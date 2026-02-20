@@ -7,7 +7,8 @@ function fetchBloggerFeed() {
     // Tällä ohitetaan Fetch API:n CORS-rajoitukset ja Service Workerin CORS-estot lähes kaikilla selaimilla.
     const blogId = '7148270853674792022';
     const script = document.createElement('script');
-    script.src = `https://www.blogger.com/feeds/${blogId}/posts/default?alt=json-in-script&callback=renderBloggerFeed`;
+    // Lisätään max-results=10, jotta ei ladata kaikkia julkaisuja turhaan hidastamaan sivua
+    script.src = `https://www.blogger.com/feeds/${blogId}/posts/default?alt=json-in-script&callback=renderBloggerFeed&max-results=10`;
     script.onerror = () => {
         document.getElementById('blogger-feed').innerHTML = '<p>Uutisten haku epäonnistui.</p>';
     };

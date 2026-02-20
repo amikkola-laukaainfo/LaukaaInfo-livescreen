@@ -177,8 +177,8 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
     const proxies = [
         `https://www.mediazoo.fi/laukaainfo-web/proxy.php?url=${encodeURIComponent(url)}&encoding=${encoding}`,
         `proxy.php?url=${encodeURIComponent(url)}&encoding=${encoding}`,
-        `https://corsproxy.io/?${encodeURIComponent(url)}`,
-        `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`
+        `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
+        `https://thingproxy.freeboard.io/fetch/${url}`
     ];
 
     let lastError = null;
@@ -195,7 +195,19 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
             // Jos käytetään muita proxyja, TextDecoder käyttää alkuperäistä encoding-parametria.
             const decoding = proxyUrl.includes('proxy.php') ? 'utf-8' : encoding;
             const decoder = new TextDecoder(decoding);
-            const text = decoder.decode(buffer);
+            let text = decoder.decode(buffer);
+
+            // Jos proxy on allorigins (/get), sisältö on kääritty JSONiin
+            if (proxyUrl.includes('allorigins.win/get')) {
+                try {
+                    const jsonRes = JSON.parse(text);
+                    if (jsonRes.contents) {
+                        text = jsonRes.contents;
+                    }
+                } catch (e) {
+                    console.warn('Allorigins JSON parsimisvirhe:', e);
+                }
+            }
 
             const parser = new DOMParser();
             const xml = parser.parseFromString(text, 'text/xml');
