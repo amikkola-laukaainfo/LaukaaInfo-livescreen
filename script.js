@@ -344,7 +344,7 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
 async function loadCompanyData() {
     console.log('Yritetään hakea yritystietoja: get_companies.php');
     try {
-        const response = await fetch('get_companies.php?t=' + Date.now());
+        const response = await fetch('https://www.mediazoo.fi/laukaainfo-web/get_companies.php?t=' + Date.now());
         console.log('Vastaus saatu:', response.status, response.statusText);
 
         const text = await response.text();
