@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="fi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LaukaaInfo – Kylien ja asukkaiden oma tietopankki</title>
+    <meta name="description"
+        content="Laukaan kylien ja asukkaiden oma tietopankki. Ajankohtaiset uutiset, tapahtumat ja paikalliset yritykset.">
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0056b3">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+
+    <!-- Fonts & Styles -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Leaflet Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <nav class="top-nav">
+        <div class="nav-container">
+            <div class="nav-logo">LaukaaInfo</div>
+            <button class="hamburger" id="hamburger-btn" aria-label="Avaa valikko">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="nav-links">
+                <li class="dropdown">
+                    <a href="#" class="nav-link dropdown-toggle">Yritykset ▾</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#company-spotlight">Tekstihaku</a></li>
+                        <li><a href="#map-section">Karttahaku</a></li>
+                    </ul>
+                </li>
+                <li><a href="#events-card" class="nav-link">Tapahtumat</a></li>
+                <li><a href="#decisions-card" class="nav-link">Päätöksenteko</a></li>
+                <li><a href="#news-card" class="nav-link">Tiedotteet</a></li>
+                <li class="dropdown">
+                    <a href="#" class="nav-link dropdown-toggle">Taajamat ▾</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="lievestuore.html">Lievestuore</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <header>
+        <div class="header-content">
+            <h1>LaukaaInfo</h1>
+            <p>Laukaan kylien ja asukkaiden oma tietopankki</p>
+            <a href="https://www.youtube.com/@laukaainfo" target="_blank" class="btn-youtube">
+                🎥 LaukaaInfo YouTube-kanavalle
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Yritysten Esittelyruutu & Katalogi -->
+        <section id="company-spotlight" class="spotlight-section">
+            <div class="spotlight-header">
+                <h2><span>🏪</span> Paikalliset yritykset</h2>
+            </div>
+
+            <div class="spotlight-container">
+                <!-- Vasen/Keski: Esittelyalue -->
+                <div class="spotlight-main" id="selected-company-view">
+                    <!-- 1. Hakukentät (Ylinnä) -->
+                    <div class="spotlight-controls">
+                        <div class="search-container">
+                            <input type="text" id="company-search" placeholder="Hae yritystä..." aria-label="Yrityshaku"
+                                autocomplete="off">
+                            <ul id="search-suggestions" class="search-suggestions"></ul>
+                        </div>
+                        <select id="category-filter" aria-label="Kategoria">
+                            <option value="all">Kaikki kategoriat</option>
+                        </select>
+                    </div>
+
+                    <!-- 2. Kuvaruutu (Keskellä) -->
+                    <div class="spotlight-media-wrapper">
+                        <div class="spotlight-media-container">
+                            <div class="spotlight-media" id="spotlight-media">
+                                <div class="placeholder-media">Valitse yritys</div>
+                            </div>
+                            <div class="slider-nav" id="slider-nav"></div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Perustiedot (Alinna, yksi sarake) -->
+                    <div class="spotlight-info-container">
+                        <div class="spotlight-content" id="spotlight-info">
+                            <h3 id="spotlight-name">Laukaan parhaat yritykset</h3>
+                            <p class="tagline" id="spotlight-tagline">Kasvua ja elinvoimaa Laukaasta</p>
+                            <div class="spotlight-description" id="spotlight-desc">
+                                Löydä paikalliset palvelut, yrittäjät ja elämykset. Klikkaa yritystä katalogista
+                                nähdäksesi lisätietoja.
+                            </div>
+
+                            <div class="spotlight-contact-info">
+                                <div class="spotlight-details" id="spotlight-details"></div>
+                                <div class="spotlight-actions" id="spotlight-actions"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Oikea: Katalogilista (kapeampi) -->
+                <div class="catalog-sidebar">
+                    <div id="catalog-list" class="catalog-list">
+                        <!-- Yritysten listaus tässä -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Karttaosio -->
+        <section id="map-section" class="card">
+            <h2><span>🗺️</span> Palvelut kartalla</h2>
+            <div id="company-map" style="height: 500px; border-radius: 12px; z-index: 1;"></div>
+        </section>
+
+        <!-- Ajankohtaista Section -->
+        <section id="ajankohtaista">
+            <div class="dashboard-grid">
+                <!-- RSS Uutiset -->
+                <div class="card" id="news-card">
+                    <h2><span>📅</span> Ajankohtaiset uutiset</h2>
+                    <div id="news-container" class="rss-list">
+                        <p>Ladataan uutisia...</p>
+                    </div>
+                </div>
+
+                <!-- RSS Päätöksenteko -->
+                <div class="card" id="decisions-card">
+                    <h2><span>⚖️</span> Päätöksenteko</h2>
+                    <div id="decisions-container" class="rss-list">
+                        <p>Ladataan pöytäkirjoja...</p>
+                    </div>
+                </div>
+
+                <!-- RSS Tapahtumat -->
+                <div class="card" id="events-card">
+                    <h2><span>🎉</span> Tapahtumat</h2>
+                    <div id="events-container" class="rss-list">
+                        <p>Ladataan tapahtumia...</p>
+                    </div>
+                </div>
+
+                <!-- Palaute -->
+                <div class="card feedback-card">
+                    <h2><span>💬</span> Anna palautetta kunnalle</h2>
+                    <p>Kunnan palvelut ja päätöksenteko kiinnostavat? Anna palautetta suoraan kunnalle.</p>
+                    <a href="https://laukaa.trimblefeedback.com/eFeedback/" target="_blank" class="btn-primary">
+                        🔗 Siirry palautelomakkeeseen
+                    </a>
+                </div>
+            </div>
+        </section>
+
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>© 2026 LaukaaInfo – Epävirallinen yhteisösovellus</p>
+            <div class="footer-links">
+                <a href="https://www.mediazoo.fi/laukaainfo/index.html">Tietoa sovelluksesta</a>
+                <a href="https://play.google.com/store/apps/datasafety?id=org.example.LaukaaLive">Yksityisyys</a>
+                <a href="https://www.mediazoo.fi/yhteystiedot">Ota yhteyttä</a>
+                <button id="pwa-install-btn"
+                    style="display: none; background: #00c3ff; color: white; border: none; padding: 5px 12px; border-radius: 20px; cursor: pointer; font-family: inherit; font-size: 0.9rem; margin-left: 10px;">Asenna
+                    sovellus</button>
+            </div>
+            <div class="app-badge">
+                <a href="https://play.google.com/store/apps/details?id=org.example.LaukaaLive&hl=fi" target="_blank">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+                        alt="Lataa Android-sovellus" style="height: 40px;">
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <div class="demo-notification">
+        Tämä on demoversio – tiedot eivät välttämättä ole ajan tasalla.
+    </div>
+
+    <!-- PWA Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('Service Worker rekisteröity', reg))
+                    .catch(err => console.error('Service Worker rekisteröinti epäonnistui', err));
+            });
+        }
+    </script>
+
+    <!-- Leaflet & Multi-cluster JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+
+    <script src="script.js?v=20260219-26"></script>
+</body>
+
+</html>
