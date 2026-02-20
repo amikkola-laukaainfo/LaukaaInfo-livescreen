@@ -173,12 +173,8 @@ function initRSSFeeds() {
  */
 async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
     // Käytetään ensisijaisesti paikallista PHP-proxya webhotellissa
-    const proxies = [
-        `proxy.php?url=${encodeURIComponent(url)}&encoding=${encoding}`,
-        `https://corsproxy.io/?${encodeURIComponent(url)}`,
-        `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-        `https://thingproxy.freeboard.io/fetch/${url}`
-    ];
+    // Use only the server‑side PHP proxy to avoid CORS issues
+    const proxies = [`proxy.php?url=${encodeURIComponent(url)}&encoding=${encoding}`];
 
     let lastError = null;
 
