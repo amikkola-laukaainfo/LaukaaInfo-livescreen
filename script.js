@@ -4,6 +4,21 @@ let currentMediaIndex = 0;
 let map = null;
 let markers = null;
 
+const welcomeCompany = {
+    id: "welcome",
+    nimi: "Tervetuloa Laukaan yrityshakuun",
+    mainoslause: "Löydä paikalliset palvelut, yrittäjät ja elämykset.",
+    esittely: "Tämä on Laukaan yrityshaku. Valitse haluamasi yritys listalta tai käytä hakua löytääksesi etsimäsi palvelut. Voit myös suodattaa yrityksiä toimialan mukaan.",
+    osoite: "Laukaa",
+    puhelin: "",
+    email: "",
+    nettisivu: "",
+    karttalinkki: "",
+    media: [
+        { type: "image", url: "icons/icon-512.png" }
+    ]
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     // Navigaation toiminnallisuus
     const hamburgerBtn = document.getElementById('hamburger-btn');
@@ -384,10 +399,9 @@ async function loadCompanyData() {
 
         initCompanyCatalog();
         initMap(allCompanies);
-        if (allCompanies.length > 0) {
-            console.log('Päivitetään spotlight ensimmäisellä yrityksellä:', allCompanies[0].nimi);
-            updateSpotlight(allCompanies[0]);
-        }
+
+        console.log('Päivitetään spotlight avaustilanteella');
+        updateSpotlight(welcomeCompany);
     } catch (error) {
         console.error('Yritystietojen haku epäonnistui:', error);
         document.getElementById('catalog-list').innerHTML = `<p style="padding: 1rem; color: #dc3545;">Virhe ladattaessa tietoja: ${error.message}</p>`;
