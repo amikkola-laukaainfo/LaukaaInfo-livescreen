@@ -174,7 +174,12 @@ function initRSSFeeds() {
 async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
     // Käytetään ensisijaisesti paikallista PHP-proxya webhotellissa
     // Use only the server‑side PHP proxy to avoid CORS issues
-    const proxies = [`proxy.php?url=${encodeURIComponent(url)}&encoding=${encoding}`];
+    const proxies = [
+        `https://www.mediazoo.fi/laukaainfo-web/proxy.php?url=${encodeURIComponent(url)}&encoding=${encoding}`,
+        `proxy.php?url=${encodeURIComponent(url)}&encoding=${encoding}`,
+        `https://corsproxy.io/?${encodeURIComponent(url)}`,
+        `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`
+    ];
 
     let lastError = null;
 
