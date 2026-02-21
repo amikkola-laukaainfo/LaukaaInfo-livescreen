@@ -215,10 +215,63 @@ document.addEventListener('DOMContentLoaded', () => {
             popupContent += `</div>`;
 
             marker.bindPopup(popupContent);
+
+            // Päivitetään lisäruutu kun markeria klikataan
+            marker.on('click', () => {
+                updateMuistoMedia(item);
+            });
+
             newMarkers.push(marker);
         });
 
         markersGroup.addLayers(newMarkers);
+    }
+
+    /**
+     * Päivittää kartan alla olevan media-osion
+     */
+    function updateMuistoMedia(item) {
+        const mediaCard = document.getElementById('muisto-media-card');
+        const mediaContainer = document.getElementById('muisto-media-container');
+        const titleEl = document.getElementById('muito-detail-title');
+        const descEl = document.getElementById('muito-detail-desc');
+        const metaEl = document.getElementById('muito-detail-meta');
+
+        if (!mediaCard) return;
+
+        // Näytetään kortti
+        mediaCard.style.display = 'block';
+        mediaCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+        // Päivitetään tekstit
+        titleEl.textContent = item.title;
+        descEl.textContent = item.description;
+        metaEl.innerHTML = `📍 ${escapeHtml(item.area)} &nbsp;|&nbsp; 📅 ${escapeHtml(item.decade)} &nbsp;|&nbsp; ✍️ ${escapeHtml(item.author)}`;
+
+        // Tyhjennetään media ja ladataan uusi
+        mediaContainer.innerHTML = '<div style="display:flex; align-items:center; justify-content:center; height:100%; color:#666;">Ladataan mediaa...</div>';
+
+        const imgUrl = item.image_url || 'icons/icon-512.png';
+        const img = new Image();
+
+        img.onload = () => {
+            mediaContainer.innerHTML = '';
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.objectFit = item.image_url ? 'cover' : 'contain';
+            if (!item.image_url) {
+                img.style.backgroundColor = 'white';
+                img.style.padding = '20px';
+            }
+            img.style.animation = 'fadeIn 0.5s ease-in-out';
+            mediaContainer.appendChild(img);
+        };
+
+        img.onerror = () => {
+            mediaContainer.innerHTML = '<div style="display:flex; align-items:center; justify-content:center; height:100%; color:#666;">Kuvaa ei voitu ladata.</div>';
+        };
+
+        img.src = imgUrl;
     }
 
     // Filter event listeners
