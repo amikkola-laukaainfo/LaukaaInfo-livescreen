@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="fi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarinakartta - LaukaaInfo</title>
+    <meta name="description" content="Seuraa Laukaan tarinaa askeleet kerrallaan.">
+
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0056b3">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Leaflet Map CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .story-controls {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .story-step-info {
+            flex: 1;
+            text-align: center;
+        }
+
+        .story-step-info h3 {
+            margin: 0;
+            color: #0056b3;
+            font-size: 1.2rem;
+        }
+
+        .story-step-info p {
+            margin: 5px 0 0 0;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .btn-story {
+            background: #0056b3;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: inherit;
+        }
+
+        .btn-story:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .btn-story:hover:not(:disabled) {
+            background: #004494;
+        }
+
+        #tarina-map {
+            height: 550px;
+            border-radius: 12px;
+            z-index: 1;
+            border: 2px solid #ddd;
+        }
+
+        .story-card {
+            margin-top: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .story-card {
+                grid-template-columns: 1fr;
+            }
+
+            .story-controls {
+                flex-direction: column;
+            }
+
+            .btn-story {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        .story-image-container {
+            width: 100%;
+            height: 100%;
+            min-height: 300px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .story-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.3s;
+        }
+
+        .return-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #0056b3;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            background: #f0f7ff;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <div class="nav-logo">LaukaaInfo</div>
+            <button class="hamburger" id="hamburger-btn" aria-label="Avaa valikko">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <aside class="sidebar-menu" id="sidebar-menu">
+        <div class="sidebar-header">
+            <h2>LaukaaInfo</h2>
+            <button class="close-btn" id="close-sidebar-btn" aria-label="Sulje valikko">&times;</button>
+        </div>
+
+        <div class="sidebar-content">
+            <div class="menu-section">
+                <h3 class="section-title">PALVELUT</h3>
+                <ul class="menu-list">
+                    <li class="menu-item has-submenu">
+                        <a href="#" class="submenu-toggle">Yritykset <span class="arrow">▼</span></a>
+                        <ul class="submenu">
+                            <li><a href="index.html#company-spotlight" class="sidebar-link">Tekstihaku</a></li>
+                            <li><a href="index.html#map-section" class="sidebar-link">Karttahaku</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item"><a href="index.html#events-card" class="sidebar-link">Tapahtumat</a></li>
+                    <li class="menu-item"><a href="index.html#news-card" class="sidebar-link">Tiedotteet</a></li>
+                    <li class="menu-item"><a href="index.html#decisions-card" class="sidebar-link">Päätöksenteko</a>
+                    </li>
+                    <li class="menu-item"><a href="index.html#feedback-card" class="sidebar-link">Palautteet</a></li>
+                    <li class="menu-item has-submenu">
+                        <a href="#" class="submenu-toggle">Taajamat <span class="arrow">▼</span></a>
+                        <ul class="submenu">
+                            <li><a href="lievestuore.html" class="sidebar-link">Lievestuore</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="menu-section highlight-section">
+                <h3 class="section-title">KARTAT & ELÄMYKSET ⭐</h3>
+                <ul class="menu-list">
+                    <li class="menu-item"><a href="tarinakartta.html" class="sidebar-link">Tarinakartta</a></li>
+                    <li class="menu-item"><a href="muistokartta.html" class="sidebar-link">Muistokartta</a></li>
+                    <li class="menu-item"><a href="kadonneet.html" class="sidebar-link">Kadonneet & löydetyt</a></li>
+                </ul>
+            </div>
+        </div>
+    </aside>
+
+    <header>
+        <div class="header-content">
+            <h1>Tarinakartta</h1>
+            <p>Seuraa opastettua kierrosta alueen historiaan ja nykypäivään</p>
+        </div>
+    </header>
+
+    <main>
+        <section class="card" style="margin-top: 2rem;">
+            <a href="index.html" class="return-link">← Palaa Etusivulle</a>
+
+            <div class="story-controls">
+                <button id="prev-btn" class="btn-story" disabled>← Edellinen</button>
+                <div class="story-step-info">
+                    <h3 id="step-title">Ladataan tarinaa...</h3>
+                    <p id="step-counter">Askel 0 / 0</p>
+                </div>
+                <button id="next-btn" class="btn-story">Seuraava →</button>
+            </div>
+
+            <div class="story-card">
+                <div id="tarina-map"></div>
+                <div class="story-details">
+                    <div class="story-image-container" id="step-image-container">
+                        <img id="step-image" src="" alt="Tarinan kuva" style="display:none;">
+                        <span id="image-placeholder">Ei kuvaa saatavilla</span>
+                    </div>
+                    <div style="margin-top: 1.5rem;">
+                        <p id="step-description" style="line-height: 1.6; color: #444; font-size: 1.05rem;">
+                            Tarinaa ladataan, hetki vain...
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>© 2026 LaukaaInfo – Epävirallinen yhteisösovellus</p>
+            <div class="footer-links">
+                <a href="index.html">Etusivulle</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="tarinakartta.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburgerBtn = document.getElementById('hamburger-btn');
+            const closeBtn = document.getElementById('close-sidebar-btn');
+            const sidebarMenu = document.getElementById('sidebar-menu');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+            const submenuToggles = document.querySelectorAll('.submenu-toggle');
+
+            function openSidebar() {
+                if (sidebarMenu) sidebarMenu.classList.add('active');
+                if (sidebarOverlay) sidebarOverlay.classList.add('active');
+            }
+            function closeSidebar() {
+                if (sidebarMenu) sidebarMenu.classList.remove('active');
+                if (sidebarOverlay) sidebarOverlay.classList.remove('active');
+            }
+            if (hamburgerBtn) hamburgerBtn.addEventListener('click', openSidebar);
+            if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
+            if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
+
+            submenuToggles.forEach(toggle => {
+                toggle.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    toggle.parentElement.classList.toggle('open');
+                    const submenu = toggle.parentElement.querySelector('.submenu');
+                    if (submenu) submenu.classList.toggle('open');
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
