@@ -12,7 +12,25 @@ if (empty($fileId)) {
     die('File ID required');
 }
 
-header('Access-Control-Allow-Origin: *');
+$allowed_origins = [
+    'https://laukaainfo.fi',
+    'https://www.laukaainfo.fi',
+    'http://localhost:8080',
+    'http://localhost:3000',
+    'http://127.0.0.1:8080',
+    'http://localhost'
+];
+$origin = isset($_SERVER['HTTP_ORIGIN']) ? rtrim($_SERVER['HTTP_ORIGIN'], '/') : '';
+if ($origin) {
+    if (in_array($origin, $allowed_origins)) {
+        header('Access-Control-Allow-Origin: ' . $origin);
+    } else {
+        http_response_code(403);
+        die('Forbidden Origin');
+    }
+} else {
+    header('Access-Control-Allow-Origin: https://laukaainfo.fi');
+}
 header('X-Proxy-Status: active');
 
 $cacheDir = 'drive_cache/';

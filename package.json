@@ -4,7 +4,8 @@
     "description": "LaukaaInfo Simplified Web Version",
     "scripts": {
         "start": "npx serve .",
-        "dev": "npx serve ."
+        "dev": "npx serve .",
+        "build": "node build.js"
     },
     "dependencies": {},
     "devDependencies": {

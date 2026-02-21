@@ -7,7 +7,26 @@
 
 // Disable browser caching for the API response
 header('Content-Type: application/json; charset=UTF-8');
-header('Access-Control-Allow-Origin: *');
+$allowed_origins = [
+    'https://laukaainfo.fi',
+    'https://www.laukaainfo.fi',
+    'http://localhost:8080',
+    'http://localhost:3000',
+    'http://127.0.0.1:8080',
+    'http://localhost'
+];
+$origin = isset($_SERVER['HTTP_ORIGIN']) ? rtrim($_SERVER['HTTP_ORIGIN'], '/') : '';
+if ($origin) {
+    if (in_array($origin, $allowed_origins)) {
+        header('Access-Control-Allow-Origin: ' . $origin);
+    } else {
+        http_response_code(403);
+        die(json_encode(array("status" => "error", "message" => "Forbidden Origin")));
+    }
+} else {
+    // If no origin is provided (e.g. same-origin or direct access), we can default to allow the main domain
+    header('Access-Control-Allow-Origin: https://laukaainfo.fi');
+}
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 header('Cache-Control: post-check=0, pre-check=0', false);
 header('Pragma: no-cache');
