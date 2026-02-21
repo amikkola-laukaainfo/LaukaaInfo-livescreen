@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Navigaation toiminnallisuus
     const hamburgerBtn = document.getElementById('hamburger-btn');
     const navLinks = document.getElementById('nav-links');
-    const navItems = document.querySelectorAll('.nav-link');
+    const navItems = document.querySelectorAll('.nav-link, .dropdown-menu a');
 
     if (hamburgerBtn && navLinks) {
         hamburgerBtn.addEventListener('click', () => {
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     return; // Lopetetaan tähän, ei suljeta koko menuuta
                 }
 
-                // Muussa tapauksessa (normaali linkki tai työpöytäversio) suljetaan mobiilivalikko
+                // Muussa tapauksessa (normaali linkki tai alavalikon linkki)
                 if (window.innerWidth <= 768) {
                     hamburgerBtn.classList.remove('active');
                     navLinks.classList.remove('active');
@@ -53,6 +53,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.querySelectorAll('.dropdown.open').forEach(dropdown => {
                         dropdown.classList.remove('open');
                     });
+                } else {
+                    // Työpöytäversio: piilotetaan alavalikko hetkeksi valinnan jälkeen
+                    const dropdownParent = item.closest('.dropdown');
+                    if (dropdownParent) {
+                        const menu = dropdownParent.querySelector('.dropdown-menu');
+                        if (menu) {
+                            menu.style.display = 'none';
+                            setTimeout(() => {
+                                menu.style.display = '';
+                            }, 300); // Palautetaan tila takaisin 300ms päästä
+                        }
+                    }
                 }
             });
         });
