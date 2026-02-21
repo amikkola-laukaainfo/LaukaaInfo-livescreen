@@ -672,6 +672,13 @@ function renderMedia(index) {
         img.alt = currentCompany.nimi;
         img.loading = "lazy";
 
+        // Jos ollaan tervetulonäkymässä, näytetään logo "contain"-muodossa ja valkoisella taustalla
+        if (currentCompany.id === 'welcome') {
+            img.style.objectFit = 'contain';
+            img.style.backgroundColor = 'white';
+            img.style.padding = '20px'; // Hieman ilmaa ympärille
+        }
+
         img.onload = () => {
             clearTimeout(loadTimeout);
             console.log('Kuva ladattu onnistuneesti:', item.url, 'Koko:', img.width, 'x', img.height);
