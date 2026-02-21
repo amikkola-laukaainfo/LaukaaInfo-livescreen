@@ -88,6 +88,62 @@
         .return-link:hover {
             background: #e0f0ff;
         }
+
+        /* ── Hashtag autocomplete ── */
+        .search-wrap {
+            position: relative;
+        }
+
+        #tag-suggestions {
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0;
+            right: 0;
+            background: #fff;
+            border: 1.5px solid #dde3ec;
+            border-radius: 8px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+            z-index: 1000;
+            max-height: 220px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        #tag-suggestions.visible {
+            display: block;
+        }
+
+        .tag-suggestion-item {
+            padding: 0.6rem 1rem;
+            cursor: pointer;
+            font-size: 0.92rem;
+            color: #0056b3;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            border-bottom: 1px solid #f0f4f8;
+            transition: background 0.15s;
+        }
+
+        .tag-suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .tag-suggestion-item:hover,
+        .tag-suggestion-item.active {
+            background: #f0f7ff;
+        }
+
+        .tag-suggestion-item .tag-hash {
+            font-weight: 700;
+            color: #0056b3;
+        }
+
+        .tag-suggestion-item .tag-match {
+            background: #dbeafe;
+            border-radius: 3px;
+            padding: 0 2px;
+        }
     </style>
 </head>
 
@@ -181,9 +237,10 @@
                     </select>
                 </div>
 
-                <div class="filter-group" style="flex: 2;">
-                    <label for="search-input">Haku (aihe, hakusana)</label>
-                    <input type="text" id="search-input" placeholder="Etsi muistoja sanoilla...">
+                <div class="filter-group search-wrap" style="flex: 2; position: relative;">
+                    <label for="search-input">Haku (aihe, hakusana tai #hashtag)</label>
+                    <input type="text" id="search-input" placeholder="Etsi sanoilla tai #tagilla..." autocomplete="off">
+                    <div id="tag-suggestions" role="listbox" aria-label="Hashtag-ehdotukset"></div>
                 </div>
             </div>
 
