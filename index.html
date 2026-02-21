@@ -51,6 +51,7 @@
                 <li><a href="#events-card" class="nav-link">Tapahtumat</a></li>
                 <li><a href="#decisions-card" class="nav-link">Päätöksenteko</a></li>
                 <li><a href="#news-card" class="nav-link">Tiedotteet</a></li>
+                <li><a href="#feedback-card" class="nav-link">Palautteet</a></li>
                 <li class="dropdown">
                     <a href="#" class="nav-link dropdown-toggle">Taajamat ▾</a>
                     <ul class="dropdown-menu">
@@ -164,10 +165,13 @@
                 </div>
 
                 <!-- Palaute -->
-                <div class="card feedback-card">
+                <div class="card" id="feedback-card">
                     <h2><span>💬</span> Anna palautetta kunnalle</h2>
-                    <p>Kunnan palvelut ja päätöksenteko kiinnostavat? Anna palautetta suoraan kunnalle.</p>
-                    <a href="https://laukaa.trimblefeedback.com/eFeedback/" target="_blank" class="btn-primary">
+                    <div id="feedback-container" class="rss-list">
+                        <p>Ladataan palautteita...</p>
+                    </div>
+                    <a href="https://laukaa.trimblefeedback.com/eFeedback/" target="_blank" class="btn-primary"
+                        style="margin-top: 15px; display: inline-block;">
                         🔗 Siirry palautelomakkeeseen
                     </a>
                 </div>
