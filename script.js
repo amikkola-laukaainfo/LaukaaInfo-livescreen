@@ -641,12 +641,13 @@ function preloadCompanyMedia(company) {
 
 function renderMedia(index) {
     const container = document.getElementById('spotlight-media');
-    const mediaList = currentCompany.media || [];
+    let mediaList = currentCompany.media || [];
     console.log('Piirretään media indeksiin:', index, 'Medialistasta:', mediaList);
 
+    let isFallback = false;
     if (mediaList.length === 0) {
-        container.innerHTML = '<div class="placeholder-media">Ei mediaa saatavilla</div>';
-        return;
+        mediaList = [{ type: 'image', url: 'icons/icon-512.png' }];
+        isFallback = true;
     }
 
     const item = mediaList[index];
@@ -686,7 +687,7 @@ function renderMedia(index) {
         // Asetetaan tyylit ja lopuksi lataus käyntiin
         img.alt = currentCompany.nimi;
 
-        if (currentCompany.id === 'welcome') {
+        if (currentCompany.id === 'welcome' || isFallback) {
             img.style.objectFit = 'contain';
             img.style.backgroundColor = 'white';
             img.style.padding = '20px';
