@@ -40,27 +40,58 @@
                 <span></span>
                 <span></span>
             </button>
-            <ul class="nav-links" id="nav-links">
-                <li class="dropdown">
-                    <a href="#" class="nav-link dropdown-toggle">Yritykset ▾</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#company-spotlight">Tekstihaku</a></li>
-                        <li><a href="#map-section">Karttahaku</a></li>
-                    </ul>
-                </li>
-                <li><a href="#events-card" class="nav-link">Tapahtumat</a></li>
-                <li><a href="#decisions-card" class="nav-link">Päätöksenteko</a></li>
-                <li><a href="#news-card" class="nav-link">Tiedotteet</a></li>
-                <li><a href="#feedback-card" class="nav-link">Palautteet</a></li>
-                <li class="dropdown">
-                    <a href="#" class="nav-link dropdown-toggle">Taajamat ▾</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="lievestuore.html">Lievestuore</a></li>
-                    </ul>
-                </li>
-            </ul>
         </div>
     </nav>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- Sidebar Menu -->
+    <aside class="sidebar-menu" id="sidebar-menu">
+        <div class="sidebar-header">
+            <h2>LaukaaInfo</h2>
+            <button class="close-btn" id="close-sidebar-btn" aria-label="Sulje valikko">&times;</button>
+        </div>
+
+        <div class="sidebar-content">
+            <!-- Pääosio: PALVELUT -->
+            <div class="menu-section">
+                <h3 class="section-title">PALVELUT</h3>
+                <ul class="menu-list">
+                    <li class="menu-item has-submenu">
+                        <a href="#" class="submenu-toggle">Yritykset <span class="arrow">▼</span></a>
+                        <ul class="submenu">
+                            <li><a href="#company-spotlight" class="sidebar-link">Tekstihaku</a></li>
+                            <li><a href="#map-section" class="sidebar-link">Karttahaku</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item"><a href="#events-card" class="sidebar-link">Tapahtumat</a></li>
+                    <li class="menu-item"><a href="#news-card" class="sidebar-link">Tiedotteet</a></li>
+                    <li class="menu-item"><a href="#decisions-card" class="sidebar-link">Päätöksenteko</a></li>
+                    <li class="menu-item"><a href="#feedback-card" class="sidebar-link">Palautteet</a></li>
+                    <li class="menu-item has-submenu">
+                        <a href="#" class="submenu-toggle">Taajamat <span class="arrow">▼</span></a>
+                        <ul class="submenu">
+                            <li><a href="lievestuore.html" class="sidebar-link">Lievestuore</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Korostettu osio: KARTAT & ELÄMYKSET -->
+            <div class="menu-section highlight-section">
+                <h3 class="section-title">KARTAT & ELÄMYKSET ⭐</h3>
+                <ul class="menu-list">
+                    <li class="menu-item"><a href="#" class="sidebar-link disabled-link"
+                            onclick="alert('Sisältö tulossa piakkoin!')">Tarinakartta</a></li>
+                    <li class="menu-item"><a href="#" class="sidebar-link disabled-link"
+                            onclick="alert('Sisältö tulossa piakkoin!')">Muistokartta</a></li>
+                    <li class="menu-item"><a href="#" class="sidebar-link disabled-link"
+                            onclick="alert('Sisältö tulossa piakkoin!')">Kadonneet & löydetyt</a></li>
+                </ul>
+            </div>
+        </div>
+    </aside>
 
     <header>
         <div class="header-content">

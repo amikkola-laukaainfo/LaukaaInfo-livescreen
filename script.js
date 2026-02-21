@@ -20,55 +20,48 @@ const welcomeCompany = {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Navigaation toiminnallisuus
+    // Sidebar Navigation Logic
     const hamburgerBtn = document.getElementById('hamburger-btn');
-    const navLinks = document.getElementById('nav-links');
-    const navItems = document.querySelectorAll('.nav-link, .dropdown-menu a');
+    const closeBtn = document.getElementById('close-sidebar-btn');
+    const sidebarMenu = document.getElementById('sidebar-menu');
+    const sidebarOverlay = document.getElementById('sidebar-overlay');
+    const submenuToggles = document.querySelectorAll('.submenu-toggle');
+    const sidebarLinks = document.querySelectorAll('.sidebar-link:not(.disabled-link)');
 
-    if (hamburgerBtn && navLinks) {
-        hamburgerBtn.addEventListener('click', () => {
-            hamburgerBtn.classList.toggle('active');
-            navLinks.classList.toggle('active');
-        });
-
-        navItems.forEach(item => {
-            item.addEventListener('click', (e) => {
-                // Jos klikattiin pudotusvalikon otsikkoa mobiilissa, estetään valikon sulkeutuminen
-                if (item.classList.contains('dropdown-toggle') && window.innerWidth <= 768) {
-                    e.preventDefault();
-                    // Etsitään parent (li.dropdown) ja avataan sen alavalikko
-                    const parentLi = item.closest('.dropdown');
-                    if (parentLi) {
-                        parentLi.classList.toggle('open');
-                    }
-                    return; // Lopetetaan tähän, ei suljeta koko menuuta
-                }
-
-                // Muussa tapauksessa (normaali linkki tai alavalikon linkki)
-                if (window.innerWidth <= 768) {
-                    hamburgerBtn.classList.remove('active');
-                    navLinks.classList.remove('active');
-
-                    // Suljetaan myös kaikki auki jääneet alavalikot
-                    document.querySelectorAll('.dropdown.open').forEach(dropdown => {
-                        dropdown.classList.remove('open');
-                    });
-                } else {
-                    // Työpöytäversio: piilotetaan alavalikko hetkeksi valinnan jälkeen
-                    const dropdownParent = item.closest('.dropdown');
-                    if (dropdownParent) {
-                        const menu = dropdownParent.querySelector('.dropdown-menu');
-                        if (menu) {
-                            menu.style.display = 'none';
-                            setTimeout(() => {
-                                menu.style.display = '';
-                            }, 300); // Palautetaan tila takaisin 300ms päästä
-                        }
-                    }
-                }
-            });
-        });
+    function openSidebar() {
+        if (sidebarMenu) sidebarMenu.classList.add('active');
+        if (sidebarOverlay) sidebarOverlay.classList.add('active');
     }
+
+    function closeSidebar() {
+        if (sidebarMenu) sidebarMenu.classList.remove('active');
+        if (sidebarOverlay) sidebarOverlay.classList.remove('active');
+    }
+
+    if (hamburgerBtn) hamburgerBtn.addEventListener('click', openSidebar);
+    if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
+    if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
+
+    // Accordion submenu functionality
+    submenuToggles.forEach(toggle => {
+        toggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            const parentLi = toggle.parentElement;
+            const submenu = parentLi.querySelector('.submenu');
+
+            parentLi.classList.toggle('open');
+            if (submenu) {
+                submenu.classList.toggle('open');
+            }
+        });
+    });
+
+    // Sulje sidebar kun normaalia linkkiä painetaan
+    sidebarLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            closeSidebar();
+        });
+    });
 
     // Alustetaan feedit
     initRSSFeeds();
