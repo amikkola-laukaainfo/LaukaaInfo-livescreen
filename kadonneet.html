@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lievestuore - LaukaaInfo</title>
-    <meta name="description" content="Lievestuoreen uutiset ja ajankohtaiset asiat">
+    <title>Kadonneet & Löytyneet - LaukaaInfo</title>
+    <meta name="description" content="Kadonneet ja löytyneet tavarat Laukaan alueella">
 
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0056b3">
@@ -72,7 +72,8 @@
                             onclick="alert('Sisältö tulossa piakkoin!')">Tarinakartta</a></li>
                     <li class="menu-item"><a href="#" class="sidebar-link disabled-link"
                             onclick="alert('Sisältö tulossa piakkoin!')">Muistokartta</a></li>
-                    <li class="menu-item"><a href="kadonneet.html" class="sidebar-link">Kadonneet & löydetyt</a></li>
+                    <li class="menu-item"><a href="#" class="sidebar-link disabled-link"
+                            onclick="alert('Sisältö tulossa piakkoin!')">Kadonneet & löydetyt</a></li>
                 </ul>
             </div>
         </div>
@@ -80,16 +81,16 @@
 
     <header>
         <div class="header-content">
-            <h1>Lievestuore</h1>
-            <p>Ajankohtaiset uutiset ja tapahtumat Lievestuoreelta</p>
+            <h1>Kadonneet & Löytyneet</h1>
+            <p>Tietoa kadonneista ja löytyneistä tavaroista alueella</p>
         </div>
     </header>
 
     <main>
-        <section id="blogger-news" class="card" style="margin-top: 2rem;">
-            <h2><span>📰</span> Lievestuoreen Uutiset</h2>
+        <section id="kadonneet-news" class="card" style="margin-top: 2rem;">
+            <h2><span>🔍</span> Löytyneet tavarat</h2>
             <div id="blogger-feed" class="rss-list">
-                <p>Ladataan uutisia...</p>
+                <p>Ladataan ilmoituksia...</p>
             </div>
         </section>
     </main>
@@ -104,7 +105,7 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="lievestuore.js"></script>
+    <script src="kadonneet.js"></script>
     <script>
         // Sidebar Navigation Logic
         document.addEventListener('DOMContentLoaded', () => {
