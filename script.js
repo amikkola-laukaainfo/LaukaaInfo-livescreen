@@ -668,17 +668,7 @@ function renderMedia(index) {
             }
         }, 45000);
 
-        img.src = item.url;
-        img.alt = currentCompany.nimi;
-        img.loading = "lazy";
-
-        // Jos ollaan tervetulonäkymässä, näytetään logo "contain"-muodossa ja valkoisella taustalla
-        if (currentCompany.id === 'welcome') {
-            img.style.objectFit = 'contain';
-            img.style.backgroundColor = 'white';
-            img.style.padding = '20px'; // Hieman ilmaa ympärille
-        }
-
+        // Tapahtumankuuntelijat AINA ennen src-asetusta
         img.onload = () => {
             clearTimeout(loadTimeout);
             console.log('Kuva ladattu onnistuneesti:', item.url, 'Koko:', img.width, 'x', img.height);
@@ -692,6 +682,19 @@ function renderMedia(index) {
             console.warn('Varmista, että PHP-välityspalvelin (get_image.php) toimii ja Drive-tiedosto on julkinen.');
             container.innerHTML = `<div class="placeholder-media">Kuvaa ei voitu ladata<br><small style="font-size:0.7em">${item.url}</small></div>`;
         };
+
+        // Asetetaan tyylit ja lopuksi lataus käyntiin
+        img.alt = currentCompany.nimi;
+
+        if (currentCompany.id === 'welcome') {
+            img.style.objectFit = 'contain';
+            img.style.backgroundColor = 'white';
+            img.style.padding = '20px';
+            img.style.width = '100%';
+            img.style.height = '100%';
+        }
+
+        img.src = item.url;
     }
 }
 
