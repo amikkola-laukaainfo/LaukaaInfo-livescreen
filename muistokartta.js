@@ -179,12 +179,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         const newMarkers = [];
+        const coords = [];
 
         filteredMuistot.forEach(item => {
             const lat = parseFloat(item.lat);
             const lng = parseFloat(item.lng);
             if (isNaN(lat) || isNaN(lng)) return;
 
+            coords.push([lat, lng]);
             const marker = L.marker([lat, lng]);
 
             let popupContent = `
@@ -225,6 +227,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         markersGroup.addLayers(newMarkers);
+
+        // Kohdistetaan kartta näkyviin merkkeihin
+        if (coords.length > 0) {
+            const bounds = L.latLngBounds(coords);
+            map.fitBounds(bounds, {
+                padding: [50, 50],
+                maxZoom: 14,
+                animate: true,
+                duration: 1.5
+            });
+        }
     }
 
     /**
