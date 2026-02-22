@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const imagePlaceholder = document.getElementById('image-placeholder');
     const prevBtn = document.getElementById('prev-btn');
     const nextBtn = document.getElementById('next-btn');
+    const stepMoreInfo = document.getElementById('step-more-info');
 
     // 2. Fetch Story Data
     Papa.parse('tarinakartta_data.csv', {
@@ -202,6 +203,14 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             stepImage.style.display = 'none';
             imagePlaceholder.style.display = 'block';
+        }
+
+        // Lisätietoa-linkki
+        if (step.more_info_url && step.more_info_url.trim()) {
+            stepMoreInfo.href = step.more_info_url;
+            stepMoreInfo.style.display = 'block';
+        } else {
+            stepMoreInfo.style.display = 'none';
         }
 
         // Kartta
