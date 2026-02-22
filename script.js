@@ -376,9 +376,10 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
  * Yritysdata ja katalogi
  */
 async function loadCompanyData() {
-    console.log('Yritetään hakea yritystietoja: get_companies.php');
+    const dataSourceUrl = 'https://www.mediazoo.fi/laukaainfo-web/get_companies.php';
+    console.log('Yritetään hakea yritystietoja:', dataSourceUrl);
     try {
-        const response = await fetch('https://www.mediazoo.fi/laukaainfo-web/get_companies.php?t=' + Date.now());
+        const response = await fetch(dataSourceUrl + '?t=' + Date.now());
         console.log('Vastaus saatu:', response.status, response.statusText);
 
         const text = await response.text();
@@ -390,6 +391,19 @@ async function loadCompanyData() {
             console.error('JSON parsimisvirhe. Data ei ole validia JSONia:', text.substring(0, 200));
             throw e;
         }
+
+        // Normalisoidaan URL:t, jos ne ovat suhteellisia ja data haetaan ulkoiselta palvelimelta
+        const baseUrl = dataSourceUrl.substring(0, dataSourceUrl.lastIndexOf('/') + 1);
+        allCompanies.forEach(company => {
+            if (company.media) {
+                company.media.forEach(item => {
+                    if (item.url && !item.url.startsWith('http') && !item.url.startsWith('//')) {
+                        console.log(`Normalisoidaan URL: ${item.url} -> ${baseUrl}${item.url}`);
+                        item.url = baseUrl + item.url;
+                    }
+                });
+            }
+        });
 
         console.log('Yrityksiä ladattu:', allCompanies.length);
 
