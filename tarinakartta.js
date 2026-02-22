@@ -195,7 +195,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Kuva
         if (step.image_url && step.image_url.trim()) {
-            stepImage.src = step.image_url;
+            let url = step.image_url.trim();
+
+            // Normalisoidaan Drive-linkit ja välimuistilinkit
+            if (url.includes('drive.google.com') || url.includes('drive_cache/')) {
+                const idMatch = url.match(/(?:id=|\/d\/|file\/d\/|drive_cache\/)([a-zA-Z0-9_-]+)/);
+                if (idMatch) {
+                    url = `get_image.php?id=${idMatch[1]}`;
+                }
+            }
+
+            stepImage.src = url;
             stepImage.style.display = 'block';
             stepImage.style.opacity = '0';
             stepImage.onload = () => { stepImage.style.opacity = '1'; };

@@ -46,7 +46,7 @@ function convert_gdrive_link($url)
     if (empty($url))
         return $url;
     // Extract ID from various Google Drive link formats (web, file, direct)
-    if (preg_match('/(?:id=|\/d\/|file\/d\/)([a-zA-Z0-9_-]{25,35})/', $url, $matches)) {
+    if (preg_match('/(?:id=|\/d\/|file\/d\/|drive_cache\/)([a-zA-Z0-9_-]{25,35})/', $url, $matches)) {
         $fileId = $matches[1];
         // Always return the proxy URL. get_image.php handles its own internal caching.
         // This avoids relative path issues and ensures CORS headers are sent.

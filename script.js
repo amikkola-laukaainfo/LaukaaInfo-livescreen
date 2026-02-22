@@ -397,9 +397,21 @@ async function loadCompanyData() {
         allCompanies.forEach(company => {
             if (company.media) {
                 company.media.forEach(item => {
-                    if (item.url && !item.url.startsWith('http') && !item.url.startsWith('//')) {
-                        console.log(`Normalisoidaan URL: ${item.url} -> ${baseUrl}${item.url}`);
-                        item.url = baseUrl + item.url;
+                    if (item.url) {
+                        // 1. Korjataan vanhentuneet/virheelliset drive_cache linkit välityspalvelimelle
+                        if (item.url.includes('drive_cache/')) {
+                            const match = item.url.match(/drive_cache\/([a-zA-Z0-9_-]+)/);
+                            if (match) {
+                                const fileId = match[1];
+                                console.log(`Korjattu Drive-välimuistiosoite: ${item.url} -> get_image.php?id=${fileId}`);
+                                item.url = (item.url.startsWith('http') ? baseUrl : '') + "get_image.php?id=" + fileId;
+                            }
+                        }
+                        // 2. Normalisoidaan suhteelliset polut (huom: yllä oleva korjaus voi jättää sen suhteelliseksi)
+                        if (!item.url.startsWith('http') && !item.url.startsWith('//')) {
+                            console.log(`Normalisoidaan suhteellinen URL: ${item.url} -> ${baseUrl}${item.url}`);
+                            item.url = baseUrl + item.url;
+                        }
                     }
                 });
             }
