@@ -38,7 +38,9 @@ $cacheFile = $cacheDir . $fileId . '.jpg';
 
 // Serve from cache if available
 if (file_exists($cacheFile)) {
-    $mime = 'image/jpeg'; // Default for cache
+    $size = @getimagesize($cacheFile);
+    $mime = ($size && isset($size['mime'])) ? $size['mime'] : 'image/jpeg';
+
     header('Content-Type: ' . $mime);
     header('X-Cache: HIT');
     header('Cache-Control: public, max-age=86400');

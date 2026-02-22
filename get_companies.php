@@ -46,16 +46,10 @@ function convert_gdrive_link($url)
     if (empty($url))
         return $url;
     // Extract ID from various Google Drive link formats (web, file, direct)
-    if (preg_match('/(?:id=|\/d\/|file\/d\/)([a-zA-Z0-9_-]{25,})/', $url, $matches)) {
+    if (preg_match('/(?:id=|\/d\/|file\/d\/)([a-zA-Z0-9_-]{25,35})/', $url, $matches)) {
         $fileId = $matches[1];
-        $cacheFile = 'drive_cache/' . $fileId . '.jpg';
-
-        // Use local cache if it exists (very fast)
-        if (file_exists($cacheFile)) {
-            return $cacheFile;
-        }
-
-        // Otherwise use the proxy which will populate the cache
+        // Always return the proxy URL. get_image.php handles its own internal caching.
+        // This avoids relative path issues and ensures CORS headers are sent.
         return "get_image.php?id=" . $fileId;
     }
     return $url;
@@ -251,9 +245,12 @@ while (($row_raw = fgetcsv($stream)) !== FALSE) {
         }
     }
 
+    $company_name = isset($row['name']) ? $row['name'] : (isset($row['nimi']) ? $row['nimi'] : 'Nimetön');
+    $company_id = isset($row['rowid']) && !empty($row['rowid']) ? $row['rowid'] : preg_replace('/[^a-z0-9]/', '', strtolower($company_name)) . '-' . count($companies);
+
     $companies[] = array(
-        "id" => "company-" . (isset($row['rowid']) ? $row['rowid'] : uniqid()),
-        "nimi" => isset($row['name']) ? $row['name'] : (isset($row['nimi']) ? $row['nimi'] : 'Nimetön'),
+        "id" => "company-" . $company_id,
+        "nimi" => $company_name,
         "kategoria" => isset($row['category']) ? $row['category'] : (isset($row['kategoria']) ? $row['kategoria'] : 'Muu'),
         "mainoslause" => ((function_exists('mb_strlen') ? mb_strlen($desc) : strlen($desc)) > 100) ? (function_exists('mb_substr') ? mb_substr($desc, 0, 100) : substr($desc, 0, 100)) . '...' : $desc,
         "esittely" => $desc,
