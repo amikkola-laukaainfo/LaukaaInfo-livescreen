@@ -1,96 +1,358 @@
+
 <!DOCTYPE html>
 <html lang="fi">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analyysi: Kunnanhallitus - Helmikuu 2026</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;700&display=swap"
-        rel="stylesheet">
+    <title>Ontologiavisualisointi: Laukaan kunnan taloudellinen tilanne on kriittinen...</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #f8fafc;
-            color: #1e293b;
-            padding: 2rem;
-            margin: 0;
+        body { font-family: sans-serif; margin: 0; background: #f8f9fa; color: #1e293b; overflow-x: hidden; }
+        #container { width: 100vw; height: 100vh; overflow: hidden; position: relative; }
+        #graph { width: 100%; height: 100%; }
+        #info { 
+            position: fixed; top: 20px; right: 20px; width: 320px; 
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px);
+            padding: 24px; border-radius: 20px; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1); display: none;
+            max-height: 85vh; overflow-y: auto; z-index: 1000;
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        #summary-btn {
+            position: fixed; top: 20px; right: 20px; z-index: 900;
+            background: #6366f1; color: white; border: none; padding: 10px 20px;
+            border-radius: 12px; font-weight: bold; cursor: pointer;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            transition: all 0.2s;
         }
-
-        h1 {
-            font-family: 'Outfit', sans-serif;
-            color: #0056b3;
-            margin-top: 0;
+        #summary-btn:hover { background: #4f46e5; transform: translateY(-1px); }
+        #summary-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px);
+            display: none; z-index: 2000; align-items: center; justify-content: center;
+            padding: 20px;
         }
-
-        .meta {
-            font-size: 0.9rem;
-            color: #64748b;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #e2e8f0;
+        .modal-content {
+            background: white; padding: 32px; border-radius: 24px; max-width: 600px;
+            width: 100%; max-height: 80vh; overflow-y: auto; position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
         }
-
-        .analysis-section {
-            margin-bottom: 1.5rem;
+        @media (max-width: 640px) {
+            #info {
+                top: auto; right: 0; bottom: 0; left: 0;
+                width: auto; border-radius: 24px 24px 0 0;
+                max-height: 60vh;
+            }
+            #summary-btn { top: 10px; right: 10px; padding: 8px 16px; font-size: 13px; }
         }
-
-        .analysis-section h2 {
-            font-size: 1.25rem;
-            color: #334155;
+        .node { cursor: pointer; stroke: #fff; stroke-width: 2px; }
+        .link { stroke: #cbd5e1; stroke-opacity: 0.5; stroke-width: 1.5px; }
+        .link-label { font-size: 9px; fill: #64748b; text-anchor: middle; pointer-events: none; }
+        .label { font-size: 12px; pointer-events: none; font-weight: 600; fill: #1e293b; }
+        h3 { margin-top: 0; color: #1e293b; font-size: 1.25rem; font-weight: 800; }
+        .type-tag { 
+            display: inline-block; padding: 4px 10px; border-radius: 8px; 
+            font-size: 10px; font-weight: 800; background: #f1f5f9; color: #475569;
+            margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.05em;
         }
-
-        .relationship-map {
-            background: #f1f5f9;
-            height: 200px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px dashed #cbd5e1;
-            margin: 1rem 0;
+        .close-btn { position: absolute; top: 16px; right: 16px; cursor: pointer; border: none; background: #f1f5f9; width: 32px; height: 32px; border-radius: 50%; font-size: 18px; display: flex; align-items: center; justify-content: center; }
+        
+        .timeline-container { max-width: 800px; margin: 60px auto; padding: 20px; position: relative; }
+        .timeline-line { position: absolute; left: 40px; top: 0; bottom: 0; width: 2px; background: #e2e8f0; }
+        .timeline-item { position: relative; margin-bottom: 48px; padding-left: 80px; }
+        .timeline-dot { 
+            position: absolute; left: 20px; top: 0; width: 40px; height: 40px; 
+            background: white; border: 4px solid #6366f1; border-radius: 50%; 
+            cursor: pointer; z-index: 10; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+        }
+        .timeline-card { 
+            background: white; padding: 24px; border-radius: 20px; 
+            border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .timeline-card:hover { transform: translateX(4px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        .timeline-change {
+            margin: 12px 0 12px 40px; padding: 6px 16px; background: #f5f3ff;
+            color: #4f46e5; border-radius: 20px; font-size: 11px; font-weight: 800;
+            display: inline-block; border: 1px solid #ddd6fe;
         }
     </style>
 </head>
-
 <body>
-    <div class="container">
-        <h1>Kunnanhallituksen kokousanalyysi</h1>
-        <div class="meta">Helmikuu 2026 | Tyyli: Asioiden suhteet</div>
-
-        <div class="analysis-section">
-            <h2>Keskeiset aiheet</h2>
-            <p>Helmikuun kokouksessa käsiteltiin useita merkittäviä hankkeita, joilla on suuri vaikutus kunnan
-                elinvoimaan ja palveluverkkoon.</p>
-            <ul>
-                <li>Uuden sivistyskeskuksen suunnittelu</li>
-                <li>Elinkeinopoliittinen ohjelma 2026-2030</li>
-                <li>Kaavoituskatsaus: Lievestuoreen keskusta</li>
-            </ul>
-        </div>
-
-        <div class="analysis-section">
-            <h2>Asioiden väliset suhteet</h2>
-            <div class="relationship-map">
-                [ Visualisointi: Aiheiden kytkeytyvyys ]
+    <div id="container">
+        <button id="summary-btn" onclick="document.getElementById('summary-modal').style.display='flex'">Yhteenveto</button>
+        
+        <div id="summary-modal" onclick="if(event.target === this) this.style.display='none'">
+            <div class="modal-content">
+                <button class="close-btn" onclick="document.getElementById('summary-modal').style.display='none'">&times;</button>
+                <h3 style="color: #6366f1; margin-bottom: 16px;">Analyysin yhteenveto</h3>
+                <p style="font-size: 16px; color: #334155; line-height: 1.8; font-style: italic;">"Laukaan kunnan taloudellinen tilanne on kriittinen helmikuussa 2026, ja sitä leimaa pakottava tarve sopeuttaa menoja merkittävien alijäämien vuoksi. Kunnan taseeseen on kertynyt noin 5,5 miljoonaa euroa alijäämää, joka on katettava vuoden 2029 loppuun mennessä. Tämän vuoksi kunta on käynnistänyt kolmannen talouden tasapainottamisohjelman (3.0). Vuoden 2026 tulonäkymät ovat heikentyneet verotulojen ja valtionosuuksien pienenemisen vuoksi, mikä johtaa 1,1 miljoonan euron tulonmenetyksiin ja pakottaa leikkaamaan käyttötalouden menoja 931 000 eurolla. Säästöt kohdistuvat erityisesti sivistys- ja konsernipalveluihin. Kunta pyrkii myös karsimaan investointeja ja on päättänyt myydä Kuhaniemen koulun. Konsernirakennetta uudistetaan siirtämällä kiinteistöomaisuutta tytäryhtiöille, mikä tavoittelee säännöllisiä rahavirtoja kunnalle. Merkittäviä taloudellisia riskejä aiheuttavat erityisesti Hirviareenan kustannukset. Sisällä on käyty keskustelua investointien priorisoinnista, kuten Kuusaankosken vesialueen ostosta."</p>
             </div>
-            <p>Sivistyskeskuksen rakentaminen kytkeytyy tiiviisti uuteen elinkeinopoliittiseen ohjelmaan, sillä modernit
-                koulutuspalvelut nähdään houkuttelutekijänä yrityksille ja uusille asukkaille.</p>
         </div>
 
-        <footer style="margin-top: 2rem; font-size: 0.8rem; color: #94a3b8; text-align: center;">
-            Analyysi tuotettu tekoälyavusteisesti. Varmista aina alkuperäinen pöytäkirja.
-        </footer>
+        
+            <div id="graph" style="position: relative;">
+                <div id="legend" style="position: absolute; bottom: 20px; right: 20px; background: rgba(255,255,255,0.9); backdrop-filter: blur(4px); padding: 14px; border-radius: 16px; border: 1px solid rgba(226, 232, 240, 0.5); font-size: 11px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); z-index: 50; min-width: 120px;">
+                    <div style="font-weight: 800; color: #94a3b8; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 0.05em; font-size: 9px;">Legend</div>
+                    
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                            <div style="width: 10px; height: 10px; border-radius: 50%; background: #10b981; flex-shrink: 0;"></div>
+                            <span style="font-weight: 600; text-transform: capitalize; color: #334155;">henkilo</span>
+                        </div>
+                    
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                            <div style="width: 10px; height: 10px; border-radius: 50%; background: #3b82f6; flex-shrink: 0;"></div>
+                            <span style="font-weight: 600; text-transform: capitalize; color: #334155;">organisaatio</span>
+                        </div>
+                    
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                            <div style="width: 10px; height: 10px; border-radius: 50%; background: #a855f7; flex-shrink: 0;"></div>
+                            <span style="font-weight: 600; text-transform: capitalize; color: #334155;">omaisuus</span>
+                        </div>
+                    
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                            <div style="width: 10px; height: 10px; border-radius: 50%; background: #ec4899; flex-shrink: 0;"></div>
+                            <span style="font-weight: 600; text-transform: capitalize; color: #334155;">ohjelma</span>
+                        </div>
+                    
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                            <div style="width: 10px; height: 10px; border-radius: 50%; background: #f97316; flex-shrink: 0;"></div>
+                            <span style="font-weight: 600; text-transform: capitalize; color: #334155;">paatos</span>
+                        </div>
+                    
+                    
+                </div>
+            </div>
+        
     </div>
-</body>
+    
+    <div id="info">
+        <button class="close-btn" onclick="document.getElementById('info').style.display='none'">&times;</button>
+        <h3 id="info-title"></h3>
+        <div id="info-type" class="type-tag"></div>
+        <p id="info-desc" style="font-size: 14px; color: #475569; line-height: 1.6; margin-bottom: 20px;"></p>
+        <div id="info-sources-title" style="font-size: 11px; font-weight: 800; color: #94a3b8; text-transform: uppercase; margin-bottom: 8px; display: none;">Lähteet</div>
+        <div id="info-source" style="display: flex; flex-direction: column; gap: 8px;"></div>
+    </div>
 
+    <script>
+        const data = {"summary":"Laukaan kunnan taloudellinen tilanne on kriittinen helmikuussa 2026, ja sitä leimaa pakottava tarve sopeuttaa menoja merkittävien alijäämien vuoksi. Kunnan taseeseen on kertynyt noin 5,5 miljoonaa euroa alijäämää, joka on katettava vuoden 2029 loppuun mennessä. Tämän vuoksi kunta on käynnistänyt kolmannen talouden tasapainottamisohjelman (3.0). Vuoden 2026 tulonäkymät ovat heikentyneet verotulojen ja valtionosuuksien pienenemisen vuoksi, mikä johtaa 1,1 miljoonan euron tulonmenetyksiin ja pakottaa leikkaamaan käyttötalouden menoja 931 000 eurolla. Säästöt kohdistuvat erityisesti sivistys- ja konsernipalveluihin. Kunta pyrkii myös karsimaan investointeja ja on päättänyt myydä Kuhaniemen koulun. Konsernirakennetta uudistetaan siirtämällä kiinteistöomaisuutta tytäryhtiöille, mikä tavoittelee säännöllisiä rahavirtoja kunnalle. Merkittäviä taloudellisia riskejä aiheuttavat erityisesti Hirviareenan kustannukset. Sisällä on käyty keskustelua investointien priorisoinnista, kuten Kuusaankosken vesialueen ostosta.","nodes":[{"id":"Laukaan_kunta","type":"organisaatio","label":"Laukaan kunta","source":"https://yle.fi/a/74-20210699, https://laukaa.oncloudos.com/kokous/2026315-13.PDF","description":"Emoyhteisö, jolla on 5,5 miljoonan euron alijäämä ja pakottava tarve talouden tasapainottamiseen vuoteen 2029 mennessä. Tämän vuoksi se on käynnistänyt kolmannen tasapainottamisohjelmansa.","date":"helmikuu 2026","order":0},{"id":"Tasapainottamisohjelma_3_0","type":"ohjelma","label":"Tasapainottamisohjelma 3.0","source":"https://laukaa.oncloudos.com/kokous/2026315-13.PDF","description":"Kunnan kolmas talouden tasapainottamisohjelma, joka on käynnistetty kertyneen alijäämän kattamiseksi vuoteen 2029 mennessä. Ohjelmaan liittyy talousarviomuutoksia ja säästötoimia.","date":"helmikuu 2026","order":1},{"id":"Laukaan_Kehitysyhtio_Oy","type":"organisaatio","label":"Laukaan Kehitysyhtiö Oy","source":"https://laukaa.oncloudos.com/kokous/2026315-15.PDF, https://laukaa.oncloudos.com/kokous/2026315-15-34035.PDF","description":"Kunnan tytäryhtiö, jolle keskitetään markkinaehtoiset toimitilat sekä sote- ja pelastuskiinteistöt vuoden 2027 alusta lukien kiinteistöomaisuuden hallinnan uudistuksessa.","date":"helmikuu 2026","order":2},{"id":"Laukaan_Vuokrakodit_Oy","type":"organisaatio","label":"Laukaan Vuokrakodit Oy","source":"https://laukaa.oncloudos.com/kokous/2026315-15.PDF, https://laukaa.oncloudos.com/kokous/2026315-15-34035.PDF","description":"Kunnan tytäryhtiö, jolle siirretään asuinrakennukset, asunto-osakkeet ja ARA-rajoitteiset kohteet vuoden 2027 alusta lukien kiinteistöomaisuuden hallinnan uudistuksessa.","date":"helmikuu 2026","order":3},{"id":"Kunnanjohtaja_A","type":"henkilo","label":"Kunnanjohtaja A","source":"https://laukaa.oncloudos.com/kokous/2026315-14.PDF, https://laukaa.oncloudos.com/kokous/2026315-11.PDF","description":"Toimii esittelijänä merkittävissä talous- ja omaisuusasioissa, kuten talousarviomuutoksissa ja Kuhaniemen koulun myynnissä.","date":"helmikuu 2026","order":4},{"id":"Konsernipalvelujohtaja_A","type":"henkilo","label":"Konsernipalvelujohtaja A","source":"https://laukaa.oncloudos.com/kokous/2026315-12.PDF, https://laukaa.oncloudos.com/kokous/2026315-13.PDF","description":"Toimii valmistelijana talousarvio- ja valtionosuusasioissa, liittyen muun muassa valtionosuuksien pienenemiseen ja tasapainottamisohjelmaan.","date":"helmikuu 2026","order":5},{"id":"Valtuutettu_A","type":"henkilo","label":"Valtuutettu A","source":"https://laukaa.oncloudos.com/kokous/2026315-14.PDF","description":"Teasiesityksen tekijä, joka vaati suurempia sopeutustoimia talouden tasapainottamiseksi.","date":"helmikuu 2026","order":6},{"id":"Valtuutettu_B","type":"henkilo","label":"Valtuutettu B","source":"https://laukaa.oncloudos.com/kokous/2026315-16-33898.PDF, https://laukaa.oncloudos.com/kokous/2026315-16-33908.PDF, https://laukaa.oncloudos.com/kokous/2026315-16-34090.PDF, https://yle.fi/a/74-20142096","description":"Jätti oikaisuvaatimuksen ja kunnallisvalituksen koskien Kuusaankosken vesialueiden ostoa ja kritisoi Hirviareenan taloudellisia riskejä.","date":"helmikuu 2026","order":7},{"id":"Hirviareena","type":"omaisuus","label":"Hirviareena","source":"https://yle.fi/a/74-20142096","description":"Taloudellisesti riskialtis liikuntahalli, jonka haltuunoton arvioidut kokonaiskustannukset kunnalle voivat nousta jopa 20 miljoonaan euroon 15 vuoden vuokra-aikana. Kunta on osapuolena vuokrasopimuksessa.","date":"helmikuu 2026","order":8},{"id":"Kuhaniemen_koulu","type":"omaisuus","label":"Kuhaniemen koulu","source":"https://laukaa.oncloudos.com/kokous/2026315-11.PDF","description":"Palvelukäytöstä poistuva kiinteistöresurssi, jonka kunta on päättänyt myydä ylläpitokulujen karsimiseksi.","date":"helmikuu 2026","order":9},{"id":"Kuusaankosken_vesialue","type":"omaisuus","label":"Kuusaankosken vesialue","source":"https://laukaa.oncloudos.com/kokous/2026315-16-33908.PDF, https://laukaa.oncloudos.com/kokous/2026315-16-34090.PDF","description":"Investointikohde, jonka ostamisesta (120 000 €) on tehty päätös. Valtuutettu B on vastustanut kauppaa ja jättänyt siitä oikaisuvaatimuksen ja valituksen vedoten kunnan taloudelliseen tilanteeseen.","date":"helmikuu 2026","order":10},{"id":"Talousarviomuutos_2026","type":"paatos","label":"Talousarviomuutos 2026","source":"https://laukaa.oncloudos.com/kokous/2026315-14.PDF, https://laukaa.oncloudos.com/kokous/2026315-14-34061.PDF, https://laukaa.oncloudos.com/kokous/2026315-14-34062.PDF","description":"Päätös, joka sisältää vuoden 2026 tulonäkymien heikentymisen vuoksi tehtävät muutokset talousarvioon. Siihen sisältyy 1,1 miljoonan euron tulonmenetys ja 931 000 euron säästöt käyttötaloudesta.","date":"helmikuu 2026","order":11}],"edges":[{"source":"Laukaan_kunta","target":"Laukaan_Kehitysyhtio_Oy","label":"omistaa tytäryhtiön","sourceUrl":"https://laukaa.oncloudos.com/kokous/2026315-15.PDF"},{"source":"Laukaan_kunta","target":"Laukaan_Vuokrakodit_Oy","label":"omistaa tytäryhtiön","sourceUrl":"https://laukaa.oncloudos.com/kokous/2026315-15.PDF"},{"source":"Laukaan_kunta","target":"Tasapainottamisohjelma_3_0","label":"käynnisti","sourceUrl":"https://laukaa.oncloudos.com/kokous/2026315-13.PDF"},{"source":"Laukaan_kunta","target":"Hirviareena","label":"on osapuolena sopimuksessa","sourceUrl":"https://yle.fi/a/74-20142096"},{"source":"Tasapainottamisohjelma_3_0","target":"Talousarviomuutos_2026","label":"liittyy päätökseen","sourceUrl":"https://laukaa.oncloudos.com/kokous/2026315-13.PDF"},{"source":"Laukaan_Kehitysyhtio_Oy","target":"Laukaan_kunta","label":"tuottaa rahavirtaa","sourceUrl":"https://laukaa.oncloudos.com/kokous/2026315-15.PDF, https://laukaa.oncloudos.com/kokous/2026315-15-34035.PDF"},{"source":"Laukaan_Vuokrakodit_Oy","target":"Laukaan_kunta","label":"tuottaa rahavirtaa","sourceUrl":"https://laukaa.oncloudos.com/kokous/2026315-15.PDF, https://laukaa.oncloudos.com/kokous/2026315-15-34035.PDF"},{"source":"Kunnanjohtaja_A","target":"Talousarviomuutos_2026","label":"esitteli","sourceUrl":"https://laukaa.oncloudos.com/kokous/2026315-14.PDF"},{"source":"Kunnanjohtaja_A","target":"Kuhaniemen_koulu","label":"esitteli myyntipäätöksen","sourceUrl":"https://laukaa.oncloudos.com/kokous/2026315-11.PDF"},{"source":"Konsernipalvelujohtaja_A","target":"Talousarviomuutos_2026","label":"valmisteli","sourceUrl":"https://laukaa.oncloudos.com/kokous/2026315-12.PDF"},{"source":"Valtuutettu_A","target":"Talousarviomuutos_2026","label":"teki esityksen suuremmista sopeutuksista","sourceUrl":"https://laukaa.oncloudos.com/kokous/2026315-14.PDF"},{"source":"Valtuutettu_B","target":"Kuusaankosken_vesialue","label":"vastusti ostoa ja valitti päätöksestä","sourceUrl":"https://laukaa.oncloudos.com/kokous/2026315-16-33908.PDF"},{"source":"Valtuutettu_B","target":"Hirviareena","label":"kritisoi riskejä","sourceUrl":"https://yle.fi/a/74-20142096"}]};
+        const colorMap = {"henkilo":"#10b981","organisaatio":"#3b82f6","omaisuus":"#a855f7","ohjelma":"#ec4899","paatos":"#f97316"};
+        
+        function resolveSourceUrl(source) {
+            if (!source) return null;
+            const s = source.trim();
+            if (s.startsWith('http')) return s;
+            const clean = s.toLowerCase();
+            
+            const docLinks = [{"id":"tdz3j9q6s","url":"https://laukaa.oncloudos.com/kokous/2026315-13.PDF"},{"id":"ehg0ifazd","url":"https://laukaa.oncloudos.com/kokous/2026315-11.PDF"},{"id":"i8ybw2p8x","url":"https://laukaa.oncloudos.com/kokous/2026315-14.PDF"},{"id":"44h7jlekl","url":"https://laukaa.oncloudos.com/kokous/2026315-14-34062.PDF"},{"id":"adb9fdr8q","url":"https://laukaa.oncloudos.com/kokous/2026315-14-34061.PDF"},{"id":"d7ry1m5de","url":"https://laukaa.oncloudos.com/kokous/2026315-12.PDF"},{"id":"3wb9l8ah9","url":"https://laukaa.oncloudos.com/kokous/2026315-16-33898.PDF"},{"id":"ktz76olvs","url":"https://laukaa.oncloudos.com/kokous/2026315-16-33908.PDF"},{"id":"zd6zh869f","url":"https://laukaa.oncloudos.com/kokous/2026315-16-34090.PDF"},{"id":"xzf3bti5z","url":"https://laukaa.oncloudos.com/kokous/2026315-15-34035.PDF"},{"id":"adg0qeaa9","url":"https://laukaa.oncloudos.com/kokous/2026315-15.PDF"}];
+            const scrapedResults = [{"url":"https://yle.fi/a/74-20210699","title":"Laukaa joutuu jälleen etsimään lisäsäästöjä – katettavaa tappiota kertynyt jo 5,5 miljoonaa euroa | Keski-Suomi | Yle","content":"Laukaan kunta valmistelee entistä tiukempia säästötoimia.\nKunnanhallitus päätti 16. helmikuuta, että se aloittaa nyt jo kolmannen talouden tasapainottamisohjelman.\nTavoitteena on, että kunta kattaa sille kertyneen alijäämän kuntalain vaatimassa ajassa eli vuoden 2029 loppuun mennessä.\nLaukaan vuoden 2025 tilinpäätöksen ennakkotietojen mukaan kunnalla on 5,5 miljoonaa euroa kertynyttä alijäämää.\nLaukaan konsernipavelujohtaja Maarit Kaija kertoo kunnan tiedotteessa, että alijäämien kattamisen aikataulu on tiukka ja siksi toimenpiteisiin täytyy ryhtyä välittömästi.\n– Monessa muussa kunnassa on ylijäämiä, joilla pystytään elämään talouden heittelyiden yli. Meillä ylijäämät on käytetty aiempina vuosina koulu- ja päiväkotikiinteistöjen rakentamiseen.\nKunnan verotulot ovat jäämässä odotettua pienemmiksi\nLaukaan kunnan taloutta kurittavat yleisen taloustilanteen lisäksi etenkin pienentyneet verotulot ja valtionosuudet.\nVerotulokertymää heikentää muun muassa heikko työllisyystilanne.\nLaukaan kunnan kuluvan vuoden verotuloennuste laski vuoden ensimmäisessä veroennustepäivityksessä yli 880 000 euroa.\nMyös kunnan saamat valtionosuudet ovat toteutumassa 220 000 euroa heikompina kuin kunnan talousarviossa arvioitiin.\n.\nTämänhetkinen valtionosuusjärjestelmä ei perustu kuntien nykyisten päätehtävien eli varhaiskasvatuksen ja perusopetuksen kustannuksiin.\nLaukaassa sivistyspalveluiden kustannukset ylittivät vuoden 2025 viimeisen muutetun talousarvion. Se tarkoittaa, että kunnan täytyy tehdä lisäsäästöjä myös sivistyspalveluihin.\nAvaa kuvien katselu\nLaukaan kunta on leikannut muun muassa koulujen oppimateriaalihankinnoista. Laukaan Vihtavuoren koulussa oppikirjoja on jouduttu kumittamaan tiukan budjetin takia. Kuva: Niko Mannonen / Yle\nYhteensä Laukaan kunnan kuluvan vuoden tuloennuste on heikennyt 1,1 miljoonaa euroa hyväksyttyyn talousarvioon verrattuna.\nKunta kertoo tiedotteessaan, että talouden tasapainottamisohjelman toteuttaminen edellyttää kaikilta kunnan toimielimiltä ja viranhaltijoilta päätöksiä, jotka vaikuttavat kuntalaisten palveluihin.\nKunta toimeenpanee uuden talouden tasapainottamisohjelman kevään talousarviomuutosten ja vuosien 2027–2029 talousarvioiden tekemisen yhteydessä.\nLaukaan Vihtavuoren koulussa kumitetaan säästöjen takia koulukirjoja. 9.-luokkalaiset Oili Mäki-Kulmala ja Nikolas Perkkiö kertovat, mitä he ajattelevat asiasta. .\nVideo: Niko Mannonen / Yle"},{"url":"https://yle.fi/a/74-20142096","title":"Valtuutetut vaativat Laukaassa Hirviareenan riskien läpikäymistä | Politiikka | Yle","content":"Laukaassa talousvaikeuksiin ajautuneen Hirviareenan tulevaisuus näyttää taas epäselvemmältä.\nUusimpana käänteenä iso joukko kunnanvaltuutettuja on allekirjoittanut esityksen, jossa vaaditaan Hirviareenaa koskevan päätöksenteon tuomista valtuustoon pelkän kunnanhallituksen käsittelyn lisäksi. Valtuutetut haluavat valtuuston selvittävän hallin haltuunoton taloudelliset ja juridiset riskit.\nAsiasta Keskisuomalainen.\nAloitteen allekirjoittanut perussuomalaisten kunnanvaltuutettu Arto Åkerman kertoo, että aloitteen tarkoituksena on selvittää, mitä Hirviareenalle tapahtui viime kuukausien aikana.\n– Minun ymmärtääkseni avajaisiakaan ei olisi järjestetty, jos kunta ei olisi tukenut.\nLaukaa maksoi Hirviareena oy:lle etukäteen 190 000 euroa liikuntavuoroista toiminnan alkuun saattamiseksi. Asiaa kunta marraskuussa juuri ennen avajaisia.\nAloitteessa on tarpeeksi allekirjoittajia, jotta valtuusto voidaan kutsua koolle asiaa pohtimaan. Seuraava valtuuston kokous on maaliskuun alkupuolella.\nÅkermanista ”konkurssikypsää yhtiötä” tai sen toimintoja on oltu siirtämässä kunnan harteille ilman, että kuntapäättäjille on selvinnyt kokonaiskuva hallin talousvaikeuksien taustalla. Tämä on hänestä aiheuttanut ison luottamuspulan kunnan sisälle.\nYli 20 miljoonaa euroa kustannuksia kunnalle?\nLaukaan Leppälahteen rakennettu Hirviareena ajautui talousvaikeuksiin lähes heti marraskuussa pidettyjen avajaisten jälkeen. Kunta tiedotti 23.1. Hirviareena Oy:n menettäneen pääomansa ja että yhtiön rahoitus ei riitä hallien operoimiseen.\nLaukaan kunta on hallin päävuokralainen ja maksaa tiloista 15 vuoden sopimuksella 750 000 euron vuosittaista vuokraa. Tämän vuoksi Laukaasta on nyt viestitty, että kunta ottaa hallin tavalla tai toisella haltuunsa.\nKunta oli sitoutunut maksamaan 250 000 euroa vuodessa hallivuoroista Hirviareena oy:lle, mutta tätä summaa ei tarvitse maksaa, jos halli siirtyy kunnalle. Asia ei kuitenkaan aiheuta kunnalle säästöä, sillä hallin toimintakustannukset tulevat olemaan suuremmat.\nTarkkaa summaa ei tiedetä. Kunnan vielä varsin epätarkka arvio hallin toimintakuluista on noin 10 miljoonaa euroa hallin jäljelläolevan 15 vuoden vuokraussopimuksen aikana.\nHallin omistajalle Leppävesiareena oy:lle maksettavan vuokran kanssa kunnan kustannukset liikuntahallista ovat siis tämänhetkisen arvion mukaan koko vuokra-ajalta yli 20 miljoonaa euroa, eli noin 1,4 miljoonaa euroa vuodessa.\nVuoden 2024  kunnan talous olisi tänä vuonna noin 1,3 miljoonaa euroa miinuksella.\nHirviareenan käyttäjät kertoivat Ylelle hallista talousvaikeuksien selvittyä."}];
+            
+            const docMatch = docLinks.find(d => {
+                try {
+                    const u = new URL(d.url);
+                    return u.pathname.split('/').pop().toLowerCase() === clean || d.url.toLowerCase().includes(clean);
+                } catch(e) { return d.url.toLowerCase().includes(clean); }
+            });
+            if (docMatch) return docMatch.url;
+            
+            const scrapeMatch = scrapedResults.find(r => {
+                try {
+                    const u = new URL(r.url);
+                    return u.pathname.split('/').pop().toLowerCase() === clean || r.url.toLowerCase().includes(clean) || r.title.toLowerCase().includes(clean);
+                } catch(e) { return r.url.toLowerCase().includes(clean) || r.title.toLowerCase().includes(clean); }
+            });
+            if (scrapeMatch) return scrapeMatch.url;
+            
+            return null;
+        }
+
+        function showInfo(d) {
+            document.getElementById("info").style.display = "block";
+            document.getElementById("info-title").innerText = d.label;
+            document.getElementById("info-type").innerText = d.type;
+            document.getElementById("info-desc").innerText = d.description || "Ei kuvausta saatavilla.";
+            
+            const sourceEl = document.getElementById("info-source");
+            const sourceTitle = document.getElementById("info-sources-title");
+            
+            if (d.source) {
+                const sources = d.source.split(',').map(s => s.trim()).filter(s => s);
+                if (sources.length > 0) {
+                    sourceTitle.style.display = "block";
+                    const links = sources.map(s => {
+                        const url = resolveSourceUrl(s);
+                        if (url) {
+                            return '<a href="' + url + '" target="_blank" style="color: #4f46e5; text-decoration: underline; font-size: 12px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">' + s + '</a>';
+                        }
+                        return '<span style="font-size: 12px; color: #64748b;">• ' + s + '</span>';
+                    });
+                    sourceEl.innerHTML = links.join('');
+                } else {
+                    sourceTitle.style.display = "none";
+                    sourceEl.innerHTML = "";
+                }
+            } else {
+                sourceTitle.style.display = "none";
+                sourceEl.innerHTML = "";
+            }
+        }
+
+        if (false) {
+            const container = document.getElementById('timeline-content');
+            const sortedNodes = [...data.nodes].sort((a, b) => (a.order || 0) - (b.order || 0));
+            
+            sortedNodes.forEach((node, index) => {
+                const item = document.createElement('div');
+                item.className = 'timeline-item';
+                
+                const dot = document.createElement('div');
+                dot.className = 'timeline-dot';
+                dot.style.borderColor = getEntityColor(node.type);
+                dot.onclick = () => showInfo(node);
+                
+                const card = document.createElement('div');
+                card.className = 'timeline-card';
+                card.onclick = () => showInfo(node);
+                card.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px; align-items: center;">
+                        <span style="font-size: 10px; font-weight: 800; color: ${getEntityColor(node.type)}; text-transform: uppercase; letter-spacing: 0.05em;">${node.date || 'Vaihe ' + (index + 1)}</span>
+                        <span style="font-size: 9px; font-weight: 800; color: #94a3b8; text-transform: uppercase; background: #f8fafc; padding: 2px 6px; border-radius: 4px;">${node.type}</span>
+                    </div>
+                    <h4 style="margin: 0 0 8px 0; color: #0f172a; font-size: 16px;">${node.label}</h4>
+                    <p style="margin: 0; font-size: 13px; color: #475569; line-height: 1.5;">${node.description || ''}</p>
+                `;
+                
+                item.appendChild(dot);
+                item.appendChild(card);
+                
+                const nextNode = sortedNodes[index + 1];
+                if (nextNode) {
+                    const edge = data.edges.find(e => e.source === node.id && e.target === nextNode.id);
+                    if (edge) {
+                        const change = document.createElement('div');
+                        change.className = 'timeline-change';
+                        change.innerText = "→ " + edge.label;
+                        item.appendChild(change);
+                    }
+                }
+                
+                container.appendChild(item);
+            });
+        } else {
+            let width = window.innerWidth;
+            let height = window.innerHeight;
+
+            const svg = d3.select("#graph").append("svg")
+                .attr("width", width)
+                .attr("height", height)
+                .call(d3.zoom().scaleExtent([0.1, 8]).on("zoom", (event) => g.attr("transform", event.transform)));
+
+            const g = svg.append("g");
+
+            svg.append("defs").append("marker")
+                .attr("id", "arrowhead")
+                .attr("viewBox", "-0 -5 10 10")
+                .attr("refX", 25)
+                .attr("refY", 0)
+                .attr("orient", "auto")
+                .attr("markerWidth", 6)
+                .attr("markerHeight", 6)
+                .attr("xoverflow", "visible")
+                .append("svg:path")
+                .attr("d", "M 0,-5 L 10 ,0 L 0,5")
+                .attr("fill", "#cbd5e1")
+                .style("stroke", "none");
+
+            const simulation = d3.forceSimulation(data.nodes)
+                .force("link", d3.forceLink(data.edges).id(d => d.id).distance(180))
+                .force("charge", d3.forceManyBody().strength(-600))
+                .force("center", d3.forceCenter(width / 2, height / 2))
+                .force("x", d3.forceX(width / 2).strength(0.07))
+                .force("y", d3.forceY(height / 2).strength(0.07))
+                .force("collision", d3.forceCollide().radius(70));
+
+            window.addEventListener('resize', () => {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                svg.attr("width", width).attr("height", height);
+                simulation.force("center", d3.forceCenter(width / 2, height / 2));
+                simulation.force("x", d3.forceX(width / 2).strength(0.07));
+                simulation.force("y", d3.forceY(height / 2).strength(0.07));
+                simulation.alpha(0.3).restart();
+            });
+
+            const link = g.append("g").selectAll("line")
+                .data(data.edges).enter().append("line")
+                .attr("class", "link")
+                .attr("marker-end", "url(#arrowhead)");
+
+            const linkLabels = g.append("g").selectAll("text")
+                .data(data.edges).enter().append("text")
+                .attr("class", "link-label")
+                .text(d => d.label);
+
+            const node = g.append("g").selectAll("g")
+                .data(data.nodes).enter().append("g")
+                .attr("class", "node-group")
+                .style("cursor", "pointer")
+                .on("click", (event, d) => showInfo(d))
+                .call(d3.drag()
+                    .on("start", dragstarted)
+                    .on("drag", dragged)
+                    .on("end", dragended));
+
+            node.append("circle")
+                .attr("class", "node")
+                .attr("r", 24)
+                .attr("fill", d => getEntityColor(d.type))
+                .attr("stroke", "#fff")
+                .attr("stroke-width", 3)
+                .attr("filter", "drop-shadow(0 4px 6px rgba(0,0,0,0.1))");
+
+            node.append("text")
+                .attr("class", "label")
+                .attr("text-anchor", "middle")
+                .attr("dy", 42)
+                .text(d => d.label);
+
+            simulation.on("tick", () => {
+                link.attr("x1", d => d.source.x).attr("y1", d => d.source.y)
+                    .attr("x2", d => d.target.x).attr("y2", d => d.target.y);
+                
+                linkLabels
+                    .attr("x", d => (d.source.x + d.target.x) / 2)
+                    .attr("y", d => (d.source.y + d.target.y) / 2);
+
+                node.attr("transform", d => "translate(" + d.x + "," + d.y + ")");
+            });
+
+            function dragstarted(event, d) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                d.fx = d.x;
+                d.fy = d.y;
+            }
+
+            function dragged(event, d) {
+                d.fx = event.x;
+                d.fy = event.y;
+            }
+
+            function dragended(event, d) {
+                if (!event.active) simulation.alphaTarget(0);
+                d.fx = null;
+                d.fy = null;
+            }
+        }
+
+        function getEntityColor(type) {
+            const t = type ? type.trim().toLowerCase() : '';
+            if (colorMap && colorMap[t]) return colorMap[t];
+            
+            if (t.includes('henkil') || t.includes('person') || t.includes('ihminen')) return '#10b981';
+            if (t.includes('organisaatio') || t.includes('organization') || t.includes('yhtiö') || t.includes('yritys') || t.includes('yhteisö') || t.includes('company')) return '#3b82f6';
+            return '#f59e0b';
+        }
+    </script>
+</body>
 </html>
