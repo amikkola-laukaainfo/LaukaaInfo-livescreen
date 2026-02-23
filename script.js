@@ -353,11 +353,27 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
             for (const item of finalItems) {
                 const rssElement = document.createElement('div');
                 rssElement.className = 'rss-item';
+
+                let analysisLink = '';
+                // Jos kyseessä on päätöksenteko ja otsikko täsmää helmikuun 2026 kunnanhallitukseen
+                if (container.id === 'decisions-container') {
+                    const titleLower = item.title.toLowerCase();
+                    if (titleLower.includes('kunnanhallitus') && (titleLower.includes('helmikuu 2026') || titleLower.includes('23.2.2026'))) {
+                        analysisLink = `
+                            <div style="margin-top: 10px;">
+                                <a href="asiahaku.html?cat=kunnanhallitus&issue=2026-02" class="btn-primary" style="font-size: 0.85rem; padding: 6px 14px; background: #28a745; display: inline-flex; align-items: center; gap: 6px;">
+                                    <span>🔍</span> Lue AI-analyysi
+                                </a>
+                            </div>`;
+                    }
+                }
+
                 rssElement.innerHTML = `
                     ${item.imageUrl ? `<img src="${item.imageUrl}" class="rss-item-image" loading="lazy">` : ''}
                     <div class="rss-meta"><span class="date">📅 ${item.dateStr}</span></div>
                     <h3><a href="${item.link}" target="_blank">${item.title}</a></h3>
                     <p class="description">${item.description}</p>
+                    ${analysisLink}
                 `;
                 container.appendChild(rssElement);
             }

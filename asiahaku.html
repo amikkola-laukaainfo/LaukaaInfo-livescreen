@@ -291,13 +291,13 @@
             const style = styleSelect.value;
 
             if (category && issue) {
-                // Esimerkkilogiikka: Kunnanhallitus + Feb 2026 + Suhteet = sivu1.html
-                if (category === 'kunnanhallitus' && issue === '2026-02' && style === 'suhteet') {
+                // Näytetään sivu1.html Kunnanhallituksen helmikuun 2026 kokoukselle
+                if (category === 'kunnanhallitus' && issue === '2026-02') {
                     iframe.src = 'sivu1.html';
                 } else {
                     // Muille vaihtoehdoille voisi olla omia sivuja, nyt näytetään tyhjä tai placeholder
                     iframe.src = 'about:blank';
-                    placeholder.innerHTML = '<p>Analyysia valitulle yhdistelmälle ei vielä löytynyt.<br><small>Kokeile: Kunnanhallitus / Kokous helmikuu 2026 / Aiheiden suhteet</small></p>';
+                    placeholder.innerHTML = '<p>Analyysia valitulle yhdistelmälle ei vielä löytynyt.<br><small>Kokeile: Kunnanhallitus / Kokous helmikuu 2026</small></p>';
                     placeholder.style.display = 'block';
                     iframe.style.display = 'none';
                     return;
@@ -345,6 +345,25 @@
                     if (submenu) submenu.classList.toggle('open');
                 });
             });
+
+            // Tarkistetaan URL-parametrit hakuun (esim. etusivun linkeistä)
+            const params = new URLSearchParams(window.location.search);
+            const catParam = params.get('cat');
+            const issueParam = params.get('issue');
+
+            if (catParam && issueData[catParam]) {
+                categorySelect.value = catParam;
+                // Päivitetään asialista manuaalisesti tai liipaisemalla tapahtuma
+                categorySelect.dispatchEvent(new Event('change'));
+
+                if (issueParam) {
+                    // Pieni viive varmistamaan että asialista on ehtinyt päivittyä
+                    setTimeout(() => {
+                        issueSelect.value = issueParam;
+                        updateEmbed();
+                    }, 100);
+                }
+            }
         });
     </script>
 </body>
