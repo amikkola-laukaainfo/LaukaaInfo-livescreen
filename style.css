@@ -860,4 +860,17 @@ footer {
     z-index: 1000;
     max-width: 250px;
     font-size: 0.85rem;
+    animation: fadeOut 0.5s ease-out 5s forwards;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    to {
+        opacity: 0;
+        visibility: hidden;
+    }
 }
