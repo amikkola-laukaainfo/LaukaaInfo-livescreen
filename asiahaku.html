@@ -104,6 +104,11 @@
         .fade-in {
             animation: fadeIn 0.5s ease-out;
         }
+
+        .inactive-option {
+            font-style: italic;
+            color: #888;
+        }
     </style>
 </head>
 
@@ -203,8 +208,8 @@
                     <select id="category-select">
                         <option value="">Valitse kategoria...</option>
                         <option value="kunnanhallitus">Kunnanhallitus</option>
-                        <option value="kunnanvaltuusto">Kunnanvaltuusto</option>
-                        <option value="tekninen">Tekninen lautakunta</option>
+                        <option value="kunnanvaltuusto" class="inactive-option">Kunnanvaltuusto (tulossa)</option>
+                        <option value="tekninen" class="inactive-option">Tekninen lautakunta (tulossa)</option>
                     </select>
                 </div>
 
@@ -250,7 +255,7 @@
     <script>
         const issueData = {
             'kunnanhallitus': [
-                { id: '2026-02', text: 'Kokous helmikuu 2026' },
+                { id: '2026-02', text: 'Kokous helmikuu 2026', active: true },
                 { id: '2026-01', text: 'Kokous tammikuu 2026' }
             ],
             'kunnanvaltuusto': [
@@ -278,7 +283,10 @@
                 issueData[category].forEach(item => {
                     const opt = document.createElement('option');
                     opt.value = item.id;
-                    opt.textContent = item.text;
+                    opt.textContent = item.text + (item.active ? '' : ' (tulossa)');
+                    if (!item.active) {
+                        opt.classList.add('inactive-option');
+                    }
                     issueSelect.appendChild(opt);
                 });
             } else {
