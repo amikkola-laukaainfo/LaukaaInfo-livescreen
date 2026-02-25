@@ -7,6 +7,7 @@
     <title>LaukaaInfo – Kylien ja asukkaiden oma tietopankki</title>
     <meta name="description"
         content="Laukaan kylien ja asukkaiden oma tietopankki. Ajankohtaiset uutiset, tapahtumat ja paikalliset yritykset.">
+    <link rel="icon" href="logo.png">
 
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
@@ -34,7 +35,10 @@
 
     <nav class="top-nav">
         <div class="nav-container">
-            <div class="nav-logo">LaukaaInfo</div>
+            <div class="nav-logo">
+                <img src="logo.png" alt="LaukaaInfo Logo">
+                <span>LaukaaInfo</span>
+            </div>
             <div class="desktop-nav">
                 <ul class="nav-links">
                     <li class="nav-item">
@@ -78,7 +82,10 @@
     <!-- Sidebar Menu -->
     <aside class="sidebar-menu" id="sidebar-menu">
         <div class="sidebar-header">
-            <h2>LaukaaInfo</h2>
+            <div class="nav-logo">
+                <img src="logo.png" alt="LaukaaInfo Logo">
+                <span>LaukaaInfo</span>
+            </div>
             <button class="close-btn" id="close-sidebar-btn" aria-label="Sulje valikko">&times;</button>
         </div>
 
@@ -129,7 +136,10 @@
 
     <header>
         <div class="header-content">
-            <h1>LaukaaInfo</h1>
+            <div class="header-title-container">
+                <img src="logo.png" alt="LaukaaInfo Logo" class="main-logo">
+                <h1>LaukaaInfo</h1>
+            </div>
             <p>Laukaan kylien ja asukkaiden oma tietopankki</p>
             <a href="https://www.youtube.com/@laukaainfo" target="_blank" class="btn-youtube">
                 🎥 LaukaaInfo YouTube-kanavalle
@@ -252,7 +262,7 @@
             <div class="footer-links">
                 <a href="https://www.mediazoo.fi/laukaainfo/index.html">Tietoa sovelluksesta</a>
                 <a href="https://play.google.com/store/apps/datasafety?id=org.example.LaukaaLive">Yksityisyys</a>
-                <a href="https://www.mediazoo.fi/yhteystiedot">Ota yhteyttä</a>
+                <a href="https://mediazoo.fi/yhteystiedot/">Yhteystiedot</a>
                 <button id="pwa-install-btn"
                     style="display: none; background: #00c3ff; color: white; border: none; padding: 5px 12px; border-radius: 20px; cursor: pointer; font-family: inherit; font-size: 0.9rem; margin-left: 10px;">Asenna
                     sovellus</button>

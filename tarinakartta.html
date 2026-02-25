@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tarinakartta - LaukaaInfo</title>
     <meta name="description" content="Seuraa Laukaan tarinaa askeleet kerrallaan.">
+    <link rel="icon" href="logo.png">
 
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0056b3">
@@ -229,7 +230,10 @@
 <body>
     <nav class="top-nav">
         <div class="nav-container">
-            <div class="nav-logo">LaukaaInfo</div>
+            <div class="nav-logo">
+                <img src="logo.png" alt="LaukaaInfo Logo">
+                <span>LaukaaInfo</span>
+            </div>
             <div class="desktop-nav">
                 <ul class="nav-links">
                     <li class="nav-item">
@@ -271,7 +275,10 @@
 
     <aside class="sidebar-menu" id="sidebar-menu">
         <div class="sidebar-header">
-            <h2>LaukaaInfo</h2>
+            <div class="nav-logo">
+                <img src="logo.png" alt="LaukaaInfo Logo">
+                <span>LaukaaInfo</span>
+            </div>
             <button class="close-btn" id="close-sidebar-btn" aria-label="Sulje valikko">&times;</button>
         </div>
 
@@ -322,7 +329,10 @@
 
     <header>
         <div class="header-content">
-            <h1>Tarinakartta</h1>
+            <div class="header-title-container">
+                <img src="logo.png" alt="LaukaaInfo Logo" class="main-logo">
+                <h1>Tarinakartta</h1>
+            </div>
             <p>Seuraa opastettua kierrosta alueen historiaan ja nykypäivään</p>
         </div>
     </header>
@@ -390,6 +400,10 @@
     <footer>
         <div class="footer-content">
             <p>© 2026 LaukaaInfo – Epävirallinen yhteisösovellus</p>
+            <div class="footer-links">
+                <a href="index.html">Etusivulle</a>
+                <a href="https://mediazoo.fi/yhteystiedot/">Yhteystiedot</a>
+            </div>
         </div>
     </footer>
 
