@@ -206,6 +206,40 @@ header p {
     transform: translateX(-50%) translateY(0);
 }
 
+/* Nested Dropdowns (Desktop) */
+.dropdown-menu li {
+    position: relative;
+}
+
+.nested-menu {
+    position: absolute;
+    top: -5px;
+    left: 100%;
+    background: white;
+    min-width: 200px;
+    box-shadow: 10px 10px 25px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 0.8rem 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1200;
+}
+
+.dropdown-menu li:hover>.nested-menu {
+    opacity: 1;
+    visibility: visible;
+}
+
+.dropdown-menu .has-arrow>a::after {
+    content: '▶';
+    font-size: 0.6rem;
+    float: right;
+    margin-left: 15px;
+    margin-top: 3px;
+    opacity: 0.6;
+}
+
 .dropdown-menu li a {
     display: block;
     padding: 0.6rem 1.5rem;
