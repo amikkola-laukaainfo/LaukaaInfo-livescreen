@@ -128,6 +128,83 @@ header p {
     transition: all 0.3s ease;
 }
 
+/* Desktop Navigation */
+.desktop-nav {
+    display: none;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.nav-item {
+    position: relative;
+}
+
+.nav-link {
+    color: var(--light-text);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1rem;
+    padding: 0.5rem 0;
+    transition: opacity 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.nav-link:hover {
+    opacity: 0.8;
+}
+
+/* Desktop Dropdowns */
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: white;
+    min-width: 200px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 0.8rem 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1100;
+}
+
+.nav-item:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+.dropdown-menu li a {
+    display: block;
+    padding: 0.6rem 1.5rem;
+    color: var(--dark-text);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: background 0.2s, color 0.2s;
+}
+
+.dropdown-menu li a:hover {
+    background: var(--light-blue);
+    color: var(--primary-blue);
+}
+
+.nav-link .arrow {
+    font-size: 0.7rem;
+    transition: transform 0.3s ease;
+}
+
+.nav-item:hover .nav-link .arrow {
+    transform: rotate(180deg);
+}
+
 /* Sidebar Overlay */
 .sidebar-overlay {
     position: fixed;
@@ -843,6 +920,16 @@ footer {
 
     .company-grid {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (min-width: 1024px) {
+    .hamburger {
+        display: none;
+    }
+
+    .desktop-nav {
+        display: block;
     }
 }
 
