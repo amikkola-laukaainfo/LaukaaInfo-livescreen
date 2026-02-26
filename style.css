@@ -20,15 +20,24 @@
     font-family: 'Outfit', 'Inter', sans-serif;
 }
 
-html {
-    scroll-behavior: smooth;
-    scroll-padding-top: 70px;
+img {
+    max-width: 100%;
+    height: auto;
 }
 
 body {
     background-color: var(--background);
     color: var(--dark-text);
     line-height: 1.6;
+    overflow-x: hidden;
+    width: 100%;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 70px;
+    overflow-x: hidden;
+    width: 100%;
 }
 
 /* Map Markers */
@@ -62,6 +71,8 @@ header {
 .main-logo {
     height: 60px;
     width: auto;
+    max-width: 200px;
+    /* Estää räjähtämästä koko leveydelle */
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
@@ -132,6 +143,8 @@ header p {
 .nav-logo img {
     height: 32px;
     width: auto;
+    max-width: 100px;
+    /* Estää räjähtämästä koko leveydelle */
     border-radius: 6px;
 }
 
@@ -289,20 +302,24 @@ header p {
 .sidebar-menu {
     position: fixed;
     top: 0;
-    left: -320px;
+    left: 0;
     width: 300px;
     height: 100%;
     background: var(--light-text);
     z-index: 1050;
     box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
-    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
     overflow-y: auto;
+    visibility: hidden;
+    /* Piilotetaan kokonaan kun ei käytössä */
 }
 
 .sidebar-menu.active {
-    left: 0;
+    transform: translateX(0);
+    visibility: visible;
 }
 
 .sidebar-header {
