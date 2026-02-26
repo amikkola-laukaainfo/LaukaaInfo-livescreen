@@ -354,11 +354,11 @@
             if (category && issue) {
                 // Näytetään sivu1.html Kunnanhallituksen helmikuun 2026 kokoukselle
                 if (category === 'kunnanhallitus' && issue === '2026-02') {
-                    iframe.src = 'sivu1.html';
+                    iframe.src = 'fetch_html.php?page=sivu1';
                 } else if (category === 'kunnanvaltuusto' && issue === '2025-all-v') {
-                    iframe.src = 'sivu2.html';
+                    iframe.src = 'fetch_html.php?page=sivu2';
                 } else if (category === 'kunnan-talous' && issue === 'talousarvio') {
-                    iframe.src = 'sivu3.html';
+                    iframe.src = 'fetch_html.php?page=sivu3';
                 } else {
                     // Muille vaihtoehdoille voisi olla omia sivuja, nyt näytetään tyhjä tai placeholder
                     iframe.src = 'about:blank';
