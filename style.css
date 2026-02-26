@@ -125,6 +125,8 @@ header p {
     display: flex;
     align-items: center;
     gap: 10px;
+    text-decoration: none;
+    color: inherit;
 }
 
 .nav-logo img {
