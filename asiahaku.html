@@ -254,7 +254,7 @@
                         <option value="">Valitse kategoria...</option>
                         <option value="kunnanhallitus">Kunnanhallitus</option>
                         <option value="kunnanvaltuusto">Kunnanvaltuusto</option>
-                        <option value="tekninen" class="inactive-option">Tekninen lautakunta (tulossa)</option>
+                        <option value="kunnan-talous">Kunnan talous</option>
                     </select>
                 </div>
 
@@ -309,8 +309,8 @@
                 { id: '2026-02-v', text: 'Valtuusto helmikuu 2026' },
                 { id: '2025-12-v', text: 'Valtuusto joulukuu 2025' }
             ],
-            'tekninen': [
-                { id: '2026-01-t', text: 'Lautakunta tammikuu 2026' }
+            'kunnan-talous': [
+                { id: 'talousarvio', text: 'Talousarvio ja muutokset', active: true }
             ]
         };
 
@@ -357,6 +357,8 @@
                     iframe.src = 'sivu1.html';
                 } else if (category === 'kunnanvaltuusto' && issue === '2025-all-v') {
                     iframe.src = 'sivu2.html';
+                } else if (category === 'kunnan-talous' && issue === 'talousarvio') {
+                    iframe.src = 'sivu3.html';
                 } else {
                     // Muille vaihtoehdoille voisi olla omia sivuja, nyt näytetään tyhjä tai placeholder
                     iframe.src = 'about:blank';
