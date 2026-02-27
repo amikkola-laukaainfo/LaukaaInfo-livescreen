@@ -310,7 +310,9 @@
                 { id: '2025-12-v', text: 'Valtuusto joulukuu 2025' }
             ],
             'kunnan-talous': [
-                { id: 'talousarvio', text: 'Talousarvio ja muutokset', active: true }
+                { id: 'talousarvio', text: 'Talousarvio ja muutokset', active: true },
+                { id: 'talouslukuja-2018-24', text: 'Talouslukuja 2018-24', active: true },
+                { id: 'velka-as-2018-24', text: 'Velka/as 2018-24', active: true }
             ]
         };
 
@@ -359,6 +361,10 @@
                     iframe.src = 'logica/sivu2.html';
                 } else if (category === 'kunnan-talous' && issue === 'talousarvio') {
                     iframe.src = 'logica/sivu3.html';
+                } else if (category === 'kunnan-talous' && issue === 'talouslukuja-2018-24') {
+                    iframe.src = 'logica/tilinpaatos-lukuja-2018-2024.html';
+                } else if (category === 'kunnan-talous' && issue === 'velka-as-2018-24') {
+                    iframe.src = 'logica/laina-asukas-2018-2024.html';
                 } else {
                     // Muille vaihtoehdoille voisi olla omia sivuja, nyt näytetään tyhjä tai placeholder
                     iframe.src = 'about:blank';
