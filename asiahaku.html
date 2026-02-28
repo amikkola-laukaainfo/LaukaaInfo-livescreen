@@ -419,8 +419,26 @@
 
             // Tarkistetaan URL-parametrit hakuun (esim. etusivun linkeistä)
             const params = new URLSearchParams(window.location.search);
-            const catParam = params.get('cat');
-            const issueParam = params.get('issue');
+            let catParam = params.get('cat');
+            let issueParam = params.get('issue');
+
+            // Tarkistetaan nätit URL:t (esim. /asia-kunnanhallitus/2026-02)
+            const pathname = window.location.pathname;
+            const pathMatch = pathname.match(/\/(?:asia|asiahaku)-([^\/]+)\/(.+)/);
+            if (!catParam && pathMatch) {
+                catParam = decodeURIComponent(pathMatch[1]);
+                issueParam = decodeURIComponent(pathMatch[2]);
+            }
+
+            // Tarkistetaan hash-linkit (esim. #asia-kunnanhallitus/2026-02)
+            const hashParam = window.location.hash;
+            if (!catParam && hashParam && hashParam.match(/^#(?:asia|asiahaku)-/)) {
+                const parts = hashParam.replace(/^#(?:asia|asiahaku)-/, '').split('/');
+                if (parts.length >= 2) {
+                    catParam = decodeURIComponent(parts[0]);
+                    issueParam = decodeURIComponent(parts.slice(1).join('/'));
+                }
+            }
 
             if (catParam && issueData[catParam]) {
                 categorySelect.value = catParam;
@@ -432,6 +450,12 @@
                     setTimeout(() => {
                         issueSelect.value = issueParam;
                         updateEmbed();
+
+                        // Skrollataan automaattisesti embed-näkymään
+                        setTimeout(() => {
+                            const embedContainer = document.getElementById('embed-container');
+                            if (embedContainer) embedContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }, 500);
                     }, 100);
                 }
             }

@@ -1,3 +1,6 @@
 RewriteEngine On
 # Uudelleenohjataan /haku-yritys -> /index.html?haku=yritys
 RewriteRule ^haku-(.*)$ /index.html?haku=$1 [L,QSA]
+
+# Uudelleenohjataan /asia-kategoria/asia -> /asiahaku.html?cat=kategoria&issue=asia
+RewriteRule ^(?:asia|asiahaku)-([^/]+)/(.*)$ /asiahaku.html?cat=$1&issue=$2 [L,QSA]
