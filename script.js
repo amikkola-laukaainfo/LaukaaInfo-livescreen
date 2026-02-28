@@ -448,8 +448,66 @@ async function loadCompanyData() {
         initCompanyCatalog();
         initMap(allCompanies);
 
-        console.log('Päivitetään spotlight avaustilanteella');
-        updateSpotlight(welcomeCompany);
+        // URL-parametrin (haku) tarkistus
+        const queryParams = new URLSearchParams(window.location.search);
+        const urlParam = queryParams.get('haku') || queryParams.get('yritys');
+        // Tarkistetaan myös hash (esim. #haku-mediazoo)
+        const hashParam = window.location.hash;
+
+        let searchKeyword = urlParam;
+        if (!searchKeyword && hashParam && hashParam.startsWith('#haku-')) {
+            searchKeyword = hashParam.replace('#haku-', '').replace(/-/g, ' ');
+        }
+
+        // Mahdollistetaan myös suora polku jos .htaccess on ohjannut sen parametriksi mutta se tulee URL:stä tms. (varmistus)
+        const pathname = window.location.pathname;
+        const pathMatch = pathname.match(/\/haku-(.*)/);
+        if (!searchKeyword && pathMatch) {
+            searchKeyword = decodeURIComponent(pathMatch[1]).replace(/-/g, ' ');
+        }
+
+        let selectedCompany = null;
+        if (searchKeyword) {
+            const lowerKeyword = searchKeyword.toLowerCase();
+            // Etsitään yrityksen nimestä tai url-ystävällisestä muodosta
+            selectedCompany = allCompanies.find(c => {
+                if (!c.nimi) return false;
+                const nameMatch = c.nimi.toLowerCase().includes(lowerKeyword);
+                const urlFriendlyName = c.nimi.toLowerCase().replace(/[^a-z0-9äö]/g, '').includes(lowerKeyword.replace(/[^a-z0-9äö]/g, ''));
+                return nameMatch || urlFriendlyName;
+            });
+        }
+
+        if (selectedCompany) {
+            console.log('Avataan yritys URL-parametrin perusteella:', selectedCompany.nimi);
+            updateSpotlight(selectedCompany);
+
+            // Asetetaan sana hakukenttään
+            const searchInput = document.getElementById('company-search');
+            if (searchInput) {
+                searchInput.value = selectedCompany.nimi;
+                filterCatalog();
+
+                // Korostetaan katalogissa
+                document.querySelectorAll('.catalog-item').forEach(el => {
+                    if (el.querySelector('h4').textContent === selectedCompany.nimi) {
+                        el.classList.add('active');
+                        setTimeout(() => {
+                            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }, 500);
+                    }
+                });
+            }
+
+            // Skrollataan automaattisesti kohtaan
+            setTimeout(() => {
+                const spotlight = document.getElementById('company-spotlight');
+                if (spotlight) spotlight.scrollIntoView({ behavior: 'smooth' });
+            }, 800);
+        } else {
+            console.log('Päivitetään spotlight avaustilanteella');
+            updateSpotlight(welcomeCompany);
+        }
     } catch (error) {
         console.error('Yritystietojen haku epäonnistui:', error);
         document.getElementById('catalog-list').innerHTML = `<p style="padding: 1rem; color: #dc3545;">Virhe ladattaessa tietoja: ${error.message}</p>`;

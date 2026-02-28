@@ -1,0 +1,3 @@
+RewriteEngine On
+# Uudelleenohjataan /haku-yritys -> /index.html?haku=yritys
+RewriteRule ^haku-(.*)$ /index.html?haku=$1 [L,QSA]
