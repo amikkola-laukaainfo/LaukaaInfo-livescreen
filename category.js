@@ -29,17 +29,67 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function loadData(category) {
     try {
-        const response = await fetch('https://www.mediazoo.fi/laukaainfo-web/get_companies.php');
+        const dataSourceUrl = 'https://www.mediazoo.fi/laukaainfo-web/get_companies.php';
+        const response = await fetch(dataSourceUrl);
         const allCompanies = await response.json();
+
+        // Normalize URLs (Same logic as in script.js)
+        const baseUrl = dataSourceUrl.substring(0, dataSourceUrl.lastIndexOf('/') + 1);
+        allCompanies.forEach(company => {
+            if (company.media) {
+                company.media.forEach(item => {
+                    if (item.url) {
+                        if (item.url.includes('drive_cache/')) {
+                            const match = item.url.match(/drive_cache\/([a-zA-Z0-9_-]+)/);
+                            if (match) {
+                                const fileId = match[1];
+                                item.url = baseUrl + "get_image.php?id=" + fileId;
+                            }
+                        }
+                        if (!item.url.startsWith('http') && !item.url.startsWith('//')) {
+                            item.url = baseUrl + item.url;
+                        }
+                    }
+                });
+            }
+        });
 
         categoryCompanies = allCompanies.filter(c => c.kategoria === category);
 
-        renderFeatured(categoryCompanies);
-        renderDirectory(categoryCompanies);
+        // Separate Premium and Free (Business vs. Free)
+        const premium = categoryCompanies.filter(c => c.media && c.media.length > 0);
+        const free = categoryCompanies.filter(c => !c.media || c.media.length === 0);
+
+        renderFeatured(premium);
+        renderDirectory(premium, free);
         initMap(categoryCompanies);
+
+        startAutoSlider();
     } catch (error) {
         console.error('Error loading data:', error);
     }
+}
+
+function startAutoSlider() {
+    const track = document.getElementById('featured-carousel');
+    if (!track) return;
+
+    let scrollAmount = 0;
+    const step = 2; // Speed
+    const interval = 50;
+
+    setInterval(() => {
+        if (track.children.length < 2) return;
+
+        scrollAmount += step;
+        if (scrollAmount >= track.scrollWidth - track.clientWidth) {
+            scrollAmount = 0;
+        }
+        track.scrollTo({
+            left: scrollAmount,
+            behavior: 'auto'
+        });
+    }, interval);
 }
 
 function renderFeatured(companies) {
@@ -83,24 +133,52 @@ function renderFeatured(companies) {
     }
 }
 
-function renderDirectory(companies) {
+function renderDirectory(premium, free) {
     const list = document.getElementById('company-list');
     list.innerHTML = '';
 
-    companies.forEach(c => {
-        const card = document.createElement('div');
-        card.className = 'company-card';
-        card.innerHTML = `
-            <h3>${c.nimi}</h3>
-            <p class="address">${c.osoite || 'Laukaa'}</p>
-            <p>${c.mainoslause || ''}</p>
-            <div style="margin-top:1rem; display:flex; gap:10px;">
-                <a href="yrityskortti.html?id=${c.id}" class="btn-primary" style="padding:0.4rem 1rem; font-size:0.8rem;">TIEDOT</a>
-                ${c.nettisivu ? `<a href="${c.nettisivu}" target="_blank" class="btn-primary" style="padding:0.4rem 1rem; font-size:0.8rem; background:#666;">WWW</a>` : ''}
-            </div>
-        `;
-        list.appendChild(card);
-    });
+    // Premium Section
+    if (premium.length > 0) {
+        const h2 = document.createElement('h2');
+        h2.textContent = '⭐ Suositellut kumppanit';
+        h2.style.gridColumn = '1 / -1';
+        h2.style.marginTop = '2rem';
+        list.appendChild(h2);
+
+        premium.forEach(c => {
+            const card = createCompanyCard(c);
+            list.appendChild(card);
+        });
+    }
+
+    // Free Section
+    if (free.length > 0) {
+        const h2 = document.createElement('h2');
+        h2.textContent = 'Palveluhakemisto';
+        h2.style.gridColumn = '1 / -1';
+        h2.style.marginTop = '4rem';
+        list.appendChild(h2);
+
+        free.forEach(c => {
+            const card = createCompanyCard(c);
+            list.appendChild(card);
+        });
+    }
+}
+
+function createCompanyCard(c) {
+    const card = document.createElement('div');
+    card.className = 'company-card';
+    card.innerHTML = `
+        <h3>${c.nimi}</h3>
+        <p class="address">${c.osoite || 'Laukaa'}</p>
+        <p>${c.mainoslause || ''}</p>
+        <div style="margin-top:1rem; display:flex; gap:10px;">
+            <a href="yrityskortti.html?id=${c.id}" class="btn-primary" style="padding:0.4rem 1rem; font-size:0.8rem;">TIEDOT</a>
+            ${c.nettisivu ? `<a href="${c.nettisivu}" target="_blank" class="btn-primary" style="padding:0.4rem 1rem; font-size:0.8rem; background:#666;">WWW</a>` : ''}
+        </div>
+    `;
+    return card;
 }
 
 function initMap(companies) {

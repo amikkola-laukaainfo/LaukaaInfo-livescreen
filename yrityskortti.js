@@ -17,9 +17,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function loadCompanyDetails(id) {
     try {
-        // Fetch from the same remote API as script.js
-        const response = await fetch('https://www.mediazoo.fi/laukaainfo-web/get_companies.php');
+        const dataSourceUrl = 'https://www.mediazoo.fi/laukaainfo-web/get_companies.php';
+        const response = await fetch(dataSourceUrl);
         const companies = await response.json();
+
+        // Normalize URLs (Same logic as in script.js)
+        const baseUrl = dataSourceUrl.substring(0, dataSourceUrl.lastIndexOf('/') + 1);
+        companies.forEach(company => {
+            if (company.media) {
+                company.media.forEach(item => {
+                    if (item.url) {
+                        if (item.url.includes('drive_cache/')) {
+                            const match = item.url.match(/drive_cache\/([a-zA-Z0-9_-]+)/);
+                            if (match) {
+                                const fileId = match[1];
+                                item.url = baseUrl + "get_image.php?id=" + fileId;
+                            }
+                        }
+                        if (!item.url.startsWith('http') && !item.url.startsWith('//')) {
+                            item.url = baseUrl + item.url;
+                        }
+                    }
+                });
+            }
+        });
 
         const company = companies.find(c => c.id === id);
 
