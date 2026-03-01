@@ -134,17 +134,12 @@
             }, interval);
         };
 
-        const pauseScrolling = () => {
+        const stopAutoScroll = () => {
+            if (autoScrollInterval) {
+                clearInterval(autoScrollInterval);
+                autoScrollInterval = null;
+            }
             isPaused = true;
-            // Clear the actual scrollAmount to sync with manual scroll position
-            scrollAmount = track.scrollLeft;
-        };
-
-        const resumeScrolling = () => {
-            setTimeout(() => {
-                isPaused = false;
-                scrollAmount = track.scrollLeft;
-            }, 3000); // 3 second pause after interaction
         };
 
         // Navigation button logic
@@ -152,32 +147,26 @@
 
         if (prevBtn) {
             prevBtn.onclick = () => {
-                pauseScrolling();
+                stopAutoScroll();
                 track.scrollBy({ left: -scrollStep, behavior: 'smooth' });
-                resumeScrolling();
             };
         }
 
         if (nextBtn) {
             nextBtn.onclick = () => {
-                pauseScrolling();
+                stopAutoScroll();
                 track.scrollBy({ left: scrollStep, behavior: 'smooth' });
-                resumeScrolling();
             };
         }
 
-        // Pause on hover
-        track.onmouseenter = () => isPaused = true;
-        track.onmouseleave = () => {
-            scrollAmount = track.scrollLeft;
-            isPaused = false;
-        };
+        // Stop on manual interaction
+        track.onmousedown = stopAutoScroll;
+        track.ontouchstart = stopAutoScroll;
+        track.onwheel = stopAutoScroll;
 
-        // Touch/Manual scroll sync
+        // Sync scrollAmount for internal tracking (if needed for other logic)
         track.onscroll = () => {
-            if (Math.abs(scrollAmount - track.scrollLeft) > 10) {
-                scrollAmount = track.scrollLeft;
-            }
+            scrollAmount = track.scrollLeft;
         };
 
         startScrolling();
