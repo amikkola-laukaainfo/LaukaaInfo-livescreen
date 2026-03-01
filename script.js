@@ -203,7 +203,11 @@ function initMap(companies) {
     });
 
     map.on('locationerror', function (e) {
-        alert("Sijaintia ei voitu hakea: " + e.message);
+        if (e.code === 1) { // PERMISSION_DENIED
+            alert("Sijainti estetty. Varmista, että käytät sivua https-osoitteessa ja olet sallinut paikannuksen selaimen asetuksista.");
+        } else {
+            alert("Sijaintia ei voitu hakea: " + e.message);
+        }
     });
 }
 
