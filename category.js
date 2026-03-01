@@ -68,13 +68,15 @@ function renderFeatured(companies) {
             }
 
             item.innerHTML = `
-                <span class="premium-badge">SUOSITELTU</span>
-                ${mediaHtml}
-                <h3>${c.nimi}</h3>
-                <p>${c.mainoslause || ''}</p>
-                <div style="margin-top:1rem;">
-                    <strong>${c.osoite || ''}</strong>
-                </div>
+                <a href="yrityskortti.html?id=${c.id}" style="text-decoration: none; color: inherit; display: block;">
+                    <span class="premium-badge">SUOSITELTU</span>
+                    ${mediaHtml}
+                    <h3>${c.nimi}</h3>
+                    <p>${c.mainoslause || ''}</p>
+                    <div style="margin-top:1rem;">
+                        <strong>${c.osoite || ''}</strong>
+                    </div>
+                </a>
             `;
             container.appendChild(item);
         });
@@ -93,8 +95,8 @@ function renderDirectory(companies) {
             <p class="address">${c.osoite || 'Laukaa'}</p>
             <p>${c.mainoslause || ''}</p>
             <div style="margin-top:1rem; display:flex; gap:10px;">
-                ${c.nettisivu ? `<a href="${c.nettisivu}" target="_blank" class="btn-primary" style="padding:0.4rem 1rem; font-size:0.8rem;">WWW</a>` : ''}
-                ${c.puhelin ? `<a href="tel:${c.puhelin}" class="btn-primary" style="padding:0.4rem 1rem; font-size:0.8rem; background:#666;">SOITA</a>` : ''}
+                <a href="yrityskortti.html?id=${c.id}" class="btn-primary" style="padding:0.4rem 1rem; font-size:0.8rem;">TIEDOT</a>
+                ${c.nettisivu ? `<a href="${c.nettisivu}" target="_blank" class="btn-primary" style="padding:0.4rem 1rem; font-size:0.8rem; background:#666;">WWW</a>` : ''}
             </div>
         `;
         list.appendChild(card);
@@ -115,7 +117,19 @@ function initMap(companies) {
     companies.forEach(company => {
         if (company.lat && company.lon) {
             const marker = L.marker([company.lat, company.lon]);
-            marker.bindPopup(`<strong>${company.nimi}</strong><br>${company.osoite}`);
+            marker.bindPopup(`
+                <strong>${company.nimi}</strong><br>${company.osoite}<br><br>
+                <a href="yrityskortti.html?id=${company.id}" style="
+                    display: block;
+                    background: #0056b3;
+                    color: white;
+                    text-decoration: none;
+                    text-align: center;
+                    padding: 5px 10px;
+                    border-radius: 4px;
+                    font-size: 0.8rem;
+                ">Näytä tiedot</a>
+            `);
             markers.addLayer(marker);
         }
     });

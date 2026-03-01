@@ -158,16 +158,19 @@ function addMarkersToMap(companies) {
                     <div style="font-family: 'Outfit', sans-serif; min-width: 150px;">
                         <h4 style="margin: 0 0 5px 0; color: #0056b3;">${company.nimi}</h4>
                         <div style="font-size: 0.8rem; margin-bottom: 8px; color: #666;">${company.kategoria}</div>
-                        <button onclick="selectFromMap('${company.id}')" style="
+                        <a href="yrityskortti.html?id=${company.id}" style="
+                            display: block;
                             background: #0056b3;
                             color: white;
-                            border: none;
+                            text-decoration: none;
+                            text-align: center;
                             padding: 5px 10px;
                             border-radius: 4px;
                             cursor: pointer;
                             width: 100%;
                             font-size: 0.8rem;
-                        ">Näytä tiedot</button>
+                            box-sizing: border-box;
+                        ">Näytä tiedot</a>
                     </div>
                 `);
 
@@ -589,8 +592,12 @@ function initCompanyCatalog() {
 }
 
 function filterCatalog() {
-    const searchTerm = (document.getElementById('company-search').value || '').toLowerCase().trim();
-    const category = document.getElementById('category-filter').value;
+    const searchEl = document.getElementById('company-search');
+    if (!searchEl) return;
+
+    const searchTerm = (searchEl.value || '').toLowerCase().trim();
+    const categoryEl = document.getElementById('category-filter');
+    const category = categoryEl ? categoryEl.value : 'all';
 
     const filtered = allCompanies.filter(company => {
         const nimi = (company.nimi || '').toLowerCase();
@@ -742,26 +749,25 @@ function updateActiveSuggestion(items) {
     });
 }
 
-function selectSuggestion(company) {
-    const searchInput = document.getElementById('company-search');
-    const suggestionsList = document.getElementById('search-suggestions');
+searchInput.value = company.nimi;
+suggestionsList.style.display = 'none';
 
-    searchInput.value = company.nimi;
-    suggestionsList.style.display = 'none';
+// Ohjataan yrityskorttiin
+window.location.href = `yrityskortti.html?id=${company.id}`;
 
-    // Filtteröidään katalogi valitun mukaan ja päivitetään spotlight
-    filterCatalog();
-    updateSpotlight(company);
+// Filtteröidään katalogi valitun mukaan ja päivitetään spotlight
+filterCatalog();
+updateSpotlight(company);
 
-    // Korostetaan katalogissa
-    document.querySelectorAll('.catalog-item').forEach(el => {
-        if (el.querySelector('h4').textContent === company.nimi) {
-            el.classList.add('active');
-            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        } else {
-            el.classList.remove('active');
-        }
-    });
+// Korostetaan katalogissa
+document.querySelectorAll('.catalog-item').forEach(el => {
+    if (el.querySelector('h4').textContent === company.nimi) {
+        el.classList.add('active');
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else {
+        el.classList.remove('active');
+    }
+});
 }
 
 function renderCatalog(companies) {
