@@ -979,6 +979,8 @@ function showSuggestions() {
         suggestions = [...suggestions, ...lievestuoreSuggestions];
     }
 
+    filteredSuggestions = suggestions; // Update global filteredSuggestions for keyboard nav
+
     if (suggestions.length === 0) {
         suggestionsList.style.display = 'none';
         return;
