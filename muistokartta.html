@@ -156,32 +156,25 @@
 <body>
     <nav class="top-nav">
         <div class="nav-container">
-            <div class="nav-logo">
+            <a href="index.html" class="nav-logo">
                 <img src="logo.png" alt="LaukaaInfo Logo">
                 <span>LaukaaInfo</span>
-            </div>
+            </a>
             <div class="desktop-nav">
                 <ul class="nav-links">
                     <li class="nav-item">
-                        <a href="#" class="nav-link">Päätösten polut <span class="arrow">▼</span></a>
+                        <a href="index.html" class="nav-link">Kauppa <span class="arrow">▼</span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="asiahaku.html">Hae ja tutki</a></li>
+                            <li><a href="lisaa-yritys.html">Lisää yritys</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">Palvelut <span class="arrow">▼</span></a>
+                        <a href="ajankohtaista.html" class="nav-link">Ajankohtaista <span class="arrow">▼</span></a>
                         <ul class="dropdown-menu">
-                            <li class="has-arrow">
-                                <a href="#">Yritykset</a>
-                                <ul class="nested-menu">
-                                    <li><a href="index.html#company-spotlight">Tekstihaku</a></li>
-                                    <li><a href="index.html#map-section">Karttahaku</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="index.html#events-card">Tapahtumat</a></li>
-                            <li><a href="index.html#news-card">Tiedotteet</a></li>
-                            <li><a href="index.html#decisions-card">Päätöksenteko</a></li>
-                            <li><a href="index.html#feedback-card">Palautteet</a></li>
+                            <li><a href="ajankohtaista.html#events-card">Tapahtumat</a></li>
+                            <li><a href="ajankohtaista.html#news-card">Tiedotteet</a></li>
+                            <li><a href="ajankohtaista.html#decisions-card">Päätöksenteko</a></li>
+                            <li><a href="ajankohtaista.html#feedback-card">Palautteet</a></li>
                             <li class="has-arrow">
                                 <a href="#">Taajamat</a>
                                 <ul class="nested-menu">
@@ -191,11 +184,17 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">Kartat & Elämykset <span class="arrow">▼</span></a>
+                        <a href="#" class="nav-link">Päätösten polut <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="asiahaku.html">Hae ja tutki</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Kartat &amp; Elämykset <span class="arrow">▼</span></a>
                         <ul class="dropdown-menu">
                             <li><a href="tarinakartta.html">Tarinakartta</a></li>
                             <li><a href="muistokartta.html">Muistokartta</a></li>
-                            <li><a href="kadonneet.html">Kadonneet & löydetyt</a></li>
+                            <li><a href="kadonneet.html">Kadonneet &amp; löydetyt</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -211,7 +210,7 @@
     <!-- Sidebar Overlay -->
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
-    <!-- Sidebar Menu (Simplified for demo page) -->
+    <!-- Sidebar Menu -->
     <aside class="sidebar-menu" id="sidebar-menu">
         <div class="sidebar-header">
             <a href="index.html" class="nav-logo">
@@ -222,30 +221,32 @@
         </div>
 
         <div class="sidebar-content">
-            <!-- Pääosio: PÄÄTÖSTEN POLUT -->
+            <!-- Pääosio: KAUPPA -->
             <div class="menu-section">
-                <h3 class="section-title">PÄÄTÖSTEN POLUT</h3>
+                <h3 class="section-title">KAUPPA</h3>
                 <ul class="menu-list">
-                    <li class="menu-item"><a href="asiahaku.html" class="sidebar-link">Hae ja tutki</a></li>
+                    <li class="menu-item"><a href="lisaa-yritys.html" class="sidebar-link">Lisää yritys</a></li>
+                    <li class="menu-item has-submenu">
+                        <a href="#" class="submenu-toggle">Kategoriat <span class="arrow">▼</span></a>
+                        <ul class="submenu" id="sidebar-categories">
+                            <!-- Kategoriat dynaamisesti -->
+                        </ul>
+                    </li>
                 </ul>
             </div>
 
-            <!-- Pääosio: PALVELUT -->
+            <!-- Pääosio: AJANKOHTAISTA -->
             <div class="menu-section">
-                <h3 class="section-title">PALVELUT</h3>
+                <h3 class="section-title">AJANKOHTAISTA</h3>
                 <ul class="menu-list">
-                    <li class="menu-item has-submenu">
-                        <a href="#" class="submenu-toggle">Yritykset <span class="arrow">▼</span></a>
-                        <ul class="submenu">
-                            <li><a href="index.html#company-spotlight" class="sidebar-link">Tekstihaku</a></li>
-                            <li><a href="index.html#map-section" class="sidebar-link">Karttahaku</a></li>
-                        </ul>
+                    <li class="menu-item"><a href="ajankohtaista.html#events-card" class="sidebar-link">Tapahtumat</a>
                     </li>
-                    <li class="menu-item"><a href="index.html#events-card" class="sidebar-link">Tapahtumat</a></li>
-                    <li class="menu-item"><a href="index.html#news-card" class="sidebar-link">Tiedotteet</a></li>
-                    <li class="menu-item"><a href="index.html#decisions-card" class="sidebar-link">Päätöksenteko</a>
+                    <li class="menu-item"><a href="ajankohtaista.html#news-card" class="sidebar-link">Tiedotteet</a>
                     </li>
-                    <li class="menu-item"><a href="index.html#feedback-card" class="sidebar-link">Palautteet</a></li>
+                    <li class="menu-item"><a href="ajankohtaista.html#decisions-card"
+                            class="sidebar-link">Päätöksenteko</a></li>
+                    <li class="menu-item"><a href="ajankohtaista.html#feedback-card" class="sidebar-link">Palautteet</a>
+                    </li>
                     <li class="menu-item has-submenu">
                         <a href="#" class="submenu-toggle">Taajamat <span class="arrow">▼</span></a>
                         <ul class="submenu">
@@ -255,13 +256,22 @@
                 </ul>
             </div>
 
+            <!-- Pääosio: PÄÄTÖSTEN POLUT -->
+            <div class="menu-section">
+                <h3 class="section-title">PÄÄTÖSTEN POLUT</h3>
+                <ul class="menu-list">
+                    <li class="menu-item"><a href="asiahaku.html" class="sidebar-link">Hae ja tutki</a></li>
+                </ul>
+            </div>
+
             <!-- Korostettu osio: KARTAT & ELÄMYKSET -->
             <div class="menu-section highlight-section">
-                <h3 class="section-title">KARTAT & ELÄMYKSET ⭐</h3>
+                <h3 class="section-title">KARTAT &amp; ELÄMYKSET ⭐</h3>
                 <ul class="menu-list">
                     <li class="menu-item"><a href="tarinakartta.html" class="sidebar-link">Tarinakartta</a></li>
                     <li class="menu-item"><a href="muistokartta.html" class="sidebar-link">Muistokartta</a></li>
-                    <li class="menu-item"><a href="kadonneet.html" class="sidebar-link">Kadonneet & löydetyt</a></li>
+                    <li class="menu-item"><a href="kadonneet.html" class="sidebar-link">Kadonneet &amp; löydetyt</a>
+                    </li>
                 </ul>
             </div>
         </div>
