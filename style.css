@@ -985,7 +985,7 @@ h2 span {
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
-    text-align: left;
+    text-align: center;
 }
 
 .catalog-list-home:empty {
