@@ -1,4 +1,5 @@
 let allCompanies = [];
+let allRssItems = []; // Global storage for RSS content
 let currentCompany = null;
 let currentMediaIndex = 0;
 let map = null;
@@ -63,10 +64,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Alustetaan feedit vain jos containerit löytyvät (Ajankohtaista-sivu)
-    if (document.getElementById('news-container')) {
-        initRSSFeeds();
-    }
+    // Alustetaan feedit taustalla hakuun (myös etusivulla)
+    initRSSFeeds();
 
     // Alustetaan yritysdata dynaamisesti (Kauppa-sivu tai -valikot)
     loadCompanyData();
@@ -336,7 +335,12 @@ function initRSSFeeds() {
  * Yleiskäyttöinen RSS-haku merkistötuella ja kuvan poiminnalla.
  */
 async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
-    // Käytetään ensisijaisesti paikallista PHP-proxya webhotellissa
+    // Determine type based on URL or container
+    const isEvent = url.includes('evofeed');
+    const typeLabel = isEvent ? 'Tapahtuma' : 'Tiedote';
+    const typeClass = isEvent ? 'event' : 'news';
+
+    // Proxies...
     // Use only the server‑side PHP proxy to avoid CORS issues
     const proxies = [
         `https://www.mediazoo.fi/laukaainfo-web/proxy.php?url=${encodeURIComponent(url)}&encoding=${encoding}`,
@@ -466,14 +470,24 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
                 if (url.includes('evofeed')) description = description.replace(/START:.*END:.*(?= )/g, '').trim();
                 description = description.substring(0, 120) + (description.length > 120 ? '...' : '');
 
-                parsedItems.push({
+                const rssItem = {
                     title,
                     link,
                     date: dateObj,
                     imageUrl,
                     description,
-                    dateStr: dateObj && !isNaN(dateObj) ? dateObj.toLocaleDateString('fi-FI') : ''
-                });
+                    dateStr: dateObj && !isNaN(dateObj) ? dateObj.toLocaleDateString('fi-FI') : '',
+                    type: typeLabel,
+                    typeClass: typeClass,
+                    isRss: true
+                };
+
+                parsedItems.push(rssItem);
+
+                // Add to global storage for search, avoid duplicates
+                if (!allRssItems.find(i => i.link === rssItem.link)) {
+                    allRssItems.push(rssItem);
+                }
             }
 
             // Järjestetään tapahtumat päivämäärän mukaan (lähin ensin)
@@ -513,12 +527,12 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
 
                 rssElement.innerHTML = `
                     ${item.imageUrl ? `<img src="${item.imageUrl}" class="rss-item-image" loading="lazy">` : ''}
-                    <div class="rss-meta"><span class="date">📅 ${item.dateStr}</span></div>
+                    <div class="rss-meta"><span class="date">📅 ${item.dateStr}</span> <span class="news-badge ${item.typeClass}">${item.type}</span></div>
                     <h3><a href="${item.link}" target="_blank">${item.title}</a></h3>
                     <p class="description">${item.description}</p>
                     ${analysisLink}
                 `;
-                container.appendChild(rssElement);
+                if (container) container.appendChild(rssElement);
             }
             return; // Onnistui!
         } catch (error) {
@@ -690,6 +704,13 @@ function initCompanyCatalog() {
 
     searchInput.addEventListener('keydown', handleSearchKeydown);
 
+    const rssToggle = document.getElementById('include-rss');
+    if (rssToggle) {
+        rssToggle.addEventListener('change', () => {
+            filterCatalog();
+        });
+    }
+
     if (categorySelect) {
         categorySelect.addEventListener('change', () => {
             filterCatalog();
@@ -727,8 +748,20 @@ function filterCatalog() {
         return matchesSearch && matchesCategory;
     });
 
-    filteredSuggestions = filtered.slice(0, 8); // Näytetään max 8 ehdotusta
-    renderCatalog(filtered);
+    // RSS Hybrid Search
+    const includeRss = document.getElementById('include-rss')?.checked;
+    let combinedResults = [...filtered];
+
+    if (includeRss && searchTerm.length > 0) {
+        const rssMatches = allRssItems.filter(item => {
+            return item.title.toLowerCase().includes(searchTerm) ||
+                item.description.toLowerCase().includes(searchTerm);
+        });
+        combinedResults = [...combinedResults, ...rssMatches];
+    }
+
+    filteredSuggestions = filtered.slice(0, 8); // Keep suggestions mainly business-centric or extend later
+    renderCatalog(combinedResults);
 
     // Päivitetään myös kartta vastaamaan filtteriä
     if (map && markers) {
@@ -797,9 +830,27 @@ function renderHomepageCategories(categories) {
 
 function showSuggestions() {
     const suggestionsList = document.getElementById('search-suggestions');
-    const searchTerm = document.getElementById('company-search').value.trim();
+    const searchInput = document.getElementById('company-search');
+    const searchTerm = searchInput.value.trim().toLowerCase();
+    const includeRss = document.getElementById('include-rss')?.checked;
 
-    if (searchTerm.length < 1 || filteredSuggestions.length === 0) {
+    if (searchTerm.length < 1) {
+        suggestionsList.style.display = 'none';
+        return;
+    }
+
+    // Get suggestions from businesses
+    let suggestions = allCompanies.filter(c => c.nimi.toLowerCase().includes(searchTerm)).slice(0, 6);
+
+    // Add RSS suggestions if enabled
+    if (includeRss) {
+        const rssSuggestions = allRssItems
+            .filter(i => i.title.toLowerCase().includes(searchTerm))
+            .slice(0, 4);
+        suggestions = [...suggestions, ...rssSuggestions];
+    }
+
+    if (suggestions.length === 0) {
         suggestionsList.style.display = 'none';
         return;
     }
@@ -807,20 +858,23 @@ function showSuggestions() {
     suggestionsList.innerHTML = '';
     activeSuggestionIndex = -1;
 
-    filteredSuggestions.forEach((company, index) => {
+    suggestions.forEach((item, index) => {
         const li = document.createElement('li');
+        const isRss = item.isRss;
+        const name = isRss ? item.title : item.nimi;
+        const cat = isRss ? item.type : item.kategoria;
 
-        // Korostetaan hakutermi nimeen
+        // Highlight search term
         const regex = new RegExp(`(${searchTerm})`, 'gi');
-        const highlightedName = company.nimi.replace(regex, '<mark>$1</mark>');
+        const highlightedName = name.replace(regex, '<mark>$1</mark>');
 
         li.innerHTML = `
-            <span>${highlightedName}</span>
-            <span class="suggestion-cat">${company.kategoria}</span>
+            <span>${isRss ? '📢 ' : ''}${highlightedName}</span>
+            <span class="suggestion-cat">${cat}</span>
         `;
 
         li.onclick = () => {
-            selectSuggestion(company);
+            selectSuggestion(item);
         };
 
         suggestionsList.appendChild(li);
@@ -862,15 +916,19 @@ function updateActiveSuggestion(items) {
     });
 }
 
-function selectSuggestion(company) {
+function selectSuggestion(item) {
     const searchInput = document.getElementById('company-search');
     const suggestionsList = document.getElementById('search-suggestions');
 
-    if (searchInput) searchInput.value = company.nimi;
     if (suggestionsList) suggestionsList.style.display = 'none';
 
-    // Ohjataan yrityskorttiin
-    window.location.href = `yrityskortti.html?id=${company.id}`;
+    if (item.isRss) {
+        window.open(item.link, '_blank');
+    } else {
+        if (searchInput) searchInput.value = item.nimi;
+        // Ohjataan yrityskorttiin
+        window.location.href = `yrityskortti.html?id=${item.id}`;
+    }
 }
 
 function renderCatalog(companies) {
@@ -882,16 +940,33 @@ function renderCatalog(companies) {
         list.innerHTML = '<p style="padding: 1rem; opacity: 0.6;">Ei löytynyt yrityksiä.</p>';
         return;
     }
-    companies.forEach(company => {
+    companies.forEach(itemData => {
         const item = document.createElement('div');
         item.className = 'catalog-item';
-        if (currentCompany && currentCompany.id === company.id) item.classList.add('active');
-        item.innerHTML = `<h4>${company.nimi}</h4><span class="cat-tag">${company.kategoria}</span>`;
-        item.onclick = () => {
-            document.querySelectorAll('.catalog-item').forEach(el => el.classList.remove('active'));
-            item.classList.add('active');
-            updateSpotlight(company);
-        };
+
+        if (itemData.isRss) {
+            // RSS Item Rendering
+            item.classList.add('rss-result');
+            item.innerHTML = `
+                <span class="news-badge ${itemData.typeClass}">${itemData.type}</span>
+                <h4>${itemData.title}</h4>
+                <div style="font-size: 0.8rem; opacity: 0.7; margin-top: 5px;">📅 ${itemData.dateStr}</div>
+                <div style="font-size: 0.85rem; margin-top: 5px;">Linkki lähteeseen ↗</div>
+            `;
+            item.onclick = () => {
+                window.open(itemData.link, '_blank');
+            };
+        } else {
+            // Business Item Rendering
+            const company = itemData;
+            if (currentCompany && currentCompany.id === company.id) item.classList.add('active');
+            item.innerHTML = `<h4>${company.nimi}</h4><span class="cat-tag">${company.kategoria}</span>`;
+            item.onclick = () => {
+                document.querySelectorAll('.catalog-item').forEach(el => el.classList.remove('active'));
+                item.classList.add('active');
+                updateSpotlight(company);
+            };
+        }
         list.appendChild(item);
     });
 }

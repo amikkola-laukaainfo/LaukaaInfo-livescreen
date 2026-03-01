@@ -966,6 +966,16 @@ h2 span {
     box-shadow: 0 4px 15px rgba(0, 86, 179, 0.3);
 }
 
+.catalog-item.rss-result {
+    border-left: 4px solid var(--accent-orange);
+}
+
+.catalog-item.rss-result:hover {
+    background: #fff5eb;
+    border-left-color: #f6ad55;
+    color: inherit;
+}
+
 .catalog-item h4 {
     margin-bottom: 0.4rem;
     font-size: 1.1rem;
@@ -1213,6 +1223,49 @@ footer {
 
 .btn-search:hover {
     background: var(--secondary-blue);
+}
+
+.search-options {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: white;
+    user-select: none;
+}
+
+.checkbox-container input {
+    cursor: pointer;
+}
+
+/* Badge for RSS search results */
+.news-badge {
+    display: inline-block;
+    background: #e2e8f0;
+    color: #4a5568;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.news-badge.event {
+    background: #c6f6d5;
+    color: #22543d;
+}
+
+.news-badge.news {
+    background: #bee3f8;
+    color: #2a4365;
 }
 
 /* Map Accordion */
