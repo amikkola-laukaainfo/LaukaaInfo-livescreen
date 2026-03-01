@@ -776,16 +776,14 @@ function renderHomepageCategories(categories) {
 
     container.innerHTML = '';
 
-    const categoryIcons = {
-        'Kauneus ja terveys': '💄',
-        'Matkailu & Elämykset': '🌲',
-        'Ravinto & Vapaa-aika': '🍽️',
-        'Perinnematkailu & Juhlat': '💒',
-        'Muu': '🏢'
-    };
-
     categories.forEach(cat => {
-        const icon = categoryIcons[cat] || '🏢';
+        // Robust lookup: try direct match, then lowercase, then slug-like
+        const cleanCat = cat.trim();
+        const icon = categoryIcons[cleanCat] ||
+            categoryIcons[cleanCat.replace('-', ' ')] ||
+            categoryIcons[cleanCat.replace(' ', '-')] ||
+            Object.entries(categoryIcons).find(([k]) => k.toLowerCase() === cleanCat.toLowerCase())?.[1] ||
+            '🏢';
         const card = document.createElement('a');
         card.href = `kategoria.html?cat=${encodeURIComponent(cat)}`;
         card.className = 'category-card';

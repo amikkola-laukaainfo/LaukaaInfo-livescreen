@@ -43,7 +43,14 @@
             'Perinnematkailu & Juhlat': '💒',
             'Muu': '🏢'
         };
-        document.getElementById('category-icon').textContent = categoryIcons[category] || '🏢';
+        // Robust lookup: try direct match, then lowercase, then slug-like
+        const cleanCat = (category || '').trim();
+        const icon = categoryIcons[cleanCat] ||
+            categoryIcons[cleanCat.replace('-', ' ')] ||
+            categoryIcons[cleanCat.replace(' ', '-')] ||
+            Object.entries(categoryIcons).find(([k]) => k.toLowerCase() === cleanCat.toLowerCase())?.[1] ||
+            '🏢';
+        document.getElementById('category-icon').textContent = icon;
 
         loadData(category);
     });
