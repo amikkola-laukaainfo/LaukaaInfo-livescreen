@@ -108,24 +108,79 @@
 
     function startAutoSlider() {
         const track = document.getElementById('featured-carousel');
+        const prevBtn = document.getElementById('carousel-prev');
+        const nextBtn = document.getElementById('carousel-next');
         if (!track) return;
 
         let scrollAmount = 0;
         const step = 2; // Speed
         const interval = 50;
+        let isPaused = false;
+        let autoScrollInterval = null;
 
-        setInterval(() => {
-            if (track.children.length < 2) return;
+        const startScrolling = () => {
+            if (autoScrollInterval) clearInterval(autoScrollInterval);
+            autoScrollInterval = setInterval(() => {
+                if (isPaused) return;
 
-            scrollAmount += step;
-            if (scrollAmount >= track.scrollWidth - track.clientWidth) {
-                scrollAmount = 0;
+                scrollAmount += step;
+                if (scrollAmount >= track.scrollWidth - track.clientWidth) {
+                    scrollAmount = 0;
+                }
+                track.scrollTo({
+                    left: scrollAmount,
+                    behavior: 'auto'
+                });
+            }, interval);
+        };
+
+        const pauseScrolling = () => {
+            isPaused = true;
+            // Clear the actual scrollAmount to sync with manual scroll position
+            scrollAmount = track.scrollLeft;
+        };
+
+        const resumeScrolling = () => {
+            setTimeout(() => {
+                isPaused = false;
+                scrollAmount = track.scrollLeft;
+            }, 3000); // 3 second pause after interaction
+        };
+
+        // Navigation button logic
+        const scrollStep = 350 + 32; // item width + gap
+
+        if (prevBtn) {
+            prevBtn.onclick = () => {
+                pauseScrolling();
+                track.scrollBy({ left: -scrollStep, behavior: 'smooth' });
+                resumeScrolling();
+            };
+        }
+
+        if (nextBtn) {
+            nextBtn.onclick = () => {
+                pauseScrolling();
+                track.scrollBy({ left: scrollStep, behavior: 'smooth' });
+                resumeScrolling();
+            };
+        }
+
+        // Pause on hover
+        track.onmouseenter = () => isPaused = true;
+        track.onmouseleave = () => {
+            scrollAmount = track.scrollLeft;
+            isPaused = false;
+        };
+
+        // Touch/Manual scroll sync
+        track.onscroll = () => {
+            if (Math.abs(scrollAmount - track.scrollLeft) > 10) {
+                scrollAmount = track.scrollLeft;
             }
-            track.scrollTo({
-                left: scrollAmount,
-                behavior: 'auto'
-            });
-        }, interval);
+        };
+
+        startScrolling();
     }
 
     function renderFeatured(companies) {
