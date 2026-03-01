@@ -63,10 +63,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Alustetaan feedit
-    initRSSFeeds();
+    // Alustetaan feedit vain jos containerit löytyvät (Ajankohtaista-sivu)
+    if (document.getElementById('news-container')) {
+        initRSSFeeds();
+    }
+
+    // Alustetaan yritysdata dynaamisesti (Kauppa-sivu tai -valikot)
     loadCompanyData();
-    initAccordion();
+
+    // Alustetaan haitari (Kauppa-sivu)
+    if (document.getElementById('toggle-map-btn')) {
+        initAccordion();
+    }
 });
 
 function initAccordion() {
@@ -412,7 +420,8 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
  * Yritysdata ja katalogi
  */
 async function loadCompanyData() {
-    const dataSourceUrl = 'https://www.mediazoo.fi/laukaainfo-web/get_companies.php';
+    // Käytetään suhteellista polkua, jotta hyödynnetään paikallista get_companies.php:tä
+    const dataSourceUrl = 'get_companies.php';
     console.log('Yritetään hakea yritystietoja:', dataSourceUrl);
     try {
         const response = await fetch(dataSourceUrl + '?t=' + Date.now());
@@ -425,11 +434,12 @@ async function loadCompanyData() {
             allCompanies = JSON.parse(text);
         } catch (e) {
             console.error('JSON parsimisvirhe. Data ei ole validia JSONia:', text.substring(0, 200));
+            // Jos lataus epäonnistuu, yritetään ladata backup tai näyttää virhe
             throw e;
         }
 
-        // Normalisoidaan URL:t, jos ne ovat suhteellisia ja data haetaan ulkoiselta palvelimelta
-        const baseUrl = dataSourceUrl.substring(0, dataSourceUrl.lastIndexOf('/') + 1);
+        // Jos ollaan paikallisessa ympäristössä, baseUrl voi olla tyhjä
+        const baseUrl = dataSourceUrl.includes('://') ? dataSourceUrl.substring(0, dataSourceUrl.lastIndexOf('/') + 1) : '';
         allCompanies.forEach(company => {
             if (company.media) {
                 company.media.forEach(item => {
@@ -543,13 +553,18 @@ function initCompanyCatalog() {
     const categorySelect = document.getElementById('category-filter');
     const suggestionsList = document.getElementById('search-suggestions');
 
+    // Jos ollaan sivulla jossa ei ole hakukenttiä, lopetetaan
+    if (!searchInput) return;
+
     const categories = [...new Set(allCompanies.map(c => c.kategoria))].sort();
-    categories.forEach(cat => {
-        const option = document.createElement('option');
-        option.value = cat;
-        option.textContent = cat;
-        categorySelect.appendChild(option);
-    });
+    if (categorySelect) {
+        categories.forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat;
+            option.textContent = cat;
+            categorySelect.appendChild(option);
+        });
+    }
 
     searchInput.addEventListener('input', () => {
         filterCatalog();
@@ -558,9 +573,11 @@ function initCompanyCatalog() {
 
     searchInput.addEventListener('keydown', handleSearchKeydown);
 
-    categorySelect.addEventListener('change', () => {
-        filterCatalog();
-    });
+    if (categorySelect) {
+        categorySelect.addEventListener('change', () => {
+            filterCatalog();
+        });
+    }
 
     // Piilotetaan ehdotukset kun klikataan muualle
     document.addEventListener('click', (e) => {
@@ -750,6 +767,8 @@ function selectSuggestion(company) {
 
 function renderCatalog(companies) {
     const list = document.getElementById('catalog-list');
+    if (!list) return; // Katalogi ei ole näkyvissä tällä sivulla
+
     list.innerHTML = '';
     if (companies.length === 0) {
         list.innerHTML = '<p style="padding: 1rem; opacity: 0.6;">Ei löytynyt yrityksiä.</p>';

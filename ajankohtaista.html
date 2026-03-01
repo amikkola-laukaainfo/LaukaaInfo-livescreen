@@ -4,116 +4,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kategoria – LaukaaInfo</title>
+    <title>Ajankohtaista – LaukaaInfo</title>
+    <meta name="description"
+        content="Laukaan kylien ja asukkaiden oma tietopankki. Ajankohtaiset uutiset, tapahtumat ja paikalliset yritykset.">
     <link rel="icon" href="logo.png">
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0056b3">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+
+    <!-- Fonts & Styles -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;700&display=swap"
         rel="stylesheet">
 
-    <!-- Leaflet for Map -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
-
-    <link rel="stylesheet" href="style.css">
-    <style>
-        .category-header {
-            padding: 4rem 1rem;
-            background: var(--light-blue);
-            text-align: center;
-            border-radius: var(--border-radius);
-            margin-bottom: 3rem;
-        }
-
-        .category-header h1 {
-            font-size: 3rem;
-            color: var(--primary-blue);
-        }
-
-        /* Carousel Styles */
-        .featured-carousel-section {
-            margin-bottom: 5rem;
-        }
-
-        .carousel-container {
-            position: relative;
-            overflow: hidden;
-            padding: 2rem 0;
-        }
-
-        .carousel-track {
-            display: flex;
-            gap: 2rem;
-            transition: transform 0.5s ease;
-        }
-
-        .carousel-item {
-            min-width: 350px;
-            background: white;
-            border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-            border-top: 4px solid var(--accent-blue);
-        }
-
-        .premium-badge {
-            background: #ffcc00;
-            color: #333;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            display: inline-block;
-        }
-
-        /* Category Map */
-        .category-map-section {
-            margin-bottom: 5rem;
-        }
-
-        #category-map {
-            height: 500px;
-            border-radius: 15px;
-            box-shadow: var(--shadow);
-        }
-
-        /* Company Grid */
-        .company-directory {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 5rem;
-        }
-
-        .company-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s;
-        }
-
-        .company-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .company-card h3 {
-            color: var(--primary-blue);
-            margin-bottom: 0.5rem;
-        }
-
-        .company-card .address {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css?v=20260226-2">
 </head>
 
 <body>
+
     <nav class="top-nav">
         <div class="nav-container">
             <a href="index.html" class="nav-logo">
@@ -126,15 +40,17 @@
                         <a href="index.html" class="nav-link">Kauppa <span class="arrow">▼</span></a>
                         <ul class="dropdown-menu">
                             <li><a href="lisaa-yritys.html">Lisää yritys</a></li>
+                            <!-- Kategoriat ladataan dynaamisesti JS:llä -->
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="ajankohtaista.html" class="nav-link">Ajankohtaista <span class="arrow">▼</span></a>
+                        <a href="ajankohtaista.html" class="nav-link active">Ajankohtaista <span
+                                class="arrow">▼</span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="ajankohtaista.html#events-card">Tapahtumat</a></li>
-                            <li><a href="ajankohtaista.html#news-card">Tiedotteet</a></li>
-                            <li><a href="ajankohtaista.html#decisions-card">Päätöksenteko</a></li>
-                            <li><a href="ajankohtaista.html#feedback-card">Palautteet</a></li>
+                            <li><a href="#events-card">Tapahtumat</a></li>
+                            <li><a href="#news-card">Tiedotteet</a></li>
+                            <li><a href="#decisions-card">Päätöksenteko</a></li>
+                            <li><a href="#feedback-card">Palautteet</a></li>
                             <li class="has-arrow">
                                 <a href="#">Taajamat</a>
                                 <ul class="nested-menu">
@@ -144,7 +60,7 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="asiahaku.html" class="nav-link">Päätösten polut <span class="arrow">▼</span></a>
+                        <a href="#" class="nav-link">Päätösten polut <span class="arrow">▼</span></a>
                         <ul class="dropdown-menu">
                             <li><a href="asiahaku.html">Hae ja tutki</a></li>
                         </ul>
@@ -199,14 +115,10 @@
             <div class="menu-section">
                 <h3 class="section-title">AJANKOHTAISTA</h3>
                 <ul class="menu-list">
-                    <li class="menu-item"><a href="ajankohtaista.html#events-card" class="sidebar-link">Tapahtumat</a>
-                    </li>
-                    <li class="menu-item"><a href="ajankohtaista.html#news-card" class="sidebar-link">Tiedotteet</a>
-                    </li>
-                    <li class="menu-item"><a href="ajankohtaista.html#decisions-card"
-                            class="sidebar-link">Päätöksenteko</a></li>
-                    <li class="menu-item"><a href="ajankohtaista.html#feedback-card" class="sidebar-link">Palautteet</a>
-                    </li>
+                    <li class="menu-item"><a href="#events-card" class="sidebar-link">Tapahtumat</a></li>
+                    <li class="menu-item"><a href="#news-card" class="sidebar-link">Tiedotteet</a></li>
+                    <li class="menu-item"><a href="#decisions-card" class="sidebar-link">Päätöksenteko</a></li>
+                    <li class="menu-item"><a href="#feedback-card" class="sidebar-link">Palautteet</a></li>
                     <li class="menu-item has-submenu">
                         <a href="#" class="submenu-toggle">Taajamat <span class="arrow">▼</span></a>
                         <ul class="submenu">
@@ -235,45 +147,67 @@
             </div>
         </div>
     </aside>
-    <!-- We need the main script for the hamburger/sidebar to work, and to load nav categories -->
-    <script src="script.js"></script>
+
+    <header>
+        <div class="header-content">
+            <h1>Ajankohtaista</h1>
+            <p>Seuraa Laukaan tapahtumia ja uutisia.</p>
+        </div>
+    </header>
 
     <main>
-        <div class="category-header">
-            <span id="category-icon" style="font-size: 4rem; display: block; margin-bottom: 1rem;">🏢</span>
-            <h1 id="category-name">Ladataan toimialaa...</h1>
-            <p id="category-description">Tutustu paikallisiin palveluntarjoajiin.</p>
-        </div>
-
-        <!-- Suositellut (Maksulliset) -->
-        <section class="featured-carousel-section" id="featured-section" style="display: none;">
-            <h2>⭐ Suositellut yritykset</h2>
-            <div class="carousel-container">
-                <div class="carousel-track" id="featured-carousel">
-                    <!-- Suositellut kortit tässä -->
+        <section id="ajankohtaista">
+            <div class="dashboard-grid">
+                <!-- RSS Uutiset -->
+                <div class="card" id="news-card">
+                    <h2><span>📅</span> Ajankohtaiset uutiset</h2>
+                    <div id="news-container" class="rss-list">
+                        <p>Ladataan uutisia...</p>
+                    </div>
                 </div>
-            </div>
-        </section>
 
-        <!-- Kartta -->
-        <section class="category-map-section">
-            <h2>Palvelut kartalla</h2>
-            <div id="category-map"></div>
-        </section>
+                <!-- RSS Päätöksenteko -->
+                <div class="card" id="decisions-card">
+                    <h2><span>⚖️</span> Päätöksenteko</h2>
+                    <div id="decisions-container" class="rss-list">
+                        <p>Ladataan pöytäkirjoja...</p>
+                    </div>
+                </div>
 
-        <!-- Kaikki yritykset -->
-        <section class="directory-section">
-            <h2>Kaikki toimijat</h2>
-            <div class="company-directory" id="company-list">
-                <!-- Kaikki kategoriassa olevat yritykset -->
+                <!-- RSS Tapahtumat -->
+                <div class="card" id="events-card">
+                    <h2><span>🎉</span> Tapahtumat</h2>
+                    <div id="events-container" class="rss-list">
+                        <p>Ladataan tapahtumia...</p>
+                    </div>
+                </div>
+
+                <!-- Palaute -->
+                <div class="card" id="feedback-card">
+                    <h2><span>💬</span> Anna palautetta kunnalle</h2>
+                    <div id="feedback-container" class="rss-list">
+                        <p>Ladataan palautteita...</p>
+                    </div>
+                    <a href="https://laukaa.trimblefeedback.com/eFeedback/" target="_blank" class="btn-primary"
+                        style="margin-top: 15px; display: inline-block;">
+                        🔗 Siirry palautelomakkeeseen
+                    </a>
+                </div>
             </div>
         </section>
     </main>
 
-    <!-- Scripts -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
-    <script src="category.js"></script>
+    <footer>
+        <div class="footer-content">
+            <p>© 2026 LaukaaInfo – Epävirallinen yhteisösovellus</p>
+            <div class="footer-links">
+                <a href="index.html">Etusivulle</a>
+                <a href="https://mediazoo.fi/yhteystiedot/">Yhteystiedot</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js?v=20260219-26"></script>
 </body>
 
 </html>
