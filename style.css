@@ -1289,6 +1289,11 @@ footer {
     color: #2a4365;
 }
 
+.news-badge.lievestuore {
+    background: #e9d8fd;
+    color: #44337a;
+}
+
 /* Map Accordion */
 .map-accordion {
     max-width: 800px;

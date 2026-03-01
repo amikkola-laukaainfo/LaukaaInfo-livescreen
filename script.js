@@ -1,5 +1,6 @@
 let allCompanies = [];
 let allRssItems = []; // Global storage for RSS content
+let allLievestuoreItems = []; // Global storage for Lievestuore Blogger posts
 let currentCompany = null;
 let currentMediaIndex = 0;
 let map = null;
@@ -329,6 +330,48 @@ function initRSSFeeds() {
     fetchRSSFeed('https://laukaa.oncloudos.com/cgi/DREQUEST.PHP?page=rss/meetingitems&show=30', document.getElementById('decisions-container'), 'Ei uusia päätöksiä.', 'iso-8859-1');
     fetchRSSFeed('https://visitlaukaa.fi/evofeed', document.getElementById('events-container'), 'Ei tulevia tapahtumia.', 'utf-8');
     fetchRSSFeed('https://laukaa.trimblefeedback.com/eFeedback/API/Feed/rss', document.getElementById('feedback-container'), 'Ei uusia palautteita.', 'utf-8');
+    // Ladataan Lievestuoreen Blogger-syöte taustalla hakua varten
+    fetchLievestuoreItems();
+}
+
+/**
+ * Hakee Lievestuoreen Blogger-uutiset taustalla hakua varten (ei renderöi näytölle).
+ */
+function fetchLievestuoreItems() {
+    const blogId = '7148270853674792022';
+    const script = document.createElement('script');
+    script.src = `https://www.blogger.com/feeds/${blogId}/posts/default?alt=json-in-script&callback=storeLievestuoreItems&max-results=20`;
+    script.onerror = () => console.warn('Lievestuoreen Blogger-syötteen haku epäonnistui.');
+    document.body.appendChild(script);
+}
+
+// Globaali callback Blogger JSONP:lle – tallentaa tiedot hakuun
+function storeLievestuoreItems(data) {
+    const entries = data.feed.entry || [];
+    allLievestuoreItems = [];
+    entries.forEach(entry => {
+        const title = entry.title.$t;
+        let content = entry.content ? entry.content.$t : (entry.summary ? entry.summary.$t : '');
+        let rawText = content.replace(/<[^>]*>?/gm, '').trim();
+        if (rawText.length > 200) rawText = rawText.substring(0, 200) + '...';
+        let link = '#';
+        if (entry.link) {
+            const altLink = entry.link.find(l => l.rel === 'alternate');
+            if (altLink) link = altLink.href;
+        }
+        const publishedDate = new Date(entry.published.$t);
+        const dateStr = publishedDate.toLocaleDateString('fi-FI');
+        allLievestuoreItems.push({
+            title,
+            link,
+            description: rawText,
+            dateStr,
+            type: 'Lievestuore',
+            typeClass: 'lievestuore',
+            isRss: true
+        });
+    });
+    console.log(`Lievestuoreen uutisia ladattu hakuun: ${allLievestuoreItems.length}`);
 }
 
 /**
@@ -719,6 +762,13 @@ function initCompanyCatalog() {
         });
     }
 
+    const lievestuoreToggle = document.getElementById('include-lievestuore');
+    if (lievestuoreToggle) {
+        lievestuoreToggle.addEventListener('change', () => {
+            filterCatalog();
+        });
+    }
+
     if (categorySelect) {
         categorySelect.addEventListener('change', () => {
             filterCatalog();
@@ -788,6 +838,7 @@ function filterCatalog() {
 
     // RSS Hybrid Search
     const includeRss = document.getElementById('include-rss')?.checked;
+    const includeLievestuore = document.getElementById('include-lievestuore')?.checked;
     let combinedResults = [...filtered];
 
     if (includeRss && searchTerm.length > 0) {
@@ -796,6 +847,14 @@ function filterCatalog() {
                 item.description.toLowerCase().includes(searchTerm);
         });
         combinedResults = [...combinedResults, ...rssMatches];
+    }
+
+    if (includeLievestuore && searchTerm.length > 0) {
+        const lievestuoreMatches = allLievestuoreItems.filter(item => {
+            return item.title.toLowerCase().includes(searchTerm) ||
+                item.description.toLowerCase().includes(searchTerm);
+        });
+        combinedResults = [...combinedResults, ...lievestuoreMatches];
     }
 
     filteredSuggestions = filtered.slice(0, 8); // Keep suggestions mainly business-centric or extend later
@@ -909,6 +968,15 @@ function showSuggestions() {
             .filter(i => i.title.toLowerCase().includes(searchTerm))
             .slice(0, 4);
         suggestions = [...suggestions, ...rssSuggestions];
+    }
+
+    // Add Lievestuore suggestions if enabled
+    const includeLievestuore = document.getElementById('include-lievestuore')?.checked;
+    if (includeLievestuore) {
+        const lievestuoreSuggestions = allLievestuoreItems
+            .filter(i => i.title.toLowerCase().includes(searchTerm))
+            .slice(0, 4);
+        suggestions = [...suggestions, ...lievestuoreSuggestions];
     }
 
     if (suggestions.length === 0) {
