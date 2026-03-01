@@ -118,6 +118,46 @@ function initMap(companies) {
     markers = L.markerClusterGroup();
     addMarkersToMap(companies);
     map.addLayer(markers);
+
+    // Geolocation Control
+    const LocateControl = L.Control.extend({
+        options: { position: 'topleft' },
+        onAdd: function (map) {
+            const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
+            const button = L.DomUtil.create('a', 'leaflet-control-locate', container);
+            button.innerHTML = '📍 Sijaintini';
+            button.href = '#';
+            button.title = 'Näytä oma sijainti';
+
+            L.DomEvent.on(button, 'click', function (e) {
+                L.DomEvent.stopPropagation(e);
+                L.DomEvent.preventDefault(e);
+                map.locate({ setView: true, maxZoom: 15 });
+            });
+
+            return container;
+        }
+    });
+
+    map.addControl(new LocateControl());
+
+    let userMarker;
+    map.on('locationfound', function (e) {
+        if (userMarker) map.removeLayer(userMarker);
+
+        const userIcon = L.divIcon({
+            className: 'user-location-marker',
+            iconSize: [20, 20],
+            iconAnchor: [10, 10]
+        });
+
+        userMarker = L.marker(e.latlng, { icon: userIcon }).addTo(map);
+        userMarker.bindPopup("Olet tässä").openPopup();
+    });
+
+    map.on('locationerror', function (e) {
+        alert("Sijaintia ei voitu hakea: " + e.message);
+    });
 }
 
 function addMarkersToMap(companies) {

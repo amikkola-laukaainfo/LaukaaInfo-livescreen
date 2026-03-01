@@ -1372,3 +1372,56 @@ footer {
         margin-top: 10px;
     }
 }
+
+/* Map Geolocation Controls */
+.leaflet-control-locate {
+    background: white !important;
+    padding: 6px 12px !important;
+    border: 2px solid rgba(0, 0, 0, 0.2) !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4) !important;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #333;
+}
+
+.leaflet-control-locate:hover {
+    background: #f4f4f4 !important;
+}
+
+/* User Location Marker */
+.user-location-marker {
+    background: #3b82f6;
+    border: 3px solid white;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.6);
+}
+
+.user-location-marker::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border-radius: 50%;
+    background: rgba(59, 130, 246, 0.3);
+    animation: pulse 2s infinite;
+    z-index: -1;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(3);
+        opacity: 0;
+    }
+}
