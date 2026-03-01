@@ -543,7 +543,10 @@ async function loadCompanyData() {
         }
     } catch (error) {
         console.error('Yritystietojen haku epäonnistui:', error);
-        document.getElementById('catalog-list').innerHTML = `<p style="padding: 1rem; color: #dc3545;">Virhe ladattaessa tietoja: ${error.message}</p>`;
+        const catalogList = document.getElementById('catalog-list');
+        if (catalogList) {
+            catalogList.innerHTML = `<p style="padding: 1rem; color: #dc3545;">Virhe ladattaessa tietoja: ${error.message}</p>`;
+        }
     }
 }
 
@@ -749,25 +752,15 @@ function updateActiveSuggestion(items) {
     });
 }
 
-searchInput.value = company.nimi;
-suggestionsList.style.display = 'none';
+function selectSuggestion(company) {
+    const searchInput = document.getElementById('company-search');
+    const suggestionsList = document.getElementById('search-suggestions');
 
-// Ohjataan yrityskorttiin
-window.location.href = `yrityskortti.html?id=${company.id}`;
+    if (searchInput) searchInput.value = company.nimi;
+    if (suggestionsList) suggestionsList.style.display = 'none';
 
-// Filtteröidään katalogi valitun mukaan ja päivitetään spotlight
-filterCatalog();
-updateSpotlight(company);
-
-// Korostetaan katalogissa
-document.querySelectorAll('.catalog-item').forEach(el => {
-    if (el.querySelector('h4').textContent === company.nimi) {
-        el.classList.add('active');
-        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    } else {
-        el.classList.remove('active');
-    }
-});
+    // Ohjataan yrityskorttiin
+    window.location.href = `yrityskortti.html?id=${company.id}`;
 }
 
 function renderCatalog(companies) {
