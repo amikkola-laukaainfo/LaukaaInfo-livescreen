@@ -403,10 +403,14 @@
             document.getElementById('option-' + type).classList.add('active');
 
             const premiumFields = document.getElementById('premium-fields');
+            const submitBtn = document.querySelector('.btn-submit');
+
             if (type === 'paid') {
                 premiumFields.classList.add('active');
+                submitBtn.textContent = 'Jatka maksuun (50,00€)';
             } else {
                 premiumFields.classList.remove('active');
+                submitBtn.textContent = 'Lähetä tiedot';
             }
         }
 
@@ -417,8 +421,57 @@
 
         document.getElementById('registration-form').addEventListener('submit', function (e) {
             e.preventDefault();
-            alert('Kiitos! Yrityksesi tiedot on lähetetty tarkistettavaksi. Olemme teihin yhteydessä mahdollisten lisätietojen osalta.');
-            window.location.href = 'index.html';
+
+            const formData = new FormData(this);
+            const typeValue = formData.get('type');
+
+            const data = {
+                tyyppi: typeValue === 'paid' ? 'MAKSULLINEN ⭐' : 'ILMAINEN',
+                nimi: formData.get('name'),
+                kategoria: formData.get('category'),
+                osoite: formData.get('address') || '-',
+                puhelin: formData.get('phone') || '-',
+                kotisivut: formData.get('website') || '-',
+                esittely: formData.get('description'),
+                kuva_linkit: formData.get('images') || '-',
+                youtube: formData.get('youtube') || '-',
+                tarjous: formData.get('coupon') || '-'
+            };
+
+            let emailBody = `Uusi yritys rekisteröinti LaukaaInfoon\n`;
+            emailBody += `------------------------------------\n`;
+            emailBody += `Tyyppi: ${data.tyyppi}\n`;
+            emailBody += `Nimi: ${data.nimi}\n`;
+            emailBody += `Kategoria: ${data.kategoria}\n`;
+            emailBody += `Osoite: ${data.osoite}\n`;
+            emailBody += `Puhelin: ${data.puhelin}\n`;
+            emailBody += `Kotisivut: ${data.kotisivut}\n\n`;
+            emailBody += `Esittely:\n${data.esittely}\n\n`;
+
+            if (typeValue === 'paid') {
+                emailBody += `Lisätiedot (Maksullinen):\n`;
+                emailBody += `Kuvat: ${data.kuva_linkit}\n`;
+                emailBody += `YouTube: ${data.youtube}\n`;
+                emailBody += `Tarjous: ${data.tarjous}\n`;
+            }
+
+            const subject = encodeURIComponent(`LaukaaInfo - Uusi yritysilmoitus: ${data.nimi}`);
+            const body = encodeURIComponent(emailBody);
+            const mailtoLink = `mailto:info@mediazoo.fi?subject=${subject}&body=${body}`;
+
+            // Avaa sähköposti tietojen lähettämistä varten
+            window.open(mailtoLink, '_blank');
+
+            if (typeValue === 'paid') {
+                // OHJAA STRIPE-MAKSUUN (Korvaa tämä omalla Stripe Payment Linkilläsi)
+                const stripePaymentLink = "https://buy.stripe.com/test_6oE14U0I85mG4j6000";
+
+                alert('Kiitos! Yrityksesi tiedot on koottu sähköpostiin. Lähetäthän viestin sähköpostiohjelmassasi ja jatka sen jälkeen maksuun Stripessä.');
+                window.location.href = stripePaymentLink;
+            } else {
+                alert('Kiitos! Yrityksesi tiedot on koottu sähköpostiin. Lähetäthän viestin sähköpostiohjelmassasi, jotta tiedot saapuvat meille tarkistettavaksi.');
+                window.location.href = 'index.html';
+            }
         });
     </script>
 </body>
