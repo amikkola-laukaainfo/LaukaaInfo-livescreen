@@ -58,11 +58,39 @@
             categoryCompanies = allCompanies.filter(c => c.kategoria === category);
 
             // Separate Premium and Free (Business vs. Free)
-            const premium = categoryCompanies.filter(c => c.media && c.media.length > 0);
+            let premium = categoryCompanies.filter(c => c.media && c.media.length > 0);
             const free = categoryCompanies.filter(c => !c.media || c.media.length === 0);
 
+            // DEMO-DATA: Jos aineistossa ei ole kuvallisia yrityksiä, näytetään muutama demo
+            if (premium.length === 0) {
+                console.log('Ei premium-yrityksiä, käytetään demo-aineistoa karuselliin.');
+                premium = [
+                    {
+                        id: 'demo1',
+                        nimi: 'Esimerkki Yritys 1',
+                        mainoslause: 'Tämä on demosisältöä karusellia varten.',
+                        osoite: 'Laukaantie 1, Laukaa',
+                        media: [{ type: 'image', url: 'https://images.unsplash.com/photo-1556740734-7193f3bc4f1a?auto=format&fit=crop&q=80&w=400' }]
+                    },
+                    {
+                        id: 'demo2',
+                        nimi: 'Esimerkki Yritys 2',
+                        mainoslause: 'Premium-näkyvyys rullaavassa karusellissa.',
+                        osoite: 'Lievestuoreentie 5, Lievestuore',
+                        media: [{ type: 'image', url: 'https://images.unsplash.com/photo-1542744094-24638eff58bb?auto=format&fit=crop&q=80&w=400' }]
+                    },
+                    {
+                        id: 'demo3',
+                        nimi: 'Esimerkki Yritys 3',
+                        mainoslause: 'Lisää kuvia CSV-tiedostoon saadaksesi oman yrityksesi tähän.',
+                        osoite: 'Vihtavuori',
+                        media: [{ type: 'image', url: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=400' }]
+                    }
+                ];
+            }
+
             renderFeatured(premium);
-            renderDirectory(premium, free);
+            renderDirectory(premium.filter(p => !p.id.startsWith('demo')), free);
             initMap(categoryCompanies);
 
             startAutoSlider();

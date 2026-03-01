@@ -1109,6 +1109,16 @@ footer {
     z-index: 2;
 }
 
+.search-input-wrapper {
+    display: flex;
+    background: white;
+    padding: 8px;
+    border-radius: 50px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 10;
+}
+
 .carousel-track {
     display: flex;
     gap: 2rem;
