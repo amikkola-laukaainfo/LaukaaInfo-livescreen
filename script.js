@@ -753,18 +753,38 @@ function filterCatalog() {
     const categoryEl = document.getElementById('category-filter');
     const category = categoryEl ? categoryEl.value : 'all';
 
-    const filtered = allCompanies.filter(company => {
-        const nimi = (company.nimi || '').toLowerCase();
-        const mainoslause = (company.mainoslause || '').toLowerCase();
-        const esittely = (company.esittely || '').toLowerCase();
+    const matches = allCompanies.map(company => {
+        const name = (company.nimi || '').toLowerCase();
+        const tagline = (company.mainoslause || '').toLowerCase();
+        const desc = (company.esittely || '').toLowerCase();
+        const cat = (company.kategoria || '').toLowerCase();
 
-        const matchesSearch = nimi.includes(searchTerm) ||
-            mainoslause.includes(searchTerm) ||
-            esittely.includes(searchTerm);
+        let score = 0;
+        if (name.includes(searchTerm)) score += 100;
+        if (tagline.includes(searchTerm)) score += 50;
+        // Only search description for longer terms to avoid noise
+        if (searchTerm.length > 1 && desc.includes(searchTerm)) score += 10;
+
+        // Exact prefix match in name gets a boost
+        if (name.startsWith(searchTerm)) score += 150;
 
         const matchesCategory = category === 'all' || company.kategoria === category;
-        return matchesSearch && matchesCategory;
+        const isPremium = company.tyyppi === 'paid' || company.taso === 'premium';
+
+        return { company, score, matchesCategory, isPremium };
+    }).filter(m => m.score > 0 && m.matchesCategory);
+
+    // Sort: Premium first, then by score, then alphabetically
+    matches.sort((a, b) => {
+        if (a.isPremium && !b.isPremium) return -1;
+        if (!a.isPremium && b.isPremium) return 1;
+
+        if (b.score !== a.score) return b.score - a.score;
+
+        return (a.company.nimi || '').localeCompare(b.company.nimi || '', 'fi');
     });
+
+    const filtered = matches.map(m => m.company);
 
     // RSS Hybrid Search
     const includeRss = document.getElementById('include-rss')?.checked;
@@ -864,8 +884,24 @@ function showSuggestions() {
         return;
     }
 
-    // Get suggestions from businesses
-    let suggestions = allCompanies.filter(c => c.nimi.toLowerCase().includes(searchTerm)).slice(0, 6);
+    // Get suggestions from businesses with scoring
+    let businessMatches = allCompanies.map(c => {
+        const name = (c.nimi || '').toLowerCase();
+        let score = 0;
+        if (name.startsWith(searchTerm)) score += 200;
+        else if (name.includes(searchTerm)) score += 100;
+
+        const isPremium = c.tyyppi === 'paid' || c.taso === 'premium';
+        return { company: c, score, isPremium };
+    }).filter(m => m.score > 0);
+
+    businessMatches.sort((a, b) => {
+        if (a.isPremium && !b.isPremium) return -1;
+        if (!a.isPremium && b.isPremium) return 1;
+        return b.score - a.score || (a.company.nimi || '').localeCompare(b.company.nimi || '', 'fi');
+    });
+
+    let suggestions = businessMatches.map(m => m.company).slice(0, 6);
 
     // Add RSS suggestions if enabled
     if (includeRss) {
