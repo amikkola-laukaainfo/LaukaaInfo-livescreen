@@ -67,24 +67,31 @@
                 premium = [
                     {
                         id: 'demo1',
-                        nimi: 'Esimerkki Yritys 1',
-                        mainoslause: 'Tämä on demosisältöä karusellia varten.',
+                        nimi: 'Esimerkki Parturi-Kampaamo',
+                        mainoslause: 'Modernit hiustenleikkuut ja värjäykset.',
                         osoite: 'Laukaantie 1, Laukaa',
-                        media: [{ type: 'image', url: 'https://images.unsplash.com/photo-1556740734-7193f3bc4f1a?auto=format&fit=crop&q=80&w=400' }]
+                        media: [{ type: 'image', url: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=600' }]
                     },
                     {
                         id: 'demo2',
-                        nimi: 'Esimerkki Yritys 2',
-                        mainoslause: 'Premium-näkyvyys rullaavassa karusellissa.',
+                        nimi: 'Laukaan Lounasravintola',
+                        mainoslause: 'Maistuvaa kotiruokaa joka arkipäivä.',
                         osoite: 'Lievestuoreentie 5, Lievestuore',
-                        media: [{ type: 'image', url: 'https://images.unsplash.com/photo-1542744094-24638eff58bb?auto=format&fit=crop&q=80&w=400' }]
+                        media: [{ type: 'image', url: 'https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&q=80&w=600' }]
                     },
                     {
                         id: 'demo3',
-                        nimi: 'Esimerkki Yritys 3',
-                        mainoslause: 'Lisää kuvia CSV-tiedostoon saadaksesi oman yrityksesi tähän.',
+                        nimi: 'Kukkakauppa Ruusu',
+                        mainoslause: 'Kukkatervehdykset kaikkiin tilaisuuksiin.',
                         osoite: 'Vihtavuori',
-                        media: [{ type: 'image', url: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=400' }]
+                        media: [{ type: 'image', url: 'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&q=80&w=600' }]
+                    },
+                    {
+                        id: 'demo4',
+                        nimi: 'Liikuntakeskus Syke',
+                        mainoslause: 'Kuntosali ja ryhmäliikuntatunnit.',
+                        osoite: 'Laukaantie 10, Laukaa',
+                        media: [{ type: 'image', url: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=600' }]
                     }
                 ];
             }

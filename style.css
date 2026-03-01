@@ -1308,6 +1308,7 @@ footer {
         flex-direction: column;
         border-radius: 20px;
         padding: 15px;
+        background: white !important;
     }
 
     .btn-search {
