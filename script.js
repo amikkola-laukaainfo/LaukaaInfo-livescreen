@@ -444,7 +444,7 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
 
                 // Tapahtumien suodatus: näytetään vain tulevat (tai tämän päivän) tapahtumat
                 // Tehdään tämä ENNEN tuplapoistoa, jotta ei hylätä uutta tapahtumaa vanhan (jo päättyneen) takia
-                if (container.id === 'events-container' && dateObj && !isNaN(dateObj)) {
+                if (container?.id === 'events-container' && dateObj && !isNaN(dateObj)) {
                     if (dateObj < todayStart) continue;
                 }
 
@@ -494,7 +494,7 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
             if (!container) return; // Background collection only
 
             // Järjestetään tapahtumat päivämäärän mukaan (lähin ensin)
-            if (container.id === 'events-container') {
+            if (container?.id === 'events-container') {
                 parsedItems.sort((a, b) => {
                     const aValid = a.date && !isNaN(a.date);
                     const bValid = b.date && !isNaN(b.date);
@@ -516,7 +516,7 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
 
                 let analysisLink = '';
                 // Jos kyseessä on päätöksenteko ja otsikko täsmää helmikuun 2026 kunnanhallitukseen
-                if (container.id === 'decisions-container') {
+                if (container?.id === 'decisions-container') {
                     const titleLower = item.title.toLowerCase();
                     if (titleLower.includes('kunnanhallitus') && (titleLower.includes('helmikuu 2026') || titleLower.includes('23.2.2026'))) {
                         analysisLink = `
@@ -704,7 +704,10 @@ function initCompanyCatalog() {
 
     searchInput.addEventListener('input', () => {
         filterCatalog();
-        showSuggestions();
+        const isHomePage = !!document.getElementById('homepage-categories');
+        if (!isHomePage) {
+            showSuggestions();
+        }
     });
 
     searchInput.addEventListener('keydown', handleSearchKeydown);
