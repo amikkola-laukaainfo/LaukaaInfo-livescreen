@@ -387,10 +387,10 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
             }
 
             const items = xml.querySelectorAll('item').length > 0 ? xml.querySelectorAll('item') : xml.querySelectorAll('entry');
-            container.innerHTML = '';
+            if (container) container.innerHTML = '';
 
             if (items.length === 0) {
-                container.innerHTML = `<p>${emptyMessage}</p>`;
+                if (container) container.innerHTML = `<p>${emptyMessage}</p>`;
                 return;
             }
 
@@ -490,6 +490,9 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
                 }
             }
 
+            // After parsing ALL items, we can handle the display if container exists
+            if (!container) return; // Background collection only
+
             // Järjestetään tapahtumat päivämäärän mukaan (lähin ensin)
             if (container.id === 'events-container') {
                 parsedItems.sort((a, b) => {
@@ -542,7 +545,9 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
     }
 
     console.error(`Kaikki RSS-haut epäonnistuivat: ${url}`, lastError);
-    container.innerHTML = `<p>Tietojen lataus epäonnistui (CORS/Network error).</p>`;
+    if (container) {
+        container.innerHTML = `<p>Tietojen lataus epäonnistui (CORS/Network error).</p>`;
+    }
 }
 
 /**
@@ -713,6 +718,13 @@ function initCompanyCatalog() {
 
     if (categorySelect) {
         categorySelect.addEventListener('change', () => {
+            filterCatalog();
+        });
+    }
+
+    const searchBtn = document.getElementById('search-btn');
+    if (searchBtn) {
+        searchBtn.addEventListener('click', () => {
             filterCatalog();
         });
     }

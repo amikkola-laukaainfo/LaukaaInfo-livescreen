@@ -966,6 +966,19 @@ h2 span {
     box-shadow: 0 4px 15px rgba(0, 86, 179, 0.3);
 }
 
+.catalog-list-home {
+    margin-top: 1.5rem;
+    background: white;
+    border-radius: 12px;
+    max-height: 400px;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.catalog-list-home:empty {
+    display: none;
+}
+
 .catalog-item.rss-result {
     border-left: 4px solid var(--accent-orange);
 }
