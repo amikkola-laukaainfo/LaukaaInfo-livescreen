@@ -971,12 +971,20 @@ function renderCatalog(companies) {
         } else {
             // Business Item Rendering
             const company = itemData;
+            const hasSpotlight = document.getElementById('company-spotlight');
+
             if (currentCompany && currentCompany.id === company.id) item.classList.add('active');
             item.innerHTML = `<h4>${company.nimi}</h4><span class="cat-tag">${company.kategoria}</span>`;
+
             item.onclick = () => {
-                document.querySelectorAll('.catalog-item').forEach(el => el.classList.remove('active'));
-                item.classList.add('active');
-                updateSpotlight(company);
+                if (hasSpotlight) {
+                    document.querySelectorAll('.catalog-item').forEach(el => el.classList.remove('active'));
+                    item.classList.add('active');
+                    updateSpotlight(company);
+                } else {
+                    // No spotlight (likely homepage), go to details page
+                    window.location.href = `yrityskortti.html?id=${company.id}`;
+                }
             };
         }
         list.appendChild(item);
@@ -992,22 +1000,32 @@ function updateSpotlight(company) {
     currentCompany = company;
     currentMediaIndex = 0;
 
-    document.getElementById('spotlight-name').textContent = company.nimi;
-    document.getElementById('spotlight-tagline').textContent = company.mainoslause;
-    document.getElementById('spotlight-desc').textContent = company.esittely || company.mainoslause;
-    document.getElementById('spotlight-details').innerHTML = `
-        <div>📍 ${company.osoite}</div>
-        <div>📞 ${company.puhelin || '-'}</div>
-        <div>📧 ${company.email || '-'}</div>
-    `;
-    let actionButtons = '';
-    if (company.nettisivu) {
-        actionButtons += `<a href="${company.nettisivu}" target="_blank" class="btn-primary">🌐 Kotisivut</a>`;
+    const nameEl = document.getElementById('spotlight-name');
+    const taglineEl = document.getElementById('spotlight-tagline');
+    const descEl = document.getElementById('spotlight-desc');
+    const detailsEl = document.getElementById('spotlight-details');
+
+    if (nameEl) nameEl.textContent = company.nimi;
+    if (taglineEl) taglineEl.textContent = company.mainoslause;
+    if (descEl) descEl.textContent = company.esittely || company.mainoslause;
+    if (detailsEl) {
+        detailsEl.innerHTML = `
+            <div>📍 ${company.osoite}</div>
+            <div>📞 ${company.puhelin || '-'}</div>
+            <div>📧 ${company.email || '-'}</div>
+        `;
     }
-    if (company.karttalinkki) {
-        actionButtons += `<a href="${company.karttalinkki}" target="_blank" class="btn-primary" style="background: #28a745;">📍 Kartta</a>`;
+    const actionsEl = document.getElementById('spotlight-actions');
+    if (actionsEl) {
+        let actionButtons = '';
+        if (company.nettisivu) {
+            actionButtons += `<a href="${company.nettisivu}" target="_blank" class="btn-primary">🌐 Kotisivut</a>`;
+        }
+        if (company.karttalinkki) {
+            actionButtons += `<a href="${company.karttalinkki}" target="_blank" class="btn-primary" style="background: #28a745;">📍 Kartta</a>`;
+        }
+        actionsEl.innerHTML = actionButtons;
     }
-    document.getElementById('spotlight-actions').innerHTML = actionButtons;
 
     renderMedia(0);
     renderSliderNav();
@@ -1037,6 +1055,8 @@ function preloadCompanyMedia(company) {
 
 function renderMedia(index) {
     const container = document.getElementById('spotlight-media');
+    if (!container) return; // Guard for missing element
+
     let mediaList = currentCompany.media || [];
     console.log('Piirretään media indeksiin:', index, 'Medialistasta:', mediaList);
 
@@ -1097,6 +1117,8 @@ function renderMedia(index) {
 
 function renderSliderNav() {
     const nav = document.getElementById('slider-nav');
+    if (!nav) return; // Guard for missing element
+
     const mediaList = currentCompany.media || [];
     nav.innerHTML = '';
 
