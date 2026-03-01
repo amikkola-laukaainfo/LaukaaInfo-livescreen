@@ -100,76 +100,32 @@
             renderDirectory(premium.filter(p => !p.id.startsWith('demo')), free);
             initMap(categoryCompanies);
 
-            startAutoSlider();
+            initCarousel();
         } catch (error) {
             console.error('Error loading data:', error);
         }
     }
 
-    function startAutoSlider() {
+    function initCarousel() {
         const track = document.getElementById('featured-carousel');
         const prevBtn = document.getElementById('carousel-prev');
         const nextBtn = document.getElementById('carousel-next');
         if (!track) return;
-
-        let scrollAmount = 0;
-        const step = 2; // Speed
-        const interval = 50;
-        let isPaused = false;
-        let autoScrollInterval = null;
-
-        const startScrolling = () => {
-            if (autoScrollInterval) clearInterval(autoScrollInterval);
-            autoScrollInterval = setInterval(() => {
-                if (isPaused) return;
-
-                scrollAmount += step;
-                if (scrollAmount >= track.scrollWidth - track.clientWidth) {
-                    scrollAmount = 0;
-                }
-                track.scrollTo({
-                    left: scrollAmount,
-                    behavior: 'auto'
-                });
-            }, interval);
-        };
-
-        const stopAutoScroll = () => {
-            if (autoScrollInterval) {
-                clearInterval(autoScrollInterval);
-                autoScrollInterval = null;
-            }
-            isPaused = true;
-        };
 
         // Navigation button logic
         const scrollStep = 350 + 32; // item width + gap
 
         if (prevBtn) {
             prevBtn.onclick = () => {
-                stopAutoScroll();
                 track.scrollBy({ left: -scrollStep, behavior: 'smooth' });
             };
         }
 
         if (nextBtn) {
             nextBtn.onclick = () => {
-                stopAutoScroll();
                 track.scrollBy({ left: scrollStep, behavior: 'smooth' });
             };
         }
-
-        // Stop on manual interaction
-        track.onmousedown = stopAutoScroll;
-        track.ontouchstart = stopAutoScroll;
-        track.onwheel = stopAutoScroll;
-
-        // Sync scrollAmount for internal tracking (if needed for other logic)
-        track.onscroll = () => {
-            scrollAmount = track.scrollLeft;
-        };
-
-        startScrolling();
     }
 
     function renderFeatured(companies) {

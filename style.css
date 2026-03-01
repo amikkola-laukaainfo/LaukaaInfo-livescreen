@@ -1111,9 +1111,8 @@ footer {
 
 .carousel-container {
     position: relative;
-    overflow: visible;
-    /* To allow buttons to hang out if needed, or keep hidden */
-    padding: 1rem 0;
+    padding: 1rem 3rem;
+    /* Extra padding for arrows */
 }
 
 .carousel-track {
@@ -1136,6 +1135,8 @@ footer {
 
 .carousel-item {
     scroll-snap-align: start;
+    flex: 0 0 350px;
+    /* Force width */
 }
 
 .carousel-nav-btn {
@@ -1145,7 +1146,7 @@ footer {
     width: 45px;
     height: 45px;
     background: white;
-    border: none;
+    border: 1px solid #eee;
     border-radius: 50%;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     cursor: pointer;
@@ -1165,11 +1166,13 @@ footer {
 }
 
 .carousel-nav-btn.prev {
-    left: -20px;
+    left: 5px;
+    /* Within the padding */
 }
 
 .carousel-nav-btn.next {
-    right: -20px;
+    right: 5px;
+    /* Within the padding */
 }
 
 @media (max-width: 768px) {
