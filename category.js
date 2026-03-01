@@ -250,20 +250,67 @@
 
         map.addLayer(markers);
 
-        // Geolocation Control
+        // Geolocation & Address Search Control
         const LocateControl = L.Control.extend({
             options: { position: 'topleft' },
             onAdd: function (map) {
-                const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
-                const button = L.DomUtil.create('a', 'leaflet-control-locate', container);
-                button.innerHTML = '📍 Sijaintini';
+                const container = L.DomUtil.create('div', 'leaflet-control-locate-wrapper');
+                container.style.position = 'relative';
+                container.style.display = 'flex';
+                container.style.alignItems = 'center';
+
+                const button = L.DomUtil.create('a', 'leaflet-control-locate leaflet-bar-part', container);
+                button.innerHTML = '📍';
                 button.href = '#';
                 button.title = 'Näytä oma sijainti';
+
+                // Address Search (Desktop)
+                const searchContainer = L.DomUtil.create('div', 'map-address-search', container);
+                searchContainer.innerHTML = `
+                    <input type="text" placeholder="Kirjoita osoite..." id="map-addr-input">
+                    <button id="map-addr-btn">HAE</button>
+                `;
 
                 L.DomEvent.on(button, 'click', function (e) {
                     L.DomEvent.stopPropagation(e);
                     L.DomEvent.preventDefault(e);
                     map.locate({ setView: true, maxZoom: 15 });
+                });
+
+                const input = searchContainer.querySelector('#map-addr-input');
+                const searchBtn = searchContainer.querySelector('#map-addr-btn');
+
+                const handleSearch = (e) => {
+                    L.DomEvent.stopPropagation(e);
+                    const query = input.value;
+                    if (!query) return;
+
+                    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query + ', Laukaa')}`)
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data && data.length > 0) {
+                                const result = data[0];
+                                const latlng = [parseFloat(result.lat), parseFloat(result.lon)];
+                                map.setView(latlng, 15);
+
+                                if (userMarker) map.removeLayer(userMarker);
+                                const userIcon = L.divIcon({
+                                    className: 'user-location-marker',
+                                    iconSize: [20, 20],
+                                    iconAnchor: [10, 10]
+                                });
+                                userMarker = L.marker(latlng, { icon: userIcon }).addTo(map);
+                                userMarker.bindPopup(`Sijainti: ${query}`).openPopup();
+                            } else {
+                                alert("Osoitetta ei löytynyt.");
+                            }
+                        })
+                        .catch(err => console.error("Geocoding error:", err));
+                };
+
+                L.DomEvent.on(searchBtn, 'click', handleSearch);
+                L.DomEvent.on(input, 'keydown', (e) => {
+                    if (e.key === 'Enter') handleSearch(e);
                 });
 
                 return container;

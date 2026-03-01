@@ -1376,21 +1376,66 @@ footer {
 /* Map Geolocation Controls */
 .leaflet-control-locate {
     background: white !important;
-    padding: 6px 12px !important;
+    width: 34px !important;
+    height: 34px !important;
+    line-height: 30px !important;
+    text-align: center !important;
     border: 2px solid rgba(0, 0, 0, 0.2) !important;
     border-radius: 4px !important;
     cursor: pointer !important;
-    font-weight: 600 !important;
-    font-size: 14px !important;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4) !important;
-    display: flex;
-    align-items: center;
-    gap: 5px;
+    font-size: 18px !important;
+    box-shadow: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
     color: #333;
+    text-decoration: none !important;
 }
 
 .leaflet-control-locate:hover {
     background: #f4f4f4 !important;
+}
+
+/* Address Search Fix for Desktop */
+.map-address-search {
+    position: absolute;
+    left: 45px;
+    top: 0;
+    display: none;
+    /* Only show on desktop */
+}
+
+@media (min-width: 1024px) {
+    .map-address-search {
+        display: flex;
+        gap: 5px;
+        background: white;
+        padding: 4px;
+        border-radius: 4px;
+        border: 2px solid rgba(0, 0, 0, 0.2);
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+    }
+}
+
+.map-address-search input {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 2px 8px;
+    font-size: 12px;
+    width: 150px;
+    font-family: inherit;
+}
+
+.map-address-search button {
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 2px 8px;
+    font-size: 11px;
+    cursor: pointer;
+    font-weight: 600;
 }
 
 /* User Location Marker */
