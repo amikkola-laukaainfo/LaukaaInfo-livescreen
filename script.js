@@ -443,8 +443,8 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
                 }
 
                 // Tapahtumien suodatus: näytetään vain tulevat (tai tämän päivän) tapahtumat
-                // Tehdään tämä ENNEN tuplapoistoa, jotta ei hylätä uutta tapahtumaa vanhan (jo päättyneen) takia
-                if (container?.id === 'events-container' && dateObj && !isNaN(dateObj)) {
+                // Tehdään tämä globaalisti isEvent-perusteella, jotta myös haku suodattaa vanhat
+                if (isEvent && dateObj && !isNaN(dateObj)) {
                     if (dateObj < todayStart) continue;
                 }
 
