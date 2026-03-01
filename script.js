@@ -97,11 +97,31 @@ function initAccordion() {
 }
 
 const categoryColors = {
+    'Autokorjaamot': '#4a5568',
+    'Elintarvike': '#f6ad55',
+    'Juhlatilat': '#ed64a6',
     'Kauneus ja terveys': '#ff4d94',
+    'Koti-rakennus': '#718096',
+    'Majoitus': '#667eea',
     'Matkailu & Elämykset': '#00cc66',
     'Ravinto & Vapaa-aika': '#ff9900',
+    'Ruokailu': '#f56565',
     'Perinnematkailu & Juhlat': '#996633',
     'Muu': '#0056b3'
+};
+
+const categoryIcons = {
+    'Autokorjaamot': '🔧',
+    'Elintarvike': '🛒',
+    'Juhlatilat': '🎊',
+    'Kauneus ja terveys': '💄',
+    'Koti-rakennus': '🏠',
+    'Majoitus': '🏨',
+    'Matkailu & Elämykset': '🌲',
+    'Ravinto & Vapaa-aika': '🍽️',
+    'Ruokailu': '🍕',
+    'Perinnematkailu & Juhlat': '💒',
+    'Muu': '🏢'
 };
 
 function initMap(companies) {

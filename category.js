@@ -31,9 +31,15 @@
 
         // Icon selection
         const categoryIcons = {
+            'Autokorjaamot': '🔧',
+            'Elintarvike': '🛒',
+            'Juhlatilat': '🎊',
             'Kauneus ja terveys': '💄',
+            'Koti-rakennus': '🏠',
+            'Majoitus': '🏨',
             'Matkailu & Elämykset': '🌲',
             'Ravinto & Vapaa-aika': '🍽️',
+            'Ruokailu': '🍕',
             'Perinnematkailu & Juhlat': '💒',
             'Muu': '🏢'
         };
