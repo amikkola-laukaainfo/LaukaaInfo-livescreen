@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="fi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lisää yritys – LaukaaInfo</title>
+    <link rel="icon" href="logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .registration-container {
+            max-width: 900px;
+            margin: 4rem auto;
+            padding: 0 1rem;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 4rem;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .comparison-table th {
+            background: var(--primary-blue);
+            color: white;
+            font-weight: 600;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .check-icon {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .cross-icon {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .form-section {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .premium-only-field {
+            display: none;
+            background: #f0f7ff;
+            padding: 1rem;
+            border-left: 4px solid var(--accent-blue);
+            margin-top: 1rem;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .premium-only-field.active {
+            display: block;
+        }
+
+        .type-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .type-option {
+            flex: 1;
+            padding: 1.5rem;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .type-option.active {
+            border-color: var(--primary-blue);
+            background: var(--light-blue);
+        }
+
+        .type-option h4 {
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 2rem;
+        }
+
+        .btn-submit:hover {
+            background: var(--secondary-blue);
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="logo.png" alt="LaukaaInfo Logo">
+                <span>LaukaaInfo</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="registration-container">
+        <header style="text-align: center; margin-bottom: 3rem;">
+            <h1>Lisää yrityksesi LaukaaInfoon</h1>
+            <p>Valitse yrityksellesi sopiva näkyvyys ja täytä tiedot.</p>
+        </header>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Ominaisuus</th>
+                    <th>Ilmainen</th>
+                    <th>Maksullinen ⭐</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Yhteystiedot (Nimi, osoite, puh)</td>
+                    <td><span class="check-icon">✓</span></td>
+                    <td><span class="check-icon">✓</span></td>
+                </tr>
+                <tr>
+                    <td>Linkki omille kotisivuille</td>
+                    <td><span class="check-icon">✓</span></td>
+                    <td><span class="check-icon">✓</span></td>
+                </tr>
+                <tr>
+                    <td>Yritysesittely (teksti)</td>
+                    <td><span class="check-icon">✓</span> (max 100 merkkiä)</td>
+                    <td><span class="check-icon">✓</span> (laaja)</td>
+                </tr>
+                <tr>
+                    <td>Näkyvyys kartalla</td>
+                    <td><span class="cross-icon">✗</span></td>
+                    <td><span class="check-icon">✓</span></td>
+                </tr>
+                <tr>
+                    <td>Kuvagalleria & Video</td>
+                    <td><span class="cross-icon">✗</span></td>
+                    <td><span class="check-icon">✓</span></td>
+                </tr>
+                <tr>
+                    <td>Priorisoitu haku (näkyy ylempänä)</td>
+                    <td><span class="cross-icon">✗</span></td>
+                    <td><span class="check-icon">✓</span></td>
+                </tr>
+                <tr>
+                    <td>Tarjouskupongit & mainoslinkit</td>
+                    <td><span class="cross-icon">✗</span></td>
+                    <td><span class="check-icon">✓</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="form-section">
+            <div class="type-selector">
+                <div class="type-option" id="option-free" onclick="selectType('free')">
+                    <h4>Ilmainen</h4>
+                    <p>Perusnäkyvyys</p>
+                </div>
+                <div class="type-option" id="option-paid" onclick="selectType('paid')">
+                    <h4>Maksullinen ⭐</h4>
+                    <p>Kaikki ominaisuudet</p>
+                </div>
+            </div>
+
+            <form id="registration-form">
+                <input type="hidden" name="type" id="input-type" value="free">
+
+                <div class="form-group">
+                    <label for="company-name">Yrityksen nimi *</label>
+                    <input type="text" id="company-name" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Kategoria *</label>
+                    <select id="category" name="category" required>
+                        <option value="">Valitse kategoria...</option>
+                        <option value="Kauneus ja terveys">Kauneus ja terveys</option>
+                        <option value="Matkailu & Elämykset">Matkailu & Elämykset</option>
+                        <option value="Ravinto & Vapaa-aika">Ravinto & Vapaa-aika</option>
+                        <option value="Perinnematkailu & Juhlat">Perinnematkailu & Juhlat</option>
+                        <option value="Muu">Muu</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Osoite</label>
+                    <input type="text" id="address" name="address">
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Puhelin</label>
+                    <input type="tel" id="phone" name="phone">
+                </div>
+
+                <div class="form-group">
+                    <label for="website">Kotisivut (URL)</label>
+                    <input type="url" id="website" name="website">
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Esittelyteksti *</label>
+                    <textarea id="description" name="description" rows="5" required></textarea>
+                </div>
+
+                <!-- Maksullisen näkyvyyden lisäkentät -->
+                <div id="premium-fields" class="premium-only-field">
+                    <div class="form-group">
+                        <label for="images">Kuvien linkit (kuningaslista, erota pilkulla)</label>
+                        <input type="text" id="images" name="images" placeholder="https://... , https://...">
+                    </div>
+                    <div class="form-group">
+                        <label for="youtube">YouTube-videon linkki</label>
+                        <input type="url" id="youtube" name="youtube">
+                    </div>
+                    <div class="form-group">
+                        <label for="coupon">Tarjous / Kuponki (esim. -20% lounaasta)</label>
+                        <input type="text" id="coupon" name="coupon">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit">Lähetä tiedot</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function selectType(type) {
+            document.getElementById('input-type').value = type;
+            document.querySelectorAll('.type-option').forEach(el => el.classList.remove('active'));
+            document.getElementById('option-' + type).classList.add('active');
+
+            const premiumFields = document.getElementById('premium-fields');
+            if (type === 'paid') {
+                premiumFields.classList.add('active');
+            } else {
+                premiumFields.classList.remove('active');
+            }
+        }
+
+        // Tarkistetaan URL-parametri avattaessa
+        const params = new URLSearchParams(window.location.search);
+        const type = params.get('type') || 'free';
+        selectType(type);
+
+        document.getElementById('registration-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            alert('Kiitos! Yrityksesi tiedot on lähetetty tarkistettavaksi. Olemme teihin yhteydessä mahdollisten lisätietojen osalta.');
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+
+</html>

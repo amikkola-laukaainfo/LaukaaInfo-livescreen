@@ -42,21 +42,15 @@
             <div class="desktop-nav">
                 <ul class="nav-links">
                     <li class="nav-item">
-                        <a href="#" class="nav-link">Päätösten polut <span class="arrow">▼</span></a>
+                        <a href="index.html" class="nav-link">Kauppa <span class="arrow">▼</span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="asiahaku.html">Hae ja tutki</a></li>
+                            <li><a href="lisaa-yritys.html">Lisää yritys</a></li>
+                            <!-- Kategoriat ladataan dynaamisesti JS:llä -->
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">Palvelut <span class="arrow">▼</span></a>
+                        <a href="#" class="nav-link">Ajankohtaista <span class="arrow">▼</span></a>
                         <ul class="dropdown-menu">
-                            <li class="has-arrow">
-                                <a href="#">Yritykset</a>
-                                <ul class="nested-menu">
-                                    <li><a href="#company-spotlight">Tekstihaku</a></li>
-                                    <li><a href="#map-section">Karttahaku</a></li>
-                                </ul>
-                            </li>
                             <li><a href="#events-card">Tapahtumat</a></li>
                             <li><a href="#news-card">Tiedotteet</a></li>
                             <li><a href="#decisions-card">Päätöksenteko</a></li>
@@ -67,6 +61,12 @@
                                     <li><a href="lievestuore.html">Lievestuore</a></li>
                                 </ul>
                             </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Päätösten polut <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="asiahaku.html">Hae ja tutki</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
@@ -101,25 +101,24 @@
         </div>
 
         <div class="sidebar-content">
-            <!-- Pääosio: PÄÄTÖSTEN POLUT -->
+            <!-- Pääosio: KAUPPA -->
             <div class="menu-section">
-                <h3 class="section-title">PÄÄTÖSTEN POLUT</h3>
+                <h3 class="section-title">KAUPPA</h3>
                 <ul class="menu-list">
-                    <li class="menu-item"><a href="asiahaku.html" class="sidebar-link">Hae ja tutki</a></li>
+                    <li class="menu-item"><a href="lisaa-yritys.html" class="sidebar-link">Lisää yritys</a></li>
+                    <li class="menu-item has-submenu">
+                        <a href="#" class="submenu-toggle">Kategoriat <span class="arrow">▼</span></a>
+                        <ul class="submenu" id="sidebar-categories">
+                            <!-- Kategoriat dynaamisesti -->
+                        </ul>
+                    </li>
                 </ul>
             </div>
 
-            <!-- Pääosio: PALVELUT -->
+            <!-- Pääosio: AJANKOHTAISTA -->
             <div class="menu-section">
-                <h3 class="section-title">PALVELUT</h3>
+                <h3 class="section-title">AJANKOHTAISTA</h3>
                 <ul class="menu-list">
-                    <li class="menu-item has-submenu">
-                        <a href="#" class="submenu-toggle">Yritykset <span class="arrow">▼</span></a>
-                        <ul class="submenu">
-                            <li><a href="#company-spotlight" class="sidebar-link">Tekstihaku</a></li>
-                            <li><a href="#map-section" class="sidebar-link">Karttahaku</a></li>
-                        </ul>
-                    </li>
                     <li class="menu-item"><a href="#events-card" class="sidebar-link">Tapahtumat</a></li>
                     <li class="menu-item"><a href="#news-card" class="sidebar-link">Tiedotteet</a></li>
                     <li class="menu-item"><a href="#decisions-card" class="sidebar-link">Päätöksenteko</a></li>
@@ -130,6 +129,14 @@
                             <li><a href="lievestuore.html" class="sidebar-link">Lievestuore</a></li>
                         </ul>
                     </li>
+                </ul>
+            </div>
+
+            <!-- Pääosio: PÄÄTÖSTEN POLUT -->
+            <div class="menu-section">
+                <h3 class="section-title">PÄÄTÖSTEN POLUT</h3>
+                <ul class="menu-list">
+                    <li class="menu-item"><a href="asiahaku.html" class="sidebar-link">Hae ja tutki</a></li>
                 </ul>
             </div>
 
@@ -159,68 +166,57 @@
     </header>
 
     <main>
-        <!-- Yritysten Esittelyruutu & Katalogi -->
-        <section id="company-spotlight" class="spotlight-section">
-            <div class="spotlight-header">
-                <h2><span>🏪</span> Paikalliset yritykset</h2>
-            </div>
+        <!-- Kauppa - Etusivu -->
+        <section id="kauppa-search" class="kauppa-hero">
+            <div class="search-hero-content">
+                <h1>Löydä paikalliset palvelut</h1>
+                <p>Hae yrityksiä, palveluita ja elämyksiä Laukaasta.</p>
 
-            <div class="spotlight-container">
-                <!-- Vasen/Keski: Esittelyalue -->
-                <div class="spotlight-main" id="selected-company-view">
-                    <!-- 1. Hakukentät (Ylinnä) -->
-                    <div class="spotlight-controls">
-                        <div class="search-container">
-                            <input type="text" id="company-search" placeholder="Hae yritystä..." aria-label="Yrityshaku"
-                                autocomplete="off">
-                            <ul id="search-suggestions" class="search-suggestions"></ul>
-                        </div>
-                        <select id="category-filter" aria-label="Kategoria">
-                            <option value="all">Kaikki kategoriat</option>
-                        </select>
-                    </div>
-
-                    <!-- 2. Kuvaruutu (Keskellä) -->
-                    <div class="spotlight-media-wrapper">
-                        <div class="spotlight-media-container">
-                            <div class="spotlight-media" id="spotlight-media">
-                                <div class="placeholder-media">Valitse yritys</div>
-                            </div>
-                            <div class="slider-nav" id="slider-nav"></div>
-                        </div>
-                    </div>
-
-                    <!-- 3. Perustiedot (Alinna, yksi sarake) -->
-                    <div class="spotlight-info-container">
-                        <div class="spotlight-content" id="spotlight-info">
-                            <h3 id="spotlight-name">Laukaan parhaat yritykset</h3>
-                            <p class="tagline" id="spotlight-tagline">Kasvua ja elinvoimaa Laukaasta</p>
-                            <div class="spotlight-description" id="spotlight-desc">
-                                Löydä paikalliset palvelut, yrittäjät ja elämykset. Klikkaa yritystä katalogista
-                                nähdäksesi lisätietoja.
-                            </div>
-
-                            <div class="spotlight-contact-info">
-                                <div class="spotlight-details" id="spotlight-details"></div>
-                                <div class="spotlight-actions" id="spotlight-actions"></div>
-                            </div>
-                        </div>
+                <div class="main-search-box">
+                    <div class="search-input-wrapper">
+                        <input type="text" id="company-search"
+                            placeholder="Mitä etsit? (esim. parturi, lounas, putkimies...)" aria-label="Yrityshaku"
+                            autocomplete="off">
+                        <ul id="search-suggestions" class="search-suggestions"></ul>
+                        <button id="search-btn" class="btn-search">Hae</button>
                     </div>
                 </div>
 
-                <!-- Oikea: Katalogilista (kapeampi) -->
-                <div class="catalog-sidebar">
-                    <div id="catalog-list" class="catalog-list">
-                        <!-- Yritysten listaus tässä -->
+                <div class="map-accordion">
+                    <button class="accordion-header" id="toggle-map-btn">
+                        <span>🗺️ Avaa karttahaku</span>
+                        <span class="icon">▼</span>
+                    </button>
+                    <div class="accordion-content" id="map-accordion-content">
+                        <div id="company-map" class="embedded-map"></div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Karttaosio -->
-        <section id="map-section" class="card">
-            <h2><span>🗺️</span> Palvelut kartalla</h2>
-            <div id="company-map" style="height: 500px; border-radius: 12px; z-index: 1;"></div>
+        <!-- CTA Osuus -->
+        <section class="cta-section">
+            <div class="cta-container">
+                <div class="cta-card cta-free">
+                    <h3>Näy ilmaiseksi</h3>
+                    <p>Lisää yrityksesi perustiedot Laukaainfo-hakemistoon täysin ilmaiseksi.</p>
+                    <a href="lisaa-yritys.html?type=free" class="btn-cta">Lisää ilmainen yritysnäkyvyys</a>
+                </div>
+                <div class="cta-card cta-paid">
+                    <h3>Erotu eduksesi ⭐</h3>
+                    <p>Hanki enemmän näkyvyyttä, kuvia ja karttapalveluita yrityksellesi.</p>
+                    <a href="lisaa-yritys.html?type=paid" class="btn-cta premium">Lisää maksullinen yritysnäkyvyys</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Toimialakategoriat -->
+        <section id="categories-section" class="categories-grid-section">
+            <h2>Toimialat</h2>
+            <div id="homepage-categories" class="categories-grid">
+                <!-- Kategoriat ladataan dynaamisesti CSV-datasta -->
+                <div class="loading-spinner">Ladataan kategorioita...</div>
+            </div>
         </section>
 
         <!-- Ajankohtaista Section -->

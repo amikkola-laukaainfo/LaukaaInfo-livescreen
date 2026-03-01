@@ -66,7 +66,27 @@ document.addEventListener('DOMContentLoaded', () => {
     // Alustetaan feedit
     initRSSFeeds();
     loadCompanyData();
+    initAccordion();
 });
+
+function initAccordion() {
+    const toggleBtn = document.getElementById('toggle-map-btn');
+    const content = document.getElementById('map-accordion-content');
+
+    if (toggleBtn && content) {
+        toggleBtn.addEventListener('click', () => {
+            const isOpen = content.classList.toggle('open');
+            toggleBtn.querySelector('.icon').style.transform = isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+
+            if (isOpen && map) {
+                // Leaflet needs a resize trigger when shown in a previously hidden container
+                setTimeout(() => {
+                    map.invalidateSize();
+                }, 300);
+            }
+        });
+    }
+}
 
 const categoryColors = {
     'Kauneus ja terveys': '#ff4d94',
@@ -447,6 +467,7 @@ async function loadCompanyData() {
 
         initCompanyCatalog();
         initMap(allCompanies);
+        initCategories(allCompanies);
 
         // URL-parametrin (haku) tarkistus
         const queryParams = new URLSearchParams(window.location.search);
@@ -575,6 +596,67 @@ function filterCatalog() {
     if (map && markers) {
         addMarkersToMap(filtered);
     }
+}
+
+function initCategories(companies) {
+    const categories = [...new Set(companies.map(c => c.kategoria))].sort();
+
+    renderNavCategories(categories);
+    renderHomepageCategories(categories);
+}
+
+function renderNavCategories(categories) {
+    const navMenu = document.querySelector('.nav-item a[href="index.html"] + .dropdown-menu');
+    const sidebarMenu = document.getElementById('sidebar-categories');
+
+    if (navMenu) {
+        // Säilytetään "Lisää yritys"
+        const firstItem = navMenu.querySelector('li');
+        navMenu.innerHTML = '';
+        if (firstItem) navMenu.appendChild(firstItem);
+
+        categories.forEach(cat => {
+            const li = document.createElement('li');
+            li.innerHTML = `<a href="kategoria.html?cat=${encodeURIComponent(cat)}">${cat}</a>`;
+            navMenu.appendChild(li);
+        });
+    }
+
+    if (sidebarMenu) {
+        sidebarMenu.innerHTML = '';
+        categories.forEach(cat => {
+            const li = document.createElement('li');
+            li.innerHTML = `<a href="kategoria.html?cat=${encodeURIComponent(cat)}" class="sidebar-link">${cat}</a>`;
+            sidebarMenu.appendChild(li);
+        });
+    }
+}
+
+function renderHomepageCategories(categories) {
+    const container = document.getElementById('homepage-categories');
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    const categoryIcons = {
+        'Kauneus ja terveys': '💄',
+        'Matkailu & Elämykset': '🌲',
+        'Ravinto & Vapaa-aika': '🍽️',
+        'Perinnematkailu & Juhlat': '💒',
+        'Muu': '🏢'
+    };
+
+    categories.forEach(cat => {
+        const icon = categoryIcons[cat] || '🏢';
+        const card = document.createElement('a');
+        card.href = `kategoria.html?cat=${encodeURIComponent(cat)}`;
+        card.className = 'category-card';
+        card.innerHTML = `
+            <span class="cat-icon">${icon}</span>
+            <h3>${cat}</h3>
+        `;
+        container.appendChild(card);
+    });
 }
 
 function showSuggestions() {
