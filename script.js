@@ -739,7 +739,10 @@ function initCompanyCatalog() {
         }
     });
 
-    renderCatalog(allCompanies);
+    const isHomePage = !!document.getElementById('homepage-categories');
+    if (!isHomePage) {
+        renderCatalog(allCompanies);
+    }
 }
 
 function filterCatalog() {
@@ -776,7 +779,14 @@ function filterCatalog() {
     }
 
     filteredSuggestions = filtered.slice(0, 8); // Keep suggestions mainly business-centric or extend later
-    renderCatalog(combinedResults);
+
+    // On the homepage, hide results if search is empty
+    const isHomePage = !!document.getElementById('homepage-categories');
+    if (isHomePage && searchTerm.length === 0) {
+        renderCatalog([]);
+    } else {
+        renderCatalog(combinedResults);
+    }
 
     // Päivitetään myös kartta vastaamaan filtteriä
     if (map && markers) {
@@ -951,8 +961,15 @@ function renderCatalog(companies) {
     if (!list) return; // Katalogi ei ole näkyvissä tällä sivulla
 
     list.innerHTML = '';
+    const searchTerm = document.getElementById('company-search')?.value.trim();
+    const isHomePage = !!document.getElementById('homepage-categories');
+
     if (companies.length === 0) {
-        list.innerHTML = '<p style="padding: 1rem; opacity: 0.6;">Ei löytynyt yrityksiä.</p>';
+        if (isHomePage && (!searchTerm || searchTerm.length === 0)) {
+            // Keep it empty so CSS :empty hides it
+            return;
+        }
+        list.innerHTML = '<p style="padding: 1rem; opacity: 0.6;">Ei löytynyt osumia.</p>';
         return;
     }
     companies.forEach(itemData => {
