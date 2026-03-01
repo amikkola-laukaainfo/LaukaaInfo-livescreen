@@ -420,8 +420,7 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
  * Yritysdata ja katalogi
  */
 async function loadCompanyData() {
-    // Käytetään suhteellista polkua, jotta hyödynnetään paikallista get_companies.php:tä
-    const dataSourceUrl = 'get_companies.php';
+    const dataSourceUrl = 'https://www.mediazoo.fi/laukaainfo-web/get_companies.php';
     console.log('Yritetään hakea yritystietoja:', dataSourceUrl);
     try {
         const response = await fetch(dataSourceUrl + '?t=' + Date.now());

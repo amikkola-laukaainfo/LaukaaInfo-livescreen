@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function loadData(category) {
     try {
-        const response = await fetch('get_companies.php');
+        const response = await fetch('https://www.mediazoo.fi/laukaainfo-web/get_companies.php');
         const allCompanies = await response.json();
 
         categoryCompanies = allCompanies.filter(c => c.kategoria === category);

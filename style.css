@@ -1066,31 +1066,47 @@ footer {
 
 /* --- Kauppa - New Homepage Styles --- */
 .kauppa-hero {
-    background: linear-gradient(rgba(0, 86, 179, 0.05), rgba(0, 86, 179, 0.1)), url('logo.png');
-    background-size: cover;
-    background-position: center;
+    background: linear-gradient(135deg, var(--primary-blue) 0%, #007bff 100%);
     padding: 6rem 1rem;
     border-radius: var(--border-radius);
     text-align: center;
     margin-bottom: 3rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.kauppa-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('logo.png') no-repeat center;
+    background-size: contain;
+    opacity: 0.1;
+    pointer-events: none;
 }
 
 .search-hero-content h1 {
     font-size: 3rem;
-    color: var(--primary-blue);
+    color: white;
     margin-bottom: 1rem;
     font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .search-hero-content p {
     font-size: 1.25rem;
     margin-bottom: 3rem;
-    opacity: 0.8;
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .main-search-box {
     max-width: 800px;
     margin: 0 auto 2rem;
+    position: relative;
+    z-index: 2;
 }
 
 .search-input-wrapper {
@@ -1098,7 +1114,7 @@ footer {
     background: white;
     padding: 8px;
     border-radius: 50px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
     position: relative;
 }
 
