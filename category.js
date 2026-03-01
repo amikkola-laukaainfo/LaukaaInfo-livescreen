@@ -83,17 +83,20 @@
     async function updateDisplay() {
         if (userCoords) {
             await calculateDistances();
-            // Sort by distance if available
-            categoryCompanies.sort((a, b) => {
-                const distA = a.distanceValue || Infinity;
-                const distB = b.distanceValue || Infinity;
-                return distA - distB;
-            });
         }
 
+        // Default: Sort alphabetically by name
+        const sortAlphabetically = (a, b) => a.nimi.localeCompare(b.nimi, 'fi');
+
+        // Distance: Sort by distanceValue
+        const sortByDistance = (a, b) => (a.distanceValue || Infinity) - (b.distanceValue || Infinity);
+
+        const currentSort = userCoords ? sortByDistance : sortAlphabetically;
+
         // Separate Premium and Free (Business vs. Free)
-        let premium = categoryCompanies.filter(c => c.media && c.media.length > 0);
-        const free = categoryCompanies.filter(c => !c.media || c.media.length === 0);
+        // We sort them BEFORE separating or sort each group individually
+        let premium = categoryCompanies.filter(c => c.media && c.media.length > 0).sort(currentSort);
+        const free = categoryCompanies.filter(c => !c.media || c.media.length === 0).sort(currentSort);
 
         // Map demo data if needed for carousel ONLY if real premium data is missing
         let carouselItems = premium;
@@ -112,6 +115,20 @@
                     mainoslause: 'Maistuvaa kotiruokaa joka arkipäivä.',
                     osoite: 'Lievestuoreentie 5, Lievestuore',
                     media: [{ type: 'image', url: 'https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&q=80&w=600' }]
+                },
+                {
+                    id: 'demo3',
+                    nimi: 'Kukkakauppa Ruusu',
+                    mainoslause: 'Kukkatervehdykset kaikkiin tilaisuuksiin.',
+                    osoite: 'Vihtavuori',
+                    media: [{ type: 'image', url: 'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&q=80&w=600' }]
+                },
+                {
+                    id: 'demo4',
+                    nimi: 'Liikuntakeskus Syke',
+                    mainoslause: 'Kuntosali ja ryhmäliikuntatunnit.',
+                    osoite: 'Laukaantie 10, Laukaa',
+                    media: [{ type: 'image', url: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=600' }]
                 }
             ];
         }
