@@ -106,6 +106,7 @@ const categoryColors = {
 
 function initMap(companies) {
     if (map) return;
+    if (!document.getElementById('company-map')) return;
 
     // Laukaa keskipiste
     map = L.map('company-map').setView([62.4128, 25.9477], 11);
