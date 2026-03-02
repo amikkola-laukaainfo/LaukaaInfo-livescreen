@@ -398,6 +398,14 @@
                 <!-- Maksullisen näkyvyyden lisäkentät -->
                 <div id="premium-fields" class="premium-only-field">
                     <div class="form-group">
+                        <label for="duration">Yritysnäkyvyyden kesto *</label>
+                        <select id="duration" name="duration" onchange="updateSubmitButtonText()">
+                            <option value="3">3 kuukautta (45,00€ sis. alv)</option>
+                            <option value="6">6 kuukautta (79,00€ sis. alv)</option>
+                            <option value="12">12 kuukautta (149,00€ sis. alv)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="images">Kuvien linkit (kuningaslista, erota pilkulla)</label>
                         <input type="text" id="images" name="images" placeholder="https://... , https://...">
                     </div>
@@ -417,21 +425,33 @@
     </div>
 
     <script>
+        function updateSubmitButtonText() {
+            const type = document.getElementById('input-type').value;
+            const submitBtn = document.querySelector('.btn-submit');
+            if (type === 'paid') {
+                const duration = document.getElementById('duration').value;
+                let price = "45,00€";
+                if (duration === "6") price = "79,00€";
+                if (duration === "12") price = "149,00€";
+                submitBtn.textContent = `Jatka maksuun (${duration} kk, ${price} sis. alv)`;
+            } else {
+                submitBtn.textContent = 'Lähetä tiedot';
+            }
+        }
+
         function selectType(type) {
             document.getElementById('input-type').value = type;
             document.querySelectorAll('.type-option').forEach(el => el.classList.remove('active'));
             document.getElementById('option-' + type).classList.add('active');
 
             const premiumFields = document.getElementById('premium-fields');
-            const submitBtn = document.querySelector('.btn-submit');
 
             if (type === 'paid') {
                 premiumFields.classList.add('active');
-                submitBtn.textContent = 'Jatka maksuun (50,00€)';
             } else {
                 premiumFields.classList.remove('active');
-                submitBtn.textContent = 'Lähetä tiedot';
             }
+            updateSubmitButtonText();
         }
 
         // Tarkistetaan URL-parametri avattaessa
@@ -460,12 +480,16 @@
                 instagram: formData.get('instagram') || '-',
                 linkedin: formData.get('linkedin') || '-',
                 tiktok: formData.get('tiktok') || '-',
-                whatsapp: formData.get('whatsapp') ? 'true' : 'false'
+                whatsapp: formData.get('whatsapp') ? 'true' : 'false',
+                kesto: formData.get('duration')
             };
 
             let emailBody = `Uusi yritys rekisteröinti LaukaaInfoon\n`;
             emailBody += `------------------------------------\n`;
             emailBody += `Tyyppi: ${data.tyyppi}\n`;
+            if (typeValue === 'paid') {
+                emailBody += `Kesto: ${data.kesto} kk\n`;
+            }
             emailBody += `Nimi: ${data.nimi}\n`;
             emailBody += `Kategoria: ${data.kategoria}\n`;
             emailBody += `Osoite: ${data.osoite}\n`;
@@ -494,8 +518,13 @@
             window.open(mailtoLink, '_blank');
 
             if (typeValue === 'paid') {
-                // OHJAA STRIPE-MAKSUUN (Korvaa tämä omalla Stripe Payment Linkilläsi)
-                const stripePaymentLink = "https://buy.stripe.com/test_6oE14U0I85mG4j6000";
+                // OHJAA STRIPE-MAKSUUN
+                const stripeLinks = {
+                    "3": "https://buy.stripe.com/3cI9AUepJ2JWbFle2p1B607",
+                    "6": "https://buy.stripe.com/bJe14oa9t98kgZF0bz1B608",
+                    "12": "https://buy.stripe.com/3cIaEY81l5W86l12jH1B609"
+                };
+                const stripePaymentLink = stripeLinks[data.kesto];
 
                 alert('Kiitos! Yrityksesi tiedot on koottu sähköpostiin. Lähetäthän viestin sähköpostiohjelmassasi ja jatka sen jälkeen maksuun Stripessä.');
                 window.location.href = stripePaymentLink;
