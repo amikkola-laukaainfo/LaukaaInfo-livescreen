@@ -364,6 +364,26 @@
                     <label for="phone">Puhelin</label>
                     <input type="tel" id="phone" name="phone">
                 </div>
+                <div class="form-group">
+                    <label for="facebook">Facebook URL</label>
+                    <input type="url" id="facebook" name="facebook" placeholder="https://facebook.com/yourpage">
+                </div>
+                <div class="form-group">
+                    <label for="instagram">Instagram URL</label>
+                    <input type="url" id="instagram" name="instagram" placeholder="https://instagram.com/yourprofile">
+                </div>
+                <div class="form-group">
+                    <label for="linkedin">LinkedIn URL</label>
+                    <input type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/yourprofile">
+                </div>
+                <div class="form-group">
+                    <label for="tiktok">TikTok URL</label>
+                    <input type="url" id="tiktok" name="tiktok" placeholder="https://tiktok.com/@yourprofile">
+                </div>
+                <div class="form-group">
+                    <label for="whatsapp">WhatsApp (käsittele puhelinnumero)</label>
+                    <input type="checkbox" id="whatsapp" name="whatsapp" value="true">
+                </div>
 
                 <div class="form-group">
                     <label for="website">Kotisivut (URL)</label>
@@ -435,7 +455,12 @@
                 esittely: formData.get('description'),
                 kuva_linkit: formData.get('images') || '-',
                 youtube: formData.get('youtube') || '-',
-                tarjous: formData.get('coupon') || '-'
+                tarjous: formData.get('coupon') || '-',
+                facebook: formData.get('facebook') || '-',
+                instagram: formData.get('instagram') || '-',
+                linkedin: formData.get('linkedin') || '-',
+                tiktok: formData.get('tiktok') || '-',
+                whatsapp: formData.get('whatsapp') ? 'true' : 'false'
             };
 
             let emailBody = `Uusi yritys rekisteröinti LaukaaInfoon\n`;
@@ -445,7 +470,13 @@
             emailBody += `Kategoria: ${data.kategoria}\n`;
             emailBody += `Osoite: ${data.osoite}\n`;
             emailBody += `Puhelin: ${data.puhelin}\n`;
-            emailBody += `Kotisivut: ${data.kotisivut}\n\n`;
+            emailBody += `Kotisivut: ${data.kotisivut}\n`;
+            emailBody += `Facebook: ${data.facebook}\n`;
+            emailBody += `Instagram: ${data.instagram}\n`;
+            emailBody += `LinkedIn: ${data.linkedin}\n`;
+            emailBody += `TikTok: ${data.tiktok}\n`;
+            emailBody += `WhatsApp: ${data.whatsapp}\n`;
+            emailBody += `\n`;
             emailBody += `Esittely:\n${data.esittely}\n\n`;
 
             if (typeValue === 'paid') {
