@@ -745,9 +745,10 @@ function initCompanyCatalog() {
         });
     }
 
+    const isHomePage = !!document.getElementById('homepage-categories');
+
     searchInput.addEventListener('input', () => {
         filterCatalog();
-        const isHomePage = !!document.getElementById('homepage-categories');
         if (!isHomePage) {
             showSuggestions();
         }
