@@ -228,9 +228,21 @@
             </div>
         </section>
 
-        <!-- Toimialakategoriat -->
         <section id="categories-section" class="categories-grid-section">
-            <h2>Toimialat</h2>
+            <div class="categories-header">
+                <h2>Toimialat</h2>
+                <div class="region-filter-wrapper">
+                    <label for="region-select">Alue:</label>
+                    <select id="region-select" class="region-dropdown">
+                        <option value="all">Kaikki</option>
+                        <option value="laukaa">Laukaa</option>
+                        <option value="leppavesi">Leppävesi</option>
+                        <option value="lievestuore">Lievestuore</option>
+                        <option value="vehnia">Vehniä</option>
+                        <option value="vihtavuori">Vihtavuori</option>
+                    </select>
+                </div>
+            </div>
             <div id="homepage-categories" class="categories-grid">
                 <!-- Kategoriat ladataan dynaamisesti CSV-datasta -->
                 <div class="loading-spinner">Ladataan kategorioita...</div>

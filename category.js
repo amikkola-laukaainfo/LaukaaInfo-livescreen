@@ -1,18 +1,20 @@
 (function () {
     let userCoords = null;
     let distanceCache = new Map();
+    let categoryCompanies = [];
+
+    const regionCoords = JSON.parse(localStorage.getItem('regionCoords'));
+    const selectedRegion = localStorage.getItem('selectedRegion');
 
     document.addEventListener('DOMContentLoaded', () => {
         const storedCoords = localStorage.getItem('userCoords');
         if (storedCoords) {
             try {
                 userCoords = JSON.parse(storedCoords);
-                // Leaflet LatLng objects have specific methods, so we might need to reconstruct it
-                // if userCoords is just a plain object {lat, lng}
                 if (userCoords && typeof userCoords.lat === 'number' && typeof userCoords.lng === 'number') {
                     userCoords = L.latLng(userCoords.lat, userCoords.lng);
                 } else {
-                    userCoords = null; // Invalidate if not a valid LatLng structure
+                    userCoords = null;
                 }
                 console.log("Restored user coordinates:", userCoords);
             } catch (e) { console.error("Error parsing stored coords", e); }
@@ -43,7 +45,6 @@
             'Perinnematkailu & Juhlat': '💒',
             'Muu': '🏢'
         };
-        // Robust lookup: try direct match, then lowercase, then slug-like
         const cleanCat = (category || '').trim();
         const icon = categoryIcons[cleanCat] ||
             categoryIcons[cleanCat.replace('-', ' ')] ||
@@ -61,7 +62,7 @@
             const response = await fetch(dataSourceUrl);
             const allCompanies = await response.json();
 
-            // Normalize URLs (Same logic as in script.js)
+            // Normalize URLs
             const baseUrl = dataSourceUrl.substring(0, dataSourceUrl.lastIndexOf('/') + 1);
             allCompanies.forEach(company => {
                 if (company.media) {
@@ -82,7 +83,24 @@
                 }
             });
 
-            categoryCompanies = allCompanies.filter(c => c.kategoria === category);
+            const rawCategoryCompanies = allCompanies.filter(c => c.kategoria === category);
+
+            if (regionCoords && selectedRegion && selectedRegion !== 'all') {
+                console.log(`Filtering by region: ${selectedRegion} (13km radius)`);
+                categoryCompanies = rawCategoryCompanies.filter(c => {
+                    // Paid companies always bypass filter
+                    const isPremium = c.tyyppi === 'paid' || c.taso === 'premium' || (c.media && c.media.length > 0);
+                    if (isPremium) return true;
+
+                    if (c.lat && c.lon) {
+                        const dist = getHaversineDistance(regionCoords.lat, regionCoords.lon, parseFloat(c.lat), parseFloat(c.lon));
+                        return dist <= 13; // 13km limit
+                    }
+                    return false; // No coords and not paid -> hide
+                });
+            } else {
+                categoryCompanies = rawCategoryCompanies;
+            }
 
             // Initial render
             updateDisplay();

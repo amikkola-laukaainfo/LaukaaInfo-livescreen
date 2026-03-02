@@ -1410,7 +1410,47 @@ footer {
 
 /* Categories Grid */
 .categories-grid-section {
-    margin-bottom: 5rem;
+    margin-bottom: 4rem;
+}
+
+.categories-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.categories-header h2 {
+    margin-bottom: 0;
+}
+
+.region-filter-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: white;
+    padding: 8px 15px;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.region-filter-wrapper label {
+    font-weight: 600;
+    color: var(--primary-blue);
+    font-size: 0.9rem;
+}
+
+.region-dropdown {
+    border: none;
+    background: none;
+    font-family: inherit;
+    font-size: 0.95rem;
+    color: var(--dark-text);
+    cursor: pointer;
+    outline: none;
+    padding: 2px 5px;
 }
 
 .categories-grid {

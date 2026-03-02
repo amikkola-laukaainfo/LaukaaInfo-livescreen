@@ -789,10 +789,39 @@ function initCompanyCatalog() {
         }
     });
 
-    const isHomePage = !!document.getElementById('homepage-categories');
     if (!isHomePage) {
         renderCatalog(allCompanies);
+    } else {
+        initRegionFilter();
     }
+}
+
+function initRegionFilter() {
+    const regionSelect = document.getElementById('region-select');
+    if (!regionSelect) return;
+
+    const villageCoords = {
+        'laukaa': { lat: 62.41407, lon: 25.95194 },
+        'leppavesi': { lat: 62.3260, lon: 25.8382 },
+        'lievestuore': { lat: 62.2625, lon: 26.2039 },
+        'vehnia': { lat: 62.4381, lon: 25.6825 },
+        'vihtavuori': { lat: 62.36972, lon: 25.90278 }
+    };
+
+    // Restore from localStorage
+    const savedRegion = localStorage.getItem('selectedRegion') || 'all';
+    regionSelect.value = savedRegion;
+
+    regionSelect.addEventListener('change', () => {
+        const val = regionSelect.value;
+        localStorage.setItem('selectedRegion', val);
+
+        if (val === 'all') {
+            localStorage.removeItem('regionCoords');
+        } else {
+            localStorage.setItem('regionCoords', JSON.stringify(villageCoords[val]));
+        }
+    });
 }
 
 function filterCatalog() {
