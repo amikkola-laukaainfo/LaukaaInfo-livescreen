@@ -952,15 +952,13 @@ h2 span {
     cursor: pointer;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     border: 2px solid transparent;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
 .catalog-item:hover {
     background: white;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     border-color: var(--light-blue);
+    transform: translateX(5px);
 }
 
 .catalog-item.active {
@@ -1005,10 +1003,36 @@ h2 span {
     background: #fff9f5;
 }
 
+.catalog-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 0.4rem;
+}
+
 .catalog-item h4 {
     margin: 0;
     font-size: 1.1rem;
+}
+
+.catalog-item-header h4 {
+    flex: 1;
+}
+
+.dist-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    background: var(--light-blue);
     color: var(--primary-blue);
+    padding: 2px 8px;
+    border-radius: 10px;
+    white-space: nowrap;
+}
+
+.catalog-item.active .dist-badge {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
 }
 
 .catalog-item .cat-tag {

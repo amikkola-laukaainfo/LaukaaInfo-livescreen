@@ -898,15 +898,28 @@ function filterCatalog() {
             }
         }
 
+        if (selectedRegion && selectedRegion !== 'all' && regionCoords && company.lat && company.lon) {
+            const dist = getHaversineDistance(regionCoords.lat, regionCoords.lon, parseFloat(company.lat), parseFloat(company.lon));
+            company.distanceText = dist < 1 ? `${Math.round(dist * 1000)} m` : `${dist.toFixed(1)} km`;
+            company.distanceValue = dist;
+        } else {
+            company.distanceText = null;
+            company.distanceValue = null;
+        }
+
         return { company, score, matchesCategory, matchesRegion, isPremium };
     }).filter(m => m.score > 0 && m.matchesCategory && m.matchesRegion);
 
-    // Sort: Premium first, then by score, then alphabetically
+    // Sort: Premium first, then by score, then by distance (if available), then alphabetically
     matches.sort((a, b) => {
         if (a.isPremium && !b.isPremium) return -1;
         if (!a.isPremium && b.isPremium) return 1;
 
         if (b.score !== a.score) return b.score - a.score;
+
+        if (a.company.distanceValue !== null && b.company.distanceValue !== null) {
+            return a.company.distanceValue - b.company.distanceValue;
+        }
 
         return (a.company.nimi || '').localeCompare(b.company.nimi || '', 'fi');
     });
@@ -1177,7 +1190,15 @@ function renderCatalog(companies) {
             const hasSpotlight = document.getElementById('company-spotlight');
 
             if (currentCompany && currentCompany.id === company.id) item.classList.add('active');
-            item.innerHTML = `<h4>${company.nimi}</h4><span class="cat-tag">${company.kategoria}</span>`;
+
+            const distHtml = company.distanceText ? `<span class="dist-badge">🚗 ${company.distanceText}</span>` : '';
+            item.innerHTML = `
+                <div class="catalog-item-header">
+                    <h4>${company.nimi}</h4>
+                    ${distHtml}
+                </div>
+                <span class="cat-tag">${company.kategoria}</span>
+            `;
 
             item.onclick = () => {
                 if (hasSpotlight) {
