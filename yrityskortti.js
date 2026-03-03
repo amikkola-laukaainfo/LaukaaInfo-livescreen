@@ -62,14 +62,32 @@
         document.getElementById('display-name').textContent = company.nimi;
         document.getElementById('display-category').textContent = company.kategoria;
         // Split description on @@ separator: first part = slogan, second part = full description
+        // @@ can appear in either mainoslause or esittely field
         const esittely = company.esittely || '';
-        const atIdx = esittely.indexOf('@@');
-        let slogan = company.mainoslause || '';
+        const mainoslause = company.mainoslause || '';
+
+        let slogan = '';
         let description = esittely;
-        if (atIdx !== -1) {
-            if (!slogan) slogan = esittely.substring(0, atIdx).trim();
-            description = esittely.substring(atIdx + 2).trim();
+
+        // Check mainoslause for @@ first
+        const mainosIdx = mainoslause.indexOf('@@');
+        if (mainosIdx !== -1) {
+            slogan = mainoslause.substring(0, mainosIdx).trim();
+            // If esittely is empty, use part after @@ in mainoslause as description
+            if (!esittely) {
+                description = mainoslause.substring(mainosIdx + 2).trim();
+            }
+        } else {
+            slogan = mainoslause;
         }
+
+        // Check esittely for @@ if slogan still not set from mainoslause
+        const esittelyIdx = esittely.indexOf('@@');
+        if (esittelyIdx !== -1) {
+            if (!slogan) slogan = esittely.substring(0, esittelyIdx).trim();
+            description = esittely.substring(esittelyIdx + 2).trim();
+        }
+
         document.getElementById('display-headline').textContent = slogan;
         document.getElementById('display-description').textContent = description;
         document.getElementById('display-address').textContent = company.osoite || 'Laukaa';
