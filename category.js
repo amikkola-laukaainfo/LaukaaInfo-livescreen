@@ -102,7 +102,7 @@
     async function loadData(category) {
         try {
             const dataSourceUrl = 'https://www.mediazoo.fi/laukaainfo-web/get_companies.php';
-            const response = await fetch(dataSourceUrl);
+            const response = await fetch(dataSourceUrl + '?t=' + Date.now());
             const allCompanies = await response.json();
 
             // Normalize URLs

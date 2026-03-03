@@ -18,12 +18,12 @@
 
     async function loadCompanyDetails(id) {
         try {
-            const dataSourceUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQTdoRdDSwSBVtImPr6hhIVLqRcA1FaWlLXg2zG9o9CjMqHQYX2kRo6Do2aHavTcgteTh1kno3GKXCd/pub?output=csv';
-            const response = await fetch(dataSourceUrl + '&t=' + Date.now());
-            const csvText = await response.text();
-            const companies = parseCSV(csvText);
+            // Käytetään palvelimen proxyä, joka hoitaa CORS-ongelmat ja datan muunnoksen
+            const dataSourceUrl = 'https://www.mediazoo.fi/laukaainfo-web/get_companies.php';
+            const response = await fetch(dataSourceUrl + '?t=' + Date.now());
+            const companies = await response.json();
 
-            const company = companies.find(c => String(c.id) === String(id));
+            const company = companies.find(c => String(c.id) === String(id) || c.id === "company-" + id);
 
             if (!company) {
                 document.getElementById('loading-overlay').innerHTML = '<h2>Yritystä ei löytynyt.</h2><a href="index.html">Takaisin hakuun</a>';
@@ -33,79 +33,8 @@
             renderCompanyDetails(company);
         } catch (error) {
             console.error('Virhe ladattaessa yrityksen tietoja:', error);
-            document.getElementById('loading-overlay').innerHTML = '<h2>Virhe ladattaessa tietoja.</h2>';
+            document.getElementById('loading-overlay').innerHTML = '<h2>Virhe ladattaessa tietoja. Tarkista PHP-tiedostot.</h2>';
         }
-    }
-
-    /**
-     * Sama CSV-parsiminen kuin script.js:ssä
-     */
-    function parseCSV(csvText) {
-        const lines = [];
-        let currentLine = [];
-        let currentCell = '';
-        let inQuotes = false;
-
-        for (let i = 0; i < csvText.length; i++) {
-            const char = csvText[i];
-            const nextChar = csvText[i + 1];
-
-            if (char === '"' && inQuotes && nextChar === '"') {
-                currentCell += '"';
-                i++;
-            } else if (char === '"') {
-                inQuotes = !inQuotes;
-            } else if (char === ',' && !inQuotes) {
-                currentLine.push(currentCell.trim());
-                currentCell = '';
-            } else if ((char === '\r' || char === '\n') && !inQuotes) {
-                currentLine.push(currentCell.trim());
-                if (currentLine.length > 1 || currentLine[0] !== '') {
-                    lines.push(currentLine);
-                }
-                currentLine = [];
-                currentCell = '';
-                if (char === '\r' && nextChar === '\n') i++;
-            } else {
-                currentCell += char;
-            }
-        }
-        if (currentCell || currentLine.length > 0) {
-            currentLine.push(currentCell.trim());
-            lines.push(currentLine);
-        }
-
-        if (lines.length < 2) return [];
-
-        const headers = lines[0];
-        return lines.slice(1).map(row => {
-            const obj = {};
-            headers.forEach((h, i) => {
-                let val = row[i] || '';
-                if (val.startsWith('"') && val.endsWith('"')) val = val.substring(1, val.length - 1);
-                obj[h.trim()] = val;
-            });
-            obj.id = obj.rowid;
-            if (obj.lat) obj.lat = obj.lat.replace(',', '.');
-            if (obj.lon) obj.lon = obj.lon.replace(',', '.');
-
-            if (obj.images && obj.images.startsWith('[')) {
-                try {
-                    const urls = JSON.parse(obj.images.replace(/'/g, '"'));
-                    obj.media = (obj.media || []).concat(urls.map(url => ({ type: 'image', url })));
-                } catch (e) { console.warn("Kuvalinkkien parsimisvirhe yritykselle " + obj.name, e); }
-            }
-            if (obj.youtubeUrl && obj.youtubeUrl.includes('youtube.com')) {
-                const vidId = obj.youtubeUrl.match(/v=([a-zA-Z0-9_-]+)/)?.[1];
-                if (vidId) {
-                    obj.media = (obj.media || []).concat([{ type: 'video', url: `https://www.youtube.com/embed/${vidId}` }]);
-                }
-            }
-            obj.nimi = obj.name;
-            obj.nettisivu = obj.website;
-            obj.esittely = obj.description;
-            return obj;
-        });
     }
 
     function renderCompanyDetails(company) {

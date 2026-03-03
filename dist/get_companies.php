@@ -31,7 +31,7 @@ header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 header('Cache-Control: post-check=0, pre-check=0', false);
 header('Pragma: no-cache');
 
-$CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSiT9tfmTO0wAi6FZEtuYNRsrIwhq_iBMh-5vqix31ct14nZB58v6HfOM6vAawYTtHgk6IaePCUCZsB/pub?output=csv";
+$CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQTdoRdDSwSBVtImPr6hhIVLqRcA1FaWlLXg2zG9o9CjMqHQYX2kRo6Do2aHavTcgteTh1kno3GKXCd/pub?output=csv";
 $CACHE_FILE = 'companies_cache.json';
 $CACHE_TIME = 3600; // 1 hour in seconds
 // Check cache - force refresh if ANY GET parameter is present (like ?t= from script.js)
@@ -261,7 +261,17 @@ while (($row_raw = fgetcsv($stream)) !== FALSE) {
         "karttalinkki" => ($lat && $lon) ? "https://www.google.com/maps?q=$lat,$lon" : "",
         "lat" => $lat,
         "lon" => $lon,
-        "media" => $media
+        "media" => $media,
+        "logo" => isset($row['logo']) ? $row['logo'] : '',
+        "facebook" => isset($row['facebook']) ? $row['facebook'] : '',
+        "instagram" => isset($row['instagram']) ? $row['instagram'] : '',
+        "linkedin" => isset($row['linkedin']) ? $row['linkedin'] : '',
+        "tiktok" => isset($row['tiktok']) ? $row['tiktok'] : '',
+        "whatsapp" => isset($row['whatsapp']) ? $row['whatsapp'] : '',
+        "mainoslinkit" => isset($row['mainoslinkit']) ? $row['mainoslinkit'] : '',
+        "karusellipaino" => isset($row['karusellipaino']) ? (int) $row['karusellipaino'] : 0,
+        "tyyppi" => isset($row['tyyppi']) ? $row['tyyppi'] : 'ilmainen',
+        "voimassaolo_loppuu" => isset($row['voimassaolo_loppuu']) ? $row['voimassaolo_loppuu'] : ''
     );
 }
 
