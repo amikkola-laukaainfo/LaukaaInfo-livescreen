@@ -28,8 +28,20 @@
             return;
         }
 
-        document.getElementById('category-name').textContent = category;
-        document.title = `${category} – LaukaaInfo`;
+        const friendlyRegions = {
+            'all': '',
+            'laukaa': 'Laukaa',
+            'leppavesi': 'Leppävesi',
+            'lievestuore': 'Lievestuore',
+            'vehnia': 'Vehniä',
+            'vihtavuori': 'Vihtavuori'
+        };
+
+        const regionName = (selectedRegion && selectedRegion !== 'all') ? friendlyRegions[selectedRegion] : '';
+        const displayTitle = regionName ? `${category} - ${regionName}` : category;
+
+        document.getElementById('category-name').textContent = displayTitle;
+        document.title = `${displayTitle} – LaukaaInfo`;
 
         // Icon selection
         const categoryIcons = {
@@ -112,8 +124,11 @@
     }
 
     async function updateDisplay() {
-        if (userCoords) {
-            await calculateDistances();
+        // Ensisijainen vertailupiste: käyttäjän sijainti. Toissijainen: valittu taajama.
+        const referenceCoords = userCoords || (regionCoords ? L.latLng(regionCoords.lat, regionCoords.lon) : null);
+
+        if (referenceCoords) {
+            await calculateDistances(referenceCoords);
         }
 
         // Default: Sort alphabetically by name
@@ -122,10 +137,9 @@
         // Distance: Sort by distanceValue
         const sortByDistance = (a, b) => (a.distanceValue || Infinity) - (b.distanceValue || Infinity);
 
-        const currentSort = userCoords ? sortByDistance : sortAlphabetically;
+        const currentSort = referenceCoords ? sortByDistance : sortAlphabetically;
 
-        // Separate Premium and Free (Business vs. Free)
-        // We sort them BEFORE separating or sort each group individually
+        // Separate Premium and Free
         let premium = categoryCompanies.filter(c => c.media && c.media.length > 0).sort(currentSort);
         const free = categoryCompanies.filter(c => !c.media || c.media.length === 0).sort(currentSort);
 
@@ -168,8 +182,8 @@
         renderDirectory(premium, free);
     }
 
-    async function calculateDistances() {
-        if (!userCoords) return;
+    async function calculateDistances(reference) {
+        if (!reference) return;
 
         // Use OSRM Table API for batch distances
         const coords = categoryCompanies
@@ -180,7 +194,7 @@
         if (!coords) return;
 
         try {
-            const url = `https://router.project-osrm.org/table/v1/driving/${userCoords.lng},${userCoords.lat};${coords}?sources=0&annotations=distance`;
+            const url = `https://router.project-osrm.org/table/v1/driving/${reference.lng},${reference.lat};${coords}?sources=0&annotations=distance`;
             const response = await fetch(url);
             const data = await response.json();
 
@@ -204,7 +218,7 @@
             // Fallback to Haversine
             categoryCompanies.forEach(company => {
                 if (company.lat && company.lon) {
-                    const dist = getHaversineDistance(userCoords.lat, userCoords.lng, parseFloat(company.lat), parseFloat(company.lon));
+                    const dist = getHaversineDistance(reference.lat, reference.lng, parseFloat(company.lat), parseFloat(company.lon));
                     company.distanceValue = dist * 1000;
                     company.distanceText = dist < 1 ? `${Math.round(dist * 1000)} m` : `${dist.toFixed(1)} km`;
                 }
