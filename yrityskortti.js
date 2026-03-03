@@ -287,6 +287,31 @@
 
             document.getElementById('google-maps-link').href = `https://www.google.com/maps?q=${company.lat},${company.lon}`;
         }
+
+        // Cloudinary Promotional Images
+        // URL pattern: https://res.cloudinary.com/dfigif5il/image/upload/w_400,q_auto,f_auto/tarjoukset/{yritysId}/{index}.jpg
+        // We use a timestamp for cache busting (v=...)
+        const rawId = id.replace('company-', '');
+        const timestamp = new Date().getTime();
+
+        [1, 2].forEach(index => {
+            const promoImg = document.getElementById(`promo-img-${index}`);
+            const promoSlot = document.getElementById(`promo-slot-${index}`);
+            if (promoImg && promoSlot) {
+                const cloudinaryUrl = `https://res.cloudinary.com/dfigif5il/image/upload/w_400,q_auto,f_auto/tarjoukset/${rawId}/${index}.jpg?v=${timestamp}`;
+
+                // Use a temporary Image object to check if the image exists
+                const tempImg = new Image();
+                tempImg.onload = () => {
+                    promoImg.src = cloudinaryUrl;
+                    promoSlot.style.display = 'block';
+                };
+                tempImg.onerror = () => {
+                    promoSlot.style.display = 'none';
+                };
+                tempImg.src = cloudinaryUrl;
+            }
+        });
     }
 
     function getHaversineDistance(lat1, lon1, lat2, lon2) {
