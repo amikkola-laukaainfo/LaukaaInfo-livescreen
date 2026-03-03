@@ -310,6 +310,8 @@ function addMarkersToMap(companies) {
 
         if (localBounds.length > 0) {
             const latLngs = localBounds.map(b => L.latLng(b[0], b[1]));
+            // Lisätään aina taajaman oma keskipiste rajoihin, niin kamera ei karkaa liian kauas
+            latLngs.push(L.latLng(regionCoords.lat, regionCoords.lon));
             const b = L.latLngBounds(latLngs);
             map.fitBounds(b.pad(0.3));
             // Suojataan liian kauas tai liian lähelle menolta
@@ -826,7 +828,7 @@ function initRegionFilter() {
 
     const villageCoords = {
         'laukaa': { lat: 62.41407, lon: 25.95194 },
-        'leppavesi': { lat: 62.3260, lon: 25.8382 },
+        'leppavesi': { lat: 62.326386, lon: 25.840924 },
         'lievestuore': { lat: 62.2625, lon: 26.2039 },
         'vehnia': { lat: 62.4381, lon: 25.6825 },
         'vihtavuori': { lat: 62.36972, lon: 25.90278 }

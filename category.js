@@ -484,8 +484,11 @@
                 });
 
                 if (localMarkers.length > 0) {
-                    const localGroup = new L.featureGroup(localMarkers);
-                    map.fitBounds(localGroup.getBounds().pad(0.3));
+                    const localLatLngs = localMarkers.map(m => m.getLatLng());
+                    // Lisätään taajaman koordinaatti rajoihin ankkuriksi
+                    localLatLngs.push(L.latLng(regionCoords.lat, regionCoords.lon));
+                    const b = L.latLngBounds(localLatLngs);
+                    map.fitBounds(b.pad(0.3));
                     if (map.getZoom() < 12) map.setZoom(12);
                     if (map.getZoom() > 15) map.setZoom(15);
                 }
