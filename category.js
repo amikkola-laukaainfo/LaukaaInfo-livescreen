@@ -529,10 +529,10 @@
         const hasMarkers = markers.getLayers().length > 0;
 
         if (selectedRegion && selectedRegion !== 'all' && regionCoords) {
-            // Use precise village center at a high zoom level (15) as requested.
+            // Use precise village center at zoom level 13 as requested.
             // We no longer use fitBounds for regional views to ensure the center remains exactly 
             // on the village coordinates (e.g. Vihtavuori school) and doesn't drift towards nearby markers.
-            map.setView([regionCoords.lat, regionCoords.lon], 15);
+            map.setView([regionCoords.lat, regionCoords.lon], 13);
         } else if (hasMarkers) {
             map.fitBounds(group.getBounds().pad(0.1));
         } else {
