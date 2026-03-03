@@ -67,26 +67,17 @@
         const mainoslause = company.mainoslause || '';
 
         let slogan = '';
-        let description = esittely;
+        let fullContent = esittely || mainoslause;
 
-        // Check mainoslause for @@ first
-        const mainosIdx = mainoslause.indexOf('@@');
-        if (mainosIdx !== -1) {
-            slogan = mainoslause.substring(0, mainosIdx).trim();
-            // If esittely is empty, use part after @@ in mainoslause as description
-            if (!esittely) {
-                description = mainoslause.substring(mainosIdx + 2).trim();
-            }
+        // Extract slogan: text before the first @@
+        if (fullContent.includes('@@')) {
+            slogan = fullContent.split('@@')[0].trim();
         } else {
-            slogan = mainoslause;
+            slogan = mainoslause || (esittely.length > 100 ? esittely.substring(0, 100) + '...' : esittely);
         }
 
-        // Check esittely for @@ if slogan still not set from mainoslause
-        const esittelyIdx = esittely.indexOf('@@');
-        if (esittelyIdx !== -1) {
-            if (!slogan) slogan = esittely.substring(0, esittelyIdx).trim();
-            description = esittely.substring(esittelyIdx + 2).trim();
-        }
+        // Description: full content with all @@ removed
+        const description = fullContent.replaceAll('@@', '').trim();
 
         document.getElementById('display-headline').textContent = slogan;
         document.getElementById('display-description').textContent = description;
