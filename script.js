@@ -626,131 +626,189 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
  * Yritysdata ja katalogi
  */
 async function loadCompanyData() {
-    const dataSourceUrl = 'https://www.mediazoo.fi/laukaainfo-web/get_companies.php';
-    console.log('Yritetään hakea yritystietoja:', dataSourceUrl);
+    const dataSourceUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQTdoRdDSwSBVtImPr6hhIVLqRcA1FaWlLXg2zG9o9CjMqHQYX2kRo6Do2aHavTcgteTh1kno3GKXCd/pub?output=csv';
+    console.log('Yritetään hakea yritystietoja (CSV):', dataSourceUrl);
     try {
-        const response = await fetch(dataSourceUrl + '?t=' + Date.now());
+        const response = await fetch(dataSourceUrl + '&t=' + Date.now());
         console.log('Vastaus saatu:', response.status, response.statusText);
 
         const text = await response.text();
         console.log('Raw data pituus:', text.length);
 
-        try {
-            allCompanies = JSON.parse(text);
-        } catch (e) {
-            console.error('JSON parsimisvirhe. Data ei ole validia JSONia:', text.substring(0, 200));
-            // Jos lataus epäonnistuu, yritetään ladata backup tai näyttää virhe
-            throw e;
-        }
+        allCompanies = parseCSV(text);
 
-        // Jos ollaan paikallisessa ympäristössä, baseUrl voi olla tyhjä
-        const baseUrl = dataSourceUrl.includes('://') ? dataSourceUrl.substring(0, dataSourceUrl.lastIndexOf('/') + 1) : '';
-        allCompanies.forEach(company => {
-            if (company.media) {
-                company.media.forEach(item => {
-                    if (item.url) {
-                        // 1. Korjataan vanhentuneet/virheelliset drive_cache linkit välityspalvelimelle
-                        if (item.url.includes('drive_cache/')) {
-                            const match = item.url.match(/drive_cache\/([a-zA-Z0-9_-]+)/);
-                            if (match) {
-                                const fileId = match[1];
-                                console.log(`Korjattu Drive-välimuistiosoite: ${item.url} -> get_image.php?id=${fileId}`);
-                                item.url = (item.url.startsWith('http') ? baseUrl : '') + "get_image.php?id=" + fileId;
-                            }
-                        }
-                        // 2. Normalisoidaan suhteelliset polut (huom: yllä oleva korjaus voi jättää sen suhteelliseksi)
-                        if (!item.url.startsWith('http') && !item.url.startsWith('//')) {
-                            console.log(`Normalisoidaan suhteellinen URL: ${item.url} -> ${baseUrl}${item.url}`);
-                            item.url = baseUrl + item.url;
-                        }
-                    }
-                });
-            }
-        });
-
-        console.log('Yrityksiä ladattu:', allCompanies.length);
-
-        if (allCompanies.length > 0 && allCompanies[0]._debug_headers) {
-            console.log('CSV Sarakkeet:', allCompanies[0]._debug_headers.join(', '));
-        }
-
-        // Diagnostiikkaa: Tulostetaan ensimmäisten yritysten koordinaatit
-        console.log('Esimerkki koordinaateista (ensimmäiset 5):');
-        allCompanies.slice(0, 5).forEach(c => {
-            console.log(`- ${c.nimi}: lat="${c.lat}", lon="${c.lon}"`);
-        });
-
-        initCompanyCatalog();
-        initMap(allCompanies);
-        initCategories(allCompanies);
-
-        // URL-parametrin (haku) tarkistus
-        const queryParams = new URLSearchParams(window.location.search);
-        const urlParam = queryParams.get('haku') || queryParams.get('yritys');
-        // Tarkistetaan myös hash (esim. #haku-mediazoo)
-        const hashParam = window.location.hash;
-
-        let searchKeyword = urlParam;
-        if (!searchKeyword && hashParam && hashParam.startsWith('#haku-')) {
-            searchKeyword = hashParam.replace('#haku-', '').replace(/-/g, ' ');
-        }
-
-        // Mahdollistetaan myös suora polku jos .htaccess on ohjannut sen parametriksi mutta se tulee URL:stä tms. (varmistus)
-        const pathname = window.location.pathname;
-        const pathMatch = pathname.match(/\/haku-(.*)/);
-        if (!searchKeyword && pathMatch) {
-            searchKeyword = decodeURIComponent(pathMatch[1]).replace(/-/g, ' ');
-        }
-
-        let selectedCompany = null;
-        if (searchKeyword) {
-            const lowerKeyword = searchKeyword.toLowerCase();
-            // Etsitään yrityksen nimestä tai url-ystävällisestä muodosta
-            selectedCompany = allCompanies.find(c => {
-                if (!c.nimi) return false;
-                const nameMatch = c.nimi.toLowerCase().includes(lowerKeyword);
-                const urlFriendlyName = c.nimi.toLowerCase().replace(/[^a-z0-9äö]/g, '').includes(lowerKeyword.replace(/[^a-z0-9äö]/g, ''));
-                return nameMatch || urlFriendlyName;
-            });
-        }
-
-        if (selectedCompany) {
-            console.log('Avataan yritys URL-parametrin perusteella:', selectedCompany.nimi);
-            updateSpotlight(selectedCompany);
-
-            // Asetetaan sana hakukenttään
-            const searchInput = document.getElementById('company-search');
-            if (searchInput) {
-                searchInput.value = selectedCompany.nimi;
-                filterCatalog();
-
-                // Korostetaan katalogissa
-                document.querySelectorAll('.catalog-item').forEach(el => {
-                    if (el.querySelector('h4').textContent === selectedCompany.nimi) {
-                        el.classList.add('active');
-                        setTimeout(() => {
-                            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        }, 500);
-                    }
-                });
-            }
-
-            // Skrollataan automaattisesti kohtaan
-            setTimeout(() => {
-                const spotlight = document.getElementById('company-spotlight');
-                if (spotlight) spotlight.scrollIntoView({ behavior: 'smooth' });
-            }, 800);
-        } else {
-            console.log('Päivitetään spotlight avaustilanteella');
-            updateSpotlight(welcomeCompany);
-        }
     } catch (error) {
-        console.error('Yritystietojen haku epäonnistui:', error);
-        const catalogList = document.getElementById('catalog-list');
-        if (catalogList) {
-            catalogList.innerHTML = `<p style="padding: 1rem; color: #dc3545;">Virhe ladattaessa tietoja: ${error.message}</p>`;
+        console.error('Virhe yritysdatan latauksessa:', error);
+        document.body.innerHTML += '<div style="background:red;color:white;padding:1rem;">Virhe yritysdatan latauksessa. Tarkista internetyhteys tai kokeile myöhemmin.</div>';
+    }
+}
+
+/**
+ * Robust CSV-parsiminen Google Sheetsia varten
+ */
+function parseCSV(csvText) {
+    const lines = [];
+    let currentLine = [];
+    let currentCell = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < csvText.length; i++) {
+        const char = csvText[i];
+        const nextChar = csvText[i + 1];
+
+        if (char === '"' && inQuotes && nextChar === '"') {
+            currentCell += '"';
+            i++;
+        } else if (char === '"') {
+            inQuotes = !inQuotes;
+        } else if (char === ',' && !inQuotes) {
+            currentLine.push(currentCell.trim());
+            currentCell = '';
+        } else if ((char === '\r' || char === '\n') && !inQuotes) {
+            currentLine.push(currentCell.trim());
+            if (currentLine.length > 1 || currentLine[0] !== '') {
+                lines.push(currentLine);
+            }
+            currentLine = [];
+            currentCell = '';
+            if (char === '\r' && nextChar === '\n') i++;
+        } else {
+            currentCell += char;
         }
     }
+    // Lisätään viimeinen solu ja rivi jos teksti ei lopu rivinvaihtoon
+    if (currentCell || currentLine.length > 0) {
+        currentLine.push(currentCell.trim());
+        lines.push(currentLine);
+    }
+
+    if (lines.length < 2) return [];
+
+    const headers = lines[0];
+    return lines.slice(1).map(row => {
+        const obj = { _debug_headers: headers };
+        headers.forEach((h, i) => {
+            let val = row[i] || '';
+            // Siivotaan mahdolliset "alku- ja loppulainausmerkit jos ne jäivät
+            if (val.startsWith('"') && val.endsWith('"')) val = val.substring(1, val.length - 1);
+            obj[h.trim()] = val;
+        });
+
+        // Mapping and processing for compatibility with the app logic
+        obj.id = obj.rowid;
+
+        // Convert lat/lon strings to safe format
+        if (obj.lat) obj.lat = obj.lat.replace(',', '.');
+        if (obj.lon) obj.lon = obj.lon.replace(',', '.');
+
+        // Parse images from JSON-like string if present
+        if (obj.images && obj.images.startsWith('[')) {
+            try {
+                const urls = JSON.parse(obj.images.replace(/'/g, '"'));
+                obj.media = (obj.media || []).concat(urls.map(url => ({ type: 'image', url })));
+            } catch (e) { console.warn("Kuvalinkkien parsimisvirhe yritykselle " + obj.name, e); }
+        }
+
+        // Process YouTube
+        if (obj.youtubeUrl && obj.youtubeUrl.includes('youtube.com')) {
+            const vidId = obj.youtubeUrl.match(/v=([a-zA-Z0-9_-]+)/)?.[1];
+            if (vidId) {
+                obj.media = (obj.media || []).concat([{ type: 'video', url: `https://www.youtube.com/embed/${vidId}` }]);
+            }
+        }
+
+        // Standard link mappings
+        obj.nimi = obj.name;
+        obj.nettisivu = obj.website;
+        obj.esittely = obj.description;
+
+        return obj;
+    });
+}
+
+console.log('Yrityksiä ladattu:', allCompanies.length);
+
+if (allCompanies.length > 0 && allCompanies[0]._debug_headers) {
+    console.log('CSV Sarakkeet:', allCompanies[0]._debug_headers.join(', '));
+}
+
+// Diagnostiikkaa: Tulostetaan ensimmäisten yritysten koordinaatit
+console.log('Esimerkki koordinaateista (ensimmäiset 5):');
+allCompanies.slice(0, 5).forEach(c => {
+    console.log(`- ${c.nimi}: lat="${c.lat}", lon="${c.lon}"`);
+});
+
+initCompanyCatalog();
+initMap(allCompanies);
+initCategories(allCompanies);
+
+// URL-parametrin (haku) tarkistus
+const queryParams = new URLSearchParams(window.location.search);
+const urlParam = queryParams.get('haku') || queryParams.get('yritys');
+// Tarkistetaan myös hash (esim. #haku-mediazoo)
+const hashParam = window.location.hash;
+
+let searchKeyword = urlParam;
+if (!searchKeyword && hashParam && hashParam.startsWith('#haku-')) {
+    searchKeyword = hashParam.replace('#haku-', '').replace(/-/g, ' ');
+}
+
+// Mahdollistetaan myös suora polku jos .htaccess on ohjannut sen parametriksi mutta se tulee URL:stä tms. (varmistus)
+const pathname = window.location.pathname;
+const pathMatch = pathname.match(/\/haku-(.*)/);
+if (!searchKeyword && pathMatch) {
+    searchKeyword = decodeURIComponent(pathMatch[1]).replace(/-/g, ' ');
+}
+
+let selectedCompany = null;
+if (searchKeyword) {
+    const lowerKeyword = searchKeyword.toLowerCase();
+    // Etsitään yrityksen nimestä tai url-ystävällisestä muodosta
+    selectedCompany = allCompanies.find(c => {
+        if (!c.nimi) return false;
+        const nameMatch = c.nimi.toLowerCase().includes(lowerKeyword);
+        const urlFriendlyName = c.nimi.toLowerCase().replace(/[^a-z0-9äö]/g, '').includes(lowerKeyword.replace(/[^a-z0-9äö]/g, ''));
+        return nameMatch || urlFriendlyName;
+    });
+}
+
+if (selectedCompany) {
+    console.log('Avataan yritys URL-parametrin perusteella:', selectedCompany.nimi);
+    updateSpotlight(selectedCompany);
+
+    // Asetetaan sana hakukenttään
+    const searchInput = document.getElementById('company-search');
+    if (searchInput) {
+        searchInput.value = selectedCompany.nimi;
+        filterCatalog();
+
+        // Korostetaan katalogissa
+        document.querySelectorAll('.catalog-item').forEach(el => {
+            if (el.querySelector('h4').textContent === selectedCompany.nimi) {
+                el.classList.add('active');
+                setTimeout(() => {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 500);
+            }
+        });
+    }
+
+    // Skrollataan automaattisesti kohtaan
+    setTimeout(() => {
+        const spotlight = document.getElementById('company-spotlight');
+        if (spotlight) spotlight.scrollIntoView({ behavior: 'smooth' });
+    }, 800);
+} else {
+    console.log('Päivitetään spotlight avaustilanteella');
+    updateSpotlight(welcomeCompany);
+}
+    } catch (error) {
+    console.error('Yritystietojen haku epäonnistui:', error);
+    const catalogList = document.getElementById('catalog-list');
+    if (catalogList) {
+        catalogList.innerHTML = `<p style="padding: 1rem; color: #dc3545;">Virhe ladattaessa tietoja: ${error.message}</p>`;
+    }
+}
 }
 
 let activeSuggestionIndex = -1;
