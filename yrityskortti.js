@@ -21,7 +21,9 @@
             // Käytetään palvelimen proxyä, joka hoitaa CORS-ongelmat ja datan muunnoksen
             const dataSourceUrl = 'https://www.mediazoo.fi/laukaainfo-web/get_companies.php';
             const response = await fetch(dataSourceUrl + '?t=' + Date.now());
-            const companies = await response.json();
+            const json = await response.json();
+            // New response format: {results: [...], total: N, page: N, limit: N}
+            const companies = Array.isArray(json) ? json : (json.results || []);
 
             // Normalize URLs
             const baseUrl = dataSourceUrl.substring(0, dataSourceUrl.lastIndexOf('/') + 1);

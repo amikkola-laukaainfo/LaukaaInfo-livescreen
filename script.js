@@ -633,8 +633,10 @@ async function loadCompanyData() {
         const response = await fetch(dataSourceUrl + '?t=' + Date.now());
         console.log('Vastaus saatu:', response.status, response.statusText);
 
-        allCompanies = await response.json();
-        console.log('Yrityksiä ladattu:', allCompanies.length);
+        const json = await response.json();
+        // New response format: {results: [...], total: N, page: N, limit: N}
+        allCompanies = Array.isArray(json) ? json : (json.results || []);
+        console.log('Yrityksiiä ladattu:', allCompanies.length);
 
         // Normalize URLs
         const baseUrl = dataSourceUrl.substring(0, dataSourceUrl.lastIndexOf('/') + 1);
