@@ -529,35 +529,10 @@
         const hasMarkers = markers.getLayers().length > 0;
 
         if (selectedRegion && selectedRegion !== 'all' && regionCoords) {
-            // Smart zoom for selected region: prioritize centering on the village
-            map.setView([regionCoords.lat, regionCoords.lon], 14);
-
-            if (hasMarkers) {
-                // Focus bounds only on local markers to prevent distal premium items from biasing center
-                const localMarkers = markers.getLayers().filter(m => {
-                    const latlng = m.getLatLng();
-                    // Double check coordinates against regionCoords
-                    const dist = getHaversineDistance(regionCoords.lat, regionCoords.lon, latlng.lat, latlng.lng);
-                    return dist < 3; // 3km focus (reduced from 5km to prevent Laukaa overlap)
-                });
-
-                if (localMarkers.length > 0) {
-                    const localLatLngs = localMarkers.map(m => m.getLatLng());
-                    // Add region center as anchor point
-                    localLatLngs.push(L.latLng(regionCoords.lat, regionCoords.lon));
-                    const b = L.latLngBounds(localLatLngs);
-                    map.fitBounds(b.pad(0.3));
-                    if (map.getZoom() < 14) map.setZoom(14);
-                    if (map.getZoom() > 16) map.setZoom(16);
-                } else {
-                    // Fallback to strict village center if no businesses found within 5km focus
-                    console.log("No local markers within 3km, centering on village center.");
-                    map.setView([regionCoords.lat, regionCoords.lon], 14);
-                }
-            } else {
-                // No markers at all for category, center on village
-                map.setView([regionCoords.lat, regionCoords.lon], 14);
-            }
+            // Use precise village center at a high zoom level (15) as requested.
+            // We no longer use fitBounds for regional views to ensure the center remains exactly 
+            // on the village coordinates (e.g. Vihtavuori school) and doesn't drift towards nearby markers.
+            map.setView([regionCoords.lat, regionCoords.lon], 15);
         } else if (hasMarkers) {
             map.fitBounds(group.getBounds().pad(0.1));
         } else {
