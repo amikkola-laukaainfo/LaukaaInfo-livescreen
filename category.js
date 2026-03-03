@@ -4,9 +4,9 @@
     let categoryCompanies = [];
     let map, markers;
 
-    const params = new URLSearchParams(window.location.search);
-    const rawRegion = params.get('region') || localStorage.getItem('selectedRegion') || 'all';
-    const selectedRegion = rawRegion.toLowerCase();
+    let selectedRegion = 'all';
+    let regionCoords = null;
+    let villageName = '';
 
     const villageCoordsMap = {
         'laukaa': { lat: 62.41407, lon: 25.95194 },
@@ -16,44 +16,42 @@
         'vihtavuori': { lat: 62.368015, lon: 25.902254 }
     };
 
-    // Determine region coords with case-insensitivity and fallback logic
-    let regionCoords = villageCoordsMap[selectedRegion];
-
-    // If not in map, try to parse from localStorage if selectedRegion matches what was stored
-    if (!regionCoords && selectedRegion !== 'all') {
-        const storedCoords = localStorage.getItem('regionCoords');
-        if (storedCoords) {
-            try {
-                regionCoords = JSON.parse(storedCoords);
-            } catch (e) {
-                console.error("Error parsing stored regionCoords", e);
-            }
-        }
-    }
-
     document.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(window.location.search);
         const category = params.get('cat');
         const regionFromUrl = params.get('region');
 
-        const storedCoords = localStorage.getItem('userCoords');
-        if (storedCoords) {
-            try {
-                userCoords = JSON.parse(storedCoords);
-                if (userCoords && typeof userCoords.lat === 'number' && typeof userCoords.lng === 'number') {
-                    userCoords = L.latLng(userCoords.lat, userCoords.lng);
-                } else {
-                    userCoords = null;
-                }
-                console.log("Restored user coordinates:", userCoords);
-            } catch (e) { console.error("Error parsing stored coords", e); }
+        // Resolve selected region: URL takes absolute priority
+        const rawRegion = regionFromUrl || localStorage.getItem('selectedRegion') || 'all';
+        selectedRegion = rawRegion.toLowerCase();
+
+        // Resolve coordinates
+        regionCoords = villageCoordsMap[selectedRegion];
+        if (!regionCoords && selectedRegion !== 'all') {
+            const storedCoords = localStorage.getItem('regionCoords');
+            if (storedCoords) {
+                try {
+                    regionCoords = JSON.parse(storedCoords);
+                } catch (e) { console.error("Error parsing stored coords", e); }
+            }
         }
 
-        if (regionFromUrl) {
-            const lowerUrlRegion = regionFromUrl.toLowerCase();
-            if (villageCoordsMap[lowerUrlRegion]) {
-                localStorage.setItem('selectedRegion', lowerUrlRegion);
-                localStorage.setItem('regionCoords', JSON.stringify(villageCoordsMap[lowerUrlRegion]));
+        // Update localStorage to match current state
+        if (selectedRegion !== 'all') {
+            localStorage.setItem('selectedRegion', selectedRegion);
+            if (regionCoords) {
+                localStorage.setItem('regionCoords', JSON.stringify(regionCoords));
             }
+        }
+
+        const storedUserCoords = localStorage.getItem('userCoords');
+        if (storedUserCoords) {
+            try {
+                const parsed = JSON.parse(storedUserCoords);
+                if (parsed && typeof parsed.lat === 'number' && typeof parsed.lng === 'number') {
+                    userCoords = L.latLng(parsed.lat, parsed.lng);
+                }
+            } catch (e) { console.error("Error parsing stored user coords", e); }
         }
 
         if (!category) {
@@ -70,8 +68,8 @@
             'vihtavuori': 'Vihtavuori'
         };
 
-        const regionName = (selectedRegion && selectedRegion !== 'all') ? friendlyRegions[selectedRegion] : '';
-        const displayTitle = regionName ? `${category} - ${regionName}` : category;
+        villageName = friendlyRegions[selectedRegion] || '';
+        const displayTitle = villageName ? `${category} - ${villageName}` : category;
 
         document.getElementById('category-name').textContent = displayTitle;
         document.title = `${displayTitle} – LaukaaInfo`;
