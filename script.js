@@ -636,6 +636,21 @@ async function loadCompanyData() {
         allCompanies = await response.json();
         console.log('Yrityksiä ladattu:', allCompanies.length);
 
+        // Normalize URLs
+        const baseUrl = dataSourceUrl.substring(0, dataSourceUrl.lastIndexOf('/') + 1);
+        allCompanies.forEach(company => {
+            if (company.media) {
+                company.media.forEach(item => {
+                    if (item.url && !item.url.startsWith('http') && !item.url.startsWith('//')) {
+                        item.url = baseUrl + item.url;
+                    }
+                });
+            }
+            if (company.logo && !company.logo.startsWith('http') && !company.logo.startsWith('//') && company.logo !== '-') {
+                company.logo = baseUrl + company.logo;
+            }
+        });
+
         initCompanyCatalog();
         initMap(allCompanies);
         initCategories(allCompanies);

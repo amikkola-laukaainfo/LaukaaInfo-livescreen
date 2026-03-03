@@ -23,6 +23,21 @@
             const response = await fetch(dataSourceUrl + '?t=' + Date.now());
             const companies = await response.json();
 
+            // Normalize URLs
+            const baseUrl = dataSourceUrl.substring(0, dataSourceUrl.lastIndexOf('/') + 1);
+            companies.forEach(company => {
+                if (company.media) {
+                    company.media.forEach(item => {
+                        if (item.url && !item.url.startsWith('http') && !item.url.startsWith('//')) {
+                            item.url = baseUrl + item.url;
+                        }
+                    });
+                }
+                if (company.logo && !company.logo.startsWith('http') && !company.logo.startsWith('//') && company.logo !== '-') {
+                    company.logo = baseUrl + company.logo;
+                }
+            });
+
             const company = companies.find(c => String(c.id) === String(id) || c.id === "company-" + id);
 
             if (!company) {

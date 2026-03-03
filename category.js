@@ -110,19 +110,13 @@
             allCompanies.forEach(company => {
                 if (company.media) {
                     company.media.forEach(item => {
-                        if (item.url) {
-                            if (item.url.includes('drive_cache/')) {
-                                const match = item.url.match(/drive_cache\/([a-zA-Z0-9_-]+)/);
-                                if (match) {
-                                    const fileId = match[1];
-                                    item.url = baseUrl + "get_image.php?id=" + fileId;
-                                }
-                            }
-                            if (!item.url.startsWith('http') && !item.url.startsWith('//')) {
-                                item.url = baseUrl + item.url;
-                            }
+                        if (item.url && !item.url.startsWith('http') && !item.url.startsWith('//')) {
+                            item.url = baseUrl + item.url;
                         }
                     });
+                }
+                if (company.logo && !company.logo.startsWith('http') && !company.logo.startsWith('//') && company.logo !== '-') {
+                    company.logo = baseUrl + company.logo;
                 }
             });
 
