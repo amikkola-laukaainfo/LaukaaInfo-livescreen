@@ -469,22 +469,31 @@
             }
         });
 
-        // Zoom to fit markers if any
         const group = new L.featureGroup(markers.getLayers());
         const hasMarkers = markers.getLayers().length > 0;
 
         if (selectedRegion && selectedRegion !== 'all' && regionCoords) {
-            // Smart zoom for selected region
+            // Smart zoom for selected region: prioritize centering on the village
+            map.setView([regionCoords.lat, regionCoords.lon], 13);
+
             if (hasMarkers) {
-                map.fitBounds(group.getBounds().pad(0.2));
-                if (map.getZoom() < 12) map.setZoom(12);
-            } else {
-                map.setView([regionCoords.lat, regionCoords.lon], 13);
+                // Focus bounds only on local markers to prevent distal premium items from biasing center
+                const localMarkers = markers.getLayers().filter(m => {
+                    const latlng = m.getLatLng();
+                    return getHaversineDistance(regionCoords.lat, regionCoords.lon, latlng.lat, latlng.lng) < 13;
+                });
+
+                if (localMarkers.length > 0) {
+                    const localGroup = new L.featureGroup(localMarkers);
+                    map.fitBounds(localGroup.getBounds().pad(0.3));
+                    if (map.getZoom() < 12) map.setZoom(12);
+                    if (map.getZoom() > 15) map.setZoom(15);
+                }
             }
         } else if (hasMarkers) {
             map.fitBounds(group.getBounds().pad(0.1));
         } else {
-            // Default center if nothing else
+            // Default center
             map.setView([62.4128, 25.9477], 11);
         }
     }

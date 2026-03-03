@@ -298,15 +298,23 @@ function addMarkersToMap(companies) {
     const selectedRegion = localStorage.getItem('selectedRegion');
 
     if (selectedRegion && selectedRegion !== 'all' && regionCoords) {
-        // Jos alue on valittu, keskitetään siihen
-        // Jos on tuloksia, zoomataan niin että ne näkyy, muuten käytetään kiinteää zoomia
-        if (bounds.length > 0) {
-            const group = new L.featureGroup(markers.getLayers());
-            map.fitBounds(group.getBounds().pad(0.2));
-            // Mutta älä varmuuden vuoksi zoomaa liian kauas jos ollaan tietyssä taajamassa
+        // Ensisijaisesti keskitys valittuun taajamaan
+        map.setView([regionCoords.lat, regionCoords.lon], 13);
+
+        // Jos on tuloksia, voidaan hieman hienosäätää jos ne ovat LÄHELLÄ valittua keskipistettä
+        // Tämä estää sen, että kaukana olevat premium-yritykset vetävät kameran pois taajamasta
+        const localBounds = bounds.filter(b => {
+            const d = getHaversineDistance(regionCoords.lat, regionCoords.lon, b[0], b[1]);
+            return d < 13; // 13km säde
+        });
+
+        if (localBounds.length > 0) {
+            const latLngs = localBounds.map(b => L.latLng(b[0], b[1]));
+            const b = L.latLngBounds(latLngs);
+            map.fitBounds(b.pad(0.3));
+            // Suojataan liian kauas tai liian lähelle menolta
             if (map.getZoom() < 12) map.setZoom(12);
-        } else {
-            map.setView([regionCoords.lat, regionCoords.lon], 13);
+            if (map.getZoom() > 15) map.setZoom(15);
         }
     } else if (bounds.length > 0) {
         map.fitBounds(bounds, { padding: [50, 50] });
@@ -1361,4 +1369,19 @@ if (installBtn) {
             installBtn.style.display = 'none';
         }
     });
+}
+
+function getHaversineDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // km
+    const dLat = deg2rad(lat2 - lat1);
+    const dLon = deg2rad(lon2 - lon1);
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+}
+
+function deg2rad(deg) {
+    return deg * (Math.PI / 180);
 }
