@@ -305,7 +305,7 @@ function addMarkersToMap(companies) {
         // Tämä estää sen, että kaukana olevat premium-yritykset vetävät kameran pois taajamasta
         const localBounds = bounds.filter(b => {
             const d = getHaversineDistance(regionCoords.lat, regionCoords.lon, b[0], b[1]);
-            return d < 13; // 13km säde
+            return d < 5; // KARTTAKESKITYS: Vain 5km säteellä olevat vaikuttavat zoomiin
         });
 
         if (localBounds.length > 0) {
@@ -317,6 +317,9 @@ function addMarkersToMap(companies) {
             // Suojataan liian kauas tai liian lähelle menolta
             if (map.getZoom() < 12) map.setZoom(12);
             if (map.getZoom() > 15) map.setZoom(15);
+        } else {
+            // Jos ei ole osumia 5km säteellä, pidetään kamera tiukasti keskipisteessä
+            map.setView([regionCoords.lat, regionCoords.lon], 13);
         }
     } else if (bounds.length > 0) {
         map.fitBounds(bounds, { padding: [50, 50] });

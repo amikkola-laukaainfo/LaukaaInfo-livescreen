@@ -480,7 +480,7 @@
                 // Focus bounds only on local markers to prevent distal premium items from biasing center
                 const localMarkers = markers.getLayers().filter(m => {
                     const latlng = m.getLatLng();
-                    return getHaversineDistance(regionCoords.lat, regionCoords.lon, latlng.lat, latlng.lng) < 13;
+                    return getHaversineDistance(regionCoords.lat, regionCoords.lon, latlng.lat, latlng.lng) < 5; // 5km focus
                 });
 
                 if (localMarkers.length > 0) {
@@ -491,6 +491,9 @@
                     map.fitBounds(b.pad(0.3));
                     if (map.getZoom() < 12) map.setZoom(12);
                     if (map.getZoom() > 15) map.setZoom(15);
+                } else {
+                    // Fallback to strict center
+                    map.setView([regionCoords.lat, regionCoords.lon], 13);
                 }
             }
         } else if (hasMarkers) {
