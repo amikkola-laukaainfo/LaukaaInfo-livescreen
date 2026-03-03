@@ -22,7 +22,7 @@
         const regionFromUrl = params.get('region');
 
         // Resolve selected region: URL takes absolute priority
-        const rawRegion = regionFromUrl || localStorage.getItem('selectedRegion') || 'all';
+        const rawRegion = (regionFromUrl || localStorage.getItem('selectedRegion') || 'all').trim();
         selectedRegion = rawRegion.toLowerCase();
 
         // Resolve coordinates
@@ -513,6 +513,17 @@
                 alert("Sijaintia ei voitu hakea: " + e.message);
             }
         });
+
+        // Redundant check to ensure state is correct before map logic
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlReg = urlParams.get('region');
+        if (urlReg) {
+            const normalizedReg = urlReg.trim().toLowerCase();
+            if (villageCoordsMap[normalizedReg]) {
+                selectedRegion = normalizedReg;
+                regionCoords = villageCoordsMap[normalizedReg];
+            }
+        }
 
         const group = new L.featureGroup(markers.getLayers());
         const hasMarkers = markers.getLayers().length > 0;
