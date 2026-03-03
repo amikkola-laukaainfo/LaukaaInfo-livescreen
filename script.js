@@ -871,6 +871,28 @@ function initRegionFilter() {
 
         // Päivitä haku ja kartta heti kun alue muuttuu
         filterCatalog();
+
+        // Päivitä myös kategoriat (linkit), jotta niissä säilyy uusi alue
+        if (typeof allCompanies !== 'undefined' && allCompanies.length > 0) {
+            initCategories(allCompanies);
+        }
+    });
+
+    // Sync when user navigates back/forward
+    window.addEventListener('popstate', () => {
+        const currentParams = new URLSearchParams(window.location.search);
+        const newReg = currentParams.get('region') || 'all';
+        regionSelect.value = newReg;
+        localStorage.setItem('selectedRegion', newReg);
+        if (newReg === 'all') {
+            localStorage.removeItem('regionCoords');
+        } else if (villageCoords[newReg]) {
+            localStorage.setItem('regionCoords', JSON.stringify(villageCoords[newReg]));
+        }
+        filterCatalog();
+        if (typeof allCompanies !== 'undefined' && allCompanies.length > 0) {
+            initCategories(allCompanies);
+        }
     });
 }
 
@@ -1039,7 +1061,9 @@ function renderHomepageCategories(categories) {
             Object.entries(categoryIcons).find(([k]) => k.toLowerCase() === cleanCat.toLowerCase())?.[1] ||
             '🏢';
         const card = document.createElement('a');
-        card.href = `kategoria.html?cat=${encodeURIComponent(cat)}${localStorage.getItem('selectedRegion') && localStorage.getItem('selectedRegion') !== 'all' ? `&region=${localStorage.getItem('selectedRegion')}` : ''}`;
+        const region = localStorage.getItem('selectedRegion');
+        const regionParam = (region && region !== 'all') ? `&region=${region}` : '';
+        card.href = `kategoria.html?cat=${encodeURIComponent(cat)}${regionParam}`;
         card.className = 'category-card';
         card.innerHTML = `
             <span class="cat-icon">${icon}</span>
