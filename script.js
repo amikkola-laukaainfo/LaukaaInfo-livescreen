@@ -294,10 +294,25 @@ function addMarkersToMap(companies) {
 
     console.log(`Kartta: Lisätty ${validMarkers} markeria ${companies.length} yrityksestä.`);
 
-    if (bounds.length > 0) {
+    const regionCoords = JSON.parse(localStorage.getItem('regionCoords'));
+    const selectedRegion = localStorage.getItem('selectedRegion');
+
+    if (selectedRegion && selectedRegion !== 'all' && regionCoords) {
+        // Jos alue on valittu, keskitetään siihen
+        // Jos on tuloksia, zoomataan niin että ne näkyy, muuten käytetään kiinteää zoomia
+        if (bounds.length > 0) {
+            const group = new L.featureGroup(markers.getLayers());
+            map.fitBounds(group.getBounds().pad(0.2));
+            // Mutta älä varmuuden vuoksi zoomaa liian kauas jos ollaan tietyssä taajamassa
+            if (map.getZoom() < 12) map.setZoom(12);
+        } else {
+            map.setView([regionCoords.lat, regionCoords.lon], 13);
+        }
+    } else if (bounds.length > 0) {
         map.fitBounds(bounds, { padding: [50, 50] });
     } else {
-        console.warn('Kartta: Ei löytynyt yrityksiä, joilla on validit koordinaatit.');
+        // Oletusnäkymä jos ei tuloksia eikä aluetta
+        map.setView([62.4128, 25.9477], 11);
     }
 }
 
@@ -822,6 +837,9 @@ function initRegionFilter() {
         } else {
             localStorage.setItem('regionCoords', JSON.stringify(villageCoords[val]));
         }
+
+        // Päivitä haku ja kartta heti kun alue muuttuu
+        filterCatalog();
     });
 }
 
@@ -832,6 +850,9 @@ function filterCatalog() {
     const searchTerm = (searchEl.value || '').toLowerCase().trim();
     const categoryEl = document.getElementById('category-filter');
     const category = categoryEl ? categoryEl.value : 'all';
+
+    const regionCoords = JSON.parse(localStorage.getItem('regionCoords'));
+    const selectedRegion = localStorage.getItem('selectedRegion');
 
     const matches = allCompanies.map(company => {
         const name = (company.nimi || '').toLowerCase();
@@ -848,11 +869,29 @@ function filterCatalog() {
         // Exact prefix match in name gets a boost
         if (name.startsWith(searchTerm)) score += 150;
 
+        // Treat empty search as a match-all if a region or category is selected
+        if (searchTerm.length === 0 && (selectedRegion !== 'all' || category !== 'all')) {
+            score = 1;
+        }
+
         const matchesCategory = category === 'all' || company.kategoria === category;
         const isPremium = company.tyyppi === 'paid' || company.taso === 'premium';
 
-        return { company, score, matchesCategory, isPremium };
-    }).filter(m => m.score > 0 && m.matchesCategory);
+        // Regional filtering
+        let matchesRegion = true;
+        if (selectedRegion && selectedRegion !== 'all' && regionCoords) {
+            if (isPremium) {
+                matchesRegion = true; // Premium bypasses region filter radius
+            } else if (company.lat && company.lon) {
+                const dist = getHaversineDistance(regionCoords.lat, regionCoords.lon, parseFloat(company.lat), parseFloat(company.lon));
+                matchesRegion = dist <= 13; // 13km radius
+            } else {
+                matchesRegion = false; // No coords and not premium -> hidden when region selected
+            }
+        }
+
+        return { company, score, matchesCategory, matchesRegion, isPremium };
+    }).filter(m => m.score > 0 && m.matchesCategory && m.matchesRegion);
 
     // Sort: Premium first, then by score, then alphabetically
     matches.sort((a, b) => {

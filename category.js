@@ -471,8 +471,21 @@
 
         // Zoom to fit markers if any
         const group = new L.featureGroup(markers.getLayers());
-        if (markers.getLayers().length > 0) {
+        const hasMarkers = markers.getLayers().length > 0;
+
+        if (selectedRegion && selectedRegion !== 'all' && regionCoords) {
+            // Smart zoom for selected region
+            if (hasMarkers) {
+                map.fitBounds(group.getBounds().pad(0.2));
+                if (map.getZoom() < 12) map.setZoom(12);
+            } else {
+                map.setView([regionCoords.lat, regionCoords.lon], 13);
+            }
+        } else if (hasMarkers) {
             map.fitBounds(group.getBounds().pad(0.1));
+        } else {
+            // Default center if nothing else
+            map.setView([62.4128, 25.9477], 11);
         }
     }
 })();
