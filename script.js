@@ -270,7 +270,7 @@ function addMarkersToMap(companies) {
                     <div style="font-family: 'Outfit', sans-serif; min-width: 150px;">
                         <h4 style="margin: 0 0 5px 0; color: #0056b3;">${company.nimi}</h4>
                         <div style="font-size: 0.8rem; margin-bottom: 8px; color: #666;">${company.kategoria}</div>
-                        <a href="yrityskortti.html?id=${company.id}" style="
+                        <a href="yrityskortti.html?id=${company.id}${localStorage.getItem('selectedRegion') && localStorage.getItem('selectedRegion') !== 'all' ? `&region=${localStorage.getItem('selectedRegion')}` : ''}" style="
                             display: block;
                             background: #0056b3;
                             color: white;
@@ -282,6 +282,7 @@ function addMarkersToMap(companies) {
                             width: 100%;
                             font-size: 0.8rem;
                             box-sizing: border-box;
+                            margin-top: 5px;
                         ">Näytä tiedot</a>
                     </div>
                 `);
@@ -837,19 +838,35 @@ function initRegionFilter() {
         'vihtavuori': { lat: 62.36972, lon: 25.90278 }
     };
 
-    // Restore from localStorage
-    const savedRegion = localStorage.getItem('selectedRegion') || 'all';
-    regionSelect.value = savedRegion;
+    // Restore from URL first, then localStorage
+    const params = new URLSearchParams(window.location.search);
+    const urlRegion = params.get('region');
+    const savedRegion = urlRegion || localStorage.getItem('selectedRegion') || 'all';
+
+    if (villageCoords[savedRegion] || savedRegion === 'all') {
+        regionSelect.value = savedRegion;
+        if (savedRegion !== 'all') {
+            localStorage.setItem('regionCoords', JSON.stringify(villageCoords[savedRegion]));
+            localStorage.setItem('selectedRegion', savedRegion);
+        }
+    }
 
     regionSelect.addEventListener('change', () => {
         const val = regionSelect.value;
+        const url = new URL(window.location.href);
+
         localStorage.setItem('selectedRegion', val);
 
         if (val === 'all') {
             localStorage.removeItem('regionCoords');
+            url.searchParams.delete('region');
         } else {
             localStorage.setItem('regionCoords', JSON.stringify(villageCoords[val]));
+            url.searchParams.set('region', val);
         }
+
+        // Päivitä URL ilman sivun latausta
+        window.history.pushState({}, '', url);
 
         // Päivitä haku ja kartta heti kun alue muuttuu
         filterCatalog();
@@ -987,7 +1004,9 @@ function renderNavCategories(categories) {
 
         categories.forEach(cat => {
             const li = document.createElement('li');
-            li.innerHTML = `<a href="kategoria.html?cat=${encodeURIComponent(cat)}">${cat}</a>`;
+            const region = localStorage.getItem('selectedRegion');
+            const regionParam = (region && region !== 'all') ? `&region=${region}` : '';
+            li.innerHTML = `<a href="kategoria.html?cat=${encodeURIComponent(cat)}${regionParam}">${cat}</a>`;
             navMenu.appendChild(li);
         });
     }
@@ -996,7 +1015,9 @@ function renderNavCategories(categories) {
         sidebarMenu.innerHTML = '';
         categories.forEach(cat => {
             const li = document.createElement('li');
-            li.innerHTML = `<a href="kategoria.html?cat=${encodeURIComponent(cat)}" class="sidebar-link">${cat}</a>`;
+            const region = localStorage.getItem('selectedRegion');
+            const regionParam = (region && region !== 'all') ? `&region=${region}` : '';
+            li.innerHTML = `<a href="kategoria.html?cat=${encodeURIComponent(cat)}${regionParam}" class="sidebar-link">${cat}</a>`;
             sidebarMenu.appendChild(li);
         });
     }
@@ -1017,7 +1038,7 @@ function renderHomepageCategories(categories) {
             Object.entries(categoryIcons).find(([k]) => k.toLowerCase() === cleanCat.toLowerCase())?.[1] ||
             '🏢';
         const card = document.createElement('a');
-        card.href = `kategoria.html?cat=${encodeURIComponent(cat)}`;
+        card.href = `kategoria.html?cat=${encodeURIComponent(cat)}${localStorage.getItem('selectedRegion') && localStorage.getItem('selectedRegion') !== 'all' ? `&region=${localStorage.getItem('selectedRegion')}` : ''}`;
         card.className = 'category-card';
         card.innerHTML = `
             <span class="cat-icon">${icon}</span>
@@ -1152,8 +1173,10 @@ function selectSuggestion(item) {
         window.open(item.link, '_blank');
     } else {
         if (searchInput) searchInput.value = item.nimi;
-        // Ohjataan yrityskorttiin
-        window.location.href = `yrityskortti.html?id=${item.id}`;
+        // Ohjataan yrityskorttiin alueen kanssa
+        const region = localStorage.getItem('selectedRegion');
+        const regionParam = (region && region !== 'all') ? `&region=${region}` : '';
+        window.location.href = `yrityskortti.html?id=${item.id}${regionParam}`;
     }
 }
 
@@ -1212,7 +1235,9 @@ function renderCatalog(companies) {
                     updateSpotlight(company);
                 } else {
                     // No spotlight (likely homepage), go to details page
-                    window.location.href = `yrityskortti.html?id=${company.id}`;
+                    const region = localStorage.getItem('selectedRegion');
+                    const regionParam = (region && region !== 'all') ? `&region=${region}` : '';
+                    window.location.href = `yrityskortti.html?id=${company.id}${regionParam}`;
                 }
             };
         }

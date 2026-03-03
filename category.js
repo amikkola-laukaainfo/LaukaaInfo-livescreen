@@ -3,8 +3,17 @@
     let distanceCache = new Map();
     let categoryCompanies = [];
 
-    const regionCoords = JSON.parse(localStorage.getItem('regionCoords'));
-    const selectedRegion = localStorage.getItem('selectedRegion');
+    const params = new URLSearchParams(window.location.search);
+    const selectedRegion = params.get('region') || localStorage.getItem('selectedRegion') || 'all';
+
+    const villageCoordsMap = {
+        'laukaa': { lat: 62.41407, lon: 25.95194 },
+        'leppavesi': { lat: 62.326386, lon: 25.840924 },
+        'lievestuore': { lat: 62.2625, lon: 26.2039 },
+        'vehnia': { lat: 62.4381, lon: 25.6825 },
+        'vihtavuori': { lat: 62.36972, lon: 25.90278 }
+    };
+    const regionCoords = villageCoordsMap[selectedRegion] || (selectedRegion !== 'all' ? JSON.parse(localStorage.getItem('regionCoords')) : null);
 
     document.addEventListener('DOMContentLoaded', () => {
         const storedCoords = localStorage.getItem('userCoords');
@@ -22,6 +31,12 @@
 
         const params = new URLSearchParams(window.location.search);
         const category = params.get('cat');
+        const regionFromUrl = params.get('region');
+
+        if (regionFromUrl && villageCoordsMap[regionFromUrl]) {
+            localStorage.setItem('selectedRegion', regionFromUrl);
+            localStorage.setItem('regionCoords', JSON.stringify(villageCoordsMap[regionFromUrl]));
+        }
 
         if (!category) {
             window.location.href = 'index.html';
