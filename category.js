@@ -2,6 +2,7 @@
     let userCoords = null;
     let distanceCache = new Map();
     let categoryCompanies = [];
+    let map, markers;
 
     const params = new URLSearchParams(window.location.search);
     const rawRegion = params.get('region') || localStorage.getItem('selectedRegion') || 'all';
@@ -31,6 +32,9 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+        const category = params.get('cat');
+        const regionFromUrl = params.get('region');
+
         const storedCoords = localStorage.getItem('userCoords');
         if (storedCoords) {
             try {
