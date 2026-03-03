@@ -13,7 +13,7 @@
         'leppavesi': { lat: 62.326386, lon: 25.840924 },
         'lievestuore': { lat: 62.2625, lon: 26.2039 },
         'vehnia': { lat: 62.4381, lon: 25.6825 },
-        'vihtavuori': { lat: 62.36972, lon: 25.90278 }
+        'vihtavuori': { lat: 62.368015, lon: 25.902254 }
     };
 
     // Determine region coords with case-insensitivity and fallback logic
