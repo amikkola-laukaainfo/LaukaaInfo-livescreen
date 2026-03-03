@@ -4,7 +4,8 @@
     let categoryCompanies = [];
 
     const params = new URLSearchParams(window.location.search);
-    const selectedRegion = params.get('region') || localStorage.getItem('selectedRegion') || 'all';
+    const rawRegion = params.get('region') || localStorage.getItem('selectedRegion') || 'all';
+    const selectedRegion = rawRegion.toLowerCase();
 
     const villageCoordsMap = {
         'laukaa': { lat: 62.41407, lon: 25.95194 },
@@ -13,7 +14,21 @@
         'vehnia': { lat: 62.4381, lon: 25.6825 },
         'vihtavuori': { lat: 62.36972, lon: 25.90278 }
     };
-    const regionCoords = villageCoordsMap[selectedRegion] || (selectedRegion !== 'all' ? JSON.parse(localStorage.getItem('regionCoords')) : null);
+
+    // Determine region coords with case-insensitivity and fallback logic
+    let regionCoords = villageCoordsMap[selectedRegion];
+
+    // If not in map, try to parse from localStorage if selectedRegion matches what was stored
+    if (!regionCoords && selectedRegion !== 'all') {
+        const storedCoords = localStorage.getItem('regionCoords');
+        if (storedCoords) {
+            try {
+                regionCoords = JSON.parse(storedCoords);
+            } catch (e) {
+                console.error("Error parsing stored regionCoords", e);
+            }
+        }
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
         const storedCoords = localStorage.getItem('userCoords');
@@ -29,13 +44,12 @@
             } catch (e) { console.error("Error parsing stored coords", e); }
         }
 
-        const params = new URLSearchParams(window.location.search);
-        const category = params.get('cat');
-        const regionFromUrl = params.get('region');
-
-        if (regionFromUrl && villageCoordsMap[regionFromUrl]) {
-            localStorage.setItem('selectedRegion', regionFromUrl);
-            localStorage.setItem('regionCoords', JSON.stringify(villageCoordsMap[regionFromUrl]));
+        if (regionFromUrl) {
+            const lowerUrlRegion = regionFromUrl.toLowerCase();
+            if (villageCoordsMap[lowerUrlRegion]) {
+                localStorage.setItem('selectedRegion', lowerUrlRegion);
+                localStorage.setItem('regionCoords', JSON.stringify(villageCoordsMap[lowerUrlRegion]));
+            }
         }
 
         if (!category) {
@@ -509,21 +523,27 @@
                 // Focus bounds only on local markers to prevent distal premium items from biasing center
                 const localMarkers = markers.getLayers().filter(m => {
                     const latlng = m.getLatLng();
-                    return getHaversineDistance(regionCoords.lat, regionCoords.lon, latlng.lat, latlng.lng) < 5; // 5km focus
+                    // Double check coordinates against regionCoords
+                    const dist = getHaversineDistance(regionCoords.lat, regionCoords.lon, latlng.lat, latlng.lng);
+                    return dist < 5; // 5km focus
                 });
 
                 if (localMarkers.length > 0) {
                     const localLatLngs = localMarkers.map(m => m.getLatLng());
-                    // Lisätään taajaman koordinaatti rajoihin ankkuriksi
+                    // Add region center as anchor point
                     localLatLngs.push(L.latLng(regionCoords.lat, regionCoords.lon));
                     const b = L.latLngBounds(localLatLngs);
                     map.fitBounds(b.pad(0.3));
                     if (map.getZoom() < 12) map.setZoom(12);
                     if (map.getZoom() > 15) map.setZoom(15);
                 } else {
-                    // Fallback to strict center
+                    // Fallback to strict village center if no businesses found within 5km focus
+                    console.log("No local markers within 5km, centering on village center.");
                     map.setView([regionCoords.lat, regionCoords.lon], 13);
                 }
+            } else {
+                // No markers at all for category, center on village
+                map.setView([regionCoords.lat, regionCoords.lon], 13);
             }
         } else if (hasMarkers) {
             map.fitBounds(group.getBounds().pad(0.1));

@@ -838,10 +838,11 @@ function initRegionFilter() {
         'vihtavuori': { lat: 62.36972, lon: 25.90278 }
     };
 
-    // Restore from URL first, then localStorage
+    // Restore from URL first, then localStorage (case-insensitive)
     const params = new URLSearchParams(window.location.search);
     const urlRegion = params.get('region');
-    const savedRegion = urlRegion || localStorage.getItem('selectedRegion') || 'all';
+    const rawSavedRegion = urlRegion || localStorage.getItem('selectedRegion') || 'all';
+    const savedRegion = rawSavedRegion.toLowerCase();
 
     if (villageCoords[savedRegion] || savedRegion === 'all') {
         regionSelect.value = savedRegion;
