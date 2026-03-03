@@ -410,12 +410,26 @@
                         <input type="text" id="images" name="images" placeholder="https://... , https://...">
                     </div>
                     <div class="form-group">
+                        <label for="logo">Yrityksen logon URL</label>
+                        <input type="url" id="logo" name="logo" placeholder="https://.../logo.png">
+                    </div>
+                    <div class="form-group">
                         <label for="youtube">YouTube-videon linkki</label>
                         <input type="url" id="youtube" name="youtube">
                     </div>
                     <div class="form-group">
                         <label for="coupon">Tarjous / Kuponki (esim. -20% lounaasta)</label>
                         <input type="text" id="coupon" name="coupon">
+                    </div>
+                    <div class="form-group">
+                        <label>Mainoslinkit (Katso tarjoukset -linkit)</label>
+                        <div id="ad-links-container">
+                            <div class="ad-link-row" style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                <input type="url" name="ad_link[]" placeholder="https://...">
+                                <button type="button" onclick="addAdLink()"
+                                    style="padding: 0 1rem; border-radius: 8px; cursor: pointer;">+</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -454,6 +468,18 @@
             updateSubmitButtonText();
         }
 
+        function addAdLink() {
+            const container = document.getElementById('ad-links-container');
+            const div = document.createElement('div');
+            div.className = 'ad-link-row';
+            div.style.cssText = 'display: flex; gap: 0.5rem; margin-bottom: 0.5rem;';
+            div.innerHTML = `
+                <input type="url" name="ad_link[]" placeholder="https://...">
+                <button type="button" onclick="this.parentElement.remove()" style="padding: 0 1rem; border-radius: 8px; cursor: pointer; color: red;">&times;</button>
+            `;
+            container.appendChild(div);
+        }
+
         // Tarkistetaan URL-parametri avattaessa
         const params = new URLSearchParams(window.location.search);
         const type = params.get('type') || 'free';
@@ -481,7 +507,9 @@
                 linkedin: formData.get('linkedin') || '-',
                 tiktok: formData.get('tiktok') || '-',
                 whatsapp: formData.get('whatsapp') ? 'true' : 'false',
-                kesto: formData.get('duration')
+                kesto: formData.get('duration'),
+                logo: formData.get('logo') || '-',
+                mainoslinkit: Array.from(document.querySelectorAll('input[name="ad_link[]"]')).map(input => input.value).filter(v => v !== '')
             };
 
             let emailBody = `Uusi yritys rekisteröinti LaukaaInfoon\n`;
@@ -505,9 +533,11 @@
 
             if (typeValue === 'paid') {
                 emailBody += `Lisätiedot (Maksullinen):\n`;
+                emailBody += `Logo: ${data.logo}\n`;
                 emailBody += `Kuvat: ${data.kuva_linkit}\n`;
                 emailBody += `YouTube: ${data.youtube}\n`;
                 emailBody += `Tarjous: ${data.tarjous}\n`;
+                emailBody += `Mainoslinkit: ${data.mainoslinkit.join(', ') || '-'}\n`;
             }
 
             const subject = encodeURIComponent(`LaukaaInfo - Uusi yritysilmoitus: ${data.nimi}`);

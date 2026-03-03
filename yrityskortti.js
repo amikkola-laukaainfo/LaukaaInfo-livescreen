@@ -97,29 +97,96 @@
         }
 
         // Logo
-        const logoImg = document.querySelector('#card-logo img');
-        if (company.media && company.media.length > 0) {
-            // Simple logic: first image as logo if no specific logo field
+        const logoImg = document.getElementById('display-logo');
+        const logoContainer = document.getElementById('logo-container');
+        if (company.logo && company.logo !== '-') {
+            logoImg.src = company.logo;
+            logoContainer.style.display = 'flex';
+        } else if (company.media && company.media.length > 0) {
+            // Fallback to first image if no logo defined
             logoImg.src = company.media[0].url;
+            logoContainer.style.display = 'flex';
         }
 
-        // Contact links
+        // Social Media & Contact links
         const phoneItem = document.getElementById('phone-item');
-        if (company.puhelin) {
+        if (company.puhelin && company.puhelin !== '-') {
             const phoneLink = document.getElementById('display-phone');
             phoneLink.textContent = company.puhelin;
             phoneLink.href = `tel:${company.puhelin}`;
+            phoneItem.style.display = 'flex';
         } else {
             phoneItem.style.display = 'none';
         }
 
         const websiteItem = document.getElementById('website-item');
-        if (company.nettisivu) {
+        if (company.nettisivu && company.nettisivu !== '-') {
             const webLink = document.getElementById('display-website');
             webLink.textContent = company.nettisivu.replace(/^https?:\/\//, '');
             webLink.href = company.nettisivu;
+            websiteItem.style.display = 'flex';
         } else {
             websiteItem.style.display = 'none';
+        }
+
+        // Social Icons Section
+        const socialIcons = document.getElementById('social-icons');
+        if (socialIcons) {
+            socialIcons.innerHTML = '';
+            const socialMap = {
+                facebook: { icon: '🔵 FB', label: 'Facebook' },
+                instagram: { icon: '📸 IG', label: 'Instagram' },
+                linkedin: { icon: '💼 LI', label: 'LinkedIn' },
+                tiktok: { icon: '📱 TT', label: 'TikTok' }
+            };
+
+            Object.entries(socialMap).forEach(([key, info]) => {
+                if (company[key] && company[key] !== '-') {
+                    const a = document.createElement('a');
+                    a.href = company[key];
+                    a.target = '_blank';
+                    a.title = info.label;
+                    a.style.cssText = 'font-size: 1.5rem; text-decoration: none; margin-right: 0.5rem;';
+                    a.textContent = info.icon.split(' ')[0]; // Show icon character
+                    socialIcons.appendChild(a);
+                }
+            });
+
+            if (company.whatsapp === 'true' && company.puhelin) {
+                const wa = document.createElement('a');
+                // Format phone: remove spaces/pluses for WA link
+                const waNum = company.puhelin.replace(/[^0-9]/g, '');
+                wa.href = `https://wa.me/${waNum}`;
+                wa.target = '_blank';
+                wa.style.cssText = 'font-size: 1.5rem; text-decoration: none;';
+                wa.textContent = '💬';
+                socialIcons.appendChild(wa);
+            }
+        }
+
+        // Promotional Links
+        const adSection = document.getElementById('promotional-links-section');
+        const adList = document.getElementById('ad-links-list');
+        if (company.mainoslinkit && company.mainoslinkit.length > 0) {
+            let links = [];
+            try {
+                // If it's a string (from CSV), parse it
+                links = typeof company.mainoslinkit === 'string' ? JSON.parse(company.mainoslinkit) : company.mainoslinkit;
+            } catch (e) { console.error("Error parsing mainoslinkit", e); }
+
+            if (links.length > 0) {
+                adSection.style.display = 'block';
+                adList.innerHTML = '';
+                links.forEach(url => {
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.target = '_blank';
+                    a.className = 'btn-primary';
+                    a.style.cssText = 'background: #d2691e; padding: 0.6rem 1.2rem; font-size: 0.9rem;';
+                    a.textContent = '📲 Katso tarjous';
+                    adList.appendChild(a);
+                });
+            }
         }
 
         // Gallery
@@ -130,6 +197,7 @@
         const images = (company.media || []).filter(m => m.type === 'image');
         if (images.length > 0) {
             mainImage.innerHTML = `<img src="${images[0].url}" alt="${company.nimi}">`;
+            galleryContainer.style.display = 'block';
 
             if (images.length > 1) {
                 thumbnails.innerHTML = '';
@@ -152,11 +220,14 @@
         if (videos.length > 0) {
             videoSection.style.display = 'block';
             videoSection.innerHTML = `<iframe src="${videos[0].url}" allowfullscreen></iframe>`;
+        } else {
+            videoSection.style.display = 'none';
         }
 
         // Map & Link
         const mapContainer = document.getElementById('card-map');
         if (company.lat && company.lon && mapContainer) {
+            mapContainer.innerHTML = ''; // Clear previous map
             const map = L.map('card-map').setView([company.lat, company.lon], 15);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; OpenStreetMap'
