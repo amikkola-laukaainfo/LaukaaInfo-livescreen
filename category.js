@@ -530,7 +530,7 @@
 
         if (selectedRegion && selectedRegion !== 'all' && regionCoords) {
             // Smart zoom for selected region: prioritize centering on the village
-            map.setView([regionCoords.lat, regionCoords.lon], 13);
+            map.setView([regionCoords.lat, regionCoords.lon], 14);
 
             if (hasMarkers) {
                 // Focus bounds only on local markers to prevent distal premium items from biasing center
@@ -547,16 +547,16 @@
                     localLatLngs.push(L.latLng(regionCoords.lat, regionCoords.lon));
                     const b = L.latLngBounds(localLatLngs);
                     map.fitBounds(b.pad(0.3));
-                    if (map.getZoom() < 12) map.setZoom(12);
-                    if (map.getZoom() > 15) map.setZoom(15);
+                    if (map.getZoom() < 14) map.setZoom(14);
+                    if (map.getZoom() > 16) map.setZoom(16);
                 } else {
                     // Fallback to strict village center if no businesses found within 5km focus
-                    console.log("No local markers within 5km, centering on village center.");
-                    map.setView([regionCoords.lat, regionCoords.lon], 13);
+                    console.log("No local markers within 3km, centering on village center.");
+                    map.setView([regionCoords.lat, regionCoords.lon], 14);
                 }
             } else {
                 // No markers at all for category, center on village
-                map.setView([regionCoords.lat, regionCoords.lon], 13);
+                map.setView([regionCoords.lat, regionCoords.lon], 14);
             }
         } else if (hasMarkers) {
             map.fitBounds(group.getBounds().pad(0.1));
