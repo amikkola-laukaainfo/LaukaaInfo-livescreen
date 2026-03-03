@@ -149,15 +149,34 @@
                 }
             });
 
-            if (company.whatsapp === 'true' && company.puhelin) {
+            // WhatsApp: field can be a phone number, 'true', or a full wa.me URL
+            const waField = (company.whatsapp || '').trim();
+            if (waField && waField !== '-' && waField !== 'false' && waField !== '0') {
                 const wa = document.createElement('a');
-                // Format phone: remove spaces/pluses for WA link
-                const waNum = company.puhelin.replace(/[^0-9]/g, '');
-                wa.href = `https://wa.me/${waNum}`;
-                wa.target = '_blank';
-                wa.style.cssText = 'font-size: 1.5rem; text-decoration: none;';
-                wa.textContent = '💬';
-                socialIcons.appendChild(wa);
+                let waHref = '';
+
+                if (waField.startsWith('http')) {
+                    // Already a full URL
+                    waHref = waField;
+                } else if (waField === 'true') {
+                    // Use the company's main phone number
+                    const waNum = (company.puhelin || '').replace(/[^0-9]/g, '');
+                    if (waNum) waHref = `https://wa.me/${waNum}`;
+                } else {
+                    // It's a phone number — strip non-digits and build link
+                    const waNum = waField.replace(/[^0-9]/g, '');
+                    if (waNum) waHref = `https://wa.me/${waNum}`;
+                }
+
+                if (waHref) {
+                    wa.href = waHref;
+                    wa.target = '_blank';
+                    wa.rel = 'noopener noreferrer';
+                    wa.title = 'WhatsApp';
+                    wa.style.cssText = 'font-size: 1.5rem; text-decoration: none; margin-right: 0.5rem; display:inline-flex; align-items:center;';
+                    wa.innerHTML = `<svg viewBox="0 0 24 24" width="28" height="28" fill="#25D366" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.52 14.16c-.23.65-1.35 1.27-1.84 1.33-.48.06-.93.21-3.18-.66-2.69-1.05-4.41-3.82-4.54-4-.13-.18-1.07-1.42-1.07-2.71s.68-1.92.92-2.18c.24-.26.52-.33.69-.33l.5.01c.16 0 .38-.06.59.45.23.54.77 1.87.84 2 .07.14.11.3.02.48-.09.17-.13.28-.26.43l-.39.44c-.13.13-.26.27-.11.53.15.26.66 1.09 1.42 1.77.97.87 1.79 1.14 2.05 1.27.26.13.41.11.56-.07.16-.18.67-.79.85-1.06.18-.27.35-.22.59-.13.24.09 1.52.72 1.78.85.26.13.43.2.5.3.06.11.06.63-.17 1.28z"/></svg>`;
+                    socialIcons.appendChild(wa);
+                }
             }
         }
 
