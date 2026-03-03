@@ -13,7 +13,7 @@
         'leppavesi': { lat: 62.326386, lon: 25.840924 },
         'lievestuore': { lat: 62.2625, lon: 26.2039 },
         'vehnia': { lat: 62.4381, lon: 25.6825 },
-        'vihtavuori': { lat: 62.368015, lon: 25.902254 }
+        'vihtavuori': { lat: 62.370563, lon: 25.902297 }
     };
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -538,7 +538,7 @@
                     const latlng = m.getLatLng();
                     // Double check coordinates against regionCoords
                     const dist = getHaversineDistance(regionCoords.lat, regionCoords.lon, latlng.lat, latlng.lng);
-                    return dist < 5; // 5km focus
+                    return dist < 3; // 3km focus (reduced from 5km to prevent Laukaa overlap)
                 });
 
                 if (localMarkers.length > 0) {
