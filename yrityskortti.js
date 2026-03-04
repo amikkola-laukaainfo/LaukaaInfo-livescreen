@@ -58,6 +58,7 @@
         document.getElementById('loading-overlay').style.display = 'none';
         document.getElementById('card-content').style.display = 'block';
 
+        const rawId = String(company.id).replace('company-', '');
         document.title = `${company.nimi} – LaukaaInfo`;
         document.getElementById('display-name').textContent = company.nimi;
         document.getElementById('display-category').textContent = company.kategoria;
@@ -237,6 +238,14 @@
                     a.textContent = '📲 Katso tarjous';
                     adList.appendChild(a);
                 });
+
+                // Add Upload Button
+                const uploadBtn = document.createElement('a');
+                uploadBtn.href = `upload.html?yritys=${rawId}`;
+                uploadBtn.className = 'btn-primary';
+                uploadBtn.style.cssText = 'background: #666; padding: 0.6rem 1.2rem; font-size: 0.9rem;';
+                uploadBtn.textContent = '📷 Päivitä kuvat';
+                adList.appendChild(uploadBtn);
             }
         }
 
@@ -291,14 +300,12 @@
         // Cloudinary Promotional Images
         // URL pattern: https://res.cloudinary.com/dfigif5il/image/upload/w_400,q_auto,f_auto/tarjoukset/{yritysId}/{index}.jpg
         // We use a timestamp for cache busting (v=...)
-        const rawId = String(company.id).replace('company-', '');
         const timestamp = new Date().getTime();
 
         [1, 2].forEach(index => {
             const promoImg = document.getElementById(`promo-img-${index}`);
             const promoSlot = document.getElementById(`promo-slot-${index}`);
             if (promoImg && promoSlot) {
-                const timestamp = new Date().getTime();
                 const baseUrl = `https://res.cloudinary.com/dfigif5il/image/upload/w_1200,q_auto,f_auto/mediazoo/offers/${rawId}_${index}`;
 
                 // Try .png first as it's common for these, then fallback to .jpg
