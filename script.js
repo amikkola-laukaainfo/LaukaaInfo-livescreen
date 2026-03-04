@@ -680,12 +680,11 @@ async function loadCompanyData() {
                 company.logo = baseUrl + company.logo;
             }
 
-            // Hashtag extraction from esittely
+            // Hashtag extraction and cleaning from esittely
             company.hashtags = [];
-            company.esittelyClean = company.esittely || '';
+            company.esittelyClean = (company.esittely || '').replace(/#\S+/g, '').trim(); // Remove #tags for general search
             if (company.esittely && company.esittely.includes('#')) {
                 const parts = company.esittely.split('#');
-                company.esittelyClean = parts[0].trim();
                 for (let i = 1; i < parts.length; i++) {
                     const tag = parts[i].split(/\s/)[0].toLowerCase();
                     if (tag) company.hashtags.push(tag);
@@ -926,8 +925,11 @@ function filterCatalog() {
         let score = 0;
         if (name.includes(searchTerm)) score += 100;
         if (tagline.includes(searchTerm)) score += 50;
+        const includeHashtags = document.getElementById('include-hashtags')?.checked;
+        const searchableDesc = includeHashtags ? desc : (company.esittelyClean || '').toLowerCase();
+
         // Only search description for longer terms to avoid noise
-        if (searchTerm.length > 1 && desc.includes(searchTerm)) score += 10;
+        if (searchTerm.length > 1 && searchableDesc.includes(searchTerm)) score += 10;
 
         // Hashtag search logic
         const includeHashtags = document.getElementById('include-hashtags')?.checked;
@@ -1112,9 +1114,12 @@ function showSuggestions() {
 
         const isPremium = c.tyyppi === 'paid' || c.taso === 'premium';
 
-        // Hashtag match for suggestions
-        const hashtagMatch = c.hashtags && c.hashtags.some(tag => tag.startsWith(searchTerm.startsWith('#') ? searchTerm.substring(1) : searchTerm));
-        if (hashtagMatch) score += 150;
+        // Hashtag match for suggestions - ONLY if enabled
+        const includeHashtags = document.getElementById('include-hashtags')?.checked;
+        if (includeHashtags) {
+            const hashtagMatch = c.hashtags && c.hashtags.some(tag => tag.startsWith(searchTerm.startsWith('#') ? searchTerm.substring(1) : searchTerm));
+            if (hashtagMatch) score += 150;
+        }
 
         return { company: c, score, isPremium };
     }).filter(m => m.score > 0);
