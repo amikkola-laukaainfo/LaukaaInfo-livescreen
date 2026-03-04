@@ -338,11 +338,14 @@
         if (!container || !itemsContainer) return;
 
         try {
-            // Using rss2json service with a small cache-buster to fetch RSS via CORS
-            const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}&api_key=your_api_key_here_if_needed`;
-            // Note: Public usage usually works without key for low rate
+            console.log('Fetching RSS from:', url);
+            // Using rss2json service with a cache-buster. 
+            // The free tier usually works without an API key if usage is low.
+            const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}&t=${Date.now()}`;
+
             const response = await fetch(proxyUrl);
             const data = await response.json();
+            console.log('RSS Status:', data.status, 'Items:', data.items?.length);
 
             if (data.status === 'ok' && data.items && data.items.length > 0) {
                 container.style.display = 'block';
