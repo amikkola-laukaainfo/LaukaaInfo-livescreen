@@ -291,7 +291,7 @@
         // Cloudinary Promotional Images
         // URL pattern: https://res.cloudinary.com/dfigif5il/image/upload/w_400,q_auto,f_auto/tarjoukset/{yritysId}/{index}.jpg
         // We use a timestamp for cache busting (v=...)
-        const rawId = id.replace('company-', '');
+        const rawId = String(company.id).replace('company-', '');
         const timestamp = new Date().getTime();
 
         [1, 2].forEach(index => {
