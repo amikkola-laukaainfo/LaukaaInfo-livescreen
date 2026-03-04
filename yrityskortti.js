@@ -298,18 +298,28 @@
             const promoImg = document.getElementById(`promo-img-${index}`);
             const promoSlot = document.getElementById(`promo-slot-${index}`);
             if (promoImg && promoSlot) {
-                const cloudinaryUrl = `https://res.cloudinary.com/dfigif5il/image/upload/w_1200,q_auto,f_auto/mediazoo/offers/${rawId}_${index}.jpg?v=${timestamp}`;
+                const timestamp = new Date().getTime();
+                const baseUrl = `https://res.cloudinary.com/dfigif5il/image/upload/w_1200,q_auto,f_auto/mediazoo/offers/${rawId}_${index}`;
 
-                // Use a temporary Image object to check if the image exists
-                const tempImg = new Image();
-                tempImg.onload = () => {
-                    promoImg.src = cloudinaryUrl;
-                    promoSlot.style.display = 'block';
+                // Try .png first as it's common for these, then fallback to .jpg
+                const tryLoad = (extension) => {
+                    const cloudinaryUrl = `${baseUrl}.${extension}?v=${timestamp}`;
+                    const tempImg = new Image();
+                    tempImg.onload = () => {
+                        promoImg.src = cloudinaryUrl;
+                        promoSlot.style.display = 'block';
+                    };
+                    tempImg.onerror = () => {
+                        if (extension === 'png') {
+                            tryLoad('jpg'); // Fallback to jpg
+                        } else {
+                            promoSlot.style.display = 'none';
+                        }
+                    };
+                    tempImg.src = cloudinaryUrl;
                 };
-                tempImg.onerror = () => {
-                    promoSlot.style.display = 'none';
-                };
-                tempImg.src = cloudinaryUrl;
+
+                tryLoad('png');
             }
         });
     }
