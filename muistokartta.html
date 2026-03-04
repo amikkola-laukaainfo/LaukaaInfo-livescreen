@@ -348,37 +348,12 @@
     <div class="demo-notification">Tämä sivusto on yksityinen ja riippumaton palvelu. Se ei ole kunnan virallinen
         verkkosivusto. Sisällöt perustuvat avoimiin ja julkisiin lähteisiin.</div>
 
-    <!-- Scripts -->
-    <!-- Leaflet & Multi-cluster JS -->
+    <script src="script.js?v=20260301-1"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
-
-    <!-- PapaParse for CSV parsing -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-
     <script src="muistokartta.js"></script>
 
-    <script>
-        // Basic sidebar logic
-        document.addEventListener('DOMContentLoaded', () => {
-            const hamburgerBtn = document.getElementById('hamburger-btn');
-            const closeBtn = document.getElementById('close-sidebar-btn');
-            const sidebarMenu = document.getElementById('sidebar-menu');
-            const sidebarOverlay = document.getElementById('sidebar-overlay');
-
-            function openSidebar() {
-                if (sidebarMenu) sidebarMenu.classList.add('active');
-                if (sidebarOverlay) sidebarOverlay.classList.add('active');
-            }
-            function closeSidebar() {
-                if (sidebarMenu) sidebarMenu.classList.remove('active');
-                if (sidebarOverlay) sidebarOverlay.classList.remove('active');
-            }
-            if (hamburgerBtn) hamburgerBtn.addEventListener('click', openSidebar);
-            if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
-            if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
-        });
-    </script>
 </body>
 
 </html>

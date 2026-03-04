@@ -36,10 +36,18 @@ body {
 
 html {
     scroll-behavior: smooth;
-    scroll-padding-top: 70px;
+    scroll-padding-top: 85px;
+    /* Kasvatettu vastaamaan top-nav korkeutta + marginaali */
     overflow-x: hidden;
     width: 100%;
 }
+
+/* Lisätään marginaalia ankkurikohteille, jotta ne eivät jää liian lähelle reunaa */
+.card,
+section[id] {
+    scroll-margin-top: 90px;
+}
+
 
 /* Map Markers */
 .custom-marker {

@@ -33,11 +33,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function openSidebar() {
         if (sidebarMenu) sidebarMenu.classList.add('active');
         if (sidebarOverlay) sidebarOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Estetään taustan skrollaus
     }
 
     function closeSidebar() {
         if (sidebarMenu) sidebarMenu.classList.remove('active');
         if (sidebarOverlay) sidebarOverlay.classList.remove('active');
+        document.body.style.overflow = ''; // Palautetaan skrollaus
     }
 
     if (hamburgerBtn) hamburgerBtn.addEventListener('click', openSidebar);
@@ -58,12 +60,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Sulje sidebar kun normaalia linkkiä painetaan
-    sidebarLinks.forEach(link => {
-        link.addEventListener('click', () => {
+    // Sulje sidebar kun mitä tahansa linkkiä painetaan (tärkeää ankkurilinkeille)
+    document.querySelectorAll('.sidebar-menu a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            const href = link.getAttribute('href');
+            // Jos linkki on pelkkä # tai submenu-toggle, älä sulje automaattisesti jos halutaan pitää auki
+            if (href === '#' || link.classList.contains('submenu-toggle')) return;
+
             closeSidebar();
         });
     });
+
+    // Tarkistetaan onko osoitteessa ankkuri ja korjataan skrollaus viiveellä (RSS-sisällön lataus siirtää sivua)
+    handleInitialHashScroll();
+
 
     // Alustetaan feedit taustalla hakuun (myös etusivulla)
     initRSSFeeds();
@@ -619,6 +629,24 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
     console.error(`Kaikki RSS-haut epäonnistuivat: ${url}`, lastError);
     if (container) {
         container.innerHTML = `<p>Tietojen lataus epäonnistui (CORS/Network error).</p>`;
+    }
+}
+
+/**
+ * Korjaa skrollauspositiota jos sivulle tultaessa on ankkurilinkki (#-loppuinen URL).
+ * RSS-syötteet ja muut dynaamiset sisällöt siirtävät sivun elementtejä latautuessaan,
+ * joten alkuperäinen selain-skrollaus osuu usein väärään kohtaan.
+ */
+function handleInitialHashScroll() {
+    const hash = window.location.hash;
+    if (hash && hash.length > 1) {
+        // Odotetaan että RSS-feedit ovat todennäköisesti latautuneet (tai ainakin yritys alkanut)
+        setTimeout(() => {
+            const element = document.querySelector(hash);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }, 1500); // 1.5 sekunnin viive yleensä riittää RSS-renderöintiin
     }
 }
 

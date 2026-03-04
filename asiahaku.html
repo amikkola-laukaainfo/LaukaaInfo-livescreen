@@ -309,6 +309,7 @@
     <div class="demo-notification">Tämä sivusto on yksityinen ja riippumaton palvelu. Se ei ole kunnan virallinen
         verkkosivusto. Sisällöt perustuvat avoimiin ja julkisiin lähteisiin.</div>
 
+    <script src="script.js?v=20260301-1"></script>
     <script>
         const issueData = {
             'kunnanhallitus': [
@@ -396,73 +397,21 @@
             }
         }
 
-        // Sidebar Navigation Logic
+        // Asiahaun URL-parametrien käsittely
         document.addEventListener('DOMContentLoaded', () => {
-            const hamburgerBtn = document.getElementById('hamburger-btn');
-            const closeBtn = document.getElementById('close-sidebar-btn');
-            const sidebarMenu = document.getElementById('sidebar-menu');
-            const sidebarOverlay = document.getElementById('sidebar-overlay');
-            const submenuToggles = document.querySelectorAll('.submenu-toggle');
-
-            function openSidebar() {
-                if (sidebarMenu) sidebarMenu.classList.add('active');
-                if (sidebarOverlay) sidebarOverlay.classList.add('active');
-            }
-
-            function closeSidebar() {
-                if (sidebarMenu) sidebarMenu.classList.remove('active');
-                if (sidebarOverlay) sidebarOverlay.classList.remove('active');
-            }
-
-            if (hamburgerBtn) hamburgerBtn.addEventListener('click', openSidebar);
-            if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
-            if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
-
-            submenuToggles.forEach(toggle => {
-                toggle.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const parentLi = toggle.parentElement;
-                    const submenu = parentLi.querySelector('.submenu');
-                    parentLi.classList.toggle('open');
-                    if (submenu) submenu.classList.toggle('open');
-                });
-            });
-
             // Tarkistetaan URL-parametrit hakuun (esim. etusivun linkeistä)
             const params = new URLSearchParams(window.location.search);
             let catParam = params.get('cat');
             let issueParam = params.get('issue');
 
-            // Tarkistetaan nätit URL:t (esim. /asia-kunnanhallitus/2026-02)
-            const pathname = window.location.pathname;
-            const pathMatch = pathname.match(/\/(?:asia|asiahaku)-([^\/]+)\/(.+)/);
-            if (!catParam && pathMatch) {
-                catParam = decodeURIComponent(pathMatch[1]);
-                issueParam = decodeURIComponent(pathMatch[2]);
-            }
-
-            // Tarkistetaan hash-linkit (esim. #asia-kunnanhallitus/2026-02)
-            const hashParam = window.location.hash;
-            if (!catParam && hashParam && hashParam.match(/^#(?:asia|asiahaku)-/)) {
-                const parts = hashParam.replace(/^#(?:asia|asiahaku)-/, '').split('/');
-                if (parts.length >= 2) {
-                    catParam = decodeURIComponent(parts[0]);
-                    issueParam = decodeURIComponent(parts.slice(1).join('/'));
-                }
-            }
-
             if (catParam && issueData[catParam]) {
                 categorySelect.value = catParam;
-                // Päivitetään asialista manuaalisesti tai liipaisemalla tapahtuma
                 categorySelect.dispatchEvent(new Event('change'));
 
                 if (issueParam) {
-                    // Pieni viive varmistamaan että asialista on ehtinyt päivittyä
                     setTimeout(() => {
                         issueSelect.value = issueParam;
                         updateEmbed();
-
-                        // Skrollataan automaattisesti embed-näkymään
                         setTimeout(() => {
                             const embedContainer = document.getElementById('embed-container');
                             if (embedContainer) embedContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -472,6 +421,7 @@
             }
         });
     </script>
+
 </body>
 
 </html>
