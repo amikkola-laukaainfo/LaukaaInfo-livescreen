@@ -926,7 +926,7 @@ function filterCatalog() {
         if (name.includes(searchTerm)) score += 100;
         if (tagline.includes(searchTerm)) score += 50;
         const includeHashtags = document.getElementById('include-hashtags')?.checked;
-        const searchableDesc = includeHashtags ? desc : (company.esittelyClean || '').toLowerCase();
+        const searchableDesc = includeHashtags ? (desc + " " + (company.hashtags || []).join(" ")) : (company.esittelyClean || '').toLowerCase();
 
         // Only search description for longer terms to avoid noise
         if (searchTerm.length > 1 && searchableDesc.includes(searchTerm)) score += 10;
