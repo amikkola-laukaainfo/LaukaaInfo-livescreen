@@ -422,6 +422,10 @@
                         <input type="text" id="coupon" name="coupon">
                     </div>
                     <div class="form-group">
+                        <label for="rss">RSS-syöte (Ajankohtaista-osio)</label>
+                        <input type="url" id="rss" name="rss" placeholder="https://.../feed">
+                    </div>
+                    <div class="form-group">
                         <label>Mainoslinkit (Katso tarjoukset -linkit)</label>
                         <div id="ad-links-container">
                             <div class="ad-link-row" style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
@@ -509,6 +513,7 @@
                 whatsapp: formData.get('whatsapp') ? 'true' : 'false',
                 kesto: formData.get('duration'),
                 logo: formData.get('logo') || '-',
+                rss: formData.get('rss') || '-',
                 mainoslinkit: Array.from(document.querySelectorAll('input[name="ad_link[]"]')).map(input => input.value).filter(v => v !== '')
             };
 
@@ -537,6 +542,7 @@
                 emailBody += `Kuvat: ${data.kuva_linkit}\n`;
                 emailBody += `YouTube: ${data.youtube}\n`;
                 emailBody += `Tarjous: ${data.tarjous}\n`;
+                emailBody += `RSS-syöte: ${data.rss}\n`;
                 emailBody += `Mainoslinkit: ${data.mainoslinkit.join(', ') || '-'}\n`;
             }
 

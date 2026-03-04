@@ -179,6 +179,119 @@
             height: 100%;
             border: none;
         }
+
+        /* RSS / Ajankohtaista Styles */
+        .rss-section {
+            margin-top: 3rem;
+            background: #fff;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border: 1px solid #edf2f7;
+        }
+
+        .rss-section h3 {
+            color: var(--primary-blue);
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .rss-item {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #edf2f7;
+            transition: transform 0.2s;
+        }
+
+        .rss-item:last-of-type {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .rss-item h4 {
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            color: #2d3748;
+        }
+
+        .rss-item h4 a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .rss-item h4 a:hover {
+            color: var(--primary-blue);
+            text-decoration: underline;
+        }
+
+        .rss-item .rss-date {
+            font-size: 0.85rem;
+            color: #718096;
+            margin-bottom: 0.8rem;
+            display: block;
+        }
+
+        .rss-item .rss-snippet {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #4a5568;
+            margin-bottom: 1rem;
+        }
+
+        .rss-more-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary-blue);
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+            padding: 0.8rem 1.5rem;
+            background: var(--light-blue);
+            border-radius: 50px;
+            transition: all 0.2s;
+            border: none;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .rss-more-toggle:hover {
+            background: #e1efff;
+        }
+
+        .rss-dropdown {
+            display: none;
+            margin-top: 1.5rem;
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .rss-dropdown.open {
+            display: block;
+        }
+
+        .rss-dropdown-item {
+            display: block;
+            padding: 1rem;
+            color: #2d3748;
+            text-decoration: none;
+            border-bottom: 1px solid #e2e8f0;
+            transition: background 0.2s;
+        }
+
+        .rss-dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .rss-dropdown-item:hover {
+            background: #edf2f7;
+            color: var(--primary-blue);
+        }
     </style>
 </head>
 
@@ -389,6 +502,21 @@
                     </div>
                 </div>
             </div>
+            <div id="rss-section" class="rss-section" style="display: none;">
+                <h3><span class="icon">📰</span> Ajankohtaista</h3>
+                <div id="rss-items-container">
+                    <!-- Uusimmat uutiset tässä -->
+                </div>
+                <div id="rss-more-section" style="display: none;">
+                    <button id="rss-toggle-btn" class="rss-more-toggle">
+                        Näytä muut uutiset <span class="arrow">▼</span>
+                    </button>
+                    <div id="rss-dropdown" class="rss-dropdown">
+                        <!-- Loput uutiset linkkeinä tässä -->
+                    </div>
+                </div>
+            </div>
+
             <div id="promotional-links-section"
                 style="margin-top: 3rem; background: #fdf5e6; padding: 2rem; border-radius: 20px; border: 1px dashed #ffa500; display: none;">
                 <h3 style="color: #d2691e; margin-bottom: 1rem;">🔥 Katso tarjoukset:</h3>

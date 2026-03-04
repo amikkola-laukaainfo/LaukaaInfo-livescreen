@@ -321,6 +321,85 @@
 
             tryLoad('png');
         });
+
+        // RSS Feed / Ajankohtaista logic
+        if (company.rss && company.rss !== '-' && company.rss !== '') {
+            loadRSS(company.rss);
+        }
+    }
+
+    async function loadRSS(url) {
+        const container = document.getElementById('rss-section');
+        const itemsContainer = document.getElementById('rss-items-container');
+        const dropdown = document.getElementById('rss-dropdown');
+        const moreSection = document.getElementById('rss-more-section');
+        const toggleBtn = document.getElementById('rss-toggle-btn');
+
+        if (!container || !itemsContainer) return;
+
+        try {
+            // Using rss2json service with a small cache-buster to fetch RSS via CORS
+            const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}&api_key=your_api_key_here_if_needed`;
+            // Note: Public usage usually works without key for low rate
+            const response = await fetch(proxyUrl);
+            const data = await response.json();
+
+            if (data.status === 'ok' && data.items && data.items.length > 0) {
+                container.style.display = 'block';
+                itemsContainer.innerHTML = '';
+                dropdown.innerHTML = '';
+
+                // Show top 2 items with snippets
+                const topItems = data.items.slice(0, 2);
+                topItems.forEach(item => {
+                    const date = new Date(item.pubDate);
+                    const dateStr = date.toLocaleDateString('fi-FI');
+                    const snippet = cleanRSSContent(item.description || item.content || '').substring(0, 160) + '...';
+
+                    const itemHtml = `
+                        <div class="rss-item">
+                            <span class="rss-date">📅 ${dateStr}</span>
+                            <h4><a href="${item.link}" target="_blank">${item.title}</a></h4>
+                            <div class="rss-snippet">${snippet}</div>
+                            <a href="${item.link}" target="_blank" style="color:var(--primary-blue); font-size:0.9rem; font-weight:600; text-decoration:none;">Lue koko uutinen →</a>
+                        </div>
+                    `;
+                    itemsContainer.insertAdjacentHTML('beforeend', itemHtml);
+                });
+
+                // Rest of the items in a dropdown
+                if (data.items.length > 2) {
+                    const otherItems = data.items.slice(2, 10); // Limit to 10 total items
+                    otherItems.forEach(item => {
+                        const a = document.createElement('a');
+                        a.href = item.link;
+                        a.target = '_blank';
+                        a.className = 'rss-dropdown-item';
+                        a.textContent = `▶ ${item.title}`;
+                        dropdown.appendChild(a);
+                    });
+                    moreSection.style.display = 'block';
+
+                    toggleBtn.onclick = () => {
+                        const isOpen = dropdown.classList.toggle('open');
+                        toggleBtn.querySelector('.arrow').textContent = isOpen ? '▲' : '▼';
+                        toggleBtn.innerHTML = isOpen ? `Pienennä uutiset <span class="arrow">▲</span>` : `Näytä muut uutiset (n. ${otherItems.length}) <span class="arrow">▼</span>`;
+                    };
+                }
+            }
+        } catch (error) {
+            console.error('Error loading RSS feed:', error);
+            // Silently fail or minimal notice
+        }
+    }
+
+    function cleanRSSContent(html) {
+        // Simple HTML strip
+        const tmp = document.createElement("DIV");
+        tmp.innerHTML = html;
+        let text = tmp.textContent || tmp.innerText || "";
+        // Remove multiple spaces/newlines
+        return text.replace(/\s+/g, ' ').trim();
     }
 
     function getHaversineDistance(lat1, lon1, lat2, lon2) {
