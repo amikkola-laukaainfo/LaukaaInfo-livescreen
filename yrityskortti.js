@@ -238,14 +238,6 @@
                     a.textContent = '📲 Katso tarjous';
                     adList.appendChild(a);
                 });
-
-                // Add Upload Button
-                const uploadBtn = document.createElement('a');
-                uploadBtn.href = `upload.html?yritys=${rawId}`;
-                uploadBtn.className = 'btn-primary';
-                uploadBtn.style.cssText = 'background: #666; padding: 0.6rem 1.2rem; font-size: 0.9rem;';
-                uploadBtn.textContent = '📷 Päivitä kuvat';
-                adList.appendChild(uploadBtn);
             }
         }
 
@@ -297,37 +289,37 @@
             document.getElementById('google-maps-link').href = `https://www.google.com/maps?q=${company.lat},${company.lon}`;
         }
 
-        // Cloudinary Promotional Images
-        // URL pattern: https://res.cloudinary.com/dfigif5il/image/upload/w_400,q_auto,f_auto/tarjoukset/{yritysId}/{index}.jpg
-        // We use a timestamp for cache busting (v=...)
+        // Cloudinary Promotional Images - checks if image exists and adds as link
         const timestamp = new Date().getTime();
 
         [1, 2].forEach(index => {
-            const promoImg = document.getElementById(`promo-img-${index}`);
-            const promoSlot = document.getElementById(`promo-slot-${index}`);
-            if (promoImg && promoSlot) {
-                const baseUrl = `https://res.cloudinary.com/dfigif5il/image/upload/w_1200,q_auto,f_auto/mediazoo/offers/${rawId}_${index}`;
+            const baseUrl = `https://res.cloudinary.com/dfigif5il/image/upload/w_1200,q_auto,f_auto/mediazoo/offers/${rawId}_${index}`;
 
-                // Try .png first as it's common for these, then fallback to .jpg
-                const tryLoad = (extension) => {
-                    const cloudinaryUrl = `${baseUrl}.${extension}?v=${timestamp}`;
-                    const tempImg = new Image();
-                    tempImg.onload = () => {
-                        promoImg.src = cloudinaryUrl;
-                        promoSlot.style.display = 'block';
-                    };
-                    tempImg.onerror = () => {
-                        if (extension === 'png') {
-                            tryLoad('jpg'); // Fallback to jpg
-                        } else {
-                            promoSlot.style.display = 'none';
-                        }
-                    };
-                    tempImg.src = cloudinaryUrl;
+            const tryLoad = (extension) => {
+                const cloudinaryUrl = `${baseUrl}.${extension}?v=${timestamp}`;
+                const tempImg = new Image();
+                tempImg.onload = () => {
+                    // Image found! Add a link button to ad-links-list
+                    if (adList) {
+                        adSection.style.display = 'block';
+                        const a = document.createElement('a');
+                        a.href = cloudinaryUrl;
+                        a.target = '_blank';
+                        a.className = 'btn-primary';
+                        a.style.cssText = 'background: #d2691e; padding: 0.6rem 1.2rem; font-size: 0.9rem;';
+                        a.textContent = `🔥 Katso tarjouskuva ${index}`;
+                        adList.appendChild(a);
+                    }
                 };
+                tempImg.onerror = () => {
+                    if (extension === 'png') {
+                        tryLoad('jpg'); // Fallback to jpg
+                    }
+                };
+                tempImg.src = cloudinaryUrl;
+            };
 
-                tryLoad('png');
-            }
+            tryLoad('png');
         });
     }
 
