@@ -930,6 +930,16 @@ function filterCatalog() {
         if (name.includes(searchTerm)) score += 100;
         if (tagline.includes(searchTerm)) score += 50;
 
+        if (company.nimi && company.nimi.includes('LVI-Taitajat')) {
+            console.log('--- DEBUG LVI-Taitajat ---');
+            console.log('searchTerm:', searchTerm);
+            console.log('includeHashtags:', includeHashtags);
+            console.log('tagline:', "[" + tagline + "]");
+            console.log('desc:', "[" + desc + "]");
+            console.log('searchableDesc:', "[" + searchableDesc + "]");
+            console.log('score before desc match:', score);
+        }
+
         // Only search description for longer terms to avoid noise
         if (searchTerm.length > 1 && searchableDesc.includes(searchTerm)) score += 10;
 
