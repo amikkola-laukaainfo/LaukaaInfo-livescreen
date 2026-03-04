@@ -932,7 +932,6 @@ function filterCatalog() {
         if (searchTerm.length > 1 && searchableDesc.includes(searchTerm)) score += 10;
 
         // Hashtag search logic
-        const includeHashtags = document.getElementById('include-hashtags')?.checked;
         if (includeHashtags && searchTerm.length > 1 && company.hashtags) {
             const cleanSearch = searchTerm.startsWith('#') ? searchTerm.substring(1) : searchTerm;
             if (company.hashtags.some(tag => tag.includes(cleanSearch))) {
