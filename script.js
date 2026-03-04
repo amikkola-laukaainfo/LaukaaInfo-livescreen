@@ -682,14 +682,14 @@ async function loadCompanyData() {
 
             // Hashtag extraction and cleaning from esittely
             company.hashtags = [];
-            company.esittelyClean = (company.esittely || '').replace(/#\S+/g, '').trim(); // Remove #tags for general search
-            if (company.esittely && company.esittely.includes('#')) {
-                const parts = company.esittely.split('#');
-                for (let i = 1; i < parts.length; i++) {
-                    const tag = parts[i].split(/\s/)[0].toLowerCase();
-                    if (tag) company.hashtags.push(tag);
-                }
-            }
+
+            // Extract all hashtags (starting with # followed by non-whitespace)
+            const hashtagRegex = /#(\S+)/g;
+            const matches = [...(company.esittely || '').matchAll(hashtagRegex)];
+            company.hashtags = matches.map(m => m[1].toLowerCase());
+
+            // Remove hashtags for general search (esittelyClean)
+            company.esittelyClean = (company.esittely || '').replace(hashtagRegex, '').replace(/\s\s+/g, ' ').trim();
         });
 
         initCompanyCatalog();
