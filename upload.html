@@ -70,12 +70,13 @@
 
     <script>
         // Security: Simple token-based access control
-        // For production, these tokens should ideally be generated or stored more securely
+        // Note: The 'yritys' parameter must match the numeric ID from the company card URL.
+        // E.g. yrityskortti.html?id=company-2  => yritys=2
         const VALID_TOKENS = {
+            '2': 'mz2026',        // Mediazoo company-2
             'test-yritys': 'secret123',
-            'mediazoo': 'mz2026',
+            'mediazoo': 'mz2026', // Keep this for now
             'demo': 'demo'
-            // Add more companies and tokens here or fetch from an API
         };
 
         const params = new URLSearchParams(window.location.search);
@@ -105,38 +106,65 @@
             setupWidget(2, "upload-widget-2");
         }
 
-        function setupWidget(index, buttonId) {
-            const myWidget = cloudinary.createUploadWidget({
-                cloudName: 'dfigif5il',
-                uploadPreset: 'tarjoukset_unsigned',
-                publicId: `tarjoukset/${yritysId}/${index}`,
-                overwrite: true,
-                resourceType: 'image',
-                clientAllowedFormats: ['jpg', 'png', 'webp', 'jpeg'],
-                maxFileSize: 5000000, // 5MB limit
-                sources: ['local', 'camera'],
-                language: 'fi',
-                text: {
-                    "fi": {
-                        "menu": {
-                            "files": "Omat tiedostot",
-                            "camera": "Kamera"
-                        },
-                        "local": {
-                            "browse": "Selaa tiedostoja",
-                            "dd_title_single": "Vedä kuva tähän"
-                        }
-                    }
-                }
-            }, (error, result) => {
-                if (!error && result && result.event === "success") {
-                    console.log('Done! Here is the image info: ', result.info);
-                    showMessage(`Kuva ${index} päivitetty onnistuneesti!`, 'success');
-                }
-            });
+        async function setupWidget(index, buttonId) {
+            const button = document.getElementById(buttonId);
 
-            document.getElementById(buttonId).addEventListener("click", function () {
-                myWidget.open();
+            button.addEventListener("click", async function () {
+                try {
+                    button.disabled = true;
+                    button.textContent = 'Valmistellaan...';
+
+                    // 1. Get signature from PHP backend
+                    const signRes = await fetch(`cloudinary-sign.php?yritys=${yritysId}&token=${token}&slot=${index}`);
+                    if (!signRes.ok) throw new Error('Allekirjoituksen haku epäonnistui');
+
+                    const data = await signRes.json();
+                    console.log('Signature Data:', data);
+
+                    if (data.error) throw new Error(data.error);
+                    if (!data.signature) throw new Error('Palvelin ei palauttanut allekirjoitusta.');
+
+                    // 2. Open signed widget
+                    cloudinary.openUploadWidget({
+                        cloudName: data.cloudName,
+                        apiKey: data.apiKey,
+                        uploadPreset: data.uploadPreset,
+                        publicId: data.publicId,
+                        timestamp: data.timestamp,
+                        signature: data.signature,
+                        resourceType: 'image',
+                        multiple: false,
+                        sources: ['local', 'camera'],
+                        clientAllowedFormats: ['jpg', 'png', 'webp', 'jpeg'],
+                        maxFileSize: 5000000,
+                        language: 'fi',
+                        text: {
+                            "fi": {
+                                "menu": { "files": "Omat tiedostot", "camera": "Kamera" },
+                                "local": { "browse": "Selaa tiedostoja", "dd_title_single": "Vedä kuva tähän" }
+                            }
+                        }
+                    }, (error, result) => {
+                        button.disabled = false;
+                        button.textContent = `Lataa tarjouskuva ${index}`;
+
+                        if (!error && result && result.event === "success") {
+                            console.log('Done! Image info: ', result.info);
+                            showMessage(`Kuva ${index} päivitetty onnistuneesti!`, 'success');
+                            // Optional: pre-cache bust notification if needed
+                        } else if (error) {
+                            console.error('Upload Error:', error);
+                            // Stringify error object if it's not a string
+                            const errorMsg = typeof error === 'object' ? JSON.stringify(error) : error;
+                            showMessage('Virhe lähetyksessä: ' + errorMsg, 'error');
+                        }
+                    });
+                } catch (err) {
+                    console.error('Setup Error:', err);
+                    showMessage('Virhe valmistelussa: ' + err.message, 'error');
+                    button.disabled = false;
+                    button.textContent = `Lataa tarjouskuva ${index}`;
+                }
             }, false);
         }
     </script>

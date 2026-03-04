@@ -298,7 +298,7 @@
             const promoImg = document.getElementById(`promo-img-${index}`);
             const promoSlot = document.getElementById(`promo-slot-${index}`);
             if (promoImg && promoSlot) {
-                const cloudinaryUrl = `https://res.cloudinary.com/dfigif5il/image/upload/w_400,q_auto,f_auto/tarjoukset/${rawId}/${index}.jpg?v=${timestamp}`;
+                const cloudinaryUrl = `https://res.cloudinary.com/dfigif5il/image/upload/w_1200,q_auto,f_auto/mediazoo/offers/${rawId}_${index}.jpg?v=${timestamp}`;
 
                 // Use a temporary Image object to check if the image exists
                 const tempImg = new Image();
