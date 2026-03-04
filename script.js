@@ -680,15 +680,17 @@ async function loadCompanyData() {
                 company.logo = baseUrl + company.logo;
             }
 
-            // Hashtag extraction and cleaning from esittely
+            // Hashtag extraction and cleaning from esittely AND mainoslause
             company.hashtags = [];
-
-            // Extract all hashtags (starting with # followed by non-whitespace)
             const hashtagRegex = /#(\S+)/g;
-            const matches = [...(company.esittely || '').matchAll(hashtagRegex)];
-            company.hashtags = matches.map(m => m[1].toLowerCase());
 
-            // Remove hashtags for general search (esittelyClean)
+            // Extract from both
+            const combinedText = (company.mainoslause || '') + " " + (company.esittely || '');
+            const hashtagMatches = [...combinedText.matchAll(hashtagRegex)];
+            company.hashtags = [...new Set(hashtagMatches.map(m => m[1].toLowerCase()))];
+
+            // Create cleaned versions for general search
+            company.mainoslauseClean = (company.mainoslause || '').replace(hashtagRegex, '').replace(/\s\s+/g, ' ').trim();
             company.esittelyClean = (company.esittely || '').replace(hashtagRegex, '').replace(/\s\s+/g, ' ').trim();
         });
 
@@ -918,15 +920,15 @@ function filterCatalog() {
 
     const matches = allCompanies.map(company => {
         const name = (company.nimi || '').toLowerCase();
-        const tagline = (company.mainoslause || '').toLowerCase();
-        const desc = (company.esittely || '').toLowerCase();
+        const includeHashtags = document.getElementById('include-hashtags')?.checked;
+        const tagline = (includeHashtags ? (company.mainoslause || '') : (company.mainoslauseClean || '')).toLowerCase();
+        const desc = (includeHashtags ? (company.esittely || '') : (company.esittelyClean || '')).toLowerCase();
+        const searchableDesc = includeHashtags ? (desc + " " + (company.hashtags || []).join(" ")) : desc;
         const cat = (company.kategoria || '').toLowerCase();
 
         let score = 0;
         if (name.includes(searchTerm)) score += 100;
         if (tagline.includes(searchTerm)) score += 50;
-        const includeHashtags = document.getElementById('include-hashtags')?.checked;
-        const searchableDesc = includeHashtags ? (desc + " " + (company.hashtags || []).join(" ")) : (company.esittelyClean || '').toLowerCase();
 
         // Only search description for longer terms to avoid noise
         if (searchTerm.length > 1 && searchableDesc.includes(searchTerm)) score += 10;
