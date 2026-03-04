@@ -679,6 +679,18 @@ async function loadCompanyData() {
             if (company.logo && !company.logo.startsWith('http') && !company.logo.startsWith('//') && company.logo !== '-') {
                 company.logo = baseUrl + company.logo;
             }
+
+            // Hashtag extraction from esittely
+            company.hashtags = [];
+            company.esittelyClean = company.esittely || '';
+            if (company.esittely && company.esittely.includes('#')) {
+                const parts = company.esittely.split('#');
+                company.esittelyClean = parts[0].trim();
+                for (let i = 1; i < parts.length; i++) {
+                    const tag = parts[i].split(/\s/)[0].toLowerCase();
+                    if (tag) company.hashtags.push(tag);
+                }
+            }
         });
 
         initCompanyCatalog();
@@ -779,6 +791,13 @@ function initCompanyCatalog() {
     const rssToggle = document.getElementById('include-rss');
     if (rssToggle) {
         rssToggle.addEventListener('change', () => {
+            filterCatalog();
+        });
+    }
+
+    const hashtagToggle = document.getElementById('include-hashtags');
+    if (hashtagToggle) {
+        hashtagToggle.addEventListener('change', () => {
             filterCatalog();
         });
     }
@@ -909,6 +928,15 @@ function filterCatalog() {
         if (tagline.includes(searchTerm)) score += 50;
         // Only search description for longer terms to avoid noise
         if (searchTerm.length > 1 && desc.includes(searchTerm)) score += 10;
+
+        // Hashtag search logic
+        const includeHashtags = document.getElementById('include-hashtags')?.checked;
+        if (includeHashtags && searchTerm.length > 1 && company.hashtags) {
+            const cleanSearch = searchTerm.startsWith('#') ? searchTerm.substring(1) : searchTerm;
+            if (company.hashtags.some(tag => tag.includes(cleanSearch))) {
+                score += 120; // High priority for hashtag matches
+            }
+        }
 
         // Exact prefix match in name gets a boost
         if (name.startsWith(searchTerm)) score += 150;
@@ -1083,6 +1111,11 @@ function showSuggestions() {
         else if (name.includes(searchTerm)) score += 100;
 
         const isPremium = c.tyyppi === 'paid' || c.taso === 'premium';
+
+        // Hashtag match for suggestions
+        const hashtagMatch = c.hashtags && c.hashtags.some(tag => tag.startsWith(searchTerm.startsWith('#') ? searchTerm.substring(1) : searchTerm));
+        if (hashtagMatch) score += 150;
+
         return { company: c, score, isPremium };
     }).filter(m => m.score > 0);
 
@@ -1277,7 +1310,7 @@ function updateSpotlight(company) {
 
     if (nameEl) nameEl.textContent = company.nimi;
     if (taglineEl) taglineEl.textContent = company.mainoslause;
-    if (descEl) descEl.textContent = company.esittely || company.mainoslause;
+    if (descEl) descEl.textContent = company.esittelyClean || company.esittely || company.mainoslause;
     if (detailsEl) {
         detailsEl.innerHTML = `
             <div>📍 ${company.osoite}</div>

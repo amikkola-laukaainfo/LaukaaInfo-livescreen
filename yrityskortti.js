@@ -77,8 +77,8 @@
             slogan = mainoslause || (esittely.length > 100 ? esittely.substring(0, 100) + '...' : esittely);
         }
 
-        // Description: full content with all @@ removed
-        const description = fullContent.replaceAll('@@', '').trim();
+        // Description: full content with all @@ removed and hashtags stripped
+        const description = fullContent.replaceAll('@@', '').replace(/#\S+/g, '').trim();
 
         document.getElementById('display-headline').textContent = slogan;
         document.getElementById('display-description').textContent = description;
