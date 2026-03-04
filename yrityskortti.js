@@ -78,7 +78,7 @@
         }
 
         // Description: full content with all @@ removed and hashtags stripped
-        const description = fullContent.replaceAll('@@', '').replace(/#\S+/g, '').trim();
+        const description = fullContent.replaceAll('@@', '').replace(/#[a-zA-Z0-9åäöÅÄÖ]+/g, '').replace(/\s\s+/g, ' ').trim();
 
         document.getElementById('display-headline').textContent = slogan;
         document.getElementById('display-description').textContent = description;

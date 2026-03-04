@@ -58,23 +58,23 @@ function minifyFolder(dir) {
             if (entry.name.endsWith('.js')) {
                 console.log(' -> Minifioidaan JS:  ' + entry.name);
                 try {
-                    execSync(`npx terser "${fullPath}" -o "${fullPath}" -c -m`, { stdio: 'ignore' });
+                    execSync(`npx terser "${fullPath}" -o "${fullPath}" -c -m`);
                 } catch (e) {
-                    console.error(' Virhe JS-tiedostossa: ' + entry.name);
+                    console.error(' Virhe JS-tiedostossa: ' + entry.name, e.message);
                 }
             } else if (entry.name.endsWith('.css')) {
                 console.log(' -> Minifioidaan CSS: ' + entry.name);
                 try {
-                    execSync(`npx cleancss -o "${fullPath}" "${fullPath}"`, { stdio: 'ignore' });
+                    execSync(`npx cleancss -o "${fullPath}" "${fullPath}"`);
                 } catch (e) {
-                    console.error(' Virhe CSS-tiedostossa: ' + entry.name);
+                    console.error(' Virhe CSS-tiedostossa: ' + entry.name, e.message);
                 }
             } else if (entry.name.endsWith('.html')) {
                 console.log(' -> Minifioidaan HTML: ' + entry.name);
                 try {
-                    execSync(`npx html-minifier --collapse-whitespace --remove-comments --minify-css true --minify-js true -o "${fullPath}" "${fullPath}"`, { stdio: 'ignore' });
+                    execSync(`npx html-minifier --collapse-whitespace --remove-comments --minify-css true --minify-js true -o "${fullPath}" "${fullPath}"`);
                 } catch (e) {
-                    console.error(' Virhe HTML-tiedostossa: ' + entry.name);
+                    console.error(' Virhe HTML-tiedostossa: ' + entry.name, e.message);
                 }
             }
         }

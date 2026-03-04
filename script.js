@@ -682,7 +682,7 @@ async function loadCompanyData() {
 
             // Hashtag extraction and cleaning from esittely AND mainoslause
             company.hashtags = [];
-            const hashtagRegex = /#(\S+)/g;
+            const hashtagRegex = /#([a-zA-Z0-9åäöÅÄÖ]+)/g;
 
             // Extract from both
             const combinedText = (company.mainoslause || '') + " " + (company.esittely || '');
