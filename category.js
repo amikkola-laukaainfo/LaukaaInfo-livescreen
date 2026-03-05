@@ -345,7 +345,7 @@
 
         if (premium.length > 0) {
             const h2 = document.createElement('h2');
-            h2.textContent = '⭐ Suositellut kumppanit';
+            h2.textContent = '⭐ Suositellut yritykset';
             h2.style.gridColumn = '1 / -1';
             h2.style.marginTop = '2rem';
             list.appendChild(h2);
