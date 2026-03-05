@@ -314,14 +314,23 @@
 
                 const distHtml = c.distanceText ? `<span style="background:var(--accent-blue); color:white; padding:2px 8px; border-radius:10px; font-size:0.75rem; margin-left:10px;">${c.distanceText}</span>` : '';
 
+                // Truncate description at @@
+                let description = c.mainoslause || '';
+                if (description.includes('@@')) {
+                    description = description.split('@@')[0].trim();
+                }
+
+                // Clean website URL
+                const websiteShow = (c.nettisivu || '').replace(/^https?:\/\//, '').replace(/\/$/, '');
+
                 item.innerHTML = `
                 <a href="yrityskortti.html?id=${c.id}" style="text-decoration: none; color: inherit; display: block;">
                     <span class="premium-badge">SUOSITELTU ${distHtml}</span>
                     ${mediaHtml}
                     <h3>${c.nimi}</h3>
-                    <p>${c.mainoslause || ''}</p>
+                    <p>${description}</p>
                     <div style="margin-top:1rem;">
-                        <strong>${c.osoite || ''}</strong>
+                        <strong>${websiteShow}</strong>
                     </div>
                 </a>
             `;
