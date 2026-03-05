@@ -170,10 +170,14 @@
         let premium = categoryCompanies.filter(c => c.media && c.media.length > 0).sort(currentSort);
         const free = categoryCompanies.filter(c => !c.media || c.media.length === 0).sort(currentSort);
 
+        // First 5 go to carousel, the rest to the directory list
+        const carouselItems = premium.slice(0, 5);
+        const remainingPremium = premium.slice(5);
+
         // Map demo data if needed for carousel ONLY if real premium data is missing
-        let carouselItems = premium;
-        if (carouselItems.length === 0) {
-            carouselItems = [
+        let displayCarousel = carouselItems;
+        if (displayCarousel.length === 0) {
+            displayCarousel = [
                 {
                     id: 'demo1',
                     nimi: 'Esimerkki Parturi-Kampaamo',
@@ -205,8 +209,8 @@
             ];
         }
 
-        renderFeatured(carouselItems);
-        renderDirectory(premium, free);
+        renderFeatured(displayCarousel);
+        renderDirectory(remainingPremium, free);
     }
 
     async function calculateDistances(reference) {
@@ -372,13 +376,25 @@
         const card = document.createElement('div');
         card.className = 'company-card';
 
+        const isPremium = c.media && c.media.length > 0;
         const distBadge = c.distanceText ? `<span style="display:inline-block; background:#eef; color:var(--primary-blue); padding:3px 10px; border-radius:15px; font-size:0.8rem; font-weight:bold; margin-bottom:10px;">🚗 ${c.distanceText}</span>` : '';
+
+        // Same logic as carousel for premium companies
+        let description = c.mainoslause || '';
+        if (isPremium && description.includes('@@')) {
+            description = description.split('@@')[0].trim();
+        }
+
+        const websiteShow = (c.nettisivu || '').replace(/^https?:\/\//, '').replace(/\/$/, '');
+        const infoHtml = isPremium && websiteShow
+            ? `<div style="margin-top:0.5rem;"><strong>${websiteShow}</strong></div>`
+            : `<p class="address">${c.osoite || 'Laukaa'}</p>`;
 
         card.innerHTML = `
         ${distBadge}
         <h3>${c.nimi}</h3>
-        <p class="address">${c.osoite || 'Laukaa'}</p>
-        <p>${c.mainoslause || ''}</p>
+        ${infoHtml}
+        <p>${description}</p>
         <div style="margin-top:1rem; display:flex; gap:10px;">
             <a href="yrityskortti.html?id=${c.id}" class="btn-primary" style="padding:0.4rem 1rem; font-size:0.8rem;">TIEDOT</a>
             ${c.nettisivu ? `<a href="${c.nettisivu}" target="_blank" class="btn-primary" style="padding:0.4rem 1rem; font-size:0.8rem; background:#666;">WWW</a>` : ''}
