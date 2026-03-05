@@ -167,8 +167,20 @@
         const currentSort = referenceCoords ? sortByDistance : sortAlphabetically;
 
         // Separate Premium and Free
-        let premium = categoryCompanies.filter(c => c.media && c.media.length > 0).sort(currentSort);
-        const free = categoryCompanies.filter(c => !c.media || c.media.length === 0).sort(currentSort);
+        // Premium: has media OR type is "maksu"
+        let premium = categoryCompanies.filter(c => (c.media && c.media.length > 0) || c.tyyppi === 'maksu');
+        const free = categoryCompanies.filter(c => !((c.media && c.media.length > 0) || c.tyyppi === 'maksu')).sort(currentSort);
+
+        // Probabilistic Weighted Sort for Premium Companies
+        // Higher karusellipaino (0-100) increases the chance of being at the top
+        premium = premium.map(c => {
+            const weight = parseFloat(c.karusellipaino) || 0;
+            // sortScore is a combination of weight-biased random and a baseline random
+            // Companies with 100 weight will have scores in range [10, 20]
+            // Companies with 0 weight will have scores in range [0, 10]
+            const sortScore = (Math.random() * 10) + (weight / 10);
+            return { ...c, sortScore };
+        }).sort((a, b) => b.sortScore - a.sortScore);
 
         // First 5 go to carousel, the rest to the directory list
         const carouselItems = premium.slice(0, 5);
@@ -183,28 +195,32 @@
                     nimi: 'Esimerkki Parturi-Kampaamo',
                     mainoslause: 'Modernit hiustenleikkuut ja värjäykset.',
                     osoite: 'Laukaantie 1, Laukaa',
-                    media: [{ type: 'image', url: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=600' }]
+                    media: [{ type: 'image', url: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=600' }],
+                    sortScore: 1
                 },
                 {
                     id: 'demo2',
                     nimi: 'Laukaan Lounasravintola',
                     mainoslause: 'Maistuvaa kotiruokaa joka arkipäivä.',
                     osoite: 'Lievestuoreentie 5, Lievestuore',
-                    media: [{ type: 'image', url: 'https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&q=80&w=600' }]
+                    media: [{ type: 'image', url: 'https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&q=80&w=600' }],
+                    sortScore: 1
                 },
                 {
                     id: 'demo3',
                     nimi: 'Kukkakauppa Ruusu',
                     mainoslause: 'Kukkatervehdykset kaikkiin tilaisuuksiin.',
                     osoite: 'Vihtavuori',
-                    media: [{ type: 'image', url: 'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&q=80&w=600' }]
+                    media: [{ type: 'image', url: 'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&q=80&w=600' }],
+                    sortScore: 1
                 },
                 {
                     id: 'demo4',
                     nimi: 'Liikuntakeskus Syke',
                     mainoslause: 'Kuntosali ja ryhmäliikuntatunnit.',
                     osoite: 'Laukaantie 10, Laukaa',
-                    media: [{ type: 'image', url: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=600' }]
+                    media: [{ type: 'image', url: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=600' }],
+                    sortScore: 1
                 }
             ];
         }
