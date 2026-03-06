@@ -1,4 +1,4 @@
-const REGIONS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTCqIQKTFGT4X5hHP448ytZx0z5FsmONjzFNr4fpabkZ6BjIuit8B8eqZbv7_VTte_4EZFQt7Fxoemk/pub?output=csv';
+const REGIONS_CSV_URL = 'get_alueet.php'; // Local PHP proxy to avoid CORS
 let areaMetadata = {};
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -9,26 +9,19 @@ async function fetchRegionMetadata() {
     try {
         const response = await fetch(REGIONS_CSV_URL);
         if (!response.ok) throw new Error('Alue-CSV lataus epäonnistui');
-        const text = await response.text();
 
-        // Simple CSV parser for 6 columns
-        const lines = text.split('\n');
-        lines.slice(1).forEach(line => {
-            if (!line.trim()) return;
-            // Handle quotes if any exist in the description, otherwise simple split
-            // Simpler split because we assume well-formed CSV or parse with regex
-            const match = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || line.split(',');
-            if (match.length >= 6) {
-                const slug = match[0].replace(/"/g, '').trim().toLowerCase();
-                areaMetadata[slug] = {
-                    name: match[1].replace(/"/g, '').trim(),
-                    desc: match[2].replace(/"/g, '').trim(),
-                    lat: parseFloat(match[3]),
-                    lon: parseFloat(match[4]),
-                    bloggerId: match[5].replace(/"/g, '').trim() || null
-                };
-            }
-        });
+        // PHP proxy palauttaa suoraan jäsennellyn JSON-kirjaston
+        const data = await response.json();
+
+        // Tarkistetaan virheet
+        if (data.error) {
+            console.error('PHP Proxy virhe:', data.error);
+            return;
+        }
+
+        // Kopioidaan tulokset areaMetadata-objektiin
+        areaMetadata = data;
+
     } catch (error) {
         console.error('Virhe alueiden haussa:', error);
     }
