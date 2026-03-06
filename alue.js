@@ -1,49 +1,38 @@
-const areaMetadata = {
-    'lievestuore': {
-        slug: 'lievestuore',
-        name: 'Lievestuore',
-        lat: 62.2625,
-        lon: 26.2039,
-        desc: 'Lievestuore on Laukaan kunnan itäosassa sijaitseva eloisa taajama, joka tunnetaan erityisesti vahvasta kylähengestään, upeista järvimaisemistaan ja monipuolisista palveluistaan. Tältä sivulta löydät Lievestuoreen yritykset, uutiset ja tapahtumat kootusti yhdestä paikasta.',
-        bloggerId: '7148270853674792022'
-    },
-    'laukaa': {
-        slug: 'laukaa',
-        name: 'Laukaa',
-        lat: 62.41407,
-        lon: 25.95194,
-        desc: 'Laukaan kirkonkylä on kunnan hallinnollinen ja kaupallinen keskus, joka tarjoaa kattavat palvelut asukkaille ja vierailijoille. Kirkonkylän rantamaisemat ja aktiivinen yrityskenttä tekevät siitä houkuttelevan paikan asioida ja viihtyä.',
-        bloggerId: null
-    },
-    'vihtavuori': {
-        slug: 'vihtavuori',
-        name: 'Vihtavuori',
-        lat: 62.370563,
-        lon: 25.902297,
-        desc: 'Vihtavuori on tunnettu teollisuushistoriastaan, vireistä urheiluseuroistaan ja viihtyisästä asuinympäristöstään. Se on yksi Laukaan keskeisimmistä taajamista, jossa yhdistyvät luonnonläheisyys ja hyvät palvelut.',
-        bloggerId: null
-    },
-    'leppavesi': {
-        slug: 'leppavesi',
-        name: 'Leppävesi',
-        lat: 62.326386,
-        lon: 25.840924,
-        desc: 'Leppävesi on kasvava ja dynaaminen taajama lähellä Jyväskylän rajaa. Alue tarjoaa monipuolisia palveluita erityisesti lapsiperheille ja rakentajille, ja se on tunnettu aktiivisesta kehityksestään.',
-        bloggerId: null
-    },
-    'vehnia': {
-        slug: 'vehnia',
-        name: 'Vehniä',
-        lat: 62.4381,
-        lon: 25.6825,
-        desc: 'Vehniä on vireä kylä nelostien varrella, jossa maaseudun rauha kohtaa hyvät liikenneyhteydet. Kylä on tunnettu yhteisöllisyydestään ja omaleimaisista yrittäjistään.',
-        bloggerId: null
-    }
-};
+const REGIONS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTCqIQKTFGT4X5hHP448ytZx0z5FsmONjzFNr4fpabkZ6BjIuit8B8eqZbv7_VTte_4EZFQt7Fxoemk/pub?output=csv';
+let areaMetadata = {};
 
 document.addEventListener('DOMContentLoaded', () => {
     initRegionPage();
 });
+
+async function fetchRegionMetadata() {
+    try {
+        const response = await fetch(REGIONS_CSV_URL);
+        if (!response.ok) throw new Error('Alue-CSV lataus epäonnistui');
+        const text = await response.text();
+
+        // Simple CSV parser for 6 columns
+        const lines = text.split('\n');
+        lines.slice(1).forEach(line => {
+            if (!line.trim()) return;
+            // Handle quotes if any exist in the description, otherwise simple split
+            // Simpler split because we assume well-formed CSV or parse with regex
+            const match = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || line.split(',');
+            if (match.length >= 6) {
+                const slug = match[0].replace(/"/g, '').trim().toLowerCase();
+                areaMetadata[slug] = {
+                    name: match[1].replace(/"/g, '').trim(),
+                    desc: match[2].replace(/"/g, '').trim(),
+                    lat: parseFloat(match[3]),
+                    lon: parseFloat(match[4]),
+                    bloggerId: match[5].replace(/"/g, '').trim() || null
+                };
+            }
+        });
+    } catch (error) {
+        console.error('Virhe alueiden haussa:', error);
+    }
+}
 
 async function initRegionPage() {
     const params = new URLSearchParams(window.location.search);
@@ -56,8 +45,13 @@ async function initRegionPage() {
     const catParam = params.get('cat')?.toLowerCase();
     const tagParam = params.get('tag')?.toLowerCase();
 
+    // Hae ensin alueiden metadata CSV:stä
+    await fetchRegionMetadata();
+
     if (!areaSlug || !areaMetadata[areaSlug]) {
         console.warn('Aluetta ei tunnistettu:', areaSlug);
+        const container = document.getElementById('catalog-list') || document.body;
+        container.innerHTML = '<p style="padding: 2rem;">Aluetta ei löytynyt tai dataa ladataan. Tarkista URL-osoite.</p>';
         return;
     }
 
