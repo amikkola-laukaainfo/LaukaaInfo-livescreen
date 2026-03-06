@@ -806,6 +806,8 @@ function initCompanyCatalog() {
     const searchBtn = document.getElementById('search-btn');
     if (searchBtn) {
         searchBtn.addEventListener('click', () => {
+            const query = searchInput.value.trim();
+            if (tryRedirectToRegion(query)) return;
             filterCatalog();
         });
     }
@@ -1199,6 +1201,12 @@ function handleSearchKeydown(e) {
         if (activeSuggestionIndex > -1) {
             e.preventDefault();
             selectSuggestion(filteredSuggestions[activeSuggestionIndex]);
+        } else {
+            // No suggestion selected, try region redirect
+            const query = (document.getElementById('company-search')?.value || '').trim();
+            if (tryRedirectToRegion(query)) {
+                e.preventDefault();
+            }
         }
     } else if (e.key === 'Escape') {
         suggestionsList.style.display = 'none';
@@ -1229,6 +1237,25 @@ function selectSuggestion(item) {
         const regionParam = (region && region !== 'all') ? `&region=${region}` : '';
         window.location.href = `yrityskortti.html?id=${item.id}${regionParam}`;
     }
+}
+
+function tryRedirectToRegion(query) {
+    if (!query || query.length < 3) return false;
+    const villages = ['lievestuore', 'laukaa', 'vihtavuori', 'leppavesi', 'vehnia'];
+    const parts = query.toLowerCase().split(' ').map(p => p.trim());
+
+    const foundVillage = villages.find(v => parts.includes(v));
+    if (foundVillage) {
+        // Redir to area page
+        const remainingQuery = parts.filter(p => p !== foundVillage).join('-').trim();
+        let targetUrl = `/${foundVillage}`;
+        if (remainingQuery) {
+            targetUrl += `/${remainingQuery}`;
+        }
+        window.location.href = targetUrl;
+        return true;
+    }
+    return false;
 }
 
 function renderCatalog(companies) {
