@@ -144,13 +144,8 @@
 }
 
 @media (max-width: 600px) {
-    .radar-location-search {
-        flex-wrap: wrap;
-    }
-
-    .radar-hint {
-        width: 100%;
-        text-align: center;
+    #radar-desktop-search.radar-location-search {
+        display: none !important;
     }
 }
 

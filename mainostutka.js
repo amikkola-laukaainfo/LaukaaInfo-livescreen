@@ -75,6 +75,22 @@ const Mainostutka = (function () {
         }
     }
 
+    async function waitForData() {
+        if (typeof allCompanies !== 'undefined' && allCompanies && allCompanies.length > 0) {
+            return Promise.resolve();
+        }
+        return new Promise(resolve => {
+            const check = () => {
+                if (typeof allCompanies !== 'undefined' && allCompanies && allCompanies.length > 0) {
+                    resolve();
+                } else {
+                    setTimeout(check, 100);
+                }
+            };
+            check();
+        });
+    }
+
     function startRadar() {
         const results = document.getElementById('radar-results-container');
         results.classList.remove('radar-results-hidden');
@@ -87,7 +103,11 @@ const Mainostutka = (function () {
                 (position) => {
                     userLat = position.coords.latitude;
                     userLon = position.coords.longitude;
-                    processRadar();
+
+                    // Varmistetaan että data on ladattu ennen käsittelyä
+                    waitForData().then(() => {
+                        processRadar();
+                    });
                 },
                 (error) => {
                     console.error("Sijaintivirhe:", error);
@@ -109,7 +129,12 @@ const Mainostutka = (function () {
     }
 
     function processRadar() {
-        if (typeof allCompanies === 'undefined') return;
+        if (typeof allCompanies === 'undefined' || !allCompanies || allCompanies.length === 0) {
+            console.warn("Mainostutka: allCompanies ei ole vielä valmis.");
+            return;
+        }
+
+        console.log("Mainostutka prosessoi yrityksiä (yhteensä):", allCompanies.length);
 
         // Lasketaan etäisyys kaikille yrityksille joilla on koordinaatit
         const allWithDistance = allCompanies.filter(c => c.lat && c.lon).map(c => {
