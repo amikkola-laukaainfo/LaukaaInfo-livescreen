@@ -1271,9 +1271,13 @@ function selectSuggestion(item) {
         }
     } else if (item.type === 'tag') {
         // Tags stay within region context
-        const region = item.region || localStorage.getItem('selectedRegion') || 'laukaa';
-        const val = item.name.toLowerCase().replace(/ /g, '-');
-        window.location.href = `${region}.html?tag=${encodeURIComponent(item.name.toLowerCase())}`;
+        let region = item.region || localStorage.getItem('selectedRegion');
+        if (isHomePage && !item.region) {
+            window.location.href = `koko-laukaa.html?tag=${encodeURIComponent(item.name.toLowerCase())}`;
+        } else {
+            region = region || 'laukaa';
+            window.location.href = `${region}.html?tag=${encodeURIComponent(item.name.toLowerCase())}`;
+        }
     } else if (item.type === 'business') {
         if (searchInput) searchInput.value = item.company.nimi;
         const region = localStorage.getItem('selectedRegion');

@@ -41,14 +41,24 @@ async function initRegionPage() {
     // Hae ensin alueiden metadata CSV:stä
     await fetchRegionMetadata();
 
-    if (!areaSlug || !areaMetadata[areaSlug]) {
-        console.warn('Aluetta ei tunnistettu:', areaSlug);
-        const container = document.getElementById('catalog-list') || document.body;
-        container.innerHTML = '<p style="padding: 2rem;">Aluetta ei löytynyt tai dataa ladataan. Tarkista URL-osoite.</p>';
-        return;
+    let area;
+    if (areaSlug === 'koko-laukaa') {
+        area = {
+            slug: 'koko-laukaa',
+            name: 'Koko Laukaa',
+            desc: 'Hae yrityksiä ja palveluita koko Laukaan alueelta.',
+            lat: 62.4128,
+            lon: 25.9477
+        };
+    } else {
+        if (!areaSlug || !areaMetadata[areaSlug]) {
+            console.warn('Aluetta ei tunnistettu:', areaSlug);
+            const container = document.getElementById('catalog-list') || document.body;
+            container.innerHTML = '<p style="padding: 2rem;">Aluetta ei löytynyt tai dataa ladataan. Tarkista URL-osoite.</p>';
+            return;
+        }
+        area = areaMetadata[areaSlug];
     }
-
-    const area = areaMetadata[areaSlug];
 
     // Lukitaan alue hakukoneelle ja script.js:lle
     localStorage.setItem('selectedRegion', areaSlug);
@@ -106,7 +116,7 @@ async function waitForData() {
 
 function filterByArea(areaSlug, catParam, tagParam) {
     return allCompanies.filter(c => {
-        const matchArea = (c.alue_slug || '').toLowerCase() === areaSlug;
+        const matchArea = areaSlug === 'koko-laukaa' || (c.alue_slug || '').toLowerCase() === areaSlug;
         if (!matchArea) return false;
 
         if (tagParam) {
@@ -212,13 +222,15 @@ function initRegionMap(area, companies) {
     if (typeof map !== 'undefined' && map) {
         regionMap = map;
         console.log('[Alue] Päivitetään olemassaoleva kartta alueelle:', area.name);
-        regionMap.setView([area.lat, area.lon], 13);
+        const zoom = area.slug === 'koko-laukaa' ? 10 : 13;
+        regionMap.setView([area.lat, area.lon], zoom);
     } else if (mapContainer._leaflet_id) {
         console.warn('[Alue] Kartta-id löytyi, mutta map-muuttuja on hukassa.');
         return;
     } else {
         // Ensimmäinen alustus
-        regionMap = L.map('company-map').setView([area.lat, area.lon], 13);
+        const zoom = area.slug === 'koko-laukaa' ? 10 : 13;
+        regionMap = L.map('company-map').setView([area.lat, area.lon], zoom);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(regionMap);
