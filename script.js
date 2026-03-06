@@ -680,18 +680,10 @@ async function loadCompanyData() {
                 company.logo = baseUrl + company.logo;
             }
 
-            // Hashtag extraction and cleaning from esittely AND mainoslause
-            company.hashtags = [];
-            const hashtagRegex = /#([a-zA-Z0-9åäöÅÄÖ]+)/g;
-
-            // Extract from both
-            const combinedText = (company.mainoslause || '') + " " + (company.esittely || '');
-            const hashtagMatches = [...combinedText.matchAll(hashtagRegex)];
-            company.hashtags = [...new Set(hashtagMatches.map(m => m[1].toLowerCase()))];
-
-            // Create cleaned versions for general search
-            company.mainoslauseClean = (company.mainoslause || '').replace(hashtagRegex, '').replace(/\s\s+/g, ' ').trim();
-            company.esittelyClean = (company.esittely || '').replace(hashtagRegex, '').replace(/\s\s+/g, ' ').trim();
+            // Process tags and slugs (stored in allCompanies)
+            company.tags = (company.tags || '').toLowerCase();
+            company.alue_slug = (company.alue_slug || '').toLowerCase();
+            company.kunta_slug = (company.kunta_slug || '').toLowerCase();
         });
 
         initCompanyCatalog();
@@ -920,10 +912,9 @@ function filterCatalog() {
 
     const matches = allCompanies.map(company => {
         const name = (company.nimi || '').toLowerCase();
-        const includeHashtags = document.getElementById('include-hashtags')?.checked;
-        const tagline = (includeHashtags ? (company.mainoslause || '') : (company.mainoslauseClean || '')).toLowerCase();
-        const desc = (includeHashtags ? (company.esittely || '') : (company.esittelyClean || '')).toLowerCase();
-        const searchableDesc = includeHashtags ? (desc + " " + (company.hashtags || []).join(" ")) : desc;
+        const tagline = (company.mainoslause || '').toLowerCase();
+        const desc = (company.esittely || '').toLowerCase();
+        const searchableDesc = desc;
         const cat = (company.kategoria || '').toLowerCase();
 
         let score = 0;
@@ -933,11 +924,11 @@ function filterCatalog() {
         // Only search description for longer terms to avoid noise
         if (searchTerm.length > 1 && searchableDesc.includes(searchTerm)) score += 10;
 
-        // Hashtag search logic
-        if (includeHashtags && searchTerm.length > 1 && company.hashtags) {
-            const cleanSearch = searchTerm.startsWith('#') ? searchTerm.substring(1) : searchTerm;
-            if (company.hashtags.some(tag => tag.includes(cleanSearch))) {
-                score += 120; // High priority for hashtag matches
+        // Tag search logic (replaces hashtag parsing)
+        if (searchTerm.length > 1 && company.tags) {
+            const tags = company.tags.split(',').map(t => t.trim().toLowerCase());
+            if (tags.some(tag => tag.includes(searchTerm)) || company.tags.includes(searchTerm)) {
+                score += 120; // High priority for tag matches
             }
         }
 
@@ -1115,11 +1106,12 @@ function showSuggestions() {
 
         const isPremium = c.tyyppi === 'paid' || c.taso === 'premium';
 
-        // Hashtag match for suggestions - ONLY if enabled
-        const includeHashtags = document.getElementById('include-hashtags')?.checked;
-        if (includeHashtags) {
-            const hashtagMatch = c.hashtags && c.hashtags.some(tag => tag.startsWith(searchTerm.startsWith('#') ? searchTerm.substring(1) : searchTerm));
-            if (hashtagMatch) score += 150;
+        // Tag match for suggestions
+        if (c.tags) {
+            const tags = c.tags.split(',').map(t => t.trim().toLowerCase());
+            if (tags.some(tag => tag.includes(searchTerm)) || c.tags.includes(searchTerm)) {
+                score += 150;
+            }
         }
 
         return { company: c, score, isPremium };
@@ -1316,7 +1308,7 @@ function updateSpotlight(company) {
 
     if (nameEl) nameEl.textContent = company.nimi;
     if (taglineEl) taglineEl.textContent = company.mainoslause;
-    if (descEl) descEl.textContent = company.esittelyClean || company.esittely || company.mainoslause;
+    if (descEl) descEl.textContent = company.esittely || company.mainoslause;
     if (detailsEl) {
         detailsEl.innerHTML = `
             <div>📍 ${company.osoite}</div>
