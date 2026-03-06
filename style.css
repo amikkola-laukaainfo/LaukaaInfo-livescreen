@@ -542,7 +542,7 @@ h2 span {
     width: 100%;
     height: 200px;
     /* Kiinteä korkeus uutisvirrassa */
-    object-fit: cover;
+    object-fit: contain;
     background-color: #f0f0f0;
     border-radius: 12px;
     margin-bottom: 0.5rem;
