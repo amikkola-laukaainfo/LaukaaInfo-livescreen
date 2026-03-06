@@ -1,4 +1,4 @@
-const REGIONS_CSV_URL = 'https://www.mediazoo.fi/laukaainfo_web/get_alueet.php';
+const REGIONS_CSV_URL = 'https://www.mediazoo.fi/laukaainfo-web/get_alueet.php';
 let areaMetadata = {};
 
 document.addEventListener('DOMContentLoaded', () => {
