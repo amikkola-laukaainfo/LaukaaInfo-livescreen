@@ -137,7 +137,7 @@ function renderRegionContent(area, filtered, cat, tag) {
             const icon = (typeof categoryIcons !== 'undefined' && categoryIcons[c]) ? categoryIcons[c] : '🏢';
             const card = document.createElement('a');
             const catSlug = c.toLowerCase().replace(/ /g, '-');
-            card.href = `/${area.slug}.html?cat=${encodeURIComponent(catSlug)}`;
+            card.href = `${area.slug}.html?cat=${encodeURIComponent(catSlug)}`;
             card.className = 'category-card';
             card.innerHTML = `<span class="cat-icon">${icon}</span><h3>${c}</h3>`;
             catGrid.appendChild(card);
@@ -154,7 +154,7 @@ function renderRegionContent(area, filtered, cat, tag) {
         tagCloud.innerHTML = '';
         uniqueTags.forEach(t => {
             const pill = document.createElement('a');
-            pill.href = `/${area.slug}.html?tag=${encodeURIComponent(t)}`;
+            pill.href = `${area.slug}.html?tag=${encodeURIComponent(t)}`;
             pill.className = 'tag-pill';
             pill.textContent = t;
             tagCloud.appendChild(pill);
@@ -203,7 +203,7 @@ function renderNearby(area) {
         item.onclick = () => {
             const region = localStorage.getItem('selectedRegion');
             const regionParam = (region && region !== 'all') ? `&region=${region}` : '';
-            window.location.href = `/yrityskortti.html?id=${company.id}${regionParam}`;
+            window.location.href = `yrityskortti.html?id=${company.id}${regionParam}`;
         };
         nearbyList.appendChild(item);
     });
@@ -222,7 +222,7 @@ function initRegionMap(area, companies) {
     companies.forEach(company => {
         if (company.lat && company.lon) {
             const marker = L.marker([parseFloat(company.lat), parseFloat(company.lon)]);
-            marker.bindPopup(`<b>${company.nimi}</b><br>${company.kategoria}<br><br><a href="/yrityskortti.html?id=${company.id}" class="btn-primary" style="color:white; padding: 5px 10px; font-size: 0.8rem;">Avaa kortti</a>`);
+            marker.bindPopup(`<b>${company.nimi}</b><br>${company.kategoria}<br><br><a href="yrityskortti.html?id=${company.id}" class="btn-primary" style="color:white; padding: 5px 10px; font-size: 0.8rem;">Avaa kortti</a>`);
             markers.addLayer(marker);
         }
     });
