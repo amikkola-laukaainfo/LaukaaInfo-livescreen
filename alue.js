@@ -206,26 +206,50 @@ function initRegionMap(area, companies) {
     const mapContainer = document.getElementById('company-map');
     if (!mapContainer || typeof L === 'undefined') return;
 
-    // Tyhjennetään säilö jos Leaflet on jo siunaamalla se (estää "Map container is already initialized" virheen)
-    if (mapContainer._leaflet_id) {
-        console.warn('[Map] Kartta on jo alustettu, ohitetaan.');
+    let regionMap;
+    // Tarkistetaan onko kartta jo alustettu (esim. script.js toimesta)
+    // script.js asettaa globaalit 'map' ja 'markers' muuttujat
+    if (typeof map !== 'undefined' && map) {
+        regionMap = map;
+        console.log('[Alue] Päivitetään olemassaoleva kartta alueelle:', area.name);
+        regionMap.setView([area.lat, area.lon], 13);
+    } else if (mapContainer._leaflet_id) {
+        console.warn('[Alue] Kartta-id löytyi, mutta map-muuttuja on hukassa.');
         return;
+    } else {
+        // Ensimmäinen alustus
+        regionMap = L.map('company-map').setView([area.lat, area.lon], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(regionMap);
+        if (typeof map !== 'undefined') map = regionMap;
     }
 
-    const regionMap = L.map('company-map').setView([area.lat, area.lon], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(regionMap);
+    // Käytetään globaalia markers-ryhmää jos se on olemassa, muuten luodaan uusi
+    let targetMarkers;
+    if (typeof markers !== 'undefined') {
+        if (!markers) {
+            markers = L.markerClusterGroup({
+                showCoverageOnHover: false,
+                maxClusterRadius: 50
+            });
+            regionMap.addLayer(markers);
+        }
+        targetMarkers = markers;
+        targetMarkers.clearLayers();
+    } else {
+        targetMarkers = L.markerClusterGroup();
+        regionMap.addLayer(targetMarkers);
+    }
 
-    const markers = L.markerClusterGroup();
+    // Lisätään vain kyseisen alueen/-haun mukaiset markerit
     companies.forEach(company => {
         if (company.lat && company.lon) {
             const marker = L.marker([parseFloat(company.lat), parseFloat(company.lon)]);
             marker.bindPopup(`<b>${company.nimi}</b><br>${company.kategoria}<br><br><a href="yrityskortti.html?id=${company.id}" class="btn-primary" style="color:white; padding: 5px 10px; font-size: 0.8rem;">Avaa kortti</a>`);
-            markers.addLayer(marker);
+            targetMarkers.addLayer(marker);
         }
     });
-    regionMap.addLayer(markers);
 }
 
 function fetchRegionNews(area) {
