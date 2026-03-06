@@ -224,6 +224,7 @@ function initRegionMap(area, companies) {
 
 function fetchRegionNews(area) {
     const container = document.getElementById('blogger-feed');
+    const eventsContainer = document.getElementById('events-feed');
     if (!container) return;
 
     console.log('[Blogger] Alustetaan uutishaku alueelle:', area.name, area);
@@ -256,12 +257,14 @@ function fetchRegionNews(area) {
         document.body.appendChild(script);
     } else {
         console.log('[Blogger] Ei bloggerId- eikä bloggerUrl-arvoa alueelle:', area.name);
-        container.innerHTML = `
+        const fallbackHtml = `
             <div class="no-news-message" style="padding: 2rem; background: rgba(0,0,0,0.03); border-radius: 12px; text-align: center;">
                 <p style="margin-bottom: 0.5rem; font-weight: 500;">Tämän alueen uutissyöte ja tapahtumakalenteri päivittyvät tänne myöhemmin.</p>
                 <p style="font-size: 0.9rem; opacity: 0.7;">Seuraa tiedotusta!</p>
             </div>
         `;
+        container.innerHTML = fallbackHtml;
+        if (eventsContainer) eventsContainer.innerHTML = fallbackHtml;
     }
 }
 
