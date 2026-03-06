@@ -254,20 +254,37 @@ window.renderRegionBloggerFeed = function (data) {
         return;
     }
 
-    entries.forEach(entry => {
+    entries.slice(0, 10).forEach(entry => {
         const title = entry.title.$t;
-        const link = entry.link.find(l => l.rel === 'alternate')?.href || '#';
-        const date = new Date(entry.published.$t).toLocaleDateString('fi-FI');
+        let content = entry.content ? entry.content.$t : (entry.summary ? entry.summary.$t : '');
 
-        const item = document.createElement('div');
-        item.className = 'rss-item';
-        item.style.marginBottom = '1rem';
-        item.style.paddingBottom = '1rem';
-        item.style.borderBottom = '1px solid #eee';
-        item.innerHTML = `
-            <div class="rss-meta" style="font-size: 0.8rem; color: #666; margin-bottom: 5px;"><span class="date">📅 ${date}</span></div>
-            <h3 style="font-size: 1rem;"><a href="${link}" target="_blank" style="color: var(--primary-blue); text-decoration: none;">${title}</a></h3>
+        // Extract the first image from the content if it exists
+        let imageUrl = '';
+        const imgMatch = content.match(/<img[^>]+src="([^">]+)"/);
+        if (imgMatch) {
+            imageUrl = imgMatch[1];
+        }
+
+        // Strip HTML to get a clean description snippet
+        let rawText = content.replace(/<[^>]*>?/gm, '').trim();
+        // Optional: Limit length
+        if (rawText.length > 200) {
+            rawText = rawText.substring(0, 200) + '...';
+        }
+
+        const link = entry.link.find(l => l.rel === 'alternate')?.href || '#';
+        const publishedDate = new Date(entry.published.$t);
+        const dateStr = publishedDate.toLocaleDateString('fi-FI');
+
+        const postEl = document.createElement('div');
+        postEl.className = 'rss-item';
+        postEl.innerHTML = `
+            ${imageUrl ?\`\n<img src="\${imageUrl}" class="rss-item-image" loading="lazy" alt="Kuva uutiseen">\n\` : ''}
+            <div class="rss-meta"><span class="date">📅 ${dateStr}</span></div>
+            <h3><a href="${link}" target="_blank">${title}</a></h3>
+            <p class="description">${rawText}</p>
         `;
-        container.appendChild(item);
+
+        container.appendChild(postEl);
     });
 };
