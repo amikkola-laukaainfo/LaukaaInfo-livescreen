@@ -220,6 +220,8 @@ function fetchRegionNews(area) {
     const container = document.getElementById('blogger-feed');
     if (!container) return;
 
+    console.log('[Blogger] Alustetaan uutishaku alueelle:', area.name, area);
+
     let feedUrl = null;
 
     if (area.bloggerUrl) {
@@ -236,10 +238,15 @@ function fetchRegionNews(area) {
     if (feedUrl) {
         const script = document.createElement('script');
         script.src = feedUrl;
+        script.id = 'blogger-script-tag';
         script.onerror = () => {
             console.error('[Blogger] Script-lataus epäonnistui, URL:', script.src);
             container.innerHTML = '<p>Uutisten lataus epäonnistui (Blogger-virhe).</p>';
         };
+        // Poista vanha script-tagi jos sellainen on
+        const oldScript = document.getElementById('blogger-script-tag');
+        if (oldScript) oldScript.remove();
+
         document.body.appendChild(script);
     } else {
         console.log('[Blogger] Ei bloggerId- eikä bloggerUrl-arvoa alueelle:', area.name);
@@ -248,48 +255,71 @@ function fetchRegionNews(area) {
 }
 
 window.renderRegionBloggerFeed = function (data) {
+    console.log('[Blogger] Feed-data vastaanotettu:', data);
     const container = document.getElementById('blogger-feed');
-    if (!container) return;
+    if (!container) {
+        console.warn('[Blogger] Säilöä "blogger-feed" ei löytynyt.');
+        return;
+    }
 
-    const entries = data.feed.entry || [];
+    // Joustava parsiminen: Blogger voi palauttaa feed-objektin juuressa tai kiedottuna
+    const feed = data.feed || data;
+    const entries = feed.entry || [];
+
     container.innerHTML = '';
 
     if (entries.length === 0) {
+        console.log('[Blogger] Ei syötteitä (entries.length === 0).');
         container.innerHTML = '<p>Ei julkaisuja.</p>';
         return;
     }
 
-    entries.slice(0, 10).forEach(entry => {
-        const title = entry.title.$t;
-        let content = entry.content ? entry.content.$t : (entry.summary ? entry.summary.$t : '');
+    console.log(`[Blogger] Renderöidään ${entries.length} uutista.`);
 
-        // Extract the first image from the content if it exists
-        let imageUrl = '';
-        const imgMatch = content.match(/<img[^>]+src="([^">]+)"/);
-        if (imgMatch) {
-            imageUrl = imgMatch[1];
+    entries.slice(0, 5).forEach((entry, index) => {
+        try {
+            const title = entry.title ? entry.title.$t : 'Ei otsikkoa';
+            let content = entry.content ? entry.content.$t : (entry.summary ? entry.summary.$t : '');
+
+            // Poimi kuva jos sellainen on
+            let imageUrl = '';
+            // 1. Ensisijaisesti thumbnail-tagista (jos on)
+            if (entry.media$thumbnail) {
+                imageUrl = entry.media$thumbnail.url;
+            } else {
+                // 2. Toissijaisesti sisällöstä
+                const imgMatch = content.match(/<img[^>]+src="([^">]+)"/);
+                if (imgMatch) imageUrl = imgMatch[1];
+            }
+
+            // Puhdista HTML koodista snippetiä varten
+            let rawText = content.replace(/<[^>]*>?/gm, '').trim();
+            if (rawText.length > 200) {
+                rawText = rawText.substring(0, 200) + '...';
+            }
+
+            // Etsi alternate-linkki
+            let link = '#';
+            if (entry.link) {
+                const altLink = entry.link.find(l => l.rel === 'alternate');
+                if (altLink) link = altLink.href;
+            }
+
+            const publishedDate = entry.published ? new Date(entry.published.$t) : new Date();
+            const dateStr = publishedDate.toLocaleDateString('fi-FI');
+
+            const postEl = document.createElement('div');
+            postEl.className = 'rss-item';
+            postEl.innerHTML = `
+                ${imageUrl ? '<img src="' + imageUrl + '" class="rss-item-image" loading="lazy" alt="Kuva uutiseen">' : ''}
+                <div class="rss-meta"><span class="date">📅 ${dateStr}</span></div>
+                <h3><a href="${link}" target="_blank">${title}</a></h3>
+                <p class="description">${rawText}</p>
+            `;
+
+            container.appendChild(postEl);
+        } catch (err) {
+            console.error(`[Blogger] Virhe syötteen ${index} parsimisessa:`, err, entry);
         }
-
-        // Strip HTML to get a clean description snippet
-        let rawText = content.replace(/<[^>]*>?/gm, '').trim();
-        // Optional: Limit length
-        if (rawText.length > 200) {
-            rawText = rawText.substring(0, 200) + '...';
-        }
-
-        const link = entry.link.find(l => l.rel === 'alternate')?.href || '#';
-        const publishedDate = new Date(entry.published.$t);
-        const dateStr = publishedDate.toLocaleDateString('fi-FI');
-
-        const postEl = document.createElement('div');
-        postEl.className = 'rss-item';
-        postEl.innerHTML = `
-            ${imageUrl ? '<img src="' + imageUrl + '" class="rss-item-image" loading="lazy" alt="Kuva uutiseen">' : ''}
-            <div class="rss-meta"><span class="date">📅 ${dateStr}</span></div>
-            <h3><a href="${link}" target="_blank">${title}</a></h3>
-            <p class="description">${rawText}</p>
-        `;
-
-        container.appendChild(postEl);
     });
 };
