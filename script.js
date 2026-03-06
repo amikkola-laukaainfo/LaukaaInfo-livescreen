@@ -1212,7 +1212,7 @@ function showSuggestions() {
         const regex = new RegExp(`(${searchTerm})`, 'gi');
         const highlightedLabel = label.replace(regex, '<mark>$1</mark>');
 
-        li.innerHTML = `<span>${highlightedLabel}</span>${badge}`;
+        li.innerHTML = `<div class="search-suggestion-main"><span class="search-suggestion-label">${highlightedLabel}</span>${badge}</div>`;
         li.onclick = (e) => {
             // If user clicked a tag pill, don't trigger the main li click
             if (e.target.classList.contains('suggestion-tag-pill')) return;
