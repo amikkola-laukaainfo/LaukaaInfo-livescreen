@@ -773,7 +773,7 @@ function initCompanyCatalog() {
     const isHomePage = !!document.getElementById('homepage-categories');
 
     searchInput.addEventListener('input', () => {
-        filterCatalog();
+        filterCatalog(!isHomePage); // On homepage, only update map, don't render list while typing
         showSuggestions();
     });
 
@@ -807,6 +807,13 @@ function initCompanyCatalog() {
             const query = searchInput.value.trim();
             if (tryRedirectToRegion(query)) return;
             filterCatalog();
+        });
+    }
+
+    const mapSearchInput = document.getElementById('map-local-search');
+    if (mapSearchInput) {
+        mapSearchInput.addEventListener('input', () => {
+            filterMapMarkers(mapSearchInput.value);
         });
     }
 
@@ -894,7 +901,7 @@ function initRegionFilter() {
     });
 }
 
-function filterCatalog() {
+function filterCatalog(renderList = true) {
     const searchEl = document.getElementById('company-search');
     if (!searchEl) return;
 
@@ -982,7 +989,18 @@ function filterCatalog() {
     // RSS Hybrid Search
     const includeRss = document.getElementById('include-rss')?.checked;
     const includeLievestuore = document.getElementById('include-lievestuore')?.checked;
-    let combinedResults = [...filtered];
+    const villages = [
+        { id: 'laukaa', name: 'Laukaa kk' },
+        { id: 'leppavesi', name: 'Leppävesi' },
+        { id: 'lievestuore', name: 'Lievestuore' },
+        { id: 'vehnia', name: 'Vehniä' },
+        { id: 'vihtavuori', name: 'Vihtavuori' }
+    ];
+    const regionMatches = searchTerm.length > 1 ? villages.filter(v =>
+        v.name.toLowerCase().includes(searchTerm) || v.id.includes(searchTerm)
+    ).map(v => ({ ...v, isRegion: true })) : [];
+
+    let combinedResults = [...regionMatches, ...filtered];
 
     if (includeRss && searchTerm.length > 0) {
         const rssMatches = allRssItems.filter(item => {
@@ -1006,13 +1024,32 @@ function filterCatalog() {
     const isHomePage = !!document.getElementById('homepage-categories');
     if (isHomePage && searchTerm.length === 0) {
         renderCatalog([]);
-    } else {
+    } else if (renderList) {
         renderCatalog(combinedResults);
     }
 
-    // Päivitetään myös kartta vastaamaan filtteriä
-    if (map && markers) {
+    // Päivitetään myös kartta vastaamaan filtteriä (vain jos ei olla etusivulla tai halutaan erikseen)
+    if (map && markers && (!isHomePage || searchTerm.length > 0)) {
         addMarkersToMap(filtered);
+    }
+}
+
+function filterMapMarkers(term) {
+    const searchTerm = (term || '').toLowerCase().trim();
+    if (searchTerm.length === 0) {
+        addMarkersToMap(allCompanies);
+        return;
+    }
+
+    const matches = allCompanies.filter(company => {
+        const name = (company.nimi || '').toLowerCase();
+        const cat = (company.kategoria || '').toLowerCase();
+        const tags = (company.tags || '').toLowerCase();
+        return name.includes(searchTerm) || cat.includes(searchTerm) || tags.includes(searchTerm);
+    });
+
+    if (map && markers) {
+        addMarkersToMap(matches);
     }
 }
 
@@ -1280,7 +1317,17 @@ function renderCatalog(companies) {
         const item = document.createElement('div');
         item.className = 'catalog-item';
 
-        if (itemData.isRss) {
+        if (itemData.isRegion) {
+            item.classList.add('region-result');
+            item.innerHTML = `
+                <span class="news-badge region" style="background: var(--primary-blue); color: white;">Alue</span>
+                <h4>${itemData.name}</h4>
+                <div style="font-size: 0.85rem; margin-top: 5px;">Siirry alueen sivulle ↗</div>
+            `;
+            item.onclick = () => {
+                window.location.href = `${itemData.id}.html`;
+            };
+        } else if (itemData.isRss) {
             // RSS Item Rendering
             item.classList.add('rss-result');
             item.innerHTML = `

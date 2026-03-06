@@ -1453,6 +1453,26 @@ footer {
     width: 100%;
 }
 
+.map-search-bar {
+    padding: 1rem;
+    background: #f8fbff;
+    border-bottom: 1px solid #eee;
+}
+
+.map-search-bar input {
+    width: 100%;
+    padding: 10px 15px;
+    border: 2px solid #e1e8f0;
+    border-radius: 8px;
+    outline: none;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.map-search-bar input:focus {
+    border-color: var(--primary-blue);
+}
+
 /* CTA Section */
 .cta-section {
     margin-bottom: 5rem;
