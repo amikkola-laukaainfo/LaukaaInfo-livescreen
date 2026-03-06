@@ -4,6 +4,55 @@
     text-align: center;
 }
 
+/* Tag Cloud Styles */
+.region-tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin: 2rem 0;
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.region-tag-cloud::-webkit-scrollbar {
+    display: none;
+    /* Safari and Chrome */
+}
+
+@media (max-width: 600px) {
+    .region-tag-cloud {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        justify-content: flex-start;
+        padding: 0.5rem 1rem;
+        margin: 1.5rem -1rem;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .region-tag-cloud .tag-pill {
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+}
+
+.tag-pill {
+    background: white;
+    color: var(--primary-blue);
+    padding: 8px 16px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s;
+}
+
+.tag-pill:hover {
+    transform: translateY(-2px);
+    background: var(--light-blue);
+}
+
 .btn-radar {
     background: linear-gradient(135deg, #ff9900, #ff4d00);
     color: white;
@@ -38,6 +87,13 @@
     padding: 2rem;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@media (max-width: 600px) {
+    .radar-results-visible {
+        padding: 1.5rem 1rem;
+        border-radius: 15px;
+    }
 }
 
 .radar-header {
@@ -93,6 +149,14 @@
     max-width: 280px;
     scroll-snap-align: start;
     flex-shrink: 0;
+}
+
+@media (max-width: 600px) {
+    .radar-ad-card {
+        min-width: calc(85vw - 1rem);
+        max-width: calc(85vw - 1rem);
+        padding: 1.25rem;
+    }
 }
 
 .radar-ad-card.is-hot-ad {
