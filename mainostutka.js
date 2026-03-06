@@ -81,21 +81,22 @@ const Mainostutka = (function () {
     function processRadar() {
         if (typeof allCompanies === 'undefined') return;
 
-        // Suodatetaan yritykset joilla on mainos
-        const advertisingCompanies = allCompanies.filter(c => {
+        // Lasketaan etäisyys kaikille yrityksille joilla on koordinaatit
+        const allWithDistance = allCompanies.filter(c => c.lat && c.lon).map(c => {
+            const dist = calculateDistance(userLat, userLon, parseFloat(c.lat), parseFloat(c.lon));
             const hasTagAd = (c.mainoslause && c.mainoslause.trim().length > 0);
-            const hasLinkAd = (c.mainoslinkit && c.mainoslinkit.length > 2); // Syy: [] tyhjänä
-            return (hasTagAd || hasLinkAd) && c.lat && c.lon;
+            const hasLinkAd = (c.mainoslinkit && c.mainoslinkit.length > 2);
+            return { ...c, distanceInKm: dist, hasAd: (hasTagAd || hasLinkAd) };
         });
 
-        // Lasketaan etäisyydet
-        const adsWithDistance = advertisingCompanies.map(c => {
-            const dist = calculateDistance(userLat, userLon, parseFloat(c.lat), parseFloat(c.lon));
-            return { ...c, distanceInKm: dist };
-        }).sort((a, b) => a.distanceInKm - b.distanceInKm);
+        // Erotetaan mainokset ja muut
+        const ads = allWithDistance.filter(c => c.hasAd).sort((a, b) => a.distanceInKm - b.distanceInKm);
+        const others = allWithDistance.filter(c => !c.hasAd).sort((a, b) => a.distanceInKm - b.distanceInKm).slice(0, 5);
 
-        renderRadarResults(adsWithDistance);
-        updateRadarMap(adsWithDistance);
+        const combinedResults = [...ads, ...others];
+
+        renderRadarResults(ads, others);
+        updateRadarMap(combinedResults);
     }
 
     function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -110,46 +111,59 @@ const Mainostutka = (function () {
         return R * c;
     }
 
-    function renderRadarResults(ads) {
+    function renderRadarResults(ads, others) {
         const list = document.getElementById('radar-ads-list');
-        if (ads.length === 0) {
-            list.innerHTML = "<p>Ei aktiivisia tarjouksia lähistöllä juuri nyt.</p>";
+        if (ads.length === 0 && others.length === 0) {
+            list.innerHTML = "<p>Ei yrityksiä lähistöllä juuri nyt.</p>";
             return;
         }
 
         list.innerHTML = '';
+
+        // Lisätään mainokset ensin
         ads.forEach(ad => {
-            const distText = ad.distanceInKm < 1
-                ? `${Math.round(ad.distanceInKm * 1000)} m`
-                : `${ad.distanceInKm.toFixed(1)} km`;
-
-            const card = document.createElement('div');
-            card.className = 'radar-ad-card';
-
-            let mainosText = ad.mainoslause || '';
-            if (mainosText.includes('@@')) mainosText = mainosText.split('@@')[0];
-
-            let adLink = '#';
-            if (ad.mainoslinkit) {
-                try {
-                    const links = JSON.parse(ad.mainoslinkit);
-                    if (links && links.length > 0) adLink = links[0];
-                } catch (e) { }
-            }
-
-            card.innerHTML = `
-                <div class="radar-ad-dist">${distText}</div>
-                <div class="radar-ad-content">
-                    <h4>${ad.nimi}</h4>
-                    <p>${mainosText}</p>
-                    <div class="radar-ad-actions">
-                        <a href="yrityskortti.html?id=${ad.id}" class="btn-small">Avaa</a>
-                        ${adLink !== '#' ? `<a href="${adLink}" target="_blank" class="btn-small secondary">Tarjous</a>` : ''}
-                    </div>
-                </div>
-            `;
-            list.appendChild(card);
+            list.appendChild(createAdCard(ad, true));
         });
+
+        // Lisätään muut
+        others.forEach(company => {
+            list.appendChild(createAdCard(company, false));
+        });
+    }
+
+    function createAdCard(ad, isAd) {
+        const distText = ad.distanceInKm < 1
+            ? `${Math.round(ad.distanceInKm * 1000)} m`
+            : `${ad.distanceInKm.toFixed(1)} km`;
+
+        const card = document.createElement('div');
+        card.className = `radar-ad-card ${isAd ? 'is-hot-ad' : 'is-normal'}`;
+
+        let mainosText = ad.mainoslause || '';
+        if (mainosText.includes('@@')) mainosText = mainosText.split('@@')[0];
+        if (!isAd && !mainosText) mainosText = ad.kategoria || 'Yritys';
+
+        let adLink = '#';
+        if (ad.mainoslinkit) {
+            try {
+                const links = JSON.parse(ad.mainoslinkit);
+                if (links && links.length > 0) adLink = links[0];
+            } catch (e) { }
+        }
+
+        card.innerHTML = `
+            <div class="radar-ad-dist">${distText}</div>
+            <div class="radar-ad-content">
+                <div class="radar-ad-badge">${isAd ? '🔥 TARJOUS' : '📍 LÄHELLÄ'}</div>
+                <h4>${ad.nimi}</h4>
+                <p>${mainosText}</p>
+                <div class="radar-ad-actions">
+                    <a href="yrityskortti.html?id=${ad.id}" class="btn-small">Avaa</a>
+                    ${(isAd && adLink !== '#') ? `<a href="${adLink}" target="_blank" class="btn-small secondary">Tarjous</a>` : ''}
+                </div>
+            </div>
+        `;
+        return card;
     }
 
     function updateRadarMap(ads) {

@@ -64,9 +64,22 @@
 }
 
 .radar-ads-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    display: flex;
     gap: 1.5rem;
+    overflow-x: auto;
+    padding: 1rem 0.5rem 2rem 0.5rem;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-blue) transparent;
+}
+
+.radar-ads-grid::-webkit-scrollbar {
+    height: 6px;
+}
+
+.radar-ads-grid::-webkit-scrollbar-thumb {
+    background-color: var(--primary-blue);
+    border-radius: 10px;
 }
 
 .radar-ad-card {
@@ -76,6 +89,29 @@
     position: relative;
     border: 1px solid #f0f0f0;
     transition: all 0.3s ease;
+    min-width: 280px;
+    max-width: 280px;
+    scroll-snap-align: start;
+    flex-shrink: 0;
+}
+
+.radar-ad-card.is-hot-ad {
+    border: 2px solid #ff9900;
+    background: linear-gradient(to bottom, #fff, #fff9f0);
+}
+
+.radar-ad-badge {
+    font-size: 0.75rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.is-hot-ad .radar-ad-badge {
+    color: #ff4d00;
+}
+
+.is-normal .radar-ad-badge {
+    color: #888;
 }
 
 .radar-ad-card:hover {
