@@ -32,9 +32,16 @@ const Mainostutka = (function () {
                     <h3>Lähialueen tarjoukset</h3>
                     <button id="close-radar-btn" class="btn-close-radar">&times;</button>
                 </div>
+                
+                <div class="radar-location-search">
+                    <input type="text" id="radar-search-input" placeholder="Hae osoite tai kylä (esim. Laukaa)...">
+                    <button id="radar-search-btn" class="btn-small">Hae</button>
+                    <span class="radar-hint">tai klikkaa karttaa</span>
+                </div>
+
                 <div id="radar-map-container" class="radar-map-view"></div>
                 <div id="radar-ads-list" class="radar-ads-grid">
-                    <p class="loading-text">Paiinitetaan sijaintia...</p>
+                    <p class="loading-text">Paikannetaan sijaintia...</p>
                 </div>
             </div>
         `;
@@ -43,6 +50,29 @@ const Mainostutka = (function () {
 
         document.getElementById('radar-trigger-btn').addEventListener('click', startRadar);
         document.getElementById('close-radar-btn').addEventListener('click', closeRadar);
+        document.getElementById('radar-search-btn').addEventListener('click', searchLocation);
+        document.getElementById('radar-search-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') searchLocation();
+        });
+    }
+
+    async function searchLocation() {
+        const query = document.getElementById('radar-search-input').value;
+        if (!query) return;
+
+        try {
+            const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query + ', Laukaa')}`);
+            const data = await response.json();
+            if (data && data.length > 0) {
+                userLat = parseFloat(data[0].lat);
+                userLon = parseFloat(data[0].lon);
+                processRadar();
+            } else {
+                alert("Paikkaa ei löytynyt. Kokeile tarkempaa hakua.");
+            }
+        } catch (e) {
+            console.error("Hakuvirhe:", e);
+        }
     }
 
     function startRadar() {
@@ -179,6 +209,13 @@ const Mainostutka = (function () {
                 attribution: '© OpenStreetMap'
             }).addTo(radarMap);
             radarMarkers = L.featureGroup().addTo(radarMap);
+
+            // Lisätään klikkauskuuntelija kartalle manuaalista valintaa varten
+            radarMap.on('click', (e) => {
+                userLat = e.latlng.lat;
+                userLon = e.latlng.lng;
+                processRadar();
+            });
         } else {
             radarMap.setView([userLat, userLon], 14);
             radarMarkers.clearLayers();
