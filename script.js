@@ -1,6 +1,5 @@
 let allCompanies = [];
 let allRssItems = []; // Global storage for RSS content
-let allLievestuoreItems = []; // Global storage for Lievestuore Blogger posts
 let currentCompany = null;
 let currentMediaIndex = 0;
 let map = null;
@@ -386,34 +385,6 @@ function fetchLievestuoreItems() {
     document.body.appendChild(script);
 }
 
-// Globaali callback Blogger JSONP:lle – tallentaa tiedot hakuun
-function storeLievestuoreItems(data) {
-    const entries = data.feed.entry || [];
-    allLievestuoreItems = [];
-    entries.forEach(entry => {
-        const title = entry.title.$t;
-        let content = entry.content ? entry.content.$t : (entry.summary ? entry.summary.$t : '');
-        let rawText = content.replace(/<[^>]*>?/gm, '').trim();
-        if (rawText.length > 200) rawText = rawText.substring(0, 200) + '...';
-        let link = '#';
-        if (entry.link) {
-            const altLink = entry.link.find(l => l.rel === 'alternate');
-            if (altLink) link = altLink.href;
-        }
-        const publishedDate = new Date(entry.published.$t);
-        const dateStr = publishedDate.toLocaleDateString('fi-FI');
-        allLievestuoreItems.push({
-            title,
-            link,
-            description: rawText,
-            dateStr,
-            type: 'Lievestuore',
-            typeClass: 'lievestuore',
-            isRss: true
-        });
-    });
-    console.log(`Lievestuoreen uutisia ladattu hakuun: ${allLievestuoreItems.length}`);
-}
 
 /**
  * Yleiskäyttöinen RSS-haku merkistötuella ja kuvan poiminnalla.
@@ -571,6 +542,10 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
                 // Add to global storage for search, avoid duplicates
                 if (!allRssItems.find(i => i.link === rssItem.link)) {
                     allRssItems.push(rssItem);
+                    // Update search results if RSS checkbox is active
+                    if (document.getElementById('include-rss')?.checked) {
+                        filterCatalog(!isHomePage);
+                    }
                 }
             }
 
@@ -786,15 +761,6 @@ function initCompanyCatalog() {
         });
     }
 
-    // Hashtag toggle removed as requested
-
-    const lievestuoreToggle = document.getElementById('include-lievestuore');
-    if (lievestuoreToggle) {
-        lievestuoreToggle.addEventListener('change', () => {
-            filterCatalog();
-        });
-    }
-
     if (categorySelect) {
         categorySelect.addEventListener('change', () => {
             filterCatalog();
@@ -1005,17 +971,9 @@ function filterCatalog(renderList = true) {
     if (includeRss && searchTerm.length > 0) {
         const rssMatches = allRssItems.filter(item => {
             return item.title.toLowerCase().includes(searchTerm) ||
-                item.description.toLowerCase().includes(searchTerm);
+                (item.description && item.description.toLowerCase().includes(searchTerm));
         });
         combinedResults = [...combinedResults, ...rssMatches];
-    }
-
-    if (includeLievestuore && searchTerm.length > 0) {
-        const lievestuoreMatches = allLievestuoreItems.filter(item => {
-            return item.title.toLowerCase().includes(searchTerm) ||
-                item.description.toLowerCase().includes(searchTerm);
-        });
-        combinedResults = [...combinedResults, ...lievestuoreMatches];
     }
 
     filteredSuggestions = filtered.slice(0, 8); // Keep suggestions mainly business-centric or extend later
@@ -1178,6 +1136,16 @@ function showSuggestions() {
         suggestions = [...suggestions, ...busMatches];
     }
 
+    // 6. Match RSS if checkbox is checked
+    const includeRss = document.getElementById('include-rss')?.checked;
+    if (includeRss && searchTerm.length > 0) {
+        const rssMatches = allRssItems.filter(item =>
+            item.title.toLowerCase().includes(searchTerm) ||
+            (item.description && item.description.toLowerCase().includes(searchTerm))
+        ).map(item => ({ ...item, type: 'rss' }));
+        suggestions = [...suggestions, ...rssMatches.slice(0, 3)];
+    }
+
     filteredSuggestions = suggestions.slice(0, 10);
 
     if (filteredSuggestions.length === 0) {
@@ -1206,6 +1174,9 @@ function showSuggestions() {
         } else if (item.type === 'business') {
             label = item.company.nimi;
             badge = `<span class="suggestion-cat">${item.company.kategoria}</span>`;
+        } else if (item.type === 'rss') {
+            label = item.title;
+            badge = `<span class="suggestion-tag">${item.type}</span>`;
         }
 
         // Highlight
@@ -1290,16 +1261,23 @@ function selectSuggestion(item) {
 
     if (item.type === 'region') {
         window.location.href = `${item.id}.html`;
-    } else if (item.type === 'category' || item.type === 'tag') {
-        const region = item.region || localStorage.getItem('selectedRegion') || 'laukaa';
-        const paramName = item.type === 'category' ? 'cat' : 'tag';
+    } else if (item.type === 'category') {
+        // Categories from central search go to national (all Laukaa) view if on home
+        const region = isHomePage ? 'all' : (item.region || localStorage.getItem('selectedRegion') || 'all');
         const val = item.name.toLowerCase().replace(/ /g, '-');
-        window.location.href = `${region}.html?${paramName}=${encodeURIComponent(val)}`;
+        window.location.href = `kategoria.html?cat=${encodeURIComponent(item.name)}&region=${region}`;
+    } else if (item.type === 'tag') {
+        // Tags stay within region context
+        const region = item.region || localStorage.getItem('selectedRegion') || 'laukaa';
+        const val = item.name.toLowerCase().replace(/ /g, '-');
+        window.location.href = `${region}.html?tag=${encodeURIComponent(item.name.toLowerCase())}`;
     } else if (item.type === 'business') {
         if (searchInput) searchInput.value = item.company.nimi;
         const region = localStorage.getItem('selectedRegion');
         const regionParam = (region && region !== 'all') ? `&region=${region}` : '';
         window.location.href = `yrityskortti.html?id=${item.company.id}${regionParam}`;
+    } else if (item.type === 'rss') {
+        window.open(item.link, '_blank');
     }
 }
 
