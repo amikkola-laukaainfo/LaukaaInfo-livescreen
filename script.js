@@ -1213,7 +1213,33 @@ function showSuggestions() {
         const highlightedLabel = label.replace(regex, '<mark>$1</mark>');
 
         li.innerHTML = `<span>${highlightedLabel}</span>${badge}`;
-        li.onclick = () => selectSuggestion(item);
+        li.onclick = (e) => {
+            // If user clicked a tag pill, don't trigger the main li click
+            if (e.target.classList.contains('suggestion-tag-pill')) return;
+            selectSuggestion(item);
+        };
+
+        if (item.type === 'region') {
+            const regionCompanies = allCompanies.filter(c => (c.alue_slug || '').toLowerCase() === item.id);
+            const regionTags = [...new Set(regionCompanies.flatMap(c => (c.tags || '').split(',').map(t => t.trim().toLowerCase())))].filter(t => t.length > 0).slice(0, 3);
+
+            if (regionTags.length > 0) {
+                const tagCont = document.createElement('div');
+                tagCont.className = 'suggestion-tags-container';
+                regionTags.forEach(tag => {
+                    const tagPill = document.createElement('span');
+                    tagPill.className = 'suggestion-tag-pill';
+                    tagPill.textContent = tag;
+                    tagPill.onclick = (e) => {
+                        e.stopPropagation();
+                        selectSuggestion({ type: 'tag', name: tag, region: item.id });
+                    };
+                    tagCont.appendChild(tagPill);
+                });
+                li.appendChild(tagCont);
+            }
+        }
+
         suggestionsList.appendChild(li);
     });
 

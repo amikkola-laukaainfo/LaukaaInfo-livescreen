@@ -56,6 +56,12 @@ async function initRegionPage() {
 
     updateMetadata(area, catParam, tagParam);
 
+    // Päivitetään hakukenttä jos meillä on tagi tai kategoria (auttaa korostuksessa)
+    const searchInput = document.getElementById('company-search');
+    if (searchInput && (tagParam || catParam)) {
+        searchInput.value = tagParam || catParam.replace(/-/g, ' ');
+    }
+
     // Odota että allCompanies on ladattu
     await waitForData();
 
