@@ -5,6 +5,7 @@ let currentCompany = null;
 let currentMediaIndex = 0;
 let map = null;
 let markers = null;
+let isHomePage = false; // Global flag for homepage context
 
 const welcomeCompany = {
     id: "welcome",
@@ -22,6 +23,7 @@ const welcomeCompany = {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+    isHomePage = !!document.getElementById('homepage-categories');
     // Sidebar Navigation Logic
     const hamburgerBtn = document.getElementById('hamburger-btn');
     const closeBtn = document.getElementById('close-sidebar-btn');
@@ -770,8 +772,6 @@ function initCompanyCatalog() {
         });
     }
 
-    const isHomePage = !!document.getElementById('homepage-categories');
-
     searchInput.addEventListener('input', () => {
         filterCatalog(!isHomePage); // On homepage, only update map, don't render list while typing
         showSuggestions();
@@ -1021,7 +1021,6 @@ function filterCatalog(renderList = true) {
     filteredSuggestions = filtered.slice(0, 8); // Keep suggestions mainly business-centric or extend later
 
     // On the homepage, hide results if search is empty
-    const isHomePage = !!document.getElementById('homepage-categories');
     if (isHomePage && searchTerm.length === 0) {
         renderCatalog([]);
     } else if (renderList) {
@@ -1303,7 +1302,6 @@ function renderCatalog(companies) {
 
     list.innerHTML = '';
     const searchTerm = document.getElementById('company-search')?.value.trim();
-    const isHomePage = !!document.getElementById('homepage-categories');
 
     if (companies.length === 0) {
         if (isHomePage && (!searchTerm || searchTerm.length === 0)) {
