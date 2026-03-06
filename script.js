@@ -1263,9 +1263,12 @@ function selectSuggestion(item) {
         window.location.href = `${item.id}.html`;
     } else if (item.type === 'category') {
         // Categories from central search go to national (all Laukaa) view if on home
-        const region = isHomePage ? 'all' : (item.region || localStorage.getItem('selectedRegion') || 'all');
-        const val = item.name.toLowerCase().replace(/ /g, '-');
-        window.location.href = `kategoria.html?cat=${encodeURIComponent(item.name)}&region=${region}`;
+        if (isHomePage) {
+            window.location.href = `kategoria.html?cat=${encodeURIComponent(item.name)}`;
+        } else {
+            const region = item.region || localStorage.getItem('selectedRegion') || 'all';
+            window.location.href = `kategoria.html?cat=${encodeURIComponent(item.name)}&region=${region}`;
+        }
     } else if (item.type === 'tag') {
         // Tags stay within region context
         const region = item.region || localStorage.getItem('selectedRegion') || 'laukaa';
