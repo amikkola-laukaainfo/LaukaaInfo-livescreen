@@ -1270,13 +1270,24 @@ function renderCatalog(companies) {
 
             if (currentCompany && currentCompany.id === company.id) item.classList.add('active');
 
+            // Find matching tags for display in the catalog
+            let displayedCat = company.kategoria;
+            if (searchTerm && searchTerm.length > 1 && company.tags) {
+                const tagsArray = company.tags.split(',').map(t => t.trim().toLowerCase());
+                const lowerSearch = searchTerm.toLowerCase();
+                const matchedTags = tagsArray.filter(t => t.includes(lowerSearch));
+                if (matchedTags.length > 0) {
+                    displayedCat += ` - ${matchedTags.join(', ')}`;
+                }
+            }
+
             const distHtml = company.distanceText ? `<span class="dist-badge">🚗 ${company.distanceText}</span>` : '';
             item.innerHTML = `
                 <div class="catalog-item-header">
                     <h4>${company.nimi}</h4>
                     ${distHtml}
                 </div>
-                <span class="cat-tag">${company.kategoria}</span>
+                <span class="cat-tag">${displayedCat}</span>
             `;
 
             item.onclick = () => {
