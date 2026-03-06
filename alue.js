@@ -1,4 +1,4 @@
-const REGIONS_CSV_URL = 'get_alueet.php'; // Local PHP proxy to avoid CORS
+const REGIONS_CSV_URL = 'https://www.mediazoo.fi/laukaainfo_web/get_alueet.php';
 let areaMetadata = {};
 
 document.addEventListener('DOMContentLoaded', () => {
