@@ -60,7 +60,7 @@ async function initRegionPage() {
     await waitForData();
 
     const filtered = filterByArea(areaSlug, catParam, tagParam);
-    renderRegionContent(area, filtered, catParam, tagParam);
+    renderRegionContent(area, areaSlug, filtered, catParam, tagParam);
     initRegionMap(area, filtered);
     fetchRegionNews(area);
 }
@@ -114,7 +114,7 @@ function filterByArea(areaSlug, catParam, tagParam) {
     });
 }
 
-function renderRegionContent(area, filtered, cat, tag) {
+function renderRegionContent(area, areaSlug, filtered, cat, tag) {
     // Kategoriat alueella
     const regionCats = [...new Set(filtered.map(c => c.kategoria))].sort();
     const catGrid = document.getElementById('region-categories');
@@ -124,7 +124,7 @@ function renderRegionContent(area, filtered, cat, tag) {
             const icon = (typeof categoryIcons !== 'undefined' && categoryIcons[c]) ? categoryIcons[c] : '🏢';
             const card = document.createElement('a');
             const catSlug = c.toLowerCase().replace(/ /g, '-');
-            card.href = `${area.slug}.html?cat=${encodeURIComponent(catSlug)}`;
+            card.href = `${areaSlug}.html?cat=${encodeURIComponent(catSlug)}`;
             card.className = 'category-card';
             card.innerHTML = `<span class="cat-icon">${icon}</span><h3>${c}</h3>`;
             catGrid.appendChild(card);
@@ -141,7 +141,7 @@ function renderRegionContent(area, filtered, cat, tag) {
         tagCloud.innerHTML = '';
         uniqueTags.forEach(t => {
             const pill = document.createElement('a');
-            pill.href = `${area.slug}.html?tag=${encodeURIComponent(t)}`;
+            pill.href = `${areaSlug}.html?tag=${encodeURIComponent(t)}`;
             pill.className = 'tag-pill';
             pill.textContent = t;
             tagCloud.appendChild(pill);
@@ -222,10 +222,16 @@ function fetchRegionNews(area) {
 
     if (area.bloggerId) {
         const blogId = area.bloggerId;
+        console.log('[Blogger] Haetaan feedit blog-ID:llä:', blogId);
         const script = document.createElement('script');
         script.src = `https://www.blogger.com/feeds/${blogId}/posts/default?alt=json-in-script&callback=renderRegionBloggerFeed&max-results=5`;
+        script.onerror = () => {
+            console.error('[Blogger] Script-lataus epäonnistui, URL:', script.src);
+            container.innerHTML = '<p>Uutisten lataus epäonnistui (Blogger-virhe).</p>';
+        };
         document.body.appendChild(script);
     } else {
+        console.log('[Blogger] Ei bloggerId-arvoa alueelle:', area.name);
         container.innerHTML = '<p>Alueen uutisia ei saatavilla tällä hetkellä.</p>';
     }
 }

@@ -50,12 +50,22 @@ if ($csvData) {
             if (empty($slug))
                 continue;
 
+            // BloggerID saattaa tulla Excelistä tieteellisenä notaationa (esim. 7,14827E+18)
+            // Muutetaan se takaisin kokonaisluvuksi
+            $rawBloggerId = isset($data[5]) ? trim($data[5]) : '';
+            // Korvaa pilkut pisteillä ja parsitaan float -> int -> string
+            if (!empty($rawBloggerId) && preg_match('/[eE]/', $rawBloggerId)) {
+                $rawBloggerId = str_replace(',', '.', $rawBloggerId);
+                $rawBloggerId = number_format((float) $rawBloggerId, 0, '.', '');
+            }
+
             $regions[$slug] = [
+                'slug' => $slug,
                 'name' => trim($data[1]),
                 'desc' => trim($data[2]),
                 'lat' => floatval(trim($data[3])),
                 'lon' => floatval(trim($data[4])),
-                'bloggerId' => isset($data[5]) ? trim($data[5]) : null
+                'bloggerId' => $rawBloggerId ?: null
             ];
         }
     }
