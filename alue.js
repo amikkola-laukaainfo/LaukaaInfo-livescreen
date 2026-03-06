@@ -48,8 +48,9 @@ document.addEventListener('DOMContentLoaded', () => {
 async function initRegionPage() {
     const params = new URLSearchParams(window.location.search);
 
-    // Recognize region from the file name, e.g. /lievestuore.html -> lievestuore
-    const pathArea = window.location.pathname.split('/').pop().replace('.html', '').toLowerCase();
+    // Recognize region from the file name or path, handling trailing slashes
+    const pathParts = window.location.pathname.split('/').filter(p => p.length > 0);
+    const pathArea = pathParts.length > 0 ? pathParts.pop().replace('.html', '').toLowerCase() : '';
 
     const areaSlug = params.get('area')?.toLowerCase() || pathArea;
     const catParam = params.get('cat')?.toLowerCase();
@@ -279,7 +280,7 @@ window.renderRegionBloggerFeed = function (data) {
         const postEl = document.createElement('div');
         postEl.className = 'rss-item';
         postEl.innerHTML = `
-            ${imageUrl ?\`\n<img src="\${imageUrl}" class="rss-item-image" loading="lazy" alt="Kuva uutiseen">\n\` : ''}
+            ${imageUrl ? '<img src="' + imageUrl + '" class="rss-item-image" loading="lazy" alt="Kuva uutiseen">' : ''}
             <div class="rss-meta"><span class="date">📅 ${dateStr}</span></div>
             <h3><a href="${link}" target="_blank">${title}</a></h3>
             <p class="description">${rawText}</p>
