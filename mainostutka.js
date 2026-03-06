@@ -33,7 +33,7 @@ const Mainostutka = (function () {
                     <button id="close-radar-btn" class="btn-close-radar">&times;</button>
                 </div>
                 
-                <div class="radar-location-search">
+                <div class="radar-location-search" id="radar-desktop-search">
                     <input type="text" id="radar-search-input" placeholder="Hae osoite tai kylä (esim. Laukaa)...">
                     <button id="radar-search-btn" class="btn-small">Hae</button>
                     <span class="radar-hint">tai klikkaa karttaa</span>
@@ -127,7 +127,14 @@ const Mainostutka = (function () {
         // Lajittelu ryhmittäin
         const offers = allWithDistance.filter(c => c.type === 'offer').sort((a, b) => a.distanceInKm - b.distanceInKm);
         const ads = allWithDistance.filter(c => c.type === 'ad').sort((a, b) => a.distanceInKm - b.distanceInKm);
-        const others = allWithDistance.filter(c => c.type === 'none').sort((a, b) => a.distanceInKm - b.distanceInKm).slice(0, 5);
+
+        // Lasketaan kuinka monta "muuta" tarvitaan, jotta saadaan vähintään 5 korttia yhteensä
+        const adCount = offers.length + ads.length;
+        const othersToRetrieve = Math.max(0, 5 - adCount);
+
+        const others = allWithDistance.filter(c => c.type === 'none')
+            .sort((a, b) => a.distanceInKm - b.distanceInKm)
+            .slice(0, othersToRetrieve);
 
         const combinedResults = [...offers, ...ads, ...others];
 
