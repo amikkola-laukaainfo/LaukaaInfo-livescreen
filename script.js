@@ -1086,62 +1086,67 @@ function renderHomepageCategories(categories) {
 function showSuggestions() {
     const suggestionsList = document.getElementById('search-suggestions');
     const searchInput = document.getElementById('company-search');
-    const searchTerm = searchInput.value.trim().toLowerCase();
-    const includeRss = document.getElementById('include-rss')?.checked;
+    if (!searchInput) return;
 
+    const searchTerm = searchInput.value.trim().toLowerCase();
     if (searchTerm.length < 1) {
         suggestionsList.style.display = 'none';
         return;
     }
 
-    // Get suggestions from businesses with scoring
-    let businessMatches = allCompanies.map(c => {
-        const name = (c.nimi || '').toLowerCase();
-        let score = 0;
-        if (name.startsWith(searchTerm)) score += 200;
-        else if (name.includes(searchTerm)) score += 100;
+    const villages = [
+        { id: 'laukaa', name: 'Laukaa kk' },
+        { id: 'leppavesi', name: 'Leppävesi' },
+        { id: 'lievestuore', name: 'Lievestuore' },
+        { id: 'vehnia', name: 'Vehniä' },
+        { id: 'vihtavuori', name: 'Vihtavuori' }
+    ];
 
-        const isPremium = c.tyyppi === 'paid' || c.taso === 'premium';
+    let suggestions = [];
 
-        // Tag match for suggestions
-        if (c.tags) {
-            const tags = c.tags.split(',').map(t => t.trim().toLowerCase());
-            if (tags.some(tag => tag.includes(searchTerm)) || c.tags.includes(searchTerm)) {
-                score += 150;
-            }
-        }
-
-        return { company: c, score, isPremium };
-    }).filter(m => m.score > 0);
-
-    businessMatches.sort((a, b) => {
-        if (a.isPremium && !b.isPremium) return -1;
-        if (!a.isPremium && b.isPremium) return 1;
-        return b.score - a.score || (a.company.nimi || '').localeCompare(b.company.nimi || '', 'fi');
+    // 1. Check for Region matches
+    const regionMatches = villages.filter(v => v.name.toLowerCase().includes(searchTerm) || v.id.includes(searchTerm));
+    regionMatches.forEach(v => {
+        suggestions.push({ type: 'region', id: v.id, name: v.name });
     });
 
-    let suggestions = businessMatches.map(m => m.company).slice(0, 6);
+    // Determine current region context for categories/tags
+    // If user typed a region name already, use that as context
+    const contextRegion = villages.find(v => searchTerm.includes(v.name.toLowerCase()) || searchTerm.includes(v.id));
+    const companiesInContext = contextRegion
+        ? allCompanies.filter(c => (c.alue_slug || '').toLowerCase() === contextRegion.id)
+        : allCompanies;
 
-    // Add RSS suggestions if enabled
-    if (includeRss) {
-        const rssSuggestions = allRssItems
-            .filter(i => i.title.toLowerCase().includes(searchTerm))
-            .slice(0, 4);
-        suggestions = [...suggestions, ...rssSuggestions];
+    // 2. Collect Categories and Tags from context
+    const categories = [...new Set(companiesInContext.map(c => c.kategoria))].filter(Boolean);
+    const tags = [...new Set(companiesInContext.flatMap(c => (c.tags || '').split(',').map(t => t.trim())))].filter(Boolean);
+
+    // 3. Match Categories
+    const catMatches = categories
+        .filter(c => c.toLowerCase().includes(searchTerm))
+        .map(c => ({ type: 'category', name: c, region: contextRegion?.id }));
+
+    // 4. Match Tags
+    const tagMatches = tags
+        .filter(t => t.toLowerCase().includes(searchTerm))
+        .map(t => ({ type: 'tag', name: t, region: contextRegion?.id }));
+
+    // Merge and alphabetize categories and tags
+    let mixedCatTags = [...catMatches, ...tagMatches].sort((a, b) => a.name.localeCompare(b.name, 'fi'));
+    suggestions = [...suggestions, ...mixedCatTags];
+
+    // 5. Match Businesses (only if term is longer or no other major matches)
+    if (searchTerm.length >= 2) {
+        const busMatches = allCompanies
+            .filter(c => c.nimi.toLowerCase().includes(searchTerm))
+            .map(c => ({ type: 'business', company: c }))
+            .slice(0, 5);
+        suggestions = [...suggestions, ...busMatches];
     }
 
-    // Add Lievestuore suggestions if enabled
-    const includeLievestuore = document.getElementById('include-lievestuore')?.checked;
-    if (includeLievestuore) {
-        const lievestuoreSuggestions = allLievestuoreItems
-            .filter(i => i.title.toLowerCase().includes(searchTerm))
-            .slice(0, 4);
-        suggestions = [...suggestions, ...lievestuoreSuggestions];
-    }
+    filteredSuggestions = suggestions.slice(0, 10);
 
-    filteredSuggestions = suggestions; // Update global filteredSuggestions for keyboard nav
-
-    if (suggestions.length === 0) {
+    if (filteredSuggestions.length === 0) {
         suggestionsList.style.display = 'none';
         return;
     }
@@ -1149,34 +1154,32 @@ function showSuggestions() {
     suggestionsList.innerHTML = '';
     activeSuggestionIndex = -1;
 
-    suggestions.forEach((item, index) => {
+    filteredSuggestions.forEach((item, index) => {
         const li = document.createElement('li');
-        const isRss = item.isRss;
-        const name = isRss ? item.title : item.nimi;
-        let cat = isRss ? item.type : item.kategoria;
+        let html = '';
+        let label = '';
+        let badge = '';
 
-        // Find matching tags for display
-        if (!isRss && item.tags) {
-            const tagsArray = item.tags.split(',').map(t => t.trim().toLowerCase());
-            const matchedTags = tagsArray.filter(t => t.includes(searchTerm));
-            if (matchedTags.length > 0) {
-                cat += ` - ${matchedTags.join(', ')}`;
-            }
+        if (item.type === 'region') {
+            label = item.name;
+            badge = '<span class="suggestion-region">Alue</span>';
+        } else if (item.type === 'category') {
+            label = item.name;
+            badge = `<span class="suggestion-cat">Kategoria${item.region ? ' (' + item.region + ')' : ''}</span>`;
+        } else if (item.type === 'tag') {
+            label = `#${item.name}`;
+            badge = `<span class="suggestion-tag">Tunniste${item.region ? ' (' + item.region + ')' : ''}</span>`;
+        } else if (item.type === 'business') {
+            label = item.company.nimi;
+            badge = `<span class="suggestion-cat">${item.company.kategoria}</span>`;
         }
 
-        // Highlight search term
+        // Highlight
         const regex = new RegExp(`(${searchTerm})`, 'gi');
-        const highlightedName = name.replace(regex, '<mark>$1</mark>');
+        const highlightedLabel = label.replace(regex, '<mark>$1</mark>');
 
-        li.innerHTML = `
-            <span>${isRss ? '📢 ' : ''}${highlightedName}</span>
-            <span class="suggestion-cat">${cat}</span>
-        `;
-
-        li.onclick = () => {
-            selectSuggestion(item);
-        };
-
+        li.innerHTML = `<span>${highlightedLabel}</span>${badge}`;
+        li.onclick = () => selectSuggestion(item);
         suggestionsList.appendChild(li);
     });
 
@@ -1185,9 +1188,8 @@ function showSuggestions() {
 
 function handleSearchKeydown(e) {
     const suggestionsList = document.getElementById('search-suggestions');
+    if (!suggestionsList || suggestionsList.style.display === 'none') return;
     const items = suggestionsList.querySelectorAll('li');
-
-    if (suggestionsList.style.display === 'none') return;
 
     if (e.key === 'ArrowDown') {
         e.preventDefault();
@@ -1202,7 +1204,6 @@ function handleSearchKeydown(e) {
             e.preventDefault();
             selectSuggestion(filteredSuggestions[activeSuggestionIndex]);
         } else {
-            // No suggestion selected, try region redirect
             const query = (document.getElementById('company-search')?.value || '').trim();
             if (tryRedirectToRegion(query)) {
                 e.preventDefault();
@@ -1225,17 +1226,20 @@ function updateActiveSuggestion(items) {
 function selectSuggestion(item) {
     const searchInput = document.getElementById('company-search');
     const suggestionsList = document.getElementById('search-suggestions');
-
     if (suggestionsList) suggestionsList.style.display = 'none';
 
-    if (item.isRss) {
-        window.open(item.link, '_blank');
-    } else {
-        if (searchInput) searchInput.value = item.nimi;
-        // Ohjataan yrityskorttiin alueen kanssa
+    if (item.type === 'region') {
+        window.location.href = `${item.id}.html`;
+    } else if (item.type === 'category' || item.type === 'tag') {
+        const region = item.region || localStorage.getItem('selectedRegion') || 'laukaa';
+        const paramName = item.type === 'category' ? 'cat' : 'tag';
+        const val = item.name.toLowerCase().replace(/ /g, '-');
+        window.location.href = `${region}.html?${paramName}=${encodeURIComponent(val)}`;
+    } else if (item.type === 'business') {
+        if (searchInput) searchInput.value = item.company.nimi;
         const region = localStorage.getItem('selectedRegion');
         const regionParam = (region && region !== 'all') ? `&region=${region}` : '';
-        window.location.href = `yrityskortti.html?id=${item.id}${regionParam}`;
+        window.location.href = `yrityskortti.html?id=${item.company.id}${regionParam}`;
     }
 }
 

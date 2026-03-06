@@ -773,12 +773,30 @@ h2 span {
     color: var(--primary-blue);
 }
 
-.search-suggestions li .suggestion-cat {
+.search-suggestions li .suggestion-cat,
+.search-suggestions li .suggestion-tag,
+.search-suggestions li .suggestion-region {
     font-size: 0.75rem;
-    opacity: 0.6;
-    background: #f0f0f0;
     padding: 2px 8px;
     border-radius: 4px;
+}
+
+.search-suggestions li .suggestion-cat {
+    opacity: 0.6;
+    background: #f0f0f0;
+}
+
+.search-suggestions li .suggestion-tag {
+    font-style: italic;
+    color: #0056b3;
+    background: #e1effe;
+    font-family: inherit;
+}
+
+.search-suggestions li .suggestion-region {
+    font-weight: 700;
+    color: white;
+    background: var(--primary-blue);
 }
 
 .search-suggestions mark {
