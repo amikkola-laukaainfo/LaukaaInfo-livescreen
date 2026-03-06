@@ -74,7 +74,6 @@
             background: #f0f7ff;
             padding: 3rem 1rem;
             margin: 4rem -1rem -4rem -1rem;
-            /* Full width background */
         }
 
         .nearby-container {
@@ -107,10 +106,8 @@
         </div>
     </nav>
 
-    <!-- Sidebar Overlay -->
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
-    <!-- Sidebar Menu -->
     <aside class="sidebar-menu" id="sidebar-menu">
         <div class="sidebar-header">
             <a href="/index.html" class="nav-logo">
@@ -132,10 +129,11 @@
             <div class="menu-section">
                 <h3 class="section-title">ALUEET</h3>
                 <ul class="menu-list" id="sidebar-regions">
-                    <li><a href="/lievestuore" class="sidebar-link">Lievestuore</a></li>
-                    <li><a href="/vihtavuori" class="sidebar-link">Vihtavuori</a></li>
-                    <li><a href="/leppavesi" class="sidebar-link">Leppävesi</a></li>
-                    <li><a href="/laukaa" class="sidebar-link">Laukaa kk</a></li>
+                    <li><a href="/lievestuore.html" class="sidebar-link">Lievestuore</a></li>
+                    <li><a href="/vihtavuori.html" class="sidebar-link">Vihtavuori</a></li>
+                    <li><a href="/leppavesi.html" class="sidebar-link">Leppävesi</a></li>
+                    <li><a href="/laukaa.html" class="sidebar-link">Laukaa kk</a></li>
+                    <li><a href="/vehnia.html" class="sidebar-link">Vehniä</a></li>
                 </ul>
             </div>
         </div>
@@ -156,9 +154,7 @@
                     </div>
                 </div>
 
-                <div id="region-tag-cloud" class="region-tag-cloud">
-                    <!-- Tägit ladataan dynaamisesti -->
-                </div>
+                <div id="region-tag-cloud" class="region-tag-cloud"></div>
             </div>
         </section>
 
@@ -177,16 +173,13 @@
         <section id="categories-section">
             <h2 id="categories-title">Kategoriat alueella</h2>
             <div id="region-categories" class="categories-grid">
-                <!-- Kategoriat dynaamisesti -->
                 <div class="loading-spinner">Ladataan kategorioita...</div>
             </div>
         </section>
 
         <section id="featured-section">
             <h2 id="featured-title">Suositellut yritykset</h2>
-            <div id="catalog-list" class="catalog-list-home">
-                <!-- Yritykset dynaamisesti -->
-            </div>
+            <div id="catalog-list" class="catalog-list-home"></div>
         </section>
 
         <div class="dashboard-grid">
@@ -208,9 +201,7 @@
         <section id="nearby-section" class="nearby-section">
             <div class="nearby-container">
                 <h2><span>🚗</span> Lähellä tätä aluetta</h2>
-                <div id="nearby-list" class="catalog-list-home">
-                    <!-- Lähellä olevat yritykset -->
-                </div>
+                <div id="nearby-list" class="catalog-list-home"></div>
             </div>
         </section>
 
@@ -232,7 +223,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
     <script src="/script.js?v=20260301-1"></script>
-    <script src="/alue.js?v=20260306-1"></script>
+    <script src="/alue.js?v=20260306-3"></script>
 
 </body>
 

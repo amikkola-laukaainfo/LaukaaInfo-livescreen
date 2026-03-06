@@ -1246,11 +1246,11 @@ function tryRedirectToRegion(query) {
 
     const foundVillage = villages.find(v => parts.includes(v));
     if (foundVillage) {
-        // Redir to area page
+        // Redir to area page (HTML format)
         const remainingQuery = parts.filter(p => p !== foundVillage).join('-').trim();
-        let targetUrl = `/${foundVillage}`;
+        let targetUrl = `/${foundVillage}.html`;
         if (remainingQuery) {
-            targetUrl += `/${remainingQuery}`;
+            targetUrl += `?tag=${encodeURIComponent(remainingQuery)}`;
         }
         window.location.href = targetUrl;
         return true;
