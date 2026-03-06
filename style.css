@@ -194,9 +194,14 @@
     }
 }
 
-.radar-ad-card.is-hot-ad {
+.radar-ad-card.is-offer {
     border: 2px solid #ff9900;
     background: linear-gradient(to bottom, #fff, #fff9f0);
+}
+
+.radar-ad-card.is-ad {
+    border: 1px solid var(--primary-blue);
+    background: linear-gradient(to bottom, #fff, #f0f7ff);
 }
 
 .radar-ad-badge {
@@ -205,11 +210,15 @@
     margin-bottom: 0.5rem;
 }
 
-.is-hot-ad .radar-ad-badge {
+.is-offer .radar-ad-badge {
     color: #ff4d00;
 }
 
-.is-normal .radar-ad-badge {
+.is-ad .radar-ad-badge {
+    color: var(--primary-blue);
+}
+
+.is-none .radar-ad-badge {
     color: #888;
 }
 

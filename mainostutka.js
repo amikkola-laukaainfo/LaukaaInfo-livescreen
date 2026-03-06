@@ -114,18 +114,24 @@ const Mainostutka = (function () {
         // Lasketaan etäisyys kaikille yrityksille joilla on koordinaatit
         const allWithDistance = allCompanies.filter(c => c.lat && c.lon).map(c => {
             const dist = calculateDistance(userLat, userLon, parseFloat(c.lat), parseFloat(c.lon));
-            const hasTagAd = (c.mainoslause && c.mainoslause.trim().length > 0);
             const hasLinkAd = (c.mainoslinkit && c.mainoslinkit.length > 2);
-            return { ...c, distanceInKm: dist, hasAd: (hasTagAd || hasLinkAd) };
+            const hasSlogan = (c.mainoslause && c.mainoslause.trim().length > 0);
+
+            let type = 'none';
+            if (hasLinkAd) type = 'offer';
+            else if (hasSlogan) type = 'ad';
+
+            return { ...c, distanceInKm: dist, type: type };
         });
 
-        // Erotetaan mainokset ja muut
-        const ads = allWithDistance.filter(c => c.hasAd).sort((a, b) => a.distanceInKm - b.distanceInKm);
-        const others = allWithDistance.filter(c => !c.hasAd).sort((a, b) => a.distanceInKm - b.distanceInKm).slice(0, 5);
+        // Lajittelu ryhmittäin
+        const offers = allWithDistance.filter(c => c.type === 'offer').sort((a, b) => a.distanceInKm - b.distanceInKm);
+        const ads = allWithDistance.filter(c => c.type === 'ad').sort((a, b) => a.distanceInKm - b.distanceInKm);
+        const others = allWithDistance.filter(c => c.type === 'none').sort((a, b) => a.distanceInKm - b.distanceInKm).slice(0, 5);
 
-        const combinedResults = [...ads, ...others];
+        const combinedResults = [...offers, ...ads, ...others];
 
-        renderRadarResults(ads, others);
+        renderRadarResults(offers, ads, others);
         updateRadarMap(combinedResults);
     }
 
@@ -141,37 +147,40 @@ const Mainostutka = (function () {
         return R * c;
     }
 
-    function renderRadarResults(ads, others) {
+    function renderRadarResults(offers, ads, others) {
         const list = document.getElementById('radar-ads-list');
-        if (ads.length === 0 && others.length === 0) {
+        if (offers.length === 0 && ads.length === 0 && others.length === 0) {
             list.innerHTML = "<p>Ei yrityksiä lähistöllä juuri nyt.</p>";
             return;
         }
 
         list.innerHTML = '';
 
-        // Lisätään mainokset ensin
-        ads.forEach(ad => {
-            list.appendChild(createAdCard(ad, true));
-        });
+        // Tärkeimmät tarjoukset
+        offers.forEach(o => list.appendChild(createAdCard(o, 'offer')));
 
-        // Lisätään muut
-        others.forEach(company => {
-            list.appendChild(createAdCard(company, false));
-        });
+        // Mainokset / Sloganit
+        ads.forEach(a => list.appendChild(createAdCard(a, 'ad')));
+
+        // Muut lähitienoot
+        others.forEach(c => list.appendChild(createAdCard(c, 'none')));
     }
 
-    function createAdCard(ad, isAd) {
+    function createAdCard(ad, type) {
         const distText = ad.distanceInKm < 1
             ? `${Math.round(ad.distanceInKm * 1000)} m`
             : `${ad.distanceInKm.toFixed(1)} km`;
 
         const card = document.createElement('div');
-        card.className = `radar-ad-card ${isAd ? 'is-hot-ad' : 'is-normal'}`;
+        card.className = `radar-ad-card is-${type}`;
+
+        let badgeText = '📍 LÄHELLÄ';
+        if (type === 'offer') badgeText = '🔥 TARJOUS';
+        else if (type === 'ad') badgeText = '📢 MAINOS';
 
         let mainosText = ad.mainoslause || '';
         if (mainosText.includes('@@')) mainosText = mainosText.split('@@')[0];
-        if (!isAd && !mainosText) mainosText = ad.kategoria || 'Yritys';
+        if (type === 'none' && !mainosText) mainosText = ad.kategoria || 'Yritys';
 
         let adLink = '#';
         if (ad.mainoslinkit) {
@@ -184,12 +193,12 @@ const Mainostutka = (function () {
         card.innerHTML = `
             <div class="radar-ad-dist">${distText}</div>
             <div class="radar-ad-content">
-                <div class="radar-ad-badge">${isAd ? '🔥 TARJOUS' : '📍 LÄHELLÄ'}</div>
+                <div class="radar-ad-badge">${badgeText}</div>
                 <h4>${ad.nimi}</h4>
                 <p>${mainosText}</p>
                 <div class="radar-ad-actions">
                     <a href="yrityskortti.html?id=${ad.id}" class="btn-small">Avaa</a>
-                    ${(isAd && adLink !== '#') ? `<a href="${adLink}" target="_blank" class="btn-small secondary">Tarjous</a>` : ''}
+                    ${(type === 'offer' && adLink !== '#') ? `<a href="${adLink}" target="_blank" class="btn-small secondary">Tarjous</a>` : ''}
                 </div>
             </div>
         `;
