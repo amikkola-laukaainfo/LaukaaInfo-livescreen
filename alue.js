@@ -220,18 +220,29 @@ function fetchRegionNews(area) {
     const container = document.getElementById('blogger-feed');
     if (!container) return;
 
-    if (area.bloggerId) {
-        const blogId = area.bloggerId;
-        console.log('[Blogger] Haetaan feedit blog-ID:llä:', blogId);
+    let feedUrl = null;
+
+    if (area.bloggerUrl) {
+        // Käytetään suoraa blogspot-URL:a – ei numerista ID:tä (ID voi pyöristyä väärin)
+        // Normalisoidaan URL (poistetaan trailing slash)
+        const baseUrl = area.bloggerUrl.replace(/\/$/, '');
+        feedUrl = `${baseUrl}/feeds/posts/default?alt=json-in-script&callback=renderRegionBloggerFeed&max-results=5`;
+        console.log('[Blogger] Haetaan feed blogspot-URL:lla:', feedUrl);
+    } else if (area.bloggerId) {
+        feedUrl = `https://www.blogger.com/feeds/${area.bloggerId}/posts/default?alt=json-in-script&callback=renderRegionBloggerFeed&max-results=5`;
+        console.log('[Blogger] Haetaan feedit blog-ID:llä:', area.bloggerId);
+    }
+
+    if (feedUrl) {
         const script = document.createElement('script');
-        script.src = `https://www.blogger.com/feeds/${blogId}/posts/default?alt=json-in-script&callback=renderRegionBloggerFeed&max-results=5`;
+        script.src = feedUrl;
         script.onerror = () => {
             console.error('[Blogger] Script-lataus epäonnistui, URL:', script.src);
             container.innerHTML = '<p>Uutisten lataus epäonnistui (Blogger-virhe).</p>';
         };
         document.body.appendChild(script);
     } else {
-        console.log('[Blogger] Ei bloggerId-arvoa alueelle:', area.name);
+        console.log('[Blogger] Ei bloggerId- eikä bloggerUrl-arvoa alueelle:', area.name);
         container.innerHTML = '<p>Alueen uutisia ei saatavilla tällä hetkellä.</p>';
     }
 }

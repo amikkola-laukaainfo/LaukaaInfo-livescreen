@@ -44,20 +44,25 @@ if ($csvData) {
             continue;
         }
 
-        // Make sure we have enough columns (Slug, Nimi, Esittelyteksti, Lat, Lon, BloggerID)
+        // Make sure we have enough columns (Slug, Nimi, Esittelyteksti, Lat, Lon, BloggerID, BloggerURL)
         if (count($data) >= 5) {
             $slug = strtolower(trim($data[0]));
             if (empty($slug))
                 continue;
 
             // BloggerID saattaa tulla Excelistä tieteellisenä notaationa (esim. 7,14827E+18)
-            // Muutetaan se takaisin kokonaisluvuksi
+            // tai normaalina kokonaislukuna. Käsitellään aina merkkijonona tarkkuuden säilyttämiseksi.
             $rawBloggerId = isset($data[5]) ? trim($data[5]) : '';
-            // Korvaa pilkut pisteillä ja parsitaan float -> int -> string
+            // Jos tieteellinen notaatio (esim. 7.14827E+18), muunnetaan sprintf:llä (ei number_format,
+            // koska float-pyöristys voi vioittaa 19-numeroisen luvun)
             if (!empty($rawBloggerId) && preg_match('/[eE]/', $rawBloggerId)) {
                 $rawBloggerId = str_replace(',', '.', $rawBloggerId);
-                $rawBloggerId = number_format((float) $rawBloggerId, 0, '.', '');
+                $rawBloggerId = sprintf('%.0f', (float) $rawBloggerId);
             }
+
+            // BloggerURL: suora blogspot-osoite (esim. https://lievestuore.blogspot.com/)
+            // Luotettavampi kuin numerinen ID, koska suuria lukuja ei tarvita
+            $bloggerUrl = isset($data[6]) ? trim($data[6]) : '';
 
             $regions[$slug] = [
                 'slug' => $slug,
@@ -65,7 +70,8 @@ if ($csvData) {
                 'desc' => trim($data[2]),
                 'lat' => floatval(trim($data[3])),
                 'lon' => floatval(trim($data[4])),
-                'bloggerId' => $rawBloggerId ?: null
+                'bloggerId' => $rawBloggerId ?: null,
+                'bloggerUrl' => $bloggerUrl ?: null
             ];
         }
     }
