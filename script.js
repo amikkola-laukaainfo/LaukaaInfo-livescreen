@@ -1029,9 +1029,8 @@ function renderNavCategories(categories) {
 
         categories.forEach(cat => {
             const li = document.createElement('li');
-            const region = localStorage.getItem('selectedRegion');
-            const regionParam = (region && region !== 'all') ? `&region=${region}` : '';
-            li.innerHTML = `<a href="kategoria.html?cat=${encodeURIComponent(cat)}${regionParam}">${cat}</a>`;
+            // Pakotetaan koko Laukaa näkymä (region=all)
+            li.innerHTML = `<a href="kategoria.html?cat=${encodeURIComponent(cat)}&region=all">${cat}</a>`;
             navMenu.appendChild(li);
         });
     }
@@ -1040,9 +1039,8 @@ function renderNavCategories(categories) {
         sidebarMenu.innerHTML = '';
         categories.forEach(cat => {
             const li = document.createElement('li');
-            const region = localStorage.getItem('selectedRegion');
-            const regionParam = (region && region !== 'all') ? `&region=${region}` : '';
-            li.innerHTML = `<a href="kategoria.html?cat=${encodeURIComponent(cat)}${regionParam}" class="sidebar-link">${cat}</a>`;
+            // Pakotetaan koko Laukaa näkymä (region=all)
+            li.innerHTML = `<a href="kategoria.html?cat=${encodeURIComponent(cat)}&region=all" class="sidebar-link">${cat}</a>`;
             sidebarMenu.appendChild(li);
         });
     }
@@ -1063,9 +1061,8 @@ function renderHomepageCategories(categories) {
             Object.entries(categoryIcons).find(([k]) => k.toLowerCase() === cleanCat.toLowerCase())?.[1] ||
             '🏢';
         const card = document.createElement('a');
-        const region = localStorage.getItem('selectedRegion');
-        const regionParam = (region && region !== 'all') ? `&region=${region}` : '';
-        card.href = `kategoria.html?cat=${encodeURIComponent(cat)}${regionParam}`;
+        // Pakotetaan koko Laukaa näkymä (region=all)
+        card.href = `kategoria.html?cat=${encodeURIComponent(cat)}&region=all`;
         card.className = 'category-card';
         card.innerHTML = `
             <span class="cat-icon">${icon}</span>
@@ -1262,13 +1259,8 @@ function selectSuggestion(item) {
     if (item.type === 'region') {
         window.location.href = `${item.id}.html`;
     } else if (item.type === 'category') {
-        // Categories from central search go to national (all Laukaa) view if on home
-        if (isHomePage) {
-            window.location.href = `kategoria.html?cat=${encodeURIComponent(item.name)}`;
-        } else {
-            const region = item.region || localStorage.getItem('selectedRegion') || 'all';
-            window.location.href = `kategoria.html?cat=${encodeURIComponent(item.name)}&region=${region}`;
-        }
+        // Pakotetaan kategoriat koko Laukaa näkymään (region=all)
+        window.location.href = `kategoria.html?cat=${encodeURIComponent(item.name)}&region=all`;
     } else if (item.type === 'tag') {
         // Tags stay within region context
         let region = item.region || localStorage.getItem('selectedRegion');

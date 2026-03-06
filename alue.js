@@ -139,8 +139,8 @@ function renderRegionContent(area, areaSlug, filtered, cat, tag) {
         regionCats.forEach(c => {
             const icon = (typeof categoryIcons !== 'undefined' && categoryIcons[c]) ? categoryIcons[c] : '🏢';
             const card = document.createElement('a');
-            const catSlug = c.toLowerCase().replace(/ /g, '-');
-            card.href = `${areaSlug}.html?cat=${encodeURIComponent(catSlug)}`;
+            // Pakotetaan koko Laukaa näkymä (region=all) kategoria-sivulla
+            card.href = `kategoria.html?cat=${encodeURIComponent(c)}&region=all`;
             card.className = 'category-card';
             card.innerHTML = `<span class="cat-icon">${icon}</span><h3>${c}</h3>`;
             catGrid.appendChild(card);
