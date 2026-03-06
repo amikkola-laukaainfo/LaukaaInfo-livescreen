@@ -774,9 +774,7 @@ function initCompanyCatalog() {
 
     searchInput.addEventListener('input', () => {
         filterCatalog();
-        if (!isHomePage) {
-            showSuggestions();
-        }
+        showSuggestions();
     });
 
     searchInput.addEventListener('keydown', handleSearchKeydown);
