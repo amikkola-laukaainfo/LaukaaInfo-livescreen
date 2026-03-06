@@ -256,7 +256,12 @@ function fetchRegionNews(area) {
         document.body.appendChild(script);
     } else {
         console.log('[Blogger] Ei bloggerId- eikä bloggerUrl-arvoa alueelle:', area.name);
-        container.innerHTML = '<p>Alueen uutisia ei saatavilla tällä hetkellä.</p>';
+        container.innerHTML = `
+            <div class="no-news-message" style="padding: 2rem; background: rgba(0,0,0,0.03); border-radius: 12px; text-align: center;">
+                <p style="margin-bottom: 0.5rem; font-weight: 500;">Tämän alueen uutissyöte ja tapahtumakalenteri päivittyvät tänne myöhemmin.</p>
+                <p style="font-size: 0.9rem; opacity: 0.7;">Seuraa tiedotusta!</p>
+            </div>
+        `;
     }
 }
 
