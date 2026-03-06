@@ -679,6 +679,7 @@ h2 span {
     left: 0;
     right: 0;
     background: white;
+    color: var(--dark-text);
     border-radius: 10px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     list-style: none;
@@ -688,6 +689,7 @@ h2 span {
     max-height: 300px;
     overflow-y: auto;
     border: 1px solid #eee;
+    text-align: left;
     animation: fadeIn 0.2s ease-out;
 }
 
@@ -729,7 +731,7 @@ h2 span {
 
 .search-suggestions mark {
     background: #fff3cd;
-    color: inherit;
+    color: var(--dark-text);
     font-weight: 600;
     border-radius: 2px;
 }
