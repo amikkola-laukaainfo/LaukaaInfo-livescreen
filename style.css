@@ -1051,7 +1051,8 @@ h2 span {
     margin-top: 1.5rem;
     background: white;
     border-radius: 12px;
-    max-height: 500px;
+    max-height: 380px;
+    /* Approximately 5 items */
     overflow-y: auto;
     overflow-x: hidden;
     padding: 1rem;
@@ -1060,13 +1061,33 @@ h2 span {
     gap: 0.8rem;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     border: 1px solid rgba(0, 0, 0, 0.05);
-    z-index: 10;
+    z-index: 100;
+    /* Higher z-index to stay on top */
     position: relative;
     width: 100%;
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
     text-align: center;
+}
+
+/* Custom scrollbar for search results */
+.catalog-list-home::-webkit-scrollbar {
+    width: 8px;
+}
+
+.catalog-list-home::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.catalog-list-home::-webkit-scrollbar-thumb {
+    background: var(--primary-blue);
+    border-radius: 10px;
+}
+
+.catalog-list-home::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-blue);
 }
 
 .catalog-list-home:empty {
@@ -1216,7 +1237,8 @@ footer {
     text-align: center;
     margin-bottom: 3rem;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
+    /* Prevent clipping of search results */
 }
 
 .kauppa-hero::before {
