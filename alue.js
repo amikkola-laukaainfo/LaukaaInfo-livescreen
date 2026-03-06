@@ -200,6 +200,12 @@ function initRegionMap(area, companies) {
     const mapContainer = document.getElementById('company-map');
     if (!mapContainer || typeof L === 'undefined') return;
 
+    // Tyhjennetään säilö jos Leaflet on jo siunaamalla se (estää "Map container is already initialized" virheen)
+    if (mapContainer._leaflet_id) {
+        console.warn('[Map] Kartta on jo alustettu, ohitetaan.');
+        return;
+    }
+
     const regionMap = L.map('company-map').setView([area.lat, area.lon], 13);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
@@ -228,10 +234,10 @@ function fetchRegionNews(area) {
         // Käytetään suoraa blogspot-URL:a – ei numerista ID:tä (ID voi pyöristyä väärin)
         // Normalisoidaan URL (poistetaan trailing slash)
         const baseUrl = area.bloggerUrl.replace(/\/$/, '');
-        feedUrl = `${baseUrl}/feeds/posts/default?alt=json-in-script&callback=renderRegionBloggerFeed&max-results=5`;
+        feedUrl = `${baseUrl}/feeds/posts/default?alt=json-in-script&callback=renderBloggerFeed&max-results=5`;
         console.log('[Blogger] Haetaan feed blogspot-URL:lla:', feedUrl);
     } else if (area.bloggerId) {
-        feedUrl = `https://www.blogger.com/feeds/${area.bloggerId}/posts/default?alt=json-in-script&callback=renderRegionBloggerFeed&max-results=5`;
+        feedUrl = `https://www.blogger.com/feeds/${area.bloggerId}/posts/default?alt=json-in-script&callback=renderBloggerFeed&max-results=5`;
         console.log('[Blogger] Haetaan feedit blog-ID:llä:', area.bloggerId);
     }
 
@@ -254,7 +260,7 @@ function fetchRegionNews(area) {
     }
 }
 
-window.renderRegionBloggerFeed = function (data) {
+window.renderBloggerFeed = function (data) {
     console.log('[Blogger] Feed-data vastaanotettu:', data);
     const container = document.getElementById('blogger-feed');
     if (!container) {
