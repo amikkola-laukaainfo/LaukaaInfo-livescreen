@@ -788,12 +788,7 @@ function initCompanyCatalog() {
         });
     }
 
-    const hashtagToggle = document.getElementById('include-hashtags');
-    if (hashtagToggle) {
-        hashtagToggle.addEventListener('change', () => {
-            filterCatalog();
-        });
-    }
+    // Hashtag toggle removed as requested
 
     const lievestuoreToggle = document.getElementById('include-lievestuore');
     if (lievestuoreToggle) {
@@ -1156,7 +1151,16 @@ function showSuggestions() {
         const li = document.createElement('li');
         const isRss = item.isRss;
         const name = isRss ? item.title : item.nimi;
-        const cat = isRss ? item.type : item.kategoria;
+        let cat = isRss ? item.type : item.kategoria;
+
+        // Find matching tags for display
+        if (!isRss && item.tags) {
+            const tagsArray = item.tags.split(',').map(t => t.trim().toLowerCase());
+            const matchedTags = tagsArray.filter(t => t.includes(searchTerm));
+            if (matchedTags.length > 0) {
+                cat += ` - ${matchedTags.join(', ')}`;
+            }
+        }
 
         // Highlight search term
         const regex = new RegExp(`(${searchTerm})`, 'gi');
