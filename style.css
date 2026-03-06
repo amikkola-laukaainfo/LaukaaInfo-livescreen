@@ -519,12 +519,17 @@ h2 span {
 }
 
 .rss-item {
-    margin-bottom: 2rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid #eee;
+    margin-bottom: 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
-    gap: 0.8rem;
+    gap: 1rem;
+    transition: transform 0.2s ease;
+}
+
+.rss-item:hover {
+    transform: translateX(5px);
 }
 
 .rss-item:last-child {
@@ -535,12 +540,18 @@ h2 span {
 
 .rss-item-image {
     width: 100%;
-    height: auto;
-    max-height: 400px;
-    object-fit: contain;
+    height: 200px;
+    /* Kiinteä korkeus uutisvirrassa */
+    object-fit: cover;
     background-color: #f0f0f0;
-    border-radius: 8px;
+    border-radius: 12px;
     margin-bottom: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease;
+}
+
+.rss-item:hover .rss-item-image {
+    transform: scale(1.02);
 }
 
 .rss-item h3 {
@@ -584,13 +595,54 @@ h2 span {
 }
 
 .rss-item .description {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: #555;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    line-height: 1.5;
+}
+
+.read-more {
+    color: var(--primary-blue);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: gap 0.2s ease;
+}
+
+.read-more:hover {
+    gap: 10px;
+    color: var(--accent-blue);
+}
+
+.view-all-news {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.btn-secondary {
+    display: inline-block;
+    background: transparent;
+    color: var(--primary-blue);
+    padding: 0.8rem 1.5rem;
+    border: 2px solid var(--primary-blue);
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background: var(--primary-blue);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 86, 179, 0.2);
 }
 
 /* Feedback Section */

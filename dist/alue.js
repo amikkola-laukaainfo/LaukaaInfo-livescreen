@@ -1,1 +1,325 @@
-const REGIONS_CSV_URL="https://www.mediazoo.fi/laukaainfo-web/get_alueet.php";let areaMetadata={};async function fetchRegionMetadata(){try{const e=await fetch(REGIONS_CSV_URL);if(!e.ok)throw new Error("Alue-CSV lataus epäonnistui");const t=await e.json();if(t.error)return void console.error("PHP Proxy virhe:",t.error);areaMetadata=t}catch(e){console.error("Virhe alueiden haussa:",e)}}async function initRegionPage(){const e=new URLSearchParams(window.location.search),t=window.location.pathname.split("/").filter(e=>e.length>0),a=t.length>0?t.pop().replace(".html","").toLowerCase():"",n=e.get("area")?.toLowerCase()||a,o=e.get("cat")?.toLowerCase(),r=e.get("tag")?.toLowerCase();if(await fetchRegionMetadata(),!n||!areaMetadata[n]){console.warn("Aluetta ei tunnistettu:",n);return void((document.getElementById("catalog-list")||document.body).innerHTML='<p style="padding: 2rem;">Aluetta ei löytynyt tai dataa ladataan. Tarkista URL-osoite.</p>')}const l=areaMetadata[n];localStorage.setItem("selectedRegion",n),localStorage.setItem("regionCoords",JSON.stringify({lat:l.lat,lon:l.lon})),updateMetadata(l,o,r),await waitForData();const i=filterByArea(n,o,r);renderRegionContent(l,n,i,o,r),initRegionMap(l,i),fetchRegionNews(l)}function updateMetadata(e,t,a){const n=document.getElementById("region-title"),o=document.getElementById("page-title"),r=document.getElementById("seo-description");let l=e.name;a?l=`${a.charAt(0).toUpperCase()+a.slice(1)}t - ${e.name}`:t&&(l=`${t.charAt(0).toUpperCase()+t.slice(1)} - ${e.name}`),n.textContent=l,o.textContent=`${l} | LaukaaInfo`;let i=`<h3>${e.name} – yritykset, palvelut ja uutiset</h3>`;i+=`<p>${e.desc}</p>`,(a||t)&&(i+=`<p>Tunnisteet: <strong>${a||t}</strong>.</p>`),r.innerHTML=i}async function waitForData(){return new Promise(e=>{const t=()=>{"undefined"!=typeof allCompanies&&allCompanies.length>0?e():setTimeout(t,100)};t()})}function filterByArea(e,t,a){return allCompanies.filter(n=>{if(!((n.alue_slug||"").toLowerCase()===e))return!1;if(a){return(n.tags||"").toLowerCase().includes(a)}return!t||(n.kategoria||"").toLowerCase()===t.replace(/-/g," ")})}function renderRegionContent(e,t,a,n,o){const r=[...new Set(a.map(e=>e.kategoria))].sort(),l=document.getElementById("region-categories");l&&(l.innerHTML="",r.forEach(e=>{const a="undefined"!=typeof categoryIcons&&categoryIcons[e]?categoryIcons[e]:"🏢",n=document.createElement("a"),o=e.toLowerCase().replace(/ /g,"-");n.href=`${t}.html?cat=${encodeURIComponent(o)}`,n.className="category-card",n.innerHTML=`<span class="cat-icon">${a}</span><h3>${e}</h3>`,l.appendChild(n)}));const i=document.getElementById("region-tag-cloud");if(i){const e=a.flatMap(e=>(e.tags||"").split(",").map(e=>e.trim().toLowerCase())).filter(e=>e.length>0).reduce((e,t)=>(e[t]=(e[t]||0)+1,e),{}),n=Object.keys(e).sort((t,a)=>e[a]-e[t]).slice(0,12);i.innerHTML="",n.forEach(e=>{const a=document.createElement("a");a.href=`${t}.html?tag=${encodeURIComponent(e)}`,a.className="tag-pill",a.textContent=e,i.appendChild(a)})}const s=[...a].sort((e,t)=>(t.karusellipaino||0)-(e.karusellipaino||0)).slice(0,8);"function"==typeof renderCatalog&&renderCatalog(s),renderNearby(e)}function renderNearby(e){const t=document.getElementById("nearby-list");if(!t)return;const a=allCompanies.filter(t=>{if(!t.lat||!t.lon||(t.alue_slug||"").toLowerCase()===e.slug)return!1;return getHaversineDistance(e.lat,e.lon,parseFloat(t.lat),parseFloat(t.lon))<=12}).sort((t,a)=>getHaversineDistance(e.lat,e.lon,parseFloat(t.lat),parseFloat(t.lon))-getHaversineDistance(e.lat,e.lon,parseFloat(a.lat),parseFloat(a.lon))).slice(0,8);t.innerHTML="",a.forEach(a=>{const n=document.createElement("div");n.className="catalog-item";const o=getHaversineDistance(e.lat,e.lon,parseFloat(a.lat),parseFloat(a.lon)),r=o<1?`${Math.round(1e3*o)} m`:`${o.toFixed(1)} km`;n.innerHTML=`\n            <div class="catalog-item-header">\n                <h4>${a.nimi}</h4>\n                <span class="dist-badge">🚗 ${r}</span>\n            </div>\n            <span class="cat-tag">${a.kategoria}</span>\n        `,n.onclick=()=>{const e=localStorage.getItem("selectedRegion"),t=e&&"all"!==e?`&region=${e}`:"";window.location.href=`yrityskortti.html?id=${a.id}${t}`},t.appendChild(n)})}function initRegionMap(e,t){if(!document.getElementById("company-map")||"undefined"==typeof L)return;const a=L.map("company-map").setView([e.lat,e.lon],13);L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:"© OpenStreetMap contributors"}).addTo(a);const n=L.markerClusterGroup();t.forEach(e=>{if(e.lat&&e.lon){const t=L.marker([parseFloat(e.lat),parseFloat(e.lon)]);t.bindPopup(`<b>${e.nimi}</b><br>${e.kategoria}<br><br><a href="yrityskortti.html?id=${e.id}" class="btn-primary" style="color:white; padding: 5px 10px; font-size: 0.8rem;">Avaa kortti</a>`),n.addLayer(t)}}),a.addLayer(n)}function fetchRegionNews(e){const t=document.getElementById("blogger-feed");if(!t)return;let a=null;if(e.bloggerUrl){a=`${e.bloggerUrl.replace(/\/$/,"")}/feeds/posts/default?alt=json-in-script&callback=renderRegionBloggerFeed&max-results=5`,console.log("[Blogger] Haetaan feed blogspot-URL:lla:",a)}else e.bloggerId&&(a=`https://www.blogger.com/feeds/${e.bloggerId}/posts/default?alt=json-in-script&callback=renderRegionBloggerFeed&max-results=5`,console.log("[Blogger] Haetaan feedit blog-ID:llä:",e.bloggerId));if(a){const e=document.createElement("script");e.src=a,e.onerror=()=>{console.error("[Blogger] Script-lataus epäonnistui, URL:",e.src),t.innerHTML="<p>Uutisten lataus epäonnistui (Blogger-virhe).</p>"},document.body.appendChild(e)}else console.log("[Blogger] Ei bloggerId- eikä bloggerUrl-arvoa alueelle:",e.name),t.innerHTML="<p>Alueen uutisia ei saatavilla tällä hetkellä.</p>"}document.addEventListener("DOMContentLoaded",()=>{initRegionPage()}),window.renderRegionBloggerFeed=function(e){const t=document.getElementById("blogger-feed");if(!t)return;const a=e.feed.entry||[];t.innerHTML="",0!==a.length?a.slice(0,10).forEach(e=>{const a=e.title.$t;let n=e.content?e.content.$t:e.summary?e.summary.$t:"",o="";const r=n.match(/<img[^>]+src="([^">]+)"/);r&&(o=r[1]);let l=n.replace(/<[^>]*>?/gm,"").trim();l.length>200&&(l=l.substring(0,200)+"...");const i=e.link.find(e=>"alternate"===e.rel)?.href||"#",s=new Date(e.published.$t).toLocaleDateString("fi-FI"),c=document.createElement("div");c.className="rss-item",c.innerHTML=`\n            ${o?'<img src="'+o+'" class="rss-item-image" loading="lazy" alt="Kuva uutiseen">':""}\n            <div class="rss-meta"><span class="date">📅 ${s}</span></div>\n            <h3><a href="${i}" target="_blank">${a}</a></h3>\n            <p class="description">${l}</p>\n        `,t.appendChild(c)}):t.innerHTML="<p>Ei julkaisuja.</p>"};
+const REGIONS_CSV_URL = 'https://www.mediazoo.fi/laukaainfo-web/get_alueet.php';
+let areaMetadata = {};
+
+document.addEventListener('DOMContentLoaded', () => {
+    initRegionPage();
+});
+
+async function fetchRegionMetadata() {
+    try {
+        const response = await fetch(REGIONS_CSV_URL);
+        if (!response.ok) throw new Error('Alue-CSV lataus epäonnistui');
+
+        // PHP proxy palauttaa suoraan jäsennellyn JSON-kirjaston
+        const data = await response.json();
+
+        // Tarkistetaan virheet
+        if (data.error) {
+            console.error('PHP Proxy virhe:', data.error);
+            return;
+        }
+
+        // Kopioidaan tulokset areaMetadata-objektiin
+        areaMetadata = data;
+
+    } catch (error) {
+        console.error('Virhe alueiden haussa:', error);
+    }
+}
+
+async function initRegionPage() {
+    const params = new URLSearchParams(window.location.search);
+
+    // Recognize region from the file name or path, handling trailing slashes
+    const pathParts = window.location.pathname.split('/').filter(p => p.length > 0);
+    const pathArea = pathParts.length > 0 ? pathParts.pop().replace('.html', '').toLowerCase() : '';
+
+    const areaSlug = params.get('area')?.toLowerCase() || pathArea;
+    const catParam = params.get('cat')?.toLowerCase();
+    const tagParam = params.get('tag')?.toLowerCase();
+
+    // Hae ensin alueiden metadata CSV:stä
+    await fetchRegionMetadata();
+
+    if (!areaSlug || !areaMetadata[areaSlug]) {
+        console.warn('Aluetta ei tunnistettu:', areaSlug);
+        const container = document.getElementById('catalog-list') || document.body;
+        container.innerHTML = '<p style="padding: 2rem;">Aluetta ei löytynyt tai dataa ladataan. Tarkista URL-osoite.</p>';
+        return;
+    }
+
+    const area = areaMetadata[areaSlug];
+
+    // Lukitaan alue hakukoneelle ja script.js:lle
+    localStorage.setItem('selectedRegion', areaSlug);
+    localStorage.setItem('regionCoords', JSON.stringify({ lat: area.lat, lon: area.lon }));
+
+    updateMetadata(area, catParam, tagParam);
+
+    // Odota että allCompanies on ladattu
+    await waitForData();
+
+    const filtered = filterByArea(areaSlug, catParam, tagParam);
+    renderRegionContent(area, areaSlug, filtered, catParam, tagParam);
+    initRegionMap(area, filtered);
+    fetchRegionNews(area);
+}
+
+function updateMetadata(area, cat, tag) {
+    const titleEl = document.getElementById('region-title');
+    const pageTitleEl = document.getElementById('page-title');
+    const seoDescEl = document.getElementById('seo-description');
+
+    let titleText = area.name;
+    if (tag) titleText = `${tag.charAt(0).toUpperCase() + tag.slice(1)}t - ${area.name}`;
+    else if (cat) titleText = `${cat.charAt(0).toUpperCase() + cat.slice(1)} - ${area.name}`;
+
+    titleEl.textContent = titleText;
+    pageTitleEl.textContent = `${titleText} | LaukaaInfo`;
+
+    let seoText = `<h3>${area.name} – yritykset, palvelut ja uutiset</h3>`;
+    seoText += `<p>${area.desc}</p>`;
+    if (tag || cat) {
+        seoText += `<p>Tunnisteet: <strong>${tag || cat}</strong>.</p>`;
+    }
+    seoDescEl.innerHTML = seoText;
+}
+
+async function waitForData() {
+    return new Promise(resolve => {
+        const check = () => {
+            if (typeof allCompanies !== 'undefined' && allCompanies.length > 0) {
+                resolve();
+            } else {
+                setTimeout(check, 100);
+            }
+        };
+        check();
+    });
+}
+
+function filterByArea(areaSlug, catParam, tagParam) {
+    return allCompanies.filter(c => {
+        const matchArea = (c.alue_slug || '').toLowerCase() === areaSlug;
+        if (!matchArea) return false;
+
+        if (tagParam) {
+            const tags = (c.tags || '').toLowerCase();
+            return tags.includes(tagParam);
+        }
+        if (catParam) {
+            return (c.kategoria || '').toLowerCase() === catParam.replace(/-/g, ' ');
+        }
+        return true;
+    });
+}
+
+function renderRegionContent(area, areaSlug, filtered, cat, tag) {
+    // Kategoriat alueella
+    const regionCats = [...new Set(filtered.map(c => c.kategoria))].sort();
+    const catGrid = document.getElementById('region-categories');
+    if (catGrid) {
+        catGrid.innerHTML = '';
+        regionCats.forEach(c => {
+            const icon = (typeof categoryIcons !== 'undefined' && categoryIcons[c]) ? categoryIcons[c] : '🏢';
+            const card = document.createElement('a');
+            const catSlug = c.toLowerCase().replace(/ /g, '-');
+            card.href = `${areaSlug}.html?cat=${encodeURIComponent(catSlug)}`;
+            card.className = 'category-card';
+            card.innerHTML = `<span class="cat-icon">${icon}</span><h3>${c}</h3>`;
+            catGrid.appendChild(card);
+        });
+    }
+
+    // Tägit alueella
+    const tagCloud = document.getElementById('region-tag-cloud');
+    if (tagCloud) {
+        const allTags = filtered.flatMap(c => (c.tags || '').split(',').map(t => t.trim().toLowerCase())).filter(t => t.length > 0);
+        const tagCounts = allTags.reduce((acc, t) => { acc[t] = (acc[t] || 0) + 1; return acc; }, {});
+        const uniqueTags = Object.keys(tagCounts).sort((a, b) => tagCounts[b] - tagCounts[a]).slice(0, 12);
+
+        tagCloud.innerHTML = '';
+        uniqueTags.forEach(t => {
+            const pill = document.createElement('a');
+            pill.href = `${areaSlug}.html?tag=${encodeURIComponent(t)}`;
+            pill.className = 'tag-pill';
+            pill.textContent = t;
+            tagCloud.appendChild(pill);
+        });
+    }
+
+    // Yritysnäytteet
+    const featured = [...filtered].sort((a, b) => (b.karusellipaino || 0) - (a.karusellipaino || 0)).slice(0, 8);
+    if (typeof renderCatalog === 'function') {
+        renderCatalog(featured);
+    }
+
+    renderNearby(area);
+}
+
+function renderNearby(area) {
+    const nearbyList = document.getElementById('nearby-list');
+    if (!nearbyList) return;
+
+    const nearby = allCompanies.filter(c => {
+        if (!c.lat || !c.lon || (c.alue_slug || '').toLowerCase() === area.slug) return false;
+        const dist = getHaversineDistance(area.lat, area.lon, parseFloat(c.lat), parseFloat(c.lon));
+        return dist <= 12; // 12km säde
+    })
+        .sort((a, b) => {
+            const dA = getHaversineDistance(area.lat, area.lon, parseFloat(a.lat), parseFloat(a.lon));
+            const dB = getHaversineDistance(area.lat, area.lon, parseFloat(b.lat), parseFloat(b.lon));
+            return dA - dB;
+        })
+        .slice(0, 8);
+
+    nearbyList.innerHTML = '';
+    nearby.forEach(company => {
+        const item = document.createElement('div');
+        item.className = 'catalog-item';
+        const dist = getHaversineDistance(area.lat, area.lon, parseFloat(company.lat), parseFloat(company.lon));
+        const distText = dist < 1 ? `${Math.round(dist * 1000)} m` : `${dist.toFixed(1)} km`;
+
+        item.innerHTML = `
+            <div class="catalog-item-header">
+                <h4>${company.nimi}</h4>
+                <span class="dist-badge">🚗 ${distText}</span>
+            </div>
+            <span class="cat-tag">${company.kategoria}</span>
+        `;
+        item.onclick = () => {
+            const region = localStorage.getItem('selectedRegion');
+            const regionParam = (region && region !== 'all') ? `&region=${region}` : '';
+            window.location.href = `yrityskortti.html?id=${company.id}${regionParam}`;
+        };
+        nearbyList.appendChild(item);
+    });
+}
+
+function initRegionMap(area, companies) {
+    const mapContainer = document.getElementById('company-map');
+    if (!mapContainer || typeof L === 'undefined') return;
+
+    const regionMap = L.map('company-map').setView([area.lat, area.lon], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(regionMap);
+
+    const markers = L.markerClusterGroup();
+    companies.forEach(company => {
+        if (company.lat && company.lon) {
+            const marker = L.marker([parseFloat(company.lat), parseFloat(company.lon)]);
+            marker.bindPopup(`<b>${company.nimi}</b><br>${company.kategoria}<br><br><a href="yrityskortti.html?id=${company.id}" class="btn-primary" style="color:white; padding: 5px 10px; font-size: 0.8rem;">Avaa kortti</a>`);
+            markers.addLayer(marker);
+        }
+    });
+    regionMap.addLayer(markers);
+}
+
+function fetchRegionNews(area) {
+    const container = document.getElementById('blogger-feed');
+    if (!container) return;
+
+    console.log('[Blogger] Alustetaan uutishaku alueelle:', area.name, area);
+
+    let feedUrl = null;
+
+    if (area.bloggerUrl) {
+        // Käytetään suoraa blogspot-URL:a – ei numerista ID:tä (ID voi pyöristyä väärin)
+        // Normalisoidaan URL (poistetaan trailing slash)
+        const baseUrl = area.bloggerUrl.replace(/\/$/, '');
+        feedUrl = `${baseUrl}/feeds/posts/default?alt=json-in-script&callback=renderRegionBloggerFeed&max-results=5`;
+        console.log('[Blogger] Haetaan feed blogspot-URL:lla:', feedUrl);
+    } else if (area.bloggerId) {
+        feedUrl = `https://www.blogger.com/feeds/${area.bloggerId}/posts/default?alt=json-in-script&callback=renderRegionBloggerFeed&max-results=5`;
+        console.log('[Blogger] Haetaan feedit blog-ID:llä:', area.bloggerId);
+    }
+
+    if (feedUrl) {
+        const script = document.createElement('script');
+        script.src = feedUrl;
+        script.id = 'blogger-script-tag';
+        script.onerror = () => {
+            console.error('[Blogger] Script-lataus epäonnistui, URL:', script.src);
+            container.innerHTML = '<p>Uutisten lataus epäonnistui (Blogger-virhe).</p>';
+        };
+        // Poista vanha script-tagi jos sellainen on
+        const oldScript = document.getElementById('blogger-script-tag');
+        if (oldScript) oldScript.remove();
+
+        document.body.appendChild(script);
+    } else {
+        console.log('[Blogger] Ei bloggerId- eikä bloggerUrl-arvoa alueelle:', area.name);
+        container.innerHTML = '<p>Alueen uutisia ei saatavilla tällä hetkellä.</p>';
+    }
+}
+
+window.renderRegionBloggerFeed = function (data) {
+    console.log('[Blogger] Feed-data vastaanotettu:', data);
+    const container = document.getElementById('blogger-feed');
+    if (!container) {
+        console.warn('[Blogger] Säilöä "blogger-feed" ei löytynyt.');
+        return;
+    }
+
+    // Joustava parsiminen: Blogger voi palauttaa feed-objektin juuressa tai kiedottuna
+    const feed = data.feed || data;
+    const entries = feed.entry || [];
+
+    container.innerHTML = '';
+
+    if (entries.length === 0) {
+        console.log('[Blogger] Ei syötteitä (entries.length === 0).');
+        container.innerHTML = '<p>Ei julkaisuja.</p>';
+        return;
+    }
+
+    console.log(`[Blogger] Renderöidään ${entries.length} uutista.`);
+
+    entries.slice(0, 5).forEach((entry, index) => {
+        try {
+            const title = entry.title ? entry.title.$t : 'Ei otsikkoa';
+            let content = entry.content ? entry.content.$t : (entry.summary ? entry.summary.$t : '');
+
+            // Poimi kuva jos sellainen on
+            let imageUrl = '';
+            // 1. Ensisijaisesti thumbnail-tagista (jos on)
+            if (entry.media$thumbnail) {
+                imageUrl = entry.media$thumbnail.url;
+            } else {
+                // 2. Toissijaisesti sisällöstä
+                const imgMatch = content.match(/<img[^>]+src="([^">]+)"/);
+                if (imgMatch) imageUrl = imgMatch[1];
+            }
+
+            // Puhdista HTML koodista snippetiä varten
+            let rawText = content.replace(/<[^>]*>?/gm, '').trim();
+            if (rawText.length > 200) {
+                rawText = rawText.substring(0, 200) + '...';
+            }
+
+            // Etsi alternate-linkki
+            let link = '#';
+            if (entry.link) {
+                const altLink = entry.link.find(l => l.rel === 'alternate');
+                if (altLink) link = altLink.href;
+            }
+
+            const publishedDate = entry.published ? new Date(entry.published.$t) : new Date();
+            const dateStr = publishedDate.toLocaleDateString('fi-FI');
+
+            const postEl = document.createElement('div');
+            postEl.className = 'rss-item';
+            postEl.innerHTML = `
+                ${imageUrl ? '<img src="' + imageUrl + '" class="rss-item-image" loading="lazy" alt="Kuva uutiseen">' : ''}
+                <div class="rss-meta"><span class="date">📅 ${dateStr}</span></div>
+                <h3><a href="${link}" target="_blank">${title}</a></h3>
+                <p class="description">${rawText}</p>
+            `;
+
+            container.appendChild(postEl);
+        } catch (err) {
+            console.error(`[Blogger] Virhe syötteen ${index} parsimisessa:`, err, entry);
+        }
+    });
+};

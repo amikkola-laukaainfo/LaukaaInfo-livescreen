@@ -274,6 +274,13 @@ window.renderRegionBloggerFeed = function (data) {
         return;
     }
 
+    // Etsi blogiin johtava linkki feedistä (usein alternate link feed-tasolla)
+    let blogLink = '#';
+    if (feed.link) {
+        const altBlogLink = feed.link.find(l => l.rel === 'alternate');
+        if (altBlogLink) blogLink = altBlogLink.href;
+    }
+
     console.log(`[Blogger] Renderöidään ${entries.length} uutista.`);
 
     entries.slice(0, 5).forEach((entry, index) => {
@@ -311,10 +318,11 @@ window.renderRegionBloggerFeed = function (data) {
             const postEl = document.createElement('div');
             postEl.className = 'rss-item';
             postEl.innerHTML = `
-                ${imageUrl ? '<img src="' + imageUrl + '" class="rss-item-image" loading="lazy" alt="Kuva uutiseen">' : ''}
+                ${imageUrl ? '<a href="' + link + '" target="_blank"><img src="' + imageUrl + '" class="rss-item-image" loading="lazy" alt="Kuva uutiseen"></a>' : ''}
                 <div class="rss-meta"><span class="date">📅 ${dateStr}</span></div>
                 <h3><a href="${link}" target="_blank">${title}</a></h3>
                 <p class="description">${rawText}</p>
+                <a href="${link}" target="_blank" class="read-more">Lue koko uutinen →</a>
             `;
 
             container.appendChild(postEl);
@@ -322,4 +330,12 @@ window.renderRegionBloggerFeed = function (data) {
             console.error(`[Blogger] Virhe syötteen ${index} parsimisessa:`, err, entry);
         }
     });
+
+    // Lisää linkki koko blogiin
+    if (blogLink && blogLink !== '#') {
+        const allNewsLink = document.createElement('div');
+        allNewsLink.className = 'view-all-news';
+        allNewsLink.innerHTML = `<a href="${blogLink}" target="_blank" class="btn-secondary">Katso kaikki uutiset Bloggerissa</a>`;
+        container.appendChild(allNewsLink);
+    }
 };

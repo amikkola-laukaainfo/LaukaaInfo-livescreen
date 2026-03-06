@@ -1,29 +1,586 @@
-<!DOCTYPE html><html lang="fi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Lisää yritys – LaukaaInfo</title><link rel="icon" href="logo.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"><style>.registration-container{max-width:900px;margin:4rem auto;padding:0 1rem}.comparison-table{width:100%;border-collapse:collapse;margin-bottom:4rem;background:#fff;border-radius:15px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.05)}.comparison-table td,.comparison-table th{padding:1.5rem;text-align:left;border-bottom:1px solid #eee}.comparison-table th{background:var(--primary-blue);color:#fff;font-weight:600}.comparison-table tr:last-child td{border-bottom:none}.check-icon{color:#28a745;font-weight:700}.cross-icon{color:#dc3545;font-weight:700}.form-section{background:#fff;padding:3rem;border-radius:20px;box-shadow:0 15px 45px rgba(0,0,0,.1)}.form-group{margin-bottom:1.5rem}.form-group label{display:block;margin-bottom:.5rem;font-weight:600;color:var(--primary-blue)}.form-group input,.form-group select,.form-group textarea{width:100%;padding:.8rem 1rem;border:1px solid #ddd;border-radius:8px;font-family:inherit;font-size:1rem}.premium-only-field{display:none;background:#f0f7ff;padding:1rem;border-left:4px solid var(--accent-blue);margin-top:1rem;border-radius:0 8px 8px 0}.premium-only-field.active{display:block}.type-selector{display:flex;gap:1rem;margin-bottom:2rem}.type-option{flex:1;padding:1.5rem;border:2px solid #eee;border-radius:12px;cursor:pointer;text-align:center;transition:all .3s}.type-option.active{border-color:var(--primary-blue);background:var(--light-blue)}.type-option h4{margin-bottom:.5rem}.btn-submit{width:100%;padding:1rem;background:var(--primary-blue);color:#fff;border:none;border-radius:50px;font-size:1.1rem;font-weight:700;cursor:pointer;transition:background .3s;margin-top:2rem}.btn-submit:hover{background:var(--secondary-blue)}</style></head><body><nav class="top-nav"><div class="nav-container"><a href="index.html" class="nav-logo"><img src="logo.png" alt="LaukaaInfo Logo"> <span>LaukaaInfo</span></a><div class="desktop-nav"><ul class="nav-links"><li class="nav-item"><a href="index.html" class="nav-link">Kauppa <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="lisaa-yritys.html">Lisää yritys</a></li></ul></li><li class="nav-item"><a href="ajankohtaista.html" class="nav-link">Ajankohtaista <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="ajankohtaista.html#events-card">Tapahtumat</a></li><li><a href="ajankohtaista.html#news-card">Tiedotteet</a></li><li><a href="ajankohtaista.html#decisions-card">Päätöksenteko</a></li><li><a href="ajankohtaista.html#feedback-card">Palautteet</a></li><li class="has-arrow"><a href="#">Taajamat</a><ul class="nested-menu"><li><a href="lievestuore.html">Lievestuore</a></li></ul></li></ul></li><li class="nav-item"><a href="asiahaku.html" class="nav-link">Päätösten polut <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="asiahaku.html">Hae ja tutki</a></li></ul></li><li class="nav-item"><a href="#" class="nav-link">Kartat & Elämykset <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="tarinakartta.html">Tarinakartta</a></li><li><a href="muistokartta.html">Muistokartta</a></li><li><a href="kadonneet.html">Kadonneet & löydetyt</a></li></ul></li></ul></div><button class="hamburger" id="hamburger-btn" aria-label="Avaa valikko"><span></span> <span></span> <span></span></button></div></nav><div class="sidebar-overlay" id="sidebar-overlay"></div><aside class="sidebar-menu" id="sidebar-menu"><div class="sidebar-header"><a href="index.html" class="nav-logo"><img src="logo.png" alt="LaukaaInfo Logo"> <span>LaukaaInfo</span> </a><button class="close-btn" id="close-sidebar-btn" aria-label="Sulje valikko">&times;</button></div><div class="sidebar-content"><div class="menu-section"><h3 class="section-title">KAUPPA</h3><ul class="menu-list"><li class="menu-item"><a href="lisaa-yritys.html" class="sidebar-link active">Lisää yritys</a></li><li class="menu-item has-submenu"><a href="#" class="submenu-toggle">Kategoriat <span class="arrow">▼</span></a><ul class="submenu" id="sidebar-categories"></ul></li></ul></div><div class="menu-section"><h3 class="section-title">AJANKOHTAISTA</h3><ul class="menu-list"><li class="menu-item"><a href="ajankohtaista.html#events-card" class="sidebar-link">Tapahtumat</a></li><li class="menu-item"><a href="ajankohtaista.html#news-card" class="sidebar-link">Tiedotteet</a></li><li class="menu-item"><a href="ajankohtaista.html#decisions-card" class="sidebar-link">Päätöksenteko</a></li><li class="menu-item"><a href="ajankohtaista.html#feedback-card" class="sidebar-link">Palautteet</a></li><li class="menu-item has-submenu"><a href="#" class="submenu-toggle">Taajamat <span class="arrow">▼</span></a><ul class="submenu"><li><a href="lievestuore.html" class="sidebar-link">Lievestuore</a></li></ul></li></ul></div><div class="menu-section"><h3 class="section-title">PÄÄTÖSTEN POLUT</h3><ul class="menu-list"><li class="menu-item"><a href="asiahaku.html" class="sidebar-link">Hae ja tutki</a></li></ul></div><div class="menu-section highlight-section"><h3 class="section-title">KARTAT & ELÄMYKSET ⭐</h3><ul class="menu-list"><li class="menu-item"><a href="tarinakartta.html" class="sidebar-link">Tarinakartta</a></li><li class="menu-item"><a href="muistokartta.html" class="sidebar-link">Muistokartta</a></li><li class="menu-item"><a href="kadonneet.html" class="sidebar-link">Kadonneet & löydetyt</a></li></ul></div></div></aside><script src="script.js"></script><div class="registration-container"><header style="text-align:center;margin-bottom:3rem"><h1>Lisää yrityksesi LaukaaInfoon</h1><p>Valitse yrityksellesi sopiva näkyvyys ja täytä tiedot.</p></header><table class="comparison-table"><thead><tr><th>Ominaisuus</th><th>Ilmainen</th><th>Maksullinen ⭐</th></tr></thead><tbody><tr><td>Yhteystiedot (Nimi, osoite, puh)</td><td><span class="check-icon">✓</span></td><td><span class="check-icon">✓</span></td></tr><tr><td>Linkki omille kotisivuille</td><td><span class="check-icon">✓</span></td><td><span class="check-icon">✓</span></td></tr><tr><td>Yritysesittely (teksti)</td><td><span class="check-icon">✓</span> (max 100 merkkiä)</td><td><span class="check-icon">✓</span> (laaja)</td></tr><tr><td>Näkyvyys kartalla</td><td><span class="cross-icon">✗</span></td><td><span class="check-icon">✓</span></td></tr><tr><td>Kuvagalleria & Video</td><td><span class="cross-icon">✗</span></td><td><span class="check-icon">✓</span></td></tr><tr><td>Priorisoitu haku (näkyy ylempänä)</td><td><span class="cross-icon">✗</span></td><td><span class="check-icon">✓</span></td></tr><tr><td>Tarjouskupongit & mainoslinkit</td><td><span class="cross-icon">✗</span></td><td><span class="check-icon">✓</span></td></tr></tbody></table><div class="form-section"><div class="type-selector"><div class="type-option" id="option-free" onclick='selectType("free")'><h4>Ilmainen</h4><p>Perusnäkyvyys</p></div><div class="type-option" id="option-paid" onclick='selectType("paid")'><h4>Maksullinen ⭐</h4><p>Kaikki ominaisuudet</p></div></div><form id="registration-form"><input type="hidden" name="type" id="input-type" value="free"><div class="form-group"><label for="company-name">Yrityksen nimi *</label> <input type="text" id="company-name" name="name" required></div><div class="form-group"><label for="category">Kategoria *</label> <select id="category" name="category" required><option value="">Valitse kategoria...</option><option value="Autokorjaamot">Autokorjaamot</option><option value="Elintarvike">Elintarvike</option><option value="Juhlatilat">Juhlatilat</option><option value="Kauneus ja terveys">Kauneus ja terveys</option><option value="Koti-rakennus">Koti-rakennus</option><option value="Majoitus">Majoitus</option><option value="Ruokailu">Ruokailu</option><option value="Muu">Muu</option></select></div><div class="form-group"><label for="address">Osoite</label> <input type="text" id="address" name="address"></div><div class="form-group"><label for="phone">Puhelin</label> <input type="tel" id="phone" name="phone"></div><div class="form-group"><label for="facebook">Facebook URL</label> <input type="url" id="facebook" name="facebook" placeholder="https://facebook.com/yourpage"></div><div class="form-group"><label for="instagram">Instagram URL</label> <input type="url" id="instagram" name="instagram" placeholder="https://instagram.com/yourprofile"></div><div class="form-group"><label for="linkedin">LinkedIn URL</label> <input type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/yourprofile"></div><div class="form-group"><label for="tiktok">TikTok URL</label> <input type="url" id="tiktok" name="tiktok" placeholder="https://tiktok.com/@yourprofile"></div><div class="form-group"><label for="whatsapp">WhatsApp (käsittele puhelinnumero)</label> <input type="checkbox" id="whatsapp" name="whatsapp" value="true"></div><div class="form-group"><label for="website">Kotisivut (URL)</label> <input type="url" id="website" name="website"></div><div class="form-group"><label for="description">Esittelyteksti *</label> <textarea id="description" name="description" rows="5" required></textarea></div><div id="premium-fields" class="premium-only-field"><div class="form-group"><label for="duration">Yritysnäkyvyyden kesto *</label> <select id="duration" name="duration" onchange="updateSubmitButtonText()"><option value="3">3 kuukautta (45,00€ sis. alv)</option><option value="6">6 kuukautta (79,00€ sis. alv)</option><option value="12">12 kuukautta (149,00€ sis. alv)</option></select></div><div class="form-group"><label for="images">Kuvien linkit (kuningaslista, erota pilkulla)</label> <input type="text" id="images" name="images" placeholder="https://... , https://..."></div><div class="form-group"><label for="logo">Yrityksen logon URL</label> <input type="url" id="logo" name="logo" placeholder="https://.../logo.png"></div><div class="form-group"><label for="youtube">YouTube-videon linkki</label> <input type="url" id="youtube" name="youtube"></div><div class="form-group"><label for="coupon">Tarjous / Kuponki (esim. -20% lounaasta)</label> <input type="text" id="coupon" name="coupon"></div><div class="form-group"><label for="rss">RSS-syöte (Ajankohtaista-osio)</label> <input type="url" id="rss" name="rss" placeholder="https://.../feed"></div><div class="form-group"><label>Mainoslinkit (Katso tarjoukset -linkit)</label><div id="ad-links-container"><div class="ad-link-row" style="display:flex;gap:.5rem;margin-bottom:.5rem"><input type="url" name="ad_link[]" placeholder="https://..."> <button type="button" onclick="addAdLink()" style="padding:0 1rem;border-radius:8px;cursor:pointer">+</button></div></div></div></div><button type="submit" class="btn-submit">Lähetä tiedot</button></form></div></div><script>function updateSubmitButtonText(){var e=document.getElementById("input-type").value,i=document.querySelector(".btn-submit");if("paid"===e){e=document.getElementById("duration").value;let t="12"===e?"149,00€":"6"===e?"79,00€":"45,00€";i.textContent=`Jatka maksuun (${e} kk, ${t} sis. alv)`}else i.textContent="Lähetä tiedot"}function selectType(t){document.getElementById("input-type").value=t,document.querySelectorAll(".type-option").forEach(t=>t.classList.remove("active")),document.getElementById("option-"+t).classList.add("active");var e=document.getElementById("premium-fields");"paid"===t?e.classList.add("active"):e.classList.remove("active"),updateSubmitButtonText()}function addAdLink(){var t=document.getElementById("ad-links-container"),e=document.createElement("div");e.className="ad-link-row",e.style.cssText="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;",e.innerHTML=`
+<!DOCTYPE html>
+<html lang="fi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lisää yritys – LaukaaInfo</title>
+    <link rel="icon" href="logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .registration-container {
+            max-width: 900px;
+            margin: 4rem auto;
+            padding: 0 1rem;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 4rem;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .comparison-table th {
+            background: var(--primary-blue);
+            color: white;
+            font-weight: 600;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .check-icon {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .cross-icon {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .form-section {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .premium-only-field {
+            display: none;
+            background: #f0f7ff;
+            padding: 1rem;
+            border-left: 4px solid var(--accent-blue);
+            margin-top: 1rem;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .premium-only-field.active {
+            display: block;
+        }
+
+        .type-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .type-option {
+            flex: 1;
+            padding: 1.5rem;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .type-option.active {
+            border-color: var(--primary-blue);
+            background: var(--light-blue);
+        }
+
+        .type-option h4 {
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 2rem;
+        }
+
+        .btn-submit:hover {
+            background: var(--secondary-blue);
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="logo.png" alt="LaukaaInfo Logo">
+                <span>LaukaaInfo</span>
+            </a>
+            <div class="desktop-nav">
+                <ul class="nav-links">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">Kauppa <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="lisaa-yritys.html">Lisää yritys</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="ajankohtaista.html" class="nav-link">Ajankohtaista <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="ajankohtaista.html#events-card">Tapahtumat</a></li>
+                            <li><a href="ajankohtaista.html#news-card">Tiedotteet</a></li>
+                            <li><a href="ajankohtaista.html#decisions-card">Päätöksenteko</a></li>
+                            <li><a href="ajankohtaista.html#feedback-card">Palautteet</a></li>
+                            <li class="has-arrow">
+                                <a href="#">Taajamat</a>
+                                <ul class="nested-menu">
+                                    <li><a href="lievestuore.html">Lievestuore</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="asiahaku.html" class="nav-link">Päätösten polut <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="asiahaku.html">Hae ja tutki</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Kartat & Elämykset <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="tarinakartta.html">Tarinakartta</a></li>
+                            <li><a href="muistokartta.html">Muistokartta</a></li>
+                            <li><a href="kadonneet.html">Kadonneet & löydetyt</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <button class="hamburger" id="hamburger-btn" aria-label="Avaa valikko">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- Sidebar Menu -->
+    <aside class="sidebar-menu" id="sidebar-menu">
+        <div class="sidebar-header">
+            <a href="index.html" class="nav-logo">
+                <img src="logo.png" alt="LaukaaInfo Logo">
+                <span>LaukaaInfo</span>
+            </a>
+            <button class="close-btn" id="close-sidebar-btn" aria-label="Sulje valikko">&times;</button>
+        </div>
+
+        <div class="sidebar-content">
+            <!-- Pääosio: KAUPPA -->
+            <div class="menu-section">
+                <h3 class="section-title">KAUPPA</h3>
+                <ul class="menu-list">
+                    <li class="menu-item"><a href="lisaa-yritys.html" class="sidebar-link active">Lisää yritys</a></li>
+                    <li class="menu-item has-submenu">
+                        <a href="#" class="submenu-toggle">Kategoriat <span class="arrow">▼</span></a>
+                        <ul class="submenu" id="sidebar-categories">
+                            <!-- Kategoriat dynaamisesti -->
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Pääosio: AJANKOHTAISTA -->
+            <div class="menu-section">
+                <h3 class="section-title">AJANKOHTAISTA</h3>
+                <ul class="menu-list">
+                    <li class="menu-item"><a href="ajankohtaista.html#events-card" class="sidebar-link">Tapahtumat</a>
+                    </li>
+                    <li class="menu-item"><a href="ajankohtaista.html#news-card" class="sidebar-link">Tiedotteet</a>
+                    </li>
+                    <li class="menu-item"><a href="ajankohtaista.html#decisions-card"
+                            class="sidebar-link">Päätöksenteko</a></li>
+                    <li class="menu-item"><a href="ajankohtaista.html#feedback-card" class="sidebar-link">Palautteet</a>
+                    </li>
+                    <li class="menu-item has-submenu">
+                        <a href="#" class="submenu-toggle">Taajamat <span class="arrow">▼</span></a>
+                        <ul class="submenu">
+                            <li><a href="lievestuore.html" class="sidebar-link">Lievestuore</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Pääosio: PÄÄTÖSTEN POLUT -->
+            <div class="menu-section">
+                <h3 class="section-title">PÄÄTÖSTEN POLUT</h3>
+                <ul class="menu-list">
+                    <li class="menu-item"><a href="asiahaku.html" class="sidebar-link">Hae ja tutki</a></li>
+                </ul>
+            </div>
+
+            <!-- Korostettu osio: KARTAT & ELÄMYKSET -->
+            <div class="menu-section highlight-section">
+                <h3 class="section-title">KARTAT & ELÄMYKSET ⭐</h3>
+                <ul class="menu-list">
+                    <li class="menu-item"><a href="tarinakartta.html" class="sidebar-link">Tarinakartta</a></li>
+                    <li class="menu-item"><a href="muistokartta.html" class="sidebar-link">Muistokartta</a></li>
+                    <li class="menu-item"><a href="kadonneet.html" class="sidebar-link">Kadonneet & löydetyt</a></li>
+                </ul>
+            </div>
+        </div>
+    </aside>
+    <script src="script.js"></script>
+
+    <div class="registration-container">
+        <header style="text-align: center; margin-bottom: 3rem;">
+            <h1>Lisää yrityksesi LaukaaInfoon</h1>
+            <p>Valitse yrityksellesi sopiva näkyvyys ja täytä tiedot.</p>
+        </header>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Ominaisuus</th>
+                    <th>Ilmainen</th>
+                    <th>Maksullinen ⭐</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Yhteystiedot (Nimi, osoite, puh)</td>
+                    <td><span class="check-icon">✓</span></td>
+                    <td><span class="check-icon">✓</span></td>
+                </tr>
+                <tr>
+                    <td>Linkki omille kotisivuille</td>
+                    <td><span class="check-icon">✓</span></td>
+                    <td><span class="check-icon">✓</span></td>
+                </tr>
+                <tr>
+                    <td>Yritysesittely (teksti)</td>
+                    <td><span class="check-icon">✓</span> (max 100 merkkiä)</td>
+                    <td><span class="check-icon">✓</span> (laaja)</td>
+                </tr>
+                <tr>
+                    <td>Näkyvyys kartalla</td>
+                    <td><span class="cross-icon">✗</span></td>
+                    <td><span class="check-icon">✓</span></td>
+                </tr>
+                <tr>
+                    <td>Kuvagalleria & Video</td>
+                    <td><span class="cross-icon">✗</span></td>
+                    <td><span class="check-icon">✓</span></td>
+                </tr>
+                <tr>
+                    <td>Priorisoitu haku (näkyy ylempänä)</td>
+                    <td><span class="cross-icon">✗</span></td>
+                    <td><span class="check-icon">✓</span></td>
+                </tr>
+                <tr>
+                    <td>Tarjouskupongit & mainoslinkit</td>
+                    <td><span class="cross-icon">✗</span></td>
+                    <td><span class="check-icon">✓</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="form-section">
+            <div class="type-selector">
+                <div class="type-option" id="option-free" onclick="selectType('free')">
+                    <h4>Ilmainen</h4>
+                    <p>Perusnäkyvyys</p>
+                </div>
+                <div class="type-option" id="option-paid" onclick="selectType('paid')">
+                    <h4>Maksullinen ⭐</h4>
+                    <p>Kaikki ominaisuudet</p>
+                </div>
+            </div>
+
+            <form id="registration-form">
+                <input type="hidden" name="type" id="input-type" value="free">
+
+                <div class="form-group">
+                    <label for="company-name">Yrityksen nimi *</label>
+                    <input type="text" id="company-name" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Kategoria *</label>
+                    <select id="category" name="category" required>
+                        <option value="">Valitse kategoria...</option>
+                        <option value="Autokorjaamot">Autokorjaamot</option>
+                        <option value="Elintarvike">Elintarvike</option>
+                        <option value="Juhlatilat">Juhlatilat</option>
+                        <option value="Kauneus ja terveys">Kauneus ja terveys</option>
+                        <option value="Koti-rakennus">Koti-rakennus</option>
+                        <option value="Majoitus">Majoitus</option>
+                        <option value="Ruokailu">Ruokailu</option>
+                        <option value="Muu">Muu</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Osoite</label>
+                    <input type="text" id="address" name="address">
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Puhelin</label>
+                    <input type="tel" id="phone" name="phone">
+                </div>
+                <div class="form-group">
+                    <label for="facebook">Facebook URL</label>
+                    <input type="url" id="facebook" name="facebook" placeholder="https://facebook.com/yourpage">
+                </div>
+                <div class="form-group">
+                    <label for="instagram">Instagram URL</label>
+                    <input type="url" id="instagram" name="instagram" placeholder="https://instagram.com/yourprofile">
+                </div>
+                <div class="form-group">
+                    <label for="linkedin">LinkedIn URL</label>
+                    <input type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/yourprofile">
+                </div>
+                <div class="form-group">
+                    <label for="tiktok">TikTok URL</label>
+                    <input type="url" id="tiktok" name="tiktok" placeholder="https://tiktok.com/@yourprofile">
+                </div>
+                <div class="form-group">
+                    <label for="whatsapp">WhatsApp (käsittele puhelinnumero)</label>
+                    <input type="checkbox" id="whatsapp" name="whatsapp" value="true">
+                </div>
+
+                <div class="form-group">
+                    <label for="website">Kotisivut (URL)</label>
+                    <input type="url" id="website" name="website">
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Esittelyteksti *</label>
+                    <textarea id="description" name="description" rows="5" required></textarea>
+                </div>
+
+                <!-- Maksullisen näkyvyyden lisäkentät -->
+                <div id="premium-fields" class="premium-only-field">
+                    <div class="form-group">
+                        <label for="duration">Yritysnäkyvyyden kesto *</label>
+                        <select id="duration" name="duration" onchange="updateSubmitButtonText()">
+                            <option value="3">3 kuukautta (45,00€ sis. alv)</option>
+                            <option value="6">6 kuukautta (79,00€ sis. alv)</option>
+                            <option value="12">12 kuukautta (149,00€ sis. alv)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="images">Kuvien linkit (kuningaslista, erota pilkulla)</label>
+                        <input type="text" id="images" name="images" placeholder="https://... , https://...">
+                    </div>
+                    <div class="form-group">
+                        <label for="logo">Yrityksen logon URL</label>
+                        <input type="url" id="logo" name="logo" placeholder="https://.../logo.png">
+                    </div>
+                    <div class="form-group">
+                        <label for="youtube">YouTube-videon linkki</label>
+                        <input type="url" id="youtube" name="youtube">
+                    </div>
+                    <div class="form-group">
+                        <label for="coupon">Tarjous / Kuponki (esim. -20% lounaasta)</label>
+                        <input type="text" id="coupon" name="coupon">
+                    </div>
+                    <div class="form-group">
+                        <label for="rss">RSS-syöte (Ajankohtaista-osio)</label>
+                        <input type="url" id="rss" name="rss" placeholder="https://.../feed">
+                    </div>
+                    <div class="form-group">
+                        <label>Mainoslinkit (Katso tarjoukset -linkit)</label>
+                        <div id="ad-links-container">
+                            <div class="ad-link-row" style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                <input type="url" name="ad_link[]" placeholder="https://...">
+                                <button type="button" onclick="addAdLink()"
+                                    style="padding: 0 1rem; border-radius: 8px; cursor: pointer;">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit">Lähetä tiedot</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function updateSubmitButtonText() {
+            const type = document.getElementById('input-type').value;
+            const submitBtn = document.querySelector('.btn-submit');
+            if (type === 'paid') {
+                const duration = document.getElementById('duration').value;
+                let price = "45,00€";
+                if (duration === "6") price = "79,00€";
+                if (duration === "12") price = "149,00€";
+                submitBtn.textContent = `Jatka maksuun (${duration} kk, ${price} sis. alv)`;
+            } else {
+                submitBtn.textContent = 'Lähetä tiedot';
+            }
+        }
+
+        function selectType(type) {
+            document.getElementById('input-type').value = type;
+            document.querySelectorAll('.type-option').forEach(el => el.classList.remove('active'));
+            document.getElementById('option-' + type).classList.add('active');
+
+            const premiumFields = document.getElementById('premium-fields');
+
+            if (type === 'paid') {
+                premiumFields.classList.add('active');
+            } else {
+                premiumFields.classList.remove('active');
+            }
+            updateSubmitButtonText();
+        }
+
+        function addAdLink() {
+            const container = document.getElementById('ad-links-container');
+            const div = document.createElement('div');
+            div.className = 'ad-link-row';
+            div.style.cssText = 'display: flex; gap: 0.5rem; margin-bottom: 0.5rem;';
+            div.innerHTML = `
                 <input type="url" name="ad_link[]" placeholder="https://...">
                 <button type="button" onclick="this.parentElement.remove()" style="padding: 0 1rem; border-radius: 8px; cursor: pointer; color: red;">&times;</button>
-            `,t.appendChild(e)}let params=new URLSearchParams(window.location.search),type=params.get("type")||"free";selectType(type),document.getElementById("registration-form").addEventListener("submit",function(t){t.preventDefault();var t=new FormData(this),e=t.get("type"),t={tyyppi:"paid"===e?"MAKSULLINEN ⭐":"ILMAINEN",nimi:t.get("name"),kategoria:t.get("category"),osoite:t.get("address")||"-",puhelin:t.get("phone")||"-",kotisivut:t.get("website")||"-",esittely:t.get("description"),kuva_linkit:t.get("images")||"-",youtube:t.get("youtube")||"-",tarjous:t.get("coupon")||"-",facebook:t.get("facebook")||"-",instagram:t.get("instagram")||"-",linkedin:t.get("linkedin")||"-",tiktok:t.get("tiktok")||"-",whatsapp:t.get("whatsapp")?"true":"false",kesto:t.get("duration"),logo:t.get("logo")||"-",rss:t.get("rss")||"-",mainoslinkit:Array.from(document.querySelectorAll('input[name="ad_link[]"]')).map(t=>t.value).filter(t=>""!==t)};let i=`Uusi yritys rekisteröinti LaukaaInfoon
-`;i=(i+=`------------------------------------
-`)+`Tyyppi: ${t.tyyppi}
-`,"paid"===e&&(i+=`Kesto: ${t.kesto} kk
-`),i=(i=(i=(i=(i=(i=(i=(i=(i=(i=(i+=`Nimi: ${t.nimi}
-`)+`Kategoria: ${t.kategoria}
-`)+`Osoite: ${t.osoite}
-`)+`Puhelin: ${t.puhelin}
-`)+`Kotisivut: ${t.kotisivut}
-`)+`Facebook: ${t.facebook}
-`)+`Instagram: ${t.instagram}
-`)+`LinkedIn: ${t.linkedin}
-`)+`TikTok: ${t.tiktok}
-`)+`WhatsApp: ${t.whatsapp}
-`+`
-`)+`Esittely:
-${t.esittely}
+            `;
+            container.appendChild(div);
+        }
 
-`,"paid"===e&&(i=(i=(i=(i=(i=(i=(i+=`Lisätiedot (Maksullinen):
-`)+`Logo: ${t.logo}
-`)+`Kuvat: ${t.kuva_linkit}
-`)+`YouTube: ${t.youtube}
-`)+`Tarjous: ${t.tarjous}
-`)+`RSS-syöte: ${t.rss}
-`)+`Mainoslinkit: ${t.mainoslinkit.join(", ")||"-"}
-`);var o=encodeURIComponent("LaukaaInfo - Uusi yritysilmoitus: "+t.nimi),a=encodeURIComponent(i);window.open(`mailto:info@mediazoo.fi?subject=${o}&body=`+a,"_blank"),"paid"===e?(o={3:"https://buy.stripe.com/3cI9AUepJ2JWbFle2p1B607",6:"https://buy.stripe.com/bJe14oa9t98kgZF0bz1B608",12:"https://buy.stripe.com/3cIaEY81l5W86l12jH1B609"}[t.kesto],alert("Kiitos! Yrityksesi tiedot on koottu sähköpostiin. Lähetäthän viestin sähköpostiohjelmassasi ja jatka sen jälkeen maksuun Stripessä."),window.location.href=o):(alert("Kiitos! Yrityksesi tiedot on koottu sähköpostiin. Lähetäthän viestin sähköpostiohjelmassasi, jotta tiedot saapuvat meille tarkistettavaksi."),window.location.href="index.html")})</script><footer><div class="footer-content"><p>© 2026 LaukaaInfo – Epävirallinen yhteisösovellus</p><div class="footer-links"><a href="index.html">Etusivulle</a> <a href="tietosuoja.html">Tietosuoja</a> <a href="maksuehto.html">Maksuehdot</a> <a href="https://mediazoo.fi/yhteystiedot/">Yhteystiedot</a></div></div></footer></body></html>
+        // Tarkistetaan URL-parametri avattaessa
+        const params = new URLSearchParams(window.location.search);
+        const type = params.get('type') || 'free';
+        selectType(type);
+
+        document.getElementById('registration-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const typeValue = formData.get('type');
+
+            const data = {
+                tyyppi: typeValue === 'paid' ? 'MAKSULLINEN ⭐' : 'ILMAINEN',
+                nimi: formData.get('name'),
+                kategoria: formData.get('category'),
+                osoite: formData.get('address') || '-',
+                puhelin: formData.get('phone') || '-',
+                kotisivut: formData.get('website') || '-',
+                esittely: formData.get('description'),
+                kuva_linkit: formData.get('images') || '-',
+                youtube: formData.get('youtube') || '-',
+                tarjous: formData.get('coupon') || '-',
+                facebook: formData.get('facebook') || '-',
+                instagram: formData.get('instagram') || '-',
+                linkedin: formData.get('linkedin') || '-',
+                tiktok: formData.get('tiktok') || '-',
+                whatsapp: formData.get('whatsapp') ? 'true' : 'false',
+                kesto: formData.get('duration'),
+                logo: formData.get('logo') || '-',
+                rss: formData.get('rss') || '-',
+                mainoslinkit: Array.from(document.querySelectorAll('input[name="ad_link[]"]')).map(input => input.value).filter(v => v !== '')
+            };
+
+            let emailBody = `Uusi yritys rekisteröinti LaukaaInfoon\n`;
+            emailBody += `------------------------------------\n`;
+            emailBody += `Tyyppi: ${data.tyyppi}\n`;
+            if (typeValue === 'paid') {
+                emailBody += `Kesto: ${data.kesto} kk\n`;
+            }
+            emailBody += `Nimi: ${data.nimi}\n`;
+            emailBody += `Kategoria: ${data.kategoria}\n`;
+            emailBody += `Osoite: ${data.osoite}\n`;
+            emailBody += `Puhelin: ${data.puhelin}\n`;
+            emailBody += `Kotisivut: ${data.kotisivut}\n`;
+            emailBody += `Facebook: ${data.facebook}\n`;
+            emailBody += `Instagram: ${data.instagram}\n`;
+            emailBody += `LinkedIn: ${data.linkedin}\n`;
+            emailBody += `TikTok: ${data.tiktok}\n`;
+            emailBody += `WhatsApp: ${data.whatsapp}\n`;
+            emailBody += `\n`;
+            emailBody += `Esittely:\n${data.esittely}\n\n`;
+
+            if (typeValue === 'paid') {
+                emailBody += `Lisätiedot (Maksullinen):\n`;
+                emailBody += `Logo: ${data.logo}\n`;
+                emailBody += `Kuvat: ${data.kuva_linkit}\n`;
+                emailBody += `YouTube: ${data.youtube}\n`;
+                emailBody += `Tarjous: ${data.tarjous}\n`;
+                emailBody += `RSS-syöte: ${data.rss}\n`;
+                emailBody += `Mainoslinkit: ${data.mainoslinkit.join(', ') || '-'}\n`;
+            }
+
+            const subject = encodeURIComponent(`LaukaaInfo - Uusi yritysilmoitus: ${data.nimi}`);
+            const body = encodeURIComponent(emailBody);
+            const mailtoLink = `mailto:info@mediazoo.fi?subject=${subject}&body=${body}`;
+
+            // Avaa sähköposti tietojen lähettämistä varten
+            window.open(mailtoLink, '_blank');
+
+            if (typeValue === 'paid') {
+                // OHJAA STRIPE-MAKSUUN
+                const stripeLinks = {
+                    "3": "https://buy.stripe.com/3cI9AUepJ2JWbFle2p1B607",
+                    "6": "https://buy.stripe.com/bJe14oa9t98kgZF0bz1B608",
+                    "12": "https://buy.stripe.com/3cIaEY81l5W86l12jH1B609"
+                };
+                const stripePaymentLink = stripeLinks[data.kesto];
+
+                alert('Kiitos! Yrityksesi tiedot on koottu sähköpostiin. Lähetäthän viestin sähköpostiohjelmassasi ja jatka sen jälkeen maksuun Stripessä.');
+                window.location.href = stripePaymentLink;
+            } else {
+                alert('Kiitos! Yrityksesi tiedot on koottu sähköpostiin. Lähetäthän viestin sähköpostiohjelmassasi, jotta tiedot saapuvat meille tarkistettavaksi.');
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
+    <footer>
+        <div class="footer-content">
+            <p>© 2026 LaukaaInfo – Epävirallinen yhteisösovellus</p>
+            <div class="footer-links">
+                <a href="index.html">Etusivulle</a>
+                <a href="tietosuoja.html">Tietosuoja</a>
+                <a href="maksuehto.html">Maksuehdot</a>
+                <a href="https://mediazoo.fi/yhteystiedot/">Yhteystiedot</a>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
