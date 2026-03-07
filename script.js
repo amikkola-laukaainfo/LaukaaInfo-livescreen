@@ -1018,18 +1018,14 @@ function initCategories(companies) {
 }
 
 function renderNavCategories(categories) {
-    const navMenu = document.querySelector('.nav-item a[href="index.html"] + .dropdown-menu');
+    const navMenu = document.getElementById("nav-categories");
     const sidebarMenu = document.getElementById('sidebar-categories');
 
     if (navMenu) {
-        // Säilytetään "Lisää yritys"
-        const firstItem = navMenu.querySelector('li');
         navMenu.innerHTML = '';
-        if (firstItem) navMenu.appendChild(firstItem);
 
         categories.forEach(cat => {
             const li = document.createElement('li');
-            // Pakotetaan koko Laukaa näkymä (region=all)
             li.innerHTML = `<a href="kategoria.html?cat=${encodeURIComponent(cat)}&region=all">${cat}</a>`;
             navMenu.appendChild(li);
         });
@@ -1039,7 +1035,6 @@ function renderNavCategories(categories) {
         sidebarMenu.innerHTML = '';
         categories.forEach(cat => {
             const li = document.createElement('li');
-            // Pakotetaan koko Laukaa näkymä (region=all)
             li.innerHTML = `<a href="kategoria.html?cat=${encodeURIComponent(cat)}&region=all" class="sidebar-link">${cat}</a>`;
             sidebarMenu.appendChild(li);
         });
