@@ -1050,6 +1050,12 @@ function renderHomepageCategories(categories) {
     const container = document.getElementById('homepage-categories');
     if (!container) return;
 
+    // Luetaan valittu alue dropdownista tai localStoragesta
+    const regionEl = document.getElementById('region-select');
+    const selectedRegion = (regionEl ? regionEl.value : null)
+        || localStorage.getItem('selectedRegion')
+        || 'all';
+
     container.innerHTML = '';
 
     categories.forEach(cat => {
@@ -1061,8 +1067,8 @@ function renderHomepageCategories(categories) {
             Object.entries(categoryIcons).find(([k]) => k.toLowerCase() === cleanCat.toLowerCase())?.[1] ||
             '🏢';
         const card = document.createElement('a');
-        // Pakotetaan koko Laukaa näkymä (region=all)
-        card.href = `kategoria.html?cat=${encodeURIComponent(cat)}&region=all`;
+        // Välitetään valittu alue kategoriasivulle
+        card.href = `kategoria.html?cat=${encodeURIComponent(cat)}&region=${encodeURIComponent(selectedRegion)}`;
         card.className = 'category-card';
         card.innerHTML = `
             <span class="cat-icon">${icon}</span>
