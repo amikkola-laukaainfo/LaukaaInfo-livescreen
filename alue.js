@@ -87,7 +87,7 @@ function updateMetadata(area, cat, tag) {
     const seoDescEl = document.getElementById('seo-description');
 
     let titleText = area.name;
-    if (tag) titleText = `${tag.charAt(0).toUpperCase() + tag.slice(1)}t - ${area.name}`;
+    if (tag) { const tagCap = tag.charAt(0).toUpperCase() + tag.slice(1); titleText = `${tagCap.endsWith('t') ? tagCap : tagCap + 't'} - ${area.name}`; }
     else if (cat) titleText = `${cat.charAt(0).toUpperCase() + cat.slice(1)} - ${area.name}`;
 
     titleEl.textContent = titleText;
