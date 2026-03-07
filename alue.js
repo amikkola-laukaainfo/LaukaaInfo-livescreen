@@ -114,9 +114,24 @@ async function waitForData() {
     });
 }
 
+// Tiedostonimet vs. CSV:n alue_slug-arvot eivät aina täsmää täsmälleen.
+// Tämä kartta yhdistää HTML-tiedoston slugin kaikkiin hyväksyttäviin alue_slug-arvoihin.
+const AREA_SLUG_ALIASES = {
+    'laukaa': ['laukaa', 'laukaa kk', 'laukaa keskusta'],
+    'leppavesi': ['leppavesi', 'leppävesi'],
+    'lievestuore': ['lievestuore'],
+    'vehnia': ['vehnia', 'vehniä'],
+    'vihtavuori': ['vihtavuori'],
+    'koko-laukaa': [] // Kaikki alueet – käsitellään erikseen
+};
+
 function filterByArea(areaSlug, catParam, tagParam) {
+    // Sallitut alue_slug-arvot tälle sivulle (normalisoituna pieniksi kirjaimiksi)
+    const allowedSlugs = AREA_SLUG_ALIASES[areaSlug] || [areaSlug];
+
     return allCompanies.filter(c => {
-        const matchArea = areaSlug === 'koko-laukaa' || (c.alue_slug || '').toLowerCase() === areaSlug;
+        const companySlug = (c.alue_slug || '').toLowerCase().trim();
+        const matchArea = areaSlug === 'koko-laukaa' || allowedSlugs.includes(companySlug);
         if (!matchArea) return false;
 
         if (tagParam) {
