@@ -298,27 +298,67 @@
                 let mediaHtml = '';
 
                 const defaultImages = {
-                    'Autokorjaamot': 'https://images.unsplash.com/photo-1613214149922-f1809fea1b0b?auto=format&fit=crop&q=80&w=600',
-                    'Elintarvike': 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=600',
-                    'Juhlatilat': 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=600',
-                    'Kauneus ja terveys': 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=600',
-                    'Koti-rakennus': 'https://images.unsplash.com/photo-1581094288338-2314dddb7ece?auto=format&fit=crop&q=80&w=600',
-                    'Majoitus': 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=600',
-                    'Matkailu & Elämykset': 'https://images.unsplash.com/photo-1504280616163-0fd48547b9ad?auto=format&fit=crop&q=80&w=600',
-                    'Ravinto & Vapaa-aika': 'https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&q=80&w=600',
-                    'Ruokailu': 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80&w=600',
-                    'Perinnematkailu & Juhlat': 'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&q=80&w=600',
-                    'Muu': 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=600'
+                    'auto ja kuljetus': [
+                        'https://images.unsplash.com/photo-1549317661-bd32c8ce0be2?auto=format&fit=crop&q=80&w=400',
+                        'https://images.unsplash.com/photo-1613214149922-f1809fea1b0b?auto=format&fit=crop&q=80&w=400',
+                        'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&q=80&w=400'
+                    ],
+                    'elintarvikkeet': [
+                        'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=400',
+                        'https://images.unsplash.com/photo-1583258292688-d0213dc5a3a8?auto=format&fit=crop&q=80&w=400',
+                        'https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&q=80&w=400'
+                    ],
+                    'hyvinvointi ja terveys': [
+                        'https://images.unsplash.com/photo-1552693673-1bf958298935?auto=format&fit=crop&q=80&w=400',
+                        'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=400',
+                        'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=400'
+                    ],
+                    'juhlatilat': [
+                        'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=400',
+                        'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&q=80&w=400',
+                        'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=400'
+                    ],
+                    'kaupat ja ostokset': [
+                        'https://images.unsplash.com/photo-1481437156560-3205f6a55735?auto=format&fit=crop&q=80&w=400',
+                        'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=400',
+                        'https://images.unsplash.com/photo-1556740738-b6a63e27c4df?auto=format&fit=crop&q=80&w=400'
+                    ],
+                    'majoitus': [
+                        'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=400',
+                        'https://images.unsplash.com/photo-1582719478250-c89409817361?auto=format&fit=crop&q=80&w=400',
+                        'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&q=80&w=400'
+                    ],
+                    'palvelut': [
+                        'https://images.unsplash.com/photo-1581561515277-2da15779ec36?auto=format&fit=crop&q=80&w=400',
+                        'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=400',
+                        'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&q=80&w=400'
+                    ],
+                    'rakentaminen ja remontointi': [
+                        'https://images.unsplash.com/photo-1581094288338-2314dddb7ece?auto=format&fit=crop&q=80&w=400',
+                        'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=80&w=400',
+                        'https://images.unsplash.com/photo-1504307651254-35680f356db3?auto=format&fit=crop&q=80&w=400'
+                    ],
+                    'ruokailu': [
+                        'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80&w=400',
+                        'https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&q=80&w=400',
+                        'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&q=80&w=400'
+                    ],
+                    'muu': [
+                        'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=400',
+                        'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=400',
+                        'https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=400'
+                    ]
                 };
 
                 let imageUrl = '';
                 if (c.media && c.media[0] && c.media[0].type === 'image') {
                     imageUrl = c.media[0].url;
                 } else {
-                    const cleanCat = (c.kategoria || '').replace(/-/g, ' ').trim();
-                    imageUrl = defaultImages[cleanCat] ||
-                        Object.entries(defaultImages).find(([k]) => k.toLowerCase() === cleanCat.toLowerCase())?.[1] ||
-                        defaultImages['Muu'];
+                    const cleanCat = (c.kategoria || '').replace(/-/g, ' ').trim().toLowerCase();
+                    const imagesArray = defaultImages[cleanCat] ||
+                        Object.entries(defaultImages).find(([k]) => k === cleanCat)?.[1] ||
+                        defaultImages['muu'];
+                    imageUrl = imagesArray[Math.floor(Math.random() * imagesArray.length)];
                 }
                 mediaHtml = `<img src="${imageUrl}" style="width:100%; height:150px; object-fit:cover; border-radius:8px; margin-bottom:1rem;" alt="${c.nimi}">`;
 
