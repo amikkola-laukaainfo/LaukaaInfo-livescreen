@@ -154,8 +154,9 @@ function renderRegionContent(area, areaSlug, filtered, cat, tag) {
         regionCats.forEach(c => {
             const icon = (typeof categoryIcons !== 'undefined' && categoryIcons[c]) ? categoryIcons[c] : '🏢';
             const card = document.createElement('a');
-            // Pakotetaan koko Laukaa näkymä (region=all) kategoria-sivulla
-            card.href = `kategoria.html?cat=${encodeURIComponent(c)}&region=all`;
+            // Kohdistetaan kategoria nykyiseen alueeseen (tyypillisesti region=alue_slug)
+            const regionParam = areaSlug === 'koko-laukaa' ? 'all' : areaSlug;
+            card.href = `kategoria.html?cat=${encodeURIComponent(c)}&region=${encodeURIComponent(regionParam)}`;
             card.className = 'category-card';
             card.innerHTML = `<span class="cat-icon">${icon}</span><h3>${c}</h3>`;
             catGrid.appendChild(card);
