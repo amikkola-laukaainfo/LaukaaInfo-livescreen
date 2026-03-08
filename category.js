@@ -186,43 +186,13 @@
         const carouselItems = premium.slice(0, 5);
         const remainingPremium = premium.slice(5);
 
-        // Map demo data if needed for carousel ONLY if real premium data is missing
-        let displayCarousel = carouselItems;
-        if (displayCarousel.length === 0) {
-            displayCarousel = [
-                {
-                    id: 'demo1',
-                    nimi: 'Esimerkki Parturi-Kampaamo',
-                    mainoslause: 'Modernit hiustenleikkuut ja värjäykset.',
-                    osoite: 'Laukaantie 1, Laukaa',
-                    media: [{ type: 'image', url: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=600' }],
-                    sortScore: 1
-                },
-                {
-                    id: 'demo2',
-                    nimi: 'Laukaan Lounasravintola',
-                    mainoslause: 'Maistuvaa kotiruokaa joka arkipäivä.',
-                    osoite: 'Lievestuoreentie 5, Lievestuore',
-                    media: [{ type: 'image', url: 'https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&q=80&w=600' }],
-                    sortScore: 1
-                },
-                {
-                    id: 'demo3',
-                    nimi: 'Kukkakauppa Ruusu',
-                    mainoslause: 'Kukkatervehdykset kaikkiin tilaisuuksiin.',
-                    osoite: 'Vihtavuori',
-                    media: [{ type: 'image', url: 'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&q=80&w=600' }],
-                    sortScore: 1
-                },
-                {
-                    id: 'demo4',
-                    nimi: 'Liikuntakeskus Syke',
-                    mainoslause: 'Kuntosali ja ryhmäliikuntatunnit.',
-                    osoite: 'Laukaantie 10, Laukaa',
-                    media: [{ type: 'image', url: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=600' }],
-                    sortScore: 1
-                }
-            ];
+        // Map random free companies to fill carousel if needed
+        let displayCarousel = [...carouselItems];
+        if (displayCarousel.length < 5 && free.length > 0) {
+            const needed = 5 - displayCarousel.length;
+            const shuffledFree = [...free].sort(() => 0.5 - Math.random());
+            const randomPicks = shuffledFree.slice(0, needed);
+            displayCarousel = [...displayCarousel, ...randomPicks];
         }
 
         renderFeatured(displayCarousel);
@@ -326,18 +296,42 @@
                 item.className = 'carousel-item';
 
                 let mediaHtml = '';
-                if (c.media && c.media[0]) {
-                    if (c.media[0].type === 'image') {
-                        mediaHtml = `<img src="${c.media[0].url}" style="width:100%; height:150px; object-fit:cover; border-radius:8px; margin-bottom:1rem;">`;
-                    }
+
+                const defaultImages = {
+                    'Autokorjaamot': 'https://images.unsplash.com/photo-1613214149922-f1809fea1b0b?auto=format&fit=crop&q=80&w=600',
+                    'Elintarvike': 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=600',
+                    'Juhlatilat': 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=600',
+                    'Kauneus ja terveys': 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=600',
+                    'Koti-rakennus': 'https://images.unsplash.com/photo-1581094288338-2314dddb7ece?auto=format&fit=crop&q=80&w=600',
+                    'Majoitus': 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=600',
+                    'Matkailu & Elämykset': 'https://images.unsplash.com/photo-1504280616163-0fd48547b9ad?auto=format&fit=crop&q=80&w=600',
+                    'Ravinto & Vapaa-aika': 'https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&q=80&w=600',
+                    'Ruokailu': 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80&w=600',
+                    'Perinnematkailu & Juhlat': 'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&q=80&w=600',
+                    'Muu': 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=600'
+                };
+
+                let imageUrl = '';
+                if (c.media && c.media[0] && c.media[0].type === 'image') {
+                    imageUrl = c.media[0].url;
+                } else {
+                    const cleanCat = (c.kategoria || '').replace(/-/g, ' ').trim();
+                    imageUrl = defaultImages[cleanCat] ||
+                        Object.entries(defaultImages).find(([k]) => k.toLowerCase() === cleanCat.toLowerCase())?.[1] ||
+                        defaultImages['Muu'];
                 }
+                mediaHtml = `<img src="${imageUrl}" style="width:100%; height:150px; object-fit:cover; border-radius:8px; margin-bottom:1rem;" alt="${c.nimi}">`;
 
                 const distHtml = c.distanceText ? `<span style="background:var(--accent-blue); color:white; padding:2px 8px; border-radius:10px; font-size:0.75rem; margin-left:10px;">${c.distanceText}</span>` : '';
 
                 // Truncate description at @@
-                let description = c.mainoslause || '';
+                let description = (c.mainoslause || '').trim();
                 if (description.includes('@@')) {
                     description = description.split('@@')[0].trim();
+                }
+
+                if (!description) {
+                    description = 'Tutustu yritykseen ja sen tarjoamiin palveluihin.';
                 }
 
                 // Clean website URL
