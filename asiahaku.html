@@ -327,9 +327,8 @@
                 { id: '2026-01', text: 'Kokous tammikuu 2026' }
             ],
             'kunnanvaltuusto': [
-                { id: '2025-all-v', text: 'Vuoden 2025 kokoukset', active: true },
-                { id: '2026-02-v', text: 'Valtuusto helmikuu 2026' },
-                { id: '2025-12-v', text: 'Valtuusto joulukuu 2025' }
+                { id: '2026-03-v', text: 'Valtuusto maaliskuu 2026', active: true },
+                { id: '2025-all-v', text: 'Vuoden 2025 kokoukset', active: true }
             ],
             'kunnan-talous': [
                 { id: 'talousarvio', text: 'Talousarvio ja muutokset', active: true },
@@ -379,6 +378,8 @@
                 // Näytetään sivu1.html Kunnanhallituksen helmikuun 2026 kokoukselle
                 if (category === 'kunnanhallitus' && issue === '2026-02') {
                     iframe.src = 'logica/sivu1.html';
+                } else if (category === 'kunnanvaltuusto' && issue === '2026-03-v') {
+                    iframe.src = 'logica/valtuusto232026.html';
                 } else if (category === 'kunnanvaltuusto' && issue === '2025-all-v') {
                     iframe.src = 'logica/sivu2.html';
                 } else if (category === 'kunnan-talous' && issue === 'talousarvio') {

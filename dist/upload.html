@@ -1,1 +1,173 @@
-<!DOCTYPE html><html lang="fi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Lataa tarjouskuva – LaukaaInfo</title><link rel="icon" href="logo.png"><link rel="stylesheet" href="style.css"><script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script><style>.upload-container{max-width:600px;margin:4rem auto;padding:2rem;background:#fff;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,.05);text-align:center}.btn-upload{display:inline-block;margin:1rem;padding:1rem 2rem;background:var(--primary-blue,#0056b3);color:#fff;border:none;border-radius:10px;cursor:pointer;font-weight:600;transition:transform .2s}.btn-upload:hover{transform:translateY(-2px)}#status-message{margin-top:2rem;padding:1rem;border-radius:10px;display:none}.error{background:#fee2e2;color:#991b1b}.success{background:#dcfce7;color:#166534}</style></head><body><div class="upload-container" id="main-content"><h1>Päivitä tarjouskuvat</h1><p id="company-name-display"></p><div id="upload-buttons" style="display:none"><button id="upload-widget-1" class="btn-upload">Lataa tarjouskuva 1</button> <button id="upload-widget-2" class="btn-upload">Lataa tarjouskuva 2</button></div><div id="status-message"></div></div><script>let VALID_TOKENS={2:"mz2026","test-yritys":"secret123",mediazoo:"mz2026",demo:"demo"},params=new URLSearchParams(window.location.search),yritysId=params.get("yritys"),token=params.get("token"),statusElem=document.getElementById("status-message"),buttonsElem=document.getElementById("upload-buttons");function showMessage(e,t){statusElem.textContent=e,statusElem.className=t,statusElem.style.display="block"}async function setupWidget(a,e){let s=document.getElementById(e);s.addEventListener("click",async function(){try{s.disabled=!0,s.textContent="Valmistellaan...";var e=await fetch(`cloudinary-sign.php?yritys=${yritysId}&token=${token}&slot=`+a);if(!e.ok)throw new Error("Allekirjoituksen haku epäonnistui");var t=await e.json();if(console.log("Signature Data:",t),t.error)throw new Error(t.error);if(!t.signature)throw new Error("Palvelin ei palauttanut allekirjoitusta.");cloudinary.openUploadWidget({cloudName:t.cloudName,apiKey:t.apiKey,uploadPreset:t.uploadPreset,publicId:t.publicId,timestamp:t.timestamp,signature:t.signature,resourceType:"image",multiple:!1,sources:["local","camera"],clientAllowedFormats:["jpg","png","webp","jpeg"],maxFileSize:5e6,language:"fi",text:{fi:{menu:{files:"Omat tiedostot",camera:"Kamera"},local:{browse:"Selaa tiedostoja",dd_title_single:"Vedä kuva tähän"}}}},(e,t)=>{s.disabled=!1,s.textContent="Lataa tarjouskuva "+a,!e&&t&&"success"===t.event?(console.log("Done! Image info: ",t.info),showMessage(`Kuva ${a} päivitetty onnistuneesti!`,"success")):e&&(console.error("Upload Error:",e),showMessage("Virhe lähetyksessä: "+("object"==typeof e?JSON.stringify(e):e),"error"))})}catch(e){console.error("Setup Error:",e),showMessage("Virhe valmistelussa: "+e.message,"error"),s.disabled=!1,s.textContent="Lataa tarjouskuva "+a}},!1)}yritysId&&token?VALID_TOKENS[yritysId]!==token?showMessage("Ei käyttöoikeutta. Token on virheellinen.","error"):(buttonsElem.style.display="block",document.getElementById("company-name-display").textContent="Yritys: "+yritysId,setupWidget(1,"upload-widget-1"),setupWidget(2,"upload-widget-2")):showMessage("Virheellinen URL. Puuttuvat parametrit.","error")</script></body></html>
+<!DOCTYPE html>
+<html lang="fi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lataa tarjouskuva – LaukaaInfo</title>
+    <link rel="icon" href="logo.png">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+    <style>
+        .upload-container {
+            max-width: 600px;
+            margin: 4rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .btn-upload {
+            display: inline-block;
+            margin: 1rem;
+            padding: 1rem 2rem;
+            background: var(--primary-blue, #0056b3);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+
+        .btn-upload:hover {
+            transform: translateY(-2px);
+        }
+
+        #status-message {
+            margin-top: 2rem;
+            padding: 1rem;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .success {
+            background: #dcfce7;
+            color: #166534;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="upload-container" id="main-content">
+        <h1>Päivitä tarjouskuvat</h1>
+        <p id="company-name-display"></p>
+
+        <div id="upload-buttons" style="display: none;">
+            <button id="upload-widget-1" class="btn-upload">Lataa tarjouskuva 1</button>
+            <button id="upload-widget-2" class="btn-upload">Lataa tarjouskuva 2</button>
+        </div>
+
+        <div id="status-message"></div>
+    </div>
+
+    <script>
+        // Security: Simple token-based access control
+        // Note: The 'yritys' parameter must match the numeric ID from the company card URL.
+        // E.g. yrityskortti.html?id=company-2  => yritys=2
+        const VALID_TOKENS = {
+            '2': 'mz2026',        // Mediazoo company-2
+            'test-yritys': 'secret123',
+            'mediazoo': 'mz2026', // Keep this for now
+            'demo': 'demo'
+        };
+
+        const params = new URLSearchParams(window.location.search);
+        const yritysId = params.get('yritys');
+        const token = params.get('token');
+
+        const statusElem = document.getElementById('status-message');
+        const buttonsElem = document.getElementById('upload-buttons');
+
+        function showMessage(msg, type) {
+            statusElem.textContent = msg;
+            statusElem.className = type;
+            statusElem.style.display = 'block';
+        }
+
+        // Validate Access
+        if (!yritysId || !token) {
+            showMessage('Virheellinen URL. Puuttuvat parametrit.', 'error');
+        } else if (VALID_TOKENS[yritysId] !== token) {
+            showMessage('Ei käyttöoikeutta. Token on virheellinen.', 'error');
+        } else {
+            // Authorized
+            buttonsElem.style.display = 'block';
+            document.getElementById('company-name-display').textContent = `Yritys: ${yritysId}`;
+
+            setupWidget(1, "upload-widget-1");
+            setupWidget(2, "upload-widget-2");
+        }
+
+        async function setupWidget(index, buttonId) {
+            const button = document.getElementById(buttonId);
+
+            button.addEventListener("click", async function () {
+                try {
+                    button.disabled = true;
+                    button.textContent = 'Valmistellaan...';
+
+                    // 1. Get signature from PHP backend
+                    const signRes = await fetch(`cloudinary-sign.php?yritys=${yritysId}&token=${token}&slot=${index}`);
+                    if (!signRes.ok) throw new Error('Allekirjoituksen haku epäonnistui');
+
+                    const data = await signRes.json();
+                    console.log('Signature Data:', data);
+
+                    if (data.error) throw new Error(data.error);
+                    if (!data.signature) throw new Error('Palvelin ei palauttanut allekirjoitusta.');
+
+                    // 2. Open signed widget
+                    cloudinary.openUploadWidget({
+                        cloudName: data.cloudName,
+                        apiKey: data.apiKey,
+                        uploadPreset: data.uploadPreset,
+                        publicId: data.publicId,
+                        timestamp: data.timestamp,
+                        signature: data.signature,
+                        resourceType: 'image',
+                        multiple: false,
+                        sources: ['local', 'camera'],
+                        clientAllowedFormats: ['jpg', 'png', 'webp', 'jpeg'],
+                        maxFileSize: 5000000,
+                        language: 'fi',
+                        text: {
+                            "fi": {
+                                "menu": { "files": "Omat tiedostot", "camera": "Kamera" },
+                                "local": { "browse": "Selaa tiedostoja", "dd_title_single": "Vedä kuva tähän" }
+                            }
+                        }
+                    }, (error, result) => {
+                        button.disabled = false;
+                        button.textContent = `Lataa tarjouskuva ${index}`;
+
+                        if (!error && result && result.event === "success") {
+                            console.log('Done! Image info: ', result.info);
+                            showMessage(`Kuva ${index} päivitetty onnistuneesti!`, 'success');
+                            // Optional: pre-cache bust notification if needed
+                        } else if (error) {
+                            console.error('Upload Error:', error);
+                            // Stringify error object if it's not a string
+                            const errorMsg = typeof error === 'object' ? JSON.stringify(error) : error;
+                            showMessage('Virhe lähetyksessä: ' + errorMsg, 'error');
+                        }
+                    });
+                } catch (err) {
+                    console.error('Setup Error:', err);
+                    showMessage('Virhe valmistelussa: ' + err.message, 'error');
+                    button.disabled = false;
+                    button.textContent = `Lataa tarjouskuva ${index}`;
+                }
+            }, false);
+        }
+    </script>
+</body>
+
+</html>
