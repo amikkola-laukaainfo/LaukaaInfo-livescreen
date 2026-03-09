@@ -180,8 +180,12 @@ function renderRegionContent(area, areaSlug, filtered, cat, tag) {
         });
     }
 
-    // Yritysnäytteet
-    const featured = [...filtered].sort((a, b) => (b.karusellipaino || 0) - (a.karusellipaino || 0)).slice(0, 8);
+    // Yritysnäytteet, järjestetään satunnaisesti mutta painotettuna
+    const featured = [...filtered].map(c => {
+        const weight = parseFloat(c.karusellipaino) || 0;
+        const sortScore = (Math.random() * 10) + (weight / 10);
+        return { ...c, sortScore };
+    }).sort((a, b) => b.sortScore - a.sortScore).slice(0, 8);
     if (typeof renderCatalog === 'function') {
         renderCatalog(featured);
     }
