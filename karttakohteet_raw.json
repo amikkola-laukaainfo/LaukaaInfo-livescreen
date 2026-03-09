@@ -1,0 +1,94 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/26166980",
+                "leisure": "pitch",
+                "sport": "tennis",
+                "surface": "clay",
+                "@geometry": "center"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    25.9544503,
+                    62.4182346
+                ]
+            },
+            "id": "way/26166980"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/40248806",
+                "leisure": "pitch",
+                "name": "Päivöläntien tenniskenttä",
+                "sport": "tennis",
+                "surface": "paved",
+                "@geometry": "center"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    25.8410244,
+                    62.3292095
+                ]
+            },
+            "id": "way/40248806"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/83200170",
+                "leisure": "pitch",
+                "sport": "beachvolleyball",
+                "@geometry": "center"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    25.8309412,
+                    62.3345533
+                ]
+            },
+            "id": "way/83200170"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "way/153274567",
+                "access": "yes",
+                "addr:city": "Laukaa",
+                "addr:housenumber": "2",
+                "addr:postcode": "41340",
+                "addr:street": "Vuojärventie",
+                "air_conditioning": "yes",
+                "amenity": "library",
+                "building": "yes",
+                "email": "Paakirjasto@laukaa.fi",
+                "image": "https://kirkanta.kirjastot.fi/files/photos/medium/pkirjasto-52b2e6.jpg",
+                "internet_access": "yes",
+                "internet_access:fee": "customers",
+                "name": "Laukaan pääkirjasto",
+                "name:fi": "Laukaan pääkirjasto",
+                "name:sv": "Laukaa huvudbibliotek",
+                "operator": "Keski kirjastot",
+                "phone": "014 267 5710",
+                "source": "bing;survey",
+                "website": "https://keski.finna.fi/Content/kirjastot?laukaan-paakirjasto",
+                "wheelchair": "yes",
+                "@geometry": "center"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    25.9480336,
+                    62.415266
+                ]
+            },
+            "id": "way/153274567"
+        }
+    ]
+}
