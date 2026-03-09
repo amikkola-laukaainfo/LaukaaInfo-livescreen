@@ -584,6 +584,13 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
                                     <span>🔍</span> Lue AI-analyysi
                                 </a>
                             </div>`;
+                    } else if (titleLower.includes('kunnanvaltuusto') && (titleLower.includes('maaliskuu 2026') || titleLower.includes('2.3.2026'))) {
+                        analysisLink = `
+                            <div style="margin-top: 10px;">
+                                <a href="asiahaku.html?cat=kunnanvaltuusto&issue=2026-03-v" class="btn-primary" style="font-size: 0.85rem; padding: 6px 14px; background: #28a745; display: inline-flex; align-items: center; gap: 6px;">
+                                    <span>🔍</span> Lue AI-analyysi
+                                </a>
+                            </div>`;
                     }
                 }
 
