@@ -208,7 +208,7 @@
             Analyysi perustuu tekoälyyn, joten varmista aina tiedot alkuperäisistä lähteistä. 
             Tämä sivu on generoitu Semantix-alustalla.
         </div>
-        <div style="font-size: 8px; color: #e2e8f0; margin-top: 10px;" data-copyright="Laukaainfo.fi" data-fingerprint="h422jvbpy45">© Laukaainfo.fi - Semantic Intelligence Fingerprint Embedded</div>
+        <div style="font-size: 8px; color: #e2e8f0; margin-top: 10px;" data-copyright="Laukaainfo.fi" data-fingerprint="bjqswfxa2j9">© Laukaainfo.fi - Semantic Intelligence Fingerprint Embedded</div>
     </footer>
 
     <script>
@@ -466,6 +466,22 @@
                     // Copy data because D3 mutates nodes/edges
                     const nodesData = JSON.parse(JSON.stringify(renderData.nodes));
                     const edgesData = JSON.parse(JSON.stringify(renderData.edges));
+
+                    // Handle dangling edges by creating placeholder nodes (resilience fix)
+                    const nodeIds = new Set(nodesData.map(n => n.id));
+                    edgesData.forEach(e => {
+                        const sId = typeof e.source === 'object' ? (e.source.id || e.source) : e.source;
+                        const tId = typeof e.target === 'object' ? (e.target.id || e.target) : e.target;
+                        if (sId && !nodeIds.has(sId)) {
+                            nodesData.push({ id: sId, label: sId, type: 'Tuntematon' });
+                            nodeIds.add(sId);
+                        }
+                        if (tId && !nodeIds.has(tId)) {
+                            nodesData.push({ id: tId, label: tId, type: 'Tuntematon' });
+                            nodeIds.add(tId);
+                        }
+                    });
+
 
                     const svg = d3.select("#graph").append("svg")
                         .attr("width", width)
