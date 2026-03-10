@@ -4,111 +4,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kategoria – LaukaaInfo</title>
+    <title>Karttakohteet - LaukaaInfo</title>
+    <meta name="description" content="Tutki Laukaan eri kohteita kartalla.">
     <link rel="icon" href="logo.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0056b3">
+
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;700&display=swap"
         rel="stylesheet">
 
-    <!-- Leaflet for Map -->
+    <!-- Leaflet Map CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
 
-    <link rel="stylesheet" href="style.css?v=20260301-1">
+    <link rel="stylesheet" href="style.css">
+
     <style>
-        .category-header {
-            padding: 4rem 1rem;
-            background: var(--light-blue);
-            text-align: center;
-            border-radius: var(--border-radius);
-            margin-bottom: 3rem;
-        }
-
-        .category-header h1 {
-            font-size: 3rem;
-            color: var(--primary-blue);
-        }
-
-        /* Carousel Styles */
-        .featured-carousel-section {
-            margin-bottom: 5rem;
-        }
-
-        .carousel-container {
-            position: relative;
-            overflow: hidden;
-            padding: 2rem 0;
-        }
-
-        .carousel-track {
+        .map-filters {
+            background: #fff;
+            padding: 1.25rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
             display: flex;
-            gap: 2rem;
-            transition: transform 0.5s ease;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
         }
 
-        .carousel-item {
-            min-width: 350px;
-            background: white;
-            border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-            border-top: 4px solid var(--accent-blue);
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-width: 200px;
         }
 
-        .premium-badge {
-            background: #ffcc00;
-            color: #333;
-            padding: 4px 12px;
-            border-radius: 20px;
+        .filter-group label {
             font-size: 0.8rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            display: inline-block;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 0.35rem;
         }
 
-        /* Category Map */
-        .category-map-section {
-            margin-bottom: 5rem;
+        .filter-group select {
+            padding: 0.65rem 0.9rem;
+            border: 1.5px solid #dde3ec;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            color: #333;
+            background: #f7f9fc;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%230056b3' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            padding-right: 2rem;
         }
 
-        #category-map {
-            height: 500px;
-            border-radius: 15px;
-            box-shadow: var(--shadow);
+        #kohteet-map {
+            height: 600px;
+            border-radius: 12px;
+            z-index: 1;
+            border: 2px solid #dde3ec;
         }
 
-        /* Company Grid */
-        .company-directory {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 5rem;
-        }
-
-        .company-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s;
-        }
-
-        .company-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .company-card h3 {
-            color: var(--primary-blue);
-            margin-bottom: 0.5rem;
-        }
-
-        .company-card .address {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
+        @media (max-width: 768px) {
+            #kohteet-map {
+                height: 450px;
+            }
         }
     </style>
 </head>
@@ -153,7 +120,7 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="asiahaku.html" class="nav-link">Päätösten polut <span class="arrow">▼</span></a>
+                        <a href="#" class="nav-link">Päätösten polut <span class="arrow">▼</span></a>
                         <ul class="dropdown-menu">
                             <li><a href="asiahaku.html">Hae ja tutki</a></li>
                         </ul>
@@ -214,7 +181,6 @@
                 </ul>
             </div>
 
-            <!-- Pääosio: AJANKOHTAISTA -->
             <div class="menu-section">
                 <h3 class="section-title">AJANKOHTAISTA</h3>
                 <ul class="menu-list">
@@ -229,7 +195,6 @@
                 </ul>
             </div>
 
-            <!-- Pääosio: PÄÄTÖSTEN POLUT -->
             <div class="menu-section">
                 <h3 class="section-title">PÄÄTÖSTEN POLUT</h3>
                 <ul class="menu-list">
@@ -237,11 +202,11 @@
                 </ul>
             </div>
 
-            <!-- Korostettu osio: KARTAT & ELÄMYKSET -->
             <div class="menu-section highlight-section">
                 <h3 class="section-title">KARTAT &amp; ELÄMYKSET ⭐</h3>
                 <ul class="menu-list">
-                    <li class="menu-item"><a href="karttakohteet.html" class="sidebar-link">Karttakohteet</a></li>
+                    <li class="menu-item"><a href="karttakohteet.html" class="sidebar-link active">Karttakohteet</a>
+                    </li>
                     <li class="menu-item"><a href="tarinakartta.html" class="sidebar-link">Tarinakartta</a></li>
                     <li class="menu-item"><a href="muistokartta.html" class="sidebar-link">Muistokartta</a></li>
                     <li class="menu-item"><a href="kadonneet.html" class="sidebar-link">Kadonneet &amp; löydetyt</a>
@@ -250,44 +215,28 @@
             </div>
         </div>
     </aside>
-    <!-- We need the main script for the hamburger/sidebar to work, and to load nav categories -->
-    <script src="script.js"></script>
+
+    <header>
+        <div class="header-content">
+            <h1>Karttakohteet</h1>
+            <p>Löydä Laukaan palvelut, harrastuspaikat ja nähtävyydet kartalta</p>
+        </div>
+    </header>
 
     <main>
-        <div class="category-header">
-            <span id="category-icon" style="font-size: 4rem; display: block; margin-bottom: 1rem;">🏢</span>
-            <h1 id="category-name">Ladataan toimialaa...</h1>
-            <p id="category-description">Tutustu paikallisiin palveluntarjoajiin.</p>
-        </div>
-
-        <section class="featured-carousel-section" id="featured-section" style="display: none;">
-            <h2>⭐ Suositellut yritykset</h2>
-            <div class="carousel-container">
-                <button class="carousel-nav-btn prev" id="carousel-prev" aria-label="Edellinen">❮</button>
-                <div class="carousel-track" id="featured-carousel">
-                    <!-- Suositellut kortit tässä -->
-                </div>
-                <button class="carousel-nav-btn next" id="carousel-next" aria-label="Seuraava">❯</button>
+        <section class="map-filters card">
+            <div class="filter-group">
+                <label for="category-filter">Valitse kategoria</label>
+                <select id="category-filter">
+                    <option value="all">Kaikki kohteet</option>
+                </select>
             </div>
+            <div id="status-text" style="font-size: 0.9rem; color: #666;">Ladataan kohteita...</div>
         </section>
 
-        <!-- Kartta -->
-        <section class="category-map-section">
-            <h2>Palvelut kartalla</h2>
-            <div id="category-map"></div>
-        </section>
-
-        <section class="directory-section">
-            <div class="company-directory" id="company-list">
-                <!-- Kaikki kategoriassa olevat yritykset -->
-            </div>
-        </section>
+        <div id="kohteet-map"></div>
     </main>
 
-    <!-- Scripts -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
-    <script src="category.js?v=20260304"></script>
     <footer>
         <div class="footer-content">
             <p>© 2026 LaukaaInfo – Epävirallinen yhteisösovellus</p>
@@ -299,6 +248,14 @@
             </div>
         </div>
     </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    <script src="script.js?v=20260301-1"></script>
+    <script src="karttakohteet_data.js"></script>
+    <script src="karttakohteet.js"></script>
+
 </body>
 
 </html>
