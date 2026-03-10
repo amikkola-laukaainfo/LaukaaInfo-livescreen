@@ -8,58 +8,57 @@ def process_geojson():
 
     # Define property mapping rules to categorize features
     def determine_category(props):
-        amenity = props.get("amenity")
-        leisure = props.get("leisure")
-        sport = props.get("sport")
-        building = props.get("building")
-        
+        amenity = props.get("amenity", "")
+        leisure = props.get("leisure", "")
+        sport = props.get("sport", "")
+
+        # Urheilupaikat
+        if leisure == "pitch" or leisure == "sports_centre" or sport != "":
+            return "Urheilupaikat"
+
+        # Koulut
         if amenity == "school":
             return "Koulut"
-        elif amenity == "shelter":
-            return "Laavut"
-        elif amenity == "library":
+
+        # Kirjastot
+        if amenity == "library":
             return "Kirjastot"
-        elif amenity in ("place_of_worship", "church") or building in ("church", "chapel"):
-            return "Kirkot ja kappelit"
-        elif amenity == "kindergarten":
+
+        # Päiväkodit
+        if amenity == "kindergarten":
             return "Päiväkodit"
-        elif amenity == "clinic":
-            return "Terveyskeskukset"
-        elif amenity == "fire_station":
-            return "Paloasemat"
-        elif leisure in ("pitch", "sports_centre") or sport:
-            if "equestrian" in str(sport):
-                return "Hevosurheilu"
-            elif "soccer" in str(sport):
-                return "Jalkapallokentät"
-            elif "tennis" in str(sport):
-                return "Tenniskentät"
-            elif "ice_hockey" in str(sport) or "ice_skating" in str(sport):
-                return "Jääurheilu"
-            elif "beachvolleyball" in str(sport) or "volleyball" in str(sport):
-                return "Lentopallokentät"
-            elif "skateboard" in str(sport):
-                return "Skeittiparkit"
-            elif "padel" in str(sport):
-                return "Padelkentät"
-            elif "athletics" in str(sport):
-                return "Yleisurheilu"
-            elif "disc_golf" in str(sport):
-                return "Frisbeegolf"
-            else:
-                return "Urheilupaikat"
-        elif amenity == "townhall":
-            return "Kunnantalo"
-        elif amenity == "bus_station":
-            return "Linja-autoasemat"
-        else:
-            return "Muut"
+
+        # Kirkot ja seurakunnat
+        if amenity == "place_of_worship":
+            return "Kirkot ja seurakunnat"
+
+        # Terveys
+        if amenity == "clinic":
+            return "Terveys"
+
+        # Kunnan palvelut
+        if amenity == "townhall":
+            return "Kunnan palvelut"
+
+        # Liikenne
+        if amenity == "bus_station":
+            return "Liikenne"
+
+        # Pelastuslaitos
+        if amenity == "fire_station":
+            return "Pelastuslaitos"
+
+        # Laavut ja retkipaikat
+        if amenity == "shelter":
+            return "Laavut ja retkipaikat"
+
+        return "Muut"
 
     if not os.path.exists(input_file):
         print(f"Error: {input_file} not found.")
         return
 
-    with open(input_file, "r", encoding="utf-8") as f:
+    with open(input_file, "r", encoding="utf-8-sig") as f:
         data = json.load(f)
         
     # Process features
