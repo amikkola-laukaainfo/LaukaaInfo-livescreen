@@ -305,7 +305,7 @@
             const baseUrl = `https://ik.imagekit.io/vowzx8znjs/mediazoo/offers/${rawId}_${index}`;
 
             const tryLoad = (extension) => {
-                const imagekitUrl = `${baseUrl}.${extension}?tr=w-1200,f-auto,q-auto&v=${timestamp}`;
+                const imagekitUrl = `${baseUrl}.${extension}?updatedAt=${timestamp}&tr=w-1200,f-auto,q-auto`;
                 const tempImg = new Image();
                 tempImg.onload = () => {
                     // Image found! Add a link button to ad-links-list
