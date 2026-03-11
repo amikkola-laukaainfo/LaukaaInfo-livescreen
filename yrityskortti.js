@@ -196,7 +196,7 @@
                     a.target = '_blank';
                     a.rel = 'noopener noreferrer';
                     a.title = info.label;
-                    a.style.cssText = 'display:inline-flex; align-items:center; text-decoration:none; margin-right:0.6rem;';
+                    a.style.cssText = 'display:inline-flex; align-items:center; text-decoration:none;';
                     a.innerHTML = `<span style="display:inline-flex; width:32px; height:32px; align-items:center; justify-content:center;">${info.svg}</span>`;
                     socialIcons.appendChild(a);
                 }
