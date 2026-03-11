@@ -263,7 +263,15 @@
                 });
             }
         } else {
-            galleryContainer.style.display = 'none';
+            // Show placeholder if no images
+            mainImage.innerHTML = `
+                <div class="image-placeholder">
+                    <img src="logo.png" alt="Ei kuvaa">
+                    <div class="placeholder-text">yrityksellä ei valokuvaa</div>
+                </div>
+            `;
+            galleryContainer.style.display = 'block';
+            thumbnails.innerHTML = '';
         }
 
         // Video
