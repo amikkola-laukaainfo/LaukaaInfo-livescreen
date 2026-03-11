@@ -1,6 +1,19 @@
 const REGIONS_CSV_URL = 'https://www.mediazoo.fi/laukaainfo-web/get_alueet.php';
 let areaMetadata = {};
 
+function slugify(text) {
+    if (!text) return "";
+    return text.toString().toLowerCase().trim()
+        .replace(/\s+/g, '-')
+        .replace(/[äÄàáâãäå]/g, 'a')
+        .replace(/[öÖòóôõöø]/g, 'o')
+        .replace(/[åÅ]/g, 'a')
+        .replace(/[^\w-]/g, '')
+        .replace(/--+/g, '-')
+        .replace(/^-+/, '')
+        .replace(/-+$/, '');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initRegionPage();
 });
@@ -226,7 +239,7 @@ function renderNearby(area) {
         item.onclick = () => {
             const region = localStorage.getItem('selectedRegion');
             const regionParam = (region && region !== 'all') ? `&region=${region}` : '';
-            window.location.href = `yrityskortti.html?id=${company.id}${regionParam}`;
+            window.location.href = `yrityskortti.html?id=${slugify(company.nimi)}${regionParam}`;
         };
         nearbyList.appendChild(item);
     });
@@ -278,7 +291,7 @@ function initRegionMap(area, companies) {
     companies.forEach(company => {
         if (company.lat && company.lon) {
             const marker = L.marker([parseFloat(company.lat), parseFloat(company.lon)]);
-            marker.bindPopup(`<b>${company.nimi}</b><br>${company.kategoria}<br><br><a href="yrityskortti.html?id=${company.id}" class="btn-primary" style="color:white; padding: 5px 10px; font-size: 0.8rem;">Avaa kortti</a>`);
+            marker.bindPopup(`<b>${company.nimi}</b><br>${company.kategoria}<br><br><a href="yrityskortti.html?id=${slugify(company.nimi)}" class="btn-primary" style="color:white; padding: 5px 10px; font-size: 0.8rem;">Avaa kortti</a>`);
             targetMarkers.addLayer(marker);
         }
     });

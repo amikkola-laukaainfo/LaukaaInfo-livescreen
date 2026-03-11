@@ -16,6 +16,19 @@
         'vihtavuori': { lat: 62.370563, lon: 25.902297 }
     };
 
+    function slugify(text) {
+        if (!text) return "";
+        return text.toString().toLowerCase().trim()
+            .replace(/\s+/g, '-')
+            .replace(/[äÄàáâãäå]/g, 'a')
+            .replace(/[öÖòóôõöø]/g, 'o')
+            .replace(/[åÅ]/g, 'a')
+            .replace(/[^\w-]/g, '')
+            .replace(/--+/g, '-')
+            .replace(/^-+/, '')
+            .replace(/-+$/, '');
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
         const params = new URLSearchParams(window.location.search);
         const category = params.get('cat');
@@ -378,7 +391,7 @@
                 const websiteShow = (c.nettisivu || '').replace(/^https?:\/\//, '').replace(/\/$/, '');
 
                 item.innerHTML = `
-                <a href="yrityskortti.html?id=${c.id}" style="text-decoration: none; color: inherit; display: block;">
+                <a href="yrityskortti.html?id=${slugify(c.nimi)}" style="text-decoration: none; color: inherit; display: block;">
                     <span class="premium-badge">SUOSITELTU ${distHtml}</span>
                     ${mediaHtml}
                     <h3>${c.nimi}</h3>
@@ -446,7 +459,7 @@
         ${infoHtml}
         <p>${description}</p>
         <div style="margin-top:1rem; display:flex; gap:10px;">
-            <a href="yrityskortti.html?id=${c.id}" class="btn-primary" style="padding:0.4rem 1rem; font-size:0.8rem;">TIEDOT</a>
+            <a href="yrityskortti.html?id=${slugify(c.nimi)}" class="btn-primary" style="padding:0.4rem 1rem; font-size:0.8rem;">TIEDOT</a>
             ${c.nettisivu ? `<a href="${c.nettisivu}" target="_blank" class="btn-primary" style="padding:0.4rem 1rem; font-size:0.8rem; background:#666;">WWW</a>` : ''}
         </div>
     `;
@@ -469,7 +482,7 @@
                 const marker = L.marker([company.lat, company.lon]);
                 marker.bindPopup(`
                 <strong>${company.nimi}</strong><br>${company.osoite}<br><br>
-                <a href="yrityskortti.html?id=${company.id}" style="
+                <a href="yrityskortti.html?id=${slugify(company.nimi)}" style="
                     display: block;
                     background: #0056b3;
                     color: white;

@@ -4,6 +4,19 @@
      * Handles detailed company view.
      */
 
+    function slugify(text) {
+        if (!text) return "";
+        return text.toString().toLowerCase().trim()
+            .replace(/\s+/g, '-')
+            .replace(/[äÄàáâãäå]/g, 'a')
+            .replace(/[öÖòóôõöø]/g, 'o')
+            .replace(/[åÅ]/g, 'a')
+            .replace(/[^\w-]/g, '')
+            .replace(/--+/g, '-')
+            .replace(/^-+/, '')
+            .replace(/-+$/, '');
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
         const params = new URLSearchParams(window.location.search);
         const companyId = params.get('id');
@@ -40,7 +53,11 @@
                 }
             });
 
-            const company = companies.find(c => String(c.id) === String(id) || c.id === "company-" + id);
+            const company = companies.find(c => 
+                String(c.id) === String(id) || 
+                c.id === "company-" + id ||
+                slugify(c.nimi) === id
+            );
 
             if (!company) {
                 document.getElementById('loading-overlay').innerHTML = '<h2>Yritystä ei löytynyt.</h2><a href="index.html">Takaisin hakuun</a>';

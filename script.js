@@ -6,6 +6,19 @@ let map = null;
 let markers = null;
 let isHomePage = false; // Global flag for homepage context
 
+function slugify(text) {
+    if (!text) return "";
+    return text.toString().toLowerCase().trim()
+        .replace(/\s+/g, '-')
+        .replace(/[äÄàáâãäå]/g, 'a')
+        .replace(/[öÖòóôõöø]/g, 'o')
+        .replace(/[åÅ]/g, 'a')
+        .replace(/[^\w-]/g, '')
+        .replace(/--+/g, '-')
+        .replace(/^-+/, '')
+        .replace(/-+$/, '');
+}
+
 const welcomeCompany = {
     id: "welcome",
     nimi: "Tervetuloa Laukaan yrityshakuun",
@@ -288,7 +301,7 @@ function addMarkersToMap(companies) {
                         <h4 style="margin: 0 0 5px 0; color: #0056b3;">${company.nimi}</h4>
                         <div style="font-size: 0.8rem; margin-bottom: 8px; color: #666;">${company.kategoria}</div>
                         <div style="display: flex; flex-direction: column; gap: 5px;">
-                            <a href="yrityskortti.html?id=${company.id}${localStorage.getItem('selectedRegion') && localStorage.getItem('selectedRegion') !== 'all' ? `&region=${localStorage.getItem('selectedRegion')}` : ''}" style="
+                            <a href="yrityskortti.html?id=${slugify(company.nimi)}${localStorage.getItem('selectedRegion') && localStorage.getItem('selectedRegion') !== 'all' ? `&region=${localStorage.getItem('selectedRegion')}` : ''}" style="
                                 display: block;
                                 background: #0056b3;
                                 color: white;
@@ -1302,7 +1315,7 @@ function selectSuggestion(item) {
         if (searchInput) searchInput.value = item.company.nimi;
         const region = localStorage.getItem('selectedRegion');
         const regionParam = (region && region !== 'all') ? `&region=${region}` : '';
-        window.location.href = `yrityskortti.html?id=${item.company.id}${regionParam}`;
+        window.location.href = `yrityskortti.html?id=${slugify(item.company.nimi)}${regionParam}`;
     } else if (item.type === 'rss') {
         window.open(item.link, '_blank');
     }
@@ -1404,7 +1417,7 @@ function renderCatalog(companies) {
                     // No spotlight (likely homepage), go to details page
                     const region = localStorage.getItem('selectedRegion');
                     const regionParam = (region && region !== 'all') ? `&region=${region}` : '';
-                    window.location.href = `yrityskortti.html?id=${company.id}${regionParam}`;
+                    window.location.href = `yrityskortti.html?id=${slugify(company.nimi)}${regionParam}`;
                 }
             };
         }
