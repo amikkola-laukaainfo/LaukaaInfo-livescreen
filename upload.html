@@ -69,15 +69,23 @@
     </div>
 
     <script>
-        // Security: Simple token-based access control
-        // Note: The 'yritys' parameter must match the numeric ID from the company card URL.
-        // E.g. yrityskortti.html?id=company-2  => yritys=2
-        const VALID_TOKENS = {
-            '2': 'mz2026',        // Mediazoo company-2
-            'test-yritys': 'secret123',
-            'mediazoo': 'mz2026', // Keep this for now
-            'demo': 'demo'
-        };
+        // Configuration: Change this 'SECRET_SALT' to something unique and keep it secret!
+        const SECRET_SALT = 'LaukaaInfo2026!Secret'; 
+
+        async function validateToken(id, token) {
+            // Check legacy hardcoded tokens first (for compatibility)
+            const legacy = { '2': 'mz2026', 'demo': 'demo' };
+            if (legacy[id] === token) return true;
+
+            // Generate expected token: first 8 chars of SHA-256(id + salt)
+            const encoder = new TextEncoder();
+            const data = encoder.encode(id + SECRET_SALT);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            
+            return hashHex.substring(0, 8) === token;
+        }
 
         const params = new URLSearchParams(window.location.search);
         const yritysId = params.get('yritys');
@@ -93,18 +101,27 @@
         }
 
         // Validate Access
-        if (!yritysId || !token) {
-            showMessage('Virheellinen URL. Puuttuvat parametrit.', 'error');
-        } else if (VALID_TOKENS[yritysId] !== token) {
-            showMessage('Ei käyttöoikeutta. Token on virheellinen.', 'error');
-        } else {
-            // Authorized
-            buttonsElem.style.display = 'block';
-            document.getElementById('company-name-display').textContent = `Yritys: ${yritysId}`;
+        async function init() {
+            if (!yritysId || !token) {
+                showMessage('Virheellinen URL. Puuttuvat parametrit.', 'error');
+                return;
+            }
+            
+            const isValid = await validateToken(yritysId, token);
+            
+            if (!isValid) {
+                showMessage('Ei käyttöoikeutta. Token on virheellinen.', 'error');
+            } else {
+                // Authorized
+                buttonsElem.style.display = 'block';
+                document.getElementById('company-name-display').textContent = `Yritys: ${yritysId}`;
 
-            setupWidget(1, "upload-widget-1");
-            setupWidget(2, "upload-widget-2");
+                setupWidget(1, "upload-widget-1");
+                setupWidget(2, "upload-widget-2");
+            }
         }
+
+        init();
 
         async function setupWidget(index, buttonId) {
             const button = document.getElementById(buttonId);
