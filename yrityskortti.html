@@ -114,6 +114,48 @@
             gap: 1rem;
             overflow-x: auto;
             padding-bottom: 1rem;
+            scrollbar-width: none;
+        }
+
+        .thumbnails::-webkit-scrollbar {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .business-card-container {
+                margin: 2rem auto;
+            }
+
+            .card-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 1.5rem;
+            }
+
+            .card-logo-container {
+                margin: 0 auto;
+            }
+
+            .card-title-section {
+                min-width: unset;
+                width: 100%;
+            }
+
+            .card-title-section h1 {
+                font-size: 2.2rem;
+            }
+
+            .main-image-container {
+                height: 300px;
+            }
+
+            .thumbnails {
+                justify-content: center;
+            }
+
+            .info-panel {
+                padding: 1.5rem;
+            }
         }
 
         .thumbnails img {
