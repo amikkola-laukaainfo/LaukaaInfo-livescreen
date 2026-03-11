@@ -298,21 +298,21 @@
             }
         }
 
-        // Cloudinary Promotional Images - checks if image exists and adds as link
+        // ImageKit Promotional Images - checks if image exists and adds as link
         const timestamp = new Date().getTime();
 
         [1, 2].forEach(index => {
-            const baseUrl = `https://res.cloudinary.com/dfigif5il/image/upload/w_1200,q_auto,f_auto/mediazoo/offers/${rawId}_${index}`;
+            const baseUrl = `https://ik.imagekit.io/vowzx8znjs/mediazoo/offers/${rawId}_${index}`;
 
             const tryLoad = (extension) => {
-                const cloudinaryUrl = `${baseUrl}.${extension}?v=${timestamp}`;
+                const imagekitUrl = `${baseUrl}.${extension}?tr=w-1200,f-auto,q-auto&v=${timestamp}`;
                 const tempImg = new Image();
                 tempImg.onload = () => {
                     // Image found! Add a link button to ad-links-list
                     if (adList) {
                         adSection.style.display = 'block';
                         const a = document.createElement('a');
-                        a.href = cloudinaryUrl;
+                        a.href = imagekitUrl;
                         a.target = '_blank';
                         a.className = 'btn-primary';
                         a.style.cssText = 'background: #d2691e; padding: 0.6rem 1.2rem; font-size: 0.9rem;';
@@ -325,7 +325,7 @@
                         tryLoad('jpg'); // Fallback to jpg
                     }
                 };
-                tempImg.src = cloudinaryUrl;
+                tempImg.src = imagekitUrl;
             };
 
             tryLoad('png');
