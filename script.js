@@ -277,24 +277,44 @@ function addMarkersToMap(companies) {
 
                 const marker = L.marker([lat, lon], { icon: icon });
 
+                const mapsUrl = company.karttalinkki && company.karttalinkki !== '-' 
+                    ? company.karttalinkki 
+                    : (company.lat && company.lon 
+                        ? `https://www.google.com/maps?q=${company.lat},${company.lon}`
+                        : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${company.nimi}, ${company.osoite || 'Laukaa'}`)}`);
+
                 marker.bindPopup(`
                     <div style="font-family: 'Outfit', sans-serif; min-width: 150px;">
                         <h4 style="margin: 0 0 5px 0; color: #0056b3;">${company.nimi}</h4>
                         <div style="font-size: 0.8rem; margin-bottom: 8px; color: #666;">${company.kategoria}</div>
-                        <a href="yrityskortti.html?id=${company.id}${localStorage.getItem('selectedRegion') && localStorage.getItem('selectedRegion') !== 'all' ? `&region=${localStorage.getItem('selectedRegion')}` : ''}" style="
-                            display: block;
-                            background: #0056b3;
-                            color: white;
-                            text-decoration: none;
-                            text-align: center;
-                            padding: 5px 10px;
-                            border-radius: 4px;
-                            cursor: pointer;
-                            width: 100%;
-                            font-size: 0.8rem;
-                            box-sizing: border-box;
-                            margin-top: 5px;
-                        ">Näytä tiedot</a>
+                        <div style="display: flex; flex-direction: column; gap: 5px;">
+                            <a href="yrityskortti.html?id=${company.id}${localStorage.getItem('selectedRegion') && localStorage.getItem('selectedRegion') !== 'all' ? `&region=${localStorage.getItem('selectedRegion')}` : ''}" style="
+                                display: block;
+                                background: #0056b3;
+                                color: white;
+                                text-decoration: none;
+                                text-align: center;
+                                padding: 6px 10px;
+                                border-radius: 4px;
+                                cursor: pointer;
+                                width: 100%;
+                                font-size: 0.8rem;
+                                box-sizing: border-box;
+                            ">Näytä tiedot</a>
+                            <a href="${mapsUrl}" target="_blank" style="
+                                display: block;
+                                background: #28a745;
+                                color: white;
+                                text-decoration: none;
+                                text-align: center;
+                                padding: 6px 10px;
+                                border-radius: 4px;
+                                cursor: pointer;
+                                width: 100%;
+                                font-size: 0.8rem;
+                                box-sizing: border-box;
+                            ">📍 Googlessa</a>
+                        </div>
                     </div>
                 `);
 

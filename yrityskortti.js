@@ -287,6 +287,15 @@
             L.marker([company.lat, company.lon]).addTo(map).bindPopup(company.nimi).openPopup();
 
             document.getElementById('google-maps-link').href = `https://www.google.com/maps?q=${company.lat},${company.lon}`;
+        } else {
+            // Fallback for missing coordinates: use karttalinkki or search by name + address
+            const mapsLink = document.getElementById('google-maps-link');
+            if (company.karttalinkki && company.karttalinkki !== '-') {
+                mapsLink.href = company.karttalinkki;
+            } else {
+                const query = encodeURIComponent(`${company.nimi}, ${company.osoite || 'Laukaa'}`);
+                mapsLink.href = `https://www.google.com/maps/search/?api=1&query=${query}`;
+            }
         }
 
         // Cloudinary Promotional Images - checks if image exists and adds as link
