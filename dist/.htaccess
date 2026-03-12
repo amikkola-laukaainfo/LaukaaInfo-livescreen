@@ -5,3 +5,22 @@ RewriteRule ^haku-(.*)$ /index.html?haku=$1 [L,QSA]
 # Uudelleenohjataan /asia-kategoria/asia -> /asiahaku.html?cat=kategoria&issue=asia
 RewriteRule ^(?:asia|asiahaku)-([^/]+)/(.*)$ /asiahaku.html?cat=$1&issue=$2 [L,QSA]
 
+# --- VÄLIMUISTI-ASETUKSET ---
+
+# 1. HTML ja version.json: ei välimuistia (tarkistetaan aina palvelimelta)
+<FilesMatch "\.(html|json)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires 0
+</FilesMatch>
+
+# 2. Versioidut JS ja CSS: pitkä välimuisti
+<FilesMatch "\.[a-f0-9]{8}\.(js|css)$">
+    Header set Cache-Control "max-age=31536000, public, immutable"
+</FilesMatch>
+
+# 3. Kuvat ja muut mediat: pitkä välimuisti
+<FilesMatch "\.(png|jpg|jpeg|gif|ico|svg|webp|woff|woff2)$">
+    Header set Cache-Control "max-age=604800, public"
+</FilesMatch>
+

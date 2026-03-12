@@ -73,6 +73,21 @@ new_mobile_ajankohtaista = """<div class="menu-section">
                 </ul>
             </div>"""
 
+# New placeholders for Karttakohteet
+new_desktop_kartat = """<li class="nav-item">
+                        <a href="index.html" class="nav-link">Kartat &amp; Elämykset <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <!-- Karttakohteet submenu will be injected here -->
+                        </ul>
+                    </li>"""
+
+new_mobile_kartat = """<div class="menu-section">
+                <h3 class="section-title">KARTAT &amp; ELÄMYKSET</h3>
+                <ul class="menu-list">
+                    <!-- Mobile Karttakohteet items will be injected here -->
+                </ul>
+            </div>"""
+
 import re
 
 def replace_between(content, start_marker, end_marker, replacement):
@@ -95,6 +110,9 @@ for filepath in html_files:
     
     # 1. Desktop Kauppa
     k_start = '<li class="nav-item">\n                        <a href="index.html" class="nav-link">Kauppa'
+    # Define Kartat menu markers
+    kartat_start = '<li class="nav-item">\n                        <a href="index.html" class="nav-link">Kartat &amp; Elämykset <span class="arrow">▼</span></a>\n                        <ul class="dropdown-menu">'
+    kartat_end = '</ul>\n                    </li>'
     if k_start not in content:
         k_start = '<li class="nav-item"><a href="index.html" class="nav-link">Kauppa'
         
@@ -104,6 +122,12 @@ for filepath in html_files:
         content = replace_between(content, '<li class="nav-item">\n                        <a href="index.html" class="nav-link">Kauppa', '</ul>\n                    </li>', new_desktop_kauppa)
     else:
         content = replace_between(content, k_start, k_end, new_desktop_kauppa)
+        # Insert Karttakohteet into desktop menu
+        content = replace_between(content, kartat_start, kartat_end, new_desktop_kartat)
+        # Insert Karttakohteet into desktop menu
+        content = replace_between(content, kartat_start, kartat_end, new_desktop_kartat)
+        # Insert Karttakohteet into desktop menu
+        content = replace_between(content, k_start, k_end, new_desktop_kartat) if False else content # This line was moved and modified to use k_start/k_end as placeholders for now.
 
     # 2. Desktop Ajankohtaista
     a_start = '<li class="nav-item">\n                        <a href="ajankohtaista.html" class="nav-link">Ajankohtaista'
@@ -125,6 +149,8 @@ for filepath in html_files:
     # Helpommin, etsi <h3 class="section-title">KAUPPA</h3> .... </div> (ensimmäinen sulkeva div)
     pattern_mobile_k = re.compile(r'<div class="menu-section">\s*<h3 class="section-title">KAUPPA</h3>\s*<ul class="menu-list">.*?</ul>\s*</div>', re.DOTALL | re.IGNORECASE)
     content = pattern_mobile_k.sub(new_mobile_kauppa, content)
+        # Insert Karttakohteet into mobile menu
+        content = replace_between(content, m_k_start, m_k_end, new_mobile_kartat)
     
     # 4. Mobile Ajankohtaista
     pattern_mobile_a = re.compile(r'<div class="menu-section">\s*<h3 class="section-title">AJANKOHTAISTA</h3>\s*<ul class="menu-list">.*?</ul>\s*</div>', re.DOTALL | re.IGNORECASE)

@@ -1616,3 +1616,72 @@ function getHaversineDistance(lat1, lon1, lat2, lon2) {
 function deg2rad(deg) {
     return deg * (Math.PI / 180);
 }
+
+/**
+ * PWA Service Worker Registration & Update Management
+ */
+function initPWAUpdates() {
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            // Check if we are in a subdirectory (like /logica/)
+            const isSubDir = window.location.pathname.includes('/logica/');
+            const swPath = isSubDir ? '../sw.js' : 'sw.js';
+
+            navigator.serviceWorker.register(swPath).then(reg => {
+                console.log('Service Worker rekisteröity');
+
+                // Tarkista päivitykset
+                reg.addEventListener('updatefound', () => {
+                    const newWorker = reg.installing;
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            showUpdateBanner();
+                        }
+                    });
+                });
+            }).catch(err => console.error('Service Worker virhe:', err));
+        });
+
+        // Kuuntele ohjaimen vaihtumista (uusi SW ottaa vallan)
+        let refreshing = false;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+            if (!refreshing) {
+                window.location.reload();
+                refreshing = true;
+            }
+        });
+    }
+}
+
+function showUpdateBanner() {
+    // Luodaan banneri jos sitä ei vielä ole
+    if (document.getElementById('sw-update-banner')) return;
+
+    const banner = document.createElement('div');
+    banner.id = 'sw-update-banner';
+    banner.className = 'sw-update-banner';
+    banner.innerHTML = `
+        <span>Uusi versio saatavilla!</span>
+        <button class="btn-refresh" onclick="prepareUpdate()">Päivitä nyt</button>
+    `;
+    document.body.appendChild(banner);
+
+    // Aktivoidaan animaatio viiveellä
+    setTimeout(() => banner.classList.add('active'), 100);
+}
+
+window.prepareUpdate = function() {
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistration().then(reg => {
+            if (reg && reg.waiting) {
+                reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+            } else {
+                // Varatoimenpide jos waiting-tilaa ei löydy
+                window.location.reload();
+            }
+        });
+    }
+};
+
+// Alustetaan PWA-päivitykset
+initPWAUpdates();

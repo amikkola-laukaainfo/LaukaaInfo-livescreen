@@ -2070,3 +2070,8 @@ footer {
         opacity: 0;
     }
 }
+/* Service Worker Update Notification Banner */
+.sw-update-banner { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: #007bff; color: white; padding: 12px 24px; border-radius: 50px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 15px; z-index: 9999; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); font-weight: 500; }
+.sw-update-banner.active { transform: translateX(-50%) translateY(0); }
+.sw-update-banner .btn-refresh { background: white; color: #007bff; border: none; padding: 6px 15px; border-radius: 20px; cursor: pointer; font-weight: 700; font-size: 0.85rem; transition: background 0.2s; }
+.sw-update-banner .btn-refresh:hover { background: #f0f0f0; }

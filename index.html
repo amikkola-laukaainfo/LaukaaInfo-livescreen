@@ -290,16 +290,7 @@
     <div class="demo-notification">Tämä sivusto on yksityinen ja riippumaton palvelu. Se ei ole kunnan virallinen
         verkkosivusto. Sisällöt perustuvat avoimiin ja julkisiin lähteisiin.</div>
 
-    <!-- PWA Service Worker Registration -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then(reg => console.log('Service Worker rekisteröity', reg))
-                    .catch(err => console.error('Service Worker rekisteröinti epäonnistui', err));
-            });
-        }
-    </script>
+    <!-- Service Worker registration is handled in script.js -->
 
     <!-- Leaflet & Multi-cluster JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
