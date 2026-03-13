@@ -5,6 +5,7 @@ let currentMediaIndex = 0;
 let map = null;
 let markers = null;
 let isHomePage = false; // Global flag for homepage context
+let userCoords = null; // Globaali sijainti
 
 function slugify(text) {
     if (!text) return "";
@@ -234,6 +235,13 @@ function initMap(companies) {
 
     let userMarker;
     map.on('locationfound', function (e) {
+        userCoords = e.latlng;
+        // Tallennetaan jotta säilyy sivujen välillä
+        localStorage.setItem('userCoords', JSON.stringify({ lat: userCoords.lat, lng: userCoords.lng }));
+        
+        // Päivitetään haku nähdäksemme lähimmät heti
+        filterCatalog();
+
         if (userMarker) map.removeLayer(userMarker);
 
         const userIcon = L.divIcon({
@@ -949,28 +957,32 @@ function filterCatalog(renderList = true) {
         }
 
         const matchesCategory = category === 'all' || company.kategoria === category;
-        const isPremium = company.tyyppi === 'paid' || company.taso === 'premium';
+        
+        // Yhtenäinen premium-määritys
+        const isPremium = company.tyyppi === 'paid' || company.tyyppi === 'maksu' || company.taso === 'premium';
 
-        // Regional filtering
+        // Regional filtering & Distance calculation
         let matchesRegion = true;
-        if (selectedRegion && selectedRegion !== 'all' && regionCoords) {
-            if (isPremium) {
-                matchesRegion = true; // Premium bypasses region filter radius
-            } else if (company.lat && company.lon) {
-                const dist = getHaversineDistance(regionCoords.lat, regionCoords.lon, parseFloat(company.lat), parseFloat(company.lon));
-                matchesRegion = dist <= 13; // 13km radius
-            } else {
-                matchesRegion = false; // No coords and not premium -> hidden when region selected
-            }
-        }
+        
+        // Ensisijainen vertailupiste etäisyydelle: käyttäjän GPS. Toissijainen: valittu alue.
+        const refLat = userCoords ? userCoords.lat : (regionCoords ? regionCoords.lat : null);
+        const refLon = userCoords ? userCoords.lng : (regionCoords ? regionCoords.lon : null);
 
-        if (selectedRegion && selectedRegion !== 'all' && regionCoords && company.lat && company.lon) {
-            const dist = getHaversineDistance(regionCoords.lat, regionCoords.lon, parseFloat(company.lat), parseFloat(company.lon));
+        if (refLat && refLon && company.lat && company.lon) {
+            const dist = getHaversineDistance(refLat, refLon, parseFloat(company.lat), parseFloat(company.lon));
             company.distanceText = dist < 1 ? `${Math.round(dist * 1000)} m` : `${dist.toFixed(1)} km`;
             company.distanceValue = dist;
+            
+            // Aluesuodatus (vain jos ei ole premium)
+            if (selectedRegion && selectedRegion !== 'all' && !isPremium) {
+                matchesRegion = dist <= 13; // 13km radius
+            }
         } else {
             company.distanceText = null;
             company.distanceValue = null;
+            if (selectedRegion && selectedRegion !== 'all' && !isPremium) {
+                matchesRegion = false;
+            }
         }
 
         return { company, score, matchesCategory, matchesRegion, isPremium };

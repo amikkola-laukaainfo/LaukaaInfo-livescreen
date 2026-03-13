@@ -140,8 +140,8 @@
             if (regionCoords && selectedRegion && selectedRegion !== 'all') {
                 console.log(`Filtering by region: ${selectedRegion} (13km radius)`);
                 categoryCompanies = rawCategoryCompanies.filter(c => {
-                    // Paid companies always bypass filter
-                    const isPremium = c.tyyppi === 'paid' || c.taso === 'premium' || (c.media && c.media.length > 0);
+                    // Yhtenäinen premium-määritys
+                    const isPremium = c.tyyppi === 'paid' || c.tyyppi === 'maksu' || c.taso === 'premium' || (c.media && c.media.length > 0);
                     if (isPremium) return true;
 
                     if (c.lat && c.lon) {
@@ -180,9 +180,9 @@
         const currentSort = referenceCoords ? sortByDistance : sortAlphabetically;
 
         // Separate Premium and Free
-        // Premium: has media OR type is "maksu"
-        let premium = categoryCompanies.filter(c => (c.media && c.media.length > 0) || c.tyyppi === 'maksu');
-        const free = categoryCompanies.filter(c => !((c.media && c.media.length > 0) || c.tyyppi === 'maksu')).sort(currentSort);
+        // Yhtenäinen premium-määritys: has media OR tyyppi is "maksu/paid"
+        let premium = categoryCompanies.filter(c => (c.media && c.media.length > 0) || c.tyyppi === 'maksu' || c.tyyppi === 'paid' || c.taso === 'premium');
+        const free = categoryCompanies.filter(c => !((c.media && c.media.length > 0) || c.tyyppi === 'maksu' || c.tyyppi === 'paid' || c.taso === 'premium')).sort(currentSort);
 
         // Probabilistic Weighted Sort for Premium Companies
         // Higher karusellipaino (0-100) increases the chance of being at the top

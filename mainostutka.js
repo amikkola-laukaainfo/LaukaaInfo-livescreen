@@ -98,27 +98,45 @@ const Mainostutka = (function () {
 
         results.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    userLat = position.coords.latitude;
-                    userLon = position.coords.longitude;
+        const isDesktop = window.innerWidth > 600;
 
-                    // Varmistetaan että data on ladattu ennen käsittelyä
-                    waitForData().then(() => {
-                        processRadar();
-                    });
-                },
-                (error) => {
-                    console.error("Sijaintivirhe:", error);
-                    let msg = "Sijaintia ei voitu hakea.";
-                    if (error.code === 1) msg = "Sijaintilupa evätty. Salli sijainti selaimen asetuksista.";
-                    document.getElementById('radar-ads-list').innerHTML = `<p class='error-msg'>${msg}</p>`;
-                },
-                { enableHighAccuracy: true }
-            );
+        if (isDesktop) {
+            // Desktop: Ei kysytä lupaa automaattisesti, vaan odotetaan haku tai kartan klikkaus
+            document.getElementById('radar-ads-list').innerHTML = "<p class='info-msg'>Anna sijainti hakemalla osoite tai klikkaamalla karttaa.</p>";
+            // Jos meillä on jo tallennettu sijainti, käytetään sitä
+            const stored = localStorage.getItem('userCoords');
+            if (stored) {
+                try {
+                    const parsed = JSON.parse(stored);
+                    userLat = parsed.lat;
+                    userLon = parsed.lng;
+                    processRadar();
+                } catch(e) {}
+            }
         } else {
-            document.getElementById('radar-ads-list').innerHTML = "<p class='error-msg'>Selaimesi ei tue paikannusta.</p>";
+            // Mobile: Kysytään lupaa heti
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        userLat = position.coords.latitude;
+                        userLon = position.coords.longitude;
+
+                        // Varmistetaan että data on ladattu ennen käsittelyä
+                        waitForData().then(() => {
+                            processRadar();
+                        });
+                    },
+                    (error) => {
+                        console.error("Sijaintivirhe:", error);
+                        let msg = "Sijaintia ei voitu hakea.";
+                        if (error.code === 1) msg = "Sijaintilupa evätty. Salli sijainti selaimen asetuksista.";
+                        document.getElementById('radar-ads-list').innerHTML = `<p class='error-msg'>${msg}</p>`;
+                    },
+                    { enableHighAccuracy: true }
+                );
+            } else {
+                document.getElementById('radar-ads-list').innerHTML = "<p class='error-msg'>Selaimesi ei tue paikannusta.</p>";
+            }
         }
     }
 
@@ -141,29 +159,38 @@ const Mainostutka = (function () {
             const dist = calculateDistance(userLat, userLon, parseFloat(c.lat), parseFloat(c.lon));
             const hasLinkAd = (c.mainoslinkit && c.mainoslinkit.length > 2);
             const hasSlogan = (c.mainoslause && c.mainoslause.trim().length > 0);
+            
+            // Yhtenäinen premium-määritys
+            const isPremium = c.tyyppi === 'paid' || c.tyyppi === 'maksu' || c.taso === 'premium';
 
             let type = 'none';
             if (hasLinkAd) type = 'offer';
             else if (hasSlogan) type = 'ad';
 
-            return { ...c, distanceInKm: dist, type: type };
+            return { ...c, distanceInKm: dist, type: type, isPremium: isPremium };
         });
 
-        // Lajittelu ryhmittäin
-        const offers = allWithDistance.filter(c => c.type === 'offer').sort((a, b) => a.distanceInKm - b.distanceInKm);
-        const ads = allWithDistance.filter(c => c.type === 'ad').sort((a, b) => a.distanceInKm - b.distanceInKm);
+        // Lajittelu: Premium ensin, sitten tyyppi (tarjous -> mainos), sitten etäisyys
+        const premiumItems = allWithDistance.filter(c => c.isPremium).sort((a, b) => a.distanceInKm - b.distanceInKm);
+        
+        // Muut tarjoukset ja mainokset
+        const otherOffers = allWithDistance.filter(c => !c.isPremium && c.type === 'offer').sort((a, b) => a.distanceInKm - b.distanceInKm);
+        const otherAds = allWithDistance.filter(c => !c.isPremium && c.type === 'ad').sort((a, b) => a.distanceInKm - b.distanceInKm);
+        
+        // Yhdistetään ja varmistetaan että premium on kärjessä
+        const sorted = [...premiumItems, ...otherOffers, ...otherAds];
 
         // Lasketaan kuinka monta "muuta" tarvitaan, jotta saadaan vähintään 5 korttia yhteensä
-        const adCount = offers.length + ads.length;
+        const adCount = sorted.length;
         const othersToRetrieve = Math.max(0, 5 - adCount);
 
-        const others = allWithDistance.filter(c => c.type === 'none')
+        const others = allWithDistance.filter(c => !c.isPremium && c.type === 'none')
             .sort((a, b) => a.distanceInKm - b.distanceInKm)
             .slice(0, othersToRetrieve);
 
-        const combinedResults = [...offers, ...ads, ...others];
+        const combinedResults = [...sorted, ...others];
 
-        renderRadarResults(offers, ads, others);
+        renderRadarResults(premiumItems, otherOffers, otherAds, others);
         updateRadarMap(combinedResults);
     }
 
