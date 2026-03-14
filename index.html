@@ -29,21 +29,6 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
 
     <link rel="stylesheet" href="style.css?v=20260301-1">
-    <script>
-        /**
-         * Avaa Facebook-linkin turvallisesti.
-         * Erityisesti Android WebView -yhteensopivuus: jos sovelluksessa on 
-         * Android-rajapinta, käytetään sitä välttämään ERR_UNKNOWN_URL_SCHEME.
-         */
-        function openFacebookGroup(url) {
-            console.log("Avaamassa Facebookia:", url);
-            if (window.Android && typeof window.Android.openFb === 'function') {
-                window.Android.openFb(url);
-                return false;
-            }
-            return true; 
-        }
-    </script>
 </head>
 
 <body>
@@ -196,7 +181,7 @@
                 <a href="https://www.youtube.com/@laukaainfo" target="_blank" class="btn-youtube">
                     🎥 LaukaaInfo YouTube-kanavalle
                 </a>
-                <a href="https://www.facebook.com/groups/892675230270311" target="_blank" class="btn-facebook" onclick="return openFacebookGroup(this.href);">
+                <a href="https://www.facebook.com/groups/892675230270311/" class="btn-facebook">
                     👥 LaukaaInfo - keskustelu
                 </a>
             </div>
