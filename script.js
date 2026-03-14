@@ -1697,3 +1697,27 @@ window.prepareUpdate = function() {
 
 // Alustetaan PWA-päivitykset
 initPWAUpdates();
+
+/**
+ * Avaa Facebook-ryhmän turvallisesti.
+ * Erityisesti Android WebView -yhteensopivuus: jos sovelluksessa on 
+ * Android-rajapinta, käytetään sitä välttämään ERR_UNKNOWN_URL_SCHEME.
+ * @param {string} url - Facebook-ryhmän URL
+ */
+function openFacebookGroup(url) {
+    console.log("Avaamassa Facebook-ryhmää:", url);
+    
+    // Jos olemme Android-sovelluksessa, jolla on JavascriptInterface "Android"
+    if (window.Android && typeof window.Android.openFb === 'function') {
+        window.Android.openFb(url);
+        return false;
+    }
+    
+    // Tavallisessa selaimessa annetaan normaalin linkin (href) toimia, 
+    // mutta jos tämä kutsutaan onclickissä, palautetaan true jotta href seuraa.
+    // Jos halutaan pakottaa uusi välilehti ohittaen oletus:
+    // window.open(url, '_blank');
+    // return false;
+    
+    return true; 
+}
