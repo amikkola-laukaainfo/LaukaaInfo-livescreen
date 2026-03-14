@@ -20,6 +20,34 @@ function slugify(text) {
         .replace(/-+$/, '');
 }
 
+/**
+ * Korjaa Facebook-linkit WebView-yhteensopiviksi.
+ * Muuntaa fb:// linkit tavallisiksi https linkeiksi, jotta WebView ei heitä erroria.
+ */
+function fixFacebookLink(url) {
+    if (!url || typeof url !== 'string') return url;
+    let fixedUrl = url.trim();
+    if (fixedUrl.startsWith('fb://')) {
+        fixedUrl = fixedUrl.replace('fb://group/', 'https://www.facebook.com/groups/')
+                           .replace('fb://page/', 'https://www.facebook.com/')
+                           .replace('fb://profile/', 'https://www.facebook.com/profile.php?id=')
+                           .replace('fb://', 'https://www.facebook.com/');
+        console.log("Facebook-linkki korjattu:", url, "->", fixedUrl);
+    }
+    return fixedUrl;
+}
+
+// Globaali klikkauskuuntelija Facebook-linkeille
+document.addEventListener('click', (e) => {
+    const link = e.target.closest('a');
+    if (link && link.href) {
+        const url = link.href;
+        if (url.startsWith('fb://')) {
+            link.href = fixFacebookLink(url);
+        }
+    }
+}, true);
+
 const welcomeCompany = {
     id: "welcome",
     nimi: "Tervetuloa Laukaan yrityshakuun",

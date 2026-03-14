@@ -191,12 +191,9 @@
             Object.entries(socialMap).forEach(([key, info]) => {
                 let val = (company[key] || '').trim();
                 if (val && val !== '-') {
-                    // Muunnetaan fb:// linkit tavallisiksi https linkeiksi, jotta WebView ei heitä erroria
-                    if (key === 'facebook' && val.startsWith('fb://')) {
-                        console.log("Muunnetaan fb:// linkki:", val);
-                        val = val.replace('fb://group/', 'https://www.facebook.com/groups/')
-                                 .replace('fb://page/', 'https://www.facebook.com/')
-                                 .replace('fb://', 'https://www.facebook.com/');
+                    // Muunnetaan fb:// linkit tavallisiksi https linkeiksi (script.js:n globaali funktio)
+                    if (key === 'facebook') {
+                        val = fixFacebookLink(val);
                     }
 
                     const a = document.createElement('a');
