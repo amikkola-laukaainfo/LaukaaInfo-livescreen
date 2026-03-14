@@ -189,8 +189,16 @@
             };
 
             Object.entries(socialMap).forEach(([key, info]) => {
-                const val = (company[key] || '').trim();
+                let val = (company[key] || '').trim();
                 if (val && val !== '-') {
+                    // Muunnetaan fb:// linkit tavallisiksi https linkeiksi, jotta WebView ei heitä erroria
+                    if (key === 'facebook' && val.startsWith('fb://')) {
+                        console.log("Muunnetaan fb:// linkki:", val);
+                        val = val.replace('fb://group/', 'https://www.facebook.com/groups/')
+                                 .replace('fb://page/', 'https://www.facebook.com/')
+                                 .replace('fb://', 'https://www.facebook.com/');
+                    }
+
                     const a = document.createElement('a');
                     a.href = val;
                     a.target = '_blank';
