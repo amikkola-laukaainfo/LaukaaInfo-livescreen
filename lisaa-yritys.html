@@ -12,6 +12,7 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <style>
         .registration-container {
             max-width: 900px;
@@ -139,6 +140,55 @@
 
         .btn-submit:hover {
             background: var(--secondary-blue);
+        }
+
+        .upload-method-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            background: #f8f9fa;
+            padding: 0.5rem;
+            border-radius: 10px;
+        }
+
+        .upload-method-btn {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .upload-method-btn.active {
+            background: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        .upload-fields {
+            display: none;
+            background: #fff;
+            padding: 1rem;
+            border: 1px dashed #ccc;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .upload-fields.active {
+            display: block;
+        }
+
+        .file-input-group {
+            margin-bottom: 1rem;
+        }
+
+        .file-input-group label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.3rem;
         }
     </style>
 </head>
@@ -421,12 +471,54 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="images">Kuvien linkit (kuningaslista, erota pilkulla)</label>
-                        <input type="text" id="images" name="images" placeholder="https://... , https://...">
-                    </div>
-                    <div class="form-group">
-                        <label for="logo">Yrityksen logon URL</label>
-                        <input type="url" id="logo" name="logo" placeholder="https://.../logo.png">
+                        <label>Kuvat ja Logo *</label>
+                        <div class="upload-method-selector">
+                            <button type="button" class="upload-method-btn active" onclick="setUploadMethod('links')">Käytä linkkejä</button>
+                            <button type="button" class="upload-method-btn" onclick="setUploadMethod('upload')">Lataa koneelta</button>
+                        </div>
+
+                        <!-- Linkkikentät -->
+                        <div id="method-links" class="upload-method-content active">
+                            <div class="form-group">
+                                <label for="images">Kuvien linkit (erota pilkulla)</label>
+                                <input type="text" id="images" name="images" placeholder="https://... , https://...">
+                            </div>
+                            <div class="form-group">
+                                <label for="logo">Yrityksen logon URL</label>
+                                <input type="url" id="logo" name="logo" placeholder="https://.../logo.png">
+                            </div>
+                        </div>
+
+                        <!-- Latauskentät -->
+                        <div id="method-upload" class="upload-method-content" style="display: none;">
+                            <div class="upload-fields active">
+                                <p style="font-size: 0.9rem; color: #666; margin-bottom: 1rem;">Lataa enintään 5 kuvaa ja yrityksen logo. Kuvat pakataan automaattisesti ZIP-tiedostoksi.</p>
+                                <div class="file-input-group">
+                                    <label>Yrityksen logo</label>
+                                    <input type="file" id="upload-logo" accept="image/*">
+                                </div>
+                                <div class="file-input-group">
+                                    <label>Kuva 1</label>
+                                    <input type="file" class="upload-img" accept="image/*">
+                                </div>
+                                <div class="file-input-group">
+                                    <label>Kuva 2</label>
+                                    <input type="file" class="upload-img" accept="image/*">
+                                </div>
+                                <div class="file-input-group">
+                                    <label>Kuva 3</label>
+                                    <input type="file" class="upload-img" accept="image/*">
+                                </div>
+                                <div class="file-input-group">
+                                    <label>Kuva 4</label>
+                                    <input type="file" class="upload-img" accept="image/*">
+                                </div>
+                                <div class="file-input-group">
+                                    <label>Kuva 5</label>
+                                    <input type="file" class="upload-img" accept="image/*">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="youtube">YouTube-videon linkki</label>
@@ -499,16 +591,53 @@
             container.appendChild(div);
         }
 
+        let currentUploadMethod = 'links';
+
+        function setUploadMethod(method) {
+            currentUploadMethod = method;
+            document.querySelectorAll('.upload-method-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('onclick').includes(method));
+            });
+
+            if (method === 'links') {
+                document.getElementById('method-links').style.display = 'block';
+                document.getElementById('method-upload').style.display = 'none';
+            } else {
+                document.getElementById('method-links').style.display = 'none';
+                document.getElementById('method-upload').style.display = 'block';
+            }
+        }
+
         // Tarkistetaan URL-parametri avattaessa
         const params = new URLSearchParams(window.location.search);
         const type = params.get('type') || 'free';
         selectType(type);
 
-        document.getElementById('registration-form').addEventListener('submit', function (e) {
+        document.getElementById('registration-form').addEventListener('submit', async function (e) {
             e.preventDefault();
 
             const formData = new FormData(this);
             const typeValue = formData.get('type');
+            
+            let zipGenerated = false;
+            let zipBlob = null;
+            let zipFileName = `LaukaaInfo_aineisto_${Date.now()}.zip`;
+
+            if (typeValue === 'paid' && currentUploadMethod === 'upload') {
+                const zip = new JSZip();
+                const logoFile = document.getElementById('upload-logo').files[0];
+                const imageFiles = Array.from(document.querySelectorAll('.upload-img')).map(el => el.files[0]).filter(f => !!f);
+
+                if (logoFile) zip.file(`logo_${logoFile.name}`, logoFile);
+                imageFiles.forEach((file, index) => {
+                    zip.file(`kuva_${index + 1}_${file.name}`, file);
+                });
+
+                if (logoFile || imageFiles.length > 0) {
+                    zipBlob = await zip.generateAsync({ type: "blob" });
+                    zipGenerated = true;
+                }
+            }
 
             const data = {
                 tyyppi: typeValue === 'paid' ? 'MAKSULLINEN ⭐' : 'ILMAINEN',
@@ -518,7 +647,7 @@
                 puhelin: formData.get('phone') || '-',
                 kotisivut: formData.get('website') || '-',
                 esittely: formData.get('description'),
-                kuva_linkit: formData.get('images') || '-',
+                kuva_linkit: currentUploadMethod === 'links' ? (formData.get('images') || '-') : 'Ladattu ZIP-tiedostona',
                 youtube: formData.get('youtube') || '-',
                 tarjous: formData.get('coupon') || '-',
                 facebook: formData.get('facebook') || '-',
@@ -527,7 +656,7 @@
                 tiktok: formData.get('tiktok') || '-',
                 whatsapp: formData.get('whatsapp') ? 'true' : 'false',
                 kesto: formData.get('duration'),
-                logo: formData.get('logo') || '-',
+                logo: currentUploadMethod === 'links' ? (formData.get('logo') || '-') : 'Ladattu ZIP-tiedostona',
                 rss: formData.get('rss') || '-',
                 mainoslinkit: Array.from(document.querySelectorAll('input[name="ad_link[]"]')).map(input => input.value).filter(v => v !== '')
             };
@@ -553,17 +682,36 @@
 
             if (typeValue === 'paid') {
                 emailBody += `Lisätiedot (Maksullinen):\n`;
+                emailBody += `Lataustapa: ${currentUploadMethod === 'links' ? 'Linkit' : 'Tiedostolataus (ZIP paketti)'}\n`;
                 emailBody += `Logo: ${data.logo}\n`;
                 emailBody += `Kuvat: ${data.kuva_linkit}\n`;
                 emailBody += `YouTube: ${data.youtube}\n`;
                 emailBody += `Tarjous: ${data.tarjous}\n`;
                 emailBody += `RSS-syöte: ${data.rss}\n`;
                 emailBody += `Mainoslinkit: ${data.mainoslinkit.join(', ') || '-'}\n`;
+                
+                if (zipGenerated) {
+                    emailBody += `\n!!! HUOM: Asiakas on ladannut kuvat. Ole hyvä ja pyydä häntä lähettämään ZIP-tiedosto osoitteeseen info.mediazoo@gmail.com tai info@mediazoo.fi !!!\n`;
+                }
             }
 
             const subject = encodeURIComponent(`LaukaaInfo - Uusi yritysilmoitus: ${data.nimi}`);
             const body = encodeURIComponent(emailBody);
-            const mailtoLink = `mailto:info@mediazoo.fi?subject=${subject}&body=${body}`;
+            const mailtoLink = `mailto:info.mediazoo@gmail.com?subject=${subject}&body=${body}`;
+
+            // Jos ZIP generoitiin, ladataan se
+            if (zipGenerated) {
+                const url = window.URL.createObjectURL(zipBlob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = zipFileName;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+                
+                alert('Kuvat on pakattu ZIP-tiedostoksi ja lataus on alkanut. LÄHETÄ kyseinen ZIP-tiedosto sähköpostitse osoitteeseen info.mediazoo@gmail.com.\n\nKlikkaa OK avataksesi sähköpostiviestin ja siirtyäksesi maksuun.');
+            }
 
             // Avaa sähköposti tietojen lähettämistä varten
             window.open(mailtoLink, '_blank');
@@ -576,9 +724,11 @@
                     "12": "https://buy.stripe.com/3cIaEY81l5W86l12jH1B609"
                 };
                 const stripePaymentLink = stripeLinks[data.kesto];
-
-                alert('Kiitos! Yrityksesi tiedot on koottu sähköpostiin. Lähetäthän viestin sähköpostiohjelmassasi ja jatka sen jälkeen maksuun Stripessä.');
-                window.location.href = stripePaymentLink;
+                
+                // Pieni viive jotta mailto ehtii avautua
+                setTimeout(() => {
+                    window.location.href = stripePaymentLink;
+                }, 1000);
             } else {
                 alert('Kiitos! Yrityksesi tiedot on koottu sähköpostiin. Lähetäthän viestin sähköpostiohjelmassasi, jotta tiedot saapuvat meille tarkistettavaksi.');
                 window.location.href = 'index.html';
