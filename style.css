@@ -391,7 +391,32 @@ header p {
     transform: scale(1.05);
 }
 
-.btn-youtube i {
+.btn-facebook {
+    display: inline-flex;
+    align-items: center;
+    background: #1877F2;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 15px rgba(24, 119, 242, 0.3);
+}
+
+.btn-facebook:hover {
+    transform: scale(1.05);
+}
+
+.header-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+}
+
+.btn-youtube i, .btn-facebook i {
     margin-right: 8px;
 }
 
