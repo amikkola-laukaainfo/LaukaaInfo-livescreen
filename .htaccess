@@ -1,4 +1,9 @@
 RewriteEngine On
+
+# Uudelleenohjataan somen esikatselubotit MediaZoon PHP-versioon, jossa on dynaamiset OG-tunnisteet
+RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|Twitterbot|LinkedInBot|discordapp) [NC]
+RewriteRule ^yrityskortti\.html$ https://www.mediazoo.fi/laukaainfo-web/yrityskortti.php [L,R=302,QSA]
+
 # Uudelleenohjataan /haku-yritys -> /index.html?haku=yritys
 RewriteRule ^haku-(.*)$ /index.html?haku=$1 [L,QSA]
 

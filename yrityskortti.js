@@ -249,10 +249,7 @@
                 </span>
             `;
             shareBtn.onclick = () => {
-                const hasImages = (company.media || []).some(m => m.type === 'image');
-                const shareUrl = hasImages 
-                    ? `https://www.mediazoo.fi/laukaainfo-web/yrityskortti.php?id=${rawId}`
-                    : window.location.href;
+                const shareUrl = window.location.href;
 
                 const shareData = {
                     title: document.title,
