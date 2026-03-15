@@ -333,8 +333,11 @@ function addMarkersToMap(companies) {
                         : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${company.nimi}, ${company.osoite || 'Laukaa'}`)}`);
 
                 const isPremium = company.tyyppi === 'maksu' || company.tyyppi === 'paid';
+                const isInDist = window.location.pathname.includes('/dist/');
+                const distPrefix = isInDist ? '' : 'dist/';
+                
                 const cardUrl = isPremium 
-                    ? `${slugify(company.nimi)}.html`
+                    ? `${distPrefix}${slugify(company.nimi)}.html`
                     : `yrityskortti.html?id=${slugify(company.nimi)}${localStorage.getItem('selectedRegion') && localStorage.getItem('selectedRegion') !== 'all' ? `&region=${localStorage.getItem('selectedRegion')}` : ''}`;
 
                 marker.bindPopup(`
@@ -1362,8 +1365,11 @@ function selectSuggestion(item) {
         const regionParam = (region && region !== 'all') ? `&region=${region}` : '';
         const isPaid = item.company.tyyppi === 'maksu' || item.company.tyyppi === 'paid';
         
+        const isInDist = window.location.pathname.includes('/dist/');
+        const distPrefix = isInDist ? '' : 'dist/';
+        
         const cardUrl = isPaid 
-            ? `${slugify(item.company.nimi)}.html` 
+            ? `${distPrefix}${slugify(item.company.nimi)}.html` 
             : `yrityskortti.html?id=${slugify(item.company.nimi)}${regionParam}`;
             
         window.location.href = cardUrl;
@@ -1470,8 +1476,11 @@ function renderCatalog(companies) {
                     const regionParam = (region && region !== 'all') ? `&region=${region}` : '';
                     const isPaid = company.tyyppi === 'maksu' || company.tyyppi === 'paid';
                     
+                    const isInDist = window.location.pathname.includes('/dist/');
+                    const distPrefix = isInDist ? '' : 'dist/';
+                    
                     const cardUrl = isPaid 
-                        ? `${slugify(company.nimi)}.html` 
+                        ? `${distPrefix}${slugify(company.nimi)}.html` 
                         : `yrityskortti.html?id=${slugify(company.nimi)}${regionParam}`;
                         
                     window.location.href = cardUrl;

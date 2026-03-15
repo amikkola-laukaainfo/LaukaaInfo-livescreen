@@ -120,7 +120,7 @@ function generatePremiumPages() {
     <meta property="og:title" content="${name} – LaukaaInfo">
     <meta property="og:description" content="${description}">
     <meta property="og:image" content="${ogImage}">
-    <meta property="og:url" content="https://laukaainfo.fi/${slug}.html">
+    <meta property="og:url" content="https://laukaainfo.fi/dist/${slug}.html">
     <meta property="og:type" content="business.business">
     <meta property="og:site_name" content="LaukaaInfo">
     <script type="application/ld+json">${JSON.stringify(schema)}</script>
