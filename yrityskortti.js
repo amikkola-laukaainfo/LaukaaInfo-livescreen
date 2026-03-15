@@ -249,17 +249,22 @@
                 </span>
             `;
             shareBtn.onclick = () => {
+                const hasImages = (company.media || []).some(m => m.type === 'image');
+                const shareUrl = hasImages 
+                    ? `https://www.mediazoo.fi/laukaainfo-web/yrityskortti.php?id=${rawId}`
+                    : window.location.href;
+
                 const shareData = {
                     title: document.title,
                     text: slogan || description,
-                    url: window.location.href
+                    url: shareUrl
                 };
 
                 if (navigator.share) {
                     navigator.share(shareData).catch(err => console.log('Error sharing:', err));
                 } else {
                     // Fallback: Copy to clipboard
-                    navigator.clipboard.writeText(window.location.href).then(() => {
+                    navigator.clipboard.writeText(shareUrl).then(() => {
                         const originalHtml = shareBtn.innerHTML;
                         shareBtn.innerHTML = '<span style="font-size:0.7rem; color:green; margin-left:0.5rem;">Kopioitu!</span>';
                         setTimeout(() => { shareBtn.innerHTML = originalHtml; }, 2000);
