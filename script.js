@@ -332,12 +332,17 @@ function addMarkersToMap(companies) {
                         ? `https://www.google.com/maps?q=${company.lat},${company.lon}`
                         : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${company.nimi}, ${company.osoite || 'Laukaa'}`)}`);
 
+                const isPremium = company.tyyppi === 'maksu' || company.tyyppi === 'paid';
+                const cardUrl = isPremium 
+                    ? `yritys/${slugify(company.nimi)}.html`
+                    : `yrityskortti.html?id=${slugify(company.nimi)}${localStorage.getItem('selectedRegion') && localStorage.getItem('selectedRegion') !== 'all' ? `&region=${localStorage.getItem('selectedRegion')}` : ''}`;
+
                 marker.bindPopup(`
                     <div style="font-family: 'Outfit', sans-serif; min-width: 150px;">
                         <h4 style="margin: 0 0 5px 0; color: #0056b3;">${company.nimi}</h4>
                         <div style="font-size: 0.8rem; margin-bottom: 8px; color: #666;">${company.kategoria}</div>
                         <div style="display: flex; flex-direction: column; gap: 5px;">
-                            <a href="yrityskortti.html?id=${slugify(company.nimi)}${localStorage.getItem('selectedRegion') && localStorage.getItem('selectedRegion') !== 'all' ? `&region=${localStorage.getItem('selectedRegion')}` : ''}" style="
+                            <a href="${cardUrl}" style="
                                 display: block;
                                 background: #0056b3;
                                 color: white;
@@ -1353,9 +1358,9 @@ function selectSuggestion(item) {
         }
     } else if (item.type === 'business') {
         if (searchInput) searchInput.value = item.company.nimi;
-        const region = localStorage.getItem('selectedRegion');
-        const regionParam = (region && region !== 'all') ? `&region=${region}` : '';
-        window.location.href = `yrityskortti.html?id=${slugify(item.company.nimi)}${regionParam}`;
+        const isPaid = item.company.tyyppi === 'maksu' || item.company.tyyppi === 'paid';
+        const cardUrl = isPaid ? `yritys/${slugify(item.company.nimi)}.html` : `yrityskortti.html?id=${slugify(item.company.nimi)}${regionParam}`;
+        window.location.href = cardUrl;
     } else if (item.type === 'rss') {
         window.open(item.link, '_blank');
     }
@@ -1455,9 +1460,9 @@ function renderCatalog(companies) {
                     updateSpotlight(company);
                 } else {
                     // No spotlight (likely homepage), go to details page
-                    const region = localStorage.getItem('selectedRegion');
-                    const regionParam = (region && region !== 'all') ? `&region=${region}` : '';
-                    window.location.href = `yrityskortti.html?id=${slugify(company.nimi)}${regionParam}`;
+                    const isPaid = company.tyyppi === 'maksu' || company.tyyppi === 'paid';
+                    const cardUrl = isPaid ? `yritys/${slugify(company.nimi)}.html` : `yrityskortti.html?id=${slugify(company.nimi)}${regionParam}`;
+                    window.location.href = cardUrl;
                 }
             };
         }

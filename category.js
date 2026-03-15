@@ -390,8 +390,11 @@
                 // Clean website URL
                 const websiteShow = (c.nettisivu || '').replace(/^https?:\/\//, '').replace(/\/$/, '');
 
+                const isPaid = c.tyyppi === 'maksu' || c.tyyppi === 'paid';
+                const cardUrl = isPaid ? `yritys/${slugify(c.nimi)}.html` : `yrityskortti.html?id=${slugify(c.nimi)}`;
+
                 item.innerHTML = `
-                <a href="yrityskortti.html?id=${slugify(c.nimi)}" style="text-decoration: none; color: inherit; display: block;">
+                <a href="${cardUrl}" style="text-decoration: none; color: inherit; display: block;">
                     <span class="premium-badge">SUOSITELTU ${distHtml}</span>
                     ${mediaHtml}
                     <h3>${c.nimi}</h3>
@@ -453,13 +456,16 @@
             ? `<div style="margin-top:0.5rem;"><strong>${websiteShow}</strong></div>`
             : `<p class="address">${c.osoite || 'Laukaa'}</p>`;
 
+        const isPaid = c.tyyppi === 'maksu' || c.tyyppi === 'paid';
+        const cardUrl = isPaid ? `yritys/${slugify(c.nimi)}.html` : `yrityskortti.html?id=${slugify(c.nimi)}`;
+
         card.innerHTML = `
         ${distBadge}
         <h3>${c.nimi}</h3>
         ${infoHtml}
         <p>${description}</p>
         <div style="margin-top:1rem; display:flex; gap:10px;">
-            <a href="yrityskortti.html?id=${slugify(c.nimi)}" class="btn-primary" style="padding:0.4rem 1rem; font-size:0.8rem;">TIEDOT</a>
+            <a href="${cardUrl}" class="btn-primary" style="padding:0.4rem 1rem; font-size:0.8rem;">TIEDOT</a>
             ${c.nettisivu ? `<a href="${c.nettisivu}" target="_blank" class="btn-primary" style="padding:0.4rem 1rem; font-size:0.8rem; background:#666;">WWW</a>` : ''}
         </div>
     `;

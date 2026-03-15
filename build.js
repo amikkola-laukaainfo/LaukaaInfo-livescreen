@@ -98,6 +98,14 @@ function minifyAndVersionFolder(dir) {
 
 minifyAndVersionFolder(distDir);
 
+// 4.5 Generoidaan premium-yritysten staattiset sivut
+try {
+    const { generatePremiumPages } = require('./generate_premium.js');
+    generatePremiumPages();
+} catch (e) {
+    console.error('Virhe premium-sivujen generoinnissa:', e.message);
+}
+
 // 5. Päivitetään HTML-tiedostojen viittaukset ja luodaan version.json
 console.log('4. Päivitetään viittaukset HTML-tiedostoihin...');
 
