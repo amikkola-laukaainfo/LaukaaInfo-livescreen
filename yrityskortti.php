@@ -58,22 +58,27 @@ if ($company) {
         $description = $slogan;
     }
 
-    // Determine OG Image
+    // Determine OG Image - Priority: 1. Gallery Image, 2. Logo, 3. Site Logo
     $baseUrl = "https://www.mediazoo.fi/laukaainfo-web/";
-    if (!empty($company['logo']) && $company['logo'] !== '-') {
-        $ogImage = $company['logo'];
-        if (strpos($ogImage, 'http') === false && strpos($ogImage, '//') === false) {
-            $ogImage = $baseUrl . $ogImage;
-        }
-    } elseif (!empty($company['media'])) {
+    $foundMediaImage = false;
+
+    if (!empty($company['media'])) {
         foreach ($company['media'] as $item) {
             if ($item['type'] === 'image' && !empty($item['url'])) {
                 $ogImage = $item['url'];
                 if (strpos($ogImage, 'http') === false && strpos($ogImage, '//') === false) {
                     $ogImage = $baseUrl . $ogImage;
                 }
+                $foundMediaImage = true;
                 break;
             }
+        }
+    }
+
+    if (!$foundMediaImage && !empty($company['logo']) && $company['logo'] !== '-') {
+        $ogImage = $company['logo'];
+        if (strpos($ogImage, 'http') === false && strpos($ogImage, '//') === false) {
+            $ogImage = $baseUrl . $ogImage;
         }
     }
 }
