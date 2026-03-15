@@ -457,7 +457,7 @@
             : `<p class="address">${c.osoite || 'Laukaa'}</p>`;
 
         const isPaid = c.tyyppi === 'maksu' || c.tyyppi === 'paid';
-        const cardUrl = isPaid ? `yritys/${slugify(c.nimi)}.html` : `yrityskortti.html?id=${slugify(c.nimi)}`;
+        const cardUrl = isPaid ? `${slugify(c.nimi)}.html` : `yrityskortti.html?id=${slugify(c.nimi)}`;
 
         card.innerHTML = `
         ${distBadge}

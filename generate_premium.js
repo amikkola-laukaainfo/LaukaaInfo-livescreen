@@ -114,13 +114,13 @@ function generatePremiumPages() {
             // Replace Title
             pageContent = pageContent.replace(/<title>.*?<\/title>/, `<title>${name} – LaukaaInfo</title>`);
             
-            // Replace OG Tags (or add if missing in base template)
+            // 123. Ensure OG URL is correct
             const ogTags = `
     <!-- Generated Premium OG Tags -->
     <meta property="og:title" content="${name} – LaukaaInfo">
     <meta property="og:description" content="${description}">
     <meta property="og:image" content="${ogImage}">
-    <meta property="og:url" content="https://laukaainfo.fi/yritys/${slug}.html">
+    <meta property="og:url" content="https://laukaainfo.fi/${slug}.html">
     <meta property="og:type" content="business.business">
     <meta property="og:site_name" content="LaukaaInfo">
     <script type="application/ld+json">${JSON.stringify(schema)}</script>
@@ -129,25 +129,8 @@ function generatePremiumPages() {
             // We'll insert these before </head>
             pageContent = pageContent.replace('</head>', ogTags + '</head>');
             
-            // Fix relative paths for CSS/JS since this is in /yritys/ subdirectory
-            pageContent = pageContent.replace(/href="style\.css/g, 'href="../style.css');
-            pageContent = pageContent.replace(/src="logo\.png/g, 'src="../logo.png');
-            pageContent = pageContent.replace(/src="script\.js/g, 'src="../script.js');
-            pageContent = pageContent.replace(/src="yrityskortti\.js/g, 'src="../yrityskortti.js');
-            pageContent = pageContent.replace(/href="logo\.png/g, 'href="../logo.png');
-            
-            // Ensure links in nav are also correct
-            pageContent = pageContent.replace(/href="index\.html/g, 'href="../index.html');
-            pageContent = pageContent.replace(/href="ajankohtaista\.html/g, 'href="../ajankohtaista.html');
-            pageContent = pageContent.replace(/href="karttakohteet\.html/g, 'href="../karttakohteet.html');
-            pageContent = pageContent.replace(/href="tarinakartta\.html/g, 'href="../tarinakartta.html');
-            pageContent = pageContent.replace(/href="muistokartta\.html/g, 'href="../muistokartta.html');
-            pageContent = pageContent.replace(/href="kadonneet\.html/g, 'href="../kadonneet.html');
-            pageContent = pageContent.replace(/href="asiahaku\.html/g, 'href="../asiahaku.html');
-            pageContent = pageContent.replace(/href="lisaa-yritys\.html/g, 'href="../lisaa-yritys.html');
-            
-            // Final path
-            const outputPath = path.join(yritysDir, `${slug}.html`);
+            // Final path - ROOT dist direct
+            const outputPath = path.join(distDir, `${slug}.html`);
             fs.writeFileSync(outputPath, pageContent);
             generatedCount++;
         }
