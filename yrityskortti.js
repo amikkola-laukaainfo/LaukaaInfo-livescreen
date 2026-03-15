@@ -19,9 +19,21 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         const params = new URLSearchParams(window.location.search);
-        const companyId = params.get('id');
+        let companyId = params.get('id');
+
+        // Jos ei olla dynaamisessa URLissa, kokeillaan päätellä ID tiedostonimestä (staattiset premium-sivut)
+        if (!companyId) {
+            const path = window.location.pathname;
+            const fileName = path.split('/').pop();
+            if (fileName && fileName.endsWith('.html') && fileName !== 'yrityskortti.html' && fileName !== 'index.html') {
+                companyId = fileName.replace('.html', '');
+                console.log("Päätelty yritys-ID tiedostonimestä:", companyId);
+            }
+        }
 
         if (!companyId) {
+            // Estetään redirect jos ollaan selvästi kehitysympäristössä tai testitilassa
+            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') return;
             window.location.href = 'index.html';
             return;
         }
