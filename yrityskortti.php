@@ -36,7 +36,7 @@ if (!empty($id) && file_exists($companiesFile)) {
 // 2. Metadata extraction
 $title = "Yrityskortti – LaukaaInfo";
 $description = "Kylien ja asukkaiden oma tietopankki.";
-$ogImage = "https://laukaainfo.fi/logo.png";
+$ogImage = "https://laukaainfo.fi/og-yrityskortti.png";
 $pageUrl = "https://laukaainfo.fi/yrityskortti.html?id=" . urlencode($id);
 
 if ($company) {
