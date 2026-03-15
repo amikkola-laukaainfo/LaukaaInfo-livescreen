@@ -337,7 +337,7 @@ function addMarkersToMap(companies) {
                 const distPrefix = isInDist ? '' : 'dist/';
                 
                 const cardUrl = isPremium 
-                    ? `${distPrefix}${slugify(company.nimi)}.html`
+                    ? `${distPrefix}yritys/${slugify(company.nimi)}.html`
                     : `yrityskortti.html?id=${slugify(company.nimi)}${localStorage.getItem('selectedRegion') && localStorage.getItem('selectedRegion') !== 'all' ? `&region=${localStorage.getItem('selectedRegion')}` : ''}`;
 
                 marker.bindPopup(`
@@ -1369,7 +1369,7 @@ function selectSuggestion(item) {
         const distPrefix = isInDist ? '' : 'dist/';
         
         const cardUrl = isPaid 
-            ? `${distPrefix}${slugify(item.company.nimi)}.html` 
+            ? `${distPrefix}yritys/${slugify(item.company.nimi)}.html` 
             : `yrityskortti.html?id=${slugify(item.company.nimi)}${regionParam}`;
             
         window.location.href = cardUrl;
@@ -1480,7 +1480,7 @@ function renderCatalog(companies) {
                     const distPrefix = isInDist ? '' : 'dist/';
                     
                     const cardUrl = isPaid 
-                        ? `${distPrefix}${slugify(company.nimi)}.html` 
+                        ? `${distPrefix}yritys/${slugify(company.nimi)}.html` 
                         : `yrityskortti.html?id=${slugify(company.nimi)}${regionParam}`;
                         
                     window.location.href = cardUrl;

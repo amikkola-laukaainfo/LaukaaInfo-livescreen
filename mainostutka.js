@@ -256,7 +256,7 @@ const Mainostutka = (function () {
                 <h4>${ad.nimi}</h4>
                 <p>${mainosText}</p>
                 <div class="radar-ad-actions">
-                    <a href="yrityskortti.html?id=${ad.id}" class="btn-small">Avaa</a>
+                    <a href="${ad.isPremium ? 'yritys/' : ''}${ad.isPremium ? slugify(ad.nimi) + '.html' : 'yrityskortti.html?id=' + ad.id}" class="btn-small">Avaa</a>
                     ${(type === 'offer' && adLink !== '#') ? `<a href="${adLink}" target="_blank" class="btn-small secondary">Tarjous</a>` : ''}
                 </div>
             </div>

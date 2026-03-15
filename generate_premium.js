@@ -114,13 +114,25 @@ function generatePremiumPages() {
             // Replace Title
             pageContent = pageContent.replace(/<title>.*?<\/title>/, `<title>${name} – LaukaaInfo</title>`);
             
-            // 123. Ensure OG URL is correct
+            // 4.5 Fix relative paths for assets since we're now in a subdirectory
+            // style.css -> ../style.css
+            // script.js -> ../script.js
+            // logo.png -> ../logo.png
+            // index.html -> ../index.html
+            pageContent = pageContent.replace(/(href|src|action)="([^"]+?\.(html|css|js|png|json|png|jpg|jpeg|gif|svg|ico)(\?[^"]*)?)"/g, (match, attr, path) => {
+                if (path.startsWith('http') || path.startsWith('//') || path.startsWith('data:') || path.startsWith('../') || path.startsWith('mailto:') || path.startsWith('tel:')) {
+                    return match;
+                }
+                return `${attr}="../${path}"`;
+            });
+            
+            // 5. Ensure OG URL is correct
             const ogTags = `
     <!-- Generated Premium OG Tags -->
     <meta property="og:title" content="${name} – LaukaaInfo">
     <meta property="og:description" content="${description}">
     <meta property="og:image" content="${ogImage}">
-    <meta property="og:url" content="https://laukaainfo.fi/dist/${slug}.html">
+    <meta property="og:url" content="https://laukaainfo.fi/yritys/${slug}.html">
     <meta property="og:type" content="business.business">
     <meta property="og:site_name" content="LaukaaInfo">
     <script type="application/ld+json">${JSON.stringify(schema)}</script>
@@ -129,8 +141,8 @@ function generatePremiumPages() {
             // We'll insert these before </head>
             pageContent = pageContent.replace('</head>', ogTags + '</head>');
             
-            // Final path - ROOT dist direct
-            const outputPath = path.join(distDir, `${slug}.html`);
+            // Final path - yritys/ subdirectory
+            const outputPath = path.join(yritysDir, `${slug}.html`);
             fs.writeFileSync(outputPath, pageContent);
             generatedCount++;
         }
