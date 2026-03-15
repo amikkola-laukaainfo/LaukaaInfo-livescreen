@@ -333,7 +333,9 @@ function addMarkersToMap(companies) {
                         : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${company.nimi}, ${company.osoite || 'Laukaa'}`)}`);
 
                 const isPremium = company.tyyppi === 'maksu' || company.tyyppi === 'paid';
-                const isInDist = window.location.pathname.includes('/dist/');
+                const isInDist = window.location.pathname.includes('/dist/') || 
+                                 window.location.hostname === 'laukaainfo.fi' || 
+                                 window.location.hostname.includes('github.io');
                 const distPrefix = isInDist ? '' : 'dist/';
                 
                 const cardUrl = isPremium 
@@ -1365,7 +1367,9 @@ function selectSuggestion(item) {
         const regionParam = (region && region !== 'all') ? `&region=${region}` : '';
         const isPaid = item.company.tyyppi === 'maksu' || item.company.tyyppi === 'paid';
         
-        const isInDist = window.location.pathname.includes('/dist/');
+        const isInDist = window.location.pathname.includes('/dist/') || 
+                         window.location.hostname === 'laukaainfo.fi' || 
+                         window.location.hostname.includes('github.io');
         const distPrefix = isInDist ? '' : 'dist/';
         
         const cardUrl = isPaid 
@@ -1476,7 +1480,9 @@ function renderCatalog(companies) {
                     const regionParam = (region && region !== 'all') ? `&region=${region}` : '';
                     const isPaid = company.tyyppi === 'maksu' || company.tyyppi === 'paid';
                     
-                    const isInDist = window.location.pathname.includes('/dist/');
+                    const isInDist = window.location.pathname.includes('/dist/') || 
+                                     window.location.hostname === 'laukaainfo.fi' || 
+                                     window.location.hostname.includes('github.io');
                     const distPrefix = isInDist ? '' : 'dist/';
                     
                     const cardUrl = isPaid 
