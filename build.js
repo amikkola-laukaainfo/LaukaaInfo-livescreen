@@ -1,44 +1,11 @@
 const fs = require('fs');
 const path = require('path');
-const https = require('https');
 const { execSync } = require('child_process');
 const crypto = require('crypto');
 
 console.log('--- LaukaaInfo Build Script ---');
 
-// 0. Haetaan uusin companies_data.json palvelimelta
-console.log('0. Haetaan uusin companies_data.json palvelimelta...');
-const dataUrl = 'https://www.mediazoo.fi/laukaainfo-web/companies_data.json';
-const dataDest = path.join(__dirname, 'companies_data.json');
-
-function downloadData() {
-    return new Promise((resolve, reject) => {
-        const file = fs.createWriteStream(dataDest);
-        https.get(dataUrl, (response) => {
-            if (response.statusCode !== 200) {
-                reject(`Palvelin vastasi: ${response.statusCode}`);
-                return;
-            }
-            response.pipe(file);
-            file.on('finish', () => {
-                file.close();
-                console.log('✓ Data ladattu onnistuneesti.');
-                resolve();
-            });
-        }).on('error', (err) => {
-            fs.unlink(dataDest, () => {});
-            reject(err.message);
-        });
-    });
-}
-
 async function runBuild() {
-    try {
-        await downloadData();
-    } catch (e) {
-        console.warn('! Datan haku epäonnistui, käytetään paikallista välimuistia jos mahdollista:', e);
-    }
-
     // Generate a build version (hash of current time)
     const buildVersion = crypto.createHash('md5').update(Date.now().toString()).digest('hex').substring(0, 8);
     console.log(`Build Version: ${buildVersion}`);
