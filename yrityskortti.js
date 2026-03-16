@@ -186,11 +186,18 @@
         const websiteItem = document.getElementById('website-item');
         if (company.nettisivu && company.nettisivu !== '-') {
             const webLink = document.getElementById('display-website');
-            webLink.textContent = company.nettisivu.replace(/^https?:\/\//, '');
+            const displayUrl = company.nettisivu.replace(/^https?:\/\//, '').replace(/\/$/, ''); // Siivotaan protokolla ja loppuslash
+            
+            if (displayUrl.length > 25) {
+                webLink.textContent = 'www-kotisivulinkki';
+            } else {
+                webLink.textContent = displayUrl;
+            }
+            
             webLink.href = company.nettisivu;
             websiteItem.style.display = 'flex';
             
-            // Skaalataan nettiosoite sopivaksi (pieni viive jotta renderöinti on valmis)
+            // Skaalataan vielä varmuuden vuoksi, jos labelikin on liian pitkä kapeilla näytöillä
             setTimeout(() => fitText(webLink, 10), 50);
         } else {
             websiteItem.style.display = 'none';
