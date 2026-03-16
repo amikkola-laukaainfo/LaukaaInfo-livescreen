@@ -120,7 +120,7 @@
             "linkedin": "",
             "tiktok": "",
             "whatsapp": "",
-            "mainoslinkit": "[\"https:\/\/www.laukaainfo.fi\/yritys\/rr.html\"]",
+            "mainoslinkit": "",
             "karusellipaino": 0,
             "tyyppi": "maksu",
             "voimassaolo_loppuu": "",
@@ -3659,8 +3659,8 @@
             "id": "company-138",
             "nimi": "Keski-Suomen Parvekelasitus OY",
             "kategoria": "Rakentaminen ja remontointi",
-            "mainoslause": "Keski-Suomen Parvekelasitus rakentaa ja lasittaa parvekkeet, terassit ja patiot Keski-Suomessa ja lä...",
-            "esittely": "Keski-Suomen Parvekelasitus rakentaa ja lasittaa parvekkeet, terassit ja patiot Keski-Suomessa ja lähimaakunnissa. @@ Meiltä myös kaihtimet ja termomatot, sekä lasitusten huollot kaikkiin merkkeihin.",
+            "mainoslause": "",
+            "esittely": "",
             "osoite": "Kotipellontie 2, 41370 Laukaa",
             "puhelin": "358458981560",
             "email": "",
@@ -3668,37 +3668,16 @@
             "karttalinkki": "https:\/\/www.google.com\/maps?q=62.475553,25.923813",
             "lat": "62.475553",
             "lon": "25.923813",
-            "media": [
-                {
-                    "type": "image",
-                    "url": "https:\/\/ik.imagekit.io\/vowzx8znjs\/mediazoo\/yritys\/138\/kuva_3.jpg"
-                },
-                {
-                    "type": "image",
-                    "url": "https:\/\/ik.imagekit.io\/vowzx8znjs\/mediazoo\/yritys\/138\/kuva_5.jpg"
-                },
-                {
-                    "type": "image",
-                    "url": "https:\/\/ik.imagekit.io\/vowzx8znjs\/mediazoo\/yritys\/138\/kuva_2.jpg"
-                },
-                {
-                    "type": "image",
-                    "url": "https:\/\/ik.imagekit.io\/vowzx8znjs\/mediazoo\/yritys\/138\/kuva_4.jpg"
-                },
-                {
-                    "type": "image",
-                    "url": "https:\/\/ik.imagekit.io\/vowzx8znjs\/mediazoo\/yritys\/138\/kuva_1.jpg"
-                }
-            ],
-            "logo": "https:\/\/cdn.prod.website-files.com\/65e5c87155996edd5b8abd22\/6602c24ed14ae9c8de29395f_shape%20kspl.svg",
+            "media": [],
+            "logo": "",
             "facebook": "",
             "instagram": "",
             "linkedin": "",
             "tiktok": "",
-            "whatsapp": "358405885780",
+            "whatsapp": "",
             "mainoslinkit": "",
             "karusellipaino": 0,
-            "tyyppi": "maksu",
+            "tyyppi": "ilmainen",
             "voimassaolo_loppuu": "",
             "rss": "",
             "tags": "",
