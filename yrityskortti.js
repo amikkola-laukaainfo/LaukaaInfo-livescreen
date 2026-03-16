@@ -17,6 +17,25 @@
             .replace(/-+$/, '');
     }
 
+    /**
+     * Pienentää fonttia, kunnes teksti mahtuu elementtiin.
+     */
+    function fitText(element, minFontSize = 12) {
+        if (!element) return;
+        
+        // Luetaan nykyinen fonttikoko (tai käytetään oletusta jos ei asetettu)
+        let fontSize = parseFloat(window.getComputedStyle(element).fontSize);
+        
+        // Vähennetään px kerrallaan kunnes mahtuu tai tullaan minimiin
+        // scrollWidth > offsetWidth kertoo ylivuodosta
+        let safety = 0;
+        while (element.scrollWidth > element.offsetWidth && fontSize > minFontSize && safety < 100) {
+            fontSize -= 1;
+            element.style.fontSize = fontSize + "px";
+            safety++;
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
         const params = new URLSearchParams(window.location.search);
         let companyId = params.get('id');
@@ -170,9 +189,24 @@
             webLink.textContent = company.nettisivu.replace(/^https?:\/\//, '');
             webLink.href = company.nettisivu;
             websiteItem.style.display = 'flex';
+            
+            // Skaalataan nettiosoite sopivaksi (pieni viive jotta renderöinti on valmis)
+            setTimeout(() => fitText(webLink, 10), 50);
         } else {
             websiteItem.style.display = 'none';
         }
+
+        // Skaalataan otsikko sopivaksi
+        const titleEl = document.getElementById('display-name');
+        setTimeout(() => fitText(titleEl, 16), 50);
+
+        // Uudelleenskaalaus kun ikkunaa muutetaan
+        window.addEventListener('resize', () => {
+            fitText(titleEl, 16);
+            if (company.nettisivu && company.nettisivu !== '-') {
+                fitText(document.getElementById('display-website'), 10);
+            }
+        });
 
         // Social Icons Section
         const socialIcons = document.getElementById('social-icons');
