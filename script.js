@@ -52,8 +52,8 @@ document.addEventListener('click', (e) => {
 const welcomeCompany = {
     id: "welcome",
     nimi: "Tervetuloa Laukaan yrityshakuun",
-    mainoslause: "Löydä paikalliset palvelut, yrittäjät ja elämykset.",
-    esittely: "Tämä on Laukaan yrityshaku. Valitse haluamasi yritys listalta tai käytä hakua löytääksesi etsimäsi palvelut. Voit myös suodattaa yrityksiä toimialan mukaan.",
+    mainoslause: "Mitä haluat tietää, löytää tai tehdä Laukaassa?",
+    esittely: "Hae yrityksiä, tapahtumia ja tiedotteita Laukaasta. Etsi esim. parturi, kahvila, taajama Laukaassa.",
     osoite: "Laukaa",
     puhelin: "",
     email: "",
