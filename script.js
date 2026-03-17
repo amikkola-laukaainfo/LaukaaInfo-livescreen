@@ -1181,15 +1181,16 @@ function filterCatalog(renderList = true) {
 
     filteredSuggestions = filtered.slice(0, 8); // Keep suggestions mainly business-centric or extend later
 
-    // On the homepage, hide results if search is empty
-    if (isHomePage && searchTerm.length === 0) {
+    // On the homepage, hide results if search is empty AND no user coordinates are found
+    if (isHomePage && searchTerm.length === 0 && !userCoords) {
         renderCatalog([]);
     } else if (renderList) {
         renderCatalog(combinedResults);
     }
 
-    // Päivitetään myös kartta vastaamaan filtteriä (vain jos ei olla etusivulla tai halutaan erikseen)
-    if (map && markers && (!isHomePage || searchTerm.length > 0)) {
+    // Päivitetään myös kartta vastaamaan filtteriä
+    // Näytetään merkkejä jos: ei olla etusivulla TAI on hakusana TAI on käyttäjän sijainti
+    if (map && markers && (!isHomePage || searchTerm.length > 0 || userCoords)) {
         // Suodatetaan vain ne kohteet joilla on koordinaatit
         const mapItems = combinedResults.filter(item => (item.lat && (item.lon || item.lng)));
         addMarkersToMap(mapItems);
