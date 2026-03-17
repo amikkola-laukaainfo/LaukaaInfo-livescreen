@@ -64,7 +64,7 @@ const welcomeCompany = {
     ]
 };
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     isHomePage = !!document.getElementById('homepage-categories');
     // Sidebar Navigation Logic
     const hamburgerBtn = document.getElementById('hamburger-btn');
