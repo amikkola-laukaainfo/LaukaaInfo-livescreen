@@ -104,7 +104,7 @@ function updateMetadata(area, cat, tag) {
     else if (cat) titleText = `${cat.charAt(0).toUpperCase() + cat.slice(1)} - ${area.name}`;
 
     titleEl.textContent = titleText;
-    pageTitleEl.textContent = `${titleText} | LaukaaInfo`;
+    pageTitleEl.textContent = `${titleText} – LaukaaInfo: Laukaa taskussasi – tiedä, löydä ja osallistu.`;
 
     let seoText = `<h3>${area.name} – yritykset, palvelut ja uutiset</h3>`;
     seoText += `<p>${area.desc}</p>`;
