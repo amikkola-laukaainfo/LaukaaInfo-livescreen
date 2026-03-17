@@ -330,7 +330,9 @@ section[id] {
 }
 
 header {
-    background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+    background: linear-gradient(rgba(0, 86, 179, 0.3), rgba(0, 61, 128, 0.3)), url('taivas_tausta.png');
+    background-size: cover;
+    background-position: center;
     color: var(--light-text);
     padding: 3rem 1rem;
     text-align: center;
