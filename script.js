@@ -119,11 +119,11 @@ document.addEventListener('DOMContentLoaded', () => {
     handleInitialHashScroll();
 
 
+    // Ladataan tapahtumien paikkatieto ENSIN, jotta se on käytössä kun RSS-feedit latautuvat
+    await loadGeoEvents();
+
     // Alustetaan feedit taustalla hakuun (myös etusivulla)
     initRSSFeeds();
-
-    // Ladataan tapahtumien paikkatieto
-    loadGeoEvents();
 
     // Alustetaan yritysdata dynaamisesti (Kauppa-sivu tai -valikot)
     loadCompanyData();
@@ -268,9 +268,10 @@ function initMap(companies) {
     let userMarker;
     map.on('locationfound', function (e) {
         userCoords = e.latlng;
-        // Tallennetaan jotta säilyy sivujen välillä
-        localStorage.setItem('userCoords', JSON.stringify({ lat: userCoords.lat, lng: userCoords.lng }));
-        
+        // Aktivoidaan tapahtumien haku automaattisesti jos sijainti löytyy
+        const rssCheckbox = document.getElementById('include-rss');
+        if (rssCheckbox) rssCheckbox.checked = true;
+
         // Päivitetään haku nähdäksemme lähimmät heti
         filterCatalog();
 
@@ -1143,8 +1144,13 @@ function filterCatalog(renderList = true) {
 
     let combinedResults = [...regionMatches, ...filtered];
 
-    if (includeRss && searchTerm.length > 0) {
+    // RSS Hybrid Search
+    // Sallitaan tapahtumien haku ilman hakusanaa, jos sijainti (userCoords) on tiedossa
+    if (includeRss && (searchTerm.length > 0 || userCoords)) {
         let rssMatches = allRssItems.filter(item => {
+            // Jos hakusana puuttuu, näytetään vain ne tapahtumat joilla on koordinaatit
+            if (searchTerm.length === 0) return (item.lat && item.lon);
+            
             return item.title.toLowerCase().includes(searchTerm) ||
                 (item.description && item.description.toLowerCase().includes(searchTerm));
         });
