@@ -89,15 +89,18 @@
 
         // Icon selection
         const categoryIcons = {
-            'Autokorjaamot': '🔧',
-            'Elintarvike': '🛒',
+            'Auto ja kuljetus': '🚗',
+            'Kaupat ja ostokset': '🛍️',
+            'Hyvinvointi ja terveys': '🏥',
+            'Ruokailu': '🍕',
+            'Palvelut': '💼',
+            'Rakentaminen ja remontointi': '🏠',
+            'Elintarvikkeet': '🛒',
             'Juhlatilat': '🎊',
-            'Kauneus ja terveys': '💄',
-            'Koti-rakennus': '🏠',
             'Majoitus': '🏨',
+            'Autokorjaamot': '🔧',
             'Matkailu & Elämykset': '🌲',
             'Ravinto & Vapaa-aika': '🍽️',
-            'Ruokailu': '🍕',
             'Perinnematkailu & Juhlat': '💒',
             'Muu': '🏢'
         };
