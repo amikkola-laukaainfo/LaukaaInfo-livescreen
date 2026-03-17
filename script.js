@@ -1,5 +1,6 @@
 let allCompanies = [];
 let allRssItems = []; // Global storage for RSS content
+let allGeoEvents = []; // Global storage for event coordinates
 let currentCompany = null;
 let currentMediaIndex = 0;
 let map = null;
@@ -120,6 +121,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Alustetaan feedit taustalla hakuun (myös etusivulla)
     initRSSFeeds();
+
+    // Ladataan tapahtumien paikkatieto
+    loadGeoEvents();
 
     // Alustetaan yritysdata dynaamisesti (Kauppa-sivu tai -valikot)
     loadCompanyData();
@@ -297,14 +301,73 @@ function addMarkersToMap(companies) {
     let validMarkers = 0;
 
     companies.forEach(company => {
-        if (company.lat && company.lon) {
-            const lat = parseFloat(company.lat);
-            const lon = parseFloat(company.lon);
+        const lat = parseFloat(company.lat);
+        const lon = parseFloat(company.lon || company.lng);
 
-            if (!isNaN(lat) && !isNaN(lon)) {
-                validMarkers++;
+        if (!isNaN(lat) && !isNaN(lon)) {
+            validMarkers++;
+            
+            let markerHtml = '';
+            let popupContent = '';
+            
+            if (company.isRss) {
+                // Tapahtuman merkki
+                markerHtml = `
+                    <div style="
+                        background-color: #ff9900;
+                        width: 24px;
+                        height: 24px;
+                        border-radius: 50%;
+                        border: 2px solid white;
+                        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 14px;
+                    ">🎉</div>
+                `;
+                
+                const routeUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`;
+                
+                popupContent = `
+                    <div style="font-family: 'Outfit', sans-serif; min-width: 180px;">
+                        <span class="news-badge event" style="font-size: 0.7rem; margin-bottom: 5px; display: inline-block;">TAPAHTUMA</span>
+                        <h4 style="margin: 0 0 5px 0; color: #cc7a00;">${company.title}</h4>
+                        <div style="font-size: 0.8rem; margin-bottom: 8px; color: #666;">📅 ${company.dateStr}</div>
+                        <div style="display: flex; flex-direction: column; gap: 5px;">
+                            <a href="${company.link}" target="_blank" style="
+                                display: block;
+                                background: #cc7a00;
+                                color: white;
+                                text-decoration: none;
+                                text-align: center;
+                                padding: 6px 10px;
+                                border-radius: 4px;
+                                cursor: pointer;
+                                width: 100%;
+                                font-size: 0.8rem;
+                                box-sizing: border-box;
+                            ">Lue lisää</a>
+                            <a href="${routeUrl}" target="_blank" style="
+                                display: block;
+                                background: #28a745;
+                                color: white;
+                                text-decoration: none;
+                                text-align: center;
+                                padding: 6px 10px;
+                                border-radius: 4px;
+                                cursor: pointer;
+                                width: 100%;
+                                font-size: 0.8rem;
+                                box-sizing: border-box;
+                            ">🚗 Reittiohjeet</a>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // Yrityksen merkki
                 const color = categoryColors[company.kategoria] || '#0056b3';
-                const markerHtml = `
+                markerHtml = `
                     <div style="
                         background-color: ${color};
                         width: 20px;
@@ -316,21 +379,9 @@ function addMarkersToMap(companies) {
                     "></div>
                 `;
 
-                const icon = L.divIcon({
-                    html: markerHtml,
-                    className: 'custom-marker',
-                    iconSize: [20, 20],
-                    iconAnchor: [10, 20],
-                    popupAnchor: [0, -20]
-                });
-
-                const marker = L.marker([lat, lon], { icon: icon });
-
                 const mapsUrl = company.karttalinkki && company.karttalinkki !== '-' 
                     ? company.karttalinkki 
-                    : (company.lat && company.lon 
-                        ? `https://www.google.com/maps?q=${company.lat},${company.lon}`
-                        : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${company.nimi}, ${company.osoite || 'Laukaa'}`)}`);
+                    : `https://www.google.com/maps?q=${company.lat},${company.lon}`;
 
                 const isPremium = company.tyyppi === 'maksu' || company.tyyppi === 'paid';
                 const isInDist = window.location.pathname.includes('/dist/') || 
@@ -342,7 +393,7 @@ function addMarkersToMap(companies) {
                     ? `${distPrefix}yritys/${slugify(company.nimi)}.html`
                     : `yrityskortti.html?id=${slugify(company.nimi)}${localStorage.getItem('selectedRegion') && localStorage.getItem('selectedRegion') !== 'all' ? `&region=${localStorage.getItem('selectedRegion')}` : ''}`;
 
-                marker.bindPopup(`
+                popupContent = `
                     <div style="font-family: 'Outfit', sans-serif; min-width: 150px;">
                         <h4 style="margin: 0 0 5px 0; color: #0056b3;">${company.nimi}</h4>
                         <div style="font-size: 0.8rem; margin-bottom: 8px; color: #666;">${company.kategoria}</div>
@@ -375,11 +426,21 @@ function addMarkersToMap(companies) {
                             ">📍 Googlessa</a>
                         </div>
                     </div>
-                `);
-
-                markers.addLayer(marker);
-                bounds.push([lat, lon]);
+                `;
             }
+
+            const icon = L.divIcon({
+                html: markerHtml,
+                className: 'custom-marker',
+                iconSize: [24, 24],
+                iconAnchor: [12, 24],
+                popupAnchor: [0, -24]
+            });
+
+            const marker = L.marker([lat, lon], { icon: icon });
+            marker.bindPopup(popupContent);
+            markers.addLayer(marker);
+            bounds.push([lat, lon]);
         }
     });
 
@@ -451,6 +512,20 @@ function initRSSFeeds() {
     fetchRSSFeed('https://laukaa.trimblefeedback.com/eFeedback/API/Feed/rss', document.getElementById('feedback-container'), 'Ei uusia palautteita.', 'utf-8');
     // Ladataan Lievestuoreen Blogger-syöte taustalla hakua varten
     fetchLievestuoreItems();
+}
+
+/**
+ * Ladataan tapahtumien geo-tiedot JSON-tiedostosta.
+ */
+async function loadGeoEvents() {
+    try {
+        const response = await fetch('tapahtumat_geo.json');
+        if (!response.ok) throw new Error('Tapahtumien paikkatietoja ei löytynyt.');
+        allGeoEvents = await response.json();
+        console.log('Geo-tapahtumat ladattu:', allGeoEvents.length);
+    } catch (error) {
+        console.warn('Virhe geo-tapahtumien latauksessa:', error);
+    }
 }
 
 /**
@@ -620,6 +695,16 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
 
                 // Add to global storage for search, avoid duplicates
                 if (!allRssItems.find(i => i.link === rssItem.link)) {
+                    // Yritetään mäpätä paikkatieto jos se löytyy
+                    if (isEvent) {
+                        const geo = allGeoEvents.find(ge => ge.url === rssItem.link || ge.nimi === rssItem.title);
+                        if (geo) {
+                            rssItem.lat = geo.lat;
+                            rssItem.lon = geo.lng; // Normalisoidaan 'lon' muotoon kuten yrityksillä
+                            rssItem.paikka = geo.paikka;
+                        }
+                    }
+                    
                     allRssItems.push(rssItem);
                     // Update search results if RSS checkbox is active
                     if (document.getElementById('include-rss')?.checked) {
@@ -1059,10 +1144,32 @@ function filterCatalog(renderList = true) {
     let combinedResults = [...regionMatches, ...filtered];
 
     if (includeRss && searchTerm.length > 0) {
-        const rssMatches = allRssItems.filter(item => {
+        let rssMatches = allRssItems.filter(item => {
             return item.title.toLowerCase().includes(searchTerm) ||
                 (item.description && item.description.toLowerCase().includes(searchTerm));
         });
+
+        // Lasketaan etäisyys RSS-tapahtumille jos mahdollista
+        const refLat = userCoords ? userCoords.lat : (regionCoords ? regionCoords.lat : null);
+        const refLon = userCoords ? userCoords.lng : (regionCoords ? regionCoords.lon : null);
+
+        if (refLat && refLon) {
+            rssMatches.forEach(item => {
+                if (item.lat && item.lon) {
+                    const dist = getHaversineDistance(refLat, refLon, parseFloat(item.lat), parseFloat(item.lon));
+                    item.distanceValue = dist;
+                    item.distanceText = dist < 1 ? `${Math.round(dist * 1000)} m` : `${dist.toFixed(1)} km`;
+                }
+            });
+            // Järjestetään tapahtumat etäisyyden mukaan
+            rssMatches.sort((a, b) => (a.distanceValue || 999) - (b.distanceValue || 999));
+            
+            // Merkitään lähin tapahtuma jos se on riittävän lähellä (esim. < 50km)
+            if (rssMatches.length > 0 && rssMatches[0].distanceValue < 50) {
+                rssMatches[0].isNearest = true;
+            }
+        }
+
         combinedResults = [...combinedResults, ...rssMatches];
     }
 
@@ -1077,7 +1184,9 @@ function filterCatalog(renderList = true) {
 
     // Päivitetään myös kartta vastaamaan filtteriä (vain jos ei olla etusivulla tai halutaan erikseen)
     if (map && markers && (!isHomePage || searchTerm.length > 0)) {
-        addMarkersToMap(filtered);
+        // Suodatetaan vain ne kohteet joilla on koordinaatit
+        const mapItems = combinedResults.filter(item => (item.lat && (item.lon || item.lng)));
+        addMarkersToMap(mapItems);
     }
 }
 
@@ -1433,11 +1542,21 @@ function renderCatalog(companies) {
         } else if (itemData.isRss) {
             // RSS Item Rendering
             item.classList.add('rss-result');
+            if (itemData.isNearest) item.classList.add('is-nearest');
+            
+            const nearestBadge = itemData.isNearest ? '<span class="nearest-badge">⭐ Lähin tapahtuma</span>' : '';
+            const distHtml = itemData.distanceText ? `<span class="dist-badge">🚗 ${itemData.distanceText}</span>` : '';
+            const routeLink = (itemData.lat && itemData.lon) ? `<div style="font-size: 0.8rem; margin-top: 5px; color: #28a745;">📍 Katso reitti tapahtumapaikalle</div>` : '';
+
             item.innerHTML = `
-                <span class="news-badge ${itemData.typeClass}">${itemData.type}</span>
+                <div class="catalog-item-header">
+                    <span class="news-badge ${itemData.typeClass}">${itemData.type}</span>
+                    ${distHtml}
+                </div>
+                ${nearestBadge}
                 <h4>${itemData.title}</h4>
                 <div style="font-size: 0.8rem; opacity: 0.7; margin-top: 5px;">📅 ${itemData.dateStr}</div>
-                <div style="font-size: 0.85rem; margin-top: 5px;">Linkki lähteeseen ↗</div>
+                ${routeLink}
             `;
             item.onclick = () => {
                 window.open(itemData.link, '_blank');
