@@ -698,7 +698,16 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
                 if (!allRssItems.find(i => i.link === rssItem.link)) {
                     // Yritetään mäpätä paikkatieto jos se löytyy
                     if (isEvent) {
-                        const geo = allGeoEvents.find(ge => ge.url === rssItem.link || ge.nimi === rssItem.title);
+                        // 1. Ensisijaisesti täsmällinen URL- tai nimi-mätsäys
+                        let geo = allGeoEvents.find(ge => ge.url === rssItem.link || ge.nimi === rssItem.title);
+                        
+                        // 2. Toissijaisesti hieman joustavampi nimi-mätsäys (ilman välilyöntejä ja pienellä kirjoitettuna)
+                        if (!geo && rssItem.title) {
+                            const normalize = (s) => (s || "").toLowerCase().replace(/[^a-z0-9äö]/g, "").trim();
+                            const normalizedTitle = normalize(rssItem.title);
+                            geo = allGeoEvents.find(ge => normalize(ge.nimi) === normalizedTitle);
+                        }
+                        
                         if (geo) {
                             rssItem.lat = geo.lat;
                             rssItem.lon = geo.lng; // Normalisoidaan 'lon' muotoon kuten yrityksillä
@@ -1151,9 +1160,24 @@ function filterCatalog(renderList = true) {
             // Jos hakusana puuttuu, näytetään vain ne tapahtumat joilla on koordinaatit
             if (searchTerm.length === 0) return (item.lat && item.lon);
             
-            return item.title.toLowerCase().includes(searchTerm) ||
-                (item.description && item.description.toLowerCase().includes(searchTerm));
+            const titleMatch = item.title.toLowerCase().includes(searchTerm);
+            const descMatch = (item.description && item.description.toLowerCase().includes(searchTerm));
+            
+            // Priorisoidaan nimen alkuosan täsmäävyyttä (boost) if needed elsewhere, 
+            // mutta tässä palautetaan true jos jompikumpi täsmää.
+            return titleMatch || descMatch;
         });
+
+        // Lisätään score dynaamisesti (boostataan nimen alkuosan täsmäävyyttä)
+        rssMatches.forEach(item => {
+            const title = (item.title || "").toLowerCase();
+            item.score = 0;
+            if (title.startsWith(searchTerm)) item.score += 200; // Korkea priority
+            else if (title.includes(searchTerm)) item.score += 100;
+        });
+        
+        // Järjestetään RSS-osumat (jos on useita)
+        rssMatches.sort((a, b) => b.score - a.score);
 
         // Lasketaan etäisyys RSS-tapahtumille jos mahdollista
         const refLat = userCoords ? userCoords.lat : (regionCoords ? regionCoords.lat : null);
