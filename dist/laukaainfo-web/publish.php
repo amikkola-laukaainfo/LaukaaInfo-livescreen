@@ -6,6 +6,8 @@
  * Generates: content.json
  */
 
+date_default_timezone_set('Europe/Helsinki');
+
 // --- CONFIGURATION ---
 // IMPORTANT: Update these with your ImageKit keys
 $imagekitId   = 'vowzx8znjs'; 
