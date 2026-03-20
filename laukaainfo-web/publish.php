@@ -14,8 +14,13 @@ $imagekitId   = 'vowzx8znjs';
 $publicKey    = 'YOUR_PUBLIC_KEY'; 
 $privateKey   = 'YOUR_PRIVATE_KEY';
 $jsonFile     = 'content.json';
+$tokenFile    = 'tokens.json';
 $maxItems     = 100;
 $companyApi   = 'https://www.mediazoo.fi/laukaainfo-web/get_companies.php';
+
+// --- URL PARAMETERS (PRE-FILL) ---
+$prefillId    = $_GET['business_id'] ?? '';
+$prefillToken = $_GET['token'] ?? '';
 
 // --- UTILITIES ---
 function sanitize($str) {
@@ -108,11 +113,12 @@ $message = '';
 $previewJson = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $business_id = $_POST['business_id'] ?? '';
-    $title = sanitize($_POST['title'] ?? '');
-    $short_desc = sanitize($_POST['short_description'] ?? '');
-    $type = $_POST['type'] ?? 'maksu';
-    $publish_at = $_POST['publish_at'] ?? date('Y-m-d\TH:i');
+    $business_id = (int)($_POST['business_id'] ?? 0);
+    $sentToken   = trim($_POST['publish_token'] ?? '');
+    $title       = sanitize($_POST['title'] ?? '');
+    $short_desc  = sanitize($_POST['short_description'] ?? '');
+    $type        = $_POST['type'] ?? 'maksu';
+    $publish_at  = $_POST['publish_at'] ?? date('Y-m-d\TH:i');
     $website_url = sanitize($_POST['website_url'] ?? '');
     $facebook_url = sanitize($_POST['facebook_url'] ?? '');
     $instagram_url = sanitize($_POST['instagram_url'] ?? '');
@@ -121,92 +127,103 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $image_url_input = sanitize($_POST['image_url'] ?? '');
 
     // Validation
-    if (empty($business_id)) {
-        $message = "Virhe: Business ID puuttuu.";
+    if (empty($business_id) || empty($sentToken)) {
+        $message = "Virhe: Business ID ja Token vaaditaan.";
     } elseif (empty($_FILES['image']['tmp_name']) && empty($image_url_input)) {
         $message = "Virhe: Kuva tai kuvan URL vaaditaan.";
     } else {
-        // --- COMPANY VALIDATION ---
-        $isValidCompany = false;
-        $companyList = json_decode(file_get_contents($companyApi . "?t=" . time()), true);
-        $companies = is_array($companyList) ? $companyList : ($companyList['results'] ?? []);
-        
-        foreach ($companies as $comp) {
-            $compId = str_replace('company-', '', $comp['id'] ?? '');
-            if ($compId == $business_id) {
-                if (($comp['tyyppi'] ?? '') === 'maksu') {
-                    $isValidCompany = true;
+        // --- TOKEN VALIDATION ---
+        $isTokenValid = false;
+        if (file_exists($tokenFile)) {
+            $tokensData = json_decode(file_get_contents($tokenFile), true) ?: [];
+            foreach ($tokensData as $tData) {
+                if ($tData['business_id'] == $business_id && $tData['publish_token'] === $sentToken) {
+                    $isTokenValid = true;
                     break;
-                } else {
-                    $message = "Virhe: Yrityksellä (ID $business_id) ei ole 'maksu'-oikeutta tiedotteiden julkaisuun.";
                 }
             }
         }
 
-        if (!$isValidCompany && empty($message)) {
-            $message = "Virhe: Yritystä ID:llä $business_id ei löytynyt rekisteristä.";
-        }
-
-        if ($isValidCompany) {
-            $final_image_url = '';
-
-            // Handle Image Upload
-            if (!empty($_FILES['image']['tmp_name'])) {
-                if ($privateKey === 'YOUR_PRIVATE_KEY') {
-                    $message = "Virhe: ImageKit API-avaimia ei ole määritetty.";
-                } else {
-                    $processedData = processImage($_FILES['image']['tmp_name']);
-                    if ($processedData) {
-                        $fileName = 'feed_' . time() . '_' . generateId() . '.jpg';
-                        $uploadedUrl = uploadToImageKit($processedData, $fileName, $publicKey, $privateKey);
-                        if ($uploadedUrl) {
-                            $final_image_url = $uploadedUrl;
-                        } else {
-                            $message = "Virhe: Kuvan lataus ImageKit-palveluun epäonnistui.";
-                        }
+        if (!$isTokenValid) {
+            $message = "Virhe: Unauthorized (Pääsy estetty). Token ei täsmää.";
+        } else {
+            // --- COMPANY REGISTRY CHECK (Optional extra) ---
+            $isValidCompany = false;
+            $companyList = json_decode(file_get_contents($companyApi . "?t=" . time()), true);
+            $companies = is_array($companyList) ? $companyList : ($companyList['results'] ?? []);
+            
+            foreach ($companies as $comp) {
+                $compId = str_replace('company-', '', $comp['id'] ?? '');
+                if ($compId == $business_id) {
+                    if (($comp['tyyppi'] ?? '') === 'maksu') {
+                        $isValidCompany = true;
+                        break;
                     } else {
-                        $message = "Virhe: Kuvan käsittely epäonnistui.";
+                        $message = "Virhe: Yrityksellä ei ole 'maksu'-oikeutta julkaisuun.";
                     }
                 }
-            } else {
-                // Use Direct URL
-                $final_image_url = $image_url_input;
             }
 
-            if ($final_image_url) {
-                // Storage
-                $feedData = [];
-                if (file_exists($jsonFile)) {
-                    $feedData = json_decode(file_get_contents($jsonFile), true) ?: [];
+            if (!$isValidCompany && empty($message)) {
+                $message = "Virhe: Yritystä ei löytynyt rekisteristä tai tilaus on päättynyt.";
+            }
+
+            if ($isValidCompany) {
+                $final_image_url = '';
+
+                // Handle Image Upload
+                if (!empty($_FILES['image']['tmp_name'])) {
+                    if ($privateKey === 'YOUR_PRIVATE_KEY') {
+                        $message = "Virhe: ImageKit API-avaimia ei ole määritetty.";
+                    } else {
+                        $processedData = processImage($_FILES['image']['tmp_name']);
+                        if ($processedData) {
+                            $fileName = 'feed_' . time() . '_' . generateId() . '.jpg';
+                            $uploadedUrl = uploadToImageKit($processedData, $fileName, $publicKey, $privateKey);
+                            if ($uploadedUrl) {
+                                $final_image_url = $uploadedUrl;
+                            } else {
+                                $message = "Virhe: Kuvan lataus ImageKit-palveluun epäonnistui.";
+                            }
+                        } else {
+                            $message = "Virhe: Kuvan käsittely epäonnistui.";
+                        }
+                    }
+                } else {
+                    $final_image_url = $image_url_input;
                 }
 
-                $newItem = [
-                    'id' => generateId(),
-                    'business_id' => (int)$business_id,
-                    'type' => $type,
-                    'title' => $title,
-                    'description' => $short_desc,
-                    'image' => $final_image_url,
-                    'publish_at' => date('c', strtotime($publish_at)),
-                    'is_promoted' => $is_promoted,
-                    'created_at' => date('c')
-                ];
+                if ($final_image_url) {
+                    // Storage
+                    $feedData = [];
+                    if (file_exists($jsonFile)) {
+                        $feedData = json_decode(file_get_contents($jsonFile), true) ?: [];
+                    }
 
-                // Optional socials
-                if ($website_url)   $newItem['website_url'] = $website_url;
-                if ($facebook_url)  $newItem['facebook_url'] = $facebook_url;
-                if ($instagram_url) $newItem['instagram_url'] = $instagram_url;
-                if ($youtube_url)   $newItem['youtube_url'] = $youtube_url;
+                    $newItem = [
+                        'id' => generateId(),
+                        'business_id' => $business_id,
+                        'type' => $type,
+                        'title' => $title,
+                        'description' => $short_desc,
+                        'image' => $final_image_url,
+                        'publish_at' => date('c', strtotime($publish_at)),
+                        'is_promoted' => $is_promoted,
+                        'created_at' => date('c')
+                    ];
 
-                // Add to top & limit
-                array_unshift($feedData, $newItem);
-                $feedData = array_slice($feedData, 0, $maxItems);
+                    if ($website_url)   $newItem['website_url'] = $website_url;
+                    if ($facebook_url)  $newItem['facebook_url'] = $facebook_url;
+                    if ($instagram_url) $newItem['instagram_url'] = $instagram_url;
+                    if ($youtube_url)   $newItem['youtube_url'] = $youtube_url;
 
-                // Save
-                file_put_contents($jsonFile, json_encode($feedData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-                
-                $message = "Sisältö julkaistu onnistuneesti! ✅";
-                $previewJson = json_encode($newItem, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+                    array_unshift($feedData, $newItem);
+                    $feedData = array_slice($feedData, 0, $maxItems);
+                    file_put_contents($jsonFile, json_encode($feedData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+                    
+                    $message = "Sisältö julkaistu onnistuneesti! ✅";
+                    $previewJson = json_encode($newItem, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+                }
             }
         }
     }
@@ -242,6 +259,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
         .alert-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
         pre { background: #1e293b; color: #e2e8f0; padding: 1rem; border-radius: 10px; font-size: 0.85rem; overflow-x: auto; margin-top: 1rem; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
@@ -259,7 +277,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="row">
             <div>
                 <label for="business_id">Yritys ID (rowid)</label>
-                <input type="number" id="business_id" name="business_id" required placeholder="Esim. 123">
+                <input type="number" id="business_id" name="business_id" required value="<?= sanitize($prefillId) ?>" placeholder="Esim. 123">
             </div>
             <div>
                 <label for="type">Tyyppi</label>
@@ -270,6 +288,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <option value="offer">Tarjous</option>
                 </select>
             </div>
+        </div>
+
+        <div class="<?= !empty($prefillToken) ? 'hidden' : '' ?>">
+            <label for="publish_token">Julkaisu-token</label>
+            <input type="password" id="publish_token" name="publish_token" required value="<?= sanitize($prefillToken) ?>" placeholder="Syötä turva-token">
         </div>
 
         <label for="title">Otsikko</label>
