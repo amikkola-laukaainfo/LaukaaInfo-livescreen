@@ -109,8 +109,10 @@ const LkiFeed = (() => {
           </div>
           <h3 class="lki-card__title">${title}</h3>
           <p class="lki-card__desc">${desc}</p>
-          <div class="lki-card__date">🕐 ${dateStr}</div>
-          ${socialHtml}
+          <div class="lki-card__footer">
+            <div class="lki-card__date">🕐 ${dateStr}</div>
+            ${socialHtml}
+          </div>
         </div>
       </article>
     `;
