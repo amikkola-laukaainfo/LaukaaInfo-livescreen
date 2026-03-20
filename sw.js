@@ -4,7 +4,6 @@ const ASSETS = [
     './index.html',
     './style.css',
     './script.js',
-    './get_companies.php',
     './manifest.json',
     './icons/icon-192.png',
     './icons/icon-512.png',

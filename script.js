@@ -387,7 +387,6 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
     // Use only the server‑side PHP proxy to avoid CORS issues
     const proxies = [
         `https://www.mediazoo.fi/laukaainfo-web/proxy.php?url=${encodeURIComponent(url)}&encoding=${encoding}`,
-        `proxy.php?url=${encodeURIComponent(url)}&encoding=${encoding}`,
         `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
         `https://thingproxy.freeboard.io/fetch/${url}`
     ];

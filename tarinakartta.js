@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (url.includes('drive.google.com') || url.includes('drive_cache/')) {
                 const idMatch = url.match(/(?:id=|\/d\/|file\/d\/|drive_cache\/)([a-zA-Z0-9_-]+)/);
                 if (idMatch) {
-                    url = `get_image.php?id=${idMatch[1]}`;
+                    url = `https://www.mediazoo.fi/laukaainfo-web/get_image.php?id=${idMatch[1]}`;
                 }
             }
 
