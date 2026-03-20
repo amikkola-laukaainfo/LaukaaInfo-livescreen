@@ -189,6 +189,19 @@
     </header>
 
     <main>
+        <!-- Feed Accordion -->
+        <section class="feed-accordion-section">
+            <div class="feed-accordion">
+                <button class="feed-accordion-header" id="toggle-feed-btn">
+                    <span>🔥 Mitä Laukaassa tapahtuu</span>
+                    <span class="icon">▲</span>
+                </button>
+                <div class="feed-accordion-content" id="feed-accordion-content">
+                    <div id="homepage-feed" data-feed-src="demo-data.json"></div>
+                </div>
+            </div>
+        </section>
+
         <!-- Kauppa - Etusivu -->
         <section id="kauppa-search" class="kauppa-hero">
             <div class="search-hero-content">
@@ -304,6 +317,14 @@
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
 
     <script src="script.js?v=20260301-1"></script>
+    <script src="feed.js"></script>
+    <script>
+        // Feed accordion toggle
+        document.getElementById('toggle-feed-btn').addEventListener('click', function() {
+            this.classList.toggle('closed');
+            document.getElementById('feed-accordion-content').classList.toggle('closed');
+        });
+    </script>
     <script>
         // Taustalla toimiva kävijälaskuri
         (function () {
