@@ -15,6 +15,7 @@ $publicKey    = 'YOUR_PUBLIC_KEY';
 $privateKey   = 'YOUR_PRIVATE_KEY';
 $jsonFile     = 'content.json';
 $maxItems     = 100;
+$companyApi   = 'https://www.mediazoo.fi/laukaainfo-web/get_companies.php';
 
 // --- UTILITIES ---
 function sanitize($str) {
@@ -125,65 +126,88 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (empty($_FILES['image']['tmp_name']) && empty($image_url_input)) {
         $message = "Virhe: Kuva tai kuvan URL vaaditaan.";
     } else {
-        $final_image_url = '';
-
-        // Handle Image Upload
-        if (!empty($_FILES['image']['tmp_name'])) {
-            if ($privateKey === 'YOUR_PRIVATE_KEY') {
-                $message = "Virhe: ImageKit API-avaimia ei ole määritetty.";
-            } else {
-                $processedData = processImage($_FILES['image']['tmp_name']);
-                if ($processedData) {
-                    $fileName = 'feed_' . time() . '_' . generateId() . '.jpg';
-                    $uploadedUrl = uploadToImageKit($processedData, $fileName, $publicKey, $privateKey);
-                    if ($uploadedUrl) {
-                        $final_image_url = $uploadedUrl;
-                    } else {
-                        $message = "Virhe: Kuvan lataus ImageKit-palveluun epäonnistui.";
-                    }
+        // --- COMPANY VALIDATION ---
+        $isValidCompany = false;
+        $companyList = json_decode(file_get_contents($companyApi . "?t=" . time()), true);
+        $companies = is_array($companyList) ? $companyList : ($companyList['results'] ?? []);
+        
+        foreach ($companies as $comp) {
+            $compId = str_replace('company-', '', $comp['id'] ?? '');
+            if ($compId == $business_id) {
+                if (($comp['tyyppi'] ?? '') === 'maksu') {
+                    $isValidCompany = true;
+                    break;
                 } else {
-                    $message = "Virhe: Kuvan käsittely epäonnistui.";
+                    $message = "Virhe: Yrityksellä (ID $business_id) ei ole 'maksu'-oikeutta tiedotteiden julkaisuun.";
                 }
             }
-        } else {
-            // Use Direct URL
-            $final_image_url = $image_url_input;
         }
 
-        if ($final_image_url) {
-            // Storage
-            $feedData = [];
-            if (file_exists($jsonFile)) {
-                $feedData = json_decode(file_get_contents($jsonFile), true) ?: [];
+        if (!$isValidCompany && empty($message)) {
+            $message = "Virhe: Yritystä ID:llä $business_id ei löytynyt rekisteristä.";
+        }
+
+        if ($isValidCompany) {
+            $final_image_url = '';
+
+            // Handle Image Upload
+            if (!empty($_FILES['image']['tmp_name'])) {
+                if ($privateKey === 'YOUR_PRIVATE_KEY') {
+                    $message = "Virhe: ImageKit API-avaimia ei ole määritetty.";
+                } else {
+                    $processedData = processImage($_FILES['image']['tmp_name']);
+                    if ($processedData) {
+                        $fileName = 'feed_' . time() . '_' . generateId() . '.jpg';
+                        $uploadedUrl = uploadToImageKit($processedData, $fileName, $publicKey, $privateKey);
+                        if ($uploadedUrl) {
+                            $final_image_url = $uploadedUrl;
+                        } else {
+                            $message = "Virhe: Kuvan lataus ImageKit-palveluun epäonnistui.";
+                        }
+                    } else {
+                        $message = "Virhe: Kuvan käsittely epäonnistui.";
+                    }
+                }
+            } else {
+                // Use Direct URL
+                $final_image_url = $image_url_input;
             }
 
-            $newItem = [
-                'id' => generateId(),
-                'business_id' => (int)$business_id,
-                'type' => $type,
-                'title' => $title,
-                'description' => $short_desc,
-                'image' => $final_image_url,
-                'publish_at' => date('c', strtotime($publish_at)),
-                'is_promoted' => $is_promoted,
-                'created_at' => date('c')
-            ];
+            if ($final_image_url) {
+                // Storage
+                $feedData = [];
+                if (file_exists($jsonFile)) {
+                    $feedData = json_decode(file_get_contents($jsonFile), true) ?: [];
+                }
 
-            // Optional socials
-            if ($website_url)   $newItem['website_url'] = $website_url;
-            if ($facebook_url)  $newItem['facebook_url'] = $facebook_url;
-            if ($instagram_url) $newItem['instagram_url'] = $instagram_url;
-            if ($youtube_url)   $newItem['youtube_url'] = $youtube_url;
+                $newItem = [
+                    'id' => generateId(),
+                    'business_id' => (int)$business_id,
+                    'type' => $type,
+                    'title' => $title,
+                    'description' => $short_desc,
+                    'image' => $final_image_url,
+                    'publish_at' => date('c', strtotime($publish_at)),
+                    'is_promoted' => $is_promoted,
+                    'created_at' => date('c')
+                ];
 
-            // Add to top & limit
-            array_unshift($feedData, $newItem);
-            $feedData = array_slice($feedData, 0, $maxItems);
+                // Optional socials
+                if ($website_url)   $newItem['website_url'] = $website_url;
+                if ($facebook_url)  $newItem['facebook_url'] = $facebook_url;
+                if ($instagram_url) $newItem['instagram_url'] = $instagram_url;
+                if ($youtube_url)   $newItem['youtube_url'] = $youtube_url;
 
-            // Save
-            file_put_contents($jsonFile, json_encode($feedData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-            
-            $message = "Sisältö julkaistu onnistuneesti! ✅";
-            $previewJson = json_encode($newItem, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+                // Add to top & limit
+                array_unshift($feedData, $newItem);
+                $feedData = array_slice($feedData, 0, $maxItems);
+
+                // Save
+                file_put_contents($jsonFile, json_encode($feedData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+                
+                $message = "Sisältö julkaistu onnistuneesti! ✅";
+                $previewJson = json_encode($newItem, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+            }
         }
     }
 }
