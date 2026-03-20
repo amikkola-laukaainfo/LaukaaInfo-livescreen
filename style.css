@@ -2386,10 +2386,10 @@ footer {
 
 /* Loading skeleton */
 .lki-skeleton {
-  background: linear-gradient(90deg, #e8eff8 25%, #f4f7fb 50%, #e8eff8 75%);
+  background: linear-gradient(90deg, #f0f4f8 25%, #dae4ef 50%, #f0f4f8 75%);
   background-size: 200% 100%;
-  animation: lki-shimmer 1.4s infinite;
-  border-radius: 10px;
+  animation: lki-shimmer 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  border-radius: 12px;
 }
 
 @keyframes lki-shimmer {
@@ -2447,7 +2447,12 @@ footer {
     color: #fff;
 }
 
-.feed-accordion-content { transition: max-height 0.45s ease-out, padding 0.45s; max-height: 5000px; overflow: hidden; }
+.feed-accordion-content { 
+    transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1), padding 0.45s; 
+    max-height: 5000px; 
+    overflow: hidden; 
+    will-change: max-height;
+}
 .feed-accordion-content.closed { max-height: 0; }
 
 /* Feed Card Social Icons */
