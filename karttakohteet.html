@@ -227,9 +227,15 @@
         <section class="map-filters card">
             <div class="filter-group">
                 <label for="category-filter">Valitse kategoria</label>
-                <select id="category-filter">
-                    <option value="all">Kaikki kohteet</option>
-                </select>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: flex-end;">
+                    <select id="category-filter" style="flex: 1;">
+                        <option value="all">Kaikki kohteet</option>
+                    </select>
+                    <button id="share-map-btn" style="padding: 0.65rem 1rem; background: #0056b3; color: white; border: none; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 0.4rem; transition: background 0.2s;">
+                        <span>Jaa haku</span>
+                        <span style="font-size: 1.1rem;">🔗</span>
+                    </button>
+                </div>
             </div>
             <div id="status-text" style="font-size: 0.9rem; color: #666;">Ladataan kohteita...</div>
             <p class="location-hint" style="margin-top: 1rem; width: 100%;">Kirjoita tai klikkaa sijaintisi ja löydä lähimmät kohteet, tapahtumat tai tarjoukset kartalla.</p>
