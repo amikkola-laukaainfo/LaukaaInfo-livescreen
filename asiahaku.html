@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hae ja tutki - LaukaaInfo</title>
+    <title>Asiahaku – LaukaaInfo: Laukaa taskussasi – tiedä, löydä ja osallistu.</title>
     <meta name="description" content="Hae ja analysoi kunnan päätöksiä ja asioita.">
     <link rel="icon" href="logo.png">
 
@@ -126,8 +126,21 @@
                         <a href="index.html" class="nav-link">Kauppa <span class="arrow">▼</span></a>
                         <ul class="dropdown-menu">
                             <li><a href="lisaa-yritys.html">Lisää yritys</a></li>
-                            <!-- Lisää kategoriat dynaamisesti scriptissä jos tarpeen, 
-                                 mutta asiahaku.html:ssä staattinen versio tai minimalistinen -->
+                            <li class="has-arrow">
+                                <a href="#">Kategoriat</a>
+                                <ul class="nested-menu" id="nav-categories">
+                                </ul>
+                            </li>
+                            <li class="has-arrow">
+                                <a href="#">Taajamat</a>
+                                <ul class="nested-menu">
+                                    <li><a href="laukaa.html">Laukaa kk</a></li>
+                                    <li><a href="leppavesi.html">Leppävesi</a></li>
+                                    <li><a href="lievestuore.html">Lievestuore</a></li>
+                                    <li><a href="vehnia.html">Vehniä</a></li>
+                                    <li><a href="vihtavuori.html">Vihtavuori</a></li>
+                                </ul>
+                            </li>
                         </ul>
                     </li>
                     <li class="nav-item">
@@ -137,12 +150,6 @@
                             <li><a href="ajankohtaista.html#news-card">Tiedotteet</a></li>
                             <li><a href="ajankohtaista.html#decisions-card">Päätöksenteko</a></li>
                             <li><a href="ajankohtaista.html#feedback-card">Palautteet</a></li>
-                            <li class="has-arrow">
-                                <a href="#">Taajamat</a>
-                                <ul class="nested-menu">
-                                    <li><a href="lievestuore.html">Lievestuore</a></li>
-                                </ul>
-                            </li>
                         </ul>
                     </li>
                     <li class="nav-item">
@@ -152,11 +159,12 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">Kartat & Elämykset <span class="arrow">▼</span></a>
+                        <a href="#" class="nav-link">Kartat &amp; Elämykset <span class="arrow">▼</span></a>
                         <ul class="dropdown-menu">
+                            <li><a href="karttakohteet.html">Karttakohteet</a></li>
                             <li><a href="tarinakartta.html">Tarinakartta</a></li>
                             <li><a href="muistokartta.html">Muistokartta</a></li>
-                            <li><a href="kadonneet.html">Kadonneet & löydetyt</a></li>
+                            <li><a href="kadonneet.html">Kadonneet &amp; löydetyt</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -188,7 +196,16 @@
                     <li class="menu-item has-submenu">
                         <a href="#" class="submenu-toggle">Kategoriat <span class="arrow">▼</span></a>
                         <ul class="submenu" id="sidebar-categories">
-                            <!-- Kategoriat ladataan dynaamisesti scriptissä -->
+                        </ul>
+                    </li>
+                    <li class="menu-item has-submenu">
+                        <a href="#" class="submenu-toggle">Taajamat <span class="arrow">▼</span></a>
+                        <ul class="submenu">
+                            <li><a href="laukaa.html" class="sidebar-link">Laukaa kk</a></li>
+                            <li><a href="leppavesi.html" class="sidebar-link">Leppävesi</a></li>
+                            <li><a href="lievestuore.html" class="sidebar-link">Lievestuore</a></li>
+                            <li><a href="vehnia.html" class="sidebar-link">Vehniä</a></li>
+                            <li><a href="vihtavuori.html" class="sidebar-link">Vihtavuori</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -206,12 +223,6 @@
                             class="sidebar-link">Päätöksenteko</a></li>
                     <li class="menu-item"><a href="ajankohtaista.html#feedback-card" class="sidebar-link">Palautteet</a>
                     </li>
-                    <li class="menu-item has-submenu">
-                        <a href="#" class="submenu-toggle">Taajamat <span class="arrow">▼</span></a>
-                        <ul class="submenu">
-                            <li><a href="lievestuore.html" class="sidebar-link">Lievestuore</a></li>
-                        </ul>
-                    </li>
                 </ul>
             </div>
 
@@ -227,9 +238,11 @@
             <div class="menu-section highlight-section">
                 <h3 class="section-title">KARTAT & ELÄMYKSET ⭐</h3>
                 <ul class="menu-list">
+                    <li class="menu-item"><a href="karttakohteet.html" class="sidebar-link">Karttakohteet</a></li>
                     <li class="menu-item"><a href="tarinakartta.html" class="sidebar-link">Tarinakartta</a></li>
                     <li class="menu-item"><a href="muistokartta.html" class="sidebar-link">Muistokartta</a></li>
-                    <li class="menu-item"><a href="kadonneet.html" class="sidebar-link">Kadonneet & löydetyt</a></li>
+                    <li class="menu-item"><a href="kadonneet.html" class="sidebar-link">Kadonneet &amp; löydetyt</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -299,7 +312,18 @@
             <p>© 2026 LaukaaInfo – Epävirallinen yhteisösovellus</p>
             <div class="footer-links">
                 <a href="index.html">Etusivulle</a>
+                <a href="tietosuoja.html">Tietosuoja</a>
+                <a href="maksuehto.html">Maksuehdot</a>
                 <a href="https://mediazoo.fi/yhteystiedot/">Yhteystiedot</a>
+                <button id="pwa-install-btn"
+                    style="display: none; background: #00c3ff; color: white; border: none; padding: 5px 12px; border-radius: 20px; cursor: pointer; font-family: inherit; font-size: 0.9rem; margin-left: 10px;">Asenna
+                    sovellus</button>
+            </div>
+            <div class="app-badge">
+                <a href="https://play.google.com/store/apps/details?id=org.example.LaukaaLive&hl=fi" target="_blank">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+                        alt="Lataa Android-sovellus" style="height: 40px;">
+                </a>
             </div>
         </div>
     </footer>
@@ -307,6 +331,7 @@
     <div class="demo-notification">Tämä sivusto on yksityinen ja riippumaton palvelu. Se ei ole kunnan virallinen
         verkkosivusto. Sisällöt perustuvat avoimiin ja julkisiin lähteisiin.</div>
 
+    <script src="script.js?v=20260301-1"></script>
     <script>
         const issueData = {
             'kunnanhallitus': [
@@ -314,9 +339,8 @@
                 { id: '2026-01', text: 'Kokous tammikuu 2026' }
             ],
             'kunnanvaltuusto': [
-                { id: '2025-all-v', text: 'Vuoden 2025 kokoukset', active: true },
-                { id: '2026-02-v', text: 'Valtuusto helmikuu 2026' },
-                { id: '2025-12-v', text: 'Valtuusto joulukuu 2025' }
+                { id: '2026-03-v', text: 'Valtuusto maaliskuu 2026', active: true },
+                { id: '2025-all-v', text: 'Vuoden 2025 kokoukset', active: true }
             ],
             'kunnan-talous': [
                 { id: 'talousarvio', text: 'Talousarvio ja muutokset', active: true },
@@ -366,6 +390,8 @@
                 // Näytetään sivu1.html Kunnanhallituksen helmikuun 2026 kokoukselle
                 if (category === 'kunnanhallitus' && issue === '2026-02') {
                     iframe.src = 'logica/sivu1.html';
+                } else if (category === 'kunnanvaltuusto' && issue === '2026-03-v') {
+                    iframe.src = 'logica/valtuusto232026.html';
                 } else if (category === 'kunnanvaltuusto' && issue === '2025-all-v') {
                     iframe.src = 'logica/sivu2.html';
                 } else if (category === 'kunnan-talous' && issue === 'talousarvio') {
@@ -394,73 +420,21 @@
             }
         }
 
-        // Sidebar Navigation Logic
+        // Asiahaun URL-parametrien käsittely
         document.addEventListener('DOMContentLoaded', () => {
-            const hamburgerBtn = document.getElementById('hamburger-btn');
-            const closeBtn = document.getElementById('close-sidebar-btn');
-            const sidebarMenu = document.getElementById('sidebar-menu');
-            const sidebarOverlay = document.getElementById('sidebar-overlay');
-            const submenuToggles = document.querySelectorAll('.submenu-toggle');
-
-            function openSidebar() {
-                if (sidebarMenu) sidebarMenu.classList.add('active');
-                if (sidebarOverlay) sidebarOverlay.classList.add('active');
-            }
-
-            function closeSidebar() {
-                if (sidebarMenu) sidebarMenu.classList.remove('active');
-                if (sidebarOverlay) sidebarOverlay.classList.remove('active');
-            }
-
-            if (hamburgerBtn) hamburgerBtn.addEventListener('click', openSidebar);
-            if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
-            if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
-
-            submenuToggles.forEach(toggle => {
-                toggle.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const parentLi = toggle.parentElement;
-                    const submenu = parentLi.querySelector('.submenu');
-                    parentLi.classList.toggle('open');
-                    if (submenu) submenu.classList.toggle('open');
-                });
-            });
-
             // Tarkistetaan URL-parametrit hakuun (esim. etusivun linkeistä)
             const params = new URLSearchParams(window.location.search);
             let catParam = params.get('cat');
             let issueParam = params.get('issue');
 
-            // Tarkistetaan nätit URL:t (esim. /asia-kunnanhallitus/2026-02)
-            const pathname = window.location.pathname;
-            const pathMatch = pathname.match(/\/(?:asia|asiahaku)-([^\/]+)\/(.+)/);
-            if (!catParam && pathMatch) {
-                catParam = decodeURIComponent(pathMatch[1]);
-                issueParam = decodeURIComponent(pathMatch[2]);
-            }
-
-            // Tarkistetaan hash-linkit (esim. #asia-kunnanhallitus/2026-02)
-            const hashParam = window.location.hash;
-            if (!catParam && hashParam && hashParam.match(/^#(?:asia|asiahaku)-/)) {
-                const parts = hashParam.replace(/^#(?:asia|asiahaku)-/, '').split('/');
-                if (parts.length >= 2) {
-                    catParam = decodeURIComponent(parts[0]);
-                    issueParam = decodeURIComponent(parts.slice(1).join('/'));
-                }
-            }
-
             if (catParam && issueData[catParam]) {
                 categorySelect.value = catParam;
-                // Päivitetään asialista manuaalisesti tai liipaisemalla tapahtuma
                 categorySelect.dispatchEvent(new Event('change'));
 
                 if (issueParam) {
-                    // Pieni viive varmistamaan että asialista on ehtinyt päivittyä
                     setTimeout(() => {
                         issueSelect.value = issueParam;
                         updateEmbed();
-
-                        // Skrollataan automaattisesti embed-näkymään
                         setTimeout(() => {
                             const embedContainer = document.getElementById('embed-container');
                             if (embedContainer) embedContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -470,6 +444,7 @@
             }
         });
     </script>
+
 </body>
 
 </html>

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ajankohtaista – LaukaaInfo</title>
+    <title>Ajankohtaista – LaukaaInfo: Laukaa taskussasi – tiedä, löydä ja osallistu.</title>
     <meta name="description"
         content="Laukaan kylien ja asukkaiden oma tietopankki. Ajankohtaiset uutiset, tapahtumat ja paikalliset yritykset.">
     <link rel="icon" href="logo.png">
@@ -40,7 +40,21 @@
                         <a href="index.html" class="nav-link">Kauppa <span class="arrow">▼</span></a>
                         <ul class="dropdown-menu">
                             <li><a href="lisaa-yritys.html">Lisää yritys</a></li>
-                            <!-- Kategoriat ladataan dynaamisesti JS:llä -->
+                            <li class="has-arrow">
+                                <a href="#">Kategoriat</a>
+                                <ul class="nested-menu" id="nav-categories">
+                                </ul>
+                            </li>
+                            <li class="has-arrow">
+                                <a href="#">Taajamat</a>
+                                <ul class="nested-menu">
+                                    <li><a href="laukaa.html">Laukaa kk</a></li>
+                                    <li><a href="leppavesi.html">Leppävesi</a></li>
+                                    <li><a href="lievestuore.html">Lievestuore</a></li>
+                                    <li><a href="vehnia.html">Vehniä</a></li>
+                                    <li><a href="vihtavuori.html">Vihtavuori</a></li>
+                                </ul>
+                            </li>
                         </ul>
                     </li>
                     <li class="nav-item">
@@ -54,7 +68,11 @@
                             <li class="has-arrow">
                                 <a href="#">Taajamat</a>
                                 <ul class="nested-menu">
+                                    <li><a href="laukaa.html">Laukaa kk</a></li>
+                                    <li><a href="leppavesi.html">Leppävesi</a></li>
                                     <li><a href="lievestuore.html">Lievestuore</a></li>
+                                    <li><a href="vehnia.html">Vehniä</a></li>
+                                    <li><a href="vihtavuori.html">Vihtavuori</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -66,11 +84,12 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">Kartat & Elämykset <span class="arrow">▼</span></a>
+                        <a href="#" class="nav-link">Kartat &amp; Elämykset <span class="arrow">▼</span></a>
                         <ul class="dropdown-menu">
+                            <li><a href="karttakohteet.html">Karttakohteet</a></li>
                             <li><a href="tarinakartta.html">Tarinakartta</a></li>
                             <li><a href="muistokartta.html">Muistokartta</a></li>
-                            <li><a href="kadonneet.html">Kadonneet & löydetyt</a></li>
+                            <li><a href="kadonneet.html">Kadonneet &amp; löydetyt</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -105,7 +124,16 @@
                     <li class="menu-item has-submenu">
                         <a href="#" class="submenu-toggle">Kategoriat <span class="arrow">▼</span></a>
                         <ul class="submenu" id="sidebar-categories">
-                            <!-- Kategoriat dynaamisesti -->
+                        </ul>
+                    </li>
+                    <li class="menu-item has-submenu">
+                        <a href="#" class="submenu-toggle">Taajamat <span class="arrow">▼</span></a>
+                        <ul class="submenu">
+                            <li><a href="laukaa.html" class="sidebar-link">Laukaa kk</a></li>
+                            <li><a href="leppavesi.html" class="sidebar-link">Leppävesi</a></li>
+                            <li><a href="lievestuore.html" class="sidebar-link">Lievestuore</a></li>
+                            <li><a href="vehnia.html" class="sidebar-link">Vehniä</a></li>
+                            <li><a href="vihtavuori.html" class="sidebar-link">Vihtavuori</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -115,15 +143,13 @@
             <div class="menu-section">
                 <h3 class="section-title">AJANKOHTAISTA</h3>
                 <ul class="menu-list">
-                    <li class="menu-item"><a href="#events-card" class="sidebar-link">Tapahtumat</a></li>
-                    <li class="menu-item"><a href="#news-card" class="sidebar-link">Tiedotteet</a></li>
-                    <li class="menu-item"><a href="#decisions-card" class="sidebar-link">Päätöksenteko</a></li>
-                    <li class="menu-item"><a href="#feedback-card" class="sidebar-link">Palautteet</a></li>
-                    <li class="menu-item has-submenu">
-                        <a href="#" class="submenu-toggle">Taajamat <span class="arrow">▼</span></a>
-                        <ul class="submenu">
-                            <li><a href="lievestuore.html" class="sidebar-link">Lievestuore</a></li>
-                        </ul>
+                    <li class="menu-item"><a href="ajankohtaista.html#events-card" class="sidebar-link">Tapahtumat</a>
+                    </li>
+                    <li class="menu-item"><a href="ajankohtaista.html#news-card" class="sidebar-link">Tiedotteet</a>
+                    </li>
+                    <li class="menu-item"><a href="ajankohtaista.html#decisions-card"
+                            class="sidebar-link">Päätöksenteko</a></li>
+                    <li class="menu-item"><a href="ajankohtaista.html#feedback-card" class="sidebar-link">Palautteet</a>
                     </li>
                 </ul>
             </div>
@@ -138,11 +164,13 @@
 
             <!-- Korostettu osio: KARTAT & ELÄMYKSET -->
             <div class="menu-section highlight-section">
-                <h3 class="section-title">KARTAT & ELÄMYKSET ⭐</h3>
+                <h3 class="section-title">KARTAT &amp; ELÄMYKSET ⭐</h3>
                 <ul class="menu-list">
+                    <li class="menu-item"><a href="karttakohteet.html" class="sidebar-link">Karttakohteet</a></li>
                     <li class="menu-item"><a href="tarinakartta.html" class="sidebar-link">Tarinakartta</a></li>
                     <li class="menu-item"><a href="muistokartta.html" class="sidebar-link">Muistokartta</a></li>
-                    <li class="menu-item"><a href="kadonneet.html" class="sidebar-link">Kadonneet & löydetyt</a></li>
+                    <li class="menu-item"><a href="kadonneet.html" class="sidebar-link">Kadonneet &amp; löydetyt</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -202,7 +230,18 @@
             <p>© 2026 LaukaaInfo – Epävirallinen yhteisösovellus</p>
             <div class="footer-links">
                 <a href="index.html">Etusivulle</a>
+                <a href="tietosuoja.html">Tietosuoja</a>
+                <a href="maksuehto.html">Maksuehdot</a>
                 <a href="https://mediazoo.fi/yhteystiedot/">Yhteystiedot</a>
+                <button id="pwa-install-btn"
+                    style="display: none; background: #00c3ff; color: white; border: none; padding: 5px 12px; border-radius: 20px; cursor: pointer; font-family: inherit; font-size: 0.9rem; margin-left: 10px;">Asenna
+                    sovellus</button>
+            </div>
+            <div class="app-badge">
+                <a href="https://play.google.com/store/apps/details?id=org.example.LaukaaLive&hl=fi" target="_blank">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+                        alt="Lataa Android-sovellus" style="height: 40px;">
+                </a>
             </div>
         </div>
     </footer>

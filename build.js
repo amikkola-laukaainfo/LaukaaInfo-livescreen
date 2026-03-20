@@ -1,10 +1,16 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+const crypto = require('crypto');
 
 console.log('--- LaukaaInfo Build Script ---');
 
-// 1. Asennetaan paketit devDependencies-osioon (jos ei jo asennettu)
+async function runBuild() {
+    // Generate a build version (hash of current time)
+    const buildVersion = crypto.createHash('md5').update(Date.now().toString()).digest('hex').substring(0, 8);
+    console.log(`Build Version: ${buildVersion}`);
+
+    // 1. Asennetaan paketit devDependencies-osioon (jos ei jo asennettu)
 console.log('1. Tarkistetaan ja asennetaan minifiintipaketit... (Tämä voi kestää hetken)');
 try {
     execSync('npm install --no-save terser clean-css-cli html-minifier', { stdio: 'ignore' });
@@ -44,7 +50,9 @@ copyRecursive(__dirname, distDir);
 // 4. Minifioidaan kaikki JS, CSS ja HTML -tiedostot dist-kansiossa
 console.log('3. Aloitetaan obfuskointi/minifiointi (JS, CSS, HTML)...');
 
-function minifyFolder(dir) {
+const assetMap = {};
+
+function minifyAndVersionFolder(dir) {
     const entries = fs.readdirSync(dir, { withFileTypes: true });
     for (const entry of entries) {
         const fullPath = path.join(dir, entry.name);
@@ -52,39 +60,85 @@ function minifyFolder(dir) {
         if (entry.isDirectory()) {
             // Älä minifioi kuvakansioita turhaan
             if (entry.name !== 'icons' && entry.name !== 'drive_cache') {
-                minifyFolder(fullPath);
+                minifyAndVersionFolder(fullPath);
             }
         } else {
-            if (entry.name.endsWith('.js')) {
-                console.log(' -> Minifioidaan JS:  ' + entry.name);
+            if (entry.name.endsWith('.js') && entry.name !== 'sw.js') {
+                console.log(' -> Minifioidaan ja versioidaan JS:  ' + entry.name);
                 try {
-                    execSync(`npx terser "${fullPath}" -o "${fullPath}" -c -m`, { stdio: 'ignore' });
+                    execSync(`npx terser "${fullPath}" -o "${fullPath}" -c -m`);
+                    const newName = entry.name.replace('.js', `.${buildVersion}.js`);
+                    const newPath = path.join(dir, newName);
+                    fs.renameSync(fullPath, newPath);
+                    assetMap[entry.name] = newName;
                 } catch (e) {
-                    console.error(' Virhe JS-tiedostossa: ' + entry.name);
+                    console.error(' Virhe JS-tiedostossa: ' + entry.name, e.message);
                 }
             } else if (entry.name.endsWith('.css')) {
-                console.log(' -> Minifioidaan CSS: ' + entry.name);
+                console.log(' -> Minifioidaan ja versioidaan CSS: ' + entry.name);
                 try {
-                    execSync(`npx cleancss -o "${fullPath}" "${fullPath}"`, { stdio: 'ignore' });
+                    execSync(`npx cleancss -o "${fullPath}" "${fullPath}"`);
+                    const newName = entry.name.replace('.css', `.${buildVersion}.css`);
+                    const newPath = path.join(dir, newName);
+                    fs.renameSync(fullPath, newPath);
+                    assetMap[entry.name] = newName;
                 } catch (e) {
-                    console.error(' Virhe CSS-tiedostossa: ' + entry.name);
+                    console.error(' Virhe CSS-tiedostossa: ' + entry.name, e.message);
                 }
             } else if (entry.name.endsWith('.html')) {
                 console.log(' -> Minifioidaan HTML: ' + entry.name);
                 try {
-                    execSync(`npx html-minifier --collapse-whitespace --remove-comments --minify-css true --minify-js true -o "${fullPath}" "${fullPath}"`, { stdio: 'ignore' });
+                    execSync(`npx html-minifier --collapse-whitespace --remove-comments --minify-css true --minify-js true -o "${fullPath}" "${fullPath}"`);
                 } catch (e) {
-                    console.error(' Virhe HTML-tiedostossa: ' + entry.name);
+                    console.error(' Virhe HTML-tiedostossa: ' + entry.name, e.message);
                 }
             }
         }
     }
 }
 
-minifyFolder(distDir);
+minifyAndVersionFolder(distDir);
+
+// 4.5 Generoidaan premium-yritysten staattiset sivut
+try {
+    const { generatePremiumPages } = require('./generate_premium.js');
+    generatePremiumPages();
+} catch (e) {
+    console.error('Virhe premium-sivujen generoinnissa:', e.message);
+}
+
+// 5. Päivitetään HTML-tiedostojen viittaukset ja luodaan version.json
+console.log('4. Päivitetään viittaukset HTML-tiedostoihin...');
+
+function updateReferences(dir) {
+    const entries = fs.readdirSync(dir, { withFileTypes: true });
+    for (const entry of entries) {
+        const fullPath = path.join(dir, entry.name);
+        if (entry.isDirectory()) {
+            updateReferences(fullPath);
+        } else if (entry.name.endsWith('.html')) {
+            let content = fs.readFileSync(fullPath, 'utf8');
+            for (const [oldName, newName] of Object.entries(assetMap)) {
+                // Etsitään viittauksia tiedostoon (esim. src="script.js" tai href="style.css")
+                // Käytetään simppeliä string replacementia, varotaan ylikattavuutta
+                const regex = new RegExp(`(["'\\/])${oldName}(["'\\?])`, 'g');
+                content = content.replace(regex, `$1${newName}$2`);
+            }
+            fs.writeFileSync(fullPath, content);
+        }
+    }
+}
+
+updateReferences(distDir);
+
+// Luodaan version.json sw.js:lle ja frontendille
+fs.writeFileSync(path.join(distDir, 'version.json'), JSON.stringify({ version: buildVersion, date: new Date().toISOString() }, null, 2));
 
 console.log('\n======================================================');
 console.log('✓ VALMIS! Tuotantoversio on nyt koottu kansioon: dist/');
+console.log('Versio: ' + buildVersion);
 console.log('Voit viedä "dist"-kansion sisällön turvallisesti julkiselle palvelimellesi.');
-console.log('Koodit on pienennetty ja logiikkaa on vaikeampi lukea.');
 console.log('======================================================\n');
+}
+
+runBuild();

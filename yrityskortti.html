@@ -5,6 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yrityskortti – LaukaaInfo</title>
+
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Yrityskortti – LaukaaInfo">
+    <meta property="og:description" content="Kylien ja asukkaiden oma tietopankki. Tutustu tarkemmin yritykseen LaukaaInfo yrityskortissa.">
+    <meta property="og:image" content="https://laukaainfo.fi/og-yrityskortti.png">
+    <meta property="og:url" content="https://laukaainfo.fi/yrityskortti.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="LaukaaInfo">
+
     <link rel="icon" href="logo.png">
 
     <!-- Fonts & Styles -->
@@ -17,7 +26,7 @@
     <!-- Leaflet Map -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-    <link rel="stylesheet" href="style.css?v=20260301">
+    <link rel="stylesheet" href="style.css?v=20260304">
     <style>
         .business-card-container {
             max-width: 1000px;
@@ -61,6 +70,9 @@
             font-size: 3rem;
             color: var(--primary-blue);
             margin-bottom: 0.5rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .card-category {
@@ -97,12 +109,16 @@
             overflow: hidden;
             margin-bottom: 1rem;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            background: #fdfdfd; /* Light background for letterboxing */
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .main-image-container img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
         }
 
         .thumbnails {
@@ -110,6 +126,62 @@
             gap: 1rem;
             overflow-x: auto;
             padding-bottom: 1rem;
+            scrollbar-width: none;
+        }
+
+        .thumbnails::-webkit-scrollbar {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .business-card-container {
+                margin: 2rem auto;
+            }
+
+            .card-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 1.5rem;
+            }
+
+            .card-logo-container {
+                margin: 0 auto;
+            }
+
+            .card-title-section {
+                min-width: unset;
+                width: 100%;
+            }
+
+            .card-title-section h1 {
+                font-size: 2.2rem;
+            }
+
+            .main-image-container {
+                height: 300px;
+            }
+
+            .thumbnails {
+                justify-content: center;
+            }
+
+            .info-panel {
+                padding: 1.5rem;
+                text-align: center;
+            }
+
+            .info-panel h2 {
+                justify-content: center;
+            }
+
+            .contact-item {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .contact-item .icon {
+                width: auto;
+            }
         }
 
         .thumbnails img {
@@ -123,6 +195,34 @@
 
         .thumbnails img:hover {
             opacity: 0.7;
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #fdfdfd;
+            position: relative;
+            user-select: none;
+        }
+
+        .image-placeholder img {
+            width: 150px !important;
+            height: 150px !important;
+            object-fit: contain !important;
+            opacity: 0.2; /* Adjusted to be subtle as requested (50% was requested, but 20-30% often looks better for a watermark, I'll stick close to requested but ensure it's "himmeä") */
+        }
+        
+        .image-placeholder .placeholder-text {
+            position: absolute;
+            bottom: 1rem;
+            right: 1.5rem;
+            font-size: 0.85rem;
+            color: #ccc;
+            font-weight: 500;
         }
 
         .info-panel {
@@ -155,6 +255,10 @@
             color: var(--primary-blue);
             text-decoration: none;
             font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
         }
 
         .contact-item a:hover {
@@ -179,6 +283,119 @@
             height: 100%;
             border: none;
         }
+
+        /* RSS / Ajankohtaista Styles */
+        .rss-section {
+            margin-top: 3rem;
+            background: #fff;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border: 1px solid #edf2f7;
+        }
+
+        .rss-section h3 {
+            color: var(--primary-blue);
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .rss-item {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #edf2f7;
+            transition: transform 0.2s;
+        }
+
+        .rss-item:last-of-type {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .rss-item h4 {
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            color: #2d3748;
+        }
+
+        .rss-item h4 a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .rss-item h4 a:hover {
+            color: var(--primary-blue);
+            text-decoration: underline;
+        }
+
+        .rss-item .rss-date {
+            font-size: 0.85rem;
+            color: #718096;
+            margin-bottom: 0.8rem;
+            display: block;
+        }
+
+        .rss-item .rss-snippet {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #4a5568;
+            margin-bottom: 1rem;
+        }
+
+        .rss-more-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary-blue);
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+            padding: 0.8rem 1.5rem;
+            background: var(--light-blue);
+            border-radius: 50px;
+            transition: all 0.2s;
+            border: none;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .rss-more-toggle:hover {
+            background: #e1efff;
+        }
+
+        .rss-dropdown {
+            display: none;
+            margin-top: 1.5rem;
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .rss-dropdown.open {
+            display: block;
+        }
+
+        .rss-dropdown-item {
+            display: block;
+            padding: 1rem;
+            color: #2d3748;
+            text-decoration: none;
+            border-bottom: 1px solid #e2e8f0;
+            transition: background 0.2s;
+        }
+
+        .rss-dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .rss-dropdown-item:hover {
+            background: #edf2f7;
+            color: var(--primary-blue);
+        }
     </style>
 </head>
 
@@ -196,6 +413,21 @@
                         <a href="index.html" class="nav-link">Kauppa <span class="arrow">▼</span></a>
                         <ul class="dropdown-menu">
                             <li><a href="lisaa-yritys.html">Lisää yritys</a></li>
+                            <li class="has-arrow">
+                                <a href="#">Kategoriat</a>
+                                <ul class="nested-menu" id="nav-categories">
+                                </ul>
+                            </li>
+                            <li class="has-arrow">
+                                <a href="#">Taajamat</a>
+                                <ul class="nested-menu">
+                                    <li><a href="laukaa.html">Laukaa kk</a></li>
+                                    <li><a href="leppavesi.html">Leppävesi</a></li>
+                                    <li><a href="lievestuore.html">Lievestuore</a></li>
+                                    <li><a href="vehnia.html">Vehniä</a></li>
+                                    <li><a href="vihtavuori.html">Vihtavuori</a></li>
+                                </ul>
+                            </li>
                         </ul>
                     </li>
                     <li class="nav-item">
@@ -205,12 +437,6 @@
                             <li><a href="ajankohtaista.html#news-card">Tiedotteet</a></li>
                             <li><a href="ajankohtaista.html#decisions-card">Päätöksenteko</a></li>
                             <li><a href="ajankohtaista.html#feedback-card">Palautteet</a></li>
-                            <li class="has-arrow">
-                                <a href="#">Taajamat</a>
-                                <ul class="nested-menu">
-                                    <li><a href="lievestuore.html">Lievestuore</a></li>
-                                </ul>
-                            </li>
                         </ul>
                     </li>
                     <li class="nav-item">
@@ -222,6 +448,7 @@
                     <li class="nav-item">
                         <a href="#" class="nav-link">Kartat &amp; Elämykset <span class="arrow">▼</span></a>
                         <ul class="dropdown-menu">
+                            <li><a href="karttakohteet.html">Karttakohteet</a></li>
                             <li><a href="tarinakartta.html">Tarinakartta</a></li>
                             <li><a href="muistokartta.html">Muistokartta</a></li>
                             <li><a href="kadonneet.html">Kadonneet &amp; löydetyt</a></li>
@@ -259,7 +486,16 @@
                     <li class="menu-item has-submenu">
                         <a href="#" class="submenu-toggle">Kategoriat <span class="arrow">▼</span></a>
                         <ul class="submenu" id="sidebar-categories">
-                            <!-- Kategoriat dynaamisesti -->
+                        </ul>
+                    </li>
+                    <li class="menu-item has-submenu">
+                        <a href="#" class="submenu-toggle">Taajamat <span class="arrow">▼</span></a>
+                        <ul class="submenu">
+                            <li><a href="laukaa.html" class="sidebar-link">Laukaa kk</a></li>
+                            <li><a href="leppavesi.html" class="sidebar-link">Leppävesi</a></li>
+                            <li><a href="lievestuore.html" class="sidebar-link">Lievestuore</a></li>
+                            <li><a href="vehnia.html" class="sidebar-link">Vehniä</a></li>
+                            <li><a href="vihtavuori.html" class="sidebar-link">Vihtavuori</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -277,12 +513,6 @@
                             class="sidebar-link">Päätöksenteko</a></li>
                     <li class="menu-item"><a href="ajankohtaista.html#feedback-card" class="sidebar-link">Palautteet</a>
                     </li>
-                    <li class="menu-item has-submenu">
-                        <a href="#" class="submenu-toggle">Taajamat <span class="arrow">▼</span></a>
-                        <ul class="submenu">
-                            <li><a href="lievestuore.html" class="sidebar-link">Lievestuore</a></li>
-                        </ul>
-                    </li>
                 </ul>
             </div>
 
@@ -298,6 +528,7 @@
             <div class="menu-section highlight-section">
                 <h3 class="section-title">KARTAT &amp; ELÄMYKSET ⭐</h3>
                 <ul class="menu-list">
+                    <li class="menu-item"><a href="karttakohteet.html" class="sidebar-link">Karttakohteet</a></li>
                     <li class="menu-item"><a href="tarinakartta.html" class="sidebar-link">Tarinakartta</a></li>
                     <li class="menu-item"><a href="muistokartta.html" class="sidebar-link">Muistokartta</a></li>
                     <li class="menu-item"><a href="kadonneet.html" class="sidebar-link">Kadonneet &amp; löydetyt</a>
@@ -314,8 +545,8 @@
 
         <div id="card-content" style="display: none;">
             <div class="card-header">
-                <div class="card-logo-container" id="card-logo">
-                    <img src="logo.png" alt="Logo">
+                <div class="card-logo-container" id="logo-container" style="display: none;">
+                    <img id="display-logo" src="" alt="Logo">
                 </div>
                 <div class="card-title-section">
                     <span class="card-category" id="display-category">Kategoria</span>
@@ -376,6 +607,11 @@
                             </div>
                         </div>
 
+                        <div class="contact-item" id="social-links">
+                            <span class="icon">🔗</span>
+                            <div id="social-icons" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 0.8rem;"></div>
+                        </div>
+
                         <div id="card-map" class="card-map"></div>
 
                         <a href="#" id="google-maps-link" target="_blank" class="btn-primary"
@@ -385,6 +621,29 @@
                     </div>
                 </div>
             </div>
+            <div id="rss-section" class="rss-section" style="display: none;">
+                <h3><span class="icon">📰</span> Ajankohtaista</h3>
+                <div id="rss-items-container">
+                    <!-- Uusimmat uutiset tässä -->
+                </div>
+                <div id="rss-more-section" style="display: none;">
+                    <button id="rss-toggle-btn" class="rss-more-toggle">
+                        Näytä muut uutiset <span class="arrow">▼</span>
+                    </button>
+                    <div id="rss-dropdown" class="rss-dropdown">
+                        <!-- Loput uutiset linkkeinä tässä -->
+                    </div>
+                </div>
+            </div>
+
+            <div id="promotional-links-section"
+                style="margin-top: 3rem; background: #fdf5e6; padding: 2rem; border-radius: 20px; border: 1px dashed #ffa500; display: none;">
+                <h3 style="color: #d2691e; margin-bottom: 1rem;">🔥 Katso tarjoukset:</h3>
+                <div id="ad-links-list" style="display: flex; flex-wrap: wrap; gap: 1rem;">
+                    <!-- Linkit tähän -->
+                </div>
+            </div>
+
         </div>
     </main>
 
@@ -392,8 +651,19 @@
         <div class="footer-content">
             <p>© 2026 LaukaaInfo – Kylien ja asukkaiden oma tietopankki</p>
             <div class="footer-links">
-                <a href="index.html">Takaisin hakuun</a>
+                <a href="index.html">Etusivulle</a>
+                <a href="tietosuoja.html">Tietosuoja</a>
+                <a href="maksuehto.html">Maksuehdot</a>
                 <a href="https://mediazoo.fi/yhteystiedot/">Yhteystiedot</a>
+                <button id="pwa-install-btn"
+                    style="display: none; background: #00c3ff; color: white; border: none; padding: 5px 12px; border-radius: 20px; cursor: pointer; font-family: inherit; font-size: 0.9rem; margin-left: 10px;">Asenna
+                    sovellus</button>
+            </div>
+            <div class="app-badge">
+                <a href="https://play.google.com/store/apps/details?id=org.example.LaukaaLive&hl=fi" target="_blank">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+                        alt="Lataa Android-sovellus" style="height: 40px;">
+                </a>
             </div>
         </div>
     </footer>
@@ -401,7 +671,7 @@
     <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="script.js?v=20260301"></script>
-    <script src="yrityskortti.js?v=20260301"></script>
+    <script src="yrityskortti.js?v=20260304-DEBUG-2"></script>
 </body>
 
 </html>

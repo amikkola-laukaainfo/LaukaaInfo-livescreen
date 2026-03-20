@@ -1,3 +1,277 @@
+/* Mainostutka Styles */
+.radar-action-wrapper {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+/* Tag Cloud Styles */
+.region-tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin: 2rem 0;
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.region-tag-cloud::-webkit-scrollbar {
+    display: none;
+    /* Safari and Chrome */
+}
+
+@media (max-width: 600px) {
+    .region-tag-cloud {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        justify-content: flex-start;
+        padding: 0.5rem 1rem;
+        margin: 1.5rem -1rem;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .region-tag-cloud .tag-pill {
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+}
+
+.tag-pill {
+    background: white;
+    color: var(--primary-blue);
+    padding: 8px 16px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s;
+}
+
+.tag-pill:hover {
+    transform: translateY(-2px);
+    background: var(--light-blue);
+}
+
+.btn-radar {
+    background: linear-gradient(135deg, #ff9900, #ff4d00);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 153, 0, 0.3);
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-radar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 153, 0, 0.4);
+}
+
+.radar-results-hidden {
+    display: none;
+}
+
+.radar-results-visible {
+    display: block;
+    margin-top: 2rem;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@media (max-width: 600px) {
+    .radar-results-visible {
+        padding: 1.5rem 1rem;
+        border-radius: 15px;
+    }
+}
+
+.radar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.radar-header h3 {
+    margin: 0;
+    color: #1a1a1a;
+    /* Tummempi väri */
+    font-size: 1.4rem;
+    font-weight: 800;
+}
+
+.btn-close-radar {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    line-height: 1;
+    color: #666;
+}
+
+.radar-map-view {
+    height: 300px;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+    border: 1px solid #eee;
+    cursor: crosshair;
+}
+
+.radar-location-search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1rem;
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 12px;
+}
+
+.radar-location-search input {
+    flex: 1;
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.radar-hint {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+@media (max-width: 600px) {
+    #radar-desktop-search.radar-location-search {
+        display: none !important;
+    }
+}
+
+.radar-ads-grid {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    padding: 1rem 0.5rem 2rem 0.5rem;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-blue) transparent;
+}
+
+.radar-ads-grid::-webkit-scrollbar {
+    height: 6px;
+}
+
+.radar-ads-grid::-webkit-scrollbar-thumb {
+    background-color: var(--primary-blue);
+    border-radius: 10px;
+}
+
+.radar-ad-card {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    position: relative;
+    border: 1px solid #f0f0f0;
+    transition: all 0.3s ease;
+    min-width: 280px;
+    max-width: 280px;
+    scroll-snap-align: start;
+    flex-shrink: 0;
+}
+
+@media (max-width: 600px) {
+    .radar-ad-card {
+        min-width: calc(85vw - 1rem);
+        max-width: calc(85vw - 1rem);
+        padding: 1.25rem;
+    }
+}
+
+.radar-ad-card.is-offer {
+    border: 2px solid #ff9900;
+    background: linear-gradient(to bottom, #fff, #fff9f0);
+}
+
+.radar-ad-card.is-ad {
+    border: 1px solid var(--primary-blue);
+    background: linear-gradient(to bottom, #fff, #f0f7ff);
+}
+
+.radar-ad-badge {
+    font-size: 0.75rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.is-offer .radar-ad-badge {
+    color: #ff4d00;
+}
+
+.is-ad .radar-ad-badge {
+    color: var(--primary-blue);
+}
+
+.is-none .radar-ad-badge {
+    color: #888;
+}
+
+.radar-ad-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.radar-ad-dist {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: #eef;
+    color: #007bff;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.radar-ad-content h4 {
+    margin: 0 0 0.5rem 0;
+    color: #333;
+}
+
+.radar-ad-content p {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+.radar-ad-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-small {
+    padding: 6px 15px;
+    font-size: 0.85rem;
+    border-radius: 20px;
+    text-decoration: none;
+    background: #007bff;
+    color: white;
+    font-weight: 600;
+}
+
+.btn-small.secondary {
+    background: #ff9900;
+}
+
 :root {
     --primary-blue: #0056b3;
     --secondary-blue: #003d80;
@@ -36,10 +310,18 @@ body {
 
 html {
     scroll-behavior: smooth;
-    scroll-padding-top: 70px;
+    scroll-padding-top: 85px;
+    /* Kasvatettu vastaamaan top-nav korkeutta + marginaali */
     overflow-x: hidden;
     width: 100%;
 }
+
+/* Lisätään marginaalia ankkurikohteille, jotta ne eivät jää liian lähelle reunaa */
+.card,
+section[id] {
+    scroll-margin-top: 90px;
+}
+
 
 /* Map Markers */
 .custom-marker {
@@ -48,7 +330,9 @@ html {
 }
 
 header {
-    background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+    background: linear-gradient(rgba(0, 86, 179, 0.3), rgba(0, 61, 128, 0.3)), url('taivas_tausta.png');
+    background-size: cover;
+    background-position: center;
     color: var(--light-text);
     padding: 3rem 1rem;
     text-align: center;
@@ -109,7 +393,32 @@ header p {
     transform: scale(1.05);
 }
 
-.btn-youtube i {
+.btn-facebook {
+    display: inline-flex;
+    align-items: center;
+    background: #1877F2;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 15px rgba(24, 119, 242, 0.3);
+}
+
+.btn-facebook:hover {
+    transform: scale(1.05);
+}
+
+.header-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+}
+
+.btn-youtube i, .btn-facebook i {
     margin-right: 8px;
 }
 
@@ -511,12 +820,17 @@ h2 span {
 }
 
 .rss-item {
-    margin-bottom: 2rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid #eee;
+    margin-bottom: 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
-    gap: 0.8rem;
+    gap: 1rem;
+    transition: transform 0.2s ease;
+}
+
+.rss-item:hover {
+    transform: translateX(5px);
 }
 
 .rss-item:last-child {
@@ -527,12 +841,18 @@ h2 span {
 
 .rss-item-image {
     width: 100%;
-    height: auto;
-    max-height: 400px;
+    height: 200px;
+    /* Kiinteä korkeus uutisvirrassa */
     object-fit: contain;
     background-color: #f0f0f0;
-    border-radius: 8px;
+    border-radius: 12px;
     margin-bottom: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease;
+}
+
+.rss-item:hover .rss-item-image {
+    transform: scale(1.02);
 }
 
 .rss-item h3 {
@@ -576,13 +896,54 @@ h2 span {
 }
 
 .rss-item .description {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: #555;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    line-height: 1.5;
+}
+
+.read-more {
+    color: var(--primary-blue);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: gap 0.2s ease;
+}
+
+.read-more:hover {
+    gap: 10px;
+    color: var(--accent-blue);
+}
+
+.view-all-news {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.btn-secondary {
+    display: inline-block;
+    background: transparent;
+    color: var(--primary-blue);
+    padding: 0.8rem 1.5rem;
+    border: 2px solid var(--primary-blue);
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background: var(--primary-blue);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 86, 179, 0.2);
 }
 
 /* Feedback Section */
@@ -671,6 +1032,7 @@ h2 span {
     left: 0;
     right: 0;
     background: white;
+    color: var(--dark-text);
     border-radius: 10px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     list-style: none;
@@ -680,6 +1042,7 @@ h2 span {
     max-height: 300px;
     overflow-y: auto;
     border: 1px solid #eee;
+    text-align: left;
     animation: fadeIn 0.2s ease-out;
 }
 
@@ -695,15 +1058,7 @@ h2 span {
     }
 }
 
-.search-suggestions li {
-    padding: 0.8rem 1rem;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: all 0.2s;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+
 
 .search-suggestions li:hover,
 .search-suggestions li.selected {
@@ -711,19 +1066,87 @@ h2 span {
     color: var(--primary-blue);
 }
 
-.search-suggestions li .suggestion-cat {
+.search-suggestions li .suggestion-cat,
+.search-suggestions li .suggestion-tag,
+.search-suggestions li .suggestion-region {
     font-size: 0.75rem;
-    opacity: 0.6;
-    background: #f0f0f0;
     padding: 2px 8px;
     border-radius: 4px;
 }
 
+.search-suggestions li .suggestion-cat {
+    opacity: 0.6;
+    background: #f0f0f0;
+}
+
+.search-suggestions li .suggestion-tag {
+    font-style: italic;
+    color: #0056b3;
+    background: #e1effe;
+    font-family: inherit;
+}
+
+.search-suggestions li .suggestion-region {
+    font-weight: 700;
+    color: white;
+    background: var(--primary-blue);
+}
+
 .search-suggestions mark {
     background: #fff3cd;
-    color: inherit;
+    color: var(--dark-text);
     font-weight: 600;
     border-radius: 2px;
+}
+
+.suggestion-tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+    padding-left: 10px;
+}
+
+.suggestion-tag-pill {
+    background: var(--light-blue);
+    color: var(--primary-blue);
+    padding: 3px 10px;
+    border-radius: 15px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+}
+
+.suggestion-tag-pill:hover {
+    background: var(--primary-blue);
+    color: white;
+    transform: translateY(-1px);
+}
+
+.search-suggestions li {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.8rem 1rem;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.search-suggestion-main {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.search-suggestion-label {
+    flex: 1;
+    text-align: left;
+    /* Label contains <mark> so it shouldn't be a flex container itself */
 }
 
 .spotlight-controls input:focus {
@@ -952,15 +1375,13 @@ h2 span {
     cursor: pointer;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     border: 2px solid transparent;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
 .catalog-item:hover {
     background: white;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     border-color: var(--light-blue);
+    transform: translateX(5px);
 }
 
 .catalog-item.active {
@@ -973,7 +1394,8 @@ h2 span {
     margin-top: 1.5rem;
     background: white;
     border-radius: 12px;
-    max-height: 500px;
+    max-height: 380px;
+    /* Approximately 5 items */
     overflow-y: auto;
     overflow-x: hidden;
     padding: 1rem;
@@ -982,13 +1404,33 @@ h2 span {
     gap: 0.8rem;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     border: 1px solid rgba(0, 0, 0, 0.05);
-    z-index: 10;
+    z-index: 100;
+    /* Higher z-index to stay on top */
     position: relative;
     width: 100%;
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
     text-align: center;
+}
+
+/* Custom scrollbar for search results */
+.catalog-list-home::-webkit-scrollbar {
+    width: 8px;
+}
+
+.catalog-list-home::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.catalog-list-home::-webkit-scrollbar-thumb {
+    background: var(--primary-blue);
+    border-radius: 10px;
+}
+
+.catalog-list-home::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-blue);
 }
 
 .catalog-list-home:empty {
@@ -1005,10 +1447,36 @@ h2 span {
     background: #fff9f5;
 }
 
+.catalog-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 0.4rem;
+}
+
 .catalog-item h4 {
     margin: 0;
     font-size: 1.1rem;
+}
+
+.catalog-item-header h4 {
+    flex: 1;
+}
+
+.dist-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    background: var(--light-blue);
     color: var(--primary-blue);
+    padding: 2px 8px;
+    border-radius: 10px;
+    white-space: nowrap;
+}
+
+.catalog-item.active .dist-badge {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
 }
 
 .catalog-item .cat-tag {
@@ -1112,7 +1580,8 @@ footer {
     text-align: center;
     margin-bottom: 3rem;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
+    /* Prevent clipping of search results */
 }
 
 .kauppa-hero::before {
@@ -1134,6 +1603,16 @@ footer {
     margin-bottom: 1rem;
     font-weight: 700;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.location-hint {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.95);
+    margin: 1.5rem auto;
+    max-width: 700px;
+    font-style: italic;
+    line-height: 1.4;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .search-hero-content p {
@@ -1349,6 +1828,26 @@ footer {
     width: 100%;
 }
 
+.map-search-bar {
+    padding: 1rem;
+    background: #f8fbff;
+    border-bottom: 1px solid #eee;
+}
+
+.map-search-bar input {
+    width: 100%;
+    padding: 10px 15px;
+    border: 2px solid #e1e8f0;
+    border-radius: 8px;
+    outline: none;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.map-search-bar input:focus {
+    border-color: var(--primary-blue);
+}
+
 /* CTA Section */
 .cta-section {
     margin-bottom: 5rem;
@@ -1410,7 +1909,47 @@ footer {
 
 /* Categories Grid */
 .categories-grid-section {
-    margin-bottom: 5rem;
+    margin-bottom: 4rem;
+}
+
+.categories-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.categories-header h2 {
+    margin-bottom: 0;
+}
+
+.region-filter-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: white;
+    padding: 8px 15px;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.region-filter-wrapper label {
+    font-weight: 600;
+    color: var(--primary-blue);
+    font-size: 0.9rem;
+}
+
+.region-dropdown {
+    border: none;
+    background: none;
+    font-family: inherit;
+    font-size: 0.95rem;
+    color: var(--dark-text);
+    cursor: pointer;
+    outline: none;
+    padding: 2px 5px;
 }
 
 .categories-grid {
@@ -1567,4 +2106,46 @@ footer {
         transform: scale(3);
         opacity: 0;
     }
+}
+/* Service Worker Update Notification Banner */
+.sw-update-banner { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: #007bff; color: white; padding: 12px 24px; border-radius: 50px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 15px; z-index: 9999; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); font-weight: 500; }
+.sw-update-banner.active { transform: translateX(-50%) translateY(0); }
+.sw-update-banner .btn-refresh { background: white; color: #007bff; border: none; padding: 6px 15px; border-radius: 20px; cursor: pointer; font-weight: 700; font-size: 0.85rem; transition: background 0.2s; }
+.sw-update-banner .btn-refresh:hover { background: #f0f0f0; }
+
+/* --- Geo-Events Integration --- */
+.is-nearest {
+    border: 2px solid var(--accent-orange) !important;
+    background: #fffdf5 !important;
+    box-shadow: 0 5px 15px rgba(255, 153, 0, 0.1) !important;
+}
+
+.nearest-badge {
+    background: var(--accent-orange);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    display: inline-block;
+    margin-bottom: 8px;
+}
+
+.user-location-marker {
+    background: var(--accent-blue);
+    border: 3px solid white;
+    border-radius: 50%;
+    box-shadow: 0 0 15px rgba(0, 123, 255, 0.5);
+    animation: pulse-blue 2s infinite;
+}
+
+@keyframes pulse-blue {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(0, 123, 255, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 123, 255, 0); }
+}
+
+/* Override for catalog item transition when active/nearest */
+.catalog-item.rss-result.is-nearest:hover {
+    background: #fff9f0 !important;
 }

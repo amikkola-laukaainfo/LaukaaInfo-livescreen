@@ -1,4 +1,5 @@
-const CACHE_NAME = 'laukaainfo-v3';
+const VERSION = 'v3'; // Päivitetään build-prosessissa tai manuaalisesti
+const CACHE_NAME = `laukaainfo-${VERSION}`;
 const ASSETS = [
     './',
     './index.html',
@@ -10,7 +11,7 @@ const ASSETS = [
     'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;700&display=swap'
 ];
 
-// Asennus - välimuistitaan tiedostot
+// Asennus - välimuistitaan staattiset tiedostot
 self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE_NAME)
@@ -19,20 +20,40 @@ self.addEventListener('install', event => {
     );
 });
 
-// Aktivointi - siivotaan vanhat välimuistit
+// Aktivointi - siivotaan vanhat välimuistit ja otetaan hallinta heti
 self.addEventListener('activate', event => {
     event.waitUntil(
-        caches.keys().then(keys => {
-            return Promise.all(
-                keys.filter(key => key !== CACHE_NAME)
-                    .map(key => caches.delete(key))
-            );
-        })
+        Promise.all([
+            caches.keys().then(keys => {
+                return Promise.all(
+                    keys.filter(key => key !== CACHE_NAME)
+                        .map(key => caches.delete(key))
+                );
+            }),
+            self.clients.claim()
+        ])
     );
 });
 
-// Nouto - palvellaan välimuistista jos mahdollista
+// Nouto-strategia
 self.addEventListener('fetch', event => {
+    const url = new URL(event.request.url);
+
+    // Strategia: Network First (Datalle kuten PHP-rajapinnat ja JSON)
+    if (url.pathname.endsWith('.php') || url.pathname.endsWith('.json')) {
+        event.respondWith(
+            fetch(event.request)
+                .then(response => {
+                    const clonedResponse = response.clone();
+                    caches.open(CACHE_NAME).then(cache => cache.put(event.request, clonedResponse));
+                    return response;
+                })
+                .catch(() => caches.match(event.request))
+        );
+        return;
+    }
+
+    // Strategia: Cache First (Staattisille asseteille)
     event.respondWith(
         caches.match(event.request)
             .then(cachedResponse => {
@@ -42,4 +63,11 @@ self.addEventListener('fetch', event => {
                 return fetch(event.request);
             })
     );
+});
+
+// Kuuntele viestejä (esim. SKIP_WAITING)
+self.addEventListener('message', event => {
+    if (event.data && event.data.type === 'SKIP_WAITING') {
+        self.skipWaiting();
+    }
 });
