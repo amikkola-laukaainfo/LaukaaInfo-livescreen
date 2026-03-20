@@ -128,7 +128,7 @@ const LkiFeed = (() => {
       : items.filter(i => i.type === activeFilter);
 
     if (filtered.length === 0) {
-      list.innerHTML = `<div class="lki-feed__empty">Ei tuloksia valitussa suodattimessa.</div>`;
+      list.innerHTML = `<div class="lki-feed__empty">Ei sisältöä vielä.</div>`;
       return;
     }
 
@@ -220,7 +220,7 @@ const LkiFeed = (() => {
       .catch(err => {
         const list = container.querySelector('.lki-feed__list');
         if (list) {
-          list.innerHTML = `<div class="lki-feed__empty">⚠️ Sisältöä ei voitu ladata: ${err.message}</div>`;
+          list.innerHTML = `<div class="lki-feed__empty">Ei sisältöä vielä.</div>`;
         }
         console.error('[LkiFeed] Load error:', err);
       });
