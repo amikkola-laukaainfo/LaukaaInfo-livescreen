@@ -6,7 +6,9 @@
     "type": "event",
     "image": "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=600&q=80",
     "publish_at": "2026-03-20T10:00:00Z",
-    "is_promoted": true
+    "is_promoted": true,
+    "website_url": "https://www.laukaa.fi",
+    "facebook_url": "https://facebook.com/laukaankunta"
   },
   {
     "id": 2,
@@ -15,7 +17,8 @@
     "type": "business",
     "image": "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=600&q=80",
     "publish_at": "2026-03-19T08:30:00Z",
-    "is_promoted": false
+    "is_promoted": false,
+    "instagram_url": "https://instagram.com/kahvilalauantai"
   },
   {
     "id": 3,
@@ -24,7 +27,9 @@
     "type": "offer",
     "image": "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=600&q=80",
     "publish_at": "2026-03-18T12:00:00Z",
-    "is_promoted": true
+    "is_promoted": true,
+    "facebook_url": "https://facebook.com/laukaaparturi",
+    "website_url": "https://www.laukaaparturi.fi"
   },
   {
     "id": 4,
@@ -33,7 +38,8 @@
     "type": "event",
     "image": "https://images.unsplash.com/photo-1444464666168-49d633b86797?auto=format&fit=crop&w=600&q=80",
     "publish_at": "2026-03-17T07:00:00Z",
-    "is_promoted": false
+    "is_promoted": false,
+    "youtube_url": "https://youtube.com/watch?v=birdwatching"
   },
   {
     "id": 5,

@@ -79,6 +79,18 @@ const LkiFeed = (() => {
     const desc      = escapeHtml(item.description);
     const imgSrc    = item.image || 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80';
 
+    // Social links
+    let socialHtml = '';
+    const socials = [];
+    if (item.website_url)   socials.push(`<a href="${item.website_url}" target="_blank" class="lki-social-icon" title="Verkkosivut">🌐</a>`);
+    if (item.facebook_url)  socials.push(`<a href="${item.facebook_url}" target="_blank" class="lki-social-icon" title="Facebook">f</a>`);
+    if (item.instagram_url) socials.push(`<a href="${item.instagram_url}" target="_blank" class="lki-social-icon" title="Instagram">📸</a>`);
+    if (item.youtube_url)   socials.push(`<a href="${item.youtube_url}" target="_blank" class="lki-social-icon" title="YouTube">▶️</a>`);
+
+    if (socials.length > 0) {
+      socialHtml = `<div class="lki-card__socials">${socials.join('')}</div>`;
+    }
+
     return `
       <article class="lki-card${item.is_promoted ? ' is-promoted' : ''}" role="article">
         <div class="lki-card__img-wrap">
@@ -98,6 +110,7 @@ const LkiFeed = (() => {
           <h3 class="lki-card__title">${title}</h3>
           <p class="lki-card__desc">${desc}</p>
           <div class="lki-card__date">🕐 ${dateStr}</div>
+          ${socialHtml}
         </div>
       </article>
     `;

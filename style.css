@@ -2442,3 +2442,8 @@ footer {
 
 .feed-accordion-content { transition: max-height 0.45s ease-out, padding 0.45s; max-height: 5000px; overflow: hidden; }
 .feed-accordion-content.closed { max-height: 0; }
+
+/* Feed Card Social Icons */
+.lki-card__socials { display: flex; gap: 0.8rem; margin-top: 0.8rem; padding-top: 0.6rem; border-top: 1px solid #f0f4f8; }
+.lki-social-icon { text-decoration: none; font-size: 1rem; color: #6b7a90; transition: transform 0.2s, color 0.2s; display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; }
+.lki-social-icon:hover { transform: scale(1.15); color: #0056b3; }
