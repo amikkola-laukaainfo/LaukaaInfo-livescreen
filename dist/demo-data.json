@@ -1,0 +1,101 @@
+[
+  {
+    "id": 1,
+    "title": "Laukaan Kesätori 2026",
+    "description": "Perinteinen kesätori avataan jälleen kesäkuun alussa. Tarjolla on paikallisia makuja, käsitöitä ja eliveistä musiikkia.",
+    "type": "event",
+    "image": "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=600&q=80",
+    "publish_at": "2026-03-20T10:00:00Z",
+    "is_promoted": true
+  },
+  {
+    "id": 2,
+    "title": "Uusi Kahvila Kirkkotie 4",
+    "description": "Kahvila Lauantai avaa ovensa huhtikuussa. Tarjolla erikoiskahveja, leivonnaisia sekä lounas arkisin.",
+    "type": "business",
+    "image": "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=600&q=80",
+    "publish_at": "2026-03-19T08:30:00Z",
+    "is_promoted": false
+  },
+  {
+    "id": 3,
+    "title": "Kevät-ale: 30% alennus kaikista palveluista",
+    "description": "LaukaaParturi tarjoaa kevään kunniaksi 30% alennuksen kaikista hiustenleikkauspalveluista maaliskuun loppuun.",
+    "type": "offer",
+    "image": "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=600&q=80",
+    "publish_at": "2026-03-18T12:00:00Z",
+    "is_promoted": true
+  },
+  {
+    "id": 4,
+    "title": "Vihtavuoren Linturetkitapahtuma",
+    "description": "Opastettu linturetki Vihtavuoren tekolammen ympäristöön. Sopii koko perheelle, ei ennakkoilmoittautumista.",
+    "type": "event",
+    "image": "https://images.unsplash.com/photo-1444464666168-49d633b86797?auto=format&fit=crop&w=600&q=80",
+    "publish_at": "2026-03-17T07:00:00Z",
+    "is_promoted": false
+  },
+  {
+    "id": 5,
+    "title": "Rakennusfirma Laukaa Oy – nyt myös remontointi",
+    "description": "Rakennusfirma Laukaa laajentaa palveluitaan kattoremontteihin ja ikkunanvaihtoon. Pyydä ilmainen tarjous!",
+    "type": "business",
+    "image": "https://images.unsplash.com/photo-1504307651254-35680f356db3?auto=format&fit=crop&w=600&q=80",
+    "publish_at": "2026-03-16T09:00:00Z",
+    "is_promoted": false
+  },
+  {
+    "id": 6,
+    "title": "Lievestuoreen Kirpputoripäivä",
+    "description": "Lievestuoreen liikuntahallissa järjestetään suuri kirpputoripäivä. Paikkoja myyjille vielä vapaana!",
+    "type": "event",
+    "image": "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=600&q=80",
+    "publish_at": "2026-03-15T11:00:00Z",
+    "is_promoted": false
+  },
+  {
+    "id": 7,
+    "title": "Ilmainen Yogaviikko – Laukaan Hyvinvointikeskus",
+    "description": "Kokeile joogaa veloituksetta koko viikon ajan. Tunnit aamulla ja illalla, kaikille sopiva.",
+    "type": "offer",
+    "image": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=600&q=80",
+    "publish_at": "2026-03-14T06:00:00Z",
+    "is_promoted": true
+  },
+  {
+    "id": 8,
+    "title": "Leppäveden Ruokafestivaali",
+    "description": "Nauti paikallisista ja kansainvälisistä ruokamakueista Leppävedellä kesäkuussa. Yli 20 myyjää.",
+    "type": "event",
+    "image": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80",
+    "publish_at": "2026-03-13T14:00:00Z",
+    "is_promoted": false
+  },
+  {
+    "id": 9,
+    "title": "Autokorjaamo Vehniä – Katsastusapu",
+    "description": "Autokorjaamo Vehniä auttaa katsastuskuntoon: rengasvaihdot, valot, jarrupäivitykset. Nopea palvelu.",
+    "type": "business",
+    "image": "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=600&q=80",
+    "publish_at": "2026-03-12T10:00:00Z",
+    "is_promoted": false
+  },
+  {
+    "id": 10,
+    "title": "Kevätkonsertti – Laukaan Kirkko",
+    "description": "Laukaan musiikkiopiston oppilaat esittävät kevätkonsertin kirkossa. Vapaa pääsy, tervetuloa!",
+    "type": "event",
+    "image": "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=600&q=80",
+    "publish_at": "2026-03-11T18:00:00Z",
+    "is_promoted": false
+  },
+  {
+    "id": 11,
+    "title": "25% alennus – Laukaan Optikko",
+    "description": "Kevään silmälasitarjous: kaikki kehykset -25% huhtikuun loppuun. Silmäntarkastus sisältyy!",
+    "type": "offer",
+    "image": "https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=600&q=80",
+    "publish_at": "2026-03-10T09:00:00Z",
+    "is_promoted": true
+  }
+]
