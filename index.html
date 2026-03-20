@@ -192,11 +192,11 @@
         <!-- Feed Accordion -->
         <section class="feed-accordion-section">
             <div class="feed-accordion">
-                <button class="feed-accordion-header" id="toggle-feed-btn">
-                    <span>🔥 Mitä Laukaassa tapahtuu</span>
-                    <span class="icon">▲</span>
+                <button class="feed-accordion-header closed" id="toggle-feed-btn">
+                    <span>📢 Mitä Laukaassa tapahtuu</span>
+                    <span class="icon-btn">Avaa</span>
                 </button>
-                <div class="feed-accordion-content" id="feed-accordion-content">
+                <div class="feed-accordion-content closed" id="feed-accordion-content">
                     <div id="homepage-feed" data-feed-src="demo-data.json"></div>
                 </div>
             </div>
@@ -322,6 +322,8 @@
         // Feed accordion toggle
         document.getElementById('toggle-feed-btn').addEventListener('click', function() {
             this.classList.toggle('closed');
+            const isClosed = this.classList.contains('closed');
+            this.querySelector('.icon-btn').textContent = isClosed ? 'Avaa' : 'Sulje';
             document.getElementById('feed-accordion-content').classList.toggle('closed');
         });
     </script>

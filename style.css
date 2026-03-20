@@ -2149,7 +2149,6 @@ footer {
 .catalog-item.rss-result.is-nearest:hover {
     background: #fff9f0 !important;
 }
-/ *   = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  
 
 /* ============================================
    LaukaaInfo Feed Component — feed.css
@@ -2247,7 +2246,7 @@ footer {
 /* Card */
 .lki-card {
   display: grid;
-  grid-template-columns: 110px 1fr;
+  grid-template-columns: 1fr; /* Pystysuuntainen */
   background: var(--card-bg);
   border-radius: var(--card-radius);
   box-shadow: var(--card-shadow);
@@ -2256,7 +2255,7 @@ footer {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   text-decoration: none;
   color: inherit;
-  border: 1.5px solid transparent;
+  border: 1px solid #e4eaf3; /* Ohut reunaviiva */
   position: relative;
 }
 
@@ -2424,7 +2423,22 @@ footer {
 .feed-accordion { background: #fff; border-radius: 15px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); overflow: hidden; border: 1px solid #eee; }
 .feed-accordion-header { width: 100%; padding: 1.2rem 1.5rem; display: flex; justify-content: space-between; align-items: center; background: #fff; border: none; cursor: pointer; font-family: 'Outfit', sans-serif; font-size: 1.2rem; font-weight: 700; color: #0056b3; text-align: left; transition: background 0.2s; }
 .feed-accordion-header:hover { background: #f8f9fa; }
-.feed-accordion-header .icon { font-size: 0.8rem; transition: transform 0.33s ease; }
-.feed-accordion-header.closed .icon { transform: rotate(180deg); }
+
+.icon-btn {
+    background: #e7f1ff;
+    color: #0056b3;
+    padding: 0.3rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.2s;
+    border: 1px solid #d0e1f9;
+}
+
+.feed-accordion-header:hover .icon-btn {
+    background: #0056b3;
+    color: #fff;
+}
+
 .feed-accordion-content { transition: max-height 0.45s ease-out, padding 0.45s; max-height: 5000px; overflow: hidden; }
 .feed-accordion-content.closed { max-height: 0; }
