@@ -329,11 +329,21 @@
         const feedContent = document.getElementById('feed-accordion-content');
         
         // Load initial state
-        const isExpanded = localStorage.getItem('lki_feed_expanded') === 'true'; // Default to false
+        const urlParams = new URLSearchParams(window.location.search);
+        const forceOpen = urlParams.get('feed') === 'open' || window.location.hash === '#feed';
+        const isExpanded = forceOpen || localStorage.getItem('lki_feed_expanded') === 'true';
+
         if (isExpanded) {
             feedBtn.classList.remove('closed');
             feedContent.classList.remove('closed');
             feedBtn.querySelector('.icon-btn').textContent = 'Sulje';
+            
+            // Jos avattiin parametrilla, varmistetaan että sivu skrollaa feediin
+            if (forceOpen) {
+                setTimeout(() => {
+                    feedBtn.scrollIntoView({ behavior: 'smooth' });
+                }, 500);
+            }
         }
 
         feedBtn.addEventListener('click', function() {
