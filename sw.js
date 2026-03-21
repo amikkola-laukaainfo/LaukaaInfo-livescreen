@@ -43,12 +43,17 @@ self.addEventListener('fetch', event => {
     const url = new URL(event.request.url);
 
     // Strategia: Network First (Datalle kuten PHP-rajapinnat ja JSON)
-    if (url.pathname.endsWith('.php') || url.pathname.endsWith('.json')) {
+    // Erityisesti api.php, jota ei haluta välimuistittaa pysyvästi
+    if (url.pathname.includes('api.php') || url.pathname.endsWith('.json')) {
         event.respondWith(
             fetch(event.request)
                 .then(response => {
-                    const clonedResponse = response.clone();
-                    caches.open(CACHE_NAME).then(cache => cache.put(event.request, clonedResponse));
+                    // Älä välimuistita api.php kutsuja, jos niissä on timestamp (ts=)
+                    // Tämä estää välimuistin paisumisen
+                    if (!url.search.includes('ts=')) {
+                        const clonedResponse = response.clone();
+                        caches.open(CACHE_NAME).then(cache => cache.put(event.request, clonedResponse));
+                    }
                     return response;
                 })
                 .catch(() => caches.match(event.request))

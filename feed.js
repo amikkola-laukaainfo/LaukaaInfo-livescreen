@@ -1,16 +1,9 @@
 /**
  * LaukaaInfo Feed Component — feed.js
  * ─────────────────────────────────────
- * Usage:
- *   LkiFeed.init('#feed-root', { dataUrl: 'demo-data.json' });
- *
- * Or via data attribute:
- *   <div id="feed-root" data-feed-src="demo-data.json"></div>
- *   LkiFeed.autoInit();
  */
 
 const LkiFeed = (() => {
-  // ── Labels & icons ─────────────────────────────────────────────
   const TYPE_LABELS = {
     event:    '📅 Tapahtuma',
     business: '🏢 Yritys',
@@ -30,16 +23,13 @@ const LkiFeed = (() => {
     { key: 'offer',    label: '🎁 Tarjoukset' }
   ];
 
-  // ── Helpers ────────────────────────────────────────────────────
   function formatDate(isoStr) {
     if (!isoStr) return '';
     try {
       return new Date(isoStr).toLocaleDateString('fi-FI', {
         day: 'numeric', month: 'short', year: 'numeric'
       });
-    } catch {
-      return isoStr;
-    }
+    } catch { return isoStr; }
   }
 
   function escapeHtml(str) {
@@ -48,11 +38,9 @@ const LkiFeed = (() => {
     return d.innerHTML;
   }
 
-  // ── Skeleton placeholders ───────────────────────────────────────
-  function renderSkeletons(container, count = 4) {
-    const list = container.querySelector('.lki-feed__list');
+  function renderSkeletons(list, count = 4) {
     if (!list) return;
-
+    list.innerHTML = '';
     for (let i = 0; i < count; i++) {
       const el = document.createElement('div');
       el.className = 'lki-card lki-card--skeleton';
@@ -68,18 +56,15 @@ const LkiFeed = (() => {
     }
   }
 
-  // ── Single card HTML ────────────────────────────────────────────
   function cardHTML(item) {
-    const typeLabel  = TYPE_LABELS[item.type]  || item.type;
-    const typeClass  = TYPE_CLASSES[item.type] || '';
-    const promoted   = item.is_promoted
-      ? `<span class="lki-badge-promoted">⭐ NOSTETTU</span>` : '';
-    const dateStr   = formatDate(item.publish_at);
-    const title     = escapeHtml(item.title);
-    const desc      = escapeHtml(item.description);
-    const imgSrc    = item.image || 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80';
+    const typeLabel = TYPE_LABELS[item.type] || item.type;
+    const typeClass = TYPE_CLASSES[item.type] || '';
+    const promoted = item.is_promoted ? `<span class="lki-badge-promoted">⭐ NOSTETTU</span>` : '';
+    const dateStr = formatDate(item.publish_at);
+    const title = escapeHtml(item.title);
+    const desc = escapeHtml(item.description);
+    const imgSrc = item.image || 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80';
 
-    // Social links
     let socialHtml = '';
     const socials = [];
     if (item.website_url)   socials.push(`<a href="${item.website_url}" target="_blank" class="lki-social-icon" title="Verkkosivut">🌐</a>`);
@@ -87,20 +72,12 @@ const LkiFeed = (() => {
     if (item.instagram_url) socials.push(`<a href="${item.instagram_url}" target="_blank" class="lki-social-icon" title="Instagram">📸</a>`);
     if (item.youtube_url)   socials.push(`<a href="${item.youtube_url}" target="_blank" class="lki-social-icon" title="YouTube">▶️</a>`);
 
-    if (socials.length > 0) {
-      socialHtml = `<div class="lki-card__socials">${socials.join('')}</div>`;
-    }
+    if (socials.length > 0) socialHtml = `<div class="lki-card__socials">${socials.join('')}</div>`;
 
     return `
       <article class="lki-card${item.is_promoted ? ' is-promoted' : ''}" role="article">
         <div class="lki-card__img-wrap">
-          <img
-            class="lki-card__img"
-            src="${imgSrc}"
-            alt="${title}"
-            loading="lazy"
-            onerror="this.src='https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=400&q=70'"
-          >
+          <img class="lki-card__img" src="${imgSrc}" alt="${title}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=400&q=70'">
         </div>
         <div class="lki-card__body">
           <div class="lki-card__badges">
@@ -118,127 +95,134 @@ const LkiFeed = (() => {
     `;
   }
 
-  // ── Render items list ───────────────────────────────────────────
-  function renderList(container, items, activeFilter) {
-    const list = container.querySelector('.lki-feed__list');
+  function renderList(list, items, activeFilter) {
     if (!list) return;
-
-    const filtered = activeFilter === 'all'
-      ? items
-      : items.filter(i => i.type === activeFilter);
-
+    const filtered = activeFilter === 'all' ? items : items.filter(i => i.type === activeFilter);
     if (filtered.length === 0) {
       list.innerHTML = `<div class="lki-feed__empty">Ei sisältöä vielä.</div>`;
       return;
     }
-
     list.innerHTML = filtered.map(cardHTML).join('');
-
-    // Click handler → open link if item has one
-    list.querySelectorAll('.lki-card').forEach((cardEl, idx) => {
-      const item = filtered[idx];
-      if (item && item.link) {
-        cardEl.addEventListener('click', () => {
-          window.open(item.link, '_blank', 'noopener');
-        });
-      }
-    });
   }
 
-  // ── Build container HTML ────────────────────────────────────────
   function buildContainer(root) {
     root.innerHTML = `
       <div class="lki-feed">
         <div class="lki-feed__header">
           <span class="lki-live-dot"></span>
           <h2>Uusimmat julkaisut</h2>
+          <button class="lki-feed__refresh-btn" id="lki-refresh-trigger" title="Päivitä">🔄</button>
         </div>
+        <div class="lki-feed__status-msg hidden" id="lki-status-text">Päivitetään...</div>
+        <div class="lki-feed__new-notification hidden" id="lki-new-alert">Uusia päivityksiä saatavilla! 🚀</div>
         <div class="lki-feed__filters" role="group" aria-label="Suodata"></div>
         <div class="lki-feed__list" aria-live="polite"></div>
       </div>
     `;
   }
 
-  // ── Filter bar ──────────────────────────────────────────────────
-  function buildFilters(container, items, onFilter) {
-    const bar = container.querySelector('.lki-feed__filters');
-    if (!bar) return;
-
-    FILTERS.forEach(f => {
-      const btn = document.createElement('button');
-      btn.className = 'lki-feed__filter-btn' + (f.key === 'all' ? ' active' : '');
-      btn.textContent = f.label;
-      btn.dataset.filter = f.key;
-      btn.addEventListener('click', () => {
-        bar.querySelectorAll('.lki-feed__filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        onFilter(f.key);
-      });
-      bar.appendChild(btn);
-    });
-  }
-
-  // ── Main init ───────────────────────────────────────────────────
   function init(selector, options = {}) {
-    const root = typeof selector === 'string'
-      ? document.querySelector(selector)
-      : selector;
+    const root = typeof selector === 'string' ? document.querySelector(selector) : selector;
+    if (!root) return;
 
-    if (!root) {
-      console.warn('[LkiFeed] Root element not found:', selector);
-      return;
+    const dataUrl = options.dataUrl || root.dataset.feedSrc || 'laukaainfo-web/api.php';
+    buildContainer(root);
+    
+    const container = root.querySelector('.lki-feed');
+    const list = container.querySelector('.lki-feed__list');
+    const refreshBtn = container.querySelector('#lki-refresh-trigger');
+    const statusText = container.querySelector('#lki-status-text');
+    const newAlert = container.querySelector('#lki-new-alert');
+    const filterBar = container.querySelector('.lki-feed__filters');
+
+    let currentItems = [];
+    let activeFilter = 'all';
+    let isInitialLoad = true;
+
+    function loadFeed(forceRefresh = false) {
+      if (forceRefresh) {
+        refreshBtn.classList.add('is-loading');
+        statusText.classList.remove('hidden');
+      }
+
+      // Bypass cache with timestamp
+      const fetchUrl = dataUrl + (dataUrl.includes('?') ? '&' : '?') + 'ts=' + Date.now();
+
+      fetch(fetchUrl)
+        .then(r => {
+          if (!r.ok) throw new Error(`HTTP ${r.status}`);
+          return r.json();
+        })
+        .then(res => {
+          const data = Array.isArray(res) ? res : (res.data || []);
+          
+          // Detect new content (compare first item ID)
+          if (!isInitialLoad && data.length > 0 && currentItems.length > 0) {
+            if (data[0].id !== currentItems[0].id) {
+              newAlert.classList.remove('hidden');
+            }
+          }
+
+          currentItems = data;
+          
+          if (isInitialLoad) {
+            renderList(list, currentItems, activeFilter);
+            buildFilters();
+            isInitialLoad = false;
+          } else if (forceRefresh) {
+            renderList(list, currentItems, activeFilter);
+            newAlert.classList.add('hidden');
+          }
+        })
+        .catch(err => {
+          console.error('[LkiFeed] Load error:', err);
+          if (isInitialLoad) {
+               list.innerHTML = `<div class="lki-feed__error">Ei yhteyttä – näytetään viimeisin sisältö.</div>`;
+          }
+        })
+        .finally(() => {
+          refreshBtn.classList.remove('is-loading');
+          statusText.classList.add('hidden');
+        });
     }
 
-    const dataUrl = options.dataUrl || root.dataset.feedSrc || 'demo-data.json';
-
-    buildContainer(root);
-    const container = root.querySelector('.lki-feed');
-
-    // Show skeletons while loading
-    renderSkeletons(container, 4);
-
-    fetch(dataUrl)
-      .then(r => {
-        if (!r.ok) throw new Error(`HTTP ${r.status}`);
-        return r.json();
-      })
-      .then(data => {
-        // Sort: newest first
-        const sorted = [...data].sort((a, b) => {
-          return new Date(b.publish_at) - new Date(a.publish_at);
+    function buildFilters() {
+      filterBar.innerHTML = '';
+      FILTERS.forEach(f => {
+        const btn = document.createElement('button');
+        btn.className = 'lki-feed__filter-btn' + (f.key === activeFilter ? ' active' : '');
+        btn.textContent = f.label;
+        btn.addEventListener('click', () => {
+          filterBar.querySelectorAll('.lki-feed__filter-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          activeFilter = f.key;
+          renderList(list, currentItems, activeFilter);
         });
-
-        let activeFilter = 'all';
-
-        buildFilters(container, sorted, filter => {
-          activeFilter = filter;
-          renderList(container, sorted, activeFilter);
-        });
-
-        renderList(container, sorted, activeFilter);
-      })
-      .catch(err => {
-        const list = container.querySelector('.lki-feed__list');
-        if (list) {
-          list.innerHTML = `<div class="lki-feed__empty">Ei sisältöä vielä.</div>`;
-        }
-        console.error('[LkiFeed] Load error:', err);
+        filterBar.appendChild(btn);
       });
+    }
+
+    // Handlers
+    refreshBtn.addEventListener('click', () => loadFeed(true));
+    newAlert.addEventListener('click', () => {
+      renderList(list, currentItems, activeFilter);
+      newAlert.classList.add('hidden');
+      window.scrollTo({ top: root.offsetTop - 20, behavior: 'smooth' });
+    });
+
+    // Auto-refresh every 90s
+    setInterval(() => loadFeed(false), 90000);
+
+    // Start
+    renderSkeletons(list, 4);
+    loadFeed(false);
   }
 
-  // ── Auto-init via data attribute ────────────────────────────────
   function autoInit() {
-    document.querySelectorAll('[data-feed-src]').forEach(el => {
-      init(el, { dataUrl: el.dataset.feedSrc });
-    });
+    document.querySelectorAll('[data-feed-src]').forEach(el => init(el));
   }
 
   return { init, autoInit };
 })();
 
-// Auto-init on DOMContentLoaded
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', LkiFeed.autoInit);
-} else {
-  LkiFeed.autoInit();
-}
+LkiFeed.autoInit();
