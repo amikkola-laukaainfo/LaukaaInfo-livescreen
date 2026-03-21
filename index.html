@@ -330,7 +330,10 @@
         
         // Load initial state
         const urlParams = new URLSearchParams(window.location.search);
-        const forceOpen = urlParams.get('feed') === 'open' || window.location.hash === '#feed';
+        // Check for feed=open OR specialized filter (filter/feed_filter)
+        const hasFilterParam = urlParams.has('filter') || urlParams.has('feed_filter');
+        const forceOpen = urlParams.get('feed') === 'open' || window.location.hash === '#homepage-feed' || (hasFilterParam && urlParams.get('feed') !== 'false');
+        
         const isExpanded = forceOpen || localStorage.getItem('lki_feed_expanded') === 'true';
 
         if (isExpanded) {
@@ -338,11 +341,11 @@
             feedContent.classList.remove('closed');
             feedBtn.querySelector('.icon-btn').textContent = 'Sulje';
             
-            // Jos avattiin parametrilla, varmistetaan että sivu skrollaa feediin
+            // If opened via parameter or anchor, ensure we scroll to it
             if (forceOpen) {
                 setTimeout(() => {
-                    feedBtn.scrollIntoView({ behavior: 'smooth' });
-                }, 500);
+                    feedBtn.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 400); // 400ms is usually enough for initial layout
             }
         }
 

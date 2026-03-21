@@ -136,7 +136,11 @@ const LkiFeed = (() => {
     const filterBar = container.querySelector('.lki-feed__filters');
 
     let currentItems = [];
-    let activeFilter = 'all';
+    let activeFilter = options.initialFilter || 'all';
+    // Map Finnish names if used in URL
+    const filterMap = { 'tapahtumat': 'event', 'yritykset': 'business', 'tarjoukset': 'offer', 'tapahtuma': 'event', 'yritys': 'business', 'tarjous': 'offer' };
+    if (filterMap[activeFilter]) activeFilter = filterMap[activeFilter];
+
     let isInitialLoad = true;
 
     function loadFeed(forceRefresh = false) {
@@ -224,7 +228,9 @@ const LkiFeed = (() => {
   }
 
   function autoInit() {
-    document.querySelectorAll('[data-feed-src]').forEach(el => init(el));
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialFilter = urlParams.get('filter') || urlParams.get('feed_filter'); 
+    document.querySelectorAll('[data-feed-src]').forEach(el => init(el, { initialFilter }));
   }
 
   return { init, autoInit };
