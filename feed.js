@@ -141,7 +141,6 @@ const LkiFeed = (() => {
 
     function loadFeed(forceRefresh = false) {
       if (forceRefresh) {
-        console.log('[LkiFeed] Manual refresh triggered');
         refreshBtn.classList.add('is-loading');
         statusText.classList.remove('hidden');
       }
@@ -209,10 +208,7 @@ const LkiFeed = (() => {
     }
 
     // Handlers
-    refreshBtn.addEventListener('click', () => {
-      console.log('[LkiFeed] Refresh button clicked');
-      loadFeed(true);
-    });
+    refreshBtn.addEventListener('click', () => loadFeed(true));
     newAlert.addEventListener('click', () => {
       renderList(list, currentItems, activeFilter);
       newAlert.classList.add('hidden');
