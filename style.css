@@ -2202,6 +2202,23 @@ footer {
   flex-shrink: 0;
   animation: lki-pulse 1.6s infinite;
 }
+.lki-feed__status-msg {
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-top: -1rem;
+  margin-bottom: 1rem;
+  transition: opacity 0.3s;
+}
+
+.lki-feed__status-msg.hidden {
+  display: none !important;
+}
+
+.hidden {
+    display: none !important;
+}
 
 @keyframes lki-pulse {
   0%, 100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.5); }

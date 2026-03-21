@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
 
     <link rel="stylesheet" href="style.css?v=20260301-1">
+    <link rel="stylesheet" href="feed.css">
 </head>
 
 <body>
@@ -328,7 +329,7 @@
         const feedContent = document.getElementById('feed-accordion-content');
         
         // Load initial state
-        const isExpanded = localStorage.getItem('lki_feed_expanded') !== 'false'; // Default to true if not set
+        const isExpanded = localStorage.getItem('lki_feed_expanded') === 'true'; // Default to false
         if (isExpanded) {
             feedBtn.classList.remove('closed');
             feedContent.classList.remove('closed');
