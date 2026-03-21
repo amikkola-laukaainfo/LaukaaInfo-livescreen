@@ -148,12 +148,17 @@ const LkiFeed = (() => {
       // Bypass cache with timestamp
       const fetchUrl = dataUrl + (dataUrl.includes('?') ? '&' : '?') + 'ts=' + Date.now();
 
-      fetch(fetchUrl)
+      // Create a promise for minimum display duration (800ms)
+      const minDelay = new Promise(resolve => setTimeout(resolve, forceRefresh ? 800 : 0));
+
+      const fetchPromise = fetch(fetchUrl)
         .then(r => {
           if (!r.ok) throw new Error(`HTTP ${r.status}`);
           return r.json();
-        })
-        .then(res => {
+        });
+
+      Promise.all([fetchPromise, minDelay])
+        .then(([res]) => {
           const data = Array.isArray(res) ? res : (res.data || []);
           
           // Detect new content (compare first item ID)
