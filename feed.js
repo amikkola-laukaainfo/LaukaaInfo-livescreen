@@ -140,6 +140,55 @@ const LkiFeed = (() => {
     // Map Finnish names if used in URL
     const filterMap = { 'tapahtumat': 'event', 'yritykset': 'business', 'tarjoukset': 'offer', 'tapahtuma': 'event', 'yritys': 'business', 'tarjous': 'offer' };
     if (filterMap[activeFilter]) activeFilter = filterMap[activeFilter];
+    
+    let lightboxEl = null;
+    let lightboxImg = null;
+
+    function setupLightbox() {
+      if (document.getElementById('lki-lightbox')) return;
+      
+      lightboxEl = document.createElement('div');
+      lightboxEl.id = 'lki-lightbox';
+      lightboxEl.className = 'lki-lightbox';
+      lightboxEl.setAttribute('role', 'dialog');
+      lightboxEl.setAttribute('aria-label', 'Kuvan katselu');
+      
+      lightboxEl.innerHTML = `
+        <div class="lki-lightbox__content">
+          <button class="lki-lightbox__close" aria-label="Sulje">&times;</button>
+          <img class="lki-lightbox__img" src="" alt="">
+        </div>
+      `;
+      
+      document.body.appendChild(lightboxEl);
+      lightboxImg = lightboxEl.querySelector('.lki-lightbox__img');
+      
+      // Close handlers
+      const close = () => {
+        lightboxEl.classList.remove('is-open');
+        document.body.classList.remove('lki-no-scroll');
+      };
+      
+      lightboxEl.addEventListener('click', (e) => {
+        if (e.target === lightboxEl || e.target.classList.contains('lki-lightbox__close')) {
+          close();
+        }
+      });
+      
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && lightboxEl.classList.contains('is-open')) {
+          close();
+        }
+      });
+    }
+
+    function openLightbox(src, alt) {
+      if (!lightboxEl) setupLightbox();
+      lightboxImg.src = src;
+      lightboxImg.alt = alt || 'Kuva';
+      lightboxEl.classList.add('is-open');
+      document.body.classList.add('lki-no-scroll');
+    }
 
     let isInitialLoad = true;
 
@@ -212,6 +261,15 @@ const LkiFeed = (() => {
     }
 
     // Handlers
+    list.addEventListener('click', (e) => {
+      const img = e.target.closest('.lki-card__img');
+      if (img) {
+        e.preventDefault();
+        e.stopPropagation();
+        openLightbox(img.src, img.alt);
+      }
+    });
+
     refreshBtn.addEventListener('click', () => loadFeed(true));
     newAlert.addEventListener('click', () => {
       renderList(list, currentItems, activeFilter);

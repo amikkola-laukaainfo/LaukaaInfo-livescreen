@@ -185,6 +185,7 @@
   object-fit: cover;
   display: block;
   transition: transform 0.35s ease;
+  cursor: zoom-in;
 }
 
 .lki-card:hover .lki-card__img {
@@ -343,5 +344,87 @@
 
   .lki-card__img-wrap {
     height: 160px;
+  }
+}
+
+/* Lightbox / Image Viewer */
+.lki-lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.lki-lightbox.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.lki-lightbox__content {
+  position: relative;
+  max-width: 95%;
+  max-height: 95%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lki-lightbox__img {
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  transform: scale(0.95);
+  transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.lki-lightbox.is-open .lki-lightbox__img {
+  transform: scale(1);
+}
+
+.lki-lightbox__close {
+  position: absolute;
+  top: -40px;
+  right: -10px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2.5rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 10px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  opacity: 0.8;
+}
+
+.lki-lightbox__close:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* Disable body scroll when lightbox open */
+body.lki-no-scroll {
+  overflow: hidden;
+}
+
+@media (max-width: 600px) {
+  .lki-lightbox {
+    padding: 1rem;
+  }
+  .lki-lightbox__close {
+    top: -50px;
+    right: 0;
   }
 }
