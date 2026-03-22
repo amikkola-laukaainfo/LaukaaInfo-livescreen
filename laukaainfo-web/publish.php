@@ -14,9 +14,10 @@ $imagekitId   = 'vowzx8znjs';
 $publicKey    = 'YOUR_PUBLIC_KEY'; 
 $privateKey   = 'YOUR_PRIVATE_KEY';
 $jsonFile     = 'content.json';
-$tokenFile    = 'tokens.json';
+$csvCacheFile = 'advertisers_cache.csv';
+$csvUrl       = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSV1-67oQMZmF0talwT6HXNg01NP0YA5XCNpKJsrTQ2RHQNQhEL6dySYicrfM1pnIU6Z41UqpzQdtdz/pub?output=csv';
+$cacheTtl     = 600; // 10 minutes
 $maxItems     = 100;
-$companyApi   = 'https://www.mediazoo.fi/laukaainfo-web/get_companies.php';
 
 // --- URL PARAMETERS (PRE-FILL) ---
 $prefillId    = $_GET['business_id'] ?? '';
@@ -132,98 +133,134 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (empty($_FILES['image']['tmp_name']) && empty($image_url_input)) {
         $message = "Virhe: Kuva tai kuvan URL vaaditaan.";
     } else {
-        // --- TOKEN VALIDATION ---
-        $isTokenValid = false;
-        if (file_exists($tokenFile)) {
-            $tokensData = json_decode(file_get_contents($tokenFile), true) ?: [];
-            foreach ($tokensData as $tData) {
-                if ($tData['business_id'] == $business_id && $tData['publish_token'] === $sentToken) {
-                    $isTokenValid = true;
-                    break;
-                }
+        // --- ADVERTISER VALIDATION (CSV from Google Sheets) ---
+        $advertiser = null;
+        
+        // Fetch and Cache CSV
+        if (!file_exists($csvCacheFile) || (time() - filemtime($csvCacheFile) > $cacheTtl)) {
+            $csvData = @file_get_contents($csvUrl);
+            if ($csvData) {
+                file_put_contents($csvCacheFile, $csvData);
             }
         }
 
-        if (!$isTokenValid) {
-            $message = "Virhe: Unauthorized (Pääsy estetty). Token ei täsmää.";
-        } else {
-            // --- COMPANY REGISTRY CHECK (Optional extra) ---
-            $isValidCompany = false;
-            $companyList = json_decode(file_get_contents($companyApi . "?t=" . time()), true);
-            $companies = is_array($companyList) ? $companyList : ($companyList['results'] ?? []);
+        if (file_exists($csvCacheFile)) {
+            $handle = fopen($csvCacheFile, "r");
+            $headers = fgetcsv($handle); // Headers: business_id,nimi,token,paketti,voimassa_asti
             
-            foreach ($companies as $comp) {
-                $compId = str_replace('company-', '', $comp['id'] ?? '');
-                if ($compId == $business_id) {
-                    if (($comp['tyyppi'] ?? '') === 'maksu') {
-                        $isValidCompany = true;
-                        break;
-                    } else {
-                        $message = "Virhe: Yrityksellä ei ole 'maksu'-oikeutta julkaisuun.";
-                    }
-                }
-            }
-
-            if (!$isValidCompany && empty($message)) {
-                $message = "Virhe: Yritystä ei löytynyt rekisteristä tai tilaus on päättynyt.";
-            }
-
-            if ($isValidCompany) {
-                $final_image_url = '';
-
-                // Handle Image Upload
-                if (!empty($_FILES['image']['tmp_name'])) {
-                    if ($privateKey === 'YOUR_PRIVATE_KEY') {
-                        $message = "Virhe: ImageKit API-avaimia ei ole määritetty.";
-                    } else {
-                        $processedData = processImage($_FILES['image']['tmp_name']);
-                        if ($processedData) {
-                            $fileName = 'feed_' . time() . '_' . generateId() . '.jpg';
-                            $uploadedUrl = uploadToImageKit($processedData, $fileName, $publicKey, $privateKey);
-                            if ($uploadedUrl) {
-                                $final_image_url = $uploadedUrl;
-                            } else {
-                                $message = "Virhe: Kuvan lataus ImageKit-palveluun epäonnistui.";
-                            }
-                        } else {
-                            $message = "Virhe: Kuvan käsittely epäonnistui.";
-                        }
-                    }
-                } else {
-                    $final_image_url = $image_url_input;
-                }
-
-                if ($final_image_url) {
-                    // Storage
-                    $feedData = [];
-                    if (file_exists($jsonFile)) {
-                        $feedData = json_decode(file_get_contents($jsonFile), true) ?: [];
-                    }
-
-                    $newItem = [
-                        'id' => generateId(),
-                        'business_id' => $business_id,
-                        'type' => $type,
-                        'title' => $title,
-                        'description' => $short_desc,
-                        'image' => $final_image_url,
-                        'publish_at' => date('c', strtotime($publish_at)),
-                        'is_promoted' => $is_promoted,
-                        'created_at' => date('c')
+            while (($row = fgetcsv($handle)) !== FALSE) {
+                if (count($row) < 5) continue;
+                if ($row[0] == $business_id && $row[2] === $sentToken) {
+                    $advertiser = [
+                        'id' => $row[0],
+                        'nimi' => $row[1],
+                        'paketti' => strtolower(trim($row[3])),
+                        'voimassa' => trim($row[4])
                     ];
+                    break;
+                }
+            }
+            fclose($handle);
+        }
 
-                    if ($website_url)   $newItem['website_url'] = $website_url;
-                    if ($facebook_url)  $newItem['facebook_url'] = $facebook_url;
-                    if ($instagram_url) $newItem['instagram_url'] = $instagram_url;
-                    if ($youtube_url)   $newItem['youtube_url'] = $youtube_url;
+        if (!$advertiser) {
+            $message = "Virhe: Unauthorized (Pääsy estetty). Token ei täsmää tai ilmoittajaa ei löydy rekisteristä.";
+        } else {
+            // Check Expiration
+            $today = date('Y-m-d');
+            if (!empty($advertiser['voimassa']) && $advertiser['voimassa'] < $today) {
+                $message = "Virhe: Julkaisuoikeuden voimassaolo on päättynyt (" . $advertiser['voimassa'] . ").";
+            } else {
+                // --- LIMIT ENFORCEMENT ---
+                $feedData = [];
+                if (file_exists($jsonFile)) {
+                    $feedData = json_decode(file_get_contents($jsonFile), true) ?: [];
+                }
 
-                    array_unshift($feedData, $newItem);
-                    $feedData = array_slice($feedData, 0, $maxItems);
-                    file_put_contents($jsonFile, json_encode($feedData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-                    
-                    $shareLink = "https://laukaainfo.fi/?business_id=" . $business_id . "&feed=open";
-                    $message = "Sisältö julkaistu onnistuneesti! ✅ <br><small><a href='$shareLink' target='_blank' style='color:inherit; font-weight:bold; text-decoration:underline;'>Katso ja jaa oma yritysfeedisi tästä linkistä &raquo;</a></small>";
-                    $previewJson = json_encode($newItem, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+                $countTotal = 0;
+                $countMonth = 0;
+                $countDay   = 0;
+                $now        = time();
+                $oneDayAgo  = $now - (24 * 3600);
+                $oneMonthAgo = $now - (30 * 24 * 3600);
+
+                foreach ($feedData as $item) {
+                    if ($item['business_id'] == $business_id) {
+                        $countTotal++;
+                        $pubTime = strtotime($item['publish_at'] ?? '');
+                        if ($pubTime > $oneDayAgo) $countDay++;
+                        if ($pubTime > $oneMonthAgo) $countMonth++;
+                    }
+                }
+
+                $plan = $advertiser['paketti'];
+                $limitError = '';
+
+                if ($plan === 'starter' && $countTotal >= 1) {
+                    $limitError = "Starter-paketti sisältää vain yhden julkaisun. Raja on täynnä.";
+                } elseif ($plan === 'basic') {
+                    if ($countMonth >= 4) $limitError = "Basic-paketin kuukausiraja (4 julkaisua/kk) on täynnä.";
+                    elseif ($countDay >= 1) $limitError = "Basic-paketin päivätaso (1 julkaisu/vrk) on jo käytetty.";
+                } elseif ($plan === 'pro') {
+                    if ($countMonth >= 15) $limitError = "Pro-paketin kuukausiraja (15 julkaisua/kk) on täynnä.";
+                    elseif ($countDay >= 2) $limitError = "Pro-paketin päivätaso (2 julkaisua/vrk) on jo käytetty.";
+                } elseif ($plan === 'event_boost' && $countTotal >= 1) {
+                    $limitError = "Event Boost sisältää vain yhden julkaisun per tapahtuma. Raja on täynnä.";
+                }
+
+                if ($limitError) {
+                    $message = "Virhe: " . $limitError;
+                } else {
+                    // --- SUCCESS: PROCEED TO IMAGE UPLOAD AND SAVE ---
+                    $final_image_url = '';
+
+                    if (!empty($_FILES['image']['tmp_name'])) {
+                        if ($privateKey === 'YOUR_PRIVATE_KEY') {
+                            $message = "Virhe: ImageKit API-avaimia ei ole määritetty.";
+                        } else {
+                            $processedData = processImage($_FILES['image']['tmp_name']);
+                            if ($processedData) {
+                                $fileName = 'feed_' . time() . '_' . generateId() . '.jpg';
+                                $uploadedUrl = uploadToImageKit($processedData, $fileName, $publicKey, $privateKey);
+                                if ($uploadedUrl) {
+                                    $final_image_url = $uploadedUrl;
+                                } else {
+                                    $message = "Virhe: Kuvan lataus ImageKit-palveluun epäonnistui.";
+                                }
+                            } else {
+                                $message = "Virhe: Kuvan käsittely epäonnistui.";
+                            }
+                        }
+                    } else {
+                        $final_image_url = $image_url_input;
+                    }
+
+                    if ($final_image_url) {
+                        $newItem = [
+                            'id' => generateId(),
+                            'business_id' => $business_id,
+                            'type' => $type,
+                            'title' => $title,
+                            'description' => $short_desc,
+                            'image' => $final_image_url,
+                            'publish_at' => date('c', strtotime($publish_at)),
+                            'is_promoted' => $is_promoted,
+                            'created_at' => date('c')
+                        ];
+
+                        if ($website_url)   $newItem['website_url'] = $website_url;
+                        if ($facebook_url)  $newItem['facebook_url'] = $facebook_url;
+                        if ($instagram_url) $newItem['instagram_url'] = $instagram_url;
+                        if ($youtube_url)   $newItem['youtube_url'] = $youtube_url;
+
+                        array_unshift($feedData, $newItem);
+                        $feedData = array_slice($feedData, 0, $maxItems);
+                        file_put_contents($jsonFile, json_encode($feedData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+                        
+                        $shareLink = "https://laukaainfo.fi/?business_id=" . $business_id . "&feed=open";
+                        $message = "Sisältö julkaistu onnistuneesti! ✅ <br><small><a href='$shareLink' target='_blank' style='color:inherit; font-weight:bold; text-decoration:underline;'>Katso ja jaa oma yritysfeedisi tästä linkistä &raquo;</a></small>";
+                        $previewJson = json_encode($newItem, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+                    }
                 }
             }
         }

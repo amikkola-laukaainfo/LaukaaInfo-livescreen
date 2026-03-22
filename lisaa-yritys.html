@@ -15,47 +15,85 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <style>
         .registration-container {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 4rem auto;
             padding: 0 1rem;
         }
 
-        .comparison-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 4rem;
+        /* Pricing Grid */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .plan-card {
             background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-        }
-
-        .comparison-table th,
-        .comparison-table td {
+            border: 2px solid #eee;
+            border-radius: 20px;
             padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.02);
+        }
+
+        .plan-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-blue);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .plan-card.active {
+            border-color: var(--primary-blue);
+            background: #f0f7ff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        /* Tier Colors */
+        .plan-card.tier-free.active { border-color: #666; background: #f8f9fa; }
+        .plan-card.tier-basic.active { border-color: #28a745; background: #f0fff4; }
+        .plan-card.tier-plus.active { border-color: #007bff; background: #f0f7ff; }
+        .plan-card.tier-pro.active { border-color: #6f42c1; background: #f5f0ff; }
+
+        .plan-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-blue);
+        }
+
+        .plan-card .price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .plan-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1rem 0;
             text-align: left;
-            border-bottom: 1px solid #eee;
+            flex-grow: 1;
+            font-size: 0.85rem;
         }
 
-        .comparison-table th {
-            background: var(--primary-blue);
-            color: white;
-            font-weight: 600;
+        .plan-card ul li {
+            padding: 0.3rem 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        .comparison-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .check-icon {
-            color: #28a745;
-            font-weight: bold;
-        }
-
-        .cross-icon {
-            color: #dc3545;
-            font-weight: bold;
-        }
+        .plan-card ul li .icon { font-weight: bold; }
+        .plan-card.tier-free ul li .icon { color: #666; }
+        .plan-card.tier-basic ul li .icon { color: #28a745; }
+        .plan-card.tier-plus ul li .icon { color: #007bff; }
+        .plan-card.tier-pro ul li .icon { color: #6f42c1; }
 
         .form-section {
             background: white;
@@ -99,31 +137,6 @@
             display: block;
         }
 
-        .type-selector {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .type-option {
-            flex: 1;
-            padding: 1.5rem;
-            border: 2px solid #eee;
-            border-radius: 12px;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .type-option.active {
-            border-color: var(--primary-blue);
-            background: var(--light-blue);
-        }
-
-        .type-option h4 {
-            margin-bottom: 0.5rem;
-        }
-
         .btn-submit {
             width: 100%;
             padding: 1rem;
@@ -141,6 +154,49 @@
         .btn-submit:hover {
             background: var(--secondary-blue);
         }
+
+        /* Instructions Section */
+        .instructions-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            margin-bottom: 3rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .instructions-section h2 {
+            font-size: 1.4rem;
+            color: var(--primary-blue);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .step-item {
+            text-align: center;
+        }
+
+        .step-num {
+            width: 32px;
+            height: 32px;
+            background: var(--primary-blue);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.8rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .step-item h4 { font-size: 1rem; margin-bottom: 0.4rem; }
+        .step-item p { font-size: 0.85rem; color: #666; line-height: 1.4; }
 
         .upload-method-selector {
             display: flex;
@@ -181,14 +237,10 @@
             display: block;
         }
 
-        .file-input-group {
-            margin-bottom: 1rem;
-        }
-
-        .file-input-group label {
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 0.3rem;
+        @media (max-width: 600px) {
+            .steps-container { grid-template-columns: 1fr; text-align: left; }
+            .step-item { display: flex; align-items: flex-start; gap: 1rem; }
+            .step-num { margin: 0; flex-shrink: 0; }
         }
     </style>
 </head>
@@ -340,67 +392,97 @@
             <p>Valitse yrityksellesi sopiva näkyvyys ja täytä tiedot.</p>
         </header>
 
-        <table class="comparison-table">
-            <thead>
-                <tr>
-                    <th>Ominaisuus</th>
-                    <th>Ilmainen</th>
-                    <th>Maksullinen ⭐</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Yhteystiedot (Nimi, osoite, puh)</td>
-                    <td><span class="check-icon">✓</span></td>
-                    <td><span class="check-icon">✓</span></td>
-                </tr>
-                <tr>
-                    <td>Linkki omille kotisivuille</td>
-                    <td><span class="check-icon">✓</span></td>
-                    <td><span class="check-icon">✓</span></td>
-                </tr>
-                <tr>
-                    <td>Yritysesittely (teksti)</td>
-                    <td><span class="check-icon">✓</span> (max 100 merkkiä)</td>
-                    <td><span class="check-icon">✓</span> (laaja)</td>
-                </tr>
-                <tr>
-                    <td>Näkyvyys kartalla</td>
-                    <td><span class="cross-icon">✗</span></td>
-                    <td><span class="check-icon">✓</span></td>
-                </tr>
-                <tr>
-                    <td>Kuvagalleria & Video</td>
-                    <td><span class="cross-icon">✗</span></td>
-                    <td><span class="check-icon">✓</span></td>
-                </tr>
-                <tr>
-                    <td>Priorisoitu haku (näkyy ylempänä)</td>
-                    <td><span class="cross-icon">✗</span></td>
-                    <td><span class="check-icon">✓</span></td>
-                </tr>
-                <tr>
-                    <td>Tarjouskupongit & mainoslinkit</td>
-                    <td><span class="cross-icon">✗</span></td>
-                    <td><span class="check-icon">✓</span></td>
-                </tr>
-            </tbody>
-        </table>
-
-        <div class="form-section">
-            <div class="type-selector">
-                <div class="type-option" id="option-free" onclick="selectType('free')">
-                    <h4>Ilmainen</h4>
-                    <p>Perusnäkyvyys</p>
-                </div>
-                <div class="type-option" id="option-paid" onclick="selectType('paid')">
-                    <h4>Maksullinen ⭐</h4>
-                    <p>Kaikki ominaisuudet</p>
-                </div>
+        <!-- Pricing Grid -->
+        <div class="pricing-grid">
+            <!-- Free -->
+            <div class="plan-card tier-free" id="tier-free" onclick="selectType('free')">
+                <h3>Ilmainen</h3>
+                <div class="price">0 €</div>
+                <ul>
+                    <li><span class="icon">✓</span> Perusyhteystiedot</li>
+                    <li><span class="icon">✓</span> Sijainti & Puh</li>
+                    <li><span class="icon">✗</span> Kotisivulinkki</li>
+                    <li><span class="icon">✗</span> Feed-julkaisut</li>
+                </ul>
+                <div style="font-size: 0.8rem; font-weight: bold; color: #666;">Valitse ilmainen</div>
             </div>
 
+            <!-- Basic -->
+            <div class="plan-card tier-basic" id="tier-basic" onclick="selectType('basic')">
+                <h3>BASIC</h3>
+                <div class="price">45 €<span> / 3kk</span></div>
+                <ul>
+                    <li><span class="icon">✓</span> Täydet yritystiedot</li>
+                    <li><span class="icon">✓</span> Kotisivulinkki</li>
+                    <li><span class="icon">✓</span> 2 julkaisua / kk</li>
+                    <li><span class="icon">✗</span> Ei nostoja</li>
+                </ul>
+                <div style="font-size: 0.8rem; font-weight: bold; color: #28a745;">Valitse Basic</div>
+            </div>
+
+            <!-- Plus -->
+            <div class="plan-card tier-plus" id="tier-plus" onclick="selectType('plus')">
+                <h3>PLUS</h3>
+                <div class="price">79 €<span> / 6kk</span></div>
+                <ul>
+                    <li><span class="icon">✓</span> Täydet yritystiedot</li>
+                    <li><span class="icon">✓</span> 5 julkaisua / kk</li>
+                    <li><span class="icon">✓</span> 1 noston / kk</li>
+                    <li><span class="icon">✓</span> Kuvagalleria</li>
+                </ul>
+                <div style="font-size: 0.8rem; font-weight: bold; color: #007bff;">Valitse Plus</div>
+            </div>
+
+            <!-- Pro -->
+            <div class="plan-card tier-pro" id="tier-pro" onclick="selectType('pro')">
+                <h3>PRO ⭐</h3>
+                <div class="price">149 €<span> / 12kk</span></div>
+                <ul>
+                    <li><span class="icon">✓</span> 10 julkaisua / kk</li>
+                    <li><span class="icon">✓</span> 2-3 nostoa / kk</li>
+                    <li><span class="icon">✓</span> Feed-prioriteetti</li>
+                    <li><span class="icon">✓</span> Kaikki ominaisuudet</li>
+                </ul>
+                <div style="font-size: 0.8rem; font-weight: bold; color: #6f42c1;">Valitse Pro</div>
+            </div>
+        </div>
+
+        <!-- Instructions Section -->
+        <section class="instructions-section">
+            <h2>Miten se toimii?</h2>
+            <div class="steps-container">
+                <div class="step-item">
+                    <div class="step-num">1</div>
+                    <h4>Valinta</h4>
+                    <p>Valitse näkyvyystaso ja ajanjakso yltä.</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">2</div>
+                    <h4>Tiedot</h4>
+                    <p>Täytä yrityksen tiedot huolellisesti alla olevalla lomakkeella.</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">3</div>
+                    <h4>Maksu</h4>
+                    <p>Stripe, MobilePay tai lasku sähköpostitse (sis. alv).</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">4</div>
+                    <h4>Päivitys</h4>
+                    <p>Yrityskortti julkaistaan tai päivitetään vahvistuksen jälkeen.</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">5</div>
+                    <h4>Ylläpito</h4>
+                    <p>Kortin päivityksiä 5 kpl/vuosi. Feedin itsepäivitys lomakkeella.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="form-section">
             <form id="registration-form">
                 <input type="hidden" name="type" id="input-type" value="free">
+                <input type="hidden" name="duration" id="input-duration" value="0">
 
                 <div class="form-group">
                     <label for="company-name">Yrityksen nimi *</label>
@@ -452,7 +534,7 @@
                     <input type="checkbox" id="whatsapp" name="whatsapp" value="true">
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" id="website-group">
                     <label for="website">Kotisivut (URL)</label>
                     <input type="url" id="website" name="website">
                 </div>
@@ -464,14 +546,6 @@
 
                 <!-- Maksullisen näkyvyyden lisäkentät -->
                 <div id="premium-fields" class="premium-only-field">
-                    <div class="form-group">
-                        <label for="duration">Yritysnäkyvyyden kesto *</label>
-                        <select id="duration" name="duration" onchange="updateSubmitButtonText()">
-                            <option value="3">3 kuukautta (45,00€ sis. alv)</option>
-                            <option value="6">6 kuukautta (79,00€ sis. alv)</option>
-                            <option value="12">12 kuukautta (149,00€ sis. alv)</option>
-                        </select>
-                    </div>
                     <div class="form-group">
                         <label>Kuvat ja Logo *</label>
                         <div class="upload-method-selector">
@@ -497,27 +571,13 @@
                                 <p style="font-size: 0.9rem; color: #666; margin-bottom: 1rem;">Lataa enintään 5 kuvaa ja yrityksen logo. Kuvat pakataan automaattisesti ZIP-tiedostoksi.</p>
                                 <div class="file-input-group">
                                     <label>Yrityksen logo</label>
-                                    <input type="file" id="upload-logo" accept="image/*">
+                                    <input type="file" id="upload-logo" accept="image/*" style="width: auto; padding: 0;">
                                 </div>
-                                <div class="file-input-group">
-                                    <label>Kuva 1</label>
-                                    <input type="file" class="upload-img" accept="image/*">
-                                </div>
-                                <div class="file-input-group">
-                                    <label>Kuva 2</label>
-                                    <input type="file" class="upload-img" accept="image/*">
-                                </div>
-                                <div class="file-input-group">
-                                    <label>Kuva 3</label>
-                                    <input type="file" class="upload-img" accept="image/*">
-                                </div>
-                                <div class="file-input-group">
-                                    <label>Kuva 4</label>
-                                    <input type="file" class="upload-img" accept="image/*">
-                                </div>
-                                <div class="file-input-group">
-                                    <label>Kuva 5</label>
-                                    <input type="file" class="upload-img" accept="image/*">
+                                <div id="image-upload-slots">
+                                    <div class="file-input-group">
+                                        <label>Kuvat</label>
+                                        <input type="file" class="upload-img" accept="image/*" multiple style="width: auto; padding: 0;">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -540,7 +600,7 @@
                             <div class="ad-link-row" style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
                                 <input type="url" name="ad_link[]" placeholder="https://...">
                                 <button type="button" onclick="addAdLink()"
-                                    style="padding: 0 1rem; border-radius: 8px; cursor: pointer;">+</button>
+                                    style="padding: 0 1rem; border-radius: 8px; cursor: pointer; width: auto;">+</button>
                             </div>
                         </div>
                     </div>
@@ -553,30 +613,43 @@
 
     <script>
         function updateSubmitButtonText() {
-            const type = document.getElementById('input-type').value;
+            const typeValue = document.getElementById('input-type').value;
             const submitBtn = document.querySelector('.btn-submit');
-            if (type === 'paid') {
-                const duration = document.getElementById('duration').value;
-                let price = "45,00€";
-                if (duration === "6") price = "79,00€";
-                if (duration === "12") price = "149,00€";
-                submitBtn.textContent = `Jatka maksuun (${duration} kk, ${price} sis. alv)`;
+            
+            if (typeValue === 'free') {
+                submitBtn.textContent = 'Lähetä ilmaiset tiedot';
+                submitBtn.style.background = '#666';
             } else {
-                submitBtn.textContent = 'Lähetä tiedot';
+                const plans = {
+                    'basic': { price: '45,00€', duration: '3 kk', color: '#28a745' },
+                    'plus': { price: '79,00€', duration: '6 kk', color: '#007bff' },
+                    'pro': { price: '149,00€', duration: '12 kk', color: '#6f42c1' }
+                };
+                const plan = plans[typeValue];
+                submitBtn.textContent = `Jatka maksuun (Yrityskortti ${typeValue.toUpperCase()} ${plan.duration}, ${plan.price} sis. alv)`;
+                submitBtn.style.background = plan.color;
             }
         }
 
         function selectType(type) {
             document.getElementById('input-type').value = type;
-            document.querySelectorAll('.type-option').forEach(el => el.classList.remove('active'));
-            document.getElementById('option-' + type).classList.add('active');
+            document.querySelectorAll('.plan-card').forEach(el => el.classList.remove('active'));
+            document.getElementById('tier-' + type).classList.add('active');
 
             const premiumFields = document.getElementById('premium-fields');
+            const websiteGroup = document.getElementById('website-group');
+            const durationInput = document.getElementById('input-duration');
 
-            if (type === 'paid') {
-                premiumFields.classList.add('active');
-            } else {
+            // Map internal types to Stripe durations
+            const durationMap = { 'free': 0, 'basic': 3, 'plus': 6, 'pro': 12 };
+            durationInput.value = durationMap[type];
+
+            if (type === 'free') {
                 premiumFields.classList.remove('active');
+                websiteGroup.style.display = 'none';
+            } else {
+                premiumFields.classList.add('active');
+                websiteGroup.style.display = 'block';
             }
             updateSubmitButtonText();
         }
@@ -588,7 +661,7 @@
             div.style.cssText = 'display: flex; gap: 0.5rem; margin-bottom: 0.5rem;';
             div.innerHTML = `
                 <input type="url" name="ad_link[]" placeholder="https://...">
-                <button type="button" onclick="this.parentElement.remove()" style="padding: 0 1rem; border-radius: 8px; cursor: pointer; color: red;">&times;</button>
+                <button type="button" onclick="this.parentElement.remove()" style="padding: 0 1rem; border-radius: 8px; cursor: pointer; color: red; width: auto;">&times;</button>
             `;
             container.appendChild(div);
         }
@@ -612,8 +685,10 @@
 
         // Tarkistetaan URL-parametri avattaessa
         const params = new URLSearchParams(window.location.search);
-        const type = params.get('type') || 'free';
-        selectType(type);
+        const initialType = params.get('type') || 'free';
+        // Handle legacy 'paid' param mapping it to basic
+        const mappedType = initialType === 'paid' ? 'basic' : initialType;
+        selectType(mappedType);
 
         document.getElementById('registration-form').addEventListener('submit', async function (e) {
             e.preventDefault();
@@ -625,29 +700,34 @@
             let zipBlob = null;
             let zipFileName = `LaukaaInfo_aineisto_${Date.now()}.zip`;
 
-            if (typeValue === 'paid' && currentUploadMethod === 'upload') {
+            if (typeValue !== 'free' && currentUploadMethod === 'upload') {
                 const zip = new JSZip();
                 const logoFile = document.getElementById('upload-logo').files[0];
-                const imageFiles = Array.from(document.querySelectorAll('.upload-img')).map(el => el.files[0]).filter(f => !!f);
-
+                const imageInputs = document.querySelectorAll('.upload-img');
+                
                 if (logoFile) zip.file(`logo_${logoFile.name}`, logoFile);
-                imageFiles.forEach((file, index) => {
-                    zip.file(`kuva_${index + 1}_${file.name}`, file);
+                
+                let imgCount = 0;
+                imageInputs.forEach(input => {
+                    Array.from(input.files).forEach(file => {
+                        imgCount++;
+                        zip.file(`kuva_${imgCount}_${file.name}`, file);
+                    });
                 });
 
-                if (logoFile || imageFiles.length > 0) {
+                if (logoFile || imgCount > 0) {
                     zipBlob = await zip.generateAsync({ type: "blob" });
                     zipGenerated = true;
                 }
             }
 
             const data = {
-                tyyppi: typeValue === 'paid' ? 'MAKSULLINEN ⭐' : 'ILMAINEN',
+                tyyppi: typeValue.toUpperCase(),
                 nimi: formData.get('name'),
                 kategoria: formData.get('category'),
                 osoite: formData.get('address') || '-',
                 puhelin: formData.get('phone') || '-',
-                kotisivut: formData.get('website') || '-',
+                kotisivut: typeValue === 'free' ? 'Ei sisälly (Ilmainen)' : (formData.get('website') || '-'),
                 esittely: formData.get('description'),
                 kuva_linkit: currentUploadMethod === 'links' ? (formData.get('images') || '-') : 'Ladattu ZIP-tiedostona',
                 youtube: formData.get('youtube') || '-',
@@ -663,10 +743,11 @@
                 mainoslinkit: Array.from(document.querySelectorAll('input[name="ad_link[]"]')).map(input => input.value).filter(v => v !== '')
             };
 
-            let emailBody = `Uusi yritys rekisteröinti LaukaaInfoon\n`;
+            const planNames = { 'free': 'Ilmainen', 'basic': 'BASIC (3 kk)', 'plus': 'PLUS (6 kk)', 'pro': 'PRO (12 kk)' };
+            let emailBody = `Uusi yritysilmoitus: ${planNames[typeValue]}\n`;
             emailBody += `------------------------------------\n`;
-            emailBody += `Tyyppi: ${data.tyyppi}\n`;
-            if (typeValue === 'paid') {
+            emailBody += `Paketti: ${planNames[typeValue]}\n`;
+            if (typeValue !== 'free') {
                 emailBody += `Kesto: ${data.kesto} kk\n`;
             }
             emailBody += `Nimi: ${data.nimi}\n`;
@@ -674,34 +755,25 @@
             emailBody += `Osoite: ${data.osoite}\n`;
             emailBody += `Puhelin: ${data.puhelin}\n`;
             emailBody += `Kotisivut: ${data.kotisivut}\n`;
-            emailBody += `Facebook: ${data.facebook}\n`;
-            emailBody += `Instagram: ${data.instagram}\n`;
-            emailBody += `LinkedIn: ${data.linkedin}\n`;
-            emailBody += `TikTok: ${data.tiktok}\n`;
-            emailBody += `WhatsApp: ${data.whatsapp}\n`;
-            emailBody += `\n`;
-            emailBody += `Esittely:\n${data.esittely}\n\n`;
+            emailBody += `\nEsittely:\n${data.esittely}\n\n`;
 
-            if (typeValue === 'paid') {
+            if (typeValue !== 'free') {
                 emailBody += `Lisätiedot (Maksullinen):\n`;
                 emailBody += `Lataustapa: ${currentUploadMethod === 'links' ? 'Linkit' : 'Tiedostolataus (ZIP paketti)'}\n`;
                 emailBody += `Logo: ${data.logo}\n`;
                 emailBody += `Kuvat: ${data.kuva_linkit}\n`;
-                emailBody += `YouTube: ${data.youtube}\n`;
-                emailBody += `Tarjous: ${data.tarjous}\n`;
-                emailBody += `RSS-syöte: ${data.rss}\n`;
-                emailBody += `Mainoslinkit: ${data.mainoslinkit.join(', ') || '-'}\n`;
+                emailBody += `Tarjous/Nosto: ${data.tarjous}\n`;
+                emailBody += `\nJos kyseessä on lasku-tilaus, ole hyvä ja lähetä laskutustiedot vastausviestissä.\n`;
                 
                 if (zipGenerated) {
-                    emailBody += `\n!!! HUOM: Asiakas on ladannut kuvat. Ole hyvä ja pyydä häntä lähettämään ZIP-tiedosto osoitteeseen info.mediazoo@gmail.com tai info@mediazoo.fi !!!\n`;
+                    emailBody += `\n!!! HUOM: Kuvat on ladattu ZIP-tiedostona. Ole hyvä ja lähetä ZIP-liitteenä: info@mediazoo.fi !!!\n`;
                 }
             }
 
-            const subject = encodeURIComponent(`LaukaaInfo - Uusi yritysilmoitus: ${data.nimi}`);
+            const subject = encodeURIComponent(`LaukaaInfo - Rekisteröinti: ${data.nimi} (${planNames[typeValue]})`);
             const body = encodeURIComponent(emailBody);
             const mailtoLink = `mailto:info.mediazoo@gmail.com?subject=${subject}&body=${body}`;
 
-            // Jos ZIP generoitiin, ladataan se
             if (zipGenerated) {
                 const url = window.URL.createObjectURL(zipBlob);
                 const a = document.createElement('a');
@@ -711,28 +783,28 @@
                 a.click();
                 window.URL.revokeObjectURL(url);
                 document.body.removeChild(a);
-                
-                alert('Kuvat on pakattu ZIP-tiedostoksi ja lataus on alkanut. LÄHETÄ kyseinen ZIP-tiedosto sähköpostitse osoitteeseen info.mediazoo@gmail.com.\n\nKlikkaa OK avataksesi sähköpostiviestin ja siirtyäksesi maksuun.');
+                alert('Aineisto on pakattu ZIP-tiedostoksi. Lähetäthän sen sähköpostitse viestin liitteenä.');
             }
 
-            // Avaa sähköposti tietojen lähettämistä varten
             window.open(mailtoLink, '_blank');
 
-            if (typeValue === 'paid') {
-                // OHJAA STRIPE-MAKSUUN
+            if (typeValue !== 'free') {
                 const stripeLinks = {
                     "3": "https://buy.stripe.com/3cI9AUepJ2JWbFle2p1B607",
                     "6": "https://buy.stripe.com/bJe14oa9t98kgZF0bz1B608",
                     "12": "https://buy.stripe.com/3cIaEY81l5W86l12jH1B609"
                 };
                 const stripePaymentLink = stripeLinks[data.kesto];
-                
-                // Pieni viive jotta mailto ehtii avautua
                 setTimeout(() => {
-                    window.location.href = stripePaymentLink;
-                }, 1000);
+                    const confirmMsg = "Haluatko siirtyä heti verkkomaksuun (Stripe/MobilePay)? \n\nVoit myös kysyä laskua vastaamalla sähköpostiviestiin.";
+                    if (confirm(confirmMsg)) {
+                        window.location.href = stripePaymentLink;
+                    } else {
+                        window.location.href = 'index.html';
+                    }
+                }, 1500);
             } else {
-                alert('Kiitos! Yrityksesi tiedot on koottu sähköpostiin. Lähetäthän viestin sähköpostiohjelmassasi, jotta tiedot saapuvat meille tarkistettavaksi.');
+                alert('Kiitos! Yrityksesi tiedot on koottu sähköpostiin. Lähetä viesti loppuun sähköpostiohjelmassasi.');
                 window.location.href = 'index.html';
             }
         });
