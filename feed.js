@@ -291,14 +291,18 @@ const LkiFeed = (() => {
         e.stopPropagation();
         const cardId = shareBtn.getAttribute('data-share-id');
         
-        // Päätellään jakolinkki joko html:n data-share-src -attribuutista tai suoraan apin osoitteesta
+        // Päätellään jakolinkki datan alkuperäisestä osoitteesta
         let shareBaseUrl = options.shareUrl || root.dataset.shareSrc;
         if (!shareBaseUrl) {
-           shareBaseUrl = dataUrl.split('?')[0].replace(/api\.php$/, 'item.php');
-           if (!shareBaseUrl.endsWith('.php')) {
-             // Fallback jos ei ole api.php niminen
-             const baseUrl = window.location.origin + window.location.pathname;
-             shareBaseUrl = (baseUrl.endsWith('/') ? baseUrl : baseUrl.substring(0, baseUrl.lastIndexOf('/') + 1)) + 'item.php';
+           // Tehdään data-osoitteesta varmasti absoluuttinen
+           const absoluteDataUrl = new URL(dataUrl, window.location.href).href;
+           
+           if (absoluteDataUrl.includes('api.php')) {
+               shareBaseUrl = absoluteDataUrl.split('?')[0].replace(/api\.php$/, 'item.php');
+           } else {
+               // Jos api.php ei löydy polusta, korvataan viimeinen osa item.php:llä
+               shareBaseUrl = absoluteDataUrl.split('?')[0];
+               shareBaseUrl = shareBaseUrl.substring(0, shareBaseUrl.lastIndexOf('/') + 1) + 'item.php';
            }
         }
         
