@@ -300,6 +300,7 @@
   color: var(--text-muted);
   line-height: 1.45;
   margin: 0;
+  white-space: pre-wrap;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
