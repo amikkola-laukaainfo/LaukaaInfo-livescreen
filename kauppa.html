@@ -464,6 +464,10 @@
                     <div class="step-num">4</div>
                     <p>Käytä tunnusta sisällön julkaisuun työkalullamme.</p>
                 </div>
+                <div class="step">
+                    <div class="step-num">5</div>
+                    <p>Saat ohjeet jakolinkkien käyttämiseksi kategoria- ja ilmoittajakohtaisesti.</p>
+                </div>
             </div>
         </section>
     </div>
@@ -519,13 +523,12 @@
 
                 // Update MobilePay Link
                 const comment = encodeURIComponent(`LaukaaInfo: ${selectedPlan ? selectedPlan.name : 'Julkaisu'}${selectedTypes ? ' (' + selectedTypes + ')' : ''}`);
-                // Placeholder phone number - usually something like 123456
-                mobilepayBtn.href = `mobilepay://pay?phone=12345&amount=${total}&comment=${comment}`;
+                mobilepayBtn.href = `mobilepay://pay?phone=36474&amount=${total}&comment=${comment}`;
 
                 // Update Mailto Link
                 const subject = encodeURIComponent("LaukaaInfo julkaisuoikeus ostettu");
                 const body = encodeURIComponent(
-                    `Olen ostanut julkaisuoikeuden MobilePaylla.\n\n` +
+                    `Olen ostanut julkaisuoikeuden MobilePaylla (tai kysy laskulla tilausta).\n\n` +
                     `Paketti: ${selectedPlan ? selectedPlan.name : '-'}\n` +
                     `Hinta: ${total} €\n` +
                     `Sisältötyypit: ${selectedTypes || '-'}\n\n` +
