@@ -314,8 +314,8 @@ const LkiFeed = (() => {
                    shareBaseUrl = shareBaseUrl.substring(0, shareBaseUrl.lastIndexOf('/') + 1) + 'item.php';
                }
            } else {
-               // Jos data on samalla servulla (tai testiaineistoa), oletetaan item.php olevan juuressa
-               shareBaseUrl = window.location.origin + '/item.php';
+               // Jos data on paikallista, oletetaan item.php olevan samassa kansiossa kuin sivu
+               shareBaseUrl = new URL('item.php', window.location.href).href.split('?')[0];
            }
         }
         
