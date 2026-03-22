@@ -75,9 +75,6 @@ const LkiFeed = (() => {
     socialHtml = `
       <div class="lki-card__actions">
         ${socials.length > 0 ? `<div class="lki-card__social-links">${socials.join('')}</div>` : ''}
-        <button class="lki-card__share-btn" data-share-id="${item.id}" title="Kopioi jakolinkki" aria-label="Jaa">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 14 20 9 15 4"></polyline><path d="M4 20v-7a4 4 0 0 1 4-4h12"></path></svg>
-        </button>
       </div>
     `;
 
@@ -118,7 +115,13 @@ const LkiFeed = (() => {
         <div class="lki-feed__header">
           <span class="lki-live-dot"></span>
           <h2>Uusimmat julkaisut</h2>
-          <button class="lki-feed__refresh-btn" id="lki-refresh-trigger" title="Päivitä">🔄</button>
+          <div class="lki-feed__header-actions">
+            <button class="lki-feed__share-btn" id="lki-share-trigger" title="Jaa tämä näkymä">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 14 20 9 15 4"></polyline><path d="M4 20v-7a4 4 0 0 1 4-4h12"></path></svg>
+              <span>Jaa</span>
+            </button>
+            <button class="lki-feed__refresh-btn" id="lki-refresh-trigger" title="Päivitä">🔄</button>
+          </div>
         </div>
         <div class="lki-feed__status-msg hidden" id="lki-status-text">Päivitetään...</div>
         <div class="lki-feed__new-notification hidden" id="lki-new-alert">Uusia päivityksiä saatavilla! 🚀</div>
@@ -138,6 +141,7 @@ const LkiFeed = (() => {
     const container = root.querySelector('.lki-feed');
     const list = container.querySelector('.lki-feed__list');
     const refreshBtn = container.querySelector('#lki-refresh-trigger');
+    const shareFeedBtn = container.querySelector('#lki-share-trigger');
     const statusText = container.querySelector('#lki-status-text');
     const newAlert = container.querySelector('#lki-new-alert');
     const filterBar = container.querySelector('.lki-feed__filters');
@@ -284,50 +288,30 @@ const LkiFeed = (() => {
     }
 
     // Handlers
-    list.addEventListener('click', (e) => {
-      const shareBtn = e.target.closest('.lki-card__share-btn');
-      if (shareBtn) {
+    // Header sharing handler
+    shareFeedBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        e.stopPropagation();
-        const cardId = shareBtn.getAttribute('data-share-id');
         
-        // JÄRJESTYS: 
-        // 1. Manuaalinen asetus HTML-attribuutissa: data-share-url="https://mediazoo.fi/item.php"
-        // 2. Globaali asetus: window.LkiFeedConfig.shareUrl
-        // 3. Automaattinen päättely data-src perusteella
-        // 4. Viimeinen hätävara: nykyinen sivu + item.php
-        
-        let shareBaseUrl = root.dataset.shareUrl || root.dataset.shareSrc || options.shareUrl;
-        
-        if (!shareBaseUrl && window.LkiFeedConfig && window.LkiFeedConfig.shareUrl) {
-            shareBaseUrl = window.LkiFeedConfig.shareUrl;
-        }
+        let filterSlug = activeFilter;
+        // Käännetään takaisin suomeksi jos mahdollista URL:ää varten
+        const invMap = { 'event': 'tapahtumat', 'business': 'yritykset', 'offer': 'tarjoukset' };
+        if (invMap[activeFilter]) filterSlug = invMap[activeFilter];
 
-        if (!shareBaseUrl) {
-           const absoluteDataUrl = new URL(dataUrl, window.location.href).href;
-           const isExternal = !absoluteDataUrl.includes(window.location.hostname);
-           
-           if (isExternal) {
-               // Jos data tulee muualta (esim. mediazoo), käytetään sen domainia
-               shareBaseUrl = absoluteDataUrl.split('?')[0].replace(/api\.php$/, 'item.php');
-               if (!shareBaseUrl.endsWith('item.php')) {
-                   shareBaseUrl = shareBaseUrl.substring(0, shareBaseUrl.lastIndexOf('/') + 1) + 'item.php';
-               }
-           } else {
-               // Jos data on paikallista, oletetaan item.php olevan samassa kansiossa kuin sivu
-               shareBaseUrl = new URL('item.php', window.location.href).href.split('?')[0];
-           }
-        }
-        
-        const shareUrl = shareBaseUrl + '?id=' + encodeURIComponent(cardId);
-        
+        const baseUrl = 'https://laukaainfo.fi/';
+        const shareUrl = `${baseUrl}?filter=${encodeURIComponent(filterSlug)}&feed=open`;
+
         navigator.clipboard.writeText(shareUrl).then(() => {
-            const origHTML = shareBtn.innerHTML;
-            shareBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>';
-            setTimeout(() => shareBtn.innerHTML = origHTML, 2000);
+            const origHTML = shareFeedBtn.innerHTML;
+            shareFeedBtn.innerHTML = '<span style="color:#27ae60">Linkki kopioitu! ✅</span>';
+            shareFeedBtn.classList.add('is-success');
+            setTimeout(() => {
+                shareFeedBtn.innerHTML = origHTML;
+                shareFeedBtn.classList.remove('is-success');
+            }, 2000);
         }).catch(err => console.error('Clip err', err));
-        return;
-      }
+    });
+
+    list.addEventListener('click', (e) => {
 
       const img = e.target.closest('.lki-card__img');
       if (img) {
