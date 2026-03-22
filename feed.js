@@ -7,20 +7,23 @@ const LkiFeed = (() => {
   const TYPE_LABELS = {
     event:    '📅 Tapahtuma',
     business: '🏢 Yritys',
-    offer:    '🎁 Tarjous'
+    offer:    '🎁 Tarjous',
+    notice:   '📢 Ilmoitus'
   };
 
   const TYPE_CLASSES = {
     event:    'lki-badge-type--event',
     business: 'lki-badge-type--business',
-    offer:    'lki-badge-type--offer'
+    offer:    'lki-badge-type--offer',
+    notice:   'lki-badge-type--notice'
   };
 
   const FILTERS = [
     { key: 'all',      label: 'Kaikki' },
     { key: 'event',    label: '📅 Tapahtumat' },
     { key: 'business', label: '🏢 Yritykset' },
-    { key: 'offer',    label: '🎁 Tarjoukset' }
+    { key: 'offer',    label: '🎁 Tarjoukset' },
+    { key: 'notice',   label: '📢 Ilmoitukset' }
   ];
 
   function formatDate(isoStr) {
@@ -162,7 +165,10 @@ const LkiFeed = (() => {
     let activeBusiness = options.initialBusiness || null;
 
     // Map Finnish names if used in URL
-    const filterMap = { 'tapahtumat': 'event', 'yritykset': 'business', 'tarjoukset': 'offer', 'tapahtuma': 'event', 'yritys': 'business', 'tarjous': 'offer' };
+    const filterMap = { 
+        'tapahtumat': 'event', 'yritykset': 'business', 'tarjoukset': 'offer', 'ilmoitukset': 'notice',
+        'tapahtuma': 'event', 'yritys': 'business', 'tarjous': 'offer', 'ilmoitus': 'notice'
+    };
     if (filterMap[activeFilter]) activeFilter = filterMap[activeFilter];
     
     let lightboxEl = null;
@@ -307,7 +313,7 @@ const LkiFeed = (() => {
         
         let filterSlug = activeFilter;
         // Käännetään takaisin suomeksi jos mahdollista URL:ää varten
-        const invMap = { 'event': 'tapahtumat', 'business': 'yritykset', 'offer': 'tarjoukset' };
+        const invMap = { 'event': 'tapahtumat', 'business': 'yritykset', 'offer': 'tarjoukset', 'notice': 'ilmoitukset' };
         if (invMap[activeFilter]) filterSlug = invMap[activeFilter];
 
         const baseUrl = 'https://laukaainfo.fi/';

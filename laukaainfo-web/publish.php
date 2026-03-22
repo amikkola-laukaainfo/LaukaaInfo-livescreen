@@ -287,6 +287,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <option value="event" selected>Tapahtuma</option>
                     <option value="story">Tarina</option>
                     <option value="offer">Tarjous</option>
+                    <option value="notice">Ilmoitus</option>
                 </select>
             </div>
         </div>

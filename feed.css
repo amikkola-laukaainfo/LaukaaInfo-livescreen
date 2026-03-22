@@ -17,6 +17,7 @@
   --badge-event: #0056b3;
   --badge-business: #27ae60;
   --badge-offer: #e67e22;
+  --badge-notice: #9b59b6;
   --badge-promoted-bg: #fff3cd;
   --badge-promoted-text: #7d5a00;
   --border: #e4eaf3;
@@ -260,6 +261,7 @@
 .lki-badge-type--event    { background: var(--badge-event); }
 .lki-badge-type--business { background: var(--badge-business); }
 .lki-badge-type--offer    { background: var(--badge-offer); }
+.lki-badge-type--notice   { background: var(--badge-notice); }
 
 /* Promoted badge */
 .lki-badge-promoted {
