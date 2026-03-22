@@ -267,6 +267,15 @@ const LkiFeed = (() => {
         e.preventDefault();
         e.stopPropagation();
         openLightbox(img.src, img.alt);
+        return;
+      }
+      
+      const card = e.target.closest('.lki-card');
+      if (card) {
+        // Älä reagoi linkkien klikkauksiin (esim. sosiaalisen median linkit)
+        if (e.target.closest('a')) return;
+        
+        card.classList.toggle('is-expanded');
       }
     });
 
