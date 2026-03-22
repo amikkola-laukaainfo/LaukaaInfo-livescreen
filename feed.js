@@ -99,9 +99,20 @@ const LkiFeed = (() => {
     `;
   }
 
-  function renderList(list, items, activeFilter) {
+  function renderList(list, items, activeFilter, activeBusiness) {
     if (!list) return;
-    const filtered = activeFilter === 'all' ? items : items.filter(i => i.type === activeFilter);
+    let filtered = items;
+    
+    // Filter by business ID if provided
+    if (activeBusiness) {
+      filtered = filtered.filter(i => i.business_id == activeBusiness || i.business_rowid == activeBusiness);
+    }
+    
+    // Filter by type
+    if (activeFilter !== 'all') {
+      filtered = filtered.filter(i => i.type === activeFilter);
+    }
+
     if (filtered.length === 0) {
       list.innerHTML = `<div class="lki-feed__empty">Ei sisältöä vielä.</div>`;
       return;
@@ -148,6 +159,8 @@ const LkiFeed = (() => {
 
     let currentItems = [];
     let activeFilter = options.initialFilter || 'all';
+    let activeBusiness = options.initialBusiness || null;
+
     // Map Finnish names if used in URL
     const filterMap = { 'tapahtumat': 'event', 'yritykset': 'business', 'tarjoukset': 'offer', 'tapahtuma': 'event', 'yritys': 'business', 'tarjous': 'offer' };
     if (filterMap[activeFilter]) activeFilter = filterMap[activeFilter];
@@ -235,7 +248,7 @@ const LkiFeed = (() => {
           currentItems = data;
           
           if (isInitialLoad) {
-            renderList(list, currentItems, activeFilter);
+            renderList(list, currentItems, activeFilter, activeBusiness);
             buildFilters();
             isInitialLoad = false;
             
@@ -255,7 +268,7 @@ const LkiFeed = (() => {
               }, 300);
             }
           } else if (forceRefresh) {
-            renderList(list, currentItems, activeFilter);
+            renderList(list, currentItems, activeFilter, activeBusiness);
             newAlert.classList.add('hidden');
           }
         })
@@ -281,7 +294,7 @@ const LkiFeed = (() => {
           filterBar.querySelectorAll('.lki-feed__filter-btn').forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
           activeFilter = f.key;
-          renderList(list, currentItems, activeFilter);
+          renderList(list, currentItems, activeFilter, activeBusiness);
         });
         filterBar.appendChild(btn);
       });
@@ -298,7 +311,11 @@ const LkiFeed = (() => {
         if (invMap[activeFilter]) filterSlug = invMap[activeFilter];
 
         const baseUrl = 'https://laukaainfo.fi/';
-        const shareUrl = `${baseUrl}?filter=${encodeURIComponent(filterSlug)}&feed=open`;
+        let shareUrl = `${baseUrl}?filter=${encodeURIComponent(filterSlug)}&feed=open`;
+        
+        if (activeBusiness) {
+            shareUrl += `&business_id=${encodeURIComponent(activeBusiness)}`;
+        }
 
         navigator.clipboard.writeText(shareUrl).then(() => {
             const origHTML = shareFeedBtn.innerHTML;
@@ -332,7 +349,7 @@ const LkiFeed = (() => {
 
     refreshBtn.addEventListener('click', () => loadFeed(true));
     newAlert.addEventListener('click', () => {
-      renderList(list, currentItems, activeFilter);
+      renderList(list, currentItems, activeFilter, activeBusiness);
       newAlert.classList.add('hidden');
       window.scrollTo({ top: root.offsetTop - 20, behavior: 'smooth' });
     });
@@ -348,8 +365,9 @@ const LkiFeed = (() => {
   function autoInit() {
     const urlParams = new URLSearchParams(window.location.search);
     const initialFilter = urlParams.get('filter') || urlParams.get('feed_filter'); 
+    const initialBusiness = urlParams.get('business_id') || urlParams.get('company') || urlParams.get('rowid');
     const initialItemId = urlParams.get('item') || urlParams.get('feed_item') || urlParams.get('id');
-    document.querySelectorAll('[data-feed-src]').forEach(el => init(el, { initialFilter, initialItemId }));
+    document.querySelectorAll('[data-feed-src]').forEach(el => init(el, { initialFilter, initialBusiness, initialItemId }));
   }
 
   return { init, autoInit };

@@ -221,7 +221,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $feedData = array_slice($feedData, 0, $maxItems);
                     file_put_contents($jsonFile, json_encode($feedData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
                     
-                    $message = "Sisältö julkaistu onnistuneesti! ✅";
+                    $shareLink = "https://laukaainfo.fi/?business_id=" . $business_id . "&feed=open";
+                    $message = "Sisältö julkaistu onnistuneesti! ✅ <br><small><a href='$shareLink' target='_blank' style='color:inherit; font-weight:bold; text-decoration:underline;'>Katso ja jaa oma yritysfeedisi tästä linkistä &raquo;</a></small>";
                     $previewJson = json_encode($newItem, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
                 }
             }
