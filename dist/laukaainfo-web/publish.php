@@ -14,9 +14,10 @@ $imagekitId   = 'vowzx8znjs';
 $publicKey    = 'YOUR_PUBLIC_KEY'; 
 $privateKey   = 'YOUR_PRIVATE_KEY';
 $jsonFile     = 'content.json';
-$tokenFile    = 'tokens.json';
+$csvCacheFile = 'advertisers_cache.csv';
+$csvUrl       = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSV1-67oQMZmF0talwT6HXNg01NP0YA5XCNpKJsrTQ2RHQNQhEL6dySYicrfM1pnIU6Z41UqpzQdtdz/pub?output=csv';
+$cacheTtl     = 600; // 10 minutes
 $maxItems     = 100;
-$companyApi   = 'https://www.mediazoo.fi/laukaainfo-web/get_companies.php';
 
 // --- URL PARAMETERS (PRE-FILL) ---
 $prefillId    = $_GET['business_id'] ?? '';
@@ -112,9 +113,100 @@ function uploadToImageKit($imageData, $fileName, $publicKey, $privateKey) {
 $message = '';
 $previewJson = '';
 
+// Determine current IDs and tokens (favor POST, fallback to pre-fill/GET)
+$business_id = (int)($_POST['business_id'] ?? $prefillId);
+$sentToken   = trim($_POST['publish_token'] ?? $prefillToken);
+
+$advertiser = null;
+$curLimits = ['posts' => 2, 'promotions' => 0];
+$countMonth = 0;
+$countPromotedMonth = 0;
+$remPosts = 0;
+$remPromos = 0;
+
+// --- ADVERTISER VALIDATION (Always run if we have credentials) ---
+if (!empty($business_id) && !empty($sentToken)) {
+    // Fetch and Cache CSV
+    if (!file_exists($csvCacheFile) || (time() - filemtime($csvCacheFile) > $cacheTtl)) {
+        $csvData = @file_get_contents($csvUrl);
+        if ($csvData) {
+            file_put_contents($csvCacheFile, $csvData);
+        }
+    }
+
+    if (file_exists($csvCacheFile)) {
+        $handle = fopen($csvCacheFile, "r");
+        $headers = fgetcsv($handle);
+        while (($row = fgetcsv($handle)) !== FALSE) {
+            if (count($row) < 5) continue;
+            if ($row[0] == $business_id && $row[2] === $sentToken) {
+                $advertiser = [
+                    'id' => $row[0],
+                    'nimi' => $row[1],
+                    'paketti' => strtolower(trim($row[3])),
+                    'voimassa' => trim($row[4])
+                ];
+                break;
+            }
+        }
+        fclose($handle);
+    }
+
+    if ($advertiser) {
+        // Check Expiration
+        $today = date('Y-m-d');
+        // Parse voimassa: try Finnish format "d.m.Y" first, then ISO "Y-m-d"
+        $voimassaTs = false;
+        if (!empty($advertiser['voimassa'])) {
+            $d = \DateTime::createFromFormat('d.m.Y', $advertiser['voimassa']);
+            if (!$d) $d = \DateTime::createFromFormat('Y-m-d', $advertiser['voimassa']);
+            if ($d) $voimassaTs = $d->setTime(23, 59, 59)->getTimestamp();
+        }
+        if ($voimassaTs !== false && $voimassaTs < time()) {
+            $message = "Virhe: Julkaisuoikeuden voimassaolo on päättynyt (" . $advertiser['voimassa'] . ").";
+            $advertiser = null; // Invalidate if expired
+        } else {
+            // --- PLAN LIMITS & USAGE ---
+            $feedData = [];
+            if (file_exists($jsonFile)) {
+                $feedData = json_decode(file_get_contents($jsonFile), true) ?: [];
+            }
+
+            $now = time();
+            $oneDayAgo  = $now - (24 * 3600);
+            $oneMonthAgo = $now - (30 * 24 * 3600);
+
+            foreach ($feedData as $item) {
+                if ($item['business_id'] == $business_id) {
+                    $pubTime = strtotime($item['publish_at'] ?? '');
+                    if ($pubTime > $oneMonthAgo) {
+                        $countMonth++;
+                        if (!empty($item['is_promoted'])) {
+                            $countPromotedMonth++;
+                        }
+                    }
+                }
+            }
+
+            $plan = $advertiser['paketti'];
+            $limits = [
+                'free'        => ['posts' => 0, 'promotions' => 0],
+                'basic'       => ['posts' => 2, 'promotions' => 0],
+                'plus'        => ['posts' => 5, 'promotions' => 1],
+                'pro'         => ['posts' => 10, 'promotions' => 3],
+                'starter'     => ['posts' => 1, 'promotions' => 0],
+                'event_boost' => ['posts' => 1, 'promotions' => 1]
+            ];
+            $curLimits = $limits[$plan] ?? ['posts' => 2, 'promotions' => 0];
+            $remPosts = max(0, $curLimits['posts'] - $countMonth);
+            $remPromos = max(0, $curLimits['promotions'] - $countPromotedMonth);
+        }
+    } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $message = "Virhe: Pääsy estetty. Token tai ID virheellinen.";
+    }
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $business_id = (int)($_POST['business_id'] ?? 0);
-    $sentToken   = trim($_POST['publish_token'] ?? '');
     $title       = sanitize($_POST['title'] ?? '');
     $short_desc  = sanitize($_POST['short_description'] ?? '');
     $type        = $_POST['type'] ?? 'maksu';
@@ -127,107 +219,83 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $image_url_input = sanitize($_POST['image_url'] ?? '');
 
     // Validation
-    if (empty($business_id) || empty($sentToken)) {
-        $message = "Virhe: Business ID ja Token vaaditaan.";
+    if (!$advertiser) {
+        $message = $message ?: "Virhe: Kirjautuminen vaaditaan.";
     } elseif (empty($_FILES['image']['tmp_name']) && empty($image_url_input)) {
         $message = "Virhe: Kuva tai kuvan URL vaaditaan.";
     } else {
-        // --- TOKEN VALIDATION ---
-        $isTokenValid = false;
-        if (file_exists($tokenFile)) {
-            $tokensData = json_decode(file_get_contents($tokenFile), true) ?: [];
-            foreach ($tokensData as $tData) {
-                if ($tData['business_id'] == $business_id && $tData['publish_token'] === $sentToken) {
-                    $isTokenValid = true;
-                    break;
-                }
-            }
+        // --- FINAL LIMIT CHECK ---
+        $limitError = '';
+        if ($countMonth >= $curLimits['posts'] && $curLimits['posts'] > 0) {
+            $limitError = "Kuukausiraja (" . $curLimits['posts'] . " julkaisua/kk) on täynnä.";
+        } elseif ($curLimits['posts'] == 0 && $advertiser['paketti'] === 'free') {
+            $limitError = "Ilmais-paketti ei sisällä feed-julkaisuoikeutta.";
+        } elseif ($type === 'maksu' && $remPromos <= 0) {
+            $limitError = "Kuukauden nostokiintiö (" . $curLimits['promotions'] . ") on jo käytetty.";
         }
 
-        if (!$isTokenValid) {
-            $message = "Virhe: Unauthorized (Pääsy estetty). Token ei täsmää.";
+        if ($limitError) {
+            $message = "Virhe: " . $limitError;
         } else {
-            // --- COMPANY REGISTRY CHECK (Optional extra) ---
-            $isValidCompany = false;
-            $companyList = json_decode(file_get_contents($companyApi . "?t=" . time()), true);
-            $companies = is_array($companyList) ? $companyList : ($companyList['results'] ?? []);
-            
-            foreach ($companies as $comp) {
-                $compId = str_replace('company-', '', $comp['id'] ?? '');
-                if ($compId == $business_id) {
-                    if (($comp['tyyppi'] ?? '') === 'maksu') {
-                        $isValidCompany = true;
-                        break;
-                    } else {
-                        $message = "Virhe: Yrityksellä ei ole 'maksu'-oikeutta julkaisuun.";
-                    }
-                }
-            }
+                    // --- SUCCESS: PROCEED TO IMAGE UPLOAD AND SAVE ---
+                    $final_image_url = '';
 
-            if (!$isValidCompany && empty($message)) {
-                $message = "Virhe: Yritystä ei löytynyt rekisteristä tai tilaus on päättynyt.";
-            }
-
-            if ($isValidCompany) {
-                $final_image_url = '';
-
-                // Handle Image Upload
-                if (!empty($_FILES['image']['tmp_name'])) {
-                    if ($privateKey === 'YOUR_PRIVATE_KEY') {
-                        $message = "Virhe: ImageKit API-avaimia ei ole määritetty.";
-                    } else {
-                        $processedData = processImage($_FILES['image']['tmp_name']);
-                        if ($processedData) {
-                            $fileName = 'feed_' . time() . '_' . generateId() . '.jpg';
-                            $uploadedUrl = uploadToImageKit($processedData, $fileName, $publicKey, $privateKey);
-                            if ($uploadedUrl) {
-                                $final_image_url = $uploadedUrl;
-                            } else {
-                                $message = "Virhe: Kuvan lataus ImageKit-palveluun epäonnistui.";
-                            }
+                    if (!empty($_FILES['image']['tmp_name'])) {
+                        if ($privateKey === 'YOUR_PRIVATE_KEY') {
+                            $message = "Virhe: ImageKit API-avaimia ei ole määritetty.";
                         } else {
-                            $message = "Virhe: Kuvan käsittely epäonnistui.";
+                            $processedData = processImage($_FILES['image']['tmp_name']);
+                            if ($processedData) {
+                                $fileName = 'feed_' . time() . '_' . generateId() . '.jpg';
+                                $uploadedUrl = uploadToImageKit($processedData, $fileName, $publicKey, $privateKey);
+                                if ($uploadedUrl) {
+                                    $final_image_url = $uploadedUrl;
+                                } else {
+                                    $message = "Virhe: Kuvan lataus ImageKit-palveluun epäonnistui.";
+                                }
+                            } else {
+                                $message = "Virhe: Kuvan käsittely epäonnistui.";
+                            }
+                        }
+                    } else {
+                        $final_image_url = $image_url_input;
+                    }
+
+                        if ($final_image_url) {
+                            $newItem = [
+                                'id' => generateId(),
+                                'business_id' => $business_id,
+                                'type' => $type,
+                                'title' => $title,
+                                'description' => $short_desc,
+                                'image' => $final_image_url,
+                                'publish_at' => date('c', strtotime($publish_at)),
+                                'is_promoted' => $is_promoted,
+                                'created_at' => date('c')
+                            ];
+
+                            if ($website_url)   $newItem['website_url'] = $website_url;
+                            if ($facebook_url)  $newItem['facebook_url'] = $facebook_url;
+                            if ($instagram_url) $newItem['instagram_url'] = $instagram_url;
+                            if ($youtube_url)   $newItem['youtube_url'] = $youtube_url;
+
+                            array_unshift($feedData, $newItem);
+                            $feedData = array_slice($feedData, 0, $maxItems);
+                            file_put_contents($jsonFile, json_encode($feedData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+                            
+                            $shareLink = "https://laukaainfo.fi/?business_id=" . $business_id . "&feed=open";
+                            $message = "Sisältö julkaistu onnistuneesti! ✅ <br><small><a href='$shareLink' target='_blank' style='color:inherit; font-weight:bold; text-decoration:underline;'>Katso ja jaa oma yritysfeedisi tästä linkistä &raquo;</a></small>";
+                            $previewJson = json_encode($newItem, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+                            
+                            // Update counts for UI reflecting the new post
+                            $countMonth++;
+                            if ($is_promoted) $countPromotedMonth++;
+                            $remPosts = max(0, $curLimits['posts'] - $countMonth);
+                            $remPromos = max(0, $curLimits['promotions'] - $countPromotedMonth);
                         }
                     }
-                } else {
-                    $final_image_url = $image_url_input;
-                }
-
-                if ($final_image_url) {
-                    // Storage
-                    $feedData = [];
-                    if (file_exists($jsonFile)) {
-                        $feedData = json_decode(file_get_contents($jsonFile), true) ?: [];
-                    }
-
-                    $newItem = [
-                        'id' => generateId(),
-                        'business_id' => $business_id,
-                        'type' => $type,
-                        'title' => $title,
-                        'description' => $short_desc,
-                        'image' => $final_image_url,
-                        'publish_at' => date('c', strtotime($publish_at)),
-                        'is_promoted' => $is_promoted,
-                        'created_at' => date('c')
-                    ];
-
-                    if ($website_url)   $newItem['website_url'] = $website_url;
-                    if ($facebook_url)  $newItem['facebook_url'] = $facebook_url;
-                    if ($instagram_url) $newItem['instagram_url'] = $instagram_url;
-                    if ($youtube_url)   $newItem['youtube_url'] = $youtube_url;
-
-                    array_unshift($feedData, $newItem);
-                    $feedData = array_slice($feedData, 0, $maxItems);
-                    file_put_contents($jsonFile, json_encode($feedData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-                    
-                    $message = "Sisältö julkaistu onnistuneesti! ✅";
-                    $previewJson = json_encode($newItem, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
                 }
             }
-        }
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="fi">
@@ -260,6 +328,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .alert-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
         pre { background: #1e293b; color: #e2e8f0; padding: 1rem; border-radius: 10px; font-size: 0.85rem; overflow-x: auto; margin-top: 1rem; }
         .hidden { display: none; }
+        .info-box { background: #e0f2fe; border: 1px solid #bae6fd; color: #0369a1; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; font-size: 0.9rem; }
+        .info-box h4 { margin: 0 0 0.5rem 0; font-size: 1rem; color: #0284c7; }
+        .info-box ul { margin: 0; padding-left: 1.2rem; }
+        .limit-alert { color: #dc2626; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -273,6 +345,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     <?php endif; ?>
 
+    <?php if (isset($advertiser)): ?>
+        <div class="info-box">
+            <h4>Tilaustiedot: <?= htmlspecialchars(strtoupper($advertiser['paketti'])) ?></h4>
+            <ul>
+                <li>Julkaisuja jäljellä (30 pv): <strong><?= $remPosts ?> kpl</strong> (Käytetty <?= $countMonth ?>/<?= $curLimits['posts'] ?>)</li>
+                <li>Nostoja jäljellä (30 pv): <strong><?= $remPromos ?> kpl</strong> (Käytetty <?= $countPromotedMonth ?>/<?= $curLimits['promotions'] ?>)</li>
+            </ul>
+        </div>
+    <?php endif; ?>
+
     <form method="POST" enctype="multipart/form-data">
         <div class="row">
             <div>
@@ -282,10 +364,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div>
                 <label for="type">Tyyppi</label>
                 <select id="type" name="type">
-                    <option value="maksu">Ilmainen maksu (Nostettu)</option>
+                    <option value="maksu">Ilmoituksen nosto (⭐)</option>
                     <option value="event" selected>Tapahtuma</option>
                     <option value="story">Tarina</option>
                     <option value="offer">Tarjous</option>
+                    <option value="notice">Ilmoitus</option>
                 </select>
             </div>
         </div>

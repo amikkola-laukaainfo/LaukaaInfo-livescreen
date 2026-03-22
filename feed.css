@@ -405,6 +405,11 @@
 
 /* Responsive: stack image on small screens */
 @media (max-width: 480px) {
+  .lki-feed {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+
   .lki-card {
     grid-template-columns: 1fr;
     grid-template-rows: 160px auto;
