@@ -291,18 +291,31 @@ const LkiFeed = (() => {
         e.stopPropagation();
         const cardId = shareBtn.getAttribute('data-share-id');
         
-        // Päätellään jakolinkki datan alkuperäisestä osoitteesta
-        let shareBaseUrl = options.shareUrl || root.dataset.shareSrc;
+        // JÄRJESTYS: 
+        // 1. Manuaalinen asetus HTML-attribuutissa: data-share-url="https://mediazoo.fi/item.php"
+        // 2. Globaali asetus: window.LkiFeedConfig.shareUrl
+        // 3. Automaattinen päättely data-src perusteella
+        // 4. Viimeinen hätävara: nykyinen sivu + item.php
+        
+        let shareBaseUrl = root.dataset.shareUrl || root.dataset.shareSrc || options.shareUrl;
+        
+        if (!shareBaseUrl && window.LkiFeedConfig && window.LkiFeedConfig.shareUrl) {
+            shareBaseUrl = window.LkiFeedConfig.shareUrl;
+        }
+
         if (!shareBaseUrl) {
-           // Tehdään data-osoitteesta varmasti absoluuttinen
            const absoluteDataUrl = new URL(dataUrl, window.location.href).href;
+           const isExternal = !absoluteDataUrl.includes(window.location.hostname);
            
-           if (absoluteDataUrl.includes('api.php')) {
+           if (isExternal) {
+               // Jos data tulee muualta (esim. mediazoo), käytetään sen domainia
                shareBaseUrl = absoluteDataUrl.split('?')[0].replace(/api\.php$/, 'item.php');
+               if (!shareBaseUrl.endsWith('item.php')) {
+                   shareBaseUrl = shareBaseUrl.substring(0, shareBaseUrl.lastIndexOf('/') + 1) + 'item.php';
+               }
            } else {
-               // Jos api.php ei löydy polusta, korvataan viimeinen osa item.php:llä
-               shareBaseUrl = absoluteDataUrl.split('?')[0];
-               shareBaseUrl = shareBaseUrl.substring(0, shareBaseUrl.lastIndexOf('/') + 1) + 'item.php';
+               // Jos data on samalla servulla (tai testiaineistoa), oletetaan item.php olevan juuressa
+               shareBaseUrl = window.location.origin + '/item.php';
            }
         }
         
