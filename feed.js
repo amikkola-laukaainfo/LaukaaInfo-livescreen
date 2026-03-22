@@ -75,7 +75,7 @@ const LkiFeed = (() => {
     if (socials.length > 0) socialHtml = `<div class="lki-card__socials">${socials.join('')}</div>`;
 
     return `
-      <article class="lki-card${item.is_promoted ? ' is-promoted' : ''}" role="article">
+      <article class="lki-card${item.is_promoted ? ' is-promoted' : ''}" data-id="${item.id || ''}" id="lki-feed-item-${item.id || ''}" role="article">
         <div class="lki-card__img-wrap">
           <img class="lki-card__img" src="${imgSrc}" alt="${title}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=400&q=70'">
         </div>
@@ -227,6 +227,22 @@ const LkiFeed = (() => {
             renderList(list, currentItems, activeFilter);
             buildFilters();
             isInitialLoad = false;
+            
+            if (options.initialItemId) {
+              setTimeout(() => {
+                const targetCard = list.querySelector(`.lki-card[data-id="${options.initialItemId}"]`);
+                if (targetCard) {
+                  targetCard.classList.add('is-expanded');
+                  targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  const origShadow = targetCard.style.boxShadow;
+                  targetCard.style.transition = 'box-shadow 0.5s ease';
+                  targetCard.style.boxShadow = '0 0 0 4px var(--accent)';
+                  setTimeout(() => {
+                    targetCard.style.boxShadow = origShadow;
+                  }, 2500);
+                }
+              }, 300);
+            }
           } else if (forceRefresh) {
             renderList(list, currentItems, activeFilter);
             newAlert.classList.add('hidden');
@@ -297,7 +313,8 @@ const LkiFeed = (() => {
   function autoInit() {
     const urlParams = new URLSearchParams(window.location.search);
     const initialFilter = urlParams.get('filter') || urlParams.get('feed_filter'); 
-    document.querySelectorAll('[data-feed-src]').forEach(el => init(el, { initialFilter }));
+    const initialItemId = urlParams.get('item') || urlParams.get('feed_item') || urlParams.get('id');
+    document.querySelectorAll('[data-feed-src]').forEach(el => init(el, { initialFilter, initialItemId }));
   }
 
   return { init, autoInit };
