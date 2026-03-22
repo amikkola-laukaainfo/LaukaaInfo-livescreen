@@ -109,7 +109,7 @@
     "title": "Vuokrataan: Moderni kolmio Laukaan keskustassa",
     "description": "(Demo) Valoisa ja vasta remontoitu 75m2 kolmio vapautuu toukokuussa. Oma sauna ja lasitettu parveke. Tiedustelut: 040-1234567.",
     "type": "notice",
-    "image": "C:\\Users\\zuump\\.gemini\\antigravity\\brain\\ec7fd992-b81f-4fdd-ac79-d609c173ddb6\\demo_apartment_1774177925842.png",
+    "image": "demo_apartment.png",
     "publish_at": "2026-03-22T10:00:00Z",
     "is_promoted": false
   },
@@ -118,7 +118,7 @@
     "title": "Vuokralle: Upea matkailuauto kesän seikkailuihin",
     "description": "(Demo) Vuokrataan hyvin varusteltu ja uudenkarhea matkailuauto 4:lle hengelle. B-kortti riittää. Varaa oma lomaviikkosi nyt!",
     "type": "notice",
-    "image": "C:\\Users\\zuump\\.gemini\\antigravity\\brain\\ec7fd992-b81f-4fdd-ac79-d609c173ddb6\\demo_campervan_1774178011940.png",
+    "image": "demo_campervan.png",
     "publish_at": "2026-03-22T09:00:00Z",
     "is_promoted": true
   }
