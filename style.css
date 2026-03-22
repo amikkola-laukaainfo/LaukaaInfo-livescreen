@@ -2444,6 +2444,7 @@ footer {
 
 /* Feed Accordion Styles */
 .feed-accordion-section { max-width: 1200px; margin: 0 auto; padding: 0 1rem 2rem; }
+@media (max-width: 480px) { .feed-accordion-section { padding-left: 0; padding-right: 0; } .feed-accordion { border-radius: 0; border-left: none; border-right: none; } }
 .feed-accordion { background: #fff; border-radius: 15px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); overflow: hidden; border: 1px solid #eee; }
 .feed-accordion-header { width: 100%; padding: 1.2rem 1.5rem; display: flex; justify-content: space-between; align-items: center; background: #fff; border: none; cursor: pointer; font-family: 'Outfit', sans-serif; font-size: 1.2rem; font-weight: 700; color: #0056b3; text-align: left; transition: background 0.2s; }
 .feed-accordion-header:hover { background: #f8f9fa; }
