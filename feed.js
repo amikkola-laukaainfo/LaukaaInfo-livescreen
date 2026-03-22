@@ -72,7 +72,14 @@ const LkiFeed = (() => {
     if (item.instagram_url) socials.push(`<a href="${item.instagram_url}" target="_blank" class="lki-social-icon" title="Instagram">📸</a>`);
     if (item.youtube_url)   socials.push(`<a href="${item.youtube_url}" target="_blank" class="lki-social-icon" title="YouTube">▶️</a>`);
 
-    if (socials.length > 0) socialHtml = `<div class="lki-card__socials">${socials.join('')}</div>`;
+    socialHtml = `
+      <div class="lki-card__actions">
+        ${socials.length > 0 ? `<div class="lki-card__social-links">${socials.join('')}</div>` : ''}
+        <button class="lki-card__share-btn" data-share-id="${item.id}" title="Kopioi jakolinkki" aria-label="Jaa">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 14 20 9 15 4"></polyline><path d="M4 20v-7a4 4 0 0 1 4-4h12"></path></svg>
+        </button>
+      </div>
+    `;
 
     return `
       <article class="lki-card${item.is_promoted ? ' is-promoted' : ''}" data-id="${item.id || ''}" id="lki-feed-item-${item.id || ''}" role="article">
@@ -278,6 +285,22 @@ const LkiFeed = (() => {
 
     // Handlers
     list.addEventListener('click', (e) => {
+      const shareBtn = e.target.closest('.lki-card__share-btn');
+      if (shareBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        const cardId = shareBtn.getAttribute('data-share-id');
+        const url = new URL(window.location.href);
+        url.searchParams.set('item', cardId);
+        
+        navigator.clipboard.writeText(url.toString()).then(() => {
+            const origHTML = shareBtn.innerHTML;
+            shareBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>';
+            setTimeout(() => shareBtn.innerHTML = origHTML, 2000);
+        }).catch(err => console.error('Clip err', err));
+        return;
+      }
+
       const img = e.target.closest('.lki-card__img');
       if (img) {
         e.preventDefault();

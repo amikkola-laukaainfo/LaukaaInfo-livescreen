@@ -278,15 +278,56 @@
   line-clamp: unset;
 }
 
+/* Footer */
+.lki-card__footer {
+  margin-top: auto;
+  padding-top: 0.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 /* Date */
 .lki-card__date {
   font-size: 0.72rem;
   color: var(--text-muted);
-  margin-top: auto;
-  padding-top: 0.2rem;
   display: flex;
   align-items: center;
   gap: 4px;
+}
+
+/* Actions and Socials */
+.lki-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.lki-card__social-links {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+}
+
+/* Share button */
+.lki-card__share-btn {
+  background: rgba(0, 86, 179, 0.08);
+  color: var(--primary);
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.lki-card__share-btn:hover {
+  background: var(--primary);
+  color: #fff;
 }
 
 /* Loading skeleton */
