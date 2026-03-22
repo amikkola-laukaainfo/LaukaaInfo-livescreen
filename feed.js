@@ -290,10 +290,21 @@ const LkiFeed = (() => {
         e.preventDefault();
         e.stopPropagation();
         const cardId = shareBtn.getAttribute('data-share-id');
-        const url = new URL(window.location.href);
-        url.searchParams.set('item', cardId);
         
-        navigator.clipboard.writeText(url.toString()).then(() => {
+        // Päätellään jakolinkki joko html:n data-share-src -attribuutista tai suoraan apin osoitteesta
+        let shareBaseUrl = options.shareUrl || root.dataset.shareSrc;
+        if (!shareBaseUrl) {
+           shareBaseUrl = dataUrl.split('?')[0].replace(/api\.php$/, 'item.php');
+           if (!shareBaseUrl.endsWith('.php')) {
+             // Fallback jos ei ole api.php niminen
+             const baseUrl = window.location.origin + window.location.pathname;
+             shareBaseUrl = (baseUrl.endsWith('/') ? baseUrl : baseUrl.substring(0, baseUrl.lastIndexOf('/') + 1)) + 'item.php';
+           }
+        }
+        
+        const shareUrl = shareBaseUrl + '?id=' + encodeURIComponent(cardId);
+        
+        navigator.clipboard.writeText(shareUrl).then(() => {
             const origHTML = shareBtn.innerHTML;
             shareBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>';
             setTimeout(() => shareBtn.innerHTML = origHTML, 2000);
