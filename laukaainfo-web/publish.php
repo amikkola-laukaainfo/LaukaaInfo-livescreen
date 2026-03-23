@@ -220,7 +220,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $video_id = '';
     $is_shorts = false;
     if ($youtube_url) {
-        $regExp = '/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|(?:shorts\/))([^#&?]*).*/';
+        $regExp = '/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|(?:shorts\/))([^#&?]*).*/';
         if (preg_match($regExp, $youtube_url, $match)) {
             $video_id = (strlen($match[2]) == 11) ? $match[2] : '';
             if (strpos($youtube_url, '/shorts/') !== false) {
@@ -235,8 +235,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validation
     if (!$advertiser) {
         $message = $message ?: "Virhe: Kirjautuminen vaaditaan.";
-    } elseif (empty($_FILES['image']['tmp_name']) && empty($image_url_input) && $type !== 'video') {
-        $message = "Virhe: Kuva tai kuvan URL vaaditaan (paitsi videoissa).";
+    } elseif (empty($_FILES['image']['tmp_name']) && empty($image_url_input) && $type !== 'video' && empty($video_id)) {
+        $message = "Virhe: Kuva tai kuvan URL vaaditaan (paitsi videoissa tai YouTube-linkin sisältävissä).";
     } else {
         // --- FINAL LIMIT CHECK ---
         $limitError = '';
@@ -273,9 +273,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         }
                     } else {
                         $final_image_url = $image_url_input;
-                        // Use YouTube thumbnail if it's a video and no image provided
-                        if (!$final_image_url && $type === 'video' && $video_id) {
-                            $final_image_url = "https://img.youtube.com/vi/$video_id/maxresdefault.jpg";
+                        // Use YouTube thumbnail if provided and no separate image
+                        if (!$final_image_url && $video_id) {
+                            $final_image_url = "https://img.youtube.com/vi/$video_id/hqdefault.jpg";
                         }
                     }
 

@@ -84,7 +84,7 @@ const LkiFeed = (() => {
       </div>
     `;
 
-    const isVideo = item.type === 'video' && item.video_id;
+    const isVideo = !!item.video_id;
     const videoAttr = isVideo ? `data-video-id="${item.video_id}" data-is-shorts="${item.is_shorts ? 'true' : 'false'}"` : '';
 
     return `
