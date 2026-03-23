@@ -71,11 +71,22 @@ const LkiFeed = (() => {
     const desc = escapeHtml(item.description);
     let imgSrc = item.image || 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80';
 
-    // Robust video detection: if image is a youtube thumbnail, extract ID
+    // Robust video detection: if image is a youtube thumbnail OR a direct link, extract ID
     let video_id = item.video_id;
-    if (!video_id && imgSrc.includes('img.youtube.com/vi/')) {
-        const parts = imgSrc.split('/vi/');
-        if (parts[1]) video_id = parts[1].split('/')[0];
+    const ytPatterns = [
+        { key: 'img.youtube.com/vi/', parser: (s) => s.split('/vi/')[1]?.split('/')[0] },
+        { key: 'youtube.com/shorts/', parser: (s) => s.split('/shorts/')[1]?.split('?')[0]?.split('&')[0] },
+        { key: 'youtube.com/watch?v=', parser: (s) => s.split('v=')[1]?.split('&')[0] },
+        { key: 'youtu.be/', parser: (s) => s.split('youtu.be/')[1]?.split('?')[0] }
+    ];
+
+    if (!video_id && imgSrc) {
+        for (const p of ytPatterns) {
+            if (imgSrc.includes(p.key)) {
+                video_id = p.parser(imgSrc);
+                if (video_id) break;
+            }
+        }
     }
     const isVideo = !!video_id;
 
@@ -111,6 +122,7 @@ const LkiFeed = (() => {
             <div class="lki-card__date">🕐 ${dateStr}</div>
             ${socialHtml}
           </div>
+          ${isVideo ? '<button class="lki-card__unmute-btn" title="Laita äänet päälle">🔊</button>' : ''}
         </div>
       </article>
     `;
@@ -405,27 +417,56 @@ const LkiFeed = (() => {
     list.addEventListener('click', (e) => {
 
       const img = e.target.closest('.lki-card__img');
-      if (img) {
+      const card = e.target.closest('.lki-card');
+      
+      if (img && card) {
         e.preventDefault();
         e.stopPropagation();
-        openLightbox(img.src, img.alt);
-        return;
-      }
-      
-      const card = e.target.closest('.lki-card');
-      if (card) {
-        // Älä reagoi linkkien klikkauksiin (esim. sosiaalisen median linkit)
-        if (e.target.closest('a')) return;
-
+        
         if (card.classList.contains('lki-card--video')) {
             const vid = card.dataset.videoId;
             const isShorts = card.dataset.isShorts === 'true';
             openLightbox('', '', vid, isShorts);
-            return;
+        } else {
+            openLightbox(img.src, img.alt);
         }
-        
-        card.classList.toggle('is-expanded');
+        return;
       }
+      if (card) {
+        // Älä reagoi linkkien klikkauksiin (esim. sosiaalisen median linkit)
+        if (e.target.closest('a')) return;
+
+        const isNowExpanded = card.classList.toggle('is-expanded');
+        
+        if (card.classList.contains('lki-card--video')) {
+            // Force play if expanding
+            if (isNowExpanded) {
+                const vid = card.dataset.videoId;
+                const container = card.querySelector('.lki-card__video-placeholder');
+                if (container && !container.innerHTML && vid) {
+                     container.innerHTML = `<iframe src="https://www.youtube.com/embed/${vid}?autoplay=1&mute=1&controls=0&loop=1&playlist=${vid}&modestbranding=1&rel=0&playsinline=1&enablejsapi=1" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+                     card.classList.add('is-playing');
+                }
+            }
+        }
+      }
+    });
+
+    // Unmute handler
+    list.addEventListener('click', (e) => {
+        const unmuteBtn = e.target.closest('.lki-card__unmute-btn');
+        if (unmuteBtn) {
+            e.preventDefault();
+            e.stopPropagation();
+            const card = unmuteBtn.closest('.lki-card');
+            const container = card.querySelector('.lki-card__video-placeholder');
+            const vid = card.dataset.videoId;
+            if (container && vid) {
+                // Remove mute and add controls for better experience when unmuted
+                container.innerHTML = `<iframe src="https://www.youtube.com/embed/${vid}?autoplay=1&mute=0&controls=1&loop=1&playlist=${vid}&modestbranding=1&rel=0&playsinline=1&enablejsapi=1" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+                unmuteBtn.style.display = 'none'; // Hide button once unmuted
+            }
+        }
     });
 
     refreshBtn.addEventListener('click', () => loadFeed(true));
