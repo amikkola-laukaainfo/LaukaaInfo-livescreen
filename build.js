@@ -118,6 +118,14 @@ function updateReferences(dir) {
             updateReferences(fullPath);
         } else if (entry.name.endsWith('.html')) {
             let content = fs.readFileSync(fullPath, 'utf8');
+            
+            // 4.6 Pakotetaan HTML-tiedostoihin erittäin tiukat selaimen välimuistin ohitukset
+            const noCacheMeta = '<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">';
+            if (!content.includes('must-revalidate')) {
+                // Toimii sekä tavallisen että minifioidun HTML:n kanssa
+                content = content.replace(/<head>/i, '<head>' + noCacheMeta);
+            }
+            
             for (const [oldName, newName] of Object.entries(assetMap)) {
                 // Etsitään viittauksia tiedostoon (esim. src="script.js" tai href="style.css")
                 // Käytetään simppeliä string replacementia, varotaan ylikattavuutta
