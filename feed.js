@@ -427,7 +427,7 @@ const LkiFeed = (() => {
           e.stopPropagation();
           const id = shareBtn.dataset.id;
           const type = shareBtn.dataset.type || 'video';
-          const link = `https://laukaainfo.fi/share/${type}/${id}`;
+          const link = `https://www.mediazoo.fi/laukaainfo-web/share.php?type=${type}&id=${id}`;
           navigator.clipboard.writeText(link).then(() => {
               const origHtml = shareBtn.innerHTML;
               shareBtn.innerHTML = '✅';
