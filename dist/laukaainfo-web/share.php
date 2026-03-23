@@ -40,14 +40,21 @@ if (!$contentItem || empty($contentItem['og'])) {
     $redirectUrl = "https://laukaainfo.fi/";
 } else {
     // Extract OG variables
-    $ogTitle = htmlspecialchars($contentItem['og']['title']);
+    $rawTitle = $contentItem['og']['title'] ?? 'Julkaisu';
+    // Lisätään LaukaaInfo.fi -tunniste loppuun, jotta mediazoo.fi-linkki ei hämää
+    $ogTitle = htmlspecialchars($rawTitle) . " | LaukaaInfo.fi";
     $ogDesc  = htmlspecialchars($contentItem['og']['description']);
     $ogImage = htmlspecialchars($contentItem['og']['image']);
-    $ogUrl   = htmlspecialchars($contentItem['og']['url']);
     
-    // The actual frontend URL (which could rely on JS router / filters)
+    // The actual frontend URL where the user should end up
     $type = $contentItem['type'] ?? 'video';
     $redirectUrl = "https://laukaainfo.fi/?filter={$type}&feed=open&id={$id}";
+    
+    // KORJAUS: Facebook on erittäin "tarkka" og:url-tagista. Jos kerromme sille, 
+    // että "oikea osoite" on laukaainfo.fi/share/..., se menee katsomaan sitä 
+    // osoitetta, saa GitHubilta 404:n ja vetää esiin LaukaaInfon yleiset tiedot!
+    // Siksi og:url täytyy olla tarkalleen tämä MediaZoon URL, jota jaetaan.
+    $ogUrl = "https://www.mediazoo.fi/laukaainfo-web/share.php?type={$type}&id={$id}";
 }
 ?>
 <!DOCTYPE html>
@@ -69,9 +76,6 @@ if (!$contentItem || empty($contentItem['og'])) {
     <meta name="twitter:title" content="<?= $ogTitle ?>" />
     <meta name="twitter:description" content="<?= $ogDesc ?>" />
     <meta name="twitter:image" content="<?= $ogImage ?>" />
-
-    <!-- Instant Redirect -->
-    <meta http-equiv="refresh" content="0;url=<?= htmlspecialchars($redirectUrl) ?>">
     
     <script>
         // JS fallback redirect (some scrapers ignore JS, which is what we want!)

@@ -40,7 +40,9 @@ if (!$contentItem || empty($contentItem['og'])) {
     $redirectUrl = "https://laukaainfo.fi/";
 } else {
     // Extract OG variables
-    $ogTitle = htmlspecialchars($contentItem['og']['title']);
+    $rawTitle = $contentItem['og']['title'] ?? 'Julkaisu';
+    // Lisätään LaukaaInfo.fi -tunniste loppuun, jotta mediazoo.fi-linkki ei hämää
+    $ogTitle = htmlspecialchars($rawTitle) . " | LaukaaInfo.fi";
     $ogDesc  = htmlspecialchars($contentItem['og']['description']);
     $ogImage = htmlspecialchars($contentItem['og']['image']);
     

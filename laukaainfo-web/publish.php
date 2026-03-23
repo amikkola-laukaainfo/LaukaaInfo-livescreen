@@ -113,9 +113,32 @@ function uploadToImageKit($imageData, $fileName, $publicKey, $privateKey) {
 
     if ($httpCode >= 200 && $httpCode < 300) {
         $res = json_decode($response, true);
-        return $res['url'] ?? false;
+        if (isset($res['url'])) {
+            return [
+                'url' => $res['url'],
+                'fileId' => $res['fileId'] ?? null
+            ];
+        }
     }
     return false;
+}
+
+/**
+ * Delete from ImageKit via cURL
+ */
+function deleteFromImageKit($fileId, $privateKey) {
+    if (!$fileId) return false;
+    $url = "https://api.imagekit.io/v1/files/$fileId";
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        "Authorization: Basic " . base64_encode($privateKey . ":")
+    ]);
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    return ($httpCode >= 200 && $httpCode < 300);
 }
 
 // --- MAIN LOGIC ---
@@ -175,11 +198,37 @@ if (!empty($business_id) && !empty($sentToken)) {
             $message = "Virhe: Julkaisuoikeuden voimassaolo on päättynyt (" . $advertiser['voimassa'] . ").";
             $advertiser = null; // Invalidate if expired
         } else {
-            // --- PLAN LIMITS & USAGE ---
             $feedData = [];
             if (file_exists($jsonFile)) {
                 $feedData = json_decode(file_get_contents($jsonFile), true) ?: [];
             }
+            
+            // --- ACTION HANDLERS ---
+            $action = $_POST['action'] ?? '';
+            $target_id = $_POST['target_id'] ?? '';
+            if ($action === 'delete' && $target_id) {
+                foreach ($feedData as $index => $item) {
+                    if ($item['id'] === $target_id && $item['business_id'] == $business_id) {
+                        $created = strtotime($item['created_at'] ?? '0');
+                        if (time() - $created <= 900) { // 15 min window
+                            if (!empty($item['imagekit_file_id']) && $privateKey !== 'YOUR_PRIVATE_KEY') {
+                                deleteFromImageKit($item['imagekit_file_id'], $privateKey);
+                            }
+                            array_splice($feedData, $index, 1);
+                            file_put_contents($jsonFile, json_encode($feedData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+                            $message = "Julkaisu poistettu onnistuneesti! 🗑️";
+                            // Redirect to prevent form resubmission
+                            header("Location: ?business_id=" . urlencode($business_id) . "&token=" . urlencode($sentToken));
+                            exit;
+                        } else {
+                            $message = "Virhe: Julkaisun poistoaika (15 min) on umpeutunut.";
+                        }
+                        break;
+                    }
+                }
+            }
+
+            // --- PLAN LIMITS & USAGE ---
 
             $now = time();
             $oneDayAgo  = $now - (24 * 3600);
@@ -215,7 +264,7 @@ if (!empty($business_id) && !empty($sentToken)) {
     }
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') !== 'delete') {
     $title       = sanitize($_POST['title'] ?? '');
     $short_desc  = sanitize($_POST['short_description'] ?? '');
     $type        = $_POST['type'] ?? 'maksu';
@@ -272,9 +321,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $processedData = processImage($_FILES['image']['tmp_name']);
                             if ($processedData) {
                                 $fileName = 'feed_' . time() . '_' . generateId() . '.jpg';
-                                $uploadedUrl = uploadToImageKit($processedData, $fileName, $publicKey, $privateKey);
-                                if ($uploadedUrl) {
-                                    $final_image_url = $uploadedUrl;
+                                $uploadResult = uploadToImageKit($processedData, $fileName, $publicKey, $privateKey);
+                                if ($uploadResult && is_array($uploadResult)) {
+                                    $final_image_url = $uploadResult['url'];
+                                    $imagekit_file_id = $uploadResult['fileId'];
                                 } else {
                                     $message = "Virhe: Kuvan lataus ImageKit-palveluun epäonnistui.";
                                 }
@@ -297,8 +347,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
 
                         if ($final_image_url) {
+                            $new_id = generateId();
+                            $edit_id = $_POST['edit_id'] ?? '';
+                            $og_image = $final_image_url;
+                            
                             $newItem = [
-                                'id' => generateId(),
+                                'id' => $new_id,
                                 'business_id' => $business_id,
                                 'type' => $type,
                                 'title' => $title,
@@ -306,7 +360,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 'image' => $final_image_url,
                                 'publish_at' => date('c', strtotime($publish_at)),
                                 'is_promoted' => $is_promoted,
-                                'created_at' => date('c')
+                                'created_at' => date('c'),
+                                'imagekit_file_id' => $imagekit_file_id ?? null,
+                                'og' => [
+                                    'title' => $title,
+                                    'description' => $short_desc ?: 'Katso sisältö LaukaaInfo-palvelussa',
+                                    'image' => $og_image,
+                                    'url' => 'https://laukaainfo.fi/share/' . $type . '/' . $new_id
+                                ]
                             ];
 
                             if ($website_url)   $newItem['website_url'] = $website_url;
@@ -316,7 +377,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             if ($video_id)      $newItem['video_id'] = $video_id;
                             if ($is_shorts)     $newItem['is_shorts'] = true;
 
-                            array_unshift($feedData, $newItem);
+                            $is_edit_successful = false;
+                            if ($edit_id) {
+                                foreach ($feedData as $index => $oldItem) {
+                                    if ($oldItem['id'] === $edit_id && $oldItem['business_id'] == $business_id) {
+                                        $created = strtotime($oldItem['created_at'] ?? '0');
+                                        if (time() - $created <= 900) {
+                                            $newItem['id'] = $oldItem['id'];
+                                            $newItem['created_at'] = $oldItem['created_at'];
+                                            $newItem['og']['url'] = 'https://laukaainfo.fi/share/' . $type . '/' . $oldItem['id'];
+                                            
+                                            // Handle ImageKit file persistence / deletion
+                                            if (empty($imagekit_file_id) && empty($_FILES['image']['tmp_name'])) {
+                                                $newItem['imagekit_file_id'] = $oldItem['imagekit_file_id'] ?? null;
+                                            } elseif (!empty($oldItem['imagekit_file_id']) && !empty($_FILES['image']['tmp_name']) && $privateKey !== 'YOUR_PRIVATE_KEY') {
+                                                deleteFromImageKit($oldItem['imagekit_file_id'], $privateKey);
+                                            }
+                                            
+                                            $feedData[$index] = $newItem;
+                                            $is_edit_successful = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            if (!$is_edit_successful) {
+                                array_unshift($feedData, $newItem);
+                            }
+                            
                             $feedData = array_slice($feedData, 0, $maxItems);
                             file_put_contents($jsonFile, json_encode($feedData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
                             
@@ -458,7 +547,86 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <h3>JSON Esikatselu:</h3>
         <pre><?= $previewJson ?></pre>
     <?php endif; ?>
+    
+    <?php if (isset($advertiser)): ?>
+        <hr style="border:0; border-top:1px solid #eee; margin: 2rem 0;">
+        <h3>✏️ Omat viimeisimmät julkaisut (Muokattavissa 15 min ajan)</h3>
+        <?php
+        $now = time();
+        $recent_items = [];
+        if (!empty($feedData)) {
+            foreach ($feedData as $item) {
+                if ($item['business_id'] == $business_id && ($now - strtotime($item['created_at'] ?? '0')) <= 900) {
+                    $recent_items[] = $item;
+                }
+            }
+        }
+        
+        if (empty($recent_items)) {
+            echo "<p style='color:#666; font-size:0.9rem;'>Ei muokattavia julkaisuja.</p>";
+        } else {
+            foreach ($recent_items as $rItem) {
+                $minsLeft = floor(15 - ($now - strtotime($rItem['created_at']))/60);
+                ?>
+                <div style="background:#fff; border:1px solid #cbe4f9; padding:1rem; border-radius:8px; margin-bottom:1rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+                    <div style="min-width:200px;">
+                        <strong><?= htmlspecialchars($rItem['title']) ?></strong><br>
+                        <small style="color:#e67e22; font-weight:bold;">Aikaa jäljellä: <?= $minsLeft ?> min</small>
+                    </div>
+                    <form method="POST" style="margin:0; display:flex; gap:0.5rem; flex-wrap:wrap;">
+                        <input type="hidden" name="business_id" value="<?= sanitize($business_id) ?>">
+                        <input type="hidden" name="publish_token" value="<?= sanitize($sentToken) ?>">
+                        <input type="hidden" name="target_id" value="<?= $rItem['id'] ?>">
+                        <button type="button" onclick='editItem(<?= json_encode($rItem, JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP) ?>)' style="width:auto; padding:0.5rem 1rem; background:#f39c12; margin-bottom:0; font-size:0.9rem;">Muokkaa ✏️</button>
+                        <button type="submit" name="action" value="delete" onclick="return confirm('Haluatko varmasti poistaa julkaisun lopullisesti?')" style="width:auto; padding:0.5rem 1rem; background:#e74c3c; margin-bottom:0; font-size:0.9rem;">Poista 🗑️</button>
+                    </form>
+                </div>
+                <?php
+            }
+        }
+        ?>
+    <?php endif; ?>
 </div>
+
+<script>
+function editItem(item) {
+    document.getElementById('title').value = item.title || '';
+    document.getElementById('short_description').value = item.description || '';
+    document.getElementById('type').value = item.type || 'event';
+    
+    if (item.publish_at) {
+        document.getElementById('publish_at').value = item.publish_at.substring(0, 16);
+    }
+    
+    document.getElementById('is_promoted').checked = item.is_promoted || false;
+    document.querySelector('input[name="website_url"]').value = item.website_url || '';
+    document.querySelector('input[name="facebook_url"]').value = item.facebook_url || '';
+    document.querySelector('input[name="instagram_url"]').value = item.instagram_url || '';
+    document.querySelector('input[name="youtube_url"]').value = item.youtube_url || '';
+    
+    // Put current image url in field so they don't lose it if they don't upload a new one
+    document.getElementById('image_url').value = item.image || '';
+    
+    // Add hidden edit_id field
+    let editInput = document.getElementById('edit_id');
+    if (!editInput) {
+        editInput = document.createElement('input');
+        editInput.type = 'hidden';
+        editInput.id = 'edit_id';
+        editInput.name = 'edit_id';
+        document.querySelector('form').appendChild(editInput);
+    }
+    editInput.value = item.id;
+    
+    // Change submit button to indicate edit mode
+    const submitBtn = document.querySelector('form button[type="submit"]');
+    submitBtn.innerHTML = 'Tallenna muutokset ✏️';
+    submitBtn.style.background = '#f39c12';
+    
+    // Scroll to top
+    window.scrollTo({top: 0, behavior: 'smooth'});
+}
+</script>
 
 </body>
 </html>

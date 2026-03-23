@@ -34,7 +34,12 @@ function sendResponse($data, $count, $status = 'ok') {
 }
 
 // --- CACHE LOGIC ---
-$cacheKey = "feed_" . md5(serialize($_GET));
+$allowedParams = [
+    'type' => $_GET['type'] ?? '',
+    'business_id' => $_GET['business_id'] ?? '',
+    'limit' => $_GET['limit'] ?? ''
+];
+$cacheKey = "feed_" . md5(serialize($allowedParams));
 $cachePath = dirname(__FILE__) . "/cache_" . $cacheKey . ".json";
 
 if (file_exists($cachePath) && (time() - filemtime($cachePath) < 60)) {
