@@ -34,9 +34,9 @@ function generateId() {
 
 function extractYouTubeId($url) {
     if (!$url) return false;
-    $regExp = '/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|(?:shorts\/))([^#&?]{11}).*/';
-    if (preg_match($regExp, $url, $match)) {
-        return $match[2];
+    $pattern = '/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([^#&?]{11})/';
+    if (preg_match($pattern, $url, $match)) {
+        return $match[1];
     }
     return false;
 }

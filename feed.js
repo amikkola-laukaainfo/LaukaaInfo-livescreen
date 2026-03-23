@@ -69,7 +69,15 @@ const LkiFeed = (() => {
     const dateStr = formatDate(item.publish_at);
     const title = escapeHtml(item.title);
     const desc = escapeHtml(item.description);
-    const imgSrc = item.image || 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80';
+    let imgSrc = item.image || 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80';
+
+    // Robust video detection: if image is a youtube thumbnail, extract ID
+    let video_id = item.video_id;
+    if (!video_id && imgSrc.includes('img.youtube.com/vi/')) {
+        const parts = imgSrc.split('/vi/');
+        if (parts[1]) video_id = parts[1].split('/')[0];
+    }
+    const isVideo = !!video_id;
 
     let socialHtml = '';
     const socials = [];
@@ -84,8 +92,7 @@ const LkiFeed = (() => {
       </div>
     `;
 
-    const isVideo = !!item.video_id;
-    const videoAttr = isVideo ? `data-video-id="${item.video_id}" data-is-shorts="${item.is_shorts ? 'true' : 'false'}"` : '';
+    const videoAttr = isVideo ? `data-video-id="${video_id}" data-is-shorts="${item.is_shorts || imgSrc.includes('hqdefault') ? 'true' : 'false'}"` : '';
 
     return `
       <article class="lki-card${item.is_promoted ? ' is-promoted' : ''}${isVideo ? ' lki-card--video' : ''}" data-id="${item.id || ''}" id="lki-feed-item-${item.id || ''}" role="article" ${videoAttr}>
