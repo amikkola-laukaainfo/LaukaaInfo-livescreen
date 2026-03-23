@@ -121,9 +121,9 @@ const LkiFeed = (() => {
           const videoId = card.dataset.videoId;
           
           if (entry.isIntersecting) {
-            if (container && !container.innerHTML) {
-              // Start muted autoplay
-              container.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${videoId}&modestbranding=1&rel=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>`;
+            if (container && !container.innerHTML && videoId) {
+              // Start muted autoplay preview
+              container.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${videoId}&modestbranding=1&rel=0&playsinline=1&enablejsapi=1" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
               card.classList.add('is-playing');
             }
           } else {
@@ -133,7 +133,7 @@ const LkiFeed = (() => {
             }
           }
         });
-      }, { threshold: 0.4 });
+      }, { threshold: 0.1, rootMargin: '50px' });
     }
 
     list.querySelectorAll('.lki-card--video').forEach(card => {
@@ -267,7 +267,7 @@ const LkiFeed = (() => {
       if (videoId) {
         lightboxImg.style.display = 'none';
         videoContainer.style.display = 'block';
-        videoContainer.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+        videoContainer.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&playsinline=1&modestbranding=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
         if (isShorts) lightboxEl.classList.add('is-shorts');
       } else {
         lightboxImg.style.display = 'block';

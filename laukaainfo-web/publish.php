@@ -32,6 +32,15 @@ function generateId() {
     return bin2hex(random_bytes(6));
 }
 
+function extractYouTubeId($url) {
+    if (!$url) return false;
+    $regExp = '/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|(?:shorts\/))([^#&?]{11}).*/';
+    if (preg_match($regExp, $url, $match)) {
+        return $match[2];
+    }
+    return false;
+}
+
 /**
  * Resize and compress image using GD
  */
@@ -217,16 +226,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $youtube_url = sanitize($_POST['youtube_url'] ?? '');
     
     // Auto-detect YouTube Video ID and Shorts status
-    $video_id = '';
-    $is_shorts = false;
-    if ($youtube_url) {
-        $regExp = '/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|(?:shorts\/))([^#&?]*).*/';
-        if (preg_match($regExp, $youtube_url, $match)) {
-            $video_id = (strlen($match[2]) == 11) ? $match[2] : '';
-            if (strpos($youtube_url, '/shorts/') !== false) {
-                $is_shorts = true;
-            }
+    // Auto-detect YouTube Video ID and Shorts status
+    $video_id = extractYouTubeId($youtube_url);
+    if (!$video_id && !empty($image_url_input)) {
+        $video_id = extractYouTubeId($image_url_input);
+        if ($video_id) {
+            $youtube_url = $image_url_input; // Treat it as youtube_url too
         }
+    }
+    
+    $is_shorts = false;
+    if ($video_id && $youtube_url && strpos($youtube_url, '/shorts/') !== false) {
+        $is_shorts = true;
     }
 
     $is_promoted = isset($_POST['is_promoted']) || ($type === 'maksu');
@@ -268,14 +279,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     $message = "Virhe: Kuvan lataus ImageKit-palveluun epäonnistui.";
                                 }
                             } else {
-                                $message = "Virhe: Kuvan käsittely epäonnistui.";
                             }
                         }
                     } else {
                         $final_image_url = $image_url_input;
-                        // Use YouTube thumbnail if provided and no separate image
+                        
+                        // If no image but we have a video ID, use YouTube thumbnail
                         if (!$final_image_url && $video_id) {
                             $final_image_url = "https://img.youtube.com/vi/$video_id/hqdefault.jpg";
+                        }
+                        
+                        // If the provided image_url IS a YouTube link, convert it to a thumbnail
+                        if ($final_image_url && extractYouTubeId($final_image_url)) {
+                            $vid = extractYouTubeId($final_image_url);
+                            $final_image_url = "https://img.youtube.com/vi/$vid/hqdefault.jpg";
                         }
                     }
 
