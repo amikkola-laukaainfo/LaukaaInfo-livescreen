@@ -4,6 +4,9 @@ RewriteEngine On
 RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|WhatsApp|Twitterbot|LinkedInBot|discordapp) [NC]
 RewriteRule ^yrityskortti\.html$ https://www.mediazoo.fi/laukaainfo-web/yrityskortti.php [L,R=302,QSA]
 
+# Uudelleenohjaus feed-jakolinkeille (share.php hoitaa OG-tägit ja JS-ohjaa käyttäjät takaisin appiin)
+RewriteRule ^share/(video|maksu|event|story|offer|notice)/([a-zA-Z0-9_-]+)$ https://www.mediazoo.fi/laukaainfo-web/share.php?type=$1&id=$2 [L,R=302,QSA]
+
 # Uudelleenohjataan /haku-yritys -> /index.html?haku=yritys
 RewriteRule ^haku-(.*)$ /index.html?haku=$1 [L,QSA]
 

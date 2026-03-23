@@ -97,6 +97,11 @@ const LkiFeed = (() => {
     if (item.instagram_url) socials.push(`<a href="${item.instagram_url}" target="_blank" class="lki-social-icon" title="Instagram">📸</a>`);
     if (item.youtube_url)   socials.push(`<a href="${item.youtube_url}" target="_blank" class="lki-social-icon" title="YouTube">▶️</a>`);
 
+    // Individual item share button
+    if (item.id) {
+        socials.push(`<button type="button" class="lki-social-icon lki-item-share-btn" data-id="${item.id}" data-type="${item.type || 'video'}" title="Kopioi jakolinkki" style="cursor:pointer; background:none; border:none; padding:4px; display:inline-flex; align-items:center; justify-content:center; opacity:0.7; transition:0.2s; outline:none;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 14 20 9 15 4"></polyline><path d="M4 20v-7a4 4 0 0 1 4-4h12"></path></svg></button>`);
+    }
+
     socialHtml = `
       <div class="lki-card__actions">
         ${socials.length > 0 ? `<div class="lki-card__social-links">${socials.join('')}</div>` : ''}
@@ -415,6 +420,21 @@ const LkiFeed = (() => {
     });
 
     list.addEventListener('click', (e) => {
+
+      const shareBtn = e.target.closest('.lki-item-share-btn');
+      if (shareBtn) {
+          e.preventDefault();
+          e.stopPropagation();
+          const id = shareBtn.dataset.id;
+          const type = shareBtn.dataset.type || 'video';
+          const link = `https://laukaainfo.fi/share/${type}/${id}`;
+          navigator.clipboard.writeText(link).then(() => {
+              const origHtml = shareBtn.innerHTML;
+              shareBtn.innerHTML = '✅';
+              setTimeout(() => shareBtn.innerHTML = origHtml, 2000);
+          }).catch(err => console.error(err));
+          return;
+      }
 
       const img = e.target.closest('.lki-card__img');
       const card = e.target.closest('.lki-card');
