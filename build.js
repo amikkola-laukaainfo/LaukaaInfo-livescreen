@@ -134,6 +134,14 @@ updateReferences(distDir);
 // Luodaan version.json sw.js:lle ja frontendille
 fs.writeFileSync(path.join(distDir, 'version.json'), JSON.stringify({ version: buildVersion, date: new Date().toISOString() }, null, 2));
 
+// Päivitetään sw.js tiedoston sisäinen versio, jotta laitteet osaavat ladata uuden välimuistin!
+let swPath = path.join(distDir, 'sw.js');
+if (fs.existsSync(swPath)) {
+    let swContent = fs.readFileSync(swPath, 'utf8');
+    swContent = swContent.replace(/const VERSION = ['"].*?['"];/, `const VERSION = '${buildVersion}';`);
+    fs.writeFileSync(swPath, swContent);
+}
+
 console.log('\n======================================================');
 console.log('✓ VALMIS! Tuotantoversio on nyt koottu kansioon: dist/');
 console.log('Versio: ' + buildVersion);
