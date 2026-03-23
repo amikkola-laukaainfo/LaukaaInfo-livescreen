@@ -8,14 +8,16 @@ const LkiFeed = (() => {
     event:    '📅 Tapahtuma',
     business: '🏢 Yritys',
     offer:    '🎁 Tarjous',
-    notice:   '📢 Ilmoitus'
+    notice:   '📢 Ilmoitus',
+    video:    '🎥 Video'
   };
 
   const TYPE_CLASSES = {
     event:    'lki-badge-type--event',
     business: 'lki-badge-type--business',
     offer:    'lki-badge-type--offer',
-    notice:   'lki-badge-type--notice'
+    notice:   'lki-badge-type--notice',
+    video:    'lki-badge-type--video'
   };
 
   const FILTERS = [
@@ -23,7 +25,8 @@ const LkiFeed = (() => {
     { key: 'event',    label: '📅 Tapahtumat' },
     { key: 'business', label: '🏢 Yritykset' },
     { key: 'offer',    label: '🎁 Tarjoukset' },
-    { key: 'notice',   label: '📢 Ilmoitukset' }
+    { key: 'notice',   label: '📢 Ilmoitukset' },
+    { key: 'video',    label: '🎥 Videot' }
   ];
 
   function formatDate(isoStr) {
@@ -81,10 +84,14 @@ const LkiFeed = (() => {
       </div>
     `;
 
+    const isVideo = item.type === 'video' && item.video_id;
+    const videoAttr = isVideo ? `data-video-id="${item.video_id}" data-is-shorts="${item.is_shorts ? 'true' : 'false'}"` : '';
+
     return `
-      <article class="lki-card${item.is_promoted ? ' is-promoted' : ''}" data-id="${item.id || ''}" id="lki-feed-item-${item.id || ''}" role="article">
+      <article class="lki-card${item.is_promoted ? ' is-promoted' : ''}${isVideo ? ' lki-card--video' : ''}" data-id="${item.id || ''}" id="lki-feed-item-${item.id || ''}" role="article" ${videoAttr}>
         <div class="lki-card__img-wrap">
           <img class="lki-card__img" src="${imgSrc}" alt="${title}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=400&q=70'">
+          ${isVideo ? '<div class="lki-card__video-placeholder"></div><div class="lki-card__play-indicator">▶️</div>' : ''}
         </div>
         <div class="lki-card__body">
           <div class="lki-card__badges">
@@ -100,6 +107,38 @@ const LkiFeed = (() => {
         </div>
       </article>
     `;
+  }
+
+  let videoObserver = null;
+  function setupVideoObservers(list) {
+    if (!window.IntersectionObserver) return;
+    
+    if (!videoObserver) {
+      videoObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          const card = entry.target;
+          const container = card.querySelector('.lki-card__video-placeholder');
+          const videoId = card.dataset.videoId;
+          
+          if (entry.isIntersecting) {
+            if (container && !container.innerHTML) {
+              // Start muted autoplay
+              container.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${videoId}&modestbranding=1&rel=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>`;
+              card.classList.add('is-playing');
+            }
+          } else {
+            if (container && container.innerHTML) {
+              container.innerHTML = '';
+              card.classList.remove('is-playing');
+            }
+          }
+        });
+      }, { threshold: 0.4 });
+    }
+
+    list.querySelectorAll('.lki-card--video').forEach(card => {
+      videoObserver.observe(card);
+    });
   }
 
   function renderList(list, items, activeFilter, activeBusiness) {
@@ -121,6 +160,9 @@ const LkiFeed = (() => {
       return;
     }
     list.innerHTML = filtered.map(cardHTML).join('');
+    
+    // Setup video observers after rendering
+    setupVideoObservers(list);
   }
 
   function buildContainer(root) {
@@ -166,8 +208,8 @@ const LkiFeed = (() => {
 
     // Map Finnish names if used in URL
     const filterMap = { 
-        'tapahtumat': 'event', 'yritykset': 'business', 'tarjoukset': 'offer', 'ilmoitukset': 'notice',
-        'tapahtuma': 'event', 'yritys': 'business', 'tarjous': 'offer', 'ilmoitus': 'notice'
+        'tapahtumat': 'event', 'yritykset': 'business', 'tarjoukset': 'offer', 'ilmoitukset': 'notice', 'videot': 'video',
+        'tapahtuma': 'event', 'yritys': 'business', 'tarjous': 'offer', 'ilmoitus': 'notice', 'video': 'video'
     };
     if (filterMap[activeFilter]) activeFilter = filterMap[activeFilter];
     
@@ -186,16 +228,22 @@ const LkiFeed = (() => {
       lightboxEl.innerHTML = `
         <div class="lki-lightbox__content">
           <button class="lki-lightbox__close" aria-label="Sulje">&times;</button>
-          <img class="lki-lightbox__img" src="" alt="">
+          <div class="lki-lightbox__media-container">
+            <img class="lki-lightbox__img" src="" alt="">
+            <div class="lki-lightbox__video"></div>
+          </div>
         </div>
       `;
       
       document.body.appendChild(lightboxEl);
       lightboxImg = lightboxEl.querySelector('.lki-lightbox__img');
+      const lightboxVideo = lightboxEl.querySelector('.lki-lightbox__video');
       
       // Close handlers
       const close = () => {
         lightboxEl.classList.remove('is-open');
+        lightboxEl.classList.remove('is-shorts');
+        lightboxVideo.innerHTML = '';
         document.body.classList.remove('lki-no-scroll');
       };
       
@@ -212,10 +260,23 @@ const LkiFeed = (() => {
       });
     }
 
-    function openLightbox(src, alt) {
+    function openLightbox(src, alt, videoId = null, isShorts = false) {
       if (!lightboxEl) setupLightbox();
-      lightboxImg.src = src;
-      lightboxImg.alt = alt || 'Kuva';
+      const videoContainer = lightboxEl.querySelector('.lki-lightbox__video');
+      
+      if (videoId) {
+        lightboxImg.style.display = 'none';
+        videoContainer.style.display = 'block';
+        videoContainer.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+        if (isShorts) lightboxEl.classList.add('is-shorts');
+      } else {
+        lightboxImg.style.display = 'block';
+        videoContainer.style.display = 'none';
+        videoContainer.innerHTML = '';
+        lightboxImg.src = src;
+        lightboxImg.alt = alt || 'Kuva';
+      }
+
       lightboxEl.classList.add('is-open');
       document.body.classList.add('lki-no-scroll');
     }
@@ -348,6 +409,13 @@ const LkiFeed = (() => {
       if (card) {
         // Älä reagoi linkkien klikkauksiin (esim. sosiaalisen median linkit)
         if (e.target.closest('a')) return;
+
+        if (card.classList.contains('lki-card--video')) {
+            const vid = card.dataset.videoId;
+            const isShorts = card.dataset.isShorts === 'true';
+            openLightbox('', '', vid, isShorts);
+            return;
+        }
         
         card.classList.toggle('is-expanded');
       }

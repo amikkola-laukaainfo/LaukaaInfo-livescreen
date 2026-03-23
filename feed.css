@@ -262,6 +262,7 @@
 .lki-badge-type--business { background: var(--badge-business); }
 .lki-badge-type--offer    { background: var(--badge-offer); }
 .lki-badge-type--notice   { background: var(--badge-notice); }
+.lki-badge-type--video    { background: #ff0000; }
 
 /* Promoted badge */
 .lki-badge-promoted {
@@ -306,6 +307,56 @@
   line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* Video specific card styles */
+.lki-card--video .lki-card__img-wrap {
+  position: relative;
+  background: #000;
+}
+
+.lki-card__video-placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.lki-card__video-placeholder iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.lki-card__play-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 0, 0, 0.8);
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  z-index: 1;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: opacity 0.3s ease;
+}
+
+.lki-card.is-playing .lki-card__play-indicator {
+  opacity: 0;
+}
+
+.lki-card.is-playing .lki-card__img {
+  opacity: 0;
 }
 
 /* Expanded state (klikkaamalla) */
@@ -461,6 +512,42 @@
   box-shadow: 0 10px 40px rgba(0,0,0,0.5);
   transform: scale(0.95);
   transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.lki-lightbox__media-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lki-lightbox__video {
+  width: 80vw;
+  max-width: 1000px;
+  aspect-ratio: 16/9;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+
+.lki-lightbox__video iframe {
+  width: 100%;
+  height: 100%;
+}
+
+/* Shorts (vertical) video styling */
+.lki-lightbox.is-shorts .lki-lightbox__video {
+  aspect-ratio: 9/16;
+  width: auto;
+  height: 85vh;
+  max-width: 90vw;
+}
+
+@media (max-width: 600px) {
+    .lki-lightbox__video {
+        width: 95vw;
+    }
 }
 
 .lki-lightbox.is-open .lki-lightbox__img {

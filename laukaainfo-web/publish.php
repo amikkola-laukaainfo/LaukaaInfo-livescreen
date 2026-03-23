@@ -215,14 +215,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $facebook_url = sanitize($_POST['facebook_url'] ?? '');
     $instagram_url = sanitize($_POST['instagram_url'] ?? '');
     $youtube_url = sanitize($_POST['youtube_url'] ?? '');
+    
+    // Auto-detect YouTube Video ID and Shorts status
+    $video_id = '';
+    $is_shorts = false;
+    if ($youtube_url) {
+        $regExp = '/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|(?:shorts\/))([^#&?]*).*/';
+        if (preg_match($regExp, $youtube_url, $match)) {
+            $video_id = (strlen($match[2]) == 11) ? $match[2] : '';
+            if (strpos($youtube_url, '/shorts/') !== false) {
+                $is_shorts = true;
+            }
+        }
+    }
+
     $is_promoted = isset($_POST['is_promoted']) || ($type === 'maksu');
     $image_url_input = sanitize($_POST['image_url'] ?? '');
 
     // Validation
     if (!$advertiser) {
         $message = $message ?: "Virhe: Kirjautuminen vaaditaan.";
-    } elseif (empty($_FILES['image']['tmp_name']) && empty($image_url_input)) {
-        $message = "Virhe: Kuva tai kuvan URL vaaditaan.";
+    } elseif (empty($_FILES['image']['tmp_name']) && empty($image_url_input) && $type !== 'video') {
+        $message = "Virhe: Kuva tai kuvan URL vaaditaan (paitsi videoissa).";
     } else {
         // --- FINAL LIMIT CHECK ---
         $limitError = '';
@@ -259,6 +273,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         }
                     } else {
                         $final_image_url = $image_url_input;
+                        // Use YouTube thumbnail if it's a video and no image provided
+                        if (!$final_image_url && $type === 'video' && $video_id) {
+                            $final_image_url = "https://img.youtube.com/vi/$video_id/maxresdefault.jpg";
+                        }
                     }
 
                         if ($final_image_url) {
@@ -278,6 +296,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             if ($facebook_url)  $newItem['facebook_url'] = $facebook_url;
                             if ($instagram_url) $newItem['instagram_url'] = $instagram_url;
                             if ($youtube_url)   $newItem['youtube_url'] = $youtube_url;
+                            if ($video_id)      $newItem['video_id'] = $video_id;
+                            if ($is_shorts)     $newItem['is_shorts'] = true;
 
                             array_unshift($feedData, $newItem);
                             $feedData = array_slice($feedData, 0, $maxItems);
@@ -366,6 +386,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <select id="type" name="type">
                     <option value="maksu">Ilmoituksen nosto (⭐)</option>
                     <option value="event" selected>Tapahtuma</option>
+                    <option value="video">🎥 Videoleike (YouTube)</option>
                     <option value="story">Tarina</option>
                     <option value="offer">Tarjous</option>
                     <option value="notice">Ilmoitus</option>
