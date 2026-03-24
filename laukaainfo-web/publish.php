@@ -437,8 +437,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') !== 'delet
                             $feedData = array_slice($feedData, 0, $maxItems);
                             file_put_contents($jsonFile, json_encode($feedData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
                             
-                            $shareLink = "https://laukaainfo.fi/?business_id=" . $business_id . "&feed=open";
-                            $message = "Sisältö julkaistu onnistuneesti! ✅ <br><small><a href='$shareLink' target='_blank' style='color:inherit; font-weight:bold; text-decoration:underline;'>Katso ja jaa oma yritysfeedisi tästä linkistä &raquo;</a></small>";
+                            // Links for sharing and feedback
+                            $feedUrl      = "https://laukaainfo.fi/?business_id=" . $business_id . "&feed=open";
+                            $directUrl    = "https://laukaainfo.fi/?business_id=" . $business_id . "&item=" . $new_id . "&feed=open";
+                            $facebookUrl  = "https://www.mediazoo.fi/laukaainfo-web/share.php?id=" . $new_id;
+
+                            $message  = "Sisältö julkaistu onnistuneesti! ✅<br><br>";
+                            $message .= "<div style='background:#f8f9fa; padding:1rem; border-radius:10px; border:1px solid #ddd; font-size:0.9rem; line-height:1.5;'>";
+                            $message .= "<strong>1. Linkki yritysfeediin:</strong><br>";
+                            $message .= "<a href='$feedUrl' target='_blank' style='color:#0056b3;'>$feedUrl</a><br><br>";
+                            $message .= "<strong>2. Suora linkki julkaisuun (Laukaainfo.fi):</strong><br>";
+                            $message .= "<a href='$directUrl' target='_blank' style='color:#0056b3;'>$directUrl</a><br><br>";
+                            $message .= "<strong>3. Facebook- / Some-jakolinkki (Mediazoo.fi):</strong><br>";
+                            $message .= "<a href='$facebookUrl' target='_blank' style='color:#0056b3; font-weight:bold;'>$facebookUrl</a><br>";
+                            $message .= "<small style='color:#666; display:block; margin-top:0.4rem;'>";
+                            $message .= "💡 <em>Käytä tätä Facebookissa / Somessa. Linkissä näkyy kuva ja viesti, ja linkki on ohjattu Mediazoo.fi:n kautta takaisin LaukaaInfo.fi-palveluun.</em>";
+                            $message .= "</small>";
+                            $message .= "</div>";
                             $previewJson = json_encode($newItem, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
                             
                             // Update counts for UI reflecting the new post
