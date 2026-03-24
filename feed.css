@@ -464,6 +464,42 @@
   margin-top: 1rem;
 }
 
+/* CTA Banner (feedin lopussa) */
+.lki-feed__cta-banner {
+  text-align: center;
+  margin-top: 1.5rem;
+  padding: 1.4rem 1rem;
+  background: linear-gradient(135deg, #e8f4fd, #dbeafe);
+  border: 1.5px solid #bfdbfe;
+  border-radius: 16px;
+}
+
+.lki-feed__cta-banner p {
+  margin: 0 0 0.7rem;
+  font-weight: 700;
+  color: #1e3a5f;
+  font-size: 1rem;
+}
+
+.lki-feed__cta-link {
+  display: inline-block;
+  background: #0056b3;
+  color: white;
+  font-weight: 700;
+  font-size: 0.92rem;
+  padding: 0.7rem 1.5rem;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.2s;
+  box-shadow: 0 4px 14px rgba(0, 86, 179, 0.3);
+}
+
+.lki-feed__cta-link:hover {
+  background: #0074d9;
+  transform: translateY(-2px);
+}
+
+
 .lki-feed__new-notification {
     background: var(--primary);
     color: white;

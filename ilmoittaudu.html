@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="fi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Julkaise LaukaaInfossa – Ilmoittaudu julkaisijaksi</title>
+    <meta name="description" content="Julkaise tapahtumia, tarjouksia ja ilmoituksia LaukaaInfossa. Tavoita paikalliset asukkaat ja asiakkaat – aloita ilmaiseksi.">
+    <link rel="icon" href="logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=20260324-1">
+    <style>
+        :root {
+            --primary: #0056b3;
+            --primary-light: #e8f0fe;
+            --accent: #00c3ff;
+            --success: #22c55e;
+            --text: #1a1a2e;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --card-bg: #ffffff;
+            --page-bg: #f4f7fb;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--page-bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* HERO */
+        .ilm-hero {
+            background: linear-gradient(135deg, #0056b3 0%, #00273d 100%);
+            color: white;
+            padding: 5rem 1.5rem 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ilm-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 70% 50%, rgba(0, 195, 255, 0.15) 0%, transparent 70%);
+        }
+
+        .ilm-hero .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        .ilm-hero h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 800;
+            margin: 0 0 1.2rem;
+            line-height: 1.15;
+        }
+
+        .ilm-hero p {
+            font-size: 1.15rem;
+            opacity: 0.85;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+        }
+
+        .ilm-hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: white;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 1rem 2rem;
+            border-radius: 14px;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+        }
+
+        .ilm-hero-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.24);
+        }
+
+        /* BENEFITS */
+        .ilm-benefits {
+            padding: 4rem 1.5rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .ilm-benefits h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .ilm-benefit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .ilm-benefit-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.8rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+            transition: transform 0.2s;
+        }
+
+        .ilm-benefit-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .ilm-benefit-card .icon {
+            font-size: 2rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .ilm-benefit-card h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 0 0 0.5rem;
+        }
+
+        .ilm-benefit-card p {
+            color: var(--muted);
+            font-size: 0.9rem;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        /* TIERS */
+        .ilm-tiers {
+            background: white;
+            padding: 4rem 1.5rem;
+        }
+
+        .ilm-tiers-inner {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .ilm-tiers h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .ilm-tier-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .ilm-tier {
+            border: 2px solid var(--border);
+            border-radius: 18px;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            background: var(--page-bg);
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .ilm-tier.featured {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .ilm-tier .tier-name {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .ilm-tier .tier-price {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 0.5rem 0;
+        }
+
+        .ilm-tier .tier-tag {
+            background: var(--success);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.25rem 0.7rem;
+            border-radius: 50px;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .ilm-tier ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1.5rem;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        .ilm-tier ul li {
+            padding: 0.4rem 0;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .ilm-tier ul li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        /* FORM */
+        .ilm-form-section {
+            padding: 4rem 1.5rem;
+            max-width: 640px;
+            margin: 0 auto;
+        }
+
+        .ilm-form-section h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .ilm-form-section p.subtitle {
+            color: var(--muted);
+            margin-bottom: 2rem;
+        }
+
+        .ilm-form-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.07);
+        }
+
+        .ilm-form-card label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.4rem;
+            margin-top: 1.2rem;
+        }
+
+        .ilm-form-card label:first-child {
+            margin-top: 0;
+        }
+
+        .ilm-form-card input[type="text"],
+        .ilm-form-card input[type="email"],
+        .ilm-form-card textarea {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+            background: var(--page-bg);
+        }
+
+        .ilm-form-card input:focus,
+        .ilm-form-card textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+        }
+
+        .ilm-form-card textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .ilm-radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            margin-top: 0.5rem;
+        }
+
+        .ilm-radio-label {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.95rem;
+            cursor: pointer;
+            padding: 0.6rem 0.8rem;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .ilm-radio-label:has(input:checked) {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .ilm-radio-label input {
+            accent-color: var(--primary);
+        }
+
+        .ilm-submit-btn {
+            margin-top: 1.8rem;
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary), #0074d9);
+            color: white;
+            border: none;
+            padding: 1.1rem 2rem;
+            border-radius: 14px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.2s;
+            box-shadow: 0 4px 16px rgba(0, 86, 179, 0.35);
+        }
+
+        .ilm-submit-btn:hover {
+            opacity: 0.92;
+            transform: translateY(-1px);
+        }
+
+        .ilm-footer-note {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.82rem;
+            color: var(--muted);
+        }
+
+        /* SUCCESS */
+        .ilm-success {
+            display: none;
+            background: #f0fdf4;
+            border: 2px solid #bbf7d0;
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .ilm-success.visible {
+            display: block;
+        }
+
+        .ilm-success h3 {
+            color: #15803d;
+            margin: 0 0 0.5rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 640px) {
+            .ilm-hero { padding: 4rem 1rem 3rem; }
+            .ilm-form-card { padding: 1.5rem; }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Nav (sama kuin index.html) -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="logo.png" alt="LaukaaInfo Logo">
+                <span>LaukaaInfo</span>
+            </a>
+            <div class="desktop-nav">
+                <ul class="nav-links">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">Kauppa <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="lisaa-yritys.html">Lisää yritys</a></li>
+                            <li><a href="kauppa.html">Osta julkaisuaikaa</a></li>
+                            <li><a href="ilmoittaudu.html">Ilmoittaudu julkaisijaksi</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <button class="hamburger" id="hamburger-btn" aria-label="Avaa valikko">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="ilm-hero">
+        <span class="badge">🌟 Paikallinen näkyvyysalusta</span>
+        <h1>Julkaise LaukaaInfossa</h1>
+        <p>Julkaise tapahtumia, tarjouksia ja ilmoituksia – tavoita paikalliset asukkaat ja asiakkaat yhdellä linkillä.</p>
+        <a href="#ilm-form" class="ilm-hero-cta">
+            ✍️ Ilmoittaudu julkaisijaksi
+        </a>
+    </section>
+
+    <!-- BENEFITS -->
+    <section class="ilm-benefits">
+        <h2>Miksi julkaista LaukaaInfossa?</h2>
+        <div class="ilm-benefit-grid">
+            <div class="ilm-benefit-card">
+                <div class="icon">📍</div>
+                <h3>Lisää näkyvyyttä paikallisesti</h3>
+                <p>Sisältösi näkyy laukaalaisille käyttäjille – siellä missä paikalliset etsivät tietoa.</p>
+            </div>
+            <div class="ilm-benefit-card">
+                <div class="icon">🔗</div>
+                <h3>Kaikki yhdessä paikassa</h3>
+                <p>Oma jaettava yritysfeed – kaikki julkaisusi yhdessä paikassa, jaettavissa yhdellä linkillä Facebookiin, WhatsAppiin tai sähköpostiin.</p>
+            </div>
+            <div class="ilm-benefit-card">
+                <div class="icon">🚀</div>
+                <h3>Helppo julkaisu</h3>
+                <p>Julkaise tapahtuma, tarjous tai ilmoitus muutamassa minuutissa ilman teknistä osaamista.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- TIERS -->
+    <section class="ilm-tiers">
+        <div class="ilm-tiers-inner">
+            <h2>Valitse sopiva paketti</h2>
+            <div class="ilm-tier-grid">
+
+                <div class="ilm-tier">
+                    <div class="tier-name">Perus</div>
+                    <div class="tier-tag">Kokeile maksutta</div>
+                    <div class="tier-price" style="color: #22c55e;">3 julkaisua</div>
+                    <ul>
+                        <li>Julkaisu feedissä</li>
+                        <li>1 ilmainen julkaisu/kk sen jälkeen</li>
+                        <li>Max 1 julkaisu/päivä</li>
+                    </ul>
+                    <a href="#ilm-form" class="btn-cta" style="display:block; text-align:center; font-size:0.95rem; padding:0.8rem;">Aloita ilmaiseksi</a>
+                </div>
+
+                <div class="ilm-tier featured">
+                    <div class="tier-name">Plus</div>
+                    <div class="tier-tag">Suosittu</div>
+                    <div class="tier-price">5 julkaisua/kk</div>
+                    <ul>
+                        <li>Julkaisu feedissä</li>
+                        <li>Suodatettu yritysnäkymä</li>
+                        <li>1 nostettu julkaisu/kk</li>
+                    </ul>
+                    <a href="kauppa.html" class="btn-cta premium" style="display:block; text-align:center; font-size:0.95rem; padding:0.8rem;">Osta Plus</a>
+                </div>
+
+                <div class="ilm-tier">
+                    <div class="tier-name">Pro / Yrityskortti</div>
+                    <div class="tier-tag">Täysi näkyvyys</div>
+                    <div class="tier-price">Rajaton</div>
+                    <ul>
+                        <li>Rajattomat julkaisut</li>
+                        <li>Oma jaettava yritysfeed</li>
+                        <li>3 nostoa/kk</li>
+                        <li>+2 bonusjulkaisua heti alussa</li>
+                    </ul>
+                    <a href="kauppa.html" class="btn-cta premium" style="display:block; text-align:center; font-size:0.95rem; padding:0.8rem;">Osta Pro</a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FORM -->
+    <section class="ilm-form-section" id="ilm-form">
+        <h2>Ilmoittaudu julkaisijaksi</h2>
+        <p class="subtitle">Jätä tietosi ja otamme yhteyttä. Ei sitoumuksia, ei piilokuluja.</p>
+
+        <div class="ilm-form-card">
+            <form id="ilm-signup-form">
+                <label for="ilm-name">Nimi *</label>
+                <input type="text" id="ilm-name" name="nimi" required placeholder="Etunimi Sukunimi">
+
+                <label for="ilm-company">Yritys / Yhdistys</label>
+                <input type="text" id="ilm-company" name="yritys" placeholder="Esim. Kahvila Laukaan Helmi">
+
+                <label for="ilm-email">Sähköposti *</label>
+                <input type="email" id="ilm-email" name="email" required placeholder="sinä@esimerkki.fi">
+
+                <label for="ilm-message">Viesti (valinnainen)</label>
+                <textarea id="ilm-message" name="viesti" placeholder="Kerro tarkemmin tarpeestasi..."></textarea>
+
+                <label style="margin-top: 1.5rem; font-size: 1rem;">Haluan:</label>
+                <div class="ilm-radio-group">
+                    <label class="ilm-radio-label">
+                        <input type="radio" name="tarve" value="julkaista_itse" checked>
+                        Julkaista itse (aloittaa heti)
+                    </label>
+                    <label class="ilm-radio-label">
+                        <input type="radio" name="tarve" value="kuulla_lisaa">
+                        Kuulla lisää ennen päätöstä
+                    </label>
+                    <label class="ilm-radio-label">
+                        <input type="radio" name="tarve" value="yrityskortti">
+                        Yrityskortti + laaja näkyvyys
+                    </label>
+                </div>
+
+                <button type="submit" class="ilm-submit-btn" id="ilm-submit-btn">
+                    Lähetä tiedot – otamme yhteyttä 📩
+                </button>
+            </form>
+
+            <div class="ilm-success" id="ilm-success">
+                <h3>✅ Kiitos ilmoittautumisesta!</h3>
+                <p>Olemme vastaanottaneet tietosi ja otamme sinuun yhteyttä pian.</p>
+                <p><a href="index.html">← Palaa etusivulle</a></p>
+            </div>
+
+            <p class="ilm-footer-note">
+                Epäröitkö? <a href="mailto:info@mediazoo.fi?subject=LaukaaInfo%20%E2%80%93%20lis%C3%A4tietopyynt%C3%B6&body=Nimi:%0D%0AYritys:%0D%0AKysymys%20%2F%20tarve:">Lähetä sähköpostia suoraan</a> →
+                <strong>info@mediazoo.fi</strong>
+            </p>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-content">
+            <p>© 2026 LaukaaInfo – Epävirallinen yhteisösovellus</p>
+            <div class="footer-links">
+                <a href="index.html">Etusivu</a>
+                <a href="kauppa.html">Osta julkaisuaikaa</a>
+                <a href="tietosuoja.html">Tietosuoja</a>
+                <a href="mailto:info@mediazoo.fi?subject=LaukaaInfo%20%E2%80%93%20lis%C3%A4tietopyynt%C3%B6&body=Nimi:%0D%0AYritys:%0D%0AKysymys%20%2F%20tarve:" class="footer-mailto-cta">✉️ Ota yhteyttä</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js?v=20260324-1"></script>
+    <script>
+        const form = document.getElementById('ilm-signup-form');
+        const success = document.getElementById('ilm-success');
+        const submitBtn = document.getElementById('ilm-submit-btn');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('ilm-name').value.trim();
+            const company = document.getElementById('ilm-company').value.trim();
+            const email = document.getElementById('ilm-email').value.trim();
+            const message = document.getElementById('ilm-message').value.trim();
+            const tarve = document.querySelector('input[name="tarve"]:checked')?.value || '';
+
+            const subject = encodeURIComponent('LaukaaInfo – uusi julkaisijailmoittautuminen');
+            const body = encodeURIComponent(
+                `Nimi: ${name}\nYritys: ${company}\nSähköposti: ${email}\nTarve: ${tarve}\nViesti: ${message}`
+            );
+
+            // Open mailto
+            window.location.href = `mailto:info@mediazoo.fi?subject=${subject}&body=${body}`;
+
+            // Show success after a short delay
+            setTimeout(() => {
+                form.style.display = 'none';
+                success.classList.add('visible');
+                success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 600);
+        });
+    </script>
+</body>
+
+</html>

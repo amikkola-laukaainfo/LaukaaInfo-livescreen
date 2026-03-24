@@ -2477,3 +2477,52 @@ footer {
 .lki-card__socials { display: flex; gap: 0.6rem; }
 .lki-social-icon { text-decoration: none; font-size: 0.9rem; color: #6b7a90; transition: transform 0.2s, color 0.2s; display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; }
 .lki-social-icon:hover { transform: scale(1.15); color: #0056b3; }
+
+/* Footer "Ota yhteyttä" matalan kynnyksen CTA */
+.footer-mailto-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff !important;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.footer-mailto-cta:hover {
+    background: rgba(255,255,255,0.22);
+    transform: translateY(-1px);
+}
+
+/* CTA Buttons (ilmoittaudu + kauppa) */
+.btn-cta {
+    display: inline-block;
+    background: var(--primary-blue);
+    color: white !important;
+    padding: 0.85rem 1.8rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+    box-shadow: 0 4px 14px rgba(0, 86, 179, 0.3);
+}
+
+.btn-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 86, 179, 0.4);
+}
+
+.btn-cta.premium {
+    background: linear-gradient(135deg, #ff9900, #e67e00);
+    box-shadow: 0 4px 14px rgba(255, 153, 0, 0.4);
+}
+
+.btn-cta.premium:hover {
+    box-shadow: 0 8px 24px rgba(255, 153, 0, 0.55);
+}

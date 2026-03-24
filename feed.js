@@ -181,9 +181,18 @@ const LkiFeed = (() => {
 
     if (filtered.length === 0) {
       list.innerHTML = `<div class="lki-feed__empty">Ei sisältöä vielä.</div>`;
-      return;
+    } else {
+      list.innerHTML = filtered.map(cardHTML).join('');
     }
-    list.innerHTML = filtered.map(cardHTML).join('');
+
+    // CTA-banneri feedin lopussa (näkyy aina)
+    const ctaEl = document.createElement('div');
+    ctaEl.className = 'lki-feed__cta-banner';
+    ctaEl.innerHTML = `
+      <p>Haluatko näkyä täällä?</p>
+      <a href="ilmoittaudu.html" class="lki-feed__cta-link">👉 Julkaise LaukaaInfossa</a>
+    `;
+    list.appendChild(ctaEl);
     
     // Setup video observers after rendering
     setupVideoObservers(list);
