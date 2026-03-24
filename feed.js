@@ -413,6 +413,7 @@ const LkiFeed = (() => {
           filterBar.querySelectorAll('.lki-feed__filter-btn').forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
           activeFilter = f.key;
+          activeBusiness = null; // Reset business-specific filter when a category is manually selected
           renderList(list, currentItems, activeFilter, activeBusiness);
         });
         filterBar.appendChild(btn);
