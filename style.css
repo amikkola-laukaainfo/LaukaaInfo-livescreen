@@ -2694,3 +2694,102 @@ footer {
     background: #f0f7ff;
     font-weight: 700;
 }
+
+/* Unified Business Navigation (Big Box Menu) */
+.business-nav-section {
+    padding: 4rem 1rem;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.business-nav-section h2 {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    color: #1e293b;
+}
+
+.business-nav-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.nav-box {
+    background: white;
+    border: 1px solid #e1e8f0;
+    border-radius: 24px;
+    padding: 3rem 2rem;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-box:hover {
+    transform: translateY(-8px);
+    border-color: var(--primary-blue);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+}
+
+.nav-box .icon {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    background: #f8fafc;
+    width: 90px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 24px;
+    transition: all 0.3s ease;
+}
+
+.nav-box:hover .icon {
+    background: #f0f7ff;
+    transform: scale(1.1);
+}
+
+.nav-box h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin-bottom: 1rem;
+}
+
+.nav-box p {
+    font-size: 1rem;
+    color: #64748b;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    flex-grow: 1;
+}
+
+.nav-box .btn-fake {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--primary-blue);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.nav-box:hover .btn-fake {
+    text-decoration: underline;
+}
+
+/* Current page indicator */
+.nav-box.active-box {
+    border-color: var(--primary-blue);
+    background: #f8fafc;
+    opacity: 0.9;
+}
