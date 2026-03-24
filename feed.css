@@ -267,6 +267,14 @@
 .lki-badge-type--notice   { background: var(--badge-notice); }
 .lki-badge-type--video    { background: #ff0000; }
 
+/* Publisher name */
+.lki-card__publisher {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-left: 0.1rem;
+}
+
 /* Promoted badge */
 .lki-badge-promoted {
   display: inline-flex;

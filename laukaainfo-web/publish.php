@@ -301,6 +301,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') !== 'delet
     $facebook_url = sanitize($_POST['facebook_url'] ?? '');
     $instagram_url = sanitize($_POST['instagram_url'] ?? '');
     $youtube_url = sanitize($_POST['youtube_url'] ?? '');
+    $publisher_name = mb_substr(sanitize($_POST['publisher_name'] ?? ''), 0, 20);
     
     // Auto-detect YouTube Video ID and Shorts status
     // Auto-detect YouTube Video ID and Shorts status
@@ -389,6 +390,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') !== 'delet
                                 'publish_at' => date('c', strtotime($publish_at)),
                                 'is_promoted' => $is_promoted,
                                 'created_at' => date('c'),
+                                'publisher_name' => $publisher_name,
                                 'imagekit_file_id' => $imagekit_file_id ?? null,
                                 'og' => [
                                     'title' => $title,
@@ -532,6 +534,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') !== 'delet
                 <?php endif; ?>
             </ul>
         </div>
+        <?php
+            // Pre-fill advertiser name for new posts
+            $advertiser_name = mb_substr(($advertiser['nimi'] ?? ''), 0, 20);
+        ?>
     <?php endif; ?>
 
     <form method="POST" enctype="multipart/form-data">
@@ -561,6 +567,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') !== 'delet
 
         <label for="title">Otsikko</label>
         <input type="text" id="title" name="title" required placeholder="Esim. Kevätmyyjäiset Laukaassa">
+
+        <label for="publisher_name">Ilmoittajan nimi (näkyy kategoriatiedon vieressä, max 20 merkkiä)</label>
+        <input type="text" id="publisher_name" name="publisher_name" maxlength="20" value="<?= sanitize($_POST['publisher_name'] ?? ($advertiser_name ?? '')) ?>" placeholder="Esim. Mediazoo">
 
         <label for="short_description">Lyhyt kuvaus</label>
         <textarea id="short_description" name="short_description" rows="3" placeholder="Lyhyt teksti korttiin..."></textarea>
@@ -645,6 +654,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') !== 'delet
 <script>
 function editItem(item) {
     document.getElementById('title').value = item.title || '';
+    document.getElementById('publisher_name').value = item.publisher_name || '';
     document.getElementById('short_description').value = item.description || '';
     document.getElementById('type').value = item.type || 'event';
     

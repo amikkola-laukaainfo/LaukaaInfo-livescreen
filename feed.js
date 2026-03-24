@@ -123,6 +123,7 @@ const LkiFeed = (() => {
     `;
 
     const videoAttr = isVideo ? `data-video-id="${video_id}" data-is-shorts="${item.is_shorts || imgSrc.includes('hqdefault') ? 'true' : 'false'}"` : '';
+    const publisher = item.publisher_name ? `<span class="lki-card__publisher">${escapeHtml(item.publisher_name)}</span>` : '';
 
     return `
       <article class="lki-card${item.is_promoted ? ' is-promoted' : ''}${isVideo ? ' lki-card--video' : ''}" data-id="${item.id || ''}" id="lki-feed-item-${item.id || ''}" role="article" ${videoAttr}>
@@ -133,6 +134,7 @@ const LkiFeed = (() => {
         <div class="lki-card__body">
           <div class="lki-card__badges">
             <span class="lki-badge-type ${typeClass}">${typeLabel}</span>
+            ${publisher}
             ${promoted}
           </div>
           <h3 class="lki-card__title">${title}</h3>
