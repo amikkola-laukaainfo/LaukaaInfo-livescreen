@@ -197,13 +197,14 @@ const LkiFeed = (() => {
     });
   }
 
-  function stopAllVideos(root) {
-    const list = root.querySelector('.lki-feed__list');
-    if (!list) return;
-    list.querySelectorAll('.lki-card--video').forEach(card => {
+  function stopAllVideos() {
+    document.querySelectorAll('.lki-card--video').forEach(card => {
       const container = card.querySelector('.lki-card__video-placeholder');
-      if (container) container.innerHTML = '';
+      if (container && container.innerHTML !== '') {
+        container.innerHTML = '';
+      }
       card.classList.remove('is-playing');
+      card.classList.remove('is-playing-unmuted');
       const unmuteBtn = card.querySelector('.lki-card__unmute-btn');
       if (unmuteBtn) {
         unmuteBtn.innerHTML = '🔊';
@@ -346,7 +347,7 @@ const LkiFeed = (() => {
     }
 
     function openLightbox(src, alt, videoId = null, isShorts = false) {
-      stopAllVideos(root); 
+      stopAllVideos(); 
       if (!lightboxEl) setupLightbox();
       const videoContainer = lightboxEl.querySelector('.lki-lightbox__video');
       
@@ -508,14 +509,20 @@ const LkiFeed = (() => {
         const isNowExpanded = card.classList.toggle('is-expanded');
         
         if (card.classList.contains('lki-card--video')) {
-            // Force play if expanding
+            // Force stop others and play this one
             if (isNowExpanded) {
+                stopAllVideos(); // Pysäytetään muut ennen tämän käynnistystä
                 const vid = card.dataset.videoId;
                 const container = card.querySelector('.lki-card__video-placeholder');
-                if (container && !container.innerHTML && vid) {
+                if (container && vid) {
                      container.innerHTML = `<iframe src="https://www.youtube.com/embed/${vid}?autoplay=1&mute=1&controls=0&loop=1&playlist=${vid}&modestbranding=1&rel=0&playsinline=1&enablejsapi=1" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
                      card.classList.add('is-playing');
                 }
+            } else {
+                // Sulkiessa sammutetaan tämä video
+                const container = card.querySelector('.lki-card__video-placeholder');
+                if (container) container.innerHTML = '';
+                card.classList.remove('is-playing');
             }
         }
       }
