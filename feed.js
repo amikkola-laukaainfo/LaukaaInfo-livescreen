@@ -7,6 +7,8 @@ const LkiFeed = (() => {
   const TYPE_LABELS = {
     event:    '📅 Tapahtuma',
     business: '🏢 Yritys',
+    community: '👥 Yhteisö',
+    story:    '📖 Tarina',
     offer:    '🎁 Tarjous',
     notice:   '📢 Ilmoitus',
     video:    '🎥 Video'
@@ -15,18 +17,21 @@ const LkiFeed = (() => {
   const TYPE_CLASSES = {
     event:    'lki-badge-type--event',
     business: 'lki-badge-type--business',
+    community: 'lki-badge-type--community',
+    story:    'lki-badge-type--story',
     offer:    'lki-badge-type--offer',
     notice:   'lki-badge-type--notice',
     video:    'lki-badge-type--video'
   };
 
   const FILTERS = [
-    { key: 'all',      label: 'Kaikki' },
-    { key: 'event',    label: '📅 Tapahtumat' },
-    { key: 'business', label: '🏢 Yritykset' },
-    { key: 'offer',    label: '🎁 Tarjoukset' },
-    { key: 'notice',   label: '📢 Ilmoitukset' },
-    { key: 'video',    label: '🎥 Videot' }
+    { key: 'all',       label: 'Kaikki' },
+    { key: 'community', label: '👥 Yhteisöt' },
+    { key: 'story',     label: '📖 Tarinat' },
+    { key: 'event',     label: '📅 Tapahtumat' },
+    { key: 'offer',     label: '🎁 Tarjoukset' },
+    { key: 'notice',    label: '📢 Ilmoitukset' },
+    { key: 'video',     label: '🎥 Videot' }
   ];
 
   function formatDate(isoStr) {
@@ -172,7 +177,12 @@ const LkiFeed = (() => {
     
     // Filter by type
     if (activeFilter !== 'all') {
-      filtered = filtered.filter(i => i.type === activeFilter);
+      if (activeFilter === 'community') {
+        // Community filter includes both business and community types
+        filtered = filtered.filter(i => i.type === 'business' || i.type === 'community');
+      } else {
+        filtered = filtered.filter(i => i.type === activeFilter);
+      }
     }
 
     if (filtered.length === 0) {
@@ -237,8 +247,8 @@ const LkiFeed = (() => {
 
     // Map Finnish names if used in URL
     const filterMap = { 
-        'tapahtumat': 'event', 'yritykset': 'business', 'tarjoukset': 'offer', 'ilmoitukset': 'notice', 'videot': 'video',
-        'tapahtuma': 'event', 'yritys': 'business', 'tarjous': 'offer', 'ilmoitus': 'notice', 'video': 'video'
+        'tapahtumat': 'event', 'yritykset': 'community', 'yhteisot': 'community', 'yhteisö': 'community', 'tarinat': 'story', 'tarina': 'story', 'tarjoukset': 'offer', 'ilmoitukset': 'notice', 'videot': 'video',
+        'tapahtuma': 'event', 'yritys': 'community', 'tarjous': 'offer', 'ilmoitus': 'notice', 'video': 'video'
     };
     if (filterMap[activeFilter]) activeFilter = filterMap[activeFilter];
     
@@ -403,7 +413,7 @@ const LkiFeed = (() => {
         
         let filterSlug = activeFilter;
         // Käännetään takaisin suomeksi jos mahdollista URL:ää varten
-        const invMap = { 'event': 'tapahtumat', 'business': 'yritykset', 'offer': 'tarjoukset', 'notice': 'ilmoitukset' };
+        const invMap = { 'event': 'tapahtumat', 'community': 'yhteisot', 'story': 'tarinat', 'offer': 'tarjoukset', 'notice': 'ilmoitukset', 'video': 'videot' };
         if (invMap[activeFilter]) filterSlug = invMap[activeFilter];
 
         const baseUrl = 'https://laukaainfo.fi/';

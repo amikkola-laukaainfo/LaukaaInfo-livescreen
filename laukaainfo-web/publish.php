@@ -547,6 +547,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') !== 'delet
                     <option value="event" selected>Tapahtuma</option>
                     <option value="video">🎥 Videoleike (YouTube)</option>
                     <option value="story">Tarina</option>
+                    <option value="community">Yhteisö</option>
                     <option value="offer">Tarjous</option>
                     <option value="notice">Ilmoitus</option>
                 </select>
