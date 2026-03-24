@@ -1,1 +1,344 @@
-<!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Lataa tarjouskuva – LaukaaInfo</title><link rel="icon" href="logo.png"><style>:root{--primary-blue:#0056b3;--light-blue:#e1efff;--danger-red:#dc2626}body{font-family:Inter,sans-serif;background-color:#f4f7f6;margin:0;padding:20px}.upload-container{max-width:800px;margin:2rem auto;padding:2rem;background:#fff;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,.05);text-align:center}.offer-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin:2rem 0}.offer-card{background:#f8fafc;padding:1.5rem;border-radius:15px;border:1px solid #e2e8f0}.preview-box{width:100%;height:200px;background:#edf2f7;border-radius:10px;margin-bottom:1rem;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}.preview-box img{max-width:100%;max-height:100%;object-fit:contain}.preview-box .placeholder{color:#a0aec0;font-size:.9rem}.btn-upload{display:block;width:100%;padding:.8rem;background:var(--primary-blue);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600;margin-bottom:.5rem}.btn-delete{display:block;width:100%;padding:.8rem;background:#fff;color:var(--danger-red);border:1px solid var(--danger-red);border-radius:8px;cursor:pointer;font-weight:600}.btn-upload:hover{opacity:.9}.btn-delete:hover{background:#fef2f2}.btn-delete:disabled,.btn-upload:disabled{background:#ccc;border-color:#ccc;color:#666;cursor:not-allowed}#status-message{margin-top:2rem;padding:1rem;border-radius:10px;display:none}.error{background:#fee2e2;color:#991b1b}.success{background:#dcfce7;color:#166534}</style></head><body><div class="upload-container" id="main-content"><h1>Päivitä tarjouskuvat</h1><p id="company-name-display" style="font-weight:600;color:var(--primary-blue)"></p><div id="upload-grid" class="offer-grid" style="display:none"><div class="offer-card"><h3>Tarjouskuva 1</h3><div class="preview-box" id="preview-1"><span class="placeholder">Ei kuvaa ladattu</span></div><button id="upload-widget-1" class="btn-upload">Lataa / Vaihda kuva</button> <button id="delete-btn-1" class="btn-delete" style="display:none">Poista kuva</button></div><div class="offer-card"><h3>Tarjouskuva 2</h3><div class="preview-box" id="preview-2"><span class="placeholder">Ei kuvaa ladattu</span></div><button id="upload-widget-2" class="btn-upload">Lataa / Vaihda kuva</button> <button id="delete-btn-2" class="btn-delete" style="display:none">Poista kuva</button></div></div><div id="status-message"></div></div><script>let SECRET_SALT="LaukaaInfo2026!Secret",IMAGEKIT_ID="vowzx8znjs";async function validateToken(e,t){return{2:"mz2026",demo:"demo"}[e]===t||(e=(new TextEncoder).encode(e+SECRET_SALT),e=await crypto.subtle.digest("SHA-256",e),Array.from(new Uint8Array(e)).map(e=>e.toString(16).padStart(2,"0")).join("").substring(0,8)===t)}let params=new URLSearchParams(window.location.search),yritysId=params.get("yritys"),token=params.get("token"),statusElem=document.getElementById("status-message"),gridElem=document.getElementById("upload-grid");function showMessage(e,t){statusElem.textContent=e,statusElem.className=t,statusElem.style.display="block","success"===t&&setTimeout(()=>{statusElem.style.display="none"},5e3)}async function init(){yritysId&&token?await validateToken(yritysId,token)?(gridElem.style.display="grid",document.getElementById("company-name-display").textContent="Yritys ID: "+yritysId,checkExistingImages(),setupWidget(1,"upload-widget-1"),setupWidget(2,"upload-widget-2"),setupDelete(1,"delete-btn-1"),setupDelete(2,"delete-btn-2")):showMessage("Ei käyttöoikeutta. Koodi on virheellinen.","error"):showMessage("Virheellinen URL. Puuttuvat parametrit.","error")}function getImageUrl(e,t){var a=(new Date).getTime();return`https://ik.imagekit.io/${IMAGEKIT_ID}/mediazoo/offers/${yritysId}_${e}.${t}?updatedAt=${a}&tr=f-auto,q-auto`}function checkExistingImages(){[1,2].forEach(n=>{let s=e=>{let t=getImageUrl(n,e);var a=new Image;a.onload=()=>{document.getElementById("preview-"+n).innerHTML=`<img src="${t}" alt="Tarjous ${n}">`,document.getElementById("delete-btn-"+n).style.display="block"},a.onerror=()=>{"png"===e?s("jpg"):(document.getElementById("preview-"+n).innerHTML='<span class="placeholder">Ei kuvaa ladattu</span>',document.getElementById("delete-btn-"+n).style.display="none")},a.src=t};s("png")})}async function setupDelete(t,e){let a=document.getElementById(e);a.onclick=async()=>{if(confirm(`Haluatko varmasti poistaa kuvan ${t}?`))try{a.disabled=!0,a.textContent="Poistetaan...";var e=await(await fetch(`imagekit-api.php?yritys=${yritysId}&token=${token}&slot=${t}&action=delete`)).json();if("ok"!==e.result&&"not found"!==e.result)throw new Error(e.error||"Tuntematon virhe poistossa");showMessage(`Kuva ${t} poistettu.`,"success"),document.getElementById("preview-"+t).innerHTML='<span class="placeholder">Ei kuvaa ladattu</span>',a.style.display="none"}catch(e){console.error("Delete error:",e),showMessage("Virhe poistossa: "+e.message,"error")}finally{a.disabled=!1,a.textContent="Poista kuva"}}}async function setupWidget(d,e){let u=document.getElementById(e),t=document.createElement("input");t.type="file",t.accept="image/png, image/jpeg, image/webp",t.style.display="none",document.body.appendChild(t),u.addEventListener("click",()=>{t.click()}),t.addEventListener("change",async function(){var e=this.files[0];if(e)if(5e6<e.size)showMessage("Kuva on liian suuri (max 5Mt)","error");else try{u.disabled=!0,u.textContent="Ladataan...";var a=await fetch(`imagekit-api.php?yritys=${yritysId}&token=${token}&action=auth`);if(!a.ok)throw new Error("Asetusten haku epäonnistui");var n=await a.json();if(n.error)throw new Error(n.error);var s=e.name.split(".").pop().toLowerCase(),i=["jpg","jpeg","webp"].includes(s)?s:"png",o=yritysId+`_${d}.`+i,r=new FormData,l=(r.append("file",e),r.append("fileName",o),r.append("publicKey",n.publicKey),r.append("signature",n.signature),r.append("expire",n.expire),r.append("token",n.token),r.append("folder","/mediazoo/offers"),r.append("useUniqueFileName","false"),await fetch("https://upload.imagekit.io/api/v1/files/upload",{method:"POST",body:r}));let t=await l.json();if(!l.ok)throw new Error(t.message||"Lataus epäonnistui ImageKitissä");console.log("Upload success:",t),showMessage(`Kuva ${d} päivitetty onnistuneesti!`,"success"),setTimeout(()=>{var e=t.url+`?updatedAt=${(new Date).getTime()}&tr=f-auto,q-auto`;document.getElementById("preview-"+d).innerHTML=`<img src="${e}" alt="Tarjous ${d}">`,document.getElementById("delete-btn-"+d).style.display="block"},500)}catch(e){console.error("Upload error:",e),showMessage("Virhe lähetyksessä: "+e.message,"error")}finally{u.disabled=!1,u.textContent="Lataa / Vaihda kuva",t.value=""}})}init()</script></body></html>
+<!DOCTYPE html>
+<html lang="fi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lataa tarjouskuva – LaukaaInfo</title>
+    <link rel="icon" href="logo.png">
+    <style>
+        :root {
+            --primary-blue: #0056b3;
+            --light-blue: #e1efff;
+            --danger-red: #dc2626;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+        }
+        .upload-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .offer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .offer-card {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .preview-box {
+            width: 100%;
+            height: 200px;
+            background: #edf2f7;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .preview-box img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .preview-box .placeholder {
+            color: #a0aec0;
+            font-size: 0.9rem;
+        }
+
+        .btn-upload {
+            display: block;
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-delete {
+            display: block;
+            width: 100%;
+            padding: 0.8rem;
+            background: white;
+            color: var(--danger-red);
+            border: 1px solid var(--danger-red);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-upload:hover { opacity: 0.9; }
+        .btn-delete:hover { background: #fef2f2; }
+
+        .btn-upload:disabled, .btn-delete:disabled {
+            background: #ccc;
+            border-color: #ccc;
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        #status-message {
+            margin-top: 2rem;
+            padding: 1rem;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .error { background: #fee2e2; color: #991b1b; }
+        .success { background: #dcfce7; color: #166534; }
+    </style>
+</head>
+
+<body>
+    <div class="upload-container" id="main-content">
+        <h1>Päivitä tarjouskuvat</h1>
+        <p id="company-name-display" style="font-weight: 600; color: var(--primary-blue);"></p>
+
+        <div id="upload-grid" class="offer-grid" style="display: none;">
+            <!-- Slot 1 -->
+            <div class="offer-card">
+                <h3>Tarjouskuva 1</h3>
+                <div class="preview-box" id="preview-1">
+                    <span class="placeholder">Ei kuvaa ladattu</span>
+                </div>
+                <button id="upload-widget-1" class="btn-upload">Lataa / Vaihda kuva</button>
+                <button id="delete-btn-1" class="btn-delete" style="display: none;">Poista kuva</button>
+            </div>
+
+            <!-- Slot 2 -->
+            <div class="offer-card">
+                <h3>Tarjouskuva 2</h3>
+                <div class="preview-box" id="preview-2">
+                    <span class="placeholder">Ei kuvaa ladattu</span>
+                </div>
+                <button id="upload-widget-2" class="btn-upload">Lataa / Vaihda kuva</button>
+                <button id="delete-btn-2" class="btn-delete" style="display: none;">Poista kuva</button>
+            </div>
+        </div>
+
+        <div id="status-message"></div>
+    </div>
+
+    <script>
+        const SECRET_SALT = 'LaukaaInfo2026!Secret'; 
+        const IMAGEKIT_ID = 'vowzx8znjs';
+
+        async function validateToken(id, token) {
+            const legacy = { '2': 'mz2026', 'demo': 'demo' };
+            if (legacy[id] === token) return true;
+
+            const encoder = new TextEncoder();
+            const data = encoder.encode(id + SECRET_SALT);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            
+            return hashHex.substring(0, 8) === token;
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        const yritysId = params.get('yritys');
+        const token = params.get('token');
+
+        const statusElem = document.getElementById('status-message');
+        const gridElem = document.getElementById('upload-grid');
+
+        function showMessage(msg, type) {
+            statusElem.textContent = msg;
+            statusElem.className = type;
+            statusElem.style.display = 'block';
+            if (type === 'success') {
+                setTimeout(() => { statusElem.style.display = 'none'; }, 5000);
+            }
+        }
+
+        async function init() {
+            if (!yritysId || !token) {
+                showMessage('Virheellinen URL. Puuttuvat parametrit.', 'error');
+                return;
+            }
+            
+            const isValid = await validateToken(yritysId, token);
+            
+            if (!isValid) {
+                showMessage('Ei käyttöoikeutta. Koodi on virheellinen.', 'error');
+            } else {
+                gridElem.style.display = 'grid';
+                document.getElementById('company-name-display').textContent = `Yritys ID: ${yritysId}`;
+
+                checkExistingImages();
+                setupWidget(1, "upload-widget-1");
+                setupWidget(2, "upload-widget-2");
+                setupDelete(1, "delete-btn-1");
+                setupDelete(2, "delete-btn-2");
+            }
+        }
+
+        function getImageUrl(slot, ext) {
+            const ts = new Date().getTime();
+            return `https://ik.imagekit.io/${IMAGEKIT_ID}/mediazoo/offers/${yritysId}_${slot}.${ext}?updatedAt=${ts}&tr=f-auto,q-auto`;
+        }
+
+        function checkExistingImages() {
+            [1, 2].forEach(slot => {
+                const checkImg = (ext) => {
+                    const imgUrl = getImageUrl(slot, ext);
+                    const img = new Image();
+                    img.onload = () => {
+                        document.getElementById(`preview-${slot}`).innerHTML = `<img src="${imgUrl}" alt="Tarjous ${slot}">`;
+                        document.getElementById(`delete-btn-${slot}`).style.display = 'block';
+                    };
+                    img.onerror = () => {
+                        if (ext === 'png') {
+                            checkImg('jpg');
+                        } else {
+                            document.getElementById(`preview-${slot}`).innerHTML = `<span class="placeholder">Ei kuvaa ladattu</span>`;
+                            document.getElementById(`delete-btn-${slot}`).style.display = 'none';
+                        }
+                    };
+                    img.src = imgUrl; 
+                };
+                checkImg('png');
+            });
+        }
+
+        async function setupDelete(index, buttonId) {
+            const button = document.getElementById(buttonId);
+            button.onclick = async () => {
+                if (!confirm(`Haluatko varmasti poistaa kuvan ${index}?`)) return;
+                
+                try {
+                    button.disabled = true;
+                    button.textContent = 'Poistetaan...';
+                    const res = await fetch(`imagekit-api.php?yritys=${yritysId}&token=${token}&slot=${index}&action=delete`);
+                    const data = await res.json();
+                    
+                    if (data.result === 'ok' || data.result === 'not found') {
+                        showMessage(`Kuva ${index} poistettu.`, 'success');
+                        document.getElementById(`preview-${index}`).innerHTML = `<span class="placeholder">Ei kuvaa ladattu</span>`;
+                        button.style.display = 'none';
+                    } else {
+                        throw new Error(data.error || 'Tuntematon virhe poistossa');
+                    }
+                } catch (err) {
+                    console.error('Delete error:', err);
+                    showMessage('Virhe poistossa: ' + err.message, 'error');
+                } finally {
+                    button.disabled = false;
+                    button.textContent = 'Poista kuva';
+                }
+            };
+        }
+
+        init();
+
+        async function setupWidget(index, buttonId) {
+            const button = document.getElementById(buttonId);
+            
+            // Create hidden file input
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/png, image/jpeg, image/webp';
+            fileInput.style.display = 'none';
+            document.body.appendChild(fileInput);
+
+            button.addEventListener("click", () => {
+                fileInput.click();
+            });
+
+            fileInput.addEventListener("change", async function () {
+                const file = this.files[0];
+                if (!file) return;
+
+                // Validate size (< 5MB)
+                if (file.size > 5000000) {
+                    showMessage('Kuva on liian suuri (max 5Mt)', 'error');
+                    return;
+                }
+
+                try {
+                    button.disabled = true;
+                    button.textContent = 'Ladataan...';
+
+                    // 1. Get auth parameters from backend
+                    const confRes = await fetch(`imagekit-api.php?yritys=${yritysId}&token=${token}&action=auth`);
+                    if (!confRes.ok) throw new Error('Asetusten haku epäonnistui');
+                    const confData = await confRes.json();
+                    
+                    if (confData.error) throw new Error(confData.error);
+
+                    // 2. Prepare FormData for ImageKit
+                    const ext = file.name.split('.').pop().toLowerCase();
+                    const safeExt = ['jpg','jpeg','webp'].includes(ext) ? ext : 'png';
+                    const targetFileName = `${yritysId}_${index}.${safeExt}`;
+
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    formData.append('fileName', targetFileName);
+                    formData.append('publicKey', confData.publicKey);
+                    formData.append('signature', confData.signature);
+                    formData.append('expire', confData.expire);
+                    formData.append('token', confData.token);
+                    formData.append('folder', '/mediazoo/offers');
+                    formData.append('useUniqueFileName', 'false'); // Overwrite instead of appending suffix
+
+                    // 3. Upload to ImageKit
+                    const uploadRes = await fetch('https://upload.imagekit.io/api/v1/files/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const uploadData = await uploadRes.json();
+
+                    if (!uploadRes.ok) {
+                        throw new Error(uploadData.message || 'Lataus epäonnistui ImageKitissä');
+                    }
+
+                    console.log('Upload success:', uploadData);
+                    showMessage(`Kuva ${index} päivitetty onnistuneesti!`, 'success');
+                    
+                    // Force refresh preview
+                    setTimeout(() => {
+                        const newUrl = uploadData.url + `?updatedAt=${new Date().getTime()}&tr=f-auto,q-auto`;
+                        document.getElementById(`preview-${index}`).innerHTML = `<img src="${newUrl}" alt="Tarjous ${index}">`;
+                        document.getElementById(`delete-btn-${index}`).style.display = 'block';
+                    }, 500);
+
+                } catch (err) {
+                    console.error('Upload error:', err);
+                    showMessage('Virhe lähetyksessä: ' + err.message, 'error');
+                } finally {
+                    button.disabled = false;
+                    button.textContent = `Lataa / Vaihda kuva`;
+                    fileInput.value = ''; // Reset input
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+
