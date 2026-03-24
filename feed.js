@@ -116,6 +116,22 @@ const LkiFeed = (() => {
     if (item.youtube_url)   socials.push(`<a href="${item.youtube_url}" target="_blank" class="lki-social-icon" title="YouTube">▶️</a>`);
 
 
+    let contactHtml = '';
+    if (item.show_contact) {
+      const shareUrlForContact = `https://laukaainfo.fi/?item=${item.id}&feed=open`;
+      const emailSubject = encodeURIComponent(`Kysymys LaukaaInfosta: ${item.title}`);
+      const emailBody = encodeURIComponent(`Hei! Näin ilmoituksenne LaukaaInfossa:\n"${item.title}"\n\n${shareUrlForContact}`);
+      const waText = encodeURIComponent(`Hei! Näin tämän LaukaaInfossa:\n"${item.title}"\n${shareUrlForContact}`);
+
+      const contacts = [];
+      if (item.contact_email) contacts.push(`<a href="mailto:${item.contact_email}?subject=${emailSubject}&body=${emailBody}" class="lki-contact-icon" title="Ota yhteyttä sähköpostilla">✉️</a>`);
+      if (item.contact_phone) contacts.push(`<a href="https://wa.me/${item.contact_phone}?text=${waText}" target="_blank" class="lki-contact-icon" title="Ota yhteyttä WhatsAppilla">💬</a>`);
+      
+      if (contacts.length > 0) {
+        contactHtml = `<div class="lki-contact-links">${contacts.join('')}</div>`;
+      }
+    }
+
     socialHtml = `
       <div class="lki-card__actions">
         ${socials.length > 0 ? `<div class="lki-card__social-links">${socials.join('')}</div>` : ''}
@@ -140,7 +156,7 @@ const LkiFeed = (() => {
           <h3 class="lki-card__title">${title}</h3>
           <p class="lki-card__desc">${desc}</p>
           <div class="lki-card__footer">
-            <div class="lki-card__date">🕐 ${dateStr}</div>
+            <div class="lki-card__date">🕐 ${dateStr} ${contactHtml}</div>
             ${socialHtml}
           </div>
           ${isVideo ? '<button class="lki-card__unmute-btn" title="Laita äänet päälle">🔊</button>' : ''}

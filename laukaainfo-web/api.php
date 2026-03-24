@@ -101,6 +101,7 @@ foreach ($rawData as $item) {
         'image'       => $item['image'] ?? '',
         'publish_at'  => $item['publish_at'] ?? '',
         'is_promoted' => $item['is_promoted'] ?? false,
+        'publisher_name' => $item['publisher_name'] ?? ''
     ];
 
     // Optional fields
@@ -108,6 +109,13 @@ foreach ($rawData as $item) {
     if (isset($item['facebook_url']))  $cleanItem['facebook_url'] = $item['facebook_url'];
     if (isset($item['instagram_url'])) $cleanItem['instagram_url'] = $item['instagram_url'];
     if (isset($item['youtube_url']))   $cleanItem['youtube_url'] = $item['youtube_url'];
+    if (isset($item['video_id']))      $cleanItem['video_id'] = $item['video_id'];
+    if (isset($item['is_shorts']))     $cleanItem['is_shorts'] = $item['is_shorts'];
+    
+    // Contact Info
+    if (isset($item['show_contact']))  $cleanItem['show_contact'] = (bool)$item['show_contact'];
+    if (isset($item['contact_email'])) $cleanItem['contact_email'] = $item['contact_email'];
+    if (isset($item['contact_phone'])) $cleanItem['contact_phone'] = $item['contact_phone'];
 
     $filteredData[] = $cleanItem;
 }

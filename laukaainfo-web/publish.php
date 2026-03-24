@@ -18,6 +18,7 @@ $csvCacheFile = 'advertisers_cache.csv';
 $csvUrl       = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSV1-67oQMZmF0talwT6HXNg01NP0YA5XCNpKJsrTQ2RHQNQhEL6dySYicrfM1pnIU6Z41UqpzQdtdz/pub?output=csv';
 $cacheTtl     = 600; // 10 minutes
 $maxItems     = 100;
+$companiesFile = '../live_companies.json';
 
 // --- URL PARAMETERS (PRE-FILL) ---
 $prefillId    = $_GET['business_id'] ?? '';
@@ -184,6 +185,20 @@ if (!empty($business_id) && !empty($sentToken)) {
         fclose($handle);
     }
 
+    // --- PRE-FILL FROM COMPANIES DATA ---
+    if ($advertiser && file_exists($companiesFile)) {
+        $companiesData = json_decode(file_get_contents($companiesFile), true);
+        if (isset($companiesData['results'])) {
+            foreach ($companiesData['results'] as $company) {
+                if ($company['id'] === 'company-' . $business_id) {
+                    $advertiser['phone'] = $company['whatsapp'] ?: $company['puhelin'] ?: '';
+                    $advertiser['email'] = $company['email'] ?: '';
+                    break;
+                }
+            }
+        }
+    }
+
     if ($advertiser) {
         // Check Expiration
         $today = date('Y-m-d');
@@ -302,6 +317,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') !== 'delet
     $instagram_url = sanitize($_POST['instagram_url'] ?? '');
     $youtube_url = sanitize($_POST['youtube_url'] ?? '');
     $publisher_name = mb_substr(sanitize($_POST['publisher_name'] ?? ''), 0, 20);
+    $contact_email = sanitize($_POST['contact_email'] ?? '');
+    $contact_phone = preg_replace('/[^0-9]/', '', $_POST['contact_phone'] ?? ''); // Only numbers for WA
+    $show_contact = isset($_POST['show_contact']) ? true : false;
     
     // Auto-detect YouTube Video ID and Shorts status
     // Auto-detect YouTube Video ID and Shorts status
@@ -391,6 +409,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') !== 'delet
                                 'is_promoted' => $is_promoted,
                                 'created_at' => date('c'),
                                 'publisher_name' => $publisher_name,
+                                'contact_email' => $contact_email,
+                                'contact_phone' => $contact_phone,
+                                'show_contact' => $show_contact,
                                 'imagekit_file_id' => $imagekit_file_id ?? null,
                                 'og' => [
                                     'title' => $title,
@@ -540,6 +561,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') !== 'delet
         ?>
     <?php endif; ?>
 
+    <?php if (isset($advertiser)): ?>
+        <hr style="border:0; border-top:1px solid #eee; margin: 2rem 0;">
+        <h3>✏️ Omat viimeisimmät julkaisut (Muokattavissa 15 min ajan)</h3>
+        <?php
+        $now = time();
+        $recent_items = [];
+        if (!empty($feedData)) {
+            foreach ($feedData as $item) {
+                if ($item['business_id'] == $business_id && ($now - strtotime($item['created_at'] ?? '0')) <= 900) {
+                    $recent_items[] = $item;
+                }
+            }
+        }
+        
+        if (empty($recent_items)) {
+            echo "<p style='color:#666; font-size:0.9rem;'>Ei muokattavia julkaisuja (viimeisen 15 min aikana julkaistut näkyvät tässä).</p>";
+        } else {
+            foreach ($recent_items as $rItem) {
+                $minsLeft = floor(15 - ($now - strtotime($rItem['created_at']))/60);
+                ?>
+                <div style="background:#fff; border:1px solid #cbe4f9; padding:1rem; border-radius:8px; margin-bottom:1rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+                    <div style="min-width:200px;">
+                        <strong><?= htmlspecialchars($rItem['title']) ?></strong><br>
+                        <small style="color:#e67e22; font-weight:bold;">Aikaa jäljellä: <?= $minsLeft ?> min</small>
+                    </div>
+                    <form method="POST" style="margin:0; display:flex; gap:0.5rem; flex-wrap:wrap;">
+                        <input type="hidden" name="business_id" value="<?= sanitize($business_id) ?>">
+                        <input type="hidden" name="publish_token" value="<?= sanitize($sentToken) ?>">
+                        <input type="hidden" name="target_id" value="<?= $rItem['id'] ?>">
+                        <button type="button" onclick='editItem(<?= json_encode($rItem, JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP) ?>)' style="width:auto; padding:0.5rem 1rem; background:#f39c12; margin-bottom:0; font-size:0.9rem;">Muokkaa ✏️</button>
+                        <button type="submit" name="action" value="delete" onclick="return confirm('Haluatko varmasti poistaa julkaisun lopullisesti?')" style="width:auto; padding:0.5rem 1rem; background:#e74c3c; margin-bottom:0; font-size:0.9rem;">Poista 🗑️</button>
+                    </form>
+                </div>
+                <?php
+            }
+        }
+        ?>
+        <hr style="border:0; border-top:1px solid #eee; margin: 2rem 0;">
+    <?php endif; ?>
+
     <form method="POST" enctype="multipart/form-data">
         <div class="row">
             <div>
@@ -580,6 +641,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') !== 'delet
         <label for="image_url">TAI kuvan URL-osoite</label>
         <input type="url" id="image_url" name="image_url" placeholder="https://esimerkki.com/kuva.jpg">
 
+        <p style="font-size:0.8rem; color:#666; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:1rem; margin-top:2rem;">Yhteystiedot feedissä (WhatsApp / Sähköposti)</p>
+        <div class="checkbox-group">
+            <input type="checkbox" id="show_contact" name="show_contact" <?= (isset($_POST['show_contact']) || (!isset($_POST['action']) && !empty($advertiser['phone']))) ? 'checked' : '' ?>>
+            <label for="show_contact" style="margin-bottom:0;">Näytä yhteystieto-ikonit ✉️ 💬 kortissa</label>
+        </div>
+        
+        <div class="row">
+            <div>
+                <label for="contact_email">Sähköposti</label>
+                <input type="email" id="contact_email" name="contact_email" value="<?= sanitize($_POST['contact_email'] ?? ($advertiser['email'] ?? '')) ?>" placeholder="info@yritys.fi">
+            </div>
+            <div>
+                <label for="contact_phone">WhatsApp-numero (muodossa 358...)</label>
+                <input type="text" id="contact_phone" name="contact_phone" value="<?= sanitize($_POST['contact_phone'] ?? ($advertiser['phone'] ?? '')) ?>" placeholder="358401234567">
+            </div>
+        </div>
+
         <div class="row">
             <div>
                 <label for="publish_at">Julkaisuaika</label>
@@ -611,44 +689,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') !== 'delet
         <pre><?= $previewJson ?></pre>
     <?php endif; ?>
     
-    <?php if (isset($advertiser)): ?>
-        <hr style="border:0; border-top:1px solid #eee; margin: 2rem 0;">
-        <h3>✏️ Omat viimeisimmät julkaisut (Muokattavissa 15 min ajan)</h3>
-        <?php
-        $now = time();
-        $recent_items = [];
-        if (!empty($feedData)) {
-            foreach ($feedData as $item) {
-                if ($item['business_id'] == $business_id && ($now - strtotime($item['created_at'] ?? '0')) <= 900) {
-                    $recent_items[] = $item;
-                }
-            }
-        }
-        
-        if (empty($recent_items)) {
-            echo "<p style='color:#666; font-size:0.9rem;'>Ei muokattavia julkaisuja.</p>";
-        } else {
-            foreach ($recent_items as $rItem) {
-                $minsLeft = floor(15 - ($now - strtotime($rItem['created_at']))/60);
-                ?>
-                <div style="background:#fff; border:1px solid #cbe4f9; padding:1rem; border-radius:8px; margin-bottom:1rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
-                    <div style="min-width:200px;">
-                        <strong><?= htmlspecialchars($rItem['title']) ?></strong><br>
-                        <small style="color:#e67e22; font-weight:bold;">Aikaa jäljellä: <?= $minsLeft ?> min</small>
-                    </div>
-                    <form method="POST" style="margin:0; display:flex; gap:0.5rem; flex-wrap:wrap;">
-                        <input type="hidden" name="business_id" value="<?= sanitize($business_id) ?>">
-                        <input type="hidden" name="publish_token" value="<?= sanitize($sentToken) ?>">
-                        <input type="hidden" name="target_id" value="<?= $rItem['id'] ?>">
-                        <button type="button" onclick='editItem(<?= json_encode($rItem, JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP) ?>)' style="width:auto; padding:0.5rem 1rem; background:#f39c12; margin-bottom:0; font-size:0.9rem;">Muokkaa ✏️</button>
-                        <button type="submit" name="action" value="delete" onclick="return confirm('Haluatko varmasti poistaa julkaisun lopullisesti?')" style="width:auto; padding:0.5rem 1rem; background:#e74c3c; margin-bottom:0; font-size:0.9rem;">Poista 🗑️</button>
-                    </form>
-                </div>
-                <?php
-            }
-        }
-        ?>
-    <?php endif; ?>
 </div>
 
 <script>
@@ -667,6 +707,10 @@ function editItem(item) {
     document.querySelector('input[name="facebook_url"]').value = item.facebook_url || '';
     document.querySelector('input[name="instagram_url"]').value = item.instagram_url || '';
     document.querySelector('input[name="youtube_url"]').value = item.youtube_url || '';
+    
+    document.getElementById('contact_email').value = item.contact_email || '';
+    document.getElementById('contact_phone').value = item.contact_phone || '';
+    document.getElementById('show_contact').checked = !!item.show_contact;
     
     // Put current image url in field so they don't lose it if they don't upload a new one
     document.getElementById('image_url').value = item.image || '';

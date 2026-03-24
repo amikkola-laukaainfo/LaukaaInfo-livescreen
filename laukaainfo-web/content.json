@@ -1,1 +1,25 @@
-[]
+[
+    {
+        "id": "test123456",
+        "business_id": "1",
+        "type": "event",
+        "title": "Testitapahtuma",
+        "description": "Tämä on testi, jossa pitäisi näkyä nimi ja yhteystiedot.",
+        "image": "https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg",
+        "publish_at": "2026-03-24T17:20:00Z",
+        "is_promoted": true,
+        "created_at": "2026-03-24T17:20:00Z",
+        "publisher_name": "Testaaja Oy",
+        "contact_email": "testi@example.com",
+        "contact_phone": "358401234567",
+        "show_contact": true,
+        "video_id": "dQw4w9WgXcQ",
+        "is_shorts": false,
+        "og": {
+            "title": "Testitapahtuma",
+            "description": "Katso sisältö LaukaaInfo-palvelussa",
+            "image": "https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg",
+            "url": "https://laukaainfo.fi/share/event/test123456"
+        }
+    }
+]
