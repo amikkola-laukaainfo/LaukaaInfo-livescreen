@@ -2526,3 +2526,171 @@ footer {
 .btn-cta.premium:hover {
     box-shadow: 0 8px 24px rgba(255, 153, 0, 0.55);
 }
+
+/* --- Business Flow UI Improvements --- */
+
+/* Decision Tree / Choice Guide */
+.choice-guide {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 24px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    margin: 2rem auto;
+    max-width: 800px;
+    border: 1px solid #eef2f7;
+    text-align: center;
+}
+
+.choice-guide h2 {
+    font-size: 1.5rem;
+    color: var(--primary-blue);
+    margin-bottom: 2rem;
+    justify-content: center;
+}
+
+.choice-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.choice-card {
+    background: #f8fafc;
+    padding: 1.5rem;
+    border-radius: 16px;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.choice-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-blue);
+    background: white;
+    box-shadow: 0 8px 20px rgba(0, 86, 179, 0.1);
+}
+
+.choice-card .icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.choice-card .label {
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+    color: var(--primary-blue);
+}
+
+.choice-card .desc {
+    font-size: 0.85rem;
+    color: #64748b;
+    line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+    .choice-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Benefit Banner */
+.benefit-banner {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 16px;
+    margin-bottom: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    box-shadow: 0 8px 20px rgba(34, 197, 94, 0.3);
+}
+
+.benefit-content h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.3rem;
+}
+
+.benefit-content p {
+    margin: 0;
+    opacity: 0.9;
+    font-size: 1rem;
+}
+
+.benefit-cta {
+    background: white;
+    color: #16a34a;
+    padding: 0.7rem 1.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 800;
+    white-space: nowrap;
+    transition: transform 0.2s;
+}
+
+.benefit-cta:hover {
+    transform: scale(1.05);
+}
+
+@media (max-width: 600px) {
+    .benefit-banner {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+/* Comparison Table */
+.comparison-section {
+    margin-top: 4rem;
+}
+
+.comparison-wrapper {
+    overflow-x: auto;
+    margin-top: 2rem;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+
+.comparison-table th, .comparison-table td {
+    padding: 1.2rem;
+    text-align: center;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.comparison-table th {
+    background: #f8fafc;
+    font-weight: 700;
+    color: var(--primary-blue);
+}
+
+.comparison-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: #334155;
+    background: #fdfdfd;
+}
+
+.comparison-table .check { color: #22c55e; font-weight: bold; }
+.comparison-table .cross { color: #ef4444; font-weight: bold; }
+
+.comparison-table tr:last-child td {
+    border-bottom: none;
+}
+
+.comparison-table .highlight {
+    background: #f0f7ff;
+    font-weight: 700;
+}
