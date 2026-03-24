@@ -98,6 +98,35 @@
             box-shadow: 0 12px 32px rgba(0,0,0,0.24);
         }
 
+        /* HEADER CTA */
+        .nav-cta-btn {
+            background: #ff9900;
+            color: white !important;
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 700 !important;
+            font-size: 0.85rem !important;
+            text-decoration: none;
+            transition: background 0.2s, transform 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-left: 1rem;
+            box-shadow: 0 4px 12px rgba(255,153,0,0.3);
+        }
+
+        .nav-cta-btn:hover {
+            background: #e68a00;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(255,153,0,0.4);
+        }
+
+        @media (max-width: 768px) {
+            .nav-cta-btn {
+                display: none; /* Mobile users use the Hero button or Sidebar */
+            }
+        }
+
         /* BENEFITS */
         .ilm-benefits {
             padding: 4rem 1.5rem;
