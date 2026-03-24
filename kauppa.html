@@ -648,6 +648,31 @@
                 mailtoBtn.href = `mailto:info@mediazoo.fi?subject=${subject}&body=${body}`;
             }
 
+            // MobilePay Click Handler with Validation
+            mobilepayBtn.addEventListener('click', (e) => {
+                const total = selectedPlan ? selectedPlan.price : 0;
+                if (total <= 0) {
+                    e.preventDefault();
+                    alert("Valitse ensin paketti yltä!");
+                    return;
+                }
+
+                // Check if likely on mobile
+                const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+                if (!isMobile) {
+                    const proceed = confirm(
+                        "MobilePay-suoralinkit vaativat puhelimeen asennetun sovelluksen toimiakseen.\n\n" +
+                        "Jos olet tietokoneella, suosittelemme:\n" +
+                        "1. Avaa tämä sivu puhelimellasi\n" +
+                        "2. Tai käytä sähköposti-ilmoitusta (Mail)\n\n" +
+                        "Haluatko silti yrittää avata sovelluksen?"
+                    );
+                    if (!proceed) {
+                        e.preventDefault();
+                    }
+                }
+            });
+
             // Initial trigger
             updatePrice();
         });
