@@ -230,33 +230,61 @@ if (!empty($business_id) && !empty($sentToken)) {
 
             // --- PLAN LIMITS & USAGE ---
 
+            $countTotal = 0;
+            $countMonth = 0;
+            $countDay = 0;
+            $countPromotedMonth = 0;
+            
             $now = time();
-            $oneDayAgo  = $now - (24 * 3600);
+            $oneDayAgo   = $now - (24 * 3600);
             $oneMonthAgo = $now - (30 * 24 * 3600);
 
             foreach ($feedData as $item) {
                 if ($item['business_id'] == $business_id) {
                     $pubTime = strtotime($item['publish_at'] ?? '');
+                    $countTotal++;
+                    
                     if ($pubTime > $oneMonthAgo) {
                         $countMonth++;
                         if (!empty($item['is_promoted'])) {
                             $countPromotedMonth++;
                         }
                     }
+                    if ($pubTime > $oneDayAgo) {
+                        $countDay++;
+                    }
                 }
             }
 
             $plan = $advertiser['paketti'];
             $limits = [
-                'free'        => ['posts' => 0, 'promotions' => 0],
+                'free'        => ['posts' => 1, 'promotions' => 0], // Default 1/mo, but overridden by starter logic below
                 'basic'       => ['posts' => 2, 'promotions' => 0],
                 'plus'        => ['posts' => 5, 'promotions' => 1],
                 'pro'         => ['posts' => 10, 'promotions' => 3],
                 'starter'     => ['posts' => 1, 'promotions' => 0],
                 'event_boost' => ['posts' => 1, 'promotions' => 1]
             ];
+            
             $curLimits = $limits[$plan] ?? ['posts' => 2, 'promotions' => 0];
-            $remPosts = max(0, $curLimits['posts'] - $countMonth);
+            
+            // Special Freemium/Free logic
+            if ($plan === 'free') {
+                // If they have used less than 3 total, they can still post (starter pack)
+                if ($countTotal < 3) {
+                    $remPosts = 3 - $countTotal;
+                } else {
+                    $remPosts = max(0, 1 - $countMonth);
+                }
+                
+                // Rate limit: 1 per day
+                if ($countDay >= 1) {
+                    $remPosts = 0;
+                }
+            } else {
+                $remPosts = max(0, $curLimits['posts'] - $countMonth);
+            }
+            
             $remPromos = max(0, $curLimits['promotions'] - $countPromotedMonth);
         }
     } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -475,8 +503,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') !== 'delet
         <div class="info-box">
             <h4>Tilaustiedot: <?= htmlspecialchars(strtoupper($advertiser['paketti'])) ?></h4>
             <ul>
-                <li>Julkaisuja jäljellä (30 pv): <strong><?= $remPosts ?> kpl</strong> (Käytetty <?= $countMonth ?>/<?= $curLimits['posts'] ?>)</li>
-                <li>Nostoja jäljellä (30 pv): <strong><?= $remPromos ?> kpl</strong> (Käytetty <?= $countPromotedMonth ?>/<?= $curLimits['promotions'] ?>)</li>
+                <?php if ($plan === 'free'): ?>
+                    <li>Julkaisuja käytettävissä: <strong><?= $remPosts ?> kpl</strong></li>
+                    <li>Julkaisuja yhteensä: <strong><?= $countTotal ?> kpl</strong></li>
+                    <?php if ($countDay >= 1): ?>
+                        <li class="limit-alert">Päivän julkaisuraja täynnä. Voit julkaista taas huomenna.</li>
+                    <?php elseif ($countTotal >= 3 && $countMonth >= 1): ?>
+                        <li class="limit-alert">Ilmaisjulkaisu tälle kuukaudelle käytetty (1/kk).</li>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <li>Julkaisuja jäljellä (30 pv): <strong><?= $remPosts ?> kpl</strong> (Käytetty <?= $countMonth ?>/<?= $curLimits['posts'] ?>)</li>
+                    <li>Nostoja jäljellä (30 pv): <strong><?= $remPromos ?> kpl</strong> (Käytetty <?= $countPromotedMonth ?>/<?= $curLimits['promotions'] ?>)</li>
+                <?php endif; ?>
             </ul>
         </div>
     <?php endif; ?>
