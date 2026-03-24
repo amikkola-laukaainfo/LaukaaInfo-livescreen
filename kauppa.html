@@ -296,13 +296,20 @@
             <div class="desktop-nav">
                 <ul class="nav-links">
                     <li class="nav-item">
-                        <a href="index.html" class="nav-link">Kauppa <span class="arrow">▼</span></a>
+                        <a href="#" class="nav-link">Kauppa <span class="arrow">▼</span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="lisaa-yritys.html">Lisää yritys</a></li>
-                            <li><a href="kauppa.html">Osta julkaisuaikaa</a></li>
+                            <li><a href="ilmoittaudu.html">Julkaise LaukaaInfossa</a></li>
+                            <li><a href="kauppa.html">Osta lisää näkyvyyttä</a></li>
+                            <li><a href="lisaa-yritys.html">Yritysnäkyvyys</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Hakulinkit <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
                             <li class="has-arrow">
                                 <a href="#">Kategoriat</a>
-                                <ul class="nested-menu" id="nav-categories"></ul>
+                                <ul class="nested-menu" id="nav-categories">
+                                </ul>
                             </li>
                             <li class="has-arrow">
                                 <a href="#">Taajamat</a>
@@ -343,11 +350,35 @@
             <button class="close-btn" id="close-sidebar-btn">&times;</button>
         </div>
         <div class="sidebar-content">
+            <!-- Pääosio: KAUPPA -->
             <div class="menu-section">
                 <h3 class="section-title">KAUPPA</h3>
                 <ul class="menu-list">
-                    <li><a href="lisaa-yritys.html" class="sidebar-link">Lisää yritys</a></li>
-                    <li><a href="kauppa.html" class="sidebar-link">Osta julkaisuaikaa</a></li>
+                    <li class="menu-item"><a href="ilmoittaudu.html" class="sidebar-link">Julkaise LaukaaInfossa</a></li>
+                    <li class="menu-item"><a href="kauppa.html" class="sidebar-link">Osta lisää näkyvyyttä</a></li>
+                    <li class="menu-item"><a href="lisaa-yritys.html" class="sidebar-link">Yritysnäkyvyys</a></li>
+                </ul>
+            </div>
+
+            <!-- Pääosio: HAKULINKIT -->
+            <div class="menu-section">
+                <h3 class="section-title">HAKULINKIT</h3>
+                <ul class="menu-list">
+                    <li class="menu-item has-submenu">
+                        <a href="#" class="submenu-toggle">Kategoriat <span class="arrow">▼</span></a>
+                        <ul class="submenu" id="sidebar-categories">
+                        </ul>
+                    </li>
+                    <li class="menu-item has-submenu">
+                        <a href="#" class="submenu-toggle">Taajamat <span class="arrow">▼</span></a>
+                        <ul class="submenu">
+                            <li><a href="laukaa.html" class="sidebar-link">Laukaa kk</a></li>
+                            <li><a href="leppavesi.html" class="sidebar-link">Leppävesi</a></li>
+                            <li><a href="lievestuore.html" class="sidebar-link">Lievestuore</a></li>
+                            <li><a href="vehnia.html" class="sidebar-link">Vehniä</a></li>
+                            <li><a href="vihtavuori.html" class="sidebar-link">Vihtavuori</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>
