@@ -18,6 +18,7 @@ const LkiFeed = (() => {
     event:    'lki-badge-type--event',
     business: 'lki-badge-type--business',
     community: 'lki-badge-type--community',
+    association: 'lki-badge-type--association',
     story:    'lki-badge-type--story',
     offer:    'lki-badge-type--offer',
     notice:   'lki-badge-type--notice',
@@ -68,8 +69,20 @@ const LkiFeed = (() => {
   }
 
   function cardHTML(item) {
-    const typeLabel = TYPE_LABELS[item.type] || item.type;
-    const typeClass = TYPE_CLASSES[item.type] || '';
+    let typeLabel = TYPE_LABELS[item.type] || item.type;
+    let typeClass = TYPE_CLASSES[item.type] || '';
+
+    // Differentiate between Yritys and Yhdistys based on rowid
+    if (item.type === 'business' || item.type === 'community') {
+      const bId = parseInt(item.business_id || item.business_rowid || 0);
+      if (bId > 1000) {
+        typeLabel = '⛪ Yhdistys';
+        typeClass = TYPE_CLASSES['association'];
+      } else {
+        typeLabel = '🏢 Yritys';
+        typeClass = TYPE_CLASSES['business'];
+      }
+    }
     const promoted = item.is_promoted ? `<span class="lki-badge-promoted">⭐ NOSTETTU</span>` : '';
     const dateStr = formatDate(item.publish_at);
     const title = escapeHtml(item.title);
