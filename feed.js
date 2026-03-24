@@ -197,6 +197,21 @@ const LkiFeed = (() => {
     });
   }
 
+  function stopAllVideos(root) {
+    const list = root.querySelector('.lki-feed__list');
+    if (!list) return;
+    list.querySelectorAll('.lki-card--video').forEach(card => {
+      const container = card.querySelector('.lki-card__video-placeholder');
+      if (container) container.innerHTML = '';
+      card.classList.remove('is-playing');
+      const unmuteBtn = card.querySelector('.lki-card__unmute-btn');
+      if (unmuteBtn) {
+        unmuteBtn.innerHTML = '🔊';
+        unmuteBtn.title = 'Laita äänet päälle';
+      }
+    });
+  }
+
   function renderList(list, items, activeFilter, activeBusiness) {
     if (!list) return;
     let filtered = items;
@@ -331,6 +346,7 @@ const LkiFeed = (() => {
     }
 
     function openLightbox(src, alt, videoId = null, isShorts = false) {
+      stopAllVideos(root); 
       if (!lightboxEl) setupLightbox();
       const videoContainer = lightboxEl.querySelector('.lki-lightbox__video');
       
@@ -505,7 +521,7 @@ const LkiFeed = (() => {
       }
     });
 
-    // Unmute handler
+    // Unmute handler — change to Toggle
     list.addEventListener('click', (e) => {
         const unmuteBtn = e.target.closest('.lki-card__unmute-btn');
         if (unmuteBtn) {
@@ -515,9 +531,20 @@ const LkiFeed = (() => {
             const container = card.querySelector('.lki-card__video-placeholder');
             const vid = card.dataset.videoId;
             if (container && vid) {
-                // Remove mute and add controls for better experience when unmuted
-                container.innerHTML = `<iframe src="https://www.youtube.com/embed/${vid}?autoplay=1&mute=0&controls=1&loop=1&playlist=${vid}&modestbranding=1&rel=0&playsinline=1&enablejsapi=1" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
-                unmuteBtn.style.display = 'none'; // Hide button once unmuted
+                const nowPlaying = card.classList.contains('is-playing-unmuted');
+                if (!nowPlaying) {
+                   // Unmute
+                   container.innerHTML = `<iframe src="https://www.youtube.com/embed/${vid}?autoplay=1&mute=0&controls=1&loop=1&playlist=${vid}&modestbranding=1&rel=0&playsinline=1&enablejsapi=1" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+                   unmuteBtn.innerHTML = '🔇';
+                   unmuteBtn.title = 'Mykistä';
+                   card.classList.add('is-playing-unmuted');
+                } else {
+                   // Mute again
+                   container.innerHTML = `<iframe src="https://www.youtube.com/embed/${vid}?autoplay=1&mute=1&controls=0&loop=1&playlist=${vid}&modestbranding=1&rel=0&playsinline=1&enablejsapi=1" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+                   unmuteBtn.innerHTML = '🔊';
+                   unmuteBtn.title = 'Laita äänet päälle';
+                   card.classList.remove('is-playing-unmuted');
+                }
             }
         }
     });
