@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Viikon nostot Laukaassa | LaukaaInfo</title>
+    <title>Viikon nostot | LaukaaInfo</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -112,6 +112,7 @@
             width: 100%;
             padding-top: 66%; /* 3:2 Aspect Ratio */
             overflow: hidden;
+            background-color: #eee;
         }
 
         .ad-image {
@@ -135,15 +136,6 @@
             flex-direction: column;
         }
 
-        .ad-category {
-            font-size: 0.8rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: var(--primary);
-            margin-bottom: 8px;
-            letter-spacing: 1px;
-        }
-
         .ad-title {
             font-size: 1.5rem;
             font-weight: 600;
@@ -161,6 +153,7 @@
             -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
             overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .ad-cta {
@@ -174,6 +167,7 @@
             transition: var(--transition);
             display: inline-block;
             box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
+            margin-top: auto;
         }
 
         .ad-cta:hover {
@@ -228,6 +222,15 @@
             z-index: 10;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
+
+        /* Tilarivi */
+        .status-msg {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            grid-column: 1 / -1;
+        }
     </style>
 </head>
 <body>
@@ -235,90 +238,13 @@
     <header>
         <div class="container">
             <h1>Viikon nostot Laukaassa</h1>
-            <p class="subtitle">Löydä paikalliset helmet, parhaat tarjoukset ja ajankohtaiset tapahtumat suoraan kotiovellesi.</p>
+            <p class="subtitle">Katso ajankohtaiset asiat, tarjoukset ja menovinkit suoraan paikallisilta yrittäjiltä.</p>
         </div>
     </header>
 
     <main class="container">
-        <div class="ad-grid">
-            <!-- Card 1 -->
-            <article class="ad-card">
-                <div class="badge">Uutta!</div>
-                <div class="ad-image-wrapper">
-                    <img src="https://images.unsplash.com/photo-1517248135467-4c7ed9d42339?auto=format&fit=crop&w=800&q=80" alt="Ravintolan ilmoitus" class="ad-image">
-                </div>
-                <div class="ad-content">
-                    <span class="ad-category">Ruoka & Juoma</span>
-                    <h2 class="ad-title">Lähiruokaa parhaimmillaan</h2>
-                    <p class="ad-description">Tervetuloa nauttimaan paikallisista raaka-aineista valmistettua lounasta ja illallista tunnelmallisessa ympäristössä. Tällä viikolla erikoistarjouksena paikallinen muikkulautanen.</p>
-                    <a href="#" class="ad-cta">Katso lisää</a>
-                </div>
-            </article>
-
-            <!-- Card 2 -->
-            <article class="ad-card">
-                <div class="ad-image-wrapper">
-                    <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6954?auto=format&fit=crop&w=800&q=80" alt="Remonttipalvelu" class="ad-image">
-                </div>
-                <div class="ad-content">
-                    <span class="ad-category">Asuminen</span>
-                    <h2 class="ad-title">Koti kuntoon kesäksi</h2>
-                    <p class="ad-description">Tarvitsetko apua piharemontoissa tai sisätilojen uudistamisessa? Meiltä saat ammattitaitoiset tekijät kaikkeen pihanhoitoon ja remontointiin. Pyydä ilmainen arvio jo tänään!</p>
-                    <a href="#" class="ad-cta">Katso lisää</a>
-                </div>
-            </article>
-
-            <!-- Card 3 -->
-            <article class="ad-card">
-                <div class="ad-image-wrapper">
-                    <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80" alt="Kesätapahtuma" class="ad-image">
-                </div>
-                <div class="ad-content">
-                    <span class="ad-category">Tapahtumat</span>
-                    <h2 class="ad-title">Kesämarkkinat Laukaassa</h2>
-                    <p class="ad-description">Lauantai on markkinapäivä! Tule tekemään löytöjä paikallisten tuottajien kojusta, nauttimaan elävästä musiikista ja tapaamaan tuttuja. Ohjelmaa koko perheelle klo 10-14.</p>
-                    <a href="#" class="ad-cta">Katso lisää</a>
-                </div>
-            </article>
-
-            <!-- Card 4 (Placeholder) -->
-            <article class="ad-card">
-                <div class="ad-image-wrapper">
-                    <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&q=80" alt="Teknologia" class="ad-image">
-                </div>
-                <div class="ad-content">
-                    <span class="ad-category">Palvelut</span>
-                    <h2 class="ad-title">Digiapu lähelläsi</h2>
-                    <p class="ad-description">Onko puhelin solmussa tai tietokone hidas? Me autamme kaikissa tekniikan haasteissa nopeasti ja luotettavasti. Kotikäynnit ilman matkakuluja Laukaan alueella.</p>
-                    <a href="#" class="ad-cta">Katso lisää</a>
-                </div>
-            </article>
-
-            <!-- Card 5 (Placeholder) -->
-            <article class="ad-card">
-                <div class="ad-image-wrapper">
-                    <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=800&q=80" alt="Kuntosali" class="ad-image">
-                </div>
-                <div class="ad-content">
-                    <span class="ad-category">Hyvinvointi</span>
-                    <h2 class="ad-title">Energiaa loppuvuoteen</h2>
-                    <p class="ad-description">Aloita uusi harrastus ja voita kaamos! Tarjoamme uusille jäsenille ensimmäisen kuukauden puoleen hintaan. Monipuolinen kuntosali ja laaja ryhmäliikuntavalikoima odottavat.</p>
-                    <a href="#" class="ad-cta">Katso lisää</a>
-                </div>
-            </article>
-
-            <!-- Card 6 (Placeholder) -->
-            <article class="ad-card">
-                <div class="ad-image-wrapper">
-                    <img src="https://images.unsplash.com/photo-1513584684374-8bdb74838a0f?auto=format&fit=crop&w=800&q=80" alt="Sisustus" class="ad-image">
-                </div>
-                <div class="ad-content">
-                    <span class="ad-category">Koti & Sisustus</span>
-                    <h2 class="ad-title">Viihtyisyyttä kotiin</h2>
-                    <p class="ad-description">Luo kotiisi tunnelmaa kauden uutuustuotteilla. Meiltä löydät upeat tekstiilit, valaisimet ja pienet sisustustavarat, joilla piristät kodin ilmettä vaivattomasti.</p>
-                    <a href="#" class="ad-cta">Katso lisää</a>
-                </div>
-            </article>
+        <div id="feed-container" class="ad-grid">
+            <div class="status-msg">Ladataan viikon nostoja... <br><small>Odota hetki</small></div>
         </div>
     </main>
 
@@ -328,5 +254,96 @@
         </div>
     </footer>
 
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const feedContainer = document.getElementById('feed-container');
+
+        // Haetaan data MediaZoon palvelimelta LaukaaInfon JS-sovellukseen
+        const apiUrl = 'https://www.mediazoo.fi/laukaainfo-web/api.php?limit=50';
+
+        fetch(apiUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Verkkovirhe: ' + response.status);
+                }
+                return response.json();
+            })
+            .then(result => {
+                // api.php palauttaa tyypillisesti objektin, jossa data-taulukko 'data' -avaimella
+                const items = result.data || result;
+                
+                // Tyhjennetään loaderi
+                feedContainer.innerHTML = '';
+                
+                if (!Array.isArray(items) || items.length === 0) {
+                    feedContainer.innerHTML = '<div class="status-msg">Ei nostoja tällä hetkellä.</div>';
+                    return;
+                }
+
+                items.forEach(item => {
+                    // Mäppäys JSON -> Kortin tiedot
+                    // Tuetaan sekä pyydettyjä että nykyisessä API:ssa olevia nimeämisiä
+                    const title = item.title || 'Ilman otsikkoa';
+                    const excerpt = item.excerpt || item.description || '';
+                    const link = item.link || item.website_url || '#';
+                    const image = item.image || '';
+                    const pubDate = item.date || item.publish_at || '';
+                    
+                    // Formatoi päivämäärä suomalaiseksi, jos sellainen on
+                    let badgeHtml = '';
+                    if (pubDate) {
+                        try {
+                            const d = new Date(pubDate);
+                            if (!isNaN(d.getTime())) {
+                                const fiDate = d.toLocaleDateString('fi-FI');
+                                badgeHtml = `<div class="badge">${fiDate}</div>`;
+                            } else {
+                                badgeHtml = `<div class="badge">${pubDate}</div>`;
+                            }
+                        } catch(e) {
+                            badgeHtml = `<div class="badge">${pubDate}</div>`;
+                        }
+                    }
+
+                    // Card wrapper
+                    const article = document.createElement('article');
+                    article.className = 'ad-card';
+
+                    // Image Html
+                    let imgHtml = '';
+                    if (image && image.trim() !== '') {
+                        imgHtml = `
+                        <div class="ad-image-wrapper">
+                            <img src="${image}" alt="${title}" class="ad-image" onerror="this.style.display='none'">
+                        </div>`;
+                    } else {
+                        // Tyylikäs harmaa paikkalaatikko jos kuvaa ei ole
+                        imgHtml = `
+                        <div class="ad-image-wrapper">
+                            <img src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22800%22%20height%3D%22533%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20800%20533%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_1%20text%20%7B%20fill%3A%23aaaaaa%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A40pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_1%22%3E%3Crect%20width%3D%22800%22%20height%3D%22533%22%20fill%3D%22%23eeeeee%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22295.5%22%20y%3D%22283.5%22%3EEi%20kuvaa%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" alt="Ei kuvaa" class="ad-image">
+                        </div>`;
+                    }
+
+                    // Render HTML sisäkkäin
+                    article.innerHTML = `
+                        ${badgeHtml}
+                        ${imgHtml}
+                        <div class="ad-content">
+                            <h2 class="ad-title">${title}</h2>
+                            <p class="ad-description">${excerpt}</p>
+                            <a href="${link}" class="ad-cta" target="_blank" rel="noopener noreferrer">Lue lisää</a>
+                        </div>
+                    `;
+
+                    feedContainer.appendChild(article);
+                });
+
+            })
+            .catch(error => {
+                console.error("Virhe ladattaessa syötettä:", error);
+                feedContainer.innerHTML = '<div class="status-msg">Sisällön lataaminen epäonnistui.<br><small>Yritä myöhemmin uudelleen.</small></div>';
+            });
+    });
+    </script>
 </body>
 </html>
