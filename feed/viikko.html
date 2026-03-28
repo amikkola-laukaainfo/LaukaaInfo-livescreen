@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viikon nostot Laukaassa | LaukaaInfo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #007bff;
+            --primary-dark: #0056b3;
+            --accent: #ff6b6b;
+            --bg: #f5f7fa;
+            --text-dark: #1a1a1a;
+            --text-muted: #666;
+            --card-bg: #ffffff;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.15);
+            --radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-dark);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        header {
+            padding: 80px 0 40px;
+            text-align: center;
+            background: linear-gradient(135deg, #ffffff 0%, #e9ecef 100%);
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+            font-weight: 300;
+        }
+
+        /* Grid */
+        .ad-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 32px;
+            padding-bottom: 80px;
+        }
+
+        @media (min-width: 768px) {
+            .ad-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .ad-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Card */
+        .ad-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(0,0,0,0.03);
+            position: relative;
+        }
+
+        .ad-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .ad-image-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 66%; /* 3:2 Aspect Ratio */
+            overflow: hidden;
+        }
+
+        .ad-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .ad-card:hover .ad-image {
+            transform: scale(1.05);
+        }
+
+        .ad-content {
+            padding: 24px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ad-category {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--primary);
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .ad-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            line-height: 1.25;
+            color: var(--text-dark);
+        }
+
+        .ad-description {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            flex-grow: 1;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .ad-cta {
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-align: center;
+            transition: var(--transition);
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
+        }
+
+        .ad-cta:hover {
+            background: var(--primary-dark);
+            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px 0;
+            text-align: center;
+            background: #fff;
+            border-top: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .footer-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            position: relative;
+            padding-bottom: 4px;
+        }
+
+        .footer-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 2px;
+            background: var(--primary);
+            transition: var(--transition);
+        }
+
+        .footer-link:hover::after {
+            width: 100%;
+        }
+
+        /* Misc */
+        .badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(4px);
+            padding: 6px 14px;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            z-index: 10;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <h1>Viikon nostot Laukaassa</h1>
+            <p class="subtitle">Löydä paikalliset helmet, parhaat tarjoukset ja ajankohtaiset tapahtumat suoraan kotiovellesi.</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="ad-grid">
+            <!-- Card 1 -->
+            <article class="ad-card">
+                <div class="badge">Uutta!</div>
+                <div class="ad-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1517248135467-4c7ed9d42339?auto=format&fit=crop&w=800&q=80" alt="Ravintolan ilmoitus" class="ad-image">
+                </div>
+                <div class="ad-content">
+                    <span class="ad-category">Ruoka & Juoma</span>
+                    <h2 class="ad-title">Lähiruokaa parhaimmillaan</h2>
+                    <p class="ad-description">Tervetuloa nauttimaan paikallisista raaka-aineista valmistettua lounasta ja illallista tunnelmallisessa ympäristössä. Tällä viikolla erikoistarjouksena paikallinen muikkulautanen.</p>
+                    <a href="#" class="ad-cta">Katso lisää</a>
+                </div>
+            </article>
+
+            <!-- Card 2 -->
+            <article class="ad-card">
+                <div class="ad-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6954?auto=format&fit=crop&w=800&q=80" alt="Remonttipalvelu" class="ad-image">
+                </div>
+                <div class="ad-content">
+                    <span class="ad-category">Asuminen</span>
+                    <h2 class="ad-title">Koti kuntoon kesäksi</h2>
+                    <p class="ad-description">Tarvitsetko apua piharemontoissa tai sisätilojen uudistamisessa? Meiltä saat ammattitaitoiset tekijät kaikkeen pihanhoitoon ja remontointiin. Pyydä ilmainen arvio jo tänään!</p>
+                    <a href="#" class="ad-cta">Katso lisää</a>
+                </div>
+            </article>
+
+            <!-- Card 3 -->
+            <article class="ad-card">
+                <div class="ad-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80" alt="Kesätapahtuma" class="ad-image">
+                </div>
+                <div class="ad-content">
+                    <span class="ad-category">Tapahtumat</span>
+                    <h2 class="ad-title">Kesämarkkinat Laukaassa</h2>
+                    <p class="ad-description">Lauantai on markkinapäivä! Tule tekemään löytöjä paikallisten tuottajien kojusta, nauttimaan elävästä musiikista ja tapaamaan tuttuja. Ohjelmaa koko perheelle klo 10-14.</p>
+                    <a href="#" class="ad-cta">Katso lisää</a>
+                </div>
+            </article>
+
+            <!-- Card 4 (Placeholder) -->
+            <article class="ad-card">
+                <div class="ad-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&q=80" alt="Teknologia" class="ad-image">
+                </div>
+                <div class="ad-content">
+                    <span class="ad-category">Palvelut</span>
+                    <h2 class="ad-title">Digiapu lähelläsi</h2>
+                    <p class="ad-description">Onko puhelin solmussa tai tietokone hidas? Me autamme kaikissa tekniikan haasteissa nopeasti ja luotettavasti. Kotikäynnit ilman matkakuluja Laukaan alueella.</p>
+                    <a href="#" class="ad-cta">Katso lisää</a>
+                </div>
+            </article>
+
+            <!-- Card 5 (Placeholder) -->
+            <article class="ad-card">
+                <div class="ad-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=800&q=80" alt="Kuntosali" class="ad-image">
+                </div>
+                <div class="ad-content">
+                    <span class="ad-category">Hyvinvointi</span>
+                    <h2 class="ad-title">Energiaa loppuvuoteen</h2>
+                    <p class="ad-description">Aloita uusi harrastus ja voita kaamos! Tarjoamme uusille jäsenille ensimmäisen kuukauden puoleen hintaan. Monipuolinen kuntosali ja laaja ryhmäliikuntavalikoima odottavat.</p>
+                    <a href="#" class="ad-cta">Katso lisää</a>
+                </div>
+            </article>
+
+            <!-- Card 6 (Placeholder) -->
+            <article class="ad-card">
+                <div class="ad-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1513584684374-8bdb74838a0f?auto=format&fit=crop&w=800&q=80" alt="Sisustus" class="ad-image">
+                </div>
+                <div class="ad-content">
+                    <span class="ad-category">Koti & Sisustus</span>
+                    <h2 class="ad-title">Viihtyisyyttä kotiin</h2>
+                    <p class="ad-description">Luo kotiisi tunnelmaa kauden uutuustuotteilla. Meiltä löydät upeat tekstiilit, valaisimet ja pienet sisustustavarat, joilla piristät kodin ilmettä vaivattomasti.</p>
+                    <a href="#" class="ad-cta">Katso lisää</a>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <a href="https://laukaainfo.fi" class="footer-link">Lisää ilmoituksia LaukaaInfossa</a>
+        </div>
+    </footer>
+
+</body>
+</html>
