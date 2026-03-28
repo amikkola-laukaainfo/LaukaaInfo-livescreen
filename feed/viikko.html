@@ -258,8 +258,26 @@
     document.addEventListener('DOMContentLoaded', () => {
         const feedContainer = document.getElementById('feed-container');
 
+        // Katsotaan onko yritys parametri asetettu
+        const urlParams = new URLSearchParams(window.location.search);
+        const yritys = urlParams.get('yritys');
+
         // Haetaan data MediaZoon palvelimelta LaukaaInfon JS-sovellukseen
-        const apiUrl = 'https://www.mediazoo.fi/laukaainfo-web/api.php?limit=50';
+        let apiUrl = 'https://www.mediazoo.fi/laukaainfo-web/api.php?limit=50';
+        
+        if (yritys) {
+            // Lisätään yritys-parametri fetch URLiin
+            apiUrl += '&yritys=' + encodeURIComponent(yritys);
+            
+            // Muutetaan sivun otsikko
+            const headerTitle = document.querySelector('header h1');
+            if (headerTitle) {
+                // Muotoillaan yrityksen nimen ensimmäinen kirjain isolla
+                const yritysNimi = yritys.charAt(0).toUpperCase() + yritys.slice(1);
+                headerTitle.textContent = 'Viikon nostot: ' + yritysNimi;
+                document.title = 'Viikon nostot: ' + yritysNimi + ' | LaukaaInfo';
+            }
+        }
 
         fetch(apiUrl)
             .then(response => {
@@ -270,13 +288,29 @@
             })
             .then(result => {
                 // api.php palauttaa tyypillisesti objektin, jossa data-taulukko 'data' -avaimella
-                const items = result.data || result;
+                let items = result.data || result;
+                
+                if (Array.isArray(items)) {
+                    // Suodatetaan julkaisut: näytetään vain viikon sisään julkaistut
+                    const now = new Date();
+                    const oneWeekAgo = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000));
+                    
+                    items = items.filter(item => {
+                        const pubDateStr = item.date || item.publish_at || '';
+                        if (!pubDateStr) return false;
+                        
+                        const pubDate = new Date(pubDateStr);
+                        if (isNaN(pubDate.getTime())) return false;
+                        
+                        return pubDate >= oneWeekAgo && pubDate <= now;
+                    });
+                }
                 
                 // Tyhjennetään loaderi
                 feedContainer.innerHTML = '';
                 
                 if (!Array.isArray(items) || items.length === 0) {
-                    feedContainer.innerHTML = '<div class="status-msg">Ei nostoja tällä hetkellä.</div>';
+                    feedContainer.innerHTML = '<div class="status-msg">Ei nostoja kuluneelta viikolta.</div>';
                     return;
                 }
 
