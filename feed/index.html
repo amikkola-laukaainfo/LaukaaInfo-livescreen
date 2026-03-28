@@ -460,14 +460,13 @@
                         });
                     }
 
-                    // Yritysfiltteröinti asiakaspuolella
-                    if (yritys) {
-                        const yritysLower = yritys.toLowerCase();
-                        items = items.filter(item => {
-                            const pubName = (item.publisher_name || '').toLowerCase();
-                            return pubName.includes(yritysLower);
-                        });
-                    }
+                    // Suodatetaan asiakaspuolella demoaineistot pois (sisältötekstistä poimien)
+                    items = items.filter(item => {
+                        const desc = (item.description || item.excerpt || '').toLowerCase();
+                        const title = (item.title || '').toLowerCase();
+                        // Poistetaan kohde, jos siinä esiintyy "(demo)" tai "demo"
+                        return !desc.includes('(demo)') && !title.includes('(demo)') && !desc.includes('demo)') && !desc.startsWith('demo');
+                    });
                 }
                 
                 feedContainer.innerHTML = '';
