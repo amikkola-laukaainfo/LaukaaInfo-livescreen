@@ -17,7 +17,7 @@
             --text-muted: #666;
             --card-bg: #ffffff;
             --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            --shadow-hover: 0 25px 50px rgba(0, 0, 0, 0.2); /* Enhanced hover shadow */
+            --shadow-hover: 0 25px 50px rgba(0, 0, 0, 0.2); 
             --radius: 16px;
             --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
@@ -126,8 +126,9 @@
             transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
-        .ad-card:hover .ad-image {
-            transform: scale(1.08); /* Suurempi zoomaus */
+        /* Zoom behavior only for images, not video iframes */
+        .ad-card:hover img.ad-image {
+            transform: scale(1.08);
         }
 
         /* Gradient Overlay */
@@ -148,7 +149,7 @@
         }
 
         /* Titles over Image */
-        .ad-title {
+        .ad-title-overlay {
             position: absolute;
             bottom: 20px;
             left: 20px;
@@ -161,9 +162,10 @@
             line-height: 1.25;
             text-shadow: 0 2px 8px rgba(0,0,0,0.4);
             transition: var(--transition);
+            pointer-events: none;
         }
 
-        .ad-card:hover .ad-title {
+        .ad-card:hover .ad-title-overlay {
             transform: translateY(-2px);
         }
 
@@ -172,6 +174,14 @@
             flex-grow: 1;
             display: flex;
             flex-direction: column;
+        }
+
+        .ad-title-inline {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            line-height: 1.25;
+            color: var(--text-dark);
         }
 
         .ad-description {
@@ -196,7 +206,7 @@
             font-weight: 700;
             font-size: 1.1rem;
             text-align: center;
-            display: block; /* Varmistaa koko leveyden */
+            display: block;
             width: 100%;
             transition: var(--transition);
             box-shadow: 0 4px 15px rgba(0, 123, 255, 0.25);
@@ -256,6 +266,7 @@
             z-index: 10;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             color: var(--text-dark);
+            pointer-events: none;
         }
 
         .category-badge {
@@ -272,6 +283,7 @@
             z-index: 10;
             box-shadow: 0 4px 10px rgba(0,0,0,0.15);
             letter-spacing: 1px;
+            pointer-events: none;
         }
 
         /* Tilarivi */
@@ -308,6 +320,14 @@
     <script>
     document.addEventListener('DOMContentLoaded', () => {
         const feedContainer = document.getElementById('feed-container');
+
+        // Apufunktio YouTube-videon ID:n poimimiseen linkistä
+        function getYouTubeId(url) {
+            if (!url) return null;
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
 
         // Katsotaan onko yritys parametri asetettu
         const urlParams = new URLSearchParams(window.location.search);
@@ -365,7 +385,10 @@
                     const excerpt = item.excerpt || item.description || '';
                     const link = item.link || item.website_url || '#';
                     const image = item.image || '';
+                    const videoUrl = item.video || item.youtube_url || item.video_url || '';
                     const pubDate = item.date || item.publish_at || '';
+                    
+                    const videoId = item.video_id || getYouTubeId(videoUrl);
                     
                     // Formatoi päivämäärä
                     let badgeHtml = '';
@@ -382,8 +405,7 @@
                         }
                     }
 
-                    // Kategoria Badge (Placeholder-logiikalla jos tyhjä)
-                    // Käännetään englanninkieliset tyypit suomeksi
+                    // Kategoria Badge
                     const categoryMap = {
                         'ad': 'Tarjous',
                         'event': 'Tapahtuma',
@@ -398,29 +420,36 @@
                     const article = document.createElement('article');
                     article.className = 'ad-card';
 
-                    // Image Html
-                    let imgHtml = '';
-                    if (image && image.trim() !== '') {
-                        imgHtml = `<img src="${image}" alt="${title}" class="ad-image" onerror="this.style.display='none'">`;
+                    // Image tai Video Html
+                    let mediaHtml = '';
+                    let isVideo = false;
+                    
+                    if (videoId) {
+                        isVideo = true;
+                        mediaHtml = `<iframe src="https://www.youtube.com/embed/${videoId}" class="ad-image" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+                    } else if (image && image.trim() !== '') {
+                        mediaHtml = `<img src="${image}" alt="${title}" class="ad-image" onerror="this.style.display='none'">`;
                     } else {
-                        imgHtml = `<img src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22800%22%20height%3D%22533%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20800%20533%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_1%20text%20%7B%20fill%3A%23aaaaaa%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A40pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_1%22%3E%3Crect%20width%3D%22800%22%20height%3D%22533%22%20fill%3D%22%23eeeeee%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22295.5%22%20y%3D%22283.5%22%3EEi%20kuvaa%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" alt="Ei kuvaa" class="ad-image">`;
+                        // Tyylikäs harmaa paikkalaatikko
+                        mediaHtml = `<img src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22800%22%20height%3D%22533%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20800%20533%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_1%20text%20%7B%20fill%3A%23aaaaaa%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A40pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_1%22%3E%3Crect%20width%3D%22800%22%20height%3D%22533%22%20fill%3D%22%23eeeeee%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22295.5%22%20y%3D%22283.5%22%3EEi%20kuvaa%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" alt="Ei kuvaa" class="ad-image">`;
                     }
 
-                    // Koko valtainen kuvarakenne titlellä
+                    // Kuvakortin yläosa
                     const wrapperHtml = `
                         <div class="ad-image-wrapper">
-                            ${imgHtml}
-                            <div class="gradient-overlay"></div>
+                            ${mediaHtml}
+                            ${!isVideo ? '<div class="gradient-overlay"></div>' : ''}
                             ${categoryBadgeHtml}
                             ${badgeHtml}
-                            <h2 class="ad-title">${title}</h2>
+                            ${!isVideo ? `<h2 class="ad-title-overlay">${title}</h2>` : ''}
                         </div>
                     `;
 
-                    // Mainosbannerimainen sisältö missä CTA selkeä
+                    // Kortin alaosa
                     article.innerHTML = `
                         ${wrapperHtml}
                         <div class="ad-content">
+                            ${isVideo ? `<h2 class="ad-title-inline">${title}</h2>` : ''}
                             <p class="ad-description">${excerpt}</p>
                             <a href="${link}" class="ad-cta" target="_blank" rel="noopener noreferrer">Lue lisää</a>
                         </div>
