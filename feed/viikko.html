@@ -234,7 +234,6 @@
             width: 100%;
             transition: var(--transition);
             box-shadow: 0 4px 15px rgba(0, 123, 255, 0.25);
-            margin-top: auto;
         }
 
         .ad-cta:hover {
@@ -318,6 +317,20 @@
             color: var(--text-muted);
             grid-column: 1 / -1;
         }
+
+        .share-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.04);
+            transition: var(--transition);
+        }
+        .share-icon:hover {
+            transform: scale(1.1);
+            background: rgba(0,0,0,0.08);
+        }
     </style>
 </head>
 <body>
@@ -361,22 +374,38 @@
             return null;
         }
 
-        // Katsotaan onko yritys parametri asetettu
+        // URL Parametrit
         const urlParams = new URLSearchParams(window.location.search);
         const yritys = urlParams.get('yritys');
+        const range = urlParams.get('range') || 'week'; // week tai month
+        const category = urlParams.get('category') || ''; // esim. tarjoukset, tapahtumat
 
         // Haetaan data MediaZoon palvelimelta LaukaaInfon JS-sovellukseen
         let apiUrl = 'https://www.mediazoo.fi/laukaainfo-web/api.php?limit=50';
         
+        const headerTitle = document.querySelector('header h1');
+        if (headerTitle) {
+            let rangeText = range === 'month' ? 'Kuukauden' : 'Viikon';
+            let categoryText = 'nostot';
+            if (category === 'tarjoukset') categoryText = 'tarjoukset';
+            else if (category === 'tapahtumat') categoryText = 'tapahtumat';
+            else if (category === 'uutiset') categoryText = 'uutiset';
+            
+            let baseTitle = `${rangeText} ${categoryText}`;
+            
+            if (yritys) {
+                const yritysNimi = yritys.charAt(0).toUpperCase() + yritys.slice(1);
+                headerTitle.textContent = `${baseTitle}: ${yritysNimi}`;
+                document.title = `${baseTitle}: ${yritysNimi} | LaukaaInfo`;
+            } else {
+                headerTitle.textContent = `${baseTitle} Laukaassa`;
+                // Ensimmäinen kirjain isoksi titleen
+                document.title = `${baseTitle.charAt(0).toUpperCase() + baseTitle.slice(1)} | LaukaaInfo`;
+            }
+        }
+        
         if (yritys) {
             apiUrl += '&yritys=' + encodeURIComponent(yritys);
-            
-            const headerTitle = document.querySelector('header h1');
-            if (headerTitle) {
-                const yritysNimi = yritys.charAt(0).toUpperCase() + yritys.slice(1);
-                headerTitle.textContent = 'Viikon nostot: ' + yritysNimi;
-                document.title = 'Viikon nostot: ' + yritysNimi + ' | LaukaaInfo';
-            }
         }
 
         fetch(apiUrl)
@@ -391,7 +420,12 @@
                 
                 if (Array.isArray(items)) {
                     const now = new Date();
-                    const oneWeekAgo = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000));
+                    let dateLimit = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000)); // viikko
+                    
+                    if (range === 'month') {
+                        dateLimit = new Date();
+                        dateLimit.setMonth(dateLimit.getMonth() - 1);
+                    }
                     
                     items = items.filter(item => {
                         const pubDateStr = item.date || item.publish_at || '';
@@ -400,8 +434,23 @@
                         const pubDate = new Date(pubDateStr);
                         if (isNaN(pubDate.getTime())) return false;
                         
-                        return pubDate >= oneWeekAgo && pubDate <= now;
+                        return pubDate >= dateLimit && pubDate <= now;
                     });
+
+                    // Kategoriafiltteröinti
+                    if (category) {
+                        items = items.filter(item => {
+                            const map = {
+                                'tarjoukset': ['ad', 'offer'],
+                                'tapahtumat': ['event'],
+                                'uutiset': ['article', 'news']
+                            };
+                            
+                            const catLower = category.toLowerCase();
+                            const allowedTypes = map[catLower] || [catLower];
+                            return item.type && allowedTypes.includes(item.type.toLowerCase());
+                        });
+                    }
                 }
                 
                 feedContainer.innerHTML = '';
@@ -484,7 +533,15 @@
                         <div class="ad-content">
                             ${isVideo ? `<h2 class="ad-title-inline">${title}</h2>` : ''}
                             <p class="ad-description">${excerpt}</p>
-                            <a href="${link}" class="ad-cta" target="_blank" rel="noopener noreferrer">Lue lisää</a>
+                            <div class="ad-bottom-row" style="margin-top: auto; display: flex; gap: 12px; align-items: center;">
+                                <a href="${link}" class="ad-cta" target="_blank" rel="noopener noreferrer" style="flex-grow: 1;">Lue lisää</a>
+                                <a href="https://wa.me/?text=${encodeURIComponent(title + ' - ' + link)}" target="_blank" class="share-icon" title="Jaa WhatsAppissa">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#25D366"><path d="M12.031 0C5.397 0 .013 5.385.013 12.019c0 2.12.552 4.186 1.599 6.007L0 24l6.113-1.604c1.761.968 3.754 1.48 5.918 1.48 6.634 0 12.018-5.385 12.018-12.02S18.665 0 12.031 0zM12 21.84c-1.801 0-3.564-.486-5.111-1.404l-.367-.217-3.791.994.996-3.687-.238-.37A9.873 9.873 0 0 1 2.05 12C2.05 6.494 6.536 2.015 12 2.015S21.95 6.494 21.95 12 17.464 21.84 12 21.84zm5.558-7.587c-.305-.153-1.806-.893-2.085-.995-.28-.103-.484-.154-.688.153-.204.307-.791.995-.97 1.201-.178.205-.357.23-.663.077-.306-.154-1.288-.475-2.454-1.517-.905-.811-1.516-1.815-1.694-2.122-.178-.306-.019-.472.134-.625.138-.138.306-.356.46-.534.152-.178.203-.306.305-.512.102-.205.051-.383-.025-.536-.076-.153-.688-1.66-.944-2.274-.249-.597-.502-.516-.688-.526-.178-.01-.383-.01-.587-.01-.204 0-.536.077-.816.383-.281.307-1.07 1.045-1.07 2.545s1.096 2.951 1.25 3.155c.153.205 2.15 3.284 5.205 4.603.725.313 1.291.5 1.733.642.729.231 1.393.198 1.916.12.585-.088 1.806-.738 2.06-1.45.255-.712.255-1.321.179-1.45-.077-.128-.281-.205-.587-.358z"/></svg>
+                                </a>
+                                <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}" target="_blank" class="share-icon" title="Jaa Facebookissa">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                                </a>
+                            </div>
                         </div>
                     `;
 
