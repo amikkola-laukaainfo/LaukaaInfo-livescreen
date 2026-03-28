@@ -321,12 +321,20 @@
     document.addEventListener('DOMContentLoaded', () => {
         const feedContainer = document.getElementById('feed-container');
 
-        // Apufunktio YouTube-videon ID:n poimimiseen linkistä
+        // Apufunktio YouTube-videon ID:n poimimiseen linkistä tai thumbnail-kuvasta
         function getYouTubeId(url) {
             if (!url) return null;
+            
+            // Perinteiset videolinkit (youtube.com, youtu.be)
             const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
             const match = url.match(regExp);
-            return (match && match[2].length === 11) ? match[2] : null;
+            if (match && match[2].length === 11) return match[2];
+            
+            // Thumbnail-kuvalinkit (img.youtube.com/vi/...)
+            const imgMatch = url.match(/img\.youtube\.com\/vi\/([^\/]+)/);
+            if (imgMatch && imgMatch[1].length === 11) return imgMatch[1];
+            
+            return null;
         }
 
         // Katsotaan onko yritys parametri asetettu
@@ -388,7 +396,8 @@
                     const videoUrl = item.video || item.youtube_url || item.video_url || '';
                     const pubDate = item.date || item.publish_at || '';
                     
-                    const videoId = item.video_id || getYouTubeId(videoUrl);
+                    let videoId = item.video_id || getYouTubeId(videoUrl);
+                    if (!videoId && image) videoId = getYouTubeId(image);
                     
                     // Formatoi päivämäärä
                     let badgeHtml = '';

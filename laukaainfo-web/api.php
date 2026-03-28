@@ -111,6 +111,8 @@ foreach ($rawData as $item) {
     if (isset($item['youtube_url']))   $cleanItem['youtube_url'] = $item['youtube_url'];
     if (isset($item['video_id']))      $cleanItem['video_id'] = $item['video_id'];
     if (isset($item['is_shorts']))     $cleanItem['is_shorts'] = $item['is_shorts'];
+    if (isset($item['video']))         $cleanItem['video'] = $item['video'];
+    if (isset($item['video_url']))     $cleanItem['video_url'] = $item['video_url'];
     
     // Contact Info
     if (isset($item['show_contact']))  $cleanItem['show_contact'] = (bool)$item['show_contact'];
