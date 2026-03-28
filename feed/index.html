@@ -468,7 +468,7 @@
                     const image = item.image || '';
                     const videoUrl = item.video || item.youtube_url || item.video_url || '';
                     const pubDate = item.date || item.publish_at || '';
-                    const phone = item.phone || item.puhelin || item.puhelinnumero || '';
+                    const phone = item.phone || item.puhelin || item.puhelinnumero || item.contact_phone || '';
                     const facebookUrl = item.facebook || item.facebook_url || '';
                     
                     let videoId = item.video_id || getYouTubeId(videoUrl);

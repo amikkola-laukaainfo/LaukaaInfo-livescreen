@@ -118,6 +118,11 @@ foreach ($rawData as $item) {
     if (isset($item['show_contact']))  $cleanItem['show_contact'] = (bool)$item['show_contact'];
     if (isset($item['contact_email'])) $cleanItem['contact_email'] = $item['contact_email'];
     if (isset($item['contact_phone'])) $cleanItem['contact_phone'] = $item['contact_phone'];
+    
+    if (isset($item['phone']))         $cleanItem['phone'] = $item['phone'];
+    if (isset($item['puhelin']))       $cleanItem['puhelin'] = $item['puhelin'];
+    if (isset($item['puhelinnumero'])) $cleanItem['puhelinnumero'] = $item['puhelinnumero'];
+    if (isset($item['facebook']))      $cleanItem['facebook'] = $item['facebook'];
 
     $filteredData[] = $cleanItem;
 }
