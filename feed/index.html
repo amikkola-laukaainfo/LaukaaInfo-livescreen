@@ -93,7 +93,7 @@
         }
 
         /* Grid */
-        .ad-grid {
+        .post-grid {
             display: grid;
             grid-template-columns: 1fr;
             gap: 32px;
@@ -101,19 +101,19 @@
         }
 
         @media (min-width: 768px) {
-            .ad-grid {
+            .post-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
 
         @media (min-width: 1024px) {
-            .ad-grid {
+            .post-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
         }
 
         /* Card - mainosbannerimainen */
-        .ad-card {
+        .post-card {
             background: var(--card-bg);
             border-radius: var(--radius);
             overflow: hidden;
@@ -125,13 +125,13 @@
             position: relative;
         }
 
-        .ad-card:hover {
+        .post-card:hover {
             transform: translateY(-8px);
             box-shadow: var(--shadow-hover);
         }
 
         /* Image Wrapper with 4:3 Banner Ratio */
-        .ad-image-wrapper {
+        .post-image-wrapper {
             position: relative;
             width: 100%;
             padding-top: 80%; /* Bannerin suhde */
@@ -139,7 +139,7 @@
             background-color: #eee;
         }
 
-        .ad-image {
+        .post-image {
             position: absolute;
             top: 0;
             left: 0;
@@ -150,7 +150,7 @@
         }
 
         /* Zoom behavior only for images, not video iframes */
-        .ad-card:hover img.ad-image {
+        .post-card:hover img.post-image {
             transform: scale(1.08);
         }
 
@@ -167,12 +167,12 @@
             pointer-events: none;
         }
 
-        .ad-card:hover .gradient-overlay {
+        .post-card:hover .gradient-overlay {
             height: 70%;
         }
 
         /* Titles over Image */
-        .ad-title-overlay {
+        .post-title-overlay {
             position: absolute;
             bottom: 20px;
             left: 20px;
@@ -188,18 +188,18 @@
             pointer-events: none;
         }
 
-        .ad-card:hover .ad-title-overlay {
+        .post-card:hover .post-title-overlay {
             transform: translateY(-2px);
         }
 
-        .ad-content {
+        .post-content {
             padding: 24px;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
         }
 
-        .ad-title-inline {
+        .post-title-inline {
             font-size: 1.5rem;
             font-weight: 600;
             margin-bottom: 12px;
@@ -207,7 +207,7 @@
             color: var(--text-dark);
         }
 
-        .ad-description {
+        .post-description {
             font-size: 1rem;
             color: var(--text-muted);
             margin-bottom: 24px;
@@ -220,7 +220,7 @@
         }
 
         /* Enhanced CTA Button */
-        .ad-cta {
+        .post-cta {
             background: var(--primary);
             color: white;
             text-decoration: none;
@@ -235,7 +235,7 @@
             box-shadow: 0 4px 15px rgba(0, 123, 255, 0.25);
         }
 
-        .ad-cta:hover {
+        .post-cta:hover {
             background: var(--primary-dark);
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(0, 123, 255, 0.35);
@@ -342,7 +342,7 @@
     </header>
 
     <main class="container">
-        <div id="feed-container" class="ad-grid">
+        <div id="feed-container" class="post-grid">
             <div class="status-msg">Ladataan viikon nostoja... <br><small>Odota hetki</small></div>
         </div>
     </main>
@@ -435,10 +435,15 @@
                     }
                     
                     items = items.filter(item => {
-                        const pubDateStr = item.date || item.publish_at || '';
+                        let pubDateStr = item.date || item.publish_at || '';
                         if (!pubDateStr) return false;
                         
-                        const pubDate = new Date(pubDateStr);
+                        let safeDateStr = pubDateStr;
+                        if (typeof safeDateStr === 'string' && safeDateStr.includes(' ')) {
+                            safeDateStr = safeDateStr.replace(' ', 'T');
+                        }
+                        
+                        const pubDate = new Date(safeDateStr);
                         if (isNaN(pubDate.getTime())) return false;
                         
                         return pubDate >= dateLimit && pubDate <= now;
@@ -496,7 +501,11 @@
                     let badgeHtml = '';
                     if (pubDate) {
                         try {
-                            const d = new Date(pubDate);
+                            let sDate = pubDate;
+                            if (typeof sDate === 'string' && sDate.includes(' ')) {
+                                sDate = sDate.replace(' ', 'T');
+                            }
+                            const d = new Date(sDate);
                             if (!isNaN(d.getTime())) {
                                 badgeHtml = `<div class="badge">${d.toLocaleDateString('fi-FI')}</div>`;
                             } else {
@@ -528,25 +537,25 @@
                     
                     if (videoId) {
                         isVideo = true;
-                        mediaHtml = `<iframe src="https://www.youtube.com/embed/${videoId}" class="ad-image" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+                        mediaHtml = `<iframe src="https://www.youtube.com/embed/${videoId}" class="post-image" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
                     } else if (igShortcode) {
                         isVideo = true;
-                        mediaHtml = `<iframe src="https://www.instagram.com/p/${igShortcode}/embed/captioned/" class="ad-image" frameborder="0" scrolling="no" allowtransparency="true" allow="encrypted-media"></iframe>`;
+                        mediaHtml = `<iframe src="https://www.instagram.com/p/${igShortcode}/embed/captioned/" class="post-image" frameborder="0" scrolling="no" allowtransparency="true" allow="encrypted-media"></iframe>`;
                     } else if (image && image.trim() !== '') {
-                        mediaHtml = `<img src="${image}" alt="${title}" class="ad-image" onerror="this.style.display='none'">`;
+                        mediaHtml = `<img src="${image}" alt="${title}" class="post-image" onerror="this.style.display='none'">`;
                     } else {
                         // Tyylikäs harmaa paikkalaatikko
-                        mediaHtml = `<img src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22800%22%20height%3D%22533%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20800%20533%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_1%20text%20%7B%20fill%3A%23aaaaaa%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A40pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_1%22%3E%3Crect%20width%3D%22800%22%20height%3D%22533%22%20fill%3D%22%23eeeeee%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22295.5%22%20y%3D%22283.5%22%3EEi%20kuvaa%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" alt="Ei kuvaa" class="ad-image">`;
+                        mediaHtml = `<img src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22800%22%20height%3D%22533%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20800%20533%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_1%20text%20%7B%20fill%3A%23aaaaaa%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A40pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_1%22%3E%3Crect%20width%3D%22800%22%20height%3D%22533%22%20fill%3D%22%23eeeeee%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22295.5%22%20y%3D%22283.5%22%3EEi%20kuvaa%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" alt="Ei kuvaa" class="post-image">`;
                     }
 
                     // Kuvakortin yläosa
                     const wrapperHtml = `
-                        <div class="ad-image-wrapper">
+                        <div class="post-image-wrapper">
                             ${mediaHtml}
                             ${!isVideo ? '<div class="gradient-overlay"></div>' : ''}
                             ${categoryBadgeHtml}
                             ${badgeHtml}
-                            ${!isVideo ? `<h2 class="ad-title-overlay">${title}</h2>` : ''}
+                            ${!isVideo ? `<h2 class="post-title-overlay">${title}</h2>` : ''}
                         </div>
                     `;
 
@@ -573,11 +582,11 @@
                     // Kortin alaosa
                     article.innerHTML = `
                         ${wrapperHtml}
-                        <div class="ad-content">
-                            ${isVideo ? `<h2 class="ad-title-inline">${title}</h2>` : ''}
-                            <p class="ad-description">${excerpt}</p>
-                            <div class="ad-bottom-row" style="margin-top: auto; display: flex; gap: 12px; align-items: center;">
-                                <a href="${link}" class="ad-cta" target="_blank" rel="noopener noreferrer" style="flex-grow: 1;">Lue lisää</a>
+                        <div class="post-content">
+                            ${isVideo ? `<h2 class="post-title-inline">${title}</h2>` : ''}
+                            <p class="post-description">${excerpt}</p>
+                            <div class="post-bottom-row" style="margin-top: auto; display: flex; gap: 12px; align-items: center;">
+                                <a href="${link}" class="post-cta" target="_blank" rel="noopener noreferrer" style="flex-grow: 1;">Lue lisää</a>
                                 ${whatsappBtnHtml}
                                 ${facebookBtnHtml}
                             </div>
