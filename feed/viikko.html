@@ -383,11 +383,14 @@
                     }
 
                     // Kategoria Badge (Placeholder-logiikalla jos tyhjä)
-                    // Pyritään kääntämään tai generoimaan jokin näyttävä tila
+                    // Käännetään englanninkieliset tyypit suomeksi
                     const categoryMap = {
                         'ad': 'Tarjous',
                         'event': 'Tapahtuma',
-                        'article': 'Uutinen'
+                        'article': 'Uutinen',
+                        'notice': 'Ilmoitus',
+                        'job': 'Työpaikka',
+                        'offer': 'Tarjous'
                     };
                     const categoryTxt = item.type ? (categoryMap[item.type] || item.type) : 'Nosto';
                     const categoryBadgeHtml = `<div class="category-badge">${categoryTxt}</div>`;
