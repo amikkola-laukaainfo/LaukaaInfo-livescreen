@@ -459,6 +459,15 @@
                             return item.type && allowedTypes.includes(item.type.toLowerCase());
                         });
                     }
+
+                    // Yritysfiltteröinti asiakaspuolella
+                    if (yritys) {
+                        const yritysLower = yritys.toLowerCase();
+                        items = items.filter(item => {
+                            const pubName = (item.publisher_name || '').toLowerCase();
+                            return pubName.includes(yritysLower);
+                        });
+                    }
                 }
                 
                 feedContainer.innerHTML = '';
