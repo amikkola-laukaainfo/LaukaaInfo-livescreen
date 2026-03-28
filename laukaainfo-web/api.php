@@ -108,6 +108,7 @@ foreach ($rawData as $item) {
     if (isset($item['website_url']))   $cleanItem['website_url'] = $item['website_url'];
     if (isset($item['facebook_url']))  $cleanItem['facebook_url'] = $item['facebook_url'];
     if (isset($item['instagram_url'])) $cleanItem['instagram_url'] = $item['instagram_url'];
+    if (isset($item['instagram']))     $cleanItem['instagram'] = $item['instagram'];
     if (isset($item['youtube_url']))   $cleanItem['youtube_url'] = $item['youtube_url'];
     if (isset($item['video_id']))      $cleanItem['video_id'] = $item['video_id'];
     if (isset($item['is_shorts']))     $cleanItem['is_shorts'] = $item['is_shorts'];

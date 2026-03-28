@@ -374,6 +374,14 @@
             return null;
         }
 
+        // Apufunktio Instagram Reels/Postauksen shortcoden poimimiseen
+        function getInstagramShortcode(url) {
+            if (!url) return null;
+            const regExp = /(?:(?:http|https):\/\/)?(?:www\.)?(?:instagram\.com|instagr\.am)\/(?:p|reel|tv)\/([a-zA-Z0-9_-]+)/i;
+            const match = url.match(regExp);
+            return match ? match[1] : null;
+        }
+
         // URL Parametrit
         const urlParams = new URLSearchParams(window.location.search);
         const yritys = urlParams.get('yritys');
@@ -473,6 +481,9 @@
                     
                     let videoId = item.video_id || getYouTubeId(videoUrl);
                     if (!videoId && image) videoId = getYouTubeId(image);
+
+                    const igUrlCandidacy = item.instagram_url || item.instagram || item.link || videoUrl || image || '';
+                    let igShortcode = getInstagramShortcode(igUrlCandidacy);
                     
                     // Formatoi päivämäärä
                     let badgeHtml = '';
@@ -511,6 +522,9 @@
                     if (videoId) {
                         isVideo = true;
                         mediaHtml = `<iframe src="https://www.youtube.com/embed/${videoId}" class="ad-image" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+                    } else if (igShortcode) {
+                        isVideo = true;
+                        mediaHtml = `<iframe src="https://www.instagram.com/p/${igShortcode}/embed/captioned/" class="ad-image" frameborder="0" scrolling="no" allowtransparency="true" allow="encrypted-media"></iframe>`;
                     } else if (image && image.trim() !== '') {
                         mediaHtml = `<img src="${image}" alt="${title}" class="ad-image" onerror="this.style.display='none'">`;
                     } else {
