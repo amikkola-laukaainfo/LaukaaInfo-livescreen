@@ -31,7 +31,10 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         const params = new URLSearchParams(window.location.search);
-        const category = params.get('cat');
+        let category = params.get('cat');
+        if (!category && document.body.dataset.category) {
+            category = document.body.dataset.category;
+        }
         const regionFromUrl = params.get('region');
 
         // Resolve selected region: URL takes absolute priority
@@ -84,8 +87,11 @@
         villageName = friendlyRegions[selectedRegion] || '';
         const displayTitle = villageName ? `${category} - ${villageName}` : category;
 
-        document.getElementById('category-name').textContent = displayTitle;
-        document.title = `${displayTitle} – LaukaaInfo`;
+        // Kun sivulla on kovakoodattu data-category (eli kyseessä on uusi SEO-alasivu), elä ylikirjoita sen Titlea tai H1-otsikkoa.
+        if (!document.body.dataset.category) {
+            document.getElementById('category-name').textContent = displayTitle;
+            document.title = `${displayTitle} – LaukaaInfo`;
+        }
 
         // Icon selection
         const categoryIcons = {
@@ -211,8 +217,39 @@
             displayCarousel = [...displayCarousel, ...randomPicks];
         }
 
+        // Inject JSON-LD Schema for SEO
+        injectSchema(categoryCompanies);
+
         renderFeatured(displayCarousel);
         renderDirectory(remainingPremium, free);
+    }
+
+    function injectSchema(companies) {
+        // Remove existing schemas to avoid duplicates if re-rendered
+        document.querySelectorAll('script[type="application/ld+json"][data-seo="localbusiness"]').forEach(el => el.remove());
+        
+        const schemas = companies.map(c => {
+            return {
+                "@context": "https://schema.org",
+                "@type": "LocalBusiness",
+                "name": c.nimi,
+                "address": {
+                    "@type": "PostalAddress",
+                    "streetAddress": c.osoite || "Laukaa",
+                    "addressLocality": "Laukaa",
+                    "addressCountry": "FI"
+                },
+                "url": c.nettisivu || `https://laukaainfo.fi/yrityskortti.html?id=${slugify(c.nimi)}`,
+                "telephone": c.puhelin || undefined,
+                "image": c.media && c.media.length > 0 && c.media[0].url ? c.media[0].url : undefined
+            };
+        });
+
+        const script = document.createElement('script');
+        script.type = 'application/ld+json';
+        script.setAttribute('data-seo', 'localbusiness');
+        script.textContent = JSON.stringify(schemas);
+        document.head.appendChild(script);
     }
 
     async function calculateDistances(reference) {

@@ -4,36 +4,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laukaa palvelut ja yritykset – Kaikki paikalliset kootusti | LaukaaInfo</title>
-    <meta name="description"
-        content="Laukaan palvelut, yritykset ja tapahtumat yhdestä paikasta. Etsi Laukaan yritykset, ravintolat ja palvelut kätevästi LaukaaInfosta.">
+    <title id="page-title">Laukaan ravintolat – Syö ja juo paikallisesti | LaukaaInfo</title>
+    <meta name="description" content="Löydä kaikki Laukaan ravintolat, lounaspaikat, kahvilat ja ruokapaikat kootusti. Katso aukioloajat ja yhteystiedot yhdestä paikasta.">
+    <link rel="canonical" href="https://laukaainfo.fi/laukaan-ravintolat.html" />
     <link rel="icon" href="logo.png">
-
-    <!-- PWA -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0056b3">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="icons/icon-192.png">
-
-    <!-- Fonts & Styles -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;700&display=swap"
         rel="stylesheet">
 
-    <!-- Leaflet Map -->
+    <!-- Leaflet for Map -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
 
     <link rel="stylesheet" href="style.css?v=20260301-1">
-    <link rel="stylesheet" href="feed.css">
+    <style>
+        .category-header {
+            padding: 4rem 1rem;
+            background: var(--light-blue);
+            text-align: center;
+            border-radius: var(--border-radius);
+            margin-bottom: 3rem;
+        }
+
+        .category-header h1 {
+            font-size: 3rem;
+            color: var(--primary-blue);
+        }
+
+        /* Carousel Styles */
+        .featured-carousel-section {
+            margin-bottom: 5rem;
+        }
+
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+            padding: 2rem 0;
+        }
+
+        .carousel-track {
+            display: flex;
+            gap: 2rem;
+            transition: transform 0.5s ease;
+        }
+
+        .carousel-item {
+            min-width: 350px;
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            border-top: 4px solid var(--accent-blue);
+        }
+
+        .premium-badge {
+            background: #ffcc00;
+            color: #333;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        /* Category Map */
+        .category-map-section {
+            margin-bottom: 5rem;
+        }
+
+        #category-map {
+            height: 500px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+        }
+
+        /* Company Grid */
+        .company-directory {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 5rem;
+        }
+
+        .company-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+
+        .company-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .company-card h3 {
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .company-card .address {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+    </style>
 </head>
 
-<body>
-
+<body data-category="Ruokailu">
     <nav class="top-nav">
         <div class="nav-container">
             <a href="index.html" class="nav-logo">
@@ -80,7 +162,7 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">Päätösten polut <span class="arrow">▼</span></a>
+                        <a href="asiahaku.html" class="nav-link">Päätösten polut <span class="arrow">▼</span></a>
                         <ul class="dropdown-menu">
                             <li><a href="asiahaku.html">Hae ja tutki</a></li>
                         </ul>
@@ -186,86 +268,38 @@
             </div>
         </div>
     </aside>
-
-    <header>
-        <div class="header-content">
-            <div class="header-title-container">
-                <img src="logo.png" alt="LaukaaInfo Logo" class="main-logo">
-                <h1>LaukaaInfo</h1>
-            </div>
-            <p>Laukaa taskussasi – tiedä, löydä ja osallistu.</p>
-            <div class="header-buttons">
-                <a href="https://www.youtube.com/@laukaainfo" target="_blank" class="btn-youtube">
-                    🎥 LaukaaInfo YouTube-kanavalle
-                </a>
-                <a href="https://www.facebook.com/groups/892675230270311" target="_blank" class="btn-facebook">
-                    👥 LaukaaInfo - keskustelu
-                </a>
-            </div>
-        </div>
-    </header>
+    <!-- We need the main script for the hamburger/sidebar to work, and to load nav categories -->
+    <script src="script.js"></script>
 
     <main>
-        <!-- Feed Accordion -->
-        <section class="feed-accordion-section">
-            <div class="feed-accordion">
-                <button class="feed-accordion-header closed" id="toggle-feed-btn" style="align-items: center;">
-                    <div style="display: flex; flex-direction: column; align-items: flex-start;">
-                        <span>📢 Mitä Laukaassa tapahtuu</span>
-                        <small style="font-size: 0.8rem; font-weight: normal; opacity: 0.9; margin-top: 2px;">Paikalliset ilmoitukset, tapahtumat ja tarjoukset</small>
-                    </div>
-                    <span class="icon-btn">Avaa</span>
-                </button>
-                <div class="feed-accordion-content closed" id="feed-accordion-content">
-                    <!-- Aktiivinen aineisto (Dynaaminen API mediazoo.fi:stä) -->
-                    <div id="homepage-feed" data-feed-src="https://www.mediazoo.fi/laukaainfo-web/api.php" data-share-url="https://mediazoo.fi/laukaainfo-web/item.php"></div>
+        <div class="category-header">
+            <span id="category-icon" style="font-size: 4rem; display: block; margin-bottom: 1rem;">🍽️</span>
+            <h1 id="category-name">Laukaan ravintolat ja ruokapaikat</h1>
+            <p id="category-description">Tutustu paikallisiin ravintoloihin, lounaspaikkoihin ja kahviloihin.</p>
+        </div>
+
+        <section class="featured-carousel-section" id="featured-section" style="display: none;">
+            <h2>⭐ Suositellut yritykset</h2>
+            <div class="carousel-container">
+                <button class="carousel-nav-btn prev" id="carousel-prev" aria-label="Edellinen">❮</button>
+                <div class="carousel-track" id="featured-carousel">
+                    <!-- Suositellut kortit tässä -->
                 </div>
+                <button class="carousel-nav-btn next" id="carousel-next" aria-label="Seuraava">❯</button>
             </div>
         </section>
 
-        <!-- Kauppa - Etusivu -->
-        <section id="kauppa-search" class="kauppa-hero">
-            <div class="search-hero-content">
-                <h1>Mitä haluat tietää, löytää tai tehdä Laukaassa?</h1>
-                <p>Hae yrityksiä, tapahtumia ja tiedotteita Laukaasta.</p>
-
-                <div class="main-search-box">
-                    <div class="search-input-wrapper">
-                        <input type="text" id="company-search"
-                            placeholder="Etsi esim. parturi, kahvila, taajama Laukaassa" aria-label="Yrityshaku"
-                            autocomplete="off">
-                        <ul id="search-suggestions" class="search-suggestions"></ul>
-                        <button id="search-btn" class="btn-search">Hae</button>
-                    </div>
-                    <div class="search-options">
-                        <label class="checkbox-container">
-                            <input type="checkbox" id="include-rss">
-                            <span class="checkmark"></span>
-                            Tapahtumat ja tiedotteet
-                        </label>
-                    </div>
-                    <!-- Hakutulokset (lisätty dynaamisesti) -->
-                    <div id="catalog-list" class="catalog-list-home"></div>
-                </div>
-
-                <p class="location-hint">Kirjoita tai klikkaa sijaintisi ja löydä lähimmät kohteet, tapahtumat tai tarjoukset kartalla.</p>
-
-                <div class="map-accordion">
-                    <button class="accordion-header" id="toggle-map-btn">
-                        <span>🗺️ Avaa karttahaku</span>
-                        <span class="icon">▼</span>
-                    </button>
-                    <div class="accordion-content" id="map-accordion-content">
-                        <div class="map-search-bar">
-                            <input type="text" id="map-local-search" placeholder="Hae kohteita kartalta..."
-                                aria-label="Etsi kartalta">
-                        </div>
-                        <div id="company-map" class="embedded-map"></div>
-                    </div>
-                </div>
-            </div>
+        <!-- Kartta -->
+        <section class="category-map-section">
+            <h2>Palvelut kartalla</h2>
+            <div id="category-map"></div>
         </section>
 
+        <section class="directory-section">
+            <div class="company-directory" id="company-list">
+                <!-- Kaikki kategoriassa olevat yritykset -->
+            </div>
+        </section>
         <!-- Unified Business Navigation -->
         <section class="business-nav-section">
             <h2 style="text-align: center; margin-bottom: 2rem;">Kasvata näkyvyyttäsi Laukaassa</h2>
@@ -290,50 +324,20 @@
                 </a>
             </div>
         </section>
-
-        <section id="categories-section" class="categories-grid-section">
-            <div class="categories-header">
-                <h2>Toimialat</h2>
-                <div class="region-filter-wrapper">
-                    <label for="region-select">Alue:</label>
-                    <select id="region-select" class="region-dropdown">
-                        <option value="all">Kaikki</option>
-                        <option value="laukaa">Laukaa</option>
-                        <option value="leppavesi">Leppävesi</option>
-                        <option value="lievestuore">Lievestuore</option>
-                        <option value="vehnia">Vehniä</option>
-                        <option value="vihtavuori">Vihtavuori</option>
-                    </select>
-                </div>
-            </div>
-            <div id="homepage-categories" class="categories-grid">
-                <!-- Kategoriat ladataan dynaamisesti CSV-datasta -->
-                <div class="loading-spinner">Ladataan kategorioita...</div>
-            </div>
-        </section>
-
-
-
     </main>
 
-    <!-- SEO Footer Links -->
-    <section class="seo-footer-links" style="background-color: #f5f9ff; padding: 2rem 1rem; margin-top: 3rem; text-align: center;">
-        <h3 style="color: #0056b3; font-size: 1.2rem; margin-bottom: 1rem;">Suosituimmat haut Laukaassa</h3>
-        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
-            <a href="laukaan-ravintolat.html" style="color: #ff3b30; text-decoration: none; font-weight: 600;">Laukaan ravintolat</a>
-            <a href="kategoria.html?cat=Autokorjaamot" style="color: #ff3b30; text-decoration: none; font-weight: 600;">Laukaan autokorjaamot</a>
-            <a href="kategoria.html?cat=Hyvinvointi ja terveys" style="color: #ff3b30; text-decoration: none; font-weight: 600;">Laukaan parturit ja kauneus</a>
-        </div>
-    </section>
-
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    <script src="category.js?v=20260304"></script>
     <footer>
         <div class="footer-content">
             <p>© 2026 LaukaaInfo – Epävirallinen yhteisösovellus</p>
             <div class="footer-links">
-                <a href="https://www.mediazoo.fi/laukaainfo/index.html">Tietoa sovelluksesta</a>
+                <a href="index.html">Etusivulle</a>
                 <a href="tietosuoja.html">Tietosuoja</a>
                 <a href="maksuehto.html">Maksuehdot</a>
-                <a href="https://mediazoo.fi/yhteystiedot/" class="footer-mailto-cta">✉️ Ota yhteyttä</a>
+                <a href="https://mediazoo.fi/yhteystiedot/">Yhteystiedot</a>
                 <button id="pwa-install-btn"
                     style="display: none; background: #00c3ff; color: white; border: none; padding: 5px 12px; border-radius: 20px; cursor: pointer; font-family: inherit; font-size: 0.9rem; margin-left: 10px;">Asenna
                     sovellus</button>
@@ -346,63 +350,6 @@
             </div>
         </div>
     </footer>
-
-    <div class="demo-notification">Tämä on yksityinen palvelusovellus.</div>
-
-    <!-- Service Worker registration is handled in script.js -->
-
-    <!-- Leaflet & Multi-cluster JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
-
-    <script src="script.js?v=20260301-1"></script>
-    <script src="feed.js?v=20260323a"></script>
-    <script>
-        // Feed accordion toggle with persistence
-        const feedBtn = document.getElementById('toggle-feed-btn');
-        const feedContent = document.getElementById('feed-accordion-content');
-        
-        // Load initial state
-        const urlParams = new URLSearchParams(window.location.search);
-        // Check for feed=open OR specialized filter (filter/feed_filter)
-        const hasFilterParam = urlParams.has('filter') || urlParams.has('feed_filter');
-        const forceOpen = urlParams.get('feed') === 'open' || window.location.hash === '#homepage-feed' || (hasFilterParam && urlParams.get('feed') !== 'false');
-        
-        const isExpanded = forceOpen || localStorage.getItem('lki_feed_expanded') === 'true';
-
-        if (isExpanded) {
-            feedBtn.classList.remove('closed');
-            feedContent.classList.remove('closed');
-            feedBtn.querySelector('.icon-btn').textContent = 'Sulje';
-            
-            // If opened via parameter or anchor, ensure we scroll to it
-            if (forceOpen) {
-                setTimeout(() => {
-                    feedBtn.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 400); // 400ms is usually enough for initial layout
-            }
-        }
-
-        feedBtn.addEventListener('click', function() {
-            this.classList.toggle('closed');
-            const nowClosed = this.classList.contains('closed');
-            this.querySelector('.icon-btn').textContent = nowClosed ? 'Avaa' : 'Sulje';
-            feedContent.classList.toggle('closed');
-            
-            // Save state
-            localStorage.setItem('lki_feed_expanded', !nowClosed);
-        });
-    </script>
-    <script>
-        // Taustalla toimiva kävijälaskuri
-        (function () {
-            setTimeout(function () {
-                try {
-                    fetch('analytics.php', { mode: 'no-cors' }).catch(() => { });
-                } catch (e) { }
-            }, 2000); // Viivästetään hieman, ettei häiritse sivun latausta
-        })();
-    </script>
 </body>
 
 </html>
