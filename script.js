@@ -858,17 +858,24 @@ async function loadCompanyData() {
             searchKeyword = hashParam.replace('#haku-', '').replace(/-/g, ' ');
         }
 
-        // Vapaa tekstihaku ?q= — täyttää hakukentän ja suodattaa tulokset ilman yritystäsmäystä
+        // Vapaa tekstihaku ?q= — täyttää hakukentän ja suorittaa haun automaattisesti
         const freeSearchInput = document.getElementById('company-search');
         if (freeQuery && freeSearchInput) {
             console.log('Vapaa tekstihaku URL-parametrista (?q=):', freeQuery);
             freeSearchInput.value = freeQuery;
-            filterCatalog();
+            // Simuloidaan Hae-painikkeen klikkaus jotta kaikki logiikka ajautuu
+            const searchBtn = document.getElementById('search-btn');
+            if (searchBtn) {
+                searchBtn.click();
+            } else {
+                filterCatalog();
+            }
+            updateSpotlight(welcomeCompany);
             setTimeout(() => {
                 const searchSection = document.getElementById('kauppa-search');
                 if (searchSection) searchSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 400);
-            updateSpotlight(welcomeCompany);
+            }, 300);
+
         } else {
             let selectedCompany = null;
             if (searchKeyword) {
