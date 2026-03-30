@@ -144,7 +144,23 @@
                 }
             });
 
-            const rawCategoryCompanies = allCompanies.filter(c => c.kategoria === category);
+            let rawCategoryCompanies;
+            const catLower = (category || '').trim().toLowerCase();
+            
+            if (catLower === 'autohuollot') {
+                rawCategoryCompanies = allCompanies.filter(c => {
+                    const searchStr = `${c.nimi || ''} ${c.kuvaus || ''} ${c.kategoria || ''} ${c.hakusana || c.hakusanat || ''}`.toLowerCase();
+                    return c.kategoria === 'Autokorjaamot' || c.kategoria === 'Auto ja kuljetus' || searchStr.includes('huolto') || searchStr.includes('korjaamo') || searchStr.includes('rengas');
+                });
+            } else if (catLower === 'parturit ja kauneus') {
+                rawCategoryCompanies = allCompanies.filter(c => {
+                    const searchStr = `${c.nimi || ''} ${c.kuvaus || ''} ${c.kategoria || ''} ${c.hakusana || c.hakusanat || ''}`.toLowerCase();
+                    return c.kategoria === 'Hyvinvointi ja terveys' && 
+                           (searchStr.includes('parturi') || searchStr.includes('kampaamo') || searchStr.includes('kauneus') || searchStr.includes('hius') || searchStr.includes('salon') || searchStr.includes('kynsi') || searchStr.includes('kosmetologi'));
+                });
+            } else {
+                rawCategoryCompanies = allCompanies.filter(c => c.kategoria === category);
+            }
 
             if (regionCoords && selectedRegion && selectedRegion !== 'all') {
                 console.log(`Filtering by region: ${selectedRegion} (13km radius)`);

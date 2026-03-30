@@ -1271,8 +1271,25 @@ function renderNavCategories(categories) {
     const navMenu = document.getElementById("nav-categories");
     const sidebarMenu = document.getElementById('sidebar-categories');
 
+    // Määritellään kustomoidut SEO-sivut
+    const customPages = [
+        { name: '⭐ Laukaan ravintolat', url: 'laukaan-ravintolat.html' },
+        { name: '⭐ Autohuollot & Korjaamot', url: 'laukaan-autohuollot.html' },
+        { name: '⭐ Parturit & Kauneus', url: 'laukaan-parturit-ja-kauneus.html' }
+    ];
+
     if (navMenu) {
         navMenu.innerHTML = '';
+        
+        customPages.forEach(page => {
+            const li = document.createElement('li');
+            li.innerHTML = `<a href="${page.url}" style="font-weight: 600; color: var(--primary-blue);">${page.name}</a>`;
+            navMenu.appendChild(li);
+        });
+
+        const divider = document.createElement('li');
+        divider.innerHTML = `<hr style="margin: 5px 10px; border: none; border-top: 1px solid #eee;">`;
+        navMenu.appendChild(divider);
 
         categories.forEach(cat => {
             const li = document.createElement('li');
@@ -1283,6 +1300,17 @@ function renderNavCategories(categories) {
 
     if (sidebarMenu) {
         sidebarMenu.innerHTML = '';
+        
+        customPages.forEach(page => {
+            const li = document.createElement('li');
+            li.innerHTML = `<a href="${page.url}" class="sidebar-link" style="font-weight: 600; color: var(--primary-blue);">${page.name}</a>`;
+            sidebarMenu.appendChild(li);
+        });
+
+        const divider = document.createElement('li');
+        divider.innerHTML = `<hr style="margin: 5px 10px; border: none; border-top: 1px solid #ddd;">`;
+        sidebarMenu.appendChild(divider);
+
         categories.forEach(cat => {
             const li = document.createElement('li');
             li.innerHTML = `<a href="kategoria.html?cat=${encodeURIComponent(cat)}&region=all" class="sidebar-link">${cat}</a>`;
