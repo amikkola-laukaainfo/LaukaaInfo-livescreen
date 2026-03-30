@@ -159,7 +159,16 @@ $remPromos = 0;
 
 // --- ADVERTISER VALIDATION (Always run if we have credentials) ---
 if (!empty($business_id) && !empty($sentToken)) {
-    // Fetch and Cache CSV
+    // --- SPECIAL ADMIN CASE (ID 99) ---
+    if ($business_id === 99 && $sentToken === 'ADMIN-99-LPS') {
+        $advertiser = [
+            'id' => 99,
+            'nimi' => 'LaukaaInfo',
+            'paketti' => 'admin',
+            'voimassa' => '31.12.2099'
+        ];
+    } else {
+        // Fetch and Cache CSV
     if (!file_exists($csvCacheFile) || (time() - filemtime($csvCacheFile) > $cacheTtl)) {
         $csvData = @file_get_contents($csvUrl);
         if ($csvData) {
@@ -184,6 +193,7 @@ if (!empty($business_id) && !empty($sentToken)) {
         }
         fclose($handle);
     }
+} // End of business_id validation
 
     // --- PRE-FILL FROM COMPANIES DATA ---
     if ($advertiser && file_exists($companiesFile)) {
@@ -278,7 +288,8 @@ if (!empty($business_id) && !empty($sentToken)) {
                 'plus'        => ['posts' => 5, 'promotions' => 1],
                 'pro'         => ['posts' => 10, 'promotions' => 3],
                 'starter'     => ['posts' => 1, 'promotions' => 0],
-                'event_boost' => ['posts' => 1, 'promotions' => 1]
+                'event_boost' => ['posts' => 1, 'promotions' => 1],
+                'admin'       => ['posts' => 999, 'promotions' => 999]
             ];
             
             $curLimits = $limits[$plan] ?? ['posts' => 2, 'promotions' => 0];
@@ -320,6 +331,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') !== 'delet
     $contact_email = sanitize($_POST['contact_email'] ?? '');
     $contact_phone = preg_replace('/[^0-9]/', '', $_POST['contact_phone'] ?? ''); // Only numbers for WA
     $show_contact = isset($_POST['show_contact']) ? true : false;
+    
+    // Default publisher name for Admin if left empty
+    if ($business_id === 99 && empty($publisher_name)) {
+        $publisher_name = 'LaukaaInfo';
+    }
     
     // Auto-detect YouTube Video ID and Shorts status
     // Auto-detect YouTube Video ID and Shorts status
