@@ -1340,9 +1340,18 @@ function renderHomepageCategories(categories) {
             Object.entries(categoryIcons).find(([k]) => k.toLowerCase() === cleanCat.toLowerCase())?.[1] ||
             '🏢';
         const card = document.createElement('a');
-        // Välitetään valittu alue kategoriasivulle
-        card.href = `kategoria.html?cat=${encodeURIComponent(cat)}&region=${encodeURIComponent(selectedRegion)}`;
         card.className = 'category-card';
+        
+        if (cleanCat === 'Ruokailu') {
+            card.href = 'laukaan-ravintolat.html';
+        } else if (cleanCat === 'Autokorjaamot') {
+            card.href = 'laukaan-autohuollot.html';
+        } else if (cleanCat === 'Hyvinvointi ja terveys') {
+            card.href = 'laukaan-parturit-ja-kauneus.html';
+        } else {
+            card.href = `kategoria.html?cat=${encodeURIComponent(cat)}&region=${encodeURIComponent(selectedRegion)}`;
+        }
+        
         card.innerHTML = `
             <span class="cat-icon">${icon}</span>
             <h3>${cat}</h3>
