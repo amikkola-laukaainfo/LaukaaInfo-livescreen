@@ -329,28 +329,34 @@ section[id] {
     border: none;
 }
 
-/* Pro-paketti: Kultainen hohde ja hienovarainen pulssi */
+/* Pro-paketti: Kultainen hohde ja voimakas syke */
 .custom-marker.is-pro div {
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.7) !important;
-    animation: pro-pulse 2s infinite ease-in-out;
+    background-color: #ffd700 !important;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.8) !important;
+    animation: pro-pulse 2s infinite ease-in-out !important;
+    z-index: 9999 !important;
+    border: 2px solid white !important;
 }
 
-/* Premium-paketti: Voimakkaampi punainen pulssi */
+/* Premium-paketti: Erittäin voimakas punainen syke */
 .custom-marker.is-premium div {
-    box-shadow: 0 0 20px rgba(255, 77, 77, 0.8) !important;
-    animation: premium-pulse 1.5s infinite ease-in-out;
+    background-color: #ff4d4d !important;
+    box-shadow: 0 0 20px rgba(255, 77, 77, 0.9) !important;
+    animation: premium-pulse 1.5s infinite ease-in-out !important;
+    z-index: 10000 !important;
+    border: 2px solid white !important;
 }
 
 @keyframes pro-pulse {
-    0% { transform: rotate(-45deg) scale(1); box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
-    50% { transform: rotate(-45deg) scale(1.1); box-shadow: 0 0 20px rgba(255, 215, 0, 0.9); }
-    100% { transform: rotate(-45deg) scale(1); box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+    0% { transform: rotate(-45deg) scale(1); box-shadow: 0 0 10px rgba(255, 215, 0, 0.6); }
+    50% { transform: rotate(-45deg) scale(1.25); box-shadow: 0 0 25px rgba(255, 215, 0, 1); }
+    100% { transform: rotate(-45deg) scale(1); box-shadow: 0 0 10px rgba(255, 215, 0, 0.6); }
 }
 
 @keyframes premium-pulse {
-    0% { transform: rotate(-45deg) scale(1); box-shadow: 0 0 15px rgba(255, 77, 77, 0.6); }
-    50% { transform: rotate(-45deg) scale(1.2); box-shadow: 0 0 30px rgba(255, 77, 77, 1); }
-    100% { transform: rotate(-45deg) scale(1); box-shadow: 0 0 15px rgba(255, 77, 77, 0.6); }
+    0% { transform: rotate(-45deg) scale(1); box-shadow: 0 0 15px rgba(255, 77, 77, 0.7); }
+    50% { transform: rotate(-45deg) scale(1.4); box-shadow: 0 0 35px rgba(255, 77, 77, 1); }
+    100% { transform: rotate(-45deg) scale(1); box-shadow: 0 0 15px rgba(255, 77, 77, 0.7); }
 }
 
 header {

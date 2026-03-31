@@ -373,21 +373,26 @@ function addMarkersToMap(companies) {
                 `;
             } else {
                 // Yrityksen merkki
-                const isPro = company.package && company.package.toLowerCase() === 'pro';
-                const isPremiumPkg = company.package && company.package.toLowerCase() === 'premium';
+                // Yrityksen merkki (Robust detection)
+                const pkgStr = (company.package || company.paketti || '').toLowerCase();
+                const typeStr = (company.tyyppi || company.type || '').toLowerCase();
+                const isPro = pkgStr.includes('pro') || typeStr.includes('pro');
+                const isPremiumPkg = pkgStr.includes('premium') || typeStr.includes('premium');
                 
                 const baseColor = categoryColors[company.kategoria] || '#0056b3';
                 const markerColor = isPro ? '#ffd700' : (isPremiumPkg ? '#ff4d4d' : baseColor);
+                const markerSize = (isPro || isPremiumPkg) ? '26px' : '20px';
 
                 markerHtml = `
                     <div style="
                         background-color: ${markerColor};
-                        width: 20px;
-                        height: 20px;
+                        width: ${markerSize};
+                        height: ${markerSize};
                         border-radius: 50% 50% 50% 0;
                         transform: rotate(-45deg);
                         border: 2px solid white;
                         box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+                        z-index: ${isPro || isPremiumPkg ? 9999 : 1};
                     "></div>
                 `;
 
@@ -441,15 +446,12 @@ function addMarkersToMap(companies) {
                 `;
             }
 
-            const isProMarker = company.package && company.package.toLowerCase() === 'pro';
-            const isPremiumMarker = company.package && company.package.toLowerCase() === 'premium';
-
             const icon = L.divIcon({
                 html: markerHtml,
-                className: `custom-marker ${isProMarker ? 'is-pro' : ''} ${isPremiumMarker ? 'is-premium' : ''}`,
-                iconSize: [24, 24],
-                iconAnchor: [12, 24],
-                popupAnchor: [0, -24]
+                className: `custom-marker ${isPro ? 'is-pro' : ''} ${isPremiumPkg ? 'is-premium' : ''}`,
+                iconSize: [30, 30],
+                iconAnchor: [15, 30],
+                popupAnchor: [0, -30]
             });
 
             const marker = L.marker([lat, lon], { icon: icon });

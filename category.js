@@ -550,27 +550,34 @@
 
         companies.forEach(company => {
             if (company.lat && company.lon) {
-                const isPro = company.package && company.package.toLowerCase() === 'pro';
-                const isPremiumPkg = company.package && company.package.toLowerCase() === 'premium';
+                // Yrityksen merkki (Robust detection)
+                const pkgStr = (company.package || company.paketti || company.taso || '').toLowerCase();
+                const typeStr = (company.tyyppi || company.type || '').toLowerCase();
+                const isPro = pkgStr.includes('pro') || typeStr.includes('pro');
+                const isPremiumPkg = pkgStr.includes('premium') || typeStr.includes('premium');
+
+                const markerColor = isPro ? '#ffd700' : (isPremiumPkg ? '#ff4d4d' : 'var(--primary-blue)');
+                const markerSize = (isPro || isPremiumPkg) ? '26px' : '20px';
 
                 const markerHtml = `
                     <div style="
-                        background-color: ${isPro ? '#ffd700' : (isPremiumPkg ? '#ff4d4d' : 'var(--primary-blue)')};
-                        width: 20px;
-                        height: 20px;
+                        background-color: ${markerColor};
+                        width: ${markerSize};
+                        height: ${markerSize};
                         border-radius: 50% 50% 50% 0;
                         transform: rotate(-45deg);
                         border: 2px solid white;
                         box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+                        z-index: ${isPro || isPremiumPkg ? 9999 : 1};
                     "></div>
                 `;
 
                 const icon = L.divIcon({
                     html: markerHtml,
                     className: `custom-marker ${isPro ? 'is-pro' : ''} ${isPremiumPkg ? 'is-premium' : ''}`,
-                    iconSize: [24, 24],
-                    iconAnchor: [12, 24],
-                    popupAnchor: [0, -24]
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -30]
                 });
 
                 const marker = L.marker([company.lat, company.lon], { icon: icon });
