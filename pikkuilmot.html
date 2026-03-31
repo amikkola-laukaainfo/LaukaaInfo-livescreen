@@ -170,22 +170,29 @@
     </footer>
 
     <script>
-        const API_URL = 'https://www.mediazoo.fi/laukaainfo-web/pikkuilmot_api.php';
         let allItems = [];
         let activeTag = 'kaikki';
 
         async function fetchAds() {
             try {
+                // Käytetään suhteellista polkua, jotta se toimii kaikissa ympäristöissä
+                const API_URL = 'laukaainfo-web/pikkuilmot_api.php';
                 console.log('Fetching ads from:', API_URL);
                 const r = await fetch(API_URL);
                 if (!r.ok) {
                     throw new Error(`Palvelin vastasi virheellä: ${r.status} ${r.statusText}`);
                 }
-                const res = await r.json();
-                console.log('Ads loaded:', res);
-                allItems = res.data || [];
-                renderTags();
-                renderAds();
+                const text = await r.text();
+                try {
+                    const res = JSON.parse(text);
+                    console.log('Ads loaded:', res);
+                    allItems = res.data || [];
+                    renderTags();
+                    renderAds();
+                } catch (jsonErr) {
+                    console.error('JSON Parse Error. Server outputted:', text);
+                    throw new Error(`Palvelimen vastaus ei ole JSON-muodossa. Tarkista konsoli.`);
+                }
             } catch (err) {
                 console.error('Fetch error:', err);
                 document.getElementById('ad-list').innerHTML = `<div class="empty-state">Virhe ladattaessa ilmoituksia: ${err.message}</div>`;

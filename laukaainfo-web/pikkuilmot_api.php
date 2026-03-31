@@ -12,7 +12,7 @@ $jsonFile = 'pikkuilmot.json';
 $adminPassword = 'Laukaa2026';
 
 // Prevent any output before headers
-ob_start();
+if (function_exists('ob_start')) ob_start();
 
 try {
     // Headers
@@ -21,9 +21,11 @@ try {
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 
+    $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
+
     // Handle Preflight
-    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-        ob_end_clean();
+    if ($method === 'OPTIONS') {
+        if (function_exists('ob_end_clean')) @ob_end_clean();
         exit;
     }
 
@@ -31,18 +33,19 @@ try {
      * Load and filter data (7-day expiration)
      */
     function getItems($file) {
-        if (!file_exists($file)) return [];
+        if (!file_exists($file)) return array();
         $raw = @file_get_contents($file);
-        if (!$raw) return [];
+        if (!$raw) return array();
         $data = json_decode($raw, true);
-        if (!is_array($data)) return [];
+        if (!is_array($data)) return array();
 
         $now = time();
-        $active = [];
+        $active = array();
         $hasChanged = false;
 
         foreach ($data as $item) {
-            $publishTime = strtotime($item['publish_at'] ?? '2000-01-01');
+            $pubAt = isset($item['publish_at']) ? $item['publish_at'] : '2000-01-01';
+            $publishTime = strtotime($pubAt);
             if (($now - $publishTime) < 604800) {
                 $active[] = $item;
             } else {
@@ -51,67 +54,72 @@ try {
         }
 
         if ($hasChanged) {
-            @file_put_contents($file, json_encode($active, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+            @file_put_contents($file, json_encode($active));
         }
 
         usort($active, function($a, $b) {
-            return strcmp($b['publish_at'] ?? '', $a['publish_at'] ?? '');
+            $atA = isset($a['publish_at']) ? $a['publish_at'] : '';
+            $atB = isset($b['publish_at']) ? $b['publish_at'] : '';
+            return strcmp($atB, $atA);
         });
         return $active;
     }
 
-    $method = $_SERVER['REQUEST_METHOD'];
-
     if ($method === 'GET') {
         $items = getItems($jsonFile);
-        ob_end_clean();
-        echo json_encode(['status' => 'ok', 'count' => count($items), 'data' => $items], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        if (function_exists('ob_end_clean')) @ob_end_clean();
+        echo json_encode(array('status' => 'ok', 'count' => count($items), 'data' => $items));
         exit;
     }
 
     if ($method === 'POST') {
-        $input = json_decode(file_get_contents('php://input'), true);
+        $rawInput = file_get_contents('php://input');
+        $input = json_decode($rawInput, true);
         if (!$input) $input = $_POST;
 
-        if (($input['password'] ?? '') !== $adminPassword) {
+        $pass = isset($input['password']) ? $input['password'] : '';
+        if ($pass !== $adminPassword) {
             http_response_code(403);
             throw new Exception('Unauthorized');
         }
 
-        $title = trim($input['title'] ?? '');
-        $link  = trim($input['link'] ?? '');
-        $tagsRaw = $input['tags'] ?? [];
+        $title = isset($input['title']) ? trim($input['title']) : '';
+        $link  = isset($input['link']) ? trim($input['link']) : '';
+        $tagsRaw = isset($input['tags']) ? $input['tags'] : array();
 
         if (is_string($tagsRaw)) {
-            $tagsArray = (strpos($tagsRaw, '[') === 0) ? (json_decode($tagsRaw, true) ?? explode(',', $tagsRaw)) : explode(',', $tagsRaw);
+            if (strpos($tagsRaw, '[') === 0) {
+                $decoded = json_decode($tagsRaw, true);
+                $tagsArray = is_array($decoded) ? $decoded : explode(',', $tagsRaw);
+            } else {
+                $tagsArray = explode(',', $tagsRaw);
+            }
         } else {
-            $tagsArray = is_array($tagsRaw) ? $tagsRaw : [];
+            $tagsArray = is_array($tagsRaw) ? $tagsRaw : array();
         }
 
         $tagsArray = array_values(array_filter(array_map('trim', $tagsArray)));
-        $primaryTag = !empty($tagsArray) ? $tagsArray[0] : '';
 
         if (empty($title) || empty($link)) {
             http_response_code(400);
             throw new Exception('Missing title or link');
         }
 
-        $newItem = [
+        $newItem = array(
             'id' => uniqid(),
             'title' => $title,
             'link' => $link,
-            'tag' => $primaryTag,
             'tags' => $tagsArray,
             'publish_at' => date('Y-m-d H:i:s'),
             'clicks' => 0
-        ];
+        );
 
         $items = getItems($jsonFile);
         $items[] = $newItem;
 
-        if (@file_put_contents($jsonFile, json_encode($items, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT))) {
-            ob_end_clean();
-            echo json_encode(['status' => 'ok', 'id' => $newItem['id'], 'share_url' => $link]);
+        if (@file_put_contents($jsonFile, json_encode($items))) {
+            if (function_exists('ob_end_clean')) @ob_end_clean();
+            echo json_encode(array('status' => 'ok', 'id' => $newItem['id'], 'share_url' => $link));
         } else {
             http_response_code(500);
             throw new Exception('Save failed');
@@ -122,10 +130,7 @@ try {
     http_response_code(405);
     throw new Exception('Method not allowed');
 
-} catch (Throwable $e) {
-    ob_end_clean();
-    echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
 } catch (Exception $e) {
-    ob_end_clean();
-    echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
+    if (function_exists('ob_end_clean')) @ob_end_clean();
+    echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
 }
