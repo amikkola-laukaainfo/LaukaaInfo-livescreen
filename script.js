@@ -904,29 +904,42 @@ async function loadCompanyData() {
         } else {
             let selectedCompany = null;
             if (searchKeyword) {
-                const lowerKeyword = searchKeyword.toLowerCase();
+                const lowerKeyword = searchKeyword.toLowerCase().trim();
+                console.log('[Deep-link] Yritetään avata yritystä hakusanalla:', lowerKeyword);
+                
                 // Etsitään yrityksen nimestä, url-ystävällisestä muodosta tai slugista
                 selectedCompany = allCompanies.find(c => {
                     if (!c.nimi) return false;
-                    const nameMatch = c.nimi.toLowerCase().includes(lowerKeyword);
-                    const urlFriendlyName = c.nimi.toLowerCase().replace(/[^a-z0-9äö]/g, '').includes(lowerKeyword.replace(/[^a-z0-9äö]/g, ''));
-                    const slugMatch = typeof slugify !== 'undefined' ? (slugify(c.nimi) === lowerKeyword || slugify(c.nimi) === slugify(lowerKeyword)) : false;
-                    return nameMatch || urlFriendlyName || slugMatch;
+                    const name = c.nimi.toLowerCase();
+                    const slug = slugify(c.nimi);
+                    const k_slug = slugify(lowerKeyword);
+                    
+                    const isExactMatch = name === lowerKeyword || slug === lowerKeyword;
+                    const isSlugMatch = slug === k_slug;
+                    const isPartialMatch = name.includes(lowerKeyword);
+                    
+                    return isExactMatch || isSlugMatch || isPartialMatch;
                 });
             }
 
             if (selectedCompany) {
-                console.log('Avataan yritys URL-parametrin perusteella:', selectedCompany.nimi);
+                console.log('[Deep-link] Löydetty yritys:', selectedCompany.nimi);
                 updateSpotlight(selectedCompany);
 
                 // AVATAAN MYÖS LkiModal jos ?open= parametri on käytössä
                 const openParam = queryParams.get('open');
                 if (openParam && window.LkiModal) {
-                    // Pieni viive varmistaa, että kartta on valmiina ja markkerit piirretty
+                    // Pieni viive varmistaa, että kartta ja markkerit ovat täysin valmiina
                     setTimeout(() => {
-                        console.log('Deep-link: Avataan LkiModal yritykselle:', selectedCompany.nimi);
+                        console.log('[Deep-link] Avataan LkiModal ja keskitetään kartta yritykselle:', selectedCompany.nimi);
+                        
+                        // Keskitytään karttaan
+                        if (map && selectedCompany.lat && selectedCompany.lon) {
+                            map.setView([selectedCompany.lat, selectedCompany.lon], 15);
+                        }
+                        
                         window.LkiModal.open(selectedCompany);
-                    }, 1000);
+                    }, 1200); // Hieman kasvatettu viive varmuuden vuoksi
                 }
 
                 // Asetetaan sana hakukenttään
@@ -954,6 +967,9 @@ async function loadCompanyData() {
                     }, 800);
                 }
             } else {
+                if (searchKeyword) {
+                    console.warn('[Deep-link] Yritystä ei löytynyt hakusanalla:', searchKeyword);
+                }
                 console.log('Päivitetään spotlight avaustilanteella');
                 updateSpotlight(welcomeCompany);
             }
