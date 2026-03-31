@@ -170,19 +170,25 @@
     </footer>
 
     <script>
-        const API_URL = 'laukaainfo-web/pikkuilmot_api.php';
+        const API_URL = 'https://www.mediazoo.fi/laukaainfo-web/pikkuilmot_api.php';
         let allItems = [];
         let activeTag = 'kaikki';
 
         async function fetchAds() {
             try {
+                console.log('Fetching ads from:', API_URL);
                 const r = await fetch(API_URL);
+                if (!r.ok) {
+                    throw new Error(`Palvelin vastasi virheellä: ${r.status} ${r.statusText}`);
+                }
                 const res = await r.json();
+                console.log('Ads loaded:', res);
                 allItems = res.data || [];
                 renderTags();
                 renderAds();
             } catch (err) {
-                document.getElementById('ad-list').innerHTML = '<div class="empty-state">Virhe ladattaessa ilmoituksia.</div>';
+                console.error('Fetch error:', err);
+                document.getElementById('ad-list').innerHTML = `<div class="empty-state">Virhe ladattaessa ilmoituksia: ${err.message}</div>`;
             }
         }
 
