@@ -191,7 +191,8 @@
                     renderAds();
                 } catch (jsonErr) {
                     console.error('JSON Parse Error. Server outputted:', text);
-                    throw new Error(`Palvelimen vastaus ei ole JSON-muodossa. Tarkista konsoli.`);
+                    const snippet = text.substring(0, 200).replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                    throw new Error(`Palvelimen vastaus ei ole JSON-muodossa. Vastaus alkaa: <br><pre style="background: #eee; padding: 10px; font-size: 0.8rem; overflow: auto; max-width: 100%;">${snippet}...</pre>`);
                 }
             } catch (err) {
                 console.error('Fetch error:', err);
