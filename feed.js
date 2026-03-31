@@ -145,15 +145,15 @@ const LkiFeed = (() => {
 
     if (item.type === 'pikkuilmoitus') {
       return `
-        <article class="lki-card lki-card--market" style="border-left: 5px solid #ffb100; background: #fffdf5;">
-          <div class="lki-card__body">
+        <article class="lki-card lki-card--market" style="border-left: 5px solid #ffb100; background: #fffdf5; display: block; padding-right: 10px;">
+          <div class="lki-card__body" style="width: 100%; box-sizing: border-box;">
             <div class="lki-card__badges">
               <span class="lki-badge-type lki-badge-type--market">🔥 NYT AJANKOHTAISTA</span>
             </div>
-            <h3 class="lki-card__title" style="color: #d35400;">${title}</h3>
-            <p class="lki-card__desc">${desc}</p>
-            <div class="lki-card__footer">
-              <a href="pikkuilmot.html" class="btn-fb" style="background: #ffb100; color: #000; width: 100%; border-radius: 8px; text-align: center; padding: 10px; font-weight: 700;">Katso kaikki ilmoitukset (Pikkuilmot) →</a>
+            <h3 class="lki-card__title" style="color: #d35400; margin-top: 5px;">${title}</h3>
+            <p class="lki-card__desc" style="margin-top: 5px; margin-bottom: 10px;">${desc}</p>
+            <div class="lki-card__footer" style="border-top: none; padding-top: 0;">
+              <a href="pikkuilmot.html" class="btn-fb" style="display: block; background: #ffb100; color: #000; width: 100%; border-radius: 8px; text-align: center; padding: 12px; font-weight: 700; text-decoration: none; box-sizing: border-box; transition: background 0.2s;">Katso kaikki ilmoitukset (Pikkuilmot) →</a>
             </div>
           </div>
         </article>
