@@ -175,8 +175,8 @@
 
         async function fetchAds() {
             try {
-                // Käytetään suhteellista polkua, jotta se toimii kaikissa ympäristöissä
-                const API_URL = 'laukaainfo-web/pikkuilmot_api.php';
+                // Käytetään absoluuttista polkua, jotta se toimii myös paikallisesti testatessa
+                const API_URL = 'https://www.mediazoo.fi/laukaainfo-web/pikkuilmot_api.php?ts=' + Date.now();
                 console.log('Fetching ads from:', API_URL);
                 const r = await fetch(API_URL);
                 if (!r.ok) {
