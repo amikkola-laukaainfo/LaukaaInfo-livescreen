@@ -248,6 +248,12 @@
         alertBox.className = 'alert';
         alertBox.style.display = 'none';
 
+        // Automaattinen tagin lisäys jos tekstikentässä on jotain
+        const pendingValue = newTagInput.value.trim().toLowerCase();
+        if (pendingValue && !selectedTags.includes(pendingValue)) {
+            selectedTags.push(pendingValue);
+        }
+
         const data = {
             password: document.getElementById('password').value,
             title: document.getElementById('title').value,

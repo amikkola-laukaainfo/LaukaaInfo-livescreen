@@ -5,8 +5,8 @@
  */
 
 // --- CONFIGURATION ---
-error_reporting(0);
-ini_set('display_errors', 0);
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 date_default_timezone_set('Europe/Helsinki');
 $jsonFile = 'pikkuilmot.json';
 $adminPassword = 'Laukaa2026'; // PLEASE CHANGE THIS AFTER DEPLOYMENT
@@ -89,7 +89,23 @@ if ($method === 'POST') {
     // Validation
     $title = trim($input['title'] ?? '');
     $link  = trim($input['link'] ?? '');
-    $tags  = $input['tags'] ?? []; // Expected as array
+    $tagsRaw = $input['tags'] ?? [];
+
+    // Robust tag parsing (handle array, comma-separated string, or JSON string)
+    if (is_string($tagsRaw)) {
+        if (strpos($tagsRaw, '[') === 0) {
+            $decoded = json_decode($tagsRaw, true);
+            $tagsArray = is_array($decoded) ? $decoded : explode(',', $tagsRaw);
+        } else {
+            $tagsArray = explode(',', $tagsRaw);
+        }
+    } else {
+        $tagsArray = is_array($tagsRaw) ? $tagsRaw : [];
+    }
+
+    // Clean tags: trim, remove empty, reset keys
+    $tagsArray = array_values(array_filter(array_map('trim', $tagsArray)));
+    $primaryTag = !empty($tagsArray) ? $tagsArray[0] : '';
 
     if (empty($title) || empty($link)) {
         http_response_code(400);
@@ -102,7 +118,8 @@ if ($method === 'POST') {
         'id'         => uniqid(),
         'title'      => $title,
         'link'       => $link,
-        'tags'       => is_array($tags) ? array_map('trim', $tags) : [],
+        'tag'        => $primaryTag, // singular for compatibility
+        'tags'       => $tagsArray,  // array for filtering
         'publish_at' => date('Y-m-d H:i:s'),
         'clicks'     => 0
     ];
