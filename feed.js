@@ -408,11 +408,36 @@ const LkiFeed = (() => {
           return r.json();
         });
 
-      const fetchPikku = fetch(pikkuUrl)
-        .then(r => r.ok ? r.json() : null)
-        .catch(() => null);
+      // Implement 12-hour caching for Pikkuilmot summary
+      const CACHE_KEY = 'lki_pikku_cache';
+      const CACHE_EXPIRY = 12 * 60 * 60 * 1000; // 12 hours
+      let pikkuPromise;
 
-      Promise.all([fetchPromise, fetchPikku, minDelay])
+      if (!forceRefresh) {
+        try {
+          const cached = localStorage.getItem(CACHE_KEY);
+          if (cached) {
+            const parsed = JSON.parse(cached);
+            if (Date.now() - parsed.ts < CACHE_EXPIRY) {
+              pikkuPromise = Promise.resolve(parsed.data);
+            }
+          }
+        } catch (e) { console.warn('Cache read error', e); }
+      }
+
+      if (!pikkuPromise) {
+        pikkuPromise = fetch(pikkuUrl)
+          .then(r => r.ok ? r.json() : null)
+          .then(res => {
+            if (res && res.status === 'ok') {
+               localStorage.setItem(CACHE_KEY, JSON.stringify({ data: res, ts: Date.now() }));
+            }
+            return res;
+          })
+          .catch(() => null);
+      }
+
+      Promise.all([fetchPromise, pikkuPromise, minDelay])
         .then(([res, pikkuRes]) => {
           let data = Array.isArray(res) ? res : (res.data || []);
           
@@ -438,10 +463,13 @@ const LkiFeed = (() => {
             data.splice(1, 0, summaryCard);
           }
           
-          // Detect new content (compare first item ID)
+          // Detect new content: Check if the top item IDs or the summary content has changed
           if (!isInitialLoad && data.length > 0 && currentItems.length > 0) {
-            if (data[0].id !== currentItems[0].id) {
-              newAlert.classList.remove('hidden');
+            const newKeys = data.slice(0, 3).map(i => i.id).join('|');
+            const oldKeys = currentItems.slice(0, 3).map(i => i.id).join('|');
+            
+            if (newKeys !== oldKeys) {
+               newAlert.classList.remove('hidden');
             }
           }
 
