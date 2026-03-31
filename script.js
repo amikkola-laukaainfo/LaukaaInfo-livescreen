@@ -316,6 +316,8 @@ function addMarkersToMap(companies) {
             
             let markerHtml = '';
             let popupContent = '';
+            let isPro = false;
+            let isPremiumPkg = false;
             
             if (company.isRss) {
                 // Tapahtuman merkki
@@ -376,8 +378,8 @@ function addMarkersToMap(companies) {
                 // Yrityksen merkki (Robust detection)
                 const pkgStr = (company.package || company.paketti || '').toLowerCase();
                 const typeStr = (company.tyyppi || company.type || '').toLowerCase();
-                const isPro = pkgStr.includes('pro') || typeStr.includes('pro');
-                const isPremiumPkg = pkgStr.includes('premium') || typeStr.includes('premium');
+                isPro = pkgStr.includes('pro') || typeStr.includes('pro');
+                isPremiumPkg = pkgStr.includes('premium') || typeStr.includes('premium');
                 
                 const baseColor = categoryColors[company.kategoria] || '#0056b3';
                 const markerColor = isPro ? '#ffd700' : (isPremiumPkg ? '#ff4d4d' : baseColor);
@@ -564,6 +566,45 @@ function fetchLievestuoreItems() {
     script.onerror = () => console.warn('Lievestuoreen Blogger-syötteen haku epäonnistui.');
     document.body.appendChild(script);
 }
+
+/**
+ * Tallentaa Lievestuoreen Blogger-uutiset globaaliin RSS-muistiin.
+ */
+window.storeLievestuoreItems = function(data) {
+    if (!data || !data.feed || !data.feed.entry) return;
+    
+    data.feed.entry.forEach(entry => {
+        const title = entry.title.$t;
+        const link = entry.link.find(l => l.rel === 'alternate').href;
+        const dateStr = entry.published.$t;
+        const date = new Date(dateStr);
+        
+        // Pick first image
+        let imageUrl = '';
+        if (entry.content && entry.content.$t) {
+            const imgMatch = entry.content.$t.match(/<img[^>]+src="([^">]+)"/);
+            if (imgMatch) imageUrl = imgMatch[1];
+        }
+        
+        const item = {
+            title,
+            link,
+            date,
+            dateStr: date.toLocaleDateString('fi-FI'),
+            imageUrl,
+            description: (entry.summary ? entry.summary.$t : (entry.content ? entry.content.$t.replace(/<[^>]*>/g, '').substring(0, 120) : '')),
+            type: 'Tiedote',
+            typeClass: 'news',
+            isRss: true
+        };
+        
+        if (!allRssItems.find(i => i.link === item.link)) {
+            allRssItems.push(item);
+        }
+    });
+
+    console.log('Lievestuoreen uutiset tallennettu hakuun:', data.feed.entry.length);
+};
 
 
 /**
