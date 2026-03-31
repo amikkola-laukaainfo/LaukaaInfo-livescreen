@@ -144,8 +144,13 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">Hakulinkit <span class="arrow">▼</span></a>
+                        <a href="#" class="nav-link active">Hakulinkit <span class="arrow">▼</span></a>
                         <ul class="dropdown-menu">
+                            <li class="has-arrow">
+                                <a href="#">Suosituimmat</a>
+                                <ul class="nested-menu" id="nav-featured">
+                                </ul>
+                            </li>
                             <li class="has-arrow">
                                 <a href="#">Kategoriat</a>
                                 <ul class="nested-menu" id="nav-categories">
@@ -173,7 +178,7 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="asiahaku.html" class="nav-link">Päätösten polut <span class="arrow">▼</span></a>
+                        <a href="#" class="nav-link">Päätösten polut <span class="arrow">▼</span></a>
                         <ul class="dropdown-menu">
                             <li><a href="asiahaku.html">Hae ja tutki</a></li>
                         </ul>
@@ -225,6 +230,11 @@
             <div class="menu-section">
                 <h3 class="section-title">HAKULINKIT</h3>
                 <ul class="menu-list">
+                    <li class="menu-item has-submenu">
+                        <a href="#" class="submenu-toggle">Suosituimmat <span class="arrow">▼</span></a>
+                        <ul class="submenu" id="sidebar-featured">
+                        </ul>
+                    </li>
                     <li class="menu-item has-submenu">
                         <a href="#" class="submenu-toggle">Kategoriat <span class="arrow">▼</span></a>
                         <ul class="submenu" id="sidebar-categories">
@@ -279,8 +289,7 @@
             </div>
         </div>
     </aside>
-    <!-- We need the main script for the hamburger/sidebar to work, and to load nav categories -->
-    <script src="script.js"></script>
+
 
     <main>
         <div class="category-header">
@@ -340,6 +349,7 @@
     <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    <script src="script.js?v=20260301-1"></script>
     <script src="category.js?v=20260304"></script>
     <footer>
         <div class="footer-content">

@@ -436,7 +436,7 @@
             <div class="desktop-nav">
                 <ul class="nav-links">
                     <li class="nav-item">
-                        <a href="#" class="nav-link">Kauppa <span class="arrow">▼</span></a>
+                        <a href="#" class="nav-link active">Kauppa <span class="arrow">▼</span></a>
                         <ul class="dropdown-menu">
                             <li><a href="ilmoittaudu.html">Ilmoittaudu julkaisijaksi</a></li>
                             <li><a href="kauppa.html">Osta lisää näkyvyyttä</a></li>
@@ -446,6 +446,11 @@
                     <li class="nav-item">
                         <a href="#" class="nav-link">Hakulinkit <span class="arrow">▼</span></a>
                         <ul class="dropdown-menu">
+                            <li class="has-arrow">
+                                <a href="#">Suosituimmat</a>
+                                <ul class="nested-menu" id="nav-featured">
+                                </ul>
+                            </li>
                             <li class="has-arrow">
                                 <a href="#">Kategoriat</a>
                                 <ul class="nested-menu" id="nav-categories">
@@ -490,7 +495,9 @@
                 </ul>
             </div>
             <button class="hamburger" id="hamburger-btn" aria-label="Avaa valikko">
-                <span></span><span></span><span></span>
+                <span></span>
+                <span></span>
+                <span></span>
             </button>
         </div>
     </nav>
@@ -511,7 +518,7 @@
             <div class="menu-section">
                 <h3 class="section-title">KAUPPA</h3>
                 <ul class="menu-list">
-                    <li class="menu-item"><a href="ilmoittaudu.html" class="sidebar-link">Ilmoittaudu julkaisijaksi</a></li>
+                    <li class="menu-item"><a href="ilmoittaudu.html" class="sidebar-link active">Ilmoittaudu julkaisijaksi</a></li>
                     <li class="menu-item"><a href="kauppa.html" class="sidebar-link">Osta lisää näkyvyyttä</a></li>
                     <li class="menu-item"><a href="lisaa-yritys.html" class="sidebar-link">Yritysnäkyvyys</a></li>
                 </ul>
@@ -521,6 +528,11 @@
             <div class="menu-section">
                 <h3 class="section-title">HAKULINKIT</h3>
                 <ul class="menu-list">
+                    <li class="menu-item has-submenu">
+                        <a href="#" class="submenu-toggle">Suosituimmat <span class="arrow">▼</span></a>
+                        <ul class="submenu" id="sidebar-featured">
+                        </ul>
+                    </li>
                     <li class="menu-item has-submenu">
                         <a href="#" class="submenu-toggle">Kategoriat <span class="arrow">▼</span></a>
                         <ul class="submenu" id="sidebar-categories">
