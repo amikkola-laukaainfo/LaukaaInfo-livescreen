@@ -506,6 +506,25 @@ const LkiFeed = (() => {
         // Älä reagoi linkkien klikkauksiin (esim. sosiaalisen median linkit)
         if (e.target.closest('a')) return;
 
+        // NEW: Open Media Modal if is a business item or has rich media
+        const itemId = card.dataset.id;
+        const item = currentItems.find(i => i.id === itemId);
+        
+        if (item && window.LkiModal) {
+            const isBusiness = item.business_id || item.type === 'business' || item.type === 'community';
+            // Only open modal if it's a "premium" or business item
+            if (isBusiness || (item.images && item.images.length > 0) || (item.videos && item.videos.length > 0)) {
+                LkiModal.open({
+                   ...item,
+                   nimi: item.title,
+                   esittely: item.description,
+                   puhelin: item.contact_phone || item.contact_whatsapp,
+                   package: item.package || (item.is_promoted ? 'pro' : 'perus')
+                });
+                return; // Stop here if we opened the modal
+            }
+        }
+
         const isNowExpanded = card.classList.toggle('is-expanded');
         
         if (card.classList.contains('lki-card--video')) {

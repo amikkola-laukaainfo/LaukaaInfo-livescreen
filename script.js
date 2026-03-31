@@ -439,6 +439,15 @@ function addMarkersToMap(companies) {
             });
 
             const marker = L.marker([lat, lon], { icon: icon });
+            
+            // Integrate New Media Modal
+            marker.on('click', function(e) {
+                if (window.LkiModal && typeof LkiModal.open === 'function') {
+                    // Slight delay to prevent immediate closing if Leaflet handles clicks weirdly
+                    setTimeout(() => LkiModal.open(company), 50);
+                }
+            });
+
             marker.bindPopup(popupContent);
             markers.addLayer(marker);
             bounds.push([lat, lon]);
