@@ -2397,6 +2397,7 @@ footer {
   /* Clamp to 2 lines */
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -2407,10 +2408,20 @@ footer {
   color: var(--text-muted);
   line-height: 1.45;
   margin: 0;
+  white-space: pre-wrap;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* Expanded state (klikkaamalla) */
+.lki-card.is-expanded .lki-card__title,
+.lki-card.is-expanded .lki-card__desc {
+  display: block;
+  -webkit-line-clamp: unset;
+  line-clamp: unset;
 }
 
 /* Date */
