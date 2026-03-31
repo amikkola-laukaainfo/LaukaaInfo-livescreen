@@ -550,19 +550,53 @@
 
         companies.forEach(company => {
             if (company.lat && company.lon) {
-                const marker = L.marker([company.lat, company.lon]);
+                const isPro = company.paketti && company.paketti.toLowerCase() === 'pro';
+                const isPremiumPkg = company.paketti && company.paketti.toLowerCase() === 'premium';
+
+                const markerHtml = `
+                    <div style="
+                        background-color: ${isPro ? '#ffd700' : (isPremiumPkg ? '#ff4d4d' : 'var(--primary-blue)')};
+                        width: 20px;
+                        height: 20px;
+                        border-radius: 50% 50% 50% 0;
+                        transform: rotate(-45deg);
+                        border: 2px solid white;
+                        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+                    "></div>
+                `;
+
+                const icon = L.divIcon({
+                    html: markerHtml,
+                    className: `custom-marker ${isPro ? 'is-pro' : ''} ${isPremiumPkg ? 'is-premium' : ''}`,
+                    iconSize: [24, 24],
+                    iconAnchor: [12, 24],
+                    popupAnchor: [0, -24]
+                });
+
+                const marker = L.marker([company.lat, company.lon], { icon: icon });
+                
+                // Integrate New Media Modal
+                marker.on('click', function(e) {
+                    if (window.LkiModal && typeof LkiModal.open === 'function') {
+                        setTimeout(() => LkiModal.open(company), 50);
+                    }
+                });
+
                 marker.bindPopup(`
-                <strong>${company.nimi}</strong><br>${company.osoite}<br><br>
-                <a href="yrityskortti.html?id=${slugify(company.nimi)}" style="
-                    display: block;
-                    background: #0056b3;
-                    color: white;
-                    text-decoration: none;
-                    text-align: center;
-                    padding: 5px 10px;
-                    border-radius: 4px;
-                    font-size: 0.8rem;
-                ">Näytä tiedot</a>
+                <div style="font-family: 'Outfit', sans-serif; min-width: 150px;">
+                    <h4 style="margin: 0 0 5px 0; color: #0056b3;">${company.nimi}</h4>
+                    <div style="font-size: 0.8rem; margin-bottom: 8px; color: #666;">${company.kategoria}</div>
+                    <a href="yrityskortti.html?id=${slugify(company.nimi)}" style="
+                        display: block;
+                        background: #0056b3;
+                        color: white;
+                        text-decoration: none;
+                        text-align: center;
+                        padding: 6px 10px;
+                        border-radius: 4px;
+                        font-size: 0.8rem;
+                    ">Näytä tiedot</a>
+                </div>
             `);
                 markers.addLayer(marker);
             }

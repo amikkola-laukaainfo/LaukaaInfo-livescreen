@@ -329,6 +329,30 @@ section[id] {
     border: none;
 }
 
+/* Pro-paketti: Kultainen hohde ja hienovarainen pulssi */
+.custom-marker.is-pro div {
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.7) !important;
+    animation: pro-pulse 2s infinite ease-in-out;
+}
+
+/* Premium-paketti: Voimakkaampi punainen pulssi */
+.custom-marker.is-premium div {
+    box-shadow: 0 0 20px rgba(255, 77, 77, 0.8) !important;
+    animation: premium-pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pro-pulse {
+    0% { transform: rotate(-45deg) scale(1); box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+    50% { transform: rotate(-45deg) scale(1.1); box-shadow: 0 0 20px rgba(255, 215, 0, 0.9); }
+    100% { transform: rotate(-45deg) scale(1); box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+}
+
+@keyframes premium-pulse {
+    0% { transform: rotate(-45deg) scale(1); box-shadow: 0 0 15px rgba(255, 77, 77, 0.6); }
+    50% { transform: rotate(-45deg) scale(1.2); box-shadow: 0 0 30px rgba(255, 77, 77, 1); }
+    100% { transform: rotate(-45deg) scale(1); box-shadow: 0 0 15px rgba(255, 77, 77, 0.6); }
+}
+
 header {
     background: linear-gradient(rgba(0, 86, 179, 0.3), rgba(0, 61, 128, 0.3)), url('taivas_tausta.png');
     background-size: cover;

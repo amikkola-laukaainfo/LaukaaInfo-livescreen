@@ -373,10 +373,15 @@ function addMarkersToMap(companies) {
                 `;
             } else {
                 // Yrityksen merkki
-                const color = categoryColors[company.kategoria] || '#0056b3';
+                const isPro = company.paketti && company.paketti.toLowerCase() === 'pro';
+                const isPremiumPkg = company.paketti && company.paketti.toLowerCase() === 'premium';
+                
+                const baseColor = categoryColors[company.kategoria] || '#0056b3';
+                const markerColor = isPro ? '#ffd700' : (isPremiumPkg ? '#ff4d4d' : baseColor);
+
                 markerHtml = `
                     <div style="
-                        background-color: ${color};
+                        background-color: ${markerColor};
                         width: 20px;
                         height: 20px;
                         border-radius: 50% 50% 50% 0;
@@ -436,12 +441,12 @@ function addMarkersToMap(companies) {
                 `;
             }
 
-            const isPro = company.paketti && company.paketti.toLowerCase() === 'pro';
-            const isPremiumPkg = company.paketti && company.paketti.toLowerCase() === 'premium';
+            const isProMarker = company.paketti && company.paketti.toLowerCase() === 'pro';
+            const isPremiumMarker = company.paketti && company.paketti.toLowerCase() === 'premium';
 
             const icon = L.divIcon({
                 html: markerHtml,
-                className: `custom-marker ${isPro ? 'is-pro' : ''} ${isPremiumPkg ? 'is-premium' : ''}`,
+                className: `custom-marker ${isProMarker ? 'is-pro' : ''} ${isPremiumMarker ? 'is-premium' : ''}`,
                 iconSize: [24, 24],
                 iconAnchor: [12, 24],
                 popupAnchor: [0, -24]
