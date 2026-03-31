@@ -453,7 +453,7 @@ const LkiFeed = (() => {
             const summaryCard = {
                 id: 'pikkuilmot-summary',
                 type: 'pikkuilmoitus',
-                title: topTag ? `${topTag[0].toUpperCase()} - tarjontaa Laukaassa` : 'Pikkuilmoitukset Laukaassa',
+                title: topTag ? `${topTag[0].toUpperCase()} - tarjontaa Laukaassa ja lähialueilla` : 'Pikkuilmoitukset Laukaassa ja lähialueilla',
                 description: `${pikkuRes.data.length} uutta ilmoitusta tällä viikolla. Löydä palvelut ja tekijät läheltäsi.`,
                 publish_at: pikkuRes.data[0].publish_at,
                 is_promoted: true
