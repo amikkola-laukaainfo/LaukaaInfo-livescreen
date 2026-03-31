@@ -181,6 +181,7 @@
     line-height: 1.6;
     opacity: 0.9;
     margin-bottom: 30px;
+    white-space: pre-wrap;
 }
 
 .lki-modal-info-grid {
