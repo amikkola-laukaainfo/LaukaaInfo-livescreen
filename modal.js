@@ -91,7 +91,8 @@ window.LkiModal = (function() {
         // Basic Info
         document.getElementById('lki-modal-title').textContent = company.nimi;
         document.getElementById('lki-modal-category').textContent = company.kategoria || company.category || '';
-        document.getElementById('lki-modal-description').textContent = company.esittely || company.description || company.mainoslause || '';
+        const rawDescription = company.esittely || company.description || company.mainoslause || '';
+        document.getElementById('lki-modal-description').textContent = rawDescription.replace(/@@/g, '');
         document.getElementById('lki-modal-address').textContent = company.osoite || 'Laukaa';
         
         const phone = company.puhelin || company.phone || '';
