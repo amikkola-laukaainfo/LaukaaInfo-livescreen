@@ -550,8 +550,8 @@
 
         companies.forEach(company => {
             if (company.lat && company.lon) {
-                const isPro = company.paketti && company.paketti.toLowerCase() === 'pro';
-                const isPremiumPkg = company.paketti && company.paketti.toLowerCase() === 'premium';
+                const isPro = company.package && company.package.toLowerCase() === 'pro';
+                const isPremiumPkg = company.package && company.package.toLowerCase() === 'premium';
 
                 const markerHtml = `
                     <div style="

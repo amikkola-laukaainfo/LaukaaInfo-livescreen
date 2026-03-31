@@ -373,8 +373,8 @@ function addMarkersToMap(companies) {
                 `;
             } else {
                 // Yrityksen merkki
-                const isPro = company.paketti && company.paketti.toLowerCase() === 'pro';
-                const isPremiumPkg = company.paketti && company.paketti.toLowerCase() === 'premium';
+                const isPro = company.package && company.package.toLowerCase() === 'pro';
+                const isPremiumPkg = company.package && company.package.toLowerCase() === 'premium';
                 
                 const baseColor = categoryColors[company.kategoria] || '#0056b3';
                 const markerColor = isPro ? '#ffd700' : (isPremiumPkg ? '#ff4d4d' : baseColor);
@@ -441,8 +441,8 @@ function addMarkersToMap(companies) {
                 `;
             }
 
-            const isProMarker = company.paketti && company.paketti.toLowerCase() === 'pro';
-            const isPremiumMarker = company.paketti && company.paketti.toLowerCase() === 'premium';
+            const isProMarker = company.package && company.package.toLowerCase() === 'pro';
+            const isPremiumMarker = company.package && company.package.toLowerCase() === 'premium';
 
             const icon = L.divIcon({
                 html: markerHtml,
