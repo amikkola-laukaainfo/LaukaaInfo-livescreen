@@ -245,12 +245,6 @@ window.LkiModal = (function() {
             footer.innerHTML += `<a href="mailto:${email}" class="lki-cta-btn email">✉️ Sähköposti</a>`;
         }
 
-        // Phone
-        const phone = company.puhelin || company.phone || '';
-        if (phone && phone !== '-') {
-            footer.innerHTML += `<a href="tel:${phone}" class="lki-cta-btn phone">📞 Soita</a>`;
-        }
-
         // Website
         const web = company.nettisivu || company.website || '';
         if (web && web !== '-' && web !== '') {
