@@ -229,7 +229,7 @@ window.LkiModal = (function() {
             ? `${distPrefix}yritys/${slug}.html`
             : `yrityskortti.html?id=${slug}`;
 
-        footer.innerHTML += `<a href="${cardUrl}" class="lki-cta-btn card">📄 Katso sivu</a>`;
+        footer.innerHTML += `<a href="${cardUrl}" class="lki-cta-btn card">📄 Yrityssivulle</a>`;
 
         // WhatsApp
         const wa = company.whatsapp || (company.puhelin && package !== 'perus' ? company.puhelin : '');
