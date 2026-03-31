@@ -203,12 +203,16 @@
 
 /* Footer / CTAs */
 .lki-modal-footer {
-    padding: 20px 30px;
-    background: rgba(0,0,0,0.02);
+    padding: 30px;
+    background: rgba(0,0,0,0.03);
     display: flex;
     gap: 15px;
     flex-wrap: wrap;
-    border-top: 1px solid rgba(0,0,0,0.05);
+    border-top: 1px solid rgba(0,0,0,0.08);
+    margin-top: 30px;
+    margin-left: -30px;
+    margin-right: -30px;
+    margin-bottom: -30px;
 }
 
 .lki-cta-btn {
@@ -247,6 +251,12 @@
     }
     .lki-modal-media { height: 40vh; }
     .lki-modal-body { padding: 20px; }
+    .lki-modal-footer { 
+        margin-left: -20px; 
+        margin-right: -20px; 
+        margin-bottom: -20px;
+        padding: 20px;
+    }
     .lki-modal-title { font-size: 1.5rem; }
     .lki-cta-btn { flex: 100%; }
 }

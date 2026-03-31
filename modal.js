@@ -46,8 +46,8 @@ window.LkiModal = (function() {
                             <div class="lki-info-item" id="lki-modal-phone-item"><span>📞</span> <span id="lki-modal-phone"></span></div>
                             <div class="lki-info-item" id="lki-modal-email-item"><span>✉️</span> <span id="lki-modal-email"></span></div>
                         </div>
+                        <div class="lki-modal-footer" id="lki-modal-footer"></div>
                     </div>
-                    <div class="lki-modal-footer" id="lki-modal-footer"></div>
                 </div>
             </div>
         `;
