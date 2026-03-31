@@ -146,6 +146,7 @@
 
             let rawCategoryCompanies;
             const catLower = (category || '').trim().toLowerCase();
+            const tags = document.body.dataset.tags ? document.body.dataset.tags.toLowerCase().split(',').map(t => t.trim()) : [];
             
             if (catLower === 'autohuollot') {
                 rawCategoryCompanies = allCompanies.filter(c => {
@@ -157,6 +158,12 @@
                     const searchStr = `${c.nimi || ''} ${c.kuvaus || ''} ${c.kategoria || ''} ${c.hakusana || c.hakusanat || ''}`.toLowerCase();
                     return c.kategoria === 'Hyvinvointi ja terveys' && 
                            (searchStr.includes('parturi') || searchStr.includes('kampaamo') || searchStr.includes('kauneus') || searchStr.includes('hius') || searchStr.includes('salon') || searchStr.includes('kynsi') || searchStr.includes('kosmetologi'));
+                });
+            } else if (tags.length > 0) {
+                // Suodatus avainsanojen (tägien) mukaan
+                rawCategoryCompanies = allCompanies.filter(c => {
+                    const searchStr = `${c.nimi || ''} ${c.kuvaus || ''} ${c.kategoria || ''} ${c.hakusana || c.hakusanat || c.tags || ''}`.toLowerCase();
+                    return tags.some(tag => searchStr.includes(tag));
                 });
             } else {
                 rawCategoryCompanies = allCompanies.filter(c => c.kategoria === category);

@@ -8,6 +8,12 @@ let markers = null;
 let isHomePage = false; // Global flag for homepage context
 let userCoords = null; // Globaali sijainti
 
+const FEATURED_LINKS = [
+    { name: 'Ravintolat', url: 'laukaan-ravintolat.html', icon: '🍴' },
+    { name: 'Autohuollot', url: 'laukaan-autohuollot.html', icon: '🔧' },
+    { name: 'Parturit & Kauneus', url: 'laukaan-parturit-ja-kauneus.html', icon: '💇' }
+];
+
 function slugify(text) {
     if (!text) return "";
     return text.toString().toLowerCase().trim()
@@ -430,9 +436,12 @@ function addMarkersToMap(companies) {
                 `;
             }
 
+            const isPro = company.paketti && company.paketti.toLowerCase() === 'pro';
+            const isPremiumPkg = company.paketti && company.paketti.toLowerCase() === 'premium';
+
             const icon = L.divIcon({
                 html: markerHtml,
-                className: 'custom-marker',
+                className: `custom-marker ${isPro ? 'is-pro' : ''} ${isPremiumPkg ? 'is-premium' : ''}`,
                 iconSize: [24, 24],
                 iconAnchor: [12, 24],
                 popupAnchor: [0, -24]
@@ -1277,54 +1286,29 @@ function initCategories(companies) {
 }
 
 function renderNavCategories(categories) {
+    const navFeatured = document.getElementById("nav-featured");
+    const sidebarFeatured = document.getElementById('sidebar-featured');
     const navMenu = document.getElementById("nav-categories");
     const sidebarMenu = document.getElementById('sidebar-categories');
 
-    // Määritellään kustomoidut SEO-sivut
-    const customPages = [
-        { name: '⭐ Laukaan ravintolat', url: 'laukaan-ravintolat.html' },
-        { name: '⭐ Autohuollot & Korjaamot', url: 'laukaan-autohuollot.html' },
-        { name: '⭐ Parturit & Kauneus', url: 'laukaan-parturit-ja-kauneus.html' }
-    ];
+    // Populate Featured Menu (Suosituimmat)
+    const featuredHtml = FEATURED_LINKS.map(link => `
+        <li><a href="${link.url}" style="font-weight: 600; color: var(--primary-blue);">${link.icon} ${link.name}</a></li>
+    `).join('');
 
-    if (navMenu) {
-        navMenu.innerHTML = '';
-        
-        customPages.forEach(page => {
-            const li = document.createElement('li');
-            li.innerHTML = `<a href="${page.url}" style="font-weight: 600; color: var(--primary-blue);">${page.name}</a>`;
-            navMenu.appendChild(li);
-        });
+    if (navFeatured) navFeatured.innerHTML = featuredHtml;
+    if (sidebarFeatured) sidebarFeatured.innerHTML = featuredHtml.replace(/style="[^"]*"/g, 'class="sidebar-link"');
 
-        const divider = document.createElement('li');
-        divider.innerHTML = `<hr style="margin: 5px 10px; border: none; border-top: 1px solid #eee;">`;
-        navMenu.appendChild(divider);
+    // Populate Regular Categories
+    const categoriesHtml = categories.map(cat => `
+        <li><a href="kategoria.html?cat=${encodeURIComponent(cat)}&region=all">${cat}</a></li>
+    `).join('');
 
-        categories.forEach(cat => {
-            const li = document.createElement('li');
-            li.innerHTML = `<a href="kategoria.html?cat=${encodeURIComponent(cat)}&region=all">${cat}</a>`;
-            navMenu.appendChild(li);
-        });
-    }
-
+    if (navMenu) navMenu.innerHTML = categoriesHtml;
     if (sidebarMenu) {
-        sidebarMenu.innerHTML = '';
-        
-        customPages.forEach(page => {
-            const li = document.createElement('li');
-            li.innerHTML = `<a href="${page.url}" class="sidebar-link" style="font-weight: 600; color: var(--primary-blue);">${page.name}</a>`;
-            sidebarMenu.appendChild(li);
-        });
-
-        const divider = document.createElement('li');
-        divider.innerHTML = `<hr style="margin: 5px 10px; border: none; border-top: 1px solid #ddd;">`;
-        sidebarMenu.appendChild(divider);
-
-        categories.forEach(cat => {
-            const li = document.createElement('li');
-            li.innerHTML = `<a href="kategoria.html?cat=${encodeURIComponent(cat)}&region=all" class="sidebar-link">${cat}</a>`;
-            sidebarMenu.appendChild(li);
-        });
+        sidebarMenu.innerHTML = categories.map(cat => `
+            <li><a href="kategoria.html?cat=${encodeURIComponent(cat)}&region=all" class="sidebar-link">${cat}</a></li>
+        `).join('');
     }
 }
 
