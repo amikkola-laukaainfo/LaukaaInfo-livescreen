@@ -1,6 +1,6 @@
 <?php
 /**
- * Pikkuilmot API (pikkuilmot_api.php)
+ * Pikkuilmot API (lki-tori-api.php)
  * Handles JSON storage for small ads with 7-day expiration.
  */
 

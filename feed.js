@@ -397,7 +397,7 @@ const LkiFeed = (() => {
 
       // Bypass cache with timestamp
       const fetchUrl = dataUrl + (dataUrl.includes('?') ? '&' : '?') + 'ts=' + Date.now();
-      const pikkuUrl = 'https://www.mediazoo.fi/laukaainfo-web/pikkuilmot_api.php?ts=' + Date.now();
+      const pikkuUrl = 'https://www.mediazoo.fi/laukaainfo-web/lki-tori-api.php?ts=' + Date.now();
 
       // Create a promise for minimum display duration (800ms)
       const minDelay = new Promise(resolve => setTimeout(resolve, forceRefresh ? 800 : 0));

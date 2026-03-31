@@ -186,7 +186,7 @@
 </div>
 
 <script>
-    const API_URL = 'pikkuilmot_api.php';
+    const API_URL = 'lki-tori-api.php';
     const form = document.getElementById('ad-form');
     const alertBox = document.getElementById('alert-box');
     const tagsContainer = document.getElementById('tags-suggestions');
