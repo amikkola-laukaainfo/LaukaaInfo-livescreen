@@ -400,7 +400,56 @@
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; OpenStreetMap'
             }).addTo(map);
-            L.marker([company.lat, company.lon]).addTo(map).bindPopup(company.nimi).openPopup();
+            // Tunnistetaan pakettityyppi (Pro tai Premium)
+            const pkgValue = (company.package || company.paketti || company.taso || company.tyyppi || company.type || '').toLowerCase();
+            const isPro = pkgValue.includes('pro');
+            const isPremiumPkg = pkgValue.includes('premium') || pkgValue.includes('maksu') || pkgValue.includes('paid');
+
+            let iconHtml = '';
+            let iconClass = 'custom-marker';
+            let iconSize = [24, 24];
+
+            if (isPremiumPkg) {
+                iconHtml = `
+                    <div class="premium-marker-inner pulsing-premium">
+                        <div class="marker-dot"></div>
+                    </div>
+                `;
+                iconClass = 'premium-leaflet-marker';
+                iconSize = [26, 26];
+            } else if (isPro) {
+                iconHtml = `
+                    <div class="pro-marker-inner pulsing-pro">
+                        <div class="marker-dot"></div>
+                    </div>
+                `;
+                iconClass = 'pro-leaflet-marker';
+                iconSize = [26, 26];
+            } else {
+                // Oletusmarkerin väri kategorian mukaan
+                const catColor = (typeof categoryColors !== 'undefined' && categoryColors[company.kategoria]) ? categoryColors[company.kategoria] : '#0056b3';
+                iconHtml = `
+                    <div style="
+                        background-color: ${catColor};
+                        width: 20px;
+                        height: 20px;
+                        border-radius: 50% 50% 50% 0;
+                        transform: rotate(-45deg);
+                        border: 2px solid white;
+                        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+                    "></div>
+                `;
+            }
+
+            const icon = L.divIcon({
+                html: iconHtml,
+                className: iconClass,
+                iconSize: iconSize,
+                iconAnchor: [iconSize[0]/2, iconSize[1]],
+                popupAnchor: [0, -iconSize[1]]
+            });
+
+            L.marker([company.lat, company.lon], { icon: icon }).addTo(map).bindPopup(company.nimi).openPopup();
 
             document.getElementById('google-maps-link').href = `https://www.google.com/maps?q=${company.lat},${company.lon}`;
         } else {

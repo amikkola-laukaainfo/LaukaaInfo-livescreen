@@ -290,8 +290,83 @@ function initRegionMap(area, companies) {
     // Lisätään vain kyseisen alueen/-haun mukaiset markerit
     companies.forEach(company => {
         if (company.lat && company.lon) {
-            const marker = L.marker([parseFloat(company.lat), parseFloat(company.lon)]);
-            marker.bindPopup(`<b>${company.nimi}</b><br>${company.kategoria}<br><br><a href="yrityskortti.html?id=${slugify(company.nimi)}" class="btn-primary" style="color:white; padding: 5px 10px; font-size: 0.8rem;">Avaa kortti</a>`);
+            const lat = parseFloat(company.lat);
+            const lon = parseFloat(company.lon);
+
+            // Tunnistetaan pakettityyppi (Pro tai Premium)
+            const pkgValue = (company.package || company.paketti || company.taso || company.tyyppi || company.type || '').toLowerCase();
+            const isPro = pkgValue.includes('pro');
+            const isPremiumPkg = pkgValue.includes('premium') || pkgValue.includes('maksu') || pkgValue.includes('paid');
+
+            let iconHtml = '';
+            let iconClass = 'custom-marker';
+            let iconSize = [24, 24];
+
+            if (isPremiumPkg) {
+                iconHtml = `
+                    <div class="premium-marker-inner pulsing-premium">
+                        <div class="marker-dot"></div>
+                    </div>
+                `;
+                iconClass = 'premium-leaflet-marker';
+                iconSize = [26, 26];
+            } else if (isPro) {
+                iconHtml = `
+                    <div class="pro-marker-inner pulsing-pro">
+                        <div class="marker-dot"></div>
+                    </div>
+                `;
+                iconClass = 'pro-leaflet-marker';
+                iconSize = [26, 26];
+            } else {
+                // Oletusmarkerin väri kategorian mukaan
+                const catColor = (typeof categoryColors !== 'undefined' && categoryColors[company.kategoria]) ? categoryColors[company.kategoria] : '#0056b3';
+                iconHtml = `
+                    <div style="
+                        background-color: ${catColor};
+                        width: 20px;
+                        height: 20px;
+                        border-radius: 50% 50% 50% 0;
+                        transform: rotate(-45deg);
+                        border: 24px solid white; /* Huom: script.js:ssä oli 2px, 24px on todennäköisesti virhe scriptissä tai tässä */
+                        border: 2px solid white;
+                        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+                    "></div>
+                `;
+            }
+
+            const icon = L.divIcon({
+                html: iconHtml,
+                className: iconClass,
+                iconSize: iconSize,
+                iconAnchor: [iconSize[0]/2, iconSize[1]],
+                popupAnchor: [0, -iconSize[1]]
+            });
+
+            const marker = L.marker([lat, lon], { icon: icon });
+            
+            // Käytetään premium-tason modaalia jos mahdollista, muuten peruspopup
+            if (typeof LkiModal !== 'undefined') {
+                marker.on('click', (e) => {
+                    L.DomEvent.stopPropagation(e);
+                    LkiModal.open(company);
+                });
+            } else {
+                marker.bindPopup(`
+                    <strong>${company.nimi}</strong><br>${company.osoite}<br><br>
+                    <a href="yrityskortti.html?id=${slugify(company.nimi)}" style="
+                        display: block;
+                        background: #0056b3;
+                        color: white;
+                        text-decoration: none;
+                        text-align: center;
+                        padding: 5px 10px;
+                        border-radius: 4px;
+                        font-size: 0.8rem;
+                    ">Näytä tiedot</a>
+                `);
+            }
+            
             targetMarkers.addLayer(marker);
         }
     });
