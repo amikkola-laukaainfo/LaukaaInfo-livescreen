@@ -11,7 +11,8 @@ const LkiFeed = (() => {
     story:    '📖 Tarina',
     offer:    '🎁 Tarjous',
     notice:   '📢 Ilmoitus',
-    video:    '🎥 Video'
+    video:    '🎥 Video',
+    pikkuilmoitus: '🔥 Ajankohtaista'
   };
 
   const TYPE_CLASSES = {
@@ -22,7 +23,8 @@ const LkiFeed = (() => {
     story:    'lki-badge-type--story',
     offer:    'lki-badge-type--offer',
     notice:   'lki-badge-type--notice',
-    video:    'lki-badge-type--video'
+    video:    'lki-badge-type--video',
+    pikkuilmoitus: 'lki-badge-type--market'
   };
 
   const FILTERS = [
@@ -140,6 +142,23 @@ const LkiFeed = (() => {
 
     const videoAttr = isVideo ? `data-video-id="${video_id}" data-is-shorts="${item.is_shorts || imgSrc.includes('hqdefault') ? 'true' : 'false'}"` : '';
     const publisher = item.publisher_name ? `<span class="lki-card__publisher">${escapeHtml(item.publisher_name)}</span>` : '';
+
+    if (item.type === 'pikkuilmoitus') {
+      return `
+        <article class="lki-card lki-card--market" style="border-left: 5px solid #ffb100; background: #fffdf5;">
+          <div class="lki-card__body">
+            <div class="lki-card__badges">
+              <span class="lki-badge-type lki-badge-type--market">🔥 NYT AJANKOHTAISTA</span>
+            </div>
+            <h3 class="lki-card__title" style="color: #d35400;">${title}</h3>
+            <p class="lki-card__desc">${desc}</p>
+            <div class="lki-card__footer">
+              <a href="pikkuilmot.html" class="btn-fb" style="background: #ffb100; color: #000; width: 100%; border-radius: 8px; text-align: center; padding: 10px; font-weight: 700;">Katso kaikki ilmoitukset (Pikkuilmot) →</a>
+            </div>
+          </div>
+        </article>
+      `;
+    }
 
     return `
       <article class="lki-card${item.is_promoted ? ' is-promoted' : ''}${isVideo ? ' lki-card--video' : ''}" data-id="${item.id || ''}" id="lki-feed-item-${item.id || ''}" role="article" ${videoAttr}>
@@ -378,6 +397,7 @@ const LkiFeed = (() => {
 
       // Bypass cache with timestamp
       const fetchUrl = dataUrl + (dataUrl.includes('?') ? '&' : '?') + 'ts=' + Date.now();
+      const pikkuUrl = 'laukaainfo-web/pikkuilmot_api.php?ts=' + Date.now();
 
       // Create a promise for minimum display duration (800ms)
       const minDelay = new Promise(resolve => setTimeout(resolve, forceRefresh ? 800 : 0));
@@ -388,9 +408,35 @@ const LkiFeed = (() => {
           return r.json();
         });
 
-      Promise.all([fetchPromise, minDelay])
-        .then(([res]) => {
-          const data = Array.isArray(res) ? res : (res.data || []);
+      const fetchPikku = fetch(pikkuUrl)
+        .then(r => r.ok ? r.json() : null)
+        .catch(() => null);
+
+      Promise.all([fetchPromise, fetchPikku, minDelay])
+        .then(([res, pikkuRes]) => {
+          let data = Array.isArray(res) ? res : (res.data || []);
+          
+          if (pikkuRes && pikkuRes.data && pikkuRes.data.length > 0) {
+            // Group by tags to find most popular
+            const tagCounts = {};
+            pikkuRes.data.forEach(ad => {
+               (ad.tags || []).forEach(t => tagCounts[t] = (tagCounts[t] || 0) + 1);
+            });
+            const topTag = Object.entries(tagCounts).sort((a,b) => b[1] - a[1])[0];
+            
+            // Create summary card
+            const summaryCard = {
+                id: 'pikkuilmot-summary',
+                type: 'pikkuilmoitus',
+                title: topTag ? `${topTag[0].toUpperCase()} - tarjontaa Laukaassa` : 'Pikkuilmoitukset Laukaassa',
+                description: `${pikkuRes.data.length} uutta ilmoitusta tällä viikolla. Löydä palvelut ja tekijät läheltäsi.`,
+                publish_at: pikkuRes.data[0].publish_at,
+                is_promoted: true
+            };
+            
+            // Inject summary card at index 1 or 2
+            data.splice(1, 0, summaryCard);
+          }
           
           // Detect new content (compare first item ID)
           if (!isInitialLoad && data.length > 0 && currentItems.length > 0) {

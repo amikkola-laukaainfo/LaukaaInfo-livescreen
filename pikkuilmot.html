@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pikkuilmot Laukaa - Paikallinen tori | LaukaaInfo</title>
+    <meta name="description" content="Laukaan omat pikkuilmoitukset kootusti. Löydä palvelut, tuotteet ja tekijät läheltäsi.">
+    <link rel="icon" href="logo.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css?v=20260301-1">
+    <style>
+        :root {
+            --market-yellow: #ffb100;
+            --market-bg: #fffdf5;
+        }
+        
+        .pikkuilmot-hero {
+            background-color: var(--market-bg);
+            padding: 3rem 1rem;
+            text-align: center;
+            border-bottom: 3px solid var(--market-yellow);
+        }
+        
+        .tag-cloud {
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .tag-pill {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+        
+        .tag-pill.active {
+            background: var(--market-yellow);
+            border-color: var(--market-yellow);
+            color: #000;
+            font-weight: 600;
+            transform: scale(1.05);
+        }
+        
+        .ad-list {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .ad-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--market-yellow);
+            transition: transform 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .ad-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .ad-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin: 0;
+            color: #000;
+            font-family: 'Outfit', sans-serif;
+        }
+        
+        .ad-meta {
+            font-size: 0.8rem;
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .ad-tags {
+            display: flex;
+            gap: 6px;
+            margin-top: 4px;
+        }
+        
+        .ad-tag {
+            font-size: 0.75rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .btn-fb {
+            display: inline-block;
+            background: #1877f2;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        .btn-fb:hover {
+            filter: brightness(1.1);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+        }
+        
+        @media (max-width: 600px) {
+            .pikkuilmot-hero {
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="logo.png" alt="LaukaaInfo Logo">
+                <span>LaukaaInfo</span>
+            </a>
+            <a href="index.html" style="text-decoration: none; color: white;">🏠 Takaisin</a>
+        </div>
+    </nav>
+
+    <header class="pikkuilmot-hero">
+        <h1 style="font-family: 'Outfit', sans-serif; font-size: 2.5rem; margin-bottom: 0.5rem;">Pikkuilmot</h1>
+        <p>Laukaan oma paikallinen ilmoitustaulu.</p>
+        <div class="tag-cloud" id="tag-cloud">
+            <!-- Tunnisteet tulevat tähän -->
+        </div>
+    </header>
+
+    <main>
+        <div class="ad-list" id="ad-list">
+            <div class="loading-spinner" style="text-align: center; padding: 2rem;">Ladataan ilmoituksia...</div>
+        </div>
+    </main>
+
+    <footer style="margin-top: 4rem; background-color: #f8f9fa;">
+        <div class="footer-content" style="text-align: center; padding: 2rem;">
+            <p>© 2026 LaukaaInfo – Pikkuilmot</p>
+            <p style="font-size: 0.9rem; opacity: 0.7;">Ilmoitukset ovat voimassa 7 päivää. Haluatko yrityksesi tähän? <a href="lisaa-yritys.html">Lue lisää.</a></p>
+        </div>
+    </footer>
+
+    <script>
+        const API_URL = 'laukaainfo-web/pikkuilmot_api.php';
+        let allItems = [];
+        let activeTag = 'kaikki';
+
+        async function fetchAds() {
+            try {
+                const r = await fetch(API_URL);
+                const res = await r.json();
+                allItems = res.data || [];
+                renderTags();
+                renderAds();
+            } catch (err) {
+                document.getElementById('ad-list').innerHTML = '<div class="empty-state">Virhe ladattaessa ilmoituksia.</div>';
+            }
+        }
+
+        function renderTags() {
+            const tags = new Set(['kaikki']);
+            allItems.forEach(item => {
+                if (item.tags) item.tags.forEach(t => tags.add(t));
+            });
+            
+            const cloud = document.getElementById('tag-cloud');
+            cloud.innerHTML = '';
+            
+            Array.from(tags).forEach(t => {
+                const pill = document.createElement('div');
+                pill.className = 'tag-pill' + (t === activeTag ? ' active' : '');
+                pill.textContent = t === 'kaikki' ? 'Kaikki' : '#' + t;
+                pill.onclick = () => {
+                    activeTag = t;
+                    renderTags();
+                    renderAds();
+                };
+                cloud.appendChild(pill);
+            });
+        }
+
+        function renderAds() {
+            const list = document.getElementById('ad-list');
+            const filtered = activeTag === 'kaikki' 
+                ? allItems 
+                : allItems.filter(item => item.tags && item.tags.includes(activeTag));
+
+            if (filtered.length === 0) {
+                list.innerHTML = `<div class="empty-state">Ei ilmoituksia tässä kategoriassa juuri nyt.</div>`;
+                return;
+            }
+
+            list.innerHTML = filtered.map(item => `
+                <article class="ad-card">
+                    <h2 class="ad-title">${item.title}</h2>
+                    <div class="ad-tags">
+                        ${(item.tags || []).map(t => `<span class="ad-tag">#${t}</span>`).join(' ')}
+                    </div>
+                    <div class="ad-meta">
+                        <span>🕐 ${formatDate(item.publish_at)}</span>
+                        <span>Voimassa viikon</span>
+                    </div>
+                    <a href="${item.link}" target="_blank" class="btn-fb">Avaa Facebookissa →</a>
+                </article>
+            `).join('');
+        }
+
+        function formatDate(iso) {
+            const d = new Date(iso);
+            return d.toLocaleDateString('fi-FI', { day: 'numeric', month: 'short' });
+        }
+
+        fetchAds();
+    </script>
+</body>
+</html>
