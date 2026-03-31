@@ -245,6 +245,13 @@ window.LkiModal = (function() {
             footer.innerHTML += `<a href="mailto:${email}" class="lki-cta-btn email">✉️ Sähköposti</a>`;
         }
 
+        // Phone (Soita) - Mobile only
+        const phone = company.puhelin || company.phone || '';
+        if (phone && phone !== '-' && phone !== '') {
+            const phoneNum = phone.replace(/[^0-9+]/g, '');
+            footer.innerHTML += `<a href="tel:${phoneNum}" class="lki-cta-btn phone desktop-hide">📞 Soita</a>`;
+        }
+
         // Website
         const web = company.nettisivu || company.website || '';
         if (web && web !== '-' && web !== '') {
