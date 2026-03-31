@@ -778,7 +778,8 @@
                     <input type="url" id="tiktok" name="tiktok" placeholder="https://tiktok.com/@yourprofile">
                 </div>
                 <div class="form-group" style="background: #f8fafc; padding: 1.5rem; border-radius: 12px; border: 1px solid #e2e8f0; margin-top: 2rem;">
-                    <label style="margin-bottom: 1rem; color: #1e293b;">Lisäpalvelut</label>
+                    <label style="margin-bottom: 0.5rem; color: #1e293b;">Lisäpalvelut & tiedustelut</label>
+                    <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1rem;">Vaikka valitsisit <strong>ilmaisen</strong> näkyvyyden, voit pyytää lisätietoa ja tarjouksen maksullisista palveluista:</p>
                     <div style="display: flex; flex-direction: column; gap: 0.8rem;">
                         <label style="display: flex; align-items: center; gap: 10px; font-weight: normal; cursor: pointer;">
                             <input type="checkbox" name="service_whatsapp" value="true" style="width: auto;"> WhatsApp sisällytettynä profiiliin
@@ -788,6 +789,9 @@
                         </label>
                         <label style="display: flex; align-items: center; gap: 10px; font-weight: normal; cursor: pointer;">
                             <input type="checkbox" name="service_video" value="true" style="width: auto;"> Haluan esittelyvideon (30–60 sek)
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 10px; font-weight: normal; cursor: pointer;">
+                            <input type="checkbox" name="service_web" value="true" style="width: auto;"> Nettisivuston luonti tai muokkaus
                         </label>
                         <label style="display: flex; align-items: center; gap: 10px; font-weight: normal; cursor: pointer;">
                             <input type="checkbox" name="service_print" value="true" style="width: auto;"> Haluan digipainotuotteita (flyerit, julisteet)
@@ -938,6 +942,15 @@
                             <li>• Flyerit, julisteet ja bannerit</li>
                             <li>• Graafinen suunnittelu</li>
                             <li>• Toimitus Laukaan alueelle</li>
+                        </ul>
+                    </div>
+                    <div class="service-card">
+                        <h3>🌐 Nettisivut</h3>
+                        <span class="price-range">alk. n. 150 €</span>
+                        <ul>
+                            <li>• Uuden sivun luonti tai muokkaus</li>
+                            <li>• Mobile-optimointi & SEO</li>
+                            <li>• Kevyt ylläpito</li>
                         </ul>
                     </div>
                 </div>
@@ -1112,6 +1125,7 @@
                 mainoslinkit: Array.from(document.querySelectorAll('input[name="ad_link[]"]')).map(input => input.value).filter(v => v !== ''),
                 service_drone: formData.get('service_drone') === 'true',
                 service_video: formData.get('service_video') === 'true',
+                service_web: formData.get('service_web') === 'true',
                 service_print: formData.get('service_print') === 'true',
                 service_whatsapp: formData.get('service_whatsapp') === 'true'
             };
@@ -1132,6 +1146,7 @@
             emailBody += `LISÄPALVELUT:\n`;
             emailBody += `- Drone-kuvaus: ${data.service_drone ? 'KYLLÄ' : 'Ei'}\n`;
             emailBody += `- Videoesittely: ${data.service_video ? 'KYLLÄ' : 'Ei'}\n`;
+            emailBody += `- Nettisivut: ${data.service_web ? 'KYLLÄ' : 'Ei'}\n`;
             emailBody += `- Digipaino: ${data.service_print ? 'KYLLÄ' : 'Ei'}\n`;
             emailBody += `- WhatsApp: ${data.service_whatsapp ? 'KYLLÄ' : 'Ei'}\n`;
             emailBody += `------------------------------------\n`;
