@@ -235,6 +235,7 @@
 .lki-cta-btn.email { background: #0056b3; color: white; }
 .lki-cta-btn.phone { background: #28a745; color: white; }
 .lki-cta-btn.website { background: #4a5568; color: white; }
+.lki-cta-btn.card { background: #1a202c; color: white; border: 1px solid rgba(255,255,255,0.1); }
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {

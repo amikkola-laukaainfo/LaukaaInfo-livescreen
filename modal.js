@@ -7,6 +7,19 @@ window.LkiModal = (function() {
     let modalOverlay = null;
     let swiperInstance = null;
 
+    function slugify(text) {
+        if (!text) return "";
+        return text.toString().toLowerCase().trim()
+            .replace(/\s+/g, '-')
+            .replace(/[äÄàáâãäå]/g, 'a')
+            .replace(/[öÖòóôõöø]/g, 'o')
+            .replace(/[åÅ]/g, 'a')
+            .replace(/[^\w-]/g, '')
+            .replace(/--+/g, '-')
+            .replace(/^-+/, '')
+            .replace(/-+$/, '');
+    }
+
     function init() {
         if (modalOverlay) return;
 
@@ -203,6 +216,20 @@ window.LkiModal = (function() {
     function renderCTAs(company, package) {
         const footer = document.getElementById('lki-modal-footer');
         footer.innerHTML = '';
+
+        // Company Card Link (Lue lisää)
+        const slug = slugify(company.nimi);
+        const isPremium = (company.tyyppi === 'maksu' || company.tyyppi === 'paid' || package === 'premium');
+        const isInDist = window.location.pathname.includes('/dist/') || 
+                         window.location.hostname === 'laukaainfo.fi' || 
+                         window.location.hostname.includes('github.io');
+        const distPrefix = isInDist ? '' : 'dist/';
+        
+        const cardUrl = isPremium 
+            ? `${distPrefix}yritys/${slug}.html`
+            : `yrityskortti.html?id=${slug}`;
+
+        footer.innerHTML += `<a href="${cardUrl}" class="lki-cta-btn card">📄 Katso sivu</a>`;
 
         // WhatsApp
         const wa = company.whatsapp || (company.puhelin && package !== 'perus' ? company.puhelin : '');
