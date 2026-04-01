@@ -272,7 +272,8 @@
             if (response.ok) {
                 document.getElementById('form-container').style.display = 'none';
                 document.getElementById('success-container').style.display = 'block';
-                document.getElementById('result-link').textContent = result.share_url;
+                const shareLink = `https://laukaainfo.fi/pikkuilmot.html?id=${result.id}`;
+                document.getElementById('result-link').innerHTML = `<a href="${shareLink}" target="_blank" style="color: var(--primary); text-decoration: none;">${shareLink}</a>`;
             } else {
                 alertBox.textContent = result.message || 'Virhe tallennuksessa';
                 alertBox.classList.add('error');

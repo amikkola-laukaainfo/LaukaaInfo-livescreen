@@ -78,6 +78,14 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
         
+        .ad-card.highlighted {
+            border-left: 8px solid var(--market-yellow);
+            background-color: #fff9e6;
+            transform: scale(1.02);
+            box-shadow: 0 5px 20px rgba(255, 177, 0, 0.2);
+            transition: all 0.5s ease;
+        }
+        
         .ad-title {
             font-size: 1.15rem;
             font-weight: 700;
@@ -340,8 +348,16 @@
                     const res = JSON.parse(text);
                     console.log('Ads loaded:', res);
                     allItems = res.data || [];
+                    
+                    const params = new URLSearchParams(window.location.search);
+                    const listTag = params.get('tag');
+                    if (listTag) {
+                        activeTag = listTag.toLowerCase();
+                    }
+
                     renderTags();
                     renderAds();
+                    checkUrlParam();
                 } catch (jsonErr) {
                     console.error('JSON Parse Error. Server outputted:', text);
                     const snippet = text.substring(0, 200).replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -356,8 +372,10 @@
         function renderTags() {
             const tags = new Set(['kaikki']);
             allItems.forEach(item => {
-                if (item.tags) item.tags.forEach(t => tags.add(t));
+                if (item.tags) item.tags.forEach(t => tags.add(t.toLowerCase()));
             });
+            
+            if (activeTag !== 'kaikki') tags.add(activeTag);
             
             const cloud = document.getElementById('tag-cloud');
             cloud.innerHTML = '';
@@ -379,7 +397,7 @@
             const list = document.getElementById('ad-list');
             const filtered = activeTag === 'kaikki' 
                 ? allItems 
-                : allItems.filter(item => item.tags && item.tags.includes(activeTag));
+                : allItems.filter(item => item.tags && item.tags.some(t => t.toLowerCase() === activeTag));
 
             if (filtered.length === 0) {
                 list.innerHTML = `<div class="empty-state">Ei ilmoituksia tässä kategoriassa juuri nyt.</div>`;
@@ -387,7 +405,7 @@
             }
 
             list.innerHTML = filtered.map(item => `
-                <article class="ad-card">
+                <article class="ad-card" id="ad-${item.id}">
                     <h2 class="ad-title">${item.title}</h2>
                     <div class="ad-tags">
                         ${(item.tags || []).map(t => `<span class="ad-tag">#${t}</span>`).join(' ')}
@@ -404,6 +422,25 @@
         function formatDate(iso) {
             const d = new Date(iso);
             return d.toLocaleDateString('fi-FI', { day: 'numeric', month: 'short' });
+        }
+
+        function checkUrlParam() {
+            const params = new URLSearchParams(window.location.search);
+            const targetId = params.get('id');
+            if (targetId) {
+                setTimeout(() => {
+                    const el = document.getElementById('ad-' + targetId);
+                    if (el) {
+                        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        el.classList.add('highlighted');
+                        
+                        // Poistetaan korostus hetken päästä
+                        setTimeout(() => {
+                            el.classList.remove('highlighted');
+                        }, 4000);
+                    }
+                }, 300);
+            }
         }
 
         fetchAds();
