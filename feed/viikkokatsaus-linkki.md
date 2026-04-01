@@ -8,16 +8,14 @@ Voidaan laittaa jakoon ja kokeilla sitä livenä heti, kun haluat testata!
 
 1
 
-viikko.html
+index.html
 
-
-
-Kun viet `feed/viikko.html` -sivun takaisin palvelimelle, itse verkkosivun osoite muotoillaan laittamalla urliin perään `?yritys=yrityksennimi`.
+Kun viet `feed/index.html` -sivun takaisin palvelimelle, itse verkkosivun osoite muotoillaan laittamalla urliin perään `?yritys=yrityksennimi`.
 
 Eli lyhyesti:
 
-**1. Sivu, joka näyttää kaikkien viikon nostot:** `https://laukaainfo.fi/feed/viikko.html` *(Tämä lähettää taustalla API-haun osoitteeseen: `.../api.php?limit=50`)*
+**1. Sivu, joka näyttää kaikkien viikon nostot:** `https://laukaainfo.fi/feed/` *(Tämä lähettää taustalla API-haun osoitteeseen: `.../api.php?limit=50`)*
 
-**2. Sivu, joka näyttää vain jokusen tietyn yrityksen nostot:** `https://laukaainfo.fi/feed/viikko.html?yritys=tokmanni` *(Tämä lähettää taustalla API-haun muokattuun osoitteeseen: `.../api.php?limit=50&yritys=tokmanni`)*
+**2. Sivu, joka näyttää vain jokusen tietyn yrityksen nostot:** `https://laukaainfo.fi/feed/?yritys=tokmanni` *(Tämä lähettää taustalla API-haun muokattuun osoitteeseen: `.../api.php?limit=50&yritys=tokmanni`)*
 
-Näin voit rakentaa esimerkiksi yksittäisille yrityksille omia suoralinkkejä suoraan heidän ilmoituksiinsa – molemmat käyttävät kuitenkin tuota yhtä ja samaa viikko.html leiskaa!
+Näin voit rakentaa esimerkiksi yksittäisille yrityksille omia suoralinkkejä suoraan heidän ilmoituksiinsa – molemmat käyttävät kuitenkin tuota yhtä ja samaa index.html leiskaa!
