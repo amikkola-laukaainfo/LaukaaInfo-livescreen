@@ -218,22 +218,34 @@
     </header>
 
     <main>
-        <!-- Feed Accordion -->
-        <section class="feed-accordion-section">
-            <div class="feed-accordion">
-                <button class="feed-accordion-header closed" id="toggle-feed-btn" style="align-items: center;">
-                    <div style="display: flex; flex-direction: column; align-items: flex-start;">
-                        <span>📢 Mitä Laukaassa tapahtuu</span>
-                        <small style="font-size: 0.8rem; font-weight: normal; opacity: 0.9; margin-top: 2px;">Paikalliset ilmoitukset, tapahtumat ja tarjoukset</small>
-                    </div>
-                    <span class="icon-btn">Avaa</span>
-                </button>
-                <div class="feed-accordion-content closed" id="feed-accordion-content">
-                    <!-- Aktiivinen aineisto (Dynaaminen API mediazoo.fi:stä) -->
-                    <div id="homepage-feed" data-feed-src="https://www.mediazoo.fi/laukaainfo-web/api.php" data-share-url="https://mediazoo.fi/laukaainfo-web/item.php"></div>
+        <div class="homepage-top">
+    <!-- Feed Accordion -->
+    <section class="feed-accordion-section">
+        <div class="feed-accordion">
+            <button class="feed-accordion-header closed" id="toggle-feed-btn" style="align-items: center;">
+                <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                    <span>📢 Mitä Laukaassa tapahtuu</span>
+                    <small style="font-size: 0.8rem; font-weight: normal; opacity: 0.9; margin-top: 2px;">Paikalliset ilmoitukset, tapahtumat ja tarjoukset</small>
                 </div>
+                <span class="icon-btn">Avaa</span>
+            </button>
+            <div class="feed-accordion-content closed" id="feed-accordion-content">
+                <!-- Aktiivinen aineisto (Dynaaminen API mediazoo.fi:stä) -->
+                <div id="homepage-feed" data-feed-src="https://www.mediazoo.fi/laukaainfo-web/api.php" data-share-url="https://mediazoo.fi/laukaainfo-web/item.php"></div>
             </div>
-        </section>
+        </div>
+    </section>
+
+    <!-- Media Spotlight Section -->
+    <section class="media-spotlight-section">
+        <h2 class="media-title">Kuvagalleria – Paikallista mediaa</h2>
+        <div class="media-gallery swiper">
+            <div class="swiper-wrapper" id="media-gallery-wrapper"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+        </div>
+    </section>
+</div>
 
         <!-- Kauppa - Etusivu -->
         <section id="kauppa-search" class="kauppa-hero">
@@ -371,6 +383,7 @@
 
     <script src="script.js?v=20260301-1"></script>
     <script src="feed.js?v=20260323a"></script>
+<script src="media-spotlight.js?v=20260401-1"></script>
     <script>
         // Feed accordion toggle with persistence
         const feedBtn = document.getElementById('toggle-feed-btn');
