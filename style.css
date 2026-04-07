@@ -2851,10 +2851,13 @@ footer {
     margin: 2rem 0;
 }
 .feed-accordion-section {
-    flex: 2 1 60%;
+    flex: 1 1 calc(50% - 1rem);
+    min-width: 300px;
 }
 .media-spotlight-card {
-    flex: 1 1 30%;
+    flex: 1 1 calc(50% - 1rem);
+    min-width: 300px;
+
     text-decoration: none;
     color: inherit;
     background: rgba(255, 255, 255, 0.8);
@@ -2926,17 +2929,28 @@ footer {
     position: relative;
     cursor: pointer;
 }
-.media-gallery img,
-.media-gallery video {
+.media-gallery-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
+    position: relative;
+}
+.media-gallery-link img,
+.media-gallery-link video {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform 0.3s ease;
+    display: block;
 }
 .media-gallery .swiper-slide:hover img,
 .media-gallery .swiper-slide:hover video {
     transform: scale(1.05);
 }
+
+
 /* Overlay badge indicating source */
 .media-source-badge {
     position: absolute;

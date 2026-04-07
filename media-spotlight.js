@@ -32,23 +32,44 @@
     const createSlide = ({src, type = 'image', link, sourceLabel}) => {
         const slide = document.createElement('div');
         slide.className = 'swiper-slide';
-        slide.title = `Avaa ${sourceLabel}`;
-        slide.onclick = () => window.open(link, '_blank');
+        
+        const anchor = document.createElement('a');
+        anchor.href = link;
+        anchor.target = '_blank';
+        anchor.className = 'media-gallery-link';
+        anchor.title = `Avaa ${sourceLabel}`;
 
         if (type === 'video') {
-            slide.innerHTML = `<video src="${src}" muted autoplay loop playsinline></video>`;
+            anchor.innerHTML = `<video src="${src}" muted autoplay loop playsinline></video>`;
         } else {
-            slide.innerHTML = `<img src="${src}" alt="${sourceLabel}">`;
+            anchor.innerHTML = `<img src="${src}" alt="${sourceLabel}">`;
         }
+        
         // badge overlay
         const badge = document.createElement('div');
         badge.className = 'media-source-badge';
         badge.textContent = sourceLabel;
-        slide.appendChild(badge);
+        anchor.appendChild(badge);
+        
+        slide.appendChild(anchor);
         return slide;
     };
 
-    // 4️⃣ Gather media objects (max 12)
+    // Slugify helper (identical to script.js)
+    function slugify(text) {
+        if (!text) return "";
+        return text.toString().toLowerCase().trim()
+            .replace(/\s+/g, '-')
+            .replace(/[äÄàáâãäå]/g, 'a')
+            .replace(/[öÖòóôõöø]/g, 'o')
+            .replace(/[åÅ]/g, 'a')
+            .replace(/[^\w-]/g, '')
+            .replace(/--+/g, '-')
+            .replace(/^-+/, '')
+            .replace(/-+$/, '');
+    }
+
+    // 4️⃣ Gather media objects (max 48)
     const media = [];
     // From feed items – expect `media` array or `image`
     feedItems.forEach(item => {
@@ -74,11 +95,12 @@
     });
     // From companies – prefer logo, then first media entry
     companies.forEach(comp => {
+        const companyLink = `yrityskortti.html?id=${slugify(comp.nimi)}`;
         if (comp.logo && comp.logo !== '-') {
             media.push({
                 src: comp.logo,
                 type: 'image',
-                link: `yrityskortti.html?id=${encodeURIComponent(comp.nimi)}`,
+                link: companyLink,
                 sourceLabel: 'Yritys'
             });
         } else if (comp.media && comp.media.length) {
@@ -87,7 +109,7 @@
                 media.push({
                     src: m.url,
                     type: m.type || 'image',
-                    link: `yrityskortti.html?id=${encodeURIComponent(comp.nimi)}`,
+                    link: companyLink,
                     sourceLabel: 'Yritys'
                 });
             }
