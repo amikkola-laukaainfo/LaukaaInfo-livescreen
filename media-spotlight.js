@@ -3,15 +3,16 @@
     const wrapper = document.getElementById('media-gallery-wrapper');
     if (!wrapper) return;
 
-    // 1️⃣ Fetch feed data (already used by feed.js)
+    // 1️⃣ Fetch feed data
     const feedEl = document.getElementById('homepage-feed');
-    const feedUrl = feedEl?.dataset.feedSrc;
+    // Fallback URL if we are on the standalone gallery page
+    const feedUrl = feedEl?.dataset.feedSrc || 'https://www.mediazoo.fi/laukaainfo-web/api.php';
     let feedItems = [];
     if (feedUrl) {
         try {
-            const resp = await fetch(`${feedUrl}?ts=${Date.now()}`);
+            const resp = await fetch(`${feedUrl}${feedUrl.includes('?') ? '&' : '?'}ts=${Date.now()}`);
             const json = await resp.json();
-            feedItems = (json.data || []).slice(0, 12);
+            feedItems = (json.data || []).slice(0, 24); // Show more items on standalone page
         } catch (e) {
             console.error('Media Spotlight – feed fetch error:', e);
         }
@@ -93,7 +94,7 @@
         }
     });
 
-    const selected = media.slice(0, 12);
+    const selected = media.slice(0, 48);
     selected.forEach(item => wrapper.appendChild(createSlide(item)));
 
     // 5️⃣ Initialise Swiper (already loaded via CDN)

@@ -236,24 +236,17 @@
         </div>
     </section>
 
-<!-- Media Spotlight Section -->
-    <button class="media-spotlight-header closed" id="toggle-media-btn" style="align-items: center;">
-        <div style="display: flex; flex-direction: column; align-items: flex-start;">
-            <span>🖼️ Media Spotlight</span>
-            <small style="font-size: 0.8rem; opacity: 0.9; margin-top: 2px;">Kuvagalleria paikallisesta mediasta</small>
-        </div>
-        <span class="icon-btn">Avaa</span>
-    </button>
-    <div class="media-spotlight-content closed" id="media-spotlight-content">
-        <section class="media-spotlight-section">
-            <h2 class="media-title">Kuvagalleria – Paikallista mediaa</h2>
-            <div class="media-gallery swiper">
-                <div class="swiper-wrapper" id="media-gallery-wrapper"></div>
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-button-next"></div>
+    <!-- Media Spotlight Link Card -->
+    <a href="galleria.html" class="media-spotlight-card">
+        <div class="card-content">
+            <span class="card-icon">🖼️</span>
+            <div class="card-text">
+                <h3>Kuvagalleria – Paikallista mediaa</h3>
+                <p>Katso uusimmat kuvat ja videot Laukaasta kootusti.</p>
             </div>
-        </section>
-    </div>
+            <span class="card-arrow">➔</span>
+        </div>
+    </a>
 </div>
 
         <!-- Kauppa - Etusivu -->
@@ -392,7 +385,7 @@
 
     <script src="script.js?v=20260301-1"></script>
     <script src="feed.js?v=20260323a"></script>
-<script src="media-spotlight.js?v=20260401-1"></script>
+
     <script>
         // Feed accordion toggle with persistence
         const feedBtn = document.getElementById('toggle-feed-btn');
