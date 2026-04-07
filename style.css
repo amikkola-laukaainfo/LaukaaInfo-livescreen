@@ -2847,14 +2847,19 @@ footer {
 .homepage-top {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    margin: 2rem 0;
+    align-items: center;
+    gap: 1.5rem;
+    margin: 2rem auto;
+    padding: 0 1rem;
 }
 .feed-accordion-section {
     width: 100%;
+    max-width: 800px;
+    padding: 0; /* Remove redundant padding */
 }
 .media-spotlight-card {
     width: 100%;
+    max-width: 800px;
 
     text-decoration: none;
     color: inherit;
