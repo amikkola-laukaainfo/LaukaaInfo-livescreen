@@ -236,15 +236,24 @@
         </div>
     </section>
 
-    <!-- Media Spotlight Section -->
-    <section class="media-spotlight-section">
-        <h2 class="media-title">Kuvagalleria – Paikallista mediaa</h2>
-        <div class="media-gallery swiper">
-            <div class="swiper-wrapper" id="media-gallery-wrapper"></div>
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-button-next"></div>
+<!-- Media Spotlight Section -->
+    <button class="media-spotlight-header closed" id="toggle-media-btn" style="align-items: center;">
+        <div style="display: flex; flex-direction: column; align-items: flex-start;">
+            <span>🖼️ Media Spotlight</span>
+            <small style="font-size: 0.8rem; opacity: 0.9; margin-top: 2px;">Kuvagalleria paikallisesta mediasta</small>
         </div>
-    </section>
+        <span class="icon-btn">Avaa</span>
+    </button>
+    <div class="media-spotlight-content closed" id="media-spotlight-content">
+        <section class="media-spotlight-section">
+            <h2 class="media-title">Kuvagalleria – Paikallista mediaa</h2>
+            <div class="media-gallery swiper">
+                <div class="swiper-wrapper" id="media-gallery-wrapper"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+            </div>
+        </section>
+    </div>
 </div>
 
         <!-- Kauppa - Etusivu -->
