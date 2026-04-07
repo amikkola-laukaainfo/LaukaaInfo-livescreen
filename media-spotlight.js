@@ -80,7 +80,7 @@
                         src: m.url,
                         type: m.type || 'image',
                         link: item.link || '#',
-                        sourceLabel: 'Feed'
+                        sourceLabel: item.publisher || 'Feed'
                     });
                 }
             });
@@ -89,7 +89,7 @@
                 src: item.image,
                 type: 'image',
                 link: item.link || '#',
-                sourceLabel: 'Feed'
+                sourceLabel: item.publisher || 'Feed'
             });
         }
     });
@@ -101,7 +101,7 @@
                 src: comp.logo,
                 type: 'image',
                 link: companyLink,
-                sourceLabel: 'Yritys'
+                sourceLabel: comp.nimi || 'Yritys'
             });
         } else if (comp.media && comp.media.length) {
             const m = comp.media[0];
@@ -110,7 +110,7 @@
                     src: m.url,
                     type: m.type || 'image',
                     link: companyLink,
-                    sourceLabel: 'Yritys'
+                    sourceLabel: comp.nimi || 'Yritys'
                 });
             }
         }

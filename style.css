@@ -2954,15 +2954,24 @@ footer {
 /* Overlay badge indicating source */
 .media-source-badge {
     position: absolute;
-    top: 4px;
-    left: 4px;
-    background: rgba(0,0,0,0.6);
+    top: 8px;
+    left: 8px;
+    background: rgba(0, 0, 0, 0.75);
     color: #fff;
-    padding: 2px 6px;
+    padding: 4px 10px;
     font-size: 0.75rem;
-    border-radius: 4px;
+    font-weight: 700;
+    border-radius: 6px;
     text-transform: uppercase;
     pointer-events: none;
+    z-index: 10;
+    max-width: calc(100% - 16px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255,255,255,0.1);
 }
 /* Mobile stacking */
 @media (max-width: 768px) {
