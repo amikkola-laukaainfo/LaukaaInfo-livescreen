@@ -76,19 +76,21 @@
         if (item.media && Array.isArray(item.media)) {
             item.media.forEach(m => {
                 if (m.url) {
+                    const itemLink = `index.html?item=${item.id}&feed=open`;
                     media.push({
                         src: m.url,
                         type: m.type || 'image',
-                        link: item.link || '#',
+                        link: itemLink,
                         sourceLabel: item.publisher || 'Feed'
                     });
                 }
             });
         } else if (item.image) {
+            const itemLink = `index.html?item=${item.id}&feed=open`;
             media.push({
                 src: item.image,
                 type: 'image',
-                link: item.link || '#',
+                link: itemLink,
                 sourceLabel: item.publisher || 'Feed'
             });
         }
