@@ -395,9 +395,14 @@
 
         function renderAds() {
             const list = document.getElementById('ad-list');
-            const filtered = activeTag === 'kaikki' 
-                ? allItems 
-                : allItems.filter(item => item.tags && item.tags.some(t => t.toLowerCase() === activeTag));
+            // Filter ads that are still within the 7‑day validity period
+            const now = new Date();
+            const cutoff = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+            const filtered = (activeTag === 'kaikki' ? allItems : allItems.filter(item => item.tags && item.tags.some(t => t.toLowerCase() === activeTag)))
+                .filter(item => {
+                    const pubDate = new Date(item.publish_at);
+                    return pubDate > cutoff;
+                });
 
             if (filtered.length === 0) {
                 list.innerHTML = `<div class="empty-state">Ei ilmoituksia tässä kategoriassa juuri nyt.</div>`;
