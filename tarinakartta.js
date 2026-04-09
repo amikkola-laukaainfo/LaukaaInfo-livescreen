@@ -13,19 +13,21 @@ document.addEventListener('DOMContentLoaded', () => {
     let polyline = null;
 
     // Elements — valikot
-    const categorySelect = document.getElementById('select-category');
-    const topicSelect = document.getElementById('select-topic');
-    const storySelect = document.getElementById('select-story');
+    const categorySelect = document.getElementById('theme-select');
+    const topicSelect = document.getElementById('category-select');
+    const storySelect = document.getElementById('story-select');
 
     // Elements — info
     const stepTitle = document.getElementById('step-title');
     const stepCounter = document.getElementById('step-counter');
-    const stepDescription = document.getElementById('step-description');
+    const detailTitle = document.getElementById('detail-title');
+    const detailDesc = document.getElementById('detail-desc');
+    const detailMeta = document.getElementById('detail-meta');
     const stepImage = document.getElementById('step-image');
     const imagePlaceholder = document.getElementById('image-placeholder');
-    const prevBtn = document.getElementById('prev-btn');
-    const nextBtn = document.getElementById('next-btn');
-    const stepMoreInfo = document.getElementById('step-more-info');
+    const prevBtn = document.getElementById('prev-step');
+    const nextBtn = document.getElementById('next-step');
+    const storyDisplay = document.getElementById('story-display');
 
     // 2. Fetch Story Data
     Papa.parse('tarinakartta_data.csv', {
@@ -127,11 +129,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         buildMapMarkers();
         if (filteredSteps.length > 0) {
+            storyDisplay.style.display = 'grid';
             goToStep(0);
         } else {
+            storyDisplay.style.display = 'none';
             stepTitle.textContent = 'Ei tarinoita valinnalla';
             stepCounter.textContent = '0 / 0';
-            stepDescription.textContent = 'Valitse eri teema tai aihe.';
+            detailDesc.textContent = 'Valitse eri teema tai aihe.';
             stepImage.style.display = 'none';
             imagePlaceholder.style.display = 'block';
         }
@@ -187,8 +191,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Päivitä UI
         stepTitle.textContent = step.title;
+        detailTitle.textContent = step.title;
         stepCounter.textContent = `Askel ${index + 1} / ${filteredSteps.length}`;
-        stepDescription.textContent = step.description;
+        detailDesc.textContent = step.description;
 
         // Synkronoi tarina-valikko
         storySelect.value = step.step_order;
@@ -217,10 +222,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Lisätietoa-linkki
         if (step.more_info_url && step.more_info_url.trim()) {
-            stepMoreInfo.href = step.more_info_url;
-            stepMoreInfo.style.display = 'block';
+            detailMeta.innerHTML = `<a href="${step.more_info_url}" target="_blank" style="color: #0056b3; font-weight: 600; text-decoration: none;">&rarr; Lue lisää tästä kohteesta</a>`;
+            detailMeta.style.display = 'block';
         } else {
-            stepMoreInfo.style.display = 'none';
+            detailMeta.style.display = 'none';
         }
 
         // Kartta
