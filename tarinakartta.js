@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const prevBtn = document.getElementById('prev-step');
     const nextBtn = document.getElementById('next-step');
     const storyDisplay = document.getElementById('story-display');
+    const stepSlider = document.getElementById('step-slider');
 
     // 2. Fetch Story Data
     Papa.parse('tarinakartta_data.csv', {
@@ -128,6 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         buildMapMarkers();
+        renderSlider();
         if (filteredSteps.length > 0) {
             storyDisplay.style.display = 'grid';
             goToStep(0);
@@ -183,6 +185,49 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function renderSlider() {
+        if (!stepSlider) return;
+        stepSlider.innerHTML = '';
+        
+        if (filteredSteps.length === 0) {
+            stepSlider.style.display = 'none';
+            return;
+        }
+        
+        stepSlider.style.display = 'flex';
+        
+        filteredSteps.forEach((step, index) => {
+            const card = document.createElement('div');
+            card.className = 'slider-card';
+            card.dataset.index = index;
+            
+            let imageUrl = 'icons/icon-512.png'; // fallback
+            if (step.image_url && step.image_url.trim()) {
+                imageUrl = step.image_url.trim();
+                // Normalisoidaan Google Drive -linkit
+                if (imageUrl.includes('drive.google.com') || imageUrl.includes('drive_cache/')) {
+                    const idMatch = imageUrl.match(/(?:id=|\/d\/|file\/d\/|drive_cache\/)([a-zA-Z0-9_-]+)/);
+                    if (idMatch) imageUrl = `https://www.mediazoo.fi/laukaainfo-web/get_image.php?id=${idMatch[1]}`;
+                }
+            }
+            
+            card.innerHTML = `
+                <div class="slider-card-number">${index + 1}</div>
+                <img src="${imageUrl}" alt="${step.title}" loading="lazy">
+                <div class="slider-card-overlay">
+                    <div class="slider-card-title">${step.title}</div>
+                    <div class="slider-card-link">Tarkennus &rarr;</div>
+                </div>
+            `;
+            
+            card.addEventListener('click', () => {
+                goToStep(index);
+            });
+            
+            stepSlider.appendChild(card);
+        });
+    }
+
     function goToStep(index) {
         if (index < 0 || index >= filteredSteps.length) return;
 
@@ -194,6 +239,16 @@ document.addEventListener('DOMContentLoaded', () => {
         detailTitle.textContent = step.title;
         stepCounter.textContent = `Askel ${index + 1} / ${filteredSteps.length}`;
         detailDesc.textContent = step.description;
+
+        // Päivitä slider
+        document.querySelectorAll('.slider-card').forEach((card, i) => {
+            if (i === index) {
+                card.classList.add('active');
+                card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            } else {
+                card.classList.remove('active');
+            }
+        });
 
         // Synkronoi tarina-valikko
         storySelect.value = step.step_order;
