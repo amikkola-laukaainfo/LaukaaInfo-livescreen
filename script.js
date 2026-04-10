@@ -1377,13 +1377,15 @@ function renderNavCategories(categories) {
     if (sidebarFeatured) sidebarFeatured.innerHTML = featuredHtml.replace(/style="[^"]*"/g, 'class="sidebar-link"');
 
     // Populate Regular Categories
+    const headerHtml = `<li><span style="display: block; padding: 0.5rem 1rem; font-size: 0.8em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--primary-blue); opacity: 0.7; cursor: default; border-bottom: 1px solid rgba(0,0,0,0.05); margin-bottom: 0.2rem;">Koko Laukaa</span></li>`;
+
     const categoriesHtml = categories.map(cat => `
         <li><a href="kategoria.html?cat=${encodeURIComponent(cat)}&region=all">${cat}</a></li>
     `).join('');
 
-    if (navMenu) navMenu.innerHTML = categoriesHtml;
+    if (navMenu) navMenu.innerHTML = headerHtml + categoriesHtml;
     if (sidebarMenu) {
-        sidebarMenu.innerHTML = categories.map(cat => `
+        sidebarMenu.innerHTML = headerHtml + categories.map(cat => `
             <li><a href="kategoria.html?cat=${encodeURIComponent(cat)}&region=all" class="sidebar-link">${cat}</a></li>
         `).join('');
     }
