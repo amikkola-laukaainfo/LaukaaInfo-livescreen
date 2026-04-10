@@ -613,6 +613,28 @@ section.region-hero .location-hint {
     }
 }
 
+/* Ylikirjoitukset tägäyksille, jotta ne rivittyvät mobiilissa "oikealta ulos vuotamisen" sijaan */
+section.region-hero .region-tag-cloud {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    overflow-x: visible !important;
+    justify-content: flex-start !important;
+    padding: 0 !important;
+    margin: 1rem 0 !important;
+}
+
+section.region-hero .region-tag-cloud .tag-pill {
+    white-space: normal !important;
+    word-break: break-word;
+    text-align: left;
+}
+
+/* Varmistetaan hakuehdotusten pysyminen kartan päällä */
+section.region-hero .main-search-box {
+    position: relative;
+    z-index: 1050; /* Leaflet map is usually around 400 */
+}
+
 .btn-youtube {
     display: inline-flex;
     align-items: center;
