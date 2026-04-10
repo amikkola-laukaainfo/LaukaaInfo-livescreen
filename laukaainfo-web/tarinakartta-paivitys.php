@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $steps = json_decode($jsonData, true);
         
         if (is_array($steps)) {
-            $header = ['step_order', 'category', 'topic', 'story_name', 'title', 'description', 'lat', 'lng', 'image_url', 'more_info_url'];
+            $header = ['step_order', 'category', 'topic', 'story_name', 'title', 'description', 'lat', 'lng', 'image_url', 'more_info_url', 'audio_url'];
             $handle = fopen($csvFile, 'w');
             fputcsv($handle, $header);
             
@@ -37,7 +37,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                     $step['lat'] ?? '',
                     $step['lng'] ?? '',
                     $step['image_url'] ?? '',
-                    $step['more_info_url'] ?? ''
+                    $step['more_info_url'] ?? '',
+                    $step['audio_url'] ?? ''
                 ];
                 fputcsv($handle, $row);
             }
@@ -451,6 +452,11 @@ if (file_exists($readPath)) {
                 <label>Lisätietolinkki (URL)</label>
                 <input type="url" id="f-more_info_url" placeholder="https://...">
             </div>
+
+            <div class="form-group">
+                <label>Ääni URL (MP3/OGG)</label>
+                <input type="url" id="f-audio_url" placeholder="https://...">
+            </div>
         </div>
         
         <div id="empty-state" style="position: absolute; top:0; left:0; right:0; bottom:0; background: var(--bg); z-index: 500;">
@@ -602,6 +608,7 @@ if (file_exists($readPath)) {
         document.getElementById('f-lng').value = step.lng || '';
         document.getElementById('f-image_url').value = step.image_url || '';
         document.getElementById('f-more_info_url').value = step.more_info_url || '';
+        document.getElementById('f-audio_url').value = step.audio_url || '';
         
         updateImgPreview(step.image_url);
         updateMarkers();
@@ -652,7 +659,7 @@ if (file_exists($readPath)) {
     };
 
     // Auto-update steps on form input
-    ['title', 'story_name', 'description', 'category', 'topic', 'lat', 'lng', 'image_url', 'more_info_url'].forEach(id => {
+    ['title', 'story_name', 'description', 'category', 'topic', 'lat', 'lng', 'image_url', 'more_info_url', 'audio_url'].forEach(id => {
         document.getElementById('f-' + id).addEventListener('input', (e) => {
             if (selectedIndex === -1) return;
             steps[selectedIndex][id] = e.target.value;
