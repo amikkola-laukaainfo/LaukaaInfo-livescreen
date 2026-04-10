@@ -39,6 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const copyLinkBtn = document.getElementById('copy-link-btn');
     const copyImgBtn = document.getElementById('copy-img-btn');
 
+    // Audio elements
+    const audioArea = document.getElementById('audio-area');
+    const stepAudio = document.getElementById('step-audio');
+
     // 2. Fetch Story Data
     Papa.parse('tarinakartta_data.csv', {
         download: true,
@@ -327,6 +331,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // QR nappula näkyviin
         if (showQrBtn) showQrBtn.style.display = 'flex';
+
+        // Audio hallinta
+        if (step.audio_url && step.audio_url.trim()) {
+            stepAudio.src = step.audio_url.trim();
+            stepAudio.load();
+            audioArea.style.display = 'block';
+        } else {
+            stepAudio.pause();
+            stepAudio.src = '';
+            audioArea.style.display = 'none';
+        }
 
         // Kartta
         const lat = parseFloat(step.lat);
