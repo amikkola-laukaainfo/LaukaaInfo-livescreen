@@ -550,6 +550,69 @@ header:not(.hero-split) p {
     }
 }
 
+/* =========================================
+   TAAJAMA-SIVUJEN HERO (region-hero)
+   Ylikirjoittaa laukaa.html jne. sisäiset tyylit
+   ========================================= */
+section.region-hero {
+    background: var(--secondary-blue) !important;
+    clip-path: none !important;
+    text-align: left !important;
+    padding: 1.75rem 0 1.5rem !important;
+    margin: 0 -1.5rem 2rem !important;
+    border-bottom-left-radius: 28px;
+    border-bottom-right-radius: 28px;
+    box-shadow: 0 4px 20px rgba(0, 51, 102, 0.15);
+    color: white;
+}
+
+section.region-hero .header-content {
+    padding: 0 1.5rem 0 15vw !important;
+}
+
+section.region-hero h1 {
+    font-family: var(--accent-font) !important;
+    font-size: 2.4rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    color: #ffffff !important;
+    letter-spacing: -1px !important;
+    line-height: 1.1 !important;
+    margin: 0 0 0.35rem !important;
+    text-align: left !important;
+}
+
+section.region-hero p {
+    color: rgba(255,255,255,0.9) !important;
+    text-align: left !important;
+    opacity: 0.88 !important;
+    font-size: 1rem !important;
+    margin-bottom: 0.5rem;
+}
+
+section.region-hero .main-search-box {
+    margin-top: 1.25rem !important;
+}
+
+section.region-hero .search-input-wrapper {
+    max-width: 600px;
+}
+
+section.region-hero .location-hint {
+    color: rgba(255,255,255,0.8) !important;
+    font-size: 0.85rem;
+}
+
+@media (max-width: 768px) {
+    section.region-hero .header-content {
+        padding: 0 1.5rem !important;
+    }
+
+    section.region-hero h1 {
+        font-size: 1.8rem !important;
+    }
+}
+
 .btn-youtube {
     display: inline-flex;
     align-items: center;
