@@ -101,7 +101,10 @@ foreach ($rawData as $item) {
         'image'       => $item['image'] ?? '',
         'publish_at'  => $item['publish_at'] ?? '',
         'is_promoted' => $item['is_promoted'] ?? false,
-        'publisher_name' => $item['publisher_name'] ?? ''
+        'publisher_name' => $item['publisher_name'] ?? '',
+        'package'     => $item['package'] ?? ($item['tyyppi'] ?? 'perus'),
+        'images'      => is_array($item['images'] ?? null) ? $item['images'] : (!empty($item['image']) ? [$item['image']] : []),
+        'videos'      => is_array($item['videos'] ?? null) ? $item['videos'] : (!empty($item['video_url']) ? [$item['video_url']] : [])
     ];
 
     // Optional fields
