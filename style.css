@@ -370,8 +370,8 @@ section[id] {
    ========================================= */
 header.hero-split {
     display: flex;
-    min-height: 300px;
-    margin-bottom: 3rem;
+    min-height: 200px;
+    margin-bottom: 2rem;
     border-bottom-left-radius: 40px;
     border-bottom-right-radius: 40px;
     overflow: hidden;
@@ -383,7 +383,7 @@ header.hero-split {
     flex: 0 0 52%;
     display: flex;
     align-items: center;
-    padding: 2.5rem 3rem 2.5rem 15vw;
+    padding: 1.5rem 2rem 1.5rem 15vw;
     position: relative;
 }
 
@@ -410,7 +410,7 @@ header.hero-split {
     flex: 1;
     position: relative;
     overflow: hidden;
-    min-height: 300px;
+    min-height: 200px;
 }
 
 .hero-nature-img {
@@ -449,9 +449,9 @@ header.hero-split {
 }
 
 .main-logo {
-    height: 96px;
-    width: 96px;
-    max-width: 96px !important;
+    height: 128px;
+    width: 128px;
+    max-width: 128px !important;
     flex-shrink: 0;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
@@ -472,7 +472,7 @@ header h1 {
 .hero-tagline {
     font-size: 1.05rem;
     opacity: 0.88;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     line-height: 1.5;
     color: rgba(255,255,255,0.9);
 }
@@ -495,7 +495,7 @@ header h1 {
     }
 
     .hero-right {
-        min-height: 220px;
+        min-height: 150px;
         flex: unset;
     }
 
