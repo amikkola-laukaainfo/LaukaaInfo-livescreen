@@ -391,6 +391,39 @@
             margin-top: 1rem;
         }
         .btn-qr:hover { background: #e9ecef; border-color: #ccc; }
+
+        /* ── Audio Styles ─── */
+        .audio-container {
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 1.5px solid #0056b322;
+        }
+        .audio-waveform {
+            flex: 1;
+            height: 40px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='40' viewBox='0 0 200 40'%3E%3Cpath d='M0 20 L5 15 L10 25 L15 10 L20 30 L25 15 L30 25 L35 5 L40 35 L45 20 L50 10 L55 30 L60 20 L65 5 L70 35 L75 15 L80 25 L85 10 L90 30 L95 15 L100 25 L105 5 L110 35 L115 20 L120 10 L125 30 L130 20 L135 5 L140 35 L145 15 L150 25 L155 10 L160 30 L165 15 L170 25 L175 5 L180 35 L185 20 L190 10 L195 30 L200 20' fill='none' stroke='%230056b3' stroke-width='2'/%3E%3C/svg%3E");
+            background-repeat: repeat-x;
+            background-position: center;
+            opacity: 0.6;
+        }
+        .audio-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #0056b3;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        audio::-webkit-media-controls-panel {
+            background-color: #f8f9fa;
+        }
     </style>
 </head>
 
@@ -615,9 +648,22 @@
                 <h2 id="detail-title"></h2>
                 <div id="detail-desc" style="line-height: 1.6; margin-bottom: 1.5rem;"></div>
                 <div id="detail-meta" style="font-size: 0.9rem; color: #666; font-style: italic;"></div>
-                <button id="show-qr-btn" class="btn-qr" style="display:none;">
-                    <span>📱 Luo QR-koodeina</span>
-                </button>
+                
+                <div id="audio-area" style="display: none;">
+                    <div class="audio-title">
+                        <span>🔊 Kuuntele tarina</span>
+                    </div>
+                    <div class="audio-container">
+                        <audio id="step-audio" controls style="height: 35px;"></audio>
+                        <div class="audio-waveform"></div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button id="show-qr-btn" class="btn-qr" style="display:none; margin-top: 0;">
+                        <span>📱 Luo QR-koodeina</span>
+                    </button>
+                </div>
             </div>
         </section>
 
