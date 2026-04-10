@@ -365,55 +365,143 @@ section[id] {
     100% { transform: rotate(-45deg) scale(1); box-shadow: 0 0 15px rgba(255, 77, 77, 0.7); }
 }
 
-header {
-    background: linear-gradient(rgba(0, 75, 160, 0.8), rgba(0, 51, 102, 0.8)), url('taivas_tausta.png');
-    background-size: cover;
-    background-position: center;
-    color: var(--light-text);
-    padding: 5rem 1rem;
-    text-align: center;
+/* =========================================
+   HERO SPLIT LAYOUT
+   ========================================= */
+header.hero-split {
+    display: flex;
+    min-height: 420px;
     margin-bottom: 3rem;
     border-bottom-left-radius: 40px;
     border-bottom-right-radius: 40px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 51, 102, 0.18);
 }
 
-.header-content {
-    max-width: 1200px;
-    margin: 0 auto;
+.hero-left {
+    background: var(--secondary-blue);
+    flex: 0 0 52%;
+    display: flex;
+    align-items: center;
+    padding: 3.5rem 3rem;
+    position: relative;
+}
+
+.hero-left::after {
+    content: '';
+    position: absolute;
+    right: -32px;
+    top: 0;
+    bottom: 0;
+    width: 64px;
+    background: var(--secondary-blue);
+    clip-path: polygon(0 0, 0% 100%, 100% 100%);
+    z-index: 2;
+}
+
+.hero-left-content {
+    color: var(--light-text);
+    position: relative;
+    z-index: 3;
+    max-width: 480px;
+}
+
+.hero-right {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    min-height: 340px;
+}
+
+.hero-nature-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform 0.6s ease;
+    max-width: 100% !important;
+}
+
+.hero-split:hover .hero-nature-img {
+    transform: scale(1.03);
+}
+
+.hero-right-caption {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(4px);
+    color: rgba(255,255,255,0.9);
+    font-size: 0.78rem;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-style: italic;
+    letter-spacing: 0.03em;
 }
 
 .header-title-container {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 0.5rem;
+    gap: 14px;
+    margin-bottom: 0.75rem;
 }
 
 .main-logo {
-    height: 60px;
-    width: 60px;
-    /* Kiinteä leveys */
-    max-width: 60px !important;
+    height: 56px;
+    width: 56px;
+    max-width: 56px !important;
     flex-shrink: 0;
     border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     object-fit: cover;
 }
 
 header h1 {
-    font-family: var(--heading-font);
-    font-size: 3.5rem;
-    font-weight: 700;
+    font-family: var(--accent-font);
+    font-size: 3.2rem;
+    font-weight: 800;
     margin: 0;
-    letter-spacing: -1px;
-    line-height: 1.1;
+    letter-spacing: -1.5px;
+    line-height: 1.05;
+    color: #ffffff;
+    text-transform: uppercase;
 }
 
-header p {
-    font-size: 1.1rem;
-    opacity: 0.9;
-    margin-bottom: 1.5rem;
+.hero-tagline {
+    font-size: 1.05rem;
+    opacity: 0.88;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.9);
+}
+
+@media (max-width: 768px) {
+    header.hero-split {
+        flex-direction: column;
+        border-bottom-left-radius: 24px;
+        border-bottom-right-radius: 24px;
+        min-height: unset;
+    }
+
+    .hero-left {
+        flex: unset;
+        padding: 2.5rem 1.5rem;
+    }
+
+    .hero-left::after {
+        display: none;
+    }
+
+    .hero-right {
+        min-height: 220px;
+        flex: unset;
+    }
+
+    header h1 {
+        font-size: 2.4rem;
+    }
 }
 
 .btn-youtube {
@@ -483,9 +571,9 @@ header p {
 
 .nav-logo {
     font-family: var(--accent-font);
-    font-size: 1.2rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
+    font-size: 1.15rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
     display: flex;
     align-items: center;
