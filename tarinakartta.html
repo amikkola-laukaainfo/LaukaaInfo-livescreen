@@ -347,6 +347,50 @@
             font-weight: 700;
             backdrop-filter: blur(4px);
         }
+        /* ── QR Code Modal ─── */
+        .qr-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            z-index: 100000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            color: #333;
+        }
+        .qr-modal canvas {
+            margin: 1rem 0;
+            max-width: 100%;
+        }
+        .qr-overlay {
+            position: fixed;
+            top:0; left:0; right:0; bottom:0;
+            background: rgba(0,0,0,0.7);
+            z-index: 99999;
+            display: none;
+        }
+        .btn-qr {
+            background: #f8f9fa;
+            color: #555;
+            border: 1px solid #ddd;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            margin-top: 1rem;
+        }
+        .btn-qr:hover { background: #e9ecef; border-color: #ccc; }
     </style>
 </head>
 
@@ -571,6 +615,9 @@
                 <h2 id="detail-title"></h2>
                 <div id="detail-desc" style="line-height: 1.6; margin-bottom: 1.5rem;"></div>
                 <div id="detail-meta" style="font-size: 0.9rem; color: #666; font-style: italic;"></div>
+                <button id="show-qr-btn" class="btn-qr" style="display:none;">
+                    <span>📱 Luo QR-koodeina</span>
+                </button>
             </div>
         </section>
 
@@ -622,11 +669,21 @@
         </div>
     </footer>
 
+    <!-- QR Modal -->
+    <div class="qr-overlay" id="qr-overlay"></div>
+    <div class="qr-modal" id="qr-modal">
+        <h3 style="margin:0;">Jaa tämä kohde</h3>
+        <p style="font-size: 0.85rem; color: #666;">Skannaa koodi avataksesi tämän askeleen suoraan.</p>
+        <div id="qrcode-container"></div>
+        <button id="close-qr" class="btn-story" style="background:#333; margin-top:1rem;">Sulje</button>
+    </div>
+
     <!-- Scripts -->
     <script src="script.js?v=20260301-1"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <script src="tarinakartta.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 
     <script>
         // Embed mode detection

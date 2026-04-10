@@ -29,6 +29,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const nextBtn = document.getElementById('next-step');
     const storyDisplay = document.getElementById('story-display');
     const stepSlider = document.getElementById('step-slider');
+    
+    // QR elements
+    const showQrBtn = document.getElementById('show-qr-btn');
+    const qrModal = document.getElementById('qr-modal');
+    const qrOverlay = document.getElementById('qr-overlay');
+    const qrContainer = document.getElementById('qrcode-container');
+    const closeQrBtn = document.getElementById('close-qr');
 
     // 2. Fetch Story Data
     Papa.parse('tarinakartta_data.csv', {
@@ -316,6 +323,9 @@ document.addEventListener('DOMContentLoaded', () => {
             detailMeta.style.display = 'none';
         }
 
+        // QR nappula näkyviin
+        if (showQrBtn) showQrBtn.style.display = 'flex';
+
         // Kartta
         const lat = parseFloat(step.lat);
         const lng = parseFloat(step.lng);
@@ -344,4 +354,36 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event Listeners
     prevBtn.addEventListener('click', () => goToStep(currentStepIndex - 1));
     nextBtn.addEventListener('click', () => goToStep(currentStepIndex + 1));
+
+    // QR Code Logic
+    if (showQrBtn) {
+        showQrBtn.addEventListener('click', () => {
+            const currentUrl = window.location.href;
+            qrContainer.innerHTML = ''; // Tyhjennä vanha
+            
+            const canvas = document.createElement('canvas');
+            qrContainer.appendChild(canvas);
+            
+            QRCode.toCanvas(canvas, currentUrl, {
+                width: 250,
+                margin: 2,
+                color: {
+                    dark: '#0056b3',
+                    light: '#ffffff'
+                }
+            }, function (error) {
+                if (error) console.error(error);
+                qrModal.style.display = 'flex';
+                qrOverlay.style.display = 'block';
+            });
+        });
+    }
+
+    const closeQr = () => {
+        qrModal.style.display = 'none';
+        qrOverlay.style.display = 'none';
+    };
+
+    if (closeQrBtn) closeQrBtn.addEventListener('click', closeQr);
+    if (qrOverlay) qrOverlay.addEventListener('click', closeQr);
 });
