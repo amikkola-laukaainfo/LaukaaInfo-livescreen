@@ -7,7 +7,7 @@
 
 date_default_timezone_set('Europe/Helsinki');
 
-$csvFile = '../tarinakartta_data.csv';
+$csvFile = 'tarinakartta_data.csv';
 $message = '';
 $adminToken = 'ADMIN-99-LPS'; // Sama kuin publish.php
 
@@ -51,12 +51,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
 // --- LUETAAN NYKYINEN DATA (CSV -> JS varten) ---
 $currentData = [];
-if (file_exists($csvFile)) {
-    $handle = fopen($csvFile, 'r');
+$readPath = $csvFile;
+
+// Jos paikallista tiedostoa ei ole, kokeillaan lukea juuresta (automaattinen import)
+if (!file_exists($readPath) && file_exists('../' . $csvFile)) {
+    $readPath = '../' . $csvFile;
+}
+
+if (file_exists($readPath)) {
+    $handle = fopen($readPath, 'r');
     $headers = fgetcsv($handle);
-    while (($row = fgetcsv($handle)) !== FALSE) {
-        if (count($row) < count($headers)) continue;
-        $currentData[] = array_combine($headers, $row);
+    if ($headers) {
+        while (($row = fgetcsv($handle)) !== FALSE) {
+            if (count($row) < count($headers)) continue;
+            $currentData[] = array_combine($headers, $row);
+        }
     }
     fclose($handle);
 }
