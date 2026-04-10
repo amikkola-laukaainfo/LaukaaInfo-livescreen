@@ -370,7 +370,7 @@ section[id] {
    ========================================= */
 header.hero-split {
     display: flex;
-    min-height: 420px;
+    min-height: 300px;
     margin-bottom: 3rem;
     border-bottom-left-radius: 40px;
     border-bottom-right-radius: 40px;
@@ -383,7 +383,7 @@ header.hero-split {
     flex: 0 0 52%;
     display: flex;
     align-items: center;
-    padding: 4rem 3rem 4rem 8vw;
+    padding: 2.5rem 3rem 2.5rem 15vw;
     position: relative;
 }
 
@@ -410,7 +410,7 @@ header.hero-split {
     flex: 1;
     position: relative;
     overflow: hidden;
-    min-height: 340px;
+    min-height: 300px;
 }
 
 .hero-nature-img {
@@ -449,9 +449,9 @@ header.hero-split {
 }
 
 .main-logo {
-    height: 56px;
-    width: 56px;
-    max-width: 56px !important;
+    height: 96px;
+    width: 96px;
+    max-width: 96px !important;
     flex-shrink: 0;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
