@@ -383,7 +383,7 @@ header.hero-split {
     flex: 0 0 52%;
     display: flex;
     align-items: center;
-    padding: 3.5rem 3rem;
+    padding: 4rem 3rem 4rem 8vw;
     position: relative;
 }
 
