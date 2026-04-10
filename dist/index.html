@@ -1,1 +1,442 @@
-<!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Laukaa palvelut ja yritykset – Kaikki paikalliset kootusti | LaukaaInfo</title><meta name="description" content="Laukaan palvelut, yritykset ja tapahtumat yhdestä paikasta. Etsi Laukaan yritykset, ravintolat ja palvelut kätevästi LaukaaInfosta."><link rel="icon" href="logo.png"><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#0056b3"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="apple-touch-icon" href="icons/icon-192.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Outfit:wght@100..900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css"><link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css"><link rel="stylesheet" href="style.0edbd8f1.css?v=20260301-1"><link rel="stylesheet" href="feed.0edbd8f1.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"><link rel="stylesheet" href="modal.0edbd8f1.css"></head><body><nav class="top-nav"><div class="nav-container"><a href="index.html" class="nav-logo"><img src="logo.png" alt="LaukaaInfo Logo"> <span>LaukaaInfo</span></a><div class="desktop-nav"><ul class="nav-links"><li class="nav-item"><a href="#" class="nav-link">Kauppa <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="ilmoittaudu.html">Ilmoittaudu julkaisijaksi</a></li><li><a href="kauppa.html">Osta lisää näkyvyyttä</a></li><li><a href="lisaa-yritys.html">Yritysnäkyvyys</a></li></ul></li><li class="nav-item"><a href="#" class="nav-link">Hakulinkit <span class="arrow">▼</span></a><ul class="dropdown-menu"><li class="has-arrow"><a href="#">Suosituimmat</a><ul class="nested-menu" id="nav-featured"></ul></li><li class="has-arrow"><a href="#">Kategoriat</a><ul class="nested-menu" id="nav-categories"></ul></li><li class="has-arrow"><a href="#">Taajamat</a><ul class="nested-menu"><li><a href="laukaa.html">Laukaa kk</a></li><li><a href="leppavesi.html">Leppävesi</a></li><li><a href="lievestuore.html">Lievestuore</a></li><li><a href="vehnia.html">Vehniä</a></li><li><a href="vihtavuori.html">Vihtavuori</a></li></ul></li></ul></li><li class="nav-item"><a href="ajankohtaista.html" class="nav-link">Ajankohtaista <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="ajankohtaista.html#events-card">Tapahtumat</a></li><li><a href="ajankohtaista.html#news-card">Tiedotteet</a></li><li><a href="ajankohtaista.html#decisions-card">Päätöksenteko</a></li><li><a href="ajankohtaista.html#feedback-card">Palautteet</a></li></ul></li><li class="nav-item"><a href="#" class="nav-link">Päätösten polut <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="asiahaku.html">Hae ja tutki</a></li></ul></li><li class="nav-item"><a href="#" class="nav-link">Kartat &amp; Elämykset <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="karttakohteet.html">Karttakohteet</a></li><li><a href="tarinakartta.html">Tarinakartta</a></li><li><a href="muistokartta.html">Muistokartta</a></li><li><a href="kadonneet.html">Kadonneet &amp; löydetyt</a></li></ul></li></ul></div><button class="hamburger" id="hamburger-btn" aria-label="Avaa valikko"><span></span> <span></span> <span></span></button></div></nav><div class="sidebar-overlay" id="sidebar-overlay"></div><aside class="sidebar-menu" id="sidebar-menu"><div class="sidebar-header"><a href="index.html" class="nav-logo"><img src="logo.png" alt="LaukaaInfo Logo"> <span>LaukaaInfo</span> </a><button class="close-btn" id="close-sidebar-btn" aria-label="Sulje valikko">&times;</button></div><div class="sidebar-content"><div class="menu-section"><h3 class="section-title">KAUPPA</h3><ul class="menu-list"><li class="menu-item"><a href="ilmoittaudu.html" class="sidebar-link">Ilmoittaudu julkaisijaksi</a></li><li class="menu-item"><a href="kauppa.html" class="sidebar-link">Osta lisää näkyvyyttä</a></li><li class="menu-item"><a href="lisaa-yritys.html" class="sidebar-link">Yritysnäkyvyys</a></li></ul></div><div class="menu-section"><h3 class="section-title">HAKULINKIT</h3><ul class="menu-list"><li class="menu-item has-submenu"><a href="#" class="submenu-toggle">Suosituimmat <span class="arrow">▼</span></a><ul class="submenu" id="sidebar-featured"></ul></li><li class="menu-item has-submenu"><a href="#" class="submenu-toggle">Kategoriat <span class="arrow">▼</span></a><ul class="submenu" id="sidebar-categories"></ul></li><li class="menu-item has-submenu"><a href="#" class="submenu-toggle">Taajamat <span class="arrow">▼</span></a><ul class="submenu"><li><a href="laukaa.html" class="sidebar-link">Laukaa kk</a></li><li><a href="leppavesi.html" class="sidebar-link">Leppävesi</a></li><li><a href="lievestuore.html" class="sidebar-link">Lievestuore</a></li><li><a href="vehnia.html" class="sidebar-link">Vehniä</a></li><li><a href="vihtavuori.html" class="sidebar-link">Vihtavuori</a></li></ul></li></ul></div><div class="menu-section"><h3 class="section-title">AJANKOHTAISTA</h3><ul class="menu-list"><li class="menu-item"><a href="ajankohtaista.html#events-card" class="sidebar-link">Tapahtumat</a></li><li class="menu-item"><a href="ajankohtaista.html#news-card" class="sidebar-link">Tiedotteet</a></li><li class="menu-item"><a href="ajankohtaista.html#decisions-card" class="sidebar-link">Päätöksenteko</a></li><li class="menu-item"><a href="ajankohtaista.html#feedback-card" class="sidebar-link">Palautteet</a></li></ul></div><div class="menu-section"><h3 class="section-title">PÄÄTÖSTEN POLUT</h3><ul class="menu-list"><li class="menu-item"><a href="asiahaku.html" class="sidebar-link">Hae ja tutki</a></li></ul></div><div class="menu-section highlight-section"><h3 class="section-title">KARTAT &amp; ELÄMYKSET ⭐</h3><ul class="menu-list"><li class="menu-item"><a href="karttakohteet.html" class="sidebar-link">Karttakohteet</a></li><li class="menu-item"><a href="tarinakartta.html" class="sidebar-link">Tarinakartta</a></li><li class="menu-item"><a href="muistokartta.html" class="sidebar-link">Muistokartta</a></li><li class="menu-item"><a href="kadonneet.html" class="sidebar-link">Kadonneet &amp; löydetyt</a></li></ul></div></div></aside><header class="hero-split"><div class="hero-left"><div class="hero-left-content"><div class="header-title-container"><img src="logo.png" alt="LaukaaInfo Logo" class="main-logo"><h1>LaukaaInfo</h1></div><p class="hero-tagline">Laukaa taskussasi – tiedä, löydä ja osallistu.</p><div class="header-buttons"><a href="https://www.youtube.com/@laukaainfo" target="_blank" class="btn-youtube">LaukaaInfo YouTube </a><a href="https://www.facebook.com/groups/892675230270311" target="_blank" class="btn-facebook">Keskusteluryhmä</a></div></div></div><div class="hero-right"><img src="hero-kuva.jpg" alt="Suomalainen luontomaisema – Laukaa" class="hero-nature-img"><div class="hero-right-caption">Laukaa, Keski-Suomi</div></div></header><main><div class="homepage-top"><a href="galleria.html" class="media-spotlight-card"><div class="card-content"><div class="card-text"><h3>Kuvagalleria – Paikallista mediaa</h3><p>Katso uusimmat kuvat ja videot Laukaasta kootusti.</p></div><span class="card-arrow">➔</span></div></a><section class="feed-accordion-section"><div class="feed-accordion"><button class="feed-accordion-header closed" id="toggle-feed-btn" style="align-items:center"><div style="display:flex;flex-direction:column;align-items:flex-start"><span>Mitä Laukaassa tapahtuu</span> <small style="font-size:.8rem;font-weight:400;opacity:.9;margin-top:2px">Paikalliset ilmoitukset, tapahtumat ja tarjoukset</small></div><span class="icon-btn">Avaa</span></button><div class="feed-accordion-content closed" id="feed-accordion-content"><div id="homepage-feed" data-feed-src="https://www.mediazoo.fi/laukaainfo-web/api.php" data-share-url="https://mediazoo.fi/laukaainfo-web/item.php"></div></div></div></section></div><section id="kauppa-search" class="kauppa-hero"><div class="search-hero-content"><h1>Mitä haluat tietää, löytää tai tehdä Laukaassa?</h1><p>Hae yrityksiä, tapahtumia ja tiedotteita Laukaasta.</p><div class="main-search-box"><div class="search-input-wrapper"><input type="text" id="company-search" placeholder="Etsi esim. parturi, kahvila, taajama Laukaassa" aria-label="Yrityshaku" autocomplete="off"><ul id="search-suggestions" class="search-suggestions"></ul><button id="search-btn" class="btn-search">Hae</button></div><div class="search-options"><label class="checkbox-container"><input type="checkbox" id="include-rss"> <span class="checkmark"></span> Tapahtumat ja tiedotteet</label></div><div id="catalog-list" class="catalog-list-home"></div></div><p class="location-hint">Kirjoita tai klikkaa sijaintisi ja löydä lähimmät kohteet, tapahtumat tai tarjoukset kartalla.</p><div class="map-accordion"><button class="accordion-header" id="toggle-map-btn"><span>Avaa karttahaku</span> <span class="icon">▼</span></button><div class="accordion-content" id="map-accordion-content"><div class="map-search-bar"><input type="text" id="map-local-search" placeholder="Hae kohteita kartalta..." aria-label="Etsi kartalta"></div><div id="company-map" class="embedded-map"></div></div></div></div></section><section class="business-nav-section"><h2 style="text-align:center;margin-bottom:2rem">Kasvata näkyvyyttäsi Laukaassa</h2><div class="business-nav-grid"><a href="ilmoittaudu.html#ilm-form" class="nav-box"><h3>Ilmoittaudu julkaisijaksi</h3><p>Uusi käyttäjä? Aloita maksutta (3 julkaisua) ja tavoita paikalliset asiakkaat helposti.</p><div class="btn-fake">Aloita tästä &raquo;</div></a><a href="kauppa.html" class="nav-box"><h3>Osta lisää näkyvyyttä</h3><p>Haluatko vain yksittäisiä julkaisuja? Osta julkaisuaikaa tarpeen mukaan alk. 5 €.</p><div class="btn-fake">Avaa kauppa &raquo;</div></a><a href="lisaa-yritys.html" class="nav-box"><h3>Yritysnäkyvyys</h3><p>Haluatko jatkuvaa näkyvyyttä ja oman feed-linkin? Ota yrityskortti alk. 15 €/kk.<br><small style="opacity:.8;font-size:.85em">Soveltuu myös yhdistyksille.</small></p><div class="btn-fake">Lue lisää &raquo;</div></a></div></section><section id="categories-section" class="categories-grid-section"><div class="categories-header"><h2>Toimialat</h2><div class="region-filter-wrapper"><label for="region-select">Alue:</label> <select id="region-select" class="region-dropdown"><option value="all">Kaikki</option><option value="laukaa">Laukaa</option><option value="leppavesi">Leppävesi</option><option value="lievestuore">Lievestuore</option><option value="vehnia">Vehniä</option><option value="vihtavuori">Vihtavuori</option></select></div></div><div id="homepage-categories" class="categories-grid"><div class="loading-spinner">Ladataan kategorioita...</div></div></section></main><section class="seo-footer-links" style="background-color:#f5f9ff;padding:2rem 1rem;margin-top:3rem;text-align:center"><h3 style="color:#0056b3;font-size:1.2rem;margin-bottom:1rem">Suosituimmat haut Laukaassa</h3><div style="display:flex;flex-wrap:wrap;justify-content:center;gap:15px"><a href="laukaan-ravintolat.html" style="color:#ff3b30;text-decoration:none;font-weight:600">Laukaan ravintolat</a> <a href="laukaan-autohuollot.html" style="color:#ff3b30;text-decoration:none;font-weight:600">Laukaan autohuollot & Korjaamot</a> <a href="laukaan-parturit-ja-kauneus.html" style="color:#ff3b30;text-decoration:none;font-weight:600">Laukaan parturit ja kauneus</a></div></section><footer><div class="footer-content"><p>© 2026 LaukaaInfo – Palvelua ylläpitää Mediazoo.fi</p><div class="footer-links"><a href="https://www.mediazoo.fi/laukaainfo/index.html">Tietoa sovelluksesta</a> <a href="tietosuoja.html">Tietosuoja</a> <a href="maksuehto.html">Maksuehdot</a> <a href="https://mediazoo.fi/yhteystiedot/" class="footer-mailto-cta">✉️ Ota yhteyttä</a> <button id="pwa-install-btn" style="display:none;background:#00c3ff;color:#fff;border:none;padding:5px 12px;border-radius:20px;cursor:pointer;font-family:inherit;font-size:.9rem;margin-left:10px">Asenna sovellus</button></div><div class="app-badge"><a href="https://play.google.com/store/apps/details?id=org.example.LaukaaLive&hl=fi" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Lataa Android-sovellus" style="height:40px"></a></div></div></footer><div class="demo-notification">Tämä on yksityinen palvelusovellus.</div><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script><script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script><script src="modal.0edbd8f1.js"></script><script src="script.0edbd8f1.js?v=20260301-1"></script><script src="feed.0edbd8f1.js?v=20260323a"></script><script>let feedBtn=document.getElementById("toggle-feed-btn"),feedContent=document.getElementById("feed-accordion-content"),urlParams=new URLSearchParams(window.location.search),hasFilterParam=urlParams.has("filter")||urlParams.has("feed_filter"),forceOpen="open"===urlParams.get("feed")||"#homepage-feed"===window.location.hash||hasFilterParam&&"false"!==urlParams.get("feed"),isExpanded=forceOpen||"true"===localStorage.getItem("lki_feed_expanded");isExpanded&&(feedBtn.classList.remove("closed"),feedContent.classList.remove("closed"),feedBtn.querySelector(".icon-btn").textContent="Sulje",forceOpen)&&setTimeout(()=>{feedBtn.scrollIntoView({behavior:"smooth",block:"start"})},400),feedBtn.addEventListener("click",function(){this.classList.toggle("closed");var e=this.classList.contains("closed");this.querySelector(".icon-btn").textContent=e?"Avaa":"Sulje",feedContent.classList.toggle("closed"),localStorage.setItem("lki_feed_expanded",!e)})</script><script>setTimeout(function(){try{fetch("analytics.php",{mode:"no-cors"}).catch(()=>{})}catch(c){}},2e3)</script></body></html>
+<!DOCTYPE html>
+<html lang="fi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laukaa palvelut ja yritykset – Kaikki paikalliset kootusti | LaukaaInfo</title>
+    <meta name="description"
+        content="Laukaan palvelut, yritykset ja tapahtumat yhdestä paikasta. Etsi Laukaan yritykset, ravintolat ja palvelut kätevästi LaukaaInfosta.">
+    <link rel="icon" href="logo.png">
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0056b3">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+
+    <!-- Fonts & Styles -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Outfit:wght@100..900&display=swap"
+        rel="stylesheet">
+
+    <!-- Leaflet Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+
+    <link rel="stylesheet" href="style.css?v=20260301-1">
+    <link rel="stylesheet" href="feed.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="modal.css">
+</head>
+
+<body>
+
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="logo.png" alt="LaukaaInfo Logo">
+                <span>LaukaaInfo</span>
+            </a>
+            <div class="desktop-nav">
+                <ul class="nav-links">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Kauppa <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="ilmoittaudu.html">Ilmoittaudu julkaisijaksi</a></li>
+                            <li><a href="kauppa.html">Osta lisää näkyvyyttä</a></li>
+                            <li><a href="lisaa-yritys.html">Yritysnäkyvyys</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Hakulinkit <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <li class="has-arrow">
+                                <a href="#">Suosituimmat</a>
+                                <ul class="nested-menu" id="nav-featured">
+                                </ul>
+                            </li>
+                            <li class="has-arrow">
+                                <a href="#">Kategoriat</a>
+                                <ul class="nested-menu" id="nav-categories">
+                                </ul>
+                            </li>
+                            <li class="has-arrow">
+                                <a href="#">Taajamat</a>
+                                <ul class="nested-menu">
+                                    <li><a href="laukaa.html">Laukaa kk</a></li>
+                                    <li><a href="leppavesi.html">Leppävesi</a></li>
+                                    <li><a href="lievestuore.html">Lievestuore</a></li>
+                                    <li><a href="vehnia.html">Vehniä</a></li>
+                                    <li><a href="vihtavuori.html">Vihtavuori</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="ajankohtaista.html" class="nav-link">Ajankohtaista <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="ajankohtaista.html#events-card">Tapahtumat</a></li>
+                            <li><a href="ajankohtaista.html#news-card">Tiedotteet</a></li>
+                            <li><a href="ajankohtaista.html#decisions-card">Päätöksenteko</a></li>
+                            <li><a href="ajankohtaista.html#feedback-card">Palautteet</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Päätösten polut <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="asiahaku.html">Hae ja tutki</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Kartat &amp; Elämykset <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="karttakohteet.html">Karttakohteet</a></li>
+                            <li><a href="tarinakartta.html">Tarinakartta</a></li>
+                            <li><a href="muistokartta.html">Muistokartta</a></li>
+                            <li><a href="kadonneet.html">Kadonneet &amp; löydetyt</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <button class="hamburger" id="hamburger-btn" aria-label="Avaa valikko">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- Sidebar Menu -->
+    <aside class="sidebar-menu" id="sidebar-menu">
+        <div class="sidebar-header">
+            <a href="index.html" class="nav-logo">
+                <img src="logo.png" alt="LaukaaInfo Logo">
+                <span>LaukaaInfo</span>
+            </a>
+            <button class="close-btn" id="close-sidebar-btn" aria-label="Sulje valikko">&times;</button>
+        </div>
+
+        <div class="sidebar-content">
+            <!-- Pääosio: KAUPPA -->
+            <div class="menu-section">
+                <h3 class="section-title">KAUPPA</h3>
+                <ul class="menu-list">
+                    <li class="menu-item"><a href="ilmoittaudu.html" class="sidebar-link">Ilmoittaudu julkaisijaksi</a></li>
+                    <li class="menu-item"><a href="kauppa.html" class="sidebar-link">Osta lisää näkyvyyttä</a></li>
+                    <li class="menu-item"><a href="lisaa-yritys.html" class="sidebar-link">Yritysnäkyvyys</a></li>
+                </ul>
+            </div>
+
+            <!-- Pääosio: HAKULINKIT -->
+            <div class="menu-section">
+                <h3 class="section-title">HAKULINKIT</h3>
+                <ul class="menu-list">
+                    <li class="menu-item has-submenu">
+                        <a href="#" class="submenu-toggle">Suosituimmat <span class="arrow">▼</span></a>
+                        <ul class="submenu" id="sidebar-featured">
+                        </ul>
+                    </li>
+                    <li class="menu-item has-submenu">
+                        <a href="#" class="submenu-toggle">Kategoriat <span class="arrow">▼</span></a>
+                        <ul class="submenu" id="sidebar-categories">
+                        </ul>
+                    </li>
+                    <li class="menu-item has-submenu">
+                        <a href="#" class="submenu-toggle">Taajamat <span class="arrow">▼</span></a>
+                        <ul class="submenu">
+                            <li><a href="laukaa.html" class="sidebar-link">Laukaa kk</a></li>
+                            <li><a href="leppavesi.html" class="sidebar-link">Leppävesi</a></li>
+                            <li><a href="lievestuore.html" class="sidebar-link">Lievestuore</a></li>
+                            <li><a href="vehnia.html" class="sidebar-link">Vehniä</a></li>
+                            <li><a href="vihtavuori.html" class="sidebar-link">Vihtavuori</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Pääosio: AJANKOHTAISTA -->
+            <div class="menu-section">
+                <h3 class="section-title">AJANKOHTAISTA</h3>
+                <ul class="menu-list">
+                    <li class="menu-item"><a href="ajankohtaista.html#events-card" class="sidebar-link">Tapahtumat</a>
+                    </li>
+                    <li class="menu-item"><a href="ajankohtaista.html#news-card" class="sidebar-link">Tiedotteet</a>
+                    </li>
+                    <li class="menu-item"><a href="ajankohtaista.html#decisions-card"
+                            class="sidebar-link">Päätöksenteko</a></li>
+                    <li class="menu-item"><a href="ajankohtaista.html#feedback-card" class="sidebar-link">Palautteet</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Pääosio: PÄÄTÖSTEN POLUT -->
+            <div class="menu-section">
+                <h3 class="section-title">PÄÄTÖSTEN POLUT</h3>
+                <ul class="menu-list">
+                    <li class="menu-item"><a href="asiahaku.html" class="sidebar-link">Hae ja tutki</a></li>
+                </ul>
+            </div>
+
+            <!-- Korostettu osio: KARTAT & ELÄMYKSET -->
+            <div class="menu-section highlight-section">
+                <h3 class="section-title">KARTAT &amp; ELÄMYKSET ⭐</h3>
+                <ul class="menu-list">
+                    <li class="menu-item"><a href="karttakohteet.html" class="sidebar-link">Karttakohteet</a></li>
+                    <li class="menu-item"><a href="tarinakartta.html" class="sidebar-link">Tarinakartta</a></li>
+                    <li class="menu-item"><a href="muistokartta.html" class="sidebar-link">Muistokartta</a></li>
+                    <li class="menu-item"><a href="kadonneet.html" class="sidebar-link">Kadonneet &amp; löydetyt</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </aside>
+
+    <header class="hero-split">
+        <div class="hero-left">
+            <div class="hero-left-content">
+                <div class="header-title-container">
+                    <img src="logo.png" alt="LaukaaInfo Logo" class="main-logo">
+                    <h1>LaukaaInfo</h1>
+                </div>
+                <p class="hero-tagline">Laukaa taskussasi – tiedä, löydä ja osallistu.</p>
+                <div class="header-buttons">
+                    <a href="https://www.youtube.com/@laukaainfo" target="_blank" class="btn-youtube">
+                        LaukaaInfo YouTube
+                    </a>
+                    <a href="https://www.facebook.com/groups/892675230270311" target="_blank" class="btn-facebook">
+                        Keskusteluryhmä
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="hero-right">
+            <img
+                src="hero-kuva.jpg"
+                alt="Suomalainen luontomaisema – Laukaa"
+                class="hero-nature-img">
+            <div class="hero-right-caption">Laukaa, Keski-Suomi</div>
+        </div>
+    </header>
+
+    <main>
+        <div class="homepage-top">
+    <!-- Media Spotlight Link Card -->
+    <a href="galleria.html" class="media-spotlight-card">
+        <div class="card-content">
+            <div class="card-text">
+                <h3>Kuvagalleria – Paikallista mediaa</h3>
+                <p>Katso uusimmat kuvat ja videot Laukaasta kootusti.</p>
+            </div>
+            <span class="card-arrow">➔</span>
+        </div>
+    </a>
+
+    <!-- Feed Accordion -->
+    <section class="feed-accordion-section">
+        <div class="feed-accordion">
+            <button class="feed-accordion-header closed" id="toggle-feed-btn" style="align-items: center;">
+                <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                    <span>Mitä Laukaassa tapahtuu</span>
+                    <small style="font-size: 0.8rem; font-weight: normal; opacity: 0.9; margin-top: 2px;">Paikalliset ilmoitukset, tapahtumat ja tarjoukset</small>
+                </div>
+                <span class="icon-btn">Avaa</span>
+            </button>
+            <div class="feed-accordion-content closed" id="feed-accordion-content">
+                <!-- Aktiivinen aineisto (Dynaaminen API mediazoo.fi:stä) -->
+                <div id="homepage-feed" data-feed-src="https://www.mediazoo.fi/laukaainfo-web/api.php" data-share-url="https://mediazoo.fi/laukaainfo-web/item.php"></div>
+            </div>
+        </div>
+    </section>
+</div>
+
+        <!-- Kauppa - Etusivu -->
+        <section id="kauppa-search" class="kauppa-hero">
+            <div class="search-hero-content">
+                <h1>Mitä haluat tietää, löytää tai tehdä Laukaassa?</h1>
+                <p>Hae yrityksiä, tapahtumia ja tiedotteita Laukaasta.</p>
+
+                <div class="main-search-box">
+                    <div class="search-input-wrapper">
+                        <input type="text" id="company-search"
+                            placeholder="Etsi esim. parturi, kahvila, taajama Laukaassa" aria-label="Yrityshaku"
+                            autocomplete="off">
+                        <ul id="search-suggestions" class="search-suggestions"></ul>
+                        <button id="search-btn" class="btn-search">Hae</button>
+                    </div>
+                    <div class="search-options">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="include-rss">
+                            <span class="checkmark"></span>
+                            Tapahtumat ja tiedotteet
+                        </label>
+                    </div>
+                    <!-- Hakutulokset (lisätty dynaamisesti) -->
+                    <div id="catalog-list" class="catalog-list-home"></div>
+                </div>
+
+                <p class="location-hint">Kirjoita tai klikkaa sijaintisi ja löydä lähimmät kohteet, tapahtumat tai tarjoukset kartalla.</p>
+
+                <div class="map-accordion">
+                    <button class="accordion-header" id="toggle-map-btn">
+                        <span>Avaa karttahaku</span>
+                        <span class="icon">▼</span>
+                    </button>
+                    <div class="accordion-content" id="map-accordion-content">
+                        <div class="map-search-bar">
+                            <input type="text" id="map-local-search" placeholder="Hae kohteita kartalta..."
+                                aria-label="Etsi kartalta">
+                        </div>
+                        <div id="company-map" class="embedded-map"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Unified Business Navigation -->
+        <section class="business-nav-section">
+            <h2 style="text-align: center; margin-bottom: 2rem;">Kasvata näkyvyyttäsi Laukaassa</h2>
+            <div class="business-nav-grid">
+                <a href="ilmoittaudu.html#ilm-form" class="nav-box">
+                    <h3>Ilmoittaudu julkaisijaksi</h3>
+                    <p>Uusi käyttäjä? Aloita maksutta (3 julkaisua) ja tavoita paikalliset asiakkaat helposti.</p>
+                    <div class="btn-fake">Aloita tästä &raquo;</div>
+                </a>
+                <a href="kauppa.html" class="nav-box">
+                    <h3>Osta lisää näkyvyyttä</h3>
+                    <p>Haluatko vain yksittäisiä julkaisuja? Osta julkaisuaikaa tarpeen mukaan alk. 5 €.</p>
+                    <div class="btn-fake">Avaa kauppa &raquo;</div>
+                </a>
+                <a href="lisaa-yritys.html" class="nav-box">
+                    <h3>Yritysnäkyvyys</h3>
+                    <p>Haluatko jatkuvaa näkyvyyttä ja oman feed-linkin? Ota yrityskortti alk. 15 €/kk.<br><small style="opacity: 0.8; font-size: 0.85em;">Soveltuu myös yhdistyksille.</small></p>
+                    <div class="btn-fake">Lue lisää &raquo;</div>
+                </a>
+            </div>
+        </section>
+
+        <section id="categories-section" class="categories-grid-section">
+            <div class="categories-header">
+                <h2>Toimialat</h2>
+                <div class="region-filter-wrapper">
+                    <label for="region-select">Alue:</label>
+                    <select id="region-select" class="region-dropdown">
+                        <option value="all">Kaikki</option>
+                        <option value="laukaa">Laukaa</option>
+                        <option value="leppavesi">Leppävesi</option>
+                        <option value="lievestuore">Lievestuore</option>
+                        <option value="vehnia">Vehniä</option>
+                        <option value="vihtavuori">Vihtavuori</option>
+                    </select>
+                </div>
+            </div>
+            <div id="homepage-categories" class="categories-grid">
+                <!-- Kategoriat ladataan dynaamisesti CSV-datasta -->
+                <div class="loading-spinner">Ladataan kategorioita...</div>
+            </div>
+        </section>
+
+
+
+    </main>
+
+    <!-- SEO Footer Links -->
+    <section class="seo-footer-links" style="background-color: #f5f9ff; padding: 2rem 1rem; margin-top: 3rem; text-align: center;">
+        <h3 style="color: #0056b3; font-size: 1.2rem; margin-bottom: 1rem;">Suosituimmat haut Laukaassa</h3>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
+            <a href="laukaan-ravintolat.html" style="color: #ff3b30; text-decoration: none; font-weight: 600;">Laukaan ravintolat</a>
+            <a href="laukaan-autohuollot.html" style="color: #ff3b30; text-decoration: none; font-weight: 600;">Laukaan autohuollot & Korjaamot</a>
+            <a href="laukaan-parturit-ja-kauneus.html" style="color: #ff3b30; text-decoration: none; font-weight: 600;">Laukaan parturit ja kauneus</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <p>© 2026 LaukaaInfo – Palvelua ylläpitää Mediazoo.fi</p>
+            <div class="footer-links">
+                <a href="https://www.mediazoo.fi/laukaainfo/index.html">Tietoa sovelluksesta</a>
+                <a href="tietosuoja.html">Tietosuoja</a>
+                <a href="maksuehto.html">Maksuehdot</a>
+                <a href="https://mediazoo.fi/yhteystiedot/" class="footer-mailto-cta">✉️ Ota yhteyttä</a>
+                <button id="pwa-install-btn"
+                    style="display: none; background: #00c3ff; color: white; border: none; padding: 5px 12px; border-radius: 20px; cursor: pointer; font-family: inherit; font-size: 0.9rem; margin-left: 10px;">Asenna
+                    sovellus</button>
+            </div>
+            <div class="app-badge">
+                <a href="https://play.google.com/store/apps/details?id=org.example.LaukaaLive&hl=fi" target="_blank">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+                        alt="Lataa Android-sovellus" style="height: 40px;">
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <div class="demo-notification">Tämä on yksityinen palvelusovellus.</div>
+
+    <!-- Service Worker registration is handled in script.js -->
+
+    <!-- Leaflet & Multi-cluster JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="modal.js"></script>
+
+    <script src="script.js?v=20260301-1"></script>
+    <script src="feed.js?v=20260323a"></script>
+
+    <script>
+        // Feed accordion toggle with persistence
+        const feedBtn = document.getElementById('toggle-feed-btn');
+        const feedContent = document.getElementById('feed-accordion-content');
+        
+        // Load initial state
+        const urlParams = new URLSearchParams(window.location.search);
+        // Check for feed=open OR specialized filter (filter/feed_filter)
+        const hasFilterParam = urlParams.has('filter') || urlParams.has('feed_filter');
+        const forceOpen = urlParams.get('feed') === 'open' || window.location.hash === '#homepage-feed' || (hasFilterParam && urlParams.get('feed') !== 'false');
+        
+        const isExpanded = forceOpen || localStorage.getItem('lki_feed_expanded') === 'true';
+
+        if (isExpanded) {
+            feedBtn.classList.remove('closed');
+            feedContent.classList.remove('closed');
+            feedBtn.querySelector('.icon-btn').textContent = 'Sulje';
+            
+            // If opened via parameter or anchor, ensure we scroll to it
+            if (forceOpen) {
+                setTimeout(() => {
+                    feedBtn.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 400); // 400ms is usually enough for initial layout
+            }
+        }
+
+        feedBtn.addEventListener('click', function() {
+            this.classList.toggle('closed');
+            const nowClosed = this.classList.contains('closed');
+            this.querySelector('.icon-btn').textContent = nowClosed ? 'Avaa' : 'Sulje';
+            feedContent.classList.toggle('closed');
+            
+            // Save state
+            localStorage.setItem('lki_feed_expanded', !nowClosed);
+        });
+    </script>
+    <script>
+        // Taustalla toimiva kävijälaskuri
+        (function () {
+            setTimeout(function () {
+                try {
+                    fetch('analytics.php', { mode: 'no-cors' }).catch(() => { });
+                } catch (e) { }
+            }, 2000); // Viivästetään hieman, ettei häiritse sivun latausta
+        })();
+    </script>
+</body>
+
+</html>
