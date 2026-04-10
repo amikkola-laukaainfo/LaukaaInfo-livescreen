@@ -36,6 +36,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const qrOverlay = document.getElementById('qr-overlay');
     const qrContainer = document.getElementById('qrcode-container');
     const closeQrBtn = document.getElementById('close-qr');
+    const copyLinkBtn = document.getElementById('copy-link-btn');
+    const copyImgBtn = document.getElementById('copy-img-btn');
 
     // 2. Fetch Story Data
     Papa.parse('tarinakartta_data.csv', {
@@ -386,4 +388,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (closeQrBtn) closeQrBtn.addEventListener('click', closeQr);
     if (qrOverlay) qrOverlay.addEventListener('click', closeQr);
+
+    // Copy Link Logic
+    if (copyLinkBtn) {
+        copyLinkBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                const originalText = copyLinkBtn.textContent;
+                copyLinkBtn.textContent = '✅ Kopioitu!';
+                setTimeout(() => { copyLinkBtn.textContent = originalText; }, 2000);
+            });
+        });
+    }
+
+    // Copy Image Logic
+    if (copyImgBtn) {
+        copyImgBtn.addEventListener('click', () => {
+            const canvas = qrContainer.querySelector('canvas');
+            if (!canvas) return;
+            
+            canvas.toBlob((blob) => {
+                const item = new ClipboardItem({ 'image/png': blob });
+                navigator.clipboard.write([item]).then(() => {
+                    const originalText = copyImgBtn.textContent;
+                    copyImgBtn.textContent = '✅ Kuva kopioitu!';
+                    setTimeout(() => { copyImgBtn.textContent = originalText; }, 2000);
+                });
+            }, 'image/png');
+        });
+    }
 });

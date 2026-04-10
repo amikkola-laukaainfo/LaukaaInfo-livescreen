@@ -673,9 +673,15 @@
     <div class="qr-overlay" id="qr-overlay"></div>
     <div class="qr-modal" id="qr-modal">
         <h3 style="margin:0;">Jaa tämä kohde</h3>
-        <p style="font-size: 0.85rem; color: #666;">Skannaa koodi avataksesi tämän askeleen suoraan.</p>
+        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">Skannaa koodi tai kopioi linkki talteen.</p>
         <div id="qrcode-container"></div>
-        <button id="close-qr" class="btn-story" style="background:#333; margin-top:1rem;">Sulje</button>
+        
+        <div style="display: flex; gap: 10px; margin-top: 1rem;">
+            <button id="copy-link-btn" class="btn-qr" style="margin-top:0;">🔗 Kopioi linkki</button>
+            <button id="copy-img-btn" class="btn-qr" style="margin-top:0;">🖼️ Kopioi kuva</button>
+        </div>
+
+        <button id="close-qr" class="btn-story" style="background:#333; margin-top:1.5rem; width: 100%;">Sulje</button>
     </div>
 
     <!-- Scripts -->
