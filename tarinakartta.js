@@ -39,7 +39,20 @@ document.addEventListener('DOMContentLoaded', () => {
             allSteps = results.data.sort((a, b) => parseInt(a.step_order) - parseInt(b.step_order));
             if (allSteps.length > 0) {
                 populateCategories();
-                applyFilters(); // initial render — kaikki tarinat
+                
+                // Jos meillä on syvälinkki, asetetaan select-valikot sen mukaisesti
+                const startupStep = new URLSearchParams(window.location.search).get('step');
+                if (startupStep) {
+                    const found = allSteps.find(s => s.step_order === startupStep);
+                    if (found) {
+                        categorySelect.value = found.category || '';
+                        populateTopics(found.category);
+                        topicSelect.value = found.topic || '';
+                        populateStories(found.category, found.topic);
+                    }
+                }
+                
+                applyFilters(); // initial render
             }
         },
         error: function (err) {
@@ -118,6 +131,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ── Filtteri & Kartta ────────────────────────────────────────────
 
+    // ── Filtteri & Kartta ────────────────────────────────────────────
+    let pendingStepOrder = new URLSearchParams(window.location.search).get('step');
+
     function applyFilters() {
         const cat = categorySelect.value;
         const topic = topicSelect.value;
@@ -130,8 +146,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         buildMapMarkers();
         renderSlider();
+
         if (filteredSteps.length > 0) {
             storyDisplay.style.display = 'grid';
+            
+            // Tarkistetaan onko meillä "syvälinkki" odottamassa
+            if (pendingStepOrder) {
+                const targetIdx = filteredSteps.findIndex(s => s.step_order === pendingStepOrder);
+                pendingStepOrder = null; // Kulutetaan heti
+                if (targetIdx >= 0) {
+                    goToStep(targetIdx);
+                    return;
+                }
+            }
+            
             goToStep(0);
         } else {
             storyDisplay.style.display = 'none';
@@ -233,6 +261,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         currentStepIndex = index;
         const step = filteredSteps[index];
+
+        // Päivitä osoitepalkki (ilman sivun latausta)
+        const url = new URL(window.location);
+        url.searchParams.set('step', step.step_order);
+        window.history.replaceState({}, '', url);
 
         // Päivitä UI
         stepTitle.textContent = step.title;
