@@ -504,6 +504,52 @@ header h1 {
     }
 }
 
+/* =========================================
+   PLAIN HEADER (alisvudet ilman hero-split)
+   ========================================= */
+header:not(.hero-split) {
+    background: var(--secondary-blue);
+    padding: 1.75rem 0 1.5rem;
+    margin-bottom: 2rem;
+    border-bottom-left-radius: 28px;
+    border-bottom-right-radius: 28px;
+    box-shadow: 0 4px 20px rgba(0, 51, 102, 0.15);
+}
+
+header:not(.hero-split) .header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem 0 15vw;
+}
+
+header:not(.hero-split) h1 {
+    font-family: var(--accent-font);
+    font-size: 2.4rem;
+    font-weight: 800;
+    margin: 0 0 0.35rem;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    color: #ffffff;
+    text-transform: uppercase;
+}
+
+header:not(.hero-split) p {
+    font-size: 1rem;
+    opacity: 0.85;
+    color: rgba(255,255,255,0.9);
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    header:not(.hero-split) .header-content {
+        padding: 0 1.5rem;
+    }
+
+    header:not(.hero-split) h1 {
+        font-size: 1.8rem;
+    }
+}
+
 .btn-youtube {
     display: inline-flex;
     align-items: center;
