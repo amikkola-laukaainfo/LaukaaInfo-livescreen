@@ -1,23 +1,24 @@
-/* Mainostutka Styles */
-.radar-action-wrapper {
-    margin-top: 1.5rem;
-    text-align: center;
-}
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap');
 
-/* Tag Cloud Styles */
-.region-tag-cloud {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    margin: 2rem 0;
-    scrollbar-width: none;
-    /* Firefox */
-}
-
-.region-tag-cloud::-webkit-scrollbar {
-    display: none;
-    /* Safari and Chrome */
+:root {
+    --primary-blue: #004ba0;
+    --secondary-blue: #003366;
+    --accent-blue: #007bff;
+    --light-blue: #f0f7ff;
+    --dark-text: #1a1a1a;
+    --light-text: #ffffff;
+    --background: #fdfdfd;
+    --card-bg: #ffffff;
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.5);
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.08);
+    --border-radius: 24px;
+    --border-radius-sm: 12px;
+    --accent-orange: #ff9900;
+    --heading-font: 'Playfair Display', serif;
+    --body-font: 'Inter', sans-serif;
+    --accent-font: 'Outfit', sans-serif;
 }
 
 @media (max-width: 600px) {
@@ -273,26 +274,31 @@
 }
 
 :root {
-    --primary-blue: #0056b3;
-    --secondary-blue: #003d80;
+    --primary-blue: #004ba0;
+    --secondary-blue: #003366;
     --accent-blue: #007bff;
-    --light-blue: #e7f1ff;
-    --dark-text: #333333;
+    --light-blue: #f0f7ff;
+    --dark-text: #1a1a1a;
     --light-text: #ffffff;
-    --background: #f8f9fa;
-    --card-bg: rgba(255, 255, 255, 0.8);
-    --glass-bg: rgba(255, 255, 255, 0.2);
-    --glass-border: rgba(255, 255, 255, 0.3);
-    --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-    --border-radius: 15px;
+    --background: #fdfdfd;
+    --card-bg: #ffffff;
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.5);
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.08);
+    --border-radius: 24px;
+    --border-radius-sm: 12px;
     --accent-orange: #ff9900;
+    --heading-font: 'Playfair Display', serif;
+    --body-font: 'Inter', sans-serif;
+    --accent-font: 'Outfit', sans-serif;
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Outfit', 'Inter', sans-serif;
+    font-family: var(--body-font);
 }
 
 img {
@@ -360,14 +366,15 @@ section[id] {
 }
 
 header {
-    background: linear-gradient(rgba(0, 86, 179, 0.3), rgba(0, 61, 128, 0.3)), url('taivas_tausta.png');
+    background: linear-gradient(rgba(0, 75, 160, 0.8), rgba(0, 51, 102, 0.8)), url('taivas_tausta.png');
     background-size: cover;
     background-position: center;
     color: var(--light-text);
-    padding: 3rem 1rem;
+    padding: 5rem 1rem;
     text-align: center;
-    clip-path: ellipse(150% 100% at 50% 0%);
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
 }
 
 .header-content {
@@ -395,9 +402,12 @@ header {
 }
 
 header h1 {
-    font-size: 2.5rem;
+    font-family: var(--heading-font);
+    font-size: 3.5rem;
+    font-weight: 700;
     margin: 0;
     letter-spacing: -1px;
+    line-height: 1.1;
 }
 
 header p {
@@ -454,12 +464,12 @@ header p {
 
 /* Navigation */
 .top-nav {
-    background: var(--primary-blue);
+    background: var(--secondary-blue);
     color: var(--light-text);
     position: sticky;
     top: 0;
     z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 1px 20px rgba(0, 0, 0, 0.12);
 }
 
 .nav-container {
@@ -472,9 +482,11 @@ header p {
 }
 
 .nav-logo {
-    font-size: 1.4rem;
+    font-family: var(--accent-font);
+    font-size: 1.2rem;
     font-weight: 700;
-    letter-spacing: -0.5px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -803,23 +815,37 @@ header p {
 main {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 1rem;
+    padding: 0 1.5rem;
 }
 
 section {
-    margin-bottom: 4rem;
+    margin-bottom: 5rem;
 }
 
 h2 {
-    font-size: 1.8rem;
+    font-family: var(--heading-font);
+    font-size: 2rem;
+    font-weight: 700;
     margin-bottom: 1.5rem;
-    color: var(--primary-blue);
+    color: var(--dark-text);
+    letter-spacing: -0.5px;
+    line-height: 1.2;
     display: flex;
     align-items: center;
+    gap: 0.5rem;
 }
 
 h2 span {
-    margin-right: 10px;
+    /* Emojit otsikossa – poistetaan tai pienennetään */
+    font-size: 1.2rem;
+    opacity: 0.7;
+}
+
+h3 {
+    font-family: var(--heading-font);
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: -0.3px;
 }
 
 /* Dashboard Grid */
@@ -831,17 +857,16 @@ h2 span {
 
 .card {
     background: var(--card-bg);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid var(--glass-border);
+    border: 1px solid rgba(0, 0, 0, 0.05);
     border-radius: var(--border-radius);
-    padding: 2rem;
+    padding: 2.5rem 2rem;
     box-shadow: var(--shadow);
-    transition: transform 0.3s ease;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .card:hover {
-    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-3px);
 }
 
 /* RSS Feed Styling */
@@ -982,18 +1007,24 @@ h2 span {
 }
 
 .btn-primary {
-    display: inline-block;
-    background: var(--primary-blue);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--dark-text);
     color: white;
-    padding: 0.8rem 1.5rem;
-    border-radius: 8px;
+    padding: 0.85rem 1.8rem;
+    border-radius: 50px;
     text-decoration: none;
-    font-weight: 500;
-    transition: background 0.3s;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    letter-spacing: 0.01em;
 }
 
 .btn-primary:hover {
-    background: var(--secondary-blue);
+    background: var(--primary-blue);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 75, 160, 0.25);
 }
 
 /* --- Spotlight Section Phase 12: Media & Stack Fix --- */
