@@ -1,1 +1,103 @@
-<!DOCTYPE html><html lang="fi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Kuvagalleria – LaukaaInfo</title><meta name="description" content="Laukaan paikallinen kuvagalleria. Katso uusimmat kuvat ja videot feedistä ja yrityskorteista."><link rel="icon" href="logo.png"><link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Outfit:wght@100..900&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css?v=20260407"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"><style>.gallery-page-container{max-width:1200px;margin:2rem auto;padding:0 1rem}.gallery-header{text-align:center;margin-bottom:3rem}.gallery-header h1{font-size:2.5rem;color:var(--primary-blue);margin-bottom:.5rem}.media-gallery.swiper{height:600px;border-radius:20px;box-shadow:0 20px 50px rgba(0,0,0,.15)}@media (max-width:768px){.media-gallery.swiper{height:400px}}</style></head><body><nav class="top-nav"><div class="nav-container"><a href="index.html" class="nav-logo"><img src="logo.png" alt="LaukaaInfo Logo"> <span>LaukaaInfo</span></a><div class="desktop-nav"><ul class="nav-links"><li><a href="index.html" class="nav-link">Palaa etusivulle</a></li></ul></div><a href="index.html" class="nav-link" style="color:#fff;font-weight:600">Etusivulle</a></div></nav><main class="gallery-page-container"><div class="gallery-header"><h1>Kuvagalleria</h1><p>Selaa paikallisia kuvia ja videoita. Klikkaa kuvaa siirtyäksesi lähteeseen.</p></div><section class="media-spotlight-section" style="flex:1 1 100%;background:0 0;box-shadow:none;padding:0"><div class="media-gallery swiper"><div class="swiper-wrapper" id="media-gallery-wrapper"></div><div class="swiper-button-prev" style="color:var(--primary-blue)"></div><div class="swiper-button-next" style="color:var(--primary-blue)"></div><div class="swiper-pagination"></div></div></section><div style="text-align:center;margin-top:3rem"><a href="index.html" class="btn-radar" style="text-decoration:none">&laquo; Takaisin etusivulle</a></div></main><footer><div class="footer-content"><p>© 2026 LaukaaInfo – Palvelua ylläpitää Mediazoo.fi</p><div class="footer-links"><a href="index.html">Etusivu</a> <a href="tietosuoja.html">Tietosuoja</a> <a href="mailto:yhteys@mediazoo.fi">Ota yhteyttä</a></div></div></footer><script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script><script src="media-spotlight.js?v=20260407"></script><script></script></body></html>
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuvagalleria – LaukaaInfo</title>
+    <meta name="description" content="Laukaan paikallinen kuvagalleria. Katso uusimmat kuvat ja videot feedistä ja yrityskorteista.">
+    <link rel="icon" href="logo.png">
+
+    <!-- Fonts & Styles -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Outfit:wght@100..900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css?v=20260407">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    
+    <style>
+        .gallery-page-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .gallery-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .gallery-header h1 {
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+        /* Override swiper height for full page */
+        .media-gallery.swiper {
+            height: 600px;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        }
+        @media (max-width: 768px) {
+            .media-gallery.swiper {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="logo.png" alt="LaukaaInfo Logo">
+                <span>LaukaaInfo</span>
+            </a>
+            <div class="desktop-nav">
+                <ul class="nav-links">
+                    <li><a href="index.html" class="nav-link">Palaa etusivulle</a></li>
+                </ul>
+            </div>
+            <a href="index.html" class="nav-link" style="color: white; font-weight: 600;">Etusivulle</a>
+        </div>
+    </nav>
+
+    <main class="gallery-page-container">
+        <div class="gallery-header">
+            <h1>Kuvagalleria</h1>
+            <p>Selaa paikallisia kuvia ja videoita. Klikkaa kuvaa siirtyäksesi lähteeseen.</p>
+        </div>
+
+        <section class="media-spotlight-section" style="flex: 1 1 100%; background: none; box-shadow: none; padding: 0;">
+            <div class="media-gallery swiper">
+                <div class="swiper-wrapper" id="media-gallery-wrapper"></div>
+                <!-- Navigation buttons -->
+                <div class="swiper-button-prev" style="color: var(--primary-blue);"></div>
+                <div class="swiper-button-next" style="color: var(--primary-blue);"></div>
+                <!-- Pagination -->
+                <div class="swiper-pagination"></div>
+            </div>
+        </section>
+        
+        <div style="text-align: center; margin-top: 3rem;">
+            <a href="index.html" class="btn-radar" style="text-decoration: none;">&laquo; Takaisin etusivulle</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>© 2026 LaukaaInfo – Palvelua ylläpitää Mediazoo.fi</p>
+            <div class="footer-links">
+                <a href="index.html">Etusivu</a>
+                <a href="tietosuoja.html">Tietosuoja</a>
+                <a href="mailto:yhteys@mediazoo.fi">Ota yhteyttä</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="media-spotlight.js?v=20260407"></script>
+    <script>
+        // Adjust swiper settings if needed since it's initialized in media-spotlight.js
+        // The script in media-spotlight.js will run automatically and fill #media-gallery-wrapper
+    </script>
+</body>
+</html>
