@@ -321,6 +321,45 @@
             </div>
         </section>
 
+        <!-- Jakolinkki generaattori -->
+        <section class="share-generator-section">
+            <div class="share-generator-card">
+                <h2>Luo jakolinkki LaukaaInfoon</h2>
+                <p>Tee täsmälinkki organisaatiolle, tapahtumille tai omalle haullesi ja jaa se eteenpäin!</p>
+                <div class="generator-controls">
+                    <div class="gen-field">
+                        <label for="share-type">Mitä haluat jakaa?</label>
+                        <select id="share-type" class="gen-input">
+                            <option value="yritys">Tietty yritys tai toimija</option>
+                            <option value="haku">Vapaa sanahaku</option>
+                            <option value="kategoria">Toimiala / Kategoria</option>
+                            <option value="taajama">Taajama / Alue</option>
+                            <option value="feed">Laukaa-syöte (Ajankohtaista)</option>
+                        </select>
+                    </div>
+                    <div class="gen-field" id="gen-target-field">
+                        <label for="share-target-input" id="share-target-label">Yrityksen nimi</label>
+                        <!-- Tekstikenttä datalist-ehdotuksilla yrityksille/haulle -->
+                        <input type="text" id="share-target-input" class="gen-input" placeholder="Kirjoita nimi..." list="generator-business-list" autocomplete="off">
+                        <datalist id="generator-business-list"></datalist>
+                        
+                        <!-- Pudotusvalikko kategorioille/taajamille (piilotettu oletuksena) -->
+                        <select id="share-target-select" class="gen-input" style="display: none;"></select>
+                    </div>
+                </div>
+                
+                <div class="generator-result-area">
+                    <label>Valmis jakolinkki:</label>
+                    <div class="url-copy-wrapper">
+                        <input type="text" id="share-result-url" readonly value="https://laukaainfo.fi/">
+                        <button id="copy-share-btn" class="btn-copy">Kopioi linkki</button>
+                    </div>
+                    <button id="show-qr-btn" class="btn-qr">Näytä QR-koodi</button>
+                    <div id="qrcode-container" class="qr-container" style="display: none;"></div>
+                </div>
+            </div>
+        </section>
+
         <!-- Unified Business Navigation -->
         <section class="business-nav-section">
             <h2 style="text-align: center; margin-bottom: 2rem;">Kasvata näkyvyyttäsi Laukaassa</h2>
@@ -385,6 +424,7 @@
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="modal.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <script src="script.js?v=20260301-1"></script>
     <script src="feed.js?v=20260323a"></script>

@@ -912,6 +912,7 @@ async function loadCompanyData() {
         initCompanyCatalog();
         initMap(allCompanies);
         initCategories(allCompanies);
+        initShareGenerator(allCompanies);
 
         // URL-parametrin (haku) tarkistus
         const queryParams = new URLSearchParams(window.location.search);
@@ -2036,3 +2037,148 @@ window.prepareUpdate = function() {
 
 // Alustetaan PWA-päivitykset
 initPWAUpdates();
+
+/**
+ * Jakolinkki generaattorin alustus
+ */
+function initShareGenerator(companies) {
+    const typeSelect = document.getElementById('share-type');
+    const targetInput = document.getElementById('share-target-input');
+    const targetSelect = document.getElementById('share-target-select');
+    const targetLabel = document.getElementById('share-target-label');
+    const resultUrl = document.getElementById('share-result-url');
+    const copyBtn = document.getElementById('copy-share-btn');
+    const qrBtn = document.getElementById('show-qr-btn');
+    const qrContainer = document.getElementById('qrcode-container');
+    const datalist = document.getElementById('generator-business-list');
+
+    if (!typeSelect || !targetInput) return;
+
+    // Täytä datalist yritysten nimillä teksti-ehdotuksia varten
+    datalist.innerHTML = '';
+    companies.forEach(c => {
+        if(c.nimi) {
+            const option = document.createElement('option');
+            option.value = c.nimi;
+            datalist.appendChild(option);
+        }
+    });
+
+    const regions = [
+        { id: 'laukaa', name: 'Laukaa kk' },
+        { id: 'leppavesi', name: 'Leppävesi' },
+        { id: 'lievestuore', name: 'Lievestuore' },
+        { id: 'vehnia', name: 'Vehniä' },
+        { id: 'vihtavuori', name: 'Vihtavuori' }
+    ];
+
+    const categories = [...new Set(companies.map(c => c.kategoria))].filter(Boolean).sort();
+
+    function updateUrl() {
+        const type = typeSelect.value;
+        const textVal = targetInput.value.trim();
+        const selVal = targetSelect.value;
+        
+        const baseUrl = window.location.origin + window.location.pathname.replace('/index.html', '/');
+        let generated = baseUrl;
+
+        qrContainer.style.display = 'none';
+
+        if (type === 'yritys') {
+            const found = companies.find(c => c.nimi.toLowerCase() === textVal.toLowerCase());
+            if (found) {
+                generated = baseUrl + `yrityskortti.html?id=${slugify(found.nimi)}`;
+            } else if (textVal) {
+                generated = baseUrl + `?haku=${encodeURIComponent(textVal)}`;
+            }
+        } else if (type === 'haku') {
+            if (textVal) {
+                generated = baseUrl + `?q=${encodeURIComponent(textVal)}`;
+            }
+        } else if (type === 'kategoria') {
+            generated = baseUrl + `kategoria.html?cat=${encodeURIComponent(selVal)}&region=all`;
+        } else if (type === 'taajama') {
+            generated = baseUrl + `?region=${selVal}`;
+        } else if (type === 'feed') {
+            generated = baseUrl + `?feed=open`;
+        }
+
+        resultUrl.value = generated;
+    }
+
+    typeSelect.addEventListener('change', () => {
+        const type = typeSelect.value;
+        targetInput.style.display = 'none';
+        targetSelect.style.display = 'none';
+        
+        if (type === 'yritys') {
+            targetLabel.textContent = 'Yrityksen nimi';
+            targetInput.style.display = 'block';
+            targetInput.placeholder = 'Kirjoita nimi ja valitse listasta...';
+            targetInput.value = '';
+            targetInput.setAttribute('list', 'generator-business-list'); // Palauta lista jos oli piilossa
+        } else if (type === 'haku') {
+            targetLabel.textContent = 'Hakusana';
+            targetInput.style.display = 'block';
+            targetInput.placeholder = 'esim. tapahtuma tai pizza';
+            targetInput.value = '';
+            targetInput.removeAttribute('list'); // Ei yritysehdotuksia sanahakuun
+        } else if (type === 'kategoria') {
+            targetLabel.textContent = 'Valitse kategoria';
+            targetSelect.style.display = 'block';
+            targetSelect.innerHTML = categories.map(c => `<option value="${c}">${c}</option>`).join('');
+        } else if (type === 'taajama') {
+            targetLabel.textContent = 'Valitse taajama';
+            targetSelect.style.display = 'block';
+            targetSelect.innerHTML = regions.map(r => `<option value="${r.id}">${r.name}</option>`).join('');
+        } else if (type === 'feed') {
+            targetLabel.textContent = 'Kopioi alta ohjatksesi syötteeseen';
+            targetInput.style.display = 'block';
+            targetInput.disabled = true;
+            targetInput.placeholder = '-';
+        }
+        
+        if(type !== 'feed') {
+            targetInput.disabled = false;
+        }
+
+        updateUrl();
+    });
+
+    targetInput.addEventListener('input', updateUrl);
+    targetSelect.addEventListener('change', updateUrl);
+
+    copyBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(resultUrl.value).then(() => {
+            const origText = copyBtn.textContent;
+            copyBtn.textContent = 'Kopioitu!';
+            copyBtn.style.background = '#28a745';
+            setTimeout(() => {
+                copyBtn.textContent = origText;
+                copyBtn.style.background = '';
+            }, 2000);
+        });
+    });
+
+    qrBtn.addEventListener('click', () => {
+        qrContainer.innerHTML = '';
+        qrContainer.style.display = 'flex';
+        // qrcode.js tarvitsee ulkoisen divin
+        if (typeof QRCode !== 'undefined') {
+            new QRCode(qrContainer, {
+                text: resultUrl.value,
+                width: 200,
+                height: 200,
+                colorDark : "#003366",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+            qrContainer.title = ""; 
+        } else {
+            qrContainer.innerHTML = 'QR-koodi ei saatavilla.';
+        }
+    });
+
+    // Initialize state
+    typeSelect.dispatchEvent(new Event('change'));
+}
