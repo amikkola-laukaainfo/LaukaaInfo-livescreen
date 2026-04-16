@@ -2052,6 +2052,7 @@ function initShareGenerator(companies) {
     const qrBtn = document.getElementById('show-qr-btn');
     const qrContainer = document.getElementById('qrcode-container');
     const datalist = document.getElementById('generator-business-list');
+    const refInput = document.getElementById('share-ref-input');
 
     if (!typeSelect || !targetInput) return;
 
@@ -2089,6 +2090,7 @@ function initShareGenerator(companies) {
         const textVal = targetInput.value.trim();
         const selVal = targetSelect.value;
         const subSelVal = targetSubSelect ? targetSubSelect.value : '';
+        const refVal = refInput ? slugify(refInput.value.trim().substring(0, 60)) : '';
         const baseUrl = window.location.origin + window.location.pathname.replace('/index.html', '/');
         let generated = baseUrl;
         qrContainer.style.display = 'none';
@@ -2113,6 +2115,10 @@ function initShareGenerator(companies) {
             } else {
                 generated = baseUrl + '?feed=open';
             }
+        }
+        // Lisää tunniste (&ref=) jos käyttäjä on kirjoittanut sen
+        if (refVal) {
+            generated += (generated.includes('?') ? '&' : '?') + 'ref=' + refVal;
         }
         resultUrl.value = generated;
     }
@@ -2161,6 +2167,7 @@ function initShareGenerator(companies) {
     targetInput.addEventListener('input', updateUrl);
     targetSelect.addEventListener('change', updateUrl);
     if (targetSubSelect) targetSubSelect.addEventListener('change', updateUrl);
+    if (refInput) refInput.addEventListener('input', updateUrl);
 
     copyBtn.addEventListener('click', () => {
         navigator.clipboard.writeText(resultUrl.value).then(() => {
