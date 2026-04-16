@@ -378,7 +378,7 @@ header.hero-split {
 }
 
 .hero-left {
-    background: var(--secondary-blue);
+    background: linear-gradient(to right, var(--secondary-blue) 0%, var(--primary-blue) 100%);
     flex: 0 0 52%;
     display: flex;
     align-items: center;
@@ -393,9 +393,8 @@ header.hero-split {
     top: 0;
     bottom: 0;
     width: 64px;
-    background: var(--secondary-blue);
+    background: var(--primary-blue);
     clip-path: polygon(0 0, 0% 100%, 100% 100%);
-    filter: drop-shadow(10px 0 16px var(--secondary-blue));
     z-index: 2;
 }
 
