@@ -383,7 +383,7 @@ header.hero-split {
     flex: 0 0 52%;
     display: flex;
     align-items: center;
-    padding: 1.5rem 2rem 1.5rem 15vw;
+    padding: 1rem 2rem 1rem 12vw;
     position: relative;
 }
 
@@ -449,9 +449,9 @@ header.hero-split {
 }
 
 .main-logo {
-    height: 128px;
-    width: 128px;
-    max-width: 128px !important;
+    height: 80px;
+    width: 80px;
+    max-width: 80px !important;
     flex-shrink: 0;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
@@ -460,20 +460,20 @@ header.hero-split {
 
 header h1 {
     font-family: var(--accent-font);
-    font-size: 3.2rem;
+    font-size: 2.2rem;
     font-weight: 800;
     margin: 0;
-    letter-spacing: -1.5px;
+    letter-spacing: -1px;
     line-height: 1.05;
     color: #ffffff;
     text-transform: uppercase;
 }
 
 .hero-tagline {
-    font-size: 1.05rem;
+    font-size: 0.95rem;
     opacity: 0.88;
-    margin-bottom: 1rem;
-    line-height: 1.5;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
     color: rgba(255,255,255,0.9);
 }
 
@@ -671,10 +671,10 @@ section.region-hero .main-search-box {
 
 .header-buttons {
     display: flex;
-    gap: 1rem;
+    gap: 0.75rem;
     justify-content: center;
     flex-wrap: wrap;
-    margin-top: 1.5rem;
+    margin-top: 0.75rem;
 }
 
 .btn-youtube i, .btn-facebook i {
@@ -1855,10 +1855,10 @@ footer {
 /* --- Kauppa - New Homepage Styles --- */
 .kauppa-hero {
     background: linear-gradient(135deg, var(--primary-blue) 0%, #007bff 100%);
-    padding: 6rem 1rem;
+    padding: 3.5rem 1rem;
     border-radius: var(--border-radius);
     text-align: center;
-    margin-bottom: 3rem;
+    margin-bottom: 2.5rem;
     position: relative;
     overflow: visible;
     /* Prevent clipping of search results */
@@ -1878,9 +1878,9 @@ footer {
 }
 
 .search-hero-content h1 {
-    font-size: 3rem;
+    font-size: 2.2rem;
     color: white;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
     font-weight: 700;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -1896,8 +1896,8 @@ footer {
 }
 
 .search-hero-content p {
-    font-size: 1.25rem;
-    margin-bottom: 3rem;
+    font-size: 1.1rem;
+    margin-bottom: 1.75rem;
     color: rgba(255, 255, 255, 0.9);
 }
 
@@ -3096,11 +3096,13 @@ footer {
 /* Flex container for feed and media spotlight */
 .homepage-top {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    align-items: flex-start;
     gap: 1.5rem;
-    margin: 2rem auto;
+    margin: 2.5rem auto;
     padding: 0 1rem;
+    max-width: 1200px;
+    justify-content: center;
 }
 .feed-accordion-section {
     width: 100%;
