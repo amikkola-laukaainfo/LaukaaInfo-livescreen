@@ -395,6 +395,7 @@ header.hero-split {
     width: 64px;
     background: var(--secondary-blue);
     clip-path: polygon(0 0, 0% 100%, 100% 100%);
+    filter: drop-shadow(10px 0 16px var(--secondary-blue));
     z-index: 2;
 }
 
