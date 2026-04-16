@@ -382,7 +382,7 @@ header.hero-split {
     flex: 0 0 52%;
     display: flex;
     align-items: center;
-    padding: 1rem 2rem 1rem 8vw;
+    padding: 1.75rem 2rem 1.75rem 10vw;
     position: relative;
 }
 
@@ -487,7 +487,7 @@ header h1 {
 
     .hero-left {
         flex: unset;
-        padding: 1.25rem 1rem;
+        padding: 2rem 1.5rem;
     }
 
     .hero-left::after {
@@ -640,11 +640,11 @@ section.region-hero .main-search-box {
     align-items: center;
     background: #ff0000;
     color: white;
-    padding: 0.6rem 1.25rem;
+    padding: 0.75rem 1.35rem;
     border-radius: 50px;
     text-decoration: none;
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
 }
@@ -658,11 +658,11 @@ section.region-hero .main-search-box {
     align-items: center;
     background: #1877F2;
     color: white;
-    padding: 0.6rem 1.25rem;
+    padding: 0.75rem 1.35rem;
     border-radius: 50px;
     text-decoration: none;
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     box-shadow: 0 4px 15px rgba(24, 119, 242, 0.3);
 }
