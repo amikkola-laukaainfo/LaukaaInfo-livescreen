@@ -3407,3 +3407,33 @@ footer {
     .media-spotlight-section { flex-basis: 100%; }
     .media-gallery .swiper-slide { width: 100% !important; }
 }
+
+/* QR-koodin kopiointinappi */
+.qr-copy-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    background: white;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #64748b;
+    transition: background 0.18s, border-color 0.18s, color 0.18s, transform 0.15s;
+    flex-shrink: 0;
+    margin-top: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+}
+
+.qr-copy-btn:hover {
+    background: #f0f6ff;
+    border-color: var(--primary-blue);
+    color: var(--primary-blue);
+    transform: scale(1.08);
+}
+
+.qr-copy-btn:active {
+    transform: scale(0.96);
+}

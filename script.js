@@ -2045,6 +2045,7 @@ function initShareGenerator(companies) {
     const typeSelect = document.getElementById('share-type');
     const targetInput = document.getElementById('share-target-input');
     const targetSelect = document.getElementById('share-target-select');
+    const targetSubSelect = document.getElementById('share-target-subselect');
     const targetLabel = document.getElementById('share-target-label');
     const resultUrl = document.getElementById('share-result-url');
     const copyBtn = document.getElementById('copy-share-btn');
@@ -2054,10 +2055,9 @@ function initShareGenerator(companies) {
 
     if (!typeSelect || !targetInput) return;
 
-    // Täytä datalist yritysten nimillä teksti-ehdotuksia varten
     datalist.innerHTML = '';
     companies.forEach(c => {
-        if(c.nimi) {
+        if (c.nimi) {
             const option = document.createElement('option');
             option.value = c.nimi;
             datalist.appendChild(option);
@@ -2066,10 +2066,20 @@ function initShareGenerator(companies) {
 
     const regions = [
         { id: 'laukaa', name: 'Laukaa kk' },
-        { id: 'leppavesi', name: 'Leppävesi' },
+        { id: 'leppavesi', name: 'Leppavesi' },
         { id: 'lievestuore', name: 'Lievestuore' },
-        { id: 'vehnia', name: 'Vehniä' },
+        { id: 'vehnia', name: 'Vehnia' },
         { id: 'vihtavuori', name: 'Vihtavuori' }
+    ];
+
+    const feedTypes = [
+        { id: 'all', name: 'Kaikki' },
+        { id: 'event', name: 'Tapahtumat' },
+        { id: 'notice', name: 'Ilmoitukset' },
+        { id: 'offer', name: 'Tarjoukset' },
+        { id: 'community', name: 'Yritykset ja Yhteisot' },
+        { id: 'story', name: 'Tarinat' },
+        { id: 'video', name: 'Videot' }
     ];
 
     const categories = [...new Set(companies.map(c => c.kategoria))].filter(Boolean).sort();
@@ -2078,31 +2088,32 @@ function initShareGenerator(companies) {
         const type = typeSelect.value;
         const textVal = targetInput.value.trim();
         const selVal = targetSelect.value;
-        
+        const subSelVal = targetSubSelect ? targetSubSelect.value : '';
         const baseUrl = window.location.origin + window.location.pathname.replace('/index.html', '/');
         let generated = baseUrl;
-
         qrContainer.style.display = 'none';
-
         if (type === 'yritys') {
             const found = companies.find(c => c.nimi.toLowerCase() === textVal.toLowerCase());
             if (found) {
-                generated = baseUrl + `yrityskortti.html?id=${slugify(found.nimi)}`;
+                generated = baseUrl + 'yrityskortti.html?id=' + slugify(found.nimi);
             } else if (textVal) {
-                generated = baseUrl + `?haku=${encodeURIComponent(textVal)}`;
+                generated = baseUrl + '?haku=' + encodeURIComponent(textVal);
             }
         } else if (type === 'haku') {
-            if (textVal) {
-                generated = baseUrl + `?q=${encodeURIComponent(textVal)}`;
-            }
+            if (textVal) { generated = baseUrl + '?q=' + encodeURIComponent(textVal); }
         } else if (type === 'kategoria') {
-            generated = baseUrl + `kategoria.html?cat=${encodeURIComponent(selVal)}&region=all`;
+            generated = baseUrl + 'kategoria.html?cat=' + encodeURIComponent(selVal) + '&region=all';
         } else if (type === 'taajama') {
-            generated = baseUrl + `?region=${selVal}`;
+            generated = baseUrl + selVal + '.html';
+            if (subSelVal && subSelVal !== 'all') { generated += '?cat=' + encodeURIComponent(subSelVal); }
         } else if (type === 'feed') {
-            generated = baseUrl + `?feed=open`;
+            if (subSelVal && subSelVal !== 'all') {
+                const filterMap = { event:'tapahtumat', notice:'ilmoitukset', offer:'tarjoukset', community:'yritykset', story:'tarinat', video:'videot' };
+                generated = baseUrl + '?filter=' + (filterMap[subSelVal] || subSelVal) + '&feed=open';
+            } else {
+                generated = baseUrl + '?feed=open';
+            }
         }
-
         resultUrl.value = generated;
     }
 
@@ -2110,75 +2121,104 @@ function initShareGenerator(companies) {
         const type = typeSelect.value;
         targetInput.style.display = 'none';
         targetSelect.style.display = 'none';
-        
+        if (targetSubSelect) targetSubSelect.style.display = 'none';
+        targetInput.disabled = false;
         if (type === 'yritys') {
             targetLabel.textContent = 'Yrityksen nimi';
             targetInput.style.display = 'block';
             targetInput.placeholder = 'Kirjoita nimi ja valitse listasta...';
             targetInput.value = '';
-            targetInput.setAttribute('list', 'generator-business-list'); // Palauta lista jos oli piilossa
+            targetInput.setAttribute('list', 'generator-business-list');
         } else if (type === 'haku') {
             targetLabel.textContent = 'Hakusana';
             targetInput.style.display = 'block';
             targetInput.placeholder = 'esim. tapahtuma tai pizza';
             targetInput.value = '';
-            targetInput.removeAttribute('list'); // Ei yritysehdotuksia sanahakuun
+            targetInput.removeAttribute('list');
         } else if (type === 'kategoria') {
             targetLabel.textContent = 'Valitse kategoria';
             targetSelect.style.display = 'block';
-            targetSelect.innerHTML = categories.map(c => `<option value="${c}">${c}</option>`).join('');
+            targetSelect.innerHTML = categories.map(c => '<option value="' + c + '">' + c + '</option>').join('');
         } else if (type === 'taajama') {
-            targetLabel.textContent = 'Valitse taajama';
+            targetLabel.textContent = 'Valitse taajama ja lisasuodatus';
             targetSelect.style.display = 'block';
-            targetSelect.innerHTML = regions.map(r => `<option value="${r.id}">${r.name}</option>`).join('');
+            targetSelect.innerHTML = regions.map(r => '<option value="' + r.id + '">' + r.name + '</option>').join('');
+            if (targetSubSelect) {
+                targetSubSelect.style.display = 'block';
+                targetSubSelect.innerHTML = '<option value="all">Kaikki toimialat</option>' +
+                    categories.map(c => '<option value="' + c + '">' + c + '</option>').join('');
+            }
         } else if (type === 'feed') {
-            targetLabel.textContent = 'Kopioi alta ohjatksesi syötteeseen';
-            targetInput.style.display = 'block';
-            targetInput.disabled = true;
-            targetInput.placeholder = '-';
+            targetLabel.textContent = 'Valitse syotteen tyyppi';
+            if (targetSubSelect) {
+                targetSubSelect.style.display = 'block';
+                targetSubSelect.innerHTML = feedTypes.map(ft => '<option value="' + ft.id + '">' + ft.name + '</option>').join('');
+            }
         }
-        
-        if(type !== 'feed') {
-            targetInput.disabled = false;
-        }
-
         updateUrl();
     });
 
     targetInput.addEventListener('input', updateUrl);
     targetSelect.addEventListener('change', updateUrl);
+    if (targetSubSelect) targetSubSelect.addEventListener('change', updateUrl);
 
     copyBtn.addEventListener('click', () => {
         navigator.clipboard.writeText(resultUrl.value).then(() => {
             const origText = copyBtn.textContent;
             copyBtn.textContent = 'Kopioitu!';
             copyBtn.style.background = '#28a745';
-            setTimeout(() => {
-                copyBtn.textContent = origText;
-                copyBtn.style.background = '';
-            }, 2000);
+            setTimeout(() => { copyBtn.textContent = origText; copyBtn.style.background = ''; }, 2000);
         });
     });
 
     qrBtn.addEventListener('click', () => {
         qrContainer.innerHTML = '';
         qrContainer.style.display = 'flex';
-        // qrcode.js tarvitsee ulkoisen divin
+        qrContainer.style.alignItems = 'flex-start';
+        qrContainer.style.gap = '8px';
         if (typeof QRCode !== 'undefined') {
-            new QRCode(qrContainer, {
-                text: resultUrl.value,
-                width: 200,
-                height: 200,
-                colorDark : "#003366",
-                colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.H
-            });
-            qrContainer.title = ""; 
+            const qrWrapper = document.createElement('div');
+            qrWrapper.style.position = 'relative';
+            qrContainer.appendChild(qrWrapper);
+
+            new QRCode(qrWrapper, { text: resultUrl.value, width: 200, height: 200, colorDark: "#003366", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H });
+
+            // Lisää kopioi-nappi QR:n jälkeen pienellä viiveellä (canvas renderöityy async)
+            setTimeout(() => {
+                const canvas = qrWrapper.querySelector('canvas');
+                if (!canvas) return;
+
+                const copyQrBtn = document.createElement('button');
+                copyQrBtn.className = 'qr-copy-btn';
+                copyQrBtn.title = 'Kopioi QR-koodi leikepöydälle';
+                copyQrBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+                qrContainer.appendChild(copyQrBtn);
+
+                copyQrBtn.addEventListener('click', () => {
+                    canvas.toBlob(blob => {
+                        if (!blob) return;
+                        try {
+                            const item = new ClipboardItem({ 'image/png': blob });
+                            navigator.clipboard.write([item]).then(() => {
+                                copyQrBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#28a745" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+                                setTimeout(() => {
+                                    copyQrBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+                                }, 2000);
+                            }).catch(() => {
+                                copyQrBtn.title = 'Kopiointi ei onnistunut (selain ei tue)';
+                            });
+                        } catch(e) {
+                            copyQrBtn.title = 'Kopiointi ei tueta tässä selaimessa';
+                        }
+                    }, 'image/png');
+                });
+            }, 100);
+
+            qrContainer.title = "";
         } else {
             qrContainer.innerHTML = 'QR-koodi ei saatavilla.';
         }
     });
 
-    // Initialize state
     typeSelect.dispatchEvent(new Event('change'));
 }
