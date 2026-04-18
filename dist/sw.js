@@ -1,14 +1,14 @@
-const VERSION = 'v5'; // Päivitetty JSON-generaattoria varten
+const VERSION = '9013fc16'; // Päivitetty JSON-generaattoria varten
 const CACHE_NAME = `laukaainfo-${VERSION}`;
 const ASSETS = [
     './',
     './index.html',
-    './style.css',
-    './script.js',
+    './style.9013fc16.css',
+    './script.9013fc16.js',
     './manifest.json',
     './icons/icon-192.png',
     './icons/icon-512.png',
-    './feed.js',
+    './feed.9013fc16.js',
     './demo-data.json',
     'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;700&display=swap'
 ];
