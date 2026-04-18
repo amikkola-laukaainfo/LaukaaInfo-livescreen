@@ -65,7 +65,24 @@
             // Käytetään palvelimen proxyä, joka hoitaa CORS-ongelmat ja datan muunnoksen
             // Haetaan vain kyseisen yrityksen tiedot (Security & Performance)
             const dataSourceUrl = 'https://www.mediazoo.fi/laukaainfo-web/get_companies.php';
-            const response = await fetch(`${dataSourceUrl}?id=${encodeURIComponent(id)}&t=${Date.now()}`);
+            let actualId = id;
+
+            // Jos ID ei ala "company-", etsitään oikea ID "Slim"-datasta
+            if (!id.startsWith('company-')) {
+                const slimRes = await fetch(`${dataSourceUrl}?t=${Date.now()}`);
+                const slimJson = await slimRes.json();
+                const allSlim = Array.isArray(slimJson) ? slimJson : (slimJson.results || []);
+                const match = allSlim.find(c => slugify(c.nimi) === id);
+                if (match) {
+                    actualId = match.id;
+                } else {
+                    document.getElementById('loading-overlay').innerHTML = '<h2>Yritystä ei löytynyt.</h2><a href="index.html">Takaisin hakuun</a>';
+                    return;
+                }
+            }
+
+            // Haetaan valitun yrityksen täydet tiedot
+            const response = await fetch(`${dataSourceUrl}?id=${encodeURIComponent(actualId)}&t=${Date.now()}`);
             const json = await response.json();
             
             // New response format: {results: [...], total: N, page: N, limit: N}
