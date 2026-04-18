@@ -312,6 +312,7 @@ while (($row_raw = fgetcsv($stream)) !== false) {
         "voimassaolo_loppuu" => $row['voimassaolo_loppuu'] ?? '',
         "rss" => $row['rss'] ?? '',
         "tags" => $row['tags'] ?? '',
+        "palvelutapa" => $row['palvelutapa'] ?? '',
         "alue_slug" => $row['alue_slug'] ?? '',
         "kunta_slug" => $row['kunta_slug'] ?? '',
     ];
@@ -329,7 +330,8 @@ if (!empty($search)) {
             || mb_safe('strpos', mb_safe('strtolower', $c['esittely']), $sq) !== false
             || mb_safe('strpos', mb_safe('strtolower', $c['osoite']), $sq) !== false
             || mb_safe('strpos', mb_safe('strtolower', $c['kategoria']), $sq) !== false
-            || mb_safe('strpos', mb_safe('strtolower', $c['tags'] ?? ''), $sq) !== false;
+            || mb_safe('strpos', mb_safe('strtolower', $c['tags'] ?? ''), $sq) !== false
+            || mb_safe('strpos', mb_safe('strtolower', $c['palvelutapa'] ?? ''), $sq) !== false;
     });
 }
 

@@ -162,7 +162,7 @@
             } else if (tags.length > 0) {
                 // Suodatus avainsanojen (tägien) mukaan
                 rawCategoryCompanies = allCompanies.filter(c => {
-                    const searchStr = `${c.nimi || ''} ${c.kuvaus || ''} ${c.kategoria || ''} ${c.hakusana || c.hakusanat || c.tags || ''}`.toLowerCase();
+                    const searchStr = `${c.nimi || ''} ${c.kuvaus || ''} ${c.kategoria || ''} ${c.hakusana || c.hakusanat || c.tags || ''} ${c.palvelutapa || ''}`.toLowerCase();
                     return tags.some(tag => searchStr.includes(tag));
                 });
             } else {
@@ -515,11 +515,12 @@
         }
 
         let serviceIcons = '';
-        if (c.tags) {
-            const tagsArray = c.tags.split(',').map(t => t.trim().toLowerCase());
+        const combinedTags = `${c.tags || ''},${c.palvelutapa || ''}`.toLowerCase();
+        if (combinedTags) {
+            const tagsArray = combinedTags.split(',').map(t => t.trim());
             if (tagsArray.includes('toimipiste')) serviceIcons += '<span class="service-icon" title="Toimipiste">🏢</span>';
-            if (tagsArray.includes('kotikaynti')) serviceIcons += '<span class="service-icon" title="Kotikäynti">🏠</span>';
-            if (tagsArray.includes('etapalvelu')) serviceIcons += '<span class="service-icon" title="Etäpalvelu">💻</span>';
+            if (tagsArray.includes('kotikaynti') || tagsArray.includes('kotikäynti')) serviceIcons += '<span class="service-icon" title="Kotikäynti">🏠</span>';
+            if (tagsArray.includes('etapalvelu') || tagsArray.includes('etäpalvelu')) serviceIcons += '<span class="service-icon" title="Etäpalvelu">💻</span>';
             if (tagsArray.includes('toimitus')) serviceIcons += '<span class="service-icon" title="Toimitus">🚚</span>';
         }
 

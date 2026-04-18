@@ -132,6 +132,63 @@
         document.getElementById('display-description').textContent = description;
         document.getElementById('display-address').textContent = company.osoite || 'Laukaa';
 
+        // Service methods (palvelutapa)
+        const tags = (company.tags || '').split(',').map(t => t.trim().toLowerCase());
+        const pvtapa = (company.palvelutapa || '').split(',').map(t => t.trim().toLowerCase());
+        const combinedTags = [...new Set([...tags, ...pvtapa])];
+        
+        let serviceIcons = '';
+        let serviceTexts = [];
+        
+        if (combinedTags.includes('toimipiste')) {
+            serviceIcons += '🏢 ';
+            serviceTexts.push('Toimipiste');
+        }
+        if (combinedTags.includes('kotikaynti') || combinedTags.includes('kotikäynti')) {
+            serviceIcons += '🏠 ';
+            serviceTexts.push('Kotikäynti');
+        }
+        if (combinedTags.includes('etapalvelu') || combinedTags.includes('etäpalvelu')) {
+            serviceIcons += '💻 ';
+            serviceTexts.push('Etäpalvelu');
+        }
+        if (combinedTags.includes('toimitus')) {
+            serviceIcons += '🚚 ';
+            serviceTexts.push('Toimitus');
+        }
+
+        if (serviceIcons) {
+            document.getElementById('display-name').innerHTML = `${company.nimi} <span style="font-size: 1.2rem; margin-left:10px; font-weight:normal;">${serviceIcons}</span>`;
+        }
+
+        // Add Palvelutapa row to info panel
+        if (serviceTexts.length > 0) {
+            const infoPanel = document.querySelector('.info-panel');
+            const websiteItem = document.getElementById('website-item');
+            
+            let serviceItem = document.getElementById('service-methods-item');
+            if (!serviceItem) {
+                serviceItem = document.createElement('div');
+                serviceItem.id = 'service-methods-item';
+                serviceItem.className = 'contact-item';
+                serviceItem.innerHTML = `
+                    <div>
+                        <span>Palvelutapa</span>
+                        <strong id="display-service-methods"></strong>
+                    </div>
+                `;
+                // Insert after website item
+                if (websiteItem) {
+                    websiteItem.after(serviceItem);
+                } else {
+                    // Fallback insertion
+                    const socialLinks = document.getElementById('social-links');
+                    if (socialLinks) infoPanel.insertBefore(serviceItem, socialLinks);
+                }
+            }
+            document.getElementById('display-service-methods').textContent = serviceTexts.join(', ');
+        }
+
         // Distance Calculation
         const storedCoords = localStorage.getItem('userCoords');
         if (storedCoords && company.lat && company.lon) {

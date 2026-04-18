@@ -267,9 +267,16 @@ function renderNearby(area, catParam, tagParam) {
         const dist = getHaversineDistance(area.lat, area.lon, parseFloat(company.lat), parseFloat(company.lon));
         const distText = dist < 1 ? `${Math.round(dist * 1000)} m` : `${dist.toFixed(1)} km`;
 
+        let serviceIcons = '';
+        const combinedTags = `${company.tags || ''},${company.palvelutapa || ''}`.toLowerCase();
+        if (combinedTags.includes('toimipiste')) serviceIcons += '🏢';
+        if (combinedTags.includes('kotikaynti') || combinedTags.includes('kotikäynti')) serviceIcons += '🏠';
+        if (combinedTags.includes('etapalvelu') || combinedTags.includes('etäpalvelu')) serviceIcons += '💻';
+        if (combinedTags.includes('toimitus')) serviceIcons += '🚚';
+
         item.innerHTML = `
             <div class="catalog-item-header">
-                <h4>${company.nimi}</h4>
+                <h4>${company.nimi} <span style="margin-left:5px; font-weight:normal;">${serviceIcons}</span></h4>
                 <span class="dist-badge">🚗 ${distText}</span>
             </div>
             <span class="cat-tag">${company.kategoria}</span>

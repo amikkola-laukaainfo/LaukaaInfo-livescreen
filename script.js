@@ -1190,10 +1190,11 @@ function filterCatalog(renderList = true) {
         if (searchTerm.length > 1 && searchableDesc.includes(searchTerm)) score += 10;
 
         // Tag search logic (replaces hashtag parsing)
-        if (searchTerm.length > 1 && company.tags) {
-            const tags = company.tags.split(',').map(t => t.trim().toLowerCase());
-            if (tags.some(tag => tag.includes(searchTerm)) || company.tags.includes(searchTerm)) {
-                score += 120; // High priority for tag matches
+        const combinedTags = `${company.tags || ''},${company.palvelutapa || ''}`.toLowerCase();
+        if (searchTerm.length > 1 && combinedTags) {
+            const tags = combinedTags.split(',').map(t => t.trim());
+            if (tags.some(tag => tag.includes(searchTerm))) {
+                score += 120; // High priority for tag and service method matches
             }
         }
 
@@ -1469,7 +1470,10 @@ function showSuggestions() {
 
     // 2. Collect Categories and Tags from context
     const categories = [...new Set(companiesInContext.map(c => c.kategoria))].filter(Boolean);
-    const tags = [...new Set(companiesInContext.flatMap(c => (c.tags || '').split(',').map(t => t.trim())))].filter(Boolean);
+    const tags = [...new Set(companiesInContext.flatMap(c => {
+        const combined = `${c.tags || ''},${c.palvelutapa || ''}`;
+        return combined.split(',').map(t => t.trim()).filter(Boolean);
+    }))];
 
     // 3. Match Categories
     const catMatches = categories
@@ -1550,7 +1554,10 @@ function showSuggestions() {
 
         if (item.type === 'region') {
             const regionCompanies = allCompanies.filter(c => (c.alue_slug || '').toLowerCase() === item.id);
-            const regionTags = [...new Set(regionCompanies.flatMap(c => (c.tags || '').split(',').map(t => t.trim().toLowerCase())))].filter(t => t.length > 0).slice(0, 3);
+            const regionTags = [...new Set(regionCompanies.flatMap(c => {
+                const combined = `${c.tags || ''},${c.palvelutapa || ''}`;
+                return combined.split(',').map(t => t.trim().toLowerCase()).filter(Boolean);
+            }))].slice(0, 3);
 
             if (regionTags.length > 0) {
                 const tagCont = document.createElement('div');
@@ -1729,22 +1736,24 @@ function renderCatalog(companies) {
 
             if (currentCompany && currentCompany.id === company.id) item.classList.add('active');
 
-            // Find matching tags for display in the catalog
+            // Find matching tags / palvelutapa for display in the catalog
             let displayedCat = company.kategoria;
             let serviceIcons = '';
             
-            if (company.tags) {
-                const tagsArray = company.tags.split(',').map(t => t.trim().toLowerCase());
-                
+            const tags = (company.tags || '').split(',').map(t => t.trim().toLowerCase());
+            const pvtapa = (company.palvelutapa || '').split(',').map(t => t.trim().toLowerCase());
+            const combinedTags = [...new Set([...tags, ...pvtapa])];
+
+            if (combinedTags.length > 0) {
                 // Add icons based on tags / palvelutapa
-                if (tagsArray.includes('toimipiste')) serviceIcons += '<span class="service-icon" title="Toimipiste">🏢</span>';
-                if (tagsArray.includes('kotikaynti')) serviceIcons += '<span class="service-icon" title="Kotikäynti">🏠</span>';
-                if (tagsArray.includes('etapalvelu')) serviceIcons += '<span class="service-icon" title="Etäpalvelu">💻</span>';
-                if (tagsArray.includes('toimitus')) serviceIcons += '<span class="service-icon" title="Toimitus">🚚</span>';
+                if (combinedTags.includes('toimipiste')) serviceIcons += '<span class="service-icon" title="Toimipiste">🏢</span>';
+                if (combinedTags.includes('kotikaynti') || combinedTags.includes('kotikäynti')) serviceIcons += '<span class="service-icon" title="Kotikäynti">🏠</span>';
+                if (combinedTags.includes('etapalvelu') || combinedTags.includes('etäpalvelu')) serviceIcons += '<span class="service-icon" title="Etäpalvelu">💻</span>';
+                if (combinedTags.includes('toimitus')) serviceIcons += '<span class="service-icon" title="Toimitus">🚚</span>';
                 
                 const lowerSearch = searchTerm ? searchTerm.toLowerCase() : '';
                 if (lowerSearch.length > 1) {
-                    const matchedTags = tagsArray.filter(t => t.includes(lowerSearch));
+                    const matchedTags = combinedTags.filter(t => t.includes(lowerSearch) && t !== '');
                     if (matchedTags.length > 0) {
                         displayedCat += ` - ${matchedTags.join(', ')}`;
                     }
