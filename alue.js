@@ -353,7 +353,6 @@ function initRegionMap(area, companies) {
         console.error('[Alue] addMarkersToMap-funktiota ei löytynyt script.js:stä.');
     }
 }
-}
 
 function fetchRegionNews(area) {
     const container = document.getElementById('blogger-feed');
