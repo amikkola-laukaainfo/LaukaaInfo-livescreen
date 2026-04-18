@@ -37,6 +37,13 @@ if ($origin) {
 } else {
     header('Access-Control-Allow-Origin: https://laukaainfo.fi');
 }
+
+// Additional Referer check for extra security (can be spoofed but stops basic scrapers)
+$referer = $_SERVER['HTTP_REFERER'] ?? '';
+if ($referer && !preg_match('/(laukaainfo\.fi|localhost|127\.0\.0\.1)/', $referer)) {
+    // Optional: Log suspicious referer
+    // error_log("Suspicious Referer: $referer");
+}
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 header('Pragma: no-cache');
 
@@ -69,8 +76,9 @@ if (file_exists($ip_key)) {
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 $category = isset($_GET['category']) ? trim($_GET['category']) : '';
 $page = isset($_GET['page']) ? max(1, (int) $_GET['page']) : 1;
-$limit = isset($_GET['limit']) ? max(1, min(500, (int) $_GET['limit'])) : 9999;
+$limit = isset($_GET['limit']) ? max(1, min(1000, (int) $_GET['limit'])) : 9999;
 $sort = isset($_GET['sort']) ? trim($_GET['sort']) : '';
+$id_param = isset($_GET['id']) ? trim($_GET['id']) : '';
 
 /* ---------- CSV source (never exposed to browser) ----------------------- */
 // CSV data is processed server-side only.
@@ -312,6 +320,7 @@ while (($row_raw = fgetcsv($stream)) !== false) {
         "voimassaolo_loppuu" => $row['voimassaolo_loppuu'] ?? '',
         "rss" => $row['rss'] ?? '',
         "tags" => $row['tags'] ?? '',
+        "palvelutapa" => $row['palvelutapa'] ?? '',
         "alue_slug" => $row['alue_slug'] ?? '',
         "kunta_slug" => $row['kunta_slug'] ?? '',
     ];
@@ -321,27 +330,64 @@ fclose($stream);
 /* ---------- Server-side filtering -------------------------------------- */
 $filtered = $all_companies;
 
-// Filter by search (name, description, address)
-if (!empty($search)) {
-    $sq = mb_safe('strtolower', $search);
-    $filtered = array_filter($filtered, function ($c) use ($sq) {
-        return mb_safe('strpos', mb_safe('strtolower', $c['nimi']), $sq) !== false
-            || mb_safe('strpos', mb_safe('strtolower', $c['esittely']), $sq) !== false
-            || mb_safe('strpos', mb_safe('strtolower', $c['osoite']), $sq) !== false
-            || mb_safe('strpos', mb_safe('strtolower', $c['kategoria']), $sq) !== false
-            || mb_safe('strpos', mb_safe('strtolower', $c['tags'] ?? ''), $sq) !== false;
+// A. Filter by specific ID if requested (High Security/Performance)
+if (!empty($id_param)) {
+    $filtered = array_filter($filtered, function ($c) use ($id_param) {
+        // Match full ID or just the slug part
+        $clean_id = str_replace('company-', '', $id_param);
+        return $c['id'] === $id_param || 
+               $c['id'] === 'company-' . $id_param ||
+               strpos($c['id'], $clean_id) !== false;
     });
-}
+    $filtered = array_values($filtered);
+    
+    // Returning FULL records for ID-specific queries
+} else {
+    // B. Bulk requests: Filters
+    if (!empty($search)) {
+        $sq = mb_safe('strtolower', $search);
+        $filtered = array_filter($filtered, function ($c) use ($sq) {
+            return mb_safe('strpos', mb_safe('strtolower', $c['nimi']), $sq) !== false
+                || mb_safe('strpos', mb_safe('strtolower', $c['esittely']), $sq) !== false
+                || mb_safe('strpos', mb_safe('strtolower', $c['osoite']), $sq) !== false
+                || mb_safe('strpos', mb_safe('strtolower', $c['kategoria']), $sq) !== false
+                || mb_safe('strpos', mb_safe('strtolower', $c['tags'] ?? ''), $sq) !== false
+                || mb_safe('strpos', mb_safe('strtolower', $c['palvelutapa'] ?? ''), $sq) !== false;
+        });
+    }
 
-// Filter by category (exact)
-if (!empty($category)) {
-    $filtered = array_filter($filtered, function ($c) use ($category) {
-        return strcasecmp($c['kategoria'], $category) === 0;
-    });
-}
+    if (!empty($category)) {
+        $filtered = array_filter($filtered, function ($c) use ($category) {
+            return strcasecmp($c['kategoria'], $category) === 0;
+        });
+    }
 
-// Re-index
-$filtered = array_values($filtered);
+    $filtered = array_values($filtered);
+
+    // C. Bulk requests: Slimming (Security)
+    // We remove contact details and long descriptions from bulk responses.
+    $filtered = array_map(function($c) {
+        return [
+            "id" => $c['id'],
+            "nimi" => $c['nimi'],
+            "kategoria" => $c['kategoria'],
+            "package" => $c['package'],
+            "mainoslause" => $c['mainoslause'],
+            "osoite" => $c['osoite'],
+            "lat" => $c['lat'],
+            "lon" => $c['lon'],
+            "logo" => $c['logo'],
+            "tags" => $c['tags'],
+            "palvelutapa" => $c['palvelutapa'],
+            "alue_slug" => $c['alue_slug'],
+            "karusellipaino" => $c['karusellipaino'],
+            "tyyppi" => $c['tyyppi'],
+            // Only send the first media item for previews to save bandwidth and improve protection
+            "media" => isset($c['media'][0]) ? [$c['media'][0]] : [],
+            "images" => isset($c['images'][0]) ? [$c['images'][0]] : []
+        ];
+    }, $filtered);
+}
 
 /* ---------- Sorting ---------------------------------------------------- */
 if (!empty($sort)) {
