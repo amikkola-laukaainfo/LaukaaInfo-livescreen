@@ -1818,9 +1818,7 @@ function renderCatalog(companies) {
                                      window.location.hostname.includes('github.io');
                     const distPrefix = isInDist ? '' : 'dist/';
                     
-                    const cardUrl = isPaid 
-                        ? `${distPrefix}yritys/${slugify(company.nimi)}.html` 
-                        : `yrityskortti.html?id=${slugify(company.nimi)}${regionParam}`;
+                    const cardUrl = `yrityskortti.html?id=${slugify(company.nimi)}${regionParam}`;
                         
                     window.location.href = cardUrl;
                 }
