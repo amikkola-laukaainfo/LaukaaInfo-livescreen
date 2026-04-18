@@ -602,7 +602,18 @@
                 marker.bindPopup(`
                 <div style="font-family: 'Outfit', sans-serif; min-width: 150px;">
                     <h4 style="margin: 0 0 5px 0; color: #0056b3;">${company.nimi}</h4>
-                    <div style="font-size: 0.8rem; margin-bottom: 8px; color: #666;">${company.kategoria}</div>
+                    <div style="font-size: 0.8rem; margin-bottom: 8px; color: #666; display: flex; align-items: center; gap: 5px;">
+                        ${company.kategoria}
+                        ${(function() {
+                            let icons = '';
+                            const combined = `${company.tags || ''},${company.palvelutapa || ''}`.toLowerCase();
+                            if (combined.includes('toimipiste')) icons += '🏢';
+                            if (combined.includes('kotikaynti') || combined.includes('kotikäynti')) icons += '🏠';
+                            if (combined.includes('etapalvelu') || combined.includes('etäpalvelu')) icons += '💻';
+                            if (combined.includes('toimitus')) icons += '🚚';
+                            return icons ? `<span style="margin-left:5px;">${icons}</span>` : '';
+                        })()}
+                    </div>
                     <a href="yrityskortti.html?id=${slugify(company.nimi)}" style="
                         display: block;
                         background: #0056b3;

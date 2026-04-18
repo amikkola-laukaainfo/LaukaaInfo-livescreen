@@ -397,18 +397,32 @@ function initRegionMap(area, companies) {
                     LkiModal.open(company);
                 });
             } else {
+                const waysIcons = (function() {
+                    let icons = '';
+                    const combined = `${company.tags || ''},${company.palvelutapa || ''}`.toLowerCase();
+                    if (combined.includes('toimipiste')) icons += '🏢';
+                    if (combined.includes('kotikaynti') || combined.includes('kotikäynti')) icons += '🏠';
+                    if (combined.includes('etapalvelu') || combined.includes('etäpalvelu')) icons += '💻';
+                    if (combined.includes('toimitus')) icons += '🚚';
+                    return icons ? `<span style="margin-left:5px;">${icons}</span>` : '';
+                })();
+
                 marker.bindPopup(`
-                    <strong>${company.nimi}</strong><br>${company.osoite}<br><br>
-                    <a href="yrityskortti.html?id=${slugify(company.nimi)}" style="
-                        display: block;
-                        background: #0056b3;
-                        color: white;
-                        text-decoration: none;
-                        text-align: center;
-                        padding: 5px 10px;
-                        border-radius: 4px;
-                        font-size: 0.8rem;
-                    ">Näytä tiedot</a>
+                    <div style="font-family: 'Outfit', sans-serif;">
+                        <h4 style="margin:0 0 5px 0;">${company.nimi} ${waysIcons}</h4>
+                        <div style="font-size:0.85rem; color:#666; margin-bottom:10px;">${company.osoite}</div>
+                        <a href="yrityskortti.html?id=${slugify(company.nimi)}" style="
+                            display: block;
+                            background: #0056b3;
+                            color: white;
+                            text-decoration: none;
+                            text-align: center;
+                            padding: 8px 10px;
+                            border-radius: 4px;
+                            font-size: 0.8rem;
+                            font-weight: 500;
+                        ">Näytä tiedot</a>
+                    </div>
                 `);
             }
             

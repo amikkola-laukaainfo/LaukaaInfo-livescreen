@@ -415,7 +415,18 @@ function addMarkersToMap(companies) {
                 popupContent = `
                     <div style="font-family: 'Outfit', sans-serif; min-width: 150px;">
                         <h4 style="margin: 0 0 5px 0; color: #0056b3;">${company.nimi}</h4>
-                        <div style="font-size: 0.8rem; margin-bottom: 8px; color: #666;">${company.kategoria}</div>
+                        <div style="font-size: 0.8rem; margin-bottom: 8px; color: #666; display: flex; align-items: center; gap: 5px;">
+                            ${company.kategoria}
+                            ${(function() {
+                                let icons = '';
+                                const combined = `${company.tags || ''},${company.palvelutapa || ''}`.toLowerCase();
+                                if (combined.includes('toimipiste')) icons += '🏢';
+                                if (combined.includes('kotikaynti') || combined.includes('kotikäynti')) icons += '🏠';
+                                if (combined.includes('etapalvelu') || combined.includes('etäpalvelu')) icons += '💻';
+                                if (combined.includes('toimitus')) icons += '🚚';
+                                return icons ? `<span style="margin-left:5px;">${icons}</span>` : '';
+                            })()}
+                        </div>
                         <div style="display: flex; flex-direction: column; gap: 5px;">
                             <a href="${cardUrl}" style="
                                 display: block;
@@ -1349,7 +1360,8 @@ function filterMapMarkers(term) {
         const name = (company.nimi || '').toLowerCase();
         const cat = (company.kategoria || '').toLowerCase();
         const tags = (company.tags || '').toLowerCase();
-        return name.includes(searchTerm) || cat.includes(searchTerm) || tags.includes(searchTerm);
+        const ptapa = (company.palvelutapa || '').toLowerCase();
+        return name.includes(searchTerm) || cat.includes(searchTerm) || tags.includes(searchTerm) || ptapa.includes(searchTerm);
     });
 
     if (map && markers) {
@@ -1815,10 +1827,29 @@ function updateSpotlight(company) {
     if (taglineEl) taglineEl.textContent = company.mainoslause;
     if (descEl) descEl.textContent = company.esittely || company.mainoslause;
     if (detailsEl) {
+        let waysMarkup = '';
+        const ways = (company.palvelutapa || '').split(',').map(t => t.trim().toLowerCase());
+        const combinedWays = [...new Set([...(company.tags || '').split(',').map(t => t.trim().toLowerCase()), ...ways])];
+        
+        let waysIcons = '';
+        let waysLabels = [];
+        if (combinedWays.includes('toimipiste')) { waysIcons += '🏢 '; waysLabels.push('Toimipiste'); }
+        if (combinedWays.includes('kotikaynti') || combinedWays.includes('kotikäynti')) { waysIcons += '🏠 '; waysLabels.push('Kotikäynti'); }
+        if (combinedWays.includes('etapalvelu') || combinedWays.includes('etäpalvelu')) { waysIcons += '💻 '; waysLabels.push('Etäpalvelu'); }
+        if (combinedWays.includes('toimitus')) { waysIcons += '🚚 '; waysLabels.push('Toimitus'); }
+
+        if (waysIcons) {
+            waysMarkup = `<div style="margin-top:8px; padding-top:8px; border-top:1px solid rgba(0,0,0,0.05); font-weight:500;">
+                <span title="${waysLabels.join(', ')}">${waysIcons}</span> 
+                <span style="font-size:0.9em; opacity:0.8;">${waysLabels.join(', ')}</span>
+            </div>`;
+        }
+
         detailsEl.innerHTML = `
             <div>📍 ${company.osoite}</div>
             <div>📞 ${company.puhelin || '-'}</div>
             <div>📧 ${company.email || '-'}</div>
+            ${waysMarkup}
         `;
     }
     const actionsEl = document.getElementById('spotlight-actions');

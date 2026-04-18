@@ -113,6 +113,43 @@ window.LkiModal = (function() {
             emailItem.style.display = 'none';
         }
 
+        // Service Methods (Palvelutapa)
+        let waysMarkup = '';
+        const tags = (company.tags || '').split(',').map(t => t.trim().toLowerCase());
+        const pvtapa = (company.palvelutapa || '').split(',').map(t => t.trim().toLowerCase());
+        const combinedWays = [...new Set([...tags, ...pvtapa])];
+        
+        let waysIcons = '';
+        let waysLabels = [];
+        if (combinedWays.includes('toimipiste')) { waysIcons += '🏢 '; waysLabels.push('Toimipiste'); }
+        if (combinedWays.includes('kotikaynti') || combinedWays.includes('kotikäynti')) { waysIcons += '🏠 '; waysLabels.push('Kotikäynti'); }
+        if (combinedWays.includes('etapalvelu') || combinedWays.includes('etäpalvelu')) { waysIcons += '💻 '; waysLabels.push('Etäpalvelu'); }
+        if (combinedWays.includes('toimitus')) { waysIcons += '🚚 '; waysLabels.push('Toimitus'); }
+
+        if (waysIcons) {
+            waysMarkup = `
+                <div class="lki-info-item" style="grid-column: 1 / -1; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(0,0,0,0.05); flex-direction: column; align-items: flex-start;">
+                    <div style="font-weight: 700; font-size: 0.75rem; text-transform: uppercase; color: var(--primary-blue); opacity: 0.7; margin-bottom: 4px;">Palvelun tyyppi</div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: 1.2rem;">${waysIcons}</span>
+                        <span style="font-size: 0.9rem; font-weight: 500;">${waysLabels.join(', ')}</span>
+                    </div>
+                </div>
+            `;
+        }
+        
+        const infoGrid = document.getElementById('lki-modal-info-grid');
+        if (waysMarkup) {
+            // Remove any existing palvelutapa item (if reusing modal)
+            const oldWay = infoGrid.querySelector('.lki-info-way');
+            if (oldWay) oldWay.remove();
+            
+            const wayDiv = document.createElement('div');
+            wayDiv.className = 'lki-info-way'; // marker for cleanup
+            wayDiv.innerHTML = waysMarkup;
+            infoGrid.appendChild(wayDiv);
+        }
+
         // Media Slider
         renderSlider(company, package);
 
