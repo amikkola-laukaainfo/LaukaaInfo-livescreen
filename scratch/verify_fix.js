@@ -1,30 +1,44 @@
+// Simulation of script.js filtering logic
+function simulateFilter(searchTerm, selectedRegion, allCompanies, userCoords = null) {
+    const matches = allCompanies.map(company => {
+        const name = (company.nimi || '').toLowerCase();
+        const tags = (company.tags || '').toLowerCase();
+        const ptapa = (company.palvelutapa || '').toLowerCase();
+        
+        let score = 0;
+        if (name.includes(searchTerm)) score += 100;
+        
+        const combinedTags = (tags + ',' + ptapa).toLowerCase();
+        if (searchTerm.length > 1 && combinedTags.includes(searchTerm)) score += 120;
 
-const companies = [
-    { id: "company-272", nimi: "Rengaskanava Oy" },
-    { id: "company-271", nimi: "Fenno optiikka" },
-    { id: "company-2", nimi: "Mediazoo" }
+        if (searchTerm.length === 0 && selectedRegion !== 'all') score = 1;
+
+        let matchesRegion = true;
+        let isPremium = company.tyyppi === 'paid' || company.tyyppi === 'maksu';
+
+        const refLat = 62.4128; // Laukaa center
+        const refLon = 25.9477;
+        
+        if (company.lat && company.lon) {
+            const dist = 21; // Simulate Mediazoo distance
+            if (selectedRegion && selectedRegion !== 'all' && !isPremium) {
+                matchesRegion = dist <= 13;
+            }
+        }
+
+        return { company, score, matchesRegion };
+    }).filter(m => m.score > 0 && m.matchesRegion);
+
+    return matches.map(m => m.company);
+}
+
+const mockCompanies = [
+    { nimi: "Mediazoo", tags: "digimedia, mainostutka", lat: 62.27, lon: 26.22, tyyppi: "maksu" },
+    { nimi: "Muu Yritys", tags: "jotain, muuta", lat: 62.41, lon: 25.94, tyyppi: "perus" }
 ];
 
-function oldFilter(id_param) {
-    const clean_id = id_param.replace('company-', '');
-    return companies.filter(c => 
-        c.id === id_param || 
-        c.id === 'company-' + id_param || 
-        c.id.includes(clean_id)
-    );
-}
+console.log("Search: digimedia, Region: koko-laukaa");
+console.log(simulateFilter("digimedia", "koko-laukaa", mockCompanies));
 
-function newFilter(id_param) {
-    return companies.filter(c => 
-        c.id === id_param || 
-        c.id === 'company-' + id_param
-    );
-}
-
-console.log("Requesting company-2");
-console.log("Old logic matches:", oldFilter("company-2").map(c => c.nimi));
-console.log("New logic matches:", newFilter("company-2").map(c => c.nimi));
-
-console.log("\nRequesting 2");
-console.log("Old logic matches:", oldFilter("2").map(c => c.nimi));
-console.log("New logic matches:", newFilter("2").map(c => c.nimi));
+console.log("Search: empty, Region: koko-laukaa");
+console.log(simulateFilter("", "koko-laukaa", mockCompanies));

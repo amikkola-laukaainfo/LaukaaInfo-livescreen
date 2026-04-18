@@ -1298,15 +1298,20 @@ function filterCatalog(renderList = true) {
     const searchEl = document.getElementById('company-search');
     if (!searchEl) return;
 
-    const searchTerm = (searchEl.value || '').toLowerCase().trim();
+    const queryParams = new URLSearchParams(window.location.search);
+    const urlTag = queryParams.get('tag') || '';
+    const urlCat = queryParams.get('cat') || '';
+    
+    const searchTerm = (searchEl.value || urlTag || '').toLowerCase().trim();
     const categoryEl = document.getElementById('category-filter');
-    const category = categoryEl ? categoryEl.value : 'all';
+    const category = categoryEl ? (categoryEl.value !== 'all' ? categoryEl.value : (urlCat || 'all')) : (urlCat || 'all');
 
     const serviceMethodEl = document.getElementById('service-method-select');
     const serviceMethod = serviceMethodEl ? serviceMethodEl.value : 'all';
 
     const regionCoords = JSON.parse(localStorage.getItem('regionCoords'));
     const selectedRegion = localStorage.getItem('selectedRegion');
+    const isKokoLaukaa = selectedRegion === 'koko-laukaa';
 
     const matches = allCompanies.map(company => {
         const name = (company.nimi || '').toLowerCase();
@@ -1362,14 +1367,14 @@ function filterCatalog(renderList = true) {
             company.distanceText = dist < 1 ? `${Math.round(dist * 1000)} m` : `${dist.toFixed(1)} km`;
             company.distanceValue = dist;
             
-            // Aluesuodatus (vain jos ei ole premium)
-            if (selectedRegion && selectedRegion !== 'all' && !isPremium) {
+            // Aluesuodatus (vain jos ei ole premium eika "Koko Laukaa" -näkymä)
+            if (selectedRegion && selectedRegion !== 'all' && !isKokoLaukaa && !isPremium) {
                 matchesRegion = dist <= 13; // 13km radius
             }
         } else {
             company.distanceText = null;
             company.distanceValue = null;
-            if (selectedRegion && selectedRegion !== 'all' && !isPremium) {
+            if (selectedRegion && selectedRegion !== 'all' && !isKokoLaukaa && !isPremium) {
                 matchesRegion = false;
             }
         }
