@@ -346,104 +346,13 @@ function initRegionMap(area, companies) {
         regionMap.addLayer(targetMarkers);
     }
 
-    // Lisätään vain kyseisen alueen/-haun mukaiset markerit
-    companies.forEach(company => {
-        const lat = parseFloat(company.lat);
-        const lon = parseFloat(company.lon || company.lng);
-
-        if (!isNaN(lat) && !isNaN(lon)) {
-            // Tunnistetaan pakettityyppi (Pro tai Premium)
-            const pkgValue = (company.package || company.paketti || company.taso || company.tyyppi || company.type || '').toLowerCase();
-            const isPro = pkgValue.includes('pro');
-            const isPremiumPkg = pkgValue.includes('premium') || pkgValue.includes('maksu') || pkgValue.includes('paid');
-
-            let iconHtml = '';
-            let iconClass = 'custom-marker';
-            let iconSize = [24, 24];
-
-            if (isPremiumPkg) {
-                iconHtml = `
-                    <div class="premium-marker-inner pulsing-premium">
-                        <div class="marker-dot"></div>
-                    </div>
-                `;
-                iconClass = 'premium-leaflet-marker';
-                iconSize = [26, 26];
-            } else if (isPro) {
-                iconHtml = `
-                    <div class="pro-marker-inner pulsing-pro">
-                        <div class="marker-dot"></div>
-                    </div>
-                `;
-                iconClass = 'pro-leaflet-marker';
-                iconSize = [26, 26];
-            } else {
-                // Oletusmarkerin väri kategorian mukaan
-                const catColor = (typeof categoryColors !== 'undefined' && categoryColors[company.kategoria]) ? categoryColors[company.kategoria] : '#0056b3';
-                iconHtml = `
-                    <div style="
-                        background-color: ${catColor};
-                        width: 20px;
-                        height: 20px;
-                        border-radius: 50% 50% 50% 0;
-                        transform: rotate(-45deg);
-                        border: 2px solid white;
-                        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-                    "></div>
-                `;
-            }
-
-            const icon = L.divIcon({
-                html: iconHtml,
-                className: iconClass,
-                iconSize: iconSize,
-                iconAnchor: [iconSize[0]/2, iconSize[1]],
-                popupAnchor: [0, -iconSize[1]]
-            });
-
-            const marker = L.marker([lat, lon], { icon: icon });
-            
-            // Käytetään premium-tason modaalia jos mahdollista, muuten peruspopup
-            if (typeof LkiModal !== 'undefined') {
-                marker.on('click', (e) => {
-                    L.DomEvent.stopPropagation(e);
-                    // Varmistetaan että meillä on täydet tiedot ennen avaamista
-                    LkiModal.open(company);
-                });
-            } else {
-                const waysIcons = (function() {
-                    let icons = '';
-                    const combined = `${company.tags || ''},${company.palvelutapa || ''}`.toLowerCase();
-                    if (combined.includes('toimipiste')) icons += '🏢';
-                    if (combined.includes('kotikaynti') || combined.includes('kotikäynti')) icons += '🏠';
-                    if (combined.includes('etapalvelu') || combined.includes('etäpalvelu')) icons += '💻';
-                    if (combined.includes('toimitus')) icons += '🚚';
-                    return icons ? `<span style="margin-left:5px;">${icons}</span>` : '';
-                })();
-
-                marker.bindPopup(`
-                    <div style="font-family: 'Outfit', sans-serif;">
-                        <h4 style="margin:0 0 5px 0;">${company.nimi} ${waysIcons}</h4>
-                        <div style="font-size:0.85rem; color:#666; margin-bottom:10px;">${company.osoite}</div>
-                        <a href="yrityskortti.html?id=${slugify(company.nimi)}" style="
-                            display: block;
-                            background: #0056b3;
-                            color: white;
-                            text-decoration: none;
-                            text-align: center;
-                            padding: 8px 10px;
-                            border-radius: 4px;
-                            font-size: 0.8rem;
-                            font-weight: 500;
-                        ">Näytä tiedot</a>
-                    </div>
-                `);
-            }
-            
-            targetMarkers.addLayer(marker);
-        }
-
-    });
+    // Lisätään vain kyseisen alueen/-haun mukaiset markerit käyttäen yhteistä funktiota script.js:ssä
+    if (typeof addMarkersToMap === 'function') {
+        addMarkersToMap(companies);
+    } else {
+        console.error('[Alue] addMarkersToMap-funktiota ei löytynyt script.js:stä.');
+    }
+}
 }
 
 function fetchRegionNews(area) {

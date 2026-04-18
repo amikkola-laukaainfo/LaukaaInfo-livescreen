@@ -306,8 +306,12 @@ function initMap(companies) {
                     buttons.forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
                     
-                    // Re-add markers
-                    addMarkersToMap(allCompanies);
+                    // Re-add markers and refresh filtering (preserves tags/search)
+                    if (typeof filterCatalog === 'function') {
+                        filterCatalog();
+                    } else {
+                        addMarkersToMap(allCompanies);
+                    }
                 });
             });
             
@@ -454,36 +458,6 @@ function addMarkersToMap(companies) {
                             <div class="marker-dot"></div>
                         </div>
                     `;
-                } else if (company.service_mode === 'SERVICE_AREA') {
-                    markerHtml = `
-                        <div style="
-                            background-color: #ff9900;
-                            width: 22px;
-                            height: 22px;
-                            border-radius: 50% 50% 50% 0;
-                            transform: rotate(-45deg);
-                            border: 2px solid white;
-                            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                        "><span style="transform: rotate(45deg); font-size: 10px;">🚗</span></div>
-                    `;
-
-                    // Draw service area circle
-                    if (company.service_radius) {
-                        const radius = parseFloat(company.service_radius) * 1000;
-                        if (!isNaN(radius)) {
-                            L.circle([lat, lon], {
-                                color: '#ff9900',
-                                fillColor: '#ff9900',
-                                fillOpacity: 0.15,
-                                radius: radius,
-                                weight: 1,
-                                interactive: false
-                            }).addTo(serviceAreaLayer);
-                        }
-                    }
                 } else {
                     markerHtml = `
                         <div style="
@@ -496,6 +470,24 @@ function addMarkersToMap(companies) {
                             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
                         "></div>
                     `;
+                }
+
+                // Draw service area circle - MOVED OUTSIDE if-else-if for consistency
+                // Works even for Pro/Premium companies if they have a radius
+                if (company.service_radius || company.service_mode === 'SERVICE_AREA') {
+                    const radiusVal = parseFloat(company.service_radius);
+                    if (!isNaN(radiusVal) && radiusVal > 0) {
+                        const radius = radiusVal * 1000;
+                        L.circle([lat, lon], {
+                            color: '#ff9900',
+                            fillColor: '#ff9900',
+                            fillOpacity: 0.15,
+                            radius: radius,
+                            weight: 1,
+                            interactive: false
+                        }).addTo(serviceAreaLayer);
+                    }
+                }
                 }
 
                 const mapsUrl = company.karttalinkki && company.karttalinkki !== '-' 
@@ -517,7 +509,7 @@ function addMarkersToMap(companies) {
                         <h4 style="margin: 0 0 5px 0; color: #0056b3;">${company.nimi}</h4>
                         <div style="font-size: 0.8rem; margin-bottom: 8px; color: #666; display: flex; align-items: center; gap: 5px; flex-wrap: wrap;">
                             ${company.kategoria}
-                            ${company.service_mode === 'SERVICE_AREA' ? '<span class="service-area-badge" style="background: #fff3e0; color: #e65100; padding: 1px 6px; border-radius: 10px; font-size: 0.65rem; border: 1px solid #ffccbc; font-weight: bold;">🟠 PALVELEE ALUEELLA</span>' : ''}
+                            ${(company.service_mode === 'SERVICE_AREA' || (company.service_radius && parseFloat(company.service_radius) > 0)) ? '<span class="service-area-badge" style="background: #fff3e0; color: #e65100; padding: 1px 6px; border-radius: 10px; font-size: 0.65rem; border: 1px solid #ffccbc; font-weight: bold;">🟠 PALVELEE ALUEELLA</span>' : ''}
                             ${(function() {
                                 let icons = '';
                                 const combined = `${company.tags || ''},${company.palvelutapa || ''}`.toLowerCase();
