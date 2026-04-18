@@ -7,6 +7,8 @@ let map = null;
 let markers = null;
 let isHomePage = false; // Global flag for homepage context
 let userCoords = null; // Globaali sijainti
+let serviceAreaLayer = null; // Layer for service area circles
+let mapFilterMode = 'all'; // 'all', 'near', 'service_area'
 
 const FEATURED_LINKS = [
     { name: 'Ravintolat', url: 'laukaan-ravintolat.html', icon: '🍴' },
@@ -207,6 +209,7 @@ function initMap(companies) {
     }).addTo(map);
 
     markers = L.markerClusterGroup();
+    serviceAreaLayer = L.layerGroup().addTo(map);
     addMarkersToMap(companies);
     map.addLayer(markers);
 
@@ -278,6 +281,40 @@ function initMap(companies) {
     });
 
     map.addControl(new LocateControl());
+    
+    // Map Filter Toggle Control
+    const MapFilterControl = L.Control.extend({
+        options: { position: 'topleft' },
+        onAdd: function(map) {
+            const container = L.DomUtil.create('div', 'leaflet-map-filters');
+            container.innerHTML = `
+                <div class="map-filter-group">
+                    <button class="map-filter-btn active" data-filter="all">Kaikki</button>
+                    <button class="map-filter-btn" data-filter="near">Lähellä</button>
+                    <button class="map-filter-btn" data-filter="service_area">Alueella</button>
+                </div>
+            `;
+            
+            const buttons = container.querySelectorAll('.map-filter-btn');
+            buttons.forEach(btn => {
+                L.DomEvent.on(btn, 'click', (e) => {
+                    L.DomEvent.stopPropagation(e);
+                    const filter = btn.getAttribute('data-filter');
+                    mapFilterMode = filter;
+                    
+                    // Update UI
+                    buttons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    // Re-add markers
+                    addMarkersToMap(allCompanies);
+                });
+            });
+            
+            return container;
+        }
+    });
+    map.addControl(new MapFilterControl());
 
     let userMarker;
     map.on('locationfound', function (e) {
@@ -312,10 +349,23 @@ function initMap(companies) {
 
 function addMarkersToMap(companies) {
     markers.clearLayers();
+    if (serviceAreaLayer) serviceAreaLayer.clearLayers();
+    
     const bounds = [];
     let validMarkers = 0;
 
-    companies.forEach(company => {
+    // Filter companies if a map filter is active
+    let displayCompanies = [...companies];
+    if (mapFilterMode === 'service_area') {
+        displayCompanies = companies.filter(c => c.service_mode === 'SERVICE_AREA');
+    } else if (mapFilterMode === 'near' && userCoords) {
+        displayCompanies = companies.filter(c => {
+            const dist = getHaversineDistance(userCoords.lat, userCoords.lng || userCoords.lon, c.lat, c.lon || c.lng);
+            return dist < 10; // Show within 10km when filtered by "Near"
+        });
+    }
+
+    displayCompanies.forEach(company => {
         const lat = parseFloat(company.lat);
         const lon = parseFloat(company.lon || company.lng);
 
@@ -405,6 +455,38 @@ function addMarkersToMap(companies) {
                         </div>
                     `;
                 } else {
+                    `;
+                } else if (company.service_mode === 'SERVICE_AREA') {
+                    markerHtml = `
+                        <div style="
+                            background-color: #ff9900;
+                            width: 22px;
+                            height: 22px;
+                            border-radius: 50% 50% 50% 0;
+                            transform: rotate(-45deg);
+                            border: 2px solid white;
+                            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        "><span style="transform: rotate(45deg); font-size: 10px;">🚗</span></div>
+                    `;
+
+                    // Draw service area circle
+                    if (company.service_radius) {
+                        const radius = parseFloat(company.service_radius) * 1000;
+                        if (!isNaN(radius)) {
+                            L.circle([lat, lon], {
+                                color: '#ff9900',
+                                fillColor: '#ff9900',
+                                fillOpacity: 0.15,
+                                radius: radius,
+                                weight: 1,
+                                interactive: false
+                            }).addTo(serviceAreaLayer);
+                        }
+                    }
+                } else {
                     markerHtml = `
                         <div style="
                             background-color: ${markerColor};
@@ -435,8 +517,9 @@ function addMarkersToMap(companies) {
                 popupContent = `
                     <div style="font-family: 'Outfit', sans-serif; min-width: 150px;">
                         <h4 style="margin: 0 0 5px 0; color: #0056b3;">${company.nimi}</h4>
-                        <div style="font-size: 0.8rem; margin-bottom: 8px; color: #666; display: flex; align-items: center; gap: 5px;">
+                        <div style="font-size: 0.8rem; margin-bottom: 8px; color: #666; display: flex; align-items: center; gap: 5px; flex-wrap: wrap;">
                             ${company.kategoria}
+                            ${company.service_mode === 'SERVICE_AREA' ? '<span class="service-area-badge" style="background: #fff3e0; color: #e65100; padding: 1px 6px; border-radius: 10px; font-size: 0.65rem; border: 1px solid #ffccbc; font-weight: bold;">🟠 PALVELEE ALUEELLA</span>' : ''}
                             ${(function() {
                                 let icons = '';
                                 const combined = `${company.tags || ''},${company.palvelutapa || ''}`.toLowerCase();
@@ -1833,7 +1916,10 @@ function renderCatalog(companies) {
                     <h4>${company.nimi} <span style="margin-left:5px; font-weight:normal;">${serviceIcons}</span></h4>
                     ${distHtml}
                 </div>
-                <span class="cat-tag">${displayedCat}</span>
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                    <span class="cat-tag">${displayedCat}</span>
+                    ${company.service_mode === 'SERVICE_AREA' ? '<span class="service-area-badge" style="background: #fff3e0; color: #e65100; padding: 1px 6px; border-radius: 10px; font-size: 0.65rem; border: 1px solid #ffccbc; font-weight: bold; display: inline-block;">🟠 PALVELEE ALUEELLA</span>' : ''}
+                </div>
             `;
 
             item.onclick = () => {

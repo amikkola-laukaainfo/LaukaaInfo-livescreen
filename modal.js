@@ -138,6 +138,10 @@ window.LkiModal = (function() {
             badgeContainer.innerHTML = '';
         }
 
+        if (company.service_mode === 'SERVICE_AREA') {
+            badgeContainer.innerHTML += '<span class="lki-badge service-area" style="background: #fff3e0; color: #e65100; border: 1px solid #ffccbc;">🟠 PALVELEE ALUEELLA</span>';
+        }
+
         // Basic Info
         document.getElementById('lki-modal-title').textContent = company.nimi;
         document.getElementById('lki-modal-category').textContent = company.kategoria || company.category || '';
@@ -197,6 +201,35 @@ window.LkiModal = (function() {
             wayDiv.className = 'lki-info-way'; 
             wayDiv.innerHTML = waysMarkup;
             infoGrid.appendChild(wayDiv);
+        }
+
+        // Service Area Confirmation
+        const oldConfirmation = infoGrid.querySelector('.lki-service-confirmation');
+        if (oldConfirmation) oldConfirmation.remove();
+
+        if (company.service_mode === 'SERVICE_AREA') {
+            const confDiv = document.createElement('div');
+            confDiv.className = 'lki-info-item lki-service-confirmation';
+            confDiv.style.gridColumn = '1 / -1';
+            confDiv.style.background = '#f0fff4';
+            confDiv.style.border = '1px solid #c6f6d5';
+            confDiv.style.borderRadius = '8px';
+            confDiv.style.padding = '10px';
+            confDiv.style.marginTop = '10px';
+            confDiv.style.display = 'flex';
+            confDiv.style.flexDirection = 'column';
+            confDiv.style.gap = '4px';
+
+            confDiv.innerHTML = `
+                <div style="color: #2f855a; font-weight: bold; display: flex; align-items: center; gap: 6px;">
+                    <span style="font-size: 1.1rem;">✔</span> Palvelee myös tällä alueella
+                </div>
+                <div style="font-size: 0.85rem; color: #276749; display: flex; align-items: center; gap: 6px;">
+                    <span>🚗</span> Liikkuva palvelu
+                </div>
+                ${company.service_note ? `<div style="font-size: 0.85rem; color: #666; font-style: italic; margin-top: 4px; padding-top: 4px; border-top: 1px dotted #ccc;">${company.service_note}</div>` : ''}
+            `;
+            infoGrid.appendChild(confDiv);
         }
 
         // Media Slider

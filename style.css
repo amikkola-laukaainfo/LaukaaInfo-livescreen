@@ -2827,6 +2827,7 @@ footer {
 .lki-social-icon { text-decoration: none; font-size: 0.9rem; color: #6b7a90; transition: transform 0.2s, color 0.2s; display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; }
 .lki-social-icon:hover { transform: scale(1.15); color: #0056b3; }
 
+
 /* Footer "Ota yhteyttä" matalan kynnyksen CTA */
 .footer-mailto-cta {
     display: inline-flex;
@@ -2846,6 +2847,79 @@ footer {
 .footer-mailto-cta:hover {
     background: rgba(255,255,255,0.22);
     transform: translateY(-1px);
+}
+
+/* --- Service Area & Map Filter Controls --- */
+.map-filter-container {
+    display: flex;
+    gap: 8px;
+    padding: 5px;
+    background: white;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.2);
+    border-radius: 4px;
+    pointer-events: auto;
+}
+
+.map-filter-btn {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #495057;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.map-filter-btn:hover {
+    background: #e9ecef;
+}
+
+.map-filter-btn.active {
+    background: var(--primary-blue);
+    color: white;
+    border-color: var(--primary-blue);
+    box-shadow: 0 2px 4px rgba(0, 86, 179, 0.2);
+}
+
+.service-area-badge {
+    transition: transform 0.2s ease;
+}
+
+.catalog-item:hover .service-area-badge {
+    transform: scale(1.05);
+}
+
+.lki-badge.service-area {
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+/* Service Area marker inner */
+.service-area-marker-inner {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e65100; /* Orange for Service Area */
+}
+
+/* Modal and Detail Page styles for Service Area Confirmation */
+.lki-service-confirmation {
+    animation: fadeInSlideUp 0.3s ease-out;
+}
+
+@keyframes fadeInSlideUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* CTA Buttons (ilmoittaudu + kauppa) */

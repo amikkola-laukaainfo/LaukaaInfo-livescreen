@@ -572,6 +572,7 @@
         card.innerHTML = `
         ${distBadge}
         <h3>${c.nimi} <span style="margin-left:5px; font-weight:normal;">${serviceIcons}</span></h3>
+        ${c.service_mode === 'SERVICE_AREA' ? '<div style="margin-bottom: 10px;"><span class="service-area-badge" style="background: #fff3e0; color: #e65100; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; border: 1px solid #ffccbc; font-weight: bold; display: inline-block;">🟠 PALVELEE ALUEELLA</span></div>' : ''}
         ${infoHtml}
         <p>${description}</p>
         <div style="margin-top:1rem; display:flex; gap:10px;">

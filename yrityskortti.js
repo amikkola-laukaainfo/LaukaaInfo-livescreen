@@ -226,6 +226,11 @@
         if (serviceIcons) {
             document.getElementById('display-name').innerHTML = `${company.nimi} <span style="font-size: 1.2rem; margin-left:10px; font-weight:normal;">${serviceIcons}</span>`;
         }
+        
+        if (company.service_mode === 'SERVICE_AREA') {
+            const badgeHtml = '<span class="service-area-badge" style="background: #fff3e0; color: #e65100; padding: 3px 10px; border-radius: 12px; font-size: 0.8rem; border: 1px solid #ffccbc; font-weight: bold; margin-left: 10px; vertical-align: middle;">🟠 PALVELEE ALUEELLA</span>';
+            document.getElementById('display-name').innerHTML += badgeHtml;
+        }
 
         // Add Palvelutapa row to info panel
         if (serviceTexts.length > 0) {
@@ -253,6 +258,35 @@
                 }
             }
             document.getElementById('display-service-methods').textContent = serviceTexts.join(', ');
+        }
+
+        // Service Area Confirmation (Mobile Service)
+        if (company.service_mode === 'SERVICE_AREA') {
+            const infoPanel = document.querySelector('.info-panel');
+            let confDiv = document.getElementById('service-area-confirmation');
+            if (!confDiv) {
+                confDiv = document.createElement('div');
+                confDiv.id = 'service-area-confirmation';
+                confDiv.style.background = '#f0fff4';
+                confDiv.style.border = '1px solid #c6f6d5';
+                confDiv.style.borderRadius = '8px';
+                confDiv.style.padding = '12px';
+                confDiv.style.marginTop = '15px';
+                confDiv.style.display = 'flex';
+                confDiv.style.flexDirection = 'column';
+                confDiv.style.gap = '4px';
+
+                confDiv.innerHTML = `
+                    <div style="color: #2f855a; font-weight: bold; display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: 1.2rem;">✔</span> Palvelee myös tällä alueella
+                    </div>
+                    <div style="font-size: 0.9rem; color: #276749; display: flex; align-items: center; gap: 8px;">
+                        <span>🚗</span> Liikkuva palvelu
+                    </div>
+                    ${company.service_note ? `<div style="font-size: 0.85rem; color: #666; font-style: italic; margin-top: 6px; padding-top: 6px; border-top: 1px dotted #ccc;">${company.service_note}</div>` : ''}
+                `;
+                infoPanel.appendChild(confDiv);
+            }
         }
 
         // Distance Calculation

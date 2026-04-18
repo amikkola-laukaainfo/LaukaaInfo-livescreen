@@ -322,6 +322,9 @@ while (($row_raw = fgetcsv($stream)) !== false) {
         "palvelutapa" => $row['palvelutapa'] ?? '',
         "alue_slug" => $row['alue_slug'] ?? '',
         "kunta_slug" => $row['kunta_slug'] ?? '',
+        "service_mode" => $row['service_mode'] ?? 'LOCAL',
+        "service_radius" => $row['service_radius'] ?? '',
+        "service_note" => $row['service_note'] ?? '',
     ];
 }
 fclose($stream);
@@ -380,6 +383,9 @@ if (!empty($id_param)) {
             "alue_slug" => $c['alue_slug'],
             "karusellipaino" => $c['karusellipaino'],
             "tyyppi" => $c['tyyppi'],
+            "service_mode" => $c['service_mode'],
+            "service_radius" => $c['service_radius'],
+            "service_note" => $c['service_note'],
             // Only send the first media item for previews to save bandwidth and improve protection
             "media" => isset($c['media'][0]) ? [$c['media'][0]] : [],
             "images" => isset($c['images'][0]) ? [$c['images'][0]] : []
