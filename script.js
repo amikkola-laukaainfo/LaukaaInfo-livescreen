@@ -1812,7 +1812,7 @@ function renderCatalog(companies) {
 /**
  * Spotlight ja Slider
  */
-function updateSpotlight(company) {
+async function updateSpotlight(company) {
     if (!company) return;
     console.log('Päivitetään spotlight:', company.nimi, 'Mediaa:', company.media ? company.media.length : 0);
     currentCompany = company;
@@ -1823,34 +1823,88 @@ function updateSpotlight(company) {
     const descEl = document.getElementById('spotlight-desc');
     const detailsEl = document.getElementById('spotlight-details');
 
+    // Alustava renderöinti niillä tiedoilla mitä meillä on
     if (nameEl) nameEl.textContent = company.nimi;
     if (taglineEl) taglineEl.textContent = company.mainoslause;
     if (descEl) descEl.textContent = company.esittely || company.mainoslause;
-    if (detailsEl) {
-        let waysMarkup = '';
-        const ways = (company.palvelutapa || '').split(',').map(t => t.trim().toLowerCase());
-        const combinedWays = [...new Set([...(company.tags || '').split(',').map(t => t.trim().toLowerCase()), ...ways])];
-        
-        let waysIcons = '';
-        let waysLabels = [];
-        if (combinedWays.includes('toimipiste')) { waysIcons += '🏢 '; waysLabels.push('Toimipiste'); }
-        if (combinedWays.includes('kotikaynti') || combinedWays.includes('kotikäynti')) { waysIcons += '🏠 '; waysLabels.push('Kotikäynti'); }
-        if (combinedWays.includes('etapalvelu') || combinedWays.includes('etäpalvelu')) { waysIcons += '💻 '; waysLabels.push('Etäpalvelu'); }
-        if (combinedWays.includes('toimitus')) { waysIcons += '🚚 '; waysLabels.push('Toimitus'); }
+    
+    renderSpotlightDetails(company, detailsEl);
 
-        if (waysIcons) {
-            waysMarkup = `<div style="margin-top:8px; padding-top:8px; border-top:1px solid rgba(0,0,0,0.05); font-weight:500;">
-                <span title="${waysLabels.join(', ')}">${waysIcons}</span> 
-                <span style="font-size:0.9em; opacity:0.8;">${waysLabels.join(', ')}</span>
-            </div>`;
+    // Jos data on vajaata (Slim), haetaan täydet tiedot taustalla
+    const isSlim = !company.puhelin && !company.email && (!company.media || company.media.length <= 1);
+    if (isSlim && company.id) {
+        try {
+            const dataSourceUrl = 'https://www.mediazoo.fi/laukaainfo-web/get_companies.php';
+            const response = await fetch(`${dataSourceUrl}?id=${encodeURIComponent(company.id)}&t=${Date.now()}`);
+            const data = await response.json();
+            
+            if (data.results && data.results[0]) {
+                const fullData = data.results[0];
+                
+                // Normalisoidaan URL:t (kuten init-vaiheessa)
+                const baseUrl = dataSourceUrl.substring(0, dataSourceUrl.lastIndexOf('/') + 1);
+                if (fullData.media) {
+                    fullData.media.forEach(item => {
+                        if (item.url && !item.url.startsWith('http') && !item.url.startsWith('//')) {
+                            item.url = baseUrl + item.url;
+                        }
+                    });
+                }
+                
+                // Päivitetään yrityksen objekti
+                Object.assign(company, fullData);
+                
+                // Päivitetään UI uudelleen
+                if (descEl) descEl.textContent = company.esittely || company.mainoslause;
+                renderSpotlightDetails(company, detailsEl);
+                
+                // Päivitetään myös toiminnot (esim. nettisivunappi saattaa ilmestyä)
+                const actionsEl = document.getElementById('spotlight-actions');
+                if (actionsEl) renderSpotlightActions(company, actionsEl);
+            }
+        } catch (e) {
+            console.error("Virhe Spotlight-lisätietojen latauksessa:", e);
         }
+    } else {
+        const actionsEl = document.getElementById('spotlight-actions');
+        if (actionsEl) renderSpotlightActions(company, actionsEl);
+    }
+}
 
-        detailsEl.innerHTML = `
-            <div>📍 ${company.osoite}</div>
-            <div>📞 ${company.puhelin || '-'}</div>
-            <div>📧 ${company.email || '-'}</div>
-            ${waysMarkup}
-        `;
+function renderSpotlightDetails(company, detailsEl) {
+    if (!detailsEl) return;
+    
+    let waysMarkup = '';
+    const ways = (company.palvelutapa || '').split(',').map(t => t.trim().toLowerCase());
+    const combinedWays = [...new Set([...(company.tags || '').split(',').map(t => t.trim().toLowerCase()), ...ways])];
+    
+    let waysIcons = '';
+    let waysLabels = [];
+    if (combinedWays.includes('toimipiste')) { waysIcons += '🏢 '; waysLabels.push('Toimipiste'); }
+    if (combinedWays.includes('kotikaynti') || combinedWays.includes('kotikäynti')) { waysIcons += '🏠 '; waysLabels.push('Kotikäynti'); }
+    if (combinedWays.includes('etapalvelu') || combinedWays.includes('etäpalvelu')) { waysIcons += '💻 '; waysLabels.push('Etäpalvelu'); }
+    if (combinedWays.includes('toimitus')) { waysIcons += '🚚 '; waysLabels.push('Toimitus'); }
+
+    if (waysIcons) {
+        waysMarkup = `<div style="margin-top:8px; padding-top:8px; border-top:1px solid rgba(0,0,0,0.05); font-weight:500;">
+            <span title="${waysLabels.join(', ')}">${waysIcons}</span> 
+            <span style="font-size:0.9em; opacity:0.8;">${waysLabels.join(', ')}</span>
+        </div>`;
+    }
+
+    detailsEl.innerHTML = `
+        <div>📍 ${company.osoite || 'Laukaa'}</div>
+        <div>📞 ${company.puhelin || '-'}</div>
+        <div>📧 ${company.email || '-'}</div>
+        ${waysMarkup}
+    `;
+}
+
+function renderSpotlightActions(company, actionsEl) {
+    if (!actionsEl) return;
+    let actionButtons = '';
+    if (company.nettisivu) {
+        actionButtons += `<a href="${company.nettisivu}" target="_blank" class="btn-primary">🌐 Kotisivut</a>`;
     }
     const actionsEl = document.getElementById('spotlight-actions');
     if (actionsEl) {

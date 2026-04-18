@@ -66,12 +66,62 @@ window.LkiModal = (function() {
         });
     }
 
-    function open(company) {
+    async function open(company) {
         init();
         if (!company) return;
 
         console.log("Opening LkiModal for:", company.nimi, company);
 
+        // Näytetään heti ne tiedot mitä meillä on (Slim-data)
+        renderContent(company);
+        
+        // Show modal early for better UX
+        modalOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+
+        // Jos kriittiset tiedot puuttuvat (Slim-data), ladataan ne lennosta
+        const isSlim = !company.puhelin && !company.email && (!company.media || company.media.length <= 1);
+        
+        if (isSlim && company.id) {
+            try {
+                // Lisätään kevyt latausilmaisin kuvaukseen tai muuhun sopivaan paikkaan
+                const descEl = document.getElementById('lki-modal-description');
+                const originalDesc = descEl.innerHTML;
+                descEl.innerHTML += '<div class="lki-loading-dots" style="margin-top:10px; opacity:0.6; font-style:italic;">Ladataan lisätietoja...</div>';
+
+                const dataSourceUrl = 'https://www.mediazoo.fi/laukaainfo-web/get_companies.php';
+                const response = await fetch(`${dataSourceUrl}?id=${encodeURIComponent(company.id)}&t=${Date.now()}`);
+                const data = await response.json();
+                
+                if (data.results && data.results[0]) {
+                    const fullData = data.results[0];
+                    
+                    // Normalisoidaan URL:t (kuten init-vaiheessa)
+                    const baseUrl = dataSourceUrl.substring(0, dataSourceUrl.lastIndexOf('/') + 1);
+                    if (fullData.media) {
+                        fullData.media.forEach(item => {
+                            if (item.url && !item.url.startsWith('http') && !item.url.startsWith('//')) {
+                                item.url = baseUrl + item.url;
+                            }
+                        });
+                    }
+                    if (fullData.logo && !fullData.logo.startsWith('http') && !fullData.logo.startsWith('//') && fullData.logo !== '-') {
+                        fullData.logo = baseUrl + fullData.logo;
+                    }
+
+                    // Päivitetään yrityksen objekti (niin että se säilyy muistissa seuraavaa klikkausta varten)
+                    Object.assign(company, fullData);
+                    
+                    // Renderöidään uudelleen täysillä tiedoilla
+                    renderContent(company);
+                }
+            } catch (error) {
+                console.error("Virhe ladattaessa lisätietoja:", error);
+            }
+        }
+    }
+
+    function renderContent(company) {
         const package = (company.package || company.taso || 'perus').toLowerCase();
         const container = document.getElementById('lki-modal-container');
         
@@ -91,6 +141,8 @@ window.LkiModal = (function() {
         // Basic Info
         document.getElementById('lki-modal-title').textContent = company.nimi;
         document.getElementById('lki-modal-category').textContent = company.kategoria || company.category || '';
+        
+        // Use full description if available, otherwise fallback to mainoslause
         const rawDescription = company.esittely || company.description || company.mainoslause || '';
         document.getElementById('lki-modal-description').textContent = rawDescription.replace(/@@/g, '');
         document.getElementById('lki-modal-address').textContent = company.osoite || 'Laukaa';
@@ -126,6 +178,11 @@ window.LkiModal = (function() {
         if (combinedWays.includes('etapalvelu') || combinedWays.includes('etäpalvelu')) { waysIcons += '💻 '; waysLabels.push('Etäpalvelu'); }
         if (combinedWays.includes('toimitus')) { waysIcons += '🚚 '; waysLabels.push('Toimitus'); }
 
+        const infoGrid = document.getElementById('lki-modal-info-grid');
+        // Clean old way info
+        const oldWay = infoGrid.querySelector('.lki-info-way');
+        if (oldWay) oldWay.remove();
+
         if (waysIcons) {
             waysMarkup = `
                 <div class="lki-info-item" style="grid-column: 1 / -1; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(0,0,0,0.05); flex-direction: column; align-items: flex-start;">
@@ -136,16 +193,8 @@ window.LkiModal = (function() {
                     </div>
                 </div>
             `;
-        }
-        
-        const infoGrid = document.getElementById('lki-modal-info-grid');
-        if (waysMarkup) {
-            // Remove any existing palvelutapa item (if reusing modal)
-            const oldWay = infoGrid.querySelector('.lki-info-way');
-            if (oldWay) oldWay.remove();
-            
             const wayDiv = document.createElement('div');
-            wayDiv.className = 'lki-info-way'; // marker for cleanup
+            wayDiv.className = 'lki-info-way'; 
             wayDiv.innerHTML = waysMarkup;
             infoGrid.appendChild(wayDiv);
         }
@@ -155,10 +204,6 @@ window.LkiModal = (function() {
 
         // CTAs
         renderCTAs(company, package);
-
-        // Show
-        modalOverlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
     }
 
     function close() {

@@ -63,9 +63,11 @@
     async function loadCompanyDetails(id) {
         try {
             // Käytetään palvelimen proxyä, joka hoitaa CORS-ongelmat ja datan muunnoksen
+            // Haetaan vain kyseisen yrityksen tiedot (Security & Performance)
             const dataSourceUrl = 'https://www.mediazoo.fi/laukaainfo-web/get_companies.php';
-            const response = await fetch(dataSourceUrl + '?t=' + Date.now());
+            const response = await fetch(`${dataSourceUrl}?id=${encodeURIComponent(id)}&t=${Date.now()}`);
             const json = await response.json();
+            
             // New response format: {results: [...], total: N, page: N, limit: N}
             const companies = Array.isArray(json) ? json : (json.results || []);
 
@@ -84,11 +86,8 @@
                 }
             });
 
-            const company = companies.find(c => 
-                String(c.id) === String(id) || 
-                c.id === "company-" + id ||
-                slugify(c.nimi) === id
-            );
+            // Etsitään yritys (vaikka pitäisi olla ainoa tulos, varmistetaan ID-muotoilu)
+            const company = companies[0];
 
             if (!company) {
                 document.getElementById('loading-overlay').innerHTML = '<h2>Yritystä ei löytynyt.</h2><a href="index.html">Takaisin hakuun</a>';

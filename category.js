@@ -29,6 +29,16 @@
             .replace(/-+$/, '');
     }
 
+    /**
+     * Normalisoi tekstin poistamalla ääkköset vertailua varten
+     */
+    function normalizeForSearch(text) {
+        if (!text) return "";
+        return text.toString().toLowerCase()
+            .replace(/[äÄàáâãå]/g, 'a')
+            .replace(/[öÖòóôõø]/g, 'o');
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
         const params = new URLSearchParams(window.location.search);
         let category = params.get('cat');
@@ -163,8 +173,14 @@
             } else if (tags.length > 0) {
                 // Suodatus avainsanojen (tägien) mukaan (käytetään tyypillisesti SEO-sivuilla)
                 rawCategoryCompanies = allCompanies.filter(c => {
-                    const searchStr = `${c.nimi || ''} ${c.kuvaus || ''} ${c.kategoria || ''} ${c.hakusana || c.hakusanat || c.tags || ''} ${c.palvelutapa || ''}`.toLowerCase();
-                    return tags.some(tag => searchStr.includes(tag.toLowerCase()));
+                    const name = normalizeForSearch(c.nimi);
+                    const desc = normalizeForSearch(c.kuvaus || c.description || c.esittely);
+                    const tags_f = normalizeForSearch(c.tags);
+                    const ptapa = normalizeForSearch(c.palvelutapa);
+                    return tags.some(tag => {
+                        const q = normalizeForSearch(tag);
+                        return name.includes(q) || desc.includes(q) || tags_f.includes(q) || ptapa.includes(q);
+                    });
                 });
             } else if (category && category !== 'all') {
                 rawCategoryCompanies = allCompanies.filter(c => c.kategoria === category);
@@ -174,10 +190,11 @@
 
             // Lisäsuodatus URL-parametrin 'tag' mukaan (esim. ?tag=etapalvelu)
             if (tagParam) {
-                const query = tagParam.toLowerCase();
+                const query = normalizeForSearch(tagParam);
                 rawCategoryCompanies = rawCategoryCompanies.filter(c => {
-                    const searchStr = `${c.tags || ''} ${c.palvelutapa || ''}`.toLowerCase();
-                    return searchStr.includes(query);
+                    const tags_f = normalizeForSearch(c.tags);
+                    const ptapa = normalizeForSearch(c.palvelutapa);
+                    return tags_f.includes(query) || ptapa.includes(query);
                 });
                 
                 // Päivitetään otsikkoon tieto suodatuksesta, jos mahdollista

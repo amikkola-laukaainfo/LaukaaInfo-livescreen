@@ -14,6 +14,16 @@ function slugify(text) {
         .replace(/-+$/, '');
 }
 
+/**
+ * Normalisoi tekstin poistamalla ääkköset vertailua varten
+ */
+function normalizeForSearch(text) {
+    if (!text) return "";
+    return text.toString().toLowerCase()
+        .replace(/[äÄàáâãå]/g, 'a')
+        .replace(/[öÖòóôõø]/g, 'o');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initRegionPage();
 });
@@ -148,9 +158,10 @@ function filterByArea(areaSlug, catParam, tagParam) {
         if (!matchArea) return false;
 
         if (tagParam) {
-            const tags = (c.tags || '').toLowerCase();
-            const ptapa = (c.palvelutapa || '').toLowerCase();
-            return tags.includes(tagParam) || ptapa.includes(tagParam);
+            const query = normalizeForSearch(tagParam);
+            const tags = normalizeForSearch(c.tags);
+            const ptapa = normalizeForSearch(c.palvelutapa);
+            return tags.includes(query) || ptapa.includes(query);
         }
         if (catParam) {
             return (c.kategoria || '').toLowerCase() === catParam.replace(/-/g, ' ');
@@ -236,9 +247,10 @@ function renderNearby(area, catParam, tagParam) {
         
         // Sovelletaan samoja tägejä/kategorioita myös lähialueen suosituksiin
         if (tagParam) {
-            const tags = (c.tags || '').toLowerCase();
-            const ptapa = (c.palvelutapa || '').toLowerCase();
-            if (!tags.includes(tagParam) && !ptapa.includes(tagParam)) return false;
+            const query = normalizeForSearch(tagParam);
+            const tags = normalizeForSearch(c.tags);
+            const ptapa = normalizeForSearch(c.palvelutapa);
+            if (!tags.includes(query) && !ptapa.includes(query)) return false;
         }
         if (catParam) {
             if ((c.kategoria || '').toLowerCase() !== catParam.replace(/-/g, ' ')) return false;
