@@ -27,6 +27,14 @@ function slugify(text) {
         .replace(/-+$/, '');
 }
 
+function normalizeForSearch(text) {
+    if (!text) return "";
+    return text.toString().toLowerCase()
+        .replace(/[äÄàáâãäå]/g, 'a')
+        .replace(/[öÖòóôõöø]/g, 'o')
+        .replace(/[åÅ]/g, 'a');
+}
+
 /**
  * Korjaa Facebook-linkit WebView-yhteensopiviksi.
  * Muuntaa fb:// linkit tavallisiksi https linkeiksi, jotta WebView ei heitä erroria.
@@ -375,7 +383,6 @@ function addMarkersToMap(companies) {
                 `;
             } else {
                 // Yrityksen merkki
-                // Yrityksen merkki (Robust detection)
                 const pkgStr = (company.package || company.paketti || '').toLowerCase();
                 const typeStr = (company.tyyppi || company.type || '').toLowerCase();
                 isPro = pkgStr.includes('pro') || typeStr.includes('pro');
@@ -385,18 +392,31 @@ function addMarkersToMap(companies) {
                 const markerColor = isPro ? '#ffd700' : (isPremiumPkg ? '#ff4d4d' : baseColor);
                 const markerSize = (isPro || isPremiumPkg) ? '26px' : '20px';
 
-                markerHtml = `
-                    <div style="
-                        background-color: ${markerColor};
-                        width: ${markerSize};
-                        height: ${markerSize};
-                        border-radius: 50% 50% 50% 0;
-                        transform: rotate(-45deg);
-                        border: 2px solid white;
-                        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-                        z-index: ${isPro || isPremiumPkg ? 9999 : 1};
-                    "></div>
-                `;
+                if (isPremiumPkg) {
+                    markerHtml = `
+                        <div class="premium-marker-inner pulsing-premium">
+                            <div class="marker-dot"></div>
+                        </div>
+                    `;
+                } else if (isPro) {
+                    markerHtml = `
+                        <div class="pro-marker-inner pulsing-pro">
+                            <div class="marker-dot"></div>
+                        </div>
+                    `;
+                } else {
+                    markerHtml = `
+                        <div style="
+                            background-color: ${markerColor};
+                            width: ${markerSize};
+                            height: ${markerSize};
+                            border-radius: 50% 50% 50% 0;
+                            transform: rotate(-45deg);
+                            border: 2px solid white;
+                            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+                        "></div>
+                    `;
+                }
 
                 const mapsUrl = company.karttalinkki && company.karttalinkki !== '-' 
                     ? company.karttalinkki 
@@ -1201,10 +1221,11 @@ function filterCatalog(renderList = true) {
         if (searchTerm.length > 1 && searchableDesc.includes(searchTerm)) score += 10;
 
         // Tag search logic (replaces hashtag parsing)
-        const combinedTags = `${company.tags || ''},${company.palvelutapa || ''}`.toLowerCase();
+        const combinedTags = normalizeForSearch(`${company.tags || ''},${company.palvelutapa || ''}`);
+        const normalizedSearch = normalizeForSearch(searchTerm);
         if (searchTerm.length > 1 && combinedTags) {
             const tags = combinedTags.split(',').map(t => t.trim());
-            if (tags.some(tag => tag.includes(searchTerm))) {
+            if (tags.some(tag => tag.includes(normalizedSearch))) {
                 score += 120; // High priority for tag and service method matches
             }
         }

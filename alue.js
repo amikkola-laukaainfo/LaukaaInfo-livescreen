@@ -348,10 +348,10 @@ function initRegionMap(area, companies) {
 
     // Lisätään vain kyseisen alueen/-haun mukaiset markerit
     companies.forEach(company => {
-        if (company.lat && company.lon) {
-            const lat = parseFloat(company.lat);
-            const lon = parseFloat(company.lon);
+        const lat = parseFloat(company.lat);
+        const lon = parseFloat(company.lon || company.lng);
 
+        if (!isNaN(lat) && !isNaN(lon)) {
             // Tunnistetaan pakettityyppi (Pro tai Premium)
             const pkgValue = (company.package || company.paketti || company.taso || company.tyyppi || company.type || '').toLowerCase();
             const isPro = pkgValue.includes('pro');
@@ -387,7 +387,6 @@ function initRegionMap(area, companies) {
                         height: 20px;
                         border-radius: 50% 50% 50% 0;
                         transform: rotate(-45deg);
-                        border: 24px solid white; /* Huom: script.js:ssä oli 2px, 24px on todennäköisesti virhe scriptissä tai tässä */
                         border: 2px solid white;
                         box-shadow: 0 2px 5px rgba(0,0,0,0.3);
                     "></div>
@@ -408,6 +407,7 @@ function initRegionMap(area, companies) {
             if (typeof LkiModal !== 'undefined') {
                 marker.on('click', (e) => {
                     L.DomEvent.stopPropagation(e);
+                    // Varmistetaan että meillä on täydet tiedot ennen avaamista
                     LkiModal.open(company);
                 });
             } else {
@@ -442,6 +442,7 @@ function initRegionMap(area, companies) {
             
             targetMarkers.addLayer(marker);
         }
+
     });
 }
 

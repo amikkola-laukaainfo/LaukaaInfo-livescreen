@@ -2430,6 +2430,59 @@ footer {
     100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 123, 255, 0); }
 }
 
+/* --- Pro & Premium Markers --- */
+.pro-leaflet-marker, .premium-leaflet-marker {
+    background: transparent !important;
+    border: none !important;
+}
+
+.pro-marker-inner, .premium-marker-inner {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pro-marker-inner {
+    background: #ffd700; /* Gold */
+}
+
+.premium-marker-inner {
+    background: #ff4d4d; /* Red/Premium */
+}
+
+.marker-dot {
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+}
+
+.pulsing-pro {
+    animation: pulse-pro-gold 2s infinite;
+}
+
+.pulsing-premium {
+    animation: pulse-premium-red 2s infinite;
+}
+
+@keyframes pulse-pro-gold {
+    0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); }
+    70% { box-shadow: 0 0 0 12px rgba(255, 215, 0, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+}
+
+@keyframes pulse-premium-red {
+    0% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.7); }
+    70% { box-shadow: 0 0 0 15px rgba(255, 77, 77, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0); }
+}
+
+
 /* Override for catalog item transition when active/nearest */
 .catalog-item.rss-result.is-nearest:hover {
     background: #fff9f0 !important;
