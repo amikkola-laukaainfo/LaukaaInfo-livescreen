@@ -488,7 +488,7 @@ function addMarkersToMap(companies) {
                         }).addTo(serviceAreaLayer);
                     }
                 }
-                }
+
 
                 const mapsUrl = company.karttalinkki && company.karttalinkki !== '-' 
                     ? company.karttalinkki 
