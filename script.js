@@ -454,8 +454,6 @@ function addMarkersToMap(companies) {
                             <div class="marker-dot"></div>
                         </div>
                     `;
-                } else {
-                    `;
                 } else if (company.service_mode === 'SERVICE_AREA') {
                     markerHtml = `
                         <div style="
