@@ -198,9 +198,21 @@ function renderRegionContent(area, areaSlug, filtered, cat, tag) {
         const weight = parseFloat(c.karusellipaino) || 0;
         const sortScore = (Math.random() * 10) + (weight / 10);
         return { ...c, sortScore };
-    }).sort((a, b) => b.sortScore - a.sortScore).slice(0, 8);
+    }).sort((a, b) => b.sortScore - a.sortScore);
+    
+    let displayCompanies = featured;
+    
+    // Jos suodatetaan tagilla tai kategorialla, näytetään kaikki. Muutoin vain top 8.
+    const titleEl = document.getElementById('featured-title');
+    if (!cat && !tag) {
+        displayCompanies = featured.slice(0, 8);
+        if (titleEl) titleEl.textContent = 'Suositellut yritykset';
+    } else {
+        if (titleEl) titleEl.textContent = 'Hakutulokset';
+    }
+
     if (typeof renderCatalog === 'function') {
-        renderCatalog(featured);
+        renderCatalog(displayCompanies);
     }
 
     renderNearby(area);
