@@ -242,8 +242,24 @@
         </section>
 
         <section id="region-map-section">
-            <div id="company-map"
-                style="height: 400px; border-radius: var(--border-radius); overflow: hidden; box-shadow: var(--shadow);">
+            <div class="map-layout-wrapper">
+                <div id="company-map"
+                    style="height: 450px; border-radius: var(--border-radius); overflow: hidden; box-shadow: var(--shadow); flex-grow: 1;">
+                </div>
+                <div id="map-sidebar" class="map-sidebar">
+                    <div class="sidebar-section">
+                        <h4><span class="icon">🟠</span> Palvelualueet</h4>
+                        <ul id="active-service-areas-list" class="sidebar-list">
+                            <li class="empty-msg">Ei aktiivisia alueita</li>
+                        </ul>
+                    </div>
+                    <div class="sidebar-section">
+                        <h4><span class="icon">🏢</span> Muut kohteet lähellä</h4>
+                        <ul id="off-map-companies-list" class="sidebar-list">
+                            <li class="empty-msg">Kaikki kohteet näkyvissä</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </section>
 

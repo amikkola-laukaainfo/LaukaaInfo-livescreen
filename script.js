@@ -9,6 +9,18 @@ let isHomePage = false; // Global flag for homepage context
 let userCoords = null; // Globaali sijainti
 let serviceAreaLayer = null; // Layer for service area circles
 let mapFilterMode = 'all'; // 'all', 'near', 'service_area'
+let activeCircles = {}; // Key: companyId/slug, Value: L.circle object
+let visibleCircles = {}; // Key: companyId/slug, Value: boolean
+let serviceCirclePalette = [
+    'hsl(24, 100%, 50%)',   // Oranssi
+    'hsl(200, 100%, 40%)',  // Sininen
+    'hsl(150, 80%, 40%)',   // Vihreä
+    'hsl(330, 90%, 50%)',   // Vaaleanpunainen
+    'hsl(270, 70%, 50%)',   // Liila
+    'hsl(10, 90%, 50%)',    // Punainen
+    'hsl(180, 70%, 40%)',   // Turkoosi
+    'hsl(45, 100%, 45%)'    // Kulta
+];
 
 const FEATURED_LINKS = [
     { name: 'Ravintolat', url: 'laukaan-ravintolat.html', icon: '🍴' },
@@ -349,6 +361,9 @@ function initMap(companies) {
             alert("Sijaintia ei voitu hakea: " + e.message);
         }
     });
+
+    // Update sidebar when map view changes
+    map.on('moveend', updateMapSidebar);
 }
 
 function addMarkersToMap(companies) {
@@ -472,20 +487,32 @@ function addMarkersToMap(companies) {
                     `;
                 }
 
-                // Draw service area circle - MOVED OUTSIDE if-else-if for consistency
-                // Works even for Pro/Premium companies if they have a radius
+                // Draw service area circle
                 if (company.service_radius || company.service_mode === 'SERVICE_AREA') {
                     const radiusVal = parseFloat(company.service_radius);
+                    const slug = slugify(company.nimi);
                     if (!isNaN(radiusVal) && radiusVal > 0) {
                         const radius = radiusVal * 1000;
-                        L.circle([lat, lon], {
-                            color: '#ff9900',
-                            fillColor: '#ff9900',
+                        
+                        // Generoidaan väri nimen perusteella
+                        const colorIndex = Math.abs(getHash(company.nimi)) % serviceCirclePalette.length;
+                        const circleColor = serviceCirclePalette[colorIndex];
+                        
+                        const circle = L.circle([lat, lon], {
+                            color: circleColor,
+                            fillColor: circleColor,
                             fillOpacity: 0.15,
                             radius: radius,
-                            weight: 1,
+                            weight: 2,
                             interactive: false
-                        }).addTo(serviceAreaLayer);
+                        });
+                        
+                        activeCircles[slug] = circle;
+                        // Oletuksena näkyvissä, jos ei ole erikseen piilotettu
+                        if (visibleCircles[slug] !== false) {
+                            circle.addTo(serviceAreaLayer);
+                            visibleCircles[slug] = true;
+                        }
                     }
                 }
 
@@ -577,6 +604,9 @@ function addMarkersToMap(companies) {
     });
 
     console.log(`Kartta: Lisätty ${validMarkers} markeria ${companies.length} yrityksestä.`);
+    
+    // Päivitetään sivupalkki
+    updateMapSidebar(displayCompanies);
 
     const regionCoords = JSON.parse(localStorage.getItem('regionCoords'));
     const selectedRegion = localStorage.getItem('selectedRegion');
@@ -2497,4 +2527,126 @@ function initShareGenerator(companies) {
     });
 
     typeSelect.dispatchEvent(new Event('change'));
+}
+
+// --- Map Interaction & Sidebar Helpers ---
+
+function getHash(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        hash = ((hash << 5) - hash) + str.charCodeAt(i);
+        hash |= 0;
+    }
+    return hash;
+}
+
+function updateMapSidebar(companies) {
+    const serviceList = document.getElementById('active-service-areas-list');
+    const offMapList = document.getElementById('off-map-companies-list');
+    if (!serviceList || !offMapList || !map) return;
+
+    serviceList.innerHTML = '';
+    offMapList.innerHTML = '';
+
+    const bounds = map.getBounds();
+    let serviceCount = 0;
+    let offMapCount = 0;
+
+    companies.forEach(company => {
+        const lat = parseFloat(company.lat);
+        const lon = parseFloat(company.lon || company.lng);
+        if (isNaN(lat) || isNaN(lon)) return;
+
+        const slug = slugify(company.nimi);
+        const isOffMap = !bounds.contains([lat, lon]);
+        const hasRadius = company.service_radius && parseFloat(company.service_radius) > 0;
+        const pkg = (company.paketti || company.package || '').toLowerCase();
+        const type = (company.tyyppi || company.type || '').toLowerCase();
+        const isPremium = pkg.includes('premium') || type.includes('paid') || type.includes('maksu');
+
+        // 1. Palvelualueet (vain ne joilla on säde)
+        if (hasRadius) {
+            serviceCount++;
+            const li = document.createElement('li');
+            li.className = 'sidebar-item';
+            
+            const colorIndex = Math.abs(getHash(company.nimi)) % serviceCirclePalette.length;
+            const circleColor = serviceCirclePalette[colorIndex];
+            const isVisible = visibleCircles[slug] !== false;
+
+            li.innerHTML = `
+                <div class="sidebar-item-info" onclick="locateOnMap(${lat}, ${lon}, '${slug}')">
+                    <span class="sidebar-item-name" style="border-left: 4px solid ${circleColor}; padding-left: 8px;">${company.nimi}</span>
+                    <span class="sidebar-item-cat">${company.kategoria}</span>
+                </div>
+                <div class="sidebar-actions">
+                    <button class="action-btn toggle-btn ${isVisible ? 'active-circle' : 'inactive-circle'}" 
+                            onclick="toggleServiceCircle('${slug}')" title="Näytä/piilota palvelualue">
+                        ${isVisible ? '👁️' : '🕶️'}
+                    </button>
+                </div>
+            `;
+            serviceList.appendChild(li);
+        }
+
+        // 2. Muut kohteet lähellä (Ulkopuolella olevat Premium tai Service Radius kohteet)
+        if (isOffMap && (hasRadius || isPremium)) {
+            offMapCount++;
+            const li = document.createElement('li');
+            li.className = 'sidebar-item';
+            li.innerHTML = `
+                <div class="sidebar-item-info" onclick="locateOnMap(${lat}, ${lon}, '${slug}')">
+                    <span class="sidebar-item-name">${company.nimi}</span>
+                    <span class="sidebar-item-cat">${company.kategoria} (näkyvän alueen ulkopuolella)</span>
+                </div>
+                <div class="sidebar-actions">
+                    <button class="action-btn locate-btn" onclick="locateOnMap(${lat}, ${lon}, '${slug}')" title="Keskitä kartta kohteeseen">
+                        📍
+                    </button>
+                </div>
+            `;
+            offMapList.appendChild(li);
+        }
+    });
+
+    if (serviceCount === 0) serviceList.innerHTML = '<li class="empty-msg">Ei aktiivisia alueita</li>';
+    if (offMapCount === 0) offMapList.innerHTML = '<li class="empty-msg">Kaikki kohteet näkyvissä</li>';
+}
+
+function toggleServiceCircle(slug) {
+    const circle = activeCircles[slug];
+    if (!circle || !serviceAreaLayer) return;
+
+    if (serviceAreaLayer.hasLayer(circle)) {
+        serviceAreaLayer.removeLayer(circle);
+        visibleCircles[slug] = false;
+    } else {
+        circle.addTo(serviceAreaLayer);
+        visibleCircles[slug] = true;
+    }
+    
+    // Refresh sidebar to update buttons
+    if (typeof filterCatalog === 'function') {
+        filterCatalog(false); // Update without re-rendering full list if possible
+    } else {
+        // Fallback: just refresh UI
+        updateMapSidebar(allCompanies); 
+    }
+}
+
+function locateOnMap(lat, lon, companyId) {
+    if (!map) return;
+    map.setView([lat, lon], 14);
+    
+    // Etsi marker ja avaa popup
+    markers.eachLayer(marker => {
+        const mLat = marker.getLatLng() ? marker.getLatLng().lat : null;
+        const mLon = marker.getLatLng() ? marker.getLatLng().lng : null;
+        if (mLat === null) return;
+        
+        // Pieni toleranssi liukuluvuille
+        if (Math.abs(mLat - lat) < 0.0001 && Math.abs(mLon - lon) < 0.0001) {
+            marker.openPopup();
+        }
+    });
 }
