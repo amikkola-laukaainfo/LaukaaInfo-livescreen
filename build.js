@@ -127,9 +127,9 @@ function updateReferences(dir) {
             }
             
             for (const [oldName, newName] of Object.entries(assetMap)) {
-                // Etsitään viittauksia tiedostoon (esim. src="script.js" tai href="style.css")
-                // Käytetään simppeliä string replacementia, varotaan ylikattavuutta
-                const regex = new RegExp(`(["'\\/])${oldName}(["'\\?])`, 'g');
+                // Etsitään viittauksia tiedostoon (esim. src="script.js" tai href="style.css" tai "../style.css")
+                // Käytetään parannettua regexiä joka tukee myös ../ polkuja
+                const regex = new RegExp(`(["'\\/]|\\.\\.\\/)${oldName}(["'\\?])`, 'g');
                 content = content.replace(regex, `$1${newName}$2`);
             }
             fs.writeFileSync(fullPath, content);

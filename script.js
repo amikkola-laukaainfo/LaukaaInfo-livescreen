@@ -2108,8 +2108,8 @@ function deg2rad(deg) {
 function initPWAUpdates() {
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            // Check if we are in a subdirectory (like /logica/)
-            const isSubDir = window.location.pathname.includes('/logica/');
+            // Check if we are in a subdirectory (like /logica/ or /yritys/)
+            const isSubDir = window.location.pathname.includes('/logica/') || window.location.pathname.includes('/yritys/');
             const swPath = isSubDir ? '../sw.js' : 'sw.js';
 
             navigator.serviceWorker.register(swPath).then(reg => {
