@@ -1,1 +1,763 @@
-<!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tarinakartta – LaukaaInfo: Laukaa taskussasi – tiedä, löydä ja osallistu.</title><meta name="description" content="Seuraa Laukaan tarinaa askeleet kerrallaan."><link rel="icon" href="logo.png"><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#0056b3"><link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Outfit:wght@100..900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><link rel="stylesheet" href="style.d5f79687.css"><style>.demo-badge{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#ffb100;color:#000;padding:10px 24px;border-radius:50px;font-size:.9rem;font-weight:800;text-transform:uppercase;z-index:100000;letter-spacing:.1em;box-shadow:0 8px 30px rgba(0,0,0,.4);pointer-events:none;border:2px solid rgba(0,0,0,.1);display:block!important;visibility:visible!important;opacity:1!important}body.is-embedded .business-nav-section,body.is-embedded .location-hint,body.is-embedded footer,body.is-embedded header,body.is-embedded nav.top-nav{display:none!important}body.is-embedded main{padding-top:20px!important;margin-top:0!important}.story-selector{background:#fff;padding:1.25rem 1.5rem;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,.05);margin-bottom:1rem}.story-selector h3{margin:0 0 .75rem 0;font-size:.85rem;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.06em}.selector-row{display:flex;gap:.75rem;flex-wrap:wrap}.selector-group{display:flex;flex-direction:column;flex:1;min-width:160px}.selector-group label{font-size:.8rem;font-weight:600;color:#555;margin-bottom:.35rem}.selector-group select{padding:.65rem .9rem;border:1.5px solid #dde3ec;border-radius:8px;font-family:inherit;font-size:.95rem;color:#333;background:#f7f9fc;cursor:pointer;transition:border-color .2s,box-shadow .2s;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%230056b3' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .75rem center;padding-right:2rem}.selector-group select:focus{outline:0;border-color:#0056b3;box-shadow:0 0 0 3px rgba(0,86,179,.15);background-color:#fff}.selector-group select:disabled{opacity:.45;cursor:not-allowed}.category-badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:.75rem;font-weight:600}.story-controls{background:#fff;padding:1.25rem 1.5rem;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,.05);margin-bottom:1.5rem;display:flex;justify-content:space-between;align-items:center;gap:1rem}.story-step-info{flex:1;text-align:center}.story-step-info h3{margin:0;color:#0056b3;font-size:1.1rem}.story-step-info p{margin:4px 0 0 0;font-size:.85rem;color:#888}.btn-story{background:#0056b3;color:#fff;border:none;padding:.75rem 1.25rem;border-radius:8px;font-weight:600;cursor:pointer;transition:background .2s;display:flex;align-items:center;gap:.5rem;font-family:inherit;white-space:nowrap}.btn-story:disabled{background:#ccc;cursor:not-allowed}.btn-story:hover:not(:disabled){background:#004494}#tarina-map{height:500px;border-radius:12px;z-index:1;border:2px solid #dde3ec}.story-card{margin-top:1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:start}.story-details{background:#fff;border-radius:12px;padding:1.25rem;box-shadow:0 2px 8px rgba(0,0,0,.06)}.story-image-container{width:100%;min-height:280px;border-radius:12px;overflow:hidden;background:#f0f4f8;display:flex;align-items:center;justify-content:center}.story-image-container img{width:100%;height:100%;object-fit:cover;transition:opacity .4s ease}.story-image-container #image-placeholder{color:#aaa;font-size:.9rem}@media (max-width:768px){.story-card{grid-template-columns:1fr}.story-controls{flex-direction:column}.btn-story{width:100%;justify-content:center}.selector-group{min-width:100%}#tarina-map{height:360px}}.step-slider{display:flex;gap:1rem;overflow-x:auto;scroll-snap-type:x mandatory;padding:1rem 0;margin:1.5rem 0;scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch}.step-slider::-webkit-scrollbar{display:none}.slider-card{flex:0 0 160px;height:220px;border-radius:12px;position:relative;overflow:hidden;scroll-snap-align:center;cursor:pointer;transition:transform .3s ease,border-color .3s;background-color:#f0f4f8;border:3px solid transparent;box-shadow:0 4px 10px rgba(0,0,0,.1)}.slider-card.active{border-color:#e85d04;transform:translateY(-5px);box-shadow:0 8px 20px rgba(232,93,4,.3)}.slider-card img{width:100%;height:100%;object-fit:cover}.slider-card-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.8));padding:1.5rem .75rem .75rem;color:#fff;display:flex;flex-direction:column;justify-content:flex-end}.slider-card-title{font-size:.85rem;font-weight:600;margin-bottom:.25rem;line-height:1.2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.slider-card-link{font-size:.75rem;font-weight:700;color:#ffb100;text-transform:uppercase;letter-spacing:.05em}.slider-card-number{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.5);color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;backdrop-filter:blur(4px)}.qr-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;padding:2rem;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.5);z-index:100000;display:none;flex-direction:column;align-items:center;text-align:center;color:#333}.qr-modal canvas{margin:1rem 0;max-width:100%}.qr-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:99999;display:none}.btn-qr{background:#f8f9fa;color:#555;border:1px solid #ddd;padding:.5rem 1rem;border-radius:8px;font-size:.8rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .2s;margin-top:1rem}.btn-qr:hover{background:#e9ecef;border-color:#ccc}.location-hint{display:block;text-align:center;color:#64748b;font-size:.9rem;max-width:600px;margin:0 auto 1.5rem;line-height:1.5;padding:.5rem 1rem;font-style:italic}.audio-container{margin:1.5rem 0;padding:1rem;background:#f8f9fa;border-radius:12px;display:flex;align-items:center;gap:15px;border:1.5px solid #0056b322}.audio-waveform{flex:1;height:40px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='40' viewBox='0 0 200 40'%3E%3Cpath d='M0 20 L5 15 L10 25 L15 10 L20 30 L25 15 L30 25 L35 5 L40 35 L45 20 L50 10 L55 30 L60 20 L65 5 L70 35 L75 15 L80 25 L85 10 L90 30 L95 15 L100 25 L105 5 L110 35 L115 20 L120 10 L125 30 L130 20 L135 5 L140 35 L145 15 L150 25 L155 10 L160 30 L165 15 L170 25 L175 5 L180 35 L185 20 L190 10 L195 30 L200 20' fill='none' stroke='%230056b3' stroke-width='2'/%3E%3C/svg%3E");background-repeat:repeat-x;background-position:center;opacity:.6}.audio-title{font-size:.75rem;font-weight:700;color:#0056b3;text-transform:uppercase;margin-bottom:5px;display:flex;align-items:center;gap:5px}audio::-webkit-media-controls-panel{background-color:#f8f9fa}</style></head><body><div class="demo-badge">Demo-aineisto</div><nav class="top-nav"><div class="nav-container"><a href="index.html" class="nav-logo"><img src="logo.png" alt="LaukaaInfo Logo"> <span>LaukaaInfo</span></a><div class="desktop-nav"><ul class="nav-links"><li class="nav-item"><a href="#" class="nav-link">Kauppa <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="ilmoittaudu.html">Ilmoittaudu julkaisijaksi</a></li><li><a href="kauppa.html">Osta lisää näkyvyyttä</a></li><li><a href="lisaa-yritys.html">Yritysnäkyvyys</a></li></ul></li><li class="nav-item"><a href="#" class="nav-link">Hakulinkit <span class="arrow">▼</span></a><ul class="dropdown-menu"><li class="has-arrow"><a href="#">Suosituimmat</a><ul class="nested-menu" id="nav-featured"></ul></li><li class="has-arrow"><a href="#">Kategoriat</a><ul class="nested-menu" id="nav-categories"></ul></li><li class="has-arrow"><a href="#">Taajamat</a><ul class="nested-menu"><li><a href="laukaa.html">Laukaa kk</a></li><li><a href="leppavesi.html">Leppävesi</a></li><li><a href="lievestuore.html">Lievestuore</a></li><li><a href="vehnia.html">Vehniä</a></li><li><a href="vihtavuori.html">Vihtavuori</a></li></ul></li></ul></li><li class="nav-item"><a href="ajankohtaista.html" class="nav-link">Ajankohtaista <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="ajankohtaista.html#events-card">Tapahtumat</a></li><li><a href="ajankohtaista.html#news-card">Tiedotteet</a></li><li><a href="ajankohtaista.html#decisions-card">Päätöksenteko</a></li><li><a href="ajankohtaista.html#feedback-card">Palautteet</a></li></ul></li><li class="nav-item"><a href="#" class="nav-link">Päätösten polut <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="asiahaku.html">Hae ja tutki</a></li></ul></li><li class="nav-item"><a href="#" class="nav-link active">Kartat &amp; Elämykset <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="karttakohteet.html">Karttakohteet</a></li><li><a href="tarinakartta.html">Tarinakartta</a></li><li><a href="muistokartta.html">Muistokartta</a></li><li><a href="kadonneet.html">Kadonneet &amp; löydetyt</a></li></ul></li></ul></div><button class="hamburger" id="hamburger-btn" aria-label="Avaa valikko"><span></span> <span></span> <span></span></button></div></nav><div class="sidebar-overlay" id="sidebar-overlay"></div><aside class="sidebar-menu" id="sidebar-menu"><div class="sidebar-header"><a href="index.html" class="nav-logo"><img src="logo.png" alt="LaukaaInfo Logo"> <span>LaukaaInfo</span> </a><button class="close-btn" id="close-sidebar-btn" aria-label="Sulje valikko">&times;</button></div><div class="sidebar-content"><div class="menu-section"><h3 class="section-title">KAUPPA</h3><ul class="menu-list"><li class="menu-item"><a href="ilmoittaudu.html" class="sidebar-link">Ilmoittaudu julkaisijaksi</a></li><li class="menu-item"><a href="kauppa.html" class="sidebar-link">Osta lisää näkyvyyttä</a></li><li class="menu-item"><a href="lisaa-yritys.html" class="sidebar-link">Yritysnäkyvyys</a></li></ul></div><div class="menu-section"><h3 class="section-title">HAKULINKIT</h3><ul class="menu-list"><li class="menu-item has-submenu"><a href="#" class="submenu-toggle">Suosituimmat <span class="arrow">▼</span></a><ul class="submenu" id="sidebar-featured"></ul></li><li class="menu-item has-submenu"><a href="#" class="submenu-toggle">Kategoriat <span class="arrow">▼</span></a><ul class="submenu" id="sidebar-categories"></ul></li><li class="menu-item has-submenu"><a href="#" class="submenu-toggle">Taajamat <span class="arrow">▼</span></a><ul class="submenu"><li><a href="laukaa.html" class="sidebar-link">Laukaa kk</a></li><li><a href="leppavesi.html" class="sidebar-link">Leppävesi</a></li><li><a href="lievestuore.html" class="sidebar-link">Lievestuore</a></li><li><a href="vehnia.html" class="sidebar-link">Vehniä</a></li><li><a href="vihtavuori.html" class="sidebar-link">Vihtavuori</a></li></ul></li></ul></div><div class="menu-section"><h3 class="section-title">AJANKOHTAISTA</h3><ul class="menu-list"><li class="menu-item"><a href="ajankohtaista.html#events-card" class="sidebar-link">Tapahtumat</a></li><li class="menu-item"><a href="ajankohtaista.html#news-card" class="sidebar-link">Tiedotteet</a></li><li class="menu-item"><a href="ajankohtaista.html#decisions-card" class="sidebar-link">Päätöksenteko</a></li><li class="menu-item"><a href="ajankohtaista.html#feedback-card" class="sidebar-link">Palautteet</a></li></ul></div><div class="menu-section"><h3 class="section-title">PÄÄTÖSTEN POLUT</h3><ul class="menu-list"><li class="menu-item"><a href="asiahaku.html" class="sidebar-link">Hae ja tutki</a></li></ul></div><div class="menu-section highlight-section"><h3 class="section-title">KARTAT &amp; ELÄMYKSET ⭐</h3><ul class="menu-list"><li class="menu-item"><a href="karttakohteet.html" class="sidebar-link">Karttakohteet</a></li><li class="menu-item"><a href="tarinakartta.html" class="sidebar-link active">Tarinakartta</a></li><li class="menu-item"><a href="muistokartta.html" class="sidebar-link">Muistokartta</a></li><li class="menu-item"><a href="kadonneet.html" class="sidebar-link">Kadonneet &amp; löydetyt</a></li></ul></div></div></aside><header><div class="header-content"><h1>Tarinakartta</h1><p>Seuraa Laukaan tarinaa askeleet kerrallaan</p></div></header><main><section class="story-selector card"><h3>Valitse Teema</h3><div class="selector-row"><div class="selector-group"><label for="theme-select">Tarinan teema</label> <select id="theme-select"><option value="">Ladataan teemoja...</option></select></div><div class="selector-group"><label for="category-select">Alue/Kategoria</label> <select id="category-select" disabled="disabled"><option value="">Valitse teema ensin</option></select></div><div class="selector-group"><label for="story-select">Valitse tarina</label> <select id="story-select" disabled="disabled"><option value="">Valitse teema ensin</option></select></div></div></section><p class="location-hint" style="margin-bottom:1.5rem">Tarinat on jaoteltu teeman ja kategorian mukaan. Voit myös itse päivittää tarinoita alueellesi ja liittää kartan omalle sivulle. Jokaisesta askeleesta tulee QR-koodi ja mahdollista on liittää tarinoihin kuvia, videota ja äänileikkeitä. Kysy lisätietoa.</p><section class="story-controls"><button id="prev-step" class="btn-story" disabled="disabled">❮ Edellinen</button><div class="story-step-info"><h3 id="step-title">Aloita tilaamalla tarina</h3><p id="step-counter">Kohta 0/0</p></div><button id="next-step" class="btn-story" disabled="disabled">Seuraava ❯</button></section><div id="tarina-map"></div><div id="step-slider" class="step-slider"></div><section id="story-display" class="story-card" style="display:none"><div class="story-image-container"><img id="step-image" src="" alt="Tarinan kuva" style="display:none"><div id="image-placeholder">Ei kuvaa saatavilla</div></div><div class="story-details"><h2 id="detail-title"></h2><div id="detail-desc" style="line-height:1.6;margin-bottom:1.5rem"></div><div id="detail-meta" style="font-size:.9rem;color:#666;font-style:italic"></div><div id="audio-area" style="display:none"><div class="audio-title"><span>Kuuntele tarina</span></div><div class="audio-container"><audio id="step-audio" controls style="height:35px"></audio><div class="audio-waveform"></div></div></div><div style="display:flex;gap:10px;flex-wrap:wrap"><button id="show-qr-btn" class="btn-qr" style="display:none;margin-top:0"><span>Luo QR-koodeina</span></button></div></div></section><section class="business-nav-section"><h2 style="text-align:center;margin-bottom:2rem">Kasvata näkyvyyttäsi Laukaassa</h2><div class="business-nav-grid"><a href="ilmoittaudu.html#ilm-form" class="nav-box"><h3>Ilmoittaudu julkaisijaksi</h3><p>Uusi käyttäjä? Aloita maksutta (3 julkaisua) ja tavoita paikalliset asiakkaat helposti.</p><div class="btn-fake">Aloita tästä &raquo;</div></a><a href="kauppa.html" class="nav-box"><h3>Osta lisää näkyvyyttä</h3><p>Haluatko vain yksittäisiä julkaisuja? Osta julkaisuaikaa tarpeen mukaan alk. 5 €.</p><div class="btn-fake">Avaa kauppa &raquo;</div></a><a href="lisaa-yritys.html" class="nav-box"><h3>Yritysnäkyvyys</h3><p>Haluatko jatkuvaa näkyvyyttä ja oman feed-linkin? Ota yrityskortti alk. 15 €/kk.<br><small style="opacity:.8;font-size:.85em">Soveltuu myös yhdistyksille.</small></p><div class="btn-fake">Lue lisää &raquo;</div></a></div></section></main><footer><div class="footer-content"><p>© 2026 LaukaaInfo – Palvelua ylläpitää Mediazoo.fi</p><div class="footer-links"><a href="index.html">Etusivulle</a> <a href="tietosuoja.html">Tietosuoja</a> <a href="maksuehto.html">Maksuehdot</a> <a href="https://mediazoo.fi/yhteystiedot/">Yhteystiedot</a> <a href="https://www.mediazoo.fi/laukaainfo-web/tarinakartta-paivitys.php" style="opacity:.3;font-size:.7rem;margin-left:10px">Editori</a> <button id="pwa-install-btn" style="display:none;background:#00c3ff;color:#fff;border:none;padding:5px 12px;border-radius:20px;cursor:pointer;font-family:inherit;font-size:.9rem;margin-left:10px">Asenna sovellus</button></div><div class="app-badge"><a href="https://play.google.com/store/apps/details?id=org.example.LaukaaLive&hl=fi" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Lataa Android-sovellus" style="height:40px"></a></div></div></footer><div class="qr-overlay" id="qr-overlay"></div><div class="qr-modal" id="qr-modal"><h3 style="margin:0">Jaa tämä kohde</h3><p style="font-size:.85rem;color:#666;margin-bottom:.5rem">Skannaa koodi tai kopioi linkki talteen.</p><div id="qrcode-container"></div><div style="display:flex;gap:10px;margin-top:1rem"><button id="copy-link-btn" class="btn-qr" style="margin-top:0">🔗 Kopioi linkki</button> <button id="copy-img-btn" class="btn-qr" style="margin-top:0">🖼️ Kopioi kuva</button></div><button id="close-qr" class="btn-story" style="background:#333;margin-top:1.5rem;width:100%">Sulje</button></div><script src="script.d5f79687.js?v=20260301-1"></script><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script><script src="tarinakartta.d5f79687.js"></script><script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script><script>window.location.search.includes("embed=true")&&document.body.classList.add("is-embedded")</script></body></html>
+<!DOCTYPE html>
+<html lang="fi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarinakartta – LaukaaInfo: Laukaa taskussasi – tiedä, löydä ja osallistu.</title>
+    <meta name="description" content="Seuraa Laukaan tarinaa askeleet kerrallaan.">
+    <link rel="icon" href="logo.png">
+
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0056b3">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Outfit:wght@100..900&display=swap"
+        rel="stylesheet">
+
+    <!-- Leaflet Map CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* ── Demo Badge ─── */
+        .demo-badge {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ffb100;
+            color: #000;
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            z-index: 100000;
+            letter-spacing: 0.1em;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+            pointer-events: none;
+            border: 2px solid rgba(0,0,0,0.1);
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        /* ── Embed Mode ─── */
+        body.is-embedded nav.top-nav, 
+        body.is-embedded header, 
+        body.is-embedded footer, 
+        body.is-embedded .business-nav-section,
+        body.is-embedded .location-hint {
+            display: none !important;
+        }
+        body.is-embedded main {
+            padding-top: 20px !important;
+            margin-top: 0 !important;
+        }
+
+        /* ── Teemavalinta ─── */
+        .story-selector {
+            background: #fff;
+            padding: 1.25rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1rem;
+        }
+
+        .story-selector h3 {
+            margin: 0 0 0.75rem 0;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .selector-row {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .selector-group {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-width: 160px;
+        }
+
+        .selector-group label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 0.35rem;
+        }
+
+        .selector-group select {
+            padding: 0.65rem 0.9rem;
+            border: 1.5px solid #dde3ec;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            color: #333;
+            background: #f7f9fc;
+            cursor: pointer;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%230056b3' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            padding-right: 2rem;
+        }
+
+        .selector-group select:focus {
+            outline: none;
+            border-color: #0056b3;
+            box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.15);
+            background-color: #fff;
+        }
+
+        .selector-group select:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        /* Teemaväriset badget kategorioissa */
+        .category-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* ── Story Controls ─── */
+        .story-controls {
+            background: #fff;
+            padding: 1.25rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .story-step-info {
+            flex: 1;
+            text-align: center;
+        }
+
+        .story-step-info h3 {
+            margin: 0;
+            color: #0056b3;
+            font-size: 1.1rem;
+        }
+
+        .story-step-info p {
+            margin: 4px 0 0 0;
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .btn-story {
+            background: #0056b3;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+
+        .btn-story:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .btn-story:hover:not(:disabled) {
+            background: #004494;
+        }
+
+        /* ── Map ─── */
+        #tarina-map {
+            height: 500px;
+            border-radius: 12px;
+            z-index: 1;
+            border: 2px solid #dde3ec;
+        }
+
+        /* ── Story Card ─── */
+        .story-card {
+            margin-top: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            align-items: start;
+        }
+
+        .story-details {
+            background: #fff;
+            border-radius: 12px;
+            padding: 1.25rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .story-image-container {
+            width: 100%;
+            min-height: 280px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #f0f4f8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .story-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.4s ease;
+        }
+
+        .story-image-container #image-placeholder {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        /* ── Return link ─── */
+
+        /* ── Responsive ─── */
+        @media (max-width: 768px) {
+            .story-card {
+                grid-template-columns: 1fr;
+            }
+
+            .story-controls {
+                flex-direction: column;
+            }
+
+            .btn-story {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .selector-group {
+                min-width: 100%;
+            }
+
+            #tarina-map {
+                height: 360px;
+            }
+        }
+
+        /* ── Step Slider ─── */
+        .step-slider {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding: 1rem 0;
+            margin: 1.5rem 0;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge */
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .step-slider::-webkit-scrollbar {
+            display: none; /* Chrome/Safari */
+        }
+
+        .slider-card {
+            flex: 0 0 160px;
+            height: 220px;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            scroll-snap-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease, border-color 0.3s;
+            background-color: #f0f4f8;
+            border: 3px solid transparent;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .slider-card.active {
+            border-color: #e85d04;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(232, 93, 4, 0.3);
+        }
+
+        .slider-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .slider-card-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            padding: 1.5rem 0.75rem 0.75rem;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .slider-card-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            line-height: 1.2;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .slider-card-link {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #ffb100;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .slider-card-number {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            backdrop-filter: blur(4px);
+        }
+        /* ── QR Code Modal ─── */
+        .qr-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            z-index: 100000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            color: #333;
+        }
+        .qr-modal canvas {
+            margin: 1rem 0;
+            max-width: 100%;
+        }
+        .qr-overlay {
+            position: fixed;
+            top:0; left:0; right:0; bottom:0;
+            background: rgba(0,0,0,0.7);
+            z-index: 99999;
+            display: none;
+        }
+        .btn-qr {
+            background: #f8f9fa;
+            color: #555;
+            border: 1px solid #ddd;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            margin-top: 1rem;
+        }
+        .btn-qr:hover { background: #e9ecef; border-color: #ccc; }
+        
+        .location-hint {
+            display: block;
+            text-align: center;
+            color: #64748b;
+            font-size: 0.9rem;
+            max-width: 600px;
+            margin: 0 auto 1.5rem;
+            line-height: 1.5;
+            padding: 0.5rem 1rem;
+            font-style: italic;
+        }
+
+        /* ── Audio Styles ─── */
+        .audio-container {
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 1.5px solid #0056b322;
+        }
+        .audio-waveform {
+            flex: 1;
+            height: 40px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='40' viewBox='0 0 200 40'%3E%3Cpath d='M0 20 L5 15 L10 25 L15 10 L20 30 L25 15 L30 25 L35 5 L40 35 L45 20 L50 10 L55 30 L60 20 L65 5 L70 35 L75 15 L80 25 L85 10 L90 30 L95 15 L100 25 L105 5 L110 35 L115 20 L120 10 L125 30 L130 20 L135 5 L140 35 L145 15 L150 25 L155 10 L160 30 L165 15 L170 25 L175 5 L180 35 L185 20 L190 10 L195 30 L200 20' fill='none' stroke='%230056b3' stroke-width='2'/%3E%3C/svg%3E");
+            background-repeat: repeat-x;
+            background-position: center;
+            opacity: 0.6;
+        }
+        .audio-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #0056b3;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        audio::-webkit-media-controls-panel {
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="demo-badge">Demo-aineisto</div>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="logo.png" alt="LaukaaInfo Logo">
+                <span>LaukaaInfo</span>
+            </a>
+            <div class="desktop-nav">
+                <ul class="nav-links">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Kauppa <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="ilmoittaudu.html">Ilmoittaudu julkaisijaksi</a></li>
+                            <li><a href="kauppa.html">Osta lisää näkyvyyttä</a></li>
+                            <li><a href="lisaa-yritys.html">Yritysnäkyvyys</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Hakulinkit <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <li class="has-arrow">
+                                <a href="#">Suosituimmat</a>
+                                <ul class="nested-menu" id="nav-featured">
+                                </ul>
+                            </li>
+                            <li class="has-arrow">
+                                <a href="#">Kategoriat</a>
+                                <ul class="nested-menu" id="nav-categories">
+                                </ul>
+                            </li>
+                            <li class="has-arrow">
+                                <a href="#">Taajamat</a>
+                                <ul class="nested-menu">
+                                    <li><a href="laukaa.html">Laukaa kk</a></li>
+                                    <li><a href="leppavesi.html">Leppävesi</a></li>
+                                    <li><a href="lievestuore.html">Lievestuore</a></li>
+                                    <li><a href="vehnia.html">Vehniä</a></li>
+                                    <li><a href="vihtavuori.html">Vihtavuori</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="ajankohtaista.html" class="nav-link">Ajankohtaista <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="ajankohtaista.html#events-card">Tapahtumat</a></li>
+                            <li><a href="ajankohtaista.html#news-card">Tiedotteet</a></li>
+                            <li><a href="ajankohtaista.html#decisions-card">Päätöksenteko</a></li>
+                            <li><a href="ajankohtaista.html#feedback-card">Palautteet</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Päätösten polut <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="asiahaku.html">Hae ja tutki</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link active">Kartat &amp; Elämykset <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="karttakohteet.html">Karttakohteet</a></li>
+                            <li><a href="tarinakartta.html">Tarinakartta</a></li>
+                            <li><a href="muistokartta.html">Muistokartta</a></li>
+                            <li><a href="kadonneet.html">Kadonneet &amp; löydetyt</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <button class="hamburger" id="hamburger-btn" aria-label="Avaa valikko">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <aside class="sidebar-menu" id="sidebar-menu">
+        <div class="sidebar-header">
+            <a href="index.html" class="nav-logo">
+                <img src="logo.png" alt="LaukaaInfo Logo">
+                <span>LaukaaInfo</span>
+            </a>
+            <button class="close-btn" id="close-sidebar-btn" aria-label="Sulje valikko">&times;</button>
+        </div>
+
+        <div class="sidebar-content">
+            <!-- Pääosio: KAUPPA -->
+            <div class="menu-section">
+                <h3 class="section-title">KAUPPA</h3>
+                <ul class="menu-list">
+                    <li class="menu-item"><a href="ilmoittaudu.html" class="sidebar-link">Ilmoittaudu julkaisijaksi</a></li>
+                    <li class="menu-item"><a href="kauppa.html" class="sidebar-link">Osta lisää näkyvyyttä</a></li>
+                    <li class="menu-item"><a href="lisaa-yritys.html" class="sidebar-link">Yritysnäkyvyys</a></li>
+                </ul>
+            </div>
+
+            <!-- Pääosio: HAKULINKIT -->
+            <div class="menu-section">
+                <h3 class="section-title">HAKULINKIT</h3>
+                <ul class="menu-list">
+                    <li class="menu-item has-submenu">
+                        <a href="#" class="submenu-toggle">Suosituimmat <span class="arrow">▼</span></a>
+                        <ul class="submenu" id="sidebar-featured">
+                        </ul>
+                    </li>
+                    <li class="menu-item has-submenu">
+                        <a href="#" class="submenu-toggle">Kategoriat <span class="arrow">▼</span></a>
+                        <ul class="submenu" id="sidebar-categories">
+                        </ul>
+                    </li>
+                    <li class="menu-item has-submenu">
+                        <a href="#" class="submenu-toggle">Taajamat <span class="arrow">▼</span></a>
+                        <ul class="submenu">
+                            <li><a href="laukaa.html" class="sidebar-link">Laukaa kk</a></li>
+                            <li><a href="leppavesi.html" class="sidebar-link">Leppävesi</a></li>
+                            <li><a href="lievestuore.html" class="sidebar-link">Lievestuore</a></li>
+                            <li><a href="vehnia.html" class="sidebar-link">Vehniä</a></li>
+                            <li><a href="vihtavuori.html" class="sidebar-link">Vihtavuori</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Pääosio: AJANKOHTAISTA -->
+            <div class="menu-section">
+                <h3 class="section-title">AJANKOHTAISTA</h3>
+                <ul class="menu-list">
+                    <li class="menu-item"><a href="ajankohtaista.html#events-card" class="sidebar-link">Tapahtumat</a>
+                    </li>
+                    <li class="menu-item"><a href="ajankohtaista.html#news-card" class="sidebar-link">Tiedotteet</a>
+                    </li>
+                    <li class="menu-item"><a href="ajankohtaista.html#decisions-card"
+                            class="sidebar-link">Päätöksenteko</a></li>
+                    <li class="menu-item"><a href="ajankohtaista.html#feedback-card" class="sidebar-link">Palautteet</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Pääosio: PÄÄTÖSTEN POLUT -->
+            <div class="menu-section">
+                <h3 class="section-title">PÄÄTÖSTEN POLUT</h3>
+                <ul class="menu-list">
+                    <li class="menu-item"><a href="asiahaku.html" class="sidebar-link">Hae ja tutki</a></li>
+                </ul>
+            </div>
+
+            <!-- Korostettu osio: KARTAT & ELÄMYKSET -->
+            <div class="menu-section highlight-section">
+                <h3 class="section-title">KARTAT &amp; ELÄMYKSET ⭐</h3>
+                <ul class="menu-list">
+                    <li class="menu-item"><a href="karttakohteet.html" class="sidebar-link">Karttakohteet</a></li>
+                    <li class="menu-item"><a href="tarinakartta.html" class="sidebar-link active">Tarinakartta</a></li>
+                    <li class="menu-item"><a href="muistokartta.html" class="sidebar-link">Muistokartta</a></li>
+                    <li class="menu-item"><a href="kadonneet.html" class="sidebar-link">Kadonneet &amp; löydetyt</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </aside>
+
+    <header>
+        <div class="header-content">
+            <h1>Tarinakartta</h1>
+            <p>Seuraa Laukaan tarinaa askeleet kerrallaan</p>
+        </div>
+    </header>
+
+    <main>
+        <section class="story-selector card">
+            <h3>Valitse Teema</h3>
+            <div class="selector-row">
+                <div class="selector-group">
+                    <label for="theme-select">Tarinan teema</label>
+                    <select id="theme-select">
+                        <option value="">Ladataan teemoja...</option>
+                    </select>
+                </div>
+                <div class="selector-group">
+                    <label for="category-select">Alue/Kategoria</label>
+                    <select id="category-select" disabled>
+                        <option value="">Valitse teema ensin</option>
+                    </select>
+                </div>
+                <div class="selector-group">
+                    <label for="story-select">Valitse tarina</label>
+                    <select id="story-select" disabled>
+                        <option value="">Valitse teema ensin</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+        <p class="location-hint" style="margin-bottom: 1.5rem;">Tarinat on jaoteltu teeman ja kategorian mukaan. Voit myös itse päivittää tarinoita alueellesi ja liittää kartan omalle sivulle. Jokaisesta askeleesta tulee QR-koodi ja mahdollista on liittää tarinoihin kuvia, videota ja äänileikkeitä. Kysy lisätietoa.</p>
+
+        <section class="story-controls">
+            <button id="prev-step" class="btn-story" disabled>❮ Edellinen</button>
+            <div class="story-step-info">
+                <h3 id="step-title">Aloita tilaamalla tarina</h3>
+                <p id="step-counter">Kohta 0/0</p>
+            </div>
+            <button id="next-step" class="btn-story" disabled>Seuraava ❯</button>
+        </section>
+
+        <div id="tarina-map"></div>
+
+        <div id="step-slider" class="step-slider">
+            <!-- Dynamically populated by JS -->
+        </div>
+
+        <section id="story-display" class="story-card" style="display: none;">
+            <div class="story-image-container">
+                <img id="step-image" src="" alt="Tarinan kuva" style="display: none;">
+                <div id="image-placeholder">Ei kuvaa saatavilla</div>
+            </div>
+            <div class="story-details">
+                <h2 id="detail-title"></h2>
+                <div id="detail-desc" style="line-height: 1.6; margin-bottom: 1.5rem;"></div>
+                <div id="detail-meta" style="font-size: 0.9rem; color: #666; font-style: italic;"></div>
+                
+                <div id="audio-area" style="display: none;">
+                    <div class="audio-title">
+                        <span>Kuuntele tarina</span>
+                    </div>
+                    <div class="audio-container">
+                        <audio id="step-audio" controls style="height: 35px;"></audio>
+                        <div class="audio-waveform"></div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button id="show-qr-btn" class="btn-qr" style="display:none; margin-top: 0;">
+                        <span>Luo QR-koodeina</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Unified Business Navigation -->
+        <section class="business-nav-section">
+            <h2 style="text-align: center; margin-bottom: 2rem;">Kasvata näkyvyyttäsi Laukaassa</h2>
+            <div class="business-nav-grid">
+                <a href="ilmoittaudu.html#ilm-form" class="nav-box">
+                    <h3>Ilmoittaudu julkaisijaksi</h3>
+                    <p>Uusi käyttäjä? Aloita maksutta (3 julkaisua) ja tavoita paikalliset asiakkaat helposti.</p>
+                    <div class="btn-fake">Aloita tästä &raquo;</div>
+                </a>
+                <a href="kauppa.html" class="nav-box">
+                    <h3>Osta lisää näkyvyyttä</h3>
+                    <p>Haluatko vain yksittäisiä julkaisuja? Osta julkaisuaikaa tarpeen mukaan alk. 5 €.</p>
+                    <div class="btn-fake">Avaa kauppa &raquo;</div>
+                </a>
+                <a href="lisaa-yritys.html" class="nav-box">
+                    <h3>Yritysnäkyvyys</h3>
+                    <p>Haluatko jatkuvaa näkyvyyttä ja oman feed-linkin? Ota yrityskortti alk. 15 €/kk.<br><small style="opacity: 0.8; font-size: 0.85em;">Soveltuu myös yhdistyksille.</small></p>
+                    <div class="btn-fake">Lue lisää &raquo;</div>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>© 2026 LaukaaInfo – Palvelua ylläpitää Mediazoo.fi</p>
+            <div class="footer-links">
+                <a href="index.html">Etusivulle</a>
+                <a href="tietosuoja.html">Tietosuoja</a>
+                <a href="maksuehto.html">Maksuehdot</a>
+                <a href="https://mediazoo.fi/yhteystiedot/">Yhteystiedot</a>
+                <a href="https://www.mediazoo.fi/laukaainfo-web/tarinakartta-paivitys.php" style="opacity: 0.3; font-size: 0.7rem; margin-left: 10px;">Editori</a>
+                <button id="pwa-install-btn"
+                    style="display: none; background: #00c3ff; color: white; border: none; padding: 5px 12px; border-radius: 20px; cursor: pointer; font-family: inherit; font-size: 0.9rem; margin-left: 10px;">Asenna
+                    sovellus</button>
+            </div>
+            <div class="app-badge">
+                <a href="https://play.google.com/store/apps/details?id=org.example.LaukaaLive&hl=fi" target="_blank">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+                        alt="Lataa Android-sovellus" style="height: 40px;">
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- QR Modal -->
+    <div class="qr-overlay" id="qr-overlay"></div>
+    <div class="qr-modal" id="qr-modal">
+        <h3 style="margin:0;">Jaa tämä kohde</h3>
+        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">Skannaa koodi tai kopioi linkki talteen.</p>
+        <div id="qrcode-container"></div>
+        
+        <div style="display: flex; gap: 10px; margin-top: 1rem;">
+            <button id="copy-link-btn" class="btn-qr" style="margin-top:0;">🔗 Kopioi linkki</button>
+            <button id="copy-img-btn" class="btn-qr" style="margin-top:0;">🖼️ Kopioi kuva</button>
+        </div>
+
+        <button id="close-qr" class="btn-story" style="background:#333; margin-top:1.5rem; width: 100%;">Sulje</button>
+    </div>
+
+    <!-- Scripts -->
+    <script src="script.js?v=20260301-1"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="tarinakartta.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+
+    <script>
+        // Embed mode detection
+        if (window.location.search.includes('embed=true')) {
+            document.body.classList.add('is-embedded');
+        }
+    </script>
+
+</body>
+
+</html>

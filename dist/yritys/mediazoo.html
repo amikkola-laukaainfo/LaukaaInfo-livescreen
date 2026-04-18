@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fi">
 
-<head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mediazoo – LaukaaInfo</title>
@@ -10,13 +10,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Outfit:wght@100..900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;700&display=swap"
         rel="stylesheet">
 
     <!-- Leaflet Map -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-    <link rel="stylesheet" href="../style.css?v=20260304">
+    <link rel="stylesheet" href="../style.b90f42b3.css?v=20260304">
     <style>
         .business-card-container {
             max-width: 1000px;
@@ -409,21 +409,9 @@
             <div class="desktop-nav">
                 <ul class="nav-links">
                     <li class="nav-item">
-                        <a href="#" class="nav-link">Kauppa <span class="arrow">▼</span></a>
+                        <a href="../index.html" class="nav-link">Kauppa <span class="arrow">▼</span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="../ilmoittaudu.html">Ilmoittaudu julkaisijaksi</a></li>
-                            <li><a href="../kauppa.html">Osta lisää näkyvyyttä</a></li>
-                            <li><a href="../lisaa-yritys.html">Yritysnäkyvyys</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">Hakulinkit <span class="arrow">▼</span></a>
-                        <ul class="dropdown-menu">
-                            <li class="has-arrow">
-                                <a href="#">Suosituimmat</a>
-                                <ul class="nested-menu" id="nav-featured">
-                                </ul>
-                            </li>
+                            <li><a href="../lisaa-yritys.html">Lisää yritys</a></li>
                             <li class="has-arrow">
                                 <a href="#">Kategoriat</a>
                                 <ul class="nested-menu" id="nav-categories">
@@ -478,6 +466,7 @@
     <!-- Sidebar Overlay -->
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
+    <!-- Sidebar Menu -->
     <aside class="sidebar-menu" id="sidebar-menu">
         <div class="sidebar-header">
             <a href="../index.html" class="nav-logo">
@@ -492,21 +481,7 @@
             <div class="menu-section">
                 <h3 class="section-title">KAUPPA</h3>
                 <ul class="menu-list">
-                    <li class="menu-item"><a href="../ilmoittaudu.html" class="sidebar-link">Ilmoittaudu julkaisijaksi</a></li>
-                    <li class="menu-item"><a href="../kauppa.html" class="sidebar-link">Osta lisää näkyvyyttä</a></li>
-                    <li class="menu-item"><a href="../lisaa-yritys.html" class="sidebar-link">Yritysnäkyvyys</a></li>
-                </ul>
-            </div>
-
-            <!-- Pääosio: HAKULINKIT -->
-            <div class="menu-section">
-                <h3 class="section-title">HAKULINKIT</h3>
-                <ul class="menu-list">
-                    <li class="menu-item has-submenu">
-                        <a href="#" class="submenu-toggle">Suosituimmat <span class="arrow">▼</span></a>
-                        <ul class="submenu" id="sidebar-featured">
-                        </ul>
-                    </li>
+                    <li class="menu-item"><a href="../lisaa-yritys.html" class="sidebar-link">Lisää yritys</a></li>
                     <li class="menu-item has-submenu">
                         <a href="#" class="submenu-toggle">Kategoriat <span class="arrow">▼</span></a>
                         <ul class="submenu" id="sidebar-categories">
@@ -608,6 +583,7 @@
                         <h2>Yhteystiedot</h2>
 
                         <div class="contact-item">
+                            <span class="icon">📍</span>
                             <div>
                                 <span>Osoite</span>
                                 <strong id="display-address">Katuosoite, Postinumero</strong>
@@ -615,6 +591,7 @@
                         </div>
 
                         <div class="contact-item" id="phone-item">
+                            <span class="icon">📞</span>
                             <div>
                                 <span>Puhelin</span>
                                 <a href="#" id="display-phone">040 123 4567</a>
@@ -622,6 +599,7 @@
                         </div>
 
                         <div class="contact-item" id="website-item">
+                            <span class="icon">🌐</span>
                             <div>
                                 <span>Kotisivut</span>
                                 <a href="#" id="display-website" target="_blank">www.yritys.fi</a>
@@ -629,6 +607,7 @@
                         </div>
 
                         <div class="contact-item" id="social-links">
+                            <span class="icon">🔗</span>
                             <div id="social-icons" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 0.8rem;"></div>
                         </div>
 
@@ -665,32 +644,11 @@
             </div>
 
         </div>
-        <!-- Unified Business Navigation -->
-        <section class="business-nav-section">
-            <h2 style="text-align: center; margin-bottom: 2rem;">Kasvata näkyvyyttäsi Laukaassa</h2>
-            <div class="business-nav-grid">
-                <a href="ilmoittaudu.html#ilm-form" class="nav-box">
-                    <h3>Ilmoittaudu julkaisijaksi</h3>
-                    <p>Uusi käyttäjä? Aloita maksutta (3 julkaisua) ja tavoita paikalliset asiakkaat helposti.</p>
-                    <div class="btn-fake">Aloita tästä &raquo;</div>
-                </a>
-                <a href="../kauppa.html" class="nav-box">
-                    <h3>Osta lisää näkyvyyttä</h3>
-                    <p>Haluatko vain yksittäisiä julkaisuja? Osta julkaisuaikaa tarpeen mukaan alk. 5 €.</p>
-                    <div class="btn-fake">Avaa kauppa &raquo;</div>
-                </a>
-                <a href="../lisaa-yritys.html" class="nav-box">
-                    <h3>Yritysnäkyvyys</h3>
-                    <p>Haluatko jatkuvaa näkyvyyttä ja oman feed-linkin? Ota yrityskortti alk. 15 €/kk.<br><small style="opacity: 0.8; font-size: 0.85em;">Soveltuu myös yhdistyksille.</small></p>
-                    <div class="btn-fake">Lue lisää &raquo;</div>
-                </a>
-            </div>
-        </section>
     </main>
 
     <footer>
         <div class="footer-content">
-            <p>© 2026 LaukaaInfo – Palvelua ylläpitää Mediazoo.fi</p>
+            <p>© 2026 LaukaaInfo – Kylien ja asukkaiden oma tietopankki</p>
             <div class="footer-links">
                 <a href="../index.html">Etusivulle</a>
                 <a href="../tietosuoja.html">Tietosuoja</a>
@@ -711,8 +669,8 @@
 
     <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="../script.js?v=20260301"></script>
-    <script src="../yrityskortti.js?v=20260304-DEBUG-2"></script>
+    <script src="../script.b90f42b3.js?v=20260301"></script>
+    <script src="../yrityskortti.b90f42b3.js?v=20260304-DEBUG-2"></script>
 </body>
 
 </html>
