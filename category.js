@@ -118,10 +118,11 @@
             '🏢';
         document.getElementById('category-icon').textContent = icon;
 
-        loadData(category);
+        const tagParam = params.get('tag');
+        loadData(category, tagParam);
     });
 
-    async function loadData(category) {
+    async function loadData(category, tagParam) {
         try {
             const dataSourceUrl = 'https://www.mediazoo.fi/laukaainfo-web/get_companies.php';
             const response = await fetch(dataSourceUrl + '?t=' + Date.now());
@@ -160,13 +161,30 @@
                            (searchStr.includes('parturi') || searchStr.includes('kampaamo') || searchStr.includes('kauneus') || searchStr.includes('hius') || searchStr.includes('salon') || searchStr.includes('kynsi') || searchStr.includes('kosmetologi'));
                 });
             } else if (tags.length > 0) {
-                // Suodatus avainsanojen (tägien) mukaan
+                // Suodatus avainsanojen (tägien) mukaan (käytetään tyypillisesti SEO-sivuilla)
                 rawCategoryCompanies = allCompanies.filter(c => {
                     const searchStr = `${c.nimi || ''} ${c.kuvaus || ''} ${c.kategoria || ''} ${c.hakusana || c.hakusanat || c.tags || ''} ${c.palvelutapa || ''}`.toLowerCase();
-                    return tags.some(tag => searchStr.includes(tag));
+                    return tags.some(tag => searchStr.includes(tag.toLowerCase()));
                 });
-            } else {
+            } else if (category && category !== 'all') {
                 rawCategoryCompanies = allCompanies.filter(c => c.kategoria === category);
+            } else {
+                rawCategoryCompanies = allCompanies;
+            }
+
+            // Lisäsuodatus URL-parametrin 'tag' mukaan (esim. ?tag=etapalvelu)
+            if (tagParam) {
+                const query = tagParam.toLowerCase();
+                rawCategoryCompanies = rawCategoryCompanies.filter(c => {
+                    const searchStr = `${c.tags || ''} ${c.palvelutapa || ''}`.toLowerCase();
+                    return searchStr.includes(query);
+                });
+                
+                // Päivitetään otsikkoon tieto suodatuksesta, jos mahdollista
+                const titleEl = document.getElementById('category-name');
+                if (titleEl && !document.body.dataset.category) {
+                    titleEl.textContent += ` (${tagParam})`;
+                }
             }
 
             if (regionCoords && selectedRegion && selectedRegion !== 'all') {

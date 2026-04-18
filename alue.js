@@ -149,7 +149,8 @@ function filterByArea(areaSlug, catParam, tagParam) {
 
         if (tagParam) {
             const tags = (c.tags || '').toLowerCase();
-            return tags.includes(tagParam);
+            const ptapa = (c.palvelutapa || '').toLowerCase();
+            return tags.includes(tagParam) || ptapa.includes(tagParam);
         }
         if (catParam) {
             return (c.kategoria || '').toLowerCase() === catParam.replace(/-/g, ' ');
@@ -236,7 +237,8 @@ function renderNearby(area, catParam, tagParam) {
         // Sovelletaan samoja tägejä/kategorioita myös lähialueen suosituksiin
         if (tagParam) {
             const tags = (c.tags || '').toLowerCase();
-            if (!tags.includes(tagParam)) return false;
+            const ptapa = (c.palvelutapa || '').toLowerCase();
+            if (!tags.includes(tagParam) && !ptapa.includes(tagParam)) return false;
         }
         if (catParam) {
             if ((c.kategoria || '').toLowerCase() !== catParam.replace(/-/g, ' ')) return false;
