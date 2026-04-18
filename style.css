@@ -3437,3 +3437,53 @@ footer {
 .qr-copy-btn:active {
     transform: scale(0.96);
 }
+
+/* Älykkäät pikahakupainikkeet etusivulle */
+.btn-smart {
+    display: inline-block;
+    background-color: var(--accent-light);
+    color: var(--primary-blue);
+    border: 1px solid var(--accent-blue);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.btn-smart:hover {
+    background-color: var(--primary-blue);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Palvelutapa-ikonit yrityskortissa */
+.service-icon {
+    display: inline-block;
+    margin-right: 5px;
+    font-size: 1.1em;
+    vertical-align: middle;
+}
+
+/* Tunnisteiden (tagien) lisävärit */
+.tag-pill.tag-laukaa, .cat-tag.tag-laukaa {
+    background: #e6fced;
+    color: #1b5e20;
+    border: 1px solid #c8e6d1;
+}
+
+.tag-pill.tag-etapalvelu, .cat-tag.tag-etapalvelu {
+    background: #eef1ff;
+    color: #3f51b5;
+    border: 1px solid #d0d6fb;
+}
+
+.tag-pill.tag-kotikaynti, .cat-tag.tag-kotikaynti {
+    background: #fdf2e9;
+    color: #e65100;
+    border: 1px solid #fadcc3;
+}
+

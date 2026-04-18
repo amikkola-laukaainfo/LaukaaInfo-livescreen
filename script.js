@@ -1731,19 +1731,30 @@ function renderCatalog(companies) {
 
             // Find matching tags for display in the catalog
             let displayedCat = company.kategoria;
-            if (searchTerm && searchTerm.length > 1 && company.tags) {
+            let serviceIcons = '';
+            
+            if (company.tags) {
                 const tagsArray = company.tags.split(',').map(t => t.trim().toLowerCase());
-                const lowerSearch = searchTerm.toLowerCase();
-                const matchedTags = tagsArray.filter(t => t.includes(lowerSearch));
-                if (matchedTags.length > 0) {
-                    displayedCat += ` - ${matchedTags.join(', ')}`;
+                
+                // Add icons based on tags / palvelutapa
+                if (tagsArray.includes('toimipiste')) serviceIcons += '<span class="service-icon" title="Toimipiste">🏢</span>';
+                if (tagsArray.includes('kotikaynti')) serviceIcons += '<span class="service-icon" title="Kotikäynti">🏠</span>';
+                if (tagsArray.includes('etapalvelu')) serviceIcons += '<span class="service-icon" title="Etäpalvelu">💻</span>';
+                if (tagsArray.includes('toimitus')) serviceIcons += '<span class="service-icon" title="Toimitus">🚚</span>';
+                
+                const lowerSearch = searchTerm ? searchTerm.toLowerCase() : '';
+                if (lowerSearch.length > 1) {
+                    const matchedTags = tagsArray.filter(t => t.includes(lowerSearch));
+                    if (matchedTags.length > 0) {
+                        displayedCat += ` - ${matchedTags.join(', ')}`;
+                    }
                 }
             }
 
             const distHtml = company.distanceText ? `<span class="dist-badge">🚗 ${company.distanceText}</span>` : '';
             item.innerHTML = `
                 <div class="catalog-item-header">
-                    <h4>${company.nimi}</h4>
+                    <h4>${company.nimi} <span style="margin-left:5px; font-weight:normal;">${serviceIcons}</span></h4>
                     ${distHtml}
                 </div>
                 <span class="cat-tag">${displayedCat}</span>

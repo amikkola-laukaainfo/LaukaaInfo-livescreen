@@ -514,6 +514,15 @@
             description = description.split('@@')[0].trim();
         }
 
+        let serviceIcons = '';
+        if (c.tags) {
+            const tagsArray = c.tags.split(',').map(t => t.trim().toLowerCase());
+            if (tagsArray.includes('toimipiste')) serviceIcons += '<span class="service-icon" title="Toimipiste">🏢</span>';
+            if (tagsArray.includes('kotikaynti')) serviceIcons += '<span class="service-icon" title="Kotikäynti">🏠</span>';
+            if (tagsArray.includes('etapalvelu')) serviceIcons += '<span class="service-icon" title="Etäpalvelu">💻</span>';
+            if (tagsArray.includes('toimitus')) serviceIcons += '<span class="service-icon" title="Toimitus">🚚</span>';
+        }
+
         const websiteShow = (c.nettisivu || '').replace(/^https?:\/\//, '').replace(/\/$/, '');
         const infoHtml = isPremium && websiteShow
             ? `<div style="margin-top:0.5rem;"><strong>${websiteShow}</strong></div>`
@@ -526,7 +535,7 @@
 
         card.innerHTML = `
         ${distBadge}
-        <h3>${c.nimi}</h3>
+        <h3>${c.nimi} <span style="margin-left:5px; font-weight:normal;">${serviceIcons}</span></h3>
         ${infoHtml}
         <p>${description}</p>
         <div style="margin-top:1rem; display:flex; gap:10px;">
