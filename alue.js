@@ -215,15 +215,33 @@ function renderRegionContent(area, areaSlug, filtered, cat, tag) {
         renderCatalog(displayCompanies);
     }
 
-    renderNearby(area);
+    renderNearby(area, cat, tag);
 }
 
-function renderNearby(area) {
+function renderNearby(area, catParam, tagParam) {
     const nearbyList = document.getElementById('nearby-list');
     if (!nearbyList) return;
 
+    // Jos olemme koko-laukaa sivulla (mikä on tavallaan globaali), 
+    // piilotetaan "Lähellä tätä aluetta" osio selkeyden vuoksi, varsinkin hauissa.
+    if (area.slug === 'koko-laukaa') {
+        const nearbySection = document.getElementById('nearby-section');
+        if (nearbySection) nearbySection.style.display = 'none';
+        return;
+    }
+
     const nearby = allCompanies.filter(c => {
         if (!c.lat || !c.lon || (c.alue_slug || '').toLowerCase() === area.slug) return false;
+        
+        // Sovelletaan samoja tägejä/kategorioita myös lähialueen suosituksiin
+        if (tagParam) {
+            const tags = (c.tags || '').toLowerCase();
+            if (!tags.includes(tagParam)) return false;
+        }
+        if (catParam) {
+            if ((c.kategoria || '').toLowerCase() !== catParam.replace(/-/g, ' ')) return false;
+        }
+
         const dist = getHaversineDistance(area.lat, area.lon, parseFloat(c.lat), parseFloat(c.lon));
         return dist <= 12; // 12km säde
     })
@@ -233,6 +251,14 @@ function renderNearby(area) {
             return dA - dB;
         })
         .slice(0, 8);
+
+    const nearbySection = document.getElementById('nearby-section');
+    if (nearby.length === 0) {
+        if (nearbySection) nearbySection.style.display = 'none';
+        return;
+    } else {
+        if (nearbySection) nearbySection.style.display = 'block';
+    }
 
     nearbyList.innerHTML = '';
     nearby.forEach(company => {
