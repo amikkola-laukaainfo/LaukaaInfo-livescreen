@@ -335,8 +335,7 @@ if (!empty($id_param)) {
         // Match full ID or just the slug part
         $clean_id = str_replace('company-', '', $id_param);
         return $c['id'] === $id_param || 
-               $c['id'] === 'company-' . $id_param ||
-               strpos($c['id'], $clean_id) !== false;
+               $c['id'] === 'company-' . $id_param;
     });
     $filtered = array_values($filtered);
     
