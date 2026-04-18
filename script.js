@@ -1114,6 +1114,13 @@ function initCompanyCatalog() {
         });
     }
 
+    const serviceMethodSelect = document.getElementById('service-method-select');
+    if (serviceMethodSelect) {
+        serviceMethodSelect.addEventListener('change', () => {
+            filterCatalog();
+        });
+    }
+
     const searchBtn = document.getElementById('search-btn');
     if (searchBtn) {
         searchBtn.addEventListener('click', () => {
@@ -1222,6 +1229,9 @@ function filterCatalog(renderList = true) {
     const categoryEl = document.getElementById('category-filter');
     const category = categoryEl ? categoryEl.value : 'all';
 
+    const serviceMethodEl = document.getElementById('service-method-select');
+    const serviceMethod = serviceMethodEl ? serviceMethodEl.value : 'all';
+
     const regionCoords = JSON.parse(localStorage.getItem('regionCoords'));
     const selectedRegion = localStorage.getItem('selectedRegion');
 
@@ -1252,8 +1262,13 @@ function filterCatalog(renderList = true) {
         // Exact prefix match in name gets a boost
         if (name.startsWith(searchTerm)) score += 150;
 
+        let matchesServiceMethod = true;
+        if (serviceMethod !== 'all') {
+            matchesServiceMethod = combinedTags.includes(serviceMethod);
+        }
+
         // Treat empty search as a match-all if a region or category is selected
-        if (searchTerm.length === 0 && (selectedRegion !== 'all' || category !== 'all')) {
+        if (searchTerm.length === 0 && (selectedRegion !== 'all' || category !== 'all' || serviceMethod !== 'all')) {
             score = 1;
         }
 
@@ -1286,8 +1301,8 @@ function filterCatalog(renderList = true) {
             }
         }
 
-        return { company, score, matchesCategory, matchesRegion, isPremium };
-    }).filter(m => m.score > 0 && m.matchesCategory && m.matchesRegion);
+        return { company, score, matchesCategory, matchesRegion, matchesServiceMethod, isPremium };
+    }).filter(m => m.score > 0 && m.matchesCategory && m.matchesRegion && m.matchesServiceMethod);
 
     // Sort: Premium first, then by score, then by distance (if available), then alphabetically
     matches.sort((a, b) => {

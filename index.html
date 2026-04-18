@@ -249,10 +249,15 @@
                         </label>
                     </div>
 
-                    <!-- Älykkäät hakupainikkeet (palvelutapa) -->
-                    <div class="smart-search-buttons" style="margin-top: 15px; margin-bottom: 5px; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
-                        <a href="koko-laukaa.html?tag=kotikaynti" class="btn-smart">🚗 Kotiin tuotavat palvelut</a>
-                        <a href="koko-laukaa.html?tag=etapalvelu" class="btn-smart">💻 Etäpalvelut</a>
+                    <!-- Älykkäät hakupainikkeet (palvelutapa) - korvattu pudotusvalikolla -->
+                    <div class="service-method-filter" style="margin-top: 15px; margin-bottom: 5px; text-align: center;">
+                        <select id="service-method-select" class="gen-input" style="max-width: 300px; display: inline-block; padding: 0.5rem; text-align: center;">
+                            <option value="all">🏢 Kaikki palvelutavat</option>
+                            <option value="toimipiste">🏢 Asiointi toimipisteessä</option>
+                            <option value="kotikaynti">🏠 Kotiin tuotavat palvelut</option>
+                            <option value="etapalvelu">💻 Etäpalvelut</option>
+                            <option value="toimitus">🚚 Toimitus / Nouto</option>
+                        </select>
                     </div>
 
                     <!-- Hakutulokset (lisätty dynaamisesti) -->

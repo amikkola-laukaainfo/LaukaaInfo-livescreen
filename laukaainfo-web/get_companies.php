@@ -48,15 +48,14 @@ header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 header('Pragma: no-cache');
 
 /* ---------- Simple rate limiting (optional) ----------------------------- */
-// Allows up to 60 requests per IP per minute via a temp file counter.
-// Comment out this block to disable.
+// Allows up to 1500 requests per IP per minute via a temp file counter.
 $rate_limit_dir = sys_get_temp_dir() . '/laukaainfo_rl/';
 if (!is_dir($rate_limit_dir))
     @mkdir($rate_limit_dir, 0700, true);
 $ip_key = $rate_limit_dir . md5($_SERVER['REMOTE_ADDR'] ?? 'unknown') . '.txt';
 $now = time();
 $window = 60;
-$max_rq = 60;
+$max_rq = 1500; // Nostettu 60 -> 1500 jotta ei tule 429-virheitä normaalikäytössä
 $hit_count = 1;
 $hit_time = $now;
 if (file_exists($ip_key)) {
