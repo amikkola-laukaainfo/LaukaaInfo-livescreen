@@ -2549,6 +2549,28 @@ function updateMapSidebar(companies) {
     const offMapList = document.getElementById('off-map-companies-list');
     if (!serviceList || !offMapList || !map) return;
 
+    // Jos funktiota kutsutaan kartan moveend-tapahtumalla, companies on Event-objekti
+    if (!Array.isArray(companies)) {
+        companies = allCompanies;
+        
+        if (typeof mapFilterMode !== 'undefined') {
+            if (mapFilterMode === 'service_area') {
+                companies = allCompanies.filter(c => c.service_mode === 'SERVICE_AREA');
+            } else if (mapFilterMode === 'near' && typeof userCoords !== 'undefined' && userCoords) {
+                companies = allCompanies.filter(c => {
+                    if (!c.lat || (!c.lon && !c.lng)) return false;
+                    const cLat = parseFloat(c.lat);
+                    const cLon = parseFloat(c.lon || c.lng);
+                    if (isNaN(cLat) || isNaN(cLon)) return false;
+                    const uLat = userCoords.lat;
+                    const uLon = userCoords.lng || userCoords.lon;
+                    const dist = getHaversineDistance(uLat, uLon, cLat, cLon);
+                    return dist < 10;
+                });
+            }
+        }
+    }
+
     serviceList.innerHTML = '';
     offMapList.innerHTML = '';
 
