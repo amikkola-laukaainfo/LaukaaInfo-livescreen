@@ -1040,7 +1040,7 @@ main {
 }
 
 section {
-    margin-bottom: 5rem;
+    margin-bottom: 4rem;
 }
 
 h2 {
@@ -2235,13 +2235,16 @@ footer {
 }
 
 .categories-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 1.5rem;
     margin-top: 2rem;
 }
 
 .category-card {
+    flex: 1 1 240px;
+    max-width: 320px;
     background: white;
     padding: 2rem;
     border-radius: 15px;
