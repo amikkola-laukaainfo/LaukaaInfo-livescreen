@@ -69,9 +69,22 @@
 
             // Jos ID ei ala "company-", etsitään oikea ID "Slim"-datasta
             if (!id.startsWith('company-')) {
-                const slimRes = await fetch(`${dataSourceUrl}?t=${Date.now()}`);
-                const slimJson = await slimRes.json();
-                const allSlim = Array.isArray(slimJson) ? slimJson : (slimJson.results || []);
+                let allSlim = [];
+                const slimCached = sessionStorage.getItem('laukaainfo_companies_slim');
+                const slimTime = sessionStorage.getItem('laukaainfo_companies_slim_time');
+                
+                if (slimCached && slimTime && (Date.now() - parseInt(slimTime) < 1800000)) {
+                    allSlim = JSON.parse(slimCached);
+                    if (!Array.isArray(allSlim)) allSlim = allSlim.results || [];
+                } else {
+                    const slimRes = await fetch(`${dataSourceUrl}?t=${Date.now()}`);
+                    if (!slimRes.ok) throw new Error('HTTP Error: ' + slimRes.status);
+                    const slimJson = await slimRes.json();
+                    allSlim = Array.isArray(slimJson) ? slimJson : (slimJson.results || []);
+                    sessionStorage.setItem('laukaainfo_companies_slim', JSON.stringify(slimJson));
+                    sessionStorage.setItem('laukaainfo_companies_slim_time', Date.now().toString());
+                }
+
                 const match = allSlim.find(c => slugify(c.nimi) === id);
                 if (match) {
                     actualId = match.id;
@@ -82,8 +95,21 @@
             }
 
             // Haetaan valitun yrityksen täydet tiedot
-            const response = await fetch(`${dataSourceUrl}?id=${encodeURIComponent(actualId)}&t=${Date.now()}`);
-            const json = await response.json();
+            let json = null;
+            const fullCached = sessionStorage.getItem('laukaainfo_full_' + actualId);
+            
+            if (fullCached) {
+                const parsed = JSON.parse(fullCached);
+                json = Array.isArray(parsed) ? parsed : (parsed.results || [parsed]);
+                if (!Array.isArray(json)) json = [json];
+            } else {
+                const response = await fetch(`${dataSourceUrl}?id=${encodeURIComponent(actualId)}&t=${Date.now()}`);
+                if (!response.ok) throw new Error('HTTP Error: ' + response.status);
+                json = await response.json();
+                
+                let storeVal = Array.isArray(json) ? json[0] : (json.results ? json.results[0] : json);
+                sessionStorage.setItem('laukaainfo_full_' + actualId, JSON.stringify(storeVal));
+            }
             
             // New response format: {results: [...], total: N, page: N, limit: N}
             const companies = Array.isArray(json) ? json : (json.results || []);

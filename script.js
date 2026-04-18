@@ -908,14 +908,25 @@ function handleInitialHashScroll() {
  * Yritysdata ja katalogi
  */
 async function loadCompanyData() {
-    // Käytetään palvelimen proxyä, joka hoitaa CORS-ongelmat ja datan muunnoksen
     const dataSourceUrl = 'https://www.mediazoo.fi/laukaainfo-web/get_companies.php';
     console.log('Yritetään hakea yritystietoja:', dataSourceUrl);
     try {
-        const response = await fetch(dataSourceUrl + '?t=' + Date.now());
-        console.log('Vastaus saatu:', response.status, response.statusText);
+        let json = null;
+        const cached = sessionStorage.getItem('laukaainfo_companies_slim');
+        const cacheTime = sessionStorage.getItem('laukaainfo_companies_slim_time');
+        
+        if (cached && cacheTime && (Date.now() - parseInt(cacheTime) < 1800000)) { // 30 min cache
+            json = JSON.parse(cached);
+            console.log('Käytetään välimuistissa olevaa yritysdataa');
+        } else {
+            const response = await fetch(dataSourceUrl + '?t=' + Date.now());
+            console.log('Vastaus saatu:', response.status);
+            if (!response.ok) throw new Error('HTTP Error: ' + response.status);
+            json = await response.json();
+            sessionStorage.setItem('laukaainfo_companies_slim', JSON.stringify(json));
+            sessionStorage.setItem('laukaainfo_companies_slim_time', Date.now().toString());
+        }
 
-        const json = await response.json();
         // New response format: {results: [...], total: N, page: N, limit: N}
         allCompanies = Array.isArray(json) ? json : (json.results || []);
         console.log('Yrityksiiä ladattu:', allCompanies.length);
@@ -1851,15 +1862,24 @@ async function updateSpotlight(company) {
 
     // Jos data on vajaata (Slim), haetaan täydet tiedot taustalla
     const isSlim = !company.puhelin && !company.email && (!company.media || company.media.length <= 1);
-    if (isSlim && company.id) {
+    if (isSlim && company.id && company.id !== 'welcome') {
         try {
             const dataSourceUrl = 'https://www.mediazoo.fi/laukaainfo-web/get_companies.php';
-            const response = await fetch(`${dataSourceUrl}?id=${encodeURIComponent(company.id)}&t=${Date.now()}`);
-            const data = await response.json();
+            let fullData = null;
+            const fullCached = sessionStorage.getItem('laukaainfo_full_' + company.id);
             
-            if (data.results && data.results[0]) {
-                const fullData = data.results[0];
-                
+            if (fullCached) {
+                fullData = JSON.parse(fullCached);
+            } else {
+                const response = await fetch(`${dataSourceUrl}?id=${encodeURIComponent(company.id)}&t=${Date.now()}`);
+                const data = await response.json();
+                if (data.results && data.results[0]) {
+                    fullData = data.results[0];
+                    sessionStorage.setItem('laukaainfo_full_' + company.id, JSON.stringify(fullData));
+                }
+            }
+            
+            if (fullData) {
                 // Normalisoidaan URL:t (kuten init-vaiheessa)
                 const baseUrl = dataSourceUrl.substring(0, dataSourceUrl.lastIndexOf('/') + 1);
                 if (fullData.media) {
