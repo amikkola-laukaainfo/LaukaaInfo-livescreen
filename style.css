@@ -3617,3 +3617,151 @@ footer {
     border: 1px solid #fadcc3;
 }
 
+/* --- Kartan asettelu ja sivupalkki (Map Sidebar) --- */
+.map-layout-wrapper {
+    display: flex;
+    gap: 1.5rem;
+    margin: 2rem auto;
+    max-width: 1200px;
+    align-items: stretch;
+}
+
+@media (max-width: 900px) {
+    .map-layout-wrapper {
+        flex-direction: column;
+    }
+}
+
+.map-sidebar {
+    flex: 0 0 320px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 8px 32px rgba(0, 51, 102, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    max-height: 450px;
+    overflow-y: auto;
+}
+
+@media (max-width: 900px) {
+    .map-sidebar {
+        flex: 1;
+        max-height: unset;
+    }
+}
+
+.map-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+.map-sidebar::-webkit-scrollbar-thumb {
+    background-color: var(--primary-blue);
+    border-radius: 10px;
+}
+
+.sidebar-section h4 {
+    font-family: var(--accent-font);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--secondary-blue);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.sidebar-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.sidebar-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.03);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    transition: all 0.2s ease;
+}
+
+.sidebar-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    border-color: rgba(0, 86, 179, 0.1);
+}
+
+.sidebar-item-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    cursor: pointer;
+}
+
+.sidebar-item-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--dark-text);
+}
+
+.sidebar-item-cat {
+    font-size: 0.75rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.8;
+}
+
+.sidebar-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.action-btn {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #666;
+}
+
+.action-btn:hover {
+    background: #e2e6ea;
+    color: var(--primary-blue);
+    transform: scale(1.1);
+}
+
+.action-btn.active-circle svg {
+    stroke: var(--primary-blue);
+}
+
+.action-btn.inactive-circle svg {
+    stroke: #999;
+}
+
+.empty-msg {
+    font-size: 0.9rem;
+    color: #888;
+    font-style: italic;
+    padding: 1rem 0;
+    text-align: center;
+}

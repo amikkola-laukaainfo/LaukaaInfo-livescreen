@@ -19,7 +19,11 @@ let serviceCirclePalette = [
     'hsl(270, 70%, 50%)',   // Liila
     'hsl(10, 90%, 50%)',    // Punainen
     'hsl(180, 70%, 40%)',   // Turkoosi
-    'hsl(45, 100%, 45%)'    // Kulta
+    'hsl(45, 100%, 45%)',   // Kulta
+    'hsl(75, 90%, 40%)',    // Limenvihreä
+    'hsl(300, 80%, 45%)',   // Purppura
+    'hsl(15, 90%, 55%)',    // Koralli
+    'hsl(220, 90%, 60%)'    // Vaaleansininen
 ];
 
 const FEATURED_LINKS = [
@@ -2552,6 +2556,11 @@ function updateMapSidebar(companies) {
     let serviceCount = 0;
     let offMapCount = 0;
 
+    // SVG Icons for the UI
+    const eyeOpenSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+    const eyeClosedSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`;
+    const locateSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>`;
+
     companies.forEach(company => {
         const lat = parseFloat(company.lat);
         const lon = parseFloat(company.lon || company.lng);
@@ -2559,10 +2568,11 @@ function updateMapSidebar(companies) {
 
         const slug = slugify(company.nimi);
         const isOffMap = !bounds.contains([lat, lon]);
-        const hasRadius = company.service_radius && parseFloat(company.service_radius) > 0;
+        const hasRadius = (company.service_radius && parseFloat(company.service_radius) > 0) || company.service_mode === 'SERVICE_AREA';
         const pkg = (company.paketti || company.package || '').toLowerCase();
         const type = (company.tyyppi || company.type || '').toLowerCase();
-        const isPremium = pkg.includes('premium') || type.includes('paid') || type.includes('maksu');
+        // Updated logic to ensure any VIP/Premium/Pro tag considers it premium
+        const isPremium = pkg.includes('premium') || type.includes('paid') || type.includes('maksu') || pkg.includes('pro') || type.includes('pro');
 
         // 1. Palvelualueet (vain ne joilla on säde)
         if (hasRadius) {
@@ -2581,8 +2591,8 @@ function updateMapSidebar(companies) {
                 </div>
                 <div class="sidebar-actions">
                     <button class="action-btn toggle-btn ${isVisible ? 'active-circle' : 'inactive-circle'}" 
-                            onclick="toggleServiceCircle('${slug}')" title="Näytä/piilota palvelualue">
-                        ${isVisible ? '👁️' : '🕶️'}
+                            onclick="toggleServiceCircle('${slug}', this)" title="Näytä/piilota palvelualue">
+                        ${isVisible ? eyeOpenSvg : eyeClosedSvg}
                     </button>
                 </div>
             `;
@@ -2597,11 +2607,11 @@ function updateMapSidebar(companies) {
             li.innerHTML = `
                 <div class="sidebar-item-info" onclick="locateOnMap(${lat}, ${lon}, '${slug}')">
                     <span class="sidebar-item-name">${company.nimi}</span>
-                    <span class="sidebar-item-cat">${company.kategoria} (näkyvän alueen ulkopuolella)</span>
+                    <span class="sidebar-item-cat">${company.kategoria} (Kartan ulkopuolella)</span>
                 </div>
                 <div class="sidebar-actions">
                     <button class="action-btn locate-btn" onclick="locateOnMap(${lat}, ${lon}, '${slug}')" title="Keskitä kartta kohteeseen">
-                        📍
+                        ${locateSvg}
                     </button>
                 </div>
             `;
@@ -2613,23 +2623,38 @@ function updateMapSidebar(companies) {
     if (offMapCount === 0) offMapList.innerHTML = '<li class="empty-msg">Kaikki kohteet näkyvissä</li>';
 }
 
-function toggleServiceCircle(slug) {
+function toggleServiceCircle(slug, btnElement) {
     const circle = activeCircles[slug];
     if (!circle || !serviceAreaLayer) return;
 
+    const eyeOpenSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+    const eyeClosedSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`;
+
+    // If passed directly via the onclick 'this' we can do targeted DOM updates without rebuilding whole list
     if (serviceAreaLayer.hasLayer(circle)) {
         serviceAreaLayer.removeLayer(circle);
         visibleCircles[slug] = false;
+        if (btnElement) {
+            btnElement.classList.remove('active-circle');
+            btnElement.classList.add('inactive-circle');
+            btnElement.innerHTML = eyeClosedSvg;
+            return; // Quick exit on targeted update
+        }
     } else {
         circle.addTo(serviceAreaLayer);
         visibleCircles[slug] = true;
+        if (btnElement) {
+            btnElement.classList.remove('inactive-circle');
+            btnElement.classList.add('active-circle');
+            btnElement.innerHTML = eyeOpenSvg;
+            return; // Quick exit on targeted update
+        }
     }
     
-    // Refresh sidebar to update buttons
+    // Fallback logic if we just have slug
     if (typeof filterCatalog === 'function') {
-        filterCatalog(false); // Update without re-rendering full list if possible
+        filterCatalog(false);
     } else {
-        // Fallback: just refresh UI
         updateMapSidebar(allCompanies); 
     }
 }
