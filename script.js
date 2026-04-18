@@ -1890,6 +1890,11 @@ async function updateSpotlight(company) {
         const actionsEl = document.getElementById('spotlight-actions');
         if (actionsEl) renderSpotlightActions(company, actionsEl);
     }
+
+    // Aina lopuksi piirretään media ja Slider
+    renderMedia(0);
+    renderSliderNav();
+    preloadCompanyMedia(company);
 }
 
 function renderSpotlightDetails(company, detailsEl) {
@@ -1923,25 +1928,27 @@ function renderSpotlightDetails(company, detailsEl) {
 
 function renderSpotlightActions(company, actionsEl) {
     if (!actionsEl) return;
+    
     let actionButtons = '';
+    
     if (company.nettisivu) {
         actionButtons += `<a href="${company.nettisivu}" target="_blank" class="btn-primary">🌐 Kotisivut</a>`;
     }
-    const actionsEl = document.getElementById('spotlight-actions');
-    if (actionsEl) {
-        let actionButtons = '';
-        if (company.nettisivu) {
-            actionButtons += `<a href="${company.nettisivu}" target="_blank" class="btn-primary">🌐 Kotisivut</a>`;
-        }
-        if (company.karttalinkki) {
-            actionButtons += `<a href="${company.karttalinkki}" target="_blank" class="btn-primary" style="background: #28a745;">📍 Kartta</a>`;
-        }
-        actionsEl.innerHTML = actionButtons;
-    }
+    
+    if (company.karttalinkki) {
+        // Fix: Use company properties correctly
+        const lat = company.lat;
+        const lon = company.lon || company.lng;
+        const mapsUrl = company.karttalinkki && company.karttalinkki !== '-' 
+            ? company.karttalinkki 
+            : (lat && lon ? `https://www.google.com/maps?q=${lat},${lon}` : null);
 
-    renderMedia(0);
-    renderSliderNav();
-    preloadCompanyMedia(company);
+        if (mapsUrl) {
+            actionButtons += `<a href="${mapsUrl}" target="_blank" class="btn-primary" style="background: #28a745;">📍 Kartta</a>`;
+        }
+    }
+    
+    actionsEl.innerHTML = actionButtons || '<p style="color:#666; font-style:italic;">Ei lisätietoja saatavilla.</p>';
 }
 
 /**
