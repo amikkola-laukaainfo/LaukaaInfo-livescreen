@@ -2030,7 +2030,7 @@ footer {
     gap: 10px;
     cursor: pointer;
     font-size: 0.95rem;
-    color: white;
+    color: #444;
     user-select: none;
 }
 
