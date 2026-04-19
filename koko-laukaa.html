@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fi">
 
 <head>
@@ -246,18 +246,21 @@
                 <div id="company-map"
                     style="height: 450px; border-radius: var(--border-radius); overflow: hidden; box-shadow: var(--shadow); flex-grow: 1;">
                 </div>
-                <div id="map-sidebar" class="map-sidebar">
+                                <div id="map-sidebar" class="map-sidebar">
                     <div class="sidebar-section">
-                        <h4><span class="icon">🟠</span> Palvelu saatavilla täällä</h4>
-                        <ul id="active-service-areas-list" class="sidebar-list">
-                            <li class="empty-msg">Ei aktiivisia alueita</li>
-                        </ul>
-                    </div>
-                    <div class="sidebar-section">
-                        <h4><span class="icon">🏢</span> Myös muualla toimivat yritykset</h4>
-                        <ul id="off-map-companies-list" class="sidebar-list">
-                            <li class="empty-msg">Kaikki kohteet näkyvissä</li>
-                        </ul>
+                        <h4><span class="icon">🟠</span> Palvelee alueella</h4>
+                        <div class="sidebar-sub-group" id="sidebar-group-on-map">
+                            <div class="sidebar-sub-label">✅ Näkyy kartalla</div>
+                            <ul id="service-areas-on-map-list" class="sidebar-list">
+                                <li class="empty-msg">Ei kohteita näkymässä</li>
+                            </ul>
+                        </div>
+                        <div class="sidebar-sub-group" id="sidebar-group-off-map">
+                            <div class="sidebar-sub-label">📍 Ei näy kartalla</div>
+                            <ul id="service-areas-off-map-list" class="sidebar-list">
+                                <li class="empty-msg">Kaikki näkyvissä</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>

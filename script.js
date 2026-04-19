@@ -2595,89 +2595,78 @@ function getHash(str) {
 }
 
 function updateMapSidebar(companies) {
-    const serviceList = document.getElementById('active-service-areas-list');
-    const offMapList = document.getElementById('off-map-companies-list');
-    if (!serviceList || !offMapList || !map) return;
+    const onMapList  = document.getElementById('service-areas-on-map-list');
+    const offMapList = document.getElementById('service-areas-off-map-list');
+    if (!onMapList || !offMapList || !map) return;
 
     // Jos funktiota kutsutaan kartan moveend-tapahtumalla, companies on Event-objekti
     if (!Array.isArray(companies)) {
         companies = window.currentMapCompanies || allCompanies;
     }
 
-
-    serviceList.innerHTML = '';
+    onMapList.innerHTML  = '';
     offMapList.innerHTML = '';
 
     const bounds = map.getBounds();
-    let serviceCount = 0;
+    let onMapCount  = 0;
     let offMapCount = 0;
 
-    // SVG Icons for the UI
-    const eyeOpenSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+    // SVG Icons
+    const eyeOpenSvg   = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
     const eyeClosedSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`;
-    const locateSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>`;
+    const locateSvg    = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>`;
 
     companies.forEach(company => {
         const lat = parseFloat(company.lat);
         const lon = parseFloat(company.lon || company.lng);
         if (isNaN(lat) || isNaN(lon)) return;
 
-        const slug = slugify(company.nimi);
-        const isOffMap = !bounds.contains([lat, lon]);
-        const hasRadius = (company.service_radius && parseFloat(company.service_radius) > 0) || company.service_mode === 'SERVICE_AREA';
-        const pkg = (company.paketti || company.package || '').toLowerCase();
-        const type = (company.tyyppi || company.type || '').toLowerCase();
-        // Updated logic to ensure any VIP/Premium/Pro tag considers it premium
-        const isPremium = pkg.includes('premium') || type.includes('paid') || type.includes('maksu') || pkg.includes('pro') || type.includes('pro');
+        // Vain palvelualueyritykset (service_radius tai SERVICE_AREA)
+        const hasRadius = (company.service_radius && parseFloat(company.service_radius) > 0)
+                       || company.service_mode === 'SERVICE_AREA';
+        if (!hasRadius) return;
 
-        // 1. Palvelualueet (vain ne joilla on säde)
-        if (hasRadius) {
-            serviceCount++;
-            const li = document.createElement('li');
-            li.className = 'sidebar-item';
-            
-            const colorIndex = Math.abs(getHash(company.nimi)) % serviceCirclePalette.length;
-            const circleColor = serviceCirclePalette[colorIndex];
-            const isVisible = visibleCircles[slug] !== false;
+        const slug      = slugify(company.nimi);
+        const isOnMap   = bounds.contains([lat, lon]);
+        const colorIdx  = Math.abs(getHash(company.nimi)) % serviceCirclePalette.length;
+        const circleColor = serviceCirclePalette[colorIdx];
+        const isVisible = visibleCircles[slug] !== false;
 
-            li.innerHTML = `
-                <div class="sidebar-item-info" onclick="locateOnMap(${lat}, ${lon}, '${slug}')">
-                    <span class="sidebar-item-name" style="border-left: 4px solid ${circleColor}; padding-left: 8px;">${company.nimi}</span>
-                    <span class="sidebar-item-cat">${company.kategoria}</span>
-                </div>
-                <div class="sidebar-actions">
-                    <button class="action-btn toggle-btn ${isVisible ? 'active-circle' : 'inactive-circle'}" 
-                            onclick="toggleServiceCircle('${slug}', this)" title="Näytä/piilota palvelualue">
-                        ${isVisible ? eyeOpenSvg : eyeClosedSvg}
-                    </button>
-                </div>
-            `;
-            serviceList.appendChild(li);
-        }
+        const li = document.createElement('li');
+        li.className = 'sidebar-item';
+        li.innerHTML = `
+            <div class="sidebar-item-info" onclick="locateOnMap(${lat}, ${lon}, '${slug}')">
+                <span class="sidebar-item-name" style="border-left: 4px solid ${circleColor}; padding-left: 8px;">${company.nimi}</span>
+                <span class="sidebar-item-cat">${company.kategoria}</span>
+            </div>
+            <div class="sidebar-actions">
+                <button class="action-btn toggle-btn ${isVisible ? 'active-circle' : 'inactive-circle'}"
+                        onclick="toggleServiceCircle('${slug}', this)" title="Näytä/piilota palvelualue">
+                    ${isVisible ? eyeOpenSvg : eyeClosedSvg}
+                </button>
+                ${!isOnMap ? `<button class="action-btn locate-btn" onclick="locateOnMap(${lat}, ${lon}, '${slug}')" title="Siirry kartalla">${locateSvg}</button>` : ''}
+            </div>
+        `;
 
-        // 2. Muut kohteet lähellä (Ulkopuolella olevat Premium tai Service Radius kohteet)
-        if (isOffMap && (hasRadius || isPremium)) {
-            offMapCount++;
-            const li = document.createElement('li');
-            li.className = 'sidebar-item';
-            li.innerHTML = `
-                <div class="sidebar-item-info" onclick="locateOnMap(${lat}, ${lon}, '${slug}')">
-                    <span class="sidebar-item-name">${company.nimi}</span>
-                    <span class="sidebar-item-cat">${company.kategoria} (Kartan ulkopuolella)</span>
-                </div>
-                <div class="sidebar-actions">
-                    <button class="action-btn locate-btn" onclick="locateOnMap(${lat}, ${lon}, '${slug}')" title="Keskitä kartta kohteeseen">
-                        ${locateSvg}
-                    </button>
-                </div>
-            `;
+        if (isOnMap) {
+            onMapList.appendChild(li);
+            onMapCount++;
+        } else {
             offMapList.appendChild(li);
+            offMapCount++;
         }
     });
 
-    if (serviceCount === 0) serviceList.innerHTML = '<li class="empty-msg">Ei aktiivisia alueita</li>';
-    if (offMapCount === 0) offMapList.innerHTML = '<li class="empty-msg">Kaikki kohteet näkyvissä</li>';
+    if (onMapCount  === 0) onMapList.innerHTML  = '<li class="empty-msg">Ei kohteita näkymässä</li>';
+    if (offMapCount === 0) offMapList.innerHTML = '<li class="empty-msg">Kaikki näkyvissä</li>';
+
+    // Piilota/näytä alaryhmät tarpeen mukaan
+    const onMapGroup  = document.getElementById('sidebar-group-on-map');
+    const offMapGroup = document.getElementById('sidebar-group-off-map');
+    // Jos molemmat ryhmät ovat tyhjiä (ei palvelualueyrityksiä lainkaan), voidaan piiloittaa koko osio
+    // mutta näytetään se aina jotta käyttäjä tietää osion olevan olemassa
 }
+
 
 function toggleServiceCircle(slug, btnElement) {
     const circle = activeCircles[slug];
