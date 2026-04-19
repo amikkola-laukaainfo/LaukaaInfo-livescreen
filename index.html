@@ -207,14 +207,7 @@
                     <h1>L<span style="font-size: 0.85em;">aukaa</span>I<span style="font-size: 0.85em;">nfo</span></h1>
                 </div>
                 <p class="hero-tagline">Laukaa taskussasi – tiedä, löydä ja osallistu.</p>
-                <div class="header-buttons">
-                    <a href="https://www.youtube.com/@laukaainfo" target="_blank" class="btn-youtube">
-                        LaukaaInfo YouTube
-                    </a>
-                    <a href="https://www.facebook.com/groups/892675230270311" target="_blank" class="btn-facebook">
-                        Keskusteluryhmä
-                    </a>
-                </div>
+
             </div>
         </div>
         <div class="hero-right">
@@ -282,13 +275,25 @@
                         <h2 style="color: var(--primary-blue); margin-bottom: 0.5rem; font-size: 1.5rem;">Selaa alueittain</h2>
                         <p style="font-size: 0.9rem; color: #555; margin-bottom: 1.5rem;">Tutustu taajamien ja koko kunnan paikalliseen tarjontaan.</p>
 
-                        <div class="region-buttons-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
-                            <a href="koko-laukaa.html" class="btn-secondary" style="grid-column: span 2; text-align: center; font-weight: bold; background: var(--primary-blue); color: white;">Koko Laukaa</a>
-                            <a href="laukaa.html" class="btn-secondary" style="text-align: center;">Laukaa kk</a>
-                            <a href="leppavesi.html" class="btn-secondary" style="text-align: center;">Leppävesi</a>
-                            <a href="lievestuore.html" class="btn-secondary" style="text-align: center;">Lievestuore</a>
-                            <a href="vihtavuori.html" class="btn-secondary" style="text-align: center;">Vihtavuori</a>
-                            <a href="vehnia.html" class="btn-secondary" style="text-align: center;">Vehniä</a>
+                        <div class="homepage-region-selector">
+                            <div class="premium-select-wrapper">
+                                <select id="home-region-select" class="premium-select">
+                                    <option value="" disabled selected>Valitse alue ja taajama...</option>
+                                    <option value="koko-laukaa">Koko Laukaa</option>
+                                    <option value="laukaa">Laukaa kk</option>
+                                    <option value="leppavesi">Leppävesi</option>
+                                    <option value="lievestuore">Lievestuore</option>
+                                    <option value="vihtavuori">Vihtavuori</option>
+                                    <option value="vehnia">Vehniä</option>
+                                </select>
+                            </div>
+                            
+                            <div id="home-category-wrapper" class="premium-select-wrapper hidden-select">
+                                <select id="home-category-select" class="premium-select">
+                                    <option value="all">Kaikki toimialat</option>
+                                    <!-- Kategoriat ladataan dynaamisesti scriptissä -->
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -296,41 +301,78 @@
                 <!-- Hakutulokset (lisätty dynaamisesti) -->
                 <div id="catalog-list" class="catalog-list-home" style="margin-top: 2rem;"></div>
 
-                <div class="map-accordion">
-                    <button class="accordion-header" id="toggle-map-btn">
-                        <span>Avaa karttahaku</span>
-                        <span class="icon">▼</span>
-                    </button>
-                    <div class="accordion-content" id="map-accordion-content">
-                        <div class="map-search-bar">
-                            <input type="text" id="map-local-search" placeholder="Hae kohteita kartalta..."
-                                aria-label="Etsi kartalta">
-                        </div>
-                        <div id="company-map" class="embedded-map"></div>
-                    </div>
-                </div>
+
             </div>
         </section>
 
-        <div class="homepage-top">
-            <!-- Media Spotlight Link Card -->
-            <a href="galleria.html" class="media-spotlight-card">
-                <div class="card-content">
-                    <div class="card-text">
-                        <h3>Kuvagalleria – Paikallista mediaa</h3>
-                        <p>Katso uusimmat kuvat ja videot Laukaasta kootusti.</p>
-                    </div>
-                    <span class="card-arrow">➔</span>
-                </div>
-            </a>
+        <section class="community-section">
+            <div class="section-header">
+                <h2>Yhteisöllisyys</h2>
+                <p>Osallistu, seuraa ja pysy kärryillä Laukaan tapahtumista.</p>
+            </div>
+            
+            <div class="feature-grid">
+                <a href="https://www.youtube.com/@laukaainfo" target="_blank" class="feature-card card-youtube">
+                    <div class="icon">🎬</div>
+                    <h3>YouTube</h3>
+                    <p>LaukaaInfo YouTube-kanava. Videoita ja tunnelmia Laukaasta.</p>
+                </a>
+                <a href="https://www.facebook.com/groups/892675230270311" target="_blank" class="feature-card card-facebook">
+                    <div class="icon">👥</div>
+                    <h3>Keskustelu</h3>
+                    <p>Liity Laukaan keskusteluryhmään Facebookissa. Kysy ja jaa.</p>
+                </a>
+                <a href="ajankohtaista.html#news-card" class="feature-card card-news">
+                    <div class="icon">📰</div>
+                    <h3>Ajankohtaista</h3>
+                    <p>Kuntatiedotteet ja viralliset uutiset kootusti yhdessä paikassa.</p>
+                </a>
+                <a href="#toggle-feed-btn" class="feature-card card-feed" onclick="document.getElementById('toggle-feed-btn').click();">
+                    <div class="icon">📱</div>
+                    <h3>Laukaa-syöte</h3>
+                    <p>Paikalliset ilmoitukset, tarjoukset ja menovinkit tuoreeltaan.</p>
+                </a>
+            </div>
+        </section>
 
+        <section class="experiences-section">
+            <div class="section-header">
+                <h2>Elämykset & Kulttuuri</h2>
+                <p>Löydä Laukaan helmet, tarinat ja päätösten taustat.</p>
+            </div>
+            
+            <div class="feature-grid">
+                <a href="asiahaku.html" class="feature-card">
+                    <div class="icon">⚖️</div>
+                    <h3>Päätösten polut</h3>
+                    <p>Tutki ja hae paikallisia päätöksiä helpon teemahaun avulla.</p>
+                </a>
+                <a href="muistokartta.html" class="feature-card">
+                    <div class="icon">🏛️</div>
+                    <h3>Muistokartta</h3>
+                    <p>Laukaan historialliset kohteet ja muistelmat kartalla.</p>
+                </a>
+                <a href="tarinakartta.html" class="feature-card">
+                    <div class="icon">🗺️</div>
+                    <h3>Tarinakartta</h3>
+                    <p>Lähde elämysmatkalle Laukaan tarinoiden ja reittien pariin.</p>
+                </a>
+                <a href="galleria.html" class="feature-card">
+                    <div class="icon">🖼️</div>
+                    <h3>Kuvagalleria</h3>
+                    <p>Katso uusimmat kuvat ja videot Laukaasta kootusti.</p>
+                </a>
+            </div>
+        </section>
+
+        <div class="homepage-top" style="justify-content: center; margin-top: 0;">
             <!-- Feed Accordion -->
             <section class="feed-accordion-section">
                 <div class="feed-accordion">
                     <button class="feed-accordion-header closed" id="toggle-feed-btn" style="align-items: center;">
                         <div style="display: flex; flex-direction: column; align-items: flex-start;">
-                            <span>Mitä Laukaassa tapahtuu</span>
-                            <small style="font-size: 0.8rem; font-weight: normal; opacity: 0.9; margin-top: 2px;">Paikalliset ilmoitukset, tapahtumat ja tarjoukset</small>
+                            <span>Paikallinen syöte</span>
+                            <small style="font-size: 0.8rem; font-weight: normal; opacity: 0.9; margin-top: 2px;">Ilmoitukset, tapahtumat ja tarjoukset</small>
                         </div>
                         <span class="icon-btn">Avaa</span>
                     </button>

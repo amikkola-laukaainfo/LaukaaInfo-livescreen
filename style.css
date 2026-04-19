@@ -3809,3 +3809,172 @@ footer {
         white-space: normal !important;
     }
 }
+
+/* =========================================
+   NEW HOMEPAGE DESIGN ELEMENTS
+   ========================================= */
+
+/* Feature Section Titles */
+.section-header {
+    text-align: center;
+    margin: 4.5rem auto 2.5rem;
+    max-width: 800px;
+}
+
+.section-header h2 {
+    font-family: var(--accent-font);
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--secondary-blue);
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
+    margin-bottom: 0.5rem;
+}
+
+.section-header p {
+    color: #64748b;
+    font-size: 1.1rem;
+}
+
+/* Feature Cards Grid */
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto 4rem;
+    padding: 0 1rem;
+}
+
+.feature-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2.5rem 2rem;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.feature-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    border-color: var(--primary-blue);
+}
+
+.feature-card .icon {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    background: #f8fafc;
+    width: 90px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 24px;
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover .icon {
+    background: #f0f7ff;
+    transform: scale(1.1);
+}
+
+.feature-card h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin-bottom: 0.75rem;
+}
+
+.feature-card p {
+    font-size: 1rem;
+    color: #64748b;
+    line-height: 1.5;
+}
+
+/* Custom Dropdown Styling */
+.premium-select-wrapper {
+    position: relative;
+    margin-bottom: 1.25rem;
+    width: 100%;
+}
+
+.premium-select {
+    width: 100%;
+    appearance: none;
+    background-color: #ffffff;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.1rem 1.5rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #1e293b;
+    cursor: pointer;
+    transition: all 0.2s;
+    outline: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.premium-select:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 4px rgba(0, 75, 160, 0.1);
+}
+
+.premium-select-wrapper::after {
+    content: '▼';
+    position: absolute;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--primary-blue);
+    pointer-events: none;
+    font-size: 0.9rem;
+}
+
+.hidden-select {
+    display: none;
+    opacity: 0;
+}
+
+.hidden-select.visible {
+    display: block;
+    opacity: 1;
+    animation: fadeInSlideUp 0.4s ease forwards;
+}
+
+@keyframes fadeInSlideUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Community Colors */
+.card-youtube:hover { border-color: #ff0000; }
+.card-youtube:hover .icon { background: #fef2f2; color: #ff0000; }
+
+.card-facebook:hover { border-color: #1877f2; }
+.card-facebook:hover .icon { background: #eff6ff; color: #1877f2; }
+
+.card-news:hover { border-color: #008148; }
+.card-news:hover .icon { background: #f0fdf4; color: #008148; }
+
+.card-feed:hover { border-color: #ff9900; }
+.card-feed:hover .icon { background: #fffbeb; color: #ff9900; }
+
+@media (max-width: 600px) {
+    .section-header h2 {
+        font-size: 1.8rem;
+    }
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+    .section-header {
+        margin: 3.5rem auto 2rem;
+    }
+}

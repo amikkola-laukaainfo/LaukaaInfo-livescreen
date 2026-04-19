@@ -160,30 +160,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Alustetaan yritysdata dynaamisesti (Kauppa-sivu tai -valikot)
     loadCompanyData();
 
-    // Alustetaan haitari (Kauppa-sivu)
-    if (document.getElementById('toggle-map-btn')) {
-        initAccordion();
+    // Alustetaan etusivun uudet valinnat
+    if (document.getElementById('home-region-select')) {
+        initHomepageSelectors();
     }
 });
 
-function initAccordion() {
-    const toggleBtn = document.getElementById('toggle-map-btn');
-    const content = document.getElementById('map-accordion-content');
 
-    if (toggleBtn && content) {
-        toggleBtn.addEventListener('click', () => {
-            const isOpen = content.classList.toggle('open');
-            toggleBtn.querySelector('.icon').style.transform = isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
-
-            if (isOpen && map) {
-                // Leaflet needs a resize trigger when shown in a previously hidden container
-                setTimeout(() => {
-                    map.invalidateSize();
-                }, 300);
-            }
-        });
-    }
-}
 
 const categoryColors = {
     'Autokorjaamot': '#4a5568',
@@ -1361,6 +1344,58 @@ function initRegionFilter() {
     });
 }
 
+function initHomepageSelectors() {
+    const regionSelect = document.getElementById('home-region-select');
+    const categoryWrapper = document.getElementById('home-category-wrapper');
+    const categorySelect = document.getElementById('home-category-select');
+
+    if (!regionSelect || !categorySelect) return;
+
+    regionSelect.addEventListener('change', () => {
+        const region = regionSelect.value;
+        if (region) {
+            // Näytetään kategoriavalikko
+            categoryWrapper.classList.add('visible');
+            
+            // Jos valittiin "Koko Laukaa", asetetaan se myös localSorageen (jos halutaan synkata)
+            if (region === 'koko-laukaa') {
+                localStorage.setItem('selectedRegion', 'all');
+            } else {
+                localStorage.setItem('selectedRegion', region);
+            }
+        }
+    });
+
+    categorySelect.addEventListener('change', () => {
+        const region = regionSelect.value;
+        const category = categorySelect.value;
+
+        if (region && category) {
+            let targetUrl = '';
+            
+            if (region === 'koko-laukaa') {
+                targetUrl = category === 'all' ? 'koko-laukaa.html' : `kategoria.html?cat=${encodeURIComponent(category)}&region=all`;
+            } else {
+                // Laukaa kk, Leppävesi jne. -sivut
+                const pageMap = {
+                    'laukaa': 'laukaa.html',
+                    'leppavesi': 'leppavesi.html',
+                    'lievestuore': 'lievestuore.html',
+                    'vehnia': 'vehnia.html',
+                    'vihtavuori': 'vihtavuori.html'
+                };
+                
+                const page = pageMap[region] || 'koko-laukaa.html';
+                targetUrl = category === 'all' ? page : `${page}?tag=${encodeURIComponent(category.toLowerCase())}`;
+            }
+
+            if (targetUrl) {
+                window.location.href = targetUrl;
+            }
+        }
+    });
+}
+
 function filterCatalog(renderList = true) {
     const searchEl = document.getElementById('company-search');
     if (!searchEl) return;
@@ -1587,6 +1622,21 @@ function initCategories(companies) {
 
     renderNavCategories(categories);
     renderHomepageCategories(categories);
+    populateHomeCategorySelect(categories);
+}
+
+function populateHomeCategorySelect(categories) {
+    const homeCatSelect = document.getElementById('home-category-select');
+    if (!homeCatSelect) return;
+
+    homeCatSelect.innerHTML = '<option value="" disabled selected>Valitse toimiala (tai kaikki)...</option><option value="all">Kaikki toimialat</option>';
+    
+    categories.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat;
+        option.textContent = cat;
+        homeCatSelect.appendChild(option);
+    });
 }
 
 function renderNavCategories(categories) {
