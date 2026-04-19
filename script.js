@@ -300,7 +300,7 @@ function initMap(companies) {
     
     // Map Filter Toggle Control
     const MapFilterControl = L.Control.extend({
-        options: { position: 'topleft' },
+        options: { position: 'topright' },
         onAdd: function(map) {
             const container = L.DomUtil.create('div', 'leaflet-map-filters');
             container.innerHTML = `
