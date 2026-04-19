@@ -48,15 +48,14 @@ header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 header('Pragma: no-cache');
 
 /* ---------- Simple rate limiting (optional) ----------------------------- */
-// Allows up to 60 requests per IP per minute via a temp file counter.
-// Comment out this block to disable.
+// Allows up to 1500 requests per IP per minute via a temp file counter.
 $rate_limit_dir = sys_get_temp_dir() . '/laukaainfo_rl/';
 if (!is_dir($rate_limit_dir))
     @mkdir($rate_limit_dir, 0700, true);
 $ip_key = $rate_limit_dir . md5($_SERVER['REMOTE_ADDR'] ?? 'unknown') . '.txt';
 $now = time();
 $window = 60;
-$max_rq = 60;
+$max_rq = 1500; // Nostettu 60 -> 1500 jotta ei tule 429-virheitä normaalikäytössä
 $hit_count = 1;
 $hit_time = $now;
 if (file_exists($ip_key)) {
@@ -323,6 +322,9 @@ while (($row_raw = fgetcsv($stream)) !== false) {
         "palvelutapa" => $row['palvelutapa'] ?? '',
         "alue_slug" => $row['alue_slug'] ?? '',
         "kunta_slug" => $row['kunta_slug'] ?? '',
+        "service_mode" => $row['service_mode'] ?? 'LOCAL',
+        "service_radius" => $row['service_radius'] ?? '',
+        "service_note" => $row['service_note'] ?? '',
     ];
 }
 fclose($stream);
@@ -336,8 +338,7 @@ if (!empty($id_param)) {
         // Match full ID or just the slug part
         $clean_id = str_replace('company-', '', $id_param);
         return $c['id'] === $id_param || 
-               $c['id'] === 'company-' . $id_param ||
-               strpos($c['id'], $clean_id) !== false;
+               $c['id'] === 'company-' . $id_param;
     });
     $filtered = array_values($filtered);
     
@@ -382,6 +383,9 @@ if (!empty($id_param)) {
             "alue_slug" => $c['alue_slug'],
             "karusellipaino" => $c['karusellipaino'],
             "tyyppi" => $c['tyyppi'],
+            "service_mode" => $c['service_mode'],
+            "service_radius" => $c['service_radius'],
+            "service_note" => $c['service_note'],
             // Only send the first media item for previews to save bandwidth and improve protection
             "media" => isset($c['media'][0]) ? [$c['media'][0]] : [],
             "images" => isset($c['images'][0]) ? [$c['images'][0]] : []

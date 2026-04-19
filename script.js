@@ -1236,7 +1236,12 @@ function initCompanyCatalog() {
         searchBtn.addEventListener('click', () => {
             const query = searchInput.value.trim();
             if (tryRedirectToRegion(query)) return;
-            filterCatalog();
+            
+            if (filteredSuggestions && filteredSuggestions.length > 0) {
+                selectSuggestion(filteredSuggestions[0]);
+            } else {
+                filterCatalog();
+            }
         });
     }
 
@@ -1778,13 +1783,17 @@ function handleSearchKeydown(e) {
         activeSuggestionIndex = (activeSuggestionIndex - 1 + items.length) % items.length;
         updateActiveSuggestion(items);
     } else if (e.key === 'Enter') {
+        e.preventDefault();
         if (activeSuggestionIndex > -1) {
-            e.preventDefault();
             selectSuggestion(filteredSuggestions[activeSuggestionIndex]);
         } else {
             const query = (document.getElementById('company-search')?.value || '').trim();
-            if (tryRedirectToRegion(query)) {
-                e.preventDefault();
+            if (tryRedirectToRegion(query)) return;
+            
+            if (filteredSuggestions && filteredSuggestions.length > 0) {
+                selectSuggestion(filteredSuggestions[0]);
+            } else if (typeof filterCatalog === 'function') {
+                filterCatalog();
             }
         }
     } else if (e.key === 'Escape') {
