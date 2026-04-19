@@ -1,13 +1,456 @@
-<!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pikkuilmot Laukaa - Paikallinen tori | LaukaaInfo</title><meta name="description" content="Laukaan omat pikkuilmoitukset kootusti. Löydä palvelut, tuotteet ja tekijät läheltäsi."><link rel="icon" href="logo.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Outfit:wght@100..900&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.eaedff42.css?v=20260301-1"><style>:root{--market-yellow:#ffb100;--market-bg:#fffdf5}.pikkuilmot-hero{background-color:var(--market-bg);padding:3rem 1rem;text-align:center;border-bottom:3px solid var(--market-yellow)}.tag-cloud{padding:20px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:800px;margin:0 auto}.tag-pill{background:#fff;border:1px solid #ddd;padding:6px 15px;border-radius:20px;font-size:.9rem;cursor:pointer;transition:all .2s;user-select:none}.tag-pill.active{background:var(--market-yellow);border-color:var(--market-yellow);color:#000;font-weight:600;transform:scale(1.05)}.ad-list{max-width:700px;margin:0 auto;padding:20px}.ad-card{background:#fff;border-radius:12px;padding:1.25rem;margin-bottom:1rem;box-shadow:0 2px 10px rgba(0,0,0,.05);border-left:5px solid var(--market-yellow);transition:transform .2s;display:flex;flex-direction:column;gap:8px}.ad-card:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(0,0,0,.1)}.ad-card.highlighted{border-left:8px solid var(--market-yellow);background-color:#fff9e6;transform:scale(1.02);box-shadow:0 5px 20px rgba(255,177,0,.2);transition:all .5s ease}.ad-title{font-size:1.15rem;font-weight:700;margin:0;color:#000;font-family:Outfit,sans-serif}.ad-meta{font-size:.8rem;color:#666;display:flex;justify-content:space-between;align-items:center}.ad-tags{display:flex;gap:6px;margin-top:4px}.ad-tag{font-size:.75rem;color:var(--primary);font-weight:600}.btn-fb{display:inline-block;background:#1877f2;color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;font-size:.9rem;font-weight:600;text-align:center;margin-top:10px}.btn-fb:hover{filter:brightness(1.1)}.empty-state{text-align:center;padding:40px;color:#888}@media (max-width:600px){.pikkuilmot-hero{padding:2rem 1rem}}</style></head><body><nav class="top-nav"><div class="nav-container"><a href="index.html" class="nav-logo"><img src="logo.png" alt="LaukaaInfo Logo"> <span>LaukaaInfo</span></a><div class="desktop-nav"><ul class="nav-links"><li class="nav-item"><a href="#" class="nav-link">Kauppa <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="ilmoittaudu.html">Ilmoittaudu julkaisijaksi</a></li><li><a href="kauppa.html">Osta lisää näkyvyyttä</a></li><li><a href="lisaa-yritys.html">Yritysnäkyvyys</a></li></ul></li><li class="nav-item"><a href="#" class="nav-link">Hakulinkit <span class="arrow">▼</span></a><ul class="dropdown-menu"><li class="has-arrow"><a href="#">Suosituimmat</a><ul class="nested-menu" id="nav-featured"></ul></li><li class="has-arrow"><a href="#">Kategoriat</a><ul class="nested-menu" id="nav-categories"></ul></li><li class="has-arrow"><a href="#">Taajamat</a><ul class="nested-menu"><li><a href="laukaa.html">Laukaa kk</a></li><li><a href="leppavesi.html">Leppävesi</a></li><li><a href="lievestuore.html">Lievestuore</a></li><li><a href="vehnia.html">Vehniä</a></li><li><a href="vihtavuori.html">Vihtavuori</a></li></ul></li></ul></li><li class="nav-item"><a href="ajankohtaista.html" class="nav-link">Ajankohtaista <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="ajankohtaista.html#events-card">Tapahtumat</a></li><li><a href="ajankohtaista.html#news-card">Tiedotteet</a></li><li><a href="ajankohtaista.html#decisions-card">Päätöksenteko</a></li><li><a href="ajankohtaista.html#feedback-card">Palautteet</a></li></ul></li><li class="nav-item"><a href="#" class="nav-link">Päätösten polut <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="asiahaku.html">Hae ja tutki</a></li></ul></li><li class="nav-item"><a href="#" class="nav-link">Kartat &amp; Elämykset <span class="arrow">▼</span></a><ul class="dropdown-menu"><li><a href="karttakohteet.html">Karttakohteet</a></li><li><a href="tarinakartta.html">Tarinakartta</a></li><li><a href="muistokartta.html">Muistokartta</a></li><li><a href="kadonneet.html">Kadonneet &amp; löydetyt</a></li></ul></li></ul></div><button class="hamburger" id="hamburger-btn" aria-label="Avaa valikko"><span></span> <span></span> <span></span></button></div></nav><div class="sidebar-overlay" id="sidebar-overlay"></div><aside class="sidebar-menu" id="sidebar-menu"><div class="sidebar-header"><a href="index.html" class="nav-logo"><img src="logo.png" alt="LaukaaInfo Logo"> <span>LaukaaInfo</span> </a><button class="close-btn" id="close-sidebar-btn" aria-label="Sulje valikko">&times;</button></div><div class="sidebar-content"><div class="menu-section"><h3 class="section-title">KAUPPA</h3><ul class="menu-list"><li class="menu-item"><a href="ilmoittaudu.html" class="sidebar-link">Ilmoittaudu julkaisijaksi</a></li><li class="menu-item"><a href="kauppa.html" class="sidebar-link">Osta lisää näkyvyyttä</a></li><li class="menu-item"><a href="lisaa-yritys.html" class="sidebar-link">Yritysnäkyvyys</a></li></ul></div><div class="menu-section"><h3 class="section-title">HAKULINKIT</h3><ul class="menu-list"><li class="menu-item has-submenu"><a href="#" class="submenu-toggle">Suosituimmat <span class="arrow">▼</span></a><ul class="submenu" id="sidebar-featured"></ul></li><li class="menu-item has-submenu"><a href="#" class="submenu-toggle">Kategoriat <span class="arrow">▼</span></a><ul class="submenu" id="sidebar-categories"></ul></li><li class="menu-item has-submenu"><a href="#" class="submenu-toggle">Taajamat <span class="arrow">▼</span></a><ul class="submenu"><li><a href="laukaa.html" class="sidebar-link">Laukaa kk</a></li><li><a href="leppavesi.html" class="sidebar-link">Leppävesi</a></li><li><a href="lievestuore.html" class="sidebar-link">Lievestuore</a></li><li><a href="vehnia.html" class="sidebar-link">Vehniä</a></li><li><a href="vihtavuori.html" class="sidebar-link">Vihtavuori</a></li></ul></li></ul></div><div class="menu-section"><h3 class="section-title">AJANKOHTAISTA</h3><ul class="menu-list"><li class="menu-item"><a href="ajankohtaista.html#events-card" class="sidebar-link">Tapahtumat</a></li><li class="menu-item"><a href="ajankohtaista.html#news-card" class="sidebar-link">Tiedotteet</a></li><li class="menu-item"><a href="ajankohtaista.html#decisions-card" class="sidebar-link">Päätöksenteko</a></li><li class="menu-item"><a href="ajankohtaista.html#feedback-card" class="sidebar-link">Palautteet</a></li></ul></div><div class="menu-section"><h3 class="section-title">PÄÄTÖSTEN POLUT</h3><ul class="menu-list"><li class="menu-item"><a href="asiahaku.html" class="sidebar-link">Hae ja tutki</a></li></ul></div><div class="menu-section highlight-section"><h3 class="section-title">KARTAT &amp; ELÄMYKSET ⭐</h3><ul class="menu-list"><li class="menu-item"><a href="karttakohteet.html" class="sidebar-link">Karttakohteet</a></li><li class="menu-item"><a href="tarinakartta.html" class="sidebar-link">Tarinakartta</a></li><li class="menu-item"><a href="muistokartta.html" class="sidebar-link">Muistokartta</a></li><li class="menu-item"><a href="kadonneet.html" class="sidebar-link">Kadonneet &amp; löydetyt</a></li></ul></div></div></aside><header class="pikkuilmot-hero"><h1 style="font-family:Outfit,sans-serif;font-size:2.5rem;margin-bottom:.5rem">Pikkuilmot</h1><p>Laukaan oma paikallinen ilmoitustaulu.</p><div class="tag-cloud" id="tag-cloud"></div></header><main><div class="ad-list" id="ad-list"><div class="loading-spinner" style="text-align:center;padding:2rem">Ladataan ilmoituksia...</div></div></main><footer style="margin-top:4rem;background-color:#f8f9fa"><div class="footer-content" style="text-align:center;padding:2rem"><p>© 2026 LaukaaInfo – Pikkuilmot</p><p style="font-size:.9rem;opacity:.7">Ilmoitukset ovat voimassa 7 päivää. Haluatko yrityksesi tähän? <a href="lisaa-yritys.html">Lue lisää.</a></p></div></footer><script>let allItems=[],activeTag="kaikki";async function fetchAds(){try{var a="https://www.mediazoo.fi/laukaainfo-web/lki-tori-api.php?ts="+Date.now(),e=(console.log("Fetching ads from:",a),await fetch(a));if(!e.ok)throw new Error(`Palvelin vastasi virheellä: ${e.status} `+e.statusText);var t=await e.text();try{var i=JSON.parse(t);console.log("Ads loaded:",i),allItems=i.data||[];var s=new URLSearchParams(window.location.search).get("tag");s&&(activeTag=s.toLowerCase()),renderTags(),renderAds(),checkUrlParam()}catch(a){console.error("JSON Parse Error. Server outputted:",t);var r=t.substring(0,200).replace(/</g,"&lt;").replace(/>/g,"&gt;");throw new Error(`Palvelimen vastaus ei ole JSON-muodossa. Vastaus alkaa: <br><pre style="background: #eee; padding: 10px; font-size: 0.8rem; overflow: auto; max-width: 100%;">${r}...</pre>`)}}catch(a){console.error("Fetch error:",a),document.getElementById("ad-list").innerHTML=`<div class="empty-state">Virhe ladattaessa ilmoituksia: ${a.message}</div>`}}function renderTags(){let e=new Set(["kaikki"]),t=(allItems.forEach(a=>{a.tags&&a.tags.forEach(a=>e.add(a.toLowerCase()))}),"kaikki"!==activeTag&&e.add(activeTag),document.getElementById("tag-cloud"));t.innerHTML="",Array.from(e).forEach(a=>{var e=document.createElement("div");e.className="tag-pill"+(a===activeTag?" active":""),e.textContent="kaikki"===a?"Kaikki":"#"+a,e.onclick=()=>{activeTag=a,renderTags(),renderAds()},t.appendChild(e)})}function renderAds(){var a=document.getElementById("ad-list"),e=new Date;let t=new Date(e.getTime()-6048e5);e=("kaikki"===activeTag?allItems:allItems.filter(a=>a.tags&&a.tags.some(a=>a.toLowerCase()===activeTag))).filter(a=>new Date(a.publish_at)>t);0===e.length?a.innerHTML='<div class="empty-state">Ei ilmoituksia tässä kategoriassa juuri nyt.</div>':a.innerHTML=e.map(a=>`
-                <article class="ad-card" id="ad-${a.id}">
-                    <h2 class="ad-title">${a.title}</h2>
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pikkuilmot Laukaa - Paikallinen tori | LaukaaInfo</title>
+    <meta name="description" content="Laukaan omat pikkuilmoitukset kootusti. Löydä palvelut, tuotteet ja tekijät läheltäsi.">
+    <link rel="icon" href="logo.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Outfit:wght@100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=20260301-1">
+    <style>
+        :root {
+            --market-yellow: #ffb100;
+            --market-bg: #fffdf5;
+        }
+        
+        .pikkuilmot-hero {
+            background-color: var(--market-bg);
+            padding: 3rem 1rem;
+            text-align: center;
+            border-bottom: 3px solid var(--market-yellow);
+        }
+        
+        .tag-cloud {
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .tag-pill {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+        
+        .tag-pill.active {
+            background: var(--market-yellow);
+            border-color: var(--market-yellow);
+            color: #000;
+            font-weight: 600;
+            transform: scale(1.05);
+        }
+        
+        .ad-list {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .ad-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--market-yellow);
+            transition: transform 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .ad-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .ad-card.highlighted {
+            border-left: 8px solid var(--market-yellow);
+            background-color: #fff9e6;
+            transform: scale(1.02);
+            box-shadow: 0 5px 20px rgba(255, 177, 0, 0.2);
+            transition: all 0.5s ease;
+        }
+        
+        .ad-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin: 0;
+            color: #000;
+            font-family: 'Outfit', sans-serif;
+        }
+        
+        .ad-meta {
+            font-size: 0.8rem;
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .ad-tags {
+            display: flex;
+            gap: 6px;
+            margin-top: 4px;
+        }
+        
+        .ad-tag {
+            font-size: 0.75rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .btn-fb {
+            display: inline-block;
+            background: #1877f2;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        .btn-fb:hover {
+            filter: brightness(1.1);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+        }
+        
+        @media (max-width: 600px) {
+            .pikkuilmot-hero {
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="logo.png" alt="LaukaaInfo Logo">
+                <span>LaukaaInfo</span>
+            </a>
+            <div class="desktop-nav">
+                <ul class="nav-links">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Kauppa <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="ilmoittaudu.html">Ilmoittaudu julkaisijaksi</a></li>
+                            <li><a href="kauppa.html">Osta lisää näkyvyyttä</a></li>
+                            <li><a href="lisaa-yritys.html">Yritysnäkyvyys</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Hakulinkit <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <li class="has-arrow">
+                                <a href="#">Suosituimmat</a>
+                                <ul class="nested-menu" id="nav-featured">
+                                </ul>
+                            </li>
+                            <li class="has-arrow">
+                                <a href="#">Kategoriat</a>
+                                <ul class="nested-menu" id="nav-categories">
+                                </ul>
+                            </li>
+                            <li class="has-arrow">
+                                <a href="#">Taajamat</a>
+                                <ul class="nested-menu">
+                                    <li><a href="laukaa.html">Laukaa kk</a></li>
+                                    <li><a href="leppavesi.html">Leppävesi</a></li>
+                                    <li><a href="lievestuore.html">Lievestuore</a></li>
+                                    <li><a href="vehnia.html">Vehniä</a></li>
+                                    <li><a href="vihtavuori.html">Vihtavuori</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="ajankohtaista.html" class="nav-link">Ajankohtaista <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="ajankohtaista.html#events-card">Tapahtumat</a></li>
+                            <li><a href="ajankohtaista.html#news-card">Tiedotteet</a></li>
+                            <li><a href="ajankohtaista.html#decisions-card">Päätöksenteko</a></li>
+                            <li><a href="ajankohtaista.html#feedback-card">Palautteet</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Päätösten polut <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="asiahaku.html">Hae ja tutki</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Kartat &amp; Elämykset <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="karttakohteet.html">Karttakohteet</a></li>
+                            <li><a href="tarinakartta.html">Tarinakartta</a></li>
+                            <li><a href="muistokartta.html">Muistokartta</a></li>
+                            <li><a href="kadonneet.html">Kadonneet &amp; löydetyt</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <button class="hamburger" id="hamburger-btn" aria-label="Avaa valikko">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- Sidebar Menu -->
+    <aside class="sidebar-menu" id="sidebar-menu">
+        <div class="sidebar-header">
+            <a href="index.html" class="nav-logo">
+                <img src="logo.png" alt="LaukaaInfo Logo">
+                <span>LaukaaInfo</span>
+            </a>
+            <button class="close-btn" id="close-sidebar-btn" aria-label="Sulje valikko">&times;</button>
+        </div>
+
+        <div class="sidebar-content">
+            <!-- Pääosio: KAUPPA -->
+            <div class="menu-section">
+                <h3 class="section-title">KAUPPA</h3>
+                <ul class="menu-list">
+                    <li class="menu-item"><a href="ilmoittaudu.html" class="sidebar-link">Ilmoittaudu julkaisijaksi</a></li>
+                    <li class="menu-item"><a href="kauppa.html" class="sidebar-link">Osta lisää näkyvyyttä</a></li>
+                    <li class="menu-item"><a href="lisaa-yritys.html" class="sidebar-link">Yritysnäkyvyys</a></li>
+                </ul>
+            </div>
+
+            <!-- Pääosio: HAKULINKIT -->
+            <div class="menu-section">
+                <h3 class="section-title">HAKULINKIT</h3>
+                <ul class="menu-list">
+                    <li class="menu-item has-submenu">
+                        <a href="#" class="submenu-toggle">Suosituimmat <span class="arrow">▼</span></a>
+                        <ul class="submenu" id="sidebar-featured">
+                        </ul>
+                    </li>
+                    <li class="menu-item has-submenu">
+                        <a href="#" class="submenu-toggle">Kategoriat <span class="arrow">▼</span></a>
+                        <ul class="submenu" id="sidebar-categories">
+                        </ul>
+                    </li>
+                    <li class="menu-item has-submenu">
+                        <a href="#" class="submenu-toggle">Taajamat <span class="arrow">▼</span></a>
+                        <ul class="submenu">
+                            <li><a href="laukaa.html" class="sidebar-link">Laukaa kk</a></li>
+                            <li><a href="leppavesi.html" class="sidebar-link">Leppävesi</a></li>
+                            <li><a href="lievestuore.html" class="sidebar-link">Lievestuore</a></li>
+                            <li><a href="vehnia.html" class="sidebar-link">Vehniä</a></li>
+                            <li><a href="vihtavuori.html" class="sidebar-link">Vihtavuori</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Pääosio: AJANKOHTAISTA -->
+            <div class="menu-section">
+                <h3 class="section-title">AJANKOHTAISTA</h3>
+                <ul class="menu-list">
+                    <li class="menu-item"><a href="ajankohtaista.html#events-card" class="sidebar-link">Tapahtumat</a>
+                    </li>
+                    <li class="menu-item"><a href="ajankohtaista.html#news-card" class="sidebar-link">Tiedotteet</a>
+                    </li>
+                    <li class="menu-item"><a href="ajankohtaista.html#decisions-card"
+                            class="sidebar-link">Päätöksenteko</a></li>
+                    <li class="menu-item"><a href="ajankohtaista.html#feedback-card" class="sidebar-link">Palautteet</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Pääosio: PÄÄTÖSTEN POLUT -->
+            <div class="menu-section">
+                <h3 class="section-title">PÄÄTÖSTEN POLUT</h3>
+                <ul class="menu-list">
+                    <li class="menu-item"><a href="asiahaku.html" class="sidebar-link">Hae ja tutki</a></li>
+                </ul>
+            </div>
+
+            <!-- Korostettu osio: KARTAT & ELÄMYKSET -->
+            <div class="menu-section highlight-section">
+                <h3 class="section-title">KARTAT &amp; ELÄMYKSET ⭐</h3>
+                <ul class="menu-list">
+                    <li class="menu-item"><a href="karttakohteet.html" class="sidebar-link">Karttakohteet</a></li>
+                    <li class="menu-item"><a href="tarinakartta.html" class="sidebar-link">Tarinakartta</a></li>
+                    <li class="menu-item"><a href="muistokartta.html" class="sidebar-link">Muistokartta</a></li>
+                    <li class="menu-item"><a href="kadonneet.html" class="sidebar-link">Kadonneet &amp; löydetyt</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </aside>
+
+    <header class="pikkuilmot-hero">
+        <h1 style="font-family: 'Outfit', sans-serif; font-size: 2.5rem; margin-bottom: 0.5rem;">Pikkuilmot</h1>
+        <p>Laukaan oma paikallinen ilmoitustaulu.</p>
+        <div class="tag-cloud" id="tag-cloud">
+            <!-- Tunnisteet tulevat tähän -->
+        </div>
+    </header>
+
+    <main>
+        <div class="ad-list" id="ad-list">
+            <div class="loading-spinner" style="text-align: center; padding: 2rem;">Ladataan ilmoituksia...</div>
+        </div>
+    </main>
+
+    <footer style="margin-top: 4rem; background-color: #f8f9fa;">
+        <div class="footer-content" style="text-align: center; padding: 2rem;">
+            <p>© 2026 LaukaaInfo – Pikkuilmot</p>
+            <p style="font-size: 0.9rem; opacity: 0.7;">Ilmoitukset ovat voimassa 7 päivää. Haluatko yrityksesi tähän? <a href="lisaa-yritys.html">Lue lisää.</a></p>
+        </div>
+    </footer>
+
+    <script>
+        let allItems = [];
+        let activeTag = 'kaikki';
+
+        async function fetchAds() {
+            try {
+                // Käytetään absoluuttista polkua, jotta se toimii myös paikallisesti testatessa
+                const API_URL = 'https://www.mediazoo.fi/laukaainfo-web/lki-tori-api.php?ts=' + Date.now();
+                console.log('Fetching ads from:', API_URL);
+                const r = await fetch(API_URL);
+                if (!r.ok) {
+                    throw new Error(`Palvelin vastasi virheellä: ${r.status} ${r.statusText}`);
+                }
+                const text = await r.text();
+                try {
+                    const res = JSON.parse(text);
+                    console.log('Ads loaded:', res);
+                    allItems = res.data || [];
+                    
+                    const params = new URLSearchParams(window.location.search);
+                    const listTag = params.get('tag');
+                    if (listTag) {
+                        activeTag = listTag.toLowerCase();
+                    }
+
+                    renderTags();
+                    renderAds();
+                    checkUrlParam();
+                } catch (jsonErr) {
+                    console.error('JSON Parse Error. Server outputted:', text);
+                    const snippet = text.substring(0, 200).replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                    throw new Error(`Palvelimen vastaus ei ole JSON-muodossa. Vastaus alkaa: <br><pre style="background: #eee; padding: 10px; font-size: 0.8rem; overflow: auto; max-width: 100%;">${snippet}...</pre>`);
+                }
+            } catch (err) {
+                console.error('Fetch error:', err);
+                document.getElementById('ad-list').innerHTML = `<div class="empty-state">Virhe ladattaessa ilmoituksia: ${err.message}</div>`;
+            }
+        }
+
+        function renderTags() {
+            const tags = new Set(['kaikki']);
+            allItems.forEach(item => {
+                if (item.tags) item.tags.forEach(t => tags.add(t.toLowerCase()));
+            });
+            
+            if (activeTag !== 'kaikki') tags.add(activeTag);
+            
+            const cloud = document.getElementById('tag-cloud');
+            cloud.innerHTML = '';
+            
+            Array.from(tags).forEach(t => {
+                const pill = document.createElement('div');
+                pill.className = 'tag-pill' + (t === activeTag ? ' active' : '');
+                pill.textContent = t === 'kaikki' ? 'Kaikki' : '#' + t;
+                pill.onclick = () => {
+                    activeTag = t;
+                    renderTags();
+                    renderAds();
+                };
+                cloud.appendChild(pill);
+            });
+        }
+
+        function renderAds() {
+            const list = document.getElementById('ad-list');
+            // Filter ads that are still within the 7‑day validity period
+            const now = new Date();
+            const cutoff = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+            const filtered = (activeTag === 'kaikki' ? allItems : allItems.filter(item => item.tags && item.tags.some(t => t.toLowerCase() === activeTag)))
+                .filter(item => {
+                    const pubDate = new Date(item.publish_at);
+                    return pubDate > cutoff;
+                });
+
+            if (filtered.length === 0) {
+                list.innerHTML = `<div class="empty-state">Ei ilmoituksia tässä kategoriassa juuri nyt.</div>`;
+                return;
+            }
+
+            list.innerHTML = filtered.map(item => `
+                <article class="ad-card" id="ad-${item.id}">
+                    <h2 class="ad-title">${item.title}</h2>
                     <div class="ad-tags">
-                        ${(a.tags||[]).map(a=>`<span class="ad-tag">#${a}</span>`).join(" ")}
+                        ${(item.tags || []).map(t => `<span class="ad-tag">#${t}</span>`).join(' ')}
                     </div>
                     <div class="ad-meta">
-                        <span>🕐 ${formatDate(a.publish_at)}</span>
+                        <span>🕐 ${formatDate(item.publish_at)}</span>
                         <span>Voimassa viikon</span>
                     </div>
-                    <a href="${a.link}" target="_blank" class="btn-fb">Avaa Facebookissa →</a>
+                    <a href="${item.link}" target="_blank" class="btn-fb">Avaa Facebookissa →</a>
                 </article>
-            `).join("")}function formatDate(a){return new Date(a).toLocaleDateString("fi-FI",{day:"numeric",month:"short"})}function checkUrlParam(){let e=new URLSearchParams(window.location.search).get("id");e&&setTimeout(()=>{let a=document.getElementById("ad-"+e);a&&(a.scrollIntoView({behavior:"smooth",block:"center"}),a.classList.add("highlighted"),setTimeout(()=>{a.classList.remove("highlighted")},4e3))},300)}fetchAds()</script><script src="script.eaedff42.js?v=20260301-1"></script></body></html>
+            `).join('');
+        }
+
+        function formatDate(iso) {
+            const d = new Date(iso);
+            return d.toLocaleDateString('fi-FI', { day: 'numeric', month: 'short' });
+        }
+
+        function checkUrlParam() {
+            const params = new URLSearchParams(window.location.search);
+            const targetId = params.get('id');
+            if (targetId) {
+                setTimeout(() => {
+                    const el = document.getElementById('ad-' + targetId);
+                    if (el) {
+                        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        el.classList.add('highlighted');
+                        
+                        // Poistetaan korostus hetken päästä
+                        setTimeout(() => {
+                            el.classList.remove('highlighted');
+                        }, 4000);
+                    }
+                }, 300);
+            }
+        }
+
+        fetchAds();
+    </script>
+    <script src="script.js?v=20260301-1"></script>
+</body>
+</html>
