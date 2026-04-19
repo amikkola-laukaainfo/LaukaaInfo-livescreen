@@ -3676,6 +3676,30 @@ footer {
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
+/* Alaryhmät sivupalkissa (Näkyy kartalla / Ei näy kartalla) */
+.sidebar-sub-group {
+    margin-top: 0.5rem;
+}
+
+.sidebar-sub-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #888;
+    padding: 0.3rem 0.5rem;
+    margin-bottom: 0.4rem;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.sidebar-sub-group + .sidebar-sub-group {
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px dashed rgba(0, 0, 0, 0.08);
+}
+
 .sidebar-list {
     list-style: none;
     padding: 0;
