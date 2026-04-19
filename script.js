@@ -618,7 +618,10 @@ function addMarkersToMap(companies) {
     const regionCoords = JSON.parse(localStorage.getItem('regionCoords'));
     const selectedRegion = localStorage.getItem('selectedRegion');
 
-    if (selectedRegion && selectedRegion !== 'all' && regionCoords) {
+    if (selectedRegion === 'koko-laukaa' && regionCoords) {
+        // Koko Laukaa -näkymä on aina koko Laukaan laajuinen, riippumatta tuloksista
+        map.setView([regionCoords.lat, regionCoords.lon], 10);
+    } else if (selectedRegion && selectedRegion !== 'all' && regionCoords) {
         // Ensisijaisesti keskitys valittuun taajamaan
         map.setView([regionCoords.lat, regionCoords.lon], 13);
 
