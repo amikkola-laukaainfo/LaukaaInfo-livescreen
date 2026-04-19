@@ -377,17 +377,17 @@ function addMarkersToMap(companies) {
     const bounds = [];
     let validMarkers = 0;
 
-    // Filter companies if a map filter is active
-    // TÄRKEÄÄ: filterCatalog saattaa suodattaa palvelualueyritykset pois matchesRegion-tarkistuksessa.
-    // Siksi palvelualueyritykset haetaan suoraan allCompanies-globaalista, ei companies-parametrista.
+    // Filter companies if a map filter is active.
+    // Huom: filterCatalog on jo suodattanut 'companies'-parametrin haun/tagin mukaan JA
+    // matchesRegion-korjauksella SERVICE_AREA-yritykset pääsevät läpi service_area-tilassa.
+    // Siksi käytetään 'companies'-parametria suoraan — hakusuodatus säilyy mukana.
     let displayCompanies = [...companies];
     if (mapFilterMode === 'service_area') {
-        // "Alueella" = lähellä olevat yritykset (jos sijainti tiedossa) + KAIKKI palvelualueyritykset
-        // Haetaan suoraan allCompanies:sta, koska filterCatalog saattaa suodattaa osan pois alueen perusteella
-        const serviceAreaCompanies = allCompanies.filter(c => c.service_mode === 'SERVICE_AREA');
+        // "Alueella" = lähellä olevat (10km, jos sijainti tiedossa) + palvelualueyritykset
+        // Molemmat ryhmät tulevat jo hakusuodatetusta 'companies'-listasta
+        const serviceAreaCompanies = companies.filter(c => c.service_mode === 'SERVICE_AREA');
         if (userCoords) {
-            // Lähellä olevat haetaan allCompanies:sta (ei companies-parametrista), jotta alueen 13km rajoitus ei poista niitä
-            const nearbyCompanies = allCompanies.filter(c => {
+            const nearbyCompanies = companies.filter(c => {
                 if (!c.lat || !(c.lon || c.lng)) return false;
                 const dist = getHaversineDistance(userCoords.lat, userCoords.lng || userCoords.lon, parseFloat(c.lat), parseFloat(c.lon || c.lng));
                 return dist < 10;
@@ -402,8 +402,8 @@ function addMarkersToMap(companies) {
             displayCompanies = serviceAreaCompanies;
         }
     } else if (mapFilterMode === 'near' && userCoords) {
-        // "Lähellä": haetaan suoraan allCompanies:sta, jotta 13km alueen raja ei estä 10km hakua
-        displayCompanies = allCompanies.filter(c => {
+        // "Lähellä": suodatetaan hakusuodatetusta 'companies'-listasta 10km säde
+        displayCompanies = companies.filter(c => {
             if (!c.lat || !(c.lon || c.lng)) return false;
             const dist = getHaversineDistance(userCoords.lat, userCoords.lng || userCoords.lon, parseFloat(c.lat), parseFloat(c.lon || c.lng));
             return dist < 10; // Show within 10km when filtered by "Near"
@@ -1433,16 +1433,29 @@ function filterCatalog(renderList = true) {
             const dist = getHaversineDistance(refLat, refLon, parseFloat(company.lat), parseFloat(company.lon));
             company.distanceText = dist < 1 ? `${Math.round(dist * 1000)} m` : `${dist.toFixed(1)} km`;
             company.distanceValue = dist;
-            
+
             // Aluesuodatus (vain jos ei ole premium eika "Koko Laukaa" -näkymä)
             if (selectedRegion && selectedRegion !== 'all' && !isKokoLaukaa && !isPremium) {
-                matchesRegion = dist <= 13; // 13km radius
+                if (mapFilterMode === 'service_area' && company.service_mode === 'SERVICE_AREA') {
+                    // Alueella-tilassa: palvelualueyritykset läpäisevät aina aluesuodatuksen
+                    matchesRegion = true;
+                } else if (mapFilterMode === 'near' && dist < 10) {
+                    // Lähellä-tilassa: 10km säteellä olevat ovat aina mukana
+                    matchesRegion = true;
+                } else {
+                    matchesRegion = dist <= 13;
+                }
             }
         } else {
             company.distanceText = null;
             company.distanceValue = null;
             if (selectedRegion && selectedRegion !== 'all' && !isKokoLaukaa && !isPremium) {
-                matchesRegion = false;
+                // SERVICE_AREA-yritykset ilman koordinaatteja pääsevät läpi service_area-tilassa
+                if (mapFilterMode === 'service_area' && company.service_mode === 'SERVICE_AREA') {
+                    matchesRegion = true;
+                } else {
+                    matchesRegion = false;
+                }
             }
         }
 
