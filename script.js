@@ -97,7 +97,7 @@ const welcomeCompany = {
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
-    isHomePage = !!document.getElementById('homepage-categories');
+    isHomePage = !!document.getElementById('home-region-select');
     // Sidebar Navigation Logic
     const hamburgerBtn = document.getElementById('hamburger-btn');
     const closeBtn = document.getElementById('close-sidebar-btn');
@@ -1247,6 +1247,9 @@ function initCompanyCatalog() {
             
             if (filteredSuggestions && filteredSuggestions.length > 0) {
                 selectSuggestion(filteredSuggestions[0]);
+            } else if (isHomePage && query.length > 0) {
+                // On homepage, redirect to results page for free-text search
+                window.location.href = `koko-laukaa.html?q=${encodeURIComponent(query)}`;
             } else {
                 filterCatalog();
             }
@@ -1840,6 +1843,9 @@ function handleSearchKeydown(e) {
             
             if (filteredSuggestions && filteredSuggestions.length > 0) {
                 selectSuggestion(filteredSuggestions[0]);
+            } else if (isHomePage && query.length > 0) {
+                // On homepage, redirect to results page for free-text search
+                window.location.href = `koko-laukaa.html?q=${encodeURIComponent(query)}`;
             } else if (typeof filterCatalog === 'function') {
                 filterCatalog();
             }
