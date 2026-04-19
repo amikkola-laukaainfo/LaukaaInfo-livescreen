@@ -206,7 +206,8 @@
                     <img src="logo.png" alt="LaukaaInfo Logo" class="main-logo">
                     <h1>L<span style="font-size: 0.85em;">aukaa</span>I<span style="font-size: 0.85em;">nfo</span></h1>
                 </div>
-                <p class="hero-tagline">Laukaa taskussasi – tiedä, löydä ja osallistu.</p>
+                <h2 style="color: white; font-size: 1.5rem; margin-bottom: 0.5rem; font-family: var(--accent-font);">Kaikki Laukaasta yhdessä paikassa</h2>
+                <p class="hero-tagline">Tiedä, löydä ja osallistu. Laukaan yritykset, palvelut ja ajankohtaiset uutiset helposti ja nopeasti.</p>
 
             </div>
         </div>
@@ -220,11 +221,42 @@
     </header>
 
     <main>
-        <!-- Kauppa - Etusivu -->
-        <section id="kauppa-search" class="kauppa-hero">
+        <!-- Yhteisöllisyys / Welcome Hub -->
+        <section class="community-section" style="margin-top: 2rem;">
+            <div class="section-header">
+                <h2>Yhteisöllisyys & Osallistu</h2>
+                <p>Laukaan YouTube, Facebook-ryhmät ja tuoreimmat kuntatiedotteet.</p>
+            </div>
+            
+            <div class="feature-grid">
+                <a href="https://www.youtube.com/@laukaainfo" target="_blank" class="feature-card card-youtube">
+                    <div class="icon">🎬</div>
+                    <h3>YouTube</h3>
+                    <p>LaukaaInfo YouTube-kanava. Videoita ja tunnelmia Laukaasta.</p>
+                </a>
+                <a href="https://www.facebook.com/groups/892675230270311" target="_blank" class="feature-card card-facebook">
+                    <div class="icon">👥</div>
+                    <h3>Keskustelu</h3>
+                    <p>Liity Laukaan keskusteluryhmään Facebookissa. Kysy ja jaa.</p>
+                </a>
+                <a href="ajankohtaista.html#news-card" class="feature-card card-news">
+                    <div class="icon">📰</div>
+                    <h3>Ajankohtaista</h3>
+                    <p>Kuntatiedotteet ja viralliset uutiset kootusti yhdessä paikassa.</p>
+                </a>
+                <a href="#toggle-feed-btn" class="feature-card card-feed" onclick="document.getElementById('toggle-feed-btn').click();">
+                    <div class="icon">📱</div>
+                    <h3>Laukaa-syöte</h3>
+                    <p>Paikalliset ilmoitukset, tarjoukset ja menovinkit tuoreeltaan.</p>
+                </a>
+            </div>
+        </section>
+
+        <!-- Haku-osuus -->
+        <section id="kauppa-search" class="kauppa-hero" style="margin-top: 3rem;">
             <div class="search-hero-content">
-                <h1>Mitä haluat tietää, löytää tai tehdä Laukaassa?</h1>
-                <p>Valitse alta, haluatko hakea tiettyä palvelua vai selata alueen tarjontaa.</p>
+                <h2 style="color: white; margin-bottom: 0.5rem;">Löydä ja selaa palveluita</h2>
+                <p>Etsi tiettyä toimijaa tai tutustu taajamien paikalliseen tarjontaan.</p>
 
                 <div class="hero-split-paths" style="display: flex; flex-wrap: wrap; gap: 2rem; margin-top: 2rem; justify-content: center; align-items: flex-start; text-align: left;">
                     
@@ -300,41 +332,10 @@
 
                 <!-- Hakutulokset (lisätty dynaamisesti) -->
                 <div id="catalog-list" class="catalog-list-home" style="margin-top: 2rem;"></div>
-
-
             </div>
         </section>
 
-        <section class="community-section">
-            <div class="section-header">
-                <h2>Yhteisöllisyys</h2>
-                <p>Osallistu, seuraa ja pysy kärryillä Laukaan tapahtumista.</p>
-            </div>
-            
-            <div class="feature-grid">
-                <a href="https://www.youtube.com/@laukaainfo" target="_blank" class="feature-card card-youtube">
-                    <div class="icon">🎬</div>
-                    <h3>YouTube</h3>
-                    <p>LaukaaInfo YouTube-kanava. Videoita ja tunnelmia Laukaasta.</p>
-                </a>
-                <a href="https://www.facebook.com/groups/892675230270311" target="_blank" class="feature-card card-facebook">
-                    <div class="icon">👥</div>
-                    <h3>Keskustelu</h3>
-                    <p>Liity Laukaan keskusteluryhmään Facebookissa. Kysy ja jaa.</p>
-                </a>
-                <a href="ajankohtaista.html#news-card" class="feature-card card-news">
-                    <div class="icon">📰</div>
-                    <h3>Ajankohtaista</h3>
-                    <p>Kuntatiedotteet ja viralliset uutiset kootusti yhdessä paikassa.</p>
-                </a>
-                <a href="#toggle-feed-btn" class="feature-card card-feed" onclick="document.getElementById('toggle-feed-btn').click();">
-                    <div class="icon">📱</div>
-                    <h3>Laukaa-syöte</h3>
-                    <p>Paikalliset ilmoitukset, tarjoukset ja menovinkit tuoreeltaan.</p>
-                </a>
-            </div>
-        </section>
-
+        <!-- Elämykset & Kulttuuri -->
         <section class="experiences-section">
             <div class="section-header">
                 <h2>Elämykset & Kulttuuri</h2>
@@ -364,6 +365,7 @@
                 </a>
             </div>
         </section>
+
 
         <div class="homepage-top" style="justify-content: center; margin-top: 0;">
             <!-- Feed Accordion -->

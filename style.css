@@ -1857,10 +1857,10 @@ footer {
 /* --- Kauppa - New Homepage Styles --- */
 .kauppa-hero {
     background: linear-gradient(135deg, var(--primary-blue) 0%, #007bff 100%);
-    padding: 3.5rem 1rem;
+    padding: 3rem 1rem;
     border-radius: var(--border-radius);
     text-align: center;
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
     position: relative;
     overflow: visible;
     /* Prevent clipping of search results */
@@ -3817,8 +3817,12 @@ footer {
 /* Feature Section Titles */
 .section-header {
     text-align: center;
-    margin: 4.5rem auto 2.5rem;
+    margin: 3.5rem auto 2.5rem;
     max-width: 800px;
+}
+
+.community-section .section-header {
+    margin-top: 2rem;
 }
 
 .section-header h2 {
