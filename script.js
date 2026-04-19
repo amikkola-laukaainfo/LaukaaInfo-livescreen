@@ -1621,7 +1621,6 @@ function initCategories(companies) {
     const categories = [...new Set(companies.map(c => c.kategoria))].sort();
 
     renderNavCategories(categories);
-    renderHomepageCategories(categories);
     populateHomeCategorySelect(categories);
 }
 
@@ -1668,46 +1667,7 @@ function renderNavCategories(categories) {
     }
 }
 
-function renderHomepageCategories(categories) {
-    const container = document.getElementById('homepage-categories');
-    if (!container) return;
 
-    // Luetaan valittu alue dropdownista tai localStoragesta
-    const regionEl = document.getElementById('region-select');
-    const selectedRegion = (regionEl ? regionEl.value : null)
-        || localStorage.getItem('selectedRegion')
-        || 'all';
-
-    container.innerHTML = '';
-
-    categories.forEach(cat => {
-        // Robust lookup: try direct match, then lowercase, then slug-like
-        const cleanCat = cat.trim();
-        const icon = categoryIcons[cleanCat] ||
-            categoryIcons[cleanCat.replace('-', ' ')] ||
-            categoryIcons[cleanCat.replace(' ', '-')] ||
-            Object.entries(categoryIcons).find(([k]) => k.toLowerCase() === cleanCat.toLowerCase())?.[1] ||
-            '🏢';
-        const card = document.createElement('a');
-        card.className = 'category-card';
-        
-        if (cleanCat === 'Ruokailu') {
-            card.href = 'laukaan-ravintolat.html';
-        } else if (cleanCat === 'Autokorjaamot') {
-            card.href = 'laukaan-autohuollot.html';
-        } else if (cleanCat === 'Hyvinvointi ja terveys') {
-            card.href = 'laukaan-parturit-ja-kauneus.html';
-        } else {
-            card.href = `kategoria.html?cat=${encodeURIComponent(cat)}&region=${encodeURIComponent(selectedRegion)}`;
-        }
-        
-        card.innerHTML = `
-            <span class="cat-icon">${icon}</span>
-            <h3>${cat}</h3>
-        `;
-        container.appendChild(card);
-    });
-}
 
 function showSuggestions() {
     const suggestionsList = document.getElementById('search-suggestions');
