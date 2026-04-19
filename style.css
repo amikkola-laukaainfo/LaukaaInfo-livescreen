@@ -3765,3 +3765,19 @@ footer {
     padding: 1rem 0;
     text-align: center;
 }
+
+/* --- Mobile Fix for Region Buttons Box Overflow --- */
+@media (max-width: 480px) {
+    .hero-path {
+        min-width: 0 !important;
+        padding: 1.5rem 1rem !important;
+    }
+    .region-buttons-grid {
+        gap: 0.5rem !important;
+    }
+    .region-buttons-grid .btn-secondary {
+        padding: 0.8rem 0.5rem !important;
+        font-size: 0.9rem !important;
+        white-space: normal !important;
+    }
+}
