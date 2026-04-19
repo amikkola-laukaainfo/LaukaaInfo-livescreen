@@ -388,6 +388,9 @@ function addMarkersToMap(companies) {
         });
     }
 
+    // Save globally so map events (e.g. pan/zoom) use the filtered list for the sidebar
+    window.currentMapCompanies = displayCompanies;
+
     displayCompanies.forEach(company => {
         const lat = parseFloat(company.lat);
         const lon = parseFloat(company.lon || company.lng);
@@ -2551,25 +2554,9 @@ function updateMapSidebar(companies) {
 
     // Jos funktiota kutsutaan kartan moveend-tapahtumalla, companies on Event-objekti
     if (!Array.isArray(companies)) {
-        companies = allCompanies;
-        
-        if (typeof mapFilterMode !== 'undefined') {
-            if (mapFilterMode === 'service_area') {
-                companies = allCompanies.filter(c => c.service_mode === 'SERVICE_AREA');
-            } else if (mapFilterMode === 'near' && typeof userCoords !== 'undefined' && userCoords) {
-                companies = allCompanies.filter(c => {
-                    if (!c.lat || (!c.lon && !c.lng)) return false;
-                    const cLat = parseFloat(c.lat);
-                    const cLon = parseFloat(c.lon || c.lng);
-                    if (isNaN(cLat) || isNaN(cLon)) return false;
-                    const uLat = userCoords.lat;
-                    const uLon = userCoords.lng || userCoords.lon;
-                    const dist = getHaversineDistance(uLat, uLon, cLat, cLon);
-                    return dist < 10;
-                });
-            }
-        }
+        companies = window.currentMapCompanies || allCompanies;
     }
+
 
     serviceList.innerHTML = '';
     offMapList.innerHTML = '';
@@ -2677,7 +2664,7 @@ function toggleServiceCircle(slug, btnElement) {
     if (typeof filterCatalog === 'function') {
         filterCatalog(false);
     } else {
-        updateMapSidebar(allCompanies); 
+        updateMapSidebar(window.currentMapCompanies || allCompanies); 
     }
 }
 
