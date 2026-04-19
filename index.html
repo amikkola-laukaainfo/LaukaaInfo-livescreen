@@ -231,40 +231,70 @@
         <section id="kauppa-search" class="kauppa-hero">
             <div class="search-hero-content">
                 <h1>Mitä haluat tietää, löytää tai tehdä Laukaassa?</h1>
-                <p>Hae yrityksiä, tapahtumia ja tiedotteita Laukaasta.</p>
+                <p>Valitse alta, haluatko hakea tiettyä palvelua vai selata alueen tarjontaa.</p>
 
-                <div class="main-search-box">
-                    <div class="search-input-wrapper">
-                        <input type="text" id="company-search"
-                            placeholder="Etsi esim. parturi, kahvila, taajama Laukaassa" aria-label="Yrityshaku"
-                            autocomplete="off">
-                        <ul id="search-suggestions" class="search-suggestions"></ul>
-                        <button id="search-btn" class="btn-search">Hae</button>
-                    </div>
-                    <div class="search-options">
-                        <label class="checkbox-container">
-                            <input type="checkbox" id="include-rss">
-                            <span class="checkmark"></span>
-                            Tapahtumat ja tiedotteet
-                        </label>
+                <div class="hero-split-paths" style="display: flex; flex-wrap: wrap; gap: 2rem; margin-top: 2rem; justify-content: center; align-items: flex-start; text-align: left;">
+                    
+                    <!-- Polku A: Hae palvelua -->
+                    <div class="hero-path search-path" style="flex: 1; min-width: 300px; background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                        <h2 style="color: var(--primary-blue); margin-bottom: 0.5rem; font-size: 1.5rem;">Hae palvelua</h2>
+                        <p style="font-size: 0.9rem; color: #555; margin-bottom: 1.5rem;">Yritykset voivat palvella useilla alueilla – hae palvelua nähdäksesi saatavuuden.</p>
+
+                        <div class="main-search-box" style="margin: 0; box-shadow: none; padding: 0;">
+                            <div class="search-input-wrapper">
+                                <input type="text" id="company-search"
+                                    placeholder="Etsi esim. parturi, digimedia" aria-label="Yrityshaku"
+                                    autocomplete="off">
+                                <ul id="search-suggestions" class="search-suggestions"></ul>
+                                <button id="search-btn" class="btn-search">Hae</button>
+                            </div>
+                            <div class="search-options" style="margin-top: 0.5rem;">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="include-rss">
+                                    <span class="checkmark"></span>
+                                    Tapahtumat ja tiedotteet
+                                </label>
+                            </div>
+
+                            <div class="service-method-filter" style="margin-top: 15px; margin-bottom: 5px;">
+                                <select id="service-method-select" class="gen-input" style="width: 100%; padding: 0.5rem;">
+                                    <option value="all">🏢 Kaikki palvelutavat</option>
+                                    <option value="toimipiste">🏢 Asiointi toimipisteessä</option>
+                                    <option value="kotikaynti">🏠 Kotiin tuotavat palvelut</option>
+                                    <option value="etapalvelu">💻 Etäpalvelut</option>
+                                    <option value="toimitus">🚚 Toimitus / Nouto</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="popular-tags" style="margin-top: 1.5rem;">
+                            <span style="font-size: 0.85rem; color: #777;">Suosittuja:</span>
+                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem;">
+                                <a href="koko-laukaa.html?tag=ravintola" class="tag-pill">Ravintola</a>
+                                <a href="koko-laukaa.html?tag=parturi" class="tag-pill">Parturi</a>
+                                <a href="koko-laukaa.html?tag=autohuolto" class="tag-pill">Autohuolto</a>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Älykkäät hakupainikkeet (palvelutapa) - korvattu pudotusvalikolla -->
-                    <div class="service-method-filter" style="margin-top: 15px; margin-bottom: 5px; text-align: center;">
-                        <select id="service-method-select" class="gen-input" style="max-width: 300px; display: inline-block; padding: 0.5rem; text-align: center;">
-                            <option value="all">🏢 Kaikki palvelutavat</option>
-                            <option value="toimipiste">🏢 Asiointi toimipisteessä</option>
-                            <option value="kotikaynti">🏠 Kotiin tuotavat palvelut</option>
-                            <option value="etapalvelu">💻 Etäpalvelut</option>
-                            <option value="toimitus">🚚 Toimitus / Nouto</option>
-                        </select>
-                    </div>
+                    <!-- Polku B: Selaa alueittain -->
+                    <div class="hero-path browse-path" style="flex: 1; min-width: 300px; background: rgba(255,255,255,0.95); padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                        <h2 style="color: var(--primary-blue); margin-bottom: 0.5rem; font-size: 1.5rem;">Selaa alueittain</h2>
+                        <p style="font-size: 0.9rem; color: #555; margin-bottom: 1.5rem;">Tutustu taajamien ja koko kunnan paikalliseen tarjontaan.</p>
 
-                    <!-- Hakutulokset (lisätty dynaamisesti) -->
-                    <div id="catalog-list" class="catalog-list-home"></div>
+                        <div class="region-buttons-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+                            <a href="koko-laukaa.html" class="btn-secondary" style="grid-column: span 2; text-align: center; font-weight: bold; background: var(--primary-blue); color: white;">Koko Laukaa</a>
+                            <a href="laukaa.html" class="btn-secondary" style="text-align: center;">Laukaa kk</a>
+                            <a href="leppavesi.html" class="btn-secondary" style="text-align: center;">Leppävesi</a>
+                            <a href="lievestuore.html" class="btn-secondary" style="text-align: center;">Lievestuore</a>
+                            <a href="vihtavuori.html" class="btn-secondary" style="text-align: center;">Vihtavuori</a>
+                            <a href="vehnia.html" class="btn-secondary" style="text-align: center;">Vehniä</a>
+                        </div>
+                    </div>
                 </div>
 
-                <p class="location-hint">Kirjoita tai klikkaa sijaintisi ja löydä lähimmät kohteet, tapahtumat tai tarjoukset kartalla.</p>
+                <!-- Hakutulokset (lisätty dynaamisesti) -->
+                <div id="catalog-list" class="catalog-list-home" style="margin-top: 2rem;"></div>
 
                 <div class="map-accordion">
                     <button class="accordion-header" id="toggle-map-btn">

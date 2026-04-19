@@ -110,11 +110,26 @@ function updateMetadata(area, cat, tag) {
     const seoDescEl = document.getElementById('seo-description');
 
     let titleText = area.name;
-    if (tag) { titleText = `${tag.charAt(0).toUpperCase() + tag.slice(1)} - ${area.name}`; }
-    else if (cat) titleText = `${cat.charAt(0).toUpperCase() + cat.slice(1)} - ${area.name}`;
+    const isKokoLaukaa = area.slug === 'koko-laukaa';
+    const locRef = isKokoLaukaa ? "Laukaassa" : area.name;
+
+    if (tag) { 
+        titleText = `${tag.charAt(0).toUpperCase() + tag.slice(1)} -palvelut ${locRef}`; 
+    } else if (cat) { 
+        titleText = `${cat.charAt(0).toUpperCase() + cat.slice(1)} ${locRef}`; 
+    }
 
     titleEl.textContent = titleText;
     pageTitleEl.textContent = `${titleText} – LaukaaInfo: Laukaa taskussasi – tiedä, löydä ja osallistu.`;
+
+    const subtitleEl = document.getElementById('region-subtitle');
+    if (subtitleEl) {
+        if (tag || cat) {
+            subtitleEl.innerHTML = `Etsit palveluja alueella <strong>${area.name}</strong>.<br><small style="color: #666; font-size: 0.9em; display: inline-block; margin-top: 5px;">📍 Mukana myös muiden alueiden palveluntarjoajat, joiden palvelualue kattaa tämän sijainnin.</small>`;
+        } else {
+            subtitleEl.textContent = `Hae yrityksiä, tapahtumia ja tiedotteita alueella: ${area.name}`;
+        }
+    }
 
     let seoText = `<h3>${area.name} – yritykset, palvelut ja uutiset</h3>`;
     seoText += `<p>${area.desc}</p>`;
