@@ -378,13 +378,18 @@ function addMarkersToMap(companies) {
     let validMarkers = 0;
 
     // Filter companies if a map filter is active
+    // TÄRKEÄÄ: filterCatalog saattaa suodattaa palvelualueyritykset pois matchesRegion-tarkistuksessa.
+    // Siksi palvelualueyritykset haetaan suoraan allCompanies-globaalista, ei companies-parametrista.
     let displayCompanies = [...companies];
     if (mapFilterMode === 'service_area') {
-        // "Alueella" = lähellä olevat yritykset (jos sijainti tiedossa) + kaikki palvelualueyritykset
-        const serviceAreaCompanies = companies.filter(c => c.service_mode === 'SERVICE_AREA');
+        // "Alueella" = lähellä olevat yritykset (jos sijainti tiedossa) + KAIKKI palvelualueyritykset
+        // Haetaan suoraan allCompanies:sta, koska filterCatalog saattaa suodattaa osan pois alueen perusteella
+        const serviceAreaCompanies = allCompanies.filter(c => c.service_mode === 'SERVICE_AREA');
         if (userCoords) {
-            const nearbyCompanies = companies.filter(c => {
-                const dist = getHaversineDistance(userCoords.lat, userCoords.lng || userCoords.lon, c.lat, c.lon || c.lng);
+            // Lähellä olevat haetaan allCompanies:sta (ei companies-parametrista), jotta alueen 13km rajoitus ei poista niitä
+            const nearbyCompanies = allCompanies.filter(c => {
+                if (!c.lat || !(c.lon || c.lng)) return false;
+                const dist = getHaversineDistance(userCoords.lat, userCoords.lng || userCoords.lon, parseFloat(c.lat), parseFloat(c.lon || c.lng));
                 return dist < 10;
             });
             // Yhdistetään lähellä olevat ja palvelualueyritykset (poistetaan duplikaatit id:n perusteella)
@@ -397,8 +402,10 @@ function addMarkersToMap(companies) {
             displayCompanies = serviceAreaCompanies;
         }
     } else if (mapFilterMode === 'near' && userCoords) {
-        displayCompanies = companies.filter(c => {
-            const dist = getHaversineDistance(userCoords.lat, userCoords.lng || userCoords.lon, c.lat, c.lon || c.lng);
+        // "Lähellä": haetaan suoraan allCompanies:sta, jotta 13km alueen raja ei estä 10km hakua
+        displayCompanies = allCompanies.filter(c => {
+            if (!c.lat || !(c.lon || c.lng)) return false;
+            const dist = getHaversineDistance(userCoords.lat, userCoords.lng || userCoords.lon, parseFloat(c.lat), parseFloat(c.lon || c.lng));
             return dist < 10; // Show within 10km when filtered by "Near"
         });
     }
