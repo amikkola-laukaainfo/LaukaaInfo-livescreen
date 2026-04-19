@@ -380,7 +380,22 @@ function addMarkersToMap(companies) {
     // Filter companies if a map filter is active
     let displayCompanies = [...companies];
     if (mapFilterMode === 'service_area') {
-        displayCompanies = companies.filter(c => c.service_mode === 'SERVICE_AREA');
+        // "Alueella" = lähellä olevat yritykset (jos sijainti tiedossa) + kaikki palvelualueyritykset
+        const serviceAreaCompanies = companies.filter(c => c.service_mode === 'SERVICE_AREA');
+        if (userCoords) {
+            const nearbyCompanies = companies.filter(c => {
+                const dist = getHaversineDistance(userCoords.lat, userCoords.lng || userCoords.lon, c.lat, c.lon || c.lng);
+                return dist < 10;
+            });
+            // Yhdistetään lähellä olevat ja palvelualueyritykset (poistetaan duplikaatit id:n perusteella)
+            const combined = [...nearbyCompanies];
+            serviceAreaCompanies.forEach(sa => {
+                if (!combined.find(c => c.id === sa.id)) combined.push(sa);
+            });
+            displayCompanies = combined;
+        } else {
+            displayCompanies = serviceAreaCompanies;
+        }
     } else if (mapFilterMode === 'near' && userCoords) {
         displayCompanies = companies.filter(c => {
             const dist = getHaversineDistance(userCoords.lat, userCoords.lng || userCoords.lon, c.lat, c.lon || c.lng);
