@@ -125,9 +125,13 @@
             position: relative;
         }
 
-        .post-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-hover);
+        .post-card.promoted {
+            border: 2px solid gold;
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.15);
+        }
+
+        .post-card.promoted:hover {
+            box-shadow: 0 25px 60px rgba(255, 215, 0, 0.25);
         }
 
         /* Image Wrapper with 4:3 Banner Ratio */
@@ -525,11 +529,12 @@
                         'job': 'Työpaikka',
                         'offer': 'Tarjous'
                     };
+                    const isPromoted = item.is_promoted === true || item.is_promoted === "true";
                     const categoryTxt = item.type ? (categoryMap[item.type] || item.type) : 'Nosto';
-                    const categoryBadgeHtml = `<div class="category-badge">${categoryTxt}</div>`;
+                    const categoryBadgeHtml = `<div class="category-badge">${isPromoted ? '⭐ ' : ''}${categoryTxt}</div>`;
 
                     const article = document.createElement('article');
-                    article.className = 'ad-card';
+                    article.className = 'post-card' + (isPromoted ? ' promoted' : '');
 
                     // Image tai Video Html
                     let mediaHtml = '';

@@ -118,22 +118,25 @@ foreach ($rawData as $item) {
     if (isset($item['video']))         $cleanItem['video'] = $item['video'];
     if (isset($item['video_url']))     $cleanItem['video_url'] = $item['video_url'];
     
-    // Contact Info
-    if (isset($item['show_contact']))  $cleanItem['show_contact'] = (bool)$item['show_contact'];
-    if (isset($item['contact_email'])) $cleanItem['contact_email'] = $item['contact_email'];
-    if (isset($item['contact_phone'])) $cleanItem['contact_phone'] = $item['contact_phone'];
-    
-    if (isset($item['phone']))         $cleanItem['phone'] = $item['phone'];
-    if (isset($item['puhelin']))       $cleanItem['puhelin'] = $item['puhelin'];
-    if (isset($item['puhelinnumero'])) $cleanItem['puhelinnumero'] = $item['puhelinnumero'];
-    if (isset($item['facebook']))      $cleanItem['facebook'] = $item['facebook'];
+    // --- CLEAN CONTACT INFO (Strict package enforcement) ---
+    // If package is 'ilmainen', hide contact details as promised in the tiers
+    $pkg = strtolower($cleanItem['package']);
+    if ($pkg === 'ilmainen' || $pkg === 'free' || $pkg === 'perus') {
+        unset($cleanItem['contact_email']);
+        unset($cleanItem['contact_phone']);
+        unset($cleanItem['show_contact']);
+    }
 
     $filteredData[] = $cleanItem;
 }
 
-// --- SORTING ---
-// publish_at DESC (newest first)
+// --- SORTING (Feed Priority) ---
+// 1. is_promoted DESC
+// 2. publish_at DESC
 usort($filteredData, function($a, $b) {
+    if (($a['is_promoted'] ?? false) !== ($b['is_promoted'] ?? false)) {
+        return ($b['is_promoted'] ?? false) ? 1 : -1;
+    }
     $dateA = $a['publish_at'] ?? '';
     $dateB = $b['publish_at'] ?? '';
     return strcmp($dateB, $dateA);
