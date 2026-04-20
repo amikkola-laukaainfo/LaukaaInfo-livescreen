@@ -2,7 +2,7 @@
     let userCoords = null;
     let distanceCache = new Map();
     let categoryCompanies = [];
-    let map, markers;
+    // map and markers are used from global scope (script.js)
 
     let selectedRegion = 'all';
     let regionCoords = null;
@@ -584,94 +584,58 @@
     }
 
     function initMap(companies) {
-        if (map) return;
+        const mapContainer = document.getElementById('category-map');
+        if (!mapContainer || typeof L === 'undefined') return;
 
-        map = L.map('category-map').setView([62.4128, 25.9477], 11);
+        let regionMap;
+        if (typeof map !== 'undefined' && map) {
+            regionMap = map;
+        } else if (mapContainer._leaflet_id) {
+            console.warn('[Kategoria] Kartta-id löytyi, mutta map-muuttuja on hukassa.');
+            return;
+        } else {
+            // First initialization
+            regionMap = L.map('category-map').setView([62.4128, 25.9477], 11);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(regionMap);
+            if (typeof map !== 'undefined') map = regionMap;
+        }
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map);
-
-        markers = L.markerClusterGroup();
-
-        companies.forEach(company => {
-            if (company.lat && company.lon) {
-                // Yrityksen merkki (Robust detection)
-                const pkgStr = (company.package || company.paketti || company.taso || '').toLowerCase();
-                const typeStr = (company.tyyppi || company.type || '').toLowerCase();
-                const isPro = pkgStr.includes('pro') || typeStr.includes('pro');
-                const isPremiumPkg = pkgStr.includes('premium') || typeStr.includes('premium');
-
-                const markerColor = isPro ? '#ffd700' : (isPremiumPkg ? '#ff4d4d' : 'var(--primary-blue)');
-                const markerSize = (isPro || isPremiumPkg) ? '26px' : '20px';
-
-                const markerHtml = `
-                    <div style="
-                        background-color: ${markerColor};
-                        width: ${markerSize};
-                        height: ${markerSize};
-                        border-radius: 50% 50% 50% 0;
-                        transform: rotate(-45deg);
-                        border: 2px solid white;
-                        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-                        z-index: ${isPro || isPremiumPkg ? 9999 : 1};
-                    "></div>
-                `;
-
-                const icon = L.divIcon({
-                    html: markerHtml,
-                    className: `custom-marker ${isPro ? 'is-pro' : ''} ${isPremiumPkg ? 'is-premium' : ''}`,
-                    iconSize: [30, 30],
-                    iconAnchor: [15, 30],
-                    popupAnchor: [0, -30]
+        let targetMarkers;
+        if (typeof markers !== 'undefined') {
+            if (!markers) {
+                markers = L.markerClusterGroup({
+                    showCoverageOnHover: false,
+                    maxClusterRadius: 50
                 });
-
-                const marker = L.marker([company.lat, company.lon], { icon: icon });
-                
-                // Integrate New Media Modal
-                marker.on('click', function(e) {
-                    if (window.LkiModal && typeof LkiModal.open === 'function') {
-                        setTimeout(() => LkiModal.open(company), 50);
-                    }
-                });
-
-                marker.bindPopup(`
-                <div style="font-family: 'Outfit', sans-serif; min-width: 150px;">
-                    <h4 style="margin: 0 0 5px 0; color: #0056b3;">${company.nimi}</h4>
-                    <div style="font-size: 0.8rem; margin-bottom: 8px; color: #666; display: flex; align-items: center; gap: 5px;">
-                        ${company.kategoria}
-                        ${(function() {
-                            let icons = '';
-                            const combined = `${company.tags || ''},${company.palvelutapa || ''}`.toLowerCase();
-                            if (combined.includes('toimipiste')) icons += '🏢';
-                            if (combined.includes('kotikaynti') || combined.includes('kotikäynti')) icons += '🏠';
-                            if (combined.includes('etapalvelu') || combined.includes('etäpalvelu')) icons += '💻';
-                            if (combined.includes('toimitus')) icons += '🚚';
-                            return icons ? `<span style="margin-left:5px;">${icons}</span>` : '';
-                        })()}
-                    </div>
-                    <a href="yrityskortti.html?id=${slugify(company.nimi)}" style="
-                        display: block;
-                        background: #0056b3;
-                        color: white;
-                        text-decoration: none;
-                        text-align: center;
-                        padding: 6px 10px;
-                        border-radius: 4px;
-                        font-size: 0.8rem;
-                    ">Näytä tiedot</a>
-                </div>
-            `);
-                markers.addLayer(marker);
+                regionMap.addLayer(markers);
             }
-        });
+            targetMarkers = markers;
+            targetMarkers.clearLayers();
+        } else {
+            targetMarkers = L.markerClusterGroup();
+            regionMap.addLayer(targetMarkers);
+        }
 
-        map.addLayer(markers);
+        // Varmista että serviceAreaLayer on olemassa (script.js vaatii tämän)
+        if (typeof serviceAreaLayer !== 'undefined') {
+            if (!serviceAreaLayer) {
+                serviceAreaLayer = L.layerGroup().addTo(regionMap);
+            }
+        }
+
+        // Delegate to shared script.js logic which correctly builds Sidebar and handles Regions/Service Areas
+        if (typeof addMarkersToMap === 'function') {
+            addMarkersToMap(companies);
+        } else {
+            console.error('[Kategoria] addMarkersToMap-funktiota ei löytynyt script.js:stä.');
+        }
 
         // Geolocation & Address Search Control
         const LocateControl = L.Control.extend({
             options: { position: 'topleft' },
-            onAdd: function (map) {
+            onAdd: function (controlMap) {
                 const container = L.DomUtil.create('div', 'leaflet-control-locate-wrapper');
                 container.style.position = 'relative';
                 container.style.display = 'flex';
@@ -682,7 +646,6 @@
                 button.href = '#';
                 button.title = 'Näytä oma sijainti';
 
-                // Address Search (Desktop)
                 const searchContainer = L.DomUtil.create('div', 'map-address-search', container);
                 searchContainer.innerHTML = `
                     <input type="text" placeholder="Kirjoita osoite..." id="map-addr-input">
@@ -692,7 +655,7 @@
                 L.DomEvent.on(button, 'click', function (e) {
                     L.DomEvent.stopPropagation(e);
                     L.DomEvent.preventDefault(e);
-                    map.locate({ setView: true, maxZoom: 15 });
+                    controlMap.locate({ setView: true, maxZoom: 15 });
                 });
 
                 const input = searchContainer.querySelector('#map-addr-input');
@@ -709,20 +672,16 @@
                             if (data && data.length > 0) {
                                 const result = data[0];
                                 const latlng = L.latLng(parseFloat(result.lat), parseFloat(result.lon));
-                                map.setView(latlng, 15);
+                                controlMap.setView(latlng, 15);
 
                                 userCoords = latlng;
                                 localStorage.setItem('userCoords', JSON.stringify({ lat: userCoords.lat, lng: userCoords.lng }));
                                 updateDisplay();
 
-                                if (userMarker) map.removeLayer(userMarker);
-                                const userIcon = L.divIcon({
-                                    className: 'user-location-marker',
-                                    iconSize: [20, 20],
-                                    iconAnchor: [10, 10]
-                                });
-                                userMarker = L.marker(latlng, { icon: userIcon }).addTo(map);
-                                userMarker.bindPopup(`Sijainti: ${query}`).openPopup();
+                                if (controlMap._userMarker) controlMap.removeLayer(controlMap._userMarker);
+                                const userIcon = L.divIcon({ className: 'user-location-marker', iconSize: [20, 20], iconAnchor: [10, 10] });
+                                controlMap._userMarker = L.marker(latlng, { icon: userIcon }).addTo(controlMap);
+                                controlMap._userMarker.bindPopup(`Sijainti: ${query}`).openPopup();
                             } else {
                                 alert("Osoitetta ei löytynyt.");
                             }
@@ -739,58 +698,49 @@
             }
         });
 
-        map.addControl(new LocateControl());
+        // Vältä duplikaatti-controllerit
+        if (!regionMap._locateControlAdded) {
+            regionMap.addControl(new LocateControl());
+            regionMap._locateControlAdded = true;
+        }
 
-        let userMarker;
-        map.on('locationfound', function (e) {
+        regionMap.on('locationfound', function (e) {
             userCoords = e.latlng;
             localStorage.setItem('userCoords', JSON.stringify({ lat: userCoords.lat, lng: userCoords.lng }));
             updateDisplay();
 
-            if (userMarker) map.removeLayer(userMarker);
-
-            const userIcon = L.divIcon({
-                className: 'user-location-marker',
-                iconSize: [20, 20],
-                iconAnchor: [10, 10]
-            });
-
-            userMarker = L.marker(e.latlng, { icon: userIcon }).addTo(map);
-            userMarker.bindPopup("Olet tässä").openPopup();
+            if (regionMap._userMarker) regionMap.removeLayer(regionMap._userMarker);
+            const userIcon = L.divIcon({ className: 'user-location-marker', iconSize: [20, 20], iconAnchor: [10, 10] });
+            regionMap._userMarker = L.marker(e.latlng, { icon: userIcon }).addTo(regionMap);
+            regionMap._userMarker.bindPopup("Olet tässä").openPopup();
         });
 
-        map.on('locationerror', function (e) {
+        regionMap.on('locationerror', function (e) {
             if (e.code === 1) { // PERMISSION_DENIED
-                alert("Sijainti estetty. Varmista, että käytät sivua https-osoitteessa ja olet sallinut paikannuksen selaimen asetuksista.");
-            } else {
-                alert("Sijaintia ei voitu hakea: " + e.message);
+                console.warn("Sijainti estetty.");
             }
         });
 
-        // Redundant check to ensure state is correct before map logic
-        const urlParams = new URLSearchParams(window.location.search);
-        const urlReg = urlParams.get('region');
-        if (urlReg) {
-            const normalizedReg = urlReg.trim().toLowerCase();
-            if (villageCoordsMap[normalizedReg]) {
-                selectedRegion = normalizedReg;
-                regionCoords = villageCoordsMap[normalizedReg];
-            }
-        }
-
-        const group = new L.featureGroup(markers.getLayers());
-        const hasMarkers = markers.getLayers().length > 0;
+        // Center map logic matching previous category.js functionality
+        const group = new L.featureGroup(targetMarkers.getLayers());
+        const hasMarkers = targetMarkers.getLayers().length > 0;
 
         if (selectedRegion && selectedRegion !== 'all' && regionCoords) {
-            // Use precise village center at zoom level 13 as requested.
-            // We no longer use fitBounds for regional views to ensure the center remains exactly 
-            // on the village coordinates (e.g. Vihtavuori school) and doesn't drift towards nearby markers.
-            map.setView([regionCoords.lat, regionCoords.lon], 13);
+            regionMap.setView([regionCoords.lat, regionCoords.lon], 13);
         } else if (hasMarkers) {
-            map.fitBounds(group.getBounds().pad(0.1));
+            regionMap.fitBounds(group.getBounds().pad(0.1));
         } else {
-            // Default center
-            map.setView([62.4128, 25.9477], 11);
+            regionMap.setView([62.4128, 25.9477], 11);
+        }
+
+        // Tapahtumakuuntelija päivittämään sivupaneelin kun karttaa liikutetaan
+        regionMap.off('moveend', handleMapMoveForSidebar);
+        regionMap.on('moveend', handleMapMoveForSidebar);
+    }
+    
+    function handleMapMoveForSidebar() {
+        if (typeof updateMapSidebar === 'function') {
+            updateMapSidebar(window.currentMapCompanies || categoryCompanies);
         }
     }
 })();
