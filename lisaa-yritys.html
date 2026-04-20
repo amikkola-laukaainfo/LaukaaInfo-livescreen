@@ -654,31 +654,41 @@
     </aside>
 
 
-        </header>
+    <main>
+        <!-- Hero Section -->
+        <section class="registration-hero">
+            <h1>Yritysprofiili ja Brändinäkyvyys</h1>
+            <p class="hero-description">
+                Luo pysyvä koti toiminnallesi LaukaaInfossa. Tavoita asiakkaat, rakenna luottamusta ja kasvata myyntiäsi paikallisesti.
+            </p>
+        </section>
 
-        <a href="#hinnasto" class="anchor-link">Katso hinnasto ↓</a>
+        <!-- Selection Gate: Cross-pivot back to Feed Path if needed -->
+        <section class="gate-section" style="background: white; border-top: none; padding-top: 0;">
+            <div class="gate-container">
+                <div class="gate-grid">
+                    <!-- Path 1: Feed Path -->
+                    <a href="ilmoittaudu.html" class="path-card feed-path">
+                        <div class="path-icon">📢</div>
+                        <h3>Etsitkö vain pikaista ilmoitusta?</h3>
+                        <p>Haluatko julkaista yksittäisen tarjouksen tai uutisen syötteeseen? Valitse Feed-julkaisun polku.</p>
+                        <div class="path-cta">Siirry julkaisemaan &raquo;</div>
+                    </a>
 
-        <!-- Unified Business Navigation -->
-        <section class="business-nav-section" style="padding-top: 0; margin-bottom: 2rem;">
-            <h2 style="text-align: center; margin-bottom: 2rem;">Kasvata näkyvyyttäsi Laukaassa</h2>
-            <div class="business-nav-grid">
-                <a href="ilmoittaudu.html#ilm-form" class="nav-box">
-                    <h3>Feed-julkaisu</h3>
-                    <p>Uusi käyttäjä? Aloita maksutta (3 julkaisua) ja tavoita paikalliset asiakkaat helposti.</p>
-                    <div class="btn-fake">Aloita tästä &raquo;</div>
-                </a>
-                <a href="kauppa.html" class="nav-box">
-                    <h3>Osta lisää näkyvyyttä</h3>
-                    <p>Haluatko vain yksittäisiä julkaisuja? Osta julkaisuaikaa tarpeen mukaan alk. 5 €.</p>
-                    <div class="btn-fake">Avaa kauppa &raquo;</div>
-                </a>
-                <a href="lisaa-yritys.html" class="nav-box">
-                    <h3>Yritysnäkyvyys</h3>
-                    <p>Haluatko jatkuvaa näkyvyyttä ja oman feed-linkin? Ota yrityskortti alk. 15 €/kk.<br><small style="opacity: 0.8; font-size: 0.85em;">Soveltuu myös yhdistyksille.</small></p>
-                    <div class="btn-fake">Lue lisää &raquo;</div>
-                </a>
+                    <!-- Path 2: Brand Path (Current Page) -->
+                    <div class="path-card brand-path active-path" style="border-color: var(--primary); background: var(--primary-light);">
+                        <div class="path-badge">Olet tässä</div>
+                        <div class="path-icon">🏢</div>
+                        <h3>Pysyvä yritysprofiili</h3>
+                        <p>Valitsemasi brändipolku takaa jatkuvan näkyvyyden ja ammattimaisen esittelyn.</p>
+                    </div>
+                </div>
             </div>
         </section>
+
+        <!-- Main Registration Content Wrapper -->
+        <div class="registration-container">
+            <a href="#hinnasto" class="anchor-link" id="hinnasto">Katso hinnasto ↓</a>
 
         <!-- Pricing Grid -->
         <div class="pricing-grid">
@@ -1244,6 +1254,8 @@
             }
         });
     </script>
+        </div> <!-- Closing registration-container -->
+    </main>
 
     <footer>
         <div class="footer-content">
