@@ -3982,3 +3982,145 @@ footer {
         margin: 3.5rem auto 2rem;
     }
 }
+
+/* =========================================
+   PURCHASE PATH SELECTION GATE
+   ========================================= */
+
+.gate-section {
+    padding: 5rem 1rem;
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    margin-top: 2rem;
+}
+
+.gate-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.gate-header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+}
+
+.gate-header h2 {
+    font-family: var(--accent-font);
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--secondary-blue);
+    margin-bottom: 1rem;
+}
+
+.gate-header p {
+    font-size: 1.2rem;
+    color: #64748b;
+}
+
+.gate-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+}
+
+.path-card {
+    background: white;
+    border-radius: 32px;
+    padding: 3rem 2.5rem;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    position: relative;
+    overflow: hidden;
+}
+
+.path-card:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 20px 50px rgba(0, 51, 102, 0.12);
+    border-color: var(--primary-blue);
+}
+
+.path-card .path-icon {
+    font-size: 3.5rem;
+    margin-bottom: 2rem;
+    width: 100px;
+    height: 100px;
+    background: #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+}
+
+.path-card:hover .path-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.path-card.feed-path:hover .path-icon { background: #fff7ed; color: #ff9900; }
+.path-card.brand-path:hover .path-icon { background: #eff6ff; color: #007bff; }
+
+.path-card h3 {
+    font-family: var(--accent-font);
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: var(--primary-blue);
+}
+
+.path-card p {
+    font-size: 1.1rem;
+    color: #64748b;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    flex-grow: 1;
+}
+
+.path-card .path-cta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    color: var(--primary-blue);
+    font-size: 1.1rem;
+    transition: all 0.2s;
+}
+
+.path-card:hover .path-cta {
+    gap: 15px;
+}
+
+.path-badge {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: #22c55e;
+    color: white;
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+}
+
+@media (max-width: 768px) {
+    .gate-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .path-card {
+        padding: 2.5rem 2rem;
+        border-radius: 24px;
+    }
+
+    .gate-header h2 {
+        font-size: 2rem;
+    }
+}
+
