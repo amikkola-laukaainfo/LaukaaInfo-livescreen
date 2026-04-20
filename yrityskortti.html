@@ -658,8 +658,16 @@
             </div>
 
             <div id="promotional-links-section"
-                style="margin-top: 3rem; background: #fdf5e6; padding: 2rem; border-radius: 20px; border: 1px dashed #ffa500; display: none;">
-                <h3 style="color: #d2691e; margin-bottom: 1rem;">🔥 Katso tarjoukset:</h3>
+                style="margin-top: 3rem; background: linear-gradient(135deg, #fff9f0 0%, #fff4e0 100%); padding: 2.5rem; border-radius: 20px; border: 2px solid #ffa500; box-shadow: 0 10px 25px rgba(255, 165, 0, 0.1); display: none;">
+                <h3 style="color: #d2691e; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.8rem; font-family: 'Outfit';">
+                    <span style="font-size: 1.8rem;">🔥</span> Ajankohtaiset tarjoukset
+                </h3>
+                
+                <div id="coupon-display" style="display: none; background: white; border: 2px dashed #ffa500; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: -10px; left: -10px; background: #ffa500; color: white; padding: 5px 15px; font-size: 0.7rem; font-weight: 800; transform: rotate(-5deg); text-transform: uppercase;">Kuponki</div>
+                    <p id="coupon-text" style="font-size: 1.2rem; font-weight: 700; color: #2d3748; margin: 0; text-align: center;"></p>
+                </div>
+
                 <div id="ad-links-list" style="display: flex; flex-wrap: wrap; gap: 1rem;">
                     <!-- Linkit tähän -->
                 </div>

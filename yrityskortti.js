@@ -481,9 +481,20 @@
             socialIcons.appendChild(shareBtn);
         }
 
-        // Promotional Links
+        // Promotional Links & Coupon
         const adSection = document.getElementById('promotional-links-section');
         const adList = document.getElementById('ad-links-list');
+        const couponDisplay = document.getElementById('coupon-display');
+        const couponText = document.getElementById('coupon-text');
+
+        // Check for text coupon (tarjous or coupon field)
+        const couponVal = company.tarjous || company.coupon || '';
+        if (couponVal && couponVal !== '-' && couponVal !== 'ei' && couponVal !== 'null') {
+            adSection.style.display = 'block';
+            couponDisplay.style.display = 'block';
+            couponText.textContent = couponVal;
+        }
+
         if (company.mainoslinkit && company.mainoslinkit.length > 0) {
             let links = [];
             try {
@@ -637,8 +648,9 @@
                         a.href = imagekitUrl;
                         a.target = '_blank';
                         a.className = 'btn-primary';
-                        a.style.cssText = 'background: #d2691e; padding: 0.6rem 1.2rem; font-size: 0.9rem;';
-                        a.textContent = `🔥 Katso tarjouskuva ${index}`;
+                        // Gradient style for offer buttons
+                        a.style.cssText = 'background: linear-gradient(135deg, #ff9900 0%, #ff5500 100%); padding: 0.8rem 1.5rem; font-size: 1rem; border: none; box-shadow: 0 4px 15px rgba(255, 85, 0, 0.3); color: white; display: inline-flex; align-items: center; gap: 8px;';
+                        a.innerHTML = `<span>🔖</span> Katso tarjouskuva ${index}`;
                         adList.appendChild(a);
                     }
                 };
