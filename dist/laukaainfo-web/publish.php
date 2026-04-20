@@ -283,7 +283,7 @@ if (!empty($business_id) && !empty($sentToken)) {
 
             $plan = $advertiser['paketti'];
             $limits = [
-                'free'        => ['posts' => 1, 'promotions' => 0], // Default 1/mo, but overridden by starter logic below
+                'ilmainen'    => ['posts' => 1, 'promotions' => 0], // Default 1/mo, but overridden by starter logic below
                 'basic'       => ['posts' => 2, 'promotions' => 0],
                 'plus'        => ['posts' => 5, 'promotions' => 1],
                 'pro'         => ['posts' => 10, 'promotions' => 3],
@@ -295,7 +295,7 @@ if (!empty($business_id) && !empty($sentToken)) {
             $curLimits = $limits[$plan] ?? ['posts' => 2, 'promotions' => 0];
             
             // Special Freemium/Free logic
-            if ($plan === 'free') {
+            if ($plan === 'ilmainen') {
                 // If they have used less than 3 total, they can still post (starter pack)
                 if ($countTotal < 3) {
                     $remPosts = 3 - $countTotal;
@@ -365,7 +365,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') !== 'delet
         $limitError = '';
         if ($countMonth >= $curLimits['posts'] && $curLimits['posts'] > 0) {
             $limitError = "Kuukausiraja (" . $curLimits['posts'] . " julkaisua/kk) on täynnä.";
-        } elseif ($curLimits['posts'] == 0 && $advertiser['paketti'] === 'free') {
+        } elseif ($curLimits['posts'] == 0 && $advertiser['paketti'] === 'ilmainen') {
             $limitError = "Ilmais-paketti ei sisällä feed-julkaisuoikeutta.";
         } elseif ($type === 'maksu' && $remPromos <= 0) {
             $limitError = "Kuukauden nostokiintiö (" . $curLimits['promotions'] . ") on jo käytetty.";
@@ -428,6 +428,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') !== 'delet
                                 'contact_email' => $contact_email,
                                 'contact_phone' => $contact_phone,
                                 'show_contact' => $show_contact,
+                                'package' => $advertiser['paketti'],
                                 'imagekit_file_id' => $imagekit_file_id ?? null,
                                 'og' => [
                                     'title' => $title,
@@ -557,7 +558,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') !== 'delet
         <div class="info-box">
             <h4>Tilaustiedot: <?= htmlspecialchars(strtoupper($advertiser['paketti'])) ?></h4>
             <ul>
-                <?php if ($plan === 'free'): ?>
+                <?php if ($plan === 'ilmainen'): ?>
                     <li>Julkaisuja käytettävissä: <strong><?= $remPosts ?> kpl</strong></li>
                     <li>Julkaisuja yhteensä: <strong><?= $countTotal ?> kpl</strong></li>
                     <?php if ($countDay >= 1): ?>
