@@ -4124,3 +4124,17 @@ footer {
     }
 }
 
+
+/* Active Path Highlighting */
+.path-card.active-path {
+    border-color: var(--primary-blue) !important;
+    background: #f0f7ff !important;
+    cursor: default;
+    pointer-events: none;
+}
+
+.path-card.active-path .path-icon {
+    background: white !important;
+    box-shadow: 0 4px 12px rgba(0, 75, 160, 0.1);
+}
+
