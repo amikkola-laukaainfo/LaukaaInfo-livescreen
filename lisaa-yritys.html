@@ -905,6 +905,38 @@
                         <label for="coupon">Tarjous / Kuponki (esim. -20% lounaasta)</label>
                         <input type="text" id="coupon" name="coupon">
                     </div>
+
+                    <!-- Toimintatapa ja palvelualue -->
+                    <div class="form-group" style="background: #f0fdf4; padding: 1.5rem; border-radius: 12px; border: 1px solid #bbf7d0; margin-top: 1rem;">
+                        <label style="color: #166534; font-weight: 700; margin-bottom: 0.5rem;">Toimintatapa ja palvelualue</label>
+                        <p style="font-size: 0.85rem; color: #15803d; margin-bottom: 1rem;">Miten ja missä palvelet asiakkaitasi?</p>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-bottom: 1rem;">
+                            <label style="display: flex; align-items: center; gap: 8px; font-weight: normal; cursor: pointer;">
+                                <input type="checkbox" name="service_mode[]" value="toimipiste" style="width: auto;"> Toimipiste
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px; font-weight: normal; cursor: pointer;">
+                                <input type="checkbox" name="service_mode[]" value="etäpalvelu" style="width: auto;"> Etäpalvelu
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px; font-weight: normal; cursor: pointer;">
+                                <input type="checkbox" name="service_mode[]" value="kotikäynti" style="width: auto;"> Kotikäynti
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px; font-weight: normal; cursor: pointer;">
+                                <input type="checkbox" name="service_mode[]" value="toimitus" style="width: auto;"> Toimitus
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="service_radius">Palvelualueen säde (km)</label>
+                            <input type="number" id="service_radius" name="service_radius" placeholder="esim. 50">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label for="service_note">Lisätiedot palvelualueesta</label>
+                            <textarea id="service_note" name="service_note" rows="2" placeholder="Esim. Toimitukset vain arkisin tai Laukaa ja lähikunnat"></textarea>
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <label for="rss">RSS-syöte (Ajankohtaista-osio)</label>
                         <input type="url" id="rss" name="rss" placeholder="https://.../feed">
@@ -1177,7 +1209,10 @@
                 service_video: formData.get('service_video') === 'true',
                 service_web: formData.get('service_web') === 'true',
                 service_print: formData.get('service_print') === 'true',
-                service_whatsapp: formData.get('service_whatsapp') === 'true'
+                service_whatsapp: formData.get('service_whatsapp') === 'true',
+                service_modes: Array.from(document.querySelectorAll('input[name="service_mode[]"]:checked')).map(el => el.value),
+                service_radius: formData.get('service_radius') || '-',
+                service_note: formData.get('service_note') || '-'
             };
 
             const planNames = { 'free': 'Ilmainen', 'basic': 'BASIC (3 kk)', 'plus': 'PLUS (6 kk)', 'pro': 'PRO (12 kk)' };
@@ -1198,6 +1233,14 @@
             emailBody += `- Videoesittely: ${data.service_video ? 'KYLLÄ' : 'Ei'}\n`;
             emailBody += `- Nettisivut: ${data.service_web ? 'KYLLÄ' : 'Ei'}\n`;
             emailBody += `- Digipaino: ${data.service_print ? 'KYLLÄ' : 'Ei'}\n`;
+            
+            if (typeValue !== 'free') {
+                emailBody += `------------------------------------\n`;
+                emailBody += `TOIMINTATAPA JA ALUE:\n`;
+                emailBody += `- Palvelutavat: ${data.service_modes.join(', ') || '-'}\n`;
+                emailBody += `- Palvelusäde: ${data.service_radius} km\n`;
+                emailBody += `- Lisätiedot: ${data.service_note}\n`;
+            }
             emailBody += `- WhatsApp: ${data.service_whatsapp ? 'KYLLÄ' : 'Ei'}\n`;
             emailBody += `------------------------------------\n`;
             emailBody += `Esittely: ${data.esittely}\n`;
