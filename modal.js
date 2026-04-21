@@ -85,7 +85,10 @@ window.LkiModal = (function() {
         // Käytetään yrityksen omaa rowid:tä, ei feedin item-id:tä
         const companyLookupId = company.business_id || company.business_rowid || company.id;
 
-        if (isSlim && companyLookupId) {
+        // Fetchataan lisätietoja vain yritys/yhteisö-tyypeille — ei ilmoituksille, tapahtumille jne.
+        const isBusinessType = !company.type || company.type === 'business' || company.type === 'community';
+
+        if (isSlim && companyLookupId && isBusinessType) {
             const descEl = document.getElementById('lki-modal-description');
             const loadingDot = document.createElement('div');
             loadingDot.className = 'lki-loading-dots';
