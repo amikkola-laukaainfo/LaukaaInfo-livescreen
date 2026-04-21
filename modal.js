@@ -82,15 +82,20 @@ window.LkiModal = (function() {
         // Jos kriittiset tiedot puuttuvat (Slim-data), ladataan ne lennosta
         const isSlim = !company.puhelin && !company.email && (!company.media || company.media.length <= 1);
         
-        if (isSlim && company.id) {
-            try {
-                // Lisätään kevyt latausilmaisin kuvaukseen tai muuhun sopivaan paikkaan
-                const descEl = document.getElementById('lki-modal-description');
-                const originalDesc = descEl.innerHTML;
-                descEl.innerHTML += '<div class="lki-loading-dots" style="margin-top:10px; opacity:0.6; font-style:italic;">Ladataan lisätietoja...</div>';
+        // Käytetään yrityksen omaa rowid:tä, ei feedin item-id:tä
+        const companyLookupId = company.business_id || company.business_rowid || company.id;
 
+        if (isSlim && companyLookupId) {
+            const descEl = document.getElementById('lki-modal-description');
+            const loadingDot = document.createElement('div');
+            loadingDot.className = 'lki-loading-dots';
+            loadingDot.style.cssText = 'margin-top:10px; opacity:0.6; font-style:italic;';
+            loadingDot.textContent = 'Ladataan lisätietoja...';
+            descEl.appendChild(loadingDot);
+
+            try {
                 const dataSourceUrl = 'https://www.mediazoo.fi/laukaainfo-web/get_companies.php';
-                const response = await fetch(`${dataSourceUrl}?id=${encodeURIComponent(company.id)}&t=${Date.now()}`);
+                const response = await fetch(`${dataSourceUrl}?id=${encodeURIComponent(companyLookupId)}&t=${Date.now()}`);
                 const data = await response.json();
                 
                 if (data.results && data.results[0]) {
@@ -112,11 +117,16 @@ window.LkiModal = (function() {
                     // Päivitetään yrityksen objekti (niin että se säilyy muistissa seuraavaa klikkausta varten)
                     Object.assign(company, fullData);
                     
-                    // Renderöidään uudelleen täysillä tiedoilla
+                    // Renderöidään uudelleen täysillä tiedoilla (poistaa myös loading-tekstin)
                     renderContent(company);
+                } else {
+                    // Ei tuloksia — poistetaan latausteksti manuaalisesti
+                    loadingDot.remove();
                 }
             } catch (error) {
                 console.error("Virhe ladattaessa lisätietoja:", error);
+                // Poistetaan latausteksti myös virhetilanteessa
+                loadingDot.remove();
             }
         }
     }
