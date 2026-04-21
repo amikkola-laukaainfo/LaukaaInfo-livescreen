@@ -135,17 +135,17 @@ window.LkiModal = (function() {
     }
 
     function renderContent(company) {
-        const package = (company.package || company.taso || 'perus').toLowerCase();
+        const tier = (company.package || company.taso || 'perus').toLowerCase();
         const container = document.getElementById('lki-modal-container');
         
         // Tier styles
-        container.className = 'lki-modal-container ' + package;
+        container.className = 'lki-modal-container ' + tier;
         
         // Badge
         const badgeContainer = document.getElementById('lki-modal-badge-container');
-        if (package === 'premium') {
+        if (tier === 'premium') {
             badgeContainer.innerHTML = '<span class="lki-badge premium">PREMIUM JYVÄSKYLÄ / LAUKAA</span>';
-        } else if (package === 'pro') {
+        } else if (tier === 'pro') {
             badgeContainer.innerHTML = '<span class="lki-badge pro">SUOSITELTU</span>';
         } else {
             badgeContainer.innerHTML = '';
@@ -246,10 +246,10 @@ window.LkiModal = (function() {
         }
 
         // Media Slider
-        renderSlider(company, package);
+        renderSlider(company, tier);
 
         // CTAs
-        renderCTAs(company, package);
+        renderCTAs(company, tier);
     }
 
     function close() {
@@ -269,7 +269,7 @@ window.LkiModal = (function() {
         videos.forEach(v => v.pause());
     }
 
-    function renderSlider(company, package) {
+    function renderSlider(company, tier) {
         const wrapper = document.getElementById('lki-modal-swiper-wrapper');
         wrapper.innerHTML = '';
 
@@ -313,10 +313,10 @@ window.LkiModal = (function() {
                 const videoUrl = item.url;
                 if (videoUrl.includes('youtube.com/embed/')) {
                     // Muted autoplay parameter for premium
-                    const autoplay = (package === 'premium') ? '&autoplay=1&mute=1' : '';
+                    const autoplay = (tier === 'premium') ? '&autoplay=1&mute=1' : '';
                     slide.innerHTML = `<iframe src="${videoUrl}?rel=0${autoplay}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
                 } else if (videoUrl.endsWith('.mp4')) {
-                    slide.innerHTML = `<video src="${videoUrl}" controls ${package === 'premium' ? 'autoplay muted' : ''}></video>`;
+                    slide.innerHTML = `<video src="${videoUrl}" controls ${tier === 'premium' ? 'autoplay muted' : ''}></video>`;
                 } else {
                     slide.innerHTML = `<iframe src="${videoUrl}" allowfullscreen></iframe>`;
                 }
@@ -337,12 +337,12 @@ window.LkiModal = (function() {
                 pagination: { el: '.swiper-pagination', clickable: true },
                 navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
                 loop: mediaItems.length > 1,
-                autoplay: (package === 'premium' && mediaItems.length > 1) ? { delay: 5000 } : false,
+                autoplay: (tier === 'premium' && mediaItems.length > 1) ? { delay: 5000 } : false,
             });
         }, 50);
     }
 
-    function renderCTAs(company, package) {
+    function renderCTAs(company, tier) {
         const footer = document.getElementById('lki-modal-footer');
         footer.innerHTML = '';
 
@@ -361,7 +361,7 @@ window.LkiModal = (function() {
         footer.innerHTML += `<a href="${cardUrl}" class="lki-cta-btn card">📄 Yrityssivulle</a>`;
 
         // WhatsApp
-        const wa = company.whatsapp || (company.puhelin && package !== 'perus' ? company.puhelin : '');
+        const wa = company.whatsapp || (company.puhelin && tier !== 'perus' ? company.puhelin : '');
         if (wa && wa !== '-' && wa !== '0') {
             const waNum = wa.replace(/[^0-9]/g, '');
             const url = waNum.startsWith('http') ? waNum : `https://wa.me/${waNum}`;

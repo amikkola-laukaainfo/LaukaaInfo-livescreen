@@ -560,21 +560,27 @@ const LkiFeed = (() => {
     list.addEventListener('click', (e) => {
 
 
-      const img = e.target.closest('.lki-card__img');
-      const card = e.target.closest('.lki-card');
-      
       if (img && card) {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        if (card.classList.contains('lki-card--video')) {
-            const vid = card.dataset.videoId;
-            const isShorts = card.dataset.isShorts === 'true';
-            openLightbox('', '', vid, isShorts);
+        // NEW: Jos tämä on yrityskortti, haluamme ehkä avata koko modaalin pelkän kuvan sijaan
+        const itemId = card.dataset.id;
+        const item = currentItems.find(i => i.id === itemId);
+        const isBusiness = item && (item.business_id || item.type === 'business' || item.type === 'community');
+
+        if (isBusiness) {
+            // Älä tee mitään tässä, anna koodin jatkaa alempaan card-käsittelijään joka avaa modaalin
         } else {
-            openLightbox(img.src, img.alt);
+            e.preventDefault();
+            e.stopPropagation();
+            
+            if (card.classList.contains('lki-card--video')) {
+                const vid = card.dataset.videoId;
+                const isShorts = card.dataset.isShorts === 'true';
+                openLightbox('', '', vid, isShorts);
+            } else {
+                openLightbox(img.src, img.alt);
+            }
+            return;
         }
-        return;
       }
       if (card) {
         // Älä reagoi linkkien klikkauksiin (esim. sosiaalisen median linkit)
