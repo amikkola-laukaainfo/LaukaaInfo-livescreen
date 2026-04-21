@@ -558,7 +558,8 @@ const LkiFeed = (() => {
     });
 
     list.addEventListener('click', (e) => {
-
+      const img = e.target.closest('.lki-card__img');
+      const card = e.target.closest('.lki-card');
 
       if (img && card) {
         // NEW: Jos tämä on yrityskortti, haluamme ehkä avata koko modaalin pelkän kuvan sijaan
