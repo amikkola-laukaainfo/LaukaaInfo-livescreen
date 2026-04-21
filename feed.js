@@ -562,13 +562,14 @@ const LkiFeed = (() => {
       const card = e.target.closest('.lki-card');
 
       if (img && card) {
-        // NEW: Jos tämä on yrityskortti, haluamme ehkä avata koko modaalin pelkän kuvan sijaan
+        // NEW: Jos tämä on yrityskortti TAI sillä on rikkaampaa mediaa, avataan uusi Media Modal
         const itemId = card.dataset.id;
-        const item = currentItems.find(i => i.id === itemId);
+        const item = currentItems.find(i => i.id == itemId); // Huom: == jotta string/number-id täsmää
         const isBusiness = item && (item.business_id || item.type === 'business' || item.type === 'community');
+        const hasRichMedia = item && ((item.images && item.images.length > 0) || (item.videos && item.videos.length > 0));
 
-        if (isBusiness) {
-            // Älä tee mitään tässä, anna koodin jatkaa alempaan card-käsittelijään joka avaa modaalin
+        if (isBusiness || hasRichMedia) {
+            // Annetaan tapahtuman jatkaa alempaan card-käsittelijään, joka avaa Media Modalin
         } else {
             e.preventDefault();
             e.stopPropagation();
@@ -589,7 +590,7 @@ const LkiFeed = (() => {
 
         // NEW: Open Media Modal if is a business item or has rich media
         const itemId = card.dataset.id;
-        const item = currentItems.find(i => i.id === itemId);
+        const item = currentItems.find(i => i.id == itemId); // Huom: == jotta string/number-id täsmää
         
         if (item && window.LkiModal) {
             const isBusiness = item.business_id || item.type === 'business' || item.type === 'community';

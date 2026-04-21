@@ -298,10 +298,10 @@ window.LkiModal = (function() {
             });
         }
 
-        // If no media, use logo or default
+        // If no media, use logo or default (also check singular 'image')
         if (mediaItems.length === 0) {
-            const logo = company.logo && company.logo !== '-' ? company.logo : 'logo.png';
-            mediaItems.push({ type: 'image', url: logo });
+            const fallbackImg = company.images?.[0] || company.image || (company.logo && company.logo !== '-' ? company.logo : 'logo.png');
+            mediaItems.push({ type: 'image', url: fallbackImg });
         }
 
         // Generate slides
@@ -348,7 +348,7 @@ window.LkiModal = (function() {
 
         // Company Card Link (Lue lisää)
         const slug = slugify(company.nimi);
-        const isPremium = (company.tyyppi === 'maksu' || company.tyyppi === 'paid' || package === 'premium');
+        const isPremium = (company.tyyppi === 'maksu' || company.tyyppi === 'paid' || tier === 'premium');
         const isInDist = window.location.pathname.includes('/dist/') || 
                          window.location.hostname === 'laukaainfo.fi' || 
                          window.location.hostname.includes('github.io');
