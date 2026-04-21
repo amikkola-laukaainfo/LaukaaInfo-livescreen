@@ -2484,6 +2484,15 @@ function initShareGenerator(companies) {
             } else {
                 generated = baseUrl + '?feed=open';
             }
+        } else if (type === 'feed-company') {
+            const found = companies.find(c => c.nimi.toLowerCase() === textVal.toLowerCase());
+            if (found) {
+                // Extract rowid from id (e.g. "company-275" -> 275)
+                const rowid = found.id.replace('company-', '');
+                generated = baseUrl + '?feed=open&rowid=' + rowid;
+            } else {
+                generated = baseUrl + '?feed=open';
+            }
         }
         // Lisää tunniste (&ref=) jos käyttäjä on kirjoittanut sen
         if (refVal) {
@@ -2524,11 +2533,16 @@ function initShareGenerator(companies) {
                     categories.map(c => '<option value="' + c + '">' + c + '</option>').join('');
             }
         } else if (type === 'feed') {
-            targetLabel.textContent = 'Valitse syotteen tyyppi';
             if (targetSubSelect) {
                 targetSubSelect.style.display = 'block';
                 targetSubSelect.innerHTML = feedTypes.map(ft => '<option value="' + ft.id + '">' + ft.name + '</option>').join('');
             }
+        } else if (type === 'feed-company') {
+            targetLabel.textContent = 'Valitse yritys';
+            targetInput.style.display = 'block';
+            targetInput.placeholder = 'Etsi yritystä...';
+            targetInput.value = '';
+            targetInput.setAttribute('list', 'generator-business-list');
         }
         updateUrl();
     });
