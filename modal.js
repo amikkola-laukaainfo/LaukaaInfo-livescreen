@@ -360,6 +360,10 @@ window.LkiModal = (function() {
 
         footer.innerHTML += `<a href="${cardUrl}" class="lki-cta-btn card">📄 Yrityssivulle</a>`;
 
+        // Local Feed Link (Laukaa-syöte)
+        const rowid = String(company.business_id || company.business_rowid || company.id).replace('company-', '');
+        footer.innerHTML += `<a href="https://laukaainfo.fi/?feed=open&rowid=${rowid}" target="_blank" class="lki-cta-btn feed">📱 Syöte</a>`;
+
         // WhatsApp
         const wa = company.whatsapp || (company.puhelin && tier !== 'perus' ? company.puhelin : '');
         if (wa && wa !== '-' && wa !== '0') {

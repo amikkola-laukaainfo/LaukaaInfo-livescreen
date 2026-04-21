@@ -512,9 +512,20 @@
                     a.className = 'btn-primary';
                     a.style.cssText = 'background: #d2691e; padding: 0.6rem 1.2rem; font-size: 0.9rem;';
                     a.textContent = '📲 Katso tarjous';
-                    adList.appendChild(a);
                 });
             }
+        }
+        
+        // Laukaa-syöte direct link
+        if (rawId) {
+            adSection.style.display = 'block';
+            const a = document.createElement('a');
+            a.href = `https://laukaainfo.fi/?feed=open&rowid=${rawId}`;
+            a.target = '_blank';
+            a.className = 'btn-primary';
+            a.style.cssText = 'background: #ff9900; padding: 0.6rem 1.2rem; font-size: 0.9rem; border: none;';
+            a.textContent = '📱 Laukaa-syöte';
+            adList.appendChild(a);
         }
 
         // Gallery
