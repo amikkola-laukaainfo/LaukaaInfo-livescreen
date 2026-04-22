@@ -264,7 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             let imageUrl = 'icons/icon-512.png'; // fallback
             if (step.image_url && step.image_url.trim()) {
-                imageUrl = step.image_url.trim();
+                imageUrl = step.image_url.split('|')[0].trim();
                 // Normalisoidaan Google Drive -linkit
                 if (imageUrl.includes('drive.google.com') || imageUrl.includes('drive_cache/')) {
                     const idMatch = imageUrl.match(/(?:id=|\/d\/|file\/d\/|drive_cache\/)([a-zA-Z0-9_-]+)/);
@@ -322,25 +322,87 @@ document.addEventListener('DOMContentLoaded', () => {
         storySelect.value = step.step_order;
 
         // Kuva
+        const sliderContainer = document.getElementById('step-image-slider');
+        const sliderPrev = document.getElementById('slider-prev');
+        const sliderNext = document.getElementById('slider-next');
+        const sliderDots = document.getElementById('slider-dots');
+        
+        if (sliderContainer) sliderContainer.innerHTML = '';
+        if (sliderDots) sliderDots.innerHTML = '';
+        
         if (step.image_url && step.image_url.trim()) {
-            let url = step.image_url.trim();
-
-            // Normalisoidaan Drive-linkit ja välimuistilinkit
-            if (url.includes('drive.google.com') || url.includes('drive_cache/')) {
-                const idMatch = url.match(/(?:id=|\/d\/|file\/d\/|drive_cache\/)([a-zA-Z0-9_-]+)/);
-                if (idMatch) {
-                    url = `https://www.mediazoo.fi/laukaainfo-web/get_image.php?id=${idMatch[1]}`;
+            const urls = step.image_url.split('|').map(u => u.trim()).filter(u => u);
+            
+            if (urls.length > 0) {
+                imagePlaceholder.style.display = 'none';
+                
+                urls.forEach((rawUrl, idx) => {
+                    let url = rawUrl;
+                    if (url.includes('drive.google.com') || url.includes('drive_cache/')) {
+                        const idMatch = url.match(/(?:id=|\/d\/|file\/d\/|drive_cache\/)([a-zA-Z0-9_-]+)/);
+                        if (idMatch) {
+                            url = `https://www.mediazoo.fi/laukaainfo-web/get_image.php?id=${idMatch[1]}`;
+                        }
+                    }
+                    
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.style.minWidth = '100%';
+                    img.style.flexShrink = '0';
+                    img.style.objectFit = 'cover';
+                    sliderContainer.appendChild(img);
+                    
+                    if (urls.length > 1) {
+                        const dot = document.createElement('div');
+                        dot.style.width = '8px';
+                        dot.style.height = '8px';
+                        dot.style.borderRadius = '50%';
+                        dot.style.background = idx === 0 ? 'white' : 'rgba(255,255,255,0.5)';
+                        dot.style.cursor = 'pointer';
+                        dot.dataset.idx = idx;
+                        sliderDots.appendChild(dot);
+                    }
+                });
+                
+                let currentSlide = 0;
+                const updateSlider = () => {
+                    sliderContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+                    Array.from(sliderDots.children).forEach((dot, i) => {
+                        dot.style.background = i === currentSlide ? 'white' : 'rgba(255,255,255,0.5)';
+                    });
+                };
+                
+                Array.from(sliderDots.children).forEach(dot => {
+                    dot.onclick = () => {
+                        currentSlide = parseInt(dot.dataset.idx);
+                        updateSlider();
+                    };
+                });
+                
+                if (urls.length > 1) {
+                    sliderPrev.style.display = 'flex';
+                    sliderNext.style.display = 'flex';
+                    sliderPrev.onclick = () => {
+                        currentSlide = (currentSlide - 1 + urls.length) % urls.length;
+                        updateSlider();
+                    };
+                    sliderNext.onclick = () => {
+                        currentSlide = (currentSlide + 1) % urls.length;
+                        updateSlider();
+                    };
+                } else {
+                    sliderPrev.style.display = 'none';
+                    sliderNext.style.display = 'none';
                 }
+            } else {
+                imagePlaceholder.style.display = 'block';
+                if (sliderPrev) sliderPrev.style.display = 'none';
+                if (sliderNext) sliderNext.style.display = 'none';
             }
-
-            stepImage.src = url;
-            stepImage.style.display = 'block';
-            stepImage.style.opacity = '0';
-            stepImage.onload = () => { stepImage.style.opacity = '1'; };
-            imagePlaceholder.style.display = 'none';
         } else {
-            stepImage.style.display = 'none';
             imagePlaceholder.style.display = 'block';
+            if (sliderPrev) sliderPrev.style.display = 'none';
+            if (sliderNext) sliderNext.style.display = 'none';
         }
 
         // Lisätietoa & Sijainti linkit
@@ -373,6 +435,28 @@ document.addEventListener('DOMContentLoaded', () => {
             stepAudio.pause();
             stepAudio.src = '';
             audioArea.style.display = 'none';
+        }
+
+        // YouTube hallinta
+        const youtubeArea = document.getElementById('youtube-area');
+        const youtubeIframe = document.getElementById('step-youtube');
+        if (step.youtube_url && step.youtube_url.trim() && youtubeArea && youtubeIframe) {
+            let yUrl = step.youtube_url.trim();
+            let videoId = '';
+            if (yUrl.includes('youtube.com/watch?v=')) {
+                videoId = new URL(yUrl).searchParams.get('v');
+            } else if (yUrl.includes('youtu.be/')) {
+                videoId = yUrl.split('youtu.be/')[1].split('?')[0];
+            }
+            if (videoId) {
+                youtubeIframe.src = `https://www.youtube.com/embed/${videoId}`;
+                youtubeArea.style.display = 'block';
+            } else {
+                youtubeArea.style.display = 'none';
+            }
+        } else if (youtubeArea) {
+            youtubeArea.style.display = 'none';
+            if (youtubeIframe) youtubeIframe.src = '';
         }
 
         // Kartta
