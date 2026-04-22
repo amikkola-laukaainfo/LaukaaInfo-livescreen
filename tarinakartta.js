@@ -294,6 +294,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         currentStepIndex = index;
         const step = filteredSteps[index];
+        const lat = parseFloat(step.lat);
+        const lng = parseFloat(step.lng);
 
         // Päivitä osoitepalkki (ilman sivun latausta)
         const url = new URL(window.location);
@@ -374,8 +376,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Kartta
-        const lat = parseFloat(step.lat);
-        const lng = parseFloat(step.lng);
         if (!isNaN(lat) && !isNaN(lng)) {
             map.flyTo([lat, lng], 13, { duration: 1.2 });
         }
