@@ -119,16 +119,23 @@ function updateMetadata(area, cat, tag) {
         titleText = `${cat.charAt(0).toUpperCase() + cat.slice(1)} ${locRef}`; 
     }
 
-    titleEl.textContent = titleText;
-    pageTitleEl.textContent = `${titleText} – LaukaaInfo: Laukaa taskussasi – tiedä, löydä ja osallistu.`;
+    const isLievestuoreMain = area.slug === 'lievestuore' && !tag && !cat;
 
-    const subtitleEl = document.getElementById('region-subtitle');
-    if (subtitleEl) {
-        if (tag || cat) {
-            subtitleEl.innerHTML = `Etsit palveluja alueella <strong>${area.name}</strong>.<br><small style="color: #666; font-size: 0.9em; display: inline-block; margin-top: 5px;">📍 Mukana myös muiden alueiden palveluntarjoajat, joiden palvelualue kattaa tämän sijainnin.</small>`;
-        } else {
-            subtitleEl.textContent = `Hae yrityksiä, tapahtumia ja tiedotteita alueella: ${area.name}`;
+    if (!isLievestuoreMain) {
+        if (titleEl) titleEl.textContent = titleText;
+        pageTitleEl.textContent = `${titleText} – LaukaaInfo: Laukaa taskussasi – tiedä, löydä ja osallistu.`;
+
+        const subtitleEl = document.getElementById('region-subtitle');
+        if (subtitleEl) {
+            if (tag || cat) {
+                subtitleEl.innerHTML = `Etsit palveluja alueella <strong>${area.name}</strong>.<br><small style="color: #666; font-size: 0.9em; display: inline-block; margin-top: 5px;">📍 Mukana myös muiden alueiden palveluntarjoajat, joiden palvelualue kattaa tämän sijainnin.</small>`;
+            } else {
+                subtitleEl.textContent = `Hae yrityksiä, tapahtumia ja tiedotteita alueella: ${area.name}`;
+            }
         }
+    } else {
+        // Vain sivuotsikko (browser tab) päivitetään Lievestuoreen pääsivullakin
+        pageTitleEl.textContent = `Löydä Lievestuore – LaukaaInfo`;
     }
 
     let seoText = `<h3>${area.name} – yritykset, palvelut ja uutiset</h3>`;
