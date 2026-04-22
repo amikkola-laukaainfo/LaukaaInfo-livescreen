@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $steps = json_decode($jsonData, true);
         
         if (is_array($steps)) {
-            $header = ['step_order', 'category', 'topic', 'story_name', 'title', 'description', 'lat', 'lng', 'image_url', 'more_info_url', 'audio_url'];
+            $header = ['step_order', 'category', 'topic', 'story_name', 'title', 'description', 'lat', 'lng', 'image_url', 'more_info_url', 'audio_url', 'youtube_url'];
             $handle = fopen($csvFile, 'w');
             fputcsv($handle, $header);
             
@@ -38,7 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                     $step['lng'] ?? '',
                     $step['image_url'] ?? '',
                     $step['more_info_url'] ?? '',
-                    $step['audio_url'] ?? ''
+                    $step['audio_url'] ?? '',
+                    $step['youtube_url'] ?? ''
                 ];
                 fputcsv($handle, $row);
             }
@@ -335,14 +336,17 @@ if (file_exists($readPath)) {
             height: 120px;
             background: #0f172a;
             border-radius: 8px;
-            overflow: hidden;
+            overflow-x: auto;
+            overflow-y: hidden;
             margin-top: 10px;
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
+            padding: 5px;
+            gap: 5px;
             border: 1px dashed var(--border);
         }
-        .image-preview img { width: 100%; height: 100%; object-fit: cover; }
+        .image-preview img { height: 100%; width: auto; object-fit: cover; flex-shrink: 0; border-radius: 4px; }
 
         #empty-state {
             display: flex;
@@ -441,8 +445,11 @@ if (file_exists($readPath)) {
             </div>
             
             <div class="form-group">
-                <label>Kuva URL (ImageKit tai YouTube thumb)</label>
-                <input type="text" id="f-image_url" placeholder="https://...">
+                <label>Kuva URL(t) (Voit lisätä useita kuvia + -napilla)</label>
+                <div id="image-url-container" style="display:flex; flex-direction:column; gap:5px;">
+                    <!-- JS creates inputs here -->
+                </div>
+                <button type="button" class="btn btn-accent btn-small" id="add-image-url-btn" style="margin-top: 5px; padding: 4px 8px; font-size: 0.8rem;">+ Lisää kuva</button>
                 <div class="image-preview" id="f-img-preview">
                     <span>Ei kuvaa</span>
                 </div>
@@ -456,6 +463,11 @@ if (file_exists($readPath)) {
             <div class="form-group">
                 <label>Ääni URL (MP3/OGG)</label>
                 <input type="url" id="f-audio_url" placeholder="https://...">
+            </div>
+
+            <div class="form-group">
+                <label>YouTube URL</label>
+                <input type="url" id="f-youtube_url" placeholder="https://youtube.com/...">
             </div>
         </div>
         
@@ -606,10 +618,17 @@ if (file_exists($readPath)) {
         document.getElementById('f-topic').value = step.topic || '';
         document.getElementById('f-lat').value = step.lat || '';
         document.getElementById('f-lng').value = step.lng || '';
-        document.getElementById('f-image_url').value = step.image_url || '';
         document.getElementById('f-more_info_url').value = step.more_info_url || '';
         document.getElementById('f-audio_url').value = step.audio_url || '';
+        document.getElementById('f-youtube_url').value = step.youtube_url || '';
         
+        const imgContainer = document.getElementById('image-url-container');
+        imgContainer.innerHTML = '';
+        const imgUrls = step.image_url ? step.image_url.split('|') : [''];
+        imgUrls.forEach(url => {
+            addImgInput(url);
+        });
+
         updateImgPreview(step.image_url);
         updateMarkers();
         
@@ -659,20 +678,52 @@ if (file_exists($readPath)) {
     };
 
     // Auto-update steps on form input
-    ['title', 'story_name', 'description', 'category', 'topic', 'lat', 'lng', 'image_url', 'more_info_url', 'audio_url'].forEach(id => {
-        document.getElementById('f-' + id).addEventListener('input', (e) => {
-            if (selectedIndex === -1) return;
-            steps[selectedIndex][id] = e.target.value;
-            if (id === 'title' || id === 'category' || id === 'story_name') renderList();
-            if (id === 'lat' || id === 'lng') updateMarkers();
-            if (id === 'image_url') updateImgPreview(e.target.value);
-        });
+    ['title', 'story_name', 'description', 'category', 'topic', 'lat', 'lng', 'more_info_url', 'audio_url', 'youtube_url'].forEach(id => {
+        const el = document.getElementById('f-' + id);
+        if (el) {
+            el.addEventListener('input', (e) => {
+                if (selectedIndex === -1) return;
+                steps[selectedIndex][id] = e.target.value;
+                if (id === 'title' || id === 'category' || id === 'story_name') renderList();
+                if (id === 'lat' || id === 'lng') updateMarkers();
+            });
+        }
     });
 
-    function updateImgPreview(url) {
+    function addImgInput(val = '') {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'f-image_url-input';
+        input.placeholder = 'https://...';
+        input.value = val;
+        input.style.width = '100%';
+        input.style.background = '#0f172a';
+        input.style.border = '1px solid var(--border)';
+        input.style.color = 'white';
+        input.style.padding = '0.6rem';
+        input.style.borderRadius = '8px';
+        input.addEventListener('input', updateImagesFromInputs);
+        document.getElementById('image-url-container').appendChild(input);
+    }
+
+    document.getElementById('add-image-url-btn').onclick = () => {
+        addImgInput();
+    };
+
+    function updateImagesFromInputs() {
+        if (selectedIndex === -1) return;
+        const inputs = document.querySelectorAll('.f-image_url-input');
+        const urls = Array.from(inputs).map(inp => inp.value.trim()).filter(v => v);
+        const combined = urls.join('|');
+        steps[selectedIndex].image_url = combined;
+        updateImgPreview(combined);
+    }
+
+    function updateImgPreview(combinedUrl) {
         const preview = document.getElementById('f-img-preview');
-        if (url && url.length > 5) {
-            preview.innerHTML = `<img src="${url}" alt="Preview" onerror="this.parentElement.innerHTML='Virheellinen kuva'">`;
+        if (combinedUrl && combinedUrl.length > 5) {
+            const urls = combinedUrl.split('|').filter(u => u);
+            preview.innerHTML = urls.map(url => `<img src="${url}" alt="Preview" onerror="this.style.display='none'">`).join('');
         } else {
             preview.innerHTML = '<span>Ei kuvaa</span>';
         }
