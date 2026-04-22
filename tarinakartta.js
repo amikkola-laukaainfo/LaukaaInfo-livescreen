@@ -54,8 +54,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (allSteps.length > 0) {
                 populateCategories();
                 
-                // Jos meillä on syvälinkki, asetetaan select-valikot sen mukaisesti
-                const startupStep = new URLSearchParams(window.location.search).get('step');
+                const urlParams = new URLSearchParams(window.location.search);
+                const startupStep = urlParams.get('step');
+                const startupCategory = urlParams.get('category');
+                const startupTopic = urlParams.get('topic');
+
                 if (startupStep) {
                     const found = allSteps.find(s => s.step_order === startupStep);
                     if (found) {
@@ -63,6 +66,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         populateTopics(found.category);
                         topicSelect.value = found.topic || '';
                         populateStories(found.category, found.topic);
+                    }
+                } else if (startupCategory) {
+                    categorySelect.value = startupCategory;
+                    populateTopics(startupCategory);
+                    if (startupTopic) {
+                        topicSelect.value = startupTopic;
+                        populateStories(startupCategory, startupTopic);
                     }
                 }
                 
