@@ -711,7 +711,8 @@
         </div>
 
         <section id="story-display" class="story-card" style="display: none;">
-            <div class="story-image-container" style="position: relative;">
+            <div class="story-media-column" style="display: flex; flex-direction: column;">
+                <div class="story-image-container" style="position: relative;">
                 <div id="step-image-slider" style="display: flex; transition: transform 0.3s ease; width: 100%; height: 100%;">
                     <img id="step-image" src="" alt="Tarinan kuva" style="display: none; min-width: 100%; flex-shrink: 0;">
                 </div>
@@ -720,7 +721,16 @@
                 <div id="slider-dots" style="position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px;"></div>
                 <div id="image-placeholder">Ei kuvaa saatavilla</div>
             </div>
-            <div class="story-details">
+            <div id="youtube-area" style="display: none; margin-top: 1.5rem; border-radius: 12px; overflow: hidden; background: #f0f4f8; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                <div class="audio-title" style="padding: 10px 15px; background: #fff; border-bottom: 1.5px solid #0056b322;">
+                    <span>Katso video</span>
+                </div>
+                <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+                    <iframe id="step-youtube" src="" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+                </div>
+            </div>
+        </div>
+        <div class="story-details">
                 <h2 id="detail-title"></h2>
                 <div id="detail-desc" style="line-height: 1.6; margin-bottom: 1.5rem;"></div>
                 <div id="detail-meta" style="font-size: 0.9rem; color: #666; font-style: italic;"></div>
@@ -732,15 +742,6 @@
                     <div class="audio-container">
                         <audio id="step-audio" controls style="height: 35px;"></audio>
                         <div class="audio-waveform"></div>
-                    </div>
-                </div>
-
-                <div id="youtube-area" style="display: none; margin-top: 1.5rem; border-radius: 12px; overflow: hidden; background: #f0f4f8; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                    <div class="audio-title" style="padding: 10px 15px; background: #fff; border-bottom: 1.5px solid #0056b322;">
-                        <span>Katso video</span>
-                    </div>
-                    <div style="position: relative; padding-bottom: 56.25%; height: 0;">
-                        <iframe id="step-youtube" src="" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
                     </div>
                 </div>
 
