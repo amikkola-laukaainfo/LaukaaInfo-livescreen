@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let filteredSteps = [];  // suodatettu näkymä
     let currentStepIndex = 0;
     let markers = [];
+    let userMarker = null;
     let polyline = null;
 
     // Elements — valikot
@@ -428,6 +429,77 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (closeQrBtn) closeQrBtn.addEventListener('click', closeQr);
     if (qrOverlay) qrOverlay.addEventListener('click', closeQr);
+
+    // Location Logic
+    const locateBtn = document.getElementById('btn-locate-user');
+    if (locateBtn) {
+        locateBtn.addEventListener('click', locateUser);
+    }
+
+    function locateUser() {
+        if (!navigator.geolocation) {
+            alert("Selaimesi ei tue paikannusta.");
+            return;
+        }
+
+        locateBtn.classList.add('loading');
+        
+        navigator.geolocation.getCurrentPosition((position) => {
+            const { latitude, longitude } = position.coords;
+            const userPos = [latitude, longitude];
+
+            if (userMarker) {
+                userMarker.setLatLng(userPos);
+            } else {
+                userMarker = L.circleMarker(userPos, {
+                    radius: 8,
+                    fillColor: "#007bff",
+                    color: "#fff",
+                    weight: 3,
+                    fillOpacity: 0.8
+                }).addTo(map).bindPopup("Olet tässä");
+            }
+
+            // Etsi lähin kohde
+            if (filteredSteps.length > 0) {
+                let minDist = Infinity;
+                let closestIdx = -1;
+
+                filteredSteps.forEach((step, i) => {
+                    if (step.lat && step.lng) {
+                        const d = calculateDistance(latitude, longitude, parseFloat(step.lat), parseFloat(step.lng));
+                        if (d < minDist) {
+                            minDist = d;
+                            closestIdx = i;
+                        }
+                    }
+                });
+
+                if (closestIdx !== -1) {
+                    goToStep(closestIdx);
+                }
+            } else {
+                map.setView(userPos, 14);
+            }
+
+            locateBtn.classList.remove('loading');
+        }, (error) => {
+            console.error("Geolocation error:", error);
+            locateBtn.classList.remove('loading');
+            alert("Sijaintia ei voitu hakea. Varmista että GPS on päällä ja olet antanut luvan.");
+        }, { enableHighAccuracy: true });
+    }
+
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371; // km
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                  Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
+    }
 
     // Copy Link Logic
     if (copyLinkBtn) {
