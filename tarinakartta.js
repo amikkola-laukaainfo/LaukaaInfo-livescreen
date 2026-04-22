@@ -206,6 +206,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
             }).addTo(map);
 
+            const popupHtml = `
+                <div style="min-width: 180px;">
+                    <h3 style="margin: 0 0 5px 0; color: #0056b3; font-size: 1rem; font-family: 'Outfit', sans-serif;">${escapeHtml(step.title)}</h3>
+                    <div style="font-size: 0.85rem; color: #666; margin-bottom: 8px;">Askel ${index + 1} / ${filteredSteps.length}</div>
+                    <a href="https://www.google.com/maps/search/?api=1&query=${lat},${lng}" target="_blank" style="background: #28a745; color: white; padding: 5px 10px; border-radius: 4px; text-decoration: none; font-size: 0.75rem; display: inline-flex; align-items: center; gap: 5px; font-weight: 600;">📍 Avaa Google Mapsissa</a>
+                </div>
+            `;
+            marker.bindPopup(popupHtml);
+
             marker.on('click', () => goToStep(index));
             markers.push(marker);
             pathCoords.push([lat, lng]);
@@ -321,9 +330,19 @@ document.addEventListener('DOMContentLoaded', () => {
             imagePlaceholder.style.display = 'block';
         }
 
-        // Lisätietoa-linkki
+        // Lisätietoa & Sijainti linkit
+        let metaHtml = '';
         if (step.more_info_url && step.more_info_url.trim()) {
-            detailMeta.innerHTML = `<a href="${step.more_info_url}" target="_blank" style="color: #0056b3; font-weight: 600; text-decoration: none;">&rarr; Lue lisää tästä kohteesta</a>`;
+            metaHtml += `<a href="${step.more_info_url}" target="_blank" style="color: #0056b3; font-weight: 600; text-decoration: none; display: block; margin-bottom: 8px;">&rarr; Lue lisää tästä kohteesta</a>`;
+        }
+        
+        if (!isNaN(lat) && !isNaN(lng)) {
+            const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+            metaHtml += `<a href="${mapsUrl}" target="_blank" style="color: #28a745; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 5px;">📍 Sijainti Google Mapsissa</a>`;
+        }
+
+        if (metaHtml) {
+            detailMeta.innerHTML = metaHtml;
             detailMeta.style.display = 'block';
         } else {
             detailMeta.style.display = 'none';
@@ -350,17 +369,23 @@ document.addEventListener('DOMContentLoaded', () => {
             map.flyTo([lat, lng], 13, { duration: 1.2 });
         }
 
-        // Highlight-markkeri
+        // Highlight-markkeri & Popup
         markers.forEach((m, i) => {
+            const isSelected = i === index;
             const el = m.getElement();
             if (!el) return;
             const inner = el.querySelector('div');
             if (inner) {
-                inner.style.backgroundColor = i === index ? '#e85d04' : '#0056b3';
-                inner.style.transform = i === index ? 'scale(1.3)' : 'scale(1)';
+                inner.style.backgroundColor = isSelected ? '#e85d04' : '#0056b3';
+                inner.style.transform = isSelected ? 'scale(1.3)' : 'scale(1)';
                 inner.style.transition = 'all 0.2s ease';
             }
-            m.setZIndexOffset(i === index ? 1000 : 0);
+            m.setZIndexOffset(isSelected ? 1000 : 0);
+            
+            if (isSelected) {
+                // Pieni viive jotta flyTo ehtii alkaa/loppua ja markkeri on näkyvissä
+                setTimeout(() => m.openPopup(), 600);
+            }
         });
 
         // Napit
@@ -430,5 +455,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }, 'image/png');
         });
+    }
+
+    function escapeHtml(unsafe) {
+        if (!unsafe) return '';
+        return unsafe.toString()
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
     }
 });

@@ -438,8 +438,19 @@
             align-items: center;
             gap: 5px;
         }
-        audio::-webkit-media-controls-panel {
-            background-color: #f8f9fa;
+        /* ── Leaflet Popup Styles ─── */
+        .leaflet-popup-content-wrapper {
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            padding: 5px;
+        }
+        .leaflet-popup-content {
+            margin: 12px;
+            font-family: 'Outfit', 'Inter', sans-serif;
+            line-height: 1.4;
+        }
+        .leaflet-popup-tip {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
     </style>
 </head>
