@@ -281,72 +281,80 @@
 
 
     <main>
-        <div class="category-header">
+        <div class="category-header bg-full-white" style="margin-bottom: 0; padding-bottom: 2rem;">
             <span id="category-icon" style="font-size: 4rem; display: block; margin-bottom: 1rem;"></span>
             <h1 id="category-name">Ladataan toimialaa...</h1>
             <p id="category-description">Tutustu paikallisiin palveluntarjoajiin.</p>
         </div>
 
-        <section class="featured-carousel-section" id="featured-section" style="display: none;">
-            <h2>⭐ Suositellut yritykset</h2>
-            <div class="carousel-container">
-                <button class="carousel-nav-btn prev" id="carousel-prev" aria-label="Edellinen">❮</button>
-                <div class="carousel-track" id="featured-carousel">
-                    <!-- Suositellut kortit tässä -->
+        <section class="featured-carousel-section bg-full-white" id="featured-section" style="display: none; padding-top: 0;">
+            <div style="max-width: 1200px; margin: 0 auto;">
+                <h2>⭐ Suositellut yritykset</h2>
+                <div class="carousel-container">
+                    <button class="carousel-nav-btn prev" id="carousel-prev" aria-label="Edellinen">❮</button>
+                    <div class="carousel-track" id="featured-carousel">
+                        <!-- Suositellut kortit tässä -->
+                    </div>
+                    <button class="carousel-nav-btn next" id="carousel-next" aria-label="Seuraava">❯</button>
                 </div>
-                <button class="carousel-nav-btn next" id="carousel-next" aria-label="Seuraava">❯</button>
             </div>
         </section>
 
         <!-- Kartta -->
-        <section class="category-map-section">
-            <h2>Palvelut kartalla</h2>
-            <div class="map-layout-wrapper">
-                <div id="category-map" style="height: 500px; border-radius: 15px; box-shadow: var(--shadow); flex-grow: 1;"></div>
-                <div id="map-sidebar" class="map-sidebar">
-                    <div class="sidebar-section">
-                        <h4><span class="icon">🚙</span> Palvelee alueella</h4>
-                        <div class="sidebar-sub-group" id="sidebar-group-on-map">
-                            <div class="sidebar-sub-label">📍 Näkyy kartalla</div>
-                            <ul id="service-areas-on-map-list" class="sidebar-list">
-                                <li class="empty-msg">Ei kohteita näkymässä</li>
-                            </ul>
-                        </div>
-                        <div class="sidebar-sub-group" id="sidebar-group-off-map">
-                            <div class="sidebar-sub-label">🌐 Ei näy kartalla</div>
-                            <ul id="service-areas-off-map-list" class="sidebar-list">
-                                <li class="empty-msg">Kaikki näkyvissä</li>
-                            </ul>
+        <section class="category-map-section bg-full-gray">
+            <div style="max-width: 1200px; margin: 0 auto;">
+                <h2>Palvelut kartalla</h2>
+                <div class="map-layout-wrapper">
+                    <div id="category-map" style="height: 500px; border-radius: 15px; box-shadow: var(--shadow); flex-grow: 1;"></div>
+                    <div id="map-sidebar" class="map-sidebar">
+                        <div class="sidebar-section">
+                            <h4><span class="icon">🚙</span> Palvelee alueella</h4>
+                            <div class="sidebar-sub-group" id="sidebar-group-on-map">
+                                <div class="sidebar-sub-label">📍 Näkyy kartalla</div>
+                                <ul id="service-areas-on-map-list" class="sidebar-list">
+                                    <li class="empty-msg">Ei kohteita näkymässä</li>
+                                </ul>
+                            </div>
+                            <div class="sidebar-sub-group" id="sidebar-group-off-map">
+                                <div class="sidebar-sub-label">🌐 Ei näy kartalla</div>
+                                <ul id="service-areas-off-map-list" class="sidebar-list">
+                                    <li class="empty-msg">Kaikki näkyvissä</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="directory-section">
-            <div class="company-directory" id="company-list">
-                <!-- Kaikki kategoriassa olevat yritykset -->
+        <section class="directory-section bg-full-white">
+            <div style="max-width: 1200px; margin: 0 auto;">
+                <div class="company-directory" id="company-list">
+                    <!-- Kaikki kategoriassa olevat yritykset -->
+                </div>
             </div>
         </section>
         <!-- Unified Business Navigation -->
-        <section class="business-nav-section">
-            <h2 style="text-align: center; margin-bottom: 2rem;">Kasvata näkyvyyttäsi Laukaassa</h2>
-            <div class="business-nav-grid">
-                <a href="ilmoittaudu.html#ilm-form" class="nav-box">
-                    <h3>Feed-julkaisu</h3>
-                    <p>Uusi käyttäjä? Aloita maksutta (3 julkaisua) ja tavoita paikalliset asiakkaat helposti.</p>
-                    <div class="btn-fake">Aloita tästä &raquo;</div>
-                </a>
-                <a href="kauppa.html" class="nav-box">
-                    <h3>Osta lisää näkyvyyttä</h3>
-                    <p>Haluatko vain yksittäisiä julkaisuja? Osta julkaisuaikaa tarpeen mukaan alk. 5 €.</p>
-                    <div class="btn-fake">Avaa kauppa &raquo;</div>
-                </a>
-                <a href="lisaa-yritys.html" class="nav-box">
-                    <h3>Yritysnäkyvyys</h3>
-                    <p>Haluatko jatkuvaa näkyvyyttä ja oman feed-linkin? Ota yrityskortti alk. 15 €/kk.<br><small style="opacity: 0.8; font-size: 0.85em;">Soveltuu myös yhdistyksille.</small></p>
-                    <div class="btn-fake">Lue lisää &raquo;</div>
-                </a>
+        <section class="business-nav-section bg-full-blue">
+            <div style="max-width: 1200px; margin: 0 auto;">
+                <h2 style="text-align: center; margin-bottom: 2rem;">Kasvata näkyvyyttäsi Laukaassa</h2>
+                <div class="business-nav-grid">
+                    <a href="ilmoittaudu.html#ilm-form" class="nav-box">
+                        <h3>Feed-julkaisu</h3>
+                        <p>Uusi käyttäjä? Aloita maksutta (3 julkaisua) ja tavoita paikalliset asiakkaat helposti.</p>
+                        <div class="btn-fake">Aloita tästä &raquo;</div>
+                    </a>
+                    <a href="kauppa.html" class="nav-box">
+                        <h3>Osta lisää näkyvyyttä</h3>
+                        <p>Haluatko vain yksittäisiä julkaisuja? Osta julkaisuaikaa tarpeen mukaan alk. 5 €.</p>
+                        <div class="btn-fake">Avaa kauppa &raquo;</div>
+                    </a>
+                    <a href="lisaa-yritys.html" class="nav-box">
+                        <h3>Yritysnäkyvyys</h3>
+                        <p>Haluatko jatkuvaa näkyvyyttä ja oman feed-linkin? Ota yrityskortti alk. 15 €/kk.<br><small style="opacity: 0.8; font-size: 0.85em;">Soveltuu myös yhdistyksille.</small></p>
+                        <div class="btn-fake">Lue lisää &raquo;</div>
+                    </a>
+                </div>
             </div>
         </section>
     </main>

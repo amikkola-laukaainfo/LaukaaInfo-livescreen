@@ -735,108 +735,121 @@
             <button id="next-step" class="btn-story" disabled>Seuraava ❯</button>
         </section>
 
-        <div class="map-selection-container">
-            <div class="map-wrapper">
-                <div id="tarina-map"></div>
-                <button id="btn-locate-user" class="btn-map-control" title="Näytä oma sijainti">
-                    <span class="icon">📍</span>
-                </button>
+        <section id="story-selection-section" class="bg-full-white" style="padding-bottom: 2rem;">
+            <div style="max-width: 1200px; margin: 0 auto;">
+                <div class="map-selection-container">
+                    <div class="map-wrapper">
+                        <div id="tarina-map"></div>
+                        <button id="btn-locate-user" class="btn-map-control" title="Näytä oma sijainti">
+                            <span class="icon">📍</span>
+                        </button>
+                    </div>
+
+                    <section class="story-selector card">
+                        <h3>Valitse Teema</h3>
+                        <div class="selector-row">
+                            <div class="selector-group">
+                                <label for="theme-select">Tarinan teema</label>
+                                <select id="theme-select">
+                                    <option value="">Ladataan teemoja...</option>
+                                </select>
+                            </div>
+                            <div class="selector-group">
+                                <label for="category-select">Alue/Kategoria</label>
+                                <select id="category-select" disabled>
+                                    <option value="">Valitse teema ensin</option>
+                                </select>
+                            </div>
+                            <div class="selector-group">
+                                <label for="story-select">Valitse tarina</label>
+                                <select id="story-select" disabled>
+                                    <option value="">Valitse teema ensin</option>
+                                </select>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <p class="location-hint" style="margin-bottom: 1.5rem;">Tarinat on jaoteltu teeman ja kategorian mukaan. Voit myös itse päivittää tarinoita alueellesi ja liittää kartan omalle sivulle. Jokaisesta askeleesta tulee QR-koodi ja mahdollista on liittää tarinoihin kuvia, videota ja äänileikkeitä. Kysy lisätietoa.</p>
             </div>
+        </section>
 
-            <section class="story-selector card">
-                <h3>Valitse Teema</h3>
-                <div class="selector-row">
-                    <div class="selector-group">
-                        <label for="theme-select">Tarinan teema</label>
-                        <select id="theme-select">
-                            <option value="">Ladataan teemoja...</option>
-                        </select>
-                    </div>
-                    <div class="selector-group">
-                        <label for="category-select">Alue/Kategoria</label>
-                        <select id="category-select" disabled>
-                            <option value="">Valitse teema ensin</option>
-                        </select>
-                    </div>
-                    <div class="selector-group">
-                        <label for="story-select">Valitse tarina</label>
-                        <select id="story-select" disabled>
-                            <option value="">Valitse teema ensin</option>
-                        </select>
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        <p class="location-hint" style="margin-bottom: 1.5rem;">Tarinat on jaoteltu teeman ja kategorian mukaan. Voit myös itse päivittää tarinoita alueellesi ja liittää kartan omalle sivulle. Jokaisesta askeleesta tulee QR-koodi ja mahdollista on liittää tarinoihin kuvia, videota ja äänileikkeitä. Kysy lisätietoa.</p>
-
-        <div id="step-slider" class="step-slider">
-            <!-- Dynamically populated by JS -->
-        </div>
-
-        <section id="story-display" class="story-card" style="display: none;">
-            <div class="story-media-column" style="display: flex; flex-direction: column;">
-                <div class="story-image-container" style="position: relative;">
-                <div id="step-image-slider" style="display: flex; transition: transform 0.3s ease; width: 100%; height: 100%;">
-                    <img id="step-image" src="" alt="Tarinan kuva" style="display: none; min-width: 100%; flex-shrink: 0;">
-                </div>
-                <button id="slider-prev" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 36px; height: 36px; cursor: pointer; display: none; align-items: center; justify-content: center; font-size: 1.2rem;">❮</button>
-                <button id="slider-next" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 36px; height: 36px; cursor: pointer; display: none; align-items: center; justify-content: center; font-size: 1.2rem;">❯</button>
-                <div id="slider-dots" style="position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px;"></div>
-                <div id="image-placeholder">Ei kuvaa saatavilla</div>
-            </div>
-            <div id="youtube-area" style="display: none; margin-top: 1.5rem; border-radius: 20px; overflow: hidden; background: #000; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
-                <div class="audio-title" style="padding: 12px 20px; background: #fff; border-bottom: 1px solid #f0f4f8; color: #0056b3; font-weight: 800; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 8px;">
-                    <span style="font-size: 1.2rem;">📺</span>
-                    <span>Katso videoesittely</span>
-                </div>
-                <div style="position: relative; padding-bottom: 56.25%; height: 0;">
-                    <iframe id="step-youtube" src="" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
-                </div>
-            </div>
-        </div>
-        <div class="story-details">
-                <h2 id="detail-title"></h2>
-                <div id="detail-desc" style="line-height: 1.6; margin-bottom: 1.5rem;"></div>
-                <div id="detail-meta" style="font-size: 0.9rem; color: #666; font-style: italic;"></div>
-                
-                <div id="audio-area" style="display: none; margin-top: 1rem;">
-                    <div class="audio-title" style="color: #0056b3; font-weight: 800; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 8px; margin-bottom: 0.75rem;">
-                        <span style="font-size: 1.2rem;">🔊</span>
-                        <span>Kuuntele tarina</span>
-                    </div>
-                    <div class="audio-container" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 15px; padding: 1rem;">
-                        <audio id="step-audio" controls style="width: 100%; height: 40px;"></audio>
-                    </div>
-                </div>
-
-                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                    <button id="show-qr-btn" class="btn-qr" style="display:none; margin-top: 0;">
-                        <span>Luo QR-koodeina</span>
-                    </button>
+        <section id="step-slider-section" class="bg-full-gray">
+            <div style="max-width: 1200px; margin: 0 auto;">
+                <div id="step-slider" class="step-slider">
+                    <!-- Dynamically populated by JS -->
                 </div>
             </div>
         </section>
 
+        <section id="story-content-section" class="bg-full-white">
+            <div style="max-width: 1200px; margin: 0 auto;">
+                <section id="story-display" class="story-card" style="display: none;">
+                    <div class="story-media-column" style="display: flex; flex-direction: column;">
+                        <div class="story-image-container" style="position: relative;">
+                            <div id="step-image-slider" style="display: flex; transition: transform 0.3s ease; width: 100%; height: 100%;">
+                                <img id="step-image" src="" alt="Tarinan kuva" style="display: none; min-width: 100%; flex-shrink: 0;">
+                            </div>
+                            <button id="slider-prev" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 36px; height: 36px; cursor: pointer; display: none; align-items: center; justify-content: center; font-size: 1.2rem;">❮</button>
+                            <button id="slider-next" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 36px; height: 36px; cursor: pointer; display: none; align-items: center; justify-content: center; font-size: 1.2rem;">❯</button>
+                            <div id="slider-dots" style="position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px;"></div>
+                            <div id="image-placeholder">Ei kuvaa saatavilla</div>
+                        </div>
+                        <div id="youtube-area" style="display: none; margin-top: 1.5rem; border-radius: 20px; overflow: hidden; background: #000; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+                            <div class="audio-title" style="padding: 12px 20px; background: #fff; border-bottom: 1px solid #f0f4f8; color: #0056b3; font-weight: 800; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 1.2rem;">📺</span>
+                                <span>Katso videoesittely</span>
+                            </div>
+                            <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+                                <iframe id="step-youtube" src="" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="story-details">
+                        <h2 id="detail-title"></h2>
+                        <div id="detail-desc" style="line-height: 1.6; margin-bottom: 1.5rem;"></div>
+                        <div id="detail-meta" style="font-size: 0.9rem; color: #666; font-style: italic;"></div>
+                        
+                        <div id="audio-area" style="display: none; margin-top: 1rem;">
+                            <div class="audio-title" style="color: #0056b3; font-weight: 800; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 8px; margin-bottom: 0.75rem;">
+                                <span style="font-size: 1.2rem;">🔊</span>
+                                <span>Kuuntele tarina</span>
+                            </div>
+                            <div class="audio-container" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 15px; padding: 1rem;">
+                                <audio id="step-audio" controls style="width: 100%; height: 40px;"></audio>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button id="show-qr-btn" class="btn-qr" style="display:none; margin-top: 0;">
+                                <span>Luo QR-koodeina</span>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </section>
+
         <!-- Unified Business Navigation -->
-        <section class="business-nav-section">
-            <h2 style="text-align: center; margin-bottom: 2rem;">Kasvata näkyvyyttäsi Laukaassa</h2>
-            <div class="business-nav-grid">
-                <a href="ilmoittaudu.html#ilm-form" class="nav-box">
-                    <h3>Feed-julkaisu</h3>
-                    <p>Uusi käyttäjä? Aloita maksutta (3 julkaisua) ja tavoita paikalliset asiakkaat helposti.</p>
-                    <div class="btn-fake">Aloita tästä &raquo;</div>
-                </a>
-                <a href="kauppa.html" class="nav-box">
-                    <h3>Osta lisää näkyvyyttä</h3>
-                    <p>Haluatko vain yksittäisiä julkaisuja? Osta julkaisuaikaa tarpeen mukaan alk. 5 €.</p>
-                    <div class="btn-fake">Avaa kauppa &raquo;</div>
-                </a>
-                <a href="lisaa-yritys.html" class="nav-box">
-                    <h3>Yritysnäkyvyys</h3>
-                    <p>Haluatko jatkuvaa näkyvyyttä ja oman feed-linkin? Ota yrityskortti alk. 15 €/kk.<br><small style="opacity: 0.8; font-size: 0.85em;">Soveltuu myös yhdistyksille.</small></p>
-                    <div class="btn-fake">Lue lisää &raquo;</div>
-                </a>
+        <section class="business-nav-section bg-full-blue">
+            <div style="max-width: 1200px; margin: 0 auto;">
+                <h2 style="text-align: center; margin-bottom: 2rem;">Kasvata näkyvyyttäsi Laukaassa</h2>
+                <div class="business-nav-grid">
+                    <a href="ilmoittaudu.html#ilm-form" class="nav-box">
+                        <h3>Feed-julkaisu</h3>
+                        <p>Uusi käyttäjä? Aloita maksutta (3 julkaisua) ja tavoita paikalliset asiakkaat helposti.</p>
+                        <div class="btn-fake">Aloita tästä &raquo;</div>
+                    </a>
+                    <a href="kauppa.html" class="nav-box">
+                        <h3>Osta lisää näkyvyyttä</h3>
+                        <p>Haluatko vain yksittäisiä julkaisuja? Osta julkaisuaikaa tarpeen mukaan alk. 5 €.</p>
+                        <div class="btn-fake">Avaa kauppa &raquo;</div>
+                    </a>
+                    <a href="lisaa-yritys.html" class="nav-box">
+                        <h3>Yritysnäkyvyys</h3>
+                        <p>Haluatko jatkuvaa näkyvyyttä ja oman feed-linkin? Ota yrityskortti alk. 15 €/kk.<br><small style="opacity: 0.8; font-size: 0.85em;">Soveltuu myös yhdistyksille.</small></p>
+                        <div class="btn-fake">Lue lisää &raquo;</div>
+                    </a>
+                </div>
             </div>
         </section>
     </main>
