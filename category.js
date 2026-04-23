@@ -48,7 +48,9 @@
         const regionFromUrl = params.get('region');
 
         // Resolve selected region: URL takes absolute priority
-        const rawRegion = (regionFromUrl || localStorage.getItem('selectedRegion') || 'all').trim();
+        // Jos olemme spesifillä laskeutumissivulla (data-category on asetettu), oletetaan 'all' ellei URL toisin sano.
+        const isLandingPage = !!document.body.dataset.category;
+        const rawRegion = (params.get('region') || (isLandingPage ? 'all' : localStorage.getItem('selectedRegion')) || 'all').trim();
         selectedRegion = rawRegion.toLowerCase();
 
         // Resolve coordinates
