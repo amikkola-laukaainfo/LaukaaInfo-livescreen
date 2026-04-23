@@ -183,7 +183,8 @@ function filterByArea(areaSlug, catParam, tagParam) {
             const query = normalizeForSearch(tagParam);
             const tags = normalizeForSearch(c.tags);
             const ptapa = normalizeForSearch(c.palvelutapa);
-            return tags.includes(query) || ptapa.includes(query);
+            const cat = normalizeForSearch(c.kategoria);
+            return tags.includes(query) || ptapa.includes(query) || cat.includes(query);
         }
         if (catParam) {
             return (c.kategoria || '').toLowerCase() === catParam.replace(/-/g, ' ');

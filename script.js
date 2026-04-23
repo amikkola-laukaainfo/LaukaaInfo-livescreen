@@ -1433,7 +1433,7 @@ function filterCatalog(renderList = true) {
         if (searchTerm.length > 1 && searchableDesc.includes(searchTerm)) score += 10;
 
         // Tag search logic (replaces hashtag parsing)
-        const combinedTags = normalizeForSearch(`${company.tags || ''},${company.palvelutapa || ''}`);
+        const combinedTags = normalizeForSearch(`${company.tags || ''},${company.palvelutapa || ''},${company.kategoria || ''}`);
         const normalizedSearch = normalizeForSearch(searchTerm);
         if (searchTerm.length > 1 && combinedTags) {
             const tags = combinedTags.split(',').map(t => t.trim());
