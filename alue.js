@@ -173,10 +173,24 @@ const AREA_SLUG_ALIASES = {
 function filterByArea(areaSlug, catParam, tagParam) {
     // Sallitut alue_slug-arvot tälle sivulle (normalisoituna pieniksi kirjaimiksi)
     const allowedSlugs = AREA_SLUG_ALIASES[areaSlug] || [areaSlug];
+    const area = areaMetadata[areaSlug];
 
     return allCompanies.filter(c => {
         const companySlug = (c.alue_slug || '').toLowerCase().trim();
-        const matchArea = areaSlug === 'koko-laukaa' || allowedSlugs.includes(companySlug);
+        let matchArea = areaSlug === 'koko-laukaa' || allowedSlugs.includes(companySlug);
+
+        // UUSI: Jos ei täsmää suoraan alueeseen, tarkistetaan onko palvelualueyritys joka kattaa tämän alueen
+        if (!matchArea && areaSlug !== 'koko-laukaa' && area && (c.service_mode === 'SERVICE_AREA' || (parseFloat(c.service_radius) > 0)) && c.lat && (c.lon || c.lng)) {
+            const cLat = parseFloat(c.lat);
+            const cLon = parseFloat(c.lon || c.lng);
+            const dist = getHaversineDistance(area.lat, area.lon, cLat, cLon);
+            const radius = parseFloat(c.service_radius) || 0;
+            
+            if (dist <= radius) {
+                matchArea = true;
+            }
+        }
+
         if (!matchArea) return false;
 
         if (tagParam) {
