@@ -258,7 +258,7 @@
                 <h2 style="color: white; margin-bottom: 0.5rem;">Löydä ja selaa palveluita</h2>
                 <p>Etsi tiettyä toimijaa tai tutustu taajamien paikalliseen tarjontaan.</p>
 
-                <div class="hero-split-paths" style="display: flex; flex-wrap: wrap; gap: 2rem; margin-top: 2rem; justify-content: center; align-items: flex-start; text-align: left;">
+                <div class="hero-split-paths" style="display: flex; flex-wrap: nowrap; gap: 2rem; margin-top: 2rem; justify-content: center; align-items: stretch; text-align: left; max-width: 1200px; margin-left: auto; margin-right: auto;">
                     
                     <!-- Polku A: Hae palvelua -->
                     <div class="hero-path search-path" style="flex: 1; min-width: 300px; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); border: 1px solid rgba(255, 255, 255, 0.5); padding: 2rem; border-radius: 12px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);">
@@ -497,10 +497,11 @@
 
     <!-- Service Worker registration is handled in script.js -->
 
-    <!-- Leaflet & Multi-cluster JS -->
+    <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="search_tags.js?v=1"></script>
     <script src="modal.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 

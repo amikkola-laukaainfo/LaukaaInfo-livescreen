@@ -2293,6 +2293,14 @@ footer {
         padding: 12px;
         margin-top: 10px;
     }
+
+    .hero-split-paths {
+        flex-wrap: wrap !important;
+    }
+    
+    .hero-path {
+        min-width: 100% !important;
+    }
 }
 
 /* Map Geolocation Controls */
