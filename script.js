@@ -2600,6 +2600,16 @@ function updateMapSidebar(companies) {
         companies = window.currentMapCompanies || allCompanies;
     }
 
+    // Järjestetään etäisyyden mukaan jos sijaintikoordinaatit löytyvät
+    const regionCoords = JSON.parse(localStorage.getItem('regionCoords'));
+    if (regionCoords && regionCoords.lat && regionCoords.lon) {
+        companies = [...companies].sort((a, b) => {
+            const distA = getHaversineDistance(regionCoords.lat, regionCoords.lon, parseFloat(a.lat), parseFloat(a.lon || a.lng));
+            const distB = getHaversineDistance(regionCoords.lat, regionCoords.lon, parseFloat(b.lat), parseFloat(b.lon || b.lng));
+            return distA - distB;
+        });
+    }
+
     onMapList.innerHTML  = '';
     offMapList.innerHTML = '';
 
