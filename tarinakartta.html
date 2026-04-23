@@ -470,6 +470,50 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
 
+        /* ── Map Selection Layout ─── */
+        .map-selection-container {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            align-items: stretch;
+        }
+
+        .map-selection-container .map-wrapper {
+            margin-bottom: 0;
+        }
+
+        .map-selection-container #tarina-map {
+            height: 100%;
+            min-height: 550px;
+        }
+
+        .map-selection-container .story-selector {
+            margin-bottom: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            justify-content: flex-start;
+            padding: 1.5rem;
+        }
+
+        .map-selection-container .selector-row {
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        @media (max-width: 1024px) {
+            .map-selection-container {
+                grid-template-columns: 1fr;
+            }
+            .map-selection-container .selector-row {
+                flex-direction: row;
+            }
+            .map-selection-container #tarina-map {
+                min-height: 400px;
+            }
+        }
+
         /* ── Map Controls ─── */
         .map-wrapper {
             position: relative;
@@ -691,36 +735,39 @@
             <button id="next-step" class="btn-story" disabled>Seuraava ❯</button>
         </section>
 
-        <div class="map-wrapper">
-            <div id="tarina-map"></div>
-            <button id="btn-locate-user" class="btn-map-control" title="Näytä oma sijainti">
-                <span class="icon">📍</span>
-            </button>
+        <div class="map-selection-container">
+            <div class="map-wrapper">
+                <div id="tarina-map"></div>
+                <button id="btn-locate-user" class="btn-map-control" title="Näytä oma sijainti">
+                    <span class="icon">📍</span>
+                </button>
+            </div>
+
+            <section class="story-selector card">
+                <h3>Valitse Teema</h3>
+                <div class="selector-row">
+                    <div class="selector-group">
+                        <label for="theme-select">Tarinan teema</label>
+                        <select id="theme-select">
+                            <option value="">Ladataan teemoja...</option>
+                        </select>
+                    </div>
+                    <div class="selector-group">
+                        <label for="category-select">Alue/Kategoria</label>
+                        <select id="category-select" disabled>
+                            <option value="">Valitse teema ensin</option>
+                        </select>
+                    </div>
+                    <div class="selector-group">
+                        <label for="story-select">Valitse tarina</label>
+                        <select id="story-select" disabled>
+                            <option value="">Valitse teema ensin</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
         </div>
 
-        <section class="story-selector card">
-            <h3>Valitse Teema</h3>
-            <div class="selector-row">
-                <div class="selector-group">
-                    <label for="theme-select">Tarinan teema</label>
-                    <select id="theme-select">
-                        <option value="">Ladataan teemoja...</option>
-                    </select>
-                </div>
-                <div class="selector-group">
-                    <label for="category-select">Alue/Kategoria</label>
-                    <select id="category-select" disabled>
-                        <option value="">Valitse teema ensin</option>
-                    </select>
-                </div>
-                <div class="selector-group">
-                    <label for="story-select">Valitse tarina</label>
-                    <select id="story-select" disabled>
-                        <option value="">Valitse teema ensin</option>
-                    </select>
-                </div>
-            </div>
-        </section>
         <p class="location-hint" style="margin-bottom: 1.5rem;">Tarinat on jaoteltu teeman ja kategorian mukaan. Voit myös itse päivittää tarinoita alueellesi ja liittää kartan omalle sivulle. Jokaisesta askeleesta tulee QR-koodi ja mahdollista on liittää tarinoihin kuvia, videota ja äänileikkeitä. Kysy lisätietoa.</p>
 
         <div id="step-slider" class="step-slider">
