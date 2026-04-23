@@ -2597,36 +2597,11 @@ function initShareGenerator(companies) {
                             }).catch(() => {
                                 copyQrBtn.title = 'Kopiointi ei onnistunut (selain ei tue)';
                             });
-                        } catch(e) {
-                            copyQrBtn.title = 'Kopiointi ei tueta tässä selaimessa';
-                        }
-                    }, 'image/png');
-                });
-            }, 100);
-
-            qrContainer.title = "";
-        } else {
-            qrContainer.innerHTML = 'QR-koodi ei saatavilla.';
-        }
-    });
-
-    typeSelect.dispatchEvent(new Event('change'));
-}
-
-// --- Map Interaction & Sidebar Helpers ---
-
-function getHash(str) {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-        hash = ((hash << 5) - hash) + str.charCodeAt(i);
-        hash |= 0;
-    }
-    return hash;
-}
-
-function updateMapSidebar(companies) {
-    const onMapList  = document.getElementById('service-areas-on-map-list');
+                        }    const onMapList  = document.getElementById('service-areas-on-map-list');
     const offMapList = document.getElementById('service-areas-off-map-list');
+    const toggleBtn  = document.getElementById('service-sidebar-toggle');
+    const badge      = document.getElementById('service-count-badge');
+
     if (!onMapList || !offMapList || !map) return;
 
     // Jos funktiota kutsutaan kartan moveend-tapahtumalla, companies on Event-objekti
@@ -2683,6 +2658,31 @@ function updateMapSidebar(companies) {
             onMapCount++;
         } else {
             offMapList.appendChild(li);
+            offMapCount++;
+        }
+    });
+
+    if (onMapCount  === 0) onMapList.innerHTML  = '<li class="empty-msg">Ei kohteita näkymässä</li>';
+    if (offMapCount === 0) offMapList.innerHTML = '<li class="empty-msg">Kaikki näkyvissä</li>';
+
+    // Päivitä toggle-painike
+    const totalServices = onMapCount + offMapCount;
+    if (toggleBtn) {
+        toggleBtn.style.display = totalServices > 0 ? 'flex' : 'none';
+        if (badge) badge.innerText = totalServices;
+    }
+}
+
+/**
+ * Avaa/sulkee kartan sivupalkin
+ */
+function toggleServiceSidebar() {
+    const sidebar = document.getElementById('map-sidebar');
+    if (sidebar) {
+        sidebar.classList.toggle('open');
+    }
+}
+pList.appendChild(li);
             offMapCount++;
         }
     });
