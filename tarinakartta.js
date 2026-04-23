@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return true;
         });
 
-        buildMapMarkers();
+        buildMapMarkers(skipMap);
         renderSlider();
 
         if (filteredSteps.length > 0) {
@@ -195,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function buildMapMarkers() {
+    function buildMapMarkers(skipMap = false) {
         // Poista vanhat
         markers.forEach(m => map.removeLayer(m));
         markers = [];
@@ -231,6 +231,8 @@ document.addEventListener('DOMContentLoaded', () => {
             pathCoords.push([lat, lng]);
         });
 
+        if (skipMap) return;
+        
         if (pathCoords.length > 1) {
             polyline = L.polyline(pathCoords, {
                 color: '#0056b3',
