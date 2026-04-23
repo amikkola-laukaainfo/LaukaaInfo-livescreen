@@ -3613,108 +3613,108 @@ footer {
 
 .tag-pill.tag-etapalvelu, .cat-tag.tag-etapalvelu {
     background: #eef1ff;
-    color: #3f51b5;
-    border: 1px solid #d0d6fb;
+    transition: all 0.2s;
+    background: #f8fafc;
 }
 
-.tag-pill.tag-kotikaynti, .cat-tag.tag-kotikaynti {
-    background: #fdf2e9;
-    color: #e65100;
-    border: 1px solid #fadcc3;
+.gen-input:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+    background: white;
 }
 
-/* --- Kartan asettelu ja sivupalkki (Map Sidebar) --- */
-.map-layout-wrapper {
-    position: relative;
+.generator-result-area {
+    background: #f0f7ff;
+    padding: 1.5rem;
+    border-radius: 16px;
+    border: 1px solid #d0e1f9;
+    text-align: left;
+}
+
+.generator-result-area label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin-bottom: 0.8rem;
+}
+
+.url-copy-wrapper {
     display: flex;
-    gap: 1.5rem;
-    margin: 2.5rem auto;
-    max-width: 1200px;
-    align-items: stretch;
-    background: #fff;
-    border-radius: 24px;
-    overflow: hidden;
-    box-shadow: 0 12px 40px rgba(0, 51, 102, 0.08);
-    border: 1px solid rgba(0, 0, 0, 0.03);
+    gap: 0.5rem;
+    margin-bottom: 1rem;
 }
 
-@media (max-width: 900px) {
-    .map-layout-wrapper {
+#share-result-url {
+    flex: 1;
+    padding: 0.8rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: white;
+    font-family: monospace;
+    font-size: 0.9rem;
+    color: #334155;
+    outline: none;
+}
+
+.btn-copy, .btn-qr {
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 0.9rem;
+}
+
+.btn-copy:hover, .btn-qr:hover {
+    background: var(--secondary-blue);
+}
+
+.btn-qr {
+    background: white;
+    color: var(--primary-blue);
+    border: 2px solid var(--primary-blue);
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.btn-qr:hover {
+    background: var(--light-blue);
+}
+
+.qr-container {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    border: 1px solid #cbd5e1;
+}
+
+@media (max-width: 600px) {
+    .share-generator-card {
+        padding: 1.5rem 1rem;
+    }
+    .gen-field {
+        min-width: 100%;
+    }
+    .url-copy-wrapper {
         flex-direction: column;
-        overflow: visible;
-        margin: 1.5rem 0;
-        border-radius: 16px;
+    }
+    .btn-copy {
+        width: 100%;
     }
 }
 
-/* Toggle Button on Map */
-.service-toggle-btn {
+/* Overlay badge indicating source */
+.media-source-badge {
     position: absolute;
-    top: 1.25rem;
-    right: 1.25rem;
-    z-index: 1000;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(0, 86, 179, 0.15);
-    border-radius: 50px;
-    padding: 12px 22px;
-    display: none; /* Shown via JS if count > 0 */
-    align-items: center;
-    gap: 12px;
-    cursor: pointer;
-    box-shadow: 0 8px 25px rgba(0, 51, 102, 0.12);
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    font-family: var(--accent-font);
-    font-weight: 700;
-    color: var(--primary-blue);
-    animation: fadeInSlideRight 0.5s ease-out;
-}
-
-@keyframes fadeInSlideRight {
-    from { opacity: 0; transform: translateX(20px); }
-    to { opacity: 1; transform: translateX(0); }
-}
-
-.service-toggle-btn:hover {
-    transform: scale(1.05) translateY(-2px);
-    background: #fff;
-    box-shadow: 0 12px 30px rgba(0, 86, 179, 0.2);
-}
-
-.service-toggle-btn:active {
-    transform: scale(0.98);
-}
-
-.service-toggle-btn .count-badge {
-    background: var(--primary-blue);
-    color: #fff;
-    font-size: 0.8rem;
-    padding: 2px 10px;
-    border-radius: 12px;
-    min-width: 24px;
-    text-align: center;
-    box-shadow: 0 2px 6px rgba(0, 86, 179, 0.3);
-}
-
-.map-sidebar {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    bottom: 1rem;
-    width: 340px;
-    z-index: 1001;
-    background: rgba(255, 255, 255, 0.94);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: -15px 0 45px rgba(0, 51, 102, 0.12);
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    padding: 1.8rem;
-    transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 0.4s ease;
+    top: 8px;
+    left: 8px;
     background: rgba(0, 0, 0, 0.75);
     color: #fff;
     padding: 4px 10px;
@@ -3914,193 +3914,6 @@ footer {
     opacity: 0;
     pointer-events: none;
     overflow-y: auto;
-}
-
-.close-sidebar-x {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    background: #f1f5f9;
-    border: none;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    color: #64748b;
-    cursor: pointer;
-    transition: all 0.2s;
-    z-index: 10;
-}
-
-.close-sidebar-x:hover {
-    background: #e2e8f0;
-    color: var(--primary-blue);
-    transform: rotate(90deg);
-}
-
-@media (max-width: 900px) {
-    .map-sidebar {
-        position: fixed;
-        top: auto;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        width: 100%;
-        height: 75vh;
-        border-radius: 32px 32px 0 0;
-        transform: translateY(100%);
-        box-shadow: 0 -15px 50px rgba(0,0,0,0.25);
-        background: #fff;
-        z-index: 3000;
-    }
-    .map-sidebar.open {
-        transform: translateY(0);
-    }
-    .close-sidebar-x {
-        top: 20px;
-        right: 20px;
-        width: 40px;
-        height: 40px;
-        font-size: 24px;
-    }
-}
-
-.map-sidebar::-webkit-scrollbar {
-    width: 6px;
-}
-.map-sidebar::-webkit-scrollbar-thumb {
-    background-color: var(--primary-blue);
-    border-radius: 10px;
-}
-
-.sidebar-section h4 {
-    font-family: var(--accent-font);
-    font-size: 1.2rem;
-    font-weight: 800;
-    color: var(--secondary-blue);
-    margin-bottom: 1.25rem;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding-bottom: 0.75rem;
-    border-bottom: 2px solid rgba(0, 0, 0, 0.04);
-}
-
-/* Alaryhmät sivupalkissa (Näkyy kartalla / Ei näy kartalla) */
-.sidebar-sub-group {
-    margin-top: 0.5rem;
-}
-
-.sidebar-sub-label {
-    font-size: 0.75rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: #94a3b8;
-    padding: 0.4rem 0.6rem;
-    margin-bottom: 0.6rem;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.sidebar-sub-group + .sidebar-sub-group {
-    margin-top: 1.5rem;
-    padding-top: 1rem;
-    border-top: 1px dashed rgba(0, 0, 0, 0.1);
-}
-
-.sidebar-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.85rem;
-}
-
-.sidebar-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.9rem;
-    background: #fff;
-    border-radius: 16px;
-    border: 1px solid rgba(0,0,0,0.04);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.sidebar-item:hover {
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-    border-color: rgba(0, 86, 179, 0.15);
-}
-
-.sidebar-item-info {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    cursor: pointer;
-}
-
-.sidebar-item-name {
-    font-weight: 700;
-    font-size: 1rem;
-    color: var(--dark-text);
-    transition: color 0.2s;
-}
-
-.sidebar-item:hover .sidebar-item-name {
-    color: var(--primary-blue);
-}
-
-.sidebar-item-cat {
-    font-size: 0.7rem;
-    color: #64748b;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-weight: 600;
-}
-
-.sidebar-actions {
-    display: flex;
-    gap: 10px;
-}
-
-.action-btn {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 10px;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.25s;
-    color: #64748b;
-}
-
-.action-btn:hover {
-    background: #f1f5f9;
-    color: var(--primary-blue);
-    border-color: var(--primary-blue);
-    transform: scale(1.1);
-}
-
-.action-btn.active-circle {
-    background: var(--light-blue);
-    color: var(--primary-blue);
-    border-color: var(--primary-blue);
-}
-
-.action-btn.active-circle svg {
-    stroke: var(--primary-blue);
 }
 
 .action-btn.inactive-circle svg {
