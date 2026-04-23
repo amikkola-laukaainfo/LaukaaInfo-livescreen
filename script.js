@@ -1767,9 +1767,12 @@ function showSuggestions() {
             label = `${item.name} (${count} kpl)`;
             badge = `<span class="suggestion-cat">Kategoria${item.region ? ' (' + item.region + ')' : ''}</span>`;
         } else if (item.type === 'tag') {
-            const count = allCompanies.filter(c => 
-                c.tunnisteet && c.tunnisteet.split(',').map(t => t.trim().toLowerCase()).includes(item.name.toLowerCase())
-            ).length;
+            const count = allCompanies.filter(c => {
+                const companyTags = (c.tags || '').toLowerCase();
+                // Support multiple separators: comma, semicolon, space
+                const tagList = companyTags.split(/[,,;,\s]+/).map(t => t.trim());
+                return tagList.includes(item.name.toLowerCase());
+            }).length;
             label = `#${item.name} (${count} kpl)`;
             badge = `<span class="suggestion-tag">Tunniste${item.region ? ' (' + item.region + ')' : ''}</span>`;
         } else if (item.type === 'business') {
