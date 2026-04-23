@@ -2597,6 +2597,8 @@ function initShareGenerator(companies) {
                             }).catch(() => {
                                 copyQrBtn.title = 'Kopiointi ei onnistunut (selain ei tue)';
                             });
+                        } catch(e) {
+                            copyQrBtn.title = 'Kopiointia ei tueta tässä selaimessa';
                         }
                     }, 'image/png');
                 });
