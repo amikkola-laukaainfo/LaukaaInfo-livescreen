@@ -2674,6 +2674,7 @@ function updateMapSidebar(companies) {
     // Päivitä toggle-painike
     const totalServices = onMapCount + offMapCount;
     if (toggleBtn) {
+        console.log('[Sidebar] Päivitetään toggle-painike. Kohteita:', totalServices);
         toggleBtn.style.display = totalServices > 0 ? 'flex' : 'none';
         if (badge) badge.innerText = totalServices;
     }
@@ -2684,6 +2685,7 @@ function updateMapSidebar(companies) {
  */
 function toggleServiceSidebar() {
     const sidebar = document.getElementById('map-sidebar');
+    console.log('[Sidebar] Toggle painettu. Sidebar löytyi:', !!sidebar);
     if (sidebar) {
         sidebar.classList.toggle('open');
     }
