@@ -316,7 +316,12 @@ function initMap(companies) {
 }
 
 function addMarkersToMap(companies) {
-    markers.clearLayers();
+    if (markers) markers.clearLayers();
+    
+    // Alustetaan palvelualue-layer tarvittaessa (jos alue.js ehti ensin)
+    if (!serviceAreaLayer && map) {
+        serviceAreaLayer = L.layerGroup().addTo(map);
+    }
     if (serviceAreaLayer) serviceAreaLayer.clearLayers();
     
     const bounds = [];
