@@ -682,6 +682,22 @@
     </header>
 
     <main>
+        <section class="story-controls">
+            <button id="prev-step" class="btn-story" disabled>❮ Edellinen</button>
+            <div class="story-step-info">
+                <h3 id="step-title">Aloita tilaamalla tarina</h3>
+                <p id="step-counter">Kohta 0/0</p>
+            </div>
+            <button id="next-step" class="btn-story" disabled>Seuraava ❯</button>
+        </section>
+
+        <div class="map-wrapper">
+            <div id="tarina-map"></div>
+            <button id="btn-locate-user" class="btn-map-control" title="Näytä oma sijainti">
+                <span class="icon">📍</span>
+            </button>
+        </div>
+
         <section class="story-selector card">
             <h3>Valitse Teema</h3>
             <div class="selector-row">
@@ -706,22 +722,6 @@
             </div>
         </section>
         <p class="location-hint" style="margin-bottom: 1.5rem;">Tarinat on jaoteltu teeman ja kategorian mukaan. Voit myös itse päivittää tarinoita alueellesi ja liittää kartan omalle sivulle. Jokaisesta askeleesta tulee QR-koodi ja mahdollista on liittää tarinoihin kuvia, videota ja äänileikkeitä. Kysy lisätietoa.</p>
-
-        <section class="story-controls">
-            <button id="prev-step" class="btn-story" disabled>❮ Edellinen</button>
-            <div class="story-step-info">
-                <h3 id="step-title">Aloita tilaamalla tarina</h3>
-                <p id="step-counter">Kohta 0/0</p>
-            </div>
-            <button id="next-step" class="btn-story" disabled>Seuraava ❯</button>
-        </section>
-
-        <div class="map-wrapper">
-            <div id="tarina-map"></div>
-            <button id="btn-locate-user" class="btn-map-control" title="Näytä oma sijainti">
-                <span class="icon">📍</span>
-            </button>
-        </div>
 
         <div id="step-slider" class="step-slider">
             <!-- Dynamically populated by JS -->
