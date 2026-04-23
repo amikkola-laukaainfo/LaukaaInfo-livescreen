@@ -57,6 +57,90 @@
             max-width: 1200px;
             margin: 0 auto;
         }
+
+        /* ── Exploration Paths Swiper ─── */
+        .exploration-paths-wrapper {
+            position: relative;
+            padding: 0 40px;
+        }
+
+        .exploration-paths {
+            padding: 20px 0 50px 0;
+            overflow: hidden;
+        }
+
+        .exploration-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid #f0f4f8;
+            margin: 10px 0;
+        }
+
+        .exploration-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .exploration-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .exploration-card h3 {
+            font-family: 'Outfit', sans-serif;
+            color: #0056b3;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .exploration-card p {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+            line-height: 1.5;
+        }
+
+        .btn-explore {
+            background: #0056b3;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: background 0.2s;
+            display: inline-block;
+        }
+
+        .btn-explore:hover {
+            background: #004494;
+        }
+
+        .swiper-button-next, .swiper-button-prev {
+            color: #0056b3;
+            background: white;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .swiper-button-next:after, .swiper-button-prev:after {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .swiper-pagination-bullet-active {
+            background: #0056b3;
+        }
     </style>
 </head>
 
@@ -293,31 +377,46 @@
         <section id="exploration-paths-section" class="bg-full-gray">
             <div id="exploration-paths-container" style="max-width: 1200px; margin: 0 auto;">
                 <h2 style="text-align: center; margin-bottom: 2rem;">Tutustu Lievestuoreeseen</h2>
-                <div class="exploration-paths">
-                    <div class="exploration-card">
-                        <div class="icon">☕</div>
-                        <h3>Pysähdy matkalla</h3>
-                        <p>Nopeat taukopaikat, kahvilat ja paikalliset puodit ysitien varrella.</p>
-                        <a href="tarinakartta.html?category=Matkailu&topic=Lievestuore&step=4" class="btn-explore">Avaa kartalla</a>
+                
+                <div class="exploration-paths-wrapper">
+                    <div class="exploration-paths swiper">
+                        <div class="swiper-wrapper">
+                            <div class="exploration-card swiper-slide">
+                                <div class="icon">🎡</div>
+                                <h3>Huvia perheelle</h3>
+                                <p>Vietä kesän hauskun päivä Nokkakiven huvipuistossa, jossa viihtyy koko perhe.</p>
+                                <a href="tarinakartta.html?category=Matkailu&topic=Lievestuore&step=12" class="btn-explore">Avaa kartalla</a>
+                            </div>
+                            <div class="exploration-card swiper-slide">
+                                <div class="icon">☕</div>
+                                <h3>Pysähdy matkalla</h3>
+                                <p>Nopeat taukopaikat, kahvilat ja paikalliset puodit ysitien varrella.</p>
+                                <a href="tarinakartta.html?category=Matkailu&topic=Lievestuore&step=4" class="btn-explore">Avaa kartalla</a>
+                            </div>
+                            <div class="exploration-card swiper-slide">
+                                <div class="icon">🌲</div>
+                                <h3>Päiväretki</h3>
+                                <p>Valloita Hyyppäävuori tai nauti eväistä Lievestuoreenjärven rannalla.</p>
+                                <a href="tarinakartta.html?category=Matkailu&topic=Lievestuore&step=5" class="btn-explore">Avaa kartalla</a>
+                            </div>
+                            <div class="exploration-card swiper-slide">
+                                <div class="icon">🏭</div>
+                                <h3>Historia</h3>
+                                <p>Teollisuuden perintö: Haarlan sellutehdas ja kylän kehitys.</p>
+                                <a href="tarinakartta.html?category=Matkailu&topic=Lievestuore&step=6" class="btn-explore">Avaa kartalla</a>
+                            </div>
+                            <div class="exploration-card swiper-slide">
+                                <div class="icon">⛵</div>
+                                <h3>Luonto</h3>
+                                <p>Veneilyä, kalastusta ja rauhallisia luontokohteita lähelläsi.</p>
+                                <a href="tarinakartta.html?category=Matkailu&topic=Lievestuore&step=7" class="btn-explore">Avaa kartalla</a>
+                            </div>
+                        </div>
+                        
+                        <div class="swiper-pagination"></div>
                     </div>
-                    <div class="exploration-card">
-                        <div class="icon">🌲</div>
-                        <h3>Päiväretki</h3>
-                        <p>Valloita Hyyppäävuori tai nauti eväistä Lievestuoreenjärven rannalla.</p>
-                        <a href="tarinakartta.html?category=Matkailu&topic=Lievestuore&step=5" class="btn-explore">Avaa kartalla</a>
-                    </div>
-                    <div class="exploration-card">
-                        <div class="icon">🏭</div>
-                        <h3>Historia</h3>
-                        <p>Teollisuuden perintö: Haarlan sellutehdas ja kylän kehitys.</p>
-                        <a href="tarinakartta.html?category=Matkailu&topic=Lievestuore&step=6" class="btn-explore">Avaa kartalla</a>
-                    </div>
-                    <div class="exploration-card">
-                        <div class="icon">⛵</div>
-                        <h3>Luonto</h3>
-                        <p>Veneilyä, kalastusta ja rauhallisia luontokohteita lähelläsi.</p>
-                        <a href="tarinakartta.html?category=Matkailu&topic=Lievestuore&step=7" class="btn-explore">Avaa kartalla</a>
-                    </div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
                 </div>
             </div>
         </section>
@@ -382,6 +481,35 @@
     <script src="mainostutka.js?v=20260306-1"></script>
     <script src="alue.js?v=20260306-8"></script>
 
+    <script>
+        // Initialize Exploration Paths Slider
+        document.addEventListener('DOMContentLoaded', () => {
+            new Swiper('.exploration-paths', {
+                slidesPerView: 1,
+                spaceBetween: 24,
+                loop: false,
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                breakpoints: {
+                    640: {
+                        slidesPerView: 2,
+                    },
+                    1024: {
+                        slidesPerView: 3,
+                    },
+                    1200: {
+                        slidesPerView: 4,
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
