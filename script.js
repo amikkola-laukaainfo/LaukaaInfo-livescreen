@@ -1556,7 +1556,20 @@ function filterCatalog(renderList = true) {
     if (isHomePage && searchTerm.length === 0 && !userCoords) {
         renderCatalog([]);
     } else if (renderList) {
-        renderCatalog(combinedResults);
+        if (combinedResults.length === 0 && searchTerm.length > 0) {
+            const list = document.getElementById('company-list');
+            if (list) {
+                list.innerHTML = `
+                    <div class="no-results" style="grid-column: 1 / -1; text-align: center; padding: 4rem 2rem; background: #f8fafc; border-radius: 20px; border: 2px dashed #e2e8f0;">
+                        <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">🔍</span>
+                        <h3 style="color: var(--primary-blue); font-size: 1.5rem; margin-bottom: 0.5rem;">0 tulosta löytyi hakusanalla "${searchTerm}"</h3>
+                        <p style="color: #64748b;">Kokeile toista hakusanaa tai selaa toimialoja ylävalikosta.</p>
+                    </div>
+                `;
+            }
+        } else {
+            renderCatalog(combinedResults);
+        }
     }
 
     // Päivitetään myös kartta vastaamaan filtteriä
@@ -1686,13 +1699,29 @@ function showSuggestions() {
         .filter(c => c.toLowerCase().includes(searchTerm))
         .map(c => ({ type: 'category', name: c, region: contextRegion?.id }));
 
-    // 4. Match Tags
+    // 4. Match Tags (from live data)
     const tagMatches = tags
         .filter(t => t.toLowerCase().includes(searchTerm))
         .map(t => ({ type: 'tag', name: t, region: contextRegion?.id }));
 
+    let mixedCatTags = [...catMatches, ...tagMatches];
+
+    // 4b. Match Pre-defined Tags (from search_tags.js)
+    if (typeof SEARCH_TAG_LIST !== 'undefined') {
+        const preDefinedMatches = SEARCH_TAG_LIST
+            .filter(t => t.term.toLowerCase().includes(searchTerm))
+            .map(t => ({ type: 'tag', name: t.term, category: t.category }));
+        
+        // Add unique matches only
+        preDefinedMatches.forEach(pm => {
+            if (!mixedCatTags.find(m => m.name.toLowerCase() === pm.name.toLowerCase())) {
+                mixedCatTags.push(pm);
+            }
+        });
+    }
+
     // Merge and alphabetize categories and tags
-    let mixedCatTags = [...catMatches, ...tagMatches].sort((a, b) => a.name.localeCompare(b.name, 'fi'));
+    mixedCatTags = mixedCatTags.sort((a, b) => a.name.localeCompare(b.name, 'fi'));
     suggestions = [...suggestions, ...mixedCatTags];
 
     // 5. Match Businesses (only if term is longer or no other major matches)
