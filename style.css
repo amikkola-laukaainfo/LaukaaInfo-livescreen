@@ -4300,7 +4300,7 @@ footer {
     border-color: var(--primary-blue);
 }
 
-.feature-card .icon {
+.feature-card .icon, .feature-card .icon-photo {
     font-size: 3rem;
     margin-bottom: 1.5rem;
     background: #f8fafc;
@@ -4313,7 +4313,7 @@ footer {
     transition: all 0.3s ease;
 }
 
-.feature-card:hover .icon {
+.feature-card:hover .icon, .feature-card:hover .icon-photo {
     background: #f0f7ff;
     transform: scale(1.1);
 }
