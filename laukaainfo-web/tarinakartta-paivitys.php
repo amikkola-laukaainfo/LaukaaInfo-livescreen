@@ -691,19 +691,45 @@ if (file_exists($readPath)) {
     });
 
     function addImgInput(val = '') {
+        const div = document.createElement('div');
+        div.style.display = 'flex';
+        div.style.gap = '5px';
+        div.style.marginBottom = '5px';
+        
         const input = document.createElement('input');
         input.type = 'text';
         input.className = 'f-image_url-input';
         input.placeholder = 'https://...';
         input.value = val;
-        input.style.width = '100%';
+        input.style.flex = '1';
         input.style.background = '#0f172a';
         input.style.border = '1px solid var(--border)';
         input.style.color = 'white';
         input.style.padding = '0.6rem';
         input.style.borderRadius = '8px';
         input.addEventListener('input', updateImagesFromInputs);
-        document.getElementById('image-url-container').appendChild(input);
+        
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.innerHTML = '&times;';
+        removeBtn.style.background = 'var(--error)';
+        removeBtn.style.color = 'white';
+        removeBtn.style.border = 'none';
+        removeBtn.style.borderRadius = '8px';
+        removeBtn.style.width = '35px';
+        removeBtn.style.cursor = 'pointer';
+        removeBtn.style.fontSize = '1.2rem';
+        removeBtn.style.display = 'flex';
+        removeBtn.style.alignItems = 'center';
+        removeBtn.style.justifyContent = 'center';
+        removeBtn.onclick = () => {
+            div.remove();
+            updateImagesFromInputs();
+        };
+        
+        div.appendChild(input);
+        div.appendChild(removeBtn);
+        document.getElementById('image-url-container').appendChild(div);
     }
 
     document.getElementById('add-image-url-btn').onclick = () => {

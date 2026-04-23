@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
         populateTopics(cat);
         populateStories(cat, '');
         storySelect.value = '';
-        applyFilters();
+        applyFilters(true); // Estetään hyppääminen kartalle vasta ensimmäisestä valinnasta
     });
 
     topicSelect.addEventListener('change', () => {
@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const topic = topicSelect.value;
         populateStories(cat, topic);
         storySelect.value = '';
-        applyFilters();
+        applyFilters(false); // Nyt on hyvä mennä kartalle
     });
 
     storySelect.addEventListener('change', () => {
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ── Filtteri & Kartta ────────────────────────────────────────────
     let pendingStepOrder = new URLSearchParams(window.location.search).get('step');
 
-    function applyFilters() {
+    function applyFilters(skipMap = false) {
         const cat = categorySelect.value;
         const topic = topicSelect.value;
 
@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
             
-            goToStep(0);
+            goToStep(0, skipMap);
         } else {
             storyDisplay.style.display = 'none';
             stepTitle.textContent = 'Ei tarinoita valinnalla';
@@ -289,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function goToStep(index) {
+    function goToStep(index, skipMap = false) {
         if (index < 0 || index >= filteredSteps.length) return;
 
         currentStepIndex = index;
@@ -306,7 +306,7 @@ document.addEventListener('DOMContentLoaded', () => {
         stepTitle.textContent = step.title;
         detailTitle.textContent = step.title;
         stepCounter.textContent = `Askel ${index + 1} / ${filteredSteps.length}`;
-        detailDesc.textContent = step.description;
+        detailDesc.innerHTML = escapeHtml(step.description || '').replace(/\\n/g, '<br>').replace(/\n/g, '<br>');
 
         // Päivitä slider
         document.querySelectorAll('.slider-card').forEach((card, i) => {
@@ -460,7 +460,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Kartta
-        if (!isNaN(lat) && !isNaN(lng)) {
+        if (!skipMap && !isNaN(lat) && !isNaN(lng)) {
             map.flyTo([lat, lng], 13, { duration: 1.2 });
         }
 
