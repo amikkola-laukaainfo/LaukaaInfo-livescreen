@@ -3715,17 +3715,205 @@ footer {
     gap: 1.5rem;
     padding: 1.8rem;
     transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 0.4s ease;
+    background: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border-radius: 6px;
+    text-transform: uppercase;
+    pointer-events: none;
+    z-index: 10;
+    max-width: calc(100% - 16px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+/* Mobile stacking */
+@media (max-width: 768px) {
+    .homepage-top { flex-direction: column; }
+    .media-spotlight-section { flex-basis: 100%; }
+    .media-gallery .swiper-slide { width: 100% !important; }
+}
+
+/* QR-koodin kopiointinappi */
+.qr-copy-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    background: white;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #64748b;
+    transition: background 0.18s, border-color 0.18s, color 0.18s, transform 0.15s;
+    flex-shrink: 0;
+    margin-top: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+}
+
+.qr-copy-btn:hover {
+    background: #f0f6ff;
+    border-color: var(--primary-blue);
+    color: var(--primary-blue);
+    transform: scale(1.08);
+}
+
+.qr-copy-btn:active {
+    transform: scale(0.96);
+}
+
+/* Älykkäät pikahakupainikkeet etusivulle */
+.btn-smart {
+    display: inline-block;
+    background-color: var(--accent-light);
+    color: var(--primary-blue);
+    border: 1px solid var(--accent-blue);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.btn-smart:hover {
+    background-color: var(--primary-blue);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Palvelutapa-ikonit yrityskortissa */
+.service-icon {
+    display: inline-block;
+    margin-right: 5px;
+    font-size: 1.1em;
+    vertical-align: middle;
+}
+
+/* Tunnisteiden (tagien) lisävärit */
+.tag-pill.tag-laukaa, .cat-tag.tag-laukaa {
+    background: #e6fced;
+    color: #1b5e20;
+    border: 1px solid #c8e6d1;
+}
+
+.tag-pill.tag-etapalvelu, .cat-tag.tag-etapalvelu {
+    background: #eef1ff;
+    color: #3f51b5;
+    border: 1px solid #d0d6fb;
+}
+
+.tag-pill.tag-kotikaynti, .cat-tag.tag-kotikaynti {
+    background: #fdf2e9;
+    color: #e65100;
+    border: 1px solid #fadcc3;
+}
+
+/* --- Kartan asettelu ja sivupalkki (Map Sidebar) --- */
+.map-layout-wrapper {
+    position: relative;
+    display: flex;
+    gap: 1.5rem;
+    margin: 2.5rem auto;
+    max-width: 1200px;
+    align-items: stretch;
+    background: #fff;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(0, 51, 102, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+@media (max-width: 900px) {
+    .map-layout-wrapper {
+        flex-direction: column;
+        overflow: visible;
+        margin: 1.5rem 0;
+        border-radius: 16px;
+    }
+}
+
+/* Toggle Button on Map */
+.service-toggle-btn {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 86, 179, 0.15);
+    border-radius: 50px;
+    padding: 12px 22px;
+    display: none; /* Shown via JS if count > 0 */
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    box-shadow: 0 8px 25px rgba(0, 51, 102, 0.12);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-family: var(--accent-font);
+    font-weight: 700;
+    color: var(--primary-blue);
+    animation: fadeInSlideRight 0.5s ease-out;
+}
+
+@keyframes fadeInSlideRight {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.service-toggle-btn:hover {
+    transform: scale(1.05) translateY(-2px);
+    background: #fff;
+    box-shadow: 0 12px 30px rgba(0, 86, 179, 0.2);
+}
+
+.service-toggle-btn:active {
+    transform: scale(0.98);
+}
+
+.service-toggle-btn .count-badge {
+    background: var(--primary-blue);
+    color: #fff;
+    font-size: 0.8rem;
+    padding: 2px 10px;
+    border-radius: 12px;
+    min-width: 24px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0, 86, 179, 0.3);
+}
+
+.map-sidebar {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    width: 340px;
+    z-index: 1001;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: -15px 0 45px rgba(0, 51, 102, 0.12);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.8rem;
+    transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 0.4s ease;
     transform: translateX(calc(100% + 2rem));
     opacity: 0;
     pointer-events: none;
     overflow-y: auto;
-}
-}
-
-.map-sidebar.open {
-    transform: translateX(0);
-    opacity: 1;
-    pointer-events: auto;
 }
 
 .close-sidebar-x {
