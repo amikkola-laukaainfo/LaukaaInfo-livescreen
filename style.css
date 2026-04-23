@@ -3718,6 +3718,8 @@ footer {
     transform: translateX(calc(100% + 2rem));
     opacity: 0;
     pointer-events: none;
+    overflow-y: auto;
+}
 }
 
 .map-sidebar.open {

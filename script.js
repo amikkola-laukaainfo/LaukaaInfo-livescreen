@@ -280,44 +280,6 @@ function initMap(companies) {
     });
 
     map.addControl(new LocateControl());
-    
-    // Map Filter Toggle Control
-    const MapFilterControl = L.Control.extend({
-        options: { position: 'topright' },
-        onAdd: function(map) {
-            const container = L.DomUtil.create('div', 'leaflet-map-filters');
-            container.innerHTML = `
-                <div class="map-filter-group">
-                    <button class="map-filter-btn active" data-filter="all">Kaikki</button>
-                    <button class="map-filter-btn" data-filter="near">Lähellä</button>
-                    <button class="map-filter-btn" data-filter="service_area">Alueella</button>
-                </div>
-            `;
-            
-            const buttons = container.querySelectorAll('.map-filter-btn');
-            buttons.forEach(btn => {
-                L.DomEvent.on(btn, 'click', (e) => {
-                    L.DomEvent.stopPropagation(e);
-                    const filter = btn.getAttribute('data-filter');
-                    mapFilterMode = filter;
-                    
-                    // Update UI
-                    buttons.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    
-                    // Re-add markers and refresh filtering (preserves tags/search)
-                    if (typeof filterCatalog === 'function') {
-                        filterCatalog();
-                    } else {
-                        addMarkersToMap(allCompanies);
-                    }
-                });
-            });
-            
-            return container;
-        }
-    });
-    map.addControl(new MapFilterControl());
 
     let userMarker;
     map.on('locationfound', function (e) {
@@ -520,10 +482,11 @@ function addMarkersToMap(companies) {
                         });
                         
                         activeCircles[slug] = circle;
-                        // Oletuksena näkyvissä, jos ei ole erikseen piilotettu
-                        if (visibleCircles[slug] !== false) {
+                        // Oletuksena PIILOSSA (muutos pyynnöstä)
+                        if (visibleCircles[slug] === true) {
                             circle.addTo(serviceAreaLayer);
-                            visibleCircles[slug] = true;
+                        } else {
+                            visibleCircles[slug] = false;
                         }
                     }
                 }
