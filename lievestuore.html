@@ -331,12 +331,24 @@
 
         <section id="region-map-section" class="bg-full-white">
             <div class="map-layout-wrapper">
-                <div id="company-map"
-                    style="height: 450px; border-radius: var(--border-radius); overflow: hidden; box-shadow: var(--shadow); flex-grow: 1;">
-                </div>
-                                <div id="map-sidebar" class="map-sidebar">
+                <div id="company-map" style="height: 480px; flex-grow: 1;"></div>
+
+                <!-- Toggle-painike kartan päällä -->
+                <button id="service-sidebar-toggle" class="service-toggle-btn" onclick="toggleServiceSidebar()" title="Näytä alueella palvelevat yritykset">
+                    <span class="icon">🚙</span>
+                    <span class="label">Palvelut alueella</span>
+                    <span id="service-count-badge" class="count-badge">0</span>
+                </button>
+
+                <div id="map-sidebar" class="map-sidebar">
+                    <button class="close-sidebar-x" onclick="toggleServiceSidebar()" aria-label="Sulje valikko">&times;</button>
+                    
                     <div class="sidebar-section">
-                        <h4><span class="icon">🚙</span> Palvelee alueella</h4>
+                        <h4><span class="icon">🚙</span> Palvelut alueella</h4>
+                        <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1rem; line-height: 1.4;">
+                            Nämä yritykset tarjoavat palveluitaan tällä alueella (esim. kotiinkuljetus tai etäpalvelu).
+                        </p>
+
                         <div class="sidebar-sub-group" id="sidebar-group-on-map">
                             <div class="sidebar-sub-label">📍 Näkyy kartalla</div>
                             <ul id="service-areas-on-map-list" class="sidebar-list">
