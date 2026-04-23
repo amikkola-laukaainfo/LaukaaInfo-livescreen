@@ -1763,10 +1763,14 @@ function showSuggestions() {
             label = item.name;
             badge = '<span class="suggestion-region">Alue</span>';
         } else if (item.type === 'category') {
-            label = item.name;
+            const count = allCompanies.filter(c => c.kategoria === item.name).length;
+            label = `${item.name} (${count} kpl)`;
             badge = `<span class="suggestion-cat">Kategoria${item.region ? ' (' + item.region + ')' : ''}</span>`;
         } else if (item.type === 'tag') {
-            label = `#${item.name}`;
+            const count = allCompanies.filter(c => 
+                c.tunnisteet && c.tunnisteet.split(',').map(t => t.trim().toLowerCase()).includes(item.name.toLowerCase())
+            ).length;
+            label = `#${item.name} (${count} kpl)`;
             badge = `<span class="suggestion-tag">Tunniste${item.region ? ' (' + item.region + ')' : ''}</span>`;
         } else if (item.type === 'business') {
             label = item.company.nimi;
