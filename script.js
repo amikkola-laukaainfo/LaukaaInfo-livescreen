@@ -1047,9 +1047,25 @@ async function loadCompanyData() {
 
         // Hae lisätiedot haulle (rowid-pohjainen)
         try {
-            const extrasRes = await fetch('https://www.mediazoo.fi/laukaainfo-web/search_extras.php?t=' + Date.now());
-            if (extrasRes.ok) {
-                const searchExtras = await extrasRes.json();
+            let searchExtras = null;
+            try {
+                const extrasRes = await fetch('https://www.mediazoo.fi/laukaainfo-web/search_extras.php?t=' + Date.now());
+                if (extrasRes.ok) {
+                    searchExtras = await extrasRes.json();
+                } else {
+                    throw new Error('Etäpalvelin ei vastannut ok');
+                }
+            } catch(e) {
+                // Lokaali varayhteys testausta varten
+                const isSubdir = window.location.pathname.includes('/yritys/');
+                const prefix = isSubdir ? '../' : './';
+                const localRes = await fetch(prefix + 'laukaainfo-web/search_extras.json');
+                if (localRes.ok) {
+                    searchExtras = await localRes.json();
+                }
+            }
+
+            if (searchExtras) {
                 allCompanies.forEach(company => {
                     const rowId = (company.id || '').toString().replace('company-', '');
                     if (searchExtras[rowId]) {
