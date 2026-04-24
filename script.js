@@ -1045,6 +1045,23 @@ async function loadCompanyData() {
             company.kunta_slug = (company.kunta_slug || '').toLowerCase();
         });
 
+        // Hae lisätiedot haulle (rowid-pohjainen)
+        try {
+            const extrasRes = await fetch('https://www.mediazoo.fi/laukaainfo-web/search_extras.php?t=' + Date.now());
+            if (extrasRes.ok) {
+                const searchExtras = await extrasRes.json();
+                allCompanies.forEach(company => {
+                    const rowId = (company.id || '').toString().replace('company-', '');
+                    if (searchExtras[rowId]) {
+                        company.searchExtraInfo = searchExtras[rowId].toLowerCase();
+                    }
+                });
+                console.log('Lisätiedot haulle ladattu onnistuneesti.');
+            }
+        } catch (e) {
+            console.warn('Hakulisätietojen lataus epäonnistui:', e);
+        }
+
         initCompanyCatalog();
         initMap(allCompanies);
         initCategories(allCompanies);
@@ -1412,6 +1429,11 @@ function filterCatalog(renderList = true) {
 
         // Exact prefix match in name gets a boost
         if (name.startsWith(searchTerm)) score += 150;
+
+        // "Viimeinen lisä": lisätietojen (rowid pohjalta) osuma antaa pienen buustin
+        if (searchTerm.length > 1 && company.searchExtraInfo && company.searchExtraInfo.includes(searchTerm)) {
+            score += 5; // Matala prioriteetti
+        }
 
         let matchesServiceMethod = true;
         if (serviceMethod !== 'all') {
