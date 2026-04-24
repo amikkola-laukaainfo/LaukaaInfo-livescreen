@@ -1765,7 +1765,7 @@ function showSuggestions() {
     // 5. Match Businesses (only if term is longer or no other major matches)
     if (searchTerm.length >= 2) {
         const busMatches = allCompanies
-            .filter(c => c.nimi.toLowerCase().includes(searchTerm))
+            .filter(c => c.nimi.toLowerCase().includes(searchTerm) || (c.searchExtraInfo && c.searchExtraInfo.includes(searchTerm)))
             .map(c => ({ type: 'business', company: c }))
             .slice(0, 5);
         suggestions = [...suggestions, ...busMatches];
