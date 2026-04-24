@@ -1,4 +1,4 @@
-const VERSION = 'v5'; // Päivitetty JSON-generaattoria varten
+const VERSION = 'v6'; // Päivitetty hakuominaisuuden päivitystä varten
 const CACHE_NAME = `laukaainfo-${VERSION}`;
 const ASSETS = [
     './',
