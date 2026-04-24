@@ -1059,17 +1059,9 @@ async function loadCompanyData() {
                 // Lokaali varayhteys testausta varten
                 const isSubdir = window.location.pathname.includes('/yritys/');
                 const prefix = isSubdir ? '../' : './';
-                try {
-                    const localRes = await fetch(prefix + 'laukaainfo-web/search_extras.json');
-                    if (localRes.ok) {
-                        searchExtras = await localRes.json();
-                    }
-                } catch(localErr) {
-                    // Fallback, jos tiedoston lataus estetään (esim. file:// protokollan CORS-ongelma)
-                    searchExtras = {
-                        "272": "rengashotelli, vannetyöt, renkaiden vaihto, tasapainotus",
-                        "275": "erikoisruokavaliot, lounasbuffet, gluteeniton, vegaani"
-                    };
+                const localRes = await fetch(prefix + 'laukaainfo-web/search_extras.json');
+                if (localRes.ok) {
+                    searchExtras = await localRes.json();
                 }
             }
 
