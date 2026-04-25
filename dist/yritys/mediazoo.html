@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fi">
 
-<head>
+<head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mediazoo – LaukaaInfo</title>
@@ -10,13 +10,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Outfit:wght@100..900&display=swap"
         rel="stylesheet">
 
     <!-- Leaflet Map -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-    <link rel="stylesheet" href="../style.b90f42b3.css?v=20260304">
+    <link rel="stylesheet" href="../style.e0329448.css?v=20260420-2">
     <style>
         .business-card-container {
             max-width: 1000px;
@@ -395,7 +395,7 @@
     <meta property="og:url" content="https://laukaainfo.fi/yritys/mediazoo.html">
     <meta property="og:type" content="business.business">
     <meta property="og:site_name" content="LaukaaInfo">
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"LocalBusiness","name":"Mediazoo","description":"Tarjoan viestinnän ja digiosaamisen tukea laidasta laitaan:@@ yrityksille, yhdistyksille ja yksityis...","address":{"@type":"PostalAddress","streetAddress":"Salmelantie, 41400 Lievestuore"},"telephone":"358414655290","url":"https://www.mediazoo.fi","image":"https://www.mediazoo.fi/laukaainfo-web/get_image.php?id=1Mhuy-3N-KH7FcT88MbgOCjj5k-5i2LGc","geo":{"@type":"GeoCoordinates","latitude":"62.270133","longitude":"26.223957"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"LocalBusiness","name":"Mediazoo","description":"Tarjoan viestinnän ja digiosaamisen tukea laidasta laitaan:@@ yrityksille, yhdistyksille ja yksityis...","address":{"@type":"PostalAddress","streetAddress":"Salmelantie, 41400 Lievestuore"},"url":"https://laukaainfo.fi/yritys/mediazoo.html","image":"https://www.mediazoo.fi/laukaainfo-web/get_image.php?id=1Mhuy-3N-KH7FcT88MbgOCjj5k-5i2LGc","geo":{"@type":"GeoCoordinates","latitude":"62.270133","longitude":"26.223957"}}</script>
 </head>
 
 <body>
@@ -409,9 +409,21 @@
             <div class="desktop-nav">
                 <ul class="nav-links">
                     <li class="nav-item">
-                        <a href="../index.html" class="nav-link">Kauppa <span class="arrow">▼</span></a>
+                        <a href="#" class="nav-link">Kauppa <span class="arrow">▼</span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="../lisaa-yritys.html">Lisää yritys</a></li>
+                            <li><a href="../ilmoittaudu.html">Feed-julkaisu</a></li>
+                            <li><a href="../kauppa.html">Osta lisää näkyvyyttä</a></li>
+                            <li><a href="../lisaa-yritys.html">Yritysnäkyvyys</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Hakulinkit <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <li class="has-arrow">
+                                <a href="#">Suosituimmat</a>
+                                <ul class="nested-menu" id="nav-featured">
+                                </ul>
+                            </li>
                             <li class="has-arrow">
                                 <a href="#">Kategoriat</a>
                                 <ul class="nested-menu" id="nav-categories">
@@ -466,7 +478,6 @@
     <!-- Sidebar Overlay -->
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
-    <!-- Sidebar Menu -->
     <aside class="sidebar-menu" id="sidebar-menu">
         <div class="sidebar-header">
             <a href="../index.html" class="nav-logo">
@@ -481,7 +492,21 @@
             <div class="menu-section">
                 <h3 class="section-title">KAUPPA</h3>
                 <ul class="menu-list">
-                    <li class="menu-item"><a href="../lisaa-yritys.html" class="sidebar-link">Lisää yritys</a></li>
+                    <li class="menu-item"><a href="../ilmoittaudu.html" class="sidebar-link">Feed-julkaisu</a></li>
+                    <li class="menu-item"><a href="../kauppa.html" class="sidebar-link">Osta lisää näkyvyyttä</a></li>
+                    <li class="menu-item"><a href="../lisaa-yritys.html" class="sidebar-link">Yritysnäkyvyys</a></li>
+                </ul>
+            </div>
+
+            <!-- Pääosio: HAKULINKIT -->
+            <div class="menu-section">
+                <h3 class="section-title">HAKULINKIT</h3>
+                <ul class="menu-list">
+                    <li class="menu-item has-submenu">
+                        <a href="#" class="submenu-toggle">Suosituimmat <span class="arrow">▼</span></a>
+                        <ul class="submenu" id="sidebar-featured">
+                        </ul>
+                    </li>
                     <li class="menu-item has-submenu">
                         <a href="#" class="submenu-toggle">Kategoriat <span class="arrow">▼</span></a>
                         <ul class="submenu" id="sidebar-categories">
@@ -583,7 +608,6 @@
                         <h2>Yhteystiedot</h2>
 
                         <div class="contact-item">
-                            <span class="icon">📍</span>
                             <div>
                                 <span>Osoite</span>
                                 <strong id="display-address">Katuosoite, Postinumero</strong>
@@ -591,7 +615,6 @@
                         </div>
 
                         <div class="contact-item" id="phone-item">
-                            <span class="icon">📞</span>
                             <div>
                                 <span>Puhelin</span>
                                 <a href="#" id="display-phone">040 123 4567</a>
@@ -599,7 +622,6 @@
                         </div>
 
                         <div class="contact-item" id="website-item">
-                            <span class="icon">🌐</span>
                             <div>
                                 <span>Kotisivut</span>
                                 <a href="#" id="display-website" target="_blank">www.yritys.fi</a>
@@ -607,7 +629,6 @@
                         </div>
 
                         <div class="contact-item" id="social-links">
-                            <span class="icon">🔗</span>
                             <div id="social-icons" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 0.8rem;"></div>
                         </div>
 
@@ -636,19 +657,54 @@
             </div>
 
             <div id="promotional-links-section"
-                style="margin-top: 3rem; background: #fdf5e6; padding: 2rem; border-radius: 20px; border: 1px dashed #ffa500; display: none;">
-                <h3 style="color: #d2691e; margin-bottom: 1rem;">🔥 Katso tarjoukset:</h3>
+                style="margin-top: 3rem; background: linear-gradient(135deg, #fff9f0 0%, #fff4e0 100%); padding: 2.5rem; border-radius: 20px; border: 2px solid #ffa500; box-shadow: 0 10px 25px rgba(255, 165, 0, 0.1); display: none;">
+                <h3 style="color: #d2691e; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.8rem; font-family: 'Outfit';">
+                    <span style="font-size: 1.8rem;">🔥</span> Ajankohtaiset tarjoukset
+                </h3>
+                
+                <div id="coupon-display" style="display: none; background: white; border: 2px dashed #ffa500; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: -10px; left: -10px; background: #ffa500; color: white; padding: 5px 15px; font-size: 0.7rem; font-weight: 800; transform: rotate(-5deg); text-transform: uppercase;">Kuponki</div>
+                    <p id="coupon-text" style="font-size: 1.2rem; font-weight: 700; color: #2d3748; margin: 0; text-align: center;"></p>
+                </div>
+
                 <div id="ad-links-list" style="display: flex; flex-wrap: wrap; gap: 1rem;">
                     <!-- Linkit tähän -->
                 </div>
             </div>
 
         </div>
+        <!-- Selection Gate: Feed vs Brand -->
+        <section class="gate-section">
+            <div class="gate-container">
+                <div class="gate-header">
+                    <h2>Mitä haluat tehdä?</h2>
+                    <p>Valitse sinulle sopiva tapa näkyä Laukaassa</p>
+                </div>
+                <div class="gate-grid">
+                    <!-- Path 1: Feed Path -->
+                    <a href="../ilmoittaudu.html" class="path-card feed-path">
+                        <div class="path-badge">Suosittu</div>
+                        <div class="path-icon">📢</div>
+                        <h3>Julkaise ilmoitus</h3>
+                        <p>Luo uutisia, tarjouksia tai tapahtumia välittömästi Laukaan syötteeseen. Aloita maksutta (3 julkaisua).</p>
+                        <div class="path-cta">Aloita tästä &raquo;</div>
+                    </a>
+
+                    <!-- Path 2: Brand Path -->
+                    <a href="../lisaa-yritys.html" class="path-card brand-path">
+                        <div class="path-icon">🏢</div>
+                        <h3>Kasvata brändiäsi</h3>
+                        <p>Hanki pysyvä näkyvyys, oma yritysprofiili ja suora yhteys asiakkaisiin. Alk. 15 €/kk.</p>
+                        <div class="path-cta">Lue lisää &raquo;</div>
+                    </a>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer>
         <div class="footer-content">
-            <p>© 2026 LaukaaInfo – Kylien ja asukkaiden oma tietopankki</p>
+            <p>© 2026 LaukaaInfo – Palvelua ylläpitää Mediazoo.fi</p>
             <div class="footer-links">
                 <a href="../index.html">Etusivulle</a>
                 <a href="../tietosuoja.html">Tietosuoja</a>
@@ -669,8 +725,8 @@
 
     <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="../script.b90f42b3.js?v=20260301"></script>
-    <script src="../yrityskortti.b90f42b3.js?v=20260304-DEBUG-2"></script>
+    <script src="../script.e0329448.js?v=20260301"></script>
+    <script src="../yrityskortti.e0329448.js?v=20260304-DEBUG-2"></script>
 </body>
 
 </html>
