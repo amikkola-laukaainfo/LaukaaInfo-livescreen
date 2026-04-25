@@ -1,14 +1,14 @@
-const VERSION = '5052d0ec'; // Päivitetty reittidatan latauksen korjausta varten
+const VERSION = 'v7'; // Päivitetty reittidatan latauksen korjausta varten
 const CACHE_NAME = `laukaainfo-${VERSION}`;
 const ASSETS = [
     './',
     './index.html',
-    './style.5052d0ec.css',
-    './script.5052d0ec.js',
+    './style.css',
+    './script.js',
     './manifest.json',
     './icons/icon-192.png',
     './icons/icon-512.png',
-    './feed.5052d0ec.js',
+    './feed.js',
     './demo-data.json',
     'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;700&display=swap'
 ];
