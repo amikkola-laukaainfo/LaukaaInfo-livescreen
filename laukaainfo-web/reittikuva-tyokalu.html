@@ -338,12 +338,28 @@
                         <button class="btn" style="margin-bottom:1rem;" onclick="triggerUpload(${idx})">📷 Lataa / Vaihda kuva</button>
                         <input type="file" id="file-input-${idx}" class="hidden" accept="image/*" onchange="handleFileUpload(event, ${idx})">
                         
-                        <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 12px; border: 1px solid var(--border);">
-                            <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 0.5rem; text-align:left;">YouTube Video (Shorts tai tavallinen)</label>
-                            <div style="display: flex; gap: 8px;">
-                                <input type="text" id="video-input-${idx}" value="${props.video || ''}" placeholder="https://..." style="margin:0; font-size:0.9rem; text-align:left; padding:0.6rem; flex:1;">
-                                <button class="btn" style="width: auto; padding: 0.6rem 1rem;" onclick="saveVideo(${idx})">Tallenna</button>
+                        <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 12px; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 0.75rem;">
+                            <div>
+                                <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 0.3rem; text-align:left;">Kuvaus / Teksti</label>
+                                <textarea id="desc-input-${idx}" style="width:100%; height:60px; background:#0f172a; border:2px solid var(--border); border-radius:8px; color:white; padding:0.6rem; font-family:inherit; font-size:0.9rem; resize:vertical;">${props.description || ''}</textarea>
                             </div>
+                            
+                            <div>
+                                <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 0.3rem; text-align:left;">YouTube Video</label>
+                                <input type="text" id="video-input-${idx}" value="${props.video || ''}" placeholder="https://..." style="margin:0; font-size:0.9rem; text-align:left; padding:0.6rem; width:100%;">
+                            </div>
+
+                            <div>
+                                <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 0.3rem; text-align:left;">Lisätietolinkki (URL)</label>
+                                <input type="text" id="info-input-${idx}" value="${props.info_url || ''}" placeholder="https://..." style="margin:0; font-size:0.9rem; text-align:left; padding:0.6rem; width:100%;">
+                            </div>
+
+                            <div>
+                                <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 0.3rem; text-align:left;">Äänitiedoston linkki (URL)</label>
+                                <input type="text" id="audio-input-${idx}" value="${props.audio_url || ''}" placeholder="https://..." style="margin:0; font-size:0.9rem; text-align:left; padding:0.6rem; width:100%;">
+                            </div>
+
+                            <button class="btn" style="padding: 0.8rem;" onclick="saveProperties(${idx})">💾 Tallenna tiedot</button>
                         </div>
                     </div>
                 `;
@@ -355,14 +371,18 @@
             document.getElementById(`file-input-${idx}`).click();
         }
 
-        async function saveVideo(idx) {
+        async function saveProperties(idx) {
             const videoUrl = document.getElementById(`video-input-${idx}`).value.trim();
+            const description = document.getElementById(`desc-input-${idx}`).value.trim();
+            const infoUrl = document.getElementById(`info-input-${idx}`).value.trim();
+            const audioUrl = document.getElementById(`audio-input-${idx}`).value.trim();
+            
             const btn = document.activeElement;
             const originalText = btn.innerHTML;
 
             try {
                 btn.disabled = true;
-                btn.innerHTML = '⌛...';
+                btn.innerHTML = '⌛ Tallennetaan...';
 
                 let pointCount = 0;
                 let targetFeatureIdx = -1;
@@ -377,9 +397,18 @@
                 }
 
                 if(targetFeatureIdx !== -1) {
-                    routeData.features[targetFeatureIdx].properties.video = videoUrl;
-                    // Jos lisätään video, varmistetaan että mediaType on oikein (käytetään VIDEO jos video on ensisijainen)
-                    if (videoUrl) routeData.features[targetFeatureIdx].properties.mediaType = 'VIDEO';
+                    const props = routeData.features[targetFeatureIdx].properties;
+                    props.video = videoUrl;
+                    props.description = description;
+                    props.info_url = infoUrl;
+                    props.audio_url = audioUrl;
+
+                    // Update mediaType if needed
+                    if (videoUrl) {
+                        props.mediaType = 'VIDEO';
+                    } else if (props.image) {
+                        props.mediaType = 'IMAGE';
+                    }
                     
                     const saveFormData = new FormData();
                     saveFormData.append('path', routePath);
@@ -392,7 +421,7 @@
                     
                     const saveData = await saveRes.json();
                     if (saveData.result === 'ok') {
-                        showToast('✅ Video tallennettu!');
+                        showToast('✅ Tiedot tallennettu!');
                         renderPoints();
                     } else {
                         throw new Error(saveData.error || 'Tallennus epäonnistui');
@@ -462,10 +491,20 @@
                 }
 
                 if(targetFeatureIdx !== -1) {
-                    routeData.features[targetFeatureIdx].properties.image = uploadData.url;
+                    const props = routeData.features[targetFeatureIdx].properties;
+                    props.image = uploadData.url;
+                    
+                    // Myös muut kentät talteen samalla
+                    props.description = document.getElementById(`desc-input-${idx}`).value.trim();
+                    props.video = document.getElementById(`video-input-${idx}`).value.trim();
+                    props.info_url = document.getElementById(`info-input-${idx}`).value.trim();
+                    props.audio_url = document.getElementById(`audio-input-${idx}`).value.trim();
+
                     // Jos asetetaan kuva, ja videota ei ole, asetetaan IMAGE
-                    if (!routeData.features[targetFeatureIdx].properties.video) {
-                        routeData.features[targetFeatureIdx].properties.mediaType = 'IMAGE';
+                    if (!props.video) {
+                        props.mediaType = 'IMAGE';
+                    } else {
+                        props.mediaType = 'VIDEO';
                     }
                     
                     const saveFormData = new FormData();
