@@ -238,11 +238,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
             }
 
+            let videoHtml = '';
+            if (step.youtube_url && step.youtube_url.trim()) {
+                const getYoutubeId = (url) => {
+                    if (!url) return null;
+                    const regExp = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube\.com\/shorts\/)([^"&?\/\s]{11})/;
+                    const match = url.match(regExp);
+                    return (match && match[1]) ? match[1] : null;
+                };
+                const vId = getYoutubeId(step.youtube_url.trim());
+                if (vId) {
+                    videoHtml = `
+                        <div style="margin-top:8px; border-radius:8px; overflow:hidden; position:relative; padding-bottom:56.25%; height:0; box-shadow:0 2px 8px rgba(0,0,0,0.15);">
+                            <iframe src="https://www.youtube.com/embed/${vId}" 
+                                style="position:absolute; top:0; left:0; width:100%; height:100%;" 
+                                frameborder="0" allowfullscreen></iframe>
+                        </div>
+                        <a href="https://www.youtube.com/watch?v=${vId}" target="_blank" style="display:block; margin-top:5px; font-size:0.75rem; color:#0056b3; text-decoration:none; font-weight:600; text-align:right;">📺 Katso YouTubessa &rarr;</a>
+                    `;
+                }
+            }
+
             const popupHtml = `
                 <div style="min-width: 180px;">
                     <h3 style="margin: 0 0 5px 0; color: #0056b3; font-size: 1rem; font-family: 'Outfit', sans-serif;">${escapeHtml(step.title)}</h3>
                     <div style="font-size: 0.85rem; color: #666; margin-bottom: 4px;">Askel ${index + 1} / ${filteredSteps.length}</div>
                     ${imageHtml}
+                    ${videoHtml}
                     <a href="https://www.google.com/maps/search/?api=1&query=${lat},${lng}" target="_blank" style="background: #28a745; color: white; padding: 5px 10px; border-radius: 4px; text-decoration: none; font-size: 0.75rem; display: inline-flex; align-items: center; gap: 5px; font-weight: 600; margin-top: 5px;">📍 Avaa Google Mapsissa</a>
                 </div>
             `;
