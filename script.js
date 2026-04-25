@@ -1048,17 +1048,17 @@ async function loadCompanyData() {
         // Hae lisätiedot haulle (rowid-pohjainen)
         try {
             let searchExtras = null;
+            const isSubdir = window.location.pathname.includes('/yritys/');
+            const prefix = isSubdir ? '../' : './';
             try {
-                const extrasRes = await fetch('https://www.mediazoo.fi/laukaainfo-web/search_extras.php?t=' + Date.now());
+                const extrasRes = await fetch(prefix + 'laukaainfo-web/search_extras.php?t=' + Date.now());
                 if (extrasRes.ok) {
                     searchExtras = await extrasRes.json();
                 } else {
-                    throw new Error('Etäpalvelin ei vastannut ok');
+                    throw new Error('Palvelin ei vastannut ok');
                 }
             } catch(e) {
                 // Lokaali varayhteys testausta varten
-                const isSubdir = window.location.pathname.includes('/yritys/');
-                const prefix = isSubdir ? '../' : './';
                 const localRes = await fetch(prefix + 'laukaainfo-web/search_extras.json');
                 if (localRes.ok) {
                     searchExtras = await localRes.json();
