@@ -15,8 +15,9 @@
         href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Outfit:wght@100..900&display=swap"
         rel="stylesheet">
 
-    <!-- Leaflet Map CSS -->
+    <!-- Leaflet Map CSS + JS (ladataan headissa jotta inline-skriptit voivat käyttää) -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <link rel="stylesheet" href="style.css">
 
@@ -947,6 +948,9 @@
                     attribution: '© OpenStreetMap contributors'
                 }).addTo(reittiMap);
 
+                // Pakota Leaflet laskemaan kartan koko uudelleen (yleinen renderöintiongelma)
+                setTimeout(() => reittiMap.invalidateSize(), 100);
+
                 const lista = document.getElementById('reitti-kohde-lista');
                 const reittiSelect = document.getElementById('reitti-select');
                 let activeItem = null;
@@ -1119,7 +1123,6 @@
 
     <!-- Scripts -->
     <script src="script.js?v=20260301-1"></script>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <script src="tarinakartta.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
