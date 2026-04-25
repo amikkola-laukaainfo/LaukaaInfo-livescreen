@@ -871,15 +871,22 @@
                         <div id="reitti-kohde-lista" style="display: flex; flex-direction: column; gap: 0.5rem; flex: 1; overflow-y: auto;">
                             <p style="color: #aaa; font-size: 0.9rem;">Ladataan...</p>
                         </div>
+                        <!-- Legenda + Jakolinkki -->
                         <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid #f0f4f8;">
                             <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
                                 <div style="width: 28px; height: 4px; background: #e63946; border-radius: 2px; flex-shrink: 0;"></div>
                                 <span style="font-size: 0.8rem; color: #555;">Kävelyreitti</span>
                             </div>
-                            <div style="display: flex; align-items: center; gap: 8px;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 1rem;">
                                 <span style="font-size: 1.1rem;">📍</span>
                                 <span style="font-size: 0.8rem; color: #555;">Kokemuspisteq</span>
                             </div>
+                            <!-- Jakolinkki-nappi -->
+                            <button id="btn-reitti-share"
+                                style="width: 100%; padding: 0.6rem 1rem; background: #f0f6ff; border: 1.5px solid #c7dcff; border-radius: 10px; font-family: inherit; font-size: 0.85rem; font-weight: 600; color: #0056b3; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 7px; transition: all 0.2s;"
+                                title="Kopioi jakolinkki tähän reittiin">
+                                🔗 Jaa tämä reitti
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -940,6 +947,27 @@
 
         <script>
         (function() {
+            // ── Toast-apufunktio ──────────────────────────────────────
+            function showToast(msg) {
+                let t = document.getElementById('reitti-toast');
+                if (!t) {
+                    t = document.createElement('div');
+                    t.id = 'reitti-toast';
+                    t.style.cssText = 'position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(20px);background:#1a2940;color:#fff;padding:10px 22px;border-radius:30px;font-size:0.88rem;font-weight:600;z-index:99999;opacity:0;transition:all 0.3s ease;pointer-events:none;white-space:nowrap;box-shadow:0 6px 20px rgba(0,0,0,0.3);';
+                    document.body.appendChild(t);
+                }
+                t.textContent = msg;
+                requestAnimationFrame(() => {
+                    t.style.opacity = '1';
+                    t.style.transform = 'translateX(-50%) translateY(0)';
+                });
+                clearTimeout(t._hideTimer);
+                t._hideTimer = setTimeout(() => {
+                    t.style.opacity = '0';
+                    t.style.transform = 'translateX(-50%) translateY(20px)';
+                }, 2500);
+            }
+
             function initReittiMap() {
                 if (!window.L) { setTimeout(initReittiMap, 200); return; }
 
@@ -953,8 +981,9 @@
 
                 const lista = document.getElementById('reitti-kohde-lista');
                 const reittiSelect = document.getElementById('reitti-select');
+                const shareBtn = document.getElementById('btn-reitti-share');
                 let activeItem = null;
-                let currentLayers = []; // reitti + pisteet jotka pitää poistaa vaihdon yhteydessä
+                let currentLayers = [];
 
                 const icon = L.divIcon({
                     html: '<div style="background:#0056b3;width:16px;height:16px;border-radius:50%;border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.35);"></div>',
@@ -964,12 +993,31 @@
                     popupAnchor: [0, -12]
                 });
 
-                function loadRoute(geojsonPath) {
-                    // Poistetaan vanhat kerrokset
+                // ── URL-deeplink: lue ?reitti= ─────────────────────────
+                function getShareUrl(routeValue) {
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('reitti', encodeURIComponent(routeValue));
+                    url.hash = 'kavelyreitit-section';
+                    return url.toString();
+                }
+
+                function updateUrl(routeValue) {
+                    const url = new URL(window.location.href);
+                    if (routeValue) {
+                        url.searchParams.set('reitti', encodeURIComponent(routeValue));
+                    } else {
+                        url.searchParams.delete('reitti');
+                    }
+                    history.replaceState(null, '', url.toString());
+                }
+
+                function loadRoute(geojsonPath, skipUrlUpdate) {
                     currentLayers.forEach(l => reittiMap.removeLayer(l));
                     currentLayers = [];
                     lista.innerHTML = '<p style="color:#aaa;font-size:0.9rem;">Ladataan...</p>';
                     activeItem = null;
+
+                    if (!skipUrlUpdate) updateUrl(geojsonPath);
 
                     fetch(geojsonPath)
                         .then(r => r.json())
@@ -1037,15 +1085,69 @@
                         });
                 }
 
-                // Ladataan oletusreitti
-                loadRoute(reittiSelect.value);
+                // ── Lue deeplink URL-parametrista ─────────────────────
+                const urlParams = new URLSearchParams(window.location.search);
+                const deeplinkReitti = urlParams.get('reitti');
 
-                // Vaihda reitti dropdownista
+                if (deeplinkReitti) {
+                    // Yritä valita oikea option dropdownista
+                    const allOptions = Array.from(reittiSelect.options);
+                    const match = allOptions.find(o => o.value === decodeURIComponent(deeplinkReitti));
+                    if (match) {
+                        reittiSelect.value = match.value;
+                        loadRoute(match.value, true);
+                        // Vieritä osioon pienellä viiveellä
+                        setTimeout(() => {
+                            document.getElementById('kavelyreitit-section')
+                                .scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 400);
+                    } else {
+                        loadRoute(reittiSelect.value, true);
+                    }
+                } else {
+                    loadRoute(reittiSelect.value, true);
+                }
+
+                // ── Vaihda reitti dropdownista ─────────────────────────
                 reittiSelect.addEventListener('change', () => {
                     if (reittiSelect.value) loadRoute(reittiSelect.value);
                 });
 
-                // Paikannus
+                // ── Jakolinkki-nappi ───────────────────────────────────
+                if (shareBtn) {
+                    shareBtn.addEventListener('click', () => {
+                        const shareUrl = getShareUrl(reittiSelect.value);
+                        if (navigator.clipboard) {
+                            navigator.clipboard.writeText(shareUrl).then(() => {
+                                showToast('✅ Linkki kopioitu leikepöydälle!');
+                            }).catch(() => fallbackCopy(shareUrl));
+                        } else {
+                            fallbackCopy(shareUrl);
+                        }
+                    });
+                    shareBtn.addEventListener('mouseenter', () => {
+                        shareBtn.style.background = '#dbeafe';
+                        shareBtn.style.borderColor = '#0056b3';
+                    });
+                    shareBtn.addEventListener('mouseleave', () => {
+                        shareBtn.style.background = '#f0f6ff';
+                        shareBtn.style.borderColor = '#c7dcff';
+                    });
+                }
+
+                function fallbackCopy(text) {
+                    const ta = document.createElement('textarea');
+                    ta.value = text;
+                    ta.style.position = 'fixed';
+                    ta.style.opacity = '0';
+                    document.body.appendChild(ta);
+                    ta.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(ta);
+                    showToast('✅ Linkki kopioitu leikepöydälle!');
+                }
+
+                // ── Paikannus ──────────────────────────────────────────
                 document.getElementById('btn-reitti-locate').addEventListener('click', () => {
                     navigator.geolocation && navigator.geolocation.getCurrentPosition(pos => {
                         reittiMap.setView([pos.coords.latitude, pos.coords.longitude], 16);
