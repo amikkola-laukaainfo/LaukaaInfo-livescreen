@@ -1085,11 +1085,11 @@
                                          onerror="
                                              if(!this.dataset.tried){ 
                                                  this.dataset.tried=1; 
-                                                 const fileName = (props.image || '').split('/').pop();
+                                                 const fileName = ('${props.image || ''}').split('/').pop();
                                                  this.src = 'reitix/' + fileName;
                                              } else if(this.dataset.tried==1){ 
                                                  this.dataset.tried=2; 
-                                                 const fileName = (props.image || '').split('/').pop();
+                                                 const fileName = ('${props.image || ''}').split('/').pop();
                                                  this.src = 'reitix/images/' + fileName;
                                              }
                                          "
