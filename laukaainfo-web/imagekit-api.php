@@ -22,10 +22,34 @@ $privateKey = 'private_ylLMZcvm5t75vYRBq75lcpQZOf8='; // Sinun oikea avain
 $folder = '/mediazoo/offers';
 $salt = "LaukaaInfo2026!Secret"; 
 
-// --- INPUT VALIDATION ---
+$action = $_GET['action'] ?? 'auth'; 
+
+// --- PUBLIC ACTIONS (Ei vaadi tokenia) ---
+
+// Sallitaan GeoJSON luku julkisesti (tarinakartta.html käyttöön)
+if ($action === 'get_geojson') {
+    $jsonPath = $_GET['path'] ?? 'reitix/route.geojson';
+    $searchPaths = [$jsonPath, '../' . $jsonPath];
+    $found = false;
+    foreach ($searchPaths as $path) {
+        if (file_exists($path)) {
+            header('Content-Type: application/json');
+            echo file_get_contents($path);
+            $found = true;
+            break;
+        }
+    }
+    if (!$found) {
+        http_response_code(404);
+        echo json_encode(['error' => 'Tiedostoa ei löytynyt.']);
+    }
+    exit;
+}
+
+// --- SECURE ACTIONS (Vaatii tokenin) ---
+
 $yritysId = $_GET['yritys'] ?? '';
 $token    = $_GET['token'] ?? '';
-$action   = $_GET['action'] ?? 'auth'; 
 $slot     = $_GET['slot'] ?? '1';
 
 if (empty($yritysId) || empty($token)) {
@@ -34,11 +58,7 @@ if (empty($yritysId) || empty($token)) {
     exit;
 }
 
-// --- TOKEN VERIFICATION ---
-// UUSI: Admin-tarkistus reittieditorille
 $isAdmin = ($yritysId === '99' && $token === 'ADMIN-99-LPS');
-
-// Yritysten tarkistus mainostyökalulle
 $expected = substr(hash('sha256', $yritysId . $salt), 0, 8);
 $legacy = ['2' => 'mz2026', 'demo' => 'demo'];
 $isLegacy = isset($legacy[$yritysId]) && $legacy[$yritysId] === $token;
@@ -49,37 +69,32 @@ if (!$isAdmin && $token !== $expected && !$isLegacy) {
     exit;
 }
 
-// --- ACTION ROUTING ---
-
-// UUSI: GeoJSON tallennus (Vain Admin)
+// GeoJSON tallennus (Vain Admin)
 if ($action === 'save_geojson') {
     if (!$isAdmin) {
         http_response_code(403);
         echo json_encode(['error' => 'Vain admin voi tallentaa reittejä.']);
         exit;
     }
-
     $jsonPath = $_POST['path'] ?? ''; 
     $jsonData = $_POST['data'] ?? '';
-
     if (empty($jsonPath) || empty($jsonData)) {
-        http_response_code(400);
-        echo json_encode(['error' => 'Polku tai data puuttuu.']);
-        exit;
+        http_response_code(400); exit;
     }
-
-    // Turvatarkistus: sallitaan vain reitix/*.geojson
-    if (strpos($jsonPath, 'reitix/') !== 0 || substr($jsonPath, -8) !== '.geojson') {
-         http_response_code(403);
-         echo json_encode(['error' => 'Tallennus sallittu vain reitix/ kansioon.']);
-         exit;
+    $targetPath = '';
+    if (file_exists($jsonPath)) $targetPath = $jsonPath;
+    elseif (file_exists('../' . $jsonPath)) $targetPath = '../' . $jsonPath;
+    else {
+        if (is_dir('reitix/')) $targetPath = $jsonPath;
+        elseif (is_dir('../reitix/')) $targetPath = '../' . $jsonPath;
     }
-
-    if (file_put_contents($jsonPath, $jsonData)) {
-        echo json_encode(['result' => 'ok', 'message' => 'Reitti tallennettu.']);
+    if (!$targetPath) {
+        http_response_code(404); echo json_encode(['error' => 'Kohdetta ei löytynyt.']); exit;
+    }
+    if (file_put_contents($targetPath, $jsonData)) {
+        echo json_encode(['result' => 'ok', 'message' => 'Tallennettu.']);
     } else {
         http_response_code(500);
-        echo json_encode(['error' => 'Kirjoitusvirhe. Tarkista kansion oikeudet.']);
     }
     exit;
 }
@@ -88,17 +103,13 @@ if ($action === 'save_geojson') {
 if ($action === 'delete') {
     $fileNamePrefix = "{$yritysId}_{$slot}";
     $searchQuery = "name:\"$fileNamePrefix*\"";
-    
     $url = "https://api.imagekit.io/v1/files?searchQuery=" . urlencode($searchQuery) . "&path=" . urlencode($folder);
-    
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Basic " . base64_encode($privateKey . ":")]);
-    
     $response = curl_exec($ch);
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
-    
     if ($httpCode >= 200 && $httpCode < 300) {
         $files = json_decode($response, true);
         if (is_array($files) && count($files) > 0) {
@@ -112,33 +123,17 @@ if ($action === 'delete') {
                 curl_exec($delCh);
                 curl_close($delCh);
             }
-            echo json_encode(['result' => 'ok', 'message' => 'Kuva poistettu.']);
-        } else {
-            echo json_encode(['result' => 'not found']);
+            echo json_encode(['result' => 'ok']);
         }
-    } else {
-        http_response_code($httpCode);
-        echo json_encode(['error' => 'Virhe haettaessa kuvaa.']);
     }
     exit;
 }
 
-// Yhteinen AUTH (käytössä molemmissa työkaluissa)
+// AUTH
 if ($action === 'auth') {
     $tokenParam = bin2hex(random_bytes(16));
     $expire = time() + (60 * 30); 
     $signature = hash_hmac('sha1', $tokenParam . $expire, $privateKey);
-
-    echo json_encode([
-        'token' => $tokenParam,
-        'expire' => $expire,
-        'signature' => $signature,
-        'publicKey' => $publicKey,
-        'urlEndpoint' => $urlEndpoint
-    ]);
+    echo json_encode(['token' => $tokenParam, 'expire' => $expire, 'signature' => $signature, 'publicKey' => $publicKey, 'urlEndpoint' => $urlEndpoint]);
     exit;
 }
-
-http_response_code(400);
-echo json_encode(['error' => 'Tuntematon toiminto.']);
-exit;
