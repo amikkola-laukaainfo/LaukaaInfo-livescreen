@@ -1056,9 +1056,23 @@
 
                                 let popupHtml = `<div style="min-width:180px;"><strong style="font-size:1.05rem;text-transform:capitalize;display:block;margin-bottom:5px;">${title}</strong>`;
                                 if (hasImage) {
-                                    // Lisätään onerror-käsittelijä, joka yrittää ladata kuvan juuresta tai reitix-kansiosta jos images-kansio epäonnistuu
+                                    // Parannettu onerror-käsittelijä: kokeilee eri polkuja ja lokittaa yritykset konsoliin
                                     popupHtml += `<img src="${imageUrl}?tr=w-300,h-200,fo-auto" 
-                                        onerror="if(!this.dataset.tried){ this.dataset.tried=1; this.src=this.src.replace('/reitix/images/', '/reitix/'); } else if(this.dataset.tried==1){ this.dataset.tried=2; this.src=this.src.replace('/reitix/', '/'); }"
+                                        onerror="
+                                            if(!this.dataset.tried){ 
+                                                this.dataset.tried=1; 
+                                                console.log('Image fallback 1: trying reitix/', this.src);
+                                                this.src=this.src.replace('reitix/images/', 'reitix/'); 
+                                            } else if(this.dataset.tried==1){ 
+                                                this.dataset.tried=2; 
+                                                console.log('Image fallback 2: trying root/', this.src);
+                                                this.src=this.src.replace('reitix/', ''); 
+                                            } else if(this.dataset.tried==2){
+                                                this.dataset.tried=3;
+                                                console.log('Image fallback 3: trying local reitix/', this.src);
+                                                this.src='reitix/' + '${props.image}';
+                                            }
+                                        "
                                         data-lightbox="${imageUrl}" 
                                         style="width:100%; border-radius:8px; margin:5px 0; display:block; box-shadow:0 2px 8px rgba(0,0,0,0.1); cursor:zoom-in;" 
                                         title="Klikkaa suurentaaksesi">`;
