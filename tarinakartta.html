@@ -856,7 +856,7 @@
                             <label for="reitti-select" style="font-size: 0.75rem; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.08em; display: block; margin-bottom: 0.4rem;">Valitse reitti</label>
                             <select id="reitti-select" style="width: 100%; padding: 0.55rem 0.85rem; border: 1.5px solid #dde3ec; border-radius: 8px; font-family: inherit; font-size: 0.88rem; color: #333; background: #f7f9fc; cursor: pointer; appearance: none; background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%230056b3' d='M6 8L1 3h10z'/%3E%3C/svg%3E&quot;); background-repeat: no-repeat; background-position: right 0.75rem center; padding-right: 2rem;">
                                 <optgroup label="Lievestuore">
-                                    <option value="reitix/route.geojson">Rantakävely 1</option>
+                                    <option value="https://www.mediazoo.fi/laukaainfo-web/reitix/route.geojson">Rantakävely 1</option>
                                 </optgroup>
                                 <optgroup label="Laukaa kk">
                                     <option value="" disabled>Keskustakävely (tulossa)</option>
@@ -1050,10 +1050,12 @@
                                 const hasImage = props.image && props.mediaType === 'IMAGE';
                                 const hasVideo = props.video && props.mediaType === 'VIDEO';
 
-                                let popupHtml = `<div style="min-width:160px;"><strong style="font-size:1rem;text-transform:capitalize;">${title}</strong>`;
-                                if (props.description) popupHtml += `<p style="margin:6px 0 0;font-size:0.85rem;color:#555;">${props.description}</p>`;
-                                if (hasImage) popupHtml += `<p style="margin:8px 0 0;font-size:0.75rem;color:#0056b3;">📷 Kuva lisätään pian</p>`;
-                                if (hasVideo) popupHtml += `<p style="margin:8px 0 0;font-size:0.75rem;color:#e85d04;">🎥 Video lisätään pian</p>`;
+                                let popupHtml = `<div style="min-width:180px;"><strong style="font-size:1.05rem;text-transform:capitalize;display:block;margin-bottom:5px;">${title}</strong>`;
+                                if (hasImage) {
+                                    popupHtml += `<img src="${props.image}?tr=w-300,h-200,fo-auto" style="width:100%; border-radius:8px; margin:5px 0; display:block; box-shadow:0 2px 8px rgba(0,0,0,0.1);">`;
+                                }
+                                if (props.description) popupHtml += `<p style="margin:6px 0 0;font-size:0.85rem;color:#555;line-height:1.4;">${props.description}</p>`;
+                                if (hasVideo) popupHtml += `<p style="margin:8px 0 0;font-size:0.75rem;color:#e85d04;font-weight:600;">🎥 Video tulossa pian</p>`;
                                 popupHtml += '</div>';
 
                                 const marker = L.marker([coords[1], coords[0]], { icon })
@@ -1067,7 +1069,7 @@
                                     <div class="reitti-kohde-num">${i + 1}</div>
                                     <div>
                                         <div class="reitti-kohde-title">${title}</div>
-                                        <div class="reitti-kohde-meta">${hasImage ? '📷' : ''}${hasVideo ? '🎥' : ''} ${hasImage||hasVideo ? 'Media tulossa' : 'Kokemuspiste'}</div>
+                                        <div class="reitti-kohde-meta">${hasImage ? '🖼️ Kuva asetettu' : '📍 Kokemuspiste'} ${hasVideo ? '• 🎥 Video' : ''}</div>
                                     </div>`;
                                 item.addEventListener('click', () => {
                                     reittiMap.setView([coords[1], coords[0]], 17, { animate: true });
