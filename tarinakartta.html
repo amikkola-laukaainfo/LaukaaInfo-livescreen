@@ -1019,7 +1019,7 @@
 
                     if (!skipUrlUpdate) updateUrl(geojsonPath);
 
-                    fetch(geojsonPath)
+                    fetch(geojsonPath + '?v=' + Date.now())
                         .then(r => r.json())
                         .then(geoData => {
                             let routeLine = null;
@@ -1063,13 +1063,13 @@
                                          onerror="
                                              if(!this.dataset.tried){ 
                                                  this.dataset.tried=1; 
-                                                 this.src='reitix/${props.image}'; 
+                                                 // Jos kuva ei lataudu pilvestä, kokeillaan paikallista reitix-kansiota
+                                                 const fileName = '${props.image}'.split('/').pop();
+                                                 this.src = 'reitix/' + fileName;
                                              } else if(this.dataset.tried==1){ 
                                                  this.dataset.tried=2; 
-                                                 this.src='reitix/images/${props.image}'; 
-                                             } else if(this.dataset.tried==2){
-                                                 this.dataset.tried=3;
-                                                 this.src='${imageUrl}'.replace('/reitix/images/', '/');
+                                                 const fileName = '${props.image}'.split('/').pop();
+                                                 this.src = 'reitix/images/' + fileName;
                                              }
                                          "
                                          data-lightbox="${imageUrl}" 

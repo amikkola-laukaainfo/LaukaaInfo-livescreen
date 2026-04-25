@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const stepAudio = document.getElementById('step-audio');
 
     // 2. Fetch Story Data
-    Papa.parse('tarinakartta_data.csv', {
+    Papa.parse('tarinakartta_data.csv?v=' + Date.now(), {
         download: true,
         header: true,
         skipEmptyLines: true,
