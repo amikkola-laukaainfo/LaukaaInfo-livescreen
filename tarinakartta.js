@@ -445,15 +445,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 metaHtml += `<a href="${infoUrl}" onclick="
                     event.preventDefault();
                     try {
-                        const absUrl = new URL(this.getAttribute('href'), window.location.href);
-                        const reittiUrl = absUrl.searchParams.get('reitti');
-                        const select = document.getElementById('reitti-select');
-                        if(select && reittiUrl) {
+                        var href = this.getAttribute('href');
+                        var reittiRaw = href.split('?reitti=')[1];
+                        if (reittiRaw) reittiRaw = reittiRaw.split('#')[0];
+                        var reittiUrl = reittiRaw ? decodeURIComponent(reittiRaw) : null;
+                        var select = document.getElementById('reitti-select');
+                        if (select && reittiUrl) {
                             select.value = reittiUrl;
                             select.dispatchEvent(new Event('change'));
                         }
                     } catch(e) { console.error('reitti link error', e); }
-                    setTimeout(function(){ document.getElementById('kavelyreitit-section').scrollIntoView({behavior: 'smooth', block: 'start'}); }, 300);
+                    setTimeout(function(){ document.getElementById('kavelyreitit-section').scrollIntoView({behavior:'smooth',block:'start'}); }, 300);
                 " style="color: #0056b3; font-weight: 600; text-decoration: none; display: block; margin-bottom: 8px;">&rarr; Siirry kävelyreitille</a>`;
             } else {
                 metaHtml += `<a href="${infoUrl}" target="_blank" style="color: #0056b3; font-weight: 600; text-decoration: none; display: block; margin-bottom: 8px;">&rarr; Lue lisää tästä kohteesta</a>`;
