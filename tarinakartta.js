@@ -452,12 +452,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const youtubeIframe = document.getElementById('step-youtube');
         if (step.youtube_url && step.youtube_url.trim() && youtubeArea && youtubeIframe) {
             let yUrl = step.youtube_url.trim();
-            let videoId = '';
-            if (yUrl.includes('youtube.com/watch?v=')) {
-                videoId = new URL(yUrl).searchParams.get('v');
-            } else if (yUrl.includes('youtu.be/')) {
-                videoId = yUrl.split('youtu.be/')[1].split('?')[0];
-            }
+            
+            const getYoutubeId = (url) => {
+                if (!url) return null;
+                const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|shorts\/)([^#&?]*).*/;
+                const match = url.match(regExp);
+                return (match && match[2].length === 11) ? match[2] : null;
+            };
+
+            const videoId = getYoutubeId(yUrl);
             if (videoId) {
                 youtubeIframe.src = `https://www.youtube.com/embed/${videoId}`;
                 youtubeArea.style.display = 'block';
