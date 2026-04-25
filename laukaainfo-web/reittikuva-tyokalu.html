@@ -308,8 +308,9 @@
                 
                 const hasImage = !!props.image;
                 const isImageKit = hasImage && props.image.includes('ik.imagekit.io');
+                const hasVideo = !!props.video;
                 
-                // Rakennetaan esikatselu-URL: jos pilvessä, käytetään sitä. Jos paikallinen, kokeillaan reitix-kansiota.
+                // Rakennetaan esikatselu-URL
                 let imgUrl = '';
                 if (isImageKit) {
                     imgUrl = `${props.image}?tr=w-400,h-300,fo-auto`;
@@ -322,15 +323,28 @@
                         <div class="point-title">${props.title || 'Nimetön piste'}</div>
                         <div class="point-id">#${idx + 1}</div>
                     </div>
-                    <div class="status-badge ${isImageKit ? 'status-ok' : (hasImage ? 'status-old' : 'status-none')}">
-                        ${isImageKit ? '✅ Kuva pilvessä' : (hasImage ? '⚠️ Vanha kuva (päivitä)' : '❌ Ei kuvaa')}
+                    <div style="display:flex; gap:8px; margin-bottom:0.75rem;">
+                        <div class="status-badge ${isImageKit ? 'status-ok' : (hasImage ? 'status-old' : 'status-none')}">
+                            ${isImageKit ? '✅ Kuva pilvessä' : (hasImage ? '⚠️ Vanha kuva' : '❌ Ei kuvaa')}
+                        </div>
+                        <div class="status-badge ${hasVideo ? 'status-ok' : 'status-none'}">
+                            ${hasVideo ? '🎬 Video asetettu' : '🎬 Ei videota'}
+                        </div>
                     </div>
                     <div class="preview-area" id="preview-${idx}">
                         ${hasImage ? `<img src="${imgUrl}" alt="Preview" onerror="this.parentElement.innerHTML='<div class=\'preview-placeholder\'>Kuva ei lataudu</div>'">` : `<div class="preview-placeholder">Lataa uusi kuva ImageKitiin</div>`}
                     </div>
                     <div class="upload-actions">
-                        <button class="btn" onclick="triggerUpload(${idx})">📷 Lataa / Vaihda kuva</button>
+                        <button class="btn" style="margin-bottom:1rem;" onclick="triggerUpload(${idx})">📷 Lataa / Vaihda kuva</button>
                         <input type="file" id="file-input-${idx}" class="hidden" accept="image/*" onchange="handleFileUpload(event, ${idx})">
+                        
+                        <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 12px; border: 1px solid var(--border);">
+                            <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 0.5rem; text-align:left;">YouTube Video (Shorts tai tavallinen)</label>
+                            <div style="display: flex; gap: 8px;">
+                                <input type="text" id="video-input-${idx}" value="${props.video || ''}" placeholder="https://..." style="margin:0; font-size:0.9rem; text-align:left; padding:0.6rem; flex:1;">
+                                <button class="btn" style="width: auto; padding: 0.6rem 1rem;" onclick="saveVideo(${idx})">Tallenna</button>
+                            </div>
+                        </div>
                     </div>
                 `;
                 listEl.appendChild(card);
@@ -339,6 +353,57 @@
 
         function triggerUpload(idx) {
             document.getElementById(`file-input-${idx}`).click();
+        }
+
+        async function saveVideo(idx) {
+            const videoUrl = document.getElementById(`video-input-${idx}`).value.trim();
+            const btn = document.activeElement;
+            const originalText = btn.innerHTML;
+
+            try {
+                btn.disabled = true;
+                btn.innerHTML = '⌛...';
+
+                let pointCount = 0;
+                let targetFeatureIdx = -1;
+                for(let i=0; i<routeData.features.length; i++) {
+                    if(routeData.features[i].geometry.type === 'Point') {
+                        if(pointCount === idx) {
+                            targetFeatureIdx = i;
+                            break;
+                        }
+                        pointCount++;
+                    }
+                }
+
+                if(targetFeatureIdx !== -1) {
+                    routeData.features[targetFeatureIdx].properties.video = videoUrl;
+                    // Jos lisätään video, varmistetaan että mediaType on oikein (käytetään VIDEO jos video on ensisijainen)
+                    if (videoUrl) routeData.features[targetFeatureIdx].properties.mediaType = 'VIDEO';
+                    
+                    const saveFormData = new FormData();
+                    saveFormData.append('path', routePath);
+                    saveFormData.append('data', JSON.stringify(routeData));
+                    
+                    const saveRes = await fetch(`imagekit-api.php?yritys=99&token=${token}&action=save_geojson`, {
+                        method: 'POST',
+                        body: saveFormData
+                    });
+                    
+                    const saveData = await saveRes.json();
+                    if (saveData.result === 'ok') {
+                        showToast('✅ Video tallennettu!');
+                        renderPoints();
+                    } else {
+                        throw new Error(saveData.error || 'Tallennus epäonnistui');
+                    }
+                }
+            } catch (err) {
+                alert('VIRHE: ' + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
         }
 
         async function handleFileUpload(event, idx) {
@@ -398,7 +463,10 @@
 
                 if(targetFeatureIdx !== -1) {
                     routeData.features[targetFeatureIdx].properties.image = uploadData.url;
-                    routeData.features[targetFeatureIdx].properties.mediaType = 'IMAGE';
+                    // Jos asetetaan kuva, ja videota ei ole, asetetaan IMAGE
+                    if (!routeData.features[targetFeatureIdx].properties.video) {
+                        routeData.features[targetFeatureIdx].properties.mediaType = 'IMAGE';
+                    }
                     
                     const saveFormData = new FormData();
                     saveFormData.append('path', routePath);
