@@ -947,6 +947,17 @@
 
         <script>
         (function() {
+            // ── Helper: Escape HTML ──────────────────────────────────
+            function escapeHtml(unsafe) {
+                if (!unsafe) return '';
+                return unsafe.toString()
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#039;');
+            }
+
             // ── Toast-apufunktio ──────────────────────────────────────
             function showToast(msg) {
                 let t = document.getElementById('reitti-toast');
@@ -1057,14 +1068,15 @@
                             points.forEach((f, i) => {
                                 const coords = f.geometry.coordinates;
                                 const props = f.properties;
-                                const title = props.title || `Kohde ${i+1}`;
+                                const title = props.title || props.name || `Kohde ${i+1}`;
+                                const description = props.description || props.desc || "";
                                 const IMAGEKIT_BASE = 'https://ik.imagekit.io/vowzx8znjs/reitix/images/';
                                 const hasImage = props.image && props.mediaType === 'IMAGE';
                                 const hasVideo = props.video && props.mediaType === 'VIDEO';
                                 
                                 let imageUrl = hasImage ? (props.image.startsWith('http') ? props.image : IMAGEKIT_BASE + props.image) : null;
 
-                                let popupHtml = `<div style="min-width:180px;"><strong style="font-size:1.05rem;text-transform:capitalize;display:block;margin-bottom:5px;">${title}</strong>`;
+                                let popupHtml = `<div style="min-width:180px;"><strong style="font-size:1.05rem;text-transform:capitalize;display:block;margin-bottom:5px;">${escapeHtml(title)}</strong>`;
                                 if (hasImage) {
                                      let displayUrl = imageUrl;
                                      if (displayUrl && !displayUrl.includes('?')) displayUrl += '?tr=w-300,h-200,fo-auto';
@@ -1085,7 +1097,10 @@
                                          style="width:100%; border-radius:8px; margin:5px 0; display:block; box-shadow:0 2px 8px rgba(0,0,0,0.1); cursor:zoom-in;" 
                                          title="Klikkaa suurentaaksesi">`;
                                  }
-                                 if (props.description) popupHtml += `<p style="margin:6px 0 0;font-size:0.85rem;color:#555;line-height:1.4;">${props.description}</p>`;
+                                 if (description) {
+                                     const cleanDesc = escapeHtml(description).replace(/\\n/g, '<br>').replace(/\n/g, '<br>');
+                                     popupHtml += `<p style="margin:6px 0 0;font-size:0.85rem;color:#555;line-height:1.4;">${cleanDesc}</p>`;
+                                 }
                                  
                                  if (props.info_url) {
                                      popupHtml += `<a href="${props.info_url}" target="_blank" style="display:inline-block; margin-top:8px; font-size:0.8rem; color:#0056b3; text-decoration:none; font-weight:700; border-bottom:1.5px solid #0056b3; padding-bottom:1px;">🔗 Lue lisää &rarr;</a>`;
@@ -1127,7 +1142,7 @@
                                  item.innerHTML = `
                                      <div class="reitti-kohde-num">${i + 1}</div>
                                      <div>
-                                         <div class="reitti-kohde-title">${title}</div>
+                                         <div class="reitti-kohde-title">${escapeHtml(title)}</div>
                                          <div class="reitti-kohde-meta">${hasImage ? '🖼️ Kuva' : '📍 Piste'} ${hasVideo ? '• 🎥 Video' : ''}</div>
                                      </div>`;
                                  item.addEventListener('click', () => {
