@@ -30,6 +30,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const nextBtn = document.getElementById('next-step');
     const storyDisplay = document.getElementById('story-display');
     const stepSlider = document.getElementById('step-slider');
+
+    // ── Helper: Normalize Image URL ──────────────────────────────
+    function getStepImageUrl(rawUrl) {
+        if (!rawUrl || !rawUrl.trim()) return null;
+        let url = rawUrl.split('|')[0].trim();
+        if (url.includes('drive.google.com') || url.includes('drive_cache/')) {
+            const idMatch = url.match(/(?:id=|\/d\/|file\/d\/|drive_cache\/)([a-zA-Z0-9_-]+)/);
+            if (idMatch) return `https://www.mediazoo.fi/laukaainfo-web/get_image.php?id=${idMatch[1]}`;
+        }
+        return url;
+    }
     
     // QR elements
     const showQrBtn = document.getElementById('show-qr-btn');
@@ -217,11 +228,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
             }).addTo(map);
 
+            const imageUrl = getStepImageUrl(step.image_url);
+            let imageHtml = '';
+            if (imageUrl) {
+                imageHtml = `
+                    <div style="margin: 8px 0; border-radius: 8px; overflow: hidden; background: #f0f4f8; height: 120px; display: flex; align-items: center; justify-content: center;">
+                        <img src="${imageUrl}" data-lightbox="${imageUrl}" alt="${escapeHtml(step.title)}" style="width: 100%; height: 100%; object-fit: cover; cursor: zoom-in;" title="Klikkaa suurentaaksesi">
+                    </div>
+                `;
+            }
+
             const popupHtml = `
                 <div style="min-width: 180px;">
                     <h3 style="margin: 0 0 5px 0; color: #0056b3; font-size: 1rem; font-family: 'Outfit', sans-serif;">${escapeHtml(step.title)}</h3>
-                    <div style="font-size: 0.85rem; color: #666; margin-bottom: 8px;">Askel ${index + 1} / ${filteredSteps.length}</div>
-                    <a href="https://www.google.com/maps/search/?api=1&query=${lat},${lng}" target="_blank" style="background: #28a745; color: white; padding: 5px 10px; border-radius: 4px; text-decoration: none; font-size: 0.75rem; display: inline-flex; align-items: center; gap: 5px; font-weight: 600;">📍 Avaa Google Mapsissa</a>
+                    <div style="font-size: 0.85rem; color: #666; margin-bottom: 4px;">Askel ${index + 1} / ${filteredSteps.length}</div>
+                    ${imageHtml}
+                    <a href="https://www.google.com/maps/search/?api=1&query=${lat},${lng}" target="_blank" style="background: #28a745; color: white; padding: 5px 10px; border-radius: 4px; text-decoration: none; font-size: 0.75rem; display: inline-flex; align-items: center; gap: 5px; font-weight: 600; margin-top: 5px;">📍 Avaa Google Mapsissa</a>
                 </div>
             `;
             marker.bindPopup(popupHtml);
@@ -264,15 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
             card.className = 'slider-card';
             card.dataset.index = index;
             
-            let imageUrl = 'icons/icon-512.png'; // fallback
-            if (step.image_url && step.image_url.trim()) {
-                imageUrl = step.image_url.split('|')[0].trim();
-                // Normalisoidaan Google Drive -linkit
-                if (imageUrl.includes('drive.google.com') || imageUrl.includes('drive_cache/')) {
-                    const idMatch = imageUrl.match(/(?:id=|\/d\/|file\/d\/|drive_cache\/)([a-zA-Z0-9_-]+)/);
-                    if (idMatch) imageUrl = `https://www.mediazoo.fi/laukaainfo-web/get_image.php?id=${idMatch[1]}`;
-                }
-            }
+            let imageUrl = getStepImageUrl(step.image_url) || 'icons/icon-512.png';
             
             card.innerHTML = `
                 <div class="slider-card-number">${index + 1}</div>
@@ -338,14 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (urls.length > 0) {
                 imagePlaceholder.style.display = 'none';
                 
-                urls.forEach((rawUrl, idx) => {
-                    let url = rawUrl;
-                    if (url.includes('drive.google.com') || url.includes('drive_cache/')) {
-                        const idMatch = url.match(/(?:id=|\/d\/|file\/d\/|drive_cache\/)([a-zA-Z0-9_-]+)/);
-                        if (idMatch) {
-                            url = `https://www.mediazoo.fi/laukaainfo-web/get_image.php?id=${idMatch[1]}`;
-                        }
-                    }
+                    let url = getStepImageUrl(rawUrl);
                     
                     const img = document.createElement('img');
                     img.src = url;
