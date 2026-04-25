@@ -312,9 +312,15 @@ window.LkiModal = (function() {
             if (item.type === 'video') {
                 const videoUrl = item.url;
                 if (videoUrl.includes('youtube.com/embed/')) {
-                    // Muted autoplay parameter for premium
-                    const autoplay = (tier === 'premium') ? '&autoplay=1&mute=1' : '';
-                    slide.innerHTML = `<iframe src="${videoUrl}?rel=0${autoplay}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+                    // Muted autoplay parameter for all
+                    const autoplay = '&autoplay=1&mute=1';
+                    const watchUrl = videoUrl.replace('embed/', 'watch?v=');
+                    slide.innerHTML = `
+                        <div class="lki-modal-video-wrapper">
+                            <iframe src="${videoUrl}?rel=0${autoplay}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            <a href="${watchUrl}" target="_blank" class="lki-modal-yt-link">📺 Katso YouTubessa &rarr;</a>
+                        </div>
+                    `;
                 } else if (videoUrl.endsWith('.mp4')) {
                     slide.innerHTML = `<video src="${videoUrl}" controls ${tier === 'premium' ? 'autoplay muted' : ''}></video>`;
                 } else {

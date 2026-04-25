@@ -115,6 +115,9 @@ const LkiFeed = (() => {
     if (item.website_url)   socials.push(`<a href="${item.website_url}" target="_blank" class="lki-social-icon" title="Verkkosivut">🌐</a>`);
     if (item.facebook_url)  socials.push(`<a href="${item.facebook_url}" target="_blank" class="lki-social-icon" title="Facebook">f</a>`);
     if (item.instagram_url) socials.push(`<a href="${item.instagram_url}" target="_blank" class="lki-social-icon" title="Instagram">📸</a>`);
+    if (isVideo && video_id) {
+        item.youtube_url = `https://www.youtube.com/watch?v=${video_id}`;
+    }
     if (item.youtube_url)   socials.push(`<a href="${item.youtube_url}" target="_blank" class="lki-social-icon" title="YouTube">▶️</a>`);
 
 
@@ -373,7 +376,10 @@ const LkiFeed = (() => {
       if (videoId) {
         lightboxImg.style.display = 'none';
         videoContainer.style.display = 'block';
-        videoContainer.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&playsinline=1&modestbranding=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+        videoContainer.innerHTML = `
+          <iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&playsinline=1&modestbranding=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank" class="lki-lightbox-yt-link">📺 Katso YouTubessa &rarr;</a>
+        `;
         if (isShorts) lightboxEl.classList.add('is-shorts');
       } else {
         lightboxImg.style.display = 'block';

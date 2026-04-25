@@ -4674,3 +4674,34 @@ footer {
 .bg-full-dark::before {
     background-color: var(--secondary-blue);
 }
+
+/* YouTube Video Links in Modal & Lightbox */
+.lki-modal-video-wrapper, .lki-lightbox__video {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.lki-modal-yt-link, .lki-lightbox-yt-link {
+    display: block;
+    text-align: right;
+    margin-top: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #0056b3;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.lki-modal-yt-link:hover, .lki-lightbox-yt-link:hover {
+    color: #00adef;
+    text-decoration: underline;
+}
+
+.lki-lightbox-yt-link {
+    color: #fff;
+    background: rgba(0,0,0,0.5);
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin-top: 10px;
+}

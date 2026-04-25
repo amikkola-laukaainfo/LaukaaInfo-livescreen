@@ -250,9 +250,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (vId) {
                     videoHtml = `
                         <div style="margin-top:8px; border-radius:8px; overflow:hidden; position:relative; padding-bottom:56.25%; height:0; box-shadow:0 2px 8px rgba(0,0,0,0.15);">
-                            <iframe src="https://www.youtube.com/embed/${vId}" 
+                            <iframe src="https://www.youtube.com/embed/${vId}?autoplay=1&mute=1&rel=0" 
                                 style="position:absolute; top:0; left:0; width:100%; height:100%;" 
-                                frameborder="0" allowfullscreen></iframe>
+                                frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
                         </div>
                         <a href="https://www.youtube.com/watch?v=${vId}" target="_blank" style="display:block; margin-top:5px; font-size:0.75rem; color:#0056b3; text-decoration:none; font-weight:600; text-align:right;">📺 Katso YouTubessa &rarr;</a>
                     `;
