@@ -1048,10 +1048,8 @@ async function loadCompanyData() {
         // Hae lisätiedot haulle (rowid-pohjainen)
         try {
             let searchExtras = null;
-            const isSubdir = window.location.pathname.includes('/yritys/');
-            const prefix = isSubdir ? '../' : './';
             try {
-                const extrasRes = await fetch(prefix + 'laukaainfo-web/search_extras.php?t=' + Date.now());
+                const extrasRes = await fetch('https://mediazoo.fi/laukaainfo-web/search_extras.php?t=' + Date.now());
                 if (extrasRes.ok) {
                     searchExtras = await extrasRes.json();
                 } else {
@@ -1059,6 +1057,8 @@ async function loadCompanyData() {
                 }
             } catch(e) {
                 // Lokaali varayhteys testausta varten
+                const isSubdir = window.location.pathname.includes('/yritys/');
+                const prefix = isSubdir ? '../' : './';
                 const localRes = await fetch(prefix + 'laukaainfo-web/search_extras.json');
                 if (localRes.ok) {
                     searchExtras = await localRes.json();
@@ -1447,8 +1447,12 @@ function filterCatalog(renderList = true) {
         if (name.startsWith(searchTerm)) score += 150;
 
         // "Viimeinen lisä": lisätietojen (rowid pohjalta) osuma antaa pienen buustin
-        if (searchTerm.length > 1 && company.searchExtraInfo && company.searchExtraInfo.includes(searchTerm)) {
-            score += 5; // Matala prioriteetti
+        if (searchTerm.length > 1 && company.searchExtraInfo) {
+            const normalizedExtraInfo = normalizeForSearch(company.searchExtraInfo);
+            const searchWords = normalizedSearch.split(/\s+/).filter(w => w.length > 1);
+            if (searchWords.length > 0 && searchWords.every(word => normalizedExtraInfo.includes(word))) {
+                score += 25; // Annamme hieman isomman painoarvon, jotta nousee paremmin tuloksiin
+            }
         }
 
         let matchesServiceMethod = true;
