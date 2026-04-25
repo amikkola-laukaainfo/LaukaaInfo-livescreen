@@ -455,9 +455,13 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const getYoutubeId = (url) => {
                 if (!url) return null;
-                const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|shorts\/)([^#&?]*).*/;
+                const regExp = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube\.com\/shorts\/)([^"&?\/\s]{11})/;
                 const match = url.match(regExp);
-                return (match && match[2].length === 11) ? match[2] : null;
+                if (match && match[1]) {
+                    console.log("YouTube ID parsed (top map):", match[1], "from URL:", url);
+                    return match[1];
+                }
+                return null;
             };
 
             const videoId = getYoutubeId(yUrl);
