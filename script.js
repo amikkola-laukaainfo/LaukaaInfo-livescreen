@@ -1049,7 +1049,7 @@ async function loadCompanyData() {
         try {
             let searchExtras = null;
             try {
-                const extrasRes = await fetch('https://mediazoo.fi/laukaainfo-web/search_extras.php?t=' + Date.now());
+                const extrasRes = await fetch('https://www.mediazoo.fi/laukaainfo-web/search_extras.php?t=' + Date.now());
                 if (extrasRes.ok) {
                     searchExtras = await extrasRes.json();
                 } else {
@@ -1508,7 +1508,7 @@ function filterCatalog(renderList = true) {
         }
 
         return { company, score, matchesCategory, matchesRegion, matchesServiceMethod, isPremium };
-    }).filter(m => m.score > 0 && m.matchesCategory && m.matchesRegion && m.matchesServiceMethod);
+    }).filter(m => m.score > 0 && ((m.matchesCategory && m.matchesRegion && m.matchesServiceMethod) || m.score >= 25));
 
     // Sort: Premium first, then by score, then by distance (if available), then alphabetically
     matches.sort((a, b) => {
