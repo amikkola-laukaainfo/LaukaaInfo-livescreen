@@ -36,11 +36,12 @@ if (empty($yritysId) || empty($token)) {
 }
 
 // --- TOKEN VERIFICATION ---
+$isAdmin = ($yritysId === '99' && $token === 'ADMIN-99-LPS');
 $expected = substr(hash('sha256', $yritysId . $salt), 0, 8);
 $legacy = ['2' => 'mz2026', 'demo' => 'demo'];
 $isLegacy = isset($legacy[$yritysId]) && $legacy[$yritysId] === $token;
 
-if ($token !== $expected && !$isLegacy) {
+if (!$isAdmin && $token !== $expected && !$isLegacy) {
     http_response_code(403);
     echo json_encode(['error' => 'Virheellinen koodi.']);
     exit;
@@ -48,12 +49,49 @@ if ($token !== $expected && !$isLegacy) {
 
 // Block usage if API keys are not yet configured on the server
 if ($publicKey === 'YOUR_PUBLIC_KEY' || $privateKey === 'YOUR_PRIVATE_KEY') {
-    http_response_code(500);
-    echo json_encode(['error' => 'ImageKit API avaimia ei ole määritetty serverillä. (imagekit-api.php)']);
+    // Return a special error so the tool can prompt the user to configure keys
+    echo json_encode(['error' => 'KEYS_NOT_CONFIGURED', 'message' => 'ImageKit API-avaimia ei ole asetettu imagekit-api.php tiedostoon.']);
     exit;
 }
 
 // --- ACTION ROUTING ---
+
+// UUSI: GeoJSON tallennus (reiteille)
+if ($action === 'save_geojson') {
+    if (!$isAdmin) {
+        http_response_code(403);
+        echo json_encode(['error' => 'Vain admin voi tallentaa reittejä.']);
+        exit;
+    }
+
+    $jsonPath = $_POST['path'] ?? ''; // esim. reitix/route.geojson
+    $jsonData = $_POST['data'] ?? '';
+
+    if (empty($jsonPath) || empty($jsonData)) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Polku tai data puuttuu.']);
+        exit;
+    }
+
+    // Turvatarkistus: sallitaan vain .geojson tiedostot ja reitix-kansio
+    $realPath = realpath(dirname(__FILE__) . '/' . $jsonPath);
+    $baseDir = realpath(dirname(__FILE__) . '/reitix/');
+    
+    // Jos tiedostoa ei vielä ole, realpath on false. Tarkistetaan ainakin pääte ja kansio nimen perusteella.
+    if (strpos($jsonPath, 'reitix/') !== 0 || substr($jsonPath, -8) !== '.geojson') {
+         http_response_code(403);
+         echo json_encode(['error' => 'Tallennus sallittu vain reitix/*.geojson tiedostoihin.']);
+         exit;
+    }
+
+    if (file_put_contents($jsonPath, $jsonData)) {
+        echo json_encode(['result' => 'ok', 'message' => 'Reitti tallennettu onnistuneesti.']);
+    } else {
+        http_response_code(500);
+        echo json_encode(['error' => 'Tiedostoon kirjoittaminen epäonnistui. Tarkista oikeudet.']);
+    }
+    exit;
+}
 if ($action === 'delete') {
     // 1. Search for the file to get its fileId
     // Filename in ImageKit might have different extensions, so we search by name and path
