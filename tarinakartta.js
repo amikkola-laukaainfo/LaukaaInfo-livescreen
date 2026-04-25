@@ -352,6 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (urls.length > 0) {
                 imagePlaceholder.style.display = 'none';
                 
+                urls.forEach((rawUrl, idx) => {
                     let url = getStepImageUrl(rawUrl);
                     
                     const img = document.createElement('img');
