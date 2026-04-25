@@ -440,7 +440,22 @@ document.addEventListener('DOMContentLoaded', () => {
         // Lisätietoa & Sijainti linkit
         let metaHtml = '';
         if (step.more_info_url && step.more_info_url.trim()) {
-            metaHtml += `<a href="${step.more_info_url}" target="_blank" style="color: #0056b3; font-weight: 600; text-decoration: none; display: block; margin-bottom: 8px;">&rarr; Lue lisää tästä kohteesta</a>`;
+            const infoUrl = step.more_info_url.trim();
+            if (infoUrl.includes('?reitti=')) {
+                metaHtml += `<a href="${infoUrl}" onclick="
+                    event.preventDefault();
+                    const urlParams = new URL(this.href).searchParams;
+                    const reittiUrl = urlParams.get('reitti');
+                    const select = document.getElementById('reitti-select');
+                    if(select && reittiUrl) {
+                        select.value = reittiUrl;
+                        select.dispatchEvent(new Event('change'));
+                    }
+                    document.getElementById('kavelyreitit-section').scrollIntoView({behavior: 'smooth', block: 'start'});
+                " style="color: #0056b3; font-weight: 600; text-decoration: none; display: block; margin-bottom: 8px;">&rarr; Siirry kävelyreitille</a>`;
+            } else {
+                metaHtml += `<a href="${infoUrl}" target="_blank" style="color: #0056b3; font-weight: 600; text-decoration: none; display: block; margin-bottom: 8px;">&rarr; Lue lisää tästä kohteesta</a>`;
+            }
         }
         
         if (!isNaN(lat) && !isNaN(lng)) {
