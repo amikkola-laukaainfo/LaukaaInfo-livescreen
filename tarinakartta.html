@@ -1025,7 +1025,14 @@
                             let routeLine = null;
                             const points = [];
 
-                            geoData.features.forEach(f => {
+                            const getYoutubeId = (url) => {
+                            if (!url) return null;
+                            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|shorts\/)([^#&?]*).*/;
+                            const match = url.match(regExp);
+                            return (match && match[2].length === 11) ? match[2] : null;
+                        };
+
+                        geoData.features.forEach(f => {
                                 if (f.geometry.type === 'LineString') {
                                     const latlngs = f.geometry.coordinates.map(c => [c[1], c[0]]);
                                     routeLine = L.polyline(latlngs, {

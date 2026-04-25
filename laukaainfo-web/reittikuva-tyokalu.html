@@ -308,7 +308,14 @@
                 
                 const hasImage = !!props.image;
                 const isImageKit = hasImage && props.image.includes('ik.imagekit.io');
-                const imgUrl = isImageKit ? `${props.image}?tr=w-400,h-300,fo-auto` : '';
+                
+                // Rakennetaan esikatselu-URL: jos pilvessä, käytetään sitä. Jos paikallinen, kokeillaan reitix-kansiota.
+                let imgUrl = '';
+                if (isImageKit) {
+                    imgUrl = `${props.image}?tr=w-400,h-300,fo-auto`;
+                } else if (hasImage) {
+                    imgUrl = `../reitix/${props.image}`;
+                }
 
                 card.innerHTML = `
                     <div class="point-header">
@@ -319,7 +326,7 @@
                         ${isImageKit ? '✅ Kuva pilvessä' : (hasImage ? '⚠️ Vanha kuva (päivitä)' : '❌ Ei kuvaa')}
                     </div>
                     <div class="preview-area" id="preview-${idx}">
-                        ${isImageKit ? `<img src="${imgUrl}" alt="Preview">` : `<div class="preview-placeholder">Lataa uusi kuva ImageKitiin</div>`}
+                        ${hasImage ? `<img src="${imgUrl}" alt="Preview" onerror="this.parentElement.innerHTML='<div class=\'preview-placeholder\'>Kuva ei lataudu</div>'">` : `<div class="preview-placeholder">Lataa uusi kuva ImageKitiin</div>`}
                     </div>
                     <div class="upload-actions">
                         <button class="btn" onclick="triggerUpload(${idx})">📷 Lataa / Vaihda kuva</button>
