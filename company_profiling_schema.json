@@ -1,0 +1,251 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "LaukaaInfo Company Profiling Schema v3",
+    "description": "Ratkaisulähtöinen profilointi palvelupolkujen mukaan. 10 pääkategoriaa ja ydinkentät.",
+    "type": "object",
+    "properties": {
+        "SCHEMA_VERSION": { "type": "string" },
+        "DESCRIPTION": { "type": "string" },
+        "profiles": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "object",
+                "properties": {
+                    "name": { "type": "string" },
+                    
+                    "core": {
+                        "type": "object",
+                        "description": "Yhteiset ydinkentät kaikille yrityksille",
+                        "properties": {
+                            "fits_for": {
+                                "type": "object",
+                                "additionalProperties": { "type": "integer", "minimum": 0, "maximum": 100 },
+                                "description": "Palvelupolkusoveltuvuus ja prioriteettipisteet"
+                            },
+                            "priority_score": { "type": "integer", "default": 0 },
+                            "paired_with": { "type": "array", "items": { "type": "string" } },
+                            "service_area": {
+                                "type": "object",
+                                "properties": {
+                                    "mode": { "type": "string", "enum": ["TOIMIPISTE", "SERVICE_AREA", "ETAPALVELU", "VALTAKUNNALLINEN"] },
+                                    "radius_km": { "type": "integer" },
+                                    "regions": { "type": "array", "items": { "type": "string" } },
+                                    "note": { "type": "string" }
+                                }
+                            },
+                            "emergency_available": { "type": "boolean" },
+                            "contract_customer_available": { "type": "boolean" },
+                            "corporate_clients": { "type": "boolean" },
+                            "home_service": { "type": "boolean" },
+                            "weekend_service": { "type": "boolean" }
+                        }
+                    },
+                    
+                    "events_and_celebrations": {
+                        "type": "object",
+                        "description": "1. Häät, juhlat ja yksityistilaisuudet",
+                        "properties": {
+                            "capacity_max": { "type": "integer" },
+                            "seated_capacity": { "type": "integer" },
+                            "outdoor_capacity": { "type": "integer" },
+                            "is_accessible": { "type": "boolean" },
+                            "is_lakeside": { "type": "boolean" },
+                            "has_sauna": { "type": "boolean" },
+                            "has_av_tech": { "type": "boolean" },
+                            "has_stage": { "type": "boolean" },
+                            "accommodation_beds": { "type": "integer" },
+                            "alcohol_license": { "type": "boolean" },
+                            "private_booking": { "type": "boolean" },
+                            "late_night_events": { "type": "boolean" },
+                            "wedding_specialized": { "type": "boolean" },
+                            "catering_min_capacity": { "type": "integer" },
+                            "catering_max_capacity": { "type": "integer" },
+                            "dietary_specialties": { "type": "array", "items": { "type": "string" } },
+                            "staff_included": { "type": "boolean" },
+                            "wedding_menu_available": { "type": "boolean" },
+                            "cake_service": { "type": "boolean" },
+                            "partner_venues": { "type": "array", "items": { "type": "string" } },
+                            "wedding_photography": { "type": "boolean" },
+                            "drone_available": { "type": "boolean" },
+                            "video_production": { "type": "boolean" },
+                            "live_music": { "type": "boolean" },
+                            "dj_services": { "type": "boolean" },
+                            "karaoke_available": { "type": "boolean" }
+                        }
+                    },
+                    
+                    "business_events": {
+                        "type": "object",
+                        "description": "2. Yritysjuhlat, kokoukset ja yritystilaisuudet",
+                        "properties": {
+                            "meeting_capacity": { "type": "integer" },
+                            "seminar_capacity": { "type": "integer" },
+                            "conference_rooms": { "type": "integer" },
+                            "has_projector": { "type": "boolean" },
+                            "has_streaming": { "type": "boolean" },
+                            "has_wifi": { "type": "boolean" },
+                            "has_stage": { "type": "boolean" },
+                            "private_booking": { "type": "boolean" },
+                            "invoice_billing": { "type": "boolean" },
+                            "corporate_clients": { "type": "boolean" },
+                            "vip_services": { "type": "boolean" },
+                            "business_catering": { "type": "boolean" },
+                            "event_hosting": { "type": "boolean" },
+                            "corporate_gifts": { "type": "boolean" },
+                            "branding_support": { "type": "boolean" },
+                            "av_support": { "type": "boolean" },
+                            "staff_events_specialized": { "type": "boolean" }
+                        }
+                    },
+                    
+                    "funerals_and_memorials": {
+                        "type": "object",
+                        "description": "3. Hautajaiset ja muistotilaisuudet",
+                        "properties": {
+                            "memorial_service_capacity": { "type": "integer" },
+                            "quiet_private_space": { "type": "boolean" },
+                            "accessible_entry": { "type": "boolean" },
+                            "memorial_catering": { "type": "boolean" },
+                            "coffee_service": { "type": "boolean" },
+                            "flower_arrangements": { "type": "boolean" },
+                            "memorial_menu_available": { "type": "boolean" },
+                            "funeral_flowers": { "type": "boolean" },
+                            "memorial_arrangements": { "type": "boolean" },
+                            "transport_assistance": { "type": "boolean" },
+                            "urgent_booking_available": { "type": "boolean" }
+                        }
+                    },
+                    
+                    "moving_and_housing": {
+                        "type": "object",
+                        "description": "4. Muutto ja asumisen muutokset",
+                        "properties": {
+                            "moving_truck_available": { "type": "boolean" },
+                            "packing_service": { "type": "boolean" },
+                            "storage_available": { "type": "boolean" },
+                            "weekend_moves": { "type": "boolean" },
+                            "urgent_moves": { "type": "boolean" },
+                            "long_distance_moves": { "type": "boolean" },
+                            "cleaning_after_move": { "type": "boolean" },
+                            "electrician_available": { "type": "boolean" },
+                            "renovation_support": { "type": "boolean" },
+                            "insurance_support": { "type": "boolean" }
+                        }
+                    },
+                    
+                    "construction_and_maintenance": {
+                        "type": "object",
+                        "description": "5. Rakentaminen, remontointi ja kiinteistöpalvelut",
+                        "properties": {
+                            "emergency_service": { "type": "boolean" },
+                            "certifications": { "type": "array", "items": { "type": "string" } },
+                            "wet_room_certification": { "type": "boolean" },
+                            "provides_tools": { "type": "boolean" },
+                            "material_supply": { "type": "boolean" },
+                            "project_management": { "type": "boolean" },
+                            "snow_removal": { "type": "boolean" },
+                            "lawn_maintenance": { "type": "boolean" },
+                            "property_monitoring": { "type": "boolean" },
+                            "maintenance_contracts": { "type": "boolean" },
+                            "housing_company_clients": { "type": "boolean" }
+                        }
+                    },
+                    
+                    "cottage_services": {
+                        "type": "object",
+                        "description": "6. Mökkipalvelut ja vapaa-ajan asuminen",
+                        "properties": {
+                            "key_holding": { "type": "boolean" },
+                            "winter_monitoring": { "type": "boolean" },
+                            "snow_removal": { "type": "boolean" },
+                            "cleaning_service": { "type": "boolean" },
+                            "lawn_service": { "type": "boolean" },
+                            "remote_monitoring": { "type": "boolean" },
+                            "emergency_visits": { "type": "boolean" },
+                            "renovation_support": { "type": "boolean" },
+                            "dock_maintenance": { "type": "boolean" },
+                            "sauna_services": { "type": "boolean" },
+                            "guest_preparation_service": { "type": "boolean" }
+                        }
+                    },
+                    
+                    "housing_company_and_contracts": {
+                        "type": "object",
+                        "description": "7. Taloyhtiöt ja jatkuvat huoltosopimukset",
+                        "properties": {
+                            "housing_company_clients": { "type": "boolean" },
+                            "maintenance_contracts": { "type": "boolean" },
+                            "emergency_response": { "type": "boolean" },
+                            "scheduled_visits": { "type": "boolean" },
+                            "property_reports": { "type": "boolean" },
+                            "invoice_billing": { "type": "boolean" },
+                            "contract_customer_available": { "type": "boolean" },
+                            "priority_support": { "type": "boolean" },
+                            "monthly_service_plan": { "type": "boolean" }
+                        }
+                    },
+                    
+                    "startup_services": {
+                        "type": "object",
+                        "description": "8. Yrityksen perustaminen",
+                        "properties": {
+                            "bookkeeping_startup": { "type": "boolean" },
+                            "business_advisory": { "type": "boolean" },
+                            "insurance_setup": { "type": "boolean" },
+                            "legal_services": { "type": "boolean" },
+                            "office_space_available": { "type": "boolean" },
+                            "banking_support": { "type": "boolean" },
+                            "website_creation": { "type": "boolean" },
+                            "webshop_setup": { "type": "boolean" },
+                            "branding_support": { "type": "boolean" },
+                            "logo_design": { "type": "boolean" },
+                            "business_photography": { "type": "boolean" }
+                        }
+                    },
+                    
+                    "business_growth": {
+                        "type": "object",
+                        "description": "9. Yrityksen kehittäminen ja kasvu",
+                        "properties": {
+                            "google_ads": { "type": "boolean" },
+                            "social_media_marketing": { "type": "boolean" },
+                            "seo_services": { "type": "boolean" },
+                            "content_creation": { "type": "boolean" },
+                            "video_production": { "type": "boolean" },
+                            "crm_support": { "type": "boolean" },
+                            "recruitment_support": { "type": "boolean" },
+                            "sales_development": { "type": "boolean" },
+                            "automation_services": { "type": "boolean" },
+                            "consulting_services": { "type": "boolean" }
+                        }
+                    },
+                    
+                    "wellbeing_and_beauty": {
+                        "type": "object",
+                        "description": "10. Hyvinvointi ja kauneus",
+                        "properties": {
+                            "home_visits": { "type": "boolean" },
+                            "online_booking": { "type": "boolean" },
+                            "unisex_services": { "type": "boolean" },
+                            "gift_cards": { "type": "boolean" },
+                            "corporate_wellbeing_services": { "type": "boolean" },
+                            "event_makeup": { "type": "boolean" },
+                            "bridal_services": { "type": "boolean" },
+                            "group_bookings": { "type": "boolean" }
+                        }
+                    },
+                    
+                    "meta": {
+                        "type": "object",
+                        "properties": {
+                            "last_updated": { "type": "string" },
+                            "verified_by": { "type": "string" }
+                        }
+                    }
+                },
+                "required": ["name", "core", "meta"]
+            }
+        }
+    },
+    "required": ["SCHEMA_VERSION", "profiles"]
+}

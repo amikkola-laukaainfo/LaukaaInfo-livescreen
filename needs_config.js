@@ -381,6 +381,77 @@ const NEEDS_CONFIG = {
                 ]
             }
         ]
+    },
+    "terveys-ja-hyvinvointi": {
+        "title": "Terveys ja hyvinvointi",
+        "icon": "🏥",
+        "description": "Löydä asiantuntijat terveyden ja hyvän olon tueksi.",
+        "steps": [
+            {
+                "id": "palvelu",
+                "multiple": true,
+                "question": "Millaista tukea tarvitset?",
+                "options": [
+                    { "label": "Lääkäri- tai terveyspalvelut", "tags": ["terveyspalvelut"] },
+                    { "label": "Fysioterapia / Hieronta", "tags": ["fysioterapia", "hieronta"] },
+                    { "label": "Mielenterveys / Psykologi", "tags": ["psykologi", "terapia"] },
+                    { "label": "Hoivapalvelut / Kotihoito", "tags": ["kotihoito", "hoivapalvelu"] }
+                ]
+            }
+        ]
+    },
+    "liikunta-ja-vapaaaika": {
+        "title": "Liikunta ja vapaa-aika",
+        "icon": "⚽",
+        "description": "Harrastuksia ja liikuntaa kaikenikäisille.",
+        "steps": [
+            {
+                "id": "tyyppi",
+                "question": "Miten haluaisit liikkua?",
+                "options": [
+                    { "label": "Kuntosali / Ryhmäliikunta", "tags": ["kuntosali", "liikuntakeskus"] },
+                    { "label": "Seurayhteistyö / Urheiluseurat", "tags": ["urheiluseura"] },
+                    { "label": "Ulkoilu / Retkeily", "tags": ["luonto", "retkeily"] },
+                    { "label": "Uinti / Vesiliikunta", "tags": ["uimahalli"] }
+                ]
+            }
+        ]
+    },
+    "elaimet": {
+        "title": "Eläimet ja lemmikit",
+        "icon": "🐾",
+        "description": "Kaikki lemmikkisi parhaaksi.",
+        "steps": [
+            {
+                "id": "tarve",
+                "multiple": true,
+                "question": "Mitä lemmikkisi tarvitsee?",
+                "options": [
+                    { "label": "Eläinlääkäri", "tags": ["eläinlääkäri"] },
+                    { "label": "Lemmikkitarvikkeet / Ruoka", "tags": ["lemmikkitarvikkeet"] },
+                    { "label": "Trimmaus / Pesu", "tags": ["trimmaus"] },
+                    { "label": "Koulutus / Hoito", "tags": ["koirahoitola", "eläinkoulutus"] }
+                ]
+            }
+        ]
+    },
+    "lapset-ja-perhe": {
+        "title": "Lapset ja perhe",
+        "icon": "👶",
+        "description": "Arjen tukea ja harrastuksia lapsiperheille.",
+        "steps": [
+            {
+                "id": "palvelut",
+                "multiple": true,
+                "question": "Millaista palvelua etsitte?",
+                "options": [
+                    { "label": "Päivähoito / Koulutus", "tags": ["päiväkoti", "koulutus"] },
+                    { "label": "Harrastukset lapsille", "tags": ["lapset", "harrastukset"] },
+                    { "label": "Lastentarvikkeet", "tags": ["erikoisliikkeet", "lapset"] },
+                    { "label": "Perheterapia / Tuki", "tags": ["psykologi", "perhepalvelut"] }
+                ]
+            }
+        ]
     }
 };
 
