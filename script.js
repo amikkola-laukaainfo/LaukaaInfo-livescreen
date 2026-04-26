@@ -1,5 +1,5 @@
-window.allCompanies = [];
-window.companyDataPromise = null; // Promise for singleton loading
+window.allCompanies = window.allCompanies || [];
+window.companyDataPromise = window.companyDataPromise || null;
 
 let allRssItems = []; // Global storage for RSS content
 let allGeoEvents = []; // Global storage for event coordinates
@@ -996,6 +996,7 @@ function handleInitialHashScroll() {
  * Yritysdata ja katalogi
  */
 async function loadCompanyData() {
+    window.loadCompanyData = loadCompanyData; // Ensure it's globally accessible
     if (window.companyDataPromise) {
         return window.companyDataPromise;
     }
