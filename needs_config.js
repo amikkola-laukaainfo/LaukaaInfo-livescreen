@@ -14,20 +14,16 @@ const NEEDS_CONFIG = {
                 ]
             },
             {
-                "id": "tarjoilu",
-                "question": "Miten haluat järjestää tarjoilun?",
+                "id": "ohjelma",
+                "multiple": true,
+                "question": "Mitä kaikkea muuta tarvitset?",
                 "options": [
                     { "label": "Pitopalvelu (Catering)", "tags": ["pitopalvelu"] },
-                    { "label": "Ravintolapalvelu", "tags": ["ravintola"] }
-                ]
-            },
-            {
-                "id": "ohjelma",
-                "question": "Tarvitsetko ohjelmaa tai kuvausta?",
-                "options": [
                     { "label": "Ohjelmapalvelut", "tags": ["ohjelmapalvelut"] },
                     { "label": "Valokuvaaja", "tags": ["valokuvaus"] },
-                    { "label": "Musiikki / DJ", "tags": ["musiikki", "ohjelmapalvelut"] }
+                    { "label": "Musiikki / DJ", "tags": ["musiikki", "ohjelmapalvelut"] },
+                    { "label": "Kukkakauppa", "tags": ["kukkakauppa"] },
+                    { "label": "Kuljetus / Taksi", "tags": ["taksi", "kuljetus"] }
                 ]
             }
         ]
@@ -48,12 +44,14 @@ const NEEDS_CONFIG = {
             },
             {
                 "id": "palvelut",
+                "multiple": true,
                 "question": "Mitä lisäpalveluita tarvitsette?",
                 "options": [
                     { "label": "Pitopalvelu", "tags": ["pitopalvelu"] },
                     { "label": "Kuljetukset", "tags": ["kuljetus", "taksi"] },
                     { "label": "Majoitus", "tags": ["majoitus"] },
-                    { "label": "AV-tekniikka", "tags": ["av-tekniikka", "it-palvelut"] }
+                    { "label": "AV-tekniikka", "tags": ["av-tekniikka", "it-palvelut"] },
+                    { "label": "Saunatilat", "tags": ["saunatilat"] }
                 ]
             }
         ]
@@ -74,11 +72,13 @@ const NEEDS_CONFIG = {
             },
             {
                 "id": "varustelu",
+                "multiple": true,
                 "question": "Lisätarpeet?",
                 "options": [
                     { "label": "Lounas / Kahvitus", "tags": ["ravintola", "pitopalvelu"] },
                     { "label": "Majoitus", "tags": ["majoitus"] },
-                    { "label": "Yrityslahjat", "tags": ["yrityslahjat", "lahjatavarat"] }
+                    { "label": "Yrityslahjat", "tags": ["yrityslahjat", "lahjatavarat"] },
+                    { "label": "Koulutuspalvelut", "tags": ["koulutus"] }
                 ]
             }
         ]
@@ -99,11 +99,13 @@ const NEEDS_CONFIG = {
             },
             {
                 "id": "ohjelma",
-                "question": "Tarvitaanko ohjelmaa?",
+                "multiple": true,
+                "question": "Tarvitaanko ohjelmaa tai muuta?",
                 "options": [
                     { "label": "Pitopalvelu (kotiin)", "tags": ["pitopalvelu"] },
                     { "label": "Ohjelmapalvelu", "tags": ["ohjelmapalvelut"] },
-                    { "label": "Kakut / Leivonnaiset", "tags": ["leipomo", "elintarvike"] }
+                    { "label": "Kakut / Leivonnaiset", "tags": ["leipomo", "elintarvike"] },
+                    { "label": "Valokuvaus", "tags": ["valokuvaus"] }
                 ]
             }
         ]
@@ -205,12 +207,14 @@ const NEEDS_CONFIG = {
         "steps": [
             {
                 "id": "palvelu",
-                "question": "Mitä palveluita tarvitset?",
+                "multiple": true,
+                "question": "Mitä kaikkia palveluita tarvitset?",
                 "options": [
                     { "label": "Hautauspalvelu", "tags": ["hautauspalvelu"] },
                     { "label": "Muistotilaisuus (tila)", "tags": ["juhlatila", "seurakunta"] },
                     { "label": "Pitopalvelu", "tags": ["pitopalvelu"] },
-                    { "label": "Kukkakauppa", "tags": ["kukkakauppa"] }
+                    { "label": "Kukkakauppa", "tags": ["kukkakauppa"] },
+                    { "label": "Lakipalvelut (perunkirjoitus)", "tags": ["lakiasiaintoimistot"] }
                 ]
             }
         ]
