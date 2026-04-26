@@ -258,14 +258,14 @@
                 <h2 style="color: white; margin-bottom: 0.5rem;">Löydä ja selaa palveluita</h2>
                 <p style="margin-bottom: 2rem; color: rgba(255,255,255,0.9);">Etsi tiettyä toimijaa tai tutustu taajamien paikalliseen tarjontaan.</p>
 
-                <div class="hero-split-paths" style="display: flex; flex-direction: column; gap: 1.5rem; align-items: center; text-align: center; padding: 0 1rem; margin: 0 auto; max-width: 1200px;">
+                <div class="hero-split-paths" style="display: flex; flex-direction: column; gap: 1.5rem; align-items: center; text-align: center; padding: 0 1rem; margin: 0 auto; max-width: 900px;">
                     
                     <!-- Polku A: Hae palvelua -->
                     <div class="hero-path search-path" style="width: 100%; max-width: 850px; background: rgba(255, 255, 255, 0.94); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.6); padding: 2rem; border-radius: 16px; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12); position: relative; z-index: 100;">
                         <h2 style="color: var(--primary-blue); margin-bottom: 0.5rem; font-size: 1.5rem;">Hae palvelua</h2>
                         <p style="font-size: 0.9rem; color: #555; margin-bottom: 1.5rem;">Yritykset voivat palvella useilla alueilla – hae palvelua nähdäksesi saatavuuden.</p>
 
-                        <div class="main-search-box" style="margin: 0; box-shadow: none; padding: 0;">
+                        <div class="main-search-box" style="margin: 0 auto; box-shadow: none; padding: 0; max-width: 560px; width: 100%;">
                             <div class="search-input-wrapper">
                                 <input type="text" id="company-search"
                                     placeholder="Etsi esim. parturi, digimedia" aria-label="Yrityshaku"
@@ -273,7 +273,7 @@
                                 <ul id="search-suggestions" class="search-suggestions"></ul>
                                 <button id="search-btn" class="btn-search">Hae</button>
                             </div>
-                            <div class="search-options" style="margin-top: 0.5rem;">
+                            <div class="search-options" style="margin-top: 0.5rem; text-align: center;">
                                 <label class="checkbox-container">
                                     <input type="checkbox" id="include-rss">
                                     <span class="checkmark"></span>
@@ -294,7 +294,7 @@
 
                         <div class="popular-tags" style="margin-top: 1.5rem;">
                             <span style="font-size: 0.85rem; color: #777;">Suosittuja:</span>
-                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem;">
+                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem; justify-content: center;">
                                 <a href="koko-laukaa.html?tag=ravintola" class="tag-pill">Ravintola</a>
                                 <a href="koko-laukaa.html?tag=parturi" class="tag-pill">Parturi</a>
                                 <a href="koko-laukaa.html?tag=autohuolto" class="tag-pill">Autohuolto</a>
@@ -307,8 +307,8 @@
                         <h2 style="color: var(--primary-blue); margin-bottom: 0.5rem; font-size: 1.5rem;">Selaa alueittain</h2>
                         <p style="font-size: 0.9rem; color: #555; margin-bottom: 1.5rem;">Tutustu taajamien ja koko kunnan paikalliseen tarjontaan.</p>
 
-                        <div class="homepage-region-selector">
-                            <div class="premium-select-wrapper">
+                        <div class="homepage-region-selector" style="display: flex; flex-direction: column; align-items: center; gap: 0.75rem;">
+                            <div class="premium-select-wrapper" style="max-width: 400px; width: 100%;">
                                 <select id="home-region-select" class="premium-select">
                                     <option value="" disabled selected>Valitse alue ja taajama...</option>
                                     <option value="koko-laukaa">Koko Laukaa</option>
@@ -320,7 +320,7 @@
                                 </select>
                             </div>
                             
-                            <div id="home-category-wrapper" class="premium-select-wrapper hidden-select">
+                            <div id="home-category-wrapper" class="premium-select-wrapper hidden-select" style="max-width: 400px; width: 100%;">
                                 <select id="home-category-select" class="premium-select">
                                     <option value="all">Kaikki toimialat</option>
                                     <!-- Kategoriat ladataan dynaamisesti scriptissä -->
