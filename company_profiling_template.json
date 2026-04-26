@@ -9,6 +9,7 @@
             },
             "features": {
                 "accessibility": true,
+                "is_lakeside": true,
                 "wifi": true,
                 "sauna": true,
                 "parking": true,
@@ -16,6 +17,8 @@
             },
             "services": {
                 "catering_allowed": "internal_only",
+                "catering_min_capacity": 10,
+                "catering_max_capacity": 500,
                 "liquor_license": true,
                 "accommodation_available": false
             },
