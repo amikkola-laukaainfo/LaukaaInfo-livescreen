@@ -227,21 +227,26 @@
 
             // Ladataan yritysdata jos sitä ei vielä ole
             try {
-                // Varmistetaan että loadCompanyData on olemassa (script.js latautunut)
+                // Odota että script.js on ladannut loadCompanyData-funktion
+                let retries = 0;
+                const maxRetries = 15;
+                while (typeof loadCompanyData !== 'function' && retries < maxRetries) {
+                    console.log("Waiting for loadCompanyData... retry:", retries);
+                    await new Promise(r => setTimeout(r, 400));
+                    retries++;
+                }
+
                 if (typeof loadCompanyData === 'function') {
-                    if (typeof allCompanies === 'undefined' || allCompanies.length === 0) {
-                        console.log("allCompanies is empty, awaiting loadCompanyData...");
+                    // Käytetään window-etuliitettä selvyyden vuoksi
+                    if (!window.allCompanies || window.allCompanies.length === 0) {
+                        console.log("allCompanies is empty, starting loadCompanyData...");
                         await loadCompanyData();
                     }
                 } else {
-                    console.warn("loadCompanyData is not available yet, waiting...");
-                    // Pieni viive jos script.js on vielä kesken
-                    await new Promise(r => setTimeout(r, 500));
-                    if (typeof loadCompanyData === 'function') {
-                        await loadCompanyData();
-                    }
+                    console.warn("loadCompanyData is still not available, trying to proceed anyway...");
                 }
-                console.log("Companies final check:", (typeof allCompanies !== 'undefined') ? allCompanies.length : 'undefined');
+                
+                console.log("Companies check:", (window.allCompanies) ? window.allCompanies.length : 'null/undefined');
             } catch (e) {
                 console.error("Error loading companies in initPalvelu:", e);
             }
@@ -360,10 +365,19 @@
             if (resultsContainer) resultsContainer.style.display = 'block';
             if (list) list.innerHTML = '';
 
-            if (typeof allCompanies === 'undefined' || allCompanies.length === 0) {
+            // Varmistetaan vielä kerran että meillä on dataa
+            if (!window.allCompanies || window.allCompanies.length === 0) {
                 console.error("allCompanies is empty in showResults!");
-                if (countEl) countEl.textContent = "Virhe: Yritysdataa ei voitu ladata. Yritä ladata sivu uudelleen.";
-                return;
+                // Viimeinen yritys ladata
+                if (typeof loadCompanyData === 'function') {
+                    console.log("Attempting last-minute loadCompanyData...");
+                    await loadCompanyData();
+                }
+                
+                if (!window.allCompanies || window.allCompanies.length === 0) {
+                    if (countEl) countEl.textContent = "Virhe: Yritystietoja ei voitu ladata palvelimelta juuri nyt. Yritä päivittää sivu.";
+                    return;
+                }
             }
 
             // Kerätään kaikki valitut vaihtoehdot yhteen listaan
