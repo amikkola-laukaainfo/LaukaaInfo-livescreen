@@ -14,16 +14,24 @@ const NEEDS_CONFIG = {
                 ]
             },
             {
-                "id": "ohjelma",
+                "id": "palvelut",
                 "multiple": true,
-                "question": "Mitä kaikkea muuta tarvitset?",
+                "question": "Mitä palveluita tarvitset juhlapäivään?",
                 "options": [
                     { "label": "Pitopalvelu (Catering)", "tags": ["pitopalvelu"] },
-                    { "label": "Ohjelmapalvelut", "tags": ["ohjelmapalvelut"] },
                     { "label": "Valokuvaaja", "tags": ["valokuvaus"] },
-                    { "label": "Musiikki / DJ", "tags": ["musiikki", "ohjelmapalvelut"] },
-                    { "label": "Kukkakauppa", "tags": ["kukkakauppa"] },
-                    { "label": "Kuljetus / Taksi", "tags": ["taksi", "kuljetus"] }
+                    { "label": "Kukkakauppa & Koristelu", "tags": ["kukkakauppa"] },
+                    { "label": "Musiikki tai DJ", "tags": ["musiikki", "ohjelmapalvelut"] }
+                ]
+            },
+            {
+                "id": "vieraat",
+                "multiple": true,
+                "question": "Tarpeet vieraiden mukavuuteen?",
+                "options": [
+                    { "label": "Majoitus vieraille", "tags": ["majoitus"] },
+                    { "label": "Kuljetus / Bussi / Taksi", "tags": ["taksi", "kuljetus"] },
+                    { "label": "Kauneuspalvelut / Meikki", "tags": ["kauneus", "kampaamo"] }
                 ]
             }
         ]
@@ -31,15 +39,15 @@ const NEEDS_CONFIG = {
     "yritysjuhlat": {
         "title": "Yritysjuhlat",
         "icon": "🥂",
-        "description": "Järjestä onnistuneet henkilöstöjuhlat tai asiakastilaisuudet.",
+        "description": "Järjestä onnistuneet henkilöstöjuhlat, pikkujoulut tai asiakastilaisuudet.",
         "steps": [
             {
                 "id": "tyyppi",
                 "question": "Millaista tilaisuutta olet järjestämässä?",
                 "options": [
-                    { "label": "Henkilöstöjuhlat", "tags": ["henkilöstöjuhlat", "juhlatila"] },
-                    { "label": "Asiakastilaisuus", "tags": ["asiakastilaisuus", "edustustila"] },
-                    { "label": "Virkistyspäivä", "tags": ["virkistyspäivä", "ohjelmapalvelut"] }
+                    { "label": "Henkilöstöjuhlat / Pikkujoulut", "tags": ["henkilöstöjuhlat", "juhlatila"] },
+                    { "label": "Asiakastilaisuus / Edustus", "tags": ["asiakastilaisuus", "edustustila"] },
+                    { "label": "Virkistyspäivä / Tiimi-ilta", "tags": ["virkistyspäivä", "ohjelmapalvelut"] }
                 ]
             },
             {
@@ -48,10 +56,10 @@ const NEEDS_CONFIG = {
                 "question": "Mitä lisäpalveluita tarvitsette?",
                 "options": [
                     { "label": "Pitopalvelu", "tags": ["pitopalvelu"] },
-                    { "label": "Kuljetukset", "tags": ["kuljetus", "taksi"] },
                     { "label": "Majoitus", "tags": ["majoitus"] },
-                    { "label": "AV-tekniikka", "tags": ["av-tekniikka", "it-palvelut"] },
-                    { "label": "Saunatilat", "tags": ["saunatilat"] }
+                    { "label": "Kuljetukset", "tags": ["kuljetus", "taksi"] },
+                    { "label": "Saunatilat", "tags": ["saunatilat"] },
+                    { "label": "Ohjelmapalvelut / Elämykset", "tags": ["ohjelmapalvelut"] }
                 ]
             }
         ]
@@ -63,22 +71,30 @@ const NEEDS_CONFIG = {
         "steps": [
             {
                 "id": "tila",
-                "question": "Tarve?",
+                "question": "Millaista tilaa tarvitsette?",
                 "options": [
-                    { "label": "Kokoustilat", "tags": ["kokoustilat"] },
-                    { "label": "Seminaaritilat", "tags": ["seminaaritilat"] },
-                    { "label": "Saunatilat", "tags": ["saunatilat"] }
+                    { "label": "Kokoushuone (pieni)", "tags": ["kokoustilat"] },
+                    { "label": "Seminaari / Koulutustila", "tags": ["seminaaritilat", "koulutus"] },
+                    { "label": "Edustustila / Saunallinen tila", "tags": ["edustustila", "saunatilat"] }
                 ]
             },
             {
-                "id": "varustelu",
-                "multiple": true,
-                "question": "Lisätarpeet?",
+                "id": "tarjoilu",
+                "question": "Tarjoilut tilaisuuteen?",
                 "options": [
-                    { "label": "Lounas / Kahvitus", "tags": ["ravintola", "pitopalvelu"] },
+                    { "label": "Lounas ja kahvitus", "tags": ["ravintola", "pitopalvelu"] },
+                    { "label": "Illallinen", "tags": ["ravintola"] },
+                    { "label": "Vain tilat", "tags": [] }
+                ]
+            },
+            {
+                "id": "lisat",
+                "multiple": true,
+                "question": "Muut tarpeet?",
+                "options": [
                     { "label": "Majoitus", "tags": ["majoitus"] },
                     { "label": "Yrityslahjat", "tags": ["yrityslahjat", "lahjatavarat"] },
-                    { "label": "Koulutuspalvelut", "tags": ["koulutus"] }
+                    { "label": "IT-tuki / AV-tekniikka", "tags": ["it-palvelut"] }
                 ]
             }
         ]
@@ -86,26 +102,28 @@ const NEEDS_CONFIG = {
     "syntymapaivat": {
         "title": "Syntymäpäivät",
         "icon": "🎂",
-        "description": "Juhlista merkkipäivää helposti.",
+        "description": "Järjestä ikimuistoiset syntymäpäivät kaikenikäisille.",
         "steps": [
             {
                 "id": "tila",
                 "question": "Missä haluat juhlia?",
                 "options": [
-                    { "label": "Ravintolassa", "tags": ["ravintola"] },
-                    { "label": "Vuokratilassa", "tags": ["juhlatila"] },
-                    { "label": "Saunalla", "tags": ["saunatilat"] }
+                    { "label": "Ravintolassa valmiissa pöydässä", "tags": ["ravintola"] },
+                    { "label": "Vuokratussa juhlatilassa", "tags": ["juhlatila"] },
+                    { "label": "Kotona (tarvitaan palveluita)", "tags": ["pitopalvelu"] },
+                    { "label": "Saunalla tai mökillä", "tags": ["saunatilat", "majoitus"] }
                 ]
             },
             {
-                "id": "ohjelma",
+                "id": "palvelut",
                 "multiple": true,
-                "question": "Tarvitaanko ohjelmaa tai muuta?",
+                "question": "Mitä tarvitaan onnistuneisiin juhliin?",
                 "options": [
-                    { "label": "Pitopalvelu (kotiin)", "tags": ["pitopalvelu"] },
-                    { "label": "Ohjelmapalvelu", "tags": ["ohjelmapalvelut"] },
+                    { "label": "Pitopalvelu / Ruoat", "tags": ["pitopalvelu"] },
                     { "label": "Kakut / Leivonnaiset", "tags": ["leipomo", "elintarvike"] },
-                    { "label": "Valokuvaus", "tags": ["valokuvaus"] }
+                    { "label": "Ohjelma / Esiintyjä", "tags": ["ohjelmapalvelut"] },
+                    { "label": "Valokuvaus", "tags": ["valokuvaus"] },
+                    { "label": "Kukat", "tags": ["kukkakauppa"] }
                 ]
             }
         ]
@@ -113,15 +131,25 @@ const NEEDS_CONFIG = {
     "muutto": {
         "title": "Muutto",
         "icon": "📦",
-        "description": "Suunnitteletko muuttoa? Me autamme löytämään palvelut.",
+        "description": "Muuttoauto, kantajat, pakkaus ja loppusiivous helposti.",
         "steps": [
             {
-                "id": "apu",
-                "question": "Mitä apua tarvitset?",
+                "id": "muuttoapu",
+                "question": "Millaista apua tarvitset muuttoon?",
                 "options": [
-                    { "label": "Muuttopalvelu / Kuljetus", "tags": ["kuljetusliike", "hinaus"] },
-                    { "label": "Varastointi", "tags": ["varastointi"] },
-                    { "label": "Muuttosiivous", "tags": ["siivous", "puhdistuspalvelut"] }
+                    { "label": "Muuttopalvelu (auto + kantajat)", "tags": ["kuljetusliike", "muuttopalvelu"] },
+                    { "label": "Vain kuljetus / Peräkärry", "tags": ["kuljetus", "hinaus"] },
+                    { "label": "Varastointipalvelu", "tags": ["varastointi"] }
+                ]
+            },
+            {
+                "id": "asunto",
+                "multiple": true,
+                "question": "Uuden kodin valmistelu?",
+                "options": [
+                    { "label": "Muuttosiivous", "tags": ["siivous", "puhdistuspalvelut"] },
+                    { "label": "Sähkösopimus / Sähköasennukset", "tags": ["sähköasennukset"] },
+                    { "label": "Pieni pintaremontti", "tags": ["maalaustyöt", "rakentaminen"] }
                 ]
             }
         ]
@@ -129,24 +157,27 @@ const NEEDS_CONFIG = {
     "remontti": {
         "title": "Remontti",
         "icon": "🔨",
-        "description": "Kodun tai toimitilan uudistus.",
+        "description": "Löydä tekijät ja tarvikkeet kodin tai toimitilan uudistukseen.",
         "steps": [
             {
-                "id": "tyo",
-                "question": "Millaista työtä tarvitaan?",
+                "id": "tekijat",
+                "multiple": true,
+                "question": "Millaista ammattilaista etsit?",
                 "options": [
-                    { "label": "Rakentaminen / Remontointi", "tags": ["rakentaminen", "rakennustyöt"] },
-                    { "label": "Sähkötyöt", "tags": ["sähköasennukset"] },
-                    { "label": "LVI-työt", "tags": ["LVI"] },
-                    { "label": "Maalaus", "tags": ["maalaustyöt"] }
+                    { "label": "Rakennus- / Remonttimies", "tags": ["rakentaminen", "rakennustyöt"] },
+                    { "label": "Sähköasentaja", "tags": ["sähköasennukset"] },
+                    { "label": "LVI-asentaja (Putkimies)", "tags": ["LVI"] },
+                    { "label": "Maalari / Tapetoija", "tags": ["maalaustyöt"] },
+                    { "label": "Suunnittelija / Arkkitehti", "tags": ["suunnittelutoimisto"] }
                 ]
             },
             {
                 "id": "tarvikkeet",
-                "question": "Mistä tarvikkeet?",
+                "question": "Mistä hankit materiaalit?",
                 "options": [
-                    { "label": "Rautakauppa / Materiaalit", "tags": ["rautakauppa", "rakennustarvikkeet"] },
-                    { "label": "Konevuokraus", "tags": ["rakennuskonevuokraus"] }
+                    { "label": "Rautakauppa / Rakennustarvikkeet", "tags": ["rautakauppa", "rakennustarvikkeet"] },
+                    { "label": "Koneiden ja laitteiden vuokraus", "tags": ["rakennuskonevuokraus"] },
+                    { "label": "Sisustustuotteet", "tags": ["kaupat ja ostokset", "erikoisliikkeet"] }
                 ]
             }
         ]
@@ -157,21 +188,24 @@ const NEEDS_CONFIG = {
         "description": "Kaikki vapaa-ajan asunnon huoltoon ja nauttimiseen.",
         "steps": [
             {
-                "id": "huolto",
+                "id": "perushuolto",
+                "multiple": true,
                 "question": "Mitä huoltoa mökki kaipaa?",
                 "options": [
-                    { "label": "Kiinteistöhuolto", "tags": ["kiinteistöhuolto"] },
+                    { "label": "Kiinteistöhuolto / Talonmies", "tags": ["kiinteistöhuolto"] },
                     { "label": "Nuohous", "tags": ["nuohouspalvelut"] },
                     { "label": "Polttopuut", "tags": ["polttopuut"] },
-                    { "label": "Pihanhoito", "tags": ["viherrakentaminen", "pihasuunnittelu"] }
+                    { "label": "Laituritarvikkeet / Huolto", "tags": ["rakentaminen"] }
                 ]
             },
             {
-                "id": "palvelut",
-                "question": "Mitä muuta tarvitset?",
+                "id": "piha-ja-tekniikka",
+                "multiple": true,
+                "question": "Pihan ja tekniikan tarpeet?",
                 "options": [
-                    { "label": "Pienkonehuolto", "tags": ["pienkonehuolto"] },
-                    { "label": "Kuljetuspalvelut", "tags": ["taksi", "kuljetus"] }
+                    { "label": "Pihanhoito / Viherrakentaminen", "tags": ["viherrakentaminen", "pihasuunnittelu"] },
+                    { "label": "Pienkonehuolto (ruohonleikkurit ym.)", "tags": ["pienkonehuolto"] },
+                    { "label": "Taksi / Kuljetus", "tags": ["taksi", "kuljetus"] }
                 ]
             }
         ]
@@ -183,19 +217,23 @@ const NEEDS_CONFIG = {
         "steps": [
             {
                 "id": "hallinto",
-                "question": "Hallinnolliset palvelut",
+                "question": "Hallinnolliset tarpeet?",
                 "options": [
-                    { "label": "Isännöinti", "tags": ["isännöinti"] },
-                    { "label": "Tilintarkastus", "tags": ["tilitoimisto"] }
+                    { "label": "Isännöintipalvelut", "tags": ["isännöinti"] },
+                    { "label": "Tilitoimisto / Tilintarkastus", "tags": ["tilitoimisto"] },
+                    { "label": "Lakipalvelut", "tags": ["lakiasiaintoimistot"] }
                 ]
             },
             {
-                "id": "yllapito",
-                "question": "Ylläpito ja korjaus",
+                "id": "kunnossapito",
+                "multiple": true,
+                "question": "Kunnossapito ja tekniset palvelut?",
                 "options": [
                     { "label": "Kiinteistöhuolto", "tags": ["kiinteistöhuolto"] },
+                    { "label": "Siivouspalvelut", "tags": ["siivous"] },
                     { "label": "Nuohous", "tags": ["nuohouspalvelut"] },
-                    { "label": "LVI- ja sähköhuolto", "tags": ["LVI", "sähköasennukset"] }
+                    { "label": "LVI- ja sähköhuolto", "tags": ["LVI", "sähköasennukset"] },
+                    { "label": "Hissihuolto", "tags": ["it-palvelut"] }
                 ]
             }
         ]
@@ -206,15 +244,22 @@ const NEEDS_CONFIG = {
         "description": "Arvokkaat ja huolelliset hautajaisjärjestelyt.",
         "steps": [
             {
-                "id": "palvelu",
-                "multiple": true,
-                "question": "Mitä kaikkia palveluita tarvitset?",
+                "id": "peruspalvelu",
+                "question": "Hautauspalvelut?",
                 "options": [
-                    { "label": "Hautauspalvelu", "tags": ["hautauspalvelu"] },
-                    { "label": "Muistotilaisuus (tila)", "tags": ["juhlatila", "seurakunta"] },
-                    { "label": "Pitopalvelu", "tags": ["pitopalvelu"] },
-                    { "label": "Kukkakauppa", "tags": ["kukkakauppa"] },
-                    { "label": "Lakipalvelut (perunkirjoitus)", "tags": ["lakiasiaintoimistot"] }
+                    { "label": "Hautauspalvelu ja arkut", "tags": ["hautauspalvelu"] },
+                    { "label": "Hautakivet ja kaiverrukset", "tags": ["hautauspalvelu"] }
+                ]
+            },
+            {
+                "id": "jarjestelyt",
+                "multiple": true,
+                "question": "Muistotilaisuuden järjestelyt?",
+                "options": [
+                    { "label": "Muistotilaisuus (tila)", "tags": ["juhlatila", "seurakunta", "ravintola"] },
+                    { "label": "Pitopalvelu / Catering", "tags": ["pitopalvelu"] },
+                    { "label": "Kukkatervehdykset", "tags": ["kukkakauppa"] },
+                    { "label": "Lakipalvelut / Perunkirjoitus", "tags": ["lakiasiaintoimistot"] }
                 ]
             }
         ]
@@ -226,29 +271,33 @@ const NEEDS_CONFIG = {
         "steps": [
             {
                 "id": "hallinto",
-                "question": "Hallinto ja suunnittelu",
+                "multiple": true,
+                "question": "Alkuvaiheen hallinto?",
                 "options": [
-                    { "label": "Yritysneuvonta / Konsultointi", "tags": ["yritysneuvonta", "konsultointi"] },
-                    { "label": "Kirjanpito", "tags": ["tilitoimisto"] },
-                    { "label": "Lakipalvelut", "tags": ["lakiasiaintoimistot"] },
-                    { "label": "Vakuutukset", "tags": ["vakuutus"] }
+                    { "label": "Yritysneuvonta / Liiketoimintasuunnitelma", "tags": ["yritysneuvonta", "konsultointi"] },
+                    { "label": "Kirjanpito ja tilitoimisto", "tags": ["tilitoimisto"] },
+                    { "label": "Vakuutukset", "tags": ["vakuutus"] },
+                    { "label": "Lakipalvelut", "tags": ["lakiasiaintoimistot"] }
                 ]
             },
             {
                 "id": "nakyvyys",
-                "question": "Markkinointi ja näkyvyys",
+                "multiple": true,
+                "question": "Markkinointi ja näkyvyys?",
                 "options": [
-                    { "label": "Verkkosivut / Mainostoimisto", "tags": ["verkkosivut", "mainostoimisto", "somemainonta", "google-mainonta"] },
-                    { "label": "Brändäys / Logot", "tags": ["brändäys", "graafiset palvelut"] },
-                    { "label": "Valokuvaus / Video", "tags": ["valokuvaus", "videotuotanto"] }
+                    { "label": "Verkkosivut / Domain", "tags": ["verkkosivut", "it-palvelut"] },
+                    { "label": "Logo ja brändäys", "tags": ["mainostoimisto", "graafiset palvelut"] },
+                    { "label": "Somemainonta ja Google-näkyvyys", "tags": ["somemainonta", "google-mainonta", "mainostoimisto"] },
+                    { "label": "Valokuvaus / Yrityskuvat", "tags": ["valokuvaus"] }
                 ]
             },
             {
                 "id": "tilat",
-                "question": "Toimitilat ja IT",
+                "question": "Toimitilat?",
                 "options": [
-                    { "label": "Toimitilat", "tags": ["toimitilat", "kiinteistönvälitys"] },
-                    { "label": "IT-palvelut", "tags": ["it-palvelut"] }
+                    { "label": "Toimitilojen haku", "tags": ["toimitilat", "kiinteistönvälitys"] },
+                    { "label": "Etätyö / Co-working", "tags": ["toimitilat"] },
+                    { "label": "IT-infra ja yhteydet", "tags": ["it-palvelut"] }
                 ]
             }
         ]
@@ -256,21 +305,26 @@ const NEEDS_CONFIG = {
     "yrityksen-kehittaminen": {
         "title": "Yrityksen kehittäminen",
         "icon": "📈",
-        "description": "Vie yrityksesi seuraavalle tasolle.",
+        "description": "Vie yrityksesi seuraavalle tasolle kasvun avulla.",
         "steps": [
             {
-                "id": "markkinointi",
-                "question": "Kasvata myyntiä",
+                "id": "myynti",
+                "multiple": true,
+                "question": "Lisää myyntiä ja tunnettuutta?",
                 "options": [
-                    { "label": "Digimarkkinointi / Google", "tags": ["google-mainonta", "somemainonta", "mainostoimisto"] },
-                    { "label": "Verkkokaupan kehitys", "tags": ["verkkokauppa"] }
+                    { "label": "Google-mainonta / SEO", "tags": ["google-mainonta", "mainostoimisto"] },
+                    { "label": "Sosiaalisen median markkinointi", "tags": ["somemainonta", "mainostoimisto"] },
+                    { "label": "Verkkokaupan rakentaminen", "tags": ["verkkokauppa", "it-palvelut"] },
+                    { "label": "Videotuotanto / Mainosvideot", "tags": ["videotuotanto"] }
                 ]
             },
             {
-                "id": "osaaminen",
-                "question": "Resurssit ja osaaminen",
+                "id": "henkilosto",
+                "multiple": true,
+                "question": "Resurssit ja osaaminen?",
                 "options": [
-                    { "label": "Henkilöstöpalvelut / Rekrytointi", "tags": ["henkilöstöpalvelut"] },
+                    { "label": "Rekrytointipalvelut", "tags": ["henkilöstöpalvelut"] },
+                    { "label": "Henkilöstön koulutus", "tags": ["koulutus"] },
                     { "label": "Liikkeenjohdon konsultointi", "tags": ["konsultointi"] }
                 ]
             }
@@ -279,15 +333,16 @@ const NEEDS_CONFIG = {
     "vakituinen-palvelukumppani": {
         "title": "Vakituinen palvelukumppani",
         "icon": "🤝",
-        "description": "Etsitkö jatkuvaa sopimuskumppania?",
+        "description": "Etsitkö jatkuvaa kumppania helpottamaan arkea?",
         "steps": [
             {
-                "id": "alue",
-                "question": "Millä osa-alueella?",
+                "id": "ala",
+                "question": "Millä osa-alueella tarvitset kumppania?",
                 "options": [
-                    { "label": "IT ja tekniikka", "tags": ["it-palvelut", "vakiopalvelu"] },
-                    { "label": "Siivous ja ylläpito", "tags": ["siivous", "kiinteistöhuolto", "vakiopalvelu"] },
-                    { "label": "Hallinto / Talous", "tags": ["tilitoimisto", "isännöinti"] }
+                    { "label": "IT- ja tietotekniikka", "tags": ["it-palvelut", "vakiopalvelu"] },
+                    { "label": "Siivous ja kiinteistöhuolto", "tags": ["siivous", "kiinteistöhuolto", "vakiopalvelu"] },
+                    { "label": "Kirjanpito ja taloushallinto", "tags": ["tilitoimisto"] },
+                    { "label": "Markkinointikumppani", "tags": ["mainostoimisto", "vakiopalvelu"] }
                 ]
             }
         ]
@@ -298,12 +353,14 @@ const NEEDS_CONFIG = {
         "description": "Huolenpitoa ja arvoa kiinteistöllesi.",
         "steps": [
             {
-                "id": "huolto",
-                "question": "Mitä palvelua etsit?",
+                "id": "huoltopalvelu",
+                "multiple": true,
+                "question": "Mitä kiinteistösi tarvitsee?",
                 "options": [
-                    { "label": "Kiinteistöhuolto", "tags": ["kiinteistöhuolto"] },
-                    { "label": "Siivouspalvelut", "tags": ["siivous", "puhdistuspalvelut"] },
-                    { "label": "Pihanhoito", "tags": ["viherrakentaminen"] }
+                    { "label": "Kiinteistöhuolto (tekniikka, lumityöt ym.)", "tags": ["kiinteistöhuolto"] },
+                    { "label": "Siivouspalvelut (sisä ja ulko)", "tags": ["siivous", "puhdistuspalvelut"] },
+                    { "label": "Pihanhoito / Lumenauraus", "tags": ["viherrakentaminen", "kiinteistöhuolto"] },
+                    { "label": "Kuntokartoitus / Suunnittelu", "tags": ["suunnittelutoimisto"] }
                 ]
             }
         ]
@@ -311,16 +368,16 @@ const NEEDS_CONFIG = {
     "paivystavat-palvelut": {
         "title": "Päivystävät palvelut",
         "icon": "🚨",
-        "description": "Apu lähellä silloin kun sitä tarvitaan.",
+        "description": "Apu lähellä silloin kun sitä tarvitaan kiireellisesti.",
         "steps": [
             {
-                "id": "hata",
-                "question": "Mitä on tapahtunut?",
+                "id": "kiireellinen",
+                "question": "Mikä hätänä?",
                 "options": [
-                    { "label": "LVI-päivystys", "tags": ["LVI", "päivystys"] },
+                    { "label": "LVI- tai putkipäivystys", "tags": ["LVI", "päivystys"] },
                     { "label": "Sähköpäivystys", "tags": ["sähköasennukset", "päivystys"] },
-                    { "label": "Hinauspalvelu", "tags": ["hinaus"] },
-                    { "label": "Lukitus / Avaimet", "tags": ["lukkoseppä", "päivystys"] }
+                    { "label": "Hinaus ja tiepalvelu", "tags": ["hinaus"] },
+                    { "label": "Lukkoseppä (avaimet hukkuneet)", "tags": ["lukkoseppä", "päivystys"] }
                 ]
             }
         ]
