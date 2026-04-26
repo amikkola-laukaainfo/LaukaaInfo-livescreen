@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="fi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palveluohjaus | LaukaaInfo</title>
+    <link rel="icon" href="logo.png">
+
+    <!-- Fonts & Styles -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css?v=20260426">
+    <style>
+        .palvelu-hero {
+            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
+            color: white;
+            padding: 4rem 1.5rem;
+            text-align: center;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            margin-bottom: 3rem;
+        }
+
+        .palvelu-hero h1 {
+            font-family: var(--accent-font);
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .palvelu-hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        #results-container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .back-nav {
+            max-width: 1200px;
+            margin: 2rem auto 0;
+            padding: 0 1.5rem;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--primary-blue);
+            font-weight: 700;
+            transition: transform 0.2s;
+        }
+
+        .btn-back:hover {
+            transform: translateX(-5px);
+        }
+        
+        /* Step transition animation */
+        .fade-in {
+            animation: fadeIn 0.4s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="logo.png" alt="LaukaaInfo Logo">
+                <span>LaukaaInfo</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="back-nav">
+        <a href="index.html" class="btn-back">&larr; Takaisin etusivulle</a>
+    </div>
+
+    <header id="palvelu-header" class="palvelu-hero">
+        <div class="icon-large" id="hero-icon" style="font-size: 4rem; margin-bottom: 1rem;"></div>
+        <h1 id="hero-title">Ladataan...</h1>
+        <p id="hero-desc"></p>
+    </header>
+
+    <main>
+        <section id="step-section" class="step-container">
+            <div class="step-progress" id="step-progress"></div>
+            <div id="step-content" class="fade-in">
+                <!-- Dynaaminen sisältö -->
+            </div>
+        </section>
+
+        <section id="results-container" style="display: none;">
+            <div class="need-header">
+                <h2>Suositellut palvelut</h2>
+                <p id="results-count"></p>
+            </div>
+            <div id="results-list" class="results-grid">
+                <!-- Tulokset ladataan tästän -->
+            </div>
+            
+            <div style="text-align: center; margin-top: 4rem;">
+                <button onclick="resetPalvelu()" class="btn-radar" style="background: var(--primary-blue);">Aloita alusta</button>
+            </div>
+        </section>
+    </main>
+
+    <footer style="margin-top: 6rem;">
+        <div class="footer-content">
+            <p>© 2026 LaukaaInfo – Palvelua ylläpitää Mediazoo.fi</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="needs_config.js"></script>
+    <script src="script.js"></script>
+    <script>
+        let currentNeedId = new URLSearchParams(window.location.search).get('id');
+        let currentStepIndex = 0;
+        let selections = {};
+        let filteredCompanies = [];
+
+        async function initPalvelu() {
+            const need = NEEDS_CONFIG[currentNeedId];
+            if (!need) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            document.getElementById('hero-title').textContent = need.title;
+            document.getElementById('hero-desc').textContent = need.description;
+            document.getElementById('hero-icon').textContent = need.icon;
+            document.title = `${need.title} | LaukaaInfo`;
+
+            // Ladataan yritysdata jos sitä ei vielä ole
+            if (allCompanies.length === 0) {
+                await loadCompanyData();
+            }
+
+            renderStep();
+        }
+
+        function renderStep() {
+            const need = NEEDS_CONFIG[currentNeedId];
+            const step = need.steps[currentStepIndex];
+            const content = document.getElementById('step-content');
+            const progress = document.getElementById('step-progress');
+
+            // Render progress
+            progress.innerHTML = '';
+            need.steps.forEach((_, i) => {
+                const dot = document.createElement('div');
+                dot.className = `progress-dot ${i === currentStepIndex ? 'active' : ''}`;
+                progress.appendChild(dot);
+            });
+
+            // Render step content
+            content.innerHTML = `
+                <div class="step-header">
+                    <h2>${step.question}</h2>
+                </div>
+                <div class="step-options">
+                    ${step.options.map((opt, i) => `
+                        <button class="option-btn" onclick="selectOption(${i})">
+                            ${opt.label}
+                            <span>&rarr;</span>
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+            
+            content.classList.remove('fade-in');
+            void content.offsetWidth; // Trigger reflow
+            content.classList.add('fade-in');
+        }
+
+        function selectOption(optionIndex) {
+            const need = NEEDS_CONFIG[currentNeedId];
+            const step = need.steps[currentStepIndex];
+            const option = step.options[optionIndex];
+
+            selections[step.id] = option;
+
+            if (currentStepIndex < need.steps.length - 1) {
+                currentStepIndex++;
+                renderStep();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('step-section').style.display = 'none';
+            document.getElementById('results-container').style.display = 'block';
+
+            const need = NEEDS_CONFIG[currentNeedId];
+            
+            // Kerätään kaikki valitut tägit
+            let requiredTags = [];
+            Object.values(selections).forEach(sel => {
+                if (sel.tags) requiredTags = [...requiredTags, ...sel.tags];
+            });
+
+            // Suodatetaan yritykset
+            // 1. Pitää vastata ainakin yhtä valittua tägiä TAI kuulua tarpeen yleiseen kategoriaan
+            filteredCompanies = allCompanies.filter(c => {
+                const companyTags = (c.tags || '').toLowerCase() + ',' + (c.kategoria || '').toLowerCase();
+                return requiredTags.some(tag => companyTags.includes(tag.toLowerCase()));
+            });
+
+            // Lajitellaan: Premiumit ensin
+            filteredCompanies.sort((a, b) => {
+                const aType = (a.paketti || a.tyyppi || '').toLowerCase();
+                const bType = (b.paketti || b.tyyppi || '').toLowerCase();
+                const aIsPremium = aType.includes('premium') || aType.includes('pro');
+                const bIsPremium = bType.includes('premium') || bType.includes('pro');
+                if (aIsPremium && !bIsPremium) return -1;
+                if (!aIsPremium && bIsPremium) return 1;
+                return 0;
+            });
+
+            const list = document.getElementById('results-list');
+            const countEl = document.getElementById('results-count');
+
+            if (filteredCompanies.length === 0) {
+                countEl.textContent = "Emme löytäneet täsmällisiä osumia, mutta tässä muita ehdotuksia.";
+                // Voisimme näyttää tarpeen yleisiä yrityksiä tässä
+                list.innerHTML = '<div class="no-results"><h3>Hups!</h3><p>Valitettavasti valintoihisi sopivia yrityksiä ei löytynyt juuri nyt. Kokeile aloittaa alusta eri valinnoilla.</p></div>';
+            } else {
+                countEl.textContent = `Löysimme ${filteredCompanies.length} yritystä, jotka voivat auttaa tarpeessasi.`;
+                list.innerHTML = filteredCompanies.map(c => renderCompanyCard(c)).join('');
+            }
+            
+            window.scrollTo({ top: document.getElementById('results-container').offsetTop - 100, behavior: 'smooth' });
+        }
+
+        function renderCompanyCard(c) {
+            const slug = slugify(c.nimi);
+            const isPremium = (c.paketti || c.tyyppi || '').toLowerCase().includes('premium');
+            const isPro = (c.paketti || c.tyyppi || '').toLowerCase().includes('pro');
+            
+            const cardUrl = (isPremium || isPro) 
+                ? `yritys/${slug}.html`
+                : `yrityskortti.html?id=${slug}`;
+
+            return `
+                <a href="${cardUrl}" class="need-card" style="height: 100%;">
+                    ${isPremium ? '<div style="position:absolute; top:10px; right:10px; font-size:0.7rem; background:gold; padding:2px 8px; border-radius:10px; font-weight:bold;">PREMIUM</div>' : ''}
+                    <div class="need-icon" style="font-size: 2rem;">${categoryIcons[c.kategoria] || '🏢'}</div>
+                    <h3>${c.nimi}</h3>
+                    <p>${c.mainoslause || (c.esittely ? c.esittely.substring(0, 80) + '...' : '')}</p>
+                    <div class="arrow" style="opacity:1; transform:none;">Katso tiedot &raquo;</div>
+                </a>
+            `;
+        }
+
+        function resetPalvelu() {
+            currentStepIndex = 0;
+            selections = {};
+            document.getElementById('step-section').style.display = 'block';
+            document.getElementById('results-container').style.display = 'none';
+            renderStep();
+        }
+
+        // Käynnistys
+        window.addEventListener('load', initPalvelu);
+    </script>
+</body>
+
+</html>

@@ -4705,3 +4705,212 @@ footer {
     border-radius: 4px;
     margin-top: 10px;
 }
+
+/* =========================================
+   NEED-BASED SERVICE GUIDANCE STYLES
+   ========================================= */
+
+.need-based-section {
+    padding: 4rem 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.need-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.need-header h2 {
+    font-family: var(--accent-font);
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--primary-blue);
+    margin-bottom: 1rem;
+    letter-spacing: -0.5px;
+}
+
+.need-header p {
+    font-size: 1.1rem;
+    color: #666;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.need-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.need-card {
+    background: white;
+    border-radius: 24px;
+    padding: 2rem;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+}
+
+.need-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(0, 75, 160, 0.05) 0%, rgba(0, 75, 160, 0) 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.need-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 75, 160, 0.1);
+    border-color: rgba(0, 75, 160, 0.1);
+}
+
+.need-card:hover::before {
+    opacity: 1;
+}
+
+.need-icon {
+    font-size: 3rem;
+    margin-bottom: 1.25rem;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.1));
+}
+
+.need-card h3 {
+    font-family: var(--accent-font);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin-bottom: 0.5rem;
+}
+
+.need-card p {
+    font-size: 0.95rem;
+    color: #666;
+    line-height: 1.4;
+}
+
+.need-card .arrow {
+    margin-top: auto;
+    padding-top: 1.5rem;
+    color: var(--primary-blue);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all 0.3s ease;
+}
+
+.need-card:hover .arrow {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Multi-step UI */
+.step-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    background: white;
+    padding: 3rem;
+    border-radius: 32px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08);
+}
+
+.step-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.step-header h2 {
+    font-family: var(--accent-font);
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--primary-blue);
+}
+
+.step-options {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+.option-btn {
+    background: #f8f9fa;
+    border: 2px solid transparent;
+    padding: 1.25rem 2rem;
+    border-radius: 16px;
+    cursor: pointer;
+    text-align: left;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.option-btn:hover {
+    background: white;
+    border-color: var(--primary-blue);
+    transform: scale(1.02);
+}
+
+.option-btn.selected {
+    background: var(--primary-blue);
+    color: white;
+    border-color: var(--primary-blue);
+}
+
+.step-progress {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.progress-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #dee2e6;
+}
+
+.progress-dot.active {
+    background: var(--primary-blue);
+    width: 24px;
+    border-radius: 5px;
+}
+
+/* Glassmorphism utility */
+.glass-panel {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+@media (max-width: 600px) {
+    .need-header h2 {
+        font-size: 1.8rem;
+    }
+    
+    .step-container {
+        padding: 2rem 1.5rem;
+        margin: 1rem;
+        border-radius: 24px;
+    }
+}
