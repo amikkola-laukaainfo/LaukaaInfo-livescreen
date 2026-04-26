@@ -1046,7 +1046,7 @@ async function loadCompanyData() {
 
             if (!json) {
                 console.error('Yritystietoja ei saatu ladattua mistään lähteestä.');
-                allCompanies = [];
+                window.allCompanies = [];
                 return [];
             }
 
@@ -1056,7 +1056,7 @@ async function loadCompanyData() {
 
             // Normalize URLs
             const baseUrl = dataSourceUrl.substring(0, dataSourceUrl.lastIndexOf('/') + 1);
-            allCompanies.forEach(company => {
+            window.allCompanies.forEach(company => {
                 if (company.media) {
                     company.media.forEach(item => {
                         if (item.url && !item.url.startsWith('http') && !item.url.startsWith('//')) {
@@ -1096,7 +1096,7 @@ async function loadCompanyData() {
                 }
 
                 if (searchExtras) {
-                    allCompanies.forEach(company => {
+                    window.allCompanies.forEach(company => {
                         const rowId = (company.id || '').toString().replace('company-', '');
                         if (searchExtras[rowId]) {
                             company.searchExtraInfo = searchExtras[rowId].toLowerCase();
