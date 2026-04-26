@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
 
-const categoryColors = {
+const MAP_CATEGORY_COLORS = {
     'Autokorjaamot': '#4a5568',
     'Elintarvike': '#f6ad55',
     'Juhlatilat': '#ed64a6',
@@ -184,7 +184,7 @@ const categoryColors = {
     'Muu': '#0056b3'
 };
 
-const categoryIcons = {
+const MAP_CATEGORY_ICONS = {
     'Autokorjaamot': '🔧',
     'Elintarvike': '🛒',
     'Juhlatilat': '🎊',
@@ -438,7 +438,7 @@ function addMarkersToMap(companies) {
                 isPro = pkgStr.includes('pro') || typeStr.includes('pro');
                 isPremiumPkg = pkgStr.includes('premium') || typeStr.includes('premium');
                 
-                const baseColor = categoryColors[company.kategoria] || '#0056b3';
+                const baseColor = MAP_CATEGORY_COLORS[company.kategoria] || '#0056b3';
                 const markerColor = isPro ? '#ffd700' : (isPremiumPkg ? '#ff4d4d' : baseColor);
                 const markerSize = (isPro || isPremiumPkg) ? '26px' : '20px';
 
