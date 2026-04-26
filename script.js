@@ -1,4 +1,6 @@
 let allCompanies = [];
+let companyDataPromise = null; // Promise for singleton loading
+
 let allRssItems = []; // Global storage for RSS content
 let allGeoEvents = []; // Global storage for event coordinates
 let currentCompany = null;
@@ -994,202 +996,210 @@ function handleInitialHashScroll() {
  * Yritysdata ja katalogi
  */
 async function loadCompanyData() {
-    const dataSourceUrl = 'https://www.mediazoo.fi/laukaainfo-web/get_companies.php';
-    console.log('Yritetään hakea yritystietoja:', dataSourceUrl);
-    try {
-        let json = null;
-        const cached = sessionStorage.getItem('laukaainfo_companies_slim');
-        const cacheTime = sessionStorage.getItem('laukaainfo_companies_slim_time');
-        
-        if (cached && cacheTime && (Date.now() - parseInt(cacheTime) < 1800000)) { // 30 min cache
-            json = JSON.parse(cached);
-            console.log('Käytetään välimuistissa olevaa yritysdataa');
-        } else {
-            try {
-                const response = await fetch(dataSourceUrl + '?t=' + Date.now());
-                console.log('Vastaus saatu:', response.status);
-                if (!response.ok) throw new Error('HTTP Error: ' + response.status);
-                json = await response.json();
-                sessionStorage.setItem('laukaainfo_companies_slim', JSON.stringify(json));
-                sessionStorage.setItem('laukaainfo_companies_slim_time', Date.now().toString());
-            } catch (networkError) {
-                console.warn('Verkkovirhe tai rate limit (429) rajapinnassa, käytetään paikallista varadataa:', networkError);
-                const isSubdir = window.location.pathname.includes('/yritys/');
-                const prefix = isSubdir ? '../' : './';
-                const localRes = await fetch(prefix + 'companies_data.json');
-                json = await localRes.json();
-            }
-        }
+    if (companyDataPromise) {
+        return companyDataPromise;
+    }
 
-        // New response format: {results: [...], total: N, page: N, limit: N}
-        allCompanies = Array.isArray(json) ? json : (json.results || []);
-        console.log('Yrityksiiä ladattu:', allCompanies.length);
+    companyDataPromise = (async () => {
+        const dataSourceUrl = 'https://www.mediazoo.fi/laukaainfo-web/get_companies.php';
+        console.log('Yritetään hakea yritystietoja:', dataSourceUrl);
 
-        // Normalize URLs
-        const baseUrl = dataSourceUrl.substring(0, dataSourceUrl.lastIndexOf('/') + 1);
-        allCompanies.forEach(company => {
-            if (company.media) {
-                company.media.forEach(item => {
-                    if (item.url && !item.url.startsWith('http') && !item.url.startsWith('//')) {
-                        item.url = baseUrl + item.url;
-                    }
-                });
-            }
-            if (company.logo && !company.logo.startsWith('http') && !company.logo.startsWith('//') && company.logo !== '-') {
-                company.logo = baseUrl + company.logo;
-            }
-
-            // Process tags and slugs (stored in allCompanies)
-            company.tags = (company.tags || '').toLowerCase();
-            company.alue_slug = (company.alue_slug || '').toLowerCase();
-            company.kunta_slug = (company.kunta_slug || '').toLowerCase();
-        });
-
-        // Hae lisätiedot haulle (rowid-pohjainen)
         try {
-            let searchExtras = null;
-            try {
-                const extrasRes = await fetch('https://www.mediazoo.fi/laukaainfo-web/search_extras.php?t=' + Date.now());
-                if (extrasRes.ok) {
-                    searchExtras = await extrasRes.json();
-                } else {
-                    throw new Error('Palvelin ei vastannut ok');
-                }
-            } catch(e) {
-                // Lokaali varayhteys testausta varten
-                const isSubdir = window.location.pathname.includes('/yritys/');
-                const prefix = isSubdir ? '../' : './';
-                const localRes = await fetch(prefix + 'laukaainfo-web/search_extras.json');
-                if (localRes.ok) {
-                    searchExtras = await localRes.json();
+            let json = null;
+            const cached = sessionStorage.getItem('laukaainfo_companies_slim');
+            const cacheTime = sessionStorage.getItem('laukaainfo_companies_slim_time');
+            
+            if (cached && cacheTime && (Date.now() - parseInt(cacheTime) < 1800000)) { // 30 min cache
+                try {
+                    json = JSON.parse(cached);
+                    console.log('Käytetään välimuistissa olevaa yritysdataa');
+                } catch (e) {
+                    console.warn('Välimuistidatan parsiminen epäonnistui:', e);
                 }
             }
 
-            if (searchExtras) {
-                allCompanies.forEach(company => {
-                    const rowId = (company.id || '').toString().replace('company-', '');
-                    if (searchExtras[rowId]) {
-                        company.searchExtraInfo = searchExtras[rowId].toLowerCase();
-                    }
-                });
-                console.log('Lisätiedot haulle ladattu onnistuneesti.');
-            }
-        } catch (e) {
-            console.warn('Hakulisätietojen lataus epäonnistui:', e);
-        }
-
-        initCompanyCatalog();
-        initMap(allCompanies);
-        initCategories(allCompanies);
-        initShareGenerator(allCompanies);
-
-        // URL-parametrin (haku) tarkistus
-        const queryParams = new URLSearchParams(window.location.search);
-        const urlParam = queryParams.get('haku') || queryParams.get('yritys') || queryParams.get('open');
-        const freeQuery = queryParams.get('q'); // Vapaa tekstihaku: ?q=hakutermi
-        const hashParam = window.location.hash;
-
-        let searchKeyword = urlParam;
-        if (!searchKeyword && hashParam && hashParam.startsWith('#haku-')) {
-            searchKeyword = hashParam.replace('#haku-', '').replace(/-/g, ' ');
-        }
-
-        // Vapaa tekstihaku ?q= — täyttää hakukentän ja suorittaa haun automaattisesti
-        const freeSearchInput = document.getElementById('company-search');
-        if (freeQuery && freeSearchInput) {
-            console.log('Vapaa tekstihaku URL-parametrista (?q=):', freeQuery);
-            freeSearchInput.value = freeQuery;
-            // Simuloidaan Hae-painikkeen klikkaus jotta kaikki logiikka ajautuu
-            const searchBtn = document.getElementById('search-btn');
-            if (searchBtn) {
-                searchBtn.click();
-            } else {
-                filterCatalog();
-            }
-            updateSpotlight(welcomeCompany);
-            setTimeout(() => {
-                const searchSection = document.getElementById('kauppa-search');
-                if (searchSection) searchSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 300);
-
-        } else {
-            let selectedCompany = null;
-            if (searchKeyword) {
-                const lowerKeyword = searchKeyword.toLowerCase().trim();
-                console.log('[Deep-link] Yritetään avata yritystä hakusanalla:', lowerKeyword);
-                
-                // Etsitään yrityksen nimestä, url-ystävällisestä muodosta tai slugista
-                selectedCompany = allCompanies.find(c => {
-                    if (!c.nimi) return false;
-                    const name = c.nimi.toLowerCase();
-                    const slug = slugify(c.nimi);
-                    const k_slug = slugify(lowerKeyword);
-                    
-                    const isExactMatch = name === lowerKeyword || slug === lowerKeyword;
-                    const isSlugMatch = slug === k_slug;
-                    const isPartialMatch = name.includes(lowerKeyword);
-                    
-                    return isExactMatch || isSlugMatch || isPartialMatch;
-                });
-            }
-
-            if (selectedCompany) {
-                console.log('[Deep-link] Löydetty yritys:', selectedCompany.nimi);
-                updateSpotlight(selectedCompany);
-
-                // AVATAAN MYÖS LkiModal jos ?open= parametri on käytössä
-                const openParam = queryParams.get('open');
-                if (openParam && window.LkiModal) {
-                    // Pieni viive varmistaa, että kartta ja markkerit ovat täysin valmiina
-                    setTimeout(() => {
-                        console.log('[Deep-link] Avataan LkiModal ja keskitetään kartta yritykselle:', selectedCompany.nimi);
-                        
-                        // Keskitytään karttaan
-                        if (map && selectedCompany.lat && selectedCompany.lon) {
-                            map.setView([selectedCompany.lat, selectedCompany.lon], 15);
+            if (!json) {
+                try {
+                    const response = await fetch(dataSourceUrl + '?t=' + Date.now());
+                    console.log('Vastaus saatu:', response.status);
+                    if (!response.ok) throw new Error('HTTP Error: ' + response.status);
+                    json = await response.json();
+                    sessionStorage.setItem('laukaainfo_companies_slim', JSON.stringify(json));
+                    sessionStorage.setItem('laukaainfo_companies_slim_time', Date.now().toString());
+                } catch (networkError) {
+                    console.warn('Verkkovirhe tai rate limit (429) rajapinnassa, käytetään paikallista varadataa:', networkError);
+                    const isSubdir = window.location.pathname.includes('/yritys/');
+                    const prefix = isSubdir ? '../' : './';
+                    try {
+                        const localRes = await fetch(prefix + 'companies_data.json');
+                        if (localRes.ok) {
+                            json = await localRes.json();
+                        } else {
+                            throw new Error('Local fallback file not found (404)');
                         }
-                        
-                        window.LkiModal.open(selectedCompany);
-                    }, 1200); // Hieman kasvatettu viive varmuuden vuoksi
+                    } catch (fallbackError) {
+                        console.error('Myös paikallisen varadatan lataus epäonnistui:', fallbackError);
+                    }
                 }
+            }
 
-                // Asetetaan sana hakukenttään
-                const searchInput = document.getElementById('company-search');
-                if (searchInput) {
-                    searchInput.value = selectedCompany.nimi;
-                    filterCatalog();
+            if (!json) {
+                console.error('Yritystietoja ei saatu ladattua mistään lähteestä.');
+                allCompanies = [];
+                return [];
+            }
 
-                    // Korostetaan katalogissa
-                    document.querySelectorAll('.catalog-item').forEach(el => {
-                        if (el.querySelector('h4').textContent === selectedCompany.nimi) {
-                            el.classList.add('active');
-                            setTimeout(() => {
-                                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                            }, 500);
+            // New response format: {results: [...], total: N, page: N, limit: N}
+            allCompanies = Array.isArray(json) ? json : (json.results || []);
+            console.log('Yrityksiä ladattu:', allCompanies.length);
+
+            // Normalize URLs
+            const baseUrl = dataSourceUrl.substring(0, dataSourceUrl.lastIndexOf('/') + 1);
+            allCompanies.forEach(company => {
+                if (company.media) {
+                    company.media.forEach(item => {
+                        if (item.url && !item.url.startsWith('http') && !item.url.startsWith('//')) {
+                            item.url = baseUrl + item.url;
                         }
                     });
                 }
+                if (company.logo && !company.logo.startsWith('http') && !company.logo.startsWith('//') && company.logo !== '-') {
+                    company.logo = baseUrl + company.logo;
+                }
 
-                // Skrollataan automaattisesti kohtaan (jos ei avattu modaalia)
-                if (!openParam) {
-                    setTimeout(() => {
-                        const spotlight = document.getElementById('company-spotlight');
-                        if (spotlight) spotlight.scrollIntoView({ behavior: 'smooth' });
-                    }, 800);
+                // Process tags and slugs (stored in allCompanies)
+                company.tags = (company.tags || '').toLowerCase();
+                company.alue_slug = (company.alue_slug || '').toLowerCase();
+                company.kunta_slug = (company.kunta_slug || '').toLowerCase();
+            });
+
+            // Hae lisätiedot haulle (rowid-pohjainen)
+            try {
+                let searchExtras = null;
+                try {
+                    const extrasRes = await fetch('https://www.mediazoo.fi/laukaainfo-web/search_extras.php?t=' + Date.now());
+                    if (extrasRes.ok) {
+                        searchExtras = await extrasRes.json();
+                    } else {
+                        throw new Error('Palvelin ei vastannut ok');
+                    }
+                } catch(e) {
+                    const isSubdir = window.location.pathname.includes('/yritys/');
+                    const prefix = isSubdir ? '../' : './';
+                    try {
+                        const localRes = await fetch(prefix + 'laukaainfo-web/search_extras.json');
+                        if (localRes.ok) {
+                            searchExtras = await localRes.json();
+                        }
+                    } catch (e2) {}
                 }
-            } else {
-                if (searchKeyword) {
-                    console.warn('[Deep-link] Yritystä ei löytynyt hakusanalla:', searchKeyword);
+
+                if (searchExtras) {
+                    allCompanies.forEach(company => {
+                        const rowId = (company.id || '').toString().replace('company-', '');
+                        if (searchExtras[rowId]) {
+                            company.searchExtraInfo = searchExtras[rowId].toLowerCase();
+                        }
+                    });
+                    console.log('Lisätiedot haulle ladattu onnistuneesti.');
                 }
-                console.log('Päivitetään spotlight avaustilanteella');
-                updateSpotlight(welcomeCompany);
+            } catch (e) {
+                console.warn('Hakulisätietojen lataus epäonnistui:', e);
             }
+
+            initCompanyCatalog();
+            initMap(allCompanies);
+            initCategories(allCompanies);
+            initShareGenerator(allCompanies);
+
+            // URL-parametrin (haku) tarkistus
+            const queryParams = new URLSearchParams(window.location.search);
+            const urlParam = queryParams.get('haku') || queryParams.get('yritys') || queryParams.get('open');
+            const freeQuery = queryParams.get('q');
+            const hashParam = window.location.hash;
+
+            let searchKeyword = urlParam;
+            if (!searchKeyword && hashParam && hashParam.startsWith('#haku-')) {
+                searchKeyword = hashParam.replace('#haku-', '').replace(/-/g, ' ');
+            }
+
+            const freeSearchInput = document.getElementById('company-search');
+            if (freeQuery && freeSearchInput) {
+                console.log('Vapaa tekstihaku URL-parametrista (?q=):', freeQuery);
+                freeSearchInput.value = freeQuery;
+                const searchBtn = document.getElementById('search-btn');
+                if (searchBtn) {
+                    searchBtn.click();
+                } else {
+                    filterCatalog();
+                }
+                updateSpotlight(welcomeCompany);
+                setTimeout(() => {
+                    const searchSection = document.getElementById('kauppa-search');
+                    if (searchSection) searchSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 300);
+            } else {
+                let selectedCompany = null;
+                if (searchKeyword) {
+                    const lowerKeyword = searchKeyword.toLowerCase().trim();
+                    selectedCompany = allCompanies.find(c => {
+                        if (!c.nimi) return false;
+                        const name = c.nimi.toLowerCase();
+                        const slug = slugify(c.nimi);
+                        const k_slug = slugify(lowerKeyword);
+                        return name === lowerKeyword || slug === lowerKeyword || slug === k_slug || name.includes(lowerKeyword);
+                    });
+                }
+
+                if (selectedCompany) {
+                    updateSpotlight(selectedCompany);
+                    const openParam = queryParams.get('open');
+                    if (openParam && window.LkiModal) {
+                        setTimeout(() => {
+                            if (map && selectedCompany.lat && selectedCompany.lon) {
+                                map.setView([selectedCompany.lat, selectedCompany.lon], 15);
+                            }
+                            window.LkiModal.open(selectedCompany);
+                        }, 1200);
+                    }
+                    const searchInput = document.getElementById('company-search');
+                    if (searchInput) {
+                        searchInput.value = selectedCompany.nimi;
+                        filterCatalog();
+                        document.querySelectorAll('.catalog-item').forEach(el => {
+                            if (el.querySelector('h4').textContent === selectedCompany.nimi) {
+                                el.classList.add('active');
+                                setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'center' }), 500);
+                            }
+                        });
+                    }
+                    if (!openParam) {
+                        setTimeout(() => {
+                            const spotlight = document.getElementById('company-spotlight');
+                            if (spotlight) spotlight.scrollIntoView({ behavior: 'smooth' });
+                        }, 800);
+                    }
+                } else {
+                    updateSpotlight(welcomeCompany);
+                }
+            }
+            return allCompanies;
+        } catch (error) {
+            console.error('Virhe yritysdatan latauksessa:', error);
+            // Don't append to body in all pages, only if we are in a context where it's useful
+            if (document.getElementById('catalog-list') || document.getElementById('palvelu-container')) {
+                const errorBanner = document.createElement('div');
+                errorBanner.style = "background:red;color:white;padding:1rem;position:fixed;bottom:0;left:0;right:0;z-index:9999;";
+                errorBanner.textContent = 'Virhe yritysdatan latauksessa. Tarkista verkkoyhteys.';
+                document.body.appendChild(errorBanner);
+            }
+            return [];
         }
-    } catch (error) {
-        console.error('Virhe yritysdatan latauksessa:', error);
-        document.body.innerHTML += '<div style="background:red;color:white;padding:1rem;">Virhe yritysdatan latauksessa. Tarkista PHP-tiedostot palvelimella.</div>';
-    }
+    })();
+
+    return companyDataPromise;
 }
+
 
 
 let activeSuggestionIndex = -1;

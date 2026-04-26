@@ -227,17 +227,23 @@
 
             // Ladataan yritysdata jos sitä ei vielä ole
             try {
-                if (typeof allCompanies === 'undefined' || allCompanies.length === 0) {
-                    console.log("Loading company data...");
+                // Varmistetaan että loadCompanyData on olemassa (script.js latautunut)
+                if (typeof loadCompanyData === 'function') {
+                    if (typeof allCompanies === 'undefined' || allCompanies.length === 0) {
+                        console.log("allCompanies is empty, awaiting loadCompanyData...");
+                        await loadCompanyData();
+                    }
+                } else {
+                    console.warn("loadCompanyData is not available yet, waiting...");
+                    // Pieni viive jos script.js on vielä kesken
+                    await new Promise(r => setTimeout(r, 500));
                     if (typeof loadCompanyData === 'function') {
                         await loadCompanyData();
-                    } else {
-                        console.error("loadCompanyData function not found!");
                     }
                 }
-                console.log("Companies loaded:", (typeof allCompanies !== 'undefined') ? allCompanies.length : 0);
+                console.log("Companies final check:", (typeof allCompanies !== 'undefined') ? allCompanies.length : 'undefined');
             } catch (e) {
-                console.error("Error loading companies:", e);
+                console.error("Error loading companies in initPalvelu:", e);
             }
 
             renderStep();
