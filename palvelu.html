@@ -251,7 +251,12 @@
                 console.error("Error loading companies in initPalvelu:", e);
             }
 
-            renderStep();
+            const filterProfiling = new URLSearchParams(window.location.search).get('filter_profiling');
+            if (filterProfiling) {
+                showResults();
+            } else {
+                renderStep();
+            }
         }
 
         function renderStep() {
@@ -391,6 +396,12 @@
                 }
             }
 
+            let filterProfiling = new URLSearchParams(window.location.search).get('filter_profiling');
+            if (filterProfiling && selectedOptions.length === 0) {
+                // If skipped steps directly from front page
+                selectedOptions.push({ label: "Tarkennettu haku", tags: [] });
+            }
+
             console.log("Processing selected options:", selectedOptions);
 
             let totalFound = 0;
@@ -437,6 +448,21 @@
                 console.log(`Filtering for option: ${opt.label}`, opt.tags);
 
                 const companiesForOpt = allCompanies.filter(c => {
+                    // HARD FILTER from front page
+                    if (filterProfiling) {
+                        let hasProp = false;
+                        if (c.profiling?.core && c.profiling.core[filterProfiling]) hasProp = true;
+                        else {
+                            for (let k in c.profiling || {}) {
+                                if (c.profiling[k] && c.profiling[k][filterProfiling]) {
+                                    hasProp = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (!hasProp) return false;
+                    }
+
                     // Tapa 1: Profilointidata (ensisijainen)
                     if (c.profiling && c.profiling.core && c.profiling.core.fits_for) {
                         const score = c.profiling.core.fits_for[currentProfilingKey] || 0;
@@ -445,7 +471,7 @@
 
                     // Tapa 2: Tagit (toissijainen fallback)
                     const companyContent = ((c.tags || '') + ' ' + (c.kategoria || '') + ' ' + (c.nimi || '')).toLowerCase();
-                    return opt.tags.some(tag => companyContent.includes(tag.toLowerCase()));
+                    return opt.tags && opt.tags.some(tag => companyContent.includes(tag.toLowerCase()));
                 });
 
                 console.log(`Found ${companiesForOpt.length} matches for ${opt.label}`);

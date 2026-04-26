@@ -265,131 +265,295 @@
             </div>
 
             <div class="need-grid">
-                <a href="palvelu.html?id=haat" class="need-card">
+                <div class="need-card" style="position: relative;">
                     <div class="need-icon">💒</div>
                     <h3>Häät</h3>
                     <p>Tilat, catering, kuvaus ja kaikki häiden järjestämiseen Laukaassa.</p>
-                    <div class="arrow">Suunnittele häät &raquo;</div>
-                </a>
+                    
+    <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
-                <a href="palvelu.html?id=yritysjuhlat" class="need-card">
+        <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'haat')">
+            <option value="">Tarkenna tarvetta...</option>
+            <option value="is_lakeside">Juhlatila järven rannalla</option>
+            <option value="accommodation_beds">Sisältää majoitusmahdollisuuden</option>
+            <option value="alcohol_license">Anniskeluoikeudet</option>
+        </select>
+    </div>
+    <a href="palvelu.html?id=haat" id="link-haat" class="arrow" style="display: block; text-align: center; text-decoration: none; padding: 0.6rem; border-radius: 8px; margin-top: 0.5rem; background: var(--primary-blue); color: white; font-weight: 600; opacity: 1; transform: none; box-shadow: 0 4px 10px rgba(0,86,179,0.2);">Suunnittele häät &raquo;</a>
+</div>
+
+                <div class="need-card" style="position: relative;">
                     <div class="need-icon">🥂</div>
                     <h3>Yritysjuhlat</h3>
                     <p>Pikkujoulut, kesäjuhlat ja asiakastilaisuudet helposti kerralla.</p>
-                    <div class="arrow">Järjestä juhlat &raquo;</div>
-                </a>
+                    
+    <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
-                <a href="palvelu.html?id=yritystilaisuudet" class="need-card">
+        <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'yritysjuhlat')">
+            <option value="">Tarkenna tarvetta...</option>
+            <option value="has_av_tech">Tiloissa AV-tekniikka</option>
+            <option value="has_sauna">Saunatilat saatavilla</option>
+        </select>
+    </div>
+    <a href="palvelu.html?id=yritysjuhlat" id="link-yritysjuhlat" class="arrow" style="display: block; text-align: center; text-decoration: none; padding: 0.6rem; border-radius: 8px; margin-top: 0.5rem; background: var(--primary-blue); color: white; font-weight: 600; opacity: 1; transform: none; box-shadow: 0 4px 10px rgba(0,86,179,0.2);">Järjestä juhlat &raquo;</a>
+</div>
+
+                <div class="need-card" style="position: relative;">
                     <div class="need-icon">💼</div>
                     <h3>Yritystilaisuudet</h3>
                     <p>Kokoukset, seminaarit ja koulutukset ammattimaisissa puitteissa.</p>
-                    <div class="arrow">Hae tilat &raquo;</div>
-                </a>
+                    
+    <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
-                <a href="palvelu.html?id=syntymapaivat" class="need-card">
+        <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'yritystilaisuudet')">
+            <option value="">Tarkenna tarvetta...</option>
+            <option value="invoice_billing">Laskutusmahdollisuus</option>
+            <option value="is_accessible">Esteetön pääsy</option>
+        </select>
+    </div>
+    <a href="palvelu.html?id=yritystilaisuudet" id="link-yritystilaisuudet" class="arrow" style="display: block; text-align: center; text-decoration: none; padding: 0.6rem; border-radius: 8px; margin-top: 0.5rem; background: var(--primary-blue); color: white; font-weight: 600; opacity: 1; transform: none; box-shadow: 0 4px 10px rgba(0,86,179,0.2);">Hae tilat &raquo;</a>
+</div>
+
+                <div class="need-card" style="position: relative;">
                     <div class="need-icon">🎂</div>
                     <h3>Syntymäpäivät</h3>
                     <p>Järjestä ikimuistoiset syntymäpäivät kaikenikäisille.</p>
-                    <div class="arrow">Aloita suunnittelu &raquo;</div>
-                </a>
+                    
+    <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
-                <a href="palvelu.html?id=muutto" class="need-card">
+        <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'syntymapaivat')">
+            <option value="">Tarkenna tarvetta...</option>
+            <option value="home_service">Kotiinkuljetus / Kotikäynti</option>
+            <option value="weekend_service">Palvelua viikonloppuisin</option>
+        </select>
+    </div>
+    <a href="palvelu.html?id=syntymapaivat" id="link-syntymapaivat" class="arrow" style="display: block; text-align: center; text-decoration: none; padding: 0.6rem; border-radius: 8px; margin-top: 0.5rem; background: var(--primary-blue); color: white; font-weight: 600; opacity: 1; transform: none; box-shadow: 0 4px 10px rgba(0,86,179,0.2);">Aloita suunnittelu &raquo;</a>
+</div>
+
+                <div class="need-card" style="position: relative;">
                     <div class="need-icon">📦</div>
                     <h3>Muutto</h3>
                     <p>Muuttoauto, kantajat, pakkaus ja loppusiivous samasta paikasta.</p>
-                    <div class="arrow">Helpota muuttoa &raquo;</div>
-                </a>
+                    
+    <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
-                <a href="palvelu.html?id=remontti" class="need-card">
+        <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'muutto')">
+            <option value="">Tarkenna tarvetta...</option>
+            <option value="weekend_moves">Viikonloppumuutot</option>
+            <option value="urgent_moves">Kiireelliset muutot</option>
+            <option value="packing_service">Pakkauspalvelu</option>
+        </select>
+    </div>
+    <a href="palvelu.html?id=muutto" id="link-muutto" class="arrow" style="display: block; text-align: center; text-decoration: none; padding: 0.6rem; border-radius: 8px; margin-top: 0.5rem; background: var(--primary-blue); color: white; font-weight: 600; opacity: 1; transform: none; box-shadow: 0 4px 10px rgba(0,86,179,0.2);">Helpota muuttoa &raquo;</a>
+</div>
+
+                <div class="need-card" style="position: relative;">
                     <div class="need-icon">🔨</div>
                     <h3>Remontti</h3>
                     <p>Löydä tekijät ja tarvikkeet kodin tai toimitilan uudistukseen.</p>
-                    <div class="arrow">Etsi tekijät &raquo;</div>
-                </a>
+                    
+    <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
-                <a href="palvelu.html?id=mokkipalvelut" class="need-card">
+        <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'remontti')">
+            <option value="">Tarkenna tarvetta...</option>
+            <option value="emergency_service">Päivystys / Hätäpalvelu</option>
+            <option value="wet_room_certification">Kosteiden tilojen sertifikaatti</option>
+        </select>
+    </div>
+    <a href="palvelu.html?id=remontti" id="link-remontti" class="arrow" style="display: block; text-align: center; text-decoration: none; padding: 0.6rem; border-radius: 8px; margin-top: 0.5rem; background: var(--primary-blue); color: white; font-weight: 600; opacity: 1; transform: none; box-shadow: 0 4px 10px rgba(0,86,179,0.2);">Etsi tekijät &raquo;</a>
+</div>
+
+                <div class="need-card" style="position: relative;">
                     <div class="need-icon">🏡</div>
                     <h3>Mökkipalvelut</h3>
                     <p>Mökin huolto, puut, pihanhoito ja muut vapaa-ajan palvelut.</p>
-                    <div class="arrow">Mökin huoltoon &raquo;</div>
-                </a>
+                    
+    <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
-                <a href="palvelu.html?id=taloyhtion-huolto" class="need-card">
+        <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'mokkipalvelut')">
+            <option value="">Tarkenna tarvetta...</option>
+            <option value="key_holding">Avainpalvelu / Valvonta</option>
+            <option value="snow_removal">Lumityöt / Pihanhoito</option>
+        </select>
+    </div>
+    <a href="palvelu.html?id=mokkipalvelut" id="link-mokkipalvelut" class="arrow" style="display: block; text-align: center; text-decoration: none; padding: 0.6rem; border-radius: 8px; margin-top: 0.5rem; background: var(--primary-blue); color: white; font-weight: 600; opacity: 1; transform: none; box-shadow: 0 4px 10px rgba(0,86,179,0.2);">Mökin huoltoon &raquo;</a>
+</div>
+
+                <div class="need-card" style="position: relative;">
                     <div class="need-icon">🏢</div>
                     <h3>Taloyhtiön huolto</h3>
                     <p>Isännöinti, kiinteistöhuolto ja tekniset korjaukset taloyhtiöille.</p>
-                    <div class="arrow">Taloyhtiön avuksi &raquo;</div>
-                </a>
+                    
+    <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
-                <a href="palvelu.html?id=hautajaiset" class="need-card">
+        <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'taloyhtion-huolto')">
+            <option value="">Tarkenna tarvetta...</option>
+            <option value="maintenance_contracts">Jatkuvat huoltosopimukset</option>
+            <option value="emergency_response">24/7 Päivystys</option>
+        </select>
+    </div>
+    <a href="palvelu.html?id=taloyhtion-huolto" id="link-taloyhtion-huolto" class="arrow" style="display: block; text-align: center; text-decoration: none; padding: 0.6rem; border-radius: 8px; margin-top: 0.5rem; background: var(--primary-blue); color: white; font-weight: 600; opacity: 1; transform: none; box-shadow: 0 4px 10px rgba(0,86,179,0.2);">Taloyhtiön avuksi &raquo;</a>
+</div>
+
+                <div class="need-card" style="position: relative;">
                     <div class="need-icon">🕯️</div>
                     <h3>Hautajaiset</h3>
                     <p>Kaikki arvokkaaseen ja huolelliseen hautajaisjärjestelyyn.</p>
-                    <div class="arrow">Tutustu palveluihin &raquo;</div>
-                </a>
+                    
+    <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
-                <a href="palvelu.html?id=yrityksen-perustaminen" class="need-card">
+        <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'hautajaiset')">
+            <option value="">Tarkenna tarvetta...</option>
+            <option value="home_service">Kotiinkuljetus / Kotikäynti</option>
+            <option value="weekend_service">Palvelua viikonloppuisin</option>
+        </select>
+    </div>
+    <a href="palvelu.html?id=hautajaiset" id="link-hautajaiset" class="arrow" style="display: block; text-align: center; text-decoration: none; padding: 0.6rem; border-radius: 8px; margin-top: 0.5rem; background: var(--primary-blue); color: white; font-weight: 600; opacity: 1; transform: none; box-shadow: 0 4px 10px rgba(0,86,179,0.2);">Tutustu palveluihin &raquo;</a>
+</div>
+
+                <div class="need-card" style="position: relative;">
                     <div class="need-icon">🚀</div>
                     <h3>Yrityksen perustaminen</h3>
                     <p>Neuvonta, hallinto, markkinointi ja IT uuden yrityksen starttiin.</p>
-                    <div class="arrow">Perusta yritys &raquo;</div>
-                </a>
+                    
+    <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
-                <a href="palvelu.html?id=yrityksen-kehittaminen" class="need-card">
+        <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'yrityksen-perustaminen')">
+            <option value="">Tarkenna tarvetta...</option>
+            <option value="home_service">Kotiinkuljetus / Kotikäynti</option>
+            <option value="weekend_service">Palvelua viikonloppuisin</option>
+        </select>
+    </div>
+    <a href="palvelu.html?id=yrityksen-perustaminen" id="link-yrityksen-perustaminen" class="arrow" style="display: block; text-align: center; text-decoration: none; padding: 0.6rem; border-radius: 8px; margin-top: 0.5rem; background: var(--primary-blue); color: white; font-weight: 600; opacity: 1; transform: none; box-shadow: 0 4px 10px rgba(0,86,179,0.2);">Perusta yritys &raquo;</a>
+</div>
+
+                <div class="need-card" style="position: relative;">
                     <div class="need-icon">📈</div>
                     <h3>Yrityksen kehittäminen</h3>
                     <p>Markkinointi, rekrytointi ja konsultointi kasvun tueksi.</p>
-                    <div class="arrow">Kehitä yritystä &raquo;</div>
-                </a>
+                    
+    <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
-                <a href="palvelu.html?id=vakituinen-palvelukumppani" class="need-card">
+        <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'yrityksen-kehittaminen')">
+            <option value="">Tarkenna tarvetta...</option>
+            <option value="home_service">Kotiinkuljetus / Kotikäynti</option>
+            <option value="weekend_service">Palvelua viikonloppuisin</option>
+        </select>
+    </div>
+    <a href="palvelu.html?id=yrityksen-kehittaminen" id="link-yrityksen-kehittaminen" class="arrow" style="display: block; text-align: center; text-decoration: none; padding: 0.6rem; border-radius: 8px; margin-top: 0.5rem; background: var(--primary-blue); color: white; font-weight: 600; opacity: 1; transform: none; box-shadow: 0 4px 10px rgba(0,86,179,0.2);">Kehitä yritystä &raquo;</a>
+</div>
+
+                <div class="need-card" style="position: relative;">
                     <div class="need-icon">🤝</div>
                     <h3>Palvelukumppani</h3>
                     <p>Etsitkö jatkuvaa kumppania siivoukseen, IT:hen tai hallintoon?</p>
-                    <div class="arrow">Löydä kumppani &raquo;</div>
-                </a>
+                    
+    <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
-                <a href="palvelu.html?id=kiinteistopalvelut" class="need-card">
+        <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'vakituinen-palvelukumppani')">
+            <option value="">Tarkenna tarvetta...</option>
+            <option value="home_service">Kotiinkuljetus / Kotikäynti</option>
+            <option value="weekend_service">Palvelua viikonloppuisin</option>
+        </select>
+    </div>
+    <a href="palvelu.html?id=vakituinen-palvelukumppani" id="link-vakituinen-palvelukumppani" class="arrow" style="display: block; text-align: center; text-decoration: none; padding: 0.6rem; border-radius: 8px; margin-top: 0.5rem; background: var(--primary-blue); color: white; font-weight: 600; opacity: 1; transform: none; box-shadow: 0 4px 10px rgba(0,86,179,0.2);">Löydä kumppani &raquo;</a>
+</div>
+
+                <div class="need-card" style="position: relative;">
                     <div class="need-icon">🏘️</div>
                     <h3>Kiinteistöpalvelut</h3>
                     <p>Siivous, huolto ja pihanhoito kiinteistöjen omistajille.</p>
-                    <div class="arrow">Kiinteistön hoitoon &raquo;</div>
-                </a>
+                    
+    <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
-                <a href="palvelu.html?id=paivystavat-palvelut" class="need-card">
+        <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'kiinteistopalvelut')">
+            <option value="">Tarkenna tarvetta...</option>
+            <option value="home_service">Kotiinkuljetus / Kotikäynti</option>
+            <option value="weekend_service">Palvelua viikonloppuisin</option>
+        </select>
+    </div>
+    <a href="palvelu.html?id=kiinteistopalvelut" id="link-kiinteistopalvelut" class="arrow" style="display: block; text-align: center; text-decoration: none; padding: 0.6rem; border-radius: 8px; margin-top: 0.5rem; background: var(--primary-blue); color: white; font-weight: 600; opacity: 1; transform: none; box-shadow: 0 4px 10px rgba(0,86,179,0.2);">Kiinteistön hoitoon &raquo;</a>
+</div>
+
+                <div class="need-card" style="position: relative;">
                     <div class="need-icon">🚨</div>
                     <h3>Päivystävät palvelut</h3>
                     <p>Apu lähellä silloin kun sitä tarvitaan kiireellisesti.</p>
-                    <div class="arrow">Hae apua &raquo;</div>
-                </a>
+                    
+    <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
-                <a href="palvelu.html?id=terveys-ja-hyvinvointi" class="need-card">
+        <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'paivystavat-palvelut')">
+            <option value="">Tarkenna tarvetta...</option>
+            <option value="emergency_available">Hinaus ja tiepalvelu</option>
+            <option value="emergency_response">Kiinteistöpäivystys</option>
+        </select>
+    </div>
+    <a href="palvelu.html?id=paivystavat-palvelut" id="link-paivystavat-palvelut" class="arrow" style="display: block; text-align: center; text-decoration: none; padding: 0.6rem; border-radius: 8px; margin-top: 0.5rem; background: var(--primary-blue); color: white; font-weight: 600; opacity: 1; transform: none; box-shadow: 0 4px 10px rgba(0,86,179,0.2);">Hae apua &raquo;</a>
+</div>
+
+                <div class="need-card" style="position: relative;">
                     <div class="need-icon">🏥</div>
                     <h3>Terveys ja hyvinvointi</h3>
                     <p>Löydä asiantuntijat terveyden ja hyvän olon tueksi.</p>
-                    <div class="arrow">Voi hyvin &raquo;</div>
-                </a>
+                    
+    <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
-                <a href="palvelu.html?id=liikunta-ja-vapaaaika" class="need-card">
+        <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'terveys-ja-hyvinvointi')">
+            <option value="">Tarkenna tarvetta...</option>
+            <option value="home_visits">Kotikäynnit</option>
+            <option value="online_booking">Sähköinen ajanvaraus</option>
+        </select>
+    </div>
+    <a href="palvelu.html?id=terveys-ja-hyvinvointi" id="link-terveys-ja-hyvinvointi" class="arrow" style="display: block; text-align: center; text-decoration: none; padding: 0.6rem; border-radius: 8px; margin-top: 0.5rem; background: var(--primary-blue); color: white; font-weight: 600; opacity: 1; transform: none; box-shadow: 0 4px 10px rgba(0,86,179,0.2);">Voi hyvin &raquo;</a>
+</div>
+
+                <div class="need-card" style="position: relative;">
                     <div class="need-icon">⚽</div>
                     <h3>Liikunta ja vapaa-aika</h3>
                     <p>Harrastuksia, seuroja ja liikuntaa kaikenikäisille.</p>
-                    <div class="arrow">Lähde liikkeelle &raquo;</div>
-                </a>
+                    
+    <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
-                <a href="palvelu.html?id=elaimet" class="need-card">
+        <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'liikunta-ja-vapaaaika')">
+            <option value="">Tarkenna tarvetta...</option>
+            <option value="home_service">Kotiinkuljetus / Kotikäynti</option>
+            <option value="weekend_service">Palvelua viikonloppuisin</option>
+        </select>
+    </div>
+    <a href="palvelu.html?id=liikunta-ja-vapaaaika" id="link-liikunta-ja-vapaaaika" class="arrow" style="display: block; text-align: center; text-decoration: none; padding: 0.6rem; border-radius: 8px; margin-top: 0.5rem; background: var(--primary-blue); color: white; font-weight: 600; opacity: 1; transform: none; box-shadow: 0 4px 10px rgba(0,86,179,0.2);">Lähde liikkeelle &raquo;</a>
+</div>
+
+                <div class="need-card" style="position: relative;">
                     <div class="need-icon">🐾</div>
                     <h3>Eläimet ja lemmikit</h3>
                     <p>Kaikki lemmikkisi parhaaksi – ruoasta lääkäriin.</p>
-                    <div class="arrow">Lemmikin avuksi &raquo;</div>
-                </a>
+                    
+    <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
-                <a href="palvelu.html?id=lapset-ja-perhe" class="need-card">
+        <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'elaimet')">
+            <option value="">Tarkenna tarvetta...</option>
+            <option value="home_service">Kotiinkuljetus / Kotikäynti</option>
+            <option value="weekend_service">Palvelua viikonloppuisin</option>
+        </select>
+    </div>
+    <a href="palvelu.html?id=elaimet" id="link-elaimet" class="arrow" style="display: block; text-align: center; text-decoration: none; padding: 0.6rem; border-radius: 8px; margin-top: 0.5rem; background: var(--primary-blue); color: white; font-weight: 600; opacity: 1; transform: none; box-shadow: 0 4px 10px rgba(0,86,179,0.2);">Lemmikin avuksi &raquo;</a>
+</div>
+
+                <div class="need-card" style="position: relative;">
                     <div class="need-icon">👶</div>
                     <h3>Lapset ja perhe</h3>
                     <p>Arjen tukea, harrastuksia ja tarvikkeita lapsiperheille.</p>
-                    <div class="arrow">Perheen palveluihin &raquo;</div>
-                </a>
+                    
+    <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
+
+        <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'lapset-ja-perhe')">
+            <option value="">Tarkenna tarvetta...</option>
+            <option value="home_service">Kotiinkuljetus / Kotikäynti</option>
+            <option value="weekend_service">Palvelua viikonloppuisin</option>
+        </select>
+    </div>
+    <a href="palvelu.html?id=lapset-ja-perhe" id="link-lapset-ja-perhe" class="arrow" style="display: block; text-align: center; text-decoration: none; padding: 0.6rem; border-radius: 8px; margin-top: 0.5rem; background: var(--primary-blue); color: white; font-weight: 600; opacity: 1; transform: none; box-shadow: 0 4px 10px rgba(0,86,179,0.2);">Perheen palveluihin &raquo;</a>
+</div>
             </div>
         </section>
 
@@ -665,6 +829,18 @@
                 } catch (e) { }
             }, 2000); // Viivästetään hieman, ettei häiritse sivun latausta
         })();
+    </script>
+
+    <script>
+        function updateNeedLink(selectEl, id) {
+            const link = document.getElementById('link-' + id);
+            const val = selectEl.value;
+            if (val) {
+                link.href = 'palvelu.html?id=' + id + '&filter_profiling=' + val;
+            } else {
+                link.href = 'palvelu.html?id=' + id;
+            }
+        }
     </script>
 </body>
 
