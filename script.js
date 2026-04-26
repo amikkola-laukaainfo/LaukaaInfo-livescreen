@@ -1,5 +1,5 @@
-let allCompanies = [];
-let companyDataPromise = null; // Promise for singleton loading
+window.allCompanies = [];
+window.companyDataPromise = null; // Promise for singleton loading
 
 let allRssItems = []; // Global storage for RSS content
 let allGeoEvents = []; // Global storage for event coordinates
@@ -996,11 +996,11 @@ function handleInitialHashScroll() {
  * Yritysdata ja katalogi
  */
 async function loadCompanyData() {
-    if (companyDataPromise) {
-        return companyDataPromise;
+    if (window.companyDataPromise) {
+        return window.companyDataPromise;
     }
 
-    companyDataPromise = (async () => {
+    window.companyDataPromise = (async () => {
         const dataSourceUrl = 'https://www.mediazoo.fi/laukaainfo-web/get_companies.php';
         console.log('Yritetään hakea yritystietoja:', dataSourceUrl);
 
@@ -1050,8 +1050,8 @@ async function loadCompanyData() {
             }
 
             // New response format: {results: [...], total: N, page: N, limit: N}
-            allCompanies = Array.isArray(json) ? json : (json.results || []);
-            console.log('Yrityksiä ladattu:', allCompanies.length);
+            window.allCompanies = Array.isArray(json) ? json : (json.results || []);
+            console.log('Yrityksiä ladattu:', window.allCompanies.length);
 
             // Normalize URLs
             const baseUrl = dataSourceUrl.substring(0, dataSourceUrl.lastIndexOf('/') + 1);
@@ -1108,9 +1108,9 @@ async function loadCompanyData() {
             }
 
             initCompanyCatalog();
-            initMap(allCompanies);
-            initCategories(allCompanies);
-            initShareGenerator(allCompanies);
+            initMap(window.allCompanies);
+            initCategories(window.allCompanies);
+            initShareGenerator(window.allCompanies);
 
             // URL-parametrin (haku) tarkistus
             const queryParams = new URLSearchParams(window.location.search);
@@ -1142,7 +1142,7 @@ async function loadCompanyData() {
                 let selectedCompany = null;
                 if (searchKeyword) {
                     const lowerKeyword = searchKeyword.toLowerCase().trim();
-                    selectedCompany = allCompanies.find(c => {
+                    selectedCompany = window.allCompanies.find(c => {
                         if (!c.nimi) return false;
                         const name = c.nimi.toLowerCase();
                         const slug = slugify(c.nimi);
