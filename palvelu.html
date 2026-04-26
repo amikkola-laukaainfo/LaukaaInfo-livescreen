@@ -348,44 +348,60 @@
 
             const list = document.getElementById('results-list');
             const countEl = document.getElementById('results-count');
-            list.innerHTML = '';
+        function showResults() {
+            console.log("showResults() active. Selections:", selections);
+            
+            const stepSection = document.getElementById('step-section');
+            const resultsContainer = document.getElementById('results-container');
+            const list = document.getElementById('results-list');
+            const countEl = document.getElementById('results-count');
 
-            console.log("showResults called. Selections:", selections);
-            console.log("allCompanies count:", allCompanies.length);
+            if (stepSection) stepSection.style.display = 'none';
+            if (resultsContainer) resultsContainer.style.display = 'block';
+            if (list) list.innerHTML = '';
 
-            // Kerätään kaikki valitut "osat" (options)
+            if (typeof allCompanies === 'undefined' || allCompanies.length === 0) {
+                console.error("allCompanies is empty in showResults!");
+                if (countEl) countEl.textContent = "Virhe: Yritysdataa ei voitu ladata. Yritä ladata sivu uudelleen.";
+                return;
+            }
+
+            // Kerätään kaikki valitut vaihtoehdot yhteen listaan
             let selectedOptions = [];
-            Object.values(selections).forEach(val => {
+            for (let stepId in selections) {
+                const val = selections[stepId];
                 if (Array.isArray(val)) {
-                    selectedOptions = [...selectedOptions, ...val];
-                } else {
+                    selectedOptions = selectedOptions.concat(val);
+                } else if (val && typeof val === 'object') {
                     selectedOptions.push(val);
                 }
-            });
+            }
 
-            console.log("Flattened selectedOptions:", selectedOptions);
+            console.log("Processing selected options:", selectedOptions);
 
             let totalFound = 0;
-            let foundAny = false;
+            let html = '';
 
-            // Ryhmitellään tulokset valittujen optioiden mukaan
             selectedOptions.forEach(opt => {
-                if (!opt.tags) return;
+                if (!opt || !opt.tags) {
+                    console.warn("Option missing tags:", opt);
+                    return;
+                }
+
+                console.log(`Filtering for option: ${opt.label}`, opt.tags);
 
                 const companiesForOpt = allCompanies.filter(c => {
-                    const companyContent = (c.tags || '').toLowerCase() + ',' + (c.kategoria || '').toLowerCase();
+                    const companyContent = ((c.tags || '') + ' ' + (c.kategoria || '') + ' ' + (c.nimi || '')).toLowerCase();
                     return opt.tags.some(tag => companyContent.includes(tag.toLowerCase()));
                 });
 
+                console.log(`Found ${companiesForOpt.length} matches for ${opt.label}`);
+
                 if (companiesForOpt.length > 0) {
-                    foundAny = true;
                     totalFound += companiesForOpt.length;
 
                     // Lisätään ryhmän otsikko
-                    const groupTitle = document.createElement('div');
-                    groupTitle.className = 'group-title';
-                    groupTitle.innerHTML = `<span>📍</span> ${opt.label}`;
-                    list.appendChild(groupTitle);
+                    html += `<div class="group-title"><span>📍</span> ${opt.label}</div>`;
 
                     // Lajitellaan: Premiumit ensin tässä ryhmässä
                     companiesForOpt.sort((a, b) => {
@@ -398,24 +414,22 @@
                         return 0;
                     });
 
-                    // Lisätään yritykset listaan
+                    // Lisätään yritykset
                     companiesForOpt.forEach(c => {
-                        const cardHtml = renderCompanyCard(c);
-                        const wrapper = document.createElement('div');
-                        wrapper.innerHTML = cardHtml;
-                        list.appendChild(wrapper.firstElementChild);
+                        html += renderCompanyCard(c);
                     });
                 }
             });
 
-            if (!foundAny) {
-                countEl.textContent = "Valitettavasti valintoihisi sopivia yrityksiä ei löytynyt juuri nyt.";
-                list.innerHTML = '<div class="no-results"><h3>Hups!</h3><p>Kokeile aloittaa alusta ja valita eri vaihtoehtoja.</p></div>';
+            if (totalFound === 0) {
+                if (countEl) countEl.textContent = "Valitettavasti valintoihisi sopivia yrityksiä ei löytynyt juuri nyt.";
+                if (list) list.innerHTML = '<div class="no-results"><h3>Hups!</h3><p>Kokeile aloittaa alusta ja valita eri vaihtoehtoja.</p></div>';
             } else {
-                countEl.textContent = `Löysimme yhteensä ${totalFound} ehdotusta valintoihisi perustuen.`;
+                if (countEl) countEl.textContent = `Löysimme yhteensä ${totalFound} ehdotusta valintoihisi perustuen.`;
+                if (list) list.innerHTML = html;
             }
             
-            window.scrollTo({ top: document.getElementById('results-container').offsetTop - 100, behavior: 'smooth' });
+            window.scrollTo({ top: resultsContainer ? resultsContainer.offsetTop - 100 : 0, behavior: 'smooth' });
         }
 
         function renderCompanyCard(c) {
