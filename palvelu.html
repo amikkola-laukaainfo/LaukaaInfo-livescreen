@@ -350,6 +350,9 @@
             const countEl = document.getElementById('results-count');
             list.innerHTML = '';
 
+            console.log("showResults called. Selections:", selections);
+            console.log("allCompanies count:", allCompanies.length);
+
             // Kerätään kaikki valitut "osat" (options)
             let selectedOptions = [];
             Object.values(selections).forEach(val => {
@@ -359,6 +362,8 @@
                     selectedOptions.push(val);
                 }
             });
+
+            console.log("Flattened selectedOptions:", selectedOptions);
 
             let totalFound = 0;
             let foundAny = false;
@@ -414,7 +419,7 @@
         }
 
         function renderCompanyCard(c) {
-            const slug = slugify(c.nimi);
+            const slug = typeof slugify === 'function' ? slugify(c.nimi) : c.nimi.toLowerCase().replace(/\s+/g, '-');
             const isPremium = (c.paketti || c.tyyppi || '').toLowerCase().includes('premium');
             const isPro = (c.paketti || c.tyyppi || '').toLowerCase().includes('pro');
             
@@ -422,10 +427,13 @@
                 ? `yritys/${slug}.html`
                 : `yrityskortti.html?id=${slug}`;
 
+            const icons = window.categoryIcons || (typeof categoryIcons !== 'undefined' ? categoryIcons : {});
+            const icon = icons[c.kategoria] || '🏢';
+
             return `
                 <a href="${cardUrl}" class="need-card" style="height: 100%;">
-                    ${isPremium ? '<div style="position:absolute; top:10px; right:10px; font-size:0.7rem; background:gold; padding:2px 8px; border-radius:10px; font-weight:bold;">PREMIUM</div>' : ''}
-                    <div class="need-icon" style="font-size: 2rem;">${categoryIcons[c.kategoria] || '🏢'}</div>
+                    ${(isPremium || isPro) ? '<div style="position:absolute; top:10px; right:10px; font-size:0.7rem; background:gold; padding:2px 8px; border-radius:10px; font-weight:bold;">PREMIUM</div>' : ''}
+                    <div class="need-icon" style="font-size: 2rem;">${icon}</div>
                     <h3>${c.nimi}</h3>
                     <p>${c.mainoslause || (c.esittely ? c.esittely.substring(0, 80) + '...' : '')}</p>
                     <div class="arrow" style="opacity:1; transform:none;">Katso tiedot &raquo;</div>
