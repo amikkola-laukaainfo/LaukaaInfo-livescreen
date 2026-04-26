@@ -396,6 +396,38 @@
             let totalFound = 0;
             let html = '';
 
+            // Kartta nykyisestä polusta profilointiavaimiin
+            const needToProfilingMap = {
+                'haat': 'häät',
+                'yritysjuhlat': 'yritysjuhlat',
+                'yritystilaisuudet': 'kokoukset',
+                'syntymapaivat': 'vapaa-aika',
+                'muutto': 'moving_and_housing',
+                'remontti': 'construction_and_maintenance',
+                'mokkipalvelut': 'cottage_services',
+                'taloyhtion-huolto': 'housing_company_and_contracts',
+                'hautajaiset': 'funerals_and_memorials',
+                'yrityksen-perustaminen': 'startup_services',
+                'yrityksen-kehittaminen': 'business_growth',
+                'vakituinen-palvelukumppani': 'housing_company_and_contracts',
+                'kiinteistopalvelut': 'construction_and_maintenance',
+                'paivystavat-palvelut': 'emergency',
+                'terveys-ja-hyvinvointi': 'wellbeing_and_beauty',
+                'liikunta-ja-vapaaaika': 'vapaa-aika',
+                'elaimet': 'vapaa-aika',
+                'lapset-ja-perhe': 'vapaa-aika'
+            };
+
+            const currentProfilingKey = needToProfilingMap[currentNeedId] || 'vapaa-aika';
+
+            // Poimitaan valinnoista mahdolliset ominaisuusvaatimukset
+            const requestedFeatures = {
+                sauna: selectedOptions.some(o => o.label.toLowerCase().includes('sauna')),
+                accessible: selectedOptions.some(o => o.label.toLowerCase().includes('esteetön') || o.label.toLowerCase().includes('vammais')),
+                emergency: currentNeedId === 'paivystavat-palvelut',
+                home_service: selectedOptions.some(o => o.label.toLowerCase().includes('kotiin') || o.label.toLowerCase().includes('kotona'))
+            };
+
             selectedOptions.forEach(opt => {
                 if (!opt || !opt.tags) {
                     console.warn("Option missing tags:", opt);
@@ -405,6 +437,13 @@
                 console.log(`Filtering for option: ${opt.label}`, opt.tags);
 
                 const companiesForOpt = allCompanies.filter(c => {
+                    // Tapa 1: Profilointidata (ensisijainen)
+                    if (c.profiling && c.profiling.core && c.profiling.core.fits_for) {
+                        const score = c.profiling.core.fits_for[currentProfilingKey] || 0;
+                        if (score > 10) return true; // Riittävän hyvä osuma
+                    }
+
+                    // Tapa 2: Tagit (toissijainen fallback)
                     const companyContent = ((c.tags || '') + ' ' + (c.kategoria || '') + ' ' + (c.nimi || '')).toLowerCase();
                     return opt.tags.some(tag => companyContent.includes(tag.toLowerCase()));
                 });
@@ -417,14 +456,31 @@
                     // Lisätään ryhmän otsikko
                     html += `<div class="group-title"><span>📍</span> ${opt.label}</div>`;
 
-                    // Lajitellaan: Premiumit ensin tässä ryhmässä
+                    // Lajitellaan: Profilointipisteet + Ominaisuusosumat ensin, sitten Premiumit
                     companiesForOpt.sort((a, b) => {
+                        // 1. Profilointipisteet kyseiseen polkuun
+                        let scoreA = (a.profiling?.core?.fits_for?.[currentProfilingKey] || 0);
+                        let scoreB = (b.profiling?.core?.fits_for?.[currentProfilingKey] || 0);
+                        
+                        // Lisäpisteet jos yrityksellä on käyttäjän mahdollisesti toivoma ominaisuus
+                        if (requestedFeatures.sauna && a.profiling?.events_and_celebrations?.has_sauna) scoreA += 50;
+                        if (requestedFeatures.sauna && b.profiling?.events_and_celebrations?.has_sauna) scoreB += 50;
+                        if (requestedFeatures.accessible && a.profiling?.events_and_celebrations?.is_accessible) scoreA += 50;
+                        if (requestedFeatures.accessible && b.profiling?.events_and_celebrations?.is_accessible) scoreB += 50;
+                        if (requestedFeatures.home_service && a.profiling?.core?.home_service) scoreA += 50;
+                        if (requestedFeatures.home_service && b.profiling?.core?.home_service) scoreB += 50;
+
+                        if (scoreA !== scoreB) return scoreB - scoreA;
+
+                        // 2. Premium/Pro status
                         const aType = (a.paketti || a.tyyppi || '').toLowerCase();
                         const bType = (b.paketti || b.tyyppi || '').toLowerCase();
                         const aIsPremium = aType.includes('premium') || aType.includes('pro');
                         const bIsPremium = bType.includes('premium') || bType.includes('pro');
+                        
                         if (aIsPremium && !bIsPremium) return -1;
                         if (!aIsPremium && bIsPremium) return 1;
+
                         return 0;
                     });
 
@@ -458,12 +514,39 @@
             const icons = window.categoryIcons || (typeof categoryIcons !== 'undefined' ? categoryIcons : {});
             const icon = icons[c.kategoria] || '🏢';
 
+            // Profilointi-lisätiedot
+            let badges = '';
+            let isTopMatch = false;
+
+            if (c.profiling) {
+                const core = c.profiling.core || {};
+                const fits = core.fits_for || {};
+                
+                // Tarkistetaan onko "Top Match" (pisteet yli 80)
+                for (let key in fits) {
+                    if (fits[key] >= 80) {
+                        isTopMatch = true;
+                        break;
+                    }
+                }
+
+                // Ominaisuus-badget
+                if (c.profiling.events_and_celebrations?.is_accessible) badges += '<span title="Esteetön pääsy" style="margin-right:5px;">♿</span>';
+                if (c.profiling.events_and_celebrations?.has_sauna) badges += '<span title="Sauna saatavilla" style="margin-right:5px;">🧖</span>';
+                if (core.home_service) badges += '<span title="Kotipalvelu" style="margin-right:5px;">🏠</span>';
+                if (core.emergency_available) badges += '<span title="Päivystys / 24h" style="margin-right:5px;">🚨</span>';
+            }
+
             return `
-                <a href="${cardUrl}" class="need-card" style="height: 100%;">
-                    ${(isPremium || isPro) ? '<div style="position:absolute; top:10px; right:10px; font-size:0.7rem; background:gold; padding:2px 8px; border-radius:10px; font-weight:bold;">PREMIUM</div>' : ''}
+                <a href="${cardUrl}" class="need-card" style="height: 100%; border-top: 4px solid ${isTopMatch ? '#ff9900' : 'transparent'};">
+                    ${isTopMatch ? '<div style="position:absolute; top:10px; right:10px; font-size:0.6rem; background:#ff9900; color:white; padding:2px 6px; border-radius:10px; font-weight:bold; z-index:10;">TOP MATCH</div>' : ''}
+                    ${(isPremium || isPro) && !isTopMatch ? '<div style="position:absolute; top:10px; right:10px; font-size:0.6rem; background:gold; padding:2px 6px; border-radius:10px; font-weight:bold; z-index:10;">PREMIUM</div>' : ''}
                     <div class="need-icon" style="font-size: 2rem;">${icon}</div>
                     <h3>${c.nimi}</h3>
-                    <p>${c.mainoslause || (c.esittely ? c.esittely.substring(0, 80) + '...' : '')}</p>
+                    <p style="margin-bottom: 10px;">${c.mainoslause || (c.esittely ? c.esittely.substring(0, 80) + '...' : '')}</p>
+                    <div class="feature-badges" style="font-size: 1.2rem; margin-bottom: 10px;">
+                        ${badges}
+                    </div>
                     <div class="arrow" style="opacity:1; transform:none;">Katso tiedot &raquo;</div>
                 </a>
             `;

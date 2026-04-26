@@ -4820,6 +4820,16 @@ footer {
     transform: translateX(0);
 }
 
+.feature-badges span {
+    display: inline-block;
+    transition: transform 0.2s;
+    cursor: help;
+}
+
+.feature-badges span:hover {
+    transform: scale(1.2);
+}
+
 /* Multi-step UI */
 .step-container {
     max-width: 800px;

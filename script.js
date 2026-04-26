@@ -1108,6 +1108,26 @@ async function loadCompanyData() {
                 console.warn('Hakulisätietojen lataus epäonnistui:', e);
             }
 
+            // Hae tarkempi yritysprofilointi
+            try {
+                const isSubdir = window.location.pathname.includes('/yritys/');
+                const prefix = isSubdir ? '../' : './';
+                const profilingRes = await fetch(prefix + 'company_profiling_data.json?t=' + Date.now());
+                if (profilingRes.ok) {
+                    const profilingData = await profilingRes.json();
+                    if (profilingData && profilingData.profiles) {
+                        window.allCompanies.forEach(company => {
+                            if (profilingData.profiles[company.id]) {
+                                company.profiling = profilingData.profiles[company.id];
+                            }
+                        });
+                        console.log('Yritysprofilointi ladattu onnistuneesti.');
+                    }
+                }
+            } catch (e) {
+                console.warn('Yritysprofiloinnin lataus epäonnistui:', e);
+            }
+
             initCompanyCatalog();
             initMap(window.allCompanies);
             initCategories(window.allCompanies);
