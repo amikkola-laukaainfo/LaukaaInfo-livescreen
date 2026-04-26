@@ -327,7 +327,7 @@ const NEEDS_CONFIG = {
     }
 };
 
-const categoryIcons = {
+const NEEDS_CATEGORY_ICONS = {
     'Palvelut': '🛠️',
     'Kaupat ja putiikit': '🛍️',
     'Ravintolat ja kahvilat': '☕',
@@ -349,6 +349,6 @@ const categoryIcons = {
 };
 
 if (typeof window !== 'undefined') {
-    window.categoryIcons = categoryIcons;
+    window.categoryIcons = NEEDS_CATEGORY_ICONS;
     window.NEEDS_CONFIG = NEEDS_CONFIG;
 }
