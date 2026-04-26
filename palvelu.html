@@ -78,6 +78,61 @@
             transform: translateX(-5px);
         }
         
+        /* Multi-select styles */
+        .option-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 1.2rem;
+            background: white;
+            border-radius: 16px;
+            border: 2px solid #eef2f6;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .option-checkbox:hover {
+            border-color: var(--primary-blue);
+            background: #f8fafc;
+        }
+
+        .option-checkbox input {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .option-checkbox.selected {
+            background: #e0f2fe;
+            border-color: var(--primary-blue);
+        }
+
+        .group-title {
+            grid-column: 1 / -1;
+            font-family: var(--accent-font);
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary-blue);
+            margin: 3rem 0 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #eef2f6;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .group-title:first-child {
+            margin-top: 0;
+        }
+
+        .btn-continue {
+            margin-top: 2rem;
+            width: 100%;
+            max-width: 300px;
+        }
+
         /* Step transition animation */
         .fade-in {
             animation: fadeIn 0.4s ease-out;
@@ -195,8 +250,6 @@
             
             const step = need.steps[currentStepIndex];
             
-            console.log("Rendering step:", currentStepIndex, step?.question);
-            
             if (!step) {
                 console.error("Step not found at index:", currentStepIndex);
                 return;
@@ -214,23 +267,60 @@
             });
 
             // Render step content
-            content.innerHTML = `
-                <div class="step-header">
-                    <h2>${step.question}</h2>
-                </div>
-                <div class="step-options">
-                    ${step.options.map((opt, i) => `
-                        <button class="option-btn" onclick="selectOption(${i})">
-                            ${opt.label}
-                            <span>&rarr;</span>
-                        </button>
-                    `).join('')}
-                </div>
-            `;
+            if (step.multiple) {
+                content.innerHTML = `
+                    <div class="step-header">
+                        <h2>${step.question}</h2>
+                        <p>Voit valita useamman vaihtoehdon.</p>
+                    </div>
+                    <div class="step-options" style="grid-template-columns: 1fr;">
+                        ${step.options.map((opt, i) => `
+                            <label class="option-checkbox ${selections[step.id]?.some(s => s.label === opt.label) ? 'selected' : ''}" id="label-${i}">
+                                <input type="checkbox" onchange="toggleOption(${i})" ${selections[step.id]?.some(s => s.label === opt.label) ? 'checked' : ''}>
+                                ${opt.label}
+                            </label>
+                        `).join('')}
+                    </div>
+                    <div style="text-align: center;">
+                        <button class="btn-radar btn-continue" onclick="nextStep()" style="background: var(--primary-blue);">Jatka &raquo;</button>
+                    </div>
+                `;
+            } else {
+                content.innerHTML = `
+                    <div class="step-header">
+                        <h2>${step.question}</h2>
+                    </div>
+                    <div class="step-options">
+                        ${step.options.map((opt, i) => `
+                            <button class="option-btn" onclick="selectOption(${i})">
+                                ${opt.label}
+                                <span>&rarr;</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+            }
             
             content.classList.remove('fade-in');
             void content.offsetWidth; // Trigger reflow
             content.classList.add('fade-in');
+        }
+
+        function toggleOption(optionIndex) {
+            const need = NEEDS_CONFIG[currentNeedId];
+            const step = need.steps[currentStepIndex];
+            const option = step.options[optionIndex];
+            
+            if (!selections[step.id]) selections[step.id] = [];
+            
+            const idx = selections[step.id].findIndex(s => s.label === option.label);
+            if (idx > -1) {
+                selections[step.id].splice(idx, 1);
+                document.getElementById(`label-${optionIndex}`).classList.remove('selected');
+            } else {
+                selections[step.id].push(option);
+                document.getElementById(`label-${optionIndex}`).classList.add('selected');
+            }
         }
 
         function selectOption(optionIndex) {
@@ -239,7 +329,11 @@
             const option = step.options[optionIndex];
 
             selections[step.id] = option;
+            nextStep();
+        }
 
+        function nextStep() {
+            const need = NEEDS_CONFIG[currentNeedId];
             if (currentStepIndex < need.steps.length - 1) {
                 currentStepIndex++;
                 renderStep();
@@ -252,42 +346,68 @@
             document.getElementById('step-section').style.display = 'none';
             document.getElementById('results-container').style.display = 'block';
 
-            const need = NEEDS_CONFIG[currentNeedId];
-            
-            // Kerätään kaikki valitut tägit
-            let requiredTags = [];
-            Object.values(selections).forEach(sel => {
-                if (sel.tags) requiredTags = [...requiredTags, ...sel.tags];
-            });
-
-            // Suodatetaan yritykset
-            // 1. Pitää vastata ainakin yhtä valittua tägiä TAI kuulua tarpeen yleiseen kategoriaan
-            filteredCompanies = allCompanies.filter(c => {
-                const companyTags = (c.tags || '').toLowerCase() + ',' + (c.kategoria || '').toLowerCase();
-                return requiredTags.some(tag => companyTags.includes(tag.toLowerCase()));
-            });
-
-            // Lajitellaan: Premiumit ensin
-            filteredCompanies.sort((a, b) => {
-                const aType = (a.paketti || a.tyyppi || '').toLowerCase();
-                const bType = (b.paketti || b.tyyppi || '').toLowerCase();
-                const aIsPremium = aType.includes('premium') || aType.includes('pro');
-                const bIsPremium = bType.includes('premium') || bType.includes('pro');
-                if (aIsPremium && !bIsPremium) return -1;
-                if (!aIsPremium && bIsPremium) return 1;
-                return 0;
-            });
-
             const list = document.getElementById('results-list');
             const countEl = document.getElementById('results-count');
+            list.innerHTML = '';
 
-            if (filteredCompanies.length === 0) {
-                countEl.textContent = "Emme löytäneet täsmällisiä osumia, mutta tässä muita ehdotuksia.";
-                // Voisimme näyttää tarpeen yleisiä yrityksiä tässä
-                list.innerHTML = '<div class="no-results"><h3>Hups!</h3><p>Valitettavasti valintoihisi sopivia yrityksiä ei löytynyt juuri nyt. Kokeile aloittaa alusta eri valinnoilla.</p></div>';
+            // Kerätään kaikki valitut "osat" (options)
+            let selectedOptions = [];
+            Object.values(selections).forEach(val => {
+                if (Array.isArray(val)) {
+                    selectedOptions = [...selectedOptions, ...val];
+                } else {
+                    selectedOptions.push(val);
+                }
+            });
+
+            let totalFound = 0;
+            let foundAny = false;
+
+            // Ryhmitellään tulokset valittujen optioiden mukaan
+            selectedOptions.forEach(opt => {
+                if (!opt.tags) return;
+
+                const companiesForOpt = allCompanies.filter(c => {
+                    const companyContent = (c.tags || '').toLowerCase() + ',' + (c.kategoria || '').toLowerCase();
+                    return opt.tags.some(tag => companyContent.includes(tag.toLowerCase()));
+                });
+
+                if (companiesForOpt.length > 0) {
+                    foundAny = true;
+                    totalFound += companiesForOpt.length;
+
+                    // Lisätään ryhmän otsikko
+                    const groupTitle = document.createElement('div');
+                    groupTitle.className = 'group-title';
+                    groupTitle.innerHTML = `<span>📍</span> ${opt.label}`;
+                    list.appendChild(groupTitle);
+
+                    // Lajitellaan: Premiumit ensin tässä ryhmässä
+                    companiesForOpt.sort((a, b) => {
+                        const aType = (a.paketti || a.tyyppi || '').toLowerCase();
+                        const bType = (b.paketti || b.tyyppi || '').toLowerCase();
+                        const aIsPremium = aType.includes('premium') || aType.includes('pro');
+                        const bIsPremium = bType.includes('premium') || bType.includes('pro');
+                        if (aIsPremium && !bIsPremium) return -1;
+                        if (!aIsPremium && bIsPremium) return 1;
+                        return 0;
+                    });
+
+                    // Lisätään yritykset listaan
+                    companiesForOpt.forEach(c => {
+                        const cardHtml = renderCompanyCard(c);
+                        const wrapper = document.createElement('div');
+                        wrapper.innerHTML = cardHtml;
+                        list.appendChild(wrapper.firstElementChild);
+                    });
+                }
+            });
+
+            if (!foundAny) {
+                countEl.textContent = "Valitettavasti valintoihisi sopivia yrityksiä ei löytynyt juuri nyt.";
+                list.innerHTML = '<div class="no-results"><h3>Hups!</h3><p>Kokeile aloittaa alusta ja valita eri vaihtoehtoja.</p></div>';
             } else {
-                countEl.textContent = `Löysimme ${filteredCompanies.length} yritystä, jotka voivat auttaa tarpeessasi.`;
-                list.innerHTML = filteredCompanies.map(c => renderCompanyCard(c)).join('');
+                countEl.textContent = `Löysimme yhteensä ${totalFound} ehdotusta valintoihisi perustuen.`;
             }
             
             window.scrollTo({ top: document.getElementById('results-container').offsetTop - 100, behavior: 'smooth' });
