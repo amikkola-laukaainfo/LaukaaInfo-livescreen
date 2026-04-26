@@ -68,7 +68,7 @@ const defaultMapping = (id) => `
             <option value="weekend_service">Palvelua viikonloppuisin</option>
         </select>`;
 
-let updatedHtml = html.replace(/<a href="palvelu\\.html\\?id=([\\w-]+)" class="need-card">([\\s\\S]*?)<div class="arrow">(.*?)<\\/div>\\s*<\\/a>/g, (match, id, content, arrowText) => {
+let updatedHtml = html.replace(/<a href="palvelu\.html\?id=([\w-]+)" class="need-card">([\s\S]*?)<div class="arrow">(.*?)<\/div>\s*<\/a>/g, (match, id, content, arrowText) => {
     
     let selectHtml = mapping[id] || defaultMapping(id);
 
