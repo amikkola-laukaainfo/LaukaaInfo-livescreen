@@ -149,28 +149,59 @@
         let filteredCompanies = [];
 
         async function initPalvelu() {
-            const need = NEEDS_CONFIG[currentNeedId];
-            if (!need) {
-                window.location.href = 'index.html';
+            console.log("initPalvelu started. currentNeedId:", currentNeedId);
+            
+            const config = window.NEEDS_CONFIG || (typeof NEEDS_CONFIG !== 'undefined' ? NEEDS_CONFIG : null);
+            if (!config) {
+                console.error("NEEDS_CONFIG not found!");
                 return;
             }
 
+            const need = config[currentNeedId];
+            if (!need) {
+                console.warn("Need not found in config:", currentNeedId);
+                // window.location.href = 'index.html'; 
+                return;
+            }
+
+            console.log("Found need:", need.title);
             document.getElementById('hero-title').textContent = need.title;
             document.getElementById('hero-desc').textContent = need.description;
             document.getElementById('hero-icon').textContent = need.icon;
             document.title = `${need.title} | LaukaaInfo`;
 
             // Ladataan yritysdata jos sitä ei vielä ole
-            if (allCompanies.length === 0) {
-                await loadCompanyData();
+            try {
+                if (typeof allCompanies === 'undefined' || allCompanies.length === 0) {
+                    console.log("Loading company data...");
+                    if (typeof loadCompanyData === 'function') {
+                        await loadCompanyData();
+                    } else {
+                        console.error("loadCompanyData function not found!");
+                    }
+                }
+                console.log("Companies loaded:", (typeof allCompanies !== 'undefined') ? allCompanies.length : 0);
+            } catch (e) {
+                console.error("Error loading companies:", e);
             }
 
             renderStep();
         }
 
         function renderStep() {
-            const need = NEEDS_CONFIG[currentNeedId];
+            const config = window.NEEDS_CONFIG || (typeof NEEDS_CONFIG !== 'undefined' ? NEEDS_CONFIG : null);
+            const need = config[currentNeedId];
+            if (!need || !need.steps) return;
+            
             const step = need.steps[currentStepIndex];
+            
+            console.log("Rendering step:", currentStepIndex, step?.question);
+            
+            if (!step) {
+                console.error("Step not found at index:", currentStepIndex);
+                return;
+            }
+
             const content = document.getElementById('step-content');
             const progress = document.getElementById('step-progress');
 
@@ -291,7 +322,7 @@
         }
 
         // Käynnistys
-        window.addEventListener('load', initPalvelu);
+        document.addEventListener('DOMContentLoaded', initPalvelu);
     </script>
 </body>
 
