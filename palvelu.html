@@ -471,6 +471,9 @@
 
                     // Jos tultiin suoraan etusivulta ilman steppejä tai valittiin vaihtoehto ilman tageja (esim. "Vain tilat")
                     if (!opt.tags || opt.tags.length === 0) {
+                        // Jos tulimme etusivulta erikoissuodattimen (esim. häävalokuvaus) kanssa ja olemme tässä, 
+                        // yrityksellä ON tuo ominaisuus (testattu yllä). Palautetaan se siis aina.
+                        if (filterProfiling) return true;
                         return score > 10;
                     }
 
