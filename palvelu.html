@@ -558,6 +558,7 @@
             // Kerätään kaikki valitut vaihtoehdot yhteen listaan
             let selectedOptions = [];
             for (let stepId in selections) {
+                if (stepId.startsWith('_')) continue;
                 const val = selections[stepId];
                 if (Array.isArray(val)) {
                     selectedOptions = selectedOptions.concat(val);
@@ -616,10 +617,10 @@
             }
 
             const requestedFeatures = {
-                sauna: selectedOptions.some(o => o.label.toLowerCase().includes('sauna')),
-                accessible: selectedOptions.some(o => o.label.toLowerCase().includes('esteetön') || o.label.toLowerCase().includes('vammais')),
+                sauna: selectedOptions.some(o => o.label?.toLowerCase().includes('sauna')),
+                accessible: selectedOptions.some(o => o.label?.toLowerCase().includes('esteetön') || o.label?.toLowerCase().includes('vammais')),
                 emergency: currentNeedId === 'paivystavat-palvelut',
-                home_service: selectedOptions.some(o => o.label.toLowerCase().includes('kotiin') || o.label.toLowerCase().includes('kotona'))
+                home_service: selectedOptions.some(o => o.label?.toLowerCase().includes('kotiin') || o.label?.toLowerCase().includes('kotona'))
             };
 
             featureOptions.forEach(opt => {
