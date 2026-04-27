@@ -66,6 +66,16 @@ const NEEDS_CONFIG = {
                     { "label": "Kuljetus / Bussi / Taksi", "tags": ["taksi", "kuljetus"] },
                     { "label": "Kauneuspalvelut / Meikki", "tags": ["kauneus", "kampaamo"] }
                 ]
+            },
+            {
+                "id": "digitointi_ja_tallennus",
+                "multiple": true,
+                "question": "Haluaisitko ikuistaa päivän digitaalisesti tai tarvitsetko muita digitointipalveluita?",
+                "options": [
+                    { "label": "Häävideon editointi / Koostepalvelu", "tags": ["videotuotanto"], "profilointi_filter": { "section": "events_and_celebrations", "field": "video_production", "value": true } },
+                    { "label": "Drone-kuvaus", "tags": ["drone"], "profilointi_filter": { "section": "events_and_celebrations", "field": "drone_available", "value": true } },
+                    { "label": "Vanhojen kuvien digitointi juhlaesitystä varten", "tags": ["digitointi"] }
+                ]
             }
         ]
     },
@@ -106,6 +116,16 @@ const NEEDS_CONFIG = {
                     { "label": "Saunatilat", "tags": ["saunatilat"], "profilointi_filter": { "section": "events_and_celebrations", "field": "has_sauna", "value": true } },
                     { "label": "Ohjelmapalvelut / Elämykset", "tags": ["ohjelmapalvelut"] },
                     { "label": "AV-tekniikka & Äänentoisto", "tags": ["it-palvelut"], "profilointi_filter": { "section": "business_events", "field": "av_support", "value": true } }
+                ]
+            },
+            {
+                "id": "hyvinvointi",
+                "multiple": true,
+                "question": "Tarvitsetteko hyvinvointia tai ohjelmaa tyky-päivään?",
+                "options": [
+                    { "label": "Yrityshyvinvointi / Luennot", "tags": ["hyvinvointi"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "corporate_wellbeing_services", "value": true } },
+                    { "label": "Ohjattu liikunta / Jooga", "tags": ["liikunta"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "wellbeing_and_activity_features", "value": "jooga" } },
+                    { "label": "Luontoelämykset / Eräopas", "tags": ["ohjelmapalvelut"] }
                 ]
             }
         ]
@@ -433,6 +453,16 @@ const NEEDS_CONFIG = {
                     { "label": "Kuljetus", "tags": ["hautauspalvelu", "kuljetus"],
                         "profilointi_filter": { "section": "funerals_and_memorials", "field": "transport_assistance", "value": true }
                     }
+                ]
+            },
+            {
+                "id": "muistot_ja_tallennus",
+                "multiple": true,
+                "question": "Haluaisitko tallentaa muistot tai tarvitsetko digitointia?",
+                "options": [
+                    { "label": "Muistovideo / Esityksen valmistelu", "tags": ["videotuotanto"] },
+                    { "label": "Vanhojen valokuvien digitointi", "tags": ["digitointi"] },
+                    { "label": "Valokuvaus tilaisuudessa", "tags": ["valokuvaus"] }
                 ]
             }
         ]
