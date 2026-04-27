@@ -3,6 +3,7 @@ const NEEDS_CONFIG = {
         "title": "Häät",
         "icon": "💒",
         "description": "Suunnittele unelmiesi häät Laukaassa. Löydä tilat, tarjoilut ja elämykset.",
+        "profilointi_context": "häät",
         "steps": [
             {
                 "id": "kapasiteetti",
@@ -18,32 +19,46 @@ const NEEDS_CONFIG = {
                 "id": "tila",
                 "question": "Millaista juhlatilaa etsit?",
                 "options": [
-                    { "label": "Juhlatila (iso)", "tags": ["juhlatila"], "filters": { "capacity": ">100" } },
+                    { "label": "Juhlatila (iso)", "tags": ["juhlatila"], "profilointi_filter": { "section": "events_and_celebrations", "field": "wedding_specialized", "value": true } },
                     { "label": "Tunnelmallinen kartano", "tags": ["kartano", "juhlatila"] },
-                    { "label": "Luonnonläheinen tila", "tags": ["luonto", "juhlatila"] }
+                    { "label": "Luonnonläheinen tila", "tags": ["luonto", "juhlatila"], "profilointi_filter": { "section": "events_and_celebrations", "field": "is_lakeside", "value": true } }
+                ]
+            },
+            {
+                "id": "pitopalvelu",
+                "question": "Tarvitsetko pitopalvelun?",
+                "skipIf": "selections.tila && getSelectedCompanyProfilointi('tila', 'events_and_celebrations', 'has_exclusive_catering')",
+                "skipMessage": "Valitsemassasi tilassa on oma catering — pitopalvelu sisältyy.",
+                "options": [
+                    { "label": "Kyllä — tarvitsen pitopalvelun", "tags": ["pitopalvelu"] },
+                    { "label": "Ei — tila järjestää ruoan", "tags": [] },
+                    { "label": "En tiedä vielä", "tags": [] }
                 ]
             },
             {
                 "id": "palvelut",
                 "multiple": true,
-                "question": "Mitä palveluita tarvitset juhlapäivään?",
+                "question": "Mitä muita palveluita tarvitset juhlatpäivään?",
                 "options": [
-                    { "label": "Pitopalvelu (Catering)", "tags": ["pitopalvelu"] },
-                    { "label": "Valokuvaaja", "tags": ["valokuvaus"] },
+                    { "label": "Valokuvaaja", "tags": ["valokuvaus"], "profilointi_filter": { "section": "events_and_celebrations", "field": "wedding_photography", "value": true } },
                     { "label": "Kukkakauppa & Koristelu", "tags": ["kukkakauppa"] },
-                    { "label": "Musiikki tai DJ", "tags": ["musiikki", "ohjelmapalvelut"] }
+                    { "label": "Musiikki tai DJ", "tags": ["musiikki", "ohjelmapalvelut"], "profilointi_filter": { "section": "events_and_celebrations", "field": "live_music", "value": true } }
                 ]
             },
             {
                 "id": "vieraat",
                 "multiple": true,
                 "question": "Tarpeet vieraiden mukavuuteen?",
+                "skipIf": "selections.tila && getSelectedCompanyProfilointi('tila', 'events_and_celebrations', 'accommodation_included')",
+                "skipMessage": "Valitsemassasi tilassa majoitus sisältyy pakettiin — ei tarvetta erikseen.",
                 "options": [
                     { "label": "Majoitus vieraille", "tags": ["majoitus"] },
                     { "label": "Kuljetus / Bussi / Taksi", "tags": ["taksi", "kuljetus"] },
                     { "label": "Kauneuspalvelut / Meikki", "tags": ["kauneus", "kampaamo"] }
                 ]
             }
+        ]
+    },       }
         ]
     },
     "yritysjuhlat": {
@@ -282,6 +297,7 @@ const NEEDS_CONFIG = {
         "title": "Hautajaiset",
         "icon": "🕯️",
         "description": "Arvokkaat ja huolelliset hautajaisjärjestelyt.",
+        "profilointi_context": "hautajaiset",
         "steps": [
             {
                 "id": "kapasiteetti",
@@ -302,14 +318,47 @@ const NEEDS_CONFIG = {
                 ]
             },
             {
+                "id": "muistotila",
+                "question": "Muistotilaisuuden tila?",
+                "options": [
+                    {
+                        "label": "Rauhallinen muistotila",
+                        "tags": [],
+                        "profilointi_filter": { "section": "funerals_and_memorials", "field": "quiet_private_space", "value": true },
+                        "require_fits_for": { "key": "hautajaiset", "min": 30 }
+                    },
+                    {
+                        "label": "Seurakuntasali",
+                        "tags": ["seurakunta"]
+                    },
+                    {
+                        "label": "Tarvitsen vain catering-palvelun",
+                        "tags": [],
+                        "profilointi_filter": { "section": "funerals_and_memorials", "field": "memorial_catering", "value": true },
+                        "require_fits_for": { "key": "hautajaiset", "min": 20 }
+                    }
+                ]
+            },
+            {
                 "id": "jarjestelyt",
                 "multiple": true,
-                "question": "Muistotilaisuuden järjestelyt?",
+                "question": "Muistotilaisuuden lisäjärjestelyt?",
                 "options": [
-                    { "label": "Muistotilaisuus (tila)", "tags": ["juhlatila", "seurakunta", "ravintola"] },
-                    { "label": "Pitopalvelu / Catering", "tags": ["pitopalvelu"] },
-                    { "label": "Kukkatervehdykset", "tags": ["kukkakauppa"] },
-                    { "label": "Lakipalvelut / Perunkirjoitus", "tags": ["lakiasiaintoimistot"] }
+                    {
+                        "label": "Kahvitus / Pitopalvelu",
+                        "tags": ["pitopalvelu"],
+                        "profilointi_filter": { "section": "funerals_and_memorials", "field": "memorial_catering", "value": true },
+                        "require_fits_for": { "key": "hautajaiset", "min": 20 }
+                    },
+                    {
+                        "label": "Kukkatervehdykset",
+                        "tags": ["kukkakauppa"],
+                        "profilointi_filter": { "section": "funerals_and_memorials", "field": "funeral_flowers", "value": true }
+                    },
+                    { "label": "Lakipalvelut / Perunkirjoitus", "tags": ["lakiasiaintoimistot"] },
+                    { "label": "Kuljetus", "tags": ["hautauspalvelu", "kuljetus"],
+                        "profilointi_filter": { "section": "funerals_and_memorials", "field": "transport_assistance", "value": true }
+                    }
                 ]
             }
         ]
