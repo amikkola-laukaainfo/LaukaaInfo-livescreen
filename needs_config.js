@@ -5,6 +5,16 @@ const NEEDS_CONFIG = {
         "description": "Suunnittele unelmiesi häät Laukaassa. Löydä tilat, tarjoilut ja elämykset.",
         "steps": [
             {
+                "id": "kapasiteetti",
+                "question": "Kuinka paljon henkilöitä tilaisuuteen osallistuu (arvio)?",
+                "options": [
+                    { "label": "Alle 20 henkilöä", "capacity_req": 20, "tags": [] },
+                    { "label": "Noin 20 - 50 henkilöä", "capacity_req": 50, "tags": [] },
+                    { "label": "Noin 50 - 100 henkilöä", "capacity_req": 100, "tags": [] },
+                    { "label": "Yli 100 henkilöä", "capacity_req": 150, "tags": [] }
+                ]
+            },
+            {
                 "id": "tila",
                 "question": "Millaista juhlatilaa etsit?",
                 "options": [
@@ -42,6 +52,16 @@ const NEEDS_CONFIG = {
         "description": "Järjestä onnistuneet henkilöstöjuhlat, pikkujoulut tai asiakastilaisuudet.",
         "steps": [
             {
+                "id": "kapasiteetti",
+                "question": "Kuinka paljon henkilöitä tilaisuuteen osallistuu (arvio)?",
+                "options": [
+                    { "label": "Alle 20 henkilöä", "capacity_req": 20, "tags": [] },
+                    { "label": "Noin 20 - 50 henkilöä", "capacity_req": 50, "tags": [] },
+                    { "label": "Noin 50 - 100 henkilöä", "capacity_req": 100, "tags": [] },
+                    { "label": "Yli 100 henkilöä", "capacity_req": 150, "tags": [] }
+                ]
+            },
+            {
                 "id": "tyyppi",
                 "question": "Millaista tilaisuutta olet järjestämässä?",
                 "options": [
@@ -69,6 +89,16 @@ const NEEDS_CONFIG = {
         "icon": "💼",
         "description": "Kokoukset, seminaarit ja koulutukset ammattimaisessa ympäristössä.",
         "steps": [
+            {
+                "id": "kapasiteetti",
+                "question": "Kuinka paljon henkilöitä tilaisuuteen osallistuu (arvio)?",
+                "options": [
+                    { "label": "Alle 20 henkilöä", "capacity_req": 20, "tags": [] },
+                    { "label": "Noin 20 - 50 henkilöä", "capacity_req": 50, "tags": [] },
+                    { "label": "Noin 50 - 100 henkilöä", "capacity_req": 100, "tags": [] },
+                    { "label": "Yli 100 henkilöä", "capacity_req": 150, "tags": [] }
+                ]
+            },
             {
                 "id": "tila",
                 "question": "Millaista tilaa tarvitsette?",
@@ -104,6 +134,16 @@ const NEEDS_CONFIG = {
         "icon": "🎂",
         "description": "Järjestä ikimuistoiset syntymäpäivät kaikenikäisille.",
         "steps": [
+            {
+                "id": "kapasiteetti",
+                "question": "Kuinka paljon henkilöitä tilaisuuteen osallistuu (arvio)?",
+                "options": [
+                    { "label": "Alle 20 henkilöä", "capacity_req": 20, "tags": [] },
+                    { "label": "Noin 20 - 50 henkilöä", "capacity_req": 50, "tags": [] },
+                    { "label": "Noin 50 - 100 henkilöä", "capacity_req": 100, "tags": [] },
+                    { "label": "Yli 100 henkilöä", "capacity_req": 150, "tags": [] }
+                ]
+            },
             {
                 "id": "tila",
                 "question": "Missä haluat juhlia?",
@@ -243,6 +283,16 @@ const NEEDS_CONFIG = {
         "icon": "🕯️",
         "description": "Arvokkaat ja huolelliset hautajaisjärjestelyt.",
         "steps": [
+            {
+                "id": "kapasiteetti",
+                "question": "Kuinka paljon henkilöitä tilaisuuteen osallistuu (arvio)?",
+                "options": [
+                    { "label": "Alle 20 henkilöä", "capacity_req": 20, "tags": [] },
+                    { "label": "Noin 20 - 50 henkilöä", "capacity_req": 50, "tags": [] },
+                    { "label": "Noin 50 - 100 henkilöä", "capacity_req": 100, "tags": [] },
+                    { "label": "Yli 100 henkilöä", "capacity_req": 150, "tags": [] }
+                ]
+            },
             {
                 "id": "peruspalvelu",
                 "question": "Hautauspalvelut?",

@@ -431,7 +431,23 @@
 
             const currentProfilingKey = needToProfilingMap[currentNeedId] || 'vapaa-aika';
 
-            // Poimitaan valinnoista mahdolliset ominaisuusvaatimukset
+            // Poimitaan valinnoista mahdolliset ominaisuusvaatimukset ja erikoiskentät (esim. kapasiteetti)
+            let requestedCapacity = 0;
+            const featureOptions = [];
+
+            selectedOptions.forEach(opt => {
+                if (opt.capacity_req) {
+                    requestedCapacity = Math.max(requestedCapacity, opt.capacity_req);
+                } else {
+                    featureOptions.push(opt);
+                }
+            });
+
+            // Jos kaikki valinnat olivat pelkkää kapasiteettia, lisätään "Tulokset" -ryhmä jotta ne näytetään
+            if (featureOptions.length === 0 && requestedCapacity > 0) {
+                featureOptions.push({ label: "Sopivat tilat", tags: [] });
+            }
+
             const requestedFeatures = {
                 sauna: selectedOptions.some(o => o.label.toLowerCase().includes('sauna')),
                 accessible: selectedOptions.some(o => o.label.toLowerCase().includes('esteetön') || o.label.toLowerCase().includes('vammais')),
