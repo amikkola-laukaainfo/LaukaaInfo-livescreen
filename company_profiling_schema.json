@@ -37,7 +37,16 @@
                             "contract_customer_available": { "type": "boolean" },
                             "corporate_clients": { "type": "boolean" },
                             "home_service": { "type": "boolean" },
-                            "weekend_service": { "type": "boolean" }
+                            "weekend_service": { "type": "boolean" },
+                            "description": { "type": "string" },
+                            "website": { "type": "string" },
+                            "email": { "type": "string" },
+                            "phone": { "type": "string" },
+                            "not_suitable_for": {
+                                "type": "array",
+                                "items": { "type": "string" },
+                                "description": "Ehdottomat poissulut: kontekstit joihin yritys EI sovellu. Esim. ['hautajaiset', 'lastenkutsut']. Jos listalla, yritystä ei näytetä kyseisessä polussa vaikka tagit osuisivat."
+                            }
                         }
                     },
                     

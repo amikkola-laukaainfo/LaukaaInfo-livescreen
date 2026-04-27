@@ -464,6 +464,32 @@
                 console.log(`Filtering for option: ${opt.label}`, opt.tags);
 
                 const companiesForOpt = allCompanies.filter(c => {
+                    // EHDOTON ESTO: not_suitable_for (context gate)
+                    // Jos yrityksen profiilissa on kyseinen polku not_suitable_for-listalla, se ohitetaan aina.
+                    const needIdToContextName = {
+                        'haat': 'häät',
+                        'yritysjuhlat': 'yritysjuhlat',
+                        'yritystilaisuudet': 'kokoukset',
+                        'syntymapaivat': 'syntymäpäivät',
+                        'hautajaiset': 'hautajaiset',
+                        'muutto': 'muutto',
+                        'remontti': 'remontti',
+                        'mokkipalvelut': 'mökkipalvelut',
+                        'taloyhtion-huolto': 'taloyhtiö',
+                        'yrityksen-perustaminen': 'yrityksen-perustaminen',
+                        'yrityksen-kehittaminen': 'yrityksen-kehittaminen',
+                        'paivystavat-palvelut': 'päivystys',
+                        'terveys-ja-hyvinvointi': 'terveys',
+                        'liikunta-ja-vapaaaika': 'vapaa-aika',
+                        'elaimet': 'eläimet',
+                        'lapset-ja-perhe': 'lapset'
+                    };
+                    const currentContextName = needIdToContextName[currentNeedId] || currentNeedId;
+                    const notSuitable = c.profiling?.core?.not_suitable_for;
+                    if (Array.isArray(notSuitable) && notSuitable.includes(currentContextName)) {
+                        return false; // Ehdoton esto — ei näytetä tässä polussa
+                    }
+
                     // HARD FILTER from front page
                     if (filterProfiling) {
                         let hasProp = false;
