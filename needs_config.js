@@ -58,8 +58,6 @@ const NEEDS_CONFIG = {
                 ]
             }
         ]
-    },       }
-        ]
     },
     "yritysjuhlat": {
         "title": "Yritysjuhlat",
