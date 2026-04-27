@@ -205,6 +205,59 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* Location Bar Styles */
+        .location-bar {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 50px;
+            margin-top: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .location-bar input {
+            background: transparent;
+            border: none;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            width: 180px;
+            outline: none;
+        }
+
+        .location-bar input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .location-bar .btn-locate {
+            background: white;
+            color: var(--primary-blue);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+            font-size: 1.2rem;
+        }
+
+        .location-bar .btn-locate:hover {
+            transform: scale(1.1);
+        }
+
+        #location-status {
+            font-size: 0.75rem;
+            margin-top: 8px;
+            opacity: 0.8;
+            min-height: 1.2em;
+        }
     </style>
 </head>
 
@@ -226,6 +279,13 @@
         <div class="icon-large" id="hero-icon" style="font-size: 4rem; margin-bottom: 1rem;"></div>
         <h1 id="hero-title">Ladataan...</h1>
         <p id="hero-desc"></p>
+        
+        <div class="location-bar">
+            <span>📍</span>
+            <input type="text" id="user-location-input" placeholder="Sijaintisi (esim. Laukaa)" autocomplete="off">
+            <button class="btn-locate" id="locate-me-btn" title="Hae sijaintini">🎯</button>
+        </div>
+        <div id="location-status"></div>
     </header>
 
     <main>
@@ -965,8 +1025,117 @@
             renderStep();
         }
 
+        function resetPalvelu() {
+            currentStepIndex = 0;
+            selections = {};
+            document.getElementById('step-section').style.display = 'block';
+            document.getElementById('results-container').style.display = 'none';
+            renderStep();
+        }
+
+        function initUserLocation() {
+            const locationInput = document.getElementById('user-location-input');
+            const locateMeBtn = document.getElementById('locate-me-btn');
+            const statusEl = document.getElementById('location-status');
+
+            if (!locationInput) return;
+
+            // Palauta tallennettu sijainti
+            const savedName = localStorage.getItem('userLocationName');
+            const savedCoordsRaw = localStorage.getItem('userCoords');
+
+            if (savedName) locationInput.value = savedName;
+            
+            // Jos tuli URL-parametrina (esim. etusivulta)
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlLat = urlParams.get('lat');
+            const urlLon = urlParams.get('lon');
+            const urlLoc = urlParams.get('loc');
+
+            if (urlLat && urlLon) {
+                const coords = { lat: parseFloat(urlLat), lng: parseFloat(urlLon) };
+                localStorage.setItem('userCoords', JSON.stringify(coords));
+                if (urlLoc) {
+                    localStorage.setItem('userLocationName', urlLoc);
+                    locationInput.value = urlLoc;
+                }
+                window.userCoords = coords;
+            } else if (savedCoordsRaw) {
+                try {
+                    window.userCoords = JSON.parse(savedCoordsRaw);
+                } catch(e) {}
+            }
+
+            // Kuuntele manuaalista syöttöä (yksinkertainen paikkahaku tai pelkkä tallennus)
+            locationInput.addEventListener('change', async () => {
+                const val = locationInput.value.trim();
+                if (!val) {
+                    localStorage.removeItem('userCoords');
+                    localStorage.removeItem('userLocationName');
+                    window.userCoords = null;
+                    if (document.getElementById('results-container').style.display !== 'none') showResults();
+                    return;
+                }
+
+                localStorage.setItem('userLocationName', val);
+                statusEl.textContent = "Haetaan koordinaatteja...";
+
+                try {
+                    const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(val + ', Laukaa')}&limit=1`);
+                    const data = await response.json();
+                    if (data && data.length > 0) {
+                        const coords = { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
+                        localStorage.setItem('userCoords', JSON.stringify(coords));
+                        window.userCoords = coords;
+                        statusEl.textContent = "Sijainti päivitetty ✅";
+                        if (document.getElementById('results-container').style.display !== 'none') showResults();
+                    } else {
+                        statusEl.textContent = "Sijaintia ei löytynyt. Kokeile tarkempaa osoitetta.";
+                    }
+                } catch(e) {
+                    statusEl.textContent = "Virhe sijainnin haussa.";
+                }
+            });
+
+            if (locateMeBtn) {
+                locateMeBtn.addEventListener('click', () => {
+                    if (!navigator.geolocation) {
+                        statusEl.textContent = "Selaimesi ei tue sijaintia.";
+                        return;
+                    }
+
+                    statusEl.textContent = "Paikannetaan...";
+                    navigator.geolocation.getCurrentPosition(async (pos) => {
+                        const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+                        window.userCoords = coords;
+                        localStorage.setItem('userCoords', JSON.stringify(coords));
+
+                        // Hae osoite käänteisellä geokoodauksella
+                        try {
+                            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${coords.lat}&lon=${coords.lng}`);
+                            const data = await res.json();
+                            const name = data.display_name.split(',')[0] || "Oma sijainti";
+                            locationInput.value = name;
+                            localStorage.setItem('userLocationName', name);
+                            statusEl.textContent = "Sijainti päivitetty ✅";
+                        } catch(e) {
+                            locationInput.value = "Oma sijainti";
+                            statusEl.textContent = "Sijainti päivitetty ✅";
+                        }
+                        
+                        if (document.getElementById('results-container').style.display !== 'none') showResults();
+                    }, () => {
+                        statusEl.textContent = "Sijainnin haku epäonnistui.";
+                    });
+                });
+            }
+        }
+
         // Käynnistys
-        document.addEventListener('DOMContentLoaded', initPalvelu);
+        document.addEventListener('DOMContentLoaded', () => {
+            initPalvelu();
+            initUserLocation();
+        });
     </script>
 </body>
 
