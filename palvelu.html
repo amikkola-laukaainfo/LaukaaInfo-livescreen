@@ -455,7 +455,7 @@
                 home_service: selectedOptions.some(o => o.label.toLowerCase().includes('kotiin') || o.label.toLowerCase().includes('kotona'))
             };
 
-            selectedOptions.forEach(opt => {
+            featureOptions.forEach(opt => {
                 if (!opt || !opt.tags) {
                     console.warn("Option missing tags:", opt);
                     return;
@@ -487,8 +487,6 @@
 
                     // Jos tultiin suoraan etusivulta ilman steppejä tai valittiin vaihtoehto ilman tageja (esim. "Vain tilat")
                     if (!opt.tags || opt.tags.length === 0) {
-                        // Jos tulimme etusivulta erikoissuodattimen (esim. häävalokuvaus) kanssa ja olemme tässä, 
-                        // yrityksellä ON tuo ominaisuus (testattu yllä). Palautetaan se siis aina.
                         if (filterProfiling) return true;
                         return score > 10;
                     }
@@ -506,13 +504,22 @@
                     // Lisätään ryhmän otsikko
                     html += `<div class="group-title"><span>📍</span> ${opt.label}</div>`;
 
-                    // Lajitellaan: Profilointipisteet + Ominaisuusosumat ensin, sitten Premiumit
+                    // Lajitellaan: Profilointipisteet + kapasiteetti ensin, sitten Premiumit
                     companiesForOpt.sort((a, b) => {
-                        // 1. Profilointipisteet kyseiseen polkuun
                         let scoreA = (a.profiling?.core?.fits_for?.[currentProfilingKey] || 0);
                         let scoreB = (b.profiling?.core?.fits_for?.[currentProfilingKey] || 0);
-                        
-                        // Lisäpisteet jos yrityksellä on käyttäjän mahdollisesti toivoma ominaisuus
+
+                        // Kapasiteettibonukset: täysin sopiva tila saa lisäpisteitä
+                        if (requestedCapacity > 0) {
+                            const capA = getCompanyCapacity(a, currentProfilingKey);
+                            const capB = getCompanyCapacity(b, currentProfilingKey);
+                            if (capA >= requestedCapacity) scoreA += 40;
+                            if (capB >= requestedCapacity) scoreB += 40;
+                            // Liian pieni tila saa miinusta
+                            if (capA > 0 && capA < requestedCapacity) scoreA -= 20;
+                            if (capB > 0 && capB < requestedCapacity) scoreB -= 20;
+                        }
+
                         if (requestedFeatures.sauna && a.profiling?.events_and_celebrations?.has_sauna) scoreA += 50;
                         if (requestedFeatures.sauna && b.profiling?.events_and_celebrations?.has_sauna) scoreB += 50;
                         if (requestedFeatures.accessible && a.profiling?.events_and_celebrations?.is_accessible) scoreA += 50;
@@ -522,21 +529,18 @@
 
                         if (scoreA !== scoreB) return scoreB - scoreA;
 
-                        // 2. Premium/Pro status
                         const aType = (a.paketti || a.tyyppi || '').toLowerCase();
                         const bType = (b.paketti || b.tyyppi || '').toLowerCase();
                         const aIsPremium = aType.includes('premium') || aType.includes('pro');
                         const bIsPremium = bType.includes('premium') || bType.includes('pro');
-                        
                         if (aIsPremium && !bIsPremium) return -1;
                         if (!aIsPremium && bIsPremium) return 1;
-
                         return 0;
                     });
 
                     // Lisätään yritykset
                     companiesForOpt.forEach(c => {
-                        html += renderCompanyCard(c);
+                        html += renderCompanyCard(c, requestedCapacity, currentProfilingKey);
                     });
                 }
             });
@@ -552,7 +556,18 @@
             window.scrollTo({ top: resultsContainer ? resultsContainer.offsetTop - 100 : 0, behavior: 'smooth' });
         }
 
-        function renderCompanyCard(c) {
+        // Apufunktio: haetaan yrityksen kapasiteetti oikeasta osiosta kontekstin perusteella
+        function getCompanyCapacity(c, profilingKey) {
+            if (!c.profiling) return 0;
+            if (profilingKey === 'kokoukset') {
+                return c.profiling.business_events?.meeting_capacity ||
+                       c.profiling.business_events?.seminar_capacity || 0;
+            }
+            return c.profiling.events_and_celebrations?.capacity_max ||
+                   c.profiling.events_and_celebrations?.seated_capacity || 0;
+        }
+
+        function renderCompanyCard(c, requestedCapacity, profilingKey) {
             const slug = typeof slugify === 'function' ? slugify(c.nimi) : c.nimi.toLowerCase().replace(/\s+/g, '-');
             const isPremium = (c.paketti || c.tyyppi || '').toLowerCase().includes('premium');
             const isPro = (c.paketti || c.tyyppi || '').toLowerCase().includes('pro');
@@ -567,6 +582,7 @@
             // Profilointi-lisätiedot
             let badges = '';
             let isTopMatch = false;
+            let capacityNote = '';
 
             if (c.profiling) {
                 const core = c.profiling.core || {};
@@ -577,6 +593,18 @@
                     if (fits[key] >= 80) {
                         isTopMatch = true;
                         break;
+                    }
+                }
+
+                // Kapasiteettimerkki — näytetään vain jos käyttäjä kysyi tilaa
+                if (requestedCapacity > 0) {
+                    const cap = getCompanyCapacity(c, profilingKey);
+                    if (cap > 0) {
+                        if (cap >= requestedCapacity) {
+                            capacityNote = `<div style="font-size:0.75rem; color:#16a34a; font-weight:600; margin-bottom:6px;">✅ Sopii: max n. ${cap} hlö</div>`;
+                        } else {
+                            capacityNote = `<div style="font-size:0.75rem; color:#d97706; font-weight:600; margin-bottom:6px;">⚠️ Huom: Tilaan mahtuu arviolta n. ${cap} hlö</div>`;
+                        }
                     }
                 }
 
@@ -594,6 +622,7 @@
                     <div class="need-icon" style="font-size: 2rem;">${icon}</div>
                     <h3>${c.nimi}</h3>
                     <p style="margin-bottom: 10px;">${c.mainoslause || (c.esittely ? c.esittely.substring(0, 80) + '...' : '')}</p>
+                    ${capacityNote}
                     <div class="feature-badges" style="font-size: 1.2rem; margin-bottom: 10px;">
                         ${badges}
                     </div>
