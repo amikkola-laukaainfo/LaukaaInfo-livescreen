@@ -5738,7 +5738,13 @@
                 "description": "",
                 "website": "",
                 "email": "",
-                "phone": ""
+                "phone": "",
+                "not_suitable_for": [
+                    "hautajaiset",
+                    "häät",
+                    "yritysjuhlat",
+                    "syntymäpäivät"
+                ]
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -6082,7 +6088,13 @@
                 "description": "",
                 "website": "",
                 "email": "",
-                "phone": ""
+                "phone": "",
+                "not_suitable_for": [
+                    "hautajaiset",
+                    "häät",
+                    "yritysjuhlat",
+                    "syntymäpäivät"
+                ]
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -6254,7 +6266,13 @@
                 "description": "",
                 "website": "",
                 "email": "",
-                "phone": ""
+                "phone": "",
+                "not_suitable_for": [
+                    "hautajaiset",
+                    "häät",
+                    "yritysjuhlat",
+                    "syntymäpäivät"
+                ]
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -6426,7 +6444,13 @@
                 "description": "",
                 "website": "",
                 "email": "",
-                "phone": ""
+                "phone": "",
+                "not_suitable_for": [
+                    "hautajaiset",
+                    "häät",
+                    "yritysjuhlat",
+                    "syntymäpäivät"
+                ]
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -6598,7 +6622,13 @@
                 "description": "",
                 "website": "",
                 "email": "",
-                "phone": ""
+                "phone": "",
+                "not_suitable_for": [
+                    "hautajaiset",
+                    "häät",
+                    "yritysjuhlat",
+                    "syntymäpäivät"
+                ]
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -41405,7 +41435,13 @@
                 "description": "",
                 "website": "",
                 "email": "",
-                "phone": ""
+                "phone": "",
+                "not_suitable_for": [
+                    "hautajaiset",
+                    "häät",
+                    "yritysjuhlat",
+                    "syntymäpäivät"
+                ]
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
