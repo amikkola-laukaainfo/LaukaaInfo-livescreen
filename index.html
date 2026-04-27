@@ -610,10 +610,26 @@
                     </div>
 
                     <div class="hero-path browse-path" style="width: 100%; max-width: 850px; background: rgba(255, 255, 255, 0.94); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.6); padding: 2rem; border-radius: 16px; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12); position: relative; z-index: 10;">
-                        <div class="homepage-region-selector" style="display: flex; flex-direction: column; align-items: center; gap: 0.75rem;">
-                            <div style="font-family: var(--accent-font); font-weight: 800; color: var(--primary-blue); font-size: 1.1rem; text-align: center; margin-bottom: 0.5rem;">Mistä etsit palvelua?</div><div style="display: flex; gap: 0.5rem; width: 100%; max-width: 500px; margin-bottom: 0.5rem;"><div style="position: relative; flex: 1;"><input type="text" id="user-location-input" class="premium-select" placeholder="Syötä osoite, kylä tai paikka..." style="width: 100%; padding-left: 2.5rem;"><span style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); font-size: 1.2rem; opacity: 0.5;">??</span></div><button id="locate-me-btn" class="btn-radar" style="padding: 0.6rem 1rem; background: var(--primary-blue); min-width: auto; border-radius: 12px;" title="Käytä nykyistä sijaintia">???</button></div>
-                                <div id="location-status" style="font-size: 0.85rem; color: #64748b; font-weight: 600; min-height: 1.2rem;">Sijaintia ei asetettu.</div>
+                                                <div class="homepage-region-selector" style="display: flex; flex-direction: column; align-items: center; gap: 1rem; width: 100%;">
+                            <div style="font-family: var(--accent-font); font-weight: 800; color: var(--primary-blue); font-size: 1.1rem; text-align: center;">MistÃ¤ etsit palvelua?</div>
+                            <div style="display: flex; gap: 0.5rem; width: 100%; max-width: 500px;">
+                                <div style="position: relative; flex: 1;">
+                                    <input type="text" id="user-location-input" class="premium-select" placeholder="SyÃ¶tÃ¤ osoite, kylÃ¤ tai paikka..." style="width: 100%; padding-left: 2.5rem;">
+                                    <span style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); font-size: 1.2rem; opacity: 0.5;">ðŸ“</span>
+                                </div>
+                                <button id="locate-me-btn" class="btn-radar" style="padding: 0.6rem 1rem; background: var(--primary-blue); min-width: auto; border-radius: 12px;" title="KÃ¤ytÃ¤ nykyistÃ¤ sijaintia">
+                                    ðŸ›°ï¸
+                                </button>
                             </div>
+                            <div id="location-status" style="font-size: 0.85rem; color: #64748b; font-weight: 600; min-height: 1.2rem;">Sijaintia ei asetettu.</div>
+                            
+                            <div id="home-category-wrapper" class="premium-select-wrapper hidden-select" style="max-width: 400px; width: 100%;">
+                                <select id="home-category-select" class="premium-select">
+                                    <option value="all">Kaikki toimialat</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                             <div id="home-category-wrapper" class="premium-select-wrapper hidden-select" style="max-width: 400px; width: 100%;">
                                 <select id="home-category-select" class="premium-select">
                                     <option value="all">Kaikki toimialat</option>
