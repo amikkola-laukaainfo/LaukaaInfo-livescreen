@@ -1,6 +1,5 @@
 #!/usr/bin/env node
-// Reads current index.html, fixes the Mojibake UTF-8 double-encoding, and writes it back.
-// Run: node fix_html_encoding.js
+// Diagnoses and fixes the encoding issue in index.html.
 
 const fs = require('fs');
 const path = require('path');
@@ -10,34 +9,23 @@ const filePath = path.join(__dirname, '..', 'index.html');
 // Read raw bytes
 const buf = fs.readFileSync(filePath);
 
-// The file bytes are valid UTF-8 (Finnish chars like ä = 0xC3 0xA4),
-// but at some point the content was read as Latin-1 and written as UTF-8 again,
-// so each multi-byte UTF-8 sequence got double-encoded as UTF-8.
-// "ä" (U+00E4) in UTF-8 = 0xC3 0xA4
-// When wrongly read as Latin-1: "Ã" (0xC3) + "¤" (0xA4)
-// Then saved as UTF-8: 0xC3 0x83 + 0xC2 0xA4 → "Ã¤"
-// Fix: decode as Latin-1, then encode result as Latin-1 bytes, then interpret those bytes as UTF-8.
+// Diagnose: what do the first bytes around "yhdess" look like?
+const asUtf8 = buf.toString('utf8');
+const idx = asUtf8.indexOf('yhdess');
+console.log('As UTF-8 around "yhdess":', JSON.stringify(asUtf8.slice(idx, idx + 20)));
 
-// Strategy: decode the file as Latin-1 to get the raw Unicode codepoints,
-// then re-encode with the correct interpretation.
+// Show bytes around that position
+const byteIdx = buf.indexOf(Buffer.from('yhdess', 'utf8'));
+console.log('Bytes around that position:', buf.slice(byteIdx, byteIdx + 20));
 
-const latin1 = buf.toString('latin1');
+// Try decode: file was written as UTF-8 after being read as Windows-1252
+// Attempt 1: read as latin1 → get raw codepoints → encode back to latin1 → decode as utf8
+const step1 = buf.toString('latin1');
+const step2 = Buffer.from(step1, 'latin1').toString('utf8');
+const idx2 = step2.indexOf('yhdess');
+console.log('After latin1→buffer→utf8:', JSON.stringify(step2.slice(idx2, idx2 + 20)));
 
-// Now latin1 contains strings like "Ã¤" (two codepoints: 0xC3 and 0xA4).
-// Create a buffer from those codepoints (treating them as raw bytes).
-const fixedBuf = Buffer.from(latin1, 'latin1');
-
-// Now fixedBuf should be the original correct UTF-8 bytes.
-const fixed = fixedBuf.toString('utf8');
-
-// Quick sanity check
-if (fixed.includes('Kaikki Laukaasta yhdessä paikassa') || fixed.includes('Löydä')) {
-    console.log('✅ Encoding looks correct - writing file.');
-    fs.writeFileSync(filePath, fixedBuf);
-    console.log('Done!');
-} else {
-    // Check what we actually got
-    const idx = fixed.indexOf('Kaikki Laukaasta');
-    console.log('Context around "Kaikki Laukaasta":', fixed.slice(idx, idx + 50));
-    console.log('⚠️ Sanity check failed - file NOT written. Check the output above.');
-}
+// Attempt 2: file might be triple encoded - decode as utf8 then re-encode latin1 bytes as utf8
+const step3 = Buffer.from(asUtf8, 'latin1').toString('utf8');
+const idx3 = step3.indexOf('yhdess');
+console.log('After utf8-as-latin1→utf8:', JSON.stringify(step3.slice(idx3, idx3 + 20)));
