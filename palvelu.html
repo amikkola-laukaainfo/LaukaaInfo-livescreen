@@ -463,15 +463,20 @@
                         if (!hasProp) return false;
                     }
 
-                    // Tapa 1: Profilointidata (ensisijainen)
+                    // Tapa 1: Profilointipisteet polkuun
+                    let score = 0;
                     if (c.profiling && c.profiling.core && c.profiling.core.fits_for) {
-                        const score = c.profiling.core.fits_for[currentProfilingKey] || 0;
-                        if (score > 10) return true; // Riittävän hyvä osuma
+                        score = c.profiling.core.fits_for[currentProfilingKey] || 0;
                     }
 
-                    // Tapa 2: Tagit (toissijainen fallback)
+                    // Jos tultiin suoraan etusivulta ilman steppejä tai valittiin vaihtoehto ilman tageja (esim. "Vain tilat")
+                    if (!opt.tags || opt.tags.length === 0) {
+                        return score > 10;
+                    }
+
+                    // Tapa 2: Tagit (toissijainen fallback, mutta pakollinen tarkemmissa askeleissa)
                     const companyContent = ((c.tags || '') + ' ' + (c.kategoria || '') + ' ' + (c.nimi || '')).toLowerCase();
-                    return opt.tags && opt.tags.some(tag => companyContent.includes(tag.toLowerCase()));
+                    return opt.tags.some(tag => companyContent.includes(tag.toLowerCase()));
                 });
 
                 console.log(`Found ${companiesForOpt.length} matches for ${opt.label}`);
