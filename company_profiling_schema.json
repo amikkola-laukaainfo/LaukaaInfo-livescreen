@@ -20,10 +20,22 @@
                             "fits_for": {
                                 "type": "object",
                                 "additionalProperties": { "type": "integer", "minimum": 0, "maximum": 100 },
-                                "description": "Palvelupolkusoveltuvuus ja prioriteettipisteet"
+                                "description": "Palvelupolkusoveltuvuus ja prioriteettipisteet. Arvo 0 ei ole esto — käytä not_suitable_for ehdottomaan estoon."
                             },
                             "priority_score": { "type": "integer", "default": 0 },
-                            "paired_with": { "type": "array", "items": { "type": "string" } },
+                            "paired_with": { "type": "array", "items": { "type": "string" }, "description": "Vanhentunut — käytä paired_with_by_context" },
+                            "paired_with_by_context": {
+                                "type": "object",
+                                "description": "Kontekstikohtaiset suositukset: mitä muita palveluja kannattaa hankkia yhdessä. Näytetään 'Seuraavaksi tarvitset yleensä nämä' -osiossa.",
+                                "properties": {
+                                    "häät": { "type": "array", "items": { "type": "string" }, "description": "Esim. Valokuvaaja, Floristi, Hääbändi" },
+                                    "hautajaiset": { "type": "array", "items": { "type": "string" }, "description": "Esim. Pitopalvelu (muistotilaisuus), Hautauspalvelu, Kukat" },
+                                    "yritysjuhlat": { "type": "array", "items": { "type": "string" }, "description": "Esim. AV-tekniikka, Esiintyjä, Majoitus" },
+                                    "kokoukset": { "type": "array", "items": { "type": "string" }, "description": "Esim. Tarjoilu, IT-tuki, Majoitus" },
+                                    "syntymäpäivät": { "type": "array", "items": { "type": "string" }, "description": "Esim. Kakku, Ohjelma, Koristeet" }
+                                },
+                                "additionalProperties": { "type": "array", "items": { "type": "string" } }
+                            },
                             "service_area": {
                                 "type": "object",
                                 "properties": {
@@ -79,7 +91,15 @@
                             "video_production": { "type": "boolean" },
                             "live_music": { "type": "boolean" },
                             "dj_services": { "type": "boolean" },
-                            "karaoke_available": { "type": "boolean" }
+                            "karaoke_available": { "type": "boolean" },
+                            "has_exclusive_catering": {
+                                "type": "boolean",
+                                "description": "true = tila vaatii oman cateringin / ruokailun (ulkopuolinen pitopalvelu ei sallittu). Tämä ohittaa 'Tarvitsetko pitopalvelun?' -kysymyksen polussa."
+                            },
+                            "accommodation_included": {
+                                "type": "boolean",
+                                "description": "true = majoitus sisältyy aina pakettiin. Tämä ohittaa 'Tarvitsetko majoitusta?' -kysymyksen polussa."
+                            }
                         }
                     },
                     
