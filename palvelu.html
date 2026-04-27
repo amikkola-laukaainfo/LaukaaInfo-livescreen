@@ -352,10 +352,61 @@
             const need = NEEDS_CONFIG[currentNeedId];
             if (currentStepIndex < need.steps.length - 1) {
                 currentStepIndex++;
+                // Tarkistetaan skipIf — hypytään askel jos ehto täyttyy
+                const step = need.steps[currentStepIndex];
+                if (step && step.skipIf) {
+                    try {
+                        // Evaluoidaan skipIf-lauseke turvallisesti
+                        const shouldSkip = evaluateSkipIf(step.skipIf);
+                        if (shouldSkip) {
+                            console.log(`Skipping step '${step.id}': ${step.skipMessage || 'skipIf condition met'}`);
+                            showSkipNotice(step.skipMessage);
+                            setTimeout(() => nextStep(), 1200);
+                            return;
+                        }
+                    } catch(e) {
+                        console.warn('skipIf evaluation failed:', e);
+                    }
+                }
                 renderStep();
             } else {
                 showResults();
             }
+        }
+
+        // Arvioi skipIf-lauseke
+        function evaluateSkipIf(skipIfStr) {
+            // Yksinkertaistettu: tarkistetaan vain tunnetut muodot
+            if (skipIfStr.includes('getSelectedCompanyProfilointi')) {
+                const match = skipIfStr.match(/getSelectedCompanyProfilointi\('([^']+)',\s*'([^']+)',\s*'([^']+)'\)/);
+                if (match) {
+                    const [_, stepId, section, field] = match;
+                    return getSelectedCompanyProfilointi(stepId, section, field);
+                }
+            }
+            return false;
+        }
+
+        // Hakee valitun yrityksen profilointiarvo tietystä osiosta
+        function getSelectedCompanyProfilointi(stepId, section, field) {
+            const sel = selections[stepId];
+            if (!sel) return false;
+            const opt = Array.isArray(sel) ? sel[0] : sel;
+            if (!opt || !opt._companyRef) return false;
+            return opt._companyRef?.profiling?.[section]?.[field] === true;
+        }
+
+        // Näytetään lyhyt ilmoitus kun askel hypytään
+        function showSkipNotice(message) {
+            const content = document.getElementById('step-content');
+            if (!message) return;
+            content.innerHTML = `
+                <div class="step-header fade-in" style="text-align:center;">
+                    <div style="font-size:2.5rem;margin-bottom:1rem;">✅</div>
+                    <h2 style="color:var(--primary-blue);">${message}</h2>
+                    <p style="opacity:0.7;">Jatketaan automaattisesti...</p>
+                </div>
+            `;
         }
 
         async function showResults() {
@@ -509,6 +560,25 @@
                     let score = 0;
                     if (c.profiling && c.profiling.core && c.profiling.core.fits_for) {
                         score = c.profiling.core.fits_for[currentProfilingKey] || 0;
+                    }
+
+                    // require_fits_for: minimipisteraja (ehdoton) — vain hautajaiset-tyyppisille poluille
+                    if (opt.require_fits_for) {
+                        const rfKey = opt.require_fits_for.key;
+                        const rfMin = opt.require_fits_for.min || 20;
+                        const rfScore = c.profiling?.core?.fits_for?.[rfKey] || 0;
+                        if (rfScore < rfMin) return false; // Ehdoton: liian pieni soveltuvuus
+                    }
+
+                    // profilointi_filter: schema-pohjainen hard filter
+                    if (opt.profilointi_filter) {
+                        const pf = opt.profilointi_filter;
+                        const actualVal = c.profiling?.[pf.section]?.[pf.field];
+                        // Jos yritysellä on profilointi mutta arvo ei täsmää → suljetaan pois
+                        if (c.profiling && c.profiling[pf.section] !== undefined) {
+                            if (actualVal !== pf.value) return false;
+                        }
+                        // Jos ei profilointia lainkaan, jatketaan tagi-haulla
                     }
 
                     // Jos tultiin suoraan etusivulta ilman steppejä tai valittiin vaihtoehto ilman tageja (esim. "Vain tilat")
