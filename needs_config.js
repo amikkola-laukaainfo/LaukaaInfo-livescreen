@@ -461,7 +461,7 @@ const NEEDS_CONFIG = {
                 "question": "Haluaisitko tallentaa muistot tai tarvitsetko digitointia?",
                 "options": [
                     { "label": "Muistovideo / Esityksen valmistelu", "tags": ["videotuotanto"] },
-                    { "label": "Vanhojen valokuvien digitointi", "tags": ["digitointi"] },
+                    { "label": "Vanhojen valokuvien digitointi", "tags": ["digitointi"], "profilointi_filter": { "section": "core", "field": "sub_contexts", "value": "digitointi" } },
                     { "label": "Valokuvaus tilaisuudessa", "tags": ["valokuvaus"] }
                 ]
             }
