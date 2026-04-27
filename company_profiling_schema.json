@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "title": "LaukaaInfo Company Profiling Schema v3",
-    "description": "Ratkaisulähtöinen profilointi palvelupolkujen mukaan. 10 pääkategoriaa ja ydinkentät.",
+    "title": "LaukaaInfo 3-tasoinen palvelupolkujärjestelmä v4",
+    "description": "Ratkaisulähtöinen profilointi palvelupolkujen mukaan. 12 pääkontekstia (Taso 1), tarkentavat tarpeet (Taso 2) ja palveluroolit (Taso 3).",
     "type": "object",
     "properties": {
         "SCHEMA_VERSION": { "type": "string" },
@@ -20,19 +20,25 @@
                             "fits_for": {
                                 "type": "object",
                                 "additionalProperties": { "type": "integer", "minimum": 0, "maximum": 100 },
-                                "description": "Palvelupolkusoveltuvuus ja prioriteettipisteet. Arvo 0 ei ole esto — käytä not_suitable_for ehdottomaan estoon."
+                                "description": "Pääkontekstien soveltuvuus ja prioriteettipisteet (Taso 1). Käytä kategoria-objektien sisällä olevia tarkennuksia Tasoon 2."
                             },
                             "priority_score": { "type": "integer", "default": 0 },
-                            "paired_with": { "type": "array", "items": { "type": "string" }, "description": "Vanhentunut — käytä paired_with_by_context" },
                             "paired_with_by_context": {
                                 "type": "object",
                                 "description": "Kontekstikohtaiset suositukset: mitä muita palveluja kannattaa hankkia yhdessä. Näytetään 'Seuraavaksi tarvitset yleensä nämä' -osiossa.",
                                 "properties": {
-                                    "häät": { "type": "array", "items": { "type": "string" }, "description": "Esim. Valokuvaaja, Floristi, Hääbändi" },
-                                    "hautajaiset": { "type": "array", "items": { "type": "string" }, "description": "Esim. Pitopalvelu (muistotilaisuus), Hautauspalvelu, Kukat" },
-                                    "yritysjuhlat": { "type": "array", "items": { "type": "string" }, "description": "Esim. AV-tekniikka, Esiintyjä, Majoitus" },
-                                    "kokoukset": { "type": "array", "items": { "type": "string" }, "description": "Esim. Tarjoilu, IT-tuki, Majoitus" },
-                                    "syntymäpäivät": { "type": "array", "items": { "type": "string" }, "description": "Esim. Kakku, Ohjelma, Koristeet" }
+                                    "weddings_and_parties": { "type": "array", "items": { "type": "string" } },
+                                    "funerals_and_memorials": { "type": "array", "items": { "type": "string" } },
+                                    "corporate_parties_and_events": { "type": "array", "items": { "type": "string" } },
+                                    "meetings_and_seminars": { "type": "array", "items": { "type": "string" } },
+                                    "moving_and_housing": { "type": "array", "items": { "type": "string" } },
+                                    "construction_and_renovation": { "type": "array", "items": { "type": "string" } },
+                                    "cottage_services": { "type": "array", "items": { "type": "string" } },
+                                    "housing_companies_and_real_estate": { "type": "array", "items": { "type": "string" } },
+                                    "starting_a_business": { "type": "array", "items": { "type": "string" } },
+                                    "business_growth_and_dev": { "type": "array", "items": { "type": "string" } },
+                                    "wellbeing_and_beauty": { "type": "array", "items": { "type": "string" } },
+                                    "emergency_and_urgent_services": { "type": "array", "items": { "type": "string" } }
                                 },
                                 "additionalProperties": { "type": "array", "items": { "type": "string" } }
                             },
@@ -41,226 +47,252 @@
                                 "properties": {
                                     "mode": { "type": "string", "enum": ["TOIMIPISTE", "SERVICE_AREA", "ETAPALVELU", "VALTAKUNNALLINEN"] },
                                     "radius_km": { "type": "integer" },
-                                    "regions": { "type": "array", "items": { "type": "string" } },
-                                    "note": { "type": "string" }
+                                    "regions": { "type": "array", "items": { "type": "string" } }
                                 }
                             },
-                            "emergency_available": { "type": "boolean" },
-                            "contract_customer_available": { "type": "boolean" },
-                            "corporate_clients": { "type": "boolean" },
-                            "home_service": { "type": "boolean" },
-                            "weekend_service": { "type": "boolean" },
-                            "description": { "type": "string" },
-                            "website": { "type": "string" },
-                            "email": { "type": "string" },
-                            "phone": { "type": "string" },
                             "not_suitable_for": {
                                 "type": "array",
                                 "items": { "type": "string" },
-                                "description": "Ehdottomat poissulut: kontekstit joihin yritys EI sovellu. Esim. ['hautajaiset', 'lastenkutsut']. Jos listalla, yritystä ei näytetä kyseisessä polussa vaikka tagit osuisivat."
-                            }
+                                "description": "Ehdottomat poissulut: kontekstit joihin yritys EI sovellu."
+                            },
+                            "emergency_available": { "type": "boolean" },
+                            "website": { "type": "string" },
+                            "email": { "type": "string" },
+                            "phone": { "type": "string" }
                         }
                     },
                     
-                    "events_and_celebrations": {
+                    "weddings_and_parties": {
                         "type": "object",
-                        "description": "1. Häät, juhlat ja yksityistilaisuudet",
+                        "description": "1. Häät ja juhlat",
                         "properties": {
+                            "role": { "type": "string", "enum": ["MAIN_SERVICE", "SUPPORT_SERVICE"] },
+                            "refinement_tags": { 
+                                "type": "array", 
+                                "items": { "type": "string" },
+                                "examples": ["pienet häät", "suuret häät", "viikonloppuhäät", "maaseutuhäät", "lasten syntymäpäivät", "valmistujaiset"]
+                            },
+                            "digitization_features": {
+                                "type": "array",
+                                "items": { "type": "string" },
+                                "examples": ["häävideoiden editointi", "hääkoosteet", "juhlaesitykset", "dronevideoiden editointi"]
+                            },
+                            "entertainment_features": {
+                                "type": "array",
+                                "items": { "type": "string" },
+                                "examples": ["livebändi", "DJ-palvelu", "taikuri", "juontaja", "ohjelmapalvelu"]
+                            },
                             "capacity_max": { "type": "integer" },
                             "seated_capacity": { "type": "integer" },
-                            "outdoor_capacity": { "type": "integer" },
                             "is_accessible": { "type": "boolean" },
-                            "is_lakeside": { "type": "boolean" },
                             "has_sauna": { "type": "boolean" },
-                            "has_av_tech": { "type": "boolean" },
-                            "has_stage": { "type": "boolean" },
-                            "accommodation_beds": { "type": "integer" },
                             "alcohol_license": { "type": "boolean" },
-                            "private_booking": { "type": "boolean" },
-                            "late_night_events": { "type": "boolean" },
-                            "wedding_specialized": { "type": "boolean" },
-                            "catering_min_capacity": { "type": "integer" },
-                            "catering_max_capacity": { "type": "integer" },
-                            "dietary_specialties": { "type": "array", "items": { "type": "string" } },
-                            "staff_included": { "type": "boolean" },
-                            "wedding_menu_available": { "type": "boolean" },
-                            "cake_service": { "type": "boolean" },
-                            "partner_venues": { "type": "array", "items": { "type": "string" } },
-                            "wedding_photography": { "type": "boolean" },
-                            "drone_available": { "type": "boolean" },
-                            "video_production": { "type": "boolean" },
-                            "live_music": { "type": "boolean" },
-                            "dj_services": { "type": "boolean" },
-                            "karaoke_available": { "type": "boolean" },
-                            "has_exclusive_catering": {
-                                "type": "boolean",
-                                "description": "true = tila vaatii oman cateringin / ruokailun (ulkopuolinen pitopalvelu ei sallittu). Tämä ohittaa 'Tarvitsetko pitopalvelun?' -kysymyksen polussa."
-                            },
-                            "accommodation_included": {
-                                "type": "boolean",
-                                "description": "true = majoitus sisältyy aina pakettiin. Tämä ohittaa 'Tarvitsetko majoitusta?' -kysymyksen polussa."
-                            }
-                        }
-                    },
-                    
-                    "business_events": {
-                        "type": "object",
-                        "description": "2. Yritysjuhlat, kokoukset ja yritystilaisuudet",
-                        "properties": {
-                            "meeting_capacity": { "type": "integer" },
-                            "seminar_capacity": { "type": "integer" },
-                            "conference_rooms": { "type": "integer" },
-                            "has_projector": { "type": "boolean" },
-                            "has_streaming": { "type": "boolean" },
-                            "has_wifi": { "type": "boolean" },
-                            "has_stage": { "type": "boolean" },
-                            "private_booking": { "type": "boolean" },
-                            "invoice_billing": { "type": "boolean" },
-                            "corporate_clients": { "type": "boolean" },
-                            "vip_services": { "type": "boolean" },
-                            "business_catering": { "type": "boolean" },
-                            "event_hosting": { "type": "boolean" },
-                            "corporate_gifts": { "type": "boolean" },
-                            "branding_support": { "type": "boolean" },
-                            "av_support": { "type": "boolean" },
-                            "staff_events_specialized": { "type": "boolean" }
+                            "catering_available": { "type": "boolean" },
+                            "accommodation_available": { "type": "boolean" }
                         }
                     },
                     
                     "funerals_and_memorials": {
                         "type": "object",
-                        "description": "3. Hautajaiset ja muistotilaisuudet",
+                        "description": "2. Hautajaiset ja muistotilaisuudet",
                         "properties": {
+                            "role": { "type": "string", "enum": ["MAIN_SERVICE", "SUPPORT_SERVICE"] },
+                            "refinement_tags": { 
+                                "type": "array", 
+                                "items": { "type": "string" },
+                                "examples": ["muistotilaisuus", "hautausjärjestelyt", "perunkirjoitus", "kukkapalvelut", "muistomerkit"]
+                            },
+                            "digitization_features": {
+                                "type": "array",
+                                "items": { "type": "string" },
+                                "examples": ["muistovideo", "vanhojen valokuvien digitointi", "VHS / DVD digitointi", "muistoesitykset", "sukukuvien kokoaminen"]
+                            },
                             "memorial_service_capacity": { "type": "integer" },
                             "quiet_private_space": { "type": "boolean" },
                             "accessible_entry": { "type": "boolean" },
                             "memorial_catering": { "type": "boolean" },
-                            "coffee_service": { "type": "boolean" },
-                            "flower_arrangements": { "type": "boolean" },
-                            "memorial_menu_available": { "type": "boolean" },
-                            "funeral_flowers": { "type": "boolean" },
-                            "memorial_arrangements": { "type": "boolean" },
-                            "transport_assistance": { "type": "boolean" },
                             "urgent_booking_available": { "type": "boolean" }
+                        }
+                    },
+                    
+                    "corporate_parties_and_events": {
+                        "type": "object",
+                        "description": "3. Yritysjuhlat ja yritystilaisuudet",
+                        "properties": {
+                            "role": { "type": "string", "enum": ["MAIN_SERVICE", "SUPPORT_SERVICE"] },
+                            "refinement_tags": { 
+                                "type": "array", 
+                                "items": { "type": "string" },
+                                "examples": ["henkilöstöjuhla", "asiakastilaisuus", "kickoff", "pikkujoulut", "lanseeraus", "VIP-tilaisuus"]
+                            },
+                            "wellbeing_and_activity_features": {
+                                "type": "array",
+                                "items": { "type": "string" },
+                                "examples": ["kalastusopas", "retkeilyopas", "melonta", "virkistyspäivä", "tiimipäivä", "yrityswellness"]
+                            },
+                            "entertainment_features": {
+                                "type": "array",
+                                "items": { "type": "string" },
+                                "examples": ["esiintyjät", "livebändi", "stand up", "DJ-palvelu", "juontaja"]
+                            },
+                            "capacity_max": { "type": "integer" },
+                            "has_av_tech": { "type": "boolean" },
+                            "private_booking": { "type": "boolean" },
+                            "invoice_billing": { "type": "boolean" }
+                        }
+                    },
+                    
+                    "meetings_and_seminars": {
+                        "type": "object",
+                        "description": "4. Kokoukset ja seminaarit",
+                        "properties": {
+                            "role": { "type": "string", "enum": ["MAIN_SERVICE", "SUPPORT_SERVICE"] },
+                            "refinement_tags": { 
+                                "type": "array", 
+                                "items": { "type": "string" },
+                                "examples": ["johtoryhmän kokous", "seminaari", "koulutus", "hybriditapahtuma", "työpaja"]
+                            },
+                            "meeting_capacity": { "type": "integer" },
+                            "seminar_capacity": { "type": "integer" },
+                            "has_projector": { "type": "boolean" },
+                            "has_streaming": { "type": "boolean" },
+                            "has_wifi": { "type": "boolean" },
+                            "catering_included": { "type": "boolean" }
                         }
                     },
                     
                     "moving_and_housing": {
                         "type": "object",
-                        "description": "4. Muutto ja asumisen muutokset",
+                        "description": "5. Muutto ja asuminen",
                         "properties": {
+                            "role": { "type": "string", "enum": ["MAIN_SERVICE", "SUPPORT_SERVICE"] },
+                            "refinement_tags": { 
+                                "type": "array", 
+                                "items": { "type": "string" },
+                                "examples": ["muutto", "varastointi", "muuton jälkisiivous", "uuden kodin valmistelu"]
+                            },
+                            "digitization_features": {
+                                "type": "array",
+                                "items": { "type": "string" },
+                                "examples": ["paperiarkistojen digitointi", "asiakirjojen varmuuskopiointi", "valokuvien järjestely", "sähköinen arkistointi"]
+                            },
                             "moving_truck_available": { "type": "boolean" },
                             "packing_service": { "type": "boolean" },
                             "storage_available": { "type": "boolean" },
-                            "weekend_moves": { "type": "boolean" },
-                            "urgent_moves": { "type": "boolean" },
-                            "long_distance_moves": { "type": "boolean" },
-                            "cleaning_after_move": { "type": "boolean" },
-                            "electrician_available": { "type": "boolean" },
-                            "renovation_support": { "type": "boolean" },
-                            "insurance_support": { "type": "boolean" }
+                            "cleaning_service": { "type": "boolean" }
                         }
                     },
                     
-                    "construction_and_maintenance": {
+                    "construction_and_renovation": {
                         "type": "object",
-                        "description": "5. Rakentaminen, remontointi ja kiinteistöpalvelut",
+                        "description": "6. Rakentaminen ja remontointi",
                         "properties": {
+                            "role": { "type": "string", "enum": ["MAIN_SERVICE", "SUPPORT_SERVICE"] },
+                            "refinement_tags": { 
+                                "type": "array", 
+                                "items": { "type": "string" },
+                                "examples": ["kodin remontti", "kylpyhuoneremontti", "pihatyö", "rakennusprojekti"]
+                            },
                             "emergency_service": { "type": "boolean" },
-                            "certifications": { "type": "array", "items": { "type": "string" } },
-                            "wet_room_certification": { "type": "boolean" },
-                            "provides_tools": { "type": "boolean" },
                             "material_supply": { "type": "boolean" },
                             "project_management": { "type": "boolean" },
-                            "snow_removal": { "type": "boolean" },
-                            "lawn_maintenance": { "type": "boolean" },
-                            "property_monitoring": { "type": "boolean" },
-                            "maintenance_contracts": { "type": "boolean" },
-                            "housing_company_clients": { "type": "boolean" }
+                            "wet_room_certification": { "type": "boolean" }
                         }
                     },
                     
                     "cottage_services": {
                         "type": "object",
-                        "description": "6. Mökkipalvelut ja vapaa-ajan asuminen",
+                        "description": "7. Mökkipalvelut",
                         "properties": {
+                            "role": { "type": "string", "enum": ["MAIN_SERVICE", "SUPPORT_SERVICE"] },
+                            "refinement_tags": { 
+                                "type": "array", 
+                                "items": { "type": "string" },
+                                "examples": ["mökin avaus", "talvivalvonta", "lumityöt", "polttopuut", "mökkiremontti", "siivous"]
+                            },
                             "key_holding": { "type": "boolean" },
                             "winter_monitoring": { "type": "boolean" },
-                            "snow_removal": { "type": "boolean" },
-                            "cleaning_service": { "type": "boolean" },
-                            "lawn_service": { "type": "boolean" },
-                            "remote_monitoring": { "type": "boolean" },
                             "emergency_visits": { "type": "boolean" },
-                            "renovation_support": { "type": "boolean" },
-                            "dock_maintenance": { "type": "boolean" },
-                            "sauna_services": { "type": "boolean" },
-                            "guest_preparation_service": { "type": "boolean" }
+                            "sauna_maintenance": { "type": "boolean" }
                         }
                     },
                     
-                    "housing_company_and_contracts": {
+                    "housing_companies_and_real_estate": {
                         "type": "object",
-                        "description": "7. Taloyhtiöt ja jatkuvat huoltosopimukset",
+                        "description": "8. Taloyhtiöt ja kiinteistöpalvelut",
                         "properties": {
-                            "housing_company_clients": { "type": "boolean" },
+                            "role": { "type": "string", "enum": ["MAIN_SERVICE", "SUPPORT_SERVICE"] },
+                            "refinement_tags": { 
+                                "type": "array", 
+                                "items": { "type": "string" },
+                                "examples": ["huoltosopimus", "päivystys", "kiinteistön ylläpito"]
+                            },
                             "maintenance_contracts": { "type": "boolean" },
                             "emergency_response": { "type": "boolean" },
-                            "scheduled_visits": { "type": "boolean" },
-                            "property_reports": { "type": "boolean" },
-                            "invoice_billing": { "type": "boolean" },
-                            "contract_customer_available": { "type": "boolean" },
-                            "priority_support": { "type": "boolean" },
-                            "monthly_service_plan": { "type": "boolean" }
+                            "housing_company_specialized": { "type": "boolean" }
                         }
                     },
                     
-                    "startup_services": {
+                    "starting_a_business": {
                         "type": "object",
-                        "description": "8. Yrityksen perustaminen",
+                        "description": "9. Yrityksen perustaminen",
                         "properties": {
-                            "bookkeeping_startup": { "type": "boolean" },
+                            "role": { "type": "string", "enum": ["MAIN_SERVICE", "SUPPORT_SERVICE"] },
+                            "refinement_tags": { 
+                                "type": "array", 
+                                "items": { "type": "string" },
+                                "examples": ["yrityksen käynnistäminen", "taloushallinto", "juridiikka", "toimitilat"]
+                            },
                             "business_advisory": { "type": "boolean" },
-                            "insurance_setup": { "type": "boolean" },
-                            "legal_services": { "type": "boolean" },
-                            "office_space_available": { "type": "boolean" },
-                            "banking_support": { "type": "boolean" },
-                            "website_creation": { "type": "boolean" },
-                            "webshop_setup": { "type": "boolean" },
-                            "branding_support": { "type": "boolean" },
-                            "logo_design": { "type": "boolean" },
-                            "business_photography": { "type": "boolean" }
+                            "bookkeeping_available": { "type": "boolean" },
+                            "office_space_available": { "type": "boolean" }
                         }
                     },
                     
-                    "business_growth": {
+                    "business_growth_and_dev": {
                         "type": "object",
-                        "description": "9. Yrityksen kehittäminen ja kasvu",
+                        "description": "10. Yrityksen kehittäminen ja kasvu",
                         "properties": {
-                            "google_ads": { "type": "boolean" },
-                            "social_media_marketing": { "type": "boolean" },
-                            "seo_services": { "type": "boolean" },
-                            "content_creation": { "type": "boolean" },
-                            "video_production": { "type": "boolean" },
-                            "crm_support": { "type": "boolean" },
-                            "recruitment_support": { "type": "boolean" },
-                            "sales_development": { "type": "boolean" },
-                            "automation_services": { "type": "boolean" },
-                            "consulting_services": { "type": "boolean" }
+                            "role": { "type": "string", "enum": ["MAIN_SERVICE", "SUPPORT_SERVICE"] },
+                            "refinement_tags": { 
+                                "type": "array", 
+                                "items": { "type": "string" },
+                                "examples": ["verkkosivut", "somemarkkinointi", "näkyvyyden kasvattaminen", "myynnin kehittäminen"]
+                            },
+                            "marketing_services": { "type": "boolean" },
+                            "website_dev": { "type": "boolean" },
+                            "sales_coaching": { "type": "boolean" }
                         }
                     },
                     
                     "wellbeing_and_beauty": {
                         "type": "object",
-                        "description": "10. Hyvinvointi ja kauneus",
+                        "description": "11. Hyvinvointi ja kauneus",
                         "properties": {
-                            "home_visits": { "type": "boolean" },
-                            "online_booking": { "type": "boolean" },
-                            "unisex_services": { "type": "boolean" },
-                            "gift_cards": { "type": "boolean" },
-                            "corporate_wellbeing_services": { "type": "boolean" },
-                            "event_makeup": { "type": "boolean" },
+                            "role": { "type": "string", "enum": ["MAIN_SERVICE", "SUPPORT_SERVICE"] },
+                            "refinement_tags": { 
+                                "type": "array", 
+                                "items": { "type": "string" },
+                                "examples": ["hyvinvointipalvelut", "kauneuspalvelut", "yrityshyvinvointi"]
+                            },
                             "bridal_services": { "type": "boolean" },
-                            "group_bookings": { "type": "boolean" }
+                            "home_visits_available": { "type": "boolean" },
+                            "online_booking": { "type": "boolean" }
+                        }
+                    },
+                    
+                    "emergency_and_urgent_services": {
+                        "type": "object",
+                        "description": "12. Päivystävät ja kiireelliset palvelut",
+                        "properties": {
+                            "role": { "type": "string", "enum": ["MAIN_SERVICE", "SUPPORT_SERVICE"] },
+                            "refinement_tags": { 
+                                "type": "array", 
+                                "items": { "type": "string" },
+                                "examples": ["päivystävä putkimies", "sähkövika", "lukkopalvelut", "kiireellinen siivous"]
+                            },
+                            "24h_service": { "type": "boolean" },
+                            "arrival_time_estimate_min": { "type": "integer" }
                         }
                     },
                     
