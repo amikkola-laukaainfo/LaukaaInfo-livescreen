@@ -757,6 +757,11 @@
                 }
             });
 
+            // Lajitellaan lopullinen lista vielä etäisyyden mukaan, jos käyttäjällä on sijainti
+            // (Tämä on hieman monimutkaista, koska html on jo generoitu ryhmittäin)
+            // Muutetaan showResults logiikkaa niin, että se generoi koko listan ja lajittelee sen jos halutaan,
+            // mutta pidetään ryhmittely toistaiseksi.
+
             if (totalFound === 0) {
                 if (countEl) countEl.textContent = "Valitettavasti valintoihisi sopivia yrityksiä ei löytynyt juuri nyt.";
                 if (list) list.innerHTML = '<div class="no-results"><h3>Hups!</h3><p>Kokeile aloittaa alusta ja valita eri vaihtoehtoja.</p></div>';
@@ -831,6 +836,18 @@
             let badges = '';
             let isTopMatch = false;
             let capacityNote = '';
+            let distanceHtml = '';
+
+            // Etäisyyslaskenta
+            const userCoordsRaw = localStorage.getItem('userCoords');
+            if (userCoordsRaw && c.lat && (c.lon || c.lng)) {
+                try {
+                    const u = JSON.parse(userCoordsRaw);
+                    const dist = getHaversineDistance(u.lat, u.lng || u.lon, parseFloat(c.lat), parseFloat(c.lon || c.lng));
+                    const distStr = dist < 1 ? `${Math.round(dist * 1000)} m` : `${dist.toFixed(1)} km`;
+                    distanceHtml = `<div class="dist-badge" style="font-size: 0.7rem; background: #f1f5f9; padding: 2px 8px; border-radius: 10px; color: #475569; font-weight: 600; display: inline-block; margin-top: 5px;">🚗 ${distStr}</div>`;
+                } catch(e) {}
+            }
 
             if (c.profiling) {
                 const core = c.profiling.core || {};
@@ -869,8 +886,11 @@
                     ${(isPremium || isPro) && !isTopMatch ? '<div style="position:absolute; top:10px; right:10px; font-size:0.6rem; background:gold; padding:2px 6px; border-radius:10px; font-weight:bold; z-index:10;">PREMIUM</div>' : ''}
                     <div class="need-icon" style="font-size: 2rem;">${icon}</div>
                     <h3>${c.nimi}</h3>
-                    <p style="margin-bottom: 10px;">${c.mainoslause || (c.esittely ? c.esittely.substring(0, 80) + '...' : '')}</p>
-                    ${capacityNote}
+                    <p style="margin-bottom: 5px;">${c.mainoslause || (c.esittely ? c.esittely.substring(0, 80) + '...' : '')}</p>
+                    ${distanceHtml}
+                    <div style="margin-top: 8px;">
+                        ${capacityNote}
+                    </div>
                     <div class="feature-badges" style="font-size: 1.2rem; margin-bottom: 10px;">
                         ${badges}
                     </div>
@@ -880,6 +900,20 @@
                     <div class="arrow" style="opacity:1; transform:none;">Katso tiedot &raquo;</div>
                 </a>
             `;
+        }
+
+        function getHaversineDistance(lat1, lon1, lat2, lon2) {
+            const dLat = deg2rad(lat2 - lat1);
+            const dLon = deg2rad(lon2 - lon1);
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                      Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+                      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return 6371 * c; // Distance in km
+        }
+
+        function deg2rad(deg) {
+            return deg * (Math.PI / 180);
         }
 
         function getMatchExplanation(c, requestedCapacity, profilingKey) {

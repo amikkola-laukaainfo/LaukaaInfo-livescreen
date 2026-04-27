@@ -1446,7 +1446,13 @@ function initUserLocation() {
 
     // Palauta tallennettu sijainti
     const savedName = localStorage.getItem('userLocationName');
-    const savedCoords = localStorage.getItem('userCoords');
+    const savedCoordsRaw = localStorage.getItem('userCoords');
+
+    if (savedCoordsRaw) {
+        try {
+            window.userCoords = JSON.parse(savedCoordsRaw);
+        } catch(e) {}
+    }
 
     if (savedName && locationInput) {
         locationInput.value = savedName;
@@ -1480,9 +1486,12 @@ function initUserLocation() {
                 const lowerQuery = query.toLowerCase();
                 if (villageCoords[lowerQuery]) {
                     const coords = villageCoords[lowerQuery];
-                    localStorage.setItem('userCoords', JSON.stringify({ lat: coords.lat, lng: coords.lon }));
+                    const coordsObj = { lat: coords.lat, lng: coords.lon };
+                    localStorage.setItem('userCoords', JSON.stringify(coordsObj));
                     localStorage.setItem('userLocationName', query);
+                    window.userCoords = coordsObj;
                     if (statusEl) statusEl.textContent = `Sijainti asetettu: ${query}`;
+                    if (typeof filterCatalog === 'function') filterCatalog();
                     return;
                 }
 
@@ -1492,9 +1501,12 @@ function initUserLocation() {
 
                 if (data && data.length > 0) {
                     const result = data[0];
-                    localStorage.setItem('userCoords', JSON.stringify({ lat: parseFloat(result.lat), lng: parseFloat(result.lon) }));
+                    const coordsObj = { lat: parseFloat(result.lat), lng: parseFloat(result.lon) };
+                    localStorage.setItem('userCoords', JSON.stringify(coordsObj));
                     localStorage.setItem('userLocationName', query);
+                    window.userCoords = coordsObj;
                     if (statusEl) statusEl.textContent = `Sijainti asetettu: ${query}`;
+                    if (typeof filterCatalog === 'function') filterCatalog();
                 } else {
                     if (statusEl) statusEl.textContent = 'Osoitetta ei löytynyt. Kokeile tarkempaa osoitetta.';
                 }
@@ -1519,8 +1531,10 @@ function initUserLocation() {
                     const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
                     localStorage.setItem('userCoords', JSON.stringify(coords));
                     localStorage.setItem('userLocationName', 'Nykyinen sijainti');
+                    window.userCoords = coords;
                     if (locationInput) locationInput.value = 'Nykyinen sijainti';
                     if (statusEl) statusEl.textContent = 'Sijainti päivitetty nykyiseen paikkaasi.';
+                    if (typeof filterCatalog === 'function') filterCatalog();
                 },
                 (err) => {
                     console.warn("Geolocation error:", err);
