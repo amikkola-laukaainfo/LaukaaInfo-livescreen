@@ -7,26 +7,26 @@ const mapping = {
         <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'haat')">
             <option value="">Tarkenna tarvetta...</option>
             <option value="is_lakeside">Juhlatila järven rannalla</option>
-            <option value="accommodation_beds">Sisältää majoitusmahdollisuuden</option>
+            <option value="video_production">Häävideokuvaus & Digitointi</option>
             <option value="alcohol_license">Anniskeluoikeudet</option>
         </select>`,
     'yritysjuhlat': `
         <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'yritysjuhlat')">
             <option value="">Tarkenna tarvetta...</option>
-            <option value="has_av_tech">Tiloissa AV-tekniikka</option>
+            <option value="corporate_wellbeing_services">TYKY- ja hyvinvointipalvelut</option>
             <option value="has_sauna">Saunatilat saatavilla</option>
         </select>`,
     'yritystilaisuudet': `
         <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'yritystilaisuudet')">
             <option value="">Tarkenna tarvetta...</option>
-            <option value="invoice_billing">Laskutusmahdollisuus</option>
+            <option value="has_streaming">Striimaus & Hybridituki</option>
             <option value="is_accessible">Esteetön pääsy</option>
         </select>`,
     'muutto': `
         <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'muutto')">
             <option value="">Tarkenna tarvetta...</option>
             <option value="weekend_moves">Viikonloppumuutot</option>
-            <option value="urgent_moves">Kiireelliset muutot</option>
+            <option value="digitization_features">Arkiston digitointi</option>
             <option value="packing_service">Pakkauspalvelu</option>
         </select>`,
     'remontti': `
@@ -39,7 +39,7 @@ const mapping = {
         <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'mokkipalvelut')">
             <option value="">Tarkenna tarvetta...</option>
             <option value="key_holding">Avainpalvelu / Valvonta</option>
-            <option value="snow_removal">Lumityöt / Pihanhoito</option>
+            <option value="sauna_services">Saunapalvelut & Wellness</option>
         </select>`,
     'taloyhtion-huolto': `
         <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'taloyhtion-huolto')">
@@ -51,12 +51,12 @@ const mapping = {
         <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'paivystavat-palvelut')">
             <option value="">Tarkenna tarvetta...</option>
             <option value="emergency_available">Hinaus ja tiepalvelu</option>
-            <option value="emergency_response">Kiinteistöpäivystys</option>
+            <option value="emergency_service">LVI- ja sähköpäivystys</option>
         </select>`,
     'terveys-ja-hyvinvointi': `
         <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'terveys-ja-hyvinvointi')">
             <option value="">Tarkenna tarvetta...</option>
-            <option value="home_visits">Kotikäynnit</option>
+            <option value="home_visits">Kotikäynnit ja hoiva</option>
             <option value="online_booking">Sähköinen ajanvaraus</option>
         </select>`
 };
