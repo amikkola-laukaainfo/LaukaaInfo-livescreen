@@ -1462,7 +1462,7 @@
                 ],
                 "service_area": {
                     "mode": "SERVICE_AREA",
-                    "radius_km": 35,
+                    "radius_km": 40,
                     "regions": [],
                     "note": "projektit sopimuksesta kauemmaksikin, digitoinnit postitse"
                 },
@@ -1511,7 +1511,7 @@
                 "seated_capacity": 0,
                 "outdoor_capacity": 0,
                 "is_accessible": false,
-                "is_lakeside": true,
+                "is_lakeside": false,
                 "has_sauna": false,
                 "has_av_tech": false,
                 "has_stage": false,
@@ -1519,7 +1519,7 @@
                 "alcohol_license": false,
                 "private_booking": false,
                 "late_night_events": false,
-                "wedding_specialized": false,
+                "wedding_specialized": true,
                 "catering_min_capacity": 0,
                 "catering_max_capacity": 0,
                 "dietary_specialties": [],
@@ -1653,7 +1653,7 @@
                 "group_bookings": false
             },
             "meta": {
-                "last_updated": "2026-04-27T12:34:31.144Z",
+                "last_updated": "2026-04-27T13:29:56.974Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -21620,7 +21620,9 @@
         "company-131": {
             "name": "Huonekaluilike Vehviläinen Oy (Kukka ja Hautauspalvelu Vehviläinen)",
             "core": {
-                "fits_for": {},
+                "fits_for": {
+                    "funerals_and_memorials": 10
+                },
                 "priority_score": 0,
                 "paired_with": [],
                 "service_area": {
@@ -21637,7 +21639,18 @@
                 "home_service": false,
                 "weekend_service": true,
                 "not_suitable_for": [],
-                "paired_with_by_context": {},
+                "paired_with_by_context": {
+                    "hautajaiset": [
+                        "Kukat",
+                        "Hautauspalvelu"
+                    ],
+                    "häät": [
+                        "Floristi"
+                    ],
+                    "syntymäpäivät": [
+                        "Kukat"
+                    ]
+                },
                 "sub_contexts": [],
                 "description": "Yli 60 vuotta toiminut huonekaluliike sekä Kukka- ja Hautauspalvelu Vehviläinen, jolla on 80 vuoden perinteet. Huonekaluliike myy sohvia, sänkyjä, patjoja, ruokailu- ja toimistokalusteita sekä tarjoaa kuljetus- ja kokoamispalveluita . Kukkakauppa tarjoaa kauniita kukkasidontoja, lahjatavaroita ja herkkuja, ja hautauspalvelu auttaa muistotilaisuuksien järjestelyissä. Yritys on neljännen polven perheyritys, jota johtaa Miia Vehviläinen .",
                 "website": "www.huonekaluliikevehvilainen.fi",
@@ -21791,7 +21804,7 @@
                 "group_bookings": false
             },
             "meta": {
-                "last_updated": "2026-04-27T05:57:52.771Z",
+                "last_updated": "2026-04-27T13:33:46.381Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -21999,7 +22012,14 @@
                 "home_service": true,
                 "weekend_service": false,
                 "not_suitable_for": [],
-                "paired_with_by_context": {},
+                "paired_with_by_context": {
+                    "häät": [
+                        "Valokuvaaja"
+                    ],
+                    "hautajaiset": [
+                        "valokuvaaja"
+                    ]
+                },
                 "sub_contexts": [],
                 "description": "Valokuvaamo Jenora Design on vuonna 2013 perustettu yksityinen elinkeinonharjoittaja, joka tarjoaa perheiden kuvauspalveluita, erikoismuotokuvauksia/boudoirkuvauksia, valmistujaiskuvauksia (ylioppilas- ja rippikuvaukset), joulukorttikuvausta, hautajaiskuvausta sekä eläketarinoiden tallentamista . Yrityksen perustaja ja valokuvaaja on Jenni Oranen . Ydinosaamista ovat klassiset, ajattomat muotokuvat .",
                 "website": "jenoradesign.com",
@@ -22153,7 +22173,7 @@
                 "group_bookings": false
             },
             "meta": {
-                "last_updated": "2026-04-27T05:58:46.024Z",
+                "last_updated": "2026-04-27T13:30:51.653Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -25737,7 +25757,7 @@
                 "contract_customer_available": true,
                 "corporate_clients": true,
                 "home_service": false,
-                "weekend_service": false,
+                "weekend_service": true,
                 "not_suitable_for": [],
                 "paired_with_by_context": {},
                 "sub_contexts": [],
@@ -25893,7 +25913,7 @@
                 "group_bookings": false
             },
             "meta": {
-                "last_updated": "2026-04-27T06:16:26.696Z",
+                "last_updated": "2026-04-27T13:28:32.863Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }

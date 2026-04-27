@@ -166,6 +166,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (document.getElementById('home-region-select')) {
         initHomepageSelectors();
     }
+
+    // Alustetaan käyttäjän sijaintivalitsin (etusivulla tai jos input löytyy)
+    initUserLocation();
 });
 
 
