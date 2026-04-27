@@ -1434,6 +1434,104 @@ function initHomepageSelectors() {
     });
 }
 
+/**
+ * Alustaa käyttäjän manuaalisen sijaintivalinnan ja paikannuksen.
+ */
+function initUserLocation() {
+    const locationInput = document.getElementById('user-location-input');
+    const locateMeBtn = document.getElementById('locate-me-btn');
+    const statusEl = document.getElementById('location-status');
+
+    if (!locationInput && !statusEl) return;
+
+    // Palauta tallennettu sijainti
+    const savedName = localStorage.getItem('userLocationName');
+    const savedCoords = localStorage.getItem('userCoords');
+
+    if (savedName && locationInput) {
+        locationInput.value = savedName;
+    }
+    if (savedName && statusEl) {
+        statusEl.textContent = `Asetettu sijainti: ${savedName}`;
+    }
+
+    if (locationInput) {
+        locationInput.addEventListener('change', async () => {
+            const query = locationInput.value.trim();
+            if (!query) {
+                localStorage.removeItem('userCoords');
+                localStorage.removeItem('userLocationName');
+                if (statusEl) statusEl.textContent = 'Sijaintia ei asetettu.';
+                return;
+            }
+
+            if (statusEl) statusEl.textContent = 'Haetaan koordinaatteja...';
+
+            try {
+                // Taajamatarkistus (nopea)
+                const villageCoords = {
+                    'laukaa': { lat: 62.41407, lon: 25.95194 },
+                    'leppavesi': { lat: 62.326386, lon: 25.840924 },
+                    'lievestuore': { lat: 62.2625, lon: 26.2039 },
+                    'vehnia': { lat: 62.4381, lon: 25.6825 },
+                    'vihtavuori': { lat: 62.370563, lon: 25.902297 }
+                };
+
+                const lowerQuery = query.toLowerCase();
+                if (villageCoords[lowerQuery]) {
+                    const coords = villageCoords[lowerQuery];
+                    localStorage.setItem('userCoords', JSON.stringify({ lat: coords.lat, lng: coords.lon }));
+                    localStorage.setItem('userLocationName', query);
+                    if (statusEl) statusEl.textContent = `Sijainti asetettu: ${query}`;
+                    return;
+                }
+
+                // Nominatim haku
+                const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query + ', Laukaa')}`);
+                const data = await res.json();
+
+                if (data && data.length > 0) {
+                    const result = data[0];
+                    localStorage.setItem('userCoords', JSON.stringify({ lat: parseFloat(result.lat), lng: parseFloat(result.lon) }));
+                    localStorage.setItem('userLocationName', query);
+                    if (statusEl) statusEl.textContent = `Sijainti asetettu: ${query}`;
+                } else {
+                    if (statusEl) statusEl.textContent = 'Osoitetta ei löytynyt. Kokeile tarkempaa osoitetta.';
+                }
+            } catch (err) {
+                console.error("Geocoding error:", err);
+                if (statusEl) statusEl.textContent = 'Virhe haussa. Yritä uudelleen.';
+            }
+        });
+    }
+
+    if (locateMeBtn) {
+        locateMeBtn.addEventListener('click', () => {
+            if (statusEl) statusEl.textContent = 'Paikannetaan...';
+            
+            if (!navigator.geolocation) {
+                if (statusEl) statusEl.textContent = 'Selaimesi ei tue paikannusta.';
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+                    localStorage.setItem('userCoords', JSON.stringify(coords));
+                    localStorage.setItem('userLocationName', 'Nykyinen sijainti');
+                    if (locationInput) locationInput.value = 'Nykyinen sijainti';
+                    if (statusEl) statusEl.textContent = 'Sijainti päivitetty nykyiseen paikkaasi.';
+                },
+                (err) => {
+                    console.warn("Geolocation error:", err);
+                    if (statusEl) statusEl.textContent = 'Paikannus epäonnistui. Salli sijainti selaimessa.';
+                }
+            );
+        });
+    }
+}
+
+
 function filterCatalog(renderList = true) {
     const searchEl = document.getElementById('company-search');
     if (!searchEl) return;
