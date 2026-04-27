@@ -5,7 +5,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const filePath = path.join(__dirname, 'index.html');
+const filePath = path.join(__dirname, '..', 'index.html');
 
 // Read raw bytes
 const buf = fs.readFileSync(filePath);
