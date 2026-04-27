@@ -208,7 +208,15 @@
                 </div>
                 <h2 style="color: white; font-size: 1.5rem; margin-bottom: 0.5rem; font-family: var(--accent-font);">Kaikki Laukaasta yhdessä paikassa</h2>
                 <p class="hero-tagline">Tiedä, löydä ja osallistu. Laukaan yritykset, palvelut ja ajankohtaiset uutiset helposti ja nopeasti.</p>
-
+                
+                <div class="location-bar-container" style="margin-top: 1.5rem;">
+                    <div class="location-bar" style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); padding: 8px 18px; border-radius: 50px; display: inline-flex; align-items: center; gap: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                        <span style="font-size: 1.2rem;">📍</span>
+                        <input type="text" id="user-location-input" placeholder="Sijaintisi (esim. Laukaa)" style="background: transparent; border: none; color: white; font-weight: 600; outline: none; width: 180px; font-size: 0.9rem;">
+                        <button id="locate-me-btn" style="background: white; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: var(--primary-blue); transition: transform 0.2s;" title="Hae sijaintini">🎯</button>
+                    </div>
+                    <div id="location-status" style="color: white; font-size: 0.75rem; margin-top: 8px; opacity: 0.8; min-height: 1.2em; font-weight: 500;"></div>
+                </div>
             </div>
         </div>
         <div class="hero-right">
@@ -860,11 +868,22 @@
         function updateNeedLink(selectEl, id) {
             const link = document.getElementById('link-' + id);
             const val = selectEl.value;
-            if (val) {
-                link.href = 'palvelu.html?id=' + id + '&filter_profiling=' + val;
-            } else {
-                link.href = 'palvelu.html?id=' + id;
+            let url = 'palvelu.html?id=' + id;
+            if (val) url += '&filter_profiling=' + val;
+            
+            // Lisätään sijaintitiedot jos tiedossa
+            const savedCoords = localStorage.getItem('userCoords');
+            const savedName = localStorage.getItem('userLocationName');
+            
+            if (savedCoords) {
+                try {
+                    const coords = JSON.parse(savedCoords);
+                    url += `&lat=${coords.lat}&lon=${coords.lng || coords.lon}`;
+                    if (savedName) url += `&loc=${encodeURIComponent(savedName)}`;
+                } catch(e) {}
             }
+            
+            link.href = url;
         }
     </script>
 </body>
