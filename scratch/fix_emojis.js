@@ -1,33 +1,18 @@
-// Fix corrupted emoji content in need-icon divs
-// The emojis were corrupted by the encoding process; restore from known good values.
+// Fix corrupted emoji content in need-icon divs using positional replacement
+// The clean commit has 14 icons, current file has 18 (extra ones from new cards we added)
+// Strategy: replace ALL broken need-icon content by rebuilding from the clean version's structure
+// then applying the new need-cards that were added later.
+
 const fs = require('fs');
 const { execSync } = require('child_process');
 
-// Get the correct emojis from the clean commit
-const cleanHtml = execSync('git show 099d9bb:index.html').toString('utf8');
-const cleanIcons = [...cleanHtml.matchAll(/class="need-icon">([^<]+)</g)].map(m => m[1]);
+// Get the correct structure from the latest commit that still had good emojis (before encoding corruption)
+// bf9cd5e = "feat: update service category dropdown menus" - this should have the full set
+const cleanHtml = execSync('git show bf9cd5e:index.html').toString('utf8');
+const cleanIconMatches = [...cleanHtml.matchAll(/class="need-icon">([^<]+)</g)];
+console.log('Clean icons from bf9cd5e:', cleanIconMatches.length, cleanIconMatches.map(m=>m[1]));
 
-// Get the current broken content
-let html = fs.readFileSync('index.html', 'utf8');
-const brokenIcons = [...html.matchAll(/class="need-icon">([^<]+)</g)].map(m => m[1]);
-
-console.log('Clean icons:', cleanIcons);
-console.log('Broken icons:', brokenIcons.map(s => JSON.stringify(s)));
-console.log('Count match:', cleanIcons.length === brokenIcons.length ? '✅' : '❌ MISMATCH');
-
-if (cleanIcons.length === brokenIcons.length) {
-    brokenIcons.forEach((broken, i) => {
-        // Escape special regex chars in broken string
-        const escaped = broken.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        html = html.replace(`class="need-icon">${broken}<`, `class="need-icon">${cleanIcons[i]}<`);
-    });
-    fs.writeFileSync('index.html', html, 'utf8');
-    console.log('✅ Emojis fixed and written!');
-    
-    // Verify
-    const verify = [...fs.readFileSync('index.html','utf8').matchAll(/class="need-icon">([^<]+)</g)].map(m=>m[1]);
-    verify.forEach((v,i) => console.log(`  ${i+1}. ${v}`));
-} else {
-    console.log('⚠️ Cannot auto-fix: icon counts differ');
-    console.log('Broken:', brokenIcons);
-}
+// Also check needs_config.js for the icon mapping
+const needsConfig = fs.readFileSync('needs_config.js', 'utf8');
+const iconMatches = [...needsConfig.matchAll(/icon:\s*['"]([^'"]+)['"]/g)];
+console.log('\nIcons from needs_config.js:', iconMatches.map(m=>m[1]));
