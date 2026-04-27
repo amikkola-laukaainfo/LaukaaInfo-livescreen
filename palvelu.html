@@ -903,8 +903,8 @@
                 }
 
                 // Taso 3: Feature matches
-                if (c.profiling.events_and_celebrations?.is_accessible && selections.palvelut?.some(s => s.label.toLowerCase().includes('esteetön'))) reasons.push("Esteetön tila");
-                if (c.profiling.events_and_celebrations?.has_sauna && selections.palvelut?.some(s => s.label.toLowerCase().includes('sauna'))) reasons.push("Saunatilat saatavilla");
+                if (c.profiling.events_and_celebrations?.is_accessible && selections.palvelut?.some(s => s.label?.toLowerCase().includes('esteetön'))) reasons.push("Esteetön tila");
+                if (c.profiling.events_and_celebrations?.has_sauna && selections.palvelut?.some(s => s.label?.toLowerCase().includes('sauna'))) reasons.push("Saunatilat saatavilla");
             }
 
             if (reasons.length === 0) return "Sopii annettuihin kriteereihin";
