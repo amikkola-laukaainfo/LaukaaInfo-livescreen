@@ -747,6 +747,18 @@
                         const bIsPremium = bType.includes('premium') || bType.includes('pro');
                         if (aIsPremium && !bIsPremium) return -1;
                         if (!aIsPremium && bIsPremium) return 1;
+
+                        // Etäisyys tie-breakerina
+                        const userCoordsRaw = localStorage.getItem('userCoords');
+                        if (userCoordsRaw) {
+                            try {
+                                const u = JSON.parse(userCoordsRaw);
+                                const distA = getHaversineDistance(u.lat, u.lng || u.lon, parseFloat(a.lat), parseFloat(a.lon || a.lng));
+                                const distB = getHaversineDistance(u.lat, u.lng || u.lon, parseFloat(b.lat), parseFloat(b.lon || b.lng));
+                                return distA - distB;
+                            } catch(e) {}
+                        }
+
                         return 0;
                     });
 
