@@ -675,21 +675,21 @@
 
             // Kartta nykyisestä polusta profilointiavaimiin (fits_for)
             const needToProfilingMap = {
-                'haat': 'häät',
-                'yritysjuhlat': 'yritysjuhlat',
-                'yritystilaisuudet': 'kokoukset',
-                'syntymapaivat': 'syntymäpäivät',
-                'muutto': 'muutto',
-                'remontti': 'remontti',
-                'mokkipalvelut': 'mökkipalvelut',
-                'taloyhtion-huolto': 'taloyhtiö',
-                'hautajaiset': 'hautajaiset',
-                'yrityksen-perustaminen': 'yrityksen-perustaminen',
-                'yrityksen-kehittaminen': 'yrityksen-kehittäminen',
-                'terveys-ja-hyvinvointi': 'terveys',
-                'liikunta-ja-vapaaaika': 'vapaa-aika',
-                'elaimet': 'vapaa-aika',
-                'lapset-ja-perhe': 'vapaa-aika'
+                'haat': 'weddings_and_parties',
+                'yritysjuhlat': 'corporate_parties_and_events',
+                'yritystilaisuudet': 'meetings_and_seminars',
+                'syntymapaivat': 'weddings_and_parties',
+                'muutto': 'moving_and_housing',
+                'remontti': 'construction_and_renovation',
+                'mokkipalvelut': 'cottage_services',
+                'taloyhtion-huolto': 'housing_companies_and_real_estate',
+                'hautajaiset': 'funerals_and_memorials',
+                'yrityksen-perustaminen': 'starting_a_business',
+                'yrityksen-kehittaminen': 'business_growth_and_dev',
+                'terveys-ja-hyvinvointi': 'wellbeing_and_beauty',
+                'liikunta-ja-vapaaaika': 'wellbeing_and_beauty',
+                'elaimet': 'wellbeing_and_beauty',
+                'lapset-ja-perhe': 'wellbeing_and_beauty'
             };
 
             const currentProfilingKey = needToProfilingMap[currentNeedId] || 'vapaa-aika';
@@ -724,18 +724,18 @@
                 const companiesForOpt = allCompanies.filter(c => {
                     // EHDOTON ESTO: not_suitable_for (context gate)
                         const needIdToContextName = {
-                            'haat': 'häät',
-                            'yritysjuhlat': 'yritysjuhlat',
-                            'yritystilaisuudet': 'kokoukset',
-                            'syntymapaivat': 'syntymäpäivät',
-                            'hautajaiset': 'hautajaiset',
-                            'muutto': 'muutto',
-                            'remontti': 'remontti',
-                            'mokkipalvelut': 'mökkipalvelut',
-                            'taloyhtion-huolto': 'taloyhtiö',
-                            'yrityksen-perustaminen': 'yrityksen-perustaminen',
-                            'yrityksen-kehittaminen': 'yrityksen-kehittäminen',
-                            'terveys-ja-hyvinvointi': 'terveys'
+                            'haat': 'weddings_and_parties',
+                            'yritysjuhlat': 'corporate_parties_and_events',
+                            'yritystilaisuudet': 'meetings_and_seminars',
+                            'syntymapaivat': 'weddings_and_parties',
+                            'hautajaiset': 'funerals_and_memorials',
+                            'muutto': 'moving_and_housing',
+                            'remontti': 'construction_and_renovation',
+                            'mokkipalvelut': 'cottage_services',
+                            'taloyhtion-huolto': 'housing_companies_and_real_estate',
+                            'yrityksen-perustaminen': 'starting_a_business',
+                            'yrityksen-kehittaminen': 'business_growth_and_dev',
+                            'terveys-ja-hyvinvointi': 'wellbeing_and_beauty'
                         };
                         const currentContextName = needIdToContextName[currentNeedId] || currentNeedId;
                         const notSuitable = c.profiling?.core?.not_suitable_for || [];
@@ -752,8 +752,19 @@
                         // TASO 2: Sub-contexts filter (Siltana)
                         if (selections._sub_contexts && selections._sub_contexts.length > 0) {
                             const companySubContexts = c.profiling?.core?.sub_contexts || [];
-                            const hasSelectedSubContext = selections._sub_contexts.some(sc => companySubContexts.includes(sc));
-                            if (companySubContexts.length > 0 && !hasSelectedSubContext) {
+                            let hasSelectedSubContext = false;
+                            
+                            if (Array.isArray(companySubContexts)) {
+                                hasSelectedSubContext = selections._sub_contexts.some(sc => companySubContexts.includes(sc));
+                            } else if (typeof companySubContexts === 'object' && companySubContexts !== null) {
+                                // Hierarkkinen Ryhmä -> Tagit objekti
+                                hasSelectedSubContext = selections._sub_contexts.some(sc => {
+                                    if (Object.keys(companySubContexts).includes(sc)) return true;
+                                    return Object.values(companySubContexts).some(arr => Array.isArray(arr) && arr.includes(sc));
+                                });
+                            }
+                            
+                            if ((Array.isArray(companySubContexts) && companySubContexts.length > 0 || (typeof companySubContexts === 'object' && Object.keys(companySubContexts).length > 0)) && !hasSelectedSubContext) {
                                 return false; 
                             }
                         }
@@ -872,10 +883,10 @@
                             if (capB > 0 && capB < requestedCapacity) scoreB -= 20;
                         }
 
-                        if (requestedFeatures.sauna && a.profiling?.events_and_celebrations?.has_sauna) scoreA += 50;
-                        if (requestedFeatures.sauna && b.profiling?.events_and_celebrations?.has_sauna) scoreB += 50;
-                        if (requestedFeatures.accessible && a.profiling?.events_and_celebrations?.is_accessible) scoreA += 50;
-                        if (requestedFeatures.accessible && b.profiling?.events_and_celebrations?.is_accessible) scoreB += 50;
+                        if (requestedFeatures.sauna && a.profiling?.weddings_and_parties?.has_sauna) scoreA += 50;
+                        if (requestedFeatures.sauna && b.profiling?.weddings_and_parties?.has_sauna) scoreB += 50;
+                        if (requestedFeatures.accessible && a.profiling?.weddings_and_parties?.is_accessible) scoreA += 50;
+                        if (requestedFeatures.accessible && b.profiling?.weddings_and_parties?.is_accessible) scoreB += 50;
                         if (requestedFeatures.home_service && a.profiling?.core?.home_service) scoreA += 50;
                         if (requestedFeatures.home_service && b.profiling?.core?.home_service) scoreB += 50;
 
@@ -964,12 +975,18 @@
         // Apufunktio: haetaan yrityksen kapasiteetti oikeasta osiosta kontekstin perusteella
         function getCompanyCapacity(c, profilingKey) {
             if (!c.profiling) return 0;
-            if (profilingKey === 'kokoukset') {
-                return c.profiling.business_events?.meeting_capacity ||
-                       c.profiling.business_events?.seminar_capacity || 0;
+            if (profilingKey === 'meetings_and_seminars') {
+                return c.profiling.meetings_and_seminars?.meeting_capacity ||
+                       c.profiling.meetings_and_seminars?.seminar_capacity || 0;
             }
-            return c.profiling.events_and_celebrations?.capacity_max ||
-                   c.profiling.events_and_celebrations?.seated_capacity || 0;
+            if (profilingKey === 'corporate_parties_and_events') {
+                return c.profiling.corporate_parties_and_events?.capacity_max || 0;
+            }
+            if (profilingKey === 'funerals_and_memorials') {
+                return c.profiling.funerals_and_memorials?.memorial_service_capacity || 0;
+            }
+            return c.profiling.weddings_and_parties?.capacity_max ||
+                   c.profiling.weddings_and_parties?.seated_capacity || 0;
         }
 
         function renderCompanyCard(c, requestedCapacity, profilingKey) {
