@@ -770,35 +770,51 @@
                         
                         if (isMediazoo) console.log(`DEBUG: Checking Mediazoo for option "${opt.label}"`, { currentProfilingKey, fitsScore, selections });
 
-                        if (selections._sub_contexts && selections._sub_contexts.length > 0) {
-                            const companySubContexts = c.profiling?.core?.sub_contexts || [];
-                            let isSubContextMatch = false;
-                            
-                            const underscoreKey = currentProfilingKey.replace(/-/g, '_');
-                            const finnishMap = {
-                                'events_and_celebrations': 'häät',
-                                'business_events': 'yritysjuhlat',
-                                'funerals_and_memorials': 'hautajaiset',
-                                'startup_services': 'yrityksen perustaminen',
-                                'business_growth': 'yrityksen kehittäminen'
-                            };
-                            const finKey = finnishMap[underscoreKey];
-
-                            if (Array.isArray(companySubContexts)) {
-                                if (companySubContexts.length === 0) isSubContextMatch = true;
-                                else isSubContextMatch = selections._sub_contexts.some(sc => companySubContexts.includes(sc));
-                            } else if (typeof companySubContexts === 'object' && companySubContexts !== null) {
-                                const relevantSubContexts = companySubContexts[underscoreKey] || companySubContexts[currentProfilingKey] || (finKey ? companySubContexts[finKey] : null);
-                                if (relevantSubContexts) isSubContextMatch = selections._sub_contexts.some(sc => relevantSubContexts.includes(sc));
-                                else isSubContextMatch = true; 
-                            } else {
-                                isSubContextMatch = true;
+                        // Tarkista not_suitable_for: hylkää yritys jos se on merkitty sopimattomaksi tähän hakuun
+                        if (opt.tags && opt.tags.length > 0 && c.profiling?.core?.not_suitable_for?.length > 0) {
+                            const notSuitable = c.profiling.core.not_suitable_for.map(s => s.toLowerCase());
+                            const optTagsLower = opt.tags.map(t => t.toLowerCase());
+                            if (optTagsLower.some(tag => notSuitable.includes(tag))) {
+                                if (isMediazoo) console.log(`DEBUG: Mediazoo excluded by not_suitable_for for "${opt.label}"`);
+                                return false;
                             }
+                        }
 
-                            if (!isSubContextMatch) {
-                                const mainFitsScore = getFitsForScore(c, currentProfilingKey);
-                                const hasAnySubContexts = Array.isArray(companySubContexts) ? companySubContexts.length > 0 : !!companySubContexts;
-                                if (hasAnySubContexts && mainFitsScore < 70) return false; 
+                        if (selections._sub_contexts && selections._sub_contexts.length > 0) {
+                            // Yritykset joilla ei ole profilointidataa pääsevät läpi tagitarkistukseen
+                            if (!c.profiling) {
+                                // Ei profilointia — sallitaan, tagitarkistus ratkaisee
+                            } else {
+                                const companySubContexts = c.profiling?.core?.sub_contexts || [];
+                                let isSubContextMatch = false;
+                                
+                                const underscoreKey = currentProfilingKey.replace(/-/g, '_');
+                                const finnishMap = {
+                                    'events_and_celebrations': 'häät',
+                                    'business_events': 'yritysjuhlat',
+                                    'funerals_and_memorials': 'hautajaiset',
+                                    'startup_services': 'yrityksen perustaminen',
+                                    'business_growth': 'yrityksen kehittäminen'
+                                };
+                                const finKey = finnishMap[underscoreKey];
+
+                                if (Array.isArray(companySubContexts)) {
+                                    if (companySubContexts.length === 0) isSubContextMatch = true;
+                                    else isSubContextMatch = selections._sub_contexts.some(sc => companySubContexts.includes(sc));
+                                } else if (typeof companySubContexts === 'object' && companySubContexts !== null) {
+                                    const relevantSubContexts = companySubContexts[underscoreKey] || companySubContexts[currentProfilingKey] || (finKey ? companySubContexts[finKey] : null);
+                                    if (relevantSubContexts) isSubContextMatch = selections._sub_contexts.some(sc => relevantSubContexts.includes(sc));
+                                    else isSubContextMatch = true; 
+                                } else {
+                                    isSubContextMatch = true;
+                                }
+
+                                if (!isSubContextMatch) {
+                                    const mainFitsScore = getFitsForScore(c, currentProfilingKey);
+                                    const hasAnySubContexts = Array.isArray(companySubContexts) ? companySubContexts.length > 0 : !!companySubContexts;
+                                    // Hylätään vain jos yrityksellä ON sub_contexts JA fits_score on korkea (eli se on profiloitu muihin konteksteihin)
+                                    if (hasAnySubContexts && mainFitsScore >= 70) return false; 
+                                }
                             }
                         }
 
