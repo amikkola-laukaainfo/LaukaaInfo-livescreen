@@ -23,23 +23,16 @@
                                 "description": "Pääkontekstien soveltuvuus ja prioriteettipisteet (Taso 1). Käytä kategoria-objektien sisällä olevia tarkennuksia Tasoon 2."
                             },
                             "priority_score": { "type": "integer", "default": 0 },
+                            "sub_contexts": {
+                                "oneOf": [
+                                    { "type": "array", "items": { "type": "string" } },
+                                    { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }
+                                ],
+                                "description": "Tarkentavat käyttötavat (Taso 2). Voi olla lista tai hierarkkinen Ryhmä->Tagit objekti."
+                            },
                             "paired_with_by_context": {
                                 "type": "object",
-                                "description": "Kontekstikohtaiset suositukset: mitä muita palveluja kannattaa hankkia yhdessä. Näytetään 'Seuraavaksi tarvitset yleensä nämä' -osiossa.",
-                                "properties": {
-                                    "häät": { "type": "array", "items": { "type": "string" } },
-                                    "hautajaiset": { "type": "array", "items": { "type": "string" } },
-                                    "yritysjuhlat": { "type": "array", "items": { "type": "string" } },
-                                    "kokoukset": { "type": "array", "items": { "type": "string" } },
-                                    "muutto": { "type": "array", "items": { "type": "string" } },
-                                    "remontti": { "type": "array", "items": { "type": "string" } },
-                                    "mökkipalvelut": { "type": "array", "items": { "type": "string" } },
-                                    "taloyhtiöpalvelut": { "type": "array", "items": { "type": "string" } },
-                                    "yrityksen-perustaminen": { "type": "array", "items": { "type": "string" } },
-                                    "yrityksen-kehittäminen": { "type": "array", "items": { "type": "string" } },
-                                    "wellbeing-and-beauty": { "type": "array", "items": { "type": "string" } },
-                                    "päivystys": { "type": "array", "items": { "type": "string" } }
-                                },
+                                "description": "Kontekstikohtaiset suositukset: mitä muita palveluja kannattaa hankkia yhdessä.",
                                 "additionalProperties": { "type": "array", "items": { "type": "string" } }
                             },
                             "service_area": {
@@ -68,8 +61,10 @@
                         "properties": {
                             "role": { "type": "string", "enum": ["MAIN_SERVICE", "SUPPORT_SERVICE"] },
                             "refinement_tags": { 
-                                "type": "array", 
-                                "items": { "type": "string" },
+                                "oneOf": [
+                                    { "type": "array", "items": { "type": "string" } },
+                                    { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }
+                                ],
                                 "examples": ["pienet häät", "suuret häät", "viikonloppuhäät", "maaseutuhäät", "lasten syntymäpäivät", "valmistujaiset"]
                             },
                             "digitization_features": {
@@ -102,8 +97,10 @@
                         "properties": {
                             "role": { "type": "string", "enum": ["MAIN_SERVICE", "SUPPORT_SERVICE"] },
                             "refinement_tags": { 
-                                "type": "array", 
-                                "items": { "type": "string" },
+                                "oneOf": [
+                                    { "type": "array", "items": { "type": "string" } },
+                                    { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }
+                                ],
                                 "examples": ["muistotilaisuus", "hautausjärjestelyt", "perunkirjoitus", "kukkapalvelut", "muistomerkit"]
                             },
                             "digitization_features": {
@@ -127,8 +124,10 @@
                         "properties": {
                             "role": { "type": "string", "enum": ["MAIN_SERVICE", "SUPPORT_SERVICE"] },
                             "refinement_tags": { 
-                                "type": "array", 
-                                "items": { "type": "string" },
+                                "oneOf": [
+                                    { "type": "array", "items": { "type": "string" } },
+                                    { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }
+                                ],
                                 "examples": ["henkilöstöjuhla", "asiakastilaisuus", "kickoff", "pikkujoulut", "lanseeraus", "VIP-tilaisuus"]
                             },
                             "wellbeing_and_activity_features": {
@@ -158,8 +157,10 @@
                         "properties": {
                             "role": { "type": "string", "enum": ["MAIN_SERVICE", "SUPPORT_SERVICE"] },
                             "refinement_tags": { 
-                                "type": "array", 
-                                "items": { "type": "string" },
+                                "oneOf": [
+                                    { "type": "array", "items": { "type": "string" } },
+                                    { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }
+                                ],
                                 "examples": ["johtoryhmän kokous", "seminaari", "koulutus", "hybriditapahtuma", "työpaja"]
                             },
                             "meeting_capacity": { "type": "integer" },
@@ -177,8 +178,10 @@
                         "properties": {
                             "role": { "type": "string", "enum": ["MAIN_SERVICE", "SUPPORT_SERVICE"] },
                             "refinement_tags": { 
-                                "type": "array", 
-                                "items": { "type": "string" },
+                                "oneOf": [
+                                    { "type": "array", "items": { "type": "string" } },
+                                    { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }
+                                ],
                                 "examples": ["muutto", "varastointi", "muuton jälkisiivous", "uuden kodin valmistelu"]
                             },
                             "digitization_features": {
@@ -201,8 +204,10 @@
                         "properties": {
                             "role": { "type": "string", "enum": ["MAIN_SERVICE", "SUPPORT_SERVICE"] },
                             "refinement_tags": { 
-                                "type": "array", 
-                                "items": { "type": "string" },
+                                "oneOf": [
+                                    { "type": "array", "items": { "type": "string" } },
+                                    { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }
+                                ],
                                 "examples": ["kodin remontti", "kylpyhuoneremontti", "pihatyö", "rakennusprojekti"]
                             },
                             "emergency_service": { "type": "boolean" },
@@ -218,8 +223,10 @@
                         "properties": {
                             "role": { "type": "string", "enum": ["MAIN_SERVICE", "SUPPORT_SERVICE"] },
                             "refinement_tags": { 
-                                "type": "array", 
-                                "items": { "type": "string" },
+                                "oneOf": [
+                                    { "type": "array", "items": { "type": "string" } },
+                                    { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }
+                                ],
                                 "examples": ["mökin avaus", "talvivalvonta", "lumityöt", "polttopuut", "mökkiremontti", "siivous"]
                             },
                             "key_holding": { "type": "boolean" },
@@ -235,8 +242,10 @@
                         "properties": {
                             "role": { "type": "string", "enum": ["MAIN_SERVICE", "SUPPORT_SERVICE"] },
                             "refinement_tags": { 
-                                "type": "array", 
-                                "items": { "type": "string" },
+                                "oneOf": [
+                                    { "type": "array", "items": { "type": "string" } },
+                                    { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }
+                                ],
                                 "examples": ["huoltosopimus", "päivystys", "kiinteistön ylläpito"]
                             },
                             "maintenance_contracts": { "type": "boolean" },
@@ -251,8 +260,10 @@
                         "properties": {
                             "role": { "type": "string", "enum": ["MAIN_SERVICE", "SUPPORT_SERVICE"] },
                             "refinement_tags": { 
-                                "type": "array", 
-                                "items": { "type": "string" },
+                                "oneOf": [
+                                    { "type": "array", "items": { "type": "string" } },
+                                    { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }
+                                ],
                                 "examples": ["yrityksen käynnistäminen", "taloushallinto", "juridiikka", "toimitilat"]
                             },
                             "business_advisory": { "type": "boolean" },
@@ -267,8 +278,10 @@
                         "properties": {
                             "role": { "type": "string", "enum": ["MAIN_SERVICE", "SUPPORT_SERVICE"] },
                             "refinement_tags": { 
-                                "type": "array", 
-                                "items": { "type": "string" },
+                                "oneOf": [
+                                    { "type": "array", "items": { "type": "string" } },
+                                    { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }
+                                ],
                                 "examples": ["verkkosivut", "somemarkkinointi", "näkyvyyden kasvattaminen", "myynnin kehittäminen"]
                             },
                             "marketing_services": { "type": "boolean" },
@@ -283,8 +296,10 @@
                         "properties": {
                             "role": { "type": "string", "enum": ["MAIN_SERVICE", "SUPPORT_SERVICE"] },
                             "refinement_tags": { 
-                                "type": "array", 
-                                "items": { "type": "string" },
+                                "oneOf": [
+                                    { "type": "array", "items": { "type": "string" } },
+                                    { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }
+                                ],
                                 "examples": ["hyvinvointipalvelut", "kauneuspalvelut", "yrityshyvinvointi"]
                             },
                             "bridal_services": { "type": "boolean" },
