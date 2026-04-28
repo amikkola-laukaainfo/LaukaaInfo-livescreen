@@ -214,7 +214,7 @@
             </div>
         </div>
         <div class="hero-right">
-            <img src="hero-kuva.jpg" alt="Laukaa maisema" class="hero-nature-img">
+            <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200&auto=format&fit=crop" alt="Laukaa maisema" class="hero-nature-img">
             <div class="hero-right-caption">Laukaa, Keski-Suomi</div>
         </div>
     </header>
@@ -230,27 +230,35 @@
                 
                 <div class="feature-grid">
                     <a href="https://www.youtube.com/@laukaainfo" target="_blank" class="feature-card">
-                        <div class="feature-card-img" style="background-image: url('https://images.unsplash.com/photo-1492619334760-227096e73138?q=80&w=800&auto=format&fit=crop');"></div>
+                        <div class="feature-card-img" style="background-image: url('https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=800&auto=format&fit=crop');"></div>
                         <div class="feature-card-body">
                             <h3>Laukaa YouTube</h3>
-                            <p>Videoita ja tunnelmia Laukaasta.</p>
+                            <p>Videoita, tapahtumia ja tunnelmia suoraan Laukaasta.</p>
                             <span class="btn-text">Katso videot &raquo;</span>
                         </div>
                     </a>
                     <a href="https://www.facebook.com/groups/892675230270311" target="_blank" class="feature-card">
-                        <div class="feature-card-img" style="background-image: url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=800&auto=format&fit=crop');"></div>
+                        <div class="feature-card-img" style="background-image: url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=800&auto=format&fit=crop');"></div>
                         <div class="feature-card-body">
                             <h3>Keskustelu</h3>
-                            <p>Liity Facebook-ryhmään ja jaa kokemuksia.</p>
+                            <p>Liity Laukaan omaan Facebook-ryhmään ja osallistu.</p>
                             <span class="btn-text">Liity ryhmään &raquo;</span>
                         </div>
                     </a>
                     <a href="ajankohtaista.html#news-card" class="feature-card">
-                        <div class="feature-card-img" style="background-image: url('https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=800&auto=format&fit=crop');"></div>
+                        <div class="feature-card-img" style="background-image: url('https://images.unsplash.com/photo-1495020689067-958852a7765e?q=80&w=800&auto=format&fit=crop');"></div>
                         <div class="feature-card-body">
                             <h3>Ajankohtaista</h3>
-                            <p>Kuntatiedotteet ja viralliset uutiset kootusti.</p>
-                            <span class="btn-text">Lue lisää &raquo;</span>
+                            <p>Tärkeimmät uutiset ja kuntatiedotteet kootusti.</p>
+                            <span class="btn-text">Lue uutiset &raquo;</span>
+                        </div>
+                    </a>
+                    <a href="#toggle-feed-btn" class="feature-card" onclick="document.getElementById('toggle-feed-btn').click();">
+                        <div class="feature-card-img" style="background-image: url('https://images.unsplash.com/photo-1516251193007-45ef944ab0c6?q=80&w=800&auto=format&fit=crop');"></div>
+                        <div class="feature-card-body">
+                            <h3>Laukaa-syöte</h3>
+                            <p>Seuraa asukkaiden ja yritysten omia julkaisuja.</p>
+                            <span class="btn-text">Avaa syöte &raquo;</span>
                         </div>
                     </a>
                 </div>
@@ -575,10 +583,11 @@
                     <p style="color: rgba(255,255,255,0.9);">Etsi tiettyä toimijaa, kategoriaa tai tutustu taajamien tarjontaan.</p>
                 </div>
 
-                <div class="hero-split-paths" style="display: flex; flex-direction: column; gap: 1.5rem; align-items: center; text-align: center; padding: 0 1rem; margin: 0 auto; max-width: 900px;">
+                <div class="hero-split-paths" style="display: flex; flex-direction: column; gap: 2.5rem; align-items: center; text-align: center; padding: 0 1rem; margin: 0 auto; max-width: 1000px;">
                     
-                    <div class="hero-path search-path" style="width: 100%; max-width: 850px; background: rgba(255, 255, 255, 0.94); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.6); padding: 2rem; border-radius: 16px; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12); position: relative; z-index: 100;">
-                        <div class="main-search-box" style="margin: 0 auto; box-shadow: none; padding: 0; max-width: 560px; width: 100%;">
+                    <div class="hero-path search-path" style="width: 100%; max-width: 900px; background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1454165833767-027ffea9e77b?q=80&w=1000&auto=format&fit=crop'); background-size: cover; background-position: center; border: 1px solid rgba(255, 255, 255, 0.2); padding: 4rem 2rem; border-radius: 24px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3); position: relative; z-index: 100;">
+                        <h3 style="color: white; font-size: 2rem; margin-bottom: 2rem; text-shadow: 0 2px 10px rgba(0,0,0,0.5);">Etsi yritystä tai palvelua</h3>
+                        <div class="main-search-box" style="margin: 0 auto; box-shadow: none; padding: 0; max-width: 600px; width: 100%;">
                             <div class="search-input-wrapper">
                                 <input type="text" id="company-search"
                                     placeholder="Etsi esim. parturi, digimedia" aria-label="Yrityshaku"
@@ -593,6 +602,17 @@
                                     Tapahtumat ja tiedotteet
                                 </label>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="hero-path browse-path" style="width: 100%; max-width: 900px; background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1000&auto=format&fit=crop'); background-size: cover; background-position: center; border: 1px solid rgba(255, 255, 255, 0.2); padding: 4rem 2rem; border-radius: 24px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3); position: relative; z-index: 10;">
+                        <h3 style="color: white; font-size: 2rem; margin-bottom: 2rem; text-shadow: 0 2px 10px rgba(0,0,0,0.5);">Selaa taajamia</h3>
+                        <div class="homepage-region-selector" style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 1rem;">
+                            <a href="laukaa.html" class="region-pill">Laukaa kk</a>
+                            <a href="leppavesi.html" class="region-pill">Leppävesi</a>
+                            <a href="lievestuore.html" class="region-pill">Lievestuore</a>
+                            <a href="vehnia.html" class="region-pill">Vehniä</a>
+                            <a href="vihtavuori.html" class="region-pill">Vihtavuori</a>
                         </div>
                     </div>
 
