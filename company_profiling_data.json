@@ -1502,11 +1502,15 @@
             "name": "Mediazoo",
             "core": {
                 "fits_for": {
-                    "häät": 40,
+                    "häät": 80,
                     "kokoukset": 35,
                     "yrityksen kehittäminen": 75,
                     "events-and-celebrations": 30,
-                    "business-growth": 25
+                    "business-growth": 25,
+                    "yritysjuhlat": 75,
+                    "hautajaiset": 60,
+                    "yrityksen-kehittäminen": 90,
+                    "muutto": 50
                 },
                 "priority_score": 52,
                 "paired_with": [
@@ -1532,7 +1536,8 @@
                 "home_service": false,
                 "weekend_service": true,
                 "not_suitable_for": [
-                    "lasten syntymäpäivät"
+                    "lasten syntymäpäivät",
+                    "remontti"
                 ],
                 "paired_with_by_context": {
                     "häät": [
@@ -1565,7 +1570,8 @@
                     "valokuvaus",
                     "häävideoiden editointi",
                     "hääkoosteet",
-                    "muistovideo"
+                    "muistovideo",
+                    "vanhojen valokuvien digitointi"
                 ],
                 "description": "Digimedian palveluihin erikoistunut yritys, joka tarjoaa digitointipalveluja (videokasetit, kaitafilmit, valokuvat, diat, negatiivit, äänikelat ja yritysarkistot), video- ja animaatiotuotantoa, valokuvausta, verkkosivujen ja some-sisällön suunnittelua, digipainotuotteita, brändäystä sekä digitaalisen markkinoinnin konsultointia. Palveluun kuuluu myös digitaalisen median hyötyjen ja haasteiden kartoitus yritysasiakkaille sekä digivalmiuksien kehittäminen. Mediazoo toimii Lievestuoreella Keski-Suomessa ja palvelee digitointiasiakkaita koko Suomessa postitse toimitettavien aineistojen kautta.",
                 "website": "www.mediazoo.fi",
@@ -1750,7 +1756,7 @@
                 "group_bookings": false
             },
             "meta": {
-                "last_updated": "2026-04-28T07:27:17.648Z",
+                "last_updated": "2026-04-28T14:23:47.836Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
