@@ -678,6 +678,10 @@
         async function showResults() {
             console.log("showResults() active. Selections:", selections);
             currentResultsGroups = [];
+
+            const config = window.NEEDS_CONFIG || (typeof NEEDS_CONFIG !== 'undefined' ? NEEDS_CONFIG : null);
+            const need = config[currentNeedId];
+            const activeSteps = need ? need.steps : [];
             
             const stepSection = document.getElementById('step-section');
             const resultsContainer = document.getElementById('results-container');
@@ -879,6 +883,12 @@
             matchingGroups.forEach(({ opt, companies: companiesForOpt }) => {
                 totalFoundCount += companiesForOpt.length;
                 htmlResults += `<div class="group-title"><span>📍</span> ${opt.label}</div>`;
+
+                // Tallennetaan tulokset tulostusta varten
+                currentResultsGroups.push({
+                    title: opt.label,
+                    companies: companiesForOpt
+                });
 
                 companiesForOpt.sort((a, b) => {
                     let scoreA = getFitsForScore(a, currentProfilingKey);
