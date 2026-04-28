@@ -797,7 +797,7 @@
                     if (opt.profilointi_filter) {
                         const pf = opt.profilointi_filter;
                         const catData = getCategoryData(c, pf.section);
-                        if (catData !== undefined) {
+                        if (catData) {
                             const actualVal = catData[pf.field];
                             let match = (actualVal === pf.value) || (Array.isArray(actualVal) && actualVal.includes(pf.value));
                             if (!match && typeof actualVal === 'object' && actualVal !== null) {
