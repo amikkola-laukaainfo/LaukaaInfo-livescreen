@@ -784,8 +784,12 @@
                         }
 
                         if (!isSubContextMatch) {
+                            // If sub-context doesn't match, we only allow it if it's a very strong main context match (>= 70)
+                            // Or if the company has NO sub-contexts defined at all (middle-ground for incomplete data)
                             const mainFitsScore = getFitsForScore(c, currentProfilingKey);
-                            if (mainFitsScore < 70) return false; 
+                            const hasAnySubContexts = Array.isArray(companySubContexts) ? companySubContexts.length > 0 : !!companySubContexts;
+                            
+                            if (hasAnySubContexts && mainFitsScore < 70) return false; 
                         }
                     }
 
@@ -794,12 +798,6 @@
                         const rfMin = opt.require_fits_for.min || 20;
                         const rfScore = getFitsForScore(c, rfKey);
                         if (rfScore < rfMin) return false;
-                    }
-
-                    // Middle-ground: If company is profiled and explicitly marked as 0 for this context, skip it.
-                    const fitsScore = getFitsForScore(c, currentProfilingKey);
-                    if (c.profiling && fitsScore === 0 && (c.profiling.core?.fits_for?.[currentProfilingKey] === 0 || c.profiling.core?.fits_for?.[currentProfilingKey.replace(/_/g, '-')] === 0)) {
-                        return false; 
                     }
 
                     let isProfiledMatch = false;
