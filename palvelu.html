@@ -658,9 +658,21 @@
 
         function getFitsForScore(c, key) {
             if (!c || !c.profiling || !c.profiling.core || !c.profiling.core.fits_for) return 0;
+            const fits = c.profiling.core.fits_for;
             const underscoreKey = key.replace(/-/g, '_');
             const hyphenKey = key.replace(/_/g, '-');
-            return c.profiling.core.fits_for[underscoreKey] || c.profiling.core.fits_for[hyphenKey] || c.profiling.core.fits_for[key] || 0;
+            
+            // Normalize Finnish keys too
+            const finnishMap = {
+                'events_and_celebrations': 'häät',
+                'business_events': 'yritysjuhlat',
+                'funerals_and_memorials': 'hautajaiset',
+                'startup_services': 'yrityksen perustaminen',
+                'business_growth': 'yrityksen kehittäminen'
+            };
+            const finKey = finnishMap[underscoreKey] || finnishMap[hyphenKey] || finnishMap[key];
+
+            return fits[underscoreKey] || fits[hyphenKey] || fits[key] || (finKey ? fits[finKey] : 0) || 0;
         }
 
         // Helper to get all collaborators of a company across all profiling categories
@@ -763,15 +775,31 @@
                     if (selections._sub_contexts && selections._sub_contexts.length > 0) {
                         const companySubContexts = c.profiling?.core?.sub_contexts || [];
                         let hasSelectedSubContext = false;
+                        
+                        // Normalize the current profiling key for sub-context lookup
+                        const underscoreKey = currentProfilingKey.replace(/-/g, '_');
+                        const finnishMap = { 'events_and_celebrations': 'häät', 'business_events': 'yritysjuhlat', 'funerals_and_memorials': 'hautajaiset' };
+                        const finKey = finnishMap[underscoreKey];
+
                         if (Array.isArray(companySubContexts)) {
                             hasSelectedSubContext = selections._sub_contexts.some(sc => companySubContexts.includes(sc));
                         } else if (typeof companySubContexts === 'object' && companySubContexts !== null) {
-                            hasSelectedSubContext = selections._sub_contexts.some(sc => {
-                                if (Object.keys(companySubContexts).includes(sc)) return true;
-                                return Object.values(companySubContexts).some(arr => Array.isArray(arr) && arr.includes(sc));
-                            });
+                            // Check if company has sub-contexts for THIS specific main context
+                            const relevantSubContexts = companySubContexts[underscoreKey] || companySubContexts[currentProfilingKey] || (finKey ? companySubContexts[finKey] : null);
+                            
+                            if (relevantSubContexts) {
+                                hasSelectedSubContext = selections._sub_contexts.some(sc => relevantSubContexts.includes(sc));
+                            } else {
+                                // If company has no sub-contexts defined for this category, we don't filter it out
+                                hasSelectedSubContext = true; 
+                            }
+                        } else {
+                            hasSelectedSubContext = true;
                         }
-                        if ((Array.isArray(companySubContexts) && companySubContexts.length > 0 || (typeof companySubContexts === 'object' && Object.keys(companySubContexts).length > 0)) && !hasSelectedSubContext) return false; 
+
+                        // If company fits the main context perfectly (score >= 70), be more lenient with sub-context mismatch
+                        const mainFitsScore = getFitsForScore(c, currentProfilingKey);
+                        if (!hasSelectedSubContext && mainFitsScore < 70) return false; 
                     }
 
                     if (opt.require_fits_for) {
