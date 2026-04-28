@@ -761,8 +761,11 @@
 
                 options.forEach(opt => {
                     const companiesForOpt = window.allCompanies.filter((c, idx) => {
+                        const isMediazoo = (c.id === 'company-2' || c.nimi === 'Mediazoo');
                         const fitsScore = getFitsForScore(c, currentProfilingKey);
                         
+                        if (isMediazoo) console.log(`DEBUG: Checking Mediazoo for option "${opt.label}"`, { currentProfilingKey, fitsScore, selections });
+
                         if (selections._sub_contexts && selections._sub_contexts.length > 0) {
                             const companySubContexts = c.profiling?.core?.sub_contexts || [];
                             let isSubContextMatch = false;
@@ -850,6 +853,7 @@
                         const companyContent = ((c.tags || '') + ' ' + (c.kategoria || '') + ' ' + (c.nimi || '')).toLowerCase();
                         const tagMatch = opt.tags.some(tag => companyContent.includes(tag.toLowerCase()));
                         
+                        if (isMediazoo) console.log(`DEBUG: Mediazoo final match for "${opt.label}": ${tagMatch}`);
                         return tagMatch;
                     });
                     
