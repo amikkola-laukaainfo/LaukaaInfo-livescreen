@@ -51,6 +51,7 @@ const NEEDS_CONFIG = {
                 "question": "Mitä muita palveluita tarvitset juhlatpäivään?",
                 "options": [
                     { "label": "Valokuvaaja", "tags": ["valokuvaus"], "profilointi_filter": { "section": "events_and_celebrations", "field": "wedding_photography", "value": true } },
+                    { "label": "Videokuvaaja", "tags": ["videotuotanto"], "profilointi_filter": { "section": "events_and_celebrations", "field": "video_production", "value": true } },
                     { "label": "Kukkakauppa & Koristelu", "tags": ["kukkakauppa"] },
                     { "label": "Musiikki tai DJ", "tags": ["musiikki", "ohjelmapalvelut"], "profilointi_filter": { "section": "events_and_celebrations", "field": "live_music", "value": true } }
                 ]
@@ -124,6 +125,7 @@ const NEEDS_CONFIG = {
                     { "label": "Pitopalvelu", "tags": ["pitopalvelu"] },
                     { "label": "Majoitus", "tags": ["majoitus"] },
                     { "label": "Kuljetukset", "tags": ["kuljetus", "taksi"] },
+                    { "label": "Videokuvaaja / Tapahtumavideointi", "tags": ["videotuotanto"], "profilointi_filter": { "section": "events_and_celebrations", "field": "video_production", "value": true } },
                     { "label": "Saunatilat", "tags": ["saunatilat"], "profilointi_filter": { "section": "events_and_celebrations", "field": "has_sauna", "value": true } },
                     { "label": "Ohjelmapalvelut / Elämykset", "tags": ["ohjelmapalvelut"] },
                     { "label": "AV-tekniikka & Äänentoisto", "tags": ["it-palvelut"], "profilointi_filter": { "section": "business_events", "field": "av_support", "value": true } }
@@ -232,6 +234,7 @@ const NEEDS_CONFIG = {
                     { "label": "Kakut / Leivonnaiset", "tags": ["leipomo", "elintarvike"], "profilointi_filter": { "section": "events_and_celebrations", "field": "cake_service", "value": true } },
                     { "label": "Ohjelma / Esiintyjä", "tags": ["ohjelmapalvelut"], "profilointi_filter": { "section": "events_and_celebrations", "field": "live_music", "value": true } },
                     { "label": "Valokuvaus", "tags": ["valokuvaus"] },
+                    { "label": "Videokuvaus", "tags": ["videotuotanto"], "profilointi_filter": { "section": "events_and_celebrations", "field": "video_production", "value": true } },
                     { "label": "Kukat", "tags": ["kukkakauppa"] }
                 ]
             }
@@ -472,7 +475,7 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": "Haluaisitko tallentaa muistot tai tarvitsetko digitointipalveluita?",
                 "options": [
-                    { "label": "Muistovideo / Esityksen valmistelu", "tags": ["videotuotanto"] },
+                    { "label": "Muistovideo / Videointi / Esitykset", "tags": ["videotuotanto"], "profilointi_filter": { "section": "events_and_celebrations", "field": "video_production", "value": true } },
                     { "label": "Valokuvaus tilaisuudessa", "tags": ["valokuvaus"] },
                     { "label": "Digitointipalvelut (kuvat, videot ym.)", "tags": ["digitointi"] }
                 ]
