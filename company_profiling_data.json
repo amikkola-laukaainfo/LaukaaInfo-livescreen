@@ -1601,14 +1601,18 @@
                 "karaoke_available": false,
                 "has_exclusive_catering": false,
                 "accommodation_included": false,
-                "digitization_features": [
-                    "häävideoiden digitointi VHS-, Hi8-, MiniDV- ja muista videokasettiformaateista",
-                    "vanhojen valokuvien ja albumien skannaus JPG/TIFF-muotoon",
-                    "diojen, negatiivien ja kaitafilmien digitointi",
-                    "diashow- ja multimediaesitykset juhlakäyttöön",
-                    "kuvakirjojen toteutus digitoiduista aineistoista",
-                    "digitoitujen aineistojen editointi erillisestä sopimuksesta"
-                ],
+                "digitization_features": {
+                    "digitointi": [
+                        "vanhojen valokuvien digitointi",
+                        "VHS / DVD digitointi",
+                        "diojen, negatiivien ja kaitafilmien digitointi"
+                    ],
+                    "editointi": [
+                        "häävideoiden editointi",
+                        "hääkoosteet",
+                        "koostepalvelu"
+                    ]
+                },
                 "entertainment_features": [
                     "hääohjelmaksi soveltuvat diashow- ja multimediaesitykset"
                 ]

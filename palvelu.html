@@ -298,8 +298,9 @@
                 <div id="next-steps-list" class="next-steps-grid"></div>
             </div>
             
-            <div style="text-align: center; margin-top: 4rem;">
-                <button onclick="resetPalvelu()" class="btn-radar" style="background: var(--primary-blue);">Aloita alusta</button>
+            <div style="text-align: center; margin-top: 4rem; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                <button onclick="resetPalvelu()" class="btn-radar" style="background: var(--secondary-blue);">Aloita alusta</button>
+                <button onclick="printResults()" class="btn-radar" style="background: var(--primary-blue);">Tulosta PDF / Paperille 🖨️</button>
             </div>
         </section>
     </main>
@@ -535,13 +536,24 @@
             evalStr = evalStr.replace(profilointiRegex, (match, stepId, section, field) => {
                 return getSelectedCompanyProfilointi(stepId, section, field);
             });
+
+            // 2. Lisätään tuki isSelected('stepId', 'label') -kutsulle
+            const selectedRegex = /isSelected\('([^']+)',\s*'([^']+)'\)/g;
+            evalStr = evalStr.replace(selectedRegex, (match, stepId, label) => {
+                const sel = selections[stepId];
+                if (!sel) return false;
+                if (Array.isArray(sel)) {
+                    return sel.some(s => s.label.toLowerCase().includes(label.toLowerCase()));
+                }
+                return sel.label.toLowerCase().includes(label.toLowerCase());
+            });
             
-            // 2. Korvataan selections.stepId-viittaukset (onko jotain valittu kyseisessä stepissä)
+            // 3. Korvataan selections.stepId-viittaukset (onko jotain valittu kyseisessä stepissä)
             evalStr = evalStr.replace(/selections\.(\w+)/g, (match, stepId) => {
                 return !!selections[stepId];
             });
 
-            // 3. Suoritetaan looginen arviointi turvallisesti
+            // 4. Suoritetaan looginen arviointi turvallisesti
             try {
                 // Sallitaan vain perus-boolean-logiikka
                 const safeEval = new Function('return ' + evalStr);
@@ -574,8 +586,11 @@
             `;
         }
 
+        let currentResultsGroups = []; // Tallennetaan tulokset tulostusta varten
+
         async function showResults() {
             console.log("showResults() active. Selections:", selections);
+            currentResultsGroups = []; // Tyhjennetään vanhat
             
             const stepSection = document.getElementById('step-section');
             const resultsContainer = document.getElementById('results-container');
@@ -747,7 +762,23 @@
                         
                         // Jos yrityksellä on profilointi kyseisessä osiossa, sen on täsmättävä
                         if (c.profiling && c.profiling[pf.section] !== undefined) {
-                            const match = (actualVal === pf.value) || (Array.isArray(actualVal) && actualVal.includes(pf.value));
+                            // Tukee: boolean, string, array ja uutta hierarkkista objectia
+                            let match = (actualVal === pf.value) || (Array.isArray(actualVal) && actualVal.includes(pf.value));
+                            
+                            // UUSI: Hierarkkinen haku (3-taso)
+                            if (!match && typeof actualVal === 'object' && actualVal !== null) {
+                                // 1. Tarkista onko arvo jokin kategorioista (avaimista)
+                                if (Object.keys(actualVal).includes(pf.value)) {
+                                    match = true;
+                                } 
+                                // 2. Tarkista onko arvo missä tahansa kategorian listassa
+                                else {
+                                    match = Object.values(actualVal).some(arr => 
+                                        Array.isArray(arr) && arr.includes(pf.value)
+                                    );
+                                }
+                            }
+
                             if (match) {
                                 isProfiledMatch = true;
                             } else {
@@ -785,6 +816,9 @@
 
                 if (companiesForOpt.length > 0) {
                     totalFound += companiesForOpt.length;
+
+                    // Tallennetaan tulostusta varten
+                    currentResultsGroups.push({ title: opt.label, companies: [...companiesForOpt] });
 
                     // Lisätään ryhmän otsikko
                     html += `<div class="group-title"><span>📍</span> ${opt.label}</div>`;

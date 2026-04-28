@@ -68,13 +68,24 @@ const NEEDS_CONFIG = {
                 ]
             },
             {
-                "id": "digitointi_ja_tallennus",
+                "id": "tallennus_ja_muistot",
                 "multiple": true,
                 "question": "Haluaisitko ikuistaa päivän digitaalisesti tai tarvitsetko muita digitointipalveluita?",
                 "options": [
                     { "label": "Häävideon editointi / Koostepalvelu", "tags": ["videotuotanto"], "profilointi_filter": { "section": "events_and_celebrations", "field": "video_production", "value": true } },
                     { "label": "Drone-kuvaus", "tags": ["drone"], "profilointi_filter": { "section": "events_and_celebrations", "field": "drone_available", "value": true } },
-                    { "label": "Vanhojen kuvien digitointi juhlaesitystä varten", "tags": ["digitointi"] }
+                    { "label": "Digitointipalvelut (kuvat, videot ym.)", "tags": ["digitointi"] }
+                ]
+            },
+            {
+                "id": "digitoinnin_tarkennus",
+                "multiple": true,
+                "question": "Mitä haluaisit digitoida juhlaesitystä varten?",
+                "skipIf": "!isSelected('tallennus_ja_muistot', 'digitointi')",
+                "options": [
+                    { "label": "Vanhojen valokuvien digitointi", "tags": ["digitointi"], "profilointi_filter": { "section": "events_and_celebrations", "field": "digitization_features", "value": "vanhojen valokuvien digitointi" } },
+                    { "label": "VHS- tai DVD-materiaalin digitointi", "tags": ["digitointi"], "profilointi_filter": { "section": "events_and_celebrations", "field": "digitization_features", "value": "VHS / DVD digitointi" } },
+                    { "label": "Asiakirjojen tai kirjeiden digitointi", "tags": ["digitointi"], "profilointi_filter": { "section": "events_and_celebrations", "field": "digitization_features", "value": "paperiarkistojen digitointi" } }
                 ]
             }
         ]
@@ -459,11 +470,22 @@ const NEEDS_CONFIG = {
             {
                 "id": "muistot_ja_tallennus",
                 "multiple": true,
-                "question": "Haluaisitko tallentaa muistot tai tarvitsetko digitointia?",
+                "question": "Haluaisitko tallentaa muistot tai tarvitsetko digitointipalveluita?",
                 "options": [
                     { "label": "Muistovideo / Esityksen valmistelu", "tags": ["videotuotanto"] },
-                    { "label": "Vanhojen valokuvien digitointi", "tags": ["digitointi"], "profilointi_filter": { "section": "core", "field": "sub_contexts", "value": "digitointi" } },
-                    { "label": "Valokuvaus tilaisuudessa", "tags": ["valokuvaus"] }
+                    { "label": "Valokuvaus tilaisuudessa", "tags": ["valokuvaus"] },
+                    { "label": "Digitointipalvelut (kuvat, videot ym.)", "tags": ["digitointi"] }
+                ]
+            },
+            {
+                "id": "hautajaiset_digitointi_tarkennus",
+                "multiple": true,
+                "question": "Mitä haluaisit digitoida muistoesitystä varten?",
+                "skipIf": "!isSelected('muistot_ja_tallennus', 'digitointi')",
+                "options": [
+                    { "label": "Vanhojen valokuvien digitointi", "tags": ["digitointi"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "digitization_features", "value": "vanhojen valokuvien digitointi" } },
+                    { "label": "VHS- tai DVD-materiaalin digitointi", "tags": ["digitointi"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "digitization_features", "value": "VHS / DVD digitointi" } },
+                    { "label": "Sukukuvien kokoaminen ja digitointi", "tags": ["digitointi"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "digitization_features", "value": "sukukuvien kokoaminen" } }
                 ]
             }
         ]
