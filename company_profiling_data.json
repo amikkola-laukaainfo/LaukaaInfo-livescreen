@@ -1674,10 +1674,12 @@
                     "häät": 80,
                     "kokoukset": 35,
                     "yrityksen kehittäminen": 75,
-                    "events-and-celebrations": 30,
-                    "business-growth": 25,
+                    "events-and-celebrations": 80,
+                    "business-growth": 75,
+                    "business_growth": 75,
                     "yritysjuhlat": 75,
                     "hautajaiset": 60,
+                    "funerals-and-memorials": 60,
                     "yrityksen-kehittäminen": 90,
                     "muutto": 50
                 },
@@ -1788,7 +1790,7 @@
                 "karaoke_available": false,
                 "has_exclusive_catering": false,
                 "accommodation_included": false,
-                "refinement_tags": [],
+                "refinement_tags": ["valokuvaus", "videotuotanto", "tapahtumavideointi"],
                 "digitization_features": {
                     "digitointi": [
                         "vanhojen valokuvien digitointi",
