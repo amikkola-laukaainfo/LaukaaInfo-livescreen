@@ -44,19 +44,6 @@
             padding: 0 1.5rem;
         }
 
-        .results-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .no-results {
-            text-align: center;
-            padding: 4rem 2rem;
-            background: white;
-            border-radius: 24px;
-            box-shadow: var(--shadow);
-        }
 
         .back-nav {
             max-width: 1200px;
@@ -943,7 +930,7 @@
                     const u = JSON.parse(userCoordsRaw);
                     const dist = getHaversineDistance(u.lat, u.lng || u.lon, parseFloat(c.lat), parseFloat(c.lon || c.lng));
                     const distStr = dist < 1 ? `${Math.round(dist * 1000)} m` : `${dist.toFixed(1)} km`;
-                    distanceHtml = `<div class="dist-badge" style="font-size: 0.7rem; background: #f1f5f9; padding: 2px 8px; border-radius: 10px; color: #475569; font-weight: 600; display: inline-block; margin-top: 5px;">🚗 ${distStr}</div>`;
+                    distanceHtml = `<div class="dist-badge">🚗 ${distStr}</div>`;
                 } catch(e) {}
             }
 
@@ -951,12 +938,9 @@
                 const core = c.profiling.core || {};
                 const fits = core.fits_for || {};
                 
-                // Tarkistetaan onko "Top Match" (pisteet yli 80)
-                for (let key in fits) {
-                    if (fits[key] >= 80) {
-                        isTopMatch = true;
-                        break;
-                    }
+                // Tarkistetaan onko "Top Match" (pisteet yli 80 tässä kontekstissa)
+                if (fits[profilingKey] >= 80) {
+                    isTopMatch = true;
                 }
 
                 // Kapasiteettimerkki — näytetään vain jos käyttäjä kysyi tilaa
@@ -964,38 +948,46 @@
                     const cap = getCompanyCapacity(c, profilingKey);
                     if (cap > 0) {
                         if (cap >= requestedCapacity) {
-                            capacityNote = `<div style="font-size:0.75rem; color:#16a34a; font-weight:600; margin-bottom:6px;">✅ Sopii: max n. ${cap} hlö</div>`;
+                            capacityNote = `<div style="font-size:0.85rem; color:#16a34a; font-weight:700; margin-bottom:10px;">✅ Sopii: max n. ${cap} hlö</div>`;
                         } else {
-                            capacityNote = `<div style="font-size:0.75rem; color:#d97706; font-weight:600; margin-bottom:6px;">⚠️ Huom: Tilaan mahtuu arviolta n. ${cap} hlö</div>`;
+                            capacityNote = `<div style="font-size:0.85rem; color:#d97706; font-weight:700; margin-bottom:10px;">⚠️ Huom: Tilaan mahtuu n. ${cap} hlö</div>`;
                         }
                     }
                 }
 
                 // Ominaisuus-badget
-                if (c.profiling.events_and_celebrations?.is_accessible) badges += '<span title="Esteetön pääsy" style="margin-right:5px;">♿</span>';
-                if (c.profiling.events_and_celebrations?.has_sauna) badges += '<span title="Sauna saatavilla" style="margin-right:5px;">🧖</span>';
-                if (core.home_service) badges += '<span title="Kotipalvelu" style="margin-right:5px;">🏠</span>';
-                if (core.emergency_available) badges += '<span title="Päivystys / 24h" style="margin-right:5px;">🚨</span>';
+                if (c.profiling.events_and_celebrations?.is_accessible) badges += '<span title="Esteetön pääsy">♿</span>';
+                if (c.profiling.events_and_celebrations?.has_sauna) badges += '<span title="Sauna saatavilla">🧖</span>';
+                if (core.home_service) badges += '<span title="Kotipalvelu">🏠</span>';
+                if (core.emergency_available) badges += '<span title="Päivystys / 24h">🚨</span>';
             }
 
             return `
-                <a href="${cardUrl}" class="need-card" style="height: 100%; border-top: 4px solid ${isTopMatch ? '#ff9900' : 'transparent'};">
-                    ${isTopMatch ? '<div style="position:absolute; top:10px; right:10px; font-size:0.6rem; background:#ff9900; color:white; padding:2px 6px; border-radius:10px; font-weight:bold; z-index:10;">TOP MATCH</div>' : ''}
-                    ${(isPremium || isPro) && !isTopMatch ? '<div style="position:absolute; top:10px; right:10px; font-size:0.6rem; background:gold; padding:2px 6px; border-radius:10px; font-weight:bold; z-index:10;">PREMIUM</div>' : ''}
-                    <div class="need-icon" style="font-size: 2rem;">${icon}</div>
+                <a href="${cardUrl}" class="company-result-card ${isTopMatch ? 'top-match' : ''}">
+                    ${isTopMatch ? '<div class="result-badge badge-top">TOP MATCH</div>' : ''}
+                    ${(isPremium || isPro) && !isTopMatch ? '<div class="result-badge badge-premium">PREMIUM</div>' : ''}
+                    
+                    <div class="result-icon">${icon}</div>
+                    
                     <h3>${c.nimi}</h3>
-                    <p style="margin-bottom: 5px;">${c.mainoslause || (c.esittely ? c.esittely.substring(0, 80) + '...' : '')}</p>
-                    ${distanceHtml}
-                    <div style="margin-top: 8px;">
-                        ${capacityNote}
+                    <div class="slogan">${c.mainoslause || (c.esittely ? c.esittely.substring(0, 100) + '...' : 'Paikallinen palveluntarjoaja Laukaassa.')}</div>
+                    
+                    ${capacityNote}
+                    
+                    <div class="card-meta">
+                        ${distanceHtml}
+                        <div class="feature-badges">
+                            ${badges}
+                        </div>
                     </div>
-                    <div class="feature-badges" style="font-size: 1.2rem; margin-bottom: 10px;">
-                        ${badges}
-                    </div>
+                    
                     <div class="match-explanation">
                         ${getMatchExplanation(c, requestedCapacity, profilingKey)}
                     </div>
-                    <div class="arrow" style="opacity:1; transform:none;">Katso tiedot &raquo;</div>
+                    
+                    <div class="card-arrow">
+                        Katso lisätiedot &raquo;
+                    </div>
                 </a>
             `;
         }
