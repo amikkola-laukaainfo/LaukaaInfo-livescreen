@@ -304,50 +304,50 @@
                         </div>
                     </div>
 
-                <div class="need-card" style="position: relative;">
-                    <div class="need-icon">💼</div>
-                    <h3>Yritystilaisuudet</h3>
-                    <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 0.5rem;">Kokoukset, seminaarit ja koulutukset ammattimaisessa ympäristössä.</p>
-                    
-    <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
+                    <div class="need-card" style="--bg-img: url('https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=800&auto=format&fit=crop');">
+                        <div class="need-card-content">
+                            <h3>Yritystilaisuudet</h3>
+                            <p>Kokoukset, seminaarit ja koulutukset ammattimaisessa ympäristössä.</p>
+                            <div class="need-refinement">
+                                <select class="premium-select" onchange="updateNeedLink(this, 'yritystilaisuudet')">
+                                    <option value="">Tarkenna tarvetta...</option>
+                                    <option value="av_equipment_high_end">Huippuluokan AV-tekniikka</option>
+                                    <option value="accommodation_available">Majoitusmahdollisuus</option>
+                                    <option value="hybrid_meeting_support">Hybridikokous-valmius</option>
+                                </select>
+                            </div>
+                            <a href="palvelu.html?id=yritystilaisuudet" id="link-yritystilaisuudet" class="btn-need">Hae tilat &raquo;</a>
+                        </div>
+                    </div>
 
-        <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'yritystilaisuudet')">
-            <option value="">Tarkenna tarvetta...</option>
-            <option value="invoice_billing">Laskutusmahdollisuus</option>
-            <option value="has_projector">Videotykki saatavilla</option>
-            <option value="has_streaming">Striimausmahdollisuus</option>
-            <option value="event_hosting">Tapahtumaisäntä / Juontaja</option>
-        </select>
-    </div>
-    <a href="palvelu.html?id=yritystilaisuudet" id="link-yritystilaisuudet" class="arrow" style="display: block; text-align: center; text-decoration: none; padding: 0.6rem; border-radius: 8px; margin-top: 0.5rem; background: var(--primary-blue); color: white; font-weight: 600; opacity: 1; transform: none; box-shadow: 0 4px 10px rgba(0,86,179,0.2);">Hae tilat &raquo;</a>
-</div>
-
-                    <div class="need-card" style="--bg-img: url('https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=800&auto=format&fit=crop');">
+                    <div class="need-card" style="--bg-img: url('birthday_laukaa_1777367401778.png');">
                         <div class="need-card-content">
                             <h3>Syntymäpäivät</h3>
-                            <p>Järjestä ikimuistoiset syntymäpäiväjuhlat kaikenikäisille.</p>
+                            <p>Järjestä ikimuistoiset juhlat. Kakkupalvelut, tilat ja ohjelma.</p>
                             <div class="need-refinement">
                                 <select class="premium-select" onchange="updateNeedLink(this, 'syntymapaivat')">
                                     <option value="">Tarkenna tarvetta...</option>
-                                    <option value="kids_birthday">Lasten syntymäpäivät</option>
-                                    <option value="milestone_birthday">Pyöreät vuodet</option>
-                                    <option value="catering_provided">Tarjoilut järjestetty</option>
+                                    <option value="cake_service">Kakkupalvelu / Leivonnaiset</option>
+                                    <option value="karaoke_available">Karaoke saatavilla</option>
+                                    <option value="late_night_events">Myöhäisillan juhlat</option>
+                                    <option value="home_service">Kotiinkuljetus / Kotikäynti</option>
                                 </select>
                             </div>
                             <a href="palvelu.html?id=syntymapaivat" id="link-syntymapaivat" class="btn-need">Järjestä synttärit &raquo;</a>
                         </div>
                     </div>
 
-                    <div class="need-card" style="--bg-img: url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=800&auto=format&fit=crop');">
+                    <div class="need-card" style="--bg-img: url('moving_service_laukaa_1777367451152.png');">
                         <div class="need-card-content">
                             <h3>Muutto</h3>
-                            <p>Tee muutosta helppoa. Löydä kantoapu, kuljetukset ja varastot.</p>
+                            <p>Tee muutosta helppoa. Muuttoapu, kuljetukset ja loppusiivous.</p>
                             <div class="need-refinement">
                                 <select class="premium-select" onchange="updateNeedLink(this, 'muutto')">
                                     <option value="">Tarkenna tarvetta...</option>
+                                    <option value="weekend_moves">Viikonloppumuutot</option>
+                                    <option value="cleaning_after_move">Muuttosiivous saatavilla</option>
+                                    <option value="storage_available">Varastointimahdollisuus</option>
                                     <option value="packing_service">Pakkauspalvelu</option>
-                                    <option value="storage_available">Varastotilaa tarvitaan</option>
-                                    <option value="international_move">Kansainvälinen muutto</option>
                                 </select>
                             </div>
                             <a href="palvelu.html?id=muutto" id="link-muutto" class="btn-need">Helpota muuttoa &raquo;</a>
@@ -423,23 +423,23 @@
     <a href="palvelu.html?id=hautajaiset" id="link-hautajaiset" class="arrow" style="display: block; text-align: center; text-decoration: none; padding: 0.6rem; border-radius: 8px; margin-top: 0.5rem; background: var(--primary-blue); color: white; font-weight: 600; opacity: 1; transform: none; box-shadow: 0 4px 10px rgba(0,86,179,0.2);">Tutustu palveluihin &raquo;</a>
 </div>
 
-                    <div class="need-card" style="--bg-img: url('https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=800&auto=format&fit=crop');">
+                    <div class="need-card" style="--bg-img: url('https://images.unsplash.com/photo-1556761175-b413da4baf72?q=80&w=800&auto=format&fit=crop');">
                         <div class="need-card-content">
                             <h3>Yrityksen perustaminen</h3>
-                            <p>Asiantuntija-apua ja verkostoja uuden yrityksen alkutaipaleelle.</p>
+                            <p>Asiantuntija-apua ja verkostoja uuden yrityksen starttiin.</p>
                             <div class="need-refinement">
                                 <select class="premium-select" onchange="updateNeedLink(this, 'yrityksen-perustaminen')">
                                     <option value="">Tarkenna tarvetta...</option>
-                                    <option value="business_plan_help">Liiketoimintasuunnitelma</option>
-                                    <option value="funding_advice">Rahoitusneuvonta</option>
-                                    <option value="office_space">Toimitilojen etsintä</option>
+                                    <option value="business_advisory">Yritysneuvonta</option>
+                                    <option value="bookkeeping_startup">Aloittavan yrityksen kirjanpito</option>
+                                    <option value="logo_design">Logon suunnittelu / Brändäys</option>
                                 </select>
                             </div>
-                            <a href="palvelu.html?id=yrityksen-perustaminen" id="link-yrityksen-perustaminen" class="btn-need">Aloita yrittäminen &raquo;</a>
+                            <a href="palvelu.html?id=yrityksen-perustaminen" id="link-yrityksen-perustaminen" class="btn-need">Perusta yritys &raquo;</a>
                         </div>
                     </div>
 
-                    <div class="need-card" style="--bg-img: url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop');">
+                    <div class="need-card" style="--bg-img: url('https://images.unsplash.com/photo-1543286386-713bdd54867e?q=80&w=800&auto=format&fit=crop');">
                         <div class="need-card-content">
                             <h3>Yrityksen kehittäminen</h3>
                             <p>Vie yrityksesi seuraavalle tasolle kasvun ja optimoinnin avulla.</p>
@@ -568,6 +568,23 @@
                     </div>
                 </div> <!-- End need-grid -->
             </div> <!-- End section-container -->
+            <style>
+                .need-card h3 {
+                    font-size: 2.2rem;
+                    color: #ffffff; /* White for better contrast on dark overlay */
+                    margin-bottom: 0.75rem;
+                    font-weight: 600;
+                    text-shadow: 0 2px 10px rgba(0,0,0,0.3); /* Subtle shadow for readability */
+                }
+
+                .need-card p {
+                    font-size: 1.05rem;
+                    color: rgba(255,255,255,0.95);
+                    margin-bottom: 1.5rem;
+                    line-height: 1.5;
+                    text-shadow: 0 1px 5px rgba(0,0,0,0.2);
+                }
+            </style>
         </section>
 
         <!-- Haku-osuus (Säilytetään toissijaisena) -->
