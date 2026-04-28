@@ -621,9 +621,46 @@
 
         let currentResultsGroups = []; // Tallennetaan tulokset tulostusta varten
 
+        // Helper to get profiling data correctly (mapping legacy keys to new schema)
+        function getCategoryData(c, key) {
+            if (!c || !c.profiling) return null;
+            const keyMap = {
+                'weddings_and_parties': 'events_and_celebrations',
+                'corporate_parties_and_events': 'events_and_celebrations',
+                'meetings_and_seminars': 'business_events',
+                'starting_a_business': 'startup_services',
+                'business_growth_and_dev': 'business_growth',
+                'construction_and_renovation': 'construction_and_maintenance',
+                'housing_companies_and_real_estate': 'housing_company_and_contracts'
+            };
+            const mappedKey = keyMap[key] || key;
+            const underscoreKey = mappedKey.replace(/-/g, '_');
+            const hyphenKey = mappedKey.replace(/_/g, '-');
+            return c.profiling[underscoreKey] || c.profiling[hyphenKey] || c.profiling[mappedKey] || c.profiling[key];
+        }
+
+        function getFitsForScore(c, key) {
+            if (!c || !c.profiling || !c.profiling.core || !c.profiling.core.fits_for) return 0;
+            const underscoreKey = key.replace(/-/g, '_');
+            const hyphenKey = key.replace(/_/g, '-');
+            return c.profiling.core.fits_for[underscoreKey] || c.profiling.core.fits_for[hyphenKey] || c.profiling.core.fits_for[key] || 0;
+        }
+
+        // Helper to get all collaborators of a company across all profiling categories
+        function getCompanyCollaborators(c) {
+            if (!c || !c.profiling) return [];
+            let collaborators = [];
+            for (let k in c.profiling) {
+                if (c.profiling[k] && Array.isArray(c.profiling[k].collaborated_with)) {
+                    collaborators = collaborators.concat(c.profiling[k].collaborated_with);
+                }
+            }
+            return collaborators;
+        }
+
         async function showResults() {
             console.log("showResults() active. Selections:", selections);
-            currentResultsGroups = []; // Tyhjennetään vanhat
+            currentResultsGroups = [];
             
             const stepSection = document.getElementById('step-section');
             const resultsContainer = document.getElementById('results-container');
@@ -635,78 +672,51 @@
             if (list) list.innerHTML = '';
             document.getElementById('next-steps-container').style.display = 'none';
 
-            // Varmistetaan vielä kerran että meillä on dataa
             if (!window.allCompanies || window.allCompanies.length === 0) {
-                console.error("allCompanies is empty in showResults!");
-                // Viimeinen yritys ladata
-                if (typeof loadCompanyData === 'function') {
-                    console.log("Attempting last-minute loadCompanyData...");
-                    await loadCompanyData();
-                }
-                
+                if (typeof loadCompanyData === 'function') await loadCompanyData();
                 if (!window.allCompanies || window.allCompanies.length === 0) {
-                    if (countEl) countEl.textContent = "Virhe: Yritystietoja ei voitu ladata palvelimelta juuri nyt. Yritä päivittää sivu.";
+                    if (countEl) countEl.textContent = "Virhe: Yritystietoja ei voitu ladata.";
                     return;
                 }
             }
 
-            // Kerätään kaikki valitut vaihtoehdot yhteen listaan
             let selectedOptions = [];
             for (let stepId in selections) {
                 if (stepId.startsWith('_')) continue;
                 const val = selections[stepId];
-                if (Array.isArray(val)) {
-                    selectedOptions = selectedOptions.concat(val);
-                } else if (val && typeof val === 'object') {
-                    selectedOptions.push(val);
-                }
+                if (Array.isArray(val)) selectedOptions = selectedOptions.concat(val);
+                else if (val && typeof val === 'object') selectedOptions.push(val);
             }
 
             let filterProfiling = new URLSearchParams(window.location.search).get('filter_profiling');
             if (filterProfiling && selectedOptions.length === 0) {
-                // If skipped steps directly from front page
                 selectedOptions.push({ label: "Tarkennettu haku", tags: [] });
             }
 
-            console.log("Processing selected options:", selectedOptions);
-
-            let totalFound = 0;
-            let html = '';
-
-            // Kartta nykyisestä polusta profilointiavaimiin (fits_for)
             const needToProfilingMap = {
-                'haat': 'weddings_and_parties',
-                'yritysjuhlat': 'corporate_parties_and_events',
-                'yritystilaisuudet': 'meetings_and_seminars',
-                'syntymapaivat': 'weddings_and_parties',
+                'haat': 'events_and_celebrations',
+                'yritysjuhlat': 'events_and_celebrations',
+                'yritystilaisuudet': 'business_events',
+                'syntymapaivat': 'events_and_celebrations',
                 'muutto': 'moving_and_housing',
-                'remontti': 'construction_and_renovation',
+                'remontti': 'construction_and_maintenance',
                 'mokkipalvelut': 'cottage_services',
-                'taloyhtion-huolto': 'housing_companies_and_real_estate',
+                'taloyhtion-huolto': 'housing_company_and_contracts',
                 'hautajaiset': 'funerals_and_memorials',
-                'yrityksen-perustaminen': 'starting_a_business',
-                'yrityksen-kehittaminen': 'business_growth_and_dev',
-                'terveys-ja-hyvinvointi': 'wellbeing_and_beauty',
-                'liikunta-ja-vapaaaika': 'wellbeing_and_beauty',
-                'elaimet': 'wellbeing_and_beauty',
-                'lapset-ja-perhe': 'wellbeing_and_beauty'
+                'yrityksen-perustaminen': 'startup_services',
+                'yrityksen-kehittaminen': 'business_growth',
+                'terveys-ja-hyvinvointi': 'wellbeing_and_beauty'
             };
 
             const currentProfilingKey = needToProfilingMap[currentNeedId] || 'vapaa-aika';
-
-            // Poimitaan valinnoista mahdolliset ominaisuusvaatimukset ja erikoiskentät (esim. kapasiteetti)
             let requestedCapacity = 0;
             const featureOptions = [];
 
             selectedOptions.forEach(opt => {
-                if (opt.capacity_req) {
-                    requestedCapacity = Math.max(requestedCapacity, opt.capacity_req);
-                } else {
-                    featureOptions.push(opt);
-                }
+                if (opt.capacity_req) requestedCapacity = Math.max(requestedCapacity, opt.capacity_req);
+                else featureOptions.push(opt);
             });
 
-            // Jos kaikki valinnat olivat pelkkää kapasiteettia, lisätään "Tulokset" -ryhmä jotta ne näytetään
             if (featureOptions.length === 0 && requestedCapacity > 0) {
                 featureOptions.push({ label: "Sopivat tilat", tags: [] });
             }
@@ -714,241 +724,155 @@
             const requestedFeatures = {
                 sauna: selectedOptions.some(o => o.label?.toLowerCase().includes('sauna')),
                 accessible: selectedOptions.some(o => o.label?.toLowerCase().includes('esteetön') || o.label?.toLowerCase().includes('vammais')),
-                emergency: currentNeedId === 'paivystavat-palvelut',
                 home_service: selectedOptions.some(o => o.label?.toLowerCase().includes('kotiin') || o.label?.toLowerCase().includes('kotona'))
             };
 
+            const allMatchingCompanies = new Set();
+            const matchingGroups = [];
+
             featureOptions.forEach(opt => {
-                console.log(`Filtering for option: ${opt.label}`, opt.tags);
-
-                const companiesForOpt = allCompanies.filter(c => {
-                    // EHDOTON ESTO: not_suitable_for (context gate)
-                        const needIdToContextName = {
-                            'haat': 'weddings_and_parties',
-                            'yritysjuhlat': 'corporate_parties_and_events',
-                            'yritystilaisuudet': 'meetings_and_seminars',
-                            'syntymapaivat': 'weddings_and_parties',
-                            'hautajaiset': 'funerals_and_memorials',
-                            'muutto': 'moving_and_housing',
-                            'remontti': 'construction_and_renovation',
-                            'mokkipalvelut': 'cottage_services',
-                            'taloyhtion-huolto': 'housing_companies_and_real_estate',
-                            'yrityksen-perustaminen': 'starting_a_business',
-                            'yrityksen-kehittaminen': 'business_growth_and_dev',
-                            'terveys-ja-hyvinvointi': 'wellbeing_and_beauty'
-                        };
-                        const currentContextName = needIdToContextName[currentNeedId] || currentNeedId;
-                        const notSuitable = c.profiling?.core?.not_suitable_for || [];
-                        if (Array.isArray(notSuitable)) {
-                            // Estä jos koko pääkonteksti on kielletty
-                            if (notSuitable.includes(currentContextName)) return false;
-                            
-                            // Estä jos jokin valitun vaihtoehdon tageista on kiellettyjen listalla
-                            if (opt.tags && opt.tags.some(tag => notSuitable.includes(tag.toLowerCase()))) {
-                                return false;
-                            }
-                        }
-
-                        // TASO 2: Sub-contexts filter (Siltana)
-                        if (selections._sub_contexts && selections._sub_contexts.length > 0) {
-                            const companySubContexts = c.profiling?.core?.sub_contexts || [];
-                            let hasSelectedSubContext = false;
-                            
-                            if (Array.isArray(companySubContexts)) {
-                                hasSelectedSubContext = selections._sub_contexts.some(sc => companySubContexts.includes(sc));
-                            } else if (typeof companySubContexts === 'object' && companySubContexts !== null) {
-                                // Hierarkkinen Ryhmä -> Tagit objekti
-                                hasSelectedSubContext = selections._sub_contexts.some(sc => {
-                                    if (Object.keys(companySubContexts).includes(sc)) return true;
-                                    return Object.values(companySubContexts).some(arr => Array.isArray(arr) && arr.includes(sc));
-                                });
-                            }
-                            
-                            if ((Array.isArray(companySubContexts) && companySubContexts.length > 0 || (typeof companySubContexts === 'object' && Object.keys(companySubContexts).length > 0)) && !hasSelectedSubContext) {
-                                return false; 
-                            }
-                        }
-
-                    // HARD FILTER from front page
-                    if (filterProfiling) {
-                        let hasProp = false;
-                        if (c.profiling?.core && c.profiling.core[filterProfiling]) hasProp = true;
-                        else {
-                            for (let k in c.profiling || {}) {
-                                if (c.profiling[k] && c.profiling[k][filterProfiling]) {
-                                    hasProp = true;
-                                    break;
-                                }
-                            }
-                        }
-                        if (!hasProp) return false;
+                const companiesForOpt = window.allCompanies.filter(c => {
+                    const notSuitable = c.profiling?.core?.not_suitable_for || [];
+                    if (Array.isArray(notSuitable)) {
+                        if (notSuitable.includes(currentProfilingKey)) return false;
+                        if (opt.tags && opt.tags.some(tag => notSuitable.includes(tag.toLowerCase()))) return false;
                     }
 
-                    // Tapa 1: Profilointipisteet polkuun
-                    let score = 0;
-                    if (c.profiling && c.profiling.core && c.profiling.core.fits_for) {
-                        score = c.profiling.core.fits_for[currentProfilingKey] || 0;
+                    if (selections._sub_contexts && selections._sub_contexts.length > 0) {
+                        const companySubContexts = c.profiling?.core?.sub_contexts || [];
+                        let hasSelectedSubContext = false;
+                        if (Array.isArray(companySubContexts)) {
+                            hasSelectedSubContext = selections._sub_contexts.some(sc => companySubContexts.includes(sc));
+                        } else if (typeof companySubContexts === 'object' && companySubContexts !== null) {
+                            hasSelectedSubContext = selections._sub_contexts.some(sc => {
+                                if (Object.keys(companySubContexts).includes(sc)) return true;
+                                return Object.values(companySubContexts).some(arr => Array.isArray(arr) && arr.includes(sc));
+                            });
+                        }
+                        if ((Array.isArray(companySubContexts) && companySubContexts.length > 0 || (typeof companySubContexts === 'object' && Object.keys(companySubContexts).length > 0)) && !hasSelectedSubContext) return false; 
                     }
 
-                    // require_fits_for: minimipisteraja (ehdoton) — vain hautajaiset-tyyppisille poluille
                     if (opt.require_fits_for) {
                         const rfKey = opt.require_fits_for.key;
                         const rfMin = opt.require_fits_for.min || 20;
-                        const rfScore = c.profiling?.core?.fits_for?.[rfKey] || 0;
-                        if (rfScore < rfMin) return false; // Ehdoton: liian pieni soveltuvuus
+                        const rfScore = getFitsForScore(c, rfKey);
+                        if (rfScore < rfMin) return false;
                     }
 
-                    // profilointi_filter: schema-pohjainen hard filter
                     let isProfiledMatch = false;
                     if (opt.profilointi_filter) {
                         const pf = opt.profilointi_filter;
-                        const actualVal = c.profiling?.[pf.section]?.[pf.field];
-                        
-                        // Jos yrityksellä on profilointi kyseisessä osiossa, sen on täsmättävä
-                        if (c.profiling && c.profiling[pf.section] !== undefined) {
-                            // Tukee: boolean, string, array ja uutta hierarkkista objectia
+                        const catData = getCategoryData(c, pf.section);
+                        const actualVal = catData ? catData[pf.field] : undefined;
+                        if (catData !== undefined) {
                             let match = (actualVal === pf.value) || (Array.isArray(actualVal) && actualVal.includes(pf.value));
-                            
-                            // UUSI: Hierarkkinen haku (3-taso)
                             if (!match && typeof actualVal === 'object' && actualVal !== null) {
-                                // 1. Tarkista onko arvo jokin kategorioista (avaimista)
-                                if (Object.keys(actualVal).includes(pf.value)) {
-                                    match = true;
-                                } 
-                                // 2. Tarkista onko arvo missä tahansa kategorian listassa
-                                else {
-                                    match = Object.values(actualVal).some(arr => 
-                                        Array.isArray(arr) && arr.includes(pf.value)
-                                    );
-                                }
+                                if (Object.keys(actualVal).includes(pf.value)) match = true;
+                                else match = Object.values(actualVal).some(arr => Array.isArray(arr) && arr.includes(pf.value));
                             }
-
-                            if (match) {
-                                isProfiledMatch = true;
-                            } else {
-                                return false; // Ehdoton hylkäys: profiili löytyy mutta arvo ei täsmää
-                            }
+                            if (match) isProfiledMatch = true; else return false;
                         }
                     }
 
-                    // Jos löytyi tarkka profiilimatch, se riittää (ei tarvitse enää tagi-checkiä)
-                    // MUTTA: Jos optio vaatii kapasiteettia (on tila), hylätään yritykset joilla kapasiteetti on 0,
-                    // ellei niillä ole myös nimenomaista juhlatila-tagia. Tämä estää esim. valokuvaajien 
-                    // (wedding_specialized) nousemisen juhlatiloiksi.
-                    if (isProfiledMatch) {
-                        if (opt.capacity_req > 0) {
-                            const cap = getCompanyCapacity(c, currentProfilingKey);
-                            const hasVenueTag = (c.tags || '').toLowerCase().includes('juhlatila') || 
-                                               (c.kategoria || '').toLowerCase().includes('juhlatila');
-                            if (cap === 0 && !hasVenueTag) return false;
-                        }
-                        return true;
+                    if (isProfiledMatch) return true;
+
+                    if (opt.capacity_req > 0 || requestedCapacity > 0) {
+                        const cap = getCompanyCapacity(c, currentProfilingKey);
+                        const hasVenueTag = (c.tags || '').toLowerCase().includes('juhlatila') || 
+                                           (c.kategoria || '').toLowerCase().includes('juhlatila');
+                        if (cap === 0 && !hasVenueTag && opt.capacity_req > 0) return false;
                     }
 
-                    // Jos tultiin suoraan etusivulta ilman steppejä tai valittiin vaihtoehto ilman tageja (esim. "Vain tilat")
-                    if (!opt.tags || opt.tags.length === 0) {
-                        if (filterProfiling) return true;
-                        return score > 10;
-                    }
-
-                    // Tapa 2: Tagit (toissijainen fallback, mutta pakollinen tarkemmissa askeleissa)
+                    if (!opt.tags || opt.tags.length === 0) return getFitsForScore(c, currentProfilingKey) > 10;
                     const companyContent = ((c.tags || '') + ' ' + (c.kategoria || '') + ' ' + (c.nimi || '')).toLowerCase();
                     return opt.tags.some(tag => companyContent.includes(tag.toLowerCase()));
                 });
-
-                console.log(`Found ${companiesForOpt.length} matches for ${opt.label}`);
-
+                
                 if (companiesForOpt.length > 0) {
-                    totalFound += companiesForOpt.length;
-
-                    // Tallennetaan tulostusta varten
-                    currentResultsGroups.push({ title: opt.label, companies: [...companiesForOpt] });
-
-                    // Lisätään ryhmän otsikko
-                    html += `<div class="group-title"><span>📍</span> ${opt.label}</div>`;
-
-                    // Lajitellaan: Profilointipisteet + kapasiteetti ensin, sitten Premiumit
-                    companiesForOpt.sort((a, b) => {
-                        let scoreA = (a.profiling?.core?.fits_for?.[currentProfilingKey] || 0);
-                        let scoreB = (b.profiling?.core?.fits_for?.[currentProfilingKey] || 0);
-
-                        // Kapasiteettibonukset: täysin sopiva tila saa lisäpisteitä
-                        if (requestedCapacity > 0) {
-                            const capA = getCompanyCapacity(a, currentProfilingKey);
-                            const capB = getCompanyCapacity(b, currentProfilingKey);
-                            if (capA >= requestedCapacity) scoreA += 40;
-                            if (capB >= requestedCapacity) scoreB += 40;
-                            // Liian pieni tila saa miinusta
-                            if (capA > 0 && capA < requestedCapacity) scoreA -= 20;
-                            if (capB > 0 && capB < requestedCapacity) scoreB -= 20;
-                        }
-
-                        if (requestedFeatures.sauna && a.profiling?.weddings_and_parties?.has_sauna) scoreA += 50;
-                        if (requestedFeatures.sauna && b.profiling?.weddings_and_parties?.has_sauna) scoreB += 50;
-                        if (requestedFeatures.accessible && a.profiling?.weddings_and_parties?.is_accessible) scoreA += 50;
-                        if (requestedFeatures.accessible && b.profiling?.weddings_and_parties?.is_accessible) scoreB += 50;
-                        if (requestedFeatures.home_service && a.profiling?.core?.home_service) scoreA += 50;
-                        if (requestedFeatures.home_service && b.profiling?.core?.home_service) scoreB += 50;
-
-                        if (scoreA !== scoreB) return scoreB - scoreA;
-
-                        const aType = (a.paketti || a.tyyppi || '').toLowerCase();
-                        const bType = (b.paketti || b.tyyppi || '').toLowerCase();
-                        const aIsPremium = aType.includes('premium') || aType.includes('pro');
-                        const bIsPremium = bType.includes('premium') || bType.includes('pro');
-                        if (aIsPremium && !bIsPremium) return -1;
-                        if (!aIsPremium && bIsPremium) return 1;
-
-                        // Etäisyys tie-breakerina
-                        const userCoordsRaw = localStorage.getItem('userCoords');
-                        if (userCoordsRaw) {
-                            try {
-                                const u = JSON.parse(userCoordsRaw);
-                                const distA = getHaversineDistance(u.lat, u.lng || u.lon, parseFloat(a.lat), parseFloat(a.lon || a.lng));
-                                const distB = getHaversineDistance(u.lat, u.lng || u.lon, parseFloat(b.lat), parseFloat(b.lon || b.lng));
-                                return distA - distB;
-                            } catch(e) {}
-                        }
-
-                        return 0;
-                    });
-
-                    // Lisätään yritykset
-                    companiesForOpt.forEach(c => {
-                        html += renderCompanyCard(c, requestedCapacity, currentProfilingKey);
-                    });
+                    companiesForOpt.forEach(c => allMatchingCompanies.add(c));
+                    matchingGroups.push({ opt, companies: companiesForOpt });
                 }
             });
 
-            // Lajitellaan lopullinen lista vielä etäisyyden mukaan, jos käyttäjällä on sijainti
-            // (Tämä on hieman monimutkaista, koska html on jo generoitu ryhmittäin)
-            // Muutetaan showResults logiikkaa niin, että se generoi koko listan ja lajittelee sen jos halutaan,
-            // mutta pidetään ryhmittely toistaiseksi.
+            // Partnership detection
+            const activeCollaboratorsSet = new Set();
+            allMatchingCompanies.forEach(c => {
+                const partners = getCompanyCollaborators(c);
+                partners.forEach(p => activeCollaboratorsSet.add(p));
+            });
 
-            if (totalFound === 0) {
-                if (countEl) countEl.textContent = "Valitettavasti valintoihisi sopivia yrityksiä ei löytynyt juuri nyt.";
-                if (list) list.innerHTML = '<div class="no-results"><h3>Hups!</h3><p>Kokeile aloittaa alusta ja valita eri vaihtoehtoja.</p></div>';
+            let totalFoundCount = 0;
+            let htmlResults = "";
+
+            matchingGroups.forEach(({ opt, companies: companiesForOpt }) => {
+                totalFoundCount += companiesForOpt.length;
+                htmlResults += `<div class="group-title"><span>📍</span> ${opt.label}</div>`;
+
+                companiesForOpt.sort((a, b) => {
+                    let scoreA = getFitsForScore(a, currentProfilingKey);
+                    let scoreB = getFitsForScore(b, currentProfilingKey);
+
+                    if (activeCollaboratorsSet.has(a.id) || activeCollaboratorsSet.has(a.nimi)) scoreA += 45;
+                    if (activeCollaboratorsSet.has(b.id) || activeCollaboratorsSet.has(b.nimi)) scoreB += 45;
+
+                    if (requestedCapacity > 0) {
+                        const capA = getCompanyCapacity(a, currentProfilingKey);
+                        const capB = getCompanyCapacity(b, currentProfilingKey);
+                        if (capA >= requestedCapacity) scoreA += 40;
+                        if (capB >= requestedCapacity) scoreB += 40;
+                        if (capA > 0 && capA < requestedCapacity) scoreA -= 20;
+                        if (capB > 0 && capB < requestedCapacity) scoreB -= 20;
+                    }
+
+                    const dataA = getCategoryData(a, currentProfilingKey);
+                    const dataB = getCategoryData(b, currentProfilingKey);
+                    if (requestedFeatures.sauna && dataA?.has_sauna) scoreA += 50;
+                    if (requestedFeatures.sauna && dataB?.has_sauna) scoreB += 50;
+                    if (requestedFeatures.accessible && dataA?.is_accessible) scoreA += 50;
+                    if (requestedFeatures.accessible && dataB?.is_accessible) scoreB += 50;
+                    if (requestedFeatures.home_service && a.profiling?.core?.home_service) scoreA += 50;
+                    if (requestedFeatures.home_service && b.profiling?.core?.home_service) scoreB += 50;
+
+                    if (scoreA !== scoreB) return scoreB - scoreA;
+                    
+                    const aIsPremium = (a.paketti || a.tyyppi || '').toLowerCase().match(/premium|pro/);
+                    const bIsPremium = (b.paketti || b.tyyppi || '').toLowerCase().match(/premium|pro/);
+                    if (aIsPremium && !bIsPremium) return -1;
+                    if (!aIsPremium && bIsPremium) return 1;
+
+                    const userCoordsRaw = localStorage.getItem('userCoords');
+                    if (userCoordsRaw) {
+                        try {
+                            const u = JSON.parse(userCoordsRaw);
+                            const distA = getHaversineDistance(u.lat, u.lng || u.lon, parseFloat(a.lat), parseFloat(a.lon || a.lng));
+                            const distB = getHaversineDistance(u.lat, u.lng || u.lon, parseFloat(b.lat), parseFloat(b.lon || b.lng));
+                            return distA - distB;
+                        } catch(e) {}
+                    }
+                    return 0;
+                });
+
+                companiesForOpt.forEach(c => {
+                    htmlResults += renderCompanyCard(c, requestedCapacity, currentProfilingKey, activeCollaboratorsSet);
+                });
+            });
+
+            if (totalFoundCount === 0) {
+                if (countEl) countEl.textContent = "Ei löytynyt sopivia yrityksiä.";
+                if (list) list.innerHTML = '<div class="no-results"><h3>Hups!</h3><p>Kokeile eri valintoja.</p></div>';
             } else {
-                if (countEl) countEl.textContent = `Löysimme yhteensä ${totalFound} ehdotusta valintoihisi perustuen.`;
-                if (list) list.innerHTML = html;
-                
-                // Näytetään seuraavat askeleet (Next Steps)
+                if (countEl) countEl.textContent = `Löysimme ${totalFoundCount} ehdotusta.`;
+                if (list) list.innerHTML = htmlResults;
                 renderNextSteps(currentProfilingKey);
             }
-            
             window.scrollTo({ top: resultsContainer ? resultsContainer.offsetTop - 100 : 0, behavior: 'smooth' });
         }
 
         function renderNextSteps(context) {
             const nextStepsContainer = document.getElementById('next-steps-container');
             const nextStepsList = document.getElementById('next-steps-list');
-            
-            // Kerätään suositukset yrityksiltä, jotka ovat Top Match tai Premium
             const recommendations = new Set();
-            const topCompanies = window.allCompanies.filter(c => {
-                const score = c.profiling?.core?.fits_for?.[context] || 0;
-                return score >= 70;
-            });
+            const topCompanies = window.allCompanies.filter(c => (c.profiling?.core?.fits_for?.[context] || 0) >= 70);
 
             topCompanies.forEach(c => {
                 const paired = c.profiling?.core?.paired_with_by_context?.[context] || [];
@@ -968,46 +892,28 @@
         }
 
         function searchNextStep(query) {
-            // Ohjataan yleiseen hakuun tai asiahakuun kyseisellä sanalla
             window.location.href = `asiahaku.html?haku=${encodeURIComponent(query)}`;
         }
 
-        // Apufunktio: haetaan yrityksen kapasiteetti oikeasta osiosta kontekstin perusteella
         function getCompanyCapacity(c, profilingKey) {
-            if (!c.profiling) return 0;
-            if (profilingKey === 'meetings_and_seminars') {
-                return c.profiling.meetings_and_seminars?.meeting_capacity ||
-                       c.profiling.meetings_and_seminars?.seminar_capacity || 0;
-            }
-            if (profilingKey === 'corporate_parties_and_events') {
-                return c.profiling.corporate_parties_and_events?.capacity_max || 0;
-            }
-            if (profilingKey === 'funerals_and_memorials') {
-                return c.profiling.funerals_and_memorials?.memorial_service_capacity || 0;
-            }
-            return c.profiling.weddings_and_parties?.capacity_max ||
-                   c.profiling.weddings_and_parties?.seated_capacity || 0;
+            const data = getCategoryData(c, profilingKey);
+            if (!data) return 0;
+            return data.capacity_max || data.meeting_capacity || data.seminar_capacity || data.seated_capacity || data.memorial_service_capacity || 0;
         }
 
-        function renderCompanyCard(c, requestedCapacity, profilingKey) {
+        function renderCompanyCard(c, requestedCapacity, profilingKey, collaboratorsSet) {
             const slug = typeof slugify === 'function' ? slugify(c.nimi) : c.nimi.toLowerCase().replace(/\s+/g, '-');
-            const isPremium = (c.paketti || c.tyyppi || '').toLowerCase().includes('premium');
-            const isPro = (c.paketti || c.tyyppi || '').toLowerCase().includes('pro');
-            
-            const cardUrl = (isPremium || isPro) 
-                ? `yritys/${slug}.html`
-                : `yrityskortti.html?id=${slug}`;
-
-            const icons = window.categoryIcons || (typeof categoryIcons !== 'undefined' ? categoryIcons : {});
+            const isPremium = (c.paketti || c.tyyppi || '').toLowerCase().match(/premium|pro/);
+            const cardUrl = isPremium ? `yritys/${slug}.html` : `yrityskortti.html?id=${slug}`;
+            const icons = window.categoryIcons || {};
             const icon = icons[c.kategoria] || '🏢';
 
-            // Profilointi-lisätiedot
             let badges = '';
-            let isTopMatch = false;
+            let isTopMatch = (getFitsForScore(c, profilingKey) >= 80);
+            let isPartner = collaboratorsSet && (collaboratorsSet.has(c.id) || collaboratorsSet.has(c.nimi));
             let capacityNote = '';
             let distanceHtml = '';
 
-            // Etäisyyslaskenta
             const userCoordsRaw = localStorage.getItem('userCoords');
             if (userCoordsRaw && c.lat && (c.lon || c.lng)) {
                 try {
@@ -1020,58 +926,32 @@
 
             if (c.profiling) {
                 const core = c.profiling.core || {};
-                const fits = core.fits_for || {};
-                
-                // Tarkistetaan onko "Top Match" (pisteet yli 80 tässä kontekstissa)
-                if (fits[profilingKey] >= 80) {
-                    isTopMatch = true;
-                }
-
-                // Kapasiteettimerkki — näytetään vain jos käyttäjä kysyi tilaa
                 if (requestedCapacity > 0) {
                     const cap = getCompanyCapacity(c, profilingKey);
                     if (cap > 0) {
-                        if (cap >= requestedCapacity) {
-                            capacityNote = `<div style="font-size:0.85rem; color:#16a34a; font-weight:700; margin-bottom:10px;">✅ Sopii: max n. ${cap} hlö</div>`;
-                        } else {
-                            capacityNote = `<div style="font-size:0.85rem; color:#d97706; font-weight:700; margin-bottom:10px;">⚠️ Huom: Tilaan mahtuu n. ${cap} hlö</div>`;
-                        }
+                        if (cap >= requestedCapacity) capacityNote = `<div style="font-size:0.85rem; color:#16a34a; font-weight:700; margin-bottom:10px;">✅ Sopii: max n. ${cap} hlö</div>`;
+                        else capacityNote = `<div style="font-size:0.85rem; color:#d97706; font-weight:700; margin-bottom:10px;">⚠️ Huom: Tilaan mahtuu n. ${cap} hlö</div>`;
                     }
                 }
-
-                // Ominaisuus-badget
-                if (c.profiling.events_and_celebrations?.is_accessible) badges += '<span title="Esteetön pääsy">♿</span>';
-                if (c.profiling.events_and_celebrations?.has_sauna) badges += '<span title="Sauna saatavilla">🧖</span>';
+                const catData = getCategoryData(c, profilingKey);
+                if (catData?.is_accessible) badges += '<span title="Esteetön pääsy">♿</span>';
+                if (catData?.has_sauna) badges += '<span title="Sauna saatavilla">🧖</span>';
                 if (core.home_service) badges += '<span title="Kotipalvelu">🏠</span>';
-                if (core.emergency_available) badges += '<span title="Päivystys / 24h">🚨</span>';
+                if (core.emergency_available) badges += '<span title="Päivystys">🚨</span>';
             }
 
             return `
-                <a href="${cardUrl}" class="company-result-card ${isTopMatch ? 'top-match' : ''}">
-                    ${isTopMatch ? '<div class="result-badge badge-top">TOP MATCH</div>' : ''}
-                    ${(isPremium || isPro) && !isTopMatch ? '<div class="result-badge badge-premium">PREMIUM</div>' : ''}
-                    
+                <a href="${cardUrl}" class="company-result-card ${isTopMatch ? 'top-match' : ''} ${isPartner ? 'partner-boost' : ''}">
+                    ${isPartner ? '<div class="result-badge badge-partner">YHTEISTYÖKUMPPANI</div>' : ''}
+                    ${isTopMatch && !isPartner ? '<div class="result-badge badge-top">TOP MATCH</div>' : ''}
+                    ${isPremium && !isTopMatch && !isPartner ? '<div class="result-badge badge-premium">PREMIUM</div>' : ''}
                     <div class="result-icon">${icon}</div>
-                    
                     <h3>${c.nimi}</h3>
                     <div class="slogan">${c.mainoslause || (c.esittely ? c.esittely.substring(0, 100) + '...' : 'Paikallinen palveluntarjoaja Laukaassa.')}</div>
-                    
                     ${capacityNote}
-                    
-                    <div class="card-meta">
-                        ${distanceHtml}
-                        <div class="feature-badges">
-                            ${badges}
-                        </div>
-                    </div>
-                    
-                    <div class="match-explanation">
-                        ${getMatchExplanation(c, requestedCapacity, profilingKey)}
-                    </div>
-                    
-                    <div class="card-arrow">
-                        Katso lisätiedot &raquo;
-                    </div>
+                    <div class="card-meta">${distanceHtml}<div class="feature-badges">${badges}</div></div>
+                    <div class="match-explanation">${getMatchExplanation(c, requestedCapacity, profilingKey)}</div>
+                    <div class="card-arrow">Katso lisätiedot &raquo;</div>
                 </a>
             `;
         }

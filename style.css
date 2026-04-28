@@ -5046,6 +5046,16 @@ footer {
     height: 8px;
 }
 
+.company-result-card.partner-boost {
+    border: 2px solid #10b981;
+    background: linear-gradient(to bottom right, #f0fdf4, #ffffff);
+}
+
+.company-result-card.partner-boost::before {
+    background: #10b981;
+    height: 8px;
+}
+
 .result-badge {
     position: absolute;
     top: 15px;
@@ -5056,6 +5066,12 @@ footer {
     border-radius: 12px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+}
+
+.badge-partner {
+    background: #10b981 !important;
+    color: white !important;
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
 }
 
 .badge-top { background: #ff9900; color: white; box-shadow: 0 4px 10px rgba(255, 153, 0, 0.3); }

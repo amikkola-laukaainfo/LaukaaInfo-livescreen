@@ -3,7 +3,7 @@ const NEEDS_CONFIG = {
         "title": "Häät",
         "icon": "💒",
         "description": "Suunnittele unelmiesi häät Laukaassa. Löydä tilat, tarjoilut ja elämykset.",
-        "profilointi_context": "weddings_and_parties",
+        "profilointi_context": "events_and_celebrations",
         "steps": [
             {
                 "id": "tarkennus",
@@ -31,13 +31,13 @@ const NEEDS_CONFIG = {
                 "options": [
                     { "label": "Juhlatila (iso)", "tags": ["juhlatila"], "capacity_req": 100 },
                     { "label": "Tunnelmallinen kartano", "tags": ["kartano", "juhlatila"], "capacity_req": 50 },
-                    { "label": "Luonnonläheinen tila", "tags": ["luonto", "juhlatila"], "capacity_req": 30, "profilointi_filter": { "section": "weddings_and_parties", "field": "refinement_tags", "value": "ranta" } }
+                    { "label": "Luonnonläheinen tila", "tags": ["luonto", "juhlatila"], "capacity_req": 30, "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "ranta" } }
                 ]
             },
             {
                 "id": "pitopalvelu",
                 "question": "Tarvitsetko pitopalvelun?",
-                "skipIf": "getSelectedCompanyProfilointi('tila', 'weddings_and_parties', 'catering_available')",
+                "skipIf": "getSelectedCompanyProfilointi('tila', 'events_and_celebrations', 'catering_available')",
                 "skipMessage": "Valitsemassasi tilassa on oma catering — pitopalvelu sisältyy.",
                 "options": [
                     { "label": "Kyllä — tarvitsen pitopalvelun", "tags": ["pitopalvelu"] },
@@ -50,17 +50,17 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": "Mitä muita palveluita tarvitset juhlatpäivään?",
                 "options": [
-                    { "label": "Valokuvaaja", "tags": ["valokuvaus"], "profilointi_filter": { "section": "weddings_and_parties", "field": "refinement_tags", "value": "valokuvaus" } },
-                    { "label": "Videokuvaaja", "tags": ["videotuotanto"], "profilointi_filter": { "section": "weddings_and_parties", "field": "digitization_features", "value": "häävideot" } },
+                    { "label": "Valokuvaaja", "tags": ["valokuvaus"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "valokuvaus" } },
+                    { "label": "Videokuvaaja", "tags": ["videotuotanto"], "profilointi_filter": { "section": "events_and_celebrations", "field": "digitization_features", "value": "häävideot" } },
                     { "label": "Kukkakauppa & Koristelu", "tags": ["kukkakauppa"] },
-                    { "label": "Musiikki tai DJ", "tags": ["musiikki", "ohjelmapalvelut"], "profilointi_filter": { "section": "weddings_and_parties", "field": "entertainment_features", "value": "musiikki" } }
+                    { "label": "Musiikki tai DJ", "tags": ["musiikki", "ohjelmapalvelut"], "profilointi_filter": { "section": "events_and_celebrations", "field": "entertainment_features", "value": "musiikki" } }
                 ]
             },
             {
                 "id": "vieraat",
                 "multiple": true,
                 "question": "Tarpeet vieraiden mukavuuteen?",
-                "skipIf": "getSelectedCompanyProfilointi('tila', 'weddings_and_parties', 'accommodation_available')",
+                "skipIf": "getSelectedCompanyProfilointi('tila', 'events_and_celebrations', 'accommodation_available')",
                 "skipMessage": "Valitsemassasi tilassa majoitus sisältyy pakettiin — ei tarvetta erikseen.",
                 "options": [
                     { "label": "Majoitus vieraille", "tags": ["majoitus"] },
@@ -73,8 +73,8 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": "Haluaisitko ikuistaa päivän digitaalisesti tai tarvitsetko muita digitointipalveluita?",
                 "options": [
-                    { "label": "Häävideon editointi / Koostepalvelu", "tags": ["videotuotanto"], "profilointi_filter": { "section": "weddings_and_parties", "field": "digitization_features", "value": "häävideoiden editointi" } },
-                    { "label": "Drone-kuvaus", "tags": ["drone"], "profilointi_filter": { "section": "weddings_and_parties", "field": "digitization_features", "value": "dronevideoiden editointi" } },
+                    { "label": "Häävideon editointi / Koostepalvelu", "tags": ["videotuotanto"], "profilointi_filter": { "section": "events_and_celebrations", "field": "digitization_features", "value": "häävideoiden editointi" } },
+                    { "label": "Drone-kuvaus", "tags": ["drone"], "profilointi_filter": { "section": "events_and_celebrations", "field": "digitization_features", "value": "dronevideoiden editointi" } },
                     { "label": "Digitointipalvelut (kuvat, videot ym.)", "tags": ["digitointi"] }
                 ]
             },
@@ -84,9 +84,9 @@ const NEEDS_CONFIG = {
                 "question": "Mitä haluaisit digitoida juhlaesitystä varten?",
                 "skipIf": "!isSelected('tallennus_ja_muistot', 'digitointi')",
                 "options": [
-                    { "label": "Vanhojen valokuvien digitointi", "tags": ["digitointi"], "profilointi_filter": { "section": "weddings_and_parties", "field": "digitization_features", "value": "vanhojen valokuvien digitointi" } },
-                    { "label": "VHS- tai DVD-materiaalin digitointi", "tags": ["digitointi"], "profilointi_filter": { "section": "weddings_and_parties", "field": "digitization_features", "value": "VHS / DVD digitointi" } },
-                    { "label": "Asiakirjojen tai kirjeiden digitointi", "tags": ["digitointi"], "profilointi_filter": { "section": "weddings_and_parties", "field": "digitization_features", "value": "paperiarkistojen digitointi" } }
+                    { "label": "Vanhojen valokuvien digitointi", "tags": ["digitointi"], "profilointi_filter": { "section": "events_and_celebrations", "field": "digitization_features", "value": "vanhojen valokuvien digitointi" } },
+                    { "label": "VHS- tai DVD-materiaalin digitointi", "tags": ["digitointi"], "profilointi_filter": { "section": "events_and_celebrations", "field": "digitization_features", "value": "VHS / DVD digitointi" } },
+                    { "label": "Asiakirjojen tai kirjeiden digitointi", "tags": ["digitointi"], "profilointi_filter": { "section": "events_and_celebrations", "field": "digitization_features", "value": "paperiarkistojen digitointi" } }
                 ]
             }
         ]
@@ -95,7 +95,7 @@ const NEEDS_CONFIG = {
         "title": "Yritysjuhlat",
         "icon": "🥂",
         "description": "Järjestä onnistuneet henkilöstöjuhlat, pikkujoulut tai asiakastilaisuudet.",
-        "profilointi_context": "corporate_parties_and_events",
+        "profilointi_context": "events_and_celebrations",
         "steps": [
             {
                 "id": "tarkennus",
@@ -125,10 +125,10 @@ const NEEDS_CONFIG = {
                     { "label": "Pitopalvelu", "tags": ["pitopalvelu"] },
                     { "label": "Majoitus", "tags": ["majoitus"] },
                     { "label": "Kuljetukset", "tags": ["kuljetus", "taksi"] },
-                    { "label": "Videokuvaaja / Tapahtumavideointi", "tags": ["videotuotanto"], "profilointi_filter": { "section": "corporate_parties_and_events", "field": "refinement_tags", "value": "tapahtumavideointi" } },
-                    { "label": "Saunatilat", "tags": ["saunatilat"], "profilointi_filter": { "section": "corporate_parties_and_events", "field": "refinement_tags", "value": "sauna" } },
+                    { "label": "Videokuvaaja / Tapahtumavideointi", "tags": ["videotuotanto"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "tapahtumavideointi" } },
+                    { "label": "Saunatilat", "tags": ["saunatilat"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "sauna" } },
                     { "label": "Ohjelmapalvelut / Elämykset", "tags": ["ohjelmapalvelut"] },
-                    { "label": "AV-tekniikka & Äänentoisto", "tags": ["it-palvelut"], "profilointi_filter": { "section": "corporate_parties_and_events", "field": "has_av_tech", "value": true } }
+                    { "label": "AV-tekniikka & Äänentoisto", "tags": ["it-palvelut"], "profilointi_filter": { "section": "events_and_celebrations", "field": "has_av_tech", "value": true } }
                 ]
             },
             {
@@ -147,7 +147,7 @@ const NEEDS_CONFIG = {
         "title": "Yritystilaisuudet",
         "icon": "💼",
         "description": "Kokoukset, seminaarit ja koulutukset ammattimaisessa ympäristössä.",
-        "profilointi_context": "meetings_and_seminars",
+        "profilointi_context": "business_events",
         "steps": [
             {
                 "id": "tarkennus",
@@ -185,7 +185,7 @@ const NEEDS_CONFIG = {
                 "options": [
                     { "label": "Majoitus", "tags": ["majoitus"] },
                     { "label": "Yrityslahjat", "tags": ["yrityslahjat", "lahjatavarat"] },
-                    { "label": "IT-tuki / AV-tekniikka", "tags": ["it-palvelut"], "profilointi_filter": { "section": "meetings_and_seminars", "field": "has_projector", "value": true } }
+                    { "label": "IT-tuki / AV-tekniikka", "tags": ["it-palvelut"], "profilointi_filter": { "section": "business_events", "field": "has_projector", "value": true } }
                 ]
             }
         ]
@@ -194,7 +194,7 @@ const NEEDS_CONFIG = {
         "title": "Syntymäpäivät",
         "icon": "🎂",
         "description": "Järjestä ikimuistoiset syntymäpäivät kaikenikäisille.",
-        "profilointi_context": "weddings_and_parties",
+        "profilointi_context": "events_and_celebrations",
         "steps": [
             {
                 "id": "tarkennus",
@@ -230,11 +230,11 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": "Mitä tarvitaan onnistuneisiin juhliin?",
                 "options": [
-                    { "label": "Pitopalvelu / Ruoat", "tags": ["pitopalvelu"], "profilointi_filter": { "section": "weddings_and_parties", "field": "catering_available", "value": true } },
-                    { "label": "Kakut / Leivonnaiset", "tags": ["leipomo", "elintarvike"], "profilointi_filter": { "section": "weddings_and_parties", "field": "refinement_tags", "value": "kakut" } },
-                    { "label": "Ohjelma / Esiintyjä", "tags": ["ohjelmapalvelut"], "profilointi_filter": { "section": "weddings_and_parties", "field": "entertainment_features", "value": "ohjelma" } },
-                    { "label": "Valokuvaus", "tags": ["valokuvaus"] },
-                    { "label": "Videokuvaus", "tags": ["videotuotanto"], "profilointi_filter": { "section": "weddings_and_parties", "field": "digitization_features", "value": "videokuvaus" } },
+                    { "label": "Pitopalvelu / Ruoat", "tags": ["pitopalvelu"], "profilointi_filter": { "section": "events_and_celebrations", "field": "catering_available", "value": true } },
+                    { "label": "Kakut / Leivonnaiset", "tags": ["leipomo", "elintarvike"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "kakut" } },
+                    { "label": "Ohjelma / Esiintyjä", "tags": ["ohjelmapalvelut"], "profilointi_filter": { "section": "events_and_celebrations", "field": "entertainment_features", "value": "ohjelma" } },
+                    { "label": "Valokuvaaus", "tags": ["valokuvaus"] },
+                    { "label": "Videokuvaus", "tags": ["videotuotanto"], "profilointi_filter": { "section": "events_and_celebrations", "field": "digitization_features", "value": "videokuvaus" } },
                     { "label": "Kukat", "tags": ["kukkakauppa"] }
                 ]
             }
@@ -280,7 +280,7 @@ const NEEDS_CONFIG = {
         "title": "Remontti",
         "icon": "🔨",
         "description": "Löydä tekijät ja tarvikkeet kodin tai toimitilan uudistukseen.",
-        "profilointi_context": "construction_and_renovation",
+        "profilointi_context": "construction_and_maintenance",
         "steps": [
             {
                 "id": "tarkennus",
@@ -298,7 +298,7 @@ const NEEDS_CONFIG = {
                 "question": "Millaista ammattilaista etsit?",
                 "options": [
                     { "label": "Rakennus- / Remonttimies", "tags": ["rakentaminen", "rakennustyöt"] },
-                    { "label": "Sähköasentaja", "tags": ["sähköasennukset"], "profilointi_filter": { "section": "construction_and_renovation", "field": "refinement_tags", "value": "sähkötyöt" } },
+                    { "label": "Sähköasentaja", "tags": ["sähköasennukset"], "profilointi_filter": { "section": "construction_and_maintenance", "field": "refinement_tags", "value": "sähkötyöt" } },
                     { "label": "LVI-asentaja (Putkimies)", "tags": ["LVI"] },
                     { "label": "Maalari / Tapetoija", "tags": ["maalaustyöt"] },
                     { "label": "Suunnittelija / Arkkitehti", "tags": ["suunnittelutoimisto"] }
@@ -358,7 +358,7 @@ const NEEDS_CONFIG = {
         "title": "Taloyhtiön huolto",
         "icon": "🏢",
         "description": "Ammattitaitoiset kumppanit taloyhtiöille.",
-        "profilointi_context": "housing_companies_and_real_estate",
+        "profilointi_context": "housing_company_and_contracts",
         "steps": [
             {
                 "id": "tarkennus",
@@ -383,7 +383,7 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": "Kunnossapito ja tekniset palvelut?",
                 "options": [
-                    { "label": "Kiinteistöhuolto", "tags": ["kiinteistöhuolto"], "profilointi_filter": { "section": "housing_companies_and_real_estate", "field": "housing_company_specialized", "value": true } },
+                    { "label": "Kiinteistöhuolto", "tags": ["kiinteistöhuolto"], "profilointi_filter": { "section": "housing_company_and_contracts", "field": "housing_company_specialized", "value": true } },
                     { "label": "Siivouspalvelut", "tags": ["siivous"] },
                     { "label": "Nuohous", "tags": ["nuohouspalvelut"] },
                     { "label": "LVI- ja sähköhuolto", "tags": ["LVI", "sähköasennukset"] },
@@ -497,7 +497,7 @@ const NEEDS_CONFIG = {
         "title": "Yrityksen perustaminen",
         "icon": "🚀",
         "description": "Kaikki tarvittava uuden yrityksen starttiin.",
-        "profilointi_context": "starting_a_business",
+        "profilointi_context": "startup_services",
         "steps": [
             {
                 "id": "tarkennus",
@@ -513,10 +513,10 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": "Alkuvaiheen hallinto?",
                 "options": [
-                    { "label": "Yritysneuvonta / Liiketoimintasuunnitelma", "tags": ["yritysneuvonta", "konsultointi"], "profilointi_filter": { "section": "starting_a_business", "field": "business_advisory", "value": true } },
-                    { "label": "Kirjanpito ja tilitoimisto", "tags": ["tilitoimisto"], "profilointi_filter": { "section": "starting_a_business", "field": "bookkeeping_available", "value": true } },
-                    { "label": "Vakuutukset", "tags": ["vakuutus"], "profilointi_filter": { "section": "starting_a_business", "field": "refinement_tags", "value": "vakuutukset" } },
-                    { "label": "Lakipalvelut", "tags": ["lakiasiaintoimistot"], "profilointi_filter": { "section": "starting_a_business", "field": "refinement_tags", "value": "lakipalvelut" } }
+                    { "label": "Yritysneuvonta / Liiketoimintasuunnitelma", "tags": ["yritysneuvonta", "konsultointi"], "profilointi_filter": { "section": "startup_services", "field": "business_advisory", "value": true } },
+                    { "label": "Kirjanpito ja tilitoimisto", "tags": ["tilitoimisto"], "profilointi_filter": { "section": "startup_services", "field": "bookkeeping_available", "value": true } },
+                    { "label": "Vakuutukset", "tags": ["vakuutus"], "profilointi_filter": { "section": "startup_services", "field": "refinement_tags", "value": "vakuutukset" } },
+                    { "label": "Lakipalvelut", "tags": ["lakiasiaintoimistot"], "profilointi_filter": { "section": "startup_services", "field": "refinement_tags", "value": "lakipalvelut" } }
                 ]
             },
             {
@@ -524,10 +524,10 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": "Markkinointi ja näkyvyys?",
                 "options": [
-                    { "label": "Verkkosivut / Domain", "tags": ["verkkosivut", "it-palvelut"], "profilointi_filter": { "section": "business_growth_and_dev", "field": "website_dev", "value": true } },
-                    { "label": "Logo ja brändäys", "tags": ["mainostoimisto", "graafiset palvelut"], "profilointi_filter": { "section": "starting_a_business", "field": "refinement_tags", "value": "brändäys" } },
+                    { "label": "Verkkosivut / Domain", "tags": ["verkkosivut", "it-palvelut"], "profilointi_filter": { "section": "business_growth", "field": "website_dev", "value": true } },
+                    { "label": "Logo ja brändäys", "tags": ["mainostoimisto", "graafiset palvelut"], "profilointi_filter": { "section": "startup_services", "field": "refinement_tags", "value": "brändäys" } },
                     { "label": "Somemainonta ja Google-näkyvyys", "tags": ["somemainonta", "google-mainonta", "mainostoimisto"] },
-                    { "label": "Valokuvaus / Yrityskuvat", "tags": ["valokuvaus"], "profilointi_filter": { "section": "starting_a_business", "field": "refinement_tags", "value": "yrityskuvat" } }
+                    { "label": "Valokuvaus / Yrityskuvat", "tags": ["valokuvaus"], "profilointi_filter": { "section": "startup_services", "field": "refinement_tags", "value": "yrityskuvat" } }
                 ]
             }
         ]
@@ -536,7 +536,7 @@ const NEEDS_CONFIG = {
         "title": "Yrityksen kehittäminen",
         "icon": "📈",
         "description": "Vie yrityksesi seuraavalle tasolle kasvun avulla.",
-        "profilointi_context": "business_growth_and_dev",
+        "profilointi_context": "business_growth",
         "steps": [
             {
                 "id": "tarkennus",
@@ -552,10 +552,10 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": "Lisää myyntiä ja tunnettuutta?",
                 "options": [
-                    { "label": "Google-mainonta / SEO", "tags": ["google-mainonta", "mainostoimisto"], "profilointi_filter": { "section": "business_growth_and_dev", "field": "marketing_services", "value": true } },
-                    { "label": "Sosiaalisen median markkinointi", "tags": ["somemainonta", "mainostoimisto"], "profilointi_filter": { "section": "business_growth_and_dev", "field": "marketing_services", "value": true } },
+                    { "label": "Google-mainonta / SEO", "tags": ["google-mainonta", "mainostoimisto"], "profilointi_filter": { "section": "business_growth", "field": "marketing_services", "value": true } },
+                    { "label": "Sosiaalisen median markkinointi", "tags": ["somemainonta", "mainostoimisto"], "profilointi_filter": { "section": "business_growth", "field": "marketing_services", "value": true } },
                     { "label": "Verkkokaupan rakentaminen", "tags": ["verkkokauppa", "it-palvelut"] },
-                    { "label": "Videotuotanto / Mainosvideot", "tags": ["videotuotanto"], "profilointi_filter": { "section": "business_growth_and_dev", "field": "refinement_tags", "value": "videotuotanto" } }
+                    { "label": "Videotuotanto / Mainosvideot", "tags": ["videotuotanto"], "profilointi_filter": { "section": "business_growth", "field": "refinement_tags", "value": "videotuotanto" } }
                 ]
             },
             {
@@ -563,9 +563,9 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": "Resurssit ja osaaminen?",
                 "options": [
-                    { "label": "Rekrytointipalvelut", "tags": ["henkilöstöpalvelut"], "profilointi_filter": { "section": "business_growth_and_dev", "field": "refinement_tags", "value": "rekrytointi" } },
+                    { "label": "Rekrytointipalvelut", "tags": ["henkilöstöpalvelut"], "profilointi_filter": { "section": "business_growth", "field": "refinement_tags", "value": "rekrytointi" } },
                     { "label": "Henkilöstön koulutus", "tags": ["koulutus"] },
-                    { "label": "Liikkeenjohdon konsultointi", "tags": ["konsultointi"], "profilointi_filter": { "section": "business_growth_and_dev", "field": "sales_coaching", "value": true } }
+                    { "label": "Liikkeenjohdon konsultointi", "tags": ["konsultointi"], "profilointi_filter": { "section": "business_growth", "field": "sales_coaching", "value": true } }
                 ]
             }
         ]
@@ -574,6 +574,7 @@ const NEEDS_CONFIG = {
         "title": "Vakituinen palvelukumppani",
         "icon": "🤝",
         "description": "Etsitkö jatkuvaa kumppania helpottamaan arkea?",
+        "profilointi_context": "vapaa-aika",
         "steps": [
             {
                 "id": "ala",
@@ -591,6 +592,7 @@ const NEEDS_CONFIG = {
         "title": "Kiinteistöpalvelut",
         "icon": "🏘️",
         "description": "Huolenpitoa ja arvoa kiinteistöllesi.",
+        "profilointi_context": "housing_company_and_contracts",
         "steps": [
             {
                 "id": "huoltopalvelu",
@@ -609,13 +611,14 @@ const NEEDS_CONFIG = {
         "title": "Päivystävät palvelut",
         "icon": "🚨",
         "description": "Apu lähellä silloin kun sitä tarvitaan kiireellisesti.",
+        "profilointi_context": "construction_and_maintenance",
         "steps": [
             {
                 "id": "kiireellinen",
                 "question": "Mikä hätänä?",
                 "options": [
-                    { "label": "LVI- tai putkipäivystys", "tags": ["LVI", "päivystys"], "profilointi_filter": { "section": "construction_and_renovation", "field": "emergency_service", "value": true } },
-                    { "label": "Sähköpäivystys", "tags": ["sähköasennukset", "päivystys"], "profilointi_filter": { "section": "construction_and_renovation", "field": "emergency_service", "value": true } },
+                    { "label": "LVI- tai putkipäivystys", "tags": ["LVI", "päivystys"], "profilointi_filter": { "section": "construction_and_maintenance", "field": "emergency_service", "value": true } },
+                    { "label": "Sähköpäivystys", "tags": ["sähköasennukset", "päivystys"], "profilointi_filter": { "section": "construction_and_maintenance", "field": "emergency_service", "value": true } },
                     { "label": "Hinaus ja tiepalvelu", "tags": ["hinaus"] },
                     { "label": "Lukkoseppä (avaimet hukkuneet)", "tags": ["lukkoseppä", "päivystys"] }
                 ]
@@ -656,6 +659,7 @@ const NEEDS_CONFIG = {
         "title": "Liikunta ja vapaa-aika",
         "icon": "⚽",
         "description": "Harrastuksia ja liikuntaa kaikenikäisille.",
+        "profilointi_context": "wellbeing_and_beauty",
         "steps": [
             {
                 "id": "tyyppi",
@@ -683,6 +687,7 @@ const NEEDS_CONFIG = {
         "title": "Eläimet ja lemmikit",
         "icon": "🐾",
         "description": "Kaikki lemmikkisi parhaaksi.",
+        "profilointi_context": "wellbeing_and_beauty",
         "steps": [
             {
                 "id": "tarve",
@@ -711,6 +716,7 @@ const NEEDS_CONFIG = {
         "title": "Lapset ja perhe",
         "icon": "👶",
         "description": "Arjen tukea ja harrastuksia lapsiperheille.",
+        "profilointi_context": "wellbeing_and_beauty",
         "steps": [
             {
                 "id": "palvelut",
