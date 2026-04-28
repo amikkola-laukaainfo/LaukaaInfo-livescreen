@@ -586,6 +586,12 @@
                 return !!selections[stepId];
             });
 
+            // 3.5 Lisätään tuki hasNodeLink('stepId', 'nodeId') -kutsulle
+            const nodeLinkRegex = /hasNodeLink\('([^']+)',\s*'([^']+)'\)/g;
+            evalStr = evalStr.replace(nodeLinkRegex, (match, stepId, nodeId) => {
+                return hasSelectedCompanyNodeLink(stepId, nodeId);
+            });
+
             // 4. Suoritetaan looginen arviointi turvallisesti
             try {
                 // Sallitaan vain perus-boolean-logiikka
@@ -604,6 +610,17 @@
             const opt = Array.isArray(sel) ? sel[0] : sel;
             if (!opt || !opt._companyRef) return false;
             return opt._companyRef?.profiling?.[section]?.[field] === true;
+        }
+
+        // Tarkistaa onko valitulla yrityksellä tietty node_link
+        function hasSelectedCompanyNodeLink(stepId, nodeId) {
+            const sel = selections[stepId];
+            if (!sel) return false;
+            const opt = Array.isArray(sel) ? sel[0] : sel;
+            const company = opt._companyRef;
+            if (!company || !company.profiling || !company.profiling.core) return false;
+            const links = company.profiling.core.node_links || [];
+            return links.includes(nodeId);
         }
 
         // Näytetään lyhyt ilmoitus kun askel hypytään
@@ -760,6 +777,18 @@
                     }
 
                     let isProfiledMatch = false;
+                    
+                    // 1. Check explicit node_links if defined in option
+                    if (opt.node_link) {
+                        const links = c.profiling?.core?.node_links || [];
+                        if (links.includes(opt.node_link)) isProfiledMatch = true;
+                    }
+                    if (opt.node_links) {
+                        const links = c.profiling?.core?.node_links || [];
+                        if (opt.node_links.some(l => links.includes(l))) isProfiledMatch = true;
+                    }
+
+                    // 2. Check traditional profiling_filter
                     if (opt.profilointi_filter) {
                         const pf = opt.profilointi_filter;
                         const catData = getCategoryData(c, pf.section);
@@ -770,7 +799,23 @@
                                 if (Object.keys(actualVal).includes(pf.value)) match = true;
                                 else match = Object.values(actualVal).some(arr => Array.isArray(arr) && arr.includes(pf.value));
                             }
-                            if (match) isProfiledMatch = true; else return false;
+                            if (match) isProfiledMatch = true; else if (!isProfiledMatch) return false;
+                        }
+                    }
+
+                    // 3. Fallback: Automated profiling check for common tags (like digitointi)
+                    if (!isProfiledMatch && opt.tags) {
+                        if (opt.tags.includes('digitointi')) {
+                            const catData = getCategoryData(c, currentProfilingKey);
+                            if (catData && Array.isArray(catData.digitization_features) && catData.digitization_features.length > 0) {
+                                isProfiledMatch = true;
+                            }
+                        }
+                        if (opt.tags.includes('juhlatila')) {
+                            const catData = getCategoryData(c, 'events_and_celebrations');
+                            if (catData && (catData.capacity_max > 0 || catData.seated_capacity > 0 || catData.wedding_specialized)) {
+                                isProfiledMatch = true;
+                            }
                         }
                     }
 
