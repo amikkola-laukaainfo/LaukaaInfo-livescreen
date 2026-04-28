@@ -703,9 +703,15 @@
                             'terveys-ja-hyvinvointi': 'terveys'
                         };
                         const currentContextName = needIdToContextName[currentNeedId] || currentNeedId;
-                        const notSuitable = c.profiling?.core?.not_suitable_for;
-                        if (Array.isArray(notSuitable) && notSuitable.includes(currentContextName)) {
-                            return false;
+                        const notSuitable = c.profiling?.core?.not_suitable_for || [];
+                        if (Array.isArray(notSuitable)) {
+                            // Estä jos koko pääkonteksti on kielletty
+                            if (notSuitable.includes(currentContextName)) return false;
+                            
+                            // Estä jos jokin valitun vaihtoehdon tageista on kiellettyjen listalla
+                            if (opt.tags && opt.tags.some(tag => notSuitable.includes(tag.toLowerCase()))) {
+                                return false;
+                            }
                         }
 
                         // TASO 2: Sub-contexts filter (Siltana)
