@@ -4992,6 +4992,155 @@ footer {
     transform: scale(1.2);
 }
 
+/* Company Result Cards (for palvelu.html) */
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.company-result-card {
+    background: white;
+    border-radius: 24px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: var(--dark-text);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eef2f6;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+}
+
+.company-result-card:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 20px 40px rgba(0, 75, 160, 0.12);
+    border-color: var(--primary-blue);
+}
+
+.company-result-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: #eef2f6;
+    transition: background 0.3s;
+}
+
+.company-result-card:hover::before {
+    background: var(--primary-blue);
+}
+
+.company-result-card.top-match {
+    border: 2px solid #ff9900;
+}
+
+.company-result-card.top-match::before {
+    background: #ff9900;
+    height: 8px;
+}
+
+.result-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-top { background: #ff9900; color: white; box-shadow: 0 4px 10px rgba(255, 153, 0, 0.3); }
+.badge-premium { background: #ffd700; color: #856404; box-shadow: 0 4px 10px rgba(255, 215, 0, 0.3); }
+
+.company-result-card .result-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    background: #f8fafc;
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.company-result-card:hover .result-icon {
+    background: var(--light-blue);
+    transform: scale(1.1) rotate(5deg);
+}
+
+.company-result-card h3 {
+    font-family: var(--heading-font);
+    font-size: 1.6rem;
+    color: var(--primary-blue);
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.company-result-card .slogan {
+    font-size: 1rem;
+    color: #64748b;
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+    flex-grow: 1;
+}
+
+.company-result-card .card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 1.5rem;
+    border-top: 1px solid #f1f5f9;
+}
+
+.company-result-card .dist-badge {
+    background: #f1f5f9;
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #475569;
+}
+
+.company-result-card .feature-badges {
+    display: flex;
+    gap: 8px;
+}
+
+.company-result-card .match-explanation {
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    font-style: italic;
+}
+
+.company-result-card .card-arrow {
+    margin-top: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    color: var(--primary-blue);
+    font-size: 0.9rem;
+    transition: gap 0.3s;
+}
+
+.company-result-card:hover .card-arrow {
+    gap: 12px;
+}
+
 /* Multi-step UI */
 .step-container {
     max-width: 800px;
