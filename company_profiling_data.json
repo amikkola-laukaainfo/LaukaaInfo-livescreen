@@ -1738,9 +1738,11 @@
                     ],
                     "häät": [
                         "häävideot",
-                        "valokuvaus",
                         "häävideoiden editointi",
-                        "hääkoosteet"
+                        "hääkoosteet",
+                        "valokuvaaja",
+                        "videokuvaaja",
+                        "digitointi"
                     ],
                     "digitointi": [
                         "digitointi",
@@ -1955,7 +1957,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-28T14:51:25.977Z",
+                "last_updated": "2026-04-28T19:07:43.805Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
