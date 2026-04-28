@@ -731,7 +731,12 @@
 
             selectedOptions.forEach(opt => {
                 if (opt.capacity_req) requestedCapacity = Math.max(requestedCapacity, opt.capacity_req);
-                else featureOptions.push(opt);
+                
+                // Lisätään featureOptionseihin jos siinä on merkityksellistä suodatettavaa 
+                // (tägejä, node_linkki tai filtteri) - vaikka olisi myös kapasiteettivaatimus.
+                if ((opt.tags && opt.tags.length > 0) || opt.node_link || opt.node_links || opt.profilointi_filter) {
+                    featureOptions.push(opt);
+                }
             });
 
             if (featureOptions.length === 0 && requestedCapacity > 0) {
@@ -792,14 +797,16 @@
                     if (opt.profilointi_filter) {
                         const pf = opt.profilointi_filter;
                         const catData = getCategoryData(c, pf.section);
-                        const actualVal = catData ? catData[pf.field] : undefined;
                         if (catData !== undefined) {
+                            const actualVal = catData[pf.field];
                             let match = (actualVal === pf.value) || (Array.isArray(actualVal) && actualVal.includes(pf.value));
                             if (!match && typeof actualVal === 'object' && actualVal !== null) {
                                 if (Object.keys(actualVal).includes(pf.value)) match = true;
                                 else match = Object.values(actualVal).some(arr => Array.isArray(arr) && arr.includes(pf.value));
                             }
-                            if (match) isProfiledMatch = true; else if (!isProfiledMatch) return false;
+                            if (match) isProfiledMatch = true;
+                            // Note: We don't return false here anymore to allow tag-based fallback
+                            // if the explicit profile data is missing but tags exist.
                         }
                     }
 
