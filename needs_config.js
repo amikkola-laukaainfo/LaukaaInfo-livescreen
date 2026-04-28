@@ -6,6 +6,11 @@ const NEEDS_CONFIG = {
         "profilointi_context": "häät",
         "steps": [
             {
+                "id": "sijainti",
+                "question": "Missä tarvitset palvelua?",
+                "type": "location_input"
+            },
+            {
                 "id": "tarkennus",
                 "question": "Millaista hääjuhlaa suunnittelette?",
                 "options": [
@@ -86,6 +91,11 @@ const NEEDS_CONFIG = {
         "profilointi_context": "yritysjuhlat",
         "steps": [
             {
+                "id": "sijainti",
+                "question": "Missä tarvitset palvelua?",
+                "type": "location_input"
+            },
+            {
                 "id": "tarkennus",
                 "question": "Millaista tilaisuutta olet järjestämässä?",
                 "options": [
@@ -137,6 +147,11 @@ const NEEDS_CONFIG = {
         "profilointi_context": "kokoukset",
         "steps": [
             {
+                "id": "sijainti",
+                "question": "Missä tarvitset palvelua?",
+                "type": "location_input"
+            },
+            {
                 "id": "tarkennus",
                 "question": "Millaista tilaa tarvitsette?",
                 "options": [
@@ -183,6 +198,11 @@ const NEEDS_CONFIG = {
         "description": "Järjestä ikimuistoiset syntymäpäivät kaikenikäisille.",
         "profilointi_context": "syntymäpäivät",
         "steps": [
+            {
+                "id": "sijainti",
+                "question": "Missä tarvitset palvelua?",
+                "type": "location_input"
+            },
             {
                 "id": "tarkennus",
                 "question": "Kenen juhlia järjestetään?",
@@ -233,6 +253,11 @@ const NEEDS_CONFIG = {
         "profilointi_context": "muutto",
         "steps": [
             {
+                "id": "sijainti",
+                "question": "Missä tarvitset palvelua?",
+                "type": "location_input"
+            },
+            {
                 "id": "tarkennus",
                 "question": "Millaista muuttoapua tarvitset?",
                 "options": [
@@ -268,6 +293,11 @@ const NEEDS_CONFIG = {
         "description": "Löydä tekijät ja tarvikkeet kodin tai toimitilan uudistukseen.",
         "profilointi_context": "remontti",
         "steps": [
+            {
+                "id": "sijainti",
+                "question": "Missä tarvitset palvelua?",
+                "type": "location_input"
+            },
             {
                 "id": "tarkennus",
                 "question": "Mitä olet remontoimassa?",
@@ -308,6 +338,11 @@ const NEEDS_CONFIG = {
         "profilointi_context": "mökkipalvelut",
         "steps": [
             {
+                "id": "sijainti",
+                "question": "Missä tarvitset palvelua?",
+                "type": "location_input"
+            },
+            {
                 "id": "tarkennus",
                 "question": "Millaista mökkipalvelua etsit?",
                 "options": [
@@ -347,6 +382,11 @@ const NEEDS_CONFIG = {
         "profilointi_context": "taloyhtiö",
         "steps": [
             {
+                "id": "sijainti",
+                "question": "Missä tarvitset palvelua?",
+                "type": "location_input"
+            },
+            {
                 "id": "tarkennus",
                 "question": "Millaista palvelua taloyhtiö tarvitsee?",
                 "options": [
@@ -384,6 +424,11 @@ const NEEDS_CONFIG = {
         "description": "Arvokkaat ja huolelliset hautajaisjärjestelyt.",
         "profilointi_context": "hautajaiset",
         "steps": [
+            {
+                "id": "sijainti",
+                "question": "Missä tarvitset palvelua?",
+                "type": "location_input"
+            },
             {
                 "id": "tarkennus",
                 "question": "Millaista apua tarvitsette järjestelyihin?",
@@ -474,6 +519,11 @@ const NEEDS_CONFIG = {
         "profilointi_context": "yrityksen-perustaminen",
         "steps": [
             {
+                "id": "sijainti",
+                "question": "Missä tarvitset palvelua?",
+                "type": "location_input"
+            },
+            {
                 "id": "tarkennus",
                 "question": "Missä vaiheessa yrityksen perustaminen on?",
                 "options": [
@@ -513,6 +563,11 @@ const NEEDS_CONFIG = {
         "profilointi_context": "yrityksen-kehittäminen",
         "steps": [
             {
+                "id": "sijainti",
+                "question": "Missä tarvitset palvelua?",
+                "type": "location_input"
+            },
+            {
                 "id": "tarkennus",
                 "question": "Millaista kehitystä yrityksesi kaipaa?",
                 "options": [
@@ -550,6 +605,11 @@ const NEEDS_CONFIG = {
         "description": "Etsitkö jatkuvaa kumppania helpottamaan arkea?",
         "steps": [
             {
+                "id": "sijainti",
+                "question": "Missä tarvitset palvelua?",
+                "type": "location_input"
+            },
+            {
                 "id": "ala",
                 "question": "Millä osa-alueella tarvitset kumppania?",
                 "options": [
@@ -566,6 +626,11 @@ const NEEDS_CONFIG = {
         "icon": "🏘️",
         "description": "Huolenpitoa ja arvoa kiinteistöllesi.",
         "steps": [
+            {
+                "id": "sijainti",
+                "question": "Missä tarvitset palvelua?",
+                "type": "location_input"
+            },
             {
                 "id": "huoltopalvelu",
                 "multiple": true,
@@ -585,6 +650,11 @@ const NEEDS_CONFIG = {
         "description": "Apu lähellä silloin kun sitä tarvitaan kiireellisesti.",
         "steps": [
             {
+                "id": "sijainti",
+                "question": "Missä tarvitset palvelua?",
+                "type": "location_input"
+            },
+            {
                 "id": "kiireellinen",
                 "question": "Mikä hätänä?",
                 "options": [
@@ -602,6 +672,11 @@ const NEEDS_CONFIG = {
         "description": "Löydä asiantuntijat terveyden ja hyvän olon tueksi.",
         "profilointi_context": "terveys",
         "steps": [
+            {
+                "id": "sijainti",
+                "question": "Missä tarvitset palvelua?",
+                "type": "location_input"
+            },
             {
                 "id": "tarkennus",
                 "question": "Millaista hyvinvointipalvelua etsit?",
@@ -632,6 +707,11 @@ const NEEDS_CONFIG = {
         "description": "Harrastuksia ja liikuntaa kaikenikäisille.",
         "steps": [
             {
+                "id": "sijainti",
+                "question": "Missä tarvitset palvelua?",
+                "type": "location_input"
+            },
+            {
                 "id": "tyyppi",
                 "question": "Miten haluaisit liikkua?",
                 "options": [
@@ -658,6 +738,11 @@ const NEEDS_CONFIG = {
         "icon": "🐾",
         "description": "Kaikki lemmikkisi parhaaksi.",
         "steps": [
+            {
+                "id": "sijainti",
+                "question": "Missä tarvitset palvelua?",
+                "type": "location_input"
+            },
             {
                 "id": "tarve",
                 "multiple": true,
@@ -686,6 +771,11 @@ const NEEDS_CONFIG = {
         "icon": "👶",
         "description": "Arjen tukea ja harrastuksia lapsiperheille.",
         "steps": [
+            {
+                "id": "sijainti",
+                "question": "Missä tarvitset palvelua?",
+                "type": "location_input"
+            },
             {
                 "id": "palvelut",
                 "multiple": true,

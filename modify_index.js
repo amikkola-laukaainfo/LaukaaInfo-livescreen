@@ -5,57 +5,57 @@ let html = fs.readFileSync('index.html', 'utf8');
 const mapping = {
     'haat': `
         <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'haat')">
-            <option value="">Tarkenna tarvetta...</option>
+            <option value="">Valitse tarkennus...</option>
             <option value="is_lakeside">Juhlatila järven rannalla</option>
             <option value="video_production">Häävideokuvaus & Digitointi</option>
             <option value="alcohol_license">Anniskeluoikeudet</option>
         </select>`,
     'yritysjuhlat': `
         <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'yritysjuhlat')">
-            <option value="">Tarkenna tarvetta...</option>
+            <option value="">Valitse tarkennus...</option>
             <option value="corporate_wellbeing_services">TYKY- ja hyvinvointipalvelut</option>
             <option value="has_sauna">Saunatilat saatavilla</option>
         </select>`,
     'yritystilaisuudet': `
         <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'yritystilaisuudet')">
-            <option value="">Tarkenna tarvetta...</option>
+            <option value="">Valitse tarkennus...</option>
             <option value="has_streaming">Striimaus & Hybridituki</option>
             <option value="is_accessible">Esteetön pääsy</option>
         </select>`,
     'muutto': `
         <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'muutto')">
-            <option value="">Tarkenna tarvetta...</option>
+            <option value="">Valitse tarkennus...</option>
             <option value="weekend_moves">Viikonloppumuutot</option>
             <option value="digitization_features">Arkiston digitointi</option>
             <option value="packing_service">Pakkauspalvelu</option>
         </select>`,
     'remontti': `
         <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'remontti')">
-            <option value="">Tarkenna tarvetta...</option>
+            <option value="">Valitse tarkennus...</option>
             <option value="emergency_service">Päivystys / Hätäpalvelu</option>
             <option value="wet_room_certification">Kosteiden tilojen sertifikaatti</option>
         </select>`,
     'mokkipalvelut': `
         <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'mokkipalvelut')">
-            <option value="">Tarkenna tarvetta...</option>
+            <option value="">Valitse tarkennus...</option>
             <option value="key_holding">Avainpalvelu / Valvonta</option>
             <option value="sauna_services">Saunapalvelut & Wellness</option>
         </select>`,
     'taloyhtion-huolto': `
         <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'taloyhtion-huolto')">
-            <option value="">Tarkenna tarvetta...</option>
+            <option value="">Valitse tarkennus...</option>
             <option value="maintenance_contracts">Jatkuvat huoltosopimukset</option>
             <option value="emergency_response">24/7 Päivystys</option>
         </select>`,
     'paivystavat-palvelut': `
         <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'paivystavat-palvelut')">
-            <option value="">Tarkenna tarvetta...</option>
+            <option value="">Valitse tarkennus...</option>
             <option value="emergency_available">Hinaus ja tiepalvelu</option>
             <option value="emergency_service">LVI- ja sähköpäivystys</option>
         </select>`,
     'terveys-ja-hyvinvointi': `
         <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'terveys-ja-hyvinvointi')">
-            <option value="">Tarkenna tarvetta...</option>
+            <option value="">Valitse tarkennus...</option>
             <option value="home_visits">Kotikäynnit ja hoiva</option>
             <option value="online_booking">Sähköinen ajanvaraus</option>
         </select>`
@@ -63,7 +63,7 @@ const mapping = {
 
 const defaultMapping = (id) => `
         <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, '${id}')">
-            <option value="">Tarkenna tarvetta...</option>
+            <option value="">Valitse tarkennus...</option>
             <option value="home_service">Kotiinkuljetus / Kotikäynti</option>
             <option value="weekend_service">Palvelua viikonloppuisin</option>
         </select>`;

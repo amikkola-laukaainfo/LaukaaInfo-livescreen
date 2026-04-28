@@ -209,14 +209,7 @@
                 <h2 style="color: white; font-size: 1.5rem; margin-bottom: 0.5rem; font-family: var(--accent-font);">Kaikki Laukaasta yhdessä paikassa</h2>
                 <p class="hero-tagline">Tiedä, löydä ja osallistu. Laukaan yritykset, palvelut ja ajankohtaiset uutiset helposti ja nopeasti.</p>
                 
-                <div class="location-bar-container" style="margin-top: 1.5rem;">
-                    <div class="location-bar" style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); padding: 8px 18px; border-radius: 50px; display: inline-flex; align-items: center; gap: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-                        <span style="font-size: 1.2rem;">📍</span>
-                        <input type="text" id="user-location-input" placeholder="Sijaintisi (esim. Laukaa)" style="background: transparent; border: none; color: white; font-weight: 600; outline: none; width: 180px; font-size: 0.9rem;">
-                        <button id="locate-me-btn" style="background: white; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: var(--primary-blue); transition: transform 0.2s;" title="Hae sijaintini">🎯</button>
-                    </div>
-                    <div id="location-status" style="color: white; font-size: 0.75rem; margin-top: 8px; opacity: 0.8; min-height: 1.2em; font-weight: 500;"></div>
-                </div>
+
             </div>
         </div>
         <div class="hero-right">
@@ -276,11 +269,12 @@
                 <div class="need-card" style="position: relative;">
                     <div class="need-icon">💒</div>
                     <h3>Häät</h3>
+                    <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 0.5rem;">Suunnittele unelmiesi häät Laukaassa. Löydä tilat, tarjoilut ja elämykset.</p>
                     
     <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
         <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'haat')">
-            <option value="">Tarkenna tarvetta...</option>
+            <option value="">Valitse tarkennus...</option>
             <option value="is_lakeside">Juhlatila järven rannalla</option>
             <option value="video_production">Häävideokuvaus & Digitointi</option>
             <option value="alcohol_license">Anniskeluoikeudet</option>
@@ -292,6 +286,7 @@
                 <div class="need-card" style="position: relative;">
                     <div class="need-icon">🥂</div>
                     <h3>Yritysjuhlat</h3>
+                    <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 0.5rem;">Järjestä onnistuneet henkilöstöjuhlat, pikkujoulut tai asiakastilaisuudet.</p>
                     
     <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
@@ -309,6 +304,7 @@
                 <div class="need-card" style="position: relative;">
                     <div class="need-icon">💼</div>
                     <h3>Yritystilaisuudet</h3>
+                    <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 0.5rem;">Kokoukset, seminaarit ja koulutukset ammattimaisessa ympäristössä.</p>
                     
     <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
@@ -326,6 +322,7 @@
                 <div class="need-card" style="position: relative;">
                     <div class="need-icon">🎂</div>
                     <h3>Syntymäpäivät</h3>
+                    <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 0.5rem;">Järjestä ikimuistoiset syntymäpäivät kaikenikäisille.</p>
                     
     <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
@@ -343,6 +340,7 @@
                 <div class="need-card" style="position: relative;">
                     <div class="need-icon">📦</div>
                     <h3>Muutto</h3>
+                    <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 0.5rem;">Muuttoauto, kantajat, pakkaus ja loppusiivous helposti.</p>
                     
     <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
@@ -360,6 +358,7 @@
                 <div class="need-card" style="position: relative;">
                     <div class="need-icon">🔨</div>
                     <h3>Remontti</h3>
+                    <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 0.5rem;">Löydä tekijät ja tarvikkeet kodin tai toimitilan uudistukseen.</p>
                     
     <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
@@ -377,6 +376,7 @@
                 <div class="need-card" style="position: relative;">
                     <div class="need-icon">🏡</div>
                     <h3>Mökkipalvelut</h3>
+                    <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 0.5rem;">Kaikki vapaa-ajan asunnon huoltoon ja nauttimiseen.</p>
                     
     <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
@@ -394,6 +394,7 @@
                 <div class="need-card" style="position: relative;">
                     <div class="need-icon">🏢</div>
                     <h3>Taloyhtiön huolto</h3>
+                    <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 0.5rem;">Ammattitaitoiset kumppanit taloyhtiöille.</p>
                     
     <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
@@ -410,6 +411,7 @@
                 <div class="need-card" style="position: relative;">
                     <div class="need-icon">🕯️</div>
                     <h3>Hautajaiset</h3>
+                    <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 0.5rem;">Arvokkaat ja huolelliset hautajaisjärjestelyt.</p>
                     
     <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
@@ -427,6 +429,7 @@
                 <div class="need-card" style="position: relative;">
                     <div class="need-icon">🚀</div>
                     <h3>Yrityksen perustaminen</h3>
+                    <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 0.5rem;">Kaikki tarvittava uuden yrityksen starttiin.</p>
                     
     <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
@@ -443,6 +446,7 @@
                 <div class="need-card" style="position: relative;">
                     <div class="need-icon">📈</div>
                     <h3>Yrityksen kehittäminen</h3>
+                    <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 0.5rem;">Vie yrityksesi seuraavalle tasolle kasvun avulla.</p>
                     
     <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
@@ -459,6 +463,7 @@
                 <div class="need-card" style="position: relative;">
                     <div class="need-icon">🤝</div>
                     <h3>Palvelukumppani</h3>
+                    <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 0.5rem;">Etsitkö jatkuvaa kumppania helpottamaan arkea?</p>
                     
     <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
@@ -475,6 +480,7 @@
                 <div class="need-card" style="position: relative;">
                     <div class="need-icon">🏘️</div>
                     <h3>Kiinteistöpalvelut</h3>
+                    <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 0.5rem;">Huolenpitoa ja arvoa kiinteistöllesi.</p>
                     
     <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
@@ -491,6 +497,7 @@
                 <div class="need-card" style="position: relative;">
                     <div class="need-icon">🚨</div>
                     <h3>Päivystävät palvelut</h3>
+                    <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 0.5rem;">Apu lähellä silloin kun sitä tarvitaan kiireellisesti.</p>
                     
     <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
@@ -507,6 +514,7 @@
                 <div class="need-card" style="position: relative;">
                     <div class="need-icon">🏥</div>
                     <h3>Terveys ja hyvinvointi</h3>
+                    <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 0.5rem;">Löydä asiantuntijat terveyden ja hyvän olon tueksi.</p>
                     
     <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
@@ -524,6 +532,7 @@
                 <div class="need-card" style="position: relative;">
                     <div class="need-icon">⚽</div>
                     <h3>Liikunta ja vapaa-aika</h3>
+                    <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 0.5rem;">Harrastuksia ja liikuntaa kaikenikäisille.</p>
                     
     <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
@@ -540,6 +549,7 @@
                 <div class="need-card" style="position: relative;">
                     <div class="need-icon">🐾</div>
                     <h3>Eläimet ja lemmikit</h3>
+                    <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 0.5rem;">Kaikki lemmikkisi parhaaksi.</p>
                     
     <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 
@@ -556,6 +566,7 @@
                 <div class="need-card" style="position: relative;">
                     <div class="need-icon">👶</div>
                     <h3>Lapset ja perhe</h3>
+                    <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 0.5rem;">Arjen tukea ja harrastuksia lapsiperheille.</p>
                     
     <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
 

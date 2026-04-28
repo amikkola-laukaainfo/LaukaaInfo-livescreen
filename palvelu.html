@@ -280,12 +280,7 @@
         <h1 id="hero-title">Ladataan...</h1>
         <p id="hero-desc"></p>
         
-        <div class="location-bar">
-            <span>📍</span>
-            <input type="text" id="user-location-input" placeholder="Sijaintisi (esim. Laukaa)" autocomplete="off">
-            <button class="btn-locate" id="locate-me-btn" title="Hae sijaintini">🎯</button>
-        </div>
-        <div id="location-status"></div>
+
     </header>
 
     <main>
@@ -415,7 +410,27 @@
             });
 
             // Render step content
-            if (step.multiple) {
+            if (step.type === 'location_input') {
+                content.innerHTML = `
+                    <div class="step-header">
+                        <h2>${step.question}</h2>
+                        <p>Sijaintisi auttaa meitä löytämään lähimmät palvelut.</p>
+                    </div>
+                    <div class="location-bar" style="background: white; border: 2px solid #eef2f6; width: 100%; max-width: 400px; margin: 0 auto 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                        <span style="color: var(--primary-blue);">📍</span>
+                        <input type="text" id="user-location-input" placeholder="Esim. Laukaa, Vihtavuori..." style="color: #333; width: 100%;" autocomplete="off">
+                        <button class="btn-locate" id="locate-me-btn" title="Hae sijaintini" style="background: var(--primary-blue); color: white;">🎯</button>
+                    </div>
+                    <div id="location-status" style="margin-bottom: 2rem; color: var(--secondary-blue); font-weight: 600; min-height: 1.2em;"></div>
+                    <div style="text-align: center;">
+                        <button class="btn-radar btn-continue" onclick="nextStep()" style="background: var(--primary-blue);">Jatka &raquo;</button>
+                    </div>
+                `;
+                // Alustetaan sijaintilogiikka uusille elementeille
+                setTimeout(() => {
+                    if (typeof initUserLocation === 'function') initUserLocation();
+                }, 50);
+            } else if (step.multiple) {
                 content.innerHTML = `
                     <div class="step-header">
                         <h2>${step.question}</h2>
