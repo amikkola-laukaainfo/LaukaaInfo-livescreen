@@ -814,13 +814,16 @@
                     if (!isProfiledMatch && opt.tags) {
                         if (opt.tags.includes('digitointi')) {
                             const catData = getCategoryData(c, currentProfilingKey);
-                            if (catData && Array.isArray(catData.digitization_features) && catData.digitization_features.length > 0) {
+                            const fitsScore = getFitsForScore(c, currentProfilingKey);
+                            if (catData && fitsScore > 0 && Array.isArray(catData.digitization_features) && catData.digitization_features.length > 0) {
                                 isProfiledMatch = true;
                             }
                         }
                         if (opt.tags.includes('juhlatila')) {
                             const catData = getCategoryData(c, 'events_and_celebrations');
-                            if (catData && (catData.capacity_max > 0 || catData.seated_capacity > 0 || catData.wedding_specialized)) {
+                            const fitsScore = getFitsForScore(c, 'events_and_celebrations');
+                            // Fallback-matchaus juhlatilalle vaatii soveltuvuutta JA kapasiteettia
+                            if (catData && fitsScore > 0 && (catData.capacity_max > 0 || catData.seated_capacity > 0)) {
                                 isProfiledMatch = true;
                             }
                         }
