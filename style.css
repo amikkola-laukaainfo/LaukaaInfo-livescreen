@@ -309,7 +309,7 @@ img {
 body {
     background-color: var(--background);
     color: var(--dark-text);
-    line-height: 1.6;
+    line-height: 1.7;
     overflow-x: hidden;
     width: 100%;
 }
