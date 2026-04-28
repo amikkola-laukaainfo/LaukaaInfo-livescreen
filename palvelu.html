@@ -656,23 +656,11 @@
             return c.profiling[underscoreKey] || c.profiling[hyphenKey] || c.profiling[mappedKey] || c.profiling[key];
         }
 
-        function getFitsForScore(c, key) {
+        function getFitsForScore(c, profilingKey) {
             if (!c || !c.profiling || !c.profiling.core || !c.profiling.core.fits_for) return 0;
             const fits = c.profiling.core.fits_for;
-            const underscoreKey = key.replace(/-/g, '_');
-            const hyphenKey = key.replace(/_/g, '-');
-            
-            // Normalize Finnish keys too
-            const finnishMap = {
-                'events_and_celebrations': 'häät',
-                'business_events': 'yritysjuhlat',
-                'funerals_and_memorials': 'hautajaiset',
-                'startup_services': 'yrityksen perustaminen',
-                'business_growth': 'yrityksen kehittäminen'
-            };
-            const finKey = finnishMap[underscoreKey] || finnishMap[hyphenKey] || finnishMap[key];
-
-            return fits[underscoreKey] || fits[hyphenKey] || fits[key] || (finKey ? fits[finKey] : 0) || 0;
+            // Support both underscore (events_and_celebrations) and hyphen (events-and-celebrations) formats
+            return fits[profilingKey] || fits[profilingKey.replace(/_/g, '-')] || 0;
         }
 
         // Helper to get all collaborators of a company across all profiling categories
@@ -774,7 +762,7 @@
 
                     if (selections._sub_contexts && selections._sub_contexts.length > 0) {
                         const companySubContexts = c.profiling?.core?.sub_contexts || [];
-                        let hasSelectedSubContext = false;
+                        let isSubContextMatch = false;
                         
                         // Normalize the current profiling key for sub-context lookup
                         const underscoreKey = currentProfilingKey.replace(/-/g, '_');
@@ -782,24 +770,23 @@
                         const finKey = finnishMap[underscoreKey];
 
                         if (Array.isArray(companySubContexts)) {
-                            hasSelectedSubContext = selections._sub_contexts.some(sc => companySubContexts.includes(sc));
+                            isSubContextMatch = selections._sub_contexts.some(sc => companySubContexts.includes(sc));
                         } else if (typeof companySubContexts === 'object' && companySubContexts !== null) {
-                            // Check if company has sub-contexts for THIS specific main context
                             const relevantSubContexts = companySubContexts[underscoreKey] || companySubContexts[currentProfilingKey] || (finKey ? companySubContexts[finKey] : null);
                             
                             if (relevantSubContexts) {
-                                hasSelectedSubContext = selections._sub_contexts.some(sc => relevantSubContexts.includes(sc));
+                                isSubContextMatch = selections._sub_contexts.some(sc => relevantSubContexts.includes(sc));
                             } else {
-                                // If company has no sub-contexts defined for this category, we don't filter it out
-                                hasSelectedSubContext = true; 
+                                isSubContextMatch = true; 
                             }
                         } else {
-                            hasSelectedSubContext = true;
+                            isSubContextMatch = true;
                         }
 
-                        // If company fits the main context perfectly (score >= 70), be more lenient with sub-context mismatch
-                        const mainFitsScore = getFitsForScore(c, currentProfilingKey);
-                        if (!hasSelectedSubContext && mainFitsScore < 70) return false; 
+                        if (!isSubContextMatch) {
+                            const mainFitsScore = getFitsForScore(c, currentProfilingKey);
+                            if (mainFitsScore < 70) return false; 
+                        }
                     }
 
                     if (opt.require_fits_for) {
@@ -807,6 +794,12 @@
                         const rfMin = opt.require_fits_for.min || 20;
                         const rfScore = getFitsForScore(c, rfKey);
                         if (rfScore < rfMin) return false;
+                    }
+
+                    // Middle-ground: If company is profiled and explicitly marked as 0 for this context, skip it.
+                    const fitsScore = getFitsForScore(c, currentProfilingKey);
+                    if (c.profiling && fitsScore === 0 && (c.profiling.core?.fits_for?.[currentProfilingKey] === 0 || c.profiling.core?.fits_for?.[currentProfilingKey.replace(/_/g, '-')] === 0)) {
+                        return false; 
                     }
 
                     let isProfiledMatch = false;
