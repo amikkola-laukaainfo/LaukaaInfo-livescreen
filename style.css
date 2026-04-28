@@ -4448,6 +4448,42 @@ footer {
 .card-feed:hover { border-color: #ff9900; }
 .card-feed:hover .icon { background: #fffbeb; color: #ff9900; }
 
+/* Community-section card overrides:
+   Palauttaa overflow:hidden ja nollaa paddingin, jotta
+   .feature-card-img background-kuvat näkyvät oikein */
+.community-section .feature-card {
+    padding: 0;
+    overflow: hidden;
+    align-items: stretch;
+    text-align: left;
+    border-radius: 16px;
+}
+
+.community-section .feature-card-img {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    flex-shrink: 0;
+    transition: transform 0.5s ease;
+}
+
+.community-section .feature-card:hover .feature-card-img {
+    transform: scale(1.07);
+}
+
+.community-section .feature-card-body {
+    padding: 1.75rem 2rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.community-section .card-youtube:hover { border-color: #ff0000; box-shadow: 0 12px 30px rgba(255,0,0,0.12); }
+.community-section .card-facebook:hover { border-color: #1877f2; box-shadow: 0 12px 30px rgba(24,119,242,0.12); }
+.community-section .card-news:hover { border-color: #008148; box-shadow: 0 12px 30px rgba(0,129,72,0.12); }
+.community-section .card-feed:hover { border-color: #ff9900; box-shadow: 0 12px 30px rgba(255,153,0,0.12); }
+
 @media (max-width: 600px) {
     .section-header h2 {
         font-size: 1.8rem;
