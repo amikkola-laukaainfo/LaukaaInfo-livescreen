@@ -245,6 +245,39 @@
             opacity: 0.8;
             min-height: 1.2em;
         }
+
+        /* Print styles */
+        @media print {
+            .top-nav, .palvelu-hero, .btn-back, .step-progress, 
+            .selection-summary, .next-steps-section, footer, 
+            .btn-radar, .card-arrow, .dist-badge {
+                display: none !important;
+            }
+            
+            body {
+                background: white;
+                color: black;
+                padding: 0;
+            }
+
+            main {
+                margin: 0;
+                padding: 20px;
+            }
+
+            .group-title {
+                border-bottom: 1px solid #ccc;
+                margin-top: 20px;
+                color: black;
+            }
+
+            .company-result-card {
+                border: 1px solid #eee;
+                break-inside: avoid;
+                margin-bottom: 15px;
+                box-shadow: none;
+            }
+        }
     </style>
 </head>
 
@@ -1180,6 +1213,77 @@
             }
         }
 
+        function printResults() {
+            if (currentResultsGroups.length === 0) {
+                alert("Ei tuloksia tulostettavaksi. Valitse ensin palveluita.");
+                return;
+            }
+
+            const printWindow = window.open('', '_blank');
+            const needTitle = document.getElementById('hero-title').textContent;
+            
+            let html = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Palvelusuositukset - ${needTitle}</title>
+                    <style>
+                        body { font-family: 'Inter', sans-serif; padding: 40px; color: #333; line-height: 1.5; }
+                        h1 { color: #1e40af; border-bottom: 2px solid #1e40af; padding-bottom: 10px; }
+                        .group { margin-top: 30px; }
+                        .group-title { font-size: 1.4rem; font-weight: 800; color: #1e40af; margin-bottom: 15px; background: #f8fafc; padding: 10px; border-radius: 8px; }
+                        .company { margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 15px; break-inside: avoid; }
+                        .company-name { font-size: 1.2rem; font-weight: 700; margin: 0 0 5px 0; color: #000; }
+                        .company-slogan { font-style: italic; color: #64748b; margin-bottom: 10px; font-size: 0.9rem; }
+                        .contact-info { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.95rem; }
+                        .info-item { display: flex; align-items: center; gap: 8px; }
+                        .footer { margin-top: 50px; font-size: 0.8rem; color: #94a3b8; text-align: center; border-top: 1px solid #eee; padding-top: 20px; }
+                        @media print { .no-print { display: none; } }
+                    </style>
+                </head>
+                <body>
+                    <h1>LaukaaInfo - Palvelusuositukset</h1>
+                    <p><strong>Tarve:</strong> ${needTitle}</p>
+                    <p>Tulostettu: ${new Date().toLocaleDateString('fi-FI')} klo ${new Date().toLocaleTimeString('fi-FI')}</p>
+            `;
+
+            currentResultsGroups.forEach(group => {
+                html += `<div class="group">
+                    <div class="group-title">${group.title}</div>`;
+                
+                group.companies.forEach(c => {
+                    const core = c.profiling?.core || {};
+                    html += `
+                        <div class="company">
+                            <div class="company-name">${c.nimi}</div>
+                            <div class="company-slogan">${c.mainoslause || ''}</div>
+                            <div class="contact-info">
+                                <div class="info-item">📞 ${core.phone || 'Ei puhelinta'}</div>
+                                <div class="info-item">📧 ${core.email || 'Ei sähköpostia'}</div>
+                                <div class="info-item">🌐 ${core.website || 'Ei verkkosivua'}</div>
+                                <div class="info-item">📍 ${c.kategoria || ''}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += `</div>`;
+            });
+
+            html += `
+                    <div class="footer">
+                        © 2026 LaukaaInfo – www.laukaainfo.fi – Palvelua ylläpitää Mediazoo.fi
+                    </div>
+                    <div class="no-print" style="margin-top: 30px; text-align: center;">
+                        <button onclick="window.print()" style="padding: 10px 20px; background: #1e40af; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">Tulosta nyt</button>
+                    </div>
+                </body>
+                </html>
+            `;
+
+            printWindow.document.write(html);
+            printWindow.document.close();
+        }
         // Käynnistys
         document.addEventListener('DOMContentLoaded', () => {
             initPalvelu();
