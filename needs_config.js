@@ -89,10 +89,10 @@ const NEEDS_CONFIG = {
                 "id": "tarkennus",
                 "question": "Millaista tilaisuutta olet järjestämässä?",
                 "options": [
-                    { "label": "Pikkujoulut", "sub_context": "pikkujoulut", "tags": ["juhlatila"] },
-                    { "label": "Henkilöstöjuhlat / Kesäjuhlat", "sub_context": "henkilöstöjuhlat", "tags": ["juhlatila"] },
+                    { "label": "Pikkujoulut", "sub_context": "pikkujoulut", "tags": ["juhlatila"], "capacity_req": 30 },
+                    { "label": "Henkilöstöjuhlat / Kesäjuhlat", "sub_context": "henkilöstöjuhlat", "tags": ["juhlatila"], "capacity_req": 50 },
                     { "label": "Virkistyspäivä / Tyky-päivä", "sub_context": "tyky-paiva", "tags": ["ohjelmapalvelut"] },
-                    { "label": "Asiakastilaisuus / Edustus", "sub_context": "edustustilaisuus", "tags": ["edustustila"] }
+                    { "label": "Asiakastilaisuus / Edustus", "sub_context": "edustustilaisuus", "tags": ["edustustila"], "capacity_req": 20 }
                 ]
             },
             {
@@ -206,10 +206,10 @@ const NEEDS_CONFIG = {
                 "id": "tila",
                 "question": "Missä haluat juhlia?",
                 "options": [
-                    { "label": "Ravintolassa valmiissa pöydässä", "tags": ["ravintola"] },
-                    { "label": "Vuokratussa juhlatilassa", "tags": ["juhlatila"] },
+                    { "label": "Ravintolassa valmiissa pöydässä", "tags": ["ravintola"], "capacity_req": 10 },
+                    { "label": "Vuokratussa juhlatilassa", "tags": ["juhlatila"], "capacity_req": 30 },
                     { "label": "Kotona (tarvitaan palveluita)", "tags": ["pitopalvelu"] },
-                    { "label": "Saunalla tai mökillä", "tags": ["saunatilat", "majoitus"] }
+                    { "label": "Saunalla tai mökillä", "tags": ["saunatilat", "majoitus"], "capacity_req": 10 }
                 ]
             },
             {
@@ -417,7 +417,8 @@ const NEEDS_CONFIG = {
                 "options": [
                     {
                         "label": "Rauhallinen muistotila",
-                        "tags": [],
+                        "tags": ["juhlatila"],
+                        "capacity_req": 20,
                         "profilointi_filter": { "section": "funerals_and_memorials", "field": "quiet_private_space", "value": true },
                         "require_fits_for": { "key": "hautajaiset", "min": 30 }
                     },
