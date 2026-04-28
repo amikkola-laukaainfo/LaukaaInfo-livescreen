@@ -204,19 +204,17 @@
             <div class="hero-left-content">
                 <div class="header-title-container">
                     <img src="logo.png" alt="LaukaaInfo Logo" class="main-logo">
-                    <h1>L<span style="font-size: 0.85em;">aukaa</span>I<span style="font-size: 0.85em;">nfo</span></h1>
+                    <h1>LaukaaInfo</h1>
                 </div>
-                <h2 style="color: white; font-size: 1.5rem; margin-bottom: 0.5rem; font-family: var(--accent-font);">Kaikki Laukaasta yhdessä paikassa</h2>
-                <p class="hero-tagline">Tiedä, löydä ja osallistu. Laukaan yritykset, palvelut ja ajankohtaiset uutiset helposti ja nopeasti.</p>
-                
-
+                <h2 class="hero-subheading">Kaikki Laukaasta yhdessä paikassa</h2>
+                <p class="hero-tagline">Löydä paikalliset palvelut, yritykset ja uutiset helposti. Autamme sinua järjestämään elämäsi tärkeät hetket Laukaassa.</p>
+                <div class="hero-actions">
+                    <a href="#service-needs" class="btn-primary">Mitä olet järjestämässä? <i class="fas fa-arrow-down"></i></a>
+                </div>
             </div>
         </div>
         <div class="hero-right">
-            <img
-                src="hero-kuva.jpg"
-                alt="Suomalainen luontomaisema – Laukaa"
-                class="hero-nature-img">
+            <img src="hero-kuva.jpg" alt="Laukaa maisema" class="hero-nature-img">
             <div class="hero-right-caption">Laukaa, Keski-Suomi</div>
         </div>
     </header>
@@ -224,32 +222,38 @@
     <main>
         <!-- Yhteisöllisyys / Welcome Hub -->
         <section class="community-section bg-full-white">
-            <div class="section-header">
-                <h2>Osallistu</h2>
-                <p>LaukaaInfon YouTube, Facebook ja tuoreimmat kuntatiedotteet.</p>
-            </div>
-            
-            <div class="feature-grid">
-                <a href="https://www.youtube.com/@laukaainfo" target="_blank" class="feature-card card-youtube">
-                    <div class="icon-photo"><img src="assets/img/icon-youtube.png" alt="YouTube"></div>
-                    <h3>YouTube</h3>
-                    <p>LaukaaInfo YouTube-kanava. Videoita ja tunnelmia Laukaasta.</p>
-                </a>
-                <a href="https://www.facebook.com/groups/892675230270311" target="_blank" class="feature-card card-facebook">
-                    <div class="icon-photo"><img src="assets/img/icon-facebook.png" alt="Keskustelu"></div>
-                    <h3>Keskustelu</h3>
-                    <p>Liity Laukaan keskusteluryhmään Facebookissa. Kysy ja jaa.</p>
-                </a>
-                <a href="ajankohtaista.html#news-card" class="feature-card card-news">
-                    <div class="icon-photo"><img src="assets/img/icon-news.png" alt="Ajankohtaista"></div>
-                    <h3>Ajankohtaista</h3>
-                    <p>Kuntatiedotteet ja viralliset uutiset kootusti yhdessä paikassa.</p>
-                </a>
-                <a href="#toggle-feed-btn" class="feature-card card-feed" onclick="document.getElementById('toggle-feed-btn').click();">
-                    <div class="icon-photo"><img src="assets/img/icon-feed.png" alt="Syöte"></div>
-                    <h3>Laukaa-syöte</h3>
-                    <p>Paikalliset ilmoitukset, tarjoukset ja menovinkit tuoreeltaan.</p>
-                </a>
+            <div class="section-container">
+                <div class="section-header">
+                    <h2>Osallistu ja pysy ajan tasalla</h2>
+                    <p>LaukaaInfo kokoaa yhteen keskustelut, videot ja tuoreimmat kuntatiedotteet.</p>
+                </div>
+                
+                <div class="feature-grid">
+                    <a href="https://www.youtube.com/@laukaainfo" target="_blank" class="feature-card">
+                        <div class="feature-card-img" style="background-image: url('https://images.unsplash.com/photo-1492619334760-227096e73138?q=80&w=800&auto=format&fit=crop');"></div>
+                        <div class="feature-card-body">
+                            <h3>Laukaa YouTube</h3>
+                            <p>Videoita ja tunnelmia Laukaasta.</p>
+                            <span class="btn-text">Katso videot &raquo;</span>
+                        </div>
+                    </a>
+                    <a href="https://www.facebook.com/groups/892675230270311" target="_blank" class="feature-card">
+                        <div class="feature-card-img" style="background-image: url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=800&auto=format&fit=crop');"></div>
+                        <div class="feature-card-body">
+                            <h3>Keskustelu</h3>
+                            <p>Liity Facebook-ryhmään ja jaa kokemuksia.</p>
+                            <span class="btn-text">Liity ryhmään &raquo;</span>
+                        </div>
+                    </a>
+                    <a href="ajankohtaista.html#news-card" class="feature-card">
+                        <div class="feature-card-img" style="background-image: url('https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=800&auto=format&fit=crop');"></div>
+                        <div class="feature-card-body">
+                            <h3>Ajankohtaista</h3>
+                            <p>Kuntatiedotteet ja viralliset uutiset kootusti.</p>
+                            <span class="btn-text">Lue lisää &raquo;</span>
+                        </div>
+                    </a>
+                </div>
             </div>
         </section>
 
@@ -259,47 +263,46 @@
 
 
         <!-- Uusi Tarveperusteinen Palveluohjaus -->
-        <section id="service-needs" class="need-based-section">
-            <div class="need-header">
-                <h2>Mitä olet järjestämässä tai mitä palvelua tarvitset?</h2>
-                <p>Valitse alta tilanteesi, niin autamme sinua löytämään juuri oikeat paikalliset ratkaisut ja palvelut.</p>
-            </div>
+        <section id="service-needs" class="need-based-section bg-full-white">
+            <div class="section-container">
+                <div class="need-header">
+                    <h2>Mitä olet järjestämässä tai mitä palvelua tarvitset?</h2>
+                    <p>Valitse alta tilanteesi, niin autamme sinua löytämään juuri oikeat paikalliset ratkaisut ja palvelut.</p>
+                </div>
 
-            <div class="need-grid">
-                <div class="need-card" style="position: relative;">
-                    <div class="need-icon">💒</div>
-                    <h3>Häät</h3>
-                    <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 0.5rem;">Suunnittele unelmiesi häät Laukaassa. Löydä tilat, tarjoilut ja elämykset.</p>
-                    
-    <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
+                <div class="need-grid">
+                    <div class="need-card" style="--bg-img: url('wedding_laukaa_1777364913970.png');">
+                        <div class="need-card-content">
+                            <h3>Häät</h3>
+                            <p>Suunnittele unelmiesi häät Laukaassa. Löydä tilat, tarjoilut ja elämykset.</p>
+                            <div class="need-refinement">
+                                <select class="premium-select" onchange="updateNeedLink(this, 'haat')">
+                                    <option value="">Tarkenna tarvetta...</option>
+                                    <option value="is_lakeside">Juhlatila järven rannalla</option>
+                                    <option value="video_production">Häävideokuvaus & Digitointi</option>
+                                    <option value="alcohol_license">Anniskeluoikeudet</option>
+                                </select>
+                            </div>
+                            <a href="palvelu.html?id=haat" id="link-haat" class="btn-need">Suunnittele häät &raquo;</a>
+                        </div>
+                    </div>
 
-        <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'haat')">
-            <option value="">Valitse tarkennus...</option>
-            <option value="is_lakeside">Juhlatila järven rannalla</option>
-            <option value="video_production">Häävideokuvaus & Digitointi</option>
-            <option value="alcohol_license">Anniskeluoikeudet</option>
-        </select>
-    </div>
-    <a href="palvelu.html?id=haat" id="link-haat" class="arrow" style="display: block; text-align: center; text-decoration: none; padding: 0.6rem; border-radius: 8px; margin-top: 0.5rem; background: var(--primary-blue); color: white; font-weight: 600; opacity: 1; transform: none; box-shadow: 0 4px 10px rgba(0,86,179,0.2);">Suunnittele häät &raquo;</a>
-</div>
-
-                <div class="need-card" style="position: relative;">
-                    <div class="need-icon">🥂</div>
-                    <h3>Yritysjuhlat</h3>
-                    <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 0.5rem;">Järjestä onnistuneet henkilöstöjuhlat, pikkujoulut tai asiakastilaisuudet.</p>
-                    
-    <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
-
-        <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'yritysjuhlat')">
-            <option value="">Tarkenna tarvetta...</option>
-            <option value="staff_events_specialized">Tyky-päiviin erikoistunut</option>
-            <option value="vip_services">VIP-palvelut saatavilla</option>
-            <option value="has_sauna">Saunatilat saatavilla</option>
-            <option value="business_catering">Yritystarjoilut</option>
-        </select>
-    </div>
-    <a href="palvelu.html?id=yritysjuhlat" id="link-yritysjuhlat" class="arrow" style="display: block; text-align: center; text-decoration: none; padding: 0.6rem; border-radius: 8px; margin-top: 0.5rem; background: var(--primary-blue); color: white; font-weight: 600; opacity: 1; transform: none; box-shadow: 0 4px 10px rgba(0,86,179,0.2);">Järjestä juhlat &raquo;</a>
-</div>
+                    <div class="need-card" style="--bg-img: url('corporate_event_laukaa_1777365049100.png');">
+                        <div class="need-card-content">
+                            <h3>Yritysjuhlat</h3>
+                            <p>Järjestä onnistuneet henkilöstöjuhlat, pikkujoulut tai asiakastilaisuudet.</p>
+                            <div class="need-refinement">
+                                <select class="premium-select" onchange="updateNeedLink(this, 'yritysjuhlat')">
+                                    <option value="">Tarkenna tarvetta...</option>
+                                    <option value="staff_events_specialized">Tyky-päiviin erikoistunut</option>
+                                    <option value="vip_services">VIP-palvelut saatavilla</option>
+                                    <option value="has_sauna">Saunatilat saatavilla</option>
+                                    <option value="business_catering">Yritystarjoilut</option>
+                                </select>
+                            </div>
+                            <a href="palvelu.html?id=yritysjuhlat" id="link-yritysjuhlat" class="btn-need">Järjestä juhlat &raquo;</a>
+                        </div>
+                    </div>
 
                 <div class="need-card" style="position: relative;">
                     <div class="need-icon">💼</div>
@@ -319,77 +322,71 @@
     <a href="palvelu.html?id=yritystilaisuudet" id="link-yritystilaisuudet" class="arrow" style="display: block; text-align: center; text-decoration: none; padding: 0.6rem; border-radius: 8px; margin-top: 0.5rem; background: var(--primary-blue); color: white; font-weight: 600; opacity: 1; transform: none; box-shadow: 0 4px 10px rgba(0,86,179,0.2);">Hae tilat &raquo;</a>
 </div>
 
-                <div class="need-card" style="position: relative;">
-                    <div class="need-icon">🎂</div>
-                    <h3>Syntymäpäivät</h3>
-                    <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 0.5rem;">Järjestä ikimuistoiset syntymäpäivät kaikenikäisille.</p>
-                    
-    <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
+                    <div class="need-card" style="--bg-img: url('https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=800&auto=format&fit=crop');">
+                        <div class="need-card-content">
+                            <h3>Syntymäpäivät</h3>
+                            <p>Järjestä ikimuistoiset syntymäpäiväjuhlat kaikenikäisille.</p>
+                            <div class="need-refinement">
+                                <select class="premium-select" onchange="updateNeedLink(this, 'syntymapaivat')">
+                                    <option value="">Tarkenna tarvetta...</option>
+                                    <option value="kids_birthday">Lasten syntymäpäivät</option>
+                                    <option value="milestone_birthday">Pyöreät vuodet</option>
+                                    <option value="catering_provided">Tarjoilut järjestetty</option>
+                                </select>
+                            </div>
+                            <a href="palvelu.html?id=syntymapaivat" id="link-syntymapaivat" class="btn-need">Järjestä synttärit &raquo;</a>
+                        </div>
+                    </div>
 
-        <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'syntymapaivat')">
-            <option value="">Tarkenna tarvetta...</option>
-            <option value="cake_service">Kakkupalvelu / Leivonnaiset</option>
-            <option value="karaoke_available">Karaoke saatavilla</option>
-            <option value="late_night_events">Myöhäisillan juhlat</option>
-            <option value="home_service">Kotiinkuljetus / Kotikäynti</option>
-        </select>
-    </div>
-    <a href="palvelu.html?id=syntymapaivat" id="link-syntymapaivat" class="arrow" style="display: block; text-align: center; text-decoration: none; padding: 0.6rem; border-radius: 8px; margin-top: 0.5rem; background: var(--primary-blue); color: white; font-weight: 600; opacity: 1; transform: none; box-shadow: 0 4px 10px rgba(0,86,179,0.2);">Aloita suunnittelu &raquo;</a>
-</div>
+                    <div class="need-card" style="--bg-img: url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=800&auto=format&fit=crop');">
+                        <div class="need-card-content">
+                            <h3>Muutto</h3>
+                            <p>Tee muutosta helppoa. Löydä kantoapu, kuljetukset ja varastot.</p>
+                            <div class="need-refinement">
+                                <select class="premium-select" onchange="updateNeedLink(this, 'muutto')">
+                                    <option value="">Tarkenna tarvetta...</option>
+                                    <option value="packing_service">Pakkauspalvelu</option>
+                                    <option value="storage_available">Varastotilaa tarvitaan</option>
+                                    <option value="international_move">Kansainvälinen muutto</option>
+                                </select>
+                            </div>
+                            <a href="palvelu.html?id=muutto" id="link-muutto" class="btn-need">Helpota muuttoa &raquo;</a>
+                        </div>
+                    </div>
 
-                <div class="need-card" style="position: relative;">
-                    <div class="need-icon">📦</div>
-                    <h3>Muutto</h3>
-                    <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 0.5rem;">Muuttoauto, kantajat, pakkaus ja loppusiivous helposti.</p>
-                    
-    <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
+                    <div class="need-card" style="--bg-img: url('renovation_laukaa_1777365221282.png');">
+                        <div class="need-card-content">
+                            <h3>Remontti</h3>
+                            <p>Löydä tekijät ja tarvikkeet kodin tai toimitilan uudistukseen.</p>
+                            <div class="need-refinement">
+                                <select class="premium-select" onchange="updateNeedLink(this, 'remontti')">
+                                    <option value="">Tarkenna tarvetta...</option>
+                                    <option value="project_management">Projektinjohto (Avaimet käteen)</option>
+                                    <option value="provides_tools">Työkalut omasta takaa</option>
+                                    <option value="wet_room_certification">Kosteiden tilojen sertifikaatti</option>
+                                    <option value="emergency_service">Päivystys / Hätäpalvelu</option>
+                                </select>
+                            </div>
+                            <a href="palvelu.html?id=remontti" id="link-remontti" class="btn-need">Etsi tekijät &raquo;</a>
+                        </div>
+                    </div>
 
-        <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'muutto')">
-            <option value="">Tarkenna tarvetta...</option>
-            <option value="weekend_moves">Viikonloppumuutot</option>
-            <option value="cleaning_after_move">Muuttosiivous saatavilla</option>
-            <option value="storage_available">Varastointimahdollisuus</option>
-            <option value="packing_service">Pakkauspalvelu</option>
-        </select>
-    </div>
-    <a href="palvelu.html?id=muutto" id="link-muutto" class="arrow" style="display: block; text-align: center; text-decoration: none; padding: 0.6rem; border-radius: 8px; margin-top: 0.5rem; background: var(--primary-blue); color: white; font-weight: 600; opacity: 1; transform: none; box-shadow: 0 4px 10px rgba(0,86,179,0.2);">Helpota muuttoa &raquo;</a>
-</div>
-
-                <div class="need-card" style="position: relative;">
-                    <div class="need-icon">🔨</div>
-                    <h3>Remontti</h3>
-                    <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 0.5rem;">Löydä tekijät ja tarvikkeet kodin tai toimitilan uudistukseen.</p>
-                    
-    <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
-
-        <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'remontti')">
-            <option value="">Tarkenna tarvetta...</option>
-            <option value="project_management">Projektinjohto (Avaimet käteen)</option>
-            <option value="provides_tools">Työkalut omasta takaa</option>
-            <option value="wet_room_certification">Kosteiden tilojen sertifikaatti</option>
-            <option value="emergency_service">Päivystys / Hätäpalvelu</option>
-        </select>
-    </div>
-    <a href="palvelu.html?id=remontti" id="link-remontti" class="arrow" style="display: block; text-align: center; text-decoration: none; padding: 0.6rem; border-radius: 8px; margin-top: 0.5rem; background: var(--primary-blue); color: white; font-weight: 600; opacity: 1; transform: none; box-shadow: 0 4px 10px rgba(0,86,179,0.2);">Etsi tekijät &raquo;</a>
-</div>
-
-                <div class="need-card" style="position: relative;">
-                    <div class="need-icon">🏡</div>
-                    <h3>Mökkipalvelut</h3>
-                    <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 0.5rem;">Kaikki vapaa-ajan asunnon huoltoon ja nauttimiseen.</p>
-                    
-    <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
-
-        <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'mokkipalvelut')">
-            <option value="">Tarkenna tarvetta...</option>
-            <option value="winter_monitoring">Talvivalvonta</option>
-            <option value="snow_removal">Lumityöt / Pihanhoito</option>
-            <option value="sauna_services">Saunapalvelut / Palju</option>
-            <option value="key_holding">Avainpalvelu</option>
-        </select>
-    </div>
-    <a href="palvelu.html?id=mokkipalvelut" id="link-mokkipalvelut" class="arrow" style="display: block; text-align: center; text-decoration: none; padding: 0.6rem; border-radius: 8px; margin-top: 0.5rem; background: var(--primary-blue); color: white; font-weight: 600; opacity: 1; transform: none; box-shadow: 0 4px 10px rgba(0,86,179,0.2);">Mökin huoltoon &raquo;</a>
-</div>
+                    <div class="need-card" style="--bg-img: url('cottage_maintenance_laukaa_1777365107727.png');">
+                        <div class="need-card-content">
+                            <h3>Mökkipalvelut</h3>
+                            <p>Kaikki vapaa-ajan asunnon huoltoon ja nauttimiseen.</p>
+                            <div class="need-refinement">
+                                <select class="premium-select" onchange="updateNeedLink(this, 'mokkipalvelut')">
+                                    <option value="">Tarkenna tarvetta...</option>
+                                    <option value="winter_monitoring">Talvivalvonta</option>
+                                    <option value="snow_removal">Lumityöt / Pihanhoito</option>
+                                    <option value="sauna_services">Saunapalvelut / Palju</option>
+                                    <option value="key_holding">Avainpalvelu</option>
+                                </select>
+                            </div>
+                            <a href="palvelu.html?id=mokkipalvelut" id="link-mokkipalvelut" class="btn-need">Mökin huoltoon &raquo;</a>
+                        </div>
+                    </div>
 
                 <div class="need-card" style="position: relative;">
                     <div class="need-icon">🏢</div>
@@ -426,22 +423,21 @@
     <a href="palvelu.html?id=hautajaiset" id="link-hautajaiset" class="arrow" style="display: block; text-align: center; text-decoration: none; padding: 0.6rem; border-radius: 8px; margin-top: 0.5rem; background: var(--primary-blue); color: white; font-weight: 600; opacity: 1; transform: none; box-shadow: 0 4px 10px rgba(0,86,179,0.2);">Tutustu palveluihin &raquo;</a>
 </div>
 
-                <div class="need-card" style="position: relative;">
-                    <div class="need-icon">🚀</div>
-                    <h3>Yrityksen perustaminen</h3>
-                    <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 0.5rem;">Kaikki tarvittava uuden yrityksen starttiin.</p>
-                    
-    <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
-
-        <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'yrityksen-perustaminen')">
-            <option value="">Tarkenna tarvetta...</option>
-            <option value="business_advisory">Yritysneuvonta</option>
-            <option value="bookkeeping_startup">Aloittavan yrityksen kirjanpito</option>
-            <option value="logo_design">Logon suunnittelu / Brändäys</option>
-        </select>
-    </div>
-    <a href="palvelu.html?id=yrityksen-perustaminen" id="link-yrityksen-perustaminen" class="arrow" style="display: block; text-align: center; text-decoration: none; padding: 0.6rem; border-radius: 8px; margin-top: 0.5rem; background: var(--primary-blue); color: white; font-weight: 600; opacity: 1; transform: none; box-shadow: 0 4px 10px rgba(0,86,179,0.2);">Perusta yritys &raquo;</a>
-</div>
+                    <div class="need-card" style="--bg-img: url('https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=800&auto=format&fit=crop');">
+                        <div class="need-card-content">
+                            <h3>Yrityksen perustaminen</h3>
+                            <p>Asiantuntija-apua ja verkostoja uuden yrityksen alkutaipaleelle.</p>
+                            <div class="need-refinement">
+                                <select class="premium-select" onchange="updateNeedLink(this, 'yrityksen-perustaminen')">
+                                    <option value="">Tarkenna tarvetta...</option>
+                                    <option value="business_plan_help">Liiketoimintasuunnitelma</option>
+                                    <option value="funding_advice">Rahoitusneuvonta</option>
+                                    <option value="office_space">Toimitilojen etsintä</option>
+                                </select>
+                            </div>
+                            <a href="palvelu.html?id=yrityksen-perustaminen" id="link-yrityksen-perustaminen" class="btn-need">Aloita yrittäminen &raquo;</a>
+                        </div>
+                    </div>
 
                 <div class="need-card" style="position: relative;">
                     <div class="need-icon">📈</div>

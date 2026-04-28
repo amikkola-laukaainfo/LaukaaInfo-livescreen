@@ -1045,28 +1045,32 @@ section {
 
 h2 {
     font-family: var(--heading-font);
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
+    font-size: 2.8rem; /* Larger, more slender */
+    font-weight: 500; /* Lighter weight for elegance */
+    margin-bottom: 1rem;
     color: var(--dark-text);
-    letter-spacing: -0.5px;
-    line-height: 1.2;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    text-align: center;
 }
 
-h2 span {
-    /* Emojit otsikossa – poistetaan tai pienennetään */
-    font-size: 1.2rem;
-    opacity: 0.7;
+.section-header {
+    max-width: 800px;
+    margin: 0 auto 4rem;
+    text-align: center;
+}
+
+.section-header p {
+    font-size: 1.15rem;
+    color: #4a5568;
+    line-height: 1.6;
 }
 
 h3 {
     font-family: var(--heading-font);
-    font-size: 1.3rem;
+    font-size: 1.6rem;
     font-weight: 600;
-    letter-spacing: -0.3px;
+    letter-spacing: -0.5px;
 }
 
 /* Dashboard Grid */
@@ -4711,52 +4715,28 @@ footer {
    ========================================= */
 
 .need-based-section {
-    padding: 4rem 1.5rem;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.need-header {
-    text-align: center;
-    margin-bottom: 3rem;
-}
-
-.need-header h2 {
-    font-family: var(--accent-font);
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: var(--primary-blue);
-    margin-bottom: 1rem;
-    letter-spacing: -0.5px;
-}
-
-.need-header p {
-    font-size: 1.1rem;
-    color: #666;
-    max-width: 700px;
-    margin: 0 auto;
+    padding: 8rem 0;
+    background-color: var(--background);
 }
 
 .need-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2.5rem;
 }
 
 .need-card {
-    background: white;
-    border-radius: 24px;
-    padding: 2rem;
-    text-decoration: none;
-    color: inherit;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    position: relative;
+    height: 480px;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    background-color: #000;
+    box-shadow: var(--shadow);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+    justify-content: flex-end;
+    border: 1px solid rgba(0,0,0,0.05);
 }
 
 .need-card::before {
@@ -4766,14 +4746,97 @@ footer {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, rgba(0, 75, 160, 0.05) 0%, rgba(0, 75, 160, 0) 100%);
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    pointer-events: none;
+    background-image: var(--bg-img);
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.8s ease;
+    z-index: 1;
+}
+
+.need-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0,0,0,0) 20%, rgba(0,0,0,0.8) 100%);
+    z-index: 2;
 }
 
 .need-card:hover {
     transform: translateY(-10px);
+    box-shadow: var(--shadow-hover);
+}
+
+.need-card:hover::before {
+    transform: scale(1.1);
+}
+
+.need-card-content {
+    position: relative;
+    z-index: 3;
+    padding: 2.5rem;
+    color: white;
+    width: 100%;
+}
+
+.need-card h3 {
+    font-size: 2rem;
+    color: white;
+    margin-bottom: 0.75rem;
+}
+
+.need-card p {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.need-refinement {
+    margin-bottom: 1.5rem;
+}
+
+.premium-select {
+    width: 100%;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.premium-select option {
+    background: white;
+    color: var(--dark-text);
+}
+
+.btn-need {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    background: white;
+    color: var(--primary-blue);
+    padding: 1rem;
+    border-radius: 14px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.05rem;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.btn-need:hover {
+    background: var(--primary-blue);
+    color: white;
+    transform: translateY(-2px);
+}
     box-shadow: 0 20px 40px rgba(0, 75, 160, 0.1);
     border-color: rgba(0, 75, 160, 0.1);
 }
