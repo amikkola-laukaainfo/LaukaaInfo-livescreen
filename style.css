@@ -1047,7 +1047,7 @@ main {
 }
 
 section {
-    margin-bottom: 4rem;
+    margin-bottom: 2.5rem;
 }
 
 h2 {
@@ -4345,7 +4345,7 @@ footer {
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 1.5rem;
     max-width: 1200px;
-    margin: 0 auto 4rem;
+    margin: 0 auto 2.5rem;
     padding: 0 1rem;
 }
 
@@ -4817,7 +4817,7 @@ footer {
    ========================================= */
 
 .need-based-section {
-    padding: 8rem 0;
+    padding: 4rem 0;
     background-color: var(--background);
 }
 
