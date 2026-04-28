@@ -1053,7 +1053,7 @@ section {
 h2 {
     font-family: var(--heading-font);
     font-size: 2.8rem; /* Larger, more slender */
-    font-weight: 500; /* Lighter weight for elegance */
+    font-weight: 400; /* Lighter weight for elegance */
     margin-bottom: 1rem;
     color: var(--dark-text);
     letter-spacing: -1px;
