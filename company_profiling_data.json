@@ -1531,7 +1531,6 @@
                 "home_service": false,
                 "weekend_service": true,
                 "not_suitable_for": [
-                    "muutto",
                     "lasten syntymäpäivät"
                 ],
                 "paired_with_by_context": {
@@ -1561,7 +1560,11 @@
                     "muistotilaisuus",
                     "digitointi",
                     "arkistointi",
-                    "häävideot"
+                    "häävideot",
+                    "valokuvaus",
+                    "häävideoiden editointi",
+                    "hääkoosteet",
+                    "muistovideo"
                 ],
                 "description": "Digimedian palveluihin erikoistunut yritys, joka tarjoaa digitointipalveluja (videokasetit, kaitafilmit, valokuvat, diat, negatiivit, äänikelat ja yritysarkistot), video- ja animaatiotuotantoa, valokuvausta, verkkosivujen ja some-sisällön suunnittelua, digipainotuotteita, brändäystä sekä digitaalisen markkinoinnin konsultointia. Palveluun kuuluu myös digitaalisen median hyötyjen ja haasteiden kartoitus yritysasiakkaille sekä digivalmiuksien kehittäminen. Mediazoo toimii Lievestuoreella Keski-Suomessa ja palvelee digitointiasiakkaita koko Suomessa postitse toimitettavien aineistojen kautta.",
                 "website": "www.mediazoo.fi",
@@ -1742,7 +1745,7 @@
                 "group_bookings": false
             },
             "meta": {
-                "last_updated": "2026-04-27T17:02:23.936Z",
+                "last_updated": "2026-04-28T07:27:17.648Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -10472,7 +10475,11 @@
                 "corporate_clients": false,
                 "home_service": false,
                 "weekend_service": false,
-                "not_suitable_for": [],
+                "not_suitable_for": [
+                    "kuljetus",
+                    "bussi",
+                    "taksi"
+                ],
                 "paired_with_by_context": {},
                 "sub_contexts": [],
                 "description": "",
@@ -10633,7 +10640,7 @@
                 "group_bookings": false
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-04-28T07:25:11.128Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -12154,7 +12161,11 @@
                 "corporate_clients": false,
                 "home_service": false,
                 "weekend_service": false,
-                "not_suitable_for": [],
+                "not_suitable_for": [
+                    "kuljetus",
+                    "bussi",
+                    "taksi"
+                ],
                 "paired_with_by_context": {},
                 "sub_contexts": [],
                 "description": "Yrityksen toimialana on tapahtumien järjestäminen, kokouspalvelut ja hyvinvointipalvelut.",
@@ -12315,7 +12326,7 @@
                 "group_bookings": false
             },
             "meta": {
-                "last_updated": "2026-04-27T06:19:42.785Z",
+                "last_updated": "2026-04-28T07:25:38.205Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -12894,7 +12905,11 @@
                 "corporate_clients": false,
                 "home_service": false,
                 "weekend_service": false,
-                "not_suitable_for": [],
+                "not_suitable_for": [
+                    "kuljetus",
+                    "bussi",
+                    "taksi"
+                ],
                 "paired_with_by_context": {},
                 "sub_contexts": [],
                 "description": "",
@@ -13055,7 +13070,7 @@
                 "group_bookings": false
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-04-28T07:25:38.205Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -39476,7 +39491,11 @@
                 "corporate_clients": false,
                 "home_service": false,
                 "weekend_service": false,
-                "not_suitable_for": [],
+                "not_suitable_for": [
+                    "kuljetus",
+                    "bussi",
+                    "taksi"
+                ],
                 "paired_with_by_context": {},
                 "sub_contexts": [],
                 "description": "",
@@ -39637,7 +39656,7 @@
                 "group_bookings": false
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-04-28T07:26:07.173Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -44289,7 +44308,11 @@
                 "corporate_clients": true,
                 "home_service": false,
                 "weekend_service": false,
-                "not_suitable_for": [],
+                "not_suitable_for": [
+                    "kuljetus",
+                    "bussi",
+                    "taksi"
+                ],
                 "paired_with_by_context": {},
                 "sub_contexts": [],
                 "description": "",
@@ -44450,7 +44473,7 @@
                 "group_bookings": false
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-04-28T07:26:07.173Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
