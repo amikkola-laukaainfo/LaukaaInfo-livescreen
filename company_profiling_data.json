@@ -1499,9 +1499,11 @@
             "core": {
                 "fits_for": {
                     "kokoukset": 35,
-                    "yrityksen kehittäminen": 75,
-                    "events_and_celebrations": 30,
-                    "business_growth": 25
+                    "yrityksen-kehittäminen": 75,
+                    "häät": 40,
+                    "hautajaiset": 40,
+                    "yritysjuhlat": 40,
+                    "vapaa-aika": 20
                 },
                 "priority_score": 52,
                 "paired_with": [

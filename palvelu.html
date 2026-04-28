@@ -747,15 +747,24 @@
                     }
 
                     // profilointi_filter: schema-pohjainen hard filter
+                    let isProfiledMatch = false;
                     if (opt.profilointi_filter) {
                         const pf = opt.profilointi_filter;
                         const actualVal = c.profiling?.[pf.section]?.[pf.field];
-                        // Jos yritysellä on profilointi mutta arvo ei täsmää → suljetaan pois
+                        
+                        // Jos yrityksellä on profilointi kyseisessä osiossa, sen on täsmättävä
                         if (c.profiling && c.profiling[pf.section] !== undefined) {
-                            if (actualVal !== pf.value) return false;
+                            const match = (actualVal === pf.value) || (Array.isArray(actualVal) && actualVal.includes(pf.value));
+                            if (match) {
+                                isProfiledMatch = true;
+                            } else {
+                                return false; // Ehdoton hylkäys: profiili löytyy mutta arvo ei täsmää
+                            }
                         }
-                        // Jos ei profilointia lainkaan, jatketaan tagi-haulla
                     }
+
+                    // Jos löytyi tarkka profiilimatch, se riittää (ei tarvitse enää tagi-checkiä)
+                    if (isProfiledMatch) return true;
 
                     // Jos tultiin suoraan etusivulta ilman steppejä tai valittiin vaihtoehto ilman tageja (esim. "Vain tilat")
                     if (!opt.tags || opt.tags.length === 0) {
