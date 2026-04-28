@@ -764,7 +764,18 @@
                     }
 
                     // Jos löytyi tarkka profiilimatch, se riittää (ei tarvitse enää tagi-checkiä)
-                    if (isProfiledMatch) return true;
+                    // MUTTA: Jos optio vaatii kapasiteettia (on tila), hylätään yritykset joilla kapasiteetti on 0,
+                    // ellei niillä ole myös nimenomaista juhlatila-tagia. Tämä estää esim. valokuvaajien 
+                    // (wedding_specialized) nousemisen juhlatiloiksi.
+                    if (isProfiledMatch) {
+                        if (opt.capacity_req > 0) {
+                            const cap = getCompanyCapacity(c, currentProfilingKey);
+                            const hasVenueTag = (c.tags || '').toLowerCase().includes('juhlatila') || 
+                                               (c.kategoria || '').toLowerCase().includes('juhlatila');
+                            if (cap === 0 && !hasVenueTag) return false;
+                        }
+                        return true;
+                    }
 
                     // Jos tultiin suoraan etusivulta ilman steppejä tai valittiin vaihtoehto ilman tageja (esim. "Vain tilat")
                     if (!opt.tags || opt.tags.length === 0) {
