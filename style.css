@@ -4825,16 +4825,19 @@ footer {
 }
 
 .need-card h3 {
-    font-size: 2rem;
-    color: white;
+    font-size: 2.2rem;
+    color: #ffffff; /* White for better contrast on dark overlay */
     margin-bottom: 0.75rem;
+    font-weight: 600;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3); /* Subtle shadow for readability */
 }
 
 .need-card p {
-    font-size: 1rem;
-    color: rgba(255,255,255,0.9);
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.95);
     margin-bottom: 1.5rem;
     line-height: 1.5;
+    text-shadow: 0 1px 5px rgba(0,0,0,0.2);
 }
 
 .need-refinement {

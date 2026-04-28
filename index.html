@@ -388,40 +388,37 @@
                         </div>
                     </div>
 
-                <div class="need-card" style="position: relative;">
-                    <div class="need-icon">🏢</div>
-                    <h3>Taloyhtiön huolto</h3>
-                    <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 0.5rem;">Ammattitaitoiset kumppanit taloyhtiöille.</p>
-                    
-    <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
+                    <div class="need-card" style="--bg-img: url('https://images.unsplash.com/photo-1590069261209-f8e9b8642343?q=80&w=800&auto=format&fit=crop');">
+                        <div class="need-card-content">
+                            <h3>Taloyhtiön huolto</h3>
+                            <p>Ammattitaitoiset kumppanit taloyhtiöille. Huoltosopimukset ja päivystys.</p>
+                            <div class="need-refinement">
+                                <select class="premium-select" onchange="updateNeedLink(this, 'taloyhtion-huolto')">
+                                    <option value="">Tarkenna tarvetta...</option>
+                                    <option value="maintenance_contracts">Jatkuvat huoltosopimukset</option>
+                                    <option value="property_reports">Kiinteistöraportointi</option>
+                                    <option value="emergency_response">24/7 Päivystys</option>
+                                </select>
+                            </div>
+                            <a href="palvelu.html?id=taloyhtion-huolto" id="link-taloyhtion-huolto" class="btn-need">Taloyhtiön avuksi &raquo;</a>
+                        </div>
+                    </div>
 
-        <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'taloyhtion-huolto')">
-            <option value="">Tarkenna tarvetta...</option>
-            <option value="maintenance_contracts">Jatkuvat huoltosopimukset</option>
-            <option value="property_reports">Säännöllinen kiinteistöraportointi</option>
-            <option value="emergency_response">24/7 Päivystys</option>
-        </select>
-    </div>
-    <a href="palvelu.html?id=taloyhtion-huolto" id="link-taloyhtion-huolto" class="arrow" style="display: block; text-align: center; text-decoration: none; padding: 0.6rem; border-radius: 8px; margin-top: 0.5rem; background: var(--primary-blue); color: white; font-weight: 600; opacity: 1; transform: none; box-shadow: 0 4px 10px rgba(0,86,179,0.2);">Taloyhtiön avuksi &raquo;</a>
-</div>
-
-                <div class="need-card" style="position: relative;">
-                    <div class="need-icon">🕯️</div>
-                    <h3>Hautajaiset</h3>
-                    <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 0.5rem;">Arvokkaat ja huolelliset hautajaisjärjestelyt.</p>
-                    
-    <div class="need-refinement" style="margin-top: auto; padding-top: 1rem; width: 100%;">
-
-        <select class="premium-select" style="width: 100%; margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.4rem; border-color: rgba(0,0,0,0.1);" onchange="updateNeedLink(this, 'hautajaiset')">
-            <option value="">Tarkenna tarvetta...</option>
-            <option value="quiet_private_space">Rauhallinen yksityistila</option>
-            <option value="memorial_catering">Muistotilaisuuden tarjoilut</option>
-            <option value="funeral_flowers">Hautajaiskukat</option>
-            <option value="home_service">Kotikäynti mahdollinen</option>
-        </select>
-    </div>
-    <a href="palvelu.html?id=hautajaiset" id="link-hautajaiset" class="arrow" style="display: block; text-align: center; text-decoration: none; padding: 0.6rem; border-radius: 8px; margin-top: 0.5rem; background: var(--primary-blue); color: white; font-weight: 600; opacity: 1; transform: none; box-shadow: 0 4px 10px rgba(0,86,179,0.2);">Tutustu palveluihin &raquo;</a>
-</div>
+                    <div class="need-card" style="--bg-img: url('https://images.unsplash.com/photo-1544928147-79a2dbc1f389?q=80&w=800&auto=format&fit=crop');">
+                        <div class="need-card-content">
+                            <h3>Hautajaiset</h3>
+                            <p>Arvokkaat ja huolelliset hautajaisjärjestelyt. Tilat, tarjoilut ja kukat.</p>
+                            <div class="need-refinement">
+                                <select class="premium-select" onchange="updateNeedLink(this, 'hautajaiset')">
+                                    <option value="">Tarkenna tarvetta...</option>
+                                    <option value="quiet_private_space">Rauhallinen yksityistila</option>
+                                    <option value="memorial_catering">Muistotilaisuuden tarjoilut</option>
+                                    <option value="funeral_flowers">Hautajaiskukat</option>
+                                </select>
+                            </div>
+                            <a href="palvelu.html?id=hautajaiset" id="link-hautajaiset" class="btn-need">Tutustu palveluihin &raquo;</a>
+                        </div>
+                    </div>
 
                     <div class="need-card" style="--bg-img: url('https://images.unsplash.com/photo-1556761175-b413da4baf72?q=80&w=800&auto=format&fit=crop');">
                         <div class="need-card-content">
@@ -568,23 +565,6 @@
                     </div>
                 </div> <!-- End need-grid -->
             </div> <!-- End section-container -->
-            <style>
-                .need-card h3 {
-                    font-size: 2.2rem;
-                    color: #ffffff; /* White for better contrast on dark overlay */
-                    margin-bottom: 0.75rem;
-                    font-weight: 600;
-                    text-shadow: 0 2px 10px rgba(0,0,0,0.3); /* Subtle shadow for readability */
-                }
-
-                .need-card p {
-                    font-size: 1.05rem;
-                    color: rgba(255,255,255,0.95);
-                    margin-bottom: 1.5rem;
-                    line-height: 1.5;
-                    text-shadow: 0 1px 5px rgba(0,0,0,0.2);
-                }
-            </style>
         </section>
 
         <!-- Haku-osuus (Säilytetään toissijaisena) -->
