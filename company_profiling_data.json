@@ -30313,7 +30313,7 @@
                 "phone": ""
             },
             "events_and_celebrations": {
-                "capacity_max": 119,
+                "capacity_max": 0,
                 "seated_capacity": 0,
                 "outdoor_capacity": 0,
                 "is_accessible": false,
@@ -30465,7 +30465,7 @@
                 "group_bookings": false
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-04-28T08:04:07.394Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
