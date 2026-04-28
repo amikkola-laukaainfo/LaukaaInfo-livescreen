@@ -6,6 +6,39 @@
     "properties": {
         "SCHEMA_VERSION": { "type": "string" },
         "DESCRIPTION": { "type": "string" },
+        "nodes": {
+            "type": "object",
+            "description": "Palvelupolkujen visualisointi- ja linkityssolmut",
+            "additionalProperties": {
+                "type": "object",
+                "properties": {
+                    "name": { "type": "string" },
+                    "type": {
+                        "type": "string",
+                        "enum": [
+                            "MAIN_CONTEXT",
+                            "SUB_CONTEXT",
+                            "SERVICE_ROLE",
+                            "AREA",
+                            "TAG",
+                            "PROFILE_GROUP"
+                        ]
+                    },
+                    "parent": {
+                        "type": ["string", "null"]
+                    },
+                    "visible_in_mermaid": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "priority": {
+                        "type": "integer",
+                        "default": 0
+                    }
+                },
+                "required": ["name", "type"]
+            }
+        },
         "profiles": {
             "type": "object",
             "additionalProperties": {
@@ -43,7 +76,12 @@
                             "contract_customer_available": { "type": "boolean" },
                             "corporate_clients": { "type": "boolean" },
                             "home_service": { "type": "boolean" },
-                            "weekend_service": { "type": "boolean" }
+                            "weekend_service": { "type": "boolean" },
+                            "node_links": {
+                                "type": "array",
+                                "items": { "type": "string" },
+                                "description": "Viittaukset nodes-rakenteeseen visualisointia ja palvelupolkuja varten"
+                            }
                         }
                     },
                     "categories": {
