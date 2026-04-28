@@ -1000,7 +1000,15 @@
             const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
                       Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
                       Math.sin(dLon / 2) * Math.sin(dLon / 2);
-            const c = 2        function getMatchExplanation(c, requestedCapacity, profilingKey) {
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return 6371 * c; // Distance in km
+        }
+
+        function deg2rad(deg) {
+            return deg * (Math.PI / 180);
+        }
+
+        function getMatchExplanation(c, requestedCapacity, profilingKey) {
             const reasons = [];
             if (c.profiling) {
                 const core = c.profiling.core || {};
@@ -1032,19 +1040,6 @@
             if (reasons.length === 0) return "Sopii annettuihin kriteereihin";
             // Palautetaan enintään kaksi parasta perustelua
             return reasons.slice(0, 2).join(" • ");
-        } reasons.push("Saunatilat saatavilla");
-            }
-
-            if (reasons.length === 0) return "Sopii annettuihin kriteereihin";
-            return reasons.slice(0, 2).join(" • ");
-        }
-
-        function resetPalvelu() {
-            currentStepIndex = 0;
-            selections = {};
-            document.getElementById('step-section').style.display = 'block';
-            document.getElementById('results-container').style.display = 'none';
-            renderStep();
         }
 
         function resetPalvelu() {
