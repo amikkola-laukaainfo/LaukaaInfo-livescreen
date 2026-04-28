@@ -1931,7 +1931,9 @@
                 "live_music": false,
                 "dj_services": false,
                 "karaoke_available": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "valokuvaus"
+                ],
                 "digitization_features": {
                     "digitointi": [
                         "vanhojen valokuvien digitointi",
@@ -16106,7 +16108,9 @@
                 "live_music": false,
                 "dj_services": false,
                 "karaoke_available": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "ranta"
+                ],
                 "digitization_features": [],
                 "entertainment_features": [],
                 "catering_available": false,
@@ -20896,7 +20900,9 @@
                 "live_music": true,
                 "dj_services": false,
                 "karaoke_available": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "ranta"
+                ],
                 "digitization_features": [],
                 "entertainment_features": [],
                 "catering_available": false,
@@ -23489,7 +23495,9 @@
                 "live_music": false,
                 "dj_services": false,
                 "karaoke_available": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "ranta"
+                ],
                 "digitization_features": [],
                 "entertainment_features": [],
                 "catering_available": false,
@@ -23718,7 +23726,9 @@
                 "live_music": true,
                 "dj_services": false,
                 "karaoke_available": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "ranta"
+                ],
                 "digitization_features": [],
                 "entertainment_features": [],
                 "catering_available": false,
@@ -26999,7 +27009,9 @@
                 "live_music": false,
                 "dj_services": false,
                 "karaoke_available": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "valokuvaus"
+                ],
                 "digitization_features": [],
                 "entertainment_features": [],
                 "catering_available": false,
@@ -27214,7 +27226,9 @@
                 "live_music": false,
                 "dj_services": false,
                 "karaoke_available": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "ranta"
+                ],
                 "digitization_features": [],
                 "entertainment_features": [],
                 "catering_available": false,
@@ -31537,7 +31551,9 @@
                 "live_music": false,
                 "dj_services": false,
                 "karaoke_available": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "valokuvaus"
+                ],
                 "digitization_features": [],
                 "entertainment_features": [],
                 "catering_available": false,
@@ -40816,7 +40832,9 @@
                 "live_music": false,
                 "dj_services": false,
                 "karaoke_available": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "ranta"
+                ],
                 "digitization_features": [],
                 "entertainment_features": [],
                 "catering_available": false,
@@ -44054,7 +44072,9 @@
                 "live_music": false,
                 "dj_services": false,
                 "karaoke_available": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "ranta"
+                ],
                 "digitization_features": [],
                 "entertainment_features": [],
                 "catering_available": false,
@@ -44269,7 +44289,9 @@
                 "live_music": false,
                 "dj_services": false,
                 "karaoke_available": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "ranta"
+                ],
                 "digitization_features": [],
                 "entertainment_features": [],
                 "catering_available": false,
@@ -46206,7 +46228,9 @@
                 "live_music": false,
                 "dj_services": false,
                 "karaoke_available": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "ranta"
+                ],
                 "digitization_features": [],
                 "entertainment_features": [],
                 "has_wifi": true,
@@ -50311,7 +50335,9 @@
                 "live_music": false,
                 "dj_services": false,
                 "karaoke_available": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "ranta"
+                ],
                 "digitization_features": [],
                 "entertainment_features": [],
                 "catering_available": false,
@@ -50546,7 +50572,9 @@
                 "live_music": false,
                 "dj_services": false,
                 "karaoke_available": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "ranta"
+                ],
                 "digitization_features": [],
                 "entertainment_features": [],
                 "catering_available": false,
@@ -50983,7 +51011,9 @@
                 "live_music": false,
                 "dj_services": false,
                 "karaoke_available": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "ranta"
+                ],
                 "digitization_features": [],
                 "entertainment_features": [],
                 "catering_available": false,
