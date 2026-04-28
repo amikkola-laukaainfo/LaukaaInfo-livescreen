@@ -1502,6 +1502,7 @@
             "name": "Mediazoo",
             "core": {
                 "fits_for": {
+                    "häät": 40,
                     "kokoukset": 35,
                     "yrityksen kehittäminen": 75,
                     "events-and-celebrations": 30,
@@ -1592,7 +1593,7 @@
                 "wedding_menu_available": false,
                 "cake_service": false,
                 "partner_venues": [],
-                "wedding_photography": false,
+                "wedding_photography": true,
                 "drone_available": false,
                 "video_production": true,
                 "live_music": false,
@@ -22918,6 +22919,7 @@
             "name": "Jenora Design",
             "core": {
                 "fits_for": {
+                    "häät": 40,
                     "hautajaiset": 35,
                     "vapaa-aika": 35
                 },
@@ -22967,7 +22969,7 @@
                 "alcohol_license": false,
                 "private_booking": false,
                 "late_night_events": false,
-                "wedding_specialized": false,
+                "wedding_specialized": true,
                 "catering_min_capacity": 0,
                 "catering_max_capacity": 0,
                 "dietary_specialties": [],
@@ -22975,7 +22977,7 @@
                 "wedding_menu_available": false,
                 "cake_service": false,
                 "partner_venues": [],
-                "wedding_photography": false,
+                "wedding_photography": true,
                 "drone_available": false,
                 "video_production": false,
                 "live_music": false,
