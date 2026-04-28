@@ -752,120 +752,114 @@
             const allMatchingCompanies = new Set();
             const matchingGroups = [];
 
-            featureOptions.forEach(opt => {
-                const companiesForOpt = window.allCompanies.filter(c => {
-                    const notSuitable = c.profiling?.core?.not_suitable_for || [];
-                    if (Array.isArray(notSuitable)) {
-                        if (notSuitable.includes(currentProfilingKey)) return false;
-                        if (opt.tags && opt.tags.some(tag => notSuitable.includes(tag.toLowerCase()))) return false;
-                    }
+            activeSteps.forEach(step => {
+                if (step.id.startsWith('_')) return;
+                const stepSelection = selections[step.id];
+                if (!stepSelection) return;
 
-                    if (selections._sub_contexts && selections._sub_contexts.length > 0) {
-                        const companySubContexts = c.profiling?.core?.sub_contexts || [];
-                        let isSubContextMatch = false;
+                const options = Array.isArray(stepSelection) ? stepSelection : [stepSelection];
+
+                options.forEach(opt => {
+                    const companiesForOpt = window.allCompanies.filter((c, idx) => {
+                        const fitsScore = getFitsForScore(c, currentProfilingKey);
                         
-                        // Normalize the current profiling key for sub-context lookup
-                        const underscoreKey = currentProfilingKey.replace(/-/g, '_');
-                        const finnishMap = { 'events_and_celebrations': 'häät', 'business_events': 'yritysjuhlat', 'funerals_and_memorials': 'hautajaiset' };
-                        const finKey = finnishMap[underscoreKey];
-
-                        if (Array.isArray(companySubContexts)) {
-                            isSubContextMatch = selections._sub_contexts.some(sc => companySubContexts.includes(sc));
-                        } else if (typeof companySubContexts === 'object' && companySubContexts !== null) {
-                            const relevantSubContexts = companySubContexts[underscoreKey] || companySubContexts[currentProfilingKey] || (finKey ? companySubContexts[finKey] : null);
+                        if (selections._sub_contexts && selections._sub_contexts.length > 0) {
+                            const companySubContexts = c.profiling?.core?.sub_contexts || [];
+                            let isSubContextMatch = false;
                             
-                            if (relevantSubContexts) {
-                                isSubContextMatch = selections._sub_contexts.some(sc => relevantSubContexts.includes(sc));
+                            const underscoreKey = currentProfilingKey.replace(/-/g, '_');
+                            const finnishMap = {
+                                'events_and_celebrations': 'häät',
+                                'business_events': 'yritysjuhlat',
+                                'funerals_and_memorials': 'hautajaiset',
+                                'startup_services': 'yrityksen perustaminen',
+                                'business_growth': 'yrityksen kehittäminen'
+                            };
+                            const finKey = finnishMap[underscoreKey];
+
+                            if (Array.isArray(companySubContexts)) {
+                                if (companySubContexts.length === 0) isSubContextMatch = true;
+                                else isSubContextMatch = selections._sub_contexts.some(sc => companySubContexts.includes(sc));
+                            } else if (typeof companySubContexts === 'object' && companySubContexts !== null) {
+                                const relevantSubContexts = companySubContexts[underscoreKey] || companySubContexts[currentProfilingKey] || (finKey ? companySubContexts[finKey] : null);
+                                if (relevantSubContexts) isSubContextMatch = selections._sub_contexts.some(sc => relevantSubContexts.includes(sc));
+                                else isSubContextMatch = true; 
                             } else {
-                                isSubContextMatch = true; 
+                                isSubContextMatch = true;
                             }
-                        } else {
-                            isSubContextMatch = true;
+
+                            if (!isSubContextMatch) {
+                                const mainFitsScore = getFitsForScore(c, currentProfilingKey);
+                                const hasAnySubContexts = Array.isArray(companySubContexts) ? companySubContexts.length > 0 : !!companySubContexts;
+                                if (hasAnySubContexts && mainFitsScore < 70) return false; 
+                            }
                         }
 
-                        if (!isSubContextMatch) {
-                            // If sub-context doesn't match, we only allow it if it's a very strong main context match (>= 70)
-                            // Or if the company has NO sub-contexts defined at all (middle-ground for incomplete data)
-                            const mainFitsScore = getFitsForScore(c, currentProfilingKey);
-                            const hasAnySubContexts = Array.isArray(companySubContexts) ? companySubContexts.length > 0 : !!companySubContexts;
-                            
-                            if (hasAnySubContexts && mainFitsScore < 70) return false; 
+                        if (opt.require_fits_for) {
+                            const rfKey = opt.require_fits_for.key;
+                            const rfMin = opt.require_fits_for.min || 20;
+                            const rfScore = getFitsForScore(c, rfKey);
+                            if (rfScore < rfMin) return false;
                         }
-                    }
 
-                    if (opt.require_fits_for) {
-                        const rfKey = opt.require_fits_for.key;
-                        const rfMin = opt.require_fits_for.min || 20;
-                        const rfScore = getFitsForScore(c, rfKey);
-                        if (rfScore < rfMin) return false;
-                    }
+                        let isProfiledMatch = false;
+                        if (opt.node_link) {
+                            const links = c.profiling?.core?.node_links || [];
+                            if (links.includes(opt.node_link)) isProfiledMatch = true;
+                        }
+                        if (opt.node_links) {
+                            const links = c.profiling?.core?.node_links || [];
+                            if (opt.node_links.some(l => links.includes(l))) isProfiledMatch = true;
+                        }
 
-                    let isProfiledMatch = false;
+                        if (opt.profilointi_filter) {
+                            const pf = opt.profilointi_filter;
+                            const catData = getCategoryData(c, pf.section);
+                            if (catData) {
+                                const actualVal = catData[pf.field];
+                                let match = (actualVal === pf.value) || (Array.isArray(actualVal) && actualVal.includes(pf.value));
+                                if (!match && typeof actualVal === 'object' && actualVal !== null) {
+                                    if (Object.keys(actualVal).includes(pf.value)) match = true;
+                                    else match = Object.values(actualVal).some(arr => Array.isArray(arr) && arr.includes(pf.value));
+                                }
+                                if (match) isProfiledMatch = true;
+                            }
+                        }
+
+                        if (!isProfiledMatch && opt.tags) {
+                            if (opt.tags.includes('digitointi')) {
+                                const catData = getCategoryData(c, currentProfilingKey);
+                                if (catData && fitsScore > 0 && Array.isArray(catData.digitization_features) && catData.digitization_features.length > 0) isProfiledMatch = true;
+                            }
+                            if (opt.tags.includes('juhlatila')) {
+                                const catData = getCategoryData(c, 'events_and_celebrations');
+                                if (catData && fitsScore > 0 && (catData.capacity_max > 0 || catData.seated_capacity > 0)) isProfiledMatch = true;
+                            }
+                        }
+
+                        if (isProfiledMatch) return true;
+
+                        if (opt.capacity_req > 0 || requestedCapacity > 0) {
+                            const cap = getCompanyCapacity(c, currentProfilingKey);
+                            const hasVenueTag = (c.tags || '').toLowerCase().includes('juhlatila') || 
+                                               (c.kategoria || '').toLowerCase().includes('juhlatila');
+                            if (cap === 0 && !hasVenueTag && opt.capacity_req > 0) return false;
+                        }
+
+                        if (!opt.tags || opt.tags.length === 0) return fitsScore > 10;
+                        const companyContent = ((c.tags || '') + ' ' + (c.kategoria || '') + ' ' + (c.nimi || '')).toLowerCase();
+                        const tagMatch = opt.tags.some(tag => companyContent.includes(tag.toLowerCase()));
+                        
+                        return tagMatch;
+                    });
                     
-                    // 1. Check explicit node_links if defined in option
-                    if (opt.node_link) {
-                        const links = c.profiling?.core?.node_links || [];
-                        if (links.includes(opt.node_link)) isProfiledMatch = true;
+                    console.log(`Option "${opt.label}" found ${companiesForOpt.length} companies.`);
+                    
+                    if (companiesForOpt.length > 0) {
+                        companiesForOpt.forEach(c => allMatchingCompanies.add(c));
+                        matchingGroups.push({ opt, companies: companiesForOpt });
                     }
-                    if (opt.node_links) {
-                        const links = c.profiling?.core?.node_links || [];
-                        if (opt.node_links.some(l => links.includes(l))) isProfiledMatch = true;
-                    }
-
-                    // 2. Check traditional profiling_filter
-                    if (opt.profilointi_filter) {
-                        const pf = opt.profilointi_filter;
-                        const catData = getCategoryData(c, pf.section);
-                        if (catData) {
-                            const actualVal = catData[pf.field];
-                            let match = (actualVal === pf.value) || (Array.isArray(actualVal) && actualVal.includes(pf.value));
-                            if (!match && typeof actualVal === 'object' && actualVal !== null) {
-                                if (Object.keys(actualVal).includes(pf.value)) match = true;
-                                else match = Object.values(actualVal).some(arr => Array.isArray(arr) && arr.includes(pf.value));
-                            }
-                            if (match) isProfiledMatch = true;
-                            // Note: We don't return false here anymore to allow tag-based fallback
-                            // if the explicit profile data is missing but tags exist.
-                        }
-                    }
-
-                    // 3. Fallback: Automated profiling check for common tags (like digitointi)
-                    if (!isProfiledMatch && opt.tags) {
-                        if (opt.tags.includes('digitointi')) {
-                            const catData = getCategoryData(c, currentProfilingKey);
-                            const fitsScore = getFitsForScore(c, currentProfilingKey);
-                            if (catData && fitsScore > 0 && Array.isArray(catData.digitization_features) && catData.digitization_features.length > 0) {
-                                isProfiledMatch = true;
-                            }
-                        }
-                        if (opt.tags.includes('juhlatila')) {
-                            const catData = getCategoryData(c, 'events_and_celebrations');
-                            const fitsScore = getFitsForScore(c, 'events_and_celebrations');
-                            // Fallback-matchaus juhlatilalle vaatii soveltuvuutta JA kapasiteettia
-                            if (catData && fitsScore > 0 && (catData.capacity_max > 0 || catData.seated_capacity > 0)) {
-                                isProfiledMatch = true;
-                            }
-                        }
-                    }
-
-                    if (isProfiledMatch) return true;
-
-                    if (opt.capacity_req > 0 || requestedCapacity > 0) {
-                        const cap = getCompanyCapacity(c, currentProfilingKey);
-                        const hasVenueTag = (c.tags || '').toLowerCase().includes('juhlatila') || 
-                                           (c.kategoria || '').toLowerCase().includes('juhlatila');
-                        if (cap === 0 && !hasVenueTag && opt.capacity_req > 0) return false;
-                    }
-
-                    if (!opt.tags || opt.tags.length === 0) return getFitsForScore(c, currentProfilingKey) > 10;
-                    const companyContent = ((c.tags || '') + ' ' + (c.kategoria || '') + ' ' + (c.nimi || '')).toLowerCase();
-                    return opt.tags.some(tag => companyContent.includes(tag.toLowerCase()));
                 });
-                
-                if (companiesForOpt.length > 0) {
-                    companiesForOpt.forEach(c => allMatchingCompanies.add(c));
-                    matchingGroups.push({ opt, companies: companiesForOpt });
-                }
             });
 
             // Partnership detection
