@@ -29,9 +29,9 @@ const NEEDS_CONFIG = {
                 "id": "tila",
                 "question": "Millaista juhlatilaa etsit?",
                 "options": [
-                    { "label": "Juhlatila (iso)", "tags": ["juhlatila"], "profilointi_filter": { "section": "events_and_celebrations", "field": "wedding_specialized", "value": true } },
-                    { "label": "Tunnelmallinen kartano", "tags": ["kartano", "juhlatila"] },
-                    { "label": "Luonnonläheinen tila", "tags": ["luonto", "juhlatila"], "profilointi_filter": { "section": "events_and_celebrations", "field": "is_lakeside", "value": true } }
+                    { "label": "Juhlatila (iso)", "tags": ["juhlatila"], "capacity_req": 100 },
+                    { "label": "Tunnelmallinen kartano", "tags": ["kartano", "juhlatila"], "capacity_req": 50 },
+                    { "label": "Luonnonläheinen tila", "tags": ["luonto", "juhlatila"], "capacity_req": 30, "profilointi_filter": { "section": "events_and_celebrations", "field": "is_lakeside", "value": true } }
                 ]
             },
             {
