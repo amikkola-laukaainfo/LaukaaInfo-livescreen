@@ -375,11 +375,12 @@ header.hero-split {
     border-radius: 0; /* Remove rounding for full-width feel */
     overflow: hidden;
     box-shadow: none;
+    position: relative;
 }
 
 .hero-left {
-    background: var(--secondary-blue);
-    flex: 0 0 50%;
+    background: linear-gradient(to right, var(--secondary-blue) 0%, var(--secondary-blue) 35%, transparent 90%);
+    flex: 1;
     display: flex;
     align-items: center;
     padding: 4rem 4rem 4rem 8vw;
@@ -407,21 +408,12 @@ header.hero-split {
 }
 
 .hero-right {
-    flex: 1;
-    position: relative;
-    overflow: hidden;
-}
-
-.hero-right::after {
-    content: '';
     position: absolute;
     top: 0;
-    left: 0;
+    right: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to right, var(--secondary-blue) 0%, transparent 60%);
-    z-index: 2;
-    pointer-events: none;
+    z-index: 1;
 }
 
 .hero-nature-img {
@@ -434,7 +426,6 @@ header.hero-split {
     object-position: center;
     display: block;
     transition: transform 0.8s ease;
-    z-index: 1;
 }
 
 .hero-right-caption {
@@ -508,15 +499,13 @@ header h1 {
 
     .hero-left {
         flex: unset;
-        padding: 2rem 1.5rem;
-    }
-
-    .hero-left::after {
-        display: none;
+        padding: 3rem 1.5rem;
+        background: var(--secondary-blue); /* Solid blue in mobile stack */
     }
 
     .hero-right {
-        min-height: 150px;
+        position: relative;
+        min-height: 250px;
         flex: unset;
     }
 
