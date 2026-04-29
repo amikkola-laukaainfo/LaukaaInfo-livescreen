@@ -169,6 +169,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Alustetaan käyttäjän sijaintivalitsin (etusivulla tai jos input löytyy)
     initUserLocation();
+
+    // Top Nav Scroll Effect
+    const topNav = document.querySelector('.top-nav');
+    if (topNav) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                topNav.classList.add('scrolled');
+            } else {
+                topNav.classList.remove('scrolled');
+            }
+        });
+    }
 });
 
 
