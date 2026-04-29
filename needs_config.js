@@ -135,8 +135,8 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": "Tarvitsetteko hyvinvointia tai ohjelmaa tyky-päivään?",
                 "options": [
-                    { "label": "Yrityshyvinvointi / Luennot", "tags": ["hyvinvointi"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "refinement_tags", "value": "yrityshyvinvointi" } },
-                    { "label": "Ohjattu liikunta / Jooga", "tags": ["liikunta"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "refinement_tags", "value": "jooga" } },
+                    { "label": "Yrityshyvinvointi / Luennot", "tags": ["hyvinvointi"] },
+                    { "label": "Ohjattu liikunta / Jooga", "tags": ["liikunta"] },
                     { "label": "Luontoelämykset / Eräopas", "tags": ["ohjelmapalvelut"] }
                 ]
             }
@@ -230,7 +230,7 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": "Mitä tarvitaan onnistuneisiin juhliin?",
                 "options": [
-                    { "label": "Pitopalvelu / Ruoat", "tags": ["pitopalvelu"], "profilointi_filter": { "section": "events_and_celebrations", "field": "catering_available", "value": true } },
+                    { "label": "Pitopalvelu / Ruoat", "tags": ["pitopalvelu"] },
                     { "label": "Kakut / Leivonnaiset", "tags": ["leipomo", "elintarvike"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "hääkakku" } },
                     { "label": "Ohjelma / Esiintyjä", "tags": ["ohjelmapalvelut"] },
                     { "label": "Valokuvaaus", "tags": ["valokuvaus"] },
@@ -269,7 +269,7 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": "Uuden kodin valmistelu?",
                 "options": [
-                    { "label": "Muuttosiivous", "tags": ["siivous", "puhdistuspalvelut"], "profilointi_filter": { "section": "moving_and_housing", "field": "cleaning_service", "value": true } },
+                    { "label": "Muuttosiivous", "tags": ["siivous", "puhdistuspalvelut"] },
                     { "label": "Sähkösopimus / Sähköasennukset", "tags": ["sähköasennukset"] },
                     { "label": "Pieni pintaremontti", "tags": ["maalaustyöt", "rakentaminen"] }
                 ]
@@ -298,7 +298,7 @@ const NEEDS_CONFIG = {
                 "question": "Millaista ammattilaista etsit?",
                 "options": [
                     { "label": "Rakennus- / Remonttimies", "tags": ["rakentaminen", "rakennustyöt"] },
-                    { "label": "Sähköasentaja", "tags": ["sähköasennukset"], "profilointi_filter": { "section": "construction_and_maintenance", "field": "refinement_tags", "value": "sähkötyöt" } },
+                    { "label": "Sähköasentaja", "tags": ["sähköasennukset"] },
                     { "label": "LVI-asentaja (Putkimies)", "tags": ["LVI"] },
                     { "label": "Maalari / Tapetoija", "tags": ["maalaustyöt"] },
                     { "label": "Suunnittelija / Arkkitehti", "tags": ["suunnittelutoimisto"] }
@@ -514,7 +514,7 @@ const NEEDS_CONFIG = {
                 "question": "Alkuvaiheen hallinto?",
                 "options": [
                     { "label": "Yritysneuvonta / Liiketoimintasuunnitelma", "tags": ["yritysneuvonta", "konsultointi"], "profilointi_filter": { "section": "startup_services", "field": "business_advisory", "value": true } },
-                    { "label": "Kirjanpito ja tilitoimisto", "tags": ["tilitoimisto"], "profilointi_filter": { "section": "startup_services", "field": "bookkeeping_available", "value": true } },
+                    { "label": "Kirjanpito ja tilitoimisto", "tags": ["tilitoimisto"] },
                     { "label": "Vakuutukset", "tags": ["vakuutus"], "profilointi_filter": { "section": "startup_services", "field": "refinement_tags", "value": "vakuutukset" } },
                     { "label": "Lakipalvelut", "tags": ["lakiasiaintoimistot"], "profilointi_filter": { "section": "startup_services", "field": "refinement_tags", "value": "lakipalvelut" } }
                 ]
@@ -555,7 +555,7 @@ const NEEDS_CONFIG = {
                     { "label": "Google-mainonta / SEO", "tags": ["google-mainonta", "mainostoimisto"], "profilointi_filter": { "section": "business_growth", "field": "marketing_services", "value": true } },
                     { "label": "Sosiaalisen median markkinointi", "tags": ["somemainonta", "mainostoimisto"], "profilointi_filter": { "section": "business_growth", "field": "marketing_services", "value": true } },
                     { "label": "Verkkokaupan rakentaminen", "tags": ["verkkokauppa", "it-palvelut"] },
-                    { "label": "Videotuotanto / Mainosvideot", "tags": ["videotuotanto", "videomarkkinointi", "video"], "profilointi_filter": { "section": "business_growth", "field": "refinement_tags", "value": "video" } }
+                    { "label": "Videotuotanto / Mainosvideot", "tags": ["videotuotanto", "videomarkkinointi", "video"], "profilointi_filter": { "section": "business_growth", "field": "refinement_tags", "value": "videomarkkinointi" } }
                 ]
             },
             {
