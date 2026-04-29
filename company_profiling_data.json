@@ -7,10 +7,20 @@
             "name": "Tyyni Hoiva Suomi Oy",
             "core": {
                 "fits_for": {
+                    "hyvinvointi-ja-kauneus": 92,
+                    "ikäihmisten-palvelut": 95,
+                    "omaishoitajien-tuki": 94,
+                    "kotipalvelut": 90,
+                    "arjen-apu": 93,
                     "events-and-celebrations": 0
                 },
-                "priority_score": 0,
-                "paired_with": [],
+                "priority_score": 78,
+                "paired_with": [
+                    "Siivouspalvelu",
+                    "Kotipalvelu",
+                    "Hyvinvointipalvelut",
+                    "Kuljetuspalvelu"
+                ],
                 "service_area": {
                     "mode": "SERVICE_AREA",
                     "radius_km": 100,
@@ -18,18 +28,52 @@
                         "Keski-Suomi",
                         "Pohjois-Savo"
                     ],
-                    "note": "Palveluita tarjotaan Keski-Suomessa ja Pohjois-Savossa, lisäksi maininta mahdollisuudesta työskentelyyn Espanjan Aurinkorannikolla ."
+                    "note": "Palveluita tarjotaan Keski-Suomessa ja Pohjois-Savossa asiakkaan kotiin, palvelutaloihin ja asumisyksiköihin. Mahdollisuus työskentelyyn myös Espanjan Aurinkorannikolla."
                 },
                 "emergency_available": false,
                 "contract_customer_available": true,
                 "corporate_clients": true,
                 "home_service": true,
                 "weekend_service": true,
-                "not_suitable_for": [],
-                "paired_with_by_context": {},
-                "sub_contexts": [],
-                "node_links": [],
-                "description": "Tyyni Hoiva Suomi Oy tarjoaa yksilöllisiä, turvallisia ja ihmisläheisiä sosiaalihuollon avopalveluja. Palveluita ovat henkilökohtainen apu, arjen tuki sekä omaishoitajien sijaistus. Yritys palvelee asiakkaita heidän omissa kodeissaan, palvelutaloissa ja asumisyksiköissä, mahdollistaen omannäköisen arjen ja hyvinvoinnin .",
+                "not_suitable_for": [
+                    "juhlatilat",
+                    "rakennuspalvelut"
+                ],
+                "paired_with_by_context": {
+                    "ikäihmisten-palvelut": [
+                        "kotisiivous",
+                        "ateriapalvelu",
+                        "kuljetuspalvelu"
+                    ],
+                    "omaishoitajien-tuki": [
+                        "omaishoitajan sijaistus",
+                        "kotipalvelu"
+                    ],
+                    "hyvinvointi-ja-kauneus": [
+                        "kotikäynnit",
+                        "hyvinvointipalvelut"
+                    ]
+                },
+                "sub_contexts": [
+                    "henkilökohtainen apu",
+                    "arjen tuki",
+                    "omaishoitajan sijaistus",
+                    "kotikäynnit",
+                    "ikäihmisten palvelut",
+                    "avopalvelut",
+                    "asumisyksiköt",
+                    "palvelutalot",
+                    "hyvinvointipalvelut",
+                    "sosiaalihuolto"
+                ],
+                "node_links": [
+                    "LAUKAA",
+                    "HYVINVOINTI",
+                    "KOTIPALVELUT",
+                    "IKAIHMISET",
+                    "OMAISHOITO"
+                ],
+                "description": "Tyyni Hoiva Suomi Oy tarjoaa yksilöllisiä, turvallisia ja ihmisläheisiä sosiaalihuollon avopalveluja. Palveluihin kuuluvat henkilökohtainen apu, arjen tuki sekä omaishoitajien sijaistus. Yritys palvelee asiakkaita heidän omissa kodeissaan, palvelutaloissa ja asumisyksiköissä mahdollistaen omannäköisen arjen, turvallisuuden ja hyvinvoinnin. Toiminta painottuu Keski-Suomeen ja Pohjois-Savoon.",
                 "website": "",
                 "email": "",
                 "phone": ""
@@ -77,7 +121,7 @@
                 "has_wifi": false,
                 "has_stage": false,
                 "private_booking": false,
-                "invoice_billing": false,
+                "invoice_billing": true,
                 "corporate_clients": true,
                 "vip_services": false,
                 "business_catering": false,
@@ -87,7 +131,10 @@
                 "av_support": false,
                 "staff_events_specialized": false,
                 "refinement_tags": [],
-                "wellbeing_and_activity_features": [],
+                "wellbeing_and_activity_features": [
+                    "henkilöstön tukipalvelut",
+                    "omaishoitajien tukipalvelut"
+                ],
                 "entertainment_features": [],
                 "collaborated_with": []
             },
@@ -101,9 +148,12 @@
                 "memorial_menu_available": false,
                 "funeral_flowers": false,
                 "memorial_arrangements": false,
-                "transport_assistance": false,
+                "transport_assistance": true,
                 "urgent_booking_available": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "saattopalvelu",
+                    "asiointiapu"
+                ],
                 "digitization_features": [],
                 "collaborated_with": []
             },
@@ -118,7 +168,10 @@
                 "electrician_available": false,
                 "renovation_support": false,
                 "insurance_support": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "arjen apu",
+                    "kodin tuki"
+                ],
                 "digitization_features": [],
                 "collaborated_with": []
             },
@@ -153,16 +206,18 @@
                 "collaborated_with": []
             },
             "housing_company_and_contracts": {
-                "housing_company_clients": false,
+                "housing_company_clients": true,
                 "maintenance_contracts": false,
                 "emergency_response": false,
-                "scheduled_visits": false,
+                "scheduled_visits": true,
                 "property_reports": false,
                 "invoice_billing": true,
                 "contract_customer_available": true,
                 "priority_support": false,
                 "monthly_service_plan": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "säännölliset kotikäynnit"
+                ],
                 "collaborated_with": []
             },
             "startup_services": {
@@ -197,17 +252,21 @@
             "wellbeing_and_beauty": {
                 "home_visits": true,
                 "online_booking": false,
-                "unisex_services": false,
+                "unisex_services": true,
                 "gift_cards": false,
                 "corporate_wellbeing_services": false,
                 "event_makeup": false,
                 "bridal_services": false,
                 "group_bookings": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "kotikäynnit",
+                    "henkilökohtainen apu",
+                    "hyvinvointituki"
+                ],
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-27T12:25:35.989Z",
+                "last_updated": "2026-04-29T08:17:03.261Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -1042,11 +1101,23 @@
             "name": "Tertan kahvila- ja puoti",
             "core": {
                 "fits_for": {
-                    "events-and-celebrations": 10,
-                    "business-events": 10
+                    "juhlat-ja-merkkipäivät": 88,
+                    "häät": 72,
+                    "yritysjuhlat": 78,
+                    "kokoukset": 82,
+                    "pitopalvelu": 90,
+                    "kahvila": 85,
+                    "events-and-celebrations": 84,
+                    "business-events": 76
                 },
-                "priority_score": 0,
-                "paired_with": [],
+                "priority_score": 74,
+                "paired_with": [
+                    "Juhlatila",
+                    "Pitopalvelu",
+                    "Valokuvaaja",
+                    "Kukkapalvelu",
+                    "Majoitus"
+                ],
                 "service_area": {
                     "mode": "TOIMIPISTE",
                     "radius_km": 0,
@@ -1054,28 +1125,67 @@
                         "Laukaa",
                         "Vihtavuori"
                     ],
-                    "note": "Sijaitsee Laukaan Vuonteella, osoitteessa Antinniementie 1, 41330 Vihtavuori "
+                    "note": "Sijaitsee Laukaan Vuonteella osoitteessa Antinniementie 1, 41330 Vihtavuori. Kahvila, lähituotepuoti sekä juhla- ja kokoustilat samalla toimipisteellä."
                 },
                 "emergency_available": false,
                 "contract_customer_available": false,
                 "corporate_clients": true,
                 "home_service": false,
                 "weekend_service": true,
-                "not_suitable_for": [
-                    "hautajaiset"
+                "not_suitable_for": [],
+                "paired_with_by_context": {
+                    "häät": [
+                        "juhlatila",
+                        "pitopalvelu",
+                        "kakku",
+                        "valokuvaaja"
+                    ],
+                    "yritysjuhlat": [
+                        "kokoustila",
+                        "pitopalvelu",
+                        "kahvitarjoilu"
+                    ],
+                    "kokoukset": [
+                        "kokoustila",
+                        "kahvitarjoilu",
+                        "lounastarjoilu"
+                    ],
+                    "muistotilaisuus": [
+                        "kahvitus",
+                        "pitopalvelu"
+                    ]
+                },
+                "sub_contexts": [
+                    "juhlatila",
+                    "kokoustila",
+                    "pitopalvelu",
+                    "kahvila",
+                    "lähituotepuoti",
+                    "kahvitus",
+                    "muistotilaisuus",
+                    "hääkakku",
+                    "juhlakakku",
+                    "astiavuokraus",
+                    "yritystilaisuudet",
+                    "kokouskahvit"
                 ],
-                "paired_with_by_context": {},
-                "sub_contexts": [],
-                "node_links": [],
-                "description": "Kahvila ja lähituotepuoti, joka tarjoaa itsetehtyjä suolaisia ja makeita herkkuja lähituotteista ja luonnonantimista. Puodissa myydään pientuottajien elintarvikkeita ja käsitöitä. Tiloja vuokrataan kokous- ja juhlakäyttöön. Palveluihin kuuluu myös pitopalvelu ja astiavuokraus .",
-                "website": "https://terta.fi",
-                "email": "info@terta.fi",
+                "node_links": [
+                    "LAUKAA",
+                    "VIIHTAVUORI",
+                    "HUVIT",
+                    "JUHLATILA",
+                    "PITOPALVELU",
+                    "KAHVILA"
+                ],
+                "description": "Kahvila ja lähituotepuoti, joka tarjoaa itsetehtyjä suolaisia ja makeita herkkuja lähituotteista ja luonnonantimista. Puodissa myydään pientuottajien elintarvikkeita ja käsitöitä. Tiloja vuokrataan kokous- ja juhlakäyttöön. Palveluihin kuuluvat myös pitopalvelu, kahvitukset, juhlakakut sekä astiavuokraus yrityksille ja yksityisille asiakkaille.",
+                "website": "[https://terta.fi](https://terta.fi)",
+                "email": "[info@terta.fi](mailto:info@terta.fi)",
                 "phone": "040 8289075"
             },
             "events_and_celebrations": {
-                "capacity_max": 0,
-                "seated_capacity": 0,
-                "outdoor_capacity": 0,
+                "capacity_max": 60,
+                "seated_capacity": 50,
+                "outdoor_capacity": 80,
                 "is_accessible": true,
                 "is_lakeside": false,
                 "has_sauna": false,
@@ -1085,14 +1195,17 @@
                 "alcohol_license": false,
                 "private_booking": true,
                 "late_night_events": false,
-                "wedding_specialized": false,
-                "catering_min_capacity": 0,
-                "catering_max_capacity": 0,
+                "wedding_specialized": true,
+                "catering_min_capacity": 10,
+                "catering_max_capacity": 100,
                 "dietary_specialties": [
-                    "erityisruokavaliot huomioitu"
+                    "erityisruokavaliot huomioitu",
+                    "lähiruoka",
+                    "gluteenittomat vaihtoehdot",
+                    "laktoosittomat vaihtoehdot"
                 ],
-                "staff_included": false,
-                "wedding_menu_available": false,
+                "staff_included": true,
+                "wedding_menu_available": true,
                 "cake_service": true,
                 "partner_venues": [],
                 "wedding_photography": false,
@@ -1103,47 +1216,59 @@
                 "karaoke_available": false,
                 "has_exclusive_catering": false,
                 "accommodation_included": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "juhlatila",
+                    "pitopalvelu",
+                    "hääkakku",
+                    "kahvitus"
+                ],
                 "digitization_features": [],
                 "entertainment_features": [],
                 "collaborated_with": []
             },
             "business_events": {
-                "meeting_capacity": 0,
-                "seminar_capacity": 0,
-                "conference_rooms": 0,
+                "meeting_capacity": 30,
+                "seminar_capacity": 40,
+                "conference_rooms": 1,
                 "has_projector": false,
                 "has_streaming": false,
-                "has_wifi": false,
+                "has_wifi": true,
                 "has_stage": false,
                 "private_booking": true,
-                "invoice_billing": false,
+                "invoice_billing": true,
                 "corporate_clients": true,
                 "vip_services": false,
                 "business_catering": true,
                 "event_hosting": false,
-                "corporate_gifts": false,
+                "corporate_gifts": true,
                 "branding_support": false,
                 "av_support": false,
-                "staff_events_specialized": false,
-                "refinement_tags": [],
+                "staff_events_specialized": true,
+                "refinement_tags": [
+                    "kokoustila",
+                    "kokouskahvit",
+                    "yritystilaisuudet"
+                ],
                 "wellbeing_and_activity_features": [],
                 "entertainment_features": [],
                 "collaborated_with": []
             },
             "funerals_and_memorials": {
-                "memorial_service_capacity": 0,
-                "quiet_private_space": false,
+                "memorial_service_capacity": 50,
+                "quiet_private_space": true,
                 "accessible_entry": true,
                 "memorial_catering": true,
                 "coffee_service": true,
                 "flower_arrangements": false,
-                "memorial_menu_available": false,
+                "memorial_menu_available": true,
                 "funeral_flowers": false,
                 "memorial_arrangements": false,
                 "transport_assistance": false,
                 "urgent_booking_available": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "muistotilaisuus",
+                    "kahvitus"
+                ],
                 "digitization_features": [],
                 "collaborated_with": []
             },
@@ -1238,16 +1363,18 @@
                 "home_visits": false,
                 "online_booking": false,
                 "unisex_services": false,
-                "gift_cards": false,
+                "gift_cards": true,
                 "corporate_wellbeing_services": false,
                 "event_makeup": false,
                 "bridal_services": false,
                 "group_bookings": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "lahjakortit"
+                ],
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-27T12:30:18.103Z",
+                "last_updated": "2026-04-29T08:18:27.325Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -1463,9 +1590,23 @@
         "company-268": {
             "name": "Jyväs Pakari Lievestuore",
             "core": {
-                "fits_for": {},
-                "priority_score": 0,
-                "paired_with": [],
+                "fits_for": {
+                    "häät": 75,
+                    "juhlat": 85,
+                    "pitopalvelu": 80,
+                    "muistotilaisuus": 75,
+                    "yritysjuhlat": 70,
+                    "kokoukset": 45,
+                    "events-and-celebrations": 80,
+                    "business-events": 55
+                },
+                "priority_score": 58,
+                "paired_with": [
+                    "Juhlatila",
+                    "Catering",
+                    "Kahvila",
+                    "Pitopalvelu"
+                ],
                 "service_area": {
                     "mode": "TOIMIPISTE",
                     "radius_km": 0,
@@ -1473,7 +1614,7 @@
                         "Laukaa",
                         "Lievestuore"
                     ],
-                    "note": ""
+                    "note": "Lievestuoreen leipomomyymälä ja kahvila osoitteessa Lievestuoreen Liisantie 15, 41400 Lievestuore. Lounas ma-la ja tilausleivonnaiset juhliin."
                 },
                 "emergency_available": false,
                 "contract_customer_available": true,
@@ -1481,19 +1622,46 @@
                 "home_service": false,
                 "weekend_service": true,
                 "not_suitable_for": [],
-                "paired_with_by_context": {},
-                "sub_contexts": [],
-                "node_links": [],
-                "description": "Leipomo ja myymälä, joka valmistaa ja myy leipomo-, konditoria- ja suolaistuotteita. Tarjoaa myös jäätelöä, kahvilapalveluita ja tilausleivonnaisia juhliin. Teemme arkena ja juhlaan. Myymälässä myynnissä myös muiden valmistajien tuotteita .",
-                "website": "",
-                "email": "",
-                "phone": ""
+                "paired_with_by_context": {
+                    "häät": [
+                        "juhlatila",
+                        "catering"
+                    ],
+                    "muistotilaisuus": [
+                        "juhlatila",
+                        "kahvitarjoilu"
+                    ],
+                    "yritysjuhlat": [
+                        "kokoustila",
+                        "kahvitarjoilu"
+                    ]
+                },
+                "sub_contexts": [
+                    "tilauskakut",
+                    "hääkakut",
+                    "muistotilaisuudet",
+                    "kahvitarjoilu",
+                    "lounas",
+                    "pitopalvelu",
+                    "kahvila",
+                    "leipomo"
+                ],
+                "node_links": [
+                    "LAUKAA",
+                    "LIEVESTUORE",
+                    "JUHLAT",
+                    "RUOKA"
+                ],
+                "description": "Leipomo, kahvila ja myymälä Lievestuoreella. Valmistaa ja myy leipomo-, konditoria- ja suolaistuotteita sekä tilausleivonnaisia juhliin. Tarjoaa kahvilapalveluita, lounasta seisovasta pöydästä arkisin ja lauantaisin sekä jäätelöä. Hää- ja juhlakakut, muistotilaisuuksien tarjoilut ja yritystilaisuuksien kahvitarjoilut kuuluvat palveluihin. Myymälässä myynnissä myös muiden valmistajien tuotteita.",
+                "website": "[https://www.jyvaspakari.fi](https://www.jyvaspakari.fi)",
+                "email": "[info@jyvaspakari.fi](mailto:info@jyvaspakari.fi)",
+                "phone": "010 327 0654"
             },
             "events_and_celebrations": {
-                "capacity_max": 0,
-                "seated_capacity": 0,
+                "capacity_max": 40,
+                "seated_capacity": 30,
                 "outdoor_capacity": 0,
-                "is_accessible": false,
+                "is_accessible": true,
                 "is_lakeside": false,
                 "has_sauna": false,
                 "has_av_tech": false,
@@ -1503,10 +1671,14 @@
                 "private_booking": false,
                 "late_night_events": false,
                 "wedding_specialized": true,
-                "catering_min_capacity": 0,
-                "catering_max_capacity": 0,
-                "dietary_specialties": [],
-                "staff_included": false,
+                "catering_min_capacity": 10,
+                "catering_max_capacity": 150,
+                "dietary_specialties": [
+                    "erityisruokavaliot",
+                    "tilauskakut",
+                    "suolaiset ja makeat leivonnaiset"
+                ],
+                "staff_included": true,
                 "wedding_menu_available": true,
                 "cake_service": true,
                 "partner_venues": [],
@@ -1518,13 +1690,17 @@
                 "karaoke_available": false,
                 "has_exclusive_catering": false,
                 "accommodation_included": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "hääkakut",
+                    "juhlakakut",
+                    "kahvitarjoilu"
+                ],
                 "digitization_features": [],
                 "entertainment_features": [],
                 "collaborated_with": []
             },
             "business_events": {
-                "meeting_capacity": 0,
+                "meeting_capacity": 20,
                 "seminar_capacity": 0,
                 "conference_rooms": 0,
                 "has_projector": false,
@@ -1541,24 +1717,30 @@
                 "branding_support": false,
                 "av_support": false,
                 "staff_events_specialized": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "kahvitarjoilu",
+                    "lounas"
+                ],
                 "wellbeing_and_activity_features": [],
                 "entertainment_features": [],
                 "collaborated_with": []
             },
             "funerals_and_memorials": {
-                "memorial_service_capacity": 0,
-                "quiet_private_space": false,
-                "accessible_entry": false,
+                "memorial_service_capacity": 40,
+                "quiet_private_space": true,
+                "accessible_entry": true,
                 "memorial_catering": true,
                 "coffee_service": true,
                 "flower_arrangements": false,
-                "memorial_menu_available": false,
+                "memorial_menu_available": true,
                 "funeral_flowers": false,
                 "memorial_arrangements": false,
                 "transport_assistance": false,
                 "urgent_booking_available": true,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "muistotilaisuus",
+                    "kahvitarjoilu"
+                ],
                 "digitization_features": [],
                 "collaborated_with": []
             },
@@ -1662,7 +1844,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-27T05:40:55.852Z",
+                "last_updated": "2026-04-29T08:20:10.721Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -5267,18 +5449,32 @@
         "company-27": {
             "name": "Ruskan Riemut Oy",
             "core": {
-                "fits_for": {},
-                "priority_score": 0,
-                "paired_with": [],
+                "fits_for": {
+                    "hyvinvointi": 95,
+                    "tyhy-päivät": 80,
+                    "yritysjuhlat": 55,
+                    "yrityksen-kehittäminen": 45,
+                    "vapaa-aika": 70,
+                    "elämykset": 90,
+                    "events-and-celebrations": 55,
+                    "business-events": 60
+                },
+                "priority_score": 62,
+                "paired_with": [
+                    "Hyvinvointipalvelut",
+                    "Luontoelämykset",
+                    "Kokouspaikka",
+                    "Ohjelmapalvelut"
+                ],
                 "service_area": {
-                    "mode": "SERVICE_AREA",
+                    "mode": "TOIMIPISTE",
                     "radius_km": 0,
                     "regions": [
                         "Keski-Suomi",
                         "Laukaa",
                         "Kuusa"
                     ],
-                    "note": "Yritys sijaitsee Laukaan Kuusassa. Palveluita tarjotaan todennäköisesti paikallisesti Keski-Suomen alueella. Hevostoiminta edellyttää asiakaskäyntejä yrityksen tiloihin."
+                    "note": "Sijaitsee Laukaan Kuusassa. Sosiaalipedagoginen hevostoiminta, Green Care -palvelut ja hyvinvointipäivät toteutetaan pääosin yrityksen omalla talliympäristössä."
                 },
                 "emergency_available": false,
                 "contract_customer_available": true,
@@ -5286,18 +5482,46 @@
                 "home_service": false,
                 "weekend_service": true,
                 "not_suitable_for": [],
-                "paired_with_by_context": {},
-                "sub_contexts": [],
-                "node_links": [],
-                "description": "Sosiaalipedagogista hevostoimintaa tarjoava yritys. Toiminta perustuu vuorovaikutukseen hevosten kanssa sosiaalisen hyvinvoinnin ja kuntoutuksen tukemiseksi. Yrityksen työkavereina toimii neljä tammaa ja kaksi ruunaa, suomenhevosia ja shetlanninponeja . Yritys on perustettu vuonna 2016 ja sen kotipaikka on Laukaa .",
-                "website": "www.ruskanriemut.fi",
+                "paired_with_by_context": {
+                    "tyhy-päivät": [
+                        "kokoustila",
+                        "pitopalvelu"
+                    ],
+                    "yritysjuhlat": [
+                        "ohjelmapalvelut",
+                        "kahvitarjoilu"
+                    ],
+                    "hyvinvointi": [
+                        "luontopalvelut",
+                        "eläinavusteinen toiminta"
+                    ]
+                },
+                "sub_contexts": [
+                    "sosiaalipedagoginen hevostoiminta",
+                    "green care",
+                    "eläinavusteinen toiminta",
+                    "tyhy-päivät",
+                    "hyvinvointipäivät",
+                    "ryhmätoiminta",
+                    "luontoelämykset",
+                    "tallivierailut"
+                ],
+                "node_links": [
+                    "LAUKAA",
+                    "KUUSA",
+                    "HUVIT",
+                    "HYVINVOINTI",
+                    "ELÄMYKSET"
+                ],
+                "description": "Sosiaalipedagogista hevostoimintaa ja Green Care -palveluja tarjoava yritys Laukaan Kuusassa. Toiminta perustuu vuorovaikutukseen hevosten kanssa sosiaalisen hyvinvoinnin, kuntoutuksen ja arjen tukemiseksi. Palveluihin kuuluu yksilö- ja ryhmätoimintaa, eläinavusteista hyvinvointia, tyhy-päiviä, hyvinvointipäiviä ja luontoelämyksiä yrityksille sekä yksityisasiakkaille. Yrityksen työkavereina toimii useita hevosia ja poneja talliympäristössä.",
+                "website": "[www.ruskanriemut.fi](http://www.ruskanriemut.fi)",
                 "email": "",
                 "phone": "+358505893254"
             },
             "events_and_celebrations": {
-                "capacity_max": 0,
-                "seated_capacity": 0,
-                "outdoor_capacity": 0,
+                "capacity_max": 20,
+                "seated_capacity": 15,
+                "outdoor_capacity": 30,
                 "is_accessible": false,
                 "is_lakeside": false,
                 "has_sauna": false,
@@ -5305,13 +5529,13 @@
                 "has_stage": false,
                 "accommodation_beds": 0,
                 "alcohol_license": false,
-                "private_booking": false,
+                "private_booking": true,
                 "late_night_events": false,
                 "wedding_specialized": false,
                 "catering_min_capacity": 0,
-                "catering_max_capacity": 0,
+                "catering_max_capacity": 20,
                 "dietary_specialties": [],
-                "staff_included": false,
+                "staff_included": true,
                 "wedding_menu_available": false,
                 "cake_service": false,
                 "partner_venues": [],
@@ -5323,32 +5547,47 @@
                 "karaoke_available": false,
                 "has_exclusive_catering": false,
                 "accommodation_included": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "elämyspäivät",
+                    "hyvinvointiryhmät"
+                ],
                 "digitization_features": [],
-                "entertainment_features": [],
+                "entertainment_features": [
+                    "hevostoiminta",
+                    "luontoelämykset"
+                ],
                 "collaborated_with": []
             },
             "business_events": {
-                "meeting_capacity": 0,
+                "meeting_capacity": 15,
                 "seminar_capacity": 0,
                 "conference_rooms": 0,
                 "has_projector": false,
                 "has_streaming": false,
                 "has_wifi": false,
                 "has_stage": false,
-                "private_booking": false,
-                "invoice_billing": false,
+                "private_booking": true,
+                "invoice_billing": true,
                 "corporate_clients": true,
                 "vip_services": false,
                 "business_catering": false,
-                "event_hosting": false,
+                "event_hosting": true,
                 "corporate_gifts": false,
                 "branding_support": false,
                 "av_support": false,
                 "staff_events_specialized": true,
-                "refinement_tags": [],
-                "wellbeing_and_activity_features": [],
-                "entertainment_features": [],
+                "refinement_tags": [
+                    "tyhy",
+                    "hyvinvointipäivät"
+                ],
+                "wellbeing_and_activity_features": [
+                    "eläinavusteinen toiminta",
+                    "green care",
+                    "työhyvinvointipäivät"
+                ],
+                "entertainment_features": [
+                    "hevostoiminta"
+                ],
                 "collaborated_with": []
             },
             "funerals_and_memorials": {
@@ -5418,7 +5657,7 @@
                 "emergency_response": false,
                 "scheduled_visits": false,
                 "property_reports": false,
-                "invoice_billing": false,
+                "invoice_billing": true,
                 "contract_customer_available": true,
                 "priority_support": false,
                 "monthly_service_plan": false,
@@ -5458,16 +5697,19 @@
                 "home_visits": false,
                 "online_booking": false,
                 "unisex_services": false,
-                "gift_cards": false,
+                "gift_cards": true,
                 "corporate_wellbeing_services": true,
                 "event_makeup": false,
                 "bridal_services": false,
                 "group_bookings": true,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "green care",
+                    "eläinavusteinen hyvinvointi"
+                ],
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-27T05:42:56.567Z",
+                "last_updated": "2026-04-29T08:21:34.959Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -5679,28 +5921,66 @@
         "company-29": {
             "name": "Senilix Os et Musculus",
             "core": {
-                "fits_for": {},
-                "priority_score": 0,
-                "paired_with": [],
+                "fits_for": {
+                    "hyvinvointi": 95,
+                    "hieronta": 100,
+                    "urheiluhieronta": 95,
+                    "yrityksen-kehittäminen": 20,
+                    "business-events": 35
+                },
+                "priority_score": 68,
+                "paired_with": [
+                    "Fysioterapia",
+                    "Personal trainer",
+                    "Hyvinvointipalvelut"
+                ],
                 "service_area": {
                     "mode": "TOIMIPISTE",
                     "radius_km": 0,
-                    "regions": [],
-                    "note": ""
+                    "regions": [
+                        "Laukaa"
+                    ],
+                    "note": "Toimipiste Laukaassa osoitteessa Kantolantie 10, 41340 Laukaa. Palvelua arkisin ja viikonloppuisin sopimuksen mukaan."
                 },
                 "emergency_available": false,
                 "contract_customer_available": false,
-                "corporate_clients": false,
+                "corporate_clients": true,
                 "home_service": false,
-                "weekend_service": false,
-                "not_suitable_for": [],
-                "paired_with_by_context": {},
-                "sub_contexts": [],
-                "node_links": [],
-                "description": "",
-                "website": "",
-                "email": "",
-                "phone": ""
+                "weekend_service": true,
+                "not_suitable_for": [
+                    "pitopalvelu",
+                    "muuttopalvelu"
+                ],
+                "paired_with_by_context": {
+                    "hyvinvointi": [
+                        "fysioterapia",
+                        "personal trainer"
+                    ],
+                    "business-events": [
+                        "tyhy-päivät",
+                        "yrityshyvinvointi"
+                    ]
+                },
+                "sub_contexts": [
+                    "hieronta",
+                    "urheiluhieronta",
+                    "mobilisoiva hieronta",
+                    "triggerpistekäsittely",
+                    "fascia käsittely",
+                    "kinesioteippaus",
+                    "painonnostovalmennus",
+                    "keppijumppa",
+                    "nivelten liikkuvuus"
+                ],
+                "node_links": [
+                    "LAUKAA",
+                    "HYVINVOINTI",
+                    "LIIKUNTA"
+                ],
+                "description": "Koulutettu hieroja ja painonnostovalmentaja Laukaassa. Yritys tarjoaa hierontaa, urheiluhierontaa, mobilisoivaa hierontaa, triggerpistekäsittelyä, fascia-käsittelyä, kinesioteippausta sekä nivelten liikkuvuutta edistäviä hoitoja. Lisäksi palveluihin kuuluu painonnoston lajivalmennus yksilöille, pareille ja pienryhmille sekä keppijumppakoulutus. Yrityksen omistaa Jani Senilä.",
+                "website": "[https://www.senilix.fi",
+                "email": "jani@senilix.fi",
+                "phone": "040](https://www.senilix.fi%22,%22email%22:%22jani@senilix.fi%22,%22phone%22:%22040) 9382230"
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -5746,16 +6026,23 @@
                 "has_stage": false,
                 "private_booking": false,
                 "invoice_billing": false,
-                "corporate_clients": false,
+                "corporate_clients": true,
                 "vip_services": false,
                 "business_catering": false,
                 "event_hosting": false,
                 "corporate_gifts": false,
                 "branding_support": false,
                 "av_support": false,
-                "staff_events_specialized": false,
-                "refinement_tags": [],
-                "wellbeing_and_activity_features": [],
+                "staff_events_specialized": true,
+                "refinement_tags": [
+                    "tyhy",
+                    "liikuntavalmennus"
+                ],
+                "wellbeing_and_activity_features": [
+                    "painonnostovalmennus yritysryhmille",
+                    "liikkuvuuden kehittäminen",
+                    "työhyvinvointia tukevat hierontapalvelut"
+                ],
                 "entertainment_features": [],
                 "collaborated_with": []
             },
@@ -5864,18 +6151,21 @@
             },
             "wellbeing_and_beauty": {
                 "home_visits": false,
-                "online_booking": false,
-                "unisex_services": false,
+                "online_booking": true,
+                "unisex_services": true,
                 "gift_cards": false,
-                "corporate_wellbeing_services": false,
+                "corporate_wellbeing_services": true,
                 "event_makeup": false,
                 "bridal_services": false,
-                "group_bookings": false,
-                "refinement_tags": [],
+                "group_bookings": true,
+                "refinement_tags": [
+                    "koulutettu hieroja",
+                    "urheiluhieronta"
+                ],
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-04-29T08:22:36.191Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -13566,9 +13856,20 @@
         "company-74": {
             "name": "T:mi Monitoimi Kiiski",
             "core": {
-                "fits_for": {},
-                "priority_score": 0,
-                "paired_with": [],
+                "fits_for": {
+                    "tapahtumien-järjestäminen": 80,
+                    "kokouspalvelut": 75,
+                    "hyvinvointipalvelut": 70,
+                    "yrityksen-kehittäminen": 40,
+                    "yritystapahtumat": 80
+                },
+                "priority_score": 48,
+                "paired_with": [
+                    "Catering",
+                    "AV-tekniikka",
+                    "Majoitus",
+                    "Ohjelmapalvelut"
+                ],
                 "service_area": {
                     "mode": "TOIMIPISTE",
                     "radius_km": 0,
@@ -13580,18 +13881,46 @@
                 },
                 "emergency_available": false,
                 "contract_customer_available": false,
-                "corporate_clients": false,
+                "corporate_clients": true,
                 "home_service": false,
-                "weekend_service": false,
+                "weekend_service": true,
                 "not_suitable_for": [
                     "kuljetus",
                     "bussi",
                     "taksi"
                 ],
-                "paired_with_by_context": {},
-                "sub_contexts": [],
-                "node_links": [],
-                "description": "Yrityksen toimialana on tapahtumien järjestäminen, kokouspalvelut ja hyvinvointipalvelut.",
+                "paired_with_by_context": {
+                    "tapahtumat": [
+                        "catering",
+                        "av-tekniikka",
+                        "ohjelmapalvelut"
+                    ],
+                    "kokoukset": [
+                        "av-tekniikka",
+                        "tilavuokraus"
+                    ],
+                    "hyvinvointi": [
+                        "tyhy-palvelut",
+                        "valmennus"
+                    ]
+                },
+                "sub_contexts": [
+                    "tapahtumatuotanto",
+                    "kokouspalvelut",
+                    "hyvinvointi",
+                    "työhyvinvointi",
+                    "juhlapalvelut",
+                    "ryhmätoiminta",
+                    "valmennus",
+                    "tilaisuuksien järjestäminen"
+                ],
+                "node_links": [
+                    "LAUKAA",
+                    "TAPAHTUMAT",
+                    "KOKOUS",
+                    "HYVINVOINTI"
+                ],
+                "description": "Yritys tarjoaa tapahtumien järjestämiseen, kokouspalveluihin sekä hyvinvointiin ja työhyvinvointiin liittyviä palveluita. Toimintaan voi kuulua erilaisten tilaisuuksien suunnittelu ja toteutus, yritysten tyhy-päivät sekä ryhmämuotoiset hyvinvointipalvelut Keski-Suomen alueella.",
                 "website": "",
                 "email": "",
                 "phone": ""
@@ -13640,16 +13969,24 @@
                 "has_stage": false,
                 "private_booking": false,
                 "invoice_billing": false,
-                "corporate_clients": false,
+                "corporate_clients": true,
                 "vip_services": false,
                 "business_catering": false,
-                "event_hosting": false,
+                "event_hosting": true,
                 "corporate_gifts": false,
                 "branding_support": false,
                 "av_support": false,
-                "staff_events_specialized": false,
-                "refinement_tags": [],
-                "wellbeing_and_activity_features": [],
+                "staff_events_specialized": true,
+                "refinement_tags": [
+                    "tyhy",
+                    "kokous",
+                    "tapahtumat"
+                ],
+                "wellbeing_and_activity_features": [
+                    "työhyvinvointipäivät",
+                    "ryhmävalmennukset",
+                    "kokouspäivien ohjelmapalvelut"
+                ],
                 "entertainment_features": [],
                 "collaborated_with": []
             },
@@ -13761,15 +14098,18 @@
                 "online_booking": false,
                 "unisex_services": false,
                 "gift_cards": false,
-                "corporate_wellbeing_services": false,
+                "corporate_wellbeing_services": true,
                 "event_makeup": false,
                 "bridal_services": false,
-                "group_bookings": false,
-                "refinement_tags": [],
+                "group_bookings": true,
+                "refinement_tags": [
+                    "tyhy",
+                    "hyvinvointi"
+                ],
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-28T07:25:38.205Z",
+                "last_updated": "2026-04-29T08:23:53.314Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -16862,25 +17202,43 @@
         "company-91": {
             "name": "Laukaan yrityspalvelut",
             "core": {
-                "fits_for": {},
-                "priority_score": 0,
+                "fits_for": {
+                    "yrityksen-perustaminen": 90,
+                    "yrityksen-kehittäminen": 85,
+                    "yritysneuvonta": 95,
+                    "rahoitusneuvonta": 75,
+                    "hankeneuvonta": 70
+                },
+                "priority_score": 60,
                 "paired_with": [],
                 "service_area": {
                     "mode": "TOIMIPISTE",
                     "radius_km": 0,
-                    "regions": [],
-                    "note": ""
+                    "regions": [
+                        "Laukaa"
+                    ],
+                    "note": "Toiminta liittyy todennäköisesti Laukaan alueen yritysneuvontaan ja elinkeinojen kehittämiseen."
                 },
                 "emergency_available": false,
-                "contract_customer_available": false,
-                "corporate_clients": false,
+                "contract_customer_available": true,
+                "corporate_clients": true,
                 "home_service": false,
                 "weekend_service": false,
                 "not_suitable_for": [],
                 "paired_with_by_context": {},
-                "sub_contexts": [],
-                "node_links": [],
-                "description": "",
+                "sub_contexts": [
+                    "yritysneuvonta",
+                    "yrityksen perustaminen",
+                    "kehittämispalvelut",
+                    "hankeneuvonta",
+                    "liiketoiminnan kehittäminen"
+                ],
+                "node_links": [
+                    "LAUKAA",
+                    "YRITYSPALVELUT",
+                    "NEUVONTA"
+                ],
+                "description": "Laukaan yrityspalvelut on yritys- ja elinkeinoelämän neuvontaan keskittyvä toimija, joka tukee paikallisia yrityksiä perustamisessa, kehittämisessä ja rahoitus- sekä hankekysymyksissä.",
                 "website": "",
                 "email": "",
                 "phone": ""
@@ -16929,7 +17287,7 @@
                 "has_stage": false,
                 "private_booking": false,
                 "invoice_billing": false,
-                "corporate_clients": false,
+                "corporate_clients": true,
                 "vip_services": false,
                 "business_catering": false,
                 "event_hosting": false,
@@ -16938,7 +17296,11 @@
                 "av_support": false,
                 "staff_events_specialized": false,
                 "refinement_tags": [],
-                "wellbeing_and_activity_features": [],
+                "wellbeing_and_activity_features": [
+                    "yritysneuvonta",
+                    "kehittämistyöpajat",
+                    "verkostoitumisen tukipalvelut"
+                ],
                 "entertainment_features": [],
                 "collaborated_with": []
             },
@@ -17058,8 +17420,8 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-26",
-                "verified_by": "system-init-v3",
+                "last_updated": "2026-04-29T08:24:57.796Z",
+                "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
         },
@@ -18496,8 +18858,14 @@
         "company-99": {
             "name": "Tmi Riihipellon Leipäpuu Kotileipomo",
             "core": {
-                "fits_for": {},
-                "priority_score": 0,
+                "fits_for": {
+                    "events-and-celebrations": 10,
+                    "kahvila-ja-leipomopalvelut": 10,
+                    "pitopalvelu": 10,
+                    "tilausleivonnaiset": 10,
+                    "lahjatuotteet": 6
+                },
+                "priority_score": 12,
                 "paired_with": [],
                 "service_area": {
                     "mode": "TOIMIPISTE",
@@ -18515,8 +18883,17 @@
                 "weekend_service": true,
                 "not_suitable_for": [],
                 "paired_with_by_context": {},
-                "sub_contexts": [],
-                "node_links": [],
+                "sub_contexts": [
+                    "leivonta",
+                    "kahvila",
+                    "konditoria",
+                    "pitopalvelu"
+                ],
+                "node_links": [
+                    "LAUKAA",
+                    "LIEVESTUORE",
+                    "HUVIT"
+                ],
                 "description": "Kotileipomo ja kahvio-myymälä, joka valmistaa ja myy leipomotuotteita .",
                 "website": "",
                 "email": "",
@@ -18695,7 +19072,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-27T05:45:26.361Z",
+                "last_updated": "2026-04-29T08:25:59.581Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -18908,8 +19285,14 @@
         "company-101": {
             "name": "AtSound Matti Laurila",
             "core": {
-                "fits_for": {},
-                "priority_score": 0,
+                "fits_for": {
+                    "events-and-celebrations": 10,
+                    "tapahtumatekniikka": 10,
+                    "aanentoisto-palvelut": 10,
+                    "dj-palvelut": 8,
+                    "ohjelmapalvelut": 7
+                },
+                "priority_score": 8,
                 "paired_with": [],
                 "service_area": {
                     "mode": "TOIMIPISTE",
@@ -18927,10 +19310,21 @@
                 "weekend_service": true,
                 "not_suitable_for": [],
                 "paired_with_by_context": {},
-                "sub_contexts": [],
-                "node_links": [],
+                "sub_contexts": [
+                    "aanentoisto",
+                    "tapahtumatekniikka",
+                    "dj",
+                    "ohjelmapalvelut"
+                ],
+                "node_links": [
+                    "LAUKAA",
+                    "LEPPAVESI",
+                    "EVENTS",
+                    "HUVIT",
+                    "AUDIO"
+                ],
                 "description": "Yksityinen elinkeinonharjoittaja, joka tarjoaa äänentoistopalveluita, laitevuokrausta, ohjelmamyyntiä, soitinkorjausta ja äänitteiden julkaisutoimintaa . Toimialana ohjelmatoimistot ja manageripalvelut .",
-                "website": "www.atsound.fi",
+                "website": "[www.atsound.fi](http://www.atsound.fi)",
                 "email": "",
                 "phone": ""
             },
@@ -19107,7 +19501,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-27T06:18:26.875Z",
+                "last_updated": "2026-04-29T08:26:58.778Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -19117,7 +19511,10 @@
             "core": {
                 "fits_for": {
                     "vapaa-aika": 70,
-                    "events-and-celebrations": 10
+                    "events-and-celebrations": 10,
+                    "perhe-huvipuisto": 90,
+                    "lasten-viihde": 80,
+                    "matkailu": 40
                 },
                 "priority_score": 0,
                 "paired_with": [],
@@ -19143,16 +19540,22 @@
                     ]
                 },
                 "sub_contexts": [
-                    "lasten juhlat"
+                    "lasten juhlat",
+                    "huvipuisto",
+                    "perheaktiviteetit"
                 ],
-                "node_links": [],
+                "node_links": [
+                    "HUVIT",
+                    "LAUKAA",
+                    "MATKAILU"
+                ],
                 "description": "Kesäisin toimiva perhehuvipuisto, jossa on laitteita ja aktiviteetteja kaikenikäisille. Puistossa on yli 19 huvipuistolaitetta, mukaan lukien vuoristorata Cyclon ja erilaisia pelejä. Puistoalueelle on ilmainen sisäänpääsy . Huvipuiston omistaa Bellingham Oy .",
-                "website": "www.nokkakivi.fi",
-                "email": "info@nokkakivi.fi",
+                "website": "[www.nokkakivi.fi](http://www.nokkakivi.fi)",
+                "email": "[info@nokkakivi.fi](mailto:info@nokkakivi.fi)",
                 "phone": "045 2705920"
             },
             "events_and_celebrations": {
-                "capacity_max": 0,
+                "capacity_max": 2000,
                 "seated_capacity": 0,
                 "outdoor_capacity": 500,
                 "is_accessible": true,
@@ -19324,7 +19727,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-27T12:38:14.739Z",
+                "last_updated": "2026-04-29T08:27:55.312Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -19336,7 +19739,12 @@
                     "kokoukset": 35,
                     "funerals-and-memorials": 16,
                     "business-events": 6,
-                    "events-and-celebrations": 10
+                    "events-and-celebrations": 10,
+                    "lounas": 60,
+                    "ravintola": 80,
+                    "catering": 50,
+                    "juhlat": 40,
+                    "pitopalvelu": 55
                 },
                 "priority_score": 0,
                 "paired_with": [
@@ -19349,7 +19757,7 @@
                     "regions": [
                         "Laukaa"
                     ],
-                    "note": "Ravintolatoimintaa Laukaassa "
+                    "note": "Ravintolatoimintaa Laukaassa"
                 },
                 "emergency_available": false,
                 "contract_customer_available": true,
@@ -19368,9 +19776,21 @@
                         "Kokoustila"
                     ]
                 },
-                "sub_contexts": [],
-                "node_links": [],
-                "description": "Ravintola Rosanne -nimellä tunnettu grilliravintola Laukaassa. Tarjoaa grilliruokaa, esivalmistelutöitä ja asiakaspalvelua .",
+                "sub_contexts": [
+                    "grilliravintola",
+                    "lounasravintola",
+                    "kahvila",
+                    "pitopalvelu",
+                    "juhlapalvelut"
+                ],
+                "node_links": [
+                    "RAVINTOLA",
+                    "LAUKAA",
+                    "RUOKA",
+                    "CATERING",
+                    "HUVIT"
+                ],
+                "description": "Ravintola Rosanne -nimellä tunnettu grilliravintola ja kahvila Laukaassa. Tarjoaa lounas- ja á la carte -ruokailua, pitopalvelua sekä tilausruokailua juhliin ja muistotilaisuuksiin. Ravintola palvelee sekä yksityis- että yritysasiakkaita.",
                 "website": "",
                 "email": "",
                 "phone": ""
@@ -19476,6 +19896,7 @@
                 "maintenance_contracts": false,
                 "housing_company_clients": false,
                 "refinement_tags": [],
+                "digitization_features": [],
                 "collaborated_with": []
             },
             "cottage_services": {
@@ -19548,7 +19969,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-27T12:45:17.590Z",
+                "last_updated": "2026-04-29T08:28:50.034Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -22080,7 +22501,12 @@
         "company-116": {
             "name": "Ohjelmatoimisto Ja - He Oy",
             "core": {
-                "fits_for": {},
+                "fits_for": {
+                    "tapahtumatuotanto": 80,
+                    "äänentoistopalvelut": 85,
+                    "yritystapahtumat": 60,
+                    "ravintolakonsultointi": 40
+                },
                 "priority_score": 0,
                 "paired_with": [],
                 "service_area": {
@@ -22090,7 +22516,7 @@
                         "Laukaa",
                         "Lievestuore"
                     ],
-                    "note": "Sijainti Laukaassa, Lievestuoreella, osoitteessa Ketaramäentie 38 "
+                    "note": "Sijainti Laukaassa, Lievestuoreella, osoitteessa Ketaramäentie 38"
                 },
                 "emergency_available": false,
                 "contract_customer_available": true,
@@ -22099,8 +22525,19 @@
                 "weekend_service": true,
                 "not_suitable_for": [],
                 "paired_with_by_context": {},
-                "sub_contexts": [],
-                "node_links": [],
+                "sub_contexts": [
+                    "äänentoisto",
+                    "ohjelmapalvelut",
+                    "dj-palvelut",
+                    "live-musiikki",
+                    "ravintolakonsultointi"
+                ],
+                "node_links": [
+                    "HUVIT",
+                    "LAUKAA",
+                    "TAPAHTUMAT",
+                    "YRITYSTAPAHTUMAT"
+                ],
                 "description": "Ohjelma- ja äänentoistopalvelujen tuottamiseen ja välittämiseen sekä ravintola-alan konsultointiin erikoistunut ohjelmatoimisto. Yhtiö voi toimintaansa varten omistaa ja hallita kiinteää omaisuutta ja arvopapereita .",
                 "website": "",
                 "email": "",
@@ -22109,6 +22546,7 @@
             "events_and_celebrations": {
                 "capacity_max": 0,
                 "seated_capacity": 0,
+                "conference_rooms": 0,
                 "outdoor_capacity": 0,
                 "is_accessible": false,
                 "is_lakeside": false,
@@ -22279,7 +22717,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-27T05:49:46.826Z",
+                "last_updated": "2026-04-29T08:30:02.971Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -22502,16 +22940,19 @@
             "name": "Peurunka Oy",
             "core": {
                 "fits_for": {
-                    "yritysjuhlat": 35,
-                    "kokoukset": 35,
-                    "yrityksen kehittäminen": 35,
+                    "yritysjuhlat": 90,
+                    "kokoukset": 95,
+                    "yrityksen-kehittäminen": 85,
                     "vapaa-aika": 100,
-                    "events-and-celebrations": 8
+                    "hyvinvointipalvelut": 100,
+                    "kuntoutus": 95,
+                    "events-and-celebrations": 80
                 },
                 "priority_score": 0,
                 "paired_with": [
                     "Majoitus",
-                    "Catering"
+                    "Catering",
+                    "Wellness-palvelut"
                 ],
                 "service_area": {
                     "mode": "TOIMIPISTE",
@@ -22520,7 +22961,7 @@
                         "Laukaa",
                         "Keski-Suomi"
                     ],
-                    "note": "Sijainti osoitteessa Peurungantie 85, 41340 Laukaa. Etäisyys Jyväskylästä noin 25-32 km ."
+                    "note": "Sijainti osoitteessa Peurungantie 85, 41340 Laukaa. Etäisyys Jyväskylästä noin 25–32 km."
                 },
                 "emergency_available": false,
                 "contract_customer_available": true,
@@ -22529,17 +22970,32 @@
                 "weekend_service": true,
                 "not_suitable_for": [],
                 "paired_with_by_context": {},
-                "sub_contexts": [],
-                "node_links": [],
-                "description": "Kylpylähotelli, kuntoutus- ja virkistyskeskus Laukaan Peurungassa. Tarjoaa monipuolisia hyvinvointi-, kokous-, majoitus- ja ravintolapalveluita yli 50 vuoden kokemuksella. Yritys työllistää noin 100 henkilöä . Peurunka on saanut Sustainable Travel Finland -sertifikaatin ja noudattaa kestävän kehityksen periaatteita .",
-                "website": "www.peurunka.fi",
-                "email": "peurunka@peurunka.fi",
+                "sub_contexts": [
+                    "kylpylä",
+                    "kuntoutus",
+                    "hotelli",
+                    "kokouspalvelut",
+                    "hyvinvointi",
+                    "ravintolapalvelut",
+                    "saunat"
+                ],
+                "node_links": [
+                    "LAUKAA",
+                    "HYVINVOINTI",
+                    "KYLPYLÄ",
+                    "HOTELLI",
+                    "KOKOUKSET",
+                    "SAUNA"
+                ],
+                "description": "Kylpylähotelli, kuntoutus- ja virkistyskeskus Laukaan Peurungassa. Tarjoaa monipuolisia hyvinvointi-, kokous-, majoitus- ja ravintolapalveluita yli 50 vuoden kokemuksella. Yritys työllistää noin 100 henkilöä. Peurunka on Sustainable Travel Finland -sertifioitu ja toimii kestävän matkailun periaatteiden mukaisesti.",
+                "website": "[www.peurunka.fi](http://www.peurunka.fi)",
+                "email": "[peurunka@peurunka.fi](mailto:peurunka@peurunka.fi)",
                 "phone": "020 751 6300"
             },
             "events_and_celebrations": {
-                "capacity_max": 119,
+                "capacity_max": 600,
                 "seated_capacity": 450,
-                "outdoor_capacity": 0,
+                "outdoor_capacity": 200,
                 "is_accessible": true,
                 "is_lakeside": true,
                 "has_sauna": true,
@@ -22559,14 +23015,14 @@
                 "wedding_menu_available": true,
                 "cake_service": true,
                 "partner_venues": [],
-                "wedding_photography": false,
+                "wedding_photography": true,
                 "drone_available": false,
                 "video_production": false,
                 "live_music": true,
-                "dj_services": false,
+                "dj_services": true,
                 "karaoke_available": false,
                 "has_exclusive_catering": false,
-                "accommodation_included": false,
+                "accommodation_included": true,
                 "refinement_tags": [],
                 "digitization_features": [],
                 "entertainment_features": [],
@@ -22577,7 +23033,7 @@
                 "seminar_capacity": 600,
                 "conference_rooms": 8,
                 "has_projector": true,
-                "has_streaming": false,
+                "has_streaming": true,
                 "has_wifi": true,
                 "has_stage": true,
                 "private_booking": true,
@@ -22587,26 +23043,32 @@
                 "business_catering": true,
                 "event_hosting": true,
                 "corporate_gifts": false,
-                "branding_support": false,
+                "branding_support": true,
                 "av_support": true,
                 "staff_events_specialized": true,
                 "refinement_tags": [],
-                "wellbeing_and_activity_features": [],
-                "entertainment_features": [],
+                "wellbeing_and_activity_features": [
+                    "liikunta",
+                    "kuntoutus",
+                    "hyvinvointipalvelut"
+                ],
+                "entertainment_features": [
+                    "live-musiikki"
+                ],
                 "collaborated_with": []
             },
             "funerals_and_memorials": {
-                "memorial_service_capacity": 0,
+                "memorial_service_capacity": 150,
                 "quiet_private_space": true,
                 "accessible_entry": true,
                 "memorial_catering": true,
                 "coffee_service": true,
-                "flower_arrangements": false,
-                "memorial_menu_available": false,
+                "flower_arrangements": true,
+                "memorial_menu_available": true,
                 "funeral_flowers": false,
-                "memorial_arrangements": false,
+                "memorial_arrangements": true,
                 "transport_assistance": false,
-                "urgent_booking_available": false,
+                "urgent_booking_available": true,
                 "refinement_tags": [],
                 "digitization_features": [],
                 "collaborated_with": []
@@ -22634,12 +23096,12 @@
                 "wet_room_certification": false,
                 "provides_tools": false,
                 "material_supply": false,
-                "project_management": false,
+                "project_management": true,
                 "snow_removal": false,
                 "lawn_maintenance": false,
-                "property_monitoring": false,
-                "maintenance_contracts": false,
-                "housing_company_clients": false,
+                "property_monitoring": true,
+                "maintenance_contracts": true,
+                "housing_company_clients": true,
                 "refinement_tags": [],
                 "collaborated_with": []
             },
@@ -22653,30 +23115,30 @@
                 "emergency_visits": false,
                 "renovation_support": false,
                 "dock_maintenance": false,
-                "sauna_services": false,
+                "sauna_services": true,
                 "guest_preparation_service": false,
                 "refinement_tags": [],
                 "collaborated_with": []
             },
             "housing_company_and_contracts": {
-                "housing_company_clients": false,
-                "maintenance_contracts": false,
+                "housing_company_clients": true,
+                "maintenance_contracts": true,
                 "emergency_response": false,
-                "scheduled_visits": false,
-                "property_reports": false,
+                "scheduled_visits": true,
+                "property_reports": true,
                 "invoice_billing": true,
                 "contract_customer_available": true,
-                "priority_support": false,
+                "priority_support": true,
                 "monthly_service_plan": false,
                 "refinement_tags": [],
                 "collaborated_with": []
             },
             "startup_services": {
                 "bookkeeping_startup": false,
-                "business_advisory": false,
+                "business_advisory": true,
                 "insurance_setup": false,
                 "legal_services": false,
-                "office_space_available": false,
+                "office_space_available": true,
                 "banking_support": false,
                 "website_creation": false,
                 "webshop_setup": false,
@@ -22693,10 +23155,10 @@
                 "content_creation": false,
                 "video_production": false,
                 "crm_support": false,
-                "recruitment_support": false,
-                "sales_development": false,
+                "recruitment_support": true,
+                "sales_development": true,
                 "automation_services": false,
-                "consulting_services": false,
+                "consulting_services": true,
                 "refinement_tags": [],
                 "collaborated_with": []
             },
@@ -22707,13 +23169,13 @@
                 "gift_cards": true,
                 "corporate_wellbeing_services": true,
                 "event_makeup": false,
-                "bridal_services": false,
+                "bridal_services": true,
                 "group_bookings": true,
                 "refinement_tags": [],
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-27T05:51:32.776Z",
+                "last_updated": "2026-04-29T08:31:10.179Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -22721,7 +23183,13 @@
         "company-119": {
             "name": "Pitopalvelu J.Sojakka",
             "core": {
-                "fits_for": {},
+                "fits_for": {
+                    "yritysjuhlat": 70,
+                    "kokoukset": 60,
+                    "häät": 80,
+                    "hautajaiset": 60,
+                    "vapaa-aika": 20
+                },
                 "priority_score": 0,
                 "paired_with": [],
                 "service_area": {
@@ -22741,11 +23209,26 @@
                 "weekend_service": true,
                 "not_suitable_for": [],
                 "paired_with_by_context": {},
-                "sub_contexts": [],
-                "node_links": [],
+                "sub_contexts": [
+                    "pitopalvelu",
+                    "catering",
+                    "luomu",
+                    "juhlapalvelu",
+                    "wedding catering",
+                    "muistotilaisuus"
+                ],
+                "node_links": [
+                    "LAUKAA",
+                    "LEPPÄVESI",
+                    "KESKI-SUOMI",
+                    "CATERING",
+                    "RUOKA",
+                    "HÄÄT",
+                    "YRITYSTILAISUUDET"
+                ],
                 "description": "Pitopalvelu, joka tarjoaa buffet-tarjoiluja erilaisiin tilaisuuksiin. Korostaa luomutuotteiden käyttöä aamu- ja iltapalabuffeteissa sekä muissa tuotekokonaisuuksissa . Erityistuotteena muun muassa savunauta-tsatsikivoileipäkakku .",
-                "website": "www.pitopalvelusojakka.fi",
-                "email": "jaana@pitopalvelusojakka.fi",
+                "website": "[www.pitopalvelusojakka.fi](http://www.pitopalvelusojakka.fi)",
+                "email": "[jaana@pitopalvelusojakka.fi](mailto:jaana@pitopalvelusojakka.fi)",
                 "phone": "0505780660"
             },
             "events_and_celebrations": {
@@ -22923,7 +23406,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-27T05:52:22.121Z",
+                "last_updated": "2026-04-29T08:32:03.196Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -22975,17 +23458,15 @@
                         "juontopalvelut"
                     ]
                 },
-                "sub_contexts": {
-                    "Yleinen": [
-                        "live-musiikki",
-                        "äänentoisto",
-                        "valaistus",
-                        "äänisuunnittelu",
-                        "studio",
-                        "tapahtumatuotanto",
-                        "ohjelmapalvelut"
-                    ]
-                },
+                "sub_contexts": [
+                    "live-musiikki",
+                    "äänentoisto",
+                    "valaistus",
+                    "äänisuunnittelu",
+                    "studio",
+                    "tapahtumatuotanto",
+                    "ohjelmapalvelut"
+                ],
                 "node_links": [
                     "HUVIT",
                     "LAUKAA",
@@ -25260,7 +25741,11 @@
             "name": "Huonekaluilike Vehviläinen Oy (Kukka ja Hautauspalvelu Vehviläinen)",
             "core": {
                 "fits_for": {
-                    "funerals-and-memorials": 10
+                    "funerals-and-memorials": 20,
+                    "huonekalumyynti": 30,
+                    "kukkakauppa": 25,
+                    "kodinsisustus": 15,
+                    "kuljetuspalvelut": 10
                 },
                 "priority_score": 0,
                 "paired_with": [],
@@ -25270,7 +25755,7 @@
                     "regions": [
                         "Laukaa"
                     ],
-                    "note": "Käyntiosoite: Laukaantie 10, 41340 Laukaa . Toiminta-alueena paikallinen Laukaan seutu, jonne tarjotaan myös kuljetuspalveluja ."
+                    "note": "Käyntiosoite: Laukaantie 10, 41340 Laukaa. Toiminta-alueena paikallinen Laukaan seutu, jonne tarjotaan myös kuljetuspalveluja."
                 },
                 "emergency_available": false,
                 "contract_customer_available": false,
@@ -25290,10 +25775,24 @@
                         "Kukat"
                     ]
                 },
-                "sub_contexts": [],
-                "node_links": [],
-                "description": "Yli 60 vuotta toiminut huonekaluliike sekä Kukka- ja Hautauspalvelu Vehviläinen, jolla on 80 vuoden perinteet. Huonekaluliike myy sohvia, sänkyjä, patjoja, ruokailu- ja toimistokalusteita sekä tarjoaa kuljetus- ja kokoamispalveluita . Kukkakauppa tarjoaa kauniita kukkasidontoja, lahjatavaroita ja herkkuja, ja hautauspalvelu auttaa muistotilaisuuksien järjestelyissä. Yritys on neljännen polven perheyritys, jota johtaa Miia Vehviläinen .",
-                "website": "www.huonekaluliikevehvilainen.fi",
+                "sub_contexts": [
+                    "huonekalut",
+                    "sisustus",
+                    "kukat",
+                    "hautajaiset",
+                    "hautauspalvelu",
+                    "kuljetus"
+                ],
+                "node_links": [
+                    "LAUKAA",
+                    "KUKAT",
+                    "HAUTAUS",
+                    "HUONEKALUT",
+                    "KULJETUS",
+                    "SISUSTUS"
+                ],
+                "description": "Yli 60 vuotta toiminut huonekaluliike sekä Kukka- ja Hautauspalvelu Vehviläinen, jolla on pitkät perinteet. Yritys myy huonekaluja kuten sohvia, sänkyjä, patjoja sekä tarjoaa kodinsisustustuotteita. Lisäksi palveluihin kuuluu kukkakauppa, kukkasidonta ja hautauspalvelut muistotilaisuuksien järjestämiseen. Yritys tarjoaa myös kuljetus- ja toimituspalveluja sekä on perheyritys.",
+                "website": "[www.huonekaluliikevehvilainen.fi](http://www.huonekaluliikevehvilainen.fi)",
                 "email": "",
                 "phone": ""
             },
@@ -25364,7 +25863,7 @@
                 "memorial_menu_available": false,
                 "funeral_flowers": true,
                 "memorial_arrangements": true,
-                "transport_assistance": false,
+                "transport_assistance": true,
                 "urgent_booking_available": false,
                 "refinement_tags": [],
                 "digitization_features": [],
@@ -25470,7 +25969,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-27T13:33:46.381Z",
+                "last_updated": "2026-04-29T08:34:01.494Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -36755,7 +37254,12 @@
         "company-187": {
             "name": "IR-Kiinteistöt Irja Hokkeri",
             "core": {
-                "fits_for": {},
+                "fits_for": {
+                    "kiinteiston-valitys": 60,
+                    "asuntojen-myynti": 45,
+                    "asuntojen-vuokraus": 35,
+                    "kiinteistokonsultointi": 20
+                },
                 "priority_score": 0,
                 "paired_with": [],
                 "service_area": {
@@ -36771,9 +37275,17 @@
                 "weekend_service": false,
                 "not_suitable_for": [],
                 "paired_with_by_context": {},
-                "sub_contexts": [],
-                "node_links": [],
-                "description": "",
+                "sub_contexts": [
+                    "kiinteistönvälitys",
+                    "asuntomyynti",
+                    "vuokraus",
+                    "kiinteistökonsultointi"
+                ],
+                "node_links": [
+                    "KIINTEISTOT",
+                    "ASUMINEN"
+                ],
+                "description": "Kiinteistöalan palveluihin keskittyvä yritys, joka tarjoaa asuntojen ja kiinteistöjen välitystä sekä vuokraukseen ja myyntiin liittyviä palveluita.",
                 "website": "",
                 "email": "",
                 "phone": ""
@@ -36951,7 +37463,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-04-29T08:35:35.681Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -37168,7 +37680,11 @@
             "name": "Isännöintitoimisto Sujuvaa Oy",
             "core": {
                 "fits_for": {
-                    "taloyhtiöpalvelut": 70
+                    "taloyhtiöpalvelut": 80,
+                    "isännöinti": 90,
+                    "kiinteistöhallinto": 70,
+                    "taloushallinto": 40,
+                    "asumisen-palvelut": 60
                 },
                 "priority_score": 0,
                 "paired_with": [],
@@ -37179,15 +37695,25 @@
                     "note": ""
                 },
                 "emergency_available": false,
-                "contract_customer_available": false,
-                "corporate_clients": false,
+                "contract_customer_available": true,
+                "corporate_clients": true,
                 "home_service": false,
                 "weekend_service": false,
                 "not_suitable_for": [],
                 "paired_with_by_context": {},
-                "sub_contexts": [],
-                "node_links": [],
-                "description": "",
+                "sub_contexts": [
+                    "isännöinti",
+                    "taloyhtiöt",
+                    "kiinteistöhallinto",
+                    "vuokra-asunnot",
+                    "taloushallinto"
+                ],
+                "node_links": [
+                    "KIINTEISTOT",
+                    "ASUMINEN",
+                    "TALOYHTIOT"
+                ],
+                "description": "Isännöintipalveluihin erikoistunut yritys, joka tarjoaa taloyhtiöiden hallintoa, kiinteistöhallintoa, taloushallintoa sekä vuokra-asuntoihin liittyviä isännöintipalveluja.",
                 "website": "",
                 "email": "",
                 "phone": ""
@@ -37235,8 +37761,8 @@
                 "has_wifi": false,
                 "has_stage": false,
                 "private_booking": false,
-                "invoice_billing": false,
-                "corporate_clients": false,
+                "invoice_billing": true,
+                "corporate_clients": true,
                 "vip_services": false,
                 "business_catering": false,
                 "event_hosting": false,
@@ -37311,14 +37837,14 @@
                 "collaborated_with": []
             },
             "housing_company_and_contracts": {
-                "housing_company_clients": false,
-                "maintenance_contracts": false,
+                "housing_company_clients": true,
+                "maintenance_contracts": true,
                 "emergency_response": false,
-                "scheduled_visits": false,
-                "property_reports": false,
-                "invoice_billing": false,
-                "contract_customer_available": false,
-                "priority_support": false,
+                "scheduled_visits": true,
+                "property_reports": true,
+                "invoice_billing": true,
+                "contract_customer_available": true,
+                "priority_support": true,
                 "monthly_service_plan": false,
                 "refinement_tags": [],
                 "collaborated_with": []
@@ -37365,7 +37891,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-04-29T08:36:27.932Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -38398,7 +38924,11 @@
         "company-195": {
             "name": "Jyväsesudun LVI Oy",
             "core": {
-                "fits_for": {},
+                "fits_for": {
+                    "construction-and-maintenance": 80,
+                    "housing-company-palvelut": 65,
+                    "lvi-palvelut": 90
+                },
                 "priority_score": 0,
                 "paired_with": [],
                 "service_area": {
@@ -38414,8 +38944,19 @@
                 "weekend_service": false,
                 "not_suitable_for": [],
                 "paired_with_by_context": {},
-                "sub_contexts": [],
-                "node_links": [],
+                "sub_contexts": [
+                    "lvi",
+                    "putkityöt",
+                    "lämmitys",
+                    "ilmanvaihto",
+                    "huolto",
+                    "vesi- ja viemärityöt"
+                ],
+                "node_links": [
+                    "LVI",
+                    "RAKENTAMINEN",
+                    "JYVÄSKYLÄ"
+                ],
                 "description": "",
                 "website": "",
                 "email": "",
@@ -38519,8 +39060,8 @@
                 "snow_removal": false,
                 "lawn_maintenance": false,
                 "property_monitoring": false,
-                "maintenance_contracts": false,
-                "housing_company_clients": false,
+                "maintenance_contracts": true,
+                "housing_company_clients": true,
                 "refinement_tags": [],
                 "collaborated_with": []
             },
@@ -38594,8 +39135,8 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-26",
-                "verified_by": "system-init-v3",
+                "last_updated": "2026-04-29T08:37:29.373Z",
+                "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
         },
@@ -41067,7 +41608,10 @@
             "name": "Laukaan Talopalvelu Oy",
             "core": {
                 "fits_for": {
-                    "taloyhtiöpalvelut": 35
+                    "taloyhtiöpalvelut": 35,
+                    "kiinteistönhuolto": 80,
+                    "talonmiespalvelut": 70,
+                    "rakennusten-ylläpito": 60
                 },
                 "priority_score": 0,
                 "paired_with": [],
@@ -41078,14 +41622,25 @@
                     "note": ""
                 },
                 "emergency_available": false,
-                "contract_customer_available": false,
-                "corporate_clients": false,
+                "contract_customer_available": true,
+                "corporate_clients": true,
                 "home_service": false,
                 "weekend_service": false,
                 "not_suitable_for": [],
                 "paired_with_by_context": {},
-                "sub_contexts": [],
-                "node_links": [],
+                "sub_contexts": [
+                    "kiinteistönhuolto",
+                    "taloyhtiöt",
+                    "huoltotyöt",
+                    "piha-alueiden-hoito",
+                    "korjauspalvelut"
+                ],
+                "node_links": [
+                    "LAUKAA",
+                    "KIINTEISTÖ",
+                    "RAKENTAMINEN",
+                    "TALOYHTIÖ"
+                ],
                 "description": "",
                 "website": "",
                 "email": "",
@@ -41187,10 +41742,10 @@
                 "material_supply": false,
                 "project_management": false,
                 "snow_removal": false,
-                "lawn_maintenance": false,
-                "property_monitoring": false,
-                "maintenance_contracts": false,
-                "housing_company_clients": false,
+                "lawn_maintenance": true,
+                "property_monitoring": true,
+                "maintenance_contracts": true,
+                "housing_company_clients": true,
                 "refinement_tags": [],
                 "collaborated_with": []
             },
@@ -41210,13 +41765,13 @@
                 "collaborated_with": []
             },
             "housing_company_and_contracts": {
-                "housing_company_clients": false,
-                "maintenance_contracts": false,
+                "housing_company_clients": true,
+                "maintenance_contracts": true,
                 "emergency_response": false,
                 "scheduled_visits": false,
                 "property_reports": false,
-                "invoice_billing": false,
-                "contract_customer_available": false,
+                "invoice_billing": true,
+                "contract_customer_available": true,
                 "priority_support": false,
                 "monthly_service_plan": false,
                 "refinement_tags": [],
@@ -41264,7 +41819,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-04-29T08:38:34.825Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -49078,7 +49633,15 @@
         "company-250": {
             "name": "Karivik Ravintolat Oy",
             "core": {
-                "fits_for": {},
+                "fits_for": {
+                    "ravintolapalvelut": 95,
+                    "catering": 90,
+                    "juhlapalvelut": 85,
+                    "kokouspalvelut": 80,
+                    "häät": 75,
+                    "yritystilaisuudet": 70,
+                    "kartanoravintola": 80
+                },
                 "priority_score": 0,
                 "paired_with": [],
                 "service_area": {
@@ -49098,11 +49661,28 @@
                 "weekend_service": false,
                 "not_suitable_for": [],
                 "paired_with_by_context": {},
-                "sub_contexts": [],
-                "node_links": [],
+                "sub_contexts": [
+                    "ravintola",
+                    "catering",
+                    "kokouspalvelut",
+                    "juhlat",
+                    "häät",
+                    "yritystilaisuudet",
+                    "lounas",
+                    "a la carte"
+                ],
+                "node_links": [
+                    "LAUKAA",
+                    "JYVÄSKYLÄ",
+                    "RAVINTOLA",
+                    "KOKOUS",
+                    "HÄÄT",
+                    "JUHLAT",
+                    "KARTANO"
+                ],
                 "description": "Ravintola Karlvik-nimellä tunnettu ravintola, joka on erikoistunut lounas- ja à la carte -palveluihin, juhlapalveluihin ja kokoustarjoiluihin. Ravintola sijaitsee kauniissa Karlvikin kartanomaisemissa .",
-                "website": "www.ravintolakarlvik.fi",
-                "email": "ravintola@ravintolakarlvik.fi",
+                "website": "[www.ravintolakarlvik.fi](http://www.ravintolakarlvik.fi)",
+                "email": "[ravintola@ravintolakarlvik.fi](mailto:ravintola@ravintolakarlvik.fi)",
                 "phone": "+358 400 550 220"
             },
             "events_and_celebrations": {
@@ -49278,7 +49858,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-27T06:07:07.709Z",
+                "last_updated": "2026-04-29T08:41:08.846Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -49286,7 +49866,14 @@
         "company-252": {
             "name": "Koskikahvio Ky Juhani Hänninen",
             "core": {
-                "fits_for": {},
+                "fits_for": {
+                    "kahvila-ravintola": 90,
+                    "matkailu": 70,
+                    "majoituspalvelut": 60,
+                    "mökkipalvelut": 40,
+                    "venevuokraus": 30,
+                    "tapahtumapalvelut": 50
+                },
                 "priority_score": 0,
                 "paired_with": [],
                 "service_area": {
@@ -49306,8 +49893,22 @@
                 "weekend_service": false,
                 "not_suitable_for": [],
                 "paired_with_by_context": {},
-                "sub_contexts": [],
-                "node_links": [],
+                "sub_contexts": [
+                    "kahvila",
+                    "ravintola",
+                    "majoitus",
+                    "venevuokraus",
+                    "lomamökit",
+                    "tapahtumat",
+                    "matkailu"
+                ],
+                "node_links": [
+                    "LAUKAA",
+                    "KUUSA",
+                    "MATKAILU",
+                    "HUVIT",
+                    "RAVINTOLA"
+                ],
                 "description": "Kahvila-ravintola, joka tarjoaa kahvila- ja ravintolapalveluita. Yrityksen toimialaan kuuluu elintarvikkeiden myynti, kappaletavaran myynti, ravintolaliikkeen harjoittaminen, huvitilaisuuksien järjestäminen, lomamökkien vuokraus ja muu majoitustoiminta, veneiden ym. vapaa-ajan toimintaan liittyvien tavaroiden vuokraus sekä myyntitoiminta messuilla ja muissa tilaisuuksissa . Yrityksellä on anniskelulupa (voimassa vuodesta 1997) .",
                 "website": "",
                 "email": "",
@@ -49486,7 +50087,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-27T06:06:14.062Z",
+                "last_updated": "2026-04-29T08:40:04.856Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -49728,7 +50329,9 @@
                 "not_suitable_for": [],
                 "paired_with_by_context": {},
                 "sub_contexts": [],
-                "node_links": [],
+                "node_links": [
+                    "LAUKAA"
+                ],
                 "description": "",
                 "website": "",
                 "email": "",
@@ -49907,7 +50510,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-04-29T08:42:20.713Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -50328,7 +50931,13 @@
         "company-257": {
             "name": "Restella Oy (Caffitella)",
             "core": {
-                "fits_for": {},
+                "fits_for": {
+                    "kahvilapalvelut": 70,
+                    "lounasravintolat": 70,
+                    "catering": 65,
+                    "ravintolapalvelut": 75,
+                    "tilausravintola": 60
+                },
                 "priority_score": 0,
                 "paired_with": [],
                 "service_area": {
@@ -50344,9 +50953,19 @@
                 "weekend_service": false,
                 "not_suitable_for": [],
                 "paired_with_by_context": {},
-                "sub_contexts": [],
-                "node_links": [],
-                "description": "",
+                "sub_contexts": [
+                    "lounas",
+                    "kahvila",
+                    "catering",
+                    "ravintola",
+                    "tilausravintola"
+                ],
+                "node_links": [
+                    "RAVINTOLA",
+                    "KAHVILA",
+                    "CATERING"
+                ],
+                "description": "Caffitella-brändillä toimiva ravintola- ja kahvilapalveluihin keskittyvä yritys, joka tarjoaa lounas- ja kahvilapalveluita sekä catering- ja tilausravintolapalveluita.",
                 "website": "",
                 "email": "",
                 "phone": ""
@@ -50525,7 +51144,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-04-29T08:43:24.235Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -51568,7 +52187,10 @@
                 "fits_for": {
                     "kokoukset": 35,
                     "mökkipalvelut": 35,
-                    "vapaa-aika": 35
+                    "vapaa-aika": 35,
+                    "yritystapahtumat": 35,
+                    "juhlat": 35,
+                    "hyvinvointi": 35
                 },
                 "priority_score": 0,
                 "paired_with": [
@@ -51592,11 +52214,26 @@
                 "weekend_service": true,
                 "not_suitable_for": [],
                 "paired_with_by_context": {},
-                "sub_contexts": [],
-                "node_links": [],
+                "sub_contexts": [
+                    "majoitus",
+                    "ravintola",
+                    "sauna",
+                    "luontoaktiviteetit",
+                    "hyvinvointi",
+                    "kokouspalvelut",
+                    "juhlapalvelut"
+                ],
+                "node_links": [
+                    "SAUNA",
+                    "LAUKAA",
+                    "HUVIT",
+                    "MAJOITUS",
+                    "KOKOUS",
+                    "LUONTO"
+                ],
                 "description": "Täyden palvelun matkailutila Kuusaankosken varrella, perustettu vuonna 2000 . Tarjoaa majoitusta Riihihuviloissa ja -huoneissa, lempeitä löylyjä savusaunoissa, monipuolisia aktiviteetteja (mm. fatbike- ja maastopyöräily, avantouinti, lumikenkäily, jääkalastus, jooga, hyvinvointipaketit), sekä ravintolapalveluita . Pohjoismainen Swan Ecolabel -sertifioitu . Toimialana ravintolat (56101) . Perheyritys .",
-                "website": "www.varjola.com",
-                "email": "varjola@varjola.com",
+                "website": "[www.varjola.com](http://www.varjola.com)",
+                "email": "[varjola@varjola.com](mailto:varjola@varjola.com)",
                 "phone": "020 792 8080"
             },
             "events_and_celebrations": {
@@ -51777,7 +52414,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-27T06:02:31.012Z",
+                "last_updated": "2026-04-29T08:44:32.550Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
