@@ -231,8 +231,8 @@ const NEEDS_CONFIG = {
                 "question": "Mitä tarvitaan onnistuneisiin juhliin?",
                 "options": [
                     { "label": "Pitopalvelu / Ruoat", "tags": ["pitopalvelu"], "profilointi_filter": { "section": "events_and_celebrations", "field": "catering_available", "value": true } },
-                    { "label": "Kakut / Leivonnaiset", "tags": ["leipomo", "elintarvike"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "juhlakakut" } },
-                    { "label": "Ohjelma / Esiintyjä", "tags": ["ohjelmapalvelut"], "profilointi_filter": { "section": "events_and_celebrations", "field": "entertainment_features", "value": "ohjelma" } },
+                    { "label": "Kakut / Leivonnaiset", "tags": ["leipomo", "elintarvike"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "hääkakku" } },
+                    { "label": "Ohjelma / Esiintyjä", "tags": ["ohjelmapalvelut"] },
                     { "label": "Valokuvaaus", "tags": ["valokuvaus"] },
                     { "label": "Videokuvaus", "tags": ["videotuotanto", "videokuvaus"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "juhlakuvaus" } },
                     { "label": "Kukat", "tags": ["kukkakauppa"] }
