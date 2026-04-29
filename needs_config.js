@@ -49,10 +49,10 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": "Mitä muita palveluita tarvitset juhlatpäivään?",
                 "options": [
-                    { "label": "Valokuvaaja", "tags": ["valokuvaus", "valokuvaaja"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "valokuvaaja" } },
-                    { "label": "Videokuvaaja", "tags": ["videotuotanto", "videokuvaus", "videokuvaaja"], "profilointi_filter": { "section": "events_and_celebrations", "field": "digitization_features", "value": "häävideot" } },
+                    { "label": "Valokuvaaja", "tags": ["valokuvaus", "valokuvaaja"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "hääkuvaus" } },
+                    { "label": "Videokuvaaja", "tags": ["videotuotanto", "videokuvaus", "videokuvaaja"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "häävideo" } },
                     { "label": "Kukkakauppa & Koristelu", "tags": ["kukkakauppa"] },
-                    { "label": "Musiikki tai DJ", "tags": ["musiikki", "ohjelmapalvelut"], "profilointi_filter": { "section": "events_and_celebrations", "field": "entertainment_features", "value": "musiikki" } }
+                    { "label": "Musiikki tai DJ", "tags": ["musiikki", "ohjelmapalvelut"], "profilointi_filter": { "section": "events_and_celebrations", "field": "entertainment_features", "value": "live-musiikki" } }
                 ]
             },
             {
@@ -73,7 +73,7 @@ const NEEDS_CONFIG = {
                 "question": "Haluaisitko ikuistaa päivän digitaalisesti tai tarvitsetko muita digitointipalveluita?",
                 "options": [
                     { "label": "Häävideon editointi / Koostepalvelu", "tags": ["videotuotanto"], "node_link": "ROLE_DIGITIZATION", "profilointi_filter": { "section": "events_and_celebrations", "field": "digitization_features", "value": "häävideoiden editointi" } },
-                    { "label": "Drone-kuvaus", "tags": ["drone"], "node_link": "ROLE_DIGITIZATION", "profilointi_filter": { "section": "events_and_celebrations", "field": "digitization_features", "value": "dronevideoiden editointi" } },
+                    { "label": "Drone-kuvaus", "tags": ["drone"], "node_link": "ROLE_DIGITIZATION", "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "drone-kuvaus" } },
                     { "label": "Digitointipalvelut (kuvat, videot ym.)", "tags": ["digitointi"], "node_link": "ROLE_DIGITIZATION" }
                 ]
             },
@@ -85,7 +85,7 @@ const NEEDS_CONFIG = {
                 "options": [
                     { "label": "Vanhojen valokuvien digitointi", "tags": ["digitointi"], "profilointi_filter": { "section": "events_and_celebrations", "field": "digitization_features", "value": "vanhojen valokuvien digitointi" } },
                     { "label": "VHS- tai DVD-materiaalin digitointi", "tags": ["digitointi"], "profilointi_filter": { "section": "events_and_celebrations", "field": "digitization_features", "value": "VHS / DVD digitointi" } },
-                    { "label": "Asiakirjojen tai kirjeiden digitointi", "tags": ["digitointi"], "profilointi_filter": { "section": "events_and_celebrations", "field": "digitization_features", "value": "paperiarkistojen digitointi" } }
+                    { "label": "Diojen, negatiivien tai kaitafilmien digitointi", "tags": ["digitointi"], "profilointi_filter": { "section": "events_and_celebrations", "field": "digitization_features", "value": "diojen, negatiivien ja kaitafilmien digitointi" } }
                 ]
             }
         ]
@@ -124,7 +124,7 @@ const NEEDS_CONFIG = {
                     { "label": "Pitopalvelu", "tags": ["pitopalvelu"] },
                     { "label": "Majoitus", "tags": ["majoitus"] },
                     { "label": "Kuljetukset", "tags": ["kuljetus", "taksi"] },
-                    { "label": "Videokuvaaja / Tapahtumavideointi", "tags": ["videotuotanto", "videokuvaus"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "tapahtumavideointi" } },
+                    { "label": "Videokuvaaja / Tapahtumavideointi", "tags": ["videotuotanto", "videokuvaus"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "videotuotanto" } },
                     { "label": "Saunatilat", "tags": ["saunatilat"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "sauna" } },
                     { "label": "Ohjelmapalvelut / Elämykset", "tags": ["ohjelmapalvelut"] },
                     { "label": "AV-tekniikka & Äänentoisto", "tags": ["it-palvelut"], "profilointi_filter": { "section": "events_and_celebrations", "field": "has_av_tech", "value": true } }
@@ -231,10 +231,10 @@ const NEEDS_CONFIG = {
                 "question": "Mitä tarvitaan onnistuneisiin juhliin?",
                 "options": [
                     { "label": "Pitopalvelu / Ruoat", "tags": ["pitopalvelu"], "profilointi_filter": { "section": "events_and_celebrations", "field": "catering_available", "value": true } },
-                    { "label": "Kakut / Leivonnaiset", "tags": ["leipomo", "elintarvike"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "kakut" } },
+                    { "label": "Kakut / Leivonnaiset", "tags": ["leipomo", "elintarvike"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "juhlakakut" } },
                     { "label": "Ohjelma / Esiintyjä", "tags": ["ohjelmapalvelut"], "profilointi_filter": { "section": "events_and_celebrations", "field": "entertainment_features", "value": "ohjelma" } },
                     { "label": "Valokuvaaus", "tags": ["valokuvaus"] },
-                    { "label": "Videokuvaus", "tags": ["videotuotanto", "videokuvaus"], "profilointi_filter": { "section": "events_and_celebrations", "field": "digitization_features", "value": "videokuvaus" } },
+                    { "label": "Videokuvaus", "tags": ["videotuotanto", "videokuvaus"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "juhlakuvaus" } },
                     { "label": "Kukat", "tags": ["kukkakauppa"] }
                 ]
             }
@@ -475,7 +475,7 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": "Haluaisitko tallentaa muistot tai tarvitsetko digitointipalveluita?",
                 "options": [
-                    { "label": "Muistovideo / Videointi / Esitykset", "tags": ["videotuotanto", "videokuvaus", "videokuvaaja"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "digitization_features", "value": "muistovideo" } },
+                    { "label": "Muistovideo / Videointi / Esitykset", "tags": ["videotuotanto", "videokuvaus", "videokuvaaja"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "refinement_tags", "value": "muistovideo" } },
                     { "label": "Valokuvaus tilaisuudessa", "tags": ["valokuvaus"] },
                     { "label": "Digitointipalvelut (kuvat, videot ym.)", "tags": ["digitointi"] }
                 ]
@@ -488,7 +488,7 @@ const NEEDS_CONFIG = {
                 "options": [
                     { "label": "Vanhojen valokuvien digitointi", "tags": ["digitointi"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "digitization_features", "value": "vanhojen valokuvien digitointi" } },
                     { "label": "VHS- tai DVD-materiaalin digitointi", "tags": ["digitointi"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "digitization_features", "value": "VHS / DVD digitointi" } },
-                    { "label": "Sukukuvien kokoaminen ja digitointi", "tags": ["digitointi"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "digitization_features", "value": "sukukuvien kokoaminen" } }
+                    { "label": "Muisteluvideo / Diashow / Kuvakirja", "tags": ["digitointi"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "digitization_features", "value": "muisteluun soveltuvat diashow- ja kuvakirjapalvelut" } }
                 ]
             }
         ]
