@@ -184,6 +184,7 @@ const NEEDS_CONFIG = {
                 "question": "Muut tarpeet?",
                 "options": [
                     { "label": "Majoitus", "tags": ["majoitus"] },
+                    { "label": "Videokuvaaja / Tapahtumavideointi", "tags": ["videotuotanto", "videokuvaus", "videokuvaaja"], "profilointi_filter": { "section": "business_events", "field": "refinement_tags", "value": "yritysvideot" } },
                     { "label": "Yrityslahjat", "tags": ["yrityslahjat", "lahjatavarat"] },
                     { "label": "IT-tuki / AV-tekniikka", "tags": ["it-palvelut"], "profilointi_filter": { "section": "business_events", "field": "has_projector", "value": true } }
                 ]
