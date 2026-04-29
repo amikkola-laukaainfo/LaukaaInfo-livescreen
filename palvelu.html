@@ -1327,7 +1327,7 @@
                 
             if (isAnchorGroup) {
                 actionHtml += `
-                <button class="btn-action ${isSelected ? 'primary-action' : ''}" onclick="selectAnchor('${c.id}')">
+                <button type="button" class="btn-action ${isSelected ? 'primary-action' : ''}" onclick="event.preventDefault(); event.stopPropagation(); selectAnchor('${c.id}')">
                     <i>🎯</i><span>${btnAnchorText}</span>
                 </button>`;
             }
