@@ -836,8 +836,23 @@
         function getFitsForScore(c, profilingKey) {
             if (!c || !c.profiling || !c.profiling.core || !c.profiling.core.fits_for) return 0;
             const fits = c.profiling.core.fits_for;
-            // Support both underscore (events_and_celebrations) and hyphen (events-and-celebrations) formats
-            return fits[profilingKey] || fits[profilingKey.replace(/_/g, '-')] || 0;
+            
+            const finnishMap = {
+                'events_and_celebrations': 'häät',
+                'business_events': 'yritysjuhlat',
+                'funerals_and_memorials': 'hautajaiset',
+                'startup_services': 'yrityksen perustaminen',
+                'business_growth': 'yrityksen kehittäminen'
+            };
+            
+            let score = fits[profilingKey] || fits[profilingKey.replace(/_/g, '-')] || 0;
+            
+            if (score === 0 && finnishMap[profilingKey]) {
+                const finKey = finnishMap[profilingKey];
+                score = fits[finKey] || fits[finKey.replace(/ /g, '-')] || 0;
+            }
+            
+            return score;
         }
 
         // Helper to get all collaborators of a company across all profiling categories
@@ -1019,15 +1034,29 @@
                         if (opt.profilointi_filter) {
                             const pf = opt.profilointi_filter;
                             const catData = getCategoryData(c, pf.section);
+                            let match = false;
+
                             if (catData) {
                                 const actualVal = catData[pf.field];
-                                let match = (actualVal === pf.value) || (Array.isArray(actualVal) && actualVal.includes(pf.value));
+                                match = (actualVal === pf.value) || (Array.isArray(actualVal) && actualVal.includes(pf.value));
+                                
                                 if (!match && typeof actualVal === 'object' && actualVal !== null) {
                                     if (Object.keys(actualVal).includes(pf.value)) match = true;
                                     else match = Object.values(actualVal).some(arr => Array.isArray(arr) && arr.includes(pf.value));
                                 }
-                                if (match) isProfiledMatch = true;
                             }
+
+                            // FALLBACK: Tarkista sub_contexts (Taso 2)
+                            if (!match && c.profiling?.core?.sub_contexts) {
+                                const subContexts = c.profiling.core.sub_contexts;
+                                if (Array.isArray(subContexts)) {
+                                    if (subContexts.includes(pf.value)) match = true;
+                                } else if (typeof subContexts === 'object' && subContexts !== null) {
+                                    match = Object.values(subContexts).some(arr => Array.isArray(arr) && arr.includes(pf.value));
+                                }
+                            }
+
+                            if (match) isProfiledMatch = true;
                         }
 
                         if (!isProfiledMatch && opt.tags) {
