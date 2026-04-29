@@ -1671,19 +1671,17 @@
             "name": "Mediazoo",
             "core": {
                 "fits_for": {
-                    "häät": 80,
-                    "kokoukset": 35,
-                    "yrityksen kehittäminen": 75,
-                    "events-and-celebrations": 80,
-                    "business-growth": 75,
-                    "business_growth": 75,
-                    "yritysjuhlat": 75,
-                    "hautajaiset": 60,
-                    "funerals-and-memorials": 60,
-                    "yrityksen-kehittäminen": 90,
-                    "muutto": 50
+                    "häät": 85,
+                    "kokoukset": 45,
+                    "yrityksen-kehittäminen": 92,
+                    "juhlat-ja-merkkipäivät": 78,
+                    "business-growth": 72,
+                    "yritysjuhlat": 82,
+                    "hautajaiset": 68,
+                    "muutto": 52,
+                    "yrityksen-perustaminen": 76
                 },
-                "priority_score": 52,
+                "priority_score": 78,
                 "paired_with": [
                     "Majoitus",
                     "Catering",
@@ -1699,7 +1697,7 @@
                         "Laukaa",
                         "Lievestuore"
                     ],
-                    "note": "projektit sopimuksesta kauemmaksikin, digitoinnit koko Suomeen postitse tai matkahuollolla"
+                    "note": "Projektit sopimuksesta myös kauemmas. Digitoinnit koko Suomeen postitse, matkahuollolla tai noutopalvelulla. Toimipaikka Lievestuoreella."
                 },
                 "emergency_available": false,
                 "contract_customer_available": true,
@@ -1712,53 +1710,63 @@
                 ],
                 "paired_with_by_context": {
                     "häät": [
-                        "Valokuvaaja",
-                        "videokuvaaja"
+                        "valokuvaaja",
+                        "videokuvaaja",
+                        "drone-kuvaus"
                     ],
                     "hautajaiset": [
                         "valokuvaaja",
-                        "videokuvaaja"
+                        "videokuvaaja",
+                        "muistovideo"
                     ],
                     "yritysjuhlat": [
                         "valokuvaaja",
-                        "videokuvaaja"
-                    ],
-                    "kokoukset": [
+                        "videokuvaaja",
                         "streamaus"
                     ],
+                    "kokoukset": [
+                        "streamaus",
+                        "videotuotanto"
+                    ],
                     "yrityksen-perustaminen": [
-                        "Verkkosivut"
+                        "verkkosivut",
+                        "brändäys"
                     ],
                     "yrityksen-kehittäminen": [
-                        "Markkinointi"
+                        "markkinointi",
+                        "sisällöntuotanto",
+                        "videotuotanto"
                     ]
                 },
-                "sub_contexts": {
-                    "hautajaiset": [
-                        "muistotilaisuus",
-                        "muistovideo"
-                    ],
-                    "häät": [
-                        "häävideot",
-                        "häävideoiden editointi",
-                        "hääkoosteet",
-                        "valokuvaaja",
-                        "videokuvaaja",
-                        "digitointi"
-                    ],
-                    "digitointi": [
-                        "digitointi",
-                        "arkistointi",
-                        "vanhojen valokuvien digitointi"
-                    ],
-                    "videokuvaaja": [
-                        "yritysvideot"
-                    ]
-                },
-                "node_links": [],
-                "description": "Digimedian palveluihin erikoistunut yritys, joka tarjoaa digitointipalveluja (videokasetit, kaitafilmit, valokuvat, diat, negatiivit, äänikelat ja yritysarkistot), video- ja animaatiotuotantoa, valokuvausta, verkkosivujen ja some-sisällön suunnittelua, digipainotuotteita, brändäystä sekä digitaalisen markkinoinnin konsultointia. Palveluun kuuluu myös digitaalisen median hyötyjen ja haasteiden kartoitus yritysasiakkaille sekä digivalmiuksien kehittäminen. Mediazoo toimii Lievestuoreella Keski-Suomessa ja palvelee digitointiasiakkaita koko Suomessa postitse toimitettavien aineistojen kautta.",
-                "website": "www.mediazoo.fi",
-                "email": "info@mediazoo.fi",
+                "sub_contexts": [
+                    "muistotilaisuus",
+                    "muistovideo",
+                    "häävideot",
+                    "häävideoiden editointi",
+                    "hääkoosteet",
+                    "valokuvaaja",
+                    "videokuvaaja",
+                    "digitointi",
+                    "arkistointi",
+                    "vanhojen valokuvien digitointi",
+                    "yritysvideot",
+                    "drone-kuvaus",
+                    "wordpress-sivustot",
+                    "digipainotuotteet"
+                ],
+                "node_links": [
+                    "LAUKAA",
+                    "LIEVESTUORE",
+                    "HUVIT",
+                    "YRITYSTAPAHTUMAT",
+                    "DIGITOINTI",
+                    "VALOKUVAUS",
+                    "VIDEOTUOTANTO",
+                    "YRITYKSEN_KEHITTAMINEN"
+                ],
+                "description": "Digimedian palveluihin erikoistunut yritys, joka tarjoaa digitointipalveluja (videokasetit, kaitafilmit, valokuvat, diat, negatiivit, äänikelat ja yritysarkistot), video- ja animaatiotuotantoa, valokuvausta, verkkosivujen ja some-sisällön suunnittelua, digipainotuotteita, brändäystä sekä digitaalisen markkinoinnin konsultointia. Palveluun kuuluu myös WordPress-sivustot, Android- ja web-sovellukset, ilmakuvaus, asuntovideot sekä digitaalisen median hyötyjen ja haasteiden kartoitus yritysasiakkaille. Mediazoo toimii Lievestuoreella Keski-Suomessa ja palvelee digitointiasiakkaita koko Suomessa myös postitse.",
+                "website": "[www.mediazoo.fi](http://www.mediazoo.fi)",
+                "email": "[info@mediazoo.fi](mailto:info@mediazoo.fi)",
                 "phone": "041-4655290"
             },
             "events_and_celebrations": {
@@ -1768,11 +1776,11 @@
                 "is_accessible": false,
                 "is_lakeside": false,
                 "has_sauna": false,
-                "has_av_tech": false,
+                "has_av_tech": true,
                 "has_stage": false,
                 "accommodation_beds": 0,
                 "alcohol_license": false,
-                "private_booking": false,
+                "private_booking": true,
                 "late_night_events": false,
                 "wedding_specialized": true,
                 "catering_min_capacity": 0,
@@ -1783,14 +1791,19 @@
                 "cake_service": false,
                 "partner_venues": [],
                 "wedding_photography": true,
-                "drone_available": false,
+                "drone_available": true,
                 "video_production": true,
                 "live_music": false,
                 "dj_services": false,
                 "karaoke_available": false,
                 "has_exclusive_catering": false,
                 "accommodation_included": false,
-                "refinement_tags": ["valokuvaus", "videotuotanto", "tapahtumavideointi"],
+                "refinement_tags": [
+                    "häävideo",
+                    "juhlakuvaus",
+                    "ilmakuvaus",
+                    "drone-kuvaus"
+                ],
                 "digitization_features": {
                     "digitointi": [
                         "vanhojen valokuvien digitointi",
@@ -1813,7 +1826,7 @@
                 "seminar_capacity": 0,
                 "conference_rooms": 0,
                 "has_projector": false,
-                "has_streaming": false,
+                "has_streaming": true,
                 "has_wifi": false,
                 "has_stage": false,
                 "private_booking": false,
@@ -1824,9 +1837,13 @@
                 "event_hosting": false,
                 "corporate_gifts": false,
                 "branding_support": true,
-                "av_support": false,
-                "staff_events_specialized": false,
-                "refinement_tags": [],
+                "av_support": true,
+                "staff_events_specialized": true,
+                "refinement_tags": [
+                    "yritysvideot",
+                    "streamaus",
+                    "brändäys"
+                ],
                 "wellbeing_and_activity_features": [
                     "koulutukset ja työpajat yrityksille",
                     "digitaito- ja viestintävalmennukset",
@@ -1849,7 +1866,10 @@
                 "memorial_arrangements": false,
                 "transport_assistance": false,
                 "urgent_booking_available": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "muistovideo",
+                    "muistokuvakooste"
+                ],
                 "digitization_features": [
                     "muistotilaisuuksien ja perhearkistojen videoiden digitointi",
                     "valokuvien, diojen ja negatiivien digitointi",
@@ -1870,7 +1890,8 @@
                 "insurance_support": false,
                 "refinement_tags": [],
                 "digitization_features": [
-                    "kotien vanhojen valokuva- ja videoarkistojen digitointi"
+                    "kotien vanhojen valokuva- ja videoarkistojen digitointi",
+                    "asuntovideot"
                 ],
                 "collaborated_with": []
             },
@@ -1886,7 +1907,10 @@
                 "property_monitoring": false,
                 "maintenance_contracts": false,
                 "housing_company_clients": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "timelapse",
+                    "dokumentointikuvaus"
+                ],
                 "collaborated_with": []
             },
             "cottage_services": {
@@ -1925,17 +1949,21 @@
                 "office_space_available": false,
                 "banking_support": false,
                 "website_creation": true,
-                "webshop_setup": false,
+                "webshop_setup": true,
                 "branding_support": true,
-                "logo_design": false,
+                "logo_design": true,
                 "business_photography": true,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "wordpress",
+                    "brändäys",
+                    "yritysilme"
+                ],
                 "collaborated_with": []
             },
             "business_growth": {
                 "google_ads": false,
                 "social_media_marketing": true,
-                "seo_services": false,
+                "seo_services": true,
                 "content_creation": true,
                 "video_production": true,
                 "crm_support": false,
@@ -1943,7 +1971,11 @@
                 "sales_development": false,
                 "automation_services": false,
                 "consulting_services": true,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "sisällöntuotanto",
+                    "markkinointi",
+                    "videomarkkinointi"
+                ],
                 "collaborated_with": []
             },
             "wellbeing_and_beauty": {
@@ -1959,7 +1991,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-28T19:07:43.805Z",
+                "last_updated": "2026-04-29T07:23:36.880Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -19738,9 +19770,12 @@
             "name": "Ext Ventures Oy",
             "core": {
                 "fits_for": {
-                    "vapaa-aika": 35
+                    "vapaa-aika": 85,
+                    "juhlat-ja-merkkipäivät": 95,
+                    "yritystapahtumat": 88,
+                    "muistotilaisuudet-ja-hautajaiset": 70
                 },
-                "priority_score": 0,
+                "priority_score": 82,
                 "paired_with": [],
                 "service_area": {
                     "mode": "TOIMIPISTE",
@@ -19749,7 +19784,7 @@
                         "Laukaa",
                         "Keski-Suomi"
                     ],
-                    "note": "Yritys sijaitsee Laukaassa. Toimintaa Keski-Suomen alueella ."
+                    "note": "Pölkinahon juhlatila sijaitsee Peurungan alueella Laukaassa. Toimintaa Keski-Suomen alueella ja tapahtumatuotantoa laajemmin."
                 },
                 "emergency_available": false,
                 "contract_customer_available": true,
@@ -19757,38 +19792,69 @@
                 "home_service": false,
                 "weekend_service": true,
                 "not_suitable_for": [],
-                "paired_with_by_context": {},
-                "sub_contexts": [],
-                "node_links": [],
-                "description": "Tapahtumatuotantoon ja huvi- ja virkistystoimintaan keskittynyt yritys . Tuottaa ja järjestää tapahtumia, kuten John Smith Rock Festival, Satama Festival, kirkkokonsertteja ja ravintolatuotantoja . Toimii myös Laukaan satamakahvilassa sekä keväällä 2025 toimintansa aloittavassa juhlatilassa . Yhtiön toimialaan kuuluu myös kiinteistöalan toiminta, asuntojen vuokraus ja hallinta sekä ravintolatoiminta .",
-                "website": "www.ext.fi",
-                "email": "info@ext.fi",
+                "paired_with_by_context": {
+                    "events-and-celebrations": [
+                        "pitopalvelu",
+                        "valokuvaaja",
+                        "majoitus",
+                        "sauna",
+                        "anniskelu",
+                        "live-musiikki"
+                    ],
+                    "business-events": [
+                        "kokouspalvelut",
+                        "catering",
+                        "majoitus"
+                    ]
+                },
+                "sub_contexts": [
+                    "juhlatila",
+                    "pitopalvelu",
+                    "kokoustila",
+                    "sauna",
+                    "anniskelu",
+                    "tapahtumatuotanto",
+                    "live-musiikki"
+                ],
+                "node_links": [
+                    "HUVIT",
+                    "SAUNA",
+                    "LAUKAA",
+                    "JUHLAT",
+                    "YRITYSTAPAHTUMAT",
+                    "PÖLKINAHO"
+                ],
+                "description": "Tapahtumatuotantoon, juhlatiloihin ja huvi- ja virkistystoimintaan keskittynyt yritys. Pölkinahon juhlatila Peurungassa tarjoaa tunnelmallisen maalaistalomiljöön juhliin, muistotilaisuuksiin, kokouksiin ja yritystilaisuuksiin. Kautta yrityksen onnistuvat myös rantasauna, pitopalvelu, anniskelu, tarjoiluhenkilökunta, majoitus Peurungan kylpylähotellissa sekä live-musiikki ja tapahtumatuotanto. Yritys järjestää myös John Smith Rock Festivalin, Satama Festivalin ja toimii Laukaan satamassa.",
+                "website": "[www.ext.fi](http://www.ext.fi)",
+                "email": "[info@ext.fi](mailto:info@ext.fi)",
                 "phone": "0400 667 814"
             },
             "events_and_celebrations": {
-                "capacity_max": 0,
-                "seated_capacity": 0,
-                "outdoor_capacity": 0,
+                "capacity_max": 300,
+                "seated_capacity": 50,
+                "outdoor_capacity": 300,
                 "is_accessible": false,
                 "is_lakeside": true,
                 "has_sauna": true,
                 "has_av_tech": false,
-                "has_stage": false,
+                "has_stage": true,
                 "accommodation_beds": 0,
-                "alcohol_license": false,
+                "alcohol_license": true,
                 "private_booking": true,
                 "late_night_events": true,
                 "wedding_specialized": false,
-                "catering_min_capacity": 0,
-                "catering_max_capacity": 0,
+                "catering_min_capacity": 10,
+                "catering_max_capacity": 300,
                 "dietary_specialties": [],
-                "staff_included": false,
+                "staff_included": true,
                 "wedding_menu_available": false,
                 "cake_service": false,
                 "partner_venues": [
+                    "Pölkinahon juhlatila",
                     "Laukaan satama",
                     "John Smith Rock Festival",
-                    "Satama Festival"
+                    "Satama Festival",
+                    "Peurunka"
                 ],
                 "wedding_photography": false,
                 "drone_available": false,
@@ -19798,19 +19864,29 @@
                 "karaoke_available": false,
                 "has_exclusive_catering": false,
                 "accommodation_included": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "juhlatila",
+                    "maalaismiljöö",
+                    "rantasauna",
+                    "pitopalvelu",
+                    "anniskelu"
+                ],
                 "digitization_features": [],
-                "entertainment_features": [],
+                "entertainment_features": [
+                    "live-musiikki",
+                    "esiintyjäillat",
+                    "pölkkilive"
+                ],
                 "collaborated_with": []
             },
             "business_events": {
-                "meeting_capacity": 0,
-                "seminar_capacity": 0,
-                "conference_rooms": 0,
+                "meeting_capacity": 50,
+                "seminar_capacity": 50,
+                "conference_rooms": 1,
                 "has_projector": false,
                 "has_streaming": false,
                 "has_wifi": false,
-                "has_stage": false,
+                "has_stage": true,
                 "private_booking": true,
                 "invoice_billing": true,
                 "corporate_clients": true,
@@ -19821,24 +19897,36 @@
                 "branding_support": false,
                 "av_support": false,
                 "staff_events_specialized": true,
-                "refinement_tags": [],
-                "wellbeing_and_activity_features": [],
-                "entertainment_features": [],
+                "refinement_tags": [
+                    "kokoustila",
+                    "yritysjuhlat",
+                    "henkilöstötilaisuudet"
+                ],
+                "wellbeing_and_activity_features": [
+                    "sauna",
+                    "majoitus"
+                ],
+                "entertainment_features": [
+                    "live-musiikki"
+                ],
                 "collaborated_with": []
             },
             "funerals_and_memorials": {
-                "memorial_service_capacity": 0,
-                "quiet_private_space": false,
+                "memorial_service_capacity": 50,
+                "quiet_private_space": true,
                 "accessible_entry": false,
-                "memorial_catering": false,
-                "coffee_service": false,
+                "memorial_catering": true,
+                "coffee_service": true,
                 "flower_arrangements": false,
-                "memorial_menu_available": false,
+                "memorial_menu_available": true,
                 "funeral_flowers": false,
                 "memorial_arrangements": false,
                 "transport_assistance": false,
                 "urgent_booking_available": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "muistotilaisuus",
+                    "rauhallinen tila"
+                ],
                 "digitization_features": [],
                 "collaborated_with": []
             },
@@ -19942,7 +20030,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-27T05:48:48.103Z",
+                "last_updated": "2026-04-29T07:18:44.047Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -22841,64 +22929,116 @@
         "company-120": {
             "name": "Proxta Oy",
             "core": {
-                "fits_for": {},
-                "priority_score": 0,
+                "fits_for": {
+                    "juhlat-ja-merkkipäivät": 82,
+                    "yritystapahtumat": 88,
+                    "vapaa-aika": 76,
+                    "yrityksen-kehittäminen": 42,
+                    "yritysjuhlat": 5
+                },
+                "priority_score": 74,
                 "paired_with": [],
                 "service_area": {
                     "mode": "TOIMIPISTE",
                     "radius_km": 0,
                     "regions": [
                         "Laukaa",
-                        "Laukkavirta"
+                        "Laukkavirta",
+                        "Keski-Suomi"
                     ],
-                    "note": "Sijainti Laukaassa, osoitteessa Ketveleentie 85, Laukkavirta ."
+                    "note": "Sijainti Laukaassa, osoitteessa Ketveleentie 85, Laukkavirta. Toiminta painottuu tapahtuma-, musiikki- ja ohjelmapalveluihin Keski-Suomen alueella."
                 },
                 "emergency_available": false,
-                "contract_customer_available": false,
+                "contract_customer_available": true,
                 "corporate_clients": true,
                 "home_service": false,
-                "weekend_service": false,
+                "weekend_service": true,
                 "not_suitable_for": [],
-                "paired_with_by_context": {},
-                "sub_contexts": [],
-                "node_links": [],
-                "description": "Musiikki- ja viihdepalveluihin erikoistunut osakeyhtiö. Toimialaan kuuluvat tapahtuma- ja tuotantopalvelut, ohjelmapalvelut, äänentoisto-, valaistus- ja äänisuunnittelupalvelut, studio- ja koulutuspalvelut sekä graafinen suunnittelu. Yhtiö toimii myös elämysmatkailu-, kennel- ja rakennusalan konsultoinnin parissa. Yhtiö omistaa Proxta Music Studion .",
+                "paired_with_by_context": {
+                    "events-and-celebrations": [
+                        "live-musiikki",
+                        "äänentoisto",
+                        "valaistus",
+                        "dj-palvelut",
+                        "ohjelmapalvelut",
+                        "esiintyjät"
+                    ],
+                    "business-events": [
+                        "av-tekniikka",
+                        "äänisuunnittelu",
+                        "tapahtumatuotanto",
+                        "juontopalvelut"
+                    ]
+                },
+                "sub_contexts": {
+                    "Yleinen": [
+                        "live-musiikki",
+                        "äänentoisto",
+                        "valaistus",
+                        "äänisuunnittelu",
+                        "studio",
+                        "tapahtumatuotanto",
+                        "ohjelmapalvelut"
+                    ]
+                },
+                "node_links": [
+                    "HUVIT",
+                    "LAUKAA",
+                    "TAPAHTUMAT",
+                    "YRITYSTAPAHTUMAT",
+                    "LIVE_MUSIIKKI",
+                    "AV_TEKNIIKKA"
+                ],
+                "description": "Musiikki- ja viihdepalveluihin erikoistunut osakeyhtiö. Toimialaan kuuluvat tapahtuma- ja tuotantopalvelut, ohjelmapalvelut, äänentoisto-, valaistus- ja äänisuunnittelupalvelut, studio- ja koulutuspalvelut sekä graafinen suunnittelu. Yhtiö toimii myös elämysmatkailu-, kennel- ja rakennusalan konsultoinnin parissa. Yhtiö omistaa Proxta Music Studion ja tarjoaa tapahtumatekniikkaa sekä live-musiikkiin liittyviä palveluita juhliin ja yritystilaisuuksiin.",
                 "website": "",
                 "email": "",
                 "phone": ""
             },
             "events_and_celebrations": {
-                "capacity_max": 0,
+                "capacity_max": 300,
                 "seated_capacity": 0,
-                "outdoor_capacity": 0,
+                "outdoor_capacity": 300,
                 "is_accessible": false,
                 "is_lakeside": false,
                 "has_sauna": false,
                 "has_av_tech": true,
-                "has_stage": false,
+                "has_stage": true,
                 "accommodation_beds": 0,
                 "alcohol_license": false,
-                "private_booking": false,
-                "late_night_events": false,
+                "private_booking": true,
+                "late_night_events": true,
                 "wedding_specialized": false,
                 "catering_min_capacity": 0,
                 "catering_max_capacity": 0,
                 "dietary_specialties": [],
-                "staff_included": false,
+                "staff_included": true,
                 "wedding_menu_available": false,
                 "cake_service": false,
-                "partner_venues": [],
+                "partner_venues": [
+                    "Proxta Music Studio"
+                ],
                 "wedding_photography": false,
                 "drone_available": false,
                 "video_production": false,
                 "live_music": true,
-                "dj_services": false,
+                "dj_services": true,
                 "karaoke_available": false,
                 "has_exclusive_catering": false,
                 "accommodation_included": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "live-musiikki",
+                    "äänentoisto",
+                    "valaistus",
+                    "esiintyjät",
+                    "tapahtumatekniikka"
+                ],
                 "digitization_features": [],
-                "entertainment_features": [],
+                "entertainment_features": [
+                    "live-musiikki",
+                    "dj-palvelut",
+                    "äänentoisto",
+                    "valaistus"
+                ],
                 "collaborated_with": []
             },
             "business_events": {
@@ -22908,20 +23048,27 @@
                 "has_projector": false,
                 "has_streaming": false,
                 "has_wifi": false,
-                "has_stage": false,
-                "private_booking": false,
-                "invoice_billing": false,
+                "has_stage": true,
+                "private_booking": true,
+                "invoice_billing": true,
                 "corporate_clients": true,
                 "vip_services": false,
                 "business_catering": false,
                 "event_hosting": true,
                 "corporate_gifts": false,
-                "branding_support": false,
+                "branding_support": true,
                 "av_support": true,
-                "staff_events_specialized": false,
-                "refinement_tags": [],
+                "staff_events_specialized": true,
+                "refinement_tags": [
+                    "yritystapahtumat",
+                    "av-tekniikka",
+                    "tapahtumatuotanto"
+                ],
                 "wellbeing_and_activity_features": [],
-                "entertainment_features": [],
+                "entertainment_features": [
+                    "äänentoisto",
+                    "live-musiikki"
+                ],
                 "collaborated_with": []
             },
             "funerals_and_memorials": {
@@ -22991,8 +23138,8 @@
                 "emergency_response": false,
                 "scheduled_visits": false,
                 "property_reports": false,
-                "invoice_billing": false,
-                "contract_customer_available": false,
+                "invoice_billing": true,
+                "contract_customer_available": true,
                 "priority_support": false,
                 "monthly_service_plan": false,
                 "refinement_tags": [],
@@ -23007,24 +23154,29 @@
                 "banking_support": false,
                 "website_creation": false,
                 "webshop_setup": false,
-                "branding_support": false,
-                "logo_design": false,
+                "branding_support": true,
+                "logo_design": true,
                 "business_photography": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "graafinen suunnittelu"
+                ],
                 "collaborated_with": []
             },
             "business_growth": {
                 "google_ads": false,
                 "social_media_marketing": false,
                 "seo_services": false,
-                "content_creation": false,
+                "content_creation": true,
                 "video_production": false,
                 "crm_support": false,
                 "recruitment_support": false,
                 "sales_development": false,
                 "automation_services": false,
-                "consulting_services": false,
-                "refinement_tags": [],
+                "consulting_services": true,
+                "refinement_tags": [
+                    "brändäys",
+                    "sisällöntuotanto"
+                ],
                 "collaborated_with": []
             },
             "wellbeing_and_beauty": {
@@ -23040,7 +23192,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-27T05:53:07.899Z",
+                "last_updated": "2026-04-29T07:21:04.389Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
