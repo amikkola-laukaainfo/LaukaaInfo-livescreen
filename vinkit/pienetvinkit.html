@@ -34,9 +34,12 @@
         }
 
         .tips-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
             gap: 15px;
+            max-width: 1000px;
+            margin: 0 auto;
         }
 
         .tip-card {
@@ -49,6 +52,9 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
+            width: 100%;
+            max-width: 300px;
+            box-sizing: border-box;
         }
 
         .tip-card:hover {
@@ -135,7 +141,8 @@
             // Ladataan kaikki pyydetyt JSON tiedostot
             for (const file of files) {
                 try {
-                    const response = await fetch(`${file.trim()}.json`);
+                    const cacheBuster = new Date().getTime();
+                    const response = await fetch(`${file.trim()}.json?v=${cacheBuster}`);
                     if (response.ok) {
                         const data = await response.json();
                         if (Array.isArray(data)) {

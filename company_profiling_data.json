@@ -53554,7 +53554,8 @@
                 "home_service": false,
                 "weekend_service": false,
                 "not_suitable_for": [
-                    "pienet"
+                    "pienet",
+                    "perinteiset"
                 ],
                 "paired_with_by_context": {},
                 "sub_contexts": [
@@ -53794,7 +53795,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T17:40:05.640Z",
+                "last_updated": "2026-04-29T19:58:01.139Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
@@ -53823,7 +53824,8 @@
                 "home_service": false,
                 "weekend_service": false,
                 "not_suitable_for": [
-                    "pienet"
+                    "pienet",
+                    "perinteiset"
                 ],
                 "paired_with_by_context": {},
                 "sub_contexts": [
@@ -54062,7 +54064,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T17:39:31.736Z",
+                "last_updated": "2026-04-29T19:57:33.766Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
@@ -56104,7 +56106,9 @@
                 "corporate_clients": false,
                 "home_service": false,
                 "weekend_service": false,
-                "not_suitable_for": [],
+                "not_suitable_for": [
+                    "pitopalvelu"
+                ],
                 "paired_with_by_context": {},
                 "sub_contexts": [
                     "majoitus",
@@ -56367,7 +56371,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T16:29:00.966Z",
+                "last_updated": "2026-04-29T18:05:56.622Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
