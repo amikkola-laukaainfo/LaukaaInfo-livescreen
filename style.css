@@ -699,12 +699,26 @@ section.region-hero .main-search-box {
 
 /* Navigation */
 .top-nav {
-    background: var(--secondary-blue);
+    background: rgba(0, 56, 130, 0.82);
     color: var(--light-text);
     position: sticky;
     top: 0;
     z-index: 2000;
     box-shadow: 0 1px 20px rgba(0, 0, 0, 0.12);
+    backdrop-filter: blur(14px) saturate(1.4);
+    -webkit-backdrop-filter: blur(14px) saturate(1.4);
+    transition: background 0.35s ease, box-shadow 0.35s ease;
+}
+
+/* Isolla ruudulla sivun yläosassa hieman läpinäkyvämpi */
+@media (min-width: 1024px) {
+    .top-nav {
+        background: rgba(0, 56, 130, 0.72);
+    }
+    .top-nav.scrolled {
+        background: rgba(0, 56, 130, 0.93);
+        box-shadow: 0 4px 32px rgba(0, 30, 80, 0.22);
+    }
 }
 
 .nav-container {
