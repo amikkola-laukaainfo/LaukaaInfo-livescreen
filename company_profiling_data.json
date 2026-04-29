@@ -1885,7 +1885,7 @@
                         "Laukaa",
                         "Lievestuore"
                     ],
-                    "note": "Projektit sopimuksesta myös kauemmas. Digitoinnit koko Suomeen postitse, matkahuollolla tai noutopalvelulla. Toimipaikka Lievestuoreella."
+                    "note": "Projektit sopimuksesta myös kauemmas. Digitoinnit koko Suomeen postitse, matkahuollolla tai noutopalvelulla. Toimipaikka Lievestuoreella osoitteessa Salmelantie 3, 41400 Lievestuore."
                 },
                 "emergency_available": false,
                 "contract_customer_available": true,
@@ -1940,7 +1940,17 @@
                     "yritysvideot",
                     "drone-kuvaus",
                     "wordpress-sivustot",
-                    "digipainotuotteet"
+                    "digipainotuotteet",
+                    "verkkosivut",
+                    "brändäys",
+                    "logo",
+                    "yrityskuvat",
+                    "digimarkkinointi",
+                    "somemainonta",
+                    "google-mainonta",
+                    "videotuotanto",
+                    "sisällöntuotanto",
+                    "konsultointi"
                 ],
                 "node_links": [
                     "LAUKAA",
@@ -1949,7 +1959,9 @@
                     "DIGITOINTI",
                     "VALOKUVAUS",
                     "VIDEOTUOTANTO",
-                    "YRITYKSEN_KEHITTAMINEN"
+                    "YRITYKSEN_KEHITTAMINEN",
+                    "YRITYKSEN_PERUSTAMINEN",
+                    "DIGIMARKKINOINTI"
                 ],
                 "description": "Digimedian palveluihin erikoistunut yritys, joka tarjoaa digitointipalveluja (videokasetit, kaitafilmit, valokuvat, diat, negatiivit, äänikelat ja yritysarkistot), video- ja animaatiotuotantoa, valokuvausta, verkkosivujen ja some-sisällön suunnittelua, digipainotuotteita, brändäystä sekä digitaalisen markkinoinnin konsultointia. Palveluun kuuluu myös WordPress-sivustot, Android- ja web-sovellukset, ilmakuvaus, asuntovideot sekä digitaalisen median hyötyjen ja haasteiden kartoitus yritysasiakkaille. Mediazoo toimii Lievestuoreella Keski-Suomessa ja palvelee digitointiasiakkaita koko Suomessa myös postitse.",
                 "website": "[www.mediazoo.fi](http://www.mediazoo.fi)",
@@ -1989,20 +2001,17 @@
                     "häävideo",
                     "juhlakuvaus",
                     "ilmakuvaus",
-                    "drone-kuvaus"
+                    "drone-kuvaus",
+                    "videotuotanto"
                 ],
-                "digitization_features": {
-                    "digitointi": [
-                        "vanhojen valokuvien digitointi",
-                        "VHS / DVD digitointi",
-                        "diojen, negatiivien ja kaitafilmien digitointi"
-                    ],
-                    "editointi": [
-                        "häävideoiden editointi",
-                        "hääkoosteet",
-                        "koostepalvelu"
-                    ]
-                },
+                "digitization_features": [
+                    "vanhojen valokuvien digitointi",
+                    "VHS / DVD digitointi",
+                    "diojen, negatiivien ja kaitafilmien digitointi",
+                    "häävideoiden editointi",
+                    "hääkoosteet",
+                    "koostepalvelu"
+                ],
                 "entertainment_features": [
                     "hääohjelmaksi soveltuvat diashow- ja multimediaesitykset"
                 ],
@@ -2029,7 +2038,9 @@
                 "refinement_tags": [
                     "yritysvideot",
                     "streamaus",
-                    "brändäys"
+                    "brändäys",
+                    "google-mainonta",
+                    "somemainonta"
                 ],
                 "wellbeing_and_activity_features": [
                     "koulutukset ja työpajat yrityksille",
@@ -2130,7 +2141,7 @@
             },
             "startup_services": {
                 "bookkeeping_startup": false,
-                "business_advisory": false,
+                "business_advisory": true,
                 "insurance_setup": false,
                 "legal_services": false,
                 "office_space_available": false,
@@ -2143,25 +2154,31 @@
                 "refinement_tags": [
                     "wordpress",
                     "brändäys",
-                    "yritysilme"
+                    "yritysilme",
+                    "verkkosivut",
+                    "logo",
+                    "yrityskuvat"
                 ],
                 "collaborated_with": []
             },
             "business_growth": {
-                "google_ads": false,
+                "google_ads": true,
                 "social_media_marketing": true,
                 "seo_services": true,
                 "content_creation": true,
                 "video_production": true,
                 "crm_support": false,
                 "recruitment_support": false,
-                "sales_development": false,
+                "sales_development": true,
                 "automation_services": false,
                 "consulting_services": true,
                 "refinement_tags": [
                     "sisällöntuotanto",
                     "markkinointi",
-                    "videomarkkinointi"
+                    "videomarkkinointi",
+                    "google-mainonta",
+                    "somemainonta",
+                    "myynnin kehittäminen"
                 ],
                 "collaborated_with": []
             },
@@ -2178,7 +2195,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T09:44:41.996Z",
+                "last_updated": "2026-04-29T11:06:04.549Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
