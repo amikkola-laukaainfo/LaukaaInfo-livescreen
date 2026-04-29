@@ -954,6 +954,10 @@
 
             activeSteps.forEach(step => {
                 if (step.id.startsWith('_')) return;
+                
+                // Ohitetaan kapasiteetti-askeleet tulosryhmien luonnissa, koska ne yhdistetään muihin
+                if (step.id === 'kapasiteetti' || step.id === 'henkilomaara') return;
+
                 const stepSelection = selections[step.id];
                 if (!stepSelection) return;
 
@@ -1233,10 +1237,32 @@
                     if (globalRequestedCapacity > 0) {
                         const capA = getCompanyCapacity(a, globalProfilingKey);
                         const capB = getCompanyCapacity(b, globalProfilingKey);
-                        if (capA >= globalRequestedCapacity) scoreA += 40;
-                        if (capB >= globalRequestedCapacity) scoreB += 40;
-                        if (capA > 0 && capA < globalRequestedCapacity) scoreA -= 20;
-                        if (capB > 0 && capB < globalRequestedCapacity) scoreB -= 20;
+                        
+                        if (capA > 0) {
+                            // Sopii tai ylittää kapasiteetin
+                            if (capA >= globalRequestedCapacity) {
+                                scoreA += 60; // Nostettu painoarvoa
+                                
+                                // "Best fit" bonus: jos tila on juuri sopiva eikä valtavasti liian suuri (max 2.5x)
+                                if (capA <= globalRequestedCapacity * 2.5) {
+                                    scoreA += 40;
+                                }
+                            } else {
+                                // Rangaistus jos tila on liian pieni
+                                scoreA -= 50; 
+                            }
+                        }
+
+                        if (capB > 0) {
+                            if (capB >= globalRequestedCapacity) {
+                                scoreB += 60;
+                                if (capB <= globalRequestedCapacity * 2.5) {
+                                    scoreB += 40;
+                                }
+                            } else {
+                                scoreB -= 50;
+                            }
+                        }
                     }
 
                     const dataA = getCategoryData(a, globalProfilingKey);
