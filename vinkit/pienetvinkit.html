@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pienet vinkit</title>
+    <!-- Tuodaan samat fontit kuin pääsivustolla -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #0066cc;
+            --secondary-blue: #004d99;
+            --accent-font: 'Outfit', sans-serif;
+            --main-font: 'Inter', sans-serif;
+        }
+        
+        body {
+            font-family: var(--main-font);
+            margin: 0;
+            padding: 20px;
+            background: transparent;
+            color: #334155;
+        }
+
+        h2 {
+            font-family: var(--accent-font);
+            color: var(--primary-blue);
+            text-align: center;
+            font-size: 1.5rem;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .tip-card {
+            background: white;
+            border-radius: 16px;
+            padding: 15px;
+            border: 2px solid #eef2f6;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s, border-color 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .tip-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary-blue);
+        }
+
+        .tip-title {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: #0f172a;
+            margin: 0;
+        }
+
+        .tip-location {
+            font-size: 0.85rem;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .tip-link {
+            margin-top: auto;
+            display: inline-block;
+            text-align: center;
+            background: #e0f2fe;
+            color: var(--primary-blue);
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+
+        .tip-link:hover {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .no-tips {
+            text-align: center;
+            color: #64748b;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="tips-wrapper">
+        <h2 id="tips-header">💡 Pieniä vinkkejä sinulle</h2>
+        <div id="tips-container" class="tips-grid">
+            <!-- Vinkit ladataan tähän JS:llä -->
+        </div>
+    </div>
+
+    <script>
+        // Haetaan URL-parametrit
+        const urlParams = new URLSearchParams(window.location.search);
+        const filesParam = urlParams.get('files'); // esim. "sauna,menokohteet-jyvas"
+        const maxTips = parseInt(urlParams.get('limit')) || 3; // Kuinka monta vinkkiä näytetään max
+
+        async function loadTips() {
+            const container = document.getElementById('tips-container');
+            const wrapper = document.getElementById('tips-wrapper');
+
+            if (!filesParam) {
+                wrapper.style.display = 'none';
+                return;
+            }
+
+            const files = filesParam.split(',');
+            let allTips = [];
+
+            // Ladataan kaikki pyydetyt JSON tiedostot
+            for (const file of files) {
+                try {
+                    const response = await fetch(`${file.trim()}.json`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (Array.isArray(data)) {
+                            allTips = allTips.concat(data);
+                        }
+                    } else {
+                        console.warn(`Vinkkitiedostoa ${file}.json ei löytynyt.`);
+                    }
+                } catch (error) {
+                    console.error(`Virhe ladattaessa tiedostoa ${file}.json`, error);
+                }
+            }
+
+            if (allTips.length === 0) {
+                wrapper.style.display = 'none';
+                return;
+            }
+
+            // Sekoitetaan ja otetaan satunnaiset
+            const shuffledTips = allTips.sort(() => 0.5 - Math.random());
+            const selectedTips = shuffledTips.slice(0, maxTips);
+
+            // Renderöidään
+            container.innerHTML = selectedTips.map(tip => `
+                <div class="tip-card">
+                    <div class="tip-title">${tip.nimi}</div>
+                    <div class="tip-location">📍 ${tip.paikka}</div>
+                    ${tip.nettilinkki ? `<a href="${tip.nettilinkki}" target="_blank" class="tip-link">Katso lisää &rarr;</a>` : ''}
+                </div>
+            `).join('');
+
+            // Lähetetään viesti vanhemmalle (palvelu.html), jotta iframe osaa skaalata korkeutensa
+            setTimeout(() => {
+                const height = document.documentElement.scrollHeight;
+                window.parent.postMessage({ type: 'resizeTipsIframe', height: height }, '*');
+            }, 100);
+        }
+
+        document.addEventListener('DOMContentLoaded', loadTips);
+    </script>
+</body>
+</html>

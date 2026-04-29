@@ -1,0 +1,17 @@
+[
+    {
+        "nimi": "Esimerkkisauna 1",
+        "paikka": "Laukaa",
+        "nettilinkki": "https://esimerkki.fi"
+    },
+    {
+        "nimi": "Hyvinvointikylpylä",
+        "paikka": "Jyväskylä",
+        "nettilinkki": "https://esimerkki.fi/spa"
+    },
+    {
+        "nimi": "Rantasauna",
+        "paikka": "Laukaa, Keskusta",
+        "nettilinkki": "https://esimerkki.fi/rantasauna"
+    }
+]

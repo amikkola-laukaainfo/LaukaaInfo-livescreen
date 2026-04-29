@@ -499,6 +499,8 @@
                 <h3 style="text-align: center; font-family: var(--accent-font); font-size: 1.5rem;">Seuraavaksi saatat tarvita myös näitä:</h3>
                 <div id="next-steps-list" class="next-steps-grid"></div>
             </div>
+
+            <div id="tips-container" style="max-width: 1200px; margin: 3rem auto; display: none;"></div>
             
             <div style="text-align: center; margin-top: 4rem; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
                 <button onclick="resetPalvelu()" class="btn-radar" style="background: var(--secondary-blue);">Aloita alusta</button>
@@ -1407,6 +1409,7 @@
                 if (countEl) countEl.textContent = `Löysimme ${totalFoundCount} ehdotusta.`;
                 if (list) list.innerHTML = htmlResults;
                 renderNextSteps(globalProfilingKey);
+                renderTips(currentNeedId);
             }
             // Vältetään selauksen hyppäämistä ylimmäs renderöinnin yhteydessä, ellei tämä ole ensimmäinen lataus
             // Jos valitaan ankkuri, käyttäjä todennäköisesti haluaa pysyä samassa kohdassa
@@ -1442,6 +1445,45 @@
 
         function searchNextStep(query) {
             window.location.href = `asiahaku.html?haku=${encodeURIComponent(query)}`;
+        }
+
+        function renderTips(needId) {
+            const tipsContainer = document.getElementById('tips-container');
+            if (!tipsContainer) return;
+            tipsContainer.innerHTML = '';
+
+            const themeTips = {
+                'haat': ['sauna', 'hyvinvointi'],
+                'yritysjuhlat': ['sauna', 'menokohteet-jyvas'],
+                'yritystilaisuudet': ['sauna', 'menokohteet-jyvas'],
+                'syntymapaivat': ['sauna'],
+                'mokkipalvelut': ['sauna', 'menokohteet-jyvas'],
+                'terveys-ja-hyvinvointi': ['hyvinvointi']
+            };
+
+            const tipsFiles = themeTips[needId];
+            if (!tipsFiles || tipsFiles.length === 0) {
+                tipsContainer.style.display = 'none';
+                return;
+            }
+
+            const tipsQuery = tipsFiles.join(',');
+            const iframeUrl = `vinkit/pienetvinkit.html?files=${tipsQuery}&limit=3`;
+
+            tipsContainer.innerHTML = `<iframe src="${iframeUrl}" style="width: 100%; border: none; min-height: 250px; overflow: hidden;" id="tips-iframe" scrolling="no"></iframe>`;
+            tipsContainer.style.display = 'block';
+
+            if (!window.tipsIframeListenerAdded) {
+                window.addEventListener('message', function(e) {
+                    if (e.data && e.data.type === 'resizeTipsIframe') {
+                        const iframe = document.getElementById('tips-iframe');
+                        if (iframe) {
+                            iframe.style.height = e.data.height + 'px';
+                        }
+                    }
+                });
+                window.tipsIframeListenerAdded = true;
+            }
         }
 
         function getCompanyCapacity(c, profilingKey) {
