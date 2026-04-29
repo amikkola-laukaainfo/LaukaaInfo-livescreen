@@ -19773,7 +19773,9 @@
                     "vapaa-aika": 85,
                     "juhlat-ja-merkkipäivät": 95,
                     "yritystapahtumat": 88,
-                    "muistotilaisuudet-ja-hautajaiset": 70
+                    "muistotilaisuudet-ja-hautajaiset": 70,
+                    "häät": 40,
+                    "yritysjuhlat": 40
                 },
                 "priority_score": 82,
                 "paired_with": [],
@@ -20030,7 +20032,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T07:18:44.047Z",
+                "last_updated": "2026-04-29T07:58:45.312Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -22953,7 +22955,10 @@
                 "corporate_clients": true,
                 "home_service": false,
                 "weekend_service": true,
-                "not_suitable_for": [],
+                "not_suitable_for": [
+                    "häät",
+                    "hautajaiset"
+                ],
                 "paired_with_by_context": {
                     "events-and-celebrations": [
                         "live-musiikki",
@@ -22995,12 +23000,12 @@
                 "phone": ""
             },
             "events_and_celebrations": {
-                "capacity_max": 300,
+                "capacity_max": 10,
                 "seated_capacity": 0,
-                "outdoor_capacity": 300,
+                "outdoor_capacity": 10,
                 "is_accessible": false,
-                "is_lakeside": false,
-                "has_sauna": false,
+                "is_lakeside": true,
+                "has_sauna": true,
                 "has_av_tech": true,
                 "has_stage": true,
                 "accommodation_beds": 0,
@@ -23192,7 +23197,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T07:21:04.389Z",
+                "last_updated": "2026-04-29T07:56:36.085Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
