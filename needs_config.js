@@ -51,7 +51,7 @@ const NEEDS_CONFIG = {
                 "question": "Mitä muita palveluita tarvitset juhlatpäivään?",
                 "options": [
                     { "label": "Valokuvaaja", "tags": ["valokuvaus"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "valokuvaus" } },
-                    { "label": "Videokuvaaja", "tags": ["videotuotanto"], "profilointi_filter": { "section": "events_and_celebrations", "field": "digitization_features", "value": "häävideot" } },
+                    { "label": "Videokuvaaja", "tags": ["videotuotanto", "videokuvaus"], "profilointi_filter": { "section": "events_and_celebrations", "field": "digitization_features", "value": "häävideot" } },
                     { "label": "Kukkakauppa & Koristelu", "tags": ["kukkakauppa"] },
                     { "label": "Musiikki tai DJ", "tags": ["musiikki", "ohjelmapalvelut"], "profilointi_filter": { "section": "events_and_celebrations", "field": "entertainment_features", "value": "musiikki" } }
                 ]
@@ -125,7 +125,7 @@ const NEEDS_CONFIG = {
                     { "label": "Pitopalvelu", "tags": ["pitopalvelu"] },
                     { "label": "Majoitus", "tags": ["majoitus"] },
                     { "label": "Kuljetukset", "tags": ["kuljetus", "taksi"] },
-                    { "label": "Videokuvaaja / Tapahtumavideointi", "tags": ["videotuotanto"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "tapahtumavideointi" } },
+                    { "label": "Videokuvaaja / Tapahtumavideointi", "tags": ["videotuotanto", "videokuvaus"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "tapahtumavideointi" } },
                     { "label": "Saunatilat", "tags": ["saunatilat"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "sauna" } },
                     { "label": "Ohjelmapalvelut / Elämykset", "tags": ["ohjelmapalvelut"] },
                     { "label": "AV-tekniikka & Äänentoisto", "tags": ["it-palvelut"], "profilointi_filter": { "section": "events_and_celebrations", "field": "has_av_tech", "value": true } }
@@ -234,7 +234,7 @@ const NEEDS_CONFIG = {
                     { "label": "Kakut / Leivonnaiset", "tags": ["leipomo", "elintarvike"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "kakut" } },
                     { "label": "Ohjelma / Esiintyjä", "tags": ["ohjelmapalvelut"], "profilointi_filter": { "section": "events_and_celebrations", "field": "entertainment_features", "value": "ohjelma" } },
                     { "label": "Valokuvaaus", "tags": ["valokuvaus"] },
-                    { "label": "Videokuvaus", "tags": ["videotuotanto"], "profilointi_filter": { "section": "events_and_celebrations", "field": "digitization_features", "value": "videokuvaus" } },
+                    { "label": "Videokuvaus", "tags": ["videotuotanto", "videokuvaus"], "profilointi_filter": { "section": "events_and_celebrations", "field": "digitization_features", "value": "videokuvaus" } },
                     { "label": "Kukat", "tags": ["kukkakauppa"] }
                 ]
             }
