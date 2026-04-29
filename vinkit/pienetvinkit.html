@@ -63,31 +63,39 @@
             margin: 0;
         }
 
-        .tip-location {
-            font-size: 0.85rem;
-            color: #64748b;
-            display: flex;
-            align-items: center;
-            gap: 4px;
+        .tip-desc {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin: 8px 0;
+            color: #334155;
         }
 
-        .tip-link {
+        .tip-details {
             margin-top: auto;
-            display: inline-block;
-            text-align: center;
-            background: #e0f2fe;
-            color: var(--primary-blue);
-            text-decoration: none;
-            padding: 8px 12px;
+            background: #f8fafc;
+            padding: 10px;
             border-radius: 8px;
-            font-weight: 700;
             font-size: 0.85rem;
-            transition: background 0.2s;
+            color: #475569;
+            border: 1px solid #e2e8f0;
         }
 
-        .tip-link:hover {
-            background: var(--primary-blue);
-            color: white;
+        .tip-details strong {
+            color: #1e293b;
+        }
+
+        .tip-extra {
+            font-style: italic;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            color: #64748b;
+        }
+        
+        .tip-link-raw {
+            font-size: 0.85rem;
+            color: var(--primary-blue);
+            text-decoration: underline;
+            word-break: break-all;
         }
 
         .no-tips {
@@ -154,8 +162,13 @@
             container.innerHTML = selectedTips.map(tip => `
                 <div class="tip-card">
                     <div class="tip-title">${tip.nimi}</div>
-                    <div class="tip-location">📍 ${tip.paikka}</div>
-                    ${tip.nettilinkki ? `<a href="${tip.nettilinkki}" target="_blank" class="tip-link">Katso lisää &rarr;</a>` : ''}
+                    ${tip.nettilinkki ? `<div><a href="${tip.nettilinkki}" target="_blank" class="tip-link-raw">${tip.nettilinkki}</a></div>` : ''}
+                    ${tip.kuvaus ? `<div class="tip-desc">${tip.kuvaus}</div>` : ''}
+                    <div class="tip-details">
+                        ${tip.paikka ? `<div><strong>Paikka:</strong> ${tip.paikka}</div>` : ''}
+                        ${tip.yhteystiedot ? `<div><strong>Yhteystiedot:</strong> ${tip.yhteystiedot}</div>` : ''}
+                        ${tip.lisatiedot ? `<div class="tip-extra">(${tip.lisatiedot})</div>` : ''}
+                    </div>
                 </div>
             `).join('');
 

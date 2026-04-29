@@ -1,17 +1,171 @@
 [
     {
-        "nimi": "Esimerkkisauna 1",
+        "nimi": "Tupaswilla",
+        "nettilinkki": "https://www.tupaswilla.fi/",
+        "kuvaus": "Tunnettu savusauna- ja juhlakohde Laukaassa. Erityisesti savusaunat, palju ja perinteinen maalaismiljöö tekevät paikasta suositun synttäreihin, tyky-päiviin ja yksityisiin saunaelämyksiin.",
         "paikka": "Laukaa",
-        "nettilinkki": "https://esimerkki.fi"
+        "yhteystiedot": "Tupaswilla, Laukaa",
+        "lisatiedot": "Yhteystiedot löytyvät sivustolta varauskohtaisesti"
     },
     {
-        "nimi": "Hyvinvointikylpylä",
+        "nimi": "Haikusauna",
+        "nettilinkki": "https://www.haikusauna.fi/",
+        "kuvaus": "Pienempi ja tunnelmallinen erikoissauna Muuramessa, erityisen suosittu pienille porukoille ja yksityisiin juhliin. Poikkeava miljöö ja elämyksellinen sauna.",
+        "paikka": "Muurame",
+        "yhteystiedot": "Varaukset verkkosivun kautta"
+    },
+    {
+        "nimi": "Sauna Lampila",
+        "nettilinkki": "https://saunalampila.fi/",
+        "kuvaus": "Laajavuoren alueella sijaitseva moderni saunamaailma Vuorilammen rannalla. Tyylikäs saunaelämys, uimismahdollisuus ja rauhallinen miljöö.",
+        "paikka": "Laajavuori, Jyväskylä",
+        "yhteystiedot": "Sauna Lampila",
+        "lisatiedot": "Varaus ja lisätiedot verkkosivuilta"
+    },
+    {
+        "nimi": "Varjola",
+        "nettilinkki": "https://www.varjola.com/",
+        "kuvaus": "Tunnettu matkailu- ja juhlakohde, jossa savusauna, palju ja monipuoliset elämyspalvelut. Sopii hyvin syntymäpäiviin ja hemmottelupäiviin.",
+        "paikka": "Laukaa",
+        "yhteystiedot": "Varjolan tila, Kuusaantie 226, Laukaa"
+    },
+    {
+        "nimi": "Revontuli Resort",
+        "nettilinkki": "https://www.revontuli.fi/",
+        "kuvaus": "Saunamaailma, resort-palvelut, golf, majoitus ja elämykset samassa paikassa. Sopii hyvin luksustyyppiseen saunaelämykseen.",
+        "paikka": "Hankasalmi",
+        "yhteystiedot": "Revontulentie 1, Hankasalmi"
+    },
+    {
+        "nimi": "Kivitasku",
+        "nettilinkki": "https://kivitasku.com/",
+        "kuvaus": "Tunnelmallinen juhla- ja saunakohde Muuramessa. Soveltuu yksityisiin juhliin, pieniin tapahtumiin ja elämyssaunomiseen.",
+        "paikka": "Muurame",
+        "yhteystiedot": "Tiedot verkkosivulta"
+    },
+    {
+        "nimi": "Savutuvan Apaja",
+        "nettilinkki": "https://www.savutuvanapaja.fi/",
+        "kuvaus": "Suosittu savusaunakohde järvimaisemissa. Tarjolla perinteinen savusauna ja juhlapalikat yrityksille ja yksityisille.",
         "paikka": "Jyväskylä",
-        "nettilinkki": "https://esimerkki.fi/spa"
+        "yhteystiedot": "Haapasaarentie 75, Jyväskylä"
     },
     {
-        "nimi": "Rantasauna",
-        "paikka": "Laukaa, Keskusta",
-        "nettilinkki": "https://esimerkki.fi/rantasauna"
+        "nimi": "Suomen Saunakylä",
+        "nettilinkki": "https://www.saunakylä.fi/",
+        "kuvaus": "Ainutlaatuinen kohde saunaharrastajalle – historiallisia savusaunoja ja suomalaisen saunakulttuurin elämyskokonaisuus.",
+        "paikka": "Jämsä",
+        "yhteystiedot": "Jämsä",
+        "lisatiedot": "Lisätiedot verkkosivuilta"
+    },
+    {
+        "nimi": "Riihikarhu SPA",
+        "nettilinkki": "https://riihikarhu.fi/",
+        "kuvaus": "Luksusluokan huvila- ja spa-kohde, jossa yksityinen saunaelämys yhdistyy majoitukseen ja hemmotteluun.",
+        "paikka": "Keski-Suomi",
+        "yhteystiedot": "Varaukset verkkosivulta"
+    },
+    {
+        "nimi": "Peurunka",
+        "nettilinkki": "https://peurunka.fi/",
+        "kuvaus": "Kylpyläkokonaisuus, jossa myös tynnyrisaunat, porealtaat ja hyvinvointipalvelut. Helppo vaihtoehto lahjaksi.",
+        "paikka": "Laukaa",
+        "yhteystiedot": "Peurungantie 85, Laukaa"
+    },
+    {
+        "nimi": "Saunalautta.fi",
+        "nettilinkki": "https://saunalautta.fi/",
+        "kuvaus": "Saunalautta Jyväsjärvelle tai Päijänteelle – risteily ja sauna samassa paketissa. Erinomainen erikoislahja pienelle porukalle.",
+        "paikka": "Jyväskylä",
+        "yhteystiedot": "Varaus verkkosivulta"
+    },
+    {
+        "nimi": "Jyväskylän Keilahalli",
+        "nettilinkki": "https://jyvaskylankeilahalli.fi/",
+        "kuvaus": "Remontoitu noin 15 hengen sauna + oma kabinetti. Lisänä keilaus, biljardi ja darts – hyvä vaihtoehto aktiiviselle synttäripäivälle.",
+        "paikka": "Jyväskylä",
+        "yhteystiedot": "Jyväskylän Keilahalli, keskusta"
+    },
+    {
+        "nimi": "Visit Kerkonkoski",
+        "nettilinkki": "https://visitkerkonkoski.fi/",
+        "kuvaus": "Kerkonkosken kuuluisa saunamaraton-tapahtuma, jossa kierretään useita saunoja saman päivän aikana. Erinomainen lahja saunahullulle.",
+        "paikka": "Kerkonkoski, Rautalampi",
+        "yhteystiedot": "Ilmoittautuminen verkkosivun kautta"
+    },
+    {
+        "nimi": "Saunamummut",
+        "nettilinkki": "https://www.facebook.com/saunamummut/",
+        "kuvaus": "Perinnesaunottajia ja elämyksellisiä saunapalveluita, esimerkiksi saunotusrituaaleja, turvehoitoja ja hemmottelua.",
+        "paikka": "Keski-Suomi / sopimuksen mukaan",
+        "yhteystiedot": "Facebook-sivun kautta"
+    },
+    {
+        "nimi": "Juurikkasaari",
+        "nettilinkki": "https://www.juurikkasaari.fi/",
+        "kuvaus": "Päijänteen rannalla sijaitseva suosittu juhla-, ravintola- ja saunakohde. Tunnettu upeasta järvimaisemasta, rantasaunoista ja nyt myös uusista rantaan rakennettavista saunoista. Sopii hyvin sekä elämyssaunomiseen että avantoon.",
+        "paikka": "Säynätsalo, Jyväskylä",
+        "yhteystiedot": "Juurikantie 5, Säynätsalo, Jyväskylä"
+    },
+    {
+        "nimi": "Sataman Viilu",
+        "nettilinkki": "https://satamanviilu.fi/saunaan/",
+        "kuvaus": "Keskellä Jyväskylän satamaa sijaitseva moderni kaupunkisauna. Helppo yhdistää kaupunkipäivään, ravintolaan ja talvikaudella avantouintiin. Suosittu erityisesti helppouden ja sijainnin vuoksi.",
+        "paikka": "Lutakko, Jyväskylä",
+        "yhteystiedot": "Satamakatu, Jyväskylän satama"
+    },
+    {
+        "nimi": "Muuramen Mursut ry",
+        "nettilinkki": "https://www.muuramenmursut.fi/",
+        "kuvaus": "Paikallinen avantouintipaikka, jota kehutaan siistiksi ja toimivaksi. Sopii erityisesti aktiivisille avanto- ja talviuintiharrastajille.",
+        "paikka": "Muurame",
+        "yhteystiedot": "Lisätiedot yhdistyksen sivuilta"
+    },
+    {
+        "nimi": "Konneveden sataman avanto",
+        "nettilinkki": "https://www.konnevesi.fi/",
+        "kuvaus": "Satama-alueella sijaitseva talvikauden avantopaikka, jossa pumppu pitää avannon auki. Helppo ja toimiva vaihtoehto paikallisille ja lähialueen kävijöille.",
+        "paikka": "Konnevesi",
+        "yhteystiedot": "Konneveden kunta / satama-alue"
+    },
+    {
+        "nimi": "Mämminiemi",
+        "kuvaus": "Kesäkauden suosittu uimaja saunailu-/retkikohde upeissa Päijänteen maisemissa. Soveltuu myös telttailuun ja veneellä saapumiseen. Enemmän luontoelämys kuin varsinainen kaupallinen saunakohde.",
+        "paikka": "Jyväskylän seutu / Päijänne",
+        "yhteystiedot": "Aluekohde, ei varsinaista varauspalvelua"
+    },
+    {
+        "nimi": "Jyväskylän Saunalautta",
+        "nettilinkki": "https://saunalautta.fi/",
+        "kuvaus": "Saunalauttaelämys Jyväsjärvelle ja Päijänteelle – yhdistää risteilyn, saunomisen ja mahdollisuuden pulahtaa järveen ympäri vuoden. Erittäin suosittu lahjaidea.",
+        "paikka": "Jyväskylä",
+        "yhteystiedot": "Varaukset verkkosivun kautta"
+    },
+    {
+        "nimi": "Sillankorva",
+        "kuvaus": "Paikallinen sauna- ja hyvinvointikohde Saarijärvellä. Suositeltu erityisesti rauhallisena elämyspaikkana.",
+        "paikka": "Saarijärvi",
+        "yhteystiedot": "Tarkemmat tiedot paikallisesti / somekanavista"
+    },
+    {
+        "nimi": "Piispala",
+        "nettilinkki": "https://www.piispala.fi/",
+        "kuvaus": "Nuorisokeskus ja liikunta-/hyvinvointikeskus, jossa erittäin pidetty saunaosasto, uintimahdollisuudet ja monipuoliset aktiviteetit. Sopii myös pidempään hyvinvointireissuun.",
+        "paikka": "Kannonkoski",
+        "yhteystiedot": "Kurssitie 40, Kannonkoski"
+    },
+    {
+        "nimi": "Revontuli Resort Sauna Hopping",
+        "nettilinkki": "https://www.revontuli.fi/sauna/",
+        "kuvaus": "Useamman erilaisen saunan kokonaisuus ja sauna hopping -elämys. Erinomainen kohde saunaharrastajalle, joka haluaa testata useita saunoja samalla kertaa.",
+        "paikka": "Hankasalmi",
+        "yhteystiedot": "Revontulentie 1, Hankasalmi"
+    },
+    {
+        "nimi": "Suomen Saunakylä",
+        "nettilinkki": "https://saunarinki.fi/saunakyla/",
+        "kuvaus": "Historiallisten savusaunojen kokonaisuus ja todellinen saunaharrastajan unelmakohde. Usein kuvailtu 'aivan mahtavaksi' kokemukseksi.",
+        "paikka": "Jämsä",
+        "yhteystiedot": "Lisätiedot verkkosivulta"
     }
 ]
