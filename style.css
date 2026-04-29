@@ -412,6 +412,18 @@ header.hero-split {
     overflow: hidden;
 }
 
+.hero-right::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, var(--secondary-blue) 0%, transparent 60%);
+    z-index: 2;
+    pointer-events: none;
+}
+
 .hero-nature-img {
     position: absolute;
     top: 0;
@@ -422,6 +434,7 @@ header.hero-split {
     object-position: center;
     display: block;
     transition: transform 0.8s ease;
+    z-index: 1;
 }
 
 .hero-right-caption {
@@ -435,6 +448,7 @@ header.hero-split {
     padding: 8px 16px;
     border-radius: 40px;
     font-weight: 500;
+    z-index: 3;
 }
 
 header h1 {
@@ -504,6 +518,10 @@ header h1 {
     .hero-right {
         min-height: 150px;
         flex: unset;
+    }
+
+    .hero-right::after {
+        background: linear-gradient(to bottom, var(--secondary-blue) 0%, transparent 50%);
     }
 
     header h1 {
