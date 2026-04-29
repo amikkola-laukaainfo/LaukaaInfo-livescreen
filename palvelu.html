@@ -319,6 +319,98 @@
                 break-inside: avoid;
             }
         }
+        /* Card Actions */
+        .card-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eef2f6;
+        }
+        .card-actions.has-three {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+        .btn-action {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            padding: 10px 5px;
+            background: #f8fafc;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--primary-blue);
+            font-size: 0.75rem;
+            font-weight: 700;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
+            cursor: pointer;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        .btn-action:hover {
+            background: #e0f2fe;
+            border-color: var(--primary-blue);
+        }
+        .btn-action.primary-action {
+            background: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+        .btn-action.primary-action:hover {
+            background: var(--secondary-blue);
+        }
+        .btn-action i {
+            font-size: 1.1rem;
+            font-style: normal;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.active {
+            display: flex;
+            animation: fadeIn 0.2s ease-out;
+        }
+        .inquiry-modal {
+            background: white;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 500px;
+            padding: 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        .inquiry-modal h2 {
+            margin-top: 0;
+            color: var(--primary-blue);
+            font-family: var(--accent-font);
+        }
+        .close-modal {
+            position: absolute;
+            top: 16px; right: 16px;
+            background: none; border: none;
+            font-size: 1.5rem; cursor: pointer; color: #64748b;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block; font-weight: 600; margin-bottom: 5px; font-size: 0.9rem;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; box-sizing: border-box;
+        }
     </style>
 </head>
 
@@ -378,6 +470,43 @@
             </div>
         </section>
     </main>
+
+    <!-- Inquiry Modal -->
+    <div id="inquiry-overlay" class="modal-overlay">
+        <div class="inquiry-modal">
+            <button class="close-modal" onclick="closeInquiryModal()">&times;</button>
+            <h2 id="inquiry-title">Pyydä tarjous</h2>
+            <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 20px;">LaukaaInfo Venuu-tyylinen demo. Oikeassa versiossa tämä lähettää tiedot suoraan yritykselle.</p>
+            <form id="inquiry-form" onsubmit="submitInquiry(event)">
+                <input type="hidden" id="inquiry-company-id">
+                <div class="form-group">
+                    <label>Nimi</label>
+                    <input type="text" required placeholder="Matti Meikäläinen">
+                </div>
+                <div class="form-group">
+                    <label>Sähköposti</label>
+                    <input type="email" required placeholder="matti@esimerkki.fi">
+                </div>
+                <div class="form-group">
+                    <label>Puhelin</label>
+                    <input type="tel" placeholder="040 123 4567">
+                </div>
+                <div class="form-group">
+                    <label>Tilaisuuden ajankohta</label>
+                    <input type="date" required>
+                </div>
+                <div class="form-group">
+                    <label>Arvioitu henkilömäärä</label>
+                    <input type="number" min="1" placeholder="Esim. 50">
+                </div>
+                <div class="form-group">
+                    <label>Lisätiedot</label>
+                    <textarea rows="4" placeholder="Kerro tarkemmin tarpeistasi..."></textarea>
+                </div>
+                <button type="submit" class="btn-radar" style="width: 100%; background: var(--primary-blue);">Lähetä tarjouspyyntö</button>
+            </form>
+        </div>
+    </div>
 
     <footer style="margin-top: 6rem;">
         <div class="footer-content">
@@ -1089,23 +1218,9 @@
                 companiesForOpt.forEach(c => {
                     let anchorCoords = null;
                     if (anchorLat !== null && anchorLon !== null) anchorCoords = { lat: anchorLat, lng: anchorLon };
-                    let cardHtml = renderCompanyCard(c, globalRequestedCapacity, globalProfilingKey, globalActiveCollaboratorsSet, anchorCoords);
-                    
-                    // Lisätään wrapperi ja "Valitse" painike, jos ollaan ankkuriryhmässä
                     const isSelected = (selectedAnchorCompanyId === c.id);
-                    let wrapperClass = isSelected ? 'selected-anchor-wrapper selected-anchor' : 'selected-anchor-wrapper';
-                    
-                    if (isAnchorGroup) {
-                        const btnText = isSelected ? 'Poista päävalinta' : 'Valitse tämä tila ja hae kumppanit';
-                        htmlResults += `
-                            <div class="${wrapperClass}" style="margin-bottom:15px; border-radius: 12px; overflow: hidden; background: white; border: 1px solid #e2e8f0;">
-                                ${cardHtml.replace('class="company-result-card ', 'class="company-result-card" style="margin-bottom:0; border:none; border-bottom:1px solid #eef2f6; box-shadow:none;" ')}
-                                <button class="btn-select-anchor" onclick="event.preventDefault(); selectAnchor('${c.id}');">${btnText}</button>
-                            </div>
-                        `;
-                    } else {
-                        htmlResults += cardHtml;
-                    }
+                    let cardHtml = renderCompanyCard(c, globalRequestedCapacity, globalProfilingKey, globalActiveCollaboratorsSet, anchorCoords, isAnchorGroup, isSelected);
+                    htmlResults += cardHtml;
                 });
             });
 
@@ -1154,7 +1269,7 @@
             return data.capacity_max || data.meeting_capacity || data.seminar_capacity || data.seated_capacity || data.memorial_service_capacity || 0;
         }
 
-        function renderCompanyCard(c, requestedCapacity, profilingKey, collaboratorsSet, anchorCoords = null) {
+        function renderCompanyCard(c, requestedCapacity, profilingKey, collaboratorsSet, anchorCoords = null, isAnchorGroup = false, isSelected = false) {
             const slug = typeof slugify === 'function' ? slugify(c.nimi) : c.nimi.toLowerCase().replace(/\s+/g, '-');
             const isPremium = (c.paketti || c.tyyppi || '').toLowerCase().match(/premium|pro/);
             const cardUrl = isPremium ? `yritys/${slug}.html` : `yrityskortti.html?id=${slug}`;
@@ -1199,8 +1314,29 @@
                 if (core.emergency_available) badges += '<span title="Päivystys">🚨</span>';
             }
 
+            const btnAnchorText = isSelected ? 'Poista valinta' : 'Valitse kohde';
+            const actionGridClass = isAnchorGroup ? 'card-actions has-three' : 'card-actions';
+
+            let actionHtml = `<div class="${actionGridClass}">
+                <button class="btn-action primary-action" onclick="openInquiryModal('${c.id}', '${c.nimi.replace(/'/g, "\\'")}')">
+                    <i>✉️</i><span>Lähetä kysely</span>
+                </button>
+                <a href="${cardUrl}" class="btn-action">
+                    <i>📄</i><span>Avaa yrityskortti</span>
+                </a>`;
+                
+            if (isAnchorGroup) {
+                actionHtml += `
+                <button class="btn-action ${isSelected ? 'primary-action' : ''}" onclick="selectAnchor('${c.id}')">
+                    <i>🎯</i><span>${btnAnchorText}</span>
+                </button>`;
+            }
+            actionHtml += `</div>`;
+
+            let wrapperClass = isSelected ? 'company-result-card selected-anchor' : 'company-result-card';
+
             return `
-                <a href="${cardUrl}" class="company-result-card ${isTopMatch ? 'top-match' : ''} ${isPartner ? 'partner-boost' : ''}">
+                <div class="${wrapperClass} ${isTopMatch ? 'top-match' : ''} ${isPartner ? 'partner-boost' : ''}">
                     ${isPartner ? '<div class="result-badge badge-partner">YHTEISTYÖKUMPPANI</div>' : ''}
                     ${isTopMatch && !isPartner ? '<div class="result-badge badge-top">TOP MATCH</div>' : ''}
                     ${isPremium && !isTopMatch && !isPartner ? '<div class="result-badge badge-premium">PREMIUM</div>' : ''}
@@ -1210,8 +1346,8 @@
                     ${capacityNote}
                     <div class="card-meta">${distanceHtml}<div class="feature-badges">${badges}</div></div>
                     <div class="match-explanation">${getMatchExplanation(c, requestedCapacity, profilingKey)}</div>
-                    <div class="card-arrow">Katso lisätiedot &raquo;</div>
-                </a>
+                    ${actionHtml}
+                </div>
             `;
         }
 
@@ -1440,6 +1576,23 @@
             printWindow.document.write(html);
             printWindow.document.close();
         }
+        function openInquiryModal(id, name) {
+            document.getElementById('inquiry-company-id').value = id;
+            document.getElementById('inquiry-title').textContent = 'Pyydä tarjous: ' + name;
+            document.getElementById('inquiry-overlay').classList.add('active');
+        }
+
+        function closeInquiryModal() {
+            document.getElementById('inquiry-overlay').classList.remove('active');
+        }
+
+        function submitInquiry(e) {
+            e.preventDefault();
+            alert("Kiitos! Tarjouspyyntö on lähetetty (demo). Oikeassa versiossa tämä tieto menisi suoraan palveluntarjoajalle.");
+            closeInquiryModal();
+            document.getElementById('inquiry-form').reset();
+        }
+
         // Käynnistys
         document.addEventListener('DOMContentLoaded', () => {
             initPalvelu();
