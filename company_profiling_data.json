@@ -5482,7 +5482,8 @@
                 "weekend_service": true,
                 "not_suitable_for": [
                     "20-50",
-                    "kartano"
+                    "kartano",
+                    "järjestää ruoan"
                 ],
                 "paired_with_by_context": {
                     "tyhy-päivät": [
@@ -5711,7 +5712,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T10:18:20.445Z",
+                "last_updated": "2026-04-29T10:30:19.307Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
