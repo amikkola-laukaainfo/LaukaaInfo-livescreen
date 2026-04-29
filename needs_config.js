@@ -50,8 +50,8 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": "Mitä muita palveluita tarvitset juhlatpäivään?",
                 "options": [
-                    { "label": "Valokuvaaja", "tags": ["valokuvaus"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "valokuvaus" } },
-                    { "label": "Videokuvaaja", "tags": ["videotuotanto", "videokuvaus"], "profilointi_filter": { "section": "events_and_celebrations", "field": "digitization_features", "value": "häävideot" } },
+                    { "label": "Valokuvaaja", "tags": ["valokuvaus", "valokuvaaja"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "valokuvaaja" } },
+                    { "label": "Videokuvaaja", "tags": ["videotuotanto", "videokuvaus", "videokuvaaja"], "profilointi_filter": { "section": "events_and_celebrations", "field": "digitization_features", "value": "häävideot" } },
                     { "label": "Kukkakauppa & Koristelu", "tags": ["kukkakauppa"] },
                     { "label": "Musiikki tai DJ", "tags": ["musiikki", "ohjelmapalvelut"], "profilointi_filter": { "section": "events_and_celebrations", "field": "entertainment_features", "value": "musiikki" } }
                 ]
@@ -475,7 +475,7 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": "Haluaisitko tallentaa muistot tai tarvitsetko digitointipalveluita?",
                 "options": [
-                    { "label": "Muistovideo / Videointi / Esitykset", "tags": ["videotuotanto"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "digitization_features", "value": "muistovideo" } },
+                    { "label": "Muistovideo / Videointi / Esitykset", "tags": ["videotuotanto", "videokuvaus", "videokuvaaja"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "digitization_features", "value": "muistovideo" } },
                     { "label": "Valokuvaus tilaisuudessa", "tags": ["valokuvaus"] },
                     { "label": "Digitointipalvelut (kuvat, videot ym.)", "tags": ["digitointi"] }
                 ]
@@ -524,10 +524,10 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": "Markkinointi ja näkyvyys?",
                 "options": [
-                    { "label": "Verkkosivut / Domain", "tags": ["verkkosivut", "it-palvelut"], "profilointi_filter": { "section": "business_growth", "field": "website_dev", "value": true } },
-                    { "label": "Logo ja brändäys", "tags": ["mainostoimisto", "graafiset palvelut"], "profilointi_filter": { "section": "startup_services", "field": "refinement_tags", "value": "brändäys" } },
-                    { "label": "Somemainonta ja Google-näkyvyys", "tags": ["somemainonta", "google-mainonta", "mainostoimisto"] },
-                    { "label": "Valokuvaus / Yrityskuvat", "tags": ["valokuvaus"], "profilointi_filter": { "section": "startup_services", "field": "refinement_tags", "value": "yrityskuvat" } }
+                    { "label": "Verkkosivut / Domain", "tags": ["verkkosivut", "it-palvelut", "kotisivut"], "profilointi_filter": { "section": "business_growth", "field": "website_dev", "value": "verkkosivut" } },
+                    { "label": "Logo ja brändäys", "tags": ["mainostoimisto", "graafiset palvelut", "brändäys"], "profilointi_filter": { "section": "startup_services", "field": "refinement_tags", "value": "brändäys" } },
+                    { "label": "Somemainonta ja Google-näkyvyys", "tags": ["somemainonta", "google-mainonta", "mainostoimisto", "digimarkkinointi"] },
+                    { "label": "Valokuvaus / Yrityskuvat", "tags": ["valokuvaus", "valokuvaaja"], "profilointi_filter": { "section": "startup_services", "field": "refinement_tags", "value": "yrityskuvat" } }
                 ]
             }
         ]
@@ -555,7 +555,7 @@ const NEEDS_CONFIG = {
                     { "label": "Google-mainonta / SEO", "tags": ["google-mainonta", "mainostoimisto"], "profilointi_filter": { "section": "business_growth", "field": "marketing_services", "value": true } },
                     { "label": "Sosiaalisen median markkinointi", "tags": ["somemainonta", "mainostoimisto"], "profilointi_filter": { "section": "business_growth", "field": "marketing_services", "value": true } },
                     { "label": "Verkkokaupan rakentaminen", "tags": ["verkkokauppa", "it-palvelut"] },
-                    { "label": "Videotuotanto / Mainosvideot", "tags": ["videotuotanto"], "profilointi_filter": { "section": "business_growth", "field": "refinement_tags", "value": "videotuotanto" } }
+                    { "label": "Videotuotanto / Mainosvideot", "tags": ["videotuotanto", "videomarkkinointi", "video"], "profilointi_filter": { "section": "business_growth", "field": "refinement_tags", "value": "video" } }
                 ]
             },
             {

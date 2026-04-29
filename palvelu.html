@@ -1036,13 +1036,26 @@
                             const catData = getCategoryData(c, pf.section);
                             let match = false;
 
+                            const checkFuzzyMatch = (target, query) => {
+                                if (!target || !query) return false;
+                                const t = String(target).toLowerCase();
+                                const q = String(query).toLowerCase();
+                                return t === q || t.includes(q) || q.includes(t);
+                            };
+
                             if (catData) {
                                 const actualVal = catData[pf.field];
-                                match = (actualVal === pf.value) || (Array.isArray(actualVal) && actualVal.includes(pf.value));
-                                
-                                if (!match && typeof actualVal === 'object' && actualVal !== null) {
-                                    if (Object.keys(actualVal).includes(pf.value)) match = true;
-                                    else match = Object.values(actualVal).some(arr => Array.isArray(arr) && arr.includes(pf.value));
+                                if (Array.isArray(actualVal)) {
+                                    match = actualVal.some(v => checkFuzzyMatch(v, pf.value));
+                                } else if (typeof actualVal === 'object' && actualVal !== null) {
+                                    match = Object.values(actualVal).flat().some(v => checkFuzzyMatch(v, pf.value));
+                                } else {
+                                    match = checkFuzzyMatch(actualVal, pf.value);
+                                }
+
+                                // Automaattinen fallback refinement_tagsiin jos ei matchia
+                                if (!match && Array.isArray(catData.refinement_tags)) {
+                                    match = catData.refinement_tags.some(v => checkFuzzyMatch(v, pf.value));
                                 }
                             }
 
@@ -1050,9 +1063,9 @@
                             if (!match && c.profiling?.core?.sub_contexts) {
                                 const subContexts = c.profiling.core.sub_contexts;
                                 if (Array.isArray(subContexts)) {
-                                    if (subContexts.includes(pf.value)) match = true;
+                                    match = subContexts.some(v => checkFuzzyMatch(v, pf.value));
                                 } else if (typeof subContexts === 'object' && subContexts !== null) {
-                                    match = Object.values(subContexts).some(arr => Array.isArray(arr) && arr.includes(pf.value));
+                                    match = Object.values(subContexts).flat().some(v => checkFuzzyMatch(v, pf.value));
                                 }
                             }
 
@@ -1295,7 +1308,13 @@
         function getCompanyCapacity(c, profilingKey) {
             const data = getCategoryData(c, profilingKey);
             if (!data) return 0;
-            return data.capacity_max || data.meeting_capacity || data.seminar_capacity || data.seated_capacity || data.memorial_service_capacity || 0;
+            return data.capacity_max || 
+                   data.meeting_capacity || 
+                   data.seminar_capacity || 
+                   data.seated_capacity || 
+                   data.memorial_service_capacity || 
+                   data.outdoor_capacity || 
+                   data.catering_max_capacity || 0;
         }
 
         function renderCompanyCard(c, requestedCapacity, profilingKey, collaboratorsSet, anchorCoords = null, isAnchorGroup = false, isSelected = false) {
