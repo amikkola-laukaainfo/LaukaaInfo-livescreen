@@ -246,84 +246,38 @@
             min-height: 1.2em;
         }
 
-        /* Solution Package Styles */
-        .solution-package {
-            background: white;
-            border-radius: 24px;
-            padding: 2rem;
-            margin-bottom: 3rem;
-            box-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-            border: 2px solid #e2e8f0;
-            position: relative;
-            overflow: hidden;
+        /* Interactive Categorization Styles */
+        .selected-anchor {
+            border: 3px solid var(--primary-blue) !important;
+            transform: scale(1.02);
+            box-shadow: 0 10px 25px -5px rgba(0, 102, 204, 0.3) !important;
+            transition: all 0.3s ease;
         }
 
-        .solution-header {
-            border-bottom: 2px solid #eef2f6;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-        }
-
-        .solution-header h2 {
-            font-family: var(--accent-font);
+        .btn-select-anchor {
+            display: inline-block;
+            margin: 10px;
+            padding: 8px 16px;
+            background: #e0f2fe;
             color: var(--primary-blue);
-            margin: 0;
-            font-size: 1.8rem;
-        }
-
-        .anchor-label {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #64748b;
             font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .anchor-wrapper {
-            margin-bottom: 2rem;
-        }
-
-        .solution-companions {
-            background: #f8fafc;
-            border-radius: 16px;
-            padding: 1.5rem;
-            border: 1px dashed #cbd5e1;
-        }
-
-        .companions-title {
-            margin-top: 0;
-            color: var(--secondary-blue);
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-        }
-
-        .companion-group-title {
-            font-weight: 700;
-            color: #475569;
-            margin: 1.5rem 0 0.5rem 0;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .companion-group-title:first-child {
-            margin-top: 0;
-        }
-
-        .companion-card-wrapper .company-result-card {
-            box-shadow: 0 2px 4px rgb(0 0 0 / 0.05);
-            padding: 1.2rem;
-            margin-bottom: 0.5rem;
-            border: 1px solid #e2e8f0;
-            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--primary-blue);
+            cursor: pointer;
+            text-align: center;
             transition: all 0.2s;
+            font-size: 0.85rem;
+            width: calc(100% - 20px);
+        }
+
+        .btn-select-anchor:hover {
+            background: var(--primary-blue);
+            color: white;
         }
         
-        .companion-card-wrapper .company-result-card:hover {
-            border-color: var(--primary-blue);
-            transform: translateX(5px);
+        .selected-anchor .btn-select-anchor {
+            background: var(--primary-blue);
+            color: white;
         }
 
         /* Print styles */
@@ -725,6 +679,13 @@
 
         let currentResultsGroups = []; // Tallennetaan tulokset tulostusta varten
 
+        let matchingGroupsData = [];
+        let selectedAnchorCompanyId = null;
+        let globalProfilingKey = '';
+        let globalRequestedCapacity = 0;
+        let globalRequestedFeatures = {};
+        let globalActiveCollaboratorsSet = new Set();
+
         // Helper to get profiling data correctly (mapping legacy keys to new schema)
         function getCategoryData(c, key) {
             if (!c || !c.profiling) return null;
@@ -839,6 +800,10 @@
                 accessible: selectedOptions.some(o => o.label?.toLowerCase().includes('esteetön') || o.label?.toLowerCase().includes('vammais')),
                 home_service: selectedOptions.some(o => o.label?.toLowerCase().includes('kotiin') || o.label?.toLowerCase().includes('kotona'))
             };
+
+            globalProfilingKey = currentProfilingKey;
+            globalRequestedCapacity = requestedCapacity;
+            globalRequestedFeatures = requestedFeatures;
 
             const allMatchingCompanies = new Set();
             const matchingGroups = [];
@@ -973,146 +938,187 @@
                 });
             });
 
-            // UUSI LOGIIKKA: Anchor + Companion -malli
+            // Tallennetaan tilamuuttujiin renderöintiä varten
+            matchingGroupsData = matchingGroups;
+            selectedAnchorCompanyId = null;
             
-            if (matchingGroups.length === 0) {
+            globalActiveCollaboratorsSet = new Set();
+            allMatchingCompanies.forEach(c => {
+                const partners = getCompanyCollaborators(c);
+                partners.forEach(p => globalActiveCollaboratorsSet.add(p));
+            });
+
+            renderResultsView();
+        }
+
+        function selectAnchor(companyId) {
+            if (selectedAnchorCompanyId === companyId) {
+                // Poistetaan valinta
+                selectedAnchorCompanyId = null;
+                // Palautetaan kaikki kumppanit
+                globalActiveCollaboratorsSet = new Set();
+                matchingGroupsData.forEach(g => {
+                    g.companies.forEach(c => {
+                        const partners = getCompanyCollaborators(c);
+                        partners.forEach(p => globalActiveCollaboratorsSet.add(p));
+                    });
+                });
+            } else {
+                // Asetetaan valinta
+                selectedAnchorCompanyId = companyId;
+                globalActiveCollaboratorsSet = new Set();
+                let anchorCompany = null;
+                matchingGroupsData.forEach(g => {
+                    const found = g.companies.find(c => c.id === companyId);
+                    if (found) anchorCompany = found;
+                });
+                if (anchorCompany) {
+                    const partners = getCompanyCollaborators(anchorCompany);
+                    partners.forEach(p => globalActiveCollaboratorsSet.add(p));
+                    // Lisätään myös ankkuri itse
+                    globalActiveCollaboratorsSet.add(anchorCompany.id);
+                    globalActiveCollaboratorsSet.add(anchorCompany.nimi);
+                }
+            }
+            renderResultsView();
+        }
+
+        function renderResultsView() {
+            const list = document.getElementById('results-list');
+            const countEl = document.getElementById('results-count');
+            const resultsContainer = document.getElementById('results-container');
+            currentResultsGroups = [];
+            
+            if (matchingGroupsData.length === 0) {
                 if (countEl) countEl.textContent = "Ei löytynyt sopivia yrityksiä.";
                 if (list) list.innerHTML = '<div class="no-results"><h3>Hups!</h3><p>Kokeile eri valintoja.</p></div>';
                 return;
             }
 
-            // 1. Tunnistetaan pääryhmä (Anchor) - etsitään ryhmä jolla on kapasiteettivaatimus tai valitaan ensimmäinen
+            let totalFoundCount = 0;
+            let htmlResults = "";
+
+            // Tunnistetaan ensimmäinen ryhmä "ankkuriryhmäksi" (voidaan valita)
             let anchorGroupIndex = 0;
-            matchingGroups.forEach((group, idx) => {
-                if (group.opt.capacity_req > 0 && !(matchingGroups[anchorGroupIndex].opt.capacity_req > 0)) {
+            matchingGroupsData.forEach((group, idx) => {
+                if (group.opt.capacity_req > 0 && !(matchingGroupsData[anchorGroupIndex].opt.capacity_req > 0)) {
                     anchorGroupIndex = idx;
                 }
             });
-            const anchorGroup = matchingGroups[anchorGroupIndex];
-            const companionGroups = matchingGroups.filter((_, idx) => idx !== anchorGroupIndex);
 
-            // 2. Järjestetään ankkuriyritykset paremmuusjärjestykseen
-            let anchorCompanies = [...anchorGroup.companies];
-            anchorCompanies.sort((a, b) => {
-                let scoreA = getFitsForScore(a, currentProfilingKey);
-                let scoreB = getFitsForScore(b, currentProfilingKey);
-
-                if (requestedCapacity > 0) {
-                    const capA = getCompanyCapacity(a, currentProfilingKey);
-                    const capB = getCompanyCapacity(b, currentProfilingKey);
-                    if (capA >= requestedCapacity) scoreA += 40;
-                    if (capB >= requestedCapacity) scoreB += 40;
-                    if (capA > 0 && capA < requestedCapacity) scoreA -= 20;
-                    if (capB > 0 && capB < requestedCapacity) scoreB -= 20;
-                }
-
-                const dataA = getCategoryData(a, currentProfilingKey);
-                const dataB = getCategoryData(b, currentProfilingKey);
-                if (requestedFeatures.sauna && dataA?.has_sauna) scoreA += 50;
-                if (requestedFeatures.sauna && dataB?.has_sauna) scoreB += 50;
-                if (requestedFeatures.accessible && dataA?.is_accessible) scoreA += 50;
-                if (requestedFeatures.accessible && dataB?.is_accessible) scoreB += 50;
-                if (requestedFeatures.home_service && a.profiling?.core?.home_service) scoreA += 50;
-                if (requestedFeatures.home_service && b.profiling?.core?.home_service) scoreB += 50;
-
-                if (scoreA !== scoreB) return scoreB - scoreA;
+            matchingGroupsData.forEach((group, idx) => {
+                const opt = group.opt;
+                const companiesForOpt = [...group.companies];
+                const isAnchorGroup = (idx === anchorGroupIndex);
                 
-                const aIsPremium = (a.paketti || a.tyyppi || '').toLowerCase().match(/premium|pro/);
-                const bIsPremium = (b.paketti || b.tyyppi || '').toLowerCase().match(/premium|pro/);
-                if (aIsPremium && !bIsPremium) return -1;
-                if (!aIsPremium && bIsPremium) return 1;
+                totalFoundCount += companiesForOpt.length;
+                htmlResults += `<div class="group-title"><span>📍</span> ${opt.label}</div>`;
 
-                const userCoordsRaw = localStorage.getItem('userCoords');
-                if (userCoordsRaw) {
-                    try {
-                        const u = JSON.parse(userCoordsRaw);
-                        const distA = getHaversineDistance(u.lat, u.lng || u.lon, parseFloat(a.lat), parseFloat(a.lon || a.lng));
-                        const distB = getHaversineDistance(u.lat, u.lng || u.lon, parseFloat(b.lat), parseFloat(b.lon || b.lng));
-                        return distA - distB;
-                    } catch(e) {}
-                }
-                return 0;
-            });
-
-            // Valitaan max 3 parasta ankkuria paketeiksi
-            const topAnchors = anchorCompanies.slice(0, 3);
-            let htmlResults = "";
-            let solutionCount = 0;
-
-            topAnchors.forEach((anchor, anchorIdx) => {
-                solutionCount++;
-                const anchorPartners = getCompanyCollaborators(anchor);
-                
-                let companionsHtml = "";
-                let hasCompanions = false;
-                let printGroup = { title: `Ratkaisuehdotus ${solutionCount}: ${anchor.nimi}`, companies: [anchor] };
-
-                companionGroups.forEach(compGroup => {
-                    let bestCompanions = [];
-                    // 1. Etsitään suorat yhteistyökumppanit
-                    const partnerCompanions = compGroup.companies.filter(c => 
-                        anchorPartners.includes(c.id) || anchorPartners.includes(c.nimi) ||
-                        getCompanyCollaborators(c).includes(anchor.id) || getCompanyCollaborators(c).includes(anchor.nimi)
-                    );
-
-                    if (partnerCompanions.length > 0) {
-                        bestCompanions = partnerCompanions.slice(0, 2).map(c => ({ company: c, isPartner: true }));
-                    } else {
-                        // 2. Varavaihtoehto: valitaan paras "vapaa" yritys
-                        let fallbackCompanies = [...compGroup.companies].sort((a, b) => getFitsForScore(b, currentProfilingKey) - getFitsForScore(a, currentProfilingKey));
-                        if (fallbackCompanies.length > 0) {
-                            bestCompanions = [{ company: fallbackCompanies[0], isPartner: false }];
-                        }
-                    }
-
-                    if (bestCompanions.length > 0) {
-                        hasCompanions = true;
-                        companionsHtml += `<div class="companion-group-title">📍 ${compGroup.opt.label}</div>`;
-                        bestCompanions.forEach(comp => {
-                            const fakePartnerSet = new Set(comp.isPartner ? [comp.company.id] : []);
-                            let cardHtml = renderCompanyCard(comp.company, 0, currentProfilingKey, fakePartnerSet);
-                            companionsHtml += `<div class="companion-card-wrapper">${cardHtml}</div>`;
-                            printGroup.companies.push(comp.company);
-                        });
-                    }
+                currentResultsGroups.push({
+                    title: opt.label,
+                    companies: companiesForOpt
                 });
 
-                currentResultsGroups.push(printGroup);
-                
-                htmlResults += `
-                    <div class="solution-package fade-in" style="animation-delay: ${anchorIdx * 0.1}s">
-                        <div class="solution-header">
-                            <h2>Suositus ${solutionCount}</h2>
-                        </div>
-                        <div class="anchor-wrapper">
-                            <div class="anchor-label">Päävalinta: ${anchorGroup.opt.label}</div>
-                            ${renderCompanyCard(anchor, requestedCapacity, currentProfilingKey, new Set())}
-                        </div>
-                `;
-
-                if (hasCompanions) {
-                    htmlResults += `
-                        <div class="solution-companions">
-                            <h4 class="companions-title">Tähän kokonaisuuteen sopivat kumppanit:</h4>
-                            <div class="companions-list">
-                                ${companionsHtml}
-                            </div>
-                        </div>
-                    `;
+                // Haetaan valitun ankkurin koordinaatit, jos sellainen on ja olemme MUIDEN ryhmien kohdalla
+                let anchorLat = null;
+                let anchorLon = null;
+                if (selectedAnchorCompanyId && !isAnchorGroup) {
+                    let anchorCompany = null;
+                    matchingGroupsData[anchorGroupIndex].companies.forEach(c => {
+                        if (c.id === selectedAnchorCompanyId) anchorCompany = c;
+                    });
+                    if (anchorCompany && anchorCompany.lat && (anchorCompany.lon || anchorCompany.lng)) {
+                        anchorLat = parseFloat(anchorCompany.lat);
+                        anchorLon = parseFloat(anchorCompany.lon || anchorCompany.lng);
+                    }
                 }
 
-                htmlResults += `</div>`;
+                companiesForOpt.sort((a, b) => {
+                    let scoreA = getFitsForScore(a, globalProfilingKey);
+                    let scoreB = getFitsForScore(b, globalProfilingKey);
+
+                    if (globalActiveCollaboratorsSet.has(a.id) || globalActiveCollaboratorsSet.has(a.nimi)) scoreA += 45;
+                    if (globalActiveCollaboratorsSet.has(b.id) || globalActiveCollaboratorsSet.has(b.nimi)) scoreB += 45;
+
+                    if (globalRequestedCapacity > 0) {
+                        const capA = getCompanyCapacity(a, globalProfilingKey);
+                        const capB = getCompanyCapacity(b, globalProfilingKey);
+                        if (capA >= globalRequestedCapacity) scoreA += 40;
+                        if (capB >= globalRequestedCapacity) scoreB += 40;
+                        if (capA > 0 && capA < globalRequestedCapacity) scoreA -= 20;
+                        if (capB > 0 && capB < globalRequestedCapacity) scoreB -= 20;
+                    }
+
+                    const dataA = getCategoryData(a, globalProfilingKey);
+                    const dataB = getCategoryData(b, globalProfilingKey);
+                    if (globalRequestedFeatures.sauna && dataA?.has_sauna) scoreA += 50;
+                    if (globalRequestedFeatures.sauna && dataB?.has_sauna) scoreB += 50;
+                    if (globalRequestedFeatures.accessible && dataA?.is_accessible) scoreA += 50;
+                    if (globalRequestedFeatures.accessible && dataB?.is_accessible) scoreB += 50;
+                    if (globalRequestedFeatures.home_service && a.profiling?.core?.home_service) scoreA += 50;
+                    if (globalRequestedFeatures.home_service && b.profiling?.core?.home_service) scoreB += 50;
+
+                    if (scoreA !== scoreB) return scoreB - scoreA;
+                    
+                    const aIsPremium = (a.paketti || a.tyyppi || '').toLowerCase().match(/premium|pro/);
+                    const bIsPremium = (b.paketti || b.tyyppi || '').toLowerCase().match(/premium|pro/);
+                    if (aIsPremium && !bIsPremium) return -1;
+                    if (!aIsPremium && bIsPremium) return 1;
+
+                    // Etäisyyslaskenta
+                    if (anchorLat !== null && anchorLon !== null) {
+                        // Käytä valitun ankkurin etäisyyttä
+                        const distA = getHaversineDistance(anchorLat, anchorLon, parseFloat(a.lat), parseFloat(a.lon || a.lng));
+                        const distB = getHaversineDistance(anchorLat, anchorLon, parseFloat(b.lat), parseFloat(b.lon || b.lng));
+                        return distA - distB;
+                    } else {
+                        // Käytä käyttäjän etäisyyttä
+                        const userCoordsRaw = localStorage.getItem('userCoords');
+                        if (userCoordsRaw) {
+                            try {
+                                const u = JSON.parse(userCoordsRaw);
+                                const distA = getHaversineDistance(u.lat, u.lng || u.lon, parseFloat(a.lat), parseFloat(a.lon || a.lng));
+                                const distB = getHaversineDistance(u.lat, u.lng || u.lon, parseFloat(b.lat), parseFloat(b.lon || b.lng));
+                                return distA - distB;
+                            } catch(e) {}
+                        }
+                    }
+                    return 0;
+                });
+
+                companiesForOpt.forEach(c => {
+                    let anchorCoords = null;
+                    if (anchorLat !== null && anchorLon !== null) anchorCoords = { lat: anchorLat, lng: anchorLon };
+                    let cardHtml = renderCompanyCard(c, globalRequestedCapacity, globalProfilingKey, globalActiveCollaboratorsSet, anchorCoords);
+                    
+                    // Lisätään wrapperi ja "Valitse" painike, jos ollaan ankkuriryhmässä
+                    const isSelected = (selectedAnchorCompanyId === c.id);
+                    let wrapperClass = isSelected ? 'selected-anchor-wrapper selected-anchor' : 'selected-anchor-wrapper';
+                    
+                    if (isAnchorGroup) {
+                        const btnText = isSelected ? 'Poista päävalinta' : 'Valitse tämä tila ja hae kumppanit';
+                        htmlResults += `
+                            <div class="${wrapperClass}" style="margin-bottom:15px; border-radius: 12px; overflow: hidden; background: white; border: 1px solid #e2e8f0;">
+                                ${cardHtml.replace('class="company-result-card ', 'class="company-result-card" style="margin-bottom:0; border:none; border-bottom:1px solid #eef2f6; box-shadow:none;" ')}
+                                <button class="btn-select-anchor" onclick="event.preventDefault(); selectAnchor('${c.id}');">${btnText}</button>
+                            </div>
+                        `;
+                    } else {
+                        htmlResults += cardHtml;
+                    }
+                });
             });
 
-            if (solutionCount === 0) {
+            if (totalFoundCount === 0) {
                 if (countEl) countEl.textContent = "Ei löytynyt sopivia yrityksiä.";
                 if (list) list.innerHTML = '<div class="no-results"><h3>Hups!</h3><p>Kokeile eri valintoja.</p></div>';
             } else {
-                if (countEl) countEl.textContent = `Kokosimme sinulle ${solutionCount} valmista ratkaisuehdotusta.`;
+                if (countEl) countEl.textContent = `Löysimme ${totalFoundCount} ehdotusta.`;
                 if (list) list.innerHTML = htmlResults;
-                renderNextSteps(currentProfilingKey);
+                renderNextSteps(globalProfilingKey);
             }
-            window.scrollTo({ top: resultsContainer ? resultsContainer.offsetTop - 100 : 0, behavior: 'smooth' });
+            // Vältetään selauksen hyppäämistä ylimmäs renderöinnin yhteydessä, ellei tämä ole ensimmäinen lataus
+            // Jos valitaan ankkuri, käyttäjä todennäköisesti haluaa pysyä samassa kohdassa
         }
 
         function renderNextSteps(context) {
@@ -1148,7 +1154,7 @@
             return data.capacity_max || data.meeting_capacity || data.seminar_capacity || data.seated_capacity || data.memorial_service_capacity || 0;
         }
 
-        function renderCompanyCard(c, requestedCapacity, profilingKey, collaboratorsSet) {
+        function renderCompanyCard(c, requestedCapacity, profilingKey, collaboratorsSet, anchorCoords = null) {
             const slug = typeof slugify === 'function' ? slugify(c.nimi) : c.nimi.toLowerCase().replace(/\s+/g, '-');
             const isPremium = (c.paketti || c.tyyppi || '').toLowerCase().match(/premium|pro/);
             const cardUrl = isPremium ? `yritys/${slug}.html` : `yrityskortti.html?id=${slug}`;
@@ -1161,14 +1167,20 @@
             let capacityNote = '';
             let distanceHtml = '';
 
-            const userCoordsRaw = localStorage.getItem('userCoords');
-            if (userCoordsRaw && c.lat && (c.lon || c.lng)) {
-                try {
-                    const u = JSON.parse(userCoordsRaw);
-                    const dist = getHaversineDistance(u.lat, u.lng || u.lon, parseFloat(c.lat), parseFloat(c.lon || c.lng));
-                    const distStr = dist < 1 ? `${Math.round(dist * 1000)} m` : `${dist.toFixed(1)} km`;
-                    distanceHtml = `<div class="dist-badge">🚗 ${distStr}</div>`;
-                } catch(e) {}
+            if (anchorCoords && c.lat && (c.lon || c.lng)) {
+                const dist = getHaversineDistance(anchorCoords.lat, anchorCoords.lng, parseFloat(c.lat), parseFloat(c.lon || c.lng));
+                const distStr = dist < 1 ? `${Math.round(dist * 1000)} m` : `${dist.toFixed(1)} km`;
+                distanceHtml = `<div class="dist-badge" style="background:#1e40af;color:white;">📍 ${distStr} valitusta tilasta</div>`;
+            } else {
+                const userCoordsRaw = localStorage.getItem('userCoords');
+                if (userCoordsRaw && c.lat && (c.lon || c.lng)) {
+                    try {
+                        const u = JSON.parse(userCoordsRaw);
+                        const dist = getHaversineDistance(u.lat, u.lng || u.lon, parseFloat(c.lat), parseFloat(c.lon || c.lng));
+                        const distStr = dist < 1 ? `${Math.round(dist * 1000)} m` : `${dist.toFixed(1)} km`;
+                        distanceHtml = `<div class="dist-badge">🚗 ${distStr}</div>`;
+                    } catch(e) {}
+                }
             }
 
             if (c.profiling) {
