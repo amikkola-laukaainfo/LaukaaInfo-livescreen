@@ -41,7 +41,6 @@ const NEEDS_CONFIG = {
                 "skipMessage": "Valitsemassasi tilassa on oma catering — pitopalvelu sisältyy.",
                 "options": [
                     { "label": "Kyllä — tarvitsen pitopalvelun", "tags": ["pitopalvelu"] },
-                    { "label": "Ei — tila järjestää ruoan", "tags": [] },
                     { "label": "En tiedä vielä", "tags": [] }
                 ]
             },
