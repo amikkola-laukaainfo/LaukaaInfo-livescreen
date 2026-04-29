@@ -19764,7 +19764,9 @@
                 "corporate_clients": true,
                 "home_service": false,
                 "weekend_service": true,
-                "not_suitable_for": [],
+                "not_suitable_for": [
+                    "kartano"
+                ],
                 "paired_with_by_context": {
                     "yritysjuhlat": [
                         "Pitopalvelu"
@@ -19969,7 +19971,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T08:28:50.034Z",
+                "last_updated": "2026-04-29T09:14:37.138Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -22968,7 +22970,9 @@
                 "corporate_clients": true,
                 "home_service": false,
                 "weekend_service": true,
-                "not_suitable_for": [],
+                "not_suitable_for": [
+                    "kartano"
+                ],
                 "paired_with_by_context": {},
                 "sub_contexts": [
                     "kylpylä",
@@ -23175,7 +23179,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T08:31:10.179Z",
+                "last_updated": "2026-04-29T09:15:40.177Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
