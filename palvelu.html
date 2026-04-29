@@ -1296,16 +1296,10 @@
                         const capB = getCompanyCapacity(b, globalProfilingKey);
                         
                         if (capA > 0) {
-                            // Sopii tai ylittää kapasiteetin
                             if (capA >= globalRequestedCapacity) {
-                                scoreA += 60; // Nostettu painoarvoa
-                                
-                                // "Best fit" bonus: jos tila on juuri sopiva eikä valtavasti liian suuri (max 2.5x)
-                                if (capA <= globalRequestedCapacity * 2.5) {
-                                    scoreA += 40;
-                                }
+                                scoreA += 60;
+                                if (capA <= globalRequestedCapacity * 2.5) scoreA += 40;
                             } else {
-                                // Rangaistus jos tila on liian pieni
                                 scoreA -= 50; 
                             }
                         }
@@ -1313,9 +1307,7 @@
                         if (capB > 0) {
                             if (capB >= globalRequestedCapacity) {
                                 scoreB += 60;
-                                if (capB <= globalRequestedCapacity * 2.5) {
-                                    scoreB += 40;
-                                }
+                                if (capB <= globalRequestedCapacity * 2.5) scoreB += 40;
                             } else {
                                 scoreB -= 50;
                             }
@@ -1331,6 +1323,43 @@
                     if (globalRequestedFeatures.home_service && a.profiling?.core?.home_service) scoreA += 50;
                     if (globalRequestedFeatures.home_service && b.profiling?.core?.home_service) scoreB += 50;
 
+                    // Etäisyyslaskenta (Ankkuri TAI Käyttäjä)
+                    let distA = Infinity;
+                    let distB = Infinity;
+                    let hasLocation = false;
+
+                    if (anchorLat !== null && anchorLon !== null) {
+                        distA = getHaversineDistance(anchorLat, anchorLon, parseFloat(a.lat), parseFloat(a.lon || a.lng));
+                        distB = getHaversineDistance(anchorLat, anchorLon, parseFloat(b.lat), parseFloat(b.lon || b.lng));
+                        hasLocation = true;
+                    } else {
+                        const userCoordsRaw = localStorage.getItem('userCoords');
+                        if (userCoordsRaw) {
+                            try {
+                                const u = JSON.parse(userCoordsRaw);
+                                distA = getHaversineDistance(u.lat, u.lng || u.lon, parseFloat(a.lat), parseFloat(a.lon || a.lng));
+                                distB = getHaversineDistance(u.lat, u.lng || u.lon, parseFloat(b.lat), parseFloat(b.lon || b.lng));
+                                hasLocation = true;
+                            } catch(e) {}
+                        }
+                    }
+
+                    // "Lähin ensin" periaate - jos sijainti tiedetään ja kummallakin on validi etäisyys
+                    if (hasLocation && !isNaN(distA) && !isNaN(distB)) {
+                        // Jos etäisyysero on yli 500 metriä, lajitellaan etäisyyden mukaan.
+                        // Näin lähin on varmasti ensimmäisenä.
+                        if (Math.abs(distA - distB) > 0.5) {
+                            return distA - distB;
+                        }
+                        // Jos ovat hyvin lähekkäin (alle 500m toisistaan), annetaan premiumille ja pisteille painoarvoa
+                        if (distA < distB) scoreA += 10;
+                        else if (distB < distA) scoreB += 10;
+                    } else if (hasLocation) {
+                        // Jos toisella ei ole sijaintia määritetty, näytetään se, jolla on sijainti, ensin
+                        if (!isNaN(distA) && isNaN(distB)) return -1;
+                        if (isNaN(distA) && !isNaN(distB)) return 1;
+                    }
+
                     if (scoreA !== scoreB) return scoreB - scoreA;
                     
                     const aIsPremium = (a.paketti || a.tyyppi || '').toLowerCase().match(/premium|pro/);
@@ -1338,34 +1367,6 @@
                     if (aIsPremium && !bIsPremium) return -1;
                     if (!aIsPremium && bIsPremium) return 1;
 
-                    // Etäisyyslaskenta ja proximity bonus
-                    if (anchorLat !== null && anchorLon !== null) {
-                        const distA = getHaversineDistance(anchorLat, anchorLon, parseFloat(a.lat), parseFloat(a.lon || a.lng));
-                        const distB = getHaversineDistance(anchorLat, anchorLon, parseFloat(b.lat), parseFloat(b.lon || b.lng));
-                        
-                        // Bonus etäisyyden perusteella (vain jos ankkuri valittu)
-                        if (distA < 2) scoreA += 120;
-                        else if (distA < 5) scoreA += 80;
-                        else if (distA < 15) scoreA += 40;
-                        
-                        if (distB < 2) scoreB += 120;
-                        else if (distB < 5) scoreB += 80;
-                        else if (distB < 15) scoreB += 40;
-                        
-                        // Jos pisteet edelleen tasan, järjestetään etäisyyden mukaan
-                        if (scoreA === scoreB) return distA - distB;
-                    } else {
-                        // Käytä käyttäjän etäisyyttä tie-breakerina
-                        const userCoordsRaw = localStorage.getItem('userCoords');
-                        if (userCoordsRaw) {
-                            try {
-                                const u = JSON.parse(userCoordsRaw);
-                                const distA = getHaversineDistance(u.lat, u.lng || u.lon, parseFloat(a.lat), parseFloat(a.lon || a.lng));
-                                const distB = getHaversineDistance(u.lat, u.lng || u.lon, parseFloat(b.lat), parseFloat(b.lon || b.lng));
-                                return distA - distB;
-                            } catch(e) {}
-                        }
-                    }
                     return 0;
                 });
 
@@ -1644,6 +1645,14 @@
                     window.userCoords = JSON.parse(savedCoordsRaw);
                 } catch(e) {}
             }
+
+            // Enter-painikkeen tuki tekstikentälle (helpottaa manuaalista hakua)
+            locationInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    locationInput.blur(); // Laukaisee change-tapahtuman automaattisesti
+                }
+            });
 
             // Kuuntele manuaalista syöttöä (yksinkertainen paikkahaku tai pelkkä tallennus)
             locationInput.addEventListener('change', async () => {
