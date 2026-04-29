@@ -1132,7 +1132,9 @@
                 "corporate_clients": true,
                 "home_service": false,
                 "weekend_service": true,
-                "not_suitable_for": [],
+                "not_suitable_for": [
+                    "kartano"
+                ],
                 "paired_with_by_context": {
                     "häät": [
                         "juhlatila",
@@ -1374,7 +1376,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T08:18:27.325Z",
+                "last_updated": "2026-04-29T10:49:04.825Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -1621,7 +1623,11 @@
                 "corporate_clients": true,
                 "home_service": false,
                 "weekend_service": true,
-                "not_suitable_for": [],
+                "not_suitable_for": [
+                    "kartano",
+                    "hautajaiset",
+                    "yritysjuhlat"
+                ],
                 "paired_with_by_context": {
                     "häät": [
                         "juhlatila",
@@ -1844,7 +1850,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T08:20:10.721Z",
+                "last_updated": "2026-04-29T10:48:23.747Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
