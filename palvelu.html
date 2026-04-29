@@ -1378,7 +1378,16 @@
                 // Taso 2: Sub-context match (Erikoistuminen)
                 if (selections._sub_contexts && selections._sub_contexts.length > 0) {
                     const companySubContexts = core.sub_contexts || [];
-                    if (selections._sub_contexts.some(sc => companySubContexts.includes(sc))) {
+                    let isSubMatch = false;
+                    if (Array.isArray(companySubContexts)) {
+                        isSubMatch = selections._sub_contexts.some(sc => companySubContexts.includes(sc));
+                    } else if (typeof companySubContexts === 'object' && companySubContexts !== null) {
+                        // Tarkistetaan kaikki objektin avaimet
+                        const allSubContexts = Object.values(companySubContexts).flat();
+                        isSubMatch = selections._sub_contexts.some(sc => allSubContexts.includes(sc));
+                    }
+                    
+                    if (isSubMatch) {
                         reasons.push("Erikoistunut tähän tarpeeseen");
                     }
                 }
@@ -1390,8 +1399,8 @@
                 }
 
                 const events = c.profiling.events_and_celebrations || {};
-                if (events.is_accessible && selections.palvelut?.some(s => s.label?.toLowerCase().includes('esteetön'))) reasons.push("Esteetön tila");
-                if (events.has_sauna && selections.palvelut?.some(s => s.label?.toLowerCase().includes('sauna'))) reasons.push("Saunatilat");
+                if (events.is_accessible && selections.palvelut?.some(s => s.label?.toLowerCase()?.includes('esteetön'))) reasons.push("Esteetön tila");
+                if (events.has_sauna && selections.palvelut?.some(s => s.label?.toLowerCase()?.includes('sauna'))) reasons.push("Saunatilat");
             }
 
             if (reasons.length === 0) return "Sopii annettuihin kriteereihin";
