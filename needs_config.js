@@ -486,8 +486,8 @@ const NEEDS_CONFIG = {
                 "question": "Mitä haluaisit digitoida muistoesitystä varten?",
                 "skipIf": "!isSelected('muistot_ja_tallennus', 'digitointi')",
                 "options": [
-                    { "label": "Vanhojen valokuvien digitointi", "tags": ["digitointi"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "digitization_features", "value": "vanhojen valokuvien digitointi" } },
-                    { "label": "VHS- tai DVD-materiaalin digitointi", "tags": ["digitointi"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "digitization_features", "value": "VHS / DVD digitointi" } },
+                    { "label": "Valokuvien ja diojen digitointi", "tags": ["digitointi"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "digitization_features", "value": "valokuvien, diojen ja negatiivien digitointi" } },
+                    { "label": "VHS- tai DVD-materiaalin digitointi", "tags": ["digitointi"] },
                     { "label": "Muisteluvideo / Diashow / Kuvakirja", "tags": ["digitointi"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "digitization_features", "value": "muisteluun soveltuvat diashow- ja kuvakirjapalvelut" } }
                 ]
             }
@@ -515,8 +515,8 @@ const NEEDS_CONFIG = {
                 "options": [
                     { "label": "Yritysneuvonta / Liiketoimintasuunnitelma", "tags": ["yritysneuvonta", "konsultointi"], "profilointi_filter": { "section": "startup_services", "field": "business_advisory", "value": true } },
                     { "label": "Kirjanpito ja tilitoimisto", "tags": ["tilitoimisto"] },
-                    { "label": "Vakuutukset", "tags": ["vakuutus"], "profilointi_filter": { "section": "startup_services", "field": "refinement_tags", "value": "vakuutukset" } },
-                    { "label": "Lakipalvelut", "tags": ["lakiasiaintoimistot"], "profilointi_filter": { "section": "startup_services", "field": "refinement_tags", "value": "lakipalvelut" } }
+                    { "label": "Vakuutukset", "tags": ["vakuutus"] },
+                    { "label": "Lakipalvelut", "tags": ["lakiasiaintoimistot"] }
                 ]
             },
             {
@@ -524,7 +524,7 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": "Markkinointi ja näkyvyys?",
                 "options": [
-                    { "label": "Verkkosivut / Domain", "tags": ["verkkosivut", "it-palvelut", "kotisivut"], "profilointi_filter": { "section": "business_growth", "field": "website_dev", "value": "verkkosivut" } },
+                    { "label": "Verkkosivut / Domain", "tags": ["verkkosivut", "it-palvelut", "kotisivut"], "profilointi_filter": { "section": "startup_services", "field": "refinement_tags", "value": "verkkosivut" } },
                     { "label": "Logo ja brändäys", "tags": ["mainostoimisto", "graafiset palvelut", "brändäys"], "profilointi_filter": { "section": "startup_services", "field": "refinement_tags", "value": "brändäys" } },
                     { "label": "Somemainonta ja Google-näkyvyys", "tags": ["somemainonta", "google-mainonta", "mainostoimisto", "digimarkkinointi"] },
                     { "label": "Valokuvaus / Yrityskuvat", "tags": ["valokuvaus", "valokuvaaja"], "profilointi_filter": { "section": "startup_services", "field": "refinement_tags", "value": "yrityskuvat" } }
@@ -552,8 +552,8 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": "Lisää myyntiä ja tunnettuutta?",
                 "options": [
-                    { "label": "Google-mainonta / SEO", "tags": ["google-mainonta", "mainostoimisto"], "profilointi_filter": { "section": "business_growth", "field": "marketing_services", "value": true } },
-                    { "label": "Sosiaalisen median markkinointi", "tags": ["somemainonta", "mainostoimisto"], "profilointi_filter": { "section": "business_growth", "field": "marketing_services", "value": true } },
+                    { "label": "Google-mainonta / SEO", "tags": ["google-mainonta", "mainostoimisto"] },
+                    { "label": "Sosiaalisen median markkinointi", "tags": ["somemainonta", "mainostoimisto"] },
                     { "label": "Verkkokaupan rakentaminen", "tags": ["verkkokauppa", "it-palvelut"] },
                     { "label": "Videotuotanto / Mainosvideot", "tags": ["videotuotanto", "videomarkkinointi", "video"], "profilointi_filter": { "section": "business_growth", "field": "refinement_tags", "value": "videomarkkinointi" } }
                 ]
@@ -563,9 +563,9 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": "Resurssit ja osaaminen?",
                 "options": [
-                    { "label": "Rekrytointipalvelut", "tags": ["henkilöstöpalvelut"], "profilointi_filter": { "section": "business_growth", "field": "refinement_tags", "value": "rekrytointi" } },
+                    { "label": "Rekrytointipalvelut", "tags": ["henkilöstöpalvelut"] },
                     { "label": "Henkilöstön koulutus", "tags": ["koulutus"] },
-                    { "label": "Liikkeenjohdon konsultointi", "tags": ["konsultointi"], "profilointi_filter": { "section": "business_growth", "field": "sales_coaching", "value": true } }
+                    { "label": "Liikkeenjohdon konsultointi", "tags": ["konsultointi"] }
                 ]
             }
         ]
