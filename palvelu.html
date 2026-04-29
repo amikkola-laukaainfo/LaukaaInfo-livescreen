@@ -1318,7 +1318,7 @@
             const actionGridClass = isAnchorGroup ? 'card-actions has-three' : 'card-actions';
 
             let actionHtml = `<div class="${actionGridClass}">
-                <button class="btn-action primary-action" onclick="openInquiryModal('${c.id}', '${c.nimi.replace(/'/g, "\\'")}')">
+                <button type="button" class="btn-action primary-action" onclick="event.preventDefault(); event.stopPropagation(); openInquiryModal('${c.id}', '${c.nimi.replace(/'/g, "\\'")}')">
                     <i>✉️</i><span>Lähetä kysely</span>
                 </button>
                 <a href="${cardUrl}" class="btn-action">
