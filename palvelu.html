@@ -411,6 +411,42 @@
         .form-group input, .form-group textarea {
             width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; box-sizing: border-box;
         }
+
+        /* Show more button styles */
+        .show-more-container {
+            grid-column: 1 / -1;
+            text-align: center;
+            margin: 20px 0 40px;
+            padding-top: 10px;
+        }
+
+        .btn-show-more {
+            background: white;
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-show-more:hover {
+            background: var(--primary-blue);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 102, 204, 0.2);
+        }
+
+        .btn-show-more i {
+            font-style: normal;
+            font-size: 1.2rem;
+        }
     </style>
 </head>
 
@@ -810,6 +846,7 @@
 
         let matchingGroupsData = [];
         let selectedAnchorCompanyId = null;
+        let expandedGroups = {}; // Seuraa mitkä ryhmät on laajennettu
         let globalProfilingKey = '';
         let globalRequestedCapacity = 0;
         let globalRequestedFeatures = {};
@@ -1301,14 +1338,24 @@
                     if (aIsPremium && !bIsPremium) return -1;
                     if (!aIsPremium && bIsPremium) return 1;
 
-                    // Etäisyyslaskenta
+                    // Etäisyyslaskenta ja proximity bonus
                     if (anchorLat !== null && anchorLon !== null) {
-                        // Käytä valitun ankkurin etäisyyttä
                         const distA = getHaversineDistance(anchorLat, anchorLon, parseFloat(a.lat), parseFloat(a.lon || a.lng));
                         const distB = getHaversineDistance(anchorLat, anchorLon, parseFloat(b.lat), parseFloat(b.lon || b.lng));
-                        return distA - distB;
+                        
+                        // Bonus etäisyyden perusteella (vain jos ankkuri valittu)
+                        if (distA < 2) scoreA += 120;
+                        else if (distA < 5) scoreA += 80;
+                        else if (distA < 15) scoreA += 40;
+                        
+                        if (distB < 2) scoreB += 120;
+                        else if (distB < 5) scoreB += 80;
+                        else if (distB < 15) scoreB += 40;
+                        
+                        // Jos pisteet edelleen tasan, järjestetään etäisyyden mukaan
+                        if (scoreA === scoreB) return distA - distB;
                     } else {
-                        // Käytä käyttäjän etäisyyttä
+                        // Käytä käyttäjän etäisyyttä tie-breakerina
                         const userCoordsRaw = localStorage.getItem('userCoords');
                         if (userCoordsRaw) {
                             try {
@@ -1322,13 +1369,34 @@
                     return 0;
                 });
 
-                companiesForOpt.forEach(c => {
+                // Rajoitetaan näytettävien määrää (max 9 ellei laajennettu)
+                const groupId = opt.id || opt.label;
+                const isExpanded = expandedGroups[groupId];
+                const visibleCompanies = isExpanded ? companiesForOpt : companiesForOpt.slice(0, 9);
+                const hasMore = companiesForOpt.length > 9;
+
+                currentResultsGroups.push({
+                    title: opt.label,
+                    companies: visibleCompanies
+                });
+
+                visibleCompanies.forEach(c => {
                     let anchorCoords = null;
                     if (anchorLat !== null && anchorLon !== null) anchorCoords = { lat: anchorLat, lng: anchorLon };
                     const isSelected = (selectedAnchorCompanyId === c.id);
                     let cardHtml = renderCompanyCard(c, globalRequestedCapacity, globalProfilingKey, globalActiveCollaboratorsSet, anchorCoords, isAnchorGroup, isSelected);
                     htmlResults += cardHtml;
                 });
+
+                if (hasMore && !isExpanded) {
+                    htmlResults += `
+                        <div class="show-more-container">
+                            <button class="btn-show-more" onclick="toggleGroupExpansion('${groupId.replace(/'/g, "\\'")}')">
+                                <i>➕</i><span>Näytä lisää (${companiesForOpt.length - 9} kohdetta)</span>
+                            </button>
+                        </div>
+                    `;
+                }
             });
 
             if (totalFoundCount === 0) {
@@ -1341,6 +1409,11 @@
             }
             // Vältetään selauksen hyppäämistä ylimmäs renderöinnin yhteydessä, ellei tämä ole ensimmäinen lataus
             // Jos valitaan ankkuri, käyttäjä todennäköisesti haluaa pysyä samassa kohdassa
+        }
+
+        function toggleGroupExpansion(groupId) {
+            expandedGroups[groupId] = true;
+            renderResultsView();
         }
 
         function renderNextSteps(context) {
