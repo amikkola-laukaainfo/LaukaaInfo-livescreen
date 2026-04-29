@@ -5521,9 +5521,9 @@
                 "phone": "+358505893254"
             },
             "events_and_celebrations": {
-                "capacity_max": 20,
-                "seated_capacity": 15,
-                "outdoor_capacity": 30,
+                "capacity_max": 0,
+                "seated_capacity": 0,
+                "outdoor_capacity": 0,
                 "is_accessible": false,
                 "is_lakeside": false,
                 "has_sauna": false,
@@ -5711,7 +5711,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T10:10:12.372Z",
+                "last_updated": "2026-04-29T10:18:20.445Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
