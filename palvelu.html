@@ -967,12 +967,22 @@
                         if (isMediazoo) console.log(`DEBUG: Checking Mediazoo for option "${opt.label}"`, { currentProfilingKey, fitsScore, selections });
 
                         // Tarkista not_suitable_for: hylkää yritys jos se on merkitty sopimattomaksi tähän hakuun
-                        if (opt.tags && opt.tags.length > 0 && c.profiling?.core?.not_suitable_for?.length > 0) {
+                        if (c.profiling?.core?.not_suitable_for?.length > 0) {
                             const notSuitable = c.profiling.core.not_suitable_for.map(s => s.toLowerCase());
-                            const optTagsLower = opt.tags.map(t => t.toLowerCase());
-                            if (optTagsLower.some(tag => notSuitable.includes(tag))) {
-                                if (isMediazoo) console.log(`DEBUG: Mediazoo excluded by not_suitable_for for "${opt.label}"`);
-                                return false;
+                            
+                            // A. Tarkistus tageilla
+                            if (opt.tags && opt.tags.length > 0) {
+                                const optTagsLower = opt.tags.map(t => t.toLowerCase());
+                                if (optTagsLower.some(tag => notSuitable.includes(tag))) return false;
+                            }
+                            
+                            // B. Tarkistus labelilla (mahdollistaa suoran tekstipohjaisen hylkäyksen)
+                            if (opt.label) {
+                                const labelLower = opt.label.toLowerCase();
+                                if (notSuitable.some(s => labelLower.includes(s))) {
+                                    if (isMediazoo) console.log(`DEBUG: Mediazoo excluded by label match in not_suitable_for: "${opt.label}"`);
+                                    return false;
+                                }
                             }
                         }
 
@@ -1085,14 +1095,23 @@
 
                         if (isProfiledMatch) return true;
 
+                        const hasVenueTag = (c.tags || '').toLowerCase().includes('juhlatila') || 
+                                           (c.kategoria || '').toLowerCase().includes('juhlatila');
+
                         if (opt.capacity_req > 0 || requestedCapacity > 0) {
                             const cap = getCompanyCapacity(c, currentProfilingKey);
-                            const hasVenueTag = (c.tags || '').toLowerCase().includes('juhlatila') || 
-                                               (c.kategoria || '').toLowerCase().includes('juhlatila');
                             if (cap === 0 && !hasVenueTag && opt.capacity_req > 0) return false;
                         }
 
-                        if (!opt.tags || opt.tags.length === 0) return fitsScore > 10;
+                        // Jos optiolla ei ole tägejä, node-linkkejä tai suodattimia, se ei saa näyttää "kaikkia" 
+                        // paitsi jos se on pelkkä kapasiteettivaatimus
+                        if (!opt.tags || opt.tags.length === 0) {
+                            if (!opt.node_link && !opt.node_links && !opt.profilointi_filter && opt.capacity_req <= 0) {
+                                return false; 
+                            }
+                            return fitsScore > 10;
+                        }
+
                         const companyContent = ((c.tags || '') + ' ' + (c.kategoria || '') + ' ' + (c.nimi || '')).toLowerCase();
                         const tagMatch = opt.tags.some(tag => companyContent.includes(tag.toLowerCase()));
                         
