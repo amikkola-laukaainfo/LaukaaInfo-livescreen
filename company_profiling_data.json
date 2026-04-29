@@ -23239,7 +23239,9 @@
                 "corporate_clients": true,
                 "home_service": false,
                 "weekend_service": true,
-                "not_suitable_for": [],
+                "not_suitable_for": [
+                    "pienet"
+                ],
                 "paired_with_by_context": {},
                 "sub_contexts": [
                     "pitopalvelu",
@@ -23438,7 +23440,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T08:32:03.196Z",
+                "last_updated": "2026-04-29T17:40:40.885Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -53549,7 +53551,9 @@
                 "corporate_clients": false,
                 "home_service": false,
                 "weekend_service": false,
-                "not_suitable_for": [],
+                "not_suitable_for": [
+                    "pienet"
+                ],
                 "paired_with_by_context": {},
                 "sub_contexts": [
                     "valokuvaaja",
@@ -53788,7 +53792,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T16:13:39.578Z",
+                "last_updated": "2026-04-29T17:40:05.640Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
@@ -53816,7 +53820,9 @@
                 "corporate_clients": false,
                 "home_service": false,
                 "weekend_service": false,
-                "not_suitable_for": [],
+                "not_suitable_for": [
+                    "pienet"
+                ],
                 "paired_with_by_context": {},
                 "sub_contexts": [
                     "valokuvaaja",
@@ -54054,7 +54060,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T16:15:16.651Z",
+                "last_updated": "2026-04-29T17:39:31.736Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
