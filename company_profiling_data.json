@@ -55067,23 +55067,23 @@
                 "karaoke_available": true,
                 "has_exclusive_catering": false,
                 "accommodation_included": false,
-                "refinement_tags": [
-                    "juhlatila",
-                    "haajuhla",
-                    "haapaketti",
-                    "pitopalvelu",
-                    "catering",
-                    "omajuomat",
-                    "aanentoisto",
-                    "karaoke",
-                    "terassi",
-                    "esteetön",
-                    "palju",
-                    "sauna",
-                    "pikkujoulu",
-                    "syntymapaivat",
-                    "valmistujaiset"
-                ],
+                "refinement_tags": {
+                    "Yleinen": [
+                        "juhlatila",
+                        "haajuhla",
+                        "haapaketti",
+                        "pitopalvelu",
+                        "catering",
+                        "omajuomat",
+                        "aanentoisto",
+                        "karaoke",
+                        "terassi",
+                        "esteetön",
+                        "pikkujoulu",
+                        "syntymapaivat",
+                        "valmistujaiset"
+                    ]
+                },
                 "digitization_features": [],
                 "entertainment_features": [
                     "karaoke",
@@ -55262,7 +55262,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-30T10:53:00.110Z",
+                "last_updated": "2026-04-30T11:06:01.729Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
@@ -55586,7 +55586,7 @@
                 "seated_capacity": 80,
                 "outdoor_capacity": 0,
                 "is_accessible": true,
-                "is_lakeside": true,
+                "is_lakeside": false,
                 "has_sauna": false,
                 "has_av_tech": true,
                 "has_stage": true,
@@ -55614,22 +55614,20 @@
                 "karaoke_available": false,
                 "has_exclusive_catering": false,
                 "accommodation_included": false,
-                "refinement_tags": [
-                    "juhlatila",
-                    "kartano",
-                    "hääjuhla",
-                    "ranta",
-                    "sauna",
-                    "rantasauna",
-                    "esteetön",
-                    "terassi",
-                    "historiallinen",
-                    "kartanonpuisto",
-                    "pitopalvelu",
-                    "juhlapalvelut",
-                    "syntymäpäivät",
-                    "valmistujaiset"
-                ],
+                "refinement_tags": {
+                    "Yleinen": [
+                        "juhlatila",
+                        "kartano",
+                        "hääjuhla",
+                        "esteetön",
+                        "terassi",
+                        "historiallinen",
+                        "pitopalvelu",
+                        "juhlapalvelut",
+                        "syntymäpäivät",
+                        "valmistujaiset"
+                    ]
+                },
                 "digitization_features": [],
                 "entertainment_features": [
                     "äänentoisto",
@@ -55806,7 +55804,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-30T10:54:54.241Z",
+                "last_updated": "2026-04-30T11:06:53.377Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
@@ -58183,22 +58181,23 @@
                 "karaoke_available": false,
                 "has_exclusive_catering": false,
                 "accommodation_included": false,
-                "refinement_tags": [
-                    "juhlatila",
-                    "hääjuhla",
-                    "sauna",
-                    "kahvila",
-                    "videotykki",
-                    "esteetön",
-                    "omaruuat",
-                    "jarjestysmies",
-                    "lattiamajoitus",
-                    "historiallinen",
-                    "pikkujoulu",
-                    "syntymäpäivät",
-                    "valmistujaiset",
-                    "karonkka"
-                ],
+                "refinement_tags": {
+                    "Yleinen": [
+                        "juhlatila",
+                        "hääjuhla",
+                        "kahvila",
+                        "videotykki",
+                        "esteetön",
+                        "omaruuat",
+                        "jarjestysmies",
+                        "lattiamajoitus",
+                        "historiallinen",
+                        "pikkujoulu",
+                        "syntymäpäivät",
+                        "valmistujaiset",
+                        "karonkka"
+                    ]
+                },
                 "digitization_features": [],
                 "entertainment_features": [
                     "videotykki",
@@ -58377,7 +58376,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-30T10:54:15.362Z",
+                "last_updated": "2026-04-30T11:05:23.794Z",
                 "verified_by": "ai-enriched",
                 "status": "enriched"
             }
