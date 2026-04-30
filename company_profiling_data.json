@@ -48900,7 +48900,17 @@
                     "häät": 35,
                     "yritysjuhlat": 35,
                     "kokoukset": 35,
-                    "vapaa-aika": 35
+                    "vapaa-aika": 35,
+                    "events-and-celebrations": 98,
+                    "business-events": 92,
+                    "funerals-and-memorials": 80,
+                    "moving-and-housing": 10,
+                    "construction-and-maintenance": 20,
+                    "cottage-services": 95,
+                    "housing-company-and-contracts": 25,
+                    "startup-services": 10,
+                    "business-growth": 30,
+                    "wellbeing-and-beauty": 85
                 },
                 "priority_score": 0,
                 "paired_with": [
@@ -48926,11 +48936,64 @@
                 "home_service": false,
                 "weekend_service": true,
                 "not_suitable_for": [],
-                "paired_with_by_context": {},
-                "sub_contexts": [],
-                "node_links": [],
+                "paired_with_by_context": {
+                    "events-and-celebrations": [
+                        "majoitus",
+                        "pitopalvelu",
+                        "catering",
+                        "valokuvaaja",
+                        "kukat",
+                        "ohjelmapalvelut"
+                    ],
+                    "business-events": [
+                        "catering",
+                        "kokoustekniikka",
+                        "majoitus"
+                    ],
+                    "funerals-and-memorials": [
+                        "kahvitarjoilu",
+                        "pitopalvelu"
+                    ],
+                    "cottage-services": [
+                        "sauna",
+                        "savusauna",
+                        "majoitus"
+                    ]
+                },
+                "sub_contexts": [
+                    "perinnekylä",
+                    "savusauna",
+                    "maailman suurin savusauna",
+                    "juhlatila",
+                    "kokoustila",
+                    "majoitus",
+                    "ravintola",
+                    "pitopalvelu",
+                    "ohjelmapalvelut",
+                    "turvehoidot",
+                    "tyhy-päivä",
+                    "yritystapahtuma",
+                    "kesäteatteri",
+                    "perinnetapahtuma",
+                    "järvimaisema",
+                    "sauna",
+                    "elämyspalvelut",
+                    "ryhmämatkat"
+                ],
+                "node_links": [
+                    "LAUKAA",
+                    "KUUSA",
+                    "TUPASWILLA",
+                    "SAVUSAUNA",
+                    "MAJOITUS",
+                    "SAUNA",
+                    "KOKOUKSET",
+                    "HÄÄT",
+                    "TYHY",
+                    "KESKISUOMI"
+                ],
                 "description": "Perinnekylä ja monitoimipaikka, joka tarjoaa tiloja juhliin, kokouksiin ja virkistyspäiviin 15–150 hengen ryhmille. Tunnettu maailman suurimmasta savusaunasta (kapasiteetti 150 henkeä) . Tarjoaa majoitusta, ruokailuja, ohjelmapalveluita (mm. Nasusafari, teatteri, sepän paja), turvehoitoja, tyhy-päiviä sekä yrityspalveluita . Yritys järjestää myös yleisötapahtumia kuten naisten turvesaunailtoja, äitienpäivälounaita, perinnepäiviä ja joulumarkkinoita . Kaudesta 2026 tarjolla kesäteatteripaketteja . Sijaitsee Vinninlammen rannalla Kattamäen rinteiden kainalossa .",
-                "website": "www.tupaswilla.fi",
+                "website": "http://www.tupaswilla.fi",
                 "email": "myynti@tupaswilla.fi",
                 "phone": "0207 410100"
             },
@@ -48968,10 +49031,31 @@
                 "karaoke_available": false,
                 "has_exclusive_catering": false,
                 "accommodation_included": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "juhlatila",
+                    "hääjuhla",
+                    "savusauna",
+                    "sauna",
+                    "pitopalvelu",
+                    "majoitus",
+                    "järvimaisema",
+                    "perinnekylä",
+                    "turvehoito",
+                    "tyhy",
+                    "kesäteatteri"
+                ],
                 "digitization_features": [],
-                "entertainment_features": [],
-                "collaborated_with": []
+                "entertainment_features": [
+                    "sauna",
+                    "savusauna",
+                    "ohjelmapalvelut"
+                ],
+                "collaborated_with": [
+                    "pitopalvelu",
+                    "valokuvaajat",
+                    "ohjelmapalveluyritykset",
+                    "majoituspalvelut"
+                ]
             },
             "business_events": {
                 "meeting_capacity": 80,
@@ -48991,10 +49075,27 @@
                 "branding_support": false,
                 "av_support": false,
                 "staff_events_specialized": true,
-                "refinement_tags": [],
-                "wellbeing_and_activity_features": [],
+                "refinement_tags": [
+                    "kokous",
+                    "seminaari",
+                    "yritystapahtuma",
+                    "tyhy",
+                    "strategiapäivä",
+                    "koulutustila",
+                    "saunaelämys",
+                    "majoitus",
+                    "pitopalvelu"
+                ],
+                "wellbeing_and_activity_features": [
+                    "sauna",
+                    "turvehoito"
+                ],
                 "entertainment_features": [],
-                "collaborated_with": []
+                "collaborated_with": [
+                    "catering-palvelut",
+                    "yrityskouluttajat",
+                    "ohjelmapalvelut"
+                ]
             },
             "funerals_and_memorials": {
                 "memorial_service_capacity": 80,
@@ -49008,9 +49109,18 @@
                 "memorial_arrangements": false,
                 "transport_assistance": false,
                 "urgent_booking_available": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "muistotilaisuus",
+                    "kahvitarjoilu",
+                    "pitopalvelu",
+                    "rauhaisa tila",
+                    "järvimaisema"
+                ],
                 "digitization_features": [],
-                "collaborated_with": []
+                "collaborated_with": [
+                    "pitopalvelu",
+                    "kukat"
+                ]
             },
             "moving_and_housing": {
                 "moving_truck_available": false,
@@ -49054,7 +49164,12 @@
                 "dock_maintenance": false,
                 "sauna_services": false,
                 "guest_preparation_service": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "savusauna",
+                    "sauna",
+                    "perinnekylä",
+                    "majoitus"
+                ],
                 "collaborated_with": []
             },
             "housing_company_and_contracts": {
@@ -49108,13 +49223,18 @@
                 "event_makeup": false,
                 "bridal_services": false,
                 "group_bookings": true,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "sauna",
+                    "turvehoito",
+                    "hyvinvointi",
+                    "ryhmäpalvelu"
+                ],
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-27T06:09:03.898Z",
-                "verified_by": "AI-analysis-v1",
-                "status": "draft"
+                "last_updated": "2026-04-30T11:34:40.868Z",
+                "verified_by": "ai-enriched-v2",
+                "status": "enriched"
             }
         },
         "company-244": {
@@ -55567,7 +55687,7 @@
                     "KARTANO",
                     "MAJOITUS"
                 ],
-                "description": "Vuonteen Helmi on Laukaan Vihtavuoressa sijaitseva vuonna 1906 valmistunut juhlatalo, joka tarjoaa historiallisen ja ainutlaatuisen miljöön juhlille ja tapahtumille. Kartanomaisessa jugend-rakennuksessa on juhlasali 80 hengelle ja kabinetti 20 hengelle. Alueella on myös urheilukenttä ja pieni tenniskenttä.",
+                "description": "Vuonteen Helmi on Laukaan Vihtavuoressa sijaitseva vuonna 1906 valmistunut juhlatalo, joka tarjoaa historiallisen ja ainutlaatuisen miljöön juhlille ja tapahtumille. Kartanomaisessa jugend-rakennuksessa on juhlasali 80 hengelle, kabinetti 20 hengelle ja rantasauna. Alueella on myös urheilukenttä ja pieni tenniskenttä.",
                 "website": "http://www.vuonteenhelmi.fi",
                 "email": "vuonteenhelmi@gmail.com",
                 "phone": "+358 40 849 6459"
@@ -55655,6 +55775,8 @@
                     "juhlapaikka"
                 ],
                 "wellbeing_and_activity_features": [
+                    "sauna",
+                    "rantasauna",
                     "kartanonpuisto"
                 ],
                 "entertainment_features": [
