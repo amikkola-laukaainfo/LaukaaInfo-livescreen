@@ -427,6 +427,13 @@ const NEEDS_CONFIG = {
                 "skipIf": "!isSelected('paatarve', 'Muistotilaisuus')",
                 "options": [
                     {
+                        "label": "Rauhallinen muistotila",
+                        "tags": ["juhlatila"],
+                        "capacity_req": 20,
+                        "profilointi_filter": { "section": "funerals_and_memorials", "field": "quiet_private_space", "value": true },
+                        "require_fits_for": { "key": "funerals_and_memorials", "min": 30 }
+                    },
+                    {
                         "label": "Seurakuntasali",
                         "tags": ["seurakunta"]
                     },
