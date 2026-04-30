@@ -600,6 +600,9 @@
     <script src="needs_config.js"></script>
     <script src="script.js"></script>
     <script>
+        let currentNeedId = new URLSearchParams(window.location.search).get('id');
+        let currentStepIndex = 0;
+        let selections = {};
         let taxonomyData = null;
 
         async function loadTaxonomy() {
