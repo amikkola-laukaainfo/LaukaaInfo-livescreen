@@ -56,3 +56,33 @@ Voit antaa lisätietoja eri kategorioissa (esim. `events_and_celebrations` tai `
 1.  **Väliviivat avaimissa:** Käytä `yrityksen-kehittäminen`, EI `yrityksen kehittäminen`.
 2.  **Pienet alkukirjaimet:** `sub_contexts`-listan arvot kannattaa kirjoittaa pienellä (esim. `digitointi`).
 3.  **Kapasiteetti:** Jos `capacity_max` on 0 tai puuttuu, yritystä ei ehdoteta tilaksi, jos haku vaatii tiettyä henkilömäärää.
+
+## 5. Alihankkijat ja yhteistyökumppanit
+
+Jos yritys tarjoaa palveluitaan toisen yrityksen (esim. juhlatilan) kautta tai toimii suositeltuna kumppanina, käytä näitä kenttiä:
+
+### `paired_with_by_context` (Yleiset palvelukumppanit)
+Käytetään, kun yritys tarjoaa lisäpalvelua (kuten kukat, kuljetus) tietyssä elämäntilanteessa, mutta se ei ole yrityksen pääkategoria.
+*   **Käyttö:** Lisää `core`-osioon. Avaimena konteksti (esim. `funerals-and-memorials`) ja arvona lista palveluista.
+*   **Esimerkki:** Ruokakauppa, joka myy myös kukkia hautajaisiin:
+    ```json
+    "paired_with_by_context": {
+        "funerals-and-memorials": ["Kukat"]
+    }
+    ```
+
+### `collaborated_with` (Suorat yrityskumppanit)
+Käytetään, kun halutaan linkittää kaksi tiettyä yritystä toisiinsa (esim. hääpaikka ja sen vakio-DJ tai pitopalvelu).
+*   **Käyttö:** Lisää kontekstikohtaiseen osioon (esim. `events_and_celebrations`). Arvona lista kumppaniyritysten ID-tunnuksista.
+*   **Esimerkki:** Juhlatila, jolla on vakiokumppanina kukkakauppa (company-94):
+    ```json
+    "events_and_celebrations": {
+        "collaborated_with": ["company-94"]
+    }
+    ```
+
+### Esimerkki: Juhlatila ja Kukkakauppa
+Jos taso 1 on **Juhlatila** ja käyttäjä valitsee **Hautajaiset**, järjestelmä suosittelee:
+1.  Juhlatilaa, jonka `fits_for` hautajaisiin on korkea.
+2.  Kukkakauppaa, jolla on joko `sub_contexts: ["kukkakauppa"]` tai joka on merkitty juhlatilan kumppaniksi (`collaborated_with`).
+

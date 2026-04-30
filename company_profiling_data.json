@@ -17890,7 +17890,7 @@
                         "kukat"
                     ]
                 },
-                "sub_contexts": [],
+                "sub_contexts": ["kukkakauppa"],
                 "node_links": [],
                 "description": "",
                 "website": "",
@@ -17960,9 +17960,9 @@
                 "accessible_entry": false,
                 "memorial_catering": false,
                 "coffee_service": false,
-                "flower_arrangements": false,
+                "flower_arrangements": true,
                 "memorial_menu_available": false,
-                "funeral_flowers": false,
+                "funeral_flowers": true,
                 "memorial_arrangements": false,
                 "transport_assistance": false,
                 "urgent_booking_available": false,
