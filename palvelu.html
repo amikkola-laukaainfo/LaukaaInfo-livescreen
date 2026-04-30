@@ -1089,8 +1089,8 @@
                                     // NEW: Pehmeämpi vertailu jos kyseessä on saman pääkontekstin sisäinen haku
                                     const hasCommonBase = selections._sub_contexts.some(sc => {
                                         const scLower = sc.toLowerCase();
-                                        // Etsitään yhteisiä sanoja tai alkuosia (hää, yritys, juhla, hautajais)
-                                        const bases = ['hää', 'yrity', 'juhla', 'hautaja', 'kokous', 'syntymä'];
+                                        // Etsitään yhteisiä sanoja tai alkuosia (hää, yritys, juhla, hautajais, muisto)
+                                        const bases = ['hää', 'yrity', 'juhla', 'hautaja', 'kokous', 'syntymä', 'muisto'];
                                         return bases.some(b => scLower.includes(b) && companySubContexts.some(csc => csc.toLowerCase().includes(b)));
                                     });
                                     if (hasCommonBase) isSubContextMatch = true;
