@@ -1005,8 +1005,20 @@
                 const options = Array.isArray(stepSelection) ? stepSelection : [stepSelection];
 
                 options.forEach(opt => {
+                    // Jos "Saunatilat" on jo valittu palveluksi, ei näytetä sitä erillisenä ryhmänä
+                    if (globalRequestedFeatures.sauna && opt.label?.toLowerCase() === 'saunatilat') return;
+
                     const companiesForOpt = window.allCompanies.filter((c, idx) => {
                         const isMediazoo = (c.id === 'company-2' || c.nimi === 'Mediazoo');
+                        
+                        // NEW: Jos Saunatilat on valittu, ja kyseessä on Juhlatila tai Kesäjuhlat -ehdotus,
+                        // rajataan vain tiloihin joissa on sauna.
+                        const isVenueOrCore = (opt.label && (opt.label.toLowerCase().includes('juhlatila') || opt.label.toLowerCase().includes('kesäjuhla')));
+                        if (globalRequestedFeatures.sauna && isVenueOrCore) {
+                            const catData = getCategoryData(c, currentProfilingKey);
+                            if (!catData?.has_sauna) return false;
+                        }
+
                         const fitsScore = getFitsForScore(c, currentProfilingKey);
                         
                         if (isMediazoo) console.log(`DEBUG: Checking Mediazoo for option "${opt.label}"`, { currentProfilingKey, fitsScore, selections });
