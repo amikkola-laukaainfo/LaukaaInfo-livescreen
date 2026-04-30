@@ -57826,10 +57826,10 @@
             "name": "Työväentalo Toivola Lievestuore",
             "core": {
                 "fits_for": {
-                    "events-and-celebrations": 90,
-                    "business-events": 80
+                    "events-and-celebrations": 95,
+                    "business-events": 85
                 },
-                "priority_score": 0,
+                "priority_score": 80,
                 "paired_with": [],
                 "service_area": {
                     "mode": "TOIMIPISTE",
@@ -57837,13 +57837,13 @@
                     "regions": [
                         "Lievestuore"
                     ],
-                    "note": ""
+                    "note": "Soveltuu erityisesti juhliin, häihin ja yritystilaisuuksiin Lievestuoreen alueella."
                 },
                 "emergency_available": false,
                 "contract_customer_available": false,
-                "corporate_clients": false,
+                "corporate_clients": true,
                 "home_service": false,
-                "weekend_service": false,
+                "weekend_service": true,
                 "not_suitable_for": [],
                 "paired_with_by_context": {},
                 "sub_contexts": [
@@ -57863,7 +57863,9 @@
                     "jarjestysmies",
                     "lattiamajoitus",
                     "tyovaentalo",
-                    "historiallinen"
+                    "historiallinen",
+                    "juhlatila",
+                    "yritystilaisuudet"
                 ],
                 "node_links": [
                     "LAUKAA",
@@ -57871,7 +57873,8 @@
                     "JUHLATILA",
                     "HAAT",
                     "KOKOUSTILA",
-                    "TYOVAENTALO"
+                    "TYOVAENTALO",
+                    "YRITYSTAPAHTUMAT"
                 ],
                 "description": "Yli satavuotias tunnelmallinen juhla- ja tapahtumatalo Lievestuoreella. Soveltuu häihin, kokouksiin, muistotilaisuuksiin, seminaareihin, pikkujouluihin, karonkkoihin ja muihin juhliin. Tiloissa suuri juhlasali, kahvila, sauna, videotykki sekä esteetön ja muunneltava tila. Omat ruoat ja juomat sallittu, kahvilapalvelut ja järjestysmiespalvelut tilauksesta.",
                 "website": "https://visitlaukaa.fi/palvelu/tyovaentalo-toivola/",
@@ -57879,21 +57882,21 @@
                 "phone": "040 054 0995"
             },
             "events_and_celebrations": {
-                "capacity_max": 0,
-                "seated_capacity": 0,
+                "capacity_max": 150,
+                "seated_capacity": 120,
                 "outdoor_capacity": 0,
                 "is_accessible": true,
                 "is_lakeside": false,
                 "has_sauna": true,
                 "has_av_tech": true,
                 "has_stage": false,
-                "accommodation_beds": 0,
+                "accommodation_beds": 20,
                 "alcohol_license": false,
                 "private_booking": true,
-                "late_night_events": false,
+                "late_night_events": true,
                 "wedding_specialized": true,
                 "catering_min_capacity": 0,
-                "catering_max_capacity": 0,
+                "catering_max_capacity": 150,
                 "dietary_specialties": [],
                 "staff_included": false,
                 "wedding_menu_available": false,
@@ -57902,7 +57905,7 @@
                 "wedding_photography": false,
                 "drone_available": false,
                 "video_production": false,
-                "live_music": false,
+                "live_music": true,
                 "dj_services": false,
                 "karaoke_available": false,
                 "has_exclusive_catering": false,
@@ -57910,7 +57913,6 @@
                 "refinement_tags": [
                     "juhlatila",
                     "hääjuhla",
-                    "haapaketti",
                     "sauna",
                     "kahvila",
                     "videotykki",
@@ -57933,9 +57935,9 @@
                 "collaborated_with": []
             },
             "business_events": {
-                "meeting_capacity": 0,
-                "seminar_capacity": 0,
-                "conference_rooms": 0,
+                "meeting_capacity": 80,
+                "seminar_capacity": 120,
+                "conference_rooms": 1,
                 "has_projector": true,
                 "has_streaming": false,
                 "has_wifi": false,
@@ -57949,7 +57951,7 @@
                 "corporate_gifts": false,
                 "branding_support": false,
                 "av_support": true,
-                "staff_events_specialized": false,
+                "staff_events_specialized": true,
                 "refinement_tags": [
                     "kokoustila",
                     "seminaari",
@@ -57972,7 +57974,7 @@
                 "collaborated_with": []
             },
             "funerals_and_memorials": {
-                "memorial_service_capacity": 0,
+                "memorial_service_capacity": 80,
                 "quiet_private_space": true,
                 "accessible_entry": true,
                 "memorial_catering": false,
@@ -58102,9 +58104,9 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T16:39:37.473Z",
-                "verified_by": "csv-reconciliation",
-                "status": "draft"
+                "last_updated": "2026-04-30T09:48:53.879Z",
+                "verified_by": "ai-enriched",
+                "status": "enriched"
             }
         },
         "company-296": {
