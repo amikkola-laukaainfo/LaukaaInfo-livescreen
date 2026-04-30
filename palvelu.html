@@ -1298,7 +1298,11 @@
                                 if (!isProfiledMatch && intent.nodeLinks) {
                                     const links = c.profiling?.core?.node_links || [];
                                     if (intent.nodeLinks.some(nl => links.includes(nl))) {
-                                        if (labelLower.includes('tila') || labelLower.includes('palvelu') || (opt.tags && opt.tags.some(t => t.toLowerCase().includes('tila')))) {
+                                        const isTila = labelLower.includes('tila') && !labelLower.includes('tilaisuus');
+                                        if (isTila || labelLower.includes('palvelu') || (opt.tags && opt.tags.some(t => {
+                                            const tl = t.toLowerCase();
+                                            return tl.includes('tila') && !tl.includes('tilaisuus');
+                                        }))) {
                                             isProfiledMatch = true;
                                         }
                                     }
@@ -1331,7 +1335,7 @@
                             }
                             
                             // Jos kyseessä on tilatyyppinen optio tai yritys, ja hakuun liittyy kapasiteettivaatimus, piilotetaan nollakapasiteetin kohteet.
-                            const isVenueType = hasVenueTag || (opt.label && opt.label.toLowerCase().includes('tila')) || opt.node_link === 'ROLE_VENUE';
+                            const isVenueType = hasVenueTag || (opt.label && opt.label.toLowerCase().includes('tila') && !opt.label.toLowerCase().includes('tilaisuus')) || opt.node_link === 'ROLE_VENUE';
                             if (requestedCapacity > 0 && isVenueType && cap === 0) {
                                 return false;
                             }
@@ -1644,7 +1648,7 @@
             } else {
                 if (countEl) countEl.textContent = `Löysimme ${totalFoundCount} ehdotusta.`;
                 if (list) list.innerHTML = htmlResults;
-                renderTaxonomyInfo(currentProfilingKey);
+                renderTaxonomyInfo(globalProfilingKey);
                 renderNextSteps(globalProfilingKey);
                 renderTips(currentNeedId);
             }
