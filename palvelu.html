@@ -1531,7 +1531,11 @@
 
             if (c.profiling) {
                 const core = c.profiling.core || {};
-                if (requestedCapacity > 0) {
+                
+                // Jos kyseessä on pitopalvelu, ei näytetä "Tilaan mahtuu max X hlö" -ilmoitusta, koska ruokaa riittää
+                const isFoodService = ((c.kategoria || '') + ' ' + (c.tags || '') + ' ' + (c.nimi || '')).toLowerCase().includes('pitopalvelu');
+                
+                if (requestedCapacity > 0 && !isFoodService) {
                     const cap = getCompanyCapacity(c, profilingKey);
                     if (cap > 0) {
                         if (cap >= requestedCapacity) capacityNote = `<div style="font-size:0.85rem; color:#16a34a; font-weight:700; margin-bottom:10px;">✅ Sopii: max n. ${cap} hlö</div>`;
@@ -1634,7 +1638,8 @@
                 }
 
                 // Taso 3: Kapasiteetti ja ominaisuudet
-                if (requestedCapacity > 0) {
+                const isFoodService = ((c.kategoria || '') + ' ' + (c.tags || '') + ' ' + (c.nimi || '')).toLowerCase().includes('pitopalvelu');
+                if (requestedCapacity > 0 && !isFoodService) {
                     const cap = getCompanyCapacity(c, profilingKey);
                     if (cap >= requestedCapacity) reasons.push("Kapasiteetti riittää");
                 }
