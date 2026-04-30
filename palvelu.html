@@ -1232,6 +1232,55 @@
                 });
             });
 
+            // Specialized grouping for Corporate Events + Accommodation
+            if ((currentNeedId === 'yritysjuhlat' || currentNeedId === 'yritystilaisuudet') && matchingGroups.length > 1) {
+                const venueGroup = matchingGroups.find(g => g.opt.tags && (g.opt.tags.includes('juhlatila') || g.opt.tags.includes('kokoustilat') || g.opt.tags.includes('juhlasali')));
+                const stayGroup = matchingGroups.find(g => g.opt.label === 'Majoitus');
+
+                if (venueGroup && stayGroup) {
+                    const allVenues = venueGroup.companies;
+                    const allStays = stayGroup.companies; // Currently only contains stay-only due to deduplication
+                    
+                    const venuesWithoutStay = allVenues.filter(c => {
+                        const catData = getCategoryData(c, 'events_and_celebrations');
+                        return !catData || !catData.accommodation_beds || catData.accommodation_beds === 0;
+                    });
+                    
+                    const venuesWithStay = allVenues.filter(c => {
+                        const catData = getCategoryData(c, 'events_and_celebrations');
+                        return catData && catData.accommodation_beds > 0;
+                    });
+                    
+                    // Mark venuesWithStay so they can be sorted first in Group 2
+                    venuesWithStay.forEach(c => c._isBothMatch = true);
+                    
+                    // Group 1: Juhlatila yritykselle
+                    const newGroup1 = {
+                        opt: { ...venueGroup.opt, label: "Juhlatila yritykselle" },
+                        companies: venuesWithoutStay
+                    };
+                    
+                    // Group 2: Majoitus ja/tai juhlatila
+                    const newGroup2 = {
+                        opt: { ...stayGroup.opt, label: "Majoitus ja/tai juhlatila" },
+                        companies: [...venuesWithStay, ...allStays]
+                    };
+                    
+                    // Replace the old groups in the list, maintaining overall order
+                    const newMatchingGroups = [];
+                    matchingGroups.forEach(g => {
+                        if (g === venueGroup) {
+                            if (newGroup1.companies.length > 0) newMatchingGroups.push(newGroup1);
+                        } else if (g === stayGroup) {
+                            if (newGroup2.companies.length > 0) newMatchingGroups.push(newGroup2);
+                        } else {
+                            newMatchingGroups.push(g);
+                        }
+                    });
+                    matchingGroups = newMatchingGroups;
+                }
+            }
+
             // Tallennetaan tilamuuttujiin renderöintiä varten
             matchingGroupsData = matchingGroups;
             selectedAnchorCompanyId = null;
@@ -1331,6 +1380,10 @@
 
                     if (globalActiveCollaboratorsSet.has(a.id) || globalActiveCollaboratorsSet.has(a.nimi)) scoreA += 45;
                     if (globalActiveCollaboratorsSet.has(b.id) || globalActiveCollaboratorsSet.has(b.nimi)) scoreB += 45;
+
+                    // NEW: Prioritize "Both" matches (Stay + Venue) in the combined Corporate group
+                    if (a._isBothMatch) scoreA += 5000;
+                    if (b._isBothMatch) scoreB += 5000;
 
                     if (globalRequestedCapacity > 0) {
                         const capA = getCompanyCapacity(a, globalProfilingKey);
