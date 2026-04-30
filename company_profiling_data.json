@@ -17890,7 +17890,7 @@
                         "kukat"
                     ]
                 },
-                "sub_contexts": ["kukkakauppa"],
+                "sub_contexts": [],
                 "node_links": [],
                 "description": "",
                 "website": "",
@@ -17960,9 +17960,9 @@
                 "accessible_entry": false,
                 "memorial_catering": false,
                 "coffee_service": false,
-                "flower_arrangements": true,
+                "flower_arrangements": false,
                 "memorial_menu_available": false,
-                "funeral_flowers": true,
+                "funeral_flowers": false,
                 "memorial_arrangements": false,
                 "transport_assistance": false,
                 "urgent_booking_available": false,
@@ -54693,7 +54693,7 @@
                 "status": "draft"
             }
         },
-        "company-278": {
+        "company-280": {
             "name": "Juhlatalo Humina Lievestuore",
             "core": {
                 "fits_for": {
@@ -54998,7 +54998,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-30T08:07:55.569Z",
+                "last_updated": "2026-04-30T10:49:57.448Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
