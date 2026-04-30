@@ -53682,10 +53682,18 @@
             "name": "Terviksen tilat",
             "core": {
                 "fits_for": {
-                    "events-and-celebrations": true,
+                    "events-and-celebrations": 80,
                     "yritysjuhlat": 15,
-                    "wellbeing-and-beauty": 39,
-                    "häät": 18
+                    "wellbeing-and-beauty": 30,
+                    "häät": 18,
+                    "business-events": 40,
+                    "funerals-and-memorials": 0,
+                    "moving-and-housing": 10,
+                    "construction-and-maintenance": 10,
+                    "cottage-services": 10,
+                    "housing-company-and-contracts": 20,
+                    "startup-services": 0,
+                    "business-growth": 0
                 },
                 "priority_score": 0,
                 "paired_with": [],
@@ -53699,10 +53707,13 @@
                 },
                 "emergency_available": false,
                 "contract_customer_available": false,
-                "corporate_clients": false,
+                "corporate_clients": true,
                 "home_service": false,
                 "weekend_service": false,
-                "not_suitable_for": [],
+                "not_suitable_for": [
+                    "hautajaiset",
+                    "muisto"
+                ],
                 "paired_with_by_context": {},
                 "sub_contexts": [
                     "juhlatila",
@@ -53716,8 +53727,7 @@
                     "juhlapalvelut",
                     "tilavuokraus",
                     "häät",
-                    "yritystapahtumat",
-                    "muistotilaisuudet"
+                    "yritystapahtumat"
                 ],
                 "node_links": [
                     "LAUKAA",
@@ -53733,9 +53743,9 @@
                 "phone": ""
             },
             "events_and_celebrations": {
-                "capacity_max": 0,
-                "seated_capacity": 0,
-                "outdoor_capacity": 0,
+                "capacity_max": 60,
+                "seated_capacity": 60,
+                "outdoor_capacity": 20,
                 "is_accessible": false,
                 "is_lakeside": false,
                 "has_sauna": false,
@@ -53773,8 +53783,8 @@
                 "collaborated_with": []
             },
             "business_events": {
-                "meeting_capacity": 0,
-                "seminar_capacity": 0,
+                "meeting_capacity": 40,
+                "seminar_capacity": 40,
                 "conference_rooms": 0,
                 "has_projector": false,
                 "has_streaming": false,
@@ -53801,7 +53811,7 @@
                 "collaborated_with": []
             },
             "funerals_and_memorials": {
-                "memorial_service_capacity": 0,
+                "memorial_service_capacity": 50,
                 "quiet_private_space": true,
                 "accessible_entry": false,
                 "memorial_catering": false,
@@ -53919,8 +53929,8 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T16:11:44.722Z",
-                "verified_by": "csv-reconciliation",
+                "last_updated": "2026-04-30T12:49:48.211Z",
+                "verified_by": "ai-analysis-v2",
                 "status": "draft"
             }
         },
@@ -55094,7 +55104,8 @@
             "core": {
                 "fits_for": {
                     "events-and-celebrations": 92,
-                    "business-events": 78
+                    "business-events": 78,
+                    "funerals-and-memorials": 50
                 },
                 "priority_score": 0,
                 "paired_with": [],
@@ -55388,7 +55399,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-30T11:19:38.197Z",
+                "last_updated": "2026-04-30T12:50:42.506Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
