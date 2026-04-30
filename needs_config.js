@@ -35,20 +35,11 @@ const NEEDS_CONFIG = {
                 ]
             },
             {
-                "id": "pitopalvelu",
-                "question": "Tarvitsetko pitopalvelun?",
-                "skipIf": "getSelectedCompanyProfilointi('tila', 'events_and_celebrations', 'catering_available')",
-                "skipMessage": "Valitsemassasi tilassa on oma catering — pitopalvelu sisältyy.",
-                "options": [
-                    { "label": "Kyllä — tarvitsen pitopalvelun", "tags": ["pitopalvelu"] },
-                    { "label": "En tiedä vielä", "tags": [] }
-                ]
-            },
-            {
                 "id": "palvelut",
                 "multiple": true,
-                "question": "Mitä muita palveluita tarvitset juhlatpäivään?",
+                "question": "Mitä palveluita tarvitset juhlapäivään?",
                 "options": [
+                    { "label": "Pitopalvelu", "tags": ["pitopalvelu"] },
                     { "label": "Valokuvaaja", "tags": ["valokuvaus", "valokuvaaja"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "hääkuvaus" } },
                     { "label": "Videokuvaaja", "tags": ["videotuotanto", "videokuvaus", "videokuvaaja"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "häävideo" } },
                     { "label": "Kukkakauppa & Koristelu", "tags": ["kukkakauppa"] },
