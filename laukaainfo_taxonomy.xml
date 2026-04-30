@@ -186,6 +186,36 @@
       </node_links>
     </intent>
 
+
+    <intent id="funerals-and-memorials" label="Hautajaiset ja muistotilaisuudet">
+      <subcontexts>
+        <tag>hautauspalvelu</tag>
+        <tag>muistotilaisuus</tag>
+        <tag>perunkirjoitus</tag>
+        <tag>hautakivi</tag>
+      </subcontexts>
+
+      <node_links>
+        <node>HAUTAUSPALVELUT</node>
+        <node>MUISTOTILAISUUS</node>
+      </node_links>
+    </intent>
+
+
+    <intent id="housing-company-and-contracts" label="Isännöinti ja taloyhtiöpalvelut">
+      <subcontexts>
+        <tag>isännöinti</tag>
+        <tag>kiinteistöhuolto</tag>
+        <tag>siivous</tag>
+        <tag>tilintarkastus</tag>
+      </subcontexts>
+
+      <node_links>
+        <node>ISÄNNÖINTI</node>
+        <node>KIINTEISTÖHUOLTO</node>
+      </node_links>
+    </intent>
+
   </intents>
 
 
@@ -206,6 +236,7 @@
     <type id="CATERING"/>
     <type id="MAJOITUS"/>
     <type id="SAUNA"/>
+    <type id="KUKAT"/>
   </service_types>
 
 
@@ -214,11 +245,15 @@
 
     <!-- Esim. ristiinmyynti -->
     <relation from="events-and-celebrations" to="accommodation" type="cross-sell"/>
-    <relation from="events-and-celebrations" to="catering" type="cross-sell"/>
+    <relation from="events-and-celebrations" to="CATERING" type="cross-sell"/>
 
     <!-- Esim. looginen yhteys -->
-    <relation from="videotuotanto" to="valokuvaus" type="related"/>
-    <relation from="kokoustila" to="catering" type="supporting"/>
+    <relation from="VIDEOTUOTANTO" to="VALOKUVAUS" type="related"/>
+    <relation from="kokoustila" to="CATERING" type="supporting"/>
+
+    <relation from="funerals-and-memorials" to="CATERING" type="supporting"/>
+    <relation from="funerals-and-memorials" to="KUKAT" type="supporting"/>
+    <relation from="funerals-and-memorials" to="VALOKUVAUS" type="supporting"/>
 
   </relations>
 
