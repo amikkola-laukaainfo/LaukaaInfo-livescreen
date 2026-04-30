@@ -2128,11 +2128,20 @@
                     "kokoukset": 45,
                     "yrityksen-kehittäminen": 92,
                     "juhlat-ja-merkkipäivät": 78,
-                    "business-growth": 72,
+                    "business-growth": 90,
                     "yritysjuhlat": 82,
                     "hautajaiset": 68,
                     "muutto": 52,
-                    "yrityksen-perustaminen": 76
+                    "yrityksen-perustaminen": 76,
+                    "events-and-celebrations": 85,
+                    "business-events": 80,
+                    "funerals-and-memorials": 70,
+                    "moving-and-housing": 30,
+                    "construction-and-maintenance": 20,
+                    "cottage-services": 10,
+                    "housing-company-and-contracts": 20,
+                    "startup-services": 85,
+                    "wellbeing-and-beauty": 10
                 },
                 "priority_score": 78,
                 "paired_with": [
@@ -2189,27 +2198,54 @@
                         "markkinointi",
                         "sisällöntuotanto",
                         "videotuotanto"
+                    ],
+                    "events-and-celebrations": [
+                        "valokuvaaja",
+                        "videokuvaaja",
+                        "drone-kuvaus"
+                    ],
+                    "funerals-and-memorials": [
+                        "valokuvaaja",
+                        "videokuvaaja",
+                        "muistovideo"
+                    ],
+                    "business-events": [
+                        "valokuvaaja",
+                        "videokuvaaja",
+                        "streamaus",
+                        "videotuotanto"
+                    ],
+                    "startup-services": [
+                        "verkkosivut",
+                        "brändäys",
+                        "logo"
+                    ],
+                    "business-growth": [
+                        "markkinointi",
+                        "sisällöntuotanto",
+                        "videotuotanto",
+                        "google-mainonta",
+                        "somemainonta"
                     ]
                 },
                 "sub_contexts": [
-                    "muistotilaisuus",
                     "muistovideo",
-                    "häävideot",
+                    "häävideo",
                     "häävideoiden editointi",
-                    "hääkoosteet",
+                    "hääkooste",
                     "valokuvaaja",
                     "videokuvaaja",
                     "digitointi",
                     "arkistointi",
-                    "vanhojen valokuvien digitointi",
-                    "yritysvideot",
+                    "valokuvien digitointi",
+                    "yritysvideo",
                     "drone-kuvaus",
-                    "wordpress-sivustot",
-                    "digipainotuotteet",
+                    "wordpress-sivusto",
+                    "digipainotuote",
                     "verkkosivut",
                     "brändäys",
                     "logo",
-                    "yrityskuvat",
+                    "yrityskuvaus",
                     "digimarkkinointi",
                     "somemainonta",
                     "google-mainonta",
@@ -2224,13 +2260,13 @@
                     "DIGITOINTI",
                     "VALOKUVAUS",
                     "VIDEOTUOTANTO",
-                    "YRITYKSEN_KEHITTAMINEN",
-                    "YRITYKSEN_PERUSTAMINEN",
-                    "DIGIMARKKINOINTI"
+                    "DIGIMARKKINOINTI",
+                    "VERKKOSIVUT",
+                    "BRÄNDÄYS"
                 ],
-                "description": "Digimedian palveluihin erikoistunut yritys, joka tarjoaa digitointipalveluja (videokasetit, kaitafilmit, valokuvat, diat, negatiivit, äänikelat ja yritysarkistot), video- ja animaatiotuotantoa, valokuvausta, verkkosivujen ja some-sisällön suunnittelua, digipainotuotteita, brändäystä sekä digitaalisen markkinoinnin konsultointia. Palveluun kuuluu myös WordPress-sivustot, Android- ja web-sovellukset, ilmakuvaus, asuntovideot sekä digitaalisen median hyötyjen ja haasteiden kartoitus yritysasiakkaille. Mediazoo toimii Lievestuoreella Keski-Suomessa ja palvelee digitointiasiakkaita koko Suomessa myös postitse.",
-                "website": "[www.mediazoo.fi](http://www.mediazoo.fi)",
-                "email": "[info@mediazoo.fi](mailto:info@mediazoo.fi)",
+                "description": "Digimedian palveluihin erikoistunut yritys, joka tarjoaa digitointipalveluja, video- ja animaatiotuotantoa, valokuvausta sekä verkkosivujen ja digitaalisen markkinoinnin ratkaisuja. Palveluihin kuuluvat videokasettien, filmien ja valokuvien digitointi, yritysvideot, ilmakuvaus, WordPress-verkkosivut, brändäys, logot ja sisällöntuotanto. Mediazoo palvelee sekä yksityis- että yritysasiakkaita Keski-Suomessa ja digitointipalveluissa koko Suomessa.",
+                "website": "http://www.mediazoo.fi",
+                "email": "info@mediazoo.fi",
                 "phone": "041-4655290"
             },
             "events_and_celebrations": {
@@ -2267,20 +2303,24 @@
                     "juhlakuvaus",
                     "ilmakuvaus",
                     "drone-kuvaus",
-                    "videotuotanto"
+                    "videotuotanto",
+                    "valokuvaus"
                 ],
                 "digitization_features": [
-                    "vanhojen valokuvien digitointi",
-                    "VHS / DVD digitointi",
-                    "diojen, negatiivien ja kaitafilmien digitointi",
-                    "häävideoiden editointi",
-                    "hääkoosteet",
-                    "koostepalvelu"
+                    "valokuvien digitointi",
+                    "vhs digitointi",
+                    "diojen digitointi",
+                    "negatiivien digitointi",
+                    "kaitafilmien digitointi",
+                    "häävideo editointi"
                 ],
                 "entertainment_features": [
-                    "hääohjelmaksi soveltuvat diashow- ja multimediaesitykset"
+                    "diashow esitys"
                 ],
-                "collaborated_with": []
+                "collaborated_with": [
+                    "valokuvaaja",
+                    "pitopalvelu"
+                ]
             },
             "business_events": {
                 "meeting_capacity": 0,
@@ -2301,21 +2341,22 @@
                 "av_support": true,
                 "staff_events_specialized": true,
                 "refinement_tags": [
-                    "yritysvideot",
+                    "yritysvideo",
                     "streamaus",
                     "brändäys",
                     "google-mainonta",
-                    "somemainonta"
+                    "somemainonta",
+                    "videotuotanto"
                 ],
                 "wellbeing_and_activity_features": [
-                    "koulutukset ja työpajat yrityksille",
-                    "digitaito- ja viestintävalmennukset",
-                    "oppimisen psykologiaan liittyvät työpajat",
-                    "ajattelun selkeyttämisen ja tiedonhallinnan koulutukset",
-                    "paikan päällä tai etänä toteutettavat kehittämispäivät"
+                    "koulutus",
+                    "työpaja",
+                    "viestintävalmennus"
                 ],
                 "entertainment_features": [],
-                "collaborated_with": []
+                "collaborated_with": [
+                    "markkinointitoimisto"
+                ]
             },
             "funerals_and_memorials": {
                 "memorial_service_capacity": 0,
@@ -2331,12 +2372,12 @@
                 "urgent_booking_available": false,
                 "refinement_tags": [
                     "muistovideo",
-                    "muistokuvakooste"
+                    "kuvakooste"
                 ],
                 "digitization_features": [
-                    "muistotilaisuuksien ja perhearkistojen videoiden digitointi",
-                    "valokuvien, diojen ja negatiivien digitointi",
-                    "muisteluun soveltuvat diashow- ja kuvakirjapalvelut"
+                    "perhearkiston digitointi",
+                    "valokuvien digitointi",
+                    "videon digitointi"
                 ],
                 "collaborated_with": []
             },
@@ -2351,10 +2392,13 @@
                 "electrician_available": false,
                 "renovation_support": false,
                 "insurance_support": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "asuntovideo",
+                    "kiinteistökuvaus"
+                ],
                 "digitization_features": [
-                    "kotien vanhojen valokuva- ja videoarkistojen digitointi",
-                    "asuntovideot"
+                    "kotivideo digitointi",
+                    "valokuva digitointi"
                 ],
                 "collaborated_with": []
             },
@@ -2372,7 +2416,7 @@
                 "housing_company_clients": false,
                 "refinement_tags": [
                     "timelapse",
-                    "dokumentointikuvaus"
+                    "rakennuskuvaus"
                 ],
                 "collaborated_with": []
             },
@@ -2417,14 +2461,15 @@
                 "logo_design": true,
                 "business_photography": true,
                 "refinement_tags": [
-                    "wordpress",
-                    "brändäys",
-                    "yritysilme",
                     "verkkosivut",
+                    "brändäys",
                     "logo",
-                    "yrityskuvat"
+                    "yritysilme",
+                    "wordpress"
                 ],
-                "collaborated_with": []
+                "collaborated_with": [
+                    "yrittäjäverkosto"
+                ]
             },
             "business_growth": {
                 "google_ads": true,
@@ -2438,14 +2483,16 @@
                 "automation_services": false,
                 "consulting_services": true,
                 "refinement_tags": [
+                    "digimarkkinointi",
                     "sisällöntuotanto",
-                    "markkinointi",
                     "videomarkkinointi",
                     "google-mainonta",
                     "somemainonta",
                     "myynnin kehittäminen"
                 ],
-                "collaborated_with": []
+                "collaborated_with": [
+                    "markkinointitoimisto"
+                ]
             },
             "wellbeing_and_beauty": {
                 "home_visits": false,
@@ -2460,8 +2507,8 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T11:06:04.549Z",
-                "verified_by": "AI-analysis-v1",
+                "last_updated": "2026-04-30T13:53:58.163Z",
+                "verified_by": "AI-analysis-v2",
                 "status": "draft"
             }
         },
