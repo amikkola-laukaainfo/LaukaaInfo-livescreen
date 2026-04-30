@@ -1197,8 +1197,6 @@
                             }
                         }
 
-                        if (isProfiledMatch) return true;
-
                         const hasVenueTag = (c.tags || '').toLowerCase().includes('juhlatila') || 
                                            (c.kategoria || '').toLowerCase().includes('juhlatila');
 
@@ -1212,6 +1210,8 @@
                             
                             if (cap === 0 && !hasVenueTag && opt.capacity_req > 0) return false;
                         }
+
+                        if (isProfiledMatch) return true;
 
                         // Jos optiolla ei ole tägejä, node-linkkejä tai suodattimia, se ei saa näyttää "kaikkia" 
                         // paitsi jos se on pelkkä kapasiteettivaatimus
