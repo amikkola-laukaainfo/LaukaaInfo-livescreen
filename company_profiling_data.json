@@ -48966,7 +48966,6 @@
                     "maailman suurin savusauna",
                     "juhlatila",
                     "kokoustila",
-                    "majoitus",
                     "ravintola",
                     "pitopalvelu",
                     "ohjelmapalvelut",
@@ -49004,7 +49003,7 @@
                 "is_accessible": false,
                 "is_lakeside": true,
                 "has_sauna": true,
-                "has_av_tech": false,
+                "has_av_tech": true,
                 "has_stage": false,
                 "accommodation_beds": 15,
                 "alcohol_license": true,
@@ -49031,19 +49030,20 @@
                 "karaoke_available": false,
                 "has_exclusive_catering": false,
                 "accommodation_included": false,
-                "refinement_tags": [
-                    "juhlatila",
-                    "hääjuhla",
-                    "savusauna",
-                    "sauna",
-                    "pitopalvelu",
-                    "majoitus",
-                    "järvimaisema",
-                    "perinnekylä",
-                    "turvehoito",
-                    "tyhy",
-                    "kesäteatteri"
-                ],
+                "refinement_tags": {
+                    "Yleinen": [
+                        "juhlatila",
+                        "hääjuhla",
+                        "savusauna",
+                        "sauna",
+                        "pitopalvelu",
+                        "järvimaisema",
+                        "perinnekylä",
+                        "turvehoito",
+                        "tyhy",
+                        "kesäteatteri"
+                    ]
+                },
                 "digitization_features": [],
                 "entertainment_features": [
                     "sauna",
@@ -49051,7 +49051,6 @@
                     "ohjelmapalvelut"
                 ],
                 "collaborated_with": [
-                    "pitopalvelu",
                     "valokuvaajat",
                     "ohjelmapalveluyritykset",
                     "majoituspalvelut"
@@ -49109,13 +49108,14 @@
                 "memorial_arrangements": false,
                 "transport_assistance": false,
                 "urgent_booking_available": false,
-                "refinement_tags": [
-                    "muistotilaisuus",
-                    "kahvitarjoilu",
-                    "pitopalvelu",
-                    "rauhaisa tila",
-                    "järvimaisema"
-                ],
+                "refinement_tags": {
+                    "Yleinen": [
+                        "muistotilaisuus",
+                        "kahvitarjoilu",
+                        "rauhaisa tila",
+                        "järvimaisema"
+                    ]
+                },
                 "digitization_features": [],
                 "collaborated_with": [
                     "pitopalvelu",
@@ -49232,7 +49232,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-30T11:34:40.868Z",
+                "last_updated": "2026-04-30T12:31:24.063Z",
                 "verified_by": "ai-enriched-v2",
                 "status": "enriched"
             }
@@ -54602,9 +54602,7 @@
                     "patikointi",
                     "hiihto"
                 ],
-                "collaborated_with": [
-                    "Työväentalo Toivola Lievestuore"
-                ]
+                "collaborated_with": []
             },
             "business_events": {
                 "meeting_capacity": 50,
@@ -54645,9 +54643,7 @@
                     "golf-simulaattori",
                     "biljardi"
                 ],
-                "collaborated_with": [
-                    "Työväentalo Toivola Lievestuore"
-                ]
+                "collaborated_with": []
             },
             "funerals_and_memorials": {
                 "memorial_service_capacity": 80,
@@ -58044,9 +58040,7 @@
                     "sauna",
                     "kahvila"
                 ],
-                "collaborated_with": [
-                    "Revontuli Resort"
-                ]
+                "collaborated_with": []
             },
             "business_events": {
                 "meeting_capacity": 80,
@@ -58085,9 +58079,7 @@
                     "videotykki",
                     "kahvila"
                 ],
-                "collaborated_with": [
-                    "Revontuli Resort"
-                ]
+                "collaborated_with": []
             },
             "funerals_and_memorials": {
                 "memorial_service_capacity": 80,
