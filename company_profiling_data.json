@@ -55567,7 +55567,7 @@
                     "KARTANO",
                     "MAJOITUS"
                 ],
-                "description": "Vuonteen Helmi on Laukaan Vihtavuoressa sijaitseva vuonna 1906 valmistunut juhlatalo, joka tarjoaa historiallisen ja ainutlaatuisen miljöön juhlille ja tapahtumille. Kartanomaisessa jugend-rakennuksessa on juhlasali 80 hengelle, kabinetti 20 hengelle ja rantasauna. Alueella on myös urheilukenttä ja pieni tenniskenttä.",
+                "description": "Vuonteen Helmi on Laukaan Vihtavuoressa sijaitseva vuonna 1906 valmistunut juhlatalo, joka tarjoaa historiallisen ja ainutlaatuisen miljöön juhlille ja tapahtumille. Kartanomaisessa jugend-rakennuksessa on juhlasali 80 hengelle ja kabinetti 20 hengelle. Alueella on myös urheilukenttä ja pieni tenniskenttä.",
                 "website": "http://www.vuonteenhelmi.fi",
                 "email": "vuonteenhelmi@gmail.com",
                 "phone": "+358 40 849 6459"
@@ -55655,8 +55655,6 @@
                     "juhlapaikka"
                 ],
                 "wellbeing_and_activity_features": [
-                    "sauna",
-                    "rantasauna",
                     "kartanonpuisto"
                 ],
                 "entertainment_features": [
