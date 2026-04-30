@@ -52,7 +52,8 @@
                     "SATAMA",
                     "KAHVILA",
                     "RAVINTOLA",
-                    "VENEILY"
+                    "VENEILY",
+                    "JUHLATILA"
                 ],
                 "description": "Laukaan Satamakahvila on viihtyisä satama-alueella toimiva kahvila ja kesäravintola, joka palvelee veneilijöitä, matkailijoita ja paikallisia. Tarjolla kahvilatuotteita, virvokkeita, lounasta sekä kausiluonteisia herkkuja. Sijainti sataman yhteydessä tekee siitä kesäkauden kohtaamispaikan järvimaisemissa.",
                 "website": "https://www.laukaansatama.fi/",
@@ -1921,7 +1922,9 @@
                     "LAUKAA",
                     "LIEVESTUORE",
                     "JUHLAT",
-                    "RUOKA"
+                    "RUOKA",
+                    "PITOPALVELU",
+                    "JUHLATILA"
                 ],
                 "description": "Leipomo, kahvila ja myymälä Lievestuoreella. Valmistaa ja myy leipomo-, konditoria- ja suolaistuotteita sekä tilausleivonnaisia juhliin. Tarjoaa kahvilapalveluita, lounasta seisovasta pöydästä arkisin ja lauantaisin sekä jäätelöä. Hää- ja juhlakakut, muistotilaisuuksien tarjoilut ja yritystilaisuuksien kahvitarjoilut kuuluvat palveluihin. Myymälässä myynnissä myös muiden valmistajien tuotteita.",
                 "website": "[https://www.jyvaspakari.fi](https://www.jyvaspakari.fi)",
@@ -2496,7 +2499,9 @@
                 ],
                 "collaborated_with": [
                     "markkinointitoimisto"
-                ]
+                ],
+                "website_dev": true,
+                "marketing_services": true
             },
             "wellbeing_and_beauty": {
                 "home_visits": false,
@@ -2511,7 +2516,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-30T14:33:01.556Z",
+                "last_updated": "2026-04-30T19:07:33.111Z",
                 "verified_by": "AI-analysis-v2",
                 "status": "draft"
             }
@@ -17787,7 +17792,9 @@
                 "not_suitable_for": [],
                 "paired_with_by_context": {},
                 "sub_contexts": [],
-                "node_links": [],
+                "node_links": [
+                    "JUHLATILA"
+                ],
                 "description": "",
                 "website": "",
                 "email": "",
@@ -19243,7 +19250,8 @@
                 "node_links": [
                     "LAUKAA",
                     "LIEVESTUORE",
-                    "HUVIT"
+                    "HUVIT",
+                    "PITOPALVELU"
                 ],
                 "description": "Kotileipomo ja kahvio-myymälä, joka valmistaa ja myy leipomotuotteita .",
                 "website": "",
@@ -19900,7 +19908,8 @@
                 "node_links": [
                     "HUVIT",
                     "LAUKAA",
-                    "MATKAILU"
+                    "MATKAILU",
+                    "JUHLATILA"
                 ],
                 "description": "Kesäisin toimiva perhehuvipuisto, jossa on laitteita ja aktiviteetteja kaikenikäisille. Puistossa on yli 19 huvipuistolaitetta, mukaan lukien vuoristorata Cyclon ja erilaisia pelejä. Puistoalueelle on ilmainen sisäänpääsy . Huvipuiston omistaa Bellingham Oy .",
                 "website": "[www.nokkakivi.fi](http://www.nokkakivi.fi)",
@@ -20143,7 +20152,9 @@
                     "LAUKAA",
                     "RUOKA",
                     "CATERING",
-                    "HUVIT"
+                    "HUVIT",
+                    "PITOPALVELU",
+                    "JUHLATILA"
                 ],
                 "description": "Ravintola Rosanne -nimellä tunnettu grilliravintola ja kahvila Laukaassa. Tarjoaa lounas- ja á la carte -ruokailua, pitopalvelua sekä tilausruokailua juhliin ja muistotilaisuuksiin. Ravintola palvelee sekä yksityis- että yritysasiakkaita.",
                 "website": "",
@@ -20602,7 +20613,9 @@
                     "LAUKAA",
                     "JUHLAT",
                     "YRITYSTAPAHTUMAT",
-                    "PÖLKINAHO"
+                    "PÖLKINAHO",
+                    "PITOPALVELU",
+                    "JUHLATILA"
                 ],
                 "description": "Tapahtumatuotantoon, juhlatiloihin ja huvi- ja virkistystoimintaan keskittynyt yritys. Pölkinahon juhlatila Peurungassa tarjoaa tunnelmallisen maalaistalomiljöön juhliin, muistotilaisuuksiin, kokouksiin ja yritystilaisuuksiin. Kautta yrityksen onnistuvat myös rantasauna, pitopalvelu, anniskelu, tarjoiluhenkilökunta, majoitus Peurungan kylpylähotellissa sekä live-musiikki ja tapahtumatuotanto. Yritys järjestää myös John Smith Rock Festivalin, Satama Festivalin ja toimii Laukaan satamassa.",
                 "website": "[www.ext.fi](http://www.ext.fi)",
@@ -23440,7 +23453,8 @@
                     "KYLPYLÄ",
                     "HOTELLI",
                     "KOKOUKSET",
-                    "SAUNA"
+                    "SAUNA",
+                    "JUHLATILA"
                 ],
                 "description": "Kylpylähotelli, kuntoutus- ja virkistyskeskus Laukaan Peurungassa. Tarjoaa monipuolisia hyvinvointi-, kokous-, majoitus- ja ravintolapalveluita yli 50 vuoden kokemuksella. Yritys työllistää noin 100 henkilöä. Peurunka on Sustainable Travel Finland -sertifioitu ja toimii kestävän matkailun periaatteiden mukaisesti.",
                 "website": "[www.peurunka.fi](http://www.peurunka.fi)",
@@ -23681,7 +23695,8 @@
                     "CATERING",
                     "RUOKA",
                     "HÄÄT",
-                    "YRITYSTILAISUUDET"
+                    "YRITYSTILAISUUDET",
+                    "PITOPALVELU"
                 ],
                 "description": "Pitopalvelu, joka tarjoaa buffet-tarjoiluja erilaisiin tilaisuuksiin. Korostaa luomutuotteiden käyttöä aamu- ja iltapalabuffeteissa sekä muissa tuotekokonaisuuksissa . Erityistuotteena muun muassa savunauta-tsatsikivoileipäkakku .",
                 "website": "[www.pitopalvelusojakka.fi](http://www.pitopalvelusojakka.fi)",
@@ -23931,7 +23946,8 @@
                     "TAPAHTUMAT",
                     "YRITYSTAPAHTUMAT",
                     "LIVE_MUSIIKKI",
-                    "AV_TEKNIIKKA"
+                    "AV_TEKNIIKKA",
+                    "JUHLATILA"
                 ],
                 "description": "Musiikki- ja viihdepalveluihin erikoistunut osakeyhtiö. Toimialaan kuuluvat tapahtuma- ja tuotantopalvelut, ohjelmapalvelut, äänentoisto-, valaistus- ja äänisuunnittelupalvelut, studio- ja koulutuspalvelut sekä graafinen suunnittelu. Yhtiö toimii myös elämysmatkailu-, kennel- ja rakennusalan konsultoinnin parissa. Yhtiö omistaa Proxta Music Studion ja tarjoaa tapahtumatekniikkaa sekä live-musiikkiin liittyviä palveluita juhliin ja yritystilaisuuksiin.",
                 "website": "",
@@ -49029,7 +49045,9 @@
                 "not_suitable_for": [],
                 "paired_with_by_context": {},
                 "sub_contexts": [],
-                "node_links": [],
+                "node_links": [
+                    "JUHLATILA"
+                ],
                 "description": "Iso-Kuhajärven rannalla sijaitseva lomamökki ja majoituspalvelu. Tarjoaa rauhallisen majoituksen lapsiystävällisessä ympäristössä omalla hiekkarannalla. Mökissä on varusteltu keittiö (astianpesukone, uuni), takka, sauna, patio, terassi, ulkotakka ja grillausmahdollisuus. Majoituskapasiteetti: 2 makuuhuonetta ja 3 oleskelutilaa. Majoituspalvelujen lisäksi yrityksen toimialaan kuuluu kaikki muu laillinen liiketoiminta . Yritys on perustettu 1.8.2019 .",
                 "website": "www.fincottage.ccom ",
                 "email": "",
@@ -49309,7 +49327,9 @@
                     "KOKOUKSET",
                     "HÄÄT",
                     "TYHY",
-                    "KESKISUOMI"
+                    "KESKISUOMI",
+                    "PITOPALVELU",
+                    "JUHLATILA"
                 ],
                 "description": "Perinnekylä ja monitoimipaikka, joka tarjoaa tiloja juhliin, kokouksiin ja virkistyspäiviin 15–150 hengen ryhmille. Tunnettu maailman suurimmasta savusaunasta (kapasiteetti 150 henkeä) . Tarjoaa majoitusta, ruokailuja, ohjelmapalveluita (mm. Nasusafari, teatteri, sepän paja), turvehoitoja, tyhy-päiviä sekä yrityspalveluita . Yritys järjestää myös yleisötapahtumia kuten naisten turvesaunailtoja, äitienpäivälounaita, perinnepäiviä ja joulumarkkinoita . Kaudesta 2026 tarjolla kesäteatteripaketteja . Sijaitsee Vinninlammen rannalla Kattamäen rinteiden kainalossa .",
                 "website": "http://www.tupaswilla.fi",
@@ -50433,7 +50453,8 @@
                     "KOKOUS",
                     "HÄÄT",
                     "JUHLAT",
-                    "KARTANO"
+                    "KARTANO",
+                    "PITOPALVELU"
                 ],
                 "description": "Ravintola Karlvik-nimellä tunnettu ravintola, joka on erikoistunut lounas- ja à la carte -palveluihin, juhlapalveluihin ja kokoustarjoiluihin. Ravintola sijaitsee kauniissa Karlvikin kartanomaisemissa .",
                 "website": "[www.ravintolakarlvik.fi](http://www.ravintolakarlvik.fi)",
@@ -50664,7 +50685,8 @@
                     "KUUSA",
                     "MATKAILU",
                     "HUVIT",
-                    "RAVINTOLA"
+                    "RAVINTOLA",
+                    "MAJOITUS"
                 ],
                 "description": "Kahvila-ravintola, joka tarjoaa kahvila- ja ravintolapalveluita. Yrityksen toimialaan kuuluu elintarvikkeiden myynti, kappaletavaran myynti, ravintolaliikkeen harjoittaminen, huvitilaisuuksien järjestäminen, lomamökkien vuokraus ja muu majoitustoiminta, veneiden ym. vapaa-ajan toimintaan liittyvien tavaroiden vuokraus sekä myyntitoiminta messuilla ja muissa tilaisuuksissa . Yrityksellä on anniskelulupa (voimassa vuodesta 1997) .",
                 "website": "",
@@ -51720,7 +51742,8 @@
                 "node_links": [
                     "RAVINTOLA",
                     "KAHVILA",
-                    "CATERING"
+                    "CATERING",
+                    "PITOPALVELU"
                 ],
                 "description": "Caffitella-brändillä toimiva ravintola- ja kahvilapalveluihin keskittyvä yritys, joka tarjoaa lounas- ja kahvilapalveluita sekä catering- ja tilausravintolapalveluita.",
                 "website": "",
@@ -52986,7 +53009,8 @@
                     "HUVIT",
                     "MAJOITUS",
                     "KOKOUS",
-                    "LUONTO"
+                    "LUONTO",
+                    "JUHLATILA"
                 ],
                 "description": "Täyden palvelun matkailutila Kuusaankosken varrella, perustettu vuonna 2000 . Tarjoaa majoitusta Riihihuviloissa ja -huoneissa, lempeitä löylyjä savusaunoissa, monipuolisia aktiviteetteja (mm. fatbike- ja maastopyöräily, avantouinti, lumikenkäily, jääkalastus, jooga, hyvinvointipaketit), sekä ravintolapalveluita . Pohjoismainen Swan Ecolabel -sertifioitu . Toimialana ravintolat (56101) . Perheyritys .",
                 "website": "[www.varjola.com](http://www.varjola.com)",
@@ -53667,7 +53691,8 @@
                     "PITOPALVELU",
                     "JUHLAT",
                     "HÄÄT",
-                    "YRITYSTAPAHTUMAT"
+                    "YRITYSTAPAHTUMAT",
+                    "JUHLATILA"
                 ],
                 "description": "Kotileipomo ja pitopalvelu, joka tarjoaa catering-palveluita, juhlatarjoiluja ja tilausleivonnaisia. Palveluihin kuuluu tarjoilujen suunnittelu ja toteutus asiakkaan tiloissa, juhlatilan vuokraus sekä kakut ja muut leivonnaiset. Yritys hyödyntää paikallisia ja itse tuotettuja raaka-aineita.",
                 "website": "",
@@ -54963,7 +54988,8 @@
                     "GOLF",
                     "RAVINTOLA",
                     "KOKOUSTILA",
-                    "LOMAKESKUS"
+                    "LOMAKESKUS",
+                    "PITOPALVELU"
                 ],
                 "description": "Revontuli Resort on Hankasalmella sijaitseva monipuolinen lomakeskus, joka tarjoaa majoitusta lasi-igluissa, mökeissä ja hotellihuoneissa. Kohde tunnetaan erityisesti revontulielämyksistä, luonnonläheisestä ympäristöstä sekä monipuolisista aktiviteeteista kuten golfista, keilailusta, saunomisesta ja talviaktiviteeteista. Alueella on myös ravintola- ja kokouspalvelut sekä tapahtumien järjestämismahdollisuudet.",
                 "website": "https://revontuli.fi",
@@ -55271,7 +55297,8 @@
                     "MAJOITUS",
                     "SAUNA",
                     "RAVINTOLA",
-                    "KOKOUSTILA"
+                    "KOKOUSTILA",
+                    "PITOPALVELU"
                 ],
                 "description": "Taulun Kartano on historiallinen kartanomiljöö Toivakassa, joka tarjoaa majoitusta, ravintolapalveluita sekä juhla- ja kokoustiloja. Kohde tunnetaan erityisesti häiden, yritystapahtumien ja juhlien järjestämispaikkana. Kartanossa on myös sauna- ja hyvinvointipalveluja sekä luonnonläheinen ympäristö järven ja maaseudun läheisyydessä.",
                 "website": "https://taulunkartano.fi",
@@ -55581,7 +55608,8 @@
                     "JUHLATILA",
                     "KOKOUSTILA",
                     "HAAT",
-                    "CATERING"
+                    "CATERING",
+                    "PITOPALVELU"
                 ],
                 "description": "Tunnelmallinen juhla- ja kokoustila Lievestuoreen keskustassa. Soveltuu häihin, syntymäpäiviin, valmistujaisiin, muistotilaisuuksiin, kokouksiin ja yritystilaisuuksiin myös kokonaispalveluna. Yläkerran juhlatilassa istumapaikat noin 75 henkilölle ja kellaritilassa noin 20 henkilölle. Kesäisin käytössä myös viihtyisä piha-alue ja terassi.",
                 "website": "https://www.juhlatalohumina.fi/",
@@ -55860,7 +55888,8 @@
                     "LAUKAA",
                     "KOKOUSTILA",
                     "JUHLATILA",
-                    "RAVINTOLA"
+                    "RAVINTOLA",
+                    "PITOPALVELU"
                 ],
                 "description": "Sarahovin kokoustilat on Laukaan Asumispalvelusäätiön ylläpitämä kokous- ja juhlatila Laukaan keskustassa. Tila toimii osana Sarahovin palvelukeskusta ja tarjoaa puitteet kokouksille, juhlille ja muistotilaisuuksille. Palveluihin kuuluu myös tilausaterioita ja pitopalvelua oman keittiön kautta. Tilassa on päivittäin kaikille avoin lounasravintola.",
                 "website": "https://www.sarapalvelut.fi",
@@ -56119,7 +56148,8 @@
                     "JUHLATILA",
                     "HÄÄT",
                     "KARTANO",
-                    "MAJOITUS"
+                    "MAJOITUS",
+                    "PITOPALVELU"
                 ],
                 "description": "Vuonteen Helmi on Laukaan Vihtavuoressa sijaitseva vuonna 1906 valmistunut juhlatalo, joka tarjoaa historiallisen ja ainutlaatuisen miljöön juhlille ja tapahtumille. Kartanomaisessa jugend-rakennuksessa on juhlasali 80 hengelle, kabinetti 20 hengelle ja rantasauna. Alueella on myös urheilukenttä ja pieni tenniskenttä.",
                 "website": "http://www.vuonteenhelmi.fi",
@@ -56690,7 +56720,8 @@
                     "MAJOITUS",
                     "KOKOUSTILA",
                     "SAUNA",
-                    "LUONTOMATKAILU"
+                    "LUONTOMATKAILU",
+                    "PITOPALVELU"
                 ],
                 "description": "Multamäen leirikeskus on luonnonläheinen leiri- ja majoituskohde Peurunkajärven rannalla Laukaassa. Kohde soveltuu leirikoulujen, nuorisoleirien, retkien, ryhmien ja yhdistysten majoitukseen sekä koulutus- ja virkistystapahtumiin. Alueella on majoitustiloja, ruokailu- ja kokoontumistiloja sekä hyvät ulkoilu- ja vesistömahdollisuudet. Rauhallinen järvimaisema tarjoaa puitteet ympärivuotiseen ryhmätoimintaan.",
                 "website": "https://www.laukaanseurakunta.fi/multamaen-leirikeskus",
@@ -58405,7 +58436,8 @@
                     "HAAT",
                     "KOKOUSTILA",
                     "TYOVAENTALO",
-                    "YRITYSTAPAHTUMAT"
+                    "YRITYSTAPAHTUMAT",
+                    "MAJOITUS"
                 ],
                 "description": "Yli satavuotias tunnelmallinen juhla- ja tapahtumatalo Lievestuoreella. Soveltuu häihin, kokouksiin, muistotilaisuuksiin, seminaareihin, pikkujouluihin, karonkkoihin ja muihin juhliin. Tiloissa suuri juhlasali, kahvila, sauna, videotykki sekä esteetön ja muunneltava tila. Omat ruoat ja juomat sallittu, kahvilapalvelut ja järjestysmiespalvelut tilauksesta.",
                 "website": "https://visitlaukaa.fi/palvelu/tyovaentalo-toivola/",
@@ -58709,7 +58741,9 @@
                     "KAHVILA",
                     "JUHLAT",
                     "CATERING",
-                    "YRITYSTAPAHTUMAT"
+                    "YRITYSTAPAHTUMAT",
+                    "PITOPALVELU",
+                    "JUHLATILA"
                 ],
                 "description": "Bistro Puulaaki on lämminhenkinen ravintola ja kahvila Leppävedellä Hirviareenan urheilukeskuksessa. Tarjoaa monipuolista lounasta, à la carte -annoksia, kahvilaherkkuja sekä juomia. Toimii viihtyisänä kohtaamispaikkana niin urheilijoille, tapahtumakävijöille kuin paikallisille asukkaillekin.",
                 "website": "https://www.bistropuulaaki.fi",
@@ -58968,7 +59002,8 @@
                     "KALA",
                     "CATERING",
                     "RUOKAPALVELU",
-                    "JUHLAT"
+                    "JUHLAT",
+                    "PITOPALVELU"
                 ],
                 "description": "Koivulan savukala on Lievestuoreella toimiva yritys, joka valmistaa ja myy savukalaa sekä muita kalatuotteita. Tarjoaa laadukasta lähiruokaa sekä palveluita juhliin, tapahtumiin ja yrityksille.",
                 "website": "[https://koivulansavukala.fi/](https://koivulansavukala.fi/)",
@@ -59230,7 +59265,9 @@
                     "KAHVILA",
                     "RAVINTOLA",
                     "JUHLAT",
-                    "CATERING"
+                    "CATERING",
+                    "PITOPALVELU",
+                    "JUHLATILA"
                 ],
                 "description": "Naissaaren Upee kahvila (Naissaaren Koskenhenki) on viihtyisä kahvila ja ruokapaikka Vaajakoskella koskimaisemissa. Tarjoaa kahvia, leivonnaisia ja ruokaa rennossa ympäristössä sekä palvelee myös ryhmiä ja tilaisuuksia.",
                 "website": "",
