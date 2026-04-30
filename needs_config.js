@@ -393,16 +393,16 @@ const NEEDS_CONFIG = {
             {
                 "id": "paatarve",
                 "multiple": true,
-                "hide_results": true,
                 "question": "Mitä asioita haluatte edistää?",
                 "options": [
-                    { "label": "Hautajaisjärjestelyt (arkku, uurna, hautakivet)", "sub_context": "hautauspalvelu", "tags": ["hautauspalvelu"] },
-                    { "label": "Muistotilaisuuden järjestäminen", "sub_context": "muistotilaisuus", "tags": ["muistotilaisuus"] },
+                    { "label": "Hautajaisjärjestelyt", "sub_context": "hautauspalvelu", "tags": ["hautauspalvelu"] },
+                    { "label": "Muistotilaisuus", "sub_context": "muistotilaisuus", "tags": ["muistotilaisuus"] },
                     { "label": "Perunkirjoitus ja laki-asiat", "sub_context": "perunkirjoitus", "tags": ["lakiasiaintoimistot"] }
                 ]
             },
             {
                 "id": "peruspalvelu",
+                "hide_results": true,
                 "question": "Hautauspalvelut?",
                 "skipIf": "!isSelected('paatarve', 'Hautajaisjärjestelyt')",
                 "options": [
@@ -423,6 +423,7 @@ const NEEDS_CONFIG = {
             },
             {
                 "id": "muistotila",
+                "hide_results": true,
                 "question": "Muistotilaisuuden tila?",
                 "skipIf": "!isSelected('paatarve', 'Muistotilaisuus')",
                 "options": [
@@ -448,6 +449,7 @@ const NEEDS_CONFIG = {
             {
                 "id": "muistotilaisuus_lisapalvelut",
                 "multiple": true,
+                "hide_results": true,
                 "question": "Muistotilaisuuden lisäpalvelut?",
                 "skipIf": "!isSelected('paatarve', 'Muistotilaisuus')",
                 "options": [
@@ -470,6 +472,7 @@ const NEEDS_CONFIG = {
             {
                 "id": "laki_asiat_tarkennus",
                 "multiple": true,
+                "hide_results": true,
                 "question": "Lakipalvelut ja asiakirjat?",
                 "skipIf": "!isSelected('paatarve', 'Laki-asiat')",
                 "options": [

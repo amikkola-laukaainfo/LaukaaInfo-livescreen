@@ -26148,11 +26148,13 @@
             "name": "Huonekaluilike Vehviläinen Oy (Kukka ja Hautauspalvelu Vehviläinen)",
             "core": {
                 "fits_for": {
-                    "funerals-and-memorials": 20,
+                    "funerals-and-memorials": 34,
                     "huonekalumyynti": 30,
                     "kukkakauppa": 25,
                     "kodinsisustus": 15,
-                    "kuljetuspalvelut": 10
+                    "kuljetuspalvelut": 10,
+                    "events-and-celebrations": 22,
+                    "business-events": 15
                 },
                 "priority_score": 0,
                 "paired_with": [],
@@ -26180,6 +26182,9 @@
                     ],
                     "syntymäpäivät": [
                         "Kukat"
+                    ],
+                    "funerals-and-memorials": [
+                        "Hautauspalvelu"
                     ]
                 },
                 "sub_contexts": [
@@ -26272,7 +26277,12 @@
                 "memorial_arrangements": true,
                 "transport_assistance": true,
                 "urgent_booking_available": false,
-                "refinement_tags": [],
+                "refinement_tags": {
+                    "Yleinen": [],
+                    "hautauspalvelu": [
+                        "hautauspalvelu"
+                    ]
+                },
                 "digitization_features": [],
                 "collaborated_with": []
             },
@@ -26376,7 +26386,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T08:34:01.494Z",
+                "last_updated": "2026-04-30T13:34:08.166Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
