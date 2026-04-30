@@ -54602,7 +54602,9 @@
                     "patikointi",
                     "hiihto"
                 ],
-                "collaborated_with": []
+                "collaborated_with": [
+                    "Työväentalo Toivola Lievestuore"
+                ]
             },
             "business_events": {
                 "meeting_capacity": 50,
@@ -54643,7 +54645,9 @@
                     "golf-simulaattori",
                     "biljardi"
                 ],
-                "collaborated_with": []
+                "collaborated_with": [
+                    "Työväentalo Toivola Lievestuore"
+                ]
             },
             "funerals_and_memorials": {
                 "memorial_service_capacity": 80,
@@ -58040,7 +58044,9 @@
                     "sauna",
                     "kahvila"
                 ],
-                "collaborated_with": []
+                "collaborated_with": [
+                    "Revontuli Resort"
+                ]
             },
             "business_events": {
                 "meeting_capacity": 80,
@@ -58079,7 +58085,9 @@
                     "videotykki",
                     "kahvila"
                 ],
-                "collaborated_with": []
+                "collaborated_with": [
+                    "Revontuli Resort"
+                ]
             },
             "funerals_and_memorials": {
                 "memorial_service_capacity": 80,
