@@ -996,8 +996,8 @@
             activeSteps.forEach(step => {
                 if (step.id.startsWith('_')) return;
                 
-                // Ohitetaan kapasiteetti-askeleet tulosryhmien luonnissa, koska ne yhdistetään muihin
-                if (step.id === 'kapasiteetti' || step.id === 'henkilomaara') return;
+                // Ohitetaan kapasiteetti-askeleet ja muut erikseen piilotetut askeleet tulosryhmien luonnissa, koska ne yhdistetään muihin tai toimivat vain tarkentimina
+                if (step.id === 'kapasiteetti' || step.id === 'henkilomaara' || step.hide_results) return;
 
                 const stepSelection = selections[step.id];
                 if (!stepSelection) return;

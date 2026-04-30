@@ -7,6 +7,7 @@ const NEEDS_CONFIG = {
         "steps": [
             {
                 "id": "tarkennus",
+                "hide_results": true,
                 "question": "Millaista hääjuhlaa suunnittelette?",
                 "options": [
                     { "label": "Perinteiset häät", "sub_context": "perinteiset häät", "tags": ["häät"] },
