@@ -170,7 +170,7 @@
                 <div class="tip-card">
                     <div class="tip-title">${tip.nimi}</div>
                     ${tip.nettilinkki ? `<div><a href="${tip.nettilinkki}" target="_blank" class="tip-link-raw">${tip.nettilinkki}</a></div>` : ''}
-                    ${tip.kuvaus ? `<div class="tip-desc">${tip.kuvaus}</div>` : ''}
+                    ${tip.kuvaus ? `<div class="tip-desc">${tip.kuvaus.replace(/@@/g, '')}</div>` : ''}
                     <div class="tip-details">
                         ${tip.paikka ? `<div><strong>Paikka:</strong> ${tip.paikka}</div>` : ''}
                         ${tip.yhteystiedot ? `<div><strong>Yhteystiedot:</strong> ${tip.yhteystiedot}</div>` : ''}

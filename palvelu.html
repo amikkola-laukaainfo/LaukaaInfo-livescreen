@@ -1600,7 +1600,7 @@
                     ${isPremium && !isTopMatch && !isPartner ? '<div class="result-badge badge-premium">PREMIUM</div>' : ''}
                     <div class="result-icon">${icon}</div>
                     <h3>${c.nimi}</h3>
-                    <div class="slogan">${c.mainoslause || (c.esittely ? c.esittely.substring(0, 100) + '...' : fallbackSlogan)}</div>
+                    <div class="slogan">${(c.mainoslause || (c.esittely ? c.esittely.substring(0, 100) + '...' : fallbackSlogan)).replace(/@@/g, '')}</div>
                     ${capacityNote}
                     <div class="card-meta">${distanceHtml}<div class="feature-badges">${badges}</div></div>
                     <div class="match-explanation">${getMatchExplanation(c, requestedCapacity, profilingKey)}</div>
