@@ -144,7 +144,7 @@ const NEEDS_CONFIG = {
                 "id": "tarkennus",
                 "question": "Millaista tilaa tarvitsette?",
                 "options": [
-                    { "label": "Pieni kokous / Neuvottelu", "sub_context": "kokous", "tags": ["kokoustilat"] },
+                    { "label": "Pieni kokous / Neuvottelu", "sub_context": "kokous", "tags": ["kokoustilat"], "capacity_req": 5 },
                     { "label": "Seminaari / Koulutus", "sub_context": "seminaari", "tags": ["seminaaritilat"] },
                     { "label": "Konferenssi / Suuri tilaisuus", "sub_context": "konferenssi", "tags": ["kokoustilat"] },
                     { "label": "Edustus- tai saunakokous", "sub_context": "edustuskokous", "tags": ["edustustila", "saunatilat"] }
@@ -175,7 +175,7 @@ const NEEDS_CONFIG = {
                 "question": "Muut tarpeet?",
                 "options": [
                     { "label": "Majoitus", "tags": ["majoitus"] },
-                    { "label": "Videokuvaus", "tags": ["videotuotanto", "videokuvaus", "videokuvaaja"], "profilointi_filter": { "section": "business_events", "field": "refinement_tags", "value": "yritysvideot" } },
+                    { "label": "Videokuvaus", "tags": ["videotuotanto", "videokuvaus", "videokuvaaja"], "profilointi_filter": { "section": "business_events", "field": "refinement_tags", "value": "yritysvideo" } },
                     { "label": "Yrityslahjat", "tags": ["yrityslahjat", "lahjatavarat"] },
                     { "label": "IT-tuki / AV-tekniikka", "tags": ["it-palvelut"], "profilointi_filter": { "section": "business_events", "field": "has_projector", "value": true } }
                 ]
