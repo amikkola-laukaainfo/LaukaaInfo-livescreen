@@ -487,7 +487,7 @@ const NEEDS_CONFIG = {
                 "question": "Haluaisitko tallentaa muistot tai tarvitsetko digitointipalveluita?",
                 "options": [
                     { "label": "Muistovideo / Videointi / Esitykset", "tags": ["videotuotanto", "videokuvaus", "videokuvaaja"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "refinement_tags", "value": "muistotilaisuuskuvaus" } },
-                    { "label": "Valokuvaus tilaisuudessa", "tags": ["valokuvaus", "hautajaiskuvaus"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "refinement_tags", "value": "hautajaiskuvaus" } },
+                    { "label": "Valokuvaus", "tags": ["valokuvaus", "hautajaiskuvaus"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "refinement_tags", "value": "hautajaiskuvaus" } },
                     { "label": "Digitointipalvelut (kuvat, videot ym.)", "tags": ["digitointi"] }
                 ]
             },
