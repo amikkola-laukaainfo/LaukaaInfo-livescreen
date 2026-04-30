@@ -480,7 +480,7 @@
                 // Truncate description at @@
                 let description = (c.mainoslause || '').trim();
                 if (description.includes('@@')) {
-                    description = description.split('@@')[0].trim();
+                    description = description.replace(/@@/g, '').trim();
                 }
 
                 if (!description) {
@@ -548,7 +548,7 @@
         // Same logic as carousel for premium companies
         let description = c.mainoslause || '';
         if (isPremium && description.includes('@@')) {
-            description = description.split('@@')[0].trim();
+            description = description.replace(/@@/g, '').trim();
         }
 
         let serviceIcons = '';
