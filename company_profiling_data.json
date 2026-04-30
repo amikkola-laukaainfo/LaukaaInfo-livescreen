@@ -23033,7 +23033,17 @@
             "core": {
                 "fits_for": {
                     "kokoukset": 35,
-                    "vapaa-aika": 35
+                    "vapaa-aika": 35,
+                    "events-and-celebrations": 85,
+                    "business-events": 80,
+                    "funerals-and-memorials": 60,
+                    "moving-and-housing": 0,
+                    "construction-and-maintenance": 0,
+                    "cottage-services": 20,
+                    "housing-company-and-contracts": 20,
+                    "startup-services": 0,
+                    "business-growth": 0,
+                    "wellbeing-and-beauty": 75
                 },
                 "priority_score": 0,
                 "paired_with": [
@@ -23048,7 +23058,7 @@
                         "Leppävesi",
                         "Keski-Suomi"
                     ],
-                    "note": "Sijaitsee Leppävedellä, osoitteessa Vaajakoskentie 113, 41310 Leppävesi. Etäisyys Jyväskylästä noin 15 minuuttia ."
+                    "note": "Sijaitsee Leppävedellä, osoitteessa Vaajakoskentie 113, 41310 Leppävesi. Etäisyys Jyväskylästä noin 15 minuuttia."
                 },
                 "emergency_available": false,
                 "contract_customer_available": true,
@@ -23056,18 +23066,64 @@
                 "home_service": false,
                 "weekend_service": true,
                 "not_suitable_for": [],
-                "paired_with_by_context": {},
-                "sub_contexts": [],
-                "node_links": [],
-                "description": "Green Care -periaatteita noudattava vanha maatila, joka tarjoaa luontoon ja eläimiin pohjautuvia hyvinvointipalveluita. Toimintaan kuuluu kesäkahvila, tapahtumajärjestelyt, Tyhy-päivät, kokouspalvelut sekä juhlatilaisuuksien (mm. häät) järjestäminen vanhassa heinäparvessa. Pihapiirissä on kanoja ja kesälampaita. Tarjolla myös SUP-lautojen vuokrausta ja mahdollisuus retkeillä luontopoluilla .",
-                "website": "www.perttulantila.fi",
+                "paired_with_by_context": {
+                    "events-and-celebrations": [
+                        "Catering",
+                        "Valokuvaaja",
+                        "Majoitus"
+                    ],
+                    "business-events": [
+                        "Catering",
+                        "Ohjelmapalvelut"
+                    ],
+                    "wellbeing-and-beauty": [
+                        "Luontopalvelut",
+                        "Elämykset"
+                    ],
+                    "funerals-and-memorials": [
+                        "Catering",
+                        "Kukat"
+                    ]
+                },
+                "sub_contexts": [
+                    "juhlatila",
+                    "kokoustila",
+                    "häät",
+                    "yritystapahtumat",
+                    "tyhy-päivä",
+                    "luontopalvelu",
+                    "green care",
+                    "elämyspalvelu",
+                    "maatila",
+                    "kesäkahvila",
+                    "muistotilaisuus",
+                    "sauna",
+                    "ulkotapahtuma",
+                    "aktiviteetti",
+                    "sup-lauta",
+                    "retkeily"
+                ],
+                "node_links": [
+                    "LAUKAA",
+                    "LEPPÄVESI",
+                    "JUHLATILA",
+                    "KOKOUSTILA",
+                    "HÄÄT",
+                    "MAJOITUS",
+                    "SAUNA",
+                    "LUONTO",
+                    "ELÄMYKSET",
+                    "YRITYSTAPAHTUMAT"
+                ],
+                "description": "Green Care -periaatteita noudattava maatila Leppävedellä, joka tarjoaa luontoon ja eläimiin perustuvia hyvinvointipalveluita sekä juhla- ja kokoustiloja. Tilalla järjestetään häitä, yritystilaisuuksia, tyhy-päiviä ja tapahtumia vanhassa heinäparvessa ja pihapiirissä. Palveluihin kuuluu kesäkahvila, elämykset, luontopolut ja SUP-lautojen vuokraus. Pihapiirissä on eläimiä kuten kanoja ja lampaita, mikä tukee hyvinvointitoimintaa.",
+                "website": "http://www.perttulantila.fi",
                 "email": "info@perttulantila.fi",
                 "phone": "040 6215113"
             },
             "events_and_celebrations": {
                 "capacity_max": 100,
                 "seated_capacity": 100,
-                "outdoor_capacity": 0,
+                "outdoor_capacity": 50,
                 "is_accessible": false,
                 "is_lakeside": true,
                 "has_sauna": true,
@@ -23093,10 +23149,24 @@
                 "karaoke_available": false,
                 "has_exclusive_catering": false,
                 "accommodation_included": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "juhlatila",
+                    "häät",
+                    "maalaismiljöö",
+                    "ulkotapahtuma",
+                    "sauna",
+                    "luontoympäristö"
+                ],
                 "digitization_features": [],
-                "entertainment_features": [],
-                "collaborated_with": []
+                "entertainment_features": [
+                    "luontoaktiviteetti",
+                    "elämyspalvelu"
+                ],
+                "collaborated_with": [
+                    "paikallinen pitopalvelu",
+                    "valokuvaaja",
+                    "ohjelmapalveluyritys"
+                ]
             },
             "business_events": {
                 "meeting_capacity": 100,
@@ -23116,14 +23186,25 @@
                 "branding_support": false,
                 "av_support": false,
                 "staff_events_specialized": true,
-                "refinement_tags": [],
-                "wellbeing_and_activity_features": [],
+                "refinement_tags": [
+                    "kokoustila",
+                    "tyhy-päivä",
+                    "yritystapahtuma",
+                    "luontopäivä"
+                ],
+                "wellbeing_and_activity_features": [
+                    "luontopolku",
+                    "elämyspalvelu",
+                    "sup-lauta"
+                ],
                 "entertainment_features": [],
-                "collaborated_with": []
+                "collaborated_with": [
+                    "paikallinen pitopalvelu"
+                ]
             },
             "funerals_and_memorials": {
-                "memorial_service_capacity": 0,
-                "quiet_private_space": false,
+                "memorial_service_capacity": 80,
+                "quiet_private_space": true,
                 "accessible_entry": false,
                 "memorial_catering": true,
                 "coffee_service": true,
@@ -23133,9 +23214,16 @@
                 "memorial_arrangements": false,
                 "transport_assistance": false,
                 "urgent_booking_available": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "muistotilaisuus",
+                    "rauhaisa tila",
+                    "maaseutuympäristö"
+                ],
                 "digitization_features": [],
-                "collaborated_with": []
+                "collaborated_with": [
+                    "pitopalvelu",
+                    "kukkakauppa"
+                ]
             },
             "moving_and_housing": {
                 "moving_truck_available": false,
@@ -23177,9 +23265,12 @@
                 "emergency_visits": false,
                 "renovation_support": false,
                 "dock_maintenance": false,
-                "sauna_services": false,
+                "sauna_services": true,
                 "guest_preparation_service": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "sauna",
+                    "luontopalvelu"
+                ],
                 "collaborated_with": []
             },
             "housing_company_and_contracts": {
@@ -23233,12 +23324,17 @@
                 "event_makeup": false,
                 "bridal_services": false,
                 "group_bookings": true,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "green care",
+                    "luontohyvinvointi",
+                    "eläinavusteinen toiminta",
+                    "ryhmäaktiviteetti"
+                ],
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-27T05:50:40.700Z",
-                "verified_by": "AI-analysis-v1",
+                "last_updated": "2026-04-30T13:11:35.115Z",
+                "verified_by": "AI-analysis-v2",
                 "status": "draft"
             }
         },
@@ -53267,9 +53363,26 @@
         "company-266": {
             "name": "Lempileivos",
             "core": {
-                "fits_for": {},
+                "fits_for": {
+                    "events-and-celebrations": 90,
+                    "business-events": 75,
+                    "funerals-and-memorials": 80,
+                    "moving-and-housing": 10,
+                    "construction-and-maintenance": 0,
+                    "cottage-services": 20,
+                    "housing-company-and-contracts": 10,
+                    "startup-services": 0,
+                    "business-growth": 0,
+                    "wellbeing-and-beauty": 25
+                },
                 "priority_score": 0,
-                "paired_with": [],
+                "paired_with": [
+                    "Majoitus",
+                    "Valokuvaaja",
+                    "Pitopalvelu",
+                    "Catering",
+                    "Kukat"
+                ],
                 "service_area": {
                     "mode": "TOIMIPISTE",
                     "radius_km": 0,
@@ -53278,7 +53391,7 @@
                         "Lievestuore",
                         "Jyväskylä"
                     ],
-                    "note": "Toimipiste sijaitsee Hohontie 453, 41400 Lievestuore. Palvelualueena Jyväskylän alue, ja yritys on toiminut siellä vuodesta 1998 ."
+                    "note": "Toimipiste sijaitsee Hohontie 453, 41400 Lievestuore. Palvelualueena Jyväskylän alue, ja yritys on toiminut siellä vuodesta 1998."
                 },
                 "emergency_available": false,
                 "contract_customer_available": false,
@@ -53288,10 +53401,51 @@
                 "not_suitable_for": [
                     "kartano"
                 ],
-                "paired_with_by_context": {},
-                "sub_contexts": [],
-                "node_links": [],
-                "description": "Kotileipomo ja pitopalvelu. Tarjoaa perinteisiä pitopalveluita, tarjoiluiden suunnittelua ja järjestämistä asiakkaan omissa tiloissa, juhlatilan vuokrausta sekä leipomotuotteiden valmistamista. Käyttää itsetuotettuja ja lähituottajien raaka-aineita ruuan ja leivonnaisten valmistukseen .",
+                "paired_with_by_context": {
+                    "events-and-celebrations": [
+                        "Juhlatila",
+                        "Valokuvaaja",
+                        "Musiikki",
+                        "Ohjelmapalvelut"
+                    ],
+                    "funerals-and-memorials": [
+                        "Kukat",
+                        "Seurakunta"
+                    ],
+                    "business-events": [
+                        "Kokoustila",
+                        "Koulutus"
+                    ]
+                },
+                "sub_contexts": [
+                    "pitopalvelu",
+                    "catering",
+                    "kotileipomo",
+                    "leipomo",
+                    "juhlapalvelu",
+                    "kakku",
+                    "täytekakku",
+                    "hääkakku",
+                    "juhlat",
+                    "häät",
+                    "muistotilaisuus",
+                    "yritystilaisuudet",
+                    "tarjoilu",
+                    "ruokapalvelu",
+                    "lähiruoka",
+                    "leivonnaiset",
+                    "tilauskakku"
+                ],
+                "node_links": [
+                    "LAUKAA",
+                    "LIEVESTUORE",
+                    "CATERING",
+                    "PITOPALVELU",
+                    "JUHLAT",
+                    "HÄÄT",
+                    "YRITYSTAPAHTUMAT"
+                ],
+                "description": "Kotileipomo ja pitopalvelu, joka tarjoaa catering-palveluita, juhlatarjoiluja ja tilausleivonnaisia. Palveluihin kuuluu tarjoilujen suunnittelu ja toteutus asiakkaan tiloissa, juhlatilan vuokraus sekä kakut ja muut leivonnaiset. Yritys hyödyntää paikallisia ja itse tuotettuja raaka-aineita.",
                 "website": "",
                 "email": "posti@lempileivos.com",
                 "phone": "+358 40 5770421"
@@ -53309,12 +53463,16 @@
                 "alcohol_license": false,
                 "private_booking": true,
                 "late_night_events": false,
-                "wedding_specialized": false,
+                "wedding_specialized": true,
                 "catering_min_capacity": 0,
                 "catering_max_capacity": 150,
-                "dietary_specialties": [],
+                "dietary_specialties": [
+                    "lähiruoka",
+                    "kotimaiset raaka-aineet",
+                    "leivonnaiset"
+                ],
                 "staff_included": false,
-                "wedding_menu_available": false,
+                "wedding_menu_available": true,
                 "cake_service": true,
                 "partner_venues": [],
                 "wedding_photography": false,
@@ -53325,10 +53483,25 @@
                 "karaoke_available": false,
                 "has_exclusive_catering": false,
                 "accommodation_included": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "pitopalvelu",
+                    "catering",
+                    "juhlat",
+                    "häät",
+                    "hääkakku",
+                    "kakku",
+                    "leivonnaiset",
+                    "tarjoilu",
+                    "syntymäpäivät",
+                    "juhlapalvelu"
+                ],
                 "digitization_features": [],
                 "entertainment_features": [],
-                "collaborated_with": []
+                "collaborated_with": [
+                    "paikalliset juhlatilat",
+                    "valokuvaajat",
+                    "kukkakaupat"
+                ]
             },
             "business_events": {
                 "meeting_capacity": 50,
@@ -53347,27 +53520,43 @@
                 "corporate_gifts": false,
                 "branding_support": false,
                 "av_support": false,
-                "staff_events_specialized": false,
-                "refinement_tags": [],
+                "staff_events_specialized": true,
+                "refinement_tags": [
+                    "catering",
+                    "yritystapahtuma",
+                    "kokoustarjoilu",
+                    "kahvitarjoilu"
+                ],
                 "wellbeing_and_activity_features": [],
                 "entertainment_features": [],
-                "collaborated_with": []
+                "collaborated_with": [
+                    "yritystilat",
+                    "kokoustilat"
+                ]
             },
             "funerals_and_memorials": {
-                "memorial_service_capacity": 0,
+                "memorial_service_capacity": 150,
                 "quiet_private_space": false,
                 "accessible_entry": false,
                 "memorial_catering": true,
                 "coffee_service": true,
                 "flower_arrangements": false,
-                "memorial_menu_available": false,
+                "memorial_menu_available": true,
                 "funeral_flowers": false,
                 "memorial_arrangements": false,
                 "transport_assistance": false,
                 "urgent_booking_available": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "muistotilaisuus",
+                    "pitopalvelu",
+                    "kahvitarjoilu",
+                    "catering"
+                ],
                 "digitization_features": [],
-                "collaborated_with": []
+                "collaborated_with": [
+                    "kukkakaupat",
+                    "seurakunnat"
+                ]
             },
             "moving_and_housing": {
                 "moving_truck_available": false,
@@ -53411,7 +53600,10 @@
                 "dock_maintenance": false,
                 "sauna_services": false,
                 "guest_preparation_service": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "catering",
+                    "ruokapalvelu"
+                ],
                 "collaborated_with": []
             },
             "housing_company_and_contracts": {
@@ -53469,8 +53661,8 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T11:25:18.721Z",
-                "verified_by": "AI-analysis-v1",
+                "last_updated": "2026-04-30T13:06:43.130Z",
+                "verified_by": "ai-analysis-v2",
                 "status": "draft"
             }
         },
@@ -58266,7 +58458,8 @@
                 "home_service": false,
                 "weekend_service": true,
                 "not_suitable_for": [
-                    "hautajaiset"
+                    "hautajaiset",
+                    "muistotilaisuus"
                 ],
                 "paired_with_by_context": {
                     "häät": [
@@ -58502,7 +58695,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-30T08:58:16.447Z",
+                "last_updated": "2026-04-30T13:13:13.161Z",
                 "verified_by": "ai-enriched",
                 "status": "enriched"
             }
