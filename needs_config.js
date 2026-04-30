@@ -396,7 +396,7 @@ const NEEDS_CONFIG = {
                 "question": "Mitä asioita haluatte edistää?",
                 "options": [
                     { "label": "Hautajaisjärjestelyt", "sub_context": "hautauspalvelu", "tags": ["hautauspalvelu"] },
-                    { "label": "Muistotilaisuus", "sub_context": "muistotilaisuus", "tags": ["muistotilaisuus", "muistotilaisuudet"] },
+                    { "label": "Muistotilaisuus", "sub_context": "muistotilaisuus", "tags": ["muistotilaisuus", "muistotilaisuudet"], "capacity_req": 10 },
                     { "label": "Perunkirjoitus ja laki-asiat", "sub_context": "perunkirjoitus", "tags": ["lakiasiaintoimistot", "perunkirjoitus"] }
                 ]
             },

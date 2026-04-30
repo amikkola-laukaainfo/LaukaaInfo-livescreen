@@ -193,6 +193,9 @@
         <tag>muistotilaisuus</tag>
         <tag>perunkirjoitus</tag>
         <tag>hautakivi</tag>
+        <tag>muistovideo</tag>
+        <tag>muistotilaisuuskuvaus</tag>
+        <tag>hautajaiskuvaus</tag>
       </subcontexts>
 
       <node_links>

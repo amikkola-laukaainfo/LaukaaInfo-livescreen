@@ -1188,7 +1188,7 @@
                                     // filtered by the event's sub-context (e.g. "Perinteiset häät").
                                     // FIX: Vältetään "tilaisuudessa" sanan osuminen "tila"-hakusanaan
                                     const labelLower = (opt.label || '').toLowerCase();
-                                    const isVenueOrCore = (opt.capacity_req > 0 || opt.node_link === 'ROLE_VENUE' || (labelLower.includes('tila') && !labelLower.includes('tilaisuus')));
+                                    const isVenueOrCore = (opt.capacity_req > 0 || opt.node_link === 'ROLE_VENUE' || (labelLower.includes('tila') && !labelLower.includes('tilaisuus')) || labelLower.includes('muistotilaisuus'));
                                     
                                     if (isVenueOrCore && hasAnySubContexts && mainFitsScore >= 70 && mainFitsScore < 80) return false; 
                                 }
@@ -1221,7 +1221,7 @@
                                 if (!target || !query) return false;
                                 const t = String(target).toLowerCase();
                                 const q = String(query).toLowerCase();
-                                return t === q || t.includes(q) || q.includes(t);
+                                return t === q || t.includes(q);
                             };
 
                             if (catData) {
@@ -1335,7 +1335,7 @@
                             }
                             
                             // Jos kyseessä on tilatyyppinen optio tai yritys, ja hakuun liittyy kapasiteettivaatimus, piilotetaan nollakapasiteetin kohteet.
-                            const isVenueType = hasVenueTag || (opt.label && opt.label.toLowerCase().includes('tila') && !opt.label.toLowerCase().includes('tilaisuus')) || opt.node_link === 'ROLE_VENUE';
+                            const isVenueType = hasVenueTag || (opt.label && (opt.label.toLowerCase().includes('tila') && !opt.label.toLowerCase().includes('tilaisuus')) || opt.label.toLowerCase().includes('muistotilaisuus')) || opt.node_link === 'ROLE_VENUE';
                             if (requestedCapacity > 0 && isVenueType && cap === 0) {
                                 return false;
                             }
