@@ -1074,9 +1074,13 @@
                                 if (!isSubContextMatch) {
                                     const mainFitsScore = getFitsForScore(c, currentProfilingKey);
                                     const hasAnySubContexts = Array.isArray(companySubContexts) ? companySubContexts.length > 0 : !!companySubContexts;
-                                    // Hylätään vain jos yrityksellä ON sub_contexts JA fits_score on korkea (eli se on profiloitu muihin konteksteihin)
-                                    // Mutta jos fitsScore on erittäin korkea (>80), sallitaan silti
-                                    if (hasAnySubContexts && mainFitsScore >= 70 && mainFitsScore < 80) return false; 
+                                    
+                                    // NEW: Relaxed check for services. If the option doesn't have a capacity requirement,
+                                    // it's likely a generic service (catering, photo, etc.) and shouldn't be strictly 
+                                    // filtered by the event's sub-context (e.g. "Perinteiset häät").
+                                    const isVenueOrCore = (opt.capacity_req > 0 || opt.node_link === 'ROLE_VENUE' || (opt.label && opt.label.toLowerCase().includes('tila')));
+                                    
+                                    if (isVenueOrCore && hasAnySubContexts && mainFitsScore >= 70 && mainFitsScore < 80) return false; 
                                 }
                             }
                         }
@@ -1230,6 +1234,19 @@
                 if (anchorCompany) {
                     const partners = getCompanyCollaborators(anchorCompany);
                     partners.forEach(p => globalActiveCollaboratorsSet.add(p));
+                    
+                    // NEW: Bidirectional partnership lookup. 
+                    // Also include companies that list the anchor as their partner.
+                    if (window.allCompanies) {
+                        window.allCompanies.forEach(c => {
+                            const cPartners = getCompanyCollaborators(c);
+                            if (cPartners.includes(anchorCompany.id) || cPartners.includes(anchorCompany.nimi)) {
+                                globalActiveCollaboratorsSet.add(c.id);
+                                globalActiveCollaboratorsSet.add(c.nimi);
+                            }
+                        });
+                    }
+
                     // Lisätään myös ankkuri itse
                     globalActiveCollaboratorsSet.add(anchorCompany.id);
                     globalActiveCollaboratorsSet.add(anchorCompany.nimi);
