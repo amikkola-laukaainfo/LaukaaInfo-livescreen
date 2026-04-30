@@ -1237,11 +1237,6 @@
             selectedAnchorCompanyId = null;
             
             globalActiveCollaboratorsSet = new Set();
-            allMatchingCompanies.forEach(c => {
-                const partners = getCompanyCollaborators(c);
-                partners.forEach(p => globalActiveCollaboratorsSet.add(p));
-            });
-
             renderResultsView();
         }
 
@@ -1249,14 +1244,8 @@
             if (selectedAnchorCompanyId === companyId) {
                 // Poistetaan valinta
                 selectedAnchorCompanyId = null;
-                // Palautetaan kaikki kumppanit
+                // Tyhjennetään kumppanit
                 globalActiveCollaboratorsSet = new Set();
-                matchingGroupsData.forEach(g => {
-                    g.companies.forEach(c => {
-                        const partners = getCompanyCollaborators(c);
-                        partners.forEach(p => globalActiveCollaboratorsSet.add(p));
-                    });
-                });
             } else {
                 // Asetetaan valinta
                 selectedAnchorCompanyId = companyId;
@@ -1557,7 +1546,8 @@
 
             let badges = '';
             let isTopMatch = (getFitsForScore(c, profilingKey) >= 80);
-            let isPartner = collaboratorsSet && (collaboratorsSet.has(c.id) || collaboratorsSet.has(c.nimi));
+            // NEW: Kumppani-merkintä näytetään vain jos kyseessä on eri ryhmä kuin ankkuri
+            let isPartner = !isAnchorGroup && collaboratorsSet && (collaboratorsSet.has(c.id) || collaboratorsSet.has(c.nimi));
             let capacityNote = '';
             let distanceHtml = '';
 
