@@ -1204,6 +1204,12 @@
 
                         if (opt.capacity_req > 0 || requestedCapacity > 0) {
                             const cap = getCompanyCapacity(c, currentProfilingKey);
+                            
+                            // Jos yritys on tila (venue) ja siltä puuttuu kapasiteetti, piilotetaan se Muistotilaisuus/Hautajaiset-kontekstissa
+                            if (currentNeedId === 'hautajaiset' && hasVenueTag && cap === 0) {
+                                return false; 
+                            }
+                            
                             if (cap === 0 && !hasVenueTag && opt.capacity_req > 0) return false;
                         }
 
