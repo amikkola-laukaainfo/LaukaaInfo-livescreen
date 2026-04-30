@@ -54997,24 +54997,19 @@
                     "tilausravintola",
                     "catering",
                     "pitopalvelu",
-                    "sauna",
-                    "palju",
                     "terassi",
                     "karaoke",
                     "videotykki",
                     "aanentoisto",
                     "langaton-internet",
                     "esteetön",
-                    "omajuomat",
                     "pikkujoulu",
                     "syntymapaivat",
-                    "satamakahvila",
                     "kahvila",
                     "ravintola",
                     "vierasvenesatama",
                     "kesäkahvila",
                     "jäätelö",
-                    "lauakka",
                     "saraavesi",
                     "venesatama",
                     "laivaranta",
@@ -55030,12 +55025,11 @@
                     "JUHLATILA",
                     "KOKOUSTILA",
                     "HAAT",
-                    "CATERING",
-                    "SAUNA"
+                    "CATERING"
                 ],
                 "description": "Tunnelmallinen juhla- ja kokoustila Lievestuoreen keskustassa. Soveltuu häihin, syntymäpäiviin, valmistujaisiin, muistotilaisuuksiin, kokouksiin ja yritystilaisuuksiin myös kokonaispalveluna. Yläkerran juhlatilassa istumapaikat noin 75 henkilölle ja kellaritilassa noin 20 henkilölle. Kesäisin käytössä myös viihtyisä piha-alue ja terassi.",
                 "website": "https://www.juhlatalohumina.fi/",
-                "email": "Yläkerran juhlatila noin 75 henkilölle, kellaritila noin 20 henkilölle. Tunnettu myös Janin Keittiön yhteydessä. Osoite vahvistettu Visit Laukaa -lähteestä.",
+                "email": "",
                 "phone": "358505664962"
             },
             "events_and_celebrations": {
@@ -55262,7 +55256,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-30T11:06:01.729Z",
+                "last_updated": "2026-04-30T11:19:38.197Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
@@ -55557,8 +55551,6 @@
                     "syntymäpäivät",
                     "muistotilaisuus",
                     "yritystilat",
-                    "sauna",
-                    "rantasauna",
                     "kartanonpuisto",
                     "esteetön",
                     "terassi",
@@ -55571,7 +55563,6 @@
                     "LAUKAA",
                     "VIHTAVUORI",
                     "JUHLATILA",
-                    "SAUNA",
                     "HÄÄT",
                     "KARTANO",
                     "MAJOITUS"
@@ -55804,7 +55795,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-30T11:06:53.377Z",
+                "last_updated": "2026-04-30T11:17:56.959Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
@@ -57826,7 +57817,6 @@
                     "häät",
                     "kokoustila",
                     "juhlasali",
-                    "sauna",
                     "pikkujoulut",
                     "seminaari",
                     "karonkka",
@@ -57849,7 +57839,6 @@
                     "JUHLATILA",
                     "HAAT",
                     "KOKOUSTILA",
-                    "SAUNA",
                     "KYLATALO"
                 ],
                 "description": "Vehniän kyläyhdistyksen omistama ja ylläpitämä juhla- ja kylätalo Laukaan Vehniällä. Soveltuu häihin, juhliin, kokouksiin, seminaareihin, pikkujouluihin, karonkkoihin, saunailtoihin ja muihin tapahtumiin ympäri vuoden. Tiloissa juhlasali 150–200 henkilölle, ravintolatila 40 henkilölle, takka- ja saunatilat noin 20 henkilölle, valmistuskeittiö, näyttämö, videotykki, WiFi, äänentoisto ja juhla-astiat 150 hengelle. Omat ruoat ja juomat sallittu.",
@@ -57863,7 +57852,7 @@
                 "outdoor_capacity": 0,
                 "is_accessible": true,
                 "is_lakeside": false,
-                "has_sauna": true,
+                "has_sauna": false,
                 "has_av_tech": true,
                 "has_stage": true,
                 "accommodation_beds": 0,
@@ -57886,23 +57875,23 @@
                 "karaoke_available": false,
                 "has_exclusive_catering": false,
                 "accommodation_included": false,
-                "refinement_tags": [
-                    "juhlatila",
-                    "hääjuhla",
-                    "haapaketti",
-                    "sauna",
-                    "takkatila",
-                    "näyttämö",
-                    "aanentoisto",
-                    "astiasto",
-                    "omaruuat",
-                    "esteetön",
-                    "siivouspalvelu",
-                    "pikkujoulu",
-                    "syntymäpäivät",
-                    "valmistujaiset",
-                    "karonkka"
-                ],
+                "refinement_tags": {
+                    "Yleinen": [
+                        "juhlatila",
+                        "hääjuhla",
+                        "haapaketti",
+                        "näyttämö",
+                        "aanentoisto",
+                        "astiasto",
+                        "omaruuat",
+                        "esteetön",
+                        "siivouspalvelu",
+                        "pikkujoulu",
+                        "syntymäpäivät",
+                        "valmistujaiset",
+                        "karonkka"
+                    ]
+                },
                 "digitization_features": [],
                 "entertainment_features": [
                     "näyttämö",
@@ -58088,7 +58077,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T16:37:31.440Z",
+                "last_updated": "2026-04-30T11:20:37.054Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
