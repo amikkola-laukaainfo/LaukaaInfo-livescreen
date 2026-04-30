@@ -26692,7 +26692,8 @@
                 "home_service": true,
                 "weekend_service": true,
                 "not_suitable_for": [
-                    "järjestää ruoan"
+                    "järjestää ruoan",
+                    "digitointi"
                 ],
                 "paired_with_by_context": {
                     "häät": [
@@ -26964,7 +26965,7 @@
                 ]
             },
             "meta": {
-                "last_updated": "2026-04-30T14:11:36.119Z",
+                "last_updated": "2026-04-30T15:10:32.866Z",
                 "verified_by": "AI-analysis-v2",
                 "status": "draft"
             }
