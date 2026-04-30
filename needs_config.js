@@ -391,17 +391,29 @@ const NEEDS_CONFIG = {
         "profilointi_context": "funerals_and_memorials",
         "steps": [
             {
-                "id": "tarkennus",
-                "question": "Millaista apua tarvitsette järjestelyihin?",
+                "id": "paatarve",
+                "multiple": true,
+                "hide_results": true,
+                "question": "Mitä asioita haluatte edistää?",
                 "options": [
-                    { "label": "Hautajaisjärjestelyt (arkku, uurna ym.)", "sub_context": "hautauspalvelu", "tags": ["hautauspalvelu"] },
-                    { "label": "Muistotilaisuus", "sub_context": "muistotilaisuus", "tags": ["juhlatila", "pitopalvelu"] },
-                    { "label": "Perunkirjoitus & Lakipalvelut", "sub_context": "perunkirjoitus", "tags": ["lakiasiaintoimistot"] }
+                    { "label": "Hautajaisjärjestelyt (arkku, uurna, hautakivet)", "sub_context": "hautauspalvelu", "tags": ["hautauspalvelu"] },
+                    { "label": "Muistotilaisuuden järjestäminen", "sub_context": "muistotilaisuus", "tags": ["muistotilaisuus"] },
+                    { "label": "Perunkirjoitus ja laki-asiat", "sub_context": "perunkirjoitus", "tags": ["lakiasiaintoimistot"] }
+                ]
+            },
+            {
+                "id": "peruspalvelu",
+                "question": "Hautauspalvelut?",
+                "skipIf": "!isSelected('paatarve', 'Hautajaisjärjestelyt')",
+                "options": [
+                    { "label": "Hautauspalvelu ja arkut", "tags": ["hautauspalvelu"] },
+                    { "label": "Hautakivet ja kaiverrukset", "tags": ["hautauspalvelu"] }
                 ]
             },
             {
                 "id": "kapasiteetti",
-                "question": "Kuinka paljon henkilöitä tilaisuuteen osallistuu (arvio)?",
+                "question": "Kuinka paljon henkilöitä muistotilaisuuteen osallistuu?",
+                "skipIf": "!isSelected('paatarve', 'Muistotilaisuus')",
                 "options": [
                     { "label": "Alle 20 henkilöä", "capacity_req": 20, "tags": [] },
                     { "label": "Noin 20 - 50 henkilöä", "capacity_req": 50, "tags": [] },
@@ -410,16 +422,9 @@ const NEEDS_CONFIG = {
                 ]
             },
             {
-                "id": "peruspalvelu",
-                "question": "Hautauspalvelut?",
-                "options": [
-                    { "label": "Hautauspalvelu ja arkut", "tags": ["hautauspalvelu"] },
-                    { "label": "Hautakivet ja kaiverrukset", "tags": ["hautauspalvelu"] }
-                ]
-            },
-            {
                 "id": "muistotila",
                 "question": "Muistotilaisuuden tila?",
+                "skipIf": "!isSelected('paatarve', 'Muistotilaisuus')",
                 "options": [
                     {
                         "label": "Rauhallinen muistotila",
@@ -441,9 +446,10 @@ const NEEDS_CONFIG = {
                 ]
             },
             {
-                "id": "jarjestelyt",
+                "id": "muistotilaisuus_lisapalvelut",
                 "multiple": true,
-                "question": "Muistotilaisuuden lisäjärjestelyt?",
+                "question": "Muistotilaisuuden lisäpalvelut?",
+                "skipIf": "!isSelected('paatarve', 'Muistotilaisuus')",
                 "options": [
                     {
                         "label": "Kahvitus / Pitopalvelu",
@@ -456,10 +462,20 @@ const NEEDS_CONFIG = {
                         "tags": ["kukkakauppa"],
                         "profilointi_filter": { "section": "funerals_and_memorials", "field": "funeral_flowers", "value": true }
                     },
-                    { "label": "Lakipalvelut / Perunkirjoitus", "tags": ["lakiasiaintoimistot"] },
-                    { "label": "Kuljetus", "tags": ["hautauspalvelu", "kuljetus"],
+                    { "label": "Kuljetuspalvelut", "tags": ["hautauspalvelu", "kuljetus"],
                         "profilointi_filter": { "section": "funerals_and_memorials", "field": "transport_assistance", "value": true }
                     }
+                ]
+            },
+            {
+                "id": "laki_asiat_tarkennus",
+                "multiple": true,
+                "question": "Lakipalvelut ja asiakirjat?",
+                "skipIf": "!isSelected('paatarve', 'Laki-asiat')",
+                "options": [
+                    { "label": "Perunkirjoitus", "tags": ["lakiasiaintoimistot"] },
+                    { "label": "Testamentti ja edunvalvonta", "tags": ["lakiasiaintoimistot"] },
+                    { "label": "Lakiasiain neuvonta", "tags": ["lakiasiaintoimistot"] }
                 ]
             },
             {
