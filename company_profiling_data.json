@@ -1433,7 +1433,7 @@
                     "hääkakku",
                     "juhlakakku",
                     "astiavuokraus",
-                    "yritystilaisuudet",
+                    "yritystapahtuma",
                     "kokouskahvit"
                 ],
                 "node_links": [
@@ -1514,7 +1514,7 @@
                 "refinement_tags": [
                     "kokoustila",
                     "kokouskahvit",
-                    "yritystilaisuudet"
+                    "yritystapahtuma"
                 ],
                 "wellbeing_and_activity_features": [],
                 "entertainment_features": [],
@@ -1908,9 +1908,9 @@
                     ]
                 },
                 "sub_contexts": [
-                    "tilauskakut",
-                    "hääkakut",
-                    "muistotilaisuudet",
+                    "tilauskakku",
+                    "hääkakku",
+                    "muistotilaisuus",
                     "kahvitarjoilu",
                     "lounas",
                     "pitopalvelu",
@@ -1962,8 +1962,8 @@
                 "has_exclusive_catering": false,
                 "accommodation_included": false,
                 "refinement_tags": [
-                    "hääkakut",
-                    "juhlakakut",
+                    "hääkakku",
+                    "juhlakakku",
                     "kahvitarjoilu"
                 ],
                 "digitization_features": [],
@@ -2303,7 +2303,6 @@
                 "refinement_tags": [
                     "häävideo",
                     "juhlakuvaus",
-                    "ilmakuvaus",
                     "drone-kuvaus",
                     "videotuotanto",
                     "valokuvaus"
@@ -5844,7 +5843,7 @@
                     "sosiaalipedagoginen hevostoiminta",
                     "green care",
                     "eläinavusteinen toiminta",
-                    "tyhy-päivät",
+                    "tyhy-päivä",
                     "hyvinvointipäivät",
                     "ryhmätoiminta",
                     "luontoelämykset",
@@ -14250,10 +14249,10 @@
                 },
                 "sub_contexts": [
                     "tapahtumatuotanto",
-                    "kokouspalvelut",
+                    "kokous",
                     "hyvinvointi",
                     "työhyvinvointi",
-                    "juhlapalvelut",
+                    "juhlapalvelu",
                     "ryhmätoiminta",
                     "valmennus",
                     "tilaisuuksien järjestäminen"
@@ -19664,7 +19663,7 @@
                 "not_suitable_for": [],
                 "paired_with_by_context": {},
                 "sub_contexts": [
-                    "aanentoisto",
+                    "äänentoisto",
                     "tapahtumatekniikka",
                     "dj",
                     "ohjelmapalvelut"
@@ -20138,7 +20137,7 @@
                     "lounasravintola",
                     "kahvila",
                     "pitopalvelu",
-                    "juhlapalvelut"
+                    "juhlapalvelu"
                 ],
                 "node_links": [
                     "RAVINTOLA",
@@ -23142,7 +23141,7 @@
                     "juhlatila",
                     "kokoustila",
                     "häät",
-                    "yritystapahtumat",
+                    "yritystapahtuma",
                     "tyhy-päivä",
                     "luontopalvelu",
                     "green care",
@@ -23431,10 +23430,10 @@
                     "kylpylä",
                     "kuntoutus",
                     "hotelli",
-                    "kokouspalvelut",
+                    "kokous",
                     "hyvinvointi",
                     "ravintolapalvelut",
-                    "saunat"
+                    "sauna"
                 ],
                 "node_links": [
                     "LAUKAA",
@@ -24006,7 +24005,7 @@
                 "av_support": true,
                 "staff_events_specialized": true,
                 "refinement_tags": [
-                    "yritystapahtumat",
+                    "yritystapahtuma",
                     "av-tekniikka",
                     "tapahtumatuotanto"
                 ],
@@ -50419,10 +50418,10 @@
                 "sub_contexts": [
                     "ravintola",
                     "catering",
-                    "kokouspalvelut",
+                    "kokous",
                     "juhlat",
                     "häät",
-                    "yritystilaisuudet",
+                    "yritystapahtuma",
                     "lounas",
                     "a la carte"
                 ],
@@ -50655,7 +50654,7 @@
                     "ravintola",
                     "majoitus",
                     "venevuokraus",
-                    "lomamökit",
+                    "lomamökki",
                     "tapahtumat",
                     "matkailu"
                 ],
@@ -52977,8 +52976,8 @@
                     "sauna",
                     "luontoaktiviteetit",
                     "hyvinvointi",
-                    "kokouspalvelut",
-                    "juhlapalvelut"
+                    "kokous",
+                    "juhlapalvelu"
                 ],
                 "node_links": [
                     "SAUNA",
@@ -53653,7 +53652,7 @@
                     "juhlat",
                     "häät",
                     "muistotilaisuus",
-                    "yritystilaisuudet",
+                    "yritystapahtuma",
                     "tarjoilu",
                     "ruokapalvelu",
                     "lähiruoka",
@@ -54140,10 +54139,10 @@
                     "kylätalo",
                     "kokoontumistila",
                     "vuokratila",
-                    "juhlapalvelut",
+                    "juhlapalvelu",
                     "tilavuokraus",
                     "häät",
-                    "yritystapahtumat"
+                    "yritystapahtuma"
                 ],
                 "node_links": [
                     "LAUKAA",
@@ -54445,7 +54444,7 @@
                     "häävideo",
                     "juhlakuvaus",
                     "tapahtumakuvaus",
-                    "dronekuvaus",
+                    "drone-kuvaus",
                     "potretti"
                 ],
                 "digitization_features": [],
@@ -54930,7 +54929,7 @@
                     "hotelli",
                     "iglut",
                     "lasi-iglu",
-                    "mökit",
+                    "mökki",
                     "ravintola",
                     "sauna",
                     "golf",
@@ -54943,7 +54942,7 @@
                     "juhlatila",
                     "kartano",
                     "kokoustila",
-                    "yritystapahtumat",
+                    "yritystapahtuma",
                     "majoitus",
                     "ohjelmapalvelut",
                     "pitopalvelu",
@@ -55250,9 +55249,9 @@
                     "häät",
                     "majoitus",
                     "sauna",
-                    "yritystapahtumat",
+                    "yritystapahtuma",
                     "kartano",
-                    "juhlapalvelut",
+                    "juhlapalvelu",
                     "pitopalvelu",
                     "kokouspaketti",
                     "tyky-päivä",
@@ -55549,21 +55548,21 @@
                     "häät",
                     "juhlat",
                     "tapahtumat",
-                    "yritystapahtumat",
-                    "muistotilaisuudet",
-                    "juhlapalvelut",
-                    "kokouspalvelut",
+                    "yritystapahtuma",
+                    "muistotilaisuus",
+                    "juhlapalvelu",
+                    "kokous",
                     "tilausravintola",
                     "catering",
                     "pitopalvelu",
                     "terassi",
                     "karaoke",
                     "videotykki",
-                    "aanentoisto",
+                    "äänentoisto",
                     "langaton-internet",
                     "esteetön",
-                    "pikkujoulu",
-                    "syntymapaivat",
+                    "pikkujoulut",
+                    "syntymäpäivät",
                     "kahvila",
                     "ravintola",
                     "vierasvenesatama",
@@ -55572,10 +55571,7 @@
                     "saraavesi",
                     "venesatama",
                     "laivaranta",
-                    "juhlatilat",
-                    "kokoustilat",
                     "yritysjuhlat",
-                    "syntymäpäivät",
                     "valmistujaiset"
                 ],
                 "node_links": [
@@ -55668,7 +55664,7 @@
                 "refinement_tags": [
                     "kokoustila",
                     "yritystapahtuma",
-                    "pikkujoulu",
+                    "pikkujoulut",
                     "kokouspaketti",
                     "tyky-paiva",
                     "seminaari",
@@ -55845,15 +55841,14 @@
                 "not_suitable_for": [],
                 "paired_with_by_context": {},
                 "sub_contexts": [
-                    "juhlatilat",
-                    "kokoustila",
                     "juhlatila",
+                    "kokoustila",
                     "laukaa",
                     "sarahovi",
                     "palvelukeskus",
                     "lounasravintola",
-                    "kokouspalvelut",
-                    "juhlapalvelut",
+                    "kokous",
+                    "juhlapalvelu",
                     "muistotilaisuus",
                     "pitopalvelu",
                     "ateriapalvelu",
@@ -55938,7 +55933,7 @@
                     "seminaari",
                     "työpaja",
                     "yritystapahtuma",
-                    "pikkujoulu",
+                    "pikkujoulut",
                     "kokouspaketti",
                     "ateriapalvelu",
                     "lounas",
@@ -56099,7 +56094,6 @@
                 "not_suitable_for": [],
                 "paired_with_by_context": {},
                 "sub_contexts": [
-                    "juhlatilat",
                     "juhlatila",
                     "vihtavuori",
                     "laukaa",
@@ -56116,7 +56110,7 @@
                     "historiallinen",
                     "pitopalvelu",
                     "kartano",
-                    "juhlapalvelut"
+                    "juhlapalvelu"
                 ],
                 "node_links": [
                     "LAUKAA",
@@ -56208,7 +56202,7 @@
                 "refinement_tags": [
                     "kokoustila",
                     "yritystapahtuma",
-                    "pikkujoulu",
+                    "pikkujoulut",
                     "tyky-päivä",
                     "koulutustila",
                     "juhlapaikka"
@@ -57805,25 +57799,24 @@
                 "not_suitable_for": [],
                 "paired_with_by_context": {},
                 "sub_contexts": [
-                    "juhlatilat",
+                    "juhlatila",
                     "häät",
                     "kokoustila",
                     "juhlasali",
                     "muistotilaisuus",
                     "saraavesi",
                     "tyvelänniemi",
-                    "juhlatila",
                     "laukaa",
                     "parveke",
                     "ranta",
                     "flyygeli",
                     "takka",
-                    "aanentoisto",
+                    "äänentoisto",
                     "omaruuat",
                     "astiasto",
-                    "poytaliinat",
+                    "pöytäliinat",
                     "piano",
-                    "jarvinakyma"
+                    "järvinäkymä"
                 ],
                 "node_links": [
                     "LAUKAA",
@@ -57874,11 +57867,11 @@
                     "ranta",
                     "flyygeli",
                     "piano",
-                    "aanentoisto",
+                    "äänentoisto",
                     "astiasto",
-                    "poytaliinat",
+                    "pöytäliinat",
                     "omaruuat",
-                    "jarvinakyma",
+                    "järvinäkymä",
                     "parveke",
                     "takka",
                     "muistotilaisuus",
@@ -57916,11 +57909,11 @@
                 "refinement_tags": [
                     "kokoustila",
                     "yritystapahtuma",
-                    "pikkujoulu",
+                    "pikkujoulut",
                     "tyky-paiva",
-                    "strategiapaiva",
+                    "strategiapäivä",
                     "juhlapaikka",
-                    "aanentoisto",
+                    "äänentoisto",
                     "ateljee"
                 ],
                 "wellbeing_and_activity_features": [
@@ -57950,7 +57943,7 @@
                     "muistotilaisuus",
                     "siunaustilaisuus",
                     "flyygeli",
-                    "jarvinakyma"
+                    "järvinäkymä"
                 ],
                 "digitization_features": [],
                 "collaborated_with": []
@@ -58052,7 +58045,7 @@
                 "bridal_services": true,
                 "group_bookings": true,
                 "refinement_tags": [
-                    "jarvinakyma",
+                    "järvinäkymä",
                     "parveke",
                     "flyygeli",
                     "haakampaus",
@@ -58091,7 +58084,7 @@
                 "not_suitable_for": [],
                 "paired_with_by_context": {},
                 "sub_contexts": [
-                    "juhlatilat",
+                    "juhlatila",
                     "häät",
                     "kokoustila",
                     "juhlasali",
@@ -58102,7 +58095,7 @@
                     "kylätalo",
                     "näyttämö",
                     "videotykki",
-                    "aanentoisto",
+                    "äänentoisto",
                     "langaton-internet",
                     "astiasto",
                     "valmistuskeitto",
@@ -58203,13 +58196,13 @@
                     "kokoustila",
                     "seminaari",
                     "yritystapahtuma",
-                    "pikkujoulu",
+                    "pikkujoulut",
                     "tyky-päivä",
                     "strategiapäivä",
                     "koulutustila",
                     "videotykki",
                     "langaton-internet",
-                    "aanentoisto",
+                    "äänentoisto",
                     "siivouspalvelu"
                 ],
                 "wellbeing_and_activity_features": [
@@ -58385,7 +58378,7 @@
                 "not_suitable_for": [],
                 "paired_with_by_context": {},
                 "sub_contexts": [
-                    "juhlatilat",
+                    "juhlatila",
                     "häät",
                     "kokoustila",
                     "juhlasali",
@@ -58398,12 +58391,11 @@
                     "videotykki",
                     "esteetön",
                     "omaruuat",
-                    "jarjestysmies",
+                    "järjestysmies",
                     "lattiamajoitus",
                     "tyovaentalo",
                     "historiallinen",
-                    "juhlatila",
-                    "yritystilaisuudet"
+                    "yritystapahtuma"
                 ],
                 "node_links": [
                     "LAUKAA",
@@ -58497,13 +58489,13 @@
                     "kokoustila",
                     "seminaari",
                     "yritystapahtuma",
-                    "pikkujoulu",
+                    "pikkujoulut",
                     "tyky-päivä",
                     "strategiapäivä",
                     "koulutustila",
                     "videotykki",
                     "kahvila",
-                    "jarjestysmies"
+                    "järjestysmies"
                 ],
                 "wellbeing_and_activity_features": [
                     "sauna"
@@ -58706,7 +58698,7 @@
                     "ryhmät",
                     "pitopalvelu",
                     "juhlatila",
-                    "yritystilaisuudet",
+                    "yritystapahtuma",
                     "ruokailu",
                     "tilausravintola"
                 ],
