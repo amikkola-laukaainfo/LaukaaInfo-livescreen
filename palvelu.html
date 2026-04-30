@@ -718,9 +718,21 @@
             if (idx > -1) {
                 selections[step.id].splice(idx, 1);
                 document.getElementById(`label-${optionIndex}`).classList.remove('selected');
+                // Poistetaan sub_context jos vaihtoehto poistetaan
+                if (option.sub_context && selections._sub_contexts) {
+                    const scIdx = selections._sub_contexts.indexOf(option.sub_context);
+                    if (scIdx > -1) selections._sub_contexts.splice(scIdx, 1);
+                }
             } else {
                 selections[step.id].push(option);
                 document.getElementById(`label-${optionIndex}`).classList.add('selected');
+                // Tallennetaan sub_context jos se on määritelty (TASO 2)
+                if (option.sub_context) {
+                    if (!selections._sub_contexts) selections._sub_contexts = [];
+                    if (!selections._sub_contexts.includes(option.sub_context)) {
+                        selections._sub_contexts.push(option.sub_context);
+                    }
+                }
             }
         }
 

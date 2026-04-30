@@ -26148,7 +26148,7 @@
             "name": "Huonekaluilike Vehviläinen Oy (Kukka ja Hautauspalvelu Vehviläinen)",
             "core": {
                 "fits_for": {
-                    "funerals-and-memorials": 34,
+                    "funerals-and-memorials": 85,
                     "huonekalumyynti": 30,
                     "kukkakauppa": 25,
                     "kodinsisustus": 15,
@@ -26191,8 +26191,10 @@
                     "huonekalut",
                     "sisustus",
                     "kukat",
+                    "kukkakauppa",
                     "hautajaiset",
                     "hautauspalvelu",
+                    "muistotilaisuus",
                     "kuljetus"
                 ],
                 "node_links": [
