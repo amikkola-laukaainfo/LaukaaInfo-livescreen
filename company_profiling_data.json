@@ -2229,6 +2229,7 @@
                     ]
                 },
                 "sub_contexts": [
+                    "muistotilaisuus",
                     "muistovideo",
                     "häävideo",
                     "häävideoiden editointi",
@@ -2371,14 +2372,12 @@
                 "memorial_arrangements": false,
                 "transport_assistance": false,
                 "urgent_booking_available": false,
-                "refinement_tags": {
-                    "Yleinen": [
-                        "muistovideo",
-                        "kuvakooste",
-                        "hautajaiskuvaus",
-                        "muistotilaisuuskuvaus"
-                    ]
-                },
+                "refinement_tags": [
+                    "muistovideo",
+                    "kuvakooste",
+                    "hautajaiskuvaus",
+                    "muistotilaisuuskuvaus"
+                ],
                 "digitization_features": [
                     "perhearkiston digitointi",
                     "valokuvien digitointi",
@@ -26717,6 +26716,7 @@
                     ]
                 },
                 "sub_contexts": [
+                    "muistotilaisuus",
                     "valokuvaus",
                     "muotokuvaus",
                     "perhekuvaus",
@@ -31114,6 +31114,7 @@
                     ]
                 },
                 "sub_contexts": [
+                    "muistotilaisuus",
                     "valokuvaus",
                     "hääkuvaus",
                     "tapahtumakuvaus",

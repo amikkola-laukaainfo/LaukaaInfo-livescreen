@@ -1103,7 +1103,9 @@
                                     // NEW: Relaxed check for services. If the option doesn't have a capacity requirement,
                                     // it's likely a generic service (catering, photo, etc.) and shouldn't be strictly 
                                     // filtered by the event's sub-context (e.g. "Perinteiset häät").
-                                    const isVenueOrCore = (opt.capacity_req > 0 || opt.node_link === 'ROLE_VENUE' || (opt.label && opt.label.toLowerCase().includes('tila')));
+                                    // FIX: Vältetään "tilaisuudessa" sanan osuminen "tila"-hakusanaan
+                                    const labelLower = (opt.label || '').toLowerCase();
+                                    const isVenueOrCore = (opt.capacity_req > 0 || opt.node_link === 'ROLE_VENUE' || (labelLower.includes('tila') && !labelLower.includes('tilaisuus')));
                                     
                                     if (isVenueOrCore && hasAnySubContexts && mainFitsScore >= 70 && mainFitsScore < 80) return false; 
                                 }
