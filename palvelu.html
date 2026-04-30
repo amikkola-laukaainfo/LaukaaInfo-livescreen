@@ -1268,6 +1268,41 @@
                             if (match) isProfiledMatch = true;
                         }
 
+                        // TAKSONOMIA-TÄSMÄYS (UUSI)
+                        if (taxonomyData && !isProfiledMatch) {
+                            const intent = taxonomyData.intents.find(i => i.id === currentProfilingKey || i.id === currentProfilingKey.replace(/_/g, '-'));
+                            if (intent) {
+                                const labelLower = (opt.label || '').toLowerCase();
+                                const isTaxonomyTerm = intent.refinements.some(r => labelLower.includes(r.toLowerCase())) ||
+                                                       intent.subcontexts.some(s => labelLower.includes(s.toLowerCase()));
+                                
+                                if (isTaxonomyTerm) {
+                                    const companyContent = (
+                                        (c.tags || '') + ' ' + 
+                                        (c.kategoria || '') + ' ' + 
+                                        (c.nimi || '') + ' ' +
+                                        (c.profiling?.core?.sub_contexts?.join(' ') || '') + ' ' +
+                                        (c.profiling?.core?.node_links?.join(' ') || '')
+                                    ).toLowerCase();
+                                    
+                                    const taxonomyMatch = intent.refinements.concat(intent.subcontexts).some(term => {
+                                        const t = term.toLowerCase();
+                                        return labelLower.includes(t) && companyContent.includes(t);
+                                    });
+                                    if (taxonomyMatch) isProfiledMatch = true;
+                                }
+
+                                if (!isProfiledMatch && intent.nodeLinks) {
+                                    const links = c.profiling?.core?.node_links || [];
+                                    if (intent.nodeLinks.some(nl => links.includes(nl))) {
+                                        if (labelLower.includes('tila') || labelLower.includes('palvelu') || (opt.tags && opt.tags.some(t => t.toLowerCase().includes('tila')))) {
+                                            isProfiledMatch = true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
                         if (!isProfiledMatch && opt.tags) {
                             if (opt.tags.includes('digitointi')) {
                                 const catData = getCategoryData(c, currentProfilingKey);
