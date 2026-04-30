@@ -55270,9 +55270,7 @@
                 "corporate_clients": false,
                 "home_service": false,
                 "weekend_service": false,
-                "not_suitable_for": [
-                    "pitopalvelu"
-                ],
+                "not_suitable_for": [],
                 "paired_with_by_context": {},
                 "sub_contexts": [
                     "juhlatilat",
@@ -55535,7 +55533,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T17:57:31.971Z",
+                "last_updated": "2026-04-30T09:26:50.739Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
