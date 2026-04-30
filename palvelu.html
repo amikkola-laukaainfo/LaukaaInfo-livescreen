@@ -1705,10 +1705,19 @@
             
             let relationsHtml = relations.map(r => {
                 const targetIntent = taxonomyData.intents.find(i => i.id === r.to);
-                const label = targetIntent ? targetIntent.label : r.to;
+                const isServiceType = taxonomyData.serviceTypes.includes(r.to.toUpperCase());
+                
+                // Kaunistetaan label: Intentin label TAI service typen nimi nätisti TAI id
+                const label = targetIntent ? targetIntent.label : (isServiceType ? r.to.charAt(0).toUpperCase() + r.to.slice(1).toLowerCase() : r.to);
+                
                 let typeText = r.type === 'cross-sell' ? 'Lisäpalvelu' : (r.type === 'supporting' ? 'Tukipalvelu' : 'Liittyy tähän');
                 return `<span class="taxonomy-relation-tag">${typeText}: ${label}</span>`;
             }).join('');
+
+            if (!relationsHtml) {
+                container.style.display = 'none';
+                return;
+            }
 
             container.innerHTML = `
                 <div class="taxonomy-info-box">
