@@ -26650,10 +26650,25 @@
                 "fits_for": {
                     "häät": 40,
                     "hautajaiset": 35,
-                    "vapaa-aika": 35
+                    "vapaa-aika": 35,
+                    "events-and-celebrations": 75,
+                    "business-events": 45,
+                    "funerals-and-memorials": 70,
+                    "moving-and-housing": 10,
+                    "construction-and-maintenance": 0,
+                    "cottage-services": 0,
+                    "housing-company-and-contracts": 0,
+                    "startup-services": 20,
+                    "business-growth": 30,
+                    "wellbeing-and-beauty": 40
                 },
                 "priority_score": 0,
-                "paired_with": [],
+                "paired_with": [
+                    "Valokuvaaja",
+                    "Videokuvaaja",
+                    "Kampaaja",
+                    "Meikkaaja"
+                ],
                 "service_area": {
                     "mode": "TOIMIPISTE",
                     "radius_km": 50,
@@ -26663,13 +26678,13 @@
                         "Jyväskylä",
                         "Keski-Suomi"
                     ],
-                    "note": "Valokuvausstudio sijaitsee Lievestuoreella, osoitteessa Liepeentie 7 b 13 . Palveluita tarjotaan Jyväskylässä ja muualla Keski-Suomessa, ja kuvauksia toteutetaan myös liikkuvasti kodeissa, toimistoilla, ulkona ja tapahtumissa ."
+                    "note": "Valokuvausstudio sijaitsee Lievestuoreella, osoitteessa Liepeentie 7 b 13. Palveluita tarjotaan Jyväskylässä ja muualla Keski-Suomessa, ja kuvauksia toteutetaan myös liikkuvasti kodeissa, toimistoilla, ulkona ja tapahtumissa."
                 },
                 "emergency_available": false,
                 "contract_customer_available": false,
                 "corporate_clients": true,
                 "home_service": true,
-                "weekend_service": false,
+                "weekend_service": true,
                 "not_suitable_for": [
                     "järjestää ruoan"
                 ],
@@ -26679,11 +26694,49 @@
                     ],
                     "hautajaiset": [
                         "valokuvaaja"
+                    ],
+                    "events-and-celebrations": [
+                        "valokuvaaja",
+                        "muotokuvaus",
+                        "juhlakuvaukset"
+                    ],
+                    "funerals-and-memorials": [
+                        "hautajaiskuvaus",
+                        "muotokuvakooste"
+                    ],
+                    "business-events": [
+                        "yrityskuvaus",
+                        "henkilöstökuvat",
+                        "brändikuvat"
                     ]
                 },
-                "sub_contexts": [],
-                "node_links": [],
-                "description": "Valokuvaamo Jenora Design on vuonna 2013 perustettu yksityinen elinkeinonharjoittaja, joka tarjoaa perheiden kuvauspalveluita, erikoismuotokuvauksia/boudoirkuvauksia, valmistujaiskuvauksia (ylioppilas- ja rippikuvaukset), joulukorttikuvausta, hautajaiskuvausta sekä eläketarinoiden tallentamista . Yrityksen perustaja ja valokuvaaja on Jenni Oranen . Ydinosaamista ovat klassiset, ajattomat muotokuvat .",
+                "sub_contexts": [
+                    "valokuvaus",
+                    "muotokuvaus",
+                    "perhekuvaus",
+                    "hääkuvaus",
+                    "hautajaiskuvaus",
+                    "valmistujaiskuvaus",
+                    "rippikuvaus",
+                    "ylioppilaskuvaus",
+                    "boudoirkuvaus",
+                    "joulukorttikuvaus",
+                    "yrityskuvaus",
+                    "henkilökuvat",
+                    "brändikuvat",
+                    "studiokuvaus",
+                    "miljöökuvaus"
+                ],
+                "node_links": [
+                    "LAUKAA",
+                    "LIEVESTUORE",
+                    "VALOKUVAUS",
+                    "MUOTOKUVAUS",
+                    "HÄÄT",
+                    "HAUTAJAISET",
+                    "YRITYSKUVAUS"
+                ],
+                "description": "Valokuvaamo Jenora Design on vuonna 2013 perustettu yksityinen elinkeinonharjoittaja, joka tarjoaa perheiden kuvauspalveluita, erikoismuotokuvauksia ja boudoirkuvauksia, valmistujaiskuvauksia (ylioppilas- ja rippikuvaukset), joulukorttikuvauksia, hautajaiskuvauksia sekä elämäntarinoiden visuaalista tallentamista. Yrityksen perustaja ja valokuvaaja on Jenni Oranen. Ydinosaamista ovat klassiset ja ajattomat muotokuvat sekä yksilöllinen asiakaskokemus.",
                 "website": "jenoradesign.com",
                 "email": "",
                 "phone": ""
@@ -26717,10 +26770,19 @@
                 "karaoke_available": false,
                 "has_exclusive_catering": false,
                 "accommodation_included": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "hääkuvaus",
+                    "juhlakuvaus",
+                    "muotokuvaus",
+                    "perhekuvaus"
+                ],
                 "digitization_features": [],
                 "entertainment_features": [],
-                "collaborated_with": []
+                "collaborated_with": [
+                    "kampaaja",
+                    "meikkaaja",
+                    "juhlatilat"
+                ]
             },
             "business_events": {
                 "meeting_capacity": 0,
@@ -26737,13 +26799,21 @@
                 "business_catering": false,
                 "event_hosting": false,
                 "corporate_gifts": false,
-                "branding_support": false,
+                "branding_support": true,
                 "av_support": false,
                 "staff_events_specialized": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "yrityskuvaus",
+                    "henkilöstökuvat",
+                    "brändikuvaus",
+                    "markkinointikuvat"
+                ],
                 "wellbeing_and_activity_features": [],
                 "entertainment_features": [],
-                "collaborated_with": []
+                "collaborated_with": [
+                    "markkinointitoimisto",
+                    "graafinen suunnittelija"
+                ]
             },
             "funerals_and_memorials": {
                 "memorial_service_capacity": 0,
@@ -26757,9 +26827,18 @@
                 "memorial_arrangements": false,
                 "transport_assistance": false,
                 "urgent_booking_available": false,
-                "refinement_tags": [],
-                "digitization_features": [],
-                "collaborated_with": []
+                "refinement_tags": [
+                    "hautajaiskuvaus",
+                    "muistokuva",
+                    "muotokuva"
+                ],
+                "digitization_features": [
+                    "elämäntarinan kuvallinen tallennus"
+                ],
+                "collaborated_with": [
+                    "hautaustoimisto",
+                    "kukkakauppa"
+                ]
             },
             "moving_and_housing": {
                 "moving_truck_available": false,
@@ -26828,25 +26907,36 @@
                 "banking_support": false,
                 "website_creation": false,
                 "webshop_setup": false,
-                "branding_support": false,
+                "branding_support": true,
                 "logo_design": false,
-                "business_photography": false,
-                "refinement_tags": [],
-                "collaborated_with": []
+                "business_photography": true,
+                "refinement_tags": [
+                    "brändikuvaus",
+                    "yrityskuvat"
+                ],
+                "collaborated_with": [
+                    "markkinointitoimisto"
+                ]
             },
             "business_growth": {
                 "google_ads": false,
                 "social_media_marketing": false,
                 "seo_services": false,
-                "content_creation": false,
+                "content_creation": true,
                 "video_production": false,
                 "crm_support": false,
                 "recruitment_support": false,
                 "sales_development": false,
                 "automation_services": false,
                 "consulting_services": false,
-                "refinement_tags": [],
-                "collaborated_with": []
+                "refinement_tags": [
+                    "sisällöntuotanto",
+                    "kuvapankki",
+                    "brändikuvat"
+                ],
+                "collaborated_with": [
+                    "digimarkkinointitoimisto"
+                ]
             },
             "wellbeing_and_beauty": {
                 "home_visits": true,
@@ -26857,12 +26947,19 @@
                 "event_makeup": false,
                 "bridal_services": false,
                 "group_bookings": false,
-                "refinement_tags": [],
-                "collaborated_with": []
+                "refinement_tags": [
+                    "boudoirkuvaus",
+                    "henkilökuvaus",
+                    "itseilmaisu"
+                ],
+                "collaborated_with": [
+                    "meikkaaja",
+                    "kampaaja"
+                ]
             },
             "meta": {
-                "last_updated": "2026-04-29T10:12:54.920Z",
-                "verified_by": "AI-analysis-v1",
+                "last_updated": "2026-04-30T14:11:36.119Z",
+                "verified_by": "AI-analysis-v2",
                 "status": "draft"
             }
         },
@@ -30963,9 +31060,14 @@
             "core": {
                 "fits_for": {
                     "häät": 35,
-                    "vapaa-aika": 35
+                    "vapaa-aika": 35,
+                    "events-and-celebrations": 70,
+                    "business-events": 65,
+                    "funerals-and-memorials": 60,
+                    "business-growth": 35,
+                    "startup-services": 30
                 },
-                "priority_score": 0,
+                "priority_score": 52,
                 "paired_with": [
                     "Kukat",
                     "Valokuvaaja",
@@ -30979,7 +31081,7 @@
                         "Jyväskylä",
                         "Keski-Suomi"
                     ],
-                    "note": "Pääasiallinen toiminta-alue Keski-Suomi (erityisesti Laukaa/Jyväskylä-seutu), tarvittaessa koko Suomen alue. 40 km säde Laukaasta ilman ylimääräisiä matkakuluja, sen yli 0,53 €/km ."
+                    "note": "Pääasiallinen toiminta-alue Keski-Suomi (erityisesti Laukaa/Jyväskylä-seutu), tarvittaessa koko Suomen alue. 40 km säde Laukaasta ilman ylimääräisiä matkakuluja, sen yli 0,53 €/km."
                 },
                 "emergency_available": false,
                 "contract_customer_available": true,
@@ -30989,11 +31091,44 @@
                 "not_suitable_for": [
                     "järjestää ruoan"
                 ],
-                "paired_with_by_context": {},
-                "sub_contexts": [],
-                "node_links": [],
-                "description": "Dokumentaristiseen tyyliin erikoistunut valokuvaamo, joka tarjoaa henkilö-, urheilu- ja tapahtumakuvauspalveluja . Yrityksen omistaa ja sitä pyörittää Linda Malmström, joka on koulutukseltaan media-alan erikoisammattitutkinnon suorittanut valokuvaajamestari . Yritys on toiminut vuodesta 2022 lähtien . Yrityksen kotipaikka on Laukaa .",
-                "website": "www.photomalmstrom.com",
+                "paired_with_by_context": {
+                    "events-and-celebrations": [
+                        "valokuvaaja",
+                        "tapahtumakuvaus",
+                        "hääkuvaus"
+                    ],
+                    "funerals-and-memorials": [
+                        "hautajaiskuvaus",
+                        "muistotilaisuuskuvaus"
+                    ],
+                    "business-events": [
+                        "yrityskuvaus",
+                        "tapahtumakuvaus",
+                        "henkilöstökuvaus"
+                    ]
+                },
+                "sub_contexts": [
+                    "valokuvaus",
+                    "hääkuvaus",
+                    "tapahtumakuvaus",
+                    "henkilökuvaus",
+                    "yrityskuvaus",
+                    "urheilukuvaus",
+                    "dokumentaarinen kuvaus",
+                    "hautajaiskuvaus",
+                    "muotokuvaus",
+                    "potrettikuvaus"
+                ],
+                "node_links": [
+                    "LAUKAA",
+                    "JYVASKYLA",
+                    "VALOKUVAUS",
+                    "TAPAHTUMAKUVAUS",
+                    "HAAKUVAUS",
+                    "YRITYSKUVAUS"
+                ],
+                "description": "Dokumentaristiseen tyyliin erikoistunut valokuvaamo, joka tarjoaa henkilö-, urheilu- ja tapahtumakuvauspalveluja. Yrityksen omistaa ja sitä pyörittää Linda Malmström, joka on koulutukseltaan media-alan erikoisammattitutkinnon suorittanut valokuvaajamestari. Yritys on toiminut vuodesta 2022 lähtien. Yrityksen kotipaikka on Laukaa.",
+                "website": "https://www.photomalmstrom.com",
                 "email": "",
                 "phone": ""
             },
@@ -31026,7 +31161,12 @@
                 "karaoke_available": false,
                 "has_exclusive_catering": false,
                 "accommodation_included": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "hääkuvaus",
+                    "tapahtumakuvaus",
+                    "potrettikuvaus",
+                    "dokumentaarinen valokuvaus"
+                ],
                 "digitization_features": [],
                 "entertainment_features": [],
                 "collaborated_with": []
@@ -31049,7 +31189,12 @@
                 "branding_support": false,
                 "av_support": false,
                 "staff_events_specialized": true,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "yrityskuvaus",
+                    "henkilöstökuvat",
+                    "tapahtumakuvaus",
+                    "brändikuvat"
+                ],
                 "wellbeing_and_activity_features": [],
                 "entertainment_features": [],
                 "collaborated_with": []
@@ -31066,7 +31211,11 @@
                 "memorial_arrangements": false,
                 "transport_assistance": false,
                 "urgent_booking_available": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "hautajaiskuvaus",
+                    "muistotilaisuuskuvaus",
+                    "dokumentaarinen kuvaus"
+                ],
                 "digitization_features": [],
                 "collaborated_with": []
             },
@@ -31140,21 +31289,27 @@
                 "branding_support": false,
                 "logo_design": false,
                 "business_photography": true,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "yrityskuvat",
+                    "brändikuvat"
+                ],
                 "collaborated_with": []
             },
             "business_growth": {
                 "google_ads": false,
                 "social_media_marketing": false,
                 "seo_services": false,
-                "content_creation": false,
+                "content_creation": true,
                 "video_production": false,
                 "crm_support": false,
                 "recruitment_support": false,
                 "sales_development": false,
                 "automation_services": false,
                 "consulting_services": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "visuaalinen sisältö",
+                    "brändikuvaus"
+                ],
                 "collaborated_with": []
             },
             "wellbeing_and_beauty": {
@@ -31166,12 +31321,15 @@
                 "event_makeup": false,
                 "bridal_services": false,
                 "group_bookings": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "muotokuvaus",
+                    "henkilökuvaus"
+                ],
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T10:12:54.920Z",
-                "verified_by": "AI-analysis-v1",
+                "last_updated": "2026-04-30T14:13:57.614Z",
+                "verified_by": "AI-analysis-v2",
                 "status": "draft"
             }
         },
