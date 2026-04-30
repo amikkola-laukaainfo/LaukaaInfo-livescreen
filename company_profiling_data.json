@@ -54489,7 +54489,14 @@
                 "not_suitable_for": [
                     "pitopalvelu"
                 ],
-                "paired_with_by_context": {},
+                "paired_with_by_context": {
+                    "business-events": [
+                        "Majoitus"
+                    ],
+                    "events-and-celebrations": [
+                        "majoitus"
+                    ]
+                },
                 "sub_contexts": [
                     "revontuli",
                     "hankasalmi",
@@ -54545,7 +54552,7 @@
                 "is_lakeside": true,
                 "has_sauna": true,
                 "has_av_tech": true,
-                "has_stage": false,
+                "has_stage": true,
                 "accommodation_beds": 80,
                 "alcohol_license": true,
                 "private_booking": true,
@@ -54650,11 +54657,12 @@
                 "memorial_arrangements": false,
                 "transport_assistance": false,
                 "urgent_booking_available": false,
-                "refinement_tags": [
-                    "muistotilaisuus",
-                    "siunaustilaisuus",
-                    "esteetön"
-                ],
+                "refinement_tags": {
+                    "Yleinen": [
+                        "muistotilaisuus",
+                        "esteetön"
+                    ]
+                },
                 "digitization_features": [],
                 "collaborated_with": []
             },
@@ -54770,7 +54778,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T17:57:31.971Z",
+                "last_updated": "2026-04-30T12:07:17.249Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
