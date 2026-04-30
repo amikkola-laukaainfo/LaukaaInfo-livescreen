@@ -1804,14 +1804,27 @@
                 
                 group.companies.forEach(c => {
                     const core = c.profiling?.core || {};
+                    
+                    const cleanContact = (str) => {
+                        if (!str || str === '-') return '';
+                        let s = str.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1'); // Markdown linkit pois
+                        s = s.replace(/mailto:/gi, ''); // mailto: pois
+                        s = s.replace(/[<>[\]()]/g, ''); // sulut pois
+                        return s.trim();
+                    };
+                    
+                    const phone = cleanContact(core.phone || c.puhelin || c.phone) || 'Ei puhelinta';
+                    const email = cleanContact(core.email || c.email) || 'Ei sähköpostia';
+                    const website = cleanContact(core.website || c.nettisivu || c.website) || 'Ei verkkosivua';
+                    
                     html += `
                         <div class="company">
                             <div class="company-name">${c.nimi}</div>
                             <div class="company-slogan">${c.mainoslause || ''}</div>
                             <div class="contact-info">
-                                <div class="info-item">📞 ${core.phone || 'Ei puhelinta'}</div>
-                                <div class="info-item">📧 ${core.email || 'Ei sähköpostia'}</div>
-                                <div class="info-item">🌐 ${core.website || 'Ei verkkosivua'}</div>
+                                <div class="info-item">📞 ${phone}</div>
+                                <div class="info-item">📧 ${email}</div>
+                                <div class="info-item">🌐 ${website}</div>
                                 <div class="info-item">📍 ${c.kategoria || ''}</div>
                             </div>
                         </div>
