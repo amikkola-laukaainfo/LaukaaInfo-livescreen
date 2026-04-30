@@ -225,7 +225,7 @@ const NEEDS_CONFIG = {
                     { "label": "Pitopalvelu / Ruoat", "tags": ["pitopalvelu"] },
                     { "label": "Kakut / Leivonnaiset", "tags": ["leipomo", "elintarvike"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "hääkakku" } },
                     { "label": "Ohjelma / Esiintyjä", "tags": ["ohjelmapalvelut"] },
-                    { "label": "Valokuvaaus", "tags": ["valokuvaus"] },
+                    { "label": "Valokuvaus", "tags": ["valokuvaus"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "juhlakuvaus" } },
                     { "label": "Videokuvaus", "tags": ["videotuotanto", "videokuvaus"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "juhlakuvaus" } },
                     { "label": "Kukat", "tags": ["kukkakauppa"] }
                 ]
@@ -486,8 +486,8 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": "Haluaisitko tallentaa muistot tai tarvitsetko digitointipalveluita?",
                 "options": [
-                    { "label": "Muistovideo / Videointi / Esitykset", "tags": ["videotuotanto", "videokuvaus", "videokuvaaja"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "refinement_tags", "value": "muistovideo" } },
-                    { "label": "Valokuvaus tilaisuudessa", "tags": ["valokuvaus"] },
+                    { "label": "Muistovideo / Videointi / Esitykset", "tags": ["videotuotanto", "videokuvaus", "videokuvaaja"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "refinement_tags", "value": "muistotilaisuuskuvaus" } },
+                    { "label": "Valokuvaus tilaisuudessa", "tags": ["valokuvaus", "hautajaiskuvaus"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "refinement_tags", "value": "hautajaiskuvaus" } },
                     { "label": "Digitointipalvelut (kuvat, videot ym.)", "tags": ["digitointi"] }
                 ]
             },
