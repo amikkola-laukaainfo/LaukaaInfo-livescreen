@@ -52,6 +52,14 @@ const LkiFeed = (() => {
     return d.innerHTML;
   }
 
+  function linkify(text) {
+    // Etsitään URLit ja muutetaan ne klikattaviksi linkeiksi. Poistetaan mahdolliset lauseen loppumerkit URLin lopusta.
+    const urlRegex = /(https?:\/\/[^\s<]+[^\s<.,;:!?'"])/g;
+    return text.replace(urlRegex, function(url) {
+      return `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color: var(--primary-blue); text-decoration: underline;">${url}</a>`;
+    });
+  }
+
   function renderSkeletons(list, count = 4) {
     if (!list) return;
     list.innerHTML = '';
@@ -88,7 +96,7 @@ const LkiFeed = (() => {
     const promoted = item.is_promoted ? `<span class="lki-badge-promoted">⭐ NOSTETTU</span>` : '';
     const dateStr = formatDate(item.publish_at);
     const title = escapeHtml(item.title);
-    const desc = escapeHtml(item.description);
+    const desc = linkify(escapeHtml(item.description));
     let imgSrc = item.image || 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80';
 
     // Robust video detection: if image is a youtube thumbnail OR a direct link, extract ID
