@@ -161,7 +161,19 @@ window.LkiModal = (function() {
         
         // Use full description if available, otherwise fallback to mainoslause
         const rawDescription = company.esittely || company.description || company.mainoslause || '';
-        document.getElementById('lki-modal-description').textContent = rawDescription.replace(/@@/g, '');
+        let cleanDesc = rawDescription.replace(/@@/g, '');
+        
+        // Escape HTML for safety, then linkify URLs
+        const tempDiv = document.createElement('div');
+        tempDiv.textContent = cleanDesc;
+        let escapedDesc = tempDiv.innerHTML;
+        
+        const urlRegex = /(https?:\/\/[^\s<]+[^\s<.,;:!?'"])/g;
+        const linkedDesc = escapedDesc.replace(urlRegex, function(url) {
+            return `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color: var(--primary-blue); text-decoration: underline;">${url}</a>`;
+        });
+        
+        document.getElementById('lki-modal-description').innerHTML = linkedDesc;
         document.getElementById('lki-modal-address').textContent = company.osoite || 'Laukaa';
         
         const phone = company.puhelin || company.phone || '';
