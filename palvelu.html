@@ -1402,7 +1402,7 @@
                     let anchorCoords = null;
                     if (anchorLat !== null && anchorLon !== null) anchorCoords = { lat: anchorLat, lng: anchorLon };
                     const isSelected = (selectedAnchorCompanyId === c.id);
-                    let cardHtml = renderCompanyCard(c, globalRequestedCapacity, globalProfilingKey, globalActiveCollaboratorsSet, anchorCoords, isAnchorGroup, isSelected);
+                    let cardHtml = renderCompanyCard(c, globalRequestedCapacity, globalProfilingKey, globalActiveCollaboratorsSet, anchorCoords, isAnchorGroup, isSelected, opt.label);
                     htmlResults += cardHtml;
                 });
 
@@ -1513,7 +1513,7 @@
                    data.catering_max_capacity || 0;
         }
 
-        function renderCompanyCard(c, requestedCapacity, profilingKey, collaboratorsSet, anchorCoords = null, isAnchorGroup = false, isSelected = false) {
+        function renderCompanyCard(c, requestedCapacity, profilingKey, collaboratorsSet, anchorCoords = null, isAnchorGroup = false, isSelected = false, groupLabel = '') {
             const slug = typeof slugify === 'function' ? slugify(c.nimi) : c.nimi.toLowerCase().replace(/\s+/g, '-');
             const isPremium = (c.paketti || c.tyyppi || '').toLowerCase().match(/premium|pro/);
             const cardUrl = isPremium ? `yritys/${slug}.html` : `yrityskortti.html?id=${slug}`;
@@ -1545,10 +1545,10 @@
             if (c.profiling) {
                 const core = c.profiling.core || {};
                 
-                // Jos kyseessä on pitopalvelu, ei näytetä "Tilaan mahtuu max X hlö" -ilmoitusta, koska ruokaa riittää
-                const isFoodService = ((c.kategoria || '') + ' ' + (c.tags || '') + ' ' + (c.nimi || '')).toLowerCase().includes('pitopalvelu');
+                // Jos kyseessä on pitopalvelu-listaus, ei näytetä "Tilaan mahtuu max X hlö" -ilmoitusta, koska ruokaa riittää muuallekin
+                const isCateringGroup = groupLabel && groupLabel.toLowerCase().includes('pitopalvelu');
                 
-                if (requestedCapacity > 0 && !isFoodService) {
+                if (requestedCapacity > 0 && !isCateringGroup) {
                     const cap = getCompanyCapacity(c, profilingKey);
                     if (cap > 0) {
                         if (cap >= requestedCapacity) capacityNote = `<div style="font-size:0.85rem; color:#16a34a; font-weight:700; margin-bottom:10px;">✅ Sopii: max n. ${cap} hlö</div>`;
