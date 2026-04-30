@@ -54733,7 +54733,22 @@
                     "esteetön",
                     "omajuomat",
                     "pikkujoulu",
-                    "syntymapaivat"
+                    "syntymapaivat",
+                    "satamakahvila",
+                    "kahvila",
+                    "ravintola",
+                    "vierasvenesatama",
+                    "kesäkahvila",
+                    "jäätelö",
+                    "lauakka",
+                    "saraavesi",
+                    "venesatama",
+                    "laivaranta",
+                    "juhlatilat",
+                    "kokoustilat",
+                    "yritysjuhlat",
+                    "syntymäpäivät",
+                    "valmistujaiset"
                 ],
                 "node_links": [
                     "LAUKAA",
@@ -54745,9 +54760,9 @@
                     "SAUNA"
                 ],
                 "description": "Tunnelmallinen juhla- ja kokoustila Lievestuoreen keskustassa. Soveltuu häihin, syntymäpäiviin, valmistujaisiin, muistotilaisuuksiin, kokouksiin ja yritystilaisuuksiin myös kokonaispalveluna. Yläkerran juhlatilassa istumapaikat noin 75 henkilölle ja kellaritilassa noin 20 henkilölle. Kesäisin käytössä myös viihtyisä piha-alue ja terassi.",
-                "website": "https://www.juhlatalohumina.fi",
-                "email": "humina@nic.fi",
-                "phone": "+358 40 1422 686"
+                "website": "https://www.juhlatalohumina.fi/",
+                "email": "Yläkerran juhlatila noin 75 henkilölle, kellaritila noin 20 henkilölle. Tunnettu myös Janin Keittiön yhteydessä. Osoite vahvistettu Visit Laukaa -lähteestä.",
+                "phone": "358505664962"
             },
             "events_and_celebrations": {
                 "capacity_max": 87,
@@ -54973,7 +54988,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T17:57:31.971Z",
+                "last_updated": "2026-04-30T08:07:55.569Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
@@ -58091,6 +58106,789 @@
                 "last_updated": "2026-04-29T16:39:37.473Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
+            }
+        },
+        "company-296": {
+            "name": "Bistro Puulaaki",
+            "core": {
+                "fits_for": {
+                    "events-and-celebrations": 70,
+                    "startup-services": 0,
+                    "business-growth": 0,
+                    "moving-and-housing": 0,
+                    "construction-and-maintenance": 0,
+                    "cottage-services": 0,
+                    "housing-company-and-contracts": 0,
+                    "häät": 2
+                },
+                "priority_score": 55,
+                "paired_with": [],
+                "service_area": {
+                    "mode": "on-site, takeaway",
+                    "radius_km": 0,
+                    "regions": [
+                        "keski-suomi"
+                    ],
+                    "note": "Palvelee erityisesti Hirviareenan tapahtumien yhteydessä sekä paikallisia asiakkaita."
+                },
+                "emergency_available": false,
+                "contract_customer_available": false,
+                "corporate_clients": true,
+                "home_service": false,
+                "weekend_service": true,
+                "not_suitable_for": [
+                    "hautajaiset"
+                ],
+                "paired_with_by_context": {},
+                "sub_contexts": [
+                    "ravintola",
+                    "kahvila",
+                    "lounas",
+                    "leppävesi",
+                    "laukaa",
+                    "hirviareena",
+                    "buffetlounas",
+                    "burgerit",
+                    "tapahtumat",
+                    "ryhmät",
+                    "pitopalvelu",
+                    "juhlatila",
+                    "yritystilaisuudet",
+                    "ruokailu",
+                    "tilausravintola"
+                ],
+                "node_links": [
+                    "LAUKAA",
+                    "RAVINTOLA",
+                    "KAHVILA",
+                    "JUHLAT",
+                    "CATERING",
+                    "YRITYSTAPAHTUMAT"
+                ],
+                "description": "Bistro Puulaaki on lämminhenkinen ravintola ja kahvila Leppävedellä Hirviareenan urheilukeskuksessa. Tarjoaa monipuolista lounasta, à la carte -annoksia, kahvilaherkkuja sekä juomia. Toimii viihtyisänä kohtaamispaikkana niin urheilijoille, tapahtumakävijöille kuin paikallisille asukkaillekin.",
+                "website": "https://www.bistropuulaaki.fi",
+                "email": "bistropuulaaki@gmail.com",
+                "phone": "358458513782"
+            },
+            "events_and_celebrations": {
+                "capacity_max": 100,
+                "seated_capacity": 80,
+                "outdoor_capacity": 0,
+                "is_accessible": true,
+                "is_lakeside": false,
+                "has_sauna": false,
+                "has_av_tech": true,
+                "has_stage": false,
+                "accommodation_beds": 0,
+                "alcohol_license": true,
+                "private_booking": true,
+                "late_night_events": true,
+                "wedding_specialized": false,
+                "catering_min_capacity": 10,
+                "catering_max_capacity": 150,
+                "dietary_specialties": [
+                    "gluteeniton",
+                    "laktoositon"
+                ],
+                "staff_included": true,
+                "wedding_menu_available": false,
+                "cake_service": false,
+                "partner_venues": [],
+                "wedding_photography": false,
+                "drone_available": false,
+                "video_production": false,
+                "live_music": false,
+                "dj_services": false,
+                "karaoke_available": false,
+                "has_exclusive_catering": false,
+                "accommodation_included": false,
+                "refinement_tags": [
+                    "juhlatila",
+                    "pitopalvelu",
+                    "yritysjuhlat",
+                    "ryhmät",
+                    "ravintola juhliin"
+                ],
+                "digitization_features": [],
+                "entertainment_features": [],
+                "collaborated_with": [
+                    "company-279"
+                ]
+            },
+            "business_events": {
+                "meeting_capacity": 50,
+                "seminar_capacity": 80,
+                "conference_rooms": 1,
+                "has_projector": true,
+                "has_streaming": false,
+                "has_wifi": true,
+                "has_stage": false,
+                "private_booking": true,
+                "invoice_billing": true,
+                "corporate_clients": true,
+                "vip_services": false,
+                "business_catering": true,
+                "event_hosting": true,
+                "corporate_gifts": false,
+                "branding_support": false,
+                "av_support": true,
+                "staff_events_specialized": true,
+                "refinement_tags": [
+                    "yritystilaisuus",
+                    "kokoustila",
+                    "lounaspalvelu",
+                    "catering yrityksille"
+                ],
+                "wellbeing_and_activity_features": [],
+                "entertainment_features": [],
+                "collaborated_with": []
+            },
+            "funerals_and_memorials": {
+                "memorial_service_capacity": 0,
+                "quiet_private_space": false,
+                "accessible_entry": false,
+                "memorial_catering": false,
+                "coffee_service": true,
+                "flower_arrangements": false,
+                "memorial_menu_available": true,
+                "funeral_flowers": false,
+                "memorial_arrangements": false,
+                "transport_assistance": false,
+                "urgent_booking_available": false,
+                "refinement_tags": {
+                    "Yleinen": [
+                        "pitopalvelu"
+                    ]
+                },
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "moving_and_housing": {
+                "moving_truck_available": false,
+                "packing_service": false,
+                "storage_available": false,
+                "weekend_moves": false,
+                "urgent_moves": false,
+                "long_distance_moves": false,
+                "cleaning_after_move": false,
+                "electrician_available": false,
+                "renovation_support": false,
+                "insurance_support": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "construction_and_maintenance": {
+                "emergency_service": false,
+                "certifications": [],
+                "wet_room_certification": false,
+                "provides_tools": false,
+                "material_supply": false,
+                "project_management": false,
+                "snow_removal": false,
+                "lawn_maintenance": false,
+                "property_monitoring": false,
+                "maintenance_contracts": false,
+                "housing_company_clients": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "cottage_services": {
+                "key_holding": false,
+                "winter_monitoring": false,
+                "snow_removal": false,
+                "cleaning_service": false,
+                "lawn_service": false,
+                "remote_monitoring": false,
+                "emergency_visits": false,
+                "renovation_support": false,
+                "dock_maintenance": false,
+                "sauna_services": false,
+                "guest_preparation_service": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "housing_company_and_contracts": {
+                "housing_company_clients": false,
+                "maintenance_contracts": false,
+                "emergency_response": false,
+                "scheduled_visits": false,
+                "property_reports": false,
+                "invoice_billing": false,
+                "contract_customer_available": false,
+                "priority_support": false,
+                "monthly_service_plan": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "startup_services": {
+                "bookkeeping_startup": false,
+                "business_advisory": false,
+                "insurance_setup": false,
+                "legal_services": false,
+                "office_space_available": false,
+                "banking_support": false,
+                "website_creation": false,
+                "webshop_setup": false,
+                "branding_support": false,
+                "logo_design": false,
+                "business_photography": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "business_growth": {
+                "google_ads": false,
+                "social_media_marketing": false,
+                "seo_services": false,
+                "content_creation": false,
+                "video_production": false,
+                "crm_support": false,
+                "recruitment_support": false,
+                "sales_development": false,
+                "automation_services": false,
+                "consulting_services": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "wellbeing_and_beauty": {
+                "home_visits": false,
+                "online_booking": false,
+                "unisex_services": false,
+                "gift_cards": true,
+                "corporate_wellbeing_services": false,
+                "event_makeup": false,
+                "bridal_services": false,
+                "group_bookings": true,
+                "refinement_tags": [
+                    "lahjakortti",
+                    "ryhmävaraukset"
+                ],
+                "collaborated_with": []
+            },
+            "meta": {
+                "last_updated": "2026-04-30T08:20:20.969Z",
+                "verified_by": "ai-enriched",
+                "status": "enriched"
+            }
+        },
+        "company-294": {
+            "name": "Koivulan savukala",
+            "core": {
+                "fits_for": {
+                    "events-and-celebrations": 60,
+                    "startup-services": 0,
+                    "business-growth": 0,
+                    "moving-and-housing": 0,
+                    "construction-and-maintenance": 0,
+                    "cottage-services": 20,
+                    "housing-company-and-contracts": 0
+                },
+                "priority_score": 55,
+                "paired_with": [],
+                "service_area": {
+                    "mode": "on-site, takeaway",
+                    "radius_km": 0,
+                    "regions": [
+                        "Lievestuore",
+                        "keski-suomi"
+                    ],
+                    "note": "Myynti toimipisteestä sekä tilauksesta tapahtumiin ja juhliin."
+                },
+                "emergency_available": false,
+                "contract_customer_available": true,
+                "corporate_clients": true,
+                "home_service": false,
+                "weekend_service": true,
+                "not_suitable_for": [],
+                "paired_with_by_context": {},
+                "sub_contexts": [
+                    "kala",
+                    "savukala",
+                    "kalatuotteet",
+                    "ruokamyynti",
+                    "lievestuore",
+                    "laukaa",
+                    "keski-suomi",
+                    "pitopalvelu",
+                    "catering",
+                    "juhlapalvelu",
+                    "lähiruoka",
+                    "takeaway",
+                    "ruoka tapahtumiin"
+                ],
+                "node_links": [
+                    "LAUKAA",
+                    "LIEVESTUORE",
+                    "KALA",
+                    "CATERING",
+                    "RUOKAPALVELU",
+                    "JUHLAT"
+                ],
+                "description": "Koivulan savukala on Lievestuoreella toimiva yritys, joka valmistaa ja myy savukalaa sekä muita kalatuotteita. Tarjoaa laadukasta lähiruokaa sekä palveluita juhliin, tapahtumiin ja yrityksille.",
+                "website": "[https://koivulansavukala.fi/](https://koivulansavukala.fi/)",
+                "email": "",
+                "phone": ""
+            },
+            "events_and_celebrations": {
+                "capacity_max": 0,
+                "seated_capacity": 0,
+                "outdoor_capacity": 0,
+                "is_accessible": false,
+                "is_lakeside": false,
+                "has_sauna": false,
+                "has_av_tech": false,
+                "has_stage": false,
+                "accommodation_beds": 0,
+                "alcohol_license": false,
+                "private_booking": false,
+                "late_night_events": false,
+                "wedding_specialized": false,
+                "catering_min_capacity": 10,
+                "catering_max_capacity": 200,
+                "dietary_specialties": [
+                    "gluteeniton",
+                    "laktoositon"
+                ],
+                "staff_included": false,
+                "wedding_menu_available": false,
+                "cake_service": false,
+                "partner_venues": [],
+                "wedding_photography": false,
+                "drone_available": false,
+                "video_production": false,
+                "live_music": false,
+                "dj_services": false,
+                "karaoke_available": false,
+                "has_exclusive_catering": false,
+                "accommodation_included": false,
+                "refinement_tags": [
+                    "pitopalvelu",
+                    "catering",
+                    "ruoka juhliin",
+                    "savukala",
+                    "juhlapalvelu"
+                ],
+                "digitization_features": [],
+                "entertainment_features": [],
+                "collaborated_with": []
+            },
+            "business_events": {
+                "meeting_capacity": 0,
+                "seminar_capacity": 0,
+                "conference_rooms": 0,
+                "has_projector": false,
+                "has_streaming": false,
+                "has_wifi": false,
+                "has_stage": false,
+                "private_booking": false,
+                "invoice_billing": true,
+                "corporate_clients": true,
+                "vip_services": false,
+                "business_catering": true,
+                "event_hosting": false,
+                "corporate_gifts": true,
+                "branding_support": false,
+                "av_support": false,
+                "staff_events_specialized": false,
+                "refinement_tags": [
+                    "catering yrityksille",
+                    "yritystilaisuus",
+                    "ruokatoimitus",
+                    "lahjatuotteet"
+                ],
+                "wellbeing_and_activity_features": [],
+                "entertainment_features": [],
+                "collaborated_with": []
+            },
+            "funerals_and_memorials": {
+                "memorial_service_capacity": 0,
+                "quiet_private_space": false,
+                "accessible_entry": false,
+                "memorial_catering": true,
+                "coffee_service": false,
+                "flower_arrangements": false,
+                "memorial_menu_available": true,
+                "funeral_flowers": false,
+                "memorial_arrangements": false,
+                "transport_assistance": false,
+                "urgent_booking_available": false,
+                "refinement_tags": [
+                    "pitopalvelu",
+                    "muistotilaisuus",
+                    "ruoka tilaisuuteen"
+                ],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "moving_and_housing": {
+                "moving_truck_available": false,
+                "packing_service": false,
+                "storage_available": false,
+                "weekend_moves": false,
+                "urgent_moves": false,
+                "long_distance_moves": false,
+                "cleaning_after_move": false,
+                "electrician_available": false,
+                "renovation_support": false,
+                "insurance_support": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "construction_and_maintenance": {
+                "emergency_service": false,
+                "certifications": [],
+                "wet_room_certification": false,
+                "provides_tools": false,
+                "material_supply": false,
+                "project_management": false,
+                "snow_removal": false,
+                "lawn_maintenance": false,
+                "property_monitoring": false,
+                "maintenance_contracts": false,
+                "housing_company_clients": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "cottage_services": {
+                "key_holding": false,
+                "winter_monitoring": false,
+                "snow_removal": false,
+                "cleaning_service": false,
+                "lawn_service": false,
+                "remote_monitoring": false,
+                "emergency_visits": false,
+                "renovation_support": false,
+                "dock_maintenance": false,
+                "sauna_services": false,
+                "guest_preparation_service": true,
+                "refinement_tags": [
+                    "ruokatoimitus mökille",
+                    "savukala",
+                    "lähiruoka"
+                ],
+                "collaborated_with": []
+            },
+            "housing_company_and_contracts": {
+                "housing_company_clients": false,
+                "maintenance_contracts": false,
+                "emergency_response": false,
+                "scheduled_visits": false,
+                "property_reports": false,
+                "invoice_billing": false,
+                "contract_customer_available": false,
+                "priority_support": false,
+                "monthly_service_plan": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "startup_services": {
+                "bookkeeping_startup": false,
+                "business_advisory": false,
+                "insurance_setup": false,
+                "legal_services": false,
+                "office_space_available": false,
+                "banking_support": false,
+                "website_creation": false,
+                "webshop_setup": true,
+                "branding_support": false,
+                "logo_design": false,
+                "business_photography": false,
+                "refinement_tags": [
+                    "verkkokauppa"
+                ],
+                "collaborated_with": []
+            },
+            "business_growth": {
+                "google_ads": false,
+                "social_media_marketing": true,
+                "seo_services": false,
+                "content_creation": false,
+                "video_production": false,
+                "crm_support": false,
+                "recruitment_support": false,
+                "sales_development": false,
+                "automation_services": false,
+                "consulting_services": false,
+                "refinement_tags": [
+                    "somemarkkinointi"
+                ],
+                "collaborated_with": []
+            },
+            "wellbeing_and_beauty": {
+                "home_visits": false,
+                "online_booking": false,
+                "unisex_services": false,
+                "gift_cards": false,
+                "corporate_wellbeing_services": false,
+                "event_makeup": false,
+                "bridal_services": false,
+                "group_bookings": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "meta": {
+                "last_updated": "2026-04-30T08:10:22.786Z",
+                "verified_by": "ai-enriched",
+                "status": "enriched"
+            }
+        },
+        "company-295": {
+            "name": "Naissaaren Upee kahvila",
+            "core": {
+                "fits_for": {
+                    "events-and-celebrations": 65,
+                    "startup-services": 0,
+                    "business-growth": 0,
+                    "moving-and-housing": 0,
+                    "construction-and-maintenance": 0,
+                    "cottage-services": 0,
+                    "housing-company-and-contracts": 0
+                },
+                "priority_score": 50,
+                "paired_with": [],
+                "service_area": {
+                    "mode": "on-site",
+                    "radius_km": 0,
+                    "regions": [
+                        "keski-suomi"
+                    ],
+                    "note": "Palvelee paikallisia asiakkaita ja matkailijoita Vaajakosken koskimaisemissa."
+                },
+                "emergency_available": false,
+                "contract_customer_available": false,
+                "corporate_clients": true,
+                "home_service": false,
+                "weekend_service": true,
+                "not_suitable_for": [],
+                "paired_with_by_context": {},
+                "sub_contexts": [
+                    "kahvila",
+                    "vaajakoski",
+                    "jyväskylä",
+                    "koskimaisema",
+                    "kahvi",
+                    "lounas",
+                    "leivonnaiset",
+                    "naissaari",
+                    "ravintola",
+                    "pitopalvelu",
+                    "juhlatila",
+                    "ryhmät",
+                    "tilausravintola",
+                    "kahvila ravintola"
+                ],
+                "node_links": [
+                    "JYVASKYLA",
+                    "VAAJAKOSKI",
+                    "KAHVILA",
+                    "RAVINTOLA",
+                    "JUHLAT",
+                    "CATERING"
+                ],
+                "description": "Naissaaren Upee kahvila (Naissaaren Koskenhenki) on viihtyisä kahvila ja ruokapaikka Vaajakoskella koskimaisemissa. Tarjoaa kahvia, leivonnaisia ja ruokaa rennossa ympäristössä sekä palvelee myös ryhmiä ja tilaisuuksia.",
+                "website": "",
+                "email": "",
+                "phone": "358503308055"
+            },
+            "events_and_celebrations": {
+                "capacity_max": 60,
+                "seated_capacity": 40,
+                "outdoor_capacity": 20,
+                "is_accessible": true,
+                "is_lakeside": true,
+                "has_sauna": false,
+                "has_av_tech": false,
+                "has_stage": false,
+                "accommodation_beds": 0,
+                "alcohol_license": true,
+                "private_booking": true,
+                "late_night_events": false,
+                "wedding_specialized": false,
+                "catering_min_capacity": 10,
+                "catering_max_capacity": 80,
+                "dietary_specialties": [
+                    "gluteeniton",
+                    "laktoositon"
+                ],
+                "staff_included": true,
+                "wedding_menu_available": false,
+                "cake_service": false,
+                "partner_venues": [],
+                "wedding_photography": false,
+                "drone_available": false,
+                "video_production": false,
+                "live_music": false,
+                "dj_services": false,
+                "karaoke_available": false,
+                "has_exclusive_catering": false,
+                "accommodation_included": false,
+                "refinement_tags": [
+                    "juhlatila",
+                    "pitopalvelu",
+                    "ryhmät",
+                    "kahvila juhliin",
+                    "ranta",
+                    "esteetön"
+                ],
+                "digitization_features": [],
+                "entertainment_features": [],
+                "collaborated_with": []
+            },
+            "business_events": {
+                "meeting_capacity": 30,
+                "seminar_capacity": 40,
+                "conference_rooms": 1,
+                "has_projector": false,
+                "has_streaming": false,
+                "has_wifi": true,
+                "has_stage": false,
+                "private_booking": true,
+                "invoice_billing": true,
+                "corporate_clients": true,
+                "vip_services": false,
+                "business_catering": true,
+                "event_hosting": true,
+                "corporate_gifts": false,
+                "branding_support": false,
+                "av_support": false,
+                "staff_events_specialized": false,
+                "refinement_tags": [
+                    "yritystilaisuus",
+                    "kokoustila",
+                    "kahvitus",
+                    "catering yrityksille"
+                ],
+                "wellbeing_and_activity_features": [],
+                "entertainment_features": [],
+                "collaborated_with": []
+            },
+            "funerals_and_memorials": {
+                "memorial_service_capacity": 30,
+                "quiet_private_space": true,
+                "accessible_entry": true,
+                "memorial_catering": true,
+                "coffee_service": true,
+                "flower_arrangements": false,
+                "memorial_menu_available": true,
+                "funeral_flowers": false,
+                "memorial_arrangements": false,
+                "transport_assistance": false,
+                "urgent_booking_available": false,
+                "refinement_tags": [
+                    "muistotilaisuus",
+                    "kahvitus",
+                    "pitopalvelu"
+                ],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "moving_and_housing": {
+                "moving_truck_available": false,
+                "packing_service": false,
+                "storage_available": false,
+                "weekend_moves": false,
+                "urgent_moves": false,
+                "long_distance_moves": false,
+                "cleaning_after_move": false,
+                "electrician_available": false,
+                "renovation_support": false,
+                "insurance_support": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "construction_and_maintenance": {
+                "emergency_service": false,
+                "certifications": [],
+                "wet_room_certification": false,
+                "provides_tools": false,
+                "material_supply": false,
+                "project_management": false,
+                "snow_removal": false,
+                "lawn_maintenance": false,
+                "property_monitoring": false,
+                "maintenance_contracts": false,
+                "housing_company_clients": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "cottage_services": {
+                "key_holding": false,
+                "winter_monitoring": false,
+                "snow_removal": false,
+                "cleaning_service": false,
+                "lawn_service": false,
+                "remote_monitoring": false,
+                "emergency_visits": false,
+                "renovation_support": false,
+                "dock_maintenance": false,
+                "sauna_services": false,
+                "guest_preparation_service": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "housing_company_and_contracts": {
+                "housing_company_clients": false,
+                "maintenance_contracts": false,
+                "emergency_response": false,
+                "scheduled_visits": false,
+                "property_reports": false,
+                "invoice_billing": false,
+                "contract_customer_available": false,
+                "priority_support": false,
+                "monthly_service_plan": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "startup_services": {
+                "bookkeeping_startup": false,
+                "business_advisory": false,
+                "insurance_setup": false,
+                "legal_services": false,
+                "office_space_available": false,
+                "banking_support": false,
+                "website_creation": false,
+                "webshop_setup": false,
+                "branding_support": false,
+                "logo_design": false,
+                "business_photography": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "business_growth": {
+                "google_ads": false,
+                "social_media_marketing": false,
+                "seo_services": false,
+                "content_creation": false,
+                "video_production": false,
+                "crm_support": false,
+                "recruitment_support": false,
+                "sales_development": false,
+                "automation_services": false,
+                "consulting_services": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "wellbeing_and_beauty": {
+                "home_visits": false,
+                "online_booking": false,
+                "unisex_services": false,
+                "gift_cards": true,
+                "corporate_wellbeing_services": false,
+                "event_makeup": false,
+                "bridal_services": false,
+                "group_bookings": true,
+                "refinement_tags": [
+                    "lahjakortti",
+                    "ryhmävaraukset"
+                ],
+                "collaborated_with": []
+            },
+            "meta": {
+                "last_updated": "2026-04-30T08:09:04.298Z",
+                "verified_by": "ai-enriched",
+                "status": "enriched"
             }
         }
     }
