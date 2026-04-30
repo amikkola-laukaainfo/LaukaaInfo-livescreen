@@ -116,7 +116,7 @@ const NEEDS_CONFIG = {
                     { "label": "Pitopalvelu", "tags": ["pitopalvelu"] },
                     { "label": "Majoitus", "tags": ["majoitus"] },
                     { "label": "Kuljetukset", "tags": ["kuljetus", "taksi"] },
-                    { "label": "Videokuvaaja / Tapahtumavideointi", "tags": ["videotuotanto", "videokuvaus"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "videotuotanto" } },
+                    { "label": "Videokuvaus", "tags": ["videotuotanto", "videokuvaus"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "videotuotanto" } },
                     { "label": "Saunatilat", "tags": ["saunatilat"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "sauna" } },
                     { "label": "Ohjelmapalvelut / Elämykset", "tags": ["ohjelmapalvelut"] },
                     { "label": "AV-tekniikka & Äänentoisto", "tags": ["it-palvelut"], "profilointi_filter": { "section": "events_and_celebrations", "field": "has_av_tech", "value": true } }
@@ -175,7 +175,7 @@ const NEEDS_CONFIG = {
                 "question": "Muut tarpeet?",
                 "options": [
                     { "label": "Majoitus", "tags": ["majoitus"] },
-                    { "label": "Videokuvaaja / Tapahtumavideointi", "tags": ["videotuotanto", "videokuvaus", "videokuvaaja"], "profilointi_filter": { "section": "business_events", "field": "refinement_tags", "value": "yritysvideot" } },
+                    { "label": "Videokuvaus", "tags": ["videotuotanto", "videokuvaus", "videokuvaaja"], "profilointi_filter": { "section": "business_events", "field": "refinement_tags", "value": "yritysvideot" } },
                     { "label": "Yrityslahjat", "tags": ["yrityslahjat", "lahjatavarat"] },
                     { "label": "IT-tuki / AV-tekniikka", "tags": ["it-palvelut"], "profilointi_filter": { "section": "business_events", "field": "has_projector", "value": true } }
                 ]
@@ -486,7 +486,7 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": "Haluaisitko tallentaa muistot tai tarvitsetko digitointipalveluita?",
                 "options": [
-                    { "label": "Muistovideo / Videointi / Esitykset", "tags": ["videotuotanto", "videokuvaus", "videokuvaaja"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "refinement_tags", "value": "muistotilaisuuskuvaus" } },
+                    { "label": "Videokuvaus / Esitykset", "tags": ["videotuotanto", "videokuvaus", "videokuvaaja"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "refinement_tags", "value": "muistotilaisuuskuvaus" } },
                     { "label": "Valokuvaus", "tags": ["valokuvaus", "hautajaiskuvaus"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "refinement_tags", "value": "hautajaiskuvaus" } },
                     { "label": "Digitointipalvelut (kuvat, videot ym.)", "tags": ["digitointi"] }
                 ]
