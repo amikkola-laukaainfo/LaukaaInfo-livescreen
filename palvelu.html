@@ -1221,7 +1221,8 @@
                                 if (!target || !query) return false;
                                 const t = String(target).toLowerCase();
                                 const q = String(query).toLowerCase();
-                                return t === q || t.includes(q);
+                                const isPluralMatch = (t === q + 't' || q === t + 't');
+                                return t === q || t.includes(q) || isPluralMatch;
                             };
 
                             if (catData) {
