@@ -77,7 +77,7 @@ function generatePremiumPages() {
             // 2. SEO Description
             let description = company.mainoslause || company.esittely || "Kylien ja asukkaiden oma tietopankki.";
             if (description.includes('@@')) {
-                description = description.split('@@')[0].trim();
+                description = description.replace(/@@/g, '').trim();
             }
             description = description.substring(0, 160).trim();
             

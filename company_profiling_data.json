@@ -17864,7 +17864,9 @@
             "name": "Osuuskauppa Keskimaa (S-Market)",
             "core": {
                 "fits_for": {
-                    "yrityksen kehittäminen": 35
+                    "yrityksen kehittäminen": 35,
+                    "events-and-celebrations": 20,
+                    "funerals-and-memorials": 20
                 },
                 "priority_score": 0,
                 "paired_with": [],
@@ -17880,7 +17882,14 @@
                 "home_service": false,
                 "weekend_service": false,
                 "not_suitable_for": [],
-                "paired_with_by_context": {},
+                "paired_with_by_context": {
+                    "funerals-and-memorials": [
+                        "Kukat"
+                    ],
+                    "events-and-celebrations": [
+                        "kukat"
+                    ]
+                },
                 "sub_contexts": [],
                 "node_links": [],
                 "description": "",
@@ -18061,7 +18070,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-04-30T10:00:50.013Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
