@@ -117,6 +117,7 @@ const NEEDS_CONFIG = {
                     { "label": "Majoitus", "tags": ["majoitus"] },
                     { "label": "Kuljetukset", "tags": ["kuljetus", "taksi"] },
                     { "label": "Videokuvaus", "tags": ["videotuotanto", "videokuvaus"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "videotuotanto" } },
+                    { "label": "Valokuvaus", "tags": ["valokuvaus", "valokuvaaja"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "juhlakuvaus" } },
                     { "label": "Saunatilat", "tags": ["saunatilat"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "sauna" } },
                     { "label": "Ohjelmapalvelut / Elämykset", "tags": ["ohjelmapalvelut"] },
                     { "label": "AV-tekniikka & Äänentoisto", "tags": ["it-palvelut"], "profilointi_filter": { "section": "events_and_celebrations", "field": "has_av_tech", "value": true } }
@@ -176,6 +177,7 @@ const NEEDS_CONFIG = {
                 "options": [
                     { "label": "Majoitus", "tags": ["majoitus"] },
                     { "label": "Videokuvaus", "tags": ["videotuotanto", "videokuvaus", "videokuvaaja"], "profilointi_filter": { "section": "business_events", "field": "refinement_tags", "value": "yritysvideo" } },
+                    { "label": "Valokuvaus", "tags": ["valokuvaus", "valokuvaaja"], "profilointi_filter": { "section": "business_events", "field": "refinement_tags", "value": "yrityskuvaus" } },
                     { "label": "Yrityslahjat", "tags": ["yrityslahjat", "lahjatavarat"] },
                     { "label": "IT-tuki / AV-tekniikka", "tags": ["it-palvelut"], "profilointi_filter": { "section": "business_events", "field": "has_projector", "value": true } }
                 ]
