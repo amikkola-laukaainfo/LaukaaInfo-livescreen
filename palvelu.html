@@ -1336,7 +1336,14 @@
                             }
                             
                             // Jos kyseessä on tilatyyppinen optio tai yritys, ja hakuun liittyy kapasiteettivaatimus, piilotetaan nollakapasiteetin kohteet.
-                            const isVenueType = hasVenueTag || (opt.label && (opt.label.toLowerCase().includes('tila') && !opt.label.toLowerCase().includes('tilaisuus')) || opt.label.toLowerCase().includes('muistotilaisuus')) || opt.node_link === 'ROLE_VENUE';
+                            const isVenueType = hasVenueTag || 
+                                               (opt.label && (
+                                                   (opt.label.toLowerCase().includes('tila') && !opt.label.toLowerCase().includes('tilaisuus')) || 
+                                                   opt.label.toLowerCase().includes('muistotilaisuus') ||
+                                                   opt.label.toLowerCase().includes('juhla')
+                                               )) || 
+                                               (opt.tags && opt.tags.includes('juhlatila')) ||
+                                               opt.node_link === 'ROLE_VENUE';
                             if (requestedCapacity > 0 && isVenueType && cap === 0) {
                                 return false;
                             }

@@ -145,9 +145,9 @@ const NEEDS_CONFIG = {
                 "question": "Millaista tilaa tarvitsette?",
                 "options": [
                     { "label": "Pieni kokous / Neuvottelu", "sub_context": "kokous", "tags": ["kokoustilat"], "capacity_req": 5 },
-                    { "label": "Seminaari / Koulutus", "sub_context": "seminaari", "tags": ["seminaaritilat"] },
-                    { "label": "Konferenssi / Suuri tilaisuus", "sub_context": "konferenssi", "tags": ["kokoustilat"] },
-                    { "label": "Edustus- tai saunakokous", "sub_context": "edustuskokous", "tags": ["edustustila", "saunatilat"] }
+                    { "label": "Seminaari / Koulutus", "sub_context": "seminaari", "tags": ["seminaaritilat"], "capacity_req": 1 },
+                    { "label": "Konferenssi / Suuri tilaisuus", "sub_context": "konferenssi", "tags": ["kokoustilat"], "capacity_req": 1 },
+                    { "label": "Edustus- tai saunakokous", "sub_context": "edustuskokous", "tags": ["edustustila", "saunatilat"], "capacity_req": 1 }
                 ]
             },
             {
@@ -193,8 +193,8 @@ const NEEDS_CONFIG = {
                 "question": "Kenen juhlia järjestetään?",
                 "options": [
                     { "label": "Lasten syntymäpäivät", "sub_context": "lasten synttärit", "tags": ["lapset"] },
-                    { "label": "Nuorten / Aikuisten juhlat", "sub_context": "aikuisten synttärit", "tags": ["juhlatila"] },
-                    { "label": "Pyöreät vuodet / Sukujuhlat", "sub_context": "sukujuhlat", "tags": ["juhlatila", "kartano"] }
+                    { "label": "Nuorten / Aikuisten juhlat", "sub_context": "aikuisten synttärit", "tags": ["juhlatila"], "capacity_req": 1 },
+                    { "label": "Pyöreät vuodet / Sukujuhlat", "sub_context": "sukujuhlat", "tags": ["juhlatila", "kartano"], "capacity_req": 1 }
                 ]
             },
             {
