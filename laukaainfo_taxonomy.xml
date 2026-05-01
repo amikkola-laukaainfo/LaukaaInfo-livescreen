@@ -14,6 +14,8 @@
         <tag>valokuvaaja</tag>
         <tag>videokuvaaja</tag>
         <tag>häävideo</tag>
+        <tag>digitointi</tag>
+        <tag>häävideon editointi</tag>
         <tag>musiikki</tag>
         <tag>ohjelmapalvelut</tag>
       </subcontexts>
@@ -194,6 +196,7 @@
         <tag>perunkirjoitus</tag>
         <tag>hautakivi</tag>
         <tag>muistovideo</tag>
+        <tag>digitointi</tag>
         <tag>muistotilaisuuskuvaus</tag>
         <tag>hautajaiskuvaus</tag>
       </subcontexts>
