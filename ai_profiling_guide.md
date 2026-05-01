@@ -44,7 +44,15 @@ Use these in `sub_contexts` to improve search relevance:
 ### Professional Services
 `yritysneuvonta`, `konsultointi`, `tilitoimisto`, `vakuutus`, `lakipalvelut`, `verkkosivut`, `brändäys`, `logo`, `yrityskuvat`, `google-mainonta`, `somemainonta`, `myynnin kehittäminen`, `verkkokauppa`, `rekrytointi`
 
-## 4. Capacity Rules
+## 4. Specialization vs. General Discovery
+The discovery engine now uses a two-tiered approach:
+
+1. **General Discovery (Core Node Links)**: If a company has a core node link (e.g., `VALOKUVAUS`), they will appear in ANY search for that category (e.g., a "Valokuvaaja" option in a wedding flow).
+2. **Specialized Match (Refinement Tags & High Scores)**: To be highlighted as a **"TOP MATCH"** or to match specific filters (e.g., "Hääkuvaaja"), the company MUST have the specific tag in their `refinement_tags` (e.g., `hääkuvaus`) or a high `fits_for` score for that intent.
+
+**AI Tip**: When profiling, always add the broad node link first, and then add specific sub-contexts and refinement tags for areas where the company truly excels.
+
+## 5. Capacity Rules
 For any company with `JUHLATILA` or `MAJOITUS` links, ensure the following fields are populated if known:
 - `capacity_max`
 - `seated_capacity`
