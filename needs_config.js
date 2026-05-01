@@ -195,8 +195,8 @@ const NEEDS_CONFIG = {
                 "question": "Kenen juhlia järjestetään?",
                 "options": [
                     { "label": "Lasten syntymäpäivät", "sub_context": "lasten synttärit", "tags": ["lapset"] },
-                    { "label": "Nuorten / Aikuisten juhlat", "sub_context": "aikuisten synttärit", "tags": ["juhlatila"], "capacity_req": 1 },
-                    { "label": "Pyöreät vuodet / Sukujuhlat", "sub_context": "sukujuhlat", "tags": ["juhlatila", "kartano"], "capacity_req": 1 }
+                    { "label": "Nuorten / Aikuisten juhlat", "sub_context": "aikuisten synttärit", "require_fits_for": { "key": "events-and-celebrations", "min": 60 }, "capacity_req": 1 },
+                    { "label": "Pyöreät vuodet / Sukujuhlat", "sub_context": "sukujuhlat", "require_fits_for": { "key": "events-and-celebrations", "min": 60 }, "capacity_req": 1 }
                 ]
             },
             {
@@ -215,7 +215,7 @@ const NEEDS_CONFIG = {
                 "options": [
                     { "label": "Ravintolassa valmiissa pöydässä", "tags": ["ravintola"], "capacity_req": 10 },
                     { "label": "Vuokratussa juhlatilassa", "tags": ["juhlatila"], "capacity_req": 30 },
-                    { "label": "Kotona (tarvitaan palveluita)", "tags": ["pitopalvelu"] },
+                    { "label": "Kotona (tarvitaan palveluita)", "tags": ["pitopalvelu", "siivous", "kukkakauppa"] },
                     { "label": "Saunalla tai mökillä", "tags": ["saunatilat", "majoitus"], "capacity_req": 10 }
                 ]
             },
