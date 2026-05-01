@@ -33,7 +33,7 @@ Always include these in uppercase in the `node_links` array if applicable:
 Use these in `sub_contexts` to improve search relevance:
 
 ### Events & Celebrations
-`juhlatila`, `kartano`, `kylätalo`, `sauna`, `ranta`, `pitopalvelu`, `valokuvaaja`, `videokuvaaja`, `häävideo`, `digitointi`, `häävideon editointi`, `musiikki`, `ohjelmapalvelut`, `drone-kuvaus`, `hääkooste`, `juhlakuvaus`
+`juhlatila`, `kartano`, `kylätalo`, `sauna`, `ranta`, `pitopalvelu`, `valokuvaaja`, `videokuvaaja`, `häävideo`, `digitointi`, `häävideon editointi`, `musiikki`, `ohjelmapalvelut`, `drone-kuvaus`, `hääkooste`, `juhlakuvaus`, `syntymäpäivät`, `sukujuhlat`, `siivous`
 
 ### Business Events
 `kokoustila`, `seminaari`, `yritysjuhlat`, `tyhypäivä`, `koulutus`, `streamaus`, `videotuotanto`, `presentaatiotekniikka`

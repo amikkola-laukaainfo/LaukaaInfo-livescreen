@@ -18,6 +18,9 @@
         <tag>häävideon editointi</tag>
         <tag>musiikki</tag>
         <tag>ohjelmapalvelut</tag>
+        <tag>syntymäpäivät</tag>
+        <tag>sukujuhlat</tag>
+        <tag>siivous</tag>
       </subcontexts>
 
       <refinements>
