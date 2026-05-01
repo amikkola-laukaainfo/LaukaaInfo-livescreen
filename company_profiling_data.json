@@ -1443,7 +1443,8 @@
                     "HUVIT",
                     "JUHLATILA",
                     "PITOPALVELU",
-                    "KAHVILA"
+                    "KAHVILA",
+                    "CATERING"
                 ],
                 "description": "Kahvila ja lähituotepuoti, joka tarjoaa itsetehtyjä suolaisia ja makeita herkkuja lähituotteista ja luonnonantimista. Puodissa myydään pientuottajien elintarvikkeita ja käsitöitä. Tiloja vuokrataan kokous- ja juhlakäyttöön. Palveluihin kuuluvat myös pitopalvelu, kahvitukset, juhlakakut sekä astiavuokraus yrityksille ja yksityisille asiakkaille.",
                 "website": "[https://terta.fi](https://terta.fi)",
@@ -1924,7 +1925,8 @@
                     "JUHLAT",
                     "RUOKA",
                     "PITOPALVELU",
-                    "JUHLATILA"
+                    "JUHLATILA",
+                    "CATERING"
                 ],
                 "description": "Leipomo, kahvila ja myymälä Lievestuoreella. Valmistaa ja myy leipomo-, konditoria- ja suolaistuotteita sekä tilausleivonnaisia juhliin. Tarjoaa kahvilapalveluita, lounasta seisovasta pöydästä arkisin ja lauantaisin sekä jäätelöä. Hää- ja juhlakakut, muistotilaisuuksien tarjoilut ja yritystilaisuuksien kahvitarjoilut kuuluvat palveluihin. Myymälässä myynnissä myös muiden valmistajien tuotteita.",
                 "website": "[https://www.jyvaspakari.fi](https://www.jyvaspakari.fi)",
@@ -5827,7 +5829,8 @@
                 "not_suitable_for": [
                     "20-50",
                     "kartano",
-                    "järjestää ruoan"
+                    "järjestää ruoan",
+                    "pitopalvelu"
                 ],
                 "paired_with_by_context": {
                     "tyhy-päivät": [
@@ -6056,7 +6059,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T10:30:19.307Z",
+                "last_updated": "2026-05-01T06:19:50.557Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -19251,7 +19254,8 @@
                     "LAUKAA",
                     "LIEVESTUORE",
                     "HUVIT",
-                    "PITOPALVELU"
+                    "PITOPALVELU",
+                    "CATERING"
                 ],
                 "description": "Kotileipomo ja kahvio-myymälä, joka valmistaa ja myy leipomotuotteita .",
                 "website": "",
@@ -20615,7 +20619,8 @@
                     "YRITYSTAPAHTUMAT",
                     "PÖLKINAHO",
                     "PITOPALVELU",
-                    "JUHLATILA"
+                    "JUHLATILA",
+                    "CATERING"
                 ],
                 "description": "Tapahtumatuotantoon, juhlatiloihin ja huvi- ja virkistystoimintaan keskittynyt yritys. Pölkinahon juhlatila Peurungassa tarjoaa tunnelmallisen maalaistalomiljöön juhliin, muistotilaisuuksiin, kokouksiin ja yritystilaisuuksiin. Kautta yrityksen onnistuvat myös rantasauna, pitopalvelu, anniskelu, tarjoiluhenkilökunta, majoitus Peurungan kylpylähotellissa sekä live-musiikki ja tapahtumatuotanto. Yritys järjestää myös John Smith Rock Festivalin, Satama Festivalin ja toimii Laukaan satamassa.",
                 "website": "[www.ext.fi](http://www.ext.fi)",
@@ -23454,7 +23459,8 @@
                     "HOTELLI",
                     "KOKOUKSET",
                     "SAUNA",
-                    "JUHLATILA"
+                    "JUHLATILA",
+                    "MAJOITUS"
                 ],
                 "description": "Kylpylähotelli, kuntoutus- ja virkistyskeskus Laukaan Peurungassa. Tarjoaa monipuolisia hyvinvointi-, kokous-, majoitus- ja ravintolapalveluita yli 50 vuoden kokemuksella. Yritys työllistää noin 100 henkilöä. Peurunka on Sustainable Travel Finland -sertifioitu ja toimii kestävän matkailun periaatteiden mukaisesti.",
                 "website": "[www.peurunka.fi](http://www.peurunka.fi)",
@@ -49329,7 +49335,8 @@
                     "TYHY",
                     "KESKISUOMI",
                     "PITOPALVELU",
-                    "JUHLATILA"
+                    "JUHLATILA",
+                    "CATERING"
                 ],
                 "description": "Perinnekylä ja monitoimipaikka, joka tarjoaa tiloja juhliin, kokouksiin ja virkistyspäiviin 15–150 hengen ryhmille. Tunnettu maailman suurimmasta savusaunasta (kapasiteetti 150 henkeä) . Tarjoaa majoitusta, ruokailuja, ohjelmapalveluita (mm. Nasusafari, teatteri, sepän paja), turvehoitoja, tyhy-päiviä sekä yrityspalveluita . Yritys järjestää myös yleisötapahtumia kuten naisten turvesaunailtoja, äitienpäivälounaita, perinnepäiviä ja joulumarkkinoita . Kaudesta 2026 tarjolla kesäteatteripaketteja . Sijaitsee Vinninlammen rannalla Kattamäen rinteiden kainalossa .",
                 "website": "http://www.tupaswilla.fi",
@@ -50454,7 +50461,8 @@
                     "HÄÄT",
                     "JUHLAT",
                     "KARTANO",
-                    "PITOPALVELU"
+                    "PITOPALVELU",
+                    "CATERING"
                 ],
                 "description": "Ravintola Karlvik-nimellä tunnettu ravintola, joka on erikoistunut lounas- ja à la carte -palveluihin, juhlapalveluihin ja kokoustarjoiluihin. Ravintola sijaitsee kauniissa Karlvikin kartanomaisemissa .",
                 "website": "[www.ravintolakarlvik.fi](http://www.ravintolakarlvik.fi)",
@@ -54153,7 +54161,11 @@
                 "weekend_service": false,
                 "not_suitable_for": [
                     "hautajaiset",
-                    "muisto"
+                    "muisto",
+                    "kartano",
+                    "järjestää ruoan",
+                    "majoitus",
+                    "pitopalvelu"
                 ],
                 "paired_with_by_context": {},
                 "sub_contexts": [
@@ -54162,7 +54174,6 @@
                     "lievestuore",
                     "juhlat",
                     "tapahtumat",
-                    "kylätalo",
                     "kokoontumistila",
                     "vuokratila",
                     "juhlapalvelu",
@@ -54175,8 +54186,7 @@
                     "LIEVESTUORE",
                     "JUHLATILA",
                     "KOKOUSTILA",
-                    "HÄÄT",
-                    "KYLÄTALO"
+                    "HÄÄT"
                 ],
                 "description": "Terviksen tilat on Lievestuoreella sijaitseva juhla- ja kokoontumistila, joka soveltuu erilaisten yksityistilaisuuksien, juhlien, kokousten ja kylätapahtumien järjestämiseen. Tilat tarjoavat monikäyttöisen ympäristön sekä sisätiloissa että mahdollisesti piha-alueen tapahtumille. Kohde palvelee paikallisia asukkaita ja yhteisöjä.",
                 "website": "",
@@ -54370,7 +54380,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-30T12:49:48.211Z",
+                "last_updated": "2026-05-01T07:19:51.917Z",
                 "verified_by": "ai-analysis-v2",
                 "status": "draft"
             }
@@ -54429,7 +54439,8 @@
                     "KESKI-SUOMI",
                     "LAUKAA",
                     "VIDEOTUOTANTO",
-                    "HÄÄT"
+                    "HÄÄT",
+                    "VALOKUVAUS"
                 ],
                 "description": "Mika Nuorva on valokuvaaja, joka tarjoaa monipuolisia kuvauspalveluja yksityis- ja yritysasiakkaille. Palveluihin kuuluvat henkilökuvaukset, tapahtuma- ja juhlakuvaukset, yrityskuvaukset sekä mahdolliset ympäristö- ja luontokuvaukset. Toiminnassa painotetaan tilanneherkkää dokumentaarista otetta sekä laadukasta kuvajälkeä.",
                 "website": "https://www.mikanuorva.com",
@@ -54699,7 +54710,8 @@
                     "LAUKAA",
                     "JYVÄSKYLÄ",
                     "KESKI-SUOMI",
-                    "HÄÄT"
+                    "HÄÄT",
+                    "VALOKUVAUS"
                 ],
                 "description": "Keijo Penttinen PS Studio on valokuvauspalveluihin keskittynyt studio, joka tarjoaa monipuolisia kuvauspalveluja yksityis- ja yritysasiakkaille. Palveluihin kuuluvat henkilökuvaukset, studiokuvaukset, tapahtuma- ja juhlakuvaukset sekä tuote- ja yrityskuvaus. Studio painottaa laadukasta visuaalista lopputulosta ja asiakaslähtöistä palvelua.",
                 "website": "https://ps-studio.fi",
@@ -54989,7 +55001,8 @@
                     "RAVINTOLA",
                     "KOKOUSTILA",
                     "LOMAKESKUS",
-                    "PITOPALVELU"
+                    "PITOPALVELU",
+                    "CATERING"
                 ],
                 "description": "Revontuli Resort on Hankasalmella sijaitseva monipuolinen lomakeskus, joka tarjoaa majoitusta lasi-igluissa, mökeissä ja hotellihuoneissa. Kohde tunnetaan erityisesti revontulielämyksistä, luonnonläheisestä ympäristöstä sekä monipuolisista aktiviteeteista kuten golfista, keilailusta, saunomisesta ja talviaktiviteeteista. Alueella on myös ravintola- ja kokouspalvelut sekä tapahtumien järjestämismahdollisuudet.",
                 "website": "https://revontuli.fi",
@@ -55298,7 +55311,8 @@
                     "SAUNA",
                     "RAVINTOLA",
                     "KOKOUSTILA",
-                    "PITOPALVELU"
+                    "PITOPALVELU",
+                    "CATERING"
                 ],
                 "description": "Taulun Kartano on historiallinen kartanomiljöö Toivakassa, joka tarjoaa majoitusta, ravintolapalveluita sekä juhla- ja kokoustiloja. Kohde tunnetaan erityisesti häiden, yritystapahtumien ja juhlien järjestämispaikkana. Kartanossa on myös sauna- ja hyvinvointipalveluja sekä luonnonläheinen ympäristö järven ja maaseudun läheisyydessä.",
                 "website": "https://taulunkartano.fi",
@@ -55609,7 +55623,8 @@
                     "KOKOUSTILA",
                     "HAAT",
                     "CATERING",
-                    "PITOPALVELU"
+                    "PITOPALVELU",
+                    "VIDEOTUOTANTO"
                 ],
                 "description": "Tunnelmallinen juhla- ja kokoustila Lievestuoreen keskustassa. Soveltuu häihin, syntymäpäiviin, valmistujaisiin, muistotilaisuuksiin, kokouksiin ja yritystilaisuuksiin myös kokonaispalveluna. Yläkerran juhlatilassa istumapaikat noin 75 henkilölle ja kellaritilassa noin 20 henkilölle. Kesäisin käytössä myös viihtyisä piha-alue ja terassi.",
                 "website": "https://www.juhlatalohumina.fi/",
@@ -55889,7 +55904,8 @@
                     "KOKOUSTILA",
                     "JUHLATILA",
                     "RAVINTOLA",
-                    "PITOPALVELU"
+                    "PITOPALVELU",
+                    "CATERING"
                 ],
                 "description": "Sarahovin kokoustilat on Laukaan Asumispalvelusäätiön ylläpitämä kokous- ja juhlatila Laukaan keskustassa. Tila toimii osana Sarahovin palvelukeskusta ja tarjoaa puitteet kokouksille, juhlille ja muistotilaisuuksille. Palveluihin kuuluu myös tilausaterioita ja pitopalvelua oman keittiön kautta. Tilassa on päivittäin kaikille avoin lounasravintola.",
                 "website": "https://www.sarapalvelut.fi",
@@ -56149,7 +56165,8 @@
                     "HÄÄT",
                     "KARTANO",
                     "MAJOITUS",
-                    "PITOPALVELU"
+                    "PITOPALVELU",
+                    "CATERING"
                 ],
                 "description": "Vuonteen Helmi on Laukaan Vihtavuoressa sijaitseva vuonna 1906 valmistunut juhlatalo, joka tarjoaa historiallisen ja ainutlaatuisen miljöön juhlille ja tapahtumille. Kartanomaisessa jugend-rakennuksessa on juhlasali 80 hengelle, kabinetti 20 hengelle ja rantasauna. Alueella on myös urheilukenttä ja pieni tenniskenttä.",
                 "website": "http://www.vuonteenhelmi.fi",
@@ -56721,7 +56738,9 @@
                     "KOKOUSTILA",
                     "SAUNA",
                     "LUONTOMATKAILU",
-                    "PITOPALVELU"
+                    "PITOPALVELU",
+                    "CATERING",
+                    "JUHLATILA"
                 ],
                 "description": "Multamäen leirikeskus on luonnonläheinen leiri- ja majoituskohde Peurunkajärven rannalla Laukaassa. Kohde soveltuu leirikoulujen, nuorisoleirien, retkien, ryhmien ja yhdistysten majoitukseen sekä koulutus- ja virkistystapahtumiin. Alueella on majoitustiloja, ruokailu- ja kokoontumistiloja sekä hyvät ulkoilu- ja vesistömahdollisuudet. Rauhallinen järvimaisema tarjoaa puitteet ympärivuotiseen ryhmätoimintaan.",
                 "website": "https://www.laukaanseurakunta.fi/multamaen-leirikeskus",
@@ -58142,7 +58161,8 @@
                     "JUHLATILA",
                     "HAAT",
                     "KOKOUSTILA",
-                    "KYLATALO"
+                    "KYLATALO",
+                    "VIDEOTUOTANTO"
                 ],
                 "description": "Vehniän kyläyhdistyksen omistama ja ylläpitämä juhla- ja kylätalo Laukaan Vehniällä. Soveltuu häihin, juhliin, kokouksiin, seminaareihin, pikkujouluihin, karonkkoihin, saunailtoihin ja muihin tapahtumiin ympäri vuoden. Tiloissa juhlasali 150–200 henkilölle, ravintolatila 40 henkilölle, takka- ja saunatilat noin 20 henkilölle, valmistuskeittiö, näyttämö, videotykki, WiFi, äänentoisto ja juhla-astiat 150 hengelle. Omat ruoat ja juomat sallittu.",
                 "website": "https://www.vehnia.fi/juhla-ja-kylatalo-himma/",
@@ -58437,7 +58457,8 @@
                     "KOKOUSTILA",
                     "TYOVAENTALO",
                     "YRITYSTAPAHTUMAT",
-                    "MAJOITUS"
+                    "MAJOITUS",
+                    "VIDEOTUOTANTO"
                 ],
                 "description": "Yli satavuotias tunnelmallinen juhla- ja tapahtumatalo Lievestuoreella. Soveltuu häihin, kokouksiin, muistotilaisuuksiin, seminaareihin, pikkujouluihin, karonkkoihin ja muihin juhliin. Tiloissa suuri juhlasali, kahvila, sauna, videotykki sekä esteetön ja muunneltava tila. Omat ruoat ja juomat sallittu, kahvilapalvelut ja järjestysmiespalvelut tilauksesta.",
                 "website": "https://visitlaukaa.fi/palvelu/tyovaentalo-toivola/",
