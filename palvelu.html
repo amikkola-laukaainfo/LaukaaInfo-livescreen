@@ -1762,7 +1762,30 @@
         }
 
         function searchNextStep(query) {
-            window.location.href = `asiahaku.html?haku=${encodeURIComponent(query)}`;
+            if (!query) return;
+
+            // Check if the query matches a top-level "Need" in NEEDS_CONFIG
+            // We check both the key and the title (case-insensitive)
+            const lowerQuery = query.toLowerCase();
+            let foundNeedId = null;
+
+            if (typeof NEEDS_CONFIG !== 'undefined') {
+                for (const [id, config] of Object.entries(NEEDS_CONFIG)) {
+                    if (id.toLowerCase() === lowerQuery || (config.title && config.title.toLowerCase() === lowerQuery)) {
+                        foundNeedId = id;
+                        break;
+                    }
+                }
+            }
+
+            if (foundNeedId) {
+                // Stay in palvelu.html but switch to the new need
+                window.location.href = `palvelu.html?id=${foundNeedId}`;
+            } else {
+                // Go to the general company/service search (index.html or koko-laukaa.html)
+                // In this project, koko-laukaa.html handles the free-text results.
+                window.location.href = `koko-laukaa.html?q=${encodeURIComponent(query)}`;
+            }
         }
 
         function renderTips(needId) {
