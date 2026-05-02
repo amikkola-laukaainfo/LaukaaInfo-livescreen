@@ -27,7 +27,7 @@ Tämä on tärkein osio jokaiselle yritykselle tiedostossa `company_profiling_da
 Voit antaa lisätietoja eri kategorioissa (esim. `events_and_celebrations` tai `funerals_and_memorials`):
 
 *   **`capacity_max`**: Henkilömäärä (jos kyseessä on tila).
-*   **`digitization_features`**: Tarkemmat tiedot digitoinnista (esim. "VHS", "kaitafilmit").
+*   **`digitization_features`**: Tarkemmat tiedot digitoinnista (esim. "VHS", "kaitafilmit", "valokuvien digitointi", "diashow-palvelu").
 *   **`is_accessible`**: Onko tila esteetön.
 
 ## 3. Esimerkki hyvästä profiloinnista (Mediazoo)

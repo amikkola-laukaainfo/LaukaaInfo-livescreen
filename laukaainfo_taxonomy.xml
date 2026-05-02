@@ -15,6 +15,9 @@
         <tag>videokuvaaja</tag>
         <tag>häävideo</tag>
         <tag>digitointi</tag>
+        <tag>vhs-digitointi</tag>
+        <tag>valokuvien digitointi</tag>
+        <tag>diojen digitointi</tag>
         <tag>häävideon editointi</tag>
         <tag>musiikki</tag>
         <tag>ohjelmapalvelut</tag>
@@ -27,6 +30,7 @@
         <tag>drone-kuvaus</tag>
         <tag>hääkooste</tag>
         <tag>juhlakuvaus</tag>
+        <tag>kaitafilmien digitointi</tag>
       </refinements>
 
       <node_links>
@@ -200,6 +204,11 @@
         <tag>hautakivi</tag>
         <tag>muistovideo</tag>
         <tag>digitointi</tag>
+        <tag>vhs-digitointi</tag>
+        <tag>valokuvien digitointi</tag>
+        <tag>diojen digitointi</tag>
+        <tag>kaitafilmien digitointi</tag>
+        <tag>diashow-esitys</tag>
         <tag>muistotilaisuuskuvaus</tag>
         <tag>hautajaiskuvaus</tag>
       </subcontexts>

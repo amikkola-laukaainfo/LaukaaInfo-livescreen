@@ -1,9 +1,13 @@
 # LaukaaInfo - AI Profiling Guide (Keywords & Taxonomy)
 
-This guide is intended for AI agents responsible for profiling companies in the LaukaaInfo ecosystem. Use these standardized tags, sub-contexts, and node links to ensure consistent service discovery.
+This guide is intended for AI agents responsible for profiling companies in the LaukaaInfo ecosystem. Use these standardized tags, sub-contexts, and node links to ensure consistent service discovery across the **palvelu.html** guided flow and general searches.
 
-## 1. Primary Intents (fits_for)
-Use these keys in the `fits_for` section of the profiling JSON.
+## 1. Business Sectors (Toimialat)
+The discovery engine uses broad business sectors to organize companies. Ensure the `kategoria` field in the core data matches one of these if possible:
+- `Palvelut`, `Kaupat ja putiikit`, `Ravintolat ja kahvilat`, `Terveys ja hyvinvointi`, `Kulttuuri ja vapaa-aika`, `Majoitus`, `Teollisuus ja rakentaminen`, `Asiantuntijapalvelut`, `Kuljetus ja logistiikka`, `Autoilu ja liikenne`, `Juhlat ja tapahtumat`.
+
+## 2. Primary Intents (fits_for)
+Use these keys in the `fits_for` section. High scores (80+) prioritize the company in these flows.
 - `events-and-celebrations` (Häät ja juhlat)
 - `business-events` (Yritystapahtumat)
 - `funerals-and-memorials` (Hautajaiset ja muistotilaisuudet)
@@ -15,48 +19,38 @@ Use these keys in the `fits_for` section of the profiling JSON.
 - `accommodation` (Majoitus)
 - `wellbeing-and-beauty` (Hyvinvointi ja kauneus)
 
-## 2. Standardized Node Links (node_links)
-Always include these in uppercase in the `node_links` array if applicable:
-- `JUHLATILA` (Venues, meeting spaces)
-- `DIGITOINTI` (Digitization services: VHS, photos, film)
-- `VALOKUVAUS` (Photography)
-- `VIDEOTUOTANTO` (Video production, editing)
-- `CATERING` (Food services, pitopalvelu)
-- `MAJOITUS` (Accommodation)
-- `SAUNA` (Sauna facilities)
-- `KUKAT` (Flowers and decoration)
-- `YRITYSTAPAHTUMAT` (Business-specific events)
-- `VERKKOSIVUT` (Web development)
-- `BRÄNDÄYS` (Branding and logos)
+## 3. Standardized Node Links (node_links)
+Node links are the **primary discovery mechanism**. If a company has a node link, they are automatically eligible for category-wide results.
+- `JUHLATILA`: Venues, meeting spaces. (Triggers capacity filtering)
+- `DIGITOINTI`: VHS, photos, film, slides. Covers: `vhs-digitointi`, `valokuvien digitointi`, `diojen digitointi`, `kaitafilmien digitointi`, `diashow-esitykset`.
+- `VALOKUVAUS`: Photography (General).
+- `VIDEOTUOTANTO`: Video production, editing.
+- `CATERING`: Food services, pitopalvelu.
+- `MAJOITUS`: Accommodation.
+- `SAUNA`: Sauna facilities.
+- `KUKAT`: Flowers and decoration.
 
-## 3. Recommended Sub-Contexts (Keywords)
-Use these in `sub_contexts` to improve search relevance:
+## 4. Sub-Contexts & Refinement Tags (The Guided Flow)
+The `palvelu.html` engine uses these to match specific user choices in the guided steps defined in `needs_config.js`.
 
-### Events & Celebrations
-`juhlatila`, `kartano`, `kylätalo`, `sauna`, `ranta`, `pitopalvelu`, `valokuvaaja`, `videokuvaaja`, `häävideo`, `digitointi`, `häävideon editointi`, `musiikki`, `ohjelmapalvelut`, `drone-kuvaus`, `hääkooste`, `juhlakuvaus`, `syntymäpäivät`, `sukujuhlat`, `siivous`
+### Matching Principles:
+1. **Direct Match**: If a user selects "Hääkuvaaja", the engine looks for `hääkuvaus` in `refinement_tags` or `sub_contexts`.
+2. **Category Fallback**: If no specific refinement matches, companies with the relevant `node_link` (e.g., `VALOKUVAUS`) are shown as general options.
+3. **Fuzzy Matching**: The engine matches plural forms (e.g., `kukka` matches `kukat`) and partial strings.
+4. **Exclusion (`not_suitable_for`)**: Use this array to prevent a company from appearing in specific contexts (e.g., a "Party DJ" might not be suitable for `funerals-and-memorials`).
 
-### Business Events
-`kokoustila`, `seminaari`, `yritysjuhlat`, `tyhypäivä`, `koulutus`, `streamaus`, `videotuotanto`, `presentaatiotekniikka`
+### Recommended Keywords by Intent:
+- **Events**: `juhlatila`, `kartano`, `kylätalo`, `sauna`, `ranta`, `pitopalvelu`, `valokuvaaja`, `videokuvaaja`, `häävideo`, `hääkuvaus`, `juhlakuvaus`, `musiikki`, `ohjelmapalvelut`, `drone-kuvaus`, `digitointi`, `vhs-digitointi`, `valokuvien digitointi`.
+- **Business**: `kokoustila`, `seminaari`, `yritysjuhlat`, `tyhypäivä`, `streamaus`, `videotuotanto`, `presentaatiotekniikka`.
+- **Funerals**: `hautauspalvelu`, `muistotilaisuus`, `perunkirjoitus`, `hautakivi`, `muistovideo`, `muistotilaisuuskuvaus`, `hautajaiskuvaus`, `digitointi`, `vhs-digitointi`, `valokuvien digitointi`, `diashow-esitys`.
+- **Professional**: `yritysneuvonta`, `tilitoimisto`, `vakuutus`, `lakipalvelut`, `verkkosivut`, `brändäys`, `logo`, `yrityskuvat`, `google-mainonta`, `somemainonta`, `rekrytointi`.
 
-### Funerals & Memorials
-`hautauspalvelu`, `muistotilaisuus`, `perunkirjoitus`, `hautakivi`, `muistovideo`, `digitointi`, `muistotilaisuuskuvaus`, `hautajaiskuvaus`
+## 5. Capacity & Feature Rules
+For any company with `JUHLATILA` or `MAJOITUS`:
+- **Capacity**: Must have `capacity_max` and `seated_capacity`. If these are 0, the company is **hidden** from searches where the user specifies a person count.
+- **Specific Features**: Use boolean flags in the profiling JSON for:
+  - `has_sauna`, `is_accessible`, `home_service_available` (home visits), `quiet_private_space` (for memorials).
 
-### Professional Services
-`yritysneuvonta`, `konsultointi`, `tilitoimisto`, `vakuutus`, `lakipalvelut`, `verkkosivut`, `brändäys`, `logo`, `yrityskuvat`, `google-mainonta`, `somemainonta`, `myynnin kehittäminen`, `verkkokauppa`, `rekrytointi`
-
-## 4. Specialization vs. General Discovery
-The discovery engine now uses a two-tiered approach:
-
-1. **General Discovery (Core Node Links)**: If a company has a core node link (e.g., `VALOKUVAUS`), they will appear in ANY search for that category (e.g., a "Valokuvaaja" option in a wedding flow).
-2. **Specialized Match (Refinement Tags & High Scores)**: To be highlighted as a **"TOP MATCH"** or to match specific filters (e.g., "Hääkuvaaja"), the company MUST have the specific tag in their `refinement_tags` (e.g., `hääkuvaus`) or a high `fits_for` score for that intent.
-
-**AI Tip**: When profiling, always add the broad node link first, and then add specific sub-contexts and refinement tags for areas where the company truly excels.
-
-## 5. Capacity Rules
-For any company with `JUHLATILA` or `MAJOITUS` links, ensure the following fields are populated if known:
-- `capacity_max`
-- `seated_capacity`
-- `accommodation_beds` (for accommodation)
-
-## 5. Important Filtering Keywords
-Avoid using "tilaisuus" (event/occasion) when you mean "tila" (space/venue). The word "tila" triggers venue-specific filtering, while "tilaisuus" is treated as a general service term.
+## 6. Important Naming Principles
+- **Tila vs. Tilaisuus**: Use "tila" for physical venues. Use "tilaisuus" for services related to events. The word "tila" (space) triggers venue-specific logic, while "tilaisuus" (event/occasion) is a general keyword.
+- **Service Chains**: When profiling, think about what else the user might need. If a company provides a venue, list its `collaborated_with` partners to strengthen the service chain in `palvelu.html`.
