@@ -1102,15 +1102,34 @@
 
                 options.forEach(opt => {
                     const companiesForOpt = window.allCompanies.filter((c, idx) => {
-                        // NEW: Estetään saman yrityksen näyttäminen useammassa ryhmässä
-                        // if (suggestedCompanyIds.has(c.id)) return false;
-
                         const isMediazoo = (c.id === 'company-2' || c.nimi === 'Mediazoo');
+                        const labelLower = (opt.label || '').toLowerCase();
+
+                        // Identify if this is a venue/space search or something that naturally has capacity
+                        const isVenueSearch = (opt.capacity_req > 0 || 
+                                              opt.node_link === 'JUHLATILA' || 
+                                              (labelLower.includes('tila') && !labelLower.includes('tilaisuus')) || 
+                                              labelLower.includes('muistotilaisuus') ||
+                                              labelLower.includes('kokous') ||
+                                              labelLower.includes('sauna') ||
+                                              labelLower.includes('majoitus') ||
+                                              labelLower.includes('ravintola') ||
+                                              labelLower.includes('mökki'));
+
+                        const companyCapacity = getCompanyCapacity(c, currentProfilingKey);
                         
+                        // NEW: Strict exclusion of venues from specialized service searches (e.g. photography, videography)
+                        // Use only physical space capacity for this check to avoid excluding catering services
+                        const catData = getCategoryData(c, currentProfilingKey);
+                        const venueCapacity = catData ? (catData.capacity_max || catData.meeting_capacity || catData.seminar_capacity || catData.seated_capacity || catData.memorial_service_capacity || catData.outdoor_capacity || 0) : 0;
+
+                        if (!isVenueSearch && venueCapacity > 0) {
+                            return false; 
+                        }
+
                         // NEW: Jos Saunatilat on valittu, ja kyseessä on Juhlatila tai Kesäjuhlat -ehdotus,
                         // rajataan vain tiloihin joissa on sauna.
-                        const isVenueOrCore = (opt.label && (opt.label.toLowerCase().includes('juhlatila') || opt.label.toLowerCase().includes('kesäjuhla')));
-                        if (globalRequestedFeatures.sauna && isVenueOrCore) {
+                        if (globalRequestedFeatures.sauna && isVenueSearch) {
                             const catData = getCategoryData(c, currentProfilingKey);
                             if (!catData?.has_sauna) return false;
                         }
