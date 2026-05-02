@@ -40,10 +40,11 @@ The `palvelu.html` engine uses these to match specific user choices in the guide
 4. **Exclusion (`not_suitable_for`)**: Use this array to prevent a company from appearing in specific contexts (e.g., a "Party DJ" might not be suitable for `funerals-and-memorials`).
 
 ### Recommended Keywords by Intent:
-- **Events**: `juhlatila`, `kartano`, `kylätalo`, `sauna`, `ranta`, `pitopalvelu`, `valokuvaaja`, `videokuvaaja`, `häävideo`, `hääkuvaus`, `juhlakuvaus`, `musiikki`, `ohjelmapalvelut`, `drone-kuvaus`, `digitointi`, `vhs-digitointi`, `valokuvien digitointi`.
-- **Business**: `kokoustila`, `seminaari`, `yritysjuhlat`, `tyhypäivä`, `streamaus`, `videotuotanto`, `presentaatiotekniikka`.
+- **Events**: `juhlatila`, `kartano`, `kylätalo`, `sauna`, `ranta`, `pitopalvelu`, `valokuvaaja`, `videokuvaaja`, `häävideo`, `hääkuvaus`, `juhlakuvaus`, `musiikki`, `ohjelmapalvelut`, `drone-kuvaus`, `ilmakuvaus`, `digitointi`, `vhs-digitointi`, `valokuvien digitointi`.
+- **Business**: `kokoustila`, `seminaari`, `yritysjuhlat`, `tyhypäivä`, `streamaus`, `videotuotanto`, `presentaatiotekniikka`, `ilmakuvaus`.
 - **Funerals**: `hautauspalvelu`, `muistotilaisuus`, `perunkirjoitus`, `hautakivi`, `muistovideo`, `muistotilaisuuskuvaus`, `hautajaiskuvaus`, `digitointi`, `vhs-digitointi`, `valokuvien digitointi`, `diashow-esitys`.
 - **Professional**: `yritysneuvonta`, `tilitoimisto`, `vakuutus`, `lakipalvelut`, `verkkosivut`, `brändäys`, `logo`, `yrityskuvat`, `google-mainonta`, `somemainonta`, `rekrytointi`.
+- **Real Estate & Construction**: `muuttopalvelu`, `varastointi`, `asuntovideo`, `kiinteistökuvaus`, `timelapse`, `rakennuskuvaus`, `ilmakuvaus`.
 
 ## 5. Capacity & Feature Rules
 For any company with `JUHLATILA` or `MAJOITUS`:

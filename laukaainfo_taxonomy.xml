@@ -28,6 +28,7 @@
 
       <refinements>
         <tag>drone-kuvaus</tag>
+        <tag>ilmakuvaus</tag>
         <tag>hääkooste</tag>
         <tag>juhlakuvaus</tag>
         <tag>kaitafilmien digitointi</tag>
@@ -38,6 +39,7 @@
         <node>VALOKUVAUS</node>
         <node>VIDEOTUOTANTO</node>
         <node>CATERING</node>
+        <node>DIGITOINTI</node>
       </node_links>
     </intent>
 
@@ -55,6 +57,8 @@
         <tag>streamaus</tag>
         <tag>videotuotanto</tag>
         <tag>presentaatiotekniikka</tag>
+        <tag>ilmakuvaus</tag>
+        <tag>drone-kuvaus</tag>
       </refinements>
 
       <node_links>
@@ -122,9 +126,16 @@
         <tag>muuttosiivous</tag>
       </subcontexts>
 
+      <refinements>
+        <tag>asuntovideo</tag>
+        <tag>kiinteistökuvaus</tag>
+      </refinements>
+
       <node_links>
         <node>MUUTTO</node>
         <node>SIIVOUS</node>
+        <node>VALOKUVAUS</node>
+        <node>VIDEOTUOTANTO</node>
       </node_links>
     </intent>
 
@@ -138,10 +149,18 @@
         <tag>remontti</tag>
       </subcontexts>
 
+      <refinements>
+        <tag>timelapse</tag>
+        <tag>rakennuskuvaus</tag>
+        <tag>ilmakuvaus</tag>
+      </refinements>
+
       <node_links>
         <node>RAKENTAMINEN</node>
         <node>SÄHKÖTYÖT</node>
         <node>LVI</node>
+        <node>VALOKUVAUS</node>
+        <node>VIDEOTUOTANTO</node>
       </node_links>
     </intent>
 
@@ -216,6 +235,7 @@
       <node_links>
         <node>HAUTAUSPALVELUT</node>
         <node>MUISTOTILAISUUS</node>
+        <node>DIGITOINTI</node>
       </node_links>
     </intent>
 

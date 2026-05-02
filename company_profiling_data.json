@@ -2435,7 +2435,11 @@
                 "digitization_features": [
                     "perhearkiston digitointi",
                     "valokuvien digitointi",
-                    "videon digitointi"
+                    "vhs digitointi",
+                    "diojen digitointi"
+                ],
+                "entertainment_features": [
+                    "diashow-esitys"
                 ],
                 "collaborated_with": []
             },
