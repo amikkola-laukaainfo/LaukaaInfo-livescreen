@@ -1378,8 +1378,7 @@
                             (c.kategoria || '') + ' ' + 
                             (c.nimi || '') + ' ' +
                             (c.profiling?.core?.sub_contexts?.join(' ') || '') + ' ' +
-                            (c.profiling?.core?.node_links?.join(' ') || '') + ' ' +
-                            (c.profiling?.core?.paired_with_by_context ? Object.values(c.profiling.core.paired_with_by_context).flat().join(' ') : '')
+                            (c.profiling?.core?.node_links?.join(' ') || '')
                         ).toLowerCase();
                         
                         const tagMatch = opt.tags.some(tag => companyContent.includes(tag.toLowerCase()));
