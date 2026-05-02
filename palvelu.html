@@ -1251,23 +1251,7 @@
                                 }
                             }
                             
-                            // FALLBACK: Tarkista paired_with_by_context (Taso 2)
-                            if (!match && c.profiling?.core?.paired_with_by_context) {
-                                const pairedData = c.profiling.core.paired_with_by_context;
-                                const contextKey = pf.section;
-                                const hyphenKey = contextKey.replace(/_/g, '-');
-                                const contextItems = pairedData[contextKey] || pairedData[hyphenKey] || [];
-                                if (Array.isArray(contextItems)) {
-                                    if (pf.value === true) {
-                                        match = contextItems.some(v => 
-                                            checkFuzzyMatch(v, opt.label) || 
-                                            (opt.tags && opt.tags.some(t => checkFuzzyMatch(v, t)))
-                                        );
-                                    } else {
-                                        match = contextItems.some(v => checkFuzzyMatch(v, pf.value));
-                                    }
-                                }
-                            }
+
 
                             if (match) isProfiledMatch = true;
                         }
