@@ -1103,7 +1103,7 @@
                 options.forEach(opt => {
                     const companiesForOpt = window.allCompanies.filter((c, idx) => {
                         // NEW: Estetään saman yrityksen näyttäminen useammassa ryhmässä
-                        if (suggestedCompanyIds.has(c.id)) return false;
+                        // if (suggestedCompanyIds.has(c.id)) return false;
 
                         const isMediazoo = (c.id === 'company-2' || c.nimi === 'Mediazoo');
                         
