@@ -246,6 +246,9 @@
         <tag>kiinteistöhuolto</tag>
         <tag>siivous</tag>
         <tag>tilintarkastus</tag>
+        <tag>lakipalvelut</tag>
+        <tag>sopimukset</tag>
+        <tag>juridiset palvelut</tag>
       </subcontexts>
 
       <node_links>

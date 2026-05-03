@@ -616,7 +616,8 @@ const NEEDS_CONFIG = {
                     { "label": "Kiinteistöhuolto (tekniikka, lumityöt ym.)", "tags": ["kiinteistöhuolto"], "is_service": true },
                     { "label": "Siivouspalvelut (sisä ja ulko)", "tags": ["siivous", "puhdistuspalvelut"] },
                     { "label": "Pihanhoito / Lumenauraus", "tags": ["viherrakentaminen", "kiinteistöhuolto"], "is_service": true },
-                    { "label": "Kuntokartoitus / Suunnittelu", "tags": ["suunnittelutoimisto"] }
+                    { "label": "Kuntokartoitus / Suunnittelu", "tags": ["suunnittelutoimisto"] },
+                    { "label": "Lakipalvelut ja sopimusasiat", "tags": ["lakiasiaintoimistot", "sopimukset"], "is_service": true }
                 ]
             }
         ]
