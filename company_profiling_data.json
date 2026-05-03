@@ -2438,10 +2438,10 @@
                     "vhs digitointi",
                     "diojen digitointi"
                 ],
+                "collaborated_with": [],
                 "entertainment_features": [
                     "diashow-esitys"
-                ],
-                "collaborated_with": []
+                ]
             },
             "moving_and_housing": {
                 "moving_truck_available": false,
@@ -36060,15 +36060,15 @@
             "name": "Väentupa R.Y. (Kirpputori Retrokeidas)",
             "core": {
                 "fits_for": {
-                    "muutto": 70,
+                    "muutto": 85,
                     "events-and-celebrations": 20,
                     "business-events": 10,
                     "funerals-and-memorials": 20,
                     "startup-services": 0,
                     "business-growth": 0,
-                    "moving-and-housing": 75,
-                    "construction-and-maintenance": 10,
-                    "cottage-services": 20,
+                    "moving-and-housing": 90,
+                    "construction-and-maintenance": 15,
+                    "cottage-services": 30,
                     "accommodation": 0,
                     "wellbeing-and-beauty": 10
                 },
@@ -36081,7 +36081,7 @@
                         "Laukaa",
                         "Keski-Suomi"
                     ],
-                    "note": "Kirpputori ja kierrätyspalvelu"
+                    "note": "Kirpputori, kierrätyspalvelu ja peräkärryn vuokraus"
                 },
                 "emergency_available": false,
                 "contract_customer_available": false,
@@ -36098,11 +36098,18 @@
                     "vaatteet",
                     "kodintavarat",
                     "second hand",
-                    "uudelleenkäyttö"
+                    "uudelleenkäyttö",
+                    "muuttopalvelu",
+                    "peräkärry",
+                    "peräkärryn vuokraus",
+                    "kuljetusapu",
+                    "tavaroiden kuljetus",
+                    "kodin tyhjennys",
+                    "varastointi kevyt"
                 ],
                 "node_links": [],
-                "description": "Väentupa R.Y. ylläpitää Kirpputori Retrokeidasta, joka tarjoaa kierrätettyjä tavaroita, vaatteita ja huonekaluja sekä mahdollisuuden tavaroiden uudelleenkäyttöön ja myyntiin.",
-                "website": "",
+                "description": "Väentupa R.Y. ylläpitää Kirpputori Retrokeidasta Laukaassa. Toiminta keskittyy kierrätykseen, käytettyjen tavaroiden myyntiin ja uudelleenkäyttöön. Lisäksi tarjolla on peräkärryn vuokraus muuttoihin ja tavaroiden kuljetukseen.",
+                "website": "https://vaentupa.fi/tuote/perakarry/",
                 "email": "",
                 "phone": ""
             },
@@ -36183,7 +36190,7 @@
                 "moving_truck_available": false,
                 "packing_service": false,
                 "storage_available": false,
-                "weekend_moves": false,
+                "weekend_moves": true,
                 "urgent_moves": false,
                 "long_distance_moves": false,
                 "cleaning_after_move": false,
@@ -36193,7 +36200,10 @@
                 "refinement_tags": [
                     "tavaroiden kierrätys",
                     "käytettyjen tavaroiden myynti",
-                    "kodin tyhjennys"
+                    "kodin tyhjennys",
+                    "peräkärryn vuokraus",
+                    "kevyt kuljetus",
+                    "omatoimimuutto"
                 ],
                 "digitization_features": [],
                 "collaborated_with": []
@@ -36225,7 +36235,10 @@
                 "dock_maintenance": false,
                 "sauna_services": false,
                 "guest_preparation_service": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "tavaroiden kuljetus mökille",
+                    "peräkärryn vuokraus"
+                ],
                 "collaborated_with": []
             },
             "housing_company_and_contracts": {
@@ -36283,7 +36296,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-05-02T18:04:27.163Z",
+                "last_updated": "2026-05-03T05:58:58.595Z",
                 "verified_by": "AI-analysis-v2",
                 "status": "draft"
             }
