@@ -1563,7 +1563,7 @@ function filterCatalog(renderList = true) {
     if (!searchEl) return;
 
     const queryParams = new URLSearchParams(window.location.search);
-    const urlTag = queryParams.get('tag') || '';
+    const urlTag = queryParams.get('tag') || queryParams.get('q') || '';
     const urlCat = queryParams.get('cat') || '';
     
     const searchTerm = (searchEl.value || urlTag || '').toLowerCase().trim();

@@ -1368,6 +1368,16 @@
                         }
 
                         if (isProfiledMatch) return true;
+                        
+                        // Jos yrityksellä on profilointi tälle kontekstille mutta arvosana on 0, 
+                        // ei sallita täsmäystä tägeillä (estää esim. juhlatilojen osumisen siivous-hakuihin)
+                        if (c.profiling && c.profiling.core && c.profiling.core.fits_for) {
+                            const fitsScore = c.profiling.core.fits_for[currentProfilingKey] || 0;
+                            // Jos profilointi on tehty (löytyy fits_for:sta) ja arvosana on 0, hylätään
+                            if (currentProfilingKey in c.profiling.core.fits_for && fitsScore === 0) {
+                                return false;
+                            }
+                        }
 
                         // Jos optiolla ei ole tägejä, node-linkkejä tai suodattimia, se ei saa näyttää "kaikkia" 
                         // paitsi jos se on pelkkä kapasiteettivaatimus

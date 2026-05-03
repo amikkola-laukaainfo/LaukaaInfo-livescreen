@@ -58810,8 +58810,7 @@
                     "valmistuskeitto",
                     "omaruuat",
                     "takkatila",
-                    "esteetön",
-                    "siivouspalvelu"
+                    "esteetön"
                 ],
                 "node_links": [
                     "LAUKAA",
@@ -58866,7 +58865,6 @@
                         "astiasto",
                         "omaruuat",
                         "esteetön",
-                        "siivouspalvelu",
                         "pikkujoulu",
                         "syntymäpäivät",
                         "valmistujaiset",
@@ -58912,8 +58910,7 @@
                     "koulutustila",
                     "videotykki",
                     "langaton-internet",
-                    "äänentoisto",
-                    "siivouspalvelu"
+                    "äänentoisto"
                 ],
                 "wellbeing_and_activity_features": [
                     "sauna",
