@@ -59,7 +59,8 @@ async function initRegionPage() {
 
     const areaSlug = params.get('area')?.toLowerCase() || pathArea;
     const catParam = params.get('cat')?.toLowerCase();
-    const tagParam = params.get('tag')?.toLowerCase();
+    const qParam = params.get('q')?.toLowerCase();
+    const tagParam = params.get('tag')?.toLowerCase() || qParam;
 
     // Hae ensin alueiden metadata CSV:stä
     await fetchRegionMetadata();
@@ -198,7 +199,8 @@ function filterByArea(areaSlug, catParam, tagParam) {
             const tags = normalizeForSearch(c.tags);
             const ptapa = normalizeForSearch(c.palvelutapa);
             const cat = normalizeForSearch(c.kategoria);
-            return tags.includes(query) || ptapa.includes(query) || cat.includes(query);
+            const name = normalizeForSearch(c.nimi);
+            return tags.includes(query) || ptapa.includes(query) || cat.includes(query) || name.includes(query);
         }
         if (catParam) {
             return (c.kategoria || '').toLowerCase() === catParam.replace(/-/g, ' ');
