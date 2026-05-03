@@ -59656,8 +59656,9 @@
                     "business-growth": 0,
                     "moving-and-housing": 0,
                     "construction-and-maintenance": 0,
-                    "cottage-services": 20,
-                    "housing-company-and-contracts": 0
+                    "cottage-services": 5,
+                    "housing-company-and-contracts": 0,
+                    "business-events": 20
                 },
                 "priority_score": 55,
                 "paired_with": [],
@@ -59685,9 +59686,6 @@
                     "lievestuore",
                     "laukaa",
                     "keski-suomi",
-                    "pitopalvelu",
-                    "catering",
-                    "juhlapalvelu",
                     "lähiruoka",
                     "takeaway",
                     "ruoka tapahtumiin"
@@ -59695,11 +59693,7 @@
                 "node_links": [
                     "LAUKAA",
                     "LIEVESTUORE",
-                    "KALA",
-                    "CATERING",
-                    "RUOKAPALVELU",
-                    "JUHLAT",
-                    "PITOPALVELU"
+                    "KALA"
                 ],
                 "description": "Koivulan savukala on Lievestuoreella toimiva yritys, joka valmistaa ja myy savukalaa sekä muita kalatuotteita. Tarjoaa laadukasta lähiruokaa sekä palveluita juhliin, tapahtumiin ja yrityksille.",
                 "website": "[https://koivulansavukala.fi/](https://koivulansavukala.fi/)",
@@ -59738,13 +59732,12 @@
                 "karaoke_available": false,
                 "has_exclusive_catering": false,
                 "accommodation_included": false,
-                "refinement_tags": [
-                    "pitopalvelu",
-                    "catering",
-                    "ruoka juhliin",
-                    "savukala",
-                    "juhlapalvelu"
-                ],
+                "refinement_tags": {
+                    "Yleinen": [
+                        "ruoka juhliin",
+                        "savukala"
+                    ]
+                },
                 "digitization_features": [],
                 "entertainment_features": [],
                 "collaborated_with": []
@@ -59781,7 +59774,7 @@
                 "memorial_service_capacity": 0,
                 "quiet_private_space": false,
                 "accessible_entry": false,
-                "memorial_catering": true,
+                "memorial_catering": false,
                 "coffee_service": false,
                 "flower_arrangements": false,
                 "memorial_menu_available": true,
@@ -59789,11 +59782,7 @@
                 "memorial_arrangements": false,
                 "transport_assistance": false,
                 "urgent_booking_available": false,
-                "refinement_tags": [
-                    "pitopalvelu",
-                    "muistotilaisuus",
-                    "ruoka tilaisuuteen"
-                ],
+                "refinement_tags": {},
                 "digitization_features": [],
                 "collaborated_with": []
             },
@@ -59905,7 +59894,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-30T08:10:22.786Z",
+                "last_updated": "2026-05-03T19:32:49.785Z",
                 "verified_by": "ai-enriched",
                 "status": "enriched"
             }
