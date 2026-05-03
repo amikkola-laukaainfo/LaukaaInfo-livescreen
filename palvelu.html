@@ -1117,16 +1117,24 @@
                                               labelLower.includes('sauna') ||
                                               labelLower.includes('majoitus') ||
                                               labelLower.includes('ravintola') ||
-                                              labelLower.includes('mökki'));
+                                              labelLower.includes('mökki')) && !opt.is_service;
 
                         const companyCapacity = getCompanyCapacity(c, currentProfilingKey);
                         
-                        // NEW: Strict exclusion of venues from specialized service searches (e.g. photography, videography)
+                        // NEW: Strict exclusion of venues from specialized service searches (e.g. photography, videography, nuohous)
                         // Use only physical space capacity for this check to avoid excluding catering services
                         const catData = getCategoryData(c, currentProfilingKey);
                         const venueCapacity = catData ? (catData.capacity_max || catData.meeting_capacity || catData.seminar_capacity || catData.seated_capacity || catData.memorial_service_capacity || catData.outdoor_capacity || 0) : 0;
 
-                        if (!isVenueSearch && venueCapacity > 0) {
+                        // Enhanced venue detection: check if company is marked as JUHLATILA or has capacity anywhere
+                        const isPrimarilyVenue = (c.profiling?.core?.node_links || []).includes('JUHLATILA') || 
+                                                (c.profiling?.events_and_celebrations?.capacity_max > 0) ||
+                                                (c.profiling?.business_events?.meeting_capacity > 0);
+
+                        if (!isVenueSearch && (venueCapacity > 0 || isPrimarilyVenue)) {
+                            // If searching for a service (not a venue), and company is a venue, exclude it.
+                            // Exceptions could be made if fits_for for the current profiling key is very high (e.g. specialized service venue),
+                            // but usually the user wants a dedicated service provider.
                             return false; 
                         }
 

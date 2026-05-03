@@ -319,7 +319,7 @@ const NEEDS_CONFIG = {
                 "id": "tarkennus",
                 "question": "Millaista mökkipalvelua etsit?",
                 "options": [
-                    { "label": "Talvivalvonta & Huolenpito", "sub_context": "talvivalvonta", "tags": ["kiinteistöhuolto"] },
+                    { "label": "Talvivalvonta & Huolenpito", "sub_context": "talvivalvonta", "tags": ["kiinteistöhuolto"], "is_service": true },
                     { "label": "Kevätkunnostus / Siivous", "sub_context": "kevatkunnostus", "tags": ["siivous"] },
                     { "label": "Polttopuut & Peruspalvelut", "sub_context": "polttopuut", "tags": ["polttopuut"] },
                     { "label": "Remontointi & Laiturit", "sub_context": "mokkiremontti", "tags": ["rakentaminen"] }
@@ -331,7 +331,7 @@ const NEEDS_CONFIG = {
                 "question": "Mitä huoltoa mökki kaipaa?",
                 "options": [
                     { "label": "Kiinteistöhuolto / Talonmies", "tags": ["kiinteistöhuolto"], "profilointi_filter": { "section": "cottage_services", "field": "key_holding", "value": true } },
-                    { "label": "Nuohous", "tags": ["nuohouspalvelut"] },
+                    { "label": "Nuohous", "tags": ["nuohouspalvelut"], "is_service": true },
                     { "label": "Polttopuut", "tags": ["polttopuut"] },
                     { "label": "Laituritarvikkeet / Huolto", "tags": ["rakentaminen"], "profilointi_filter": { "section": "cottage_services", "field": "dock_maintenance", "value": true } }
                 ]
@@ -377,10 +377,10 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": "Kunnossapito ja tekniset palvelut?",
                 "options": [
-                    { "label": "Kiinteistöhuolto", "tags": ["kiinteistöhuolto"], "profilointi_filter": { "section": "housing_company_and_contracts", "field": "housing_company_specialized", "value": true } },
-                    { "label": "Siivouspalvelut", "tags": ["siivous"] },
-                    { "label": "Nuohous", "tags": ["nuohouspalvelut"] },
-                    { "label": "LVI- ja sähköhuolto", "tags": ["LVI", "sähköasennukset"] },
+                    { "label": "Kiinteistöhuolto", "tags": ["kiinteistöhuolto"], "is_service": true, "profilointi_filter": { "section": "housing_company_and_contracts", "field": "housing_company_specialized", "value": true } },
+                    { "label": "Siivouspalvelut", "tags": ["siivous"], "is_service": true },
+                    { "label": "Nuohous", "tags": ["nuohouspalvelut"], "is_service": true },
+                    { "label": "LVI- ja sähköhuolto", "tags": ["LVI", "sähköasennukset"], "is_service": true },
                     { "label": "Hissihuolto", "tags": ["it-palvelut"] }
                 ]
             }
@@ -612,9 +612,9 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": "Mitä kiinteistösi tarvitsee?",
                 "options": [
-                    { "label": "Kiinteistöhuolto (tekniikka, lumityöt ym.)", "tags": ["kiinteistöhuolto"] },
+                    { "label": "Kiinteistöhuolto (tekniikka, lumityöt ym.)", "tags": ["kiinteistöhuolto"], "is_service": true },
                     { "label": "Siivouspalvelut (sisä ja ulko)", "tags": ["siivous", "puhdistuspalvelut"] },
-                    { "label": "Pihanhoito / Lumenauraus", "tags": ["viherrakentaminen", "kiinteistöhuolto"] },
+                    { "label": "Pihanhoito / Lumenauraus", "tags": ["viherrakentaminen", "kiinteistöhuolto"], "is_service": true },
                     { "label": "Kuntokartoitus / Suunnittelu", "tags": ["suunnittelutoimisto"] }
                 ]
             }
