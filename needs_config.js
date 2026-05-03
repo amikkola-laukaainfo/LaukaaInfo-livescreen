@@ -486,6 +486,7 @@ const NEEDS_CONFIG = {
             {
                 "id": "muistot_ja_tallennus",
                 "multiple": true,
+                "skipIf": "!isSelected('paatarve', 'Muistotilaisuus')",
                 "question": "Haluaisitko tallentaa muistot tai tarvitsetko digitointipalveluita?",
                 "options": [
                     { "label": "Videokuvaus / Esitykset", "tags": ["videotuotanto", "videokuvaus", "videokuvaaja"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "refinement_tags", "value": "muistotilaisuuskuvaus" } },
