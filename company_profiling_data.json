@@ -4,7 +4,7 @@
     "nodes": {},
     "profiles": {
         "company-278": {
-            "name": "Laukaan Satamakahvila",
+            "name": "Laukaan Satamakahvila (Laukaan satama)",
             "core": {
                 "fits_for": {
                     "events-and-celebrations": 50,
@@ -21,10 +21,12 @@
                 "priority_score": 60,
                 "paired_with": [],
                 "service_area": {
-                    "mode": "TOIMIPISTE",
+                    "mode": "LOCAL",
                     "radius_km": 0,
-                    "regions": [],
-                    "note": "Satamakahvila Laukaan veneily- ja satama-alueella, kesäkauden palvelut ja kahvilatoiminta."
+                    "regions": [
+                        "Laukaa satama"
+                    ],
+                    "note": "Sijaitsee Laukaan satamassa Saraaveden rannalla. Kesäkauden toimipiste, tapahtumia viikonloppuisin."
                 },
                 "emergency_available": false,
                 "contract_customer_available": false,
@@ -45,7 +47,12 @@
                     "satama",
                     "laiturialue",
                     "kesäkahvila",
-                    "matkailu"
+                    "matkailu",
+                    "vierasvenesatama",
+                    "lauakka",
+                    "saraavesi",
+                    "venesatama",
+                    "laivaranta"
                 ],
                 "node_links": [
                     "LAUKAA",
@@ -55,10 +62,10 @@
                     "VENEILY",
                     "JUHLATILA"
                 ],
-                "description": "Laukaan Satamakahvila on viihtyisä satama-alueella toimiva kahvila ja kesäravintola, joka palvelee veneilijöitä, matkailijoita ja paikallisia. Tarjolla kahvilatuotteita, virvokkeita, lounasta sekä kausiluonteisia herkkuja. Sijainti sataman yhteydessä tekee siitä kesäkauden kohtaamispaikan järvimaisemissa.",
-                "website": "https://www.laukaansatama.fi/",
-                "email": "",
-                "phone": ""
+                "description": "Laukaan Satamakahvila on Saraaveden rannalla sijaitseva kesäinen kahvila ja vapaa-ajan keskus. Satama toimii myös vierasvenesatamana sekä tapahtumapaikkana, jossa järjestetään kesäisin konsertteja ja tapahtumia. Kahvilasta saa makeita ja suolaisia annoksia, jäätelöä sekä ruokaa pienempään ja suurempaan nälkään. Alueella on vuokrattavia saunoja, SUP-lautoja ja vesijettejä sekä monipuoliset ulkoilumahdollisuudet.",
+                "website": "https://laukaansatama.fi",
+                "email": "[info@laukaansatama.fi](mailto:info@laukaansatama.fi)",
+                "phone": "358505664962"
             },
             "events_and_celebrations": {
                 "capacity_max": 50,
@@ -263,7 +270,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-30T11:00:08.076Z",
+                "last_updated": "2026-05-03T12:15:03.683Z",
                 "verified_by": "ai-generated",
                 "status": "draft"
             }
@@ -60161,6 +60168,259 @@
                 "last_updated": "2026-04-30T08:09:04.298Z",
                 "verified_by": "ai-enriched",
                 "status": "enriched"
+            }
+        },
+        "company-300": {
+            "name": "Nuohous Lapin Mies Oy",
+            "core": {
+                "fits_for": {
+                    "events-and-celebrations": 5,
+                    "business-events": 5,
+                    "funerals-and-memorials": 5,
+                    "startup-services": 0,
+                    "business-growth": 0,
+                    "moving-and-housing": 70,
+                    "construction-and-maintenance": 95,
+                    "cottage-services": 85,
+                    "accommodation": 0,
+                    "wellbeing-and-beauty": 0,
+                    "housing-company-and-contracts": 80
+                },
+                "priority_score": 78,
+                "paired_with": [],
+                "service_area": {
+                    "mode": "onsite",
+                    "radius_km": 120,
+                    "regions": [
+                        "keski-suomi"
+                    ],
+                    "note": "Palvelut saatavilla Keski-Suomen alueella sopimuksen mukaan."
+                },
+                "emergency_available": false,
+                "contract_customer_available": true,
+                "corporate_clients": true,
+                "home_service": true,
+                "weekend_service": false,
+                "not_suitable_for": [
+                    "majoitus",
+                    "juhlatila",
+                    "ravintolapalvelut"
+                ],
+                "paired_with_by_context": {},
+                "sub_contexts": [
+                    "nuohous",
+                    "nuohooja",
+                    "savuhormi",
+                    "tulisija",
+                    "paloturvallisuus",
+                    "keski-suomi",
+                    "jyväskylä",
+                    "hormien puhdistus",
+                    "kiinteistöhuolto",
+                    "kiinteistön kunnossapito",
+                    "takka nuohous",
+                    "mökkinuohous"
+                ],
+                "node_links": [
+                    "MAJOITUS"
+                ],
+                "description": "Nuohous Lapin Mies Oy tarjoaa ammattitaitoiset nuohouspalvelut Keski-Suomen alueella. Palveluihin kuuluvat savuhormien ja tulisijojen nuohous, tarkastukset sekä paloturvallisuuteen liittyvä neuvonta.",
+                "website": "https://www.nuohouslapinmies.fi",
+                "email": "arto@nuohouslapinmies.fi",
+                "phone": "451403597"
+            },
+            "events_and_celebrations": {
+                "capacity_max": 0,
+                "seated_capacity": 0,
+                "outdoor_capacity": 0,
+                "is_accessible": false,
+                "is_lakeside": false,
+                "has_sauna": false,
+                "has_av_tech": false,
+                "has_stage": false,
+                "accommodation_beds": 0,
+                "alcohol_license": false,
+                "private_booking": false,
+                "late_night_events": false,
+                "wedding_specialized": false,
+                "catering_min_capacity": 0,
+                "catering_max_capacity": 0,
+                "dietary_specialties": [],
+                "staff_included": false,
+                "wedding_menu_available": false,
+                "cake_service": false,
+                "partner_venues": [],
+                "wedding_photography": false,
+                "drone_available": false,
+                "video_production": false,
+                "live_music": false,
+                "dj_services": false,
+                "karaoke_available": false,
+                "has_exclusive_catering": false,
+                "accommodation_included": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "entertainment_features": [],
+                "collaborated_with": []
+            },
+            "business_events": {
+                "meeting_capacity": 0,
+                "seminar_capacity": 0,
+                "conference_rooms": 0,
+                "has_projector": false,
+                "has_streaming": false,
+                "has_wifi": false,
+                "has_stage": false,
+                "private_booking": false,
+                "invoice_billing": true,
+                "corporate_clients": true,
+                "vip_services": false,
+                "business_catering": false,
+                "event_hosting": false,
+                "corporate_gifts": false,
+                "branding_support": false,
+                "av_support": false,
+                "staff_events_specialized": false,
+                "refinement_tags": [],
+                "wellbeing_and_activity_features": [],
+                "entertainment_features": [],
+                "collaborated_with": []
+            },
+            "funerals_and_memorials": {
+                "memorial_service_capacity": 0,
+                "quiet_private_space": false,
+                "accessible_entry": false,
+                "memorial_catering": false,
+                "coffee_service": false,
+                "flower_arrangements": false,
+                "memorial_menu_available": false,
+                "funeral_flowers": false,
+                "memorial_arrangements": false,
+                "transport_assistance": false,
+                "urgent_booking_available": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "moving_and_housing": {
+                "moving_truck_available": false,
+                "packing_service": false,
+                "storage_available": false,
+                "weekend_moves": false,
+                "urgent_moves": false,
+                "long_distance_moves": false,
+                "cleaning_after_move": false,
+                "electrician_available": false,
+                "renovation_support": false,
+                "insurance_support": false,
+                "refinement_tags": [
+                    "tulisijojen huolto",
+                    "hormien puhdistus",
+                    "asumisen turvallisuus"
+                ],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "construction_and_maintenance": {
+                "emergency_service": false,
+                "certifications": [],
+                "wet_room_certification": false,
+                "provides_tools": true,
+                "material_supply": false,
+                "project_management": false,
+                "snow_removal": false,
+                "lawn_maintenance": false,
+                "property_monitoring": false,
+                "maintenance_contracts": true,
+                "housing_company_clients": true,
+                "refinement_tags": [
+                    "nuohouspalvelu",
+                    "paloturvallisuus",
+                    "savuhormien huolto"
+                ],
+                "collaborated_with": []
+            },
+            "cottage_services": {
+                "key_holding": false,
+                "winter_monitoring": false,
+                "snow_removal": false,
+                "cleaning_service": false,
+                "lawn_service": false,
+                "remote_monitoring": false,
+                "emergency_visits": false,
+                "renovation_support": false,
+                "dock_maintenance": false,
+                "sauna_services": true,
+                "guest_preparation_service": false,
+                "refinement_tags": [
+                    "mökkinuohous",
+                    "takka ja sauna hormit",
+                    "vapaa-ajan asunnot"
+                ],
+                "collaborated_with": []
+            },
+            "housing_company_and_contracts": {
+                "housing_company_clients": true,
+                "maintenance_contracts": true,
+                "emergency_response": false,
+                "scheduled_visits": true,
+                "property_reports": false,
+                "invoice_billing": true,
+                "contract_customer_available": true,
+                "priority_support": false,
+                "monthly_service_plan": false,
+                "refinement_tags": [
+                    "taloyhtiön nuohous",
+                    "säännöllinen huolto",
+                    "kiinteistön turvallisuus"
+                ],
+                "collaborated_with": []
+            },
+            "startup_services": {
+                "bookkeeping_startup": false,
+                "business_advisory": false,
+                "insurance_setup": false,
+                "legal_services": false,
+                "office_space_available": false,
+                "banking_support": false,
+                "website_creation": false,
+                "webshop_setup": false,
+                "branding_support": false,
+                "logo_design": false,
+                "business_photography": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "business_growth": {
+                "google_ads": false,
+                "social_media_marketing": false,
+                "seo_services": false,
+                "content_creation": false,
+                "video_production": false,
+                "crm_support": false,
+                "recruitment_support": false,
+                "sales_development": false,
+                "automation_services": false,
+                "consulting_services": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "wellbeing_and_beauty": {
+                "home_visits": false,
+                "online_booking": false,
+                "unisex_services": false,
+                "gift_cards": false,
+                "corporate_wellbeing_services": false,
+                "event_makeup": false,
+                "bridal_services": false,
+                "group_bookings": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "meta": {
+                "last_updated": "2026-05-03T12:16:13.916Z",
+                "verified_by": "ai-profiling",
+                "status": "updated"
             }
         }
     }
