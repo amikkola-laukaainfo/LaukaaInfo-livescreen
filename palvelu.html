@@ -331,6 +331,9 @@
         .card-actions.has-three {
             grid-template-columns: 1fr 1fr 1fr;
         }
+        .card-actions.has-one {
+            grid-template-columns: 1fr;
+        }
         .btn-action {
             display: flex;
             flex-direction: column;
@@ -1901,12 +1904,29 @@
             }
 
             const btnAnchorText = isSelected ? 'Poista valinta' : 'Valitse kohde';
-            const actionGridClass = isAnchorGroup ? 'card-actions has-three' : 'card-actions';
+            
+            const core = c.profiling?.core || {};
+            const email = (core.email || c.email || '').trim();
+            const hasEmail = email && email !== '-' && email !== 'Ei tiedossa';
 
-            let actionHtml = `<div class="${actionGridClass}">
+            let buttonsCount = 1; // "Avaa yrityskortti" on aina mukana
+            if (hasEmail) buttonsCount++;
+            if (isAnchorGroup) buttonsCount++;
+
+            let actionGridClass = 'card-actions';
+            if (buttonsCount === 3) actionGridClass = 'card-actions has-three';
+            else if (buttonsCount === 1) actionGridClass = 'card-actions has-one';
+
+            let actionHtml = `<div class="${actionGridClass}">`;
+            
+            if (hasEmail) {
+                actionHtml += `
                 <button type="button" class="btn-action primary-action" onclick="event.preventDefault(); event.stopPropagation(); openInquiryModal('${c.id}', '${c.nimi.replace(/'/g, "\\'")}')">
                     <i>✉️</i><span>Lähetä kysely</span>
-                </button>
+                </button>`;
+            }
+
+            actionHtml += `
                 <a href="${cardUrl}" class="btn-action">
                     <i>📄</i><span>Avaa yrityskortti</span>
                 </a>`;
