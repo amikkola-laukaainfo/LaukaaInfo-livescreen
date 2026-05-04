@@ -26908,7 +26908,9 @@
                     "kodinsisustus": 15,
                     "kuljetuspalvelut": 10,
                     "events-and-celebrations": 22,
-                    "business-events": 15
+                    "business-events": 15,
+                    "construction-and-maintenance": 30,
+                    "moving-and-housing": 20
                 },
                 "priority_score": 0,
                 "paired_with": [],
@@ -50545,7 +50547,7 @@
                     "business-events": 92,
                     "funerals-and-memorials": 80,
                     "moving-and-housing": 10,
-                    "construction-and-maintenance": 20,
+                    "construction-and-maintenance": 0,
                     "cottage-services": 95,
                     "housing-company-and-contracts": 25,
                     "startup-services": 10,
@@ -61663,7 +61665,7 @@
                 "collaborated_with": []
             },
             "construction_and_maintenance": {
-                "emergency_service": false,
+                "emergency_service": true,
                 "certifications": [],
                 "wet_room_certification": false,
                 "provides_tools": true,
@@ -61916,7 +61918,7 @@
                 "collaborated_with": []
             },
             "construction_and_maintenance": {
-                "emergency_service": false,
+                "emergency_service": true,
                 "certifications": [],
                 "wet_room_certification": false,
                 "provides_tools": true,
@@ -62178,7 +62180,10 @@
                     "mittatilauskalusteet",
                     "puusepäntyöt",
                     "keittiökalusteet",
-                    "asennuspalvelu"
+                    "asennuspalvelu",
+                    "kalustekorjaus",
+                    "huonekalujen kunnostus",
+                    "sisustussuunnittelu"
                 ],
                 "collaborated_with": []
             },
