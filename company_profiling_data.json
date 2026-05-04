@@ -50586,7 +50586,8 @@
                 "home_service": false,
                 "weekend_service": true,
                 "not_suitable_for": [
-                    "omilla tarjoiluilla"
+                    "omilla tarjoiluilla",
+                    "majoitus"
                 ],
                 "paired_with_by_context": {
                     "events-and-celebrations": [
@@ -50889,7 +50890,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-05-04T16:46:28.556Z",
+                "last_updated": "2026-05-04T17:26:59.181Z",
                 "verified_by": "ai-enriched-v2",
                 "status": "enriched"
             }
@@ -59938,7 +59939,10 @@
                 "corporate_clients": true,
                 "home_service": false,
                 "weekend_service": true,
-                "not_suitable_for": [],
+                "not_suitable_for": [
+                    "majoitus",
+                    "järjestää ruoan"
+                ],
                 "paired_with_by_context": {},
                 "sub_contexts": [
                     "juhlatila",
@@ -60207,7 +60211,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-30T11:05:23.794Z",
+                "last_updated": "2026-05-04T17:26:27.334Z",
                 "verified_by": "ai-enriched",
                 "status": "enriched"
             }
