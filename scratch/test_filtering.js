@@ -1,112 +1,116 @@
+const fs = require('fs');
 
-const companies = [
-    {
-        id: "company-2",
-        nimi: "Mediazoo",
-        tags: "digimedia, IT-palvelut, videokuvaus, valokuvaus, digitointi",
-        profiling: {
-            core: {
-                fits_for: { "funerals-and-memorials": 70 },
-                sub_contexts: ["muistovideo", "hautajaiskuvaus", "muistotilaisuuskuvaus"]
-            },
-            "funerals-and-memorials": {
-                refinement_tags: {
-                    "Yleinen": ["muistovideo", "kuvakooste", "hautajaiskuvaus", "muistotilaisuuskuvaus"]
-                }
-            }
-        }
-    },
-    {
-        id: "company-133",
-        nimi: "Jenora Design",
-        tags: "valokuvaus",
-        profiling: {
-            core: {
-                fits_for: { "funerals-and-memorials": 70 },
-                sub_contexts: ["valokuvaus", "hautajaiskuvaus"]
-            },
-            "funerals-and-memorials": {
-                refinement_tags: ["hautajaiskuvaus", "muistokuva", "muotokuva"]
-            }
-        }
-    }
-];
+// Mock data and environment
+const profilingData = JSON.parse(fs.readFileSync('company_profiling_data.json', 'utf8'));
+const allCompanies = Object.keys(profilingData.profiles).map(id => ({
+    id: id,
+    nimi: profilingData.profiles[id].name,
+    profiling: profilingData.profiles[id]
+}));
 
-const selections = {
-    paatarve: { label: "Muistotilaisuus", sub_context: "muistotilaisuus" },
-    _sub_contexts: ["muistotilaisuus"]
-};
-
-const opt = { 
-    label: "Valokuvaus tilaisuudessa", 
-    tags: ["valokuvaus", "hautajaiskuvaus"], 
-    profilointi_filter: { 
-        section: "funerals_and_memorials", 
-        field: "refinement_tags", 
-        value: "hautajaiskuvaus" 
-    } 
-};
-
-function getCategoryData(c, key) {
-    const mappedKey = key;
-    const underscoreKey = mappedKey.replace(/-/g, '_');
-    const hyphenKey = mappedKey.replace(/_/g, '-');
-    return c.profiling[underscoreKey] || c.profiling[hyphenKey] || c.profiling[mappedKey];
+// Mock functions from palvelu.html
+function getCategoryData(c, section) {
+    if (!c.profiling || !c.profiling[section]) return null;
+    return c.profiling[section];
 }
 
 function checkFuzzyMatch(target, query) {
-    if (!target || !query) return false;
+    if (target === undefined || target === null || query === undefined || query === null) return false;
     const t = String(target).toLowerCase();
     const q = String(query).toLowerCase();
-    return t === q || t.includes(q) || q.includes(t);
+    const isPluralMatch = (t === q + 't' || q === t + 't');
+    return t === q || t.includes(q) || q.includes(t) || isPluralMatch;
 }
 
-const currentProfilingKey = "funerals_and_memorials";
+// Test target option
+const opt = { 
+    "label": "Tila omilla tarjoiluilla", 
+    "tags": ["juhlatila"], 
+    "capacity_req": 20, 
+    "node_link": "JUHLATILA", 
+    "profilointi_filter": { "section": "events_and_celebrations", "field": "own_catering_allowed", "value": true } 
+};
 
-companies.forEach(c => {
-    console.log(`Checking ${c.nimi}...`);
+const currentProfilingKey = 'events_and_celebrations';
+
+console.log(`--- Testing Search for: "${opt.label}" ---`);
+
+const problematicIds = ['company-290', 'company-289']; // Revontuli Resort and Taulun Kartano
+
+const results = allCompanies.filter(c => {
+    // START FILTER LOGIC (copied from palvelu.html)
+    const isMediazoo = false;
     
-    // Sub-context match logic
-    const companySubContexts = c.profiling?.core?.sub_contexts || [];
-    let isSubContextMatch = selections._sub_contexts.some(sc => companySubContexts.includes(sc));
-    
-    if (!isSubContextMatch) {
-        const bases = ['hää', 'yrity', 'juhla', 'hautaja', 'kokous', 'syntymä', 'muisto'];
-        const hasCommonBase = selections._sub_contexts.some(sc => {
-            const scLower = sc.toLowerCase();
-            return bases.some(b => scLower.includes(b) && companySubContexts.some(csc => csc.toLowerCase().includes(b)));
-        });
-        if (hasCommonBase) isSubContextMatch = true;
+    // Tarkista not_suitable_for
+    if (c.profiling?.core?.not_suitable_for?.length > 0) {
+        const notSuitable = c.profiling.core.not_suitable_for.map(s => s.toLowerCase());
+        const labelLower = (opt.label || '').toLowerCase();
+        const optTagsLower = (opt.tags || []).map(t => t.toLowerCase());
+
+        const labelBlocked = notSuitable.some(s => labelLower.includes(s));
+        const tagBlocked = optTagsLower.some(tag => notSuitable.includes(tag));
+
+        if (labelBlocked || tagBlocked) {
+            return false;
+        }
     }
-    console.log(`  isSubContextMatch: ${isSubContextMatch}`);
 
-    // Profiling filter logic
     let isProfiledMatch = false;
     if (opt.profilointi_filter) {
         const pf = opt.profilointi_filter;
         const catData = getCategoryData(c, pf.section);
         let match = false;
+
         if (catData) {
             const actualVal = catData[pf.field];
             if (Array.isArray(actualVal)) {
                 match = actualVal.some(v => checkFuzzyMatch(v, pf.value));
             } else if (typeof actualVal === 'object' && actualVal !== null) {
                 match = Object.values(actualVal).flat().some(v => checkFuzzyMatch(v, pf.value));
+            } else {
+                match = checkFuzzyMatch(actualVal, pf.value);
             }
-            if (match) isProfiledMatch = true;
+            if (!match && Array.isArray(catData.refinement_tags)) {
+                match = catData.refinement_tags.some(v => checkFuzzyMatch(v, pf.value));
+            }
+        }
+
+        if (!match && c.profiling?.core?.sub_contexts) {
+            const subContexts = c.profiling.core.sub_contexts;
+            if (Array.isArray(subContexts)) {
+                match = subContexts.some(v => checkFuzzyMatch(v, pf.value));
+            }
+        }
+
+        if (opt.node_link || opt.node_links) {
+            // Node link check
+            const links = c.profiling?.core?.node_links || [];
+            let nodeLinkMatch = false;
+            if (opt.node_link && links.includes(opt.node_link)) nodeLinkMatch = true;
+            if (opt.node_links && opt.node_links.some(l => links.includes(l))) nodeLinkMatch = true;
+            
+            isProfiledMatch = nodeLinkMatch && match;
+        } else {
+            isProfiledMatch = match;
         }
     }
-    console.log(`  isProfiledMatch: ${isProfiledMatch}`);
-    
-    // Final match logic
-    const companyContent = (
-        (c.tags || '') + ' ' + 
-        (c.nimi || '') + ' ' +
-        (c.profiling?.core?.sub_contexts?.join(' ') || '')
-    ).toLowerCase();
-    const tagMatch = opt.tags.some(tag => companyContent.includes(tag.toLowerCase()));
-    console.log(`  tagMatch: ${tagMatch}`);
-    
-    const finalMatch = isProfiledMatch || tagMatch;
-    console.log(`  Final Match: ${finalMatch}`);
+
+    // Taxonomy fallback (simplified for node link check)
+    // In our fix, this is skipped if opt.profilointi_filter is present
+    if (false && !isProfiledMatch && !opt.profilointi_filter) {
+        // ... (skipped as per fix)
+    }
+
+    return isProfiledMatch;
+    // END FILTER LOGIC
 });
+
+const foundProblematic = results.filter(r => problematicIds.includes(r.id));
+if (foundProblematic.length === 0) {
+    console.log("SUCCESS: Problematic companies are correctly excluded!");
+} else {
+    console.log("FAILURE: Found problematic companies in results:");
+    foundProblematic.forEach(r => console.log(` - ${r.nimi} (${r.id})`));
+}
+
+console.log(`Total results found: ${results.length}`);

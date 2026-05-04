@@ -1152,20 +1152,18 @@
                         // Tarkista not_suitable_for: hylkää yritys jos se on merkitty sopimattomaksi tähän hakuun
                         if (c.profiling?.core?.not_suitable_for?.length > 0) {
                             const notSuitable = c.profiling.core.not_suitable_for.map(s => s.toLowerCase());
+                            const labelLower = (opt.label || '').toLowerCase();
+                            const optTagsLower = (opt.tags || []).map(t => t.toLowerCase());
+
+                            // A. Tarkistus labelilla: Jos jokin hylkäystermi sisältyy hakuotsikkoon (esim. "omilla tarjoiluilla")
+                            const labelBlocked = notSuitable.some(s => labelLower.includes(s));
                             
-                            // A. Tarkistus tageilla
-                            if (opt.tags && opt.tags.length > 0) {
-                                const optTagsLower = opt.tags.map(t => t.toLowerCase());
-                                if (optTagsLower.some(tag => notSuitable.includes(tag))) return false;
-                            }
-                            
-                            // B. Tarkistus labelilla (mahdollistaa suoran tekstipohjaisen hylkäyksen)
-                            if (opt.label) {
-                                const labelLower = opt.label.toLowerCase();
-                                if (notSuitable.some(s => labelLower.includes(s))) {
-                                    if (isMediazoo) console.log(`DEBUG: Mediazoo excluded by label match in not_suitable_for: "${opt.label}"`);
-                                    return false;
-                                }
+                            // B. Tarkistus tageilla: Jos jokin hakuoptio on kielletty yritykseltä
+                            const tagBlocked = optTagsLower.some(tag => notSuitable.includes(tag));
+
+                            if (labelBlocked || tagBlocked) {
+                                if (isMediazoo) console.log(`DEBUG: Company ${c.nimi} EXCLUDED by not_suitable_for for option "${opt.label}"`);
+                                return false;
                             }
                         }
 
@@ -1291,7 +1289,10 @@
                         }
 
                         // TAKSONOMIA-TÄSMÄYS (UUSI)
-                        if (taxonomyData && !isProfiledMatch) {
+                        // TÄRKEÄ KORJAUS: Jos optiolla on profilointisuodatin (esim. omilla tarjoiluilla), 
+                        // ei sallita taksonomia-fallbackia, jotta vältetään vääriä osumia yrityksille 
+                        // jotka on jo kertaalleen hylätty (esim. catering-vaatimuksen takia).
+                        if (taxonomyData && !isProfiledMatch && !opt.profilointi_filter) {
                             const intent = taxonomyData.intents.find(i => i.id === currentProfilingKey || i.id === currentProfilingKey.replace(/_/g, '-'));
                             if (intent) {
                                 const labelLower = (opt.label || '').toLowerCase();
