@@ -48,10 +48,17 @@ The `palvelu.html` engine uses these to match specific user choices in the guide
 
 ## 5. Capacity & Feature Rules
 For any company with `JUHLATILA` or `MAJOITUS`:
-- **Capacity**: Must have `capacity_max` and `seated_capacity`. If these are 0, the company is **hidden** from searches where the user specifies a person count.
+- **Capacity**: Must have `capacity_max` and `seated_capacity`.
+  - `standing_guests`: Use for cocktail/party capacity without seating.
+  - `outdoor_capacity`: Capacity for terraces/garden areas.
+- **Hybrid Service Rules**:
+  - If a company provides a venue **and** catering, use `inhouse_catering_available: true`.
+  - If a company allows outside catering, use `own_catering_allowed: true`.
+  - Ensure `node_links` includes both `JUHLATILA` and `CATERING` for such companies.
 - **Specific Features**: Use boolean flags in the profiling JSON for:
-  - `has_sauna`, `is_accessible`, `home_service_available` (home visits), `quiet_private_space` (for memorials).
+  - `has_sauna`, `is_accessible`, `accommodation_available` (with `accommodation_beds`), `late_night_events`, `alcohol_license`.
 
 ## 6. Important Naming Principles
+- **Naming Convention**: Taxonomy IDs use hyphens (`events-and-celebrations`), but JSON category keys use underscores (`events_and_celebrations`).
 - **Tila vs. Tilaisuus**: Use "tila" for physical venues. Use "tilaisuus" for services related to events. The word "tila" (space) triggers venue-specific logic, while "tilaisuus" (event/occasion) is a general keyword.
 - **Service Chains**: When profiling, think about what else the user might need. If a company provides a venue, list its `collaborated_with` partners to strengthen the service chain in `palvelu.html`.

@@ -32,7 +32,8 @@ const NEEDS_CONFIG = {
                 "options": [
                     { "label": "Juhlatila (iso)", "tags": ["juhlatila"], "capacity_req": 100, "node_link": "JUHLATILA" },
                     { "label": "Tunnelmallinen kartano", "tags": ["kartano", "juhlatila"], "capacity_req": 50, "node_link": "JUHLATILA" },
-                    { "label": "Luonnonläheinen tila", "tags": ["luonto", "juhlatila"], "capacity_req": 30, "node_link": "JUHLATILA", "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "ranta" } }
+                    { "label": "Luonnonläheinen tila", "tags": ["luonto", "juhlatila"], "capacity_req": 30, "node_link": "JUHLATILA", "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "ranta" } },
+                    { "label": "Tila omilla tarjoiluilla", "tags": ["juhlatila"], "capacity_req": 20, "node_link": "JUHLATILA", "profilointi_filter": { "section": "events_and_celebrations", "field": "own_catering_allowed", "value": true } }
                 ]
             },
             {

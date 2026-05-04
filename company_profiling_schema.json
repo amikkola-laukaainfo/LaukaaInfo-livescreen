@@ -99,11 +99,23 @@
                             "events_and_celebrations": {
                                 "type": "object",
                                 "properties": {
-                                    "capacity_max": { "type": "integer" },
-                                    "seated_capacity": { "type": "integer" },
-                                    "is_accessible": { "type": "boolean" },
-                                    "has_sauna": { "type": "boolean" },
-                                    "collaborated_with": { "type": "array", "items": { "type": "string" } }
+                            "events_and_celebrations": {
+                                "type": "object",
+                                "properties": {
+                                    "capacity_max": { "type": "integer", "description": "Kokonaiskapasiteetti (henkilömäärä)" },
+                                    "seated_capacity": { "type": "integer", "description": "Istumapaikat ruokailua varten" },
+                                    "standing_guests": { "type": "integer", "description": "Seisomapaikat / Cocktail-tilaisuudet" },
+                                    "outdoor_capacity": { "type": "integer", "description": "Ulkoterassin tai piha-alueen kapasiteetti" },
+                                    "is_accessible": { "type": "boolean", "description": "Onko tila esteetön" },
+                                    "has_sauna": { "type": "boolean", "description": "Onko tilassa sauna käytettävissä" },
+                                    "own_catering_allowed": { "type": "boolean", "description": "Sallitaanko omat ruoat/pitopalvelu" },
+                                    "inhouse_catering_available": { "type": "boolean", "description": "Tarjoaako tila oman pitopalvelun" },
+                                    "partner_catering_available": { "type": "boolean", "description": "Onko tilalla vakiokumppanit pitopalveluun" },
+                                    "alcohol_license": { "type": "boolean", "description": "Onko tilassa anniskeluoikeudet" },
+                                    "late_night_events": { "type": "boolean", "description": "Onko tila käytettävissä yöhön asti (02/04)" },
+                                    "accommodation_available": { "type": "boolean", "description": "Onko tilalla majoitusmahdollisuutta" },
+                                    "accommodation_beds": { "type": "integer", "description": "Vuodepaikkojen määrä" },
+                                    "collaborated_with": { "type": "array", "items": { "type": "string" }, "description": "Yhteistyökumppanit (ID:t)" }
                                 }
                             },
                             "funerals_and_memorials": {

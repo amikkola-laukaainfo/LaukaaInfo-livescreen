@@ -1903,7 +1903,16 @@
 
             if (c.profiling) {
                 const core = c.profiling.core || {};
+                const catData = getCategoryData(c, profilingKey);
                 
+                // NEW: Hybrid / Multi-service detection
+                const isHybrid = catData?.inhouse_catering_available || 
+                                (core.node_links && core.node_links.includes('JUHLATILA') && core.node_links.includes('CATERING'));
+                
+                if (isHybrid) {
+                    badges += '<span class="hybrid-badge" style="background:#f0fdf4; color:#16a34a; border:1px solid #bbf7d0; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:bold; margin-right:5px;" title="Tarjoaa sekä tilan että palvelut">✨ MONIPALVELU</span>';
+                }
+
                 // Jos kyseessä on pitopalvelu-listaus, ei näytetä "Tilaan mahtuu max X hlö" -ilmoitusta, koska ruokaa riittää muuallekin
                 const isCateringGroup = groupLabel && groupLabel.toLowerCase().includes('pitopalvelu');
                 
@@ -1914,7 +1923,6 @@
                         else capacityNote = `<div style="font-size:0.85rem; color:#d97706; font-weight:700; margin-bottom:10px;">⚠️ Huom: Tilaan mahtuu n. ${cap} hlö</div>`;
                     }
                 }
-                const catData = getCategoryData(c, profilingKey);
                 if (catData?.is_accessible) badges += '<span title="Esteetön pääsy">♿</span>';
                 if (catData?.has_sauna) badges += '<span title="Sauna saatavilla">🧖</span>';
                 if (core.home_service) badges += '<span title="Kotipalvelu">🏠</span>';
