@@ -56415,7 +56415,8 @@
                 "home_service": false,
                 "weekend_service": false,
                 "not_suitable_for": [
-                    "pitopalvelu"
+                    "pitopalvelu",
+                    "omilla tarjoiluilla"
                 ],
                 "paired_with_by_context": {
                     "business-events": [
@@ -56743,7 +56744,8 @@
                 "home_service": false,
                 "weekend_service": false,
                 "not_suitable_for": [
-                    "pitopalvelu"
+                    "pitopalvelu",
+                    "omilla tarjoiluilla"
                 ],
                 "paired_with_by_context": {},
                 "sub_contexts": [
