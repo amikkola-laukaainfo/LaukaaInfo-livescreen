@@ -1334,10 +1334,12 @@
                         if (!isProfiledMatch && opt.tags) {
                             const isPhotoSearch = opt.tags.some(t => t.includes('valokuva'));
                             const isVideoSearch = opt.tags.some(t => t.includes('video') || t === 'videotuotanto');
+                            const isFloristSearch = opt.tags.some(t => t.includes('kukka'));
                             
                             const coreNodeLinks = c.profiling?.core?.node_links || [];
                             if ((isPhotoSearch && coreNodeLinks.includes('VALOKUVAUS')) || 
-                                (isVideoSearch && coreNodeLinks.includes('VIDEOTUOTANTO'))) {
+                                (isVideoSearch && coreNodeLinks.includes('VIDEOTUOTANTO')) ||
+                                (isFloristSearch && coreNodeLinks.includes('KUKAT'))) {
                                 isProfiledMatch = true;
                             }
                         }

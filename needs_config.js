@@ -44,7 +44,7 @@ const NEEDS_CONFIG = {
                     { "label": "Pitopalvelu", "tags": ["pitopalvelu"] },
                     { "label": "Valokuvaaja", "tags": ["valokuvaus", "valokuvaaja"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "hääkuvaus" } },
                     { "label": "Videokuvaaja", "tags": ["videotuotanto", "videokuvaus", "videokuvaaja"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "häävideo" } },
-                    { "label": "Kukkakauppa & Koristelu", "tags": ["kukkakauppa"] },
+                    { "label": "Kukkakauppa & Koristelu", "tags": ["kukkakauppa", "kukat"] },
                     { "label": "Musiikki tai DJ", "tags": ["musiikki", "ohjelmapalvelut"], "profilointi_filter": { "section": "events_and_celebrations", "field": "entertainment_features", "value": "live-musiikki" } }
                 ]
             },
@@ -230,7 +230,7 @@ const NEEDS_CONFIG = {
                     { "label": "Ohjelma / Esiintyjä", "tags": ["ohjelmapalvelut"] },
                     { "label": "Valokuvaus", "tags": ["valokuvaus"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "juhlakuvaus" } },
                     { "label": "Videokuvaus", "tags": ["videotuotanto", "videokuvaus"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "juhlakuvaus" } },
-                    { "label": "Kukat", "tags": ["kukkakauppa"] }
+                    { "label": "Kukat", "tags": ["kukkakauppa", "kukat"] }
                 ]
             }
         ]
@@ -465,7 +465,7 @@ const NEEDS_CONFIG = {
                     },
                     {
                         "label": "Kukkatervehdykset",
-                        "tags": ["kukkakauppa"],
+                        "tags": ["kukkakauppa", "kukat"],
                         "profilointi_filter": { "section": "funerals_and_memorials", "field": "funeral_flowers", "value": true }
                     },
                     { "label": "Kuljetuspalvelut", "tags": ["hautauspalvelu", "kuljetus"],

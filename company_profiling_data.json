@@ -25163,12 +25163,12 @@
                 "fits_for": {
                     "events-and-celebrations": 40,
                     "business-events": 35,
-                    "funerals-and-memorials": 20,
+                    "funerals-and-memorials": 0,
                     "startup-services": 0,
                     "business-growth": 0,
-                    "moving-and-housing": 60,
-                    "construction-and-maintenance": 85,
-                    "cottage-services": 75,
+                    "moving-and-housing": 0,
+                    "construction-and-maintenance": 0,
+                    "cottage-services": 0,
                     "accommodation": 0,
                     "wellbeing-and-beauty": 0
                 },
@@ -25186,26 +25186,16 @@
                 "emergency_available": false,
                 "contract_customer_available": true,
                 "corporate_clients": false,
-                "home_service": true,
-                "weekend_service": false,
-                "not_suitable_for": [],
-                "paired_with_by_context": {},
-                "sub_contexts": [
-                    "remontointi",
-                    "rakennuspalvelu",
-                    "pienrakentaminen",
-                    "korjaustyöt",
-                    "mökkihuolto",
-                    "kiinteistönhuolto",
-                    "piha-alueiden-hoito",
-                    "puutyöt"
+                "home_service": false,
+                "weekend_service": true,
+                "not_suitable_for": [
+                    "majoitus",
+                    "majoitus vieraille"
                 ],
+                "paired_with_by_context": {},
+                "sub_contexts": [],
                 "node_links": [
-                    "LAUKAA",
-                    "RAKENTAMINEN",
-                    "KIINTEISTÖ",
-                    "MÖKKIPALVELUT",
-                    "MAJOITUS"
+                    "LAUKAA"
                 ],
                 "description": "Rakennus- ja remonttipalveluja tarjoava toiminimi Laukaan alueella. Palveluihin kuuluu pienrakentaminen, korjaustyöt, puutyöt sekä kiinteistöjen ja mökkien huolto. Toimii erityisesti kotitalouksissa ja vapaa-ajan asunnoilla.",
                 "website": "",
@@ -25399,7 +25389,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-05-02T18:11:49.442Z",
+                "last_updated": "2026-05-04T17:36:09.634Z",
                 "verified_by": "AI-analysis-v2",
                 "status": "draft"
             }
