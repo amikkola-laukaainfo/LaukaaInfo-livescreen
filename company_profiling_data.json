@@ -33,7 +33,9 @@
                 "corporate_clients": false,
                 "home_service": false,
                 "weekend_service": true,
-                "not_suitable_for": [],
+                "not_suitable_for": [
+                    "omilla tarjoiluilla"
+                ],
                 "paired_with_by_context": {},
                 "sub_contexts": [
                     "kahvila",
@@ -273,7 +275,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-05-03T12:15:03.683Z",
+                "last_updated": "2026-05-04T16:48:10.789Z",
                 "verified_by": "ai-generated",
                 "status": "draft"
             }
@@ -1977,7 +1979,8 @@
                 "not_suitable_for": [
                     "kartano",
                     "hautajaiset",
-                    "yritysjuhlat"
+                    "yritysjuhlat",
+                    "omilla tarjoiluilla"
                 ],
                 "paired_with_by_context": {
                     "häät": [
@@ -2207,7 +2210,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T10:48:23.747Z",
+                "last_updated": "2026-05-04T16:52:43.484Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -18217,7 +18220,10 @@
                 "corporate_clients": false,
                 "home_service": false,
                 "weekend_service": false,
-                "not_suitable_for": [],
+                "not_suitable_for": [
+                    "omilla tarjoiluilla",
+                    "juhlatila"
+                ],
                 "paired_with_by_context": {},
                 "sub_contexts": [],
                 "node_links": [
@@ -18404,7 +18410,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-04T16:52:01.099Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -20377,7 +20383,8 @@
                 "home_service": false,
                 "weekend_service": true,
                 "not_suitable_for": [
-                    "kartano"
+                    "kartano",
+                    "omilla tarjoiluilla"
                 ],
                 "paired_with_by_context": {
                     "syntymäpäivät": [
@@ -20576,7 +20583,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T10:10:43.418Z",
+                "last_updated": "2026-05-04T16:53:11.859Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -20614,7 +20621,8 @@
                 "home_service": false,
                 "weekend_service": true,
                 "not_suitable_for": [
-                    "kartano"
+                    "kartano",
+                    "omilla tarjoiluilla"
                 ],
                 "paired_with_by_context": {
                     "yritysjuhlat": [
@@ -20655,13 +20663,13 @@
                 "outdoor_capacity": 0,
                 "is_accessible": false,
                 "own_catering_allowed": false,
-                "inhouse_catering_available": false,
-                "is_lakeside": false,
-                "has_sauna": false,
+                "inhouse_catering_available": true,
+                "is_lakeside": true,
+                "has_sauna": true,
                 "has_av_tech": true,
                 "has_stage": false,
                 "accommodation_beds": 0,
-                "alcohol_license": false,
+                "alcohol_license": true,
                 "private_booking": true,
                 "late_night_events": false,
                 "wedding_specialized": false,
@@ -20678,7 +20686,7 @@
                 "live_music": false,
                 "dj_services": false,
                 "karaoke_available": false,
-                "has_exclusive_catering": true,
+                "has_exclusive_catering": false,
                 "accommodation_included": false,
                 "refinement_tags": [],
                 "digitization_features": [],
@@ -20825,7 +20833,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T09:14:37.138Z",
+                "last_updated": "2026-05-04T16:50:05.026Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -23999,7 +24007,8 @@
                 "home_service": false,
                 "weekend_service": true,
                 "not_suitable_for": [
-                    "kartano"
+                    "kartano",
+                    "omilla tarjoiluilla"
                 ],
                 "paired_with_by_context": {},
                 "sub_contexts": [
@@ -24212,7 +24221,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T09:15:40.177Z",
+                "last_updated": "2026-05-04T16:47:49.937Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -50545,10 +50554,10 @@
                     "events-and-celebrations": 98,
                     "business-events": 92,
                     "funerals-and-memorials": 80,
-                    "moving-and-housing": 10,
-                    "construction-and-maintenance": 20,
-                    "cottage-services": 95,
-                    "housing-company-and-contracts": 25,
+                    "moving-and-housing": 0,
+                    "construction-and-maintenance": 0,
+                    "cottage-services": 0,
+                    "housing-company-and-contracts": 0,
                     "startup-services": 10,
                     "business-growth": 30,
                     "wellbeing-and-beauty": 85
@@ -50576,7 +50585,9 @@
                 "corporate_clients": true,
                 "home_service": false,
                 "weekend_service": true,
-                "not_suitable_for": [],
+                "not_suitable_for": [
+                    "omilla tarjoiluilla"
+                ],
                 "paired_with_by_context": {
                     "events-and-celebrations": [
                         "majoitus",
@@ -50652,7 +50663,7 @@
                 "has_sauna": true,
                 "has_av_tech": true,
                 "has_stage": false,
-                "accommodation_beds": 15,
+                "accommodation_beds": 0,
                 "alcohol_license": true,
                 "private_booking": true,
                 "late_night_events": true,
@@ -50765,7 +50776,6 @@
                 },
                 "digitization_features": [],
                 "collaborated_with": [
-                    "pitopalvelu",
                     "kukat"
                 ]
             },
@@ -50879,7 +50889,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-30T12:31:24.063Z",
+                "last_updated": "2026-05-04T16:46:28.556Z",
                 "verified_by": "ai-enriched-v2",
                 "status": "enriched"
             }
@@ -54397,7 +54407,9 @@
                 "corporate_clients": true,
                 "home_service": false,
                 "weekend_service": true,
-                "not_suitable_for": [],
+                "not_suitable_for": [
+                    "omilla tarjoiluilla"
+                ],
                 "paired_with_by_context": {},
                 "sub_contexts": [
                     "majoitus",
@@ -54429,7 +54441,7 @@
                 "outdoor_capacity": 0,
                 "is_accessible": false,
                 "own_catering_allowed": false,
-                "inhouse_catering_available": false,
+                "inhouse_catering_available": true,
                 "is_lakeside": false,
                 "has_sauna": true,
                 "has_av_tech": false,
@@ -54603,7 +54615,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T08:44:32.550Z",
+                "last_updated": "2026-05-04T16:51:23.046Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -55093,7 +55105,8 @@
                 "home_service": true,
                 "weekend_service": false,
                 "not_suitable_for": [
-                    "kartano"
+                    "kartano",
+                    "omilla tarjoiluilla"
                 ],
                 "paired_with_by_context": {
                     "events-and-celebrations": [
@@ -55124,7 +55137,6 @@
                     "häät",
                     "muistotilaisuus",
                     "yritystapahtuma",
-                    "tarjoilu",
                     "ruokapalvelu",
                     "lähiruoka",
                     "leivonnaiset",
@@ -55359,7 +55371,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-30T13:06:43.130Z",
+                "last_updated": "2026-05-04T16:47:18.553Z",
                 "verified_by": "ai-analysis-v2",
                 "status": "draft"
             }
@@ -56781,7 +56793,7 @@
                 "outdoor_capacity": 200,
                 "is_accessible": true,
                 "own_catering_allowed": false,
-                "inhouse_catering_available": false,
+                "inhouse_catering_available": true,
                 "is_lakeside": true,
                 "has_sauna": true,
                 "has_av_tech": true,
@@ -56808,7 +56820,7 @@
                 "live_music": false,
                 "dj_services": false,
                 "karaoke_available": false,
-                "has_exclusive_catering": true,
+                "has_exclusive_catering": false,
                 "accommodation_included": false,
                 "refinement_tags": [
                     "juhlatila",
@@ -56889,12 +56901,13 @@
                 "memorial_arrangements": false,
                 "transport_assistance": false,
                 "urgent_booking_available": false,
-                "refinement_tags": [
-                    "muistotilaisuus",
-                    "siunaustilaisuus",
-                    "esteetön",
-                    "kartano"
-                ],
+                "refinement_tags": {
+                    "Yleinen": [
+                        "muistotilaisuus",
+                        "esteetön",
+                        "kartano"
+                    ]
+                },
                 "digitization_features": [],
                 "collaborated_with": []
             },
@@ -57009,7 +57022,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T17:57:31.971Z",
+                "last_updated": "2026-05-04T16:43:10.099Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
