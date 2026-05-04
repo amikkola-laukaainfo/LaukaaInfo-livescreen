@@ -70,8 +70,11 @@ const results = allCompanies.filter(c => {
             } else {
                 match = checkFuzzyMatch(actualVal, pf.value);
             }
+            if (match && c.id === 'company-282') console.log(`DEBUG company-282: Match on primary field: ${pf.field} = ${actualVal}`);
+            
             if (!match && Array.isArray(catData.refinement_tags)) {
                 match = catData.refinement_tags.some(v => checkFuzzyMatch(v, pf.value));
+                if (match && c.id === 'company-282') console.log(`DEBUG company-282: Match on refinement_tags`);
             }
         }
 
@@ -79,6 +82,7 @@ const results = allCompanies.filter(c => {
             const subContexts = c.profiling.core.sub_contexts;
             if (Array.isArray(subContexts)) {
                 match = subContexts.some(v => checkFuzzyMatch(v, pf.value));
+                if (match && c.id === 'company-282') console.log(`DEBUG company-282: Match on sub_contexts: ${subContexts}`);
             }
         }
 
@@ -89,6 +93,7 @@ const results = allCompanies.filter(c => {
             if (opt.node_link && links.includes(opt.node_link)) nodeLinkMatch = true;
             if (opt.node_links && opt.node_links.some(l => links.includes(l))) nodeLinkMatch = true;
             
+            if (c.id === 'company-282') console.log(`DEBUG company-282: nodeLinkMatch=${nodeLinkMatch}, match=${match}`);
             isProfiledMatch = nodeLinkMatch && match;
         } else {
             isProfiledMatch = match;
