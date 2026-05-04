@@ -114,3 +114,4 @@ if (foundProblematic.length === 0) {
 }
 
 console.log(`Total results found: ${results.length}`);
+results.forEach(r => console.log(` - Match: ${r.nimi} (${r.id})`));
