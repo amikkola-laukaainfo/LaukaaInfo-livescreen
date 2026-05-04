@@ -58,7 +58,18 @@ For any company with `JUHLATILA` or `MAJOITUS`:
 - **Specific Features**: Use boolean flags in the profiling JSON for:
   - `has_sauna`, `is_accessible`, `accommodation_available` (with `accommodation_beds`), `late_night_events`, `alcohol_license`.
 
-## 6. Important Naming Principles
-- **Naming Convention**: Taxonomy IDs use hyphens (`events-and-celebrations`), but JSON category keys use underscores (`events_and_celebrations`).
-- **Tila vs. Tilaisuus**: Use "tila" for physical venues. Use "tilaisuus" for services related to events. The word "tila" (space) triggers venue-specific logic, while "tilaisuus" (event/occasion) is a general keyword.
-- **Service Chains**: When profiling, think about what else the user might need. If a company provides a venue, list its `collaborated_with` partners to strengthen the service chain in `palvelu.html`.
+## 7. Master Keyword Table (Guided Flow Sync)
+Use these exact terms in `sub_contexts` or `refinement_tags` to ensure companies appear in the corresponding guided flow steps:
+
+| Category | Step / Need | Required Keywords (Tags) |
+| :--- | :--- | :--- |
+| **Legal** | Perunkirjoitus, Lakipalvelut | `lakiasiaintoimistot`, `perunkirjoitus`, `sopimukset` |
+| **Accounting** | Kirjanpito, Hallinto | `tilitoimisto`, `kirjanpito` |
+| **Construction** | Sähkötyöt, Maalaus, Suunnittelu | `sähköasennukset`, `maalaustyöt`, `suunnittelutoimisto` |
+| **Maintenance** | Nuohous, Kiinteistöhuolto | `nuohouspalvelut`, `kiinteistöhuolto`, `huoltosopimus` |
+| **Wellness** | Häät, Kauneus, Terapia | `meikki`, `kampaus`, `psykologi`, `terveyspalvelut` |
+| **Animals** | Eläinlääkäri, Hoito | `eläinlääkäri`, `trimmaus`, `koirahoitola` |
+| **Business** | Rekrytointi, Markkinointi | `henkilöstöpalvelut`, `mainostoimisto`, `koulutus` |
+| **Emergency** | Hinaus, Lukot, Sähkö | `hinaus`, `lukkoseppä`, `päivystys` |
+| **Mökki** | Polttopuut, Laiturit | `polttopuut`, `laituritarvikkeet` |
+| **Family** | Päivähoito, Harrastukset | `päiväkoti`, `lapset`, `harrastukset` |
