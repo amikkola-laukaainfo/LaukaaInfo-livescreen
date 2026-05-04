@@ -161,7 +161,19 @@ window.LkiModal = (function() {
         
         // Use full description if available, otherwise fallback to mainoslause
         const rawDescription = company.esittely || company.description || company.mainoslause || '';
-        document.getElementById('lki-modal-description').textContent = rawDescription.replace(/@@/g, '');
+        let cleanDesc = rawDescription.replace(/@@/g, '');
+        
+        // Escape HTML for safety, then linkify URLs
+        const tempDiv = document.createElement('div');
+        tempDiv.textContent = cleanDesc;
+        let escapedDesc = tempDiv.innerHTML;
+        
+        const urlRegex = /(https?:\/\/[^\s<]+[^\s<.,;:!?'"])/g;
+        const linkedDesc = escapedDesc.replace(urlRegex, function(url) {
+            return `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color: var(--primary-blue); text-decoration: underline;">${url}</a>`;
+        });
+        
+        document.getElementById('lki-modal-description').innerHTML = linkedDesc;
         document.getElementById('lki-modal-address').textContent = company.osoite || 'Laukaa';
         
         const phone = company.puhelin || company.phone || '';
@@ -392,10 +404,24 @@ window.LkiModal = (function() {
         }
 
         // Website
-        const web = company.nettisivu || company.website || '';
+        const web = company.nettisivu || company.website || company.website_url || '';
         if (web && web !== '-' && web !== '') {
             const url = web.startsWith('http') ? web : `http://${web}`;
             footer.innerHTML += `<a href="${url}" target="_blank" class="lki-cta-btn website">🌐 Verkkosivut</a>`;
+        }
+
+        // Facebook
+        const fb = company.facebook_url || company.facebook || '';
+        if (fb && fb !== '-') {
+            const url = fb.startsWith('http') ? fb : `https://${fb}`;
+            footer.innerHTML += `<a href="${url}" target="_blank" class="lki-cta-btn facebook" style="background:#1877F2;color:white;border-color:#1877F2;">f Facebook</a>`;
+        }
+
+        // Instagram
+        const ig = company.instagram_url || company.instagram || '';
+        if (ig && ig !== '-') {
+            const url = ig.startsWith('http') ? ig : `https://${ig}`;
+            footer.innerHTML += `<a href="${url}" target="_blank" class="lki-cta-btn instagram" style="background:#E1306C;color:white;border-color:#E1306C;">📸 Instagram</a>`;
         }
     }
 

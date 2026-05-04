@@ -1,43 +1,67 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "title": "LaukaaInfo 3-tasoinen palvelupolkujärjestelmä v4",
-    "description": "Ratkaisulähtöinen profilointi palvelupolkujen mukaan. 12 pääkontekstia (Taso 1), tarkentavat tarpeet (Taso 2) ja palveluroolit (Taso 3).",
+    "title": "LaukaaInfo 3-tasoinen palvelupolkujärjestelmä v5",
+    "description": "Ratkaisulähtöinen profilointi palvelupolkujen mukaan. 10 pääkontekstia (Taso 1), tarkentavat tarpeet (Taso 2) ja palveluroolit (Taso 3).",
     "type": "object",
     "properties": {
         "SCHEMA_VERSION": { "type": "string" },
         "DESCRIPTION": { "type": "string" },
+        "nodes": {
+            "type": "object",
+            "description": "Palvelupolkujen visualisointi- ja linkityssolmut",
+            "additionalProperties": {
+                "type": "object",
+                "properties": {
+                    "name": { "type": "string" },
+                    "type": {
+                        "type": "string",
+                        "enum": [
+                            "MAIN_CONTEXT",
+                            "SUB_CONTEXT",
+                            "SERVICE_ROLE",
+                            "AREA",
+                            "TAG",
+                            "PROFILE_GROUP"
+                        ]
+                    },
+                    "parent": {
+                        "type": ["string", "null"]
+                    },
+                    "visible_in_mermaid": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "priority": {
+                        "type": "integer",
+                        "default": 0
+                    }
+                },
+                "required": ["name", "type"]
+            }
+        },
         "profiles": {
             "type": "object",
             "additionalProperties": {
                 "type": "object",
                 "properties": {
                     "name": { "type": "string" },
-                    
                     "core": {
                         "type": "object",
                         "description": "Yhteiset ydinkentät kaikille yrityksille",
                         "properties": {
                             "fits_for": {
                                 "type": "object",
-                                "additionalProperties": { "type": "integer", "minimum": 0, "maximum": 100 },
-                                "description": "Pääkontekstien soveltuvuus ja prioriteettipisteet (Taso 1)."
+                                "additionalProperties": { "type": "integer", "minimum": 0, "maximum": 100 }
                             },
                             "priority_score": { "type": "integer", "default": 0 },
+                            "sub_contexts": {
+                                "oneOf": [
+                                    { "type": "array", "items": { "type": "string" } },
+                                    { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }
+                                ]
+                            },
                             "paired_with_by_context": {
                                 "type": "object",
-                                "description": "Kontekstikohtaiset suositukset.",
-                                "properties": {
-                                    "events_and_celebrations": { "type": "array", "items": { "type": "string" } },
-                                    "funerals_and_memorials": { "type": "array", "items": { "type": "string" } },
-                                    "business_events": { "type": "array", "items": { "type": "string" } },
-                                    "moving_and_housing": { "type": "array", "items": { "type": "string" } },
-                                    "construction_and_maintenance": { "type": "array", "items": { "type": "string" } },
-                                    "cottage_services": { "type": "array", "items": { "type": "string" } },
-                                    "housing_company_and_contracts": { "type": "array", "items": { "type": "string" } },
-                                    "startup_services": { "type": "array", "items": { "type": "string" } },
-                                    "business_growth": { "type": "array", "items": { "type": "string" } },
-                                    "wellbeing_and_beauty": { "type": "array", "items": { "type": "string" } }
-                                },
                                 "additionalProperties": { "type": "array", "items": { "type": "string" } }
                             },
                             "service_area": {
@@ -48,211 +72,129 @@
                                     "regions": { "type": "array", "items": { "type": "string" } }
                                 }
                             },
-                            "not_suitable_for": { "type": "array", "items": { "type": "string" } },
                             "emergency_available": { "type": "boolean" },
+                            "contract_customer_available": { "type": "boolean" },
+                            "corporate_clients": { "type": "boolean" },
                             "home_service": { "type": "boolean" },
                             "weekend_service": { "type": "boolean" },
-                            "website": { "type": "string" },
-                            "email": { "type": "string" },
-                            "phone": { "type": "string" }
-                        }
-                    },
-                    
-                    "events_and_celebrations": {
-                        "type": "object",
-                        "description": "1. Häät ja juhlat",
-                        "properties": {
-                            "capacity_max": { "type": "integer" },
-                            "seated_capacity": { "type": "integer" },
-                            "outdoor_capacity": { "type": "integer" },
-                            "is_accessible": { "type": "boolean" },
-                            "is_lakeside": { "type": "boolean" },
-                            "has_sauna": { "type": "boolean" },
-                            "has_av_tech": { "type": "boolean" },
-                            "has_stage": { "type": "boolean" },
-                            "accommodation_beds": { "type": "integer" },
-                            "alcohol_license": { "type": "boolean" },
-                            "wedding_specialized": { "type": "boolean" },
-                            "wedding_photography": { "type": "boolean" },
-                            "video_production": { "type": "boolean" },
-                            "live_music": { "type": "boolean" },
-                            "digitization_features": {
+                            "node_links": {
                                 "type": "array",
                                 "items": { "type": "string" },
-                                "examples": ["häävideoiden editointi", "juhlaesitykset", "vanhojen kuvien skannaus", "muistovideot"]
+                                "description": "Viittaukset nodes-rakenteeseen visualisointia ja palvelupolkuja varten"
+                            }
+                        }
+                    },
+                    "categories": {
+                        "type": "object",
+                        "properties": {
+                            "core": {
+                                "type": "object",
+                                "properties": {
+                                    "description": { "type": "string" },
+                                    "website": { "type": "string" },
+                                    "email": { "type": "string" },
+                                    "phone": { "type": "string" }
+                                }
                             },
-                            "wellbeing_and_activity_features": {
-                                "type": "array",
-                                "items": { "type": "string" },
-                                "examples": ["polttariwellness", "juhlajooga", "rentoutuspalvelut"]
+                            "events_and_celebrations": {
+                                "type": "object",
+                                "properties": {
+                            "events_and_celebrations": {
+                                "type": "object",
+                                "properties": {
+                                    "capacity_max": { "type": "integer", "description": "Kokonaiskapasiteetti (henkilömäärä)" },
+                                    "seated_capacity": { "type": "integer", "description": "Istumapaikat ruokailua varten" },
+                                    "standing_guests": { "type": "integer", "description": "Seisomapaikat / Cocktail-tilaisuudet" },
+                                    "outdoor_capacity": { "type": "integer", "description": "Ulkoterassin tai piha-alueen kapasiteetti" },
+                                    "is_accessible": { "type": "boolean", "description": "Onko tila esteetön" },
+                                    "has_sauna": { "type": "boolean", "description": "Onko tilassa sauna käytettävissä" },
+                                    "own_catering_allowed": { "type": "boolean", "description": "Sallitaanko omat ruoat/pitopalvelu" },
+                                    "inhouse_catering_available": { "type": "boolean", "description": "Tarjoaako tila oman pitopalvelun" },
+                                    "partner_catering_available": { "type": "boolean", "description": "Onko tilalla vakiokumppanit pitopalveluun" },
+                                    "alcohol_license": { "type": "boolean", "description": "Onko tilassa anniskeluoikeudet" },
+                                    "late_night_events": { "type": "boolean", "description": "Onko tila käytettävissä yöhön asti (02/04)" },
+                                    "accommodation_available": { "type": "boolean", "description": "Onko tilalla majoitusmahdollisuutta" },
+                                    "accommodation_beds": { "type": "integer", "description": "Vuodepaikkojen määrä" },
+                                    "collaborated_with": { "type": "array", "items": { "type": "string" }, "description": "Yhteistyökumppanit (ID:t)" }
+                                }
                             },
-                            "entertainment_features": { "type": "array", "items": { "type": "string" } }
-                        }
-                    },
-                    
-                    "funerals_and_memorials": {
-                        "type": "object",
-                        "description": "2. Hautajaiset ja muistotilaisuudet",
-                        "properties": {
-                            "memorial_service_capacity": { "type": "integer" },
-                            "quiet_private_space": { "type": "boolean" },
-                            "accessible_entry": { "type": "boolean" },
-                            "memorial_catering": { "type": "boolean" },
-                            "funeral_flowers": { "type": "boolean" },
-                            "transport_assistance": { "type": "boolean" },
-                            "urgent_booking_available": { "type": "boolean" },
-                            "digitization_features": {
-                                "type": "array",
-                                "items": { "type": "string" },
-                                "examples": ["muistovideo", "vanhojen valokuvien digitointi", "sukukuvien kokoaminen"]
-                            }
-                        }
-                    },
-                    
-                    "business_events": {
-                        "type": "object",
-                        "description": "3. Yritystapahtumat ja kokoukset",
-                        "properties": {
-                            "meeting_capacity": { "type": "integer" },
-                            "seminar_capacity": { "type": "integer" },
-                            "has_projector": { "type": "boolean" },
-                            "has_streaming": { "type": "boolean" },
-                            "has_wifi": { "type": "boolean" },
-                            "invoice_billing": { "type": "boolean" },
-                            "av_support": { "type": "boolean" },
-                            "branding_support": { "type": "boolean" },
-                            "wellbeing_and_activity_features": {
-                                "type": "array",
-                                "items": { "type": "string" },
-                                "examples": ["virkistyspäivä", "tiimipäivä", "yrityswellness", "luontoliikunta"]
+                            "funerals_and_memorials": {
+                                "type": "object",
+                                "properties": {
+                                    "memorial_service_capacity": { "type": "integer" },
+                                    "quiet_private_space": { "type": "boolean" },
+                                    "collaborated_with": { "type": "array", "items": { "type": "string" } }
+                                }
                             },
-                            "digitization_features": {
-                                "type": "array",
-                                "items": { "type": "string" },
-                                "examples": ["tapahtumatallennus", "arkiston digitointi", "hybriditapahtuman tuki"]
+                            "business_events": {
+                                "type": "object",
+                                "properties": {
+                                    "meeting_capacity": { "type": "integer" },
+                                    "has_projector": { "type": "boolean" },
+                                    "collaborated_with": { "type": "array", "items": { "type": "string" } }
+                                }
+                            },
+                            "moving_and_housing": {
+                                "type": "object",
+                                "properties": {
+                                    "moving_truck_available": { "type": "boolean" },
+                                    "collaborated_with": { "type": "array", "items": { "type": "string" } }
+                                }
+                            },
+                            "construction_and_maintenance": {
+                                "type": "object",
+                                "properties": {
+                                    "emergency_service": { "type": "boolean" },
+                                    "collaborated_with": { "type": "array", "items": { "type": "string" } }
+                                }
+                            },
+                            "cottage_services": {
+                                "type": "object",
+                                "properties": {
+                                    "key_holding": { "type": "boolean" },
+                                    "collaborated_with": { "type": "array", "items": { "type": "string" } }
+                                }
+                            },
+                            "housing_company_and_contracts": {
+                                "type": "object",
+                                "properties": {
+                                    "maintenance_contracts": { "type": "boolean" },
+                                    "collaborated_with": { "type": "array", "items": { "type": "string" } }
+                                }
+                            },
+                            "startup_services": {
+                                "type": "object",
+                                "properties": {
+                                    "business_advisory": { "type": "boolean" },
+                                    "collaborated_with": { "type": "array", "items": { "type": "string" } }
+                                }
+                            },
+                            "business_growth": {
+                                "type": "object",
+                                "properties": {
+                                    "marketing_services": { "type": "boolean" },
+                                    "collaborated_with": { "type": "array", "items": { "type": "string" } }
+                                }
+                            },
+                            "wellbeing_and_beauty": {
+                                "type": "object",
+                                "properties": {
+                                    "home_visits": { "type": "boolean" },
+                                    "collaborated_with": { "type": "array", "items": { "type": "string" } }
+                                }
                             }
                         }
                     },
-                    
-                    "moving_and_housing": {
-                        "type": "object",
-                        "description": "4. Muutto ja asuminen",
-                        "properties": {
-                            "moving_truck_available": { "type": "boolean" },
-                            "packing_service": { "type": "boolean" },
-                            "storage_available": { "type": "boolean" },
-                            "cleaning_after_move": { "type": "boolean" },
-                            "electrician_available": { "type": "boolean" },
-                            "digitization_features": {
-                                "type": "array",
-                                "items": { "type": "string" },
-                                "examples": ["paperiarkistojen digitointi muuton yhteydessä", "valokuvien järjestely"]
-                            }
-                        }
-                    },
-                    
-                    "construction_and_maintenance": {
-                        "type": "object",
-                        "description": "5. Rakentaminen ja kunnossapito",
-                        "properties": {
-                            "emergency_service": { "type": "boolean" },
-                            "wet_room_certification": { "type": "boolean" },
-                            "material_supply": { "type": "boolean" },
-                            "project_management": { "type": "boolean" },
-                            "snow_removal": { "type": "boolean" },
-                            "digitization_features": {
-                                "type": "array",
-                                "items": { "type": "string" },
-                                "examples": ["älykotiratkaisut", "kiinteistön sähköinen dokumentointi"]
-                            }
-                        }
-                    },
-                    
-                    "cottage_services": {
-                        "type": "object",
-                        "description": "6. Mökkipalvelut",
-                        "properties": {
-                            "key_holding": { "type": "boolean" },
-                            "winter_monitoring": { "type": "boolean" },
-                            "snow_removal": { "type": "boolean" },
-                            "dock_maintenance": { "type": "boolean" },
-                            "sauna_services": { "type": "boolean" },
-                            "wellbeing_and_activity_features": {
-                                "type": "array",
-                                "items": { "type": "string" },
-                                "examples": ["mökkijooga", "ohjattu luontoretki", "saunaelämykset"]
-                            }
-                        }
-                    },
-                    
-                    "housing_company_and_contracts": {
-                        "type": "object",
-                        "description": "7. Taloyhtiöt ja sopimukset",
-                        "properties": {
-                            "housing_company_clients": { "type": "boolean" },
-                            "maintenance_contracts": { "type": "boolean" },
-                            "emergency_response": { "type": "boolean" }
-                        }
-                    },
-                    
-                    "startup_services": {
-                        "type": "object",
-                        "description": "8. Aloittava yritys",
-                        "properties": {
-                            "business_advisory": { "type": "boolean" },
-                            "bookkeeping_startup": { "type": "boolean" },
-                            "website_creation": { "type": "boolean" },
-                            "branding_support": { "type": "boolean" },
-                            "digitization_features": {
-                                "type": "array",
-                                "items": { "type": "string" },
-                                "examples": ["paperittoman toimiston perustaminen", "digitaalinen arkistointi"]
-                            }
-                        }
-                    },
-                    
-                    "business_growth": {
-                        "type": "object",
-                        "description": "9. Kasvu ja kehitys",
-                        "properties": {
-                            "seo_services": { "type": "boolean" },
-                            "social_media_marketing": { "type": "boolean" },
-                            "video_production": { "type": "boolean" },
-                            "consulting_services": { "type": "boolean" },
-                            "digitization_features": {
-                                "type": "array",
-                                "items": { "type": "string" },
-                                "examples": ["liiketoiminnan digitointi", "automatisointi"]
-                            }
-                        }
-                    },
-                    
-                    "wellbeing_and_beauty": {
-                        "type": "object",
-                        "description": "10. Hyvinvointi ja kauneus",
-                        "properties": {
-                            "home_visits": { "type": "boolean" },
-                            "online_booking": { "type": "boolean" },
-                            "bridal_services": { "type": "boolean" },
-                            "corporate_wellbeing_services": { "type": "boolean" },
-                            "wellbeing_and_activity_features": {
-                                "type": "array",
-                                "items": { "type": "string" },
-                                "examples": ["hieronta", "kasvohoidot", "jooga", "pilates", "hyvinvointivalmennus"]
-                            }
-                        }
-                    },
-                    
                     "meta": {
                         "type": "object",
                         "properties": {
                             "last_updated": { "type": "string" },
                             "verified_by": { "type": "string" },
-                            "status": { "type": "string" }
+                            "status": { "type": "string", "enum": ["draft", "verified", "pending_review"] }
                         }
                     }
                 },
-                "required": ["core", "meta"]
+                "required": ["name", "core", "meta"]
             }
         }
     },

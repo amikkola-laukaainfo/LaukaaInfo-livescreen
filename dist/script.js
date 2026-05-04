@@ -169,6 +169,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Alustetaan käyttäjän sijaintivalitsin (etusivulla tai jos input löytyy)
     initUserLocation();
+
+    // Top Nav Scroll Effect
+    const topNav = document.querySelector('.top-nav');
+    if (topNav) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                topNav.classList.add('scrolled');
+            } else {
+                topNav.classList.remove('scrolled');
+            }
+        });
+    }
 });
 
 
@@ -1551,7 +1563,7 @@ function filterCatalog(renderList = true) {
     if (!searchEl) return;
 
     const queryParams = new URLSearchParams(window.location.search);
-    const urlTag = queryParams.get('tag') || '';
+    const urlTag = queryParams.get('tag') || queryParams.get('q') || '';
     const urlCat = queryParams.get('cat') || '';
     
     const searchTerm = (searchEl.value || urlTag || '').toLowerCase().trim();

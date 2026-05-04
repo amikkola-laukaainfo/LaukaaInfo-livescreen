@@ -1,0 +1,301 @@
+<laukaainfo_taxonomy version="1.0">
+
+  <!-- 1. PÄÄKÄYTTÖTARKOITUKSET (fits_for) -->
+  <intents>
+
+    <intent id="events-and-celebrations" label="Häät ja juhlat">
+      <subcontexts>
+        <tag>juhlatila</tag>
+        <tag>kartano</tag>
+        <tag>kylätalo</tag>
+        <tag>sauna</tag>
+        <tag>ranta</tag>
+        <tag>pitopalvelu</tag>
+        <tag>valokuvaaja</tag>
+        <tag>videokuvaaja</tag>
+        <tag>häävideo</tag>
+        <tag>digitointi</tag>
+        <tag>vhs-digitointi</tag>
+        <tag>valokuvien digitointi</tag>
+        <tag>diojen digitointi</tag>
+        <tag>häävideon editointi</tag>
+        <tag>musiikki</tag>
+        <tag>ohjelmapalvelut</tag>
+        <tag>syntymäpäivät</tag>
+        <tag>sukujuhlat</tag>
+        <tag>siivous</tag>
+      </subcontexts>
+
+      <refinements>
+        <tag>drone-kuvaus</tag>
+        <tag>ilmakuvaus</tag>
+        <tag>hääkooste</tag>
+        <tag>juhlakuvaus</tag>
+        <tag>kaitafilmien digitointi</tag>
+      </refinements>
+
+      <node_links>
+        <node>JUHLATILAT</node>
+        <node>VALOKUVAUS</node>
+        <node>VIDEOTUOTANTO</node>
+        <node>CATERING</node>
+        <node>DIGITOINTI</node>
+      </node_links>
+    </intent>
+
+
+    <intent id="business-events" label="Yritystapahtumat">
+      <subcontexts>
+        <tag>kokoustila</tag>
+        <tag>seminaari</tag>
+        <tag>yritysjuhlat</tag>
+        <tag>tyhypäivä</tag>
+        <tag>koulutus</tag>
+      </subcontexts>
+
+      <refinements>
+        <tag>streamaus</tag>
+        <tag>videotuotanto</tag>
+        <tag>presentaatiotekniikka</tag>
+        <tag>ilmakuvaus</tag>
+        <tag>drone-kuvaus</tag>
+      </refinements>
+
+      <node_links>
+        <node>YRITYSTAPAHTUMAT</node>
+        <node>VIDEOTUOTANTO</node>
+      </node_links>
+    </intent>
+
+
+    <intent id="startup-services" label="Yrityksen perustaminen">
+      <subcontexts>
+        <tag>yritysneuvonta</tag>
+        <tag>konsultointi</tag>
+        <tag>tilitoimisto</tag>
+        <tag>vakuutus</tag>
+        <tag>lakipalvelut</tag>
+        <tag>verkkosivut</tag>
+        <tag>brändäys</tag>
+        <tag>logo</tag>
+        <tag>yrityskuvat</tag>
+      </subcontexts>
+
+      <refinements>
+        <tag>wordpress</tag>
+        <tag>graafinen suunnittelu</tag>
+      </refinements>
+
+      <node_links>
+        <node>YRITYKSEN_PERUSTAMINEN</node>
+        <node>VERKKOSIVUT</node>
+        <node>BRÄNDÄYS</node>
+      </node_links>
+    </intent>
+
+
+    <intent id="business-growth" label="Yrityksen kehittäminen">
+      <subcontexts>
+        <tag>google-mainonta</tag>
+        <tag>somemainonta</tag>
+        <tag>myynnin kehittäminen</tag>
+        <tag>verkkokauppa</tag>
+        <tag>videotuotanto</tag>
+        <tag>rekrytointi</tag>
+        <tag>koulutus</tag>
+      </subcontexts>
+
+      <refinements>
+        <tag>sisällöntuotanto</tag>
+        <tag>videomarkkinointi</tag>
+      </refinements>
+
+      <node_links>
+        <node>YRITYKSEN_KEHITTAMINEN</node>
+        <node>VIDEOTUOTANTO</node>
+        <node>DIGIMARKKINOINTI</node>
+      </node_links>
+    </intent>
+
+
+    <intent id="moving-and-housing" label="Muutto ja asuminen">
+      <subcontexts>
+        <tag>muuttopalvelu</tag>
+        <tag>kuljetus</tag>
+        <tag>varastointi</tag>
+        <tag>muuttosiivous</tag>
+      </subcontexts>
+
+      <refinements>
+        <tag>asuntovideo</tag>
+        <tag>kiinteistökuvaus</tag>
+      </refinements>
+
+      <node_links>
+        <node>MUUTTO</node>
+        <node>SIIVOUS</node>
+        <node>VALOKUVAUS</node>
+        <node>VIDEOTUOTANTO</node>
+      </node_links>
+    </intent>
+
+
+    <intent id="construction-and-maintenance" label="Rakentaminen ja remontti">
+      <subcontexts>
+        <tag>rakentaminen</tag>
+        <tag>sähköasennukset</tag>
+        <tag>putkimies</tag>
+        <tag>maalari</tag>
+        <tag>remontti</tag>
+      </subcontexts>
+
+      <refinements>
+        <tag>timelapse</tag>
+        <tag>rakennuskuvaus</tag>
+        <tag>ilmakuvaus</tag>
+      </refinements>
+
+      <node_links>
+        <node>RAKENTAMINEN</node>
+        <node>SÄHKÖTYÖT</node>
+        <node>LVI</node>
+        <node>VALOKUVAUS</node>
+        <node>VIDEOTUOTANTO</node>
+      </node_links>
+    </intent>
+
+
+    <intent id="cottage-services" label="Mökkipalvelut">
+      <subcontexts>
+        <tag>talvivalvonta</tag>
+        <tag>kiinteistöhuolto</tag>
+        <tag>siivous</tag>
+        <tag>polttopuut</tag>
+        <tag>laiturihuolto</tag>
+      </subcontexts>
+
+      <node_links>
+        <node>MÖKKIPALVELUT</node>
+        <node>KIINTEISTÖHUOLTO</node>
+      </node_links>
+    </intent>
+
+
+    <intent id="accommodation" label="Majoitus">
+      <subcontexts>
+        <tag>hotelli</tag>
+        <tag>lomamökki</tag>
+        <tag>huoneisto</tag>
+        <tag>leirikeskus</tag>
+      </subcontexts>
+
+      <refinements>
+        <tag>järvinäköala</tag>
+        <tag>sauna</tag>
+      </refinements>
+
+      <node_links>
+        <node>MAJOITUS</node>
+        <node>LOMAMÖKIT</node>
+      </node_links>
+    </intent>
+
+
+    <intent id="wellbeing-and-beauty" label="Hyvinvointi ja kauneus">
+      <subcontexts>
+        <tag>hieronta</tag>
+        <tag>kauneushoitola</tag>
+        <tag>terapia</tag>
+        <tag>jooga</tag>
+      </subcontexts>
+
+      <node_links>
+        <node>HYVINVOINTI</node>
+      </node_links>
+    </intent>
+
+
+    <intent id="funerals-and-memorials" label="Hautajaiset ja muistotilaisuudet">
+      <subcontexts>
+        <tag>hautauspalvelu</tag>
+        <tag>muistotilaisuus</tag>
+        <tag>perunkirjoitus</tag>
+        <tag>hautakivi</tag>
+        <tag>muistovideo</tag>
+        <tag>digitointi</tag>
+        <tag>vhs-digitointi</tag>
+        <tag>valokuvien digitointi</tag>
+        <tag>diojen digitointi</tag>
+        <tag>kaitafilmien digitointi</tag>
+        <tag>diashow-esitys</tag>
+        <tag>muistotilaisuuskuvaus</tag>
+        <tag>hautajaiskuvaus</tag>
+      </subcontexts>
+
+      <node_links>
+        <node>HAUTAUSPALVELUT</node>
+        <node>MUISTOTILAISUUS</node>
+        <node>DIGITOINTI</node>
+      </node_links>
+    </intent>
+
+
+    <intent id="housing-company-and-contracts" label="Isännöinti ja taloyhtiöpalvelut">
+      <subcontexts>
+        <tag>isännöinti</tag>
+        <tag>kiinteistöhuolto</tag>
+        <tag>siivous</tag>
+        <tag>tilintarkastus</tag>
+        <tag>lakipalvelut</tag>
+        <tag>sopimukset</tag>
+        <tag>juridiset palvelut</tag>
+      </subcontexts>
+
+      <node_links>
+        <node>ISÄNNÖINTI</node>
+        <node>KIINTEISTÖHUOLTO</node>
+      </node_links>
+    </intent>
+
+  </intents>
+
+
+  <!-- 2. SIJAINTISOLMUT -->
+  <locations>
+    <node id="LAUKAA"/>
+    <node id="LIEVESTUORE"/>
+    <node id="VIHTAVUORI"/>
+    <node id="JYVÄSKYLÄ"/>
+  </locations>
+
+
+  <!-- 3. PALVELUTYYPIT (poikkileikkaavat) -->
+  <service_types>
+    <type id="VALOKUVAUS"/>
+    <type id="VIDEOTUOTANTO"/>
+    <type id="DIGITOINTI"/>
+    <type id="CATERING"/>
+    <type id="MAJOITUS"/>
+    <type id="SAUNA"/>
+    <type id="KUKAT"/>
+  </service_types>
+
+
+  <!-- 4. SUHDELOGIIKKA -->
+  <relations>
+
+    <!-- Esim. ristiinmyynti -->
+    <relation from="events-and-celebrations" to="accommodation" type="cross-sell"/>
+    <relation from="events-and-celebrations" to="CATERING" type="cross-sell"/>
+
+    <!-- Esim. looginen yhteys -->
+    <relation from="VIDEOTUOTANTO" to="VALOKUVAUS" type="related"/>
+    <relation from="kokoustila" to="CATERING" type="supporting"/>
+
+    <relation from="funerals-and-memorials" to="CATERING" type="supporting"/>
+    <relation from="funerals-and-memorials" to="KUKAT" type="supporting"/>
+    <relation from="funerals-and-memorials" to="VALOKUVAUS" type="supporting"/>
+
+  </relations>
+
+</laukaainfo_taxonomy>

@@ -238,7 +238,7 @@ const Mainostutka = (function () {
         else if (type === 'ad') badgeText = '📢 MAINOS';
 
         let mainosText = ad.mainoslause || '';
-        if (mainosText.includes('@@')) mainosText = mainosText.split('@@')[0];
+        if (mainosText.includes('@@')) mainosText = mainosText.replace(/@@/g, '').trim();
         if (type === 'none' && !mainosText) mainosText = ad.kategoria || 'Yritys';
 
         let adLink = '#';
