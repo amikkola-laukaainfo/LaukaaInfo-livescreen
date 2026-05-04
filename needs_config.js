@@ -296,6 +296,7 @@ const NEEDS_CONFIG = {
                     { "label": "Sähköasentaja", "tags": ["sähköasennukset"] },
                     { "label": "LVI-asentaja (Putkimies)", "tags": ["LVI"] },
                     { "label": "Maalari / Tapetoija", "tags": ["maalaustyöt"] },
+                    { "label": "Puuseppä / Kalustekorjaus", "tags": ["puutyöt", "kalusteet", "puuseppä"], "profilointi_filter": { "section": "construction_and_maintenance", "field": "refinement_tags", "value": "kalustekorjaus" } },
                     { "label": "Suunnittelija / Arkkitehti", "tags": ["suunnittelutoimisto"] }
                 ]
             },
