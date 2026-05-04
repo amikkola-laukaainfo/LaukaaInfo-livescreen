@@ -1424,7 +1424,8 @@
                 "home_service": false,
                 "weekend_service": true,
                 "not_suitable_for": [
-                    "kartano"
+                    "kartano",
+                    "omilla tarjoiluilla"
                 ],
                 "paired_with_by_context": {
                     "häät": [
@@ -1446,6 +1447,9 @@
                     "muistotilaisuus": [
                         "kahvitus",
                         "pitopalvelu"
+                    ],
+                    "events-and-celebrations": [
+                        "videokuvaaja"
                     ]
                 },
                 "sub_contexts": [
@@ -1671,7 +1675,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T10:49:04.825Z",
+                "last_updated": "2026-05-04T16:32:30.546Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -23689,23 +23693,23 @@
                 "corporate_clients": true,
                 "home_service": false,
                 "weekend_service": true,
-                "not_suitable_for": [],
+                "not_suitable_for": [
+                    "omilla tarjoiluilla"
+                ],
                 "paired_with_by_context": {
                     "events-and-celebrations": [
-                        "Catering",
                         "Valokuvaaja",
-                        "Majoitus"
+                        "videokuvaaja"
                     ],
                     "business-events": [
-                        "Catering",
-                        "Ohjelmapalvelut"
+                        "Ohjelmapalvelut",
+                        "videokuvaaja"
                     ],
                     "wellbeing-and-beauty": [
                         "Luontopalvelut",
                         "Elämykset"
                     ],
                     "funerals-and-memorials": [
-                        "Catering",
                         "Kukat"
                     ]
                 },
@@ -23733,7 +23737,6 @@
                     "JUHLATILA",
                     "KOKOUSTILA",
                     "HÄÄT",
-                    "MAJOITUS",
                     "SAUNA",
                     "LUONTO",
                     "ELÄMYKSET",
@@ -23790,7 +23793,6 @@
                     "elämyspalvelu"
                 ],
                 "collaborated_with": [
-                    "paikallinen pitopalvelu",
                     "valokuvaaja",
                     "ohjelmapalveluyritys"
                 ]
@@ -23848,7 +23850,6 @@
                 ],
                 "digitization_features": [],
                 "collaborated_with": [
-                    "pitopalvelu",
                     "kukkakauppa"
                 ]
             },
@@ -23960,7 +23961,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-30T13:11:35.115Z",
+                "last_updated": "2026-05-04T16:30:14.308Z",
                 "verified_by": "AI-analysis-v2",
                 "status": "draft"
             }
@@ -26908,9 +26909,7 @@
                     "kodinsisustus": 15,
                     "kuljetuspalvelut": 10,
                     "events-and-celebrations": 22,
-                    "business-events": 15,
-                    "construction-and-maintenance": 30,
-                    "moving-and-housing": 20
+                    "business-events": 15
                 },
                 "priority_score": 0,
                 "paired_with": [],
@@ -50547,7 +50546,7 @@
                     "business-events": 92,
                     "funerals-and-memorials": 80,
                     "moving-and-housing": 10,
-                    "construction-and-maintenance": 0,
+                    "construction-and-maintenance": 20,
                     "cottage-services": 95,
                     "housing-company-and-contracts": 25,
                     "startup-services": 10,
@@ -56437,7 +56436,6 @@
                     "yritystapahtuma",
                     "majoitus",
                     "ohjelmapalvelut",
-                    "pitopalvelu",
                     "avantouinti",
                     "kalastus",
                     "patikointi",
@@ -56470,7 +56468,7 @@
                 "outdoor_capacity": 0,
                 "is_accessible": true,
                 "own_catering_allowed": false,
-                "inhouse_catering_available": false,
+                "inhouse_catering_available": true,
                 "is_lakeside": true,
                 "has_sauna": true,
                 "has_av_tech": true,
@@ -56497,7 +56495,7 @@
                 "live_music": false,
                 "dj_services": false,
                 "karaoke_available": false,
-                "has_exclusive_catering": true,
+                "has_exclusive_catering": false,
                 "accommodation_included": true,
                 "refinement_tags": [
                     "juhlatila",
@@ -56704,7 +56702,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-30T12:07:17.249Z",
+                "last_updated": "2026-05-04T16:09:23.614Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
@@ -57603,7 +57601,9 @@
                 "corporate_clients": false,
                 "home_service": false,
                 "weekend_service": false,
-                "not_suitable_for": [],
+                "not_suitable_for": [
+                    "omilla tarjoiluilla"
+                ],
                 "paired_with_by_context": {},
                 "sub_contexts": [
                     "juhlatila",
@@ -57630,7 +57630,6 @@
                     "JUHLATILA",
                     "HÄÄT",
                     "KARTANO",
-                    "MAJOITUS",
                     "PITOPALVELU",
                     "CATERING"
                 ],
@@ -57865,7 +57864,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-30T11:17:56.959Z",
+                "last_updated": "2026-05-04T16:25:46.013Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
@@ -59332,7 +59331,18 @@
                 "home_service": false,
                 "weekend_service": false,
                 "not_suitable_for": [],
-                "paired_with_by_context": {},
+                "paired_with_by_context": {
+                    "events-and-celebrations": [
+                        "Valokuvaaja"
+                    ],
+                    "business-events": [
+                        "valokuvaaja",
+                        "videokuvaaja"
+                    ],
+                    "funerals-and-memorials": [
+                        "Muistotilaisuuden tila"
+                    ]
+                },
                 "sub_contexts": [
                     "juhlatila",
                     "häät",
@@ -59355,7 +59365,6 @@
                 ],
                 "node_links": [
                     "LAUKAA",
-                    "SAAVESI",
                     "JUHLATILA",
                     "HAAT",
                     "KOKOUSTILA",
@@ -59372,7 +59381,7 @@
                 "standing_guests": 0,
                 "outdoor_capacity": 0,
                 "is_accessible": false,
-                "own_catering_allowed": false,
+                "own_catering_allowed": true,
                 "inhouse_catering_available": false,
                 "is_lakeside": true,
                 "has_sauna": false,
@@ -59381,7 +59390,7 @@
                 "accommodation_beds": 0,
                 "alcohol_license": false,
                 "private_booking": true,
-                "late_night_events": false,
+                "late_night_events": true,
                 "wedding_specialized": true,
                 "catering_min_capacity": 0,
                 "catering_max_capacity": 100,
@@ -59396,7 +59405,7 @@
                 "live_music": true,
                 "dj_services": true,
                 "karaoke_available": false,
-                "has_exclusive_catering": false,
+                "has_exclusive_catering": true,
                 "accommodation_included": false,
                 "refinement_tags": [
                     "juhlatila",
@@ -59592,7 +59601,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-29T16:35:43.747Z",
+                "last_updated": "2026-05-04T16:23:03.784Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
@@ -60747,7 +60756,9 @@
                 "corporate_clients": true,
                 "home_service": false,
                 "weekend_service": true,
-                "not_suitable_for": [],
+                "not_suitable_for": [
+                    "omilla tarjoiluilla"
+                ],
                 "paired_with_by_context": {},
                 "sub_contexts": [
                     "kahvila",
@@ -60771,9 +60782,9 @@
                     "KAHVILA",
                     "RAVINTOLA",
                     "JUHLAT",
-                    "CATERING",
                     "PITOPALVELU",
-                    "JUHLATILA"
+                    "JUHLATILA",
+                    "CATERING"
                 ],
                 "description": "Naissaaren Upee kahvila (Naissaaren Koskenhenki) on viihtyisä kahvila ja ruokapaikka Vaajakoskella koskimaisemissa. Tarjoaa kahvia, leivonnaisia ja ruokaa rennossa ympäristössä sekä palvelee myös ryhmiä ja tilaisuuksia.",
                 "website": "",
@@ -60978,7 +60989,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-30T08:09:04.298Z",
+                "last_updated": "2026-05-04T16:33:57.041Z",
                 "verified_by": "ai-enriched",
                 "status": "enriched"
             }
@@ -61665,7 +61676,7 @@
                 "collaborated_with": []
             },
             "construction_and_maintenance": {
-                "emergency_service": true,
+                "emergency_service": false,
                 "certifications": [],
                 "wet_room_certification": false,
                 "provides_tools": true,
@@ -61918,7 +61929,7 @@
                 "collaborated_with": []
             },
             "construction_and_maintenance": {
-                "emergency_service": true,
+                "emergency_service": false,
                 "certifications": [],
                 "wet_room_certification": false,
                 "provides_tools": true,
@@ -62180,10 +62191,7 @@
                     "mittatilauskalusteet",
                     "puusepäntyöt",
                     "keittiökalusteet",
-                    "asennuspalvelu",
-                    "kalustekorjaus",
-                    "huonekalujen kunnostus",
-                    "sisustussuunnittelu"
+                    "asennuspalvelu"
                 ],
                 "collaborated_with": []
             },
