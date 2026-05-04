@@ -1248,7 +1248,7 @@
                             let match = false;
 
                             const checkFuzzyMatch = (target, query) => {
-                                if (!target || !query) return false;
+                                if (target === undefined || target === null || query === undefined || query === null) return false;
                                 const t = String(target).toLowerCase();
                                 const q = String(query).toLowerCase();
                                 const isPluralMatch = (t === q + 't' || q === t + 't');
@@ -1280,10 +1280,14 @@
                                     match = Object.values(subContexts).flat().some(v => checkFuzzyMatch(v, pf.value));
                                 }
                             }
-                            
 
-
-                            if (match) isProfiledMatch = true;
+                            // TÄRKEÄ KORJAUS: Jos optiolla on node_link-vaatimus JA profilointisuodatin,
+                            // molempien on täytyttävä (AND). Muuten pelkkä profilointisuodatin riittää.
+                            if (opt.node_link || opt.node_links) {
+                                isProfiledMatch = isProfiledMatch && match;
+                            } else {
+                                isProfiledMatch = match;
+                            }
                         }
 
                         // TAKSONOMIA-TÄSMÄYS (UUSI)
