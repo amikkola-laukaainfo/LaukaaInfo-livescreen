@@ -606,14 +606,13 @@ const NEEDS_CONFIG = {
                 "id": "tyyppi",
                 "question": "Millaista vapaa-ajan kohdetta tai palvelua etsit?",
                 "options": [
-                    { "label": "Peurunka", "tags": ["liikuntakeskus", "uimahalli", "kylpylä"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "refinement_tags", "value": "peurunka" } },
-                    { "label": "Varjola", "tags": ["retkeily", "luonto"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "refinement_tags", "value": "varjola" } },
-                    { "label": "Revontuli Resort", "tags": ["retkeily", "golf"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "refinement_tags", "value": "revontuli" } },
-                    { "label": "UntenOnnela Ranch", "tags": ["hevonen", "luonto"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "refinement_tags", "value": "ranch" } },
-                    { "label": "Nokkakiven huvipuisto (Bellingham)", "tags": ["lapset", "huvipuisto"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "refinement_tags", "value": "nokkakivi" } },
-                    { "label": "Multamäen leirikeskus", "tags": ["leirikeskus", "luonto"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "refinement_tags", "value": "multamäki" } },
-                    { "label": "Kuntosali / Ryhmäliikunta", "sub_context": "kuntosali", "tags": ["kuntosali", "liikuntakeskus"] },
-                    { "label": "Seurayhteistyö / Urheiluseurat", "sub_context": "urheiluseura", "tags": ["urheiluseura"] }
+                    { "label": "Uinti: Ehdotus Peurunka", "tags": ["uinti", "uimahalli", "kylpylä"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "refinement_tags", "value": "peurunka" } },
+                    { "label": "Koskenlasku: Varjola", "tags": ["koskenlasku", "vesiaktiviteetit"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "refinement_tags", "value": "varjola" } },
+                    { "label": "Golf: Revontuli", "tags": ["golf", "ulkoilu"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "refinement_tags", "value": "revontuli" } },
+                    { "label": "Ratsastus: Unten onnela", "tags": ["ratsastus", "hevonen"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "refinement_tags", "value": "ranch" } },
+                    { "label": "Huvipuisto: Nokkakivi", "tags": ["lapset", "huvipuisto"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "refinement_tags", "value": "nokkakivi" } },
+                    { "label": "Luontoretkeily: Multamäen leirikeskus", "tags": ["retkeily", "luonto"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "refinement_tags", "value": "multamäki" } },
+                    { "label": "Kuntosali: OnefIT, Peurunka ym", "tags": ["kuntosali", "liikuntakeskus"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "refinement_tags", "value": "kuntosali" } }
                 ]
             }
         ]
