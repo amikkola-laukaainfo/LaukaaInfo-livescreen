@@ -58198,6 +58198,23 @@
                 ],
                 "collaborated_with": []
             },
+            "wellbeing_and_beauty": {
+                "home_visits": false,
+                "online_booking": false,
+                "unisex_services": true,
+                "gift_cards": false,
+                "corporate_wellbeing_services": false,
+                "event_makeup": false,
+                "bridal_services": false,
+                "group_bookings": true,
+                "refinement_tags": [
+                    "multamäki",
+                    "retkeily",
+                    "luontoretkeily",
+                    "leirikeskus"
+                ],
+                "collaborated_with": []
+            },
             "meta": {
                 "last_updated": "2026-04-29T16:27:04.548Z",
                 "verified_by": "csv-reconciliation",
