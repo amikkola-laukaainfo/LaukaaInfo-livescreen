@@ -23,7 +23,8 @@
         href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Outfit:wght@100..900&display=swap"
         rel="stylesheet">
 
-    <link rel="stylesheet" href="style.css?v=20260420-2">
+    <link rel="stylesheet" href="style.css?v=20260505">
+    <script src="translations.js?v=20260505"></script>
 </head>
 
 <body>
@@ -94,6 +95,10 @@
                         </ul>
                     </li>
                 </ul>
+            </div>
+            <div class="lang-switcher">
+                <button class="lang-btn" onclick="i18n.setLanguage('fi')" data-lang="fi">FI</button>
+                <button class="lang-btn" onclick="i18n.setLanguage('en')" data-lang="en">EN</button>
             </div>
             <button class="hamburger" id="hamburger-btn" aria-label="Avaa valikko">
                 <span></span>

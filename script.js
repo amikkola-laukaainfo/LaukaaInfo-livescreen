@@ -1,6 +1,19 @@
 window.allCompanies = window.allCompanies || [];
 window.companyDataPromise = window.companyDataPromise || null;
 
+// Safety check for i18n (LaukaaInfo-livescreen)
+if (typeof i18n === 'undefined') {
+    window.i18n = {
+        t: (key) => key,
+        getText: (obj) => {
+            if (!obj) return "";
+            if (typeof obj === 'string') return obj;
+            return obj.fi || "";
+        },
+        currentLang: 'fi'
+    };
+}
+
 let allRssItems = []; // Global storage for RSS content
 let allGeoEvents = []; // Global storage for event coordinates
 let currentCompany = null;
