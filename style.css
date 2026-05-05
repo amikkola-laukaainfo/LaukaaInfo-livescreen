@@ -408,8 +408,21 @@ header.hero-split {
     color: var(--light-text);
     position: relative;
     z-index: 3;
-    max-width: 600px;
+    max-width: 850px; /* Hieman leveämpi jotta logo mahtuu viereen */
     text-align: left;
+}
+
+.hero-flex-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+}
+
+.hero-copy {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .hero-right {
@@ -431,6 +444,7 @@ header.hero-split {
     object-position: center;
     display: block;
     transition: transform 0.8s ease;
+    filter: brightness(1.15) contrast(1.05); /* Lisätty valoisuutta ja kontrastia */
 }
 
 .hero-right-caption {
@@ -479,7 +493,7 @@ header h1 {
     font-family: var(--accent-font);
     font-size: 2.2rem;
     font-weight: 800;
-    margin: 0;
+    margin: 0 0 0.5rem; /* Lisätty marginaali alaotsikkoon */
     letter-spacing: -1px;
     line-height: 1.05;
     color: #ffffff;
@@ -531,6 +545,21 @@ header h1 {
 
     header h1 {
         font-size: 2.4rem;
+    }
+
+    .hero-flex-container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 1.5rem;
+    }
+
+    .hero-copy {
+        align-items: center;
+    }
+
+    .hero-actions {
+        text-align: center;
     }
 }
 
