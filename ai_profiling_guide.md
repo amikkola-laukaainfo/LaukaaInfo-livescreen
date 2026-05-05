@@ -45,6 +45,7 @@ The `palvelu.html` engine uses these to match specific user choices in the guide
 - **Funerals**: `hautauspalvelu`, `muistotilaisuus`, `perunkirjoitus`, `hautakivi`, `muistovideo`, `muistotilaisuuskuvaus`, `hautajaiskuvaus`, `digitointi`, `vhs-digitointi`, `valokuvien digitointi`, `diashow-esitys`.
 - **Professional**: `yritysneuvonta`, `tilitoimisto`, `vakuutus`, `lakipalvelut`, `verkkosivut`, `brändäys`, `logo`, `yrityskuvat`, `google-mainonta`, `somemainonta`, `rekrytointi`.
 - **Real Estate & Construction**: `muuttopalvelu`, `varastointi`, `asuntovideo`, `kiinteistökuvaus`, `timelapse`, `rakennuskuvaus`, `ilmakuvaus`.
+- **Leisure Destinations**: Use these for major sites: `peurunka`, `varjola`, `revontuli`, `ranch`, `nokkakivi`, `multamäki`.
 
 ## 5. Capacity & Feature Rules
 For any company with `JUHLATILA` or `MAJOITUS`:
@@ -66,10 +67,11 @@ Use these exact terms in `sub_contexts` or `refinement_tags` to ensure companies
 | **Legal** | Perunkirjoitus, Lakipalvelut | `lakiasiaintoimistot`, `perunkirjoitus`, `sopimukset` |
 | **Accounting** | Kirjanpito, Hallinto | `tilitoimisto`, `kirjanpito` |
 | **Construction** | Sähkötyöt, Maalaus, Suunnittelu | `sähköasennukset`, `maalaustyöt`, `suunnittelutoimisto` |
-| **Maintenance** | Nuohous, Kiinteistöhuolto | `nuohouspalvelut`, `kiinteistöhuolto`, `huoltosopimus` |
-| **Wellness** | Häät, Kauneus, Terapia | `meikki`, `kampaus`, `psykologi`, `terveyspalvelut` |
-| **Animals** | Eläinlääkäri, Hoito | `eläinlääkäri`, `trimmaus`, `koirahoitola` |
-| **Business** | Rekrytointi, Markkinointi | `henkilöstöpalvelut`, `mainostoimisto`, `koulutus` |
+| **Maintenance** | Kiinteistöhuolto, Isännöinti | `kiinteistöhuolto`, `isännöinti`, `siivous`, `viherrakentaminen` |
+| **Wellness** | Hyvinvointi, Terapia, Kauneus | `terveyspalvelut`, `hieronta`, `kauneus`, `kampaamo`, `terapia` |
+| **Leisure** | Peurunka, Varjola, Ranch | `peurunka`, `varjola`, `revontuli`, `ranch`, `nokkakivi`, `multamäki` |
+| **Animals** | Eläinlääkäri, Hevonen, Hoito | `eläinlääkäri`, `hevonen`, `trimmaus`, `koirahoitola` |
+| **Business** | Rekrytointi, Markkinointi | `henkilöstöpalvelut`, `mainostoimisto`, `markkinointikumppani` |
 | **Emergency** | Hinaus, Lukot, Sähkö | `hinaus`, `lukkoseppä`, `päivystys` |
 | **Mökki** | Polttopuut, Laiturit | `polttopuut`, `laituritarvikkeet` |
-| **Family** | Päivähoito, Harrastukset | `päiväkoti`, `lapset`, `harrastukset` |
+| **Family** | Lapset, Harrastukset | `lapset`, `harrastukset` |

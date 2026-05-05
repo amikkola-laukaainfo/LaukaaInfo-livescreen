@@ -203,12 +203,18 @@
     </intent>
 
 
-    <intent id="wellbeing-and-beauty" label="Hyvinvointi ja kauneus">
+    <intent id="wellbeing-and-beauty" label="Hyvinvointi, vapaa-aika ja kauneus">
       <subcontexts>
         <tag>hieronta</tag>
         <tag>kauneushoitola</tag>
         <tag>terapia</tag>
         <tag>jooga</tag>
+        <tag>peurunka</tag>
+        <tag>varjola</tag>
+        <tag>revontuli</tag>
+        <tag>ranch</tag>
+        <tag>nokkakivi</tag>
+        <tag>multamÃ¤ki</tag>
       </subcontexts>
 
       <node_links>
