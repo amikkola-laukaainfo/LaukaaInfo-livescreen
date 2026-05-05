@@ -30260,7 +30260,9 @@
                 "corporate_clients": false,
                 "home_service": false,
                 "weekend_service": false,
-                "not_suitable_for": [],
+                "not_suitable_for": [
+                    "vapaa-aika"
+                ],
                 "sub_contexts": [],
                 "node_links": [],
                 "description": "",
