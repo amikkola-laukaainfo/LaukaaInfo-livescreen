@@ -2610,7 +2610,10 @@
                 "corporate_clients": false,
                 "home_service": false,
                 "weekend_service": false,
-                "not_suitable_for": [],
+                "not_suitable_for": [
+                    "psykologi",
+                    "mielen"
+                ],
                 "sub_contexts": [],
                 "node_links": [],
                 "description": "",
@@ -2794,7 +2797,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-05T10:40:55.677Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -2817,7 +2820,10 @@
                 "corporate_clients": false,
                 "home_service": false,
                 "weekend_service": false,
-                "not_suitable_for": [],
+                "not_suitable_for": [
+                    "mielen",
+                    "psykologi"
+                ],
                 "sub_contexts": [],
                 "node_links": [],
                 "description": "",
@@ -3001,7 +3007,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-05T10:41:29.376Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -3024,7 +3030,10 @@
                 "corporate_clients": false,
                 "home_service": false,
                 "weekend_service": false,
-                "not_suitable_for": [],
+                "not_suitable_for": [
+                    "mielen",
+                    "psykologi"
+                ],
                 "sub_contexts": [],
                 "node_links": [],
                 "description": "",
@@ -3208,7 +3217,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-05T10:42:19.286Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -3231,7 +3240,10 @@
                 "corporate_clients": false,
                 "home_service": false,
                 "weekend_service": false,
-                "not_suitable_for": [],
+                "not_suitable_for": [
+                    "mielen",
+                    "psykologi"
+                ],
                 "sub_contexts": [],
                 "node_links": [],
                 "description": "",
@@ -3415,7 +3427,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-05T10:42:50.915Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
