@@ -327,7 +327,7 @@ const NEEDS_CONFIG = {
         ]
     },
     "kiinteistopalvelut": {
-        "title": "Kiinteistö- ja huoltopalvelut",
+        "title": "Taloyhtiö & Kiinteistöpalvelut",
         "icon": "🏘️",
         "description": "Huolenpitoa ja arvoa kiinteistöllesi sekä taloyhtiön tarpeet.",
         "profilointi_context": "housing_company_and_contracts",
