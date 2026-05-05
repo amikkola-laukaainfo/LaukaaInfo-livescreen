@@ -241,13 +241,13 @@ function initMap(companies) {
             const button = L.DomUtil.create('a', 'leaflet-control-locate leaflet-bar-part', container);
             button.innerHTML = '📍';
             button.href = '#';
-            button.title = 'Näytä oma sijainti';
+            button.title = i18n.t('map_show_location');
 
             // Address Search (Desktop)
             const searchContainer = L.DomUtil.create('div', 'map-address-search', container);
             searchContainer.innerHTML = `
-                <input type="text" placeholder="Kirjoita osoite..." id="map-addr-input">
-                <button id="map-addr-btn">HAE</button>
+                <input type="text" placeholder="${i18n.t('placeholder_address')}" id="map-addr-input">
+                <button id="map-addr-btn">${i18n.t('btn_search_short')}</button>
             `;
 
             L.DomEvent.on(button, 'click', function (e) {
@@ -279,9 +279,9 @@ function initMap(companies) {
                                 iconAnchor: [10, 10]
                             });
                             userMarker = L.marker(latlng, { icon: userIcon }).addTo(map);
-                            userMarker.bindPopup(`Sijainti: ${query}`).openPopup();
+                            userMarker.bindPopup(`${i18n.t('map_location')}: ${query}`).openPopup();
                         } else {
-                            alert("Osoitetta ei löytynyt.");
+                            alert(i18n.t('map_address_not_found'));
                         }
                     })
                     .catch(err => console.error("Geocoding error:", err));
@@ -317,14 +317,14 @@ function initMap(companies) {
         });
 
         userMarker = L.marker(e.latlng, { icon: userIcon }).addTo(map);
-        userMarker.bindPopup("Olet tässä").openPopup();
+        userMarker.bindPopup(i18n.t('map_you_are_here')).openPopup();
     });
 
     map.on('locationerror', function (e) {
         if (e.code === 1) { // PERMISSION_DENIED
-            alert("Sijainti estetty. Varmista, että käytät sivua https-osoitteessa ja olet sallinut paikannuksen selaimen asetuksista.");
+            alert(i18n.t('map_location_denied'));
         } else {
-            alert("Sijaintia ei voitu hakea: " + e.message);
+            alert(i18n.t('map_location_error') + ": " + e.message);
         }
     });
 
@@ -413,7 +413,7 @@ function addMarkersToMap(companies) {
                 
                 popupContent = `
                     <div style="font-family: 'Outfit', sans-serif; min-width: 180px;">
-                        <span class="news-badge event" style="font-size: 0.7rem; margin-bottom: 5px; display: inline-block;">TAPAHTUMA</span>
+                        <span class="news-badge event" style="font-size: 0.7rem; margin-bottom: 5px; display: inline-block;">${i18n.t('label_event').toUpperCase()}</span>
                         <h4 style="margin: 0 0 5px 0; color: #cc7a00;">${company.title}</h4>
                         <div style="font-size: 0.8rem; margin-bottom: 8px; color: #666;">📅 ${company.dateStr}</div>
                         <div style="display: flex; flex-direction: column; gap: 5px;">
@@ -429,7 +429,7 @@ function addMarkersToMap(companies) {
                                 width: 100%;
                                 font-size: 0.8rem;
                                 box-sizing: border-box;
-                            ">Lue lisää</a>
+                            ">${i18n.t('btn_read_more_rss')}</a>
                             <a href="${routeUrl}" target="_blank" style="
                                 display: block;
                                 background: #28a745;
@@ -442,7 +442,7 @@ function addMarkersToMap(companies) {
                                 width: 100%;
                                 font-size: 0.8rem;
                                 box-sizing: border-box;
-                            ">🚗 Reittiohjeet</a>
+                            ">🚗 ${i18n.t('btn_directions')}</a>
                         </div>
                     </div>
                 `;
@@ -533,7 +533,7 @@ function addMarkersToMap(companies) {
                         <h4 style="margin: 0 0 5px 0; color: #0056b3;">${company.nimi}</h4>
                         <div style="font-size: 0.8rem; margin-bottom: 8px; color: #666; display: flex; align-items: center; gap: 5px; flex-wrap: wrap;">
                             ${company.kategoria}
-                            ${(company.service_mode === 'SERVICE_AREA' || (company.service_radius && parseFloat(company.service_radius) > 0)) ? '<span class="service-area-badge" style="background: #fff3e0; color: #e65100; padding: 1px 6px; border-radius: 10px; font-size: 0.65rem; border: 1px solid #ffccbc; font-weight: bold;">🟠 PALVELEE ALUEELLA</span>' : ''}
+                            ${(company.service_mode === 'SERVICE_AREA' || (company.service_radius && parseFloat(company.service_radius) > 0)) ? `<span class="service-area-badge" style="background: #fff3e0; color: #e65100; padding: 1px 6px; border-radius: 10px; font-size: 0.65rem; border: 1px solid #ffccbc; font-weight: bold;">🟠 ${i18n.t('label_serves_area')}</span>` : ''}
                             ${(function() {
                                 let icons = '';
                                 const combined = `${company.tags || ''},${company.palvelutapa || ''}`.toLowerCase();
@@ -557,7 +557,7 @@ function addMarkersToMap(companies) {
                                 width: 100%;
                                 font-size: 0.8rem;
                                 box-sizing: border-box;
-                            ">Näytä tiedot</a>
+                            ">${i18n.t('btn_view_details')}</a>
                             <a href="${mapsUrl}" target="_blank" style="
                                 display: block;
                                 background: #28a745;
@@ -570,7 +570,7 @@ function addMarkersToMap(companies) {
                                 width: 100%;
                                 font-size: 0.8rem;
                                 box-sizing: border-box;
-                            ">📍 Googlessa</a>
+                            ">📍 ${i18n.t('btn_google_maps')}</a>
                         </div>
                     </div>
                 `;
@@ -668,10 +668,10 @@ function selectFromMap(companyId) {
  * Alustaa kaikki RSS-syötteet.
  */
 function initRSSFeeds() {
-    fetchRSSFeed('https://www.laukaa.fi/asukkaat/kategoria/uutiset/feed/', document.getElementById('news-container'), 'Ei uusia uutiset tällä hetkellä.', 'utf-8');
-    fetchRSSFeed('https://laukaa.oncloudos.com/cgi/DREQUEST.PHP?page=rss/meetingitems&show=30', document.getElementById('decisions-container'), 'Ei uusia päätöksiä.', 'iso-8859-1');
-    fetchRSSFeed('https://visitlaukaa.fi/evofeed', document.getElementById('events-container'), 'Ei tulevia tapahtumia.', 'utf-8');
-    fetchRSSFeed('https://laukaa.trimblefeedback.com/eFeedback/API/Feed/rss', document.getElementById('feedback-container'), 'Ei uusia palautteita.', 'utf-8');
+    fetchRSSFeed('https://www.laukaa.fi/asukkaat/kategoria/uutiset/feed/', document.getElementById('news-container'), i18n.t('rss_no_news'), 'utf-8');
+    fetchRSSFeed('https://laukaa.oncloudos.com/cgi/DREQUEST.PHP?page=rss/meetingitems&show=30', document.getElementById('decisions-container'), i18n.t('rss_no_decisions'), 'iso-8859-1');
+    fetchRSSFeed('https://visitlaukaa.fi/evofeed', document.getElementById('events-container'), i18n.t('rss_no_events'), 'utf-8');
+    fetchRSSFeed('https://laukaa.trimblefeedback.com/eFeedback/API/Feed/rss', document.getElementById('feedback-container'), i18n.t('rss_no_feedback'), 'utf-8');
     // Ladataan Lievestuoreen Blogger-syöte taustalla hakua varten
     fetchLievestuoreItems();
 }
@@ -724,10 +724,10 @@ window.storeLievestuoreItems = function(data) {
             title,
             link,
             date,
-            dateStr: date.toLocaleDateString('fi-FI'),
+            dateStr: date.toLocaleDateString(i18n.currentLang === 'fi' ? 'fi-FI' : 'en-GB'),
             imageUrl,
             description: (entry.summary ? entry.summary.$t : (entry.content ? entry.content.$t.replace(/<[^>]*>/g, '').substring(0, 120) : '')),
-            type: 'Tiedote',
+            type: i18n.t('label_news'),
             typeClass: 'news',
             isRss: true
         };
@@ -747,7 +747,7 @@ window.storeLievestuoreItems = function(data) {
 async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
     // Determine type based on URL or container
     const isEvent = url.includes('evofeed');
-    const typeLabel = isEvent ? 'Tapahtuma' : 'Tiedote';
+    const typeLabel = isEvent ? i18n.t('label_event') : i18n.t('label_news');
     const typeClass = isEvent ? 'event' : 'news';
 
     // Proxies...
@@ -810,7 +810,7 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
 
             for (let i = 0; i < items.length; i++) {
                 const item = items[i];
-                const title = (item.querySelector('title')?.textContent || 'Ei otsikkoa').trim();
+                const title = (item.querySelector('title')?.textContent || i18n.t('rss_no_title')).trim();
                 const link = item.querySelector('link')?.textContent || item.querySelector('link')?.getAttribute('href') || '#';
 
                 let dateObj = null;
@@ -885,7 +885,7 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
                     date: dateObj,
                     imageUrl,
                     description,
-                    dateStr: dateObj && !isNaN(dateObj) ? dateObj.toLocaleDateString('fi-FI') : '',
+                    dateStr: dateObj && !isNaN(dateObj) ? dateObj.toLocaleDateString(i18n.currentLang === 'fi' ? 'fi-FI' : 'en-GB') : '',
                     type: typeLabel,
                     typeClass: typeClass,
                     isRss: true
@@ -954,14 +954,14 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
                         analysisLink = `
                             <div style="margin-top: 10px;">
                                 <a href="asiahaku.html?cat=kunnanhallitus&issue=2026-02" class="btn-primary" style="font-size: 0.85rem; padding: 6px 14px; background: #28a745; display: inline-flex; align-items: center; gap: 6px;">
-                                    <span>🔍</span> Lue AI-analyysi
+                                    <span>🔍</span> ${i18n.t('btn_ai_analysis')}
                                 </a>
                             </div>`;
                     } else if (titleLower.includes('kunnanvaltuusto') && (titleLower.includes('maaliskuu 2026') || titleLower.includes('2.3.2026'))) {
                         analysisLink = `
                             <div style="margin-top: 10px;">
                                 <a href="asiahaku.html?cat=kunnanvaltuusto&issue=2026-03-v" class="btn-primary" style="font-size: 0.85rem; padding: 6px 14px; background: #28a745; display: inline-flex; align-items: center; gap: 6px;">
-                                    <span>🔍</span> Lue AI-analyysi
+                                    <span>🔍</span> ${i18n.t('btn_ai_analysis')}
                                 </a>
                             </div>`;
                     }
@@ -985,7 +985,7 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
 
     console.error(`Kaikki RSS-haut epäonnistuivat: ${url}`, lastError);
     if (container) {
-        container.innerHTML = `<p>Tietojen lataus epäonnistui (CORS/Network error).</p>`;
+        container.innerHTML = `<p>${i18n.t('error_rss_cors')}</p>`;
     }
 }
 
@@ -1031,7 +1031,7 @@ async function loadCompanyData() {
             if (cached && cacheTime && (Date.now() - parseInt(cacheTime) < 1800000)) { // 30 min cache
                 try {
                     json = JSON.parse(cached);
-                    console.log('Käytetään välimuistissa olevaa yritysdataa');
+                    console.log(i18n.t('log_cache_used'));
                 } catch (e) {
                     console.warn('Välimuistidatan parsiminen epäonnistui:', e);
                 }
@@ -1120,7 +1120,7 @@ async function loadCompanyData() {
                             company.searchExtraInfo = searchExtras[rowId].toLowerCase();
                         }
                     });
-                    console.log('Lisätiedot haulle ladattu onnistuneesti.');
+                    console.log(i18n.t('log_extras_loaded'));
                 }
             } catch (e) {
                 console.warn('Hakulisätietojen lataus epäonnistui:', e);
@@ -1139,7 +1139,7 @@ async function loadCompanyData() {
                                 company.profiling = profilingData.profiles[company.id];
                             }
                         });
-                        console.log('Yritysprofilointi ladattu onnistuneesti.');
+                        console.log(i18n.t('log_profiling_loaded'));
                     }
                 }
             } catch (e) {
@@ -1227,9 +1227,8 @@ async function loadCompanyData() {
             console.error('Virhe yritysdatan latauksessa:', error);
             // Don't append to body in all pages, only if we are in a context where it's useful
             if (document.getElementById('catalog-list') || document.getElementById('palvelu-container')) {
-                const errorBanner = document.createElement('div');
                 errorBanner.style = "background:red;color:white;padding:1rem;position:fixed;bottom:0;left:0;right:0;z-index:9999;";
-                errorBanner.textContent = 'Virhe yritysdatan latauksessa. Tarkista verkkoyhteys.';
+                errorBanner.textContent = i18n.t('error_load_failed_network');
                 document.body.appendChild(errorBanner);
             }
             return [];
@@ -1473,20 +1472,19 @@ function initUserLocation() {
         locationInput.value = savedName;
     }
     if (savedName && statusEl) {
-        statusEl.textContent = `Asetettu sijainti: ${savedName}`;
+        statusEl.textContent = `${i18n.t('status_location_set')}: ${savedName}`;
     }
 
     if (locationInput) {
         locationInput.addEventListener('change', async () => {
             const query = locationInput.value.trim();
             if (!query) {
-                localStorage.removeItem('userCoords');
                 localStorage.removeItem('userLocationName');
-                if (statusEl) statusEl.textContent = 'Sijaintia ei asetettu.';
+                if (statusEl) statusEl.textContent = i18n.t('status_location_not_set');
                 return;
             }
 
-            if (statusEl) statusEl.textContent = 'Haetaan koordinaatteja...';
+            if (statusEl) statusEl.textContent = i18n.t('status_fetching_coords');
 
             try {
                 // Taajamatarkistus (nopea)
@@ -1505,7 +1503,7 @@ function initUserLocation() {
                     localStorage.setItem('userCoords', JSON.stringify(coordsObj));
                     localStorage.setItem('userLocationName', query);
                     window.userCoords = coordsObj;
-                    if (statusEl) statusEl.textContent = `Sijainti asetettu: ${query}`;
+                    if (statusEl) statusEl.textContent = `${i18n.t('status_location_set')}: ${query}`;
                     if (typeof filterCatalog === 'function') filterCatalog();
                     return;
                 }
@@ -1520,24 +1518,24 @@ function initUserLocation() {
                     localStorage.setItem('userCoords', JSON.stringify(coordsObj));
                     localStorage.setItem('userLocationName', query);
                     window.userCoords = coordsObj;
-                    if (statusEl) statusEl.textContent = `Sijainti asetettu: ${query}`;
+                    if (statusEl) statusEl.textContent = `${i18n.t('status_location_set')}: ${query}`;
                     if (typeof filterCatalog === 'function') filterCatalog();
                 } else {
-                    if (statusEl) statusEl.textContent = 'Osoitetta ei löytynyt. Kokeile tarkempaa osoitetta.';
+                    if (statusEl) statusEl.textContent = i18n.t('status_address_not_found_precise');
                 }
             } catch (err) {
                 console.error("Geocoding error:", err);
-                if (statusEl) statusEl.textContent = 'Virhe haussa. Yritä uudelleen.';
+                if (statusEl) statusEl.textContent = i18n.t('status_search_error');
             }
         });
     }
 
     if (locateMeBtn) {
         locateMeBtn.addEventListener('click', () => {
-            if (statusEl) statusEl.textContent = 'Paikannetaan...';
+            if (statusEl) statusEl.textContent = i18n.t('status_locating');
             
             if (!navigator.geolocation) {
-                if (statusEl) statusEl.textContent = 'Selaimesi ei tue paikannusta.';
+                if (statusEl) statusEl.textContent = i18n.t('status_geo_unsupported');
                 return;
             }
 
@@ -1547,13 +1545,13 @@ function initUserLocation() {
                     localStorage.setItem('userCoords', JSON.stringify(coords));
                     localStorage.setItem('userLocationName', 'Nykyinen sijainti');
                     window.userCoords = coords;
-                    if (locationInput) locationInput.value = 'Nykyinen sijainti';
-                    if (statusEl) statusEl.textContent = 'Sijainti päivitetty nykyiseen paikkaasi.';
+                    if (locationInput) locationInput.value = i18n.currentLang === 'fi' ? 'Nykyinen sijainti' : 'Current location';
+                    if (statusEl) statusEl.textContent = i18n.t('status_location_updated');
                     if (typeof filterCatalog === 'function') filterCatalog();
                 },
                 (err) => {
                     console.warn("Geolocation error:", err);
-                    if (statusEl) statusEl.textContent = 'Paikannus epäonnistui. Salli sijainti selaimessa.';
+                    if (statusEl) statusEl.textContent = i18n.t('status_geo_failed');
                 }
             );
         });

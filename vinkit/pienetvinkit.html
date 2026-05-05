@@ -125,10 +125,29 @@
         const urlParams = new URLSearchParams(window.location.search);
         const filesParam = urlParams.get('files'); // esim. "sauna,menokohteet-jyvas"
         const maxTips = parseInt(urlParams.get('limit')) || 3; // Kuinka monta vinkkiä näytetään max
+        const lang = urlParams.get('lang') || 'fi';
+
+        const translations = {
+            fi: {
+                header: "💡 Pieniä vinkkejä sinulle",
+                place: "Paikka",
+                contact: "Yhteystiedot"
+            },
+            en: {
+                header: "💡 Small tips for you",
+                place: "Place",
+                contact: "Contact"
+            }
+        };
+
+        const t = translations[lang] || translations.fi;
 
         async function loadTips() {
             const container = document.getElementById('tips-container');
             const wrapper = document.getElementById('tips-wrapper');
+            const header = document.getElementById('tips-header');
+
+            if (header) header.textContent = t.header;
 
             if (!filesParam) {
                 wrapper.style.display = 'none';
@@ -172,8 +191,8 @@
                     ${tip.nettilinkki ? `<div><a href="${tip.nettilinkki}" target="_blank" class="tip-link-raw">${tip.nettilinkki}</a></div>` : ''}
                     ${tip.kuvaus ? `<div class="tip-desc">${tip.kuvaus.replace(/@@/g, '')}</div>` : ''}
                     <div class="tip-details">
-                        ${tip.paikka ? `<div><strong>Paikka:</strong> ${tip.paikka}</div>` : ''}
-                        ${tip.yhteystiedot ? `<div><strong>Yhteystiedot:</strong> ${tip.yhteystiedot}</div>` : ''}
+                        ${tip.paikka ? `<div><strong>${t.place}:</strong> ${tip.paikka}</div>` : ''}
+                        ${tip.yhteystiedot ? `<div><strong>${t.contact}:</strong> ${tip.yhteystiedot}</div>` : ''}
                         ${tip.lisatiedot ? `<div class="tip-extra">(${tip.lisatiedot})</div>` : ''}
                     </div>
                 </div>

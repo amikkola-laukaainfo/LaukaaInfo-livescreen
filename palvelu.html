@@ -516,12 +516,12 @@
 
     <header id="palvelu-header" class="palvelu-hero">
         <div class="icon-large" id="hero-icon" style="font-size: 4rem; margin-bottom: 1rem;"></div>
-        <h1 id="hero-title">Ladataan...</h1>
+        <h1 id="hero-title" data-i18n="status_loading">Ladataan...</h1>
         <p id="hero-desc"></p>
         
         <div class="location-bar">
             <span>📍</span>
-            <input type="text" id="user-location-input" placeholder="Sijaintisi (esim. Laukaa)" autocomplete="off">
+            <input type="text" id="user-location-input" data-i18n="[placeholder]placeholder_your_location" placeholder="Sijaintisi (esim. Laukaa)" autocomplete="off">
             <button class="btn-locate" id="locate-me-btn" title="Hae sijaintini">🎯</button>
         </div>
         <div id="location-status"></div>
@@ -538,7 +538,7 @@
 
         <section id="results-container" style="display: none;">
             <div class="need-header">
-                <h2>Suositellut palvelut</h2>
+                <h2 data-i18n="palvelu_results_title">Suositellut palvelut</h2>
                 <p id="results-count"></p>
             </div>
             <div id="results-list" class="results-grid">
@@ -546,7 +546,7 @@
             </div>
 
             <div id="next-steps-container" class="next-steps-section" style="display: none;">
-                <h3 style="text-align: center; font-family: var(--accent-font); font-size: 1.5rem;">Seuraavaksi saatat tarvita myös näitä:</h3>
+                <h3 style="text-align: center; font-family: var(--accent-font); font-size: 1.5rem;" data-i18n="palvelu_next_steps">Seuraavaksi saatat tarvita myös näitä:</h3>
                 <div id="next-steps-list" class="next-steps-grid"></div>
             </div>
 
@@ -567,42 +567,42 @@
     <div id="inquiry-overlay" class="modal-overlay">
         <div class="inquiry-modal">
             <button class="close-modal" onclick="closeInquiryModal()">&times;</button>
-            <h2 id="inquiry-title">Pyydä tarjous</h2>
-            <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 20px;">Tämä lomake ei ole vielä käytössä, kun yrityksellä on ilmaisnäkyvyys sivustolla.</p>
+            <h2 id="inquiry-title" data-i18n="palvelu_inquiry_title">Pyydä tarjous</h2>
+            <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 20px;" data-i18n="palvelu_inquiry_unavailable">Tämä lomake ei ole vielä käytössä, kun yrityksellä on ilmaisnäkyvyys sivustolla.</p>
             <form id="inquiry-form" onsubmit="submitInquiry(event)">
                 <input type="hidden" id="inquiry-company-id">
                 <div class="form-group">
-                    <label>Nimi</label>
-                    <input type="text" required placeholder="Matti Meikäläinen">
+                    <label data-i18n="label_name">Nimi</label>
+                    <input type="text" required data-i18n="[placeholder]placeholder_name" placeholder="Matti Meikäläinen">
                 </div>
                 <div class="form-group">
-                    <label>Sähköposti</label>
-                    <input type="email" required placeholder="matti@esimerkki.fi">
+                    <label data-i18n="label_email">Sähköposti</label>
+                    <input type="email" required data-i18n="[placeholder]placeholder_email" placeholder="matti@esimerkki.fi">
                 </div>
                 <div class="form-group">
-                    <label>Puhelin</label>
-                    <input type="tel" placeholder="040 123 4567">
+                    <label data-i18n="label_phone">Puhelin</label>
+                    <input type="tel" data-i18n="[placeholder]placeholder_phone" placeholder="040 123 4567">
                 </div>
                 <div class="form-group">
-                    <label>Tilaisuuden ajankohta</label>
+                    <label data-i18n="label_event_date">Tilaisuuden ajankohta</label>
                     <input type="date" required>
                 </div>
                 <div class="form-group">
-                    <label>Arvioitu henkilömäärä</label>
-                    <input type="number" min="1" placeholder="Esim. 50">
+                    <label data-i18n="label_pax">Arvioitu henkilömäärä</label>
+                    <input type="number" min="1" data-i18n="[placeholder]placeholder_pax" placeholder="Esim. 50">
                 </div>
                 <div class="form-group">
-                    <label>Lisätiedot</label>
-                    <textarea rows="4" placeholder="Kerro tarkemmin tarpeistasi..."></textarea>
+                    <label data-i18n="label_more_info">Lisätiedot</label>
+                    <textarea rows="4" data-i18n="[placeholder]placeholder_more_info" placeholder="Kerro tarkemmin tarpeistasi..."></textarea>
                 </div>
-                <button type="submit" class="btn-radar" style="width: 100%; background: var(--primary-blue);">Lähetä tarjouspyyntö</button>
+                <button type="submit" class="btn-radar" style="width: 100%; background: var(--primary-blue);" data-i18n="btn_send_inquiry">Lähetä tarjouspyyntö</button>
             </form>
         </div>
     </div>
 
     <footer style="margin-top: 6rem;">
         <div class="footer-content">
-            <p>© 2026 LaukaaInfo – Palvelua ylläpitää Mediazoo.fi</p>
+            <p data-i18n="footer_copyright">© 2026 LaukaaInfo – Palvelua ylläpitää Mediazoo.fi</p>
         </div>
     </footer>
 
@@ -755,7 +755,7 @@
                         `).join('')}
                     </div>
                     <div style="text-align: center;">
-                        <button class="btn-radar btn-continue" onclick="nextStep()" style="background: var(--primary-blue);">Jatka &raquo;</button>
+                        <button class="btn-radar btn-continue" onclick="nextStep()" style="background: var(--primary-blue);" data-i18n="btn_continue">Jatka &raquo;</button>
                     </div>
                 `;
             } else {
@@ -947,7 +947,7 @@
                 <div class="step-header fade-in" style="text-align:center;">
                     <div style="font-size:2.5rem;margin-bottom:1rem;">✅</div>
                     <h2 style="color:var(--primary-blue);">${message}</h2>
-                    <p style="opacity:0.7;">Jatketaan automaattisesti...</p>
+                    <p style="opacity:0.7;" data-i18n="skip_notice">Jatketaan automaattisesti...</p>
                 </div>
             `;
         }
@@ -1041,7 +1041,7 @@
             if (!window.allCompanies || window.allCompanies.length === 0) {
                 if (typeof loadCompanyData === 'function') await loadCompanyData();
                 if (!window.allCompanies || window.allCompanies.length === 0) {
-                    if (countEl) countEl.textContent = "Virhe: Yritystietoja ei voitu ladata.";
+                    if (countEl) countEl.textContent = i18n.t('error_load_companies');
                     return;
                 }
             }
@@ -1056,7 +1056,7 @@
 
             let filterProfiling = new URLSearchParams(window.location.search).get('filter_profiling');
             if (filterProfiling && selectedOptions.length === 0) {
-                selectedOptions.push({ label: "Tarkennettu haku", tags: [] });
+                selectedOptions.push({ label: { "fi": "Tarkennettu haku", "en": "Advanced search" }, tags: [] });
             }
 
             const needToProfilingMap = {
@@ -1090,7 +1090,7 @@
             });
 
             if (featureOptions.length === 0 && requestedCapacity > 0) {
-                featureOptions.push({ label: "Sopivat tilat", tags: [] });
+                featureOptions.push({ label: { "fi": "Sopivat tilat", "en": "Suitable venues" }, tags: [] });
             }
 
             const requestedFeatures = {
@@ -1565,8 +1565,8 @@
             currentResultsGroups = [];
             
             if (matchingGroupsData.length === 0) {
-                if (countEl) countEl.textContent = "Ei vielä yrityksiä ilmoittajissa.";
-                if (list) list.innerHTML = '<div class="no-results"><h3>Hups!</h3><p>Kokeile eri valintoja tai palaa myöhemmin.</p></div>';
+                if (countEl) countEl.textContent = i18n.t('error_no_companies');
+                if (list) list.innerHTML = `<div class="no-results"><h3>${i18n.t('palvelu_no_results_title')}</h3><p>${i18n.t('palvelu_no_results_desc')}</p></div>`;
                 return;
             }
 
@@ -1587,7 +1587,7 @@
                 const isAnchorGroup = (idx === anchorGroupIndex);
                 
                 totalFoundCount += companiesForOpt.length;
-                htmlResults += `<div class="group-title"><span>📍</span> ${opt.label}</div>`;
+                htmlResults += `<div class="group-title"><span>📍</span> ${i18n.getText(opt.label)}</div>`;
 
 
                 // Haetaan valitun ankkurin koordinaatit, jos sellainen on ja olemme MUIDEN ryhmien kohdalla
@@ -1695,13 +1695,13 @@
                 });
 
                 // Rajoitetaan näytettävien määrää (max 9 ellei laajennettu)
-                const groupId = opt.id || opt.label;
+                const groupId = opt.id || i18n.getText(opt.label);
                 const isExpanded = expandedGroups[groupId];
                 const visibleCompanies = isExpanded ? companiesForOpt : companiesForOpt.slice(0, 9);
                 const hasMore = companiesForOpt.length > 9;
 
                 currentResultsGroups.push({
-                    title: opt.label,
+                    title: i18n.getText(opt.label),
                     companies: visibleCompanies
                 });
 
@@ -1709,8 +1709,8 @@
                     htmlResults += `
                         <div style="grid-column: 1 / -1; padding: 2.5rem; background: #f8fafc; border-radius: 24px; border: 2px dashed #cbd5e1; text-align: center; color: #64748b;">
                             <div style="font-size: 2rem; margin-bottom: 0.5rem;">🏢</div>
-                            <div style="font-weight: 700; color: var(--primary-blue); font-size: 1.1rem; margin-bottom: 5px;">Ei vielä yrityksiä ilmoittajissa</div>
-                            <p style="margin: 0; font-size: 0.9rem; opacity: 0.8;">Tähän kategoriaan ei ole vielä ilmoitettu palveluntarjoajia.</p>
+                            <div style="font-weight: 700; color: var(--primary-blue); font-size: 1.1rem; margin-bottom: 5px;">${i18n.t('error_no_companies')}</div>
+                            <p style="margin: 0; font-size: 0.9rem; opacity: 0.8;">${i18n.t('palvelu_no_results_desc')}</p>
                         </div>
                     `;
                 } else {
@@ -1718,16 +1718,17 @@
                         let anchorCoords = null;
                         if (anchorLat !== null && anchorLon !== null) anchorCoords = { lat: anchorLat, lng: anchorLon };
                         const isSelected = (selectedAnchorCompanyId === c.id);
-                        let cardHtml = renderCompanyCard(c, globalRequestedCapacity, globalProfilingKey, globalActiveCollaboratorsSet, anchorCoords, isAnchorGroup, isSelected, opt.label);
+                        let cardHtml = renderCompanyCard(c, globalRequestedCapacity, globalProfilingKey, globalActiveCollaboratorsSet, anchorCoords, isAnchorGroup, isSelected, i18n.getText(opt.label));
                         htmlResults += cardHtml;
                     });
                 }
 
                 if (hasMore && !isExpanded) {
+                    const moreCount = companiesForOpt.length - 9;
                     htmlResults += `
                         <div class="show-more-container">
                             <button class="btn-show-more" onclick="toggleGroupExpansion('${groupId.replace(/'/g, "\\'")}')">
-                                <i>➕</i><span>Näytä lisää (${companiesForOpt.length - 9} kohdetta)</span>
+                                <i>➕</i><span>${i18n.t('btn_show_more_count').replace('{count}', moreCount)}</span>
                             </button>
                         </div>
                     `;
@@ -1735,10 +1736,10 @@
             });
 
             if (totalFoundCount === 0) {
-                if (countEl) countEl.textContent = "Ei vielä yrityksiä ilmoittajissa.";
+                if (countEl) countEl.textContent = i18n.t('error_no_companies');
                 if (list) list.innerHTML = htmlResults;
             } else {
-                if (countEl) countEl.textContent = `Löysimme ${totalFoundCount} ehdotusta.`;
+                if (countEl) countEl.textContent = i18n.t('palvelu_found_count').replace('{count}', totalFoundCount);
                 if (list) list.innerHTML = htmlResults;
                 renderTaxonomyInfo(globalProfilingKey);
                 renderNextSteps(globalProfilingKey);
@@ -1781,13 +1782,15 @@
 
             if (recommendations.size > 0) {
                 nextStepsContainer.style.display = 'block';
-                nextStepsList.innerHTML = Array.from(recommendations).map(rec => `
-                    <div class="next-step-card" onclick="searchNextStep('${rec}')">
+                nextStepsList.innerHTML = Array.from(recommendations).map(rec => {
+                    const recText = typeof rec === 'string' ? rec : i18n.getText(rec);
+                    return `
+                    <div class="next-step-card" onclick="searchNextStep('${recText.replace(/'/g, "\\'")}')">
                         <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🔍</div>
-                        <div style="font-weight: 700; color: var(--primary-blue);">${rec}</div>
-                        <div style="font-size: 0.75rem; color: #64748b; margin-top: 4px;">Etsi palveluntarjoajia</div>
+                        <div style="font-weight: 700; color: var(--primary-blue);">${recText}</div>
+                        <div style="font-size: 0.75rem; color: #64748b; margin-top: 4px;">${i18n.t('btn_search_providers')}</div>
                     </div>
-                `).join('');
+                `}).join('');
             }
         }
 
@@ -1808,9 +1811,10 @@
                 const isServiceType = taxonomyData.serviceTypes.includes(r.to.toUpperCase());
                 
                 // Kaunistetaan label: Intentin label TAI service typen nimi nätisti TAI id
-                const label = targetIntent ? targetIntent.label : (isServiceType ? r.to.charAt(0).toUpperCase() + r.to.slice(1).toLowerCase() : r.to);
+                const label = targetIntent ? i18n.getText(targetIntent.label) : (isServiceType ? r.to.charAt(0).toUpperCase() + r.to.slice(1).toLowerCase() : r.to);
                 
-                let typeText = r.type === 'cross-sell' ? 'Lisäpalvelu' : (r.type === 'supporting' ? 'Tukipalvelu' : 'Liittyy tähän');
+                let typeKey = r.type === 'cross-sell' ? 'taxonomy_cross_sell' : (r.type === 'supporting' ? 'taxonomy_supporting' : 'taxonomy_related');
+                let typeText = i18n.t(typeKey);
                 return `<span class="taxonomy-relation-tag">${typeText}: ${label}</span>`;
             }).join('');
 
@@ -1823,8 +1827,8 @@
                 <div class="taxonomy-info-box">
                     <div class="taxonomy-info-icon">💡</div>
                     <div class="taxonomy-info-content">
-                        <h4>Tiesitkö? Palveluketjun suositukset</h4>
-                        <p>Tämä haku perustuu LaukaaInfon taksonomiaan. <strong>${intent.label}</strong> -kokonaisuuteen liittyy usein seuraavia tarpeita:</p>
+                        <h4>${i18n.t('palvelu_taxonomy_title')}</h4>
+                        <p>${i18n.t('palvelu_taxonomy_desc').replace('{intent}', i18n.getText(intent.label))}</p>
                         <div style="margin-top: 10px;">
                             ${relationsHtml}
                         </div>
@@ -1882,7 +1886,7 @@
             }
 
             const tipsQuery = tipsFiles.join(',');
-            const iframeUrl = `vinkit/pienetvinkit.html?files=${tipsQuery}&limit=3`;
+            const iframeUrl = `vinkit/pienetvinkit.html?files=${tipsQuery}&limit=3&lang=${i18n.currentLang}`;
 
             tipsContainer.innerHTML = `<iframe src="${iframeUrl}" style="width: 100%; border: none; min-height: 250px; overflow: hidden;" id="tips-iframe" scrolling="no"></iframe>`;
             tipsContainer.style.display = 'block';
@@ -1916,17 +1920,17 @@
             if (isLievestuore && isVenueNeed) {
                 container.innerHTML = `
                     <div class="next-steps-section" style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border: 2px solid #7dd3fc; margin-top: 2rem; max-width: 1200px; margin-left: auto; margin-right: auto;">
-                        <h3 style="text-align: center; font-family: var(--accent-font); color: #0369a1; margin-bottom: 1rem; font-size: 1.5rem;">🏃 Kävelyreitti-vinkit Lievestuoreella</h3>
+                        <h3 style="text-align: center; font-family: var(--accent-font); color: #0369a1; margin-bottom: 1rem; font-size: 1.5rem;">${i18n.t('special_vinkit_title').replace('{location}', 'Lievestuoreella')}</h3>
                         <p style="text-align: center; font-size: 0.95rem; color: #0c4a6e; margin-bottom: 1.5rem; max-width: 700px; margin-left: auto; margin-right: auto;">
-                            Haluatko jaloitella juhlien lomassa tai tutustua alueeseen? Tässä suosituksemme:
+                            ${i18n.t('special_vinkit_desc')}
                         </p>
                         <div class="next-steps-grid" style="justify-content: center;">
                             <a href="https://laukaainfo.fi/tarinakartta.html?step=1&r=rantakavely-1#kavelyreitit-section" target="_blank" class="next-step-card" style="text-decoration: none; border-color: #7dd3fc;">
                                 <div style="font-size: 2rem; margin-bottom: 0.5rem;">🚶</div>
-                                <div style="font-weight: 800; color: var(--primary-blue); font-size: 1.1rem;">Lievestuoreen rantakävely</div>
-                                <p style="font-size: 0.85rem; color: #475569; margin: 8px 0;">Kaunis reitti järven rantamaisemissa, sopii mainiosti juhlapäivän happihyppelyyn.</p>
+                                <div style="font-weight: 800; color: var(--primary-blue); font-size: 1.1rem;">${i18n.t('lievestuore_rantakavely')}</div>
+                                <p style="font-size: 0.85rem; color: #475569; margin: 8px 0;">${i18n.t('lievestuore_rantakavely_desc')}</p>
                                 <div style="font-size: 0.75rem; font-weight: 700; color: #0369a1; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 5px;">
-                                    Avaa tarinakartta ja reitti &raquo;
+                                    ${i18n.t('btn_open_storymap')}
                                 </div>
                             </a>
                         </div>
@@ -1965,7 +1969,7 @@
             if (anchorCoords && c.lat && (c.lon || c.lng)) {
                 const dist = getHaversineDistance(anchorCoords.lat, anchorCoords.lng, parseFloat(c.lat), parseFloat(c.lon || c.lng));
                 const distStr = dist < 1 ? `${Math.round(dist * 1000)} m` : `${dist.toFixed(1)} km`;
-                distanceHtml = `<div class="dist-badge" style="background:#1e40af;color:white;">📍 ${distStr} valitusta tilasta</div>`;
+                distanceHtml = `<div class="dist-badge" style="background:#1e40af;color:white;">${i18n.t('dist_from_selected').replace('{dist}', distStr)}</div>`;
             } else {
                 const userCoordsRaw = localStorage.getItem('userCoords');
                 if (userCoordsRaw && c.lat && (c.lon || c.lng)) {
@@ -1973,7 +1977,7 @@
                         const u = JSON.parse(userCoordsRaw);
                         const dist = getHaversineDistance(u.lat, u.lng || u.lon, parseFloat(c.lat), parseFloat(c.lon || c.lng));
                         const distStr = dist < 1 ? `${Math.round(dist * 1000)} m` : `${dist.toFixed(1)} km`;
-                        distanceHtml = `<div class="dist-badge">🚗 ${distStr}</div>`;
+                        distanceHtml = `<div class="dist-badge">${i18n.t('dist_from_user').replace('{dist}', distStr)}</div>`;
                     } catch(e) {}
                 }
             }
@@ -1987,7 +1991,7 @@
                                 (core.node_links && core.node_links.includes('JUHLATILA') && core.node_links.includes('CATERING'));
                 
                 if (isHybrid) {
-                    badges += '<span class="hybrid-badge" style="background:#f0fdf4; color:#16a34a; border:1px solid #bbf7d0; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:bold; margin-right:5px;" title="Tarjoaa sekä tilan että palvelut">✨ MONIPALVELU</span>';
+                    badges += `<span class="hybrid-badge" style="background:#f0fdf4; color:#16a34a; border:1px solid #bbf7d0; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:bold; margin-right:5px;" title="${i18n.t('badge_hybrid_title')}">${i18n.t('badge_hybrid')}</span>`;
                 }
 
                 // Jos kyseessä on pitopalvelu-listaus, ei näytetä "Tilaan mahtuu max X hlö" -ilmoitusta, koska ruokaa riittää muuallekin
@@ -1996,8 +2000,8 @@
                 if (requestedCapacity > 0 && !isCateringGroup) {
                     const cap = getCompanyCapacity(c, profilingKey);
                     if (cap > 0) {
-                        if (cap >= requestedCapacity) capacityNote = `<div style="font-size:0.85rem; color:#16a34a; font-weight:700; margin-bottom:10px;">✅ Sopii: max n. ${cap} hlö</div>`;
-                        else capacityNote = `<div style="font-size:0.85rem; color:#d97706; font-weight:700; margin-bottom:10px;">⚠️ Huom: Tilaan mahtuu n. ${cap} hlö</div>`;
+                        if (cap >= requestedCapacity) capacityNote = `<div style="font-size:0.85rem; color:#16a34a; font-weight:700; margin-bottom:10px;">${i18n.t('capacity_fits').replace('{cap}', cap)}</div>`;
+                        else capacityNote = `<div style="font-size:0.85rem; color:#d97706; font-weight:700; margin-bottom:10px;">${i18n.t('capacity_note').replace('{cap}', cap)}</div>`;
                     }
                 }
                 if (catData?.is_accessible) badges += '<span title="Esteetön pääsy">♿</span>';
@@ -2006,7 +2010,7 @@
                 if (core.emergency_available) badges += '<span title="Päivystys">🚨</span>';
             }
 
-            const btnAnchorText = isSelected ? 'Poista valinta' : 'Valitse kohde';
+            const btnAnchorText = isSelected ? i18n.t('btn_deselect_anchor') : i18n.t('btn_select_anchor');
             
             const core = c.profiling?.core || {};
             const email = (core.email || c.email || '').trim();
@@ -2025,13 +2029,13 @@
             if (hasEmail) {
                 actionHtml += `
                 <button type="button" class="btn-action primary-action" onclick="event.preventDefault(); event.stopPropagation(); openInquiryModal('${c.id}', '${c.nimi.replace(/'/g, "\\'")}')">
-                    <i>✉️</i><span>Lähetä kysely</span>
+                    <i>✉️</i><span>${i18n.t('btn_send_inquiry_short')}</span>
                 </button>`;
             }
 
             actionHtml += `
                 <a href="${cardUrl}" class="btn-action">
-                    <i>📄</i><span>Avaa yrityskortti</span>
+                    <i>📄</i><span>${i18n.t('btn_view_card')}</span>
                 </a>`;
                 
             if (isAnchorGroup) {
@@ -2052,13 +2056,13 @@
                              addressLower.includes('vehniä') ||
                              (c.alue_slug && c.alue_slug.length > 0);
 
-            const fallbackSlogan = isLaukaa ? 'Paikallinen palveluntarjoaja Laukaassa.' : 'Palveluntarjoaja LaukaaInfo-verkostossa.';
+            const fallbackSlogan = isLaukaa ? i18n.t('local_provider_laukaa') : i18n.t('network_provider');
 
             return `
                 <div class="${wrapperClass} ${isTopMatch ? 'top-match' : ''} ${isPartner ? 'partner-boost' : ''}">
-                    ${isPartner ? '<div class="result-badge badge-partner">YHTEISTYÖKUMPPANI</div>' : ''}
-                    ${isTopMatch && !isPartner ? '<div class="result-badge badge-top">TOP MATCH</div>' : ''}
-                    ${isPremium && !isTopMatch && !isPartner ? '<div class="result-badge badge-premium">PREMIUM</div>' : ''}
+                    ${isPartner ? `<div class="result-badge badge-partner">${i18n.t('badge_partner')}</div>` : ''}
+                    ${isTopMatch && !isPartner ? `<div class="result-badge badge-top">${i18n.t('badge_top')}</div>` : ''}
+                    ${isPremium && !isTopMatch && !isPartner ? `<div class="result-badge badge-premium">${i18n.t('badge_premium')}</div>` : ''}
                     <div class="result-icon">${icon}</div>
                     <h3>${c.nimi}</h3>
                     <div class="slogan">${(c.mainoslause || (c.esittely ? c.esittely.substring(0, 100) + '...' : fallbackSlogan)).replace(/@@/g, '')}</div>
@@ -2091,8 +2095,8 @@
                 const fits = core.fits_for || {};
                 
                 // Taso 1: Pääkontekstin soveltuvuus
-                if (fits[profilingKey] >= 80) reasons.push("Pääasiallinen palvelualue");
-                else if (fits[profilingKey] >= 40) reasons.push("Sopii hyvin tilaisuuteen");
+                if (fits[profilingKey] >= 80) reasons.push(i18n.t('match_main_area'));
+                else if (fits[profilingKey] >= 40) reasons.push(i18n.t('match_fits_well'));
 
                 // Taso 2: Sub-context match (Erikoistuminen)
                 if (selections._sub_contexts && selections._sub_contexts.length > 0) {
@@ -2107,7 +2111,7 @@
                     }
                     
                     if (isSubMatch) {
-                        reasons.push("Erikoistunut tähän tarpeeseen");
+                        reasons.push(i18n.t('match_specialized'));
                     }
                 }
 
@@ -2115,15 +2119,15 @@
                 const isFoodService = ((c.kategoria || '') + ' ' + (c.tags || '') + ' ' + (c.nimi || '')).toLowerCase().includes('pitopalvelu');
                 if (requestedCapacity > 0 && !isFoodService) {
                     const cap = getCompanyCapacity(c, profilingKey);
-                    if (cap >= requestedCapacity) reasons.push("Kapasiteetti riittää");
+                    if (cap >= requestedCapacity) reasons.push(i18n.t('match_capacity_ok'));
                 }
 
                 const events = c.profiling.events_and_celebrations || {};
-                if (events.is_accessible && selections.palvelut?.some(s => s.label?.toLowerCase()?.includes('esteetön'))) reasons.push("Esteetön tila");
-                if (events.has_sauna && selections.palvelut?.some(s => s.label?.toLowerCase()?.includes('sauna'))) reasons.push("Saunatilat");
+                if (events.is_accessible && selections.palvelut?.some(s => s.label?.fi?.toLowerCase()?.includes('esteetön') || s.label?.en?.toLowerCase()?.includes('accessible'))) reasons.push(i18n.t('match_accessible'));
+                if (events.has_sauna && selections.palvelut?.some(s => s.label?.fi?.toLowerCase()?.includes('sauna') || s.label?.en?.toLowerCase()?.includes('sauna'))) reasons.push(i18n.t('match_sauna'));
             }
 
-            if (reasons.length === 0) return "Sopii annettuihin kriteereihin";
+            if (reasons.length === 0) return i18n.t('match_default');
             // Palautetaan enintään kaksi parasta perustelua
             return reasons.slice(0, 2).join(" • ");
         }
@@ -2198,13 +2202,13 @@
                         const coords = { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
                         localStorage.setItem('userCoords', JSON.stringify(coords));
                         window.userCoords = coords;
-                        statusEl.textContent = "Sijainti päivitetty ✅";
+                        statusEl.textContent = i18n.t('status_location_updated');
                         if (document.getElementById('results-container').style.display !== 'none') showResults();
                     } else {
-                        statusEl.textContent = "Sijaintia ei löytynyt. Kokeile tarkempaa osoitetta.";
+                        statusEl.textContent = i18n.t('status_address_not_found_precise');
                     }
                 } catch(e) {
-                    statusEl.textContent = "Virhe sijainnin haussa.";
+                    statusEl.textContent = i18n.t('status_search_error');
                 }
             });
 
@@ -2215,7 +2219,7 @@
                         return;
                     }
 
-                    statusEl.textContent = "Paikannetaan...";
+                    statusEl.textContent = i18n.t('status_locating');
                     navigator.geolocation.getCurrentPosition(async (pos) => {
                         const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
                         window.userCoords = coords;
@@ -2228,15 +2232,15 @@
                             const name = data.display_name.split(',')[0] || "Oma sijainti";
                             locationInput.value = name;
                             localStorage.setItem('userLocationName', name);
-                            statusEl.textContent = "Sijainti päivitetty ✅";
+                            statusEl.textContent = i18n.t('status_location_updated');
                         } catch(e) {
-                            locationInput.value = "Oma sijainti";
-                            statusEl.textContent = "Sijainti päivitetty ✅";
+                            locationInput.value = i18n.t('label_my_location');
+                            statusEl.textContent = i18n.t('status_location_updated');
                         }
                         
                         if (document.getElementById('results-container').style.display !== 'none') showResults();
                     }, () => {
-                        statusEl.textContent = "Sijainnin haku epäonnistui.";
+                        statusEl.textContent = i18n.t('status_geo_failed');
                     });
                 });
             }
@@ -2255,7 +2259,7 @@
                 <!DOCTYPE html>
                 <html>
                 <head>
-                    <title>Palvelusuositukset - ${needTitle}</title>
+                    <title>${i18n.t('print_recommendations_title').replace('{title}', needTitle)}</title>
                     <style>
                         body { font-family: 'Inter', sans-serif; padding: 40px; color: #333; line-height: 1.5; }
                         h1 { color: #1e40af; border-bottom: 2px solid #1e40af; padding-bottom: 10px; }
@@ -2271,9 +2275,9 @@
                     </style>
                 </head>
                 <body>
-                    <h1>LaukaaInfo - Palvelusuositukset</h1>
-                    <p><strong>Tarve:</strong> ${needTitle}</p>
-                    <p>Tulostettu: ${new Date().toLocaleDateString('fi-FI')} klo ${new Date().toLocaleTimeString('fi-FI')}</p>
+                    <h1>${i18n.t('print_header')}</h1>
+                    <p><strong>${i18n.t('print_need')}:</strong> ${needTitle}</p>
+                    <p>${i18n.t('print_date').replace('{date}', new Date().toLocaleDateString(i18n.currentLang === 'fi' ? 'fi-FI' : 'en-GB')).replace('{time}', new Date().toLocaleTimeString(i18n.currentLang === 'fi' ? 'fi-FI' : 'en-GB'))}</p>
             `;
 
             currentResultsGroups.forEach(group => {
@@ -2291,9 +2295,9 @@
                         return s.trim();
                     };
                     
-                    const phone = cleanContact(core.phone || c.puhelin || c.phone) || 'Ei puhelinta';
-                    const email = cleanContact(core.email || c.email) || 'Ei sähköpostia';
-                    const website = cleanContact(core.website || c.nettisivu || c.website) || 'Ei verkkosivua';
+                    const phone = cleanContact(core.phone || c.puhelin || c.phone) || i18n.t('print_no_phone');
+                    const email = cleanContact(core.email || c.email) || i18n.t('print_no_email');
+                    const website = cleanContact(core.website || c.nettisivu || c.website) || i18n.t('print_no_website');
                     
                     html += `
                         <div class="company">
@@ -2317,7 +2321,7 @@
                         © 2026 LaukaaInfo – www.laukaainfo.fi – Palvelua ylläpitää Mediazoo.fi
                     </div>
                     <div class="no-print" style="margin-top: 30px; text-align: center;">
-                        <button onclick="window.print()" style="padding: 10px 20px; background: #1e40af; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">Tulosta nyt</button>
+                        <button onclick="window.print()" style="padding: 10px 20px; background: #1e40af; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">${i18n.t('print_now')}</button>
                     </div>
                 </body>
                 </html>
@@ -2328,7 +2332,7 @@
         }
         function openInquiryModal(id, name) {
             document.getElementById('inquiry-company-id').value = id;
-            document.getElementById('inquiry-title').textContent = 'Pyydä tarjous: ' + name;
+            document.getElementById('inquiry-title').textContent = i18n.t('inquiry_request_quote') + name;
             document.getElementById('inquiry-overlay').classList.add('active');
         }
 
@@ -2338,7 +2342,7 @@
 
         function submitInquiry(e) {
             e.preventDefault();
-            alert("Kiitos! Tarjouspyyntö on lähetetty (demo). Oikeassa versiossa tämä tieto menisi suoraan palveluntarjoajalle.");
+            alert(i18n.t('alert_inquiry_sent'));
             closeInquiryModal();
             document.getElementById('inquiry-form').reset();
         }
@@ -2347,6 +2351,8 @@
         document.addEventListener('DOMContentLoaded', () => {
             initPalvelu();
             initUserLocation();
+            // Translate static elements
+            if (window.i18n) window.i18n.translatePage();
         });
     </script>
 </body>
