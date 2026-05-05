@@ -1,73 +1,76 @@
 const NEEDS_CONFIG = {
     "haat": {
-        "title": "Häät",
+        "title": { "fi": "Häät", "en": "Weddings" },
         "icon": "💒",
-        "description": "Suunnittele unelmiesi häät Laukaassa. Löydä tilat, tarjoilut ja elämykset.",
+        "description": { 
+            "fi": "Suunnittele unelmiesi häät Laukaassa. Löydä tilat, tarjoilut ja elämykset.",
+            "en": "Plan your dream wedding in Laukaa. Find venues, catering, and experiences."
+        },
         "profilointi_context": "events_and_celebrations",
         "steps": [
             {
                 "id": "tarkennus",
                 "hide_results": true,
-                "question": "Millaista hääjuhlaa suunnittelette?",
+                "question": { "fi": "Millaista hääjuhlaa suunnittelette?", "en": "What kind of wedding are you planning?" },
                 "options": [
-                    { "label": "Perinteiset häät", "sub_context": "perinteiset häät", "tags": ["häät"] },
-                    { "label": "Pienet häät / Intiimi juhla", "sub_context": "pienet häät", "tags": ["häät"] },
-                    { "label": "Teemahäät / Modernit häät", "sub_context": "teemahäät", "tags": ["häät"] },
-                    { "label": "Vain vihkiminen ja kahvitus", "sub_context": "vihkiminen", "tags": ["häät"] }
+                    { "label": { "fi": "Perinteiset häät", "en": "Traditional Wedding" }, "sub_context": "perinteiset häät", "tags": ["häät"] },
+                    { "label": { "fi": "Pienet häät / Intiimi juhla", "en": "Small Wedding / Intimate Celebration" }, "sub_context": "pienet häät", "tags": ["häät"] },
+                    { "label": { "fi": "Teemahäät / Modernit häät", "en": "Theme Wedding / Modern Wedding" }, "sub_context": "teemahäät", "tags": ["häät"] },
+                    { "label": { "fi": "Vain vihkiminen ja kahvitus", "en": "Ceremony and Coffee Reception only" }, "sub_context": "vihkiminen", "tags": ["häät"] }
                 ]
             },
             {
                 "id": "kapasiteetti",
-                "question": "Kuinka paljon henkilöitä tilaisuuteen osallistuu (arvio)?",
+                "question": { "fi": "Kuinka paljon henkilöitä tilaisuuteen osallistuu (arvio)?", "en": "How many people will attend the event (estimate)?" },
                 "options": [
-                    { "label": "Alle 20 henkilöä", "capacity_req": 20, "tags": [] },
-                    { "label": "Noin 20 - 50 henkilöä", "capacity_req": 50, "tags": [] },
-                    { "label": "Noin 50 - 100 henkilöä", "capacity_req": 100, "tags": [] },
-                    { "label": "Yli 100 henkilöä", "capacity_req": 150, "tags": [] }
+                    { "label": { "fi": "Alle 20 henkilöä", "en": "Less than 20 people" }, "capacity_req": 20, "tags": [] },
+                    { "label": { "fi": "Noin 20 - 50 henkilöä", "en": "About 20 - 50 people" }, "capacity_req": 50, "tags": [] },
+                    { "label": { "fi": "Noin 50 - 100 henkilöä", "en": "About 50 - 100 people" }, "capacity_req": 100, "tags": [] },
+                    { "label": { "fi": "Yli 100 henkilöä", "en": "Over 100 people" }, "capacity_req": 150, "tags": [] }
                 ]
             },
             {
                 "id": "tila",
-                "question": "Millaista juhlatilaa etsit?",
+                "question": { "fi": "Millaista juhlatilaa etsit?", "en": "What kind of party venue are you looking for?" },
                 "options": [
-                    { "label": "Juhlatila (iso)", "tags": ["juhlatila"], "capacity_req": 100, "node_link": "JUHLATILA" },
-                    { "label": "Tunnelmallinen kartano", "tags": ["kartano", "juhlatila"], "capacity_req": 50, "node_link": "JUHLATILA" },
-                    { "label": "Luonnonläheinen tila", "tags": ["luonto", "juhlatila"], "capacity_req": 30, "node_link": "JUHLATILA", "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "ranta" } },
-                    { "label": "Tila omilla tarjoiluilla", "tags": ["juhlatila"], "capacity_req": 20, "node_link": "JUHLATILA", "profilointi_filter": { "section": "events_and_celebrations", "field": "own_catering_allowed", "value": true } }
+                    { "label": { "fi": "Juhlatila (iso)", "en": "Party venue (large)" }, "tags": ["juhlatila"], "capacity_req": 100, "node_link": "JUHLATILA" },
+                    { "label": { "fi": "Tunnelmallinen kartano", "en": "Atmospheric manor" }, "tags": ["kartano", "juhlatila"], "capacity_req": 50, "node_link": "JUHLATILA" },
+                    { "label": { "fi": "Luonnonläheinen tila", "en": "Nature-oriented space" }, "tags": ["luonto", "juhlatila"], "capacity_req": 30, "node_link": "JUHLATILA", "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "ranta" } },
+                    { "label": { "fi": "Tila omilla tarjoiluilla", "en": "Venue with own catering allowed" }, "tags": ["juhlatila"], "capacity_req": 20, "node_link": "JUHLATILA", "profilointi_filter": { "section": "events_and_celebrations", "field": "own_catering_allowed", "value": true } }
                 ]
             },
             {
                 "id": "palvelut",
                 "multiple": true,
-                "question": "Mitä palveluita tarvitset juhlapäivään?",
+                "question": { "fi": "Mitä palveluita tarvitset juhlapäivään?", "en": "What services do you need for the wedding day?" },
                 "options": [
-                    { "label": "Pitopalvelu", "tags": ["pitopalvelu"] },
-                    { "label": "Valokuvaaja", "tags": ["valokuvaus", "valokuvaaja"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "hääkuvaus" } },
-                    { "label": "Videokuvaaja", "tags": ["videotuotanto", "videokuvaus", "videokuvaaja"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "häävideo" } },
-                    { "label": "Kukkakauppa & Koristelu", "tags": ["kukkakauppa", "kukat"] },
-                    { "label": "Musiikki tai DJ", "tags": ["musiikki", "ohjelmapalvelut"], "profilointi_filter": { "section": "events_and_celebrations", "field": "entertainment_features", "value": "live-musiikki" } }
+                    { "label": { "fi": "Pitopalvelu", "en": "Catering service" }, "tags": ["pitopalvelu"] },
+                    { "label": { "fi": "Valokuvaaja", "en": "Photographer" }, "tags": ["valokuvaus", "valokuvaaja"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "hääkuvaus" } },
+                    { "label": { "fi": "Videokuvaaja", "en": "Videographer" }, "tags": ["videotuotanto", "videokuvaus", "videokuvaaja"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "häävideo" } },
+                    { "label": { "fi": "Kukkakauppa & Koristelu", "en": "Flower shop & Decoration" }, "tags": ["kukkakauppa", "kukat"] },
+                    { "label": { "fi": "Musiikki tai DJ", "en": "Music or DJ" }, "tags": ["musiikki", "ohjelmapalvelut"], "profilointi_filter": { "section": "events_and_celebrations", "field": "entertainment_features", "value": "live-musiikki" } }
                 ]
             },
             {
                 "id": "vieraat",
                 "multiple": true,
-                "question": "Tarpeet vieraiden mukavuuteen?",
+                "question": { "fi": "Tarpeet vieraiden mukavuuteen?", "en": "Needs for guest comfort?" },
                 "skipIf": "getSelectedCompanyProfilointi('tila', 'events_and_celebrations', 'accommodation_available')",
-                "skipMessage": "Valitsemassasi tilassa majoitus sisältyy pakettiin — ei tarvetta erikseen.",
+                "skipMessage": { "fi": "Valitsemassasi tilassa majoitus sisältyy pakettiin — ei tarvetta erikseen.", "en": "Accommodation is included in the package at your selected venue — no separate need." },
                 "options": [
-                    { "label": "Majoitus vieraille", "tags": ["majoitus"] },
-                    { "label": "Kuljetus / Bussi / Taksi", "tags": ["taksi", "kuljetus"] },
-                    { "label": "Kauneuspalvelut / Meikki", "tags": ["kauneus", "kampaamo"] }
+                    { "label": { "fi": "Majoitus vieraille", "en": "Accommodation for guests" }, "tags": ["majoitus"] },
+                    { "label": { "fi": "Kuljetus / Bussi / Taksi", "en": "Transport / Bus / Taxi" }, "tags": ["taksi", "kuljetus"] },
+                    { "label": { "fi": "Kauneuspalvelut / Meikki", "en": "Beauty services / Makeup" }, "tags": ["kauneus", "kampaamo"] }
                 ]
             },
             {
                 "id": "tallennus_ja_muistot",
                 "multiple": true,
-                "question": "Haluaisitko ikuistaa päivän digitaalisesti tai tarvitsetko muita digitointipalveluita?",
+                "question": { "fi": "Haluaisitko ikuistaa päivän digitaalisesti tai tarvitsetko muita digitointipalveluita?", "en": "Would you like to capture the day digitally or do you need other digitization services?" },
                 "options": [
-                    { "label": "Häävideon editointi / Koostepalvelu", "tags": ["videotuotanto", "häävideon editointi"], "node_link": "DIGITOINTI", "profilointi_filter": { "section": "events_and_celebrations", "field": "digitization_features", "value": "häävideo editointi" } },
-                    { "label": "Drone-kuvaus", "tags": ["drone", "drone-kuvaus"], "node_link": "DIGITOINTI", "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "drone-kuvaus" } },
-                    { "label": "Digitointipalvelut (kuvat, videot ym.)", "tags": ["digitointi"], "node_link": "DIGITOINTI" }
+                    { "label": { "fi": "Häävideon editointi / Koostepalvelu", "en": "Wedding video editing / Compilation service" }, "tags": ["videotuotanto", "häävideon editointi"], "node_link": "DIGITOINTI", "profilointi_filter": { "section": "events_and_celebrations", "field": "digitization_features", "value": "häävideo editointi" } },
+                    { "label": { "fi": "Drone-kuvaus", "en": "Drone filming" }, "tags": ["drone", "drone-kuvaus"], "node_link": "DIGITOINTI", "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "drone-kuvaus" } },
+                    { "label": { "fi": "Digitointipalvelut (kuvat, videot ym.)", "en": "Digitization services (photos, videos etc.)" }, "tags": ["digitointi"], "node_link": "DIGITOINTI" }
                 ]
             }
         ]

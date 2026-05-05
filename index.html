@@ -32,6 +32,7 @@
     <link rel="stylesheet" href="feed.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="stylesheet" href="modal.css">
+    <script src="translations.js"></script>
 </head>
 
 <body>
@@ -45,11 +46,11 @@
             <div class="desktop-nav">
                 <ul class="nav-links">
                     <li class="nav-item">
-                        <a href="#" class="nav-link">Kauppa <span class="arrow">▼</span></a>
+                        <a href="#" class="nav-link" data-i18n="nav_shop">Kauppa <span class="arrow">▼</span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="ilmoittaudu.html">Feed-julkaisu</a></li>
-                            <li><a href="kauppa.html">Osta lisää näkyvyyttä</a></li>
-                            <li><a href="lisaa-yritys.html">Yritysnäkyvyys</a></li>
+                            <li><a href="ilmoittaudu.html" data-i18n="nav_feed">Feed-julkaisu</a></li>
+                            <li><a href="kauppa.html" data-i18n="nav_buy_visibility">Osta lisää näkyvyyttä</a></li>
+                            <li><a href="lisaa-yritys.html" data-i18n="nav_business_visibility">Yritysnäkyvyys</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
@@ -102,6 +103,10 @@
                         </ul>
                     </li>
                 </ul>
+            </div>
+            <div class="lang-switcher">
+                <button class="lang-btn" onclick="i18n.setLanguage('fi')" data-lang="fi">FI</button>
+                <button class="lang-btn" onclick="i18n.setLanguage('en')" data-lang="en">EN</button>
             </div>
             <button class="hamburger" id="hamburger-btn" aria-label="Avaa valikko">
                 <span></span>
@@ -205,11 +210,11 @@
                 <div class="hero-flex-container">
                     <img src="logo.png" alt="LaukaaInfo Logo" class="main-logo">
                     <div class="hero-copy">
-                        <h1>Laukaa<span class="highlight-i">I</span>nfo</h1>
-                        <h2 class="hero-subheading">Kaikki Laukaasta yhdessä paikassa</h2>
-                        <p class="hero-tagline">Löydä paikalliset palvelut, yritykset ja uutiset helposti. Autamme sinua järjestämään elämäsi tärkeät hetket Laukaassa.</p>
+                        <h1 data-i18n="hero_title">Laukaa<span class="highlight-i">I</span>nfo</h1>
+                        <h2 class="hero-subheading" data-i18n="hero_subheading">Kaikki Laukaasta yhdessä paikassa</h2>
+                        <p class="hero-tagline" data-i18n="hero_tagline">Löydä paikalliset palvelut, yritykset ja uutiset helposti. Autamme sinua järjestämään elämäsi tärkeät hetket Laukaassa.</p>
                         <div class="hero-actions">
-                            <a href="#service-needs" class="btn-primary">Mitä olet järjestämässä? <i class="fas fa-arrow-down"></i></a>
+                            <a href="#service-needs" class="btn-primary" data-i18n="hero_button">Mitä olet järjestämässä? <i class="fas fa-arrow-down"></i></a>
                         </div>
                     </div>
                 </div>
@@ -237,33 +242,33 @@
                     <a href="https://www.youtube.com/@laukaainfo" target="_blank" class="feature-card card-youtube">
                         <div class="feature-card-img" style="background-image: url('assets/img/icon-youtube.png');"></div>
                         <div class="feature-card-body">
-                            <h3>Laukaa YouTube</h3>
-                            <p>Videoita, tapahtumia ja tunnelmia suoraan Laukaasta.</p>
-                            <span class="btn-text">Katso videot &raquo;</span>
+                            <h3 data-i18n="feature_youtube_title">Laukaa YouTube</h3>
+                            <p data-i18n="feature_youtube_desc">Videoita, tapahtumia ja tunnelmia suoraan Laukaasta.</p>
+                            <span class="btn-text" data-i18n="feature_youtube_btn">Katso videot &raquo;</span>
                         </div>
                     </a>
                     <a href="https://www.facebook.com/groups/892675230270311" target="_blank" class="feature-card card-facebook">
                         <div class="feature-card-img" style="background-image: url('assets/img/icon-facebook.png');"></div>
                         <div class="feature-card-body">
-                            <h3>Keskustelu</h3>
-                            <p>Liity Laukaan omaan Facebook-ryhmään ja osallistu.</p>
-                            <span class="btn-text">Liity ryhmään &raquo;</span>
+                            <h3 data-i18n="feature_fb_title">Keskustelu</h3>
+                            <p data-i18n="feature_fb_desc">Liity Laukaan omaan Facebook-ryhmään ja osallistu.</p>
+                            <span class="btn-text" data-i18n="feature_fb_btn">Liity ryhmään &raquo;</span>
                         </div>
                     </a>
                     <a href="ajankohtaista.html#news-card" class="feature-card card-news">
                         <div class="feature-card-img" style="background-image: url('assets/img/icon-news.png');"></div>
                         <div class="feature-card-body">
-                            <h3>Ajankohtaista</h3>
-                            <p>Tärkeimmät uutiset ja kuntatiedotteet kootusti.</p>
-                            <span class="btn-text">Lue uutiset &raquo;</span>
+                            <h3 data-i18n="feature_news_title">Ajankohtaista</h3>
+                            <p data-i18n="feature_news_desc">Tärkeimmät uutiset ja kuntatiedotteet kootusti.</p>
+                            <span class="btn-text" data-i18n="feature_news_btn">Lue uutiset &raquo;</span>
                         </div>
                     </a>
                     <a href="#toggle-feed-btn" class="feature-card card-feed" onclick="document.getElementById('toggle-feed-btn').click();">
                         <div class="feature-card-img" style="background-image: url('assets/img/icon-feed.png');"></div>
                         <div class="feature-card-body">
-                            <h3>Laukaa-syöte</h3>
-                            <p>Seuraa asukkaiden ja yritysten omia julkaisuja.</p>
-                            <span class="btn-text">Avaa syöte &raquo;</span>
+                            <h3 data-i18n="feature_feed_title">Laukaa-syöte</h3>
+                            <p data-i18n="feature_feed_desc">Seuraa asukkaiden ja yritysten omia julkaisuja.</p>
+                            <span class="btn-text" data-i18n="feature_feed_btn">Avaa syöte &raquo;</span>
                         </div>
                     </a>
                 </div>
@@ -280,17 +285,16 @@
         <section class="need-based-section bg-full-white">
             <div class="section-container">
                 <div class="need-header">
-                    <h2 id="service-needs"><span id="palveluverkosto"></span>Mitä olet järjestämässä tai mitä palvelua tarvitset?</h2>
-                    <p>Valitse alta tilanteesi, niin autamme sinua löytämään juuri oikeat paikalliset ratkaisut ja palvelut.</p>
+                    <h2 id="service-needs"><span id="palveluverkosto"></span><span data-i18n="need_section_title">Mitä olet järjestämässä tai mitä palvelua tarvitset?</span></h2>
+                    <p data-i18n="need_section_desc">Valitse alta tilanteesi, niin autamme sinua löytämään juuri oikeat paikalliset ratkaisut ja palvelut.</p>
                 </div>
 
                 <div class="need-grid">
                     <div class="need-card" style="--bg-img: url('wedding_laukaa_1777364913970.png');">
                         <div class="need-card-content">
-                            <h3>Häät</h3>
-                            <p>Suunnittele unelmiesi häät Laukaassa. Löydä tilat, tarjoilut ja elämykset.</p>
-
-                            <a href="palvelu.html?id=haat" id="link-haat" class="btn-need">Suunnittele häät &raquo;</a>
+                            <h3 data-i18n="need_haat_title">Häät</h3>
+                            <p data-i18n="need_haat_desc">Suunnittele unelmiesi häät Laukaassa. Löydä tilat, tarjoilut ja elämykset.</p>
+                            <a href="palvelu.html?id=haat" id="link-haat" class="btn-need" data-i18n="need_haat_btn">Suunnittele häät &raquo;</a>
                         </div>
                     </div>
 

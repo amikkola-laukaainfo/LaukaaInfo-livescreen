@@ -24,6 +24,8 @@
         <tag>syntymäpäivät</tag>
         <tag>sukujuhlat</tag>
         <tag>siivous</tag>
+        <tag>kukat</tag>
+        <tag>kukkakauppa</tag>
       </subcontexts>
 
       <refinements>
@@ -201,12 +203,18 @@
     </intent>
 
 
-    <intent id="wellbeing-and-beauty" label="Hyvinvointi ja kauneus">
+    <intent id="wellbeing-and-beauty" label="Hyvinvointi, vapaa-aika ja kauneus">
       <subcontexts>
         <tag>hieronta</tag>
         <tag>kauneushoitola</tag>
         <tag>terapia</tag>
         <tag>jooga</tag>
+        <tag>peurunka</tag>
+        <tag>varjola</tag>
+        <tag>revontuli</tag>
+        <tag>ranch</tag>
+        <tag>nokkakivi</tag>
+        <tag>multamÃ¤ki</tag>
       </subcontexts>
 
       <node_links>
@@ -230,6 +238,8 @@
         <tag>diashow-esitys</tag>
         <tag>muistotilaisuuskuvaus</tag>
         <tag>hautajaiskuvaus</tag>
+        <tag>kukat</tag>
+        <tag>kukkakauppa</tag>
       </subcontexts>
 
       <node_links>
