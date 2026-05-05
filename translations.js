@@ -646,11 +646,12 @@ class I18nManager {
 
             const key = attrValue;
             const translation = this.t(key);
+            const hasHTML = translation.includes('<br>') || translation.includes('</span>') || translation.includes('</i>');
             
             if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
                 if (el.hasAttribute('placeholder')) el.placeholder = translation;
                 else el.value = translation;
-            } else if (el.children.length > 0) {
+            } else if (el.children.length > 0 && !hasHTML) {
                 // Element has child elements (e.g. <span>, <i> icons) –
                 // only update the first plain text node to avoid destroying them
                 let updated = false;
@@ -666,7 +667,7 @@ class I18nManager {
                     el.insertBefore(document.createTextNode(translation + ' '), el.firstChild);
                 }
             } else {
-                if (translation.includes('<br>')) {
+                if (hasHTML) {
                     el.innerHTML = translation;
                 } else {
                     el.textContent = translation;
