@@ -1707,7 +1707,8 @@
                         "hieronta",
                         "fysioterapia",
                         "kuntoutus",
-                        "ravintovalmennus"
+                        "ravintovalmennus",
+                        "terveyspalvelut"
                     ],
                     "business-events": [
                         "tyhypäivä",
@@ -1929,7 +1930,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-05-02T18:28:11.643Z",
+                "last_updated": "2026-05-05T09:15:21.770Z",
                 "verified_by": "AI-analysis-v2",
                 "status": "draft"
             }
