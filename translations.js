@@ -37,7 +37,7 @@ const UI_TRANSLATIONS = {
         "community_title": "Osallistu ja pysy ajan tasalla",
         "community_desc": "LaukaaInfo kokoaa yhteen keskustelut, videot ja tuoreimmat kuntatiedotteet.",
         "hero_subheading": "Kaikki Laukaasta yhdessä paikassa",
-        "hero_tagline": "Löydä paikalliset palvelut, yritykset ja uutiset helposti. Autamme sinua järjestämään elämäsi tärkeät hetket Laukaassa.",
+        "hero_tagline": "Löydä paikalliset palvelut, yritykset ja uutiset helposti.<br>Autamme sinua järjestämään elämäsi tärkeät hetket Laukaassa.",
         "hero_button": "Mitä olet järjestämässä?",
         "btn_next": "Seuraava",
         "btn_back": "Takaisin",
@@ -332,7 +332,7 @@ const UI_TRANSLATIONS = {
         "community_title": "Participate and stay updated",
         "community_desc": "LaukaaInfo brings together discussions, videos, and the latest municipal bulletins.",
         "hero_subheading": "Everything about Laukaa in one place",
-        "hero_tagline": "Find local services, businesses, and news easily. We help you organize the important moments of your life in Laukaa.",
+        "hero_tagline": "Find local services, businesses, and news easily.<br>We help you organize the important moments of your life in Laukaa.",
         "hero_button": "What are you organizing?",
         "btn_next": "Next",
         "btn_back": "Back",
@@ -666,7 +666,11 @@ class I18nManager {
                     el.insertBefore(document.createTextNode(translation + ' '), el.firstChild);
                 }
             } else {
-                el.textContent = translation;
+                if (translation.includes('<br>')) {
+                    el.innerHTML = translation;
+                } else {
+                    el.textContent = translation;
+                }
             }
         });
         
