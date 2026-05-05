@@ -981,7 +981,8 @@
                 'business_events': 'yritysjuhlat',
                 'funerals_and_memorials': 'hautajaiset',
                 'startup_services': 'yrityksen perustaminen',
-                'business_growth': 'yrityksen kehittäminen'
+                'business_growth': 'yrityksen kehittäminen',
+                'wellbeing-and-beauty': 'vapaa-aika'
             };
             
             let score = fits[profilingKey] || fits[profilingKey.replace(/_/g, '-')] || 0;
@@ -989,6 +990,11 @@
             if (score === 0 && finnishMap[profilingKey]) {
                 const finKey = finnishMap[profilingKey];
                 score = fits[finKey] || fits[finKey.replace(/ /g, '-')] || 0;
+            }
+            
+            // Fallback for wellbeing-and-beauty to hyvinvointipalvelut
+            if (score === 0 && profilingKey === 'wellbeing-and-beauty') {
+                score = fits['hyvinvointipalvelut'] || fits['wellbeing-services'] || 0;
             }
             
             return score;
@@ -1123,6 +1129,11 @@
                                               labelLower.includes('ratsastus') ||
                                               labelLower.includes('aktiviteetit') ||
                                               labelLower.includes('elämys') ||
+                                              labelLower.includes('retkeily') ||
+                                              labelLower.includes('luontoretkeily') ||
+                                              labelLower.includes('kuntosali') ||
+                                              labelLower.includes('urheilu') ||
+                                              labelLower.includes('liikunta') ||
                                               labelLower.includes('mökki')) && !opt.is_service;
 
                         const companyCapacity = getCompanyCapacity(c, currentProfilingKey);
@@ -1407,6 +1418,14 @@
                                 return false; 
                             }
                             return fitsScore > 10;
+                        }
+
+                        // TÄRKEÄ KORJAUS: Jos optiolla on profilointisuodatin (liikunta-ja-vapaaaika), 
+                        // EI sallita fallbackia tägeihin, jos suodatin ei täsmännyt.
+                        // Tämä estää esim. Revontuli Resortin (jolla on 'avantouinti' sub_contextina) 
+                        // osumisen 'Uinti'-optioon (jolla on tägi 'uinti').
+                        if (opt.profilointi_filter) {
+                            return isProfiledMatch;
                         }
 
                         // Laajennettu haku: Nimi + Tägit + Kategoria + Profiloinnin sub_contexts + Node_links
