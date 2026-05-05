@@ -5961,7 +5961,8 @@
                     "kuntosali",
                     "personal training",
                     "ryhmäliikunta",
-                    "hyvinvointi"
+                    "hyvinvointi",
+                    "onefit"
                 ],
                 "collaborated_with": []
             },
@@ -20578,7 +20579,10 @@
                 "event_makeup": false,
                 "bridal_services": false,
                 "group_bookings": true,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "nokkakivi",
+                    "huvipuisto"
+                ],
                 "collaborated_with": []
             },
             "meta": {
@@ -24222,7 +24226,13 @@
                 "event_makeup": false,
                 "bridal_services": true,
                 "group_bookings": true,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "peurunka",
+                    "uinti",
+                    "uimahalli",
+                    "kylpylä",
+                    "kuntosali"
+                ],
                 "collaborated_with": []
             },
             "meta": {
@@ -25649,7 +25659,10 @@
                 "refinement_tags": [
                     "eläinavusteinen hyvinvointi",
                     "ulkoilu",
-                    "ryhmätoiminta"
+                    "ryhmätoiminta",
+                    "ranch",
+                    "ratsastus",
+                    "untenonnela"
                 ],
                 "collaborated_with": []
             },
@@ -54624,7 +54637,10 @@
                 "event_makeup": false,
                 "bridal_services": false,
                 "group_bookings": true,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "varjola",
+                    "koskenlasku"
+                ],
                 "collaborated_with": []
             },
             "meta": {
@@ -56727,7 +56743,9 @@
                     "lahjakortti",
                     "elämyslahja",
                     "hemmotteluviikonloppu",
-                    "ryhmävaraus"
+                    "ryhmävaraus",
+                    "revontuli",
+                    "golf"
                 ],
                 "collaborated_with": []
             },
@@ -58473,7 +58491,9 @@
                     "leirikoulu",
                     "nuorisoleiri",
                     "rippileiri",
-                    "kerhotoiminta"
+                    "kerhotoiminta",
+                    "multamäki",
+                    "luontoretkeily"
                 ],
                 "collaborated_with": []
             },
