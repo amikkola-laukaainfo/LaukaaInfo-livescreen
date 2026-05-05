@@ -383,7 +383,7 @@ header.hero-split {
 }
 
 .hero-left {
-    background: linear-gradient(to right, var(--secondary-blue) 0%, var(--secondary-blue) 35%, transparent 90%);
+    background: linear-gradient(to right, var(--secondary-blue) 0%, var(--secondary-blue) 35%, transparent 65%);
     flex: 1;
     display: flex;
     align-items: center;
@@ -409,6 +409,7 @@ header.hero-split {
     position: relative;
     z-index: 3;
     max-width: 600px;
+    text-align: left;
 }
 
 .hero-right {
@@ -485,12 +486,23 @@ header h1 {
     text-transform: uppercase;
 }
 
+.highlight-i {
+    font-size: 1.15em;
+    display: inline-block;
+    vertical-align: baseline;
+}
+
 .hero-tagline {
     font-size: 0.95rem;
     opacity: 0.88;
     margin-bottom: 0.5rem;
     line-height: 1.4;
     color: rgba(255,255,255,0.9);
+}
+
+.hero-actions {
+    margin-top: 1.5rem;
+    text-align: left;
 }
 
 @media (max-width: 768px) {
