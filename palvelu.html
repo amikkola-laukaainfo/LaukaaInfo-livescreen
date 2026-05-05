@@ -545,6 +545,8 @@
                 <div id="next-steps-list" class="next-steps-grid"></div>
             </div>
 
+            <div id="special-vinkit-container" style="display: none;"></div>
+
             <div id="tips-container" style="max-width: 1200px; margin: 3rem auto; display: none;"></div>
             
             <div id="taxonomy-info-container" style="display: none;"></div>
@@ -1735,6 +1737,7 @@
                 renderTaxonomyInfo(globalProfilingKey);
                 renderNextSteps(globalProfilingKey);
                 renderTips(currentNeedId);
+                renderSpecialVinkit(currentNeedId);
             }
             // Vältetään selauksen hyppäämistä ylimmäs renderöinnin yhteydessä, ellei tämä ole ensimmäinen lataus
             // Jos valitaan ankkuri, käyttäjä todennäköisesti haluaa pysyä samassa kohdassa
@@ -1888,6 +1891,42 @@
                     }
                 });
                 window.tipsIframeListenerAdded = true;
+            }
+        }
+
+        function renderSpecialVinkit(needId) {
+            const container = document.getElementById('special-vinkit-container');
+            if (!container) return;
+            container.innerHTML = '';
+            container.style.display = 'none';
+
+            // Tarkistetaan onko kyseessä Lievestuore ja juhlatila-aiheinen haku
+            const userLoc = (localStorage.getItem('userLocationName') || '').toLowerCase();
+            const isLievestuore = userLoc.includes('lievestuore');
+            
+            const venueNeeds = ['haat', 'yritysjuhlat', 'yritystilaisuudet', 'syntymapaivat', 'hautajaiset'];
+            const isVenueNeed = venueNeeds.includes(needId);
+
+            if (isLievestuore && isVenueNeed) {
+                container.innerHTML = `
+                    <div class="next-steps-section" style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border: 2px solid #7dd3fc; margin-top: 2rem; max-width: 1200px; margin-left: auto; margin-right: auto;">
+                        <h3 style="text-align: center; font-family: var(--accent-font); color: #0369a1; margin-bottom: 1rem; font-size: 1.5rem;">🏃 Kävelyreitti-vinkit Lievestuoreella</h3>
+                        <p style="text-align: center; font-size: 0.95rem; color: #0c4a6e; margin-bottom: 1.5rem; max-width: 700px; margin-left: auto; margin-right: auto;">
+                            Haluatko jaloitella juhlien lomassa tai tutustua alueeseen? Tässä suosituksemme:
+                        </p>
+                        <div class="next-steps-grid" style="justify-content: center;">
+                            <a href="https://laukaainfo.fi/tarinakartta.html?step=1&r=rantakavely-1#kavelyreitit-section" target="_blank" class="next-step-card" style="text-decoration: none; border-color: #7dd3fc;">
+                                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🚶</div>
+                                <div style="font-weight: 800; color: var(--primary-blue); font-size: 1.1rem;">Lievestuoreen rantakävely</div>
+                                <p style="font-size: 0.85rem; color: #475569; margin: 8px 0;">Kaunis reitti järven rantamaisemissa, sopii mainiosti juhlapäivän happihyppelyyn.</p>
+                                <div style="font-size: 0.75rem; font-weight: 700; color: #0369a1; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 5px;">
+                                    Avaa tarinakartta ja reitti &raquo;
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                `;
+                container.style.display = 'block';
             }
         }
 
