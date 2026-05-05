@@ -69,17 +69,6 @@ const NEEDS_CONFIG = {
                     { "label": "Drone-kuvaus", "tags": ["drone", "drone-kuvaus"], "node_link": "DIGITOINTI", "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "drone-kuvaus" } },
                     { "label": "Digitointipalvelut (kuvat, videot ym.)", "tags": ["digitointi"], "node_link": "DIGITOINTI" }
                 ]
-            },
-            {
-                "id": "digitoinnin_tarkennus",
-                "multiple": true,
-                "question": "Mitä haluaisit digitoida juhlaesitystä varten?",
-                "skipIf": "!isSelected('tallennus_ja_muistot', 'digitointi')",
-                "options": [
-                    { "label": "Vanhojen valokuvien digitointi", "tags": ["digitointi", "valokuvien digitointi"], "profilointi_filter": { "section": "events_and_celebrations", "field": "digitization_features", "value": "valokuvien digitointi" } },
-                    { "label": "VHS- tai DVD-materiaalin digitointi", "tags": ["digitointi", "vhs digitointi", "vhs-digitointi"], "profilointi_filter": { "section": "events_and_celebrations", "field": "digitization_features", "value": "vhs digitointi" } },
-                    { "label": "Diojen, negatiivien tai kaitafilmien digitointi", "tags": ["digitointi", "diojen digitointi", "kaitafilmien digitointi"], "profilointi_filter": { "section": "events_and_celebrations", "field": "digitization_features", "value": "kaitafilmien digitointi" } }
-                ]
             }
         ]
     },
@@ -95,8 +84,7 @@ const NEEDS_CONFIG = {
                 "options": [
                     { "label": "Pikkujoulut", "sub_context": "pikkujoulut", "tags": ["juhlatila"], "capacity_req": 30 },
                     { "label": "Henkilöstöjuhlat / Kesäjuhlat", "sub_context": "henkilöstöjuhlat", "tags": ["juhlatila"], "capacity_req": 50 },
-                    { "label": "Virkistyspäivä / Tyky-päivä", "sub_context": "tyky-paiva", "tags": ["ohjelmapalvelut"] },
-                    { "label": "Asiakastilaisuus / Edustus", "sub_context": "edustustilaisuus", "tags": ["edustustila"], "capacity_req": 20 }
+                    { "label": "Virkistyspäivä / Tyky-päivä", "sub_context": "tyky-paiva", "tags": ["ohjelmapalvelut"] }
                 ]
             },
             {
@@ -148,8 +136,7 @@ const NEEDS_CONFIG = {
                 "options": [
                     { "label": "Pieni kokous / Neuvottelu", "sub_context": "kokous", "tags": ["kokoustilat"], "capacity_req": 5 },
                     { "label": "Seminaari / Koulutus", "sub_context": "seminaari", "tags": ["seminaaritilat"], "capacity_req": 1 },
-                    { "label": "Konferenssi / Suuri tilaisuus", "sub_context": "konferenssi", "tags": ["kokoustilat"], "capacity_req": 1 },
-                    { "label": "Edustus- tai saunakokous", "sub_context": "edustuskokous", "tags": ["edustustila", "saunatilat"], "capacity_req": 1 }
+                    { "label": "Konferenssi / Suuri tilaisuus", "sub_context": "konferenssi", "tags": ["kokoustilat"], "capacity_req": 1 }
                 ]
             },
             {
@@ -167,7 +154,7 @@ const NEEDS_CONFIG = {
                 "question": "Tarjoilut tilaisuuteen?",
                 "options": [
                     { "label": "Lounas ja kahvitus", "tags": ["ravintola", "pitopalvelu"] },
-                    { "label": "Illallinen", "tags": ["ravintola"] },
+                    { "label": "Iltapala", "tags": ["ravintola"] },
                     { "label": "Vain tilat", "tags": [] }
                 ]
             },
@@ -179,7 +166,6 @@ const NEEDS_CONFIG = {
                     { "label": "Majoitus", "tags": ["majoitus"] },
                     { "label": "Videokuvaus", "tags": ["videotuotanto", "videokuvaus", "videokuvaaja"], "profilointi_filter": { "section": "business_events", "field": "refinement_tags", "value": "yritysvideo" } },
                     { "label": "Valokuvaus", "tags": ["valokuvaus", "valokuvaaja"], "profilointi_filter": { "section": "business_events", "field": "refinement_tags", "value": "yrityskuvaus" } },
-                    { "label": "Yrityslahjat", "tags": ["yrityslahjat", "lahjatavarat"] },
                     { "label": "IT-tuki / AV-tekniikka", "tags": ["it-palvelut"], "profilointi_filter": { "section": "business_events", "field": "has_projector", "value": true } }
                 ]
             }
@@ -214,8 +200,7 @@ const NEEDS_CONFIG = {
                 "id": "tila",
                 "question": "Missä haluat juhlia?",
                 "options": [
-                    { "label": "Ravintolassa valmiissa pöydässä", "tags": ["ravintola"], "capacity_req": 10 },
-                    { "label": "Vuokratussa juhlatilassa", "tags": ["juhlatila"], "capacity_req": 30 },
+                    { "label": "Juhlatila ruokailulla", "tags": ["ravintola"], "capacity_req": 10 },
                     { "label": "Kotona (tarvitaan palveluita)", "tags": ["pitopalvelu", "siivous", "kukkakauppa"] },
                     { "label": "Saunalla tai mökillä", "tags": ["saunatilat", "majoitus"], "capacity_req": 10 }
                 ]
@@ -241,15 +226,6 @@ const NEEDS_CONFIG = {
         "description": "Muuttoauto, kantajat, pakkaus ja loppusiivous helposti.",
         "profilointi_context": "moving_and_housing",
         "steps": [
-            {
-                "id": "tarkennus",
-                "question": "Millaista muuttoapua tarvitset?",
-                "options": [
-                    { "label": "Kodin muutto", "sub_context": "kodin muutto", "tags": ["muuttopalvelu"] },
-                    { "label": "Yritysmuutto", "sub_context": "yritysmuutto", "tags": ["muuttopalvelu"] },
-                    { "label": "Pieni kuljetus / Peräkärry", "sub_context": "pienmuutto", "tags": ["kuljetus"] }
-                ]
-            },
             {
                 "id": "muuttoapu",
                 "question": "Millaista apua tarvitset muuttoon?",
@@ -350,40 +326,30 @@ const NEEDS_CONFIG = {
             }
         ]
     },
-    "taloyhtion-huolto": {
-        "title": "Taloyhtiön huolto",
-        "icon": "🏢",
-        "description": "Ammattitaitoiset kumppanit taloyhtiöille.",
+    "kiinteistopalvelut": {
+        "title": "Kiinteistö- ja huoltopalvelut",
+        "icon": "🏘️",
+        "description": "Huolenpitoa ja arvoa kiinteistöllesi sekä taloyhtiön tarpeet.",
         "profilointi_context": "housing_company_and_contracts",
         "steps": [
             {
                 "id": "tarkennus",
-                "question": "Millaista palvelua taloyhtiö tarvitsee?",
+                "question": "Millaista palvelua tarvitset?",
                 "options": [
                     { "label": "Jatkuva kiinteistöhuolto", "sub_context": "kiinteistöhuolto", "tags": ["kiinteistöhuolto"] },
                     { "label": "Isännöintipalvelut", "sub_context": "isännöinti", "tags": ["isännöinti"] },
-                    { "label": "Kertaluonteinen remontti", "sub_context": "linjasaneeraus", "tags": ["rakentaminen"] }
+                    { "label": "Kertaluonteinen remontti", "sub_context": "linjasaneeraus", "tags": ["rakentaminen"] },
+                    { "label": "Siivouspalvelut", "tags": ["siivous"], "is_service": true },
+                    { "label": "Pihanhoito / Lumityöt", "tags": ["viherrakentaminen", "kiinteistöhuolto"], "is_service": true }
                 ]
             },
             {
                 "id": "hallinto",
-                "question": "Hallinnolliset tarpeet?",
+                "question": "Hallinnolliset ja asiantuntijatarpeet?",
                 "options": [
                     { "label": "Isännöintipalvelut", "tags": ["isännöinti"] },
                     { "label": "Tilitoimisto / Tilintarkastus", "tags": ["tilitoimisto"] },
-                    { "label": "Lakipalvelut", "tags": ["lakiasiaintoimistot"] }
-                ]
-            },
-            {
-                "id": "kunnossapito",
-                "multiple": true,
-                "question": "Kunnossapito ja tekniset palvelut?",
-                "options": [
-                    { "label": "Kiinteistöhuolto", "tags": ["kiinteistöhuolto"], "is_service": true, "profilointi_filter": { "section": "housing_company_and_contracts", "field": "housing_company_specialized", "value": true } },
-                    { "label": "Siivouspalvelut", "tags": ["siivous"], "is_service": true },
-                    { "label": "Nuohous", "tags": ["nuohouspalvelut"], "is_service": true },
-                    { "label": "LVI- ja sähköhuolto", "tags": ["LVI", "sähköasennukset"], "is_service": true },
-                    { "label": "Hissihuolto", "tags": ["it-palvelut"] }
+                    { "label": "Lakipalvelut ja sopimusasiat", "tags": ["lakiasiaintoimistot", "sopimukset"] }
                 ]
             }
         ]
@@ -495,17 +461,6 @@ const NEEDS_CONFIG = {
                     { "label": "Valokuvaus", "tags": ["valokuvaus", "hautajaiskuvaus"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "refinement_tags", "value": "hautajaiskuvaus" } },
                     { "label": "Digitointipalvelut (kuvat, videot ym.)", "tags": ["digitointi"], "node_link": "DIGITOINTI" }
                 ]
-            },
-            {
-                "id": "hautajaiset_digitointi_tarkennus",
-                "multiple": true,
-                "question": "Mitä haluaisit digitoida muistoesitystä varten?",
-                "skipIf": "!isSelected('muistot_ja_tallennus', 'digitointi')",
-                "options": [
-                    { "label": "Valokuvien ja diojen digitointi", "tags": ["digitointi", "valokuvien digitointi", "diojen digitointi"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "digitization_features", "value": "valokuvien digitointi" } },
-                    { "label": "VHS- tai DVD-materiaalin digitointi", "tags": ["digitointi", "vhs digitointi", "vhs-digitointi"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "digitization_features", "value": "vhs digitointi" } },
-                    { "label": "Muisteluvideo / Diashow / Kuvakirja", "tags": ["digitointi", "diashow-esitys", "muistovideo"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "refinement_tags", "value": "muistovideo" } }
-                ]
             }
         ]
     },
@@ -604,26 +559,6 @@ const NEEDS_CONFIG = {
             }
         ]
     },
-    "kiinteistopalvelut": {
-        "title": "Kiinteistöpalvelut",
-        "icon": "🏘️",
-        "description": "Huolenpitoa ja arvoa kiinteistöllesi.",
-        "profilointi_context": "housing_company_and_contracts",
-        "steps": [
-            {
-                "id": "huoltopalvelu",
-                "multiple": true,
-                "question": "Mitä kiinteistösi tarvitsee?",
-                "options": [
-                    { "label": "Kiinteistöhuolto (tekniikka, lumityöt ym.)", "tags": ["kiinteistöhuolto"], "is_service": true },
-                    { "label": "Siivouspalvelut (sisä ja ulko)", "tags": ["siivous", "puhdistuspalvelut"] },
-                    { "label": "Pihanhoito / Lumenauraus", "tags": ["viherrakentaminen", "kiinteistöhuolto"], "is_service": true },
-                    { "label": "Kuntokartoitus / Suunnittelu", "tags": ["suunnittelutoimisto"] },
-                    { "label": "Lakipalvelut ja sopimusasiat", "tags": ["lakiasiaintoimistot", "sopimukset"], "is_service": true }
-                ]
-            }
-        ]
-    },
     "paivystavat-palvelut": {
         "title": "Päivystävät palvelut",
         "icon": "🚨",
@@ -654,20 +589,9 @@ const NEEDS_CONFIG = {
                 "options": [
                     { "label": "Hieronnat & Kehonhuolto", "sub_context": "hieronta", "tags": ["hieronta"] },
                     { "label": "Kauneudenhoito & Kampaamot", "sub_context": "kauneudenhoito", "tags": ["kampaamo", "kauneus"] },
-                    { "label": "Terveyspalvelut & Lääkärit", "sub_context": "terveyspalvelut", "tags": ["terveyspalvelut"] },
+                    { "label": "Terveyspalvelut", "sub_context": "terveyspalvelut", "tags": ["terveyspalvelut"] },
                     { "label": "Mielen hyvinvointi & Terapia", "sub_context": "terapia", "tags": ["psykologi"] },
-                    { "label": "Hää- ja juhlapalvelut", "sub_context": "bridal_services", "tags": ["meikki", "kampaus"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "bridal_services", "value": true } }
-                ]
-            },
-            {
-                "id": "palvelu",
-                "multiple": true,
-                "question": "Millaista tukea tarvitset?",
-                "options": [
-                    { "label": "Lääkäri- tai terveyspalvelut", "tags": ["terveyspalvelut"] },
-                    { "label": "Fysioterapia / Hieronta", "tags": ["fysioterapia", "hieronta"] },
-                    { "label": "Mielenterveys / Psykologi", "tags": ["psykologi", "terapia"] },
-                    { "label": "Hoivapalvelut / Kotihoito", "tags": ["kotihoito", "hoivapalvelu"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "home_visits_available", "value": true } }
+                    { "label": "Hoivapalvelu ja kotihoito", "sub_context": "kotihoito", "tags": ["kotihoito"] }
                 ]
             }
         ]
@@ -680,22 +604,16 @@ const NEEDS_CONFIG = {
         "steps": [
             {
                 "id": "tyyppi",
-                "question": "Miten haluaisit liikkua?",
+                "question": "Millaista vapaa-ajan kohdetta tai palvelua etsit?",
                 "options": [
+                    { "label": "Peurunka", "tags": ["liikuntakeskus", "uimahalli", "kylpylä"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "refinement_tags", "value": "peurunka" } },
+                    { "label": "Varjola", "tags": ["retkeily", "luonto"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "refinement_tags", "value": "varjola" } },
+                    { "label": "Revontuli Resort", "tags": ["retkeily", "golf"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "refinement_tags", "value": "revontuli" } },
+                    { "label": "UntenOnnela Ranch", "tags": ["hevonen", "luonto"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "refinement_tags", "value": "ranch" } },
+                    { "label": "Nokkakiven huvipuisto (Bellingham)", "tags": ["lapset", "huvipuisto"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "refinement_tags", "value": "nokkakivi" } },
+                    { "label": "Multamäen leirikeskus", "tags": ["leirikeskus", "luonto"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "refinement_tags", "value": "multamäki" } },
                     { "label": "Kuntosali / Ryhmäliikunta", "sub_context": "kuntosali", "tags": ["kuntosali", "liikuntakeskus"] },
-                    { "label": "Seurayhteistyö / Urheiluseurat", "sub_context": "urheiluseura", "tags": ["urheiluseura"] },
-                    { "label": "Ulkoilu / Retkeily", "sub_context": "retkeily", "tags": ["luonto", "retkeily"] },
-                    { "label": "Uinti / Vesiliikunta", "sub_context": "uinti", "tags": ["uimahalli"] }
-                ]
-            },
-            {
-                "id": "kohderyhma",
-                "question": "Kenelle palvelua etsit?",
-                "options": [
-                    { "label": "Lapsille ja nuorille", "tags": ["lapset", "nuoret"] },
-                    { "label": "Aikuisille", "tags": [] },
-                    { "label": "Senioreille", "tags": ["seniorit"] },
-                    { "label": "Koko perheelle", "tags": ["perhe"] }
+                    { "label": "Seurayhteistyö / Urheiluseurat", "sub_context": "urheiluseura", "tags": ["urheiluseura"] }
                 ]
             }
         ]
