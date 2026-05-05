@@ -1057,7 +1057,8 @@
                 'hautajaiset': 'funerals_and_memorials',
                 'yrityksen-perustaminen': 'startup_services',
                 'yrityksen-kehittaminen': 'business_growth',
-                'terveys-ja-hyvinvointi': 'wellbeing_and_beauty'
+                'terveys-ja-hyvinvointi': 'wellbeing_and_beauty',
+                'liikunta-ja-vapaaaika': 'wellbeing_and_beauty'
             };
 
             const currentProfilingKey = needToProfilingMap[currentNeedId] || 'vapaa-aika';
@@ -1117,6 +1118,11 @@
                                               labelLower.includes('sauna') ||
                                               labelLower.includes('majoitus') ||
                                               labelLower.includes('ravintola') ||
+                                              labelLower.includes('uinti') ||
+                                              labelLower.includes('huvipuisto') ||
+                                              labelLower.includes('ratsastus') ||
+                                              labelLower.includes('aktiviteetit') ||
+                                              labelLower.includes('elämys') ||
                                               labelLower.includes('mökki')) && !opt.is_service;
 
                         const companyCapacity = getCompanyCapacity(c, currentProfilingKey);

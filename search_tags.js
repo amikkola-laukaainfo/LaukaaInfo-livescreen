@@ -153,5 +153,17 @@ const SEARCH_TAG_LIST = [
     { term: "ohjelmapalvelut", category: "Muut palvelut" },
     { term: "verkkokauppa", category: "Muut palvelut" },
     { term: "valokuvaus", category: "Muut palvelut" },
-    { term: "sanomalehti", category: "Muut palvelut" }
+    { term: "sanomalehti", category: "Muut palvelut" },
+
+    // ⚽ Liikunta ja vapaa-aika
+    { term: "uinti", category: "Liikunta ja vapaa-aika" },
+    { term: "uimahalli", category: "Liikunta ja vapaa-aika" },
+    { term: "kylpylä", category: "Liikunta ja vapaa-aika" },
+    { term: "huvipuisto", category: "Liikunta ja vapaa-aika" },
+    { term: "koskenlasku", category: "Liikunta ja vapaa-aika" },
+    { term: "golf", category: "Liikunta ja vapaa-aika" },
+    { term: "kuntosali", category: "Liikunta ja vapaa-aika" },
+    { term: "ratsastus", category: "Liikunta ja vapaa-aika" },
+    { term: "retkeily", category: "Liikunta ja vapaa-aika" },
+    { term: "ulkoilu", category: "Liikunta ja vapaa-aika" }
 ];
