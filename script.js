@@ -995,7 +995,10 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
  * joten alkuperäinen selain-skrollaus osuu usein väärään kohtaan.
  */
 function handleInitialHashScroll() {
-    const hash = window.location.hash;
+    let hash = window.location.hash;
+    // Tuki alias-nimelle
+    if (hash === '#palveluverkosto') hash = '#service-needs';
+    
     if (hash && hash.length > 1) {
         // Odotetaan että RSS-feedit ovat todennäköisesti latautuneet (tai ainakin yritys alkanut)
         setTimeout(() => {

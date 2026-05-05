@@ -328,6 +328,10 @@ section[id] {
     scroll-margin-top: 90px;
 }
 
+#service-needs, #palveluverkosto {
+    scroll-margin-top: 85px;
+}
+
 
 /* Map Markers */
 .custom-marker {
