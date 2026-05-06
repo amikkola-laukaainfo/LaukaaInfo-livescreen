@@ -1689,7 +1689,11 @@
                     "wellbeing-and-beauty": 95
                 },
                 "priority_score": 85,
-                "paired_with": [],
+                "paired_with": [
+                    "hieronta",
+                    "fysioterapia",
+                    "kuntoutus"
+                ],
                 "service_area": {
                     "mode": "TOIMIPISTE",
                     "radius_km": 0,
@@ -1922,6 +1926,7 @@
                 "bridal_services": false,
                 "group_bookings": true,
                 "refinement_tags": [
+                    "terveyspalvelut",
                     "neurologinen kuntoutus",
                     "terveysneuvonta",
                     "kokonaisvaltainen hyvinvointi",
@@ -1932,7 +1937,7 @@
             "meta": {
                 "last_updated": "2026-05-05T09:15:21.770Z",
                 "verified_by": "AI-analysis-v2",
-                "status": "draft"
+                "status": "published"
             }
         },
         "company-268": {

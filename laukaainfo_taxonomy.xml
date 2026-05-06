@@ -214,8 +214,15 @@
         <tag>revontuli</tag>
         <tag>ranch</tag>
         <tag>nokkakivi</tag>
-        <tag>multamÃ¤ki</tag>
+        <tag>multamäki</tag>
+        <tag>terveyspalvelut</tag>
+        <tag>kuntoutus</tag>
       </subcontexts>
+
+      <refinements>
+        <tag>neurologinen kuntoutus</tag>
+        <tag>sairaanhoitaja</tag>
+      </refinements>
 
       <node_links>
         <node>HYVINVOINTI</node>
