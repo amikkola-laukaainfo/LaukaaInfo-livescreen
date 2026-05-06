@@ -23993,8 +23993,7 @@
                     "vapaa-aika": 100,
                     "hyvinvointipalvelut": 100,
                     "kuntoutus": 95,
-                    "events-and-celebrations": 80,
-                    "wellbeing-and-beauty": 100
+                    "events-and-celebrations": 80
                 },
                 "priority_score": 0,
                 "paired_with": [
@@ -54436,7 +54435,11 @@
                 },
                 "emergency_available": false,
                 "contract_customer_available": false,
-                "paired_with_by_context": {},
+                "paired_with_by_context": {
+                    "wellbeing-and-beauty": [
+                        "koskenlasku"
+                    ]
+                },
                 "corporate_clients": true,
                 "home_service": false,
                 "weekend_service": true,
@@ -54651,7 +54654,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-05-06T13:51:45.050Z",
+                "last_updated": "2026-05-06T14:18:26.483Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
