@@ -1779,8 +1779,8 @@
                 "collaborated_with": []
             },
             "business_events": {
-                "meeting_capacity": 15,
-                "seminar_capacity": 20,
+                "meeting_capacity": 0,
+                "seminar_capacity": 0,
                 "conference_rooms": 0,
                 "has_projector": false,
                 "has_streaming": false,

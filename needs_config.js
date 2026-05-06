@@ -565,11 +565,11 @@ const NEEDS_CONFIG = {
                 "id": "tarkennus",
                 "question": { "fi": "Millaista hyvinvointipalvelua etsit?", "en": "What kind of wellbeing service are you looking for?" },
                 "options": [
-                    { "label": { "fi": "Hieronnat & Kehonhuolto", "en": "Massage & Body care" }, "sub_context": "hieronta", "tags": ["hieronta"] },
-                    { "label": { "fi": "Kauneudenhoito & Kampaamot", "en": "Beauty care & Hairdressers" }, "sub_context": "kauneudenhoito", "tags": ["kampaamo", "kauneus"] },
-                    { "label": { "fi": "Terveyspalvelut", "en": "Health services" }, "sub_context": "terveyspalvelut", "tags": ["terveyspalvelut"] },
-                    { "label": { "fi": "Mielen hyvinvointi & Terapia", "en": "Mental wellbeing & Therapy" }, "sub_context": "terapia", "tags": ["psykologi"] },
-                    { "label": { "fi": "Hoivapalvelu ja kotihoito", "en": "Care services and home care" }, "sub_context": "kotihoito", "tags": ["kotihoito"] }
+                    { "label": { "fi": "Hieronnat & Kehonhuolto", "en": "Massage & Body care" }, "sub_context": "hieronta", "tags": ["hieronta"], "is_service": true },
+                    { "label": { "fi": "Kauneudenhoito & Kampaamot", "en": "Beauty care & Hairdressers" }, "sub_context": "kauneudenhoito", "tags": ["kampaamo", "kauneus"], "is_service": true },
+                    { "label": { "fi": "Terveyspalvelut", "en": "Health services" }, "sub_context": "terveyspalvelut", "tags": ["terveyspalvelut"], "is_service": true },
+                    { "label": { "fi": "Mielen hyvinvointi & Terapia", "en": "Mental wellbeing & Therapy" }, "sub_context": "terapia", "tags": ["psykologi"], "is_service": true },
+                    { "label": { "fi": "Hoivapalvelu ja kotihoito", "en": "Care services and home care" }, "sub_context": "kotihoito", "tags": ["kotihoito"], "is_service": true }
                 ]
             }
         ]
