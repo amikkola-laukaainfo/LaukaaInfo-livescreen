@@ -154,6 +154,8 @@ const SEARCH_TAG_LIST = [
     { term: "verkkokauppa", category: "Muut palvelut" },
     { term: "valokuvaus", category: "Muut palvelut" },
     { term: "sanomalehti", category: "Muut palvelut" },
+    { term: "hautauspalvelu", category: "Muut palvelut" },
+    { term: "hautajaiset", category: "Muut palvelut" },
 
     // ⚽ Liikunta ja vapaa-aika
     { term: "uinti", category: "Liikunta ja vapaa-aika" },
