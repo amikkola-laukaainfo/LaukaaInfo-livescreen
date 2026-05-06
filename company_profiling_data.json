@@ -1693,7 +1693,7 @@
                     "hieronta",
                     "fysioterapia",
                     "kuntoutus",
-	            "terveyspalvelut"
+                    "terveyspalvelut"
                 ],
                 "service_area": {
                     "mode": "TOIMIPISTE",
@@ -1993,7 +1993,8 @@
                     "kartano",
                     "hautajaiset",
                     "yritysjuhlat",
-                    "omilla tarjoiluilla"
+                    "omilla tarjoiluilla",
+                    "muistotilaisuus"
                 ],
                 "sub_contexts": [
                     "tilauskakku",
@@ -2209,7 +2210,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-05-04T16:52:43.484Z",
+                "last_updated": "2026-05-06T19:26:14.310Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
