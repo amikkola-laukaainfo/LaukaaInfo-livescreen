@@ -114,9 +114,9 @@ function updateMetadata(area, cat, tag) {
     const pageTitleEl = document.getElementById('page-title');
     const seoDescEl = document.getElementById('seo-description');
 
-    let titleText = i18n.getText(area);
+    let titleText = area.name;
     const isKokoLaukaa = area.slug === 'koko-laukaa';
-    const locRef = isKokoLaukaa ? (i18n.currentLang === 'fi' ? "Laukaassa" : "in Laukaa") : i18n.getText(area);
+    const locRef = isKokoLaukaa ? (i18n.currentLang === 'fi' ? "Laukaassa" : "in Laukaa") : area.name;
 
     if (tag) { 
         titleText = i18n.currentLang === 'fi' ? `${tag.charAt(0).toUpperCase() + tag.slice(1)} -palvelut ${locRef}` : `${tag.charAt(0).toUpperCase() + tag.slice(1)} services ${locRef}`; 
@@ -124,31 +124,29 @@ function updateMetadata(area, cat, tag) {
         titleText = `${cat.charAt(0).toUpperCase() + cat.slice(1)} ${locRef}`; 
     }
 
-    const isLievestuoreMain = area.slug === 'lievestuore' && !tag && !cat;
-
-    if (!isLievestuoreMain) {
-        if (titleEl) titleEl.textContent = titleText;
-        pageTitleEl.textContent = `${titleText} – LaukaaInfo: Laukaa taskussasi – tiedä, löydä ja osallistu.`;
-
-        const subtitleEl = document.getElementById('region-subtitle');
-        if (subtitleEl) {
-            if (tag || cat) {
-                subtitleEl.innerHTML = i18n.currentLang === 'fi' ? 
-                    `Etsit palveluja alueella <strong>${i18n.getText(area)}</strong>.<br><small style="color: #666; font-size: 0.9em; display: inline-block; margin-top: 5px;">📍 Mukana myös muiden alueiden palveluntarjoajat, joiden palvelualue kattaa tämän sijainnin.</small>` :
-                    `Searching for services in area <strong>${i18n.getText(area)}</strong>.<br><small style="color: #666; font-size: 0.9em; display: inline-block; margin-top: 5px;">📍 Including service providers from other areas that cover this location.</small>`;
-            } else {
-                subtitleEl.textContent = i18n.currentLang === 'fi' ? 
-                    `Hae yrityksiä, tapahtumia ja tiedotteita alueella: ${i18n.getText(area)}` :
-                    `Search for companies, events and bulletins in area: ${i18n.getText(area)}`;
-            }
-        }
-    } else {
-        // Vain sivuotsikko (browser tab) päivitetään Lievestuoreen pääsivullakin
+    if (titleEl) titleEl.textContent = titleText;
+    
+    if (area.slug === 'lievestuore' && !tag && !cat) {
         pageTitleEl.textContent = `Löydä Lievestuore – LaukaaInfo`;
+    } else {
+        pageTitleEl.textContent = `${titleText} – LaukaaInfo: Laukaa taskussasi – tiedä, löydä ja osallistu.`;
     }
 
-    let seoText = `<h3>${i18n.getText(area)} – ${i18n.t('seo_region_h3') || 'yritykset, palvelut ja uutiset'}</h3>`;
-    seoText += `<p>${i18n.getText(area, 'desc')}</p>`;
+    const subtitleEl = document.getElementById('region-subtitle');
+    if (subtitleEl) {
+        if (tag || cat) {
+            subtitleEl.innerHTML = i18n.currentLang === 'fi' ? 
+                `Etsit palveluja alueella <strong>${area.name}</strong>.<br><small style="color: #666; font-size: 0.9em; display: inline-block; margin-top: 5px;">📍 Mukana myös muiden alueiden palveluntarjoajat, joiden palvelualue kattaa tämän sijainnin.</small>` :
+                `Searching for services in area <strong>${area.name}</strong>.<br><small style="color: #666; font-size: 0.9em; display: inline-block; margin-top: 5px;">📍 Including service providers from other areas that cover this location.</small>`;
+        } else {
+            subtitleEl.textContent = i18n.currentLang === 'fi' ? 
+                `Hae yrityksiä, tapahtumia ja tiedotteita alueella: ${area.name}` :
+                `Search for companies, events and bulletins in area: ${area.name}`;
+        }
+    }
+
+    let seoText = `<h3>${area.name} – ${i18n.t('seo_region_h3') || 'yritykset, palvelut ja uutiset'}</h3>`;
+    seoText += `<p>${area.desc || ''}</p>`;
     if (tag || cat) {
         seoText += `<p>${i18n.currentLang === 'fi' ? 'Tunnisteet' : 'Tags'}: <strong>${tag || cat}</strong>.</p>`;
     }
