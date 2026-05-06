@@ -1865,7 +1865,7 @@
 
             if (typeof NEEDS_CONFIG !== 'undefined') {
                 for (const [id, config] of Object.entries(NEEDS_CONFIG)) {
-                    if (id.toLowerCase() === lowerQuery || (config.title && config.title.toLowerCase() === lowerQuery)) {
+                    if (id.toLowerCase() === lowerQuery || (config.title && i18n.getText(config.title).toLowerCase() === lowerQuery)) {
                         foundNeedId = id;
                         break;
                     }
