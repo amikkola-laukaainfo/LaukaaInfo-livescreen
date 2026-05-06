@@ -1817,6 +1817,18 @@
                 const paired = pairedObj[context] || pairedObj[contextHyphenated] || [];
                 paired.forEach(p => addRec(p));
             });
+
+            // 3. Konfiguraatiopohjaiset suositukset (NEEDS_CONFIGin omat vaihtoehdot)
+            const currentNeedId = new URLSearchParams(window.location.search).get('id');
+            const config = window.NEEDS_CONFIG || (typeof NEEDS_CONFIG !== 'undefined' ? NEEDS_CONFIG : null);
+            if (currentNeedId && config && config[currentNeedId]) {
+                const need = config[currentNeedId];
+                (need.steps || []).forEach(step => {
+                    (step.options || []).forEach(opt => {
+                        addRec(opt.label);
+                    });
+                });
+            }
             
             // Limit to max 12 recommendations
             const limitedRecs = recommendations.slice(0, 12);
