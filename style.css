@@ -4982,8 +4982,9 @@ footer {
     background-image: var(--bg-img);
     background-size: cover;
     background-position: center;
-    transition: transform 0.8s ease;
+    transition: transform 0.8s ease, opacity 0.5s ease;
     z-index: 1;
+    opacity: 0.65; /* Increased transparency for better text contrast */
 }
 
 .need-card::after {
@@ -4996,8 +4997,8 @@ footer {
     /* Stronger gradient for better text readability */
     background: linear-gradient(to bottom,
         rgba(0,0,0,0.1) 0%,
-        rgba(0,0,0,0.35) 40%,
-        rgba(0,0,0,0.82) 100%);
+        rgba(0,0,0,0.3) 40%,
+        rgba(0,0,0,0.85) 100%);
     z-index: 2;
 }
 
@@ -5008,6 +5009,7 @@ footer {
 
 .need-card:hover::before {
     transform: scale(1.1);
+    opacity: 1; /* Fully visible on hover */
 }
 
 .need-card-content {
