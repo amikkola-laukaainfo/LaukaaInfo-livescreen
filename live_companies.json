@@ -1,4 +1,4 @@
-﻿{
+{
     "results": [
         {
             "id": "company-272",
@@ -3442,7 +3442,7 @@
             "tyyppi": "ilmainen",
             "voimassaolo_loppuu": "",
             "rss": "",
-            "tags": "huonekalut",
+            "tags": "huonekalut, kukkakauppa, hautauspalvelu",
             "alue_slug": "Laukaa kk",
             "kunta_slug": "Laukaa"
         },
