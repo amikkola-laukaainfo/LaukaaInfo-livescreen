@@ -5397,12 +5397,12 @@ footer {
     max-width: 900px;
     padding: 4rem 2rem;
     border-radius: 32px;
-    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.15);
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.15); /* Semi-transparent base */
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    background: rgba(0, 0, 0, 0.2); /* Middle-ground: darker than white, lighter than before */
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -5420,19 +5420,19 @@ footer {
     background-image: var(--bg-img);
     background-size: cover;
     background-position: center;
-    opacity: 0.35; /* High transparency so background logo shows through */
+    opacity: 0.55; /* Balanced transparency */
     z-index: 0;
     transition: opacity 0.4s ease, transform 0.6s ease;
 }
 
 .hero-path:hover {
     transform: translateY(-8px);
-    background: rgba(255, 255, 255, 0.25);
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+    background: rgba(0, 0, 0, 0.3);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
 }
 
 .hero-path:hover::before {
-    opacity: 0.5;
+    opacity: 0.7;
     transform: scale(1.05);
 }
 
