@@ -1226,6 +1226,7 @@
                                     const hasCommonBase = selections._sub_contexts.some(sc => {
                                         const scLower = sc.toLowerCase();
                                         // Etsitään yhteisiä sanoja tai alkuosia (hää, yritys, juhla, hautajais, muisto)
+                                        const bases = ['hää', 'yritys', 'juhla', 'hautajais', 'muisto'];
                                         const cscArray = Array.isArray(companySubContexts) ? companySubContexts : (typeof companySubContexts === 'object' && companySubContexts !== null ? Object.values(companySubContexts).flat() : []);
                                         return bases.some(b => scLower.includes(b) && cscArray.some(csc => String(csc).toLowerCase().includes(b)));
                                     });
@@ -1757,8 +1758,22 @@
 
         function renderNextSteps(context) {
             const nextStepsContainer = document.getElementById('next-steps-container');
-            const nextStepsList = document.getElementById('next-steps-list');
-            const recommendations = new Set();
+            const recommendations = [];
+            const seenNormalized = new Set();
+            
+            function addRec(rec) {
+                if (!rec) return;
+                const text = typeof rec === 'string' ? rec : i18n.getText(rec);
+                if (!text || text.length < 2) return;
+                
+                const normalized = text.trim().toLowerCase();
+                if (!seenNormalized.has(normalized)) {
+                    seenNormalized.add(normalized);
+                    // Capitalize first letter for consistent display
+                    const display = text.trim().charAt(0).toUpperCase() + text.trim().slice(1);
+                    recommendations.push(display);
+                }
+            }
             
             // Normalize context for data lookup (handles underscore vs hyphen)
             const contextHyphenated = context.replace(/_/g, '-');
@@ -1773,10 +1788,7 @@
             topCompanies.forEach(c => {
                 const pairedObj = c.profiling?.core?.paired_with_by_context || {};
                 const paired = pairedObj[context] || pairedObj[contextHyphenated] || [];
-                if (paired.length > 0) {
-                    console.log(`Löytyi suosituksia yritykseltä ${c.name}:`, paired);
-                }
-                paired.forEach(p => recommendations.add(p));
+                paired.forEach(p => addRec(p));
             });
 
             // 2. Taksonomiapohjaiset suositukset
@@ -1784,23 +1796,20 @@
                 const intent = taxonomyData.intents.find(i => i.id === context || i.id === contextHyphenated);
                 if (intent) {
                     const relations = taxonomyData.relations.filter(r => r.from === intent.id);
-                    if (relations.length > 0) {
-                        console.log(`Löytyi taksonomiasuosituksia kontekstille ${context}:`, relations.map(r => r.to));
-                    }
                     relations.forEach(r => {
                         const targetIntent = taxonomyData.intents.find(i => i.id === r.to);
-                        if (targetIntent) recommendations.add(targetIntent.label);
-                        else recommendations.add(r.to);
+                        if (targetIntent) addRec(targetIntent.label);
+                        else addRec(r.to);
                     });
                 }
             }
             
-            console.log(`Yhteensä ${recommendations.size} palvelusuositusta kontekstille ${context}`);
+            // Limit to max 12 recommendations
+            const limitedRecs = recommendations.slice(0, 12);
 
-            if (recommendations.size > 0) {
+            if (limitedRecs.length > 0) {
                 nextStepsContainer.style.display = 'block';
-                nextStepsList.innerHTML = Array.from(recommendations).map(rec => {
-                    const recText = typeof rec === 'string' ? rec : i18n.getText(rec);
+                nextStepsList.innerHTML = limitedRecs.map(recText => {
                     return `
                     <div class="next-step-card" onclick="searchNextStep('${recText.replace(/'/g, "\\'")}')">
                         <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🔍</div>
@@ -1808,6 +1817,8 @@
                         <div style="font-size: 0.75rem; color: #64748b; margin-top: 4px;">${i18n.t('btn_search_providers')}</div>
                     </div>
                 `}).join('');
+            } else {
+                nextStepsContainer.style.display = 'none';
             }
         }
 
