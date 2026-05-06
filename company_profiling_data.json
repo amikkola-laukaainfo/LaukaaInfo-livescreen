@@ -54413,7 +54413,10 @@
                     "vapaa-aika": 35,
                     "yritystapahtumat": 35,
                     "juhlat": 35,
-                    "hyvinvointi": 35
+                    "hyvinvointi": 35,
+                    "events-and-celebrations": 80,
+                    "business-events": 80,
+                    "wellbeing-and-beauty": 80
                 },
                 "priority_score": 0,
                 "paired_with": [
@@ -54646,7 +54649,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-05-04T16:51:23.046Z",
+                "last_updated": "2026-05-06T13:37:40.702Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -56432,7 +56435,8 @@
                 "fits_for": {
                     "events-and-celebrations": 95,
                     "business-events": 85,
-                    "cottage-services": 60
+                    "cottage-services": 60,
+                    "wellbeing-and-beauty": 85
                 },
                 "priority_score": 0,
                 "paired_with": [],
@@ -56752,7 +56756,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-05-04T16:09:23.614Z",
+                "last_updated": "2026-05-06T13:36:44.778Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
@@ -58179,23 +58183,6 @@
                 "automation_services": false,
                 "consulting_services": false,
                 "refinement_tags": [],
-                "collaborated_with": []
-            },
-            "wellbeing_and_beauty": {
-                "home_visits": false,
-                "online_booking": false,
-                "unisex_services": false,
-                "gift_cards": true,
-                "corporate_wellbeing_services": false,
-                "event_makeup": false,
-                "bridal_services": false,
-                "group_bookings": true,
-                "refinement_tags": [
-                    "kalastusloma",
-                    "rentoutuminen",
-                    "sauna",
-                    "luontokylpy"
-                ],
                 "collaborated_with": []
             },
             "wellbeing_and_beauty": {
