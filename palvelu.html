@@ -892,9 +892,9 @@
                 const sel = selections[stepId];
                 if (!sel) return false;
                 if (Array.isArray(sel)) {
-                    return sel.some(s => s.label.toLowerCase().includes(label.toLowerCase()));
+                    return sel.some(s => i18n.getText(s.label).toLowerCase().includes(label.toLowerCase()));
                 }
-                return sel.label.toLowerCase().includes(label.toLowerCase());
+                return i18n.getText(sel.label).toLowerCase().includes(label.toLowerCase());
             });
             
             // 3. Korvataan selections.stepId-viittaukset (onko jotain valittu kyseisessä stepissä)
@@ -1094,9 +1094,9 @@
             }
 
             const requestedFeatures = {
-                sauna: selectedOptions.some(o => o.label?.toLowerCase().includes('sauna')),
-                accessible: selectedOptions.some(o => o.label?.toLowerCase().includes('esteetön') || o.label?.toLowerCase().includes('vammais')),
-                home_service: selectedOptions.some(o => o.label?.toLowerCase().includes('kotiin') || o.label?.toLowerCase().includes('kotona'))
+                sauna: selectedOptions.some(o => i18n.getText(o.label)?.toLowerCase().includes('sauna')),
+                accessible: selectedOptions.some(o => i18n.getText(o.label)?.toLowerCase().includes('esteetön') || i18n.getText(o.label)?.toLowerCase().includes('vammais')),
+                home_service: selectedOptions.some(o => i18n.getText(o.label)?.toLowerCase().includes('kotiin') || i18n.getText(o.label)?.toLowerCase().includes('kotona'))
             };
 
             globalProfilingKey = currentProfilingKey;
@@ -1172,7 +1172,7 @@
 
                         const fitsScore = getFitsForScore(c, currentProfilingKey);
                         
-                        if (isMediazoo) console.log(`DEBUG: Checking Mediazoo for option "${opt.label}"`, { currentProfilingKey, fitsScore, selections });
+                        if (isMediazoo) console.log(`DEBUG: Checking Mediazoo for option "${i18n.getText(opt.label)}"`, { currentProfilingKey, fitsScore, selections });
 
                         // Tarkista not_suitable_for: hylkää yritys jos se on merkitty sopimattomaksi tähän hakuun
                         if (c.profiling?.core?.not_suitable_for?.length > 0) {
@@ -1187,7 +1187,7 @@
                             const tagBlocked = optTagsLower.some(tag => notSuitable.includes(tag));
 
                             if (labelBlocked || tagBlocked) {
-                                if (isMediazoo) console.log(`DEBUG: Company ${c.nimi} EXCLUDED by not_suitable_for for option "${opt.label}"`);
+                                if (isMediazoo) console.log(`DEBUG: Company ${c.nimi} EXCLUDED by not_suitable_for for option "${i18n.getText(opt.label)}"`);
                                 return false;
                             }
                         }
@@ -1240,7 +1240,7 @@
                                     // it's likely a generic service (catering, photo, etc.) and shouldn't be strictly 
                                     // filtered by the event's sub-context (e.g. "Perinteiset häät").
                                     // FIX: Vältetään "tilaisuudessa" sanan osuminen "tila"-hakusanaan
-                                    const labelLower = (opt.label || '').toLowerCase();
+                                    const labelLower = i18n.getText(opt.label || '').toLowerCase();
                                     const isVenueOrCore = (opt.capacity_req > 0 || opt.node_link === 'JUHLATILA' || (labelLower.includes('tila') && !labelLower.includes('tilaisuus')) || labelLower.includes('muistotilaisuus'));
                                     
                                     if (isVenueOrCore && hasAnySubContexts && mainFitsScore >= 70 && mainFitsScore < 80) return false; 
@@ -1320,7 +1320,7 @@
                         if (taxonomyData && !isProfiledMatch && !opt.profilointi_filter) {
                             const intent = taxonomyData.intents.find(i => i.id === currentProfilingKey || i.id === currentProfilingKey.replace(/_/g, '-'));
                             if (intent) {
-                                const labelLower = (opt.label || '').toLowerCase();
+                                const labelLower = i18n.getText(opt.label || '').toLowerCase();
                                 const isTaxonomyTerm = intent.refinements.some(r => labelLower.includes(r.toLowerCase())) ||
                                                        intent.subcontexts.some(s => labelLower.includes(s.toLowerCase()));
                                 
@@ -1396,9 +1396,9 @@
                             // Jos kyseessä on tilatyyppinen optio tai yritys, ja hakuun liittyy kapasiteettivaatimus, piilotetaan nollakapasiteetin kohteet.
                             const isVenueType = hasVenueTag || 
                                                (opt.label && (
-                                                   (opt.label.toLowerCase().includes('tila') && !opt.label.toLowerCase().includes('tilaisuus')) || 
-                                                   opt.label.toLowerCase().includes('muistotilaisuus') ||
-                                                   opt.label.toLowerCase().includes('juhla')
+                                                   (i18n.getText(opt.label).toLowerCase().includes('tila') && !i18n.getText(opt.label).toLowerCase().includes('tilaisuus')) || 
+                                                   i18n.getText(opt.label).toLowerCase().includes('muistotilaisuus') ||
+                                                   i18n.getText(opt.label).toLowerCase().includes('juhla')
                                                )) || 
                                                (opt.tags && opt.tags.includes('juhlatila')) ||
                                                opt.node_link === 'JUHLATILA';
@@ -1447,11 +1447,11 @@
                         
                         const tagMatch = opt.tags.some(tag => companyContent.includes(tag.toLowerCase()));
                         
-                        if (isMediazoo) console.log(`DEBUG: Mediazoo final match for "${opt.label}": ${tagMatch}`);
+                        if (isMediazoo) console.log(`DEBUG: Mediazoo final match for "${i18n.getText(opt.label)}": ${tagMatch}`);
                         return tagMatch;
                     });
                     
-                    console.log(`Option "${opt.label}" found ${companiesForOpt.length} companies.`);
+                    console.log(`Option "${i18n.getText(opt.label)}" found ${companiesForOpt.length} companies.`);
                     
                     // Aina mukaan, vaikka yrityksiä ei löytyisi (käyttäjän toive)
                     companiesForOpt.forEach(c => {
