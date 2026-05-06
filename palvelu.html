@@ -1121,6 +1121,7 @@
                 options.forEach(opt => {
                     const companiesForOpt = window.allCompanies.filter((c, idx) => {
                         const isMediazoo = (c.id === 'company-2' || c.nimi === 'Mediazoo');
+                        const isRiina = (c.id === 'company-269' || (c.nimi && c.nimi.includes('Riina Raitio')));
                         const labelLower = i18n.getText(opt.label || '').toLowerCase();
 
                         // Identify if this is a venue/space search or something that naturally has capacity
@@ -1130,13 +1131,12 @@
                                               labelLower.includes('muistotilaisuus') ||
                                               labelLower.includes('kokous') ||
                                               labelLower.includes('sauna') ||
-                                              labelLower.includes('majoitus') ||
-                                              labelLower.includes('ravintola') ||
-                                              labelLower.includes('uinti') ||
-                                              labelLower.includes('huvipuisto') ||
-                                              labelLower.includes('ratsastus') ||
-                                              labelLower.includes('aktiviteetit') ||
-                                              labelLower.includes('elämys') ||
+                                              labelLower.includes('juhla') ||
+                                              labelLower.includes('häät') ||
+                                              labelLower.includes('pikkujoulut') ||
+                                              labelLower.includes('leirikoulu') ||
+                                              labelLower.includes('rippikoulu') ||
+                                              labelLower.includes('kesäsiirtola') ||
                                               labelLower.includes('retkeily') ||
                                               labelLower.includes('luontoretkeily') ||
                                               labelLower.includes('kuntosali') ||
@@ -1147,6 +1147,9 @@
                                               labelLower.includes('mökki')) && !opt.is_service;
 
                         const companyCapacity = getCompanyCapacity(c, currentProfilingKey);
+                        const fitsScore = getFitsForScore(c, currentProfilingKey);
+
+                        if (isRiina) console.log(`DEBUG: Checking Riina Raitio for option "${i18n.getText(opt.label)}"`, { currentProfilingKey, fitsScore, isVenueSearch });
                         
                         // NEW: Strict exclusion of venues from specialized service searches (e.g. photography, videography, nuohous)
                         // Use only physical space capacity for this check to avoid excluding catering services
@@ -1160,9 +1163,14 @@
 
                         if (!isVenueSearch && (venueCapacity > 0 || isPrimarilyVenue)) {
                             // If searching for a service (not a venue), and company is a venue, exclude it.
-                            // Exceptions could be made if fits_for for the current profiling key is very high (e.g. specialized service venue),
-                            // but usually the user wants a dedicated service provider.
-                            return false; 
+                            // EXCEPTION: If the company has a very high score for this context (fitsScore >= 80),
+                            // it's likely a legitimate service provider who happens to have some capacity.
+                            if (fitsScore >= 80) {
+                                if (isRiina) console.log(`DEBUG: Riina Raitio ALLOWED despite being primarily venue (high fitsScore: ${fitsScore})`);
+                            } else {
+                                if (isRiina) console.log(`DEBUG: Riina Raitio EXCLUDED as primarily venue (isVenueSearch=${isVenueSearch}, venueCapacity=${venueCapacity}, isPrimarilyVenue=${isPrimarilyVenue})`);
+                                return false; 
+                            }
                         }
 
                         // NEW: Jos Saunatilat on valittu, ja kyseessä on Juhlatila tai Kesäjuhlat -ehdotus,
@@ -1172,8 +1180,6 @@
                             if (!catData?.has_sauna) return false;
                         }
 
-                        const fitsScore = getFitsForScore(c, currentProfilingKey);
-                        
                         if (isMediazoo) console.log(`DEBUG: Checking Mediazoo for option "${i18n.getText(opt.label)}"`, { currentProfilingKey, fitsScore, selections });
 
                         // Tarkista not_suitable_for: hylkää yritys jos se on merkitty sopimattomaksi tähän hakuun
