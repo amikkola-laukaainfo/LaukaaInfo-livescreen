@@ -1001,7 +1001,7 @@
             }
             
             // Fallback for wellbeing-and-beauty to hyvinvointipalvelut
-            if (score === 0 && profilingKey === 'wellbeing-and-beauty') {
+            if (score === 0 && (profilingKey === 'wellbeing-and-beauty' || profilingKey === 'wellbeing_and_beauty')) {
                 score = fits['hyvinvointipalvelut'] || fits['wellbeing-services'] || 0;
             }
             
@@ -1416,8 +1416,9 @@
                         // ei sallita täsmäystä tägeillä (estää esim. juhlatilojen osumisen siivous-hakuihin)
                         if (c.profiling && c.profiling.core && c.profiling.core.fits_for) {
                             const fitsScore = getFitsForScore(c, currentProfilingKey);
+                            const hasProfiling = (currentProfilingKey in c.profiling.core.fits_for) || (currentProfilingKey.replace(/_/g, '-') in c.profiling.core.fits_for);
                             // Jos profilointi on tehty (löytyy fits_for:sta) ja arvosana on 0, hylätään
-                            if (currentProfilingKey in c.profiling.core.fits_for && fitsScore === 0) {
+                            if (hasProfiling && fitsScore === 0) {
                                 return false;
                             }
                         }
