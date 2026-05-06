@@ -1142,6 +1142,8 @@
                                               labelLower.includes('kuntosali') ||
                                               labelLower.includes('urheilu') ||
                                               labelLower.includes('liikunta') ||
+                                              labelLower.includes('koskenlasku') ||
+                                              labelLower.includes('golf') ||
                                               labelLower.includes('mökki')) && !opt.is_service;
 
                         const companyCapacity = getCompanyCapacity(c, currentProfilingKey);
@@ -1413,7 +1415,7 @@
                         // Jos yrityksellä on profilointi tälle kontekstille mutta arvosana on 0, 
                         // ei sallita täsmäystä tägeillä (estää esim. juhlatilojen osumisen siivous-hakuihin)
                         if (c.profiling && c.profiling.core && c.profiling.core.fits_for) {
-                            const fitsScore = c.profiling.core.fits_for[currentProfilingKey] || 0;
+                            const fitsScore = getFitsForScore(c, currentProfilingKey);
                             // Jos profilointi on tehty (löytyy fits_for:sta) ja arvosana on 0, hylätään
                             if (currentProfilingKey in c.profiling.core.fits_for && fitsScore === 0) {
                                 return false;
@@ -1426,7 +1428,7 @@
                             if (!opt.node_link && !opt.node_links && !opt.profilointi_filter && opt.capacity_req <= 0) {
                                 return false; 
                             }
-                            return fitsScore > 10;
+                            return getFitsForScore(c, currentProfilingKey) > 10;
                         }
 
                         // TÄRKEÄ KORJAUS: Jos optiolla on profilointisuodatin (liikunta-ja-vapaaaika), 
