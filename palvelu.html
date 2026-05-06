@@ -2140,8 +2140,8 @@
                 }
 
                 const events = c.profiling.events_and_celebrations || {};
-                if (events.is_accessible && selections.palvelut?.some(s => s.label?.fi?.toLowerCase()?.includes('esteetön') || s.label?.en?.toLowerCase()?.includes('accessible'))) reasons.push(i18n.t('match_accessible'));
-                if (events.has_sauna && selections.palvelut?.some(s => s.label?.fi?.toLowerCase()?.includes('sauna') || s.label?.en?.toLowerCase()?.includes('sauna'))) reasons.push(i18n.t('match_sauna'));
+                if (events.is_accessible && selections.palvelut?.some(s => i18n.getText(s.label).toLowerCase().includes('esteetön') || i18n.getText(s.label).toLowerCase().includes('accessible'))) reasons.push(i18n.t('match_accessible'));
+                if (events.has_sauna && selections.palvelut?.some(s => i18n.getText(s.label).toLowerCase().includes('sauna'))) reasons.push(i18n.t('match_sauna'));
             }
 
             if (reasons.length === 0) return i18n.t('match_default');
