@@ -5389,3 +5389,64 @@ footer {
         font-size: 1.4rem;
     }
 }
+
+/* --- Hero Path Cards with Transparency --- */
+.hero-path {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    padding: 4rem 2rem;
+    border-radius: 32px;
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.15); /* Semi-transparent base */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s ease;
+}
+
+.hero-path::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: var(--bg-img);
+    background-size: cover;
+    background-position: center;
+    opacity: 0.35; /* High transparency so background logo shows through */
+    z-index: 0;
+    transition: opacity 0.4s ease, transform 0.6s ease;
+}
+
+.hero-path:hover {
+    transform: translateY(-8px);
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+}
+
+.hero-path:hover::before {
+    opacity: 0.5;
+    transform: scale(1.05);
+}
+
+.hero-path > * {
+    position: relative;
+    z-index: 1; /* Keep text/inputs above the background image */
+}
+
+.search-path { z-index: 100; }
+.browse-path { z-index: 10; }
+
+@media (max-width: 768px) {
+    .hero-path {
+        padding: 3rem 1.5rem;
+        border-radius: 24px;
+    }
+}
