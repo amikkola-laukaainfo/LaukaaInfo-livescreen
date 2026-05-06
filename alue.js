@@ -177,6 +177,17 @@ const AREA_SLUG_ALIASES = {
     'koko-laukaa': [] // Kaikki alueet – käsitellään erikseen
 };
 
+// Estetään alueiden ja maakuntien ilmestyminen tunnisteiksi (tägeiksi)
+const FORBIDDEN_TAGS = [
+    'laukaa', 'laukaa kk', 'laukaa keskusta', 'laukaassa', 'laukaan',
+    'leppavesi', 'leppävesi',
+    'lievestuore', 'lievestuoreella',
+    'vehnia', 'vehniä',
+    'vihtavuori', 'vihtavuorella',
+    'keski-suomi', 'keski-suomessa',
+    'jyväskylä', 'jyväskylässä', 'äänekoski', 'uuraisten', 'uurainen', 'konnevesi', 'hankasalmi', 'muurame', 'petäjävesi'
+];
+
 function filterByArea(areaSlug, catParam, tagParam) {
     // Sallitut alue_slug-arvot tälle sivulle (normalisoituna pieniksi kirjaimiksi)
     const allowedSlugs = AREA_SLUG_ALIASES[areaSlug] || [areaSlug];
@@ -236,7 +247,8 @@ function renderRegionContent(area, areaSlug, filtered, cat, tag) {
     // Tägit alueella
     const tagCloud = document.getElementById('region-tag-cloud');
     if (tagCloud) {
-        const allTags = filtered.flatMap(c => (c.tags || '').split(',').map(t => t.trim().toLowerCase())).filter(t => t.length > 0);
+        const allTags = filtered.flatMap(c => (c.tags || '').split(',').map(t => t.trim().toLowerCase()))
+            .filter(t => t.length > 0 && !FORBIDDEN_TAGS.includes(t));
         const tagCounts = allTags.reduce((acc, t) => { acc[t] = (acc[t] || 0) + 1; return acc; }, {});
         const uniqueTags = Object.keys(tagCounts).sort((a, b) => tagCounts[b] - tagCounts[a]).slice(0, 12);
 

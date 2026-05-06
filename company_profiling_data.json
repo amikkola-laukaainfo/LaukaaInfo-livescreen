@@ -1681,10 +1681,10 @@
                     "business-events": 75,
                     "funerals-and-memorials": 30,
                     "startup-services": 0,
-                    "business-growth": 10,
+                    "business-growth": 0,
                     "moving-and-housing": 0,
                     "construction-and-maintenance": 0,
-                    "cottage-services": 10,
+                    "cottage-services": 0,
                     "accommodation": 0,
                     "wellbeing-and-beauty": 95
                 },
@@ -1692,7 +1692,8 @@
                 "paired_with": [
                     "hieronta",
                     "fysioterapia",
-                    "kuntoutus"
+                    "kuntoutus",
+	            "terveyspalvelut"
                 ],
                 "service_area": {
                     "mode": "TOIMIPISTE",
@@ -1744,7 +1745,7 @@
                 "seated_capacity": 0,
                 "standing_guests": 0,
                 "outdoor_capacity": 0,
-                "is_accessible": true,
+                "is_accessible": false,
                 "own_catering_allowed": false,
                 "inhouse_catering_available": false,
                 "is_lakeside": false,
