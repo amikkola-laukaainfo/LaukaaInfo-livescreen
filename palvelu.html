@@ -1779,7 +1779,33 @@
             // Normalize context for data lookup (handles underscore vs hyphen)
             const contextHyphenated = context.replace(/_/g, '-');
             
-            // 1. Profilointipohjaiset suositukset
+            // 1. Taksonomiapohjaiset suositukset (sub-kontekstit ja tarkennukset)
+            if (taxonomyData) {
+                const intent = taxonomyData.intents.find(i => i.id === context || i.id === contextHyphenated);
+                if (intent) {
+                    // Lisätään taksonomian sub-kontekstit ja tarkennukset (nämä ovat "virallisia" tageja)
+                    const taxonomyTags = [...(intent.subcontexts || []), ...(intent.refinements || [])];
+                    
+                    // Suodatetaan pois ne, jotka on jo valittu tässä haussa
+                    const currentSubs = (selections._sub_contexts || []).map(s => s.toLowerCase());
+                    
+                    taxonomyTags.forEach(tag => {
+                        if (!currentSubs.includes(tag.toLowerCase())) {
+                            addRec(tag);
+                        }
+                    });
+
+                    // Lisätään myös suhteet (relations)
+                    const relations = taxonomyData.relations.filter(r => r.from === intent.id);
+                    relations.forEach(r => {
+                        const targetIntent = taxonomyData.intents.find(i => i.id === r.to);
+                        if (targetIntent) addRec(targetIntent.label);
+                        else addRec(r.to);
+                    });
+                }
+            }
+
+            // 2. Profilointipohjaiset suositukset (yritysten omat ristiinmyyntiehdotukset)
             const topCompanies = (window.allCompanies || []).filter(c => {
                 const fits = c.profiling?.core?.fits_for || {};
                 const score = fits[context] || fits[contextHyphenated] || 0;
@@ -1791,19 +1817,6 @@
                 const paired = pairedObj[context] || pairedObj[contextHyphenated] || [];
                 paired.forEach(p => addRec(p));
             });
-
-            // 2. Taksonomiapohjaiset suositukset
-            if (taxonomyData) {
-                const intent = taxonomyData.intents.find(i => i.id === context || i.id === contextHyphenated);
-                if (intent) {
-                    const relations = taxonomyData.relations.filter(r => r.from === intent.id);
-                    relations.forEach(r => {
-                        const targetIntent = taxonomyData.intents.find(i => i.id === r.to);
-                        if (targetIntent) addRec(targetIntent.label);
-                        else addRec(r.to);
-                    });
-                }
-            }
             
             // Limit to max 12 recommendations
             const limitedRecs = recommendations.slice(0, 12);
