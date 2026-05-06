@@ -1760,18 +1760,33 @@
             const nextStepsList = document.getElementById('next-steps-list');
             const recommendations = new Set();
             
-            // 1. Profilointipohjaiset suositukset (olemassa oleva logiikka)
-            const topCompanies = window.allCompanies.filter(c => (c.profiling?.core?.fits_for?.[context] || 0) >= 70);
+            // Normalize context for data lookup (handles underscore vs hyphen)
+            const contextHyphenated = context.replace(/_/g, '-');
+            
+            // 1. Profilointipohjaiset suositukset
+            const topCompanies = (window.allCompanies || []).filter(c => {
+                const fits = c.profiling?.core?.fits_for || {};
+                const score = fits[context] || fits[contextHyphenated] || 0;
+                return score >= 70;
+            });
+            
             topCompanies.forEach(c => {
-                const paired = c.profiling?.core?.paired_with_by_context?.[context] || [];
+                const pairedObj = c.profiling?.core?.paired_with_by_context || {};
+                const paired = pairedObj[context] || pairedObj[contextHyphenated] || [];
+                if (paired.length > 0) {
+                    console.log(`Löytyi suosituksia yritykseltä ${c.name}:`, paired);
+                }
                 paired.forEach(p => recommendations.add(p));
             });
 
-            // 2. Taksonomiapohjaiset suositukset (uusi logiikka)
+            // 2. Taksonomiapohjaiset suositukset
             if (taxonomyData) {
-                const intent = taxonomyData.intents.find(i => i.id === context || i.id === context.replace(/_/g, '-'));
+                const intent = taxonomyData.intents.find(i => i.id === context || i.id === contextHyphenated);
                 if (intent) {
                     const relations = taxonomyData.relations.filter(r => r.from === intent.id);
+                    if (relations.length > 0) {
+                        console.log(`Löytyi taksonomiasuosituksia kontekstille ${context}:`, relations.map(r => r.to));
+                    }
                     relations.forEach(r => {
                         const targetIntent = taxonomyData.intents.find(i => i.id === r.to);
                         if (targetIntent) recommendations.add(targetIntent.label);
@@ -1779,6 +1794,8 @@
                     });
                 }
             }
+            
+            console.log(`Yhteensä ${recommendations.size} palvelusuositusta kontekstille ${context}`);
 
             if (recommendations.size > 0) {
                 nextStepsContainer.style.display = 'block';
