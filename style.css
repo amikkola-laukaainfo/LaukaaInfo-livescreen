@@ -5399,7 +5399,7 @@ footer {
     border-radius: 32px;
     box-shadow: 0 15px 45px rgba(0, 0, 0, 0.15);
     overflow: hidden;
-    background: rgba(0, 0, 0, 0.2); /* Middle-ground: darker than white, lighter than before */
+    background: rgba(0, 0, 0, 0.15); /* Lighter background for better image visibility */
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -5420,19 +5420,19 @@ footer {
     background-image: var(--bg-img);
     background-size: cover;
     background-position: center;
-    opacity: 0.55; /* Balanced transparency */
+    opacity: 0.8; /* Higher base opacity for more visible images */
     z-index: 0;
     transition: opacity 0.4s ease, transform 0.6s ease;
 }
 
 .hero-path:hover {
     transform: translateY(-8px);
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.4); /* Returns to normal darkness on hover */
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
 }
 
 .hero-path:hover::before {
-    opacity: 0.7;
+    opacity: 0.95;
     transform: scale(1.05);
 }
 
