@@ -1121,7 +1121,7 @@
                 options.forEach(opt => {
                     const companiesForOpt = window.allCompanies.filter((c, idx) => {
                         const isMediazoo = (c.id === 'company-2' || c.nimi === 'Mediazoo');
-                        const labelLower = (opt.label || '').toLowerCase();
+                        const labelLower = i18n.getText(opt.label || '').toLowerCase();
 
                         // Identify if this is a venue/space search or something that naturally has capacity
                         const isVenueSearch = (opt.capacity_req > 0 || 
@@ -1177,7 +1177,7 @@
                         // Tarkista not_suitable_for: hylkää yritys jos se on merkitty sopimattomaksi tähän hakuun
                         if (c.profiling?.core?.not_suitable_for?.length > 0) {
                             const notSuitable = c.profiling.core.not_suitable_for.map(s => s.toLowerCase());
-                            const labelLower = (opt.label || '').toLowerCase();
+                            const labelLower = i18n.getText(opt.label || '').toLowerCase();
                             const optTagsLower = (opt.tags || []).map(t => t.toLowerCase());
 
                             // A. Tarkistus labelilla: Jos jokin hylkäystermi sisältyy hakuotsikkoon (esim. "omilla tarjoiluilla")
