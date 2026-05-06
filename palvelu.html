@@ -892,9 +892,9 @@
                 const sel = selections[stepId];
                 if (!sel) return false;
                 if (Array.isArray(sel)) {
-                    return sel.some(s => i18n.getText(s.label).toLowerCase().includes(label.toLowerCase()));
+                    return sel.some(s => (i18n.getText(s.label) || '').toLowerCase().includes(label.toLowerCase()));
                 }
-                return i18n.getText(sel.label).toLowerCase().includes(label.toLowerCase());
+                return (i18n.getText(sel.label) || '').toLowerCase().includes(label.toLowerCase());
             });
             
             // 3. Korvataan selections.stepId-viittaukset (onko jotain valittu kyseisessä stepissä)
@@ -1094,9 +1094,9 @@
             }
 
             const requestedFeatures = {
-                sauna: selectedOptions.some(o => i18n.getText(o.label)?.toLowerCase().includes('sauna')),
-                accessible: selectedOptions.some(o => i18n.getText(o.label)?.toLowerCase().includes('esteetön') || i18n.getText(o.label)?.toLowerCase().includes('vammais')),
-                home_service: selectedOptions.some(o => i18n.getText(o.label)?.toLowerCase().includes('kotiin') || i18n.getText(o.label)?.toLowerCase().includes('kotona'))
+                sauna: selectedOptions.some(o => (i18n.getText(o.label) || '').toLowerCase().includes('sauna')),
+                accessible: selectedOptions.some(o => (i18n.getText(o.label) || '').toLowerCase().includes('esteetön') || (i18n.getText(o.label) || '').toLowerCase().includes('vammais')),
+                home_service: selectedOptions.some(o => (i18n.getText(o.label) || '').toLowerCase().includes('kotiin') || (i18n.getText(o.label) || '').toLowerCase().includes('kotona'))
             };
 
             globalProfilingKey = currentProfilingKey;
@@ -1176,9 +1176,9 @@
 
                         // Tarkista not_suitable_for: hylkää yritys jos se on merkitty sopimattomaksi tähän hakuun
                         if (c.profiling?.core?.not_suitable_for?.length > 0) {
-                            const notSuitable = c.profiling.core.not_suitable_for.map(s => s.toLowerCase());
-                            const labelLower = i18n.getText(opt.label || '').toLowerCase();
-                            const optTagsLower = (opt.tags || []).map(t => t.toLowerCase());
+                            const notSuitable = c.profiling.core.not_suitable_for.map(s => String(s).toLowerCase());
+                            const labelLower = (i18n.getText(opt.label) || '').toLowerCase();
+                            const optTagsLower = (opt.tags || []).map(t => String(t).toLowerCase());
 
                             // A. Tarkistus labelilla: Jos jokin hylkäystermi sisältyy hakuotsikkoon (esim. "omilla tarjoiluilla")
                             const labelBlocked = notSuitable.some(s => labelLower.includes(s));
@@ -1226,8 +1226,8 @@
                                     const hasCommonBase = selections._sub_contexts.some(sc => {
                                         const scLower = sc.toLowerCase();
                                         // Etsitään yhteisiä sanoja tai alkuosia (hää, yritys, juhla, hautajais, muisto)
-                                        const bases = ['hää', 'yrity', 'juhla', 'hautaja', 'kokous', 'syntymä', 'muisto'];
-                                        return bases.some(b => scLower.includes(b) && companySubContexts.some(csc => csc.toLowerCase().includes(b)));
+                                        const cscArray = Array.isArray(companySubContexts) ? companySubContexts : (typeof companySubContexts === 'object' && companySubContexts !== null ? Object.values(companySubContexts).flat() : []);
+                                        return bases.some(b => scLower.includes(b) && cscArray.some(csc => String(csc).toLowerCase().includes(b)));
                                     });
                                     if (hasCommonBase) isSubContextMatch = true;
                                 }
@@ -1970,7 +1970,7 @@
         }
 
         function renderCompanyCard(c, requestedCapacity, profilingKey, collaboratorsSet, anchorCoords = null, isAnchorGroup = false, isSelected = false, groupLabel = '') {
-            const slug = typeof slugify === 'function' ? slugify(c.nimi) : c.nimi.toLowerCase().replace(/\s+/g, '-');
+            const slug = typeof slugify === 'function' ? slugify(c.nimi) : String(c.nimi).toLowerCase().replace(/\s+/g, '-');
             const isPremium = (c.paketti || c.tyyppi || '').toLowerCase().match(/premium|pro/);
             const cardUrl = isPremium ? `yritys/${slug}.html` : `yrityskortti.html?id=${slug}`;
             const icons = window.categoryIcons || {};
@@ -2140,8 +2140,8 @@
                 }
 
                 const events = c.profiling.events_and_celebrations || {};
-                if (events.is_accessible && selections.palvelut?.some(s => i18n.getText(s.label).toLowerCase().includes('esteetön') || i18n.getText(s.label).toLowerCase().includes('accessible'))) reasons.push(i18n.t('match_accessible'));
-                if (events.has_sauna && selections.palvelut?.some(s => i18n.getText(s.label).toLowerCase().includes('sauna'))) reasons.push(i18n.t('match_sauna'));
+                if (events.is_accessible && selections.palvelut?.some(s => (i18n.getText(s.label) || '').toLowerCase().includes('esteetön') || (i18n.getText(s.label) || '').toLowerCase().includes('accessible'))) reasons.push(i18n.t('match_accessible'));
+                if (events.has_sauna && selections.palvelut?.some(s => (i18n.getText(s.label) || '').toLowerCase().includes('sauna'))) reasons.push(i18n.t('match_sauna'));
             }
 
             if (reasons.length === 0) return i18n.t('match_default');
