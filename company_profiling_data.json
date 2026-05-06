@@ -54449,7 +54449,8 @@
                     "luontoaktiviteetit",
                     "hyvinvointi",
                     "kokous",
-                    "juhlapalvelu"
+                    "juhlapalvelu",
+                    "koskenlasku"
                 ],
                 "node_links": [
                     "SAUNA",
@@ -54649,7 +54650,7 @@
                 "collaborated_with": []
             },
             "meta": {
-                "last_updated": "2026-05-06T13:37:40.702Z",
+                "last_updated": "2026-05-06T13:51:45.050Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
