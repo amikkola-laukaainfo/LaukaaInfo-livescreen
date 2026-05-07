@@ -5049,9 +5049,7 @@ footer {
     font-weight: 800;
     text-shadow: 0 2px 10px rgba(0,0,0,0.5);
     line-height: 1.15;
-    word-break: break-word;
     overflow-wrap: break-word;
-    hyphens: auto;
 }
 
 .need-card p {
