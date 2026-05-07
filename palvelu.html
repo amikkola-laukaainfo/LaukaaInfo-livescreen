@@ -1207,6 +1207,8 @@
                         const normalizeText = (txt) => {
                             if (!txt) return "";
                             return String(txt).toLowerCase()
+                                .replace(/Ã£Â¤/g, 'ä').replace(/Ã£Â¶/g, 'ö')
+                                .replace(/Ã£â€ž/g, 'ä').replace(/Ã£â€“/g, 'ö')
                                 .replace(/Ã¤/g, 'ä').replace(/Ã¶/g, 'ö')
                                 .replace(/Ã„/g, 'ä').replace(/Ã–/g, 'ö')
                                 .replace(/Ã¥/g, 'å').replace(/Ã…/g, 'å')
