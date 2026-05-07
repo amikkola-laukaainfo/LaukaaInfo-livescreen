@@ -645,33 +645,26 @@
                         });
                     }
                 });
-
-                console.log("Taxonomy loaded from JSON:", taxonomyData);
             } catch (e) {
-                console.warn("Could not load taxonomy JSON:", e);
                 // Fallback to empty to prevent crashes
                 taxonomyData = { intents: [], relations: [], serviceTypes: [] };
             }
         }
 
         async function initPalvelu() {
-            console.log("initPalvelu started. currentNeedId:", currentNeedId);
             
             const config = window.NEEDS_CONFIG || (typeof NEEDS_CONFIG !== 'undefined' ? NEEDS_CONFIG : null);
             if (!config) {
-                console.error("NEEDS_CONFIG not found!");
                 return;
             }
 
             const need = config[currentNeedId];
             if (!need) {
-                console.warn("Need not found in config:", currentNeedId);
                 // window.location.href = 'index.html'; 
                 return;
             }
 
             const title = i18n.getText(need.title);
-            console.log("Found need:", title);
             document.getElementById('hero-title').textContent = title;
             document.getElementById('hero-desc').textContent = i18n.getText(need.description);
             document.getElementById('hero-icon').textContent = need.icon;
@@ -686,7 +679,6 @@
                 let retries = 0;
                 const maxRetries = 15;
                 while (typeof loadCompanyData !== 'function' && retries < maxRetries) {
-                    console.log("Waiting for loadCompanyData... retry:", retries);
                     await new Promise(r => setTimeout(r, 400));
                     retries++;
                 }
@@ -694,16 +686,11 @@
                 if (typeof loadCompanyData === 'function') {
                     // Käytetään window-etuliitettä selvyyden vuoksi
                     if (!window.allCompanies || window.allCompanies.length === 0) {
-                        console.log("allCompanies is empty, starting loadCompanyData...");
                         await loadCompanyData();
                     }
                 } else {
-                    console.warn("loadCompanyData is still not available, trying to proceed anyway...");
                 }
-                
-                console.log("Companies check:", (window.allCompanies) ? window.allCompanies.length : 'null/undefined');
             } catch (e) {
-                console.error("Error loading companies in initPalvelu:", e);
             }
 
             const filterProfiling = new URLSearchParams(window.location.search).get('filter_profiling');
@@ -722,7 +709,6 @@
             const step = need.steps[currentStepIndex];
             
             if (!step) {
-                console.error("Step not found at index:", currentStepIndex);
                 return;
             }
 
@@ -860,13 +846,11 @@
                         // Evaluoidaan skipIf-lauseke turvallisesti
                         const shouldSkip = evaluateSkipIf(step.skipIf);
                         if (shouldSkip) {
-                            console.log(`Skipping step '${step.id}': ${i18n.getText(step.skipMessage) || 'skipIf condition met'}`);
                             showSkipNotice(i18n.getText(step.skipMessage));
                             setTimeout(() => nextStep(), 1200);
                             return;
                         }
                     } catch(e) {
-                        console.warn('skipIf evaluation failed:', e);
                     }
                 }
                 renderStep();
@@ -915,7 +899,6 @@
                 const safeEval = new Function('return ' + evalStr);
                 return safeEval();
             } catch(e) {
-                console.warn('evaluateSkipIf failed for:', evalStr, e);
                 return false;
             }
         }
@@ -1039,7 +1022,6 @@
         }
 
         async function showResults() {
-            console.log("showResults() active. Selections:", selections);
             currentResultsGroups = [];
 
             const config = window.NEEDS_CONFIG || (typeof NEEDS_CONFIG !== 'undefined' ? NEEDS_CONFIG : null);
@@ -1177,8 +1159,6 @@
                         const companyCapacity = getCompanyCapacity(c, currentProfilingKey);
                         const fitsScore = getFitsForScore(c, currentProfilingKey);
 
-                        if (isRiina) console.log(`DEBUG: Checking Riina Raitio for option "${i18n.getText(opt.label)}"`, { currentProfilingKey, fitsScore, isVenueSearch });
-                        
                         // NEW: Strict exclusion of venues from specialized service searches (e.g. photography, videography, nuohous)
                         // Use only physical space capacity for this check to avoid excluding catering services
                         const catData = getCategoryData(c, currentProfilingKey);
@@ -1194,9 +1174,7 @@
                             // EXCEPTION: If the company has a very high score for this context (fitsScore >= 80),
                             // it's likely a legitimate service provider who happens to have some capacity.
                             if (fitsScore >= 80) {
-                                if (isRiina) console.log(`DEBUG: Riina Raitio ALLOWED despite being primarily venue (high fitsScore: ${fitsScore})`);
-                            } else {
-                                if (isRiina) console.log(`DEBUG: Riina Raitio EXCLUDED as primarily venue (isVenueSearch=${isVenueSearch}, venueCapacity=${venueCapacity}, isPrimarilyVenue=${isPrimarilyVenue})`);
+                                } else {
                                 return false; 
                             }
                         }
@@ -1207,8 +1185,6 @@
                             const catData = getCategoryData(c, currentProfilingKey);
                             if (!catData?.has_sauna) return false;
                         }
-
-                        if (isMediazoo) console.log(`DEBUG: Checking Mediazoo for option "${i18n.getText(opt.label)}"`, { currentProfilingKey, fitsScore, selections });
 
                         // Helper normalization for robust comparison (handles potential encoding issues)
                         const normalizeText = (txt) => {
@@ -1236,9 +1212,6 @@
 
                             if (labelBlocked || tagBlocked) {
                                 if (isMediazoo || isRiina) {
-                                    console.log(`DEBUG: Company ${c.nimi} EXCLUDED by not_suitable_for for option "${i18n.getText(opt.label)}"`, {
-                                        notSuitable, labelLower, labelBlocked, tagBlocked
-                                    });
                                 }
                                 return false;
                             }
@@ -1528,11 +1501,8 @@
                         
                         const tagMatch = opt.tags.some(tag => companyContent.includes(tag.toLowerCase()));
                         
-                        if (isMediazoo) console.log(`DEBUG: Mediazoo final match for "${i18n.getText(opt.label)}": ${tagMatch}`);
                         return tagMatch;
                     });
-                    
-                    console.log(`Option "${i18n.getText(opt.label)}" found ${companiesForOpt.length} companies.`);
                     
                     // Aina mukaan, vaikka yrityksiä ei löytyisi (käyttäjän toive)
                     companiesForOpt.forEach(c => {
