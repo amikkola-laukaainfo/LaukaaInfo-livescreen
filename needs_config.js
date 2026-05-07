@@ -122,7 +122,7 @@ const NEEDS_CONFIG = {
                 "options": [
                     { "label": { "fi": "Yrityshyvinvointi / Luennot", "en": "Corporate wellbeing / Lectures" }, "tags": ["hyvinvointi"] },
                     { "label": { "fi": "Ohjattu liikunta / Jooga", "en": "Guided exercise / Yoga" }, "tags": ["liikunta"] },
-                    { "label": { "fi": "Luontoelämykset / Eräopas", "en": "Nature experiences / Wilderness guide" }, "tags": ["ohjelmapalvelut"] }
+                    { "label": { "fi": "Luontoelämykset / Eräopas", "en": "Nature experiences / Wilderness guide" }, "tags": ["ohjelmapalvelut", "eräopas"] }
                 ]
             }
         ]
