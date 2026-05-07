@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fi">
 
 <head>
@@ -1159,7 +1159,6 @@
                         const companyCapacity = getCompanyCapacity(c, currentProfilingKey);
                         const fitsScore = getFitsForScore(c, currentProfilingKey);
 
-                        if (isRiina) console.log(`DEBUG: Checking Riina Raitio for option "${i18n.getText(opt.label)}"`, { currentProfilingKey, fitsScore, isVenueSearch });
                         
                         // NEW: Strict exclusion of venues from specialized service searches (e.g. photography, videography, nuohous)
                         // Use only physical space capacity for this check to avoid excluding catering services
@@ -1188,7 +1187,6 @@
                             if (!catData?.has_sauna) return false;
                         }
 
-                        if (isMediazoo) console.log(`DEBUG: Checking Mediazoo for option "${i18n.getText(opt.label)}"`, { currentProfilingKey, fitsScore, selections });
 
                         // Helper normalization for robust comparison (handles potential encoding issues)
                         const normalizeText = (txt) => {
