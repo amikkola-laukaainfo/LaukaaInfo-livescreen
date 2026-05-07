@@ -1203,20 +1203,34 @@
 
                         if (isMediazoo) console.log(`DEBUG: Checking Mediazoo for option "${i18n.getText(opt.label)}"`, { currentProfilingKey, fitsScore, selections });
 
+                        // Helper normalization for robust comparison (handles potential encoding issues)
+                        const normalizeText = (txt) => {
+                            if (!txt) return "";
+                            return String(txt).toLowerCase()
+                                .replace(/Ã¤/g, 'ä').replace(/Ã¶/g, 'ö')
+                                .replace(/Ã„/g, 'ä').replace(/Ã–/g, 'ö')
+                                .replace(/Ã¥/g, 'å').replace(/Ã…/g, 'å')
+                                .trim();
+                        };
+
                         // Tarkista not_suitable_for: hylkää yritys jos se on merkitty sopimattomaksi tähän hakuun
                         if (c.profiling?.core?.not_suitable_for?.length > 0) {
-                            const notSuitable = c.profiling.core.not_suitable_for.map(s => String(s).toLowerCase());
-                            const labelLower = (i18n.getText(opt.label) || '').toLowerCase();
-                            const optTagsLower = (opt.tags || []).map(t => String(t).toLowerCase());
+                            const notSuitable = c.profiling.core.not_suitable_for.map(s => normalizeText(s));
+                            const labelLower = normalizeText(i18n.getText(opt.label));
+                            const optTagsLower = (opt.tags || []).map(t => normalizeText(t));
 
                             // A. Tarkistus labelilla: Jos jokin hylkäystermi sisältyy hakuotsikkoon (esim. "omilla tarjoiluilla")
-                            const labelBlocked = notSuitable.some(s => labelLower.includes(s));
+                            const labelBlocked = notSuitable.some(s => s && labelLower.includes(s));
                             
                             // B. Tarkistus tageilla: Jos jokin hakuoptio on kielletty yritykseltä
-                            const tagBlocked = optTagsLower.some(tag => notSuitable.includes(tag));
+                            const tagBlocked = optTagsLower.some(tag => tag && notSuitable.includes(tag));
 
                             if (labelBlocked || tagBlocked) {
-                                if (isMediazoo) console.log(`DEBUG: Company ${c.nimi} EXCLUDED by not_suitable_for for option "${i18n.getText(opt.label)}"`);
+                                if (isMediazoo || isRiina) {
+                                    console.log(`DEBUG: Company ${c.nimi} EXCLUDED by not_suitable_for for option "${i18n.getText(opt.label)}"`, {
+                                        notSuitable, labelLower, labelBlocked, tagBlocked
+                                    });
+                                }
                                 return false;
                             }
                         }
