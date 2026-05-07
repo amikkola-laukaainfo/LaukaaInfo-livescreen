@@ -386,7 +386,7 @@ const NEEDS_CONFIG = {
             {
                 "id": "kapasiteetti",
                 "question": { "fi": "Kuinka paljon henkilöitä muistotilaisuuteen osallistuu?", "en": "How many people will attend the memorial service?" },
-                "skipIf": "!isSelected('paatarve', 'Muistotilaisuus')",
+                "skipIf": "isSelected('paatarve', 'Muistotilaisuus') || !isSelected('paatarve', 'Muistotilaisuus')",
                 "options": [
                     { "label": { "fi": "Alle 20 henkilöä", "en": "Less than 20 people" }, "capacity_req": 20, "tags": [] },
                     { "label": { "fi": "Noin 20 - 50 henkilöä", "en": "About 20 - 50 people" }, "capacity_req": 50, "tags": [] },
@@ -397,12 +397,13 @@ const NEEDS_CONFIG = {
             {
                 "id": "muistotila",
                 "hide_results": true,
-                "question": { "fi": "Muistotilaisuuden tila?", "en": "Venue for the memorial service?" },
+                "question": { "fi": "Millaista muistotilaisuuden tilaa tarvitsette?", "en": "What kind of venue do you need for the memorial service?" },
                 "skipIf": "!isSelected('paatarve', 'Muistotilaisuus')",
                 "options": [
-                    { "label": { "fi": "Rauhallinen muistotila", "en": "Quiet private space" }, "tags": ["juhlatila"], "capacity_req": 20, "profilointi_filter": { "section": "funerals_and_memorials", "field": "quiet_private_space", "value": true }, "require_fits_for": { "key": "funerals_and_memorials", "min": 30 } },
-                    { "label": { "fi": "Seurakuntasali", "en": "Parish hall" }, "tags": ["seurakunta"] },
-                    { "label": { "fi": "Tarvitsen vain catering-palvelun", "en": "Catering service only" }, "tags": [], "profilointi_filter": { "section": "funerals_and_memorials", "field": "memorial_catering", "value": true }, "require_fits_for": { "key": "funerals_and_memorials", "min": 20 } }
+                    { "label": { "fi": "Pieni kodikas muistotila (alle 20 hlö)", "en": "Small intimate memorial space (under 20 ppl)" }, "tags": ["juhlatila"], "capacity_req": 20, "sub_context": "muistotilaisuus", "profilointi_filter": { "section": "funerals_and_memorials", "field": "quiet_private_space", "value": true }, "require_fits_for": { "key": "funerals_and_memorials", "min": 20 } },
+                    { "label": { "fi": "Rauhallinen muistotila (20–50 hlö)", "en": "Quiet memorial venue (20–50 ppl)" }, "tags": ["juhlatila"], "capacity_req": 50, "sub_context": "muistotilaisuus", "profilointi_filter": { "section": "funerals_and_memorials", "field": "quiet_private_space", "value": true }, "require_fits_for": { "key": "funerals_and_memorials", "min": 30 } },
+                    { "label": { "fi": "Seurakuntasali (yli 50 hlö)", "en": "Parish hall (over 50 ppl)" }, "tags": ["seurakunta"], "capacity_req": 50, "sub_context": "muistotilaisuus" },
+                    { "label": { "fi": "Tarvitsen vain catering-palvelun", "en": "Catering service only" }, "tags": [], "sub_context": "muistotilaisuus", "profilointi_filter": { "section": "funerals_and_memorials", "field": "memorial_catering", "value": true }, "require_fits_for": { "key": "funerals_and_memorials", "min": 20 } }
                 ]
             },
             {
