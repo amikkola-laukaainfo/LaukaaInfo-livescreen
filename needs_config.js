@@ -158,7 +158,7 @@ const NEEDS_CONFIG = {
                 "options": [
                     { "label": { "fi": "Lounas ja kahvitus", "en": "Lunch and coffee" }, "tags": ["ravintola", "pitopalvelu"] },
                     { "label": { "fi": "Iltapala", "en": "Evening snack" }, "tags": ["ravintola"] },
-                    { "label": { "fi": "Vain tilat", "en": "Venue only" }, "tags": [] }
+                    { "label": { "fi": "Vain tilat", "en": "Venue only" }, "tags": ["juhlatila"], "node_link": "JUHLATILA", "intent_codes": ["VENUE_PARTY", "VENUE_MEETING"] }
                 ]
             },
             {
@@ -203,7 +203,7 @@ const NEEDS_CONFIG = {
                 "id": "tila",
                 "question": { "fi": "Missä haluat juhlia?", "en": "Where do you want to celebrate?" },
                 "options": [
-                    { "label": { "fi": "Juhlatila ruokailulla", "en": "Venue with dining" }, "tags": ["ravintola"], "capacity_req": 10 },
+                    { "label": { "fi": "Juhlatila ruokailulla", "en": "Venue with dining" }, "tags": ["ravintola", "juhlatila"], "capacity_req": 10, "node_link": "JUHLATILA", "intent_codes": ["VENUE_PARTY"] },
                     { "label": { "fi": "Kotona (tarvitaan palveluita)", "en": "At home (services needed)" }, "tags": ["pitopalvelu", "siivous", "kukkakauppa"] },
                     { "label": { "fi": "Saunalla tai mökillä", "en": "Sauna or cottage" }, "tags": ["saunatilat", "majoitus"], "capacity_req": 10 }
                 ]

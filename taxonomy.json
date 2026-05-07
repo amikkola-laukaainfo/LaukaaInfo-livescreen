@@ -258,14 +258,14 @@
       "label": { "fi": "Juhlatila", "en": "Party Venue" },
       "parent": "VENUES",
       "node_links": ["JUHLATILA"],
-      "tags": ["juhlatila", "pikkujoulut", "henkilöstöjuhlat", "syntymäpäivät", "häät", "kesäjuhlat"]
+      "tags": ["juhlatila", "pikkujoulut", "pikkujoulu", "henkilöstöjuhlat", "syntymäpäivät", "häät", "kesäjuhlat", "virkistyspäivä", "tyky-päivä", "tyhy-päivä", "sukujuhla", "valmistujaiset"]
     },
 
     "VENUE_MEETING": {
       "label": { "fi": "Kokoustila", "en": "Meeting Space" },
       "parent": "VENUES",
       "node_links": ["JUHLATILA"],
-      "tags": ["kokoustila", "neuvotteluhuone", "seminaari", "konferenssi", "koulutus"]
+      "tags": ["kokoustila", "neuvotteluhuone", "seminaari", "konferenssi", "koulutus", "kokous", "luento", "infotilaisuus", "asiakastilaisuus"]
     },
 
     "VENUE_ACCOMMODATION": {
