@@ -1399,7 +1399,8 @@
                                     const links = c.profiling?.core?.node_links || [];
                                     if (intent.nodeLinks.some(nl => links.includes(nl))) {
                                         const isTila = labelLower.includes('tila') && !labelLower.includes('tilaisuus');
-                                        if (isTila || (opt.tags && opt.tags.some(t => {
+                                        const isVenueIntent = targetIntentId.startsWith('VENUE_');
+                                        if (isTila || isVenueIntent || (opt.tags && opt.tags.some(t => {
                                             const tl = t.toLowerCase();
                                             return tl.includes('tila') && !tl.includes('tilaisuus');
                                         }))) {
