@@ -20784,7 +20784,9 @@
                     "majoitus",
                     "ravintolapalvelut",
                     "kiinteistöhuolto",
-                    "hyvinvointipalvelut"
+                    "hyvinvointipalvelut",
+                    "eräopas",
+                    "luontoelämykset"
                 ],
                 "sub_contexts": [
                     "äänentoisto",
