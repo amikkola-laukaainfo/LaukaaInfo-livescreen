@@ -584,13 +584,13 @@ const NEEDS_CONFIG = {
                 "id": "tyyppi",
                 "question": { "fi": "Millaista vapaa-ajan kohdetta tai palvelua etsit?", "en": "What kind of leisure venue or service are you looking for?" },
                 "options": [
-                    { "label": { "fi": "Uinti", "en": "Swimming" }, "tags": ["uinti", "uimahalli", "kylpylä"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "refinement_tags", "value": "peurunka" } },
-                    { "label": { "fi": "Koskenlasku", "en": "White-water rafting" }, "tags": ["koskenlasku", "vesiaktiviteetit"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "refinement_tags", "value": "varjola" } },
-                    { "label": { "fi": "Golf", "en": "Golf" }, "tags": ["golf", "ulkoilu"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "refinement_tags", "value": "revontuli" } },
-                    { "label": { "fi": "Ratsastus", "en": "Horse riding" }, "tags": ["ratsastus", "hevonen"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "refinement_tags", "value": "ratsastus" } },
-                    { "label": { "fi": "Huvipuisto", "en": "Amusement park" }, "tags": ["lapset", "huvipuisto"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "refinement_tags", "value": "nokkakivi" } },
-                    { "label": { "fi": "Luontoretkeily", "en": "Nature hiking" }, "tags": ["retkeily", "luonto"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "refinement_tags", "value": "multamäki" } },
-                    { "label": { "fi": "Kuntosali", "en": "Gym" }, "tags": ["kuntosali", "liikuntakeskus"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "refinement_tags", "value": "kuntosali" } }
+                    { "label": { "fi": "Uinti", "en": "Swimming" }, "tags": ["uinti", "uimahalli", "kylpylä", "peurunka", "vesiliikunta", "avantouinti"], "intent_codes": ["REC_SWIMMING"] },
+                    { "label": { "fi": "Koskenlasku", "en": "White-water rafting" }, "tags": ["koskenlasku", "vesiaktiviteetit", "melonta", "varjola", "koskimelonta"], "intent_codes": ["REC_RAFTING"] },
+                    { "label": { "fi": "Golf", "en": "Golf" }, "tags": ["golf", "golfkenttä", "golfklubi", "revontuli", "ulkoilu"], "intent_codes": ["REC_GOLF"] },
+                    { "label": { "fi": "Ratsastus", "en": "Horse riding" }, "tags": ["ratsastus", "hevonen", "ratsastuskoulu", "vaellus hevosella"], "intent_codes": ["REC_RIDING"] },
+                    { "label": { "fi": "Huvipuisto", "en": "Amusement park" }, "tags": ["lapset", "huvipuisto", "nokkakivi", "elämyspalvelut", "perheaktiviteetit"], "intent_codes": ["REC_AMUSEMENT"] },
+                    { "label": { "fi": "Luontoretkeily", "en": "Nature hiking" }, "tags": ["retkeily", "luontoretkeily", "luonto", "multamäki", "vaellus", "eräopas", "ohjelmapalvelut"], "intent_codes": ["REC_OUTDOOR"] },
+                    { "label": { "fi": "Kuntosali", "en": "Gym" }, "tags": ["kuntosali", "liikuntakeskus", "ohjattu liikunta", "personal trainer", "ryhmäliikunta"], "intent_codes": ["REC_GYM"] }
                 ]
             }
         ]

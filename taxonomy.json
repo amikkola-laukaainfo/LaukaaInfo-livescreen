@@ -1,106 +1,287 @@
 {
   "intents": {
+
     "EVT_WEDDING": {
       "label": { "fi": "Häät", "en": "Weddings" },
       "parent": "EVENTS",
       "related": ["MEDIA_PHOTO", "BIZ_CATERING", "VENUE_PARTY", "MEDIA_DRONE"],
-      "tags": ["häät", "hääjuhla", "vihkiminen"]
+      "tags": ["häät", "hääjuhla", "vihkiminen", "hääkuvaus", "häävideo", "hääkooste"]
     },
+
     "EVT_BIRTHDAY": {
       "label": { "fi": "Syntymäpäivät", "en": "Birthdays" },
       "parent": "EVENTS",
       "related": ["BIZ_CATERING", "MEDIA_PHOTO", "ENT_PROGRAM"],
-      "tags": ["syntymäpäivät", "synttärit", "sukujuhlat"]
+      "tags": ["syntymäpäivät", "synttärit", "sukujuhlat", "lasten synttärit"]
     },
+
     "EVT_CORPORATE": {
       "label": { "fi": "Yritystapahtumat", "en": "Corporate Events" },
       "parent": "EVENTS",
       "related": ["BIZ_CATERING", "MEDIA_VIDEO", "BIZ_MARKETING"],
-      "tags": ["yritysjuhlat", "tyhypäivä", "pikkujoulut", "henkilöstöjuhlat"]
+      "tags": ["yritysjuhlat", "tyhypäivä", "pikkujoulut", "henkilöstöjuhlat", "kesäjuhlat", "koulutus", "seminaari", "kokoustila"]
     },
+
     "EVT_MEMORIAL": {
       "label": { "fi": "Hautajaiset ja muistotilaisuudet", "en": "Funerals and Memorials" },
       "parent": "EVENTS",
-      "related": ["BIZ_CATERING", "MEDIA_PHOTO", "LAW_LEGAL"],
-      "tags": ["hautajaiset", "muistotilaisuus", "perunkirjoitus"]
+      "related": ["BIZ_CATERING", "MEDIA_PHOTO", "LAW_LEGAL", "BIZ_FLORIST", "MEDIA_DIGITIZATION"],
+      "tags": [
+        "hautajaiset", "muistotilaisuus", "perunkirjoitus", "hautauspalvelu", "hautakivi",
+        "muistovideo", "digitointi", "vhs-digitointi", "valokuvien digitointi",
+        "diojen digitointi", "kaitafilmien digitointi", "diasow-esitys",
+        "muistotilaisuuskuvaus", "hautajaiskuvaus", "kukat", "kukkakauppa"
+      ]
     },
+
     "MEDIA_PHOTO": {
       "label": { "fi": "Valokuvaus", "en": "Photography" },
       "parent": "MEDIA",
       "related": ["MEDIA_VIDEO", "MEDIA_DRONE"],
-      "tags": ["valokuvaus", "valokuvaaja", "hääkuvaus", "juhlakuvaus"]
+      "tags": ["valokuvaus", "valokuvaaja", "hääkuvaus", "juhlakuvaus", "yrityskuvaus", "kiinteistökuvaus", "asuntovideo"]
     },
+
     "MEDIA_VIDEO": {
       "label": { "fi": "Videokuvaus", "en": "Video Production" },
       "parent": "MEDIA",
       "related": ["MEDIA_PHOTO", "MEDIA_DRONE", "MEDIA_DIGITIZATION"],
-      "tags": ["videokuvaus", "videotuotanto", "häävideo", "mainosvideo"]
+      "tags": ["videokuvaus", "videotuotanto", "häävideo", "mainosvideo", "yritysvideo", "videomarkkinointi", "streamaus", "presentaatiotekniikka"]
     },
+
     "MEDIA_DRONE": {
       "label": { "fi": "Drone-kuvaus", "en": "Drone Filming" },
       "parent": "MEDIA",
       "related": ["MEDIA_VIDEO", "MEDIA_PHOTO"],
-      "tags": ["drone", "drone-kuvaus", "ilmakuvaus"]
+      "tags": ["drone", "drone-kuvaus", "ilmakuvaus", "timelapse", "rakennuskuvaus"]
     },
+
     "MEDIA_DIGITIZATION": {
       "label": { "fi": "Digitointi", "en": "Digitization" },
       "parent": "MEDIA",
       "related": ["MEDIA_VIDEO"],
-      "tags": ["digitointi", "vhs-digitointi", "valokuvien digitointi", "diojen digitointi"]
+      "tags": [
+        "digitointi", "vhs-digitointi", "valokuvien digitointi", "diojen digitointi",
+        "kaitafilmien digitointi", "häävideon editointi", "diasow-esitys"
+      ]
     },
+
     "BIZ_CATERING": {
       "label": { "fi": "Pitopalvelu", "en": "Catering" },
       "parent": "BUSINESS",
       "related": ["VENUE_PARTY"],
-      "tags": ["pitopalvelu", "catering", "ruokailu"]
+      "tags": ["pitopalvelu", "catering", "ruokailu", "kahvitus", "lounas"]
     },
+
+    "BIZ_FLORIST": {
+      "label": { "fi": "Kukkakauppa ja koristelu", "en": "Florist and Decoration" },
+      "parent": "BUSINESS",
+      "related": ["EVT_WEDDING", "EVT_MEMORIAL"],
+      "tags": ["kukkakauppa", "kukat", "hautajaiskukat", "koristelu", "kukkatervehkys"]
+    },
+
     "BIZ_BRANDING": {
       "label": { "fi": "Brändäys ja logo", "en": "Branding and Logo" },
       "parent": "BUSINESS",
       "related": ["BIZ_MARKETING", "MEDIA_PHOTO"],
-      "tags": ["brändäys", "logo", "graafinen suunnittelu"]
+      "tags": ["brändäys", "logo", "graafinen suunnittelu", "wordpress"]
     },
+
     "BIZ_MARKETING": {
       "label": { "fi": "Markkinointi", "en": "Marketing" },
       "parent": "BUSINESS",
       "related": ["BIZ_BRANDING", "MEDIA_VIDEO", "BIZ_ADVISORY"],
-      "tags": ["markkinointi", "digimarkkinointi", "somemainonta", "google-mainonta"]
+      "tags": ["markkinointi", "digimarkkinointi", "somemainonta", "google-mainonta", "sisällöntuotanto", "videomarkkinointi", "verkkokauppa"]
     },
+
     "BIZ_ADVISORY": {
       "label": { "fi": "Yritysneuvonta", "en": "Business Advisory" },
       "parent": "BUSINESS",
       "related": ["BIZ_MARKETING", "LAW_LEGAL"],
-      "tags": ["yritysneuvonta", "konsultointi", "liiketoimintasuunnitelma"]
+      "tags": ["yritysneuvonta", "konsultointi", "liiketoimintasuunnitelma", "rekrytointi", "koulutus"]
     },
+
+    "LAW_LEGAL": {
+      "label": { "fi": "Lakipalvelut", "en": "Legal Services" },
+      "parent": "BUSINESS",
+      "related": ["BIZ_ADVISORY"],
+      "tags": ["lakipalvelut", "lakiasiaintoimisto", "perunkirjoitus", "testamentti", "sopimukset", "juridiset palvelut", "tilintarkastus"]
+    },
+
+    "BIZ_IT": {
+      "label": { "fi": "IT ja verkkosivut", "en": "IT and Websites" },
+      "parent": "BUSINESS",
+      "related": ["BIZ_MARKETING", "BIZ_BRANDING"],
+      "tags": ["verkkosivut", "kotisivut", "it-palvelut", "domain", "wordpress", "verkkokauppa"]
+    },
+
     "HOME_MOVING": {
       "label": { "fi": "Muutto", "en": "Moving" },
       "parent": "HOME",
       "related": ["HOME_CLEANING", "HOME_MAINTENANCE"],
-      "tags": ["muutto", "muuttopalvelu", "kuljetus", "varastointi"]
+      "tags": ["muutto", "muuttopalvelu", "kuljetus", "varastointi", "muuttosiivous", "asuntovideo", "kiinteistökuvaus"]
     },
+
     "HOME_RENOVATION": {
       "label": { "fi": "Remontti", "en": "Renovation" },
       "parent": "HOME",
       "related": ["HOME_MAINTENANCE"],
-      "tags": ["remontti", "rakentaminen", "sähköasennukset", "lvi", "maalaustyöt"]
+      "tags": ["remontti", "rakentaminen", "sähköasennukset", "lvi", "maalaustyöt", "putkimies", "maalari", "timelapse", "rakennuskuvaus"]
     },
+
     "HOME_CLEANING": {
       "label": { "fi": "Siivous", "en": "Cleaning" },
       "parent": "HOME",
       "related": ["HOME_MAINTENANCE"],
-      "tags": ["siivous", "muuttosiivous", "kotisiivous"]
+      "tags": ["siivous", "muuttosiivous", "kotisiivous", "puhdistuspalvelut"]
     },
+
+    "HOME_MAINTENANCE": {
+      "label": { "fi": "Kiinteistöhuolto", "en": "Property Maintenance" },
+      "parent": "HOME",
+      "related": ["HOME_RENOVATION", "HOME_CLEANING"],
+      "tags": ["kiinteistöhuolto", "talonmies", "isännöinti", "pihanhoito", "lumityöt", "laiturihuolto", "polttopuut", "talvivalvonta"]
+    },
+
+    "HOME_COTTAGE": {
+      "label": { "fi": "Mökkipalvelut", "en": "Cottage Services" },
+      "parent": "HOME",
+      "related": ["HOME_MAINTENANCE", "HOME_CLEANING"],
+      "tags": ["mökkipalvelut", "talvivalvonta", "kiinteistöhuolto", "siivous", "polttopuut", "laiturihuolto", "pihanhoito"]
+    },
+
     "VENUE_PARTY": {
       "label": { "fi": "Juhlatila", "en": "Party Venue" },
       "parent": "VENUES",
       "related": ["BIZ_CATERING", "EVT_WEDDING"],
-      "tags": ["juhlatila", "kartano", "kylätalo", "sauna"]
+      "tags": ["juhlatila", "kartano", "kylätalo", "sauna", "ranta", "juhlapaikka"]
     },
+
     "VENUE_MEETING": {
       "label": { "fi": "Kokoustila", "en": "Meeting Room" },
       "parent": "VENUES",
       "related": ["BIZ_CATERING", "EVT_CORPORATE"],
-      "tags": ["kokoustila", "seminaari", "konferenssi"]
+      "tags": ["kokoustila", "seminaari", "konferenssi", "seminaaritilat", "streamaus"]
+    },
+
+    "VENUE_ACCOMMODATION": {
+      "label": { "fi": "Majoitus", "en": "Accommodation" },
+      "parent": "VENUES",
+      "related": ["VENUE_PARTY", "REC_OUTDOOR"],
+      "tags": ["majoitus", "hotelli", "lomamökki", "huoneisto", "leirikeskus", "järvinäköala", "sauna"]
+    },
+
+    "WELLBEING_HEALTH": {
+      "label": { "fi": "Terveyspalvelut", "en": "Health Services" },
+      "parent": "WELLBEING",
+      "related": ["WELLBEING_THERAPY", "WELLBEING_BEAUTY"],
+      "tags": ["terveyspalvelut", "lääkäri", "sairaanhoitaja", "fysioterapia", "kuntoutus", "neurologinen kuntoutus", "hammashoito"]
+    },
+
+    "WELLBEING_THERAPY": {
+      "label": { "fi": "Terapia ja hyvinvointi", "en": "Therapy and Wellbeing" },
+      "parent": "WELLBEING",
+      "related": ["WELLBEING_HEALTH", "WELLBEING_BEAUTY"],
+      "tags": ["terapia", "psykologi", "hieronta", "jooga", "hyvinvointi", "mindfulness"]
+    },
+
+    "WELLBEING_BEAUTY": {
+      "label": { "fi": "Kauneus ja hoitopalvelut", "en": "Beauty and Care Services" },
+      "parent": "WELLBEING",
+      "related": ["WELLBEING_HEALTH"],
+      "tags": ["kauneushoitola", "kampaamo", "parturi", "kosmetiikka", "jalkahoito", "kauneus", "meikki"]
+    },
+
+    "REC_SWIMMING": {
+      "label": { "fi": "Uinti ja vesiliikunta", "en": "Swimming and Water Activities" },
+      "parent": "RECREATION",
+      "related": ["REC_OUTDOOR", "VENUE_ACCOMMODATION"],
+      "tags": ["uinti", "uimahalli", "kylpylä", "peurunka", "vesiliikunta", "avantouinti"]
+    },
+
+    "REC_RAFTING": {
+      "label": { "fi": "Koskenlasku ja vesiaktiviteetit", "en": "White-water Rafting and Water Activities" },
+      "parent": "RECREATION",
+      "related": ["REC_OUTDOOR"],
+      "tags": ["koskenlasku", "vesiaktiviteetit", "melonta", "varjola", "koskimelonta"]
+    },
+
+    "REC_GOLF": {
+      "label": { "fi": "Golf", "en": "Golf" },
+      "parent": "RECREATION",
+      "related": ["REC_OUTDOOR"],
+      "tags": ["golf", "golfkenttä", "golfklubi", "revontuli", "ulkoilu"]
+    },
+
+    "REC_RIDING": {
+      "label": { "fi": "Ratsastus", "en": "Horse Riding" },
+      "parent": "RECREATION",
+      "related": ["REC_OUTDOOR"],
+      "tags": ["ratsastus", "hevonen", "ratsastuskoulu", "vaellus hevosella"]
+    },
+
+    "REC_OUTDOOR": {
+      "label": { "fi": "Luontoretkeily ja ulkoilu", "en": "Nature Hiking and Outdoor" },
+      "parent": "RECREATION",
+      "related": ["REC_SWIMMING", "REC_RAFTING", "REC_GOLF", "VENUE_ACCOMMODATION"],
+      "tags": ["retkeily", "luontoretkeily", "luonto", "multamäki", "ulkoilu", "vaellus", "eräopas", "ohjelmapalvelut"]
+    },
+
+    "REC_GYM": {
+      "label": { "fi": "Kuntosali ja liikuntakeskus", "en": "Gym and Sports Centre" },
+      "parent": "RECREATION",
+      "related": ["WELLBEING_HEALTH"],
+      "tags": ["kuntosali", "liikuntakeskus", "ohjattu liikunta", "personal trainer", "ryhmäliikunta"]
+    },
+
+    "REC_AMUSEMENT": {
+      "label": { "fi": "Huvipuisto ja perheaktiviteetit", "en": "Amusement Park and Family Activities" },
+      "parent": "RECREATION",
+      "related": ["REC_OUTDOOR"],
+      "tags": ["huvipuisto", "lapset", "perheaktiviteetit", "nokkakivi", "elämyspalvelut"]
+    },
+
+    "ENT_PROGRAM": {
+      "label": { "fi": "Ohjelmapalvelut", "en": "Entertainment and Program Services" },
+      "parent": "ENTERTAINMENT",
+      "related": ["EVT_WEDDING", "EVT_CORPORATE", "REC_OUTDOOR"],
+      "tags": ["ohjelmapalvelut", "elämykset", "musiikki", "esiintyjä", "eräopas", "luontoelämykset"]
+    },
+
+    "ENT_MUSIC": {
+      "label": { "fi": "Musiikki ja DJ", "en": "Music and DJ" },
+      "parent": "ENTERTAINMENT",
+      "related": ["EVT_WEDDING", "EVT_CORPORATE"],
+      "tags": ["musiikki", "dj", "live-musiikki", "bändi"]
+    },
+
+    "BIZ_TRANSPORT": {
+      "label": { "fi": "Kuljetus ja taksi", "en": "Transport and Taxi" },
+      "parent": "BUSINESS",
+      "related": ["HOME_MOVING"],
+      "tags": ["taksi", "kuljetus", "kuljetusliike", "hinaus", "bussi", "sairaankuljetus"]
     }
-  }
+
+  },
+
+  "relations": [
+    { "from": "EVT_WEDDING", "to": "VENUE_ACCOMMODATION", "type": "cross-sell" },
+    { "from": "EVT_WEDDING", "to": "BIZ_CATERING", "type": "cross-sell" },
+    { "from": "EVT_MEMORIAL", "to": "BIZ_CATERING", "type": "supporting" },
+    { "from": "EVT_MEMORIAL", "to": "BIZ_FLORIST", "type": "supporting" },
+    { "from": "EVT_MEMORIAL", "to": "MEDIA_PHOTO", "type": "supporting" },
+    { "from": "MEDIA_VIDEO", "to": "MEDIA_PHOTO", "type": "related" },
+    { "from": "VENUE_MEETING", "to": "BIZ_CATERING", "type": "supporting" },
+    { "from": "REC_SWIMMING", "to": "VENUE_ACCOMMODATION", "type": "related" },
+    { "from": "REC_OUTDOOR", "to": "VENUE_ACCOMMODATION", "type": "related" },
+    { "from": "REC_GOLF", "to": "VENUE_ACCOMMODATION", "type": "related" },
+    { "from": "HOME_MOVING", "to": "MEDIA_PHOTO", "type": "cross-sell" },
+    { "from": "HOME_RENOVATION", "to": "MEDIA_DRONE", "type": "cross-sell" }
+  ],
+
+  "service_types": [
+    "VALOKUVAUS", "VIDEOTUOTANTO", "DIGITOINTI", "CATERING",
+    "MAJOITUS", "SAUNA", "KUKAT", "HYVINVOINTI", "LIIKUNTA"
+  ],
+
+  "locations": ["LAUKAA", "LIEVESTUORE", "VIHTAVUORI", "JYVÄSKYLÄ"]
 }
