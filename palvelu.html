@@ -978,7 +978,11 @@
             const mappedKey = keyMap[key] || key;
             const underscoreKey = mappedKey.replace(/-/g, '_');
             const hyphenKey = mappedKey.replace(/_/g, '-');
-            return c.profiling[underscoreKey] || c.profiling[hyphenKey] || c.profiling[mappedKey] || c.profiling[key];
+            
+            // Profiling data v5 has categories under a 'categories' property
+            const categories = c.profiling.categories || {};
+            return categories[underscoreKey] || categories[hyphenKey] || categories[mappedKey] || 
+                   c.profiling[underscoreKey] || c.profiling[hyphenKey] || c.profiling[mappedKey] || c.profiling[key];
         }
 
         function getFitsForScore(c, profilingKey) {
