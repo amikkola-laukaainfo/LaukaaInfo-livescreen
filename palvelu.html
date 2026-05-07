@@ -627,7 +627,7 @@
                         label: i18n.getText(data.intents[id].label),
                         subcontexts: data.intents[id].tags || [], // Mapping tags to subcontexts
                         refinements: [],
-                        nodeLinks: [] // These are now handled via intent_codes directly
+                        nodeLinks: data.intents[id].node_links || [] // Read from taxonomy.json
                     })),
                     relations: [],
                     serviceTypes: []

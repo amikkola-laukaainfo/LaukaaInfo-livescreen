@@ -18,7 +18,7 @@
     "EVT_CORPORATE": {
       "label": { "fi": "Yritystapahtumat", "en": "Corporate Events" },
       "parent": "EVENTS",
-      "related": ["BIZ_CATERING", "MEDIA_VIDEO", "BIZ_MARKETING"],
+      "related": ["BIZ_CATERING", "MEDIA_VIDEO", "BIZ_MARKETING", "VENUE_PARTY", "VENUE_MEETING"],
       "tags": ["yritysjuhlat", "tyhypäivä", "pikkujoulut", "henkilöstöjuhlat", "kesäjuhlat", "koulutus", "seminaari", "kokoustila"]
     },
 
@@ -252,6 +252,27 @@
       "parent": "ENTERTAINMENT",
       "related": ["EVT_WEDDING", "EVT_CORPORATE"],
       "tags": ["musiikki", "dj", "live-musiikki", "bändi"]
+    },
+
+    "VENUE_PARTY": {
+      "label": { "fi": "Juhlatila", "en": "Party Venue" },
+      "parent": "VENUES",
+      "node_links": ["JUHLATILA"],
+      "tags": ["juhlatila", "pikkujoulut", "henkilöstöjuhlat", "syntymäpäivät", "häät", "kesäjuhlat"]
+    },
+
+    "VENUE_MEETING": {
+      "label": { "fi": "Kokoustila", "en": "Meeting Space" },
+      "parent": "VENUES",
+      "node_links": ["JUHLATILA"],
+      "tags": ["kokoustila", "neuvotteluhuone", "seminaari", "konferenssi", "koulutus"]
+    },
+
+    "VENUE_ACCOMMODATION": {
+      "label": { "fi": "Majoitus", "en": "Accommodation" },
+      "parent": "VENUES",
+      "node_links": ["MAJOITUS"],
+      "tags": ["majoitus", "hotelli", "mökki", "huoneisto", "yöpyminen"]
     },
 
     "BIZ_TRANSPORT": {
