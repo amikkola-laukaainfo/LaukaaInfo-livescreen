@@ -1879,6 +1879,25 @@
                         else addRec(r.to);
                     });
                 }
+
+                // New: also look at intent_codes from active selections
+                for (let stepId in selections) {
+                    const sel = selections[stepId];
+                    if (!sel) continue;
+                    const opts = Array.isArray(sel) ? sel : [sel];
+                    opts.forEach(opt => {
+                        if (opt.intent_codes) {
+                            opt.intent_codes.forEach(code => {
+                                const relIntents = taxonomyData.relations.filter(r => r.from === code);
+                                relIntents.forEach(r => {
+                                    const target = taxonomyData.intents.find(i => i.id === r.to);
+                                    if (target) addRec(target.label);
+                                    else addRec(r.to);
+                                });
+                            });
+                        }
+                    });
+                }
             }
 
             // 2. Profilointipohjaiset suositukset (yritysten omat ristiinmyyntiehdotukset)

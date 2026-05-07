@@ -83,6 +83,8 @@ const SEARCH_TAG_LIST = [
     { term: "majoitus", category: "Ravintolat ja palvelut" },
     { term: "kokoustilat", category: "Ravintolat ja palvelut" },
     { term: "juhlatilat", category: "Ravintolat ja palvelut" },
+    { term: "pikkujoulut", category: "Ravintolat ja palvelut" },
+    { term: "pikkujoulu", category: "Ravintolat ja palvelut" },
 
     // 💻 Yritys- ja asiantuntijapalvelut
     { term: "tilitoimisto", category: "Yritys- ja asiantuntijapalvelut" },
