@@ -85,9 +85,9 @@ const NEEDS_CONFIG = {
                 "id": "tarkennus",
                 "question": { "fi": "Millaista tilaisuutta olet järjestämässä?", "en": "What kind of event are you organizing?" },
                 "options": [
-                    { "label": { "fi": "Pikkujoulut", "en": "Christmas Party" }, "sub_context": "pikkujoulut", "tags": ["juhlatila"], "capacity_req": 30 },
-                    { "label": { "fi": "Henkilöstöjuhlat / Kesäjuhlat", "en": "Staff Party / Summer Party" }, "sub_context": "henkilöstöjuhlat", "tags": ["juhlatila"], "capacity_req": 50 },
-                    { "label": { "fi": "Virkistyspäivä / Tyky-päivä", "en": "Team Day / Wellness Day" }, "sub_context": "tyky-paiva", "tags": ["ohjelmapalvelut"] }
+                    { "label": { "fi": "Pikkujoulut", "en": "Christmas Party" }, "sub_context": "pikkujoulut", "tags": ["juhlatila"], "capacity_req": 30, "intent_codes": ["VENUE_PARTY"], "node_link": "JUHLATILA" },
+                    { "label": { "fi": "Henkilöstöjuhlat / Kesäjuhlat", "en": "Staff Party / Summer Party" }, "sub_context": "henkilöstöjuhlat", "tags": ["juhlatila"], "capacity_req": 50, "intent_codes": ["VENUE_PARTY"], "node_link": "JUHLATILA" },
+                    { "label": { "fi": "Virkistyspäivä / Tyky-päivä", "en": "Team Day / Wellness Day" }, "sub_context": "tyky-paiva", "tags": ["juhlatila", "ohjelmapalvelut"], "capacity_req": 10, "intent_codes": ["VENUE_PARTY", "ENT_PROGRAM"], "node_link": "JUHLATILA" }
                 ]
             },
             {
@@ -105,14 +105,14 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": { "fi": "Mitä lisäpalveluita tarvitsette?", "en": "What additional services do you need?" },
                 "options": [
-                    { "label": { "fi": "Pitopalvelu", "en": "Catering" }, "tags": ["pitopalvelu"] },
-                    { "label": { "fi": "Majoitus", "en": "Accommodation" }, "tags": ["majoitus"] },
-                    { "label": { "fi": "Kuljetukset", "en": "Transport" }, "tags": ["kuljetus", "taksi"] },
-                    { "label": { "fi": "Videokuvaus", "en": "Video recording" }, "tags": ["videotuotanto", "videokuvaus"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "videotuotanto" } },
-                    { "label": { "fi": "Valokuvaus", "en": "Photography" }, "tags": ["valokuvaus", "valokuvaaja"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "juhlakuvaus" } },
-                    { "label": { "fi": "Saunatilat", "en": "Sauna facilities" }, "tags": ["saunatilat"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "sauna" } },
-                    { "label": { "fi": "Ohjelmapalvelut / Elämykset", "en": "Entertainment / Experiences" }, "tags": ["ohjelmapalvelut"] },
-                    { "label": { "fi": "AV-tekniikka & Äänentoisto", "en": "AV tech & Sound" }, "tags": ["it-palvelut"], "profilointi_filter": { "section": "events_and_celebrations", "field": "has_av_tech", "value": true } }
+                    { "label": { "fi": "Pitopalvelu", "en": "Catering" }, "tags": ["pitopalvelu"], "intent_codes": ["BIZ_CATERING"] },
+                    { "label": { "fi": "Majoitus", "en": "Accommodation" }, "tags": ["majoitus"], "intent_codes": ["VENUE_ACCOMMODATION"] },
+                    { "label": { "fi": "Kuljetukset", "en": "Transport" }, "tags": ["kuljetus", "taksi"], "intent_codes": ["BIZ_TRANSPORT"] },
+                    { "label": { "fi": "Videokuvaus", "en": "Video recording" }, "tags": ["videotuotanto", "videokuvaus"], "intent_codes": ["MEDIA_VIDEO"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "videotuotanto" } },
+                    { "label": { "fi": "Valokuvaus", "en": "Photography" }, "tags": ["valokuvaus", "valokuvaaja"], "intent_codes": ["MEDIA_PHOTO"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "juhlakuvaus" } },
+                    { "label": { "fi": "Saunatilat", "en": "Sauna facilities" }, "tags": ["saunatilat"], "intent_codes": ["VENUE_PARTY"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "sauna" } },
+                    { "label": { "fi": "Ohjelmapalvelut / Elämykset", "en": "Entertainment / Experiences" }, "tags": ["ohjelmapalvelut"], "intent_codes": ["ENT_PROGRAM"] },
+                    { "label": { "fi": "AV-tekniikka & Äänentoisto", "en": "AV tech & Sound" }, "tags": ["it-palvelut"], "intent_codes": ["MEDIA_VIDEO"], "profilointi_filter": { "section": "events_and_celebrations", "field": "has_av_tech", "value": true } }
                 ]
             },
             {
@@ -137,9 +137,9 @@ const NEEDS_CONFIG = {
                 "id": "tarkennus",
                 "question": { "fi": "Millaista tilaa tarvitsette?", "en": "What kind of space do you need?" },
                 "options": [
-                    { "label": { "fi": "Pieni kokous / Neuvottelu", "en": "Small meeting / Negotiation" }, "sub_context": "kokous", "tags": ["kokoustilat"], "capacity_req": 5 },
-                    { "label": { "fi": "Seminaari / Koulutus", "en": "Seminar / Training" }, "sub_context": "seminaari", "tags": ["seminaaritilat"], "capacity_req": 1 },
-                    { "label": { "fi": "Konferenssi / Suuri tilaisuus", "en": "Conference / Large event" }, "sub_context": "konferenssi", "tags": ["kokoustilat"], "capacity_req": 1 }
+                    { "label": { "fi": "Pieni kokous / Neuvottelu", "en": "Small meeting / Negotiation" }, "sub_context": "kokous", "tags": ["kokoustilat"], "capacity_req": 5, "intent_codes": ["VENUE_MEETING"], "node_link": "JUHLATILA" },
+                    { "label": { "fi": "Seminaari / Koulutus", "en": "Seminar / Training" }, "sub_context": "seminaari", "tags": ["seminaaritilat"], "capacity_req": 1, "intent_codes": ["VENUE_MEETING"], "node_link": "JUHLATILA" },
+                    { "label": { "fi": "Konferenssi / Suuri tilaisuus", "en": "Conference / Large event" }, "sub_context": "konferenssi", "tags": ["kokoustilat"], "capacity_req": 1, "intent_codes": ["VENUE_MEETING"], "node_link": "JUHLATILA" }
                 ]
             },
             {
@@ -166,10 +166,10 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": { "fi": "Muut tarpeet?", "en": "Other needs?" },
                 "options": [
-                    { "label": { "fi": "Majoitus", "en": "Accommodation" }, "tags": ["majoitus"] },
-                    { "label": { "fi": "Videokuvaus", "en": "Video recording" }, "tags": ["videotuotanto", "videokuvaus", "videokuvaaja"], "profilointi_filter": { "section": "business_events", "field": "refinement_tags", "value": "yritysvideo" } },
-                    { "label": { "fi": "Valokuvaus", "en": "Photography" }, "tags": ["valokuvaus", "valokuvaaja"], "profilointi_filter": { "section": "business_events", "field": "refinement_tags", "value": "yrityskuvaus" } },
-                    { "label": { "fi": "IT-tuki / AV-tekniikka", "en": "IT support / AV tech" }, "tags": ["it-palvelut"], "profilointi_filter": { "section": "business_events", "field": "has_projector", "value": true } }
+                    { "label": { "fi": "Majoitus", "en": "Accommodation" }, "tags": ["majoitus"], "intent_codes": ["VENUE_ACCOMMODATION"] },
+                    { "label": { "fi": "Videokuvaus", "en": "Video recording" }, "tags": ["videotuotanto", "videokuvaus", "videokuvaaja"], "intent_codes": ["MEDIA_VIDEO"], "profilointi_filter": { "section": "business_events", "field": "refinement_tags", "value": "yritysvideo" } },
+                    { "label": { "fi": "Valokuvaus", "en": "Photography" }, "tags": ["valokuvaus", "valokuvaaja"], "intent_codes": ["MEDIA_PHOTO"], "profilointi_filter": { "section": "business_events", "field": "refinement_tags", "value": "yrityskuvaus" } },
+                    { "label": { "fi": "IT-tuki / AV-tekniikka", "en": "IT support / AV tech" }, "tags": ["it-palvelut"], "intent_codes": ["BIZ_IT"], "profilointi_filter": { "section": "business_events", "field": "has_projector", "value": true } }
                 ]
             }
         ]
