@@ -1186,8 +1186,8 @@
 
                         // Enhanced venue detection: check if company is marked as JUHLATILA or has capacity anywhere
                         const isPrimarilyVenue = (c.profiling?.core?.node_links || []).includes('JUHLATILA') || 
-                                                (c.profiling?.events_and_celebrations?.capacity_max > 0) ||
-                                                (c.profiling?.business_events?.meeting_capacity > 0);
+                                                (getCategoryData(c, 'events_and_celebrations')?.capacity_max > 0) ||
+                                                (getCategoryData(c, 'business_events')?.meeting_capacity > 0);
 
                         if (!isVenueSearch && (venueCapacity > 0 || isPrimarilyVenue)) {
                             // If searching for a service (not a venue), and company is a venue, exclude it.
@@ -2275,7 +2275,7 @@
                     if (cap >= requestedCapacity) reasons.push(i18n.t('match_capacity_ok'));
                 }
 
-                const events = c.profiling.events_and_celebrations || {};
+                const events = getCategoryData(c, 'events_and_celebrations') || {};
                 if (events.is_accessible && selections.palvelut?.some(s => (i18n.getText(s.label) || '').toLowerCase().includes('esteetön') || (i18n.getText(s.label) || '').toLowerCase().includes('accessible'))) reasons.push(i18n.t('match_accessible'));
                 if (events.has_sauna && selections.palvelut?.some(s => (i18n.getText(s.label) || '').toLowerCase().includes('sauna'))) reasons.push(i18n.t('match_sauna'));
             }
