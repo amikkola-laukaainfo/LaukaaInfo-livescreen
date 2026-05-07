@@ -1372,7 +1372,8 @@
                         // ei sallita taksonomia-fallbackia, jotta vältetään vääriä osumia yrityksille 
                         // jotka on jo kertaalleen hylätty (esim. catering-vaatimuksen takia).
                         if (taxonomyData && !isProfiledMatch && !opt.profilointi_filter) {
-                            const intent = taxonomyData.intents.find(i => i.id === currentProfilingKey || i.id === currentProfilingKey.replace(/_/g, '-'));
+                            const targetIntentId = (opt.intent_codes && opt.intent_codes.length > 0) ? opt.intent_codes[0] : currentProfilingKey;
+                            const intent = taxonomyData.intents.find(i => i.id === targetIntentId || i.id === targetIntentId.replace(/_/g, '-'));
                             if (intent) {
                                 const labelLower = i18n.getText(opt.label || '').toLowerCase();
                                 const isTaxonomyTerm = intent.refinements.some(r => labelLower.includes(r.toLowerCase())) ||
