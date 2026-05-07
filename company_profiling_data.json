@@ -1,4 +1,4 @@
-﻿{
+{
     "SCHEMA_VERSION": "5.0",
     "DESCRIPTION": "LaukaaInfo Ratkaisulähtöinen profilointi v5. Sisältää eksplisiittisen graafirakenteen.",
     "nodes": {},
@@ -24820,7 +24820,8 @@
                     "kokous",
                     "hyvinvointi",
                     "ravintolapalvelut",
-                    "sauna"
+                    "sauna",
+                    "pikkujoulut"
                 ],
                 "node_links": [
                     "LAUKAA",
@@ -24834,7 +24835,9 @@
                 ],
                 "intent_codes": [
                     "REC_SWIMMING",
-                    "REC_GYM"
+                    "REC_GYM",
+                    "VENUE_PARTY",
+                    "VENUE_MEETING"
                 ],
                 "intent_scores": {
                     "REC_SWIMMING": 100,
@@ -56176,7 +56179,8 @@
                     "hyvinvointi",
                     "kokous",
                     "juhlapalvelu",
-                    "koskenlasku"
+                    "koskenlasku",
+                    "pikkujoulut"
                 ],
                 "node_links": [
                     "SAUNA",
@@ -56188,7 +56192,9 @@
                     "JUHLATILA"
                 ],
                 "intent_codes": [
-                    "REC_RAFTING"
+                    "REC_RAFTING",
+                    "VENUE_PARTY",
+                    "VENUE_MEETING"
                 ],
                 "intent_scores": {
                     "REC_RAFTING": 90
@@ -58299,7 +58305,8 @@
                     "kalastus",
                     "patikointi",
                     "hiihto",
-                    "kokouspaketti"
+                    "kokouspaketti",
+                    "pikkujoulut"
                 ],
                 "node_links": [
                     "LAUKAA",
@@ -58317,7 +58324,9 @@
                 ],
                 "intent_codes": [
                     "EVT_WEDDING",
-                    "REC_GOLF"
+                    "REC_GOLF",
+                    "VENUE_PARTY",
+                    "VENUE_MEETING"
                 ],
                 "intent_scores": {
                     "EVT_WEDDING": 100,
