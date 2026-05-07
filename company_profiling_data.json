@@ -27861,10 +27861,12 @@
                 ],
                 "intent_codes": [
                     "EVT_MEMORIAL",
-                    "EVT_MEMORIAL"
+                    "EVT_MEMORIAL",
+                    "BIZ_FLORIST"
                 ],
                 "intent_scores": {
-                    "EVT_MEMORIAL": 100
+                    "EVT_MEMORIAL": 100,
+                    "BIZ_FLORIST": 100
                 }
             },
             "categories": {
