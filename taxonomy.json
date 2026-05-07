@@ -1,0 +1,106 @@
+{
+  "intents": {
+    "EVT_WEDDING": {
+      "label": { "fi": "Häät", "en": "Weddings" },
+      "parent": "EVENTS",
+      "related": ["MEDIA_PHOTO", "BIZ_CATERING", "VENUE_PARTY", "MEDIA_DRONE"],
+      "tags": ["häät", "hääjuhla", "vihkiminen"]
+    },
+    "EVT_BIRTHDAY": {
+      "label": { "fi": "Syntymäpäivät", "en": "Birthdays" },
+      "parent": "EVENTS",
+      "related": ["BIZ_CATERING", "MEDIA_PHOTO", "ENT_PROGRAM"],
+      "tags": ["syntymäpäivät", "synttärit", "sukujuhlat"]
+    },
+    "EVT_CORPORATE": {
+      "label": { "fi": "Yritystapahtumat", "en": "Corporate Events" },
+      "parent": "EVENTS",
+      "related": ["BIZ_CATERING", "MEDIA_VIDEO", "BIZ_MARKETING"],
+      "tags": ["yritysjuhlat", "tyhypäivä", "pikkujoulut", "henkilöstöjuhlat"]
+    },
+    "EVT_MEMORIAL": {
+      "label": { "fi": "Hautajaiset ja muistotilaisuudet", "en": "Funerals and Memorials" },
+      "parent": "EVENTS",
+      "related": ["BIZ_CATERING", "MEDIA_PHOTO", "LAW_LEGAL"],
+      "tags": ["hautajaiset", "muistotilaisuus", "perunkirjoitus"]
+    },
+    "MEDIA_PHOTO": {
+      "label": { "fi": "Valokuvaus", "en": "Photography" },
+      "parent": "MEDIA",
+      "related": ["MEDIA_VIDEO", "MEDIA_DRONE"],
+      "tags": ["valokuvaus", "valokuvaaja", "hääkuvaus", "juhlakuvaus"]
+    },
+    "MEDIA_VIDEO": {
+      "label": { "fi": "Videokuvaus", "en": "Video Production" },
+      "parent": "MEDIA",
+      "related": ["MEDIA_PHOTO", "MEDIA_DRONE", "MEDIA_DIGITIZATION"],
+      "tags": ["videokuvaus", "videotuotanto", "häävideo", "mainosvideo"]
+    },
+    "MEDIA_DRONE": {
+      "label": { "fi": "Drone-kuvaus", "en": "Drone Filming" },
+      "parent": "MEDIA",
+      "related": ["MEDIA_VIDEO", "MEDIA_PHOTO"],
+      "tags": ["drone", "drone-kuvaus", "ilmakuvaus"]
+    },
+    "MEDIA_DIGITIZATION": {
+      "label": { "fi": "Digitointi", "en": "Digitization" },
+      "parent": "MEDIA",
+      "related": ["MEDIA_VIDEO"],
+      "tags": ["digitointi", "vhs-digitointi", "valokuvien digitointi", "diojen digitointi"]
+    },
+    "BIZ_CATERING": {
+      "label": { "fi": "Pitopalvelu", "en": "Catering" },
+      "parent": "BUSINESS",
+      "related": ["VENUE_PARTY"],
+      "tags": ["pitopalvelu", "catering", "ruokailu"]
+    },
+    "BIZ_BRANDING": {
+      "label": { "fi": "Brändäys ja logo", "en": "Branding and Logo" },
+      "parent": "BUSINESS",
+      "related": ["BIZ_MARKETING", "MEDIA_PHOTO"],
+      "tags": ["brändäys", "logo", "graafinen suunnittelu"]
+    },
+    "BIZ_MARKETING": {
+      "label": { "fi": "Markkinointi", "en": "Marketing" },
+      "parent": "BUSINESS",
+      "related": ["BIZ_BRANDING", "MEDIA_VIDEO", "BIZ_ADVISORY"],
+      "tags": ["markkinointi", "digimarkkinointi", "somemainonta", "google-mainonta"]
+    },
+    "BIZ_ADVISORY": {
+      "label": { "fi": "Yritysneuvonta", "en": "Business Advisory" },
+      "parent": "BUSINESS",
+      "related": ["BIZ_MARKETING", "LAW_LEGAL"],
+      "tags": ["yritysneuvonta", "konsultointi", "liiketoimintasuunnitelma"]
+    },
+    "HOME_MOVING": {
+      "label": { "fi": "Muutto", "en": "Moving" },
+      "parent": "HOME",
+      "related": ["HOME_CLEANING", "HOME_MAINTENANCE"],
+      "tags": ["muutto", "muuttopalvelu", "kuljetus", "varastointi"]
+    },
+    "HOME_RENOVATION": {
+      "label": { "fi": "Remontti", "en": "Renovation" },
+      "parent": "HOME",
+      "related": ["HOME_MAINTENANCE"],
+      "tags": ["remontti", "rakentaminen", "sähköasennukset", "lvi", "maalaustyöt"]
+    },
+    "HOME_CLEANING": {
+      "label": { "fi": "Siivous", "en": "Cleaning" },
+      "parent": "HOME",
+      "related": ["HOME_MAINTENANCE"],
+      "tags": ["siivous", "muuttosiivous", "kotisiivous"]
+    },
+    "VENUE_PARTY": {
+      "label": { "fi": "Juhlatila", "en": "Party Venue" },
+      "parent": "VENUES",
+      "related": ["BIZ_CATERING", "EVT_WEDDING"],
+      "tags": ["juhlatila", "kartano", "kylätalo", "sauna"]
+    },
+    "VENUE_MEETING": {
+      "label": { "fi": "Kokoustila", "en": "Meeting Room" },
+      "parent": "VENUES",
+      "related": ["BIZ_CATERING", "EVT_CORPORATE"],
+      "tags": ["kokoustila", "seminaari", "konferenssi"]
+    }
+  }
+}

@@ -6,8 +6,27 @@ This guide is intended for AI agents responsible for profiling companies in the 
 The discovery engine uses broad business sectors to organize companies. Ensure the `kategoria` field in the core data matches one of these if possible:
 - `Palvelut`, `Kaupat ja putiikit`, `Ravintolat ja kahvilat`, `Terveys ja hyvinvointi`, `Kulttuuri ja vapaa-aika`, `Majoitus`, `Teollisuus ja rakentaminen`, `Asiantuntijapalvelut`, `Kuljetus ja logistiikka`, `Autoilu ja liikenne`, `Juhlat ja tapahtumat`.
 
-## 2. Primary Intents (fits_for)
-Use these keys in the `fits_for` section. High scores (80+) prioritize the company in these flows.
+## 2. Intent-Based Profiling (intent_codes & intent_scores)
+This is the **primary discovery and ranking mechanism**. AI agents should prioritize populating these fields.
+
+### Standardized Intent Codes (intent_codes)
+Use these uppercase codes in the `intent_codes` array.
+- **Events**: `EVT_WEDDING`, `EVT_BIRTHDAY`, `EVT_CORPORATE`, `EVT_MEMORIAL`.
+- **Media**: `MEDIA_PHOTO`, `MEDIA_VIDEO`, `MEDIA_DRONE`, `MEDIA_DIGITIZATION`.
+- **Business**: `BIZ_CATERING`, `BIZ_BRANDING`, `BIZ_MARKETING`, `BIZ_ADVISORY`, `BIZ_FLORIST`, `BIZ_TRANSPORT`.
+- **Home**: `HOME_MOVING`, `HOME_RENOVATION`, `HOME_CLEANING`, `HOME_MAINTENANCE`.
+- **Venues**: `VENUE_PARTY`, `VENUE_MEETING`, `VENUE_ACCOMMODATION`.
+- **Leisure/Health**: `LEISURE_SPA`, `LEISURE_GOLF`, `WELLBEING_BEAUTY`.
+
+### Weighted Scores (intent_scores)
+Define the strength of the match (0-100) for each code in the `intent_scores` object.
+- `100`: Primary service, specialist.
+- `80`: Significant secondary service.
+- `50`: Capability exists but is not the main focus.
+- `20`: Occasional or minor supporting role.
+
+## 3. Legacy Primary Intents (fits_for) - DEPRECATED
+The `fits_for` field is still supported for backward compatibility but is being phased out in favor of `intent_scores`.
 - `events-and-celebrations` (Häät ja juhlat)
 - `business-events` (Yritystapahtumat)
 - `funerals-and-memorials` (Hautajaiset ja muistotilaisuudet)
@@ -19,10 +38,10 @@ Use these keys in the `fits_for` section. High scores (80+) prioritize the compa
 - `accommodation` (Majoitus)
 - `wellbeing-and-beauty` (Hyvinvointi ja kauneus)
 
-## 3. Standardized Node Links (node_links)
-Node links are the **primary discovery mechanism**. If a company has a node link, they are automatically eligible for category-wide results.
+## 4. Standardized Node Links (node_links)
+Node links are used for visual mapping and category-wide broad matching.
 - `JUHLATILA`: Venues, meeting spaces. (Triggers capacity filtering)
-- `DIGITOINTI`: VHS, photos, film, slides. Covers: `vhs-digitointi`, `valokuvien digitointi`, `diojen digitointi`, `kaitafilmien digitointi`, `diashow-esitykset`.
+- `DIGITOINTI`: VHS, photos, film, slides.
 - `VALOKUVAUS`: Photography (General).
 - `VIDEOTUOTANTO`: Video production, editing.
 - `CATERING`: Food services, pitopalvelu.

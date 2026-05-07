@@ -617,39 +617,40 @@
 
         async function loadTaxonomy() {
             try {
-                const response = await fetch('laukaainfo_taxonomy.xml');
-                const xmlText = await response.text();
-                const parser = new DOMParser();
-                const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+                const response = await fetch('taxonomy.json');
+                const data = await response.json();
                 
+                // Map new JSON structure to internal taxonomyData format for backward compatibility
                 taxonomyData = {
-                    intents: [],
-                    locations: [],
-                    serviceTypes: [],
-                    relations: []
+                    intents: Object.keys(data.intents).map(id => ({
+                        id: id,
+                        label: i18n.getText(data.intents[id].label),
+                        subcontexts: data.intents[id].tags || [], // Mapping tags to subcontexts
+                        refinements: [],
+                        nodeLinks: [] // These are now handled via intent_codes directly
+                    })),
+                    relations: [],
+                    serviceTypes: []
                 };
 
-                xmlDoc.querySelectorAll('intent').forEach(intent => {
-                    taxonomyData.intents.push({
-                        id: intent.getAttribute('id'),
-                        label: intent.getAttribute('label'),
-                        subcontexts: Array.from(intent.querySelectorAll('subcontexts tag')).map(t => t.textContent),
-                        refinements: Array.from(intent.querySelectorAll('refinements tag')).map(t => t.textContent),
-                        nodeLinks: Array.from(intent.querySelectorAll('node_links node')).map(n => n.textContent)
-                    });
+                // Populate relations from 'related' arrays
+                Object.keys(data.intents).forEach(id => {
+                    if (data.intents[id].related) {
+                        data.intents[id].related.forEach(to => {
+                            taxonomyData.relations.push({
+                                from: id,
+                                to: to,
+                                type: 'related'
+                            });
+                        });
+                    }
                 });
 
-                xmlDoc.querySelectorAll('relation').forEach(rel => {
-                    taxonomyData.relations.push({
-                        from: rel.getAttribute('from'),
-                        to: rel.getAttribute('to'),
-                        type: rel.getAttribute('type')
-                    });
-                });
-
-                console.log("Taxonomy loaded:", taxonomyData);
+                console.log("Taxonomy loaded from JSON:", taxonomyData);
             } catch (e) {
-                console.warn("Could not load taxonomy XML:", e);
+                console.warn("Could not load taxonomy JSON:", e);
+                // Fallback to empty to prevent crashes
+                taxonomyData = { intents: [], relations: [], serviceTypes: [] };
             }
         }
 
@@ -981,7 +982,15 @@
         }
 
         function getFitsForScore(c, profilingKey) {
-            if (!c || !c.profiling || !c.profiling.core || !c.profiling.core.fits_for) return 0;
+            if (!c || !c.profiling || !c.profiling.core) return 0;
+            
+            // 1. Check intent_scores first (new standardized system)
+            if (c.profiling.core.intent_scores) {
+                const intentScore = c.profiling.core.intent_scores[profilingKey];
+                if (intentScore !== undefined) return intentScore;
+            }
+
+            if (!c.profiling.core.fits_for) return 0;
             const fits = c.profiling.core.fits_for;
             
             const finnishMap = {
@@ -1006,6 +1015,11 @@
             }
             
             return score;
+        }
+
+        function getIntentScore(c, intentCode) {
+            if (!c || !c.profiling || !c.profiling.core || !c.profiling.core.intent_scores) return 0;
+            return c.profiling.core.intent_scores[intentCode] || 0;
         }
 
         // Helper to get all collaborators of a company across all profiling categories
@@ -1321,6 +1335,14 @@
                                 isProfiledMatch = match;
                             }
                         }
+                        
+                        // INTENT-CODE TÄSMÄYS (UUSI)
+                        if (opt.intent_codes && c.profiling?.core?.intent_codes) {
+                            const hasIntent = opt.intent_codes.some(code => c.profiling.core.intent_codes.includes(code));
+                            if (hasIntent) {
+                                isProfiledMatch = true;
+                            }
+                        }
 
                         // TAKSONOMIA-TÄSMÄYS (UUSI)
                         // TÄRKEÄ KORJAUS: Jos optiolla on profilointisuodatin (esim. omilla tarjoiluilla), 
@@ -1381,7 +1403,24 @@
                         if (!isProfiledMatch && opt.tags) {
                             if (opt.tags.includes('digitointi')) {
                                 const catData = getCategoryData(c, currentProfilingKey);
-                                if (catData && fitsScore > 0 && Array.isArray(catData.digitization_features) && catData.digitization_features.length > 0) isProfiledMatch = true;
+                                const hasDigitizationFeatures = catData && Array.isArray(catData.digitization_features) && catData.digitization_features.length > 0;
+                                
+                                // Jos on profilointi-dataa, käytetään sitä
+                                if (hasDigitizationFeatures && fitsScore > 0) {
+                                    isProfiledMatch = true;
+                                } else {
+                                    // Muutoin tarkistetaan tägit ja lisätiedot (varasysteemi)
+                                    const companyContent = (
+                                        (c.tags || '') + ' ' + 
+                                        (c.searchExtraInfo || '') + ' ' + 
+                                        (c.kategoria || '') + ' ' + 
+                                        (c.nimi || '') + ' ' +
+                                        (c.profiling?.core?.sub_contexts?.join(' ') || '')
+                                    ).toLowerCase();
+                                    if (companyContent.includes('digitointi')) {
+                                        isProfiledMatch = true;
+                                    }
+                                }
                             }
                             if (opt.tags.includes('juhlatila')) {
                                 const catData = getCategoryData(c, 'events_and_celebrations');

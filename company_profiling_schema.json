@@ -53,6 +53,16 @@
                                 "type": "object",
                                 "additionalProperties": { "type": "integer", "minimum": 0, "maximum": 100 }
                             },
+                            "intent_codes": {
+                                "type": "array",
+                                "items": { "type": "string" },
+                                "description": "Standardoidut intent-koodit (esim. EVT_WEDDING, BIZ_CATERING)"
+                            },
+                            "intent_scores": {
+                                "type": "object",
+                                "additionalProperties": { "type": "integer", "minimum": 0, "maximum": 100 },
+                                "description": "Pisteytys intent-koodeille"
+                            },
                             "priority_score": { "type": "integer", "default": 0 },
                             "sub_contexts": {
                                 "oneOf": [

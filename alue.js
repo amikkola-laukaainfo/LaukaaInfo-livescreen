@@ -198,14 +198,29 @@ function filterByArea(areaSlug, catParam, tagParam) {
         let matchArea = areaSlug === 'koko-laukaa' || allowedSlugs.includes(companySlug);
 
         // UUSI: Jos ei täsmää suoraan alueeseen, tarkistetaan onko palvelualueyritys joka kattaa tämän alueen
-        if (!matchArea && areaSlug !== 'koko-laukaa' && area && (c.service_mode === 'SERVICE_AREA' || (parseFloat(c.service_radius) > 0)) && c.lat && (c.lon || c.lng)) {
-            const cLat = parseFloat(c.lat);
-            const cLon = parseFloat(c.lon || c.lng);
-            const dist = getHaversineDistance(area.lat, area.lon, cLat, cLon);
-            const radius = parseFloat(c.service_radius) || 0;
+        if (!matchArea && areaSlug !== 'koko-laukaa' && area) {
+            const isServiceArea = c.service_mode === 'SERVICE_AREA' || (parseFloat(c.service_radius) > 0);
             
-            if (dist <= radius) {
-                matchArea = true;
+            if (isServiceArea) {
+                const cLat = parseFloat(c.lat);
+                const cLon = parseFloat(c.lon || c.lng);
+                
+                if (isNaN(cLat) || isNaN(cLon)) {
+                    // Jos ei koordinaatteja, mutta on palvelualueyritys, 
+                    // sallitaan osuma alueen mukaan jos alue_slug tai kunta_slug täsmää,
+                    // tai oletetaan että se palvelee koko kuntaa jos se on Laukaassa.
+                    const companyKunta = (c.kunta_slug || '').toLowerCase();
+                    if (companyKunta === 'laukaa' || allowedSlugs.includes(companySlug)) {
+                        matchArea = true;
+                    }
+                } else {
+                    const dist = getHaversineDistance(area.lat, area.lon, cLat, cLon);
+                    const radius = parseFloat(c.service_radius) || 15; // Oletus 15km jos radius puuttuu
+                    
+                    if (dist <= radius) {
+                        matchArea = true;
+                    }
+                }
             }
         }
 
@@ -213,11 +228,19 @@ function filterByArea(areaSlug, catParam, tagParam) {
 
         if (tagParam) {
             const query = normalizeForSearch(tagParam);
-            const tags = normalizeForSearch(c.tags);
-            const ptapa = normalizeForSearch(c.palvelutapa);
-            const cat = normalizeForSearch(c.kategoria);
-            const name = normalizeForSearch(c.nimi);
-            return tags.includes(query) || ptapa.includes(query) || cat.includes(query) || name.includes(query);
+            const tags = normalizeForSearch(c.tags || '');
+            const ptapa = normalizeForSearch(c.palvelutapa || '');
+            const cat = normalizeForSearch(c.kategoria || '');
+            const name = normalizeForSearch(c.nimi || '');
+            const extra = normalizeForSearch(c.searchExtraInfo || '');
+            const subContexts = normalizeForSearch((c.profiling?.core?.sub_contexts || []).join(', '));
+            
+            return tags.includes(query) || 
+                   ptapa.includes(query) || 
+                   cat.includes(query) || 
+                   name.includes(query) || 
+                   extra.includes(query) ||
+                   subContexts.includes(query);
         }
         if (catParam) {
             return (c.kategoria || '').toLowerCase() === catParam.replace(/-/g, ' ');
