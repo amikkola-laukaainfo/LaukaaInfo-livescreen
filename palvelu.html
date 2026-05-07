@@ -1176,9 +1176,7 @@
                             // EXCEPTION: If the company has a very high score for this context (fitsScore >= 80),
                             // it's likely a legitimate service provider who happens to have some capacity.
                             if (fitsScore >= 80) {
-                                if (isRiina) console.log(`DEBUG: Riina Raitio ALLOWED despite being primarily venue (high fitsScore: ${fitsScore})`);
-                            } else {
-                                if (isRiina) console.log(`DEBUG: Riina Raitio EXCLUDED as primarily venue (isVenueSearch=${isVenueSearch}, venueCapacity=${venueCapacity}, isPrimarilyVenue=${isPrimarilyVenue})`);
+                                } else {
                                 return false; 
                             }
                         }
@@ -1507,7 +1505,6 @@
                         
                         const tagMatch = opt.tags.some(tag => companyContent.includes(tag.toLowerCase()));
                         
-                        if (isMediazoo) console.log(`DEBUG: Mediazoo final match for "${i18n.getText(opt.label)}": ${tagMatch}`);
                         return tagMatch;
                     });
                     
