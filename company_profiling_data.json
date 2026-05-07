@@ -1,4 +1,4 @@
-{
+﻿{
     "SCHEMA_VERSION": "5.0",
     "DESCRIPTION": "LaukaaInfo Ratkaisulähtöinen profilointi v5. Sisältää eksplisiittisen graafirakenteen.",
     "nodes": {},
@@ -20760,7 +20760,7 @@
                 "emergency_available": false,
                 "contract_customer_available": true,
                 "paired_with_by_context": {
-                    "häät": [
+                    "events-and-celebrations": [
                         "juhlatila",
                         "catering",
                         "valokuvaus"
@@ -20773,7 +20773,7 @@
                         "lava",
                         "äänentoisto"
                     ],
-                    "yritysjuhlat": [
+                    "business-events": [
                         "äänentoisto"
                     ]
                 },
@@ -20831,26 +20831,26 @@
                     "phone": ""
                 },
                 "events_and_celebrations": {
-                    "capacity_max": 500,
-                    "seated_capacity": 300,
-                    "standing_guests": 500,
-                    "outdoor_capacity": 500,
+                    "capacity_max": 0,
+                    "seated_capacity": 0,
+                    "standing_guests": 0,
+                    "outdoor_capacity": 0,
                     "is_accessible": false,
                     "own_catering_allowed": true,
                     "inhouse_catering_available": false,
                     "is_lakeside": false,
-                    "has_sauna": false,
+                    "has_sauna": true,
                     "has_av_tech": true,
                     "has_stage": true,
                     "accommodation_beds": 0,
                     "alcohol_license": false,
                     "private_booking": true,
                     "late_night_events": true,
-                    "wedding_specialized": true,
+                    "wedding_specialized": false,
                     "catering_min_capacity": 0,
                     "catering_max_capacity": 0,
                     "dietary_specialties": [],
-                    "staff_included": true,
+                    "staff_included": false,
                     "wedding_menu_available": false,
                     "cake_service": false,
                     "partner_venues": [],
@@ -20918,7 +20918,7 @@
                     "collaborated_with": []
                 },
                 "funerals_and_memorials": {
-                    "memorial_service_capacity": 100,
+                    "memorial_service_capacity": 0,
                     "quiet_private_space": false,
                     "accessible_entry": false,
                     "memorial_catering": false,
@@ -20929,11 +20929,7 @@
                     "memorial_arrangements": false,
                     "transport_assistance": false,
                     "urgent_booking_available": false,
-                    "refinement_tags": [
-                        "äänentoisto",
-                        "mikrofoni",
-                        "muistotilaisuus"
-                    ],
+                    "refinement_tags": {},
                     "digitization_features": [],
                     "collaborated_with": []
                 },
@@ -21040,7 +21036,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-07T16:35:01.498Z",
+                "last_updated": "2026-05-07T18:22:27.701Z",
                 "verified_by": "ai-profile-builder",
                 "status": "updated"
             }
@@ -24822,8 +24818,7 @@
                     "kokous",
                     "hyvinvointi",
                     "ravintolapalvelut",
-                    "sauna",
-                    "pikkujoulut"
+                    "sauna"
                 ],
                 "node_links": [
                     "LAUKAA",
@@ -24837,9 +24832,7 @@
                 ],
                 "intent_codes": [
                     "REC_SWIMMING",
-                    "REC_GYM",
-                    "VENUE_PARTY",
-                    "VENUE_MEETING"
+                    "REC_GYM"
                 ],
                 "intent_scores": {
                     "REC_SWIMMING": 100,
@@ -56181,8 +56174,7 @@
                     "hyvinvointi",
                     "kokous",
                     "juhlapalvelu",
-                    "koskenlasku",
-                    "pikkujoulut"
+                    "koskenlasku"
                 ],
                 "node_links": [
                     "SAUNA",
@@ -56194,9 +56186,7 @@
                     "JUHLATILA"
                 ],
                 "intent_codes": [
-                    "REC_RAFTING",
-                    "VENUE_PARTY",
-                    "VENUE_MEETING"
+                    "REC_RAFTING"
                 ],
                 "intent_scores": {
                     "REC_RAFTING": 90
@@ -58307,8 +58297,7 @@
                     "kalastus",
                     "patikointi",
                     "hiihto",
-                    "kokouspaketti",
-                    "pikkujoulut"
+                    "kokouspaketti"
                 ],
                 "node_links": [
                     "LAUKAA",
@@ -58326,9 +58315,7 @@
                 ],
                 "intent_codes": [
                     "EVT_WEDDING",
-                    "REC_GOLF",
-                    "VENUE_PARTY",
-                    "VENUE_MEETING"
+                    "REC_GOLF"
                 ],
                 "intent_scores": {
                     "EVT_WEDDING": 100,
