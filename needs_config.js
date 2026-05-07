@@ -400,10 +400,10 @@ const NEEDS_CONFIG = {
                 "question": { "fi": "Millaista muistotilaisuuden tilaa tarvitsette?", "en": "What kind of venue do you need for the memorial service?" },
                 "skipIf": "!isSelected('paatarve', 'Muistotilaisuus')",
                 "options": [
-                    { "label": { "fi": "Pieni kodikas muistotila (alle 20 hlö)", "en": "Small intimate memorial space (under 20 ppl)" }, "tags": ["juhlatila"], "capacity_req": 20, "sub_context": "muistotilaisuus", "profilointi_filter": { "section": "funerals_and_memorials", "field": "quiet_private_space", "value": true }, "require_fits_for": { "key": "funerals_and_memorials", "min": 20 } },
-                    { "label": { "fi": "Rauhallinen muistotila (20–50 hlö)", "en": "Quiet memorial venue (20–50 ppl)" }, "tags": ["juhlatila"], "capacity_req": 50, "sub_context": "muistotilaisuus", "profilointi_filter": { "section": "funerals_and_memorials", "field": "quiet_private_space", "value": true }, "require_fits_for": { "key": "funerals_and_memorials", "min": 30 } },
-                    { "label": { "fi": "Seurakuntasali (yli 50 hlö)", "en": "Parish hall (over 50 ppl)" }, "tags": ["seurakunta"], "capacity_req": 50, "sub_context": "muistotilaisuus" },
-                    { "label": { "fi": "Tarvitsen vain catering-palvelun", "en": "Catering service only" }, "tags": [], "sub_context": "muistotilaisuus", "profilointi_filter": { "section": "funerals_and_memorials", "field": "memorial_catering", "value": true }, "require_fits_for": { "key": "funerals_and_memorials", "min": 20 } }
+                    { "label": { "fi": "Pieni kodikas muistotila (alle 20 hlö)", "en": "Small intimate memorial space (under 20 ppl)" }, "tags": ["juhlatila"], "capacity_req": 20, "profilointi_filter": { "section": "funerals_and_memorials", "field": "quiet_private_space", "value": true }, "require_fits_for": { "key": "funerals_and_memorials", "min": 20 } },
+                    { "label": { "fi": "Rauhallinen muistotila (20–50 hlö)", "en": "Quiet memorial venue (20–50 ppl)" }, "tags": ["juhlatila"], "capacity_req": 50, "profilointi_filter": { "section": "funerals_and_memorials", "field": "quiet_private_space", "value": true }, "require_fits_for": { "key": "funerals_and_memorials", "min": 30 } },
+                    { "label": { "fi": "Seurakuntasali (yli 50 hlö)", "en": "Parish hall (over 50 ppl)" }, "tags": ["seurakunta"], "capacity_req": 50 },
+                    { "label": { "fi": "Tarvitsen vain catering-palvelun", "en": "Catering service only" }, "tags": [], "profilointi_filter": { "section": "funerals_and_memorials", "field": "memorial_catering", "value": true }, "require_fits_for": { "key": "funerals_and_memorials", "min": 20 } }
                 ]
             },
             {
@@ -414,7 +414,7 @@ const NEEDS_CONFIG = {
                 "skipIf": "!isSelected('paatarve', 'Muistotilaisuus')",
                 "options": [
                     { "label": { "fi": "Kahvitus / Pitopalvelu", "en": "Coffee / Catering" }, "tags": ["pitopalvelu"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "memorial_catering", "value": true }, "require_fits_for": { "key": "funerals_and_memorials", "min": 20 } },
-                    { "label": { "fi": "Kukkatervehdykset", "en": "Floral tributes" }, "tags": ["kukkakauppa", "kukat"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "funeral_flowers", "value": true } },
+                    { "label": { "fi": "Kukkatervehdykset", "en": "Floral tributes" }, "tags": ["kukkakauppa", "kukat"], "intent_codes": ["BIZ_FLORIST"] },
                     { "label": { "fi": "Kuljetuspalvelut", "en": "Transport services" }, "tags": ["hautauspalvelu", "kuljetus"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "transport_assistance", "value": true } }
                 ]
             },
@@ -436,7 +436,7 @@ const NEEDS_CONFIG = {
                 "skipIf": "!isSelected('paatarve', 'Muistotilaisuus')",
                 "question": { "fi": "Haluaisitko tallentaa muistot tai tarvitsetko digitointipalveluita?", "en": "Would you like to preserve memories or need digitization services?" },
                 "options": [
-                    { "label": { "fi": "Videokuvaus / Esitykset", "en": "Video recording / Presentations" }, "tags": ["videotuotanto", "videokuvaus", "videokuvaaja"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "refinement_tags", "value": "muistotilaisuuskuvaus" } },
+                    { "label": { "fi": "Videokuvaus / Esitykset", "en": "Video recording / Presentations" }, "tags": ["videotuotanto", "videokuvaus", "videokuvaaja"], "node_link": "VIDEOTUOTANTO", "intent_codes": ["MEDIA_VIDEO"] },
                     { "label": { "fi": "Valokuvaus", "en": "Photography" }, "tags": ["valokuvaus", "hautajaiskuvaus"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "refinement_tags", "value": "hautajaiskuvaus" } },
                     { "label": { "fi": "Digitointipalvelut (kuvat, videot ym.)", "en": "Digitization services (photos, videos etc.)" }, "tags": ["digitointi"], "node_link": "DIGITOINTI" }
                 ]
