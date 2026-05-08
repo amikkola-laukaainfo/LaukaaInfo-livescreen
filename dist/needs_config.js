@@ -358,7 +358,6 @@ const NEEDS_CONFIG = {
             },
             {
                 "id": "peruspalvelu",
-                "hide_results": true,
                 "question": { "fi": "Hautauspalvelut?", "en": "Funeral services?" },
                 "skipIf": "!isSelected('paatarve', 'Hautajaisjärjestelyt')",
                 "options": [
@@ -379,7 +378,6 @@ const NEEDS_CONFIG = {
             },
             {
                 "id": "muistotila",
-                "hide_results": true,
                 "question": { "fi": "Millaista muistotilaisuuden tilaa tarvitsette?", "en": "What kind of venue do you need for the memorial service?" },
                 "skipIf": "!isSelected('paatarve', 'Muistotilaisuus')",
                 "options": [
@@ -392,9 +390,8 @@ const NEEDS_CONFIG = {
             {
                 "id": "muistotilaisuus_lisapalvelut",
                 "multiple": true,
-                "hide_results": true,
-                "question": { "fi": "Muistotilaisuuden lisäpalvelut?", "en": "Additional services for the memorial?" },
-                "skipIf": "!isSelected('paatarve', 'Muistotilaisuus')",
+                "question": { "fi": "Hautajaisten ja muistotilaisuuden lisäpalvelut?", "en": "Additional services for the funeral and memorial?" },
+                "skipIf": "!isSelected('paatarve', 'Muistotilaisuus') && !isSelected('paatarve', 'Hautajaisjärjestelyt')",
                 "options": [
                     { "label": { "fi": "Kahvitus / Pitopalvelu", "en": "Coffee / Catering" }, "tags": ["pitopalvelu"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "memorial_catering", "value": true }, "require_fits_for": { "key": "funerals_and_memorials", "min": 20 } },
                     { "label": { "fi": "Kukkatervehdykset", "en": "Floral tributes" }, "tags": ["kukkakauppa", "kukat"], "intent_codes": ["BIZ_FLORIST"] },
@@ -404,9 +401,8 @@ const NEEDS_CONFIG = {
             {
                 "id": "laki_asiat_tarkennus",
                 "multiple": true,
-                "hide_results": true,
                 "question": { "fi": "Lakipalvelut ja asiakirjat?", "en": "Legal services and documents?" },
-                "skipIf": "!isSelected('paatarve', 'Laki-asiat')",
+                "skipIf": "!isSelected('paatarve', 'Perunkirjoitus ja laki-asiat')",
                 "options": [
                     { "label": { "fi": "Perunkirjoitus", "en": "Estate inventory" }, "tags": ["lakiasiaintoimistot"] },
                     { "label": { "fi": "Testamentti ja edunvalvonta", "en": "Will and guardianship" }, "tags": ["lakiasiaintoimistot"] },
