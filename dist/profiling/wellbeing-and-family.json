@@ -286,7 +286,8 @@
                 "construction-and-maintenance": 0,
                 "cottage-services": 0,
                 "accommodation": 0,
-                "wellbeing-and-beauty": 95
+                "wellbeing-and-beauty": 95,
+                "liikunta-ja-vapaaaika": 40
             },
             "priority_score": 82,
             "paired_with": [],
@@ -328,8 +329,12 @@
                 "jooga"
             ],
             "node_links": [],
-            "intent_codes": [],
-            "intent_scores": {}
+            "intent_codes": [
+                "REC_GYM"
+            ],
+            "intent_scores": {
+                "REC_GYM": 100
+            }
         },
         "categories": {
             "core": {
@@ -533,7 +538,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-02T18:26:51.259Z",
+            "last_updated": "2026-05-08T14:47:24.893Z",
             "verified_by": "AI-analysis-v2",
             "status": "draft"
         }
@@ -877,8 +882,12 @@
                 "HYVINVOINTI",
                 "LIIKUNTA"
             ],
-            "intent_codes": [],
-            "intent_scores": {}
+            "intent_codes": [
+                "REC_GYM"
+            ],
+            "intent_scores": {
+                "REC_GYM": 100
+            }
         },
         "categories": {
             "core": {
@@ -1683,7 +1692,8 @@
             "weekend_service": true,
             "not_suitable_for": [
                 "musiikki",
-                "dj"
+                "dj",
+                "huvipuisto"
             ],
             "sub_contexts": [
                 "ratsastus",
@@ -1911,7 +1921,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-02T18:10:41.711Z",
+            "last_updated": "2026-05-08T14:46:17.836Z",
             "verified_by": "AI-analysis-v2",
             "status": "draft"
         }
