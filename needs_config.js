@@ -20,23 +20,15 @@ const NEEDS_CONFIG = {
                 ]
             },
             {
-                "id": "kapasiteetti",
-                "question": { "fi": "Kuinka paljon henkilöitä tilaisuuteen osallistuu (arvio)?", "en": "How many people will attend the event (estimate)?" },
-                "options": [
-                    { "label": { "fi": "Alle 20 henkilöä", "en": "Less than 20 people" }, "capacity_req": 20, "tags": [], "intent_codes": ["EVT_WEDDING"] },
-                    { "label": { "fi": "Noin 20 - 50 henkilöä", "en": "About 20 - 50 people" }, "capacity_req": 50, "tags": [], "intent_codes": ["EVT_WEDDING"] },
-                    { "label": { "fi": "Noin 50 - 100 henkilöä", "en": "About 50 - 100 people" }, "capacity_req": 100, "tags": [], "intent_codes": ["EVT_WEDDING"] },
-                    { "label": { "fi": "Yli 100 henkilöä", "en": "Over 100 people" }, "capacity_req": 150, "tags": [], "intent_codes": ["EVT_WEDDING"] }
-                ]
-            },
-            {
                 "id": "tila",
                 "question": { "fi": "Millaista juhlatilaa etsit?", "en": "What kind of party venue are you looking for?" },
                 "options": [
-                    { "label": { "fi": "Juhlatila (iso)", "en": "Party venue (large)" }, "tags": ["juhlatila"], "capacity_req": 100, "node_link": "JUHLATILA", "intent_codes": ["VENUE_PARTY"] },
+                    { "label": { "fi": "Iso juhlatila (yli 50 hlö)", "en": "Large party venue (over 50 ppl)" }, "tags": ["juhlatila"], "capacity_req": 100, "node_link": "JUHLATILA", "intent_codes": ["VENUE_PARTY"] },
+                    { "label": { "fi": "Keskikokoinen / Pieni tila (alle 50 hlö)", "en": "Medium / Small venue (under 50 ppl)" }, "tags": ["juhlatila"], "capacity_req": 50, "node_link": "JUHLATILA", "intent_codes": ["VENUE_PARTY"] },
                     { "label": { "fi": "Tunnelmallinen kartano", "en": "Atmospheric manor" }, "tags": ["kartano", "juhlatila"], "capacity_req": 50, "node_link": "JUHLATILA", "intent_codes": ["VENUE_PARTY"] },
                     { "label": { "fi": "Luonnonläheinen tila", "en": "Nature-oriented space" }, "tags": ["luonto", "juhlatila"], "capacity_req": 30, "node_link": "JUHLATILA", "intent_codes": ["VENUE_PARTY"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "ranta" } },
-                    { "label": { "fi": "Tila omilla tarjoiluilla", "en": "Venue with own catering allowed" }, "tags": ["juhlatila"], "capacity_req": 20, "node_link": "JUHLATILA", "intent_codes": ["VENUE_PARTY"], "profilointi_filter": { "section": "events_and_celebrations", "field": "own_catering_allowed", "value": true } }
+                    { "label": { "fi": "Tila omilla tarjoiluilla", "en": "Venue with own catering allowed" }, "tags": ["juhlatila"], "capacity_req": 50, "node_link": "JUHLATILA", "intent_codes": ["VENUE_PARTY"], "profilointi_filter": { "section": "events_and_celebrations", "field": "own_catering_allowed", "value": true } },
+                    { "label": { "fi": "Omissa tiloissa (ei tilatarvetta)", "en": "At our own premises (no venue needed)" }, "tags": ["pitopalvelu", "valokuvaus", "ohjelmapalvelut"] }
                 ]
             },
             {
@@ -85,19 +77,18 @@ const NEEDS_CONFIG = {
                 "id": "tarkennus",
                 "question": { "fi": "Millaista tilaisuutta olet järjestämässä?", "en": "What kind of event are you organizing?" },
                 "options": [
-                    { "label": { "fi": "Pikkujoulut", "en": "Christmas Party" }, "sub_context": "pikkujoulut", "tags": ["juhlatila"], "capacity_req": 30, "intent_codes": ["VENUE_PARTY"], "node_link": "JUHLATILA" },
-                    { "label": { "fi": "Henkilöstöjuhlat / Kesäjuhlat", "en": "Staff Party / Summer Party" }, "sub_context": "henkilöstöjuhlat", "tags": ["juhlatila"], "capacity_req": 50, "intent_codes": ["VENUE_PARTY"], "node_link": "JUHLATILA" },
-                    { "label": { "fi": "Virkistyspäivä / Tyky-päivä", "en": "Team Day / Wellness Day" }, "sub_context": "tyky-paiva", "tags": ["juhlatila", "ohjelmapalvelut"], "capacity_req": 10, "intent_codes": ["VENUE_PARTY", "ENT_PROGRAM"], "node_link": "JUHLATILA" }
+                    { "label": { "fi": "Pikkujoulut", "en": "Christmas Party" }, "sub_context": "pikkujoulut" },
+                    { "label": { "fi": "Henkilöstöjuhlat / Kesäjuhlat", "en": "Staff Party / Summer Party" }, "sub_context": "henkilöstöjuhlat" },
+                    { "label": { "fi": "Virkistyspäivä / Tyky-päivä", "en": "Team Day / Wellness Day" }, "sub_context": "tyky-paiva", "tags": ["ohjelmapalvelut"], "intent_codes": ["ENT_PROGRAM"] }
                 ]
             },
             {
-                "id": "kapasiteetti",
-                "question": { "fi": "Kuinka paljon henkilöitä tilaisuuteen osallistuu (arvio)?", "en": "How many people will attend (estimate)?" },
+                "id": "tila",
+                "question": { "fi": "Missä haluatte juhlia?", "en": "Where do you want to celebrate?" },
                 "options": [
-                    { "label": { "fi": "Alle 20 henkilöä", "en": "Less than 20 people" }, "capacity_req": 20, "tags": [] },
-                    { "label": { "fi": "Noin 20 - 50 henkilöä", "en": "About 20 - 50 people" }, "capacity_req": 50, "tags": [] },
-                    { "label": { "fi": "Noin 50 - 100 henkilöä", "en": "About 50 - 100 people" }, "capacity_req": 100, "tags": [] },
-                    { "label": { "fi": "Yli 100 henkilöä", "en": "Over 100 people" }, "capacity_req": 150, "tags": [] }
+                    { "label": { "fi": "Juhlatila (alle 50 henkilöä)", "en": "Venue (under 50 people)" }, "tags": ["juhlatila"], "capacity_req": 50, "intent_codes": ["VENUE_PARTY"], "node_link": "JUHLATILA" },
+                    { "label": { "fi": "Juhlatila (yli 50 henkilöä)", "en": "Venue (over 50 people)" }, "tags": ["juhlatila"], "capacity_req": 100, "intent_codes": ["VENUE_PARTY"], "node_link": "JUHLATILA" },
+                    { "label": { "fi": "Omissa tiloissa (ei tilatarvetta)", "en": "At our own premises (no venue needed)" }, "tags": ["pitopalvelu", "ohjelmapalvelut"] }
                 ]
             },
             {
@@ -135,21 +126,20 @@ const NEEDS_CONFIG = {
         "steps": [
             {
                 "id": "tarkennus",
-                "question": { "fi": "Millaista tilaa tarvitsette?", "en": "What kind of space do you need?" },
+                "question": { "fi": "Millaista tilaisuutta olette järjestämässä?", "en": "What kind of event are you organizing?" },
                 "options": [
-                    { "label": { "fi": "Pieni kokous / Neuvottelu", "en": "Small meeting / Negotiation" }, "sub_context": "kokous", "tags": ["kokoustilat"], "capacity_req": 5, "intent_codes": ["VENUE_MEETING"], "node_link": "JUHLATILA" },
-                    { "label": { "fi": "Seminaari / Koulutus", "en": "Seminar / Training" }, "sub_context": "seminaari", "tags": ["seminaaritilat"], "capacity_req": 1, "intent_codes": ["VENUE_MEETING"], "node_link": "JUHLATILA" },
-                    { "label": { "fi": "Konferenssi / Suuri tilaisuus", "en": "Conference / Large event" }, "sub_context": "konferenssi", "tags": ["kokoustilat"], "capacity_req": 1, "intent_codes": ["VENUE_MEETING"], "node_link": "JUHLATILA" }
+                    { "label": { "fi": "Kokous / Neuvottelu", "en": "Meeting / Negotiation" }, "sub_context": "kokous" },
+                    { "label": { "fi": "Seminaari / Koulutus", "en": "Seminar / Training" }, "sub_context": "seminaari" },
+                    { "label": { "fi": "Konferenssi / Suuri tilaisuus", "en": "Conference / Large event" }, "sub_context": "konferenssi" }
                 ]
             },
             {
-                "id": "kapasiteetti",
-                "question": { "fi": "Kuinka paljon henkilöitä tilaisuuteen osallistuu (arvio)?", "en": "How many people will attend (estimate)?" },
+                "id": "tila",
+                "question": { "fi": "Missä haluatte järjestää tilaisuuden?", "en": "Where do you want to hold the event?" },
                 "options": [
-                    { "label": { "fi": "Alle 20 henkilöä", "en": "Less than 20 people" }, "capacity_req": 20, "tags": [] },
-                    { "label": { "fi": "Noin 20 - 50 henkilöä", "en": "About 20 - 50 people" }, "capacity_req": 50, "tags": [] },
-                    { "label": { "fi": "Noin 50 - 100 henkilöä", "en": "About 50 - 100 people" }, "capacity_req": 100, "tags": [] },
-                    { "label": { "fi": "Yli 100 henkilöä", "en": "Over 100 people" }, "capacity_req": 150, "tags": [] }
+                    { "label": { "fi": "Kokoustila (alle 50 henkilöä)", "en": "Meeting room (under 50 people)" }, "tags": ["kokoustilat"], "capacity_req": 50, "intent_codes": ["VENUE_MEETING"], "node_link": "JUHLATILA" },
+                    { "label": { "fi": "Seminaari- tai juhlatila (yli 50 henkilöä)", "en": "Seminar or party venue (over 50 people)" }, "tags": ["seminaaritilat", "kokoustilat"], "capacity_req": 100, "intent_codes": ["VENUE_MEETING"], "node_link": "JUHLATILA" },
+                    { "label": { "fi": "Omissa tiloissa (ei tilatarvetta)", "en": "At our own premises (no venue needed)" }, "tags": ["pitopalvelu", "it-palvelut"] }
                 ]
             },
             {
@@ -158,7 +148,7 @@ const NEEDS_CONFIG = {
                 "options": [
                     { "label": { "fi": "Lounas ja kahvitus", "en": "Lunch and coffee" }, "tags": ["ravintola", "pitopalvelu"] },
                     { "label": { "fi": "Iltapala", "en": "Evening snack" }, "tags": ["ravintola"] },
-                    { "label": { "fi": "Vain tilat", "en": "Venue only" }, "tags": ["juhlatila"], "node_link": "JUHLATILA", "intent_codes": ["VENUE_PARTY", "VENUE_MEETING"] }
+                    { "label": { "fi": "Ei tarjoilua", "en": "No catering" }, "tags": [] }
                 ]
             },
             {
@@ -190,22 +180,12 @@ const NEEDS_CONFIG = {
                 ]
             },
             {
-                "id": "kapasiteetti",
-                "question": { "fi": "Kuinka paljon henkilöitä tilaisuuteen osallistuu (arvio)?", "en": "How many people will attend (estimate)?" },
-                "options": [
-                    { "label": { "fi": "Alle 20 henkilöä", "en": "Less than 20 people" }, "capacity_req": 20, "tags": [] },
-                    { "label": { "fi": "Noin 20 - 50 henkilöä", "en": "About 20 - 50 people" }, "capacity_req": 50, "tags": [] },
-                    { "label": { "fi": "Noin 50 - 100 henkilöä", "en": "About 50 - 100 people" }, "capacity_req": 100, "tags": [] },
-                    { "label": { "fi": "Yli 100 henkilöä", "en": "Over 100 people" }, "capacity_req": 150, "tags": [] }
-                ]
-            },
-            {
                 "id": "tila",
                 "question": { "fi": "Missä haluat juhlia?", "en": "Where do you want to celebrate?" },
                 "options": [
-                    { "label": { "fi": "Juhlatila ruokailulla", "en": "Venue with dining" }, "tags": ["ravintola", "juhlatila"], "capacity_req": 10, "node_link": "JUHLATILA", "intent_codes": ["VENUE_PARTY"] },
-                    { "label": { "fi": "Kotona (tarvitaan palveluita)", "en": "At home (services needed)" }, "tags": ["pitopalvelu", "siivous", "kukkakauppa"] },
-                    { "label": { "fi": "Saunalla tai mökillä", "en": "Sauna or cottage" }, "tags": ["saunatilat", "majoitus"], "capacity_req": 10 }
+                    { "label": { "fi": "Juhlatila (alle 50 henkilöä)", "en": "Venue (under 50 people)" }, "tags": ["ravintola", "juhlatila"], "capacity_req": 50, "intent_codes": ["VENUE_PARTY"], "node_link": "JUHLATILA" },
+                    { "label": { "fi": "Juhlatila (yli 50 henkilöä)", "en": "Venue (over 50 people)" }, "tags": ["ravintola", "juhlatila"], "capacity_req": 100, "intent_codes": ["VENUE_PARTY"], "node_link": "JUHLATILA" },
+                    { "label": { "fi": "Kotona (tarvitaan palveluita)", "en": "At home (services needed)" }, "tags": ["pitopalvelu", "siivous", "kukkakauppa"] }
                 ]
             },
             {
