@@ -5213,11 +5213,15 @@ footer {
 
 .company-result-card h3 {
     font-family: var(--heading-font);
-    font-size: 1.6rem;
+    font-size: 1.35rem;
     color: var(--primary-blue);
     margin-bottom: 0.75rem;
     font-weight: 700;
-    line-height: 1.2;
+    line-height: 1.25;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+    word-break: normal;
 }
 
 .company-result-card .slogan {
@@ -5400,7 +5404,7 @@ footer {
     }
 
     .company-result-card h3 {
-        font-size: 1.4rem;
+        font-size: 1.25rem;
     }
 }
 
