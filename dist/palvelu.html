@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fi">
 
-<head>
+<head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Palveluohjaus | LaukaaInfo</title>
@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="style.css?v=20260426">
+    <link rel="stylesheet" href="style.c24ccaf0.css?v=20260426">
     <script src="translations.js?v=20260505"></script>
     <style>
         .palvelu-hero {
@@ -607,8 +607,8 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="needs_config.js?v=20260507"></script>
-    <script src="script.js"></script>
+    <script src="needs_config.c24ccaf0.js?v=20260507"></script>
+    <script src="script.c24ccaf0.js"></script>
     <script>
         let currentNeedId = new URLSearchParams(window.location.search).get('id');
         let currentStepIndex = 0;
@@ -1119,6 +1119,7 @@
                 const options = Array.isArray(stepSelection) ? stepSelection : [stepSelection];
 
                 options.forEach(opt => {
+                    if (opt.hide_results) return;
                     const companiesForOpt = window.allCompanies.filter((c, idx) => {
                         const isMediazoo = (c.id === 'company-2' || c.nimi === 'Mediazoo');
                         const isRiina = (c.id === 'company-269' || (c.nimi && c.nimi.includes('Riina Raitio')));

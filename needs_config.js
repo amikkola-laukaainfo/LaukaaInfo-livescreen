@@ -28,7 +28,7 @@ const NEEDS_CONFIG = {
                     { "label": { "fi": "Tunnelmallinen kartano", "en": "Atmospheric manor" }, "tags": ["kartano", "juhlatila"], "capacity_req": 50, "node_link": "JUHLATILA", "intent_codes": ["VENUE_PARTY"] },
                     { "label": { "fi": "Luonnonläheinen tila", "en": "Nature-oriented space" }, "tags": ["luonto", "juhlatila"], "capacity_req": 30, "node_link": "JUHLATILA", "intent_codes": ["VENUE_PARTY"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "ranta" } },
                     { "label": { "fi": "Tila omilla tarjoiluilla", "en": "Venue with own catering allowed" }, "tags": ["juhlatila"], "capacity_req": 50, "node_link": "JUHLATILA", "intent_codes": ["VENUE_PARTY"], "profilointi_filter": { "section": "events_and_celebrations", "field": "own_catering_allowed", "value": true } },
-                    { "label": { "fi": "Omissa tiloissa (ei tilatarvetta)", "en": "At our own premises (no venue needed)" }, "tags": ["pitopalvelu", "valokuvaus", "ohjelmapalvelut"] }
+                    { "label": { "fi": "Omissa tiloissa (ei tilatarvetta)", "en": "At our own premises (no venue needed)" }, "hide_results": true }
                 ]
             },
             {
@@ -75,6 +75,7 @@ const NEEDS_CONFIG = {
         "steps": [
             {
                 "id": "tarkennus",
+                "hide_results": true,
                 "question": { "fi": "Millaista tilaisuutta olet järjestämässä?", "en": "What kind of event are you organizing?" },
                 "options": [
                     { "label": { "fi": "Pikkujoulut", "en": "Christmas Party" }, "sub_context": "pikkujoulut" },
@@ -88,7 +89,7 @@ const NEEDS_CONFIG = {
                 "options": [
                     { "label": { "fi": "Juhlatila (alle 50 henkilöä)", "en": "Venue (under 50 people)" }, "tags": ["juhlatila"], "capacity_req": 50, "intent_codes": ["VENUE_PARTY"], "node_link": "JUHLATILA" },
                     { "label": { "fi": "Juhlatila (yli 50 henkilöä)", "en": "Venue (over 50 people)" }, "tags": ["juhlatila"], "capacity_req": 100, "intent_codes": ["VENUE_PARTY"], "node_link": "JUHLATILA" },
-                    { "label": { "fi": "Omissa tiloissa (ei tilatarvetta)", "en": "At our own premises (no venue needed)" }, "tags": ["pitopalvelu", "ohjelmapalvelut"] }
+                    { "label": { "fi": "Omissa tiloissa (ei tilatarvetta)", "en": "At our own premises (no venue needed)" }, "hide_results": true }
                 ]
             },
             {
@@ -126,6 +127,7 @@ const NEEDS_CONFIG = {
         "steps": [
             {
                 "id": "tarkennus",
+                "hide_results": true,
                 "question": { "fi": "Millaista tilaisuutta olette järjestämässä?", "en": "What kind of event are you organizing?" },
                 "options": [
                     { "label": { "fi": "Kokous / Neuvottelu", "en": "Meeting / Negotiation" }, "sub_context": "kokous" },
@@ -139,7 +141,7 @@ const NEEDS_CONFIG = {
                 "options": [
                     { "label": { "fi": "Kokoustila (alle 50 henkilöä)", "en": "Meeting room (under 50 people)" }, "tags": ["kokoustilat"], "capacity_req": 50, "intent_codes": ["VENUE_MEETING"], "node_link": "JUHLATILA" },
                     { "label": { "fi": "Seminaari- tai juhlatila (yli 50 henkilöä)", "en": "Seminar or party venue (over 50 people)" }, "tags": ["seminaaritilat", "kokoustilat"], "capacity_req": 100, "intent_codes": ["VENUE_MEETING"], "node_link": "JUHLATILA" },
-                    { "label": { "fi": "Omissa tiloissa (ei tilatarvetta)", "en": "At our own premises (no venue needed)" }, "tags": ["pitopalvelu", "it-palvelut"] }
+                    { "label": { "fi": "Omissa tiloissa (ei tilatarvetta)", "en": "At our own premises (no venue needed)" }, "hide_results": true }
                 ]
             },
             {
@@ -172,6 +174,7 @@ const NEEDS_CONFIG = {
         "steps": [
             {
                 "id": "tarkennus",
+                "hide_results": true,
                 "question": { "fi": "Kenen juhlia järjestetään?", "en": "Who is the celebration for?" },
                 "options": [
                     { "label": { "fi": "Lasten syntymäpäivät", "en": "Children's birthday" }, "sub_context": "lasten synttärit", "tags": ["lapset"] },
@@ -185,7 +188,7 @@ const NEEDS_CONFIG = {
                 "options": [
                     { "label": { "fi": "Juhlatila (alle 50 henkilöä)", "en": "Venue (under 50 people)" }, "tags": ["ravintola", "juhlatila"], "capacity_req": 50, "intent_codes": ["VENUE_PARTY"], "node_link": "JUHLATILA" },
                     { "label": { "fi": "Juhlatila (yli 50 henkilöä)", "en": "Venue (over 50 people)" }, "tags": ["ravintola", "juhlatila"], "capacity_req": 100, "intent_codes": ["VENUE_PARTY"], "node_link": "JUHLATILA" },
-                    { "label": { "fi": "Kotona (tarvitaan palveluita)", "en": "At home (services needed)" }, "tags": ["pitopalvelu", "siivous", "kukkakauppa"] }
+                    { "label": { "fi": "Kotona (tarvitaan palveluita)", "en": "At home (services needed)" }, "hide_results": true }
                 ]
             },
             {

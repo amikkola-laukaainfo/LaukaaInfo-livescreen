@@ -1119,6 +1119,7 @@
                 const options = Array.isArray(stepSelection) ? stepSelection : [stepSelection];
 
                 options.forEach(opt => {
+                    if (opt.hide_results) return;
                     const companiesForOpt = window.allCompanies.filter((c, idx) => {
                         const isMediazoo = (c.id === 'company-2' || c.nimi === 'Mediazoo');
                         const isRiina = (c.id === 'company-269' || (c.nimi && c.nimi.includes('Riina Raitio')));
