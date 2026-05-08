@@ -7,16 +7,18 @@
             "name": "Laukaan Satamakahvila (Laukaan satama)",
             "core": {
                 "fits_for": {
-                    "events-and-celebrations": 50,
-                    "business-events": 20,
-                    "funerals-and-memorials": 10,
+                    "events-and-celebrations": 86,
+                    "business-events": 68,
+                    "funerals-and-memorials": 25,
                     "moving-and-housing": 0,
                     "construction-and-maintenance": 0,
-                    "cottage-services": 70,
+                    "cottage-services": 78,
                     "housing-company-and-contracts": 0,
                     "startup-services": 0,
                     "business-growth": 10,
-                    "wellbeing-and-beauty": 80
+                    "wellbeing-and-beauty": 74,
+                    "liikunta-ja-vapaaaika": 88,
+                    "accommodation": 86
                 },
                 "priority_score": 60,
                 "paired_with": [],
@@ -38,23 +40,18 @@
                     "omilla tarjoiluilla"
                 ],
                 "sub_contexts": [
-                    "kahvila",
                     "satamakahvila",
-                    "ravintola",
-                    "terassi",
-                    "jäätelö",
-                    "lounas",
-                    "tapahtumat",
-                    "veneily",
-                    "satama",
-                    "laiturialue",
                     "kesäkahvila",
-                    "matkailu",
-                    "vierasvenesatama",
-                    "lauakka",
-                    "saraavesi",
-                    "venesatama",
-                    "laivaranta"
+                    "veneily",
+                    "sup-lauta",
+                    "vesijetti",
+                    "satamatapahtuma",
+                    "terassi",
+                    "kahvitilaisuus",
+                    "pienet juhlat",
+                    "kesäilta",
+                    "ulkoilu",
+                    "vierasvenesatama"
                 ],
                 "node_links": [
                     "LAUKAA",
@@ -62,62 +59,74 @@
                     "KAHVILA",
                     "RAVINTOLA",
                     "VENEILY",
-                    "JUHLATILA"
+                    "JUHLATILA",
+                    "LIIKUNTA",
+                    "SAUNA"
                 ],
-                "intent_codes": [],
-                "intent_scores": {}
+                "intent_codes": [
+                    "VENUE_PARTY",
+                    "REC_OUTDOOR",
+                    "ENT_PROGRAM"
+                ],
+                "intent_scores": {
+                    "VENUE_PARTY": 86,
+                    "REC_OUTDOOR": 82,
+                    "ENT_PROGRAM": 68
+                }
             },
             "categories": {
                 "core": {
-                    "description": "Laukaan Satamakahvila on Saraaveden rannalla sijaitseva kesäinen kahvila ja vapaa-ajan keskus. Satama toimii myös vierasvenesatamana sekä tapahtumapaikkana, jossa järjestetään kesäisin konsertteja ja tapahtumia. Kahvilasta saa makeita ja suolaisia annoksia, jäätelöä sekä ruokaa pienempään ja suurempaan nälkään. Alueella on vuokrattavia saunoja, SUP-lautoja ja vesijettejä sekä monipuoliset ulkoilumahdollisuudet.",
-                    "website": "https://laukaansatama.fi",
+                    "description": "Saraaveden rannalla sijaitseva kesäinen satamakahvila ja tapahtumapaikka, joka tarjoaa kahvila- ja ravintolapalveluja, veneilyyn liittyviä palveluita sekä vapaa-ajan aktiviteetteja kuten SUP-lautoja ja vesijettejä. Tunnettu kesätapahtumista ja rantaterassista.",
+                    "website": "[https://laukaansatama.fi](https://laukaansatama.fi)",
                     "email": "[info@laukaansatama.fi](mailto:info@laukaansatama.fi)",
-                    "phone": "358505664962"
+                    "phone": "+358505664962"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 50,
                     "seated_capacity": 40,
-                    "standing_guests": 0,
+                    "standing_guests": 80,
                     "outdoor_capacity": 80,
                     "is_accessible": true,
                     "own_catering_allowed": false,
-                    "inhouse_catering_available": false,
+                    "inhouse_catering_available": true,
                     "is_lakeside": true,
-                    "has_sauna": false,
+                    "has_sauna": true,
                     "has_av_tech": false,
                     "has_stage": false,
                     "accommodation_beds": 0,
                     "alcohol_license": false,
                     "private_booking": true,
-                    "late_night_events": false,
+                    "late_night_events": true,
                     "wedding_specialized": false,
-                    "catering_min_capacity": 0,
+                    "catering_min_capacity": 10,
                     "catering_max_capacity": 50,
-                    "dietary_specialties": [],
-                    "staff_included": false,
+                    "dietary_specialties": [
+                        "kahvila-annokset",
+                        "kesäterassi"
+                    ],
+                    "staff_included": true,
                     "wedding_menu_available": false,
                     "cake_service": false,
                     "partner_venues": [],
                     "wedding_photography": false,
                     "drone_available": false,
                     "video_production": false,
-                    "live_music": false,
+                    "live_music": true,
                     "dj_services": false,
                     "karaoke_available": false,
                     "has_exclusive_catering": false,
                     "accommodation_included": false,
                     "refinement_tags": [
-                        "kahvila",
-                        "satamakahvila",
+                        "satamajuhla",
                         "terassi",
-                        "kesäkahvila",
-                        "juhlatila",
-                        "pienet tapahtumat"
+                        "rantakahvila",
+                        "kesätapahtuma"
                     ],
                     "digitization_features": [],
                     "entertainment_features": [
-                        "terassi",
-                        "maisemapaikka"
+                        "live-musiikki",
+                        "sup-laudat",
+                        "vesijetti"
                     ],
                     "collaborated_with": []
                 },
@@ -209,14 +218,14 @@
                     "remote_monitoring": false,
                     "emergency_visits": false,
                     "renovation_support": false,
-                    "dock_maintenance": false,
-                    "sauna_services": false,
+                    "dock_maintenance": true,
+                    "sauna_services": true,
                     "guest_preparation_service": false,
                     "refinement_tags": [
-                        "satama",
                         "veneily",
-                        "kesäpalvelu",
-                        "kahvila"
+                        "satama",
+                        "saunavuokraus",
+                        "kesäpalvelut"
                     ],
                     "collaborated_with": []
                 },
@@ -265,15 +274,15 @@
                 "wellbeing_and_beauty": {
                     "home_visits": false,
                     "online_booking": false,
-                    "unisex_services": false,
+                    "unisex_services": true,
                     "gift_cards": false,
-                    "corporate_wellbeing_services": false,
+                    "corporate_wellbeing_services": true,
                     "event_makeup": false,
                     "bridal_services": false,
                     "group_bookings": true,
                     "refinement_tags": [
-                        "kahvila",
-                        "terassi",
+                        "järvimaisema",
+                        "ulkoilu",
                         "hyvinvointi",
                         "satamamiljöö"
                     ],
@@ -281,7 +290,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-04T16:48:10.789Z",
+                "last_updated": "2026-05-08T13:47:08.802Z",
                 "verified_by": "ai-generated",
                 "status": "draft"
             }
@@ -785,8 +794,18 @@
             "name": "Onnellinen Studio",
             "core": {
                 "fits_for": {
-                    "events-and-celebrations": 0,
-                    "startup-services": 0
+                    "events-and-celebrations": 10,
+                    "startup-services": 100,
+                    "business-events": 82,
+                    "funerals-and-memorials": 0,
+                    "moving-and-housing": 0,
+                    "construction-and-maintenance": 0,
+                    "cottage-services": 0,
+                    "housing-company-and-contracts": 44,
+                    "business-growth": 90,
+                    "wellbeing-and-beauty": 0,
+                    "liikunta-ja-vapaaaika": 0,
+                    "accommodation": 0
                 },
                 "priority_score": 0,
                 "paired_with": [],
@@ -806,15 +825,37 @@
                 "home_service": false,
                 "weekend_service": false,
                 "not_suitable_for": [],
-                "sub_contexts": [],
-                "node_links": [],
-                "intent_codes": [],
-                "intent_scores": {}
+                "sub_contexts": [
+                    "mainostoimisto",
+                    "brändäys",
+                    "logosuunnittelu",
+                    "graafinen suunnittelu",
+                    "yritysilme",
+                    "markkinointimateriaalit",
+                    "verkkosivut",
+                    "startup-brändäys",
+                    "mainonta",
+                    "sisällöntuotanto"
+                ],
+                "node_links": [
+                    "BRÄNDÄYS",
+                    "VERKKOSIVUT"
+                ],
+                "intent_codes": [
+                    "BIZ_BRANDING",
+                    "BIZ_MARKETING",
+                    "BIZ_IT"
+                ],
+                "intent_scores": {
+                    "BIZ_BRANDING": 100,
+                    "BIZ_MARKETING": 82,
+                    "BIZ_IT": 44
+                }
             },
             "categories": {
                 "core": {
-                    "description": "Mainostoimisto, joka tarjoaa mainonnan suunnitteluun ja toteutukseen liittyviä palveluita.",
-                    "website": "www.onnellinenstudio.com",
+                    "description": "Onnellinen Studio on mainostoimisto, joka tarjoaa yrityksille brändäystä, visuaalista suunnittelua ja markkinointiviestinnän palveluita. Yritys auttaa erityisesti pk-yrityksiä yritysilmeen, logojen ja digitaalisen näkyvyyden kehittämisessä.",
+                    "website": "https://www.onnellinenstudio.com",
                     "email": "",
                     "phone": ""
                 },
@@ -864,7 +905,7 @@
                     "has_wifi": false,
                     "has_stage": false,
                     "private_booking": false,
-                    "invoice_billing": false,
+                    "invoice_billing": true,
                     "corporate_clients": true,
                     "vip_services": false,
                     "business_catering": false,
@@ -873,7 +914,11 @@
                     "branding_support": true,
                     "av_support": false,
                     "staff_events_specialized": false,
-                    "refinement_tags": [],
+                    "refinement_tags": [
+                        "brändäys",
+                        "visuaalinen suunnittelu",
+                        "yritysilme"
+                    ],
                     "wellbeing_and_activity_features": [],
                     "entertainment_features": [],
                     "collaborated_with": []
@@ -959,26 +1004,37 @@
                     "legal_services": false,
                     "office_space_available": false,
                     "banking_support": false,
-                    "website_creation": false,
+                    "website_creation": true,
                     "webshop_setup": false,
                     "branding_support": true,
                     "logo_design": true,
                     "business_photography": false,
-                    "refinement_tags": [],
+                    "refinement_tags": [
+                        "startup-brändäys",
+                        "logo",
+                        "verkkosivut",
+                        "yritysilme",
+                        "markkinointimateriaalit"
+                    ],
                     "collaborated_with": []
                 },
                 "business_growth": {
                     "google_ads": false,
-                    "social_media_marketing": false,
+                    "social_media_marketing": true,
                     "seo_services": false,
-                    "content_creation": false,
+                    "content_creation": true,
                     "video_production": false,
                     "crm_support": false,
                     "recruitment_support": false,
                     "sales_development": false,
                     "automation_services": false,
-                    "consulting_services": false,
-                    "refinement_tags": [],
+                    "consulting_services": true,
+                    "refinement_tags": [
+                        "brändistrategia",
+                        "sisällöntuotanto",
+                        "sosiaalinen media",
+                        "markkinointi"
+                    ],
                     "collaborated_with": []
                 },
                 "wellbeing_and_beauty": {
@@ -995,7 +1051,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-27T11:09:16.817Z",
+                "last_updated": "2026-05-08T13:42:47.212Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -1441,8 +1497,17 @@
                     "pitopalvelu": 90,
                     "kahvila": 85,
                     "events-and-celebrations": 100,
-                    "business-events": 76,
-                    "funerals-and-memorials": 100
+                    "business-events": 100,
+                    "funerals-and-memorials": 100,
+                    "moving-and-housing": 0,
+                    "construction-and-maintenance": 0,
+                    "cottage-services": 0,
+                    "housing-company-and-contracts": 0,
+                    "startup-services": 0,
+                    "business-growth": 0,
+                    "wellbeing-and-beauty": 10,
+                    "liikunta-ja-vapaaaika": 8,
+                    "accommodation": 100
                 },
                 "priority_score": 74,
                 "paired_with": [
@@ -1490,53 +1555,51 @@
                     "omilla tarjoiluilla"
                 ],
                 "sub_contexts": [
-                    "juhlatila",
-                    "kokoustila",
                     "pitopalvelu",
-                    "kahvila",
-                    "lähituotepuoti",
-                    "kahvitus",
+                    "juhlatila",
                     "muistotilaisuus",
+                    "kahvitus",
                     "hääkakku",
+                    "kokoustila",
+                    "kahvila",
+                    "lähiruoka",
                     "juhlakakku",
-                    "astiavuokraus",
                     "yritystapahtuma",
-                    "kokouskahvit"
+                    "kokouskahvit",
+                    "astiavuokraus"
                 ],
                 "node_links": [
-                    "LAUKAA",
-                    "VIIHTAVUORI",
-                    "HUVIT",
                     "JUHLATILA",
-                    "PITOPALVELU",
-                    "KAHVILA",
                     "CATERING"
                 ],
                 "intent_codes": [
-                    "EVT_WEDDING",
+                    "BIZ_CATERING",
+                    "VENUE_PARTY",
                     "EVT_MEMORIAL",
-                    "EVT_MEMORIAL"
+                    "EVT_WEDDING"
                 ],
                 "intent_scores": {
                     "EVT_WEDDING": 100,
-                    "EVT_MEMORIAL": 100
+                    "EVT_MEMORIAL": 90,
+                    "BIZ_CATERING": 100,
+                    "VENUE_PARTY": 92
                 }
             },
             "categories": {
                 "core": {
-                    "description": "Kahvila ja lähituotepuoti, joka tarjoaa itsetehtyjä suolaisia ja makeita herkkuja lähituotteista ja luonnonantimista. Puodissa myydään pientuottajien elintarvikkeita ja käsitöitä. Tiloja vuokrataan kokous- ja juhlakäyttöön. Palveluihin kuuluvat myös pitopalvelu, kahvitukset, juhlakakut sekä astiavuokraus yrityksille ja yksityisille asiakkaille.",
-                    "website": "[https://terta.fi](https://terta.fi)",
-                    "email": "[info@terta.fi](mailto:info@terta.fi)",
-                    "phone": "040 8289075"
+                    "description": "Tertan kahvila- ja puoti tarjoaa kahvila-, juhlatila- ja pitopalveluita Laukaan Vuonteella. Yritys tunnetaan lähiruoasta, juhlakakuista, muistotilaisuuksista ja yritysten kokouskahvituksista sekä viihtyisistä juhla- ja kokoustiloista.",
+                    "website": "https://terta.fi",
+                    "email": "info@terta.fi",
+                    "phone": "+358408289075"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 60,
                     "seated_capacity": 50,
-                    "standing_guests": 0,
+                    "standing_guests": 60,
                     "outdoor_capacity": 80,
                     "is_accessible": true,
                     "own_catering_allowed": false,
-                    "inhouse_catering_available": false,
+                    "inhouse_catering_available": true,
                     "is_lakeside": false,
                     "has_sauna": false,
                     "has_av_tech": false,
@@ -1549,10 +1612,10 @@
                     "catering_min_capacity": 10,
                     "catering_max_capacity": 100,
                     "dietary_specialties": [
-                        "erityisruokavaliot huomioitu",
+                        "gluteeniton",
+                        "laktoositon",
                         "lähiruoka",
-                        "gluteenittomat vaihtoehdot",
-                        "laktoosittomat vaihtoehdot"
+                        "erityisruokavaliot"
                     ],
                     "staff_included": true,
                     "wedding_menu_available": true,
@@ -1570,7 +1633,8 @@
                         "juhlatila",
                         "pitopalvelu",
                         "hääkakku",
-                        "kahvitus"
+                        "kahvitus",
+                        "juhlakakku"
                     ],
                     "digitization_features": [],
                     "entertainment_features": [],
@@ -1595,9 +1659,9 @@
                     "av_support": false,
                     "staff_events_specialized": true,
                     "refinement_tags": [
-                        "kokoustila",
                         "kokouskahvit",
-                        "yritystapahtuma"
+                        "yritystapahtuma",
+                        "kokoustila"
                     ],
                     "wellbeing_and_activity_features": [],
                     "entertainment_features": [],
@@ -1617,7 +1681,8 @@
                     "urgent_booking_available": false,
                     "refinement_tags": [
                         "muistotilaisuus",
-                        "kahvitus"
+                        "kahvitus",
+                        "pitopalvelu"
                     ],
                     "digitization_features": [],
                     "collaborated_with": []
@@ -1725,7 +1790,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-04T16:32:30.546Z",
+                "last_updated": "2026-05-08T13:45:11.232Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -21048,10 +21113,21 @@
             "core": {
                 "fits_for": {
                     "vapaa-aika": 70,
-                    "events-and-celebrations": 10,
+                    "events-and-celebrations": 82,
                     "perhe-huvipuisto": 90,
                     "lasten-viihde": 80,
-                    "matkailu": 40
+                    "matkailu": 40,
+                    "business-events": 82,
+                    "funerals-and-memorials": 0,
+                    "moving-and-housing": 0,
+                    "construction-and-maintenance": 0,
+                    "cottage-services": 5,
+                    "housing-company-and-contracts": 0,
+                    "startup-services": 0,
+                    "business-growth": 0,
+                    "wellbeing-and-beauty": 35,
+                    "liikunta-ja-vapaaaika": 100,
+                    "accommodation": 0
                 },
                 "priority_score": 0,
                 "paired_with": [],
@@ -21080,34 +21156,52 @@
                     "omilla tarjoiluilla"
                 ],
                 "sub_contexts": [
-                    "lasten juhlat",
                     "huvipuisto",
-                    "perheaktiviteetit"
+                    "lastenjuhlat",
+                    "syntymäpäivät",
+                    "perhepäivä",
+                    "kesäretki",
+                    "laitteet",
+                    "vuoristorata",
+                    "perheaktiviteetit",
+                    "ryhmävierailu",
+                    "koululaisretki",
+                    "teemapuisto",
+                    "kesätapahtuma"
                 ],
                 "node_links": [
                     "HUVIT",
                     "LAUKAA",
                     "MATKAILU",
-                    "JUHLATILA"
+                    "JUHLATILA",
+                    "LIIKUNTA"
                 ],
-                "intent_codes": [],
-                "intent_scores": {}
+                "intent_codes": [
+                    "REC_AMUSEMENT",
+                    "ENT_PROGRAM",
+                    "EVT_BIRTHDAY"
+                ],
+                "intent_scores": {
+                    "REC_AMUSEMENT": 100,
+                    "ENT_PROGRAM": 82,
+                    "EVT_BIRTHDAY": 76
+                }
             },
             "categories": {
                 "core": {
-                    "description": "Kesäisin toimiva perhehuvipuisto, jossa on laitteita ja aktiviteetteja kaikenikäisille. Puistossa on yli 19 huvipuistolaitetta, mukaan lukien vuoristorata Cyclon ja erilaisia pelejä. Puistoalueelle on ilmainen sisäänpääsy . Huvipuiston omistaa Bellingham Oy .",
-                    "website": "[www.nokkakivi.fi](http://www.nokkakivi.fi)",
+                    "description": "Lievestuoreella sijaitseva kesäkauden perhehuvipuisto, jossa on yli 19 huvilaitetta, pelejä ja koko perheen aktiviteetteja. Tunnettu erityisesti Cyclon-vuoristoradasta ja matalan kynnyksen perhepäivistä. Soveltuu lasten syntymäpäiviin, ryhmävierailuihin ja kesätapahtumiin.",
+                    "website": "[https://www.nokkakivi.fi](https://www.nokkakivi.fi)",
                     "email": "[info@nokkakivi.fi](mailto:info@nokkakivi.fi)",
-                    "phone": "045 2705920"
+                    "phone": "0452705920"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 2000,
                     "seated_capacity": 0,
-                    "standing_guests": 0,
+                    "standing_guests": 2000,
                     "outdoor_capacity": 500,
                     "is_accessible": true,
                     "own_catering_allowed": false,
-                    "inhouse_catering_available": false,
+                    "inhouse_catering_available": true,
                     "is_lakeside": false,
                     "has_sauna": false,
                     "has_av_tech": false,
@@ -21115,12 +21209,14 @@
                     "accommodation_beds": 0,
                     "alcohol_license": false,
                     "private_booking": true,
-                    "late_night_events": true,
+                    "late_night_events": false,
                     "wedding_specialized": false,
-                    "catering_min_capacity": 0,
-                    "catering_max_capacity": 0,
-                    "dietary_specialties": [],
-                    "staff_included": false,
+                    "catering_min_capacity": 20,
+                    "catering_max_capacity": 500,
+                    "dietary_specialties": [
+                        "lastenannokset"
+                    ],
+                    "staff_included": true,
                     "wedding_menu_available": false,
                     "cake_service": false,
                     "partner_venues": [],
@@ -21132,13 +21228,23 @@
                     "karaoke_available": false,
                     "has_exclusive_catering": false,
                     "accommodation_included": false,
-                    "refinement_tags": [],
+                    "refinement_tags": [
+                        "lastenjuhlat",
+                        "syntymäpäivä",
+                        "perhepäivä",
+                        "huvipuisto",
+                        "ryhmävierailu"
+                    ],
                     "digitization_features": [],
-                    "entertainment_features": [],
+                    "entertainment_features": [
+                        "huvilaitteet",
+                        "pelialue",
+                        "vuoristorata"
+                    ],
                     "collaborated_with": []
                 },
                 "business_events": {
-                    "meeting_capacity": 0,
+                    "meeting_capacity": 100,
                     "seminar_capacity": 0,
                     "conference_rooms": 0,
                     "has_projector": false,
@@ -21146,7 +21252,7 @@
                     "has_wifi": false,
                     "has_stage": false,
                     "private_booking": true,
-                    "invoice_billing": false,
+                    "invoice_billing": true,
                     "corporate_clients": true,
                     "vip_services": false,
                     "business_catering": true,
@@ -21155,9 +21261,18 @@
                     "branding_support": false,
                     "av_support": false,
                     "staff_events_specialized": true,
-                    "refinement_tags": [],
-                    "wellbeing_and_activity_features": [],
-                    "entertainment_features": [],
+                    "refinement_tags": [
+                        "tyhy-päivä",
+                        "henkilöstöpäivä",
+                        "kesäjuhla"
+                    ],
+                    "wellbeing_and_activity_features": [
+                        "ulkoviihde",
+                        "ryhmäaktiviteetit"
+                    ],
+                    "entertainment_features": [
+                        "huvilaitteet"
+                    ],
                     "collaborated_with": []
                 },
                 "funerals_and_memorials": {
@@ -21280,7 +21395,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-04T16:53:11.859Z",
+                "last_updated": "2026-05-08T13:47:08.799Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -24874,9 +24989,18 @@
                     "vapaa-aika": 100,
                     "hyvinvointipalvelut": 100,
                     "kuntoutus": 95,
-                    "events-and-celebrations": 80,
+                    "events-and-celebrations": 100,
                     "liikunta-ja-vapaaaika": 100,
-                    "wellbeing-and-beauty": 90
+                    "wellbeing-and-beauty": 96,
+                    "business-events": 96,
+                    "funerals-and-memorials": 100,
+                    "moving-and-housing": 0,
+                    "construction-and-maintenance": 10,
+                    "cottage-services": 18,
+                    "housing-company-and-contracts": 15,
+                    "startup-services": 52,
+                    "business-growth": 60,
+                    "accommodation": 100
                 },
                 "priority_score": 0,
                 "paired_with": [
@@ -24905,59 +25029,75 @@
                 ],
                 "sub_contexts": [
                     "kylpylä",
-                    "kuntoutus",
                     "hotelli",
-                    "kokous",
-                    "hyvinvointi",
-                    "ravintolapalvelut",
-                    "sauna"
+                    "majoitus",
+                    "kokoustila",
+                    "yritystapahtuma",
+                    "hyvinvointipalvelut",
+                    "kuntoutus",
+                    "uimahalli",
+                    "kuntosali",
+                    "sauna",
+                    "hääjuhla",
+                    "muistotilaisuus",
+                    "tyky-päivä",
+                    "ravintola",
+                    "viikonloppuloma"
                 ],
                 "node_links": [
-                    "LAUKAA",
-                    "HYVINVOINTI",
-                    "KYLPYLÄ",
-                    "HOTELLI",
-                    "KOKOUKSET",
-                    "SAUNA",
                     "JUHLATILA",
-                    "MAJOITUS"
+                    "MAJOITUS",
+                    "SAUNA",
+                    "HYVINVOINTI",
+                    "LIIKUNTA",
+                    "CATERING"
                 ],
                 "intent_codes": [
                     "REC_SWIMMING",
-                    "REC_GYM"
+                    "VENUE_ACCOMMODATION",
+                    "EVT_CORPORATE",
+                    "EVT_WEDDING",
+                    "EVT_MEMORIAL"
                 ],
                 "intent_scores": {
                     "REC_SWIMMING": 100,
-                    "REC_GYM": 90
+                    "REC_GYM": 90,
+                    "VENUE_ACCOMMODATION": 96,
+                    "EVT_CORPORATE": 90,
+                    "EVT_WEDDING": 100,
+                    "EVT_MEMORIAL": 100
                 }
             },
             "categories": {
                 "core": {
-                    "description": "Kylpylähotelli, kuntoutus- ja virkistyskeskus Laukaan Peurungassa. Tarjoaa monipuolisia hyvinvointi-, kokous-, majoitus- ja ravintolapalveluita yli 50 vuoden kokemuksella. Yritys työllistää noin 100 henkilöä. Peurunka on Sustainable Travel Finland -sertifioitu ja toimii kestävän matkailun periaatteiden mukaisesti.",
-                    "website": "[www.peurunka.fi](http://www.peurunka.fi)",
-                    "email": "[peurunka@peurunka.fi](mailto:peurunka@peurunka.fi)",
-                    "phone": "020 751 6300"
+                    "description": "Peurunka Oy on Laukaassa sijaitseva kylpylähotelli, kuntoutus- ja hyvinvointikeskus, joka tarjoaa majoitusta, kokouspalveluita, ravintolapalveluita sekä monipuolisia liikunta- ja wellness-elämyksiä. Kohde palvelee sekä vapaa-ajan asiakkaita että yritys- ja tapahtuma-asiakkaita ympäri vuoden.",
+                    "website": "https://www.peurunka.fi",
+                    "email": "peurunka@peurunka.fi",
+                    "phone": "+358207516300"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 600,
                     "seated_capacity": 450,
-                    "standing_guests": 0,
+                    "standing_guests": 600,
                     "outdoor_capacity": 200,
                     "is_accessible": true,
                     "own_catering_allowed": false,
-                    "inhouse_catering_available": false,
+                    "inhouse_catering_available": true,
                     "is_lakeside": true,
                     "has_sauna": true,
                     "has_av_tech": true,
                     "has_stage": true,
-                    "accommodation_beds": 0,
+                    "accommodation_beds": 300,
                     "alcohol_license": true,
                     "private_booking": true,
                     "late_night_events": true,
                     "wedding_specialized": true,
-                    "catering_min_capacity": 0,
+                    "catering_min_capacity": 10,
                     "catering_max_capacity": 600,
                     "dietary_specialties": [
+                        "gluteeniton",
+                        "laktoositon",
+                        "vegaani",
                         "erityisruokavaliot"
                     ],
                     "staff_included": true,
@@ -24969,12 +25109,24 @@
                     "video_production": false,
                     "live_music": true,
                     "dj_services": true,
-                    "karaoke_available": false,
-                    "has_exclusive_catering": false,
+                    "karaoke_available": true,
+                    "has_exclusive_catering": true,
                     "accommodation_included": true,
-                    "refinement_tags": [],
+                    "refinement_tags": [
+                        "juhlatila",
+                        "hääjuhla",
+                        "yritysjuhla",
+                        "kylpylähäät",
+                        "saunailta",
+                        "kokouspaketti",
+                        "majoitus"
+                    ],
                     "digitization_features": [],
-                    "entertainment_features": [],
+                    "entertainment_features": [
+                        "live-musiikki",
+                        "karaoke",
+                        "uima-allas"
+                    ],
                     "collaborated_with": []
                 },
                 "business_events": {
@@ -24991,14 +25143,21 @@
                     "vip_services": true,
                     "business_catering": true,
                     "event_hosting": true,
-                    "corporate_gifts": false,
-                    "branding_support": true,
+                    "corporate_gifts": true,
+                    "branding_support": false,
                     "av_support": true,
                     "staff_events_specialized": true,
-                    "refinement_tags": [],
+                    "refinement_tags": [
+                        "kokoushotelli",
+                        "seminaari",
+                        "tyky-päivä",
+                        "hyvinvointipäivä",
+                        "yritystapahtuma"
+                    ],
                     "wellbeing_and_activity_features": [
-                        "liikunta",
-                        "kuntoutus",
+                        "uiminen",
+                        "kuntosali",
+                        "sauna",
                         "hyvinvointipalvelut"
                     ],
                     "entertainment_features": [
@@ -25018,7 +25177,11 @@
                     "memorial_arrangements": true,
                     "transport_assistance": false,
                     "urgent_booking_available": true,
-                    "refinement_tags": [],
+                    "refinement_tags": [
+                        "muistotilaisuus",
+                        "kahvitus",
+                        "esteetön tila"
+                    ],
                     "digitization_features": [],
                     "collaborated_with": []
                 },
@@ -25121,17 +25284,18 @@
                     "bridal_services": true,
                     "group_bookings": true,
                     "refinement_tags": [
-                        "peurunka",
-                        "uinti",
-                        "uimahalli",
                         "kylpylä",
-                        "kuntosali"
+                        "uinti",
+                        "hyvinvointi",
+                        "kuntosali",
+                        "sauna",
+                        "lahjakortti"
                     ],
                     "collaborated_with": []
                 }
             },
             "meta": {
-                "last_updated": "2026-05-04T16:47:49.937Z",
+                "last_updated": "2026-05-08T13:45:11.223Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -29108,7 +29272,20 @@
         "company-135": {
             "name": "Kauneushoitola Ania",
             "core": {
-                "fits_for": {},
+                "fits_for": {
+                    "wellbeing-and-beauty": 100,
+                    "events-and-celebrations": 42,
+                    "business-events": 10,
+                    "funerals-and-memorials": 5,
+                    "moving-and-housing": 0,
+                    "construction-and-maintenance": 0,
+                    "cottage-services": 0,
+                    "housing-company-and-contracts": 0,
+                    "startup-services": 0,
+                    "business-growth": 0,
+                    "liikunta-ja-vapaaaika": 12,
+                    "accommodation": 0
+                },
                 "priority_score": 0,
                 "paired_with": [],
                 "service_area": {
@@ -29127,17 +29304,38 @@
                 "home_service": false,
                 "weekend_service": false,
                 "not_suitable_for": [],
-                "sub_contexts": [],
-                "node_links": [],
-                "intent_codes": [],
-                "intent_scores": {}
+                "sub_contexts": [
+                    "kauneushoitola",
+                    "kasvohoito",
+                    "vartalohoito",
+                    "ripsien kestovärjäys",
+                    "kulmien muotoilu",
+                    "meikkaus",
+                    "juhlameikki",
+                    "häämeikki",
+                    "ihonhoito",
+                    "lievestuore"
+                ],
+                "node_links": [
+                    "HYVINVOINTI"
+                ],
+                "intent_codes": [
+                    "WELLBEING_BEAUTY",
+                    "EVT_WEDDING",
+                    "WELLBEING_THERAPY"
+                ],
+                "intent_scores": {
+                    "WELLBEING_BEAUTY": 100,
+                    "EVT_WEDDING": 42,
+                    "WELLBEING_THERAPY": 28
+                }
             },
             "categories": {
                 "core": {
-                    "description": "Kauneushoitola, joka tarjoaa kauneudenhoitopalveluita, kuten kasvo- ja vartalohoidot, meikkaukset sekä ripsien ja kulmien muotoilun. Yritys on perustettu 5.4.2006 ja se on yksityinen elinkeinonharjoittaja .",
-                    "website": "hoitolaania.fi",
+                    "description": "Kauneushoitola Ania tarjoaa kauneudenhoitopalveluita Lievestuoreella. Palveluihin kuuluvat kasvo- ja vartalohoidot, meikkaukset sekä ripsien ja kulmien käsittelyt. Yritys palvelee ajanvarauksella paikallisia asiakkaita sekä juhla- ja häävalmistautujia.",
+                    "website": "https://www.hoitolaania.fi",
                     "email": "",
-                    "phone": "040 755 8641"
+                    "phone": "0407558641"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -29171,7 +29369,11 @@
                     "karaoke_available": false,
                     "has_exclusive_catering": false,
                     "accommodation_included": false,
-                    "refinement_tags": [],
+                    "refinement_tags": [
+                        "häämeikki",
+                        "juhlameikki",
+                        "kauneuspalvelut juhliin"
+                    ],
                     "digitization_features": [],
                     "entertainment_features": [],
                     "collaborated_with": []
@@ -29195,7 +29397,9 @@
                     "av_support": false,
                     "staff_events_specialized": false,
                     "refinement_tags": [],
-                    "wellbeing_and_activity_features": [],
+                    "wellbeing_and_activity_features": [
+                        "kauneuspalvelut"
+                    ],
                     "entertainment_features": [],
                     "collaborated_with": []
                 },
@@ -29304,19 +29508,25 @@
                 },
                 "wellbeing_and_beauty": {
                     "home_visits": false,
-                    "online_booking": false,
+                    "online_booking": true,
                     "unisex_services": true,
-                    "gift_cards": false,
+                    "gift_cards": true,
                     "corporate_wellbeing_services": false,
-                    "event_makeup": false,
-                    "bridal_services": false,
+                    "event_makeup": true,
+                    "bridal_services": true,
                     "group_bookings": false,
-                    "refinement_tags": [],
+                    "refinement_tags": [
+                        "kasvohoidot",
+                        "meikkaus",
+                        "häämeikki",
+                        "ripsi- ja kulmapalvelut",
+                        "lahjakortit"
+                    ],
                     "collaborated_with": []
                 }
             },
             "meta": {
-                "last_updated": "2026-04-27T05:59:33.670Z",
+                "last_updated": "2026-05-08T13:42:47.210Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -41372,7 +41582,20 @@
         "company-190": {
             "name": "Isännöitsijätoimisto Heikki Valkonen Ky",
             "core": {
-                "fits_for": {},
+                "fits_for": {
+                    "events-and-celebrations": 0,
+                    "business-events": 20,
+                    "funerals-and-memorials": 0,
+                    "moving-and-housing": 40,
+                    "construction-and-maintenance": 100,
+                    "cottage-services": 100,
+                    "housing-company-and-contracts": 100,
+                    "startup-services": 58,
+                    "business-growth": 58,
+                    "wellbeing-and-beauty": 0,
+                    "liikunta-ja-vapaaaika": 0,
+                    "accommodation": 0
+                },
                 "priority_score": 0,
                 "paired_with": [],
                 "service_area": {
@@ -41393,17 +41616,38 @@
                 "home_service": false,
                 "weekend_service": false,
                 "not_suitable_for": [],
-                "sub_contexts": [],
-                "node_links": [],
-                "intent_codes": [],
-                "intent_scores": {}
+                "sub_contexts": [
+                    "isännöinti",
+                    "taloyhtiö",
+                    "kiinteistöhallinto",
+                    "taloushallinto",
+                    "huoltokirja",
+                    "korjaushankkeet",
+                    "asukaspalvelu",
+                    "kiinteistöylläpito",
+                    "hallinnointi",
+                    "vastikehallinta"
+                ],
+                "node_links": [
+                    "ISÄNNÖINTI",
+                    "KIINTEISTÖHUOLTO",
+                    "LAUKAA"
+                ],
+                "intent_codes": [
+                    "HOME_MAINTENANCE",
+                    "BIZ_ADVISORY"
+                ],
+                "intent_scores": {
+                    "HOME_MAINTENANCE": 100,
+                    "BIZ_ADVISORY": 58
+                }
             },
             "categories": {
                 "core": {
-                    "description": "Isännöintipalveluja tarjoava kommandiittiyhtiö, joka on toiminut vuodesta 1995/1996 . Yrityksen osaamisalueeseen kuuluu hallinnolliset tehtävät, kiinteistöjen hoito, ylläpito ja korjaus sekä taloushallinto . Yrityksen liiketoiminta on syyskuussa 2023 siirtynyt osaksi Noste Isännöinti Oy:tä ja edelleen Oiva Isännöinti -konsernia, ja toiminta jatkuu osana isompaa kokonaisuutta . Isännöitsijä Heikki Valkonen on jatkanut työskentelyä Oiva Isännöinnin palveluksessa .",
-                    "website": "www.isannointivalkonen.fi",
+                    "description": "Pitkään Laukaan ja Jyväskylän alueella toiminut isännöintiyritys, jonka palveluihin kuuluvat taloyhtiöiden hallinto, taloushallinto, kiinteistöjen ylläpito sekä korjaushankkeiden koordinointi. Liiketoiminta on siirtynyt osaksi Oiva Isännöinti -kokonaisuutta vuonna 2023.",
+                    "website": "[https://www.isannointivalkonen.fi](https://www.isannointivalkonen.fi)",
                     "email": "",
-                    "phone": "+358 40 7770161"
+                    "phone": "+358407770161"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -41443,7 +41687,7 @@
                     "collaborated_with": []
                 },
                 "business_events": {
-                    "meeting_capacity": 0,
+                    "meeting_capacity": 10,
                     "seminar_capacity": 0,
                     "conference_rooms": 0,
                     "has_projector": false,
@@ -41451,7 +41695,7 @@
                     "has_wifi": false,
                     "has_stage": false,
                     "private_booking": false,
-                    "invoice_billing": false,
+                    "invoice_billing": true,
                     "corporate_clients": true,
                     "vip_services": false,
                     "business_catering": false,
@@ -41460,7 +41704,10 @@
                     "branding_support": false,
                     "av_support": false,
                     "staff_events_specialized": false,
-                    "refinement_tags": [],
+                    "refinement_tags": [
+                        "taloyhtiökokous",
+                        "hallitus"
+                    ],
                     "wellbeing_and_activity_features": [],
                     "entertainment_features": [],
                     "collaborated_with": []
@@ -41502,13 +41749,17 @@
                     "wet_room_certification": false,
                     "provides_tools": false,
                     "material_supply": false,
-                    "project_management": false,
+                    "project_management": true,
                     "snow_removal": false,
                     "lawn_maintenance": false,
-                    "property_monitoring": false,
-                    "maintenance_contracts": false,
-                    "housing_company_clients": false,
-                    "refinement_tags": [],
+                    "property_monitoring": true,
+                    "maintenance_contracts": true,
+                    "housing_company_clients": true,
+                    "refinement_tags": [
+                        "kiinteistöylläpito",
+                        "korjaussuunnittelu",
+                        "huolto"
+                    ],
                     "collaborated_with": []
                 },
                 "cottage_services": {
@@ -41528,15 +41779,20 @@
                 },
                 "housing_company_and_contracts": {
                     "housing_company_clients": true,
-                    "maintenance_contracts": false,
+                    "maintenance_contracts": true,
                     "emergency_response": false,
-                    "scheduled_visits": false,
-                    "property_reports": false,
-                    "invoice_billing": false,
+                    "scheduled_visits": true,
+                    "property_reports": true,
+                    "invoice_billing": true,
                     "contract_customer_available": true,
-                    "priority_support": false,
-                    "monthly_service_plan": false,
-                    "refinement_tags": [],
+                    "priority_support": true,
+                    "monthly_service_plan": true,
+                    "refinement_tags": [
+                        "isännöinti",
+                        "taloyhtiö",
+                        "kiinteistöhallinto",
+                        "korjaushankkeet"
+                    ],
                     "collaborated_with": []
                 },
                 "startup_services": {
@@ -41582,7 +41838,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-27T06:12:52.618Z",
+                "last_updated": "2026-05-08T13:47:08.802Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -59088,10 +59344,17 @@
             "core": {
                 "fits_for": {
                     "events-and-celebrations": 100,
-                    "business-events": 85,
-                    "cottage-services": 60,
-                    "wellbeing-and-beauty": 85,
-                    "liikunta-ja-vapaaaika": 95
+                    "business-events": 88,
+                    "cottage-services": 72,
+                    "wellbeing-and-beauty": 84,
+                    "liikunta-ja-vapaaaika": 98,
+                    "funerals-and-memorials": 58,
+                    "moving-and-housing": 0,
+                    "construction-and-maintenance": 0,
+                    "housing-company-and-contracts": 0,
+                    "startup-services": 0,
+                    "business-growth": 5,
+                    "accommodation": 100
                 },
                 "priority_score": 0,
                 "paired_with": [],
@@ -59121,69 +59384,52 @@
                     "omilla tarjoiluilla"
                 ],
                 "sub_contexts": [
-                    "revontuli",
-                    "hankasalmi",
-                    "lomakeskus",
-                    "hotelli",
-                    "iglut",
-                    "lasi-iglu",
-                    "mökki",
-                    "ravintola",
-                    "sauna",
+                    "hääjuhla",
                     "golf",
-                    "keilailu",
-                    "kokous",
-                    "tapahtumat",
-                    "luontomatkailu",
-                    "elämykset",
-                    "häät",
-                    "juhlatila",
-                    "kartano",
+                    "lomakeskus",
+                    "lasi-iglu",
                     "kokoustila",
-                    "yritystapahtuma",
                     "majoitus",
-                    "ohjelmapalvelut",
+                    "sauna",
+                    "tyky-päivä",
+                    "luontomatkailu",
+                    "keilailu",
                     "avantouinti",
                     "kalastus",
                     "patikointi",
-                    "hiihto",
+                    "talvihäät",
                     "kokouspaketti"
                 ],
                 "node_links": [
-                    "LAUKAA",
-                    "HANKASALMI",
-                    "MAJOITUS",
                     "JUHLATILA",
-                    "HÄÄT",
+                    "MAJOITUS",
                     "SAUNA",
-                    "GOLF",
-                    "RAVINTOLA",
-                    "KOKOUSTILA",
-                    "LOMAKESKUS",
-                    "PITOPALVELU",
+                    "LIIKUNTA",
                     "CATERING"
                 ],
                 "intent_codes": [
                     "EVT_WEDDING",
-                    "REC_GOLF"
+                    "REC_GOLF",
+                    "VENUE_ACCOMMODATION"
                 ],
                 "intent_scores": {
                     "EVT_WEDDING": 100,
-                    "REC_GOLF": 95
+                    "REC_GOLF": 95,
+                    "VENUE_ACCOMMODATION": 94
                 }
             },
             "categories": {
                 "core": {
-                    "description": "Revontuli Resort on Hankasalmella sijaitseva monipuolinen lomakeskus, joka tarjoaa majoitusta lasi-igluissa, mökeissä ja hotellihuoneissa. Kohde tunnetaan erityisesti revontulielämyksistä, luonnonläheisestä ympäristöstä sekä monipuolisista aktiviteeteista kuten golfista, keilailusta, saunomisesta ja talviaktiviteeteista. Alueella on myös ravintola- ja kokouspalvelut sekä tapahtumien järjestämismahdollisuudet.",
+                    "description": "Revontuli Resort on Hankasalmella sijaitseva lomakeskus, joka tarjoaa majoitusta, juhla- ja kokoustiloja, golfia sekä luonto- ja hyvinvointielämyksiä. Kohde tunnetaan erityisesti hääjuhlista, lasi-igluista ja ympärivuotisista aktiviteeteista.",
                     "website": "https://revontuli.fi",
                     "email": "sales@revontuli.fi",
-                    "phone": "+358 14 844 2200"
+                    "phone": "+358148442200"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 120,
                     "seated_capacity": 100,
-                    "standing_guests": 0,
-                    "outdoor_capacity": 0,
+                    "standing_guests": 120,
+                    "outdoor_capacity": 120,
                     "is_accessible": true,
                     "own_catering_allowed": false,
                     "inhouse_catering_available": true,
@@ -59199,8 +59445,8 @@
                     "catering_min_capacity": 10,
                     "catering_max_capacity": 120,
                     "dietary_specialties": [
-                        "laktoositon",
                         "gluteeniton",
+                        "laktoositon",
                         "vegaani"
                     ],
                     "staff_included": true,
@@ -59210,34 +59456,25 @@
                     "wedding_photography": false,
                     "drone_available": false,
                     "video_production": false,
-                    "live_music": false,
-                    "dj_services": false,
+                    "live_music": true,
+                    "dj_services": true,
                     "karaoke_available": false,
                     "has_exclusive_catering": false,
                     "accommodation_included": true,
                     "refinement_tags": [
-                        "juhlatila",
                         "hääjuhla",
-                        "kartano",
-                        "ranta",
+                        "juhlatila",
+                        "golf",
                         "sauna",
-                        "esteetön",
-                        "pitopalvelu",
                         "majoitus",
-                        "hääpaketti",
-                        "ohjelmapalvelut",
-                        "ulkojuhla",
-                        "talvihäät",
                         "revontulihäät",
-                        "elämyslahja"
+                        "talvihäät"
                     ],
                     "digitization_features": [],
                     "entertainment_features": [
                         "golf",
                         "keilailu",
                         "avantouinti",
-                        "kalastus",
-                        "patikointi",
                         "hiihto"
                     ],
                     "collaborated_with": [
@@ -59263,29 +59500,21 @@
                     "av_support": true,
                     "staff_events_specialized": true,
                     "refinement_tags": [
-                        "kokoustila",
-                        "seminaari",
-                        "tyky-päivä",
-                        "yritystapahtuma",
                         "kokouspaketti",
-                        "viriketapahtuma",
+                        "tyky-päivä",
+                        "virikepäivä",
                         "strategiapäivä"
                     ],
                     "wellbeing_and_activity_features": [
                         "golf",
-                        "keilailu",
-                        "avantouinti",
-                        "luontopolku",
-                        "sauna"
+                        "sauna",
+                        "luontoaktiviteetit"
                     ],
                     "entertainment_features": [
                         "keilailu",
-                        "golf-simulaattori",
                         "biljardi"
                     ],
-                    "collaborated_with": [
-                        "Työväentalo Toivola Lievestuore"
-                    ]
+                    "collaborated_with": []
                 },
                 "funerals_and_memorials": {
                     "memorial_service_capacity": 80,
@@ -59342,7 +59571,7 @@
                     "key_holding": false,
                     "winter_monitoring": false,
                     "snow_removal": false,
-                    "cleaning_service": false,
+                    "cleaning_service": true,
                     "lawn_service": false,
                     "remote_monitoring": false,
                     "emergency_visits": false,
@@ -59352,11 +59581,9 @@
                     "guest_preparation_service": true,
                     "refinement_tags": [
                         "lomamökki",
-                        "luksusmajoitus",
+                        "lasi-iglu",
                         "sauna",
-                        "palju",
-                        "takka",
-                        "grillikota"
+                        "palju"
                     ],
                     "collaborated_with": []
                 },
@@ -59404,26 +59631,24 @@
                 },
                 "wellbeing_and_beauty": {
                     "home_visits": false,
-                    "online_booking": false,
-                    "unisex_services": false,
+                    "online_booking": true,
+                    "unisex_services": true,
                     "gift_cards": true,
-                    "corporate_wellbeing_services": false,
+                    "corporate_wellbeing_services": true,
                     "event_makeup": false,
                     "bridal_services": false,
                     "group_bookings": true,
                     "refinement_tags": [
-                        "lahjakortti",
-                        "elämyslahja",
-                        "hemmotteluviikonloppu",
-                        "ryhmävaraus",
-                        "revontuli",
-                        "golf"
+                        "hyvinvointiloma",
+                        "golf",
+                        "sauna",
+                        "elämyslahja"
                     ],
                     "collaborated_with": []
                 }
             },
             "meta": {
-                "last_updated": "2026-05-06T13:36:44.778Z",
+                "last_updated": "2026-05-08T13:45:11.230Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
@@ -63149,7 +63374,7 @@
             "name": "Bistro Puulaaki",
             "core": {
                 "fits_for": {
-                    "events-and-celebrations": 70,
+                    "events-and-celebrations": 100,
                     "startup-services": 0,
                     "business-growth": 0,
                     "moving-and-housing": 0,
@@ -63157,7 +63382,12 @@
                     "cottage-services": 0,
                     "housing-company-and-contracts": 0,
                     "häät": 40,
-                    "yritysjuhlat": 50
+                    "yritysjuhlat": 50,
+                    "business-events": 100,
+                    "funerals-and-memorials": 100,
+                    "wellbeing-and-beauty": 8,
+                    "liikunta-ja-vapaaaika": 35,
+                    "accommodation": 100
                 },
                 "priority_score": 55,
                 "paired_with": [],
@@ -63187,50 +63417,51 @@
                     "muistotilaisuus"
                 ],
                 "sub_contexts": [
+                    "pitopalvelu",
+                    "juhlatila",
+                    "yritysjuhlat",
+                    "kokoustila",
                     "ravintola",
                     "kahvila",
                     "lounas",
-                    "leppävesi",
-                    "laukaa",
+                    "buffet",
+                    "ryhmäruokailu",
                     "hirviareena",
-                    "buffetlounas",
-                    "burgerit",
-                    "tapahtumat",
-                    "ryhmät",
-                    "pitopalvelu",
-                    "juhlatila",
-                    "yritystapahtuma",
-                    "ruokailu",
-                    "tilausravintola"
+                    "leppävesi",
+                    "tilausravintola",
+                    "pikkujoulut",
+                    "syntymäpäivät"
                 ],
                 "node_links": [
-                    "LAUKAA",
-                    "RAVINTOLA",
-                    "KAHVILA",
-                    "JUHLAT",
                     "CATERING",
-                    "YRITYSTAPAHTUMAT",
-                    "PITOPALVELU",
                     "JUHLATILA"
                 ],
-                "intent_codes": [],
-                "intent_scores": {}
+                "intent_codes": [
+                    "BIZ_CATERING",
+                    "VENUE_PARTY",
+                    "EVT_CORPORATE"
+                ],
+                "intent_scores": {
+                    "BIZ_CATERING": 100,
+                    "VENUE_PARTY": 88,
+                    "EVT_CORPORATE": 79
+                }
             },
             "categories": {
                 "core": {
-                    "description": "Bistro Puulaaki on lämminhenkinen ravintola ja kahvila Leppävedellä Hirviareenan urheilukeskuksessa. Tarjoaa monipuolista lounasta, ÃƒÂ  la carte -annoksia, kahvilaherkkuja sekä juomia. Toimii viihtyisänä kohtaamispaikkana niin urheilijoille, tapahtumakävijöille kuin paikallisille asukkaillekin.",
+                    "description": "Bistro Puulaaki toimii Hirviareenalla Leppävedellä tarjoten ravintola-, kahvila- ja pitopalveluita sekä tiloja juhliin ja yritystilaisuuksiin. Yritys palvelee ryhmiä, tapahtumia ja yritysasiakkaita cateringin sekä yksityistilaisuuksien muodossa.",
                     "website": "https://www.bistropuulaaki.fi",
                     "email": "bistropuulaaki@gmail.com",
-                    "phone": "358458513782"
+                    "phone": "+358458513782"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 100,
                     "seated_capacity": 80,
-                    "standing_guests": 0,
+                    "standing_guests": 100,
                     "outdoor_capacity": 0,
                     "is_accessible": true,
                     "own_catering_allowed": false,
-                    "inhouse_catering_available": false,
+                    "inhouse_catering_available": true,
                     "is_lakeside": false,
                     "has_sauna": false,
                     "has_av_tech": true,
@@ -63262,8 +63493,8 @@
                         "juhlatila",
                         "pitopalvelu",
                         "yritysjuhlat",
-                        "ryhmät",
-                        "ravintola juhliin"
+                        "syntymäpäivät",
+                        "pikkujoulut"
                     ],
                     "digitization_features": [],
                     "entertainment_features": [],
@@ -63290,20 +63521,21 @@
                     "av_support": true,
                     "staff_events_specialized": true,
                     "refinement_tags": [
-                        "yritystilaisuus",
                         "kokoustila",
-                        "lounaspalvelu",
-                        "catering yrityksille"
+                        "yritystilaisuus",
+                        "catering yrityksille",
+                        "seminaari",
+                        "tiimipäivä"
                     ],
                     "wellbeing_and_activity_features": [],
                     "entertainment_features": [],
                     "collaborated_with": []
                 },
                 "funerals_and_memorials": {
-                    "memorial_service_capacity": 0,
+                    "memorial_service_capacity": 30,
                     "quiet_private_space": false,
-                    "accessible_entry": false,
-                    "memorial_catering": false,
+                    "accessible_entry": true,
+                    "memorial_catering": true,
                     "coffee_service": true,
                     "flower_arrangements": false,
                     "memorial_menu_available": true,
@@ -63311,11 +63543,10 @@
                     "memorial_arrangements": false,
                     "transport_assistance": false,
                     "urgent_booking_available": false,
-                    "refinement_tags": {
-                        "Yleinen": [
-                            "pitopalvelu"
-                        ]
-                    },
+                    "refinement_tags": [
+                        "kahvitarjoilu",
+                        "pitopalvelu"
+                    ],
                     "digitization_features": [],
                     "collaborated_with": []
                 },
@@ -63423,7 +63654,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-30T13:13:13.161Z",
+                "last_updated": "2026-05-08T13:42:47.211Z",
                 "verified_by": "ai-enriched",
                 "status": "enriched"
             }
