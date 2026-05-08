@@ -85,6 +85,48 @@ function fixFacebookLink(url) {
     return fixedUrl;
 }
 
+/**
+ * Sanitoi ja standardoi URL-osoitteet.
+ * Poistaa ylimääräiset merkit (kuten hakasulkeet) ja varmistaa protokollan.
+ * @param {string} url - Puhdistettava URL
+ * @param {boolean} isWebsite - Onko kyseessä yrityksen päänettisivu (lisää protokollan tarvittaessa)
+ */
+function cleanUrl(url, isWebsite = false) {
+    if (!url || typeof url !== 'string' || url === '-') return '';
+    
+    let cleaned = url.trim();
+    
+    // Tunnistetaan markdown-linkki [teksti](url) ja poimitaan url
+    const mdMatch = cleaned.match(/\[.*?\]\((.*?)\)/);
+    if (mdMatch) {
+        cleaned = mdMatch[1];
+    } else {
+        // Poistetaan hakasulkeet ja sulkumerkit jos ei ollut markdown-linkki
+        cleaned = cleaned.replace(/[\[\]()]/g, '');
+        // Poistetaan kaikki välilyönnin jälkeinen osa (esim. "www.sivu.fi (lisätietoja)")
+        cleaned = cleaned.split(/\s+/)[0];
+    }
+    
+    // Poistetaan mahdollinen loppupiste (jos linkki on esim. tekstin lopussa)
+    cleaned = cleaned.replace(/\.$/, '');
+    
+    // Facebook-erityiskäsittely (käyttää olemassa olevaa fixFacebookLink-funktiota)
+    if (cleaned.includes('facebook.com') || cleaned.startsWith('fb://')) {
+        cleaned = fixFacebookLink(cleaned);
+    }
+
+    if (isWebsite && cleaned.length > 0) {
+        // Varmistetaan https:// etuliite verkkosivuille, jos se puuttuu
+        if (!/^https?:\/\//i.test(cleaned)) {
+            cleaned = 'https://' + cleaned;
+        }
+    }
+    
+    return cleaned;
+}
+
+
+
 // Globaali klikkauskuuntelija Facebook-linkeille
 document.addEventListener('click', (e) => {
     const link = e.target.closest('a');
@@ -2417,7 +2459,10 @@ function renderSpotlightActions(company, actionsEl) {
     let actionButtons = '';
     
     if (company.nettisivu) {
-        actionButtons += `<a href="${company.nettisivu}" target="_blank" class="btn-primary">🌐 Kotisivut</a>`;
+        const sanitizedUrl = cleanUrl(company.nettisivu, true);
+        if (sanitizedUrl) {
+            actionButtons += `<a href="${sanitizedUrl}" target="_blank" class="btn-primary">🌐 Kotisivut</a>`;
+        }
     }
     
     if (company.karttalinkki) {

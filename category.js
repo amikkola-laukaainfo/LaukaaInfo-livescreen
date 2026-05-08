@@ -488,7 +488,8 @@
                 }
 
                 // Clean website URL
-                const websiteShow = (c.nettisivu || '').replace(/^https?:\/\//, '').replace(/\/$/, '');
+                const sanitizedUrl = cleanUrl(c.nettisivu || '', true);
+                const websiteShow = sanitizedUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
 
                 const isPaid = c.tyyppi === 'maksu' || c.tyyppi === 'paid';
                 const cardUrl = isPaid ? `yritys/${slugify(c.nimi)}.html` : `yrityskortti.html?id=${slugify(c.nimi)}`;
@@ -561,7 +562,8 @@
             if (tagsArray.includes('toimitus')) serviceIcons += '<span class="service-icon" title="Toimitus">🚚</span>';
         }
 
-        const websiteShow = (c.nettisivu || '').replace(/^https?:\/\//, '').replace(/\/$/, '');
+        const sanitizedUrl = cleanUrl(c.nettisivu || '', true);
+        const websiteShow = sanitizedUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
         const infoHtml = isPremium && websiteShow
             ? `<div style="margin-top:0.5rem;"><strong>${websiteShow}</strong></div>`
             : `<p class="address">${c.osoite || 'Laukaa'}</p>`;
@@ -579,7 +581,7 @@
         <p>${description}</p>
         <div style="margin-top:1rem; display:flex; gap:10px;">
             <a href="${cardUrl}" class="btn-primary" style="padding:0.4rem 1rem; font-size:0.8rem;">TIEDOT</a>
-            ${c.nettisivu ? `<a href="${c.nettisivu}" target="_blank" class="btn-primary" style="padding:0.4rem 1rem; font-size:0.8rem; background:#666;">WWW</a>` : ''}
+            ${sanitizedUrl ? `<a href="${sanitizedUrl}" target="_blank" class="btn-primary" style="padding:0.4rem 1rem; font-size:0.8rem; background:#666;">WWW</a>` : ''}
         </div>
     `;
         return card;

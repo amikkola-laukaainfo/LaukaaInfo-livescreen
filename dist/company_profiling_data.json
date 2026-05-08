@@ -376,9 +376,9 @@
             "categories": {
                 "core": {
                     "description": "Tyyni Hoiva Suomi Oy tarjoaa yksilöllisiä, turvallisia ja ihmisläheisiä sosiaalihuollon avopalveluja. Palveluihin kuuluvat henkilökohtainen apu, arjen tuki sekä omaishoitajien sijaistus. Yritys palvelee asiakkaita heidän omissa kodeissaan, palvelutaloissa ja asumisyksiköissä mahdollistaen omannäköisen arjen, turvallisuuden ja hyvinvoinnin. Toiminta painottuu Keski-Suomeen ja Pohjois-Savoon.",
-                    "website": "",
+                    "website": "https://www.tyynihoiva.fi",
                     "email": "",
-                    "phone": ""
+                    "phone": "358 50 3639 338"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -572,7 +572,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-30T08:39:25.711Z",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -1863,9 +1863,9 @@
             "categories": {
                 "core": {
                     "description": "Terveys- ja hyvinvointipalvelu Riina Raitio tarjoaa sairaanhoitajataustaista asiantuntijapalvelua, joka keskittyy neurologiseen hoitotyöhön ja kokonaisvaltaiseen hyvinvointiin. Palveluihin kuuluvat neurologisten asiakkaiden ohjaus ja kuntoutus, aivoverenkiertohäiriöiden ennaltaehkäisy sekä toiminnallisten neurologisten oireiden hoito. Palveluja tarjotaan vastaanotolla sekä kotikäynteinä ja hyvinvointitapahtumissa.",
-                    "website": "",
+                    "website": "https://www.terveysjahyvinvointipalveluriinaraitio.com/",
                     "email": "",
-                    "phone": ""
+                    "phone": "35804578358213"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -2064,7 +2064,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-05T09:15:21.770Z",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v2",
                 "status": "published"
             }
@@ -2789,7 +2789,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358405221063"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -2968,7 +2968,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-05T10:40:55.677Z",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -3003,9 +3003,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.fysioterapiaehyt.fi/",
                     "email": "",
-                    "phone": ""
+                    "phone": "358503640445"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -3184,7 +3184,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-05T10:41:29.376Z",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -3650,7 +3650,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358451400199"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -3829,7 +3829,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -3861,9 +3861,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://hierontakumpu.fi",
                     "email": "",
-                    "phone": ""
+                    "phone": "358407187330"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -4042,7 +4042,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -4076,7 +4076,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358445431239"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -4255,7 +4255,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -4289,7 +4289,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358443273008"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -4468,7 +4468,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -4502,7 +4502,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358405747070"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -4681,7 +4681,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -4715,7 +4715,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358407227386"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -4894,7 +4894,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -4928,7 +4928,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358407166948"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -5107,7 +5107,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -5141,9 +5141,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.laukaanapteekki.fi",
                     "email": "",
-                    "phone": ""
+                    "phone": "35814831044"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -5322,7 +5322,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T14:24:53.506Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -5330,33 +5330,75 @@
         "company-18": {
             "name": "Laukaan Toimintaterapia",
             "core": {
-                "fits_for": {},
-                "priority_score": 0,
-                "paired_with": [],
+                "fits_for": {
+                    "events-and-celebrations": 0,
+                    "business-events": 5,
+                    "funerals-and-memorials": 5,
+                    "moving-and-housing": 15,
+                    "construction-and-maintenance": 0,
+                    "cottage-services": 0,
+                    "housing-company-and-contracts": 0,
+                    "startup-services": 0,
+                    "business-growth": 0,
+                    "wellbeing-and-beauty": 100,
+                    "liikunta-ja-vapaaaika": 38,
+                    "accommodation": 0
+                },
+                "priority_score": 82,
+                "paired_with": [
+                    "Fysioterapia",
+                    "Kuntoutus"
+                ],
                 "service_area": {
                     "mode": "TOIMIPISTE",
                     "radius_km": 0,
-                    "regions": [],
-                    "note": ""
+                    "regions": [
+                        "Laukaa"
+                    ],
+                    "note": "Toimintaterapia- ja kuntoutuspalvelut."
                 },
                 "emergency_available": false,
                 "contract_customer_available": false,
-                "paired_with_by_context": {},
+                "paired_with_by_context": {
+                    "wellbeing-and-beauty": [
+                        "Kuntoutus",
+                        "Fysioterapia"
+                    ]
+                },
                 "corporate_clients": false,
-                "home_service": false,
+                "home_service": true,
                 "weekend_service": false,
-                "not_suitable_for": [],
-                "sub_contexts": [],
-                "node_links": [],
-                "intent_codes": [],
-                "intent_scores": {}
+                "not_suitable_for": [
+                    "juhlat",
+                    "pitopalvelu",
+                    "kuljetus"
+                ],
+                "sub_contexts": [
+                    "toimintaterapia",
+                    "kuntoutus",
+                    "lasten toimintaterapia",
+                    "toimintakyky",
+                    "arkikuntoutus",
+                    "sensorinen integraatio"
+                ],
+                "node_links": [
+                    "HYVINVOINTI"
+                ],
+                "intent_codes": [
+                    "WELLBEING_THERAPY",
+                    "WELLBEING_HEALTH"
+                ],
+                "intent_scores": {
+                    "WELLBEING_THERAPY": 100,
+                    "WELLBEING_HEALTH": 82
+                }
             },
             "categories": {
                 "core": {
-                    "description": "",
-                    "website": "",
+                    "description": "Laukaassa toimiva toimintaterapiapalvelu, joka tarjoaa kuntoutusta ja toimintakykyä tukevia terapiapalveluja lapsille, nuorille ja aikuisille.",
+                    "website": "[https://www.laukaantoimintaterapia.fi](https://www.laukaantoimintaterapia.fi)",
                     "email": "",
-                    "phone": ""
+                    "phone": "358505457099"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -5404,7 +5446,7 @@
                     "has_wifi": false,
                     "has_stage": false,
                     "private_booking": false,
-                    "invoice_billing": false,
+                    "invoice_billing": true,
                     "corporate_clients": false,
                     "vip_services": false,
                     "business_catering": false,
@@ -5413,8 +5455,12 @@
                     "branding_support": false,
                     "av_support": false,
                     "staff_events_specialized": false,
-                    "refinement_tags": [],
-                    "wellbeing_and_activity_features": [],
+                    "refinement_tags": [
+                        "kuntoutuspalaverit"
+                    ],
+                    "wellbeing_and_activity_features": [
+                        "toimintaterapia"
+                    ],
                     "entertainment_features": [],
                     "collaborated_with": []
                 },
@@ -5522,22 +5568,26 @@
                     "collaborated_with": []
                 },
                 "wellbeing_and_beauty": {
-                    "home_visits": false,
+                    "home_visits": true,
                     "online_booking": false,
-                    "unisex_services": false,
+                    "unisex_services": true,
                     "gift_cards": false,
                     "corporate_wellbeing_services": false,
                     "event_makeup": false,
                     "bridal_services": false,
                     "group_bookings": false,
-                    "refinement_tags": [],
+                    "refinement_tags": [
+                        "toimintakyvyn arviointi",
+                        "kuntoutus",
+                        "arkitaitojen tuki"
+                    ],
                     "collaborated_with": []
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
-                "verified_by": "AI-analysis-v1",
-                "status": "draft"
+                "last_updated": "2026-05-08T15:42:33.179Z",
+                "verified_by": "AI-analysis-v2",
+                "status": "updated"
             }
         },
         "company-19": {
@@ -5569,9 +5619,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.lievestuoreenapteekki.fi",
                     "email": "",
-                    "phone": ""
+                    "phone": "358207199440"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -5750,7 +5800,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T14:24:53.506Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -5788,7 +5838,7 @@
                     "description": "Fysioterapia- ja hyvinvointipalveluihin erikoistunut yritys. Tarjoaa fysioterapiapalveluja Jyväskylän alueella . Osallistuu hyvinvointitapahtumiin ja tarjoaa mm. klassista hierontaa ja intialaista päähierontaa . Yritys on Kuntoutusyrittäjät ry:n jäsen .",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358405772305"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -5967,7 +6017,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-27T06:21:05.229Z",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -5985,8 +6035,8 @@
                     "construction-and-maintenance": 0,
                     "cottage-services": 0,
                     "accommodation": 0,
-                    "wellbeing-and-beauty": 95,
-                    "liikunta-ja-vapaaaika": 40
+                    "wellbeing-and-beauty": 100,
+                    "liikunta-ja-vapaaaika": 100
                 },
                 "priority_score": 82,
                 "paired_with": [],
@@ -6040,7 +6090,7 @@
                     "description": "OneFit on kuntosali- ja hyvinvointipalvelu, joka tarjoaa monipuolisia liikunta- ja valmennuspalveluja kuten kuntosaliharjoittelua, ryhmäliikuntaa ja personal training -ohjausta. Palvelut sopivat yksityishenkilöille sekä yrityksille esimerkiksi tyhypäiviin ja työhyvinvoinnin kehittämiseen.",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358408470820"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -6237,7 +6287,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T14:47:24.893Z",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v2",
                 "status": "draft"
             }
@@ -6549,9 +6599,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.vello.fi/sannaniinikoski",
                     "email": "",
-                    "phone": ""
+                    "phone": "358409643642"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -6730,7 +6780,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -6743,7 +6793,9 @@
                     "hieronta": 100,
                     "urheiluhieronta": 95,
                     "yrityksen-kehittäminen": 20,
-                    "business-events": 35
+                    "business-events": 35,
+                    "wellbeing-and-beauty": 100,
+                    "liikunta-ja-vapaaaika": 100
                 },
                 "priority_score": 68,
                 "paired_with": [
@@ -7029,7 +7081,7 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.terveystalo.com",
                     "email": "",
                     "phone": ""
                 },
@@ -7211,7 +7263,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -7245,7 +7297,7 @@
             "categories": {
                 "core": {
                     "description": "Hierontapalveluita tarjoava yritys Laukaassa. Perustettu 28.2.2009 .",
-                    "website": "",
+                    "website": "https://booksalon.fi/laukaan-hieronta-ja-kauneussalonki",
                     "email": "",
                     "phone": "045 883 7504"
                 },
@@ -7426,7 +7478,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-27T05:43:53.647Z",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -7460,9 +7512,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://hyvinvointipalveluvire.fi/",
                     "email": "",
-                    "phone": ""
+                    "phone": "358503309984"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -7641,7 +7693,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -7675,7 +7727,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358503041412"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -7854,7 +7906,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -7886,9 +7938,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.bunion.fi",
                     "email": "",
-                    "phone": ""
+                    "phone": "358505419420"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -8067,7 +8119,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -8075,37 +8127,71 @@
         "company-37": {
             "name": "Arskan Autopalvelu",
             "core": {
-                "fits_for": {},
-                "priority_score": 0,
-                "paired_with": [],
+                "fits_for": {
+                    "events-and-celebrations": 0,
+                    "business-events": 0,
+                    "funerals-and-memorials": 0,
+                    "moving-and-housing": 8,
+                    "construction-and-maintenance": 74,
+                    "cottage-services": 74,
+                    "housing-company-and-contracts": 74,
+                    "startup-services": 0,
+                    "business-growth": 0,
+                    "wellbeing-and-beauty": 0,
+                    "liikunta-ja-vapaaaika": 0,
+                    "accommodation": 0
+                },
+                "priority_score": 48,
+                "paired_with": [
+                    "Rengaspalvelu",
+                    "Autohuolto"
+                ],
                 "service_area": {
                     "mode": "TOIMIPISTE",
                     "radius_km": 0,
-                    "regions": [],
-                    "note": ""
+                    "regions": [
+                        "Laukaa",
+                        "Leppävesi",
+                        "Jyväskylä"
+                    ],
+                    "note": "Autokorjaamo ja huoltopalvelut Leppävedellä."
                 },
                 "emergency_available": false,
                 "contract_customer_available": false,
                 "paired_with_by_context": {},
-                "corporate_clients": false,
+                "corporate_clients": true,
                 "home_service": false,
                 "weekend_service": false,
                 "not_suitable_for": [
                     "kuljetus",
                     "bussi",
-                    "taksi"
+                    "taksi",
+                    "juhlat",
+                    "pitopalvelu"
                 ],
-                "sub_contexts": [],
-                "node_links": [],
-                "intent_codes": [],
-                "intent_scores": {}
+                "sub_contexts": [
+                    "autohuolto",
+                    "autokorjaamo",
+                    "määräaikaishuolto",
+                    "vikadiagnostiikka",
+                    "korjauspalvelu"
+                ],
+                "node_links": [
+                    "KIINTEISTÖHUOLTO"
+                ],
+                "intent_codes": [
+                    "HOME_MAINTENANCE"
+                ],
+                "intent_scores": {
+                    "HOME_MAINTENANCE": 74
+                }
             },
             "categories": {
                 "core": {
-                    "description": "",
-                    "website": "",
-                    "email": "",
-                    "phone": ""
+                    "description": "Leppävedellä toimiva autokorjaamo ja autohuolto. Tarjoaa henkilöautojen huolto- ja korjauspalveluita sekä määräaikaishuoltoja.",
+                    "website": "[https://www.arskanautopalvelu.fi](https://www.arskanautopalvelu.fi)",
+                    "email": "[posti@arskanautopalvelu.fi](mailto:posti@arskanautopalvelu.fi)",
+                    "phone": "0405961689"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -8153,8 +8239,8 @@
                     "has_wifi": false,
                     "has_stage": false,
                     "private_booking": false,
-                    "invoice_billing": false,
-                    "corporate_clients": false,
+                    "invoice_billing": true,
+                    "corporate_clients": true,
                     "vip_services": false,
                     "business_catering": false,
                     "event_hosting": false,
@@ -8210,7 +8296,10 @@
                     "property_monitoring": false,
                     "maintenance_contracts": false,
                     "housing_company_clients": false,
-                    "refinement_tags": [],
+                    "refinement_tags": [
+                        "autohuolto",
+                        "korjaamopalvelut"
+                    ],
                     "collaborated_with": []
                 },
                 "cottage_services": {
@@ -8284,7 +8373,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-28T06:43:54.047Z",
+                "last_updated": "2026-05-08T15:36:01.666Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -8943,37 +9032,75 @@
         "company-41": {
             "name": "Autokorjaamo Kari-Huolto Leppävesi",
             "core": {
-                "fits_for": {},
-                "priority_score": 0,
-                "paired_with": [],
+                "fits_for": {
+                    "events-and-celebrations": 0,
+                    "business-events": 0,
+                    "funerals-and-memorials": 0,
+                    "moving-and-housing": 10,
+                    "construction-and-maintenance": 82,
+                    "cottage-services": 82,
+                    "housing-company-and-contracts": 82,
+                    "startup-services": 0,
+                    "business-growth": 0,
+                    "wellbeing-and-beauty": 0,
+                    "liikunta-ja-vapaaaika": 0,
+                    "accommodation": 0
+                },
+                "priority_score": 62,
+                "paired_with": [
+                    "Autohuolto",
+                    "Sijaisauto"
+                ],
                 "service_area": {
                     "mode": "TOIMIPISTE",
                     "radius_km": 0,
-                    "regions": [],
-                    "note": ""
+                    "regions": [
+                        "Leppävesi",
+                        "Laukaa",
+                        "Jyväskylä"
+                    ],
+                    "note": "VAG-ajoneuvojen huolto ja korjaus Leppävedellä."
                 },
                 "emergency_available": false,
-                "contract_customer_available": false,
-                "paired_with_by_context": {},
-                "corporate_clients": false,
+                "contract_customer_available": true,
+                "paired_with_by_context": {
+                    "construction-and-maintenance": [
+                        "Ajoneuvohuolto"
+                    ]
+                },
+                "corporate_clients": true,
                 "home_service": false,
                 "weekend_service": false,
                 "not_suitable_for": [
                     "kuljetus",
                     "bussi",
-                    "taksi"
+                    "taksi",
+                    "juhlat"
                 ],
-                "sub_contexts": [],
-                "node_links": [],
-                "intent_codes": [],
-                "intent_scores": {}
+                "sub_contexts": [
+                    "autohuolto",
+                    "vag-huolto",
+                    "ilmastointihuolto",
+                    "vikadiagnostiikka",
+                    "määräaikaishuolto",
+                    "sijaisauto"
+                ],
+                "node_links": [
+                    "KIINTEISTÖHUOLTO"
+                ],
+                "intent_codes": [
+                    "HOME_MAINTENANCE"
+                ],
+                "intent_scores": {
+                    "HOME_MAINTENANCE": 82
+                }
             },
             "categories": {
                 "core": {
-                    "description": "",
-                    "website": "",
-                    "email": "",
-                    "phone": ""
+                    "description": "Pitkän kokemuksen autokorjaamo Leppävedellä. Erikoistunut Volkswagen-, Audi-, Skoda- ja Seat-ajoneuvojen huoltoon, korjaukseen ja vianmääritykseen.",
+                    "website": "[https://www.karihuolto.fi](https://www.karihuolto.fi)",
+                    "email": "[autokorjaamo@karihuolto.fi](mailto:autokorjaamo@karihuolto.fi)",
+                    "phone": "014281602"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -9021,8 +9148,8 @@
                     "has_wifi": false,
                     "has_stage": false,
                     "private_booking": false,
-                    "invoice_billing": false,
-                    "corporate_clients": false,
+                    "invoice_billing": true,
+                    "corporate_clients": true,
                     "vip_services": false,
                     "business_catering": false,
                     "event_hosting": false,
@@ -9070,7 +9197,7 @@
                     "emergency_service": false,
                     "certifications": [],
                     "wet_room_certification": false,
-                    "provides_tools": false,
+                    "provides_tools": true,
                     "material_supply": false,
                     "project_management": false,
                     "snow_removal": false,
@@ -9078,7 +9205,11 @@
                     "property_monitoring": false,
                     "maintenance_contracts": false,
                     "housing_company_clients": false,
-                    "refinement_tags": [],
+                    "refinement_tags": [
+                        "vag-erikoiskorjaamo",
+                        "autohuolto",
+                        "korjaamopalvelu"
+                    ],
                     "collaborated_with": []
                 },
                 "cottage_services": {
@@ -9152,7 +9283,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-28T06:43:54.047Z",
+                "last_updated": "2026-05-08T15:36:01.679Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -9405,7 +9536,7 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.gticarcenter.fi",
                     "email": "",
                     "phone": ""
                 },
@@ -9586,7 +9717,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-28T06:43:54.047Z",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -11174,7 +11305,7 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.leiskart.fi",
                     "email": "",
                     "phone": ""
                 },
@@ -11355,7 +11486,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-28T06:43:54.048Z",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -11827,7 +11958,7 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.pajakulma.fi",
                     "email": "",
                     "phone": ""
                 },
@@ -12008,7 +12139,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-28T06:43:54.048Z",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -12261,7 +12392,7 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.printsport.fi",
                     "email": "",
                     "phone": ""
                 },
@@ -12442,7 +12573,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-28T06:43:54.048Z",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -12695,7 +12826,7 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.scania.com",
                     "email": "",
                     "phone": ""
                 },
@@ -12876,7 +13007,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-28T06:43:54.048Z",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -12912,7 +13043,7 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://automaalaus.com",
                     "email": "",
                     "phone": ""
                 },
@@ -13093,7 +13224,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-28T06:43:54.048Z",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -15392,7 +15523,7 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.lauttaanaho.com",
                     "email": "",
                     "phone": ""
                 },
@@ -15573,7 +15704,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -16260,7 +16391,7 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://thpesu.fi",
                     "email": "",
                     "phone": ""
                 },
@@ -16441,7 +16572,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-28T06:43:54.048Z",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -16477,7 +16608,7 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.wakpal.fi",
                     "email": "",
                     "phone": ""
                 },
@@ -16659,7 +16790,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-28T06:43:54.048Z",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -16910,9 +17041,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.r-kioski.fi",
                     "email": "",
-                    "phone": ""
+                    "phone": "358469200811"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -17091,7 +17222,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T14:24:53.506Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -17123,9 +17254,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.alko.fi",
                     "email": "",
-                    "phone": ""
+                    "phone": "35820692771"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -17304,7 +17435,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -17336,9 +17467,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.k-ruoka.fi",
                     "email": "",
-                    "phone": ""
+                    "phone": "358143480096"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -17517,7 +17648,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -17549,9 +17680,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.k-ruoka.fi",
                     "email": "",
-                    "phone": ""
+                    "phone": "358505167955"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -17730,7 +17861,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -17764,7 +17895,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358400157640"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -17943,7 +18074,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -17977,7 +18108,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358405555757"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -18156,7 +18287,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -18190,7 +18321,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358500190985"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -18369,7 +18500,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -18403,7 +18534,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358148404225"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -18582,7 +18713,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -18854,7 +18985,7 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://corporate.lidl.fi/",
                     "email": "",
                     "phone": ""
                 },
@@ -19035,7 +19166,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-04T16:52:01.099Z",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -19069,7 +19200,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "35814832656"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -19248,7 +19379,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.284Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -19291,7 +19422,7 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://keskimaa.fi",
                     "email": "",
                     "phone": ""
                 },
@@ -19472,7 +19603,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-30T10:00:50.013Z",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -19504,9 +19635,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.k-ruoka.fi",
                     "email": "",
-                    "phone": ""
+                    "phone": "358143771906"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -19685,7 +19816,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -19957,7 +20088,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358405319078"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -20136,7 +20267,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -20170,7 +20301,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358504662140"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -20349,7 +20480,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -20614,7 +20745,7 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.tokmanni.fi",
                     "email": "",
                     "phone": ""
                 },
@@ -20796,7 +20927,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -20910,7 +21041,7 @@
                     "description": "AtSound Matti Laurila tarjoaa äänentoistoa, DJ-palveluita, tapahtumatekniikkaa, ohjelmapalveluita ja laitevuokrausta Laukaassa ja Keski-Suomen alueella. Yritys toteuttaa ääni- ja ohjelmapalveluita yritystapahtumiin, juhliin, häihin ja live-esiintymisiin. Palveluihin kuuluu myös artistivälitys, karaoke, soitinkorjaus sekä äänitteiden julkaiseminen.",
                     "website": "https://www.atsound.fi",
                     "email": "",
-                    "phone": ""
+                    "phone": "358405581753"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -21118,7 +21249,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-07T18:22:27.701Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "ai-profile-builder",
                 "status": "updated"
             }
@@ -21420,19 +21551,29 @@
             "core": {
                 "fits_for": {
                     "kokoukset": 35,
-                    "funerals-and-memorials": 16,
-                    "business-events": 6,
-                    "events-and-celebrations": 10,
+                    "funerals-and-memorials": 95,
+                    "business-events": 95,
+                    "events-and-celebrations": 95,
                     "lounas": 60,
                     "ravintola": 80,
                     "catering": 50,
                     "juhlat": 40,
-                    "pitopalvelu": 55
+                    "pitopalvelu": 55,
+                    "moving-and-housing": 0,
+                    "construction-and-maintenance": 0,
+                    "cottage-services": 0,
+                    "housing-company-and-contracts": 12,
+                    "startup-services": 0,
+                    "business-growth": 0,
+                    "wellbeing-and-beauty": 8,
+                    "liikunta-ja-vapaaaika": 14,
+                    "accommodation": 95
                 },
-                "priority_score": 0,
+                "priority_score": 81,
                 "paired_with": [
                     "Majoitus",
-                    "Catering"
+                    "Catering",
+                    "Kokoustila"
                 ],
                 "service_area": {
                     "mode": "TOIMIPISTE",
@@ -21440,7 +21581,7 @@
                     "regions": [
                         "Laukaa"
                     ],
-                    "note": "Ravintolatoimintaa Laukaassa"
+                    "note": "Ravintola- ja pitopalvelut Laukaassa."
                 },
                 "emergency_available": false,
                 "contract_customer_available": true,
@@ -21451,40 +21592,53 @@
                     ],
                     "hautajaiset": [
                         "Muistotilaisuuden tila"
+                    ],
+                    "funerals-and-memorials": [
+                        "Muistotila",
+                        "Kahvitarjoilu"
+                    ],
+                    "events-and-celebrations": [
+                        "Juhlatila",
+                        "Pitopalvelu"
                     ]
                 },
                 "corporate_clients": true,
                 "home_service": false,
                 "weekend_service": true,
                 "not_suitable_for": [
-                    "kartano",
                     "omilla tarjoiluilla"
                 ],
                 "sub_contexts": [
-                    "grilliravintola",
-                    "lounasravintola",
-                    "kahvila",
+                    "lounas",
                     "pitopalvelu",
-                    "juhlapalvelu"
+                    "muistotilaisuus",
+                    "juhlapalvelu",
+                    "yritystilaisuus",
+                    "kahvila",
+                    "tilausruokailu"
                 ],
                 "node_links": [
-                    "RAVINTOLA",
-                    "LAUKAA",
-                    "RUOKA",
                     "CATERING",
-                    "HUVIT",
-                    "PITOPALVELU",
-                    "JUHLATILA"
+                    "JUHLATILA",
+                    "SAUNA"
                 ],
-                "intent_codes": [],
-                "intent_scores": {}
+                "intent_codes": [
+                    "BIZ_CATERING",
+                    "EVT_MEMORIAL",
+                    "EVT_CORPORATE"
+                ],
+                "intent_scores": {
+                    "BIZ_CATERING": 95,
+                    "EVT_MEMORIAL": 74,
+                    "EVT_CORPORATE": 68
+                }
             },
             "categories": {
                 "core": {
-                    "description": "Ravintola Rosanne -nimellä tunnettu grilliravintola ja kahvila Laukaassa. Tarjoaa lounas- ja ÃƒÂ¡ la carte -ruokailua, pitopalvelua sekä tilausruokailua juhliin ja muistotilaisuuksiin. Ravintola palvelee sekä yksityis- että yritysasiakkaita.",
-                    "website": "",
+                    "description": "Ravintola Rosanne on Laukaassa toimiva ravintola, kahvila ja pitopalvelu, joka tarjoaa lounasta, tilausruokailuja, juhlapalveluja sekä muistotilaisuuksia yksityis- ja yritysasiakkaille.",
+                    "website": "[https://www.ravintolarosanne.fi](https://www.ravintolarosanne.fi)",
                     "email": "",
-                    "phone": ""
+                    "phone": "35814833030"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 80,
@@ -21518,7 +21672,11 @@
                     "karaoke_available": false,
                     "has_exclusive_catering": false,
                     "accommodation_included": false,
-                    "refinement_tags": [],
+                    "refinement_tags": [
+                        "juhlat",
+                        "pitopalvelu",
+                        "tilausravintola"
+                    ],
                     "digitization_features": [],
                     "entertainment_features": [],
                     "collaborated_with": []
@@ -21541,14 +21699,17 @@
                     "branding_support": false,
                     "av_support": false,
                     "staff_events_specialized": false,
-                    "refinement_tags": [],
+                    "refinement_tags": [
+                        "yritystilaisuudet",
+                        "kokoustarjoilu"
+                    ],
                     "wellbeing_and_activity_features": [],
                     "entertainment_features": [],
                     "collaborated_with": []
                 },
                 "funerals_and_memorials": {
                     "memorial_service_capacity": 0,
-                    "quiet_private_space": false,
+                    "quiet_private_space": true,
                     "accessible_entry": false,
                     "memorial_catering": true,
                     "coffee_service": true,
@@ -21558,7 +21719,10 @@
                     "memorial_arrangements": false,
                     "transport_assistance": false,
                     "urgent_booking_available": false,
-                    "refinement_tags": [],
+                    "refinement_tags": [
+                        "muistotilaisuus",
+                        "kahvitarjoilu"
+                    ],
                     "digitization_features": [],
                     "collaborated_with": []
                 },
@@ -21664,7 +21828,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-04T16:50:05.026Z",
+                "last_updated": "2026-05-08T15:36:01.688Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -22270,7 +22434,7 @@
                     "description": "Hermoratahieronta KIPaway tarjoaa hermoratahierontaa ja hyvinvointipalveluita Laukaan ja Jyväskylän alueella. Palvelut keskittyvät kehonhuoltoon, palautumiseen, kiputilojen lievitykseen sekä kokonaisvaltaiseen hyvinvointiin.",
                     "website": "https://www.kipaway.fi",
                     "email": "",
-                    "phone": ""
+                    "phone": "358453424883"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -22474,7 +22638,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T07:21:40.783Z",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "ai-analysis-v3",
                 "status": "enriched"
             }
@@ -22508,7 +22672,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358400190155"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -22687,7 +22851,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -22721,7 +22885,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358456755219"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -22900,7 +23064,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -22934,7 +23098,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358400917024"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -23113,7 +23277,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -23147,7 +23311,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358504133387"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -23326,7 +23490,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -23360,7 +23524,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358405952681"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -23539,7 +23703,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -23573,7 +23737,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358406846574"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -23752,7 +23916,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -23786,7 +23950,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358505722773"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -23965,7 +24129,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -24022,7 +24186,7 @@
                     "description": "Luontaishoitola, joka tarjoaa erilaisia rentouttavia ja kokonaisvaltaisia hoitoja hyvinvoinnin tukemiseen. Palveluihin kuuluu esimerkiksi energiahoitoja ja muita kehoa ja mieltä tasapainottavia hoitomuotoja rauhallisessa hoitohuoneessa.",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358407789624"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -24212,7 +24376,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-02T18:13:42.568Z",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v2",
                 "status": "draft"
             }
@@ -24246,7 +24410,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358445344304"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -24425,7 +24589,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -24486,7 +24650,7 @@
                     "description": "Ohjelma- ja äänentoistopalvelujen tuottamiseen ja välittämiseen sekä ravintola-alan konsultointiin erikoistunut ohjelmatoimisto. Yhtiö voi toimintaansa varten omistaa ja hallita kiinteää omaisuutta ja arvopapereita .",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "35814861761"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -24666,7 +24830,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-29T08:30:02.971Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -25040,7 +25204,8 @@
                 "weekend_service": true,
                 "not_suitable_for": [
                     "kartano",
-                    "omilla tarjoiluilla"
+                    "omilla tarjoiluilla",
+                    "luennot"
                 ],
                 "sub_contexts": [
                     "kylpylä",
@@ -25310,7 +25475,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T13:45:11.223Z",
+                "last_updated": "2026-05-08T15:50:49.845Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -25639,7 +25804,7 @@
                     "description": "Musiikki- ja viihdepalveluihin erikoistunut osakeyhtiö. Toimialaan kuuluvat tapahtuma- ja tuotantopalvelut, ohjelmapalvelut, äänentoisto-, valaistus- ja äänisuunnittelupalvelut, studio- ja koulutuspalvelut sekä graafinen suunnittelu. Yhtiö toimii myös elämysmatkailu-, kennel- ja rakennusalan konsultoinnin parissa. Yhtiö omistaa Proxta Music Studion ja tarjoaa tapahtumatekniikkaa sekä live-musiikkiin liittyviä palveluita juhliin ja yritystilaisuuksiin.",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358407373026"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 10,
@@ -25843,7 +26008,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-29T10:11:27.567Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -26093,7 +26258,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358505969944"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -26272,7 +26437,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -26323,9 +26488,9 @@
             "categories": {
                 "core": {
                     "description": "Rakennus- ja remonttipalveluja tarjoava toiminimi Laukaan alueella. Palveluihin kuuluu pienrakentaminen, korjaustyöt, puutyöt sekä kiinteistöjen ja mökkien huolto. Toimii erityisesti kotitalouksissa ja vapaa-ajan asunnoilla.",
-                    "website": "",
+                    "website": "https://puuhis.vip/",
                     "email": "",
-                    "phone": ""
+                    "phone": "358400343570"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -26515,7 +26680,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-04T17:36:09.634Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v2",
                 "status": "draft"
             }
@@ -26581,9 +26746,9 @@
             "categories": {
                 "core": {
                     "description": "Pieni maatila ja harrastetalli Laukaan Äijälässä. Toiminta keskittyy shetlanninponeihin ja tarjoaa ratsastustunteja, ponejen vuokrausta, kerhoja ja leirejä sekä elämyksellistä toimintaa kuten maastoilua, ajoa, agilityä ja talvisin rekiajelua. Sopii erityisesti ryhmille, virkistyspäiviin ja elämyspalveluihin.",
-                    "website": "",
+                    "website": "www.untenonnelaranch.fi/",
                     "email": "",
-                    "phone": ""
+                    "phone": "358505660512"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -26785,7 +26950,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T14:46:17.836Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v2",
                 "status": "draft"
             }
@@ -27250,7 +27415,7 @@
                     "description": "Kauneusalan yritys, jonka nimi viittaa kauneus- ja hyvinvointipalveluihin. Yrityksen kotipaikka on Laukaa .",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358405122918"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -27429,7 +27594,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-27T05:56:41.521Z",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -27461,9 +27626,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.evenails.fi",
                     "email": "",
-                    "phone": ""
+                    "phone": "358503313773"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -27642,7 +27807,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -27984,7 +28149,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358458870320"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -28163,7 +28328,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -28461,7 +28626,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358400907054"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -28640,7 +28805,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -28755,7 +28920,7 @@
                     "description": "Valokuvaamo Jenora Design on vuonna 2013 perustettu yksityinen elinkeinonharjoittaja, joka tarjoaa perheiden kuvauspalveluita, erikoismuotokuvauksia ja boudoirkuvauksia, valmistujaiskuvauksia (ylioppilas- ja rippikuvaukset), joulukorttikuvauksia, hautajaiskuvauksia sekä elämäntarinoiden visuaalista tallentamista. Yrityksen perustaja ja valokuvaaja on Jenni Oranen. Ydinosaamista ovat klassiset ja ajattomat muotokuvat sekä yksilöllinen asiakaskokemus.",
                     "website": "jenoradesign.com",
                     "email": "",
-                    "phone": ""
+                    "phone": "358449721372"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -28978,7 +29143,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-30T15:10:32.866Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v2",
                 "status": "draft"
             }
@@ -29036,7 +29201,8 @@
                 "weekend_service": false,
                 "not_suitable_for": [
                     "suuret massatapahtumat",
-                    "pikatoimitukset"
+                    "pikatoimitukset",
+                    "luennot"
                 ],
                 "sub_contexts": [
                     "käsityö",
@@ -29074,7 +29240,7 @@
                     "description": "Joudukas on Mirja Aution käsityö- ja taidealan toimija Laukaasta. Yritys valmistaa perinteitä kunnioittavia piensarjatuotteita, sisustus- ja lahjatuotteita sekä Saraakallio-aiheisia tuotteita. Toimintaan kuuluu myös taide- ja ympäristötaidenäyttelyitä sekä yhteistyö paikallisten matkailu- ja kulttuuritoimijoiden kanssa.",
                     "website": "https://www.joudukas.fi",
                     "email": "joudukas@joudukas.fi",
-                    "phone": ""
+                    "phone": "358504911431"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -29281,7 +29447,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T07:24:24.136Z",
+                "last_updated": "2026-05-08T15:50:49.846Z",
                 "verified_by": "ai-analysis-v2",
                 "status": "draft"
             }
@@ -29320,7 +29486,9 @@
                 "corporate_clients": false,
                 "home_service": false,
                 "weekend_service": false,
-                "not_suitable_for": [],
+                "not_suitable_for": [
+                    "luennot"
+                ],
                 "sub_contexts": [
                     "kauneushoitola",
                     "kasvohoito",
@@ -29543,7 +29711,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T13:42:47.210Z",
+                "last_updated": "2026-05-08T15:50:49.846Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -29577,9 +29745,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.kauneushoitolatunne.fi",
                     "email": "",
-                    "phone": ""
+                    "phone": "358406354003"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -29759,7 +29927,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -29793,7 +29961,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "35814832505"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -29972,7 +30140,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -30226,9 +30394,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://kimmonkulma.com",
                     "email": "",
-                    "phone": ""
+                    "phone": "358405063527"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -30407,7 +30575,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T14:24:53.507Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -30654,7 +30822,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358505557216"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -30833,7 +31001,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -30937,7 +31105,7 @@
                     "description": "Merjan Risu&Ruusut on Laukaan alueella toimiva kukka- ja sidontapalvelu, joka tarjoaa kukkakimppuja, juhla- ja hääkoristeluita, hautasidontaa sekä sesonkikukkia yksityisille ja yrityksille. Yritys toteuttaa persoonallisia kukka-asetelmia juhliin, muistotilaisuuksiin ja yritystilaisuuksiin.",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358407388747"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -31163,7 +31331,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T07:25:49.790Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "ai-analysis-v2",
                 "status": "draft"
             }
@@ -31197,7 +31365,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358407027733"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -31376,7 +31544,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -31442,7 +31610,7 @@
                     "description": "Module Keittiö ja Rakennuspalvelu tarjoaa keittiöremontteja, sisäremontointia ja rakennuspalveluja Laukaan ja Keski-Suomen alueella. Palveluihin kuuluvat mm. keittiöasennukset, kalustetyöt ja yleiset remontointityöt koteihin ja mökeille.",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358400376079"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -31635,7 +31803,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-02T18:08:35.096Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v2",
                 "status": "draft"
             }
@@ -31884,7 +32052,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358401833016"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -32063,7 +32231,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -32310,7 +32478,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "35814665993"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -32489,7 +32657,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -32736,7 +32904,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358400850438"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -32915,7 +33083,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -32949,7 +33117,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358405473700"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -33128,7 +33296,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -33162,7 +33330,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358451311797"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -33341,7 +33509,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -33375,7 +33543,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "35814832494"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -33554,7 +33722,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -33651,7 +33819,7 @@
                     "description": "Dokumentaristiseen tyyliin erikoistunut valokuvaamo, joka tarjoaa henkilö-, urheilu- ja tapahtumakuvauspalveluja. Yrityksen omistaa ja sitä pyörittää Linda Malmström, joka on koulutukseltaan media-alan erikoisammattitutkinnon suorittanut valokuvaajamestari. Yritys on toiminut vuodesta 2022 lähtien. Yrityksen kotipaikka on Laukaa.",
                     "website": "https://www.photomalmstrom.com",
                     "email": "",
-                    "phone": ""
+                    "phone": "358407315292"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -33853,7 +34021,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-30T14:13:57.614Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v2",
                 "status": "draft"
             }
@@ -33921,7 +34089,7 @@
                     "description": "Pieneläintuhkaamopalvelu, joka tarjoaa lemmikkien tuhkaus- ja muistopalveluita.",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358407333590"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -34106,7 +34274,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T07:51:21.732Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "ai-profiling-v1",
                 "status": "draft"
             }
@@ -34156,7 +34324,8 @@
                 "not_suitable_for": [
                     "yritystapahtumat",
                     "juhlapalvelut",
-                    "rakennuspalvelut"
+                    "rakennuspalvelut",
+                    "luennot"
                 ],
                 "sub_contexts": [
                     "käytetyt lastenvaatteet",
@@ -34184,7 +34353,7 @@
                     "description": "Laukaassa toimiva käytettyjen lastenvaatteiden, lelujen ja äitiysvaatteiden myyntiin keskittyvä pienyritys. Toiminta painottuu verkkokauppa- ja huutokauppamyyntiin sekä kierrätystuotteisiin.",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358407028886"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -34370,7 +34539,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T07:26:56.713Z",
+                "last_updated": "2026-05-08T15:50:49.846Z",
                 "verified_by": "ai-analysis-v5",
                 "status": "draft"
             }
@@ -34404,7 +34573,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358401865533"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -34583,7 +34752,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -34834,7 +35003,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358400261979"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -35013,7 +35182,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -35050,7 +35219,7 @@
                     "description": "Laukaassa toimiva parturi-kampaamo, joka tarjoaa hiuspalveluita. Tarkempia tietoja palveluvalikoimasta ei ole saatavilla julkisista lähteistä .",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358405277951"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -35229,7 +35398,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-27T06:15:21.801Z",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -35902,7 +36071,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358400699562"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -36081,7 +36250,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -36329,9 +36498,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.puusta.fi",
                     "email": "",
-                    "phone": ""
+                    "phone": "358407154986"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -36510,7 +36679,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T14:24:53.507Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -36546,7 +36715,7 @@
                     "description": "Parturi-kampaamo ja ekokampaamo, joka tarjoaa monipuolisia hiuspalveluita koko perheelle. Ekopalveluihin kuuluvat ekologiset hoidot (savi, turve, merilevä), savivaalennukset, kasvivärjäykset, intialainen päähieronta ja energisoiva hiustenleikkaus. Kampaamo on mahdollisimman tuoksuton palvellakseen tuoksuyliherkkiä ja hajusteallergisia asiakkaita. Kampaamossa työskentelevät parturi-kampaajat Katja ja Heli (molemmat ekokampaajia) .\n\nYrityksen kotipaikka on Laukaa, perustamisvuosi 2015. Toimiala: Parturit ja kampaamot (96021) .",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358407315521"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -36725,7 +36894,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-27T06:14:20.934Z",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -36759,7 +36928,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358400907054"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -36938,7 +37107,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -37006,7 +37175,7 @@
                     "description": "Tmi Mari Virtanen tarjoaa hyvinvointi- ja hoivapalveluita, kuten hierontaa ja arjen tukipalveluja. Palvelut toteutetaan usein kotikäynteinä Laukaan ja lähialueen asiakkaille.",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358404160906"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -37202,7 +37371,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-02T18:06:36.162Z",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v2",
                 "status": "draft"
             }
@@ -37234,9 +37403,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.timma.fi/eloisa",
                     "email": "",
-                    "phone": ""
+                    "phone": "358504760744"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -37415,7 +37584,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -37447,9 +37616,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://timma.fi/kampaamosaija",
                     "email": "",
-                    "phone": ""
+                    "phone": "358409303152"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -37628,7 +37797,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -37662,7 +37831,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358404177019"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -37841,7 +38010,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -37881,9 +38050,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.peurunka.fi",
                     "email": "",
-                    "phone": ""
+                    "phone": "358207516713"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -38062,7 +38231,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-28T08:04:07.394Z",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -38094,9 +38263,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.topiron.fi",
                     "email": "",
-                    "phone": ""
+                    "phone": "358407259398"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -38275,7 +38444,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -38343,7 +38512,7 @@
                     "description": "Mittatilauspuusepänverstas, joka valmistaa ja toteuttaa kalusteita, sisustusratkaisuja sekä puusepäntöitä yksityis- ja yritysasiakkaille.",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358445225208"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -38526,7 +38695,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T07:30:29.388Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v2",
                 "status": "draft"
             }
@@ -38814,9 +38983,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.adven.com",
                     "email": "",
-                    "phone": ""
+                    "phone": "358103445000"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -38995,7 +39164,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -39029,7 +39198,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358407278316"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -39208,7 +39377,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -39242,7 +39411,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358406620631"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -39421,7 +39590,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -39455,7 +39624,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358505629629"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -39634,7 +39803,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -39668,7 +39837,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358407449608"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -39847,7 +40016,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -39881,9 +40050,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.colliersasunnot.com",
                     "email": "",
-                    "phone": ""
+                    "phone": "358201303003"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -40063,7 +40232,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -40097,7 +40266,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358407508808"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -40276,7 +40445,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -40734,9 +40903,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.tmiforsström.fi",
                     "email": "",
-                    "phone": ""
+                    "phone": "358401936141"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -40915,7 +41084,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -40967,7 +41136,7 @@
                     "description": "Kiinteistöalan palveluihin keskittyvä yritys, joka tarjoaa asuntojen ja kiinteistöjen välitystä sekä vuokraukseen ja myyntiin liittyviä palveluita.",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358407349426"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -41146,7 +41315,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-29T08:35:35.681Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -41156,34 +41325,79 @@
             "core": {
                 "fits_for": {
                     "muutto": 35,
-                    "taloyhtiöpalvelut": 35
+                    "taloyhtiöpalvelut": 35,
+                    "events-and-celebrations": 0,
+                    "business-events": 15,
+                    "funerals-and-memorials": 0,
+                    "moving-and-housing": 72,
+                    "construction-and-maintenance": 95,
+                    "cottage-services": 95,
+                    "housing-company-and-contracts": 96,
+                    "startup-services": 58,
+                    "business-growth": 58,
+                    "wellbeing-and-beauty": 0,
+                    "liikunta-ja-vapaaaika": 0,
+                    "accommodation": 0
                 },
-                "priority_score": 0,
-                "paired_with": [],
+                "priority_score": 78,
+                "paired_with": [
+                    "Kiinteistöhuolto",
+                    "Taloushallinto"
+                ],
                 "service_area": {
                     "mode": "TOIMIPISTE",
                     "radius_km": 0,
-                    "regions": [],
-                    "note": ""
+                    "regions": [
+                        "Laukaa",
+                        "Jyväskylä"
+                    ],
+                    "note": "Isännöintipalvelut taloyhtiöille ja kiinteistöille Keski-Suomessa."
                 },
                 "emergency_available": true,
-                "contract_customer_available": false,
-                "paired_with_by_context": {},
-                "corporate_clients": false,
+                "contract_customer_available": true,
+                "paired_with_by_context": {
+                    "housing-company-and-contracts": [
+                        "Kiinteistöhuolto",
+                        "Remonttipalvelut",
+                        "Taloushallinto"
+                    ]
+                },
+                "corporate_clients": true,
                 "home_service": false,
                 "weekend_service": false,
-                "not_suitable_for": [],
-                "sub_contexts": [],
-                "node_links": [],
-                "intent_codes": [],
-                "intent_scores": {}
+                "not_suitable_for": [
+                    "juhlapalvelut",
+                    "pitopalvelu",
+                    "kuljetus"
+                ],
+                "sub_contexts": [
+                    "isännöinti",
+                    "taloyhtiöt",
+                    "kiinteistöhallinto",
+                    "asunto-osakeyhtiöt",
+                    "muuttoilmoitus",
+                    "remontti-ilmoitukset",
+                    "taloushallinto"
+                ],
+                "node_links": [
+                    "ISÄNNÖINTI",
+                    "KIINTEISTÖHUOLTO"
+                ],
+                "intent_codes": [
+                    "HOME_MAINTENANCE",
+                    "BIZ_ADVISORY"
+                ],
+                "intent_scores": {
+                    "HOME_MAINTENANCE": 95,
+                    "BIZ_ADVISORY": 58
+                }
             },
             "categories": {
                 "core": {
-                    "description": "",
-                    "website": "",
-                    "email": "",
-                    "phone": ""
+                    "description": "Täyden palvelun isännöintitoimisto Laukaan ja Jyväskylän alueella. Tarjoaa asunto- ja kiinteistöosakeyhtiöiden isännöintiä, sähköisiä asiointipalveluja, muutto- ja remontti-ilmoituksia sekä taloushallintoa.",
+                    "website": "[https://www.asuville.fi](https://www.asuville.fi)",
+                    "email": "[ville.sinetta@asuville.fi](mailto:ville.sinetta@asuville.fi)",
+                    "phone": "358504755666"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -41278,18 +41492,21 @@
                     "collaborated_with": []
                 },
                 "construction_and_maintenance": {
-                    "emergency_service": false,
+                    "emergency_service": true,
                     "certifications": [],
                     "wet_room_certification": false,
                     "provides_tools": false,
                     "material_supply": false,
-                    "project_management": false,
+                    "project_management": true,
                     "snow_removal": false,
                     "lawn_maintenance": false,
-                    "property_monitoring": false,
-                    "maintenance_contracts": false,
-                    "housing_company_clients": false,
-                    "refinement_tags": [],
+                    "property_monitoring": true,
+                    "maintenance_contracts": true,
+                    "housing_company_clients": true,
+                    "refinement_tags": [
+                        "kiinteistöjen ylläpito",
+                        "korjaushankkeet"
+                    ],
                     "collaborated_with": []
                 },
                 "cottage_services": {
@@ -41308,16 +41525,20 @@
                     "collaborated_with": []
                 },
                 "housing_company_and_contracts": {
-                    "housing_company_clients": false,
-                    "maintenance_contracts": false,
-                    "emergency_response": false,
-                    "scheduled_visits": false,
-                    "property_reports": false,
-                    "invoice_billing": false,
-                    "contract_customer_available": false,
-                    "priority_support": false,
-                    "monthly_service_plan": false,
-                    "refinement_tags": [],
+                    "housing_company_clients": true,
+                    "maintenance_contracts": true,
+                    "emergency_response": true,
+                    "scheduled_visits": true,
+                    "property_reports": true,
+                    "invoice_billing": true,
+                    "contract_customer_available": true,
+                    "priority_support": true,
+                    "monthly_service_plan": true,
+                    "refinement_tags": [
+                        "sähköinen asiointi",
+                        "isännöitsijäntodistukset",
+                        "taloyhtiöiden hallinto"
+                    ],
                     "collaborated_with": []
                 },
                 "startup_services": {
@@ -41363,9 +41584,9 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
-                "verified_by": "AI-analysis-v1",
-                "status": "draft"
+                "last_updated": "2026-05-08T15:42:33.169Z",
+                "verified_by": "AI-analysis-v2",
+                "status": "updated"
             }
         },
         "company-189": {
@@ -41376,45 +41597,81 @@
                     "isännöinti": 90,
                     "kiinteistöhallinto": 70,
                     "taloushallinto": 40,
-                    "asumisen-palvelut": 60
+                    "asumisen-palvelut": 60,
+                    "events-and-celebrations": 0,
+                    "business-events": 20,
+                    "funerals-and-memorials": 0,
+                    "moving-and-housing": 75,
+                    "construction-and-maintenance": 97,
+                    "cottage-services": 97,
+                    "housing-company-and-contracts": 98,
+                    "startup-services": 62,
+                    "business-growth": 62,
+                    "wellbeing-and-beauty": 0,
+                    "liikunta-ja-vapaaaika": 0,
+                    "accommodation": 0
                 },
-                "priority_score": 0,
-                "paired_with": [],
+                "priority_score": 84,
+                "paired_with": [
+                    "Kiinteistöhuolto",
+                    "Taloushallinto"
+                ],
                 "service_area": {
                     "mode": "TOIMIPISTE",
                     "radius_km": 0,
-                    "regions": [],
-                    "note": ""
+                    "regions": [
+                        "Laukaa",
+                        "Jyväskylä",
+                        "Konnevesi",
+                        "Äänekoski"
+                    ],
+                    "note": "Isännöinti- ja taloushallintopalvelut Keski-Suomessa."
                 },
                 "emergency_available": false,
                 "contract_customer_available": true,
-                "paired_with_by_context": {},
+                "paired_with_by_context": {
+                    "housing-company-and-contracts": [
+                        "Kiinteistöhuolto",
+                        "Sähköiset kokoukset",
+                        "Taloushallinto"
+                    ]
+                },
                 "corporate_clients": true,
                 "home_service": false,
                 "weekend_service": false,
-                "not_suitable_for": [],
+                "not_suitable_for": [
+                    "juhlat",
+                    "pitopalvelu",
+                    "kuljetus"
+                ],
                 "sub_contexts": [
                     "isännöinti",
                     "taloyhtiöt",
                     "kiinteistöhallinto",
-                    "vuokra-asunnot",
-                    "taloushallinto"
+                    "taloushallinto",
+                    "sähköiset kokoukset",
+                    "hausvise",
+                    "vuokra-asunnot"
                 ],
                 "node_links": [
-                    "KIINTEISTOT",
-                    "ASUMINEN",
-                    "TALOYHTIOT",
-                    "ISÄNNÖINTI"
+                    "ISÄNNÖINTI",
+                    "KIINTEISTÖHUOLTO"
                 ],
-                "intent_codes": [],
-                "intent_scores": {}
+                "intent_codes": [
+                    "HOME_MAINTENANCE",
+                    "BIZ_ADVISORY"
+                ],
+                "intent_scores": {
+                    "HOME_MAINTENANCE": 97,
+                    "BIZ_ADVISORY": 62
+                }
             },
             "categories": {
                 "core": {
-                    "description": "Isännöintipalveluihin erikoistunut yritys, joka tarjoaa taloyhtiöiden hallintoa, kiinteistöhallintoa, taloushallintoa sekä vuokra-asuntoihin liittyviä isännöintipalveluja.",
-                    "website": "",
-                    "email": "",
-                    "phone": ""
+                    "description": "Käytännönläheinen isännöinti- ja taloushallintoyritys Laukaassa. Tarjoaa taloyhtiöiden hallintoa, sähköisiä palvelukanavia, kokousratkaisuja ja kiinteistöalan taloushallintoa.",
+                    "website": "[https://www.sujuvaa.fi](https://www.sujuvaa.fi)",
+                    "email": "[terhi.markkanen@sujuvaa.fi](mailto:terhi.markkanen@sujuvaa.fi)",
+                    "phone": "358505944643"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -41454,12 +41711,12 @@
                     "collaborated_with": []
                 },
                 "business_events": {
-                    "meeting_capacity": 0,
+                    "meeting_capacity": 10,
                     "seminar_capacity": 0,
-                    "conference_rooms": 0,
+                    "conference_rooms": 1,
                     "has_projector": false,
-                    "has_streaming": false,
-                    "has_wifi": false,
+                    "has_streaming": true,
+                    "has_wifi": true,
                     "has_stage": false,
                     "private_booking": false,
                     "invoice_billing": true,
@@ -41471,7 +41728,9 @@
                     "branding_support": false,
                     "av_support": false,
                     "staff_events_specialized": false,
-                    "refinement_tags": [],
+                    "refinement_tags": [
+                        "sähköiset kokoukset"
+                    ],
                     "wellbeing_and_activity_features": [],
                     "entertainment_features": [],
                     "collaborated_with": []
@@ -41546,8 +41805,12 @@
                     "invoice_billing": true,
                     "contract_customer_available": true,
                     "priority_support": true,
-                    "monthly_service_plan": false,
-                    "refinement_tags": [],
+                    "monthly_service_plan": true,
+                    "refinement_tags": [
+                        "sähköinen palvelukanava",
+                        "dokumenttien allekirjoitus",
+                        "hallitusnäkymä"
+                    ],
                     "collaborated_with": []
                 },
                 "startup_services": {
@@ -41593,9 +41856,9 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-29T08:36:27.932Z",
-                "verified_by": "AI-analysis-v1",
-                "status": "draft"
+                "last_updated": "2026-05-08T15:42:33.177Z",
+                "verified_by": "AI-analysis-v2",
+                "status": "updated"
             }
         },
         "company-190": {
@@ -41891,7 +42154,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358400467785"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -42070,7 +42333,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -42104,7 +42367,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358400626648"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -42283,7 +42546,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -42315,9 +42578,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.jl-maanrakennus.fi",
                     "email": "",
-                    "phone": ""
+                    "phone": "358400234893"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -42496,7 +42759,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -42530,7 +42793,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358400330273"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -42709,7 +42972,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -42765,7 +43028,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358400540230"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -42944,7 +43207,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-29T08:37:29.373Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -42981,9 +43244,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.facebook.com/p/Kake-Security-J%C3%A4rjestyksenvalvonta-vartiointiyksityisetsiv%C3%A4-ja-koulutus-100057536496028/?locale=fi_FI",
                     "email": "",
-                    "phone": ""
+                    "phone": "358400510006"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -43162,7 +43425,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -43194,9 +43457,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.aninkainen.fi/laukaa/",
                     "email": "",
-                    "phone": ""
+                    "phone": "358451030680"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -43375,7 +43638,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -43407,9 +43670,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.farox.fi",
                     "email": "",
-                    "phone": ""
+                    "phone": "358207344860"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -43588,7 +43851,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -43623,9 +43886,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://petajamaki.fi/",
                     "email": "",
-                    "phone": ""
+                    "phone": "358505511129"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -43804,7 +44067,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -43836,9 +44099,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.koskienergia.fi",
                     "email": "",
-                    "phone": ""
+                    "phone": "358206323821"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -44017,7 +44280,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -44049,9 +44312,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.helama.fi/",
                     "email": "",
-                    "phone": ""
+                    "phone": "358407330623"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -44230,7 +44493,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -44240,42 +44503,89 @@
             "core": {
                 "fits_for": {
                     "muutto": 35,
-                    "taloyhtiöpalvelut": 70
+                    "taloyhtiöpalvelut": 70,
+                    "cottage-services": 100,
+                    "construction-and-maintenance": 95,
+                    "housing-company-and-contracts": 95,
+                    "events-and-celebrations": 5,
+                    "business-events": 10,
+                    "funerals-and-memorials": 15,
+                    "startup-services": 0,
+                    "business-growth": 0,
+                    "moving-and-housing": 40,
+                    "accommodation": 0,
+                    "wellbeing-and-beauty": 0
                 },
-                "priority_score": 0,
-                "paired_with": [],
+                "priority_score": 72,
+                "paired_with": [
+                    "Kiinteistöhuolto",
+                    "Pihanhoito",
+                    "Mökkipalvelut"
+                ],
                 "service_area": {
                     "mode": "TOIMIPISTE",
-                    "radius_km": 0,
-                    "regions": [],
-                    "note": ""
+                    "radius_km": 60,
+                    "regions": [
+                        "Laukaa",
+                        "Jyväskylä",
+                        "Keski-Suomi"
+                    ],
+                    "note": "Kiinteistöhuolto-, mökkipalvelu- ja viherrakennuspalvelut Keski-Suomen alueella."
                 },
                 "emergency_available": true,
-                "contract_customer_available": false,
-                "paired_with_by_context": {},
-                "corporate_clients": false,
-                "home_service": false,
-                "weekend_service": false,
-                "not_suitable_for": [],
-                "sub_contexts": [
-                    "viherrakentaminnen"
+                "contract_customer_available": true,
+                "paired_with_by_context": {
+                    "cottage-services": [
+                        "Mökkitalkkari",
+                        "Pihanhoito",
+                        "Lumityöt"
+                    ],
+                    "housing-company-and-contracts": [
+                        "Kiinteistöhuolto",
+                        "Vihertyöt"
+                    ]
+                },
+                "corporate_clients": true,
+                "home_service": true,
+                "weekend_service": true,
+                "not_suitable_for": [
+                    "ravintolapalvelut",
+                    "juhlatilat",
+                    "majoitus"
                 ],
-                "node_links": [],
+                "sub_contexts": [
+                    "viherrakentaminen",
+                    "pihanhoito",
+                    "mökkitalkkari",
+                    "kiinteistöhuolto",
+                    "lumityöt",
+                    "ruohonleikkaus",
+                    "pihaurakointi",
+                    "ulkotyöt",
+                    "taloyhtiöt",
+                    "mökkipalvelut"
+                ],
+                "node_links": [
+                    "KIINTEISTÖHUOLTO",
+                    "MAJOITUS"
+                ],
                 "intent_codes": [
                     "HOME_COTTAGE",
-                    "HOME_MAINTENANCE"
+                    "HOME_MAINTENANCE",
+                    "HOME_RENOVATION"
                 ],
                 "intent_scores": {
                     "HOME_COTTAGE": 100,
-                    "HOME_MAINTENANCE": 100
+                    "HOME_MAINTENANCE": 95,
+                    "HOME_RENOVATION": 55
                 }
             },
             "categories": {
                 "core": {
-                    "description": "",
-                    "website": "",
+                    "description": "Laukaan Aave Oy tarjoaa kiinteistöhuoltoa, mökkipalveluja, viherrakentamista ja pihanhoitoa Laukaan ja Keski-Suomen alueella. Yritys palvelee sekä yksityisasiakkaita että taloyhtiöitä ympäri vuoden.",
+                    "website": "https://www.laukaanaave.fi/",
                     "email": "",
-                    "phone": ""
+                    "phone": "358400647841"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -44286,7 +44596,7 @@
                     "own_catering_allowed": false,
                     "inhouse_catering_available": false,
                     "is_lakeside": false,
-                    "has_sauna": true,
+                    "has_sauna": false,
                     "has_av_tech": false,
                     "has_stage": false,
                     "accommodation_beds": 0,
@@ -44313,7 +44623,7 @@
                     "digitization_features": [],
                     "entertainment_features": [],
                     "collaborated_with": [],
-                    "has_wifi": true
+                    "has_wifi": false
                 },
                 "business_events": {
                     "meeting_capacity": 0,
@@ -44324,8 +44634,8 @@
                     "has_wifi": false,
                     "has_stage": false,
                     "private_booking": false,
-                    "invoice_billing": false,
-                    "corporate_clients": false,
+                    "invoice_billing": true,
+                    "corporate_clients": true,
                     "vip_services": false,
                     "business_catering": false,
                     "event_hosting": false,
@@ -44333,7 +44643,9 @@
                     "branding_support": false,
                     "av_support": false,
                     "staff_events_specialized": false,
-                    "refinement_tags": [],
+                    "refinement_tags": [
+                        "kiinteistöpalvelut"
+                    ],
                     "wellbeing_and_activity_features": [],
                     "entertainment_features": [],
                     "collaborated_with": []
@@ -44349,8 +44661,10 @@
                     "funeral_flowers": false,
                     "memorial_arrangements": false,
                     "transport_assistance": false,
-                    "urgent_booking_available": false,
-                    "refinement_tags": [],
+                    "urgent_booking_available": true,
+                    "refinement_tags": [
+                        "hautausmaan hoito"
+                    ],
                     "digitization_features": [],
                     "collaborated_with": []
                 },
@@ -44359,57 +44673,69 @@
                     "packing_service": false,
                     "storage_available": false,
                     "weekend_moves": false,
-                    "urgent_moves": false,
+                    "urgent_moves": true,
                     "long_distance_moves": false,
                     "cleaning_after_move": false,
                     "electrician_available": false,
-                    "renovation_support": false,
+                    "renovation_support": true,
                     "insurance_support": false,
-                    "refinement_tags": [],
+                    "refinement_tags": [
+                        "piha- ja kiinteistötyöt"
+                    ],
                     "digitization_features": [],
                     "collaborated_with": []
                 },
                 "construction_and_maintenance": {
-                    "emergency_service": false,
+                    "emergency_service": true,
                     "certifications": [],
                     "wet_room_certification": false,
-                    "provides_tools": false,
-                    "material_supply": false,
+                    "provides_tools": true,
+                    "material_supply": true,
                     "project_management": false,
-                    "snow_removal": false,
-                    "lawn_maintenance": false,
-                    "property_monitoring": false,
-                    "maintenance_contracts": false,
-                    "housing_company_clients": false,
-                    "refinement_tags": [],
+                    "snow_removal": true,
+                    "lawn_maintenance": true,
+                    "property_monitoring": true,
+                    "maintenance_contracts": true,
+                    "housing_company_clients": true,
+                    "refinement_tags": [
+                        "viherrakentaminen",
+                        "talvikunnossapito",
+                        "pihaurakointi"
+                    ],
                     "collaborated_with": []
                 },
                 "cottage_services": {
-                    "key_holding": false,
-                    "winter_monitoring": false,
-                    "snow_removal": false,
+                    "key_holding": true,
+                    "winter_monitoring": true,
+                    "snow_removal": true,
                     "cleaning_service": false,
-                    "lawn_service": false,
+                    "lawn_service": true,
                     "remote_monitoring": false,
-                    "emergency_visits": false,
-                    "renovation_support": false,
-                    "dock_maintenance": false,
+                    "emergency_visits": true,
+                    "renovation_support": true,
+                    "dock_maintenance": true,
                     "sauna_services": false,
-                    "guest_preparation_service": false,
-                    "refinement_tags": [],
+                    "guest_preparation_service": true,
+                    "refinement_tags": [
+                        "mökkitalkkari",
+                        "mökkien valvonta"
+                    ],
                     "collaborated_with": []
                 },
                 "housing_company_and_contracts": {
-                    "housing_company_clients": false,
-                    "maintenance_contracts": false,
-                    "emergency_response": false,
-                    "scheduled_visits": false,
-                    "property_reports": false,
-                    "invoice_billing": false,
-                    "contract_customer_available": false,
-                    "priority_support": false,
-                    "monthly_service_plan": false,
-                    "refinement_tags": [],
+                    "housing_company_clients": true,
+                    "maintenance_contracts": true,
+                    "emergency_response": true,
+                    "scheduled_visits": true,
+                    "property_reports": true,
+                    "invoice_billing": true,
+                    "contract_customer_available": true,
+                    "priority_support": true,
+                    "monthly_service_plan": true,
+                    "refinement_tags": [
+                        "taloyhtiöhuolto",
+                        "ulkohuolto"
+                    ],
                     "collaborated_with": []
                 },
                 "startup_services": {
@@ -44455,13 +44781,13 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T14:31:18.553Z",
-                "verified_by": "AI-analysis-v1",
-                "status": "draft"
+                "last_updated": "2026-05-08T15:47:37.863Z",
+                "verified_by": "AI-analysis-v2",
+                "status": "updated"
             }
         },
         "company-203": {
-            "name": "Laukaan Kotipalvelu",
+            "name": "Laukaan Arkiapupalvelut",
             "core": {
                 "fits_for": {
                     "events-and-celebrations": 10,
@@ -44482,8 +44808,7 @@
                     "mode": "TOIMIPISTE",
                     "radius_km": 30,
                     "regions": [
-                        "Laukaa",
-                        "Keski-Suomi"
+                        "Laukaa kk"
                     ],
                     "note": "Paikallinen kotipalvelu ja arjen apu"
                 },
@@ -44531,7 +44856,7 @@
                     "description": "Laukaan Kotipalvelu tarjoaa monipuolisia kotipalveluita arjen helpottamiseen, kuten siivousta, asiointiapua, kodinhoitoa, muuttoapua sekä tukea ikäihmisille ja kotitalouksille.",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358451148091"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -44728,7 +45053,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T07:36:15.708Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v3",
                 "status": "draft"
             }
@@ -44768,7 +45093,8 @@
                 "weekend_service": false,
                 "not_suitable_for": [
                     "large-scale event production",
-                    "venue services"
+                    "venue services",
+                    "luennot"
                 ],
                 "sub_contexts": [
                     "kotisiivous",
@@ -44979,7 +45305,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T07:35:33.283Z",
+                "last_updated": "2026-05-08T15:50:49.846Z",
                 "verified_by": "AI-analysis-v2",
                 "status": "draft"
             }
@@ -45013,7 +45339,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358404182556"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -45192,7 +45518,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -45259,9 +45585,9 @@
             "categories": {
                 "core": {
                     "description": "Laukaan Puhtaanapito Oy tarjoaa kiinteistöjen puhtaanapito-, ylläpito- ja huoltopalveluita, mukaan lukien siivous, piha-alueiden hoito sekä taloyhtiöiden ja yrityskohteiden kiinteistöhuolto.",
-                    "website": "",
+                    "website": "https://www.laukaanpuhtaanapito.fi",
                     "email": "",
-                    "phone": ""
+                    "phone": "358400547384"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -45448,7 +45774,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T07:36:57.655Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v3",
                 "status": "draft"
             }
@@ -45525,9 +45851,9 @@
             "categories": {
                 "core": {
                     "description": "Laukaan Renki-Palvelut tarjoaa monipuolisia arjen apu- ja kiinteistönhoitopalveluita, kuten mökkihuoltoa, siivousta, pihatöitä, lumitöitä sekä muuttoapua Laukaan ja Keski-Suomen alueella.",
-                    "website": "",
+                    "website": "https://www.renki-palvelut.fi/",
                     "email": "",
-                    "phone": ""
+                    "phone": "358405144389"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -45706,7 +46032,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T07:37:33.262Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v2",
                 "status": "draft"
             }
@@ -45781,9 +46107,9 @@
             "categories": {
                 "core": {
                     "description": "Laukaan Talopalvelu Oy tarjoaa monipuolisia kiinteistönhuollon ja talonmiespalveluiden ratkaisuja Laukaan ja Keski-Suomen alueella. Palveluihin kuuluvat mm. piha-alueiden hoito, lumityöt, korjaus- ja huoltotyöt sekä kiinteistöjen ylläpito taloyhtiöille ja yksityisasiakkaille.",
-                    "website": "",
+                    "website": "https://www.laukaantalopalvelu.fi",
                     "email": "",
-                    "phone": ""
+                    "phone": "358407558526"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -45971,7 +46297,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-02T18:01:34.606Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -46005,7 +46331,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358400702129"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -46184,7 +46510,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -46216,9 +46542,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://lievestuoreenlampo.fi/wp/",
                     "email": "",
-                    "phone": ""
+                    "phone": "358447223270"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -46397,7 +46723,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -46431,7 +46757,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358405696611"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -46610,7 +46936,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -46683,9 +47009,9 @@
             "categories": {
                 "core": {
                     "description": "LVI Jukka Pirttinen Oy tarjoaa LVI-alan palveluita kuten putkityöt, viemärien avaukset, lämmitysjärjestelmien huollot sekä kylpyhuone- ja vesijohtoremontit Laukaan ja Keski-Suomen alueella.",
-                    "website": "",
+                    "website": "https://www.lvipirttinen.fi",
                     "email": "",
-                    "phone": ""
+                    "phone": "358290011450"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -46864,7 +47190,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T07:38:18.599Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v2",
                 "status": "draft"
             }
@@ -46896,9 +47222,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.lvisekuri.fi",
                     "email": "",
-                    "phone": ""
+                    "phone": "358400552951"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -47077,7 +47403,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -47148,9 +47474,9 @@
             "categories": {
                 "core": {
                     "description": "LVI-Taitajat Oy tarjoaa LVI-alan asiantuntijapalveluita, kuten putki-, lämmitys-, vesi- ja ilmanvaihtojärjestelmien asennusta, huoltoa ja korjausta. Yritys palvelee sekä yksityisasiakkaita, yrityksiä että taloyhtiöitä.",
-                    "website": "",
+                    "website": "https://www.lvitaitajat.fi",
                     "email": "",
-                    "phone": ""
+                    "phone": "358451792297"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -47329,7 +47655,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T07:38:54.648Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v2",
                 "status": "draft"
             }
@@ -47361,9 +47687,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.vestec.fi",
                     "email": "",
-                    "phone": ""
+                    "phone": "358408463798"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -47542,7 +47868,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -47574,9 +47900,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.mittakupari.com",
                     "email": "",
-                    "phone": ""
+                    "phone": "358400542456"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -47755,7 +48081,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -47789,7 +48115,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358405908542"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -47968,7 +48294,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -48251,7 +48577,7 @@
                     "description": "Pikkupiika Kaarina tarjoaa lastenhoito- ja arjen tukipalveluita perheille, kuten lastenhoitoa, kotiapua ja tilapäistä arjen apua eri tilanteisiin.",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358400245176"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -48434,7 +48760,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T07:39:29.036Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v2",
                 "status": "draft"
             }
@@ -48468,7 +48794,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358500648240"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -48647,7 +48973,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -48681,7 +49007,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358504008129"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -48860,7 +49186,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -48894,7 +49220,7 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.sssoy.fi",
                     "email": "",
                     "phone": ""
                 },
@@ -49076,7 +49402,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -49114,9 +49440,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.sydansuomenkuljetus.com",
                     "email": "",
-                    "phone": ""
+                    "phone": "358207613660"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -49295,7 +49621,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-28T07:26:07.173Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -49347,7 +49673,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358451231602"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -49526,7 +49852,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T07:40:08.259Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "ai-assumption-v1",
                 "status": "draft"
             }
@@ -49560,7 +49886,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358405046327"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -49739,7 +50065,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -49773,7 +50099,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358456351257"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -49952,7 +50278,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -49986,7 +50312,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358503624439"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -50165,7 +50491,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -50438,7 +50764,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358408380676"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -50617,7 +50943,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -50651,7 +50977,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358404131592"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -50830,7 +51156,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -50903,7 +51229,7 @@
                     "description": "Talotekniikka Väyrynen tarjoaa talotekniikan asennus-, huolto- ja korjauspalveluita Laukaan ja Keski-Suomen alueella. Palveluihin kuuluvat mm. LVI-työt, putkityöt, lämmitysjärjestelmät ja kiinteistötekniikan ratkaisut niin koteihin kuin yrityksille.",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358442843580"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -51092,7 +51418,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-02T18:00:16.718Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -51346,7 +51672,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358400251637"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -51525,7 +51851,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -51559,7 +51885,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358443731471"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -51738,7 +52064,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -51810,7 +52136,7 @@
                     "description": "Tmi Eero Ylönen tarjoaa rakennus-, remontointi- ja kiinteistöhuoltopalveluita Laukaan ja Keski-Suomen alueella. Palveluihin kuuluu mm. saneeraus, korjaustyöt, pihatyöt sekä mökkien huolto ja ylläpito.",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358400832092"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -51998,7 +52324,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-02T17:59:11.277Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -52032,7 +52358,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358400789843"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -52211,7 +52537,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -52245,7 +52571,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358405660914"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -52424,7 +52750,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -52458,7 +52784,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358400647206"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -52637,7 +52963,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -52671,7 +52997,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358403010748"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -52850,7 +53176,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -52882,7 +53208,7 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.vaentupa.fi",
                     "email": "",
                     "phone": ""
                 },
@@ -53063,7 +53389,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -54169,9 +54495,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.vihtahousu.fi",
                     "email": "",
-                    "phone": ""
+                    "phone": "358143771470"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -54350,7 +54676,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-27T12:27:37.891Z",
+                "last_updated": "2026-05-08T15:32:40.284Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -55090,7 +55416,7 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.st1.fi",
                     "email": "",
                     "phone": ""
                 },
@@ -55271,7 +55597,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-28T07:26:07.173Z",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -55312,9 +55638,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.mustakorppi.fi",
                     "email": "",
-                    "phone": ""
+                    "phone": "358405455843"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -55493,7 +55819,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-29T08:42:20.713Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -55530,9 +55856,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://www.laukaanhovi.fi",
                     "email": "",
-                    "phone": ""
+                    "phone": "358504008645"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -55711,7 +56037,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.284Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -55743,9 +56069,9 @@
             "categories": {
                 "core": {
                     "description": "",
-                    "website": "",
+                    "website": "https://pubjuoma.fi",
                     "email": "",
-                    "phone": ""
+                    "phone": "358445023233"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -55924,7 +56250,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.284Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -55974,9 +56300,9 @@
             "categories": {
                 "core": {
                     "description": "Caffitella-brändillä toimiva ravintola- ja kahvilapalveluihin keskittyvä yritys, joka tarjoaa lounas- ja kahvilapalveluita sekä catering- ja tilausravintolapalveluita.",
-                    "website": "",
+                    "website": "https://www.caffitella.fi",
                     "email": "",
-                    "phone": ""
+                    "phone": "358102312297"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -56156,7 +56482,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-29T08:43:24.235Z",
+                "last_updated": "2026-05-08T15:32:40.284Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -56412,7 +56738,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358405249478"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -56591,7 +56917,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.284Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -56841,7 +57167,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "35814861244"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -57020,7 +57346,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.284Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -57054,7 +57380,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358143100251"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -57233,7 +57559,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.284Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -57280,7 +57606,8 @@
                 "weekend_service": true,
                 "not_suitable_for": [
                     "omilla tarjoiluilla",
-                    "huvipuisto"
+                    "huvipuisto",
+                    "luennot"
                 ],
                 "sub_contexts": [
                     "majoitus",
@@ -57500,7 +57827,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T14:46:17.836Z",
+                "last_updated": "2026-05-08T15:50:49.846Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -57534,7 +57861,7 @@
                     "description": "",
                     "website": "",
                     "email": "",
-                    "phone": ""
+                    "phone": "358503069070"
                 },
                 "events_and_celebrations": {
                     "capacity_max": 0,
@@ -57713,7 +58040,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
+                "last_updated": "2026-05-08T15:32:40.284Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -57774,7 +58101,7 @@
             "categories": {
                 "core": {
                     "description": "Kirpputori Majakka on Lievestuoreella Laukaassa toimiva kirpputori, joka tarjoaa käytettyjä tavaroita kuten vaatteita, kodintarvikkeita ja sisustusesineitä. Sopii erityisesti edulliseen hankintaan sekä kierrätykseen esimerkiksi muuton tai kodin perustamisen yhteydessä.",
-                    "website": "",
+                    "website": "https://www.laukaanseurakunta.fi/osallistu/majakan-kirpputori-ja-olohuone",
                     "email": "",
                     "phone": ""
                 },
@@ -57958,7 +58285,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-02T17:55:33.805Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -58591,7 +58918,7 @@
             "categories": {
                 "core": {
                     "description": "Terviksen tilat on Lievestuoreella sijaitseva juhla- ja kokoontumistila, joka soveltuu erilaisten yksityistilaisuuksien, juhlien, kokousten ja kylätapahtumien järjestämiseen. Tilat tarjoavat monikäyttöisen ympäristön sekä sisätiloissa että mahdollisesti piha-alueen tapahtumille. Kohde palvelee paikallisia asukkaita ja yhteisöjä.",
-                    "website": "",
+                    "website": "https://www.terviksentilat.fi/",
                     "email": "",
                     "phone": ""
                 },
@@ -58786,7 +59113,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-01T07:19:51.917Z",
+                "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "ai-analysis-v2",
                 "status": "draft"
             }
@@ -60085,7 +60412,7 @@
                 "core": {
                     "description": "Tunnelmallinen juhla- ja kokoustila Lievestuoreen keskustassa. Soveltuu häihin, syntymäpäiviin, valmistujaisiin, muistotilaisuuksiin, kokouksiin ja yritystilaisuuksiin myös kokonaispalveluna. Yläkerran juhlatilassa istumapaikat noin 75 henkilölle ja kellaritilassa noin 20 henkilölle. Kesäisin käytössä myös viihtyisä piha-alue ja terassi.",
                     "website": "https://www.juhlatalohumina.fi/",
-                    "email": "",
+                    "email": "Yläkerran juhlatila noin 75 henkilölle, kellaritila noin 20 henkilölle. Tunnettu myös Janin Keittiön yhteydessä. Osoite vahvistettu Visit Laukaa -lähteestä.",
                     "phone": "358505664962"
                 },
                 "events_and_celebrations": {
@@ -60316,7 +60643,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-30T12:50:42.506Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
@@ -61046,7 +61373,7 @@
                 "core": {
                     "description": "Tarvaalan kalamaja on rauhallinen järvi- ja luontokohde Tarvaalan alueella Laukaassa. Kohde soveltuu erityisesti kalastukseen, pienryhmien majoitukseen, luonnossa liikkumiseen ja rentoutumiseen. Kalamaja tarjoaa perusmajoitustason puitteet luonnon keskellä, lähellä vesistöjä ja hyviä kalastusalueita. Ympäristö on hiljainen ja soveltuu omatoimiseen lomailuun.",
                     "website": "",
-                    "email": "",
+                    "email": "Kohde painottuu omatoimiseen majoitukseen ja kalastusharrastukseen. Ei laajaa palvelutarjontaa, mutta hyvät luonto- ja vesistömahdollisuudet.",
                     "phone": ""
                 },
                 "events_and_celebrations": {
@@ -61266,7 +61593,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-29T16:27:04.548Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
@@ -61342,7 +61669,7 @@
                 "core": {
                     "description": "Multamäen leirikeskus on luonnonläheinen leiri- ja majoituskohde Peurunkajärven rannalla Laukaassa. Kohde soveltuu leirikoulujen, nuorisoleirien, retkien, ryhmien ja yhdistysten majoitukseen sekä koulutus- ja virkistystapahtumiin. Alueella on majoitustiloja, ruokailu- ja kokoontumistiloja sekä hyvät ulkoilu- ja vesistömahdollisuudet. Rauhallinen järvimaisema tarjoaa puitteet ympärivuotiseen ryhmätoimintaan.",
                     "website": "https://www.laukaanseurakunta.fi/multamaen-leirikeskus",
-                    "email": "",
+                    "email": "Järvenrantasijainti mahdollistaa monipuoliset vesistö- ja luontoaktiviteetit. Kohde painottuu ryhmäkäyttöön ja leiritoimintaan.",
                     "phone": ""
                 },
                 "events_and_celebrations": {
@@ -61574,7 +61901,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T14:50:32.584Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
@@ -61650,7 +61977,7 @@
                 "core": {
                     "description": "Leppäveden alueella luonnonrauhassa sijaitseva lomamökkikohde, joka tarjoaa ympärivuotista majoitusta järven läheisyydessä. Käytettävissä viihtyisiä ja hyvin varusteltuja lomamökkejä omalla saunalla, terassilla, takalla, keittiöllä ja luontoyhteydellä. Sopii lomailuun, perhemajoitukseen, kalastukseen, yritysryhmille sekä rauhallisiin virkistys- ja vapaa-ajan oleskeluihin. Alueella hyvät ulkoilu- ja luontoreitit sekä rantasaunamahdollisuuksia.",
                     "website": "https://www.countryhakkinen.fi",
-                    "email": "",
+                    "email": "Luonnonläheinen sijainti Leppäveden tuntumassa. Mahdollisuus saunaan, kalastukseen ja ulkoiluun. Helppo saavutettavuus Jyväskylän suunnasta.",
                     "phone": "040 736 5166"
                 },
                 "events_and_celebrations": {
@@ -61870,7 +62197,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-29T16:30:53.534Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
@@ -61947,7 +62274,7 @@
                 "core": {
                     "description": "Kuusassa Vatianjärven rannalla sijaitseva lomamökkikohde, jossa on kuusi omarantaista ja ympärivuotisessa käytössä olevaa hirsimökkiä. Jokaisessa mökissä on oma ranta, sauna, takka, soutuvene, täysin varusteltu keittiö, sisä-wc ja terassi. Majoitusta yhteensä noin 50 hengelle. Sopii lomailuun, kalastukseen, työmatkalaisten tilapäismajoitukseen sekä pidempiaikaiseen majoitukseen. Lähellä Kuusaankoski, Varjola, Peurunka ja Metsoreitti.",
                     "website": "http://www.ylasaarikko.com",
-                    "email": "",
+                    "email": "Vuokrattavana myös grillikota ja kotasauna. Sesonkiaikana majoitus yleensä viikkovuokrauksena, muina aikoina myös lyhyempiä majoituksia. Lähin kylpylä Peurunka noin 5 km.",
                     "phone": "040 514 4830"
                 },
                 "events_and_celebrations": {
@@ -62171,7 +62498,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-29T16:32:31.459Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
@@ -62244,7 +62571,7 @@
                 "core": {
                     "description": "Laukaan Äijälässä Nurminen-järven rannalla sijaitseva lomakeskus, joka tarjoaa 4â€“6 hengen lomahuoneistoja ympäri vuoden. Kohteessa on 11 huoneistoa, joista suurin on 60 mÃ‚Â² kolmella makuuhuoneella ja pienemmät 40 mÃ‚Â² huoneistot neljälle hengelle. Jokaisessa huoneistossa on sauna, terassi, täysin varustettu keittiö ja järvinäkymä. Käytössä myös veneitä, laituri, nuotiopaikka, rantatuolit ja hiekkapohjainen uimapaikka.",
                     "website": "https://www.laukaanpitkaniemi.fi",
-                    "email": "",
+                    "email": "Lemmikit sallittu rajoituksin. Vaihtopäivä perjantaisin. Lähellä Varjola, Tupaswilla ja Peurunka. Varaukset verkkosivujen kautta.",
                     "phone": ""
                 },
                 "events_and_celebrations": {
@@ -62465,7 +62792,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-29T16:33:52.517Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
@@ -62547,7 +62874,7 @@
                 "core": {
                     "description": "Elegantti ja persoonallinen juhlatila Saraaveden rannalla Tyvelänniemessä noin 2 km Laukaan keskustasta. Soveltuu häihin, syntymäpäiviin, muistotilaisuuksiin, kokouksiin ja muihin juhliin. Isossa salissa istumapaikat noin 80 henkilölle ja Ateljee-tilan myötä lisäpaikkoja noin 20. Tilassa suuri parveke, flyygeli, takka, äänentoisto, kylmälaitteet, hella sekä mahdollisuus omiin ruokiin. Juhla-astiat ja pöytäliinat vuokrattavissa.",
                     "website": "https://www.laukaantuulenvare.com",
-                    "email": "",
+                    "email": "Vuokra-aika sovitaan tapauskohtaisesti. Pääsääntöisesti vuokra-aika päättyy klo 22.00. Hiekoitettu piha-alue käytettävissä pysäköintiin.",
                     "phone": "040 196 4487"
                 },
                 "events_and_celebrations": {
@@ -62777,7 +63104,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-04T16:23:03.784Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
@@ -62846,7 +63173,7 @@
                 "core": {
                     "description": "Vehniän kyläyhdistyksen omistama ja ylläpitämä juhla- ja kylätalo Laukaan Vehniällä. Soveltuu häihin, juhliin, kokouksiin, seminaareihin, pikkujouluihin, karonkkoihin, saunailtoihin ja muihin tapahtumiin ympäri vuoden. Tiloissa juhlasali 150â€“200 henkilölle, ravintolatila 40 henkilölle, takka- ja saunatilat noin 20 henkilölle, valmistuskeittiö, näyttämö, videotykki, WiFi, äänentoisto ja juhla-astiat 150 hengelle. Omat ruoat ja juomat sallittu.",
                     "website": "https://www.vehnia.fi/juhla-ja-kylatalo-himma/",
-                    "email": "",
+                    "email": "Tilat remontoitu vuosina 2017–2019 ja 2025. Vuokraukseen saatavilla myös siivouspalvelu ja yhteistyökumppaneiden catering-apu. Tilat käytössä klo 02:00 saakka, yöpyminen ei mahdollista.",
                     "phone": "040 824 6751"
                 },
                 "events_and_celebrations": {
@@ -63082,7 +63409,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-30T11:20:37.054Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
@@ -63160,7 +63487,7 @@
                 "core": {
                     "description": "Yli satavuotias tunnelmallinen juhla- ja tapahtumatalo Lievestuoreella. Soveltuu häihin, kokouksiin, muistotilaisuuksiin, seminaareihin, pikkujouluihin, karonkkoihin ja muihin juhliin. Tiloissa suuri juhlasali, kahvila, sauna, videotykki sekä esteetön ja muunneltava tila. Omat ruoat ja juomat sallittu, kahvilapalvelut ja järjestysmiespalvelut tilauksesta.",
                     "website": "https://visitlaukaa.fi/palvelu/tyovaentalo-toivola/",
-                    "email": "",
+                    "email": "Tilaa vuokraa Laukaan Demarit. Saatavilla myös kahvilapalvelut, järjestysmiespalvelut ja mahdollisuus tilapäiseen lattiamajoitukseen.",
                     "phone": "040 054 0995"
                 },
                 "events_and_celebrations": {
@@ -63395,7 +63722,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-04T17:26:27.334Z",
+                "last_updated": "2026-05-08T15:32:40.283Z",
                 "verified_by": "ai-enriched",
                 "status": "enriched"
             }

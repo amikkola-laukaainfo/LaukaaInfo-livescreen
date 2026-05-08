@@ -80,9 +80,9 @@
         "categories": {
             "core": {
                 "description": "Tyyni Hoiva Suomi Oy tarjoaa yksilöllisiä, turvallisia ja ihmisläheisiä sosiaalihuollon avopalveluja. Palveluihin kuuluvat henkilökohtainen apu, arjen tuki sekä omaishoitajien sijaistus. Yritys palvelee asiakkaita heidän omissa kodeissaan, palvelutaloissa ja asumisyksiköissä mahdollistaen omannäköisen arjen, turvallisuuden ja hyvinvoinnin. Toiminta painottuu Keski-Suomeen ja Pohjois-Savoon.",
-                "website": "",
+                "website": "https://www.tyynihoiva.fi",
                 "email": "",
-                "phone": ""
+                "phone": "358 50 3639 338"
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -276,7 +276,520 @@
             }
         },
         "meta": {
-            "last_updated": "2026-04-30T08:39:25.711Z",
+            "last_updated": "2026-05-08T15:32:40.282Z",
+            "verified_by": "AI-analysis-v1",
+            "status": "draft"
+        }
+    },
+    "company-37": {
+        "name": "Arskan Autopalvelu",
+        "core": {
+            "fits_for": {
+                "events-and-celebrations": 0,
+                "business-events": 0,
+                "funerals-and-memorials": 0,
+                "moving-and-housing": 8,
+                "construction-and-maintenance": 74,
+                "cottage-services": 74,
+                "housing-company-and-contracts": 74,
+                "startup-services": 0,
+                "business-growth": 0,
+                "wellbeing-and-beauty": 0,
+                "liikunta-ja-vapaaaika": 0,
+                "accommodation": 0
+            },
+            "priority_score": 48,
+            "paired_with": [
+                "Rengaspalvelu",
+                "Autohuolto"
+            ],
+            "service_area": {
+                "mode": "TOIMIPISTE",
+                "radius_km": 0,
+                "regions": [
+                    "Laukaa",
+                    "Leppävesi",
+                    "Jyväskylä"
+                ],
+                "note": "Autokorjaamo ja huoltopalvelut Leppävedellä."
+            },
+            "emergency_available": false,
+            "contract_customer_available": false,
+            "paired_with_by_context": {},
+            "corporate_clients": true,
+            "home_service": false,
+            "weekend_service": false,
+            "not_suitable_for": [
+                "kuljetus",
+                "bussi",
+                "taksi",
+                "juhlat",
+                "pitopalvelu"
+            ],
+            "sub_contexts": [
+                "autohuolto",
+                "autokorjaamo",
+                "määräaikaishuolto",
+                "vikadiagnostiikka",
+                "korjauspalvelu"
+            ],
+            "node_links": [
+                "KIINTEISTÖHUOLTO"
+            ],
+            "intent_codes": [
+                "HOME_MAINTENANCE"
+            ],
+            "intent_scores": {
+                "HOME_MAINTENANCE": 74
+            }
+        },
+        "categories": {
+            "core": {
+                "description": "Leppävedellä toimiva autokorjaamo ja autohuolto. Tarjoaa henkilöautojen huolto- ja korjauspalveluita sekä määräaikaishuoltoja.",
+                "website": "[https://www.arskanautopalvelu.fi](https://www.arskanautopalvelu.fi)",
+                "email": "[posti@arskanautopalvelu.fi](mailto:posti@arskanautopalvelu.fi)",
+                "phone": "0405961689"
+            },
+            "events_and_celebrations": {
+                "capacity_max": 0,
+                "seated_capacity": 0,
+                "standing_guests": 0,
+                "outdoor_capacity": 0,
+                "is_accessible": false,
+                "own_catering_allowed": false,
+                "inhouse_catering_available": false,
+                "is_lakeside": false,
+                "has_sauna": false,
+                "has_av_tech": false,
+                "has_stage": false,
+                "accommodation_beds": 0,
+                "alcohol_license": false,
+                "private_booking": false,
+                "late_night_events": false,
+                "wedding_specialized": false,
+                "catering_min_capacity": 0,
+                "catering_max_capacity": 0,
+                "dietary_specialties": [],
+                "staff_included": false,
+                "wedding_menu_available": false,
+                "cake_service": false,
+                "partner_venues": [],
+                "wedding_photography": false,
+                "drone_available": false,
+                "video_production": false,
+                "live_music": false,
+                "dj_services": false,
+                "karaoke_available": false,
+                "has_exclusive_catering": false,
+                "accommodation_included": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "entertainment_features": [],
+                "collaborated_with": []
+            },
+            "business_events": {
+                "meeting_capacity": 0,
+                "seminar_capacity": 0,
+                "conference_rooms": 0,
+                "has_projector": false,
+                "has_streaming": false,
+                "has_wifi": false,
+                "has_stage": false,
+                "private_booking": false,
+                "invoice_billing": true,
+                "corporate_clients": true,
+                "vip_services": false,
+                "business_catering": false,
+                "event_hosting": false,
+                "corporate_gifts": false,
+                "branding_support": false,
+                "av_support": false,
+                "staff_events_specialized": false,
+                "refinement_tags": [],
+                "wellbeing_and_activity_features": [],
+                "entertainment_features": [],
+                "collaborated_with": []
+            },
+            "funerals_and_memorials": {
+                "memorial_service_capacity": 0,
+                "quiet_private_space": false,
+                "accessible_entry": false,
+                "memorial_catering": false,
+                "coffee_service": false,
+                "flower_arrangements": false,
+                "memorial_menu_available": false,
+                "funeral_flowers": false,
+                "memorial_arrangements": false,
+                "transport_assistance": false,
+                "urgent_booking_available": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "moving_and_housing": {
+                "moving_truck_available": false,
+                "packing_service": false,
+                "storage_available": false,
+                "weekend_moves": false,
+                "urgent_moves": false,
+                "long_distance_moves": false,
+                "cleaning_after_move": false,
+                "electrician_available": false,
+                "renovation_support": false,
+                "insurance_support": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "construction_and_maintenance": {
+                "emergency_service": false,
+                "certifications": [],
+                "wet_room_certification": false,
+                "provides_tools": false,
+                "material_supply": false,
+                "project_management": false,
+                "snow_removal": false,
+                "lawn_maintenance": false,
+                "property_monitoring": false,
+                "maintenance_contracts": false,
+                "housing_company_clients": false,
+                "refinement_tags": [
+                    "autohuolto",
+                    "korjaamopalvelut"
+                ],
+                "collaborated_with": []
+            },
+            "cottage_services": {
+                "key_holding": false,
+                "winter_monitoring": false,
+                "snow_removal": false,
+                "cleaning_service": false,
+                "lawn_service": false,
+                "remote_monitoring": false,
+                "emergency_visits": false,
+                "renovation_support": false,
+                "dock_maintenance": false,
+                "sauna_services": false,
+                "guest_preparation_service": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "housing_company_and_contracts": {
+                "housing_company_clients": false,
+                "maintenance_contracts": false,
+                "emergency_response": false,
+                "scheduled_visits": false,
+                "property_reports": false,
+                "invoice_billing": false,
+                "contract_customer_available": false,
+                "priority_support": false,
+                "monthly_service_plan": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "startup_services": {
+                "bookkeeping_startup": false,
+                "business_advisory": false,
+                "insurance_setup": false,
+                "legal_services": false,
+                "office_space_available": false,
+                "banking_support": false,
+                "website_creation": false,
+                "webshop_setup": false,
+                "branding_support": false,
+                "logo_design": false,
+                "business_photography": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "business_growth": {
+                "google_ads": false,
+                "social_media_marketing": false,
+                "seo_services": false,
+                "content_creation": false,
+                "video_production": false,
+                "crm_support": false,
+                "recruitment_support": false,
+                "sales_development": false,
+                "automation_services": false,
+                "consulting_services": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "wellbeing_and_beauty": {
+                "home_visits": false,
+                "online_booking": false,
+                "unisex_services": false,
+                "gift_cards": false,
+                "corporate_wellbeing_services": false,
+                "event_makeup": false,
+                "bridal_services": false,
+                "group_bookings": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            }
+        },
+        "meta": {
+            "last_updated": "2026-05-08T15:36:01.666Z",
+            "verified_by": "AI-analysis-v1",
+            "status": "draft"
+        }
+    },
+    "company-41": {
+        "name": "Autokorjaamo Kari-Huolto Leppävesi",
+        "core": {
+            "fits_for": {
+                "events-and-celebrations": 0,
+                "business-events": 0,
+                "funerals-and-memorials": 0,
+                "moving-and-housing": 10,
+                "construction-and-maintenance": 82,
+                "cottage-services": 82,
+                "housing-company-and-contracts": 82,
+                "startup-services": 0,
+                "business-growth": 0,
+                "wellbeing-and-beauty": 0,
+                "liikunta-ja-vapaaaika": 0,
+                "accommodation": 0
+            },
+            "priority_score": 62,
+            "paired_with": [
+                "Autohuolto",
+                "Sijaisauto"
+            ],
+            "service_area": {
+                "mode": "TOIMIPISTE",
+                "radius_km": 0,
+                "regions": [
+                    "Leppävesi",
+                    "Laukaa",
+                    "Jyväskylä"
+                ],
+                "note": "VAG-ajoneuvojen huolto ja korjaus Leppävedellä."
+            },
+            "emergency_available": false,
+            "contract_customer_available": true,
+            "paired_with_by_context": {
+                "construction-and-maintenance": [
+                    "Ajoneuvohuolto"
+                ]
+            },
+            "corporate_clients": true,
+            "home_service": false,
+            "weekend_service": false,
+            "not_suitable_for": [
+                "kuljetus",
+                "bussi",
+                "taksi",
+                "juhlat"
+            ],
+            "sub_contexts": [
+                "autohuolto",
+                "vag-huolto",
+                "ilmastointihuolto",
+                "vikadiagnostiikka",
+                "määräaikaishuolto",
+                "sijaisauto"
+            ],
+            "node_links": [
+                "KIINTEISTÖHUOLTO"
+            ],
+            "intent_codes": [
+                "HOME_MAINTENANCE"
+            ],
+            "intent_scores": {
+                "HOME_MAINTENANCE": 82
+            }
+        },
+        "categories": {
+            "core": {
+                "description": "Pitkän kokemuksen autokorjaamo Leppävedellä. Erikoistunut Volkswagen-, Audi-, Skoda- ja Seat-ajoneuvojen huoltoon, korjaukseen ja vianmääritykseen.",
+                "website": "[https://www.karihuolto.fi](https://www.karihuolto.fi)",
+                "email": "[autokorjaamo@karihuolto.fi](mailto:autokorjaamo@karihuolto.fi)",
+                "phone": "014281602"
+            },
+            "events_and_celebrations": {
+                "capacity_max": 0,
+                "seated_capacity": 0,
+                "standing_guests": 0,
+                "outdoor_capacity": 0,
+                "is_accessible": false,
+                "own_catering_allowed": false,
+                "inhouse_catering_available": false,
+                "is_lakeside": false,
+                "has_sauna": false,
+                "has_av_tech": false,
+                "has_stage": false,
+                "accommodation_beds": 0,
+                "alcohol_license": false,
+                "private_booking": false,
+                "late_night_events": false,
+                "wedding_specialized": false,
+                "catering_min_capacity": 0,
+                "catering_max_capacity": 0,
+                "dietary_specialties": [],
+                "staff_included": false,
+                "wedding_menu_available": false,
+                "cake_service": false,
+                "partner_venues": [],
+                "wedding_photography": false,
+                "drone_available": false,
+                "video_production": false,
+                "live_music": false,
+                "dj_services": false,
+                "karaoke_available": false,
+                "has_exclusive_catering": false,
+                "accommodation_included": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "entertainment_features": [],
+                "collaborated_with": []
+            },
+            "business_events": {
+                "meeting_capacity": 0,
+                "seminar_capacity": 0,
+                "conference_rooms": 0,
+                "has_projector": false,
+                "has_streaming": false,
+                "has_wifi": false,
+                "has_stage": false,
+                "private_booking": false,
+                "invoice_billing": true,
+                "corporate_clients": true,
+                "vip_services": false,
+                "business_catering": false,
+                "event_hosting": false,
+                "corporate_gifts": false,
+                "branding_support": false,
+                "av_support": false,
+                "staff_events_specialized": false,
+                "refinement_tags": [],
+                "wellbeing_and_activity_features": [],
+                "entertainment_features": [],
+                "collaborated_with": []
+            },
+            "funerals_and_memorials": {
+                "memorial_service_capacity": 0,
+                "quiet_private_space": false,
+                "accessible_entry": false,
+                "memorial_catering": false,
+                "coffee_service": false,
+                "flower_arrangements": false,
+                "memorial_menu_available": false,
+                "funeral_flowers": false,
+                "memorial_arrangements": false,
+                "transport_assistance": false,
+                "urgent_booking_available": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "moving_and_housing": {
+                "moving_truck_available": false,
+                "packing_service": false,
+                "storage_available": false,
+                "weekend_moves": false,
+                "urgent_moves": false,
+                "long_distance_moves": false,
+                "cleaning_after_move": false,
+                "electrician_available": false,
+                "renovation_support": false,
+                "insurance_support": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "construction_and_maintenance": {
+                "emergency_service": false,
+                "certifications": [],
+                "wet_room_certification": false,
+                "provides_tools": true,
+                "material_supply": false,
+                "project_management": false,
+                "snow_removal": false,
+                "lawn_maintenance": false,
+                "property_monitoring": false,
+                "maintenance_contracts": false,
+                "housing_company_clients": false,
+                "refinement_tags": [
+                    "vag-erikoiskorjaamo",
+                    "autohuolto",
+                    "korjaamopalvelu"
+                ],
+                "collaborated_with": []
+            },
+            "cottage_services": {
+                "key_holding": false,
+                "winter_monitoring": false,
+                "snow_removal": false,
+                "cleaning_service": false,
+                "lawn_service": false,
+                "remote_monitoring": false,
+                "emergency_visits": false,
+                "renovation_support": false,
+                "dock_maintenance": false,
+                "sauna_services": false,
+                "guest_preparation_service": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "housing_company_and_contracts": {
+                "housing_company_clients": false,
+                "maintenance_contracts": false,
+                "emergency_response": false,
+                "scheduled_visits": false,
+                "property_reports": false,
+                "invoice_billing": false,
+                "contract_customer_available": false,
+                "priority_support": false,
+                "monthly_service_plan": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "startup_services": {
+                "bookkeeping_startup": false,
+                "business_advisory": false,
+                "insurance_setup": false,
+                "legal_services": false,
+                "office_space_available": false,
+                "banking_support": false,
+                "website_creation": false,
+                "webshop_setup": false,
+                "branding_support": false,
+                "logo_design": false,
+                "business_photography": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "business_growth": {
+                "google_ads": false,
+                "social_media_marketing": false,
+                "seo_services": false,
+                "content_creation": false,
+                "video_production": false,
+                "crm_support": false,
+                "recruitment_support": false,
+                "sales_development": false,
+                "automation_services": false,
+                "consulting_services": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "wellbeing_and_beauty": {
+                "home_visits": false,
+                "online_booking": false,
+                "unisex_services": false,
+                "gift_cards": false,
+                "corporate_wellbeing_services": false,
+                "event_makeup": false,
+                "bridal_services": false,
+                "group_bookings": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            }
+        },
+        "meta": {
+            "last_updated": "2026-05-08T15:36:01.679Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -562,7 +1075,7 @@
         "categories": {
             "core": {
                 "description": "",
-                "website": "",
+                "website": "https://www.pajakulma.fi",
                 "email": "",
                 "phone": ""
             },
@@ -743,7 +1256,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-04-28T06:43:54.048Z",
+            "last_updated": "2026-05-08T15:32:40.282Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -1338,7 +1851,7 @@
                 "description": "Hermoratahieronta KIPaway tarjoaa hermoratahierontaa ja hyvinvointipalveluita Laukaan ja Jyväskylän alueella. Palvelut keskittyvät kehonhuoltoon, palautumiseen, kiputilojen lievitykseen sekä kokonaisvaltaiseen hyvinvointiin.",
                 "website": "https://www.kipaway.fi",
                 "email": "",
-                "phone": ""
+                "phone": "358453424883"
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -1542,7 +2055,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T07:21:40.783Z",
+            "last_updated": "2026-05-08T15:32:40.282Z",
             "verified_by": "ai-analysis-v3",
             "status": "enriched"
         }
@@ -1916,7 +2429,7 @@
                 "description": "Module Keittiö ja Rakennuspalvelu tarjoaa keittiöremontteja, sisäremontointia ja rakennuspalveluja Laukaan ja Keski-Suomen alueella. Palveluihin kuuluvat mm. keittiöasennukset, kalustetyöt ja yleiset remontointityöt koteihin ja mökeille.",
                 "website": "",
                 "email": "",
-                "phone": ""
+                "phone": "358400376079"
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -2109,7 +2622,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-02T18:08:35.096Z",
+            "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "AI-analysis-v2",
             "status": "draft"
         }
@@ -2177,7 +2690,7 @@
                 "description": "Mittatilauspuusepänverstas, joka valmistaa ja toteuttaa kalusteita, sisustusratkaisuja sekä puusepäntöitä yksityis- ja yritysasiakkaille.",
                 "website": "",
                 "email": "",
-                "phone": ""
+                "phone": "358445225208"
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -2360,7 +2873,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T07:30:29.388Z",
+            "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "AI-analysis-v2",
             "status": "draft"
         }
@@ -2394,9 +2907,9 @@
         "categories": {
             "core": {
                 "description": "",
-                "website": "",
+                "website": "https://www.colliersasunnot.com",
                 "email": "",
-                "phone": ""
+                "phone": "358201303003"
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -2576,7 +3089,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-04-26",
+            "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -2628,7 +3141,7 @@
                 "description": "Kiinteistöalan palveluihin keskittyvä yritys, joka tarjoaa asuntojen ja kiinteistöjen välitystä sekä vuokraukseen ja myyntiin liittyviä palveluita.",
                 "website": "",
                 "email": "",
-                "phone": ""
+                "phone": "358407349426"
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -2807,9 +3320,278 @@
             }
         },
         "meta": {
-            "last_updated": "2026-04-29T08:35:35.681Z",
+            "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "system-init-v3",
             "status": "draft"
+        }
+    },
+    "company-188": {
+        "name": "Isännöinti Asuville Oy",
+        "core": {
+            "fits_for": {
+                "muutto": 35,
+                "taloyhtiöpalvelut": 35,
+                "events-and-celebrations": 0,
+                "business-events": 15,
+                "funerals-and-memorials": 0,
+                "moving-and-housing": 72,
+                "construction-and-maintenance": 95,
+                "cottage-services": 95,
+                "housing-company-and-contracts": 96,
+                "startup-services": 58,
+                "business-growth": 58,
+                "wellbeing-and-beauty": 0,
+                "liikunta-ja-vapaaaika": 0,
+                "accommodation": 0
+            },
+            "priority_score": 78,
+            "paired_with": [
+                "Kiinteistöhuolto",
+                "Taloushallinto"
+            ],
+            "service_area": {
+                "mode": "TOIMIPISTE",
+                "radius_km": 0,
+                "regions": [
+                    "Laukaa",
+                    "Jyväskylä"
+                ],
+                "note": "Isännöintipalvelut taloyhtiöille ja kiinteistöille Keski-Suomessa."
+            },
+            "emergency_available": true,
+            "contract_customer_available": true,
+            "paired_with_by_context": {
+                "housing-company-and-contracts": [
+                    "Kiinteistöhuolto",
+                    "Remonttipalvelut",
+                    "Taloushallinto"
+                ]
+            },
+            "corporate_clients": true,
+            "home_service": false,
+            "weekend_service": false,
+            "not_suitable_for": [
+                "juhlapalvelut",
+                "pitopalvelu",
+                "kuljetus"
+            ],
+            "sub_contexts": [
+                "isännöinti",
+                "taloyhtiöt",
+                "kiinteistöhallinto",
+                "asunto-osakeyhtiöt",
+                "muuttoilmoitus",
+                "remontti-ilmoitukset",
+                "taloushallinto"
+            ],
+            "node_links": [
+                "ISÄNNÖINTI",
+                "KIINTEISTÖHUOLTO"
+            ],
+            "intent_codes": [
+                "HOME_MAINTENANCE",
+                "BIZ_ADVISORY"
+            ],
+            "intent_scores": {
+                "HOME_MAINTENANCE": 95,
+                "BIZ_ADVISORY": 58
+            }
+        },
+        "categories": {
+            "core": {
+                "description": "Täyden palvelun isännöintitoimisto Laukaan ja Jyväskylän alueella. Tarjoaa asunto- ja kiinteistöosakeyhtiöiden isännöintiä, sähköisiä asiointipalveluja, muutto- ja remontti-ilmoituksia sekä taloushallintoa.",
+                "website": "[https://www.asuville.fi](https://www.asuville.fi)",
+                "email": "[ville.sinetta@asuville.fi](mailto:ville.sinetta@asuville.fi)",
+                "phone": "358504755666"
+            },
+            "events_and_celebrations": {
+                "capacity_max": 0,
+                "seated_capacity": 0,
+                "standing_guests": 0,
+                "outdoor_capacity": 0,
+                "is_accessible": false,
+                "own_catering_allowed": false,
+                "inhouse_catering_available": false,
+                "is_lakeside": false,
+                "has_sauna": false,
+                "has_av_tech": false,
+                "has_stage": false,
+                "accommodation_beds": 0,
+                "alcohol_license": false,
+                "private_booking": false,
+                "late_night_events": false,
+                "wedding_specialized": false,
+                "catering_min_capacity": 0,
+                "catering_max_capacity": 0,
+                "dietary_specialties": [],
+                "staff_included": false,
+                "wedding_menu_available": false,
+                "cake_service": false,
+                "partner_venues": [],
+                "wedding_photography": false,
+                "drone_available": false,
+                "video_production": false,
+                "live_music": false,
+                "dj_services": false,
+                "karaoke_available": false,
+                "has_exclusive_catering": false,
+                "accommodation_included": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "entertainment_features": [],
+                "collaborated_with": [],
+                "has_wifi": true
+            },
+            "business_events": {
+                "meeting_capacity": 0,
+                "seminar_capacity": 0,
+                "conference_rooms": 0,
+                "has_projector": false,
+                "has_streaming": false,
+                "has_wifi": false,
+                "has_stage": false,
+                "private_booking": false,
+                "invoice_billing": false,
+                "corporate_clients": false,
+                "vip_services": false,
+                "business_catering": false,
+                "event_hosting": false,
+                "corporate_gifts": false,
+                "branding_support": false,
+                "av_support": false,
+                "staff_events_specialized": false,
+                "refinement_tags": [],
+                "wellbeing_and_activity_features": [],
+                "entertainment_features": [],
+                "collaborated_with": []
+            },
+            "funerals_and_memorials": {
+                "memorial_service_capacity": 0,
+                "quiet_private_space": false,
+                "accessible_entry": false,
+                "memorial_catering": false,
+                "coffee_service": false,
+                "flower_arrangements": false,
+                "memorial_menu_available": false,
+                "funeral_flowers": false,
+                "memorial_arrangements": false,
+                "transport_assistance": false,
+                "urgent_booking_available": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "moving_and_housing": {
+                "moving_truck_available": false,
+                "packing_service": false,
+                "storage_available": false,
+                "weekend_moves": false,
+                "urgent_moves": false,
+                "long_distance_moves": false,
+                "cleaning_after_move": false,
+                "electrician_available": false,
+                "renovation_support": false,
+                "insurance_support": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "construction_and_maintenance": {
+                "emergency_service": true,
+                "certifications": [],
+                "wet_room_certification": false,
+                "provides_tools": false,
+                "material_supply": false,
+                "project_management": true,
+                "snow_removal": false,
+                "lawn_maintenance": false,
+                "property_monitoring": true,
+                "maintenance_contracts": true,
+                "housing_company_clients": true,
+                "refinement_tags": [
+                    "kiinteistöjen ylläpito",
+                    "korjaushankkeet"
+                ],
+                "collaborated_with": []
+            },
+            "cottage_services": {
+                "key_holding": false,
+                "winter_monitoring": false,
+                "snow_removal": false,
+                "cleaning_service": false,
+                "lawn_service": false,
+                "remote_monitoring": false,
+                "emergency_visits": false,
+                "renovation_support": false,
+                "dock_maintenance": false,
+                "sauna_services": false,
+                "guest_preparation_service": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "housing_company_and_contracts": {
+                "housing_company_clients": true,
+                "maintenance_contracts": true,
+                "emergency_response": true,
+                "scheduled_visits": true,
+                "property_reports": true,
+                "invoice_billing": true,
+                "contract_customer_available": true,
+                "priority_support": true,
+                "monthly_service_plan": true,
+                "refinement_tags": [
+                    "sähköinen asiointi",
+                    "isännöitsijäntodistukset",
+                    "taloyhtiöiden hallinto"
+                ],
+                "collaborated_with": []
+            },
+            "startup_services": {
+                "bookkeeping_startup": false,
+                "business_advisory": false,
+                "insurance_setup": false,
+                "legal_services": false,
+                "office_space_available": false,
+                "banking_support": false,
+                "website_creation": false,
+                "webshop_setup": false,
+                "branding_support": false,
+                "logo_design": false,
+                "business_photography": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "business_growth": {
+                "google_ads": false,
+                "social_media_marketing": false,
+                "seo_services": false,
+                "content_creation": false,
+                "video_production": false,
+                "crm_support": false,
+                "recruitment_support": false,
+                "sales_development": false,
+                "automation_services": false,
+                "consulting_services": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "wellbeing_and_beauty": {
+                "home_visits": false,
+                "online_booking": false,
+                "unisex_services": false,
+                "gift_cards": false,
+                "corporate_wellbeing_services": false,
+                "event_makeup": false,
+                "bridal_services": false,
+                "group_bookings": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            }
+        },
+        "meta": {
+            "last_updated": "2026-05-08T15:42:33.169Z",
+            "verified_by": "AI-analysis-v2",
+            "status": "updated"
         }
     },
     "company-189": {
@@ -2820,45 +3602,81 @@
                 "isännöinti": 90,
                 "kiinteistöhallinto": 70,
                 "taloushallinto": 40,
-                "asumisen-palvelut": 60
+                "asumisen-palvelut": 60,
+                "events-and-celebrations": 0,
+                "business-events": 20,
+                "funerals-and-memorials": 0,
+                "moving-and-housing": 75,
+                "construction-and-maintenance": 97,
+                "cottage-services": 97,
+                "housing-company-and-contracts": 98,
+                "startup-services": 62,
+                "business-growth": 62,
+                "wellbeing-and-beauty": 0,
+                "liikunta-ja-vapaaaika": 0,
+                "accommodation": 0
             },
-            "priority_score": 0,
-            "paired_with": [],
+            "priority_score": 84,
+            "paired_with": [
+                "Kiinteistöhuolto",
+                "Taloushallinto"
+            ],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
-                "regions": [],
-                "note": ""
+                "regions": [
+                    "Laukaa",
+                    "Jyväskylä",
+                    "Konnevesi",
+                    "Äänekoski"
+                ],
+                "note": "Isännöinti- ja taloushallintopalvelut Keski-Suomessa."
             },
             "emergency_available": false,
             "contract_customer_available": true,
-            "paired_with_by_context": {},
+            "paired_with_by_context": {
+                "housing-company-and-contracts": [
+                    "Kiinteistöhuolto",
+                    "Sähköiset kokoukset",
+                    "Taloushallinto"
+                ]
+            },
             "corporate_clients": true,
             "home_service": false,
             "weekend_service": false,
-            "not_suitable_for": [],
+            "not_suitable_for": [
+                "juhlat",
+                "pitopalvelu",
+                "kuljetus"
+            ],
             "sub_contexts": [
                 "isännöinti",
                 "taloyhtiöt",
                 "kiinteistöhallinto",
-                "vuokra-asunnot",
-                "taloushallinto"
+                "taloushallinto",
+                "sähköiset kokoukset",
+                "hausvise",
+                "vuokra-asunnot"
             ],
             "node_links": [
-                "KIINTEISTOT",
-                "ASUMINEN",
-                "TALOYHTIOT",
-                "ISÄNNÖINTI"
+                "ISÄNNÖINTI",
+                "KIINTEISTÖHUOLTO"
             ],
-            "intent_codes": [],
-            "intent_scores": {}
+            "intent_codes": [
+                "HOME_MAINTENANCE",
+                "BIZ_ADVISORY"
+            ],
+            "intent_scores": {
+                "HOME_MAINTENANCE": 97,
+                "BIZ_ADVISORY": 62
+            }
         },
         "categories": {
             "core": {
-                "description": "Isännöintipalveluihin erikoistunut yritys, joka tarjoaa taloyhtiöiden hallintoa, kiinteistöhallintoa, taloushallintoa sekä vuokra-asuntoihin liittyviä isännöintipalveluja.",
-                "website": "",
-                "email": "",
-                "phone": ""
+                "description": "Käytännönläheinen isännöinti- ja taloushallintoyritys Laukaassa. Tarjoaa taloyhtiöiden hallintoa, sähköisiä palvelukanavia, kokousratkaisuja ja kiinteistöalan taloushallintoa.",
+                "website": "[https://www.sujuvaa.fi](https://www.sujuvaa.fi)",
+                "email": "[terhi.markkanen@sujuvaa.fi](mailto:terhi.markkanen@sujuvaa.fi)",
+                "phone": "358505944643"
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -2898,12 +3716,12 @@
                 "collaborated_with": []
             },
             "business_events": {
-                "meeting_capacity": 0,
+                "meeting_capacity": 10,
                 "seminar_capacity": 0,
-                "conference_rooms": 0,
+                "conference_rooms": 1,
                 "has_projector": false,
-                "has_streaming": false,
-                "has_wifi": false,
+                "has_streaming": true,
+                "has_wifi": true,
                 "has_stage": false,
                 "private_booking": false,
                 "invoice_billing": true,
@@ -2915,7 +3733,9 @@
                 "branding_support": false,
                 "av_support": false,
                 "staff_events_specialized": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "sähköiset kokoukset"
+                ],
                 "wellbeing_and_activity_features": [],
                 "entertainment_features": [],
                 "collaborated_with": []
@@ -2990,8 +3810,12 @@
                 "invoice_billing": true,
                 "contract_customer_available": true,
                 "priority_support": true,
-                "monthly_service_plan": false,
-                "refinement_tags": [],
+                "monthly_service_plan": true,
+                "refinement_tags": [
+                    "sähköinen palvelukanava",
+                    "dokumenttien allekirjoitus",
+                    "hallitusnäkymä"
+                ],
                 "collaborated_with": []
             },
             "startup_services": {
@@ -3037,9 +3861,9 @@
             }
         },
         "meta": {
-            "last_updated": "2026-04-29T08:36:27.932Z",
-            "verified_by": "AI-analysis-v1",
-            "status": "draft"
+            "last_updated": "2026-05-08T15:42:33.177Z",
+            "verified_by": "AI-analysis-v2",
+            "status": "updated"
         }
     },
     "company-190": {
@@ -3357,7 +4181,7 @@
                 "description": "",
                 "website": "",
                 "email": "",
-                "phone": ""
+                "phone": "358400540230"
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -3536,7 +4360,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-04-29T08:37:29.373Z",
+            "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -3571,9 +4395,9 @@
         "categories": {
             "core": {
                 "description": "",
-                "website": "",
+                "website": "https://petajamaki.fi/",
                 "email": "",
-                "phone": ""
+                "phone": "358505511129"
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -3752,7 +4576,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-04-26",
+            "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -3762,42 +4586,89 @@
         "core": {
             "fits_for": {
                 "muutto": 35,
-                "taloyhtiöpalvelut": 70
+                "taloyhtiöpalvelut": 70,
+                "cottage-services": 100,
+                "construction-and-maintenance": 95,
+                "housing-company-and-contracts": 95,
+                "events-and-celebrations": 5,
+                "business-events": 10,
+                "funerals-and-memorials": 15,
+                "startup-services": 0,
+                "business-growth": 0,
+                "moving-and-housing": 40,
+                "accommodation": 0,
+                "wellbeing-and-beauty": 0
             },
-            "priority_score": 0,
-            "paired_with": [],
+            "priority_score": 72,
+            "paired_with": [
+                "Kiinteistöhuolto",
+                "Pihanhoito",
+                "Mökkipalvelut"
+            ],
             "service_area": {
                 "mode": "TOIMIPISTE",
-                "radius_km": 0,
-                "regions": [],
-                "note": ""
+                "radius_km": 60,
+                "regions": [
+                    "Laukaa",
+                    "Jyväskylä",
+                    "Keski-Suomi"
+                ],
+                "note": "Kiinteistöhuolto-, mökkipalvelu- ja viherrakennuspalvelut Keski-Suomen alueella."
             },
             "emergency_available": true,
-            "contract_customer_available": false,
-            "paired_with_by_context": {},
-            "corporate_clients": false,
-            "home_service": false,
-            "weekend_service": false,
-            "not_suitable_for": [],
-            "sub_contexts": [
-                "viherrakentaminnen"
+            "contract_customer_available": true,
+            "paired_with_by_context": {
+                "cottage-services": [
+                    "Mökkitalkkari",
+                    "Pihanhoito",
+                    "Lumityöt"
+                ],
+                "housing-company-and-contracts": [
+                    "Kiinteistöhuolto",
+                    "Vihertyöt"
+                ]
+            },
+            "corporate_clients": true,
+            "home_service": true,
+            "weekend_service": true,
+            "not_suitable_for": [
+                "ravintolapalvelut",
+                "juhlatilat",
+                "majoitus"
             ],
-            "node_links": [],
+            "sub_contexts": [
+                "viherrakentaminen",
+                "pihanhoito",
+                "mökkitalkkari",
+                "kiinteistöhuolto",
+                "lumityöt",
+                "ruohonleikkaus",
+                "pihaurakointi",
+                "ulkotyöt",
+                "taloyhtiöt",
+                "mökkipalvelut"
+            ],
+            "node_links": [
+                "KIINTEISTÖHUOLTO",
+                "MAJOITUS"
+            ],
             "intent_codes": [
                 "HOME_COTTAGE",
-                "HOME_MAINTENANCE"
+                "HOME_MAINTENANCE",
+                "HOME_RENOVATION"
             ],
             "intent_scores": {
                 "HOME_COTTAGE": 100,
-                "HOME_MAINTENANCE": 100
+                "HOME_MAINTENANCE": 95,
+                "HOME_RENOVATION": 55
             }
         },
         "categories": {
             "core": {
-                "description": "",
-                "website": "",
+                "description": "Laukaan Aave Oy tarjoaa kiinteistöhuoltoa, mökkipalveluja, viherrakentamista ja pihanhoitoa Laukaan ja Keski-Suomen alueella. Yritys palvelee sekä yksityisasiakkaita että taloyhtiöitä ympäri vuoden.",
+                "website": "https://www.laukaanaave.fi/",
                 "email": "",
-                "phone": ""
+                "phone": "358400647841"
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -3808,7 +4679,7 @@
                 "own_catering_allowed": false,
                 "inhouse_catering_available": false,
                 "is_lakeside": false,
-                "has_sauna": true,
+                "has_sauna": false,
                 "has_av_tech": false,
                 "has_stage": false,
                 "accommodation_beds": 0,
@@ -3835,7 +4706,7 @@
                 "digitization_features": [],
                 "entertainment_features": [],
                 "collaborated_with": [],
-                "has_wifi": true
+                "has_wifi": false
             },
             "business_events": {
                 "meeting_capacity": 0,
@@ -3846,8 +4717,8 @@
                 "has_wifi": false,
                 "has_stage": false,
                 "private_booking": false,
-                "invoice_billing": false,
-                "corporate_clients": false,
+                "invoice_billing": true,
+                "corporate_clients": true,
                 "vip_services": false,
                 "business_catering": false,
                 "event_hosting": false,
@@ -3855,7 +4726,9 @@
                 "branding_support": false,
                 "av_support": false,
                 "staff_events_specialized": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "kiinteistöpalvelut"
+                ],
                 "wellbeing_and_activity_features": [],
                 "entertainment_features": [],
                 "collaborated_with": []
@@ -3871,8 +4744,10 @@
                 "funeral_flowers": false,
                 "memorial_arrangements": false,
                 "transport_assistance": false,
-                "urgent_booking_available": false,
-                "refinement_tags": [],
+                "urgent_booking_available": true,
+                "refinement_tags": [
+                    "hautausmaan hoito"
+                ],
                 "digitization_features": [],
                 "collaborated_with": []
             },
@@ -3881,57 +4756,69 @@
                 "packing_service": false,
                 "storage_available": false,
                 "weekend_moves": false,
-                "urgent_moves": false,
+                "urgent_moves": true,
                 "long_distance_moves": false,
                 "cleaning_after_move": false,
                 "electrician_available": false,
-                "renovation_support": false,
+                "renovation_support": true,
                 "insurance_support": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "piha- ja kiinteistötyöt"
+                ],
                 "digitization_features": [],
                 "collaborated_with": []
             },
             "construction_and_maintenance": {
-                "emergency_service": false,
+                "emergency_service": true,
                 "certifications": [],
                 "wet_room_certification": false,
-                "provides_tools": false,
-                "material_supply": false,
+                "provides_tools": true,
+                "material_supply": true,
                 "project_management": false,
-                "snow_removal": false,
-                "lawn_maintenance": false,
-                "property_monitoring": false,
-                "maintenance_contracts": false,
-                "housing_company_clients": false,
-                "refinement_tags": [],
+                "snow_removal": true,
+                "lawn_maintenance": true,
+                "property_monitoring": true,
+                "maintenance_contracts": true,
+                "housing_company_clients": true,
+                "refinement_tags": [
+                    "viherrakentaminen",
+                    "talvikunnossapito",
+                    "pihaurakointi"
+                ],
                 "collaborated_with": []
             },
             "cottage_services": {
-                "key_holding": false,
-                "winter_monitoring": false,
-                "snow_removal": false,
+                "key_holding": true,
+                "winter_monitoring": true,
+                "snow_removal": true,
                 "cleaning_service": false,
-                "lawn_service": false,
+                "lawn_service": true,
                 "remote_monitoring": false,
-                "emergency_visits": false,
-                "renovation_support": false,
-                "dock_maintenance": false,
+                "emergency_visits": true,
+                "renovation_support": true,
+                "dock_maintenance": true,
                 "sauna_services": false,
-                "guest_preparation_service": false,
-                "refinement_tags": [],
+                "guest_preparation_service": true,
+                "refinement_tags": [
+                    "mökkitalkkari",
+                    "mökkien valvonta"
+                ],
                 "collaborated_with": []
             },
             "housing_company_and_contracts": {
-                "housing_company_clients": false,
-                "maintenance_contracts": false,
-                "emergency_response": false,
-                "scheduled_visits": false,
-                "property_reports": false,
-                "invoice_billing": false,
-                "contract_customer_available": false,
-                "priority_support": false,
-                "monthly_service_plan": false,
-                "refinement_tags": [],
+                "housing_company_clients": true,
+                "maintenance_contracts": true,
+                "emergency_response": true,
+                "scheduled_visits": true,
+                "property_reports": true,
+                "invoice_billing": true,
+                "contract_customer_available": true,
+                "priority_support": true,
+                "monthly_service_plan": true,
+                "refinement_tags": [
+                    "taloyhtiöhuolto",
+                    "ulkohuolto"
+                ],
                 "collaborated_with": []
             },
             "startup_services": {
@@ -3977,9 +4864,9 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T14:31:18.553Z",
-            "verified_by": "AI-analysis-v1",
-            "status": "draft"
+            "last_updated": "2026-05-08T15:47:37.863Z",
+            "verified_by": "AI-analysis-v2",
+            "status": "updated"
         }
     },
     "company-204": {
@@ -4017,7 +4904,8 @@
             "weekend_service": false,
             "not_suitable_for": [
                 "large-scale event production",
-                "venue services"
+                "venue services",
+                "luennot"
             ],
             "sub_contexts": [
                 "kotisiivous",
@@ -4228,7 +5116,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T07:35:33.283Z",
+            "last_updated": "2026-05-08T15:50:49.846Z",
             "verified_by": "AI-analysis-v2",
             "status": "draft"
         }
@@ -4295,9 +5183,9 @@
         "categories": {
             "core": {
                 "description": "Laukaan Puhtaanapito Oy tarjoaa kiinteistöjen puhtaanapito-, ylläpito- ja huoltopalveluita, mukaan lukien siivous, piha-alueiden hoito sekä taloyhtiöiden ja yrityskohteiden kiinteistöhuolto.",
-                "website": "",
+                "website": "https://www.laukaanpuhtaanapito.fi",
                 "email": "",
-                "phone": ""
+                "phone": "358400547384"
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -4484,7 +5372,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T07:36:57.655Z",
+            "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "AI-analysis-v3",
             "status": "draft"
         }
@@ -4561,9 +5449,9 @@
         "categories": {
             "core": {
                 "description": "Laukaan Renki-Palvelut tarjoaa monipuolisia arjen apu- ja kiinteistönhoitopalveluita, kuten mökkihuoltoa, siivousta, pihatöitä, lumitöitä sekä muuttoapua Laukaan ja Keski-Suomen alueella.",
-                "website": "",
+                "website": "https://www.renki-palvelut.fi/",
                 "email": "",
-                "phone": ""
+                "phone": "358405144389"
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -4742,7 +5630,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T07:37:33.262Z",
+            "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "AI-analysis-v2",
             "status": "draft"
         }
@@ -4817,9 +5705,9 @@
         "categories": {
             "core": {
                 "description": "Laukaan Talopalvelu Oy tarjoaa monipuolisia kiinteistönhuollon ja talonmiespalveluiden ratkaisuja Laukaan ja Keski-Suomen alueella. Palveluihin kuuluvat mm. piha-alueiden hoito, lumityöt, korjaus- ja huoltotyöt sekä kiinteistöjen ylläpito taloyhtiöille ja yksityisasiakkaille.",
-                "website": "",
+                "website": "https://www.laukaantalopalvelu.fi",
                 "email": "",
-                "phone": ""
+                "phone": "358407558526"
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -5007,7 +5895,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-02T18:01:34.606Z",
+            "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -5080,9 +5968,9 @@
         "categories": {
             "core": {
                 "description": "LVI Jukka Pirttinen Oy tarjoaa LVI-alan palveluita kuten putkityöt, viemärien avaukset, lämmitysjärjestelmien huollot sekä kylpyhuone- ja vesijohtoremontit Laukaan ja Keski-Suomen alueella.",
-                "website": "",
+                "website": "https://www.lvipirttinen.fi",
                 "email": "",
-                "phone": ""
+                "phone": "358290011450"
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -5261,7 +6149,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T07:38:18.599Z",
+            "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "AI-analysis-v2",
             "status": "draft"
         }
@@ -5332,9 +6220,9 @@
         "categories": {
             "core": {
                 "description": "LVI-Taitajat Oy tarjoaa LVI-alan asiantuntijapalveluita, kuten putki-, lämmitys-, vesi- ja ilmanvaihtojärjestelmien asennusta, huoltoa ja korjausta. Yritys palvelee sekä yksityisasiakkaita, yrityksiä että taloyhtiöitä.",
-                "website": "",
+                "website": "https://www.lvitaitajat.fi",
                 "email": "",
-                "phone": ""
+                "phone": "358451792297"
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -5513,7 +6401,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T07:38:54.648Z",
+            "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "AI-analysis-v2",
             "status": "draft"
         }
@@ -5565,7 +6453,7 @@
                 "description": "",
                 "website": "",
                 "email": "",
-                "phone": ""
+                "phone": "358451231602"
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -5744,7 +6632,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T07:40:08.259Z",
+            "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "ai-assumption-v1",
             "status": "draft"
         }
@@ -5817,7 +6705,7 @@
                 "description": "Talotekniikka Väyrynen tarjoaa talotekniikan asennus-, huolto- ja korjauspalveluita Laukaan ja Keski-Suomen alueella. Palveluihin kuuluvat mm. LVI-työt, putkityöt, lämmitysjärjestelmät ja kiinteistötekniikan ratkaisut niin koteihin kuin yrityksille.",
                 "website": "",
                 "email": "",
-                "phone": ""
+                "phone": "358442843580"
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -6006,7 +6894,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-02T18:00:16.718Z",
+            "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -6078,7 +6966,7 @@
                 "description": "Tmi Eero Ylönen tarjoaa rakennus-, remontointi- ja kiinteistöhuoltopalveluita Laukaan ja Keski-Suomen alueella. Palveluihin kuuluu mm. saneeraus, korjaustyöt, pihatyöt sekä mökkien huolto ja ylläpito.",
                 "website": "",
                 "email": "",
-                "phone": ""
+                "phone": "358400832092"
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -6266,7 +7154,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-02T17:59:11.277Z",
+            "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -6776,7 +7664,7 @@
             "core": {
                 "description": "Tarvaalan kalamaja on rauhallinen järvi- ja luontokohde Tarvaalan alueella Laukaassa. Kohde soveltuu erityisesti kalastukseen, pienryhmien majoitukseen, luonnossa liikkumiseen ja rentoutumiseen. Kalamaja tarjoaa perusmajoitustason puitteet luonnon keskellä, lähellä vesistöjä ja hyviä kalastusalueita. Ympäristö on hiljainen ja soveltuu omatoimiseen lomailuun.",
                 "website": "",
-                "email": "",
+                "email": "Kohde painottuu omatoimiseen majoitukseen ja kalastusharrastukseen. Ei laajaa palvelutarjontaa, mutta hyvät luonto- ja vesistömahdollisuudet.",
                 "phone": ""
             },
             "events_and_celebrations": {
@@ -6996,7 +7884,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-04-29T16:27:04.548Z",
+            "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
         }
@@ -7072,7 +7960,7 @@
             "core": {
                 "description": "Leppäveden alueella luonnonrauhassa sijaitseva lomamökkikohde, joka tarjoaa ympärivuotista majoitusta järven läheisyydessä. Käytettävissä viihtyisiä ja hyvin varusteltuja lomamökkejä omalla saunalla, terassilla, takalla, keittiöllä ja luontoyhteydellä. Sopii lomailuun, perhemajoitukseen, kalastukseen, yritysryhmille sekä rauhallisiin virkistys- ja vapaa-ajan oleskeluihin. Alueella hyvät ulkoilu- ja luontoreitit sekä rantasaunamahdollisuuksia.",
                 "website": "https://www.countryhakkinen.fi",
-                "email": "",
+                "email": "Luonnonläheinen sijainti Leppäveden tuntumassa. Mahdollisuus saunaan, kalastukseen ja ulkoiluun. Helppo saavutettavuus Jyväskylän suunnasta.",
                 "phone": "040 736 5166"
             },
             "events_and_celebrations": {
@@ -7292,7 +8180,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-04-29T16:30:53.534Z",
+            "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
         }
@@ -7369,7 +8257,7 @@
             "core": {
                 "description": "Kuusassa Vatianjärven rannalla sijaitseva lomamökkikohde, jossa on kuusi omarantaista ja ympärivuotisessa käytössä olevaa hirsimökkiä. Jokaisessa mökissä on oma ranta, sauna, takka, soutuvene, täysin varusteltu keittiö, sisä-wc ja terassi. Majoitusta yhteensä noin 50 hengelle. Sopii lomailuun, kalastukseen, työmatkalaisten tilapäismajoitukseen sekä pidempiaikaiseen majoitukseen. Lähellä Kuusaankoski, Varjola, Peurunka ja Metsoreitti.",
                 "website": "http://www.ylasaarikko.com",
-                "email": "",
+                "email": "Vuokrattavana myös grillikota ja kotasauna. Sesonkiaikana majoitus yleensä viikkovuokrauksena, muina aikoina myös lyhyempiä majoituksia. Lähin kylpylä Peurunka noin 5 km.",
                 "phone": "040 514 4830"
             },
             "events_and_celebrations": {
@@ -7593,7 +8481,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-04-29T16:32:31.459Z",
+            "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
         }
@@ -7666,7 +8554,7 @@
             "core": {
                 "description": "Laukaan Äijälässä Nurminen-järven rannalla sijaitseva lomakeskus, joka tarjoaa 4â€“6 hengen lomahuoneistoja ympäri vuoden. Kohteessa on 11 huoneistoa, joista suurin on 60 mÃ‚Â² kolmella makuuhuoneella ja pienemmät 40 mÃ‚Â² huoneistot neljälle hengelle. Jokaisessa huoneistossa on sauna, terassi, täysin varustettu keittiö ja järvinäkymä. Käytössä myös veneitä, laituri, nuotiopaikka, rantatuolit ja hiekkapohjainen uimapaikka.",
                 "website": "https://www.laukaanpitkaniemi.fi",
-                "email": "",
+                "email": "Lemmikit sallittu rajoituksin. Vaihtopäivä perjantaisin. Lähellä Varjola, Tupaswilla ja Peurunka. Varaukset verkkosivujen kautta.",
                 "phone": ""
             },
             "events_and_celebrations": {
@@ -7887,7 +8775,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-04-29T16:33:52.517Z",
+            "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
         }

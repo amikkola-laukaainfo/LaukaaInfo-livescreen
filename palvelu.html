@@ -1563,6 +1563,35 @@
                 }
             }
 
+            // Ryhmien deduplikointi ja yhdistäminen: Jos useampi optio tuottaa täsmälleen saman yritysjoukon, 
+            // yhdistetään ne yhdeksi ryhmäksi turhan toiston välttämiseksi.
+            const uniqueMatchingGroups = [];
+            const seenCompanySets = new Map(); // Map: "id,id,id" -> Group index
+
+            matchingGroups.forEach(g => {
+                if (g.companies.length === 0) return; // Tyhjiä ryhmiä ei näytetä muutenkaan
+
+                const companyIds = g.companies.map(c => c.id).sort().join(',');
+                if (seenCompanySets.has(companyIds)) {
+                    // Sama joukko löytyi jo. Yhdistetään labelit jos ne ovat eri.
+                    const existingGroup = uniqueMatchingGroups[seenCompanySets.get(companyIds)];
+                    const newLabel = i18n.getText(g.opt.label);
+                    const oldLabel = i18n.getText(existingGroup.opt.label);
+                    
+                    if (newLabel !== oldLabel && !oldLabel.includes(newLabel)) {
+                        existingGroup.opt.label = {
+                            fi: oldLabel + " & " + newLabel,
+                            en: i18n.getText(existingGroup.opt.label, 'en') + " & " + i18n.getText(g.opt.label, 'en')
+                        };
+                    }
+                } else {
+                    seenCompanySets.set(companyIds, uniqueMatchingGroups.length);
+                    uniqueMatchingGroups.push(g);
+                }
+            });
+            
+            matchingGroups = uniqueMatchingGroups;
+
             // Tallennetaan tilamuuttujiin renderöintiä varten
             matchingGroupsData = matchingGroups;
             selectedAnchorCompanyId = null;
@@ -2411,17 +2440,17 @@
                 group.companies.forEach(c => {
                     const core = c.profiling?.core || {};
                     
-                    const cleanContact = (str) => {
+                    const cleanContact = (str, isWebsite = false) => {
                         if (!str || str === '-') return '';
-                        let s = str.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1'); // Markdown linkit pois
+                        // Käytetään globaalia cleanUrl-funktiota (script.js)
+                        let s = typeof cleanUrl === 'function' ? cleanUrl(str, isWebsite) : str;
                         s = s.replace(/mailto:/gi, ''); // mailto: pois
-                        s = s.replace(/[<>[\]()]/g, ''); // sulut pois
                         return s.trim();
                     };
                     
                     const phone = cleanContact(core.phone || c.puhelin || c.phone) || i18n.t('print_no_phone');
                     const email = cleanContact(core.email || c.email) || i18n.t('print_no_email');
-                    const website = cleanContact(core.website || c.nettisivu || c.website) || i18n.t('print_no_website');
+                    const website = cleanContact(core.website || c.nettisivu || c.website, true) || i18n.t('print_no_website');
                     
                     html += `
                         <div class="company">

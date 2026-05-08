@@ -343,7 +343,8 @@
         const websiteItem = document.getElementById('website-item');
         if (company.nettisivu && company.nettisivu !== '-') {
             const webLink = document.getElementById('display-website');
-            const displayUrl = company.nettisivu.replace(/^https?:\/\//, '').replace(/\/$/, ''); // Siivotaan protokolla ja loppuslash
+            const sanitizedUrl = cleanUrl(company.nettisivu, true);
+            const displayUrl = sanitizedUrl.replace(/^https?:\/\//, '').replace(/\/$/, ''); // Siivotaan protokolla ja loppuslash
             
             if (displayUrl.length > 25) {
                 webLink.textContent = 'www-kotisivulinkki';
@@ -351,7 +352,7 @@
                 webLink.textContent = displayUrl;
             }
             
-            webLink.href = company.nettisivu;
+            webLink.href = sanitizedUrl;
             websiteItem.style.display = 'flex';
             
             // Skaalataan vielä varmuuden vuoksi, jos labelikin on liian pitkä kapeilla näytöillä
@@ -399,12 +400,8 @@
             };
 
             Object.entries(socialMap).forEach(([key, info]) => {
-                let val = (company[key] || '').trim();
+                let val = cleanUrl(company[key] || '');
                 if (val && val !== '-') {
-                    // Muunnetaan fb:// linkit tavallisiksi https linkeiksi (script.js:n globaali funktio)
-                    if (key === 'facebook') {
-                        val = fixFacebookLink(val);
-                    }
 
                     const a = document.createElement('a');
                     a.href = val;

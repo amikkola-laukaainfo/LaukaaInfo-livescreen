@@ -349,6 +349,7 @@ const NEEDS_CONFIG = {
             {
                 "id": "paatarve",
                 "multiple": true,
+                "hide_results": true,
                 "question": { "fi": "Mitä asioita haluatte edistää?", "en": "What matters would you like to address?" },
                 "options": [
                     { "label": { "fi": "Hautajaisjärjestelyt", "en": "Funeral arrangements" }, "sub_context": "hautauspalvelu", "tags": ["hautauspalvelu"], "node_link": "HAUTAUS" },

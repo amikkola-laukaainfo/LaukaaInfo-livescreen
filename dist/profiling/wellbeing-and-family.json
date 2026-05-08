@@ -67,9 +67,9 @@
         "categories": {
             "core": {
                 "description": "Terveys- ja hyvinvointipalvelu Riina Raitio tarjoaa sairaanhoitajataustaista asiantuntijapalvelua, joka keskittyy neurologiseen hoitotyöhön ja kokonaisvaltaiseen hyvinvointiin. Palveluihin kuuluvat neurologisten asiakkaiden ohjaus ja kuntoutus, aivoverenkiertohäiriöiden ennaltaehkäisy sekä toiminnallisten neurologisten oireiden hoito. Palveluja tarjotaan vastaanotolla sekä kotikäynteinä ja hyvinvointitapahtumissa.",
-                "website": "",
+                "website": "https://www.terveysjahyvinvointipalveluriinaraitio.com/",
                 "email": "",
-                "phone": ""
+                "phone": "35804578358213"
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -268,9 +268,272 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-05T09:15:21.770Z",
+            "last_updated": "2026-05-08T15:32:40.282Z",
             "verified_by": "AI-analysis-v2",
             "status": "published"
+        }
+    },
+    "company-18": {
+        "name": "Laukaan Toimintaterapia",
+        "core": {
+            "fits_for": {
+                "events-and-celebrations": 0,
+                "business-events": 5,
+                "funerals-and-memorials": 5,
+                "moving-and-housing": 15,
+                "construction-and-maintenance": 0,
+                "cottage-services": 0,
+                "housing-company-and-contracts": 0,
+                "startup-services": 0,
+                "business-growth": 0,
+                "wellbeing-and-beauty": 100,
+                "liikunta-ja-vapaaaika": 38,
+                "accommodation": 0
+            },
+            "priority_score": 82,
+            "paired_with": [
+                "Fysioterapia",
+                "Kuntoutus"
+            ],
+            "service_area": {
+                "mode": "TOIMIPISTE",
+                "radius_km": 0,
+                "regions": [
+                    "Laukaa"
+                ],
+                "note": "Toimintaterapia- ja kuntoutuspalvelut."
+            },
+            "emergency_available": false,
+            "contract_customer_available": false,
+            "paired_with_by_context": {
+                "wellbeing-and-beauty": [
+                    "Kuntoutus",
+                    "Fysioterapia"
+                ]
+            },
+            "corporate_clients": false,
+            "home_service": true,
+            "weekend_service": false,
+            "not_suitable_for": [
+                "juhlat",
+                "pitopalvelu",
+                "kuljetus"
+            ],
+            "sub_contexts": [
+                "toimintaterapia",
+                "kuntoutus",
+                "lasten toimintaterapia",
+                "toimintakyky",
+                "arkikuntoutus",
+                "sensorinen integraatio"
+            ],
+            "node_links": [
+                "HYVINVOINTI"
+            ],
+            "intent_codes": [
+                "WELLBEING_THERAPY",
+                "WELLBEING_HEALTH"
+            ],
+            "intent_scores": {
+                "WELLBEING_THERAPY": 100,
+                "WELLBEING_HEALTH": 82
+            }
+        },
+        "categories": {
+            "core": {
+                "description": "Laukaassa toimiva toimintaterapiapalvelu, joka tarjoaa kuntoutusta ja toimintakykyä tukevia terapiapalveluja lapsille, nuorille ja aikuisille.",
+                "website": "[https://www.laukaantoimintaterapia.fi](https://www.laukaantoimintaterapia.fi)",
+                "email": "",
+                "phone": "358505457099"
+            },
+            "events_and_celebrations": {
+                "capacity_max": 0,
+                "seated_capacity": 0,
+                "standing_guests": 0,
+                "outdoor_capacity": 0,
+                "is_accessible": false,
+                "own_catering_allowed": false,
+                "inhouse_catering_available": false,
+                "is_lakeside": false,
+                "has_sauna": false,
+                "has_av_tech": false,
+                "has_stage": false,
+                "accommodation_beds": 0,
+                "alcohol_license": false,
+                "private_booking": false,
+                "late_night_events": false,
+                "wedding_specialized": false,
+                "catering_min_capacity": 0,
+                "catering_max_capacity": 0,
+                "dietary_specialties": [],
+                "staff_included": false,
+                "wedding_menu_available": false,
+                "cake_service": false,
+                "partner_venues": [],
+                "wedding_photography": false,
+                "drone_available": false,
+                "video_production": false,
+                "live_music": false,
+                "dj_services": false,
+                "karaoke_available": false,
+                "has_exclusive_catering": false,
+                "accommodation_included": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "entertainment_features": [],
+                "collaborated_with": []
+            },
+            "business_events": {
+                "meeting_capacity": 0,
+                "seminar_capacity": 0,
+                "conference_rooms": 0,
+                "has_projector": false,
+                "has_streaming": false,
+                "has_wifi": false,
+                "has_stage": false,
+                "private_booking": false,
+                "invoice_billing": true,
+                "corporate_clients": false,
+                "vip_services": false,
+                "business_catering": false,
+                "event_hosting": false,
+                "corporate_gifts": false,
+                "branding_support": false,
+                "av_support": false,
+                "staff_events_specialized": false,
+                "refinement_tags": [
+                    "kuntoutuspalaverit"
+                ],
+                "wellbeing_and_activity_features": [
+                    "toimintaterapia"
+                ],
+                "entertainment_features": [],
+                "collaborated_with": []
+            },
+            "funerals_and_memorials": {
+                "memorial_service_capacity": 0,
+                "quiet_private_space": false,
+                "accessible_entry": false,
+                "memorial_catering": false,
+                "coffee_service": false,
+                "flower_arrangements": false,
+                "memorial_menu_available": false,
+                "funeral_flowers": false,
+                "memorial_arrangements": false,
+                "transport_assistance": false,
+                "urgent_booking_available": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "moving_and_housing": {
+                "moving_truck_available": false,
+                "packing_service": false,
+                "storage_available": false,
+                "weekend_moves": false,
+                "urgent_moves": false,
+                "long_distance_moves": false,
+                "cleaning_after_move": false,
+                "electrician_available": false,
+                "renovation_support": false,
+                "insurance_support": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "construction_and_maintenance": {
+                "emergency_service": false,
+                "certifications": [],
+                "wet_room_certification": false,
+                "provides_tools": false,
+                "material_supply": false,
+                "project_management": false,
+                "snow_removal": false,
+                "lawn_maintenance": false,
+                "property_monitoring": false,
+                "maintenance_contracts": false,
+                "housing_company_clients": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "cottage_services": {
+                "key_holding": false,
+                "winter_monitoring": false,
+                "snow_removal": false,
+                "cleaning_service": false,
+                "lawn_service": false,
+                "remote_monitoring": false,
+                "emergency_visits": false,
+                "renovation_support": false,
+                "dock_maintenance": false,
+                "sauna_services": false,
+                "guest_preparation_service": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "housing_company_and_contracts": {
+                "housing_company_clients": false,
+                "maintenance_contracts": false,
+                "emergency_response": false,
+                "scheduled_visits": false,
+                "property_reports": false,
+                "invoice_billing": false,
+                "contract_customer_available": false,
+                "priority_support": false,
+                "monthly_service_plan": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "startup_services": {
+                "bookkeeping_startup": false,
+                "business_advisory": false,
+                "insurance_setup": false,
+                "legal_services": false,
+                "office_space_available": false,
+                "banking_support": false,
+                "website_creation": false,
+                "webshop_setup": false,
+                "branding_support": false,
+                "logo_design": false,
+                "business_photography": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "business_growth": {
+                "google_ads": false,
+                "social_media_marketing": false,
+                "seo_services": false,
+                "content_creation": false,
+                "video_production": false,
+                "crm_support": false,
+                "recruitment_support": false,
+                "sales_development": false,
+                "automation_services": false,
+                "consulting_services": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "wellbeing_and_beauty": {
+                "home_visits": true,
+                "online_booking": false,
+                "unisex_services": true,
+                "gift_cards": false,
+                "corporate_wellbeing_services": false,
+                "event_makeup": false,
+                "bridal_services": false,
+                "group_bookings": false,
+                "refinement_tags": [
+                    "toimintakyvyn arviointi",
+                    "kuntoutus",
+                    "arkitaitojen tuki"
+                ],
+                "collaborated_with": []
+            }
+        },
+        "meta": {
+            "last_updated": "2026-05-08T15:42:33.179Z",
+            "verified_by": "AI-analysis-v2",
+            "status": "updated"
         }
     },
     "company-23": {
@@ -286,8 +549,8 @@
                 "construction-and-maintenance": 0,
                 "cottage-services": 0,
                 "accommodation": 0,
-                "wellbeing-and-beauty": 95,
-                "liikunta-ja-vapaaaika": 40
+                "wellbeing-and-beauty": 100,
+                "liikunta-ja-vapaaaika": 100
             },
             "priority_score": 82,
             "paired_with": [],
@@ -341,7 +604,7 @@
                 "description": "OneFit on kuntosali- ja hyvinvointipalvelu, joka tarjoaa monipuolisia liikunta- ja valmennuspalveluja kuten kuntosaliharjoittelua, ryhmäliikuntaa ja personal training -ohjausta. Palvelut sopivat yksityishenkilöille sekä yrityksille esimerkiksi tyhypäiviin ja työhyvinvoinnin kehittämiseen.",
                 "website": "",
                 "email": "",
-                "phone": ""
+                "phone": "358408470820"
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -538,7 +801,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T14:47:24.893Z",
+            "last_updated": "2026-05-08T15:32:40.282Z",
             "verified_by": "AI-analysis-v2",
             "status": "draft"
         }
@@ -831,7 +1094,9 @@
                 "hieronta": 100,
                 "urheiluhieronta": 95,
                 "yrityksen-kehittäminen": 20,
-                "business-events": 35
+                "business-events": 35,
+                "wellbeing-and-beauty": 100,
+                "liikunta-ja-vapaaaika": 100
             },
             "priority_score": 68,
             "paired_with": [
@@ -1140,7 +1405,7 @@
                 "description": "Luontaishoitola, joka tarjoaa erilaisia rentouttavia ja kokonaisvaltaisia hoitoja hyvinvoinnin tukemiseen. Palveluihin kuuluu esimerkiksi energiahoitoja ja muita kehoa ja mieltä tasapainottavia hoitomuotoja rauhallisessa hoitohuoneessa.",
                 "website": "",
                 "email": "",
-                "phone": ""
+                "phone": "358407789624"
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -1330,7 +1595,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-02T18:13:42.568Z",
+            "last_updated": "2026-05-08T15:32:40.282Z",
             "verified_by": "AI-analysis-v2",
             "status": "draft"
         }
@@ -1381,7 +1646,8 @@
             "weekend_service": true,
             "not_suitable_for": [
                 "kartano",
-                "omilla tarjoiluilla"
+                "omilla tarjoiluilla",
+                "luennot"
             ],
             "sub_contexts": [
                 "kylpylä",
@@ -1651,7 +1917,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T13:45:11.223Z",
+            "last_updated": "2026-05-08T15:50:49.845Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -1717,9 +1983,9 @@
         "categories": {
             "core": {
                 "description": "Pieni maatila ja harrastetalli Laukaan Äijälässä. Toiminta keskittyy shetlanninponeihin ja tarjoaa ratsastustunteja, ponejen vuokrausta, kerhoja ja leirejä sekä elämyksellistä toimintaa kuten maastoilua, ajoa, agilityä ja talvisin rekiajelua. Sopii erityisesti ryhmille, virkistyspäiviin ja elämyspalveluihin.",
-                "website": "",
+                "website": "www.untenonnelaranch.fi/",
                 "email": "",
-                "phone": ""
+                "phone": "358505660512"
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -1921,7 +2187,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T14:46:17.836Z",
+            "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "AI-analysis-v2",
             "status": "draft"
         }
@@ -1960,7 +2226,9 @@
             "corporate_clients": false,
             "home_service": false,
             "weekend_service": false,
-            "not_suitable_for": [],
+            "not_suitable_for": [
+                "luennot"
+            ],
             "sub_contexts": [
                 "kauneushoitola",
                 "kasvohoito",
@@ -2183,7 +2451,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T13:42:47.210Z",
+            "last_updated": "2026-05-08T15:50:49.846Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -2220,9 +2488,9 @@
         "categories": {
             "core": {
                 "description": "",
-                "website": "",
+                "website": "https://kimmonkulma.com",
                 "email": "",
-                "phone": ""
+                "phone": "358405063527"
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -2401,7 +2669,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T14:24:53.507Z",
+            "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -2451,7 +2719,8 @@
             "not_suitable_for": [
                 "yritystapahtumat",
                 "juhlapalvelut",
-                "rakennuspalvelut"
+                "rakennuspalvelut",
+                "luennot"
             ],
             "sub_contexts": [
                 "käytetyt lastenvaatteet",
@@ -2479,7 +2748,7 @@
                 "description": "Laukaassa toimiva käytettyjen lastenvaatteiden, lelujen ja äitiysvaatteiden myyntiin keskittyvä pienyritys. Toiminta painottuu verkkokauppa- ja huutokauppamyyntiin sekä kierrätystuotteisiin.",
                 "website": "",
                 "email": "",
-                "phone": ""
+                "phone": "358407028886"
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -2665,7 +2934,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T07:26:56.713Z",
+            "last_updated": "2026-05-08T15:50:49.846Z",
             "verified_by": "ai-analysis-v5",
             "status": "draft"
         }
@@ -2926,225 +3195,8 @@
             "status": "draft"
         }
     },
-    "company-188": {
-        "name": "Isännöinti Asuville Oy",
-        "core": {
-            "fits_for": {
-                "muutto": 35,
-                "taloyhtiöpalvelut": 35
-            },
-            "priority_score": 0,
-            "paired_with": [],
-            "service_area": {
-                "mode": "TOIMIPISTE",
-                "radius_km": 0,
-                "regions": [],
-                "note": ""
-            },
-            "emergency_available": true,
-            "contract_customer_available": false,
-            "paired_with_by_context": {},
-            "corporate_clients": false,
-            "home_service": false,
-            "weekend_service": false,
-            "not_suitable_for": [],
-            "sub_contexts": [],
-            "node_links": [],
-            "intent_codes": [],
-            "intent_scores": {}
-        },
-        "categories": {
-            "core": {
-                "description": "",
-                "website": "",
-                "email": "",
-                "phone": ""
-            },
-            "events_and_celebrations": {
-                "capacity_max": 0,
-                "seated_capacity": 0,
-                "standing_guests": 0,
-                "outdoor_capacity": 0,
-                "is_accessible": false,
-                "own_catering_allowed": false,
-                "inhouse_catering_available": false,
-                "is_lakeside": false,
-                "has_sauna": false,
-                "has_av_tech": false,
-                "has_stage": false,
-                "accommodation_beds": 0,
-                "alcohol_license": false,
-                "private_booking": false,
-                "late_night_events": false,
-                "wedding_specialized": false,
-                "catering_min_capacity": 0,
-                "catering_max_capacity": 0,
-                "dietary_specialties": [],
-                "staff_included": false,
-                "wedding_menu_available": false,
-                "cake_service": false,
-                "partner_venues": [],
-                "wedding_photography": false,
-                "drone_available": false,
-                "video_production": false,
-                "live_music": false,
-                "dj_services": false,
-                "karaoke_available": false,
-                "has_exclusive_catering": false,
-                "accommodation_included": false,
-                "refinement_tags": [],
-                "digitization_features": [],
-                "entertainment_features": [],
-                "collaborated_with": [],
-                "has_wifi": true
-            },
-            "business_events": {
-                "meeting_capacity": 0,
-                "seminar_capacity": 0,
-                "conference_rooms": 0,
-                "has_projector": false,
-                "has_streaming": false,
-                "has_wifi": false,
-                "has_stage": false,
-                "private_booking": false,
-                "invoice_billing": false,
-                "corporate_clients": false,
-                "vip_services": false,
-                "business_catering": false,
-                "event_hosting": false,
-                "corporate_gifts": false,
-                "branding_support": false,
-                "av_support": false,
-                "staff_events_specialized": false,
-                "refinement_tags": [],
-                "wellbeing_and_activity_features": [],
-                "entertainment_features": [],
-                "collaborated_with": []
-            },
-            "funerals_and_memorials": {
-                "memorial_service_capacity": 0,
-                "quiet_private_space": false,
-                "accessible_entry": false,
-                "memorial_catering": false,
-                "coffee_service": false,
-                "flower_arrangements": false,
-                "memorial_menu_available": false,
-                "funeral_flowers": false,
-                "memorial_arrangements": false,
-                "transport_assistance": false,
-                "urgent_booking_available": false,
-                "refinement_tags": [],
-                "digitization_features": [],
-                "collaborated_with": []
-            },
-            "moving_and_housing": {
-                "moving_truck_available": false,
-                "packing_service": false,
-                "storage_available": false,
-                "weekend_moves": false,
-                "urgent_moves": false,
-                "long_distance_moves": false,
-                "cleaning_after_move": false,
-                "electrician_available": false,
-                "renovation_support": false,
-                "insurance_support": false,
-                "refinement_tags": [],
-                "digitization_features": [],
-                "collaborated_with": []
-            },
-            "construction_and_maintenance": {
-                "emergency_service": false,
-                "certifications": [],
-                "wet_room_certification": false,
-                "provides_tools": false,
-                "material_supply": false,
-                "project_management": false,
-                "snow_removal": false,
-                "lawn_maintenance": false,
-                "property_monitoring": false,
-                "maintenance_contracts": false,
-                "housing_company_clients": false,
-                "refinement_tags": [],
-                "collaborated_with": []
-            },
-            "cottage_services": {
-                "key_holding": false,
-                "winter_monitoring": false,
-                "snow_removal": false,
-                "cleaning_service": false,
-                "lawn_service": false,
-                "remote_monitoring": false,
-                "emergency_visits": false,
-                "renovation_support": false,
-                "dock_maintenance": false,
-                "sauna_services": false,
-                "guest_preparation_service": false,
-                "refinement_tags": [],
-                "collaborated_with": []
-            },
-            "housing_company_and_contracts": {
-                "housing_company_clients": false,
-                "maintenance_contracts": false,
-                "emergency_response": false,
-                "scheduled_visits": false,
-                "property_reports": false,
-                "invoice_billing": false,
-                "contract_customer_available": false,
-                "priority_support": false,
-                "monthly_service_plan": false,
-                "refinement_tags": [],
-                "collaborated_with": []
-            },
-            "startup_services": {
-                "bookkeeping_startup": false,
-                "business_advisory": false,
-                "insurance_setup": false,
-                "legal_services": false,
-                "office_space_available": false,
-                "banking_support": false,
-                "website_creation": false,
-                "webshop_setup": false,
-                "branding_support": false,
-                "logo_design": false,
-                "business_photography": false,
-                "refinement_tags": [],
-                "collaborated_with": []
-            },
-            "business_growth": {
-                "google_ads": false,
-                "social_media_marketing": false,
-                "seo_services": false,
-                "content_creation": false,
-                "video_production": false,
-                "crm_support": false,
-                "recruitment_support": false,
-                "sales_development": false,
-                "automation_services": false,
-                "consulting_services": false,
-                "refinement_tags": [],
-                "collaborated_with": []
-            },
-            "wellbeing_and_beauty": {
-                "home_visits": false,
-                "online_booking": false,
-                "unisex_services": false,
-                "gift_cards": false,
-                "corporate_wellbeing_services": false,
-                "event_makeup": false,
-                "bridal_services": false,
-                "group_bookings": false,
-                "refinement_tags": [],
-                "collaborated_with": []
-            }
-        },
-        "meta": {
-            "last_updated": "2026-04-26",
-            "verified_by": "AI-analysis-v1",
-            "status": "draft"
-        }
-    },
     "company-203": {
-        "name": "Laukaan Kotipalvelu",
+        "name": "Laukaan Arkiapupalvelut",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 10,
@@ -3165,8 +3217,7 @@
                 "mode": "TOIMIPISTE",
                 "radius_km": 30,
                 "regions": [
-                    "Laukaa",
-                    "Keski-Suomi"
+                    "Laukaa kk"
                 ],
                 "note": "Paikallinen kotipalvelu ja arjen apu"
             },
@@ -3214,7 +3265,7 @@
                 "description": "Laukaan Kotipalvelu tarjoaa monipuolisia kotipalveluita arjen helpottamiseen, kuten siivousta, asiointiapua, kodinhoitoa, muuttoapua sekä tukea ikäihmisille ja kotitalouksille.",
                 "website": "",
                 "email": "",
-                "phone": ""
+                "phone": "358451148091"
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -3411,7 +3462,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T07:36:15.708Z",
+            "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "AI-analysis-v3",
             "status": "draft"
         }
@@ -3481,7 +3532,7 @@
                 "description": "Pikkupiika Kaarina tarjoaa lastenhoito- ja arjen tukipalveluita perheille, kuten lastenhoitoa, kotiapua ja tilapäistä arjen apua eri tilanteisiin.",
                 "website": "",
                 "email": "",
-                "phone": ""
+                "phone": "358400245176"
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -3664,7 +3715,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T07:39:29.036Z",
+            "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "AI-analysis-v2",
             "status": "draft"
         }
@@ -3702,9 +3753,9 @@
         "categories": {
             "core": {
                 "description": "",
-                "website": "",
+                "website": "https://www.sydansuomenkuljetus.com",
                 "email": "",
-                "phone": ""
+                "phone": "358207613660"
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -3883,7 +3934,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-04-28T07:26:07.173Z",
+            "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -4183,7 +4234,7 @@
         "categories": {
             "core": {
                 "description": "Kirpputori Majakka on Lievestuoreella Laukaassa toimiva kirpputori, joka tarjoaa käytettyjä tavaroita kuten vaatteita, kodintarvikkeita ja sisustusesineitä. Sopii erityisesti edulliseen hankintaan sekä kierrätykseen esimerkiksi muuton tai kodin perustamisen yhteydessä.",
-                "website": "",
+                "website": "https://www.laukaanseurakunta.fi/osallistu/majakan-kirpputori-ja-olohuone",
                 "email": "",
                 "phone": ""
             },
@@ -4367,7 +4418,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-02T17:55:33.805Z",
+            "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
