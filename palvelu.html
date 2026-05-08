@@ -1104,7 +1104,7 @@
             globalRequestedFeatures = requestedFeatures;
 
             const allMatchingCompanies = new Set();
-            const matchingGroups = [];
+            let matchingGroups = [];
             const suggestedCompanyIds = new Set();
 
             activeSteps.forEach(step => {
