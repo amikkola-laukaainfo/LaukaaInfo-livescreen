@@ -5414,22 +5414,33 @@ footer {
     position: relative;
     width: 100%;
     max-width: 900px;
-    padding: 4rem 2rem;
     border-radius: 32px;
     box-shadow: 0 15px 45px rgba(0, 0, 0, 0.15);
-    overflow: hidden;
-    background: rgba(0, 0, 0, 0.15); /* Lighter background for better image visibility */
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    overflow: visible; /* Allows search suggestions to overflow */
     border: 1px solid rgba(255, 255, 255, 0.2);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     transition: all 0.4s ease;
+    background: transparent;
 }
 
-.hero-path::before {
+.hero-path-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+    border-radius: 32px;
+    overflow: hidden; /* Clips the background image scale */
+    background: rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+.hero-path-bg::before {
     content: '';
     position: absolute;
     top: 0;
@@ -5439,25 +5450,38 @@ footer {
     background-image: var(--bg-img);
     background-size: cover;
     background-position: center;
-    opacity: 0.8; /* Higher base opacity for more visible images */
-    z-index: 0;
+    opacity: 0.8;
     transition: opacity 0.4s ease, transform 0.6s ease;
 }
 
 .hero-path:hover {
     transform: translateY(-8px);
-    background: rgba(0, 0, 0, 0.4); /* Returns to normal darkness on hover */
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
 }
 
-.hero-path:hover::before {
+.hero-path:hover .hero-path-bg {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.hero-path:hover .hero-path-bg::before {
     opacity: 0.95;
     transform: scale(1.05);
 }
 
+.hero-path-content {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    padding: 4rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 .hero-path > * {
     position: relative;
-    z-index: 1; /* Keep text/inputs above the background image */
+    z-index: 1;
 }
 
 .search-path { z-index: 100; }
@@ -5465,7 +5489,12 @@ footer {
 
 @media (max-width: 768px) {
     .hero-path {
-        padding: 3rem 1.5rem;
         border-radius: 24px;
+    }
+    .hero-path-bg {
+        border-radius: 24px;
+    }
+    .hero-path-content {
+        padding: 3rem 1.5rem;
     }
 }
