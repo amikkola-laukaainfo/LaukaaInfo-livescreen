@@ -33633,30 +33633,64 @@
         "company-155": {
             "name": "Pieneläintuhkaamo Usva OY",
             "core": {
-                "fits_for": {},
-                "priority_score": 0,
+                "fits_for": {
+                    "funerals-and-memorials": 100,
+                    "events-and-celebrations": 5,
+                    "business-events": 0,
+                    "startup-services": 0,
+                    "business-growth": 0,
+                    "moving-and-housing": 0,
+                    "construction-and-maintenance": 0,
+                    "cottage-services": 0,
+                    "accommodation": 0,
+                    "wellbeing-and-beauty": 25,
+                    "housing-company-and-contracts": 0
+                },
+                "priority_score": 95,
                 "paired_with": [],
                 "service_area": {
                     "mode": "TOIMIPISTE",
-                    "radius_km": 0,
-                    "regions": [],
-                    "note": ""
+                    "radius_km": 150,
+                    "regions": [
+                        "Laukaa",
+                        "Jyväskylä",
+                        "Keski-Suomi"
+                    ],
+                    "note": "Palvelee laajasti Keski-Suomen alueella"
                 },
-                "emergency_available": false,
+                "emergency_available": true,
                 "contract_customer_available": false,
                 "paired_with_by_context": {},
                 "corporate_clients": false,
-                "home_service": false,
-                "weekend_service": false,
-                "not_suitable_for": [],
-                "sub_contexts": [],
-                "node_links": [],
-                "intent_codes": [],
-                "intent_scores": {}
+                "home_service": true,
+                "weekend_service": true,
+                "not_suitable_for": [
+                    "events-and-celebrations",
+                    "business-events",
+                    "lastentarvikkeet",
+                    "eräopas",
+                    "lasten syntymäpäivät",
+                    "yritysjuhlat"
+                ],
+                "sub_contexts": [
+                    "pieneläintuhkaus",
+                    "lemmikkimuistot",
+                    "uurnapalvelu",
+                    "surupalvelu"
+                ],
+                "node_links": [
+                    "HYVINVOINTI"
+                ],
+                "intent_codes": [
+                    "EVT_MEMORIAL"
+                ],
+                "intent_scores": {
+                    "EVT_MEMORIAL": 100
+                }
             },
             "categories": {
                 "core": {
-                    "description": "",
+                    "description": "Pieneläintuhkaamopalvelu, joka tarjoaa lemmikkien tuhkaus- ja muistopalveluita.",
                     "website": "",
                     "email": "",
                     "phone": ""
@@ -33722,18 +33756,21 @@
                     "collaborated_with": []
                 },
                 "funerals_and_memorials": {
-                    "memorial_service_capacity": 0,
-                    "quiet_private_space": false,
-                    "accessible_entry": false,
+                    "memorial_service_capacity": 20,
+                    "quiet_private_space": true,
+                    "accessible_entry": true,
                     "memorial_catering": false,
                     "coffee_service": false,
                     "flower_arrangements": false,
                     "memorial_menu_available": false,
                     "funeral_flowers": false,
-                    "memorial_arrangements": false,
-                    "transport_assistance": false,
-                    "urgent_booking_available": false,
-                    "refinement_tags": [],
+                    "memorial_arrangements": true,
+                    "transport_assistance": true,
+                    "urgent_booking_available": true,
+                    "refinement_tags": [
+                        "lemmikkimuistot",
+                        "surupalvelu"
+                    ],
                     "digitization_features": [],
                     "collaborated_with": []
                 },
@@ -33825,7 +33862,7 @@
                     "collaborated_with": []
                 },
                 "wellbeing_and_beauty": {
-                    "home_visits": false,
+                    "home_visits": true,
                     "online_booking": false,
                     "unisex_services": false,
                     "gift_cards": false,
@@ -33833,14 +33870,18 @@
                     "event_makeup": false,
                     "bridal_services": false,
                     "group_bookings": false,
-                    "refinement_tags": [],
+                    "refinement_tags": [
+                        "surutyö",
+                        "lemmikkien hyvästijättö"
+                    ],
                     "collaborated_with": []
                 }
             },
             "meta": {
-                "last_updated": "2026-04-26",
-                "verified_by": "system-init-v3",
-                "status": "draft"
+                "last_updated": "2026-05-08T07:51:21.732Z",
+                "verified_by": "ai-profiling-v1",
+                "status": "draft",
+                "batch_recommendation_note": "Use case: kun profiloidaan useita yrityskortteja, suositeltu määrä per vastaus on noin 5–10 yritystä (maksimi ~15), jotta laatu, tarkkuus ja yhtenäinen intent-pisteytys säilyvät ilman kontekstin heikkenemistä."
             }
         },
         "company-156": {
