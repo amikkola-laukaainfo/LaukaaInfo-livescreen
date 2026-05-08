@@ -4419,6 +4419,7 @@ footer {
     font-size: 0.95rem;
     color: #94a3b8;
     font-style: italic;
+}
 /* --- Mobile Fix for Region Buttons Box Overflow --- */
 @media (max-width: 550px) {
     .hero-split-paths {
