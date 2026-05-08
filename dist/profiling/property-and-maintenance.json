@@ -1604,7 +1604,8 @@
             "not_suitable_for": [
                 "pitopalvelu",
                 "majoitus",
-                "hyvinvointipalvelut"
+                "hyvinvointipalvelut",
+                "sisustustuotteet"
             ],
             "sub_contexts": [
                 "kitarahuolto",
@@ -1849,7 +1850,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T07:23:11.506Z",
+            "last_updated": "2026-05-08T14:24:53.507Z",
             "verified_by": "web-research",
             "status": "enriched"
         }
@@ -3778,10 +3779,18 @@
             "home_service": false,
             "weekend_service": false,
             "not_suitable_for": [],
-            "sub_contexts": [],
+            "sub_contexts": [
+                "viherrakentaminnen"
+            ],
             "node_links": [],
-            "intent_codes": [],
-            "intent_scores": {}
+            "intent_codes": [
+                "HOME_COTTAGE",
+                "HOME_MAINTENANCE"
+            ],
+            "intent_scores": {
+                "HOME_COTTAGE": 100,
+                "HOME_MAINTENANCE": 100
+            }
         },
         "categories": {
             "core": {
@@ -3968,7 +3977,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-04-26",
+            "last_updated": "2026-05-08T14:31:18.553Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }

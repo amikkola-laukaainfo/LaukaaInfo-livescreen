@@ -2199,7 +2199,8 @@
             "home_service": false,
             "weekend_service": false,
             "not_suitable_for": [
-                "lastentarvikkeet"
+                "lastentarvikkeet",
+                "sisustustuotteet"
             ],
             "sub_contexts": [],
             "node_links": [],
@@ -2390,7 +2391,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-04-26",
+            "last_updated": "2026-05-08T14:24:53.507Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
