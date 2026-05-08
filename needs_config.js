@@ -352,7 +352,7 @@ const NEEDS_CONFIG = {
                 "question": { "fi": "Mitä asioita haluatte edistää?", "en": "What matters would you like to address?" },
                 "options": [
                     { "label": { "fi": "Hautajaisjärjestelyt", "en": "Funeral arrangements" }, "sub_context": "hautauspalvelu", "tags": ["hautauspalvelu"], "node_link": "HAUTAUS" },
-                    { "label": { "fi": "Muistotilaisuus", "en": "Memorial service" }, "sub_context": "muistotilaisuus", "tags": ["muistotilaisuus", "muistotilaisuudet"], "capacity_req": 10, "node_link": "HAUTAUS" },
+                    { "label": { "fi": "Muistotilaisuus", "en": "Memorial service" }, "sub_context": "muistotilaisuus", "node_link": "HAUTAUS" },
                     { "label": { "fi": "Perunkirjoitus ja laki-asiat", "en": "Estate inventory and legal matters" }, "sub_context": "perunkirjoitus", "tags": ["lakiasiaintoimistot", "perunkirjoitus"] }
                 ]
             },
