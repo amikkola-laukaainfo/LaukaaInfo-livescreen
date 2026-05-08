@@ -37,7 +37,8 @@
                 "home_service": false,
                 "weekend_service": true,
                 "not_suitable_for": [
-                    "omilla tarjoiluilla"
+                    "omilla tarjoiluilla",
+                    "luontoretkeily"
                 ],
                 "sub_contexts": [
                     "satamakahvila",
@@ -290,7 +291,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T13:47:08.802Z",
+                "last_updated": "2026-05-08T16:55:00.358Z",
                 "verified_by": "ai-generated",
                 "status": "draft"
             }
@@ -25776,7 +25777,8 @@
                 "not_suitable_for": [
                     "häät",
                     "hautajaiset",
-                    "kartano"
+                    "kartano",
+                    "luontoretkeily"
                 ],
                 "sub_contexts": [
                     "live-musiikki",
@@ -26008,7 +26010,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T15:32:40.283Z",
+                "last_updated": "2026-05-08T16:55:00.358Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -29202,7 +29204,8 @@
                 "not_suitable_for": [
                     "suuret massatapahtumat",
                     "pikatoimitukset",
-                    "luennot"
+                    "luennot",
+                    "luontoretkeily"
                 ],
                 "sub_contexts": [
                     "käsityö",
@@ -29447,7 +29450,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T15:50:49.846Z",
+                "last_updated": "2026-05-08T16:55:00.358Z",
                 "verified_by": "ai-analysis-v2",
                 "status": "draft"
             }
@@ -59146,7 +59149,8 @@
                 "weekend_service": false,
                 "not_suitable_for": [
                     "pienet",
-                    "perinteiset"
+                    "perinteiset",
+                    "luontoretkeily"
                 ],
                 "sub_contexts": [
                     "valokuvaaja",
@@ -59401,7 +59405,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-29T19:58:01.139Z",
+                "last_updated": "2026-05-08T16:55:00.359Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
@@ -59436,7 +59440,8 @@
                     "pienet",
                     "perinteiset",
                     "henkilöstön koulutus",
-                    "päivähoito"
+                    "päivähoito",
+                    "luontoretkeily"
                 ],
                 "sub_contexts": [
                     "valokuvaaja",
@@ -59690,7 +59695,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-29T19:57:33.766Z",
+                "last_updated": "2026-05-08T16:55:00.359Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
