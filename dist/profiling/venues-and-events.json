@@ -48134,8 +48134,12 @@
                 "CATERING",
                 "JUHLATILA"
             ],
-            "intent_codes": [],
-            "intent_scores": {}
+            "intent_codes": [
+                "EDU_DAYCARE"
+            ],
+            "intent_scores": {
+                "EDU_DAYCARE": 100
+            }
         },
         "categories": {
             "core": {

@@ -2740,8 +2740,12 @@
                 "LASTENTARVIKKEET",
                 "VERKKOSIVUT"
             ],
-            "intent_codes": [],
-            "intent_scores": {}
+            "intent_codes": [
+                "SHOP_CHILDREN"
+            ],
+            "intent_scores": {
+                "SHOP_CHILDREN": 100
+            }
         },
         "categories": {
             "core": {
@@ -3520,11 +3524,13 @@
             ],
             "intent_codes": [
                 "WELLBEING_HEALTH",
-                "HOME_CLEANING"
+                "HOME_CLEANING",
+                "WELLBEING_FAMILY"
             ],
             "intent_scores": {
                 "WELLBEING_HEALTH": 100,
-                "HOME_CLEANING": 40
+                "HOME_CLEANING": 40,
+                "WELLBEING_FAMILY": 100
             }
         },
         "categories": {

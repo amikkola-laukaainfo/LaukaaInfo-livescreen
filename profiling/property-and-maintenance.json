@@ -337,10 +337,12 @@
                 "KIINTEISTÖHUOLTO"
             ],
             "intent_codes": [
-                "HOME_MAINTENANCE"
+                "HOME_MAINTENANCE",
+                "AUTO_REPAIR"
             ],
             "intent_scores": {
-                "HOME_MAINTENANCE": 74
+                "HOME_MAINTENANCE": 74,
+                "AUTO_REPAIR": 100
             }
         },
         "categories": {
@@ -595,10 +597,12 @@
                 "KIINTEISTÖHUOLTO"
             ],
             "intent_codes": [
-                "HOME_MAINTENANCE"
+                "HOME_MAINTENANCE",
+                "AUTO_REPAIR"
             ],
             "intent_scores": {
-                "HOME_MAINTENANCE": 82
+                "HOME_MAINTENANCE": 82,
+                "AUTO_REPAIR": 100
             }
         },
         "categories": {
