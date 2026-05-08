@@ -25,6 +25,14 @@ if (fs.existsSync(distDir)) {
 }
 fs.mkdirSync(distDir);
 
+// 2.5 Suoritetaan yritysdatan modularisointi
+console.log('1.5 Modularisoidaan profilointidata...');
+try {
+    execSync('node split_data.js', { stdio: 'inherit' });
+} catch (e) {
+    console.error('Virhe datan modularisoinnissa:', e.message);
+}
+
 // 3. Kopioidaan tiedostot
 console.log('2. Kopioidaan tiedostot dist-kansioon...');
 function copyRecursive(src, dest) {

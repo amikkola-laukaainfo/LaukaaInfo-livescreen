@@ -1143,16 +1143,47 @@ async function loadCompanyData() {
             try {
                 const isSubdir = window.location.pathname.includes('/yritys/');
                 const prefix = isSubdir ? '../' : './';
-                const profilingRes = await fetch(prefix + 'company_profiling_data.json?t=' + Date.now());
+                // Hae tarkempi yritysprofilointi (modularisoitu)
+                const profilingRes = await fetch(prefix + 'profiling/metadata.json?t=' + Date.now());
                 if (profilingRes.ok) {
-                    const profilingData = await profilingRes.json();
-                    if (profilingData && profilingData.profiles) {
+                    const metadata = await profilingRes.json();
+                    if (metadata && metadata.files) {
+                        // Ladataan kaikki sektoritiedostot rinnakkain
+                        const fetchPromises = metadata.files.map(file => 
+                            fetch(prefix + 'profiling/' + file + '?t=' + Date.now()).then(r => r.ok ? r.json() : {})
+                        );
+                        
+                        const sectorDataArray = await Promise.all(fetchPromises);
+                        const combinedProfiles = {};
+                        
+                        sectorDataArray.forEach(sectorProfiles => {
+                            Object.assign(combinedProfiles, sectorProfiles);
+                        });
+
                         window.allCompanies.forEach(company => {
-                            if (profilingData.profiles[company.id]) {
-                                company.profiling = profilingData.profiles[company.id];
+                            if (combinedProfiles[company.id]) {
+                                company.profiling = combinedProfiles[company.id];
                             }
                         });
-                        console.log(i18n.t('log_profiling_loaded'));
+                        
+                        // Tallennetaan myös metadata graafia varten
+                        window.profilingMetadata = metadata;
+                        
+                        console.log(i18n.t('log_profiling_loaded') + ` (${metadata.files.length} sektoria)`);
+                    }
+                } else {
+                    // Fallback jos metadataa ei löydy (ehkä vanha build)
+                    const oldRes = await fetch(prefix + 'company_profiling_data.json?t=' + Date.now());
+                    if (oldRes.ok) {
+                        const profilingData = await oldRes.json();
+                        if (profilingData && profilingData.profiles) {
+                            window.allCompanies.forEach(company => {
+                                if (profilingData.profiles[company.id]) {
+                                    company.profiling = profilingData.profiles[company.id];
+                                }
+                            });
+                            console.log(i18n.t('log_profiling_loaded') + ' (legacy fallback)');
+                        }
                     }
                 }
             } catch (e) {
