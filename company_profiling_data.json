@@ -33880,8 +33880,7 @@
             "meta": {
                 "last_updated": "2026-05-08T07:51:21.732Z",
                 "verified_by": "ai-profiling-v1",
-                "status": "draft",
-                "batch_recommendation_note": "Use case: kun profiloidaan useita yrityskortteja, suositeltu määrä per vastaus on noin 5–10 yritystä (maksimi ~15), jotta laatu, tarkkuus ja yhtenäinen intent-pisteytys säilyvät ilman kontekstin heikkenemistä."
+                "status": "draft"
             }
         },
         "company-156": {
@@ -57723,11 +57722,9 @@
                         "Juhlatila",
                         "Valokuvaaja",
                         "Musiikki",
-                        "Ohjelmapalvelut",
-                        "Kukat"
+                        "Ohjelmapalvelut"
                     ],
                     "funerals-and-memorials": [
-                        "Kukat",
                         "Seurakunta",
                         "Hautauspalvelu"
                     ],
@@ -57771,8 +57768,7 @@
                 ],
                 "node_links": [
                     "CATERING",
-                    "JUHLATILA",
-                    "KUKAT"
+                    "JUHLATILA"
                 ],
                 "intent_codes": [
                     "BIZ_CATERING",
@@ -57850,7 +57846,6 @@
                     "digitization_features": [],
                     "entertainment_features": [],
                     "collaborated_with": [
-                        "paikalliset juhlatilat",
                         "valokuvaajat",
                         "kukkakaupat"
                     ]
@@ -58020,7 +58015,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T07:19:17.214Z",
+                "last_updated": "2026-05-08T11:55:36.103Z",
                 "verified_by": "ai-analysis-v3",
                 "status": "enriched"
             }
