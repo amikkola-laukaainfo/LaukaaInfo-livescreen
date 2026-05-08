@@ -616,10 +616,10 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": { "fi": "Millaista palvelua etsitte?", "en": "What kind of service are you looking for?" },
                 "options": [
-                    { "label": { "fi": "Päivähoito / Koulutus", "en": "Daycare / Education" }, "sub_context": "paivahoito", "tags": ["päiväkoti", "koulutus"] },
-                    { "label": { "fi": "Harrastukset lapsille", "en": "Hobbies for children" }, "sub_context": "lasten harrastukset", "tags": ["lapset", "harrastukset"] },
-                    { "label": { "fi": "Lastentarvikkeet", "en": "Children's supplies" }, "sub_context": "lastentarvikkeet", "tags": ["erikoisliikkeet", "lapset"] },
-                    { "label": { "fi": "Perheterapia / Tuki", "en": "Family therapy / Support" }, "sub_context": "perhetuki", "tags": ["psykologi", "perhepalvelut"] }
+                    { "label": { "fi": "Päivähoito / Koulutus", "en": "Daycare / Education" }, "sub_context": "paivahoito", "tags": ["päiväkoti", "koulutus"], "intent_codes": ["EDU_DAYCARE"] },
+                    { "label": { "fi": "Harrastukset lapsille", "en": "Hobbies for children" }, "sub_context": "lasten harrastukset", "tags": ["lapset", "harrastukset"], "intent_codes": ["REC_CHILDREN"] },
+                    { "label": { "fi": "Lastentarvikkeet", "en": "Children's supplies" }, "sub_context": "lastentarvikkeet", "tags": ["erikoisliikkeet", "lapset"], "intent_codes": ["SHOP_CHILDREN"] },
+                    { "label": { "fi": "Perheterapia / Tuki", "en": "Family therapy / Support" }, "sub_context": "perhetuki", "tags": ["psykologi", "perhepalvelut"], "intent_codes": ["WELLBEING_FAMILY"] }
                 ]
             },
             {
@@ -630,6 +630,25 @@ const NEEDS_CONFIG = {
                     { "label": { "fi": "Leikki-ikäiset (3-6v)", "en": "Preschoolers (3-6y)" }, "tags": ["lapset"] },
                     { "label": { "fi": "Koululaiset", "en": "School-age children" }, "tags": ["koululainen"] },
                     { "label": { "fi": "Nuoret / Teinit", "en": "Youth / Teens" }, "tags": ["nuoret"] }
+                ]
+            }
+        ]
+    },
+    "autohuollot": {
+        "title": { "fi": "Autohuollot", "en": "Car Maintenance" },
+        "icon": "🚗",
+        "description": { "fi": "Etsi luotettava korjaamo tai huoltopalvelu autollesi.", "en": "Find a reliable repair shop or maintenance service for your car." },
+        "profilointi_context": "auto_services",
+        "steps": [
+            {
+                "id": "palvelut",
+                "multiple": true,
+                "question": { "fi": "Millaista palvelua autoosi tarvitset?", "en": "What kind of service does your car need?" },
+                "options": [
+                    { "label": { "fi": "Perushuolto ja korjaukset", "en": "Basic maintenance and repairs" }, "sub_context": "autokorjaamo", "tags": ["autokorjaamot", "autohuolto"], "intent_codes": ["AUTO_REPAIR"] },
+                    { "label": { "fi": "Renkaiden vaihto tai osto", "en": "Tire change or purchase" }, "sub_context": "rengasliike", "tags": ["rengasliike"], "intent_codes": ["AUTO_TIRES"] },
+                    { "label": { "fi": "Auton pesu tai hoito", "en": "Car wash or care" }, "sub_context": "autopesu", "tags": ["autopesu", "automaalaamo"], "intent_codes": ["AUTO_WASH"] },
+                    { "label": { "fi": "Raskaan kaluston huolto", "en": "Heavy equipment maintenance" }, "sub_context": "raskaskonehuolto", "tags": ["raskaskonehuolto"], "intent_codes": ["AUTO_HEAVY"] }
                 ]
             }
         ]

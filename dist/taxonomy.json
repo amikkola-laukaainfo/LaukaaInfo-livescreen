@@ -149,30 +149,6 @@
       "tags": ["mökkipalvelut", "talvivalvonta", "kiinteistöhuolto", "siivous", "polttopuut", "laiturihuolto", "pihanhoito"]
     },
 
-    "VENUE_PARTY": {
-      "label": { "fi": "Juhlatila", "en": "Party Venue" },
-      "parent": "VENUES",
-      "node_links": ["JUHLATILA"],
-      "related": ["BIZ_CATERING", "EVT_WEDDING", "EVT_CORPORATE"],
-      "tags": ["juhlatila", "pikkujoulut", "pikkujoulu", "henkilöstöjuhlat", "syntymäpäivät", "häät", "kesäjuhlat", "virkistyspäivä", "tyky-päivä", "tyhy-päivä", "sukujuhla", "valmistujaiset", "kartano", "kylätalo", "sauna", "ranta", "juhlapaikka"]
-    },
-
-    "VENUE_MEETING": {
-      "label": { "fi": "Kokoustila", "en": "Meeting Space" },
-      "parent": "VENUES",
-      "node_links": ["JUHLATILA"],
-      "related": ["BIZ_CATERING", "EVT_CORPORATE"],
-      "tags": ["kokoustila", "neuvotteluhuone", "seminaari", "konferenssi", "koulutus", "kokous", "luento", "infotilaisuus", "asiakastilaisuus", "seminaaritilat", "streamaus"]
-    },
-
-    "VENUE_ACCOMMODATION": {
-      "label": { "fi": "Majoitus", "en": "Accommodation" },
-      "parent": "VENUES",
-      "node_links": ["MAJOITUS"],
-      "related": ["VENUE_PARTY", "REC_OUTDOOR"],
-      "tags": ["majoitus", "hotelli", "mökki", "huoneisto", "yöpyminen", "leirikeskus", "järvinäköala", "sauna"]
-    },
-
     "WELLBEING_HEALTH": {
       "label": { "fi": "Terveyspalvelut", "en": "Health Services" },
       "parent": "WELLBEING",
@@ -257,11 +233,88 @@
       "tags": ["musiikki", "dj", "live-musiikki", "bändi"]
     },
 
+    "VENUE_PARTY": {
+      "label": { "fi": "Juhlatila", "en": "Party Venue" },
+      "parent": "VENUES",
+      "node_links": ["JUHLATILA"],
+      "tags": ["juhlatila", "pikkujoulut", "pikkujoulu", "henkilöstöjuhlat", "syntymäpäivät", "häät", "kesäjuhlat", "virkistyspäivä", "tyky-päivä", "tyhy-päivä", "sukujuhla", "valmistujaiset"]
+    },
+
+    "VENUE_MEETING": {
+      "label": { "fi": "Kokoustila", "en": "Meeting Space" },
+      "parent": "VENUES",
+      "node_links": ["JUHLATILA"],
+      "tags": ["kokoustila", "neuvotteluhuone", "seminaari", "konferenssi", "koulutus", "kokous", "luento", "infotilaisuus", "asiakastilaisuus"]
+    },
+
+    "VENUE_ACCOMMODATION": {
+      "label": { "fi": "Majoitus", "en": "Accommodation" },
+      "parent": "VENUES",
+      "node_links": ["MAJOITUS"],
+      "tags": ["majoitus", "hotelli", "mökki", "huoneisto", "yöpyminen"]
+    },
+
     "BIZ_TRANSPORT": {
       "label": { "fi": "Kuljetus ja taksi", "en": "Transport and Taxi" },
       "parent": "BUSINESS",
       "related": ["HOME_MOVING"],
       "tags": ["taksi", "kuljetus", "kuljetusliike", "hinaus", "bussi", "sairaankuljetus"]
+    },
+
+    "EDU_DAYCARE": {
+      "label": { "fi": "Päivähoito ja koulutus", "en": "Daycare and Education" },
+      "parent": "EDUCATION",
+      "related": ["REC_CHILDREN"],
+      "tags": ["päiväkoti", "koulutus", "päivähoito"]
+    },
+
+    "REC_CHILDREN": {
+      "label": { "fi": "Lasten harrastukset", "en": "Children's Hobbies" },
+      "parent": "RECREATION",
+      "related": ["EDU_DAYCARE", "SHOP_CHILDREN"],
+      "tags": ["lapset", "harrastukset", "lasten harrastukset"]
+    },
+
+    "SHOP_CHILDREN": {
+      "label": { "fi": "Lastentarvikkeet", "en": "Children's Supplies" },
+      "parent": "SHOPPING",
+      "related": ["REC_CHILDREN"],
+      "tags": ["erikoisliikkeet", "lapset", "lastentarvikkeet"]
+    },
+
+    "WELLBEING_FAMILY": {
+      "label": { "fi": "Perheen tuki ja terapia", "en": "Family Support and Therapy" },
+      "parent": "WELLBEING",
+      "related": ["EDU_DAYCARE"],
+      "tags": ["psykologi", "perhepalvelut", "perhetuki", "perheterapia"]
+    },
+
+    "AUTO_REPAIR": {
+      "label": { "fi": "Autokorjaamot", "en": "Auto Repair" },
+      "parent": "AUTO",
+      "related": ["AUTO_TIRES", "AUTO_WASH"],
+      "tags": ["autokorjaamot", "autohuolto", "autokorjaamo"]
+    },
+
+    "AUTO_TIRES": {
+      "label": { "fi": "Renkaat", "en": "Tires" },
+      "parent": "AUTO",
+      "related": ["AUTO_REPAIR"],
+      "tags": ["rengasliike"]
+    },
+
+    "AUTO_WASH": {
+      "label": { "fi": "Autopesu ja maalaus", "en": "Car Wash and Painting" },
+      "parent": "AUTO",
+      "related": ["AUTO_REPAIR"],
+      "tags": ["autopesu", "automaalaamo"]
+    },
+
+    "AUTO_HEAVY": {
+      "label": { "fi": "Raskaan kaluston huolto", "en": "Heavy Equipment Maintenance" },
+      "parent": "AUTO",
+      "related": ["AUTO_REPAIR"],
+      "tags": ["raskaskonehuolto"]
     }
 
   },
@@ -278,9 +331,7 @@
     { "from": "REC_OUTDOOR", "to": "VENUE_ACCOMMODATION", "type": "related" },
     { "from": "REC_GOLF", "to": "VENUE_ACCOMMODATION", "type": "related" },
     { "from": "HOME_MOVING", "to": "MEDIA_PHOTO", "type": "cross-sell" },
-    { "from": "HOME_RENOVATION", "to": "MEDIA_DRONE", "type": "cross-sell" },
-    { "from": "EVT_CORPORATE", "to": "VENUE_PARTY", "type": "supporting" },
-    { "from": "EVT_CORPORATE", "to": "BIZ_CATERING", "type": "cross-sell" }
+    { "from": "HOME_RENOVATION", "to": "MEDIA_DRONE", "type": "cross-sell" }
   ],
 
   "service_types": [

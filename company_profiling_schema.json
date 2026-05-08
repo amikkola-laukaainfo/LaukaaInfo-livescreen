@@ -192,6 +192,13 @@
                                     "home_visits": { "type": "boolean" },
                                     "collaborated_with": { "type": "array", "items": { "type": "string" } }
                                 }
+                            },
+                            "auto_services": {
+                                "type": "object",
+                                "properties": {
+                                    "replacement_car_available": { "type": "boolean" },
+                                    "collaborated_with": { "type": "array", "items": { "type": "string" } }
+                                }
                             }
                         }
                     },

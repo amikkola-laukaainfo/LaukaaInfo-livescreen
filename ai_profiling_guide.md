@@ -16,7 +16,9 @@ Use these uppercase codes in the `intent_codes` array.
 - **Business**: `BIZ_CATERING`, `BIZ_BRANDING`, `BIZ_MARKETING`, `BIZ_ADVISORY`, `BIZ_FLORIST`, `BIZ_TRANSPORT`.
 - **Home**: `HOME_MOVING`, `HOME_RENOVATION`, `HOME_CLEANING`, `HOME_MAINTENANCE`.
 - **Venues**: `VENUE_PARTY`, `VENUE_MEETING`, `VENUE_ACCOMMODATION`.
-- **Leisure/Health**: `LEISURE_SPA`, `LEISURE_GOLF`, `WELLBEING_BEAUTY`.
+- **Leisure/Health**: `LEISURE_SPA`, `LEISURE_GOLF`, `WELLBEING_BEAUTY`, `WELLBEING_FAMILY`.
+- **Family/Education**: `EDU_DAYCARE`, `REC_CHILDREN`, `SHOP_CHILDREN`.
+- **Auto Services**: `AUTO_REPAIR`, `AUTO_WASH`, `AUTO_TIRES`, `AUTO_HEAVY`.
 
 ### Weighted Scores (intent_scores)
 Define the strength of the match (0-100) for each code in the `intent_scores` object.
@@ -93,4 +95,5 @@ Use these exact terms in `sub_contexts` or `refinement_tags` to ensure companies
 | **Business** | Rekrytointi, Markkinointi | `henkilöstöpalvelut`, `mainostoimisto`, `markkinointikumppani` |
 | **Emergency** | Hinaus, Lukot, Sähkö | `hinaus`, `lukkoseppä`, `päivystys` |
 | **Mökki** | Polttopuut, Laiturit | `polttopuut`, `laituritarvikkeet` |
-| **Family** | Lapset, Harrastukset | `lapset`, `harrastukset` |
+| **Family** | Lapset, Harrastukset | `lapset`, `harrastukset`, `päiväkoti`, `perhetuki` |
+| **Auto** | Huolto, Renkaat, Pesu | `autokorjaamo`, `rengasliike`, `autopesu`, `raskaskonehuolto` |
