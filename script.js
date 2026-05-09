@@ -387,7 +387,7 @@ function initMap(companies) {
     map.on('moveend', updateMapSidebar);
 }
 
-function addMarkersToMap(companies) {
+function addMarkersToMap(companies, forceShowAll = false) {
     if (markers) markers.clearLayers();
     
     // Alustetaan palvelualue-layer tarvittaessa (jos alue.js ehti ensin)
@@ -677,7 +677,13 @@ function addMarkersToMap(companies) {
             return d < 5; // KARTTAKESKITYS: Vain 5km säteellä olevat vaikuttavat zoomiin
         });
 
-        if (localBounds.length > 0) {
+        if (forceShowAll && bounds.length > 0) {
+            // HAKU AKTIIVINEN: näytetään kaikki hakutulokset, vaikka olisivat kauempana
+            const latLngs = bounds.map(b => L.latLng(b[0], b[1]));
+            latLngs.push(L.latLng(regionCoords.lat, regionCoords.lon));
+            const b = L.latLngBounds(latLngs);
+            map.fitBounds(b.pad(0.3));
+        } else if (localBounds.length > 0) {
             const latLngs = localBounds.map(b => L.latLng(b[0], b[1]));
             // Lisätään aina taajaman oma keskipiste rajoihin, niin kamera ei karkaa liian kauas
             latLngs.push(L.latLng(regionCoords.lat, regionCoords.lon));
@@ -1864,7 +1870,7 @@ function filterCatalog(renderList = true) {
     if (map && markers && (!isHomePage || searchTerm.length > 0 || userCoords)) {
         // Suodatetaan vain ne kohteet joilla on koordinaatit
         const mapItems = combinedResults.filter(item => (item.lat && (item.lon || item.lng)));
-        addMarkersToMap(mapItems);
+        addMarkersToMap(mapItems, searchTerm.length > 0);
     }
 }
 
@@ -1884,7 +1890,7 @@ function filterMapMarkers(term) {
     });
 
     if (map && markers) {
-        addMarkersToMap(matches);
+        addMarkersToMap(matches, searchTerm.length > 0);
     }
 }
 
