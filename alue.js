@@ -224,7 +224,7 @@ function filterByArea(areaSlug, catParam, tagParam) {
             }
         }
 
-        if (!matchArea) return false;
+        if (!matchArea && !tagParam) return false;
 
         if (tagParam) {
             const query = normalizeForSearch(tagParam);
@@ -428,7 +428,9 @@ function initRegionMap(area, companies) {
 
     // Lisätään vain kyseisen alueen/-haun mukaiset markerit käyttäen yhteistä funktiota script.js:ssä
     if (typeof addMarkersToMap === 'function') {
-        addMarkersToMap(companies);
+        const urlParams = new URLSearchParams(window.location.search);
+        const isSearch = urlParams.has('tag') || urlParams.has('q');
+        addMarkersToMap(companies, isSearch);
     } else {
         console.error('[Alue] addMarkersToMap-funktiota ei löytynyt script.js:stä.');
     }
