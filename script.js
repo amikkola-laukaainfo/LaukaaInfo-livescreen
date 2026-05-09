@@ -677,13 +677,7 @@ function addMarkersToMap(companies, forceShowAll = false) {
             return d < 5; // KARTTAKESKITYS: Vain 5km säteellä olevat vaikuttavat zoomiin
         });
 
-        if (forceShowAll && bounds.length > 0) {
-            // HAKU AKTIIVINEN: näytetään kaikki hakutulokset, vaikka olisivat kauempana
-            const latLngs = bounds.map(b => L.latLng(b[0], b[1]));
-            latLngs.push(L.latLng(regionCoords.lat, regionCoords.lon));
-            const b = L.latLngBounds(latLngs);
-            map.fitBounds(b.pad(0.3));
-        } else if (localBounds.length > 0) {
+        if (localBounds.length > 0) {
             const latLngs = localBounds.map(b => L.latLng(b[0], b[1]));
             // Lisätään aina taajaman oma keskipiste rajoihin, niin kamera ei karkaa liian kauas
             latLngs.push(L.latLng(regionCoords.lat, regionCoords.lon));
@@ -2964,13 +2958,16 @@ function updateMapSidebar(companies) {
         const lon = parseFloat(company.lon || company.lng);
         if (isNaN(lat) || isNaN(lon)) return;
 
-        // Vain palvelualueyritykset (service_radius tai SERVICE_AREA)
+        // Sisällytetään sidebar-listaan jos:
+        // 1. On palvelualueyritys (service_radius tai SERVICE_AREA)
+        // 2. On haku päällä ja yritys on ruudun ulkopuolella (off-map)
         const hasRadius = (company.service_radius && parseFloat(company.service_radius) > 0)
                        || company.service_mode === 'SERVICE_AREA';
-        if (!hasRadius) return;
-
-        const slug      = slugify(company.nimi);
-        const isOnMap   = bounds.contains([lat, lon]);
+        
+        const isOnMap = bounds.contains([lat, lon]);
+        
+        // Jos ei ole palvelualueyritys ja on jo kartalla, ei turhaan näytetä sivupalkissa
+        if (!hasRadius && isOnMap) return;
         const colorIdx  = Math.abs(getHash(company.nimi)) % serviceCirclePalette.length;
         const circleColor = serviceCirclePalette[colorIdx];
         const isVisible = visibleCircles[slug] !== false;
@@ -3009,7 +3006,24 @@ function updateMapSidebar(companies) {
         console.log('[Sidebar] Päivitetään toggle-painike. Kohteita:', totalServices);
         toggleBtn.style.display = totalServices > 0 ? 'flex' : 'none';
         if (badge) badge.innerText = totalServices;
+
+        // "Aktivoidaan" sivupalkki jos on uusia off-map tuloksia haun aikana
+        if (offMapCount > 0 && !sidebarIsOpen() && isSearchActive()) {
+            toggleBtn.classList.add('pulse-highlight');
+            // Vaihtoehtoisesti voidaan avata se suoraan, jos halutaan vahvempi efekti:
+            // toggleServiceSidebar();
+        } else {
+            toggleBtn.classList.remove('pulse-highlight');
+        }
     }
+}
+
+// Apufunktiot tilan tarkistukseen
+function sidebarIsOpen() {
+    return document.getElementById('map-sidebar')?.classList.contains('open');
+}
+function isSearchActive() {
+    return (document.getElementById('company-search')?.value || '').trim().length > 0;
 }
 
 /**
