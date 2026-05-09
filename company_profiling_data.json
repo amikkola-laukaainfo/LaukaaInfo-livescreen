@@ -9515,7 +9515,22 @@
         "company-45": {
             "name": "GTI Car Center Oy",
             "core": {
-                "fits_for": {},
+                "fits_for": {
+                    "events-and-celebrations": 0,
+                    "business-events": 0,
+                    "funerals-and-memorials": 0,
+                    "moving-and-housing": 10,
+                    "construction-and-maintenance": 100,
+                    "cottage-services": 100,
+                    "housing-company-and-contracts": 100,
+                    "startup-services": 0,
+                    "business-growth": 0,
+                    "wellbeing-and-beauty": 0,
+                    "liikunta-ja-vapaaaika": 0,
+                    "accommodation": 0,
+                    "family-and-children": 10,
+                    "auto-services": 90
+                },
                 "priority_score": 0,
                 "paired_with": [],
                 "service_area": {
@@ -9535,15 +9550,34 @@
                     "bussi",
                     "taksi"
                 ],
-                "sub_contexts": [],
-                "node_links": [],
-                "intent_codes": [],
-                "intent_scores": {}
+                "sub_contexts": [
+                    "autohuolto",
+                    "autokorjaamo",
+                    "rengastyöt",
+                    "öljynvaihto",
+                    "diagnostiikka",
+                    "ilmastointihuolto"
+                ],
+                "node_links": [
+                    "KIINTEISTÖHUOLTO"
+                ],
+                "intent_codes": [
+                    "AUTO_REPAIR",
+                    "AUTO_TIRES",
+                    "AUTO_WASH",
+                    "HOME_MAINTENANCE"
+                ],
+                "intent_scores": {
+                    "AUTO_REPAIR": 85,
+                    "AUTO_TIRES": 70,
+                    "AUTO_WASH": 60,
+                    "HOME_MAINTENANCE": 100
+                }
             },
             "categories": {
                 "core": {
-                    "description": "",
-                    "website": "https://www.gticarcenter.fi",
+                    "description": "GTI Car Center Oy on monipuolinen autokorjaamo, joka tarjoaa huolto-, korjaus- ja rengaspalveluita sekä ajoneuvojen diagnostiikkaa Jyväskylän alueella.",
+                    "website": "[https://www.gticarcenter.fi](https://www.gticarcenter.fi)",
                     "email": "",
                     "phone": ""
                 },
@@ -9724,7 +9758,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T15:32:40.282Z",
+                "last_updated": "2026-05-09T18:18:13.051Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -13022,7 +13056,22 @@
         "company-63": {
             "name": "Sepän Automaalaus",
             "core": {
-                "fits_for": {},
+                "fits_for": {
+                    "events-and-celebrations": 0,
+                    "business-events": 0,
+                    "funerals-and-memorials": 0,
+                    "moving-and-housing": 5,
+                    "construction-and-maintenance": 10,
+                    "cottage-services": 5,
+                    "housing-company-and-contracts": 10,
+                    "startup-services": 0,
+                    "business-growth": 0,
+                    "wellbeing-and-beauty": 0,
+                    "liikunta-ja-vapaaaika": 0,
+                    "accommodation": 0,
+                    "family-and-children": 5,
+                    "auto-services": 90
+                },
                 "priority_score": 0,
                 "paired_with": [],
                 "service_area": {
@@ -13042,15 +13091,27 @@
                     "bussi",
                     "taksi"
                 ],
-                "sub_contexts": [],
+                "sub_contexts": [
+                    "automaalaus",
+                    "kolarikorjaus",
+                    "maalipinnan korjaus",
+                    "auton maalaus",
+                    "ruostekorjaus"
+                ],
                 "node_links": [],
-                "intent_codes": [],
-                "intent_scores": {}
+                "intent_codes": [
+                    "AUTO_WASH",
+                    "AUTO_REPAIR"
+                ],
+                "intent_scores": {
+                    "AUTO_WASH": 90,
+                    "AUTO_REPAIR": 60
+                }
             },
             "categories": {
                 "core": {
-                    "description": "",
-                    "website": "https://automaalaus.com",
+                    "description": "Sepän Automaalaus tarjoaa ajoneuvojen maalaus- ja kolarikorjauspalveluita, kuten pintamaalaukset, paikkamaalaukset ja ruostekorjaukset.",
+                    "website": "[https://automaalaus.com](https://automaalaus.com)",
                     "email": "",
                     "phone": ""
                 },
@@ -13231,7 +13292,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T15:32:40.282Z",
+                "last_updated": "2026-05-09T18:18:13.068Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -16370,7 +16431,22 @@
         "company-79": {
             "name": "TH-Pesu Oy",
             "core": {
-                "fits_for": {},
+                "fits_for": {
+                    "events-and-celebrations": 0,
+                    "business-events": 0,
+                    "funerals-and-memorials": 0,
+                    "moving-and-housing": 70,
+                    "construction-and-maintenance": 20,
+                    "cottage-services": 70,
+                    "housing-company-and-contracts": 70,
+                    "startup-services": 0,
+                    "business-growth": 0,
+                    "wellbeing-and-beauty": 10,
+                    "liikunta-ja-vapaaaika": 0,
+                    "accommodation": 0,
+                    "family-and-children": 20,
+                    "auto-services": 85
+                },
                 "priority_score": 0,
                 "paired_with": [],
                 "service_area": {
@@ -16390,15 +16466,28 @@
                     "bussi",
                     "taksi"
                 ],
-                "sub_contexts": [],
+                "sub_contexts": [
+                    "autopesu",
+                    "sisäpesu",
+                    "ulkopesu",
+                    "painepesu",
+                    "kiinteistöpesu",
+                    "teollisuuspesu"
+                ],
                 "node_links": [],
-                "intent_codes": [],
-                "intent_scores": {}
+                "intent_codes": [
+                    "AUTO_WASH",
+                    "HOME_CLEANING"
+                ],
+                "intent_scores": {
+                    "AUTO_WASH": 85,
+                    "HOME_CLEANING": 70
+                }
             },
             "categories": {
                 "core": {
-                    "description": "",
-                    "website": "https://thpesu.fi",
+                    "description": "TH-Pesu Oy tarjoaa ajoneuvojen pesupalveluita sekä erilaisia kiinteistö- ja teollisuuspesuja, kuten painepesua ja pintojen puhdistusta.",
+                    "website": "[https://thpesu.fi](https://thpesu.fi)",
                     "email": "",
                     "phone": ""
                 },
@@ -16579,7 +16668,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T15:32:40.282Z",
+                "last_updated": "2026-05-09T18:18:13.074Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -20728,30 +20817,73 @@
         "company-100": {
             "name": "Tokmanni Oy",
             "core": {
-                "fits_for": {},
-                "priority_score": 0,
+                "fits_for": {
+                    "events-and-celebrations": 20,
+                    "business-events": 10,
+                    "funerals-and-memorials": 10,
+                    "startup-services": 0,
+                    "business-growth": 0,
+                    "moving-and-housing": 100,
+                    "construction-and-maintenance": 55,
+                    "cottage-services": 100,
+                    "accommodation": 0,
+                    "wellbeing-and-beauty": 15,
+                    "housing-company-and-contracts": 100,
+                    "family-and-children": 40
+                },
+                "priority_score": 35,
                 "paired_with": [],
                 "service_area": {
                     "mode": "TOIMIPISTE",
                     "radius_km": 0,
-                    "regions": [],
-                    "note": ""
+                    "regions": [
+                        "Laukaa",
+                        "Jyväskylä",
+                        "Keski-Suomi"
+                    ],
+                    "note": "Useita myymälöitä alueella"
                 },
                 "emergency_available": false,
                 "contract_customer_available": false,
                 "paired_with_by_context": {},
                 "corporate_clients": false,
                 "home_service": false,
-                "weekend_service": false,
-                "not_suitable_for": [],
-                "sub_contexts": [],
+                "weekend_service": true,
+                "not_suitable_for": [
+                    "palvelupohjaiset toimeksiannot",
+                    "tapahtumien järjestäminen",
+                    "asiantuntijapalvelut"
+                ],
+                "sub_contexts": [
+                    "halpakauppa",
+                    "kodintarvikkeet",
+                    "sisustus",
+                    "siivoustarvikkeet",
+                    "työkalut",
+                    "puutarhatuotteet",
+                    "kausituotteet",
+                    "lelut",
+                    "kodinhoito",
+                    "remonttitarvikkeet",
+                    "rautakauppa"
+                ],
                 "node_links": [],
-                "intent_codes": [],
-                "intent_scores": {}
+                "intent_codes": [
+                    "SHOP_CHILDREN",
+                    "HOME_MAINTENANCE",
+                    "HOME_COTTAGE",
+                    "HOME_CLEANING"
+                ],
+                "intent_scores": {
+                    "SHOP_CHILDREN": 40,
+                    "HOME_MAINTENANCE": 55,
+                    "HOME_COTTAGE": 45,
+                    "HOME_CLEANING": 100
+                }
             },
             "categories": {
                 "core": {
-                    "description": "",
+                    "description": "Tokmanni Oy on Suomen suurin halpakauppaketju, joka tarjoaa laajan valikoiman kodin, vapaa-ajan, puutarhan ja arjen tuotteita edulliseen hintaan.",
                     "website": "https://www.tokmanni.fi",
                     "email": "",
                     "phone": ""
@@ -20934,9 +21066,9 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T15:32:40.283Z",
-                "verified_by": "AI-analysis-v1",
-                "status": "draft"
+                "last_updated": "2026-05-09T18:16:10.174Z",
+                "verified_by": "AI-analysis-v2",
+                "status": "updated"
             }
         },
         "company-101": {
