@@ -2968,6 +2968,7 @@ function updateMapSidebar(companies) {
         
         // Jos ei ole palvelualueyritys ja on jo kartalla, ei turhaan näytetä sivupalkissa
         if (!hasRadius && isOnMap) return;
+        const slug = slugify(company.nimi);
         const colorIdx  = Math.abs(getHash(company.nimi)) % serviceCirclePalette.length;
         const circleColor = serviceCirclePalette[colorIdx];
         const isVisible = visibleCircles[slug] !== false;
