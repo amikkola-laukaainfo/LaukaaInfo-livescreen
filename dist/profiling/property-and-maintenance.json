@@ -296,7 +296,8 @@
                 "business-growth": 0,
                 "wellbeing-and-beauty": 0,
                 "liikunta-ja-vapaaaika": 0,
-                "accommodation": 0
+                "accommodation": 0,
+                "auto-services": 100
             },
             "priority_score": 48,
             "paired_with": [
@@ -552,7 +553,8 @@
                 "business-growth": 0,
                 "wellbeing-and-beauty": 0,
                 "liikunta-ja-vapaaaika": 0,
-                "accommodation": 0
+                "accommodation": 0,
+                "auto-services": 100
             },
             "priority_score": 62,
             "paired_with": [
@@ -5396,7 +5398,8 @@
                 "cottage-services": 90,
                 "accommodation": 0,
                 "wellbeing-and-beauty": 20,
-                "housing-company-and-contracts": 85
+                "housing-company-and-contracts": 85,
+                "auto-services": 40
             },
             "priority_score": 70,
             "paired_with": [],
@@ -5918,7 +5921,8 @@
                 "cottage-services": 100,
                 "accommodation": 0,
                 "wellbeing-and-beauty": 0,
-                "housing-company-and-contracts": 100
+                "housing-company-and-contracts": 100,
+                "auto-services": 30
             },
             "priority_score": 75,
             "paired_with": [],
@@ -7939,7 +7943,6 @@
                 "grillikota",
                 "terassi",
                 "vene",
-                "polttopuut",
                 "talvikäyttö",
                 "ympärivuotinen",
                 "luonnonrauha",
@@ -7950,15 +7953,18 @@
             ],
             "node_links": [
                 "LAUKAA",
-                "LIEVESTUORE",
                 "MAJOITUS",
                 "MOkkI",
                 "SAUNA",
                 "LEPPAVESI",
                 "KALASTUS"
             ],
-            "intent_codes": [],
-            "intent_scores": {}
+            "intent_codes": [
+                "VENUE_ACCOMMODATION"
+            ],
+            "intent_scores": {
+                "VENUE_ACCOMMODATION": 100
+            }
         },
         "categories": {
             "core": {
@@ -8184,7 +8190,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T15:32:40.283Z",
+            "last_updated": "2026-05-09T17:53:02.613Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
         }

@@ -17657,7 +17657,8 @@
                 "business-growth": 0,
                 "wellbeing-and-beauty": 35,
                 "liikunta-ja-vapaaaika": 100,
-                "accommodation": 0
+                "accommodation": 0,
+                "family-and-children": 100
             },
             "priority_score": 0,
             "paired_with": [],
@@ -48076,7 +48077,8 @@
             "fits_for": {
                 "events-and-celebrations": 60,
                 "business-events": 75,
-                "cottage-services": 55
+                "cottage-services": 55,
+                "family-and-children": 100
             },
             "priority_score": 0,
             "paired_with": [],

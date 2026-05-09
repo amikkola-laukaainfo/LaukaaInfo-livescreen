@@ -2688,7 +2688,8 @@
                 "cottage-services": 0,
                 "accommodation": 0,
                 "wellbeing-and-beauty": 5,
-                "housing-company-and-contracts": 0
+                "housing-company-and-contracts": 0,
+                "family-and-children": 100
             },
             "priority_score": 20,
             "paired_with": [
@@ -3485,7 +3486,8 @@
                 "cottage-services": 40,
                 "accommodation": 0,
                 "wellbeing-and-beauty": 100,
-                "housing-company-and-contracts": 40
+                "housing-company-and-contracts": 40,
+                "family-and-children": 100
             },
             "priority_score": 0,
             "paired_with": [],
