@@ -335,7 +335,7 @@ const NEEDS_CONFIG = {
                 "options": [
                     { "label": { "fi": "Isännöintipalvelut", "en": "Property management services" }, "tags": ["isännöinti"] },
                     { "label": { "fi": "Tilitoimisto / Tilintarkastus", "en": "Accounting / Auditing" }, "tags": ["tilitoimisto"] },
-                    { "label": { "fi": "Lakipalvelut ja sopimusasiat", "en": "Legal services and contracts" }, "tags": ["lakiasiaintoimistot", "sopimukset"] }
+                    { "label": { "fi": "Lakipalvelut ja sopimusasiat", "en": "Legal services and contracts" }, "tags": ["lakiasiaintoimisto", "sopimukset", "lakipalvelut"] }
                 ]
             }
         ]
@@ -353,7 +353,7 @@ const NEEDS_CONFIG = {
                 "options": [
                     { "label": { "fi": "Hautajaisjärjestelyt", "en": "Funeral arrangements" }, "sub_context": "hautauspalvelu", "tags": ["hautauspalvelu"], "node_link": "HAUTAUS", "hide_results": true },
                     { "label": { "fi": "Muistotilaisuus", "en": "Memorial service" }, "sub_context": "muistotilaisuus", "tags": ["juhlatila", "pitopalvelu"], "node_link": "HAUTAUS", "hide_results": true },
-                    { "label": { "fi": "Perunkirjoitus ja laki-asiat", "en": "Estate inventory and legal matters" }, "sub_context": "perunkirjoitus", "tags": ["lakiasiaintoimistot", "perunkirjoitus", "tilitoimisto", "asiantuntijapalvelut"] }
+                    { "label": { "fi": "Perunkirjoitus ja laki-asiat", "en": "Estate inventory and legal matters" }, "sub_context": "perunkirjoitus", "tags": ["lakiasiaintoimisto", "perunkirjoitus", "tilitoimisto", "asiantuntijapalvelut", "lakipalvelut"] }
                 ]
             },
             {
@@ -404,9 +404,9 @@ const NEEDS_CONFIG = {
                 "question": { "fi": "Lakipalvelut ja asiakirjat?", "en": "Legal services and documents?" },
                 "skipIf": "!isSelected('paatarve', 'Perunkirjoitus ja laki-asiat')",
                 "options": [
-                    { "label": { "fi": "Perunkirjoitus", "en": "Estate inventory" }, "tags": ["lakiasiaintoimistot", "tilitoimisto", "asiantuntijapalvelut"] },
-                    { "label": { "fi": "Testamentti ja edunvalvonta", "en": "Will and guardianship" }, "tags": ["lakiasiaintoimistot", "asiantuntijapalvelut"] },
-                    { "label": { "fi": "Lakiasiain neuvonta", "en": "Legal advice" }, "tags": ["lakiasiaintoimistot", "konsultointi", "asiantuntijapalvelut"] }
+                    { "label": { "fi": "Perunkirjoitus", "en": "Estate inventory" }, "tags": ["lakiasiaintoimisto", "tilitoimisto", "asiantuntijapalvelut", "lakipalvelut"] },
+                    { "label": { "fi": "Testamentti ja edunvalvonta", "en": "Will and guardianship" }, "tags": ["lakiasiaintoimisto", "asiantuntijapalvelut", "lakipalvelut"] },
+                    { "label": { "fi": "Lakiasiain neuvonta", "en": "Legal advice" }, "tags": ["lakiasiaintoimisto", "konsultointi", "asiantuntijapalvelut", "lakipalvelut"] }
                 ]
             },
             {
@@ -445,7 +445,7 @@ const NEEDS_CONFIG = {
                     { "label": { "fi": "Yritysneuvonta / Liiketoimintasuunnitelma", "en": "Business advisory / Business plan" }, "tags": ["yritysneuvonta", "konsultointi"], "profilointi_filter": { "section": "startup_services", "field": "business_advisory", "value": true } },
                     { "label": { "fi": "Kirjanpito ja tilitoimisto", "en": "Bookkeeping and accounting" }, "tags": ["tilitoimisto"] },
                     { "label": { "fi": "Vakuutukset", "en": "Insurance" }, "tags": ["vakuutus"] },
-                    { "label": { "fi": "Lakipalvelut", "en": "Legal services" }, "tags": ["lakiasiaintoimistot"] }
+                    { "label": { "fi": "Lakipalvelut", "en": "Legal services" }, "tags": ["lakiasiaintoimisto", "lakipalvelut"] }
                 ]
             },
             {
