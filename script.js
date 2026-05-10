@@ -2967,7 +2967,8 @@ function updateMapSidebar(companies) {
         const isOnMap = bounds.contains([lat, lon]);
         
         // Jos ei ole palvelualueyritys ja on jo kartalla, ei turhaan näytetä sivupalkissa
-        if (!hasRadius && isOnMap) return;
+        // PAITSI jos haku on päällä, jolloin listataan kaikki tulokset (helpottaa selailua)
+        if (!hasRadius && isOnMap && !isSearchActive()) return;
         const slug = slugify(company.nimi);
         const colorIdx  = Math.abs(getHash(company.nimi)) % serviceCirclePalette.length;
         const circleColor = serviceCirclePalette[colorIdx];
