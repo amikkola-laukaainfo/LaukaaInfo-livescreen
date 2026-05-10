@@ -349,12 +349,11 @@ const NEEDS_CONFIG = {
             {
                 "id": "paatarve",
                 "multiple": true,
-                "hide_results": true,
                 "question": { "fi": "Mitä asioita haluatte edistää?", "en": "What matters would you like to address?" },
                 "options": [
                     { "label": { "fi": "Hautajaisjärjestelyt", "en": "Funeral arrangements" }, "sub_context": "hautauspalvelu", "tags": ["hautauspalvelu"], "node_link": "HAUTAUS" },
-                    { "label": { "fi": "Muistotilaisuus", "en": "Memorial service" }, "sub_context": "muistotilaisuus", "node_link": "HAUTAUS" },
-                    { "label": { "fi": "Perunkirjoitus ja laki-asiat", "en": "Estate inventory and legal matters" }, "sub_context": "perunkirjoitus", "tags": ["lakiasiaintoimistot", "perunkirjoitus"] }
+                    { "label": { "fi": "Muistotilaisuus", "en": "Memorial service" }, "sub_context": "muistotilaisuus", "tags": ["juhlatila", "pitopalvelu"], "node_link": "HAUTAUS" },
+                    { "label": { "fi": "Perunkirjoitus ja laki-asiat", "en": "Estate inventory and legal matters" }, "sub_context": "perunkirjoitus", "tags": ["lakiasiaintoimistot", "perunkirjoitus", "tilitoimisto", "asiantuntijapalvelut"] }
                 ]
             },
             {
@@ -369,7 +368,7 @@ const NEEDS_CONFIG = {
             {
                 "id": "kapasiteetti",
                 "question": { "fi": "Kuinka paljon henkilöitä muistotilaisuuteen osallistuu?", "en": "How many people will attend the memorial service?" },
-                "skipIf": "isSelected('paatarve', 'Muistotilaisuus') || !isSelected('paatarve', 'Muistotilaisuus')",
+                "skipIf": "!isSelected('paatarve', 'Muistotilaisuus')",
                 "options": [
                     { "label": { "fi": "Alle 20 henkilöä", "en": "Less than 20 people" }, "capacity_req": 20, "tags": [] },
                     { "label": { "fi": "Noin 20 - 50 henkilöä", "en": "About 20 - 50 people" }, "capacity_req": 50, "tags": [] },
@@ -405,9 +404,9 @@ const NEEDS_CONFIG = {
                 "question": { "fi": "Lakipalvelut ja asiakirjat?", "en": "Legal services and documents?" },
                 "skipIf": "!isSelected('paatarve', 'Perunkirjoitus ja laki-asiat')",
                 "options": [
-                    { "label": { "fi": "Perunkirjoitus", "en": "Estate inventory" }, "tags": ["lakiasiaintoimistot"] },
-                    { "label": { "fi": "Testamentti ja edunvalvonta", "en": "Will and guardianship" }, "tags": ["lakiasiaintoimistot"] },
-                    { "label": { "fi": "Lakiasiain neuvonta", "en": "Legal advice" }, "tags": ["lakiasiaintoimistot"] }
+                    { "label": { "fi": "Perunkirjoitus", "en": "Estate inventory" }, "tags": ["lakiasiaintoimistot", "tilitoimisto", "asiantuntijapalvelut"] },
+                    { "label": { "fi": "Testamentti ja edunvalvonta", "en": "Will and guardianship" }, "tags": ["lakiasiaintoimistot", "asiantuntijapalvelut"] },
+                    { "label": { "fi": "Lakiasiain neuvonta", "en": "Legal advice" }, "tags": ["lakiasiaintoimistot", "konsultointi", "asiantuntijapalvelut"] }
                 ]
             },
             {
