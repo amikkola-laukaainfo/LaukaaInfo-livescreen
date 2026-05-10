@@ -20854,19 +20854,7 @@
                     "tapahtumien järjestäminen",
                     "asiantuntijapalvelut"
                 ],
-                "sub_contexts": [
-                    "halpakauppa",
-                    "kodintarvikkeet",
-                    "sisustus",
-                    "siivoustarvikkeet",
-                    "työkalut",
-                    "puutarhatuotteet",
-                    "kausituotteet",
-                    "lelut",
-                    "kodinhoito",
-                    "remonttitarvikkeet",
-                    "rautakauppa"
-                ],
+                "sub_contexts": [],
                 "node_links": [],
                 "intent_codes": [
                     "SHOP_CHILDREN",
@@ -55047,7 +55035,7 @@
             }
         },
         "company-250": {
-            "name": "Karlvik Ravintolat Oy",
+            "name": "Karlvik Ravintola",
             "core": {
                 "fits_for": {
                     "ravintolapalvelut": 95,
@@ -55289,7 +55277,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-07T12:07:42.477Z",
+                "last_updated": "2026-05-10T07:05:27.810Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -62071,7 +62059,8 @@
                 "fits_for": {
                     "cottage-services": 95,
                     "events-and-celebrations": 35,
-                    "business-events": 30
+                    "business-events": 30,
+                    "accommodation": 100
                 },
                 "priority_score": 0,
                 "paired_with": [],
@@ -62094,31 +62083,7 @@
                     "putkipäivystys",
                     "polttopuut"
                 ],
-                "sub_contexts": [
-                    "majoitus",
-                    "lomamökki",
-                    "mökki",
-                    "sauna",
-                    "järvenranta",
-                    "leppävesi",
-                    "laukaa",
-                    "kalastus",
-                    "perhemajoitus",
-                    "vapaa-aika",
-                    "yritysryhmät",
-                    "rantasauna",
-                    "takka",
-                    "grillikota",
-                    "terassi",
-                    "vene",
-                    "talvikäyttö",
-                    "ympärivuotinen",
-                    "luonnonrauha",
-                    "retkeily",
-                    "hiihdot",
-                    "marjastus",
-                    "sienestys"
-                ],
+                "sub_contexts": [],
                 "node_links": [
                     "LAUKAA",
                     "MAJOITUS",
@@ -66884,6 +66849,275 @@
                 "last_updated": "2026-05-08T05:44:28.035Z",
                 "verified_by": "web-research",
                 "status": "enriched"
+            }
+        },
+        "company-308": {
+            "name": "Lakiasiaintoimisto Esa Jäntti",
+            "core": {
+                "fits_for": {
+                    "events-and-celebrations": 10,
+                    "business-events": 20,
+                    "funerals-and-memorials": 100,
+                    "startup-services": 100,
+                    "business-growth": 65,
+                    "moving-and-housing": 70,
+                    "construction-and-maintenance": 20,
+                    "cottage-services": 10,
+                    "accommodation": 0,
+                    "wellbeing-and-beauty": 0,
+                    "housing-company-and-contracts": 100
+                },
+                "priority_score": 82,
+                "paired_with": [],
+                "service_area": {
+                    "mode": "TOIMIPISTE",
+                    "radius_km": 50,
+                    "regions": [
+                        "laukaa",
+                        "jyväskylä",
+                        "keski-suomi"
+                    ],
+                    "note": "palvelee myös etänä"
+                },
+                "emergency_available": false,
+                "contract_customer_available": true,
+                "paired_with_by_context": {},
+                "corporate_clients": true,
+                "home_service": false,
+                "weekend_service": false,
+                "not_suitable_for": [
+                    "juhlatilat",
+                    "catering",
+                    "viihdepalvelut"
+                ],
+                "sub_contexts": [
+                    "perunkirjoitus",
+                    "perinnönjako",
+                    "testamentti",
+                    "edunvalvontavaltuutus",
+                    "kauppakirjat",
+                    "sopimusoikeus",
+                    "yritysjuridiikka",
+                    "riidanratkaisu",
+                    "avioehto",
+                    "kiinteistökauppa"
+                ],
+                "node_links": [],
+                "intent_codes": [
+                    "LAW_LEGAL",
+                    "BIZ_ADVISORY"
+                ],
+                "intent_scores": {
+                    "LAW_LEGAL": 100,
+                    "BIZ_ADVISORY": 65
+                }
+            },
+            "categories": {
+                "core": {
+                    "description": "Lakiasiaintoimisto Esa Jäntti tarjoaa juridisia palveluita yksityishenkilöille ja yrityksille Laukaan ja Jyväskylän alueella. Palveluihin kuuluvat mm. perheoikeus, perunkirjoitukset, testamentit, sopimusasiat sekä kiinteistö- ja yritysjuridiikka.",
+                    "website": "https://www.juristisi.fi",
+                    "email": "",
+                    "phone": ""
+                },
+                "events_and_celebrations": {
+                    "capacity_max": 0,
+                    "seated_capacity": 0,
+                    "standing_guests": 0,
+                    "outdoor_capacity": 0,
+                    "is_accessible": false,
+                    "own_catering_allowed": false,
+                    "inhouse_catering_available": false,
+                    "is_lakeside": false,
+                    "has_sauna": false,
+                    "has_av_tech": false,
+                    "has_stage": false,
+                    "accommodation_beds": 0,
+                    "alcohol_license": false,
+                    "private_booking": false,
+                    "late_night_events": false,
+                    "wedding_specialized": false,
+                    "catering_min_capacity": 0,
+                    "catering_max_capacity": 0,
+                    "dietary_specialties": [],
+                    "staff_included": false,
+                    "wedding_menu_available": false,
+                    "cake_service": false,
+                    "partner_venues": [],
+                    "wedding_photography": false,
+                    "drone_available": false,
+                    "video_production": false,
+                    "live_music": false,
+                    "dj_services": false,
+                    "karaoke_available": false,
+                    "has_exclusive_catering": false,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "digitization_features": [],
+                    "entertainment_features": [],
+                    "collaborated_with": []
+                },
+                "business_events": {
+                    "meeting_capacity": 0,
+                    "seminar_capacity": 0,
+                    "conference_rooms": 0,
+                    "has_projector": false,
+                    "has_streaming": false,
+                    "has_wifi": false,
+                    "has_stage": false,
+                    "private_booking": false,
+                    "invoice_billing": true,
+                    "corporate_clients": true,
+                    "vip_services": false,
+                    "business_catering": false,
+                    "event_hosting": false,
+                    "corporate_gifts": false,
+                    "branding_support": false,
+                    "av_support": false,
+                    "staff_events_specialized": false,
+                    "refinement_tags": [
+                        "juridinen neuvonta yrityksille"
+                    ],
+                    "wellbeing_and_activity_features": [],
+                    "entertainment_features": [],
+                    "collaborated_with": []
+                },
+                "funerals_and_memorials": {
+                    "memorial_service_capacity": 0,
+                    "quiet_private_space": false,
+                    "accessible_entry": false,
+                    "memorial_catering": false,
+                    "coffee_service": false,
+                    "flower_arrangements": false,
+                    "memorial_menu_available": false,
+                    "funeral_flowers": false,
+                    "memorial_arrangements": true,
+                    "transport_assistance": false,
+                    "urgent_booking_available": true,
+                    "refinement_tags": [
+                        "perunkirjoitus",
+                        "perinnönjako",
+                        "testamentti"
+                    ],
+                    "digitization_features": [],
+                    "collaborated_with": []
+                },
+                "moving_and_housing": {
+                    "moving_truck_available": false,
+                    "packing_service": false,
+                    "storage_available": false,
+                    "weekend_moves": false,
+                    "urgent_moves": false,
+                    "long_distance_moves": false,
+                    "cleaning_after_move": false,
+                    "electrician_available": false,
+                    "renovation_support": false,
+                    "insurance_support": false,
+                    "refinement_tags": [
+                        "kiinteistökauppa",
+                        "kauppakirjat"
+                    ],
+                    "digitization_features": [],
+                    "collaborated_with": []
+                },
+                "construction_and_maintenance": {
+                    "emergency_service": false,
+                    "certifications": [],
+                    "wet_room_certification": false,
+                    "provides_tools": false,
+                    "material_supply": false,
+                    "project_management": false,
+                    "snow_removal": false,
+                    "lawn_maintenance": false,
+                    "property_monitoring": false,
+                    "maintenance_contracts": false,
+                    "housing_company_clients": true,
+                    "refinement_tags": [
+                        "sopimusjuridiikka"
+                    ],
+                    "collaborated_with": []
+                },
+                "cottage_services": {
+                    "key_holding": false,
+                    "winter_monitoring": false,
+                    "snow_removal": false,
+                    "cleaning_service": false,
+                    "lawn_service": false,
+                    "remote_monitoring": false,
+                    "emergency_visits": false,
+                    "renovation_support": false,
+                    "dock_maintenance": false,
+                    "sauna_services": false,
+                    "guest_preparation_service": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "housing_company_and_contracts": {
+                    "housing_company_clients": true,
+                    "maintenance_contracts": false,
+                    "emergency_response": false,
+                    "scheduled_visits": false,
+                    "property_reports": false,
+                    "invoice_billing": true,
+                    "contract_customer_available": true,
+                    "priority_support": false,
+                    "monthly_service_plan": false,
+                    "refinement_tags": [
+                        "sopimukset",
+                        "juridinen neuvonta"
+                    ],
+                    "collaborated_with": []
+                },
+                "startup_services": {
+                    "bookkeeping_startup": false,
+                    "business_advisory": true,
+                    "insurance_setup": false,
+                    "legal_services": true,
+                    "office_space_available": false,
+                    "banking_support": false,
+                    "website_creation": false,
+                    "webshop_setup": false,
+                    "branding_support": false,
+                    "logo_design": false,
+                    "business_photography": false,
+                    "refinement_tags": [
+                        "yrityksen perustaminen",
+                        "sopimukset"
+                    ],
+                    "collaborated_with": []
+                },
+                "business_growth": {
+                    "google_ads": false,
+                    "social_media_marketing": false,
+                    "seo_services": false,
+                    "content_creation": false,
+                    "video_production": false,
+                    "crm_support": false,
+                    "recruitment_support": false,
+                    "sales_development": false,
+                    "automation_services": false,
+                    "consulting_services": true,
+                    "refinement_tags": [
+                        "juridinen konsultointi"
+                    ],
+                    "collaborated_with": []
+                },
+                "wellbeing_and_beauty": {
+                    "home_visits": false,
+                    "online_booking": false,
+                    "unisex_services": false,
+                    "gift_cards": false,
+                    "corporate_wellbeing_services": false,
+                    "event_makeup": false,
+                    "bridal_services": false,
+                    "group_bookings": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                }
+            },
+            "meta": {
+                "last_updated": "2026-05-10T07:07:27.248Z",
+                "verified_by": "ai-generated",
+                "status": "completed"
             }
         }
     }

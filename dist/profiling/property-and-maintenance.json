@@ -8398,7 +8398,8 @@
             "fits_for": {
                 "cottage-services": 95,
                 "events-and-celebrations": 35,
-                "business-events": 30
+                "business-events": 30,
+                "accommodation": 100
             },
             "priority_score": 0,
             "paired_with": [],
@@ -8421,31 +8422,7 @@
                 "putkipäivystys",
                 "polttopuut"
             ],
-            "sub_contexts": [
-                "majoitus",
-                "lomamökki",
-                "mökki",
-                "sauna",
-                "järvenranta",
-                "leppävesi",
-                "laukaa",
-                "kalastus",
-                "perhemajoitus",
-                "vapaa-aika",
-                "yritysryhmät",
-                "rantasauna",
-                "takka",
-                "grillikota",
-                "terassi",
-                "vene",
-                "talvikäyttö",
-                "ympärivuotinen",
-                "luonnonrauha",
-                "retkeily",
-                "hiihdot",
-                "marjastus",
-                "sienestys"
-            ],
+            "sub_contexts": [],
             "node_links": [
                 "LAUKAA",
                 "MAJOITUS",

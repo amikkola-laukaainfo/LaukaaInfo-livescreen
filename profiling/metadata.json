@@ -284,7 +284,8 @@
         "company-303": "property-and-maintenance.json",
         "company-302": "property-and-maintenance.json",
         "company-306": "venues-and-events.json",
-        "company-307": "venues-and-events.json"
+        "company-307": "venues-and-events.json",
+        "company-308": "venues-and-events.json"
     },
     "files": [
         "venues-and-events.json",

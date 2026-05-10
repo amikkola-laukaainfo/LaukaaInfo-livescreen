@@ -1638,19 +1638,7 @@
                 "tapahtumien järjestäminen",
                 "asiantuntijapalvelut"
             ],
-            "sub_contexts": [
-                "halpakauppa",
-                "kodintarvikkeet",
-                "sisustus",
-                "siivoustarvikkeet",
-                "työkalut",
-                "puutarhatuotteet",
-                "kausituotteet",
-                "lelut",
-                "kodinhoito",
-                "remonttitarvikkeet",
-                "rautakauppa"
-            ],
+            "sub_contexts": [],
             "node_links": [],
             "intent_codes": [
                 "SHOP_CHILDREN",
