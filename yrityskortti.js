@@ -523,29 +523,48 @@
             adList.appendChild(a);
         }
 
-        // Gallery
+        // Media Gallery (Images & Videos)
         const galleryContainer = document.getElementById('gallery-container');
         const mainImage = document.getElementById('main-image');
         const thumbnails = document.getElementById('image-thumbnails');
 
-        const images = (company.media || []).filter(m => m.type === 'image');
-        if (images.length > 0) {
-            mainImage.innerHTML = `<img src="${images[0].url}" alt="${company.nimi}">`;
+        const allMedia = company.media || [];
+        const renderMedia = (media) => {
+            if (media.type === 'video') {
+                mainImage.innerHTML = `<iframe src="${media.url}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%; height:100%; border-radius: 20px;"></iframe>`;
+            } else {
+                mainImage.innerHTML = `<img src="${media.url}" alt="${company.nimi}" style="width:100%; height:100%; object-fit: cover; border-radius: 20px;">`;
+            }
+        };
+
+        if (allMedia.length > 0) {
+            renderMedia(allMedia[0]);
             galleryContainer.style.display = 'block';
 
-            if (images.length > 1) {
+            if (allMedia.length > 1) {
                 thumbnails.innerHTML = '';
-                images.forEach(img => {
-                    const thumb = document.createElement('img');
-                    thumb.src = img.url;
-                    thumb.onclick = () => {
-                        mainImage.querySelector('img').src = img.url;
-                    };
-                    thumbnails.appendChild(thumb);
+                allMedia.forEach(m => {
+                    const thumbWrapper = document.createElement('div');
+                    thumbWrapper.className = 'thumb-wrapper';
+                    thumbWrapper.style.cssText = 'position: relative; cursor: pointer; flex-shrink: 0;';
+                    
+                    if (m.type === 'video') {
+                        // For video, use a placeholder or a play icon overlay if no thumbnail is provided
+                        // Since we don't have separate video thumbnails, we'll use a stylized play button
+                        thumbWrapper.innerHTML = `
+                            <div style="width: 120px; height: 90px; background: #000; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem;">
+                                <i class="fas fa-play-circle"></i>
+                            </div>
+                        `;
+                    } else {
+                        thumbWrapper.innerHTML = `<img src="${m.url}" style="width: 120px; height: 90px; object-fit: cover; border-radius: 12px; border: 2px solid transparent;">`;
+                    }
+                    
+                    thumbWrapper.onclick = () => renderMedia(m);
+                    thumbnails.appendChild(thumbWrapper);
                 });
             }
         } else {
-            // Show placeholder if no images
             mainImage.innerHTML = `
                 <div class="image-placeholder">
                     <img src="logo.png" alt="Ei kuvaa">
@@ -556,15 +575,9 @@
             thumbnails.innerHTML = '';
         }
 
-        // Video
+        // Hide legacy video section as it's now integrated
         const videoSection = document.getElementById('video-section');
-        const videos = (company.media || []).filter(m => m.type === 'video');
-        if (videos.length > 0) {
-            videoSection.style.display = 'block';
-            videoSection.innerHTML = `<iframe src="${videos[0].url}" allowfullscreen></iframe>`;
-        } else {
-            videoSection.style.display = 'none';
-        }
+        if (videoSection) videoSection.style.display = 'none';
 
         // Map & Link
         const mapContainer = document.getElementById('card-map');
