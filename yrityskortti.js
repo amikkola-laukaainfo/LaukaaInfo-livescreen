@@ -763,13 +763,19 @@
             const currentCap = getCap(currentCompany, currentProfiling);
             const recommendations = [];
 
+            const pairedWith = currentProfiling.paired_with_by_context || {};
+            const contexts = Object.keys(pairedWith);
+            
+            console.log('Etsitään suosituksia yritykselle:', currentCompany.nimi, 'Kontekstit:', contexts);
+
             contexts.forEach(ctx => {
-                const pairs = currentProfiling.paired_with_by_context[ctx];
+                const pairs = pairedWith[ctx];
                 if (!Array.isArray(pairs)) return;
 
                 pairs.forEach(pair => {
                     const pairText = typeof pair === 'string' ? pair : (pair.label ? i18n.getText(pair.label) : '');
-                    
+                    if (!pairText && typeof pair !== 'object') return;
+
                     const matches = allCompanies.filter(c => {
                         if (c.id === currentCompany.id) return false;
                         const cProf = allProfiling[c.id];
@@ -806,6 +812,10 @@
                         return true;
                     });
 
+                    if (filtered.length > 0) {
+                        console.log(`Löytyi ${filtered.length} osumaa parille:`, pairText || pair);
+                    }
+
                     const shuffled = filtered.sort(() => 0.5 - Math.random());
                     shuffled.slice(0, 2).forEach(c => {
                         if (!recommendations.find(r => r.id === c.id)) {
@@ -814,6 +824,8 @@
                     });
                 });
             });
+
+            console.log('Suositukset yhteensä:', recommendations.length);
 
             if (recommendations.length > 0) {
                 section.style.display = 'block';
