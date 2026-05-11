@@ -5457,9 +5457,12 @@ footer {
     z-index: 0;
     border-radius: 32px;
     overflow: hidden; /* Clips the background image scale */
-    background: rgba(0, 0, 0, 0.15);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    background-color: rgba(0, 0, 0, 0.15);
+    background-size: cover;
+    background-position: center;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    transition: transform 0.6s ease;
 }
 
 .hero-path-bg::before {
@@ -5469,11 +5472,8 @@ footer {
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: var(--bg-img);
-    background-size: cover;
-    background-position: center;
-    opacity: 0.8;
-    transition: opacity 0.4s ease, transform 0.6s ease;
+    background: rgba(0, 0, 0, 0.45);
+    transition: background 0.4s ease;
 }
 
 .hero-path:hover {
@@ -5482,12 +5482,11 @@ footer {
 }
 
 .hero-path:hover .hero-path-bg {
-    background: rgba(0, 0, 0, 0.4);
+    transform: scale(1.03);
 }
 
 .hero-path:hover .hero-path-bg::before {
-    opacity: 0.95;
-    transform: scale(1.05);
+    background: rgba(0, 0, 0, 0.3);
 }
 
 .hero-path-content {
