@@ -809,7 +809,10 @@
 
                     const matches = allCompanies.filter(c => {
                         if (c.id === currentCompany.id) return false;
-                        const cProf = allProfiling[c.id];
+                        
+                        // Fix: Ensure we check both raw ID and 'company-' prefixed ID
+                        const cId = String(c.id).startsWith('company-') ? c.id : `company-${c.id}`;
+                        const cProf = allProfiling[cId] || allProfiling[c.id];
 
                         // 1. Täsmäys objekti-määrityksillä (intent_code tai taxonomy_group)
                         if (typeof pair === 'object') {
