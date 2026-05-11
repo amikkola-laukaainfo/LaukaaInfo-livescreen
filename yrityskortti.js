@@ -753,10 +753,18 @@
             
             if (!currentProfiling) {
                 console.warn('Profilointidataa ei löytynyt yritykselle ID:llä:', currentCompany.id);
-                // Kokeillaan etsiä nimen perusteella jos ID ei täsmää (esim. tertta vs company-270)
+                
+                // Kokeillaan etsiä:
+                // 1. ID ilman "company-" etuliitettä tai sen kanssa
+                // 2. Nimen perusteella (esim. tertta vs company-270)
+                const targetId = String(currentCompany.id).replace('company-', '');
+                
                 const altId = Object.keys(allProfiling).find(id => {
+                    const cleanId = id.replace('company-', '');
+                    if (cleanId === targetId) return true;
+
                     const p = allProfiling[id];
-                    const pNimi = (p.core?.nimi || '').toLowerCase().trim();
+                    const pNimi = (p.name || p.core?.nimi || '').toLowerCase().trim();
                     const cNimi = (currentCompany.nimi || '').toLowerCase().trim();
                     return pNimi === cNimi || slugify(pNimi) === slugify(cNimi);
                 });
