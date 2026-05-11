@@ -397,13 +397,44 @@
 
             .main-content {
                 gap: 1.5rem;
-                padding-bottom: 60px; /* Buffer for bottom buttons */
+                padding-bottom: 80px; /* Buffer for bottom bar */
             }
 
             #display-description {
-                padding: 1.25rem;
+                padding: 1.5rem;
                 font-size: 1rem;
                 line-height: 1.6;
+                margin-bottom: 1.5rem;
+            }
+
+            .mobile-contact-bar {
+                display: flex;
+                position: fixed;
+                bottom: 20px;
+                left: 15px;
+                right: 15px;
+                background: white;
+                padding: 10px;
+                border-radius: 15px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                z-index: 1000;
+                gap: 10px;
+                justify-content: center;
+                animation: slideUp 0.4s ease;
+            }
+
+            .mobile-contact-bar .btn-cta {
+                flex: 1;
+                margin: 0;
+                padding: 10px;
+                font-size: 0.85rem;
+                text-align: center;
+                white-space: nowrap;
+            }
+
+            @keyframes slideUp {
+                from { transform: translateY(100px); opacity: 0; }
+                to { transform: translateY(0); opacity: 1; }
             }
         }
 
@@ -819,7 +850,7 @@
                     </div>
                 </div>
 
-                <div class="sidebar">
+                <aside class="sidebar" id="info-panel">
                     <div class="info-panel">
                         <h2>Yhteystiedot</h2>
 
@@ -855,8 +886,13 @@
                             📍 Avaa Google Mapsissa
                         </a>
                     </div>
-                </div>
+                </aside>
             </div>
+
+            <div id="mobile-contact-bar" class="mobile-contact-bar" style="display: none;">
+                <!-- Filled via JS -->
+            </div>
+
             <div id="rss-section" class="rss-section" style="display: none;">
                 <h3><span class="icon">📰</span> Ajankohtaista</h3>
                 <div id="rss-items-container">
