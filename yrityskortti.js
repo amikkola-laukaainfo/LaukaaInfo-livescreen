@@ -724,6 +724,10 @@
         if (!section || !container) return;
 
         try {
+            console.log('--- loadRecommendations ---');
+            console.log('currentCompany:', currentCompany);
+            console.log('currentCompany.id:', currentCompany.id);
+
             const isDist = window.location.pathname.includes('/yritys/');
             const prefix = isDist ? '../' : './';
             
@@ -743,7 +747,26 @@
             const profilesArray = await Promise.all(profPromises);
             profilesArray.forEach(p => Object.assign(allProfiling, p));
 
-            const currentProfiling = allProfiling[currentCompany.id];
+            console.log('Kaikki profilointidata ladattu:', Object.keys(allProfiling).length, 'kohdetta');
+            
+            let currentProfiling = allProfiling[currentCompany.id];
+            
+            if (!currentProfiling) {
+                console.warn('Profilointidataa ei löytynyt yritykselle ID:llä:', currentCompany.id);
+                // Kokeillaan etsiä nimen perusteella jos ID ei täsmää (esim. tertta vs company-270)
+                const altId = Object.keys(allProfiling).find(id => {
+                    const p = allProfiling[id];
+                    const pNimi = (p.core?.nimi || '').toLowerCase().trim();
+                    const cNimi = (currentCompany.nimi || '').toLowerCase().trim();
+                    return pNimi === cNimi || slugify(pNimi) === slugify(cNimi);
+                });
+                
+                if (altId) {
+                    console.log('Löytyi vaihtoehtoinen ID profiloinnista:', altId);
+                    currentProfiling = allProfiling[altId];
+                }
+            }
+
             if (!currentProfiling || !currentProfiling.paired_with_by_context) {
                 console.log('Ei paired_with_by_context dataa yritykselle:', currentCompany.id);
                 return;
