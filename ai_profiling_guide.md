@@ -13,12 +13,12 @@ This is the **primary discovery and ranking mechanism**. AI agents should priori
 Use these uppercase codes in the `intent_codes` array.
 - **Events**: `EVT_WEDDING`, `EVT_BIRTHDAY`, `EVT_CORPORATE`, `EVT_MEMORIAL`.
 - **Media**: `MEDIA_PHOTO`, `MEDIA_VIDEO`, `MEDIA_DRONE`, `MEDIA_DIGITIZATION`.
-- **Business**: `BIZ_CATERING`, `BIZ_BRANDING`, `BIZ_MARKETING`, `BIZ_ADVISORY`, `BIZ_FLORIST`, `BIZ_TRANSPORT`.
-- **Home**: `HOME_MOVING`, `HOME_RENOVATION`, `HOME_CLEANING`, `HOME_MAINTENANCE`.
+- **Business**: `BIZ_CATERING`, `BIZ_FLORIST`, `BIZ_BRANDING`, `BIZ_MARKETING`, `BIZ_ADVISORY`, `BIZ_IT`.
+- **Home**: `HOME_MOVING`, `HOME_RENOVATION`, `HOME_CLEANING`, `HOME_MAINTENANCE`, `HOME_COTTAGE`.
 - **Venues**: `VENUE_PARTY`, `VENUE_MEETING`, `VENUE_ACCOMMODATION`.
-- **Leisure/Health**: `LEISURE_SPA`, `LEISURE_GOLF`, `WELLBEING_BEAUTY`, `WELLBEING_FAMILY`.
-- **Family/Education**: `EDU_DAYCARE`, `REC_CHILDREN`, `SHOP_CHILDREN`.
-- **Auto Services**: `AUTO_REPAIR`, `AUTO_WASH`, `AUTO_TIRES`, `AUTO_HEAVY`.
+- **Leisure/Health**: `REC_SWIMMING`, `REC_RAFTING`, `REC_GOLF`, `REC_RIDING`, `REC_OUTDOOR`, `REC_GYM`.
+- **Family/Education**: `EDU_DAYCARE`, `REC_CHILDREN`, `SHOP_CHILDREN`, `WELLBEING_FAMILY`.
+- **Auto Services**: `AUTO_REPAIR`, `AUTO_TIRES`, `AUTO_WASH`, `AUTO_HEAVY`.
 
 ### Weighted Scores (intent_scores)
 Define the strength of the match (0-100) for each code in the `intent_scores` object.
@@ -79,6 +79,15 @@ For any company with `JUHLATILA` or `MAJOITUS`:
   - Ensure `node_links` includes both `JUHLATILA` and `CATERING` for such companies.
 - **Specific Features**: Use boolean flags in the profiling JSON for:
   - `has_sauna`, `is_accessible`, `accommodation_available` (with `accommodation_beds`), `late_night_events`, `alcohol_license`.
+
+## 6. Contextual Service Pairings (paired_with_by_context)
+Use this object to define recommendations based on the customer's intent or situation.
+- **general**: Use this for global recommendations (e.g., a catering company always recommending a venue).
+- **events-and-celebrations**: Recommendations specifically for parties/weddings.
+- **business-events**: Recommendations for meetings/corporate events.
+- ...and other context IDs from the taxonomy.
+
+Example: `"paired_with_by_context": { "general": ["Majoitus"], "events-and-celebrations": ["Hääkuvaus"] }`
 
 ## 7. Master Keyword Table (Guided Flow Sync)
 Use these exact terms in `sub_contexts` or `refinement_tags` to ensure companies appear in the corresponding guided flow steps:

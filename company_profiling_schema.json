@@ -1,219 +1,92 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "title": "LaukaaInfo 3-tasoinen palvelupolkujärjestelmä v5",
-    "description": "Ratkaisulähtöinen profilointi palvelupolkujen mukaan. 10 pääkontekstia (Taso 1), tarkentavat tarpeet (Taso 2) ja palveluroolit (Taso 3).",
+    "title": "LaukaaInfo Ratkaisulähtöinen profilointi v5",
+    "description": "Schema yritysprofiileille. Sisältää intent-pohjaisen pisteytyksen ja kontekstuaaliset suositukset.",
     "type": "object",
     "properties": {
-        "SCHEMA_VERSION": { "type": "string" },
-        "DESCRIPTION": { "type": "string" },
-        "nodes": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "core": {
             "type": "object",
-            "description": "Palvelupolkujen visualisointi- ja linkityssolmut",
-            "additionalProperties": {
-                "type": "object",
-                "properties": {
-                    "name": { "type": "string" },
-                    "type": {
-                        "type": "string",
-                        "enum": [
-                            "MAIN_CONTEXT",
-                            "SUB_CONTEXT",
-                            "SERVICE_ROLE",
-                            "AREA",
-                            "TAG",
-                            "PROFILE_GROUP"
-                        ]
-                    },
-                    "parent": {
-                        "type": ["string", "null"]
-                    },
-                    "visible_in_mermaid": {
-                        "type": "boolean",
-                        "default": true
-                    },
-                    "priority": {
-                        "type": "integer",
-                        "default": 0
+            "properties": {
+                "fits_for": {
+                    "type": "object",
+                    "additionalProperties": { "type": "integer", "minimum": 0, "maximum": 100 },
+                    "description": "Sopivuus pääpolkuihin (esim. events-and-celebrations)"
+                },
+                "intent_codes": {
+                    "type": "array",
+                    "items": { "type": "string" },
+                    "description": "v5 Taksonomian mukaiset koodit"
+                },
+                "intent_scores": {
+                    "type": "object",
+                    "additionalProperties": { "type": "integer" }
+                },
+                "priority_score": { "type": "integer" },
+                "service_area": {
+                    "type": "object",
+                    "properties": {
+                        "mode": { "type": "string", "enum": ["TOIMIPISTE", "SERVICE_AREA", "ETAPALVELU", "VALTAKUNNALLINEN"] },
+                        "radius_km": { "type": "integer" },
+                        "regions": { "type": "array", "items": { "type": "string" } },
+                        "note": { "type": "string" }
                     }
                 },
-                "required": ["name", "type"]
+                "emergency_available": { "type": "boolean" },
+                "contract_customer_available": { "type": "boolean" },
+                "corporate_clients": { "type": "boolean" },
+                "home_service": { "type": "boolean" },
+                "weekend_service": { "type": "boolean" },
+                "not_suitable_for": { "type": "array", "items": { "type": "string" } },
+                "paired_with_by_context": {
+                    "type": "object",
+                    "additionalProperties": { "type": "array", "items": { "type": "string" } },
+                    "description": "Kontekstuaaliset suositukset (esim. general, events-and-celebrations)"
+                },
+                "sub_contexts": {
+                    "oneOf": [
+                        { "type": "array", "items": { "type": "string" } },
+                        { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }
+                    ]
+                },
+                "node_links": { "type": "array", "items": { "type": "string" } }
+            },
+            "required": ["fits_for", "intent_codes", "intent_scores", "priority_score", "service_area"]
+        },
+        "categories": {
+            "type": "object",
+            "properties": {
+                "core": {
+                    "type": "object",
+                    "properties": {
+                        "description": { "type": "string" },
+                        "website": { "type": "string" },
+                        "email": { "type": "string" },
+                        "phone": { "type": "string" }
+                    }
+                },
+                "events_and_celebrations": { "type": "object" },
+                "business_events": { "type": "object" },
+                "funerals_and_memorials": { "type": "object" },
+                "moving_and_housing": { "type": "object" },
+                "construction_and_maintenance": { "type": "object" },
+                "cottage_services": { "type": "object" },
+                "housing_company_and_contracts": { "type": "object" },
+                "startup_services": { "type": "object" },
+                "business_growth": { "type": "object" },
+                "wellbeing_and_beauty": { "type": "object" },
+                "auto_services": { "type": "object" }
             }
         },
-        "profiles": {
+        "meta": {
             "type": "object",
-            "additionalProperties": {
-                "type": "object",
-                "properties": {
-                    "name": { "type": "string" },
-                    "core": {
-                        "type": "object",
-                        "description": "Yhteiset ydinkentät kaikille yrityksille",
-                        "properties": {
-                            "fits_for": {
-                                "type": "object",
-                                "additionalProperties": { "type": "integer", "minimum": 0, "maximum": 100 }
-                            },
-                            "intent_codes": {
-                                "type": "array",
-                                "items": { "type": "string" },
-                                "description": "Standardoidut intent-koodit (esim. EVT_WEDDING, BIZ_CATERING)"
-                            },
-                            "intent_scores": {
-                                "type": "object",
-                                "additionalProperties": { "type": "integer", "minimum": 0, "maximum": 100 },
-                                "description": "Pisteytys intent-koodeille"
-                            },
-                            "priority_score": { "type": "integer", "default": 0 },
-                            "sub_contexts": {
-                                "oneOf": [
-                                    { "type": "array", "items": { "type": "string" } },
-                                    { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }
-                                ]
-                            },
-                            "paired_with_by_context": {
-                                "type": "object",
-                                "additionalProperties": { "type": "array", "items": { "type": "string" } }
-                            },
-                            "service_area": {
-                                "type": "object",
-                                "properties": {
-                                    "mode": { "type": "string", "enum": ["TOIMIPISTE", "SERVICE_AREA", "ETAPALVELU", "VALTAKUNNALLINEN"] },
-                                    "radius_km": { "type": "integer" },
-                                    "regions": { "type": "array", "items": { "type": "string" } }
-                                }
-                            },
-                            "emergency_available": { "type": "boolean" },
-                            "contract_customer_available": { "type": "boolean" },
-                            "corporate_clients": { "type": "boolean" },
-                            "home_service": { "type": "boolean" },
-                            "weekend_service": { "type": "boolean" },
-                            "node_links": {
-                                "type": "array",
-                                "items": { "type": "string" },
-                                "description": "Viittaukset nodes-rakenteeseen visualisointia ja palvelupolkuja varten"
-                            }
-                        }
-                    },
-                    "categories": {
-                        "type": "object",
-                        "properties": {
-                            "core": {
-                                "type": "object",
-                                "properties": {
-                                    "description": { "type": "string" },
-                                    "website": { "type": "string" },
-                                    "email": { "type": "string" },
-                                    "phone": { "type": "string" }
-                                }
-                            },
-                            "events_and_celebrations": {
-                                "type": "object",
-                                "properties": {
-                            "events_and_celebrations": {
-                                "type": "object",
-                                "properties": {
-                                    "capacity_max": { "type": "integer", "description": "Kokonaiskapasiteetti (henkilömäärä)" },
-                                    "seated_capacity": { "type": "integer", "description": "Istumapaikat ruokailua varten" },
-                                    "standing_guests": { "type": "integer", "description": "Seisomapaikat / Cocktail-tilaisuudet" },
-                                    "outdoor_capacity": { "type": "integer", "description": "Ulkoterassin tai piha-alueen kapasiteetti" },
-                                    "is_accessible": { "type": "boolean", "description": "Onko tila esteetön" },
-                                    "has_sauna": { "type": "boolean", "description": "Onko tilassa sauna käytettävissä" },
-                                    "own_catering_allowed": { "type": "boolean", "description": "Sallitaanko omat ruoat/pitopalvelu" },
-                                    "inhouse_catering_available": { "type": "boolean", "description": "Tarjoaako tila oman pitopalvelun" },
-                                    "partner_catering_available": { "type": "boolean", "description": "Onko tilalla vakiokumppanit pitopalveluun" },
-                                    "alcohol_license": { "type": "boolean", "description": "Onko tilassa anniskeluoikeudet" },
-                                    "late_night_events": { "type": "boolean", "description": "Onko tila käytettävissä yöhön asti (02/04)" },
-                                    "accommodation_available": { "type": "boolean", "description": "Onko tilalla majoitusmahdollisuutta" },
-                                    "accommodation_beds": { "type": "integer", "description": "Vuodepaikkojen määrä" },
-                                    "collaborated_with": { "type": "array", "items": { "type": "string" }, "description": "Yhteistyökumppanit (ID:t)" }
-                                }
-                            },
-                            "funerals_and_memorials": {
-                                "type": "object",
-                                "properties": {
-                                    "memorial_service_capacity": { "type": "integer" },
-                                    "quiet_private_space": { "type": "boolean" },
-                                    "collaborated_with": { "type": "array", "items": { "type": "string" } }
-                                }
-                            },
-                            "business_events": {
-                                "type": "object",
-                                "properties": {
-                                    "meeting_capacity": { "type": "integer" },
-                                    "has_projector": { "type": "boolean" },
-                                    "collaborated_with": { "type": "array", "items": { "type": "string" } }
-                                }
-                            },
-                            "moving_and_housing": {
-                                "type": "object",
-                                "properties": {
-                                    "moving_truck_available": { "type": "boolean" },
-                                    "collaborated_with": { "type": "array", "items": { "type": "string" } }
-                                }
-                            },
-                            "construction_and_maintenance": {
-                                "type": "object",
-                                "properties": {
-                                    "emergency_service": { "type": "boolean" },
-                                    "collaborated_with": { "type": "array", "items": { "type": "string" } }
-                                }
-                            },
-                            "cottage_services": {
-                                "type": "object",
-                                "properties": {
-                                    "key_holding": { "type": "boolean" },
-                                    "collaborated_with": { "type": "array", "items": { "type": "string" } }
-                                }
-                            },
-                            "housing_company_and_contracts": {
-                                "type": "object",
-                                "properties": {
-                                    "maintenance_contracts": { "type": "boolean" },
-                                    "collaborated_with": { "type": "array", "items": { "type": "string" } }
-                                }
-                            },
-                            "startup_services": {
-                                "type": "object",
-                                "properties": {
-                                    "business_advisory": { "type": "boolean" },
-                                    "collaborated_with": { "type": "array", "items": { "type": "string" } }
-                                }
-                            },
-                            "business_growth": {
-                                "type": "object",
-                                "properties": {
-                                    "marketing_services": { "type": "boolean" },
-                                    "collaborated_with": { "type": "array", "items": { "type": "string" } }
-                                }
-                            },
-                            "wellbeing_and_beauty": {
-                                "type": "object",
-                                "properties": {
-                                    "home_visits": { "type": "boolean" },
-                                    "collaborated_with": { "type": "array", "items": { "type": "string" } }
-                                }
-                            },
-                            "auto_services": {
-                                "type": "object",
-                                "properties": {
-                                    "replacement_car_available": { "type": "boolean" },
-                                    "collaborated_with": { "type": "array", "items": { "type": "string" } }
-                                }
-                            }
-                        }
-                    },
-                    "meta": {
-                        "type": "object",
-                        "properties": {
-                            "last_updated": { "type": "string" },
-                            "verified_by": { "type": "string" },
-                            "status": { "type": "string", "enum": ["draft", "verified", "pending_review"] }
-                        }
-                    }
-                },
-                "required": ["name", "core", "meta"]
+            "properties": {
+                "last_updated": { "type": "string" },
+                "verified_by": { "type": "string" },
+                "status": { "type": "string", "enum": ["draft", "verified", "pending_review"] }
             }
         }
     },
-    "required": ["SCHEMA_VERSION", "profiles"]
+    "required": ["id", "name", "core", "categories", "meta"]
 }
