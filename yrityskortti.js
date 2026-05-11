@@ -528,6 +528,14 @@
         const mainImage = document.getElementById('main-image');
         const thumbnails = document.getElementById('image-thumbnails');
 
+        // Helper to extract YouTube ID
+        const getYouTubeId = (url) => {
+            if (!url) return null;
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        };
+
         const allMedia = company.media || [];
         const renderMedia = (media) => {
             if (media.type === 'video') {
@@ -549,13 +557,23 @@
                     thumbWrapper.style.cssText = 'position: relative; cursor: pointer; flex-shrink: 0;';
                     
                     if (m.type === 'video') {
-                        // For video, use a placeholder or a play icon overlay if no thumbnail is provided
-                        // Since we don't have separate video thumbnails, we'll use a stylized play button
-                        thumbWrapper.innerHTML = `
-                            <div style="width: 120px; height: 90px; background: #000; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem;">
-                                <i class="fas fa-play-circle"></i>
-                            </div>
-                        `;
+                        const ytId = getYouTubeId(m.url);
+                        const ytThumb = ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : null;
+                        
+                        if (ytThumb) {
+                            thumbWrapper.innerHTML = `
+                                <img src="${ytThumb}" style="width: 120px; height: 90px; object-fit: cover; border-radius: 12px; border: 2px solid transparent;">
+                                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.8rem; text-shadow: 0 0 10px rgba(0,0,0,0.5);">
+                                    <i class="fas fa-play-circle"></i>
+                                </div>
+                            `;
+                        } else {
+                            thumbWrapper.innerHTML = `
+                                <div style="width: 120px; height: 90px; background: #000; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem;">
+                                    <i class="fas fa-play-circle"></i>
+                                </div>
+                            `;
+                        }
                     } else {
                         thumbWrapper.innerHTML = `<img src="${m.url}" style="width: 120px; height: 90px; object-fit: cover; border-radius: 12px; border: 2px solid transparent;">`;
                     }

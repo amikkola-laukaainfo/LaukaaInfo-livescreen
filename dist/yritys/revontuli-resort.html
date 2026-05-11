@@ -16,8 +16,8 @@
     <!-- Leaflet Map -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-    <link rel="stylesheet" href="../style.8538be5b.css?v=20260420-2">
-    <script src="../translations.8538be5b.js?v=20260505"></script>
+    <link rel="stylesheet" href="../style.a04c9e18.css?v=20260420-2">
+    <script src="../translations.a04c9e18.js?v=20260505"></script>
     <style>
         :root {
             --primary-blue: #0056b3;
@@ -32,14 +32,30 @@
         }
 
         body {
-            background-color: #f8fafc;
+            background-color: #f1f5f9;
             font-family: 'Inter', sans-serif;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+
+        .nav-link {
+            color: white !important;
+            font-weight: 600 !important;
+        }
+
+        .nav-logo span {
+            color: white !important;
+        }
+
+        .dropdown-menu a {
+            color: var(--dark-text) !important;
         }
 
         .business-card-container {
             max-width: 1200px;
             margin: 2rem auto 5rem;
             padding: 0 1.5rem;
+            background: white !important;
         }
 
         /* --- Header Section --- */
@@ -120,6 +136,9 @@
             font-weight: 400;
             line-height: 1.5;
             max-width: 800px;
+            word-break: normal;
+            overflow-wrap: break-word;
+            hyphens: none;
         }
 
         /* --- Grid Layout --- */
@@ -147,7 +166,7 @@
             overflow: hidden;
             margin-bottom: 1.5rem;
             box-shadow: var(--card-shadow);
-            background: #fff;
+            background: white !important;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -202,6 +221,9 @@
             border-radius: var(--border-radius);
             box-shadow: var(--premium-shadow);
             white-space: pre-wrap;
+            word-break: normal;
+            overflow-wrap: break-word;
+            hyphens: none;
         }
 
         /* --- Sidebar & Info Panel --- */
@@ -848,8 +870,8 @@
 
     <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="../script.8538be5b.js?v=20260301"></script>
-    <script src="../yrityskortti.8538be5b.js?v=20260304-DEBUG-2"></script>
+    <script src="../script.a04c9e18.js?v=20260301"></script>
+    <script src="../yrityskortti.a04c9e18.js?v=20260304-DEBUG-2"></script>
 </body>
 
 </html>
