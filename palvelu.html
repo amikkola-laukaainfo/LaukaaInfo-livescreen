@@ -624,27 +624,15 @@
                 taxonomyData = {
                     intents: Object.keys(data.intents).map(id => ({
                         id: id,
-                        label: i18n.getText(data.intents[id].label),
-                        subcontexts: data.intents[id].tags || [], // Mapping tags to subcontexts
+                        label: i18n.getText(data.intents[id]),
+                        subcontexts: data.intents[id].tags || [],
                         refinements: [],
-                        nodeLinks: data.intents[id].node_links || [] // Read from taxonomy.json
+                        nodeLinks: data.intents[id].node_links || []
                     })),
-                    relations: [],
-                    serviceTypes: []
+                    relations: data.relations || [],
+                    serviceTypes: data.serviceTypes || []
                 };
-
-                // Populate relations from 'related' arrays
-                Object.keys(data.intents).forEach(id => {
-                    if (data.intents[id].related) {
-                        data.intents[id].related.forEach(to => {
-                            taxonomyData.relations.push({
-                                from: id,
-                                to: to,
-                                type: 'related'
-                            });
-                        });
-                    }
-                });
+                console.log('Taxonomy loaded:', taxonomyData.intents.length, 'intents');
             } catch (e) {
                 // Fallback to empty to prevent crashes
                 taxonomyData = { intents: [], relations: [], serviceTypes: [] };
