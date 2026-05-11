@@ -251,8 +251,6 @@
         height: 100%; 
         max-height: 100%; 
         border-radius: 0; 
-        display: flex;
-        flex-direction: column;
     }
     .lki-modal-media { 
         height: 35vh; 
@@ -262,15 +260,13 @@
         padding: 20px; 
         flex: 1;
         overflow-y: auto;
-        padding-bottom: 40px; /* Extra space for bottom buffer */
     }
     .lki-modal-footer { 
-        margin-top: 0;
-        padding: 15px 20px;
-        background: var(--lki-modal-bg);
-        border-top: 1px solid rgba(0,0,0,0.1);
-        box-shadow: 0 -4px 15px rgba(0,0,0,0.05);
-        flex-shrink: 0;
+        margin-top: 30px;
+        padding: 20px 0;
+        background: transparent;
+        border-top: 1px solid rgba(0,0,0,0.08);
+        box-shadow: none;
     }
     .lki-modal-footer .desktop-hide {
         display: flex !important;
@@ -279,9 +275,24 @@
     .lki-cta-btn { 
         flex: 100%; 
         min-width: 0;
-        padding: 12px;
+        padding: 14px;
+    }
+    .lki-footer-hide-btn {
+        display: block;
+        width: 100%;
+        background: none;
+        border: 1px solid rgba(0,0,0,0.1);
+        color: #718096;
+        padding: 10px;
+        border-radius: 10px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        cursor: pointer;
     }
 }
+
+.lki-footer-hide-btn { display: none; }
 
 /* Animations */
 @keyframes lki-pulse {

@@ -46,8 +46,8 @@ window.LkiModal = (function() {
                             <div class="lki-info-item" id="lki-modal-phone-item"><span>📞</span> <span id="lki-modal-phone"></span></div>
                             <div class="lki-info-item" id="lki-modal-email-item"><span>✉️</span> <span id="lki-modal-email"></span></div>
                         </div>
+                        <div class="lki-modal-footer" id="lki-modal-footer"></div>
                     </div>
-                    <div class="lki-modal-footer" id="lki-modal-footer"></div>
                 </div>
             </div>
         `;
@@ -377,6 +377,15 @@ window.LkiModal = (function() {
     function renderCTAs(company, tier) {
         const footer = document.getElementById('lki-modal-footer');
         footer.innerHTML = '';
+        
+        // Add a "Hide" button for mobile
+        const hideBtn = document.createElement('button');
+        hideBtn.className = 'lki-footer-hide-btn';
+        hideBtn.innerHTML = '✕ Piilota painikkeet';
+        hideBtn.onclick = () => {
+            footer.style.display = 'none';
+        };
+        footer.appendChild(hideBtn);
 
         // Company Card Link (Lue lisää)
         const slug = slugify(company.nimi);
