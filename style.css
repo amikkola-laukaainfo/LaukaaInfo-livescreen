@@ -5456,12 +5456,10 @@ footer {
     bottom: 0;
     z-index: 0;
     border-radius: 32px;
-    overflow: hidden; /* Clips the background image scale */
-    background-color: rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    background-color: #1a1a2e; /* Fallback color */
     background-size: cover;
     background-position: center;
-    backdrop-filter: blur(0px);
-    -webkit-backdrop-filter: blur(0px);
     transition: transform 0.6s ease;
 }
 
