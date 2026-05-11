@@ -548,6 +548,10 @@
         if (allMedia.length > 0) {
             renderMedia(allMedia[0]);
             galleryContainer.style.display = 'block';
+            
+            // Hide the blue stripe in the header if gallery exists
+            const header = document.querySelector('.card-header');
+            if (header) header.classList.add('has-gallery');
 
             if (allMedia.length > 1) {
                 thumbnails.innerHTML = '';
