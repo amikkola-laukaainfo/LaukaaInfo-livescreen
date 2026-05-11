@@ -14,12 +14,6 @@
                 "housing-company-and-contracts": 100
             },
             "priority_score": 78,
-            "paired_with": [
-                "Siivouspalvelu",
-                "Kotipalvelu",
-                "Hyvinvointipalvelut",
-                "Kuljetuspalvelu"
-            ],
             "service_area": {
                 "mode": "SERVICE_AREA",
                 "radius_km": 100,
@@ -40,6 +34,12 @@
                     "kotipalvelu",
                     "kotikäynnit",
                     "hyvinvointipalvelut"
+                ],
+                "general": [
+                    "Siivouspalvelu",
+                    "Kotipalvelu",
+                    "Hyvinvointipalvelut",
+                    "Kuljetuspalvelu"
                 ]
             },
             "corporate_clients": true,
@@ -300,10 +300,6 @@
                 "auto-services": 100
             },
             "priority_score": 48,
-            "paired_with": [
-                "Rengaspalvelu",
-                "Autohuolto"
-            ],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -316,7 +312,12 @@
             },
             "emergency_available": false,
             "contract_customer_available": false,
-            "paired_with_by_context": {},
+            "paired_with_by_context": {
+                "general": [
+                    "Rengaspalvelu",
+                    "Autohuolto"
+                ]
+            },
             "corporate_clients": true,
             "home_service": false,
             "weekend_service": false,
@@ -557,10 +558,6 @@
                 "auto-services": 100
             },
             "priority_score": 62,
-            "paired_with": [
-                "Autohuolto",
-                "Sijaisauto"
-            ],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -576,6 +573,10 @@
             "paired_with_by_context": {
                 "construction-and-maintenance": [
                     "Ajoneuvohuolto"
+                ],
+                "general": [
+                    "Autohuolto",
+                    "Sijaisauto"
                 ]
             },
             "corporate_clients": true,
@@ -820,7 +821,6 @@
                 "auto-services": 90
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -1067,7 +1067,6 @@
                 "wellbeing-and-beauty": 0
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 60,
@@ -1306,7 +1305,6 @@
                 "taloyhtiöpalvelut": 35
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -1538,7 +1536,6 @@
                 "auto-services": 90
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -1779,7 +1776,6 @@
                 "housing-company-and-contracts": 100
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 50,
@@ -2036,7 +2032,6 @@
                 "wellbeing-and-beauty": 0
             },
             "priority_score": 35,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -2275,13 +2270,6 @@
                 "housing-company-and-contracts": 100
             },
             "priority_score": 76,
-            "paired_with": [
-                "Kuntosali",
-                "Fysioterapia",
-                "Hyvinvointipalvelut",
-                "Jooga",
-                "Työhyvinvointi"
-            ],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 40,
@@ -2304,6 +2292,13 @@
                     "Fysioterapia",
                     "Hieronta",
                     "Jooga"
+                ],
+                "general": [
+                    "Kuntosali",
+                    "Fysioterapia",
+                    "Hyvinvointipalvelut",
+                    "Jooga",
+                    "Työhyvinvointi"
                 ]
             },
             "corporate_clients": true,
@@ -2579,13 +2574,6 @@
                 "liikunta-ja-vapaaaika": 70
             },
             "priority_score": 74,
-            "paired_with": [
-                "Musiikki",
-                "Juhlatila",
-                "Äänentoisto",
-                "Ohjelmapalvelut",
-                "Valokuvaaja"
-            ],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 80,
@@ -2610,6 +2598,13 @@
                     "Kokoustila",
                     "Äänentoisto",
                     "Ohjelmapalvelut"
+                ],
+                "general": [
+                    "Musiikki",
+                    "Juhlatila",
+                    "Äänentoisto",
+                    "Ohjelmapalvelut",
+                    "Valokuvaaja"
                 ]
             },
             "corporate_clients": true,
@@ -2885,7 +2880,6 @@
                 "wellbeing-and-beauty": 0
             },
             "priority_score": 85,
-            "paired_with": [],
             "service_area": {
                 "mode": "LIIKKUVA",
                 "radius_km": 60,
@@ -3145,7 +3139,6 @@
                 "housing-company-and-contracts": 70
             },
             "priority_score": 78,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 80,
@@ -3386,7 +3379,6 @@
                 "taloyhtiöpalvelut": 35
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -3605,7 +3597,6 @@
                 "kiinteistokonsultointi": 20
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -3846,10 +3837,6 @@
                 "accommodation": 0
             },
             "priority_score": 78,
-            "paired_with": [
-                "Kiinteistöhuolto",
-                "Taloushallinto"
-            ],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -3865,6 +3852,10 @@
                 "housing-company-and-contracts": [
                     "Kiinteistöhuolto",
                     "Remonttipalvelut",
+                    "Taloushallinto"
+                ],
+                "general": [
+                    "Kiinteistöhuolto",
                     "Taloushallinto"
                 ]
             },
@@ -4118,10 +4109,6 @@
                 "accommodation": 0
             },
             "priority_score": 84,
-            "paired_with": [
-                "Kiinteistöhuolto",
-                "Taloushallinto"
-            ],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -4139,6 +4126,10 @@
                 "housing-company-and-contracts": [
                     "Kiinteistöhuolto",
                     "Sähköiset kokoukset",
+                    "Taloushallinto"
+                ],
+                "general": [
+                    "Kiinteistöhuolto",
                     "Taloushallinto"
                 ]
             },
@@ -4385,7 +4376,6 @@
                 "accommodation": 0
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "SERVICE_AREA",
                 "radius_km": 0,
@@ -4642,7 +4632,6 @@
                 "housing-company-and-contracts": 100
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -4874,7 +4863,6 @@
                 "taloyhtiöpalvelut": 100
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -5101,11 +5089,6 @@
                 "wellbeing-and-beauty": 0
             },
             "priority_score": 72,
-            "paired_with": [
-                "Kiinteistöhuolto",
-                "Pihanhoito",
-                "Mökkipalvelut"
-            ],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 60,
@@ -5127,6 +5110,11 @@
                 "housing-company-and-contracts": [
                     "Kiinteistöhuolto",
                     "Vihertyöt"
+                ],
+                "general": [
+                    "Kiinteistöhuolto",
+                    "Pihanhoito",
+                    "Mökkipalvelut"
                 ]
             },
             "corporate_clients": true,
@@ -5387,7 +5375,6 @@
                 "housing-company-and-contracts": 95
             },
             "priority_score": 60,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 50,
@@ -5640,7 +5627,6 @@
                 "housing-company-and-contracts": 100
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -5897,7 +5883,6 @@
                 "auto-services": 40
             },
             "priority_score": 70,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 40,
@@ -6158,7 +6143,6 @@
                 "housing-company-and-contracts": 100
             },
             "priority_score": 82,
-            "paired_with": [],
             "service_area": {
                 "mode": "LIIKKUVA",
                 "radius_km": 50,
@@ -6420,7 +6404,6 @@
                 "auto-services": 30
             },
             "priority_score": 75,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 60,
@@ -6674,7 +6657,6 @@
                 "housing-company-and-contracts": 100
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 60,
@@ -6919,7 +6901,6 @@
                 "housing-company-and-contracts": 70
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -7157,7 +7138,6 @@
                 "housing-company-and-contracts": 100
             },
             "priority_score": 85,
-            "paired_with": [],
             "service_area": {
                 "mode": "LIIKKUVA",
                 "radius_km": 60,
@@ -7419,7 +7399,6 @@
                 "housing-company-and-contracts": 100
             },
             "priority_score": 72,
-            "paired_with": [],
             "service_area": {
                 "mode": "LIIKKUVA",
                 "radius_km": 50,
@@ -7669,7 +7648,6 @@
                 "mökkipalvelut": 70
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -7890,7 +7868,6 @@
                 "mökkipalvelut": 35
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -8111,7 +8088,6 @@
                 "events-and-celebrations": 20
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -8402,7 +8378,6 @@
                 "accommodation": 100
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -8676,7 +8651,6 @@
                 "business-events": 35
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -8977,7 +8951,6 @@
                 "business-events": 30
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -9279,7 +9252,6 @@
                 "housing-company-and-contracts": 100
             },
             "priority_score": 78,
-            "paired_with": [],
             "service_area": {
                 "mode": "onsite",
                 "radius_km": 120,
@@ -9548,7 +9520,6 @@
                 "housing-company-and-contracts": 100
             },
             "priority_score": 82,
-            "paired_with": [],
             "service_area": {
                 "mode": "SERVICE_AREA",
                 "radius_km": 100,
@@ -9816,7 +9787,6 @@
                 "housing-company-and-contracts": 55
             },
             "priority_score": 84,
-            "paired_with": [],
             "service_area": {
                 "mode": "SERVICE_AREA",
                 "radius_km": 100,
@@ -10069,7 +10039,6 @@
                 "housing-company-and-contracts": 40
             },
             "priority_score": 86,
-            "paired_with": [],
             "service_area": {
                 "mode": "SERVICE_AREA",
                 "radius_km": 200,
@@ -10326,7 +10295,6 @@
                 "housing-company-and-contracts": 70
             },
             "priority_score": 88,
-            "paired_with": [],
             "service_area": {
                 "mode": "SERVICE_AREA",
                 "radius_km": 50,
