@@ -1,110 +1,2432 @@
-<!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Palveluohjaus | LaukaaInfo</title><link rel="icon" href="logo.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.82253058.css?v=20260426"><script src="translations.82253058.js?v=20260505"></script><style>.palvelu-hero{background:linear-gradient(135deg,var(--secondary-blue) 0,var(--primary-blue) 100%);color:#fff;padding:4rem 1.5rem;text-align:center;border-bottom-left-radius:40px;border-bottom-right-radius:40px;margin-bottom:3rem}.palvelu-hero h1{font-family:var(--accent-font);font-size:3rem;font-weight:900;margin-bottom:1rem}.palvelu-hero p{font-size:1.2rem;opacity:.9;max-width:600px;margin:0 auto}#results-container{max-width:1200px;margin:3rem auto;padding:0 1.5rem}.back-nav{max-width:1200px;margin:2rem auto 0;padding:0 1.5rem}.btn-back{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--primary-blue);font-weight:700;transition:transform .2s}.btn-back:hover{transform:translateX(-5px)}.option-checkbox{display:flex;align-items:center;gap:15px;padding:1.2rem;background:#fff;border-radius:16px;border:2px solid #eef2f6;cursor:pointer;transition:all .2s;text-align:left;font-weight:600}.option-checkbox:hover{border-color:var(--primary-blue);background:#f8fafc}.option-checkbox input{width:24px;height:24px;cursor:pointer}.option-checkbox.selected{background:#e0f2fe;border-color:var(--primary-blue)}.group-title{grid-column:1/-1;font-family:var(--accent-font);font-size:1.8rem;font-weight:800;color:var(--primary-blue);margin:3rem 0 1.5rem;padding-bottom:.5rem;border-bottom:2px solid #eef2f6;display:flex;align-items:center;gap:10px}.group-title:first-child{margin-top:0}.btn-continue{margin-top:2rem;width:100%;max-width:300px}.fade-in{animation:fadeIn .4s ease-out}.selection-summary{max-width:800px;margin:0 auto 2rem;padding:1rem;background:#f1f5f9;border-radius:12px;font-size:.9rem;display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center}.summary-tag{background:#fff;padding:4px 12px;border-radius:20px;border:1px solid #cbd5e1;color:var(--secondary-blue);font-weight:600}.next-steps-section{max-width:1200px;margin:4rem auto;padding:2rem;background:#f8fafc;border-radius:32px;border:2px dashed #cbd5e1}.next-steps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.5rem;margin-top:1.5rem}.next-step-card{background:#fff;padding:1.5rem;border-radius:20px;text-align:center;box-shadow:0 4px 6px -1px rgb(0 0 0 / .1);transition:transform .2s;cursor:pointer;border:2px solid transparent}.next-step-card:hover{transform:translateY(-5px);border-color:var(--primary-blue)}.match-explanation{font-size:.7rem;color:#64748b;margin-top:8px;font-style:italic}@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}.location-bar{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.2);backdrop-filter:blur(10px);padding:8px 16px;border-radius:50px;margin-top:1.5rem;border:1px solid rgba(255,255,255,.3)}.location-bar input{background:0 0;border:none;color:#fff;font-weight:600;font-size:.9rem;width:180px;outline:0}.location-bar input::placeholder{color:rgba(255,255,255,.7)}.location-bar .btn-locate{background:#fff;color:var(--primary-blue);border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .2s;font-size:1.2rem}.location-bar .btn-locate:hover{transform:scale(1.1)}#location-status{font-size:.75rem;margin-top:8px;opacity:.8;min-height:1.2em}.selected-anchor{border:3px solid var(--primary-blue)!important;transform:scale(1.02);box-shadow:0 10px 25px -5px rgba(0,102,204,.3)!important;transition:all .3s ease}.btn-select-anchor{display:inline-block;margin:10px;padding:8px 16px;background:#e0f2fe;color:var(--primary-blue);font-weight:700;border-radius:8px;border:1px solid var(--primary-blue);cursor:pointer;text-align:center;transition:all .2s;font-size:.85rem;width:calc(100% - 20px)}.btn-select-anchor:hover{background:var(--primary-blue);color:#fff}.selected-anchor .btn-select-anchor{background:var(--primary-blue);color:#fff}@media print{.btn-back,.btn-radar,.card-arrow,.dist-badge,.next-steps-section,.palvelu-hero,.selection-summary,.step-progress,.top-nav,footer{display:none!important}body{background:#fff;color:#000;padding:0}main{margin:0;padding:20px}.group-title{border-bottom:1px solid #ccc;margin-top:20px;color:#000}.company-result-card{border:1px solid #eee;break-inside:avoid;margin-bottom:15px;box-shadow:none}.solution-package{box-shadow:none;border:1px solid #ccc;margin-bottom:40px;break-inside:avoid}}.card-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:15px;padding-top:15px;border-top:1px solid #eef2f6}.card-actions.has-three{grid-template-columns:1fr 1fr 1fr}.card-actions.has-one{grid-template-columns:1fr}.btn-action{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:10px 5px;background:#f8fafc;border-radius:8px;text-decoration:none;color:var(--primary-blue);font-size:.75rem;font-weight:700;border:1px solid #e2e8f0;transition:all .2s;cursor:pointer;text-align:center;box-sizing:border-box}.btn-action:hover{background:#e0f2fe;border-color:var(--primary-blue)}.btn-action.primary-action{background:var(--primary-blue);color:#fff;border-color:var(--primary-blue)}.btn-action.primary-action:hover{background:var(--secondary-blue)}.btn-action i{font-size:1.1rem;font-style:normal}.modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;padding:20px}.modal-overlay.active{display:flex;animation:fadeIn .2s ease-out}.inquiry-modal{background:#fff;border-radius:16px;width:100%;max-width:500px;padding:24px;box-shadow:0 10px 25px rgba(0,0,0,.2);position:relative;max-height:90vh;overflow-y:auto}.inquiry-modal h2{margin-top:0;color:var(--primary-blue);font-family:var(--accent-font)}.close-modal{position:absolute;top:16px;right:16px;background:0 0;border:none;font-size:1.5rem;cursor:pointer;color:#64748b}.form-group{margin-bottom:15px}.form-group label{display:block;font-weight:600;margin-bottom:5px;font-size:.9rem}.form-group input,.form-group textarea{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font-family:inherit;box-sizing:border-box}.show-more-container{grid-column:1/-1;text-align:center;margin:20px 0 40px;padding-top:10px}.btn-show-more{background:#fff;color:var(--primary-blue);border:2px solid var(--primary-blue);padding:12px 30px;border-radius:50px;font-weight:700;font-size:1rem;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:10px;box-shadow:0 4px 6px -1px rgba(0,0,0,.1)}.btn-show-more:hover{background:var(--primary-blue);color:#fff;transform:translateY(-2px);box-shadow:0 10px 15px -3px rgba(0,102,204,.2)}.btn-show-more i{font-style:normal;font-size:1.2rem}.taxonomy-info-box{max-width:1200px;margin:2rem auto;padding:1.5rem;background:#f0f9ff;border-radius:20px;border:1px solid #bae6fd;display:flex;align-items:flex-start;gap:15px;animation:fadeIn .5s ease-out}.taxonomy-info-icon{font-size:2rem}.taxonomy-info-content h4{margin:0 0 5px 0;color:#0369a1;font-family:var(--accent-font)}.taxonomy-info-content p{margin:0;font-size:.9rem;color:#0c4a6e;line-height:1.5}.taxonomy-relation-tag{display:inline-block;padding:2px 8px;background:#e0f2fe;border:1px solid #7dd3fc;border-radius:4px;font-size:.75rem;font-weight:700;color:#0369a1;margin-right:5px;margin-top:5px}</style></head><body><nav class="top-nav"><div class="nav-container"><a href="index.html" class="nav-logo"><img src="logo.png" alt="LaukaaInfo Logo"> <span data-i18n="hero_title">LaukaaInfo</span></a><div class="lang-switcher"><button class="lang-btn" onclick='i18n.setLanguage("fi")' data-lang="fi">FI</button> <button class="lang-btn" onclick='i18n.setLanguage("en")' data-lang="en">EN</button></div></div></nav><div class="back-nav"><a href="index.html" class="btn-back" data-i18n="btn_back">&larr; Takaisin etusivulle</a></div><header id="palvelu-header" class="palvelu-hero"><div class="icon-large" id="hero-icon" style="font-size:4rem;margin-bottom:1rem"></div><h1 id="hero-title">Ladataan...</h1><p id="hero-desc"></p><div class="location-bar"><span>📍</span> <input type="text" id="user-location-input" data-i18n="[placeholder]placeholder_your_location" placeholder="Sijaintisi (esim. Laukaa)" autocomplete="off"> <button class="btn-locate" id="locate-me-btn" title="Hae sijaintini">🎯</button></div><div id="location-status"></div></header><main><section id="step-section" class="step-container"><div id="selection-summary" class="selection-summary" style="display:none"></div><div class="step-progress" id="step-progress"></div><div id="step-content" class="fade-in"></div></section><section id="results-container" style="display:none"><div class="need-header"><h2 data-i18n="palvelu_results_title">Suositellut palvelut</h2><p id="results-count"></p></div><div id="results-list" class="results-grid"></div><div id="next-steps-container" class="next-steps-section" style="display:none"><h3 style="text-align:center;font-family:var(--accent-font);font-size:1.5rem" data-i18n="palvelu_next_steps">Seuraavaksi saatat tarvita myös näitä:</h3><div id="next-steps-list" class="next-steps-grid"></div></div><div id="special-vinkit-container" style="display:none"></div><div id="tips-container" style="max-width:1200px;margin:3rem auto;display:none"></div><div id="taxonomy-info-container" style="display:none"></div><div style="text-align:center;margin-top:4rem;display:flex;justify-content:center;gap:20px;flex-wrap:wrap"><button onclick="resetPalvelu()" class="btn-radar" style="background:var(--secondary-blue)" data-i18n="btn_reset">Aloita alusta</button> <button onclick="printResults()" class="btn-radar" style="background:var(--primary-blue)" data-i18n="btn_print">Tulosta PDF / Paperille 🖨️</button></div></section></main><div id="inquiry-overlay" class="modal-overlay"><div class="inquiry-modal"><button class="close-modal" onclick="closeInquiryModal()">&times;</button><h2 id="inquiry-title" data-i18n="palvelu_inquiry_title">Pyydä tarjous</h2><p style="font-size:.9rem;color:#64748b;margin-bottom:20px" data-i18n="palvelu_inquiry_unavailable">Tämä lomake ei ole vielä käytössä, kun yrityksellä on ilmaisnäkyvyys sivustolla.</p><form id="inquiry-form" onsubmit="submitInquiry(event)"><input type="hidden" id="inquiry-company-id"><div class="form-group"><label data-i18n="label_name">Nimi</label> <input type="text" required data-i18n="[placeholder]placeholder_name" placeholder="Matti Meikäläinen"></div><div class="form-group"><label data-i18n="label_email">Sähköposti</label> <input type="email" required data-i18n="[placeholder]placeholder_email" placeholder="matti@esimerkki.fi"></div><div class="form-group"><label data-i18n="label_phone">Puhelin</label> <input type="tel" data-i18n="[placeholder]placeholder_phone" placeholder="040 123 4567"></div><div class="form-group"><label data-i18n="label_event_date">Tilaisuuden ajankohta</label> <input type="date" required></div><div class="form-group"><label data-i18n="label_pax">Arvioitu henkilömäärä</label> <input type="number" min="1" data-i18n="[placeholder]placeholder_pax" placeholder="Esim. 50"></div><div class="form-group"><label data-i18n="label_more_info">Lisätiedot</label> <textarea rows="4" data-i18n="[placeholder]placeholder_more_info" placeholder="Kerro tarkemmin tarpeistasi..."></textarea></div><button type="submit" class="btn-radar" style="width:100%;background:var(--primary-blue)" data-i18n="btn_send_inquiry">Lähetä tarjouspyyntö</button></form></div></div><footer style="margin-top:6rem"><div class="footer-content"><p data-i18n="footer_copyright">© 2026 LaukaaInfo – Palvelua ylläpitää Mediazoo.fi</p></div></footer><script src="needs_config.82253058.js?v=20260507"></script><script src="script.82253058.js"></script><script>let currentNeedId=new URLSearchParams(window.location.search).get("id"),currentStepIndex=0,selections={},taxonomyData=null;async function loadTaxonomy(){try{let t=await(await fetch("taxonomy.json")).json();taxonomyData={intents:Object.keys(t.intents).map(e=>({id:e,label:i18n.getText(t.intents[e]),subcontexts:t.intents[e].tags||[],refinements:[],nodeLinks:t.intents[e].node_links||[]})),relations:t.relations||[],serviceTypes:t.serviceTypes||[]},console.log("Taxonomy loaded:",taxonomyData.intents.length,"intents")}catch(e){taxonomyData={intents:[],relations:[],serviceTypes:[]}}}async function initPalvelu(){var e=window.NEEDS_CONFIG||("undefined"!=typeof NEEDS_CONFIG?NEEDS_CONFIG:null);if(e){e=e[currentNeedId];if(e){var t=i18n.getText(e.title);document.getElementById("hero-title").textContent=t,document.getElementById("hero-desc").textContent=i18n.getText(e.description),document.getElementById("hero-icon").textContent=e.icon,document.title=t+" | LaukaaInfo",await loadTaxonomy();try{let e=0;for(;"function"!=typeof loadCompanyData&&e<15;)await new Promise(e=>setTimeout(e,400)),e++;"function"!=typeof loadCompanyData||window.allCompanies&&0!==window.allCompanies.length||await loadCompanyData()}catch(e){}(new URLSearchParams(window.location.search).get("filter_profiling")?showResults:renderStep)()}}}function renderStep(){var e=(window.NEEDS_CONFIG||("undefined"!=typeof NEEDS_CONFIG?NEEDS_CONFIG:null))[currentNeedId];if(e&&e.steps){let n=e.steps[currentStepIndex];if(n){var t=document.getElementById("step-content");let i=document.getElementById("step-progress");updateSelectionSummary(),i.innerHTML="",e.steps.forEach((e,t)=>{var n=document.createElement("div");n.className="progress-dot "+(t===currentStepIndex?"active":""),i.appendChild(n)}),n.multiple?t.innerHTML=`
+<!DOCTYPE html>
+<html lang="fi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palveluohjaus | LaukaaInfo</title>
+    <link rel="icon" href="logo.png">
+
+    <!-- Fonts & Styles -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css?v=20260426">
+    <script src="translations.js?v=20260505"></script>
+    <style>
+        .palvelu-hero {
+            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
+            color: white;
+            padding: 4rem 1.5rem;
+            text-align: center;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            margin-bottom: 3rem;
+        }
+
+        .palvelu-hero h1 {
+            font-family: var(--accent-font);
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .palvelu-hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        #results-container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+        }
+
+
+        .back-nav {
+            max-width: 1200px;
+            margin: 2rem auto 0;
+            padding: 0 1.5rem;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--primary-blue);
+            font-weight: 700;
+            transition: transform 0.2s;
+        }
+
+        .btn-back:hover {
+            transform: translateX(-5px);
+        }
+        
+        /* Multi-select styles */
+        .option-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 1.2rem;
+            background: white;
+            border-radius: 16px;
+            border: 2px solid #eef2f6;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .option-checkbox:hover {
+            border-color: var(--primary-blue);
+            background: #f8fafc;
+        }
+
+        .option-checkbox input {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .option-checkbox.selected {
+            background: #e0f2fe;
+            border-color: var(--primary-blue);
+        }
+
+        .group-title {
+            grid-column: 1 / -1;
+            font-family: var(--accent-font);
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary-blue);
+            margin: 3rem 0 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #eef2f6;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .group-title:first-child {
+            margin-top: 0;
+        }
+
+        .btn-continue {
+            margin-top: 2rem;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        /* Step transition animation */
+        .fade-in {
+            animation: fadeIn 0.4s ease-out;
+        }
+        
+        /* Selection Summary */
+        .selection-summary {
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            padding: 1rem;
+            background: #f1f5f9;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .summary-tag {
+            background: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid #cbd5e1;
+            color: var(--secondary-blue);
+            font-weight: 600;
+        }
+
+        .next-steps-section {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 2rem;
+            background: #f8fafc;
+            border-radius: 32px;
+            border: 2px dashed #cbd5e1;
+        }
+
+        .next-steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .next-step-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            transition: transform 0.2s;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .next-step-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-blue);
+        }
+
+        .match-explanation {
+            font-size: 0.7rem;
+            color: #64748b;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Location Bar Styles */
+        .location-bar {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 50px;
+            margin-top: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .location-bar input {
+            background: transparent;
+            border: none;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            width: 180px;
+            outline: none;
+        }
+
+        .location-bar input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .location-bar .btn-locate {
+            background: white;
+            color: var(--primary-blue);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+            font-size: 1.2rem;
+        }
+
+        .location-bar .btn-locate:hover {
+            transform: scale(1.1);
+        }
+
+        #location-status {
+            font-size: 0.75rem;
+            margin-top: 8px;
+            opacity: 0.8;
+            min-height: 1.2em;
+        }
+
+        /* Interactive Categorization Styles */
+        .selected-anchor {
+            border: 3px solid var(--primary-blue) !important;
+            transform: scale(1.02);
+            box-shadow: 0 10px 25px -5px rgba(0, 102, 204, 0.3) !important;
+            transition: all 0.3s ease;
+        }
+
+        .btn-select-anchor {
+            display: inline-block;
+            margin: 10px;
+            padding: 8px 16px;
+            background: #e0f2fe;
+            color: var(--primary-blue);
+            font-weight: 700;
+            border-radius: 8px;
+            border: 1px solid var(--primary-blue);
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+            width: calc(100% - 20px);
+        }
+
+        .btn-select-anchor:hover {
+            background: var(--primary-blue);
+            color: white;
+        }
+        
+        .selected-anchor .btn-select-anchor {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        /* Print styles */
+        @media print {
+            .top-nav, .palvelu-hero, .btn-back, .step-progress, 
+            .selection-summary, .next-steps-section, footer, 
+            .btn-radar, .card-arrow, .dist-badge {
+                display: none !important;
+            }
+            
+            body {
+                background: white;
+                color: black;
+                padding: 0;
+            }
+
+            main {
+                margin: 0;
+                padding: 20px;
+            }
+
+            .group-title {
+                border-bottom: 1px solid #ccc;
+                margin-top: 20px;
+                color: black;
+            }
+
+            .company-result-card {
+                border: 1px solid #eee;
+                break-inside: avoid;
+                margin-bottom: 15px;
+                box-shadow: none;
+            }
+            
+            .solution-package {
+                box-shadow: none;
+                border: 1px solid #ccc;
+                margin-bottom: 40px;
+                break-inside: avoid;
+            }
+        }
+        /* Card Actions */
+        .card-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eef2f6;
+        }
+        .card-actions.has-three {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+        .card-actions.has-one {
+            grid-template-columns: 1fr;
+        }
+        .btn-action {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            padding: 10px 5px;
+            background: #f8fafc;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--primary-blue);
+            font-size: 0.75rem;
+            font-weight: 700;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
+            cursor: pointer;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        .btn-action:hover {
+            background: #e0f2fe;
+            border-color: var(--primary-blue);
+        }
+        .btn-action.primary-action {
+            background: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+        .btn-action.primary-action:hover {
+            background: var(--secondary-blue);
+        }
+        .btn-action i {
+            font-size: 1.1rem;
+            font-style: normal;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.active {
+            display: flex;
+            animation: fadeIn 0.2s ease-out;
+        }
+        .inquiry-modal {
+            background: white;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 500px;
+            padding: 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .inquiry-modal h2 {
+            margin-top: 0;
+            color: var(--primary-blue);
+            font-family: var(--accent-font);
+        }
+        .close-modal {
+            position: absolute;
+            top: 16px; right: 16px;
+            background: none; border: none;
+            font-size: 1.5rem; cursor: pointer; color: #64748b;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block; font-weight: 600; margin-bottom: 5px; font-size: 0.9rem;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; box-sizing: border-box;
+        }
+
+        /* Show more button styles */
+        .show-more-container {
+            grid-column: 1 / -1;
+            text-align: center;
+            margin: 20px 0 40px;
+            padding-top: 10px;
+        }
+
+        .btn-show-more {
+            background: white;
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-show-more:hover {
+            background: var(--primary-blue);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 102, 204, 0.2);
+        }
+
+        .btn-show-more i {
+            font-style: normal;
+            font-size: 1.2rem;
+        }
+
+        /* Taxonomy / Service Chain Info Styles */
+        .taxonomy-info-box {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: #f0f9ff;
+            border-radius: 20px;
+            border: 1px solid #bae6fd;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            animation: fadeIn 0.5s ease-out;
+        }
+        .taxonomy-info-icon {
+            font-size: 2rem;
+        }
+        .taxonomy-info-content h4 {
+            margin: 0 0 5px 0;
+            color: #0369a1;
+            font-family: var(--accent-font);
+        }
+        .taxonomy-info-content p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #0c4a6e;
+            line-height: 1.5;
+        }
+        .taxonomy-relation-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            background: #e0f2fe;
+            border: 1px solid #7dd3fc;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #0369a1;
+            margin-right: 5px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="logo.png" alt="LaukaaInfo Logo">
+                <span data-i18n="hero_title">LaukaaInfo</span>
+            </a>
+            <div class="lang-switcher">
+                <button class="lang-btn" onclick="i18n.setLanguage('fi')" data-lang="fi">FI</button>
+                <button class="lang-btn" onclick="i18n.setLanguage('en')" data-lang="en">EN</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="back-nav">
+        <a href="index.html" class="btn-back" data-i18n="btn_back">&larr; Takaisin etusivulle</a>
+    </div>
+
+    <header id="palvelu-header" class="palvelu-hero">
+        <div class="icon-large" id="hero-icon" style="font-size: 4rem; margin-bottom: 1rem;"></div>
+        <h1 id="hero-title">Ladataan...</h1>
+        <p id="hero-desc"></p>
+        
+        <div class="location-bar">
+            <span>📍</span>
+            <input type="text" id="user-location-input" data-i18n="[placeholder]placeholder_your_location" placeholder="Sijaintisi (esim. Laukaa)" autocomplete="off">
+            <button class="btn-locate" id="locate-me-btn" title="Hae sijaintini">🎯</button>
+        </div>
+        <div id="location-status"></div>
+    </header>
+
+    <main>
+        <section id="step-section" class="step-container">
+            <div id="selection-summary" class="selection-summary" style="display: none;"></div>
+            <div class="step-progress" id="step-progress"></div>
+            <div id="step-content" class="fade-in">
+                <!-- Dynaaminen sisältö -->
+            </div>
+        </section>
+
+        <section id="results-container" style="display: none;">
+            <div class="need-header">
+                <h2 data-i18n="palvelu_results_title">Suositellut palvelut</h2>
+                <p id="results-count"></p>
+            </div>
+            <div id="results-list" class="results-grid">
+                <!-- Tulokset ladataan tästän -->
+            </div>
+
+            <div id="next-steps-container" class="next-steps-section" style="display: none;">
+                <h3 style="text-align: center; font-family: var(--accent-font); font-size: 1.5rem;" data-i18n="palvelu_next_steps">Seuraavaksi saatat tarvita myös näitä:</h3>
+                <div id="next-steps-list" class="next-steps-grid"></div>
+            </div>
+
+            <div id="special-vinkit-container" style="display: none;"></div>
+
+            <div id="tips-container" style="max-width: 1200px; margin: 3rem auto; display: none;"></div>
+            
+            <div id="taxonomy-info-container" style="display: none;"></div>
+
+            <div style="text-align: center; margin-top: 4rem; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                <button onclick="resetPalvelu()" class="btn-radar" style="background: var(--secondary-blue);" data-i18n="btn_reset">Aloita alusta</button>
+                <button onclick="printResults()" class="btn-radar" style="background: var(--primary-blue);" data-i18n="btn_print">Tulosta PDF / Paperille 🖨️</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Inquiry Modal -->
+    <div id="inquiry-overlay" class="modal-overlay">
+        <div class="inquiry-modal">
+            <button class="close-modal" onclick="closeInquiryModal()">&times;</button>
+            <h2 id="inquiry-title" data-i18n="palvelu_inquiry_title">Pyydä tarjous</h2>
+            <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 20px;" data-i18n="palvelu_inquiry_unavailable">Tämä lomake ei ole vielä käytössä, kun yrityksellä on ilmaisnäkyvyys sivustolla.</p>
+            <form id="inquiry-form" onsubmit="submitInquiry(event)">
+                <input type="hidden" id="inquiry-company-id">
+                <div class="form-group">
+                    <label data-i18n="label_name">Nimi</label>
+                    <input type="text" required data-i18n="[placeholder]placeholder_name" placeholder="Matti Meikäläinen">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="label_email">Sähköposti</label>
+                    <input type="email" required data-i18n="[placeholder]placeholder_email" placeholder="matti@esimerkki.fi">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="label_phone">Puhelin</label>
+                    <input type="tel" data-i18n="[placeholder]placeholder_phone" placeholder="040 123 4567">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="label_event_date">Tilaisuuden ajankohta</label>
+                    <input type="date" required>
+                </div>
+                <div class="form-group">
+                    <label data-i18n="label_pax">Arvioitu henkilömäärä</label>
+                    <input type="number" min="1" data-i18n="[placeholder]placeholder_pax" placeholder="Esim. 50">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="label_more_info">Lisätiedot</label>
+                    <textarea rows="4" data-i18n="[placeholder]placeholder_more_info" placeholder="Kerro tarkemmin tarpeistasi..."></textarea>
+                </div>
+                <button type="submit" class="btn-radar" style="width: 100%; background: var(--primary-blue);" data-i18n="btn_send_inquiry">Lähetä tarjouspyyntö</button>
+            </form>
+        </div>
+    </div>
+
+    <footer style="margin-top: 6rem;">
+        <div class="footer-content">
+            <p data-i18n="footer_copyright">© 2026 LaukaaInfo – Palvelua ylläpitää Mediazoo.fi</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="needs_config.js?v=20260507"></script>
+    <script src="script.js"></script>
+    <script>
+        let currentNeedId = new URLSearchParams(window.location.search).get('id');
+        let currentStepIndex = 0;
+        let selections = {};
+        let taxonomyData = null;
+
+        async function loadTaxonomy() {
+            try {
+                const response = await fetch('taxonomy.json');
+                const data = await response.json();
+                
+                // Map new JSON structure to internal taxonomyData format for backward compatibility
+                taxonomyData = {
+                    intents: Object.keys(data.intents).map(id => ({
+                        id: id,
+                        label: i18n.getText(data.intents[id]),
+                        subcontexts: data.intents[id].tags || [],
+                        refinements: [],
+                        nodeLinks: data.intents[id].node_links || []
+                    })),
+                    relations: data.relations || [],
+                    serviceTypes: data.serviceTypes || []
+                };
+                console.log('Taxonomy loaded:', taxonomyData.intents.length, 'intents');
+            } catch (e) {
+                // Fallback to empty to prevent crashes
+                taxonomyData = { intents: [], relations: [], serviceTypes: [] };
+            }
+        }
+
+        async function initPalvelu() {
+            
+            const config = window.NEEDS_CONFIG || (typeof NEEDS_CONFIG !== 'undefined' ? NEEDS_CONFIG : null);
+            if (!config) {
+                return;
+            }
+
+            const need = config[currentNeedId];
+            if (!need) {
+                // window.location.href = 'index.html'; 
+                return;
+            }
+
+            const title = i18n.getText(need.title);
+            document.getElementById('hero-title').textContent = title;
+            document.getElementById('hero-desc').textContent = i18n.getText(need.description);
+            document.getElementById('hero-icon').textContent = need.icon;
+            document.title = `${title} | LaukaaInfo`;
+
+            // Ladataan taksonomia ja yritysdata rinnakkain
+            await loadTaxonomy();
+
+            // Ladataan yritysdata jos sitä ei vielä ole
+            try {
+                // Odota että script.js on ladannut loadCompanyData-funktion
+                let retries = 0;
+                const maxRetries = 15;
+                while (typeof loadCompanyData !== 'function' && retries < maxRetries) {
+                    await new Promise(r => setTimeout(r, 400));
+                    retries++;
+                }
+
+                if (typeof loadCompanyData === 'function') {
+                    // Käytetään window-etuliitettä selvyyden vuoksi
+                    if (!window.allCompanies || window.allCompanies.length === 0) {
+                        await loadCompanyData();
+                    }
+                } else {
+                }
+            } catch (e) {
+            }
+
+            const filterProfiling = new URLSearchParams(window.location.search).get('filter_profiling');
+            if (filterProfiling) {
+                showResults();
+            } else {
+                renderStep();
+            }
+        }
+
+        function renderStep() {
+            const config = window.NEEDS_CONFIG || (typeof NEEDS_CONFIG !== 'undefined' ? NEEDS_CONFIG : null);
+            const need = config[currentNeedId];
+            if (!need || !need.steps) return;
+            
+            const step = need.steps[currentStepIndex];
+            
+            if (!step) {
+                return;
+            }
+
+            const content = document.getElementById('step-content');
+            const progress = document.getElementById('step-progress');
+
+            // Render summary
+            updateSelectionSummary();
+
+            // Render progress
+            progress.innerHTML = '';
+            need.steps.forEach((_, i) => {
+                const dot = document.createElement('div');
+                dot.className = `progress-dot ${i === currentStepIndex ? 'active' : ''}`;
+                progress.appendChild(dot);
+            });
+
+            // Render step content
+            if (step.multiple) {
+                content.innerHTML = `
                     <div class="step-header">
-                        <h2>${i18n.getText(n.question)}</h2>
+                        <h2>${i18n.getText(step.question)}</h2>
                         <p data-i18n="search_multiple_desc">Voit valita useamman vaihtoehdon.</p>
                     </div>
                     <div class="step-options" style="grid-template-columns: 1fr;">
-                        ${n.options.map((t,e)=>`
-                            <label class="option-checkbox ${selections[n.id]?.some(e=>i18n.getText(e.label)===i18n.getText(t.label))?"selected":""}" id="label-${e}">
-                                <input type="checkbox" onchange="toggleOption(${e})" ${selections[n.id]?.some(e=>i18n.getText(e.label)===i18n.getText(t.label))?"checked":""}>
-                                ${i18n.getText(t.label)}
+                        ${step.options.map((opt, i) => `
+                            <label class="option-checkbox ${selections[step.id]?.some(s => i18n.getText(s.label) === i18n.getText(opt.label)) ? 'selected' : ''}" id="label-${i}">
+                                <input type="checkbox" onchange="toggleOption(${i})" ${selections[step.id]?.some(s => i18n.getText(s.label) === i18n.getText(opt.label)) ? 'checked' : ''}>
+                                ${i18n.getText(opt.label)}
                             </label>
-                        `).join("")}
+                        `).join('')}
                     </div>
                     <div style="text-align: center;">
                         <button class="btn-radar btn-continue" onclick="nextStep()" style="background: var(--primary-blue);" data-i18n="btn_continue">Jatka &raquo;</button>
                     </div>
-                `:t.innerHTML=`
+                `;
+            } else {
+                content.innerHTML = `
                     <div class="step-header">
-                        <h2>${i18n.getText(n.question)}</h2>
+                        <h2>${i18n.getText(step.question)}</h2>
                     </div>
                     <div class="step-options">
-                        ${n.options.map((e,t)=>`
-                            <button class="option-btn" onclick="selectOption(${t})">
-                                ${i18n.getText(e.label)}
+                        ${step.options.map((opt, i) => `
+                            <button class="option-btn" onclick="selectOption(${i})">
+                                ${i18n.getText(opt.label)}
                                 <span>&rarr;</span>
                             </button>
-                        `).join("")}
+                        `).join('')}
                     </div>
-                `,t.classList.remove("fade-in"),t.offsetWidth,t.classList.add("fade-in")}}}function updateSelectionSummary(){var e,t,n=document.getElementById("selection-summary");let i=[];for(e in selections)e.startsWith("_")||(t=selections[e],Array.isArray(t)?t.forEach(e=>i.push(e.label)):t&&t.label&&i.push(t.label));0<i.length?(n.innerHTML=i.map(e=>`<span class="summary-tag">${i18n.getText(e)}</span>`).join(""),n.style.display="flex"):n.style.display="none"}function toggleOption(e){var t=NEEDS_CONFIG[currentNeedId].steps[currentStepIndex];let n=t.options[e];selections[t.id]||(selections[t.id]=[]);var i=selections[t.id].findIndex(e=>e.label===n.label);-1<i?(selections[t.id].splice(i,1),document.getElementById("label-"+e).classList.remove("selected"),n.sub_context&&selections._sub_contexts&&-1<(i=selections._sub_contexts.indexOf(n.sub_context))&&selections._sub_contexts.splice(i,1)):(selections[t.id].push(n),document.getElementById("label-"+e).classList.add("selected"),n.sub_context&&(selections._sub_contexts||(selections._sub_contexts=[]),selections._sub_contexts.includes(n.sub_context)||selections._sub_contexts.push(n.sub_context)))}function selectOption(e){var t=NEEDS_CONFIG[currentNeedId].steps[currentStepIndex],e=t.options[e];(selections[t.id]=e).sub_context&&(selections._sub_contexts||(selections._sub_contexts=[]),selections._sub_contexts.includes(e.sub_context)||selections._sub_contexts.push(e.sub_context)),nextStep()}function nextStep(){var e=NEEDS_CONFIG[currentNeedId];if(currentStepIndex<e.steps.length-1){currentStepIndex++;e=e.steps[currentStepIndex];if(e&&e.skipIf)try{if(evaluateSkipIf(e.skipIf))return showSkipNotice(i18n.getText(e.skipMessage)),void setTimeout(()=>nextStep(),1200)}catch(e){}renderStep()}else showResults()}function evaluateSkipIf(e){if(!e)return!1;let t=e;t=(t=(t=(t=t.replace(/getSelectedCompanyProfilointi\('([^']+)',\s*'([^']+)',\s*'([^']+)'\)/g,(e,t,n,i)=>getSelectedCompanyProfilointi(t,n,i))).replace(/isSelected\('([^']+)',\s*'([^']+)'\)/g,(e,t,n)=>{t=selections[t];return!!t&&(Array.isArray(t)?t.some(e=>(i18n.getText(e.label)||"").toLowerCase().includes(n.toLowerCase())):(i18n.getText(t.label)||"").toLowerCase().includes(n.toLowerCase()))})).replace(/selections\.(\w+)/g,(e,t)=>!!selections[t])).replace(/hasNodeLink\('([^']+)',\s*'([^']+)'\)/g,(e,t,n)=>hasSelectedCompanyNodeLink(t,n));try{return new Function("return "+t)()}catch(e){return!1}}function getSelectedCompanyProfilointi(e,t,n){var e=selections[e];return!(!e||!(e=Array.isArray(e)?e[0]:e)||!e._companyRef||!0!==e._companyRef?.profiling?.[t]?.[n])}function hasSelectedCompanyNodeLink(e,t){var e=selections[e];return!!e&&!!((e=(Array.isArray(e)?e[0]:e)._companyRef)&&e.profiling&&e.profiling.core)&&(e.profiling.core.node_links||[]).includes(t)}function showSkipNotice(e){var t=document.getElementById("step-content");e&&(t.innerHTML=`
+                `;
+            }
+            
+            content.classList.remove('fade-in');
+            void content.offsetWidth; // Trigger reflow
+            content.classList.add('fade-in');
+        }
+
+        function updateSelectionSummary() {
+            const summaryEl = document.getElementById('selection-summary');
+            const summaryTags = [];
+            
+            for (let stepId in selections) {
+                if (stepId.startsWith('_')) continue;
+                const val = selections[stepId];
+                if (Array.isArray(val)) {
+                    val.forEach(v => summaryTags.push(v.label));
+                } else if (val && val.label) {
+                    summaryTags.push(val.label);
+                }
+            }
+
+            if (summaryTags.length > 0) {
+                summaryEl.innerHTML = summaryTags.map(tag => `<span class="summary-tag">${i18n.getText(tag)}</span>`).join('');
+                summaryEl.style.display = 'flex';
+            } else {
+                summaryEl.style.display = 'none';
+            }
+        }
+
+        function toggleOption(optionIndex) {
+            const need = NEEDS_CONFIG[currentNeedId];
+            const step = need.steps[currentStepIndex];
+            const option = step.options[optionIndex];
+            
+            if (!selections[step.id]) selections[step.id] = [];
+            
+            const idx = selections[step.id].findIndex(s => s.label === option.label);
+            if (idx > -1) {
+                selections[step.id].splice(idx, 1);
+                document.getElementById(`label-${optionIndex}`).classList.remove('selected');
+                // Poistetaan sub_context jos vaihtoehto poistetaan
+                if (option.sub_context && selections._sub_contexts) {
+                    const scIdx = selections._sub_contexts.indexOf(option.sub_context);
+                    if (scIdx > -1) selections._sub_contexts.splice(scIdx, 1);
+                }
+            } else {
+                selections[step.id].push(option);
+                document.getElementById(`label-${optionIndex}`).classList.add('selected');
+                // Tallennetaan sub_context jos se on määritelty (TASO 2)
+                if (option.sub_context) {
+                    if (!selections._sub_contexts) selections._sub_contexts = [];
+                    if (!selections._sub_contexts.includes(option.sub_context)) {
+                        selections._sub_contexts.push(option.sub_context);
+                    }
+                }
+            }
+        }
+
+        function selectOption(optionIndex) {
+            const need = NEEDS_CONFIG[currentNeedId];
+            const step = need.steps[currentStepIndex];
+            const option = step.options[optionIndex];
+
+            selections[step.id] = option;
+            
+            // Tallenneteaan sub_context jos se on määritelty (TASO 2)
+            if (option.sub_context) {
+                if (!selections._sub_contexts) selections._sub_contexts = [];
+                if (!selections._sub_contexts.includes(option.sub_context)) {
+                    selections._sub_contexts.push(option.sub_context);
+                }
+            }
+            
+            nextStep();
+        }
+
+        function nextStep() {
+            const need = NEEDS_CONFIG[currentNeedId];
+            if (currentStepIndex < need.steps.length - 1) {
+                currentStepIndex++;
+                // Tarkistetaan skipIf — hypytään askel jos ehto täyttyy
+                const step = need.steps[currentStepIndex];
+                if (step && step.skipIf) {
+                    try {
+                        // Evaluoidaan skipIf-lauseke turvallisesti
+                        const shouldSkip = evaluateSkipIf(step.skipIf);
+                        if (shouldSkip) {
+                            showSkipNotice(i18n.getText(step.skipMessage));
+                            setTimeout(() => nextStep(), 1200);
+                            return;
+                        }
+                    } catch(e) {
+                    }
+                }
+                renderStep();
+            } else {
+                showResults();
+            }
+        }
+
+        // Arvioi skipIf-lauseke tukien loogisia operaattoreita ja profilointitarkistuksia
+        function evaluateSkipIf(skipIfStr) {
+            if (!skipIfStr) return false;
+            
+            let evalStr = skipIfStr;
+            
+            // 1. Korvataan getSelectedCompanyProfilointi-kutsut niiden tuloksilla
+            const profilointiRegex = /getSelectedCompanyProfilointi\('([^']+)',\s*'([^']+)',\s*'([^']+)'\)/g;
+            evalStr = evalStr.replace(profilointiRegex, (match, stepId, section, field) => {
+                return getSelectedCompanyProfilointi(stepId, section, field);
+            });
+
+            // 2. Lisätään tuki isSelected('stepId', 'label') -kutsulle
+            const selectedRegex = /isSelected\('([^']+)',\s*'([^']+)'\)/g;
+            evalStr = evalStr.replace(selectedRegex, (match, stepId, label) => {
+                const sel = selections[stepId];
+                if (!sel) return false;
+                if (Array.isArray(sel)) {
+                    return sel.some(s => (i18n.getText(s.label) || '').toLowerCase().includes(label.toLowerCase()));
+                }
+                return (i18n.getText(sel.label) || '').toLowerCase().includes(label.toLowerCase());
+            });
+            
+            // 3. Korvataan selections.stepId-viittaukset (onko jotain valittu kyseisessä stepissä)
+            evalStr = evalStr.replace(/selections\.(\w+)/g, (match, stepId) => {
+                return !!selections[stepId];
+            });
+
+            // 3.5 Lisätään tuki hasNodeLink('stepId', 'nodeId') -kutsulle
+            const nodeLinkRegex = /hasNodeLink\('([^']+)',\s*'([^']+)'\)/g;
+            evalStr = evalStr.replace(nodeLinkRegex, (match, stepId, nodeId) => {
+                return hasSelectedCompanyNodeLink(stepId, nodeId);
+            });
+
+            // 4. Suoritetaan looginen arviointi turvallisesti
+            try {
+                // Sallitaan vain perus-boolean-logiikka
+                const safeEval = new Function('return ' + evalStr);
+                return safeEval();
+            } catch(e) {
+                return false;
+            }
+        }
+
+        // Hakee valitun yrityksen profilointiarvo tietystä osiosta
+        function getSelectedCompanyProfilointi(stepId, section, field) {
+            const sel = selections[stepId];
+            if (!sel) return false;
+            const opt = Array.isArray(sel) ? sel[0] : sel;
+            if (!opt || !opt._companyRef) return false;
+            return opt._companyRef?.profiling?.[section]?.[field] === true;
+        }
+
+        // Tarkistaa onko valitulla yrityksellä tietty node_link
+        function hasSelectedCompanyNodeLink(stepId, nodeId) {
+            const sel = selections[stepId];
+            if (!sel) return false;
+            const opt = Array.isArray(sel) ? sel[0] : sel;
+            const company = opt._companyRef;
+            if (!company || !company.profiling || !company.profiling.core) return false;
+            const links = company.profiling.core.node_links || [];
+            return links.includes(nodeId);
+        }
+
+        // Näytetään lyhyt ilmoitus kun askel hypytään
+        function showSkipNotice(message) {
+            const content = document.getElementById('step-content');
+            if (!message) return;
+            content.innerHTML = `
                 <div class="step-header fade-in" style="text-align:center;">
                     <div style="font-size:2.5rem;margin-bottom:1rem;">✅</div>
-                    <h2 style="color:var(--primary-blue);">${e}</h2>
+                    <h2 style="color:var(--primary-blue);">${message}</h2>
                     <p style="opacity:0.7;" data-i18n="skip_notice">Jatketaan automaattisesti...</p>
                 </div>
-            `)}let currentResultsGroups=[],matchingGroupsData=[],selectedAnchorCompanyId=null,expandedGroups={},globalProfilingKey="",globalRequestedCapacity=0,globalRequestedFeatures={},globalActiveCollaboratorsSet=new Set;function getCategoryData(e,t){var n,i,a,o;return e&&e.profiling?(i=(n={weddings_and_parties:"events_and_celebrations",corporate_parties_and_events:"events_and_celebrations",meetings_and_seminars:"business_events",starting_a_business:"startup_services",business_growth_and_dev:"business_growth",construction_and_renovation:"construction_and_maintenance",housing_companies_and_real_estate:"housing_company_and_contracts"}[t]||t).replace(/-/g,"_"),a=n.replace(/_/g,"-"),(o=e.profiling.categories||{})[i]||o[a]||o[n]||e.profiling[i]||e.profiling[a]||e.profiling[n]||e.profiling[t]):null}function getFitsForScore(e,t){if(!e||!e.profiling||!e.profiling.core)return 0;if(e.profiling.core.intent_scores){var n=e.profiling.core.intent_scores[t];if(void 0!==n)return n}if(!e.profiling.core.fits_for)return 0;var n=e.profiling.core.fits_for,e={events_and_celebrations:"häät",business_events:"yritysjuhlat",funerals_and_memorials:"hautajaiset",startup_services:"yrityksen perustaminen",business_growth:"yrityksen kehittäminen","wellbeing-and-beauty":"vapaa-aika"};let i=n[t]||n[t.replace(/_/g,"-")]||0;return 0===i&&e[t]&&(e=e[t],i=n[e]||n[e.replace(/ /g,"-")]||0),i=0!==i||"wellbeing-and-beauty"!==t&&"wellbeing_and_beauty"!==t?i:n.hyvinvointipalvelut||n["wellbeing-services"]||0}function getIntentScore(e,t){return e&&e.profiling&&e.profiling.core&&e.profiling.core.intent_scores&&e.profiling.core.intent_scores[t]||0}function getCompanyCollaborators(e){if(!e||!e.profiling)return[];let t=[];for(var n in e.profiling)e.profiling[n]&&Array.isArray(e.profiling[n].collaborated_with)&&(t=t.concat(e.profiling[n].collaborated_with));return t}async function showResults(){currentResultsGroups=[];var l=(window.NEEDS_CONFIG||("undefined"!=typeof NEEDS_CONFIG?NEEDS_CONFIG:null))[currentNeedId],l=l?l.steps:[],r=document.getElementById("step-section"),c=document.getElementById("results-container"),d=document.getElementById("results-list"),e=document.getElementById("results-count");if(r&&(r.style.display="none"),c&&(c.style.display="block"),d&&(d.innerHTML=""),document.getElementById("next-steps-container").style.display="none",window.allCompanies&&0!==window.allCompanies.length||("function"==typeof loadCompanyData&&await loadCompanyData(),window.allCompanies&&0!==window.allCompanies.length)){let e=[];for(var a in selections)a.startsWith("_")||(a=selections[a],Array.isArray(a)?e=e.concat(a):a&&"object"==typeof a&&e.push(a));new URLSearchParams(window.location.search).get("filter_profiling")&&0===e.length&&e.push({label:{fi:"Tarkennettu haku",en:"Advanced search"},tags:[]});let g={haat:"events_and_celebrations",yritysjuhlat:"events_and_celebrations",yritystilaisuudet:"business_events",syntymapaivat:"events_and_celebrations",muutto:"moving_and_housing",remontti:"construction_and_maintenance",mokkipalvelut:"cottage_services","taloyhtion-huolto":"housing_company_and_contracts",hautajaiset:"funerals_and_memorials","yrityksen-perustaminen":"startup_services","yrityksen-kehittaminen":"business_growth","terveys-ja-hyvinvointi":"wellbeing_and_beauty","liikunta-ja-vapaaaika":"wellbeing_and_beauty"}[currentNeedId]||"vapaa-aika",m=0,t=[];e.forEach(e=>{e.capacity_req&&(m=Math.max(m,e.capacity_req)),(e.tags&&0<e.tags.length||e.node_link||e.node_links||e.profilointi_filter)&&t.push(e)}),0===t.length&&0<m&&t.push({label:{fi:"Sopivat tilat",en:"Suitable venues"},tags:[]});r={sauna:e.some(e=>(i18n.getText(e.label)||"").toLowerCase().includes("sauna")),accessible:e.some(e=>(i18n.getText(e.label)||"").toLowerCase().includes("esteetön")||(i18n.getText(e.label)||"").toLowerCase().includes("vammais")),home_service:e.some(e=>(i18n.getText(e.label)||"").toLowerCase().includes("kotiin")||(i18n.getText(e.label)||"").toLowerCase().includes("kotona"))};globalProfilingKey=g,globalRequestedCapacity=m,globalRequestedFeatures=r;let n=new Set;var u=[];let i=new Set;if(l.forEach(e=>{e.id.startsWith("_")||"kapasiteetti"===e.id||"henkilomaara"===e.id||e.hide_results||(e=selections[e.id])&&(Array.isArray(e)?e:[e]).forEach(p=>{var e;p.hide_results||((e=window.allCompanies.filter((o,e)=>{"company-2"!==o.id&&o.nimi,"company-269"!==o.id&&o.nimi&&o.nimi.includes("Riina Raitio");let t=i18n.getText(p.label||"").toLowerCase();var s=(0<p.capacity_req||"JUHLATILA"===p.node_link||t.includes("tila")&&!t.includes("tilaisuus")||t.includes("muistotilaisuus")||t.includes("kokous")||t.includes("sauna")||t.includes("juhla")||t.includes("häät")||t.includes("pikkujoulut")||t.includes("seminaari")||t.includes("koulutus")||t.includes("konferenssi")||t.includes("leirikoulu")||t.includes("rippikoulu")||t.includes("kesäsiirtola")||t.includes("retkeily")||t.includes("luontoretkeily")||t.includes("kuntosali")||t.includes("urheilu")||t.includes("liikunta")||t.includes("koskenlasku")||t.includes("golf")||t.includes("uinti")||t.includes("uimahalli")||t.includes("kylpylä")||t.includes("ratsastus")||t.includes("huvipuisto")||t.includes("vesiliikunta")||t.includes("melonta")||t.includes("mökki"))&&!p.is_service;getCompanyCapacity(o,g);let n=getFitsForScore(o,g),i=getCategoryData(o,g);var l=i&&(i.capacity_max||i.meeting_capacity||i.seminar_capacity||i.seated_capacity||i.memorial_service_capacity||i.outdoor_capacity)||0,r=(o.profiling?.core?.node_links||[]).includes("JUHLATILA")||0<getCategoryData(o,"events_and_celebrations")?.capacity_max||0<getCategoryData(o,"business_events")?.meeting_capacity;if(!s&&(0<l||r)&&!(80<=n))return!1;if(globalRequestedFeatures.sauna&&s){let e=getCategoryData(o,g);if(!e?.has_sauna)return!1}let a=e=>e?String(e).toLowerCase().replace(/Ã£Â¤/g,"ä").replace(/Ã£Â¶/g,"ö").replace(/Ã£â€ž/g,"ä").replace(/Ã£â€“/g,"ö").replace(/Ã¤/g,"ä").replace(/Ã¶/g,"ö").replace(/Ã„/g,"ä").replace(/Ã–/g,"ö").replace(/Ã¥/g,"å").replace(/Ã…/g,"å").trim():"";if(0<o.profiling?.core?.not_suitable_for?.length){let t=o.profiling.core.not_suitable_for.map(e=>a(e)),n=a(i18n.getText(p.label));var l=(p.tags||[]).map(e=>a(e)),r=t.some(e=>e&&n.includes(e)),s=l.some(e=>e&&t.includes(e));if(r||s)return!1}if(selections._sub_contexts&&0<selections._sub_contexts.length&&o.profiling){let a=o.profiling?.core?.sub_contexts||[],e=!1;var l=g.replace(/-/g,"_"),r={events_and_celebrations:"häät",business_events:"yritysjuhlat",funerals_and_memorials:"hautajaiset",startup_services:"yrityksen perustaminen",business_growth:"yrityksen kehittäminen"}[l];if(Array.isArray(a))e=0===a.length||selections._sub_contexts.some(e=>a.includes(e));else if("object"==typeof a&&null!==a){let t=a[l]||a[g]||(r?a[r]:null);e=!t||selections._sub_contexts.some(e=>t.includes(e))}else e=!0;if(e||selections._sub_contexts.some(e=>{let n=e.toLowerCase();let i=Array.isArray(a)?a:"object"==typeof a&&null!==a?Object.values(a).flat():[];return["hää","yritys","juhla","hautajais","muisto"].some(t=>n.includes(t)&&i.some(e=>String(e).toLowerCase().includes(t)))})&&(e=!0),!e){var s=getFitsForScore(o,g),l=Array.isArray(a)?0<a.length:!!a;let e=i18n.getText(p.label||"").toLowerCase();if((0<p.capacity_req||"JUHLATILA"===p.node_link||e.includes("tila")&&!e.includes("tilaisuus")||e.includes("muistotilaisuus"))&&l&&70<=s&&s<80)return!1}}if(p.require_fits_for){r=p.require_fits_for.key,l=p.require_fits_for.min||20;if(getFitsForScore(o,r)<l)return!1}let c=!1;if(p.node_link&&(o.profiling?.core?.node_links||[]).includes(p.node_link)&&(c=!0),p.node_links){let t=o.profiling?.core?.node_links||[];p.node_links.some(e=>t.includes(e))&&(c=!0)}if(p.profilointi_filter){let t=p.profilointi_filter,e=getCategoryData(o,t.section),n=!1,i=(e,t)=>{var n;return null!=e&&null!=t&&(n=(e=String(e).toLowerCase())===(t=String(t).toLowerCase())+"t"||t===e+"t",e===t||e.includes(t)||t.includes(e)||n)};!(n=!e||(s=e[t.field],n=Array.isArray(s)?s.some(e=>i(e,t.value)):"object"==typeof s&&null!==s?Object.values(s).flat().some(e=>i(e,t.value)):i(s,t.value))||!Array.isArray(e.refinement_tags)?n:e.refinement_tags.some(e=>i(e,t.value)))&&o.profiling?.core?.sub_contexts&&(r=o.profiling.core.sub_contexts,Array.isArray(r)?n=r.some(e=>i(e,t.value)):"object"==typeof r&&null!==r&&(n=Object.values(r).flat().some(e=>i(e,t.value)))),c=(!p.node_link&&!p.node_links||c)&&n}if(p.intent_codes&&o.profiling?.core?.intent_codes&&p.intent_codes.some(e=>o.profiling.core.intent_codes.includes(e))&&(c=!0),taxonomyData&&!c&&!p.profilointi_filter){let i=p.intent_codes&&0<p.intent_codes.length?p.intent_codes[0]:g;l=taxonomyData.intents.find(e=>e.id===i||e.id===i.replace(/_/g,"-"));if(l){let n=i18n.getText(p.label||"").toLowerCase();if(l.refinements.some(e=>n.includes(e.toLowerCase()))||l.subcontexts.some(e=>n.includes(e.toLowerCase()))){let t=((o.tags||"")+" "+(o.kategoria||"")+" "+(o.nimi||"")+" "+(o.profiling?.core?.sub_contexts?.join(" ")||"")+" "+(o.profiling?.core?.node_links?.join(" ")||"")).toLowerCase();l.refinements.concat(l.subcontexts).some(e=>{e=e.toLowerCase();return n.includes(e)&&t.includes(e)})&&(c=!0)}if(!c&&l.nodeLinks){let t=o.profiling?.core?.node_links||[];l.nodeLinks.some(e=>t.includes(e))&&(s=n.includes("tila")&&!n.includes("tilaisuus"),r=i.startsWith("VENUE_"),s||r||p.tags&&p.tags.some(e=>{e=e.toLowerCase();return e.includes("tila")&&!e.includes("tilaisuus")}))&&(c=!0)}}}if(!(c=!c&&p.tags&&(l=p.tags.some(e=>e.includes("valokuva")),s=p.tags.some(e=>e.includes("video")||"videotuotanto"===e),r=p.tags.some(e=>e.includes("kukka")),d=o.profiling?.core?.node_links||[],l&&d.includes("VALOKUVAUS")||s&&d.includes("VIDEOTUOTANTO")||r&&d.includes("KUKAT"))?!0:c)&&p.tags){if(p.tags.includes("digitointi")){let e=getCategoryData(o,g);if(e&&Array.isArray(e.digitization_features)&&0<e.digitization_features.length&&0<n)c=!0;else{let e=((o.tags||"")+" "+(o.searchExtraInfo||"")+" "+(o.kategoria||"")+" "+(o.nimi||"")+" "+(o.profiling?.core?.sub_contexts?.join(" ")||"")).toLowerCase();e.includes("digitointi")&&(c=!0)}}if(p.tags.includes("juhlatila")){let e=getCategoryData(o,"events_and_celebrations");e&&0<n&&(0<e.capacity_max||0<e.seated_capacity)&&(c=!0)}}l=(o.tags||"").toLowerCase().includes("juhlatila")||(o.kategoria||"").toLowerCase().includes("juhlatila")||(o.tags||"").toLowerCase().includes("kokoustila")||(o.tags||"").toLowerCase().includes("edustustila");if(0<p.capacity_req||0<m){s=getCompanyCapacity(o,g);if(0<p.capacity_req&&0===s)return!1;r=l||p.label&&(i18n.getText(p.label).toLowerCase().includes("tila")&&!i18n.getText(p.label).toLowerCase().includes("tilaisuus")||i18n.getText(p.label).toLowerCase().includes("muistotilaisuus")||i18n.getText(p.label).toLowerCase().includes("juhla"))||p.tags&&p.tags.includes("juhlatila")||"JUHLATILA"===p.node_link;if(0<m&&r&&0===s)return!1}var d=!p.capacity_req&&"JUHLATILA"!==p.node_link,l=getCompanyCapacity(o,g);if(d&&0<l){let t=o.profiling?.core?.intent_scores||{};if(!(p.intent_codes||[]).some(e=>80<=(t[e]||0)))return!1}if(c)return!0;if(o.profiling&&o.profiling.core&&o.profiling.core.fits_for){let e=getFitsForScore(o,g);if((g in o.profiling.core.fits_for||g.replace(/_/g,"-")in o.profiling.core.fits_for)&&0===e)return!1}if(!p.tags||0===p.tags.length)return!(!(p.node_link||p.node_links||p.profilointi_filter)&&p.capacity_req<=0)&&10<getFitsForScore(o,g);if(p.profilointi_filter)return c;let u=((o.tags||"")+" "+(o.kategoria||"")+" "+(o.nimi||"")+" "+(o.profiling?.core?.sub_contexts?.join(" ")||"")+" "+(o.profiling?.core?.node_links?.join(" ")||"")).toLowerCase();return p.tags.some(e=>u.includes(e.toLowerCase()))})).forEach(e=>{n.add(e),i.add(e.id)}),u.push({opt:p,companies:e}))})}),("yritysjuhlat"===currentNeedId||"yritystilaisuudet"===currentNeedId)&&1<u.length){let a=u.find(e=>e.opt.tags&&(e.opt.tags.includes("juhlatila")||e.opt.tags.includes("kokoustilat")||e.opt.tags.includes("juhlasali"))),o=u.find(e=>"Majoitus"===e.opt.label);if(a&&o){c=a.companies,d=o.companies,r=c.filter(e=>{e=getCategoryData(e,"events_and_celebrations");return!e||!e.accommodation_beds||0===e.accommodation_beds}),l=c.filter(e=>{e=getCategoryData(e,"events_and_celebrations");return e&&0<e.accommodation_beds});l.forEach(e=>e._isBothMatch=!0);let t={opt:{...a.opt,label:"Juhlatila yritykselle"},companies:r},n={opt:{...o.opt,label:"Majoitus ja/tai juhlatila"},companies:[...l,...d]},i=[];u.forEach(e=>{e===a?0<t.companies.length&&i.push(t):e===o?0<n.companies.length&&i.push(n):i.push(e)}),u=i}}let o=[],s=new Map;u.forEach(e=>{var t,n,i,a;0!==e.companies.length&&(t=e.companies.map(e=>e.id).sort().join(","),s.has(t)?(n=o[s.get(t)],(i=i18n.getText(e.opt.label))===(a=i18n.getText(n.opt.label))||a.includes(i)||(n.opt.label={fi:a+" & "+i,en:i18n.getText(n.opt.label,"en")+" & "+i18n.getText(e.opt.label,"en")})):(s.set(t,o.length),o.push(e)))}),u=o,matchingGroupsData=u,selectedAnchorCompanyId=null,globalActiveCollaboratorsSet=new Set,renderResultsView()}else e&&(e.textContent=i18n.t("error_load_companies"))}function selectAnchor(t){if(selectedAnchorCompanyId===t)selectedAnchorCompanyId=null,globalActiveCollaboratorsSet=new Set;else{selectedAnchorCompanyId=t,globalActiveCollaboratorsSet=new Set;let n=null;matchingGroupsData.forEach(e=>{e=e.companies.find(e=>e.id===t);e&&(n=e)}),n&&(getCompanyCollaborators(n).forEach(e=>globalActiveCollaboratorsSet.add(e)),window.allCompanies&&window.allCompanies.forEach(e=>{var t=getCompanyCollaborators(e);(t.includes(n.id)||t.includes(n.nimi))&&(globalActiveCollaboratorsSet.add(e.id),globalActiveCollaboratorsSet.add(e.nimi))}),globalActiveCollaboratorsSet.add(n.id),globalActiveCollaboratorsSet.add(n.nimi))}renderResultsView()}function renderResultsView(){var e=document.getElementById("results-list"),t=document.getElementById("results-count");document.getElementById("results-container");if(currentResultsGroups=[],0===matchingGroupsData.length)t&&(t.textContent=i18n.t("error_no_companies")),e&&(e.innerHTML=`<div class="no-results"><h3>${i18n.t("palvelu_no_results_title")}</h3><p>${i18n.t("palvelu_no_results_desc")}</p></div>`);else{let l=0,r="",c=0;matchingGroupsData.forEach((e,t)=>{0<e.opt.capacity_req&&!(0<matchingGroupsData[c].opt.capacity_req)&&(c=t)}),matchingGroupsData.forEach((e,t)=>{let i=e.opt;e=[...e.companies];let a=t===c,d=(l+=e.length,r+=`<div class="group-title"><span>📍</span> ${i18n.getText(i.label)}</div>`,null),u=null;if(selectedAnchorCompanyId&&!a){let t=null;matchingGroupsData[c].companies.forEach(e=>{e.id===selectedAnchorCompanyId&&(t=e)}),t&&t.lat&&(t.lon||t.lng)&&(d=parseFloat(t.lat),u=parseFloat(t.lon||t.lng))}e.sort((e,t)=>{let n=getFitsForScore(e,globalProfilingKey),i=getFitsForScore(t,globalProfilingKey);(globalActiveCollaboratorsSet.has(e.id)||globalActiveCollaboratorsSet.has(e.nimi))&&(n+=45),(globalActiveCollaboratorsSet.has(t.id)||globalActiveCollaboratorsSet.has(t.nimi))&&(i+=45),e._isBothMatch&&(n+=5e3),t._isBothMatch&&(i+=5e3),0<globalRequestedCapacity&&(a=getCompanyCapacity(e,globalProfilingKey),o=getCompanyCapacity(t,globalProfilingKey),0<a&&(a>=globalRequestedCapacity?(n+=60,a<=2.5*globalRequestedCapacity&&(n+=40)):n-=50),0<o)&&(o>=globalRequestedCapacity?(i+=60,o<=2.5*globalRequestedCapacity&&(i+=40)):i-=50);var a=getCategoryData(e,globalProfilingKey),o=getCategoryData(t,globalProfilingKey);globalRequestedFeatures.sauna&&a?.has_sauna&&(n+=50),globalRequestedFeatures.sauna&&o?.has_sauna&&(i+=50),globalRequestedFeatures.accessible&&a?.is_accessible&&(n+=50),globalRequestedFeatures.accessible&&o?.is_accessible&&(i+=50),globalRequestedFeatures.home_service&&e.profiling?.core?.home_service&&(n+=50),globalRequestedFeatures.home_service&&t.profiling?.core?.home_service&&(i+=50);let s=1/0,l=1/0,r=!1;if(null!==d&&null!==u)s=getHaversineDistance(d,u,parseFloat(e.lat),parseFloat(e.lon||e.lng)),l=getHaversineDistance(d,u,parseFloat(t.lat),parseFloat(t.lon||t.lng)),r=!0;else{var a=localStorage.getItem("userCoords");if(a)try{var c=JSON.parse(a);s=getHaversineDistance(c.lat,c.lng||c.lon,parseFloat(e.lat),parseFloat(e.lon||e.lng)),l=getHaversineDistance(c.lat,c.lng||c.lon,parseFloat(t.lat),parseFloat(t.lon||t.lng)),r=!0}catch(e){}}if(!r||isNaN(s)||isNaN(l)){if(r){if(!isNaN(s)&&isNaN(l))return-1;if(isNaN(s)&&!isNaN(l))return 1}}else{if(.5<Math.abs(s-l))return s-l;s<l?n+=10:l<s&&(i+=10)}return n!==i?i-n:(o=(e.paketti||e.tyyppi||"").toLowerCase().match(/premium|pro/),a=(t.paketti||t.tyyppi||"").toLowerCase().match(/premium|pro/),o&&!a?-1:!o&&a?1:0)});var t=i.id||i18n.getText(i.label),n=expandedGroups[t],o=n?e:e.slice(0,9),s=9<e.length;currentResultsGroups.push({title:i18n.getText(i.label),companies:o}),0===o.length?r+=`
+            `;
+        }
+
+        let currentResultsGroups = []; // Tallennetaan tulokset tulostusta varten
+
+        let matchingGroupsData = [];
+        let selectedAnchorCompanyId = null;
+        let expandedGroups = {}; // Seuraa mitkä ryhmät on laajennettu
+        let globalProfilingKey = '';
+        let globalRequestedCapacity = 0;
+        let globalRequestedFeatures = {};
+        let globalActiveCollaboratorsSet = new Set();
+
+        // Helper to get profiling data correctly (mapping legacy keys to new schema)
+        function getCategoryData(c, key) {
+            if (!c || !c.profiling) return null;
+            const keyMap = {
+                'weddings_and_parties': 'events_and_celebrations',
+                'corporate_parties_and_events': 'events_and_celebrations',
+                'meetings_and_seminars': 'business_events',
+                'starting_a_business': 'startup_services',
+                'business_growth_and_dev': 'business_growth',
+                'construction_and_renovation': 'construction_and_maintenance',
+                'housing_companies_and_real_estate': 'housing_company_and_contracts'
+            };
+            const mappedKey = keyMap[key] || key;
+            const underscoreKey = mappedKey.replace(/-/g, '_');
+            const hyphenKey = mappedKey.replace(/_/g, '-');
+            
+            // Profiling data v5 has categories under a 'categories' property
+            const categories = c.profiling.categories || {};
+            return categories[underscoreKey] || categories[hyphenKey] || categories[mappedKey] || 
+                   c.profiling[underscoreKey] || c.profiling[hyphenKey] || c.profiling[mappedKey] || c.profiling[key];
+        }
+
+        function getFitsForScore(c, profilingKey) {
+            if (!c || !c.profiling || !c.profiling.core) return 0;
+            
+            // 1. Check intent_scores first (new standardized system)
+            if (c.profiling.core.intent_scores) {
+                const intentScore = c.profiling.core.intent_scores[profilingKey];
+                if (intentScore !== undefined) return intentScore;
+            }
+
+            if (!c.profiling.core.fits_for) return 0;
+            const fits = c.profiling.core.fits_for;
+            
+            const finnishMap = {
+                'events_and_celebrations': 'häät',
+                'business_events': 'yritysjuhlat',
+                'funerals_and_memorials': 'hautajaiset',
+                'startup_services': 'yrityksen perustaminen',
+                'business_growth': 'yrityksen kehittäminen',
+                'wellbeing-and-beauty': 'vapaa-aika'
+            };
+            
+            let score = fits[profilingKey] || fits[profilingKey.replace(/_/g, '-')] || 0;
+            
+            if (score === 0 && finnishMap[profilingKey]) {
+                const finKey = finnishMap[profilingKey];
+                score = fits[finKey] || fits[finKey.replace(/ /g, '-')] || 0;
+            }
+            
+            // Fallback for wellbeing-and-beauty to hyvinvointipalvelut
+            if (score === 0 && (profilingKey === 'wellbeing-and-beauty' || profilingKey === 'wellbeing_and_beauty')) {
+                score = fits['hyvinvointipalvelut'] || fits['wellbeing-services'] || 0;
+            }
+            
+            return score;
+        }
+
+        function getIntentScore(c, intentCode) {
+            if (!c || !c.profiling || !c.profiling.core || !c.profiling.core.intent_scores) return 0;
+            return c.profiling.core.intent_scores[intentCode] || 0;
+        }
+
+        // Helper to get all collaborators of a company across all profiling categories
+        function getCompanyCollaborators(c) {
+            if (!c || !c.profiling) return [];
+            let collaborators = [];
+            for (let k in c.profiling) {
+                if (c.profiling[k] && Array.isArray(c.profiling[k].collaborated_with)) {
+                    collaborators = collaborators.concat(c.profiling[k].collaborated_with);
+                }
+            }
+            return collaborators;
+        }
+
+        async function showResults() {
+            currentResultsGroups = [];
+
+            const config = window.NEEDS_CONFIG || (typeof NEEDS_CONFIG !== 'undefined' ? NEEDS_CONFIG : null);
+            const need = config[currentNeedId];
+            const activeSteps = need ? need.steps : [];
+            
+            const stepSection = document.getElementById('step-section');
+            const resultsContainer = document.getElementById('results-container');
+            const list = document.getElementById('results-list');
+            const countEl = document.getElementById('results-count');
+
+            if (stepSection) stepSection.style.display = 'none';
+            if (resultsContainer) resultsContainer.style.display = 'block';
+            if (list) list.innerHTML = '';
+            document.getElementById('next-steps-container').style.display = 'none';
+
+            if (!window.allCompanies || window.allCompanies.length === 0) {
+                if (typeof loadCompanyData === 'function') await loadCompanyData();
+                if (!window.allCompanies || window.allCompanies.length === 0) {
+                    if (countEl) countEl.textContent = i18n.t('error_load_companies');
+                    return;
+                }
+            }
+
+            let selectedOptions = [];
+            for (let stepId in selections) {
+                if (stepId.startsWith('_')) continue;
+                const val = selections[stepId];
+                if (Array.isArray(val)) selectedOptions = selectedOptions.concat(val);
+                else if (val && typeof val === 'object') selectedOptions.push(val);
+            }
+
+            let filterProfiling = new URLSearchParams(window.location.search).get('filter_profiling');
+            if (filterProfiling && selectedOptions.length === 0) {
+                selectedOptions.push({ label: { "fi": "Tarkennettu haku", "en": "Advanced search" }, tags: [] });
+            }
+
+            const needToProfilingMap = {
+                'haat': 'events_and_celebrations',
+                'yritysjuhlat': 'events_and_celebrations',
+                'yritystilaisuudet': 'business_events',
+                'syntymapaivat': 'events_and_celebrations',
+                'muutto': 'moving_and_housing',
+                'remontti': 'construction_and_maintenance',
+                'mokkipalvelut': 'cottage_services',
+                'taloyhtion-huolto': 'housing_company_and_contracts',
+                'hautajaiset': 'funerals_and_memorials',
+                'yrityksen-perustaminen': 'startup_services',
+                'yrityksen-kehittaminen': 'business_growth',
+                'terveys-ja-hyvinvointi': 'wellbeing_and_beauty',
+                'liikunta-ja-vapaaaika': 'wellbeing_and_beauty'
+            };
+
+            const currentProfilingKey = needToProfilingMap[currentNeedId] || 'vapaa-aika';
+            let requestedCapacity = 0;
+            const featureOptions = [];
+
+            selectedOptions.forEach(opt => {
+                if (opt.capacity_req) requestedCapacity = Math.max(requestedCapacity, opt.capacity_req);
+                
+                // Lisätään featureOptionseihin jos siinä on merkityksellistä suodatettavaa 
+                // (tägejä, node_linkki tai filtteri) - vaikka olisi myös kapasiteettivaatimus.
+                if ((opt.tags && opt.tags.length > 0) || opt.node_link || opt.node_links || opt.profilointi_filter) {
+                    featureOptions.push(opt);
+                }
+            });
+
+            if (featureOptions.length === 0 && requestedCapacity > 0) {
+                featureOptions.push({ label: { "fi": "Sopivat tilat", "en": "Suitable venues" }, tags: [] });
+            }
+
+            const requestedFeatures = {
+                sauna: selectedOptions.some(o => (i18n.getText(o.label) || '').toLowerCase().includes('sauna')),
+                accessible: selectedOptions.some(o => (i18n.getText(o.label) || '').toLowerCase().includes('esteetön') || (i18n.getText(o.label) || '').toLowerCase().includes('vammais')),
+                home_service: selectedOptions.some(o => (i18n.getText(o.label) || '').toLowerCase().includes('kotiin') || (i18n.getText(o.label) || '').toLowerCase().includes('kotona'))
+            };
+
+            globalProfilingKey = currentProfilingKey;
+            globalRequestedCapacity = requestedCapacity;
+            globalRequestedFeatures = requestedFeatures;
+
+            const allMatchingCompanies = new Set();
+            var matchingGroups = [];
+            const suggestedCompanyIds = new Set();
+
+            activeSteps.forEach(step => {
+                if (step.id.startsWith('_')) return;
+                
+                // Ohitetaan kapasiteetti-askeleet ja muut erikseen piilotetut askeleet tulosryhmien luonnissa, koska ne yhdistetään muihin tai toimivat vain tarkentimina
+                if (step.id === 'kapasiteetti' || step.id === 'henkilomaara' || step.hide_results) return;
+
+                const stepSelection = selections[step.id];
+                if (!stepSelection) return;
+
+                const options = Array.isArray(stepSelection) ? stepSelection : [stepSelection];
+
+                options.forEach(opt => {
+                    if (opt.hide_results) return;
+                    const companiesForOpt = window.allCompanies.filter((c, idx) => {
+                        const isMediazoo = (c.id === 'company-2' || c.nimi === 'Mediazoo');
+                        const isRiina = (c.id === 'company-269' || (c.nimi && c.nimi.includes('Riina Raitio')));
+                        const labelLower = i18n.getText(opt.label || '').toLowerCase();
+
+                        // Identify if this is a venue/space search or something that naturally has capacity
+                        const isVenueSearch = (opt.capacity_req > 0 || 
+                                              opt.node_link === 'JUHLATILA' || 
+                                              (labelLower.includes('tila') && !labelLower.includes('tilaisuus')) || 
+                                              labelLower.includes('muistotilaisuus') ||
+                                              labelLower.includes('kokous') ||
+                                              labelLower.includes('sauna') ||
+                                              labelLower.includes('juhla') ||
+                                              labelLower.includes('häät') ||
+                                              labelLower.includes('pikkujoulut') ||
+                                              labelLower.includes('seminaari') ||
+                                              labelLower.includes('koulutus') ||
+                                              labelLower.includes('konferenssi') ||
+                                              labelLower.includes('leirikoulu') ||
+                                              labelLower.includes('rippikoulu') ||
+                                              labelLower.includes('kesäsiirtola') ||
+                                              labelLower.includes('retkeily') ||
+                                              labelLower.includes('luontoretkeily') ||
+                                              labelLower.includes('kuntosali') ||
+                                              labelLower.includes('urheilu') ||
+                                              labelLower.includes('liikunta') ||
+                                              labelLower.includes('koskenlasku') ||
+                                              labelLower.includes('golf') ||
+                                              labelLower.includes('uinti') ||
+                                              labelLower.includes('uimahalli') ||
+                                              labelLower.includes('kylpylä') ||
+                                              labelLower.includes('ratsastus') ||
+                                              labelLower.includes('huvipuisto') ||
+                                              labelLower.includes('vesiliikunta') ||
+                                              labelLower.includes('melonta') ||
+                                              labelLower.includes('mökki')) && !opt.is_service;
+
+                        const companyCapacity = getCompanyCapacity(c, currentProfilingKey);
+                        const fitsScore = getFitsForScore(c, currentProfilingKey);
+
+                        // NEW: Strict exclusion of venues from specialized service searches (e.g. photography, videography, nuohous)
+                        // Use only physical space capacity for this check to avoid excluding catering services
+                        const catData = getCategoryData(c, currentProfilingKey);
+                        const venueCapacity = catData ? (catData.capacity_max || catData.meeting_capacity || catData.seminar_capacity || catData.seated_capacity || catData.memorial_service_capacity || catData.outdoor_capacity || 0) : 0;
+
+                        // Enhanced venue detection: check if company is marked as JUHLATILA or has capacity anywhere
+                        const isPrimarilyVenue = (c.profiling?.core?.node_links || []).includes('JUHLATILA') || 
+                                                (getCategoryData(c, 'events_and_celebrations')?.capacity_max > 0) ||
+                                                (getCategoryData(c, 'business_events')?.meeting_capacity > 0);
+
+                        if (!isVenueSearch && (venueCapacity > 0 || isPrimarilyVenue)) {
+                            // If searching for a service (not a venue), and company is a venue, exclude it.
+                            // EXCEPTION: If the company has a very high score for this context (fitsScore >= 80),
+                            // it's likely a legitimate service provider who happens to have some capacity.
+                            if (fitsScore >= 80) {
+                                } else {
+                                return false; 
+                            }
+                        }
+
+                        // NEW: Jos Saunatilat on valittu, ja kyseessä on Juhlatila tai Kesäjuhlat -ehdotus,
+                        // rajataan vain tiloihin joissa on sauna.
+                        if (globalRequestedFeatures.sauna && isVenueSearch) {
+                            const catData = getCategoryData(c, currentProfilingKey);
+                            if (!catData?.has_sauna) return false;
+                        }
+
+                        // Helper normalization for robust comparison (handles potential encoding issues)
+                        const normalizeText = (txt) => {
+                            if (!txt) return "";
+                            return String(txt).toLowerCase()
+                                .replace(/Ã£Â¤/g, 'ä').replace(/Ã£Â¶/g, 'ö')
+                                .replace(/Ã£â€ž/g, 'ä').replace(/Ã£â€“/g, 'ö')
+                                .replace(/Ã¤/g, 'ä').replace(/Ã¶/g, 'ö')
+                                .replace(/Ã„/g, 'ä').replace(/Ã–/g, 'ö')
+                                .replace(/Ã¥/g, 'å').replace(/Ã…/g, 'å')
+                                .trim();
+                        };
+
+                        // Tarkista not_suitable_for: hylkää yritys jos se on merkitty sopimattomaksi tähän hakuun
+                        if (c.profiling?.core?.not_suitable_for?.length > 0) {
+                            const notSuitable = c.profiling.core.not_suitable_for.map(s => normalizeText(s));
+                            const labelLower = normalizeText(i18n.getText(opt.label));
+                            const optTagsLower = (opt.tags || []).map(t => normalizeText(t));
+
+                            // A. Tarkistus labelilla: Jos jokin hylkäystermi sisältyy hakuotsikkoon (esim. "omilla tarjoiluilla")
+                            const labelBlocked = notSuitable.some(s => s && labelLower.includes(s));
+                            
+                            // B. Tarkistus tageilla: Jos jokin hakuoptio on kielletty yritykseltä
+                            const tagBlocked = optTagsLower.some(tag => tag && notSuitable.includes(tag));
+
+                            if (labelBlocked || tagBlocked) {
+                                if (isMediazoo || isRiina) {
+                                }
+                                return false;
+                            }
+                        }
+
+                        if (selections._sub_contexts && selections._sub_contexts.length > 0) {
+                            // Yritykset joilla ei ole profilointidataa pääsevät läpi tagitarkistukseen
+                            if (!c.profiling) {
+                                // Ei profilointia — sallitaan, tagitarkistus ratkaisee
+                            } else {
+                                const companySubContexts = c.profiling?.core?.sub_contexts || [];
+                                let isSubContextMatch = false;
+                                
+                                const underscoreKey = currentProfilingKey.replace(/-/g, '_');
+                                const finnishMap = {
+                                    'events_and_celebrations': 'häät',
+                                    'business_events': 'yritysjuhlat',
+                                    'funerals_and_memorials': 'hautajaiset',
+                                    'startup_services': 'yrityksen perustaminen',
+                                    'business_growth': 'yrityksen kehittäminen'
+                                };
+                                const finKey = finnishMap[underscoreKey];
+
+                                if (Array.isArray(companySubContexts)) {
+                                    if (companySubContexts.length === 0) isSubContextMatch = true;
+                                    else isSubContextMatch = selections._sub_contexts.some(sc => companySubContexts.includes(sc));
+                                } else if (typeof companySubContexts === 'object' && companySubContexts !== null) {
+                                    const relevantSubContexts = companySubContexts[underscoreKey] || companySubContexts[currentProfilingKey] || (finKey ? companySubContexts[finKey] : null);
+                                    if (relevantSubContexts) isSubContextMatch = selections._sub_contexts.some(sc => relevantSubContexts.includes(sc));
+                                    else isSubContextMatch = true; 
+                                } else {
+                                    isSubContextMatch = true;
+                                }
+
+                                if (!isSubContextMatch) {
+                                    // NEW: Pehmeämpi vertailu jos kyseessä on saman pääkontekstin sisäinen haku
+                                    const hasCommonBase = selections._sub_contexts.some(sc => {
+                                        const scLower = sc.toLowerCase();
+                                        // Etsitään yhteisiä sanoja tai alkuosia (hää, yritys, juhla, hautajais, muisto)
+                                        const bases = ['hää', 'yritys', 'juhla', 'hautajais', 'muisto'];
+                                        const cscArray = Array.isArray(companySubContexts) ? companySubContexts : (typeof companySubContexts === 'object' && companySubContexts !== null ? Object.values(companySubContexts).flat() : []);
+                                        return bases.some(b => scLower.includes(b) && cscArray.some(csc => String(csc).toLowerCase().includes(b)));
+                                    });
+                                    if (hasCommonBase) isSubContextMatch = true;
+                                }
+
+                                if (!isSubContextMatch) {
+                                    const mainFitsScore = getFitsForScore(c, currentProfilingKey);
+                                    const hasAnySubContexts = Array.isArray(companySubContexts) ? companySubContexts.length > 0 : !!companySubContexts;
+                                    
+                                    // NEW: Relaxed check for services. If the option doesn't have a capacity requirement,
+                                    // it's likely a generic service (catering, photo, etc.) and shouldn't be strictly 
+                                    // filtered by the event's sub-context (e.g. "Perinteiset häät").
+                                    // FIX: Vältetään "tilaisuudessa" sanan osuminen "tila"-hakusanaan
+                                    const labelLower = i18n.getText(opt.label || '').toLowerCase();
+                                    const isVenueOrCore = (opt.capacity_req > 0 || opt.node_link === 'JUHLATILA' || (labelLower.includes('tila') && !labelLower.includes('tilaisuus')) || labelLower.includes('muistotilaisuus'));
+                                    
+                                    if (isVenueOrCore && hasAnySubContexts && mainFitsScore >= 70 && mainFitsScore < 80) return false; 
+                                }
+                            }
+                        }
+
+                        if (opt.require_fits_for) {
+                            const rfKey = opt.require_fits_for.key;
+                            const rfMin = opt.require_fits_for.min || 20;
+                            const rfScore = getFitsForScore(c, rfKey);
+                            if (rfScore < rfMin) return false;
+                        }
+
+                        let isProfiledMatch = false;
+                        if (opt.node_link) {
+                            const links = c.profiling?.core?.node_links || [];
+                            if (links.includes(opt.node_link)) isProfiledMatch = true;
+                        }
+                        if (opt.node_links) {
+                            const links = c.profiling?.core?.node_links || [];
+                            if (opt.node_links.some(l => links.includes(l))) isProfiledMatch = true;
+                        }
+
+                        if (opt.profilointi_filter) {
+                            const pf = opt.profilointi_filter;
+                            const catData = getCategoryData(c, pf.section);
+                            let match = false;
+
+                            const checkFuzzyMatch = (target, query) => {
+                                if (target === undefined || target === null || query === undefined || query === null) return false;
+                                const t = String(target).toLowerCase();
+                                const q = String(query).toLowerCase();
+                                const isPluralMatch = (t === q + 't' || q === t + 't');
+                                return t === q || t.includes(q) || q.includes(t) || isPluralMatch;
+                            };
+
+                            if (catData) {
+                                const actualVal = catData[pf.field];
+                                if (Array.isArray(actualVal)) {
+                                    match = actualVal.some(v => checkFuzzyMatch(v, pf.value));
+                                } else if (typeof actualVal === 'object' && actualVal !== null) {
+                                    match = Object.values(actualVal).flat().some(v => checkFuzzyMatch(v, pf.value));
+                                } else {
+                                    match = checkFuzzyMatch(actualVal, pf.value);
+                                }
+
+                                // Automaattinen fallback refinement_tagsiin jos ei matchia
+                                if (!match && Array.isArray(catData.refinement_tags)) {
+                                    match = catData.refinement_tags.some(v => checkFuzzyMatch(v, pf.value));
+                                }
+                            }
+
+                            // FALLBACK: Tarkista sub_contexts (Taso 2)
+                            if (!match && c.profiling?.core?.sub_contexts) {
+                                const subContexts = c.profiling.core.sub_contexts;
+                                if (Array.isArray(subContexts)) {
+                                    match = subContexts.some(v => checkFuzzyMatch(v, pf.value));
+                                } else if (typeof subContexts === 'object' && subContexts !== null) {
+                                    match = Object.values(subContexts).flat().some(v => checkFuzzyMatch(v, pf.value));
+                                }
+                            }
+
+                            // TÄRKEÄ KORJAUS: Jos optiolla on node_link-vaatimus JA profilointisuodatin,
+                            // molempien on täytyttävä (AND). Muuten pelkkä profilointisuodatin riittää.
+                            if (opt.node_link || opt.node_links) {
+                                isProfiledMatch = isProfiledMatch && match;
+                            } else {
+                                isProfiledMatch = match;
+                            }
+                        }
+                        
+                        // INTENT-CODE TÄSMÄYS (UUSI)
+                        if (opt.intent_codes && c.profiling?.core?.intent_codes) {
+                            const hasIntent = opt.intent_codes.some(code => c.profiling.core.intent_codes.includes(code));
+                            if (hasIntent) {
+                                isProfiledMatch = true;
+                            }
+                        }
+
+                        // TAKSONOMIA-TÄSMÄYS (UUSI)
+                        // TÄRKEÄ KORJAUS: Jos optiolla on profilointisuodatin (esim. omilla tarjoiluilla), 
+                        // ei sallita taksonomia-fallbackia, jotta vältetään vääriä osumia yrityksille 
+                        // jotka on jo kertaalleen hylätty (esim. catering-vaatimuksen takia).
+                        if (taxonomyData && !isProfiledMatch && !opt.profilointi_filter) {
+                            const targetIntentId = (opt.intent_codes && opt.intent_codes.length > 0) ? opt.intent_codes[0] : currentProfilingKey;
+                            const intent = taxonomyData.intents.find(i => i.id === targetIntentId || i.id === targetIntentId.replace(/_/g, '-'));
+                            if (intent) {
+                                const labelLower = i18n.getText(opt.label || '').toLowerCase();
+                                const isTaxonomyTerm = intent.refinements.some(r => labelLower.includes(r.toLowerCase())) ||
+                                                       intent.subcontexts.some(s => labelLower.includes(s.toLowerCase()));
+                                
+                                if (isTaxonomyTerm) {
+                                    const companyContent = (
+                                        (c.tags || '') + ' ' + 
+                                        (c.kategoria || '') + ' ' + 
+                                        (c.nimi || '') + ' ' +
+                                        (c.profiling?.core?.sub_contexts?.join(' ') || '') + ' ' +
+                                        (c.profiling?.core?.node_links?.join(' ') || '')
+                                    ).toLowerCase();
+                                    
+                                    const taxonomyMatch = intent.refinements.concat(intent.subcontexts).some(term => {
+                                        const t = term.toLowerCase();
+                                        return labelLower.includes(t) && companyContent.includes(t);
+                                    });
+                                    if (taxonomyMatch) isProfiledMatch = true;
+                                }
+
+                                if (!isProfiledMatch && intent.nodeLinks) {
+                                    const links = c.profiling?.core?.node_links || [];
+                                    if (intent.nodeLinks.some(nl => links.includes(nl))) {
+                                        const isTila = labelLower.includes('tila') && !labelLower.includes('tilaisuus');
+                                        const isVenueIntent = targetIntentId.startsWith('VENUE_');
+                                        if (isTila || isVenueIntent || (opt.tags && opt.tags.some(t => {
+                                            const tl = t.toLowerCase();
+                                            return tl.includes('tila') && !tl.includes('tilaisuus');
+                                        }))) {
+                                            isProfiledMatch = true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // NEW: Broaden photography/videography match
+                        if (!isProfiledMatch && opt.tags) {
+                            const isPhotoSearch = opt.tags.some(t => t.includes('valokuva'));
+                            const isVideoSearch = opt.tags.some(t => t.includes('video') || t === 'videotuotanto');
+                            const isFloristSearch = opt.tags.some(t => t.includes('kukka'));
+                            
+                            const coreNodeLinks = c.profiling?.core?.node_links || [];
+                            if ((isPhotoSearch && coreNodeLinks.includes('VALOKUVAUS')) || 
+                                (isVideoSearch && coreNodeLinks.includes('VIDEOTUOTANTO')) ||
+                                (isFloristSearch && coreNodeLinks.includes('KUKAT'))) {
+                                isProfiledMatch = true;
+                            }
+                        }
+
+                        if (!isProfiledMatch && opt.tags) {
+                            if (opt.tags.includes('digitointi')) {
+                                const catData = getCategoryData(c, currentProfilingKey);
+                                const hasDigitizationFeatures = catData && Array.isArray(catData.digitization_features) && catData.digitization_features.length > 0;
+                                
+                                // Jos on profilointi-dataa, käytetään sitä
+                                if (hasDigitizationFeatures && fitsScore > 0) {
+                                    isProfiledMatch = true;
+                                } else {
+                                    // Muutoin tarkistetaan tägit ja lisätiedot (varasysteemi)
+                                    const companyContent = (
+                                        (c.tags || '') + ' ' + 
+                                        (c.searchExtraInfo || '') + ' ' + 
+                                        (c.kategoria || '') + ' ' + 
+                                        (c.nimi || '') + ' ' +
+                                        (c.profiling?.core?.sub_contexts?.join(' ') || '')
+                                    ).toLowerCase();
+                                    if (companyContent.includes('digitointi')) {
+                                        isProfiledMatch = true;
+                                    }
+                                }
+                            }
+                            if (opt.tags.includes('juhlatila')) {
+                                const catData = getCategoryData(c, 'events_and_celebrations');
+                                if (catData && fitsScore > 0 && (catData.capacity_max > 0 || catData.seated_capacity > 0)) isProfiledMatch = true;
+                            }
+                        }
+
+                        const hasVenueTag = (c.tags || '').toLowerCase().includes('juhlatila') || 
+                                           (c.kategoria || '').toLowerCase().includes('juhlatila') ||
+                                           (c.tags || '').toLowerCase().includes('kokoustila') ||
+                                           (c.tags || '').toLowerCase().includes('edustustila');
+
+                        if (opt.capacity_req > 0 || requestedCapacity > 0) {
+                            const cap = getCompanyCapacity(c, currentProfilingKey);
+                            
+                            // Jos optio vaatii kapasiteettia (esim. juhlatila-valinta), yrityksellä on oltava kapasiteetti.
+                            if (opt.capacity_req > 0 && cap === 0) {
+                                return false;
+                            }
+                            
+                            // Jos kyseessä on tilatyyppinen optio tai yritys, ja hakuun liittyy kapasiteettivaatimus, piilotetaan nollakapasiteetin kohteet.
+                            const isVenueType = hasVenueTag || 
+                                               (opt.label && (
+                                                   (i18n.getText(opt.label).toLowerCase().includes('tila') && !i18n.getText(opt.label).toLowerCase().includes('tilaisuus')) || 
+                                                   i18n.getText(opt.label).toLowerCase().includes('muistotilaisuus') ||
+                                                   i18n.getText(opt.label).toLowerCase().includes('juhla')
+                                               )) || 
+                                               (opt.tags && opt.tags.includes('juhlatila')) ||
+                                               opt.node_link === 'JUHLATILA';
+
+                            if (requestedCapacity > 0 && isVenueType && cap === 0) {
+                                return false;
+                            }
+                        }
+
+                        // NEW: Estetään juhlatilojen (kapasiteettikohteet) nouseminen palveluhakuihin (esim. videokuvaus)
+                        // Jos optio ei vaadi kapasiteettia, mutta yrityksellä on kapasiteettia (on tila), 
+                        // niin yrityksen on oltava vahva match (score > 80) kyseiseen palvelu-intenttiin.
+                        const isServiceOnlyOption = !opt.capacity_req && opt.node_link !== 'JUHLATILA';
+                        const companyCap = getCompanyCapacity(c, currentProfilingKey);
+                        if (isServiceOnlyOption && companyCap > 0) {
+                            const intentScores = c.profiling?.core?.intent_scores || {};
+                            const hasStrongServiceMatch = (opt.intent_codes || []).some(code => (intentScores[code] || 0) >= 80);
+                            
+                            // Jos yritys on ensisijaisesti tila (eikä vahva palvelun tarjoaja), hylätään se palvelu-optiosta
+                            if (!hasStrongServiceMatch) return false;
+                        }
+
+                        if (isProfiledMatch) return true;
+                        
+                        // Jos yrityksellä on profilointi tälle kontekstille mutta arvosana on 0, 
+                        // ei sallita täsmäystä tägeillä (estää esim. juhlatilojen osumisen siivous-hakuihin)
+                        if (c.profiling && c.profiling.core && c.profiling.core.fits_for) {
+                            const fitsScore = getFitsForScore(c, currentProfilingKey);
+                            const hasProfiling = (currentProfilingKey in c.profiling.core.fits_for) || (currentProfilingKey.replace(/_/g, '-') in c.profiling.core.fits_for);
+                            // Jos profilointi on tehty (löytyy fits_for:sta) ja arvosana on 0, hylätään
+                            if (hasProfiling && fitsScore === 0) {
+                                return false;
+                            }
+                        }
+
+                        // Jos optiolla ei ole tägejä, node-linkkejä tai suodattimia, se ei saa näyttää "kaikkia" 
+                        // paitsi jos se on pelkkä kapasiteettivaatimus
+                        if (!opt.tags || opt.tags.length === 0) {
+                            if (!opt.node_link && !opt.node_links && !opt.profilointi_filter && opt.capacity_req <= 0) {
+                                return false; 
+                            }
+                            return getFitsForScore(c, currentProfilingKey) > 10;
+                        }
+
+                        // TÄRKEÄ KORJAUS: Jos optiolla on profilointisuodatin (liikunta-ja-vapaaaika), 
+                        // EI sallita fallbackia tägeihin, jos suodatin ei täsmännyt.
+                        // Tämä estää esim. Revontuli Resortin (jolla on 'avantouinti' sub_contextina) 
+                        // osumisen 'Uinti'-optioon (jolla on tägi 'uinti').
+                        if (opt.profilointi_filter) {
+                            return isProfiledMatch;
+                        }
+
+                        // Laajennettu haku: Nimi + Tägit + Kategoria + Profiloinnin sub_contexts + Node_links
+                        const companyContent = (
+                            (c.tags || '') + ' ' + 
+                            (c.kategoria || '') + ' ' + 
+                            (c.nimi || '') + ' ' +
+                            (c.profiling?.core?.sub_contexts?.join(' ') || '') + ' ' +
+                            (c.profiling?.core?.node_links?.join(' ') || '')
+                        ).toLowerCase();
+                        
+                        const tagMatch = opt.tags.some(tag => companyContent.includes(tag.toLowerCase()));
+                        
+                        return tagMatch;
+                    });
+                    
+                    // Aina mukaan, vaikka yrityksiä ei löytyisi (käyttäjän toive)
+                    companiesForOpt.forEach(c => {
+                        allMatchingCompanies.add(c);
+                        suggestedCompanyIds.add(c.id);
+                    });
+                    matchingGroups.push({ opt, companies: companiesForOpt });
+                });
+            });
+
+            // Specialized grouping for Corporate Events + Accommodation
+            if ((currentNeedId === 'yritysjuhlat' || currentNeedId === 'yritystilaisuudet') && matchingGroups.length > 1) {
+                const venueGroup = matchingGroups.find(g => g.opt.tags && (g.opt.tags.includes('juhlatila') || g.opt.tags.includes('kokoustilat') || g.opt.tags.includes('juhlasali')));
+                const stayGroup = matchingGroups.find(g => g.opt.label === 'Majoitus');
+
+                if (venueGroup && stayGroup) {
+                    const allVenues = venueGroup.companies;
+                    const allStays = stayGroup.companies; // Currently only contains stay-only due to deduplication
+                    
+                    const venuesWithoutStay = allVenues.filter(c => {
+                        const catData = getCategoryData(c, 'events_and_celebrations');
+                        return !catData || !catData.accommodation_beds || catData.accommodation_beds === 0;
+                    });
+                    
+                    const venuesWithStay = allVenues.filter(c => {
+                        const catData = getCategoryData(c, 'events_and_celebrations');
+                        return catData && catData.accommodation_beds > 0;
+                    });
+                    
+                    // Mark venuesWithStay so they can be sorted first in Group 2
+                    venuesWithStay.forEach(c => c._isBothMatch = true);
+                    
+                    // Group 1: Juhlatila yritykselle
+                    const newGroup1 = {
+                        opt: { ...venueGroup.opt, label: "Juhlatila yritykselle" },
+                        companies: venuesWithoutStay
+                    };
+                    
+                    // Group 2: Majoitus ja/tai juhlatila
+                    const newGroup2 = {
+                        opt: { ...stayGroup.opt, label: "Majoitus ja/tai juhlatila" },
+                        companies: [...venuesWithStay, ...allStays]
+                    };
+                    
+                    // Replace the old groups in the list, maintaining overall order
+                    const newMatchingGroups = [];
+                    matchingGroups.forEach(g => {
+                        if (g === venueGroup) {
+                            if (newGroup1.companies.length > 0) newMatchingGroups.push(newGroup1);
+                        } else if (g === stayGroup) {
+                            if (newGroup2.companies.length > 0) newMatchingGroups.push(newGroup2);
+                        } else {
+                            newMatchingGroups.push(g);
+                        }
+                    });
+                    matchingGroups = newMatchingGroups;
+                }
+            }
+
+            // Ryhmien deduplikointi ja yhdistäminen: Jos useampi optio tuottaa täsmälleen saman yritysjoukon, 
+            // yhdistetään ne yhdeksi ryhmäksi turhan toiston välttämiseksi.
+            const uniqueMatchingGroups = [];
+            const seenCompanySets = new Map(); // Map: "id,id,id" -> Group index
+
+            matchingGroups.forEach(g => {
+                if (g.companies.length === 0) return; // Tyhjiä ryhmiä ei näytetä muutenkaan
+
+                const companyIds = g.companies.map(c => c.id).sort().join(',');
+                if (seenCompanySets.has(companyIds)) {
+                    // Sama joukko löytyi jo. Yhdistetään labelit jos ne ovat eri.
+                    const existingGroup = uniqueMatchingGroups[seenCompanySets.get(companyIds)];
+                    const newLabel = i18n.getText(g.opt.label);
+                    const oldLabel = i18n.getText(existingGroup.opt.label);
+                    
+                    if (newLabel !== oldLabel && !oldLabel.includes(newLabel)) {
+                        existingGroup.opt.label = {
+                            fi: oldLabel + " & " + newLabel,
+                            en: i18n.getText(existingGroup.opt.label, 'en') + " & " + i18n.getText(g.opt.label, 'en')
+                        };
+                    }
+                } else {
+                    seenCompanySets.set(companyIds, uniqueMatchingGroups.length);
+                    uniqueMatchingGroups.push(g);
+                }
+            });
+            
+            matchingGroups = uniqueMatchingGroups;
+
+            // Tallennetaan tilamuuttujiin renderöintiä varten
+            matchingGroupsData = matchingGroups;
+            selectedAnchorCompanyId = null;
+            
+            globalActiveCollaboratorsSet = new Set();
+            renderResultsView();
+        }
+
+        function selectAnchor(companyId) {
+            if (selectedAnchorCompanyId === companyId) {
+                // Poistetaan valinta
+                selectedAnchorCompanyId = null;
+                // Tyhjennetään kumppanit
+                globalActiveCollaboratorsSet = new Set();
+            } else {
+                // Asetetaan valinta
+                selectedAnchorCompanyId = companyId;
+                globalActiveCollaboratorsSet = new Set();
+                let anchorCompany = null;
+                matchingGroupsData.forEach(g => {
+                    const found = g.companies.find(c => c.id === companyId);
+                    if (found) anchorCompany = found;
+                });
+                if (anchorCompany) {
+                    const partners = getCompanyCollaborators(anchorCompany);
+                    partners.forEach(p => globalActiveCollaboratorsSet.add(p));
+                    
+                    // NEW: Bidirectional partnership lookup. 
+                    // Also include companies that list the anchor as their partner.
+                    if (window.allCompanies) {
+                        window.allCompanies.forEach(c => {
+                            const cPartners = getCompanyCollaborators(c);
+                            if (cPartners.includes(anchorCompany.id) || cPartners.includes(anchorCompany.nimi)) {
+                                globalActiveCollaboratorsSet.add(c.id);
+                                globalActiveCollaboratorsSet.add(c.nimi);
+                            }
+                        });
+                    }
+
+                    // Lisätään myös ankkuri itse
+                    globalActiveCollaboratorsSet.add(anchorCompany.id);
+                    globalActiveCollaboratorsSet.add(anchorCompany.nimi);
+                }
+            }
+            renderResultsView();
+        }
+
+        function renderResultsView() {
+            const list = document.getElementById('results-list');
+            const countEl = document.getElementById('results-count');
+            const resultsContainer = document.getElementById('results-container');
+            currentResultsGroups = [];
+            
+            if (matchingGroupsData.length === 0) {
+                if (countEl) countEl.textContent = i18n.t('error_no_companies');
+                if (list) list.innerHTML = `<div class="no-results"><h3>${i18n.t('palvelu_no_results_title')}</h3><p>${i18n.t('palvelu_no_results_desc')}</p></div>`;
+                return;
+            }
+
+            let totalFoundCount = 0;
+            let htmlResults = "";
+
+            // Tunnistetaan ensimmäinen ryhmä "ankkuriryhmäksi" (voidaan valita)
+            let anchorGroupIndex = 0;
+            matchingGroupsData.forEach((group, idx) => {
+                if (group.opt.capacity_req > 0 && !(matchingGroupsData[anchorGroupIndex].opt.capacity_req > 0)) {
+                    anchorGroupIndex = idx;
+                }
+            });
+
+            matchingGroupsData.forEach((group, idx) => {
+                const opt = group.opt;
+                const companiesForOpt = [...group.companies];
+                const isAnchorGroup = (idx === anchorGroupIndex);
+                
+                totalFoundCount += companiesForOpt.length;
+                htmlResults += `<div class="group-title"><span>📍</span> ${i18n.getText(opt.label)}</div>`;
+
+
+                // Haetaan valitun ankkurin koordinaatit, jos sellainen on ja olemme MUIDEN ryhmien kohdalla
+                let anchorLat = null;
+                let anchorLon = null;
+                if (selectedAnchorCompanyId && !isAnchorGroup) {
+                    let anchorCompany = null;
+                    matchingGroupsData[anchorGroupIndex].companies.forEach(c => {
+                        if (c.id === selectedAnchorCompanyId) anchorCompany = c;
+                    });
+                    if (anchorCompany && anchorCompany.lat && (anchorCompany.lon || anchorCompany.lng)) {
+                        anchorLat = parseFloat(anchorCompany.lat);
+                        anchorLon = parseFloat(anchorCompany.lon || anchorCompany.lng);
+                    }
+                }
+
+                companiesForOpt.sort((a, b) => {
+                    let scoreA = getFitsForScore(a, globalProfilingKey);
+                    let scoreB = getFitsForScore(b, globalProfilingKey);
+
+                    if (globalActiveCollaboratorsSet.has(a.id) || globalActiveCollaboratorsSet.has(a.nimi)) scoreA += 45;
+                    if (globalActiveCollaboratorsSet.has(b.id) || globalActiveCollaboratorsSet.has(b.nimi)) scoreB += 45;
+
+                    // NEW: Prioritize "Both" matches (Stay + Venue) in the combined Corporate group
+                    if (a._isBothMatch) scoreA += 5000;
+                    if (b._isBothMatch) scoreB += 5000;
+
+                    if (globalRequestedCapacity > 0) {
+                        const capA = getCompanyCapacity(a, globalProfilingKey);
+                        const capB = getCompanyCapacity(b, globalProfilingKey);
+                        
+                        if (capA > 0) {
+                            if (capA >= globalRequestedCapacity) {
+                                scoreA += 60;
+                                if (capA <= globalRequestedCapacity * 2.5) scoreA += 40;
+                            } else {
+                                scoreA -= 50; 
+                            }
+                        }
+
+                        if (capB > 0) {
+                            if (capB >= globalRequestedCapacity) {
+                                scoreB += 60;
+                                if (capB <= globalRequestedCapacity * 2.5) scoreB += 40;
+                            } else {
+                                scoreB -= 50;
+                            }
+                        }
+                    }
+
+                    const dataA = getCategoryData(a, globalProfilingKey);
+                    const dataB = getCategoryData(b, globalProfilingKey);
+                    if (globalRequestedFeatures.sauna && dataA?.has_sauna) scoreA += 50;
+                    if (globalRequestedFeatures.sauna && dataB?.has_sauna) scoreB += 50;
+                    if (globalRequestedFeatures.accessible && dataA?.is_accessible) scoreA += 50;
+                    if (globalRequestedFeatures.accessible && dataB?.is_accessible) scoreB += 50;
+                    if (globalRequestedFeatures.home_service && a.profiling?.core?.home_service) scoreA += 50;
+                    if (globalRequestedFeatures.home_service && b.profiling?.core?.home_service) scoreB += 50;
+
+                    // Etäisyyslaskenta (Ankkuri TAI Käyttäjä)
+                    let distA = Infinity;
+                    let distB = Infinity;
+                    let hasLocation = false;
+
+                    if (anchorLat !== null && anchorLon !== null) {
+                        distA = getHaversineDistance(anchorLat, anchorLon, parseFloat(a.lat), parseFloat(a.lon || a.lng));
+                        distB = getHaversineDistance(anchorLat, anchorLon, parseFloat(b.lat), parseFloat(b.lon || b.lng));
+                        hasLocation = true;
+                    } else {
+                        const userCoordsRaw = localStorage.getItem('userCoords');
+                        if (userCoordsRaw) {
+                            try {
+                                const u = JSON.parse(userCoordsRaw);
+                                distA = getHaversineDistance(u.lat, u.lng || u.lon, parseFloat(a.lat), parseFloat(a.lon || a.lng));
+                                distB = getHaversineDistance(u.lat, u.lng || u.lon, parseFloat(b.lat), parseFloat(b.lon || b.lng));
+                                hasLocation = true;
+                            } catch(e) {}
+                        }
+                    }
+
+                    // "Lähin ensin" periaate - jos sijainti tiedetään ja kummallakin on validi etäisyys
+                    if (hasLocation && !isNaN(distA) && !isNaN(distB)) {
+                        // Jos etäisyysero on yli 500 metriä, lajitellaan etäisyyden mukaan.
+                        // Näin lähin on varmasti ensimmäisenä.
+                        if (Math.abs(distA - distB) > 0.5) {
+                            return distA - distB;
+                        }
+                        // Jos ovat hyvin lähekkäin (alle 500m toisistaan), annetaan premiumille ja pisteille painoarvoa
+                        if (distA < distB) scoreA += 10;
+                        else if (distB < distA) scoreB += 10;
+                    } else if (hasLocation) {
+                        // Jos toisella ei ole sijaintia määritetty, näytetään se, jolla on sijainti, ensin
+                        if (!isNaN(distA) && isNaN(distB)) return -1;
+                        if (isNaN(distA) && !isNaN(distB)) return 1;
+                    }
+
+                    if (scoreA !== scoreB) return scoreB - scoreA;
+                    
+                    const aIsPremium = (a.paketti || a.tyyppi || '').toLowerCase().match(/premium|pro/);
+                    const bIsPremium = (b.paketti || b.tyyppi || '').toLowerCase().match(/premium|pro/);
+                    if (aIsPremium && !bIsPremium) return -1;
+                    if (!aIsPremium && bIsPremium) return 1;
+
+                    return 0;
+                });
+
+                // Rajoitetaan näytettävien määrää (max 9 ellei laajennettu)
+                const groupId = opt.id || i18n.getText(opt.label);
+                const isExpanded = expandedGroups[groupId];
+                const visibleCompanies = isExpanded ? companiesForOpt : companiesForOpt.slice(0, 9);
+                const hasMore = companiesForOpt.length > 9;
+
+                currentResultsGroups.push({
+                    title: i18n.getText(opt.label),
+                    companies: visibleCompanies
+                });
+
+                if (visibleCompanies.length === 0) {
+                    htmlResults += `
                         <div style="grid-column: 1 / -1; padding: 2.5rem; background: #f8fafc; border-radius: 24px; border: 2px dashed #cbd5e1; text-align: center; color: #64748b;">
                             <div style="font-size: 2rem; margin-bottom: 0.5rem;">🏢</div>
-                            <div style="font-weight: 700; color: var(--primary-blue); font-size: 1.1rem; margin-bottom: 5px;">${i18n.t("error_no_companies")}</div>
-                            <p style="margin: 0; font-size: 0.9rem; opacity: 0.8;">${i18n.t("palvelu_no_results_desc")}</p>
+                            <div style="font-weight: 700; color: var(--primary-blue); font-size: 1.1rem; margin-bottom: 5px;">${i18n.t('error_no_companies')}</div>
+                            <p style="margin: 0; font-size: 0.9rem; opacity: 0.8;">${i18n.t('palvelu_no_results_desc')}</p>
                         </div>
-                    `:o.forEach(e=>{let t=null;null!==d&&null!==u&&(t={lat:d,lng:u});var n=selectedAnchorCompanyId===e.id,e=renderCompanyCard(e,globalRequestedCapacity,globalProfilingKey,globalActiveCollaboratorsSet,t,a,n,i18n.getText(i.label));r+=e}),s&&!n&&(o=e.length-9,r+=`
+                    `;
+                } else {
+                    visibleCompanies.forEach(c => {
+                        let anchorCoords = null;
+                        if (anchorLat !== null && anchorLon !== null) anchorCoords = { lat: anchorLat, lng: anchorLon };
+                        const isSelected = (selectedAnchorCompanyId === c.id);
+                        let cardHtml = renderCompanyCard(c, globalRequestedCapacity, globalProfilingKey, globalActiveCollaboratorsSet, anchorCoords, isAnchorGroup, isSelected, i18n.getText(opt.label));
+                        htmlResults += cardHtml;
+                    });
+                }
+
+                if (hasMore && !isExpanded) {
+                    const moreCount = companiesForOpt.length - 9;
+                    htmlResults += `
                         <div class="show-more-container">
-                            <button class="btn-show-more" onclick="toggleGroupExpansion('${t.replace(/'/g,"\\'")}')">
-                                <i>➕</i><span>${i18n.t("btn_show_more_count").replace("{count}",o)}</span>
+                            <button class="btn-show-more" onclick="toggleGroupExpansion('${groupId.replace(/'/g, "\\'")}')">
+                                <i>➕</i><span>${i18n.t('btn_show_more_count').replace('{count}', moreCount)}</span>
                             </button>
                         </div>
-                    `)}),0===l?(t&&(t.textContent=i18n.t("error_no_companies")),e&&(e.innerHTML=r)):(t&&(t.textContent=i18n.t("palvelu_found_count").replace("{count}",l)),e&&(e.innerHTML=r),renderTaxonomyInfo(globalProfilingKey),renderNextSteps(globalProfilingKey),renderTips(currentNeedId),renderSpecialVinkit(currentNeedId))}}function toggleGroupExpansion(e){expandedGroups[e]=!0,renderResultsView()}function renderNextSteps(i){var e=document.getElementById("next-steps-container"),t=document.getElementById("next-steps-list");let n=[],a=new Set;function o(e){var t;!e||!(e="string"==typeof e?e:i18n.getText(e))||e.length<2||(t=e.trim().toLowerCase(),a.has(t))||(a.add(t),t=e.trim().charAt(0).toUpperCase()+e.trim().slice(1),n.push(t))}let s=i.replace(/_/g,"-");if(taxonomyData){let n=taxonomyData.intents.find(e=>e.id===i||e.id===s);if(n){var l=[...n.subcontexts||[],...n.refinements||[]];let t=(selections._sub_contexts||[]).map(e=>e.toLowerCase());l.forEach(e=>{t.includes(e.toLowerCase())||o(e)}),taxonomyData.relations.filter(e=>e.from===n.id).forEach(t=>{var e=taxonomyData.intents.find(e=>e.id===t.to);o(e?e.label:t.to)})}for(var r in selections){r=selections[r];r&&(Array.isArray(r)?r:[r]).forEach(e=>{e.intent_codes&&e.intent_codes.forEach(t=>{taxonomyData.relations.filter(e=>e.from===t).forEach(t=>{var e=taxonomyData.intents.find(e=>e.id===t.to);o(e?e.label:t.to)})})})}}(window.allCompanies||[]).filter(e=>{e=e.profiling?.core?.fits_for||{};return 70<=(e[i]||e[s]||0)}).forEach(e=>{var t=e.profiling?.core?.paired_with_by_context||{};let n=t[i]||t[s]||[];t=getCompanyCapacity(e,i);(n=0===t?n.filter(e=>{e=("string"==typeof e?e:i18n.getText(e)).toLowerCase();return!(e.includes("juhlatila")||e.includes("kokoustila")||e.includes("majoitus"))}):n).forEach(e=>o(e))});var l=new URLSearchParams(window.location.search).get("id"),c=window.NEEDS_CONFIG||("undefined"!=typeof NEEDS_CONFIG?NEEDS_CONFIG:null),c=(l&&c&&c[l]&&(c[l].steps||[]).forEach(e=>{(e.options||[]).forEach(e=>{o(e.label)})}),n.slice(0,12));0<c.length?(e.style.display="block",t.innerHTML=c.map(e=>`
-                    <div class="next-step-card" onclick="searchNextStep('${e.replace(/'/g,"\\'")}')">
+                    `;
+                }
+            });
+
+            if (totalFoundCount === 0) {
+                if (countEl) countEl.textContent = i18n.t('error_no_companies');
+                if (list) list.innerHTML = htmlResults;
+            } else {
+                if (countEl) countEl.textContent = i18n.t('palvelu_found_count').replace('{count}', totalFoundCount);
+                if (list) list.innerHTML = htmlResults;
+                renderTaxonomyInfo(globalProfilingKey);
+                renderNextSteps(globalProfilingKey);
+                renderTips(currentNeedId);
+                renderSpecialVinkit(currentNeedId);
+            }
+            // Vältetään selauksen hyppäämistä ylimmäs renderöinnin yhteydessä, ellei tämä ole ensimmäinen lataus
+            // Jos valitaan ankkuri, käyttäjä todennäköisesti haluaa pysyä samassa kohdassa
+        }
+
+        function toggleGroupExpansion(groupId) {
+            expandedGroups[groupId] = true;
+            renderResultsView();
+        }
+
+        function renderNextSteps(context) {
+            const nextStepsContainer = document.getElementById('next-steps-container');
+            const nextStepsList = document.getElementById('next-steps-list');
+            const recommendations = [];
+            const seenNormalized = new Set();
+            
+            function addRec(rec) {
+                if (!rec) return;
+                const text = typeof rec === 'string' ? rec : i18n.getText(rec);
+                if (!text || text.length < 2) return;
+                
+                const normalized = text.trim().toLowerCase();
+                if (!seenNormalized.has(normalized)) {
+                    seenNormalized.add(normalized);
+                    // Capitalize first letter for consistent display
+                    const display = text.trim().charAt(0).toUpperCase() + text.trim().slice(1);
+                    recommendations.push(display);
+                }
+            }
+            
+            // Normalize context for data lookup (handles underscore vs hyphen)
+            const contextHyphenated = context.replace(/_/g, '-');
+            
+            // 1. Taksonomiapohjaiset suositukset (sub-kontekstit ja tarkennukset)
+            if (taxonomyData) {
+                const intent = taxonomyData.intents.find(i => i.id === context || i.id === contextHyphenated);
+                if (intent) {
+                    // Lisätään taksonomian sub-kontekstit ja tarkennukset (nämä ovat "virallisia" tageja)
+                    const taxonomyTags = [...(intent.subcontexts || []), ...(intent.refinements || [])];
+                    
+                    // Suodatetaan pois ne, jotka on jo valittu tässä haussa
+                    const currentSubs = (selections._sub_contexts || []).map(s => s.toLowerCase());
+                    
+                    taxonomyTags.forEach(tag => {
+                        if (!currentSubs.includes(tag.toLowerCase())) {
+                            addRec(tag);
+                        }
+                    });
+
+                    // Lisätään myös suhteet (relations)
+                    const relations = taxonomyData.relations.filter(r => r.from === intent.id);
+                    relations.forEach(r => {
+                        const targetIntent = taxonomyData.intents.find(i => i.id === r.to);
+                        if (targetIntent) addRec(targetIntent.label);
+                        else addRec(r.to);
+                    });
+                }
+
+                // New: also look at intent_codes from active selections
+                for (let stepId in selections) {
+                    const sel = selections[stepId];
+                    if (!sel) continue;
+                    const opts = Array.isArray(sel) ? sel : [sel];
+                    opts.forEach(opt => {
+                        if (opt.intent_codes) {
+                            opt.intent_codes.forEach(code => {
+                                const relIntents = taxonomyData.relations.filter(r => r.from === code);
+                                relIntents.forEach(r => {
+                                    const target = taxonomyData.intents.find(i => i.id === r.to);
+                                    if (target) addRec(target.label);
+                                    else addRec(r.to);
+                                });
+                            });
+                        }
+                    });
+                }
+            }
+
+            // 2. Profilointipohjaiset suositukset (yritysten omat ristiinmyyntiehdotukset)
+            const topCompanies = (window.allCompanies || []).filter(c => {
+                const fits = c.profiling?.core?.fits_for || {};
+                const score = fits[context] || fits[contextHyphenated] || 0;
+                return score >= 70;
+            });
+            
+            topCompanies.forEach(c => {
+                const pairedObj = c.profiling?.core?.paired_with_by_context || {};
+                let paired = pairedObj[context] || pairedObj[contextHyphenated] || [];
+                
+                // NEW: Jos yritys on palveluntarjoaja (ei kapasiteettia), karsitaan suosituksista juhlatilat
+                // (Käyttäjätoive: ei henkilökapasiteettikohteita palveluihin)
+                const companyCap = getCompanyCapacity(c, context);
+                if (companyCap === 0) {
+                    paired = paired.filter(p => {
+                        const pText = (typeof p === 'string' ? p : i18n.getText(p)).toLowerCase();
+                        const isVenueTerm = pText.includes('juhlatila') || pText.includes('kokoustila') || pText.includes('majoitus');
+                        return !isVenueTerm;
+                    });
+                }
+
+                paired.forEach(p => addRec(p));
+            });
+
+            // 3. Konfiguraatiopohjaiset suositukset (NEEDS_CONFIGin omat vaihtoehdot)
+            const currentNeedId = new URLSearchParams(window.location.search).get('id');
+            const config = window.NEEDS_CONFIG || (typeof NEEDS_CONFIG !== 'undefined' ? NEEDS_CONFIG : null);
+            if (currentNeedId && config && config[currentNeedId]) {
+                const need = config[currentNeedId];
+                (need.steps || []).forEach(step => {
+                    (step.options || []).forEach(opt => {
+                        addRec(opt.label);
+                    });
+                });
+            }
+            
+            // Limit to max 12 recommendations
+            const limitedRecs = recommendations.slice(0, 12);
+
+            if (limitedRecs.length > 0) {
+                nextStepsContainer.style.display = 'block';
+                nextStepsList.innerHTML = limitedRecs.map(recText => {
+                    return `
+                    <div class="next-step-card" onclick="searchNextStep('${recText.replace(/'/g, "\\'")}')">
                         <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🔍</div>
-                        <div style="font-weight: 700; color: var(--primary-blue);">${e}</div>
-                        <div style="font-size: 0.75rem; color: #64748b; margin-top: 4px;">${i18n.t("btn_search_providers")}</div>
+                        <div style="font-weight: 700; color: var(--primary-blue);">${recText}</div>
+                        <div style="font-size: 0.75rem; color: #64748b; margin-top: 4px;">${i18n.t('btn_search_providers')}</div>
                     </div>
-                `).join("")):e.style.display="none"}function renderTaxonomyInfo(n){var e,i=document.getElementById("taxonomy-info-container");if(i&&taxonomyData){let t=taxonomyData.intents.find(e=>e.id===n||e.id===n.replace(/_/g,"-"));t&&(e=taxonomyData.relations.filter(e=>e.from===t.id).map(t=>{var e=taxonomyData.intents.find(e=>e.id===t.to),n=taxonomyData.serviceTypes.includes(t.to.toUpperCase()),e=e?i18n.getText(e.label):n?t.to.charAt(0).toUpperCase()+t.to.slice(1).toLowerCase():t.to,n="cross-sell"===t.type?"taxonomy_cross_sell":"supporting"===t.type?"taxonomy_supporting":"taxonomy_related";return`<span class="taxonomy-relation-tag">${i18n.t(n)}: ${e}</span>`}).join(""))?(i.innerHTML=`
+                `}).join('');
+            } else {
+                nextStepsContainer.style.display = 'none';
+            }
+        }
+
+        function renderTaxonomyInfo(context) {
+            const container = document.getElementById('taxonomy-info-container');
+            if (!container || !taxonomyData) return;
+
+            const intent = taxonomyData.intents.find(i => i.id === context || i.id === context.replace(/_/g, '-'));
+            if (!intent) {
+                container.style.display = 'none';
+                return;
+            }
+
+            const relations = taxonomyData.relations.filter(r => r.from === intent.id);
+            
+            let relationsHtml = relations.map(r => {
+                const targetIntent = taxonomyData.intents.find(i => i.id === r.to);
+                const isServiceType = taxonomyData.serviceTypes.includes(r.to.toUpperCase());
+                
+                // Kaunistetaan label: Intentin label TAI service typen nimi nätisti TAI id
+                const label = targetIntent ? i18n.getText(targetIntent.label) : (isServiceType ? r.to.charAt(0).toUpperCase() + r.to.slice(1).toLowerCase() : r.to);
+                
+                let typeKey = r.type === 'cross-sell' ? 'taxonomy_cross_sell' : (r.type === 'supporting' ? 'taxonomy_supporting' : 'taxonomy_related');
+                let typeText = i18n.t(typeKey);
+                return `<span class="taxonomy-relation-tag">${typeText}: ${label}</span>`;
+            }).join('');
+
+            if (!relationsHtml) {
+                container.style.display = 'none';
+                return;
+            }
+
+            container.innerHTML = `
                 <div class="taxonomy-info-box">
                     <div class="taxonomy-info-icon">💡</div>
                     <div class="taxonomy-info-content">
-                        <h4>${i18n.t("palvelu_taxonomy_title")}</h4>
-                        <p>${i18n.t("palvelu_taxonomy_desc").replace("{intent}",i18n.getText(t.label))}</p>
+                        <h4>${i18n.t('palvelu_taxonomy_title')}</h4>
+                        <p>${i18n.t('palvelu_taxonomy_desc').replace('{intent}', i18n.getText(intent.label))}</p>
                         <div style="margin-top: 10px;">
-                            ${e}
+                            ${relationsHtml}
                         </div>
                     </div>
                 </div>
-            `,i.style.display="flex"):i.style.display="none"}}function searchNextStep(t){if(t){var n=t.toLowerCase();let e=null;if("undefined"!=typeof NEEDS_CONFIG)for(var[i,a]of Object.entries(NEEDS_CONFIG))if(i.toLowerCase()===n||a.title&&i18n.getText(a.title).toLowerCase()===n){e=i;break}e?window.location.href="palvelu.html?id="+e:window.location.href="koko-laukaa.html?q="+encodeURIComponent(t)}}function renderTips(e){var t=document.getElementById("tips-container");t&&(t.innerHTML="",(e={haat:["sauna","hyvinvointi"],yritysjuhlat:["sauna","menokohteet-jyvas"],yritystilaisuudet:["sauna","menokohteet-jyvas"],syntymapaivat:["sauna"],mokkipalvelut:["sauna","menokohteet-jyvas"],"terveys-ja-hyvinvointi":["hyvinvointi"]}[e])&&0!==e.length?(e=`vinkit/pienetvinkit.html?files=${e.join(",")}&limit=3&lang=`+i18n.currentLang,t.innerHTML=`<iframe src="${e}" style="width: 100%; border: none; min-height: 250px; overflow: hidden;" id="tips-iframe" scrolling="no"></iframe>`,t.style.display="block",window.tipsIframeListenerAdded||(window.addEventListener("message",function(e){var t;e.data&&"resizeTipsIframe"===e.data.type&&(t=document.getElementById("tips-iframe"))&&(t.style.height=e.data.height+"px")}),window.tipsIframeListenerAdded=!0)):t.style.display="none")}function renderSpecialVinkit(e){var t,n=document.getElementById("special-vinkit-container");n&&(n.innerHTML="",n.style.display="none",t=(localStorage.getItem("userLocationName")||"").toLowerCase().includes("lievestuore"),e=["haat","yritysjuhlat","yritystilaisuudet","syntymapaivat","hautajaiset"].includes(e),t)&&e&&(n.innerHTML=`
+            `;
+            container.style.display = 'flex';
+        }
+
+        function searchNextStep(query) {
+            if (!query) return;
+
+            // Check if the query matches a top-level "Need" in NEEDS_CONFIG
+            // We check both the key and the title (case-insensitive)
+            const lowerQuery = query.toLowerCase();
+            let foundNeedId = null;
+
+            if (typeof NEEDS_CONFIG !== 'undefined') {
+                for (const [id, config] of Object.entries(NEEDS_CONFIG)) {
+                    if (id.toLowerCase() === lowerQuery || (config.title && i18n.getText(config.title).toLowerCase() === lowerQuery)) {
+                        foundNeedId = id;
+                        break;
+                    }
+                }
+            }
+
+            if (foundNeedId) {
+                // Stay in palvelu.html but switch to the new need
+                window.location.href = `palvelu.html?id=${foundNeedId}`;
+            } else {
+                // Go to the general company/service search (index.html or koko-laukaa.html)
+                // In this project, koko-laukaa.html handles the free-text results.
+                window.location.href = `koko-laukaa.html?q=${encodeURIComponent(query)}`;
+            }
+        }
+
+        function renderTips(needId) {
+            const tipsContainer = document.getElementById('tips-container');
+            if (!tipsContainer) return;
+            tipsContainer.innerHTML = '';
+
+            const themeTips = {
+                'haat': ['sauna', 'hyvinvointi'],
+                'yritysjuhlat': ['sauna', 'menokohteet-jyvas'],
+                'yritystilaisuudet': ['sauna', 'menokohteet-jyvas'],
+                'syntymapaivat': ['sauna'],
+                'mokkipalvelut': ['sauna', 'menokohteet-jyvas'],
+                'terveys-ja-hyvinvointi': ['hyvinvointi']
+            };
+
+            const tipsFiles = themeTips[needId];
+            if (!tipsFiles || tipsFiles.length === 0) {
+                tipsContainer.style.display = 'none';
+                return;
+            }
+
+            const tipsQuery = tipsFiles.join(',');
+            const iframeUrl = `vinkit/pienetvinkit.html?files=${tipsQuery}&limit=3&lang=${i18n.currentLang}`;
+
+            tipsContainer.innerHTML = `<iframe src="${iframeUrl}" style="width: 100%; border: none; min-height: 250px; overflow: hidden;" id="tips-iframe" scrolling="no"></iframe>`;
+            tipsContainer.style.display = 'block';
+
+            if (!window.tipsIframeListenerAdded) {
+                window.addEventListener('message', function(e) {
+                    if (e.data && e.data.type === 'resizeTipsIframe') {
+                        const iframe = document.getElementById('tips-iframe');
+                        if (iframe) {
+                            iframe.style.height = e.data.height + 'px';
+                        }
+                    }
+                });
+                window.tipsIframeListenerAdded = true;
+            }
+        }
+
+        function renderSpecialVinkit(needId) {
+            const container = document.getElementById('special-vinkit-container');
+            if (!container) return;
+            container.innerHTML = '';
+            container.style.display = 'none';
+
+            // Tarkistetaan onko kyseessä Lievestuore ja juhlatila-aiheinen haku
+            const userLoc = (localStorage.getItem('userLocationName') || '').toLowerCase();
+            const isLievestuore = userLoc.includes('lievestuore');
+            
+            const venueNeeds = ['haat', 'yritysjuhlat', 'yritystilaisuudet', 'syntymapaivat', 'hautajaiset'];
+            const isVenueNeed = venueNeeds.includes(needId);
+
+            if (isLievestuore && isVenueNeed) {
+                container.innerHTML = `
                     <div class="next-steps-section" style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border: 2px solid #7dd3fc; margin-top: 2rem; max-width: 1200px; margin-left: auto; margin-right: auto;">
-                        <h3 style="text-align: center; font-family: var(--accent-font); color: #0369a1; margin-bottom: 1rem; font-size: 1.5rem;">${i18n.t("special_vinkit_title").replace("{location}","Lievestuoreella")}</h3>
+                        <h3 style="text-align: center; font-family: var(--accent-font); color: #0369a1; margin-bottom: 1rem; font-size: 1.5rem;">${i18n.t('special_vinkit_title').replace('{location}', 'Lievestuoreella')}</h3>
                         <p style="text-align: center; font-size: 0.95rem; color: #0c4a6e; margin-bottom: 1.5rem; max-width: 700px; margin-left: auto; margin-right: auto;">
-                            ${i18n.t("special_vinkit_desc")}
+                            ${i18n.t('special_vinkit_desc')}
                         </p>
                         <div class="next-steps-grid" style="justify-content: center;">
                             <a href="https://laukaainfo.fi/tarinakartta.html?step=1&r=rantakavely-1#kavelyreitit-section" target="_blank" class="next-step-card" style="text-decoration: none; border-color: #7dd3fc;">
                                 <div style="font-size: 2rem; margin-bottom: 0.5rem;">🚶</div>
-                                <div style="font-weight: 800; color: var(--primary-blue); font-size: 1.1rem;">${i18n.t("lievestuore_rantakavely")}</div>
-                                <p style="font-size: 0.85rem; color: #475569; margin: 8px 0;">${i18n.t("lievestuore_rantakavely_desc")}</p>
+                                <div style="font-weight: 800; color: var(--primary-blue); font-size: 1.1rem;">${i18n.t('lievestuore_rantakavely')}</div>
+                                <p style="font-size: 0.85rem; color: #475569; margin: 8px 0;">${i18n.t('lievestuore_rantakavely_desc')}</p>
                                 <div style="font-size: 0.75rem; font-weight: 700; color: #0369a1; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 5px;">
-                                    ${i18n.t("btn_open_storymap")}
+                                    ${i18n.t('btn_open_storymap')}
                                 </div>
                             </a>
                         </div>
                     </div>
-                `,n.style.display="block")}function getCompanyCapacity(e,t){e=getCategoryData(e,t);return e&&(e.capacity_max||e.meeting_capacity||e.seminar_capacity||e.seated_capacity||e.memorial_service_capacity||e.outdoor_capacity||e.catering_max_capacity)||0}function renderCompanyCard(t,n,i,e,a=null,o=!1,s=!1,l=""){var r="function"==typeof slugify?slugify(t.nimi):String(t.nimi).toLowerCase().replace(/\s+/g,"-"),c=(t.paketti||t.tyyppi||"").toLowerCase().match(/premium|pro/),r=c?`yritys/${r}.html`:"yrityskortti.html?id="+r,d=(window.categoryIcons||{})[t.kategoria]||"🏢";let u="";var p=80<=getFitsForScore(t,i),e=!o&&e&&(e.has(t.id)||e.has(t.nimi));let g="",m="";if(a&&t.lat&&(t.lon||t.lng)){a=getHaversineDistance(a.lat,a.lng,parseFloat(t.lat),parseFloat(t.lon||t.lng)),a=a<1?Math.round(1e3*a)+" m":a.toFixed(1)+" km";m=`<div class="dist-badge" style="background:#1e40af;color:white;">${i18n.t("dist_from_selected").replace("{dist}",a)}</div>`}else{a=localStorage.getItem("userCoords");if(a&&t.lat&&(t.lon||t.lng))try{var f=JSON.parse(a),y=getHaversineDistance(f.lat,f.lng||f.lon,parseFloat(t.lat),parseFloat(t.lon||t.lng)),_=y<1?Math.round(1e3*y)+" m":y.toFixed(1)+" km";m=`<div class="dist-badge">${i18n.t("dist_from_user").replace("{dist}",_)}</div>`}catch(e){}}if(t.profiling){let e=t.profiling.core||{};a=getCategoryData(t,i),f=((a?.inhouse_catering_available||e.node_links&&e.node_links.includes("JUHLATILA")&&e.node_links.includes("CATERING"))&&(u+=`<span class="hybrid-badge" style="background:#f0fdf4; color:#16a34a; border:1px solid #bbf7d0; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:bold; margin-right:5px;" title="${i18n.t("badge_hybrid_title")}">${i18n.t("badge_hybrid")}</span>`),l&&l.toLowerCase().includes("pitopalvelu"));0<n&&!f&&0<(y=getCompanyCapacity(t,i))&&(g=n<=y?`<div style="font-size:0.85rem; color:#16a34a; font-weight:700; margin-bottom:10px;">${i18n.t("capacity_fits").replace("{cap}",y)}</div>`:`<div style="font-size:0.85rem; color:#d97706; font-weight:700; margin-bottom:10px;">${i18n.t("capacity_note").replace("{cap}",y)}</div>`),a?.is_accessible&&(u+='<span title="Esteetön pääsy">♿</span>'),a?.has_sauna&&(u+='<span title="Sauna saatavilla">🧖</span>'),e.home_service&&(u+='<span title="Kotipalvelu">🏠</span>'),e.emergency_available&&(u+='<span title="Päivystys">🚨</span>')}_=s?i18n.t("btn_deselect_anchor"):i18n.t("btn_select_anchor");let v=t.profiling?.core||{};l=(v.email||t.email||"").trim(),f=l&&"-"!==l&&"Ei tiedossa"!==l;let h=1,b=(f&&h++,o&&h++,"card-actions"),x=(3===h?b="card-actions has-three":1===h&&(b="card-actions has-one"),`<div class="${b}">`);f&&(x+=`
-                <button type="button" class="btn-action primary-action" onclick="event.preventDefault(); event.stopPropagation(); openInquiryModal('${t.id}', '${t.nimi.replace(/'/g,"\\'")}')">
-                    <i>✉️</i><span>${i18n.t("btn_send_inquiry_short")}</span>
-                </button>`),x+=`
-                <a href="${r}" class="btn-action">
-                    <i>📄</i><span>${i18n.t("btn_view_card")}</span>
-                </a>`,o&&(x+=`
-                <button type="button" class="btn-action ${s?"primary-action":""}" onclick="event.preventDefault(); event.stopPropagation(); selectAnchor('${t.id}')">
-                    <i>🎯</i><span>${_}</span>
-                </button>`),x+="</div>";y=s?"company-result-card selected-anchor":"company-result-card",a=(t.osoite||"").toLowerCase(),l=a.includes("laukaa")||a.includes("lievestuore")||a.includes("vihtavuori")||a.includes("leppävesi")||a.includes("vehniä")||t.alue_slug&&0<t.alue_slug.length?i18n.t("local_provider_laukaa"):i18n.t("network_provider");return`
-                <div class="${y} ${p?"top-match":""} ${e?"partner-boost":""}">
-                    ${e?`<div class="result-badge badge-partner">${i18n.t("badge_partner")}</div>`:""}
-                    ${p&&!e?`<div class="result-badge badge-top">${i18n.t("badge_top")}</div>`:""}
-                    ${!c||p||e?"":`<div class="result-badge badge-premium">${i18n.t("badge_premium")}</div>`}
-                    <div class="result-icon">${d}</div>
-                    <h3>${t.nimi}</h3>
-                    <div class="slogan">${(t.mainoslause||(t.esittely?t.esittely.substring(0,100)+"...":l)).replace(/@@/g,"")}</div>
-                    ${g}
-                    <div class="card-meta">${m}<div class="feature-badges">${u}</div></div>
-                    <div class="match-explanation">${getMatchExplanation(t,n,i)}</div>
-                    ${x}
+                `;
+                container.style.display = 'block';
+            }
+        }
+
+        function getCompanyCapacity(c, profilingKey) {
+            const data = getCategoryData(c, profilingKey);
+            if (!data) return 0;
+            return data.capacity_max || 
+                   data.meeting_capacity || 
+                   data.seminar_capacity || 
+                   data.seated_capacity || 
+                   data.memorial_service_capacity || 
+                   data.outdoor_capacity || 
+                   data.catering_max_capacity || 0;
+        }
+
+        function renderCompanyCard(c, requestedCapacity, profilingKey, collaboratorsSet, anchorCoords = null, isAnchorGroup = false, isSelected = false, groupLabel = '') {
+            const slug = typeof slugify === 'function' ? slugify(c.nimi) : String(c.nimi).toLowerCase().replace(/\s+/g, '-');
+            const isPremium = (c.paketti || c.tyyppi || '').toLowerCase().match(/premium|pro/);
+            const cardUrl = isPremium ? `yritys/${slug}.html` : `yrityskortti.html?id=${slug}`;
+            const icons = window.categoryIcons || {};
+            const icon = icons[c.kategoria] || '🏢';
+
+            let badges = '';
+            let isTopMatch = (getFitsForScore(c, profilingKey) >= 80);
+            // NEW: Kumppani-merkintä näytetään vain jos kyseessä on eri ryhmä kuin ankkuri
+            let isPartner = !isAnchorGroup && collaboratorsSet && (collaboratorsSet.has(c.id) || collaboratorsSet.has(c.nimi));
+            let capacityNote = '';
+            let distanceHtml = '';
+
+            if (anchorCoords && c.lat && (c.lon || c.lng)) {
+                const dist = getHaversineDistance(anchorCoords.lat, anchorCoords.lng, parseFloat(c.lat), parseFloat(c.lon || c.lng));
+                const distStr = dist < 1 ? `${Math.round(dist * 1000)} m` : `${dist.toFixed(1)} km`;
+                distanceHtml = `<div class="dist-badge" style="background:#1e40af;color:white;">${i18n.t('dist_from_selected').replace('{dist}', distStr)}</div>`;
+            } else {
+                const userCoordsRaw = localStorage.getItem('userCoords');
+                if (userCoordsRaw && c.lat && (c.lon || c.lng)) {
+                    try {
+                        const u = JSON.parse(userCoordsRaw);
+                        const dist = getHaversineDistance(u.lat, u.lng || u.lon, parseFloat(c.lat), parseFloat(c.lon || c.lng));
+                        const distStr = dist < 1 ? `${Math.round(dist * 1000)} m` : `${dist.toFixed(1)} km`;
+                        distanceHtml = `<div class="dist-badge">${i18n.t('dist_from_user').replace('{dist}', distStr)}</div>`;
+                    } catch(e) {}
+                }
+            }
+
+            if (c.profiling) {
+                const core = c.profiling.core || {};
+                const catData = getCategoryData(c, profilingKey);
+                
+                // NEW: Hybrid / Multi-service detection
+                const isHybrid = catData?.inhouse_catering_available || 
+                                (core.node_links && core.node_links.includes('JUHLATILA') && core.node_links.includes('CATERING'));
+                
+                if (isHybrid) {
+                    badges += `<span class="hybrid-badge" style="background:#f0fdf4; color:#16a34a; border:1px solid #bbf7d0; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:bold; margin-right:5px;" title="${i18n.t('badge_hybrid_title')}">${i18n.t('badge_hybrid')}</span>`;
+                }
+
+                // Jos kyseessä on pitopalvelu-listaus, ei näytetä "Tilaan mahtuu max X hlö" -ilmoitusta, koska ruokaa riittää muuallekin
+                const isCateringGroup = groupLabel && groupLabel.toLowerCase().includes('pitopalvelu');
+                
+                if (requestedCapacity > 0 && !isCateringGroup) {
+                    const cap = getCompanyCapacity(c, profilingKey);
+                    if (cap > 0) {
+                        if (cap >= requestedCapacity) capacityNote = `<div style="font-size:0.85rem; color:#16a34a; font-weight:700; margin-bottom:10px;">${i18n.t('capacity_fits').replace('{cap}', cap)}</div>`;
+                        else capacityNote = `<div style="font-size:0.85rem; color:#d97706; font-weight:700; margin-bottom:10px;">${i18n.t('capacity_note').replace('{cap}', cap)}</div>`;
+                    }
+                }
+                if (catData?.is_accessible) badges += '<span title="Esteetön pääsy">♿</span>';
+                if (catData?.has_sauna) badges += '<span title="Sauna saatavilla">🧖</span>';
+                if (core.home_service) badges += '<span title="Kotipalvelu">🏠</span>';
+                if (core.emergency_available) badges += '<span title="Päivystys">🚨</span>';
+            }
+
+            const btnAnchorText = isSelected ? i18n.t('btn_deselect_anchor') : i18n.t('btn_select_anchor');
+            
+            const core = c.profiling?.core || {};
+            const email = (core.email || c.email || '').trim();
+            const hasEmail = email && email !== '-' && email !== 'Ei tiedossa';
+
+            let buttonsCount = 1; // "Avaa yrityskortti" on aina mukana
+            if (hasEmail) buttonsCount++;
+            if (isAnchorGroup) buttonsCount++;
+
+            let actionGridClass = 'card-actions';
+            if (buttonsCount === 3) actionGridClass = 'card-actions has-three';
+            else if (buttonsCount === 1) actionGridClass = 'card-actions has-one';
+
+            let actionHtml = `<div class="${actionGridClass}">`;
+            
+            if (hasEmail) {
+                actionHtml += `
+                <button type="button" class="btn-action primary-action" onclick="event.preventDefault(); event.stopPropagation(); openInquiryModal('${c.id}', '${c.nimi.replace(/'/g, "\\'")}')">
+                    <i>✉️</i><span>${i18n.t('btn_send_inquiry_short')}</span>
+                </button>`;
+            }
+
+            actionHtml += `
+                <a href="${cardUrl}" class="btn-action">
+                    <i>📄</i><span>${i18n.t('btn_view_card')}</span>
+                </a>`;
+                
+            if (isAnchorGroup) {
+                actionHtml += `
+                <button type="button" class="btn-action ${isSelected ? 'primary-action' : ''}" onclick="event.preventDefault(); event.stopPropagation(); selectAnchor('${c.id}')">
+                    <i>🎯</i><span>${btnAnchorText}</span>
+                </button>`;
+            }
+            actionHtml += `</div>`;
+
+            let wrapperClass = isSelected ? 'company-result-card selected-anchor' : 'company-result-card';
+
+            const addressLower = (c.osoite || '').toLowerCase();
+            const isLaukaa = addressLower.includes('laukaa') || 
+                             addressLower.includes('lievestuore') || 
+                             addressLower.includes('vihtavuori') || 
+                             addressLower.includes('leppävesi') || 
+                             addressLower.includes('vehniä') ||
+                             (c.alue_slug && c.alue_slug.length > 0);
+
+            const fallbackSlogan = isLaukaa ? i18n.t('local_provider_laukaa') : i18n.t('network_provider');
+
+            return `
+                <div class="${wrapperClass} ${isTopMatch ? 'top-match' : ''} ${isPartner ? 'partner-boost' : ''}">
+                    ${isPartner ? `<div class="result-badge badge-partner">${i18n.t('badge_partner')}</div>` : ''}
+                    ${isTopMatch && !isPartner ? `<div class="result-badge badge-top">${i18n.t('badge_top')}</div>` : ''}
+                    ${isPremium && !isTopMatch && !isPartner ? `<div class="result-badge badge-premium">${i18n.t('badge_premium')}</div>` : ''}
+                    <div class="result-icon">${icon}</div>
+                    <h3>${c.nimi}</h3>
+                    <div class="slogan">${(c.mainoslause || (c.esittely ? c.esittely.substring(0, 100) + '...' : fallbackSlogan)).replace(/@@/g, '')}</div>
+                    ${capacityNote}
+                    <div class="card-meta">${distanceHtml}<div class="feature-badges">${badges}</div></div>
+                    <div class="match-explanation">${getMatchExplanation(c, requestedCapacity, profilingKey)}</div>
+                    ${actionHtml}
                 </div>
-            `}function getHaversineDistance(e,t,n,i){var a=deg2rad(n-e),i=deg2rad(i-t),t=Math.sin(a/2)*Math.sin(a/2)+Math.cos(deg2rad(e))*Math.cos(deg2rad(n))*Math.sin(i/2)*Math.sin(i/2);return 6371*(2*Math.atan2(Math.sqrt(t),Math.sqrt(1-t)))}function deg2rad(e){return e*(Math.PI/180)}function getMatchExplanation(e,t,n){var i=[];if(e.profiling){var a=e.profiling.core||{},o=a.fits_for||{};if(80<=o[n]?i.push(i18n.t("match_main_area")):40<=o[n]&&i.push(i18n.t("match_fits_well")),selections._sub_contexts&&0<selections._sub_contexts.length){let n=a.sub_contexts||[],e=!1;if(Array.isArray(n))e=selections._sub_contexts.some(e=>n.includes(e));else if("object"==typeof n&&null!==n){let t=Object.values(n).flat();e=selections._sub_contexts.some(e=>t.includes(e))}e&&i.push(i18n.t("match_specialized"))}o=((e.kategoria||"")+" "+(e.tags||"")+" "+(e.nimi||"")).toLowerCase().includes("pitopalvelu"),a=(0<t&&!o&&t<=getCompanyCapacity(e,n)&&i.push(i18n.t("match_capacity_ok")),getCategoryData(e,"events_and_celebrations")||{});a.is_accessible&&selections.palvelut?.some(e=>(i18n.getText(e.label)||"").toLowerCase().includes("esteetön")||(i18n.getText(e.label)||"").toLowerCase().includes("accessible"))&&i.push(i18n.t("match_accessible")),a.has_sauna&&selections.palvelut?.some(e=>(i18n.getText(e.label)||"").toLowerCase().includes("sauna"))&&i.push(i18n.t("match_sauna"))}return 0===i.length?i18n.t("match_default"):i.slice(0,2).join(" • ")}function resetPalvelu(){currentStepIndex=0,selections={},document.getElementById("step-section").style.display="block",document.getElementById("results-container").style.display="none",renderStep()}function initUserLocation(){let i=document.getElementById("user-location-input");var e=document.getElementById("locate-me-btn");let a=document.getElementById("location-status");if(i){var t=localStorage.getItem("userLocationName"),n=localStorage.getItem("userCoords"),t=(t&&(i.value=t),new URLSearchParams(window.location.search)),o=t.get("lat"),s=t.get("lon"),t=t.get("loc");if(o&&s){o={lat:parseFloat(o),lng:parseFloat(s)};localStorage.setItem("userCoords",JSON.stringify(o)),t&&(localStorage.setItem("userLocationName",t),i.value=t),window.userCoords=o}else if(n)try{window.userCoords=JSON.parse(n)}catch(e){}i.addEventListener("keypress",e=>{"Enter"===e.key&&(e.preventDefault(),i.blur())}),i.addEventListener("change",async()=>{var e=i.value.trim();if(e){localStorage.setItem("userLocationName",e),a.textContent="Haetaan koordinaatteja...";try{var t,n=await(await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(e+", Laukaa")}&limit=1`)).json();n&&0<n.length?(t={lat:parseFloat(n[0].lat),lng:parseFloat(n[0].lon)},localStorage.setItem("userCoords",JSON.stringify(t)),window.userCoords=t,a.textContent=i18n.t("status_location_updated"),"none"!==document.getElementById("results-container").style.display&&showResults()):a.textContent=i18n.t("status_address_not_found_precise")}catch(e){a.textContent=i18n.t("status_search_error")}}else localStorage.removeItem("userCoords"),localStorage.removeItem("userLocationName"),window.userCoords=null,"none"!==document.getElementById("results-container").style.display&&showResults()}),e&&e.addEventListener("click",()=>{navigator.geolocation?(a.textContent=i18n.t("status_locating"),navigator.geolocation.getCurrentPosition(async e=>{e={lat:e.coords.latitude,lng:e.coords.longitude};window.userCoords=e,localStorage.setItem("userCoords",JSON.stringify(e));try{var t=(await(await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${e.lat}&lon=`+e.lng)).json()).display_name.split(",")[0]||"Oma sijainti";i.value=t,localStorage.setItem("userLocationName",t),a.textContent=i18n.t("status_location_updated")}catch(e){i.value=i18n.t("label_my_location"),a.textContent=i18n.t("status_location_updated")}"none"!==document.getElementById("results-container").style.display&&showResults()},()=>{a.textContent=i18n.t("status_geo_failed")})):a.textContent="Selaimesi ei tue sijaintia."})}}function printResults(){if(0===currentResultsGroups.length)alert("Ei tuloksia tulostettavaksi. Valitse ensin palveluita.");else{var e=window.open("","_blank"),t=document.getElementById("hero-title").textContent;let o=`
+            `;
+        }
+
+        function getHaversineDistance(lat1, lon1, lat2, lon2) {
+            const dLat = deg2rad(lat2 - lat1);
+            const dLon = deg2rad(lon2 - lon1);
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                      Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+                      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return 6371 * c; // Distance in km
+        }
+
+        function deg2rad(deg) {
+            return deg * (Math.PI / 180);
+        }
+
+        function getMatchExplanation(c, requestedCapacity, profilingKey) {
+            const reasons = [];
+            if (c.profiling) {
+                const core = c.profiling.core || {};
+                const fits = core.fits_for || {};
+                
+                // Taso 1: Pääkontekstin soveltuvuus
+                if (fits[profilingKey] >= 80) reasons.push(i18n.t('match_main_area'));
+                else if (fits[profilingKey] >= 40) reasons.push(i18n.t('match_fits_well'));
+
+                // Taso 2: Sub-context match (Erikoistuminen)
+                if (selections._sub_contexts && selections._sub_contexts.length > 0) {
+                    const companySubContexts = core.sub_contexts || [];
+                    let isSubMatch = false;
+                    if (Array.isArray(companySubContexts)) {
+                        isSubMatch = selections._sub_contexts.some(sc => companySubContexts.includes(sc));
+                    } else if (typeof companySubContexts === 'object' && companySubContexts !== null) {
+                        // Tarkistetaan kaikki objektin avaimet
+                        const allSubContexts = Object.values(companySubContexts).flat();
+                        isSubMatch = selections._sub_contexts.some(sc => allSubContexts.includes(sc));
+                    }
+                    
+                    if (isSubMatch) {
+                        reasons.push(i18n.t('match_specialized'));
+                    }
+                }
+
+                // Taso 3: Kapasiteetti ja ominaisuudet
+                const isFoodService = ((c.kategoria || '') + ' ' + (c.tags || '') + ' ' + (c.nimi || '')).toLowerCase().includes('pitopalvelu');
+                if (requestedCapacity > 0 && !isFoodService) {
+                    const cap = getCompanyCapacity(c, profilingKey);
+                    if (cap >= requestedCapacity) reasons.push(i18n.t('match_capacity_ok'));
+                }
+
+                const events = getCategoryData(c, 'events_and_celebrations') || {};
+                if (events.is_accessible && selections.palvelut?.some(s => (i18n.getText(s.label) || '').toLowerCase().includes('esteetön') || (i18n.getText(s.label) || '').toLowerCase().includes('accessible'))) reasons.push(i18n.t('match_accessible'));
+                if (events.has_sauna && selections.palvelut?.some(s => (i18n.getText(s.label) || '').toLowerCase().includes('sauna'))) reasons.push(i18n.t('match_sauna'));
+            }
+
+            if (reasons.length === 0) return i18n.t('match_default');
+            // Palautetaan enintään kaksi parasta perustelua
+            return reasons.slice(0, 2).join(" • ");
+        }
+
+        function resetPalvelu() {
+            currentStepIndex = 0;
+            selections = {};
+            document.getElementById('step-section').style.display = 'block';
+            document.getElementById('results-container').style.display = 'none';
+            renderStep();
+        }
+
+        function initUserLocation() {
+            const locationInput = document.getElementById('user-location-input');
+            const locateMeBtn = document.getElementById('locate-me-btn');
+            const statusEl = document.getElementById('location-status');
+
+            if (!locationInput) return;
+
+            // Palauta tallennettu sijainti
+            const savedName = localStorage.getItem('userLocationName');
+            const savedCoordsRaw = localStorage.getItem('userCoords');
+
+            if (savedName) locationInput.value = savedName;
+            
+            // Jos tuli URL-parametrina (esim. etusivulta)
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlLat = urlParams.get('lat');
+            const urlLon = urlParams.get('lon');
+            const urlLoc = urlParams.get('loc');
+
+            if (urlLat && urlLon) {
+                const coords = { lat: parseFloat(urlLat), lng: parseFloat(urlLon) };
+                localStorage.setItem('userCoords', JSON.stringify(coords));
+                if (urlLoc) {
+                    localStorage.setItem('userLocationName', urlLoc);
+                    locationInput.value = urlLoc;
+                }
+                window.userCoords = coords;
+            } else if (savedCoordsRaw) {
+                try {
+                    window.userCoords = JSON.parse(savedCoordsRaw);
+                } catch(e) {}
+            }
+
+            // Enter-painikkeen tuki tekstikentälle (helpottaa manuaalista hakua)
+            locationInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    locationInput.blur(); // Laukaisee change-tapahtuman automaattisesti
+                }
+            });
+
+            // Kuuntele manuaalista syöttöä (yksinkertainen paikkahaku tai pelkkä tallennus)
+            locationInput.addEventListener('change', async () => {
+                const val = locationInput.value.trim();
+                if (!val) {
+                    localStorage.removeItem('userCoords');
+                    localStorage.removeItem('userLocationName');
+                    window.userCoords = null;
+                    if (document.getElementById('results-container').style.display !== 'none') showResults();
+                    return;
+                }
+
+                localStorage.setItem('userLocationName', val);
+                statusEl.textContent = "Haetaan koordinaatteja...";
+
+                try {
+                    const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(val + ', Laukaa')}&limit=1`);
+                    const data = await response.json();
+                    if (data && data.length > 0) {
+                        const coords = { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
+                        localStorage.setItem('userCoords', JSON.stringify(coords));
+                        window.userCoords = coords;
+                        statusEl.textContent = i18n.t('status_location_updated');
+                        if (document.getElementById('results-container').style.display !== 'none') showResults();
+                    } else {
+                        statusEl.textContent = i18n.t('status_address_not_found_precise');
+                    }
+                } catch(e) {
+                    statusEl.textContent = i18n.t('status_search_error');
+                }
+            });
+
+            if (locateMeBtn) {
+                locateMeBtn.addEventListener('click', () => {
+                    if (!navigator.geolocation) {
+                        statusEl.textContent = "Selaimesi ei tue sijaintia.";
+                        return;
+                    }
+
+                    statusEl.textContent = i18n.t('status_locating');
+                    navigator.geolocation.getCurrentPosition(async (pos) => {
+                        const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+                        window.userCoords = coords;
+                        localStorage.setItem('userCoords', JSON.stringify(coords));
+
+                        // Hae osoite käänteisellä geokoodauksella
+                        try {
+                            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${coords.lat}&lon=${coords.lng}`);
+                            const data = await res.json();
+                            const name = data.display_name.split(',')[0] || "Oma sijainti";
+                            locationInput.value = name;
+                            localStorage.setItem('userLocationName', name);
+                            statusEl.textContent = i18n.t('status_location_updated');
+                        } catch(e) {
+                            locationInput.value = i18n.t('label_my_location');
+                            statusEl.textContent = i18n.t('status_location_updated');
+                        }
+                        
+                        if (document.getElementById('results-container').style.display !== 'none') showResults();
+                    }, () => {
+                        statusEl.textContent = i18n.t('status_geo_failed');
+                    });
+                });
+            }
+        }
+
+        function printResults() {
+            if (currentResultsGroups.length === 0) {
+                alert("Ei tuloksia tulostettavaksi. Valitse ensin palveluita.");
+                return;
+            }
+
+            const printWindow = window.open('', '_blank');
+            const needTitle = document.getElementById('hero-title').textContent;
+            
+            let html = `
                 <!DOCTYPE html>
                 <html>
                 <head>
-                    <title>${i18n.t("print_recommendations_title").replace("{title}",t)}</title>
+                    <title>${i18n.t('print_recommendations_title').replace('{title}', needTitle)}</title>
                     <style>
                         body { font-family: 'Inter', sans-serif; padding: 40px; color: #333; line-height: 1.5; }
                         h1 { color: #1e40af; border-bottom: 2px solid #1e40af; padding-bottom: 10px; }
@@ -120,28 +2442,86 @@
                     </style>
                 </head>
                 <body>
-                    <h1>${i18n.t("print_header")}</h1>
-                    <p><strong>${i18n.t("print_need")}:</strong> ${t}</p>
-                    <p>${i18n.t("print_date").replace("{date}",(new Date).toLocaleDateString("fi"===i18n.currentLang?"fi-FI":"en-GB")).replace("{time}",(new Date).toLocaleTimeString("fi"===i18n.currentLang?"fi-FI":"en-GB"))}</p>
-            `;currentResultsGroups.forEach(e=>{o+=`<div class="group">
-                    <div class="group-title">${e.title}</div>`,e.companies.forEach(e=>{var t=e.profiling?.core||{},n=(e,t=!1)=>{if(!e||"-"===e)return"";let n="function"==typeof cleanUrl?cleanUrl(e,t):e;return(n=n.replace(/mailto:/gi,"")).trim()},i=n(t.phone||e.puhelin||e.phone)||i18n.t("print_no_phone"),a=n(t.email||e.email)||i18n.t("print_no_email"),n=n(t.website||e.nettisivu||e.website,!0)||i18n.t("print_no_website");o+=`
+                    <h1>${i18n.t('print_header')}</h1>
+                    <p><strong>${i18n.t('print_need')}:</strong> ${needTitle}</p>
+                    <p>${i18n.t('print_date').replace('{date}', new Date().toLocaleDateString(i18n.currentLang === 'fi' ? 'fi-FI' : 'en-GB')).replace('{time}', new Date().toLocaleTimeString(i18n.currentLang === 'fi' ? 'fi-FI' : 'en-GB'))}</p>
+            `;
+
+            currentResultsGroups.forEach(group => {
+                html += `<div class="group">
+                    <div class="group-title">${group.title}</div>`;
+                
+                group.companies.forEach(c => {
+                    const core = c.profiling?.core || {};
+                    
+                    const cleanContact = (str, isWebsite = false) => {
+                        if (!str || str === '-') return '';
+                        // Käytetään globaalia cleanUrl-funktiota (script.js)
+                        let s = typeof cleanUrl === 'function' ? cleanUrl(str, isWebsite) : str;
+                        s = s.replace(/mailto:/gi, ''); // mailto: pois
+                        return s.trim();
+                    };
+                    
+                    const phone = cleanContact(core.phone || c.puhelin || c.phone) || i18n.t('print_no_phone');
+                    const email = cleanContact(core.email || c.email) || i18n.t('print_no_email');
+                    const website = cleanContact(core.website || c.nettisivu || c.website, true) || i18n.t('print_no_website');
+                    
+                    html += `
                         <div class="company">
-                            <div class="company-name">${e.nimi}</div>
-                            <div class="company-slogan">${e.mainoslause||""}</div>
+                            <div class="company-name">${c.nimi}</div>
+                            <div class="company-slogan">${c.mainoslause || ''}</div>
                             <div class="contact-info">
-                                <div class="info-item">📞 ${i}</div>
-                                <div class="info-item">📧 ${a}</div>
-                                <div class="info-item">🌐 ${n}</div>
-                                <div class="info-item">📍 ${e.kategoria||""}</div>
+                                <div class="info-item">📞 ${phone}</div>
+                                <div class="info-item">📧 ${email}</div>
+                                <div class="info-item">🌐 ${website}</div>
+                                <div class="info-item">📍 ${c.kategoria || ''}</div>
                             </div>
                         </div>
-                    `}),o+="</div>"}),o+=`
+                    `;
+                });
+                
+                html += `</div>`;
+            });
+
+            html += `
                     <div class="footer">
                         © 2026 LaukaaInfo – www.laukaainfo.fi – Palvelua ylläpitää Mediazoo.fi
                     </div>
                     <div class="no-print" style="margin-top: 30px; text-align: center;">
-                        <button onclick="window.print()" style="padding: 10px 20px; background: #1e40af; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">${i18n.t("print_now")}</button>
+                        <button onclick="window.print()" style="padding: 10px 20px; background: #1e40af; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">${i18n.t('print_now')}</button>
                     </div>
                 </body>
                 </html>
-            `,e.document.write(o),e.document.close()}}function openInquiryModal(e,t){document.getElementById("inquiry-company-id").value=e,document.getElementById("inquiry-title").textContent=i18n.t("inquiry_request_quote")+t,document.getElementById("inquiry-overlay").classList.add("active")}function closeInquiryModal(){document.getElementById("inquiry-overlay").classList.remove("active")}function submitInquiry(e){e.preventDefault(),alert(i18n.t("alert_inquiry_sent")),closeInquiryModal(),document.getElementById("inquiry-form").reset()}document.addEventListener("DOMContentLoaded",()=>{initPalvelu(),initUserLocation(),window.i18n&&window.i18n.translatePage()})</script></body></html>
+            `;
+
+            printWindow.document.write(html);
+            printWindow.document.close();
+        }
+        function openInquiryModal(id, name) {
+            document.getElementById('inquiry-company-id').value = id;
+            document.getElementById('inquiry-title').textContent = i18n.t('inquiry_request_quote') + name;
+            document.getElementById('inquiry-overlay').classList.add('active');
+        }
+
+        function closeInquiryModal() {
+            document.getElementById('inquiry-overlay').classList.remove('active');
+        }
+
+        function submitInquiry(e) {
+            e.preventDefault();
+            alert(i18n.t('alert_inquiry_sent'));
+            closeInquiryModal();
+            document.getElementById('inquiry-form').reset();
+        }
+
+        // Käynnistys
+        document.addEventListener('DOMContentLoaded', () => {
+            initPalvelu();
+            initUserLocation();
+            // Translate static elements
+            if (window.i18n) window.i18n.translatePage();
+        });
+    </script>
+</body>
+
+</html>
