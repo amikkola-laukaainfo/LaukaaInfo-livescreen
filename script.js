@@ -1979,11 +1979,7 @@ function showSuggestions() {
     // 2. Collect Categories and Tags from context
     const categories = [...new Set(companiesInContext.map(c => c.kategoria))].filter(Boolean);
     const tags = [...new Set(companiesInContext.flatMap(c => {
-        const profilingTags = [
-            ...(c.profiling?.core?.intent_codes || []),
-            ...(Array.isArray(c.profiling?.core?.sub_contexts) ? c.profiling.core.sub_contexts : Object.values(c.profiling?.core?.sub_contexts || {}).flat())
-        ];
-        const combined = `${c.tags || ''},${c.palvelutapa || ''},${profilingTags.join(',')}`;
+        const combined = `${c.tags || ''},${c.palvelutapa || ''}`;
         return combined.split(',').map(t => t.trim()).filter(Boolean);
     }))];
 
@@ -2067,7 +2063,7 @@ function showSuggestions() {
                 return tagList.includes(item.name.toLowerCase());
             }).length;
             label = `#${item.name} (${count} kpl)`;
-            badge = `<span class="suggestion-tag">Tunniste${item.region ? ' (' + item.region + ')' : ''}</span>`;
+            badge = `<span class="suggestion-tag">Palvelutyyppi${item.region ? ' (' + item.region + ')' : ''}</span>`;
         } else if (item.type === 'business') {
             label = item.company.nimi;
             badge = `<span class="suggestion-cat">${item.company.kategoria}</span>`;
