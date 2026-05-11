@@ -1979,7 +1979,11 @@ function showSuggestions() {
     // 2. Collect Categories and Tags from context
     const categories = [...new Set(companiesInContext.map(c => c.kategoria))].filter(Boolean);
     const tags = [...new Set(companiesInContext.flatMap(c => {
-        const combined = `${c.tags || ''},${c.palvelutapa || ''}`;
+        const profilingTags = [
+            ...(c.profiling?.core?.intent_codes || []),
+            ...(Array.isArray(c.profiling?.core?.sub_contexts) ? c.profiling.core.sub_contexts : Object.values(c.profiling?.core?.sub_contexts || {}).flat())
+        ];
+        const combined = `${c.tags || ''},${c.palvelutapa || ''},${profilingTags.join(',')}`;
         return combined.split(',').map(t => t.trim()).filter(Boolean);
     }))];
 

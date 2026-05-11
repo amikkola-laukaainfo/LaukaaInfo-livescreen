@@ -750,24 +750,35 @@
             }
 
             const recommendations = [];
-            const contexts = Object.keys(currentProfiling.paired_with_by_context);
-            
             contexts.forEach(ctx => {
                 const pairs = currentProfiling.paired_with_by_context[ctx];
                 if (!Array.isArray(pairs)) return;
 
                 pairs.forEach(pair => {
+                    const pairText = typeof pair === 'string' ? pair : (pair.label ? i18n.getText(pair.label) : '');
+                    
                     const matches = allCompanies.filter(c => {
                         if (c.id === currentCompany.id) return false;
                         const cProf = allProfiling[c.id];
-                        if (!cProf) return false;
 
-                        // Täsmätään intent_codeen tai taxonomy_groupiin
-                        if (pair.intent_code) {
-                            return cProf.core?.intent_codes?.includes(pair.intent_code);
+                        // 1. Täsmäys objekti-määrityksillä (intent_code tai taxonomy_group)
+                        if (typeof pair === 'object') {
+                            if (pair.intent_code && cProf?.core?.intent_codes?.includes(pair.intent_code)) return true;
+                            if (pair.taxonomy_group && cProf?.core?.taxonomy_group === pair.taxonomy_group) return true;
                         }
-                        if (pair.taxonomy_group) {
-                            return cProf.core?.taxonomy_group === pair.taxonomy_group;
+
+                        // 2. Täsmäys tekstipohjaisesti (tagit, kategoria, nimi tai sub_context)
+                        if (pairText) {
+                            const pt = pairText.toLowerCase();
+                            const combined = `${c.tags || ''},${c.kategoria || ''},${c.nimi || ''}`.toLowerCase();
+                            if (combined.includes(pt)) return true;
+                            
+                            if (cProf?.core?.sub_contexts) {
+                                const subs = Array.isArray(cProf.core.sub_contexts) ? cProf.core.sub_contexts : Object.values(cProf.core.sub_contexts).flat();
+                                if (subs.some(sc => sc.toLowerCase().includes(pt))) return true;
+                            }
+                            
+                            if (cProf?.core?.intent_codes?.some(ic => ic.toLowerCase().includes(pt))) return true;
                         }
                         return false;
                     });
