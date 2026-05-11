@@ -1444,9 +1444,23 @@
                                                )) || 
                                                (opt.tags && opt.tags.includes('juhlatila')) ||
                                                opt.node_link === 'JUHLATILA';
+
                             if (requestedCapacity > 0 && isVenueType && cap === 0) {
                                 return false;
                             }
+                        }
+
+                        // NEW: Estetään juhlatilojen (kapasiteettikohteet) nouseminen palveluhakuihin (esim. videokuvaus)
+                        // Jos optio ei vaadi kapasiteettia, mutta yrityksellä on kapasiteettia (on tila), 
+                        // niin yrityksen on oltava vahva match (score > 80) kyseiseen palvelu-intenttiin.
+                        const isServiceOnlyOption = !opt.capacity_req && opt.node_link !== 'JUHLATILA';
+                        const companyCap = getCompanyCapacity(c, currentProfilingKey);
+                        if (isServiceOnlyOption && companyCap > 0) {
+                            const intentScores = c.profiling?.core?.intent_scores || {};
+                            const hasStrongServiceMatch = (opt.intent_codes || []).some(code => (intentScores[code] || 0) >= 80);
+                            
+                            // Jos yritys on ensisijaisesti tila (eikä vahva palvelun tarjoaja), hylätään se palvelu-optiosta
+                            if (!hasStrongServiceMatch) return false;
                         }
 
                         if (isProfiledMatch) return true;
@@ -1901,7 +1915,19 @@
             
             topCompanies.forEach(c => {
                 const pairedObj = c.profiling?.core?.paired_with_by_context || {};
-                const paired = pairedObj[context] || pairedObj[contextHyphenated] || [];
+                let paired = pairedObj[context] || pairedObj[contextHyphenated] || [];
+                
+                // NEW: Jos yritys on palveluntarjoaja (ei kapasiteettia), karsitaan suosituksista juhlatilat
+                // (Käyttäjätoive: ei henkilökapasiteettikohteita palveluihin)
+                const companyCap = getCompanyCapacity(c, context);
+                if (companyCap === 0) {
+                    paired = paired.filter(p => {
+                        const pText = (typeof p === 'string' ? p : i18n.getText(p)).toLowerCase();
+                        const isVenueTerm = pText.includes('juhlatila') || pText.includes('kokoustila') || pText.includes('majoitus');
+                        return !isVenueTerm;
+                    });
+                }
+
                 paired.forEach(p => addRec(p));
             });
 

@@ -749,7 +749,20 @@
                 return;
             }
 
+            const getCap = (c, prof) => {
+                if (!prof || !prof.categories) return 0;
+                // Etsitään kapasiteettia eri kategorioista
+                const cats = ['events_and_celebrations', 'business_events', 'funerals_and_memorials'];
+                for (const cat of cats) {
+                    const data = prof.categories[cat];
+                    if (data && (data.capacity_max > 0 || data.seated_capacity > 0)) return data.capacity_max || data.seated_capacity;
+                }
+                return 0;
+            };
+
+            const currentCap = getCap(currentCompany, currentProfiling);
             const recommendations = [];
+
             contexts.forEach(ctx => {
                 const pairs = currentProfiling.paired_with_by_context[ctx];
                 if (!Array.isArray(pairs)) return;
@@ -784,7 +797,16 @@
                     });
 
                     // Poimitaan muutama satunnainen osuma per pari-määritys
-                    const shuffled = matches.sort(() => 0.5 - Math.random());
+                    // Suodatetaan kapasiteettikohteet pois, jos nykyinen yritys on palvelu
+                    const filtered = matches.filter(c => {
+                        if (currentCap === 0) {
+                            const mProf = allProfiling[c.id];
+                            if (getCap(c, mProf) > 0) return false;
+                        }
+                        return true;
+                    });
+
+                    const shuffled = filtered.sort(() => 0.5 - Math.random());
                     shuffled.slice(0, 2).forEach(c => {
                         if (!recommendations.find(r => r.id === c.id)) {
                             recommendations.push(c);

@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
     <link rel="stylesheet" href="style.css?v=20260420-2">
+    <link rel="stylesheet" href="modal.css">
     <script src="translations.js?v=20260505"></script>
     <style>
         :root {
@@ -360,35 +361,49 @@
         @media (max-width: 768px) {
             .business-card-container {
                 margin: 1rem auto 3rem;
+                padding: 1rem;
             }
 
             .card-header {
                 flex-direction: column;
                 align-items: center;
                 text-align: center;
-                padding: 2rem 1.5rem;
-                gap: 1.5rem;
+                padding: 1.5rem 1rem;
+                gap: 1rem;
             }
 
             .card-title-section h1 {
-                font-size: 2.25rem;
+                font-size: 2rem;
             }
 
             #display-headline {
-                font-size: 1.15rem;
+                font-size: 1.1rem;
             }
 
             .main-image-container {
-                height: 300px;
+                height: 250px;
+                margin-bottom: 1rem;
+            }
+
+            .thumbnails {
+                gap: 0.75rem;
+                padding-bottom: 1rem;
+            }
+
+            .thumbnails img {
+                width: 100px;
+                height: 75px;
             }
 
             .main-content {
-                gap: 2rem;
+                gap: 1.5rem;
+                padding-bottom: 60px; /* Buffer for bottom buttons */
             }
 
             #display-description {
-                padding: 1.5rem;
-                font-size: 1.05rem;
+                padding: 1.25rem;
+                font-size: 1rem;
+                line-height: 1.6;
             }
         }
 

@@ -17,7 +17,6 @@
                 "accommodation": 0
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -276,7 +275,6 @@
                 "hankeneuvonta": 70
             },
             "priority_score": 60,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -510,7 +508,6 @@
                 "ravintolakonsultointi": 40
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,

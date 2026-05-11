@@ -28,7 +28,7 @@
     height: 100%;
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(8px);
-    z-index: 10000;
+    z-index: 20000;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -251,12 +251,26 @@
         height: 100%; 
         max-height: 100%; 
         border-radius: 0; 
+        display: flex;
+        flex-direction: column;
     }
-    .lki-modal-media { height: 30vh; }
-    .lki-modal-body { padding: 20px; }
+    .lki-modal-media { 
+        height: 35vh; 
+        flex-shrink: 0;
+    }
+    .lki-modal-body { 
+        padding: 20px; 
+        flex: 1;
+        overflow-y: auto;
+        padding-bottom: 40px; /* Extra space for bottom buffer */
+    }
     .lki-modal-footer { 
-        margin-top: 20px;
-        padding: 20px 0;
+        margin-top: 0;
+        padding: 15px 20px;
+        background: var(--lki-modal-bg);
+        border-top: 1px solid rgba(0,0,0,0.1);
+        box-shadow: 0 -4px 15px rgba(0,0,0,0.05);
+        flex-shrink: 0;
     }
     .lki-modal-footer .desktop-hide {
         display: flex !important;
@@ -265,6 +279,7 @@
     .lki-cta-btn { 
         flex: 100%; 
         min-width: 0;
+        padding: 12px;
     }
 }
 

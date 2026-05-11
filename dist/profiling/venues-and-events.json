@@ -17,7 +17,6 @@
                 "accommodation": 86
             },
             "priority_score": 60,
-            "paired_with": [],
             "service_area": {
                 "mode": "LOCAL",
                 "radius_km": 0,
@@ -297,7 +296,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -510,7 +508,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -727,7 +724,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -959,13 +955,6 @@
                 "accommodation": 100
             },
             "priority_score": 74,
-            "paired_with": [
-                "Juhlatila",
-                "Pitopalvelu",
-                "Valokuvaaja",
-                "Kukkapalvelu",
-                "Majoitus"
-            ],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -994,6 +983,13 @@
                 "funerals-and-memorials": [
                     "kahvitus",
                     "pitopalvelu"
+                ],
+                "general": [
+                    "Juhlatila",
+                    "Pitopalvelu",
+                    "Valokuvaaja",
+                    "Kukkapalvelu",
+                    "Majoitus"
                 ]
             },
             "corporate_clients": true,
@@ -1259,12 +1255,6 @@
                 "funerals-and-memorials": 100
             },
             "priority_score": 58,
-            "paired_with": [
-                "Juhlatila",
-                "Catering",
-                "Kahvila",
-                "Pitopalvelu"
-            ],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -1288,6 +1278,12 @@
                 "business-events": [
                     "kokoustila",
                     "kahvitarjoilu"
+                ],
+                "general": [
+                    "Juhlatila",
+                    "Catering",
+                    "Kahvila",
+                    "Pitopalvelu"
                 ]
             },
             "corporate_clients": true,
@@ -1556,12 +1552,6 @@
                 "wellbeing-and-beauty": 10
             },
             "priority_score": 78,
-            "paired_with": [
-                "Majoitus",
-                "Catering",
-                "Valokuvaaja",
-                "Videokuvaaja"
-            ],
             "service_area": {
                 "mode": "SERVICE_AREA",
                 "radius_km": 40,
@@ -1608,6 +1598,12 @@
                     "valokuvaaja",
                     "videokuvaaja",
                     "muistovideo"
+                ],
+                "general": [
+                    "Majoitus",
+                    "Catering",
+                    "Valokuvaaja",
+                    "Videokuvaaja"
                 ]
             },
             "corporate_clients": true,
@@ -1937,7 +1933,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -2153,7 +2148,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -2369,7 +2363,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -2585,7 +2578,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -2801,7 +2793,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -3014,7 +3005,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -3227,7 +3217,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -3440,7 +3429,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -3653,7 +3641,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -3866,7 +3853,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -4079,7 +4065,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -4292,7 +4277,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -4507,7 +4491,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -4722,7 +4705,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -4939,7 +4921,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -5154,7 +5135,6 @@
                 "vapaa-aika": 35
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -5368,7 +5348,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -5585,7 +5564,6 @@
                 "vapaa-aika": 35
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -5798,7 +5776,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -6011,7 +5988,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -6224,7 +6200,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -6441,7 +6416,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -6658,7 +6632,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -6875,7 +6848,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -7092,7 +7064,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -7309,7 +7280,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -7526,7 +7496,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -7743,7 +7712,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -7960,7 +7928,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -8177,7 +8144,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -8396,7 +8362,6 @@
                 "vapaa-aika": 35
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -8613,7 +8578,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -8830,7 +8794,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -9047,7 +9010,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -9264,7 +9226,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -9481,7 +9442,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -9698,7 +9658,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -9915,7 +9874,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -10132,7 +10090,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -10349,7 +10306,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -10566,7 +10522,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -10783,7 +10738,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -11000,7 +10954,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -11217,7 +11170,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -11434,7 +11386,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -11657,12 +11608,6 @@
                 "yritystapahtumat": 80
             },
             "priority_score": 48,
-            "paired_with": [
-                "Catering",
-                "AV-tekniikka",
-                "Majoitus",
-                "Ohjelmapalvelut"
-            ],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -11687,6 +11632,12 @@
                 "wellbeing-and-beauty": [
                     "tyhy-palvelut",
                     "valmennus"
+                ],
+                "general": [
+                    "Catering",
+                    "AV-tekniikka",
+                    "Majoitus",
+                    "Ohjelmapalvelut"
                 ]
             },
             "corporate_clients": true,
@@ -11924,7 +11875,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -12137,7 +12087,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -12354,7 +12303,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -12571,7 +12519,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -12788,7 +12735,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -13006,7 +12952,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -13223,7 +13168,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -13438,7 +13382,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -13651,7 +13594,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -13864,7 +13806,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -14077,7 +14018,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -14290,7 +14230,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -14503,7 +14442,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -14716,7 +14654,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -14929,7 +14866,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -15147,7 +15083,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -15364,7 +15299,6 @@
                 "funerals-and-memorials": 20
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -15584,7 +15518,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -15797,7 +15730,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -16010,7 +15942,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -16229,7 +16160,6 @@
                 "lahjatuotteet": 6
             },
             "priority_score": 12,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -16473,11 +16403,6 @@
                 "liikunta-ja-vapaaaika": 92
             },
             "priority_score": 82,
-            "paired_with": [
-                "juhlatilat",
-                "pitopalvelu",
-                "esiintyjät"
-            ],
             "service_area": {
                 "mode": "MOBIILI",
                 "radius_km": 120,
@@ -16507,6 +16432,11 @@
                 ],
                 "business-events": [
                     "äänentoisto"
+                ],
+                "general": [
+                    "juhlatilat",
+                    "pitopalvelu",
+                    "esiintyjät"
                 ]
             },
             "corporate_clients": true,
@@ -16796,7 +16726,6 @@
                 "family-and-children": 100
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -17090,11 +17019,6 @@
                 "accommodation": 95
             },
             "priority_score": 81,
-            "paired_with": [
-                "Majoitus",
-                "Catering",
-                "Kokoustila"
-            ],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -17120,6 +17044,11 @@
                 "events-and-celebrations": [
                     "Juhlatila",
                     "Pitopalvelu"
+                ],
+                "general": [
+                    "Majoitus",
+                    "Catering",
+                    "Kokoustila"
                 ]
             },
             "corporate_clients": true,
@@ -17358,7 +17287,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "SERVICE_AREA",
                 "radius_km": 0,
@@ -17587,7 +17515,6 @@
                 "yritysjuhlat": 40
             },
             "priority_score": 82,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -17865,7 +17792,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -18078,7 +18004,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -18291,7 +18216,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -18504,7 +18428,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -18717,7 +18640,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -18930,7 +18852,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -19143,7 +19064,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -19356,7 +19276,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -19582,10 +19501,6 @@
                 "wellbeing-and-beauty": 75
             },
             "priority_score": 0,
-            "paired_with": [
-                "Majoitus",
-                "Catering"
-            ],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -19613,6 +19528,10 @@
                 ],
                 "funerals-and-memorials": [
                     "Kukat"
+                ],
+                "general": [
+                    "Majoitus",
+                    "Catering"
                 ]
             },
             "corporate_clients": true,
@@ -19899,7 +19818,6 @@
                 "funerals-and-memorials": 100
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "SERVICE_AREA",
                 "radius_km": 50,
@@ -20148,7 +20066,6 @@
                 "yritysjuhlat": 5
             },
             "priority_score": 74,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -20426,7 +20343,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -20642,7 +20558,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -20866,7 +20781,6 @@
                 "wellbeing-and-beauty": 0
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -21098,7 +21012,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -21313,7 +21226,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -21526,7 +21438,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -21742,7 +21653,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -21955,7 +21865,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -22176,7 +22085,6 @@
                 "business-events": 15
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -22432,7 +22340,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -22659,12 +22566,6 @@
                 "wellbeing-and-beauty": 40
             },
             "priority_score": 0,
-            "paired_with": [
-                "Valokuvaaja",
-                "Videokuvaaja",
-                "Kampaaja",
-                "Meikkaaja"
-            ],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 50,
@@ -22696,6 +22597,12 @@
                     "yrityskuvaus",
                     "henkilöstökuvat",
                     "brändikuvat"
+                ],
+                "general": [
+                    "Valokuvaaja",
+                    "Videokuvaaja",
+                    "Kampaaja",
+                    "Meikkaaja"
                 ]
             },
             "corporate_clients": true,
@@ -22996,13 +22903,6 @@
                 "liikunta-ja-vapaaaika": 25
             },
             "priority_score": 52,
-            "paired_with": [
-                "Kukat",
-                "Juhlatila",
-                "Matkailupalvelut",
-                "Käsityöläiset",
-                "Kahvilat"
-            ],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 40,
@@ -23024,6 +22924,13 @@
                 "business-events": [
                     "Matkailupalvelut",
                     "Kokoustila"
+                ],
+                "general": [
+                    "Kukat",
+                    "Juhlatila",
+                    "Matkailupalvelut",
+                    "Käsityöläiset",
+                    "Kahvilat"
                 ]
             },
             "corporate_clients": true,
@@ -23290,7 +23197,6 @@
                 "vapaa-aika": 35
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -23504,7 +23410,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -23717,7 +23622,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 100,
@@ -23934,7 +23838,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -24147,7 +24050,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -24372,13 +24274,6 @@
                 "housing-company-and-contracts": 0
             },
             "priority_score": 78,
-            "paired_with": [
-                "Juhlatila",
-                "Pitopalvelu",
-                "Valokuvaaja",
-                "Hautaustoimisto",
-                "Kampaamo"
-            ],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 50,
@@ -24406,6 +24301,13 @@
                 "business-events": [
                     "Kokoustila",
                     "Yrityspalvelut"
+                ],
+                "general": [
+                    "Juhlatila",
+                    "Pitopalvelu",
+                    "Valokuvaaja",
+                    "Hautaustoimisto",
+                    "Kampaamo"
                 ]
             },
             "corporate_clients": true,
@@ -24690,7 +24592,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -24903,7 +24804,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -25116,7 +25016,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -25331,7 +25230,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -25544,7 +25442,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -25757,7 +25654,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -25970,7 +25866,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -26183,7 +26078,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -26396,7 +26290,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -26609,7 +26502,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -26831,11 +26723,6 @@
                 "moving-and-housing": 100
             },
             "priority_score": 52,
-            "paired_with": [
-                "Kukat",
-                "Valokuvaaja",
-                "Pitopalvelu"
-            ],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 40,
@@ -26862,6 +26749,11 @@
                     "yrityskuvaus",
                     "tapahtumakuvaus",
                     "henkilöstökuvaus"
+                ],
+                "general": [
+                    "Kukat",
+                    "Valokuvaaja",
+                    "Pitopalvelu"
                 ]
             },
             "corporate_clients": true,
@@ -27133,7 +27025,6 @@
                 "housing-company-and-contracts": 0
             },
             "priority_score": 95,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 150,
@@ -27374,7 +27265,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -27587,7 +27477,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -27804,7 +27693,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -28017,7 +27905,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -28233,7 +28120,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -28446,7 +28332,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -28659,7 +28544,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -28872,7 +28756,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -29085,7 +28968,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -29298,7 +29180,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -29514,7 +29395,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -29729,7 +29609,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -29953,7 +29832,6 @@
                 "wellbeing-and-beauty": 75
             },
             "priority_score": 68,
-            "paired_with": [],
             "service_area": {
                 "mode": "LIIKKUVA",
                 "radius_km": 40,
@@ -30206,7 +30084,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -30419,7 +30296,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -30632,7 +30508,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -30850,10 +30725,6 @@
                 "vapaa-aika": 100
             },
             "priority_score": 0,
-            "paired_with": [
-                "Majoitus",
-                "Catering"
-            ],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -30862,7 +30733,12 @@
             },
             "emergency_available": false,
             "contract_customer_available": false,
-            "paired_with_by_context": {},
+            "paired_with_by_context": {
+                "general": [
+                    "Majoitus",
+                    "Catering"
+                ]
+            },
             "corporate_clients": false,
             "home_service": false,
             "weekend_service": true,
@@ -31066,7 +30942,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -31279,7 +31154,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -31492,7 +31366,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -31705,7 +31578,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -31918,7 +31790,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -32131,7 +32002,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -32344,7 +32214,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -32557,7 +32426,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -32770,7 +32638,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -32983,7 +32850,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -33196,7 +33062,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -33409,7 +33274,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -33622,7 +33486,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -33835,7 +33698,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -34050,10 +33912,6 @@
                 "kokoukset": 35
             },
             "priority_score": 0,
-            "paired_with": [
-                "Majoitus",
-                "Catering"
-            ],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -34062,7 +33920,12 @@
             },
             "emergency_available": false,
             "contract_customer_available": false,
-            "paired_with_by_context": {},
+            "paired_with_by_context": {
+                "general": [
+                    "Majoitus",
+                    "Catering"
+                ]
+            },
             "corporate_clients": false,
             "home_service": false,
             "weekend_service": false,
@@ -34266,7 +34129,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -34479,7 +34341,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -34692,7 +34553,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -34905,7 +34765,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -35118,7 +34977,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -35331,7 +35189,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -35544,7 +35401,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -35757,7 +35613,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -35970,7 +35825,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -36183,7 +36037,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -36396,7 +36249,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -36609,7 +36461,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -36822,7 +36673,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -37035,7 +36885,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -37248,7 +37097,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -37463,7 +37311,6 @@
                 "yrityksen kehittäminen": 35
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -37677,7 +37524,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -37890,7 +37736,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -38103,7 +37948,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -38316,7 +38160,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -38529,7 +38372,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -38742,7 +38584,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "SERVICE_AREA",
                 "radius_km": 100,
@@ -38962,7 +38803,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -39175,7 +39015,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -39388,7 +39227,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -39601,7 +39439,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -39814,7 +39651,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -40027,7 +39863,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -40240,7 +40075,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -40468,13 +40302,6 @@
                 "wellbeing-and-beauty": 85
             },
             "priority_score": 0,
-            "paired_with": [
-                "Majoitus",
-                "Valokuvaaja",
-                "Pitopalvelu",
-                "Catering",
-                "Kukat"
-            ],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -40509,6 +40336,13 @@
                     "sauna",
                     "savusauna",
                     "majoitus"
+                ],
+                "general": [
+                    "Majoitus",
+                    "Valokuvaaja",
+                    "Pitopalvelu",
+                    "Catering",
+                    "Kukat"
                 ]
             },
             "corporate_clients": true,
@@ -40823,7 +40657,6 @@
                 "wellbeing-and-beauty": 20
             },
             "priority_score": 78,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -41081,7 +40914,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -41299,7 +41131,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -41521,7 +41352,6 @@
                 "events-and-celebrations": 100
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -41762,7 +41592,6 @@
                 "yrityksen kehittäminen": 35
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -41983,10 +41812,6 @@
                 "vapaa-aika": 70
             },
             "priority_score": 0,
-            "paired_with": [
-                "Majoitus",
-                "Catering"
-            ],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -41995,7 +41820,12 @@
             },
             "emergency_available": false,
             "contract_customer_available": false,
-            "paired_with_by_context": {},
+            "paired_with_by_context": {
+                "general": [
+                    "Majoitus",
+                    "Catering"
+                ]
+            },
             "corporate_clients": false,
             "home_service": false,
             "weekend_service": false,
@@ -42203,10 +42033,6 @@
                 "kokoukset": 70
             },
             "priority_score": 0,
-            "paired_with": [
-                "Majoitus",
-                "Catering"
-            ],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -42215,7 +42041,12 @@
             },
             "emergency_available": false,
             "contract_customer_available": false,
-            "paired_with_by_context": {},
+            "paired_with_by_context": {
+                "general": [
+                    "Majoitus",
+                    "Catering"
+                ]
+            },
             "corporate_clients": false,
             "home_service": false,
             "weekend_service": false,
@@ -42419,7 +42250,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -42632,7 +42462,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -42854,7 +42683,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -43067,7 +42895,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -43283,7 +43110,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -43496,7 +43322,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -43720,10 +43545,6 @@
                 "liikunta-ja-vapaaaika": 90
             },
             "priority_score": 0,
-            "paired_with": [
-                "Majoitus",
-                "Catering"
-            ],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -43739,6 +43560,10 @@
             "paired_with_by_context": {
                 "wellbeing-and-beauty": [
                     "koskenlasku"
+                ],
+                "general": [
+                    "Majoitus",
+                    "Catering"
                 ]
             },
             "corporate_clients": true,
@@ -43977,7 +43802,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -44202,15 +44026,6 @@
                 "accommodation": 100
             },
             "priority_score": 88,
-            "paired_with": [
-                "Majoitus",
-                "Valokuvaaja",
-                "Pitopalvelu",
-                "Catering",
-                "Kukat",
-                "Juhlatila",
-                "Musiikki"
-            ],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 60,
@@ -44239,6 +44054,15 @@
                     "Kokoustila",
                     "Koulutus",
                     "Yritysjuhlat"
+                ],
+                "general": [
+                    "Majoitus",
+                    "Valokuvaaja",
+                    "Pitopalvelu",
+                    "Catering",
+                    "Kukat",
+                    "Juhlatila",
+                    "Musiikki"
                 ]
             },
             "corporate_clients": true,
@@ -44532,7 +44356,6 @@
         "core": {
             "fits_for": {},
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -44760,7 +44583,6 @@
                 "business-growth": 0
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "LOCAL",
                 "radius_km": 0,
@@ -45024,7 +44846,6 @@
                 "moving-and-housing": 100
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "SERVICE_AREA",
                 "radius_km": 120,
@@ -45313,7 +45134,6 @@
                 "moving-and-housing": 100
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "SERVICE_AREA",
                 "radius_km": 100,
@@ -45610,7 +45430,6 @@
                 "accommodation": 100
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "LOCAL",
                 "radius_km": 0,
@@ -45915,7 +45734,6 @@
                 "cottage-services": 40
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "LOCAL",
                 "radius_km": 0,
@@ -46234,7 +46052,6 @@
                 "funerals-and-memorials": 100
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "LOCAL",
                 "radius_km": 0,
@@ -46562,11 +46379,6 @@
                 "housing-company-and-contracts": 0
             },
             "priority_score": 84,
-            "paired_with": [
-                "pitopalvelu",
-                "kukat",
-                "valokuvaus"
-            ],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -46590,6 +46402,11 @@
                 "juhlat": [
                     "catering",
                     "musiikki ja viihde"
+                ],
+                "general": [
+                    "pitopalvelu",
+                    "kukat",
+                    "valokuvaus"
                 ]
             },
             "corporate_clients": true,
@@ -46880,13 +46697,6 @@
                 "liikunta-ja-vapaaaika": 20
             },
             "priority_score": 88,
-            "paired_with": [
-                "pitopalvelut",
-                "hääkuvaus",
-                "kukkapalvelut",
-                "ohjelmapalvelut",
-                "muistotilaisuudet"
-            ],
             "service_area": {
                 "mode": "LOCAL",
                 "radius_km": 40,
@@ -46914,6 +46724,13 @@
                 "yritystilaisuus": [
                     "kokoustarjoilu",
                     "av-laitteet"
+                ],
+                "general": [
+                    "pitopalvelut",
+                    "hääkuvaus",
+                    "kukkapalvelut",
+                    "ohjelmapalvelut",
+                    "muistotilaisuudet"
                 ]
             },
             "corporate_clients": true,
@@ -47216,7 +47033,6 @@
                 "family-and-children": 100
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -47528,7 +47344,6 @@
                 "funerals-and-memorials": 100
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -47839,7 +47654,6 @@
                 "business-events": 84
             },
             "priority_score": 0,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -48145,7 +47959,6 @@
                 "funerals-and-memorials": 100
             },
             "priority_score": 80,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -48469,7 +48282,6 @@
                 "accommodation": 100
             },
             "priority_score": 55,
-            "paired_with": [],
             "service_area": {
                 "mode": "on-site, takeaway",
                 "radius_km": 0,
@@ -48752,7 +48564,6 @@
                 "business-events": 20
             },
             "priority_score": 55,
-            "paired_with": [],
             "service_area": {
                 "mode": "on-site, takeaway",
                 "radius_km": 0,
@@ -49012,7 +48823,6 @@
                 "housing-company-and-contracts": 0
             },
             "priority_score": 50,
-            "paired_with": [],
             "service_area": {
                 "mode": "on-site",
                 "radius_km": 0,
@@ -49287,7 +49097,6 @@
                 "housing-company-and-contracts": 80
             },
             "priority_score": 78,
-            "paired_with": [],
             "service_area": {
                 "mode": "onsite",
                 "radius_km": 0,
@@ -49568,11 +49377,6 @@
                 "liikunta-ja-vapaaaika": 88
             },
             "priority_score": 63,
-            "paired_with": [
-                "musiikki",
-                "pitopalvelu",
-                "valokuvaus"
-            ],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -49593,6 +49397,11 @@
                 "tapahtuma": [
                     "valokuvaus",
                     "musiikki"
+                ],
+                "general": [
+                    "musiikki",
+                    "pitopalvelu",
+                    "valokuvaus"
                 ]
             },
             "corporate_clients": true,
@@ -49866,12 +49675,6 @@
                 "housing-company-and-contracts": 0
             },
             "priority_score": 38,
-            "paired_with": [
-                "kukkakaupat",
-                "pitopalvelut",
-                "juhlatilat",
-                "hautauspalvelut"
-            ],
             "service_area": {
                 "mode": "local",
                 "radius_km": 35,
@@ -49893,6 +49696,12 @@
                 "EVT-MEMORIAL": [
                     "hautauspalvelut",
                     "pitopalvelut"
+                ],
+                "general": [
+                    "kukkakaupat",
+                    "pitopalvelut",
+                    "juhlatilat",
+                    "hautauspalvelut"
                 ]
             },
             "corporate_clients": true,
@@ -50159,7 +49968,6 @@
                 "housing-company-and-contracts": 100
             },
             "priority_score": 82,
-            "paired_with": [],
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 50,
@@ -50181,18 +49989,7 @@
                 "catering",
                 "viihdepalvelut"
             ],
-            "sub_contexts": [
-                "perunkirjoitus",
-                "perinnönjako",
-                "testamentti",
-                "edunvalvontavaltuutus",
-                "kauppakirjat",
-                "sopimusoikeus",
-                "yritysjuridiikka",
-                "riidanratkaisu",
-                "avioehto",
-                "kiinteistökauppa"
-            ],
+            "sub_contexts": [],
             "node_links": [],
             "intent_codes": [
                 "LAW_LEGAL",
@@ -50406,7 +50203,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-10T07:07:27.248Z",
+            "last_updated": "2026-05-10T07:51:56.944Z",
             "verified_by": "ai-generated",
             "status": "completed"
         }

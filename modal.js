@@ -46,8 +46,8 @@ window.LkiModal = (function() {
                             <div class="lki-info-item" id="lki-modal-phone-item"><span>📞</span> <span id="lki-modal-phone"></span></div>
                             <div class="lki-info-item" id="lki-modal-email-item"><span>✉️</span> <span id="lki-modal-email"></span></div>
                         </div>
-                        <div class="lki-modal-footer" id="lki-modal-footer"></div>
                     </div>
+                    <div class="lki-modal-footer" id="lki-modal-footer"></div>
                 </div>
             </div>
         `;
@@ -344,20 +344,34 @@ window.LkiModal = (function() {
             wrapper.appendChild(slide);
         });
 
-        // Initialize Swiper
+        // Initialize Swiper ONLY if more than 1 item
         if (swiperInstance) {
             swiperInstance.destroy(true, true);
+            swiperInstance = null;
         }
 
-        // Wait for DOM to catch up
-        setTimeout(() => {
-            swiperInstance = new Swiper('#lki-modal-swiper', {
-                pagination: { el: '.swiper-pagination', clickable: true },
-                navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-                loop: mediaItems.length > 1,
-                autoplay: (tier === 'premium' && mediaItems.length > 1) ? { delay: 5000 } : false,
-            });
-        }, 50);
+        if (mediaItems.length > 1) {
+            // Wait for DOM to catch up
+            setTimeout(() => {
+                swiperInstance = new Swiper('#lki-modal-swiper', {
+                    pagination: { el: '.swiper-pagination', clickable: true },
+                    navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+                    loop: true,
+                    autoplay: (tier === 'premium') ? { delay: 5000, disableOnInteraction: false } : false,
+                });
+            }, 50);
+        } else {
+            // If only 1 item, ensure Swiper classes don't mess with it
+            const swiperEl = document.getElementById('lki-modal-swiper');
+            if (swiperEl) {
+                const pag = swiperEl.querySelector('.swiper-pagination');
+                const next = swiperEl.querySelector('.swiper-button-next');
+                const prev = swiperEl.querySelector('.swiper-button-prev');
+                if (pag) pag.style.display = 'none';
+                if (next) next.style.display = 'none';
+                if (prev) prev.style.display = 'none';
+            }
+        }
     }
 
     function renderCTAs(company, tier) {
