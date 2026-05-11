@@ -710,6 +710,105 @@
         if (company.rss && company.rss !== '-' && company.rss !== '') {
             loadRSS(company.rss);
         }
+
+        // Suositukset / Recommendations
+        loadRecommendations(company);
+    }
+
+    /**
+     * Lataa ja näyttää suositukset yritykselle perustuen paired_with_by_context -logiikkaan.
+     */
+    async function loadRecommendations(currentCompany) {
+        const section = document.getElementById('recommendations-section');
+        const container = document.getElementById('recommendations-container');
+        if (!section || !container) return;
+
+        try {
+            const isDist = window.location.pathname.includes('/yritys/');
+            const prefix = isDist ? '../' : './';
+            
+            // Haetaan kaikki yritykset ja niiden profilointidata
+            const companiesRes = await fetch(prefix + 'companies_data.json?t=' + Date.now());
+            if (!companiesRes.ok) return;
+            const allCompanies = await companiesRes.json();
+            
+            const metadataRes = await fetch(prefix + 'profiling/metadata.json?t=' + Date.now());
+            if (!metadataRes.ok) return;
+            const metadata = await metadataRes.json();
+            
+            let allProfiling = {};
+            const profPromises = metadata.files.map(file => 
+                fetch(prefix + 'profiling/' + file + '?t=' + Date.now()).then(r => r.ok ? r.json() : {})
+            );
+            const profilesArray = await Promise.all(profPromises);
+            profilesArray.forEach(p => Object.assign(allProfiling, p));
+
+            const currentProfiling = allProfiling[currentCompany.id];
+            if (!currentProfiling || !currentProfiling.paired_with_by_context) {
+                console.log('Ei paired_with_by_context dataa yritykselle:', currentCompany.id);
+                return;
+            }
+
+            const recommendations = [];
+            const contexts = Object.keys(currentProfiling.paired_with_by_context);
+            
+            contexts.forEach(ctx => {
+                const pairs = currentProfiling.paired_with_by_context[ctx];
+                if (!Array.isArray(pairs)) return;
+
+                pairs.forEach(pair => {
+                    const matches = allCompanies.filter(c => {
+                        if (c.id === currentCompany.id) return false;
+                        const cProf = allProfiling[c.id];
+                        if (!cProf) return false;
+
+                        // Täsmätään intent_codeen tai taxonomy_groupiin
+                        if (pair.intent_code) {
+                            return cProf.core?.intent_codes?.includes(pair.intent_code);
+                        }
+                        if (pair.taxonomy_group) {
+                            return cProf.core?.taxonomy_group === pair.taxonomy_group;
+                        }
+                        return false;
+                    });
+
+                    // Poimitaan muutama satunnainen osuma per pari-määritys
+                    const shuffled = matches.sort(() => 0.5 - Math.random());
+                    shuffled.slice(0, 2).forEach(c => {
+                        if (!recommendations.find(r => r.id === c.id)) {
+                            recommendations.push(c);
+                        }
+                    });
+                });
+            });
+
+            if (recommendations.length > 0) {
+                section.style.display = 'block';
+                container.innerHTML = '';
+                
+                // Näytetään max 6 suositusta
+                recommendations.slice(0, 6).forEach(rec => {
+                    const card = document.createElement('a');
+                    card.href = `yrityskortti.html?id=${rec.id}`;
+                    card.className = 'recommendation-card';
+                    
+                    // Siivotaan kuvaus
+                    let desc = rec.esittely || '';
+                    if (desc.includes('@@')) desc = desc.split('@@')[0];
+                    desc = desc.replace(/#[a-zA-Z0-9åäöÅÄÖ]+/g, '').substring(0, 100).trim() + '...';
+
+                    card.innerHTML = `
+                        <div class="rec-category">${rec.kategoria}</div>
+                        <h4>${rec.nimi}</h4>
+                        <p>${desc}</p>
+                        <div class="rec-cta">Lue lisää &raquo;</div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        } catch (err) {
+            console.warn('Virhe suositusten latauksessa:', err);
+        }
     }
 
     async function loadRSS(url) {
