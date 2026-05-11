@@ -228,7 +228,7 @@
         }
         
         if (company.service_mode === 'SERVICE_AREA') {
-            const badgeHtml = '<span class="service-area-badge" style="background: #fff3e0; color: #e65100; padding: 3px 10px; border-radius: 12px; font-size: 0.8rem; border: 1px solid #ffccbc; font-weight: bold; margin-left: 10px; vertical-align: middle;">🟠 PALVELEE ALUEELLA</span>';
+            const badgeHtml = '<span class="service-area-badge">🟠 PALVELEE ALUEELLA</span>';
             document.getElementById('display-name').innerHTML += badgeHtml;
         }
 
@@ -308,9 +308,7 @@
                 if (!distElem) {
                     distElem = document.createElement('div');
                     distElem.id = 'display-distance';
-                    distElem.style.marginTop = '0.5rem';
-                    distElem.style.color = 'var(--primary-blue)';
-                    distElem.style.fontWeight = '700';
+                    distElem.className = 'distance-badge';
                     addressContainer.appendChild(distElem);
                 }
                 distElem.innerHTML = `🚗 Etäisyys: ${distText}`;
