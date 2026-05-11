@@ -711,6 +711,41 @@
             loadRSS(company.rss);
         }
 
+        // Mobile contact bar (floating, bottom of screen on mobile)
+        const mobileBar = document.getElementById('mobile-contact-bar');
+        if (mobileBar) {
+            mobileBar.innerHTML = '';
+            let hasBarActions = false;
+
+            if (company.puhelin && company.puhelin !== '-') {
+                const phoneNum = company.puhelin.replace(/[^0-9+]/g, '');
+                mobileBar.innerHTML += `<a href="tel:${phoneNum}" style="flex:1;background:#28a745;color:white;padding:12px 10px;border-radius:12px;text-align:center;text-decoration:none;font-weight:700;font-size:0.9rem;">📞 Soita</a>`;
+                hasBarActions = true;
+            }
+
+            const waNum = (company.whatsapp || company.puhelin || '').replace(/[^0-9]/g, '');
+            if (waNum) {
+                mobileBar.innerHTML += `<a href="https://wa.me/${waNum}" target="_blank" style="flex:1;background:#25D366;color:white;padding:12px 10px;border-radius:12px;text-align:center;text-decoration:none;font-weight:700;font-size:0.9rem;">💬 WhatsApp</a>`;
+                hasBarActions = true;
+            }
+
+            const web = company.nettisivu || company.website || '';
+            if (web && web !== '-') {
+                const webUrl = web.startsWith('http') ? web : `http://${web}`;
+                mobileBar.innerHTML += `<a href="${webUrl}" target="_blank" style="flex:1;background:#0056b3;color:white;padding:12px 10px;border-radius:12px;text-align:center;text-decoration:none;font-weight:700;font-size:0.9rem;">🌐 Sivut</a>`;
+                hasBarActions = true;
+            }
+
+            // Show only on mobile
+            if (hasBarActions) {
+                const updateBarVisibility = () => {
+                    mobileBar.style.display = window.innerWidth <= 768 ? 'flex' : 'none';
+                };
+                updateBarVisibility();
+                window.addEventListener('resize', updateBarVisibility);
+            }
+        }
+
         // Suositukset / Recommendations
         loadRecommendations(company);
     }
