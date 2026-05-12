@@ -155,27 +155,33 @@ class NetworkBuilder {
                     delete this.selections[scenarioId][stepIndex];
                 }
             }
-            this.clearRecommendations(scenarioId, parseInt(stepIndex) + 1);
+            this.propagateRecommendations(scenarioId, stepIndex);
         }
         this.updateSummary();
     }
 
-    propagateRecommendations(scenarioId, currentStepIndex) {
-        const nextStepIndex = parseInt(currentStepIndex) + 1;
-        const selectedIds = this.selections[scenarioId][currentStepIndex] || [];
-        this.clearRecommendations(scenarioId, nextStepIndex);
+    getRecommendationsForStep(scenarioId, fromStepIndex) {
+        const selectedIds = this.selections[scenarioId]?.[fromStepIndex] || [];
+        const recommendedIds = [];
         
         selectedIds.forEach(companyId => {
             const profile = this.profiling[companyId];
             if (!profile) return;
             const paired = profile.core?.paired_with_by_context || {};
             const collaborated = profile.categories?.events_and_celebrations?.collaborated_with || [];
-            const recommendedIds = [...collaborated];
+            recommendedIds.push(...collaborated);
             Object.values(paired).forEach(list => {
                 if (Array.isArray(list)) recommendedIds.push(...list);
             });
-            this.highlightCompatiblePartners(scenarioId, nextStepIndex, recommendedIds);
         });
+        
+        return [...new Set(recommendedIds)];
+    }
+
+    propagateRecommendations(scenarioId, currentStepIndex) {
+        // Just trigger a re-render of the next step(s)
+        // This will naturally use getRecommendationsForStep during the render process
+        this.renderDynamicSteps();
     }
 
     clearRecommendations(scenarioId, stepIndex) {
@@ -220,7 +226,12 @@ class NetworkBuilder {
             
             const tags = stepEl.dataset.tags.split(',').map(t => t.trim().toLowerCase());
             const partnerList = stepEl.querySelector('.partner-list');
+            const scenarioId = stepEl.closest('.chain-section').id;
             if (!partnerList) return;
+
+            // Get recommendations from previous step(s)
+            // We look at the immediately preceding step
+            const recommendations = this.getRecommendationsForStep(scenarioId, stepIdx - 1);
 
             // Find matching companies
             let matches = this.companies.filter(c => {
@@ -231,7 +242,13 @@ class NetworkBuilder {
 
             // Sort matches
             matches.sort((a, b) => {
-                // Pro/Premium first
+                // 1. Recommendations from previous steps first!
+                const aIsRec = recommendations.includes(a.id);
+                const bIsRec = recommendations.includes(b.id);
+                if (aIsRec && !bIsRec) return -1;
+                if (!aIsRec && bIsRec) return 1;
+
+                // 2. Pro/Premium next
                 const aPkg = (a.package || '').toLowerCase();
                 const bPkg = (b.package || '').toLowerCase();
                 const aIsPremium = aPkg.includes('pro') || aPkg.includes('premium');
@@ -239,7 +256,7 @@ class NetworkBuilder {
                 if (aIsPremium && !bIsPremium) return -1;
                 if (!aIsPremium && bIsPremium) return 1;
 
-                // Then by distance
+                // 3. Then by distance
                 if (this.userCoords && a.lat && a.lon && b.lat && b.lon) {
                     const distA = this.getDist(this.userCoords, a);
                     const distB = this.getDist(this.userCoords, b);
@@ -253,11 +270,11 @@ class NetworkBuilder {
 
             partnerList.innerHTML = '';
             matches.forEach(comp => {
-                const scenarioId = stepEl.closest('.chain-section').id;
                 const isSelected = this.selections[scenarioId]?.[stepIdx]?.includes(comp.id);
+                const isRecommended = recommendations.includes(comp.id);
 
                 const card = document.createElement('div');
-                card.className = `partner-link ${isSelected ? 'selected' : ''}`;
+                card.className = `partner-link ${isSelected ? 'selected' : ''} ${isRecommended ? 'recommended' : ''}`;
                 card.dataset.companyId = comp.id;
 
                 let distText = '';
