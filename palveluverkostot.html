@@ -61,27 +61,32 @@
         .networks-hero {
             background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
             color: white;
-            padding: 5rem 1.5rem;
+            padding: 4rem 1.5rem;
             text-align: center;
-            border-bottom-left-radius: 60px;
-            border-bottom-right-radius: 60px;
-            margin-bottom: 4rem;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            margin-bottom: 3rem;
         }
 
         .networks-hero h1 {
             font-family: var(--accent-font);
-            font-size: 3.5rem;
+            font-size: 3rem;
             font-weight: 900;
-            margin-bottom: 1.5rem;
-            letter-spacing: -1px;
+            margin-bottom: 1rem;
         }
 
         .networks-hero p {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             opacity: 0.9;
-            max-width: 700px;
+            max-width: 600px;
             margin: 0 auto;
             line-height: 1.6;
+        }
+
+        .back-nav {
+            max-width: 1200px;
+            margin: 2rem auto 0;
+            padding: 0 1.5rem;
         }
 
         .network-scenarios-grid {
@@ -311,21 +316,23 @@
         </div>
     </nav>
 
+    <div class="back-nav">
+        <a href="index.html" class="btn-back" data-i18n="btn_back">&larr; Takaisin etusivulle</a>
+    </div>
+
+    <header class="networks-hero">
+        <h1 data-i18n="networks_hero_title">Älykkäät Palveluverkostot</h1>
+        <p data-i18n="networks_hero_desc">LaukaaInfo yhdistää paikalliset toimijat saumattomiksi palveluketjuiksi.</p>
+        
+        <div class="location-bar">
+            <span style="font-size: 1.2rem;">📍</span>
+            <input type="text" id="user-location-input" placeholder="Sijaintisi (esim. Laukaa)" data-i18n-placeholder="placeholder_your_location">
+            <button class="btn-locate" id="locate-me-btn">🎯</button>
+        </div>
+        <div id="location-status" style="margin-top: 10px; font-size: 0.8rem; opacity: 0.8;"></div>
+    </header>
+
     <main>
-        <section class="networks-hero">
-            <div class="back-nav" style="text-align: left; max-width: 1000px; margin: 0 auto 2rem;">
-                <a href="index.html" class="btn-back" style="color: white; text-decoration: none;" data-i18n="btn_back">&larr; Takaisin etusivulle</a>
-            </div>
-            <h1 data-i18n="networks_hero_title">Älykkäät Palveluverkostot</h1>
-            <p data-i18n="networks_hero_desc">LaukaaInfo yhdistää paikalliset toimijat saumattomiksi palveluketjuiksi.</p>
-            
-            <div class="location-bar">
-                <span style="font-size: 1.2rem;">📍</span>
-                <input type="text" id="user-location-input" placeholder="Sijaintisi (esim. Laukaa)" data-i18n-placeholder="placeholder_your_location">
-                <button class="btn-locate" id="locate-me-btn">🎯</button>
-            </div>
-            <div id="location-status" style="margin-top: 10px; font-size: 0.8rem; opacity: 0.8;"></div>
-        </section>
 
         <section class="network-scenarios-grid">
             <a href="#scenario-weddings" class="scenario-card">
