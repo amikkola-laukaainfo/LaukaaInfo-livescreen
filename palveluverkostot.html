@@ -450,52 +450,36 @@
         </div>
     </nav>
 
-    <header class="networks-hero">
-        <div class="back-nav">
-            <a href="index.html" class="btn-back" data-i18n="btn_back">&larr; Takaisin etusivulle</a>
-        </div>
-        <div class="hero-content">
-            <h1 data-i18n="networks_title">Palveluverkostot</h1>
-            <p data-i18n="networks_desc">Rakenna itsellesi täydellinen palvelukokonaisuus Laukaasta. Valitsemalla kumppanit eri vaiheisiin näet suositukset yhteensopivista toimijoista.</p>
+    <main>
+        <section class="networks-hero">
+            <div class="back-nav">
+                <a href="index.html" class="btn-back" data-i18n="btn_back">&larr; Takaisin etusivulle</a>
+            </div>
+            <h1 data-i18n="networks_hero_title">Älykkäät Palveluverkostot</h1>
+            <p data-i18n="networks_hero_desc">LaukaaInfo yhdistää paikalliset toimijat saumattomiksi palveluketjuiksi. Yksi tarve tuo mukanaan kaikki tarvittavat asiantuntijat.</p>
             
             <div class="location-bar">
-                <span>📍</span>
-                <input type="text" id="user-location-input" data-i18n="[placeholder]placeholder_your_location" placeholder="Sijaintisi (esim. Laukaa)" autocomplete="off">
-                <button class="btn-locate" id="locate-me-btn" title="Hae sijaintini">🎯</button>
+                <span style="font-size: 1.2rem;">📍</span>
+                <input type="text" id="user-location-input" placeholder="Sijaintisi (esim. Laukaa)" data-i18n-placeholder="placeholder_your_location">
+                <button class="btn-locate" id="locate-me-btn" title="Paikanna minut">🎯</button>
             </div>
             <div id="location-status" style="margin-top: 10px; font-size: 0.8rem; opacity: 0.8;"></div>
-        </div>
-    </header>
+        </section>
 
-    <main>
         <section class="network-scenarios-grid">
             <a href="#scenario-weddings" class="scenario-card">
-                <div class="scenario-icon">💍</div>
                 <h3 data-i18n="scenario_weddings_title">Häät ja suuret juhlat</h3>
                 <p data-i18n="scenario_weddings_short">Kaikki juhlatilasta tarjoiluun ja hääkuvaukseen.</p>
             </a>
             <a href="#scenario-moving" class="scenario-card">
-                <div class="scenario-icon">📦</div>
                 <h3 data-i18n="scenario_moving_title">Muuttoprosessi</h3>
                 <p data-i18n="scenario_moving_short">Helpota asunnon vaihtoa logistiikan ja siivouksen avulla.</p>
             </a>
             <a href="#scenario-cottage" class="scenario-card">
-                <div class="scenario-icon">🏡</div>
                 <h3 data-i18n="scenario_cottage_title">Mökin ylläpito</h3>
                 <p data-i18n="scenario_cottage_short">Talkkaripalvelut, nuohous ja remontit vapaa-ajan asunnolle.</p>
             </a>
-            <a href="#scenario-bereavement" class="scenario-card">
-                <div class="scenario-icon">🕯️</div>
-                <h3 data-i18n="scenario_bereavement_title">Surupalvelu</h3>
-                <p data-i18n="scenario_bereavement_short">Kokonaisvaltainen tuki hautajaisjärjestelyihin ja lakiapuna.</p>
-            </a>
-            <a href="#scenario-startup" class="scenario-card">
-                <div class="scenario-icon">🚀</div>
-                <h3 data-i18n="scenario_startup_title">Startupista kasvuun</h3>
-                <p data-i18n="scenario_startup_short">Tukea yrityksen perustamiseen, brändäykseen ja kasvuun.</p>
-            </a>
             <a href="#scenario-tyhy" class="scenario-card">
-                <div class="scenario-icon">🧘</div>
                 <h3 data-i18n="scenario_tyhy_title">TYHY ja tiimipäivät</h3>
                 <p data-i18n="scenario_tyhy_short">Elämyksiä, hyvinvointia ja asiantuntijaluentoja tiimillesi.</p>
             </a>
@@ -508,47 +492,29 @@
                 <p data-i18n="scenario_weddings_desc">Suunnittele unelmiesi juhlat Laukaassa askel askeleelta.</p>
             </div>
             <div class="chain-container">
-                    <div class="chain-step" data-tags="juhlatila">
-                        <span class="step-label" data-i18n="step_1">Vaihe 1: Suunnittelu ja miljöö</span>
-                        <h4 data-i18n="step_1_title">Juhlatila ja tunnelma</h4>
-                        <div class="partner-list">
-                            <!-- Dynamic content -->
-                        </div>
-                    </div>
-
-                    <div class="chain-step" data-tags="pitopalvelu,catering,kukkakauppa,kukat">
-                        <span class="step-label" data-i18n="step_2">Vaihe 2: Maut ja kukkaloisto</span>
-                        <h4 data-i18n="step_2_title">Maut ja kukkaloisto</h4>
-                        <div class="partner-list">
-                            <!-- Dynamic content -->
-                        </div>
-                    </div>
-
-                    <div class="chain-step" data-tags="valokuvaaja,videokuvaaja,digitointi">
-                        <span class="step-label" data-i18n="step_3">Vaihe 3: Muistojen taltiointi</span>
-                        <h4 data-i18n="step_3_title">Muistojen taltiointi</h4>
-                        <div class="partner-list">
-                            <!-- Dynamic content -->
-                        </div>
-                    </div>
-
-                    <div class="chain-step" data-tags="majoitus">
-                        <span class="step-label" data-i18n="step_4">Vaihe 4: Majoitus</span>
-                        <h4 data-i18n="step_4_title">Majoitus vieraille</h4>
-                        <div class="partner-list">
-                            <!-- Dynamic content -->
-                        </div>
-                    </div>
+                <div class="chain-step" data-tags="juhlatila">
+                    <span class="step-label" data-i18n="step_1">Vaihe 1: Suunnittelu ja miljöö</span>
+                    <h4 data-i18n="step_1_title">Juhlatila ja tunnelma</h4>
+                    <div class="partner-list"></div>
+                </div>
+                <div class="chain-step" data-tags="pitopalvelu,catering,kukkakauppa,kukat">
+                    <span class="step-label" data-i18n="step_2">Vaihe 2: Maut ja kukkaloisto</span>
+                    <h4 data-i18n="step_2_title">Maut ja kukkaloisto</h4>
+                    <div class="partner-list"></div>
+                </div>
+                <div class="chain-step" data-tags="valokuvaaja,videokuvaaja,digitointi">
+                    <span class="step-label" data-i18n="step_3">Vaihe 3: Muistojen taltiointi</span>
+                    <h4 data-i18n="step_3_title">Muistojen taltiointi</h4>
+                    <div class="partner-list"></div>
+                </div>
+                <div class="chain-step" data-tags="majoitus">
+                    <span class="step-label" data-i18n="step_4">Vaihe 4: Majoitus</span>
+                    <h4 data-i18n="step_4_title">Majoitus vieraille</h4>
+                    <div class="partner-list"></div>
+                </div>
                 <div class="chain-step dynamic-suggestions" style="display: none;">
                     <span class="step-label" data-i18n="related_services">Liittyvät palvelut</span>
-                    <div class="step-content">
-                        <div class="step-header">
-                            <h4 data-i18n="suggested_for_you">Suositeltu sinulle</h4>
-                        </div>
-                        <div class="partner-list suggestion-slot">
-                            <!-- Dynamic suggestions here -->
-                        </div>
-                    </div>
+                    <div class="partner-list suggestion-slot"></div>
                 </div>
             </div>
         </section>
@@ -560,66 +526,14 @@
                 <p data-i18n="scenario_moving_desc">Sujuva siirtymä uuteen kotiin Laukaassa.</p>
             </div>
             <div class="chain-container">
-                            <h4 data-i18n="step_moving_2_title">Kuljetus ja vuokraus</h4>
-                        </div>
-                        <div class="partner-list">
-                            <a href="yrityskortti.html?id=company-223" class="partner-link">
-                                <div class="partner-info"><span>Sydän-Suomen Kuljetus</span><small data-i18n="role_transport">Muuttokuljetukset</small></div>
-                            </a>
-                            <a href="yrityskortti.html?id=company-176" class="partner-link">
-                                <div class="partner-info"><span>Väentupa R.Y.</span><small data-i18n="role_trailer">Peräkärryn vuokraus</small></div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="chain-step dynamic-suggestions" style="display: none;">
-                    <span class="step-label" data-i18n="related_services">Liittyvät palvelut</span>
                 <div class="chain-step" data-tags="lakiasiaintoimisto,notariaatti,kiinteistönvälitys">
                     <span class="step-label" data-i18n="step_legal">Vaihe 1: Lakiturva ja sopimukset</span>
                     <h4 data-i18n="step_moving_1_title">Kauppakirjat ja viralliset asiat</h4>
                     <div class="partner-list"></div>
                 </div>
-                <div class="chain-step" data-tags="muuttoapua,kuljetus,taksi,peräkärry">
+                <div class="chain-step" data-tags="muuttoapu,kuljetus,taksi,peräkärry">
                     <span class="step-label" data-i18n="step_logistics">Vaihe 2: Logistiikka ja apuvoimat</span>
                     <h4 data-i18n="step_moving_2_title">Kuljetus ja vuokraus</h4>
-                    <div class="partner-list"></div>
-                </div>
-                <div class="chain-step dynamic-suggestions" style="display: none;">
-                    <span class="step-label" data-i18n="related_services">Liittyvät palvelut</span>
-                    <div class="partner-list suggestion-slot"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Mökki -->
-        <section id="scenario-cottage" class="chain-section">
-            <div class="chain-header">
-                <h2 data-i18n="scenario_cottage_title">Mökin ylläpito</h2>
-                <p data-i18n="scenario_cottage_desc">Vapaa-ajan asuminen vaivattomaksi ympäri vuoden.</p>
-            </div>
-            <div class="chain-container">
-                <div class="chain-step" data-tags="talkkari,huolto,nuohous,lumityöt">
-                    <span class="step-label" data-i18n="step_maintenance">Vaihe 1: Ylläpito ja huolto</span>
-                    <h4 data-i18n="step_cottage_1_title">Mökkitalkkarit ja piha</h4>
-                    <div class="partner-list"></div>
-                </div>
-                <div class="chain-step dynamic-suggestions" style="display: none;">
-                    <span class="step-label" data-i18n="related_services">Liittyvät palvelut</span>
-                    <div class="partner-list suggestion-slot"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Surupalvelu -->
-        <section id="scenario-bereavement" class="chain-section" style="background: #f1f5f9; padding: 6rem 1.5rem; border-radius: 60px;">
-            <div class="chain-header">
-                <h2 data-i18n="scenario_bereavement_title">Surupalvelu</h2>
-                <p data-i18n="scenario_bereavement_desc">Kunnioittava ja kokonaisvaltainen tuki vaikealla hetkellä.</p>
-            </div>
-            <div class="chain-container">
-                <div class="chain-step" data-tags="hautaus,kukkakauppa,juhlatila,pitopalvelu,perunkirjoitus">
-                    <span class="step-label" data-i18n="step_memorial">Vaihe 1: Muistotilaisuus ja hautaus</span>
-                    <h4 data-i18n="step_bereavement_1_title">Hautaus ja juhlatilat</h4>
                     <div class="partner-list"></div>
                 </div>
                 <div class="chain-step dynamic-suggestions" style="display: none;">
@@ -636,27 +550,14 @@
                 <p data-i18n="scenario_startup_desc">Asiantuntijaverkosto tukenasi yrityksen joka vaiheessa.</p>
             </div>
             <div class="chain-container">
-                <div class="chain-step">
-                    <span class="step-label" data-i18n="step_business">Alku ja brändi</span>
-                    <div class="step-content">
-                        <div class="step-header">
-                            <h4 data-i18n="step_startup_1_title">Neuvonta ja visuaalinen ilme</h4>
-                        </div>
-                        <div class="partner-list">
-                            <a href="yrityskortti.html?id=company-273" class="partner-link">
-                                <div class="partner-info"><span>Onnellinen Studio</span><small data-i18n="role_design">Logosuunnittelu & brändäys</small></div>
-                            </a>
-                            <a href="yrityskortti.html?id=company-154" class="partner-link">
-                                <div class="partner-info"><span>Photo Malmström</span><small data-i18n="role_business_photo">Yrityskuvaus</small></div>
-                            </a>
-                            <a href="yrityskortti.html?id=company-2" class="partner-link">
-                                <div class="partner-info"><span>Mediazoo</span><small data-i18n="role_web">Nettisivut & digimarkkinointi</small></div>
-                            </a>
-                            <a href="yrityskortti.html?id=company-189" class="partner-link">
-                                <div class="partner-info"><span>Sujuvaa</span><small data-i18n="role_realestate">Toimitilaisännöinti</small></div>
-                            </a>
-                        </div>
-                    </div>
+                <div class="chain-step" data-tags="mainostoimisto,logosuunnittelu,brändäys,valokuvaaja">
+                    <span class="step-label" data-i18n="step_business">Vaihe 1: Alku ja brändi</span>
+                    <h4 data-i18n="step_startup_1_title">Neuvonta ja visuaalinen ilme</h4>
+                    <div class="partner-list"></div>
+                </div>
+                <div class="chain-step dynamic-suggestions" style="display: none;">
+                    <span class="step-label" data-i18n="related_services">Liittyvät palvelut</span>
+                    <div class="partner-list suggestion-slot"></div>
                 </div>
             </div>
         </section>
@@ -668,42 +569,23 @@
                 <p data-i18n="scenario_tyhy_desc">Vahvista tiimiäsi elämyksillä ja hyvinvoinnilla.</p>
             </div>
             <div class="chain-container">
-                <div class="chain-step">
-                    <span class="step-label" data-i18n="step_activities">Aktiviteetit ja rentoutus</span>
-                    <div class="step-content">
-                        <div class="step-header">
-                            <h4 data-i18n="step_tyhy_1_title">Vauhtia ja saunan lämpöä</h4>
-                        </div>
-                        <div class="partner-list">
-                            <a href="yrityskortti.html?id=company-263" class="partner-link">
-                                <div class="partner-info"><span>Varjola</span><small data-i18n="role_activities">Aktiviteetit & elämykset</small></div>
-                            </a>
-                            <a href="yrityskortti.html?id=company-243" class="partner-link">
-                                <div class="partner-info"><span>Laukaan Tupaswilla</span><small data-i18n="role_sauna">Savusauna & miljöö</small></div>
-                            </a>
-                        </div>
-                    </div>
+                <div class="chain-step" data-tags="aktiviteetit,elämys,sauna,savusauna">
+                    <span class="step-label" data-i18n="step_activities">Vaihe 1: Aktiviteetit ja rentoutus</span>
+                    <h4 data-i18n="step_tyhy_1_title">Vauhtia ja saunan lämpöä</h4>
+                    <div class="partner-list"></div>
                 </div>
-                <div class="chain-step">
-                    <span class="step-label" data-i18n="step_wellness">Hyvinvointi ja oppiminen</span>
-                    <div class="step-content">
-                        <div class="step-header">
-                            <h4 data-i18n="step_tyhy_2_title">Asiantuntijaluennot ja valmennus</h4>
-                        </div>
-                        <div class="partner-list">
-                            <a href="yrityskortti.html?id=company-269" class="partner-link">
-                                <div class="partner-info"><span>Riina Raitio</span><small data-i18n="role_lecture">Hyvinvointiluennot</small></div>
-                            </a>
-                            <a href="yrityskortti.html?id=company-23" class="partner-link">
-                                <div class="partner-info"><span>OneFit</span><small data-i18n="role_pt">Tiimivalmennus</small></div>
-                            </a>
-                        </div>
-                    </div>
+                <div class="chain-step" data-tags="luennot,valmennus,hyvinvointi,hieronta">
+                    <span class="step-label" data-i18n="step_wellness">Vaihe 2: Hyvinvointi ja oppiminen</span>
+                    <h4 data-i18n="step_tyhy_2_title">Asiantuntijaluennot ja valmennus</h4>
+                    <div class="partner-list"></div>
+                </div>
+                <div class="chain-step dynamic-suggestions" style="display: none;">
+                    <span class="step-label" data-i18n="related_services">Liittyvät palvelut</span>
+                    <div class="partner-list suggestion-slot"></div>
                 </div>
             </div>
         </section>
 
-        <!-- More sections would be added here for each scenario -->
          <div style="text-align: center; margin-bottom: 5rem; padding: 0 1.5rem;">
             <p style="color: #64748b; margin-bottom: 2rem;" data-i18n="networks_footer_text">Tämä on vasta alku. Jokainen verkosto on muokattavissa tarpeittesi mukaan.</p>
             <a href="index.html#palveluverkosto" class="btn-radar" style="background: var(--primary-blue); text-decoration: none; display: inline-block;" data-i18n="btn_create_custom">Luo oma verkosto &raquo;</a>
