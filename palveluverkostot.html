@@ -574,14 +574,19 @@
                 </div>
                 <div class="chain-step dynamic-suggestions" style="display: none;">
                     <span class="step-label" data-i18n="related_services">Liittyvät palvelut</span>
-                    <div class="step-content">
-                        <div class="step-header">
-                            <h4 data-i18n="suggested_for_you">Suositeltu sinulle</h4>
-                        </div>
-                        <div class="partner-list suggestion-slot">
-                            <!-- Dynamic suggestions here -->
-                        </div>
-                    </div>
+                <div class="chain-step" data-tags="lakiasiaintoimisto,notariaatti,kiinteistönvälitys">
+                    <span class="step-label" data-i18n="step_legal">Vaihe 1: Lakiturva ja sopimukset</span>
+                    <h4 data-i18n="step_moving_1_title">Kauppakirjat ja viralliset asiat</h4>
+                    <div class="partner-list"></div>
+                </div>
+                <div class="chain-step" data-tags="muuttoapua,kuljetus,taksi,peräkärry">
+                    <span class="step-label" data-i18n="step_logistics">Vaihe 2: Logistiikka ja apuvoimat</span>
+                    <h4 data-i18n="step_moving_2_title">Kuljetus ja vuokraus</h4>
+                    <div class="partner-list"></div>
+                </div>
+                <div class="chain-step dynamic-suggestions" style="display: none;">
+                    <span class="step-label" data-i18n="related_services">Liittyvät palvelut</span>
+                    <div class="partner-list suggestion-slot"></div>
                 </div>
             </div>
         </section>
@@ -612,30 +617,14 @@
                 <p data-i18n="scenario_bereavement_desc">Kunnioittava ja kokonaisvaltainen tuki vaikealla hetkellä.</p>
             </div>
             <div class="chain-container">
-                <div class="chain-step">
-                    <span class="step-label" data-i18n="step_memorial">Muistotilaisuus ja hautaus</span>
-                    <div class="step-content">
-                        <div class="step-header">
-                            <h4 data-i18n="step_bereavement_1_title">Hautaus ja juhlatilat</h4>
-                        </div>
-                        <div class="partner-list">
-                            <a href="yrityskortti.html?id=company-131" class="partner-link">
-                                <div class="partner-info"><span>Kukka ja Hautauspalvelu Vehviläinen</span><small data-i18n="role_funeral">Hautauspalvelu</small></div>
-                            </a>
-                            <a href="yrityskortti.html?id=company-280" class="partner-link">
-                                <div class="partner-info"><span>Humina</span><small data-i18n="role_venue_small">Muistotilaisuudet</small></div>
-                            </a>
-                            <a href="yrityskortti.html?id=company-266" class="partner-link">
-                                <div class="partner-info"><span>Lempileivos</span><small data-i18n="role_catering_funeral">Muistotilaisuus-tarjoilut</small></div>
-                            </a>
-                            <a href="yrityskortti.html?id=company-277" class="partner-link">
-                                <div class="partner-info"><span>Sarahovin kokoustilat</span><small data-i18n="role_venue_access">Esteetön tila</small></div>
-                            </a>
-                            <a href="yrityskortti.html?id=company-301" class="partner-link">
-                                <div class="partner-info"><span>Notariaatti</span><small data-i18n="role_legal_probate">Perunkirjoitus & perintö</small></div>
-                            </a>
-                        </div>
-                    </div>
+                <div class="chain-step" data-tags="hautaus,kukkakauppa,juhlatila,pitopalvelu,perunkirjoitus">
+                    <span class="step-label" data-i18n="step_memorial">Vaihe 1: Muistotilaisuus ja hautaus</span>
+                    <h4 data-i18n="step_bereavement_1_title">Hautaus ja juhlatilat</h4>
+                    <div class="partner-list"></div>
+                </div>
+                <div class="chain-step dynamic-suggestions" style="display: none;">
+                    <span class="step-label" data-i18n="related_services">Liittyvät palvelut</span>
+                    <div class="partner-list suggestion-slot"></div>
                 </div>
             </div>
         </section>
