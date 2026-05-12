@@ -3047,7 +3047,7 @@
     },
     {
       "id": "company-154",
-      "nimi": "Photo MalmstrÃ¶m",
+      "nimi": "Photo Malmström",
       "kategoria": "Palvelut",
       "package": "perus",
       "mainoslause": "",
@@ -4874,7 +4874,7 @@
     },
     {
       "id": "company-242",
-      "nimi": "KuhajÃ¤rven Suviranta Oy",
+      "nimi": "Kuhajärven Suviranta Oy",
       "kategoria": "Majoitus",
       "package": "perus",
       "mainoslause": "",
@@ -5392,3 +5392,4 @@
   "page": 1,
   "limit": 9999
 }
+
