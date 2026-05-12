@@ -33,8 +33,12 @@ function generatePremiumPages() {
         return;
     }
     
-    const data = JSON.parse(fs.readFileSync(companiesFile, 'utf8'));
+    // Read with BOM stripping (Windows editors may prepend \uFEFF)
+    let rawJson = fs.readFileSync(companiesFile, 'utf8');
+    if (rawJson.charCodeAt(0) === 0xFEFF) rawJson = rawJson.slice(1);
+    const data = JSON.parse(rawJson);
     const companies = data.results || [];
+
     
     // Read the base yrityskortti.html as a template
     // We'll use a slightly modified version that doesn't rely solely on JS for SEO
