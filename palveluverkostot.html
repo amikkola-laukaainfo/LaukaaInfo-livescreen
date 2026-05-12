@@ -17,6 +17,47 @@
     <link rel="stylesheet" href="modal.css">
     <script src="translations.js?v=20260512"></script>
     <style>
+        .location-bar {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 50px;
+            margin-top: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .location-bar input {
+            background: transparent;
+            border: none;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            width: 180px;
+            outline: none;
+        }
+
+        .location-bar input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .location-bar .btn-locate {
+            background: white;
+            color: var(--primary-blue);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+            font-size: 1.2rem;
+        }
+    </style>
         .networks-hero {
             background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
             color: white;
@@ -409,13 +450,21 @@
         </div>
     </nav>
 
-    <div class="back-nav" style="max-width: 1200px; margin: 2rem auto 0; padding: 0 1.5rem;">
-        <a href="index.html" class="btn-back" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: var(--primary-blue); font-weight: 700;">&larr; Takaisin etusivulle</a>
-    </div>
-
     <header class="networks-hero">
-        <h1 data-i18n="networks_hero_title">Älykkäät Palveluverkostot</h1>
-        <p data-i18n="networks_hero_desc">LaukaaInfo yhdistää paikalliset toimijat saumattomiksi palveluketjuiksi. Yksi tarve tuo mukanaan kaikki tarvittavat asiantuntijat.</p>
+        <div class="back-nav">
+            <a href="index.html" class="btn-back" data-i18n="btn_back">&larr; Takaisin etusivulle</a>
+        </div>
+        <div class="hero-content">
+            <h1 data-i18n="networks_title">Palveluverkostot</h1>
+            <p data-i18n="networks_desc">Rakenna itsellesi täydellinen palvelukokonaisuus Laukaasta. Valitsemalla kumppanit eri vaiheisiin näet suositukset yhteensopivista toimijoista.</p>
+            
+            <div class="location-bar">
+                <span>📍</span>
+                <input type="text" id="user-location-input" data-i18n="[placeholder]placeholder_your_location" placeholder="Sijaintisi (esim. Laukaa)" autocomplete="off">
+                <button class="btn-locate" id="locate-me-btn" title="Hae sijaintini">🎯</button>
+            </div>
+            <div id="location-status" style="margin-top: 10px; font-size: 0.8rem; opacity: 0.8;"></div>
+        </div>
     </header>
 
     <main>
@@ -459,60 +508,69 @@
                 <p data-i18n="scenario_weddings_desc">Suunnittele unelmiesi juhlat Laukaassa askel askeleelta.</p>
             </div>
             <div class="chain-container">
-                <div class="chain-step">
-                    <span class="step-label" data-i18n="step_1">Vaihe 1: Suunnittelu ja miljöö</span>
-                    <div class="step-content">
-                        <div class="step-header">
-                            <h4 data-i18n="step_wedding_1_title">Juhlatila ja tunnelma</h4>
-                        </div>
+                    <div class="chain-step" data-tags="juhlatila">
+                        <span class="step-label" data-i18n="step_1">Vaihe 1: Suunnittelu ja miljöö</span>
+                        <h4 data-i18n="step_1_title">Juhlatilat ja miljöö</h4>
                         <div class="partner-list">
-                            <a href="yrityskortti.html?id=company-282" class="partner-link">
-                                <div class="partner-info"><span>Laukaan Tuulenväre</span><small data-i18n="role_venue">Juhlatila & miljöö</small></div>
-                            </a>
-                            <a href="yrityskortti.html?id=company-276" class="partner-link">
-                                <div class="partner-info"><span>Vuonteen Helmi</span><small data-i18n="role_venue_unique">Uniikki juhlapaikka</small></div>
-                            </a>
+                            <!-- Dynamic content -->
                         </div>
                     </div>
-                </div>
-                <div class="chain-step">
-                    <span class="step-label" data-i18n="step_2">Vaihe 2: Maut ja kukkaloisto</span>
-                    <div class="step-content">
-                        <div class="step-header">
-                            <h4 data-i18n="step_wedding_2_title">Tarjoilu ja koristelu</h4>
-                        </div>
+
+                    <div class="chain-step" data-tags="majoitus">
+                        <span class="step-label" data-i18n="step_2">Vaihe 2: Majoitus</span>
+                        <h4 data-i18n="step_2_title">Majoitus vieraille</h4>
                         <div class="partner-list">
-                            <a href="yrityskortti.html?id=company-266" class="partner-link">
-                                <div class="partner-info"><span>Lempileivos</span><small data-i18n="role_catering">Pitopalvelu & kakut</small></div>
-                            </a>
-                            <a href="yrityskortti.html?id=company-268" class="partner-link">
-                                <div class="partner-info"><span>Jyväs Pakari</span><small data-i18n="role_bakery">Hääkakkujen mestari</small></div>
-                            </a>
-                            <a href="yrityskortti.html?id=company-142" class="partner-link">
-                                <div class="partner-info"><span>Merjan Risu & Ruusut</span><small data-i18n="role_florist">Hääkukat & sidonta</small></div>
-                            </a>
+                            <!-- Dynamic content -->
                         </div>
                     </div>
-                </div>
-                <div class="chain-step">
-                    <span class="step-label" data-i18n="step_3">Vaihe 3: Muistojen taltiointi</span>
-                    <div class="step-content">
-                        <div class="step-header">
-                            <h4 data-i18n="step_wedding_3_title">Valokuvaus ja viihde</h4>
-                        </div>
+
+                    <div class="chain-step" data-tags="catering,pitopalvelu">
+                        <span class="step-label" data-i18n="step_3">Vaihe 3: Catering ja juoma</span>
+                        <h4 data-i18n="step_3_title">Pitopalvelut</h4>
                         <div class="partner-list">
-                            <a href="yrityskortti.html?id=company-291" class="partner-link">
-                                <div class="partner-info"><span>PS Studio</span><small data-i18n="role_photo">Häävalokuvaus</small></div>
-                            </a>
-                            <a href="yrityskortti.html?id=company-292" class="partner-link">
-                                <div class="partner-info"><span>Mika Nuorva</span><small data-i18n="role_video">Häävideokuvaus</small></div>
-                            </a>
-                            <a href="yrityskortti.html?id=company-101" class="partner-link">
-                                <div class="partner-info"><span>AtSound</span><small data-i18n="role_dj">DJ & äänentoisto</small></div>
-                            </a>
+                            <!-- Dynamic content -->
                         </div>
                     </div>
-                </div>
+
+                    <div class="chain-step" data-tags="kukkakauppa,kukat">
+                        <span class="step-label" data-i18n="step_4">Vaihe 4: Kukat ja somistus</span>
+                        <h4 data-i18n="step_4_title">Kukat</h4>
+                        <div class="partner-list">
+                            <!-- Dynamic content -->
+                        </div>
+                    </div>
+
+                    <div class="chain-step" data-tags="valokuvaaja,kuvaus">
+                        <span class="step-label" data-i18n="step_5">Vaihe 5: Kuvaus ja muistot</span>
+                        <h4 data-i18n="step_5_title">Valokuvaajat</h4>
+                        <div class="partner-list">
+                            <!-- Dynamic content -->
+                        </div>
+                    </div>
+
+                    <div class="chain-step" data-tags="esiintyjä,ohjelma,musiikki">
+                        <span class="step-label" data-i18n="step_6">Vaihe 6: Ohjelma ja musiikki</span>
+                        <h4 data-i18n="step_6_title">Ohjelmapalvelut</h4>
+                        <div class="partner-list">
+                            <!-- Dynamic content -->
+                        </div>
+                    </div>
+
+                    <div class="chain-step" data-tags="taksi,kuljetus,bussi">
+                        <span class="step-label" data-i18n="step_7">Vaihe 7: Kuljetus</span>
+                        <h4 data-i18n="step_7_title">Kuljetuspalvelut</h4>
+                        <div class="partner-list">
+                            <!-- Dynamic content -->
+                        </div>
+                    </div>
+
+                    <div class="chain-step" data-tags="koru,sormus,huomenlahja">
+                        <span class="step-label" data-i18n="step_8">Vaihe 8: Huomenlahjat ja sormukset</span>
+                        <h4 data-i18n="step_8_title">Korut ja lahjat</h4>
+                        <div class="partner-list">
+                            <!-- Dynamic content -->
+                        </div>
+                    </div>
                 <div class="chain-step dynamic-suggestions" style="display: none;">
                     <span class="step-label" data-i18n="related_services">Liittyvät palvelut</span>
                     <div class="step-content">
@@ -736,10 +794,10 @@
     </div>
 
     <div id="report-modal" class="lki-modal-overlay">
-        <div class="lki-modal-container" style="max-width: 800px; padding: 3rem;">
-            <button class="lki-modal-close" onclick="document.getElementById('report-modal').classList.remove('active')">&times;</button>
-            <div id="report-content"></div>
-            <div style="text-align: center; margin-top: 2rem;" class="no-print">
+        <div class="lki-modal-container" style="max-width: 800px; padding: 0; display: flex; flex-direction: column;">
+            <button class="lki-modal-close" onclick="document.getElementById('report-modal').classList.remove('active')" style="position: absolute; right: 20px; top: 20px; z-index: 10;">&times;</button>
+            <div id="report-content" style="padding: 3rem; overflow-y: auto; flex: 1;"></div>
+            <div style="text-align: center; padding: 2rem; background: #f8fafc; border-top: 1px solid #eee;" class="no-print">
                 <button class="btn-radar" onclick="window.print()">Tulosta / Tallenna PDF</button>
             </div>
         </div>
