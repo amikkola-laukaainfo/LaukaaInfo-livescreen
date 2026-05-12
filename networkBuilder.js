@@ -71,6 +71,7 @@ class NetworkBuilder {
             });
             this.selections[scenarioId][stepIndex] = companyId;
             this.propagateRecommendations(scenarioId, stepIndex);
+            this.updateSuggestions(scenarioId, stepIndex);
         } else {
             const link = Array.from(stepEl.querySelectorAll('.partner-link')).find(l => l.href.includes(companyId));
             if (link) link.classList.remove('selected');
@@ -139,6 +140,47 @@ class NetworkBuilder {
             const list = nextStepEl.querySelector('.partner-list');
             const recommended = Array.from(list.querySelectorAll('.partner-link.recommended'));
             recommended.forEach(el => list.prepend(el));
+        }
+    }
+
+    updateSuggestions(scenarioId, currentStepIndex) {
+        const scenarioEl = document.getElementById(scenarioId);
+        const suggestionSlot = scenarioEl.querySelector('.suggestion-slot');
+        const suggestionStep = scenarioEl.querySelector('.dynamic-suggestions');
+        
+        if (!suggestionSlot || !suggestionStep) return;
+
+        const currentCompanyId = this.selections[scenarioId][currentStepIndex];
+        const profile = this.profiling[currentCompanyId];
+        
+        if (!profile || !profile.core?.paired_with_by_context?.general) {
+            suggestionStep.style.display = 'none';
+            return;
+        }
+
+        const relatedTags = profile.core.paired_with_by_context.general;
+        const suggestedCompanies = this.companies.filter(c => 
+            relatedTags.some(tag => c.tags.toLowerCase().includes(tag.toLowerCase())) &&
+            c.id !== currentCompanyId
+        ).slice(0, 3);
+
+        if (suggestedCompanies.length > 0) {
+            suggestionSlot.innerHTML = '';
+            suggestedCompanies.forEach(comp => {
+                const card = document.createElement('a');
+                card.href = `yrityskortti.html?id=${comp.id}`;
+                card.className = 'partner-link suggestion-card';
+                card.innerHTML = `
+                    <div class="partner-info">
+                        <span>${comp.nimi}</span>
+                        <small>${comp.kategoria}</small>
+                    </div>
+                `;
+                suggestionSlot.appendChild(card);
+            });
+            suggestionStep.style.display = 'flex';
+        } else {
+            suggestionStep.style.display = 'none';
         }
     }
 
