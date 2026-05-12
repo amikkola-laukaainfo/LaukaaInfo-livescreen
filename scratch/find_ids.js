@@ -10,15 +10,14 @@ const targets = [
     "Sujuvaa", "Varjola", "Sessio", "Tupaswilla", "Raitio", "OneFit"
 ];
 
-const results = {};
-
-data.results.forEach(c => {
-    targets.forEach(t => {
-        if (c.nimi.toLowerCase().includes(t.toLowerCase())) {
-            results[t] = results[t] || [];
-            results[t].push({ id: c.id, nimi: c.nimi });
-        }
-    });
+const mapping = {};
+targets.forEach(t => {
+    const found = data.results.find(c => c.nimi.toLowerCase().includes(t.toLowerCase()));
+    if (found) {
+        mapping[t] = found.id;
+    } else {
+        mapping[t] = "MISSING";
+    }
 });
 
-console.log(JSON.stringify(results, null, 2));
+console.log(JSON.stringify(mapping, null, 2));
