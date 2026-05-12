@@ -13,18 +13,27 @@ class NetworkBuilder {
 
     async init() {
         try {
-            const [companiesRes, profilingRes] = await Promise.all([
+            // Fetch both company data sources to ensure we have all IDs (e.g. company-282)
+            const [liveRes, tempRes, profilingRes] = await Promise.all([
                 fetch('live_companies.json'),
+                fetch('temp_companies.json'),
                 fetch('company_profiling_data.json')
             ]);
 
-            const companiesData = await companiesRes.json();
-            this.companies = companiesData.results;
+            const liveData = await liveRes.json();
+            const tempData = await tempRes.json();
+            
+            // Merge companies, avoiding duplicates
+            const companyMap = {};
+            [...(tempData.results || []), ...(liveData.results || [])].forEach(c => {
+                companyMap[c.id] = c;
+            });
+            this.companies = Object.values(companyMap);
             
             const profilingData = await profilingRes.json();
             this.profiling = profilingData.profiles;
 
-            console.log('NetworkBuilder: Data loaded');
+            console.log('NetworkBuilder: Data loaded', this.companies.length, 'companies');
             this.setupListeners();
             this.renderAll();
         } catch (error) {
@@ -59,23 +68,35 @@ class NetworkBuilder {
     handleSelection(scenarioId, stepIndex, companyId, isSelected) {
         if (!this.selections[scenarioId]) this.selections[scenarioId] = {};
         
-        // Clear other selections in the same step (exclusive choice for now)
         const stepEl = document.querySelector(`#${scenarioId} .chain-step[data-step="${stepIndex}"]`);
         if (isSelected) {
-            stepEl.querySelectorAll('.partner-toggle').forEach(cb => {
-                if (cb.dataset.companyId !== companyId) cb.checked = false;
-            });
-            stepEl.querySelectorAll('.partner-link').forEach(link => {
-                link.classList.remove('selected');
-                if (link.href.includes(companyId)) link.classList.add('selected');
-            });
-            this.selections[scenarioId][stepIndex] = companyId;
+            // For now, allow multiple selections in a step if the user wants, 
+            // but the UI currently suggests one per step. 
+            // Let's keep it flexible but clear previous logic if needed.
+            // stepEl.querySelectorAll('.partner-toggle').forEach(cb => {
+            //     if (cb.dataset.companyId !== companyId) cb.checked = false;
+            // });
+            
+            const link = Array.from(stepEl.querySelectorAll('.partner-link')).find(l => l.dataset.companyId === companyId);
+            if (link) link.classList.add('selected');
+            
+            if (!this.selections[scenarioId][stepIndex]) this.selections[scenarioId][stepIndex] = [];
+            if (!this.selections[scenarioId][stepIndex].includes(companyId)) {
+                this.selections[scenarioId][stepIndex].push(companyId);
+            }
+            
             this.propagateRecommendations(scenarioId, stepIndex);
             this.updateSuggestions(scenarioId, stepIndex);
         } else {
-            const link = Array.from(stepEl.querySelectorAll('.partner-link')).find(l => l.href.includes(companyId));
+            const link = Array.from(stepEl.querySelectorAll('.partner-link')).find(l => l.dataset.companyId === companyId);
             if (link) link.classList.remove('selected');
-            delete this.selections[scenarioId][stepIndex];
+            
+            if (this.selections[scenarioId][stepIndex]) {
+                this.selections[scenarioId][stepIndex] = this.selections[scenarioId][stepIndex].filter(id => id !== companyId);
+                if (this.selections[scenarioId][stepIndex].length === 0) {
+                    delete this.selections[scenarioId][stepIndex];
+                }
+            }
             this.clearRecommendations(scenarioId, parseInt(stepIndex) + 1);
         }
         
@@ -84,23 +105,26 @@ class NetworkBuilder {
 
     propagateRecommendations(scenarioId, currentStepIndex) {
         const nextStepIndex = parseInt(currentStepIndex) + 1;
-        const currentCompanyId = this.selections[scenarioId][currentStepIndex];
-        const profile = this.profiling[currentCompanyId];
-
+        const selectedIds = this.selections[scenarioId][currentStepIndex] || [];
+        
         this.clearRecommendations(scenarioId, nextStepIndex);
-        if (!profile) return;
+        
+        selectedIds.forEach(companyId => {
+            const profile = this.profiling[companyId];
+            if (!profile) return;
 
-        // Find paired partners
-        const paired = profile.core?.paired_with_by_context || {};
-        const collaborated = profile.categories?.events_and_celebrations?.collaborated_with || [];
+            // Find paired partners
+            const paired = profile.core?.paired_with_by_context || {};
+            const collaborated = profile.categories?.events_and_celebrations?.collaborated_with || [];
 
-        // Collect all recommended IDs or Tags
-        const recommendedIds = [...collaborated];
-        Object.values(paired).forEach(list => {
-            if (Array.isArray(list)) recommendedIds.push(...list);
+            // Collect all recommended IDs or Tags
+            const recommendedIds = [...collaborated];
+            Object.values(paired).forEach(list => {
+                if (Array.isArray(list)) recommendedIds.push(...list);
+            });
+
+            this.highlightCompatiblePartners(scenarioId, nextStepIndex, recommendedIds);
         });
-
-        this.highlightCompatiblePartners(scenarioId, nextStepIndex, recommendedIds);
     }
 
     clearRecommendations(scenarioId, stepIndex) {
@@ -113,20 +137,16 @@ class NetworkBuilder {
         const nextStepEl = document.querySelector(`#${scenarioId} .chain-step[data-step="${stepIndex}"]`);
         if (!nextStepEl) return;
 
-        console.log(`Highlighting in step ${stepIndex} with IDs:`, recommendedIds);
-
         const links = nextStepEl.querySelectorAll('.partner-link');
         let foundMatch = false;
 
         links.forEach(link => {
-            const companyId = link.href.split('id=')[1];
-            const name = link.querySelector('span').innerText.toLowerCase();
+            const companyId = link.dataset.companyId;
+            const name = link.querySelector('.partner-name').innerText.toLowerCase();
             
-            // Match by ID or by Name (since some pairings are names)
             const isMatch = recommendedIds.some(rec => 
                 rec === companyId || 
-                name.includes(rec.toLowerCase()) || 
-                (typeof rec === 'string' && rec.length > 3 && name.includes(rec.toLowerCase()))
+                name.includes(String(rec).toLowerCase())
             );
 
             if (isMatch) {
@@ -135,7 +155,6 @@ class NetworkBuilder {
             }
         });
 
-        // If matches found, move them to the top of the list
         if (foundMatch) {
             const list = nextStepEl.querySelector('.partner-list');
             const recommended = Array.from(list.querySelectorAll('.partner-link.recommended'));
@@ -150,7 +169,13 @@ class NetworkBuilder {
         
         if (!suggestionSlot || !suggestionStep) return;
 
-        const currentCompanyId = this.selections[scenarioId][currentStepIndex];
+        const selectedIds = this.selections[scenarioId][currentStepIndex] || [];
+        if (selectedIds.length === 0) {
+            suggestionStep.style.display = 'none';
+            return;
+        }
+
+        const currentCompanyId = selectedIds[0]; // Use first selection for suggestions
         const profile = this.profiling[currentCompanyId];
         
         if (!profile || !profile.core?.paired_with_by_context?.general) {
@@ -160,22 +185,23 @@ class NetworkBuilder {
 
         const relatedTags = profile.core.paired_with_by_context.general;
         const suggestedCompanies = this.companies.filter(c => 
-            relatedTags.some(tag => c.tags.toLowerCase().includes(tag.toLowerCase())) &&
+            relatedTags.some(tag => c.tags?.toLowerCase().includes(tag.toLowerCase())) &&
             c.id !== currentCompanyId
         ).slice(0, 3);
 
         if (suggestedCompanies.length > 0) {
             suggestionSlot.innerHTML = '';
             suggestedCompanies.forEach(comp => {
-                const card = document.createElement('a');
-                card.href = `yrityskortti.html?id=${comp.id}`;
+                const card = document.createElement('div');
                 card.className = 'partner-link suggestion-card';
+                card.dataset.companyId = comp.id;
                 card.innerHTML = `
                     <div class="partner-info">
-                        <span>${comp.nimi}</span>
+                        <span class="partner-name">${comp.nimi}</span>
                         <small>${comp.kategoria}</small>
                     </div>
                 `;
+                card.querySelector('.partner-name').onclick = () => window.LkiModal.open(comp);
                 suggestionSlot.appendChild(card);
             });
             suggestionStep.style.display = 'flex';
@@ -191,15 +217,17 @@ class NetworkBuilder {
 
         let totalSelected = 0;
         Object.keys(this.selections).forEach(scenarioId => {
-            Object.values(this.selections[scenarioId]).forEach(companyId => {
-                const company = this.companies.find(c => c.id === companyId);
-                if (company) {
-                    const item = document.createElement('div');
-                    item.className = 'selected-item';
-                    item.innerText = company.nimi;
-                    list.appendChild(item);
-                    totalSelected++;
-                }
+            Object.values(this.selections[scenarioId]).forEach(ids => {
+                ids.forEach(companyId => {
+                    const company = this.companies.find(c => c.id === companyId);
+                    if (company) {
+                        const item = document.createElement('div');
+                        item.className = 'selected-item';
+                        item.innerText = company.nimi;
+                        list.appendChild(item);
+                        totalSelected++;
+                    }
+                });
             });
         });
 
@@ -213,30 +241,101 @@ class NetworkBuilder {
     }
 
     printPlan() {
-        window.print();
+        const reportModal = document.getElementById('report-modal');
+        const reportContent = document.getElementById('report-content');
+        
+        let html = `
+            <div class="report-header" style="text-align: center; margin-bottom: 3rem; border-bottom: 2px solid var(--primary-blue); padding-bottom: 1rem;">
+                <h1 style="color: var(--primary-blue); font-size: 2rem;">Palvelusuunnitelma - LaukaaInfo</h1>
+                <p>${new Date().toLocaleDateString('fi-FI')}</p>
+            </div>
+        `;
+
+        let hasSelections = false;
+        Object.keys(this.selections).forEach(scenarioId => {
+            const scenarioName = document.querySelector(`#${scenarioId} h2`)?.innerText || scenarioId;
+            let scenarioHtml = `<div class="report-section" style="margin-bottom: 2.5rem;">
+                <h2 style="color: var(--secondary-blue); border-left: 5px solid var(--primary-blue); padding-left: 15px; margin-bottom: 1.5rem;">${scenarioName}</h2>
+                <div style="display: grid; gap: 1.5rem;">
+            `;
+            
+            let scenarioHasItems = false;
+            Object.keys(this.selections[scenarioId]).sort().forEach(stepIdx => {
+                const stepLabel = document.querySelector(`#${scenarioId} .chain-step[data-step="${stepIdx}"] .step-label`)?.innerText || `Vaihe ${stepIdx}`;
+                const stepTitle = document.querySelector(`#${scenarioId} .chain-step[data-step="${stepIdx}"] h4`)?.innerText || "";
+                
+                this.selections[scenarioId][stepIdx].forEach(companyId => {
+                    const comp = this.companies.find(c => c.id === companyId);
+                    if (comp) {
+                        scenarioHasItems = true;
+                        hasSelections = true;
+                        scenarioHtml += `
+                            <div class="report-item" style="padding: 1rem; border: 1px solid #eee; border-radius: 12px; background: #fafafa;">
+                                <div style="font-size: 0.8rem; text-transform: uppercase; font-weight: 700; color: #666; margin-bottom: 5px;">${stepLabel}: ${stepTitle}</div>
+                                <div style="font-size: 1.2rem; font-weight: 800; color: var(--primary-blue);">${comp.nimi}</div>
+                                <div style="margin-top: 8px; font-size: 0.95rem; display: flex; flex-wrap: wrap; gap: 15px;">
+                                    ${comp.osoite ? `<span>📍 ${comp.osoite}</span>` : ''}
+                                    ${comp.puhelin ? `<span>📞 ${comp.puhelin}</span>` : ''}
+                                    ${comp.nettisivu ? `<span>🌐 ${comp.nettisivu}</span>` : ''}
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+            });
+
+            scenarioHtml += `</div></div>`;
+            if (scenarioHasItems) html += scenarioHtml;
+        });
+
+        if (!hasSelections) {
+            html += '<p style="text-align: center; font-style: italic;">Ei valittuja yrityksiä.</p>';
+        }
+
+        reportContent.innerHTML = html;
+        reportModal.classList.add('active');
     }
 
     renderAll() {
-        // Add checkboxes to all existing cards
+        // Wrap existing content and add checkboxes
         document.querySelectorAll('.partner-link').forEach(link => {
             const companyId = link.href.split('id=')[1];
+            link.dataset.companyId = companyId;
+            link.removeAttribute('href'); // Prevent default navigation
             
-            // Avoid adding multiple times
             if (link.querySelector('.partner-toggle')) return;
 
+            const originalContent = link.innerHTML;
+            link.innerHTML = '';
+
+            // Info area (clickable for modal)
+            const infoArea = document.createElement('div');
+            infoArea.className = 'partner-card-info';
+            infoArea.style.width = '100%';
+            infoArea.style.cursor = 'pointer';
+            infoArea.innerHTML = originalContent;
+            
+            // Add partner-name class to the span
+            const nameSpan = infoArea.querySelector('span');
+            if (nameSpan) nameSpan.className = 'partner-name';
+
+            // Toggle area (checkbox)
             const toggleContainer = document.createElement('div');
             toggleContainer.className = 'partner-toggle-container';
-            toggleContainer.innerHTML = `<input type="checkbox" class="partner-toggle" data-company-id="${companyId}" onclick="event.stopPropagation()">`;
+            toggleContainer.innerHTML = `<input type="checkbox" class="partner-toggle" data-company-id="${companyId}">`;
             
+            link.appendChild(infoArea);
             link.appendChild(toggleContainer);
             
-            // Make the whole link clickable for toggle, but prevent default navigation if clicking the checkbox area
-            link.addEventListener('click', (e) => {
-                if (e.target.classList.contains('partner-toggle')) return;
-                e.preventDefault();
-                const cb = link.querySelector('.partner-toggle');
-                cb.checked = !cb.checked;
-                cb.dispatchEvent(new Event('change', { bubbles: true }));
+            // Interaction
+            infoArea.addEventListener('click', (e) => {
+                const company = this.companies.find(c => c.id === companyId);
+                if (company && window.LkiModal) {
+                    window.LkiModal.open(company);
+                } else {
+                    // Fallback to old URL if modal fails
+                    window.location.href = `yrityskortti.html?id=${companyId}`;
+                }
             });
         });
 
