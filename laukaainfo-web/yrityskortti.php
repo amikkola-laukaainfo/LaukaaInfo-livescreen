@@ -31,6 +31,21 @@ if (!empty($id) && file_exists($companiesFile)) {
             break;
         }
     }
+
+    // 1.1 Load External Reviews (Dynamic Merge)
+    $reviews_file = __DIR__ . '/arviot/arviot1252026.json';
+    if ($company && file_exists($reviews_file)) {
+        $rev_json = json_decode(file_get_contents($reviews_file), true);
+        if (is_array($rev_json)) {
+            $rowid = str_replace('company-', '', $company['id']);
+            foreach ($rev_json as $r) {
+                if ($r['internal_id'] == $rowid && !empty($r['reviews_url'])) {
+                    $company['google_reviews_url'] = $r['reviews_url'];
+                    break;
+                }
+            }
+        }
+    }
 }
 
 // 2. Metadata extraction
@@ -685,7 +700,7 @@ if ($company) {
                             </div>
                         </div>
 
-                        <?php if (isset($company['google_reviews_url'])): ?>
+                        <?php if (isset($company['google_reviews_url']) && !empty($company['google_reviews_url'])): ?>
                         <div class="contact-item" id="google-reviews-item-static">
                             <span class="icon">⭐</span>
                             <div>

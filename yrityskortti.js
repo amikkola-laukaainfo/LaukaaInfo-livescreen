@@ -359,6 +359,35 @@
             websiteItem.style.display = 'none';
         }
 
+        // Google Reviews Link
+        if (company.google_reviews_url) {
+            const infoPanel = document.querySelector('.info-panel');
+            let reviewsItem = document.getElementById('google-reviews-item');
+            if (!reviewsItem) {
+                reviewsItem = document.createElement('div');
+                reviewsItem.id = 'google-reviews-item';
+                reviewsItem.className = 'contact-item';
+                reviewsItem.innerHTML = `
+                    <div>
+                        <span>Google Arviot</span>
+                        <a id="display-reviews" href="${company.google_reviews_url}" target="_blank" rel="noopener noreferrer" style="color:#f4b400; font-weight:bold;">
+                            ⭐ Lue ja jätä arvio
+                        </a>
+                    </div>
+                `;
+                // Insert after website item or before social icons
+                if (websiteItem) {
+                    websiteItem.after(reviewsItem);
+                } else {
+                    const socialLinks = document.getElementById('social-links');
+                    if (socialLinks) infoPanel.insertBefore(reviewsItem, socialLinks);
+                }
+            } else {
+                const reviewsLink = reviewsItem.querySelector('#display-reviews');
+                reviewsLink.href = company.google_reviews_url;
+            }
+        }
+
         // Skaalataan otsikko sopivaksi
         const titleEl = document.getElementById('display-name');
         setTimeout(() => fitText(titleEl, 16), 50);
