@@ -5034,26 +5034,24 @@ footer {
     left: 0;
     width: 100%;
     height: 100%;
-    /* Darker by default for text contrast */
+    /* Starting darkness at 0.75 as requested */
     background: linear-gradient(to bottom,
         rgba(0,0,0,0.2) 0%,
-        rgba(0,0,0,0.5) 45%,
-        rgba(0,0,0,0.9) 100%);
+        rgba(0,0,0,0.4) 45%,
+        rgba(0,0,0,0.75) 100%);
     z-index: 1;
-    transition: all 0.5s ease;
+    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 1;
 }
 
 .need-card:hover {
     transform: translateY(-12px);
-    box-shadow: 0 20px 40px rgba(0, 51, 102, 0.2);
+    box-shadow: 0 20px 45px rgba(0, 51, 102, 0.3);
 }
 
 .need-card:hover::before {
-    /* Lighter and clearer on hover */
-    background: linear-gradient(to bottom,
-        rgba(0,0,0,0) 0%,
-        rgba(0,0,0,0.2) 40%,
-        rgba(0,0,0,0.75) 100%);
+    /* Brings the image out more clearly on hover */
+    opacity: 0.3;
 }
 
 .need-card-content {
