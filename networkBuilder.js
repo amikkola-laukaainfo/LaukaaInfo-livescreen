@@ -85,7 +85,7 @@ class NetworkBuilder {
                     const coords = { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
                     updateLocationAndRender(coords, query);
                 } else {
-                    if (statusEl) statusEl.textContent = 'Sijaintia ei löytynyt.';
+                    if (statusEl) statusEl.textContent = 'Sijaintia ei l\u00f6ytynyt.';
                 }
             } catch (e) {
                 if (statusEl) statusEl.textContent = 'Virhe haussa.';
@@ -367,7 +367,7 @@ class NetworkBuilder {
         });
 
         if (!hasSelections) {
-            html += '<p style="text-align: center; font-style: italic;">Ei valittuja yrityksiä.</p>';
+            html += '<p style="text-align: center; font-style: italic;">Ei valittuja yrityksi\u00e4.</p>';
         }
 
         reportContent.innerHTML = html;
