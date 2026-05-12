@@ -229,9 +229,19 @@ class NetworkBuilder {
             const scenarioId = stepEl.closest('.chain-section').id;
             if (!partnerList) return;
 
-            // Get recommendations from previous step(s)
-            // We look at the immediately preceding step
-            const recommendations = this.getRecommendationsForStep(scenarioId, stepIdx - 1);
+            // Get recommendations and anchor from previous step(s)
+            const prevStepIdx = stepIdx - 1;
+            const recommendations = this.getRecommendationsForStep(scenarioId, prevStepIdx);
+            
+            // Find an anchor company (first selected in previous step)
+            let anchorCoords = null;
+            const prevSelectedIds = this.selections[scenarioId]?.[prevStepIdx] || [];
+            if (prevSelectedIds.length > 0) {
+                const anchorComp = this.companies.find(c => c.id === prevSelectedIds[0]);
+                if (anchorComp && anchorComp.lat && anchorComp.lon) {
+                    anchorCoords = { lat: parseFloat(anchorComp.lat), lng: parseFloat(anchorComp.lon) };
+                }
+            }
 
             // Find matching companies
             let matches = this.companies.filter(c => {
@@ -256,7 +266,14 @@ class NetworkBuilder {
                 if (aIsPremium && !bIsPremium) return -1;
                 if (!aIsPremium && bIsPremium) return 1;
 
-                // 3. Then by distance
+                // 3. Distance from ANCHOR (if selected)
+                if (anchorCoords && a.lat && a.lon && b.lat && b.lon) {
+                    const distA = this.getDist(anchorCoords, a);
+                    const distB = this.getDist(anchorCoords, b);
+                    if (distA !== distB) return distA - distB;
+                }
+
+                // 4. Then by distance from USER
                 if (this.userCoords && a.lat && a.lon && b.lat && b.lon) {
                     const distA = this.getDist(this.userCoords, a);
                     const distB = this.getDist(this.userCoords, b);
@@ -278,9 +295,12 @@ class NetworkBuilder {
                 card.dataset.companyId = comp.id;
 
                 let distText = '';
-                if (this.userCoords && comp.lat && comp.lon) {
-                    const d = this.getDist(this.userCoords, comp);
-                    distText = `<small style="color: #666; margin-left: 10px;">${d.toFixed(1)} km</small>`;
+                // Show distance from anchor if it exists, otherwise from user
+                const displayRef = anchorCoords || this.userCoords;
+                if (displayRef && comp.lat && comp.lon) {
+                    const d = this.getDist(displayRef, comp);
+                    const prefix = anchorCoords ? '📍 ' : '';
+                    distText = `<small style="color: #666; margin-left: 10px;">${prefix}${d.toFixed(1)} km</small>`;
                 }
 
                 card.innerHTML = `
