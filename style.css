@@ -5064,13 +5064,20 @@ footer {
 }
 
 .need-card h3 {
-    font-size: 2.4rem;
+    font-size: 2.1rem;
     color: #ffffff !important;
     margin-bottom: 0.75rem;
     font-weight: 800;
     text-shadow: 0 2px 10px rgba(0,0,0,0.5);
     line-height: 1.15;
-    overflow-wrap: break-word;
+    overflow-wrap: normal;
+    word-break: normal;
+}
+
+/* White balance fix for Syntymäpäivät card */
+.card-white-balance {
+    background-blend-mode: screen;
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
 .need-card p {
