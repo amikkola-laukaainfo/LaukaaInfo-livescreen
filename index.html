@@ -548,24 +548,24 @@
         </section>
 
 
-        <div class="homepage-top" style="justify-content: center; margin-top: 0;">
-            <!-- Feed Accordion -->
-            <section class="feed-accordion-section">
-                <div class="feed-accordion">
-                    <button class="feed-accordion-header closed" id="toggle-feed-btn" style="align-items: center;">
+        <!-- Paikallinen syöte -lohko -->
+        <section class="feed-accordion-section bg-full-white" style="padding: 3rem 0; margin-bottom: 0;">
+            <div class="section-container">
+                <div class="feed-accordion" style="border: none; box-shadow: 0 15px 45px rgba(0,0,0,0.08); border-radius: 24px; overflow: visible;">
+                    <button class="feed-accordion-header closed" id="toggle-feed-btn" style="align-items: center; background: #0056b3; color: white; border-radius: 24px; padding: 1.8rem 2.5rem; transition: all 0.3s ease; border: none;">
                         <div style="display: flex; flex-direction: column; align-items: flex-start;">
-                            <span data-i18n="feed_title">Paikallinen syöte</span>
-                            <small style="font-size: 0.8rem; font-weight: normal; opacity: 0.9; margin-top: 2px;" data-i18n="feed_subtitle">Ilmoitukset, tapahtumat ja tarjoukset</small>
+                            <span data-i18n="feed_title" style="color: white; font-size: 1.4rem;">Paikallinen syöte</span>
+                            <small style="font-size: 0.9rem; font-weight: normal; opacity: 0.9; margin-top: 4px; color: rgba(255,255,255,0.85);" data-i18n="feed_subtitle">Löydä ilmoitukset, tapahtumat ja paikalliset tarjoukset</small>
                         </div>
-                        <span class="icon-btn" data-i18n="feed_open">Avaa</span>
+                        <span class="icon-btn" data-i18n="feed_open" style="background: white; color: #0056b3; border: none; padding: 0.6rem 1.8rem; border-radius: 50px; font-weight: 800; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">Avaa</span>
                     </button>
-                    <div class="feed-accordion-content closed" id="feed-accordion-content">
+                    <div class="feed-accordion-content closed" id="feed-accordion-content" style="background: #f8fbff; border-radius: 0 0 24px 24px;">
                         <!-- Aktiivinen aineisto (Dynaaminen API mediazoo.fi:stä) -->
-                        <div id="homepage-feed" data-feed-src="https://www.mediazoo.fi/laukaainfo-web/api.php" data-share-url="https://mediazoo.fi/laukaainfo-web/item.php"></div>
+                        <div id="homepage-feed" data-feed-src="https://www.mediazoo.fi/laukaainfo-web/api.php" data-share-url="https://mediazoo.fi/laukaainfo-web/item.php" style="padding: 2rem;"></div>
                     </div>
                 </div>
-            </section>
-        </div>
+            </div>
+        </section>
 
 
 
