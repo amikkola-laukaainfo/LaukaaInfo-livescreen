@@ -4091,7 +4091,7 @@
     },
     {
       "id": "company-154",
-      "nimi": "Photo MalmstrÃƒÂ¶m",
+      "nimi": "Photo Malmström",
       "kategoria": "Palvelut",
       "mainoslause": "",
       "esittely": "",
@@ -6614,7 +6614,7 @@
     },
     {
       "id": "company-242",
-      "nimi": "KuhajÃƒÂ¤rven Suviranta Oy",
+      "nimi": "Kuhajärven Suviranta Oy",
       "kategoria": "Majoitus",
       "mainoslause": "",
       "esittely": "",
@@ -7295,3 +7295,5 @@
   "page": 1,
   "limit": 9999
 }
+
+
