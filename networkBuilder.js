@@ -12,6 +12,20 @@ class NetworkBuilder {
         this.init();
     }
 
+    /**
+     * Fetch a JSON file safely, stripping any UTF-8 BOM (\uFEFF / ï»¿)
+     * that Windows editors (Notepad, Excel) may prepend.
+     */
+    async fetchJson(url) {
+        const res = await fetch(url);
+        let text = await res.text();
+        // Strip UTF-8 BOM if present
+        if (text.charCodeAt(0) === 0xFEFF) {
+            text = text.slice(1);
+        }
+        return JSON.parse(text);
+    }
+
     async init() {
         try {
             // Load saved coordinates if any
@@ -22,23 +36,19 @@ class NetworkBuilder {
                 } catch(e) {}
             }
 
-            // Fetch company data and profiling
-            const [liveRes, tempRes, profilingRes] = await Promise.all([
-                fetch('live_companies.json'),
-                fetch('temp_companies.json'),
-                fetch('company_profiling_data.json')
+            // Fetch company data and profiling (BOM-safe)
+            const [liveData, tempData, profilingData] = await Promise.all([
+                this.fetchJson('live_companies.json'),
+                this.fetchJson('temp_companies.json'),
+                this.fetchJson('company_profiling_data.json')
             ]);
 
-            const liveData = await liveRes.json();
-            const tempData = await tempRes.json();
-            
             const companyMap = {};
             [...(tempData.results || []), ...(liveData.results || [])].forEach(c => {
                 companyMap[c.id] = c;
             });
             this.companies = Object.values(companyMap);
             
-            const profilingData = await profilingRes.json();
             this.profiling = profilingData.profiles;
 
             console.log('NetworkBuilder: Data loaded', this.companies.length, 'companies');
