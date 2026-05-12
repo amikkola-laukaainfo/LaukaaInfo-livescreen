@@ -523,6 +523,7 @@
             <span>📍</span>
             <input type="text" id="user-location-input" data-i18n="[placeholder]placeholder_your_location" placeholder="Sijaintisi (esim. Laukaa)" autocomplete="off">
             <button class="btn-locate" id="locate-me-btn" title="Hae sijaintini">🎯</button>
+            <button class="btn-locate" id="share-this-page-btn" title="Kopioi jakolinkki tähän hakuun" style="margin-left: 4px; background: rgba(255,255,255,0.3); color: white;">🔗</button>
         </div>
         <div id="location-status"></div>
     </header>
@@ -609,6 +610,22 @@
     <!-- Scripts -->
     <script src="needs_config.js?v=20260507"></script>
     <script src="script.js"></script>
+    <script>
+        // Share this page functionality
+        document.getElementById('share-this-page-btn')?.addEventListener('click', function() {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                const btn = this;
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '✅';
+                btn.style.background = '#28a745';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = 'rgba(255,255,255,0.3)';
+                }, 2000);
+            });
+        });
+    </script>
     <script>
         let currentNeedId = new URLSearchParams(window.location.search).get('id');
         let currentStepIndex = 0;
