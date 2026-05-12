@@ -560,23 +560,6 @@
                 <p data-i18n="scenario_moving_desc">Sujuva siirtymä uuteen kotiin Laukaassa.</p>
             </div>
             <div class="chain-container">
-                <div class="chain-step">
-                    <span class="step-label" data-i18n="step_legal">Lakiturva ja sopimukset</span>
-                    <div class="step-content">
-                        <div class="step-header">
-                            <h4 data-i18n="step_moving_1_title">Kauppakirjat ja viralliset asiat</h4>
-                        </div>
-                        <div class="partner-list">
-                            <a href="yrityskortti.html?id=company-308" class="partner-link">
-                                <div class="partner-info"><span>Lakiasiaintoimisto Esa Jäntti</span><small data-i18n="role_legal">Kiinteistökauppa</small></div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="chain-step">
-                    <span class="step-label" data-i18n="step_logistics">Logistiikka ja apuvoimat</span>
-                    <div class="step-content">
-                        <div class="step-header">
                             <h4 data-i18n="step_moving_2_title">Kuljetus ja vuokraus</h4>
                         </div>
                         <div class="partner-list">
@@ -610,21 +593,14 @@
                 <p data-i18n="scenario_cottage_desc">Vapaa-ajan asuminen vaivattomaksi ympäri vuoden.</p>
             </div>
             <div class="chain-container">
-                <div class="chain-step">
-                    <span class="step-label" data-i18n="step_maintenance">Ylläpito ja huolto</span>
-                    <div class="step-content">
-                        <div class="step-header">
-                            <h4 data-i18n="step_cottage_1_title">Mökkitalkkarit ja piha</h4>
-                        </div>
-                        <div class="partner-list">
-                            <a href="yrityskortti.html?id=company-202" class="partner-link">
-                                <div class="partner-info"><span>Laukaan Aave</span><small data-i18n="role_talkkari">Mökkitalkkari & lumityöt</small></div>
-                            </a>
-                            <a href="yrityskortti.html?id=company-73" class="partner-link">
-                                <div class="partner-info"><span>Tmi Jukka Häkkinen</span><small data-i18n="role_maintenance">Mökkihuolto</small></div>
-                            </a>
-                        </div>
-                    </div>
+                <div class="chain-step" data-tags="talkkari,huolto,nuohous,lumityöt">
+                    <span class="step-label" data-i18n="step_maintenance">Vaihe 1: Ylläpito ja huolto</span>
+                    <h4 data-i18n="step_cottage_1_title">Mökkitalkkarit ja piha</h4>
+                    <div class="partner-list"></div>
+                </div>
+                <div class="chain-step dynamic-suggestions" style="display: none;">
+                    <span class="step-label" data-i18n="related_services">Liittyvät palvelut</span>
+                    <div class="partner-list suggestion-slot"></div>
                 </div>
             </div>
         </section>
