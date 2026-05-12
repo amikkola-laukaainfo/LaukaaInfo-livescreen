@@ -383,7 +383,7 @@ header.hero-split {
 }
 
 .hero-left {
-    background: linear-gradient(to right, var(--secondary-blue) 0%, var(--secondary-blue) 35%, transparent 65%);
+    background: linear-gradient(to right, rgba(0, 51, 102, 0.9) 0%, rgba(0, 51, 102, 0.5) 45%, transparent 85%);
     flex: 1;
     display: flex;
     align-items: center;
