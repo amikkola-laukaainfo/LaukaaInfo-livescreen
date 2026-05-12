@@ -70,13 +70,6 @@ class NetworkBuilder {
         
         const stepEl = document.querySelector(`#${scenarioId} .chain-step[data-step="${stepIndex}"]`);
         if (isSelected) {
-            // For now, allow multiple selections in a step if the user wants, 
-            // but the UI currently suggests one per step. 
-            // Let's keep it flexible but clear previous logic if needed.
-            // stepEl.querySelectorAll('.partner-toggle').forEach(cb => {
-            //     if (cb.dataset.companyId !== companyId) cb.checked = false;
-            // });
-            
             const link = Array.from(stepEl.querySelectorAll('.partner-link')).find(l => l.dataset.companyId === companyId);
             if (link) link.classList.add('selected');
             
@@ -238,6 +231,13 @@ class NetworkBuilder {
             list.innerHTML = '<p class="empty-msg" data-i18n="no_selections">Ei valintoja vielä. Aloita valitsemalla yritys ylhäältä.</p>';
             if (window.i18n) window.i18n.translatePage();
         }
+    }
+
+    updateStepProvider(scenarioId, stepIndex, companyId) {
+        if (!this.selections[scenarioId]) this.selections[scenarioId] = {};
+        this.selections[scenarioId][stepIndex] = [companyId];
+        this.updateSummary();
+        this.propagateRecommendations(scenarioId, stepIndex);
     }
 
     printPlan() {
