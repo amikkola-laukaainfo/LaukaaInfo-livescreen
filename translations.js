@@ -380,7 +380,10 @@ const UI_TRANSLATIONS = {
         "step_bereavement_1_title": "Hautaus ja juhlatilat",
         "step_startup_1_title": "Neuvonta ja visuaalinen ilme",
         "step_tyhy_1_title": "Vauhtia ja saunan lämpöä",
-        "step_tyhy_2_title": "Asiantuntijaluennot ja valmennus"
+        "step_tyhy_2_title": "Asiantuntijaluennot ja valmennus",
+        "your_network_title": "Oma verkostosi",
+        "no_selections": "Ei valintoja vielä. Aloita valitsemalla yritys ylhäältä.",
+        "btn_print_plan": "Tallenna suunnitelma »"
     },
     en: {
         "nav_home": "Home",
@@ -754,7 +757,10 @@ const UI_TRANSLATIONS = {
         "step_bereavement_1_title": "Funeral and Venues",
         "step_startup_1_title": "Consulting and Visual Identity",
         "step_tyhy_1_title": "Speed and Sauna Heat",
-        "step_tyhy_2_title": "Expert Lectures and Coaching"
+        "step_tyhy_2_title": "Expert Lectures and Coaching",
+        "your_network_title": "Your Custom Network",
+        "no_selections": "No selections yet. Start by choosing a company above.",
+        "btn_print_plan": "Save Your Plan »"
     }
 };
 
