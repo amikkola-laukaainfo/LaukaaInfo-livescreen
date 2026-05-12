@@ -2789,6 +2789,12 @@ function initShareGenerator(companies) {
             } else {
                 generated = baseUrl + '?feed=open';
             }
+        } else if (type === 'section-search') {
+            generated = baseUrl + '#search-section';
+        } else if (type === 'section-services') {
+            generated = baseUrl + '#palveluverkosto';
+        } else if (type === 'section-experiences') {
+            generated = baseUrl + '#experiences-section';
         }
         // Lisää tunniste (&ref=) jos käyttäjä on kirjoittanut sen
         if (refVal) {
@@ -2839,6 +2845,11 @@ function initShareGenerator(companies) {
             targetInput.placeholder = 'Etsi yritystä...';
             targetInput.value = '';
             targetInput.setAttribute('list', 'generator-business-list');
+        } else if (type.startsWith('section-')) {
+            targetLabel.textContent = 'Linkki koko etusivun lohkoon';
+            targetInput.style.display = 'block';
+            targetInput.value = 'Koko etusivu';
+            targetInput.disabled = true;
         }
         updateUrl();
     });

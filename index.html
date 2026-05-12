@@ -276,7 +276,7 @@
             </div>
         </section>
 
-        <section class="search-section bg-full-blue" style="padding: 2.5rem 0 3.5rem;">
+        <section id="search-section" class="search-section bg-full-blue" style="padding: 2.5rem 0 3.5rem;">
             <div class="section-container">
                 <div class="section-header" style="margin-bottom: 2rem;">
                     <h2 style="color: #0a2540;">Tarkempi haku</h2>
@@ -485,7 +485,7 @@
 
 
         <!-- Elämykset & Kulttuuri -->
-        <section class="experiences-section bg-full-gray">
+        <section id="experiences-section" class="experiences-section bg-full-gray">
             <div class="section-header">
                 <h2 data-i18n="feature_experiences_title">Elämykset & Kulttuuri</h2>
                 <p data-i18n="feature_experiences_desc">Löydä Laukaan helmet, tarinat ja päätösten taustat.</p>
@@ -549,7 +549,7 @@
 
 
         <!-- Paikallinen syöte -lohko -->
-        <section class="feed-accordion-section bg-full-white" style="padding: 3rem 0; margin-bottom: 0;">
+        <section id="feed-section" class="feed-accordion-section bg-full-white" style="padding: 3rem 0; margin-bottom: 0;">
             <div class="section-container">
                 <div class="feed-accordion" style="border: none; box-shadow: 0 15px 45px rgba(0,0,0,0.08); border-radius: 24px; overflow: visible;">
                     <button class="feed-accordion-header closed" id="toggle-feed-btn" style="align-items: center; background: #0056b3; color: white; border-radius: 24px; padding: 1.8rem 2.5rem; transition: all 0.3s ease; border: none;">
@@ -584,6 +584,9 @@
                             <option value="taajama">Taajama / Alue</option>
                             <option value="feed">Laukaa-syöte (Ajankohtaista)</option>
                             <option value="feed-company">Yrityksen feed-ilmoitukset</option>
+                            <option value="section-search">Lohko: Tarkempi haku</option>
+                            <option value="section-services">Lohko: Palveluverkosto</option>
+                            <option value="section-experiences">Lohko: Elämykset</option>
                         </select>
                     </div>
                     <div class="gen-field" id="gen-target-field">
