@@ -1,6 +1,6 @@
 /**
  * LaukaaInfo Network Builder
- * Handles dynamic service chains and partner recommendations
+ * Handles dynamic service chains, partner recommendations, and geolocation
  */
 
 class NetworkBuilder {
@@ -8,12 +8,21 @@ class NetworkBuilder {
         this.companies = [];
         this.profiling = {};
         this.selections = {}; // scenarioId -> { stepIndex -> companyId }
+        this.userCoords = null;
         this.init();
     }
 
     async init() {
         try {
-            // Fetch both company data sources to ensure we have all IDs (e.g. company-282)
+            // Load saved coordinates if any
+            const savedCoords = localStorage.getItem('userCoords');
+            if (savedCoords) {
+                try {
+                    this.userCoords = JSON.parse(savedCoords);
+                } catch(e) {}
+            }
+
+            // Fetch company data and profiling
             const [liveRes, tempRes, profilingRes] = await Promise.all([
                 fetch('live_companies.json'),
                 fetch('temp_companies.json'),
@@ -23,7 +32,6 @@ class NetworkBuilder {
             const liveData = await liveRes.json();
             const tempData = await tempRes.json();
             
-            // Merge companies, avoiding duplicates
             const companyMap = {};
             [...(tempData.results || []), ...(liveData.results || [])].forEach(c => {
                 companyMap[c.id] = c;
@@ -34,33 +42,80 @@ class NetworkBuilder {
             this.profiling = profilingData.profiles;
 
             console.log('NetworkBuilder: Data loaded', this.companies.length, 'companies');
+            
+            this.setupLocationSupport();
             this.setupListeners();
-            this.renderAll();
+            this.renderDynamicSteps();
         } catch (error) {
             console.error('NetworkBuilder initialization failed:', error);
         }
     }
 
+    setupLocationSupport() {
+        const locationInput = document.getElementById('user-location-input');
+        const locateMeBtn = document.getElementById('locate-me-btn');
+        const statusEl = document.getElementById('location-status');
+
+        if (!locationInput) return;
+
+        // Sync with global userCoords if script.js already loaded it
+        if (window.userCoords) this.userCoords = window.userCoords;
+
+        const updateLocationAndRender = (coords, name) => {
+            this.userCoords = coords;
+            if (statusEl) statusEl.textContent = `Sijainti asetettu: ${name}`;
+            this.renderDynamicSteps();
+        };
+
+        // Handle text input
+        locationInput.addEventListener('change', async () => {
+            const query = locationInput.value.trim();
+            if (!query) {
+                this.userCoords = null;
+                this.renderDynamicSteps();
+                return;
+            }
+
+            if (statusEl) statusEl.textContent = 'Haetaan koordinaatteja...';
+
+            try {
+                const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query + ', Laukaa')}`);
+                const data = await res.json();
+                if (data && data.length > 0) {
+                    const coords = { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
+                    updateLocationAndRender(coords, query);
+                } else {
+                    if (statusEl) statusEl.textContent = 'Sijaintia ei löytynyt.';
+                }
+            } catch (e) {
+                if (statusEl) statusEl.textContent = 'Virhe haussa.';
+            }
+        });
+
+        // Handle "Locate Me"
+        if (locateMeBtn) {
+            locateMeBtn.addEventListener('click', () => {
+                if (statusEl) statusEl.textContent = 'Paikannetaan...';
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+                        updateLocationAndRender(coords, 'Nykyinen sijainti');
+                    },
+                    () => {
+                        if (statusEl) statusEl.textContent = 'Paikannus epäonnistui.';
+                    }
+                );
+            });
+        }
+    }
+
     setupListeners() {
-        // Listen for checkbox changes (rasti ruutuun)
         document.addEventListener('change', (e) => {
             if (e.target.classList.contains('partner-toggle')) {
                 const companyId = e.target.dataset.companyId;
                 const scenarioId = e.target.closest('.chain-section').id;
                 const stepIndex = e.target.closest('.chain-step').dataset.step;
-                
                 this.handleSelection(scenarioId, stepIndex, companyId, e.target.checked);
-            }
-        });
-
-        // Listen for provider switches (alasvetovalikko)
-        document.addEventListener('change', (e) => {
-            if (e.target.classList.contains('step-select')) {
-                const companyId = e.target.value;
-                const scenarioId = e.target.closest('.chain-section').id;
-                const stepIndex = e.target.closest('.chain-step').dataset.step;
-                
-                this.updateStepProvider(scenarioId, stepIndex, companyId);
             }
         });
     }
@@ -92,30 +147,23 @@ class NetworkBuilder {
             }
             this.clearRecommendations(scenarioId, parseInt(stepIndex) + 1);
         }
-        
         this.updateSummary();
     }
 
     propagateRecommendations(scenarioId, currentStepIndex) {
         const nextStepIndex = parseInt(currentStepIndex) + 1;
         const selectedIds = this.selections[scenarioId][currentStepIndex] || [];
-        
         this.clearRecommendations(scenarioId, nextStepIndex);
         
         selectedIds.forEach(companyId => {
             const profile = this.profiling[companyId];
             if (!profile) return;
-
-            // Find paired partners
             const paired = profile.core?.paired_with_by_context || {};
             const collaborated = profile.categories?.events_and_celebrations?.collaborated_with || [];
-
-            // Collect all recommended IDs or Tags
             const recommendedIds = [...collaborated];
             Object.values(paired).forEach(list => {
                 if (Array.isArray(list)) recommendedIds.push(...list);
             });
-
             this.highlightCompatiblePartners(scenarioId, nextStepIndex, recommendedIds);
         });
     }
@@ -135,7 +183,7 @@ class NetworkBuilder {
 
         links.forEach(link => {
             const companyId = link.dataset.companyId;
-            const name = link.querySelector('.partner-name').innerText.toLowerCase();
+            const name = link.querySelector('.partner-name')?.innerText.toLowerCase() || "";
             
             const isMatch = recommendedIds.some(rec => 
                 rec === companyId || 
@@ -155,52 +203,89 @@ class NetworkBuilder {
         }
     }
 
-    updateSuggestions(scenarioId, currentStepIndex) {
-        const scenarioEl = document.getElementById(scenarioId);
-        const suggestionSlot = scenarioEl.querySelector('.suggestion-slot');
-        const suggestionStep = scenarioEl.querySelector('.dynamic-suggestions');
-        
-        if (!suggestionSlot || !suggestionStep) return;
+    renderDynamicSteps() {
+        document.querySelectorAll('.chain-step[data-tags]').forEach((stepEl, index) => {
+            const stepIdx = index + 1;
+            stepEl.setAttribute('data-step', stepIdx);
+            
+            const tags = stepEl.dataset.tags.split(',').map(t => t.trim().toLowerCase());
+            const partnerList = stepEl.querySelector('.partner-list');
+            if (!partnerList) return;
 
-        const selectedIds = this.selections[scenarioId][currentStepIndex] || [];
-        if (selectedIds.length === 0) {
-            suggestionStep.style.display = 'none';
-            return;
-        }
+            // Find matching companies
+            let matches = this.companies.filter(c => {
+                const companyTags = (c.tags || '').toLowerCase();
+                const category = (c.kategoria || '').toLowerCase();
+                return tags.some(t => companyTags.includes(t) || category.includes(t));
+            });
 
-        const currentCompanyId = selectedIds[0]; // Use first selection for suggestions
-        const profile = this.profiling[currentCompanyId];
-        
-        if (!profile || !profile.core?.paired_with_by_context?.general) {
-            suggestionStep.style.display = 'none';
-            return;
-        }
+            // Sort matches
+            matches.sort((a, b) => {
+                // Pro/Premium first
+                const aPkg = (a.package || '').toLowerCase();
+                const bPkg = (b.package || '').toLowerCase();
+                const aIsPremium = aPkg.includes('pro') || aPkg.includes('premium');
+                const bIsPremium = bPkg.includes('pro') || bPkg.includes('premium');
+                if (aIsPremium && !bIsPremium) return -1;
+                if (!aIsPremium && bIsPremium) return 1;
 
-        const relatedTags = profile.core.paired_with_by_context.general;
-        const suggestedCompanies = this.companies.filter(c => 
-            relatedTags.some(tag => c.tags?.toLowerCase().includes(tag.toLowerCase())) &&
-            c.id !== currentCompanyId
-        ).slice(0, 3);
+                // Then by distance
+                if (this.userCoords && a.lat && a.lon && b.lat && b.lon) {
+                    const distA = this.getDist(this.userCoords, a);
+                    const distB = this.getDist(this.userCoords, b);
+                    return distA - distB;
+                }
+                return 0;
+            });
 
-        if (suggestedCompanies.length > 0) {
-            suggestionSlot.innerHTML = '';
-            suggestedCompanies.forEach(comp => {
+            // Limit to top 15 matches for performance/UI
+            matches = matches.slice(0, 15);
+
+            partnerList.innerHTML = '';
+            matches.forEach(comp => {
+                const scenarioId = stepEl.closest('.chain-section').id;
+                const isSelected = this.selections[scenarioId]?.[stepIdx]?.includes(comp.id);
+
                 const card = document.createElement('div');
-                card.className = 'partner-link suggestion-card';
+                card.className = `partner-link ${isSelected ? 'selected' : ''}`;
                 card.dataset.companyId = comp.id;
+
+                let distText = '';
+                if (this.userCoords && comp.lat && comp.lon) {
+                    const d = this.getDist(this.userCoords, comp);
+                    distText = `<small style="color: #666; margin-left: 10px;">${d.toFixed(1)} km</small>`;
+                }
+
                 card.innerHTML = `
-                    <div class="partner-info">
-                        <span class="partner-name">${comp.nimi}</span>
-                        <small>${comp.kategoria}</small>
+                    <div class="partner-card-info" style="width: 100%; cursor: pointer;">
+                        <div class="partner-info">
+                            <span class="partner-name">${comp.nimi}</span>
+                            ${distText}
+                            <small>${comp.kategoria}</small>
+                        </div>
+                    </div>
+                    <div class="partner-toggle-container">
+                        <input type="checkbox" class="partner-toggle" data-company-id="${comp.id}" ${isSelected ? 'checked' : ''}>
                     </div>
                 `;
-                card.querySelector('.partner-name').onclick = () => window.LkiModal.open(comp);
-                suggestionSlot.appendChild(card);
+
+                card.querySelector('.partner-card-info').onclick = () => {
+                    if (window.LkiModal) window.LkiModal.open(comp);
+                };
+                partnerList.appendChild(card);
             });
-            suggestionStep.style.display = 'flex';
-        } else {
-            suggestionStep.style.display = 'none';
+        });
+    }
+
+    getDist(c1, c2) {
+        // Use global getHaversineDistance if available, else simple fallback
+        if (window.getHaversineDistance) {
+            return window.getHaversineDistance(c1.lat, c1.lng || c1.lon, parseFloat(c2.lat), parseFloat(c2.lon));
         }
+        // Fallback (very rough)
+        const dx = c1.lat - parseFloat(c2.lat);
+        const dy = (c1.lng || c1.lon) - parseFloat(c2.lon);
+        return Math.sqrt(dx*dx + dy*dy) * 111;
     }
 
     updateSummary() {
@@ -231,13 +316,6 @@ class NetworkBuilder {
             list.innerHTML = '<p class="empty-msg" data-i18n="no_selections">Ei valintoja vielä. Aloita valitsemalla yritys ylhäältä.</p>';
             if (window.i18n) window.i18n.translatePage();
         }
-    }
-
-    updateStepProvider(scenarioId, stepIndex, companyId) {
-        if (!this.selections[scenarioId]) this.selections[scenarioId] = {};
-        this.selections[scenarioId][stepIndex] = [companyId];
-        this.updateSummary();
-        this.propagateRecommendations(scenarioId, stepIndex);
     }
 
     printPlan() {
@@ -296,55 +374,57 @@ class NetworkBuilder {
         reportModal.classList.add('active');
     }
 
-    renderAll() {
-        // Wrap existing content and add checkboxes
-        document.querySelectorAll('.partner-link').forEach(link => {
-            const companyId = link.href.split('id=')[1];
-            link.dataset.companyId = companyId;
-            link.removeAttribute('href'); // Prevent default navigation
-            
-            if (link.querySelector('.partner-toggle')) return;
+    updateSuggestions(scenarioId, currentStepIndex) {
+        // Suggestions logic can remain or be updated to be more dynamic
+        const scenarioEl = document.getElementById(scenarioId);
+        const suggestionSlot = scenarioEl.querySelector('.suggestion-slot');
+        const suggestionStep = scenarioEl.querySelector('.dynamic-suggestions');
+        
+        if (!suggestionSlot || !suggestionStep) return;
 
-            const originalContent = link.innerHTML;
-            link.innerHTML = '';
+        const selectedIds = this.selections[scenarioId][currentStepIndex] || [];
+        if (selectedIds.length === 0) {
+            suggestionStep.style.display = 'none';
+            return;
+        }
 
-            // Info area (clickable for modal)
-            const infoArea = document.createElement('div');
-            infoArea.className = 'partner-card-info';
-            infoArea.style.width = '100%';
-            infoArea.style.cursor = 'pointer';
-            infoArea.innerHTML = originalContent;
-            
-            // Add partner-name class to the span
-            const nameSpan = infoArea.querySelector('span');
-            if (nameSpan) nameSpan.className = 'partner-name';
+        const currentCompanyId = selectedIds[0];
+        const profile = this.profiling[currentCompanyId];
+        
+        if (!profile || !profile.core?.paired_with_by_context?.general) {
+            suggestionStep.style.display = 'none';
+            return;
+        }
 
-            // Toggle area (checkbox)
-            const toggleContainer = document.createElement('div');
-            toggleContainer.className = 'partner-toggle-container';
-            toggleContainer.innerHTML = `<input type="checkbox" class="partner-toggle" data-company-id="${companyId}">`;
-            
-            link.appendChild(infoArea);
-            link.appendChild(toggleContainer);
-            
-            // Interaction
-            infoArea.addEventListener('click', (e) => {
-                const company = this.companies.find(c => c.id === companyId);
-                if (company && window.LkiModal) {
-                    window.LkiModal.open(company);
-                } else {
-                    // Fallback to old URL if modal fails
-                    window.location.href = `yrityskortti.html?id=${companyId}`;
-                }
+        const relatedTags = profile.core.paired_with_by_context.general;
+        const suggestedCompanies = this.companies.filter(c => 
+            relatedTags.some(tag => c.tags?.toLowerCase().includes(tag.toLowerCase())) &&
+            c.id !== currentCompanyId
+        ).slice(0, 3);
+
+        if (suggestedCompanies.length > 0) {
+            suggestionSlot.innerHTML = '';
+            suggestedCompanies.forEach(comp => {
+                const card = document.createElement('div');
+                card.className = 'partner-link suggestion-card';
+                card.dataset.companyId = comp.id;
+                card.innerHTML = `
+                    <div class="partner-card-info" style="width: 100%; cursor: pointer;">
+                        <div class="partner-info">
+                            <span class="partner-name">${comp.nimi}</span>
+                            <small>${comp.kategoria}</small>
+                        </div>
+                    </div>
+                `;
+                card.querySelector('.partner-card-info').onclick = () => {
+                    if (window.LkiModal) window.LkiModal.open(comp);
+                };
+                suggestionSlot.appendChild(card);
             });
-        });
-
-        // Add step data attributes to HTML
-        document.querySelectorAll('.chain-section').forEach(section => {
-            section.querySelectorAll('.chain-step').forEach((step, index) => {
-                step.setAttribute('data-step', index + 1);
-            });
-        });
+            suggestionStep.style.display = 'flex';
+        } else {
+            suggestionStep.style.display = 'none';
+        }
     }
 }
 
