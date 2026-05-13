@@ -470,7 +470,22 @@ header.hero-split {
     padding: 8px 16px;
     border-radius: 40px;
     font-weight: 500;
+    z-index: 5;
+}
+
+.hero-network-silhouette {
+    position: absolute;
+    top: 50%;
+    left: 55%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    height: 70%;
+    object-fit: contain;
+    opacity: 0.12;
     z-index: 3;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    filter: brightness(0) invert(0); /* Black silhouette */
 }
 
 header h1 {
