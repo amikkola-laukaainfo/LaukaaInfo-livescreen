@@ -185,7 +185,22 @@
                     });
                 });
             } else if (category && category !== 'all') {
-                rawCategoryCompanies = allCompanies.filter(c => c.kategoria === category);
+                const normCat = normalizeForSearch(category);
+                rawCategoryCompanies = allCompanies.filter(c => {
+                    const cCat = normalizeForSearch(c.kategoria || '');
+                    const cName = normalizeForSearch(c.nimi || '');
+                    const cTags = normalizeForSearch(c.tags || '');
+                    
+                    // Alkuperäinen tarkka kategoria-osuma
+                    if (c.kategoria === category) return true;
+                    
+                    // Laajennettu haku: jos kategoria-parametri on esim. "Kahvila", haetaan myös nimen ja tägien perusteella.
+                    // Tämä auttaa löytämään vastaavat yritykset, vaikka ne olisi luokiteltu eri pääkategoriaan (esim. Ruokailu).
+                    if (normCat.length > 3) {
+                        return cCat.includes(normCat) || cName.includes(normCat) || cTags.includes(normCat);
+                    }
+                    return false;
+                });
             } else {
                 rawCategoryCompanies = allCompanies;
             }
