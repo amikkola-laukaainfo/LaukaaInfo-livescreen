@@ -16448,7 +16448,8 @@
                 "kiinteistöhuolto",
                 "hyvinvointipalvelut",
                 "eräopas",
-                "luontoelämykset"
+                "luontoelämykset",
+                "juhlatila"
             ],
             "sub_contexts": [
                 "äänentoisto",
@@ -16698,7 +16699,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T15:32:40.283Z",
+            "last_updated": "2026-05-13T14:42:49.775Z",
             "verified_by": "ai-profile-builder",
             "status": "updated"
         }

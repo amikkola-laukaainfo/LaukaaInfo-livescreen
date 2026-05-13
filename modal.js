@@ -353,6 +353,11 @@ window.LkiModal = (function() {
         if (mediaItems.length > 1) {
             // Wait for DOM to catch up
             setTimeout(() => {
+                if (typeof Swiper === 'undefined') {
+                    console.error('Swiper not loaded - check script tags');
+                    return;
+                }
+                console.log('Initializing Swiper for modal...', company.nimi);
                 swiperInstance = new Swiper('#lki-modal-swiper', {
                     pagination: { el: '.swiper-pagination', clickable: true },
                     navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },

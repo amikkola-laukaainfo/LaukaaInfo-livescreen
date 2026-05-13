@@ -21046,7 +21046,8 @@
                     "kiinteistöhuolto",
                     "hyvinvointipalvelut",
                     "eräopas",
-                    "luontoelämykset"
+                    "luontoelämykset",
+                    "juhlatila"
                 ],
                 "sub_contexts": [
                     "äänentoisto",
@@ -21296,7 +21297,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T15:32:40.283Z",
+                "last_updated": "2026-05-13T14:42:49.775Z",
                 "verified_by": "ai-profile-builder",
                 "status": "updated"
             }
@@ -45064,7 +45065,8 @@
                 "not_suitable_for": [
                     "large-scale event production",
                     "venue services",
-                    "luennot"
+                    "luennot",
+                    "majoitus"
                 ],
                 "sub_contexts": [
                     "kotisiivous",
@@ -45275,7 +45277,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T15:50:49.846Z",
+                "last_updated": "2026-05-13T14:38:44.194Z",
                 "verified_by": "AI-analysis-v2",
                 "status": "draft"
             }
@@ -45782,7 +45784,9 @@
                 "corporate_clients": false,
                 "home_service": true,
                 "weekend_service": true,
-                "not_suitable_for": [],
+                "not_suitable_for": [
+                    "majoitus"
+                ],
                 "sub_contexts": [
                     "mökkihuolto",
                     "siivous",
@@ -46000,7 +46004,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T15:32:40.283Z",
+                "last_updated": "2026-05-13T14:40:12.788Z",
                 "verified_by": "AI-analysis-v2",
                 "status": "draft"
             }
