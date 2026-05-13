@@ -170,6 +170,20 @@ foreach ($header_raw as $i => $h) {
     $header[] = strtolower($h);
 }
 
+/* ---------- Load External Reviews (Dynamic Merge) ----------------------- */
+$reviews_map = [];
+$reviews_file = __DIR__ . '/arviot/arviot1252026.json';
+if (file_exists($reviews_file)) {
+    $rev_json = json_decode(file_get_contents($reviews_file), true);
+    if (is_array($rev_json)) {
+        foreach ($rev_json as $r) {
+            if (!empty($r['internal_id']) && !empty($r['reviews_url'])) {
+                $reviews_map[$r['internal_id']] = $r['reviews_url'];
+            }
+        }
+    }
+}
+
 $all_companies = [];
 
 while (($row_raw = fgetcsv($stream)) !== false) {
@@ -325,6 +339,7 @@ while (($row_raw = fgetcsv($stream)) !== false) {
         "service_mode" => $row['service_mode'] ?? 'LOCAL',
         "service_radius" => $row['service_radius'] ?? '',
         "service_note" => $row['service_note'] ?? '',
+        "google_reviews_url" => $reviews_map[$rowid] ?? '',
     ];
 }
 fclose($stream);
