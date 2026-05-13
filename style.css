@@ -443,8 +443,20 @@ header.hero-split {
     object-fit: cover;
     object-position: center;
     display: block;
-    transition: transform 0.8s ease;
+    transition: opacity 1.5s ease-in-out, transform 0.8s ease;
     filter: brightness(1.15) contrast(1.05); /* Lisätty valoisuutta ja kontrastia */
+    opacity: 0;
+    z-index: 1;
+}
+
+.hero-nature-img.active {
+    opacity: 1;
+    z-index: 2;
+}
+
+.hero-nature-img.prev {
+    opacity: 1;
+    z-index: 1;
 }
 
 .hero-right-caption {

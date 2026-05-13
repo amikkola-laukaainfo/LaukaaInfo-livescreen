@@ -220,6 +220,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Alustetaan etusivun uudet valinnat
     if (document.getElementById('home-region-select')) {
         initHomepageSelectors();
+        initHeroSlideshow();
     }
 
     // Alustetaan käyttäjän sijaintivalitsin (etusivulla tai jos input löytyy)
@@ -3105,4 +3106,74 @@ function locateOnMap(lat, lon, companyId) {
             marker.openPopup();
         }
     });
+}
+
+/**
+ * Alustaa etusivun pääkuvan automaattisen vaihdon.
+ * Hakee kuvalistan mediazoo.fi-palvelimelta ja vaihtaa kuvaa 10s välein.
+ */
+async function initHeroSlideshow() {
+    const slideshowContainer = document.getElementById('hero-slideshow');
+    if (!slideshowContainer) return;
+
+    try {
+        // Haetaan dynaaminen kuvalista
+        const response = await fetch('https://www.mediazoo.fi/laukaainfo-web/get_hero_images.php');
+        if (!response.ok) return;
+        const images = await response.json();
+
+        // Jos kuvia ei löydy, pidetään oletuskuva
+        if (!images || images.length === 0) return;
+
+        // Lisätään oletuskuva listan alkuun jos se ei jo ole siellä
+        // (Huom: tässä vaiheessa images sisältää GitHub-linkkejä)
+        let currentIdx = 0;
+        const allImageUrls = [...images];
+        
+        // Esiladataan kuvat sulavuuden varmistamiseksi
+        allImageUrls.forEach(url => {
+            const img = new Image();
+            img.src = url;
+        });
+
+        const container = document.getElementById('hero-slideshow');
+        
+        setInterval(() => {
+            const nextIdx = (currentIdx + 1) % allImageUrls.length;
+            const nextUrl = allImageUrls[nextIdx];
+
+            // Luodaan uusi kuvaelementti faden alle
+            const newImg = document.createElement('img');
+            newImg.src = nextUrl;
+            newImg.className = 'hero-nature-img';
+            newImg.alt = 'Laukaa maisema';
+            
+            // Vanha aktiivinen kuva
+            const currentImg = container.querySelector('.hero-nature-img.active');
+            
+            // Lisätään uusi kuva
+            container.appendChild(newImg);
+
+            // Käynnistetään fade pienen viiveen jälkeen (jotta selain ehtii renderöidä)
+            setTimeout(() => {
+                if (currentImg) {
+                    currentImg.classList.remove('active');
+                    currentImg.classList.add('prev');
+                }
+                newImg.classList.add('active');
+
+                // Poistetaan vanha kuva kun transition on valmis (1.5s)
+                setTimeout(() => {
+                    if (currentImg && currentImg.parentNode) {
+                        currentImg.parentNode.removeChild(currentImg);
+                    }
+                }, 1600);
+            }, 50);
+
+            currentIdx = nextIdx;
+        }, 10000); // 10 sekuntia
+
+    } catch (error) {
+        console.warn('Hero slideshow error:', error);
+    }
 }
