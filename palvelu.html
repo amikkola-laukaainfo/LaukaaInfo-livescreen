@@ -1499,6 +1499,8 @@
                             if (!opt.node_link && !opt.node_links && !opt.profilointi_filter && opt.capacity_req <= 0) {
                                 return false; 
                             }
+                            // Jos on suodattimia muttei osumaa (isProfiledMatch), ei näytetä pelkällä scorella
+                            if (opt.node_link || opt.node_links || opt.profilointi_filter) return isProfiledMatch;
                             return getFitsForScore(c, currentProfilingKey) > 10;
                         }
 
