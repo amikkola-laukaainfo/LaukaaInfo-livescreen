@@ -31,6 +31,8 @@ const SEARCH_TAG_LIST = [
     { term: "kylmätyö", category: "Huolto, korjaus ja tekniset palvelut" },
     { term: "öljypoltinhuolto", category: "Huolto, korjaus ja tekniset palvelut" },
     { term: "nuohouspalvelut", category: "Huolto, korjaus ja tekniset palvelut" },
+    { term: "nuohous", category: "Huolto, korjaus ja tekniset palvelut" },
+    { term: "nuohooja", category: "Huolto, korjaus ja tekniset palvelut" },
     { term: "huoltoasema", category: "Huolto, korjaus ja tekniset palvelut" },
 
     // 🚗 Liikenne ja kuljetus
