@@ -155,7 +155,7 @@
             }
 
             const files = filesParam.split(',');
-            let allTips = [];
+            let sourceGroups = []; // Taulukko taulukoista: [[vinkit tiedostosta 1], [vinkit tiedostosta 2]]
 
             // Ladataan kaikki pyydetyt JSON tiedostot
             for (const file of files) {
@@ -164,8 +164,9 @@
                     const response = await fetch(`${file.trim()}.json?v=${cacheBuster}`);
                     if (response.ok) {
                         const data = await response.json();
-                        if (Array.isArray(data)) {
-                            allTips = allTips.concat(data);
+                        if (Array.isArray(data) && data.length > 0) {
+                            // Sekoitetaan ryhmän sisällä heti
+                            sourceGroups.push(data.sort(() => 0.5 - Math.random()));
                         }
                     } else {
                         console.warn(`Vinkkitiedostoa ${file}.json ei löytynyt.`);
@@ -175,14 +176,26 @@
                 }
             }
 
-            if (allTips.length === 0) {
+            if (sourceGroups.length === 0) {
                 wrapper.style.display = 'none';
                 return;
             }
 
-            // Sekoitetaan ja otetaan satunnaiset
-            const shuffledTips = allTips.sort(() => 0.5 - Math.random());
-            const selectedTips = shuffledTips.slice(0, maxTips);
+            // Valitaan vinkit siten, että ne vaihtelevat eri lähteiden välillä (Round-Robin)
+            let selectedTips = [];
+            let groupPointer = 0;
+            
+            // Poimitaan yksi vinkki per tiedosto kerrallaan, kunnes limiitti on täynnä
+            while (selectedTips.length < maxTips && sourceGroups.some(g => g.length > 0)) {
+                const currentGroup = sourceGroups[groupPointer % sourceGroups.length];
+                if (currentGroup.length > 0) {
+                    selectedTips.push(currentGroup.shift());
+                }
+                groupPointer++;
+            }
+            
+            // Sekoitetaan vielä valitut vinkit, jotta järjestys ei ole aina sama
+            selectedTips.sort(() => 0.5 - Math.random());
 
             // Renderöidään
             container.innerHTML = selectedTips.map(tip => `
