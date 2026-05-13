@@ -295,7 +295,7 @@ const NEEDS_CONFIG = {
                 "question": { "fi": "Mitä huoltoa mökki kaipaa?", "en": "What maintenance does the cottage need?" },
                 "options": [
                     { "label": { "fi": "Kiinteistöhuolto / Talonmies", "en": "Property maintenance / Caretaker" }, "tags": ["kiinteistöhuolto"], "profilointi_filter": { "section": "cottage_services", "field": "key_holding", "value": true } },
-                    { "label": { "fi": "Nuohous", "en": "Chimney sweeping" }, "tags": ["nuohouspalvelut"], "is_service": true },
+                    { "label": { "fi": "Nuohous", "en": "Chimney sweeping" }, "tags": ["nuohous", "nuohooja", "nuohouspalvelut"], "is_service": true },
                     { "label": { "fi": "Polttopuut", "en": "Firewood" }, "tags": ["polttopuut"] },
                     { "label": { "fi": "Laituritarvikkeet / Huolto", "en": "Dock supplies / Maintenance" }, "tags": ["rakentaminen"], "profilointi_filter": { "section": "cottage_services", "field": "dock_maintenance", "value": true } }
                 ]

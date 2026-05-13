@@ -245,11 +245,24 @@ class NetworkBuilder {
 
             // Find matching companies
             let matches = this.companies.filter(c => {
+                const name = (c.nimi || '').toLowerCase();
                 const companyTags = (c.tags || '').toLowerCase().split(',').map(t => t.trim());
                 const category = (c.kategoria || '').toLowerCase();
+                const desc = (c.kuvaus || c.description || c.esittely || '').toLowerCase();
                 
-                // Stricter match: check if any of the requested tags are present as a whole tag or in category
-                return tags.some(t => companyTags.includes(t) || category === t || category.includes(t));
+                // Flexible match: check if any of the requested tags are present
+                return tags.some(t => {
+                    // Check direct tag match
+                    if (companyTags.includes(t)) return true;
+                    // Check category
+                    if (category === t || category.includes(t)) return true;
+                    // Check name or description for the tag
+                    if (name.includes(t) || desc.includes(t)) return true;
+                    // Handle singular/plural overlap (e.g. "nuohouspalvelut" vs "nuohous")
+                    if (t.length > 3 && companyTags.some(ct => ct.length > 3 && (t.includes(ct) || ct.includes(t)))) return true;
+                    
+                    return false;
+                });
             });
 
             // Context mapping for relevance sorting
