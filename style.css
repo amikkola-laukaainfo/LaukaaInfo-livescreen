@@ -478,14 +478,13 @@ header.hero-split {
     top: 50%;
     left: 55%;
     transform: translate(-50%, -50%);
-    width: 70%;
-    height: 70%;
+    width: 80%;
+    height: 80%;
     object-fit: contain;
-    opacity: 0.12;
+    opacity: 0.22;
     z-index: 3;
     pointer-events: none;
-    mix-blend-mode: overlay;
-    filter: brightness(0) invert(0); /* Black silhouette */
+    mix-blend-mode: multiply;
 }
 
 header h1 {
