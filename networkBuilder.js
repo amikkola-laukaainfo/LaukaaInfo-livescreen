@@ -245,10 +245,22 @@ class NetworkBuilder {
 
             // Find matching companies
             let matches = this.companies.filter(c => {
-                const companyTags = (c.tags || '').toLowerCase();
+                const companyTags = (c.tags || '').toLowerCase().split(',').map(t => t.trim());
                 const category = (c.kategoria || '').toLowerCase();
-                return tags.some(t => companyTags.includes(t) || category.includes(t));
+                
+                // Stricter match: check if any of the requested tags are present as a whole tag or in category
+                return tags.some(t => companyTags.includes(t) || category === t || category.includes(t));
             });
+
+            // Context mapping for relevance sorting
+            const SCENARIO_CONTEXT_MAP = {
+                'scenario-weddings': 'events_and_celebrations',
+                'scenario-moving': 'moving_and_housing',
+                'scenario-cottage': 'cottage_services',
+                'scenario-startup': 'startup_services',
+                'scenario-tyhy': 'liikunta-ja-vapaaaika'
+            };
+            const currentContext = SCENARIO_CONTEXT_MAP[scenarioId];
 
             // Sort matches
             matches.sort((a, b) => {
@@ -258,7 +270,14 @@ class NetworkBuilder {
                 if (aIsRec && !bIsRec) return -1;
                 if (!aIsRec && bIsRec) return 1;
 
-                // 2. Pro/Premium next
+                // 2. Contextual relevance (profiling score)
+                if (currentContext) {
+                    const aScore = this.profiling[a.id]?.core?.fits_for?.[currentContext] || 0;
+                    const bScore = this.profiling[b.id]?.core?.fits_for?.[currentContext] || 0;
+                    if (aScore !== bScore) return bScore - aScore;
+                }
+
+                // 3. Pro/Premium next
                 const aPkg = (a.package || '').toLowerCase();
                 const bPkg = (b.package || '').toLowerCase();
                 const aIsPremium = aPkg.includes('pro') || aPkg.includes('premium');
@@ -266,14 +285,14 @@ class NetworkBuilder {
                 if (aIsPremium && !bIsPremium) return -1;
                 if (!aIsPremium && bIsPremium) return 1;
 
-                // 3. Distance from ANCHOR (if selected)
+                // 4. Distance from ANCHOR (if selected)
                 if (anchorCoords && a.lat && a.lon && b.lat && b.lon) {
                     const distA = this.getDist(anchorCoords, a);
                     const distB = this.getDist(anchorCoords, b);
                     if (distA !== distB) return distA - distB;
                 }
 
-                // 4. Then by distance from USER
+                // 5. Then by distance from USER
                 if (this.userCoords && a.lat && a.lon && b.lat && b.lon) {
                     const distA = this.getDist(this.userCoords, a);
                     const distB = this.getDist(this.userCoords, b);
