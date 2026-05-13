@@ -194,9 +194,22 @@
             if (tagParam) {
                 const query = normalizeForSearch(tagParam);
                 rawCategoryCompanies = rawCategoryCompanies.filter(c => {
+                    const name = normalizeForSearch(c.nimi);
+                    const desc = normalizeForSearch(c.kuvaus || c.description || c.esittely);
                     const tags_f = normalizeForSearch(c.tags);
                     const ptapa = normalizeForSearch(c.palvelutapa);
-                    return tags_f.includes(query) || ptapa.includes(query);
+                    const extra = normalizeForSearch(c.searchExtraInfo || '');
+                    const cat = normalizeForSearch(c.kategoria);
+                    
+                    // Suodatus: täsmääkö hakusana johonkin kenttään
+                    // Includes-haku molemmin päin auttaa yksikkö/monikko-ongelmissa (esim. "kahvilat" vs "kahvila")
+                    return name.includes(query) || 
+                           desc.includes(query) || 
+                           tags_f.includes(query) || 
+                           ptapa.includes(query) || 
+                           extra.includes(query) ||
+                           cat.includes(query) ||
+                           (query.length > 3 && query.includes(tags_f) && tags_f.length > 3);
                 });
                 
                 // Päivitetään otsikkoon tieto suodatuksesta, jos mahdollista

@@ -240,7 +240,8 @@ function filterByArea(areaSlug, catParam, tagParam) {
                    cat.includes(query) || 
                    name.includes(query) || 
                    extra.includes(query) ||
-                   subContexts.includes(query);
+                   subContexts.includes(query) ||
+                   (query.length > 3 && query.includes(tags) && tags.length > 3);
         }
         if (catParam) {
             return (c.kategoria || '').toLowerCase() === catParam.replace(/-/g, ' ');

@@ -19,7 +19,7 @@ const SEARCH_TAG_LIST = [
     { term: "vastaava työnjohtaja", category: "Rakentaminen ja kiinteistöt" },
 
     // 🔧 Huolto, korjaus ja tekniset palvelut
-    { term: "autokorjaamot", category: "Huolto, korjaus ja tekniset palvelut" },
+    { term: "autokorjaamo", category: "Huolto, korjaus ja tekniset palvelut" },
     { term: "automaalaamo", category: "Huolto, korjaus ja tekniset palvelut" },
     { term: "autotarvikkeet", category: "Huolto, korjaus ja tekniset palvelut" },
     { term: "pienkonehuolto", category: "Huolto, korjaus ja tekniset palvelut" },
@@ -65,7 +65,7 @@ const SEARCH_TAG_LIST = [
     { term: "päivittäistavarakauppa", category: "Kauppa ja myymälät" },
     { term: "kioski", category: "Kauppa ja myymälät" },
     { term: "kirpputori", category: "Kauppa ja myymälät" },
-    { term: "kangaskaupat", category: "Kauppa ja myymälät" },
+    { term: "kangaskauppa", category: "Kauppa ja myymälät" },
     { term: "rautakauppa", category: "Kauppa ja myymälät" },
     { term: "puutavaraliike", category: "Kauppa ja myymälät" },
     { term: "saha", category: "Kauppa ja myymälät" },
@@ -79,8 +79,8 @@ const SEARCH_TAG_LIST = [
     { term: "lahjatavarat", category: "Kauppa ja myymälät" },
 
     // 🍽️ Ravintolat ja palvelut
-    { term: "kahvilat", category: "Ravintolat ja palvelut" },
-    { term: "ravintolat", category: "Ravintolat ja palvelut" },
+    { term: "kahvila", category: "Ravintolat ja palvelut" },
+    { term: "ravintola", category: "Ravintolat ja palvelut" },
     { term: "pitopalvelu", category: "Ravintolat ja palvelut" },
     { term: "majoitus", category: "Ravintolat ja palvelut" },
     { term: "kokoustilat", category: "Ravintolat ja palvelut" },
@@ -113,8 +113,8 @@ const SEARCH_TAG_LIST = [
     { term: "hyvinvointi", category: "Terveys ja hyvinvointi" },
 
     // 🧑🤝🧑 Henkilökohtaiset palvelut
-    { term: "kampaamot", category: "Henkilökohtaiset palvelut" },
-    { term: "parturit", category: "Henkilökohtaiset palvelut" },
+    { term: "kampaamo", category: "Henkilökohtaiset palvelut" },
+    { term: "parturi", category: "Henkilökohtaiset palvelut" },
     { term: "ompelutyöt", category: "Henkilökohtaiset palvelut" },
     { term: "pesupalvelut", category: "Henkilökohtaiset palvelut" },
     { term: "puhdistuspalvelut", category: "Henkilökohtaiset palvelut" },

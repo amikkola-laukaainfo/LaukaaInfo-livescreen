@@ -1686,7 +1686,7 @@ function filterCatalog(renderList = true) {
         const normalizedSearch = normalizeForSearch(searchTerm);
         if (searchTerm.length > 1 && combinedTags) {
             const tags = combinedTags.split(',').map(t => t.trim());
-            if (tags.some(tag => tag.includes(normalizedSearch))) {
+            if (tags.some(tag => tag.includes(normalizedSearch) || (normalizedSearch.length > 3 && tag.length > 3 && normalizedSearch.includes(tag)))) {
                 score += 120; // High priority for tag and service method matches
             }
         }
