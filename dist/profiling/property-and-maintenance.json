@@ -10534,5 +10534,296 @@
             "verified_by": "ai-enriched",
             "status": "completed"
         }
+    },
+    "company-310": {
+        "name": "Suomen säkkikauppa",
+        "core": {
+            "fits_for": {
+                "events-and-celebrations": 5,
+                "business-events": 18,
+                "funerals-and-memorials": 0,
+                "startup-services": 8,
+                "business-growth": 12,
+                "moving-and-housing": 38,
+                "construction-and-maintenance": 82,
+                "cottage-services": 82,
+                "accommodation": 0,
+                "wellbeing-and-beauty": 0,
+                "housing-company-and-contracts": 82
+            },
+            "priority_score": 74,
+            "service_area": {
+                "mode": "TOIMIPISTE",
+                "radius_km": 250,
+                "regions": [
+                    "lievestuore",
+                    "laukaa",
+                    "jyväskylä",
+                    "keski-suomi",
+                    "suomi"
+                ],
+                "note": "Verkkokauppa toimittaa tuotteita koko Suomeen."
+            },
+            "emergency_available": false,
+            "contract_customer_available": true,
+            "paired_with_by_context": {
+                "general": [
+                    "KIINTEISTÖHUOLTO"
+                ],
+                "construction-and-maintenance": [
+                    "KIINTEISTÖHUOLTO"
+                ],
+                "cottage-services": [
+                    "KIINTEISTÖHUOLTO"
+                ],
+                "moving-and-housing": [
+                    "KIINTEISTÖHUOLTO"
+                ]
+            },
+            "corporate_clients": true,
+            "home_service": false,
+            "weekend_service": true,
+            "not_suitable_for": [
+                "juhlatilat",
+                "hyvinvointipalvelut",
+                "ravintolapalvelut",
+                "majoitus"
+            ],
+            "sub_contexts": [
+                "suursäkit",
+                "klapisäkit",
+                "verkkoklapisäkit",
+                "puunkäsittely",
+                "polttopuut",
+                "säkitystelineet",
+                "rakennussäkit",
+                "viljasäkit",
+                "kestopeitteet",
+                "metsätalous",
+                "mökkitarvikkeet",
+                "varastointi"
+            ],
+            "node_links": [
+                "KIINTEISTÖHUOLTO",
+                "MAJOITUS"
+            ],
+            "intent_codes": [
+                "HOME_MAINTENANCE",
+                "HOME_COTTAGE",
+                "HOME_MOVING"
+            ],
+            "intent_scores": {
+                "HOME_MAINTENANCE": 82,
+                "HOME_COTTAGE": 76,
+                "HOME_MOVING": 38
+            }
+        },
+        "categories": {
+            "core": {
+                "description": "Suomen Säkkikauppa on Lievestuoreella toimiva verkkokauppa, joka on erikoistunut klapisäkkien, suursäkkien, säkitystelineiden ja muiden varastointi- ja kuljetussäkkien myyntiin koko Suomeen.",
+                "website": "https://www.suomensakkikauppa.fi",
+                "email": "info@suomensakkikauppa.fi",
+                "phone": "0408394344"
+            },
+            "events_and_celebrations": {
+                "capacity_max": 0,
+                "seated_capacity": 0,
+                "standing_guests": 0,
+                "outdoor_capacity": 0,
+                "is_accessible": false,
+                "own_catering_allowed": false,
+                "inhouse_catering_available": false,
+                "is_lakeside": false,
+                "has_sauna": false,
+                "has_av_tech": false,
+                "has_stage": false,
+                "accommodation_beds": 0,
+                "alcohol_license": false,
+                "private_booking": false,
+                "late_night_events": false,
+                "wedding_specialized": false,
+                "catering_min_capacity": 0,
+                "catering_max_capacity": 0,
+                "dietary_specialties": [],
+                "staff_included": false,
+                "wedding_menu_available": false,
+                "cake_service": false,
+                "partner_venues": [],
+                "wedding_photography": false,
+                "drone_available": false,
+                "video_production": false,
+                "live_music": false,
+                "dj_services": false,
+                "karaoke_available": false,
+                "has_exclusive_catering": false,
+                "accommodation_included": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "entertainment_features": [],
+                "collaborated_with": []
+            },
+            "business_events": {
+                "meeting_capacity": 0,
+                "seminar_capacity": 0,
+                "conference_rooms": 0,
+                "has_projector": false,
+                "has_streaming": false,
+                "has_wifi": false,
+                "has_stage": false,
+                "private_booking": false,
+                "invoice_billing": true,
+                "corporate_clients": true,
+                "vip_services": false,
+                "business_catering": false,
+                "event_hosting": false,
+                "corporate_gifts": false,
+                "branding_support": false,
+                "av_support": false,
+                "staff_events_specialized": false,
+                "refinement_tags": [
+                    "verkkokauppa",
+                    "yritysasiakkaat",
+                    "metsätalous"
+                ],
+                "wellbeing_and_activity_features": [],
+                "entertainment_features": [],
+                "collaborated_with": []
+            },
+            "funerals_and_memorials": {
+                "memorial_service_capacity": 0,
+                "quiet_private_space": false,
+                "accessible_entry": false,
+                "memorial_catering": false,
+                "coffee_service": false,
+                "flower_arrangements": false,
+                "memorial_menu_available": false,
+                "funeral_flowers": false,
+                "memorial_arrangements": false,
+                "transport_assistance": false,
+                "urgent_booking_available": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "moving_and_housing": {
+                "moving_truck_available": false,
+                "packing_service": false,
+                "storage_available": false,
+                "weekend_moves": false,
+                "urgent_moves": false,
+                "long_distance_moves": true,
+                "cleaning_after_move": false,
+                "electrician_available": false,
+                "renovation_support": false,
+                "insurance_support": false,
+                "refinement_tags": [
+                    "suursäkit",
+                    "rakennussäkit",
+                    "varastointi"
+                ],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "construction_and_maintenance": {
+                "emergency_service": false,
+                "certifications": [],
+                "wet_room_certification": false,
+                "provides_tools": true,
+                "material_supply": true,
+                "project_management": false,
+                "snow_removal": false,
+                "lawn_maintenance": false,
+                "property_monitoring": false,
+                "maintenance_contracts": false,
+                "housing_company_clients": true,
+                "refinement_tags": [
+                    "rakennussäkit",
+                    "säkitystelineet",
+                    "kestopeitteet"
+                ],
+                "collaborated_with": []
+            },
+            "cottage_services": {
+                "key_holding": false,
+                "winter_monitoring": false,
+                "snow_removal": false,
+                "cleaning_service": false,
+                "lawn_service": false,
+                "remote_monitoring": false,
+                "emergency_visits": false,
+                "renovation_support": false,
+                "dock_maintenance": false,
+                "sauna_services": false,
+                "guest_preparation_service": false,
+                "refinement_tags": [
+                    "klapisäkit",
+                    "polttopuut",
+                    "mökkitarvikkeet"
+                ],
+                "collaborated_with": []
+            },
+            "housing_company_and_contracts": {
+                "housing_company_clients": true,
+                "maintenance_contracts": false,
+                "emergency_response": false,
+                "scheduled_visits": false,
+                "property_reports": false,
+                "invoice_billing": true,
+                "contract_customer_available": true,
+                "priority_support": false,
+                "monthly_service_plan": false,
+                "refinement_tags": [
+                    "kiinteistöjen varastointi",
+                    "rakennussäkit"
+                ],
+                "collaborated_with": []
+            },
+            "startup_services": {
+                "bookkeeping_startup": false,
+                "business_advisory": false,
+                "insurance_setup": false,
+                "legal_services": false,
+                "office_space_available": false,
+                "banking_support": false,
+                "website_creation": false,
+                "webshop_setup": false,
+                "branding_support": false,
+                "logo_design": false,
+                "business_photography": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "business_growth": {
+                "google_ads": false,
+                "social_media_marketing": false,
+                "seo_services": false,
+                "content_creation": false,
+                "video_production": false,
+                "crm_support": false,
+                "recruitment_support": false,
+                "sales_development": false,
+                "automation_services": false,
+                "consulting_services": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "wellbeing_and_beauty": {
+                "home_visits": false,
+                "online_booking": false,
+                "unisex_services": false,
+                "gift_cards": true,
+                "corporate_wellbeing_services": false,
+                "event_makeup": false,
+                "bridal_services": false,
+                "group_bookings": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            }
+        },
+        "meta": {
+            "last_updated": "2026-05-13T13:46:03.602Z",
+            "verified_by": "web-research-ai",
+            "status": "draft"
+        }
     }
 }
