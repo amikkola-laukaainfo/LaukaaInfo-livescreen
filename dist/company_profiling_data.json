@@ -64263,10 +64263,12 @@
                     "KIINTEISTÖHUOLTO"
                 ],
                 "intent_codes": [
-                    "HOME_MAINTENANCE"
+                    "HOME_MAINTENANCE",
+                    "HOME_COTTAGE"
                 ],
                 "intent_scores": {
-                    "HOME_MAINTENANCE": 100
+                    "HOME_MAINTENANCE": 100,
+                    "HOME_COTTAGE": 100
                 }
             },
             "categories": {
