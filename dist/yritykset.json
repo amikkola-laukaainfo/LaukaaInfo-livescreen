@@ -1,0 +1,104 @@
+[
+    {
+        "id": "visit-laukaa",
+        "nimi": "Visit Laukaa",
+        "kategoria": "Matkailu & Elämykset",
+        "mainoslause": "Kylien kunta ja luonnon syli",
+        "esittely": "Laukaa tarjoaa upeita luontoelämyksiä, monipuolisia harrastusmahdollisuuksia ja aitoa kylätunnelmaa. Visit Laukaa kokoaa yhteen alueen parhaat kohteet ja tapahtumat.",
+        "osoite": "Laukaantie 14, 41340 Laukaa",
+        "puhelin": "014 267 5000",
+        "email": "visit@laukaa.fi",
+        "nettisivu": "https://www.visitlaukaa.fi",
+        "karttalinkki": "https://goo.gl/maps/Example1",
+        "media": [
+            {
+                "type": "video",
+                "url": "https://www.youtube.com/embed/ScMzIvxBSi4"
+            },
+            {
+                "type": "image",
+                "url": "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80"
+            }
+        ]
+    },
+    {
+        "id": "tupaswilla",
+        "nimi": "Tupaswilla",
+        "kategoria": "Perinnematkailu & Juhlat",
+        "mainoslause": "Elämyksiä perinteiden äärellä",
+        "esittely": "Tupaswilla on upea perinnematkailukohde, joka tarjoaa elämyksiä, juhlapalveluita ja uniikkeja saunakokemuksia keskellä luvonnonrauhaa.",
+        "osoite": "Ränssintie 5, 41370 Kuusa",
+        "puhelin": "040 123 4567",
+        "email": "info@tupaswilla.fi",
+        "nettisivu": "https://www.tupaswilla.fi",
+        "karttalinkki": "https://goo.gl/maps/ExampleTupa",
+        "media": [
+            {
+                "type": "image",
+                "url": "https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=1200&q=80"
+            },
+            {
+                "type": "video",
+                "url": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+            }
+        ]
+    },
+    {
+        "id": "laukaan-satama",
+        "nimi": "Laukaan Satama",
+        "kategoria": "Ravinto & Vapaa-aika",
+        "mainoslause": "Kesän paras kohtaamispaikka",
+        "esittely": "Tule nauttimaan upeista järvimaisemista, hyvästä ruuasta ja rennosta tunnelmasta. Satamassa viihtyy koko perhe!",
+        "osoite": "Satamatie 1, 41340 Laukaa",
+        "puhelin": "040 987 6543",
+        "email": "ravintola@laukaansatama.fi",
+        "nettisivu": "https://www.laukaansatama.fi",
+        "karttalinkki": "https://goo.gl/maps/Example3",
+        "media": [
+            {
+                "type": "image",
+                "url": "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80"
+            }
+        ]
+    },
+    {
+        "id": "peurunka",
+        "nimi": "Peurunka",
+        "kategoria": "Hyvinvointi & Kylpylät",
+        "mainoslause": "Elämyksiä ja hyvinvointia",
+        "esittely": "Peurunka on täyden palvelun lomakeskus ja kylpylä. Tarjoamme majoitusta, aktiviteetteja, hoitoja ja hyvää oloa kaikille aisteille.",
+        "osoite": "Peurungantie 85, 41340 Laukaa",
+        "puhelin": "020 751 601",
+        "email": "peurunka@peurunka.fi",
+        "nettisivu": "https://www.peurunka.fi",
+        "karttalinkki": "https://goo.gl/maps/Example4",
+        "media": [
+            {
+                "type": "video",
+                "url": "https://www.youtube.com/embed/8it6JpM5740"
+            },
+            {
+                "type": "image",
+                "url": "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1200&q=80"
+            }
+        ]
+    },
+    {
+        "id": "demo-yritys-a",
+        "nimi": "Demo Yritys A",
+        "kategoria": "Kategoria Alpha",
+        "mainoslause": "Esimerkki yrityksestä kategoriassa Alpha.",
+        "esittely": "Tämä on demonstraatio Google Drive CSV-integraatiota varten. Kaikki tiedot (nimet, tekstit, kuvat ja videot) tulevat olemaan helposti hallittavissa ulkoisesta tiedostosta.",
+        "osoite": "Keskustie 5, Laukaa",
+        "puhelin": "010 000 001",
+        "email": "alpha@example.fi",
+        "nettisivu": "https://example.com",
+        "karttalinkki": "https://maps.google.com",
+        "media": [
+            {
+                "type": "image",
+                "url": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80"
+            }
+        ]
+    }
+]
