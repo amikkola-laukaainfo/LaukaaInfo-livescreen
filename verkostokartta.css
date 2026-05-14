@@ -150,6 +150,21 @@ body {
     font-weight: 700;
 }
 
+.back-to-categories {
+    font-size: 0.85rem;
+    color: var(--accent-primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.back-to-categories:hover {
+    text-decoration: underline;
+}
+
 /* Sub-lists for hierarchical view */
 .sub-selection-list {
     margin-left: 20px;
