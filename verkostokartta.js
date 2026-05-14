@@ -382,8 +382,17 @@ class NetworkMap {
 
             // Check refinement_tags
             for (const section in profile.categories || {}) {
-                const refTags = profile.categories[section].refinement_tags || [];
-                if (terms.some(t => refTags.some(rt => rt.toLowerCase().includes(t)))) return true;
+                const refTags = profile.categories[section].refinement_tags;
+                if (!refTags) continue;
+
+                if (Array.isArray(refTags)) {
+                    if (terms.some(t => refTags.some(rt => rt.toLowerCase().includes(t)))) return true;
+                } else if (typeof refTags === 'object') {
+                    for (const key in refTags) {
+                        const subTags = refTags[key];
+                        if (Array.isArray(subTags) && terms.some(t => subTags.some(rt => rt.toLowerCase().includes(t)))) return true;
+                    }
+                }
             }
         }
 
