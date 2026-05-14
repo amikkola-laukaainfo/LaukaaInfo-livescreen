@@ -338,6 +338,13 @@
             <input type="text" id="user-location-input" placeholder="Sijaintisi (esim. Laukaa)" data-i18n-placeholder="placeholder_your_location">
             <button class="btn-locate" id="locate-me-btn">🎯</button>
         </div>
+        
+        <div style="margin-top: 2rem;">
+            <a href="verkostokartta.html" class="btn-radar" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); text-decoration: none; display: inline-block; padding: 12px 24px; border-radius: 50px; font-weight: 700; backdrop-filter: blur(10px); transition: all 0.3s;" onmouseover="this.style.background='white'; this.style.color='var(--primary-blue)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'; this.style.color='white'">
+                ✨ Tutki verkostoa semanttisesti &raquo;
+            </a>
+        </div>
+
         <div id="location-status" style="margin-top: 10px; font-size: 0.8rem; opacity: 0.8;"></div>
     </header>
 
@@ -465,9 +472,10 @@
             </div>
         </section>
 
-         <div style="text-align: center; margin-bottom: 5rem;">
-            <a href="index.html#palveluverkosto" class="btn-radar" style="background: var(--primary-blue); text-decoration: none; display: inline-block;" data-i18n="btn_create_custom">Luo oma verkosto &raquo;</a>
-         </div>
+          <div style="text-align: center; margin-bottom: 5rem; display: flex; justify-content: center; gap: 1rem;">
+             <a href="index.html#palveluverkosto" class="btn-radar" style="background: var(--primary-blue); text-decoration: none; display: inline-block;" data-i18n="btn_create_custom">Luo oma verkosto &raquo;</a>
+             <a href="verkostokartta.html" class="btn-radar" style="background: var(--secondary-blue); text-decoration: none; display: inline-block;">Semanttinen verkosto &raquo;</a>
+          </div>
     </main>
 
     <footer>
