@@ -49431,9 +49431,7 @@
                 "pienryhmät",
                 "workshop"
             ],
-            "node_links": [
-                "JUHLATILA"
-            ],
+            "node_links": [],
             "intent_codes": [
                 "ENT_NATURE",
                 "EVT_PARTY",
@@ -49455,10 +49453,10 @@
                 "phone": ""
             },
             "events_and_celebrations": {
-                "capacity_max": 20,
-                "seated_capacity": 15,
-                "standing_guests": 20,
-                "outdoor_capacity": 20,
+                "capacity_max": 0,
+                "seated_capacity": 0,
+                "standing_guests": 0,
+                "outdoor_capacity": 0,
                 "is_accessible": false,
                 "own_catering_allowed": true,
                 "inhouse_catering_available": false,
@@ -49468,7 +49466,7 @@
                 "has_stage": false,
                 "accommodation_beds": 0,
                 "alcohol_license": false,
-                "private_booking": true,
+                "private_booking": false,
                 "late_night_events": false,
                 "wedding_specialized": false,
                 "catering_min_capacity": 0,
@@ -49476,7 +49474,7 @@
                 "dietary_specialties": [],
                 "staff_included": true,
                 "wedding_menu_available": false,
-                "cake_service": false,
+                "cake_service": true,
                 "partner_venues": [],
                 "wedding_photography": false,
                 "drone_available": false,
@@ -49493,7 +49491,10 @@
                     "virkistyspäivä",
                     "ohjelmapalvelu",
                     "teemallinen ilta",
-                    "workshop"
+                    "workshop",
+                    "syntymäpäiväjuhla",
+                    "syntymäpäiväkakku",
+                    "juhlakakku"
                 ],
                 "digitization_features": [],
                 "entertainment_features": [
