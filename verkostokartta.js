@@ -433,6 +433,27 @@ class NetworkMap {
     }
 
     runLayout() {
+        if (this.cy.nodes().length === 0) return;
+        const layout = this.cy.layout({
+            name: 'cose',
+            animate: true,
+            randomize: false,
+            componentSpacing: 100,
+            nodeRepulsion: 4000,
+            edgeElasticity: 100,
+            nestingFactor: 5
+        });
+        layout.run();
+    }
+
+    runLayoutAndFit() {
+        if (this.cy.nodes().length === 0) return;
+        if (this.cy.nodes().length === 1) {
+            // Single node: just center it, no layout needed
+            this.cy.center();
+            this.cy.fit(undefined, 150);
+            return;
+        }
         const layout = this.cy.layout({
             name: 'cose',
             animate: true,
@@ -442,13 +463,7 @@ class NetworkMap {
             edgeElasticity: 100,
             nestingFactor: 5,
             stop: () => {
-                if (this.cy.nodes().length > 0) {
-                    this.cy.animate({
-                        fit: {
-                            padding: 50
-                        }
-                    }, { duration: 500 });
-                }
+                this.cy.fit(undefined, 60);
             }
         });
         layout.run();
