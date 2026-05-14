@@ -112,6 +112,16 @@ class NetworkMap {
                     }
                 },
                 {
+                    selector: 'node[type="refinement"]',
+                    style: {
+                        'background-color': '#f59e0b',
+                        'width': 40,
+                        'height': 40,
+                        'font-size': '9px',
+                        'color': '#1e293b'
+                    }
+                },
+                {
                     selector: 'edge',
                     style: {
                         'width': 2,
@@ -153,9 +163,19 @@ class NetworkMap {
         const groupList = document.getElementById('category-list');
         groupList.innerHTML = '';
 
+        // Add headers with i18n support
+        const catHeader = document.querySelector('#category-section h3');
+        if (catHeader) catHeader.setAttribute('data-i18n', 'header_categories');
+        
+        const intentHeader = document.querySelector('#intent-section h3');
+        if (intentHeader) intentHeader.setAttribute('data-i18n', 'header_tags');
+        
+        const companyHeader = document.querySelector('#company-section h3');
+        if (companyHeader) companyHeader.setAttribute('data-i18n', 'header_companies');
+
         this.data.taxonomy.groups.forEach(group => {
             const item = document.createElement('div');
-            item.className = 'selection-item';
+            item.className = 'selection-item' + (this.selections.groups.has(group.id) ? ' active' : '');
             item.dataset.id = group.id;
             
             // Count how many companies might fit here
@@ -164,14 +184,18 @@ class NetworkMap {
                 return profile?.core?.fits_for?.[group.id] > 20;
             }).length;
 
+            const groupName = window.i18n ? i18n.t(`group_${group.id.replace(/-/g, '_')}`) : group.name;
+
             item.innerHTML = `
-                <span class="item-name">${group.name}</span>
+                <span class="item-name">${groupName}</span>
                 <span class="item-count">${count}</span>
             `;
 
             item.onclick = () => this.toggleGroup(group.id);
             groupList.appendChild(item);
         });
+        
+        if (window.i18n) i18n.translatePage();
     }
 
     toggleGroup(groupId) {
@@ -224,20 +248,62 @@ class NetworkMap {
             item.className = 'selection-item' + (this.selections.intents.has(code) ? ' active' : '');
             item.dataset.id = code;
 
-            const count = this.data.companies.filter(c => {
-                const tags = (c.tags || '').toLowerCase();
-                const intentNameFi = intent.fi.toLowerCase();
-                return tags.includes(intentNameFi) || (c.intent_codes && c.intent_codes.includes(code));
-            }).length;
+            const count = this.data.companies.filter(c => this.checkCompanyMatch(c, code)).length;
+            const label = window.i18n ? i18n.getText(intent) : intent.fi;
 
             item.innerHTML = `
-                <span class="item-name">${intent.fi}</span>
+                <span class="item-name">${label}</span>
                 <span class="item-count">${count}</span>
             `;
 
             item.onclick = () => this.toggleIntent(code);
             list.appendChild(item);
         });
+    }
+
+    checkCompanyMatch(c, code) {
+        const intent = this.data.taxonomy.intents[code];
+        if (!intent) return false;
+
+        const tags = (c.tags || '').toLowerCase();
+        const intentNameFi = intent.fi.toLowerCase();
+        const intentNameEn = (intent.en || '').toLowerCase();
+
+        // 1. Direct tag match
+        if (tags.includes(intentNameFi) || (intentNameEn && tags.includes(intentNameEn))) return true;
+
+        // 2. Direct code match
+        if (c.intent_codes && c.intent_codes.includes(code)) return true;
+
+        // 3. Profiling data match
+        const profile = this.data.profiling[c.id];
+        if (profile) {
+            // Check node_links
+            if (profile.core?.node_links?.includes(code)) return true;
+            
+            // Check refinement_tags
+            const refTags = profile.core?.refinement_tags || [];
+            if (refTags.some(rt => rt.toLowerCase().includes(intentNameFi))) return true;
+
+            // Deep check in categories
+            for (const section in profile.categories || {}) {
+                const catData = profile.categories[section];
+                for (const key in catData) {
+                    const val = catData[key];
+                    if (Array.isArray(val) && val.some(v => typeof v === 'string' && v.toLowerCase().includes(intentNameFi))) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        // 4. Special cases for Digitization
+        if (code === 'MEDIA_DIGITIZATION') {
+            if (tags.includes('digitointi') || tags.includes('vhs') || tags.includes('diojen')) return true;
+            if (c.nimi && (c.nimi.includes('Mediazoo') || c.nimi.includes('Riina Raitio'))) return true;
+        }
+
+        return false;
     }
 
     toggleIntent(code) {
@@ -251,9 +317,10 @@ class NetworkMap {
             this.selections.intents.add(code);
             item.classList.add('active');
             const intent = this.data.taxonomy.intents[code];
+            const label = window.i18n ? i18n.getText(intent) : intent.fi;
             this.addNode({
                 id: code,
-                label: intent.fi,
+                label: label,
                 type: 'intent',
                 weight: 80
             });
@@ -264,6 +331,27 @@ class NetworkMap {
                 if (group.codes.includes(code)) {
                     this.addEdge(gid, code);
                 }
+            });
+
+            // Add refinement tags associated with this intent from company data
+            const matchingCompanies = this.data.companies.filter(c => this.checkCompanyMatch(c, code));
+            const refinementTags = new Set();
+            matchingCompanies.forEach(c => {
+                const profile = this.data.profiling[c.id];
+                const tags = profile?.core?.refinement_tags || [];
+                tags.forEach(t => refinementTags.add(t));
+            });
+
+            // Limit to top 5 refinements to avoid clutter
+            Array.from(refinementTags).slice(0, 5).forEach(tag => {
+                const tagId = `ref-${tag.replace(/\s+/g, '_')}`;
+                this.addNode({
+                    id: tagId,
+                    label: tag,
+                    type: 'refinement',
+                    weight: 40
+                });
+                this.addEdge(code, tagId, 'semantic');
             });
         }
 
@@ -285,12 +373,7 @@ class NetworkMap {
 
         // Find companies matching selected intents
         let matches = this.data.companies.filter(c => {
-            return Array.from(this.selections.intents).some(code => {
-                const intent = this.data.taxonomy.intents[code];
-                const tags = (c.tags || '').toLowerCase();
-                const intentNameFi = intent.fi.toLowerCase();
-                return tags.includes(intentNameFi) || (c.intent_codes && c.intent_codes.includes(code));
-            });
+            return Array.from(this.selections.intents).some(code => this.checkCompanyMatch(c, code));
         });
 
         // Sort by priority/package
@@ -338,11 +421,18 @@ class NetworkMap {
 
             // Connect to matching intents
             this.selections.intents.forEach(code => {
-                const intent = this.data.taxonomy.intents[code];
-                const tags = (company.tags || '').toLowerCase();
-                const intentNameFi = intent.fi.toLowerCase();
-                if (tags.includes(intentNameFi) || (company.intent_codes && company.intent_codes.includes(code))) {
+                if (this.checkCompanyMatch(company, code)) {
                     this.addEdge(code, companyId);
+                    
+                    // Connect to matching refinement tags if they are in graph
+                    const profile = this.data.profiling[companyId];
+                    const tags = profile?.core?.refinement_tags || [];
+                    tags.forEach(tag => {
+                        const tagId = `ref-${tag.replace(/\s+/g, '_')}`;
+                        if (this.cy.getElementById(tagId).length > 0) {
+                            this.addEdge(tagId, companyId);
+                        }
+                    });
                 }
             });
 
