@@ -12,8 +12,9 @@ class NetworkMap {
             profiling: {}
         };
         this.selections = {
-            groups: new Set(),
-            intents: new Set(),
+            needId: null,
+            options: new Set(), // Set of option identifiers (needId-stepId-index)
+            subContexts: new Set(),
             companies: new Set()
         };
         this.init();
@@ -34,15 +35,12 @@ class NetworkMap {
     }
 
     async loadData() {
-        const [taxRes, liveRes, tempRes, profRes] = await Promise.all([
-            fetch('taxonomy.json'),
+        const [liveRes, tempRes, profRes] = await Promise.all([
             fetch('live_companies.json'),
             fetch('temp_companies.json'),
             fetch('company_profiling_data.json')
         ]);
 
-        this.data.taxonomy = await taxRes.json();
-        
         const liveData = await liveRes.json();
         const tempData = await tempRes.json();
         const profData = await profRes.json();
@@ -54,9 +52,12 @@ class NetworkMap {
         this.data.companies = Object.values(companyMap);
         this.data.profiling = profData.profiles;
 
+        // NEEDS_CONFIG is loaded via <script> tag in HTML
+        this.data.needs = window.NEEDS_CONFIG || {};
+
         console.log("NetworkMap: Data loaded", {
             companies: this.data.companies.length,
-            groups: this.data.taxonomy.groups.length
+            needs: Object.keys(this.data.needs).length
         });
     }
 
@@ -163,82 +164,82 @@ class NetworkMap {
         const sidebarContent = document.querySelector('.sidebar-content');
         sidebarContent.innerHTML = '';
 
-        // Category Section
-        const catSection = document.createElement('div');
-        catSection.className = 'sidebar-section';
-        catSection.innerHTML = `<h3 data-i18n="header_categories">Kategoriat</h3><div id="category-list" class="selection-list"></div>`;
-        const categoryList = catSection.querySelector('#category-list');
+        if (!this.selections.needId) {
+            // Show all Needs
+            const catSection = document.createElement('div');
+            catSection.className = 'sidebar-section';
+            catSection.innerHTML = `<h3 data-i18n="need_section_title">Mitä olet järjestämässä?</h3><div id="need-list" class="selection-list"></div>`;
+            const needList = catSection.querySelector('#need-list');
 
-        if (this.selections.groups.size === 0) {
-            // Show all groups
-            this.data.taxonomy.groups.forEach(group => {
-                const count = this.data.companies.filter(c => {
-                    const profile = this.data.profiling[c.id];
-                    return profile?.core?.fits_for?.[group.id] > 20;
-                }).length;
-                
-                const groupName = window.i18n ? i18n.t(`group_${group.id.replace(/-/g, '_')}`) : group.name;
-                const item = this.createItemElement(group.id, groupName, count, () => this.toggleGroup(group.id));
-                categoryList.appendChild(item);
+            Object.entries(this.data.needs).forEach(([id, need]) => {
+                const label = i18n.getText(need.title);
+                const item = this.createItemElement(id, `${need.icon} ${label}`, null, () => this.toggleNeed(id));
+                needList.appendChild(item);
             });
             sidebarContent.appendChild(catSection);
         } else {
-            // Show only selected group with a "change" button
-            const groupId = Array.from(this.selections.groups)[0];
-            const group = this.data.taxonomy.groups.find(g => g.id === groupId);
-            const groupName = window.i18n ? i18n.t(`group_${group.id.replace(/-/g, '_')}`) : group.name;
-            
+            // Show selected Need with change button
+            const needId = this.selections.needId;
+            const need = this.data.needs[needId];
+            const label = i18n.getText(need.title);
+
+            const catSection = document.createElement('div');
+            catSection.className = 'sidebar-section';
+            catSection.innerHTML = `<div id="need-list" class="selection-list"></div>`;
+            const needList = catSection.querySelector('#need-list');
+
             const backBtn = document.createElement('div');
             backBtn.className = 'back-to-categories';
-            backBtn.innerHTML = `&larr; <span data-i18n="btn_change_category">Vaihda kategoriaa</span>`;
+            backBtn.innerHTML = `&larr; <span data-i18n="btn_change_category">Vaihda aihetta</span>`;
             backBtn.onclick = () => this.resetMap();
-            categoryList.appendChild(backBtn);
+            needList.appendChild(backBtn);
 
-            const item = this.createItemElement(groupId, groupName, null, () => this.toggleGroup(groupId), true);
-            categoryList.appendChild(item);
+            const needItem = this.createItemElement(needId, `${need.icon} ${label}`, null, () => {}, true);
+            needList.appendChild(needItem);
             sidebarContent.appendChild(catSection);
 
-            // Intent Section
-            const intentSection = document.createElement('div');
-            intentSection.className = 'sidebar-section';
-            intentSection.innerHTML = `<h3 data-i18n="header_tags">Tunnisteet</h3><div id="intent-list" class="selection-list"></div>`;
-            const intentList = intentSection.querySelector('#intent-list');
+            // Steps and Options
+            need.steps.forEach((step, stepIdx) => {
+                const stepSection = document.createElement('div');
+                stepSection.className = 'sidebar-section';
+                stepSection.innerHTML = `<h3>${i18n.getText(step.question)}</h3><div class="selection-list"></div>`;
+                const optionList = stepSection.querySelector('.selection-list');
 
-            group.codes.forEach(code => {
-                const intent = this.data.taxonomy.intents[code];
-                if (!intent) return;
-
-                const count = this.data.companies.filter(c => this.checkCompanyMatch(c, code)).length;
-                const label = intent.fi || intent.en || code;
-                const isActive = this.selections.intents.has(code);
-                
-                const item = this.createItemElement(code, label, count, () => this.toggleIntent(code), isActive);
-                intentList.appendChild(item);
-
-                // Hierarchical companies/refinements if intent is active
-                if (isActive) {
-                    const subList = document.createElement('div');
-                    subList.className = 'sub-selection-list';
+                step.options.forEach((opt, optIdx) => {
+                    if (opt.hide_results && !opt.sub_context) return;
                     
-                    // Companies for this intent
-                    const matches = this.data.companies.filter(c => this.checkCompanyMatch(c, code));
-                    matches.sort((a, b) => {
-                        const aPkg = (a.package || '').toLowerCase();
-                        const bPkg = (b.package || '').toLowerCase();
-                        if (aPkg.includes('premium') && !bPkg.includes('premium')) return -1;
-                        return 0;
-                    });
-
-                    matches.slice(0, 10).forEach(comp => {
-                        const compActive = this.selections.companies.has(comp.id);
-                        const compItem = this.createItemElement(comp.id, comp.nimi, null, () => this.toggleCompany(comp.id, code), compActive, 'company-item');
-                        subList.appendChild(compItem);
-                    });
+                    const optId = `${needId}-${step.id}-${optIdx}`;
+                    const optLabel = i18n.getText(opt.label);
+                    const isActive = this.selections.options.has(optId);
                     
-                    intentList.appendChild(subList);
-                }
+                    // Count matching companies for this option
+                    const count = this.data.companies.filter(c => this.checkCompanyMatch(c, opt, need)).length;
+                    
+                    const item = this.createItemElement(optId, optLabel, count, () => this.toggleOption(opt, step, optIdx), isActive);
+                    optionList.appendChild(item);
+
+                    if (isActive) {
+                        const subList = document.createElement('div');
+                        subList.className = 'sub-selection-list';
+                        
+                        const matches = this.data.companies.filter(c => this.checkCompanyMatch(c, opt, need));
+                        matches.sort((a, b) => {
+                            const aPkg = (a.package || '').toLowerCase();
+                            const bPkg = (b.package || '').toLowerCase();
+                            if (aPkg.includes('premium') && !bPkg.includes('premium')) return -1;
+                            return 0;
+                        });
+
+                        matches.slice(0, 15).forEach(comp => {
+                            const compActive = this.selections.companies.has(comp.id);
+                            const compItem = this.createItemElement(comp.id, comp.nimi, null, () => this.toggleCompany(comp.id, optId), compActive, 'company-item');
+                            subList.appendChild(compItem);
+                        });
+                        optionList.appendChild(subList);
+                    }
+                });
+                sidebarContent.appendChild(stepSection);
             });
-            sidebarContent.appendChild(intentSection);
         }
 
         if (window.i18n) i18n.translatePage();
@@ -262,31 +263,28 @@ class NetworkMap {
         return div;
     }
 
-    toggleGroup(groupId) {
-        if (this.selections.groups.has(groupId)) {
-            // Toggle off: reset everything
+    toggleNeed(needId) {
+        if (this.selections.needId === needId) {
             this.resetMap();
             return;
         }
 
-        // Exclusive selection: remove old group node from graph, clear all graph nodes
         this.cy.elements().remove();
-        this.selections.groups.clear();
-        this.selections.intents.clear();
+        this.selections.needId = needId;
+        this.selections.options.clear();
+        this.selections.subContexts.clear();
         this.selections.companies.clear();
         
-        this.selections.groups.add(groupId);
-        const group = this.data.taxonomy.groups.find(g => g.id === groupId);
-        const groupName = window.i18n ? i18n.t(`group_${groupId.replace(/-/g, '_')}`) : group.name;
+        const need = this.data.needs[needId];
+        const label = i18n.getText(need.title);
         
         this.addNode({
-            id: groupId,
-            label: groupName,
+            id: needId,
+            label: `${need.icon}\n${label}`,
             type: 'group',
             weight: 100
         });
 
-        // Center and fit the single node immediately
         this.cy.layout({ name: 'preset' }).run();
         this.cy.center();
         this.cy.fit(undefined, 100);
@@ -294,55 +292,29 @@ class NetworkMap {
         this.renderSidebar();
     }
 
-    toggleIntent(code) {
-        if (this.selections.intents.has(code)) {
-            this.selections.intents.delete(code);
-            this.removeNode(code);
-            
-            // Also remove child nodes that might be dangling
-            const tagIdPrefix = `ref-`;
-            this.cy.nodes(`[id ^= "${tagIdPrefix}"]`).forEach(node => {
-                const connectedIntents = node.connectedEdges().sources().filter(n => n.id() !== code);
-                if (connectedIntents.length === 0) this.cy.remove(node);
-            });
+    toggleOption(opt, step, optIdx) {
+        const optId = `${this.selections.needId}-${step.id}-${optIdx}`;
+        const label = i18n.getText(opt.label);
+
+        if (this.selections.options.has(optId)) {
+            this.selections.options.delete(optId);
+            if (opt.sub_context) this.selections.subContexts.delete(opt.sub_context);
+            this.removeNode(optId);
         } else {
-            this.selections.intents.add(code);
-            const intent = this.data.taxonomy.intents[code];
-            const label = intent.fi || intent.en || code;
+            this.selections.options.add(optId);
+            if (opt.sub_context) this.selections.subContexts.add(opt.sub_context);
+            
             this.addNode({
-                id: code,
+                id: optId,
                 label: label,
                 type: 'intent',
                 weight: 80
             });
 
-            // Connect to parent groups already in graph
-            this.selections.groups.forEach(gid => {
-                const group = this.data.taxonomy.groups.find(g => g.id === gid);
-                if (group.codes.includes(code)) {
-                    this.addEdge(gid, code);
-                }
-            });
+            this.addEdge(this.selections.needId, optId);
 
-            // Add refinement tags
-            const matchingCompanies = this.data.companies.filter(c => this.checkCompanyMatch(c, code));
-            const refinementTags = new Set();
-            matchingCompanies.forEach(c => {
-                const profile = this.data.profiling[c.id];
-                const tags = profile?.core?.refinement_tags || [];
-                tags.forEach(t => refinementTags.add(t));
-            });
-
-            Array.from(refinementTags).slice(0, 5).forEach(tag => {
-                const tagId = `ref-${tag.replace(/\s+/g, '_')}`;
-                this.addNode({
-                    id: tagId,
-                    label: tag,
-                    type: 'refinement',
-                    weight: 40
-                });
-                this.addEdge(code, tagId, 'semantic');
-            });
+            // Add matching companies (optional: only add if explicitly selected? 
+            // Or maybe add some top ones automatically? For now, we only add companies when selected in sidebar)
         }
 
         this.renderSidebar();
@@ -364,20 +336,15 @@ class NetworkMap {
                 weight: 60
             });
 
-            // Connect to matching intents
-            this.selections.intents.forEach(code => {
-                if (this.checkCompanyMatch(company, code)) {
-                    this.addEdge(code, companyId);
-                    
-                    // Connect to matching refinement tags
-                    const profile = this.data.profiling[companyId];
-                    const tags = profile?.core?.refinement_tags || [];
-                    tags.forEach(tag => {
-                        const tagId = `ref-${tag.replace(/\s+/g, '_')}`;
-                        if (this.cy.getElementById(tagId).length > 0) {
-                            this.addEdge(tagId, companyId);
-                        }
-                    });
+            // Connect to matching options
+            this.selections.options.forEach(optId => {
+                const [needId, stepId, idx] = optId.split('-');
+                const need = this.data.needs[needId];
+                const step = need.steps.find(s => s.id === stepId);
+                const opt = step.options[parseInt(idx)];
+                
+                if (this.checkCompanyMatch(company, opt, need)) {
+                    this.addEdge(optId, companyId);
                 }
             });
 
@@ -396,8 +363,9 @@ class NetworkMap {
     }
 
     resetMap() {
-        this.selections.groups.clear();
-        this.selections.intents.clear();
+        this.selections.needId = null;
+        this.selections.options.clear();
+        this.selections.subContexts.clear();
         this.selections.companies.clear();
         if (this.cy) this.cy.elements().remove();
         this.renderSidebar();
@@ -469,41 +437,79 @@ class NetworkMap {
         layout.run();
     }
 
-    checkCompanyMatch(c, code) {
-        const intent = this.data.taxonomy.intents[code];
-        if (!intent) return false;
+    checkCompanyMatch(c, opt, need) {
+        if (!c || !opt) return false;
 
-        const profile = this.data.profiling[c.id];
-        
-        // 1. Group relevance check: Must belong to the active group if one is selected
-        if (this.selections.groups.size > 0) {
-            const activeGroupId = Array.from(this.selections.groups)[0];
-            const score = profile?.core?.fits_for?.[activeGroupId] || 0;
-            if (score <= 0) return false;
+        const profilingKey = need.profilointi_context || 'vapaa-aika';
+        const profile = this.data.profiling[c.id] || {};
+        const core = profile.core || {};
+
+        // 1. Sub-context filtering (Taso 2)
+        if (this.selections.subContexts.size > 0) {
+            const companySubContexts = core.sub_contexts || [];
+            let isSubContextMatch = false;
+
+            if (Array.isArray(companySubContexts)) {
+                if (companySubContexts.length === 0) isSubContextMatch = true;
+                else isSubContextMatch = Array.from(this.selections.subContexts).some(sc => companySubContexts.includes(sc));
+            } else if (typeof companySubContexts === 'object') {
+                const relevant = companySubContexts[profilingKey.replace(/-/g, '_')] || [];
+                isSubContextMatch = Array.from(this.selections.subContexts).some(sc => relevant.includes(sc));
+            } else {
+                isSubContextMatch = true;
+            }
+            
+            // If the option itself is a sub-context, we don't apply the cross-filter to it
+            if (!opt.sub_context && !isSubContextMatch) {
+                // If it's a service, be a bit more relaxed (like in palvelu.html)
+                const fitsScore = core.fits_for?.[profilingKey] || 0;
+                const isVenueOrCore = (opt.capacity_req > 0 || opt.node_link === 'JUHLATILA');
+                if (isVenueOrCore && fitsScore < 80) return false;
+            }
         }
 
-        const tags = (c.tags || '').toLowerCase();
-        const intentNameFi = (intent.fi || '').toLowerCase();
-        const intentNameEn = (intent.en || '').toLowerCase();
+        // 2. Direct matching (intent_codes, node_link, tags)
+        
+        // intent_codes
+        if (opt.intent_codes && core.intent_codes) {
+            if (opt.intent_codes.some(code => core.intent_codes.includes(code))) return true;
+        }
 
-        // 2. Direct code match (intent_codes or node_links)
-        if (c.intent_codes && c.intent_codes.includes(code)) return true;
-        if (profile?.core?.node_links?.includes(code)) return true;
+        // node_link
+        if (opt.node_link && core.node_links) {
+            if (core.node_links.includes(opt.node_link)) return true;
+        }
+        if (opt.node_links && core.node_links) {
+            if (opt.node_links.some(l => core.node_links.includes(l))) return true;
+        }
 
-        // 3. Keyword match in restricted fields
-        const checkFields = [
-            tags,
-            ...(profile?.core?.sub_contexts || []),
-            ...(profile?.core?.refinement_tags || [])
-        ];
+        // profilointi_filter
+        if (opt.profilointi_filter) {
+            const pf = opt.profilointi_filter;
+            const section = profile.categories?.[pf.section] || profile[pf.section];
+            if (section) {
+                const val = section[pf.field];
+                if (Array.isArray(val) && val.includes(pf.value)) return true;
+                if (val === pf.value) return true;
+            }
+        }
 
-        if (intentNameFi && checkFields.some(f => typeof f === 'string' && f.toLowerCase().includes(intentNameFi))) return true;
-        if (intentNameEn && checkFields.some(f => typeof f === 'string' && f.toLowerCase().includes(intentNameEn))) return true;
+        // tags
+        if (opt.tags) {
+            const companyContent = (
+                (c.tags || '') + ' ' + 
+                (c.kategoria || '') + ' ' + 
+                (c.nimi || '') + ' ' +
+                (core.sub_contexts?.join(' ') || '') + ' ' +
+                (core.node_links?.join(' ') || '')
+            ).toLowerCase();
+            if (opt.tags.some(tag => companyContent.includes(tag.toLowerCase()))) return true;
+        }
 
-        // 4. Special case: digitointi
-        if (code === 'MEDIA_DIGITIZATION') {
-            if (tags.includes('digitointi') || tags.includes('vhs') || tags.includes('diojen')) return true;
-            if (c.nimi && (c.nimi.includes('Mediazoo') || c.nimi.includes('Riina Raitio'))) return true;
+        // 3. Context score fallback
+        const fitsScore = core.fits_for?.[profilingKey] || core.fits_for?.[profilingKey.replace(/_/g, '-')] || 0;
+        if (fitsScore > 50 && !opt.intent_codes && !opt.node_link && !opt.profilointi_filter) {
+            return true;
         }
 
         return false;
