@@ -627,6 +627,10 @@
         });
     </script>
     <script>
+        const THRESHOLD_STRICT = 80;   // Vain parhaat osaajat
+        const THRESHOLD_RELEVANT = 50; // Selkeästi alaan liittyvät
+        const THRESHOLD_LOOSE = 10;    // Kaikki, joilla on jokin kytkös
+
         let currentNeedId = new URLSearchParams(window.location.search).get('id');
         let currentStepIndex = 0;
         let selections = {};
@@ -1198,9 +1202,9 @@
 
                         if (!isVenueSearch && (venueCapacity > 0 || isPrimarilyVenue)) {
                             // If searching for a service (not a venue), and company is a venue, exclude it.
-                            // EXCEPTION: If the company has a very high score for this context (fitsScore >= 80),
+                            // EXCEPTION: If the company has a very high score for this context (fitsScore >= THRESHOLD_STRICT),
                             // it's likely a legitimate service provider who happens to have some capacity.
-                            if (fitsScore >= 80) {
+                            if (fitsScore >= THRESHOLD_STRICT) {
                                 } else {
                                 return false; 
                             }
@@ -1296,7 +1300,7 @@
                                     const labelLower = i18n.getText(opt.label || '').toLowerCase();
                                     const isVenueOrCore = (opt.capacity_req > 0 || opt.node_link === 'JUHLATILA' || (labelLower.includes('tila') && !labelLower.includes('tilaisuus')) || labelLower.includes('muistotilaisuus'));
                                     
-                                    if (isVenueOrCore && hasAnySubContexts && mainFitsScore >= 70 && mainFitsScore < 80) return false; 
+                                    if (isVenueOrCore && hasAnySubContexts && mainFitsScore >= 70 && mainFitsScore < THRESHOLD_STRICT) return false; 
                                 }
                             }
                         }
@@ -1490,12 +1494,12 @@
 
                         // NEW: Estetään juhlatilojen (kapasiteettikohteet) nouseminen palveluhakuihin (esim. videokuvaus)
                         // Jos optio ei vaadi kapasiteettia, mutta yrityksellä on kapasiteettia (on tila), 
-                        // niin yrityksen on oltava vahva match (score > 80) kyseiseen palvelu-intenttiin.
+                        // niin yrityksen on oltava vahva match (score > THRESHOLD_STRICT) kyseiseen palvelu-intenttiin.
                         const isServiceOnlyOption = !opt.capacity_req && opt.node_link !== 'JUHLATILA';
                         const companyCap = getCompanyCapacity(c, currentProfilingKey);
                         if (isServiceOnlyOption && companyCap > 0) {
                             const intentScores = c.profiling?.core?.intent_scores || {};
-                            const hasStrongServiceMatch = (opt.intent_codes || []).some(code => (intentScores[code] || 0) >= 80);
+                            const hasStrongServiceMatch = (opt.intent_codes || []).some(code => (intentScores[code] || 0) >= THRESHOLD_STRICT);
                             
                             // Jos yritys on ensisijaisesti tila (eikä vahva palvelun tarjoaja), hylätään se palvelu-optiosta
                             if (!hasStrongServiceMatch) return false;
@@ -1522,7 +1526,7 @@
                             }
                             // Jos on suodattimia muttei osumaa (isProfiledMatch), ei näytetä pelkällä scorella
                             if (opt.node_link || opt.node_links || opt.profilointi_filter) return isProfiledMatch;
-                            return getFitsForScore(c, currentProfilingKey) > 10;
+                            return getFitsForScore(c, currentProfilingKey) > THRESHOLD_LOOSE;
                         }
 
                         // TÄRKEÄ KORJAUS: Jos optiolla on profilointisuodatin (liikunta-ja-vapaaaika), 
@@ -1730,6 +1734,12 @@
                 companiesForOpt.sort((a, b) => {
                     let scoreA = getFitsForScore(a, globalProfilingKey);
                     let scoreB = getFitsForScore(b, globalProfilingKey);
+
+                    // NEW: Bonus-pisteet jos tarkka sub_context täsmää (esim. kylpyhuoneremontti)
+                    if (opt.sub_context) {
+                        if (a.profiling?.core?.sub_contexts?.includes(opt.sub_context)) scoreA += 50;
+                        if (b.profiling?.core?.sub_contexts?.includes(opt.sub_context)) scoreB += 50;
+                    }
 
                     if (globalActiveCollaboratorsSet.has(a.id) || globalActiveCollaboratorsSet.has(a.nimi)) scoreA += 45;
                     if (globalActiveCollaboratorsSet.has(b.id) || globalActiveCollaboratorsSet.has(b.nimi)) scoreB += 45;
