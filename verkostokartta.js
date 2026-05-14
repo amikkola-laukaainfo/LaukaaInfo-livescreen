@@ -23,8 +23,8 @@ class NetworkMap {
         try {
             await this.loadData();
             this.initCytoscape();
-            this.renderSidebar();
             this.setupControls();
+            this.renderSidebar();
             
             // Hide loader
             document.getElementById('loader').style.display = 'none';
@@ -160,162 +160,141 @@ class NetworkMap {
     }
 
     renderSidebar() {
-        const groupList = document.getElementById('category-list');
-        groupList.innerHTML = '';
+        const sidebarContent = document.querySelector('.sidebar-content');
+        sidebarContent.innerHTML = '';
 
-        // Add headers with i18n support
-        const catHeader = document.querySelector('#category-section h3');
-        if (catHeader) catHeader.setAttribute('data-i18n', 'header_categories');
-        
-        const intentHeader = document.querySelector('#intent-section h3');
-        if (intentHeader) intentHeader.setAttribute('data-i18n', 'header_tags');
-        
-        const companyHeader = document.querySelector('#company-section h3');
-        if (companyHeader) companyHeader.setAttribute('data-i18n', 'header_companies');
+        // Category Section
+        const catSection = document.createElement('div');
+        catSection.className = 'sidebar-section';
+        catSection.innerHTML = `<h3 data-i18n="header_categories">Kategoriat</h3><div id="category-list" class="selection-list"></div>`;
+        const categoryList = catSection.querySelector('#category-list');
 
-        this.data.taxonomy.groups.forEach(group => {
-            const item = document.createElement('div');
-            item.className = 'selection-item' + (this.selections.groups.has(group.id) ? ' active' : '');
-            item.dataset.id = group.id;
-            
-            // Count how many companies might fit here
-            const count = this.data.companies.filter(c => {
-                const profile = this.data.profiling[c.id];
-                return profile?.core?.fits_for?.[group.id] > 20;
-            }).length;
-
+        if (this.selections.groups.size === 0) {
+            // Show all groups
+            this.data.taxonomy.groups.forEach(group => {
+                const count = this.data.companies.filter(c => {
+                    const profile = this.data.profiling[c.id];
+                    return profile?.core?.fits_for?.[group.id] > 20;
+                }).length;
+                
+                const groupName = window.i18n ? i18n.t(`group_${group.id.replace(/-/g, '_')}`) : group.name;
+                const item = this.createItemElement(group.id, groupName, count, () => this.toggleGroup(group.id));
+                categoryList.appendChild(item);
+            });
+            sidebarContent.appendChild(catSection);
+        } else {
+            // Show only selected group with a "clear" button or active state
+            const groupId = Array.from(this.selections.groups)[0];
+            const group = this.data.taxonomy.groups.find(g => g.id === groupId);
             const groupName = window.i18n ? i18n.t(`group_${group.id.replace(/-/g, '_')}`) : group.name;
+            
+            const item = this.createItemElement(groupId, groupName, null, () => this.toggleGroup(groupId), true);
+            categoryList.appendChild(item);
+            sidebarContent.appendChild(catSection);
 
-            item.innerHTML = `
-                <span class="item-name">${groupName}</span>
-                <span class="item-count">${count}</span>
-            `;
+            // Intent Section
+            const intentSection = document.createElement('div');
+            intentSection.className = 'sidebar-section';
+            intentSection.innerHTML = `<h3 data-i18n="header_tags">Tunnisteet</h3><div id="intent-list" class="selection-list"></div>`;
+            const intentList = intentSection.querySelector('#intent-list');
 
-            item.onclick = () => this.toggleGroup(group.id);
-            groupList.appendChild(item);
-        });
-        
+            group.codes.forEach(code => {
+                const intent = this.data.taxonomy.intents[code];
+                if (!intent) return;
+
+                const count = this.data.companies.filter(c => this.checkCompanyMatch(c, code)).length;
+                const label = window.i18n ? i18n.getText(intent) : intent.fi;
+                const isActive = this.selections.intents.has(code);
+                
+                const item = this.createItemElement(code, label, count, () => this.toggleIntent(code), isActive);
+                intentList.appendChild(item);
+
+                // Hierarchical companies/refinements if intent is active
+                if (isActive) {
+                    const subList = document.createElement('div');
+                    subList.className = 'sub-selection-list';
+                    
+                    // Companies for this intent
+                    const matches = this.data.companies.filter(c => this.checkCompanyMatch(c, code));
+                    matches.sort((a, b) => {
+                        const aPkg = (a.package || '').toLowerCase();
+                        const bPkg = (b.package || '').toLowerCase();
+                        if (aPkg.includes('premium') && !bPkg.includes('premium')) return -1;
+                        return 0;
+                    });
+
+                    matches.slice(0, 10).forEach(comp => {
+                        const compActive = this.selections.companies.has(comp.id);
+                        const compItem = this.createItemElement(comp.id, comp.nimi, null, () => this.toggleCompany(comp.id, code), compActive, 'company-item');
+                        subList.appendChild(compItem);
+                    });
+                    
+                    intentList.appendChild(subList);
+                }
+            });
+            sidebarContent.appendChild(intentSection);
+        }
+
         if (window.i18n) i18n.translatePage();
     }
 
-    toggleGroup(groupId) {
-        const item = document.querySelector(`#category-list .selection-item[data-id="${groupId}"]`);
+    createItemElement(id, name, count, onClick, isActive = false, extraClass = '') {
+        const div = document.createElement('div');
+        div.className = `selection-item ${isActive ? 'active' : ''} ${extraClass}`;
+        div.dataset.id = id;
         
-        if (this.selections.groups.has(groupId)) {
-            this.selections.groups.delete(groupId);
-            item.classList.remove('active');
-            this.removeNode(groupId);
-        } else {
-            this.selections.groups.add(groupId);
-            item.classList.add('active');
-            const group = this.data.taxonomy.groups.find(g => g.id === groupId);
-            this.addNode({
-                id: groupId,
-                label: group.name,
-                type: 'group',
-                weight: 100
-            });
-        }
-
-        this.updateIntentList();
-        this.runLayout();
+        let countHtml = count !== null ? `<span class="item-count">${count}</span>` : '';
+        div.innerHTML = `
+            <span class="item-name">${name}</span>
+            ${countHtml}
+        `;
+        
+        div.onclick = (e) => {
+            e.stopPropagation();
+            onClick();
+        };
+        return div;
     }
 
-    updateIntentList() {
-        const section = document.getElementById('intent-section');
-        const list = document.getElementById('intent-list');
-        list.innerHTML = '';
-
-        if (this.selections.groups.size === 0) {
-            section.style.display = 'none';
+    toggleGroup(groupId) {
+        if (this.selections.groups.has(groupId)) {
+            // Clear all when toggling off the only group
+            this.resetMap();
             return;
         }
 
-        section.style.display = 'block';
+        // Exclusive selection: Clear existing groups
+        this.selections.groups.forEach(gid => this.removeNode(gid));
+        this.selections.groups.clear();
         
-        // Collect all intent codes from active groups
-        const codes = new Set();
-        this.selections.groups.forEach(gid => {
-            const group = this.data.taxonomy.groups.find(g => g.id === gid);
-            group.codes.forEach(code => codes.add(code));
+        this.selections.groups.add(groupId);
+        const group = this.data.taxonomy.groups.find(g => g.id === groupId);
+        const groupName = window.i18n ? i18n.t(`group_${groupId.replace(/-/g, '_')}`) : group.name;
+        
+        this.addNode({
+            id: groupId,
+            label: groupName,
+            type: 'group',
+            weight: 100
         });
 
-        codes.forEach(code => {
-            const intent = this.data.taxonomy.intents[code];
-            if (!intent) return;
-
-            const item = document.createElement('div');
-            item.className = 'selection-item' + (this.selections.intents.has(code) ? ' active' : '');
-            item.dataset.id = code;
-
-            const count = this.data.companies.filter(c => this.checkCompanyMatch(c, code)).length;
-            const label = window.i18n ? i18n.getText(intent) : intent.fi;
-
-            item.innerHTML = `
-                <span class="item-name">${label}</span>
-                <span class="item-count">${count}</span>
-            `;
-
-            item.onclick = () => this.toggleIntent(code);
-            list.appendChild(item);
-        });
-    }
-
-    checkCompanyMatch(c, code) {
-        const intent = this.data.taxonomy.intents[code];
-        if (!intent) return false;
-
-        const tags = (c.tags || '').toLowerCase();
-        const intentNameFi = intent.fi.toLowerCase();
-        const intentNameEn = (intent.en || '').toLowerCase();
-
-        // 1. Direct tag match
-        if (tags.includes(intentNameFi) || (intentNameEn && tags.includes(intentNameEn))) return true;
-
-        // 2. Direct code match
-        if (c.intent_codes && c.intent_codes.includes(code)) return true;
-
-        // 3. Profiling data match
-        const profile = this.data.profiling[c.id];
-        if (profile) {
-            // Check node_links
-            if (profile.core?.node_links?.includes(code)) return true;
-            
-            // Check refinement_tags
-            const refTags = profile.core?.refinement_tags || [];
-            if (refTags.some(rt => rt.toLowerCase().includes(intentNameFi))) return true;
-
-            // Deep check in categories
-            for (const section in profile.categories || {}) {
-                const catData = profile.categories[section];
-                for (const key in catData) {
-                    const val = catData[key];
-                    if (Array.isArray(val) && val.some(v => typeof v === 'string' && v.toLowerCase().includes(intentNameFi))) {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        // 4. Special cases for Digitization
-        if (code === 'MEDIA_DIGITIZATION') {
-            if (tags.includes('digitointi') || tags.includes('vhs') || tags.includes('diojen')) return true;
-            if (c.nimi && (c.nimi.includes('Mediazoo') || c.nimi.includes('Riina Raitio'))) return true;
-        }
-
-        return false;
+        this.renderSidebar();
+        this.runLayout();
     }
 
     toggleIntent(code) {
-        const item = document.querySelector(`#intent-list .selection-item[data-id="${code}"]`);
-        
         if (this.selections.intents.has(code)) {
             this.selections.intents.delete(code);
-            item.classList.remove('active');
             this.removeNode(code);
+            
+            // Also remove child nodes that might be dangling
+            const tagIdPrefix = `ref-`;
+            this.cy.nodes(`[id ^= "${tagIdPrefix}"]`).forEach(node => {
+                const connectedIntents = node.connectedEdges().sources().filter(n => n.id() !== code);
+                if (connectedIntents.length === 0) this.cy.remove(node);
+            });
         } else {
             this.selections.intents.add(code);
-            item.classList.add('active');
             const intent = this.data.taxonomy.intents[code];
             const label = window.i18n ? i18n.getText(intent) : intent.fi;
             this.addNode({
@@ -333,7 +312,7 @@ class NetworkMap {
                 }
             });
 
-            // Add refinement tags associated with this intent from company data
+            // Add refinement tags
             const matchingCompanies = this.data.companies.filter(c => this.checkCompanyMatch(c, code));
             const refinementTags = new Set();
             matchingCompanies.forEach(c => {
@@ -342,7 +321,6 @@ class NetworkMap {
                 tags.forEach(t => refinementTags.add(t));
             });
 
-            // Limit to top 5 refinements to avoid clutter
             Array.from(refinementTags).slice(0, 5).forEach(tag => {
                 const tagId = `ref-${tag.replace(/\s+/g, '_')}`;
                 this.addNode({
@@ -355,61 +333,16 @@ class NetworkMap {
             });
         }
 
-        this.updateCompanyList();
+        this.renderSidebar();
         this.runLayout();
     }
 
-    updateCompanyList() {
-        const section = document.getElementById('company-section');
-        const list = document.getElementById('company-list');
-        list.innerHTML = '';
-
-        if (this.selections.intents.size === 0) {
-            section.style.display = 'none';
-            return;
-        }
-
-        section.style.display = 'block';
-
-        // Find companies matching selected intents
-        let matches = this.data.companies.filter(c => {
-            return Array.from(this.selections.intents).some(code => this.checkCompanyMatch(c, code));
-        });
-
-        // Sort by priority/package
-        matches.sort((a, b) => {
-            const aPkg = (a.package || '').toLowerCase();
-            const bPkg = (b.package || '').toLowerCase();
-            if (aPkg.includes('premium') && !bPkg.includes('premium')) return -1;
-            if (!aPkg.includes('premium') && bPkg.includes('premium')) return 1;
-            return 0;
-        });
-
-        // Limit to top 20 for sidebar performance
-        matches.slice(0, 20).forEach(comp => {
-            const item = document.createElement('div');
-            item.className = 'selection-item' + (this.selections.companies.has(comp.id) ? ' active' : '');
-            item.dataset.id = comp.id;
-
-            item.innerHTML = `
-                <span class="item-name">${comp.nimi}</span>
-            `;
-
-            item.onclick = () => this.toggleCompany(comp.id);
-            list.appendChild(item);
-        });
-    }
-
-    toggleCompany(companyId) {
-        const item = document.querySelector(`#company-list .selection-item[data-id="${companyId}"]`);
-        
+    toggleCompany(companyId, parentIntentCode) {
         if (this.selections.companies.has(companyId)) {
             this.selections.companies.delete(companyId);
-            if (item) item.classList.remove('active');
             this.removeNode(companyId);
         } else {
             this.selections.companies.add(companyId);
-            if (item) item.classList.add('active');
             const company = this.data.companies.find(c => c.id === companyId);
             
             this.addNode({
@@ -424,7 +357,7 @@ class NetworkMap {
                 if (this.checkCompanyMatch(company, code)) {
                     this.addEdge(code, companyId);
                     
-                    // Connect to matching refinement tags if they are in graph
+                    // Connect to matching refinement tags
                     const profile = this.data.profiling[companyId];
                     const tags = profile?.core?.refinement_tags || [];
                     tags.forEach(tag => {
@@ -436,7 +369,7 @@ class NetworkMap {
                 }
             });
 
-            // Semantic links to other active companies
+            // Semantic links
             this.selections.companies.forEach(otherId => {
                 if (otherId === companyId) return;
                 const profile = this.data.profiling[companyId];
@@ -446,7 +379,21 @@ class NetworkMap {
                 }
             });
         }
+        this.renderSidebar();
         this.runLayout();
+    }
+
+    resetMap() {
+        this.selections.groups.clear();
+        this.selections.intents.clear();
+        this.selections.companies.clear();
+        if (this.cy) this.cy.elements().remove();
+        this.renderSidebar();
+    }
+
+    printMap() {
+        // Simple print for now, could be improved with high-res export
+        window.print();
     }
 
     // Graph Helpers
@@ -491,6 +438,8 @@ class NetworkMap {
         document.getElementById('zoom-out').onclick = () => this.cy.zoom(this.cy.zoom() * 0.8);
         document.getElementById('fit-view').onclick = () => this.cy.fit();
         document.getElementById('refresh-layout').onclick = () => this.runLayout();
+        document.getElementById('reset-map').onclick = () => this.resetMap();
+        document.getElementById('print-map').onclick = () => this.printMap();
     }
 }
 

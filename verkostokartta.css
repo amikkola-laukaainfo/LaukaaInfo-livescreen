@@ -150,6 +150,34 @@ body {
     font-weight: 700;
 }
 
+/* Sub-lists for hierarchical view */
+.sub-selection-list {
+    margin-left: 20px;
+    padding-left: 12px;
+    border-left: 2px dashed #e2e8f0;
+    margin-top: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.company-item {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    background: rgba(16, 185, 129, 0.05);
+    border-color: rgba(16, 185, 129, 0.1);
+}
+
+.company-item:hover {
+    background: rgba(16, 185, 129, 0.1);
+    border-color: #10b981;
+}
+
+.company-item.active {
+    background: #10b981;
+    color: white;
+}
+
 /* Controls Overlay */
 .network-controls {
     position: absolute;
@@ -275,5 +303,26 @@ body {
     }
     #network-container {
         height: 50vh;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .network-sidebar, 
+    .network-controls, 
+    .back-link,
+    .legend {
+        display: none !important;
+    }
+    
+    body, #network-container {
+        background: white !important;
+        color: black !important;
+        height: 100vh !important;
+        width: 100vw !important;
+    }
+    
+    #cy {
+        background: white !important;
     }
 }
