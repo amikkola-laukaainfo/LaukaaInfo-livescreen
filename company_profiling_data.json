@@ -65901,7 +65901,7 @@
           "dietary_specialties": [],
           "staff_included": true,
           "wedding_menu_available": false,
-          "cake_service": false,
+          "cake_service": true,
           "partner_venues": [],
           "wedding_photography": false,
           "drone_available": false,
@@ -65918,7 +65918,10 @@
             "virkistyspäivä",
             "ohjelmapalvelu",
             "teemallinen ilta",
-            "workshop"
+            "workshop",
+            "syntymäpäiväjuhla",
+            "syntymäpäiväkakku",
+            "juhlakakku"
           ],
           "digitization_features": [],
           "entertainment_features": [
