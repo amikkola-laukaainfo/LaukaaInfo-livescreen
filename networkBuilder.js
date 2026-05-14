@@ -243,14 +243,23 @@ class NetworkBuilder {
                 }
             }
 
+            const intents = (stepEl.dataset.intents || '').split(',').map(i => i.trim()).filter(i => i);
+            
             // Find matching companies
             let matches = this.companies.filter(c => {
                 const name = (c.nimi || '').toLowerCase();
                 const companyTags = (c.tags || '').toLowerCase().split(',').map(t => t.trim());
                 const category = (c.kategoria || '').toLowerCase();
                 const desc = (c.kuvaus || c.description || c.esittely || '').toLowerCase();
+                const profile = this.profiling[c.id];
+
+                // 1. Check Intent Codes (explicit mapping)
+                if (intents.length > 0) {
+                    const companyIntents = profile?.core?.intent_codes || [];
+                    if (intents.some(i => companyIntents.includes(i))) return true;
+                }
                 
-                // Flexible match: check if any of the requested tags are present
+                // 2. Flexible match: check if any of the requested tags are present
                 return tags.some(t => {
                     // Check direct tag match
                     if (companyTags.includes(t)) return true;
@@ -258,6 +267,21 @@ class NetworkBuilder {
                     if (category === t || category.includes(t)) return true;
                     // Check name or description for the tag
                     if (name.includes(t) || desc.includes(t)) return true;
+                    
+                    // Check profiling sub_contexts, node_links, and refinement_tags
+                    if (profile) {
+                        const subContexts = profile.core?.sub_contexts || [];
+                        const nodeLinks = profile.core?.node_links || [];
+                        if (subContexts.some(sc => sc.toLowerCase().includes(t))) return true;
+                        if (nodeLinks.some(nl => nl.toLowerCase().includes(t))) return true;
+                        
+                        // Check refinement_tags across all sections
+                        for (const section in profile.categories || {}) {
+                            const refTags = profile.categories[section].refinement_tags || [];
+                            if (refTags.some(rt => rt.toLowerCase().includes(t))) return true;
+                        }
+                    }
+
                     // Handle singular/plural overlap (e.g. "nuohouspalvelut" vs "nuohous")
                     if (t.length > 3 && companyTags.some(ct => ct.length > 3 && (t.includes(ct) || ct.includes(t)))) return true;
                     
