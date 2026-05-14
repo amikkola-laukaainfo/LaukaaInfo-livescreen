@@ -348,6 +348,8 @@ class NetworkMap {
         this.renderSidebar();
         this.runLayoutAndFit();
     }
+
+    toggleCompany(companyId, parentIntentCode) {
         if (this.selections.companies.has(companyId)) {
             this.selections.companies.delete(companyId);
             this.removeNode(companyId);
