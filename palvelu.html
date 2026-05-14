@@ -1249,7 +1249,6 @@
                         }
 
                         if (selections._sub_contexts && selections._sub_contexts.length > 0) {
-                            // Yritykset joilla ei ole profilointidataa pääsevät läpi tagitarkistukseen
                             if (!c.profiling) {
                                 // Ei profilointia — sallitaan, tagitarkistus ratkaisee
                             } else {
@@ -1262,10 +1261,12 @@
                                     'business_events': 'yritysjuhlat',
                                     'funerals_and_memorials': 'hautajaiset',
                                     'startup_services': 'yrityksen perustaminen',
-                                    'business_growth': 'yrityksen kehittäminen'
+                                    'business_growth': 'yrityksen kehittäminen',
+                                    'construction_and_maintenance': 'remontti'
                                 };
                                 const finKey = finnishMap[underscoreKey];
 
+                                // 1. Tarkistetaan täsmääkö jokin yrityksen sub_context käyttäjän valintoihin
                                 if (Array.isArray(companySubContexts)) {
                                     if (companySubContexts.length === 0) isSubContextMatch = true;
                                     else isSubContextMatch = selections._sub_contexts.some(sc => companySubContexts.includes(sc));
@@ -1281,26 +1282,34 @@
                                     // NEW: Pehmeämpi vertailu jos kyseessä on saman pääkontekstin sisäinen haku
                                     const hasCommonBase = selections._sub_contexts.some(sc => {
                                         const scLower = sc.toLowerCase();
-                                        // Etsitään yhteisiä sanoja tai alkuosia (hää, yritys, juhla, hautajais, muisto)
-                                        const bases = ['hää', 'yritys', 'juhla', 'hautajais', 'muisto'];
+                                        const bases = ['hää', 'yritys', 'juhla', 'hautajais', 'muisto', 'remontti', 'rakentaminen'];
                                         const cscArray = Array.isArray(companySubContexts) ? companySubContexts : (typeof companySubContexts === 'object' && companySubContexts !== null ? Object.values(companySubContexts).flat() : []);
                                         return bases.some(b => scLower.includes(b) && cscArray.some(csc => String(csc).toLowerCase().includes(b)));
                                     });
                                     if (hasCommonBase) isSubContextMatch = true;
                                 }
 
+                                // 2. JOS EI EDELLEENKÄÄN MATSIA: Hylätään yritys jos se on profiloitu mutta "väärään" sub-kontekstiin
                                 if (!isSubContextMatch) {
                                     const mainFitsScore = getFitsForScore(c, currentProfilingKey);
                                     const hasAnySubContexts = Array.isArray(companySubContexts) ? companySubContexts.length > 0 : !!companySubContexts;
-                                    
-                                    // NEW: Relaxed check for services. If the option doesn't have a capacity requirement,
-                                    // it's likely a generic service (catering, photo, etc.) and shouldn't be strictly 
-                                    // filtered by the event's sub-context (e.g. "Perinteiset häät").
-                                    // FIX: Vältetään "tilaisuudessa" sanan osuminen "tila"-hakusanaan
                                     const labelLower = i18n.getText(opt.label || '').toLowerCase();
                                     const isVenueOrCore = (opt.capacity_req > 0 || opt.node_link === 'JUHLATILA' || (labelLower.includes('tila') && !labelLower.includes('tilaisuus')) || labelLower.includes('muistotilaisuus'));
                                     
-                                    if (isVenueOrCore && hasAnySubContexts && mainFitsScore >= 70 && mainFitsScore < THRESHOLD_STRICT) return false; 
+                                    // JOS hakuoptiolla on itsellään sub_context vaatimus (kuten "uudisrakentaminen"), ollaan ERITTÄIN tiukkoja
+                                    if (opt.sub_context) {
+                                        // Jos yritys on profiloitu mutta ei sisällä tätä sub-kontekstia, hylätään
+                                        // Poikkeus: Erittäin korkea yleisarvosana (Premium)
+                                        if (mainFitsScore < THRESHOLD_STRICT) return false;
+                                    }
+
+                                    // Rakentaminen ja remontointi: Jos yrityksellä on sub-konteksteja mutta väärä, hylätään
+                                    if (currentProfilingKey === 'construction-and-maintenance' && hasAnySubContexts) {
+                                        if (mainFitsScore < THRESHOLD_STRICT) return false;
+                                    }
+
+                                    // Muut alat (häät jne): Venues ovat tiukempia
+                                    if (isVenueOrCore && hasAnySubContexts && mainFitsScore >= THRESHOLD_RELEVANT && mainFitsScore < THRESHOLD_STRICT) return false; 
                                 }
                             }
                         }
@@ -1507,34 +1516,29 @@
 
                         if (isProfiledMatch) return true;
                         
-                        // Jos yrityksellä on profilointi tälle kontekstille mutta arvosana on 0, 
-                        // ei sallita täsmäystä tägeillä (estää esim. juhlatilojen osumisen siivous-hakuihin)
+                        // Jos yrityksellä on profilointi tälle kontekstille mutta arvosana on liian matala,
+                        // ei sallita täsmäystä tägeillä. Tämä on tärkeää, jotta profilointisovelluksen 
+                        // muokkaukset vaikuttavat suoraan tuloksiin (esim. jos asetat pisteet nollaksi).
                         if (c.profiling && c.profiling.core && c.profiling.core.fits_for) {
                             const fitsScore = getFitsForScore(c, currentProfilingKey);
-                            const hasProfiling = (currentProfilingKey in c.profiling.core.fits_for) || (currentProfilingKey.replace(/_/g, '-') in c.profiling.core.fits_for);
-                            // Jos profilointi on tehty (löytyy fits_for:sta) ja arvosana on 0, hylätään
-                            if (hasProfiling && fitsScore === 0) {
-                                return false;
+                            const hasProfilingForThisContext = (currentProfilingKey in c.profiling.core.fits_for) || (currentProfilingKey.replace(/_/g, '-') in c.profiling.core.fits_for);
+                            
+                            if (hasProfilingForThisContext) {
+                                // Jos profilointi on tehty, käytetään tiukkaa THRESHOLD_LOOSE rajaa (10)
+                                if (fitsScore < THRESHOLD_LOOSE) return false;
+                                
+                                // JOS hakuoptiolla on tiukka profilointisuodatin (esim. has_sauna: true), 
+                                // EI sallita fallbackia tägeihin jos se ei jo täsmännyt.
+                                if (opt.profilointi_filter || opt.node_link || opt.node_links) return false;
                             }
                         }
 
-                        // Jos optiolla ei ole tägejä, node-linkkejä tai suodattimia, se ei saa näyttää "kaikkia" 
-                        // paitsi jos se on pelkkä kapasiteettivaatimus
+                        // Jos optiolla ei ole tägejä, se ei saa näyttää "kaikkia" 
                         if (!opt.tags || opt.tags.length === 0) {
                             if (!opt.node_link && !opt.node_links && !opt.profilointi_filter && opt.capacity_req <= 0) {
                                 return false; 
                             }
-                            // Jos on suodattimia muttei osumaa (isProfiledMatch), ei näytetä pelkällä scorella
-                            if (opt.node_link || opt.node_links || opt.profilointi_filter) return isProfiledMatch;
-                            return getFitsForScore(c, currentProfilingKey) > THRESHOLD_LOOSE;
-                        }
-
-                        // TÄRKEÄ KORJAUS: Jos optiolla on profilointisuodatin (liikunta-ja-vapaaaika), 
-                        // EI sallita fallbackia tägeihin, jos suodatin ei täsmännyt.
-                        // Tämä estää esim. Revontuli Resortin (jolla on 'avantouinti' sub_contextina) 
-                        // osumisen 'Uinti'-optioon (jolla on tägi 'uinti').
-                        if (opt.profilointi_filter) {
-                            return isProfiledMatch;
+                            return fitsScore > THRESHOLD_LOOSE;
                         }
 
                         // Laajennettu haku: Nimi + Tägit + Kategoria + Profiloinnin sub_contexts + Node_links
