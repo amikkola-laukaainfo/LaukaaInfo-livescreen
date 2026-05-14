@@ -264,14 +264,16 @@ class NetworkMap {
 
     toggleGroup(groupId) {
         if (this.selections.groups.has(groupId)) {
-            // Clear all when toggling off the only group
+            // Toggle off: reset everything
             this.resetMap();
             return;
         }
 
-        // Exclusive selection: Clear existing groups
-        this.selections.groups.forEach(gid => this.removeNode(gid));
+        // Exclusive selection: remove old group node from graph, clear all graph nodes
+        this.cy.elements().remove();
         this.selections.groups.clear();
+        this.selections.intents.clear();
+        this.selections.companies.clear();
         
         this.selections.groups.add(groupId);
         const group = this.data.taxonomy.groups.find(g => g.id === groupId);
@@ -284,13 +286,12 @@ class NetworkMap {
             weight: 100
         });
 
+        // Center and fit the single node immediately
+        this.cy.layout({ name: 'preset' }).run();
+        this.cy.center();
+        this.cy.fit(undefined, 100);
+
         this.renderSidebar();
-        this.runLayout();
-        
-        // Ensure centering for first node
-        if (this.selections.groups.size === 1 && this.selections.intents.size === 0) {
-            setTimeout(() => this.cy.fit(), 500);
-        }
     }
 
     toggleIntent(code) {
