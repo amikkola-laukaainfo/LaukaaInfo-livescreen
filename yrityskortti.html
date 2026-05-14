@@ -351,11 +351,22 @@
         /* --- Mobile Responsiveness --- */
         @media (max-width: 1024px) {
             .card-grid {
-                grid-template-columns: 1fr;
+                display: flex;
+                flex-direction: column;
+                gap: 2rem;
             }
-            .info-panel {
+            .main-content {
+                display: contents; /* Allows reordering children within .card-grid */
+            }
+            .gallery-container { order: 1; }
+            .info-panel { 
+                order: 2; 
                 position: static;
+                padding: 1.5rem;
+                margin-top: 1rem;
             }
+            .description-section { order: 3; }
+            #video-section { order: 4; }
         }
 
         @media (max-width: 768px) {
@@ -854,6 +865,10 @@
                     <div class="info-panel">
                         <h2>Yhteystiedot</h2>
 
+                        <div class="contact-item" id="social-links">
+                            <div id="social-icons" style="display: flex; flex-wrap: wrap; gap: 0.8rem;"></div>
+                        </div>
+
                         <div class="contact-item">
                             <div>
                                 <span>Osoite</span>
@@ -873,10 +888,6 @@
                                 <span>Kotisivut</span>
                                 <a href="#" id="display-website" target="_blank">www.yritys.fi</a>
                             </div>
-                        </div>
-
-                        <div class="contact-item" id="social-links">
-                            <div id="social-icons" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 0.8rem;"></div>
                         </div>
 
                         <div id="card-map" class="card-map"></div>

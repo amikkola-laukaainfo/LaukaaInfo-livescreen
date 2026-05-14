@@ -16,9 +16,9 @@
     <!-- Leaflet Map -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-    <link rel="stylesheet" href="../style.885f4ff9.css?v=20260420-2">
-    <link rel="stylesheet" href="../modal.885f4ff9.css">
-    <script src="../translations.885f4ff9.js?v=20260505"></script>
+    <link rel="stylesheet" href="../style.fca35c70.css?v=20260420-2">
+    <link rel="stylesheet" href="../modal.fca35c70.css">
+    <script src="../translations.fca35c70.js?v=20260505"></script>
     <style>
         :root {
             --primary-blue: #0056b3;
@@ -341,11 +341,22 @@
         /* --- Mobile Responsiveness --- */
         @media (max-width: 1024px) {
             .card-grid {
-                grid-template-columns: 1fr;
+                display: flex;
+                flex-direction: column;
+                gap: 2rem;
             }
-            .info-panel {
+            .main-content {
+                display: contents; /* Allows reordering children within .card-grid */
+            }
+            .gallery-container { order: 1; }
+            .info-panel { 
+                order: 2; 
                 position: static;
+                padding: 1.5rem;
+                margin-top: 1rem;
             }
+            .description-section { order: 3; }
+            #video-section { order: 4; }
         }
 
         @media (max-width: 768px) {
@@ -853,6 +864,10 @@
                     <div class="info-panel">
                         <h2>Yhteystiedot</h2>
 
+                        <div class="contact-item" id="social-links">
+                            <div id="social-icons" style="display: flex; flex-wrap: wrap; gap: 0.8rem;"></div>
+                        </div>
+
                         <div class="contact-item">
                             <div>
                                 <span>Osoite</span>
@@ -872,10 +887,6 @@
                                 <span>Kotisivut</span>
                                 <a href="#" id="display-website" target="_blank">www.yritys.fi</a>
                             </div>
-                        </div>
-
-                        <div class="contact-item" id="social-links">
-                            <div id="social-icons" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 0.8rem;"></div>
                         </div>
 
                         <div id="card-map" class="card-map"></div>
@@ -984,8 +995,8 @@
 
     <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="../script.885f4ff9.js?v=20260301"></script>
-    <script src="../yrityskortti.885f4ff9.js?v=20260304-DEBUG-2"></script>
+    <script src="../script.fca35c70.js?v=20260301"></script>
+    <script src="../yrityskortti.fca35c70.js?v=20260304-DEBUG-2"></script>
 </body>
 
 </html>
