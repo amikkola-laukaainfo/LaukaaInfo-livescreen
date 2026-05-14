@@ -1059,6 +1059,11 @@
                 else if (val && typeof val === 'object') selectedOptions.push(val);
             }
 
+            const noCateringSelected = selectedOptions.some(opt => {
+                const label = i18n.getText(opt.label).toLowerCase();
+                return label === 'ei tarjoilua' || label === 'no catering';
+            });
+
             let filterProfiling = new URLSearchParams(window.location.search).get('filter_profiling');
             if (filterProfiling && selectedOptions.length === 0) {
                 selectedOptions.push({ label: { "fi": "Tarkennettu haku", "en": "Advanced search" }, tags: [] });
@@ -1129,6 +1134,22 @@
                         const isMediazoo = (c.id === 'company-2' || c.nimi === 'Mediazoo');
                         const isRiina = (c.id === 'company-269' || (c.nimi && c.nimi.includes('Riina Raitio')));
                         const labelLower = i18n.getText(opt.label || '').toLowerCase();
+
+                        // NEW: Global catering exclusion if "Ei tarjoilua" selected
+                        if (noCateringSelected) {
+                            const companyName = (c.nimi || '').toLowerCase();
+                            const companyTags = (c.tags || '').toLowerCase();
+                            const companyCat = (c.kategoria || '').toLowerCase();
+                            const nodeLinks = c.profiling?.core?.node_links || [];
+                            
+                            const isCatering = companyName.includes('pitopalvelu') || 
+                                               companyTags.includes('pitopalvelu') || 
+                                               companyCat.includes('pitopalvelu') ||
+                                               nodeLinks.includes('CATERING') ||
+                                               nodeLinks.includes('PITOPALVELU');
+                            
+                            if (isCatering) return false;
+                        }
 
                         // Identify if this is a venue/space search or something that naturally has capacity
                         const isVenueSearch = (opt.capacity_req > 0 || 
@@ -1863,12 +1884,20 @@
             const recommendations = [];
             const seenNormalized = new Set();
             
+            const noCateringSelected = (selections.tarjoilu && i18n.getText(selections.tarjoilu.label).toLowerCase().includes('ei tarjoilua'));
+
             function addRec(rec) {
                 if (!rec) return;
                 const text = typeof rec === 'string' ? rec : i18n.getText(rec);
                 if (!text || text.length < 2) return;
                 
                 const normalized = text.trim().toLowerCase();
+                
+                // NEW: Filter out catering suggestions if "Ei tarjoilua" selected
+                if (noCateringSelected && (normalized.includes('pitopalvelu') || normalized.includes('tarjoilu') || normalized.includes('catering'))) {
+                    return;
+                }
+
                 if (!seenNormalized.has(normalized)) {
                     seenNormalized.add(normalized);
                     // Capitalize first letter for consistent display
@@ -2066,13 +2095,21 @@
                 'terveys-ja-hyvinvointi': ['hyvinvointi']
             };
 
-            const tipsFiles = themeTips[needId];
-            if (!tipsFiles || tipsFiles.length === 0) {
+            const tipsFiles = themeTips[needId] || [];
+            
+            // NEW: Filter out catering-related tips if "Ei tarjoilua" selected
+            const noCateringSelected = (selections.tarjoilu && i18n.getText(selections.tarjoilu.label).toLowerCase().includes('ei tarjoilua'));
+            let finalTipsFiles = [...tipsFiles];
+            if (noCateringSelected) {
+                finalTipsFiles = finalTipsFiles.filter(t => t !== 'juhlakakut' && t !== 'pitopalvelu');
+            }
+
+            if (finalTipsFiles.length === 0) {
                 tipsContainer.style.display = 'none';
                 return;
             }
 
-            const tipsQuery = tipsFiles.join(',');
+            const tipsQuery = finalTipsFiles.join(',');
             const iframeUrl = `vinkit/pienetvinkit.html?files=${tipsQuery}&limit=3&lang=${i18n.currentLang}`;
 
             tipsContainer.innerHTML = `<iframe src="${iframeUrl}" style="width: 100%; border: none; min-height: 250px; overflow: hidden;" id="tips-iframe" scrolling="no"></iframe>`;
