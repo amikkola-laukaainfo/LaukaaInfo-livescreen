@@ -224,11 +224,7 @@ class NetworkMap {
             item.className = 'selection-item' + (this.selections.intents.has(code) ? ' active' : '');
             item.dataset.id = code;
 
-            const count = this.data.companies.filter(c => {
-                const tags = (c.tags || '').toLowerCase();
-                const intentNameFi = intent.fi.toLowerCase();
-                return tags.includes(intentNameFi) || (c.intent_codes && c.intent_codes.includes(code));
-            }).length;
+            const count = this.data.companies.filter(c => this.companyMatchesIntent(c, code)).length;
 
             item.innerHTML = `
                 <span class="item-name">${intent.fi}</span>
@@ -285,12 +281,7 @@ class NetworkMap {
 
         // Find companies matching selected intents
         let matches = this.data.companies.filter(c => {
-            return Array.from(this.selections.intents).some(code => {
-                const intent = this.data.taxonomy.intents[code];
-                const tags = (c.tags || '').toLowerCase();
-                const intentNameFi = intent.fi.toLowerCase();
-                return tags.includes(intentNameFi) || (c.intent_codes && c.intent_codes.includes(code));
-            });
+            return Array.from(this.selections.intents).some(code => this.companyMatchesIntent(c, code));
         });
 
         // Sort by priority/package
@@ -338,10 +329,7 @@ class NetworkMap {
 
             // Connect to matching intents
             this.selections.intents.forEach(code => {
-                const intent = this.data.taxonomy.intents[code];
-                const tags = (company.tags || '').toLowerCase();
-                const intentNameFi = intent.fi.toLowerCase();
-                if (tags.includes(intentNameFi) || (company.intent_codes && company.intent_codes.includes(code))) {
+                if (this.companyMatchesIntent(company, code)) {
                     this.addEdge(code, companyId);
                 }
             });
@@ -357,6 +345,49 @@ class NetworkMap {
             });
         }
         this.runLayout();
+    }
+
+    companyMatchesIntent(c, intentCode) {
+        const intent = this.data.taxonomy.intents[intentCode];
+        if (!intent) return false;
+
+        // 1. Explicit intent code match
+        if (c.intent_codes && c.intent_codes.includes(intentCode)) return true;
+        
+        const profile = this.data.profiling[c.id];
+        if (profile?.core?.intent_codes?.includes(intentCode)) return true;
+
+        // 2. Name/Tags/Desc match (flexible)
+        const name = (c.nimi || '').toLowerCase();
+        const tags = (c.tags || '').toLowerCase();
+        const category = (c.kategoria || '').toLowerCase();
+        const desc = (c.kuvaus || c.description || c.esittely || '').toLowerCase();
+        
+        const terms = [intent.fi.toLowerCase(), ...(intent.en ? [intent.en.toLowerCase()] : [])];
+        
+        const hasTextMatch = terms.some(t => 
+            name.includes(t) || tags.includes(t) || category.includes(t) || desc.includes(t)
+        );
+        if (hasTextMatch) return true;
+
+        // 3. Profiling metadata match
+        if (profile) {
+            const subContexts = profile.core?.sub_contexts || [];
+            const nodeLinks = profile.core?.node_links || [];
+            
+            if (terms.some(t => 
+                subContexts.some(sc => sc.toLowerCase().includes(t)) ||
+                nodeLinks.some(nl => nl.toLowerCase().includes(t))
+            )) return true;
+
+            // Check refinement_tags
+            for (const section in profile.categories || {}) {
+                const refTags = profile.categories[section].refinement_tags || [];
+                if (terms.some(t => refTags.some(rt => rt.toLowerCase().includes(t)))) return true;
+            }
+        }
+
+        return false;
     }
 
     // Graph Helpers
