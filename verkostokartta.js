@@ -346,10 +346,8 @@ class NetworkMap {
         }
 
         this.renderSidebar();
-        this.runLayout();
+        this.runLayoutAndFit();
     }
-
-    toggleCompany(companyId, parentIntentCode) {
         if (this.selections.companies.has(companyId)) {
             this.selections.companies.delete(companyId);
             this.removeNode(companyId);
@@ -392,7 +390,7 @@ class NetworkMap {
             });
         }
         this.renderSidebar();
-        this.runLayout();
+        this.runLayoutAndFit();
     }
 
     resetMap() {
