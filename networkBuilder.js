@@ -9,6 +9,12 @@ class NetworkBuilder {
         this.profiling = {};
         this.selections = {}; // scenarioId -> { stepIndex -> companyId }
         this.userCoords = null;
+        
+        // Standard thresholds
+        this.THRESHOLD_STRICT = 80;
+        this.THRESHOLD_RELEVANT = 50;
+        this.THRESHOLD_LOOSE = 10;
+
         this.init();
     }
 
@@ -245,24 +251,51 @@ class NetworkBuilder {
 
             // Find matching companies
             let matches = this.companies.filter(c => {
+                const profilingKey = currentContext || 'vapaa-aika';
+                const profile = this.profiling[c.id] || {};
+                const core = profile.core || {};
+                const fitsScore = core.fits_for?.[profilingKey] || core.fits_for?.[profilingKey.replace(/-/g, '_')] || 0;
+
+                // 1. Sub-context Filtering (if previous step selected)
+                if (recommendations.length > 0 && core.sub_contexts) {
+                    // Check if company matches any recommended sub-context indirectly
+                    // (Implementation detail: networkBuilder uses paired_with more than sub_contexts,
+                    // but we should still be strict if profiling exists)
+                }
+
+                // 2. Direct Matching Logic (Aligned with palvelu.html)
+                let isProfiledMatch = false;
+                
+                // Intent Codes & Node Links
+                const links = core.node_links || [];
+                const intentCodes = core.intent_codes || [];
+                if (tags.some(t => intentCodes.includes(t.toUpperCase()) || links.includes(t.toUpperCase()))) {
+                    isProfiledMatch = true;
+                }
+
+                // Profiling-First fallback restrictions
+                const hasProfilingForContext = core.fits_for && (profilingKey in core.fits_for || profilingKey.replace(/-/g, '_') in core.fits_for);
+                if (hasProfilingForContext) {
+                    if (fitsScore < this.THRESHOLD_LOOSE) return false;
+                }
+
+                if (isProfiledMatch) return true;
+
+                // 3. Flexible Match (Secondary)
                 const name = (c.nimi || '').toLowerCase();
                 const companyTags = (c.tags || '').toLowerCase().split(',').map(t => t.trim());
                 const category = (c.kategoria || '').toLowerCase();
                 const desc = (c.kuvaus || c.description || c.esittely || '').toLowerCase();
                 
-                // Flexible match: check if any of the requested tags are present
-                return tags.some(t => {
-                    // Check direct tag match
+                const tagMatch = tags.some(t => {
                     if (companyTags.includes(t)) return true;
-                    // Check category
                     if (category === t || category.includes(t)) return true;
-                    // Check name or description for the tag
                     if (name.includes(t) || desc.includes(t)) return true;
-                    // Handle singular/plural overlap (e.g. "nuohouspalvelut" vs "nuohous")
                     if (t.length > 3 && companyTags.some(ct => ct.length > 3 && (t.includes(ct) || ct.includes(t)))) return true;
-                    
                     return false;
                 });
+
+                return tagMatch;
             });
 
             // Context mapping for relevance sorting
