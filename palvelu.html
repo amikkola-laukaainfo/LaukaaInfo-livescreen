@@ -1297,19 +1297,20 @@
                                     const isVenueOrCore = (opt.capacity_req > 0 || opt.node_link === 'JUHLATILA' || (labelLower.includes('tila') && !labelLower.includes('tilaisuus')) || labelLower.includes('muistotilaisuus'));
                                     
                                     // JOS hakuoptiolla on itsellään sub_context vaatimus (kuten "uudisrakentaminen"), ollaan ERITTÄIN tiukkoja
-                                    if (opt.sub_context) {
-                                        // Jos yritys on profiloitu mutta ei sisällä tätä sub-kontekstia, hylätään
-                                        // Poikkeus: Erittäin korkea yleisarvosana (Premium)
-                                        if (mainFitsScore < THRESHOLD_STRICT) return false;
+                                    if (opt.sub_context && hasAnySubContexts) {
+                                        // Jos yritys on profiloitu mutta ei sisällä tätä nimenomaista sub-kontekstia, hylätään se.
+                                        // Poikkeus: ERITTÄIN korkea yleisarvosana (100) voi mennä läpi, jos halutaan jättää pelivaraa, 
+                                        // mutta käyttäjän toiveen mukaan (6 tulosta) mennään nyt tiukalla linjalla.
+                                        return false; 
                                     }
 
                                     // Rakentaminen ja remontointi: Jos yrityksellä on sub-konteksteja mutta väärä, hylätään
                                     if (currentProfilingKey === 'construction-and-maintenance' && hasAnySubContexts) {
-                                        if (mainFitsScore < THRESHOLD_STRICT) return false;
+                                        return false;
                                     }
 
                                     // Muut alat (häät jne): Venues ovat tiukempia
-                                    if (isVenueOrCore && hasAnySubContexts && mainFitsScore >= THRESHOLD_RELEVANT && mainFitsScore < THRESHOLD_STRICT) return false; 
+                                    if (isVenueOrCore && hasAnySubContexts && mainFitsScore < THRESHOLD_STRICT) return false; 
                                 }
                             }
                         }

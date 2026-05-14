@@ -483,10 +483,10 @@ class NetworkMap {
                 const labelLower = i18n.getText(opt.label || '').toLowerCase();
                 const isVenueOrCore = (opt.capacity_req > 0 || opt.node_link === 'JUHLATILA' || (labelLower.includes('tila') && !labelLower.includes('tilaisuus')));
 
-                // Hylätään herkemmin jos optiolla on oma sub_context tai jos kyseessä on rakentaminen
-                if (opt.sub_context && fitsScore < this.THRESHOLD_STRICT) return false;
-                if (profilingKey === 'construction-and-maintenance' && fitsScore < this.THRESHOLD_STRICT) return false;
-                if (isVenueOrCore && fitsScore >= this.THRESHOLD_RELEVANT && fitsScore < this.THRESHOLD_STRICT) return false;
+                // Hylätään jos optiolla on oma sub_context tai jos kyseessä on rakentaminen
+                if (opt.sub_context && companySubContexts.length > 0) return false;
+                if (profilingKey === 'construction-and-maintenance' && companySubContexts.length > 0) return false;
+                if (isVenueOrCore && companySubContexts.length > 0 && fitsScore < this.THRESHOLD_STRICT) return false;
             }
         }
 

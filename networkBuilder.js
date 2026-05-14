@@ -256,11 +256,16 @@ class NetworkBuilder {
                 const core = profile.core || {};
                 const fitsScore = core.fits_for?.[profilingKey] || core.fits_for?.[profilingKey.replace(/-/g, '_')] || 0;
 
-                // 1. Sub-context Filtering (if previous step selected)
-                if (recommendations.length > 0 && core.sub_contexts) {
-                    // Check if company matches any recommended sub-context indirectly
-                    // (Implementation detail: networkBuilder uses paired_with more than sub_contexts,
-                    // but we should still be strict if profiling exists)
+                // 1. Sub-context Filtering (Strict Alignment)
+                const companySubContexts = core.sub_contexts || [];
+                if (companySubContexts.length > 0) {
+                    // Jos hakuun liittyy suosituksia (aiempi valinta) ja ne rajaavat alaa, 
+                    // tai jos olemme rakentamisessa, ollaan tiukkoja.
+                    if (profilingKey === 'construction-and-maintenance') {
+                        // Tässä kohtaa tarvittaisiin hakuoption tarkempaa sub-kontekstia, 
+                        // mutta yleisenä sääntönä: jos yritys on profiloitu mutta arvosana on matala, hylätään se herkemmin.
+                        if (fitsScore < this.THRESHOLD_STRICT) return false;
+                    }
                 }
 
                 // 2. Direct Matching Logic (Aligned with palvelu.html)
