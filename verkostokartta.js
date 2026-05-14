@@ -280,6 +280,11 @@ class NetworkMap {
 
         this.renderSidebar();
         this.runLayout();
+        
+        // Ensure centering for first node
+        if (this.selections.groups.size === 1 && this.selections.intents.size === 0) {
+            setTimeout(() => this.cy.fit(), 500);
+        }
     }
 
     toggleIntent(code) {
@@ -428,7 +433,16 @@ class NetworkMap {
             componentSpacing: 100,
             nodeRepulsion: 4000,
             edgeElasticity: 100,
-            nestingFactor: 5
+            nestingFactor: 5,
+            stop: () => {
+                if (this.cy.nodes().length > 0) {
+                    this.cy.animate({
+                        fit: {
+                            padding: 50
+                        }
+                    }, { duration: 500 });
+                }
+            }
         });
         layout.run();
     }
