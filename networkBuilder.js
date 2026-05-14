@@ -277,8 +277,18 @@ class NetworkBuilder {
                         
                         // Check refinement_tags across all sections
                         for (const section in profile.categories || {}) {
-                            const refTags = profile.categories[section].refinement_tags || [];
-                            if (refTags.some(rt => rt.toLowerCase().includes(t))) return true;
+                            const refTags = profile.categories[section].refinement_tags;
+                            if (!refTags) continue;
+
+                            if (Array.isArray(refTags)) {
+                                if (refTags.some(rt => rt.toLowerCase().includes(t))) return true;
+                            } else if (typeof refTags === 'object') {
+                                // Sometimes it's an object of arrays
+                                for (const key in refTags) {
+                                    const subTags = refTags[key];
+                                    if (Array.isArray(subTags) && subTags.some(rt => rt.toLowerCase().includes(t))) return true;
+                                }
+                            }
                         }
                     }
 
