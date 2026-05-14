@@ -209,7 +209,7 @@ class NetworkMap {
                 if (!intent) return;
 
                 const count = this.data.companies.filter(c => this.checkCompanyMatch(c, code)).length;
-                const label = window.i18n ? i18n.getText(intent) : intent.fi;
+                const label = intent.fi || intent.en || code;
                 const isActive = this.selections.intents.has(code);
                 
                 const item = this.createItemElement(code, label, count, () => this.toggleIntent(code), isActive);
@@ -308,7 +308,7 @@ class NetworkMap {
         } else {
             this.selections.intents.add(code);
             const intent = this.data.taxonomy.intents[code];
-            const label = window.i18n ? i18n.getText(intent) : intent.fi;
+            const label = intent.fi || intent.en || code;
             this.addNode({
                 id: code,
                 label: label,
@@ -467,6 +467,49 @@ class NetworkMap {
             }
         });
         layout.run();
+    }
+
+    checkCompanyMatch(c, code) {
+        const intent = this.data.taxonomy.intents[code];
+        if (!intent) return false;
+
+        const tags = (c.tags || '').toLowerCase();
+        const intentNameFi = (intent.fi || '').toLowerCase();
+        const intentNameEn = (intent.en || '').toLowerCase();
+
+        // 1. Direct tag match
+        if (intentNameFi && tags.includes(intentNameFi)) return true;
+        if (intentNameEn && tags.includes(intentNameEn)) return true;
+
+        // 2. Direct code match on company
+        if (c.intent_codes && c.intent_codes.includes(code)) return true;
+
+        // 3. Profiling data match
+        const profile = this.data.profiling[c.id];
+        if (profile) {
+            if (profile.core?.node_links?.includes(code)) return true;
+
+            const refTags = profile.core?.refinement_tags || [];
+            if (intentNameFi && refTags.some(rt => rt.toLowerCase().includes(intentNameFi))) return true;
+
+            for (const section in profile.categories || {}) {
+                const catData = profile.categories[section];
+                for (const key in catData) {
+                    const val = catData[key];
+                    if (Array.isArray(val) && val.some(v =>
+                        typeof v === 'string' && intentNameFi && v.toLowerCase().includes(intentNameFi)
+                    )) return true;
+                }
+            }
+        }
+
+        // 4. Special case: digitointi
+        if (code === 'MEDIA_DIGITIZATION') {
+            if (tags.includes('digitointi') || tags.includes('vhs') || tags.includes('diojen')) return true;
+            if (c.nimi && (c.nimi.includes('Mediazoo') || c.nimi.includes('Riina Raitio'))) return true;
+        }
+
+        return false;
     }
 
     setupControls() {
