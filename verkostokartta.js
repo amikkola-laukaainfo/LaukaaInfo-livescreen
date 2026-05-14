@@ -183,11 +183,17 @@ class NetworkMap {
             });
             sidebarContent.appendChild(catSection);
         } else {
-            // Show only selected group with a "clear" button or active state
+            // Show only selected group with a "change" button
             const groupId = Array.from(this.selections.groups)[0];
             const group = this.data.taxonomy.groups.find(g => g.id === groupId);
             const groupName = window.i18n ? i18n.t(`group_${group.id.replace(/-/g, '_')}`) : group.name;
             
+            const backBtn = document.createElement('div');
+            backBtn.className = 'back-to-categories';
+            backBtn.innerHTML = `&larr; <span data-i18n="btn_change_category">Vaihda kategoriaa</span>`;
+            backBtn.onclick = () => this.resetMap();
+            categoryList.appendChild(backBtn);
+
             const item = this.createItemElement(groupId, groupName, null, () => this.toggleGroup(groupId), true);
             categoryList.appendChild(item);
             sidebarContent.appendChild(catSection);
