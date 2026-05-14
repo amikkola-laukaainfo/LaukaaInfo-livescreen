@@ -17,6 +17,12 @@ class NetworkMap {
             subContexts: new Set(),
             companies: new Set()
         };
+
+        // Standard thresholds
+        this.THRESHOLD_STRICT = 80;
+        this.THRESHOLD_RELEVANT = 50;
+        this.THRESHOLD_LOOSE = 10;
+
         this.init();
     }
 
@@ -441,10 +447,13 @@ class NetworkMap {
         if (!c || !opt) return false;
 
         const profilingKey = need.profilointi_context || 'vapaa-aika';
+        const profilingKeyUnderscore = profilingKey.replace(/-/g, '_');
         const profile = this.data.profiling[c.id] || {};
         const core = profile.core || {};
+        
+        const fitsScore = core.fits_for?.[profilingKey] || core.fits_for?.[profilingKey.replace(/_/g, '-')] || 0;
 
-        // 1. Sub-context filtering (Taso 2)
+        // 1. Sub-context filtering (Strict Alignment)
         if (this.selections.subContexts.size > 0) {
             const companySubContexts = core.sub_contexts || [];
             let isSubContextMatch = false;
@@ -453,63 +462,85 @@ class NetworkMap {
                 if (companySubContexts.length === 0) isSubContextMatch = true;
                 else isSubContextMatch = Array.from(this.selections.subContexts).some(sc => companySubContexts.includes(sc));
             } else if (typeof companySubContexts === 'object') {
-                const relevant = companySubContexts[profilingKey.replace(/-/g, '_')] || [];
+                const relevant = companySubContexts[profilingKeyUnderscore] || companySubContexts[profilingKey] || [];
                 isSubContextMatch = Array.from(this.selections.subContexts).some(sc => relevant.includes(sc));
             } else {
                 isSubContextMatch = true;
             }
+
+            if (!isSubContextMatch) {
+                // Pehmeämpi vertailu (kuten palvelu.html:ssä)
+                const bases = ['hää', 'yritys', 'juhla', 'hautajais', 'muisto', 'remontti', 'rakentaminen'];
+                const cscArray = Array.isArray(companySubContexts) ? companySubContexts : (typeof companySubContexts === 'object' ? Object.values(companySubContexts).flat() : []);
+                const hasCommonBase = Array.from(this.selections.subContexts).some(sc => {
+                    const scLower = String(sc).toLowerCase();
+                    return bases.some(b => scLower.includes(b) && cscArray.some(csc => String(csc).toLowerCase().includes(b)));
+                });
+                if (hasCommonBase) isSubContextMatch = true;
+            }
             
-            // If the option itself is a sub-context, we don't apply the cross-filter to it
-            if (!opt.sub_context && !isSubContextMatch) {
-                // If it's a service, be a bit more relaxed (like in palvelu.html)
-                const fitsScore = core.fits_for?.[profilingKey] || 0;
-                const isVenueOrCore = (opt.capacity_req > 0 || opt.node_link === 'JUHLATILA');
-                if (isVenueOrCore && fitsScore < 80) return false;
+            if (!isSubContextMatch) {
+                const labelLower = i18n.getText(opt.label || '').toLowerCase();
+                const isVenueOrCore = (opt.capacity_req > 0 || opt.node_link === 'JUHLATILA' || (labelLower.includes('tila') && !labelLower.includes('tilaisuus')));
+
+                // Hylätään herkemmin jos optiolla on oma sub_context tai jos kyseessä on rakentaminen
+                if (opt.sub_context && fitsScore < this.THRESHOLD_STRICT) return false;
+                if (profilingKey === 'construction-and-maintenance' && fitsScore < this.THRESHOLD_STRICT) return false;
+                if (isVenueOrCore && fitsScore >= this.THRESHOLD_RELEVANT && fitsScore < this.THRESHOLD_STRICT) return false;
             }
         }
 
-        // 2. Direct matching (intent_codes, node_link, tags)
+        // 2. Direct matching (intent_codes, node_link, profilointi_filter)
+        let isProfiledMatch = false;
         
         // intent_codes
         if (opt.intent_codes && core.intent_codes) {
-            if (opt.intent_codes.some(code => core.intent_codes.includes(code))) return true;
+            if (opt.intent_codes.some(code => core.intent_codes.includes(code))) isProfiledMatch = true;
         }
 
         // node_link
-        if (opt.node_link && core.node_links) {
-            if (core.node_links.includes(opt.node_link)) return true;
-        }
-        if (opt.node_links && core.node_links) {
-            if (opt.node_links.some(l => core.node_links.includes(l))) return true;
+        if (!isProfiledMatch) {
+            const links = core.node_links || [];
+            if (opt.node_link && links.includes(opt.node_link)) isProfiledMatch = true;
+            if (opt.node_links && opt.node_links.some(l => links.includes(l))) isProfiledMatch = true;
         }
 
         // profilointi_filter
-        if (opt.profilointi_filter) {
+        if (!isProfiledMatch && opt.profilointi_filter) {
             const pf = opt.profilointi_filter;
             const section = profile.categories?.[pf.section] || profile[pf.section];
             if (section) {
                 const val = section[pf.field];
-                if (Array.isArray(val) && val.includes(pf.value)) return true;
-                if (val === pf.value) return true;
+                if (Array.isArray(val) && val.includes(pf.value)) isProfiledMatch = true;
+                else if (val === pf.value) isProfiledMatch = true;
             }
         }
 
-        // tags
+        if (isProfiledMatch) return true;
+
+        // 3. Profiling-First fallback restrictions
+        const hasProfilingForContext = core.fits_for && (profilingKey in core.fits_for || profilingKey.replace(/-/g, '_') in core.fits_for);
+        if (hasProfilingForContext) {
+            if (fitsScore < this.THRESHOLD_LOOSE) return false;
+            // Jos on tiukkoja suodattimia muttei osumaa, ei sallita tägi-fallbackia
+            if (opt.profilointi_filter || opt.node_link || opt.node_links) return false;
+        }
+
+        // 4. Tag match (Secondary)
         if (opt.tags) {
             const companyContent = (
                 (c.tags || '') + ' ' + 
                 (c.kategoria || '') + ' ' + 
                 (c.nimi || '') + ' ' +
-                (core.sub_contexts?.join(' ') || '') + ' ' +
+                (Array.isArray(core.sub_contexts) ? core.sub_contexts.join(' ') : '') + ' ' +
                 (core.node_links?.join(' ') || '')
             ).toLowerCase();
             if (opt.tags.some(tag => companyContent.includes(tag.toLowerCase()))) return true;
         }
 
-        // 3. Context score fallback
-        const fitsScore = core.fits_for?.[profilingKey] || core.fits_for?.[profilingKey.replace(/_/g, '-')] || 0;
-        if (fitsScore > 50 && !opt.intent_codes && !opt.node_link && !opt.profilointi_filter) {
-            return true;
+        // 5. General score fallback (Only if no specific constraints)
+        if (!opt.tags && !opt.intent_codes && !opt.node_link && !opt.profilointi_filter) {
+            return fitsScore > this.THRESHOLD_RELEVANT;
         }
 
         return false;
