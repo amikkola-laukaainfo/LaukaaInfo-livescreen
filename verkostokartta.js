@@ -473,35 +473,32 @@ class NetworkMap {
         const intent = this.data.taxonomy.intents[code];
         if (!intent) return false;
 
+        const profile = this.data.profiling[c.id];
+        
+        // 1. Group relevance check: Must belong to the active group if one is selected
+        if (this.selections.groups.size > 0) {
+            const activeGroupId = Array.from(this.selections.groups)[0];
+            const score = profile?.core?.fits_for?.[activeGroupId] || 0;
+            if (score <= 0) return false;
+        }
+
         const tags = (c.tags || '').toLowerCase();
         const intentNameFi = (intent.fi || '').toLowerCase();
         const intentNameEn = (intent.en || '').toLowerCase();
 
-        // 1. Direct tag match
-        if (intentNameFi && tags.includes(intentNameFi)) return true;
-        if (intentNameEn && tags.includes(intentNameEn)) return true;
-
-        // 2. Direct code match on company
+        // 2. Direct code match (intent_codes or node_links)
         if (c.intent_codes && c.intent_codes.includes(code)) return true;
+        if (profile?.core?.node_links?.includes(code)) return true;
 
-        // 3. Profiling data match
-        const profile = this.data.profiling[c.id];
-        if (profile) {
-            if (profile.core?.node_links?.includes(code)) return true;
+        // 3. Keyword match in restricted fields
+        const checkFields = [
+            tags,
+            ...(profile?.core?.sub_contexts || []),
+            ...(profile?.core?.refinement_tags || [])
+        ];
 
-            const refTags = profile.core?.refinement_tags || [];
-            if (intentNameFi && refTags.some(rt => rt.toLowerCase().includes(intentNameFi))) return true;
-
-            for (const section in profile.categories || {}) {
-                const catData = profile.categories[section];
-                for (const key in catData) {
-                    const val = catData[key];
-                    if (Array.isArray(val) && val.some(v =>
-                        typeof v === 'string' && intentNameFi && v.toLowerCase().includes(intentNameFi)
-                    )) return true;
-                }
-            }
-        }
+        if (intentNameFi && checkFields.some(f => typeof f === 'string' && f.toLowerCase().includes(intentNameFi))) return true;
+        if (intentNameEn && checkFields.some(f => typeof f === 'string' && f.toLowerCase().includes(intentNameEn))) return true;
 
         // 4. Special case: digitointi
         if (code === 'MEDIA_DIGITIZATION') {
