@@ -1,6 +1,7 @@
 {
     "company-278": {
         "name": "Laukaan Satamakahvila (Laukaan satama)",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 86,
@@ -33,7 +34,10 @@
             "weekend_service": true,
             "not_suitable_for": [
                 "omilla tarjoiluilla",
-                "luontoretkeily"
+                "luontoretkeily",
+                "tunnelmallinen kartano",
+                "saunatilat",
+                "laituritarvikkeet / huolto"
             ],
             "sub_contexts": [
                 "satamakahvila",
@@ -293,6 +297,7 @@
     },
     "company-274": {
         "name": "Kotihoito A-M Huttunen",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -505,6 +510,7 @@
     },
     "company-272": {
         "name": "Rengaskanava Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -721,6 +727,7 @@
     },
     "company-271": {
         "name": "Fenno optiikka",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -933,6 +940,7 @@
     },
     "company-270": {
         "name": "Tertan kahvila- ja puoti",
+        "tags": "",
         "core": {
             "fits_for": {
                 "juhlat-ja-merkkipäivät": 88,
@@ -997,7 +1005,8 @@
             "weekend_service": true,
             "not_suitable_for": [
                 "kartano",
-                "omilla tarjoiluilla"
+                "omilla tarjoiluilla",
+                "saunatilat"
             ],
             "sub_contexts": [
                 "pitopalvelu",
@@ -1242,6 +1251,7 @@
     },
     "company-268": {
         "name": "Jyväs Pakari Lievestuore",
+        "tags": "",
         "core": {
             "fits_for": {
                 "häät": 75,
@@ -1294,7 +1304,8 @@
                 "hautajaiset",
                 "yritysjuhlat",
                 "omilla tarjoiluilla",
-                "muistotilaisuus"
+                "muistotilaisuus",
+                "luonnonläheinen tila"
             ],
             "sub_contexts": [
                 "tilauskakku",
@@ -1530,6 +1541,7 @@
     },
     "company-2": {
         "name": "Mediazoo",
+        "tags": "it-palvelut",
         "core": {
             "fits_for": {
                 "häät": 85,
@@ -1542,13 +1554,13 @@
                 "muutto": 52,
                 "yrityksen-perustaminen": 76,
                 "events-and-celebrations": 100,
-                "business-events": 80,
+                "business-events": 85,
                 "funerals-and-memorials": 100,
                 "moving-and-housing": 100,
                 "construction-and-maintenance": 20,
                 "cottage-services": 10,
-                "housing-company-and-contracts": 20,
-                "startup-services": 85,
+                "housing-company-and-contracts": 90,
+                "startup-services": 90,
                 "wellbeing-and-beauty": 10
             },
             "priority_score": 78,
@@ -1611,7 +1623,8 @@
             "weekend_service": true,
             "not_suitable_for": [
                 "lasten syntymäpäivät",
-                "remontti"
+                "remontti",
+                "kahvitus / pitopalvelu"
             ],
             "sub_contexts": [
                 "muistotilaisuus",
@@ -1659,12 +1672,14 @@
                 "EVT_WEDDING",
                 "EVT_MEMORIAL",
                 "EVT_MEMORIAL",
-                "MEDIA_PHOTO"
+                "MEDIA_PHOTO",
+                "BIZ_IT"
             ],
             "intent_scores": {
                 "EVT_WEDDING": 100,
                 "EVT_MEMORIAL": 100,
-                "MEDIA_PHOTO": 100
+                "MEDIA_PHOTO": 100,
+                "BIZ_IT": 90
             }
         },
         "categories": {
@@ -1733,7 +1748,7 @@
                 "meeting_capacity": 0,
                 "seminar_capacity": 0,
                 "conference_rooms": 0,
-                "has_projector": false,
+                "has_projector": true,
                 "has_streaming": true,
                 "has_wifi": false,
                 "has_stage": false,
@@ -1930,6 +1945,7 @@
     },
     "company-3": {
         "name": "Eevan fysioterapia",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -2145,6 +2161,7 @@
     },
     "company-6": {
         "name": "Fysioterapia Ehyt",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -2360,6 +2377,7 @@
     },
     "company-7": {
         "name": "Fysioterapia Oiva Ky",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -2575,6 +2593,7 @@
     },
     "company-8": {
         "name": "Fysioterapiapalvelu Hannele Kerkelä",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -2790,6 +2809,7 @@
     },
     "company-9": {
         "name": "Hermoratahieroja Hilkka Jokitalo",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -3002,6 +3022,7 @@
     },
     "company-10": {
         "name": "Hieroja Antero Kumpu",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -3214,6 +3235,7 @@
     },
     "company-11": {
         "name": "Hierontapalvelu Soul&Body",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -3426,6 +3448,7 @@
     },
     "company-12": {
         "name": "Hierontapalvelut Anni Lappalainen",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -3638,6 +3661,7 @@
     },
     "company-13": {
         "name": "Iloinen Noita Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -3850,6 +3874,7 @@
     },
     "company-15": {
         "name": "Katja Säpsä",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -4062,6 +4087,7 @@
     },
     "company-16": {
         "name": "Hieroja Anni Piilonen",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -4274,6 +4300,7 @@
     },
     "company-17": {
         "name": "Laukaan Apteekki",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -4488,6 +4515,7 @@
     },
     "company-19": {
         "name": "Lievestuoreen Apteekki",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -4702,6 +4730,7 @@
     },
     "company-20": {
         "name": "Liikkeen Viisaus",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -4918,6 +4947,7 @@
     },
     "company-28": {
         "name": "Sanna Niinikoski",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -5130,6 +5160,7 @@
     },
     "company-30": {
         "name": "Suomen Terveystalo Oy",
+        "tags": "",
         "core": {
             "fits_for": {
                 "vapaa-aika": 35
@@ -5345,6 +5376,7 @@
     },
     "company-32": {
         "name": "Laukaan hieronta ja kauneussalonki",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -5559,6 +5591,7 @@
     },
     "company-33": {
         "name": "Hyvinvointipalvelu Vire",
+        "tags": "",
         "core": {
             "fits_for": {
                 "vapaa-aika": 35
@@ -5773,6 +5806,7 @@
     },
     "company-35": {
         "name": "Tmi Tuula Laiho",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -5985,6 +6019,7 @@
     },
     "company-36": {
         "name": "Tmi Heini Riekkinen",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -6197,6 +6232,7 @@
     },
     "company-38": {
         "name": "Asennuspalvelu J.Karvinen Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -6413,6 +6449,7 @@
     },
     "company-39": {
         "name": "Autokorjaamo Heikki Valkonen (AD Autokorjaamo)",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -6629,6 +6666,7 @@
     },
     "company-40": {
         "name": "Autokorjaamo J Ala-Könni Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -6845,6 +6883,7 @@
     },
     "company-42": {
         "name": "Automaalaamo Autokori Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -7061,6 +7100,7 @@
     },
     "company-47": {
         "name": "Gyvers Garage",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -7277,6 +7317,7 @@
     },
     "company-48": {
         "name": "Hytösen korjaamo",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -7493,6 +7534,7 @@
     },
     "company-49": {
         "name": "Jannen Autokorjaus",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -7709,6 +7751,7 @@
     },
     "company-50": {
         "name": "Jeltek",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -7925,6 +7968,7 @@
     },
     "company-51": {
         "name": "JKL Asennus Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -8141,6 +8185,7 @@
     },
     "company-54": {
         "name": "Konehuolto Myyryläinen Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -8357,6 +8402,7 @@
     },
     "company-55": {
         "name": "LeiskarT",
+        "tags": "",
         "core": {
             "fits_for": {
                 "vapaa-aika": 35
@@ -8575,6 +8621,7 @@
     },
     "company-56": {
         "name": "LRA-Raskashuolto Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -8791,6 +8838,7 @@
     },
     "company-57": {
         "name": "Möykky Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -9007,6 +9055,7 @@
     },
     "company-59": {
         "name": "Parkos Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -9223,6 +9272,7 @@
     },
     "company-60": {
         "name": "Printsport Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -9439,6 +9489,7 @@
     },
     "company-61": {
         "name": "RJJ - Huolto & Pesu Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -9655,6 +9706,7 @@
     },
     "company-62": {
         "name": "Scania Suomi Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -9871,6 +9923,7 @@
     },
     "company-64": {
         "name": "Service Palonen",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -10087,6 +10140,7 @@
     },
     "company-66": {
         "name": "SK Raskashuolto",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -10303,6 +10357,7 @@
     },
     "company-67": {
         "name": "T:mi Ari Hokkanen",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -10519,6 +10574,7 @@
     },
     "company-68": {
         "name": "T:mi Autopalvelu Timo Lehtonen",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -10735,6 +10791,7 @@
     },
     "company-69": {
         "name": "T:mi Autopesu Hietex",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -10951,6 +11008,7 @@
     },
     "company-70": {
         "name": "T:mi Huolto-Kaksikko S. Roiha",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -11167,6 +11225,7 @@
     },
     "company-71": {
         "name": "T:mi Jarkon korjaus ja apu",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -11383,6 +11442,7 @@
     },
     "company-72": {
         "name": "T:mi Jarno Räty",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -11599,6 +11659,7 @@
     },
     "company-74": {
         "name": "T:mi Monitoimi Kiiski",
+        "tags": "",
         "core": {
             "fits_for": {
                 "tapahtumien-järjestäminen": 80,
@@ -11872,6 +11933,7 @@
     },
     "company-75": {
         "name": "T:mi T. Lauttaanaho",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -12084,6 +12146,7 @@
     },
     "company-76": {
         "name": "T:mi Tero Hytönen",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -12300,6 +12363,7 @@
     },
     "company-77": {
         "name": "T:mi Tommi Kauppinen",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -12516,6 +12580,7 @@
     },
     "company-78": {
         "name": "Tecvest Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -12732,6 +12797,7 @@
     },
     "company-80": {
         "name": "Wakpal Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -12949,6 +13015,7 @@
     },
     "company-81": {
         "name": "Vuonteen Kolaripaja",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -13165,6 +13232,7 @@
     },
     "company-82": {
         "name": "R-kioski - Kirsi Sinijärvi Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -13379,6 +13447,7 @@
     },
     "company-83": {
         "name": "Alko Oy (Alko)",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -13591,6 +13660,7 @@
     },
     "company-84": {
         "name": "Espedet Oy (K-Supermarket)",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -13803,6 +13873,7 @@
     },
     "company-86": {
         "name": "J. Kaurola Avoin yhtiö (K-MARKET TIITUS)",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -14015,6 +14086,7 @@
     },
     "company-87": {
         "name": "Kalaliike Pentti Rossi",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -14227,6 +14299,7 @@
     },
     "company-88": {
         "name": "Keliapakari",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -14439,6 +14512,7 @@
     },
     "company-89": {
         "name": "Keski-Suomen Lihavarras Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -14651,6 +14725,7 @@
     },
     "company-90": {
         "name": "Laukaan Säästö-Market Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -14863,6 +14938,7 @@
     },
     "company-92": {
         "name": "Lidi Suomi Ky",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -14880,7 +14956,10 @@
             "weekend_service": false,
             "not_suitable_for": [
                 "omilla tarjoiluilla",
-                "juhlatila"
+                "juhlatila",
+                "keskikokoinen / pieni tila (alle 50 hlö)",
+                "tunnelmallinen kartano",
+                "luonnonläheinen tila"
             ],
             "sub_contexts": [],
             "node_links": [
@@ -15080,6 +15159,7 @@
     },
     "company-93": {
         "name": "Lähipalvelu ja Grilli Jokis",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -15292,6 +15372,7 @@
     },
     "company-94": {
         "name": "Osuuskauppa Keskimaa (S-Market)",
+        "tags": "",
         "core": {
             "fits_for": {
                 "yrityksen kehittäminen": 35,
@@ -15515,6 +15596,7 @@
     },
     "company-95": {
         "name": "P. Helppi Ky (K-MARKET VIHTORI)",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -15727,6 +15809,7 @@
     },
     "company-97": {
         "name": "T:mi Juhani P.E. Lampinen",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -15939,6 +16022,7 @@
     },
     "company-98": {
         "name": "T:mi Tökös",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -16151,6 +16235,7 @@
     },
     "company-99": {
         "name": "Tmi Riihipellon Leipäpuu Kotileipomo",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 10,
@@ -16383,6 +16468,7 @@
     },
     "company-101": {
         "name": "AtSound Matti Laurila",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 100,
@@ -16706,6 +16792,7 @@
     },
     "company-102": {
         "name": "Bellingham Oy (Nokkakiven huvipuisto)",
+        "tags": "",
         "core": {
             "fits_for": {
                 "vapaa-aika": 70,
@@ -16749,7 +16836,10 @@
             "weekend_service": true,
             "not_suitable_for": [
                 "kartano",
-                "omilla tarjoiluilla"
+                "omilla tarjoiluilla",
+                "luonnonläheinen tila",
+                "juhlatila (alle 50 henkilöä)",
+                "seminaari- tai juhlatila (yli 50 henkilöä)"
             ],
             "sub_contexts": [
                 "huvipuisto",
@@ -16998,6 +17088,7 @@
     },
     "company-103": {
         "name": "Cafe Anne-Maria Oy (Ravintola Rosanne)",
+        "tags": "",
         "core": {
             "fits_for": {
                 "kokoukset": 35,
@@ -17056,7 +17147,10 @@
             "home_service": false,
             "weekend_service": true,
             "not_suitable_for": [
-                "omilla tarjoiluilla"
+                "omilla tarjoiluilla",
+                "tunnelmallinen kartano",
+                "luonnonläheinen tila",
+                "kahvitus / pitopalvelu"
             ],
             "sub_contexts": [
                 "lounas",
@@ -17285,6 +17379,7 @@
     },
     "company-104": {
         "name": "Catering KatinCa",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -17506,6 +17601,7 @@
     },
     "company-105": {
         "name": "Ext Ventures Oy",
+        "tags": "",
         "core": {
             "fits_for": {
                 "vapaa-aika": 85,
@@ -17546,7 +17642,8 @@
             "home_service": false,
             "weekend_service": true,
             "not_suitable_for": [
-                "pitopalvelu"
+                "pitopalvelu",
+                "uinti"
             ],
             "sub_contexts": [
                 "juhlatila",
@@ -17790,6 +17887,7 @@
     },
     "company-107": {
         "name": "Hieroja Veijo Karvonen",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -18002,6 +18100,7 @@
     },
     "company-108": {
         "name": "Hierontahelmi",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -18214,6 +18313,7 @@
     },
     "company-109": {
         "name": "Hierontapalvelu Virpi Myyryläinen",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -18426,6 +18526,7 @@
     },
     "company-110": {
         "name": "In Essence",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -18638,6 +18739,7 @@
     },
     "company-111": {
         "name": "Keski-Suomen Hieronta- ja lymfaterapiakeskus",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -18850,6 +18952,7 @@
     },
     "company-112": {
         "name": "Koulutettu hieroja Antti-Pekka Ahonen",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -19062,6 +19165,7 @@
     },
     "company-113": {
         "name": "Koulutettu hieroja Veera Vihtari",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -19274,6 +19378,7 @@
     },
     "company-115": {
         "name": "Marjo Niininen koulutettu hieroja",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -19486,6 +19591,7 @@
     },
     "company-117": {
         "name": "Perttulan tila Oy",
+        "tags": "",
         "core": {
             "fits_for": {
                 "kokoukset": 35,
@@ -19809,6 +19915,7 @@
     },
     "company-119": {
         "name": "Pitopalvelu J.Sojakka",
+        "tags": "",
         "core": {
             "fits_for": {
                 "yritysjuhlat": 70,
@@ -20058,6 +20165,7 @@
     },
     "company-120": {
         "name": "Proxta Oy",
+        "tags": "",
         "core": {
             "fits_for": {
                 "juhlat-ja-merkkipäivät": 82,
@@ -20339,223 +20447,9 @@
             "status": "draft"
         }
     },
-    "company-121": {
-        "name": "Rock Tekniikka Ky",
-        "core": {
-            "fits_for": {},
-            "priority_score": 0,
-            "service_area": {
-                "mode": "TOIMIPISTE",
-                "radius_km": 0,
-                "regions": [
-                    "Laukaa",
-                    "Lievestuore"
-                ],
-                "note": "Yrityksen kotipaikka on Laukaa ."
-            },
-            "emergency_available": false,
-            "contract_customer_available": true,
-            "paired_with_by_context": {},
-            "corporate_clients": true,
-            "home_service": false,
-            "weekend_service": true,
-            "not_suitable_for": [],
-            "sub_contexts": [],
-            "node_links": [],
-            "intent_codes": [],
-            "intent_scores": {}
-        },
-        "categories": {
-            "core": {
-                "description": "Sähkötekniikan ja tapahtumatekniikan palveluihin erikoistunut yritys. Yritys on perustettu vuonna 2016 .",
-                "website": "",
-                "email": "",
-                "phone": ""
-            },
-            "events_and_celebrations": {
-                "capacity_max": 0,
-                "seated_capacity": 0,
-                "standing_guests": 0,
-                "outdoor_capacity": 0,
-                "is_accessible": false,
-                "own_catering_allowed": false,
-                "inhouse_catering_available": false,
-                "is_lakeside": false,
-                "has_sauna": false,
-                "has_av_tech": true,
-                "has_stage": false,
-                "accommodation_beds": 0,
-                "alcohol_license": false,
-                "private_booking": true,
-                "late_night_events": true,
-                "wedding_specialized": false,
-                "catering_min_capacity": 0,
-                "catering_max_capacity": 0,
-                "dietary_specialties": [],
-                "staff_included": false,
-                "wedding_menu_available": false,
-                "cake_service": false,
-                "partner_venues": [],
-                "wedding_photography": false,
-                "drone_available": false,
-                "video_production": false,
-                "live_music": true,
-                "dj_services": false,
-                "karaoke_available": false,
-                "has_exclusive_catering": false,
-                "accommodation_included": false,
-                "refinement_tags": [],
-                "digitization_features": [],
-                "entertainment_features": [],
-                "collaborated_with": []
-            },
-            "business_events": {
-                "meeting_capacity": 0,
-                "seminar_capacity": 0,
-                "conference_rooms": 0,
-                "has_projector": false,
-                "has_streaming": false,
-                "has_wifi": false,
-                "has_stage": false,
-                "private_booking": true,
-                "invoice_billing": true,
-                "corporate_clients": true,
-                "vip_services": false,
-                "business_catering": false,
-                "event_hosting": true,
-                "corporate_gifts": false,
-                "branding_support": false,
-                "av_support": true,
-                "staff_events_specialized": true,
-                "refinement_tags": [],
-                "wellbeing_and_activity_features": [],
-                "entertainment_features": [],
-                "collaborated_with": []
-            },
-            "funerals_and_memorials": {
-                "memorial_service_capacity": 0,
-                "quiet_private_space": false,
-                "accessible_entry": false,
-                "memorial_catering": false,
-                "coffee_service": false,
-                "flower_arrangements": false,
-                "memorial_menu_available": false,
-                "funeral_flowers": false,
-                "memorial_arrangements": false,
-                "transport_assistance": false,
-                "urgent_booking_available": false,
-                "refinement_tags": [],
-                "digitization_features": [],
-                "collaborated_with": []
-            },
-            "moving_and_housing": {
-                "moving_truck_available": false,
-                "packing_service": false,
-                "storage_available": false,
-                "weekend_moves": false,
-                "urgent_moves": false,
-                "long_distance_moves": false,
-                "cleaning_after_move": false,
-                "electrician_available": true,
-                "renovation_support": false,
-                "insurance_support": false,
-                "refinement_tags": [],
-                "digitization_features": [],
-                "collaborated_with": []
-            },
-            "construction_and_maintenance": {
-                "emergency_service": false,
-                "certifications": [],
-                "wet_room_certification": false,
-                "provides_tools": false,
-                "material_supply": false,
-                "project_management": false,
-                "snow_removal": false,
-                "lawn_maintenance": false,
-                "property_monitoring": false,
-                "maintenance_contracts": false,
-                "housing_company_clients": false,
-                "refinement_tags": [],
-                "collaborated_with": []
-            },
-            "cottage_services": {
-                "key_holding": false,
-                "winter_monitoring": false,
-                "snow_removal": false,
-                "cleaning_service": false,
-                "lawn_service": false,
-                "remote_monitoring": false,
-                "emergency_visits": false,
-                "renovation_support": false,
-                "dock_maintenance": false,
-                "sauna_services": false,
-                "guest_preparation_service": false,
-                "refinement_tags": [],
-                "collaborated_with": []
-            },
-            "housing_company_and_contracts": {
-                "housing_company_clients": false,
-                "maintenance_contracts": false,
-                "emergency_response": false,
-                "scheduled_visits": false,
-                "property_reports": false,
-                "invoice_billing": true,
-                "contract_customer_available": true,
-                "priority_support": false,
-                "monthly_service_plan": false,
-                "refinement_tags": [],
-                "collaborated_with": []
-            },
-            "startup_services": {
-                "bookkeeping_startup": false,
-                "business_advisory": false,
-                "insurance_setup": false,
-                "legal_services": false,
-                "office_space_available": false,
-                "banking_support": false,
-                "website_creation": false,
-                "webshop_setup": false,
-                "branding_support": false,
-                "logo_design": false,
-                "business_photography": false,
-                "refinement_tags": [],
-                "collaborated_with": []
-            },
-            "business_growth": {
-                "google_ads": false,
-                "social_media_marketing": false,
-                "seo_services": false,
-                "content_creation": false,
-                "video_production": false,
-                "crm_support": false,
-                "recruitment_support": false,
-                "sales_development": false,
-                "automation_services": false,
-                "consulting_services": false,
-                "refinement_tags": [],
-                "collaborated_with": []
-            },
-            "wellbeing_and_beauty": {
-                "home_visits": false,
-                "online_booking": false,
-                "unisex_services": false,
-                "gift_cards": false,
-                "corporate_wellbeing_services": false,
-                "event_makeup": false,
-                "bridal_services": false,
-                "group_bookings": true,
-                "refinement_tags": [],
-                "collaborated_with": []
-            }
-        },
-        "meta": {
-            "last_updated": "2026-04-27T05:54:01.968Z",
-            "verified_by": "AI-analysis-v1",
-            "status": "draft"
-        }
-    },
     "company-122": {
         "name": "Tmi Maarit Roth HR-Hieronta",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -20768,6 +20662,7 @@
     },
     "company-123": {
         "name": "Tmi Petri Puuhis Lähdemäki",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 40,
@@ -21010,6 +20905,7 @@
     },
     "company-125": {
         "name": "Kauneuspuoti Amelie",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -21224,6 +21120,7 @@
     },
     "company-126": {
         "name": "Astellen",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -21436,6 +21333,7 @@
     },
     "company-127": {
         "name": "Evellina's Beauty",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -21651,6 +21549,7 @@
     },
     "company-128": {
         "name": "Eve Nails",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -21863,6 +21762,7 @@
     },
     "company-130": {
         "name": "Parturi-Kampaamo Carpe Diem",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -22075,6 +21975,7 @@
     },
     "company-131": {
         "name": "Huonekaluliike Vehviläinen Oy (Kukka ja Hautauspalvelu Vehviläinen)",
+        "tags": "",
         "core": {
             "fits_for": {
                 "funerals-and-memorials": 100,
@@ -22112,7 +22013,13 @@
             "corporate_clients": false,
             "home_service": false,
             "weekend_service": true,
-            "not_suitable_for": [],
+            "not_suitable_for": [
+                "kuljetus / bussi / taksi",
+                "kuljetukset",
+                "vain kuljetus / peräkärry",
+                "taksi / kuljetus",
+                "kahvitus / pitopalvelu"
+            ],
             "sub_contexts": [
                 "huonekalut",
                 "sisustus",
@@ -22338,6 +22245,7 @@
     },
     "company-132": {
         "name": "Hiushuone Sonja",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -22550,6 +22458,7 @@
     },
     "company-133": {
         "name": "Jenora Design",
+        "tags": "",
         "core": {
             "fits_for": {
                 "häät": 40,
@@ -22611,7 +22520,9 @@
             "weekend_service": true,
             "not_suitable_for": [
                 "järjestää ruoan",
-                "digitointi"
+                "digitointi",
+                "videokuvaus",
+                "kahvitus / pitopalvelu"
             ],
             "sub_contexts": [
                 "muistotilaisuus",
@@ -22886,313 +22797,9 @@
             "status": "draft"
         }
     },
-    "company-134": {
-        "name": "Joudukas",
-        "core": {
-            "fits_for": {
-                "events-and-celebrations": 45,
-                "business-events": 35,
-                "funerals-and-memorials": 35,
-                "startup-services": 5,
-                "business-growth": 10,
-                "moving-and-housing": 0,
-                "construction-and-maintenance": 0,
-                "cottage-services": 20,
-                "accommodation": 25,
-                "wellbeing-and-beauty": 25,
-                "housing-company-and-contracts": 0,
-                "liikunta-ja-vapaaaika": 25
-            },
-            "priority_score": 52,
-            "service_area": {
-                "mode": "TOIMIPISTE",
-                "radius_km": 40,
-                "regions": [
-                    "Laukaa",
-                    "Jyväskylä",
-                    "Keski-Suomi"
-                ],
-                "note": "Käsityö- ja taidetuotteita sekä pienimuotoista kulttuuritoimintaa Laukaan ja Keski-Suomen alueella."
-            },
-            "emergency_available": false,
-            "contract_customer_available": false,
-            "paired_with_by_context": {
-                "events-and-celebrations": [
-                    "Kukat",
-                    "Juhlatila",
-                    "Pitopalvelu"
-                ],
-                "business-events": [
-                    "Matkailupalvelut",
-                    "Kokoustila"
-                ],
-                "general": [
-                    "Kukat",
-                    "Juhlatila",
-                    "Matkailupalvelut",
-                    "Käsityöläiset",
-                    "Kahvilat"
-                ]
-            },
-            "corporate_clients": true,
-            "home_service": false,
-            "weekend_service": false,
-            "not_suitable_for": [
-                "suuret massatapahtumat",
-                "pikatoimitukset",
-                "luennot",
-                "luontoretkeily"
-            ],
-            "sub_contexts": [
-                "käsityö",
-                "taidekäsityö",
-                "sisustustuotteet",
-                "lahjatavarat",
-                "saunatekstiilit",
-                "keittiötekstiilit",
-                "saraakallio",
-                "kulttuurituotteet",
-                "piensarjatuotteet",
-                "paikallistuotteet",
-                "design",
-                "keraaminen taide",
-                "ympäristötaide",
-                "käsityöläinen",
-                "lahjaideat",
-                "kulttuurimatkailu"
-            ],
-            "node_links": [
-                "HYVINVOINTI",
-                "KUKAT"
-            ],
-            "intent_codes": [
-                "BIZ_FLORIST",
-                "REC_OUTDOOR"
-            ],
-            "intent_scores": {
-                "BIZ_FLORIST": 35,
-                "REC_OUTDOOR": 25
-            }
-        },
-        "categories": {
-            "core": {
-                "description": "Joudukas on Mirja Aution käsityö- ja taidealan toimija Laukaasta. Yritys valmistaa perinteitä kunnioittavia piensarjatuotteita, sisustus- ja lahjatuotteita sekä Saraakallio-aiheisia tuotteita. Toimintaan kuuluu myös taide- ja ympäristötaidenäyttelyitä sekä yhteistyö paikallisten matkailu- ja kulttuuritoimijoiden kanssa.",
-                "website": "https://www.joudukas.fi",
-                "email": "joudukas@joudukas.fi",
-                "phone": "358504911431"
-            },
-            "events_and_celebrations": {
-                "capacity_max": 0,
-                "seated_capacity": 0,
-                "standing_guests": 0,
-                "outdoor_capacity": 0,
-                "is_accessible": false,
-                "own_catering_allowed": false,
-                "inhouse_catering_available": false,
-                "is_lakeside": true,
-                "has_sauna": false,
-                "has_av_tech": false,
-                "has_stage": false,
-                "accommodation_beds": 0,
-                "alcohol_license": false,
-                "private_booking": false,
-                "late_night_events": false,
-                "wedding_specialized": false,
-                "catering_min_capacity": 0,
-                "catering_max_capacity": 0,
-                "dietary_specialties": [],
-                "staff_included": false,
-                "wedding_menu_available": false,
-                "cake_service": false,
-                "partner_venues": [
-                    "Tertan kahvila & puoti",
-                    "Kädenjälkipuoti Sará soppi"
-                ],
-                "wedding_photography": false,
-                "drone_available": false,
-                "video_production": false,
-                "live_music": false,
-                "dj_services": false,
-                "karaoke_available": false,
-                "has_exclusive_catering": false,
-                "accommodation_included": false,
-                "refinement_tags": [
-                    "käsityötuotteet",
-                    "lahjat",
-                    "design",
-                    "paikallistuotteet",
-                    "sisustus"
-                ],
-                "digitization_features": [],
-                "entertainment_features": [],
-                "collaborated_with": [
-                    "Laukaan Kädenjälki",
-                    "Tertan kahvila & puoti",
-                    "Jyväskylän Taito Shop"
-                ]
-            },
-            "business_events": {
-                "meeting_capacity": 0,
-                "seminar_capacity": 0,
-                "conference_rooms": 0,
-                "has_projector": false,
-                "has_streaming": false,
-                "has_wifi": false,
-                "has_stage": false,
-                "private_booking": false,
-                "invoice_billing": true,
-                "corporate_clients": true,
-                "vip_services": false,
-                "business_catering": false,
-                "event_hosting": false,
-                "corporate_gifts": true,
-                "branding_support": false,
-                "av_support": false,
-                "staff_events_specialized": false,
-                "refinement_tags": [
-                    "yrityslahjat",
-                    "paikallistuotteet",
-                    "design-tuotteet"
-                ],
-                "wellbeing_and_activity_features": [],
-                "entertainment_features": [],
-                "collaborated_with": [
-                    "kulttuuritoimijat",
-                    "matkailuhankkeet"
-                ]
-            },
-            "funerals_and_memorials": {
-                "memorial_service_capacity": 0,
-                "quiet_private_space": false,
-                "accessible_entry": false,
-                "memorial_catering": false,
-                "coffee_service": false,
-                "flower_arrangements": false,
-                "memorial_menu_available": false,
-                "funeral_flowers": false,
-                "memorial_arrangements": false,
-                "transport_assistance": false,
-                "urgent_booking_available": false,
-                "refinement_tags": [],
-                "digitization_features": [],
-                "collaborated_with": []
-            },
-            "moving_and_housing": {
-                "moving_truck_available": false,
-                "packing_service": false,
-                "storage_available": false,
-                "weekend_moves": false,
-                "urgent_moves": false,
-                "long_distance_moves": false,
-                "cleaning_after_move": false,
-                "electrician_available": false,
-                "renovation_support": false,
-                "insurance_support": false,
-                "refinement_tags": [],
-                "digitization_features": [],
-                "collaborated_with": []
-            },
-            "construction_and_maintenance": {
-                "emergency_service": false,
-                "certifications": [],
-                "wet_room_certification": false,
-                "provides_tools": false,
-                "material_supply": false,
-                "project_management": false,
-                "snow_removal": false,
-                "lawn_maintenance": false,
-                "property_monitoring": false,
-                "maintenance_contracts": false,
-                "housing_company_clients": false,
-                "refinement_tags": [],
-                "collaborated_with": []
-            },
-            "cottage_services": {
-                "key_holding": false,
-                "winter_monitoring": false,
-                "snow_removal": false,
-                "cleaning_service": false,
-                "lawn_service": false,
-                "remote_monitoring": false,
-                "emergency_visits": false,
-                "renovation_support": false,
-                "dock_maintenance": false,
-                "sauna_services": false,
-                "guest_preparation_service": false,
-                "refinement_tags": [
-                    "mökkisisustus",
-                    "saunatekstiilit",
-                    "lahjatuotteet"
-                ],
-                "collaborated_with": []
-            },
-            "housing_company_and_contracts": {
-                "housing_company_clients": false,
-                "maintenance_contracts": false,
-                "emergency_response": false,
-                "scheduled_visits": false,
-                "property_reports": false,
-                "invoice_billing": false,
-                "contract_customer_available": false,
-                "priority_support": false,
-                "monthly_service_plan": false,
-                "refinement_tags": [],
-                "collaborated_with": []
-            },
-            "startup_services": {
-                "bookkeeping_startup": false,
-                "business_advisory": false,
-                "insurance_setup": false,
-                "legal_services": false,
-                "office_space_available": false,
-                "banking_support": false,
-                "website_creation": false,
-                "webshop_setup": false,
-                "branding_support": false,
-                "logo_design": false,
-                "business_photography": false,
-                "refinement_tags": [],
-                "collaborated_with": []
-            },
-            "business_growth": {
-                "google_ads": false,
-                "social_media_marketing": false,
-                "seo_services": false,
-                "content_creation": false,
-                "video_production": false,
-                "crm_support": false,
-                "recruitment_support": false,
-                "sales_development": false,
-                "automation_services": false,
-                "consulting_services": false,
-                "refinement_tags": [],
-                "collaborated_with": []
-            },
-            "wellbeing_and_beauty": {
-                "home_visits": false,
-                "online_booking": false,
-                "unisex_services": false,
-                "gift_cards": false,
-                "corporate_wellbeing_services": false,
-                "event_makeup": false,
-                "bridal_services": false,
-                "group_bookings": false,
-                "refinement_tags": [
-                    "käsityö",
-                    "luonnonmateriaalit",
-                    "kulttuuri"
-                ],
-                "collaborated_with": []
-            }
-        },
-        "meta": {
-            "last_updated": "2026-05-08T16:55:00.358Z",
-            "verified_by": "ai-analysis-v2",
-            "status": "draft"
-        }
-    },
     "company-136": {
         "name": "Kauneushoitola Tunne",
+        "tags": "",
         "core": {
             "fits_for": {
                 "vapaa-aika": 35
@@ -23408,6 +23015,7 @@
     },
     "company-137": {
         "name": "Kauneuspörssi",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -23620,6 +23228,7 @@
     },
     "company-138": {
         "name": "Keski-Suomen Parvekelasitus OY",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -23836,6 +23445,7 @@
     },
     "company-140": {
         "name": "Kosmetologi Helena Manninen",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -24048,6 +23658,7 @@
     },
     "company-141": {
         "name": "Laukaan Kultakello Avoin yhtiö",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -24260,6 +23871,7 @@
     },
     "company-142": {
         "name": "Merjan Risu&Ruusut",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 100,
@@ -24316,7 +23928,8 @@
             "weekend_service": true,
             "not_suitable_for": [
                 "suuret festivaalit",
-                "massatapahtumat"
+                "massatapahtumat",
+                "kahvitus / pitopalvelu"
             ],
             "sub_contexts": [
                 "kukkakauppa",
@@ -24590,6 +24203,7 @@
     },
     "company-143": {
         "name": "Miruma",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -24802,6 +24416,7 @@
     },
     "company-145": {
         "name": "Monipalvelu Suomivirta",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -25014,6 +24629,7 @@
     },
     "company-146": {
         "name": "Parturi-Kampaamo Anita Kuniala",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -25228,6 +24844,7 @@
     },
     "company-147": {
         "name": "Parturi-Kampaamo Anne-Maria Arvola",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -25440,6 +25057,7 @@
     },
     "company-148": {
         "name": "Parturi-Kampaamo Doris",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -25652,6 +25270,7 @@
     },
     "company-149": {
         "name": "Parturi-kampaamo Minna Näreaho",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -25864,6 +25483,7 @@
     },
     "company-150": {
         "name": "Parturi-Kampaamo Paulan Kampa",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -26076,6 +25696,7 @@
     },
     "company-151": {
         "name": "Parturi-Kampaamo Raija Viinikainen",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -26288,6 +25909,7 @@
     },
     "company-152": {
         "name": "Parturi-Kampaamo Sandy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -26500,6 +26122,7 @@
     },
     "company-153": {
         "name": "Parturi-Kampaamo Tuula Häkkinen",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -26712,6 +26335,7 @@
     },
     "company-154": {
         "name": "Photo Malmström",
+        "tags": "valokuvaus",
         "core": {
             "fits_for": {
                 "häät": 35,
@@ -26761,7 +26385,9 @@
             "home_service": false,
             "weekend_service": true,
             "not_suitable_for": [
-                "järjestää ruoan"
+                "järjestää ruoan",
+                "videokuvaus",
+                "kahvitus / pitopalvelu"
             ],
             "sub_contexts": [
                 "muistotilaisuus",
@@ -26840,7 +26466,8 @@
                     "hääkuvaus",
                     "tapahtumakuvaus",
                     "potrettikuvaus",
-                    "dokumentaarinen valokuvaus"
+                    "dokumentaarinen valokuvaus",
+                    "juhlakuvaus"
                 ],
                 "digitization_features": [],
                 "entertainment_features": [],
@@ -27011,6 +26638,7 @@
     },
     "company-155": {
         "name": "Pieneläintuhkaamo Usva OY",
+        "tags": "",
         "core": {
             "fits_for": {
                 "funerals-and-memorials": 100,
@@ -27263,6 +26891,7 @@
     },
     "company-157": {
         "name": "Rakentajainpalvelu Järvinen",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -27475,6 +27104,7 @@
     },
     "company-158": {
         "name": "Kynsiteknikko Kristi Ruul-Saari​",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -27691,6 +27321,7 @@
     },
     "company-159": {
         "name": "Hiushuone Soma",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -27903,6 +27534,7 @@
     },
     "company-160": {
         "name": "Spirello",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -28116,220 +27748,9 @@
             "status": "draft"
         }
     },
-    "company-161": {
-        "name": "Sähköpalvelu M Leminen Ky",
-        "core": {
-            "fits_for": {},
-            "priority_score": 0,
-            "service_area": {
-                "mode": "TOIMIPISTE",
-                "radius_km": 0,
-                "regions": [],
-                "note": ""
-            },
-            "emergency_available": false,
-            "contract_customer_available": false,
-            "paired_with_by_context": {},
-            "corporate_clients": false,
-            "home_service": false,
-            "weekend_service": false,
-            "not_suitable_for": [],
-            "sub_contexts": [],
-            "node_links": [],
-            "intent_codes": [],
-            "intent_scores": {}
-        },
-        "categories": {
-            "core": {
-                "description": "",
-                "website": "",
-                "email": "",
-                "phone": ""
-            },
-            "events_and_celebrations": {
-                "capacity_max": 0,
-                "seated_capacity": 0,
-                "standing_guests": 0,
-                "outdoor_capacity": 0,
-                "is_accessible": false,
-                "own_catering_allowed": false,
-                "inhouse_catering_available": false,
-                "is_lakeside": false,
-                "has_sauna": false,
-                "has_av_tech": false,
-                "has_stage": false,
-                "accommodation_beds": 0,
-                "alcohol_license": false,
-                "private_booking": false,
-                "late_night_events": false,
-                "wedding_specialized": false,
-                "catering_min_capacity": 0,
-                "catering_max_capacity": 0,
-                "dietary_specialties": [],
-                "staff_included": false,
-                "wedding_menu_available": false,
-                "cake_service": false,
-                "partner_venues": [],
-                "wedding_photography": false,
-                "drone_available": false,
-                "video_production": false,
-                "live_music": false,
-                "dj_services": false,
-                "karaoke_available": false,
-                "has_exclusive_catering": false,
-                "accommodation_included": false,
-                "refinement_tags": [],
-                "digitization_features": [],
-                "entertainment_features": [],
-                "collaborated_with": []
-            },
-            "business_events": {
-                "meeting_capacity": 0,
-                "seminar_capacity": 0,
-                "conference_rooms": 0,
-                "has_projector": false,
-                "has_streaming": false,
-                "has_wifi": false,
-                "has_stage": false,
-                "private_booking": false,
-                "invoice_billing": false,
-                "corporate_clients": false,
-                "vip_services": false,
-                "business_catering": false,
-                "event_hosting": false,
-                "corporate_gifts": false,
-                "branding_support": false,
-                "av_support": false,
-                "staff_events_specialized": false,
-                "refinement_tags": [],
-                "wellbeing_and_activity_features": [],
-                "entertainment_features": [],
-                "collaborated_with": []
-            },
-            "funerals_and_memorials": {
-                "memorial_service_capacity": 0,
-                "quiet_private_space": false,
-                "accessible_entry": false,
-                "memorial_catering": false,
-                "coffee_service": false,
-                "flower_arrangements": false,
-                "memorial_menu_available": false,
-                "funeral_flowers": false,
-                "memorial_arrangements": false,
-                "transport_assistance": false,
-                "urgent_booking_available": false,
-                "refinement_tags": [],
-                "digitization_features": [],
-                "collaborated_with": []
-            },
-            "moving_and_housing": {
-                "moving_truck_available": false,
-                "packing_service": false,
-                "storage_available": false,
-                "weekend_moves": false,
-                "urgent_moves": false,
-                "long_distance_moves": false,
-                "cleaning_after_move": false,
-                "electrician_available": false,
-                "renovation_support": false,
-                "insurance_support": false,
-                "refinement_tags": [],
-                "digitization_features": [],
-                "collaborated_with": []
-            },
-            "construction_and_maintenance": {
-                "emergency_service": false,
-                "certifications": [],
-                "wet_room_certification": false,
-                "provides_tools": false,
-                "material_supply": false,
-                "project_management": false,
-                "snow_removal": false,
-                "lawn_maintenance": false,
-                "property_monitoring": false,
-                "maintenance_contracts": false,
-                "housing_company_clients": false,
-                "refinement_tags": [],
-                "collaborated_with": []
-            },
-            "cottage_services": {
-                "key_holding": false,
-                "winter_monitoring": false,
-                "snow_removal": false,
-                "cleaning_service": false,
-                "lawn_service": false,
-                "remote_monitoring": false,
-                "emergency_visits": false,
-                "renovation_support": false,
-                "dock_maintenance": false,
-                "sauna_services": false,
-                "guest_preparation_service": false,
-                "refinement_tags": [],
-                "collaborated_with": []
-            },
-            "housing_company_and_contracts": {
-                "housing_company_clients": false,
-                "maintenance_contracts": false,
-                "emergency_response": false,
-                "scheduled_visits": false,
-                "property_reports": false,
-                "invoice_billing": false,
-                "contract_customer_available": false,
-                "priority_support": false,
-                "monthly_service_plan": false,
-                "refinement_tags": [],
-                "collaborated_with": []
-            },
-            "startup_services": {
-                "bookkeeping_startup": false,
-                "business_advisory": false,
-                "insurance_setup": false,
-                "legal_services": false,
-                "office_space_available": false,
-                "banking_support": false,
-                "website_creation": false,
-                "webshop_setup": false,
-                "branding_support": false,
-                "logo_design": false,
-                "business_photography": false,
-                "refinement_tags": [],
-                "collaborated_with": []
-            },
-            "business_growth": {
-                "google_ads": false,
-                "social_media_marketing": false,
-                "seo_services": false,
-                "content_creation": false,
-                "video_production": false,
-                "crm_support": false,
-                "recruitment_support": false,
-                "sales_development": false,
-                "automation_services": false,
-                "consulting_services": false,
-                "refinement_tags": [],
-                "collaborated_with": []
-            },
-            "wellbeing_and_beauty": {
-                "home_visits": false,
-                "online_booking": false,
-                "unisex_services": false,
-                "gift_cards": false,
-                "corporate_wellbeing_services": false,
-                "event_makeup": false,
-                "bridal_services": false,
-                "group_bookings": false,
-                "refinement_tags": [],
-                "collaborated_with": []
-            }
-        },
-        "meta": {
-            "last_updated": "2026-04-26",
-            "verified_by": "system-init-v3",
-            "status": "draft"
-        }
-    },
     "company-162": {
         "name": "T.mi Jaana Jämbäck",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -28542,6 +27963,7 @@
     },
     "company-163": {
         "name": "Tia's hair and beauty",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -28754,6 +28176,7 @@
     },
     "company-164": {
         "name": "Tmi Anni Nurminen",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -28966,6 +28389,7 @@
     },
     "company-165": {
         "name": "Tmi Helppasi",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -29178,6 +28602,7 @@
     },
     "company-166": {
         "name": "Tmi Jussi Pöysä",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -29393,6 +28818,7 @@
     },
     "company-167": {
         "name": "Tmi Katja Vehviläinen (Parturi-kampaamo",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -29607,6 +29033,7 @@
     },
     "company-168": {
         "name": "Tmi Kia Janhonen",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -29819,6 +29246,7 @@
     },
     "company-169": {
         "name": "Tmi Mari Virtanen",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 65,
@@ -29851,7 +29279,9 @@
             "weekend_service": true,
             "not_suitable_for": [
                 "rakennustyöt",
-                "suurimuotoinen tapahtumatuotanto"
+                "suurimuotoinen tapahtumatuotanto",
+                "yrityshyvinvointi / luennot",
+                "kahvitus / pitopalvelu"
             ],
             "sub_contexts": [
                 "hyvinvointipalvelut",
@@ -30082,6 +29512,7 @@
     },
     "company-170": {
         "name": "Tmi Saana Oksanen",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -30294,6 +29725,7 @@
     },
     "company-171": {
         "name": "Tmi Saija Kärki",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -30506,6 +29938,7 @@
     },
     "company-172": {
         "name": "Tmi SaraBella/Salon Belleza Gloriosa Sara Aho",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -30718,6 +30151,7 @@
     },
     "company-173": {
         "name": "Tmi Seija Puttonen",
+        "tags": "",
         "core": {
             "fits_for": {
                 "yritysjuhlat": 35,
@@ -30743,7 +30177,9 @@
             "corporate_clients": false,
             "home_service": false,
             "weekend_service": true,
-            "not_suitable_for": [],
+            "not_suitable_for": [
+                "lastentarvikkeet"
+            ],
             "sub_contexts": [],
             "node_links": [],
             "intent_codes": [],
@@ -30940,6 +30376,7 @@
     },
     "company-174": {
         "name": "Topiron Ky",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -31152,6 +30589,7 @@
     },
     "company-177": {
         "name": "Adven Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -31364,6 +30802,7 @@
     },
     "company-178": {
         "name": "Almek",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -31576,6 +31015,7 @@
     },
     "company-179": {
         "name": "Apponen Pekka Juhani",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -31788,6 +31228,7 @@
     },
     "company-180": {
         "name": "Arkkitiimi Osuuskunta",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -32000,6 +31441,7 @@
     },
     "company-181": {
         "name": "Atte Isokangas Tmi",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -32212,6 +31654,7 @@
     },
     "company-183": {
         "name": "Duuni-Simppa Ky",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -32424,6 +31867,7 @@
     },
     "company-184": {
         "name": "EXS Finland Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -32636,6 +32080,7 @@
     },
     "company-185": {
         "name": "Hento Works",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -32848,6 +32293,7 @@
     },
     "company-186": {
         "name": "Ilmalämpöpumput Tmi Forsström",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -33060,6 +32506,7 @@
     },
     "company-191": {
         "name": "IV-urakointi Lehtonen Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -33272,6 +32719,7 @@
     },
     "company-192": {
         "name": "Kiinteistöjen korjaus ja huolto Lehtiö Jarmo",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -33484,6 +32932,7 @@
     },
     "company-193": {
         "name": "JL-Maanrakennus Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -33696,6 +33145,7 @@
     },
     "company-194": {
         "name": "Jyvä-IV Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -33908,6 +33358,7 @@
     },
     "company-196": {
         "name": "Kaken turva Oy",
+        "tags": "",
         "core": {
             "fits_for": {
                 "kokoukset": 35
@@ -34127,6 +33578,7 @@
     },
     "company-197": {
         "name": "Kiinteistönvälitys HuippuMesta LKV",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -34339,6 +33791,7 @@
     },
     "company-198": {
         "name": "Kiinteistöpalvelu Farox Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -34551,6 +34004,7 @@
     },
     "company-200": {
         "name": "Koskienergia Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -34763,6 +34217,7 @@
     },
     "company-201": {
         "name": "Laatutyö Helama Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -34975,6 +34430,7 @@
     },
     "company-205": {
         "name": "Laukaan Pitkäniemen kiinteistöhuolto Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -35187,6 +34643,7 @@
     },
     "company-209": {
         "name": "Lehtomäen traktoripalvelu",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -35399,6 +34856,7 @@
     },
     "company-210": {
         "name": "Lievestuoreen Lämpö Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -35611,6 +35069,7 @@
     },
     "company-211": {
         "name": "LVI-Hanaman",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -35823,6 +35282,7 @@
     },
     "company-213": {
         "name": "LVI-Sekuri Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -36035,6 +35495,7 @@
     },
     "company-215": {
         "name": "LVI-Vestec Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -36247,6 +35708,7 @@
     },
     "company-216": {
         "name": "Mittakupari Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -36459,6 +35921,7 @@
     },
     "company-217": {
         "name": "Monitac",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -36671,6 +36134,7 @@
     },
     "company-218": {
         "name": "Osk. JS Keski-Suomi",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -36883,6 +36347,7 @@
     },
     "company-220": {
         "name": "Pinta-Putki Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -37095,6 +36560,7 @@
     },
     "company-221": {
         "name": "Putki Pee Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -37307,6 +36773,7 @@
     },
     "company-222": {
         "name": "Suur-Savon Sähkö Oy",
+        "tags": "",
         "core": {
             "fits_for": {
                 "yrityksen kehittäminen": 35
@@ -37522,6 +36989,7 @@
     },
     "company-225": {
         "name": "t:mi Ilkka Kanerva",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -37734,6 +37202,7 @@
     },
     "company-226": {
         "name": "T:mi Jukka-Pekka Olkkonen",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -37946,6 +37415,7 @@
     },
     "company-227": {
         "name": "T:mi Maria Fägerholt",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -38158,6 +37628,7 @@
     },
     "company-229": {
         "name": "T:mi Porrastyö",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -38370,6 +37841,7 @@
     },
     "company-230": {
         "name": "T.mi Susanna Niiniranta",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -38582,6 +38054,7 @@
     },
     "company-232": {
         "name": "TeePee kiinteistöpalvelut Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -38604,7 +38077,9 @@
             "corporate_clients": true,
             "home_service": true,
             "weekend_service": false,
-            "not_suitable_for": [],
+            "not_suitable_for": [
+                "lvi-asentaja (putkimies)"
+            ],
             "sub_contexts": [],
             "node_links": [],
             "intent_codes": [],
@@ -38801,6 +38276,7 @@
     },
     "company-233": {
         "name": "Tmi Aki Tuppurainen",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -39013,6 +38489,7 @@
     },
     "company-234": {
         "name": "VaskiTeam",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -39225,6 +38702,7 @@
     },
     "company-236": {
         "name": "Tmi Marika Kurkipuro",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -39437,6 +38915,7 @@
     },
     "company-237": {
         "name": "Tmi Tuula Rutanen",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -39649,6 +39128,7 @@
     },
     "company-238": {
         "name": "Toiminimi Veikko Nieminen",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -39861,6 +39341,7 @@
     },
     "company-239": {
         "name": "WoodIT",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -40073,6 +39554,7 @@
     },
     "company-240": {
         "name": "Väentupa R.Y. (SER-TOIMINTA)",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -40285,13 +39767,14 @@
     },
     "company-243": {
         "name": "Laukaan Tupaswilla Oy",
+        "tags": "",
         "core": {
             "fits_for": {
                 "häät": 35,
                 "yritysjuhlat": 35,
                 "kokoukset": 35,
                 "vapaa-aika": 35,
-                "events-and-celebrations": 98,
+                "events-and-celebrations": 90,
                 "business-events": 92,
                 "funerals-and-memorials": 80,
                 "moving-and-housing": 0,
@@ -40300,7 +39783,8 @@
                 "housing-company-and-contracts": 0,
                 "startup-services": 10,
                 "business-growth": 30,
-                "wellbeing-and-beauty": 85
+                "wellbeing-and-beauty": 85,
+                "accommodation": 90
             },
             "priority_score": 0,
             "service_area": {
@@ -40388,8 +39872,12 @@
                 "JUHLATILA",
                 "CATERING"
             ],
-            "intent_codes": [],
-            "intent_scores": {}
+            "intent_codes": [
+                "VENUE_PARTY"
+            ],
+            "intent_scores": {
+                "VENUE_PARTY": 90
+            }
         },
         "categories": {
             "core": {
@@ -40435,20 +39923,7 @@
                 "karaoke_available": false,
                 "has_exclusive_catering": false,
                 "accommodation_included": false,
-                "refinement_tags": {
-                    "Yleinen": [
-                        "juhlatila",
-                        "hääjuhla",
-                        "savusauna",
-                        "sauna",
-                        "pitopalvelu",
-                        "järvimaisema",
-                        "perinnekylä",
-                        "turvehoito",
-                        "tyhy",
-                        "kesäteatteri"
-                    ]
-                },
+                "refinement_tags": "sauna",
                 "digitization_features": [],
                 "entertainment_features": [
                     "sauna",
@@ -40644,6 +40119,7 @@
     },
     "company-244": {
         "name": "Maatila Kovanen",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 100,
@@ -40674,7 +40150,14 @@
             "weekend_service": true,
             "not_suitable_for": [
                 "rakennuspalvelut",
-                "digipalvelut"
+                "digipalvelut",
+                "juhlatila (alle 50 henkilöä)",
+                "iso juhlatila (yli 50 hlö)",
+                "keskikokoinen / pieni tila (alle 50 hlö)",
+                "tunnelmallinen kartano",
+                "luonnonläheinen tila",
+                "tila omilla tarjoiluilla",
+                "juhlatila (yli 50 henkilöä)"
             ],
             "sub_contexts": [
                 "juhlatila",
@@ -40912,6 +40395,7 @@
     },
     "company-246": {
         "name": "Bitoxo Oy (RAVINTOLA VIHTAHOUSU)",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -41129,6 +40613,7 @@
     },
     "company-249": {
         "name": "Jabo -afrin",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -41341,6 +40826,7 @@
     },
     "company-250": {
         "name": "Karlvik Ravintola",
+        "tags": "",
         "core": {
             "fits_for": {
                 "ravintolapalvelut": 95,
@@ -41367,7 +40853,10 @@
             "corporate_clients": true,
             "home_service": false,
             "weekend_service": false,
-            "not_suitable_for": [],
+            "not_suitable_for": [
+                "kylpyhuoneremontti",
+                "lvi-asentaja (putkimies)"
+            ],
             "sub_contexts": [
                 "ravintola",
                 "catering",
@@ -41588,6 +41077,7 @@
     },
     "company-253": {
         "name": "Laukaan Autohuoltamo Oy (ST1 KAHVILA)",
+        "tags": "",
         "core": {
             "fits_for": {
                 "yrityksen kehittäminen": 35
@@ -41806,6 +41296,7 @@
     },
     "company-254": {
         "name": "Laukaan Korppi Oy",
+        "tags": "",
         "core": {
             "fits_for": {
                 "yritysjuhlat": 35,
@@ -41830,7 +41321,9 @@
             "corporate_clients": false,
             "home_service": false,
             "weekend_service": false,
-            "not_suitable_for": [],
+            "not_suitable_for": [
+                "lastentarvikkeet"
+            ],
             "sub_contexts": [],
             "node_links": [
                 "LAUKAA"
@@ -42029,6 +41522,7 @@
     },
     "company-255": {
         "name": "Laukaan Matkailukeskus Oy",
+        "tags": "",
         "core": {
             "fits_for": {
                 "kokoukset": 70
@@ -42248,6 +41742,7 @@
     },
     "company-256": {
         "name": "Rastas Ravintola Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -42458,8 +41953,243 @@
             "status": "draft"
         }
     },
+    "company-257": {
+        "name": "Restella Oy (Caffitella)",
+        "tags": "leipomo, elintarvike, kakut, leivonnaiset, pitopalvelu",
+        "core": {
+            "fits_for": {
+                "kahvilapalvelut": 70,
+                "lounasravintolat": 70,
+                "catering": 65,
+                "ravintolapalvelut": 75,
+                "tilausravintola": 60,
+                "events-and-celebrations": 85,
+                "funerals-and-memorials": 100
+            },
+            "priority_score": 0,
+            "service_area": {
+                "mode": "TOIMIPISTE",
+                "radius_km": 0,
+                "regions": [],
+                "note": ""
+            },
+            "emergency_available": false,
+            "contract_customer_available": false,
+            "paired_with_by_context": {},
+            "corporate_clients": false,
+            "home_service": false,
+            "weekend_service": false,
+            "not_suitable_for": [],
+            "sub_contexts": [
+                "lounas",
+                "kahvila",
+                "catering",
+                "ravintola",
+                "tilausravintola"
+            ],
+            "node_links": [
+                "RAVINTOLA",
+                "KAHVILA",
+                "CATERING",
+                "PITOPALVELU",
+                "JUHLATILA"
+            ],
+            "intent_codes": [],
+            "intent_scores": {}
+        },
+        "categories": {
+            "core": {
+                "description": "Caffitella-brändillä toimiva ravintola- ja kahvilapalveluihin keskittyvä yritys, joka tarjoaa lounas- ja kahvilapalveluita sekä catering- ja tilausravintolapalveluita.",
+                "website": "https://www.caffitella.fi",
+                "email": "",
+                "phone": "358102312297"
+            },
+            "events_and_celebrations": {
+                "capacity_max": 0,
+                "seated_capacity": 0,
+                "standing_guests": 0,
+                "outdoor_capacity": 0,
+                "is_accessible": false,
+                "own_catering_allowed": false,
+                "inhouse_catering_available": false,
+                "is_lakeside": false,
+                "has_sauna": false,
+                "has_av_tech": false,
+                "has_stage": false,
+                "accommodation_beds": 0,
+                "alcohol_license": false,
+                "private_booking": false,
+                "late_night_events": false,
+                "wedding_specialized": false,
+                "catering_min_capacity": 0,
+                "catering_max_capacity": 0,
+                "dietary_specialties": [],
+                "staff_included": false,
+                "wedding_menu_available": false,
+                "cake_service": false,
+                "partner_venues": [],
+                "wedding_photography": false,
+                "drone_available": false,
+                "video_production": false,
+                "live_music": false,
+                "dj_services": false,
+                "karaoke_available": false,
+                "has_exclusive_catering": false,
+                "accommodation_included": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "entertainment_features": [],
+                "collaborated_with": [],
+                "has_wifi": true
+            },
+            "business_events": {
+                "meeting_capacity": 0,
+                "seminar_capacity": 0,
+                "conference_rooms": 0,
+                "has_projector": false,
+                "has_streaming": false,
+                "has_wifi": false,
+                "has_stage": false,
+                "private_booking": false,
+                "invoice_billing": false,
+                "corporate_clients": false,
+                "vip_services": false,
+                "business_catering": false,
+                "event_hosting": false,
+                "corporate_gifts": false,
+                "branding_support": false,
+                "av_support": false,
+                "staff_events_specialized": false,
+                "refinement_tags": [],
+                "wellbeing_and_activity_features": [],
+                "entertainment_features": [],
+                "collaborated_with": []
+            },
+            "funerals_and_memorials": {
+                "memorial_service_capacity": 0,
+                "quiet_private_space": false,
+                "accessible_entry": false,
+                "memorial_catering": false,
+                "coffee_service": false,
+                "flower_arrangements": false,
+                "memorial_menu_available": false,
+                "funeral_flowers": false,
+                "memorial_arrangements": false,
+                "transport_assistance": false,
+                "urgent_booking_available": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "moving_and_housing": {
+                "moving_truck_available": false,
+                "packing_service": false,
+                "storage_available": false,
+                "weekend_moves": false,
+                "urgent_moves": false,
+                "long_distance_moves": false,
+                "cleaning_after_move": false,
+                "electrician_available": false,
+                "renovation_support": false,
+                "insurance_support": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "construction_and_maintenance": {
+                "emergency_service": false,
+                "certifications": [],
+                "wet_room_certification": false,
+                "provides_tools": false,
+                "material_supply": false,
+                "project_management": false,
+                "snow_removal": false,
+                "lawn_maintenance": false,
+                "property_monitoring": false,
+                "maintenance_contracts": false,
+                "housing_company_clients": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "cottage_services": {
+                "key_holding": false,
+                "winter_monitoring": false,
+                "snow_removal": false,
+                "cleaning_service": false,
+                "lawn_service": false,
+                "remote_monitoring": false,
+                "emergency_visits": false,
+                "renovation_support": false,
+                "dock_maintenance": false,
+                "sauna_services": false,
+                "guest_preparation_service": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "housing_company_and_contracts": {
+                "housing_company_clients": false,
+                "maintenance_contracts": false,
+                "emergency_response": false,
+                "scheduled_visits": false,
+                "property_reports": false,
+                "invoice_billing": false,
+                "contract_customer_available": false,
+                "priority_support": false,
+                "monthly_service_plan": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "startup_services": {
+                "bookkeeping_startup": false,
+                "business_advisory": false,
+                "insurance_setup": false,
+                "legal_services": false,
+                "office_space_available": false,
+                "banking_support": false,
+                "website_creation": false,
+                "webshop_setup": false,
+                "branding_support": false,
+                "logo_design": false,
+                "business_photography": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "business_growth": {
+                "google_ads": false,
+                "social_media_marketing": false,
+                "seo_services": false,
+                "content_creation": false,
+                "video_production": false,
+                "crm_support": false,
+                "recruitment_support": false,
+                "sales_development": false,
+                "automation_services": false,
+                "consulting_services": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "wellbeing_and_beauty": {
+                "home_visits": false,
+                "online_booking": false,
+                "unisex_services": false,
+                "gift_cards": false,
+                "corporate_wellbeing_services": false,
+                "event_makeup": false,
+                "bridal_services": false,
+                "group_bookings": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            }
+        },
+        "meta": {
+            "last_updated": "2026-05-08T15:32:40.284Z",
+            "verified_by": "AI-analysis-v1",
+            "status": "draft"
+        }
+    },
     "company-258": {
         "name": "Restel Liikenneasemat Oy (ST1 Lievestuore)",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -42681,6 +42411,7 @@
     },
     "company-259": {
         "name": "Ruokalandia Oy",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -42893,6 +42624,7 @@
     },
     "company-260": {
         "name": "T:mi Lounaskahvio Huumo (Ysitien grilli)",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -43108,6 +42840,7 @@
     },
     "company-261": {
         "name": "T. Lamio",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -43320,6 +43053,7 @@
     },
     "company-262": {
         "name": "Tmi Medya",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -43532,6 +43266,7 @@
     },
     "company-263": {
         "name": "Varjolan Tilan Matkailu Oy",
+        "tags": "",
         "core": {
             "fits_for": {
                 "kokoukset": 35,
@@ -43540,10 +43275,11 @@
                 "yritystapahtumat": 35,
                 "juhlat": 35,
                 "hyvinvointi": 35,
-                "events-and-celebrations": 80,
+                "events-and-celebrations": 90,
                 "business-events": 80,
                 "wellbeing-and-beauty": 80,
-                "liikunta-ja-vapaaaika": 90
+                "liikunta-ja-vapaaaika": 90,
+                "accommodation": 90
             },
             "priority_score": 0,
             "service_area": {
@@ -43595,10 +43331,12 @@
                 "JUHLATILA"
             ],
             "intent_codes": [
-                "REC_RAFTING"
+                "REC_RAFTING",
+                "VENUE_PARTY"
             ],
             "intent_scores": {
-                "REC_RAFTING": 90
+                "REC_RAFTING": 90,
+                "VENUE_PARTY": 90
             }
         },
         "categories": {
@@ -43643,7 +43381,9 @@
                 "karaoke_available": false,
                 "has_exclusive_catering": false,
                 "accommodation_included": false,
-                "refinement_tags": [],
+                "refinement_tags": [
+                    "sauna"
+                ],
                 "digitization_features": [],
                 "entertainment_features": [],
                 "collaborated_with": []
@@ -43800,6 +43540,7 @@
     },
     "company-264": {
         "name": "VL-Marketing",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -44012,6 +43753,7 @@
     },
     "company-266": {
         "name": "Lempileivos",
+        "tags": "pitopalvelu, leipomo, elintarvike, kakut, leivonnaiset",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 100,
@@ -44354,6 +44096,7 @@
     },
     "company-267": {
         "name": "Hevosklinikka Laukaa",
+        "tags": "",
         "core": {
             "fits_for": {},
             "priority_score": 0,
@@ -44568,6 +44311,7 @@
     },
     "company-293": {
         "name": "Terviksen tilat",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 100,
@@ -44604,7 +44348,8 @@
                 "kartano",
                 "järjestää ruoan",
                 "majoitus",
-                "pitopalvelu"
+                "pitopalvelu",
+                "luonnonläheinen tila"
             ],
             "sub_contexts": [
                 "juhlatila",
@@ -44838,6 +44583,7 @@
     },
     "company-292": {
         "name": "Mika Nuorva Valokuvaaja",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 100,
@@ -44864,7 +44610,10 @@
             "not_suitable_for": [
                 "pienet",
                 "perinteiset",
-                "luontoretkeily"
+                "luontoretkeily",
+                "häävideon editointi / koostepalvelu & drone-kuvaus & digitointipalvelut (kuvat, videot ym.)",
+                "digitointipalvelut (kuvat, videot ym.) & drone-kuvaus",
+                "kahvitus / pitopalvelu"
             ],
             "sub_contexts": [
                 "valokuvaaja",
@@ -44893,11 +44642,13 @@
                 "LAUKAA",
                 "VIDEOTUOTANTO",
                 "HÄÄT",
-                "VALOKUVAUS"
+                "VALOKUVAUS",
+                "DIGITOINTI"
             ],
             "intent_codes": [
                 "EVT_WEDDING",
-                "MEDIA_PHOTO"
+                "MEDIA_PHOTO",
+                "MEDIA_DRONE"
             ],
             "intent_scores": {
                 "EVT_WEDDING": 100,
@@ -45126,6 +44877,7 @@
     },
     "company-291": {
         "name": "Keijo Penttinen PS Studio",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 100,
@@ -45154,7 +44906,9 @@
                 "perinteiset",
                 "henkilöstön koulutus",
                 "päivähoito",
-                "luontoretkeily"
+                "luontoretkeily",
+                "videokuvaus",
+                "kahvitus / pitopalvelu"
             ],
             "sub_contexts": [
                 "valokuvaaja",
@@ -45415,10 +45169,11 @@
     },
     "company-290": {
         "name": "Revontuli Resort",
+        "tags": "seminaaritilat, kokoustilat, majoitus",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 100,
-                "business-events": 88,
+                "business-events": 90,
                 "cottage-services": 72,
                 "wellbeing-and-beauty": 84,
                 "liikunta-ja-vapaaaika": 98,
@@ -45426,7 +45181,7 @@
                 "moving-and-housing": 0,
                 "construction-and-maintenance": 0,
                 "housing-company-and-contracts": 0,
-                "startup-services": 0,
+                "startup-services": 90,
                 "business-growth": 5,
                 "accommodation": 100
             },
@@ -45454,7 +45209,10 @@
             "weekend_service": false,
             "not_suitable_for": [
                 "pitopalvelu",
-                "omilla tarjoiluilla"
+                "omilla tarjoiluilla",
+                "kylpyhuoneremontti",
+                "lvi-asentaja (putkimies)",
+                "laituritarvikkeet / huolto"
             ],
             "sub_contexts": [
                 "hääjuhla",
@@ -45483,12 +45241,16 @@
             "intent_codes": [
                 "EVT_WEDDING",
                 "REC_GOLF",
-                "VENUE_ACCOMMODATION"
+                "VENUE_ACCOMMODATION",
+                "VENUE_PARTY",
+                "VENUE_MEETING"
             ],
             "intent_scores": {
                 "EVT_WEDDING": 100,
                 "REC_GOLF": 95,
-                "VENUE_ACCOMMODATION": 94
+                "VENUE_ACCOMMODATION": 90,
+                "VENUE_PARTY": 90,
+                "VENUE_MEETING": 90
             }
         },
         "categories": {
@@ -45728,6 +45490,7 @@
     },
     "company-289": {
         "name": "Taulun Kartano",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 100,
@@ -45751,7 +45514,8 @@
             "weekend_service": false,
             "not_suitable_for": [
                 "pitopalvelu",
-                "omilla tarjoiluilla"
+                "omilla tarjoiluilla",
+                "laituritarvikkeet / huolto"
             ],
             "sub_contexts": [
                 "taulun kartano",
@@ -46046,6 +45810,7 @@
     },
     "company-280": {
         "name": "Juhlatalo Humina Lievestuore",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 100,
@@ -46068,7 +45833,8 @@
             "home_service": false,
             "weekend_service": false,
             "not_suitable_for": [
-                "pitopalvelu"
+                "pitopalvelu",
+                "luonnonläheinen tila"
             ],
             "sub_contexts": [
                 "juhlatila",
@@ -46365,6 +46131,7 @@
     },
     "company-277": {
         "name": "Sarahovin kokoustilat",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 92,
@@ -46416,7 +46183,10 @@
             "not_suitable_for": [
                 "majoitus",
                 "suuret yli 100 hengen tapahtumat",
-                "yökerho- ja myöhäisillatapahtumat"
+                "yökerho- ja myöhäisillatapahtumat",
+                "tunnelmallinen kartano",
+                "luonnonläheinen tila",
+                "saunatilat"
             ],
             "sub_contexts": [
                 "juhlatila",
@@ -46682,6 +46452,7 @@
     },
     "company-276": {
         "name": "Vuonteen Helmi",
+        "tags": "pitopalvelu",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 100,
@@ -46737,7 +46508,9 @@
             "corporate_clients": true,
             "home_service": false,
             "weekend_service": true,
-            "not_suitable_for": [],
+            "not_suitable_for": [
+                "saunatilat"
+            ],
             "sub_contexts": [
                 "juhlatila",
                 "kokoustila",
@@ -47026,6 +46799,7 @@
     },
     "company-286": {
         "name": "Multamäen leirikeskus",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 60,
@@ -47050,7 +46824,9 @@
             "weekend_service": false,
             "not_suitable_for": [
                 "pitopalvelu",
-                "koskenlasku"
+                "koskenlasku",
+                "kylpyhuoneremontti",
+                "lvi-asentaja (putkimies)"
             ],
             "sub_contexts": [
                 "majoitus",
@@ -47338,6 +47114,7 @@
     },
     "company-282": {
         "name": "Laukaan Tuulenväre",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 100,
@@ -47649,6 +47426,7 @@
     },
     "company-281": {
         "name": "Juhla- ja kylätalo Himma",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 100,
@@ -47669,7 +47447,9 @@
             "corporate_clients": false,
             "home_service": false,
             "weekend_service": false,
-            "not_suitable_for": [],
+            "not_suitable_for": [
+                "keittiöremontti"
+            ],
             "sub_contexts": [
                 "juhlatila",
                 "häät",
@@ -47953,6 +47733,7 @@
     },
     "company-279": {
         "name": "Työväentalo Toivola Lievestuore",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 100,
@@ -47976,7 +47757,9 @@
             "weekend_service": true,
             "not_suitable_for": [
                 "majoitus",
-                "järjestää ruoan"
+                "järjestää ruoan",
+                "tunnelmallinen kartano",
+                "luonnonläheinen tila"
             ],
             "sub_contexts": [
                 "juhlatila",
@@ -48265,6 +48048,7 @@
     },
     "company-296": {
         "name": "Bistro Puulaaki",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 100,
@@ -48306,7 +48090,10 @@
             "weekend_service": true,
             "not_suitable_for": [
                 "hautajaiset",
-                "muistotilaisuus"
+                "muistotilaisuus",
+                "tunnelmallinen kartano",
+                "luonnonläheinen tila",
+                "saunatilat"
             ],
             "sub_contexts": [
                 "pitopalvelu",
@@ -48553,6 +48340,7 @@
     },
     "company-294": {
         "name": "Koivulan savukala",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 60,
@@ -48813,6 +48601,7 @@
     },
     "company-295": {
         "name": "Naissaaren Upee kahvila",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 65,
@@ -49083,6 +48872,7 @@
     },
     "company-301": {
         "name": "SS Notariaatti Oy – Lievestuoreen toimipiste",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 10,
@@ -49130,7 +48920,9 @@
             "not_suitable_for": [
                 "juhlatilat",
                 "majoitus",
-                "rakennuspalvelut"
+                "rakennuspalvelut",
+                "kertaluonteinen remontti",
+                "kahvitus / pitopalvelu"
             ],
             "sub_contexts": [
                 "notariaatti",
@@ -49362,9 +49154,10 @@
     },
     "company-306": {
         "name": "Villi-Sessio",
+        "tags": "ohjelmapalvelut, eräopas, leipomo, elintarvike, kakut, leivonnaiset",
         "core": {
             "fits_for": {
-                "events-and-celebrations": 82,
+                "events-and-celebrations": 85,
                 "business-events": 80,
                 "funerals-and-memorials": 0,
                 "startup-services": 0,
@@ -49662,6 +49455,7 @@
     },
     "company-307": {
         "name": "Kauppapuutarha Tervo Oy",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 78,
@@ -49712,7 +49506,8 @@
             "not_suitable_for": [
                 "muuttopalvelut",
                 "lakipalvelut",
-                "it-palvelut"
+                "it-palvelut",
+                "kahvitus / pitopalvelu"
             ],
             "sub_contexts": [
                 "kauppapuutarha",
@@ -49955,6 +49750,7 @@
     },
     "company-308": {
         "name": "Lakiasiaintoimisto Esa Jäntti",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 10,
@@ -49989,7 +49785,9 @@
             "not_suitable_for": [
                 "juhlatilat",
                 "catering",
-                "viihdepalvelut"
+                "viihdepalvelut",
+                "kertaluonteinen remontti",
+                "kahvitus / pitopalvelu"
             ],
             "sub_contexts": [],
             "node_links": [],

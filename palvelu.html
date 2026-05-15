@@ -1248,71 +1248,10 @@
                             }
                         }
 
-                        if (selections._sub_contexts && selections._sub_contexts.length > 0) {
-                            if (!c.profiling) {
-                                // Ei profilointia — sallitaan, tagitarkistus ratkaisee
-                            } else {
-                                const companySubContexts = c.profiling?.core?.sub_contexts || [];
-                                let isSubContextMatch = false;
-                                
-                                const underscoreKey = currentProfilingKey.replace(/-/g, '_');
-                                const finnishMap = {
-                                    'events_and_celebrations': 'häät',
-                                    'business_events': 'yritysjuhlat',
-                                    'funerals_and_memorials': 'hautajaiset',
-                                    'startup_services': 'yrityksen perustaminen',
-                                    'business_growth': 'yrityksen kehittäminen',
-                                    'construction_and_maintenance': 'remontti'
-                                };
-                                const finKey = finnishMap[underscoreKey];
-
-                                // 1. Tarkistetaan täsmääkö jokin yrityksen sub_context käyttäjän valintoihin
-                                if (Array.isArray(companySubContexts)) {
-                                    if (companySubContexts.length === 0) isSubContextMatch = true;
-                                    else isSubContextMatch = selections._sub_contexts.some(sc => companySubContexts.includes(sc));
-                                } else if (typeof companySubContexts === 'object' && companySubContexts !== null) {
-                                    const relevantSubContexts = companySubContexts[underscoreKey] || companySubContexts[currentProfilingKey] || (finKey ? companySubContexts[finKey] : null);
-                                    if (relevantSubContexts) isSubContextMatch = selections._sub_contexts.some(sc => relevantSubContexts.includes(sc));
-                                    else isSubContextMatch = true; 
-                                } else {
-                                    isSubContextMatch = true;
-                                }
-
-                                if (!isSubContextMatch) {
-                                    // NEW: Pehmeämpi vertailu jos kyseessä on saman pääkontekstin sisäinen haku
-                                    const hasCommonBase = selections._sub_contexts.some(sc => {
-                                        const scLower = sc.toLowerCase();
-                                        const bases = ['hää', 'yritys', 'juhla', 'hautajais', 'muisto', 'remontti', 'rakentaminen'];
-                                        const cscArray = Array.isArray(companySubContexts) ? companySubContexts : (typeof companySubContexts === 'object' && companySubContexts !== null ? Object.values(companySubContexts).flat() : []);
-                                        return bases.some(b => scLower.includes(b) && cscArray.some(csc => String(csc).toLowerCase().includes(b)));
-                                    });
-                                    if (hasCommonBase) isSubContextMatch = true;
-                                }
-
-                                // 2. JOS EI EDELLEENKÄÄN MATSIA: Hylätään yritys jos se on profiloitu mutta "väärään" sub-kontekstiin
-                                if (!isSubContextMatch) {
-                                    const mainFitsScore = getFitsForScore(c, currentProfilingKey);
-                                    const hasAnySubContexts = Array.isArray(companySubContexts) ? companySubContexts.length > 0 : !!companySubContexts;
-                                    const labelLower = i18n.getText(opt.label || '').toLowerCase();
-                                    const isVenueOrCore = (opt.capacity_req > 0 || opt.node_link === 'JUHLATILA' || (labelLower.includes('tila') && !labelLower.includes('tilaisuus')) || labelLower.includes('muistotilaisuus'));
-                                    
-                                    // JOS hakuoptiolla on itsellään sub_context vaatimus (kuten "uudisrakentaminen"), ollaan ERITTÄIN tiukkoja
-                                    if (opt.sub_context && hasAnySubContexts) {
-                                        // Jos yritys on profiloitu mutta ei sisällä tätä nimenomaista sub-kontekstia, hylätään se.
-                                        // Poikkeus: ERITTÄIN korkea yleisarvosana (100) voi mennä läpi, jos halutaan jättää pelivaraa, 
-                                        // mutta käyttäjän toiveen mukaan (6 tulosta) mennään nyt tiukalla linjalla.
-                                        return false; 
-                                    }
-
-                                    // Rakentaminen ja remontointi: Jos yrityksellä on sub-konteksteja mutta väärä, hylätään
-                                    if (currentProfilingKey === 'construction-and-maintenance' && hasAnySubContexts) {
-                                        return false;
-                                    }
-
-                                    // Muut alat (häät jne): Venues ovat tiukempia
-                                    if (isVenueOrCore && hasAnySubContexts && mainFitsScore < THRESHOLD_STRICT) return false; 
-                                }
-                            }
+                        // Core Profiling Match (Parity with Simulator)
+                        const isCoreMatch = window.isMatch ? window.isMatch(c.profiling, opt, currentProfilingKey, selections._sub_contexts || []) : true;
+                        if (!isCoreMatch && c.profiling) {
+                            return false;
                         }
 
                         if (opt.require_fits_for) {
@@ -1322,7 +1261,7 @@
                             if (rfScore < rfMin) return false;
                         }
 
-                        let isProfiledMatch = false;
+                        let isProfiledMatch = isCoreMatch;
                         if (opt.node_link) {
                             const links = c.profiling?.core?.node_links || [];
                             if (links.includes(opt.node_link)) isProfiledMatch = true;
@@ -1377,14 +1316,6 @@
                                 isProfiledMatch = isProfiledMatch && match;
                             } else {
                                 isProfiledMatch = match;
-                            }
-                        }
-                        
-                        // INTENT-CODE TÄSMÄYS (UUSI)
-                        if (opt.intent_codes && c.profiling?.core?.intent_codes) {
-                            const hasIntent = opt.intent_codes.some(code => c.profiling.core.intent_codes.includes(code));
-                            if (hasIntent) {
-                                isProfiledMatch = true;
                             }
                         }
 

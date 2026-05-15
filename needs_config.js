@@ -268,7 +268,7 @@ const NEEDS_CONFIG = {
                 "options": [
                     { "label": { "fi": "Rautakauppa / Rakennustarvikkeet", "en": "Hardware store / Building supplies" }, "tags": ["rautakauppa", "rakennustarvikkeet"] },
                     { "label": { "fi": "Koneiden ja laitteiden vuokraus", "en": "Machine and equipment rental" }, "tags": ["rakennuskonevuokraus"] },
-                    { "label": { "fi": "Sisustustuotteet", "en": "Interior decoration products" }, "tags": ["kaupat ja ostokset", "erikoisliikkeet"] }
+                    { "label": { "fi": "Sisustustuotteet", "en": "Interior decoration products" }, "tags": ["sisustus", "matot", "verhot", "huonekalut", "lahjatavarat"] }
                 ]
             }
         ]
@@ -393,7 +393,7 @@ const NEEDS_CONFIG = {
                 "question": { "fi": "Hautajaisten ja muistotilaisuuden lisäpalvelut?", "en": "Additional services for the funeral and memorial?" },
                 "skipIf": "!isSelected('paatarve', 'Muistotilaisuus') && !isSelected('paatarve', 'Hautajaisjärjestelyt')",
                 "options": [
-                    { "label": { "fi": "Kahvitus / Pitopalvelu", "en": "Coffee / Catering" }, "tags": ["pitopalvelu"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "memorial_catering", "value": true }, "require_fits_for": { "key": "funerals_and_memorials", "min": 20 } },
+                    { "label": { "fi": "Kahvitus / Pitopalvelu", "en": "Coffee / Catering" }, "tags": ["pitopalvelu"], "intent_codes": ["BIZ_CATERING"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "memorial_catering", "value": true }, "require_fits_for": { "key": "funerals_and_memorials", "min": 20 } },
                     { "label": { "fi": "Kukkatervehdykset", "en": "Floral tributes" }, "tags": ["kukkakauppa", "kukat"], "intent_codes": ["BIZ_FLORIST"] },
                     { "label": { "fi": "Kuljetuspalvelut", "en": "Transport services" }, "tags": ["hautauspalvelu", "kuljetus"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "transport_assistance", "value": true } }
                 ]
@@ -640,13 +640,25 @@ const NEEDS_CONFIG = {
         "profilointi_context": "auto_services",
         "steps": [
             {
+                "id": "tarkennus",
+                "hide_results": true,
+                "question": { "fi": "Minkä tyyppistä ajoneuvoa huolletaan?", "en": "What type of vehicle is being serviced?" },
+                "options": [
+                    { "label": { "fi": "Henkilöauto", "en": "Passenger car" }, "sub_context": "henkilöauto" },
+                    { "label": { "fi": "Raskas kalusto / Työkoneet", "en": "Heavy equipment / Machines" }, "sub_context": "raskaskonehuolto" },
+                    { "label": { "fi": "Asuntoauto tai -vaunu", "en": "Caravan or Motorhome" }, "sub_context": "asuntoauto" }
+                ]
+            },
+            {
                 "id": "palvelut",
                 "multiple": true,
                 "question": { "fi": "Millaista palvelua autoosi tarvitset?", "en": "What kind of service does your car need?" },
                 "options": [
-                    { "label": { "fi": "Perushuolto ja korjaukset", "en": "Basic maintenance and repairs" }, "sub_context": "autokorjaamo", "tags": ["autokorjaamot", "autohuolto"], "intent_codes": ["AUTO_REPAIR"] },
+                    { "label": { "fi": "Perushuolto ja korjaukset", "en": "Basic maintenance and repairs" }, "sub_context": "autokorjaamo", "tags": ["autokorjaamot", "autohuolto", "huolto", "korjaamo"], "intent_codes": ["AUTO_REPAIR"] },
                     { "label": { "fi": "Renkaiden vaihto tai osto", "en": "Tire change or purchase" }, "sub_context": "rengasliike", "tags": ["rengasliike"], "intent_codes": ["AUTO_TIRES"] },
                     { "label": { "fi": "Auton pesu tai hoito", "en": "Car wash or care" }, "sub_context": "autopesu", "tags": ["autopesu", "automaalaamo"], "intent_codes": ["AUTO_WASH"] },
+                    { "label": { "fi": "Katsastuspalvelut", "en": "Inspection services" }, "sub_context": "katsastus", "tags": ["katsastus"], "intent_codes": ["AUTO_INSPECTION"] },
+                    { "label": { "fi": "Vauriokorjaus ja maalaus", "en": "Damage repair and painting" }, "sub_context": "automaalaamo", "tags": ["automaalaamo", "peltikorjaamo"], "intent_codes": ["AUTO_BODY"] },
                     { "label": { "fi": "Raskaan kaluston huolto", "en": "Heavy equipment maintenance" }, "sub_context": "raskaskonehuolto", "tags": ["raskaskonehuolto"], "intent_codes": ["AUTO_HEAVY"] }
                 ]
             }

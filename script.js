@@ -3177,3 +3177,56 @@ async function initHeroSlideshow() {
         console.warn('Hero slideshow error:', error);
     }
 }
+
+/**
+ * Global search matching function for LaukaaInfo service discovery.
+ * Ensures parity with the production simulator.
+ */
+const THRESHOLD_STRICT = 80;
+const THRESHOLD_RELEVANT = 50;
+const THRESHOLD_LOOSE = 10;
+
+function isMatch(company, option, context, activeSubContexts) {
+    if (!company || !option) return false;
+    
+    // Normalize context and key handling
+    const label = (i18n.getText(option.label) || "").toLowerCase();
+    const companyCore = company.core || {};
+    const intentScores = companyCore.intent_scores || {};
+    const fitsFor = companyCore.fits_for || {};
+    
+    // 1. Kategoria-pisteet (fits_for)
+    // Support both dash and underscore versions
+    const contextKeyDash = context.replace(/_/g, '-');
+    const contextKeyUnderscore = context.replace(/-/g, '_');
+    const fitsScore = fitsFor[context] || fitsFor[contextKeyDash] || fitsFor[contextKeyUnderscore] || 0;
+
+    // 2. Intent-osuma (esim. BIZ_CATERING)
+    const hasStrongIntent = (option.intent_codes || []).some(code => (intentScores[code] || 0) >= 50);
+
+    // 3. Sub-context täsmäys
+    const companySubContexts = companyCore.sub_contexts || [];
+    let isSubContextMatch = (!activeSubContexts || activeSubContexts.length === 0);
+    if (!isSubContextMatch) {
+        isSubContextMatch = activeSubContexts.some(sc => companySubContexts.includes(sc));
+    }
+
+    // 4. Lempileivos-tyyppinen poikkeus: Jos yritys on "yleinen palvelu" (pitopalvelu tai remontti),
+    // sallitaan haku vaikka sub-context ei täsmäisi, jos kategoria-pisteet ovat korkeat.
+    const isGeneralService = (fitsScore >= THRESHOLD_STRICT) && (
+        label.includes("pitopalvelu") || 
+        label.includes("leipomo") || 
+        label.includes("remontti") ||
+        label.includes("rakennus")
+    );
+
+    if (isGeneralService) return true;
+
+    // Normaalit ehdot: joko sub-context tai vahva intent
+    return (fitsScore >= THRESHOLD_LOOSE) && (isSubContextMatch || hasStrongIntent);
+}
+
+// Expose to window
+if (typeof window !== 'undefined') {
+    window.isMatch = isMatch;
+}

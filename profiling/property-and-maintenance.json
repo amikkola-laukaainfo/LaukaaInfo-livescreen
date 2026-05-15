@@ -1,6 +1,7 @@
 {
     "company-275": {
         "name": "Tyyni Hoiva Suomi Oy",
+        "tags": "",
         "core": {
             "fits_for": {
                 "hyvinvointi-ja-kauneus": 92,
@@ -48,7 +49,16 @@
             "not_suitable_for": [
                 "rakennuspalvelut",
                 "juhlatila",
-                "iso"
+                "iso",
+                "kylpyhuoneremontti",
+                "keittiöremontti",
+                "rakennus- / remonttimies",
+                "sähköasentaja",
+                "lvi-asentaja (putkimies)",
+                "maalari / tapetoija",
+                "suunnittelija / arkkitehti",
+                "laituritarvikkeet / huolto",
+                "kertaluonteinen remontti"
             ],
             "sub_contexts": [
                 "henkilökohtainen apu",
@@ -283,6 +293,7 @@
     },
     "company-37": {
         "name": "Arskan Autopalvelu",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 0,
@@ -326,7 +337,18 @@
                 "bussi",
                 "taksi",
                 "juhlat",
-                "pitopalvelu"
+                "pitopalvelu",
+                "kylpyhuoneremontti",
+                "keittiöremontti",
+                "pintaremontti (maalaus tms.)",
+                "uudisrakentaminen",
+                "rakennus- / remonttimies",
+                "sähköasentaja",
+                "lvi-asentaja (putkimies)",
+                "maalari / tapetoija",
+                "suunnittelija / arkkitehti",
+                "laituritarvikkeet / huolto",
+                "kertaluonteinen remontti"
             ],
             "sub_contexts": [
                 "autohuolto",
@@ -541,6 +563,7 @@
     },
     "company-41": {
         "name": "Autokorjaamo Kari-Huolto Leppävesi",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 0,
@@ -586,7 +609,17 @@
                 "kuljetus",
                 "bussi",
                 "taksi",
-                "juhlat"
+                "juhlat",
+                "kylpyhuoneremontti",
+                "keittiöremontti",
+                "pintaremontti (maalaus tms.)",
+                "rakennus- / remonttimies",
+                "sähköasentaja",
+                "lvi-asentaja (putkimies)",
+                "maalari / tapetoija",
+                "suunnittelija / arkkitehti",
+                "laituritarvikkeet / huolto",
+                "kertaluonteinen remontti"
             ],
             "sub_contexts": [
                 "autohuolto",
@@ -803,6 +836,7 @@
     },
     "company-45": {
         "name": "GTI Car Center Oy",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 0,
@@ -836,7 +870,17 @@
             "not_suitable_for": [
                 "kuljetus",
                 "bussi",
-                "taksi"
+                "taksi",
+                "kylpyhuoneremontti",
+                "keittiöremontti",
+                "uudisrakentaminen",
+                "rakennus- / remonttimies",
+                "sähköasentaja",
+                "lvi-asentaja (putkimies)",
+                "maalari / tapetoija",
+                "suunnittelija / arkkitehti",
+                "laituritarvikkeet / huolto",
+                "kertaluonteinen remontti"
             ],
             "sub_contexts": [
                 "autohuolto",
@@ -1053,6 +1097,7 @@
     },
     "company-53": {
         "name": "K&K Peni Oy",
+        "tags": "",
         "core": {
             "fits_for": {
                 "construction-and-maintenance": 90,
@@ -1084,7 +1129,12 @@
             "home_service": true,
             "weekend_service": false,
             "not_suitable_for": [
-                "majoitus"
+                "majoitus",
+                "sähköasentaja",
+                "lvi-asentaja (putkimies)",
+                "maalari / tapetoija",
+                "suunnittelija / arkkitehti",
+                "laituritarvikkeet / huolto"
             ],
             "sub_contexts": [
                 "maanrakennus",
@@ -1300,6 +1350,7 @@
     },
     "company-58": {
         "name": "Pajakulma Oy",
+        "tags": "",
         "core": {
             "fits_for": {
                 "taloyhtiöpalvelut": 35
@@ -1518,6 +1569,7 @@
     },
     "company-63": {
         "name": "Sepän Automaalaus",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 0,
@@ -1761,6 +1813,7 @@
     },
     "company-73": {
         "name": "T:mi Jukka Häkkinen",
+        "tags": "",
         "core": {
             "fits_for": {
                 "construction-and-maintenance": 100,
@@ -1799,7 +1852,12 @@
                 "pieni pintaremontti",
                 "keittiöremontti",
                 "maalaus",
-                "laituritarvikkeet"
+                "laituritarvikkeet",
+                "sähköasentaja",
+                "lvi-asentaja (putkimies)",
+                "maalari / tapetoija",
+                "suunnittelija / arkkitehti",
+                "kahvitus / pitopalvelu"
             ],
             "sub_contexts": [
                 "remontti",
@@ -2018,6 +2076,7 @@
     },
     "company-96": {
         "name": "Raudaskala",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 10,
@@ -2050,7 +2109,9 @@
             "not_suitable_for": [
                 "juhlatilat",
                 "kokoustilat",
-                "majoitus"
+                "majoitus",
+                "kylpyhuoneremontti",
+                "lvi-asentaja (putkimies)"
             ],
             "sub_contexts": [
                 "kalakauppa",
@@ -2255,6 +2316,7 @@
     },
     "company-106": {
         "name": "Hermoratahieronta KIPaway",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 20,
@@ -2307,7 +2369,15 @@
             "not_suitable_for": [
                 "juhlatilat",
                 "pitopalvelu",
-                "kuljetuspalvelut"
+                "kuljetuspalvelut",
+                "keittiöremontti",
+                "uudisrakentaminen",
+                "sähköasentaja",
+                "lvi-asentaja (putkimies)",
+                "maalari / tapetoija",
+                "suunnittelija / arkkitehti",
+                "laituritarvikkeet / huolto",
+                "kertaluonteinen remontti"
             ],
             "sub_contexts": [
                 "hermoratahieronta",
@@ -2556,8 +2626,236 @@
             "status": "enriched"
         }
     },
+    "company-121": {
+        "name": "Rock Tekniikka Ky",
+        "tags": "it-palvelut",
+        "core": {
+            "fits_for": {
+                "business-events": 85,
+                "housing-company-and-contracts": 90,
+                "startup-services": 90,
+                "business-growth": 90
+            },
+            "priority_score": 0,
+            "service_area": {
+                "mode": "TOIMIPISTE",
+                "radius_km": 0,
+                "regions": [
+                    "Laukaa",
+                    "Lievestuore"
+                ],
+                "note": "Yrityksen kotipaikka on Laukaa ."
+            },
+            "emergency_available": false,
+            "contract_customer_available": true,
+            "paired_with_by_context": {},
+            "corporate_clients": true,
+            "home_service": false,
+            "weekend_service": true,
+            "not_suitable_for": [
+                "kertaluonteinen remontti"
+            ],
+            "sub_contexts": [],
+            "node_links": [],
+            "intent_codes": [
+                "BIZ_IT"
+            ],
+            "intent_scores": {
+                "BIZ_IT": 90
+            }
+        },
+        "categories": {
+            "core": {
+                "description": "Sähkötekniikan ja tapahtumatekniikan palveluihin erikoistunut yritys. Yritys on perustettu vuonna 2016 .",
+                "website": "",
+                "email": "",
+                "phone": ""
+            },
+            "events_and_celebrations": {
+                "capacity_max": 0,
+                "seated_capacity": 0,
+                "standing_guests": 0,
+                "outdoor_capacity": 0,
+                "is_accessible": false,
+                "own_catering_allowed": false,
+                "inhouse_catering_available": false,
+                "is_lakeside": false,
+                "has_sauna": false,
+                "has_av_tech": true,
+                "has_stage": false,
+                "accommodation_beds": 0,
+                "alcohol_license": false,
+                "private_booking": true,
+                "late_night_events": true,
+                "wedding_specialized": false,
+                "catering_min_capacity": 0,
+                "catering_max_capacity": 0,
+                "dietary_specialties": [],
+                "staff_included": false,
+                "wedding_menu_available": false,
+                "cake_service": false,
+                "partner_venues": [],
+                "wedding_photography": false,
+                "drone_available": false,
+                "video_production": false,
+                "live_music": true,
+                "dj_services": false,
+                "karaoke_available": false,
+                "has_exclusive_catering": false,
+                "accommodation_included": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "entertainment_features": [],
+                "collaborated_with": []
+            },
+            "business_events": {
+                "meeting_capacity": 0,
+                "seminar_capacity": 0,
+                "conference_rooms": 0,
+                "has_projector": true,
+                "has_streaming": false,
+                "has_wifi": false,
+                "has_stage": false,
+                "private_booking": true,
+                "invoice_billing": true,
+                "corporate_clients": true,
+                "vip_services": false,
+                "business_catering": false,
+                "event_hosting": true,
+                "corporate_gifts": false,
+                "branding_support": false,
+                "av_support": true,
+                "staff_events_specialized": true,
+                "refinement_tags": [],
+                "wellbeing_and_activity_features": [],
+                "entertainment_features": [],
+                "collaborated_with": []
+            },
+            "funerals_and_memorials": {
+                "memorial_service_capacity": 0,
+                "quiet_private_space": false,
+                "accessible_entry": false,
+                "memorial_catering": false,
+                "coffee_service": false,
+                "flower_arrangements": false,
+                "memorial_menu_available": false,
+                "funeral_flowers": false,
+                "memorial_arrangements": false,
+                "transport_assistance": false,
+                "urgent_booking_available": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "moving_and_housing": {
+                "moving_truck_available": false,
+                "packing_service": false,
+                "storage_available": false,
+                "weekend_moves": false,
+                "urgent_moves": false,
+                "long_distance_moves": false,
+                "cleaning_after_move": false,
+                "electrician_available": true,
+                "renovation_support": false,
+                "insurance_support": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "construction_and_maintenance": {
+                "emergency_service": false,
+                "certifications": [],
+                "wet_room_certification": false,
+                "provides_tools": false,
+                "material_supply": false,
+                "project_management": false,
+                "snow_removal": false,
+                "lawn_maintenance": false,
+                "property_monitoring": false,
+                "maintenance_contracts": false,
+                "housing_company_clients": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "cottage_services": {
+                "key_holding": false,
+                "winter_monitoring": false,
+                "snow_removal": false,
+                "cleaning_service": false,
+                "lawn_service": false,
+                "remote_monitoring": false,
+                "emergency_visits": false,
+                "renovation_support": false,
+                "dock_maintenance": false,
+                "sauna_services": false,
+                "guest_preparation_service": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "housing_company_and_contracts": {
+                "housing_company_clients": false,
+                "maintenance_contracts": false,
+                "emergency_response": false,
+                "scheduled_visits": false,
+                "property_reports": false,
+                "invoice_billing": true,
+                "contract_customer_available": true,
+                "priority_support": false,
+                "monthly_service_plan": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "startup_services": {
+                "bookkeeping_startup": false,
+                "business_advisory": false,
+                "insurance_setup": false,
+                "legal_services": false,
+                "office_space_available": false,
+                "banking_support": false,
+                "website_creation": false,
+                "webshop_setup": false,
+                "branding_support": false,
+                "logo_design": false,
+                "business_photography": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "business_growth": {
+                "google_ads": false,
+                "social_media_marketing": false,
+                "seo_services": false,
+                "content_creation": false,
+                "video_production": false,
+                "crm_support": false,
+                "recruitment_support": false,
+                "sales_development": false,
+                "automation_services": false,
+                "consulting_services": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "wellbeing_and_beauty": {
+                "home_visits": false,
+                "online_booking": false,
+                "unisex_services": false,
+                "gift_cards": false,
+                "corporate_wellbeing_services": false,
+                "event_makeup": false,
+                "bridal_services": false,
+                "group_bookings": true,
+                "refinement_tags": [],
+                "collaborated_with": []
+            }
+        },
+        "meta": {
+            "last_updated": "2026-04-27T05:54:01.968Z",
+            "verified_by": "AI-analysis-v1",
+            "status": "draft"
+        }
+    },
     "company-129": {
         "name": "Fieldhill Oy",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 88,
@@ -2614,7 +2912,20 @@
                 "pitopalvelu",
                 "majoitus",
                 "hyvinvointipalvelut",
-                "sisustustuotteet"
+                "sisustustuotteet",
+                "musiikki tai dj",
+                "ohjelmapalvelut / elämykset",
+                "ohjattu liikunta / jooga",
+                "kylpyhuoneremontti",
+                "keittiöremontti",
+                "uudisrakentaminen",
+                "rakennus- / remonttimies",
+                "sähköasentaja",
+                "lvi-asentaja (putkimies)",
+                "maalari / tapetoija",
+                "suunnittelija / arkkitehti",
+                "laituritarvikkeet / huolto",
+                "kertaluonteinen remontti"
             ],
             "sub_contexts": [
                 "kitarahuolto",
@@ -2864,8 +3175,316 @@
             "status": "enriched"
         }
     },
+    "company-134": {
+        "name": "Joudukas",
+        "tags": "erikoisliikkeet",
+        "core": {
+            "fits_for": {
+                "events-and-celebrations": 45,
+                "business-events": 35,
+                "funerals-and-memorials": 35,
+                "startup-services": 5,
+                "business-growth": 10,
+                "moving-and-housing": 0,
+                "construction-and-maintenance": 85,
+                "cottage-services": 20,
+                "accommodation": 25,
+                "wellbeing-and-beauty": 25,
+                "housing-company-and-contracts": 0,
+                "liikunta-ja-vapaaaika": 25
+            },
+            "priority_score": 52,
+            "service_area": {
+                "mode": "TOIMIPISTE",
+                "radius_km": 40,
+                "regions": [
+                    "Laukaa",
+                    "Jyväskylä",
+                    "Keski-Suomi"
+                ],
+                "note": "Käsityö- ja taidetuotteita sekä pienimuotoista kulttuuritoimintaa Laukaan ja Keski-Suomen alueella."
+            },
+            "emergency_available": false,
+            "contract_customer_available": false,
+            "paired_with_by_context": {
+                "events-and-celebrations": [
+                    "Kukat",
+                    "Juhlatila",
+                    "Pitopalvelu"
+                ],
+                "business-events": [
+                    "Matkailupalvelut",
+                    "Kokoustila"
+                ],
+                "general": [
+                    "Kukat",
+                    "Juhlatila",
+                    "Matkailupalvelut",
+                    "Käsityöläiset",
+                    "Kahvilat"
+                ]
+            },
+            "corporate_clients": true,
+            "home_service": false,
+            "weekend_service": false,
+            "not_suitable_for": [
+                "suuret massatapahtumat",
+                "pikatoimitukset",
+                "luennot",
+                "luontoretkeily",
+                "keittiöremontti"
+            ],
+            "sub_contexts": [
+                "käsityö",
+                "taidekäsityö",
+                "sisustustuotteet",
+                "lahjatavarat",
+                "saunatekstiilit",
+                "keittiötekstiilit",
+                "saraakallio",
+                "kulttuurituotteet",
+                "piensarjatuotteet",
+                "paikallistuotteet",
+                "design",
+                "keraaminen taide",
+                "ympäristötaide",
+                "käsityöläinen",
+                "lahjaideat",
+                "kulttuurimatkailu"
+            ],
+            "node_links": [
+                "HYVINVOINTI",
+                "KUKAT"
+            ],
+            "intent_codes": [
+                "BIZ_FLORIST",
+                "REC_OUTDOOR"
+            ],
+            "intent_scores": {
+                "BIZ_FLORIST": 35,
+                "REC_OUTDOOR": 25
+            }
+        },
+        "categories": {
+            "core": {
+                "description": "Joudukas on Mirja Aution käsityö- ja taidealan toimija Laukaasta. Yritys valmistaa perinteitä kunnioittavia piensarjatuotteita, sisustus- ja lahjatuotteita sekä Saraakallio-aiheisia tuotteita. Toimintaan kuuluu myös taide- ja ympäristötaidenäyttelyitä sekä yhteistyö paikallisten matkailu- ja kulttuuritoimijoiden kanssa.",
+                "website": "https://www.joudukas.fi",
+                "email": "joudukas@joudukas.fi",
+                "phone": "358504911431"
+            },
+            "events_and_celebrations": {
+                "capacity_max": 0,
+                "seated_capacity": 0,
+                "standing_guests": 0,
+                "outdoor_capacity": 0,
+                "is_accessible": false,
+                "own_catering_allowed": false,
+                "inhouse_catering_available": false,
+                "is_lakeside": true,
+                "has_sauna": false,
+                "has_av_tech": false,
+                "has_stage": false,
+                "accommodation_beds": 0,
+                "alcohol_license": false,
+                "private_booking": false,
+                "late_night_events": false,
+                "wedding_specialized": false,
+                "catering_min_capacity": 0,
+                "catering_max_capacity": 0,
+                "dietary_specialties": [],
+                "staff_included": false,
+                "wedding_menu_available": false,
+                "cake_service": false,
+                "partner_venues": [
+                    "Tertan kahvila & puoti",
+                    "Kädenjälkipuoti Sará soppi"
+                ],
+                "wedding_photography": false,
+                "drone_available": false,
+                "video_production": false,
+                "live_music": false,
+                "dj_services": false,
+                "karaoke_available": false,
+                "has_exclusive_catering": false,
+                "accommodation_included": false,
+                "refinement_tags": [
+                    "käsityötuotteet",
+                    "lahjat",
+                    "design",
+                    "paikallistuotteet",
+                    "sisustus"
+                ],
+                "digitization_features": [],
+                "entertainment_features": [],
+                "collaborated_with": [
+                    "Laukaan Kädenjälki",
+                    "Tertan kahvila & puoti",
+                    "Jyväskylän Taito Shop"
+                ]
+            },
+            "business_events": {
+                "meeting_capacity": 0,
+                "seminar_capacity": 0,
+                "conference_rooms": 0,
+                "has_projector": false,
+                "has_streaming": false,
+                "has_wifi": false,
+                "has_stage": false,
+                "private_booking": false,
+                "invoice_billing": true,
+                "corporate_clients": true,
+                "vip_services": false,
+                "business_catering": false,
+                "event_hosting": false,
+                "corporate_gifts": true,
+                "branding_support": false,
+                "av_support": false,
+                "staff_events_specialized": false,
+                "refinement_tags": [
+                    "yrityslahjat",
+                    "paikallistuotteet",
+                    "design-tuotteet"
+                ],
+                "wellbeing_and_activity_features": [],
+                "entertainment_features": [],
+                "collaborated_with": [
+                    "kulttuuritoimijat",
+                    "matkailuhankkeet"
+                ]
+            },
+            "funerals_and_memorials": {
+                "memorial_service_capacity": 0,
+                "quiet_private_space": false,
+                "accessible_entry": false,
+                "memorial_catering": false,
+                "coffee_service": false,
+                "flower_arrangements": false,
+                "memorial_menu_available": false,
+                "funeral_flowers": false,
+                "memorial_arrangements": false,
+                "transport_assistance": false,
+                "urgent_booking_available": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "moving_and_housing": {
+                "moving_truck_available": false,
+                "packing_service": false,
+                "storage_available": false,
+                "weekend_moves": false,
+                "urgent_moves": false,
+                "long_distance_moves": false,
+                "cleaning_after_move": false,
+                "electrician_available": false,
+                "renovation_support": false,
+                "insurance_support": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "construction_and_maintenance": {
+                "emergency_service": false,
+                "certifications": [],
+                "wet_room_certification": false,
+                "provides_tools": false,
+                "material_supply": false,
+                "project_management": false,
+                "snow_removal": false,
+                "lawn_maintenance": false,
+                "property_monitoring": false,
+                "maintenance_contracts": false,
+                "housing_company_clients": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "cottage_services": {
+                "key_holding": false,
+                "winter_monitoring": false,
+                "snow_removal": false,
+                "cleaning_service": false,
+                "lawn_service": false,
+                "remote_monitoring": false,
+                "emergency_visits": false,
+                "renovation_support": false,
+                "dock_maintenance": false,
+                "sauna_services": false,
+                "guest_preparation_service": false,
+                "refinement_tags": [
+                    "mökkisisustus",
+                    "saunatekstiilit",
+                    "lahjatuotteet"
+                ],
+                "collaborated_with": []
+            },
+            "housing_company_and_contracts": {
+                "housing_company_clients": false,
+                "maintenance_contracts": false,
+                "emergency_response": false,
+                "scheduled_visits": false,
+                "property_reports": false,
+                "invoice_billing": false,
+                "contract_customer_available": false,
+                "priority_support": false,
+                "monthly_service_plan": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "startup_services": {
+                "bookkeeping_startup": false,
+                "business_advisory": false,
+                "insurance_setup": false,
+                "legal_services": false,
+                "office_space_available": false,
+                "banking_support": false,
+                "website_creation": false,
+                "webshop_setup": false,
+                "branding_support": false,
+                "logo_design": false,
+                "business_photography": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "business_growth": {
+                "google_ads": false,
+                "social_media_marketing": false,
+                "seo_services": false,
+                "content_creation": false,
+                "video_production": false,
+                "crm_support": false,
+                "recruitment_support": false,
+                "sales_development": false,
+                "automation_services": false,
+                "consulting_services": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "wellbeing_and_beauty": {
+                "home_visits": false,
+                "online_booking": false,
+                "unisex_services": false,
+                "gift_cards": false,
+                "corporate_wellbeing_services": false,
+                "event_makeup": false,
+                "bridal_services": false,
+                "group_bookings": false,
+                "refinement_tags": [
+                    "käsityö",
+                    "luonnonmateriaalit",
+                    "kulttuuri"
+                ],
+                "collaborated_with": []
+            }
+        },
+        "meta": {
+            "last_updated": "2026-05-08T16:55:00.358Z",
+            "verified_by": "ai-analysis-v2",
+            "status": "draft"
+        }
+    },
     "company-144": {
         "name": "Module Keittiö ja Rakennuspalvelu",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 5,
@@ -2900,7 +3519,12 @@
                 "juhlat",
                 "tapahtumatuotanto",
                 "hyvinvointipalvelut",
-                "majoitus"
+                "majoitus",
+                "sähköasentaja",
+                "lvi-asentaja (putkimies)",
+                "maalari / tapetoija",
+                "suunnittelija / arkkitehti",
+                "laituritarvikkeet / huolto"
             ],
             "sub_contexts": [
                 "keittiöremontti",
@@ -3124,6 +3748,7 @@
     },
     "company-175": {
         "name": "Veisto- ja Kalustetyö M. Ojala",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 5,
@@ -3154,7 +3779,13 @@
             "not_suitable_for": [
                 "massatuotanto",
                 "digipalvelut",
-                "terveyspalvelut"
+                "terveyspalvelut",
+                "kylpyhuoneremontti",
+                "sähköasentaja",
+                "lvi-asentaja (putkimies)",
+                "maalari / tapetoija",
+                "suunnittelija / arkkitehti",
+                "kertaluonteinen remontti"
             ],
             "sub_contexts": [
                 "puusepäntyö",
@@ -3374,6 +4005,7 @@
     },
     "company-182": {
         "name": "Colliers Finland Oy",
+        "tags": "",
         "core": {
             "fits_for": {
                 "taloyhtiöpalvelut": 35
@@ -3589,6 +4221,7 @@
     },
     "company-187": {
         "name": "IR-Kiinteistöt Irja Hokkeri",
+        "tags": "",
         "core": {
             "fits_for": {
                 "kiinteiston-valitys": 60,
@@ -3819,6 +4452,7 @@
     },
     "company-188": {
         "name": "Isännöinti Asuville Oy",
+        "tags": "",
         "core": {
             "fits_for": {
                 "muutto": 35,
@@ -3865,7 +4499,14 @@
             "not_suitable_for": [
                 "juhlapalvelut",
                 "pitopalvelu",
-                "kuljetus"
+                "kuljetus",
+                "kylpyhuoneremontti",
+                "keittiöremontti",
+                "sähköasentaja",
+                "lvi-asentaja (putkimies)",
+                "maalari / tapetoija",
+                "suunnittelija / arkkitehti",
+                "laituritarvikkeet / huolto"
             ],
             "sub_contexts": [
                 "isännöinti",
@@ -4088,6 +4729,7 @@
     },
     "company-189": {
         "name": "Isännöintitoimisto Sujuvaa Oy",
+        "tags": "",
         "core": {
             "fits_for": {
                 "taloyhtiöpalvelut": 80,
@@ -4139,7 +4781,12 @@
             "not_suitable_for": [
                 "juhlat",
                 "pitopalvelu",
-                "kuljetus"
+                "kuljetus",
+                "sähköasentaja",
+                "lvi-asentaja (putkimies)",
+                "maalari / tapetoija",
+                "suunnittelija / arkkitehti",
+                "laituritarvikkeet / huolto"
             ],
             "sub_contexts": [
                 "isännöinti",
@@ -4360,6 +5007,7 @@
     },
     "company-190": {
         "name": "Isännöitsijätoimisto Heikki Valkonen Ky",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 0,
@@ -4393,7 +5041,15 @@
             "corporate_clients": true,
             "home_service": false,
             "weekend_service": false,
-            "not_suitable_for": [],
+            "not_suitable_for": [
+                "keittiöremontti",
+                "sähköasentaja",
+                "lvi-asentaja (putkimies)",
+                "maalari / tapetoija",
+                "suunnittelija / arkkitehti",
+                "laituritarvikkeet / huolto",
+                "kertaluonteinen remontti"
+            ],
             "sub_contexts": [
                 "isännöinti",
                 "taloyhtiö",
@@ -4623,6 +5279,7 @@
     },
     "company-195": {
         "name": "Jyväsesudun LVI Oy",
+        "tags": "",
         "core": {
             "fits_for": {
                 "construction-and-maintenance": 100,
@@ -4644,7 +5301,14 @@
             "corporate_clients": false,
             "home_service": false,
             "weekend_service": false,
-            "not_suitable_for": [],
+            "not_suitable_for": [
+                "pieni pintaremontti",
+                "sähköasentaja",
+                "maalari / tapetoija",
+                "suunnittelija / arkkitehti",
+                "laituritarvikkeet / huolto",
+                "kertaluonteinen remontti"
+            ],
             "sub_contexts": [
                 "lvi",
                 "putkityöt",
@@ -4857,6 +5521,7 @@
     },
     "company-199": {
         "name": "Kiinteistöpalvelu Petäjämäki ky",
+        "tags": "",
         "core": {
             "fits_for": {
                 "muutto": 35,
@@ -5072,6 +5737,7 @@
     },
     "company-202": {
         "name": "Laukaan Aave Oy",
+        "tags": "",
         "core": {
             "fits_for": {
                 "muutto": 35,
@@ -5123,7 +5789,12 @@
             "not_suitable_for": [
                 "ravintolapalvelut",
                 "juhlatilat",
-                "majoitus"
+                "majoitus",
+                "sähköasentaja",
+                "lvi-asentaja (putkimies)",
+                "maalari / tapetoija",
+                "suunnittelija / arkkitehti",
+                "laituritarvikkeet / huolto"
             ],
             "sub_contexts": [
                 "viherrakentaminen",
@@ -5360,6 +6031,7 @@
     },
     "company-204": {
         "name": "Laukaan Kotipalvelu",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 10,
@@ -5394,7 +6066,14 @@
                 "large-scale event production",
                 "venue services",
                 "luennot",
-                "majoitus"
+                "majoitus",
+                "kylpyhuoneremontti",
+                "uudisrakentaminen",
+                "sähköasentaja",
+                "lvi-asentaja (putkimies)",
+                "maalari / tapetoija",
+                "suunnittelija / arkkitehti",
+                "laituritarvikkeet / huolto"
             ],
             "sub_contexts": [
                 "kotisiivous",
@@ -5612,6 +6291,7 @@
     },
     "company-206": {
         "name": "Laukaan Puhtaanapito Oy",
+        "tags": "",
         "core": {
             "fits_for": {
                 "muutto": 10,
@@ -5643,7 +6323,14 @@
             "not_suitable_for": [
                 "juhlapalvelut",
                 "majoitus",
-                "viihdepalvelut"
+                "viihdepalvelut",
+                "kylpyhuoneremontti",
+                "keittiöremontti",
+                "sähköasentaja",
+                "lvi-asentaja (putkimies)",
+                "maalari / tapetoija",
+                "suunnittelija / arkkitehti",
+                "laituritarvikkeet / huolto"
             ],
             "sub_contexts": [
                 "puhtaanapito",
@@ -5867,6 +6554,7 @@
     },
     "company-207": {
         "name": "Laukaan Renki-Palvelut",
+        "tags": "",
         "core": {
             "fits_for": {
                 "mökkipalvelut": 70,
@@ -5901,7 +6589,14 @@
             "home_service": true,
             "weekend_service": true,
             "not_suitable_for": [
-                "majoitus"
+                "majoitus",
+                "kuljetus / bussi / taksi",
+                "kuljetukset",
+                "sähköasentaja",
+                "lvi-asentaja (putkimies)",
+                "maalari / tapetoija",
+                "suunnittelija / arkkitehti",
+                "laituritarvikkeet / huolto"
             ],
             "sub_contexts": [
                 "mökkihuolto",
@@ -6127,6 +6822,7 @@
     },
     "company-208": {
         "name": "Laukaan Talopalvelu Oy",
+        "tags": "",
         "core": {
             "fits_for": {
                 "taloyhtiöpalvelut": 35,
@@ -6165,7 +6861,13 @@
             "not_suitable_for": [
                 "juhlatilat",
                 "majoitus",
-                "hyvinvointipalvelut"
+                "hyvinvointipalvelut",
+                "kylpyhuoneremontti",
+                "sähköasentaja",
+                "lvi-asentaja (putkimies)",
+                "maalari / tapetoija",
+                "suunnittelija / arkkitehti",
+                "laituritarvikkeet / huolto"
             ],
             "sub_contexts": [
                 "kiinteistönhuolto",
@@ -6391,6 +7093,7 @@
     },
     "company-212": {
         "name": "LVI Jukka Pirttinen Oy",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 0,
@@ -6425,7 +7128,15 @@
             "weekend_service": true,
             "not_suitable_for": [
                 "juhlatapahtumat",
-                "majoituspalvelut"
+                "majoituspalvelut",
+                "kuljetus / bussi / taksi",
+                "kuljetukset",
+                "sähköasentaja",
+                "maalari / tapetoija",
+                "suunnittelija / arkkitehti",
+                "laituritarvikkeet / huolto",
+                "kertaluonteinen remontti",
+                "pihanhoito / lumityöt"
             ],
             "sub_contexts": [
                 "lvi-huolto",
@@ -6645,6 +7356,7 @@
     },
     "company-214": {
         "name": "LVI-Taitajat Oy",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 0,
@@ -6677,7 +7389,14 @@
             "home_service": true,
             "weekend_service": false,
             "not_suitable_for": [
-                "event- ja juhlapalvelut"
+                "event- ja juhlapalvelut",
+                "it-tuki / av-tekniikka",
+                "sähköasentaja",
+                "maalari / tapetoija",
+                "suunnittelija / arkkitehti",
+                "laituritarvikkeet / huolto",
+                "kertaluonteinen remontti",
+                "pihanhoito / lumityöt"
             ],
             "sub_contexts": [
                 "lvi-huolto",
@@ -6896,9 +7615,10 @@
     },
     "company-224": {
         "name": "T:mi Harri Lekander",
+        "tags": "lvi",
         "core": {
             "fits_for": {
-                "construction-and-maintenance": 80,
+                "construction-and-maintenance": 85,
                 "moving-and-housing": 20,
                 "cottage-services": 70,
                 "housing-company-and-contracts": 70
@@ -6916,7 +7636,12 @@
             "corporate_clients": false,
             "home_service": true,
             "weekend_service": false,
-            "not_suitable_for": [],
+            "not_suitable_for": [
+                "sähköasentaja",
+                "maalari / tapetoija",
+                "suunnittelija / arkkitehti",
+                "laituritarvikkeet / huolto"
+            ],
             "sub_contexts": [
                 "lvi-työt",
                 "huoltotyöt",
@@ -7126,6 +7851,7 @@
     },
     "company-231": {
         "name": "Talotekniikka Väyrynen",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 5,
@@ -7160,7 +7886,12 @@
             "not_suitable_for": [
                 "juhlatilat",
                 "majoitus",
-                "hyvinvointipalvelut"
+                "hyvinvointipalvelut",
+                "sähköasentaja",
+                "lvi-asentaja (putkimies)",
+                "maalari / tapetoija",
+                "suunnittelija / arkkitehti",
+                "laituritarvikkeet / huolto"
             ],
             "sub_contexts": [
                 "lvi-työt",
@@ -7387,6 +8118,7 @@
     },
     "company-235": {
         "name": "Tmi Eero Ylönen",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 20,
@@ -7421,7 +8153,13 @@
             "not_suitable_for": [
                 "majoitus",
                 "juhlatilat",
-                "digipalvelut"
+                "digipalvelut",
+                "sähköasentaja",
+                "lvi-asentaja (putkimies)",
+                "maalari / tapetoija",
+                "suunnittelija / arkkitehti",
+                "laituritarvikkeet / huolto",
+                "jatkuva kiinteistöhuolto"
             ],
             "sub_contexts": [
                 "remontti",
@@ -7646,6 +8384,7 @@
     },
     "company-242": {
         "name": "Kuhajärven Suviranta Oy",
+        "tags": "",
         "core": {
             "fits_for": {
                 "mökkipalvelut": 70
@@ -7667,7 +8406,9 @@
             "corporate_clients": false,
             "home_service": false,
             "weekend_service": false,
-            "not_suitable_for": [],
+            "not_suitable_for": [
+                "keittiöremontti"
+            ],
             "sub_contexts": [],
             "node_links": [
                 "JUHLATILA"
@@ -7866,6 +8607,7 @@
     },
     "company-245": {
         "name": "Pietilän Lomamökit",
+        "tags": "",
         "core": {
             "fits_for": {
                 "mökkipalvelut": 35
@@ -7888,7 +8630,9 @@
             "corporate_clients": true,
             "home_service": false,
             "weekend_service": false,
-            "not_suitable_for": [],
+            "not_suitable_for": [
+                "keittiöremontti"
+            ],
             "sub_contexts": [],
             "node_links": [],
             "intent_codes": [],
@@ -8085,6 +8829,7 @@
     },
     "company-287": {
         "name": "Tarvaalan Kalamaja",
+        "tags": "",
         "core": {
             "fits_for": {
                 "cottage-services": 85,
@@ -8373,6 +9118,7 @@
     },
     "company-285": {
         "name": "Country Häkkinen Lomamökit",
+        "tags": "",
         "core": {
             "fits_for": {
                 "cottage-services": 95,
@@ -8398,7 +9144,9 @@
             "not_suitable_for": [
                 "lvi",
                 "putkipäivystys",
-                "polttopuut"
+                "polttopuut",
+                "keittiöremontti",
+                "laituritarvikkeet / huolto"
             ],
             "sub_contexts": [],
             "node_links": [
@@ -8647,6 +9395,7 @@
     },
     "company-284": {
         "name": "Ylä-Saarikon lomamökit",
+        "tags": "",
         "core": {
             "fits_for": {
                 "cottage-services": 95,
@@ -8671,7 +9420,11 @@
             "not_suitable_for": [
                 "lvi",
                 "putkipäivystys",
-                "polttopuut"
+                "polttopuut",
+                "kylpyhuoneremontti",
+                "keittiöremontti",
+                "laituritarvikkeet / huolto",
+                "uinti"
             ],
             "sub_contexts": [
                 "majoitus",
@@ -8947,6 +9700,7 @@
     },
     "company-283": {
         "name": "Pitkäniemen lomahuoneistot",
+        "tags": "",
         "core": {
             "fits_for": {
                 "cottage-services": 95,
@@ -8972,7 +9726,9 @@
                 "lvi",
                 "putkipäivystys",
                 "polttopuut",
-                "laituritarvikkeet"
+                "laituritarvikkeet",
+                "kylpyhuoneremontti",
+                "keittiöremontti"
             ],
             "sub_contexts": [
                 "majoitus",
@@ -9240,6 +9996,7 @@
     },
     "company-300": {
         "name": "Nuohous Lapin Mies Oy",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 5,
@@ -9274,7 +10031,20 @@
                 "juhlatila",
                 "ravintolapalvelut",
                 "talvivalvonta",
-                "huolenpito"
+                "huolenpito",
+                "kylpyhuoneremontti",
+                "keittiöremontti",
+                "pintaremontti (maalaus tms.)",
+                "uudisrakentaminen",
+                "rakennus- / remonttimies",
+                "sähköasentaja",
+                "lvi-asentaja (putkimies)",
+                "maalari / tapetoija",
+                "suunnittelija / arkkitehti",
+                "kiinteistöhuolto / talonmies",
+                "laituritarvikkeet / huolto",
+                "kertaluonteinen remontti",
+                "pihanhoito / lumityöt"
             ],
             "sub_contexts": [
                 "nuohous",
@@ -9510,6 +10280,7 @@
     },
     "company-305": {
         "name": "Sähköpalvelu Valoisat Oy",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 5,
@@ -9542,7 +10313,13 @@
             "not_suitable_for": [
                 "majoitus",
                 "juhlatila",
-                "hyvinvointipalvelut"
+                "hyvinvointipalvelut",
+                "rakennus- / remonttimies",
+                "lvi-asentaja (putkimies)",
+                "maalari / tapetoija",
+                "suunnittelija / arkkitehti",
+                "laituritarvikkeet / huolto",
+                "pihanhoito / lumityöt"
             ],
             "sub_contexts": [
                 "sähkötyöt",
@@ -9777,6 +10554,7 @@
     },
     "company-304": {
         "name": "Sähkötyöt Rissanen Oy",
+        "tags": "sähköasennukset",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 0,
@@ -9784,7 +10562,7 @@
                 "funerals-and-memorials": 0,
                 "startup-services": 10,
                 "business-growth": 15,
-                "moving-and-housing": 70,
+                "moving-and-housing": 85,
                 "construction-and-maintenance": 95,
                 "cottage-services": 60,
                 "accommodation": 0,
@@ -9812,7 +10590,12 @@
                 "hyvinvointipalvelut",
                 "verkkosivut",
                 "markkinointi",
-                "verkkokauppa"
+                "verkkokauppa",
+                "lvi-asentaja (putkimies)",
+                "maalari / tapetoija",
+                "suunnittelija / arkkitehti",
+                "laituritarvikkeet / huolto",
+                "kertaluonteinen remontti"
             ],
             "sub_contexts": [
                 "sähkötarvikkeet",
@@ -10029,6 +10812,7 @@
     },
     "company-303": {
         "name": "Puusepänliike Tourunen Oy",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 5,
@@ -10060,7 +10844,12 @@
             "weekend_service": false,
             "not_suitable_for": [
                 "majoitus",
-                "ravintola- ja juhlapalvelut"
+                "ravintola- ja juhlapalvelut",
+                "sähköasentaja",
+                "lvi-asentaja (putkimies)",
+                "maalari / tapetoija",
+                "suunnittelija / arkkitehti",
+                "kertaluonteinen remontti"
             ],
             "sub_contexts": [
                 "puuseppä",
@@ -10285,6 +11074,7 @@
     },
     "company-302": {
         "name": "Laukaan Rakennustyö",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 10,
@@ -10316,7 +11106,12 @@
             "weekend_service": false,
             "not_suitable_for": [
                 "majoitus",
-                "hyvinvointipalvelut"
+                "hyvinvointipalvelut",
+                "sähköasentaja",
+                "lvi-asentaja (putkimies)",
+                "maalari / tapetoija",
+                "suunnittelija / arkkitehti",
+                "laituritarvikkeet / huolto"
             ],
             "sub_contexts": [
                 "rakennus",
@@ -10542,6 +11337,7 @@
     },
     "company-310": {
         "name": "Suomen säkkikauppa",
+        "tags": "",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 5,
@@ -10592,7 +11388,20 @@
                 "juhlatilat",
                 "hyvinvointipalvelut",
                 "ravintolapalvelut",
-                "majoitus"
+                "majoitus",
+                "varastointipalvelu",
+                "kylpyhuoneremontti",
+                "keittiöremontti",
+                "pintaremontti (maalaus tms.)",
+                "uudisrakentaminen",
+                "rakennus- / remonttimies",
+                "sähköasentaja",
+                "lvi-asentaja (putkimies)",
+                "maalari / tapetoija",
+                "suunnittelija / arkkitehti",
+                "laituritarvikkeet / huolto",
+                "taksi / kuljetus",
+                "kertaluonteinen remontti"
             ],
             "sub_contexts": [
                 "suursäkit",
