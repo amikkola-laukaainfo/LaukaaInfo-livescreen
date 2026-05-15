@@ -627,9 +627,8 @@
         });
     </script>
     <script>
-        const THRESHOLD_STRICT = 80;   // Vain parhaat osaajat
-        const THRESHOLD_RELEVANT = 50; // Selkeästi alaan liittyvät
-        const THRESHOLD_LOOSE = 10;    // Kaikki, joilla on jokin kytkös
+        // THRESHOLD_STRICT / THRESHOLD_RELEVANT / THRESHOLD_LOOSE
+        // are declared as global const in script.js — do not re-declare here.
 
         let currentNeedId = new URLSearchParams(window.location.search).get('id');
         let currentStepIndex = 0;
