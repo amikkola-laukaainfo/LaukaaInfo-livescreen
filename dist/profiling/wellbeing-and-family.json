@@ -5169,7 +5169,9 @@
                 "business-events": 75,
                 "cottage-services": 55,
                 "family-and-children": 100,
-                "wellbeing-and-beauty": 100
+                "wellbeing-and-beauty": 100,
+                "liikunta-ja-vapaaaika": 100,
+                "accommodation": 100
             },
             "priority_score": 0,
             "service_area": {

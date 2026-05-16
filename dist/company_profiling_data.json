@@ -48511,9 +48511,11 @@
         },
         "company-217": {
             "name": "Monitac",
-            "tags": "",
+            "tags": "siivous",
             "core": {
-                "fits_for": {},
+                "fits_for": {
+                    "cottage-services": 100
+                },
                 "priority_score": 0,
                 "service_area": {
                     "mode": "TOIMIPISTE",
@@ -61864,7 +61866,9 @@
                     "business-events": 75,
                     "cottage-services": 55,
                     "family-and-children": 100,
-                    "wellbeing-and-beauty": 100
+                    "wellbeing-and-beauty": 100,
+                    "liikunta-ja-vapaaaika": 100,
+                    "accommodation": 100
                 },
                 "priority_score": 0,
                 "service_area": {
@@ -64807,7 +64811,7 @@
         },
         "company-300": {
             "name": "Nuohous Lapin Mies Oy",
-            "tags": "",
+            "tags": "nuohouspalvelut",
             "core": {
                 "fits_for": {
                     "events-and-celebrations": 5,
