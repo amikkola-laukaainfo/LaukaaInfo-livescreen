@@ -17,6 +17,9 @@ const opt = {
 function getCategoryData(c, profilingKey) {
     if (!c.profiling) return null;
     const hyphenKey = profilingKey.replace(/_/g, '-');
+    if (c.profiling.categories) {
+        return c.profiling.categories[profilingKey] || c.profiling.categories[hyphenKey] || c.profiling[profilingKey] || c.profiling[hyphenKey] || null;
+    }
     return c.profiling[profilingKey] || c.profiling[hyphenKey] || null;
 }
 
