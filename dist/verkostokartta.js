@@ -1,0 +1,563 @@
+/**
+ * LaukaaInfo Semantic Network Map
+ * Uses Cytoscape.js to visualize the service network
+ */
+
+class NetworkMap {
+    constructor() {
+        this.cy = null;
+        this.data = {
+            taxonomy: null,
+            companies: [],
+            profiling: {}
+        };
+        this.selections = {
+            needId: null,
+            options: new Set(), // Set of option identifiers (needId-stepId-index)
+            subContexts: new Set(),
+            companies: new Set()
+        };
+
+        // Standard thresholds
+        this.THRESHOLD_STRICT = 80;
+        this.THRESHOLD_RELEVANT = 50;
+        this.THRESHOLD_LOOSE = 10;
+
+        this.init();
+    }
+
+    async init() {
+        try {
+            await this.loadData();
+            this.initCytoscape();
+            this.setupControls();
+            this.renderSidebar();
+            
+            // Hide loader
+            document.getElementById('loader').style.display = 'none';
+        } catch (error) {
+            console.error("NetworkMap initialization failed:", error);
+        }
+    }
+
+    async loadData() {
+        const [liveRes, tempRes, profRes] = await Promise.all([
+            fetch('live_companies.json'),
+            fetch('temp_companies.json'),
+            fetch('company_profiling_data.json')
+        ]);
+
+        const liveData = await liveRes.json();
+        const tempData = await tempRes.json();
+        const profData = await profRes.json();
+
+        const companyMap = {};
+        [...(tempData.results || []), ...(liveData.results || [])].forEach(c => {
+            companyMap[c.id] = c;
+        });
+        this.data.companies = Object.values(companyMap);
+        this.data.profiling = profData.profiles;
+
+        // NEEDS_CONFIG is loaded via <script> tag in HTML
+        this.data.needs = window.NEEDS_CONFIG || {};
+
+        console.log("NetworkMap: Data loaded", {
+            companies: this.data.companies.length,
+            needs: Object.keys(this.data.needs).length
+        });
+    }
+
+    initCytoscape() {
+        this.cy = cytoscape({
+            container: document.getElementById('cy'),
+            style: [
+                {
+                    selector: 'node',
+                    style: {
+                        'label': 'data(label)',
+                        'text-valign': 'center',
+                        'text-halign': 'center',
+                        'color': '#fff',
+                        'font-size': '12px',
+                        'font-family': 'Inter, sans-serif',
+                        'font-weight': '600',
+                        'text-wrap': 'wrap',
+                        'text-max-width': '80px',
+                        'width': 'mapData(weight, 0, 100, 40, 80)',
+                        'height': 'mapData(weight, 0, 100, 40, 80)',
+                        'background-color': '#475569',
+                        'border-width': 2,
+                        'border-color': '#1e293b',
+                        'transition-property': 'background-color, line-color, target-arrow-color, width, height',
+                        'transition-duration': '0.3s'
+                    }
+                },
+                {
+                    selector: 'node[type="group"]',
+                    style: {
+                        'background-color': '#6366f1',
+                        'font-size': '14px',
+                        'width': 100,
+                        'height': 100
+                    }
+                },
+                {
+                    selector: 'node[type="intent"]',
+                    style: {
+                        'background-color': '#3b82f6',
+                        'width': 70,
+                        'height': 70
+                    }
+                },
+                {
+                    selector: 'node[type="company"]',
+                    style: {
+                        'background-color': '#10b981',
+                        'width': 60,
+                        'height': 60,
+                        'font-size': '10px'
+                    }
+                },
+                {
+                    selector: 'node[type="refinement"]',
+                    style: {
+                        'background-color': '#f59e0b',
+                        'width': 40,
+                        'height': 40,
+                        'font-size': '9px',
+                        'color': '#1e293b'
+                    }
+                },
+                {
+                    selector: 'edge',
+                    style: {
+                        'width': 2,
+                        'line-color': '#cbd5e1',
+                        'curve-style': 'bezier',
+                        'opacity': 0.5,
+                        'target-arrow-shape': 'triangle',
+                        'target-arrow-color': '#cbd5e1'
+                    }
+                },
+                {
+                    selector: 'edge[type="semantic"]',
+                    style: {
+                        'line-style': 'dashed',
+                        'line-color': '#fbbf24',
+                        'target-arrow-color': '#fbbf24'
+                    }
+                }
+            ],
+            layout: {
+                name: 'cose',
+                animate: true
+            }
+        });
+
+        this.cy.on('tap', 'node', (evt) => {
+            const node = evt.target;
+            if (node.data('type') === 'company') {
+                const companyId = node.id();
+                const company = this.data.companies.find(c => c.id === companyId);
+                if (company && window.LkiModal) {
+                    window.LkiModal.open(company);
+                }
+            }
+        });
+    }
+
+    renderSidebar() {
+        const sidebarContent = document.querySelector('.sidebar-content');
+        sidebarContent.innerHTML = '';
+
+        if (!this.selections.needId) {
+            // Show all Needs
+            const catSection = document.createElement('div');
+            catSection.className = 'sidebar-section';
+            catSection.innerHTML = `<h3 data-i18n="need_section_title">Mitä olet järjestämässä?</h3><div id="need-list" class="selection-list"></div>`;
+            const needList = catSection.querySelector('#need-list');
+
+            Object.entries(this.data.needs).forEach(([id, need]) => {
+                const label = i18n.getText(need.title);
+                const item = this.createItemElement(id, `${need.icon} ${label}`, null, () => this.toggleNeed(id));
+                needList.appendChild(item);
+            });
+            sidebarContent.appendChild(catSection);
+        } else {
+            // Show selected Need with change button
+            const needId = this.selections.needId;
+            const need = this.data.needs[needId];
+            const label = i18n.getText(need.title);
+
+            const catSection = document.createElement('div');
+            catSection.className = 'sidebar-section';
+            catSection.innerHTML = `<div id="need-list" class="selection-list"></div>`;
+            const needList = catSection.querySelector('#need-list');
+
+            const backBtn = document.createElement('div');
+            backBtn.className = 'back-to-categories';
+            backBtn.innerHTML = `&larr; <span data-i18n="btn_change_category">Vaihda aihetta</span>`;
+            backBtn.onclick = () => this.resetMap();
+            needList.appendChild(backBtn);
+
+            const needItem = this.createItemElement(needId, `${need.icon} ${label}`, null, () => {}, true);
+            needList.appendChild(needItem);
+            sidebarContent.appendChild(catSection);
+
+            // Steps and Options
+            need.steps.forEach((step, stepIdx) => {
+                const stepSection = document.createElement('div');
+                stepSection.className = 'sidebar-section';
+                stepSection.innerHTML = `<h3>${i18n.getText(step.question)}</h3><div class="selection-list"></div>`;
+                const optionList = stepSection.querySelector('.selection-list');
+
+                step.options.forEach((opt, optIdx) => {
+                    if (opt.hide_results && !opt.sub_context) return;
+                    
+                    const optId = `${needId}-${step.id}-${optIdx}`;
+                    const optLabel = i18n.getText(opt.label);
+                    const isActive = this.selections.options.has(optId);
+                    
+                    // Count matching companies for this option
+                    const count = this.data.companies.filter(c => this.checkCompanyMatch(c, opt, need)).length;
+                    
+                    const item = this.createItemElement(optId, optLabel, count, () => this.toggleOption(opt, step, optIdx), isActive);
+                    optionList.appendChild(item);
+
+                    if (isActive) {
+                        const subList = document.createElement('div');
+                        subList.className = 'sub-selection-list';
+                        
+                        const matches = this.data.companies.filter(c => this.checkCompanyMatch(c, opt, need));
+                        matches.sort((a, b) => {
+                            const aPkg = (a.package || '').toLowerCase();
+                            const bPkg = (b.package || '').toLowerCase();
+                            if (aPkg.includes('premium') && !bPkg.includes('premium')) return -1;
+                            return 0;
+                        });
+
+                        matches.slice(0, 15).forEach(comp => {
+                            const compActive = this.selections.companies.has(comp.id);
+                            const compItem = this.createItemElement(comp.id, comp.nimi, null, () => this.toggleCompany(comp.id, optId), compActive, 'company-item');
+                            subList.appendChild(compItem);
+                        });
+                        optionList.appendChild(subList);
+                    }
+                });
+                sidebarContent.appendChild(stepSection);
+            });
+        }
+
+        if (window.i18n) i18n.translatePage();
+    }
+
+    createItemElement(id, name, count, onClick, isActive = false, extraClass = '') {
+        const div = document.createElement('div');
+        div.className = `selection-item ${isActive ? 'active' : ''} ${extraClass}`;
+        div.dataset.id = id;
+        
+        let countHtml = count !== null ? `<span class="item-count">${count}</span>` : '';
+        div.innerHTML = `
+            <span class="item-name">${name}</span>
+            ${countHtml}
+        `;
+        
+        div.onclick = (e) => {
+            e.stopPropagation();
+            onClick();
+        };
+        return div;
+    }
+
+    toggleNeed(needId) {
+        if (this.selections.needId === needId) {
+            this.resetMap();
+            return;
+        }
+
+        this.cy.elements().remove();
+        this.selections.needId = needId;
+        this.selections.options.clear();
+        this.selections.subContexts.clear();
+        this.selections.companies.clear();
+        
+        const need = this.data.needs[needId];
+        const label = i18n.getText(need.title);
+        
+        this.addNode({
+            id: needId,
+            label: `${need.icon}\n${label}`,
+            type: 'group',
+            weight: 100
+        });
+
+        this.cy.layout({ name: 'preset' }).run();
+        this.cy.center();
+        this.cy.fit(undefined, 100);
+
+        this.renderSidebar();
+    }
+
+    toggleOption(opt, step, optIdx) {
+        const optId = `${this.selections.needId}-${step.id}-${optIdx}`;
+        const label = i18n.getText(opt.label);
+
+        if (this.selections.options.has(optId)) {
+            this.selections.options.delete(optId);
+            if (opt.sub_context) this.selections.subContexts.delete(opt.sub_context);
+            this.removeNode(optId);
+        } else {
+            this.selections.options.add(optId);
+            if (opt.sub_context) this.selections.subContexts.add(opt.sub_context);
+            
+            this.addNode({
+                id: optId,
+                label: label,
+                type: 'intent',
+                weight: 80
+            });
+
+            this.addEdge(this.selections.needId, optId);
+
+            // Add matching companies (optional: only add if explicitly selected? 
+            // Or maybe add some top ones automatically? For now, we only add companies when selected in sidebar)
+        }
+
+        this.renderSidebar();
+        this.runLayoutAndFit();
+    }
+
+    toggleCompany(companyId, parentIntentCode) {
+        if (this.selections.companies.has(companyId)) {
+            this.selections.companies.delete(companyId);
+            this.removeNode(companyId);
+        } else {
+            this.selections.companies.add(companyId);
+            const company = this.data.companies.find(c => c.id === companyId);
+            
+            this.addNode({
+                id: companyId,
+                label: company.nimi,
+                type: 'company',
+                weight: 60
+            });
+
+            // Connect to matching options
+            this.selections.options.forEach(optId => {
+                const [needId, stepId, idx] = optId.split('-');
+                const need = this.data.needs[needId];
+                const step = need.steps.find(s => s.id === stepId);
+                const opt = step.options[parseInt(idx)];
+                
+                if (this.checkCompanyMatch(company, opt, need)) {
+                    this.addEdge(optId, companyId);
+                }
+            });
+
+            // Semantic links
+            this.selections.companies.forEach(otherId => {
+                if (otherId === companyId) return;
+                const profile = this.data.profiling[companyId];
+                if (profile?.categories?.events_and_celebrations?.collaborated_with?.includes(otherId) ||
+                    profile?.core?.paired_with_by_context?.general?.includes(otherId)) {
+                    this.addEdge(companyId, otherId, 'semantic');
+                }
+            });
+        }
+        this.renderSidebar();
+        this.runLayoutAndFit();
+    }
+
+    resetMap() {
+        this.selections.needId = null;
+        this.selections.options.clear();
+        this.selections.subContexts.clear();
+        this.selections.companies.clear();
+        if (this.cy) this.cy.elements().remove();
+        this.renderSidebar();
+    }
+
+    printMap() {
+        // Simple print for now, could be improved with high-res export
+        window.print();
+    }
+
+    // Graph Helpers
+    addNode(data) {
+        if (this.cy.getElementById(data.id).length === 0) {
+            this.cy.add({
+                group: 'nodes',
+                data: data
+            });
+        }
+    }
+
+    removeNode(id) {
+        this.cy.remove(this.cy.getElementById(id));
+    }
+
+    addEdge(source, target, type = 'normal') {
+        const id = `e-${source}-${target}`;
+        if (this.cy.getElementById(id).length === 0) {
+            this.cy.add({
+                group: 'edges',
+                data: { id, source, target, type }
+            });
+        }
+    }
+
+    runLayout() {
+        if (this.cy.nodes().length === 0) return;
+        const layout = this.cy.layout({
+            name: 'cose',
+            animate: true,
+            randomize: false,
+            componentSpacing: 100,
+            nodeRepulsion: 4000,
+            edgeElasticity: 100,
+            nestingFactor: 5
+        });
+        layout.run();
+    }
+
+    runLayoutAndFit() {
+        if (this.cy.nodes().length === 0) return;
+        if (this.cy.nodes().length === 1) {
+            // Single node: just center it, no layout needed
+            this.cy.center();
+            this.cy.fit(undefined, 150);
+            return;
+        }
+        const layout = this.cy.layout({
+            name: 'cose',
+            animate: true,
+            randomize: false,
+            componentSpacing: 100,
+            nodeRepulsion: 4000,
+            edgeElasticity: 100,
+            nestingFactor: 5,
+            stop: () => {
+                this.cy.fit(undefined, 60);
+            }
+        });
+        layout.run();
+    }
+
+    checkCompanyMatch(c, opt, need) {
+        if (!c || !opt) return false;
+
+        const profilingKey = need.profilointi_context || 'vapaa-aika';
+        const profilingKeyUnderscore = profilingKey.replace(/-/g, '_');
+        const profile = this.data.profiling[c.id] || {};
+        const core = profile.core || {};
+        
+        const fitsScore = core.fits_for?.[profilingKey] || core.fits_for?.[profilingKey.replace(/_/g, '-')] || 0;
+
+        // 1. Sub-context filtering (Strict Alignment)
+        if (this.selections.subContexts.size > 0) {
+            const companySubContexts = core.sub_contexts || [];
+            let isSubContextMatch = false;
+
+            if (Array.isArray(companySubContexts)) {
+                if (companySubContexts.length === 0) isSubContextMatch = true;
+                else isSubContextMatch = Array.from(this.selections.subContexts).some(sc => companySubContexts.includes(sc));
+            } else if (typeof companySubContexts === 'object') {
+                const relevant = companySubContexts[profilingKeyUnderscore] || companySubContexts[profilingKey] || [];
+                isSubContextMatch = Array.from(this.selections.subContexts).some(sc => relevant.includes(sc));
+            } else {
+                isSubContextMatch = true;
+            }
+
+            if (!isSubContextMatch) {
+                // Pehmeämpi vertailu (kuten palvelu.html:ssä)
+                const bases = ['hää', 'yritys', 'juhla', 'hautajais', 'muisto', 'remontti', 'rakentaminen'];
+                const cscArray = Array.isArray(companySubContexts) ? companySubContexts : (typeof companySubContexts === 'object' ? Object.values(companySubContexts).flat() : []);
+                const hasCommonBase = Array.from(this.selections.subContexts).some(sc => {
+                    const scLower = String(sc).toLowerCase();
+                    return bases.some(b => scLower.includes(b) && cscArray.some(csc => String(csc).toLowerCase().includes(b)));
+                });
+                if (hasCommonBase) isSubContextMatch = true;
+            }
+            
+            if (!isSubContextMatch) {
+                const labelLower = i18n.getText(opt.label || '').toLowerCase();
+                const isVenueOrCore = (opt.capacity_req > 0 || opt.node_link === 'JUHLATILA' || (labelLower.includes('tila') && !labelLower.includes('tilaisuus')));
+
+                // Hylätään jos optiolla on oma sub_context tai jos kyseessä on rakentaminen
+                if (opt.sub_context && companySubContexts.length > 0) return false;
+                if (profilingKey === 'construction-and-maintenance' && companySubContexts.length > 0) return false;
+                if (isVenueOrCore && companySubContexts.length > 0 && fitsScore < this.THRESHOLD_STRICT) return false;
+            }
+        }
+
+        // 2. Direct matching (intent_codes, node_link, profilointi_filter)
+        let isProfiledMatch = false;
+        
+        // intent_codes
+        if (opt.intent_codes && core.intent_codes) {
+            if (opt.intent_codes.some(code => core.intent_codes.includes(code))) isProfiledMatch = true;
+        }
+
+        // node_link
+        if (!isProfiledMatch) {
+            const links = core.node_links || [];
+            if (opt.node_link && links.includes(opt.node_link)) isProfiledMatch = true;
+            if (opt.node_links && opt.node_links.some(l => links.includes(l))) isProfiledMatch = true;
+        }
+
+        // profilointi_filter
+        if (!isProfiledMatch && opt.profilointi_filter) {
+            const pf = opt.profilointi_filter;
+            const section = profile.categories?.[pf.section] || profile[pf.section];
+            if (section) {
+                const val = section[pf.field];
+                if (Array.isArray(val) && val.includes(pf.value)) isProfiledMatch = true;
+                else if (val === pf.value) isProfiledMatch = true;
+            }
+        }
+
+        if (isProfiledMatch) return true;
+
+        // 3. Profiling-First fallback restrictions
+        const hasProfilingForContext = core.fits_for && (profilingKey in core.fits_for || profilingKey.replace(/-/g, '_') in core.fits_for);
+        if (hasProfilingForContext) {
+            if (fitsScore < this.THRESHOLD_LOOSE) return false;
+            // Jos on tiukkoja suodattimia muttei osumaa, ei sallita tägi-fallbackia
+            if (opt.profilointi_filter || opt.node_link || opt.node_links) return false;
+        }
+
+        // 4. Tag match (Secondary)
+        if (opt.tags) {
+            const companyContent = (
+                (c.tags || '') + ' ' + 
+                (c.kategoria || '') + ' ' + 
+                (c.nimi || '') + ' ' +
+                (Array.isArray(core.sub_contexts) ? core.sub_contexts.join(' ') : '') + ' ' +
+                (core.node_links?.join(' ') || '')
+            ).toLowerCase();
+            if (opt.tags.some(tag => companyContent.includes(tag.toLowerCase()))) return true;
+        }
+
+        // 5. General score fallback (Only if no specific constraints)
+        if (!opt.tags && !opt.intent_codes && !opt.node_link && !opt.profilointi_filter) {
+            return fitsScore > this.THRESHOLD_RELEVANT;
+        }
+
+        return false;
+    }
+
+    setupControls() {
+        document.getElementById('zoom-in').onclick = () => this.cy.zoom(this.cy.zoom() * 1.2);
+        document.getElementById('zoom-out').onclick = () => this.cy.zoom(this.cy.zoom() * 0.8);
+        document.getElementById('fit-view').onclick = () => this.cy.fit();
+        document.getElementById('refresh-layout').onclick = () => this.runLayout();
+        document.getElementById('reset-map').onclick = () => this.resetMap();
+        document.getElementById('print-map').onclick = () => this.printMap();
+    }
+}
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    window.networkMap = new NetworkMap();
+    if (window.i18n) window.i18n.translatePage();
+});

@@ -1857,7 +1857,8 @@
                 "lvi-asentaja (putkimies)",
                 "maalari / tapetoija",
                 "suunnittelija / arkkitehti",
-                "kahvitus / pitopalvelu"
+                "kahvitus / pitopalvelu",
+                "pitopalvelu"
             ],
             "sub_contexts": [
                 "remontti",
@@ -3232,7 +3233,8 @@
                 "pikatoimitukset",
                 "luennot",
                 "luontoretkeily",
-                "keittiöremontti"
+                "keittiöremontti",
+                "pitopalvelu"
             ],
             "sub_contexts": [
                 "käsityö",
@@ -9424,7 +9426,8 @@
                 "kylpyhuoneremontti",
                 "keittiöremontti",
                 "laituritarvikkeet / huolto",
-                "uinti"
+                "uinti",
+                "pitopalvelu"
             ],
             "sub_contexts": [
                 "majoitus",

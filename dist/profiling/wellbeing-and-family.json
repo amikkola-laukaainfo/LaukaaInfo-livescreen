@@ -51,7 +51,9 @@
             "corporate_clients": true,
             "home_service": true,
             "weekend_service": false,
-            "not_suitable_for": [],
+            "not_suitable_for": [
+                "pitopalvelu"
+            ],
             "sub_contexts": [
                 "hyvinvointi",
                 "neurologinen kuntoutus",
@@ -581,7 +583,9 @@
             "corporate_clients": true,
             "home_service": false,
             "weekend_service": true,
-            "not_suitable_for": [],
+            "not_suitable_for": [
+                "pitopalvelu"
+            ],
             "sub_contexts": [
                 "kuntosali",
                 "ryhmäliikunta",
@@ -1892,7 +1896,8 @@
             "home_service": false,
             "weekend_service": true,
             "not_suitable_for": [
-                "kahvitus / pitopalvelu"
+                "kahvitus / pitopalvelu",
+                "pitopalvelu"
             ],
             "sub_contexts": [
                 "hyvinvointi",
@@ -2474,7 +2479,8 @@
                 "dj",
                 "huvipuisto",
                 "kylpyhuoneremontti",
-                "lvi-asentaja (putkimies)"
+                "lvi-asentaja (putkimies)",
+                "pitopalvelu"
             ],
             "sub_contexts": [
                 "ratsastus",
@@ -2742,7 +2748,8 @@
             "home_service": false,
             "weekend_service": false,
             "not_suitable_for": [
-                "luennot"
+                "luennot",
+                "pitopalvelu"
             ],
             "sub_contexts": [
                 "kauneushoitola",
@@ -3943,7 +3950,7 @@
                 "business-growth": 0,
                 "moving-and-housing": 100,
                 "construction-and-maintenance": 85,
-                "cottage-services": 85,
+                "cottage-services": 100,
                 "accommodation": 0,
                 "wellbeing-and-beauty": 70,
                 "housing-company-and-contracts": 100

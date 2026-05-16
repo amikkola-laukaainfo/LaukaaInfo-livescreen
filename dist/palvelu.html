@@ -1,4 +1,894 @@
-<!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Palveluohjaus | LaukaaInfo</title><link rel="icon" href="logo.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.345b5ab5.css?v=20260426"><script src="translations.345b5ab5.js?v=20260505"></script><style>.palvelu-hero{background:linear-gradient(135deg,var(--secondary-blue) 0,var(--primary-blue) 100%);color:#fff;padding:4rem 1.5rem;text-align:center;border-bottom-left-radius:40px;border-bottom-right-radius:40px;margin-bottom:3rem}.palvelu-hero h1{font-family:var(--accent-font);font-size:3rem;font-weight:900;margin-bottom:1rem}.palvelu-hero p{font-size:1.2rem;opacity:.9;max-width:600px;margin:0 auto}#results-container{max-width:1200px;margin:3rem auto;padding:0 1.5rem}.back-nav{max-width:1200px;margin:2rem auto 0;padding:0 1.5rem}.btn-back{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--primary-blue);font-weight:700;transition:transform .2s}.btn-back:hover{transform:translateX(-5px)}.option-checkbox{display:flex;align-items:center;gap:15px;padding:1.2rem;background:#fff;border-radius:16px;border:2px solid #eef2f6;cursor:pointer;transition:all .2s;text-align:left;font-weight:600}.option-checkbox:hover{border-color:var(--primary-blue);background:#f8fafc}.option-checkbox input{width:24px;height:24px;cursor:pointer}.option-checkbox.selected{background:#e0f2fe;border-color:var(--primary-blue)}.group-title{grid-column:1/-1;font-family:var(--accent-font);font-size:1.8rem;font-weight:800;color:var(--primary-blue);margin:3rem 0 1.5rem;padding-bottom:.5rem;border-bottom:2px solid #eef2f6;display:flex;align-items:center;gap:10px}.group-title:first-child{margin-top:0}.btn-continue{margin-top:2rem;width:100%;max-width:300px}.fade-in{animation:fadeIn .4s ease-out}.selection-summary{max-width:800px;margin:0 auto 2rem;padding:1rem;background:#f1f5f9;border-radius:12px;font-size:.9rem;display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center}.summary-tag{background:#fff;padding:4px 12px;border-radius:20px;border:1px solid #cbd5e1;color:var(--secondary-blue);font-weight:600}.next-steps-section{max-width:1200px;margin:4rem auto;padding:2rem;background:#f8fafc;border-radius:32px;border:2px dashed #cbd5e1}.next-steps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.5rem;margin-top:1.5rem}.next-step-card{background:#fff;padding:1.5rem;border-radius:20px;text-align:center;box-shadow:0 4px 6px -1px rgb(0 0 0 / .1);transition:transform .2s;cursor:pointer;border:2px solid transparent}.next-step-card:hover{transform:translateY(-5px);border-color:var(--primary-blue)}.match-explanation{font-size:.7rem;color:#64748b;margin-top:8px;font-style:italic}@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}.location-bar{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.2);backdrop-filter:blur(10px);padding:8px 16px;border-radius:50px;margin-top:1.5rem;border:1px solid rgba(255,255,255,.3)}.location-bar input{background:0 0;border:none;color:#fff;font-weight:600;font-size:.9rem;width:180px;outline:0}.location-bar input::placeholder{color:rgba(255,255,255,.7)}.location-bar .btn-locate{background:#fff;color:var(--primary-blue);border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .2s;font-size:1.2rem}.location-bar .btn-locate:hover{transform:scale(1.1)}#location-status{font-size:.75rem;margin-top:8px;opacity:.8;min-height:1.2em}.selected-anchor{border:3px solid var(--primary-blue)!important;transform:scale(1.02);box-shadow:0 10px 25px -5px rgba(0,102,204,.3)!important;transition:all .3s ease}.btn-select-anchor{display:inline-block;margin:10px;padding:8px 16px;background:#e0f2fe;color:var(--primary-blue);font-weight:700;border-radius:8px;border:1px solid var(--primary-blue);cursor:pointer;text-align:center;transition:all .2s;font-size:.85rem;width:calc(100% - 20px)}.btn-select-anchor:hover{background:var(--primary-blue);color:#fff}.selected-anchor .btn-select-anchor{background:var(--primary-blue);color:#fff}@media print{.btn-back,.btn-radar,.card-arrow,.dist-badge,.next-steps-section,.palvelu-hero,.selection-summary,.step-progress,.top-nav,footer{display:none!important}body{background:#fff;color:#000;padding:0}main{margin:0;padding:20px}.group-title{border-bottom:1px solid #ccc;margin-top:20px;color:#000}.company-result-card{border:1px solid #eee;break-inside:avoid;margin-bottom:15px;box-shadow:none}.solution-package{box-shadow:none;border:1px solid #ccc;margin-bottom:40px;break-inside:avoid}}.card-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:15px;padding-top:15px;border-top:1px solid #eef2f6}.card-actions.has-three{grid-template-columns:1fr 1fr 1fr}.card-actions.has-one{grid-template-columns:1fr}.btn-action{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:10px 5px;background:#f8fafc;border-radius:8px;text-decoration:none;color:var(--primary-blue);font-size:.75rem;font-weight:700;border:1px solid #e2e8f0;transition:all .2s;cursor:pointer;text-align:center;box-sizing:border-box}.btn-action:hover{background:#e0f2fe;border-color:var(--primary-blue)}.btn-action.primary-action{background:var(--primary-blue);color:#fff;border-color:var(--primary-blue)}.btn-action.primary-action:hover{background:var(--secondary-blue)}.btn-action i{font-size:1.1rem;font-style:normal}.modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;padding:20px}.modal-overlay.active{display:flex;animation:fadeIn .2s ease-out}.inquiry-modal{background:#fff;border-radius:16px;width:100%;max-width:500px;padding:24px;box-shadow:0 10px 25px rgba(0,0,0,.2);position:relative;max-height:90vh;overflow-y:auto}.inquiry-modal h2{margin-top:0;color:var(--primary-blue);font-family:var(--accent-font)}.close-modal{position:absolute;top:16px;right:16px;background:0 0;border:none;font-size:1.5rem;cursor:pointer;color:#64748b}.form-group{margin-bottom:15px}.form-group label{display:block;font-weight:600;margin-bottom:5px;font-size:.9rem}.form-group input,.form-group textarea{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font-family:inherit;box-sizing:border-box}.show-more-container{grid-column:1/-1;text-align:center;margin:20px 0 40px;padding-top:10px}.btn-show-more{background:#fff;color:var(--primary-blue);border:2px solid var(--primary-blue);padding:12px 30px;border-radius:50px;font-weight:700;font-size:1rem;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:10px;box-shadow:0 4px 6px -1px rgba(0,0,0,.1)}.btn-show-more:hover{background:var(--primary-blue);color:#fff;transform:translateY(-2px);box-shadow:0 10px 15px -3px rgba(0,102,204,.2)}.btn-show-more i{font-style:normal;font-size:1.2rem}.taxonomy-info-box{max-width:1200px;margin:2rem auto;padding:1.5rem;background:#f0f9ff;border-radius:20px;border:1px solid #bae6fd;display:flex;align-items:flex-start;gap:15px;animation:fadeIn .5s ease-out}.taxonomy-info-icon{font-size:2rem}.taxonomy-info-content h4{margin:0 0 5px 0;color:#0369a1;font-family:var(--accent-font)}.taxonomy-info-content p{margin:0;font-size:.9rem;color:#0c4a6e;line-height:1.5}.taxonomy-relation-tag{display:inline-block;padding:2px 8px;background:#e0f2fe;border:1px solid #7dd3fc;border-radius:4px;font-size:.75rem;font-weight:700;color:#0369a1;margin-right:5px;margin-top:5px}</style></head><body><nav class="top-nav"><div class="nav-container"><a href="index.html" class="nav-logo"><img src="logo.png" alt="LaukaaInfo Logo"> <span data-i18n="hero_title">LaukaaInfo</span></a><div class="lang-switcher"><button class="lang-btn" onclick='i18n.setLanguage("fi")' data-lang="fi">FI</button> <button class="lang-btn" onclick='i18n.setLanguage("en")' data-lang="en">EN</button></div></div></nav><div class="back-nav"><a href="index.html" class="btn-back" data-i18n="btn_back">&larr; Takaisin etusivulle</a></div><header id="palvelu-header" class="palvelu-hero"><div class="icon-large" id="hero-icon" style="font-size:4rem;margin-bottom:1rem"></div><h1 id="hero-title">Ladataan...</h1><p id="hero-desc"></p><div class="location-bar"><span>📍</span> <input type="text" id="user-location-input" data-i18n="[placeholder]placeholder_your_location" placeholder="Sijaintisi (esim. Laukaa)" autocomplete="off"> <button class="btn-locate" id="locate-me-btn" title="Hae sijaintini">🎯</button> <button class="btn-locate" id="share-this-page-btn" title="Kopioi jakolinkki tähän hakuun" style="margin-left:4px;background:rgba(255,255,255,.3);color:#fff">🔗</button></div><div id="location-status"></div></header><main><section id="step-section" class="step-container"><div id="selection-summary" class="selection-summary" style="display:none"></div><div class="step-progress" id="step-progress"></div><div id="step-content" class="fade-in"></div></section><section id="results-container" style="display:none"><div class="need-header"><h2 data-i18n="palvelu_results_title">Suositellut palvelut</h2><p id="results-count"></p></div><div id="results-list" class="results-grid"></div><div id="next-steps-container" class="next-steps-section" style="display:none"><h3 style="text-align:center;font-family:var(--accent-font);font-size:1.5rem" data-i18n="palvelu_next_steps">Seuraavaksi saatat tarvita myös näitä:</h3><div id="next-steps-list" class="next-steps-grid"></div></div><div id="special-vinkit-container" style="display:none"></div><div id="tips-container" style="max-width:1200px;margin:3rem auto;display:none"></div><div id="taxonomy-info-container" style="display:none"></div><div style="text-align:center;margin-top:4rem;display:flex;justify-content:center;gap:20px;flex-wrap:wrap"><button onclick="resetPalvelu()" class="btn-radar" style="background:var(--secondary-blue)" data-i18n="btn_reset">Aloita alusta</button> <button onclick="printResults()" class="btn-radar" style="background:var(--primary-blue)" data-i18n="btn_print">Tulosta PDF / Paperille 🖨️</button></div></section></main><div id="inquiry-overlay" class="modal-overlay"><div class="inquiry-modal"><button class="close-modal" onclick="closeInquiryModal()">&times;</button><h2 id="inquiry-title" data-i18n="palvelu_inquiry_title">Pyydä tarjous</h2><p style="font-size:.9rem;color:#64748b;margin-bottom:20px" data-i18n="palvelu_inquiry_unavailable">Tämä lomake ei ole vielä käytössä, kun yrityksellä on ilmaisnäkyvyys sivustolla.</p><form id="inquiry-form" onsubmit="submitInquiry(event)"><input type="hidden" id="inquiry-company-id"><div class="form-group"><label data-i18n="label_name">Nimi</label> <input type="text" required data-i18n="[placeholder]placeholder_name" placeholder="Matti Meikäläinen"></div><div class="form-group"><label data-i18n="label_email">Sähköposti</label> <input type="email" required data-i18n="[placeholder]placeholder_email" placeholder="matti@esimerkki.fi"></div><div class="form-group"><label data-i18n="label_phone">Puhelin</label> <input type="tel" data-i18n="[placeholder]placeholder_phone" placeholder="040 123 4567"></div><div class="form-group"><label data-i18n="label_event_date">Tilaisuuden ajankohta</label> <input type="date" required></div><div class="form-group"><label data-i18n="label_pax">Arvioitu henkilömäärä</label> <input type="number" min="1" data-i18n="[placeholder]placeholder_pax" placeholder="Esim. 50"></div><div class="form-group"><label data-i18n="label_more_info">Lisätiedot</label> <textarea rows="4" data-i18n="[placeholder]placeholder_more_info" placeholder="Kerro tarkemmin tarpeistasi..."></textarea></div><button type="submit" class="btn-radar" style="width:100%;background:var(--primary-blue)" data-i18n="btn_send_inquiry">Lähetä tarjouspyyntö</button></form></div></div><footer style="margin-top:6rem"><div class="footer-content"><p data-i18n="footer_copyright">© 2026 LaukaaInfo – Palvelua ylläpitää Mediazoo.fi</p></div></footer><script src="needs_config.345b5ab5.js?v=20260507"></script><script src="script.345b5ab5.js"></script><script>let THRESHOLD_STRICT=80;function normalizeText(e){return e?String(e).toLowerCase().replace(/Ã£Â¤/g,"ä").replace(/Ã£Â¶/g,"ö").replace(/Ã£â€ž/g,"ä").replace(/Ã£â€“/g,"ö").replace(/Ã¤/g,"ä").replace(/Ã¶/g,"ö").replace(/Ã„/g,"ä").replace(/Ã–/g,"ö").replace(/Ã¥/g,"å").replace(/Ã…/g,"å").trim():""}function isMatch(n,l,i,r,o){let a=normalizeText(l.label&&l.label.fi?l.label.fi:l.label).toLowerCase();var s=getFitsForScore(n,i),c=i.replace(/-/g,"_"),u=i.replace(/_/g,"-");let f=!1;var g=n.profiling&&n.profiling.core&&n.profiling.core.not_suitable_for?n.profiling.core.not_suitable_for:[];if(!g.some(e=>e&&a.includes(normalizeText(e).toLowerCase()))){if(o){var g=normalizeText(n.nimi||n.name).toLowerCase(),o=normalizeText(n.tags).toLowerCase(),p=normalizeText(n.kategoria||n.category).toLowerCase();if(!(a.includes("pitopalvelu")||(l.intent_codes||[]).includes("BIZ_CATERING"))&&(g.includes("pitopalvelu")||o.includes("pitopalvelu")||p.includes("pitopalvelu")))return!1}g=l.tags&&l.tags.includes("juhlatila")||"JUHLATILA"===l.node_link||a.includes("tila")&&!a.includes("tilaisuus"),o=(0<l.capacity_req||g||a.includes("muistotilaisuus")||a.includes("kokous")||a.includes("sauna")||a.includes("juhla")||a.includes("häät")||a.includes("pikkujoulut"))&&!l.is_service;if(r&&0<r.length){let t=n.profiling&&n.profiling.core?n.profiling.core.sub_contexts:[],e=!1;if(Array.isArray(t))e=0===t.length||r.some(e=>t.includes(e));else if(t&&"object"==typeof t){let i=t[c]||t[u];e=!i||r.some(e=>i.includes(e))}else e=!0;if(!e){p=Array.isArray(t)?0<t.length:!!t,g=i.includes("construction")||i.includes("housing")||i.includes("remontti"),c=a.includes("pitopalvelu")||a.includes("leipomo")||(l.intent_codes||[]).includes("BIZ_CATERING");if(l.sub_context&&p&&!g&&!c)return!1;if(o&&p&&s<THRESHOLD_STRICT&&!c)return!1}}if(l.node_link||l.node_links){let i=n.profiling&&n.profiling.core&&n.profiling.core.node_links||[];(l.node_links||[l.node_link]).some(e=>e&&i.includes(e))&&(f=!0)}if(l.profilointi_filter){let t=l.profilointi_filter;u=getCategoryData(n,t.section);let e=!1;if(u){r=u[t.field];let i=(e,i)=>e===i||"string"==typeof e&&"string"==typeof i&&((e=normalizeText(e))===(i=normalizeText(i))||e===i+"t"||i===e+"t"||e.includes(i)||i.includes(e));!(e=Array.isArray(r)?r.some(e=>i(e,t.value)):"object"==typeof r&&null!==r?Object.values(r).flat().some(e=>i(e,t.value)):i(r,t.value))&&Array.isArray(u.refinement_tags)&&(e=u.refinement_tags.some(e=>i(e,t.value)))}f=(!l.node_link&&!l.node_links||f)&&e}if(!(f=!(f=l.intent_codes&&n.profiling&&n.profiling.core&&n.profiling.core.intent_codes&&l.intent_codes.some(e=>n.profiling.core.intent_codes.includes(e))?!0:f)&&l.tags&&l.tags.includes("juhlatila")&&(g=getCategoryData(n,"events_and_celebrations"))&&0<s&&(0<g.capacity_max||0<g.seated_capacity)?!0:f)&&l.tags){let i=((n.tags||"")+" "+(n.kategoria||n.category||"")+" "+(n.nimi||n.name||"")).toLowerCase();l.tags.map(e=>normalizeText(e)).some(e=>i.includes(e))&&(f=!0)}if(0<l.capacity_req)if(0===getCompanyCapacity(n,i))return!1;if(!l.capacity_req&&"JUHLATILA"!==l.node_link)if(0<getCompanyCapacity(n,i)){let i=n.profiling&&n.profiling.core&&n.profiling.core.intent_scores||{};if(!(l.intent_codes||[]).some(e=>(i[e]||0)>=THRESHOLD_STRICT)&&s<THRESHOLD_STRICT)return!1}if(f){if(o)if(0===getCompanyCapacity(n,i))return!1;return!0}if(0===s&&n.profiling&&n.profiling.core&&n.profiling.core.fits_for)if(i in n.profiling.core.fits_for||i.replace(/_/g,"-")in n.profiling.core.fits_for)return!1;l.tags&&0!==l.tags.length||l.node_link||l.node_links||l.profilointi_filter||l.capacity_req}return!1}document.getElementById("share-this-page-btn")?.addEventListener("click",function(){var e=window.location.href;navigator.clipboard.writeText(e).then(()=>{let e=this,i=e.innerHTML;e.innerHTML="✅",e.style.background="#28a745",setTimeout(()=>{e.innerHTML=i,e.style.background="rgba(255,255,255,0.3)"},2e3)})})</script><script>let currentNeedId = new URLSearchParams(window.location.search).get('id');
+<!DOCTYPE html>
+<html lang="fi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palveluohjaus | LaukaaInfo</title>
+    <link rel="icon" href="logo.png">
+
+    <!-- Fonts & Styles -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css?v=20260426">
+    <script src="translations.js?v=20260505"></script>
+    <style>
+        .palvelu-hero {
+            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
+            color: white;
+            padding: 4rem 1.5rem;
+            text-align: center;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            margin-bottom: 3rem;
+        }
+
+        .palvelu-hero h1 {
+            font-family: var(--accent-font);
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .palvelu-hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        #results-container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+        }
+
+
+        .back-nav {
+            max-width: 1200px;
+            margin: 2rem auto 0;
+            padding: 0 1.5rem;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--primary-blue);
+            font-weight: 700;
+            transition: transform 0.2s;
+        }
+
+        .btn-back:hover {
+            transform: translateX(-5px);
+        }
+        
+        /* Multi-select styles */
+        .option-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 1.2rem;
+            background: white;
+            border-radius: 16px;
+            border: 2px solid #eef2f6;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .option-checkbox:hover {
+            border-color: var(--primary-blue);
+            background: #f8fafc;
+        }
+
+        .option-checkbox input {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .option-checkbox.selected {
+            background: #e0f2fe;
+            border-color: var(--primary-blue);
+        }
+
+        .group-title {
+            grid-column: 1 / -1;
+            font-family: var(--accent-font);
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary-blue);
+            margin: 3rem 0 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #eef2f6;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .group-title:first-child {
+            margin-top: 0;
+        }
+
+        .btn-continue {
+            margin-top: 2rem;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        /* Step transition animation */
+        .fade-in {
+            animation: fadeIn 0.4s ease-out;
+        }
+        
+        /* Selection Summary */
+        .selection-summary {
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            padding: 1rem;
+            background: #f1f5f9;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .summary-tag {
+            background: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid #cbd5e1;
+            color: var(--secondary-blue);
+            font-weight: 600;
+        }
+
+        .next-steps-section {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 2rem;
+            background: #f8fafc;
+            border-radius: 32px;
+            border: 2px dashed #cbd5e1;
+        }
+
+        .next-steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .next-step-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            transition: transform 0.2s;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .next-step-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-blue);
+        }
+
+        .match-explanation {
+            font-size: 0.7rem;
+            color: #64748b;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Location Bar Styles */
+        .location-bar {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 50px;
+            margin-top: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .location-bar input {
+            background: transparent;
+            border: none;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            width: 180px;
+            outline: none;
+        }
+
+        .location-bar input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .location-bar .btn-locate {
+            background: white;
+            color: var(--primary-blue);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+            font-size: 1.2rem;
+        }
+
+        .location-bar .btn-locate:hover {
+            transform: scale(1.1);
+        }
+
+        #location-status {
+            font-size: 0.75rem;
+            margin-top: 8px;
+            opacity: 0.8;
+            min-height: 1.2em;
+        }
+
+        /* Interactive Categorization Styles */
+        .selected-anchor {
+            border: 3px solid var(--primary-blue) !important;
+            transform: scale(1.02);
+            box-shadow: 0 10px 25px -5px rgba(0, 102, 204, 0.3) !important;
+            transition: all 0.3s ease;
+        }
+
+        .btn-select-anchor {
+            display: inline-block;
+            margin: 10px;
+            padding: 8px 16px;
+            background: #e0f2fe;
+            color: var(--primary-blue);
+            font-weight: 700;
+            border-radius: 8px;
+            border: 1px solid var(--primary-blue);
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+            width: calc(100% - 20px);
+        }
+
+        .btn-select-anchor:hover {
+            background: var(--primary-blue);
+            color: white;
+        }
+        
+        .selected-anchor .btn-select-anchor {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        /* Print styles */
+        @media print {
+            .top-nav, .palvelu-hero, .btn-back, .step-progress, 
+            .selection-summary, .next-steps-section, footer, 
+            .btn-radar, .card-arrow, .dist-badge {
+                display: none !important;
+            }
+            
+            body {
+                background: white;
+                color: black;
+                padding: 0;
+            }
+
+            main {
+                margin: 0;
+                padding: 20px;
+            }
+
+            .group-title {
+                border-bottom: 1px solid #ccc;
+                margin-top: 20px;
+                color: black;
+            }
+
+            .company-result-card {
+                border: 1px solid #eee;
+                break-inside: avoid;
+                margin-bottom: 15px;
+                box-shadow: none;
+            }
+            
+            .solution-package {
+                box-shadow: none;
+                border: 1px solid #ccc;
+                margin-bottom: 40px;
+                break-inside: avoid;
+            }
+        }
+        /* Card Actions */
+        .card-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eef2f6;
+        }
+        .card-actions.has-three {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+        .card-actions.has-one {
+            grid-template-columns: 1fr;
+        }
+        .btn-action {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            padding: 10px 5px;
+            background: #f8fafc;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--primary-blue);
+            font-size: 0.75rem;
+            font-weight: 700;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
+            cursor: pointer;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        .btn-action:hover {
+            background: #e0f2fe;
+            border-color: var(--primary-blue);
+        }
+        .btn-action.primary-action {
+            background: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+        .btn-action.primary-action:hover {
+            background: var(--secondary-blue);
+        }
+        .btn-action i {
+            font-size: 1.1rem;
+            font-style: normal;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.active {
+            display: flex;
+            animation: fadeIn 0.2s ease-out;
+        }
+        .inquiry-modal {
+            background: white;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 500px;
+            padding: 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .inquiry-modal h2 {
+            margin-top: 0;
+            color: var(--primary-blue);
+            font-family: var(--accent-font);
+        }
+        .close-modal {
+            position: absolute;
+            top: 16px; right: 16px;
+            background: none; border: none;
+            font-size: 1.5rem; cursor: pointer; color: #64748b;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block; font-weight: 600; margin-bottom: 5px; font-size: 0.9rem;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; box-sizing: border-box;
+        }
+
+        /* Show more button styles */
+        .show-more-container {
+            grid-column: 1 / -1;
+            text-align: center;
+            margin: 20px 0 40px;
+            padding-top: 10px;
+        }
+
+        .btn-show-more {
+            background: white;
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-show-more:hover {
+            background: var(--primary-blue);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 102, 204, 0.2);
+        }
+
+        .btn-show-more i {
+            font-style: normal;
+            font-size: 1.2rem;
+        }
+
+        /* Taxonomy / Service Chain Info Styles */
+        .taxonomy-info-box {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: #f0f9ff;
+            border-radius: 20px;
+            border: 1px solid #bae6fd;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            animation: fadeIn 0.5s ease-out;
+        }
+        .taxonomy-info-icon {
+            font-size: 2rem;
+        }
+        .taxonomy-info-content h4 {
+            margin: 0 0 5px 0;
+            color: #0369a1;
+            font-family: var(--accent-font);
+        }
+        .taxonomy-info-content p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #0c4a6e;
+            line-height: 1.5;
+        }
+        .taxonomy-relation-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            background: #e0f2fe;
+            border: 1px solid #7dd3fc;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #0369a1;
+            margin-right: 5px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="logo.png" alt="LaukaaInfo Logo">
+                <span data-i18n="hero_title">LaukaaInfo</span>
+            </a>
+            <div class="lang-switcher">
+                <button class="lang-btn" onclick="i18n.setLanguage('fi')" data-lang="fi">FI</button>
+                <button class="lang-btn" onclick="i18n.setLanguage('en')" data-lang="en">EN</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="back-nav">
+        <a href="index.html" class="btn-back" data-i18n="btn_back">&larr; Takaisin etusivulle</a>
+    </div>
+
+    <header id="palvelu-header" class="palvelu-hero">
+        <div class="icon-large" id="hero-icon" style="font-size: 4rem; margin-bottom: 1rem;"></div>
+        <h1 id="hero-title">Ladataan...</h1>
+        <p id="hero-desc"></p>
+        
+        <div class="location-bar">
+            <span>📍</span>
+            <input type="text" id="user-location-input" data-i18n="[placeholder]placeholder_your_location" placeholder="Sijaintisi (esim. Laukaa)" autocomplete="off">
+            <button class="btn-locate" id="locate-me-btn" title="Hae sijaintini">🎯</button>
+            <button class="btn-locate" id="share-this-page-btn" title="Kopioi jakolinkki tähän hakuun" style="margin-left: 4px; background: rgba(255,255,255,0.3); color: white;">🔗</button>
+        </div>
+        <div id="location-status"></div>
+    </header>
+
+    <main>
+        <section id="step-section" class="step-container">
+            <div id="selection-summary" class="selection-summary" style="display: none;"></div>
+            <div class="step-progress" id="step-progress"></div>
+            <div id="step-content" class="fade-in">
+                <!-- Dynaaminen sisältö -->
+            </div>
+        </section>
+
+        <section id="results-container" style="display: none;">
+            <div class="need-header">
+                <h2 data-i18n="palvelu_results_title">Suositellut palvelut</h2>
+                <p id="results-count"></p>
+            </div>
+            <div id="results-list" class="results-grid">
+                <!-- Tulokset ladataan tästän -->
+            </div>
+
+            <div id="next-steps-container" class="next-steps-section" style="display: none;">
+                <h3 style="text-align: center; font-family: var(--accent-font); font-size: 1.5rem;" data-i18n="palvelu_next_steps">Seuraavaksi saatat tarvita myös näitä:</h3>
+                <div id="next-steps-list" class="next-steps-grid"></div>
+            </div>
+
+            <div id="special-vinkit-container" style="display: none;"></div>
+
+            <div id="tips-container" style="max-width: 1200px; margin: 3rem auto; display: none;"></div>
+            
+            <div id="taxonomy-info-container" style="display: none;"></div>
+
+            <div style="text-align: center; margin-top: 4rem; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                <button onclick="resetPalvelu()" class="btn-radar" style="background: var(--secondary-blue);" data-i18n="btn_reset">Aloita alusta</button>
+                <button onclick="printResults()" class="btn-radar" style="background: var(--primary-blue);" data-i18n="btn_print">Tulosta PDF / Paperille 🖨️</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Inquiry Modal -->
+    <div id="inquiry-overlay" class="modal-overlay">
+        <div class="inquiry-modal">
+            <button class="close-modal" onclick="closeInquiryModal()">&times;</button>
+            <h2 id="inquiry-title" data-i18n="palvelu_inquiry_title">Pyydä tarjous</h2>
+            <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 20px;" data-i18n="palvelu_inquiry_unavailable">Tämä lomake ei ole vielä käytössä, kun yrityksellä on ilmaisnäkyvyys sivustolla.</p>
+            <form id="inquiry-form" onsubmit="submitInquiry(event)">
+                <input type="hidden" id="inquiry-company-id">
+                <div class="form-group">
+                    <label data-i18n="label_name">Nimi</label>
+                    <input type="text" required data-i18n="[placeholder]placeholder_name" placeholder="Matti Meikäläinen">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="label_email">Sähköposti</label>
+                    <input type="email" required data-i18n="[placeholder]placeholder_email" placeholder="matti@esimerkki.fi">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="label_phone">Puhelin</label>
+                    <input type="tel" data-i18n="[placeholder]placeholder_phone" placeholder="040 123 4567">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="label_event_date">Tilaisuuden ajankohta</label>
+                    <input type="date" required>
+                </div>
+                <div class="form-group">
+                    <label data-i18n="label_pax">Arvioitu henkilömäärä</label>
+                    <input type="number" min="1" data-i18n="[placeholder]placeholder_pax" placeholder="Esim. 50">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="label_more_info">Lisätiedot</label>
+                    <textarea rows="4" data-i18n="[placeholder]placeholder_more_info" placeholder="Kerro tarkemmin tarpeistasi..."></textarea>
+                </div>
+                <button type="submit" class="btn-radar" style="width: 100%; background: var(--primary-blue);" data-i18n="btn_send_inquiry">Lähetä tarjouspyyntö</button>
+            </form>
+        </div>
+    </div>
+
+    <footer style="margin-top: 6rem;">
+        <div class="footer-content">
+            <p data-i18n="footer_copyright">© 2026 LaukaaInfo – Palvelua ylläpitää Mediazoo.fi</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="needs_config.js?v=20260507"></script>
+    <script src="script.js"></script>
+    <script>
+
+        const THRESHOLD_STRICT = 80;
+        
+        function normalizeText(txt) {
+            if (!txt) return "";
+            return String(txt).toLowerCase()
+                .replace(/Ã£Â¤/g, 'ä').replace(/Ã£Â¶/g, 'ö')
+                .replace(/Ã£â€ž/g, 'ä').replace(/Ã£â€“/g, 'ö')
+                .replace(/Ã¤/g, 'ä').replace(/Ã¶/g, 'ö')
+                .replace(/Ã„/g, 'ä').replace(/Ã–/g, 'ö')
+                .replace(/Ã¥/g, 'å').replace(/Ã…/g, 'å')
+                .trim();
+        }
+
+                function isMatch(c, opt, context, subContextsReq, noCateringSelected) {
+            const labelLower = normalizeText(opt.label && opt.label.fi ? opt.label.fi : opt.label).toLowerCase();
+            const fitsScore = getFitsForScore(c, context);
+            const underscoreKey = context.replace(/-/g, '_');
+            const hyphenKey = context.replace(/_/g, '-');
+            
+            let isProfiledMatch = false;
+
+            const exclusions = (c.profiling && c.profiling.core && c.profiling.core.not_suitable_for) ? c.profiling.core.not_suitable_for : [];
+            if (exclusions.some(exc => exc && labelLower.includes(normalizeText(exc).toLowerCase()))) {
+                return false;
+            }
+            
+            // INTENT-CODE TÄSMÄYS
+            if (opt.intent_codes && c.profiling && c.profiling.core && c.profiling.core.intent_codes) {
+                if (opt.intent_codes.some(code => c.profiling.core.intent_codes.includes(code))) isProfiledMatch = true;
+            }
+
+            if (opt.require_fits_for) {
+                const rfKey = opt.require_fits_for.key;
+                const rfMin = opt.require_fits_for.min || 20;
+                const rfScore = getFitsForScore(c, rfKey);
+                if (rfScore < rfMin) return false;
+            }
+
+            if (noCateringSelected) {
+                const companyName = normalizeText(c.nimi || c.name).toLowerCase();
+                const companyTags = normalizeText(c.tags).toLowerCase();
+                const companyCat = normalizeText(c.kategoria || c.category).toLowerCase();
+                
+                const isCateringOption = labelLower.includes('pitopalvelu') || (opt.intent_codes || []).includes('BIZ_CATERING');
+                
+                if (!isCateringOption && (companyName.includes('pitopalvelu') || companyTags.includes('pitopalvelu') || companyCat.includes('pitopalvelu'))) {
+                    return false;
+                }
+            }
+
+            const isVenueType = (opt.tags && opt.tags.includes('juhlatila')) || 
+                                opt.node_link === 'JUHLATILA' || 
+                                (labelLower.includes('tila') && !labelLower.includes('tilaisuus'));
+
+            const isVenueSearch = (opt.capacity_req > 0 || 
+                                  isVenueType ||
+                                  labelLower.includes('muistotilaisuus') ||
+                                  labelLower.includes('kokous') ||
+                                  labelLower.includes('sauna') ||
+                                  labelLower.includes('juhla') ||
+                                  labelLower.includes('häät') ||
+                                  labelLower.includes('pikkujoulut')) && !opt.is_service;
+
+            if (subContextsReq && subContextsReq.length > 0) {
+                const companySubContexts = (c.profiling && c.profiling.core) ? c.profiling.core.sub_contexts : [];
+                let isSubContextMatch = false;
+
+                if (Array.isArray(companySubContexts)) {
+                    if (companySubContexts.length === 0) isSubContextMatch = true;
+                    else isSubContextMatch = subContextsReq.some(sc => companySubContexts.includes(sc));
+                } else if (companySubContexts && typeof companySubContexts === 'object') {
+                    const relevantSubContexts = companySubContexts[underscoreKey] || companySubContexts[hyphenKey];
+                    if (relevantSubContexts) isSubContextMatch = subContextsReq.some(sc => relevantSubContexts.includes(sc));
+                    else isSubContextMatch = true; 
+                } else {
+                    isSubContextMatch = true;
+                }
+
+                if (!isSubContextMatch) {
+                    const hasAnySubContexts = Array.isArray(companySubContexts) ? companySubContexts.length > 0 : !!companySubContexts;
+                    const isConstruction = context.includes('construction') || context.includes('housing') || context.includes('remontti');
+                    const isCatering = labelLower.includes('pitopalvelu') || labelLower.includes('leipomo') || (opt.intent_codes || []).includes('BIZ_CATERING');
+                    
+                    if (opt.sub_context && hasAnySubContexts && !isConstruction && !isCatering) return false; 
+                    if (isVenueSearch && hasAnySubContexts && fitsScore < THRESHOLD_STRICT && !isCatering) return false; 
+                }
+            }
+
+            if (opt.node_link || opt.node_links) {
+                const cLinks = (c.profiling && c.profiling.core) ? c.profiling.core.node_links || [] : [];
+                const oLinks = opt.node_links || [opt.node_link];
+                if (oLinks.some(l => l && cLinks.includes(l))) isProfiledMatch = true;
+            }
+
+            if (opt.profilointi_filter) {
+                const pf = opt.profilointi_filter;
+                const sectionData = getCategoryData(c, pf.section);
+                let match = false;
+
+                if (sectionData) {
+                    const actualVal = sectionData[pf.field];
+                    const checkFuzzyMatch = (a, b) => {
+                        if (a === b) return true;
+                        if (typeof a === 'string' && typeof b === 'string') {
+                            const na = normalizeText(a);
+                            const nb = normalizeText(b);
+                            return na === nb || na === nb + 't' || nb === na + 't' || na.includes(nb) || nb.includes(na);
+                        }
+                        return false;
+                    };
+
+                    if (Array.isArray(actualVal)) match = actualVal.some(v => checkFuzzyMatch(v, pf.value));
+                    else if (typeof actualVal === 'object' && actualVal !== null) match = Object.values(actualVal).flat().some(v => checkFuzzyMatch(v, pf.value));
+                    else match = checkFuzzyMatch(actualVal, pf.value);
+
+                    if (!match && Array.isArray(sectionData.refinement_tags)) {
+                        match = sectionData.refinement_tags.some(v => checkFuzzyMatch(v, pf.value));
+                    }
+                }
+                
+                if (opt.node_link || opt.node_links) isProfiledMatch = isProfiledMatch && match;
+                else isProfiledMatch = match;
+            }
+
+            // TAKSONOMIA-TÄSMÄYS (UUSI)
+            if (typeof taxonomyData !== 'undefined' && taxonomyData && !isProfiledMatch && !opt.profilointi_filter) {
+                const targetIntentId = (opt.intent_codes && opt.intent_codes.length > 0) ? opt.intent_codes[0] : context;
+                const intent = taxonomyData.intents.find(i => i.id === targetIntentId || i.id === targetIntentId.replace(/_/g, '-'));
+                if (intent) {
+                    const isTaxonomyTerm = intent.refinements.some(r => labelLower.includes(r.toLowerCase())) ||
+                                           intent.subcontexts.some(s => labelLower.includes(s.toLowerCase()));
+                    
+                    if (isTaxonomyTerm) {
+                        const companyContent = (
+                            (c.tags || '') + ' ' + 
+                            (c.kategoria || '') + ' ' + 
+                            (c.nimi || '') + ' ' +
+                            (c.profiling?.core?.sub_contexts?.join(' ') || '') + ' ' +
+                            (c.profiling?.core?.node_links?.join(' ') || '')
+                        ).toLowerCase();
+                        
+                        const taxonomyMatch = intent.refinements.concat(intent.subcontexts).some(term => {
+                            const t = term.toLowerCase();
+                            return labelLower.includes(t) && companyContent.includes(t);
+                        });
+                        if (taxonomyMatch) isProfiledMatch = true;
+                    }
+
+                    if (!isProfiledMatch && intent.nodeLinks) {
+                        const links = c.profiling?.core?.node_links || [];
+                        if (intent.nodeLinks.some(nl => links.includes(nl))) {
+                            const isTila = labelLower.includes('tila') && !labelLower.includes('tilaisuus');
+                            const isVenueIntent = targetIntentId.startsWith('VENUE_');
+                            if (isTila || isVenueIntent || (opt.tags && opt.tags.some(t => {
+                                const tl = t.toLowerCase();
+                                return tl.includes('tila') && !tl.includes('tilaisuus');
+                            }))) {
+                                isProfiledMatch = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Broaden photography/videography match
+            if (!isProfiledMatch && opt.tags) {
+                const isPhotoSearch = opt.tags.some(t => typeof t === 'string' && t.includes('valokuva'));
+                const isVideoSearch = opt.tags.some(t => typeof t === 'string' && (t.includes('video') || t === 'videotuotanto'));
+                const isFloristSearch = opt.tags.some(t => typeof t === 'string' && t.includes('kukka'));
+                
+                const coreNodeLinks = c.profiling?.core?.node_links || [];
+                if ((isPhotoSearch && coreNodeLinks.includes('VALOKUVAUS')) || 
+                    (isVideoSearch && coreNodeLinks.includes('VIDEOTUOTANTO')) ||
+                    (isFloristSearch && coreNodeLinks.includes('KUKAT'))) {
+                    isProfiledMatch = true;
+                }
+            }
+
+            // Digitointi ja juhlatila tags
+            if (!isProfiledMatch && opt.tags) {
+                if (opt.tags.includes('digitointi')) {
+                    const catData = getCategoryData(c, context);
+                    const hasDigitizationFeatures = catData && Array.isArray(catData.digitization_features) && catData.digitization_features.length > 0;
+                    
+                    if (hasDigitizationFeatures && fitsScore > 0) {
+                        isProfiledMatch = true;
+                    } else {
+                        const companyContent = (
+                            (c.tags || '') + ' ' + 
+                            (c.searchExtraInfo || '') + ' ' + 
+                            (c.kategoria || '') + ' ' + 
+                            (c.nimi || '') + ' ' +
+                            (c.profiling?.core?.sub_contexts?.join(' ') || '')
+                        ).toLowerCase();
+                        if (companyContent.includes('digitointi')) {
+                            isProfiledMatch = true;
+                        }
+                    }
+                }
+                if (opt.tags.includes('juhlatila')) {
+                    const eventsData = getCategoryData(c, 'events_and_celebrations');
+                    if (eventsData && fitsScore > 0 && (eventsData.capacity_max > 0 || eventsData.seated_capacity > 0)) {
+                        isProfiledMatch = true;
+                    }
+                }
+            }
+
+            if (!isProfiledMatch && opt.tags) {
+                const companyContent = (
+                    (c.tags || '') + ' ' + 
+                    (c.kategoria || c.category || '') + ' ' + 
+                    (c.nimi || c.name || '')
+                ).toLowerCase();
+
+                const optTagsLower = opt.tags.map(t => normalizeText(t));
+                if (optTagsLower.some(tag => companyContent.includes(tag))) {
+                    isProfiledMatch = true;
+                }
+            }
+
+            if (opt.capacity_req > 0) {
+                const cap = getCompanyCapacity(c, context);
+                if (cap === 0) return false;
+            }
+
+            if (!opt.capacity_req && opt.node_link !== 'JUHLATILA') {
+                const companyCap = getCompanyCapacity(c, context);
+                if (companyCap > 0) {
+                    const intentScores = (c.profiling && c.profiling.core) ? c.profiling.core.intent_scores || {} : {};
+                    const hasStrongServiceMatch = (opt.intent_codes || []).some(code => (intentScores[code] || 0) >= THRESHOLD_STRICT);
+                    
+                    if (!hasStrongServiceMatch && fitsScore < THRESHOLD_STRICT) {
+                        return false;
+                    }
+                }
+            }
+
+            if (isProfiledMatch) {
+                if (isVenueSearch) {
+                    const cap = getCompanyCapacity(c, context);
+                    if (cap === 0) return false;
+                }
+                return true;
+            }
+
+            if (fitsScore === 0 && (c.profiling && c.profiling.core && c.profiling.core.fits_for)) {
+                const hasProfiling = (context in c.profiling.core.fits_for) || (context.replace(/_/g, '-') in c.profiling.core.fits_for);
+                if (hasProfiling) return false;
+            }
+
+            if (!opt.tags || opt.tags.length === 0) {
+                if (!opt.node_link && !opt.node_links && !opt.profilointi_filter && !(opt.capacity_req > 0)) {
+                    return false;
+                }
+            }
+
+            return false;
+        }
+
+
+        // Share this page functionality
+        document.getElementById('share-this-page-btn')?.addEventListener('click', function() {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                const btn = this;
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '✅';
+                btn.style.background = '#28a745';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = 'rgba(255,255,255,0.3)';
+                }, 2000);
+            });
+        });
+    </script>
+    <script>
+        let currentNeedId = new URLSearchParams(window.location.search).get('id');
         let currentStepIndex = 0;
         let selections = {};
         let taxonomyData = null;
@@ -499,268 +1389,6 @@
 const companiesForOpt = window.allCompanies.filter(c => {
                         const noCateringSelected = !!selectedOptions.find(o => o.profilointi_filter && o.profilointi_filter.field === 'catering_policy' && o.profilointi_filter.value === 'own_catering');
                         return isMatch(c, opt, currentProfilingKey, selections._sub_contexts || [], noCateringSelected);
-                    });
-if (hasCommonBase) isSubContextMatch = true;
-                                }
-
-                                if (!isSubContextMatch) {
-                                    const mainFitsScore = getFitsForScore(c, currentProfilingKey);
-                                    const hasAnySubContexts = Array.isArray(companySubContexts) ? companySubContexts.length > 0 : !!companySubContexts;
-                                    
-                                    // NEW: Relaxed check for services. If the option doesn't have a capacity requirement,
-                                    // it's likely a generic service (catering, photo, etc.) and shouldn't be strictly 
-                                    // filtered by the event's sub-context (e.g. "Perinteiset häät").
-                                    // FIX: Vältetään "tilaisuudessa" sanan osuminen "tila"-hakusanaan
-                                    const labelLower = i18n.getText(opt.label || '').toLowerCase();
-                                    const isVenueOrCore = (opt.capacity_req > 0 || opt.node_link === 'JUHLATILA' || (labelLower.includes('tila') && !labelLower.includes('tilaisuus')) || labelLower.includes('muistotilaisuus'));
-                                    
-                                    if (isVenueOrCore && hasAnySubContexts && mainFitsScore >= 70 && mainFitsScore < 80) return false; 
-                                }
-                            }
-                        }
-
-                        if (opt.require_fits_for) {
-                            const rfKey = opt.require_fits_for.key;
-                            const rfMin = opt.require_fits_for.min || 20;
-                            const rfScore = getFitsForScore(c, rfKey);
-                            if (rfScore < rfMin) return false;
-                        }
-
-                        let isProfiledMatch = false;
-                        if (opt.node_link) {
-                            const links = c.profiling?.core?.node_links || [];
-                            if (links.includes(opt.node_link)) isProfiledMatch = true;
-                        }
-                        if (opt.node_links) {
-                            const links = c.profiling?.core?.node_links || [];
-                            if (opt.node_links.some(l => links.includes(l))) isProfiledMatch = true;
-                        }
-
-                        if (opt.profilointi_filter) {
-                            const pf = opt.profilointi_filter;
-                            const catData = getCategoryData(c, pf.section);
-                            let match = false;
-
-                            const checkFuzzyMatch = (target, query) => {
-                                if (target === undefined || target === null || query === undefined || query === null) return false;
-                                const t = String(target).toLowerCase();
-                                const q = String(query).toLowerCase();
-                                const isPluralMatch = (t === q + 't' || q === t + 't');
-                                return t === q || t.includes(q) || q.includes(t) || isPluralMatch;
-                            };
-
-                            if (catData) {
-                                const actualVal = catData[pf.field];
-                                if (Array.isArray(actualVal)) {
-                                    match = actualVal.some(v => checkFuzzyMatch(v, pf.value));
-                                } else if (typeof actualVal === 'object' && actualVal !== null) {
-                                    match = Object.values(actualVal).flat().some(v => checkFuzzyMatch(v, pf.value));
-                                } else {
-                                    match = checkFuzzyMatch(actualVal, pf.value);
-                                }
-
-                                // Automaattinen fallback refinement_tagsiin jos ei matchia
-                                if (!match && Array.isArray(catData.refinement_tags)) {
-                                    match = catData.refinement_tags.some(v => checkFuzzyMatch(v, pf.value));
-                                }
-                            }
-
-                            // FALLBACK: Tarkista sub_contexts (Taso 2)
-                            if (!match && c.profiling?.core?.sub_contexts) {
-                                const subContexts = c.profiling.core.sub_contexts;
-                                if (Array.isArray(subContexts)) {
-                                    match = subContexts.some(v => checkFuzzyMatch(v, pf.value));
-                                } else if (typeof subContexts === 'object' && subContexts !== null) {
-                                    match = Object.values(subContexts).flat().some(v => checkFuzzyMatch(v, pf.value));
-                                }
-                            }
-
-                            // TÄRKEÄ KORJAUS: Jos optiolla on node_link-vaatimus JA profilointisuodatin,
-                            // molempien on täytyttävä (AND). Muuten pelkkä profilointisuodatin riittää.
-                            if (opt.node_link || opt.node_links) {
-                                isProfiledMatch = isProfiledMatch && match;
-                            } else {
-                                isProfiledMatch = match;
-                            }
-                        }
-                        
-                        // INTENT-CODE TÄSMÄYS (UUSI)
-                        if (opt.intent_codes && c.profiling?.core?.intent_codes) {
-                            const hasIntent = opt.intent_codes.some(code => c.profiling.core.intent_codes.includes(code));
-                            if (hasIntent) {
-                                isProfiledMatch = true;
-                            }
-                        }
-
-                        // TAKSONOMIA-TÄSMÄYS (UUSI)
-                        // TÄRKEÄ KORJAUS: Jos optiolla on profilointisuodatin (esim. omilla tarjoiluilla), 
-                        // ei sallita taksonomia-fallbackia, jotta vältetään vääriä osumia yrityksille 
-                        // jotka on jo kertaalleen hylätty (esim. catering-vaatimuksen takia).
-                        if (taxonomyData && !isProfiledMatch && !opt.profilointi_filter) {
-                            const targetIntentId = (opt.intent_codes && opt.intent_codes.length > 0) ? opt.intent_codes[0] : currentProfilingKey;
-                            const intent = taxonomyData.intents.find(i => i.id === targetIntentId || i.id === targetIntentId.replace(/_/g, '-'));
-                            if (intent) {
-                                const labelLower = i18n.getText(opt.label || '').toLowerCase();
-                                const isTaxonomyTerm = intent.refinements.some(r => labelLower.includes(r.toLowerCase())) ||
-                                                       intent.subcontexts.some(s => labelLower.includes(s.toLowerCase()));
-                                
-                                if (isTaxonomyTerm) {
-                                    const companyContent = (
-                                        (c.tags || '') + ' ' + 
-                                        (c.kategoria || '') + ' ' + 
-                                        (c.nimi || '') + ' ' +
-                                        (c.profiling?.core?.sub_contexts?.join(' ') || '') + ' ' +
-                                        (c.profiling?.core?.node_links?.join(' ') || '')
-                                    ).toLowerCase();
-                                    
-                                    const taxonomyMatch = intent.refinements.concat(intent.subcontexts).some(term => {
-                                        const t = term.toLowerCase();
-                                        return labelLower.includes(t) && companyContent.includes(t);
-                                    });
-                                    if (taxonomyMatch) isProfiledMatch = true;
-                                }
-
-                                if (!isProfiledMatch && intent.nodeLinks) {
-                                    const links = c.profiling?.core?.node_links || [];
-                                    if (intent.nodeLinks.some(nl => links.includes(nl))) {
-                                        const isTila = labelLower.includes('tila') && !labelLower.includes('tilaisuus');
-                                        const isVenueIntent = targetIntentId.startsWith('VENUE_');
-                                        if (isTila || isVenueIntent || (opt.tags && opt.tags.some(t => {
-                                            const tl = t.toLowerCase();
-                                            return tl.includes('tila') && !tl.includes('tilaisuus');
-                                        }))) {
-                                            isProfiledMatch = true;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        // NEW: Broaden photography/videography match
-                        if (!isProfiledMatch && opt.tags) {
-                            const isPhotoSearch = opt.tags.some(t => t.includes('valokuva'));
-                            const isVideoSearch = opt.tags.some(t => t.includes('video') || t === 'videotuotanto');
-                            const isFloristSearch = opt.tags.some(t => t.includes('kukka'));
-                            
-                            const coreNodeLinks = c.profiling?.core?.node_links || [];
-                            if ((isPhotoSearch && coreNodeLinks.includes('VALOKUVAUS')) || 
-                                (isVideoSearch && coreNodeLinks.includes('VIDEOTUOTANTO')) ||
-                                (isFloristSearch && coreNodeLinks.includes('KUKAT'))) {
-                                isProfiledMatch = true;
-                            }
-                        }
-
-                        if (!isProfiledMatch && opt.tags) {
-                            if (opt.tags.includes('digitointi')) {
-                                const catData = getCategoryData(c, currentProfilingKey);
-                                const hasDigitizationFeatures = catData && Array.isArray(catData.digitization_features) && catData.digitization_features.length > 0;
-                                
-                                // Jos on profilointi-dataa, käytetään sitä
-                                if (hasDigitizationFeatures && fitsScore > 0) {
-                                    isProfiledMatch = true;
-                                } else {
-                                    // Muutoin tarkistetaan tägit ja lisätiedot (varasysteemi)
-                                    const companyContent = (
-                                        (c.tags || '') + ' ' + 
-                                        (c.searchExtraInfo || '') + ' ' + 
-                                        (c.kategoria || '') + ' ' + 
-                                        (c.nimi || '') + ' ' +
-                                        (c.profiling?.core?.sub_contexts?.join(' ') || '')
-                                    ).toLowerCase();
-                                    if (companyContent.includes('digitointi')) {
-                                        isProfiledMatch = true;
-                                    }
-                                }
-                            }
-                            if (opt.tags.includes('juhlatila')) {
-                                const catData = getCategoryData(c, 'events_and_celebrations');
-                                if (catData && fitsScore > 0 && (catData.capacity_max > 0 || catData.seated_capacity > 0)) isProfiledMatch = true;
-                            }
-                        }
-
-                        const hasVenueTag = (c.tags || '').toLowerCase().includes('juhlatila') || 
-                                           (c.kategoria || '').toLowerCase().includes('juhlatila') ||
-                                           (c.tags || '').toLowerCase().includes('kokoustila') ||
-                                           (c.tags || '').toLowerCase().includes('edustustila');
-
-                        if (opt.capacity_req > 0 || requestedCapacity > 0) {
-                            const cap = getCompanyCapacity(c, currentProfilingKey);
-                            
-                            // Jos optio vaatii kapasiteettia (esim. juhlatila-valinta), yrityksellä on oltava kapasiteetti.
-                            if (opt.capacity_req > 0 && cap === 0) {
-                                return false;
-                            }
-                            
-                            // Jos kyseessä on tilatyyppinen optio tai yritys, ja hakuun liittyy kapasiteettivaatimus, piilotetaan nollakapasiteetin kohteet.
-                            const isVenueType = hasVenueTag || 
-                                               (opt.label && (
-                                                   (i18n.getText(opt.label).toLowerCase().includes('tila') && !i18n.getText(opt.label).toLowerCase().includes('tilaisuus')) || 
-                                                   i18n.getText(opt.label).toLowerCase().includes('muistotilaisuus') ||
-                                                   i18n.getText(opt.label).toLowerCase().includes('juhla')
-                                               )) || 
-                                               (opt.tags && opt.tags.includes('juhlatila')) ||
-                                               opt.node_link === 'JUHLATILA';
-
-                            if (requestedCapacity > 0 && isVenueType && cap === 0) {
-                                return false;
-                            }
-                        }
-
-                        // NEW: Estetään juhlatilojen (kapasiteettikohteet) nouseminen palveluhakuihin (esim. videokuvaus)
-                        // Jos optio ei vaadi kapasiteettia, mutta yrityksellä on kapasiteettia (on tila), 
-                        // niin yrityksen on oltava vahva match (score > 80) kyseiseen palvelu-intenttiin.
-                        const isServiceOnlyOption = !opt.capacity_req && opt.node_link !== 'JUHLATILA';
-                        const companyCap = getCompanyCapacity(c, currentProfilingKey);
-                        if (isServiceOnlyOption && companyCap > 0) {
-                            const intentScores = c.profiling?.core?.intent_scores || {};
-                            const hasStrongServiceMatch = (opt.intent_codes || []).some(code => (intentScores[code] || 0) >= 80);
-                            
-                            // Jos yritys on ensisijaisesti tila (eikä vahva palvelun tarjoaja), hylätään se palvelu-optiosta
-                            if (!hasStrongServiceMatch) return false;
-                        }
-
-                        if (isProfiledMatch) return true;
-                        
-                        // Jos yrityksellä on profilointi tälle kontekstille mutta arvosana on 0, 
-                        // ei sallita täsmäystä tägeillä (estää esim. juhlatilojen osumisen siivous-hakuihin)
-                        if (c.profiling && c.profiling.core && c.profiling.core.fits_for) {
-                            const fitsScore = getFitsForScore(c, currentProfilingKey);
-                            const hasProfiling = (currentProfilingKey in c.profiling.core.fits_for) || (currentProfilingKey.replace(/_/g, '-') in c.profiling.core.fits_for);
-                            // Jos profilointi on tehty (löytyy fits_for:sta) ja arvosana on 0, hylätään
-                            if (hasProfiling && fitsScore === 0) {
-                                return false;
-                            }
-                        }
-
-                        // Jos optiolla ei ole tägejä, node-linkkejä tai suodattimia, se ei saa näyttää "kaikkia" 
-                        // paitsi jos se on pelkkä kapasiteettivaatimus
-                        if (!opt.tags || opt.tags.length === 0) {
-                            if (!opt.node_link && !opt.node_links && !opt.profilointi_filter && opt.capacity_req <= 0) {
-                                return false; 
-                            }
-                            return getFitsForScore(c, currentProfilingKey) > 10;
-                        }
-
-                        // TÄRKEÄ KORJAUS: Jos optiolla on profilointisuodatin (liikunta-ja-vapaaaika), 
-                        // EI sallita fallbackia tägeihin, jos suodatin ei täsmännyt.
-                        // Tämä estää esim. Revontuli Resortin (jolla on 'avantouinti' sub_contextina) 
-                        // osumisen 'Uinti'-optioon (jolla on tägi 'uinti').
-                        if (opt.profilointi_filter) {
-                            return isProfiledMatch;
-                        }
-
-                        // Laajennettu haku: Nimi + Tägit + Kategoria + Profiloinnin sub_contexts + Node_links
-                        const companyContent = (
-                            (c.tags || '') + ' ' + 
-                            (c.kategoria || '') + ' ' + 
-                            (c.nimi || '') + ' ' +
-                            (c.profiling?.core?.sub_contexts?.join(' ') || '') + ' ' +
-                            (c.profiling?.core?.node_links?.join(' ') || '')
-                        ).toLowerCase();
-                        
-                        const tagMatch = opt.tags.some(tag => companyContent.includes(tag.toLowerCase()));
-                        
-                        return tagMatch;
                     });
                     
                     // Aina mukaan, vaikka yrityksiä ei löytyisi (käyttäjän toive)
@@ -1775,4 +2403,8 @@ if (hasCommonBase) isSubContextMatch = true;
             initUserLocation();
             // Translate static elements
             if (window.i18n) window.i18n.translatePage();
-        });</script></body></html>
+        });
+    </script>
+</body>
+
+</html>

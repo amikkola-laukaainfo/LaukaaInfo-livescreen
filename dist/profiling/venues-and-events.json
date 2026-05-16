@@ -1624,7 +1624,8 @@
             "not_suitable_for": [
                 "lasten syntymäpäivät",
                 "remontti",
-                "kahvitus / pitopalvelu"
+                "kahvitus / pitopalvelu",
+                "pitopalvelu"
             ],
             "sub_contexts": [
                 "muistotilaisuus",
@@ -16678,7 +16679,7 @@
                 "memorial_arrangements": false,
                 "transport_assistance": false,
                 "urgent_booking_available": false,
-                "refinement_tags": {},
+                "refinement_tags": [],
                 "digitization_features": [],
                 "collaborated_with": []
             },
@@ -20694,7 +20695,8 @@
             "weekend_service": true,
             "not_suitable_for": [
                 "majoitus",
-                "majoitus vieraille"
+                "majoitus vieraille",
+                "pitopalvelu"
             ],
             "sub_contexts": [],
             "node_links": [
@@ -22018,7 +22020,8 @@
                 "kuljetukset",
                 "vain kuljetus / peräkärry",
                 "taksi / kuljetus",
-                "kahvitus / pitopalvelu"
+                "kahvitus / pitopalvelu",
+                "pitopalvelu"
             ],
             "sub_contexts": [
                 "huonekalut",
@@ -22128,12 +22131,9 @@
                 "memorial_arrangements": true,
                 "transport_assistance": true,
                 "urgent_booking_available": false,
-                "refinement_tags": {
-                    "Yleinen": [],
-                    "hautauspalvelu": [
-                        "hautauspalvelu"
-                    ]
-                },
+                "refinement_tags": [
+                    "hautauspalvelu"
+                ],
                 "digitization_features": [],
                 "collaborated_with": []
             },
@@ -22522,7 +22522,8 @@
                 "järjestää ruoan",
                 "digitointi",
                 "videokuvaus",
-                "kahvitus / pitopalvelu"
+                "kahvitus / pitopalvelu",
+                "pitopalvelu"
             ],
             "sub_contexts": [
                 "muistotilaisuus",
@@ -26387,7 +26388,8 @@
             "not_suitable_for": [
                 "järjestää ruoan",
                 "videokuvaus",
-                "kahvitus / pitopalvelu"
+                "kahvitus / pitopalvelu",
+                "pitopalvelu"
             ],
             "sub_contexts": [
                 "muistotilaisuus",
@@ -29281,7 +29283,8 @@
                 "rakennustyöt",
                 "suurimuotoinen tapahtumatuotanto",
                 "yrityshyvinvointi / luennot",
-                "kahvitus / pitopalvelu"
+                "kahvitus / pitopalvelu",
+                "pitopalvelu"
             ],
             "sub_contexts": [
                 "hyvinvointipalvelut",
@@ -39923,7 +39926,9 @@
                 "karaoke_available": false,
                 "has_exclusive_catering": false,
                 "accommodation_included": false,
-                "refinement_tags": "sauna",
+                "refinement_tags": [
+                    "sauna"
+                ],
                 "digitization_features": [],
                 "entertainment_features": [
                     "sauna",
@@ -39988,14 +39993,12 @@
                 "memorial_arrangements": false,
                 "transport_assistance": false,
                 "urgent_booking_available": false,
-                "refinement_tags": {
-                    "Yleinen": [
-                        "muistotilaisuus",
-                        "kahvitarjoilu",
-                        "rauhaisa tila",
-                        "järvimaisema"
-                    ]
-                },
+                "refinement_tags": [
+                    "muistotilaisuus",
+                    "kahvitarjoilu",
+                    "rauhaisa tila",
+                    "järvimaisema"
+                ],
                 "digitization_features": [],
                 "collaborated_with": [
                     "kukat"
@@ -44613,7 +44616,8 @@
                 "luontoretkeily",
                 "häävideon editointi / koostepalvelu & drone-kuvaus & digitointipalvelut (kuvat, videot ym.)",
                 "digitointipalvelut (kuvat, videot ym.) & drone-kuvaus",
-                "kahvitus / pitopalvelu"
+                "kahvitus / pitopalvelu",
+                "pitopalvelu"
             ],
             "sub_contexts": [
                 "valokuvaaja",
@@ -44908,7 +44912,8 @@
                 "päivähoito",
                 "luontoretkeily",
                 "videokuvaus",
-                "kahvitus / pitopalvelu"
+                "kahvitus / pitopalvelu",
+                "pitopalvelu"
             ],
             "sub_contexts": [
                 "valokuvaaja",
@@ -45363,12 +45368,10 @@
                 "memorial_arrangements": false,
                 "transport_assistance": false,
                 "urgent_booking_available": false,
-                "refinement_tags": {
-                    "Yleinen": [
-                        "muistotilaisuus",
-                        "esteetön"
-                    ]
-                },
+                "refinement_tags": [
+                    "muistotilaisuus",
+                    "esteetön"
+                ],
                 "digitization_features": [],
                 "collaborated_with": []
             },
@@ -45681,13 +45684,11 @@
                 "memorial_arrangements": false,
                 "transport_assistance": false,
                 "urgent_booking_available": false,
-                "refinement_tags": {
-                    "Yleinen": [
-                        "muistotilaisuus",
-                        "esteetön",
-                        "kartano"
-                    ]
-                },
+                "refinement_tags": [
+                    "muistotilaisuus",
+                    "esteetön",
+                    "kartano"
+                ],
                 "digitization_features": [],
                 "collaborated_with": []
             },
@@ -45928,23 +45929,21 @@
                 "karaoke_available": true,
                 "has_exclusive_catering": false,
                 "accommodation_included": false,
-                "refinement_tags": {
-                    "Yleinen": [
-                        "juhlatila",
-                        "haajuhla",
-                        "haapaketti",
-                        "pitopalvelu",
-                        "catering",
-                        "omajuomat",
-                        "aanentoisto",
-                        "karaoke",
-                        "terassi",
-                        "esteetön",
-                        "pikkujoulu",
-                        "syntymapaivat",
-                        "valmistujaiset"
-                    ]
-                },
+                "refinement_tags": [
+                    "juhlatila",
+                    "haajuhla",
+                    "haapaketti",
+                    "pitopalvelu",
+                    "catering",
+                    "omajuomat",
+                    "aanentoisto",
+                    "karaoke",
+                    "terassi",
+                    "esteetön",
+                    "pikkujoulu",
+                    "syntymapaivat",
+                    "valmistujaiset"
+                ],
                 "digitization_features": [],
                 "entertainment_features": [
                     "karaoke",
@@ -46601,20 +46600,18 @@
                 "karaoke_available": false,
                 "has_exclusive_catering": false,
                 "accommodation_included": false,
-                "refinement_tags": {
-                    "Yleinen": [
-                        "juhlatila",
-                        "kartano",
-                        "hääjuhla",
-                        "esteetön",
-                        "terassi",
-                        "historiallinen",
-                        "pitopalvelu",
-                        "juhlapalvelut",
-                        "syntymäpäivät",
-                        "valmistujaiset"
-                    ]
-                },
+                "refinement_tags": [
+                    "juhlatila",
+                    "kartano",
+                    "hääjuhla",
+                    "esteetön",
+                    "terassi",
+                    "historiallinen",
+                    "pitopalvelu",
+                    "juhlapalvelut",
+                    "syntymäpäivät",
+                    "valmistujaiset"
+                ],
                 "digitization_features": [],
                 "entertainment_features": [
                     "äänentoisto",
@@ -47525,22 +47522,20 @@
                 "karaoke_available": false,
                 "has_exclusive_catering": false,
                 "accommodation_included": false,
-                "refinement_tags": {
-                    "Yleinen": [
-                        "juhlatila",
-                        "hääjuhla",
-                        "haapaketti",
-                        "näyttämö",
-                        "aanentoisto",
-                        "astiasto",
-                        "omaruuat",
-                        "esteetön",
-                        "pikkujoulu",
-                        "syntymäpäivät",
-                        "valmistujaiset",
-                        "karonkka"
-                    ]
-                },
+                "refinement_tags": [
+                    "juhlatila",
+                    "hääjuhla",
+                    "haapaketti",
+                    "näyttämö",
+                    "aanentoisto",
+                    "astiasto",
+                    "omaruuat",
+                    "esteetön",
+                    "pikkujoulu",
+                    "syntymäpäivät",
+                    "valmistujaiset",
+                    "karonkka"
+                ],
                 "digitization_features": [],
                 "entertainment_features": [
                     "näyttämö",
@@ -47841,23 +47836,21 @@
                 "karaoke_available": false,
                 "has_exclusive_catering": false,
                 "accommodation_included": false,
-                "refinement_tags": {
-                    "Yleinen": [
-                        "juhlatila",
-                        "hääjuhla",
-                        "kahvila",
-                        "videotykki",
-                        "esteetön",
-                        "omaruuat",
-                        "jarjestysmies",
-                        "lattiamajoitus",
-                        "historiallinen",
-                        "pikkujoulu",
-                        "syntymäpäivät",
-                        "valmistujaiset",
-                        "karonkka"
-                    ]
-                },
+                "refinement_tags": [
+                    "juhlatila",
+                    "hääjuhla",
+                    "kahvila",
+                    "videotykki",
+                    "esteetön",
+                    "omaruuat",
+                    "jarjestysmies",
+                    "lattiamajoitus",
+                    "historiallinen",
+                    "pikkujoulu",
+                    "syntymäpäivät",
+                    "valmistujaiset",
+                    "karonkka"
+                ],
                 "digitization_features": [],
                 "entertainment_features": [
                     "videotykki",
@@ -48431,12 +48424,10 @@
                 "karaoke_available": false,
                 "has_exclusive_catering": false,
                 "accommodation_included": false,
-                "refinement_tags": {
-                    "Yleinen": [
-                        "ruoka juhliin",
-                        "savukala"
-                    ]
-                },
+                "refinement_tags": [
+                    "ruoka juhliin",
+                    "savukala"
+                ],
                 "digitization_features": [],
                 "entertainment_features": [],
                 "collaborated_with": []
@@ -48481,7 +48472,7 @@
                 "memorial_arrangements": false,
                 "transport_assistance": false,
                 "urgent_booking_available": false,
-                "refinement_tags": {},
+                "refinement_tags": [],
                 "digitization_features": [],
                 "collaborated_with": []
             },
@@ -49205,7 +49196,8 @@
                 "hautauspalvelut",
                 "rakennuspalvelut",
                 "majoitus",
-                "huvipuisto"
+                "huvipuisto",
+                "pitopalvelu"
             ],
             "sub_contexts": [
                 "lievestuore",
@@ -49507,7 +49499,8 @@
                 "muuttopalvelut",
                 "lakipalvelut",
                 "it-palvelut",
-                "kahvitus / pitopalvelu"
+                "kahvitus / pitopalvelu",
+                "pitopalvelu"
             ],
             "sub_contexts": [
                 "kauppapuutarha",
