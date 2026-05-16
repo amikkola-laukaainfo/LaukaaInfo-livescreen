@@ -58899,10 +58899,12 @@
                 ],
                 "node_links": [],
                 "intent_codes": [
-                    "PETS_HORSE"
+                    "PETS_HORSE",
+                    "PETS_VET"
                 ],
                 "intent_scores": {
-                    "PETS_HORSE": 100
+                    "PETS_HORSE": 100,
+                    "PETS_VET": 100
                 }
             },
             "categories": {
@@ -59089,7 +59091,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-16T15:28:59.360Z",
+                "last_updated": "2026-05-16T15:53:34.805Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }

@@ -19,7 +19,7 @@ const sectorFiles = {
     'venues-and-events.json': ['events-and-celebrations', 'business-events', 'funerals-and-memorials', 'juhlat-ja-merkkipäivät', 'häät', 'yritysjuhlat', 'kokoukset', 'pitopalvelu', 'juhlat', 'muistotilaisuus', 'hautajaiset', 'tyhy-päivät', 'yritystapahtumat', 'tapahtumien-järjestäminen', 'kokouspalvelut', 'tilausravintola', 'juhlapalvelut', 'yritystilaisuudet', 'tapahtumapalvelut', 'tapahtumatuotanto'],
     'media-and-marketing.json': ['startup-services', 'business-growth', 'yrityksen-kehittäminen', 'yrityksen-perustaminen', 'yritysneuvonta', 'rahoitusneuvonta', 'hankeneuvonta', 'tapahtumatekniikka', 'aanentoisto-palvelut', 'dj-palvelut', 'ohjelmapalvelut', 'äänentoistopalvelut'],
     'property-and-maintenance.json': ['construction-and-maintenance', 'cottage-services', 'housing-company-and-contracts', 'taloyhtiöpalvelut', 'lvi-palvelut', 'mökkipalvelut', 'kiinteistönhuolto', 'talonmiespalvelut', 'rakennusten-ylläpito', 'isännöinti', 'kiinteistöhallinto', 'kiinteistokonsultointi'],
-    'wellbeing-and-family.json': ['wellbeing-and-beauty', 'moving-and-housing', 'hyvinvointi-ja-kauneus', 'ikäihmisten-palvelut', 'omaishoitajien-tuki', 'kotipalvelut', 'arjen-apu', 'hyvinvointi', 'hieronta', 'urheiluhieronta', 'hyvinvointipalvelut', 'kuntoutus', 'asumisen-palvelut', 'muutto'],
+    'wellbeing-and-family.json': ['wellbeing-and-beauty', 'animals', 'family-and-children', 'moving-and-housing', 'hyvinvointi-ja-kauneus', 'ikäihmisten-palvelut', 'omaishoitajien-tuki', 'kotipalvelut', 'arjen-apu', 'hyvinvointi', 'hieronta', 'urheiluhieronta', 'hyvinvointipalvelut', 'kuntoutus', 'asumisen-palvelut', 'muutto'],
     'mixed-local-services.json': ['kahvila', 'ravintola', 'lounas', 'catering', 'majoituspalvelut', 'venevuokraus', 'kukkakauppa', 'huonekalumyynti', 'kodinsisustus', 'kuljetuspalvelut', 'autohuolto', 'rengaspalvelu']
 };
 
@@ -58,7 +58,7 @@ Object.entries(profiles).forEach(([id, profile]) => {
     if (maxScore === 0 && profile.categories) {
         if (profile.categories.events_and_celebrations || profile.categories.business_events) {
             assignedFile = 'venues-and-events.json';
-        } else if (profile.categories.wellbeing_and_beauty) {
+        } else if (profile.categories.wellbeing_and_beauty || profile.categories.animals || profile.categories.family_and_children) {
             assignedFile = 'wellbeing-and-family.json';
         }
         // Add more heuristics as needed

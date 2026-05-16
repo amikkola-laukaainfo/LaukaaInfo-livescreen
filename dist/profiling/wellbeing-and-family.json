@@ -1864,6 +1864,303 @@
             "status": "updated"
         }
     },
+    "company-102": {
+        "name": "Bellingham Oy (Nokkakiven huvipuisto)",
+        "tags": "",
+        "core": {
+            "fits_for": {
+                "vapaa-aika": 70,
+                "events-and-celebrations": 82,
+                "perhe-huvipuisto": 90,
+                "lasten-viihde": 80,
+                "matkailu": 40,
+                "business-events": 82,
+                "funerals-and-memorials": 0,
+                "moving-and-housing": 0,
+                "construction-and-maintenance": 0,
+                "cottage-services": 5,
+                "housing-company-and-contracts": 0,
+                "startup-services": 0,
+                "business-growth": 0,
+                "wellbeing-and-beauty": 35,
+                "liikunta-ja-vapaaaika": 100,
+                "accommodation": 0,
+                "family-and-children": 100
+            },
+            "priority_score": 0,
+            "service_area": {
+                "mode": "TOIMIPISTE",
+                "radius_km": 0,
+                "regions": [
+                    "Laukaa",
+                    "Lievestuore",
+                    "Keski-Suomi"
+                ],
+                "note": "Sijaitsee Lievestuoreella, osoitteessa Ruuhimäentie 3. Etäisyys Jyväskylästä noin 24 km ."
+            },
+            "emergency_available": false,
+            "contract_customer_available": false,
+            "paired_with_by_context": {
+                "events-and-celebrations": [
+                    "Lasten ohjelmapalvelut"
+                ]
+            },
+            "corporate_clients": false,
+            "home_service": false,
+            "weekend_service": true,
+            "not_suitable_for": [
+                "kartano",
+                "omilla tarjoiluilla",
+                "luonnonläheinen tila",
+                "juhlatila (alle 50 henkilöä)",
+                "seminaari- tai juhlatila (yli 50 henkilöä)"
+            ],
+            "sub_contexts": [
+                "huvipuisto",
+                "lastenjuhlat",
+                "syntymäpäivät",
+                "perhepäivä",
+                "kesäretki",
+                "laitteet",
+                "vuoristorata",
+                "perheaktiviteetit",
+                "ryhmävierailu",
+                "koululaisretki",
+                "teemapuisto",
+                "kesätapahtuma"
+            ],
+            "node_links": [
+                "HUVIT",
+                "LAUKAA",
+                "MATKAILU",
+                "JUHLATILA",
+                "LIIKUNTA",
+                "LAPSET"
+            ],
+            "intent_codes": [
+                "REC_AMUSEMENT",
+                "ENT_PROGRAM",
+                "EVT_BIRTHDAY"
+            ],
+            "intent_scores": {
+                "REC_AMUSEMENT": 100,
+                "ENT_PROGRAM": 82,
+                "EVT_BIRTHDAY": 76
+            }
+        },
+        "categories": {
+            "core": {
+                "description": "Lievestuoreella sijaitseva kesäkauden perhehuvipuisto, jossa on yli 19 huvilaitetta, pelejä ja koko perheen aktiviteetteja. Tunnettu erityisesti Cyclon-vuoristoradasta ja matalan kynnyksen perhepäivistä. Soveltuu lasten syntymäpäiviin, ryhmävierailuihin ja kesätapahtumiin.",
+                "website": "[https://www.nokkakivi.fi](https://www.nokkakivi.fi)",
+                "email": "[info@nokkakivi.fi](mailto:info@nokkakivi.fi)",
+                "phone": "0452705920"
+            },
+            "events_and_celebrations": {
+                "capacity_max": 2000,
+                "seated_capacity": 0,
+                "standing_guests": 2000,
+                "outdoor_capacity": 500,
+                "is_accessible": true,
+                "own_catering_allowed": false,
+                "inhouse_catering_available": true,
+                "is_lakeside": false,
+                "has_sauna": false,
+                "has_av_tech": false,
+                "has_stage": false,
+                "accommodation_beds": 0,
+                "alcohol_license": false,
+                "private_booking": true,
+                "late_night_events": false,
+                "wedding_specialized": false,
+                "catering_min_capacity": 20,
+                "catering_max_capacity": 500,
+                "dietary_specialties": [
+                    "lastenannokset"
+                ],
+                "staff_included": true,
+                "wedding_menu_available": false,
+                "cake_service": false,
+                "partner_venues": [],
+                "wedding_photography": false,
+                "drone_available": false,
+                "video_production": false,
+                "live_music": false,
+                "dj_services": false,
+                "karaoke_available": false,
+                "has_exclusive_catering": false,
+                "accommodation_included": false,
+                "refinement_tags": [
+                    "lastenjuhlat",
+                    "syntymäpäivä",
+                    "perhepäivä",
+                    "huvipuisto",
+                    "ryhmävierailu"
+                ],
+                "digitization_features": [],
+                "entertainment_features": [
+                    "huvilaitteet",
+                    "pelialue",
+                    "vuoristorata"
+                ],
+                "collaborated_with": []
+            },
+            "business_events": {
+                "meeting_capacity": 100,
+                "seminar_capacity": 0,
+                "conference_rooms": 0,
+                "has_projector": false,
+                "has_streaming": false,
+                "has_wifi": false,
+                "has_stage": false,
+                "private_booking": true,
+                "invoice_billing": true,
+                "corporate_clients": true,
+                "vip_services": false,
+                "business_catering": true,
+                "event_hosting": true,
+                "corporate_gifts": false,
+                "branding_support": false,
+                "av_support": false,
+                "staff_events_specialized": true,
+                "refinement_tags": [
+                    "tyhy-päivä",
+                    "henkilöstöpäivä",
+                    "kesäjuhla"
+                ],
+                "wellbeing_and_activity_features": [
+                    "ulkoviihde",
+                    "ryhmäaktiviteetit"
+                ],
+                "entertainment_features": [
+                    "huvilaitteet"
+                ],
+                "collaborated_with": []
+            },
+            "funerals_and_memorials": {
+                "memorial_service_capacity": 0,
+                "quiet_private_space": false,
+                "accessible_entry": true,
+                "memorial_catering": false,
+                "coffee_service": false,
+                "flower_arrangements": false,
+                "memorial_menu_available": false,
+                "funeral_flowers": false,
+                "memorial_arrangements": false,
+                "transport_assistance": false,
+                "urgent_booking_available": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "moving_and_housing": {
+                "moving_truck_available": false,
+                "packing_service": false,
+                "storage_available": false,
+                "weekend_moves": false,
+                "urgent_moves": false,
+                "long_distance_moves": false,
+                "cleaning_after_move": false,
+                "electrician_available": false,
+                "renovation_support": false,
+                "insurance_support": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "construction_and_maintenance": {
+                "emergency_service": false,
+                "certifications": [],
+                "wet_room_certification": false,
+                "provides_tools": false,
+                "material_supply": false,
+                "project_management": false,
+                "snow_removal": false,
+                "lawn_maintenance": false,
+                "property_monitoring": false,
+                "maintenance_contracts": false,
+                "housing_company_clients": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "cottage_services": {
+                "key_holding": false,
+                "winter_monitoring": false,
+                "snow_removal": false,
+                "cleaning_service": false,
+                "lawn_service": false,
+                "remote_monitoring": false,
+                "emergency_visits": false,
+                "renovation_support": false,
+                "dock_maintenance": false,
+                "sauna_services": false,
+                "guest_preparation_service": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "housing_company_and_contracts": {
+                "housing_company_clients": false,
+                "maintenance_contracts": false,
+                "emergency_response": false,
+                "scheduled_visits": false,
+                "property_reports": false,
+                "invoice_billing": false,
+                "contract_customer_available": false,
+                "priority_support": false,
+                "monthly_service_plan": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "startup_services": {
+                "bookkeeping_startup": false,
+                "business_advisory": false,
+                "insurance_setup": false,
+                "legal_services": false,
+                "office_space_available": false,
+                "banking_support": false,
+                "website_creation": false,
+                "webshop_setup": false,
+                "branding_support": false,
+                "logo_design": false,
+                "business_photography": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "business_growth": {
+                "google_ads": false,
+                "social_media_marketing": false,
+                "seo_services": false,
+                "content_creation": false,
+                "video_production": false,
+                "crm_support": false,
+                "recruitment_support": false,
+                "sales_development": false,
+                "automation_services": false,
+                "consulting_services": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "wellbeing_and_beauty": {
+                "home_visits": false,
+                "online_booking": true,
+                "unisex_services": false,
+                "gift_cards": true,
+                "corporate_wellbeing_services": false,
+                "event_makeup": false,
+                "bridal_services": false,
+                "group_bookings": true,
+                "refinement_tags": [
+                    "nokkakivi",
+                    "huvipuisto"
+                ],
+                "collaborated_with": []
+            }
+        },
+        "meta": {
+            "last_updated": "2026-05-08T13:47:08.799Z",
+            "verified_by": "AI-analysis-v1",
+            "status": "draft"
+        }
+    },
     "company-114": {
         "name": "Luontaishoitola Enkelihuone",
         "tags": "",
@@ -4973,10 +5270,12 @@
             ],
             "node_links": [],
             "intent_codes": [
-                "PETS_HORSE"
+                "PETS_HORSE",
+                "PETS_VET"
             ],
             "intent_scores": {
-                "PETS_HORSE": 100
+                "PETS_HORSE": 100,
+                "PETS_VET": 100
             }
         },
         "categories": {
@@ -5163,7 +5462,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-16T15:28:59.360Z",
+            "last_updated": "2026-05-16T15:53:34.805Z",
             "verified_by": "system-init-v3",
             "status": "draft"
         }
