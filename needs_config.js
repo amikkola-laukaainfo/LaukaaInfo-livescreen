@@ -216,9 +216,9 @@ const NEEDS_CONFIG = {
                 "id": "muuttoapu",
                 "question": { "fi": "Millaista apua tarvitset muuttoon?", "en": "What kind of help do you need for moving?" },
                 "options": [
-                    { "id": "OPT_MOVE_SERVICE_FULL", "label": { "fi": "Muuttopalvelu (auto + kantajat)", "en": "Moving service (van + carriers)", "intent_codes": ["MOVE_FULL"] }, "tags": ["kuljetusliike", "muuttopalvelu"] },
-                    { "id": "OPT_MOVE_TRANSPORT_ONLY", "label": { "fi": "Vain kuljetus / Peräkärry", "en": "Transport only / Trailer", "intent_codes": ["MOVE_TRANSPORT"] }, "tags": ["kuljetus", "hinaus"] },
-                    { "id": "OPT_MOVE_STORAGE", "label": { "fi": "Varastointipalvelu", "en": "Storage service", "intent_codes": ["MOVE_STORAGE"] }, "tags": ["varastointi"] }
+                    { "id": "OPT_MOVE_SERVICE_FULL", "label": { "fi": "Muuttopalvelu (auto + kantajat)", "en": "Moving service (van + carriers)" }, "intent_codes": ["MOVE_FULL"], "tags": ["kuljetusliike", "muuttopalvelu"] },
+                    { "id": "OPT_MOVE_TRANSPORT_ONLY", "label": { "fi": "Vain kuljetus / Peräkärry", "en": "Transport only / Trailer" }, "intent_codes": ["MOVE_TRANSPORT"], "tags": ["kuljetus", "hinaus"] },
+                    { "id": "OPT_MOVE_STORAGE", "label": { "fi": "Varastointipalvelu", "en": "Storage service" }, "intent_codes": ["MOVE_STORAGE"], "tags": ["varastointi"] }
                 ]
             },
             {
@@ -226,9 +226,9 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": { "fi": "Uuden kodin valmistelu?", "en": "Preparing your new home?" },
                 "options": [
-                    { "id": "OPT_MOVE_CLEANING", "label": { "fi": "Muuttosiivous", "en": "Moving clean", "intent_codes": ["MOVE_CLEANING"] }, "tags": ["siivous", "puhdistuspalvelut"] },
-                    { "id": "OPT_MOVE_ELECTRICITY", "label": { "fi": "Sähkösopimus / Sähköasennukset", "en": "Electricity contract / Electrical installations", "intent_codes": ["MOVE_ELECTRICITY"] }, "tags": ["sähköasennukset"] },
-                    { "id": "OPT_MOVE_RENO_SMALL", "label": { "fi": "Pieni pintaremontti", "en": "Minor surface renovation", "intent_codes": ["MOVE_RENO"] }, "tags": ["maalaustyöt", "rakentaminen"] }
+                    { "id": "OPT_MOVE_CLEANING", "label": { "fi": "Muuttosiivous", "en": "Moving clean" }, "intent_codes": ["MOVE_CLEANING"], "tags": ["siivous", "puhdistuspalvelut"] },
+                    { "id": "OPT_MOVE_ELECTRICITY", "label": { "fi": "Sähkösopimus / Sähköasennukset", "en": "Electricity contract / Electrical installations" }, "intent_codes": ["MOVE_ELECTRICITY"], "tags": ["sähköasennukset"] },
+                    { "id": "OPT_MOVE_RENO_SMALL", "label": { "fi": "Pieni pintaremontti", "en": "Minor surface renovation" }, "intent_codes": ["MOVE_RENO"], "tags": ["maalaustyöt", "rakentaminen"] }
                 ]
             }
         ]
@@ -243,10 +243,10 @@ const NEEDS_CONFIG = {
                 "id": "tarkennus",
                 "question": { "fi": "Mitä olet remontoimassa?", "en": "What are you renovating?" },
                 "options": [
-                    { "id": "OPT_RENO_BATHROOM", "label": { "fi": "Kylpyhuoneremontti", "en": "Bathroom renovation", "intent_codes": ["RENO_BATHROOM"] }, "sub_context": "kylpyhuoneremontti", "tags": ["LVI", "rakentaminen"] },
-                    { "id": "OPT_RENO_KITCHEN", "label": { "fi": "Keittiöremontti", "en": "Kitchen renovation", "intent_codes": ["RENO_KITCHEN"] }, "sub_context": "keittiöremontti", "tags": ["rakentaminen"] },
-                    { "id": "OPT_RENO_SURFACE", "label": { "fi": "Pintaremontti (maalaus tms.)", "en": "Surface renovation (painting etc.)", "intent_codes": ["RENO_SURFACE"] }, "sub_context": "pintaremontti", "tags": ["maalaustyöt"] },
-                    { "id": "OPT_RENO_NEW_BUILD", "label": { "fi": "Uudisrakentaminen", "en": "New construction", "intent_codes": ["RENO_NEW"] }, "sub_context": "uudisrakentaminen", "tags": ["rakentaminen"] }
+                    { "id": "OPT_RENO_BATHROOM", "label": { "fi": "Kylpyhuoneremontti", "en": "Bathroom renovation" }, "intent_codes": ["RENO_BATHROOM"], "sub_context": "kylpyhuoneremontti", "tags": ["LVI", "rakentaminen"] },
+                    { "id": "OPT_RENO_KITCHEN", "label": { "fi": "Keittiöremontti", "en": "Kitchen renovation" }, "intent_codes": ["RENO_KITCHEN"], "sub_context": "keittiöremontti", "tags": ["rakentaminen"] },
+                    { "id": "OPT_RENO_SURFACE", "label": { "fi": "Pintaremontti (maalaus tms.)", "en": "Surface renovation (painting etc.)" }, "intent_codes": ["RENO_SURFACE"], "sub_context": "pintaremontti", "tags": ["maalaustyöt"] },
+                    { "id": "OPT_RENO_NEW_BUILD", "label": { "fi": "Uudisrakentaminen", "en": "New construction" }, "intent_codes": ["RENO_NEW"], "sub_context": "uudisrakentaminen", "tags": ["rakentaminen"] }
                 ]
             },
             {
