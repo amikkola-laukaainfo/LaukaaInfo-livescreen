@@ -1979,7 +1979,9 @@ function showSuggestions() {
     // 2. Collect Categories and Tags from context
     const categories = [...new Set(companiesInContext.map(c => c.kategoria))].filter(Boolean);
     const tags = [...new Set(companiesInContext.flatMap(c => {
-        const combined = `${c.tags || ''},${c.palvelutapa || ''}`;
+        const profilingIntents = c.profiling?.core?.intent_codes || [];
+        const profilingSubContexts = c.profiling?.core?.sub_contexts || [];
+        const combined = `${c.tags || ''},${c.palvelutapa || ''},${profilingIntents.join(',')},${profilingSubContexts.join(',')}`;
         return combined.split(',').map(t => t.trim()).filter(Boolean);
     }))];
 
@@ -2016,7 +2018,19 @@ function showSuggestions() {
     // 5. Match Businesses (only if term is longer or no other major matches)
     if (searchTerm.length >= 2) {
         const busMatches = allCompanies
-            .filter(c => c.nimi.toLowerCase().includes(searchTerm) || (c.searchExtraInfo && c.searchExtraInfo.includes(searchTerm)))
+            .filter(c => {
+                const name = (c.nimi || '').toLowerCase();
+                const extra = (c.searchExtraInfo || '').toLowerCase();
+                const tags = (c.tags || '').toLowerCase();
+                const ptapa = (c.palvelutapa || '').toLowerCase();
+                const profilingSub = (c.profiling?.core?.sub_contexts || []).join(',').toLowerCase();
+                
+                return name.includes(searchTerm) || 
+                       extra.includes(searchTerm) || 
+                       tags.includes(searchTerm) || 
+                       ptapa.includes(searchTerm) ||
+                       profilingSub.includes(searchTerm);
+            })
             .map(c => ({ type: 'business', company: c }))
             .slice(0, 5);
         suggestions = [...suggestions, ...busMatches];

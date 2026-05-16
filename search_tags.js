@@ -46,6 +46,8 @@ const SEARCH_TAG_LIST = [
     { term: "matkahuolto", category: "Liikenne ja kuljetus" },
     { term: "sairaanhoito", category: "Liikenne ja kuljetus" },
     { term: "sairaankuljetus", category: "Liikenne ja kuljetus" },
+    { term: "peräkärry", category: "Liikenne ja kuljetus" },
+    { term: "Vain kuljetus / Peräkärry", category: "Liikenne ja kuljetus" },
 
     // 🏭 Teollisuus ja tuotanto
     { term: "metallituotteet", category: "Teollisuus ja tuotanto" },
