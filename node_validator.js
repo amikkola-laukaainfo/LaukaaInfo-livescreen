@@ -22,6 +22,21 @@ function readJsonClean(file) {
 const companiesRaw = readJsonClean('companies_data.json').results;
 const profiling = readJsonClean('company_profiling_data.json');
 
+const taxonomyRaw = readJsonClean('taxonomy.json');
+global.taxonomyData = {
+    intents: Object.keys(taxonomyRaw.intents).map(e => ({
+        id: e,
+        label: i18n.getText(taxonomyRaw.intents[e]),
+        subcontexts: taxonomyRaw.intents[e].tags || [],
+        refinements: [],
+        nodeLinks: taxonomyRaw.intents[e].node_links || []
+    }))
+};
+
+
+const needsConfigRaw = fs.readFileSync('needs_config.js', 'utf8');
+const NEEDS_CONFIG = eval(needsConfigRaw + '; NEEDS_CONFIG;');
+
 global.allCompanies = companiesRaw.map(c => {
     return { ...c, profiling: profiling[c.id] || {} };
 });
@@ -42,9 +57,39 @@ async function runValidation() {
             let matchesAll = true;
             for (let stepId in test.params.selections) {
                 const stepOptions = test.params.selections[stepId];
-                const matchesStep = stepOptions.some(opt => {
+                
+                const selectedOptions = [];
+                let subContextsReq = [];
+                for (let sId in test.params.selections) {
+                    test.params.selections[sId].forEach(o => {
+                        let fullOption = { ...o };
+                        if (NEEDS_CONFIG[test.params.id]) {
+                            for (let step of NEEDS_CONFIG[test.params.id].steps) {
+                                let match = step.options.find(opt => opt.label && (opt.label.fi === o.label.fi || opt.label === o.label));
+                                if (match) { fullOption = { ...match, ...o }; break; }
+                            }
+                        }
+                        selectedOptions.push(fullOption);
+                        if (fullOption.sub_context) subContextsReq.push(fullOption.sub_context);
+                    });
+                }
+                
+                const noCateringSelected = !!selectedOptions.find(o => o.profilointi_filter && o.profilointi_filter.field === 'catering_policy' && o.profilointi_filter.value === 'own_catering');
+
+                const enrichedStepOptions = stepOptions.map(o => {
+                    let fullOption = { ...o };
+                    if (NEEDS_CONFIG[test.params.id]) {
+                        for (let step of NEEDS_CONFIG[test.params.id].steps) {
+                            let match = step.options.find(opt => opt.label && (opt.label.fi === o.label.fi || opt.label === o.label));
+                            if (match) { fullOption = { ...match, ...o }; break; }
+                        }
+                    }
+                    return fullOption;
+                });
+
+                const matchesStep = enrichedStepOptions.some(opt => {
                     global.globalRequestedCapacity = opt.capacity_req || 0;
-                    return isMatch(c, opt, profilingKey);
+                    return isMatch(c, opt, profilingKey, subContextsReq, noCateringSelected);
                 });
                 if (!matchesStep) matchesAll = false;
             }
