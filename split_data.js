@@ -20,7 +20,8 @@ const sectorFiles = {
     'media-and-marketing.json': ['startup-services', 'business-growth', 'yrityksen-kehittäminen', 'yrityksen-perustaminen', 'yritysneuvonta', 'rahoitusneuvonta', 'hankeneuvonta', 'tapahtumatekniikka', 'aanentoisto-palvelut', 'dj-palvelut', 'ohjelmapalvelut', 'äänentoistopalvelut'],
     'property-and-maintenance.json': ['construction-and-maintenance', 'cottage-services', 'housing-company-and-contracts', 'taloyhtiöpalvelut', 'lvi-palvelut', 'mökkipalvelut', 'kiinteistönhuolto', 'talonmiespalvelut', 'rakennusten-ylläpito', 'isännöinti', 'kiinteistöhallinto', 'kiinteistokonsultointi'],
     'wellbeing-and-family.json': ['wellbeing-and-beauty', 'animals', 'family-and-children', 'moving-and-housing', 'hyvinvointi-ja-kauneus', 'ikäihmisten-palvelut', 'omaishoitajien-tuki', 'kotipalvelut', 'arjen-apu', 'hyvinvointi', 'hieronta', 'urheiluhieronta', 'hyvinvointipalvelut', 'kuntoutus', 'asumisen-palvelut', 'muutto'],
-    'mixed-local-services.json': ['kahvila', 'ravintola', 'lounas', 'catering', 'majoituspalvelut', 'venevuokraus', 'kukkakauppa', 'huonekalumyynti', 'kodinsisustus', 'kuljetuspalvelut', 'autohuolto', 'rengaspalvelu']
+    'business-services.json': ['startup-services', 'business-growth', 'service-partner', 'media-and-marketing', 'yrityksen-kehittäminen', 'yrityksen-perustaminen', 'yritysneuvonta', 'rahoitusneuvonta', 'hankeneuvonta'],
+    'mixed-local-services.json': ['kahvila', 'ravintola', 'lounas', 'catering', 'majoituspalvelut', 'venevuokraus', 'kukkakauppa', 'huonekalumyynti', 'kodinsisustus', 'kuljetuspalvelut', 'autohuolto', 'rengaspalvelu', 'auto-services', 'emergency-services']
 };
 
 const results = {
