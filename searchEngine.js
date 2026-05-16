@@ -224,7 +224,11 @@ function isMatch(c, opt, context, subContextsReq, noCateringSelected, taxonomyDa
         ).toLowerCase();
 
         const optTagsLower = opt.tags.map(t => normalizeText(t));
-        if (optTagsLower.some(tag => companyContent.includes(tag))) {
+        if (optTagsLower.some(tag => {
+            const nt = normalizeText(tag);
+            // Tarkistetaan molemmat suunnat
+            return companyContent.includes(nt) || nt.split(' ').some(word => word.length > 3 && companyContent.includes(word));
+        })) {
             isProfiledMatch = true;
         }
     }
