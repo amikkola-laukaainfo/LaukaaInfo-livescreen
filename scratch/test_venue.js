@@ -2,11 +2,9 @@ const fs = require('fs');
 const { searchEngine, isMatch } = require('../searchEngine');
 
 const companies = JSON.parse(fs.readFileSync('./company_profiling_data.json', 'utf8'));
-// transform dictionary to array for searchEngine
-const allCompanies = Object.keys(companies).map(k => ({ id: k, ...companies[k] }));
-
-const tupaswilla = allCompanies.find(c => c.id === 'company-243');
-console.log("Found Tupaswilla:", !!tupaswilla);
+const tupaswillaData = companies.profiles['company-243'];
+const tupaswilla = { id: 'company-243', profiling: tupaswillaData };
+console.log("Found Tupaswilla:", !!tupaswillaData);
 
 const opt = { 
     "id": "OPT_WED_VENUE_LARGE", 
