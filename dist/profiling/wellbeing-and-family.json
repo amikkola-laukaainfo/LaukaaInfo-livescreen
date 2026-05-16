@@ -2115,7 +2115,7 @@
     },
     "company-118": {
         "name": "Peurunka Oy",
-        "tags": "majoitus",
+        "tags": "majoitus, kuntosali, liikuntakeskus, ohjattu liikunta, personal trainer, ryhmäliikunta",
         "core": {
             "fits_for": {
                 "yritysjuhlat": 90,
@@ -2126,7 +2126,7 @@
                 "kuntoutus": 95,
                 "events-and-celebrations": 100,
                 "liikunta-ja-vapaaaika": 100,
-                "wellbeing-and-beauty": 96,
+                "wellbeing-and-beauty": 100,
                 "business-events": 90,
                 "funerals-and-memorials": 100,
                 "moving-and-housing": 0,
@@ -2195,11 +2195,12 @@
                 "EVT_CORPORATE",
                 "EVT_WEDDING",
                 "EVT_MEMORIAL",
-                "VENUE_PARTY"
+                "VENUE_PARTY",
+                "REC_GYM"
             ],
             "intent_scores": {
                 "REC_SWIMMING": 100,
-                "REC_GYM": 90,
+                "REC_GYM": 100,
                 "VENUE_ACCOMMODATION": 90,
                 "EVT_CORPORATE": 90,
                 "EVT_WEDDING": 100,
@@ -4938,6 +4939,324 @@
         "meta": {
             "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "AI-analysis-v1",
+            "status": "draft"
+        }
+    },
+    "company-286": {
+        "name": "Multamäen leirikeskus",
+        "tags": "retkeily, luontoretkeily, luonto, multamäki, vaellus, eräopas, ohjelmapalvelut",
+        "core": {
+            "fits_for": {
+                "events-and-celebrations": 60,
+                "business-events": 75,
+                "cottage-services": 55,
+                "family-and-children": 100,
+                "wellbeing-and-beauty": 100
+            },
+            "priority_score": 0,
+            "service_area": {
+                "mode": "TOIMIPISTE",
+                "radius_km": 0,
+                "regions": [
+                    "Laukaa kk"
+                ],
+                "note": ""
+            },
+            "emergency_available": false,
+            "contract_customer_available": false,
+            "paired_with_by_context": {},
+            "corporate_clients": false,
+            "home_service": false,
+            "weekend_service": false,
+            "not_suitable_for": [
+                "pitopalvelu",
+                "koskenlasku",
+                "kylpyhuoneremontti",
+                "lvi-asentaja (putkimies)"
+            ],
+            "sub_contexts": [
+                "majoitus",
+                "leirikeskus",
+                "leirikoulu",
+                "nuorisoleiri",
+                "ryhmämajoitus",
+                "peurunkajärvi",
+                "laukaa",
+                "koulutus",
+                "luontokohde",
+                "retkeily",
+                "vapaa-aika",
+                "juhlatila",
+                "kokoustila",
+                "sauna",
+                "ranta",
+                "ulkopelit",
+                "kiipeilyseinä",
+                "jousiammunta",
+                "melonta",
+                "talvirieha",
+                "pitopalvelu",
+                "ruokailu"
+            ],
+            "node_links": [
+                "LAUKAA",
+                "PEURUNKAJARVI",
+                "LEIRIKESKUS",
+                "MAJOITUS",
+                "KOKOUSTILA",
+                "SAUNA",
+                "LUONTOMATKAILU",
+                "PITOPALVELU",
+                "CATERING",
+                "JUHLATILA"
+            ],
+            "intent_codes": [
+                "EDU_DAYCARE",
+                "REC_OUTDOOR"
+            ],
+            "intent_scores": {
+                "EDU_DAYCARE": 100,
+                "REC_OUTDOOR": 100
+            }
+        },
+        "categories": {
+            "core": {
+                "description": "Multamäen leirikeskus on luonnonläheinen leiri- ja majoituskohde Peurunkajärven rannalla Laukaassa. Kohde soveltuu leirikoulujen, nuorisoleirien, retkien, ryhmien ja yhdistysten majoitukseen sekä koulutus- ja virkistystapahtumiin. Alueella on majoitustiloja, ruokailu- ja kokoontumistiloja sekä hyvät ulkoilu- ja vesistömahdollisuudet. Rauhallinen järvimaisema tarjoaa puitteet ympärivuotiseen ryhmätoimintaan.",
+                "website": "https://www.laukaanseurakunta.fi/multamaen-leirikeskus",
+                "email": "Järvenrantasijainti mahdollistaa monipuoliset vesistö- ja luontoaktiviteetit. Kohde painottuu ryhmäkäyttöön ja leiritoimintaan.",
+                "phone": ""
+            },
+            "events_and_celebrations": {
+                "capacity_max": 0,
+                "seated_capacity": 0,
+                "standing_guests": 0,
+                "outdoor_capacity": 0,
+                "is_accessible": false,
+                "own_catering_allowed": false,
+                "inhouse_catering_available": false,
+                "is_lakeside": true,
+                "has_sauna": true,
+                "has_av_tech": false,
+                "has_stage": false,
+                "accommodation_beds": 80,
+                "alcohol_license": false,
+                "private_booking": true,
+                "late_night_events": false,
+                "wedding_specialized": false,
+                "catering_min_capacity": 10,
+                "catering_max_capacity": 80,
+                "dietary_specialties": [],
+                "staff_included": false,
+                "wedding_menu_available": false,
+                "cake_service": false,
+                "partner_venues": [],
+                "wedding_photography": false,
+                "drone_available": false,
+                "video_production": false,
+                "live_music": false,
+                "dj_services": false,
+                "karaoke_available": false,
+                "has_exclusive_catering": false,
+                "accommodation_included": false,
+                "refinement_tags": [
+                    "juhlatila",
+                    "majoitus",
+                    "ranta",
+                    "sauna",
+                    "perhejuhla",
+                    "syntymäpäivät",
+                    "rippijuhla",
+                    "valmistujaiset",
+                    "pitopalvelu"
+                ],
+                "digitization_features": [],
+                "entertainment_features": [
+                    "kiipeilyseinä",
+                    "jousiammunta",
+                    "ulkopelit",
+                    "biljardi",
+                    "pingis"
+                ],
+                "collaborated_with": []
+            },
+            "business_events": {
+                "meeting_capacity": 80,
+                "seminar_capacity": 0,
+                "conference_rooms": 0,
+                "has_projector": false,
+                "has_streaming": false,
+                "has_wifi": false,
+                "has_stage": false,
+                "private_booking": true,
+                "invoice_billing": false,
+                "corporate_clients": false,
+                "vip_services": false,
+                "business_catering": true,
+                "event_hosting": true,
+                "corporate_gifts": false,
+                "branding_support": false,
+                "av_support": false,
+                "staff_events_specialized": false,
+                "refinement_tags": [
+                    "kokoustila",
+                    "koulutustila",
+                    "tyky-päivä",
+                    "strategiapäivä",
+                    "leirikoulu",
+                    "ryhmämajoitus",
+                    "pitopalvelu"
+                ],
+                "wellbeing_and_activity_features": [
+                    "melonta",
+                    "kiipeilyseinä",
+                    "jousiammunta",
+                    "sauna",
+                    "luontopolku"
+                ],
+                "entertainment_features": [
+                    "ulkopelit",
+                    "biljardi",
+                    "pingis"
+                ],
+                "collaborated_with": []
+            },
+            "funerals_and_memorials": {
+                "memorial_service_capacity": 0,
+                "quiet_private_space": false,
+                "accessible_entry": false,
+                "memorial_catering": false,
+                "coffee_service": false,
+                "flower_arrangements": false,
+                "memorial_menu_available": false,
+                "funeral_flowers": false,
+                "memorial_arrangements": false,
+                "transport_assistance": false,
+                "urgent_booking_available": false,
+                "refinement_tags": [
+                    "muistotilaisuus",
+                    "pitopalvelu"
+                ],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "moving_and_housing": {
+                "moving_truck_available": false,
+                "packing_service": false,
+                "storage_available": false,
+                "weekend_moves": false,
+                "urgent_moves": false,
+                "long_distance_moves": false,
+                "cleaning_after_move": false,
+                "electrician_available": false,
+                "renovation_support": false,
+                "insurance_support": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "construction_and_maintenance": {
+                "emergency_service": false,
+                "certifications": [],
+                "wet_room_certification": false,
+                "provides_tools": false,
+                "material_supply": false,
+                "project_management": false,
+                "snow_removal": false,
+                "lawn_maintenance": false,
+                "property_monitoring": false,
+                "maintenance_contracts": false,
+                "housing_company_clients": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "cottage_services": {
+                "key_holding": false,
+                "winter_monitoring": false,
+                "snow_removal": false,
+                "cleaning_service": false,
+                "lawn_service": false,
+                "remote_monitoring": false,
+                "emergency_visits": false,
+                "renovation_support": false,
+                "dock_maintenance": false,
+                "sauna_services": true,
+                "guest_preparation_service": false,
+                "refinement_tags": [
+                    "ryhmämajoitus",
+                    "leirikeskus",
+                    "leirikoulu",
+                    "sauna",
+                    "ranta",
+                    "melonta",
+                    "talvirieha"
+                ],
+                "collaborated_with": []
+            },
+            "housing_company_and_contracts": {
+                "housing_company_clients": false,
+                "maintenance_contracts": false,
+                "emergency_response": false,
+                "scheduled_visits": false,
+                "property_reports": false,
+                "invoice_billing": false,
+                "contract_customer_available": false,
+                "priority_support": false,
+                "monthly_service_plan": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "startup_services": {
+                "bookkeeping_startup": false,
+                "business_advisory": false,
+                "insurance_setup": false,
+                "legal_services": false,
+                "office_space_available": false,
+                "banking_support": false,
+                "website_creation": false,
+                "webshop_setup": false,
+                "branding_support": false,
+                "logo_design": false,
+                "business_photography": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "business_growth": {
+                "google_ads": false,
+                "social_media_marketing": false,
+                "seo_services": false,
+                "content_creation": false,
+                "video_production": false,
+                "crm_support": false,
+                "recruitment_support": false,
+                "sales_development": false,
+                "automation_services": false,
+                "consulting_services": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "wellbeing_and_beauty": {
+                "home_visits": false,
+                "online_booking": false,
+                "unisex_services": false,
+                "gift_cards": false,
+                "corporate_wellbeing_services": false,
+                "event_makeup": false,
+                "bridal_services": false,
+                "group_bookings": true,
+                "refinement_tags": [
+                    "leirikoulu",
+                    "nuorisoleiri",
+                    "rippileiri",
+                    "kerhotoiminta",
+                    "multamäki",
+                    "luontoretkeily"
+                ],
+                "collaborated_with": []
+            }
+        },
+        "meta": {
+            "last_updated": "2026-05-08T15:32:40.283Z",
+            "verified_by": "csv-reconciliation",
             "status": "draft"
         }
     }

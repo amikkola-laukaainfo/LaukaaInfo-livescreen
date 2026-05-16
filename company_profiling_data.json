@@ -25407,7 +25407,7 @@
         },
         "company-118": {
             "name": "Peurunka Oy",
-            "tags": "majoitus",
+            "tags": "majoitus, kuntosali, liikuntakeskus, ohjattu liikunta, personal trainer, ryhmäliikunta",
             "core": {
                 "fits_for": {
                     "yritysjuhlat": 90,
@@ -25418,7 +25418,7 @@
                     "kuntoutus": 95,
                     "events-and-celebrations": 100,
                     "liikunta-ja-vapaaaika": 100,
-                    "wellbeing-and-beauty": 96,
+                    "wellbeing-and-beauty": 100,
                     "business-events": 90,
                     "funerals-and-memorials": 100,
                     "moving-and-housing": 0,
@@ -25487,11 +25487,12 @@
                     "EVT_CORPORATE",
                     "EVT_WEDDING",
                     "EVT_MEMORIAL",
-                    "VENUE_PARTY"
+                    "VENUE_PARTY",
+                    "REC_GYM"
                 ],
                 "intent_scores": {
                     "REC_SWIMMING": 100,
-                    "REC_GYM": 90,
+                    "REC_GYM": 100,
                     "VENUE_ACCOMMODATION": 90,
                     "EVT_CORPORATE": 90,
                     "EVT_WEDDING": 100,
@@ -61847,13 +61848,14 @@
         },
         "company-286": {
             "name": "Multamäen leirikeskus",
-            "tags": "",
+            "tags": "retkeily, luontoretkeily, luonto, multamäki, vaellus, eräopas, ohjelmapalvelut",
             "core": {
                 "fits_for": {
                     "events-and-celebrations": 60,
                     "business-events": 75,
                     "cottage-services": 55,
-                    "family-and-children": 100
+                    "family-and-children": 100,
+                    "wellbeing-and-beauty": 100
                 },
                 "priority_score": 0,
                 "service_area": {
@@ -61913,10 +61915,12 @@
                     "JUHLATILA"
                 ],
                 "intent_codes": [
-                    "EDU_DAYCARE"
+                    "EDU_DAYCARE",
+                    "REC_OUTDOOR"
                 ],
                 "intent_scores": {
-                    "EDU_DAYCARE": 100
+                    "EDU_DAYCARE": 100,
+                    "REC_OUTDOOR": 100
                 }
             },
             "categories": {
