@@ -1768,6 +1768,11 @@ function filterCatalog(renderList = true) {
             return a.company.distanceValue - b.company.distanceValue;
         }
 
+        // Use priority_score as a tie-breaker before alphabetical sorting
+        const prioA = a.company.profiling?.core?.priority_score || 0;
+        const prioB = b.company.profiling?.core?.priority_score || 0;
+        if (prioB !== prioA) return prioB - prioA;
+
         return (a.company.nimi || '').localeCompare(b.company.nimi || '', 'fi');
     });
 

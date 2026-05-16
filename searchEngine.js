@@ -402,6 +402,10 @@ function processSearchResults(allCompanies, selections, currentNeedId, needToPro
             if (aIsPremium && !bIsPremium) return -1;
             if (!aIsPremium && bIsPremium) return 1;
 
+            const prioA = a.profiling?.core?.priority_score || 0;
+            const prioB = b.profiling?.core?.priority_score || 0;
+            if (prioB !== prioA) return prioB - prioA;
+
             return 0;
         });
     });
