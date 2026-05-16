@@ -4256,10 +4256,12 @@
             ],
             "node_links": [],
             "intent_codes": [
-                "HOME_MOVING"
+                "HOME_MOVING",
+                "MOVE_TRANSPORT"
             ],
             "intent_scores": {
-                "HOME_MOVING": 100
+                "HOME_MOVING": 100,
+                "MOVE_TRANSPORT": 100
             }
         },
         "categories": {
