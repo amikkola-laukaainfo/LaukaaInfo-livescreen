@@ -352,7 +352,7 @@ const NEEDS_CONFIG = {
                 "question": { "fi": "Mitä asioita haluatte edistää?", "en": "What matters would you like to address?" },
                 "options": [
                     { "id": "OPT_FUNERAL_ARRANGEMENTS", "label": { "fi": "Hautajaisjärjestelyt", "en": "Funeral arrangements" }, "sub_context": "hautauspalvelu", "tags": ["hautauspalvelu"], "node_link": "HAUTAUS", "hide_results": true },
-                    { "id": "OPT_FUNERAL_MEMORIAL", "label": { "fi": "Muistotilaisuus", "en": "Memorial service" }, "sub_context": "muistotilaisuus", "tags": ["juhlatila", "pitopalvelu"], "node_link": "HAUTAUS", "hide_results": true },
+                    { "id": "OPT_FUNERAL_MEMORIAL", "label": { "fi": "Muistotilaisuus", "en": "Memorial service" }, "sub_context": "muistotilaisuus", "tags": [], "node_link": "HAUTAUS", "hide_results": true },
                     { "id": "OPT_FUNERAL_LEGAL", "label": { "fi": "Perunkirjoitus ja laki-asiat", "en": "Estate inventory and legal matters" }, "sub_context": "perunkirjoitus", "tags": ["lakiasiaintoimisto", "perunkirjoitus", "tilitoimisto", "asiantuntijapalvelut", "lakipalvelut"] }
                 ]
             },
@@ -370,21 +370,11 @@ const NEEDS_CONFIG = {
                 "question": { "fi": "Kuinka paljon henkilöitä muistotilaisuuteen osallistuu?", "en": "How many people will attend the memorial service?" },
                 "skipIf": "!isSelected('paatarve', 'Muistotilaisuus')",
                 "options": [
-                    { "id": "OPT_FUNERAL_CAP_20", "label": { "fi": "Alle 20 henkilöä", "en": "Less than 20 people" }, "capacity_req": 20, "tags": [] },
-                    { "id": "OPT_FUNERAL_CAP_50", "label": { "fi": "Noin 20 - 50 henkilöä", "en": "About 20 - 50 people" }, "capacity_req": 50, "tags": [] },
-                    { "id": "OPT_FUNERAL_CAP_100", "label": { "fi": "Noin 50 - 100 henkilöä", "en": "About 50 - 100 people" }, "capacity_req": 100, "tags": [] },
-                    { "id": "OPT_FUNERAL_CAP_150", "label": { "fi": "Yli 100 henkilöä", "en": "Over 100 people" }, "capacity_req": 150, "tags": [] }
-                ]
-            },
-            {
-                "id": "muistotila",
-                "question": { "fi": "Millaista muistotilaisuuden tilaa tarvitsette?", "en": "What kind of venue do you need for the memorial service?" },
-                "skipIf": "!isSelected('paatarve', 'Muistotilaisuus')",
-                "options": [
-                    { "id": "OPT_FUNERAL_VENUE_SMALL", "label": { "fi": "Pieni kodikas muistotila (alle 20 hlö)", "en": "Small intimate memorial space (under 20 ppl)" }, "tags": ["juhlatila"], "capacity_req": 20, "profilointi_filter": { "section": "funerals_and_memorials", "field": "quiet_private_space", "value": true }, "require_fits_for": { "key": "funerals_and_memorials", "min": 20 } },
-                    { "id": "OPT_FUNERAL_VENUE_QUIET", "label": { "fi": "Rauhallinen muistotila (20–50 hlö)", "en": "Quiet memorial venue (20–50 ppl)" }, "tags": ["juhlatila"], "capacity_req": 50, "profilointi_filter": { "section": "funerals_and_memorials", "field": "quiet_private_space", "value": true }, "require_fits_for": { "key": "funerals_and_memorials", "min": 30 } },
-                    { "id": "OPT_FUNERAL_VENUE_PARISH", "label": { "fi": "Seurakuntasali (yli 50 hlö)", "en": "Parish hall (over 50 ppl)" }, "tags": ["seurakunta"], "capacity_req": 50 },
-                    { "id": "OPT_FUNERAL_VENUE_CATERING_ONLY", "label": { "fi": "Tarvitsen vain catering-palvelun", "en": "Catering service only" }, "tags": [], "profilointi_filter": { "section": "funerals_and_memorials", "field": "memorial_catering", "value": true }, "require_fits_for": { "key": "funerals_and_memorials", "min": 20 } }
+                    { "id": "OPT_FUNERAL_CAP_20", "label": { "fi": "Alle 20 henkilöä", "en": "Less than 20 people" }, "capacity_req": 20, "tags": ["juhlatila"] },
+                    { "id": "OPT_FUNERAL_CAP_50", "label": { "fi": "Noin 20 - 50 henkilöä", "en": "About 20 - 50 people" }, "capacity_req": 50, "tags": ["juhlatila"] },
+                    { "id": "OPT_FUNERAL_CAP_100", "label": { "fi": "Noin 50 - 100 henkilöä", "en": "About 50 - 100 people" }, "capacity_req": 100, "tags": ["juhlatila"] },
+                    { "id": "OPT_FUNERAL_CAP_150", "label": { "fi": "Yli 100 henkilöä", "en": "Over 100 people" }, "capacity_req": 150, "tags": ["juhlatila"] },
+                    { "id": "OPT_FUNERAL_VENUE_NONE", "label": { "fi": "Omissa tiloissa (ei tilatarvetta)", "en": "At our own premises (no venue needed)" }, "hide_results": true }
                 ]
             },
             {
