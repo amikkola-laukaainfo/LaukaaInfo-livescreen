@@ -65002,11 +65002,14 @@
                     "property_monitoring": false,
                     "maintenance_contracts": true,
                     "housing_company_clients": true,
-                    "refinement_tags": [
-                        "nuohouspalvelu",
-                        "paloturvallisuus",
-                        "savuhormien huolto"
-                    ],
+                    "refinement_tags": {
+                        "Yleinen": [
+                            "nuohouspalvelu",
+                            "paloturvallisuus",
+                            "savuhormien huolto",
+                            "nuohous"
+                        ]
+                    },
                     "collaborated_with": []
                 },
                 "cottage_services": {
@@ -65021,11 +65024,14 @@
                     "dock_maintenance": false,
                     "sauna_services": true,
                     "guest_preparation_service": false,
-                    "refinement_tags": [
-                        "mökkinuohous",
-                        "takka ja sauna hormit",
-                        "vapaa-ajan asunnot"
-                    ],
+                    "refinement_tags": {
+                        "Yleinen": [
+                            "mökkinuohous",
+                            "takka ja sauna hormit",
+                            "vapaa-ajan asunnot",
+                            "nuohous"
+                        ]
+                    },
                     "collaborated_with": []
                 },
                 "housing_company_and_contracts": {
@@ -65088,7 +65094,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-03T12:16:13.916Z",
+                "last_updated": "2026-05-16T11:49:56.448Z",
                 "verified_by": "ai-profiling",
                 "status": "updated"
             }
