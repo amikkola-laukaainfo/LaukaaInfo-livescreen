@@ -611,6 +611,182 @@
     <script src="needs_config.js?v=20260507"></script>
     <script src="script.js"></script>
     <script>
+
+        const THRESHOLD_STRICT = 80;
+        
+        function normalizeText(txt) {
+            if (!txt) return "";
+            return String(txt).toLowerCase()
+                .replace(/Ã£Â¤/g, 'ä').replace(/Ã£Â¶/g, 'ö')
+                .replace(/Ã£â€ž/g, 'ä').replace(/Ã£â€“/g, 'ö')
+                .replace(/Ã¤/g, 'ä').replace(/Ã¶/g, 'ö')
+                .replace(/Ã„/g, 'ä').replace(/Ã–/g, 'ö')
+                .replace(/Ã¥/g, 'å').replace(/Ã…/g, 'å')
+                .trim();
+        }
+
+        function isMatch(c, opt, context, subContextsReq, noCateringSelected) {
+            const labelLower = normalizeText(opt.label && opt.label.fi ? opt.label.fi : opt.label).toLowerCase();
+            const fitsScore = getFitsForScore(c, context);
+            const underscoreKey = context.replace(/-/g, '_');
+            const hyphenKey = context.replace(/_/g, '-');
+            
+            let isProfiledMatch = false;
+
+            const exclusions = (c.profiling && c.profiling.core && c.profiling.core.not_suitable_for) ? c.profiling.core.not_suitable_for : [];
+            if (exclusions.some(exc => exc && labelLower.includes(normalizeText(exc).toLowerCase()))) {
+                return false;
+            }
+
+            if (noCateringSelected) {
+                const companyName = normalizeText(c.nimi || c.name).toLowerCase();
+                const companyTags = normalizeText(c.tags).toLowerCase();
+                const companyCat = normalizeText(c.kategoria || c.category).toLowerCase();
+                
+                const isCateringOption = labelLower.includes('pitopalvelu') || (opt.intent_codes || []).includes('BIZ_CATERING');
+                
+                if (!isCateringOption && (companyName.includes('pitopalvelu') || companyTags.includes('pitopalvelu') || companyCat.includes('pitopalvelu'))) {
+                    return false;
+                }
+            }
+
+            const isVenueType = (opt.tags && opt.tags.includes('juhlatila')) || 
+                                opt.node_link === 'JUHLATILA' || 
+                                (labelLower.includes('tila') && !labelLower.includes('tilaisuus'));
+
+            const isVenueSearch = (opt.capacity_req > 0 || 
+                                  isVenueType ||
+                                  labelLower.includes('muistotilaisuus') ||
+                                  labelLower.includes('kokous') ||
+                                  labelLower.includes('sauna') ||
+                                  labelLower.includes('juhla') ||
+                                  labelLower.includes('häät') ||
+                                  labelLower.includes('pikkujoulut')) && !opt.is_service;
+
+            if (subContextsReq && subContextsReq.length > 0) {
+                const companySubContexts = (c.profiling && c.profiling.core) ? c.profiling.core.sub_contexts : [];
+                let isSubContextMatch = false;
+
+                if (Array.isArray(companySubContexts)) {
+                    if (companySubContexts.length === 0) isSubContextMatch = true;
+                    else isSubContextMatch = subContextsReq.some(sc => companySubContexts.includes(sc));
+                } else if (companySubContexts && typeof companySubContexts === 'object') {
+                    const relevantSubContexts = companySubContexts[underscoreKey] || companySubContexts[hyphenKey];
+                    if (relevantSubContexts) isSubContextMatch = subContextsReq.some(sc => relevantSubContexts.includes(sc));
+                    else isSubContextMatch = true; 
+                } else {
+                    isSubContextMatch = true;
+                }
+
+                if (!isSubContextMatch) {
+                    const hasAnySubContexts = Array.isArray(companySubContexts) ? companySubContexts.length > 0 : !!companySubContexts;
+                    const isConstruction = context.includes('construction') || context.includes('housing') || context.includes('remontti');
+                    const isCatering = labelLower.includes('pitopalvelu') || labelLower.includes('leipomo') || (opt.intent_codes || []).includes('BIZ_CATERING');
+                    
+                    if (opt.sub_context && hasAnySubContexts && !isConstruction && !isCatering) return false; 
+                    if (isVenueSearch && hasAnySubContexts && fitsScore < THRESHOLD_STRICT && !isCatering) return false; 
+                }
+            }
+
+            if (opt.node_link || opt.node_links) {
+                const cLinks = (c.profiling && c.profiling.core) ? c.profiling.core.node_links || [] : [];
+                const oLinks = opt.node_links || [opt.node_link];
+                if (oLinks.some(l => l && cLinks.includes(l))) isProfiledMatch = true;
+            }
+
+            if (opt.profilointi_filter) {
+                const pf = opt.profilointi_filter;
+                const sectionData = getCategoryData(c, pf.section);
+                let match = false;
+
+                if (sectionData) {
+                    const actualVal = sectionData[pf.field];
+                    const checkFuzzyMatch = (a, b) => {
+                        if (a === b) return true;
+                        if (typeof a === 'string' && typeof b === 'string') {
+                            const na = normalizeText(a);
+                            const nb = normalizeText(b);
+                            return na === nb || na === nb + 't' || nb === na + 't' || na.includes(nb) || nb.includes(na);
+                        }
+                        return false;
+                    };
+
+                    if (Array.isArray(actualVal)) match = actualVal.some(v => checkFuzzyMatch(v, pf.value));
+                    else if (typeof actualVal === 'object' && actualVal !== null) match = Object.values(actualVal).flat().some(v => checkFuzzyMatch(v, pf.value));
+                    else match = checkFuzzyMatch(actualVal, pf.value);
+
+                    if (!match && Array.isArray(sectionData.refinement_tags)) {
+                        match = sectionData.refinement_tags.some(v => checkFuzzyMatch(v, pf.value));
+                    }
+                }
+                
+                if (opt.node_link || opt.node_links) isProfiledMatch = isProfiledMatch && match;
+                else isProfiledMatch = match;
+            }
+
+            if (opt.intent_codes && c.profiling && c.profiling.core && c.profiling.core.intent_codes) {
+                if (opt.intent_codes.some(code => c.profiling.core.intent_codes.includes(code))) isProfiledMatch = true;
+            }
+
+            if (!isProfiledMatch && opt.tags && opt.tags.includes('juhlatila')) {
+                const eventsData = getCategoryData(c, 'events_and_celebrations');
+                if (eventsData && fitsScore > 0 && (eventsData.capacity_max > 0 || eventsData.seated_capacity > 0)) {
+                    isProfiledMatch = true;
+                }
+            }
+
+            if (!isProfiledMatch && opt.tags) {
+                const companyContent = (
+                    (c.tags || '') + ' ' + 
+                    (c.kategoria || c.category || '') + ' ' + 
+                    (c.nimi || c.name || '')
+                ).toLowerCase();
+
+                const optTagsLower = opt.tags.map(t => normalizeText(t));
+                if (optTagsLower.some(tag => companyContent.includes(tag))) {
+                    isProfiledMatch = true;
+                }
+            }
+
+            if (opt.capacity_req > 0) {
+                const cap = getCompanyCapacity(c, context);
+                if (cap === 0) return false;
+            }
+
+            if (!opt.capacity_req && opt.node_link !== 'JUHLATILA') {
+                const companyCap = getCompanyCapacity(c, context);
+                if (companyCap > 0) {
+                    const intentScores = (c.profiling && c.profiling.core) ? c.profiling.core.intent_scores || {} : {};
+                    const hasStrongServiceMatch = (opt.intent_codes || []).some(code => (intentScores[code] || 0) >= THRESHOLD_STRICT);
+                    
+                    if (!hasStrongServiceMatch && fitsScore < THRESHOLD_STRICT) {
+                        return false;
+                    }
+                }
+            }
+
+            if (isProfiledMatch) {
+                if (isVenueSearch) {
+                    const cap = getCompanyCapacity(c, context);
+                    if (cap === 0) return false;
+                }
+                return true;
+            }
+
+            if (fitsScore === 0 && (c.profiling && c.profiling.core && c.profiling.core.fits_for)) {
+                const hasProfiling = (context in c.profiling.core.fits_for) || (context.replace(/_/g, '-') in c.profiling.core.fits_for);
+                if (hasProfiling) return false;
+            }
+
+            if (!opt.tags || opt.tags.length === 0) {
+                if (!opt.node_link && !opt.node_links && !opt.profilointi_filter && !(opt.capacity_req > 0)) {
+                    return false;
+                }
+            }
+
+            return false;
+        }
+
         // Share this page functionality
         document.getElementById('share-this-page-btn')?.addEventListener('click', function() {
             const url = window.location.href;
@@ -1125,143 +1301,11 @@
 
                 options.forEach(opt => {
                     if (opt.hide_results) return;
-                    const companiesForOpt = window.allCompanies.filter((c, idx) => {
-                        const isMediazoo = (c.id === 'company-2' || c.nimi === 'Mediazoo');
-                        const isRiina = (c.id === 'company-269' || (c.nimi && c.nimi.includes('Riina Raitio')));
-                        const labelLower = i18n.getText(opt.label || '').toLowerCase();
-
-                        // Identify if this is a venue/space search or something that naturally has capacity
-                        const isVenueSearch = (opt.capacity_req > 0 || 
-                                              opt.node_link === 'JUHLATILA' || 
-                                              (labelLower.includes('tila') && !labelLower.includes('tilaisuus')) || 
-                                              labelLower.includes('muistotilaisuus') ||
-                                              labelLower.includes('kokous') ||
-                                              labelLower.includes('sauna') ||
-                                              labelLower.includes('juhla') ||
-                                              labelLower.includes('häät') ||
-                                              labelLower.includes('pikkujoulut') ||
-                                              labelLower.includes('seminaari') ||
-                                              labelLower.includes('koulutus') ||
-                                              labelLower.includes('konferenssi') ||
-                                              labelLower.includes('leirikoulu') ||
-                                              labelLower.includes('rippikoulu') ||
-                                              labelLower.includes('kesäsiirtola') ||
-                                              labelLower.includes('retkeily') ||
-                                              labelLower.includes('luontoretkeily') ||
-                                              labelLower.includes('kuntosali') ||
-                                              labelLower.includes('urheilu') ||
-                                              labelLower.includes('liikunta') ||
-                                              labelLower.includes('koskenlasku') ||
-                                              labelLower.includes('golf') ||
-                                              labelLower.includes('uinti') ||
-                                              labelLower.includes('uimahalli') ||
-                                              labelLower.includes('kylpylä') ||
-                                              labelLower.includes('ratsastus') ||
-                                              labelLower.includes('huvipuisto') ||
-                                              labelLower.includes('vesiliikunta') ||
-                                              labelLower.includes('melonta') ||
-                                              labelLower.includes('mökki')) && !opt.is_service;
-
-                        const companyCapacity = getCompanyCapacity(c, currentProfilingKey);
-                        const fitsScore = getFitsForScore(c, currentProfilingKey);
-
-                        // NEW: Strict exclusion of venues from specialized service searches (e.g. photography, videography, nuohous)
-                        // Use only physical space capacity for this check to avoid excluding catering services
-                        const catData = getCategoryData(c, currentProfilingKey);
-                        const venueCapacity = catData ? (catData.capacity_max || catData.meeting_capacity || catData.seminar_capacity || catData.seated_capacity || catData.memorial_service_capacity || catData.outdoor_capacity || 0) : 0;
-
-                        // Enhanced venue detection: check if company is marked as JUHLATILA or has capacity anywhere
-                        const isPrimarilyVenue = (c.profiling?.core?.node_links || []).includes('JUHLATILA') || 
-                                                (getCategoryData(c, 'events_and_celebrations')?.capacity_max > 0) ||
-                                                (getCategoryData(c, 'business_events')?.meeting_capacity > 0);
-
-                        if (!isVenueSearch && (venueCapacity > 0 || isPrimarilyVenue)) {
-                            // If searching for a service (not a venue), and company is a venue, exclude it.
-                            // EXCEPTION: If the company has a very high score for this context (fitsScore >= 80),
-                            // it's likely a legitimate service provider who happens to have some capacity.
-                            if (fitsScore >= 80) {
-                                } else {
-                                return false; 
-                            }
-                        }
-
-                        // NEW: Jos Saunatilat on valittu, ja kyseessä on Juhlatila tai Kesäjuhlat -ehdotus,
-                        // rajataan vain tiloihin joissa on sauna.
-                        if (globalRequestedFeatures.sauna && isVenueSearch) {
-                            const catData = getCategoryData(c, currentProfilingKey);
-                            if (!catData?.has_sauna) return false;
-                        }
-
-                        // Helper normalization for robust comparison (handles potential encoding issues)
-                        const normalizeText = (txt) => {
-                            if (!txt) return "";
-                            return String(txt).toLowerCase()
-                                .replace(/Ã£Â¤/g, 'ä').replace(/Ã£Â¶/g, 'ö')
-                                .replace(/Ã£â€ž/g, 'ä').replace(/Ã£â€“/g, 'ö')
-                                .replace(/Ã¤/g, 'ä').replace(/Ã¶/g, 'ö')
-                                .replace(/Ã„/g, 'ä').replace(/Ã–/g, 'ö')
-                                .replace(/Ã¥/g, 'å').replace(/Ã…/g, 'å')
-                                .trim();
-                        };
-
-                        // Tarkista not_suitable_for: hylkää yritys jos se on merkitty sopimattomaksi tähän hakuun
-                        if (c.profiling?.core?.not_suitable_for?.length > 0) {
-                            const notSuitable = c.profiling.core.not_suitable_for.map(s => normalizeText(s));
-                            const labelLower = normalizeText(i18n.getText(opt.label));
-                            const optTagsLower = (opt.tags || []).map(t => normalizeText(t));
-
-                            // A. Tarkistus labelilla: Jos jokin hylkäystermi sisältyy hakuotsikkoon (esim. "omilla tarjoiluilla")
-                            const labelBlocked = notSuitable.some(s => s && labelLower.includes(s));
-                            
-                            // B. Tarkistus tageilla: Jos jokin hakuoptio on kielletty yritykseltä
-                            const tagBlocked = optTagsLower.some(tag => tag && notSuitable.includes(tag));
-
-                            if (labelBlocked || tagBlocked) {
-                                if (isMediazoo || isRiina) {
-                                }
-                                return false;
-                            }
-                        }
-
-                        if (selections._sub_contexts && selections._sub_contexts.length > 0) {
-                            // Yritykset joilla ei ole profilointidataa pääsevät läpi tagitarkistukseen
-                            if (!c.profiling) {
-                                // Ei profilointia — sallitaan, tagitarkistus ratkaisee
-                            } else {
-                                const companySubContexts = c.profiling?.core?.sub_contexts || [];
-                                let isSubContextMatch = false;
-                                
-                                const underscoreKey = currentProfilingKey.replace(/-/g, '_');
-                                const finnishMap = {
-                                    'events_and_celebrations': 'häät',
-                                    'business_events': 'yritysjuhlat',
-                                    'funerals_and_memorials': 'hautajaiset',
-                                    'startup_services': 'yrityksen perustaminen',
-                                    'business_growth': 'yrityksen kehittäminen'
-                                };
-                                const finKey = finnishMap[underscoreKey];
-
-                                if (Array.isArray(companySubContexts)) {
-                                    if (companySubContexts.length === 0) isSubContextMatch = true;
-                                    else isSubContextMatch = selections._sub_contexts.some(sc => companySubContexts.includes(sc));
-                                } else if (typeof companySubContexts === 'object' && companySubContexts !== null) {
-                                    const relevantSubContexts = companySubContexts[underscoreKey] || companySubContexts[currentProfilingKey] || (finKey ? companySubContexts[finKey] : null);
-                                    if (relevantSubContexts) isSubContextMatch = selections._sub_contexts.some(sc => relevantSubContexts.includes(sc));
-                                    else isSubContextMatch = true; 
-                                } else {
-                                    isSubContextMatch = true;
-                                }
-
-                                if (!isSubContextMatch) {
-                                    // NEW: Pehmeämpi vertailu jos kyseessä on saman pääkontekstin sisäinen haku
-                                    const hasCommonBase = selections._sub_contexts.some(sc => {
-                                        const scLower = sc.toLowerCase();
-                                        // Etsitään yhteisiä sanoja tai alkuosia (hää, yritys, juhla, hautajais, muisto)
-                                        const bases = ['hää', 'yritys', 'juhla', 'hautajais', 'muisto'];
-                                        const cscArray = Array.isArray(companySubContexts) ? companySubContexts : (typeof companySubContexts === 'object' && companySubContexts !== null ? Object.values(companySubContexts).flat() : []);
-                                        return bases.some(b => scLower.includes(b) && cscArray.some(csc => String(csc).toLowerCase().includes(b)));
-                                    });
-                                    if (hasCommonBase) isSubContextMatch = true;
+const companiesForOpt = window.allCompanies.filter(c => {
+                        const noCateringSelected = !!selectedOptions.find(o => o.profilointi_filter && o.profilointi_filter.field === 'catering_policy' && o.profilointi_filter.value === 'own_catering');
+                        return isMatch(c, opt, currentProfilingKey, selections._sub_contexts || [], noCateringSelected);
+                    });
+if (hasCommonBase) isSubContextMatch = true;
                                 }
 
                                 if (!isSubContextMatch) {
@@ -2132,8 +2176,7 @@
                    data.seminar_capacity || 
                    data.seated_capacity || 
                    data.memorial_service_capacity || 
-                   data.outdoor_capacity || 
-                   data.catering_max_capacity || 0;
+                   data.outdoor_capacity || 0;
         }
 
         function renderCompanyCard(c, requestedCapacity, profilingKey, collaboratorsSet, anchorCoords = null, isAnchorGroup = false, isSelected = false, groupLabel = '') {
