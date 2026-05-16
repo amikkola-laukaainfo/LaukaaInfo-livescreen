@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { searchEngine, isMatch } = require('./searchEngine');
+const { searchEngine, isMatch } = require('../searchEngine');
 
 const companies = JSON.parse(fs.readFileSync('./company_profiling_data.json', 'utf8'));
 // transform dictionary to array for searchEngine
