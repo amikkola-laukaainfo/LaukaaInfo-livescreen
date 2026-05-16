@@ -627,9 +627,6 @@
         });
     </script>
     <script>
-        // THRESHOLD_STRICT / THRESHOLD_RELEVANT / THRESHOLD_LOOSE
-        // are declared as global const in script.js — do not re-declare here.
-
         let currentNeedId = new URLSearchParams(window.location.search).get('id');
         let currentStepIndex = 0;
         let selections = {};
@@ -1062,11 +1059,6 @@
                 else if (val && typeof val === 'object') selectedOptions.push(val);
             }
 
-            const noCateringSelected = selectedOptions.some(opt => {
-                const label = i18n.getText(opt.label).toLowerCase();
-                return label === 'ei tarjoilua' || label === 'no catering';
-            });
-
             let filterProfiling = new URLSearchParams(window.location.search).get('filter_profiling');
             if (filterProfiling && selectedOptions.length === 0) {
                 selectedOptions.push({ label: { "fi": "Tarkennettu haku", "en": "Advanced search" }, tags: [] });
@@ -1138,22 +1130,6 @@
                         const isRiina = (c.id === 'company-269' || (c.nimi && c.nimi.includes('Riina Raitio')));
                         const labelLower = i18n.getText(opt.label || '').toLowerCase();
 
-                        // NEW: Global catering exclusion if "Ei tarjoilua" selected
-                        if (noCateringSelected) {
-                            const companyName = (c.nimi || '').toLowerCase();
-                            const companyTags = (c.tags || '').toLowerCase();
-                            const companyCat = (c.kategoria || '').toLowerCase();
-                            const nodeLinks = c.profiling?.core?.node_links || [];
-                            
-                            const isCatering = companyName.includes('pitopalvelu') || 
-                                               companyTags.includes('pitopalvelu') || 
-                                               companyCat.includes('pitopalvelu') ||
-                                               nodeLinks.includes('CATERING') ||
-                                               nodeLinks.includes('PITOPALVELU');
-                            
-                            if (isCatering) return false;
-                        }
-
                         // Identify if this is a venue/space search or something that naturally has capacity
                         const isVenueSearch = (opt.capacity_req > 0 || 
                                               opt.node_link === 'JUHLATILA' || 
@@ -1201,9 +1177,9 @@
 
                         if (!isVenueSearch && (venueCapacity > 0 || isPrimarilyVenue)) {
                             // If searching for a service (not a venue), and company is a venue, exclude it.
-                            // EXCEPTION: If the company has a very high score for this context (fitsScore >= THRESHOLD_STRICT),
+                            // EXCEPTION: If the company has a very high score for this context (fitsScore >= 80),
                             // it's likely a legitimate service provider who happens to have some capacity.
-                            if (fitsScore >= THRESHOLD_STRICT) {
+                            if (fitsScore >= 80) {
                                 } else {
                                 return false; 
                             }
@@ -1247,10 +1223,61 @@
                             }
                         }
 
-                        // Core Profiling Match (Parity with Simulator)
-                        const isCoreMatch = window.isMatch ? window.isMatch(c.profiling, opt, currentProfilingKey, selections._sub_contexts || []) : true;
-                        if (!isCoreMatch && c.profiling) {
-                            return false;
+                        if (selections._sub_contexts && selections._sub_contexts.length > 0) {
+                            // Yritykset joilla ei ole profilointidataa pääsevät läpi tagitarkistukseen
+                            if (!c.profiling) {
+                                // Ei profilointia — sallitaan, tagitarkistus ratkaisee
+                            } else {
+                                const companySubContexts = c.profiling?.core?.sub_contexts || [];
+                                let isSubContextMatch = false;
+                                
+                                const underscoreKey = currentProfilingKey.replace(/-/g, '_');
+                                const finnishMap = {
+                                    'events_and_celebrations': 'häät',
+                                    'business_events': 'yritysjuhlat',
+                                    'funerals_and_memorials': 'hautajaiset',
+                                    'startup_services': 'yrityksen perustaminen',
+                                    'business_growth': 'yrityksen kehittäminen'
+                                };
+                                const finKey = finnishMap[underscoreKey];
+
+                                if (Array.isArray(companySubContexts)) {
+                                    if (companySubContexts.length === 0) isSubContextMatch = true;
+                                    else isSubContextMatch = selections._sub_contexts.some(sc => companySubContexts.includes(sc));
+                                } else if (typeof companySubContexts === 'object' && companySubContexts !== null) {
+                                    const relevantSubContexts = companySubContexts[underscoreKey] || companySubContexts[currentProfilingKey] || (finKey ? companySubContexts[finKey] : null);
+                                    if (relevantSubContexts) isSubContextMatch = selections._sub_contexts.some(sc => relevantSubContexts.includes(sc));
+                                    else isSubContextMatch = true; 
+                                } else {
+                                    isSubContextMatch = true;
+                                }
+
+                                if (!isSubContextMatch) {
+                                    // NEW: Pehmeämpi vertailu jos kyseessä on saman pääkontekstin sisäinen haku
+                                    const hasCommonBase = selections._sub_contexts.some(sc => {
+                                        const scLower = sc.toLowerCase();
+                                        // Etsitään yhteisiä sanoja tai alkuosia (hää, yritys, juhla, hautajais, muisto)
+                                        const bases = ['hää', 'yritys', 'juhla', 'hautajais', 'muisto'];
+                                        const cscArray = Array.isArray(companySubContexts) ? companySubContexts : (typeof companySubContexts === 'object' && companySubContexts !== null ? Object.values(companySubContexts).flat() : []);
+                                        return bases.some(b => scLower.includes(b) && cscArray.some(csc => String(csc).toLowerCase().includes(b)));
+                                    });
+                                    if (hasCommonBase) isSubContextMatch = true;
+                                }
+
+                                if (!isSubContextMatch) {
+                                    const mainFitsScore = getFitsForScore(c, currentProfilingKey);
+                                    const hasAnySubContexts = Array.isArray(companySubContexts) ? companySubContexts.length > 0 : !!companySubContexts;
+                                    
+                                    // NEW: Relaxed check for services. If the option doesn't have a capacity requirement,
+                                    // it's likely a generic service (catering, photo, etc.) and shouldn't be strictly 
+                                    // filtered by the event's sub-context (e.g. "Perinteiset häät").
+                                    // FIX: Vältetään "tilaisuudessa" sanan osuminen "tila"-hakusanaan
+                                    const labelLower = i18n.getText(opt.label || '').toLowerCase();
+                                    const isVenueOrCore = (opt.capacity_req > 0 || opt.node_link === 'JUHLATILA' || (labelLower.includes('tila') && !labelLower.includes('tilaisuus')) || labelLower.includes('muistotilaisuus'));
+                                    
+                                    if (isVenueOrCore && hasAnySubContexts && mainFitsScore >= 70 && mainFitsScore < 80) return false; 
+                                }
+                            }
                         }
 
                         if (opt.require_fits_for) {
@@ -1260,7 +1287,7 @@
                             if (rfScore < rfMin) return false;
                         }
 
-                        let isProfiledMatch = isCoreMatch;
+                        let isProfiledMatch = false;
                         if (opt.node_link) {
                             const links = c.profiling?.core?.node_links || [];
                             if (links.includes(opt.node_link)) isProfiledMatch = true;
@@ -1315,6 +1342,14 @@
                                 isProfiledMatch = isProfiledMatch && match;
                             } else {
                                 isProfiledMatch = match;
+                            }
+                        }
+                        
+                        // INTENT-CODE TÄSMÄYS (UUSI)
+                        if (opt.intent_codes && c.profiling?.core?.intent_codes) {
+                            const hasIntent = opt.intent_codes.some(code => c.profiling.core.intent_codes.includes(code));
+                            if (hasIntent) {
+                                isProfiledMatch = true;
                             }
                         }
 
@@ -1434,12 +1469,12 @@
 
                         // NEW: Estetään juhlatilojen (kapasiteettikohteet) nouseminen palveluhakuihin (esim. videokuvaus)
                         // Jos optio ei vaadi kapasiteettia, mutta yrityksellä on kapasiteettia (on tila), 
-                        // niin yrityksen on oltava vahva match (score > THRESHOLD_STRICT) kyseiseen palvelu-intenttiin.
+                        // niin yrityksen on oltava vahva match (score > 80) kyseiseen palvelu-intenttiin.
                         const isServiceOnlyOption = !opt.capacity_req && opt.node_link !== 'JUHLATILA';
                         const companyCap = getCompanyCapacity(c, currentProfilingKey);
                         if (isServiceOnlyOption && companyCap > 0) {
                             const intentScores = c.profiling?.core?.intent_scores || {};
-                            const hasStrongServiceMatch = (opt.intent_codes || []).some(code => (intentScores[code] || 0) >= THRESHOLD_STRICT);
+                            const hasStrongServiceMatch = (opt.intent_codes || []).some(code => (intentScores[code] || 0) >= 80);
                             
                             // Jos yritys on ensisijaisesti tila (eikä vahva palvelun tarjoaja), hylätään se palvelu-optiosta
                             if (!hasStrongServiceMatch) return false;
@@ -1447,29 +1482,32 @@
 
                         if (isProfiledMatch) return true;
                         
-                        // Jos yrityksellä on profilointi tälle kontekstille mutta arvosana on liian matala,
-                        // ei sallita täsmäystä tägeillä. Tämä on tärkeää, jotta profilointisovelluksen 
-                        // muokkaukset vaikuttavat suoraan tuloksiin (esim. jos asetat pisteet nollaksi).
+                        // Jos yrityksellä on profilointi tälle kontekstille mutta arvosana on 0, 
+                        // ei sallita täsmäystä tägeillä (estää esim. juhlatilojen osumisen siivous-hakuihin)
                         if (c.profiling && c.profiling.core && c.profiling.core.fits_for) {
                             const fitsScore = getFitsForScore(c, currentProfilingKey);
-                            const hasProfilingForThisContext = (currentProfilingKey in c.profiling.core.fits_for) || (currentProfilingKey.replace(/_/g, '-') in c.profiling.core.fits_for);
-                            
-                            if (hasProfilingForThisContext) {
-                                // Jos profilointi on tehty, käytetään tiukkaa THRESHOLD_LOOSE rajaa (10)
-                                if (fitsScore < THRESHOLD_LOOSE) return false;
-                                
-                                // JOS hakuoptiolla on tiukka profilointisuodatin (esim. has_sauna: true), 
-                                // EI sallita fallbackia tägeihin jos se ei jo täsmännyt.
-                                if (opt.profilointi_filter || opt.node_link || opt.node_links) return false;
+                            const hasProfiling = (currentProfilingKey in c.profiling.core.fits_for) || (currentProfilingKey.replace(/_/g, '-') in c.profiling.core.fits_for);
+                            // Jos profilointi on tehty (löytyy fits_for:sta) ja arvosana on 0, hylätään
+                            if (hasProfiling && fitsScore === 0) {
+                                return false;
                             }
                         }
 
-                        // Jos optiolla ei ole tägejä, se ei saa näyttää "kaikkia" 
+                        // Jos optiolla ei ole tägejä, node-linkkejä tai suodattimia, se ei saa näyttää "kaikkia" 
+                        // paitsi jos se on pelkkä kapasiteettivaatimus
                         if (!opt.tags || opt.tags.length === 0) {
                             if (!opt.node_link && !opt.node_links && !opt.profilointi_filter && opt.capacity_req <= 0) {
                                 return false; 
                             }
-                            return fitsScore > THRESHOLD_LOOSE;
+                            return getFitsForScore(c, currentProfilingKey) > 10;
+                        }
+
+                        // TÄRKEÄ KORJAUS: Jos optiolla on profilointisuodatin (liikunta-ja-vapaaaika), 
+                        // EI sallita fallbackia tägeihin, jos suodatin ei täsmännyt.
+                        // Tämä estää esim. Revontuli Resortin (jolla on 'avantouinti' sub_contextina) 
+                        // osumisen 'Uinti'-optioon (jolla on tägi 'uinti').
+                        if (opt.profilointi_filter) {
+                            return isProfiledMatch;
                         }
 
                         // Laajennettu haku: Nimi + Tägit + Kategoria + Profiloinnin sub_contexts + Node_links
@@ -1670,12 +1708,6 @@
                     let scoreA = getFitsForScore(a, globalProfilingKey);
                     let scoreB = getFitsForScore(b, globalProfilingKey);
 
-                    // NEW: Bonus-pisteet jos tarkka sub_context täsmää (esim. kylpyhuoneremontti)
-                    if (opt.sub_context) {
-                        if (a.profiling?.core?.sub_contexts?.includes(opt.sub_context)) scoreA += 50;
-                        if (b.profiling?.core?.sub_contexts?.includes(opt.sub_context)) scoreB += 50;
-                    }
-
                     if (globalActiveCollaboratorsSet.has(a.id) || globalActiveCollaboratorsSet.has(a.nimi)) scoreA += 45;
                     if (globalActiveCollaboratorsSet.has(b.id) || globalActiveCollaboratorsSet.has(b.nimi)) scoreB += 45;
 
@@ -1829,20 +1861,12 @@
             const recommendations = [];
             const seenNormalized = new Set();
             
-            const noCateringSelected = (selections.tarjoilu && i18n.getText(selections.tarjoilu.label).toLowerCase().includes('ei tarjoilua'));
-
             function addRec(rec) {
                 if (!rec) return;
                 const text = typeof rec === 'string' ? rec : i18n.getText(rec);
                 if (!text || text.length < 2) return;
                 
                 const normalized = text.trim().toLowerCase();
-                
-                // NEW: Filter out catering suggestions if "Ei tarjoilua" selected
-                if (noCateringSelected && (normalized.includes('pitopalvelu') || normalized.includes('tarjoilu') || normalized.includes('catering'))) {
-                    return;
-                }
-
                 if (!seenNormalized.has(normalized)) {
                     seenNormalized.add(normalized);
                     // Capitalize first letter for consistent display
@@ -2031,30 +2055,21 @@
             tipsContainer.innerHTML = '';
 
             const themeTips = {
-                'haat': ['sauna', 'hyvinvointi', 'juhlakakut'],
-                'yritysjuhlat': ['sauna', 'menokohteet-jyvas', 'juhlakakut'],
-                'yritystilaisuudet': ['sauna', 'menokohteet-jyvas', 'juhlakakut'],
-                'syntymapaivat': ['sauna', 'juhlakakut'],
-                'hautajaiset': ['juhlakakut'],
+                'haat': ['sauna', 'hyvinvointi'],
+                'yritysjuhlat': ['sauna', 'menokohteet-jyvas'],
+                'yritystilaisuudet': ['sauna', 'menokohteet-jyvas'],
+                'syntymapaivat': ['sauna'],
                 'mokkipalvelut': ['sauna', 'menokohteet-jyvas'],
                 'terveys-ja-hyvinvointi': ['hyvinvointi']
             };
 
-            const tipsFiles = themeTips[needId] || [];
-            
-            // NEW: Filter out catering-related tips if "Ei tarjoilua" selected
-            const noCateringSelected = (selections.tarjoilu && i18n.getText(selections.tarjoilu.label).toLowerCase().includes('ei tarjoilua'));
-            let finalTipsFiles = [...tipsFiles];
-            if (noCateringSelected) {
-                finalTipsFiles = finalTipsFiles.filter(t => t !== 'juhlakakut' && t !== 'pitopalvelu');
-            }
-
-            if (finalTipsFiles.length === 0) {
+            const tipsFiles = themeTips[needId];
+            if (!tipsFiles || tipsFiles.length === 0) {
                 tipsContainer.style.display = 'none';
                 return;
             }
 
-            const tipsQuery = finalTipsFiles.join(',');
+            const tipsQuery = tipsFiles.join(',');
             const iframeUrl = `vinkit/pienetvinkit.html?files=${tipsQuery}&limit=3&lang=${i18n.currentLang}`;
 
             tipsContainer.innerHTML = `<iframe src="${iframeUrl}" style="width: 100%; border: none; min-height: 250px; overflow: hidden;" id="tips-iframe" scrolling="no"></iframe>`;

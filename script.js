@@ -220,7 +220,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Alustetaan etusivun uudet valinnat
     if (document.getElementById('home-region-select')) {
         initHomepageSelectors();
-        initHeroSlideshow();
     }
 
     // Alustetaan käyttäjän sijaintivalitsin (etusivulla tai jos input löytyy)
@@ -1686,7 +1685,7 @@ function filterCatalog(renderList = true) {
         const normalizedSearch = normalizeForSearch(searchTerm);
         if (searchTerm.length > 1 && combinedTags) {
             const tags = combinedTags.split(',').map(t => t.trim());
-            if (tags.some(tag => tag.includes(normalizedSearch) || (normalizedSearch.length > 3 && tag.length > 3 && normalizedSearch.includes(tag)))) {
+            if (tags.some(tag => tag.includes(normalizedSearch))) {
                 score += 120; // High priority for tag and service method matches
             }
         }
@@ -3106,127 +3105,4 @@ function locateOnMap(lat, lon, companyId) {
             marker.openPopup();
         }
     });
-}
-
-/**
- * Alustaa etusivun pääkuvan automaattisen vaihdon.
- * Hakee kuvalistan mediazoo.fi-palvelimelta ja vaihtaa kuvaa 10s välein.
- */
-async function initHeroSlideshow() {
-    const slideshowContainer = document.getElementById('hero-slideshow');
-    if (!slideshowContainer) return;
-
-    try {
-        // Haetaan dynaaminen kuvalista
-        const response = await fetch('https://www.mediazoo.fi/laukaainfo-web/get_hero_images.php');
-        if (!response.ok) return;
-        const images = await response.json();
-
-        // Jos kuvia ei löydy, pidetään oletuskuva
-        if (!images || images.length === 0) return;
-
-        // Lisätään oletuskuva listan alkuun jos se ei jo ole siellä
-        // (Huom: tässä vaiheessa images sisältää GitHub-linkkejä)
-        let currentIdx = 0;
-        const allImageUrls = [...images];
-        
-        // Esiladataan kuvat sulavuuden varmistamiseksi
-        allImageUrls.forEach(url => {
-            const img = new Image();
-            img.src = url;
-        });
-
-        const container = document.getElementById('hero-slideshow');
-        
-        setInterval(() => {
-            const nextIdx = (currentIdx + 1) % allImageUrls.length;
-            const nextUrl = allImageUrls[nextIdx];
-
-            // Luodaan uusi kuvaelementti faden alle
-            const newImg = document.createElement('img');
-            newImg.src = nextUrl;
-            newImg.className = 'hero-nature-img';
-            newImg.alt = 'Laukaa maisema';
-            
-            // Vanha aktiivinen kuva
-            const currentImg = container.querySelector('.hero-nature-img.active');
-            
-            // Lisätään uusi kuva
-            container.appendChild(newImg);
-
-            // Käynnistetään fade pienen viiveen jälkeen (jotta selain ehtii renderöidä)
-            setTimeout(() => {
-                if (currentImg) {
-                    currentImg.classList.remove('active');
-                    currentImg.classList.add('prev');
-                }
-                newImg.classList.add('active');
-
-                // Poistetaan vanha kuva kun transition on valmis (1.5s)
-                setTimeout(() => {
-                    if (currentImg && currentImg.parentNode) {
-                        currentImg.parentNode.removeChild(currentImg);
-                    }
-                }, 1600);
-            }, 50);
-
-            currentIdx = nextIdx;
-        }, 10000); // 10 sekuntia
-
-    } catch (error) {
-        console.warn('Hero slideshow error:', error);
-    }
-}
-
-/**
- * Global search matching function for LaukaaInfo service discovery.
- * Ensures parity with the production simulator.
- */
-const THRESHOLD_STRICT = 80;
-const THRESHOLD_RELEVANT = 50;
-const THRESHOLD_LOOSE = 10;
-
-function isMatch(company, option, context, activeSubContexts) {
-    if (!company || !option) return false;
-    
-    // Normalize context and key handling
-    const label = (i18n.getText(option.label) || "").toLowerCase();
-    const companyCore = company.core || {};
-    const intentScores = companyCore.intent_scores || {};
-    const fitsFor = companyCore.fits_for || {};
-    
-    // 1. Kategoria-pisteet (fits_for)
-    // Support both dash and underscore versions
-    const contextKeyDash = context.replace(/_/g, '-');
-    const contextKeyUnderscore = context.replace(/-/g, '_');
-    const fitsScore = fitsFor[context] || fitsFor[contextKeyDash] || fitsFor[contextKeyUnderscore] || 0;
-
-    // 2. Intent-osuma (esim. BIZ_CATERING)
-    const hasStrongIntent = (option.intent_codes || []).some(code => (intentScores[code] || 0) >= 50);
-
-    // 3. Sub-context täsmäys
-    const companySubContexts = companyCore.sub_contexts || [];
-    let isSubContextMatch = (!activeSubContexts || activeSubContexts.length === 0);
-    if (!isSubContextMatch) {
-        isSubContextMatch = activeSubContexts.some(sc => companySubContexts.includes(sc));
-    }
-
-    // 4. Lempileivos-tyyppinen poikkeus: Jos yritys on "yleinen palvelu" (pitopalvelu tai remontti),
-    // sallitaan haku vaikka sub-context ei täsmäisi, jos kategoria-pisteet ovat korkeat.
-    const isGeneralService = (fitsScore >= THRESHOLD_STRICT) && (
-        label.includes("pitopalvelu") || 
-        label.includes("leipomo") || 
-        label.includes("remontti") ||
-        label.includes("rakennus")
-    );
-
-    if (isGeneralService) return true;
-
-    // Normaalit ehdot: joko sub-context tai vahva intent
-    return (fitsScore >= THRESHOLD_LOOSE) && (isSubContextMatch || hasStrongIntent);
-}
-
-// Expose to window
-if (typeof window !== 'undefined') {
-    window.isMatch = isMatch;
 }
