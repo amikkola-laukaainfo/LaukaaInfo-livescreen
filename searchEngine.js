@@ -415,6 +415,119 @@ function generateSearchFingerprint(needId, selections, finalGroups) {
         }))
     };
 }
+/**
+ * Shared Recommendation Logic
+ * Generates "Next Steps" suggestions based on:
+ * 1. NEEDS_CONFIG (Core path options)
+ * 2. Taxonomy (Related intents)
+ * 3. Profiling (Paired services)
+ */
+function getRecommendations(needId, context, selectionsArr, allCompanies, taxonomyData, needsConfig, i18nHelper) {
+    const recommendations = [];
+    const seenNormalized = new Set();
+    const contextHyphenated = context.replace(/_/g, '-');
+
+    function addRec(rec) {
+        if (!rec) return;
+        const text = (typeof rec === 'string') ? rec : (i18nHelper ? i18nHelper.getText(rec) : (rec.fi || rec.en || ""));
+        if (!text || text.length < 2) return;
+        
+        const normalized = text.trim().toLowerCase();
+        if (!seenNormalized.has(normalized)) {
+            seenNormalized.add(normalized);
+            const display = text.trim().charAt(0).toUpperCase() + text.trim().slice(1);
+            recommendations.push(display);
+        }
+    }
+
+    // A. PRIORITY 1: Guided Search Path Options (from NEEDS_CONFIG)
+    // These are the most "intentional" suggestions.
+    const need = needsConfig ? needsConfig[needId] : null;
+    if (need) {
+        (need.steps || []).forEach(step => {
+            (step.options || []).forEach(opt => {
+                addRec(opt.label);
+            });
+        });
+    }
+
+    // B. PRIORITY 2: Taxonomy Relations
+    if (taxonomyData && taxonomyData.intents) {
+        // Find intent (direct or via group)
+        let intentIds = [context, contextHyphenated];
+        
+        // If taxonomy includes groups, find which group this context belongs to
+        const group = (taxonomyData.groups || []).find(g => g.id === context || g.id === contextHyphenated);
+        if (group && group.codes) {
+            intentIds = [...intentIds, ...group.codes];
+        }
+
+        const matchingIntents = taxonomyData.intents.filter(i => intentIds.includes(i.id));
+        
+        matchingIntents.forEach(intent => {
+            // 1. Subcontexts and Refinements
+            const taxonomyTags = [...(intent.subcontexts || []), ...(intent.refinements || [])];
+            const selectedSubContexts = selectionsArr.filter(s => s.sub_context).map(s => s.sub_context.toLowerCase());
+            
+            taxonomyTags.forEach(tag => {
+                if (!selectedSubContexts.includes(tag.toLowerCase())) {
+                    addRec(tag);
+                }
+            });
+
+            // 2. Relations
+            if (taxonomyData.relations) {
+                const relations = taxonomyData.relations.filter(r => r.from === intent.id);
+                relations.forEach(r => {
+                    const target = taxonomyData.intents.find(i => i.id === r.to);
+                    if (target) addRec(target.label);
+                    else addRec(r.to);
+                });
+            }
+        });
+
+        // 3. Relations from selected options
+        selectionsArr.forEach(opt => {
+            if (opt.intent_codes) {
+                opt.intent_codes.forEach(code => {
+                    const rels = (taxonomyData.relations || []).filter(r => r.from === code);
+                    rels.forEach(r => {
+                        const target = taxonomyData.intents.find(i => i.id === r.to);
+                        if (target) addRec(target.label);
+                        else addRec(r.to);
+                    });
+                });
+            }
+        });
+    }
+
+    // C. PRIORITY 3: Profiling Data (Paired services)
+    const topCompanies = (allCompanies || []).filter(c => {
+        const score = getFitsForScore(c, context);
+        return score >= 70;
+    });
+
+    topCompanies.forEach(c => {
+        const pairedObj = c.profiling?.core?.paired_with_by_context || {};
+        let paired = pairedObj[context] || pairedObj[contextHyphenated] || [];
+        
+        // Filter out venues if the company itself is a service provider without capacity
+        const companyCap = getCompanyCapacity(c, context);
+        if (companyCap === 0) {
+            paired = paired.filter(p => {
+                const pText = (typeof p === 'string' ? p : (i18nHelper ? i18nHelper.getText(p) : (p.fi || ""))).toLowerCase();
+                const isVenueTerm = pText.includes('juhlatila') || pText.includes('kokoustila') || pText.includes('majoitus');
+                return !isVenueTerm;
+            });
+        }
+
+        paired.forEach(p => addRec(p));
+    });
+
+    return recommendations.slice(0, 12);
+}
+
+function generateSearchFingerprint(needId, selections, finalGroups) {
 
 if (typeof module !== 'undefined') {
     module.exports = { 
@@ -424,6 +537,7 @@ if (typeof module !== 'undefined') {
         getHaversineDistance,
         isMatch, 
         processSearchResults,
-        generateSearchFingerprint
+        generateSearchFingerprint,
+        getRecommendations
     };
 }

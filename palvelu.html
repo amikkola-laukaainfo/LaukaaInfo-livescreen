@@ -644,13 +644,14 @@
                 
                 // Map new JSON structure to internal taxonomyData format for backward compatibility
                 taxonomyData = {
-                    intents: Object.keys(data.intents).map(id => ({
+                    intents: Object.keys(data.intents || {}).map(id => ({
                         id: id,
                         label: i18n.getText(data.intents[id]),
                         subcontexts: data.intents[id].tags || [],
                         refinements: [],
                         nodeLinks: data.intents[id].node_links || []
                     })),
+                    groups: data.groups || [],
                     relations: data.relations || [],
                     serviceTypes: data.serviceTypes || []
                 };
@@ -1280,109 +1281,16 @@
         function renderNextSteps(context) {
             const nextStepsContainer = document.getElementById('next-steps-container');
             const nextStepsList = document.getElementById('next-steps-list');
-            const recommendations = [];
-            const seenNormalized = new Set();
-            
-            function addRec(rec) {
-                if (!rec) return;
-                const text = typeof rec === 'string' ? rec : i18n.getText(rec);
-                if (!text || text.length < 2) return;
-                
-                const normalized = text.trim().toLowerCase();
-                if (!seenNormalized.has(normalized)) {
-                    seenNormalized.add(normalized);
-                    // Capitalize first letter for consistent display
-                    const display = text.trim().charAt(0).toUpperCase() + text.trim().slice(1);
-                    recommendations.push(display);
-                }
-            }
-            
-            // Normalize context for data lookup (handles underscore vs hyphen)
-            const contextHyphenated = context.replace(/_/g, '-');
-            
-            // 1. Taksonomiapohjaiset suositukset (sub-kontekstit ja tarkennukset)
-            if (taxonomyData) {
-                const intent = taxonomyData.intents.find(i => i.id === context || i.id === contextHyphenated);
-                if (intent) {
-                    // Lisätään taksonomian sub-kontekstit ja tarkennukset (nämä ovat "virallisia" tageja)
-                    const taxonomyTags = [...(intent.subcontexts || []), ...(intent.refinements || [])];
-                    
-                    // Suodatetaan pois ne, jotka on jo valittu tässä haussa
-                    const currentSubs = (selections._sub_contexts || []).map(s => s.toLowerCase());
-                    
-                    taxonomyTags.forEach(tag => {
-                        if (!currentSubs.includes(tag.toLowerCase())) {
-                            addRec(tag);
-                        }
-                    });
+            if (!nextStepsContainer || !nextStepsList) return;
 
-                    // Lisätään myös suhteet (relations)
-                    const relations = taxonomyData.relations.filter(r => r.from === intent.id);
-                    relations.forEach(r => {
-                        const targetIntent = taxonomyData.intents.find(i => i.id === r.to);
-                        if (targetIntent) addRec(targetIntent.label);
-                        else addRec(r.to);
-                    });
-                }
-
-                // New: also look at intent_codes from active selections
-                for (let stepId in selections) {
-                    const sel = selections[stepId];
-                    if (!sel) continue;
-                    const opts = Array.isArray(sel) ? sel : [sel];
-                    opts.forEach(opt => {
-                        if (opt.intent_codes) {
-                            opt.intent_codes.forEach(code => {
-                                const relIntents = taxonomyData.relations.filter(r => r.from === code);
-                                relIntents.forEach(r => {
-                                    const target = taxonomyData.intents.find(i => i.id === r.to);
-                                    if (target) addRec(target.label);
-                                    else addRec(r.to);
-                                });
-                            });
-                        }
-                    });
-                }
-            }
-
-            // 2. Profilointipohjaiset suositukset (yritysten omat ristiinmyyntiehdotukset)
-            const topCompanies = (window.allCompanies || []).filter(c => {
-                const fits = c.profiling?.core?.fits_for || {};
-                const score = fits[context] || fits[contextHyphenated] || 0;
-                return score >= 70;
-            });
-            
-            topCompanies.forEach(c => {
-                const pairedObj = c.profiling?.core?.paired_with_by_context || {};
-                let paired = pairedObj[context] || pairedObj[contextHyphenated] || [];
-                
-                // NEW: Jos yritys on palveluntarjoaja (ei kapasiteettia), karsitaan suosituksista juhlatilat
-                // (Käyttäjätoive: ei henkilökapasiteettikohteita palveluihin)
-                const companyCap = getCompanyCapacity(c, context);
-                if (companyCap === 0) {
-                    paired = paired.filter(p => {
-                        const pText = (typeof p === 'string' ? p : i18n.getText(p)).toLowerCase();
-                        const isVenueTerm = pText.includes('juhlatila') || pText.includes('kokoustila') || pText.includes('majoitus');
-                        return !isVenueTerm;
-                    });
-                }
-
-                paired.forEach(p => addRec(p));
-            });
-
-            // 3. Konfiguraatiopohjaiset suositukset (NEEDS_CONFIGin omat vaihtoehdot)
-            const currentNeedId = new URLSearchParams(window.location.search).get('id');
             const config = window.NEEDS_CONFIG || (typeof NEEDS_CONFIG !== 'undefined' ? NEEDS_CONFIG : null);
-            if (currentNeedId && config && config[currentNeedId]) {
-                const need = config[currentNeedId];
-                (need.steps || []).forEach(step => {
-                    (step.options || []).forEach(opt => {
-                        addRec(opt.label);
-                    });
-                });
-            }
             
-            // Limit to max 12 recommendations
+            // Get recommendations using the shared logic in searchEngine.js
+            // Pass selections as an array (values of the selections object)
+            const selectionsArr = Object.values(selections).flat();
+            const recommendations = getRecommendations(currentNeedId, context, selectionsArr, window.allCompanies, taxonomyData, config, window.i18n);
+            
+            // Limit to max 12 recommendations (already done in getRecommendations, but for safety)
             const limitedRecs = recommendations.slice(0, 12);
 
             if (limitedRecs.length > 0) {
@@ -1404,7 +1312,20 @@
             const container = document.getElementById('taxonomy-info-container');
             if (!container || !taxonomyData) return;
 
-            const intent = taxonomyData.intents.find(i => i.id === context || i.id === context.replace(/_/g, '-'));
+            const contextHyphenated = context.replace(/_/g, '-');
+            
+            // 1. Try to find direct intent
+            let intent = taxonomyData.intents.find(i => i.id === context || i.id === contextHyphenated);
+            
+            // 2. If not found, check if context is a group and use its primary code (e.g. HOME_COTTAGE)
+            if (!intent && taxonomyData.groups) {
+                const group = taxonomyData.groups.find(g => g.id === context || g.id === contextHyphenated);
+                if (group && group.codes && group.codes.length > 0) {
+                    // Use the first code as the representative intent for display
+                    intent = taxonomyData.intents.find(i => i.id === group.codes[0]);
+                }
+            }
+
             if (!intent) {
                 container.style.display = 'none';
                 return;
