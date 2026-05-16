@@ -568,8 +568,8 @@ const NEEDS_CONFIG = {
     "elaimet": {
         "title": { "fi": "Eläimet ja lemmikit", "en": "Animals and Pets" },
         "icon": "🐾",
-        "description": { "fi": "Kaikki lemmikkisi parhaaksi.", "en": "Everything for your pet's best." },
-        "profilointi_context": "wellbeing_and_beauty",
+        "description": { "fi": "Löydä eläinlääkärit, trimmaajat ja muut lemmikkipalvelut.", "en": "Find veterinarians, groomers and other pet services." },
+        "profilointi_context": "animals",
         "steps": [
             {
                 "id": "tarve",
@@ -595,10 +595,10 @@ const NEEDS_CONFIG = {
         ]
     },
     "lapset-ja-perhe": {
-        "title": { "fi": "Lapset ja perhe", "en": "Children & Family" },
-        "icon": "👶",
-        "description": { "fi": "Arjen tukea ja harrastuksia lapsiperheille.", "en": "Everyday support and hobbies for families with children." },
-        "profilointi_context": "wellbeing_and_beauty",
+        "title": { "fi": "Lapset ja perhe", "en": "Children and Family" },
+        "icon": "👨‍👩‍👧‍👦",
+        "description": { "fi": "Etsi lapsiperheille sopivia aktiviteetteja ja palveluita.", "en": "Find activities and services for families with children." },
+        "profilointi_context": "family_and_children",
         "steps": [
             {
                 "id": "palvelut",
