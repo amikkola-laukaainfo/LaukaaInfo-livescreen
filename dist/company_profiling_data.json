@@ -358,7 +358,8 @@
                     "maalari / tapetoija",
                     "suunnittelija / arkkitehti",
                     "laituritarvikkeet / huolto",
-                    "kertaluonteinen remontti"
+                    "kertaluonteinen remontti",
+                    "kuljetuspalvelut"
                 ],
                 "sub_contexts": [
                     "henkilökohtainen apu",
@@ -1815,7 +1816,7 @@
         },
         "company-269": {
             "name": "Terveys- ja hyvinvointipalvelu Riina Raitio",
-            "tags": "liikunta",
+            "tags": "liikunta, terveyspalvelut",
             "core": {
                 "fits_for": {
                     "events-and-celebrations": 85,
@@ -1827,7 +1828,7 @@
                     "construction-and-maintenance": 0,
                     "cottage-services": 0,
                     "accommodation": 0,
-                    "wellbeing-and-beauty": 95
+                    "wellbeing-and-beauty": 100
                 },
                 "priority_score": 85,
                 "service_area": {
@@ -34374,7 +34375,8 @@
                     "lastentarvikkeet",
                     "eräopas",
                     "lasten syntymäpäivät",
-                    "yritysjuhlat"
+                    "yritysjuhlat",
+                    "kuljetuspalvelut"
                 ],
                 "sub_contexts": [
                     "pieneläintuhkaus",
@@ -45190,7 +45192,8 @@
                     "maalari / tapetoija",
                     "suunnittelija / arkkitehti",
                     "laituritarvikkeet / huolto",
-                    "kahvitus / pitopalvelu"
+                    "kahvitus / pitopalvelu",
+                    "kuljetuspalvelut"
                 ],
                 "sub_contexts": [
                     "kotipalvelu",
@@ -54215,7 +54218,8 @@
                     "tunnelmallinen kartano",
                     "luonnonläheinen tila",
                     "tila omilla tarjoiluilla",
-                    "juhlatila (yli 50 henkilöä)"
+                    "juhlatila (yli 50 henkilöä)",
+                    "kahvitus / pitopalvelu"
                 ],
                 "sub_contexts": [
                     "juhlatila",
@@ -58862,9 +58866,11 @@
         },
         "company-267": {
             "name": "Hevosklinikka Laukaa",
-            "tags": "",
+            "tags": "hevonen",
             "core": {
-                "fits_for": {},
+                "fits_for": {
+                    "wellbeing-and-beauty": 100
+                },
                 "priority_score": 0,
                 "service_area": {
                     "mode": "TOIMIPISTE",
@@ -59380,7 +59386,8 @@
                     "häävideon editointi / koostepalvelu & drone-kuvaus & digitointipalvelut (kuvat, videot ym.)",
                     "digitointipalvelut (kuvat, videot ym.) & drone-kuvaus",
                     "kahvitus / pitopalvelu",
-                    "pitopalvelu"
+                    "pitopalvelu",
+                    "digitointipalvelut (kuvat, videot ym.)"
                 ],
                 "sub_contexts": [
                     "valokuvaaja",
@@ -60598,7 +60605,8 @@
                 "weekend_service": false,
                 "not_suitable_for": [
                     "pitopalvelu",
-                    "luonnonläheinen tila"
+                    "luonnonläheinen tila",
+                    "videokuvaus / esitykset"
                 ],
                 "sub_contexts": [
                     "juhlatila",
@@ -60948,7 +60956,8 @@
                     "yökerho- ja myöhäisillatapahtumat",
                     "tunnelmallinen kartano",
                     "luonnonläheinen tila",
-                    "saunatilat"
+                    "saunatilat",
+                    "videokuvaus / esitykset"
                 ],
                 "sub_contexts": [
                     "juhlatila",
@@ -63688,7 +63697,8 @@
                     "majoitus",
                     "järjestää ruoan",
                     "tunnelmallinen kartano",
-                    "luonnonläheinen tila"
+                    "luonnonläheinen tila",
+                    "videokuvaus / esitykset"
                 ],
                 "sub_contexts": [
                     "juhlatila",
@@ -65081,12 +65091,12 @@
         },
         "company-301": {
             "name": "SS Notariaatti Oy – Lievestuoreen toimipiste",
-            "tags": "",
+            "tags": "lakiasiaintoimisto, tilitoimisto, asiantuntijapalvelut, lakipalvelut",
             "core": {
                 "fits_for": {
                     "events-and-celebrations": 10,
                     "business-events": 20,
-                    "funerals-and-memorials": 85,
+                    "funerals-and-memorials": 100,
                     "startup-services": 75,
                     "business-growth": 40,
                     "moving-and-housing": 65,
