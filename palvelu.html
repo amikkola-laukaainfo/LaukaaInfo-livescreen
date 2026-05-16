@@ -493,6 +493,37 @@
             margin-right: 5px;
             margin-top: 5px;
         }
+
+        /* Company Media Styles */
+        .result-media {
+            width: 100%;
+            height: 160px;
+            margin-bottom: 1.5rem;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #f8fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #eef2f6;
+            transition: all 0.3s ease;
+        }
+        .result-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .company-result-card:hover .result-media img {
+            transform: scale(1.1);
+        }
+        .company-result-card:hover .result-media {
+            border-color: var(--primary-blue);
+        }
+        .result-media.is-logo img {
+            object-fit: contain;
+            padding: 15px;
+        }
     </style>
 </head>
 
@@ -1584,12 +1615,19 @@
 
             const fallbackSlogan = isLaukaa ? i18n.t('local_provider_laukaa') : i18n.t('network_provider');
 
+            let mediaHtml = `<div class="result-icon">${icon}</div>`;
+            if (c.logo && c.logo !== '-' && c.logo.startsWith('http')) {
+                mediaHtml = `<div class="result-media is-logo"><img src="${c.logo}" alt="${c.nimi}" loading="lazy"></div>`;
+            } else if (c.media && Array.isArray(c.media) && c.media.length > 0 && c.media[0].url) {
+                mediaHtml = `<div class="result-media"><img src="${c.media[0].url}" alt="${c.nimi}" loading="lazy"></div>`;
+            }
+
             return `
                 <div class="${wrapperClass} ${isTopMatch ? 'top-match' : ''} ${isPartner ? 'partner-boost' : ''}">
                     ${isPartner ? `<div class="result-badge badge-partner">${i18n.t('badge_partner')}</div>` : ''}
                     ${isTopMatch && !isPartner ? `<div class="result-badge badge-top">${i18n.t('badge_top')}</div>` : ''}
                     ${isPremium && !isTopMatch && !isPartner ? `<div class="result-badge badge-premium">${i18n.t('badge_premium')}</div>` : ''}
-                    <div class="result-icon">${icon}</div>
+                    ${mediaHtml}
                     <h3>${c.nimi}</h3>
                     <div class="slogan">${(c.mainoslause || (c.esittely ? c.esittely.substring(0, 100) + '...' : fallbackSlogan)).replace(/@@/g, '')}</div>
                     ${capacityNote}
