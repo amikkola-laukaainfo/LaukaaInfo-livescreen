@@ -9679,7 +9679,8 @@
                 "SAUNA",
                 "VATIANJARVI",
                 "KALASTUS",
-                "JUHLATILA"
+                "JUHLATILA",
+                "LAPSET"
             ],
             "intent_codes": [],
             "intent_scores": {}
@@ -9978,7 +9979,9 @@
                 "MOkkI",
                 "SAUNA",
                 "NURMINEN",
-                "JARVENRANTA"
+                "JARVENRANTA",
+                "ELÄIMET",
+                "LAPSET"
             ],
             "intent_codes": [],
             "intent_scores": {}

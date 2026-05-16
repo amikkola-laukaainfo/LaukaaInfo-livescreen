@@ -881,7 +881,8 @@
                 "KUUSA",
                 "HUVIT",
                 "HYVINVOINTI",
-                "ELÄMYKSET"
+                "ELÄMYKSET",
+                "ELÄIMET"
             ],
             "intent_codes": [],
             "intent_scores": {}
@@ -3263,7 +3264,8 @@
                 "LAUKAA",
                 "KIERRÄTYS",
                 "LASTENTARVIKKEET",
-                "VERKKOSIVUT"
+                "VERKKOSIVUT",
+                "LAPSET"
             ],
             "intent_codes": [
                 "SHOP_CHILDREN"
@@ -4272,7 +4274,8 @@
             ],
             "node_links": [
                 "HYVINVOINTI",
-                "JUHLATILA"
+                "JUHLATILA",
+                "LAPSET"
             ],
             "intent_codes": [
                 "WELLBEING_HEALTH",
@@ -4948,9 +4951,10 @@
         "tags": "hevonen",
         "core": {
             "fits_for": {
-                "wellbeing-and-beauty": 100
+                "wellbeing-and-beauty": 54,
+                "animals": 100
             },
-            "priority_score": 0,
+            "priority_score": 10,
             "service_area": {
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
@@ -4968,8 +4972,12 @@
                 "hevonen"
             ],
             "node_links": [],
-            "intent_codes": [],
-            "intent_scores": {}
+            "intent_codes": [
+                "PETS_HORSE"
+            ],
+            "intent_scores": {
+                "PETS_HORSE": 100
+            }
         },
         "categories": {
             "core": {
@@ -5155,7 +5163,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-04-26",
+            "last_updated": "2026-05-16T15:28:59.360Z",
             "verified_by": "system-init-v3",
             "status": "draft"
         }

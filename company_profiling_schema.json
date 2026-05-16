@@ -76,6 +76,8 @@
                 "startup_services": { "type": "object" },
                 "business_growth": { "type": "object" },
                 "wellbeing_and_beauty": { "type": "object" },
+                "animals": { "type": "object" },
+                "family_and_children": { "type": "object" },
                 "auto_services": { "type": "object" }
             }
         },

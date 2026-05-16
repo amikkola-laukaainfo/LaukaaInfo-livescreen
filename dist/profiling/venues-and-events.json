@@ -16861,7 +16861,8 @@
                 "LAUKAA",
                 "MATKAILU",
                 "JUHLATILA",
-                "LIIKUNTA"
+                "LIIKUNTA",
+                "LAPSET"
             ],
             "intent_codes": [
                 "REC_AMUSEMENT",
@@ -22551,7 +22552,8 @@
                 "HÄÄT",
                 "HAUTAJAISET",
                 "YRITYSKUVAUS",
-                "JUHLATILA"
+                "JUHLATILA",
+                "LAPSET"
             ],
             "intent_codes": [
                 "EVT_WEDDING",
@@ -26688,7 +26690,8 @@
                 "surupalvelu"
             ],
             "node_links": [
-                "HYVINVOINTI"
+                "HYVINVOINTI",
+                "ELÄIMET"
             ],
             "intent_codes": [
                 "EVT_MEMORIAL"
