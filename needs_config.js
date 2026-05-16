@@ -254,21 +254,21 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": { "fi": "Millaista ammattilaista etsit?", "en": "What kind of professional are you looking for?" },
                 "options": [
-                    { "id": "OPT_RENO_PRO_BUILDER", "label": { "fi": "Rakennus- / Remonttimies", "en": "Builder / Handyman", "intent_codes": ["RENO_BUILDER"] }, "tags": ["rakentaminen", "rakennustyöt"] },
-                    { "id": "OPT_RENO_PRO_ELECTRICIAN", "label": { "fi": "Sähköasentaja", "en": "Electrician", "intent_codes": ["RENO_ELECTRICIAN"] }, "tags": ["sähköasennukset"] },
-                    { "id": "OPT_RENO_PRO_PLUMBER", "label": { "fi": "LVI-asentaja (Putkimies)", "en": "HVAC installer (Plumber)", "intent_codes": ["RENO_PLUMBER"] }, "tags": ["LVI"] },
-                    { "id": "OPT_RENO_PRO_PAINTER", "label": { "fi": "Maalari / Tapetoija", "en": "Painter / Wallpaper installer", "intent_codes": ["RENO_PAINTER"] }, "tags": ["maalaustyöt"] },
-                    { "id": "OPT_RENO_PRO_CARPENTER", "label": { "fi": "Puuseppä / Kalustekorjaus", "en": "Carpenter / Furniture repair", "intent_codes": ["RENO_CARPENTER"] }, "tags": ["puutyöt", "kalusteet", "puuseppä"], "profilointi_filter": { "section": "construction_and_maintenance", "field": "refinement_tags", "value": "kalustekorjaus" } },
-                    { "id": "OPT_RENO_PRO_DESIGNER", "label": { "fi": "Suunnittelija / Arkkitehti", "en": "Designer / Architect", "intent_codes": ["RENO_DESIGNER"] }, "tags": ["suunnittelutoimisto"] }
+                    { "id": "OPT_RENO_PRO_BUILDER", "label": { "fi": "Rakennus- / Remonttimies", "en": "Builder / Handyman" }, "intent_codes": ["RENO_BUILDER"], "tags": ["rakentaminen", "rakennustyöt"] },
+                    { "id": "OPT_RENO_PRO_ELECTRICIAN", "label": { "fi": "Sähköasentaja", "en": "Electrician" }, "intent_codes": ["RENO_ELECTRICIAN"], "tags": ["sähköasennukset"] },
+                    { "id": "OPT_RENO_PRO_PLUMBER", "label": { "fi": "LVI-asentaja (Putkimies)", "en": "HVAC installer (Plumber)" }, "intent_codes": ["RENO_PLUMBER"], "tags": ["LVI"] },
+                    { "id": "OPT_RENO_PRO_PAINTER", "label": { "fi": "Maalari / Tapetoija", "en": "Painter / Wallpaper installer" }, "intent_codes": ["RENO_PAINTER"], "tags": ["maalaustyöt"] },
+                    { "id": "OPT_RENO_PRO_CARPENTER", "label": { "fi": "Puuseppä / Kalustekorjaus", "en": "Carpenter / Furniture repair" }, "intent_codes": ["RENO_CARPENTER"], "tags": ["puutyöt", "kalusteet", "puuseppä"], "profilointi_filter": { "section": "construction_and_maintenance", "field": "refinement_tags", "value": "kalustekorjaus" } },
+                    { "id": "OPT_RENO_PRO_DESIGNER", "label": { "fi": "Suunnittelija / Arkkitehti", "en": "Designer / Architect" }, "intent_codes": ["RENO_DESIGNER"], "tags": ["suunnittelutoimisto"] }
                 ]
             },
             {
                 "id": "tarvikkeet",
                 "question": { "fi": "Mistä hankit materiaalit?", "en": "Where do you get materials?" },
                 "options": [
-                    { "id": "OPT_RENO_MAT_HARDWARE", "label": { "fi": "Rautakauppa / Rakennustarvikkeet", "en": "Hardware store / Building supplies", "intent_codes": ["RENO_HARDWARE"] }, "tags": ["rautakauppa", "rakennustarvikkeet"] },
-                    { "id": "OPT_RENO_MAT_RENTAL", "label": { "fi": "Koneiden ja laitteiden vuokraus", "en": "Machine and equipment rental", "intent_codes": ["RENO_RENTAL"] }, "tags": ["rakennuskonevuokraus"] },
-                    { "id": "OPT_RENO_MAT_INTERIOR", "label": { "fi": "Sisustustuotteet", "en": "Interior decoration products", "intent_codes": ["RENO_INTERIOR"] }, "tags": ["kaupat ja ostokset", "erikoisliikkeet"] }
+                    { "id": "OPT_RENO_MAT_HARDWARE", "label": { "fi": "Rautakauppa / Rakennustarvikkeet", "en": "Hardware store / Building supplies" }, "intent_codes": ["RENO_HARDWARE"], "tags": ["rautakauppa", "rakennustarvikkeet"] },
+                    { "id": "OPT_RENO_MAT_RENTAL", "label": { "fi": "Koneiden ja laitteiden vuokraus", "en": "Machine and equipment rental" }, "intent_codes": ["RENO_RENTAL"], "tags": ["rakennuskonevuokraus"] },
+                    { "id": "OPT_RENO_MAT_INTERIOR", "label": { "fi": "Sisustustuotteet", "en": "Interior decoration products" }, "intent_codes": ["RENO_INTERIOR"], "tags": ["kaupat ja ostokset", "erikoisliikkeet"] }
                 ]
             }
         ]
@@ -305,9 +305,9 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": { "fi": "Pihan ja tekniikan tarpeet?", "en": "Yard and technical needs?" },
                 "options": [
-                    { "id": "OPT_COTTAGE_YARD", "label": { "fi": "Pihanhoito / Viherrakentaminen", "en": "Yard care / Landscaping", "intent_codes": ["COTTAGE_YARD"] }, "tags": ["viherrakentaminen", "pihasuunnittelu"] },
-                    { "id": "OPT_COTTAGE_MACHINE", "label": { "fi": "Pienkonehuolto (ruohonleikkurit ym.)", "en": "Small machine maintenance (lawn mowers etc.)", "intent_codes": ["COTTAGE_MACHINE"] }, "tags": ["pienkonehuolto"] },
-                    { "id": "OPT_COTTAGE_TRANSPORT", "label": { "fi": "Taksi / Kuljetus", "en": "Taxi / Transport", "intent_codes": ["BIZ_TRANSPORT"] }, "tags": ["taksi", "kuljetus"] }
+                    { "id": "OPT_COTTAGE_YARD", "label": { "fi": "Pihanhoito / Viherrakentaminen", "en": "Yard care / Landscaping" }, "intent_codes": ["COTTAGE_YARD"], "tags": ["viherrakentaminen", "pihasuunnittelu"] },
+                    { "id": "OPT_COTTAGE_MACHINE", "label": { "fi": "Pienkonehuolto (ruohonleikkurit ym.)", "en": "Small machine maintenance (lawn mowers etc.)" }, "intent_codes": ["COTTAGE_MACHINE"], "tags": ["pienkonehuolto"] },
+                    { "id": "OPT_COTTAGE_TRANSPORT", "label": { "fi": "Taksi / Kuljetus", "en": "Taxi / Transport" }, "intent_codes": ["BIZ_TRANSPORT"], "tags": ["taksi", "kuljetus"] }
                 ]
             }
         ]
@@ -322,20 +322,20 @@ const NEEDS_CONFIG = {
                 "id": "tarkennus",
                 "question": { "fi": "Millaista palvelua tarvitset?", "en": "What kind of service do you need?" },
                 "options": [
-                    { "id": "OPT_HOUSING_MAINTENANCE", "label": { "fi": "Jatkuva kiinteistöhuolto", "en": "Ongoing property maintenance", "intent_codes": ["PROP_MAINTENANCE"] }, "sub_context": "kiinteistöhuolto", "tags": ["kiinteistöhuolto"] },
-                    { "id": "OPT_HOUSING_MANAGEMENT", "label": { "fi": "Isännöintipalvelut", "en": "Property management services", "intent_codes": ["PROP_MANAGEMENT"] }, "sub_context": "isännöinti", "tags": ["isännöinti"] },
-                    { "id": "OPT_HOUSING_RENO", "label": { "fi": "Kertaluonteinen remontti", "en": "One-time renovation", "intent_codes": ["PROP_RENO"] }, "sub_context": "linjasaneeraus", "tags": ["rakentaminen"] },
-                    { "id": "OPT_HOUSING_CLEAN", "label": { "fi": "Siivouspalvelut", "en": "Cleaning services", "intent_codes": ["PROP_CLEANING"] }, "tags": ["siivous"], "is_service": true },
-                    { "id": "OPT_HOUSING_YARD", "label": { "fi": "Pihanhoito / Lumityöt", "en": "Yard care / Snow removal", "intent_codes": ["PROP_YARD"] }, "tags": ["viherrakentaminen", "kiinteistöhuolto"], "is_service": true }
+                    { "id": "OPT_HOUSING_MAINTENANCE", "label": { "fi": "Jatkuva kiinteistöhuolto", "en": "Ongoing property maintenance" }, "intent_codes": ["PROP_MAINTENANCE"], "sub_context": "kiinteistöhuolto", "tags": ["kiinteistöhuolto"] },
+                    { "id": "OPT_HOUSING_MANAGEMENT", "label": { "fi": "Isännöintipalvelut", "en": "Property management services" }, "intent_codes": ["PROP_MANAGEMENT"], "sub_context": "isännöinti", "tags": ["isännöinti"] },
+                    { "id": "OPT_HOUSING_RENO", "label": { "fi": "Kertaluonteinen remontti", "en": "One-time renovation" }, "intent_codes": ["PROP_RENO"], "sub_context": "linjasaneeraus", "tags": ["rakentaminen"] },
+                    { "id": "OPT_HOUSING_CLEAN", "label": { "fi": "Siivouspalvelut", "en": "Cleaning services" }, "intent_codes": ["PROP_CLEANING"], "tags": ["siivous"], "is_service": true },
+                    { "id": "OPT_HOUSING_YARD", "label": { "fi": "Pihanhoito / Lumityöt", "en": "Yard care / Snow removal" }, "intent_codes": ["PROP_YARD"], "tags": ["viherrakentaminen", "kiinteistöhuolto"], "is_service": true }
                 ]
             },
             {
                 "id": "hallinto",
                 "question": { "fi": "Hallinnolliset ja asiantuntijatarpeet?", "en": "Administrative and expert needs?" },
                 "options": [
-                    { "id": "OPT_HOUSING_MANAGEMENT_ADMIN", "label": { "fi": "Isännöintipalvelut", "en": "Property management services", "intent_codes": ["PROP_MANAGEMENT"] }, "tags": ["isännöinti"] },
-                    { "id": "OPT_HOUSING_ACCOUNTING", "label": { "fi": "Tilitoimisto / Tilintarkastus", "en": "Accounting / Auditing", "intent_codes": ["PROP_ACCOUNTING"] }, "tags": ["tilitoimisto"] },
-                    { "id": "OPT_HOUSING_LEGAL", "label": { "fi": "Lakipalvelut ja sopimusasiat", "en": "Legal services and contracts", "intent_codes": ["PROP_LEGAL"] }, "tags": ["lakiasiaintoimisto", "sopimukset", "lakipalvelut"] }
+                    { "id": "OPT_HOUSING_MANAGEMENT_ADMIN", "label": { "fi": "Isännöintipalvelut", "en": "Property management services" }, "intent_codes": ["PROP_MANAGEMENT"], "tags": ["isännöinti"] },
+                    { "id": "OPT_HOUSING_ACCOUNTING", "label": { "fi": "Tilitoimisto / Tilintarkastus", "en": "Accounting / Auditing" }, "intent_codes": ["PROP_ACCOUNTING"], "tags": ["tilitoimisto"] },
+                    { "id": "OPT_HOUSING_LEGAL", "label": { "fi": "Lakipalvelut ja sopimusasiat", "en": "Legal services and contracts" }, "intent_codes": ["PROP_LEGAL"], "tags": ["lakiasiaintoimisto", "sopimukset", "lakipalvelut"] }
                 ]
             }
         ]
@@ -351,9 +351,9 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": { "fi": "Mitä asioita haluatte edistää?", "en": "What matters would you like to address?" },
                 "options": [
-                    { "id": "OPT_FUNERAL_ARRANGEMENTS", "label": { "fi": "Hautajaisjärjestelyt", "en": "Funeral arrangements", "intent_codes": ["FUNERAL_ARRANGEMENTS"] }, "sub_context": "hautauspalvelu", "tags": ["hautauspalvelu"], "node_link": "HAUTAUS", "hide_results": true },
-                    { "id": "OPT_FUNERAL_MEMORIAL", "label": { "fi": "Muistotilaisuus", "en": "Memorial service", "intent_codes": ["FUNERAL_MEMORIAL"] }, "sub_context": "muistotilaisuus", "tags": [], "node_link": "HAUTAUS", "hide_results": true },
-                    { "id": "OPT_FUNERAL_LEGAL", "label": { "fi": "Perunkirjoitus ja laki-asiat", "en": "Estate inventory and legal matters", "intent_codes": ["FUNERAL_LEGAL"] }, "sub_context": "perunkirjoitus", "tags": ["lakiasiaintoimisto", "perunkirjoitus", "tilitoimisto", "asiantuntijapalvelut", "lakipalvelut"] }
+                    { "id": "OPT_FUNERAL_ARRANGEMENTS", "label": { "fi": "Hautajaisjärjestelyt", "en": "Funeral arrangements" }, "intent_codes": ["FUNERAL_ARRANGEMENTS"], "sub_context": "hautauspalvelu", "tags": ["hautauspalvelu"], "node_link": "HAUTAUS", "hide_results": true },
+                    { "id": "OPT_FUNERAL_MEMORIAL", "label": { "fi": "Muistotilaisuus", "en": "Memorial service" }, "intent_codes": ["FUNERAL_MEMORIAL"], "sub_context": "muistotilaisuus", "tags": [], "node_link": "HAUTAUS", "hide_results": true },
+                    { "id": "OPT_FUNERAL_LEGAL", "label": { "fi": "Perunkirjoitus ja laki-asiat", "en": "Estate inventory and legal matters" }, "intent_codes": ["FUNERAL_LEGAL"], "sub_context": "perunkirjoitus", "tags": ["lakiasiaintoimisto", "perunkirjoitus", "tilitoimisto", "asiantuntijapalvelut", "lakipalvelut"] }
                 ]
             },
             {
@@ -361,8 +361,8 @@ const NEEDS_CONFIG = {
                 "question": { "fi": "Hautauspalvelut?", "en": "Funeral services?" },
                 "skipIf": "!isSelected('paatarve', 'Hautajaisjärjestelyt')",
                 "options": [
-                    { "id": "OPT_FUNERAL_SERVICE", "label": { "fi": "Hautauspalvelu ja arkut", "en": "Funeral service and coffins", "intent_codes": ["FUNERAL_SERVICE"] }, "tags": ["hautauspalvelu"] },
-                    { "id": "OPT_FUNERAL_STONES", "label": { "fi": "Hautakivet ja kaiverrukset", "en": "Gravestones and engravings", "intent_codes": ["FUNERAL_STONES"] }, "tags": ["hautauspalvelu"] }
+                    { "id": "OPT_FUNERAL_SERVICE", "label": { "fi": "Hautauspalvelu ja arkut", "en": "Funeral service and coffins" }, "intent_codes": ["FUNERAL_SERVICE"], "tags": ["hautauspalvelu"] },
+                    { "id": "OPT_FUNERAL_STONES", "label": { "fi": "Hautakivet ja kaiverrukset", "en": "Gravestones and engravings" }, "intent_codes": ["FUNERAL_STONES"], "tags": ["hautauspalvelu"] }
                 ]
             },
             {
@@ -383,9 +383,9 @@ const NEEDS_CONFIG = {
                 "question": { "fi": "Hautajaisten ja muistotilaisuuden lisäpalvelut?", "en": "Additional services for the funeral and memorial?" },
                 "skipIf": "!isSelected('paatarve', 'Muistotilaisuus') && !isSelected('paatarve', 'Hautajaisjärjestelyt')",
                 "options": [
-                    { "id": "OPT_FUNERAL_CATERING", "label": { "fi": "Kahvitus / Pitopalvelu", "en": "Coffee / Catering", "intent_codes": ["BIZ_CATERING"] }, "tags": ["pitopalvelu"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "memorial_catering", "value": true }, "require_fits_for": { "key": "funerals_and_memorials", "min": 20 } },
-                    { "id": "OPT_FUNERAL_FLOWERS", "label": { "fi": "Kukkatervehdykset", "en": "Floral tributes", "intent_codes": ["BIZ_FLORIST"] }, "tags": ["kukkakauppa", "kukat"], "intent_codes": ["BIZ_FLORIST"] },
-                    { "id": "OPT_FUNERAL_TRANSPORT", "label": { "fi": "Kuljetuspalvelut", "en": "Transport services", "intent_codes": ["BIZ_TRANSPORT"] }, "tags": ["hautauspalvelu", "kuljetus"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "transport_assistance", "value": true } }
+                    { "id": "OPT_FUNERAL_CATERING", "label": { "fi": "Kahvitus / Pitopalvelu", "en": "Coffee / Catering" }, "intent_codes": ["BIZ_CATERING"], "tags": ["pitopalvelu"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "memorial_catering", "value": true }, "require_fits_for": { "key": "funerals_and_memorials", "min": 20 } },
+                    { "id": "OPT_FUNERAL_FLOWERS", "label": { "fi": "Kukkatervehdykset", "en": "Floral tributes" }, "intent_codes": ["BIZ_FLORIST"], "tags": ["kukkakauppa", "kukat"] },
+                    { "id": "OPT_FUNERAL_TRANSPORT", "label": { "fi": "Kuljetuspalvelut", "en": "Transport services" }, "intent_codes": ["BIZ_TRANSPORT"], "tags": ["hautauspalvelu", "kuljetus"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "transport_assistance", "value": true } }
                 ]
             },
             {
@@ -405,9 +405,9 @@ const NEEDS_CONFIG = {
                 "skipIf": "!isSelected('paatarve', 'Muistotilaisuus')",
                 "question": { "fi": "Haluaisitko tallentaa muistot tai tarvitsetko digitointipalveluita?", "en": "Would you like to preserve memories or need digitization services?" },
                 "options": [
-                    { "id": "OPT_FUNERAL_MEM_VIDEO", "label": { "fi": "Videokuvaus / Esitykset", "en": "Video recording / Presentations", "intent_codes": ["MEDIA_VIDEO"] }, "tags": ["videotuotanto", "videokuvaus", "videokuvaaja"], "node_link": "VIDEOTUOTANTO", "intent_codes": ["MEDIA_VIDEO"] },
-                    { "id": "OPT_FUNERAL_MEM_PHOTO", "label": { "fi": "Valokuvaus", "en": "Photography", "intent_codes": ["MEDIA_PHOTO"] }, "tags": ["valokuvaus", "hautajaiskuvaus"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "refinement_tags", "value": "hautajaiskuvaus" } },
-                    { "id": "OPT_FUNERAL_MEM_DIGI", "label": { "fi": "Digitointipalvelut (kuvat, videot ym.)", "en": "Digitization services (photos, videos etc.)", "intent_codes": ["MEDIA_DIGITIZATION"] }, "tags": ["digitointi"], "node_link": "DIGITOINTI" }
+                    { "id": "OPT_FUNERAL_MEM_VIDEO", "label": { "fi": "Videokuvaus / Esitykset", "en": "Video recording / Presentations" }, "intent_codes": ["MEDIA_VIDEO"], "tags": ["videotuotanto", "videokuvaus", "videokuvaaja"], "node_link": "VIDEOTUOTANTO" },
+                    { "id": "OPT_FUNERAL_MEM_PHOTO", "label": { "fi": "Valokuvaus", "en": "Photography" }, "intent_codes": ["MEDIA_PHOTO"], "tags": ["valokuvaus", "hautajaiskuvaus"], "profilointi_filter": { "section": "funerals_and_memorials", "field": "refinement_tags", "value": "hautajaiskuvaus" } },
+                    { "id": "OPT_FUNERAL_MEM_DIGI", "label": { "fi": "Digitointipalvelut (kuvat, videot ym.)", "en": "Digitization services (photos, videos etc.)" }, "intent_codes": ["MEDIA_DIGITIZATION"], "tags": ["digitointi"], "node_link": "DIGITOINTI" }
                 ]
             }
         ]
@@ -422,9 +422,9 @@ const NEEDS_CONFIG = {
                 "id": "tarkennus",
                 "question": { "fi": "Missä vaiheessa yrityksen perustaminen on?", "en": "What stage is your business startup at?" },
                 "options": [
-                    { "id": "OPT_STARTUP_IDEA", "label": { "fi": "Liikeidea & Suunnittelu", "en": "Business idea & Planning", "intent_codes": ["STARTUP_IDEA"] }, "sub_context": "liikeidea", "tags": ["konsultointi"] },
-                    { "id": "OPT_STARTUP_REG", "label": { "fi": "Rekisteröinti & Hallinto", "en": "Registration & Administration", "intent_codes": ["STARTUP_REG"] }, "sub_context": "rekisterointi", "tags": ["tilitoimisto"] },
-                    { "id": "OPT_STARTUP_MARKETING", "label": { "fi": "Markkinointi & Verkkosivut", "en": "Marketing & Website", "intent_codes": ["STARTUP_MARKETING"] }, "sub_context": "digimarkkinointi", "tags": ["it-palvelut"] }
+                    { "id": "OPT_STARTUP_IDEA", "label": { "fi": "Liikeidea & Suunnittelu", "en": "Business idea & Planning" }, "intent_codes": ["STARTUP_IDEA"], "sub_context": "liikeidea", "tags": ["konsultointi"] },
+                    { "id": "OPT_STARTUP_REG", "label": { "fi": "Rekisteröinti & Hallinto", "en": "Registration & Administration" }, "intent_codes": ["STARTUP_REG"], "sub_context": "rekisterointi", "tags": ["tilitoimisto"] },
+                    { "id": "OPT_STARTUP_MARKETING", "label": { "fi": "Markkinointi & Verkkosivut", "en": "Marketing & Website" }, "intent_codes": ["STARTUP_MARKETING"], "sub_context": "digimarkkinointi", "tags": ["it-palvelut"] }
                 ]
             },
             {
@@ -432,10 +432,10 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": { "fi": "Alkuvaiheen hallinto?", "en": "Early-stage administration?" },
                 "options": [
-                    { "id": "OPT_STARTUP_ADVISORY", "label": { "fi": "Yritysneuvonta / Liiketoimintasuunnitelma", "en": "Business advisory / Business plan", "intent_codes": ["STARTUP_ADVISORY"] }, "tags": ["yritysneuvonta", "konsultointi"], "profilointi_filter": { "section": "startup_services", "field": "business_advisory", "value": true } },
-                    { "id": "OPT_STARTUP_ACCOUNTING", "label": { "fi": "Kirjanpito ja tilitoimisto", "en": "Bookkeeping and accounting", "intent_codes": ["STARTUP_ACCOUNTING"] }, "tags": ["tilitoimisto"] },
-                    { "id": "OPT_STARTUP_INSURANCE", "label": { "fi": "Vakuutukset", "en": "Insurance", "intent_codes": ["STARTUP_INSURANCE"] }, "tags": ["vakuutus"] },
-                    { "id": "OPT_STARTUP_LEGAL", "label": { "fi": "Lakipalvelut", "en": "Legal services", "intent_codes": ["STARTUP_LEGAL"] }, "tags": ["lakiasiaintoimisto", "lakipalvelut"] }
+                    { "id": "OPT_STARTUP_ADVISORY", "label": { "fi": "Yritysneuvonta / Liiketoimintasuunnitelma", "en": "Business advisory / Business plan" }, "intent_codes": ["STARTUP_ADVISORY"], "tags": ["yritysneuvonta", "konsultointi"], "profilointi_filter": { "section": "startup_services", "field": "business_advisory", "value": true } },
+                    { "id": "OPT_STARTUP_ACCOUNTING", "label": { "fi": "Kirjanpito ja tilitoimisto", "en": "Bookkeeping and accounting" }, "intent_codes": ["STARTUP_ACCOUNTING"], "tags": ["tilitoimisto"] },
+                    { "id": "OPT_STARTUP_INSURANCE", "label": { "fi": "Vakuutukset", "en": "Insurance" }, "intent_codes": ["STARTUP_INSURANCE"], "tags": ["vakuutus"] },
+                    { "id": "OPT_STARTUP_LEGAL", "label": { "fi": "Lakipalvelut", "en": "Legal services" }, "intent_codes": ["STARTUP_LEGAL"], "tags": ["lakiasiaintoimisto", "lakipalvelut"] }
                 ]
             },
             {
@@ -443,10 +443,10 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": { "fi": "Markkinointi ja näkyvyys?", "en": "Marketing and visibility?" },
                 "options": [
-                    { "id": "OPT_STARTUP_WEB", "label": { "fi": "Verkkosivut / Domain", "en": "Website / Domain", "intent_codes": ["STARTUP_WEB"] }, "tags": ["verkkosivut", "it-palvelut", "kotisivut"], "profilointi_filter": { "section": "startup_services", "field": "refinement_tags", "value": "verkkosivut" } },
-                    { "id": "OPT_STARTUP_BRAND", "label": { "fi": "Logo ja brändäys", "en": "Logo and branding", "intent_codes": ["STARTUP_BRAND"] }, "tags": ["mainostoimisto", "graafiset palvelut", "brändäys"], "profilointi_filter": { "section": "startup_services", "field": "refinement_tags", "value": "brändäys" } },
-                    { "id": "OPT_STARTUP_ADS", "label": { "fi": "Somemainonta ja Google-näkyvyys", "en": "Social media ads and Google visibility", "intent_codes": ["STARTUP_ADS"] }, "tags": ["somemainonta", "google-mainonta", "mainostoimisto", "digimarkkinointi"] },
-                    { "id": "OPT_STARTUP_PHOTO", "label": { "fi": "Valokuvaus / Yrityskuvat", "en": "Photography / Business photos", "intent_codes": ["MEDIA_PHOTO"] }, "tags": ["valokuvaus", "valokuvaaja"], "profilointi_filter": { "section": "startup_services", "field": "refinement_tags", "value": "yrityskuvat" } }
+                    { "id": "OPT_STARTUP_WEB", "label": { "fi": "Verkkosivut / Domain", "en": "Website / Domain" }, "intent_codes": ["STARTUP_WEB"], "tags": ["verkkosivut", "it-palvelut", "kotisivut"], "profilointi_filter": { "section": "startup_services", "field": "refinement_tags", "value": "verkkosivut" } },
+                    { "id": "OPT_STARTUP_BRAND", "label": { "fi": "Logo ja brändäys", "en": "Logo and branding" }, "intent_codes": ["STARTUP_BRAND"], "tags": ["mainostoimisto", "graafiset palvelut", "brändäys"], "profilointi_filter": { "section": "startup_services", "field": "refinement_tags", "value": "brändäys" } },
+                    { "id": "OPT_STARTUP_ADS", "label": { "fi": "Somemainonta ja Google-näkyvyys", "en": "Social media ads and Google visibility" }, "intent_codes": ["STARTUP_ADS"], "tags": ["somemainonta", "google-mainonta", "mainostoimisto", "digimarkkinointi"] },
+                    { "id": "OPT_STARTUP_PHOTO", "label": { "fi": "Valokuvaus / Yrityskuvat", "en": "Photography / Business photos" }, "intent_codes": ["MEDIA_PHOTO"], "tags": ["valokuvaus", "valokuvaaja"], "profilointi_filter": { "section": "startup_services", "field": "refinement_tags", "value": "yrityskuvat" } }
                 ]
             }
         ]
@@ -461,9 +461,9 @@ const NEEDS_CONFIG = {
                 "id": "tarkennus",
                 "question": { "fi": "Millaista kehitystä yrityksesi kaipaa?", "en": "What kind of development does your business need?" },
                 "options": [
-                    { "id": "OPT_GROWTH_MARKETING", "label": { "fi": "Digitaalinen markkinointi & Myynti", "en": "Digital marketing & Sales", "intent_codes": ["GROWTH_MARKETING"] }, "sub_context": "digitaalinen myynti", "tags": ["mainostoimisto"] },
-                    { "id": "OPT_GROWTH_STAFF", "label": { "fi": "Henkilöstö & Rekrytointi", "en": "Staff & Recruitment", "intent_codes": ["GROWTH_STAFF"] }, "sub_context": "rekrytointi", "tags": ["henkilöstöpalvelut"] },
-                    { "id": "OPT_GROWTH_CONSULT", "label": { "fi": "Liikkeenjohdon konsultointi", "en": "Management consulting", "intent_codes": ["GROWTH_CONSULT"] }, "sub_context": "konsultointi", "tags": ["konsultointi"] }
+                    { "id": "OPT_GROWTH_MARKETING", "label": { "fi": "Digitaalinen markkinointi & Myynti", "en": "Digital marketing & Sales" }, "intent_codes": ["GROWTH_MARKETING"], "sub_context": "digitaalinen myynti", "tags": ["mainostoimisto"] },
+                    { "id": "OPT_GROWTH_STAFF", "label": { "fi": "Henkilöstö & Rekrytointi", "en": "Staff & Recruitment" }, "intent_codes": ["GROWTH_STAFF"], "sub_context": "rekrytointi", "tags": ["henkilöstöpalvelut"] },
+                    { "id": "OPT_GROWTH_CONSULT", "label": { "fi": "Liikkeenjohdon konsultointi", "en": "Management consulting" }, "intent_codes": ["GROWTH_CONSULT"], "sub_context": "konsultointi", "tags": ["konsultointi"] }
                 ]
             },
             {
@@ -471,10 +471,10 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": { "fi": "Lisää myyntiä ja tunnettuutta?", "en": "More sales and visibility?" },
                 "options": [
-                    { "id": "OPT_GROWTH_SEO", "label": { "fi": "Google-mainonta / SEO", "en": "Google ads / SEO", "intent_codes": ["GROWTH_SEO"] }, "tags": ["google-mainonta", "mainostoimisto"] },
-                    { "id": "OPT_GROWTH_SOCIAL", "label": { "fi": "Sosiaalisen median markkinointi", "en": "Social media marketing", "intent_codes": ["GROWTH_SOCIAL"] }, "tags": ["somemainonta", "mainostoimisto"] },
-                    { "id": "OPT_GROWTH_ECOMMERCE", "label": { "fi": "Verkkokaupan rakentaminen", "en": "Building an online store", "intent_codes": ["GROWTH_ECOMMERCE"] }, "tags": ["verkkokauppa", "it-palvelut"] },
-                    { "id": "OPT_GROWTH_VIDEO", "label": { "fi": "Videotuotanto / Mainosvideot", "en": "Video production / Advertising videos", "intent_codes": ["MEDIA_VIDEO"] }, "tags": ["videotuotanto", "videomarkkinointi", "video"], "profilointi_filter": { "section": "business_growth", "field": "refinement_tags", "value": "videomarkkinointi" } }
+                    { "id": "OPT_GROWTH_SEO", "label": { "fi": "Google-mainonta / SEO", "en": "Google ads / SEO" }, "intent_codes": ["GROWTH_SEO"], "tags": ["google-mainonta", "mainostoimisto"] },
+                    { "id": "OPT_GROWTH_SOCIAL", "label": { "fi": "Sosiaalisen median markkinointi", "en": "Social media marketing" }, "intent_codes": ["GROWTH_SOCIAL"], "tags": ["somemainonta", "mainostoimisto"] },
+                    { "id": "OPT_GROWTH_ECOMMERCE", "label": { "fi": "Verkkokaupan rakentaminen", "en": "Building an online store" }, "intent_codes": ["GROWTH_ECOMMERCE"], "tags": ["verkkokauppa", "it-palvelut"] },
+                    { "id": "OPT_GROWTH_VIDEO", "label": { "fi": "Videotuotanto / Mainosvideot", "en": "Video production / Advertising videos" }, "intent_codes": ["MEDIA_VIDEO"], "tags": ["videotuotanto", "videomarkkinointi", "video"], "profilointi_filter": { "section": "business_growth", "field": "refinement_tags", "value": "videomarkkinointi" } }
                 ]
             },
             {
@@ -482,9 +482,9 @@ const NEEDS_CONFIG = {
                 "multiple": true,
                 "question": { "fi": "Resurssit ja osaaminen?", "en": "Resources and expertise?" },
                 "options": [
-                    { "id": "OPT_GROWTH_RECRUIT", "label": { "fi": "Rekyktointipalvelut", "en": "Recruitment services", "intent_codes": ["GROWTH_RECRUIT"] }, "tags": ["henkilöstöpalvelut"] },
-                    { "id": "OPT_GROWTH_TRAINING", "label": { "fi": "Henkilöstön koulutus", "en": "Staff training", "intent_codes": ["GROWTH_TRAINING"] }, "tags": ["koulutus"] },
-                    { "id": "OPT_GROWTH_MANAGEMENT", "label": { "fi": "Liikkeenjohdon konsultointi", "en": "Management consulting", "intent_codes": ["GROWTH_CONSULT"] }, "tags": ["konsultointi"] }
+                    { "id": "OPT_GROWTH_RECRUIT", "label": { "fi": "Rekyktointipalvelut", "en": "Recruitment services" }, "intent_codes": ["GROWTH_RECRUIT"], "tags": ["henkilöstöpalvelut"] },
+                    { "id": "OPT_GROWTH_TRAINING", "label": { "fi": "Henkilöstön koulutus", "en": "Staff training" }, "intent_codes": ["GROWTH_TRAINING"], "tags": ["koulutus"] },
+                    { "id": "OPT_GROWTH_MANAGEMENT", "label": { "fi": "Liikkeenjohdon konsultointi", "en": "Management consulting" }, "intent_codes": ["GROWTH_CONSULT"], "tags": ["konsultointi"] }
                 ]
             }
         ]
