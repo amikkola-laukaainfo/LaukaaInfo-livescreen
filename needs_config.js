@@ -197,7 +197,7 @@ const NEEDS_CONFIG = {
                 "question": { "fi": "Mitä tarvitaan onnistuneisiin juhliin?", "en": "What do you need for a successful party?" },
                 "options": [
                     { "label": { "fi": "Pitopalvelu / Ruoat", "en": "Catering / Food" }, "tags": ["pitopalvelu"] },
-                    { "label": { "fi": "Kakut / Leivonnaiset", "en": "Cakes / Pastries" }, "tags": ["leipomo", "elintarvike"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "hääkakku" } },
+                    { "label": { "fi": "Kakut / Leivonnaiset", "en": "Cakes / Pastries" }, "tags": ["leipomo", "elintarvike"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "juhlakakku" } },
                     { "label": { "fi": "Ohjelma / Esiintyjä", "en": "Entertainment / Performer" }, "tags": ["ohjelmapalvelut"] },
                     { "label": { "fi": "Valokuvaus", "en": "Photography" }, "tags": ["valokuvaus"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "juhlakuvaus" } },
                     { "label": { "fi": "Videokuvaus", "en": "Video recording" }, "tags": ["videotuotanto", "videokuvaus"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "juhlakuvaus" } },
