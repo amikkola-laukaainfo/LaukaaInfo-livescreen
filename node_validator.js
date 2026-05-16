@@ -10,15 +10,23 @@ global.i18n = {
     getText: (o) => typeof o === 'string' ? o : (o.fi || o.en || '')
 };
 
+function readJsonClean(file) {
+    let content = fs.readFileSync(file, 'utf8');
+    if (content.charCodeAt(0) === 0xFEFF) {
+        content = content.slice(1);
+    }
+    return JSON.parse(content);
+}
+
 // 2. Load Data
-const companiesRaw = JSON.parse(fs.readFileSync('companies_data.json', 'utf8')).results;
-const profiling = JSON.parse(fs.readFileSync('company_profiling_data.json', 'utf8'));
+const companiesRaw = readJsonClean('companies_data.json').results;
+const profiling = readJsonClean('company_profiling_data.json');
 
 global.allCompanies = companiesRaw.map(c => {
     return { ...c, profiling: profiling[c.id] || {} };
 });
 
-const goldenData = JSON.parse(fs.readFileSync('goldenQueries.json', 'utf8'));
+const goldenData = readJsonClean('goldenQueries.json');
 
 // 3. Run Validation
 async function runValidation() {
