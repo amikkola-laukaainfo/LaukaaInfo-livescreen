@@ -73,7 +73,8 @@
     { "id": "wellbeing-and-beauty", "name": "Terveys ja hyvinvointi", "codes": ["WELLBEING_HEALTH", "WELLBEING_THERAPY", "WELLBEING_BEAUTY", "REC_GYM"] },
     { "id": "liikunta-ja-vapaaaika", "name": "Liikunta ja vapaa-aika", "codes": ["REC_OUTDOOR", "REC_SWIMMING", "REC_RAFTING", "REC_GOLF", "REC_RIDING", "REC_GYM", "REC_AMUSEMENT", "ENT_PROGRAM"] },
     { "id": "accommodation", "name": "Majoitus", "codes": ["VENUE_ACCOMMODATION", "VENUE_PARTY", "REC_OUTDOOR", "BIZ_CATERING"] },
-    { "id": "family-and-children", "name": "Perhe ja lapset", "codes": ["EDU_DAYCARE", "REC_CHILDREN", "SHOP_CHILDREN", "WELLBEING_FAMILY", "REC_AMUSEMENT"] },
+    { "id": "family-and-children", "name": "Perhe ja lapset", "codes": ["EDU_DAYCARE", "REC_CHILDREN", "SHOP_CHILDREN", "WELLBEING_FAMILY", "REC_AMUSEMENT", "FAMILY_INFANT", "FAMILY_PRESCHOOL", "FAMILY_SCHOOL", "FAMILY_TEEN"] },
+    { "id": "animals", "name": "Eläimet ja lemmikit", "codes": ["PETS_VET", "PETS_SUPPLIES", "PETS_GROOMING", "PETS_CARE", "PETS_DOG", "PETS_CAT", "PETS_HORSE", "PETS_SMALL"] },
     { "id": "auto-services", "name": "Autopalvelut", "codes": ["AUTO_REPAIR", "AUTO_TIRES", "AUTO_WASH", "AUTO_HEAVY", "BIZ_TRANSPORT"] }
   ]
 }

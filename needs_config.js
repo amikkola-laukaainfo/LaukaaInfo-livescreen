@@ -598,7 +598,7 @@ const NEEDS_CONFIG = {
         "title": { "fi": "Lapset ja perhe", "en": "Children and Family" },
         "icon": "👨‍👩‍👧‍👦",
         "description": { "fi": "Etsi lapsiperheille sopivia aktiviteetteja ja palveluita.", "en": "Find activities and services for families with children." },
-        "profilointi_context": "family_and_children",
+        "profilointi_context": "family-and-children",
         "steps": [
             {
                 "id": "palvelut",
