@@ -1,4 +1,4 @@
-﻿{
+{
     "SCHEMA_VERSION": "5.0",
     "DESCRIPTION": "LaukaaInfo Ratkaisulähtöinen profilointi v5. Sisältää eksplisiittisen graafirakenteen.",
     "nodes": {},
@@ -64873,7 +64873,8 @@
                     "kiinteistöhuolto",
                     "kiinteistön kunnossapito",
                     "takka nuohous",
-                    "mökkinuohous"
+                    "mökkinuohous",
+                    "kevatkunnostus"
                 ],
                 "node_links": [
                     "MAJOITUS",
@@ -67659,7 +67660,8 @@
                     "kestopeitteet",
                     "metsätalous",
                     "mökkitarvikkeet",
-                    "varastointi"
+                    "varastointi",
+                    "kevatkunnostus"
                 ],
                 "node_links": [
                     "KIINTEISTÖHUOLTO",
