@@ -29,6 +29,7 @@ function getFitsForScore(c, profilingKey) {
 
 function getCompanyCapacity(c, profilingKey) {
     const data = getCategoryData(c, profilingKey);
+    console.log("getCategoryData for", profilingKey, ":", data);
     if (!data) return 0;
     return data.capacity_max || 
            data.meeting_capacity || 
