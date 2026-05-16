@@ -527,7 +527,6 @@ function getRecommendations(needId, context, selectionsArr, allCompanies, taxono
     return recommendations.slice(0, 12);
 }
 
-function generateSearchFingerprint(needId, selections, finalGroups) {
 
 if (typeof module !== 'undefined') {
     module.exports = { 
