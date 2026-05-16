@@ -15646,9 +15646,11 @@
         },
         "company-75": {
             "name": "T:mi T. Lauttaanaho",
-            "tags": "",
+            "tags": "linja-auto",
             "core": {
-                "fits_for": {},
+                "fits_for": {
+                    "moving-and-housing": 100
+                },
                 "priority_score": 0,
                 "service_area": {
                     "mode": "TOIMIPISTE",
@@ -15662,11 +15664,17 @@
                 "corporate_clients": false,
                 "home_service": false,
                 "weekend_service": false,
-                "not_suitable_for": [],
+                "not_suitable_for": [
+                    "peräkärry"
+                ],
                 "sub_contexts": [],
                 "node_links": [],
-                "intent_codes": [],
-                "intent_scores": {}
+                "intent_codes": [
+                    "BIZ_TRANSPORT"
+                ],
+                "intent_scores": {
+                    "BIZ_TRANSPORT": 100
+                }
             },
             "categories": {
                 "core": {
@@ -15852,7 +15860,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T15:32:40.282Z",
+                "last_updated": "2026-05-16T18:12:33.888Z",
                 "verified_by": "system-init-v3",
                 "status": "draft"
             }
@@ -39053,7 +39061,7 @@
                     "accommodation": 0,
                     "wellbeing-and-beauty": 10
                 },
-                "priority_score": 0,
+                "priority_score": 12,
                 "service_area": {
                     "mode": "TOIMIPISTE",
                     "radius_km": 30,
@@ -39069,9 +39077,7 @@
                 "corporate_clients": false,
                 "home_service": false,
                 "weekend_service": true,
-                "not_suitable_for": [
-                    "kuljetukset"
-                ],
+                "not_suitable_for": [],
                 "sub_contexts": [
                     "kirpputori",
                     "kierrätys",
@@ -39090,8 +39096,12 @@
                     "varastointi kevyt"
                 ],
                 "node_links": [],
-                "intent_codes": [],
-                "intent_scores": {}
+                "intent_codes": [
+                    "HOME_MOVING"
+                ],
+                "intent_scores": {
+                    "HOME_MOVING": 100
+                }
             },
             "categories": {
                 "core": {
@@ -39287,7 +39297,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-03T05:58:58.595Z",
+                "last_updated": "2026-05-16T18:10:23.320Z",
                 "verified_by": "AI-analysis-v2",
                 "status": "draft"
             }
