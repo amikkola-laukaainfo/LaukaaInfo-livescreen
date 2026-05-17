@@ -290,8 +290,17 @@ function processSearchResults(allCompanies, selections, currentNeedId, needToPro
     let matchingGroups = [];
     const companiesToProcess = [...allCompanies];
 
+    // Special logic for Funerals (Hautajaiset):
+    // If the user selects "Muistotilaisuus" (OPT_FUNERAL_MEMORIAL) and also selects a specific venue/capacity option (OPT_FUNERAL_CAP_*),
+    // do not show the general "Muistotilaisuus" group separately, but show the "juhlatila" (capacity) options directly.
+    const hasFuneralMemorial = selections.some(s => s.id === 'OPT_FUNERAL_MEMORIAL');
+    const hasFuneralVenue = selections.some(s => s.id && s.id.startsWith('OPT_FUNERAL_CAP_'));
+
     selections.forEach(opt => {
         if (opt.is_step || opt.id === 'OPT_NO_CATERING' || opt.is_info) return;
+
+        // Skip general Memorial Service group if a specific venue/capacity option is chosen
+        if (opt.id === 'OPT_FUNERAL_MEMORIAL' && hasFuneralMemorial && hasFuneralVenue) return;
 
         const groupCompanies = companiesToProcess.filter(c => 
             isMatch(c, opt, profilingKey, subContextsReq, noCateringSelected, taxonomyData)
@@ -455,8 +464,22 @@ function getRecommendations(needId, context, selectionsArr, allCompanies, taxono
     // These are the most "intentional" suggestions.
     const need = needsConfig ? needsConfig[needId] : null;
     if (need) {
+        const selectedIds = new Set((selectionsArr || []).map(s => s.id));
+        const stepsWithSelection = new Set();
+        
         (need.steps || []).forEach(step => {
+            const hasSel = (step.options || []).some(opt => selectedIds.has(opt.id));
+            if (hasSel && !step.multiple) {
+                stepsWithSelection.add(step.id);
+            }
+        });
+
+        (need.steps || []).forEach(step => {
+            // Skip recommending options from a single-select step that already has a selection
+            if (stepsWithSelection.has(step.id)) return;
+
             (step.options || []).forEach(opt => {
+                if (selectedIds.has(opt.id)) return;
                 addRec(opt.label);
             });
         });
