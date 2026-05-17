@@ -1,0 +1,658 @@
+[
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 17 maalis 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Soivan viikon oppilaskonsertti I",
+    "aika": "ti, 17 maalis 2026 16:00:00",
+    "paikka": "Laukaan pääkirjasto, Vuojärventie 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/soivan-viikon-oppilaskonsertti-i/",
+    "lat": 62.4152685,
+    "lng": 25.9481125
+  },
+  {
+    "nimi": "Japanilaisten vihkojen työpaja",
+    "aika": "ti, 17 maalis 2026 17:00:00",
+    "paikka": "Valkolan kylätalo, Puralanharjuntie 76, 41360 Valkola",
+    "url": "https://visitlaukaa.fi/tapahtuma/japanilaisten-vihkojen-tyopaja/",
+    "lat": 62.4681516,
+    "lng": 25.8249414
+  },
+  {
+    "nimi": "Soivan viikon oppilaskonsertti II",
+    "aika": "ke, 18 maalis 2026 15:30:00",
+    "paikka": "Laukaan pääkirjasto, Vuojärventie 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/soivan-viikon-oppilaskonsertti-ii/",
+    "lat": 62.4152685,
+    "lng": 25.9481125
+  },
+  {
+    "nimi": "Sauna & pulahdus",
+    "aika": "ke, 18 maalis 2026 14:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sauna-pulahdus/",
+    "lat": 62.4341199,
+    "lng": 25.8968081
+  },
+  {
+    "nimi": "Kotikulman kerho",
+    "aika": "pe, 20 maalis 2026 10:15:00",
+    "paikka": "Kotikulma, Arwidssonintie 15, 40340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/kotikulman-kerho/",
+    "lat": 62.4131074,
+    "lng": 25.9510179
+  },
+  {
+    "nimi": "Savusauna, rantasauna ja avanto",
+    "aika": "pe, 20 maalis 2026 14:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/savusauna-rantasauna-ja-avanto/",
+    "lat": 62.4341199,
+    "lng": 25.8968081
+  },
+  {
+    "nimi": "Hulluuden vuorilla",
+    "aika": "pe, 20 maalis 2026 16:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/hulluuden-vuorilla-2/",
+    "lat": 62.4547601,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Robin & Jaakko Kulta",
+    "aika": "pe, 20 maalis 2026 21:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/robin-jaakko-kulta/",
+    "lat": 62.4341199,
+    "lng": 25.8968081
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 21 maalis 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Ressu Redford",
+    "aika": "la, 21 maalis 2026 22:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/ressu-redford/",
+    "lat": 62.4341199,
+    "lng": 25.8968081
+  },
+  {
+    "nimi": "Meidän Liepee",
+    "aika": "ma, 23 maalis 2026 00:00:00",
+    "paikka": "Liepeentie 11",
+    "url": "https://visitlaukaa.fi/tapahtuma/meidan-liepee-2/",
+    "lat": 62.2612551,
+    "lng": 26.1957885
+  },
+  {
+    "nimi": "Kyläilta Lievestuoreella",
+    "aika": "ma, 23 maalis 2026 17:30:00",
+    "paikka": "Lievestuoreen koulu, Laurinkyläntie 5, 41400 Lievestuore",
+    "url": "https://visitlaukaa.fi/tapahtuma/kylailta-lievestuoreella/",
+    "lat": 62.2593337,
+    "lng": 26.2044547
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 24 maalis 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Infopiste haitallisita vieraslajeista",
+    "aika": "ti, 24 maalis 2026 12:00:00",
+    "paikka": "",
+    "url": "https://visitlaukaa.fi/tapahtuma/infopiste-haitallisita-vieraslajeista/",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "nimi": "Säilyykö Laukaan itsenäisyys?",
+    "aika": "ti, 24 maalis 2026 17:30:00",
+    "paikka": "Laukaan kirjasto, Vuojärventie 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sailyyko-laukaan-itsenaisyys/",
+    "lat": 62.4152685,
+    "lng": 25.9481125
+  },
+  {
+    "nimi": "Peli-ilta",
+    "aika": "ke, 25 maalis 2026 17:30:00",
+    "paikka": "Lievestuoreen kansalaisopisto, Opistotie 8, 41400 Lievestuore",
+    "url": "https://visitlaukaa.fi/tapahtuma/peli-ilta/",
+    "lat": 62.2622409,
+    "lng": 26.1951585
+  },
+  {
+    "nimi": "Kotikulman kerho",
+    "aika": "pe, 27 maalis 2026 10:15:00",
+    "paikka": "Kotikulma, Arwidssonintie 15, 40340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/kotikulman-kerho/",
+    "lat": 62.4131074,
+    "lng": 25.9510179
+  },
+  {
+    "nimi": "Savusauna, rantasauna ja avanto",
+    "aika": "pe, 27 maalis 2026 14:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/savusauna-rantasauna-ja-avanto/",
+    "lat": 62.4341199,
+    "lng": 25.8968081
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 28 maalis 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Pomppulinnamaailma 2026",
+    "aika": "la, 28 maalis 2026 09:00:00",
+    "paikka": "Vihtavuoren liikuntahalli, Koulutie 2, 41330 Vihtavuori",
+    "url": "https://visitlaukaa.fi/tapahtuma/pomppulinnamaailma-2026/",
+    "lat": 62.3710149,
+    "lng": 25.9009256
+  },
+  {
+    "nimi": "Suuri Kirppispäivä – Peurunka Areena",
+    "aika": "la, 28 maalis 2026 09:30:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/suuri-kirppispaiva-peurunka-areena-3/",
+    "lat": 62.4341199,
+    "lng": 25.8968081
+  },
+  {
+    "nimi": "NEPIHL Luoteis-Euroopan parajääkiekkoliigan turnaus",
+    "aika": "la, 28 maalis 2026 09:30:00",
+    "paikka": "Peurungan jäähalli, Peurungantie 85, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/nepihl-luoteis-euroopan-parajaakiekko-liiga-turnaus/",
+    "lat": 62.4341199,
+    "lng": 25.8968081
+  },
+  {
+    "nimi": "Liepeen Legot",
+    "aika": "la, 28 maalis 2026 13:00:00",
+    "paikka": "Lievestuoreen koulu, Laurinkyläntie 5, 41400 Lievestuore",
+    "url": "https://visitlaukaa.fi/tapahtuma/liepeen-legot/",
+    "lat": 62.2593337,
+    "lng": 26.2044547
+  },
+  {
+    "nimi": "Kirpputori Lievestuoreella",
+    "aika": "la, 28 maalis 2026 13:00:00",
+    "paikka": "Lievestuoreen koulu, Laurinkyläntie 5, 41400 Lievestuore",
+    "url": "https://visitlaukaa.fi/tapahtuma/kirpputori-lievestuoreella/",
+    "lat": 62.2593337,
+    "lng": 26.2044547
+  },
+  {
+    "nimi": "Ikonien äärellä -luento",
+    "aika": "su, 29 maalis 2026 14:00:00",
+    "paikka": "Laukaan seurakuntatalo, Saravedentie 4, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/ikonien-aarella-luento/",
+    "lat": 62.4146027,
+    "lng": 25.966209
+  },
+  {
+    "nimi": "Ikoninäyttely",
+    "aika": "ma, 30 maalis 2026 12:00:00",
+    "paikka": "Laukaan seurakuntatalo, Saravedentie 4, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/ikoninayttely-2/",
+    "lat": 62.4146027,
+    "lng": 25.966209
+  },
+  {
+    "nimi": "Kosmetiikkaa kotikonstein",
+    "aika": "ma, 30 maalis 2026 17:00:00",
+    "paikka": "Kylätalo Himma, Jokihaarantie 29, 41180 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/kosmetiikkaa-kotikonstein/",
+    "lat": 62.4520459,
+    "lng": 25.6363891
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 31 maalis 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Infopiste haitallisita vieraslajeista",
+    "aika": "ti, 31 maalis 2026 12:00:00",
+    "paikka": "",
+    "url": "https://visitlaukaa.fi/tapahtuma/infopiste-haitallisita-vieraslajeista/",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "nimi": "Ikoninäyttely",
+    "aika": "ti, 31 maalis 2026 12:00:00",
+    "paikka": "Laukaan seurakuntatalo, Saravedentie 4, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/ikoninayttely-2/",
+    "lat": 62.4146027,
+    "lng": 25.966209
+  },
+  {
+    "nimi": "Ikoninäyttely",
+    "aika": "ke, 01 huhti 2026 12:00:00",
+    "paikka": "Laukaan seurakuntatalo, Saravedentie 4, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/ikoninayttely-2/",
+    "lat": 62.4146027,
+    "lng": 25.966209
+  },
+  {
+    "nimi": "Ikoninäyttely",
+    "aika": "to, 02 huhti 2026 06:00:00",
+    "paikka": "Laukaan seurakuntatalo, Saravedentie 4, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/ikoninayttely-2/",
+    "lat": 62.4146027,
+    "lng": 25.966209
+  },
+  {
+    "nimi": "Ankkajahti",
+    "aika": "pe, 03 huhti 2026 04:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/ankkajahti/",
+    "lat": 62.4341199,
+    "lng": 25.8968081
+  },
+  {
+    "nimi": "Ankkajahti",
+    "aika": "la, 04 huhti 2026 04:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/ankkajahti/",
+    "lat": 62.4341199,
+    "lng": 25.8968081
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 04 huhti 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Ikoninäyttely",
+    "aika": "la, 04 huhti 2026 09:00:00",
+    "paikka": "Laukaan seurakuntatalo, Saravedentie 4, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/ikoninayttely-2/",
+    "lat": 62.4146027,
+    "lng": 25.966209
+  },
+  {
+    "nimi": "Ankkajahti",
+    "aika": "su, 05 huhti 2026 04:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/ankkajahti/",
+    "lat": 62.4341199,
+    "lng": 25.8968081
+  },
+  {
+    "nimi": "Ankkajahti",
+    "aika": "ma, 06 huhti 2026 04:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/ankkajahti/",
+    "lat": 62.4341199,
+    "lng": 25.8968081
+  },
+  {
+    "nimi": "Ankkajahti",
+    "aika": "ti, 07 huhti 2026 04:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/ankkajahti/",
+    "lat": 62.4341199,
+    "lng": 25.8968081
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 07 huhti 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Laukaan yrityspalvelut -vastaanotto Lievestuoreella",
+    "aika": "ke, 08 huhti 2026 06:00:00",
+    "paikka": "Jyväs-Pakari Lievestuore, Lievestuoreen Liisantie 15, 41400 Lievestuore",
+    "url": "https://visitlaukaa.fi/tapahtuma/yrityspalvelut-vastaanotto-lievestuoreella/",
+    "lat": 62.2530703,
+    "lng": 26.2089623
+  },
+  {
+    "nimi": "Kotikulman kerho",
+    "aika": "pe, 10 huhti 2026 10:15:00",
+    "paikka": "Kotikulma, Arwidssonintie 15, 40340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/kotikulman-kerho/",
+    "lat": 62.4131074,
+    "lng": 25.9510179
+  },
+  {
+    "nimi": "Paint & Wine",
+    "aika": "pe, 10 huhti 2026 19:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/paint-wine/",
+    "lat": 62.4341199,
+    "lng": 25.8968081
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 11 huhti 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Naisten hiljainen turvesaunailta",
+    "aika": "ma, 13 huhti 2026 16:30:00",
+    "paikka": "Laukaan Tupaswilla, Ränssintie 5, 41370 Kuusa",
+    "url": "https://visitlaukaa.fi/tapahtuma/naisten-hiljainen-turvesaunailta/",
+    "lat": 62.4547219,
+    "lng": 25.9763206
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 14 huhti 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "JyväsRiihi juhlii! Juhlistamme 30-vuotiasta Leader-toimintaa Suomessa",
+    "aika": "ke, 15 huhti 2026 14:00:00",
+    "paikka": "Valkolan kylätalo, Puralanharjuntie 76, 41360 Valkola",
+    "url": "https://visitlaukaa.fi/tapahtuma/jyvasriihi-juhlii-juhlistamme-30-vuotiasta-leader-toimintaa-suomessa/",
+    "lat": 62.4681516,
+    "lng": 25.8249414
+  },
+  {
+    "nimi": "Kotikulman kerho",
+    "aika": "pe, 17 huhti 2026 10:15:00",
+    "paikka": "Kotikulma, Arwidssonintie 15, 40340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/kotikulman-kerho/",
+    "lat": 62.4131074,
+    "lng": 25.9510179
+  },
+  {
+    "nimi": "Nahkatakkinen tyttö -musikaali",
+    "aika": "pe, 17 huhti 2026 15:00:00",
+    "paikka": "Sydän-Laukaan koulun auditorio, Saralinnantie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/nahkatakkinen-tytto-musikaali/",
+    "lat": 62.416344,
+    "lng": 25.9504153
+  },
+  {
+    "nimi": "Portion Boys & Komiat",
+    "aika": "pe, 17 huhti 2026 21:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/portion-boys-komiat/",
+    "lat": 62.4341199,
+    "lng": 25.8968081
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 18 huhti 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 21 huhti 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Nahkatakkinen tyttö -musikaali",
+    "aika": "ke, 22 huhti 2026 15:00:00",
+    "paikka": "Sydän-Laukaan koulun auditorio, Saralinnantie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/nahkatakkinen-tytto-musikaali/",
+    "lat": 62.416344,
+    "lng": 25.9504153
+  },
+  {
+    "nimi": "Kotikulman kerho",
+    "aika": "pe, 24 huhti 2026 10:15:00",
+    "paikka": "Kotikulma, Arwidssonintie 15, 40340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/kotikulman-kerho/",
+    "lat": 62.4131074,
+    "lng": 25.9510179
+  },
+  {
+    "nimi": "Nahkatakkinen tyttö -musikaali",
+    "aika": "pe, 24 huhti 2026 15:00:00",
+    "paikka": "Sydän-Laukaan koulun auditorio, Saralinnantie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/nahkatakkinen-tytto-musikaali/",
+    "lat": 62.416344,
+    "lng": 25.9504153
+  },
+  {
+    "nimi": "Mokoma &  Tyrantti",
+    "aika": "pe, 24 huhti 2026 21:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/mokoma-tyrantti/",
+    "lat": 62.4341199,
+    "lng": 25.8968081
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 25 huhti 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Äijälän Rautalankalauantai 2026",
+    "aika": "la, 25 huhti 2026 20:00:00",
+    "paikka": "Äijälän Seurantalo, Äijäläntie 1105, 41390 Äijälä",
+    "url": "https://visitlaukaa.fi/tapahtuma/aijalan-rautalankalauantai-2026/",
+    "lat": 62.54929,
+    "lng": 26.0620259
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 28 huhti 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 02 touko 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Pizzalauantai",
+    "aika": "la, 02 touko 2026 10:00:00",
+    "paikka": "Valkolan kylätalo, Puralanharjuntie 76, 41360 Valkola",
+    "url": "https://visitlaukaa.fi/tapahtuma/pizzalauantai-11/",
+    "lat": 62.4681516,
+    "lng": 25.8249414
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 05 touko 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Kotikulman kerho",
+    "aika": "pe, 08 touko 2026 10:15:00",
+    "paikka": "Kotikulma, Arwidssonintie 15, 40340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/kotikulman-kerho/",
+    "lat": 62.4131074,
+    "lng": 25.9510179
+  },
+  {
+    "nimi": "Paint & Wine",
+    "aika": "pe, 08 touko 2026 19:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/paint-wine-3/",
+    "lat": 62.4341199,
+    "lng": 25.8968081
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 09 touko 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Paint & Wine",
+    "aika": "la, 09 touko 2026 19:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/paint-wine-2/",
+    "lat": 62.4341199,
+    "lng": 25.8968081
+  },
+  {
+    "nimi": "Äitienpäivälounas, Nostalgia-konsertti ja savusauna",
+    "aika": "su, 10 touko 2026 12:30:00",
+    "paikka": "Laukaan Tupaswilla, Ränssintie 5, 41370 Kuusa",
+    "url": "https://visitlaukaa.fi/tapahtuma/aitienpaivalounas-nostalgia-konsertti-ja-savusauna/",
+    "lat": 62.4547219,
+    "lng": 25.9763206
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 12 touko 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Laukaan yrityspalvelut -vastaanotto Lievestuoreella",
+    "aika": "ke, 13 touko 2026 06:00:00",
+    "paikka": "Jyväs-Pakari Lievestuore, Lievestuoreen Liisantie 15, 41400 Lievestuore",
+    "url": "https://visitlaukaa.fi/tapahtuma/yrityspalvelut-vastaanotto-lievestuoreella/",
+    "lat": 62.2530703,
+    "lng": 26.2089623
+  },
+  {
+    "nimi": "Kotikulman kerho",
+    "aika": "pe, 15 touko 2026 10:15:00",
+    "paikka": "Kotikulma, Arwidssonintie 15, 40340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/kotikulman-kerho/",
+    "lat": 62.4131074,
+    "lng": 25.9510179
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 16 touko 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 19 touko 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Kotikulman kerho",
+    "aika": "pe, 22 touko 2026 10:15:00",
+    "paikka": "Kotikulma, Arwidssonintie 15, 40340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/kotikulman-kerho/",
+    "lat": 62.4131074,
+    "lng": 25.9510179
+  },
+  {
+    "nimi": "Playscape Lanit",
+    "aika": "pe, 22 touko 2026 14:00:00",
+    "paikka": "Peurungantie 85, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/playscape-lanit/",
+    "lat": 62.4082584,
+    "lng": 25.94609
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 23 touko 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 26 touko 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 30 touko 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Turvesaunan yhteisvuoro",
+    "aika": "ti, 09 kesä 2026 16:30:00",
+    "paikka": "Laukaan Tupaswilla, Ränssintie 5, 41370 Kuusa",
+    "url": "https://visitlaukaa.fi/tapahtuma/turvesaunan-yhteisvuoro/",
+    "lat": 62.4547219,
+    "lng": 25.9763206
+  },
+  {
+    "nimi": "Laukaan yrityspalvelut -vastaanotto Lievestuoreella",
+    "aika": "ke, 10 kesä 2026 06:00:00",
+    "paikka": "Jyväs-Pakari Lievestuore, Lievestuoreen Liisantie 15, 41400 Lievestuore",
+    "url": "https://visitlaukaa.fi/tapahtuma/yrityspalvelut-vastaanotto-lievestuoreella/",
+    "lat": 62.2530703,
+    "lng": 26.2089623
+  },
+  {
+    "nimi": "Kalevala spirit – elämysten saunailta",
+    "aika": "to, 11 kesä 2026 17:30:00",
+    "paikka": "Laukaan Tupaswilla, Ränssintie 5, 41370 Kuusa",
+    "url": "https://visitlaukaa.fi/tapahtuma/kalevala-spirit-elamysten-saunailta/",
+    "lat": 62.4547219,
+    "lng": 25.9763206
+  },
+  {
+    "nimi": "Naisten turvesauna",
+    "aika": "ma, 06 heinä 2026 16:30:00",
+    "paikka": "Laukaan Tupaswilla, Ränssintie 5, 41370 Kuusa",
+    "url": "https://visitlaukaa.fi/tapahtuma/naisten-turvesauna-5/",
+    "lat": 62.4547219,
+    "lng": 25.9763206
+  }
+]
