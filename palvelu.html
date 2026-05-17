@@ -161,7 +161,7 @@
 
         .next-steps-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(min(160px, 100%), 1fr));
             gap: 1.5rem;
             margin-top: 1.5rem;
         }
@@ -175,6 +175,10 @@
             transition: transform 0.2s;
             cursor: pointer;
             border: 2px solid transparent;
+            /* Prevent long words from overflowing the card */
+            overflow-wrap: break-word;
+            word-break: break-word;
+            min-width: 0;
         }
 
         .next-step-card:hover {
@@ -1326,11 +1330,13 @@
 
             if (limitedRecs.length > 0) {
                 nextStepsContainer.style.display = 'block';
+                // Modified styling for .next-steps-grid to use minmax(200px, 1fr) for mobile responsiveness
+                // and added overflow-wrap/word-break properties
                 nextStepsList.innerHTML = limitedRecs.map(recText => {
                     return `
-                    <div class="next-step-card" onclick="searchNextStep('${recText.replace(/'/g, "\\'")}')">
+                    <div class="next-step-card" onclick="searchNextStep('${recText.replace(/'/g, "\\'")}')" style="overflow-wrap: break-word; word-break: break-word;">
                         <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🔍</div>
-                        <div style="font-weight: 700; color: var(--primary-blue);">${recText}</div>
+                        <div style="font-weight: 700; color: var(--primary-blue); overflow-wrap: break-word;">${recText}</div>
                         <div style="font-size: 0.75rem; color: #64748b; margin-top: 4px;">${i18n.t('btn_search_providers')}</div>
                     </div>
                 `}).join('');

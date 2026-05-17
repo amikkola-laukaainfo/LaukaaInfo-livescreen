@@ -5183,6 +5183,7 @@ footer {
     position: relative;
     overflow: hidden;
     height: 100%;
+    min-width: 0; /* Prevents flex/grid overflow with long unbroken words */
 }
 
 .company-result-card:hover {
@@ -5271,10 +5272,10 @@ footer {
     margin-bottom: 0.75rem;
     font-weight: 700;
     line-height: 1.25;
-    overflow-wrap: break-word;
+    overflow-wrap: anywhere;
     word-wrap: break-word;
     hyphens: auto;
-    word-break: normal;
+    word-break: break-word;
 }
 
 .company-result-card .slogan {
