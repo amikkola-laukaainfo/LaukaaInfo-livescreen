@@ -41,15 +41,17 @@ class NetworkMap {
     }
 
     async loadData() {
-        const [liveRes, tempRes, profRes] = await Promise.all([
+        const [liveRes, tempRes, profRes, taxRes] = await Promise.all([
             fetch('live_companies.json'),
             fetch('temp_companies.json'),
-            fetch('company_profiling_data.json')
+            fetch('company_profiling_data.json'),
+            fetch('taxonomy.json').catch(() => null)
         ]);
 
         const liveData = await liveRes.json();
         const tempData = await tempRes.json();
         const profData = await profRes.json();
+        const taxonomyData = taxRes ? await taxRes.json() : null;
 
         const companyMap = {};
         [...(tempData.results || []), ...(liveData.results || [])].forEach(c => {
@@ -57,6 +59,7 @@ class NetworkMap {
         });
         this.data.companies = Object.values(companyMap);
         this.data.profiling = profData.profiles;
+        this.data.taxonomy = taxonomyData;
 
         // NEEDS_CONFIG is loaded via <script> tag in HTML
         this.data.needs = window.NEEDS_CONFIG || {};
@@ -445,105 +448,15 @@ class NetworkMap {
 
     checkCompanyMatch(c, opt, need) {
         if (!c || !opt) return false;
-
-        const profilingKey = need.profilointi_context || 'vapaa-aika';
-        const profilingKeyUnderscore = profilingKey.replace(/-/g, '_');
-        const profile = this.data.profiling[c.id] || {};
-        const core = profile.core || {};
         
-        const fitsScore = core.fits_for?.[profilingKey] || core.fits_for?.[profilingKey.replace(/_/g, '-')] || 0;
-
-        // 1. Sub-context filtering (Strict Alignment)
-        if (this.selections.subContexts.size > 0) {
-            const companySubContexts = core.sub_contexts || [];
-            let isSubContextMatch = false;
-
-            if (Array.isArray(companySubContexts)) {
-                if (companySubContexts.length === 0) isSubContextMatch = true;
-                else isSubContextMatch = Array.from(this.selections.subContexts).some(sc => companySubContexts.includes(sc));
-            } else if (typeof companySubContexts === 'object') {
-                const relevant = companySubContexts[profilingKeyUnderscore] || companySubContexts[profilingKey] || [];
-                isSubContextMatch = Array.from(this.selections.subContexts).some(sc => relevant.includes(sc));
-            } else {
-                isSubContextMatch = true;
-            }
-
-            if (!isSubContextMatch) {
-                // Pehmeämpi vertailu (kuten palvelu.html:ssä)
-                const bases = ['hää', 'yritys', 'juhla', 'hautajais', 'muisto', 'remontti', 'rakentaminen'];
-                const cscArray = Array.isArray(companySubContexts) ? companySubContexts : (typeof companySubContexts === 'object' ? Object.values(companySubContexts).flat() : []);
-                const hasCommonBase = Array.from(this.selections.subContexts).some(sc => {
-                    const scLower = String(sc).toLowerCase();
-                    return bases.some(b => scLower.includes(b) && cscArray.some(csc => String(csc).toLowerCase().includes(b)));
-                });
-                if (hasCommonBase) isSubContextMatch = true;
-            }
-            
-            if (!isSubContextMatch) {
-                const labelLower = i18n.getText(opt.label || '').toLowerCase();
-                const isVenueOrCore = (opt.capacity_req > 0 || opt.node_link === 'JUHLATILA' || (labelLower.includes('tila') && !labelLower.includes('tilaisuus')));
-
-                // Hylätään jos optiolla on oma sub_context tai jos kyseessä on rakentaminen
-                if (opt.sub_context && companySubContexts.length > 0) return false;
-                if (profilingKey === 'construction-and-maintenance' && companySubContexts.length > 0) return false;
-                if (isVenueOrCore && companySubContexts.length > 0 && fitsScore < this.THRESHOLD_STRICT) return false;
-            }
+        if (window.isMatch) {
+            const profilingKey = need.profilointi_context || 'vapaa-aika';
+            const subContextsReq = Array.from(this.selections.subContexts);
+            // verkostokartta uses the same shared searchEngine logic
+            return window.isMatch(c, opt, profilingKey, subContextsReq, false, this.data.taxonomy);
         }
-
-        // 2. Direct matching (intent_codes, node_link, profilointi_filter)
-        let isProfiledMatch = false;
         
-        // intent_codes
-        if (opt.intent_codes && core.intent_codes) {
-            if (opt.intent_codes.some(code => core.intent_codes.includes(code))) isProfiledMatch = true;
-        }
-
-        // node_link
-        if (!isProfiledMatch) {
-            const links = core.node_links || [];
-            if (opt.node_link && links.includes(opt.node_link)) isProfiledMatch = true;
-            if (opt.node_links && opt.node_links.some(l => links.includes(l))) isProfiledMatch = true;
-        }
-
-        // profilointi_filter
-        if (!isProfiledMatch && opt.profilointi_filter) {
-            const pf = opt.profilointi_filter;
-            const section = profile.categories?.[pf.section] || profile[pf.section];
-            if (section) {
-                const val = section[pf.field];
-                if (Array.isArray(val) && val.includes(pf.value)) isProfiledMatch = true;
-                else if (val === pf.value) isProfiledMatch = true;
-            }
-        }
-
-        if (isProfiledMatch) return true;
-
-        // 3. Profiling-First fallback restrictions
-        const hasProfilingForContext = core.fits_for && (profilingKey in core.fits_for || profilingKey.replace(/-/g, '_') in core.fits_for);
-        if (hasProfilingForContext) {
-            if (fitsScore < this.THRESHOLD_LOOSE) return false;
-            // Jos on tiukkoja suodattimia muttei osumaa, ei sallita tägi-fallbackia
-            if (opt.profilointi_filter || opt.node_link || opt.node_links) return false;
-        }
-
-        // 4. Tag match (Secondary)
-        if (opt.tags) {
-            const companyContent = (
-                (c.tags || '') + ' ' + 
-                (c.kategoria || '') + ' ' + 
-                (c.nimi || '') + ' ' +
-                (Array.isArray(core.sub_contexts) ? core.sub_contexts.join(' ') : '') + ' ' +
-                (core.node_links?.join(' ') || '')
-            ).toLowerCase();
-            if (opt.tags.some(tag => companyContent.includes(tag.toLowerCase()))) return true;
-        }
-
-        // 5. General score fallback (Only if no specific constraints)
-        if (!opt.tags && !opt.intent_codes && !opt.node_link && !opt.profilointi_filter) {
-            return fitsScore > this.THRESHOLD_RELEVANT;
-        }
-
-        return false;
+        return false; // Fallback should not be needed when searchEngine.js is loaded
     }
 
     setupControls() {

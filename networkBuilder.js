@@ -7,6 +7,7 @@ class NetworkBuilder {
     constructor() {
         this.companies = [];
         this.profiling = {};
+        this.taxonomy = null;
         this.selections = {}; // scenarioId -> { stepIndex -> companyId }
         this.userCoords = null;
         
@@ -43,10 +44,11 @@ class NetworkBuilder {
             }
 
             // Fetch company data and profiling (BOM-safe)
-            const [liveData, tempData, profilingData] = await Promise.all([
+            const [liveData, tempData, profilingData, taxonomyData] = await Promise.all([
                 this.fetchJson('live_companies.json'),
                 this.fetchJson('temp_companies.json'),
-                this.fetchJson('company_profiling_data.json')
+                this.fetchJson('company_profiling_data.json'),
+                this.fetchJson('taxonomy.json').catch(() => null)
             ]);
 
             const companyMap = {};
@@ -56,6 +58,7 @@ class NetworkBuilder {
             this.companies = Object.values(companyMap);
             
             this.profiling = profilingData.profiles;
+            this.taxonomy = taxonomyData;
 
             console.log('NetworkBuilder: Data loaded', this.companies.length, 'companies');
             
@@ -230,10 +233,30 @@ class NetworkBuilder {
             const stepIdx = index + 1;
             stepEl.setAttribute('data-step', stepIdx);
             
-            const tags = stepEl.dataset.tags.split(',').map(t => t.trim().toLowerCase());
+            // Parse step attributes
+            const tags = (stepEl.dataset.tags || '').split(',').map(t => t.trim().toLowerCase()).filter(t => t);
+            const intents = (stepEl.dataset.intents || '').split(',').map(t => t.trim().toUpperCase()).filter(t => t);
+            const nodes = (stepEl.dataset.nodes || '').split(',').map(t => t.trim().toUpperCase()).filter(t => t);
+            
+            const opt = {
+                tags: tags.length > 0 ? tags : null,
+                intent_codes: intents.length > 0 ? intents : null,
+                node_links: nodes.length > 0 ? nodes : null
+            };
+
             const partnerList = stepEl.querySelector('.partner-list');
             const scenarioId = stepEl.closest('.chain-section').id;
             if (!partnerList) return;
+
+            // Context mapping for relevance sorting
+            const SCENARIO_CONTEXT_MAP = {
+                'scenario-weddings': 'events_and_celebrations',
+                'scenario-moving': 'moving_and_housing',
+                'scenario-cottage': 'cottage_services',
+                'scenario-startup': 'startup_services',
+                'scenario-tyhy': 'liikunta-ja-vapaaaika'
+            };
+            const currentContext = SCENARIO_CONTEXT_MAP[scenarioId] || 'vapaa-aika';
 
             // Get recommendations and anchor from previous step(s)
             const prevStepIdx = stepIdx - 1;
@@ -249,69 +272,15 @@ class NetworkBuilder {
                 }
             }
 
-            // Find matching companies
+            // Find matching companies using shared search logic
             let matches = this.companies.filter(c => {
-                const profilingKey = currentContext || 'vapaa-aika';
-                const profile = this.profiling[c.id] || {};
-                const core = profile.core || {};
-                const fitsScore = core.fits_for?.[profilingKey] || core.fits_for?.[profilingKey.replace(/-/g, '_')] || 0;
-
-                // 1. Sub-context Filtering (Strict Alignment)
-                const companySubContexts = core.sub_contexts || [];
-                if (companySubContexts.length > 0) {
-                    // Jos hakuun liittyy suosituksia (aiempi valinta) ja ne rajaavat alaa, 
-                    // tai jos olemme rakentamisessa, ollaan tiukkoja.
-                    if (profilingKey === 'construction-and-maintenance') {
-                        // Tässä kohtaa tarvittaisiin hakuoption tarkempaa sub-kontekstia, 
-                        // mutta yleisenä sääntönä: jos yritys on profiloitu mutta arvosana on matala, hylätään se herkemmin.
-                        if (fitsScore < this.THRESHOLD_STRICT) return false;
-                    }
+                if (window.isMatch) {
+                    return window.isMatch(c, opt, currentContext, [], false, this.taxonomy);
                 }
-
-                // 2. Direct Matching Logic (Aligned with palvelu.html)
-                let isProfiledMatch = false;
-                
-                // Intent Codes & Node Links
-                const links = core.node_links || [];
-                const intentCodes = core.intent_codes || [];
-                if (tags.some(t => intentCodes.includes(t.toUpperCase()) || links.includes(t.toUpperCase()))) {
-                    isProfiledMatch = true;
-                }
-
-                // Profiling-First fallback restrictions
-                const hasProfilingForContext = core.fits_for && (profilingKey in core.fits_for || profilingKey.replace(/-/g, '_') in core.fits_for);
-                if (hasProfilingForContext) {
-                    if (fitsScore < this.THRESHOLD_LOOSE) return false;
-                }
-
-                if (isProfiledMatch) return true;
-
-                // 3. Flexible Match (Secondary)
-                const name = (c.nimi || '').toLowerCase();
-                const companyTags = (c.tags || '').toLowerCase().split(',').map(t => t.trim());
-                const category = (c.kategoria || '').toLowerCase();
-                const desc = (c.kuvaus || c.description || c.esittely || '').toLowerCase();
-                
-                const tagMatch = tags.some(t => {
-                    if (companyTags.includes(t)) return true;
-                    if (category === t || category.includes(t)) return true;
-                    if (name.includes(t) || desc.includes(t)) return true;
-                    if (t.length > 3 && companyTags.some(ct => ct.length > 3 && (t.includes(ct) || ct.includes(t)))) return true;
-                    return false;
-                });
-
-                return tagMatch;
+                return false; // Fallback should not happen if searchEngine.js is loaded
             });
 
-            // Context mapping for relevance sorting
-            const SCENARIO_CONTEXT_MAP = {
-                'scenario-weddings': 'events_and_celebrations',
-                'scenario-moving': 'moving_and_housing',
-                'scenario-cottage': 'cottage_services',
-                'scenario-startup': 'startup_services',
-                'scenario-tyhy': 'liikunta-ja-vapaaaika'
-            };
-            const currentContext = SCENARIO_CONTEXT_MAP[scenarioId];
+
 
             // Sort matches
             matches.sort((a, b) => {
