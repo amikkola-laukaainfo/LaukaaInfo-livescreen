@@ -104,7 +104,7 @@ const NEEDS_CONFIG = {
                     { "id": "OPT_CORP_PARTY_PHOTO", "label": { "fi": "Valokuvaus", "en": "Photography" }, "tags": ["valokuvaus", "valokuvaaja"], "intent_codes": ["MEDIA_PHOTO"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "juhlakuvaus" } },
                     { "id": "OPT_CORP_PARTY_SAUNA", "label": { "fi": "Saunatilat", "en": "Sauna facilities" }, "tags": ["saunatilat"], "intent_codes": ["VENUE_PARTY"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "sauna" } },
                     { "id": "OPT_CORP_PARTY_PROGRAM", "label": { "fi": "Ohjelmapalvelut / Elämykset", "en": "Entertainment / Experiences" }, "tags": ["ohjelmapalvelut"], "intent_codes": ["ENT_PROGRAM"] },
-                    { "id": "OPT_CORP_PARTY_AV", "label": { "fi": "AV-tekniikka & Äänentoisto", "en": "AV tech & Sound" }, "tags": ["it-palvelut"], "intent_codes": ["MEDIA_VIDEO"], "profilointi_filter": { "section": "events_and_celebrations", "field": "has_av_tech", "value": true } }
+                    { "id": "OPT_CORP_PARTY_AV", "label": { "fi": "AV-tekniikka & Äänentoisto", "en": "AV tech & Sound" }, "tags": ["it-palvelut"], "intent_codes": ["MEDIA_VIDEO"], "profilointi_filter": { "section": "events_and_celebrations", "field": "has_av_tech", "value": true }, "exclude_if_capacity": true }
                 ]
             },
             {
@@ -161,7 +161,7 @@ const NEEDS_CONFIG = {
                     { "id": "OPT_BIZ_STAY", "label": { "fi": "Majoitus", "en": "Accommodation" }, "tags": ["majoitus"], "intent_codes": ["VENUE_ACCOMMODATION"] },
                     { "id": "OPT_BIZ_VIDEO", "label": { "fi": "Videokuvaus", "en": "Video recording" }, "tags": ["videotuotanto", "videokuvaus", "videokuvaaja"], "intent_codes": ["MEDIA_VIDEO"], "profilointi_filter": { "section": "business_events", "field": "refinement_tags", "value": "yritysvideo" } },
                     { "id": "OPT_BIZ_PHOTO", "label": { "fi": "Valokuvaus", "en": "Photography" }, "tags": ["valokuvaus", "valokuvaaja"], "intent_codes": ["MEDIA_PHOTO"], "profilointi_filter": { "section": "business_events", "field": "refinement_tags", "value": "yrityskuvaus" } },
-                    { "id": "OPT_BIZ_IT", "label": { "fi": "IT-tuki / AV-tekniikka", "en": "IT support / AV tech" }, "tags": ["it-palvelut"], "intent_codes": ["BIZ_IT"], "profilointi_filter": { "section": "business_events", "field": "has_projector", "value": true } }
+                    { "id": "OPT_BIZ_IT", "label": { "fi": "IT-tuki / AV-tekniikka", "en": "IT support / AV tech" }, "tags": ["it-palvelut"], "intent_codes": ["BIZ_IT"], "profilointi_filter": { "section": "business_events", "field": "has_projector", "value": true }, "exclude_if_capacity": true }
                 ]
             }
         ]

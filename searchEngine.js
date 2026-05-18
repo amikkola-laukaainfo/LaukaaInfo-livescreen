@@ -80,6 +80,10 @@ function isMatch(c, opt, context, subContextsReq, noCateringSelected, taxonomyDa
     if (exclusions.some(exc => exc && labelLower.includes(normalizeText(exc).toLowerCase()))) {
         return false;
     }
+
+    if (opt.exclude_if_capacity && getCompanyCapacity(c, context) > 0) {
+        return false;
+    }
     
     // INTENT-CODE TÄSMÄYS
     if (opt.intent_codes && c.profiling && c.profiling.core && c.profiling.core.intent_codes) {
