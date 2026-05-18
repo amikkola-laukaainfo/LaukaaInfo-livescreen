@@ -1,19 +1,17 @@
-// Yrityskaruselli etusivulle
+// Yrityskaruselli etusivulle – sivun reunan välilehti
 document.addEventListener('DOMContentLoaded', () => {
-    // Odota hieman, jotta muu sivusto ehtii latautua ja mahdolliset script.js-haut valmistuvat
     setTimeout(async () => {
         try {
-            if (typeof loadCompanyData === "function" && (!window.allCompanies || window.allCompanies.length === 0)) {
+            // Varmistetaan että yritysdata on ladattu
+            if (typeof loadCompanyData === 'function' && (!window.allCompanies || window.allCompanies.length === 0)) {
                 await loadCompanyData();
             }
 
             const companies = window.allCompanies || [];
-            const withWebsite = companies.filter(c => c.nettisivu || c.linkki || c.verkkosivu || c.website);
-            
-            console.log('Carousel: Yrityksiä yhteensä:', companies.length);
-            console.log('Carousel: Yrityksiä joilla nettisivu:', withWebsite.length);
-            
-            // Luodaan kieleke joka tapauksessa, jotta nähdään toimiiko se
+            console.log('Carousel: Yrityksiä ladattu:', companies.length);
+
+            // Käytetään kaikkia yrityksiä – priorisoidaan ne joilla on logo tai paketti
+            const candidates = companies.length > 0 ? companies : [];
 
             // Etsi tai luo widget
             let widget = document.getElementById('company-carousel-widget');
@@ -30,91 +28,112 @@ document.addEventListener('DOMContentLoaded', () => {
                             <h3>Suositellut yritykset</h3>
                             <button class="drawer-close-btn" id="carousel-close-btn">&times;</button>
                         </div>
-                        <div class="drawer-body">
-                            <div class="popup-icon">🏢</div>
+                        <div class="drawer-body" id="carousel-drawer-body">
+                            <div class="popup-icon" id="carousel-icon">🏢</div>
                             <div class="popup-info">
                                 <div class="popup-category" id="carousel-category">Palvelu</div>
                                 <div class="popup-name" id="carousel-name">Ladataan...</div>
-                                <div class="popup-link-text">Vieraile sivustolla &raquo;</div>
+                                <div class="popup-link-text">Tutustu yritykseen &raquo;</div>
                             </div>
                         </div>
                     </div>
                 `;
                 document.body.appendChild(widget);
 
-                // Lisätään kuuntelijat avaamiselle ja sulkemiselle
-                const toggleBtn = document.getElementById('carousel-toggle-btn');
-                const closeBtn = document.getElementById('carousel-close-btn');
-
-                toggleBtn.addEventListener('click', () => {
+                // Toggle-napin kuuntelija
+                document.getElementById('carousel-toggle-btn').addEventListener('click', () => {
                     widget.classList.toggle('open');
                 });
 
-                closeBtn.addEventListener('click', (e) => {
-                    e.stopPropagation(); // Estä klikkauksen kupliminen widgetille
+                // Sulkemisnapin kuuntelija
+                document.getElementById('carousel-close-btn').addEventListener('click', (e) => {
+                    e.stopPropagation();
                     widget.classList.remove('open');
                 });
             }
 
             const categoryEl = document.getElementById('carousel-category');
             const nameEl = document.getElementById('carousel-name');
+            const iconEl = document.getElementById('carousel-icon');
+            const drawerBody = document.getElementById('carousel-drawer-body');
             let currentCompany = null;
 
-            function updateCarousel() {
-                // Piilotetaan hetkeksi animaatiota varten
-                widget.classList.add('fade-out');
-                
-                setTimeout(() => {
-                    // Valitse satunnainen yritys
-                    currentCompany = withWebsite[Math.floor(Math.random() * withWebsite.length)];
-                    
-                    nameEl.textContent = currentCompany.nimi || currentCompany.name || "Yritys";
-                    
-                    // Kategoria
-                    let cat = "Palvelu";
-                    if (currentCompany.tags && currentCompany.tags.length > 0) {
-                        cat = currentCompany.tags[0];
-                    } else if (currentCompany.tyyppi) {
-                        cat = currentCompany.tyyppi;
-                    }
-                    // Siisti kategoria (esim. poista alaviivat, vaihda alkamaan isolla)
-                    cat = cat.replace(/_/g, ' ');
-                    cat = cat.charAt(0).toUpperCase() + cat.slice(1);
-                    categoryEl.textContent = cat;
+            // Kategoria-emojit
+            const categoryEmojis = {
+                'ravintola': '🍽️', 'ruoka': '🍽️', 'cafe': '☕',
+                'rakennus': '🏗️', 'remontti': '🔨', 'lvi': '🔧',
+                'terveys': '💊', 'hyvinvointi': '💆', 'hieronta': '💆',
+                'kauneus': '💄', 'parturi': '✂️',
+                'auto': '🚗', 'huolto': '🔧',
+                'koira': '🐕', 'elain': '🐾', 'lemmi': '🐾',
+                'myymälä': '🛍️', 'kauppa': '🛒',
+                'kuljetus': '🚚', 'muutto': '📦',
+                'kiinteist': '🏠', 'isännöi': '🏠',
+                'media': '📸', 'mainos': '📢',
+                'koulutus': '📚', 'opetus': '📚',
+                'juhla': '🎉', 'tapahtuma': '🎊',
+            };
 
-                    // Näytä taas
-                    widget.classList.remove('fade-out');
-                }, 500); // 500ms fade-outin pituus
+            function getEmoji(company) {
+                const haystack = ((company.kategoria || '') + ' ' + (company.tags || '') + ' ' + (company.tyyppi || '')).toLowerCase();
+                for (const [key, emoji] of Object.entries(categoryEmojis)) {
+                    if (haystack.includes(key)) return emoji;
+                }
+                return '🏢';
             }
 
-            // Avaa uuteen välilehteen klikattaessa (vain jos ei klikata nappeja)
-            widget.addEventListener('click', (e) => {
-                if (e.target.closest('#carousel-toggle-btn') || e.target.closest('#carousel-close-btn')) {
-                    return; // Ohitetaan jos klikataan nappia
-                }
-                if (currentCompany) {
-                    let url = currentCompany.nettisivu || currentCompany.linkki || currentCompany.verkkosivu || currentCompany.website;
-                    if (url && !url.startsWith('http')) {
-                        url = 'https://' + url;
-                    }
-                    if (url) {
-                        window.open(url, '_blank');
-                    }
-                }
-            });
+            function updateCarousel() {
+                if (candidates.length === 0) return;
 
-            // Ensimmäinen päivitys ja ajastin vain jos löytyy yrityksiä
-            if (withWebsite.length > 0) {
+                widget.classList.add('fade-out');
+
+                setTimeout(() => {
+                    currentCompany = candidates[Math.floor(Math.random() * candidates.length)];
+
+                    nameEl.textContent = currentCompany.nimi || 'Yritys';
+
+                    // Kategoria
+                    let cat = currentCompany.kategoria || currentCompany.tyyppi || 'Palvelu';
+                    cat = cat.replace(/_/g, ' ');
+                    cat = cat.charAt(0).toUpperCase() + cat.slice(1);
+                    // Lyhennä jos liian pitkä
+                    if (cat.length > 30) cat = cat.substring(0, 28) + '…';
+                    categoryEl.textContent = cat;
+
+                    // Emoji
+                    iconEl.textContent = getEmoji(currentCompany);
+
+                    widget.classList.remove('fade-out');
+                }, 400);
+            }
+
+            // Klikkaus vie yrityssivulle LaukaaInfossa
+            if (drawerBody) {
+                drawerBody.addEventListener('click', () => {
+                    if (!currentCompany) return;
+
+                    // Kokeillaan ensin ulkoista nettisivua
+                    const externalUrl = currentCompany.nettisivu || currentCompany.linkki || currentCompany.verkkosivu || currentCompany.website;
+                    if (externalUrl) {
+                        const url = externalUrl.startsWith('http') ? externalUrl : 'https://' + externalUrl;
+                        window.open(url, '_blank');
+                        return;
+                    }
+
+                    // Muuten avataan haku yrityksen nimellä
+                    const name = encodeURIComponent(currentCompany.nimi || '');
+                    window.location.href = `koko-laukaa.html?q=${name}`;
+                });
+            }
+
+            // Käynnistys
+            if (candidates.length > 0) {
                 updateCarousel();
                 setInterval(updateCarousel, 5000);
-            } else {
-                // Näytetään geneerinen teksti jos ei nettisivullisia yrityksiä
-                if (nameEl) nameEl.textContent = 'Laukaan yritykset';
-                if (categoryEl) categoryEl.textContent = 'Palvelut';
             }
 
         } catch (e) {
-            console.warn("Company carousel error:", e);
+            console.warn('Carousel error:', e);
         }
-    }, 2000); // 2 sekunnin viive alun latauksen keventämiseksi
+    }, 2500); // Odotetaan 2.5s jotta allCompanies ehtii latautua
 });

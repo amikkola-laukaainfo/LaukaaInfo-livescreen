@@ -5890,3 +5890,156 @@ footer {
         max-width: 170px;
     }
 }
+
+/* ===== Company Carousel Side Tab / Drawer ===== */
+.company-popup-widget {
+    position: fixed !important;
+    top: 50% !important;
+    right: 0 !important;
+    transform: translateY(-50%) !important;
+    z-index: 99999 !important;
+    display: flex !important;
+    align-items: stretch !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.carousel-tab {
+    background: #0056b3;
+    color: white;
+    padding: 14px 10px;
+    border-radius: 8px 0 0 8px;
+    cursor: pointer;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-weight: 700;
+    box-shadow: -3px 0 12px rgba(0,0,0,0.25);
+    transition: background 0.2s ease;
+    font-size: 0.82rem;
+    letter-spacing: 1px;
+    user-select: none;
+    flex-shrink: 0;
+    font-family: inherit;
+}
+
+.carousel-tab:hover {
+    background: #003d80;
+}
+
+.carousel-drawer {
+    background: white;
+    width: 0;
+    overflow: hidden;
+    box-shadow: -4px 0 20px rgba(0,0,0,0.18);
+    border-radius: 12px 0 0 12px;
+    display: flex;
+    flex-direction: column;
+    transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.company-popup-widget.open .carousel-drawer {
+    width: 290px;
+}
+
+.drawer-header {
+    background: #f0f4f9;
+    padding: 11px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #dde5ef;
+    min-width: 290px;
+    box-sizing: border-box;
+}
+
+.drawer-header h3 {
+    margin: 0;
+    font-size: 0.88rem;
+    color: #0a2540;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.drawer-close-btn {
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    cursor: pointer;
+    color: #666;
+    line-height: 1;
+    padding: 0 2px;
+    flex-shrink: 0;
+}
+
+.drawer-body {
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    min-width: 290px;
+    box-sizing: border-box;
+    transition: opacity 0.3s ease, background 0.2s ease;
+}
+
+.drawer-body:hover {
+    background: #f5f8ff;
+}
+
+.company-popup-widget .popup-icon {
+    font-size: 1.8rem;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.company-popup-widget .popup-info {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    flex: 1;
+}
+
+.company-popup-widget .popup-category {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #e87722;
+    font-weight: 800;
+    margin-bottom: 2px;
+    white-space: nowrap;
+}
+
+.company-popup-widget .popup-name {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #0a2540;
+    margin-bottom: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 210px;
+}
+
+.company-popup-widget .popup-link-text {
+    font-size: 0.78rem;
+    color: #0056b3;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.company-popup-widget.fade-out .drawer-body {
+    opacity: 0;
+}
+
+@media (max-width: 600px) {
+    .company-popup-widget.open .carousel-drawer {
+        width: 250px;
+    }
+    .drawer-header,
+    .drawer-body {
+        min-width: 250px;
+    }
+    .company-popup-widget .popup-name {
+        max-width: 160px;
+    }
+}
