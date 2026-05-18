@@ -243,7 +243,7 @@ class NetworkMap {
                             return 0;
                         });
 
-                        matches.slice(0, 15).forEach(comp => {
+                        matches.forEach(comp => {
                             const compActive = this.selections.companies.has(comp.id);
                             const compItem = this.createItemElement(comp.id, comp.nimi, null, () => this.toggleCompany(comp.id, optId), compActive, 'company-item');
                             subList.appendChild(compItem);
