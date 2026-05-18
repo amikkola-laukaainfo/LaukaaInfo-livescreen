@@ -5549,37 +5549,88 @@ footer {
     }
 }
 
-/* Company Carousel Popup */
+/* Company Carousel Side Tab / Drawer */
 .company-popup-widget {
     position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 10px 30px rgba(0, 86, 179, 0.15);
-    border-radius: 16px;
-    padding: 16px 20px;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+}
+
+.carousel-tab {
+    background: var(--primary-blue);
+    color: white;
+    padding: 12px 10px;
+    border-radius: 8px 0 0 8px;
+    cursor: pointer;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-weight: bold;
+    box-shadow: -2px 0 10px rgba(0,0,0,0.15);
+    transition: background 0.3s ease;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+.carousel-tab:hover {
+    background: var(--accent-blue);
+}
+
+.carousel-drawer {
+    background: white;
+    width: 300px;
+    box-shadow: -5px 0 25px rgba(0,0,0,0.15);
+    border-radius: 12px 0 0 12px;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.company-popup-widget.open .carousel-drawer {
+    transform: translateX(0);
+}
+
+.drawer-header {
+    background: #f8f9fa;
+    padding: 12px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+}
+
+.drawer-header h3 {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--dark-text);
+    font-family: var(--heading-font);
+}
+
+.drawer-close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #888;
+    line-height: 1;
+}
+
+.drawer-body {
+    padding: 15px;
     display: flex;
     align-items: center;
     gap: 15px;
-    z-index: 9999;
     cursor: pointer;
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    transform: translateY(0);
-    opacity: 1;
-    max-width: 320px;
+    transition: background 0.2s ease;
 }
 
-.company-popup-widget:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 35px rgba(0, 86, 179, 0.25);
-    background: rgba(255, 255, 255, 0.95);
-}
-
-.company-popup-widget.fade-out {
-    opacity: 0;
-    transform: translateY(10px);
+.drawer-body:hover {
+    background: #f9f9f9;
 }
 
 .company-popup-widget .popup-icon {
@@ -5621,12 +5672,14 @@ footer {
     font-weight: 600;
 }
 
+.company-popup-widget.fade-out .drawer-body {
+    opacity: 0;
+}
+
+/* Mobile adjustments */
 @media (max-width: 768px) {
-    .company-popup-widget {
-        bottom: 20px;
-        right: 20px;
-        left: 20px;
-        max-width: none;
+    .carousel-drawer {
+        width: 260px;
     }
 }
 

@@ -19,14 +19,38 @@ document.addEventListener('DOMContentLoaded', () => {
                 widget.id = 'company-carousel-widget';
                 widget.className = 'company-popup-widget';
                 widget.innerHTML = `
-                    <div class="popup-icon">🏢</div>
-                    <div class="popup-info">
-                        <div class="popup-category" id="carousel-category">Palvelu</div>
-                        <div class="popup-name" id="carousel-name">Ladataan...</div>
-                        <div class="popup-link-text">Vieraile sivustolla &raquo;</div>
+                    <div class="carousel-tab" id="carousel-toggle-btn">
+                        <span>🏢 Yritykset</span>
+                    </div>
+                    <div class="carousel-drawer" id="carousel-drawer-content">
+                        <div class="drawer-header">
+                            <h3>Suositellut yritykset</h3>
+                            <button class="drawer-close-btn" id="carousel-close-btn">&times;</button>
+                        </div>
+                        <div class="drawer-body">
+                            <div class="popup-icon">🏢</div>
+                            <div class="popup-info">
+                                <div class="popup-category" id="carousel-category">Palvelu</div>
+                                <div class="popup-name" id="carousel-name">Ladataan...</div>
+                                <div class="popup-link-text">Vieraile sivustolla &raquo;</div>
+                            </div>
+                        </div>
                     </div>
                 `;
                 document.body.appendChild(widget);
+
+                // Lisätään kuuntelijat avaamiselle ja sulkemiselle
+                const toggleBtn = document.getElementById('carousel-toggle-btn');
+                const closeBtn = document.getElementById('carousel-close-btn');
+
+                toggleBtn.addEventListener('click', () => {
+                    widget.classList.toggle('open');
+                });
+
+                closeBtn.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Estä klikkauksen kupliminen widgetille
+                    widget.classList.remove('open');
+                });
             }
 
             const categoryEl = document.getElementById('carousel-category');
@@ -60,8 +84,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 }, 500); // 500ms fade-outin pituus
             }
 
-            // Avaa uuteen välilehteen klikattaessa
-            widget.addEventListener('click', () => {
+            // Avaa uuteen välilehteen klikattaessa (vain jos ei klikata nappeja)
+            widget.addEventListener('click', (e) => {
+                if (e.target.closest('#carousel-toggle-btn') || e.target.closest('#carousel-close-btn')) {
+                    return; // Ohitetaan jos klikataan nappia
+                }
                 if (currentCompany) {
                     let url = currentCompany.nettisivu || currentCompany.linkki || currentCompany.verkkosivu || currentCompany.website;
                     if (url && !url.startsWith('http')) {
