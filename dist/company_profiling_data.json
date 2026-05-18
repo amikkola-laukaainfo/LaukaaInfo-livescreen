@@ -23416,7 +23416,6 @@
                     "kylpyhuoneremontti",
                     "keittiöremontti",
                     "pintaremontti (maalaus tms.)",
-                    "uudisrakentaminen",
                     "rakennus- / remonttimies",
                     "sähköasentaja",
                     "lvi-asentaja (putkimies)",
@@ -23430,13 +23429,15 @@
                     "SHOP_CHILDREN",
                     "HOME_MAINTENANCE",
                     "HOME_COTTAGE",
-                    "HOME_CLEANING"
+                    "HOME_CLEANING",
+                    "RENO_HARDWARE"
                 ],
                 "intent_scores": {
                     "SHOP_CHILDREN": 40,
                     "HOME_MAINTENANCE": 55,
                     "HOME_COTTAGE": 45,
-                    "HOME_CLEANING": 100
+                    "HOME_CLEANING": 100,
+                    "RENO_HARDWARE": 100
                 }
             },
             "categories": {
@@ -23651,7 +23652,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-09T18:16:10.174Z",
+                "last_updated": "2026-05-18T08:49:13.453Z",
                 "verified_by": "AI-analysis-v2",
                 "status": "updated"
             }

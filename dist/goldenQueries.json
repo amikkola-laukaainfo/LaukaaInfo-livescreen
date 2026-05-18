@@ -27,8 +27,8 @@
       }
     },
     "expected": {
-      "count": 3,
-      "topIds": ["company-270", "company-268", "company-306"]
+      "count": 6,
+      "topIds": ["company-270", "company-268", "company-306", "company-88", "company-99", "company-266"]
     }
   },
   {
