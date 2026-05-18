@@ -182,10 +182,21 @@ function isMatch(c, opt, context, subContextsReq, noCateringSelected, taxonomyDa
     // TAKSONOMIA-TÄSMÄYS
     if (taxonomyData && !isProfiledMatch && !opt.profilointi_filter) {
         const targetIntentId = (opt.intent_codes && opt.intent_codes.length > 0) ? opt.intent_codes[0] : context;
-        const intent = taxonomyData.intents.find(i => i.id === targetIntentId || i.id === targetIntentId.replace(/_/g, '-'));
+        
+        let intent;
+        if (Array.isArray(taxonomyData.intents)) {
+            intent = taxonomyData.intents.find(i => i.id === targetIntentId || i.id === targetIntentId.replace(/_/g, '-'));
+        } else if (taxonomyData.intents && typeof taxonomyData.intents === 'object') {
+            intent = taxonomyData.intents[targetIntentId] || taxonomyData.intents[targetIntentId.replace(/_/g, '-')];
+        }
+
         if (intent) {
-            const isTaxonomyTerm = intent.refinements.some(r => labelLower.includes(r.toLowerCase())) ||
-                                   intent.subcontexts.some(s => labelLower.includes(s.toLowerCase()));
+            const refinements = intent.refinements || intent.tags || [];
+            const subcontexts = intent.subcontexts || [];
+            const nodeLinks = intent.nodeLinks || intent.node_links || [];
+            
+            const isTaxonomyTerm = refinements.some(r => labelLower.includes(r.toLowerCase())) ||
+                                   subcontexts.some(s => labelLower.includes(s.toLowerCase()));
             
             if (isTaxonomyTerm) {
                 const companyContent = (
@@ -196,16 +207,16 @@ function isMatch(c, opt, context, subContextsReq, noCateringSelected, taxonomyDa
                     (c.profiling?.core?.node_links?.join(' ') || '')
                 ).toLowerCase();
                 
-                const taxonomyMatch = intent.refinements.concat(intent.subcontexts).some(term => {
+                const taxonomyMatch = refinements.concat(subcontexts).some(term => {
                     const t = term.toLowerCase();
                     return labelLower.includes(t) && companyContent.includes(t);
                 });
                 if (taxonomyMatch) isProfiledMatch = true;
             }
 
-            if (!isProfiledMatch && intent.nodeLinks) {
+            if (!isProfiledMatch && nodeLinks.length > 0) {
                 const links = c.profiling?.core?.node_links || [];
-                if (intent.nodeLinks.some(nl => links.includes(nl))) {
+                if (nodeLinks.some(nl => links.includes(nl))) {
                     const isTila = labelLower.includes('tila') && !labelLower.includes('tilaisuus');
                     const isVenueIntent = targetIntentId.startsWith('VENUE_');
                     if (isTila || isVenueIntent || (opt.tags && opt.tags.some(t => {
