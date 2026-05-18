@@ -137,3 +137,54 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, 2500); // Odotetaan 2.5s jotta allCompanies ehtii latautua
 });
+
+// Etusivun hero-kuvan slideshow
+document.addEventListener('DOMContentLoaded', () => {
+    const heroSlideshow = document.getElementById('hero-slideshow');
+    if (!heroSlideshow) return;
+
+    const images = [
+        'otsikkokuvat/hero-kuva.jpg',
+        'otsikkokuvat/kuva-2478.jpg',
+        'otsikkokuvat/kuva-2527 (1).jpg',
+        'otsikkokuvat/kuva-2589 (1).jpg'
+    ];
+
+    let currentIndex = 0;
+
+    function nextImage() {
+        currentIndex = (currentIndex + 1) % images.length;
+        const nextSrc = images[currentIndex];
+
+        const currentImg = heroSlideshow.querySelector('.hero-nature-img.active');
+        
+        const newImg = document.createElement('img');
+        newImg.src = nextSrc;
+        newImg.alt = "Laukaa maisema";
+        newImg.className = "hero-nature-img";
+        
+        heroSlideshow.appendChild(newImg);
+        
+        setTimeout(() => {
+            if (currentImg) {
+                currentImg.classList.remove('active');
+                currentImg.classList.add('prev');
+            }
+            newImg.classList.add('active');
+            
+            setTimeout(() => {
+                if (currentImg) {
+                    const parent = currentImg.parentNode;
+                    if (parent && parent.tagName.toLowerCase() === 'picture') {
+                        parent.parentNode.removeChild(parent);
+                    } else if (parent) {
+                        parent.removeChild(currentImg);
+                    }
+                }
+            }, 1500);
+        }, 50);
+    }
+
+    // Vaihdetaan kuva 6 sekunnin välein
+    setInterval(nextImage, 6000);
+});
