@@ -249,6 +249,86 @@ class NetworkMap {
                 });
                 sidebarContent.appendChild(stepSection);
             });
+
+            // Hae ja näytä suositukset (Next steps) valintojen perusteella
+            if (this.selections.options.size > 0 && window.getRecommendations) {
+                const selectionsArr = [];
+                this.selections.options.forEach(optId => {
+                    const [nId, stepId, idx] = optId.split('-');
+                    const s = need.steps.find(st => st.id === stepId);
+                    if (s) {
+                        selectionsArr.push(s.options[parseInt(idx)]);
+                    }
+                });
+
+                const needToProfilingMap = {
+                    'haat': 'events_and_celebrations',
+                    'yritysjuhlat': 'events_and_celebrations',
+                    'yritystilaisuudet': 'business_events',
+                    'syntymapaivat': 'events_and_celebrations',
+                    'muutto': 'moving_and_housing',
+                    'remontti': 'construction_and_maintenance',
+                    'mokkipalvelut': 'cottage_services',
+                    'taloyhtion-huolto': 'housing_company_and_contracts',
+                    'hautajaiset': 'funerals_and_memorials',
+                    'yrityksen-perustaminen': 'startup_services',
+                    'yrityksen-kehittaminen': 'business_growth',
+                    'terveys-ja-hyvinvointi': 'wellbeing_and_beauty',
+                    'liikunta-ja-vapaaaika': 'wellbeing_and_beauty'
+                };
+                const profilingKey = needToProfilingMap[needId] || need.profilointi_context || 'vapaa-aika';
+                
+                const recommendations = window.getRecommendations(
+                    needId, 
+                    profilingKey, 
+                    selectionsArr, 
+                    this.data.companies, 
+                    this.data.taxonomy, 
+                    this.data.needs, 
+                    window.i18n
+                );
+
+                if (recommendations && recommendations.length > 0) {
+                    const recSection = document.createElement('div');
+                    recSection.className = 'sidebar-section';
+                    recSection.innerHTML = `<h3 data-i18n="palvelu_next_steps">Seuraavaksi saatat tarvita myös näitä:</h3><div class="selection-list" style="display: flex; flex-wrap: wrap; gap: 6px; flex-direction: row;"></div>`;
+                    const recList = recSection.querySelector('.selection-list');
+                    
+                    recommendations.forEach(rec => {
+                        const badge = document.createElement('span');
+                        badge.style.display = 'inline-block';
+                        badge.style.padding = '4px 10px';
+                        badge.style.background = '#e0f2fe';
+                        badge.style.border = '1px solid #7dd3fc';
+                        badge.style.borderRadius = '20px';
+                        badge.style.fontSize = '0.8rem';
+                        badge.style.fontWeight = '600';
+                        badge.style.color = '#0369a1';
+                        badge.style.cursor = 'pointer';
+                        badge.textContent = rec;
+                        badge.onclick = () => {
+                            const lowerQuery = rec.toLowerCase();
+                            let foundNeedId = null;
+                            if (typeof window.NEEDS_CONFIG !== 'undefined') {
+                                for (const [id, config] of Object.entries(window.NEEDS_CONFIG)) {
+                                    if (id.toLowerCase() === lowerQuery || (config.title && (config.title.fi || config.title).toLowerCase() === lowerQuery)) {
+                                        foundNeedId = id;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (foundNeedId) {
+                                window.location.href = `palvelu.html?id=${foundNeedId}`;
+                            } else {
+                                window.location.href = `koko-laukaa.html?q=${encodeURIComponent(rec)}`;
+                            }
+                        };
+                        recList.appendChild(badge);
+                    });
+                    
+                    sidebarContent.appendChild(recSection);
+                }
+            }
         }
 
         if (window.i18n) i18n.translatePage();
