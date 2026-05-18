@@ -10,4 +10,4 @@
                     </div>
                     <a href="${a.link}" target="_blank" class="btn-fb">Avaa Facebookissa →</a>
                 </article>
-            `).join("")}function formatDate(a){return new Date(a).toLocaleDateString("fi-FI",{day:"numeric",month:"short"})}function checkUrlParam(){let e=new URLSearchParams(window.location.search).get("id");e&&setTimeout(()=>{let a=document.getElementById("ad-"+e);a&&(a.scrollIntoView({behavior:"smooth",block:"ce
+            `).join("")}function formatDate(a){return new Date(a).toLocaleDateString("fi-FI",{day:"numeric",month:"short"})}function checkUrlParam(){let e=new URLSearchParams(window.location.search).get("id");e&&setTimeout(()=>{let a=document.getElementById("ad-"+e);a&&(a.scrollIntoView({behavior:"smooth",block:"center"}),a.classList.add("highlighted"),setTimeout(()=>{a.classList.remove("highlighted")},4e3))},300)}fetchAds()</script><script src="script.fd43a7c0.js?v=20260301-1"></script></body></html>

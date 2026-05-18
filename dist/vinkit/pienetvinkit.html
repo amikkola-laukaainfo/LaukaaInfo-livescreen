@@ -9,4 +9,4 @@
                         ${e.lisatiedot?`<div class="tip-extra">(${e.lisatiedot})</div>`:""}
                     </div>
                 </div>
-            `).join(""),setTimeout(()=>{var t=document.documentElement.scrollHeight;window.parent.p
+            `).join(""),setTimeout(()=>{var t=document.documentElement.scrollHeight;window.parent.postMessage({type:"resizeTipsIframe",height:t},"*")},100)}}else e.style.display="none"}document.addEventListener("DOMContentLoaded",loadTips)</script></body></html>

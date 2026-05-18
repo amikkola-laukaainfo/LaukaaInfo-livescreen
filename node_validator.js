@@ -38,7 +38,7 @@ const needsConfigRaw = fs.readFileSync('needs_config.js', 'utf8');
 const NEEDS_CONFIG = eval(needsConfigRaw + '; NEEDS_CONFIG;');
 
 global.allCompanies = companiesRaw.map(c => {
-    return { ...c, profiling: profiling[c.id] || {} };
+    return { ...c, profiling: profiling.profiles ? profiling.profiles[c.id] : (profiling[c.id] || {}) };
 });
 
 const goldenData = readJsonClean('goldenQueries.json');
@@ -97,6 +97,7 @@ async function runValidation() {
         });
 
         const foundIds = filtered.map(c => c.id);
+        console.log("  Found IDs:", foundIds);
         const expectedIds = test.expected.topIds || [];
         
         let testPassed = true;
