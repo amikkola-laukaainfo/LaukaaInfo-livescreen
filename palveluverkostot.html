@@ -297,6 +297,30 @@
         }
 
         @media print {
+            /* Piilotetaan kaikki paitsi raportti, jos se on auki */
+            body:has(#report-modal.active) > :not(#report-modal) {
+                display: none !important;
+            }
+            
+            /* Jos raportti on auki, poistetaan overlay-tausta ja varjot */
+            body:has(#report-modal.active) #report-modal {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                background: white;
+            }
+            body:has(#report-modal.active) .lki-modal-container {
+                box-shadow: none;
+                border: none;
+                max-width: 100%;
+                padding: 0;
+            }
+            body:has(#report-modal.active) .lki-modal-close {
+                display: none; /* Ei tulosteta sulkemisnappia */
+            }
+
+            /* Normaalit tulostustyylit (jos raportti ei ole auki) */
             .no-print, .top-nav, .back-nav, .networks-hero, .network-scenarios-grid, 
             .summary-drawer, footer, .btn-radar, .partner-toggle-container {
                 display: none !important;
