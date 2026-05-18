@@ -468,9 +468,15 @@ class NetworkMap {
     // Graph Helpers
     addNode(data) {
         if (this.cy.getElementById(data.id).length === 0) {
+            // Assign a small random initial position so cose layout can repel them properly instead of getting stuck at exactly (0,0)
+            const position = {
+                x: Math.random() * 100 - 50,
+                y: Math.random() * 100 - 50
+            };
             this.cy.add({
                 group: 'nodes',
-                data: data
+                data: data,
+                position: position
             });
         }
     }
