@@ -11893,7 +11893,7 @@
     },
     "company-310": {
         "name": "Suomen säkkikauppa",
-        "tags": "",
+        "tags": "polttopuut",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 5,
@@ -11903,7 +11903,7 @@
                 "business-growth": 12,
                 "moving-and-housing": 38,
                 "construction-and-maintenance": 82,
-                "cottage-services": 82,
+                "cottage-services": 100,
                 "accommodation": 0,
                 "wellbeing-and-beauty": 0,
                 "housing-company-and-contracts": 82
@@ -11957,7 +11957,8 @@
                 "suunnittelija / arkkitehti",
                 "laituritarvikkeet / huolto",
                 "taksi / kuljetus",
-                "kertaluonteinen remontti"
+                "kertaluonteinen remontti",
+                "polttopuut"
             ],
             "sub_contexts": [
                 "suursäkit",
@@ -11981,12 +11982,14 @@
             "intent_codes": [
                 "HOME_MAINTENANCE",
                 "HOME_COTTAGE",
-                "HOME_MOVING"
+                "HOME_MOVING",
+                "COTTAGE_FIREWOOD"
             ],
             "intent_scores": {
                 "HOME_MAINTENANCE": 82,
                 "HOME_COTTAGE": 76,
-                "HOME_MOVING": 38
+                "HOME_MOVING": 38,
+                "COTTAGE_FIREWOOD": 100
             }
         },
         "categories": {
