@@ -103,10 +103,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // Ensimmäinen päivitys
-            updateCarousel();
-            // Päivitä 5 sekunnin välein
-            setInterval(updateCarousel, 5000);
+            // Ensimmäinen päivitys ja ajastin vain jos löytyy yrityksiä
+            if (withWebsite.length > 0) {
+                updateCarousel();
+                setInterval(updateCarousel, 5000);
+            } else {
+                // Näytetään geneerinen teksti jos ei nettisivullisia yrityksiä
+                if (nameEl) nameEl.textContent = 'Laukaan yritykset';
+                if (categoryEl) categoryEl.textContent = 'Palvelut';
+            }
 
         } catch (e) {
             console.warn("Company carousel error:", e);
