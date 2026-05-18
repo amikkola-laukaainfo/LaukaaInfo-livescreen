@@ -468,10 +468,10 @@ class NetworkMap {
     // Graph Helpers
     addNode(data) {
         if (this.cy.getElementById(data.id).length === 0) {
-            // Assign a small random initial position so cose layout can repel them properly instead of getting stuck at exactly (0,0)
+            // Laajempi satunnainen sijainti, jotta fysiikka ehtii reagoida (elävämpi efekti)
             const position = {
-                x: Math.random() * 100 - 50,
-                y: Math.random() * 100 - 50
+                x: Math.random() * 400 - 200,
+                y: Math.random() * 400 - 200
             };
             this.cy.add({
                 group: 'nodes',
@@ -502,7 +502,9 @@ class NetworkMap {
             animate: true,
             randomize: false,
             componentSpacing: 100,
-            nodeRepulsion: 4000,
+            nodeRepulsion: 400000,
+            nodeOverlap: 40,
+            idealEdgeLength: 120,
             edgeElasticity: 100,
             nestingFactor: 5
         });
@@ -522,7 +524,9 @@ class NetworkMap {
             animate: true,
             randomize: false,
             componentSpacing: 100,
-            nodeRepulsion: 4000,
+            nodeRepulsion: 400000,
+            nodeOverlap: 40,
+            idealEdgeLength: 120,
             edgeElasticity: 100,
             nestingFactor: 5,
             stop: () => {
