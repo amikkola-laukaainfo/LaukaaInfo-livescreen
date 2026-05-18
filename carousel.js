@@ -9,8 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const companies = window.allCompanies || [];
             const withWebsite = companies.filter(c => c.nettisivu || c.linkki || c.verkkosivu || c.website);
-
-            if (withWebsite.length === 0) return;
+            
+            console.log('Carousel: Yrityksiä yhteensä:', companies.length);
+            console.log('Carousel: Yrityksiä joilla nettisivu:', withWebsite.length);
+            
+            // Luodaan kieleke joka tapauksessa, jotta nähdään toimiiko se
 
             // Etsi tai luo widget
             let widget = document.getElementById('company-carousel-widget');
