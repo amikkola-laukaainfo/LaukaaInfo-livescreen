@@ -55,6 +55,10 @@ class NetworkMap {
 
         const companyMap = {};
         [...(tempData.results || []), ...(liveData.results || [])].forEach(c => {
+            // Yhdistetään profilointidata yritysolioon
+            if (profData.profiles[c.id]) {
+                c.profiling = profData.profiles[c.id];
+            }
             companyMap[c.id] = c;
         });
         this.data.companies = Object.values(companyMap);
