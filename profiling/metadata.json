@@ -286,7 +286,9 @@
         "company-307": "venues-and-events.json",
         "company-308": "venues-and-events.json",
         "company-309": "media-and-marketing.json",
-        "company-310": "property-and-maintenance.json"
+        "company-310": "property-and-maintenance.json",
+        "company-312": "venues-and-events.json",
+        "company-311": "property-and-maintenance.json"
     },
     "files": [
         "venues-and-events.json",

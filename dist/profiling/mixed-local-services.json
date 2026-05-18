@@ -261,6 +261,33 @@
                 "group_bookings": false,
                 "refinement_tags": [],
                 "collaborated_with": []
+            },
+            "animals": {
+                "emergency_service": false,
+                "home_visits": false,
+                "online_booking": false,
+                "specialization": [],
+                "grooming_available": false,
+                "boarding_available": false,
+                "supplies_sold": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "family_and_children": {
+                "daycare_available": false,
+                "hobby_activities": false,
+                "educational_services": false,
+                "family_therapy": false,
+                "equipment_rental": false,
+                "accessible_with_stroller": false,
+                "baby_changing_room": false,
+                "kids_play_area": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "auto_services": {
+                "replacement_car_available": false,
+                "collaborated_with": []
             }
         },
         "meta": {
@@ -534,6 +561,33 @@
                 "group_bookings": false,
                 "refinement_tags": [],
                 "collaborated_with": []
+            },
+            "animals": {
+                "emergency_service": false,
+                "home_visits": false,
+                "online_booking": false,
+                "specialization": [],
+                "grooming_available": false,
+                "boarding_available": false,
+                "supplies_sold": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "family_and_children": {
+                "daycare_available": false,
+                "hobby_activities": false,
+                "educational_services": false,
+                "family_therapy": false,
+                "equipment_rental": false,
+                "accessible_with_stroller": false,
+                "baby_changing_room": false,
+                "kids_play_area": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "auto_services": {
+                "replacement_car_available": false,
+                "collaborated_with": []
             }
         },
         "meta": {
@@ -778,6 +832,33 @@
                 "group_bookings": false,
                 "refinement_tags": [],
                 "collaborated_with": []
+            },
+            "animals": {
+                "emergency_service": false,
+                "home_visits": false,
+                "online_booking": false,
+                "specialization": [],
+                "grooming_available": false,
+                "boarding_available": false,
+                "supplies_sold": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "family_and_children": {
+                "daycare_available": false,
+                "hobby_activities": false,
+                "educational_services": false,
+                "family_therapy": false,
+                "equipment_rental": false,
+                "accessible_with_stroller": false,
+                "baby_changing_room": false,
+                "kids_play_area": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "auto_services": {
+                "replacement_car_available": false,
+                "collaborated_with": []
             }
         },
         "meta": {
@@ -804,7 +885,8 @@
                 "liikunta-ja-vapaaaika": 0,
                 "accommodation": 0,
                 "family-and-children": 20,
-                "auto-services": 85
+                "auto-services": 85,
+                "service-partner": 70
             },
             "priority_score": 0,
             "service_area": {
@@ -1024,6 +1106,33 @@
                 "bridal_services": false,
                 "group_bookings": false,
                 "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "animals": {
+                "emergency_service": false,
+                "home_visits": false,
+                "online_booking": false,
+                "specialization": [],
+                "grooming_available": false,
+                "boarding_available": false,
+                "supplies_sold": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "family_and_children": {
+                "daycare_available": false,
+                "hobby_activities": false,
+                "educational_services": false,
+                "family_therapy": false,
+                "equipment_rental": false,
+                "accessible_with_stroller": false,
+                "baby_changing_room": false,
+                "kids_play_area": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "auto_services": {
+                "replacement_car_available": false,
                 "collaborated_with": []
             }
         },
@@ -1265,6 +1374,33 @@
                 "bridal_services": false,
                 "group_bookings": false,
                 "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "animals": {
+                "emergency_service": false,
+                "home_visits": false,
+                "online_booking": false,
+                "specialization": [],
+                "grooming_available": false,
+                "boarding_available": false,
+                "supplies_sold": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "family_and_children": {
+                "daycare_available": false,
+                "hobby_activities": false,
+                "educational_services": false,
+                "family_therapy": false,
+                "equipment_rental": false,
+                "accessible_with_stroller": false,
+                "baby_changing_room": false,
+                "kids_play_area": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "auto_services": {
+                "replacement_car_available": false,
                 "collaborated_with": []
             }
         },
