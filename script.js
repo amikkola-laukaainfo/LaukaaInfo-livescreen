@@ -1984,9 +1984,8 @@ function showSuggestions() {
     // 2. Collect Categories and Tags from context
     const categories = [...new Set(companiesInContext.map(c => c.kategoria))].filter(Boolean);
     const tags = [...new Set(companiesInContext.flatMap(c => {
-        const profilingIntents = c.profiling?.core?.intent_codes || [];
         const profilingSubContexts = c.profiling?.core?.sub_contexts || [];
-        const combined = `${c.tags || ''},${c.palvelutapa || ''},${profilingIntents.join(',')},${profilingSubContexts.join(',')}`;
+        const combined = `${c.tags || ''},${c.palvelutapa || ''},${profilingSubContexts.join(',')}`;
         return combined.split(',').map(t => t.trim()).filter(Boolean);
     }))];
 
