@@ -1,1 +1,550 @@
-<!DOCTYPE html><html lang="fi"><head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title data-i18n="networks_page_title">Palveluverkostot | LaukaaInfo</title><link rel="icon" href="logo.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.7a1d377b.css?v=20260512"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"><link rel="stylesheet" href="modal.7a1d377b.css"><script src="translations.7a1d377b.js?v=20260512"></script><style>.location-bar{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.2);backdrop-filter:blur(10px);padding:8px 16px;border-radius:50px;margin-top:1.5rem;border:1px solid rgba(255,255,255,.3)}.location-bar input{background:0 0;border:none;color:#fff;font-weight:600;font-size:.9rem;width:180px;outline:0}.location-bar input::placeholder{color:rgba(255,255,255,.7)}.location-bar .btn-locate{background:#fff;color:var(--primary-blue);border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .2s;font-size:1.2rem}.networks-hero{background:linear-gradient(135deg,var(--secondary-blue) 0,var(--primary-blue) 100%);color:#fff;padding:4rem 1.5rem;text-align:center;border-bottom-left-radius:40px;border-bottom-right-radius:40px;margin-bottom:3rem}.networks-hero h1{font-family:var(--accent-font);font-size:3rem;font-weight:900;margin-bottom:1rem}.networks-hero p{font-size:1.2rem;opacity:.9;max-width:600px;margin:0 auto;line-height:1.6}.back-nav{max-width:1200px;margin:2rem auto 0;padding:0 1.5rem}.network-scenarios-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;max-width:1200px;margin:0 auto 5rem;padding:0 1.5rem}.scenario-card{background:#fff;padding:2rem;border-radius:24px;box-shadow:0 10px 30px rgba(0,0,0,.05);text-decoration:none;color:inherit;transition:all .3s cubic-bezier(.4,0,.2,1);border:2px solid transparent;display:flex;flex-direction:column;align-items:center;text-align:center}.scenario-card:hover{transform:translateY(-10px);border-color:var(--primary-blue);box-shadow:0 20px 50px rgba(0,51,102,.1)}.scenario-card h3{font-family:var(--accent-font);font-size:1.4rem;color:var(--primary-blue);margin-bottom:.8rem}.scenario-card p{color:#4a5568;font-size:.95rem;line-height:1.4}.chain-section{max-width:1000px;margin:6rem auto;padding:0 1.5rem;scroll-margin-top:100px}.chain-header{text-align:center;margin-bottom:4rem}.chain-header h2{font-family:var(--accent-font);font-size:2.5rem;color:var(--primary-blue);margin-bottom:1rem}.chain-container{position:relative;padding-left:40px;border-left:4px dashed #e2e8f0;margin-left:20px}.chain-step{position:relative;margin-bottom:4rem}.chain-step::before{content:'';position:absolute;left:-54px;top:0;width:24px;height:24px;background:#fff;border:4px solid var(--primary-blue);border-radius:50%;z-index:2}.step-label{display:inline-block;background:#e0f2fe;color:var(--primary-blue);padding:4px 12px;border-radius:50px;font-size:.85rem;font-weight:700;margin-bottom:1rem;text-transform:uppercase}.partner-list{display:flex;gap:1.5rem;overflow-x:auto;padding:1rem .5rem 2rem;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:var(--primary-blue) transparent}.partner-link{flex:0 0 280px;scroll-snap-align:start;display:flex;align-items:center;justify-content:space-between;padding:1.5rem;background:#fff;border-radius:24px;box-shadow:0 4px 12px rgba(0,0,0,.05);border:2px solid transparent;transition:all .3s ease;position:relative;text-decoration:none;color:inherit}.partner-link.selected{border-color:var(--primary-blue);background:#f0f7ff}.partner-link.recommended{border-color:#fbbf24;background:#fffbeb}.partner-link.recommended::before{content:'✨ SUOSITUS';position:absolute;top:-12px;left:20px;background:#fbbf24;color:#78350f;font-size:.7rem;font-weight:900;padding:2px 10px;border-radius:50px;z-index:10}.partner-name{display:block;font-size:1.1rem;font-weight:800;color:var(--primary-blue)}.summary-drawer{position:fixed;bottom:0;left:0;right:0;background:#fff;box-shadow:0 -10px 30px rgba(0,0,0,.1);padding:1.5rem;z-index:1000;transform:translateY(100%);transition:transform .4s ease;border-top-left-radius:32px;border-top-right-radius:32px}.summary-drawer.active{transform:translateY(0)}.summary-content{max-width:1000px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:2rem}#selected-partners-list{display:flex;gap:1rem;overflow-x:auto;flex-grow:1}.selected-item{background:#f1f5f9;padding:8px 16px;border-radius:50px;font-size:.9rem;font-weight:700;color:var(--primary-blue);white-space:nowrap}.dynamic-suggestions{background:#f8fafc;border-top:1px dashed #cbd5e1;padding-top:2rem;margin-top:2rem}@media print{body:has(#report-modal.active)>:not(#report-modal){display:none!important}body:has(#report-modal.active) #report-modal{position:absolute;left:0;top:0;width:100%;background:#fff}body:has(#report-modal.active) .lki-modal-container{box-shadow:none;border:none;max-width:100%;padding:0}body:has(#report-modal.active) .lki-modal-close{display:none}.back-nav,.btn-radar,.network-scenarios-grid,.networks-hero,.no-print,.partner-toggle-container,.summary-drawer,.top-nav,footer{display:none!important}.chain-section{margin:0;padding:0;background:#fff!important}}@media (max-width:768px){.summary-content{flex-direction:column;gap:1rem}.networks-hero h1{font-size:2.2rem}}</style></head><body><nav class="top-nav"><div class="nav-container"><a href="index.html" class="nav-logo"><img src="logo.png" alt="LaukaaInfo Logo"> <span data-i18n="hero_title">LaukaaInfo</span></a><div class="lang-switcher"><button class="lang-btn" onclick='i18n.setLanguage("fi")' data-lang="fi">FI</button> <button class="lang-btn" onclick='i18n.setLanguage("en")' data-lang="en">EN</button></div></div></nav><div class="back-nav"><a href="index.html" class="btn-back" data-i18n="btn_back">&larr; Takaisin etusivulle</a></div><header class="networks-hero"><h1 data-i18n="networks_hero_title">Palveluverkostojen esimerkkejä</h1><p data-i18n="networks_hero_desc">LaukaaInfo yhdist&auml;&auml; paikalliset toimijat saumattomiksi palveluketjuiksi. Yksi tarve tuo mukanaan kaikki tarvittavat asiantuntijat.</p><div class="location-bar"><span style="font-size:1.2rem">📍</span> <input type="text" id="user-location-input" placeholder="Sijaintisi (esim. Laukaa)" data-i18n-placeholder="placeholder_your_location"> <button class="btn-locate" id="locate-me-btn">🎯</button></div><div style="margin-top:2rem"><a href="verkostokartta.html" class="btn-radar" style="background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);text-decoration:none;display:inline-block;padding:12px 24px;border-radius:50px;font-weight:700;backdrop-filter:blur(10px);transition:all .3s" onmouseover='this.style.background="white",this.style.color="var(--primary-blue)"' onmouseout='this.style.background="rgba(255,255,255,0.2)",this.style.color="white"'>✨ Tutki verkostoa semanttisesti &raquo;</a></div><div id="location-status" style="margin-top:10px;font-size:.8rem;opacity:.8"></div></header><main><section class="network-scenarios-grid"><a href="#scenario-weddings" class="scenario-card"><h3 data-i18n="scenario_weddings_title">H&auml;&auml;t ja suuret juhlat</h3><p data-i18n="scenario_weddings_short">Kaikki juhlatilasta tarjoiluun ja h&auml;&auml;kuvaukseen.</p></a><a href="#scenario-moving" class="scenario-card"><h3 data-i18n="scenario_moving_title">Muuttoprosessi</h3><p data-i18n="scenario_moving_short">Helpota asunnon vaihtoa logistiikan ja siivouksen avulla.</p></a><a href="#scenario-cottage" class="scenario-card"><h3 data-i18n="scenario_cottage_title">M&ouml;kin yll&auml;pito</h3><p data-i18n="scenario_cottage_short">Talkkaripalvelut, nuohous ja remontit.</p></a><a href="#scenario-startup" class="scenario-card"><h3 data-i18n="scenario_startup_title">Startupista kasvuun</h3><p data-i18n="scenario_startup_short">Tukea yrityksen perustamiseen ja br&auml;nd&auml;ykseen.</p></a><a href="#scenario-tyhy" class="scenario-card"><h3 data-i18n="scenario_tyhy_title">TYHY ja tiimip&auml;iv&auml;t</h3><p data-i18n="scenario_tyhy_short">El&auml;myksi&auml;, hyvinvointia ja valmennusta.</p></a></section><section id="scenario-weddings" class="chain-section"><div class="chain-header"><h2 data-i18n="scenario_weddings_title">H&auml;&auml;t ja suuret juhlat</h2><p data-i18n="scenario_weddings_desc">Suunnittele unelmiesi juhlat Laukaassa askel askeleelta.</p></div><div class="chain-container"><div class="chain-step" data-nodes="JUHLATILA" data-tags="juhlatila"><span class="step-label" data-i18n="step_1">Vaihe 1</span><h4 data-i18n="step_1_title">Juhlatila ja tunnelma</h4><div class="partner-list"></div></div><div class="chain-step" data-nodes="CATERING" data-tags="pitopalvelu,catering,kukkakauppa,kukat"><span class="step-label" data-i18n="step_2">Vaihe 2</span><h4 data-i18n="step_2_title">Maut ja kukkaloisto</h4><div class="partner-list"></div></div><div class="chain-step" data-intents="VALOKUVAUS,VIDEOKUVAUS" data-tags="valokuvaaja,videokuvaaja,digitointi,digitoimisto,valokuvaus,videokuvaus,studio,kuvaaja,kuvaus"><span class="step-label" data-i18n="step_3">Vaihe 3</span><h4 data-i18n="step_3_title">Muistojen taltiointi</h4><div class="partner-list"></div></div><div class="chain-step" data-nodes="MAJOITUS" data-tags="majoitus"><span class="step-label" data-i18n="step_4">Vaihe 4</span><h4 data-i18n="step_4_title">Majoitus vieraille</h4><div class="partner-list"></div></div><div class="chain-step dynamic-suggestions" style="display:none"><span class="step-label" data-i18n="related_services">Liittyv&auml;t palvelut</span><div class="partner-list suggestion-slot"></div></div></div></section><section id="scenario-moving" class="chain-section" style="background:#f8fbff;padding:6rem 1.5rem;border-radius:60px"><div class="chain-header"><h2 data-i18n="scenario_moving_title">Muuttoprosessi</h2></div><div class="chain-container"><div class="chain-step" data-intents="LEGAL_SERVICES" data-tags="lakiasiaintoimisto,notariaatti,kiinteist&ouml;nv&auml;litys"><span class="step-label" data-i18n="step_legal">Vaihe 1</span><h4 data-i18n="step_moving_1_title">Lakiturva ja sopimukset</h4><div class="partner-list"></div></div><div class="chain-step" data-intents="MOVING_HELP,LOGISTICS" data-tags="muuttoapu,kuljetus,per&auml;k&auml;rry"><span class="step-label" data-i18n="step_logistics">Vaihe 2</span><h4 data-i18n="step_moving_2_title">Logistiikka ja kuljetus</h4><div class="partner-list"></div></div></div></section><section id="scenario-cottage" class="chain-section"><div class="chain-header"><h2 data-i18n="scenario_cottage_title">M&ouml;kin yll&auml;pito</h2></div><div class="chain-container"><div class="chain-step" data-intents="HOME_MAINTENANCE,YARD_WORK,CLEANING_SERVICES,CHIMNEY_SWEEP" data-tags="talkkari,nuohous,lumityöt,remontti,kotipalvelu,siivous,pienremontti,maalaus,rakennus,sähköasennus,putkiasennus,kiinteistöhuolto"><span class="step-label" data-i18n="step_maintenance">Vaihe 1</span><h4 data-i18n="step_cottage_1_title">Yll&auml;pito ja huolto</h4><div class="partner-list"></div></div></div></section><section id="scenario-startup" class="chain-section" style="background:#fdf2f8;padding:6rem 1.5rem;border-radius:60px"><div class="chain-header"><h2 data-i18n="scenario_startup_title">Startupista kasvuun</h2></div><div class="chain-container"><div class="chain-step" data-intents="BUSINESS_CONSULTING,MARKETING_SERVICES,VALOKUVAUS" data-tags="mainostoimisto,logosuunnittelu,br&auml;nd&auml;ys,valokuvaaja,videokuvaaja,digimarkkinointi,digimedia,graafinen,suunnittelu,suunnittelija,media,studio,valokuvaus"><span class="step-label" data-i18n="step_business">Vaihe 1</span><h4 data-i18n="step_startup_1_title">Neuvonta ja visuaalinen ilme</h4><div class="partner-list"></div></div></div></section><section id="scenario-tyhy" class="chain-section"><div class="chain-header"><h2 data-i18n="scenario_tyhy_title">TYHY ja tiimip&auml;iv&auml;t</h2></div><div class="chain-container"><div class="chain-step" data-intents="ACTIVITY_SERVICES,SAUNA" data-tags="aktiviteetit,el&auml;mys,sauna,savusauna"><span class="step-label" data-i18n="step_activities">Vaihe 1</span><h4 data-i18n="step_tyhy_1_title">Aktiviteetit ja rentoutus</h4><div class="partner-list"></div></div><div class="chain-step" data-intents="WELLBEING_SERVICES,COACHING" data-tags="luennot,valmennus,hyvinvointi"><span class="step-label" data-i18n="step_wellness">Vaihe 2</span><h4 data-i18n="step_tyhy_2_title">Hyvinvointi ja oppiminen</h4><div class="partner-list"></div></div></div></section><div style="text-align:center;margin-bottom:5rem;display:flex;justify-content:center;gap:1rem"><a href="index.html#palveluverkosto" class="btn-radar" style="background:var(--primary-blue);text-decoration:none;display:inline-block" data-i18n="btn_create_custom">Luo oma verkosto &raquo;</a> <a href="verkostokartta.html" class="btn-radar" style="background:var(--secondary-blue);text-decoration:none;display:inline-block">Semanttinen verkosto &raquo;</a></div></main><footer><div class="footer-content" style="text-align:center;padding:2rem"><p>&copy; 2026 LaukaaInfo &ndash; &Auml;lykk&auml;&auml;t palveluketjut</p></div></footer><div id="network-summary" class="summary-drawer"><div class="summary-content"><h3 data-i18n="your_network_title">Oma verkostosi</h3><div id="selected-partners-list"></div><button class="btn-radar" onclick="window.networkBuilder.printPlan()" data-i18n="btn_print_plan">Tallenna suunnitelma</button></div></div><div id="report-modal" class="lki-modal-overlay"><div class="lki-modal-container" style="max-width:800px;padding:0;display:flex;flex-direction:column"><button class="lki-modal-close" onclick='document.getElementById("report-modal").classList.remove("active")'>&times;</button><div id="report-content" style="padding:3rem;overflow-y:auto;flex:1"></div><div style="text-align:center;padding:2rem;background:#f8fafc;border-top:1px solid #eee" class="no-print"><button class="btn-radar" onclick="window.print()">Tulosta / Tallenna PDF</button></div></div></div><script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script><script src="searchEngine.7a1d377b.js"></script><script src="script.7a1d377b.js"></script><script src="modal.7a1d377b.js"></script><script src="networkBuilder.7a1d377b.js"></script><script>document.addEventListener("DOMContentLoaded",()=>{window.i18n&&i18n.translatePage(),document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();e=document.querySelector(this.getAttribute("href"));e&&e.scrollIntoView({behavior:"smooth"})})})})</script></body></html>
+<!DOCTYPE html>
+<html lang="fi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="networks_page_title">Palveluverkostot | LaukaaInfo</title>
+    <link rel="icon" href="logo.png">
+
+    <!-- Fonts & Styles -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css?v=20260512">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="modal.css">
+    <script src="translations.js?v=20260512"></script>
+    <style>
+        .location-bar {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 50px;
+            margin-top: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .location-bar input {
+            background: transparent;
+            border: none;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            width: 180px;
+            outline: none;
+        }
+
+        .location-bar input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .location-bar .btn-locate {
+            background: white;
+            color: var(--primary-blue);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+            font-size: 1.2rem;
+        }
+
+        .networks-hero {
+            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
+            color: white;
+            padding: 4rem 1.5rem;
+            text-align: center;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            margin-bottom: 3rem;
+        }
+
+        .networks-hero h1 {
+            font-family: var(--accent-font);
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .networks-hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .back-nav {
+            max-width: 1200px;
+            margin: 2rem auto 0;
+            padding: 0 1.5rem;
+        }
+
+        .network-scenarios-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto 5rem;
+            padding: 0 1.5rem;
+        }
+
+        .scenario-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .scenario-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary-blue);
+            box-shadow: 0 20px 50px rgba(0, 51, 102, 0.1);
+        }
+
+        .scenario-card h3 {
+            font-family: var(--accent-font);
+            font-size: 1.4rem;
+            color: var(--primary-blue);
+            margin-bottom: 0.8rem;
+        }
+
+        .scenario-card p {
+            color: #4a5568;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .chain-section {
+            max-width: 1000px;
+            margin: 6rem auto;
+            padding: 0 1.5rem;
+            scroll-margin-top: 100px;
+        }
+
+        .chain-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .chain-header h2 {
+            font-family: var(--accent-font);
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+
+        .chain-container {
+            position: relative;
+            padding-left: 40px;
+            border-left: 4px dashed #e2e8f0;
+            margin-left: 20px;
+        }
+
+        .chain-step {
+            position: relative;
+            margin-bottom: 4rem;
+        }
+
+        .chain-step::before {
+            content: '';
+            position: absolute;
+            left: -54px;
+            top: 0;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border: 4px solid var(--primary-blue);
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+        .step-label {
+            display: inline-block;
+            background: #e0f2fe;
+            color: var(--primary-blue);
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .partner-list {
+            display: flex;
+            gap: 1.5rem;
+            overflow-x: auto;
+            padding: 1rem 0.5rem 2rem;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-blue) transparent;
+        }
+
+        .partner-link {
+            flex: 0 0 280px;
+            scroll-snap-align: start;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .partner-link.selected {
+            border-color: var(--primary-blue);
+            background: #f0f7ff;
+        }
+
+        .partner-link.recommended {
+            border-color: #fbbf24;
+            background: #fffbeb;
+        }
+
+        .partner-link.recommended::before {
+            content: '✨ SUOSITUS';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #fbbf24;
+            color: #78350f;
+            font-size: 0.7rem;
+            font-weight: 900;
+            padding: 2px 10px;
+            border-radius: 50px;
+            z-index: 10;
+        }
+
+        .partner-name {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--primary-blue);
+        }
+
+        .summary-drawer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            z-index: 1000;
+            transform: translateY(100%);
+            transition: transform 0.4s ease;
+            border-top-left-radius: 32px;
+            border-top-right-radius: 32px;
+        }
+
+        .summary-drawer.active { transform: translateY(0); }
+
+        .summary-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+
+        #selected-partners-list {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            flex-grow: 1;
+        }
+
+        .selected-item {
+            background: #f1f5f9;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            white-space: nowrap;
+        }
+
+        .dynamic-suggestions {
+            background: #f8fafc;
+            border-top: 1px dashed #cbd5e1;
+            padding-top: 2rem;
+            margin-top: 2rem;
+        }
+
+        @media print {
+            /* Piilotetaan kaikki paitsi raportti, jos se on auki */
+            body:has(#report-modal.active) > :not(#report-modal) {
+                display: none !important;
+            }
+            
+            /* Jos raportti on auki, poistetaan overlay-tausta ja varjot */
+            body:has(#report-modal.active) #report-modal {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                background: white;
+            }
+            body:has(#report-modal.active) .lki-modal-container {
+                box-shadow: none;
+                border: none;
+                max-width: 100%;
+                padding: 0;
+            }
+            body:has(#report-modal.active) .lki-modal-close {
+                display: none; /* Ei tulosteta sulkemisnappia */
+            }
+
+            /* Normaalit tulostustyylit (jos raportti ei ole auki) */
+            .no-print, .top-nav, .back-nav, .networks-hero, .network-scenarios-grid, 
+            .summary-drawer, footer, .btn-radar, .partner-toggle-container {
+                display: none !important;
+            }
+            .chain-section { margin: 0; padding: 0; background: white !important; }
+        }
+
+        @media (max-width: 768px) {
+            .summary-content { flex-direction: column; gap: 1rem; }
+            .networks-hero h1 { font-size: 2.2rem; }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="logo.png" alt="LaukaaInfo Logo">
+                <span data-i18n="hero_title">LaukaaInfo</span>
+            </a>
+            <div class="lang-switcher">
+                <button class="lang-btn" onclick="i18n.setLanguage('fi')" data-lang="fi">FI</button>
+                <button class="lang-btn" onclick="i18n.setLanguage('en')" data-lang="en">EN</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="back-nav">
+        <a href="index.html" class="btn-back" data-i18n="btn_back">&larr; Takaisin etusivulle</a>
+    </div>
+
+    <header class="networks-hero">
+        <h1 data-i18n="networks_hero_title">Palveluverkostojen esimerkkejä</h1>
+        <p data-i18n="networks_hero_desc">LaukaaInfo yhdist&auml;&auml; paikalliset toimijat saumattomiksi palveluketjuiksi. Yksi tarve tuo mukanaan kaikki tarvittavat asiantuntijat.</p>
+        
+        <div class="location-bar">
+            <span style="font-size: 1.2rem;">📍</span>
+            <input type="text" id="user-location-input" placeholder="Sijaintisi (esim. Laukaa)" data-i18n-placeholder="placeholder_your_location">
+            <button class="btn-locate" id="locate-me-btn">🎯</button>
+        </div>
+        
+        <div style="margin-top: 2rem;">
+            <a href="verkostokartta.html" class="btn-radar" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); text-decoration: none; display: inline-block; padding: 12px 24px; border-radius: 50px; font-weight: 700; backdrop-filter: blur(10px); transition: all 0.3s;" onmouseover="this.style.background='white'; this.style.color='var(--primary-blue)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'; this.style.color='white'">
+                ✨ Tutki verkostoa semanttisesti &raquo;
+            </a>
+        </div>
+
+        <div id="location-status" style="margin-top: 10px; font-size: 0.8rem; opacity: 0.8;"></div>
+    </header>
+
+    <main>
+        <section class="network-scenarios-grid">
+            <a href="#scenario-weddings" class="scenario-card">
+                <h3 data-i18n="scenario_weddings_title">H&auml;&auml;t ja suuret juhlat</h3>
+                <p data-i18n="scenario_weddings_short">Kaikki juhlatilasta tarjoiluun ja h&auml;&auml;kuvaukseen.</p>
+            </a>
+            <a href="#scenario-moving" class="scenario-card">
+                <h3 data-i18n="scenario_moving_title">Muuttoprosessi</h3>
+                <p data-i18n="scenario_moving_short">Helpota asunnon vaihtoa logistiikan ja siivouksen avulla.</p>
+            </a>
+            <a href="#scenario-cottage" class="scenario-card">
+                <h3 data-i18n="scenario_cottage_title">M&ouml;kin yll&auml;pito</h3>
+                <p data-i18n="scenario_cottage_short">Talkkaripalvelut, nuohous ja remontit.</p>
+            </a>
+            <a href="#scenario-startup" class="scenario-card">
+                <h3 data-i18n="scenario_startup_title">Startupista kasvuun</h3>
+                <p data-i18n="scenario_startup_short">Tukea yrityksen perustamiseen ja br&auml;nd&auml;ykseen.</p>
+            </a>
+            <a href="#scenario-tyhy" class="scenario-card">
+                <h3 data-i18n="scenario_tyhy_title">TYHY ja tiimip&auml;iv&auml;t</h3>
+                <p data-i18n="scenario_tyhy_short">El&auml;myksi&auml;, hyvinvointia ja valmennusta.</p>
+            </a>
+        </section>
+
+        <!-- H&auml;&auml;t -->
+        <section id="scenario-weddings" class="chain-section">
+            <div class="chain-header">
+                <h2 data-i18n="scenario_weddings_title">H&auml;&auml;t ja suuret juhlat</h2>
+                <p data-i18n="scenario_weddings_desc">Suunnittele unelmiesi juhlat Laukaassa askel askeleelta.</p>
+            </div>
+            <div class="chain-container">
+                <div class="chain-step" data-nodes="JUHLATILA" data-tags="juhlatila">
+                    <span class="step-label" data-i18n="step_1">Vaihe 1</span>
+                    <h4 data-i18n="step_1_title">Juhlatila ja tunnelma</h4>
+                    <div class="partner-list"></div>
+                </div>
+                <div class="chain-step" data-nodes="CATERING" data-tags="pitopalvelu,catering,kukkakauppa,kukat">
+                    <span class="step-label" data-i18n="step_2">Vaihe 2</span>
+                    <h4 data-i18n="step_2_title">Maut ja kukkaloisto</h4>
+                    <div class="partner-list"></div>
+                </div>
+                <div class="chain-step" data-intents="VALOKUVAUS,VIDEOKUVAUS" data-tags="valokuvaaja,videokuvaaja,digitointi,digitoimisto,valokuvaus,videokuvaus,studio,kuvaaja,kuvaus">
+                    <span class="step-label" data-i18n="step_3">Vaihe 3</span>
+                    <h4 data-i18n="step_3_title">Muistojen taltiointi</h4>
+                    <div class="partner-list"></div>
+                </div>
+                <div class="chain-step" data-nodes="MAJOITUS" data-tags="majoitus">
+                    <span class="step-label" data-i18n="step_4">Vaihe 4</span>
+                    <h4 data-i18n="step_4_title">Majoitus vieraille</h4>
+                    <div class="partner-list"></div>
+                </div>
+                <div class="chain-step dynamic-suggestions" style="display: none;">
+                    <span class="step-label" data-i18n="related_services">Liittyv&auml;t palvelut</span>
+                    <div class="partner-list suggestion-slot"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Muutto -->
+        <section id="scenario-moving" class="chain-section" style="background: #f8fbff; padding: 6rem 1.5rem; border-radius: 60px;">
+            <div class="chain-header">
+                <h2 data-i18n="scenario_moving_title">Muuttoprosessi</h2>
+            </div>
+            <div class="chain-container">
+                <div class="chain-step" data-intents="LEGAL_SERVICES" data-tags="lakiasiaintoimisto,notariaatti,kiinteist&ouml;nv&auml;litys">
+                    <span class="step-label" data-i18n="step_legal">Vaihe 1</span>
+                    <h4 data-i18n="step_moving_1_title">Lakiturva ja sopimukset</h4>
+                    <div class="partner-list"></div>
+                </div>
+                <div class="chain-step" data-intents="MOVING_HELP,LOGISTICS" data-tags="muuttoapu,kuljetus,per&auml;k&auml;rry">
+                    <span class="step-label" data-i18n="step_logistics">Vaihe 2</span>
+                    <h4 data-i18n="step_moving_2_title">Logistiikka ja kuljetus</h4>
+                    <div class="partner-list"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- M&ouml;kki -->
+        <section id="scenario-cottage" class="chain-section">
+            <div class="chain-header">
+                <h2 data-i18n="scenario_cottage_title">M&ouml;kin yll&auml;pito</h2>
+            </div>
+            <div class="chain-container">
+                <div class="chain-step" data-intents="HOME_MAINTENANCE,YARD_WORK,CLEANING_SERVICES,CHIMNEY_SWEEP" data-tags="talkkari,nuohous,lumityöt,remontti,kotipalvelu,siivous,pienremontti,maalaus,rakennus,sähköasennus,putkiasennus,kiinteistöhuolto">
+                    <span class="step-label" data-i18n="step_maintenance">Vaihe 1</span>
+                    <h4 data-i18n="step_cottage_1_title">Yll&auml;pito ja huolto</h4>
+                    <div class="partner-list"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Startup -->
+        <section id="scenario-startup" class="chain-section" style="background: #fdf2f8; padding: 6rem 1.5rem; border-radius: 60px;">
+            <div class="chain-header">
+                <h2 data-i18n="scenario_startup_title">Startupista kasvuun</h2>
+            </div>
+            <div class="chain-container">
+                <div class="chain-step" data-intents="BUSINESS_CONSULTING,MARKETING_SERVICES,VALOKUVAUS" data-tags="mainostoimisto,logosuunnittelu,br&auml;nd&auml;ys,valokuvaaja,videokuvaaja,digimarkkinointi,digimedia,graafinen,suunnittelu,suunnittelija,media,studio,valokuvaus">
+                    <span class="step-label" data-i18n="step_business">Vaihe 1</span>
+                    <h4 data-i18n="step_startup_1_title">Neuvonta ja visuaalinen ilme</h4>
+                    <div class="partner-list"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TYHY -->
+        <section id="scenario-tyhy" class="chain-section">
+            <div class="chain-header">
+                <h2 data-i18n="scenario_tyhy_title">TYHY ja tiimip&auml;iv&auml;t</h2>
+            </div>
+            <div class="chain-container">
+                <div class="chain-step" data-intents="ACTIVITY_SERVICES,SAUNA" data-tags="aktiviteetit,el&auml;mys,sauna,savusauna">
+                    <span class="step-label" data-i18n="step_activities">Vaihe 1</span>
+                    <h4 data-i18n="step_tyhy_1_title">Aktiviteetit ja rentoutus</h4>
+                    <div class="partner-list"></div>
+                </div>
+                <div class="chain-step" data-intents="WELLBEING_SERVICES,COACHING" data-tags="luennot,valmennus,hyvinvointi">
+                    <span class="step-label" data-i18n="step_wellness">Vaihe 2</span>
+                    <h4 data-i18n="step_tyhy_2_title">Hyvinvointi ja oppiminen</h4>
+                    <div class="partner-list"></div>
+                </div>
+            </div>
+        </section>
+
+          <div style="text-align: center; margin-bottom: 5rem; display: flex; justify-content: center; gap: 1rem;">
+             <a href="index.html#palveluverkosto" class="btn-radar" style="background: var(--primary-blue); text-decoration: none; display: inline-block;" data-i18n="btn_create_custom">Luo oma verkosto &raquo;</a>
+             <a href="verkostokartta.html" class="btn-radar" style="background: var(--secondary-blue); text-decoration: none; display: inline-block;">Semanttinen verkosto &raquo;</a>
+          </div>
+    </main>
+
+    <footer>
+        <div class="footer-content" style="text-align: center; padding: 2rem;">
+            <p>&copy; 2026 LaukaaInfo &ndash; &Auml;lykk&auml;&auml;t palveluketjut</p>
+        </div>
+    </footer>
+
+    <div id="network-summary" class="summary-drawer">
+        <div class="summary-content">
+            <h3 data-i18n="your_network_title">Oma verkostosi</h3>
+            <div id="selected-partners-list"></div>
+            <button class="btn-radar" onclick="window.networkBuilder.printPlan()" data-i18n="btn_print_plan">Tallenna suunnitelma</button>
+        </div>
+    </div>
+
+    <div id="report-modal" class="lki-modal-overlay">
+        <div class="lki-modal-container" style="max-width: 800px; padding: 0; display: flex; flex-direction: column;">
+            <button class="lki-modal-close" onclick="document.getElementById('report-modal').classList.remove('active')">&times;</button>
+            <div id="report-content" style="padding: 3rem; overflow-y: auto; flex: 1;"></div>
+            <div style="text-align: center; padding: 2rem; background: #f8fafc; border-top: 1px solid #eee;" class="no-print">
+                <button class="btn-radar" onclick="window.print()">Tulosta / Tallenna PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="searchEngine.js"></script>
+    <script src="script.js"></script>
+    <script src="modal.js"></script>
+    <script src="networkBuilder.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.i18n) i18n.translatePage();
+            
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) target.scrollIntoView({ behavior: 'smooth' });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
