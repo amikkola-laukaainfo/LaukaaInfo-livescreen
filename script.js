@@ -2739,6 +2739,50 @@ function initShareGenerator(companies) {
 
     if (!typeSelect || !targetInput) return;
 
+    let feedAdvertisers = [];
+    async function fetchFeedAdvertisers() {
+        try {
+            let res = await fetch('laukaainfo-web/advertisers_cache.csv');
+            if (!res.ok) {
+                res = await fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vSV1-67oQMZmF0talwT6HXNg01NP0YA5XCNpKJsrTQ2RHQNQhEL6dySYicrfM1pnIU6Z41UqpzQdtdz/pub?output=csv');
+            }
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            const csvText = await res.text();
+            const lines = csvText.split(/\r?\n/);
+            const list = [];
+            for (let i = 1; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line) continue;
+                const parts = line.split(',');
+                if (parts.length >= 2) {
+                    const id = parts[0].trim();
+                    const name = parts[1].trim();
+                    if (id && name) {
+                        list.push({ id, name });
+                    }
+                }
+            }
+            if (!list.some(a => a.id === '99')) {
+                list.unshift({ id: '99', name: 'LaukaaInfo' });
+            }
+            feedAdvertisers = list;
+        } catch (err) {
+            console.warn('Error loading feed advertisers, using fallback:', err);
+            feedAdvertisers = [
+                { id: '99', name: 'LaukaaInfo' },
+                { id: '2', name: 'Mediazoo' },
+                { id: '3', name: 'TyyniHoivaSuomi' },
+                { id: '313', name: 'Kädenjälki ry' }
+            ];
+        }
+        if (typeSelect.value === 'feed') {
+            targetSelect.innerHTML = '<option value="all">Kaikki ilmoittajat (Kaikki)</option>' +
+                feedAdvertisers.map(a => '<option value="' + a.id + '">' + a.name + '</option>').join('');
+            updateUrl();
+        }
+    }
+    fetchFeedAdvertisers();
+
     datalist.innerHTML = '';
     companies.forEach(c => {
         if (c.nimi) {
@@ -2792,12 +2836,16 @@ function initShareGenerator(companies) {
             generated = baseUrl + selVal + '.html';
             if (subSelVal && subSelVal !== 'all') { generated += '?cat=' + encodeURIComponent(subSelVal); }
         } else if (type === 'feed') {
+            let params = [];
             if (subSelVal && subSelVal !== 'all') {
                 const filterMap = { event:'tapahtumat', notice:'ilmoitukset', offer:'tarjoukset', community:'yritykset', story:'tarinat', video:'videot' };
-                generated = baseUrl + '?filter=' + (filterMap[subSelVal] || subSelVal) + '&feed=open';
-            } else {
-                generated = baseUrl + '?feed=open';
+                params.push('filter=' + (filterMap[subSelVal] || subSelVal));
             }
+            if (selVal && selVal !== 'all') {
+                params.push('rowid=' + encodeURIComponent(selVal));
+            }
+            params.push('feed=open');
+            generated = baseUrl + '?' + params.join('&');
         } else if (type === 'feed-company') {
             const found = companies.find(c => c.nimi.toLowerCase() === textVal.toLowerCase());
             if (found) {
@@ -2853,6 +2901,10 @@ function initShareGenerator(companies) {
                     categories.map(c => '<option value="' + c + '">' + c + '</option>').join('');
             }
         } else if (type === 'feed') {
+            targetLabel.textContent = 'Valitse ilmoittaja ja julkaisutyyppi';
+            targetSelect.style.display = 'block';
+            targetSelect.innerHTML = '<option value="all">Kaikki ilmoittajat (Kaikki)</option>' +
+                feedAdvertisers.map(a => '<option value="' + a.id + '">' + a.name + '</option>').join('');
             if (targetSubSelect) {
                 targetSubSelect.style.display = 'block';
                 targetSubSelect.innerHTML = feedTypes.map(ft => '<option value="' + ft.id + '">' + ft.name + '</option>').join('');
