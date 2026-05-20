@@ -690,6 +690,9 @@ function addMarkersToMap(companies, forceShowAll = false) {
             // Jos ei ole osumia 5km säteellä, pidetään kamera tiukasti keskipisteessä
             map.setView([regionCoords.lat, regionCoords.lon], 13);
         }
+    } else if (selectedRegion === 'all') {
+        // Show full Laukaa area for 'all' region without focusing on a single marker.
+        map.setView([62.4128, 25.9477], 11);
     } else if (bounds.length > 0) {
         map.fitBounds(bounds, { padding: [50, 50] });
     } else {
@@ -1760,7 +1763,7 @@ function filterCatalog(renderList = true) {
     // Sort: Premium first, then by score, then by distance (if available), then alphabetically
     matches.sort((a, b) => {
         if (a.isPremium && !b.isPremium) return -1;
-        if (!a.isPremium && b.isPremium) return 1;
+        if (!hasRadius && !isSearchActive()) return 1;
 
         if (b.score !== a.score) return b.score - a.score;
 
@@ -3065,7 +3068,7 @@ function updateMapSidebar(companies) {
         
         // Jos ei ole palvelualueyritys ja on jo kartalla, ei turhaan näytetä sivupalkissa
         // PAITSI jos haku on päällä, jolloin listataan kaikki tulokset (helpottaa selailua)
-        if (!hasRadius && isOnMap && !isSearchActive()) return;
+        // Include all companies in the sidebar regardless of map bounds.
         const slug = slugify(company.nimi);
         const colorIdx  = Math.abs(getHash(company.nimi)) % serviceCirclePalette.length;
         const circleColor = serviceCirclePalette[colorIdx];
