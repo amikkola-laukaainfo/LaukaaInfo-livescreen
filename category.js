@@ -65,7 +65,10 @@
         }
 
         // Update localStorage to match current state
-        if (selectedRegion !== 'all') {
+        if (selectedRegion === 'all') {
+            localStorage.setItem('selectedRegion', 'all');
+            localStorage.removeItem('regionCoords');
+        } else {
             localStorage.setItem('selectedRegion', selectedRegion);
             if (regionCoords) {
                 localStorage.setItem('regionCoords', JSON.stringify(regionCoords));

@@ -662,8 +662,14 @@ function addMarkersToMap(companies, forceShowAll = false) {
 
     const regionCoords = JSON.parse(localStorage.getItem('regionCoords'));
     const selectedRegion = localStorage.getItem('selectedRegion');
+    const urlParams = new URLSearchParams(window.location.search);
+    const regionParam = urlParams.get('region');
+    const isAll = (selectedRegion === 'all') || (regionParam === 'all');
 
-    if (selectedRegion === 'koko-laukaa' && regionCoords) {
+    if (isAll) {
+        // Show full Laukaa area for 'all' region without focusing on a single marker.
+        map.setView([62.4128, 25.9477], 11);
+    } else if (selectedRegion === 'koko-laukaa' && regionCoords) {
         // Koko Laukaa -näkymä on aina koko Laukaan laajuinen, riippumatta tuloksista
         map.setView([regionCoords.lat, regionCoords.lon], 10);
     } else if (selectedRegion && selectedRegion !== 'all' && regionCoords) {
@@ -690,9 +696,6 @@ function addMarkersToMap(companies, forceShowAll = false) {
             // Jos ei ole osumia 5km säteellä, pidetään kamera tiukasti keskipisteessä
             map.setView([regionCoords.lat, regionCoords.lon], 13);
         }
-    } else if (selectedRegion === 'all') {
-        // Show full Laukaa area for 'all' region without focusing on a single marker.
-        map.setView([62.4128, 25.9477], 11);
     } else if (bounds.length > 0) {
         map.fitBounds(bounds, { padding: [50, 50] });
     } else {
@@ -1763,7 +1766,6 @@ function filterCatalog(renderList = true) {
     // Sort: Premium first, then by score, then by distance (if available), then alphabetically
     matches.sort((a, b) => {
         if (a.isPremium && !b.isPremium) return -1;
-        if (!hasRadius && !isSearchActive()) return 1;
 
         if (b.score !== a.score) return b.score - a.score;
 
@@ -3061,14 +3063,15 @@ function updateMapSidebar(companies) {
         // Sisällytetään sidebar-listaan jos:
         // 1. On palvelualueyritys (service_radius tai SERVICE_AREA)
         // 2. On haku päällä ja yritys on ruudun ulkopuolella (off-map)
-        const hasRadius = (company.service_radius && parseFloat(company.service_radius) > 0)
-                       || company.service_mode === 'SERVICE_AREA';
+        const hasRadius = (company.service_radius && company.service_radius.trim() !== '')
+                       || company.service_mode === 'SERVICE_AREA'
+                       || company.service_mode === 'onsite';
         
         const isOnMap = bounds.contains([lat, lon]);
         
-        // Jos ei ole palvelualueyritys ja on jo kartalla, ei turhaan näytetä sivupalkissa
-        // PAITSI jos haku on päällä, jolloin listataan kaikki tulokset (helpottaa selailua)
-        // Include all companies in the sidebar regardless of map bounds.
+        // Jos ei ole palvelualueyritys ja haku ei ole päällä, sitä ei näytetä sivupalkissa ollenkaan
+        if (!hasRadius && !isSearchActive()) return;
+
         const slug = slugify(company.nimi);
         const colorIdx  = Math.abs(getHash(company.nimi)) % serviceCirclePalette.length;
         const circleColor = serviceCirclePalette[colorIdx];
