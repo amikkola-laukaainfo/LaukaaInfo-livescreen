@@ -90,6 +90,15 @@ foreach ($rawData as $item) {
         continue;
     }
 
+    // Dynamically expire promotions after 1 week (7 days)
+    $isPromoted = $item['is_promoted'] ?? false;
+    if ($isPromoted) {
+        $pubTime = strtotime($item['publish_at'] ?? '');
+        if ($pubTime && (time() - $pubTime) > (7 * 24 * 3600)) {
+            $isPromoted = false;
+        }
+    }
+
     // --- CLEAN DATA (Whitelist fields) ---
     // Part 4: Do NOT expose imagekit_file_id, internal status, or tokens
     $cleanItem = [
@@ -100,7 +109,7 @@ foreach ($rawData as $item) {
         'description' => $item['description'] ?? '',
         'image'       => $item['image'] ?? '',
         'publish_at'  => $item['publish_at'] ?? '',
-        'is_promoted' => $item['is_promoted'] ?? false,
+        'is_promoted' => $isPromoted,
         'publisher_name' => $item['publisher_name'] ?? '',
         'package'     => $item['package'] ?? ($item['tyyppi'] ?? 'perus'),
         'images'      => is_array($item['images'] ?? null) ? $item['images'] : (!empty($item['image']) ? [$item['image']] : []),

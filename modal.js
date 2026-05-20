@@ -393,8 +393,19 @@ window.LkiModal = (function() {
         footer.appendChild(hideBtn);
 
         // Company Card Link (Lue lisää)
-        const slug = slugify(company.nimi);
-        const isPremium = (company.tyyppi === 'maksu' || company.tyyppi === 'paid' || tier === 'premium');
+        let companyName = company.publisher_name || company.nimi;
+        let isPremium = (company.tyyppi === 'maksu' || company.tyyppi === 'paid' || tier === 'premium');
+
+        const bId = company.business_id || company.business_rowid;
+        if (bId && typeof window !== 'undefined' && Array.isArray(window.allCompanies)) {
+            const found = window.allCompanies.find(c => c.id == bId || c.id === `company-${bId}` || c.business_id == bId);
+            if (found) {
+                companyName = found.nimi;
+                isPremium = (found.tyyppi === 'maksu' || found.tyyppi === 'paid' || (found.package && found.package.toLowerCase() === 'premium'));
+            }
+        }
+
+        const slug = slugify(companyName);
         const isInDist = window.location.pathname.includes('/dist/') || 
                          window.location.hostname === 'laukaainfo.fi' || 
                          window.location.hostname.includes('github.io');
