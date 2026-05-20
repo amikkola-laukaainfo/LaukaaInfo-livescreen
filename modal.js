@@ -355,6 +355,25 @@ window.LkiModal = (function() {
             });
         }
 
+        // 3. Handle singular video_id or youtube_url from feed items
+        let feedVideoUrl = company.video_id ? `https://www.youtube.com/embed/${company.video_id}` : null;
+        if (!feedVideoUrl && company.youtube_url) {
+            let vid = '';
+            if (company.youtube_url.includes('youtube.com/watch?v=')) {
+                vid = company.youtube_url.split('v=')[1]?.split('&')[0];
+            } else if (company.youtube_url.includes('youtu.be/')) {
+                vid = company.youtube_url.split('youtu.be/')[1]?.split('?')[0];
+            }
+            if (vid) {
+                feedVideoUrl = `https://www.youtube.com/embed/${vid}`;
+            }
+        }
+        if (feedVideoUrl) {
+            if (!mediaItems.find(m => m.url === feedVideoUrl)) {
+                mediaItems.push({ type: 'video', url: feedVideoUrl });
+            }
+        }
+
         // If no media, use logo or default (also check singular 'image')
         if (mediaItems.length === 0) {
             const fallbackImg = company.images?.[0] || company.image || (company.logo && company.logo !== '-' ? company.logo : 'logo.png');
