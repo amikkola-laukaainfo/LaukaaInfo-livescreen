@@ -777,6 +777,93 @@
 
         // Suositukset / Recommendations
         loadRecommendations(company);
+
+        // SEO JSON-LD -injektointi
+        injectJSONLD(company);
+    }
+
+    /**
+     * Injektoi yrityksen tiedot JSON-LD Schema (LocalBusiness) -muodossa sivun headiin.
+     */
+    function injectJSONLD(company) {
+        try {
+            // Poistetaan vanha JSON-LD jos sellainen on (estää duplikaatit sivuston sisäisessä navigaatiossa)
+            const oldScript = document.getElementById('company-jsonld');
+            if (oldScript) {
+                oldScript.remove();
+            }
+
+            // Puhdistetaan kuvausteksti samalla tavalla kuin otsikon esittelyssä
+            const esittely = company.esittely || '';
+            const mainoslause = company.mainoslause || '';
+            const fullContent = esittely || mainoslause;
+            const description = fullContent.replaceAll('@@', '').replace(/#[a-zA-Z0-9åäöÅÄÖ]+/g, '').replace(/\s\s+/g, ' ').trim();
+
+            const schema = {
+                "@context": "https://schema.org",
+                "@type": "LocalBusiness",
+                "@id": `https://laukaainfo.fi/yrityskortti.html?id=${company.id}`,
+                "name": company.nimi,
+                "description": description || `${company.nimi} - Laukaan yritys.`,
+                "address": {
+                    "@type": "PostalAddress",
+                    "streetAddress": company.osoite || 'Laukaa',
+                    "addressLocality": "Laukaa",
+                    "addressCountry": "FI"
+                }
+            };
+
+            if (company.puhelin && company.puhelin !== '-') {
+                schema.telephone = company.puhelin;
+            }
+
+            if (company.nettisivu && company.nettisivu !== '-') {
+                let webUrl = company.nettisivu.trim();
+                if (!webUrl.startsWith('http')) {
+                    webUrl = 'https://' + webUrl;
+                }
+                schema.url = webUrl;
+            }
+
+            if (company.logo && company.logo !== '-') {
+                schema.logo = company.logo;
+            } else if (company.media && company.media.length > 0 && company.media[0].url) {
+                schema.logo = company.media[0].url;
+            }
+
+            if (company.lat && company.lon) {
+                schema.geo = {
+                    "@type": "GeoCoordinates",
+                    "latitude": parseFloat(company.lat),
+                    "longitude": parseFloat(company.lon)
+                };
+            }
+
+            // Sosiaaliset mediat (sameAs)
+            const sameAs = [];
+            ['facebook', 'instagram', 'linkedin', 'tiktok'].forEach(key => {
+                let val = company[key] || '';
+                if (val && val !== '-') {
+                    val = val.trim();
+                    if (!val.startsWith('http')) {
+                        val = 'https://' + val;
+                    }
+                    sameAs.push(val);
+                }
+            });
+            if (sameAs.length > 0) {
+                schema.sameAs = sameAs;
+            }
+
+            const script = document.createElement('script');
+            script.id = 'company-jsonld';
+            script.type = 'application/ld+json';
+            script.text = JSON.stringify(schema, null, 2);
+            document.head.appendChild(script);
+            console.log('✓ Injektoitu JSON-LD -skeema yritykselle:', company.nimi);
+        } catch (e) {
+            console.error('Virhe JSON-LD -injektoinnissa:', e);
+        }
     }
 
     /**

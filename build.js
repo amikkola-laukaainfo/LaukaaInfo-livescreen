@@ -25,7 +25,14 @@ if (fs.existsSync(distDir)) {
 }
 fs.mkdirSync(distDir);
 
-// 2.5 Suoritetaan yritysdatan modularisointi
+// 2.5 Suoritetaan tietämysgraafin rakentaminen ja yritysdatan modularisointi
+console.log('1.4 Rakennetaan tietämysgraafi...');
+try {
+    execSync('node build_graph.js', { stdio: 'inherit' });
+} catch (e) {
+    console.error('Virhe graafin rakentamisessa:', e.message);
+}
+
 console.log('1.5 Modularisoidaan profilointidata...');
 try {
     execSync('node split_data.js', { stdio: 'inherit' });

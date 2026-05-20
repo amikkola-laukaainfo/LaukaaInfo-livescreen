@@ -82,6 +82,7 @@ const metadata = {
     SCHEMA_VERSION: data.SCHEMA_VERSION,
     DESCRIPTION: data.DESCRIPTION,
     nodes: data.nodes || {},
+    edges: data.edges || [],
     company_index: companyToFile,
     files: Object.keys(results).filter(f => Object.keys(results[f]).length > 0)
 };
