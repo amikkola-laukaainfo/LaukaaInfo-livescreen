@@ -24,15 +24,24 @@
     <style>
         .category-header {
             padding: 4rem 1rem;
-            background: var(--light-blue);
+            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
             text-align: center;
             border-radius: var(--border-radius);
             margin-bottom: 3rem;
+            box-shadow: 0 4px 20px rgba(0, 51, 102, 0.15);
         }
 
         .category-header h1 {
             font-size: 3rem;
-            color: var(--primary-blue);
+            color: #ffffff;
+        }
+
+        .category-header p {
+            color: rgba(255, 255, 255, 0.88);
+        }
+
+        #category-icon {
+            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.18));
         }
 
         /* Carousel Styles */
