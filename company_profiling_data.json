@@ -78049,20 +78049,23 @@
                     "luova toiminta",
                     "ohjelmapalvelu",
                     "pienryhmät",
-                    "workshop"
+                    "workshop",
+                    "eräopas"
                 ],
                 "node_links": [],
                 "intent_codes": [
                     "ENT_NATURE",
                     "EVT_PARTY",
-                    "EVT_CORPORATE"
+                    "EVT_CORPORATE",
+                    "ENT_PROGRAM"
                 ],
                 "intent_scores": {
                     "ENT_NATURE": 88,
                     "EVT_PARTY": 80,
                     "EVT_CORPORATE": 58,
                     "ENT_MUSIC": 40,
-                    "BIZ_MEETING": 25
+                    "BIZ_MEETING": 25,
+                    "ENT_PROGRAM": 100
                 }
             },
             "categories": {
@@ -78104,18 +78107,21 @@
                     "karaoke_available": false,
                     "has_exclusive_catering": false,
                     "accommodation_included": false,
-                    "refinement_tags": [
-                        "elämysilta",
-                        "pienryhmät",
-                        "luova tapahtuma",
-                        "virkistyspäivä",
-                        "ohjelmapalvelu",
-                        "teemallinen ilta",
-                        "workshop",
-                        "syntymäpäiväjuhla",
-                        "syntymäpäiväkakku",
-                        "juhlakakku"
-                    ],
+                    "refinement_tags": {
+                        "Yleinen": [
+                            "elämysilta",
+                            "pienryhmät",
+                            "luova tapahtuma",
+                            "virkistyspäivä",
+                            "ohjelmapalvelu",
+                            "teemallinen ilta",
+                            "workshop",
+                            "syntymäpäiväjuhla",
+                            "syntymäpäiväkakku",
+                            "juhlakakku",
+                            "eräopas"
+                        ]
+                    },
                     "digitization_features": [],
                     "entertainment_features": [
                         "elämyssisällöt",
@@ -78302,7 +78308,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T14:46:17.836Z",
+                "last_updated": "2026-05-20T19:20:29.104Z",
                 "verified_by": "ai-profile-builder",
                 "status": "updated"
             }
@@ -91906,6 +91912,12 @@
             "to": "intent-BIZ_MEETING",
             "relation": "offers",
             "weight": 25
+        },
+        {
+            "from": "company-306",
+            "to": "intent-ENT_PROGRAM",
+            "relation": "offers",
+            "weight": 100
         },
         {
             "from": "company-306",

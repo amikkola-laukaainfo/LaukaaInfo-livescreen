@@ -15345,6 +15345,12 @@
         },
         {
             "from": "company-306",
+            "to": "intent-ENT_PROGRAM",
+            "relation": "offers",
+            "weight": 100
+        },
+        {
+            "from": "company-306",
             "to": "group-events-and-celebrations",
             "relation": "fits_for",
             "weight": 85
