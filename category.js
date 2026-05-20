@@ -762,6 +762,8 @@
 
         if (selectedRegion && selectedRegion !== 'all' && regionCoords) {
             regionMap.setView([regionCoords.lat, regionCoords.lon], 13);
+        } else if (selectedRegion === 'all') {
+            regionMap.setView([62.4128, 25.9477], 11);
         } else if (hasMarkers) {
             regionMap.fitBounds(group.getBounds().pad(0.1));
         } else {
