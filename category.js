@@ -186,16 +186,19 @@
                 });
             } else if (category && category !== 'all') {
                 const normCat = normalizeForSearch(category);
+                const catBase = normCat.replace(/palvelut$/i, '').trim();
                 rawCategoryCompanies = allCompanies.filter(c => {
                     const cCat = normalizeForSearch(c.kategoria || '');
                     const cName = normalizeForSearch(c.nimi || '');
                     const cTags = normalizeForSearch(c.tags || '');
-                    
-                    // Alkuperäinen tarkka kategoria-osuma
+
+                    // Exact category match
                     if (c.kategoria === category) return true;
-                    
-                    // Laajennettu haku: jos kategoria-parametri on esim. "Kahvila", haetaan myös nimen ja tägien perusteella.
-                    // Tämä auttaa löytämään vastaavat yritykset, vaikka ne olisi luokiteltu eri pääkategoriaan (esim. Ruokailu).
+
+                    // Tag fallback: match base term in tags (e.g., "nuohous" from "Nuohouspalvelut")
+                    if (catBase && cTags.includes(catBase)) return true;
+
+                    // Extended search for longer category terms
                     if (normCat.length > 3) {
                         return cCat.includes(normCat) || cName.includes(normCat) || cTags.includes(normCat);
                     }
