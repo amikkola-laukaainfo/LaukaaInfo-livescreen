@@ -234,18 +234,19 @@ const NEEDS_CONFIG = {
         ]
     },
     "remontti": {
-        "title": { "fi": "Remontti", "en": "Renovation" },
+        "title": { "fi": "Remontti & Talon huolto", "en": "Renovation & Maintenance" },
         "icon": "🔨",
-        "description": { "fi": "Löydä tekijät ja tarvikkeet kodin tai toimitilan uudistukseen.", "en": "Find professionals and materials for your home or office renovation." },
+        "description": { "fi": "Löydä tekijät ja tarvikkeet kodin uudistukseen ja ylläpitoon, kuten remontteihin ja nuohoukseen.", "en": "Find professionals and materials for home renovation and maintenance tasks like chimney sweeping." },
         "profilointi_context": "construction_and_maintenance",
         "steps": [
             {
                 "id": "tarkennus",
-                "question": { "fi": "Mitä olet remontoimassa?", "en": "What are you renovating?" },
+                "question": { "fi": "Mitä olet remontoimassa tai huoltamassa?", "en": "What are you renovating or maintaining?" },
                 "options": [
                     { "id": "OPT_RENO_BATHROOM", "label": { "fi": "Kylpyhuoneremontti", "en": "Bathroom renovation" }, "intent_codes": ["RENO_BATHROOM"], "sub_context": "kylpyhuoneremontti", "tags": ["LVI", "rakentaminen"] },
                     { "id": "OPT_RENO_KITCHEN", "label": { "fi": "Keittiöremontti", "en": "Kitchen renovation" }, "intent_codes": ["RENO_KITCHEN"], "sub_context": "keittiöremontti", "tags": ["rakentaminen"] },
                     { "id": "OPT_RENO_SURFACE", "label": { "fi": "Pintaremontti (maalaus tms.)", "en": "Surface renovation (painting etc.)" }, "intent_codes": ["RENO_SURFACE"], "sub_context": "pintaremontti", "tags": ["maalaustyöt"] },
+                    { "id": "OPT_RENO_MAINTENANCE", "label": { "fi": "Talon huolto & Kunnossapito (nuohous, ilmanvaihto ym.)", "en": "House maintenance & Upkeep (sweeping, ventilation etc.)" }, "intent_codes": ["COTTAGE_SWEEP", "PROP_MAINTENANCE"], "sub_context": "talon huolto", "tags": ["nuohous", "nuohouspalvelut", "kiinteistöhuolto", "ilmanvaihto"] },
                     { "id": "OPT_RENO_NEW_BUILD", "label": { "fi": "Uudisrakentaminen", "en": "New construction" }, "intent_codes": ["RENO_NEW"], "sub_context": "uudisrakentaminen", "tags": ["rakentaminen"] }
                 ]
             },
@@ -258,6 +259,8 @@ const NEEDS_CONFIG = {
                     { "id": "OPT_RENO_PRO_ELECTRICIAN", "label": { "fi": "Sähköasentaja", "en": "Electrician" }, "intent_codes": ["RENO_ELECTRICIAN"], "tags": ["sähköasennukset"] },
                     { "id": "OPT_RENO_PRO_PLUMBER", "label": { "fi": "LVI-asentaja (Putkimies)", "en": "HVAC installer (Plumber)" }, "intent_codes": ["RENO_PLUMBER"], "tags": ["LVI"] },
                     { "id": "OPT_RENO_PRO_PAINTER", "label": { "fi": "Maalari / Tapetoija", "en": "Painter / Wallpaper installer" }, "intent_codes": ["RENO_PAINTER"], "tags": ["maalaustyöt"] },
+                    { "id": "OPT_RENO_PRO_SWEEPER", "label": { "fi": "Nuohooja", "en": "Chimney sweeper" }, "intent_codes": ["COTTAGE_SWEEP"], "tags": ["nuohous", "nuohouspalvelut"], "is_service": true },
+                    { "id": "OPT_RENO_PRO_MAINTENANCE", "label": { "fi": "Kiinteistöhuolto / Talonmies", "en": "Property maintenance / Caretaker" }, "intent_codes": ["PROP_MAINTENANCE"], "tags": ["kiinteistöhuolto"] },
                     { "id": "OPT_RENO_PRO_CARPENTER", "label": { "fi": "Puuseppä / Kalustekorjaus", "en": "Carpenter / Furniture repair" }, "intent_codes": ["RENO_CARPENTER"], "tags": ["puutyöt", "kalusteet", "puuseppä"], "profilointi_filter": { "section": "construction_and_maintenance", "field": "refinement_tags", "value": "kalustekorjaus" } },
                     { "id": "OPT_RENO_PRO_DESIGNER", "label": { "fi": "Suunnittelija / Arkkitehti", "en": "Designer / Architect" }, "intent_codes": ["RENO_DESIGNER"], "tags": ["suunnittelutoimisto"] }
                 ]
@@ -268,7 +271,8 @@ const NEEDS_CONFIG = {
                 "options": [
                     { "id": "OPT_RENO_MAT_HARDWARE", "label": { "fi": "Rautakauppa / Rakennustarvikkeet", "en": "Hardware store / Building supplies" }, "intent_codes": ["RENO_HARDWARE"], "tags": ["rautakauppa", "rakennustarvikkeet"] },
                     { "id": "OPT_RENO_MAT_RENTAL", "label": { "fi": "Koneiden ja laitteiden vuokraus", "en": "Machine and equipment rental" }, "intent_codes": ["RENO_RENTAL"], "tags": ["rakennuskonevuokraus"] },
-                    { "id": "OPT_RENO_MAT_INTERIOR", "label": { "fi": "Sisustustuotteet", "en": "Interior decoration products" }, "intent_codes": ["RENO_INTERIOR"], "tags": ["kaupat ja ostokset", "erikoisliikkeet"] }
+                    { "id": "OPT_RENO_MAT_INTERIOR", "label": { "fi": "Sisustustuotteet", "en": "Interior decoration products" }, "intent_codes": ["RENO_INTERIOR"], "tags": ["kaupat ja ostokset", "erikoisliikkeet"] },
+                    { "id": "OPT_RENO_MAT_NONE", "label": { "fi": "Ei tarvetta materiaaleille (ostetaan palveluna)", "en": "No need for materials (purchased as service)" }, "hide_results": true }
                 ]
             }
         ]
