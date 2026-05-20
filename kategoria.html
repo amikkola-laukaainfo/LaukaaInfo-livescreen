@@ -21,20 +21,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="stylesheet" href="modal.css">
     <script src="translations.js?v=20260505"></script>
-    <style>
-        .category-header {
-            padding: 4rem 1rem;
-            background: var(--light-blue);
-            text-align: center;
-            border-radius: var(--border-radius);
-            margin-bottom: 3rem;
-        }
-
-        .category-header h1 {
-            font-size: 3rem;
-            color: var(--primary-blue);
-        }
-
         /* Carousel Styles */
         .featured-carousel-section {
             margin-bottom: 5rem;
@@ -281,13 +267,15 @@
     </aside>
 
 
-    <main>
-        <div class="category-header bg-full-white" style="margin-bottom: 0; padding-bottom: 2rem;">
-            <span id="category-icon" style="font-size: 4rem; display: block; margin-bottom: 1rem;"></span>
+    <header>
+        <div class="header-content">
+            <span id="category-icon" style="font-size: 4rem; display: block; margin-bottom: 0.5rem;"></span>
             <h1 id="category-name">Ladataan toimialaa...</h1>
             <p id="category-description">Tutustu paikallisiin palveluntarjoajiin.</p>
         </div>
+    </header>
 
+    <main>
         <section class="featured-carousel-section bg-full-white" id="featured-section" style="display: none; padding-top: 0;">
             <div style="max-width: 1200px; margin: 0 auto;">
                 <h2>⭐ Suositellut yritykset</h2>
