@@ -498,14 +498,28 @@ const LkiFeed = (() => {
               setTimeout(() => {
                 const targetCard = list.querySelector(`.lki-card[data-id="${options.initialItemId}"]`);
                 if (targetCard) {
-                  targetCard.classList.add('is-expanded');
-                  targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                  const origShadow = targetCard.style.boxShadow;
-                  targetCard.style.transition = 'box-shadow 0.5s ease';
-                  targetCard.style.boxShadow = '0 0 0 4px var(--accent)';
-                  setTimeout(() => {
-                    targetCard.style.boxShadow = origShadow;
-                  }, 2500);
+                  const item = currentItems.find(i => i.id == options.initialItemId);
+                  const isBusiness = item && (item.business_id || item.type === 'business' || item.type === 'community');
+                  const hasRichMedia = item && ((item.images && item.images.length > 0) || (item.videos && item.videos.length > 0));
+
+                  if (item && window.LkiModal && (isBusiness || hasRichMedia)) {
+                    LkiModal.open({
+                       ...item,
+                       nimi: item.title,
+                       esittely: item.description,
+                       puhelin: item.contact_phone || item.contact_whatsapp,
+                       package: item.package || (item.is_promoted ? 'pro' : 'perus')
+                    });
+                  } else {
+                    targetCard.classList.add('is-expanded');
+                    targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    const origShadow = targetCard.style.boxShadow;
+                    targetCard.style.transition = 'box-shadow 0.5s ease';
+                    targetCard.style.boxShadow = '0 0 0 4px var(--accent)';
+                    setTimeout(() => {
+                      targetCard.style.boxShadow = origShadow;
+                    }, 2500);
+                  }
                 }
               }, 300);
             }

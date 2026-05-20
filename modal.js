@@ -42,7 +42,7 @@ window.LkiModal = (function() {
                         <span class="lki-modal-category" id="lki-modal-category"></span>
                         <div class="lki-modal-description" id="lki-modal-description"></div>
                         <div class="lki-modal-info-grid" id="lki-modal-info-grid">
-                            <div class="lki-info-item"><span>📍</span> <span id="lki-modal-address">Laukaa</span></div>
+                            <div class="lki-info-item" style="display: flex; align-items: center; flex-wrap: wrap;"><span>📍</span> <span id="lki-modal-address">Laukaa</span> <button class="lki-modal-share-location-btn" id="lki-modal-share-location-btn" title="Kopioi jakolinkki kohteeseen" aria-label="Kopioi jakolinkki kohteeseen">🔗</button> <span class="lki-modal-share-location-feedback" id="lki-modal-share-location-feedback" style="display: none;">Kopioitu! ✅</span></div>
                             <div class="lki-info-item" id="lki-modal-phone-item"><span>📞</span> <span id="lki-modal-phone"></span></div>
                             <div class="lki-info-item" id="lki-modal-email-item"><span>✉️</span> <span id="lki-modal-email"></span></div>
                         </div>
@@ -255,6 +255,51 @@ window.LkiModal = (function() {
                 ${company.service_note ? `<div style="font-size: 0.85rem; color: #666; font-style: italic; margin-top: 4px; padding-top: 4px; border-top: 1px dotted #ccc;">${company.service_note}</div>` : ''}
             `;
             infoGrid.appendChild(confDiv);
+        }
+
+        // Jakolinkki kohteeseen
+        const shareBtn = document.getElementById('lki-modal-share-location-btn');
+        const shareFeedback = document.getElementById('lki-modal-share-location-feedback');
+        if (shareBtn) {
+            let shareUrl = '';
+            const baseUrl = window.location.protocol + '//' + window.location.host + window.location.pathname;
+            const isFeedItem = company.publish_at || company.type === 'event' || company.type === 'notice' || company.type === 'story' || company.type === 'offer' || company.type === 'video' || company.type === 'pikkuilmoitus';
+            
+            if (isFeedItem && company.id) {
+                shareUrl = `${baseUrl}?item=${encodeURIComponent(company.id)}&feed=open`;
+            } else {
+                const slug = slugify(company.nimi || company.title || '');
+                shareUrl = `${baseUrl}?open=${encodeURIComponent(slug)}`;
+            }
+
+            shareBtn.onclick = (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                navigator.clipboard.writeText(shareUrl).then(() => {
+                    shareFeedback.style.display = 'inline';
+                    setTimeout(() => {
+                        shareFeedback.style.display = 'none';
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Error copying link to clipboard:', err);
+                    // Fallback jos clipboard api ei ole käytettävissä
+                    const textarea = document.createElement('textarea');
+                    textarea.value = shareUrl;
+                    textarea.style.position = 'fixed';
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    try {
+                        document.execCommand('copy');
+                        shareFeedback.style.display = 'inline';
+                        setTimeout(() => {
+                            shareFeedback.style.display = 'none';
+                        }, 2000);
+                    } catch (err2) {
+                        console.error('Fallback copy failed:', err2);
+                    }
+                    document.body.removeChild(textarea);
+                });
+            };
         }
 
         // Media Slider
