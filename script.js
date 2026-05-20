@@ -2849,7 +2849,12 @@ function initShareGenerator(companies) {
         } else if (type === 'section-search') {
             generated = baseUrl + '#search-section';
         } else if (type === 'section-services') {
-            generated = baseUrl + '#palveluverkosto';
+            const cardVal = targetSelect ? targetSelect.value : 'all';
+            if (cardVal && cardVal !== 'all') {
+                generated = baseUrl + '#card-' + cardVal;
+            } else {
+                generated = baseUrl + '#palveluverkosto';
+            }
         } else if (type === 'section-experiences') {
             generated = baseUrl + '#experiences-section';
         }
@@ -2900,6 +2905,30 @@ function initShareGenerator(companies) {
                 targetSubSelect.innerHTML = '<option value="all">Kaikki ilmoittajat (Kaikki)</option>' +
                     feedAdvertisers.map(a => '<option value="' + a.id + '">' + a.name + '</option>').join('');
             }
+        } else if (type === 'section-services') {
+            targetLabel.textContent = 'Valitse palveluverkoston kohde';
+            targetSelect.style.display = 'block';
+            targetSelect.innerHTML = [
+                { id: 'all', name: 'Koko palveluverkosto' },
+                { id: 'haat', name: 'Häät' },
+                { id: 'yritysjuhlat', name: 'Yritysjuhlat' },
+                { id: 'yritystilaisuudet', name: 'Yritystilaisuudet' },
+                { id: 'syntymapaivat', name: 'Syntymäpäivät' },
+                { id: 'muutto', name: 'Muutto' },
+                { id: 'remontti', name: 'Remontti & Talon huolto' },
+                { id: 'mokkipalvelut', name: 'Mökkipalvelut' },
+                { id: 'hautajaiset', name: 'Hautajaiset' },
+                { id: 'yrityksen-perustaminen', name: 'Yrityksen perustaminen' },
+                { id: 'yrityksen-kehittaminen', name: 'Yrityksen kehittäminen' },
+                { id: 'vakituinen-palvelukumppani', name: 'Palvelukumppani' },
+                { id: 'kiinteistopalvelut', name: 'Taloyhtiö & Kiinteistöpalvelut' },
+                { id: 'paivystavat-palvelut', name: 'Päivystävät palvelut' },
+                { id: 'terveys-ja-hyvinvointi', name: 'Terveys ja hyvinvointi' },
+                { id: 'liikunta-ja-vapaaaika', name: 'Liikunta ja vapaa-aika' },
+                { id: 'elaimet', name: 'Eläimet ja lemmikit' },
+                { id: 'lapset-ja-perhe', name: 'Lapset ja perhe' },
+                { id: 'autohuollot', name: 'Autohuollot' }
+            ].map(s => '<option value="' + s.id + '">' + s.name + '</option>').join('');
         } else if (type.startsWith('section-')) {
             targetLabel.textContent = 'Linkki koko etusivun lohkoon';
             targetInput.style.display = 'block';

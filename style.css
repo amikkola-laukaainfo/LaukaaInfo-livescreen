@@ -5051,6 +5051,7 @@ footer {
     flex-direction: column;
     justify-content: flex-end;
     border: 1px solid rgba(0,0,0,0.05);
+    scroll-margin-top: 100px;
 }
 
 .need-card::before {
