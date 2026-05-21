@@ -10088,9 +10088,23 @@
         "tags": "",
         "core": {
             "fits_for": {
-                "cottage-services": 95,
-                "events-and-celebrations": 38,
-                "business-events": 30
+                "cottage-services": 96,
+                "events-and-celebrations": 40,
+                "business-events": 32,
+                "funerals-and-memorials": 0,
+                "moving-and-housing": 0,
+                "construction-and-maintenance": 0,
+                "housing-company-and-contracts": 0,
+                "startup-services": 0,
+                "business-growth": 0,
+                "service-partner": 0,
+                "emergency-services": 0,
+                "wellbeing-and-beauty": 58,
+                "liikunta-ja-vapaaaika": 68,
+                "accommodation": 100,
+                "family-and-children": 72,
+                "animals": 36,
+                "auto-services": 0
             },
             "priority_score": 0,
             "service_area": {
@@ -10116,46 +10130,47 @@
                 "keittiöremontti"
             ],
             "sub_contexts": [
-                "majoitus",
                 "lomahuoneisto",
-                "mökki",
-                "sauna",
                 "järvenranta",
-                "äijälä",
-                "laukaa",
-                "nurminen",
-                "perhemajoitus",
-                "vapaa-aika",
+                "ympärivuotinen majoitus",
+                "saunamökki",
+                "nuotiopaikka",
                 "vene",
                 "laituri",
-                "nuotiopaikka",
-                "terassi",
-                "takka",
-                "polttopuut",
                 "talvikäyttö",
-                "ympärivuotinen",
+                "lemmikkiystävällinen",
+                "uinti",
+                "veneily",
                 "luonnonrauha",
-                "lemmikkiystävällinen"
+                "järvimaisema",
+                "perhemajoitus",
+                "hiekkaranta",
+                "ulkoleikit",
+                "saunominen",
+                "rentoutumisloma",
+                "luontokylpy"
             ],
             "node_links": [
-                "LAUKAA",
-                "AIJALA",
                 "MAJOITUS",
-                "MOkkI",
                 "SAUNA",
-                "NURMINEN",
-                "JARVENRANTA",
-                "ELÄIMET",
-                "LAPSET"
+                "LIIKUNTA"
             ],
-            "intent_codes": [],
-            "intent_scores": {}
+            "intent_codes": [
+                "VENUE_ACCOMMODATION",
+                "HOME_COTTAGE",
+                "REC_OUTDOOR"
+            ],
+            "intent_scores": {
+                "VENUE_ACCOMMODATION": 100,
+                "HOME_COTTAGE": 94,
+                "REC_OUTDOOR": 62
+            }
         },
         "categories": {
             "core": {
-                "description": "Laukaan Äijälässä Nurminen-järven rannalla sijaitseva lomakeskus, joka tarjoaa 4â€“6 hengen lomahuoneistoja ympäri vuoden. Kohteessa on 11 huoneistoa, joista suurin on 60 mÃ‚Â² kolmella makuuhuoneella ja pienemmät 40 mÃ‚Â² huoneistot neljälle hengelle. Jokaisessa huoneistossa on sauna, terassi, täysin varustettu keittiö ja järvinäkymä. Käytössä myös veneitä, laituri, nuotiopaikka, rantatuolit ja hiekkapohjainen uimapaikka.",
+                "description": "Pitkäniemen lomahuoneistot tarjoaa ympärivuotista mökki- ja lomahuoneistomajoitusta Laukaan Äijälässä Nurminen-järven rannalla. Huoneistoissa on sauna, terassi, takka ja täysin varusteltu keittiö. Kohde sopii erityisesti perhelomailuun, luonnossa rentoutumiseen ja pienimuotoisiin ryhmämajoituksiin.",
                 "website": "https://www.laukaanpitkaniemi.fi",
-                "email": "Lemmikit sallittu rajoituksin. Vaihtopäivä perjantaisin. Lähellä Varjola, Tupaswilla ja Peurunka. Varaukset verkkosivujen kautta.",
+                "email": "",
                 "phone": ""
             },
             "events_and_celebrations": {
@@ -10403,7 +10418,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T15:32:40.283Z",
+            "last_updated": "2026-05-21T12:47:51.347Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
         }

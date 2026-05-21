@@ -1951,22 +1951,6 @@
             "lon": 25.87644,
             "address": "Vaajakoskentie 113, 41310 Laukaa"
         },
-        "nodelink-LEPPÄVESI": {
-            "type": "nodelink",
-            "name": "LEPPÄVESI"
-        },
-        "nodelink-KOKOUSTILA": {
-            "type": "nodelink",
-            "name": "KOKOUSTILA"
-        },
-        "nodelink-HÄÄT": {
-            "type": "nodelink",
-            "name": "HÄÄT"
-        },
-        "nodelink-LUONTO": {
-            "type": "nodelink",
-            "name": "LUONTO"
-        },
         "company-118": {
             "type": "company",
             "name": "Peurunka Oy",
@@ -2174,6 +2158,10 @@
         "nodelink-MUOTOKUVAUS": {
             "type": "nodelink",
             "name": "MUOTOKUVAUS"
+        },
+        "nodelink-HÄÄT": {
+            "type": "nodelink",
+            "name": "HÄÄT"
         },
         "nodelink-HAUTAJAISET": {
             "type": "nodelink",
@@ -3549,6 +3537,10 @@
             "lon": 26.211,
             "address": "Lievestuore, Laukaa"
         },
+        "nodelink-KOKOUSTILA": {
+            "type": "nodelink",
+            "name": "KOKOUSTILA"
+        },
         "company-292": {
             "type": "company",
             "name": "Mika Nuorva Valokuvaaja",
@@ -3596,10 +3588,6 @@
             "lat": 62.163,
             "lon": 26.271,
             "address": "Tauluntie 596, Toivakka"
-        },
-        "nodelink-TOIVAKKA": {
-            "type": "nodelink",
-            "name": "TOIVAKKA"
         },
         "company-280": {
             "type": "company",
@@ -3716,18 +3704,6 @@
             "lat": 62.4927435,
             "lon": 26.0522324,
             "address": "Pitkäniementie 171, 41390 Äijälä, Laukaa"
-        },
-        "nodelink-AIJALA": {
-            "type": "nodelink",
-            "name": "AIJALA"
-        },
-        "nodelink-NURMINEN": {
-            "type": "nodelink",
-            "name": "NURMINEN"
-        },
-        "nodelink-JARVENRANTA": {
-            "type": "nodelink",
-            "name": "JARVENRANTA"
         },
         "company-282": {
             "type": "company",
@@ -7230,6 +7206,11 @@
             "relation": "links_to"
         },
         {
+            "from": "company-104",
+            "to": "nodelink-JUHLATILA",
+            "relation": "links_to"
+        },
+        {
             "from": "company-105",
             "to": "group-vapaa-aika",
             "relation": "fits_for",
@@ -7687,7 +7668,13 @@
             "from": "company-117",
             "to": "intent-EVT_MEMORIAL",
             "relation": "offers",
-            "weight": 100
+            "weight": 96
+        },
+        {
+            "from": "company-117",
+            "to": "intent-ENT_PROGRAM",
+            "relation": "offers",
+            "weight": 82
         },
         {
             "from": "company-117",
@@ -7711,31 +7698,61 @@
             "from": "company-117",
             "to": "group-business-events",
             "relation": "fits_for",
-            "weight": 80
+            "weight": 85
         },
         {
             "from": "company-117",
             "to": "group-funerals-and-memorials",
             "relation": "fits_for",
-            "weight": 100
+            "weight": 96
         },
         {
             "from": "company-117",
             "to": "group-cottage-services",
             "relation": "fits_for",
-            "weight": 20
+            "weight": 35
         },
         {
             "from": "company-117",
             "to": "group-housing-company-and-contracts",
             "relation": "fits_for",
-            "weight": 20
+            "weight": 10
         },
         {
             "from": "company-117",
             "to": "group-wellbeing-and-beauty",
             "relation": "fits_for",
-            "weight": 75
+            "weight": 84
+        },
+        {
+            "from": "company-117",
+            "to": "group-service-partner",
+            "relation": "fits_for",
+            "weight": 25
+        },
+        {
+            "from": "company-117",
+            "to": "group-liikunta-ja-vapaaaika",
+            "relation": "fits_for",
+            "weight": 82
+        },
+        {
+            "from": "company-117",
+            "to": "group-accommodation",
+            "relation": "fits_for",
+            "weight": 10
+        },
+        {
+            "from": "company-117",
+            "to": "group-family-and-children",
+            "relation": "fits_for",
+            "weight": 42
+        },
+        {
+            "from": "company-117",
+            "to": "group-animals",
+            "relation": "fits_for",
+            "weight": 35
         },
         {
             "from": "company-117",
@@ -7754,27 +7771,7 @@
         },
         {
             "from": "company-117",
-            "to": "nodelink-LAUKAA",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-117",
-            "to": "nodelink-LEPPÄVESI",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-117",
             "to": "nodelink-JUHLATILA",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-117",
-            "to": "nodelink-KOKOUSTILA",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-117",
-            "to": "nodelink-HÄÄT",
             "relation": "links_to"
         },
         {
@@ -7784,17 +7781,12 @@
         },
         {
             "from": "company-117",
-            "to": "nodelink-LUONTO",
+            "to": "nodelink-HYVINVOINTI",
             "relation": "links_to"
         },
         {
             "from": "company-117",
-            "to": "nodelink-ELÄMYKSET",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-117",
-            "to": "nodelink-YRITYSTAPAHTUMAT",
+            "to": "nodelink-LIIKUNTA",
             "relation": "links_to"
         },
         {
@@ -8069,6 +8061,11 @@
         {
             "from": "company-118",
             "to": "nodelink-CATERING",
+            "relation": "links_to"
+        },
+        {
+            "from": "company-118",
+            "to": "nodelink-LAPSET",
             "relation": "links_to"
         },
         {
@@ -12816,6 +12813,12 @@
         },
         {
             "from": "company-263",
+            "to": "intent-EVT_WEDDING",
+            "relation": "offers",
+            "weight": 100
+        },
+        {
+            "from": "company-263",
             "to": "group-kokoukset",
             "relation": "fits_for",
             "weight": 35
@@ -13735,6 +13738,18 @@
         },
         {
             "from": "company-289",
+            "to": "intent-VENUE_PARTY",
+            "relation": "offers",
+            "weight": 100
+        },
+        {
+            "from": "company-289",
+            "to": "intent-VENUE_ACCOMMODATION",
+            "relation": "offers",
+            "weight": 92
+        },
+        {
+            "from": "company-289",
             "to": "group-events-and-celebrations",
             "relation": "fits_for",
             "weight": 100
@@ -13743,13 +13758,49 @@
             "from": "company-289",
             "to": "group-business-events",
             "relation": "fits_for",
-            "weight": 88
+            "weight": 92
         },
         {
             "from": "company-289",
             "to": "group-cottage-services",
             "relation": "fits_for",
-            "weight": 40
+            "weight": 55
+        },
+        {
+            "from": "company-289",
+            "to": "group-funerals-and-memorials",
+            "relation": "fits_for",
+            "weight": 78
+        },
+        {
+            "from": "company-289",
+            "to": "group-service-partner",
+            "relation": "fits_for",
+            "weight": 20
+        },
+        {
+            "from": "company-289",
+            "to": "group-wellbeing-and-beauty",
+            "relation": "fits_for",
+            "weight": 52
+        },
+        {
+            "from": "company-289",
+            "to": "group-liikunta-ja-vapaaaika",
+            "relation": "fits_for",
+            "weight": 48
+        },
+        {
+            "from": "company-289",
+            "to": "group-accommodation",
+            "relation": "fits_for",
+            "weight": 100
+        },
+        {
+            "from": "company-289",
+            "to": "group-family-and-children",
+            "relation": "fits_for",
+            "weight": 25
         },
         {
             "from": "company-289",
@@ -13758,27 +13809,7 @@
         },
         {
             "from": "company-289",
-            "to": "nodelink-LAUKAA",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-289",
-            "to": "nodelink-TOIVAKKA",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-289",
-            "to": "nodelink-KARTANO",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-289",
             "to": "nodelink-JUHLATILA",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-289",
-            "to": "nodelink-HÄÄT",
             "relation": "links_to"
         },
         {
@@ -13788,27 +13819,17 @@
         },
         {
             "from": "company-289",
+            "to": "nodelink-CATERING",
+            "relation": "links_to"
+        },
+        {
+            "from": "company-289",
             "to": "nodelink-SAUNA",
             "relation": "links_to"
         },
         {
             "from": "company-289",
-            "to": "nodelink-RAVINTOLA",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-289",
-            "to": "nodelink-KOKOUSTILA",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-289",
-            "to": "nodelink-PITOPALVELU",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-289",
-            "to": "nodelink-CATERING",
+            "to": "nodelink-HYVINVOINTI",
             "relation": "links_to"
         },
         {
@@ -13907,6 +13928,16 @@
         {
             "from": "company-280",
             "to": "nodelink-SAUNA",
+            "relation": "links_to"
+        },
+        {
+            "from": "company-280",
+            "to": "nodelink-VIDEOTUOTANTO",
+            "relation": "links_to"
+        },
+        {
+            "from": "company-280",
+            "to": "nodelink-LAPSET",
             "relation": "links_to"
         },
         {
@@ -14076,7 +14107,7 @@
             "from": "company-276",
             "to": "intent-EVT_MEMORIAL",
             "relation": "offers",
-            "weight": 80
+            "weight": 100
         },
         {
             "from": "company-276",
@@ -14154,7 +14185,7 @@
             "from": "company-276",
             "to": "group-funerals-and-memorials",
             "relation": "fits_for",
-            "weight": 82
+            "weight": 100
         },
         {
             "from": "company-276",
@@ -14603,21 +14634,69 @@
         },
         {
             "from": "company-283",
+            "to": "intent-VENUE_ACCOMMODATION",
+            "relation": "offers",
+            "weight": 100
+        },
+        {
+            "from": "company-283",
+            "to": "intent-HOME_COTTAGE",
+            "relation": "offers",
+            "weight": 94
+        },
+        {
+            "from": "company-283",
+            "to": "intent-REC_OUTDOOR",
+            "relation": "offers",
+            "weight": 62
+        },
+        {
+            "from": "company-283",
             "to": "group-cottage-services",
             "relation": "fits_for",
-            "weight": 95
+            "weight": 96
         },
         {
             "from": "company-283",
             "to": "group-events-and-celebrations",
             "relation": "fits_for",
-            "weight": 38
+            "weight": 40
         },
         {
             "from": "company-283",
             "to": "group-business-events",
             "relation": "fits_for",
-            "weight": 30
+            "weight": 32
+        },
+        {
+            "from": "company-283",
+            "to": "group-wellbeing-and-beauty",
+            "relation": "fits_for",
+            "weight": 58
+        },
+        {
+            "from": "company-283",
+            "to": "group-liikunta-ja-vapaaaika",
+            "relation": "fits_for",
+            "weight": 68
+        },
+        {
+            "from": "company-283",
+            "to": "group-accommodation",
+            "relation": "fits_for",
+            "weight": 100
+        },
+        {
+            "from": "company-283",
+            "to": "group-family-and-children",
+            "relation": "fits_for",
+            "weight": 72
+        },
+        {
+            "from": "company-283",
+            "to": "group-animals",
+            "relation": "fits_for",
+            "weight": 36
         },
         {
             "from": "company-283",
@@ -14626,22 +14705,7 @@
         },
         {
             "from": "company-283",
-            "to": "nodelink-LAUKAA",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-283",
-            "to": "nodelink-AIJALA",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-283",
             "to": "nodelink-MAJOITUS",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-283",
-            "to": "nodelink-MOkkI",
             "relation": "links_to"
         },
         {
@@ -14651,22 +14715,7 @@
         },
         {
             "from": "company-283",
-            "to": "nodelink-NURMINEN",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-283",
-            "to": "nodelink-JARVENRANTA",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-283",
-            "to": "nodelink-ELÄIMET",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-283",
-            "to": "nodelink-LAPSET",
+            "to": "nodelink-LIIKUNTA",
             "relation": "links_to"
         },
         {
@@ -14800,6 +14849,12 @@
         },
         {
             "from": "company-281",
+            "to": "intent-EVT_MEMORIAL",
+            "relation": "offers",
+            "weight": 100
+        },
+        {
+            "from": "company-281",
             "to": "group-events-and-celebrations",
             "relation": "fits_for",
             "weight": 100
@@ -14814,7 +14869,7 @@
             "from": "company-281",
             "to": "group-funerals-and-memorials",
             "relation": "fits_for",
-            "weight": 72
+            "weight": 100
         },
         {
             "from": "company-281",
@@ -14871,6 +14926,11 @@
         {
             "from": "company-281",
             "to": "nodelink-SAUNA",
+            "relation": "links_to"
+        },
+        {
+            "from": "company-281",
+            "to": "nodelink-VIDEOTUOTANTO",
             "relation": "links_to"
         },
         {
@@ -14974,6 +15034,11 @@
         {
             "from": "company-279",
             "to": "nodelink-SAUNA",
+            "relation": "links_to"
+        },
+        {
+            "from": "company-279",
+            "to": "nodelink-VIDEOTUOTANTO",
             "relation": "links_to"
         },
         {

@@ -422,7 +422,8 @@
             "intent_codes": [
                 "MEDIA_VIDEO",
                 "MEDIA_PHOTO",
-                "STARTUP_WEB"
+                "STARTUP_WEB",
+                "EVT_WEDDING"
             ],
             "intent_scores": {
                 "EVT_WEDDING": 100,

@@ -2720,12 +2720,15 @@
                 "SAUNA",
                 "HYVINVOINTI",
                 "LIIKUNTA",
-                "CATERING"
+                "CATERING",
+                "LAPSET"
             ],
             "intent_codes": [
                 "REC_SWIMMING",
                 "REC_GYM",
-                "VENUE_ACCOMMODATION"
+                "VENUE_ACCOMMODATION",
+                "EVT_WEDDING",
+                "EVT_MEMORIAL"
             ],
             "intent_scores": {
                 "REC_SWIMMING": 100,

@@ -1951,22 +1951,6 @@
             "lon": 25.87644,
             "address": "Vaajakoskentie 113, 41310 Laukaa"
         },
-        "nodelink-LEPPÄVESI": {
-            "type": "nodelink",
-            "name": "LEPPÄVESI"
-        },
-        "nodelink-KOKOUSTILA": {
-            "type": "nodelink",
-            "name": "KOKOUSTILA"
-        },
-        "nodelink-HÄÄT": {
-            "type": "nodelink",
-            "name": "HÄÄT"
-        },
-        "nodelink-LUONTO": {
-            "type": "nodelink",
-            "name": "LUONTO"
-        },
         "company-118": {
             "type": "company",
             "name": "Peurunka Oy",
@@ -2174,6 +2158,10 @@
         "nodelink-MUOTOKUVAUS": {
             "type": "nodelink",
             "name": "MUOTOKUVAUS"
+        },
+        "nodelink-HÄÄT": {
+            "type": "nodelink",
+            "name": "HÄÄT"
         },
         "nodelink-HAUTAJAISET": {
             "type": "nodelink",
@@ -3549,6 +3537,10 @@
             "lon": 26.211,
             "address": "Lievestuore, Laukaa"
         },
+        "nodelink-KOKOUSTILA": {
+            "type": "nodelink",
+            "name": "KOKOUSTILA"
+        },
         "company-292": {
             "type": "company",
             "name": "Mika Nuorva Valokuvaaja",
@@ -3596,10 +3588,6 @@
             "lat": 62.163,
             "lon": 26.271,
             "address": "Tauluntie 596, Toivakka"
-        },
-        "nodelink-TOIVAKKA": {
-            "type": "nodelink",
-            "name": "TOIVAKKA"
         },
         "company-280": {
             "type": "company",
@@ -3716,18 +3704,6 @@
             "lat": 62.4927435,
             "lon": 26.0522324,
             "address": "Pitkäniementie 171, 41390 Äijälä, Laukaa"
-        },
-        "nodelink-AIJALA": {
-            "type": "nodelink",
-            "name": "AIJALA"
-        },
-        "nodelink-NURMINEN": {
-            "type": "nodelink",
-            "name": "NURMINEN"
-        },
-        "nodelink-JARVENRANTA": {
-            "type": "nodelink",
-            "name": "JARVENRANTA"
         },
         "company-282": {
             "type": "company",
@@ -5692,7 +5668,8 @@
                 "intent_codes": [
                     "BIZ_CATERING",
                     "VENUE_PARTY",
-                    "EVT_MEMORIAL"
+                    "EVT_MEMORIAL",
+                    "EVT_WEDDING"
                 ],
                 "intent_scores": {
                     "EVT_WEDDING": 100,
@@ -6701,7 +6678,8 @@
                 "intent_codes": [
                     "MEDIA_VIDEO",
                     "MEDIA_PHOTO",
-                    "STARTUP_WEB"
+                    "STARTUP_WEB",
+                    "EVT_WEDDING"
                 ],
                 "intent_scores": {
                     "EVT_WEDDING": 100,
@@ -28646,7 +28624,8 @@
                     "kahvitarjoilu"
                 ],
                 "node_links": [
-                    "CATERING"
+                    "CATERING",
+                    "JUHLATILA"
                 ],
                 "intent_codes": [
                     "BIZ_CATERING",
@@ -32006,15 +31985,22 @@
                     "kokoukset": 35,
                     "vapaa-aika": 35,
                     "events-and-celebrations": 100,
-                    "business-events": 80,
-                    "funerals-and-memorials": 100,
+                    "business-events": 85,
+                    "funerals-and-memorials": 96,
                     "moving-and-housing": 0,
                     "construction-and-maintenance": 0,
-                    "cottage-services": 20,
-                    "housing-company-and-contracts": 20,
+                    "cottage-services": 35,
+                    "housing-company-and-contracts": 10,
                     "startup-services": 0,
                     "business-growth": 0,
-                    "wellbeing-and-beauty": 75
+                    "wellbeing-and-beauty": 84,
+                    "service-partner": 25,
+                    "emergency-services": 0,
+                    "liikunta-ja-vapaaaika": 82,
+                    "accommodation": 10,
+                    "family-and-children": 42,
+                    "animals": 35,
+                    "auto-services": 0
                 },
                 "priority_score": 0,
                 "service_area": {
@@ -32057,47 +32043,48 @@
                     "omilla tarjoiluilla"
                 ],
                 "sub_contexts": [
-                    "juhlatila",
-                    "kokoustila",
-                    "häät",
-                    "yritystapahtuma",
+                    "maalaismiljöö",
+                    "heinälato",
+                    "ulkohäät",
+                    "juhlapäivä luonnossa",
                     "tyhy-päivä",
-                    "luontopalvelu",
                     "green care",
-                    "elämyspalvelu",
-                    "maatila",
-                    "kesäkahvila",
+                    "yrityksen virkistyspäivä",
+                    "luontotiimipäivä",
                     "muistotilaisuus",
-                    "sauna",
-                    "ulkotapahtuma",
-                    "aktiviteetti",
+                    "rauhallinen maaseututila",
+                    "kahvitus",
+                    "eläinavusteinen hyvinvointi",
+                    "luontohyvinvointi",
+                    "green care",
                     "sup-lauta",
-                    "retkeily"
+                    "retkeily",
+                    "luontopolku",
+                    "elämyspalvelu",
+                    "lampaat",
+                    "kanat",
+                    "maatilan eläimet"
                 ],
                 "node_links": [
-                    "LAUKAA",
-                    "LEPPÄVESI",
                     "JUHLATILA",
-                    "KOKOUSTILA",
-                    "HÄÄT",
                     "SAUNA",
-                    "LUONTO",
-                    "ELÄMYKSET",
-                    "YRITYSTAPAHTUMAT"
+                    "HYVINVOINTI",
+                    "LIIKUNTA"
                 ],
                 "intent_codes": [
                     "EVT_WEDDING",
                     "EVT_MEMORIAL",
-                    "EVT_MEMORIAL"
+                    "ENT_PROGRAM"
                 ],
                 "intent_scores": {
                     "EVT_WEDDING": 100,
-                    "EVT_MEMORIAL": 100
+                    "EVT_MEMORIAL": 96,
+                    "ENT_PROGRAM": 82
                 }
             },
             "categories": {
                 "core": {
-                    "description": "Green Care -periaatteita noudattava maatila Leppävedellä, joka tarjoaa luontoon ja eläimiin perustuvia hyvinvointipalveluita sekä juhla- ja kokoustiloja. Tilalla järjestetään häitä, yritystilaisuuksia, tyhy-päiviä ja tapahtumia vanhassa heinäparvessa ja pihapiirissä. Palveluihin kuuluu kesäkahvila, elämykset, luontopolut ja SUP-lautojen vuokraus. Pihapiirissä on eläimiä kuten kanoja ja lampaita, mikä tukee hyvinvointitoimintaa.",
+                    "description": "Perttulan tila Oy on Leppävedellä sijaitseva Green Care -maatila, joka tarjoaa juhla- ja kokoustiloja, hyvinvointi- ja elämyspalveluita sekä luontolähtöisiä yritys- ja yksityistapahtumia. Tilalla järjestetään häitä, muistotilaisuuksia, tyhy-päiviä ja eläinavusteisia hyvinvointikokemuksia.",
                     "website": "http://www.perttulantila.fi",
                     "email": "info@perttulantila.fi",
                     "phone": "040 6215113"
@@ -32344,7 +32331,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-04T16:30:14.308Z",
+                "last_updated": "2026-05-21T12:47:51.347Z",
                 "verified_by": "AI-analysis-v2",
                 "status": "draft"
             }
@@ -32435,12 +32422,15 @@
                     "SAUNA",
                     "HYVINVOINTI",
                     "LIIKUNTA",
-                    "CATERING"
+                    "CATERING",
+                    "LAPSET"
                 ],
                 "intent_codes": [
                     "REC_SWIMMING",
                     "REC_GYM",
-                    "VENUE_ACCOMMODATION"
+                    "VENUE_ACCOMMODATION",
+                    "EVT_WEDDING",
+                    "EVT_MEMORIAL"
                 ],
                 "intent_scores": {
                     "REC_SWIMMING": 100,
@@ -68646,12 +68636,14 @@
                 "intent_codes": [
                     "VENUE_PARTY",
                     "VENUE_ACCOMMODATION",
-                    "REC_RAFTING"
+                    "REC_RAFTING",
+                    "EVT_WEDDING"
                 ],
                 "intent_scores": {
                     "REC_RAFTING": 95,
                     "VENUE_PARTY": 100,
-                    "VENUE_ACCOMMODATION": 92
+                    "VENUE_ACCOMMODATION": 92,
+                    "EVT_WEDDING": 100
                 }
             },
             "categories": {
@@ -71321,8 +71313,22 @@
             "core": {
                 "fits_for": {
                     "events-and-celebrations": 100,
-                    "business-events": 88,
-                    "cottage-services": 40
+                    "business-events": 92,
+                    "cottage-services": 55,
+                    "funerals-and-memorials": 78,
+                    "moving-and-housing": 0,
+                    "construction-and-maintenance": 0,
+                    "housing-company-and-contracts": 0,
+                    "startup-services": 0,
+                    "business-growth": 0,
+                    "service-partner": 20,
+                    "emergency-services": 0,
+                    "wellbeing-and-beauty": 52,
+                    "liikunta-ja-vapaaaika": 48,
+                    "accommodation": 100,
+                    "family-and-children": 25,
+                    "animals": 0,
+                    "auto-services": 0
                 },
                 "priority_score": 0,
                 "service_area": {
@@ -71345,50 +71351,46 @@
                     "laituritarvikkeet / huolto"
                 ],
                 "sub_contexts": [
-                    "taulun kartano",
-                    "toivakka",
-                    "hotelli",
-                    "ravintola",
-                    "juhlatila",
-                    "kokoustila",
-                    "häät",
-                    "majoitus",
-                    "sauna",
-                    "yritystapahtuma",
-                    "kartano",
-                    "juhlapalvelu",
-                    "pitopalvelu",
+                    "kartanohäät",
+                    "hääjuhla",
+                    "yritysjuhlat",
+                    "ranta-alue",
+                    "saunailta",
                     "kokouspaketti",
                     "tyky-päivä",
-                    "esteetön",
-                    "ranta",
-                    "luontopolku",
-                    "pihasauna",
-                    "palju"
+                    "seminaari",
+                    "johtoryhmäpäivä",
+                    "muistotilaisuus",
+                    "kahvitarjoilu",
+                    "rauhallinen juhlatila",
+                    "kartanomajoitus",
+                    "järvimaisema",
+                    "viikonloppumajoitus",
+                    "saunaelämys",
+                    "hemmottelupaketti",
+                    "luontoympäristö"
                 ],
                 "node_links": [
-                    "LAUKAA",
-                    "TOIVAKKA",
-                    "KARTANO",
                     "JUHLATILA",
-                    "HÄÄT",
                     "MAJOITUS",
+                    "CATERING",
                     "SAUNA",
-                    "RAVINTOLA",
-                    "KOKOUSTILA",
-                    "PITOPALVELU",
-                    "CATERING"
+                    "HYVINVOINTI"
                 ],
                 "intent_codes": [
-                    "EVT_WEDDING"
+                    "VENUE_PARTY",
+                    "EVT_WEDDING",
+                    "VENUE_ACCOMMODATION"
                 ],
                 "intent_scores": {
-                    "EVT_WEDDING": 100
+                    "EVT_WEDDING": 100,
+                    "VENUE_PARTY": 100,
+                    "VENUE_ACCOMMODATION": 92
                 }
             },
             "categories": {
                 "core": {
-                    "description": "Taulun Kartano on historiallinen kartanomiljöö Toivakassa, joka tarjoaa majoitusta, ravintolapalveluita sekä juhla- ja kokoustiloja. Kohde tunnetaan erityisesti häiden, yritystapahtumien ja juhlien järjestämispaikkana. Kartanossa on myös sauna- ja hyvinvointipalveluja sekä luonnonläheinen ympäristö järven ja maaseudun läheisyydessä.",
+                    "description": "Taulun Kartano on historiallinen kartano- ja tapahtumakohde Toivakassa. Yritys tarjoaa juhla- ja kokoustiloja, kartanomajoitusta, ravintola- ja cateringpalveluita sekä sauna- ja hyvinvointielämyksiä erityisesti häihin, yritystapahtumiin ja yksityisjuhliin.",
                     "website": "https://taulunkartano.fi",
                     "email": "info@taulunkartano.fi",
                     "phone": "+358 40 123 4567"
@@ -71655,7 +71657,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-04T16:43:10.099Z",
+                "last_updated": "2026-05-21T12:47:51.346Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
@@ -71726,12 +71728,15 @@
                 "node_links": [
                     "JUHLATILA",
                     "CATERING",
-                    "SAUNA"
+                    "SAUNA",
+                    "VIDEOTUOTANTO",
+                    "LAPSET"
                 ],
                 "intent_codes": [
                     "VENUE_PARTY",
                     "EVT_WEDDING",
-                    "EVT_CORPORATE"
+                    "EVT_CORPORATE",
+                    "EVT_MEMORIAL"
                 ],
                 "intent_scores": {
                     "EVT_WEDDING": 96,
@@ -72361,7 +72366,7 @@
                 "fits_for": {
                     "events-and-celebrations": 100,
                     "business-events": 92,
-                    "funerals-and-memorials": 82,
+                    "funerals-and-memorials": 100,
                     "startup-services": 88,
                     "business-growth": 0,
                     "moving-and-housing": 0,
@@ -72451,11 +72456,12 @@
                 "intent_codes": [
                     "VENUE_PARTY",
                     "EVT_WEDDING",
-                    "VENUE_MEETING"
+                    "VENUE_MEETING",
+                    "EVT_MEMORIAL"
                 ],
                 "intent_scores": {
                     "EVT_WEDDING": 98,
-                    "EVT_MEMORIAL": 80,
+                    "EVT_MEMORIAL": 100,
                     "VENUE_PARTY": 100,
                     "EVT_CORPORATE": 80,
                     "VENUE_MEETING": 88,
@@ -74038,9 +74044,23 @@
             "tags": "",
             "core": {
                 "fits_for": {
-                    "cottage-services": 95,
-                    "events-and-celebrations": 38,
-                    "business-events": 30
+                    "cottage-services": 96,
+                    "events-and-celebrations": 40,
+                    "business-events": 32,
+                    "funerals-and-memorials": 0,
+                    "moving-and-housing": 0,
+                    "construction-and-maintenance": 0,
+                    "housing-company-and-contracts": 0,
+                    "startup-services": 0,
+                    "business-growth": 0,
+                    "service-partner": 0,
+                    "emergency-services": 0,
+                    "wellbeing-and-beauty": 58,
+                    "liikunta-ja-vapaaaika": 68,
+                    "accommodation": 100,
+                    "family-and-children": 72,
+                    "animals": 36,
+                    "auto-services": 0
                 },
                 "priority_score": 0,
                 "service_area": {
@@ -74066,46 +74086,47 @@
                     "keittiöremontti"
                 ],
                 "sub_contexts": [
-                    "majoitus",
                     "lomahuoneisto",
-                    "mökki",
-                    "sauna",
                     "järvenranta",
-                    "äijälä",
-                    "laukaa",
-                    "nurminen",
-                    "perhemajoitus",
-                    "vapaa-aika",
+                    "ympärivuotinen majoitus",
+                    "saunamökki",
+                    "nuotiopaikka",
                     "vene",
                     "laituri",
-                    "nuotiopaikka",
-                    "terassi",
-                    "takka",
-                    "polttopuut",
                     "talvikäyttö",
-                    "ympärivuotinen",
+                    "lemmikkiystävällinen",
+                    "uinti",
+                    "veneily",
                     "luonnonrauha",
-                    "lemmikkiystävällinen"
+                    "järvimaisema",
+                    "perhemajoitus",
+                    "hiekkaranta",
+                    "ulkoleikit",
+                    "saunominen",
+                    "rentoutumisloma",
+                    "luontokylpy"
                 ],
                 "node_links": [
-                    "LAUKAA",
-                    "AIJALA",
                     "MAJOITUS",
-                    "MOkkI",
                     "SAUNA",
-                    "NURMINEN",
-                    "JARVENRANTA",
-                    "ELÄIMET",
-                    "LAPSET"
+                    "LIIKUNTA"
                 ],
-                "intent_codes": [],
-                "intent_scores": {}
+                "intent_codes": [
+                    "VENUE_ACCOMMODATION",
+                    "HOME_COTTAGE",
+                    "REC_OUTDOOR"
+                ],
+                "intent_scores": {
+                    "VENUE_ACCOMMODATION": 100,
+                    "HOME_COTTAGE": 94,
+                    "REC_OUTDOOR": 62
+                }
             },
             "categories": {
                 "core": {
-                    "description": "Laukaan Äijälässä Nurminen-järven rannalla sijaitseva lomakeskus, joka tarjoaa 4â€“6 hengen lomahuoneistoja ympäri vuoden. Kohteessa on 11 huoneistoa, joista suurin on 60 mÃ‚Â² kolmella makuuhuoneella ja pienemmät 40 mÃ‚Â² huoneistot neljälle hengelle. Jokaisessa huoneistossa on sauna, terassi, täysin varustettu keittiö ja järvinäkymä. Käytössä myös veneitä, laituri, nuotiopaikka, rantatuolit ja hiekkapohjainen uimapaikka.",
+                    "description": "Pitkäniemen lomahuoneistot tarjoaa ympärivuotista mökki- ja lomahuoneistomajoitusta Laukaan Äijälässä Nurminen-järven rannalla. Huoneistoissa on sauna, terassi, takka ja täysin varusteltu keittiö. Kohde sopii erityisesti perhelomailuun, luonnossa rentoutumiseen ja pienimuotoisiin ryhmämajoituksiin.",
                     "website": "https://www.laukaanpitkaniemi.fi",
-                    "email": "Lemmikit sallittu rajoituksin. Vaihtopäivä perjantaisin. Lähellä Varjola, Tupaswilla ja Peurunka. Varaukset verkkosivujen kautta.",
+                    "email": "",
                     "phone": ""
                 },
                 "events_and_celebrations": {
@@ -74353,7 +74374,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T15:32:40.283Z",
+                "last_updated": "2026-05-21T12:47:51.347Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
@@ -74710,7 +74731,7 @@
                 "fits_for": {
                     "events-and-celebrations": 100,
                     "business-events": 90,
-                    "funerals-and-memorials": 72,
+                    "funerals-and-memorials": 100,
                     "moving-and-housing": 0,
                     "construction-and-maintenance": 0,
                     "cottage-services": 22,
@@ -74766,17 +74787,20 @@
                 ],
                 "node_links": [
                     "JUHLATILA",
-                    "SAUNA"
+                    "SAUNA",
+                    "VIDEOTUOTANTO"
                 ],
                 "intent_codes": [
                     "VENUE_PARTY",
                     "EVT_WEDDING",
-                    "VENUE_MEETING"
+                    "VENUE_MEETING",
+                    "EVT_MEMORIAL"
                 ],
                 "intent_scores": {
                     "EVT_WEDDING": 94,
                     "VENUE_PARTY": 100,
-                    "VENUE_MEETING": 86
+                    "VENUE_MEETING": 86,
+                    "EVT_MEMORIAL": 100
                 }
             },
             "categories": {
@@ -75114,7 +75138,8 @@
                     "JUHLATILA",
                     "KOKOUSTILA",
                     "MAJOITUS",
-                    "SAUNA"
+                    "SAUNA",
+                    "VIDEOTUOTANTO"
                 ],
                 "intent_codes": [
                     "VENUE_PARTY",
@@ -83957,6 +83982,11 @@
             "relation": "links_to"
         },
         {
+            "from": "company-104",
+            "to": "nodelink-JUHLATILA",
+            "relation": "links_to"
+        },
+        {
             "from": "company-105",
             "to": "group-vapaa-aika",
             "relation": "fits_for",
@@ -84414,7 +84444,13 @@
             "from": "company-117",
             "to": "intent-EVT_MEMORIAL",
             "relation": "offers",
-            "weight": 100
+            "weight": 96
+        },
+        {
+            "from": "company-117",
+            "to": "intent-ENT_PROGRAM",
+            "relation": "offers",
+            "weight": 82
         },
         {
             "from": "company-117",
@@ -84438,31 +84474,61 @@
             "from": "company-117",
             "to": "group-business-events",
             "relation": "fits_for",
-            "weight": 80
+            "weight": 85
         },
         {
             "from": "company-117",
             "to": "group-funerals-and-memorials",
             "relation": "fits_for",
-            "weight": 100
+            "weight": 96
         },
         {
             "from": "company-117",
             "to": "group-cottage-services",
             "relation": "fits_for",
-            "weight": 20
+            "weight": 35
         },
         {
             "from": "company-117",
             "to": "group-housing-company-and-contracts",
             "relation": "fits_for",
-            "weight": 20
+            "weight": 10
         },
         {
             "from": "company-117",
             "to": "group-wellbeing-and-beauty",
             "relation": "fits_for",
-            "weight": 75
+            "weight": 84
+        },
+        {
+            "from": "company-117",
+            "to": "group-service-partner",
+            "relation": "fits_for",
+            "weight": 25
+        },
+        {
+            "from": "company-117",
+            "to": "group-liikunta-ja-vapaaaika",
+            "relation": "fits_for",
+            "weight": 82
+        },
+        {
+            "from": "company-117",
+            "to": "group-accommodation",
+            "relation": "fits_for",
+            "weight": 10
+        },
+        {
+            "from": "company-117",
+            "to": "group-family-and-children",
+            "relation": "fits_for",
+            "weight": 42
+        },
+        {
+            "from": "company-117",
+            "to": "group-animals",
+            "relation": "fits_for",
+            "weight": 35
         },
         {
             "from": "company-117",
@@ -84481,27 +84547,7 @@
         },
         {
             "from": "company-117",
-            "to": "nodelink-LAUKAA",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-117",
-            "to": "nodelink-LEPPÄVESI",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-117",
             "to": "nodelink-JUHLATILA",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-117",
-            "to": "nodelink-KOKOUSTILA",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-117",
-            "to": "nodelink-HÄÄT",
             "relation": "links_to"
         },
         {
@@ -84511,17 +84557,12 @@
         },
         {
             "from": "company-117",
-            "to": "nodelink-LUONTO",
+            "to": "nodelink-HYVINVOINTI",
             "relation": "links_to"
         },
         {
             "from": "company-117",
-            "to": "nodelink-ELÄMYKSET",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-117",
-            "to": "nodelink-YRITYSTAPAHTUMAT",
+            "to": "nodelink-LIIKUNTA",
             "relation": "links_to"
         },
         {
@@ -84796,6 +84837,11 @@
         {
             "from": "company-118",
             "to": "nodelink-CATERING",
+            "relation": "links_to"
+        },
+        {
+            "from": "company-118",
+            "to": "nodelink-LAPSET",
             "relation": "links_to"
         },
         {
@@ -89543,6 +89589,12 @@
         },
         {
             "from": "company-263",
+            "to": "intent-EVT_WEDDING",
+            "relation": "offers",
+            "weight": 100
+        },
+        {
+            "from": "company-263",
             "to": "group-kokoukset",
             "relation": "fits_for",
             "weight": 35
@@ -90462,6 +90514,18 @@
         },
         {
             "from": "company-289",
+            "to": "intent-VENUE_PARTY",
+            "relation": "offers",
+            "weight": 100
+        },
+        {
+            "from": "company-289",
+            "to": "intent-VENUE_ACCOMMODATION",
+            "relation": "offers",
+            "weight": 92
+        },
+        {
+            "from": "company-289",
             "to": "group-events-and-celebrations",
             "relation": "fits_for",
             "weight": 100
@@ -90470,13 +90534,49 @@
             "from": "company-289",
             "to": "group-business-events",
             "relation": "fits_for",
-            "weight": 88
+            "weight": 92
         },
         {
             "from": "company-289",
             "to": "group-cottage-services",
             "relation": "fits_for",
-            "weight": 40
+            "weight": 55
+        },
+        {
+            "from": "company-289",
+            "to": "group-funerals-and-memorials",
+            "relation": "fits_for",
+            "weight": 78
+        },
+        {
+            "from": "company-289",
+            "to": "group-service-partner",
+            "relation": "fits_for",
+            "weight": 20
+        },
+        {
+            "from": "company-289",
+            "to": "group-wellbeing-and-beauty",
+            "relation": "fits_for",
+            "weight": 52
+        },
+        {
+            "from": "company-289",
+            "to": "group-liikunta-ja-vapaaaika",
+            "relation": "fits_for",
+            "weight": 48
+        },
+        {
+            "from": "company-289",
+            "to": "group-accommodation",
+            "relation": "fits_for",
+            "weight": 100
+        },
+        {
+            "from": "company-289",
+            "to": "group-family-and-children",
+            "relation": "fits_for",
+            "weight": 25
         },
         {
             "from": "company-289",
@@ -90485,27 +90585,7 @@
         },
         {
             "from": "company-289",
-            "to": "nodelink-LAUKAA",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-289",
-            "to": "nodelink-TOIVAKKA",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-289",
-            "to": "nodelink-KARTANO",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-289",
             "to": "nodelink-JUHLATILA",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-289",
-            "to": "nodelink-HÄÄT",
             "relation": "links_to"
         },
         {
@@ -90515,27 +90595,17 @@
         },
         {
             "from": "company-289",
+            "to": "nodelink-CATERING",
+            "relation": "links_to"
+        },
+        {
+            "from": "company-289",
             "to": "nodelink-SAUNA",
             "relation": "links_to"
         },
         {
             "from": "company-289",
-            "to": "nodelink-RAVINTOLA",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-289",
-            "to": "nodelink-KOKOUSTILA",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-289",
-            "to": "nodelink-PITOPALVELU",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-289",
-            "to": "nodelink-CATERING",
+            "to": "nodelink-HYVINVOINTI",
             "relation": "links_to"
         },
         {
@@ -90634,6 +90704,16 @@
         {
             "from": "company-280",
             "to": "nodelink-SAUNA",
+            "relation": "links_to"
+        },
+        {
+            "from": "company-280",
+            "to": "nodelink-VIDEOTUOTANTO",
+            "relation": "links_to"
+        },
+        {
+            "from": "company-280",
+            "to": "nodelink-LAPSET",
             "relation": "links_to"
         },
         {
@@ -90803,7 +90883,7 @@
             "from": "company-276",
             "to": "intent-EVT_MEMORIAL",
             "relation": "offers",
-            "weight": 80
+            "weight": 100
         },
         {
             "from": "company-276",
@@ -90881,7 +90961,7 @@
             "from": "company-276",
             "to": "group-funerals-and-memorials",
             "relation": "fits_for",
-            "weight": 82
+            "weight": 100
         },
         {
             "from": "company-276",
@@ -91330,21 +91410,69 @@
         },
         {
             "from": "company-283",
+            "to": "intent-VENUE_ACCOMMODATION",
+            "relation": "offers",
+            "weight": 100
+        },
+        {
+            "from": "company-283",
+            "to": "intent-HOME_COTTAGE",
+            "relation": "offers",
+            "weight": 94
+        },
+        {
+            "from": "company-283",
+            "to": "intent-REC_OUTDOOR",
+            "relation": "offers",
+            "weight": 62
+        },
+        {
+            "from": "company-283",
             "to": "group-cottage-services",
             "relation": "fits_for",
-            "weight": 95
+            "weight": 96
         },
         {
             "from": "company-283",
             "to": "group-events-and-celebrations",
             "relation": "fits_for",
-            "weight": 38
+            "weight": 40
         },
         {
             "from": "company-283",
             "to": "group-business-events",
             "relation": "fits_for",
-            "weight": 30
+            "weight": 32
+        },
+        {
+            "from": "company-283",
+            "to": "group-wellbeing-and-beauty",
+            "relation": "fits_for",
+            "weight": 58
+        },
+        {
+            "from": "company-283",
+            "to": "group-liikunta-ja-vapaaaika",
+            "relation": "fits_for",
+            "weight": 68
+        },
+        {
+            "from": "company-283",
+            "to": "group-accommodation",
+            "relation": "fits_for",
+            "weight": 100
+        },
+        {
+            "from": "company-283",
+            "to": "group-family-and-children",
+            "relation": "fits_for",
+            "weight": 72
+        },
+        {
+            "from": "company-283",
+            "to": "group-animals",
+            "relation": "fits_for",
+            "weight": 36
         },
         {
             "from": "company-283",
@@ -91353,22 +91481,7 @@
         },
         {
             "from": "company-283",
-            "to": "nodelink-LAUKAA",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-283",
-            "to": "nodelink-AIJALA",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-283",
             "to": "nodelink-MAJOITUS",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-283",
-            "to": "nodelink-MOkkI",
             "relation": "links_to"
         },
         {
@@ -91378,22 +91491,7 @@
         },
         {
             "from": "company-283",
-            "to": "nodelink-NURMINEN",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-283",
-            "to": "nodelink-JARVENRANTA",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-283",
-            "to": "nodelink-ELÄIMET",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-283",
-            "to": "nodelink-LAPSET",
+            "to": "nodelink-LIIKUNTA",
             "relation": "links_to"
         },
         {
@@ -91527,6 +91625,12 @@
         },
         {
             "from": "company-281",
+            "to": "intent-EVT_MEMORIAL",
+            "relation": "offers",
+            "weight": 100
+        },
+        {
+            "from": "company-281",
             "to": "group-events-and-celebrations",
             "relation": "fits_for",
             "weight": 100
@@ -91541,7 +91645,7 @@
             "from": "company-281",
             "to": "group-funerals-and-memorials",
             "relation": "fits_for",
-            "weight": 72
+            "weight": 100
         },
         {
             "from": "company-281",
@@ -91598,6 +91702,11 @@
         {
             "from": "company-281",
             "to": "nodelink-SAUNA",
+            "relation": "links_to"
+        },
+        {
+            "from": "company-281",
+            "to": "nodelink-VIDEOTUOTANTO",
             "relation": "links_to"
         },
         {
@@ -91701,6 +91810,11 @@
         {
             "from": "company-279",
             "to": "nodelink-SAUNA",
+            "relation": "links_to"
+        },
+        {
+            "from": "company-279",
+            "to": "nodelink-VIDEOTUOTANTO",
             "relation": "links_to"
         },
         {
