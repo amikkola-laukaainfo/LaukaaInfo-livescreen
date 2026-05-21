@@ -672,6 +672,54 @@
         let selections = {};
         let taxonomyData = null;
 
+        const NEED_TO_PROFILING_MAP = {
+            'haat': 'events_and_celebrations',
+            'yritysjuhlat': 'events_and_celebrations',
+            'yritystilaisuudet': 'business_events',
+            'syntymapaivat': 'events_and_celebrations',
+            'muutto': 'moving_and_housing',
+            'remontti': 'construction_and_maintenance',
+            'mokkipalvelut': 'cottage_services',
+            'taloyhtion-huolto': 'housing_company_and_contracts',
+            'hautajaiset': 'funerals_and_memorials',
+            'yrityksen-perustaminen': 'startup_services',
+            'yrityksen-kehittaminen': 'business_growth',
+            'terveys-ja-hyvinvointi': 'wellbeing_and_beauty',
+            'liikunta-ja-vapaaaika': 'wellbeing_and_beauty'
+        };
+
+        function getProfilingKeyForNeed(needId) {
+            const config = window.NEEDS_CONFIG || (typeof NEEDS_CONFIG !== 'undefined' ? NEEDS_CONFIG : null);
+            const need = config && config[needId];
+            return NEED_TO_PROFILING_MAP[needId]
+                || (need && need.profilointi_context)
+                || needId
+                || 'vapaa-aika';
+        }
+
+        function showInvalidNeedError() {
+            const stepSection = document.getElementById('step-section');
+            const resultsContainer = document.getElementById('results-container');
+            if (resultsContainer) resultsContainer.style.display = 'none';
+            if (stepSection) stepSection.style.display = 'block';
+
+            document.getElementById('hero-title').textContent = i18n.t('error_invalid_need_title');
+            document.getElementById('hero-desc').textContent = i18n.t('error_invalid_need_desc');
+            document.getElementById('hero-icon').textContent = '❓';
+            document.title = `${i18n.t('error_invalid_need_title')} | LaukaaInfo`;
+
+            const content = document.getElementById('step-content');
+            const progress = document.getElementById('step-progress');
+            if (progress) progress.innerHTML = '';
+            if (content) {
+                content.innerHTML = `
+                    <div class="step-header" style="text-align: center;">
+                        <p style="margin-bottom: 1.5rem;">${i18n.t('error_invalid_need_desc')}</p>
+                        <a href="index.html#service-needs" class="btn-radar" style="background: var(--primary-blue); display: inline-block;">${i18n.t('error_invalid_need_btn')}</a>
+                    </div>`;
+            }
+        }
+
         async function loadTaxonomy() {
             try {
                 const response = await fetch('taxonomy.json');
@@ -690,7 +738,6 @@
                     relations: data.relations || [],
                     serviceTypes: data.serviceTypes || []
                 };
-                console.log('Taxonomy loaded:', taxonomyData.intents.length, 'intents');
             } catch (e) {
                 // Fallback to empty to prevent crashes
                 taxonomyData = { intents: [], relations: [], serviceTypes: [] };
@@ -704,9 +751,14 @@
                 return;
             }
 
+            if (!currentNeedId) {
+                showInvalidNeedError();
+                return;
+            }
+
             const need = config[currentNeedId];
             if (!need) {
-                // window.location.href = 'index.html'; 
+                showInvalidNeedError();
                 return;
             }
 
@@ -772,6 +824,12 @@
                 progress.appendChild(dot);
             });
 
+            const stepNavHtml = `
+                <div class="step-nav" style="text-align: center; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem;">
+                    ${currentStepIndex > 0 ? `<button type="button" class="btn-radar" onclick="prevStep()" style="background: var(--secondary-blue);" data-i18n="btn_prev">${i18n.t('btn_prev')}</button>` : ''}
+                    ${step.multiple ? `<button type="button" class="btn-radar btn-continue" onclick="nextStep()" style="background: var(--primary-blue);" data-i18n="btn_continue">${i18n.t('btn_continue')}</button>` : ''}
+                </div>`;
+
             // Render step content
             if (step.multiple) {
                 content.innerHTML = `
@@ -787,9 +845,7 @@
                             </label>
                         `).join('')}
                     </div>
-                    <div style="text-align: center;">
-                        <button class="btn-radar btn-continue" onclick="nextStep()" style="background: var(--primary-blue);" data-i18n="btn_continue">Jatka &raquo;</button>
-                    </div>
+                    ${stepNavHtml}
                 `;
             } else {
                 content.innerHTML = `
@@ -804,6 +860,7 @@
                             </button>
                         `).join('')}
                     </div>
+                    ${stepNavHtml}
                 `;
             }
             
@@ -879,6 +936,13 @@
             }
             
             nextStep();
+        }
+
+        function prevStep() {
+            if (currentStepIndex > 0) {
+                currentStepIndex--;
+                renderStep();
+            }
         }
 
         function nextStep() {
@@ -1032,21 +1096,15 @@
                 try { userLoc = JSON.parse(userCoordsRaw); } catch(e) {}
             }
 
-            const needToProfilingMap = {
-                'haat': 'events_and_celebrations',
-                'yritysjuhlat': 'events_and_celebrations',
-                'yritystilaisuudet': 'business_events',
-                'syntymapaivat': 'events_and_celebrations',
-                'muutto': 'moving_and_housing',
-                'remontti': 'construction_and_maintenance',
-                'mokkipalvelut': 'cottage_services',
-                'taloyhtion-huolto': 'housing_company_and_contracts',
-                'hautajaiset': 'funerals_and_memorials',
-                'yrityksen-perustaminen': 'startup_services',
-                'yrityksen-kehittaminen': 'business_growth',
-                'terveys-ja-hyvinvointi': 'wellbeing_and_beauty',
-                'liikunta-ja-vapaaaika': 'wellbeing_and_beauty'
-            };
+            const needToProfilingMap = { ...NEED_TO_PROFILING_MAP };
+            const config = window.NEEDS_CONFIG || NEEDS_CONFIG;
+            if (config) {
+                for (const [id, need] of Object.entries(config)) {
+                    if (need.profilointi_context && !needToProfilingMap[id]) {
+                        needToProfilingMap[id] = need.profilointi_context;
+                    }
+                }
+            }
 
             // Call central search engine
             const searchResult = processSearchResults(
@@ -1060,7 +1118,7 @@
             );
 
             matchingGroupsData = searchResult.groups;
-            globalProfilingKey = needToProfilingMap[currentNeedId] || 'vapaa-aika';
+            globalProfilingKey = getProfilingKeyForNeed(currentNeedId);
             
             // Set global requested capacity from selections
             globalRequestedCapacity = flatSelections.reduce((max, opt) => Math.max(max, opt.capacity_req || 0), 0);
@@ -1073,9 +1131,6 @@
             };
 
             renderResultsView();
-
-            // Log fingerprint for parity check
-            console.log("Search Parity Fingerprint:", searchResult.fingerprint);
         }
 
 
@@ -1112,8 +1167,7 @@
                     globalActiveCollaboratorsSet.add(anchorCompany.nimi);
                 }
             }
-            // Re-run search to update ordering and collaboration
-            showResults();
+            renderResultsView();
         }
 
         function renderResultsView() {
@@ -1590,10 +1644,12 @@
             let actionHtml = `<div class="${actionGridClass}">`;
             
             if (hasEmail) {
+                const cleanEmail = (typeof cleanUrl === 'function' ? cleanUrl(email, false) : email).replace(/^mailto:/gi, '').trim();
+                const mailSubject = encodeURIComponent(i18n.t('inquiry_email_subject').replace('{company}', c.nimi));
                 actionHtml += `
-                <button type="button" class="btn-action primary-action" onclick="event.preventDefault(); event.stopPropagation(); openInquiryModal('${c.id}', '${c.nimi.replace(/'/g, "\\'")}')">
-                    <i>✉️</i><span>${i18n.t('btn_send_inquiry_short')}</span>
-                </button>`;
+                <a href="mailto:${cleanEmail}?subject=${mailSubject}" class="btn-action primary-action" onclick="event.stopPropagation();">
+                    <i>✉️</i><span>${i18n.t('btn_contact_email')}</span>
+                </a>`;
             }
 
             actionHtml += `
@@ -1818,7 +1874,7 @@
 
         function printResults() {
             if (currentResultsGroups.length === 0) {
-                alert("Ei tuloksia tulostettavaksi. Valitse ensin palveluita.");
+                alert(i18n.t('print_no_results'));
                 return;
             }
 
