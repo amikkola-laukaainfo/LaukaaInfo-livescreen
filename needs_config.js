@@ -37,10 +37,13 @@ const NEEDS_CONFIG = {
                 "question": { "fi": "Mitä palveluita tarvitset juhlapäivään?", "en": "What services do you need for the wedding day?" },
                 "options": [
                     { "id": "OPT_WED_SERVICE_CATERING", "label": { "fi": "Pitopalvelu", "en": "Catering service" }, "tags": ["pitopalvelu"], "intent_codes": ["BIZ_CATERING"] },
+                    { "id": "OPT_WED_SERVICE_CAKE", "label": { "fi": "Hääkakku / Leivonnaiset", "en": "Wedding cake / Pastries" }, "tags": ["leipomo", "elintarvike", "pitopalvelu"], "intent_codes": ["BIZ_CATERING"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "juhlakakku" } },
                     { "id": "OPT_WED_SERVICE_PHOTO", "label": { "fi": "Valokuvaaja", "en": "Photographer" }, "tags": ["valokuvaus", "valokuvaaja"], "intent_codes": ["MEDIA_PHOTO"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "hääkuvaus" } },
                     { "id": "OPT_WED_SERVICE_VIDEO", "label": { "fi": "Videokuvaaja", "en": "Videographer" }, "tags": ["videotuotanto", "videokuvaus", "videokuvaaja"], "intent_codes": ["MEDIA_VIDEO"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "häävideo" } },
                     { "id": "OPT_WED_SERVICE_FLORIST", "label": { "fi": "Kukkakauppa & Koristelu", "en": "Flower shop & Decoration" }, "tags": ["kukkakauppa", "kukat"], "intent_codes": ["BIZ_FLORIST"] },
-                    { "id": "OPT_WED_SERVICE_MUSIC", "label": { "fi": "Musiikki tai DJ", "en": "Music or DJ" }, "tags": ["musiikki", "ohjelmapalvelut"], "intent_codes": ["ENT_MUSIC"], "profilointi_filter": { "section": "events_and_celebrations", "field": "entertainment_features", "value": "live-musiikki" } }
+                    { "id": "OPT_WED_SERVICE_MUSIC", "label": { "fi": "Musiikki tai DJ", "en": "Music or DJ" }, "tags": ["musiikki", "ohjelmapalvelut"], "intent_codes": ["ENT_MUSIC"], "profilointi_filter": { "section": "events_and_celebrations", "field": "entertainment_features", "value": "live-musiikki" } },
+                    { "id": "OPT_WED_SERVICE_PROGRAM", "label": { "fi": "Ohjelmapalvelut / Esiintyjät", "en": "Entertainment / Performers" }, "tags": ["ohjelmapalvelut"], "intent_codes": ["ENT_PROGRAM"] },
+                    { "id": "OPT_WED_SERVICE_PLANNER", "label": { "fi": "Hääsuunnittelija / Koordinaattori", "en": "Wedding planner / Coordinator" }, "tags": ["ohjelmapalvelut", "tapahtumatuotanto"], "intent_codes": ["ENT_PROGRAM"] }
                 ]
             },
             {

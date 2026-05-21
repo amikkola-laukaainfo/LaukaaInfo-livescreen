@@ -2648,15 +2648,20 @@
                 "events-and-celebrations": 100,
                 "liikunta-ja-vapaaaika": 100,
                 "wellbeing-and-beauty": 100,
-                "business-events": 90,
+                "business-events": 95,
                 "funerals-and-memorials": 100,
                 "moving-and-housing": 0,
-                "construction-and-maintenance": 10,
-                "cottage-services": 18,
-                "housing-company-and-contracts": 15,
-                "startup-services": 52,
-                "business-growth": 60,
-                "accommodation": 100
+                "construction-and-maintenance": 8,
+                "cottage-services": 20,
+                "housing-company-and-contracts": 18,
+                "startup-services": 35,
+                "business-growth": 45,
+                "accommodation": 100,
+                "service-partner": 40,
+                "emergency-services": 0,
+                "family-and-children": 72,
+                "animals": 0,
+                "auto-services": 0
             },
             "priority_score": 0,
             "service_area": {
@@ -2686,21 +2691,28 @@
                 "luennot"
             ],
             "sub_contexts": [
-                "kylpylä",
-                "hotelli",
-                "majoitus",
-                "kokoustila",
-                "yritystapahtuma",
-                "hyvinvointipalvelut",
-                "kuntoutus",
-                "uimahalli",
-                "kuntosali",
-                "sauna",
-                "hääjuhla",
+                "kylpylähäät",
                 "muistotilaisuus",
+                "yritysjuhla",
+                "saunailta",
+                "kokoushotelli",
+                "seminaari",
                 "tyky-päivä",
-                "ravintola",
-                "viikonloppuloma"
+                "hyvinvointipäivä",
+                "kylpylä",
+                "hieronta",
+                "sauna",
+                "hyvinvointiloma",
+                "uinti",
+                "kuntosali",
+                "ryhmäliikunta",
+                "vesijumppa",
+                "kylpylähotelli",
+                "viikonloppuloma",
+                "perheloma",
+                "perheloma",
+                "uima-allas",
+                "lasten aktiviteetit"
             ],
             "node_links": [
                 "JUHLATILA",
@@ -2712,17 +2724,13 @@
             ],
             "intent_codes": [
                 "REC_SWIMMING",
-                "VENUE_ACCOMMODATION",
-                "EVT_CORPORATE",
-                "EVT_WEDDING",
-                "EVT_MEMORIAL",
-                "VENUE_PARTY",
-                "REC_GYM"
+                "REC_GYM",
+                "VENUE_ACCOMMODATION"
             ],
             "intent_scores": {
                 "REC_SWIMMING": 100,
-                "REC_GYM": 100,
-                "VENUE_ACCOMMODATION": 90,
+                "REC_GYM": 98,
+                "VENUE_ACCOMMODATION": 95,
                 "EVT_CORPORATE": 90,
                 "EVT_WEDDING": 100,
                 "EVT_MEMORIAL": 100,
@@ -2731,7 +2739,7 @@
         },
         "categories": {
             "core": {
-                "description": "Peurunka Oy on Laukaassa sijaitseva kylpylähotelli, kuntoutus- ja hyvinvointikeskus, joka tarjoaa majoitusta, kokouspalveluita, ravintolapalveluita sekä monipuolisia liikunta- ja wellness-elämyksiä. Kohde palvelee sekä vapaa-ajan asiakkaita että yritys- ja tapahtuma-asiakkaita ympäri vuoden.",
+                "description": "Peurunka Oy on Laukaassa toimiva kylpylähotelli ja hyvinvointikeskus, joka tarjoaa majoitusta, ravintola- ja kokouspalveluita, kuntoutusta sekä monipuolisia liikunta- ja wellness-palveluita. Kohde soveltuu yritystapahtumiin, juhliin, muistotilaisuuksiin ja aktiiviseen lomailuun ympäri vuoden.",
                 "website": "https://www.peurunka.fi",
                 "email": "peurunka@peurunka.fi",
                 "phone": "+358207516300"
@@ -2984,7 +2992,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T15:50:49.845Z",
+            "last_updated": "2026-05-21T11:53:44.943Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
