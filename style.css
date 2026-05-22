@@ -374,7 +374,7 @@ section[id] {
    ========================================= */
 header.hero-split {
     display: flex;
-    min-height: 85vh; /* Taller hero */
+    min-height: 57vh; /* ~1/3 matalampi kuin aiempi 85vh */
     margin-bottom: 0; /* Flush with content if needed, but we have padding in sections */
     border-radius: 0; /* Remove rounding for full-width feel */
     overflow: hidden;
@@ -387,7 +387,7 @@ header.hero-split {
     flex: 1;
     display: flex;
     align-items: center;
-    padding: 4rem 4rem 4rem 8vw;
+    padding: 2.75rem 3rem 2.75rem 8vw;
     position: relative;
     z-index: 2;
 }
@@ -561,7 +561,7 @@ header h1 {
 
     .hero-right {
         position: relative;
-        min-height: 250px;
+        min-height: 170px;
         flex: unset;
     }
 
