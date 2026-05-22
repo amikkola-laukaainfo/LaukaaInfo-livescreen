@@ -168,7 +168,7 @@
         }
     }
 
-    /** Vanhentunut ilmainen yritys: vain nimi + osoite, ei linkkejä eikä yhteystietoja */
+    /** Vanhentunut ilmainen yritys: nimi, osoite ja nettiosoite (jos annettu) */
     function renderExpiredCompanyCard(company) {
         document.getElementById('loading-overlay').style.display = 'none';
         document.getElementById('card-content').style.display = 'block';
@@ -190,7 +190,7 @@
             const alert = document.createElement('div');
             alert.id = 'expired-notice';
             alert.style.cssText = 'background:#fff3cd;color:#856404;padding:10px;border-radius:8px;margin-bottom:15px;text-align:center;font-weight:bold;border:1px solid #ffeeba;';
-            alert.textContent = '⚠️ Yrityksen ilmainen näkyvyys on päättynyt. Näytetään vain nimi ja osoite.';
+            alert.textContent = '⚠️ Yrityksen ilmainen näkyvyys on päättynyt. Näytetään vain nimi, osoite ja kotisivu (jos annettu).';
             nameEl.parentElement.insertBefore(alert, nameEl);
         }
 
@@ -219,7 +219,6 @@
             'logo-container',
             'gallery-container',
             'phone-item',
-            'website-item',
             'google-reviews-item',
             'service-methods-item',
             'service-area-confirmation',
@@ -240,6 +239,26 @@
 
         const mapContainer = document.getElementById('card-map');
         if (mapContainer) mapContainer.innerHTML = '';
+
+        const websiteItem = document.getElementById('website-item');
+        const nettisivu = (company.nettisivu || company.website || '').trim();
+        if (websiteItem && nettisivu && nettisivu !== '-') {
+            const webLink = document.getElementById('display-website');
+            if (webLink && typeof cleanUrl === 'function') {
+                const sanitizedUrl = cleanUrl(nettisivu, true);
+                const displayUrl = sanitizedUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
+                webLink.textContent = displayUrl.length > 25 ? 'www-kotisivulinkki' : displayUrl;
+                webLink.href = sanitizedUrl;
+                webLink.target = '_blank';
+                webLink.rel = 'noopener noreferrer';
+                websiteItem.style.display = 'flex';
+                setTimeout(() => {
+                    if (typeof fitText === 'function') fitText(webLink, 10);
+                }, 50);
+            }
+        } else if (websiteItem) {
+            websiteItem.style.display = 'none';
+        }
 
         const infoPanel = document.querySelector('.info-panel');
         if (infoPanel && !document.getElementById('expired-renew-cta')) {

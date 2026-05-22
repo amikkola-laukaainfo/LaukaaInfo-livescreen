@@ -327,8 +327,7 @@ while (($row_raw = fgetcsv($stream)) !== false) {
         $row['instagram'] = '';
         $row['linkedin'] = '';
         $row['tiktok'] = '';
-        $row['website'] = '';
-        $row['nettisivu'] = '';
+        // Nettiosoite säilytetään – näytetään yrityskortilla
         $row['phone'] = '';
         $row['puhelin'] = '';
         $row['email'] = '';
@@ -336,7 +335,7 @@ while (($row_raw = fgetcsv($stream)) !== false) {
         $row['whatsapp'] = '';
         $row['logo'] = '';
         $row['mainoslinkit'] = '';
-        // Osoite säilytetään – näytetään yrityskortilla (ei yhteystietoja/linkkejä)
+        // Osoite ja nettiosoite säilytetään yrityskortilla (ei muita yhteystietoja/somea)
         $reviews_map[$rowid] = '';
     }
 
