@@ -1210,6 +1210,14 @@ main {
     padding: 0 1.5rem;
 }
 
+.section-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
 section {
     margin-bottom: 2.5rem;
 }
@@ -1300,6 +1308,122 @@ h3 {
     display: flex;
     align-items: center;
     gap: 8px;
+}
+
+/* Dashboard grid (ajankohtaista, taajamasivut) */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+.dashboard-grid > .card,
+.dashboard-grid > .info-block,
+#ajankohtaista-dashboard .card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 24px;
+    padding: 2rem 1.75rem;
+    box-shadow: 0 10px 30px rgba(0, 51, 102, 0.06);
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.dashboard-grid > .card:hover,
+.dashboard-grid > .info-block:hover {
+    box-shadow: 0 16px 40px rgba(0, 51, 102, 0.1);
+    transform: translateY(-4px);
+}
+
+.dashboard-grid .card h2,
+.dashboard-grid .info-block h2 {
+    font-family: var(--accent-font);
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--primary-blue);
+    margin: 0;
+    letter-spacing: -0.02em;
+}
+
+.info-block__header {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e8eef4;
+}
+
+.info-block__icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    line-height: 1;
+}
+
+.info-block__icon--news { background: #e0f2fe; }
+.info-block__icon--decisions { background: #ede9fe; }
+.info-block__icon--events { background: #ffedd5; }
+.info-block__icon--feedback { background: #d1fae5; }
+
+#news-card { border-top: 4px solid var(--primary-blue); }
+#decisions-card { border-top: 4px solid #6366f1; }
+#events-card { border-top: 4px solid #ea580c; }
+#feedback-card { border-top: 4px solid #059669; }
+
+.ajankohtaista-jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.ajankohtaista-jump a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1.15rem;
+    background: #fff;
+    border: 2px solid #d1e2f3;
+    border-radius: 50px;
+    text-decoration: none;
+    color: var(--primary-blue);
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 51, 102, 0.05);
+}
+
+.ajankohtaista-jump a:hover {
+    background: var(--primary-blue);
+    color: #fff;
+    border-color: var(--primary-blue);
+    transform: translateY(-2px);
+}
+
+.info-block__footer {
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e8eef4;
+}
+
+.info-block__footer .btn-radar {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.9rem;
+    padding: 0.65rem 1.25rem;
+}
+
+@media (max-width: 900px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* RSS Feed Styling */

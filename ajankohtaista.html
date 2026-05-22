@@ -23,11 +23,11 @@
         href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Outfit:wght@100..900&display=swap"
         rel="stylesheet">
 
-    <link rel="stylesheet" href="style.css?v=20260505">
+    <link rel="stylesheet" href="style.css?v=20260522">
     <script src="translations.js?v=20260505"></script>
 </head>
 
-<body>
+<body class="page-ajankohtaista">
 
     <nav class="top-nav">
         <div class="nav-container">
@@ -198,55 +198,73 @@
 
     <header>
         <div class="header-content">
-            <h1>Ajankohtaista</h1>
-            <p>Seuraa Laukaan tapahtumia ja uutisia.</p>
+            <h1 data-i18n="nav_current">Ajankohtaista</h1>
+            <p data-i18n="ajankohtaista_hero_desc">Seuraa Laukaan uutisia, tapahtumia, päätöksiä ja palautteita yhdestä paikasta.</p>
         </div>
     </header>
 
     <main>
         <section id="ajankohtaista-dashboard" class="bg-full-gray">
-            <div class="dashboard-grid" style="max-width: 1200px; margin: 0 auto;">
-                <!-- RSS Uutiset -->
-                <div class="card" id="news-card">
-                    <h2>Ajankohtaiset uutiset</h2>
-                    <div id="news-container" class="rss-list">
-                        <p>Ladataan uutisia...</p>
-                    </div>
-                </div>
+            <div class="section-container">
+                <nav class="ajankohtaista-jump" aria-label="Siirry osioon">
+                    <a href="#news-card"><span aria-hidden="true">📰</span> <span data-i18n="nav_news">Tiedotteet</span></a>
+                    <a href="#events-card"><span aria-hidden="true">📅</span> <span data-i18n="nav_events">Tapahtumat</span></a>
+                    <a href="#decisions-card"><span aria-hidden="true">📋</span> <span data-i18n="nav_decisions">Päätöksenteko</span></a>
+                    <a href="#feedback-card"><span aria-hidden="true">💬</span> <span data-i18n="nav_feedback">Palautteet</span></a>
+                </nav>
 
-                <!-- RSS Päätöksenteko -->
-                <div class="card" id="decisions-card">
-                    <h2>Päätöksenteko</h2>
-                    <div id="decisions-container" class="rss-list">
-                        <p>Ladataan pöytäkirjoja...</p>
-                    </div>
-                </div>
+                <div class="dashboard-grid">
+                    <article class="info-block card" id="news-card">
+                        <div class="info-block__header">
+                            <span class="info-block__icon info-block__icon--news" aria-hidden="true">📰</span>
+                            <h2 data-i18n="ajankohtaista_news_title">Ajankohtaiset uutiset</h2>
+                        </div>
+                        <div id="news-container" class="rss-list">
+                            <p data-i18n="loading_news">Ladataan uutisia...</p>
+                        </div>
+                    </article>
 
-                <!-- RSS Tapahtumat -->
-                <div class="card" id="events-card">
-                    <h2>Tapahtumat</h2>
-                    <div id="events-container" class="rss-list">
-                        <p>Ladataan tapahtumia...</p>
-                    </div>
-                </div>
+                    <article class="info-block card" id="events-card">
+                        <div class="info-block__header">
+                            <span class="info-block__icon info-block__icon--events" aria-hidden="true">📅</span>
+                            <h2 data-i18n="nav_events">Tapahtumat</h2>
+                        </div>
+                        <div id="events-container" class="rss-list">
+                            <p data-i18n="loading_events">Ladataan tapahtumia...</p>
+                        </div>
+                    </article>
 
-                <!-- Palaute -->
-                <div class="card" id="feedback-card">
-                    <h2>Anna palautetta kunnalle</h2>
-                    <div id="feedback-container" class="rss-list">
-                        <p>Ladataan palautteita...</p>
-                    </div>
-                    <a href="https://laukaa.trimblefeedback.com/eFeedback/" target="_blank" class="btn-primary"
-                        style="margin-top: 15px; display: inline-block;">
-                        🔗 Siirry palautelomakkeeseen
-                    </a>
+                    <article class="info-block card" id="decisions-card">
+                        <div class="info-block__header">
+                            <span class="info-block__icon info-block__icon--decisions" aria-hidden="true">📋</span>
+                            <h2 data-i18n="nav_decisions">Päätöksenteko</h2>
+                        </div>
+                        <div id="decisions-container" class="rss-list">
+                            <p data-i18n="loading_decisions">Ladataan pöytäkirjoja...</p>
+                        </div>
+                    </article>
+
+                    <article class="info-block card" id="feedback-card">
+                        <div class="info-block__header">
+                            <span class="info-block__icon info-block__icon--feedback" aria-hidden="true">💬</span>
+                            <h2 data-i18n="ajankohtaista_feedback_title">Anna palautetta kunnalle</h2>
+                        </div>
+                        <div id="feedback-container" class="rss-list">
+                            <p data-i18n="loading_feedback">Ladataan palautteita...</p>
+                        </div>
+                        <div class="info-block__footer">
+                            <a href="https://laukaa.trimblefeedback.com/eFeedback/" target="_blank" rel="noopener noreferrer" class="btn-radar">
+                                <span aria-hidden="true">🔗</span> <span data-i18n="ajankohtaista_feedback_btn">Siirry palautelomakkeeseen</span>
+                            </a>
+                        </div>
+                    </article>
                 </div>
             </div>
         </section>
-        <!-- Unified Business Navigation -->
+
         <section class="business-nav-section bg-full-blue">
-            <div style="max-width: 1200px; margin: 0 auto;">
-                <h2 style="text-align: center; margin-bottom: 2rem;">Kasvata näkyvyyttäsi Laukaassa</h2>
+            <div class="section-container">
+                <h2 style="text-align: center; margin-bottom: 2rem;" data-i18n="title_grow_visibility">Kasvata näkyvyyttäsi Laukaassa</h2>
                 <div class="business-nav-grid">
                     <a href="ilmoittaudu.html#ilm-form" class="nav-box">
                         <h3>Feed-julkaisu</h3>
