@@ -879,9 +879,8 @@
                 sessionStorage.removeItem('pikahaku_pending');
                 if (data.id) currentNeedId = data.id;
                 if (data.selections) {
-                    selections = typeof rehydrateSelectionsFromConfig === 'function'
-                        ? rehydrateSelectionsFromConfig(data.id, data.selections)
-                        : data.selections;
+                    // Valinnat tulevat jo täysinä objekteina pikahakusta, ei tarvetta rehydratoida
+                    selections = data.selections;
                 }
                 searchMode = 'compact';
                 window.searchMode = 'compact';
