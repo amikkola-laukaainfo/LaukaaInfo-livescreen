@@ -168,38 +168,104 @@
         }
     }
 
-    function renderCompanyDetails(company) {
+    /** Vanhentunut ilmainen yritys: vain nimi + osoite, ei linkkejä eikä yhteystietoja */
+    function renderExpiredCompanyCard(company) {
         document.getElementById('loading-overlay').style.display = 'none';
         document.getElementById('card-content').style.display = 'block';
 
-        if (company.is_expired) {
-            const cardContent = document.getElementById('card-content');
-            if (cardContent) cardContent.classList.add('expired-card');
-            
-            const nameEl = document.getElementById('display-name');
-            if (nameEl) {
-                const alertHtml = '<div style="background: #fff3cd; color: #856404; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center; font-weight: bold; border: 1px solid #ffeeba;">⚠️ Yrityksen tiedot voivat olla vanhentuneita</div>';
-                nameEl.insertAdjacentHTML('beforebegin', alertHtml);
-            }
-            
-            // Minimalistinen tyyli: poistetaan korostusvärit
-            const header = document.querySelector('.card-header');
-            if (header) {
-                header.style.background = '#e2e8f0'; // Harmaa tausta
-                header.style.color = '#334155';
-            }
-            
-            // Tyhjennetään mahdolliset jäämät
-            company.esittely = '';
-            company.mainoslause = '';
-            company.logo = '';
-            company.media = [];
-            company.puhelin = '';
-            company.nettisivu = '';
-            company.whatsapp = '';
-            company.facebook = '';
-            company.instagram = '';
+        const cardContent = document.getElementById('card-content');
+        if (cardContent) cardContent.classList.add('expired-card');
+
+        document.title = `${company.nimi} – LaukaaInfo`;
+
+        const header = document.querySelector('.card-header');
+        if (header) {
+            header.style.background = '#e2e8f0';
+            header.style.color = '#334155';
+            header.classList.remove('has-gallery');
         }
+
+        const nameEl = document.getElementById('display-name');
+        if (nameEl && !document.getElementById('expired-notice')) {
+            const alert = document.createElement('div');
+            alert.id = 'expired-notice';
+            alert.style.cssText = 'background:#fff3cd;color:#856404;padding:10px;border-radius:8px;margin-bottom:15px;text-align:center;font-weight:bold;border:1px solid #ffeeba;';
+            alert.textContent = '⚠️ Yrityksen ilmainen näkyvyys on päättynyt. Näytetään vain nimi ja osoite.';
+            nameEl.parentElement.insertBefore(alert, nameEl);
+        }
+
+        document.getElementById('display-name').textContent = company.nimi;
+        document.getElementById('display-category').textContent = company.kategoria || '';
+
+        const headlineEl = document.getElementById('display-headline');
+        if (headlineEl) {
+            headlineEl.textContent = '';
+            headlineEl.style.display = 'none';
+        }
+
+        const descEl = document.getElementById('display-description');
+        if (descEl) {
+            descEl.textContent = '';
+            const descWrap = descEl.closest('.description-block') || descEl.parentElement;
+            if (descWrap) descWrap.style.display = 'none';
+        }
+
+        document.getElementById('display-address').textContent = company.osoite || 'Laukaa';
+
+        const distEl = document.getElementById('display-distance');
+        if (distEl) distEl.remove();
+
+        [
+            'logo-container',
+            'gallery-container',
+            'phone-item',
+            'website-item',
+            'google-reviews-item',
+            'service-methods-item',
+            'service-area-confirmation',
+            'card-map',
+            'promotional-links-section',
+            'video-section',
+            'social-links'
+        ].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = 'none';
+        });
+
+        const socialIcons = document.getElementById('social-icons');
+        if (socialIcons) socialIcons.innerHTML = '';
+
+        const logoContainer = document.getElementById('logo-container');
+        if (logoContainer) logoContainer.style.display = 'none';
+
+        const mapContainer = document.getElementById('card-map');
+        if (mapContainer) mapContainer.innerHTML = '';
+
+        const infoPanel = document.querySelector('.info-panel');
+        if (infoPanel && !document.getElementById('expired-renew-cta')) {
+            const cta = document.createElement('div');
+            cta.id = 'expired-renew-cta';
+            cta.style.cssText = 'margin-top:1.5rem;padding:1.25rem;background:#f0f7ff;border:2px solid #bae6fd;border-radius:16px;text-align:center;';
+            cta.innerHTML = `
+                <p style="margin:0 0 1rem;color:#334155;line-height:1.5;font-size:0.95rem;">
+                    Haluatko palauttaa yrityksen näkyvyyden sivustolla? Valitse sopiva paketti ja lähetä tiedot uudelleen.
+                </p>
+                <a href="lisaa-yritys.html" class="btn-radar" style="display:inline-block;text-decoration:none;">
+                    Palauta näkyvyys – valitse paketti
+                </a>
+            `;
+            infoPanel.appendChild(cta);
+        }
+    }
+
+    function renderCompanyDetails(company) {
+        if (company.is_expired) {
+            renderExpiredCompanyCard(company);
+            return;
+        }
+
+        document.getElementById('loading-overlay').style.display = 'none';
+        document.getElementById('card-content').style.display = 'block';
 
         const rawId = String(company.id).replace('company-', '');
         document.title = `${company.nimi} – LaukaaInfo`;

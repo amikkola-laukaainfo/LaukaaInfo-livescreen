@@ -336,7 +336,7 @@ while (($row_raw = fgetcsv($stream)) !== false) {
         $row['whatsapp'] = '';
         $row['logo'] = '';
         $row['mainoslinkit'] = '';
-        $row['address'] = ''; // Poistetaanko osoite kokonaan? Ehkä pidetään osoite, jos se on fyysinen liike.
+        // Osoite säilytetään – näytetään yrityskortilla (ei yhteystietoja/linkkejä)
         $reviews_map[$rowid] = '';
     }
 

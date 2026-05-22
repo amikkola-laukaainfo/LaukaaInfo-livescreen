@@ -180,6 +180,31 @@
             display: block;
         }
 
+        .paid-only-field {
+            display: block;
+        }
+
+        .paid-only-field.is-hidden {
+            display: none !important;
+        }
+
+        .free-tier-hint {
+            display: none;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid #64748b;
+            padding: 1rem 1.25rem;
+            border-radius: 0 12px 12px 0;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            color: #475569;
+            line-height: 1.5;
+        }
+
+        .free-tier-hint.visible {
+            display: block;
+        }
+
         .btn-submit {
             width: 100%;
             padding: 1rem;
@@ -698,9 +723,10 @@
                 <h3>Ilmainen</h3>
                 <div class="price">0 €</div>
                 <ul>
-                    <li><span class="icon">✓</span> Perusyhteystiedot</li>
-                    <li><span class="icon">✓</span> Sijainti & Puh</li>
-                    <li><span class="icon">✗</span> Kotisivulinkki</li>
+                    <li><span class="icon">✓</span> Nimi, kategoria ja osoite</li>
+                    <li><span class="icon">✗</span> Puhelin ja muut yhteystiedot</li>
+                    <li><span class="icon">✗</span> Kotisivu ja some-linkit</li>
+                    <li><span class="icon">✗</span> Profilointi verkostoihin</li>
                     <li><span class="icon">✗</span> Feed-julkaisut</li>
                 </ul>
                 <div style="font-size: 0.8rem; font-weight: bold; color: #666;">Valitse ilmainen</div>
@@ -711,8 +737,9 @@
                 <h3>BASIC</h3>
                 <div class="price">45 €<span> / 3kk</span></div>
                 <ul>
-                    <li><span class="icon">✓</span> Täydet yritystiedot</li>
-                    <li><span class="icon">✓</span> Kotisivulinkki</li>
+                    <li><span class="icon">✓</span> Täydet yritystiedot ja yhteystiedot</li>
+                    <li><span class="icon">✓</span> Kotisivu ja some-linkit</li>
+                    <li><span class="icon">✓</span> Profilointi palveluverkostoihin</li>
                     <li><span class="icon">✓</span> 2 julkaisua / kk</li>
                     <li><span class="icon">✗</span> Ei nostoja</li>
                 </ul>
@@ -724,11 +751,11 @@
                 <h3>PLUS</h3>
                 <div class="price">79 €<span> / 6kk</span></div>
                 <ul>
-                    <li><span class="icon">✓</span> Täydet yritystiedot</li>
+                    <li><span class="icon">✓</span> Täydet yritystiedot ja yhteystiedot</li>
+                    <li><span class="icon">✓</span> Profilointi palveluverkostoihin</li>
                     <li><span class="icon">✓</span> 5 julkaisua / kk</li>
                     <li><span class="icon">✓</span> 1 noston / kk</li>
-                    <li><span class="icon">✓</span> Kuvagalleria</li>
-                    <li><span class="icon">✓</span> Itsepäivitettävä tarjoustyökalu</li>
+                    <li><span class="icon">✓</span> Kuvagalleria ja tarjoustyökalu</li>
                 </ul>
                 <div style="font-size: 0.8rem; font-weight: bold; color: #007bff;">Valitse Plus</div>
             </div>
@@ -738,10 +765,10 @@
                 <h3>PRO ⭐</h3>
                 <div class="price">149 €<span> / 12kk</span></div>
                 <ul>
+                    <li><span class="icon">✓</span> Profilointi palveluverkostoihin</li>
                     <li><span class="icon">✓</span> 10 julkaisua / kk</li>
-                    <li><span class="icon">✓</span> 2-3 nostoa / kk</li>
+                    <li><span class="icon">✓</span> 2–3 nostoa / kk</li>
                     <li><span class="icon">✓</span> Feed-prioriteetti</li>
-                    <li><span class="icon">✓</span> Itsepäivitettävä tarjoustyökalu</li>
                     <li><span class="icon">✓</span> Kaikki ominaisuudet</li>
                 </ul>
                 <div style="font-size: 0.8rem; font-weight: bold; color: #6f42c1;">Valitse Pro</div>
@@ -821,30 +848,38 @@
                     </select>
                 </div>
 
+                <div id="free-tier-hint" class="free-tier-hint">
+                    <strong>Ilmainen näkyvyys</strong> sisältää vain yrityksen nimen, kategorian ja osoitteen.
+                    Puhelin, sähköposti, kotisivu, some-linkit ja profilointi palveluverkostoihin kuuluvat BASIC-, PLUS- ja PRO-paketteihin.
+                    Vanhentuneella ilmaisella kortilla näytetään sivustolla vain nimi ja osoite.
+                </div>
+
                 <div class="form-group">
                     <label for="address">Osoite</label>
                     <input type="text" id="address" name="address">
                 </div>
 
-                <div class="form-group">
-                    <label for="phone">Puhelin</label>
-                    <input type="tel" id="phone" name="phone">
-                </div>
-                <div class="form-group">
-                    <label for="facebook">Facebook URL</label>
-                    <input type="url" id="facebook" name="facebook" placeholder="https://facebook.com/yourpage">
-                </div>
-                <div class="form-group">
-                    <label for="instagram">Instagram URL</label>
-                    <input type="url" id="instagram" name="instagram" placeholder="https://instagram.com/yourprofile">
-                </div>
-                <div class="form-group">
-                    <label for="linkedin">LinkedIn URL</label>
-                    <input type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/yourprofile">
-                </div>
-                <div class="form-group">
-                    <label for="tiktok">TikTok URL</label>
-                    <input type="url" id="tiktok" name="tiktok" placeholder="https://tiktok.com/@yourprofile">
+                <div id="paid-contact-fields" class="paid-only-field">
+                    <div class="form-group">
+                        <label for="phone">Puhelin</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="facebook">Facebook URL</label>
+                        <input type="url" id="facebook" name="facebook" placeholder="https://facebook.com/yourpage">
+                    </div>
+                    <div class="form-group">
+                        <label for="instagram">Instagram URL</label>
+                        <input type="url" id="instagram" name="instagram" placeholder="https://instagram.com/yourprofile">
+                    </div>
+                    <div class="form-group">
+                        <label for="linkedin">LinkedIn URL</label>
+                        <input type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/yourprofile">
+                    </div>
+                    <div class="form-group">
+                        <label for="tiktok">TikTok URL</label>
+                        <input type="url" id="tiktok" name="tiktok" placeholder="https://tiktok.com/@yourprofile">
+                    </div>
                 </div>
                 <div class="form-group" style="background: #f8fafc; padding: 1.5rem; border-radius: 12px; border: 1px solid #e2e8f0; margin-top: 2rem;">
                     <label style="margin-bottom: 0.5rem; color: #1e293b;">Lisäpalvelut & tiedustelut</label>
@@ -876,7 +911,7 @@
                     <input type="url" id="website" name="website">
                 </div>
 
-                <div class="form-group">
+                <div id="paid-description-group" class="paid-only-field form-group">
                     <label for="description">Esittelyteksti *</label>
                     <textarea id="description" name="description" rows="5" required></textarea>
                 </div>
@@ -1087,6 +1122,25 @@
             }
         }
 
+        function clearPaidContactFields() {
+            ['phone', 'facebook', 'instagram', 'linkedin', 'tiktok', 'website', 'description'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+        }
+
+        function setPaidFieldsVisibility(isFree) {
+            const paidContact = document.getElementById('paid-contact-fields');
+            const paidDesc = document.getElementById('paid-description-group');
+            const freeHint = document.getElementById('free-tier-hint');
+            const descInput = document.getElementById('description');
+
+            if (paidContact) paidContact.classList.toggle('is-hidden', isFree);
+            if (paidDesc) paidDesc.classList.toggle('is-hidden', isFree);
+            if (freeHint) freeHint.classList.toggle('visible', isFree);
+            if (descInput) descInput.required = !isFree;
+        }
+
         function selectType(type) {
             document.getElementById('input-type').value = type;
             document.querySelectorAll('.plan-card').forEach(el => el.classList.remove('active'));
@@ -1095,14 +1149,18 @@
             const premiumFields = document.getElementById('premium-fields');
             const websiteGroup = document.getElementById('website-group');
             const durationInput = document.getElementById('input-duration');
+            const isFree = type === 'free';
 
             // Map internal types to Stripe durations
             const durationMap = { 'free': 0, 'basic': 3, 'plus': 6, 'pro': 12 };
             durationInput.value = durationMap[type];
 
-            if (type === 'free') {
+            setPaidFieldsVisibility(isFree);
+
+            if (isFree) {
                 premiumFields.classList.remove('active');
                 websiteGroup.style.display = 'none';
+                clearPaidContactFields();
             } else {
                 premiumFields.classList.add('active');
                 websiteGroup.style.display = 'block';
