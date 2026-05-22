@@ -115,10 +115,33 @@
             margin-top: 0;
         }
 
-        .btn-continue {
+        .step-nav {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            align-items: stretch;
+            flex-wrap: wrap;
             margin-top: 2rem;
-            width: 100%;
-            max-width: 300px;
+        }
+
+        .step-nav .step-nav-btn {
+            flex: 1 1 160px;
+            max-width: 220px;
+            min-width: 160px;
+            min-height: 48px;
+            margin: 0;
+            padding: 12px 20px;
+            justify-content: center;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .step-nav .step-nav-btn--prev {
+            background: var(--secondary-blue);
+        }
+
+        .step-nav .step-nav-btn--next {
+            background: var(--primary-blue);
         }
 
         /* Step transition animation */
@@ -825,9 +848,9 @@
             });
 
             const stepNavHtml = `
-                <div class="step-nav" style="text-align: center; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem;">
-                    ${currentStepIndex > 0 ? `<button type="button" class="btn-radar" onclick="prevStep()" style="background: var(--secondary-blue);" data-i18n="btn_prev">${i18n.t('btn_prev')}</button>` : ''}
-                    ${step.multiple ? `<button type="button" class="btn-radar btn-continue" onclick="nextStep()" style="background: var(--primary-blue);" data-i18n="btn_continue">${i18n.t('btn_continue')}</button>` : ''}
+                <div class="step-nav">
+                    ${currentStepIndex > 0 ? `<button type="button" class="btn-radar step-nav-btn step-nav-btn--prev" onclick="prevStep()" data-i18n="btn_prev">${i18n.t('btn_prev')}</button>` : ''}
+                    ${step.multiple ? `<button type="button" class="btn-radar step-nav-btn step-nav-btn--next" onclick="nextStep()" data-i18n="btn_continue">${i18n.t('btn_continue')}</button>` : ''}
                 </div>`;
 
             // Render step content
