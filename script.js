@@ -2499,6 +2499,15 @@ function renderSpotlightDetails(company, detailsEl) {
         </div>`;
     }
 
+    // Expired companies: show only address, suppress contact details
+    if (company.is_expired) {
+        detailsEl.innerHTML = `
+            <div>📍 ${company.osoite || 'Laukaa'}</div>
+            <div style="color:#94a3b8; font-size:0.85em; font-style:italic; margin-top:6px;">⚠️ Tiedot voivat olla vanhentuneita</div>
+        `;
+        return;
+    }
+
     detailsEl.innerHTML = `
         <div>📍 ${company.osoite || 'Laukaa'}</div>
         <div>📞 ${company.puhelin || '-'}</div>
@@ -2509,6 +2518,15 @@ function renderSpotlightDetails(company, detailsEl) {
 
 function renderSpotlightActions(company, actionsEl) {
     if (!actionsEl) return;
+
+    // Expired companies: suppress all action buttons (no phone, website, social)
+    if (company.is_expired) {
+        actionsEl.innerHTML = `
+            <a href="lisaa-yritys.html" class="btn-primary" style="background: #e2e8f0; color: #475569; font-size: 0.85rem; text-align:center;">
+                🔄 Uudista yritystiedot
+            </a>`;
+        return;
+    }
     
     let actionButtons = '';
     
