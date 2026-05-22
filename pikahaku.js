@@ -206,14 +206,9 @@ function submitPikahaku(e) {
 
     PS().readCompactSelectionsFromForm(currentNeedId, selections, document);
 
-    let payload = selections;
-    if (typeof rehydrateSelectionsFromConfig === 'function') {
-        payload = rehydrateSelectionsFromConfig(currentNeedId, selections);
-    }
-
     sessionStorage.setItem('pikahaku_pending', JSON.stringify({
         id: currentNeedId,
-        selections: payload
+        selections: selections
     }));
 
     window.location.href = `palvelu.html?id=${encodeURIComponent(currentNeedId)}&mode=compact&autosearch=1`;
