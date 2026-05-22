@@ -866,9 +866,23 @@
         let currentNeedId = urlParamsInit.get('id');
         let searchMode = urlParamsInit.get('mode') === 'compact' ? 'compact' : 'guided';
         window.searchMode = searchMode;
+        let pendingPikahakuSearch = false;
         let currentStepIndex = 0;
         let selections = {};
         let taxonomyData = null;
+
+        const pikahakuPendingRaw = sessionStorage.getItem('pikahaku_pending');
+        if (pikahakuPendingRaw) {
+            try {
+                const data = JSON.parse(pikahakuPendingRaw);
+                sessionStorage.removeItem('pikahaku_pending');
+                if (data.id) currentNeedId = data.id;
+                if (data.selections) selections = data.selections;
+                searchMode = 'compact';
+                window.searchMode = 'compact';
+                pendingPikahakuSearch = true;
+            } catch (e) {}
+        }
 
         const NEED_TO_PROFILING_MAP = {
             'haat': 'events_and_celebrations',
@@ -997,7 +1011,8 @@
             if (modeBar) modeBar.style.display = 'flex';
 
             const filterProfiling = urlParamsInit.get('filter_profiling');
-            if (filterProfiling) {
+            if (pendingPikahakuSearch || filterProfiling || urlParamsInit.get('autosearch') === '1') {
+                setSearchMode('compact', false);
                 showResults();
             } else if (searchMode === 'compact') {
                 setSearchMode('compact', false);

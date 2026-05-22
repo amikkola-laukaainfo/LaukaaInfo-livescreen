@@ -5031,6 +5031,59 @@ footer {
     color: #64748b;
 }
 
+.home-pikahaku-entry {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    max-width: 520px;
+    margin: 1.75rem auto 0;
+    padding: 1rem 1.25rem;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border: 2px solid #7dd3fc;
+    border-radius: 20px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-align: left;
+}
+
+.home-pikahaku-entry:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 86, 179, 0.15);
+    border-color: var(--primary-blue);
+}
+
+.home-pikahaku-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.home-pikahaku-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.home-pikahaku-text strong {
+    font-size: 1.1rem;
+    color: var(--primary-blue);
+}
+
+.home-pikahaku-text span {
+    font-size: 0.9rem;
+    color: #475569;
+    font-weight: 500;
+}
+
+.home-pikahaku-arrow {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--primary-blue);
+    flex-shrink: 0;
+}
+
 .need-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
