@@ -153,8 +153,41 @@ const welcomeCompany = {
     ]
 };
 
+/** Lataa site-nav.js (Kartat & Elämykset -valikon yhteinen runko) */
+function loadSiteNavScript() {
+    return new Promise((resolve) => {
+        if (typeof window.initSiteMapsNavigation === 'function') {
+            window.initSiteMapsNavigation();
+            resolve();
+            return;
+        }
+        const ref = document.querySelector('script[src*="script.js"]');
+        let base = '';
+        if (ref) {
+            const src = ref.getAttribute('src') || '';
+            const m = src.match(/^((?:\.\.\/)*)/);
+            if (m) base = m[1];
+        } else if (/\/yritys\//i.test(window.location.pathname)) {
+            base = '../';
+        }
+        const el = document.createElement('script');
+        el.src = `${base}site-nav.js?v=20260522`;
+        el.onload = () => {
+            if (typeof window.initSiteMapsNavigation === 'function') {
+                window.initSiteMapsNavigation();
+            }
+            resolve();
+        };
+        el.onerror = () => resolve();
+        document.head.appendChild(el);
+    });
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     isHomePage = !!document.getElementById('home-region-select');
+
+    await loadSiteNavScript();
+
     // Sidebar Navigation Logic
     const hamburgerBtn = document.getElementById('hamburger-btn');
     const closeBtn = document.getElementById('close-sidebar-btn');
