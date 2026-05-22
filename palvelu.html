@@ -837,6 +837,7 @@
     <!-- Scripts -->
     <script src="needs_config.js?v=20260507"></script>
     <script src="searchEngine.js"></script>
+    <script src="palvelu-selections.js?v=20260521"></script>
     <script src="script.js"></script>
     <script>
 
@@ -1056,10 +1057,10 @@
                 if (compactSection) compactSection.style.display = 'block';
                 if (progress) progress.style.display = 'none';
                 renderCompactForm();
-                syncCompactFormFromSelections();
-                updateCompactStepVisibility();
+                PalveluSelections.syncCompactFormFromSelections(currentNeedId, selections, document);
+                PalveluSelections.updateCompactStepVisibility(currentNeedId, selections, document);
             } else {
-                readCompactSelectionsFromForm();
+                PalveluSelections.readCompactSelectionsFromForm(currentNeedId, selections, document);
                 if (stepSection) stepSection.style.display = 'block';
                 if (compactSection) compactSection.style.display = 'none';
                 if (progress) progress.style.display = '';
@@ -1121,136 +1122,26 @@
         }
 
         function onCompactFieldChange() {
-            readCompactSelectionsFromForm();
-            updateCompactStepVisibility();
+            PalveluSelections.readCompactSelectionsFromForm(currentNeedId, selections, document);
+            PalveluSelections.updateCompactStepVisibility(currentNeedId, selections, document);
             updateSelectionSummary();
         }
 
         function readCompactSelectionsFromForm() {
-            const config = window.NEEDS_CONFIG || NEEDS_CONFIG;
-            const need = config && config[currentNeedId];
-            if (!need) return;
-
-            const subContexts = [];
-
-            need.steps.forEach(step => {
-                const wrapper = document.getElementById(`wrapper-${step.id}`);
-                if (wrapper && wrapper.classList.contains('compact-field--skipped')) {
-                    delete selections[step.id];
-                    return;
-                }
-
-                if (step.multiple) {
-                    const checked = wrapper ? wrapper.querySelectorAll(`input[name="compact-${step.id}"]:checked`) : [];
-                    const selected = [];
-                    checked.forEach(inp => {
-                        const opt = step.options[parseInt(inp.value, 10)];
-                        if (opt) {
-                            selected.push(opt);
-                            if (opt.sub_context && !subContexts.includes(opt.sub_context)) {
-                                subContexts.push(opt.sub_context);
-                            }
-                        }
-                    });
-                    if (selected.length) selections[step.id] = selected;
-                    else delete selections[step.id];
-                } else {
-                    const selEl = document.getElementById(`compact-step-${step.id}`);
-                    if (selEl && selEl.value !== '') {
-                        const opt = step.options[parseInt(selEl.value, 10)];
-                        if (opt) {
-                            selections[step.id] = opt;
-                            if (opt.sub_context && !subContexts.includes(opt.sub_context)) {
-                                subContexts.push(opt.sub_context);
-                            }
-                        }
-                    } else {
-                        delete selections[step.id];
-                    }
-                }
-            });
-
-            if (subContexts.length) selections._sub_contexts = subContexts;
-            else delete selections._sub_contexts;
+            PalveluSelections.readCompactSelectionsFromForm(currentNeedId, selections, document);
         }
 
         function syncCompactFormFromSelections() {
-            const config = window.NEEDS_CONFIG || NEEDS_CONFIG;
-            const need = config && config[currentNeedId];
-            if (!need) return;
-
-            need.steps.forEach(step => {
-                const wrapper = document.getElementById(`wrapper-${step.id}`);
-                if (!wrapper) return;
-
-                if (step.multiple) {
-                    const arr = selections[step.id];
-                    wrapper.querySelectorAll('input[type="checkbox"]').forEach(inp => {
-                        const opt = step.options[parseInt(inp.value, 10)];
-                        inp.checked = !!(arr && arr.some(s =>
-                            (s.id && opt.id && s.id === opt.id) ||
-                            i18n.getText(s.label) === i18n.getText(opt.label)
-                        ));
-                    });
-                } else {
-                    const sel = selections[step.id];
-                    const selectEl = document.getElementById(`compact-step-${step.id}`);
-                    if (!selectEl) return;
-                    if (!sel) {
-                        selectEl.value = '';
-                        return;
-                    }
-                    const idx = step.options.findIndex(o =>
-                        (sel.id && o.id && sel.id === o.id) ||
-                        i18n.getText(o.label) === i18n.getText(sel.label)
-                    );
-                    selectEl.value = idx >= 0 ? String(idx) : '';
-                }
-            });
+            PalveluSelections.syncCompactFormFromSelections(currentNeedId, selections, document);
         }
 
         function updateCompactStepVisibility() {
-            const config = window.NEEDS_CONFIG || NEEDS_CONFIG;
-            const need = config && config[currentNeedId];
-            if (!need) return;
-
-            need.steps.forEach(step => {
-                const wrapper = document.getElementById(`wrapper-${step.id}`);
-                if (!wrapper) return;
-
-                if (!step.skipIf) {
-                    wrapper.classList.remove('compact-field--skipped');
-                    wrapper.querySelectorAll('input, select').forEach(el => { el.disabled = false; });
-                    return;
-                }
-
-                const skip = evaluateSkipIf(step.skipIf);
-                wrapper.classList.toggle('compact-field--skipped', skip);
-
-                if (skip) {
-                    // Poistetaan vain lomakkeen tilasta – älä tyhjennä selections-objektia,
-                    // jotta hakutulokset pysyvät samoina pikahaun ja ohjatun haun välillä.
-                    if (step.multiple) {
-                        wrapper.querySelectorAll('input[type="checkbox"]').forEach(inp => {
-                            inp.checked = false;
-                            inp.disabled = true;
-                        });
-                    } else {
-                        const selectEl = wrapper.querySelector('select');
-                        if (selectEl) {
-                            selectEl.value = '';
-                            selectEl.disabled = true;
-                        }
-                    }
-                } else {
-                    wrapper.querySelectorAll('input, select').forEach(el => { el.disabled = false; });
-                }
-            });
+            PalveluSelections.updateCompactStepVisibility(currentNeedId, selections, document);
         }
 
         function submitCompactSearch(e) {
             e.preventDefault();
-            readCompactSelectionsFromForm();
+            PalveluSelections.readCompactSelectionsFromForm(currentNeedId, selections, document);
             if (typeof rehydrateSelectionsFromConfig === 'function') {
                 selections = rehydrateSelectionsFromConfig(currentNeedId, selections);
             }
@@ -1427,68 +1318,8 @@
             }
         }
 
-        // Arvioi skipIf-lauseke tukien loogisia operaattoreita ja profilointitarkistuksia
         function evaluateSkipIf(skipIfStr) {
-            if (!skipIfStr) return false;
-            
-            let evalStr = skipIfStr;
-            
-            // 1. Korvataan getSelectedCompanyProfilointi-kutsut niiden tuloksilla
-            const profilointiRegex = /getSelectedCompanyProfilointi\('([^']+)',\s*'([^']+)',\s*'([^']+)'\)/g;
-            evalStr = evalStr.replace(profilointiRegex, (match, stepId, section, field) => {
-                return getSelectedCompanyProfilointi(stepId, section, field);
-            });
-
-            // 2. Lisätään tuki isSelected('stepId', 'label') -kutsulle
-            const selectedRegex = /isSelected\('([^']+)',\s*'([^']+)'\)/g;
-            evalStr = evalStr.replace(selectedRegex, (match, stepId, label) => {
-                const sel = selections[stepId];
-                if (!sel) return false;
-                if (Array.isArray(sel)) {
-                    return sel.some(s => (i18n.getText(s.label) || '').toLowerCase().includes(label.toLowerCase()));
-                }
-                return (i18n.getText(sel.label) || '').toLowerCase().includes(label.toLowerCase());
-            });
-            
-            // 3. Korvataan selections.stepId-viittaukset (onko jotain valittu kyseisessä stepissä)
-            evalStr = evalStr.replace(/selections\.(\w+)/g, (match, stepId) => {
-                return !!selections[stepId];
-            });
-
-            // 3.5 Lisätään tuki hasNodeLink('stepId', 'nodeId') -kutsulle
-            const nodeLinkRegex = /hasNodeLink\('([^']+)',\s*'([^']+)'\)/g;
-            evalStr = evalStr.replace(nodeLinkRegex, (match, stepId, nodeId) => {
-                return hasSelectedCompanyNodeLink(stepId, nodeId);
-            });
-
-            // 4. Suoritetaan looginen arviointi turvallisesti
-            try {
-                // Sallitaan vain perus-boolean-logiikka
-                const safeEval = new Function('return ' + evalStr);
-                return safeEval();
-            } catch(e) {
-                return false;
-            }
-        }
-
-        // Hakee valitun yrityksen profilointiarvo tietystä osiosta
-        function getSelectedCompanyProfilointi(stepId, section, field) {
-            const sel = selections[stepId];
-            if (!sel) return false;
-            const opt = Array.isArray(sel) ? sel[0] : sel;
-            if (!opt || !opt._companyRef) return false;
-            return opt._companyRef?.profiling?.[section]?.[field] === true;
-        }
-
-        // Tarkistaa onko valitulla yrityksellä tietty node_link
-        function hasSelectedCompanyNodeLink(stepId, nodeId) {
-            const sel = selections[stepId];
-            if (!sel) return false;
-            const opt = Array.isArray(sel) ? sel[0] : sel;
-            const company = opt._companyRef;
-            if (!company || !company.profiling || !company.profiling.core) return false;
-            const links = company.profiling.core.node_links || [];
-            return links.includes(nodeId);
+            return PalveluSelections.evaluateSkipIf(skipIfStr, selections, currentNeedId);
         }
 
         // Näytetään lyhyt ilmoitus kun askel hypytään
@@ -1540,14 +1371,8 @@
                 }
             }
 
-            // Prepare flattened selections for search engine
-            let flatSelections = [];
-            for (let stepId in selections) {
-                if (stepId.startsWith('_')) continue;
-                const val = selections[stepId];
-                if (Array.isArray(val)) flatSelections = flatSelections.concat(val);
-                else if (val && typeof val === 'object') flatSelections.push(val);
-            }
+            const searchableSelections = PalveluSelections.filterSelectionsForSearch(currentNeedId, selections);
+            const flatSelections = PalveluSelections.flattenSelections(searchableSelections);
 
             // User location from localStorage
             let userLoc = null;

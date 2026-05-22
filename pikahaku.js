@@ -13,8 +13,10 @@ const PIKAHAUKU_NEED_ORDER = [
 let currentNeedId = new URLSearchParams(window.location.search).get('id') || '';
 let selections = {};
 
+const PS = () => window.PalveluSelections;
+
 function getNeedsConfig() {
-    return window.NEEDS_CONFIG || (typeof NEEDS_CONFIG !== 'undefined' ? NEEDS_CONFIG : null);
+    return PS() ? PS().getNeedsConfig() : (window.NEEDS_CONFIG || NEEDS_CONFIG);
 }
 
 function initPikahaku() {
@@ -59,6 +61,7 @@ function onNeedSelected(clearSelections) {
     const wrap = document.getElementById('pikahaku-fields-wrap');
     const emptyHint = document.getElementById('pikahaku-empty-hint');
     const guidedLink = document.getElementById('pikahaku-guided-link');
+    const memorialHint = document.getElementById('pikahaku-memorial-hint');
 
     if (newId !== currentNeedId && clearSelections) {
         selections = {};
@@ -74,6 +77,7 @@ function onNeedSelected(clearSelections) {
         if (wrap) wrap.style.display = 'none';
         if (emptyHint) emptyHint.style.display = 'block';
         if (guidedLink) guidedLink.style.display = 'none';
+        if (memorialHint) memorialHint.style.display = 'none';
         updateNeedHero(null);
         updateSelectionSummary();
         return;
@@ -89,8 +93,9 @@ function onNeedSelected(clearSelections) {
 
     updateNeedHero(need);
     renderCompactFields();
-    syncCompactFormFromSelections();
-    updateCompactStepVisibility();
+    PS().syncCompactFormFromSelections(currentNeedId, selections, document);
+    PS().updateCompactStepVisibility(currentNeedId, selections, document);
+    updateMemorialHint();
     updateSelectionSummary();
 }
 
@@ -159,182 +164,20 @@ function renderCompactFields() {
 }
 
 function onCompactFieldChange() {
-    readCompactSelectionsFromForm();
-    updateCompactStepVisibility();
+    PS().readCompactSelectionsFromForm(currentNeedId, selections, document);
+    PS().updateCompactStepVisibility(currentNeedId, selections, document);
+    updateMemorialHint();
     updateSelectionSummary();
 }
 
-function readCompactSelectionsFromForm() {
-    const config = getNeedsConfig();
-    const need = config && config[currentNeedId];
-    if (!need) return;
-
-    const subContexts = [];
-
-    need.steps.forEach(step => {
-        const wrapper = document.getElementById(`wrapper-${step.id}`);
-        if (wrapper && wrapper.classList.contains('compact-field--skipped')) {
-            delete selections[step.id];
-            return;
-        }
-
-        if (step.multiple) {
-            const checked = wrapper ? wrapper.querySelectorAll(`input[name="compact-${step.id}"]:checked`) : [];
-            const selected = [];
-            checked.forEach(inp => {
-                const opt = step.options[parseInt(inp.value, 10)];
-                if (opt) {
-                    selected.push(opt);
-                    if (opt.sub_context && !subContexts.includes(opt.sub_context)) {
-                        subContexts.push(opt.sub_context);
-                    }
-                }
-            });
-            if (selected.length) selections[step.id] = selected;
-            else delete selections[step.id];
-        } else {
-            const selEl = document.getElementById(`compact-step-${step.id}`);
-            if (selEl && selEl.value !== '') {
-                const opt = step.options[parseInt(selEl.value, 10)];
-                if (opt) {
-                    selections[step.id] = opt;
-                    if (opt.sub_context && !subContexts.includes(opt.sub_context)) {
-                        subContexts.push(opt.sub_context);
-                    }
-                }
-            } else {
-                delete selections[step.id];
-            }
-        }
-    });
-
-    if (subContexts.length) selections._sub_contexts = subContexts;
-    else delete selections._sub_contexts;
-}
-
-function syncCompactFormFromSelections() {
-    const config = getNeedsConfig();
-    const need = config && config[currentNeedId];
-    if (!need) return;
-
-    need.steps.forEach(step => {
-        const wrapper = document.getElementById(`wrapper-${step.id}`);
-        if (!wrapper) return;
-
-        if (step.multiple) {
-            const arr = selections[step.id];
-            wrapper.querySelectorAll('input[type="checkbox"]').forEach(inp => {
-                const opt = step.options[parseInt(inp.value, 10)];
-                inp.checked = !!(arr && arr.some(s =>
-                    (s.id && opt.id && s.id === opt.id) ||
-                    i18n.getText(s.label) === i18n.getText(opt.label)
-                ));
-            });
-        } else {
-            const sel = selections[step.id];
-            const selectEl = document.getElementById(`compact-step-${step.id}`);
-            if (!selectEl) return;
-            if (!sel) {
-                selectEl.value = '';
-                return;
-            }
-            const idx = step.options.findIndex(o =>
-                (sel.id && o.id && sel.id === o.id) ||
-                i18n.getText(o.label) === i18n.getText(sel.label)
-            );
-            selectEl.value = idx >= 0 ? String(idx) : '';
-        }
-    });
-}
-
-function updateCompactStepVisibility() {
-    const config = getNeedsConfig();
-    const need = config && config[currentNeedId];
-    if (!need) return;
-
-    need.steps.forEach(step => {
-        const wrapper = document.getElementById(`wrapper-${step.id}`);
-        if (!wrapper) return;
-
-        if (!step.skipIf) {
-            wrapper.classList.remove('compact-field--skipped');
-            wrapper.querySelectorAll('input, select').forEach(el => { el.disabled = false; });
-            return;
-        }
-
-        const skip = evaluateSkipIf(step.skipIf);
-        wrapper.classList.toggle('compact-field--skipped', skip);
-
-        if (skip) {
-            if (step.multiple) {
-                wrapper.querySelectorAll('input[type="checkbox"]').forEach(inp => {
-                    inp.checked = false;
-                    inp.disabled = true;
-                });
-            } else {
-                const selectEl = wrapper.querySelector('select');
-                if (selectEl) {
-                    selectEl.value = '';
-                    selectEl.disabled = true;
-                }
-            }
-        } else {
-            wrapper.querySelectorAll('input, select').forEach(el => { el.disabled = false; });
-        }
-    });
-}
-
-function evaluateSkipIf(skipIfStr) {
-    if (!skipIfStr) return false;
-
-    let evalStr = skipIfStr;
-
-    const profilointiRegex = /getSelectedCompanyProfilointi\('([^']+)',\s*'([^']+)',\s*'([^']+)'\)/g;
-    evalStr = evalStr.replace(profilointiRegex, (match, stepId, section, field) => {
-        return getSelectedCompanyProfilointi(stepId, section, field);
-    });
-
-    const selectedRegex = /isSelected\('([^']+)',\s*'([^']+)'\)/g;
-    evalStr = evalStr.replace(selectedRegex, (match, stepId, label) => {
-        const sel = selections[stepId];
-        if (!sel) return false;
-        if (Array.isArray(sel)) {
-            return sel.some(s => (i18n.getText(s.label) || '').toLowerCase().includes(label.toLowerCase()));
-        }
-        return (i18n.getText(sel.label) || '').toLowerCase().includes(label.toLowerCase());
-    });
-
-    evalStr = evalStr.replace(/selections\.(\w+)/g, (match, stepId) => !!selections[stepId]);
-
-    const nodeLinkRegex = /hasNodeLink\('([^']+)',\s*'([^']+)'\)/g;
-    evalStr = evalStr.replace(nodeLinkRegex, (match, stepId, nodeId) => {
-        return hasSelectedCompanyNodeLink(stepId, nodeId);
-    });
-
-    try {
-        const safeEval = new Function('return ' + evalStr);
-        return safeEval();
-    } catch (e) {
-        return false;
+function updateMemorialHint() {
+    const el = document.getElementById('pikahaku-memorial-hint');
+    if (!el || currentNeedId !== 'hautajaiset') {
+        if (el) el.style.display = 'none';
+        return;
     }
-}
-
-function getSelectedCompanyProfilointi(stepId, section, field) {
-    const sel = selections[stepId];
-    if (!sel) return false;
-    const opt = Array.isArray(sel) ? sel[0] : sel;
-    if (!opt || !opt._companyRef) return false;
-    return opt._companyRef?.profiling?.[section]?.[field] === true;
-}
-
-function hasSelectedCompanyNodeLink(stepId, nodeId) {
-    const sel = selections[stepId];
-    if (!sel) return false;
-    const opt = Array.isArray(sel) ? sel[0] : sel;
-    const company = opt._companyRef;
-    if (!company || !company.profiling || !company.profiling.core) return false;
-    const links = company.profiling.core.node_links || [];
-    return links.includes(nodeId);
+    const show = !PS().hasMemorialServiceSelected(currentNeedId, selections);
+    el.style.display = show ? 'block' : 'none';
 }
 
 function updateSelectionSummary() {
@@ -361,11 +204,12 @@ function submitPikahaku(e) {
     e.preventDefault();
     if (!currentNeedId) return;
 
-    readCompactSelectionsFromForm();
+    PS().readCompactSelectionsFromForm(currentNeedId, selections, document);
 
-    const payload = typeof rehydrateSelectionsFromConfig === 'function'
-        ? rehydrateSelectionsFromConfig(currentNeedId, selections)
-        : selections;
+    let payload = selections;
+    if (typeof rehydrateSelectionsFromConfig === 'function') {
+        payload = rehydrateSelectionsFromConfig(currentNeedId, selections);
+    }
 
     sessionStorage.setItem('pikahaku_pending', JSON.stringify({
         id: currentNeedId,

@@ -213,6 +213,17 @@
             color: var(--secondary-blue);
             font-weight: 600;
         }
+
+        .pikahaku-memorial-hint {
+            margin: 0 0 1rem 0;
+            padding: 12px 14px;
+            background: #fff7ed;
+            border: 1px solid #fdba74;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            color: #9a3412;
+            line-height: 1.45;
+        }
     </style>
 </head>
 
@@ -259,6 +270,8 @@
                     <a href="#" id="pikahaku-guided-link" class="pikahaku-guided-link" style="display: none;" data-i18n="pikahaku_guided_link">Haluatko askel askeleelta? Ohjattu haku »</a>
                 </div>
 
+                <p id="pikahaku-memorial-hint" class="pikahaku-memorial-hint" style="display: none;" data-i18n="pikahaku_need_memorial_hint">Valitse ensin kohdasta yllä &quot;Muistotilaisuus&quot;, jotta juhlatila-, pitopalvelu- ja muut lisäkentät tulevat mukaan hakuun.</p>
+
                 <div id="pikahaku-fields-wrap" style="display: none;">
                     <div id="compact-fields"></div>
                     <button type="submit" id="pikahaku-submit" class="btn-radar compact-search-btn" data-i18n="btn_compact_search">Hae palvelut</button>
@@ -276,8 +289,9 @@
     </footer>
 
     <script src="needs_config.js?v=20260507"></script>
-    <script src="script.js"></script>
-    <script src="pikahaku.js?v=20260521"></script>
+    <script src="searchEngine.js"></script>
+    <script src="palvelu-selections.js?v=20260521"></script>
+    <script src="pikahaku.js?v=20260522"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             initPikahaku();
