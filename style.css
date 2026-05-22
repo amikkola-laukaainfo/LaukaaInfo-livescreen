@@ -1317,6 +1317,17 @@ h3 {
     gap: 1.5rem;
 }
 
+/* Ajankohtaista: tiedotteet + tapahtumat + palautteet rinnakkain isolla näytöllä */
+.page-ajankohtaista #ajankohtaista-dashboard .dashboard-grid,
+#ajankohtaista-dashboard .dashboard-grid {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.page-ajankohtaista #ajankohtaista-dashboard #decisions-card,
+#ajankohtaista-dashboard #decisions-card {
+    grid-column: 1 / -1;
+}
+
 .dashboard-grid > .card,
 .dashboard-grid > .info-block,
 #ajankohtaista-dashboard .card {
@@ -1423,6 +1434,16 @@ h3 {
 @media (max-width: 900px) {
     .dashboard-grid {
         grid-template-columns: 1fr;
+    }
+
+    .page-ajankohtaista #ajankohtaista-dashboard .dashboard-grid,
+    #ajankohtaista-dashboard .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .page-ajankohtaista #ajankohtaista-dashboard #decisions-card,
+    #ajankohtaista-dashboard #decisions-card {
+        grid-column: auto;
     }
 }
 
