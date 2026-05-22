@@ -34,7 +34,7 @@ const UI_TRANSLATIONS = {
         "nav_paths": "Päätösten polut",
         "nav_search_explore": "Hae ja tutki",
         "nav_maps": "Kartat & Elämykset",
-        "nav_map_points": "Karttakohteet",
+        "nav_map_points": "Julkiset kohteet",
         "nav_story_map": "Tarinakartta",
         "nav_route_map": "Reittikartta",
         "nav_memorial_map": "Muistokartta",
