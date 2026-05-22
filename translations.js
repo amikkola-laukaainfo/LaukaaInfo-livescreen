@@ -472,7 +472,7 @@ const UI_TRANSLATIONS = {
         "nav_paths": "Decision Paths",
         "nav_search_explore": "Search & Explore",
         "nav_maps": "Maps & Experiences",
-        "nav_map_points": "Map Points",
+        "nav_map_points": "Public Places",
         "nav_story_map": "Story Map",
         "nav_route_map": "Route map",
         "nav_memorial_map": "Memorial Map",

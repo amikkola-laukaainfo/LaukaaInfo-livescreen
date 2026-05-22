@@ -526,7 +526,7 @@ if ($company) {
                     <li class="nav-item">
                         <a href="#" class="nav-link">Kartat &amp; Elämykset <span class="arrow">▼</span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="https://laukaainfo.fi/karttakohteet.html">Karttakohteet</a></li>
+                            <li><a href="https://laukaainfo.fi/kohdekartta.html">Karttakohteet</a></li>
                             <li><a href="https://laukaainfo.fi/tarinakartta.html">Tarinakartta</a></li>
                             <li><a href="https://laukaainfo.fi/muistokartta.html">Muistokartta</a></li>
                             <li><a href="https://laukaainfo.fi/kadonneet.html">Kadonneet &amp; löydetyt</a></li>
@@ -606,7 +606,7 @@ if ($company) {
             <div class="menu-section highlight-section">
                 <h3 class="section-title">KARTAT &amp; ELÄMYKSET ⭐</h3>
                 <ul class="menu-list">
-                    <li class="menu-item"><a href="https://laukaainfo.fi/karttakohteet.html" class="sidebar-link">Karttakohteet</a></li>
+                    <li class="menu-item"><a href="https://laukaainfo.fi/kohdekartta.html" class="sidebar-link">Karttakohteet</a></li>
                     <li class="menu-item"><a href="https://laukaainfo.fi/tarinakartta.html" class="sidebar-link">Tarinakartta</a></li>
                     <li class="menu-item"><a href="https://laukaainfo.fi/muistokartta.html" class="sidebar-link">Muistokartta</a></li>
                     <li class="menu-item"><a href="https://laukaainfo.fi/kadonneet.html" class="sidebar-link">Kadonneet &amp; löydetyt</a>

@@ -28,7 +28,7 @@
 
     /** Kartat & Elämykset – järjestys desktop- ja mobiilivalikossa */
     const MAPS_NAV_ITEMS = [
-        { path: 'karttakohteet.html', i18nKey: 'nav_map_points', label: 'Karttakohteet' },
+        { path: 'kohdekartta.html', i18nKey: 'nav_map_points', label: 'Karttakohteet' },
         { path: 'tarinakartta.html', i18nKey: 'nav_story_map', label: 'Tarinakartta' },
         { path: 'tarinakartta.html#kavelyreitit-section', i18nKey: 'nav_route_map', label: 'Reittikartta' },
         { path: 'muistokartta.html', i18nKey: 'nav_memorial_map', label: 'Muistokartta' },
