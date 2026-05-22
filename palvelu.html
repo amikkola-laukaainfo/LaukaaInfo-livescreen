@@ -1372,6 +1372,9 @@
 
             const searchableSelections = PalveluSelections.filterSelectionsForSearch(currentNeedId, selections);
             const flatSelections = PalveluSelections.flattenSelections(searchableSelections);
+            console.log('DEBUG: selections from pikahaku:', selections);
+            console.log('DEBUG: searchableSelections:', searchableSelections);
+            console.log('DEBUG: flatSelections:', flatSelections);
 
             // User location from localStorage
             let userLoc = null;
