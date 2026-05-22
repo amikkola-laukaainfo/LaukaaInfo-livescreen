@@ -293,6 +293,53 @@ while (($row_raw = fgetcsv($stream)) !== false) {
     $rowid = !empty($row['rowid']) ? $row['rowid'] : (preg_replace('/[^a-z0-9]/', '', strtolower($name)) . '-' . count($all_companies));
     $kategoria = !empty($row['category']) ? $row['category'] : (!empty($row['kategoria']) ? $row['kategoria'] : 'Muu');
 
+    /* --- Expiration Logic ---------------------------------------------- */
+    $is_expired = false;
+    $voimassaolo = trim($row['voimassaolo_loppuu'] ?? '');
+    if (!empty($voimassaolo)) {
+        // Oletetaan D.M.YYYY tai YYYY-MM-DD
+        if (strpos($voimassaolo, '.') !== false) {
+            $parts = explode('.', $voimassaolo);
+            if (count($parts) === 3) {
+                // convert D.M.YYYY to YYYY-MM-DD
+                $voimassaolo = sprintf('%04d-%02d-%02d', $parts[2], $parts[1], $parts[0]);
+            }
+        }
+        $exp_time = strtotime($voimassaolo);
+        // Keskiyön tarkistus tai yksinkertainen < time()
+        if ($exp_time && $exp_time < time()) {
+            $is_expired = true;
+        }
+    }
+
+    $package = !empty($row['paketti']) ? strtolower($row['paketti']) : (!empty($row['taso']) ? strtolower($row['taso']) : 'perus');
+    $tyyppi = $row['tyyppi'] ?? 'ilmainen';
+    $karusellipaino = isset($row['karusellipaino']) ? (int) $row['karusellipaino'] : 0;
+
+    if ($is_expired) {
+        $package = 'ilmainen';
+        $tyyppi = 'ilmainen';
+        $karusellipaino = -1; // hide from carousel
+        $desc = ''; // clear description
+        $media = []; // clear media
+        // clear extra links & contact
+        $row['facebook'] = '';
+        $row['instagram'] = '';
+        $row['linkedin'] = '';
+        $row['tiktok'] = '';
+        $row['website'] = '';
+        $row['nettisivu'] = '';
+        $row['phone'] = '';
+        $row['puhelin'] = '';
+        $row['email'] = '';
+        $row['sähköposti'] = '';
+        $row['whatsapp'] = '';
+        $row['logo'] = '';
+        $row['mainoslinkit'] = '';
+        $row['address'] = ''; // Poistetaanko osoite kokonaan? Ehkä pidetään osoite, jos se on fyysinen liike.
+        $reviews_map[$rowid] = '';
+    }
+
     /* --- Clean Media arrays -------------------------------------------- */
     $images_only = [];
     $videos_only = [];
@@ -306,7 +353,7 @@ while (($row_raw = fgetcsv($stream)) !== false) {
         "nimi" => $name,
         "category" => $kategoria, // Alias for name
         "kategoria" => $kategoria,
-        "package" => !empty($row['paketti']) ? strtolower($row['paketti']) : (!empty($row['taso']) ? strtolower($row['taso']) : 'perus'),
+        "package" => $package,
         "mainoslause" => mb_safe('strlen', $desc) > 100 ? mb_safe('substr', $desc, 0, 100) . '...' : $desc,
         "esittely" => $desc,
         "description" => $desc, // Alias
@@ -328,9 +375,10 @@ while (($row_raw = fgetcsv($stream)) !== false) {
         "tiktok" => $row['tiktok'] ?? '',
         "whatsapp" => !empty($row['whatsapp']) ? $row['whatsapp'] : '',
         "mainoslinkit" => $row['mainoslinkit'] ?? '',
-        "karusellipaino" => isset($row['karusellipaino']) ? (int) $row['karusellipaino'] : 0,
-        "tyyppi" => $row['tyyppi'] ?? 'ilmainen',
+        "karusellipaino" => $karusellipaino,
+        "tyyppi" => $tyyppi,
         "voimassaolo_loppuu" => $row['voimassaolo_loppuu'] ?? '',
+        "is_expired" => $is_expired,
         "rss" => $row['rss'] ?? '',
         "tags" => $row['tags'] ?? '',
         "palvelutapa" => $row['palvelutapa'] ?? '',
@@ -401,6 +449,7 @@ if (!empty($id_param)) {
             "service_mode" => $c['service_mode'],
             "service_radius" => $c['service_radius'],
             "service_note" => $c['service_note'],
+            "is_expired" => $c['is_expired'] ?? false,
             // Only send the first media item for previews to save bandwidth and improve protection
             "media" => isset($c['media'][0]) ? [$c['media'][0]] : [],
             "images" => isset($c['images'][0]) ? [$c['images'][0]] : []
