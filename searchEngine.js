@@ -314,7 +314,7 @@ function processSearchResults(allCompanies, selections, currentNeedId, needToPro
     const hasFuneralVenue = selections.some(s => s.id && s.id.startsWith('OPT_FUNERAL_CAP_'));
 
     selections.forEach(opt => {
-        if (opt.is_step || opt.id === 'OPT_NO_CATERING' || opt.is_info) return;
+        if (opt.is_step || opt.id === 'OPT_NO_CATERING' || opt.is_info || opt.hide_results) return;
 
         // Skip general Memorial Service group if a specific venue/capacity option is chosen
         if (opt.id === 'OPT_FUNERAL_MEMORIAL' && hasFuneralMemorial && hasFuneralVenue) return;
@@ -579,6 +579,73 @@ function getRecommendations(needId, context, selectionsArr, allCompanies, taxono
 }
 
 
+/**
+ * Palauttaa valinnat NEEDS_CONFIG-viitteistä (sessionStorage / pikahaku).
+ * Varmistaa että jokaisella valinnalla on tagit, intent_codes jne.
+ */
+function rehydrateSelectionsFromConfig(needId, rawSelections) {
+    const config = (typeof NEEDS_CONFIG !== 'undefined' ? NEEDS_CONFIG : null)
+        || (typeof window !== 'undefined' && window.NEEDS_CONFIG ? window.NEEDS_CONFIG : null);
+    if (!config || !needId || !config[needId] || !rawSelections) return rawSelections || {};
+
+    const need = config[needId];
+    const out = {};
+
+    if (rawSelections._sub_contexts) {
+        out._sub_contexts = Array.isArray(rawSelections._sub_contexts)
+            ? [...rawSelections._sub_contexts]
+            : rawSelections._sub_contexts;
+    }
+
+    const resolveOption = (step, stored) => {
+        if (!stored) return null;
+        if (stored.id) {
+            const byId = step.options.find(o => o.id === stored.id);
+            if (byId) return byId;
+        }
+        const storedLabel = normalizeText(
+            stored.label && stored.label.fi ? stored.label.fi : stored.label
+        ).toLowerCase();
+        if (storedLabel) {
+            const byLabel = step.options.find(o => {
+                const optLabel = normalizeText(o.label && o.label.fi ? o.label.fi : o.label).toLowerCase();
+                return optLabel === storedLabel;
+            });
+            if (byLabel) return byLabel;
+        }
+        return stored;
+    };
+
+    need.steps.forEach(step => {
+        const val = rawSelections[step.id];
+        if (!val) return;
+        if (step.multiple) {
+            const arr = (Array.isArray(val) ? val : [val])
+                .map(v => resolveOption(step, v))
+                .filter(Boolean);
+            if (arr.length) out[step.id] = arr;
+        } else {
+            const resolved = resolveOption(step, val);
+            if (resolved) out[step.id] = resolved;
+        }
+    });
+
+    const subContexts = [];
+    for (const key in out) {
+        if (key.startsWith('_')) continue;
+        const val = out[key];
+        const items = Array.isArray(val) ? val : [val];
+        items.forEach(opt => {
+            if (opt.sub_context && !subContexts.includes(opt.sub_context)) {
+                subContexts.push(opt.sub_context);
+            }
+        });
+    }
+    if (subContexts.length) out._sub_contexts = subContexts;
+
+    return out;
+}
+
 if (typeof module !== 'undefined') {
     module.exports = { 
         getCategoryData, 
@@ -588,6 +655,7 @@ if (typeof module !== 'undefined') {
         isMatch, 
         processSearchResults,
         generateSearchFingerprint,
-        getRecommendations
+        getRecommendations,
+        rehydrateSelectionsFromConfig
     };
 }

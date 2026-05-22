@@ -266,7 +266,6 @@ function updateCompactStepVisibility() {
         wrapper.classList.toggle('compact-field--skipped', skip);
 
         if (skip) {
-            delete selections[step.id];
             if (step.multiple) {
                 wrapper.querySelectorAll('input[type="checkbox"]').forEach(inp => {
                     inp.checked = false;
@@ -363,11 +362,14 @@ function submitPikahaku(e) {
     if (!currentNeedId) return;
 
     readCompactSelectionsFromForm();
-    updateCompactStepVisibility();
+
+    const payload = typeof rehydrateSelectionsFromConfig === 'function'
+        ? rehydrateSelectionsFromConfig(currentNeedId, selections)
+        : selections;
 
     sessionStorage.setItem('pikahaku_pending', JSON.stringify({
         id: currentNeedId,
-        selections: selections
+        selections: payload
     }));
 
     window.location.href = `palvelu.html?id=${encodeURIComponent(currentNeedId)}&mode=compact&autosearch=1`;

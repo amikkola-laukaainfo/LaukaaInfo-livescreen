@@ -877,7 +877,11 @@
                 const data = JSON.parse(pikahakuPendingRaw);
                 sessionStorage.removeItem('pikahaku_pending');
                 if (data.id) currentNeedId = data.id;
-                if (data.selections) selections = data.selections;
+                if (data.selections) {
+                    selections = typeof rehydrateSelectionsFromConfig === 'function'
+                        ? rehydrateSelectionsFromConfig(data.id, data.selections)
+                        : data.selections;
+                }
                 searchMode = 'compact';
                 window.searchMode = 'compact';
                 pendingPikahakuSearch = true;
@@ -1012,7 +1016,17 @@
 
             const filterProfiling = urlParamsInit.get('filter_profiling');
             if (pendingPikahakuSearch || filterProfiling || urlParamsInit.get('autosearch') === '1') {
-                setSearchMode('compact', false);
+                searchMode = 'compact';
+                window.searchMode = 'compact';
+                document.querySelectorAll('.mode-tab').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.mode === 'compact');
+                });
+                const stepSection = document.getElementById('step-section');
+                const compactSection = document.getElementById('compact-section');
+                const progress = document.getElementById('step-progress');
+                if (stepSection) stepSection.style.display = 'none';
+                if (compactSection) compactSection.style.display = 'none';
+                if (progress) progress.style.display = 'none';
                 showResults();
             } else if (searchMode === 'compact') {
                 setSearchMode('compact', false);
@@ -1214,7 +1228,8 @@
                 wrapper.classList.toggle('compact-field--skipped', skip);
 
                 if (skip) {
-                    delete selections[step.id];
+                    // Poistetaan vain lomakkeen tilasta – älä tyhjennä selections-objektia,
+                    // jotta hakutulokset pysyvät samoina pikahaun ja ohjatun haun välillä.
                     if (step.multiple) {
                         wrapper.querySelectorAll('input[type="checkbox"]').forEach(inp => {
                             inp.checked = false;
@@ -1236,7 +1251,9 @@
         function submitCompactSearch(e) {
             e.preventDefault();
             readCompactSelectionsFromForm();
-            updateCompactStepVisibility();
+            if (typeof rehydrateSelectionsFromConfig === 'function') {
+                selections = rehydrateSelectionsFromConfig(currentNeedId, selections);
+            }
             showResults();
         }
 
