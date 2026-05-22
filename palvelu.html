@@ -144,6 +144,162 @@
             background: var(--primary-blue);
         }
 
+        /* Search mode tabs */
+        .palvelu-mode-bar {
+            max-width: 600px;
+            margin: 0 auto 1.5rem;
+            padding: 0 1.5rem;
+            display: flex;
+            gap: 0;
+            background: #f1f5f9;
+            border-radius: 50px;
+            padding: 4px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .mode-tab {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .mode-tab.active {
+            background: white;
+            color: var(--primary-blue);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .mode-tab:hover:not(.active) {
+            color: var(--primary-blue);
+        }
+
+        /* Compact quick search form (UI A) */
+        .compact-form-section {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            padding: 0 1.5rem;
+        }
+
+        .compact-form {
+            background: white;
+            border-radius: 24px;
+            padding: 2rem;
+            border: 2px solid #eef2f6;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .compact-field {
+            margin-bottom: 1.5rem;
+        }
+
+        .compact-field:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .compact-field--skipped {
+            opacity: 0.45;
+            pointer-events: none;
+        }
+
+        .compact-field--skipped .compact-skip-note {
+            display: block;
+        }
+
+        .compact-label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .compact-hint {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin: 0 0 0.75rem 0;
+        }
+
+        .compact-skip-note {
+            display: none;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            font-style: italic;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .compact-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            font-weight: 600;
+            color: #1e293b;
+            background: #f8fafc;
+            cursor: pointer;
+            box-sizing: border-box;
+            appearance: auto;
+        }
+
+        .compact-select:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            background: white;
+        }
+
+        .compact-checkboxes {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .compact-check {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            background: #f8fafc;
+            border: 2px solid #eef2f6;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .compact-check:hover {
+            border-color: var(--primary-blue);
+            background: #f0f9ff;
+        }
+
+        .compact-check input {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .compact-check:has(input:checked) {
+            background: #e0f2fe;
+            border-color: var(--primary-blue);
+        }
+
+        .compact-search-btn {
+            width: 100%;
+            margin-top: 1.5rem;
+            background: var(--primary-blue) !important;
+            justify-content: center;
+            text-align: center;
+        }
+
         /* Step transition animation */
         .fade-in {
             animation: fadeIn 0.4s ease-out;
@@ -587,12 +743,25 @@
     </header>
 
     <main>
+        <div id="palvelu-mode-bar" class="palvelu-mode-bar" style="display: none;">
+            <button type="button" class="mode-tab active" data-mode="guided" onclick="setSearchMode('guided')" data-i18n="palvelu_mode_guided">Ohjattu haku</button>
+            <button type="button" class="mode-tab" data-mode="compact" onclick="setSearchMode('compact')" data-i18n="palvelu_mode_compact">Pikahaku</button>
+        </div>
+
+        <div id="selection-summary" class="selection-summary" style="display: none;"></div>
+
         <section id="step-section" class="step-container">
-            <div id="selection-summary" class="selection-summary" style="display: none;"></div>
             <div class="step-progress" id="step-progress"></div>
             <div id="step-content" class="fade-in">
                 <!-- Dynaaminen sisältö -->
             </div>
+        </section>
+
+        <section id="compact-section" class="compact-form-section" style="display: none;">
+            <form id="compact-form" class="compact-form" onsubmit="submitCompactSearch(event)">
+                <div id="compact-fields"></div>
+                <button type="submit" class="btn-radar compact-search-btn" data-i18n="btn_compact_search">Hae palvelut</button>
+            </form>
         </section>
 
         <section id="results-container" style="display: none;">
@@ -676,8 +845,11 @@
 
         // Share this page functionality
         document.getElementById('share-this-page-btn')?.addEventListener('click', function() {
-            const url = window.location.href;
-            navigator.clipboard.writeText(url).then(() => {
+            const url = new URL(window.location.href);
+            if (window.searchMode === 'compact') {
+                url.searchParams.set('mode', 'compact');
+            }
+            navigator.clipboard.writeText(url.toString()).then(() => {
                 const btn = this;
                 const originalText = btn.innerHTML;
                 btn.innerHTML = '✅';
@@ -690,7 +862,10 @@
         });
     </script>
     <script>
-        let currentNeedId = new URLSearchParams(window.location.search).get('id');
+        const urlParamsInit = new URLSearchParams(window.location.search);
+        let currentNeedId = urlParamsInit.get('id');
+        let searchMode = urlParamsInit.get('mode') === 'compact' ? 'compact' : 'guided';
+        window.searchMode = searchMode;
         let currentStepIndex = 0;
         let selections = {};
         let taxonomyData = null;
@@ -721,8 +896,12 @@
         }
 
         function showInvalidNeedError() {
+            const modeBar = document.getElementById('palvelu-mode-bar');
+            const compactSection = document.getElementById('compact-section');
             const stepSection = document.getElementById('step-section');
             const resultsContainer = document.getElementById('results-container');
+            if (modeBar) modeBar.style.display = 'none';
+            if (compactSection) compactSection.style.display = 'none';
             if (resultsContainer) resultsContainer.style.display = 'none';
             if (stepSection) stepSection.style.display = 'block';
 
@@ -814,12 +993,236 @@
             } catch (e) {
             }
 
-            const filterProfiling = new URLSearchParams(window.location.search).get('filter_profiling');
+            const modeBar = document.getElementById('palvelu-mode-bar');
+            if (modeBar) modeBar.style.display = 'flex';
+
+            const filterProfiling = urlParamsInit.get('filter_profiling');
             if (filterProfiling) {
                 showResults();
+            } else if (searchMode === 'compact') {
+                setSearchMode('compact', false);
             } else {
+                setSearchMode('guided', false);
+            }
+        }
+
+        function setSearchMode(mode, updateUrl = true) {
+            searchMode = mode;
+            window.searchMode = mode;
+            const stepSection = document.getElementById('step-section');
+            const compactSection = document.getElementById('compact-section');
+            const progress = document.getElementById('step-progress');
+            const resultsContainer = document.getElementById('results-container');
+
+            if (resultsContainer && resultsContainer.style.display !== 'none') {
+                return;
+            }
+
+            document.querySelectorAll('.mode-tab').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.mode === mode);
+            });
+
+            if (mode === 'compact') {
+                if (stepSection) stepSection.style.display = 'none';
+                if (compactSection) compactSection.style.display = 'block';
+                if (progress) progress.style.display = 'none';
+                renderCompactForm();
+                syncCompactFormFromSelections();
+                updateCompactStepVisibility();
+            } else {
+                readCompactSelectionsFromForm();
+                if (stepSection) stepSection.style.display = 'block';
+                if (compactSection) compactSection.style.display = 'none';
+                if (progress) progress.style.display = '';
                 renderStep();
             }
+
+            updateSelectionSummary();
+
+            if (updateUrl) {
+                const url = new URL(window.location.href);
+                if (mode === 'compact') url.searchParams.set('mode', 'compact');
+                else url.searchParams.delete('mode');
+                history.replaceState(null, '', url);
+            }
+        }
+
+        function renderCompactForm() {
+            const config = window.NEEDS_CONFIG || NEEDS_CONFIG;
+            const need = config && config[currentNeedId];
+            const container = document.getElementById('compact-fields');
+            if (!container || !need || !need.steps) return;
+
+            const placeholder = i18n.t('compact_select_placeholder');
+            const skipHint = i18n.t('compact_skip_hint');
+            const multiHint = i18n.t('search_multiple_desc');
+
+            container.innerHTML = need.steps.map(step => {
+                const fieldId = `compact-step-${step.id}`;
+                if (step.multiple) {
+                    return `
+                        <div class="compact-field" data-step-id="${step.id}" id="wrapper-${step.id}">
+                            <p class="compact-skip-note">${skipHint}</p>
+                            <span class="compact-label">${i18n.getText(step.question)}</span>
+                            <p class="compact-hint">${multiHint}</p>
+                            <div class="compact-checkboxes">
+                                ${step.options.map((opt, i) => `
+                                    <label class="compact-check">
+                                        <input type="checkbox" name="compact-${step.id}" value="${i}" data-step-id="${step.id}">
+                                        <span>${i18n.getText(opt.label)}</span>
+                                    </label>
+                                `).join('')}
+                            </div>
+                        </div>`;
+                }
+                return `
+                    <div class="compact-field" data-step-id="${step.id}" id="wrapper-${step.id}">
+                        <p class="compact-skip-note">${skipHint}</p>
+                        <label class="compact-label" for="${fieldId}">${i18n.getText(step.question)}</label>
+                        <select id="${fieldId}" class="compact-select" data-step-id="${step.id}">
+                            <option value="">${placeholder}</option>
+                            ${step.options.map((opt, i) => `<option value="${i}">${i18n.getText(opt.label)}</option>`).join('')}
+                        </select>
+                    </div>`;
+            }).join('');
+
+            container.querySelectorAll('select, input[type="checkbox"]').forEach(el => {
+                el.addEventListener('change', onCompactFieldChange);
+            });
+        }
+
+        function onCompactFieldChange() {
+            readCompactSelectionsFromForm();
+            updateCompactStepVisibility();
+            updateSelectionSummary();
+        }
+
+        function readCompactSelectionsFromForm() {
+            const config = window.NEEDS_CONFIG || NEEDS_CONFIG;
+            const need = config && config[currentNeedId];
+            if (!need) return;
+
+            const subContexts = [];
+
+            need.steps.forEach(step => {
+                const wrapper = document.getElementById(`wrapper-${step.id}`);
+                if (wrapper && wrapper.classList.contains('compact-field--skipped')) {
+                    delete selections[step.id];
+                    return;
+                }
+
+                if (step.multiple) {
+                    const checked = wrapper ? wrapper.querySelectorAll(`input[name="compact-${step.id}"]:checked`) : [];
+                    const selected = [];
+                    checked.forEach(inp => {
+                        const opt = step.options[parseInt(inp.value, 10)];
+                        if (opt) {
+                            selected.push(opt);
+                            if (opt.sub_context && !subContexts.includes(opt.sub_context)) {
+                                subContexts.push(opt.sub_context);
+                            }
+                        }
+                    });
+                    if (selected.length) selections[step.id] = selected;
+                    else delete selections[step.id];
+                } else {
+                    const selEl = document.getElementById(`compact-step-${step.id}`);
+                    if (selEl && selEl.value !== '') {
+                        const opt = step.options[parseInt(selEl.value, 10)];
+                        if (opt) {
+                            selections[step.id] = opt;
+                            if (opt.sub_context && !subContexts.includes(opt.sub_context)) {
+                                subContexts.push(opt.sub_context);
+                            }
+                        }
+                    } else {
+                        delete selections[step.id];
+                    }
+                }
+            });
+
+            if (subContexts.length) selections._sub_contexts = subContexts;
+            else delete selections._sub_contexts;
+        }
+
+        function syncCompactFormFromSelections() {
+            const config = window.NEEDS_CONFIG || NEEDS_CONFIG;
+            const need = config && config[currentNeedId];
+            if (!need) return;
+
+            need.steps.forEach(step => {
+                const wrapper = document.getElementById(`wrapper-${step.id}`);
+                if (!wrapper) return;
+
+                if (step.multiple) {
+                    const arr = selections[step.id];
+                    wrapper.querySelectorAll('input[type="checkbox"]').forEach(inp => {
+                        const opt = step.options[parseInt(inp.value, 10)];
+                        inp.checked = !!(arr && arr.some(s =>
+                            (s.id && opt.id && s.id === opt.id) ||
+                            i18n.getText(s.label) === i18n.getText(opt.label)
+                        ));
+                    });
+                } else {
+                    const sel = selections[step.id];
+                    const selectEl = document.getElementById(`compact-step-${step.id}`);
+                    if (!selectEl) return;
+                    if (!sel) {
+                        selectEl.value = '';
+                        return;
+                    }
+                    const idx = step.options.findIndex(o =>
+                        (sel.id && o.id && sel.id === o.id) ||
+                        i18n.getText(o.label) === i18n.getText(sel.label)
+                    );
+                    selectEl.value = idx >= 0 ? String(idx) : '';
+                }
+            });
+        }
+
+        function updateCompactStepVisibility() {
+            const config = window.NEEDS_CONFIG || NEEDS_CONFIG;
+            const need = config && config[currentNeedId];
+            if (!need) return;
+
+            need.steps.forEach(step => {
+                const wrapper = document.getElementById(`wrapper-${step.id}`);
+                if (!wrapper) return;
+
+                if (!step.skipIf) {
+                    wrapper.classList.remove('compact-field--skipped');
+                    wrapper.querySelectorAll('input, select').forEach(el => { el.disabled = false; });
+                    return;
+                }
+
+                const skip = evaluateSkipIf(step.skipIf);
+                wrapper.classList.toggle('compact-field--skipped', skip);
+
+                if (skip) {
+                    delete selections[step.id];
+                    if (step.multiple) {
+                        wrapper.querySelectorAll('input[type="checkbox"]').forEach(inp => {
+                            inp.checked = false;
+                            inp.disabled = true;
+                        });
+                    } else {
+                        const selectEl = wrapper.querySelector('select');
+                        if (selectEl) {
+                            selectEl.value = '';
+                            selectEl.disabled = true;
+                        }
+                    }
+                } else {
+                    wrapper.querySelectorAll('input, select').forEach(el => { el.disabled = false; });
+                }
+            });
+        }
+
+        function submitCompactSearch(e) {
+            e.preventDefault();
+            readCompactSelectionsFromForm();
+            updateCompactStepVisibility();
+            showResults();
         }
 
         function renderStep() {
@@ -1091,6 +1494,8 @@
             const countEl = document.getElementById('results-count');
 
             if (stepSection) stepSection.style.display = 'none';
+            const compactSection = document.getElementById('compact-section');
+            if (compactSection) compactSection.style.display = 'none';
             if (resultsContainer) resultsContainer.style.display = 'block';
             if (list) list.innerHTML = '';
             document.getElementById('next-steps-container').style.display = 'none';
@@ -1784,9 +2189,15 @@
         function resetPalvelu() {
             currentStepIndex = 0;
             selections = {};
-            document.getElementById('step-section').style.display = 'block';
+            selectedAnchorCompanyId = null;
+            globalActiveCollaboratorsSet = new Set();
+            expandedGroups = {};
             document.getElementById('results-container').style.display = 'none';
-            renderStep();
+            if (searchMode === 'compact') {
+                setSearchMode('compact', false);
+            } else {
+                setSearchMode('guided', false);
+            }
         }
 
         function initUserLocation() {
