@@ -172,6 +172,35 @@
         document.getElementById('loading-overlay').style.display = 'none';
         document.getElementById('card-content').style.display = 'block';
 
+        if (company.is_expired) {
+            const cardContent = document.getElementById('card-content');
+            if (cardContent) cardContent.classList.add('expired-card');
+            
+            const nameEl = document.getElementById('display-name');
+            if (nameEl) {
+                const alertHtml = '<div style="background: #fff3cd; color: #856404; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center; font-weight: bold; border: 1px solid #ffeeba;">⚠️ Yrityksen tiedot voivat olla vanhentuneita</div>';
+                nameEl.insertAdjacentHTML('beforebegin', alertHtml);
+            }
+            
+            // Minimalistinen tyyli: poistetaan korostusvärit
+            const header = document.querySelector('.card-header');
+            if (header) {
+                header.style.background = '#e2e8f0'; // Harmaa tausta
+                header.style.color = '#334155';
+            }
+            
+            // Tyhjennetään mahdolliset jäämät
+            company.esittely = '';
+            company.mainoslause = '';
+            company.logo = '';
+            company.media = [];
+            company.puhelin = '';
+            company.nettisivu = '';
+            company.whatsapp = '';
+            company.facebook = '';
+            company.instagram = '';
+        }
+
         const rawId = String(company.id).replace('company-', '');
         document.title = `${company.nimi} – LaukaaInfo`;
         document.getElementById('display-name').textContent = company.nimi;

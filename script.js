@@ -385,6 +385,35 @@ function initMap(companies) {
 
     // Update sidebar when map view changes
     map.on('moveend', updateMapSidebar);
+
+    // Zoom-level filtering for expired companies
+    map.on('zoomend', function() {
+        if (map.getZoom() < 15) {
+            document.body.classList.add('map-zoomed-out');
+        } else {
+            document.body.classList.remove('map-zoomed-out');
+        }
+    });
+    if (map.getZoom() < 15) {
+        document.body.classList.add('map-zoomed-out');
+    }
+    
+    // Inject CSS for expired markers
+    if (!document.getElementById('expired-marker-css')) {
+        const style = document.createElement('style');
+        style.id = 'expired-marker-css';
+        style.innerHTML = `
+            body.map-zoomed-out .is-expired {
+                display: none !important;
+            }
+            .custom-marker.is-expired > div {
+                background-color: #cbd5e1 !important; /* Harmaa väri */
+                border-color: #94a3b8 !important;
+                transform: scale(0.8) rotate(-45deg) !important;
+            }
+        `;
+        document.head.appendChild(style);
+    }
 }
 
 function addMarkersToMap(companies, forceShowAll = false) {
@@ -633,7 +662,7 @@ function addMarkersToMap(companies, forceShowAll = false) {
 
             const icon = L.divIcon({
                 html: markerHtml,
-                className: `custom-marker ${isPro ? 'is-pro' : ''} ${isPremiumPkg ? 'is-premium' : ''}`,
+                className: `custom-marker ${isPro ? 'is-pro' : ''} ${isPremiumPkg ? 'is-premium' : ''} ${company.is_expired ? 'is-expired' : ''}`,
                 iconSize: [30, 30],
                 iconAnchor: [15, 30],
                 popupAnchor: [0, -30]

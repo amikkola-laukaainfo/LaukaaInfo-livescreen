@@ -69,6 +69,8 @@ function getCompanyCollaborators(c) {
 }
 
 function isMatch(c, opt, context, subContextsReq, noCateringSelected, taxonomyData) {
+    if (c.is_expired) return false;
+    
     const labelLower = normalizeText(opt.label && opt.label.fi ? opt.label.fi : opt.label).toLowerCase();
     const fitsScore = getFitsForScore(c, context);
     const underscoreKey = context.replace(/-/g, '_');
