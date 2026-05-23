@@ -6380,3 +6380,399 @@ footer {
         transition: none;
     }
 }
+
+/* ========================================================
+   MOBILE OPTIMIZATION – matkamaalle.fi inspired
+   v2026-05 – ONLY affects max-width: 768px
+   Desktop layout is completely unchanged.
+   ======================================================== */
+
+/* --- Accent colours: rikkaampi väripaletti --- */
+:root {
+    --accent-coral:  #c94c36;   /* lämmin punainen / CTA */
+    --accent-forest: #2e7d52;   /* metsänvihreä */
+    --accent-amber:  #d97706;   /* kullankeltainen */
+    --accent-teal:   #0e7490;   /* teal / lake blue */
+}
+
+/* CTA btn-primary saa coralin mobiilissa hero-toimintaan */
+@media (max-width: 768px) {
+    .btn-primary {
+        background: var(--accent-coral);
+    }
+    .btn-primary:hover {
+        background: #a83929;
+    }
+
+    /* Hae-nappi saa voimakkaamman värin */
+    .btn-search {
+        background: var(--accent-coral);
+        padding: 0 1.4rem;
+    }
+    .btn-search:hover {
+        background: #a83929;
+    }
+
+    /* need-card hover-nappi värimuutos */
+    .btn-need:hover {
+        background: var(--accent-coral);
+        color: white;
+    }
+
+    /* ------------------------------------------------
+       NAVIGAATIO – tiiviimpi mobiilissa
+       ------------------------------------------------ */
+    .top-nav .nav-container {
+        padding: 0.45rem 0.75rem;
+    }
+    .nav-logo img {
+        height: 28px;
+        width: 28px;
+        max-width: 28px !important;
+    }
+    .nav-logo span {
+        font-size: 0.88rem;
+        letter-spacing: 0.5px;
+    }
+
+    /* ------------------------------------------------
+       HERO-OSIO – kompaktimpi, lähemmäksi käyttökohdetta
+       ------------------------------------------------ */
+    header.hero-split {
+        min-height: unset;
+    }
+    .hero-left {
+        padding: 1.1rem 0.85rem 1rem;
+        background: var(--secondary-blue);
+    }
+    header h1,
+    header.hero-split h1 {
+        font-size: 1.5rem !important;
+        letter-spacing: -0.5px;
+        margin-bottom: 0.3rem;
+    }
+    .hero-subheading {
+        font-size: 0.95rem;
+        margin-bottom: 0.5rem;
+        opacity: 0.9;
+    }
+    .hero-tagline {
+        font-size: 0.8rem;
+        line-height: 1.4;
+        margin-bottom: 0.25rem;
+        opacity: 0.85;
+    }
+    .hero-actions {
+        margin-top: 0.85rem;
+    }
+    .btn-primary {
+        padding: 0.65rem 1.25rem;
+        font-size: 0.88rem;
+    }
+    .main-logo {
+        height: 44px;
+        width: 44px;
+        max-width: 44px !important;
+    }
+    .hero-flex-container {
+        gap: 1rem;
+    }
+    .hero-right {
+        min-height: 120px;
+    }
+
+    /* ------------------------------------------------
+       SECTION-OTSIKOT – pienemmät mobiilissa
+       ------------------------------------------------ */
+    h2 {
+        font-size: 1.5rem;
+        letter-spacing: -0.5px;
+    }
+    .section-header {
+        margin-bottom: 1.5rem;
+    }
+    .section-header p {
+        font-size: 0.88rem;
+    }
+    .need-header h2 {
+        font-size: 1.35rem !important;
+        margin-bottom: 0.5rem;
+    }
+    .need-header p {
+        font-size: 0.85rem;
+    }
+    .need-header {
+        margin-bottom: 1.5rem !important;
+    }
+
+    /* ------------------------------------------------
+       PADDINGIT – koko näytön leveys käyttöön
+       ------------------------------------------------ */
+    main {
+        padding: 0;
+    }
+    .section-container {
+        padding: 0 0.75rem;
+    }
+    .need-based-section {
+        padding: 2rem 0;
+    }
+    .community-section,
+    .experiences-section {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+
+    /* ------------------------------------------------
+       PALVELUKORTIT (need-grid) – 2 kolumnia, matalammat
+       ------------------------------------------------ */
+    .need-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.55rem;
+        padding: 0 0.75rem;
+    }
+    .need-card {
+        height: 148px;
+        border-radius: 16px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .need-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px rgba(0, 51, 102, 0.18);
+    }
+    .need-card-content {
+        padding: 0.85rem 0.9rem 0.9rem;
+    }
+    .need-card h3 {
+        font-size: 0.95rem !important;
+        margin-bottom: 0;
+        font-weight: 700;
+        line-height: 1.2;
+        text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+    }
+    /* Piilota kuvaus mobiilissa */
+    .need-card p {
+        display: none;
+    }
+    /* btn-need peittää koko kortin näkymättömänä klikkialueena */
+    .btn-need {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        color: transparent;
+        border-radius: inherit;
+        z-index: 10;
+        padding: 0;
+        box-shadow: none;
+        font-size: 0;
+        border: none;
+    }
+    /* Quick links -rivi kompaktimpi */
+    .quick-links-row {
+        gap: 0.5rem !important;
+        margin-bottom: 1rem !important;
+        padding: 0 0.75rem;
+    }
+    .quick-link-box {
+        padding: 0.55rem 0.9rem !important;
+        font-size: 0.82rem !important;
+        border-radius: 10px !important;
+    }
+
+    /* ------------------------------------------------
+       FEATURE-KORTIT (Yhteisöllisyys, Elämykset)
+       ------------------------------------------------ */
+    .feature-grid {
+        gap: 0.75rem;
+    }
+    .feature-card {
+        height: auto !important;      /* ylikirjoittaa inline height: 400px */
+        min-height: unset !important;
+        border-radius: 16px;
+    }
+    .feature-card-img {
+        height: 90px !important;
+    }
+    .feature-card-body {
+        padding: 1rem !important;
+    }
+    .feature-card h3 {
+        font-size: 0.95rem;
+        margin-bottom: 0.35rem;
+    }
+    .feature-card p {
+        font-size: 0.82rem;
+        margin-bottom: 0.6rem;
+        line-height: 1.45;
+    }
+    .btn-text {
+        font-size: 0.82rem;
+    }
+
+    /* ------------------------------------------------
+       HAKUOSIO – matkamaalle.fi-tyylinen kortti
+       ------------------------------------------------ */
+
+    /* Osion taustaväri: lämmin tumma teal */
+    #search-section.bg-full-blue::before {
+        background-color: #1b3a4b !important;
+    }
+    #search-section {
+        padding: 1.5rem 0 2rem !important;
+    }
+    #search-section .section-header {
+        margin-bottom: 1rem;
+    }
+    #search-section .section-header h2 {
+        color: #ffffff !important;
+        font-size: 1.2rem;
+    }
+    #search-section .section-header p {
+        color: rgba(255,255,255,0.8) !important;
+        font-size: 0.82rem;
+    }
+
+    /* Hakukortti */
+    .hero-path.search-path,
+    .hero-path.browse-path {
+        border-radius: 18px !important;
+        border: none !important;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.2) !important;
+        overflow: hidden;
+    }
+    /* Hakukortin sisäinen taustaoverlay tummempi */
+    .hero-path.search-path > div[style*="background-image"] {
+        opacity: 0.08 !important;
+    }
+
+    /* Hero path content padding */
+    .hero-path-content {
+        padding: 1.4rem 1rem !important;
+    }
+
+    /* Otsikko hakukortissa */
+    .hero-path-content h3 {
+        font-size: 1rem !important;
+        margin-bottom: 1rem !important;
+        color: #0a2540 !important;
+    }
+
+    /* Hakukentän wrapper */
+    .search-input-wrapper {
+        border-radius: 14px;
+        padding: 5px 5px 5px 12px;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+    }
+    .search-input-wrapper input {
+        font-size: 0.95rem;
+        padding: 0.75rem 0.5rem 0.75rem 0;
+    }
+    .btn-search {
+        border-radius: 10px;
+        padding: 0.7rem 1.1rem;
+        font-size: 0.9rem;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+    }
+
+    /* Checkbox-rivi */
+    .search-options {
+        margin-top: 0.75rem;
+    }
+    .checkbox-container {
+        font-size: 0.82rem;
+    }
+
+    /* Taajama-pillitriivi */
+    .homepage-region-selector {
+        gap: 0.4rem !important;
+    }
+    .region-pill {
+        font-size: 0.82rem !important;
+        padding: 0.4rem 0.9rem !important;
+        border-radius: 40px !important;
+    }
+    .hero-split-paths {
+        gap: 1rem !important;
+        padding: 0 0.75rem !important;
+    }
+
+    /* ------------------------------------------------
+       PAIKALLINEN SYÖTE -NAPPI
+       ------------------------------------------------ */
+    .feed-accordion-header {
+        border-radius: 18px !important;
+        padding: 1.2rem 1.25rem !important;
+    }
+    .feed-accordion-header span[data-i18n="feed_title"] {
+        font-size: 1.1rem !important;
+    }
+
+    /* ------------------------------------------------
+       JAKOLINKKI-GENERAATTORI
+       ------------------------------------------------ */
+    .share-generator-section {
+        padding: 0 0.75rem;
+    }
+    .share-generator-card {
+        padding: 1.25rem 1rem;
+        border-radius: 18px;
+    }
+    .share-generator-card h2 {
+        font-size: 1.1rem;
+    }
+
+    /* ------------------------------------------------
+       "MITÄ HALUAT TEHDÄ?" -GATE-SECTION
+       ------------------------------------------------ */
+    .gate-section {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+    .gate-header h2 {
+        font-size: 1.4rem !important;
+    }
+    .gate-container {
+        padding: 0 0.75rem;
+    }
+    .path-card {
+        padding: 1.75rem 1.25rem !important;
+        border-radius: 18px !important;
+    }
+    .path-card h3 {
+        font-size: 1.3rem;
+    }
+    .path-card .path-icon {
+        width: 72px;
+        height: 72px;
+        font-size: 2.2rem;
+        margin-bottom: 1.25rem;
+        border-radius: 20px;
+    }
+
+    /* ------------------------------------------------
+       SEO FOOTER LINKS
+       ------------------------------------------------ */
+    .seo-footer-links {
+        padding: 1.5rem 0.75rem;
+    }
+}
+
+/* Erittäin kapeat puhelimet (max 380px) */
+@media (max-width: 380px) {
+    .need-grid {
+        gap: 0.4rem;
+    }
+    .need-card {
+        height: 130px;
+    }
+    .need-card h3 {
+        font-size: 0.85rem !important;
+    }
+    header h1,
+    header.hero-split h1 {
+        font-size: 1.35rem !important;
+    }
+}
