@@ -6758,6 +6758,152 @@ footer {
     .seo-footer-links {
         padding: 1.5rem 0.75rem;
     }
+
+    /* ------------------------------------------------
+       ALASIVUJEN OPTIMOINTI (Palvelut, Taajamat, Ajankohtaista)
+       ------------------------------------------------ */
+    
+    /* Kategoria-sivu ja vastaavat headerit (ei hero-split) */
+    header:not(.hero-split) {
+        padding: 1.25rem 1rem 1.25rem !important;
+    }
+    header:not(.hero-split) .header-content {
+        padding: 0 !important;
+    }
+    header:not(.hero-split) h1 {
+        font-size: 1.5rem !important;
+        margin-bottom: 0.25rem !important;
+    }
+    header:not(.hero-split) p {
+        font-size: 0.9rem !important;
+    }
+
+    /* Taajamasivujen Hero (region-hero) ja hakuosio */
+    section.region-hero {
+        padding: 1.25rem 0 1.5rem !important;
+        margin: 0 0 1.5rem !important;
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+    }
+    section.region-hero .header-content {
+        padding: 0 1rem !important;
+    }
+    section.region-hero h1 {
+        font-size: 1.5rem !important;
+        margin-bottom: 0.25rem !important;
+    }
+    section.region-hero p {
+        font-size: 0.9rem !important;
+    }
+    section.region-hero .main-search-box {
+        margin-top: 1rem !important;
+    }
+
+    /* Yrityskortit (Company Result Card) esim. palvelu.html */
+    .results-grid {
+        gap: 0.75rem;
+        padding: 0 0.75rem;
+    }
+    .company-result-card {
+        padding: 1rem 1.25rem;
+        border-radius: 16px;
+    }
+    .company-result-card .result-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.8rem;
+        margin-bottom: 0.75rem;
+        border-radius: 12px;
+    }
+    .company-result-card h3 {
+        font-size: 1.15rem;
+        margin-bottom: 0.35rem;
+    }
+    .company-result-card .slogan {
+        font-size: 0.85rem;
+        margin-bottom: 0.75rem;
+    }
+    .company-result-card .card-meta {
+        padding-top: 0.75rem;
+        gap: 8px;
+    }
+    .company-result-card .dist-badge {
+        padding: 2px 8px;
+        font-size: 0.75rem;
+    }
+    .company-result-card .card-arrow {
+        margin-top: 1rem;
+        font-size: 0.85rem;
+    }
+    
+    /* Kategoriaruudukko (Taajamasivut ja palvelu.html) */
+    .categories-grid {
+        gap: 0.75rem;
+        padding: 0 0.75rem;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* 2 kolumnia myös mobiilissa */
+    }
+    .category-card {
+        padding: 1.25rem 0.5rem;
+        border-radius: 14px;
+        flex: unset;
+        max-width: none;
+    }
+    .category-card .cat-icon {
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+    }
+    .category-card h3 {
+        font-size: 0.85rem;
+    }
+
+    /* Ajankohtaista-sivun uutiskortit ja dashboard */
+    .dashboard-grid {
+        gap: 1rem;
+        padding: 0 0.75rem;
+    }
+    .dashboard-grid > .card,
+    .dashboard-grid > .info-block,
+    #ajankohtaista-dashboard .card {
+        padding: 1.25rem 1rem;
+        border-radius: 16px;
+    }
+    .dashboard-grid .card h2,
+    .dashboard-grid .info-block h2 {
+        font-size: 1.15rem;
+    }
+    .info-block__header {
+        margin-bottom: 0.75rem;
+        padding-bottom: 0.75rem;
+    }
+    .info-block__icon {
+        width: 36px;
+        height: 36px;
+        font-size: 1.1rem;
+        border-radius: 10px;
+    }
+    .ajankohtaista-jump a {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+    
+    /* RSS-uutisvirta */
+    .rss-item {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1.25rem;
+        gap: 0.5rem;
+    }
+    .rss-item-image {
+        height: 140px; /* Pienempi kuva mobiilissa */
+        border-radius: 10px;
+    }
+    .rss-item h3 {
+        font-size: 1.05rem;
+    }
+    .rss-item .description {
+        font-size: 0.85rem;
+        -webkit-line-clamp: 2; /* Vain 2 riviä tekstiä mobiilissa */
+    }
 }
 
 /* Erittäin kapeat puhelimet (max 380px) */
