@@ -648,6 +648,24 @@ const NEEDS_CONFIG = {
                 ]
             }
         ]
+    },
+    "vuokraus": {
+        "title": { "fi": "Vuokrauspalvelut", "en": "Rental Services" },
+        "icon": "🔑",
+        "description": { "fi": "Vuokraa kalustoa ja laitteita tarpeen mukaan.", "en": "Rent equipment and machinery as needed." },
+        "profilointi_context": "vapaa-aika",
+        "steps": [
+            {
+                "id": "tyyppi",
+                "question": { "fi": "Mitä olet vuokraamassa?", "en": "What are you renting?" },
+                "options": [
+                    { "id": "OPT_RENTAL_BOAT", "label": { "fi": "Venevuokraus", "en": "Boat rental" }, "sub_context": "venevuokraus", "tags": ["venevuokraus"] },
+                    { "id": "OPT_RENTAL_TRAILER", "label": { "fi": "Peräkärryn vuokraus", "en": "Trailer rental" }, "sub_context": "peräkärryn vuokraus", "tags": ["peräkärryn vuokraus"] },
+                    { "id": "OPT_RENTAL_EQUIPMENT", "label": { "fi": "Laitteisto- ja soitinvuokraus", "en": "Equipment and instrument rental" }, "sub_context": "laitteistovuokraus", "tags": ["laitteistovuokraus", "soitinvuokraus"] },
+                    { "id": "OPT_RENTAL_APARTMENT", "label": { "fi": "Asuntojen vuokraus", "en": "Apartment rental" }, "sub_context": "asuntojen-vuokraus", "tags": ["asuntojen-vuokraus"] }
+                ]
+            }
+        ]
     }
 };
 
