@@ -64,6 +64,7 @@
                 "BIZ_IT": 44
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Onnellinen Studio on mainostoimisto, joka tarjoaa yrityksille brändäystä, visuaalista suunnittelua ja markkinointiviestinnän palveluita. Yritys auttaa erityisesti pk-yrityksiä yritysilmeen, logojen ja digitaalisen näkyvyyden kehittämisessä.",
@@ -434,6 +435,22 @@
                 "STARTUP_WEB": 92
             }
         },
+        "capabilities": {
+            "DRONE_FILMING": {
+                "available": true,
+                "priority_score": 0.85,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
+        },
         "categories": {
             "core": {
                 "description": "Lievestuoreella toimiva digimedia- ja markkinointialan yritys, joka tarjoaa videotuotantoa, valokuvausta, drone-kuvausta, digitointipalveluja sekä verkkosivujen ja digitaalisen markkinoinnin ratkaisuja yrityksille ja yksityisasiakkaille.",
@@ -720,22 +737,6 @@
             "last_updated": "2026-05-21T11:57:38.386Z",
             "verified_by": "AI-analysis-v2",
             "status": "draft"
-        },
-        "capabilities": {
-            "DRONE_FILMING": {
-                "available": true,
-                "priority_score": 0.85,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "AV_RENTAL": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-91": {
@@ -780,6 +781,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Laukaan yrityspalvelut on yritys- ja elinkeinoelämän neuvontaan keskittyvä toimija, joka tukee paikallisia yrityksiä perustamisessa, kehittämisessä ja rahoitus- sekä hankekysymyksissä.",
@@ -1052,6 +1054,15 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
+        },
         "categories": {
             "core": {
                 "description": "Ohjelma- ja äänentoistopalvelujen tuottamiseen ja välittämiseen sekä ravintola-alan konsultointiin erikoistunut ohjelmatoimisto. Yhtiö voi toimintaansa varten omistaa ja hallita kiinteää omaisuutta ja arvopapereita .",
@@ -1267,15 +1278,6 @@
             "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
-        },
-        "capabilities": {
-            "AV_RENTAL": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-309": {
@@ -1361,6 +1363,7 @@
                 "BIZ_BRANDING": 35
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Johtakee Oy on Laukaassa toimiva liikkeenjohdon konsultointiin ja yritysten kehittämiseen keskittyvä yritys.",

@@ -77,6 +77,7 @@
                 "AUTO_REPAIR": 100
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Leppävedellä toimiva autokorjaamo ja autohuolto. Tarjoaa henkilöautojen huolto- ja korjauspalveluita sekä määräaikaishuoltoja.",
@@ -376,6 +377,7 @@
                 "AUTO_REPAIR": 100
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Pitkän kokemuksen autokorjaamo Leppävedellä. Erikoistunut Volkswagen-, Audi-, Skoda- ja Seat-ajoneuvojen huoltoon, korjaukseen ja vianmääritykseen.",
@@ -651,6 +653,7 @@
                 "AUTO_REPAIR": 60
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Sepän Automaalaus tarjoaa ajoneuvojen maalaus- ja kolarikorjauspalveluita, kuten pintamaalaukset, paikkamaalaukset ja ruostekorjaukset.",
@@ -926,6 +929,7 @@
                 "HOME_CLEANING": 70
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "TH-Pesu Oy tarjoaa ajoneuvojen pesupalveluita sekä erilaisia kiinteistö- ja teollisuuspesuja, kuten painepesua ja pintojen puhdistusta.",
@@ -1194,6 +1198,15 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {
+            "WATERCRAFT_RENTAL": {
+                "available": true,
+                "priority_score": 0.85,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
+        },
         "categories": {
             "core": {
                 "description": "Kahvila-ravintola, joka tarjoaa kahvila- ja ravintolapalveluita. Yrityksen toimialaan kuuluu elintarvikkeiden myynti, kappaletavaran myynti, ravintolaliikkeen harjoittaminen, huvitilaisuuksien järjestäminen, lomamökkien vuokraus ja muu majoitustoiminta, veneiden ym. vapaa-ajan toimintaan liittyvien tavaroiden vuokraus sekä myyntitoiminta messuilla ja muissa tilaisuuksissa . Yrityksellä on anniskelulupa (voimassa vuodesta 1997) .",
@@ -1408,15 +1421,6 @@
             "last_updated": "2026-04-29T12:57:45.330Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
-        },
-        "capabilities": {
-            "WATERCRAFT_RENTAL": {
-                "available": true,
-                "priority_score": 0.85,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     }
 }

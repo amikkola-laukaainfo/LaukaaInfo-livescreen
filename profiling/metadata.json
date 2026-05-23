@@ -1,6 +1,6 @@
 {
     "SCHEMA_VERSION": "6.0",
-    "DESCRIPTION": "LaukaaInfo Ratkaisulähtöinen profilointi v6. Sisältää graafirakenteen ja capability-kerroksen (vuokraukset / jaetut resurssit).",
+    "DESCRIPTION": "LaukaaInfo Ratkaisulähtöinen profilointi v6. Sisältää graafirakenteen ja capability-kerroksen.",
     "nodes": {
         "group-events-and-celebrations": {
             "type": "group",
@@ -7791,6 +7791,11 @@
         },
         {
             "from": "company-117",
+            "to": "nodelink-ELÄIMET",
+            "relation": "links_to"
+        },
+        {
+            "from": "company-117",
             "to": "valokuvaaja",
             "relation": "collaborated_with",
             "category": "events_and_celebrations"
@@ -13750,6 +13755,12 @@
         },
         {
             "from": "company-289",
+            "to": "intent-EVT_MEMORIAL",
+            "relation": "offers",
+            "weight": 100
+        },
+        {
+            "from": "company-289",
             "to": "group-events-and-celebrations",
             "relation": "fits_for",
             "weight": 100
@@ -13770,7 +13781,7 @@
             "from": "company-289",
             "to": "group-funerals-and-memorials",
             "relation": "fits_for",
-            "weight": 78
+            "weight": 100
         },
         {
             "from": "company-289",
@@ -14716,6 +14727,16 @@
         {
             "from": "company-283",
             "to": "nodelink-LIIKUNTA",
+            "relation": "links_to"
+        },
+        {
+            "from": "company-283",
+            "to": "nodelink-ELÄIMET",
+            "relation": "links_to"
+        },
+        {
+            "from": "company-283",
+            "to": "nodelink-LAPSET",
             "relation": "links_to"
         },
         {
@@ -15695,7 +15716,7 @@
             "from": "company-306",
             "to": "intent-EVT_CORPORATE",
             "relation": "offers",
-            "weight": 72
+            "weight": 82
         },
         {
             "from": "company-306",
@@ -15719,7 +15740,31 @@
             "from": "company-306",
             "to": "intent-REC_OUTDOOR",
             "relation": "offers",
-            "weight": 94
+            "weight": 96
+        },
+        {
+            "from": "company-306",
+            "to": "intent-REC_RAFTING",
+            "relation": "offers",
+            "weight": 84
+        },
+        {
+            "from": "company-306",
+            "to": "intent-EVT_BIRTHDAY",
+            "relation": "offers",
+            "weight": 74
+        },
+        {
+            "from": "company-306",
+            "to": "intent-EVT_BIRTHDAY_ADULTS",
+            "relation": "offers",
+            "weight": 70
+        },
+        {
+            "from": "company-306",
+            "to": "intent-REC_CHILDREN",
+            "relation": "offers",
+            "weight": 48
         },
         {
             "from": "company-306",
@@ -15737,19 +15782,19 @@
             "from": "company-306",
             "to": "group-cottage-services",
             "relation": "fits_for",
-            "weight": 10
+            "weight": 28
         },
         {
             "from": "company-306",
             "to": "group-accommodation",
             "relation": "fits_for",
-            "weight": 94
+            "weight": 96
         },
         {
             "from": "company-306",
             "to": "group-wellbeing-and-beauty",
             "relation": "fits_for",
-            "weight": 26
+            "weight": 42
         },
         {
             "from": "company-306",
@@ -15761,13 +15806,13 @@
             "from": "company-306",
             "to": "group-service-partner",
             "relation": "fits_for",
-            "weight": 18
+            "weight": 30
         },
         {
             "from": "company-306",
             "to": "group-family-and-children",
             "relation": "fits_for",
-            "weight": 34
+            "weight": 52
         },
         {
             "from": "company-306",

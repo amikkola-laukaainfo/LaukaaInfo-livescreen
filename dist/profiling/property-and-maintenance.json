@@ -88,6 +88,7 @@
                 "HOME_MAINTENANCE": 100
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Tyyni Hoiva Suomi Oy tarjoaa yksilöllisiä, turvallisia ja ihmisläheisiä sosiaalihuollon avopalveluja. Palveluihin kuuluvat henkilökohtainen apu, arjen tuki sekä omaishoitajien sijaistus. Yritys palvelee asiakkaita heidän omissa kodeissaan, palvelutaloissa ja asumisyksiköissä mahdollistaen omannäköisen arjen, turvallisuuden ja hyvinvoinnin. Toiminta painottuu Keski-Suomeen ja Pohjois-Savoon.",
@@ -391,6 +392,7 @@
                 "HOME_MAINTENANCE": 100
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "GTI Car Center Oy on monipuolinen autokorjaamo, joka tarjoaa huolto-, korjaus- ja rengaspalveluita sekä ajoneuvojen diagnostiikkaa Jyväskylän alueella.",
@@ -663,6 +665,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "K&K Peni Oy tarjoaa maanrakennus- ja kaivuutöitä sekä piha- ja perustustöitä Laukaan ja Keski-Suomen alueella. Palveluihin kuuluvat mm. salaojitukset, viemäröinnit, rakennuspohjien valmistelu sekä erilaiset mökki- ja pihatyöt.",
@@ -917,6 +920,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -1201,6 +1205,7 @@
                 "HOME_MAINTENANCE": 100
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Tmi Jukka Häkkinen tarjoaa rakennus-, remontointi- ja kiinteistönhuoltopalveluita Laukaan ja Keski-Suomen alueella. Palveluihin kuuluu pienrakentaminen, korjaustyöt, mökkihuolto sekä erilaiset pihatyöt ja ylläpitopalvelut.",
@@ -1475,6 +1480,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Raudaskala Oy on Laukaassa toimiva kalakauppa, joka myy kalaa, äyriäisiä ja nilviäisiä erikoisliikkeenä. Yritys tarjoaa tuoreita kalatuotteita kuluttajille paikallisesti.",
@@ -1789,6 +1795,7 @@
                 "HOME_MAINTENANCE": 100
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Hermoratahieronta KIPaway tarjoaa hermoratahierontaa ja hyvinvointipalveluita Laukaan ja Jyväskylän alueella. Palvelut keskittyvät kehonhuoltoon, palautumiseen, kiputilojen lievitykseen sekä kokonaisvaltaiseen hyvinvointiin.",
@@ -2069,6 +2076,15 @@
                 "BIZ_IT": 90
             }
         },
+        "capabilities": {
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
+        },
         "categories": {
             "core": {
                 "description": "Sähkötekniikan ja tapahtumatekniikan palveluihin erikoistunut yritys. Yritys on perustettu vuonna 2016 .",
@@ -2283,15 +2299,6 @@
             "last_updated": "2026-04-27T05:54:01.968Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
-        },
-        "capabilities": {
-            "AV_RENTAL": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-129": {
@@ -2400,6 +2407,15 @@
                 "ENT_PROGRAM": 70,
                 "EVT_CORPORATE": 52,
                 "HOME_MAINTENANCE": 100
+            }
+        },
+        "capabilities": {
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
             }
         },
         "categories": {
@@ -2641,15 +2657,6 @@
             "last_updated": "2026-05-08T14:24:53.507Z",
             "verified_by": "web-research",
             "status": "enriched"
-        },
-        "capabilities": {
-            "AV_RENTAL": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-134": {
@@ -2743,6 +2750,7 @@
                 "REC_OUTDOOR": 25
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Joudukas on Mirja Aution käsityö- ja taidealan toimija Laukaasta. Yritys valmistaa perinteitä kunnioittavia piensarjatuotteita, sisustus- ja lahjatuotteita sekä Saraakallio-aiheisia tuotteita. Toimintaan kuuluu myös taide- ja ympäristötaidenäyttelyitä sekä yhteistyö paikallisten matkailu- ja kulttuuritoimijoiden kanssa.",
@@ -3048,6 +3056,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Module Keittiö ja Rakennuspalvelu tarjoaa keittiöremontteja, sisäremontointia ja rakennuspalveluja Laukaan ja Keski-Suomen alueella. Palveluihin kuuluvat mm. keittiöasennukset, kalustetyöt ja yleiset remontointityöt koteihin ja mökeille.",
@@ -3342,6 +3351,7 @@
                 "HOME_MAINTENANCE": 70
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Mittatilauspuusepänverstas, joka valmistaa ja toteuttaa kalusteita, sisustusratkaisuja sekä puusepäntöitä yksityis- ja yritysasiakkaille.",
@@ -3588,6 +3598,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -3847,6 +3858,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Kiinteistöalan palveluihin keskittyvä yritys, joka tarjoaa asuntojen ja kiinteistöjen välitystä sekä vuokraukseen ja myyntiin liittyviä palveluita.",
@@ -4143,6 +4155,7 @@
                 "BIZ_ADVISORY": 58
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Täyden palvelun isännöintitoimisto Laukaan ja Jyväskylän alueella. Tarjoaa asunto- ja kiinteistöosakeyhtiöiden isännöintiä, sähköisiä asiointipalveluja, muutto- ja remontti-ilmoituksia sekä taloushallintoa.",
@@ -4450,6 +4463,7 @@
                 "BIZ_ADVISORY": 62
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Käytännönläheinen isännöinti- ja taloushallintoyritys Laukaassa. Tarjoaa taloyhtiöiden hallintoa, sähköisiä palvelukanavia, kokousratkaisuja ja kiinteistöalan taloushallintoa.",
@@ -4743,6 +4757,7 @@
                 "BIZ_ADVISORY": 58
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Pitkään Laukaan ja Jyväskylän alueella toiminut isännöintiyritys, jonka palveluihin kuuluvat taloyhtiöiden hallinto, taloushallinto, kiinteistöjen ylläpito sekä korjaushankkeiden koordinointi. Liiketoiminta on siirtynyt osaksi Oiva Isännöinti -kokonaisuutta vuonna 2023.",
@@ -5024,6 +5039,7 @@
                 "HOME_MAINTENANCE": 100
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -5267,6 +5283,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -5571,6 +5588,7 @@
                 "HOME_RENOVATION": 55
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Laukaan Aave Oy tarjoaa kiinteistöhuoltoa, mökkipalveluja, viherrakentamista ja pihanhoitoa Laukaan ja Keski-Suomen alueella. Yritys palvelee sekä yksityisasiakkaita että taloyhtiöitä ympäri vuoden.",
@@ -5876,6 +5894,7 @@
                 "HOME_COTTAGE": 35
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Kotipalvelu- ja kiinteistöhuoltopalvelut kotitalouksille ja taloyhtiöille",
@@ -6159,6 +6178,7 @@
                 "HOME_MOVING": 10
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Laukaan Puhtaanapito Oy tarjoaa kiinteistöjen puhtaanapito-, ylläpito- ja huoltopalveluita, mukaan lukien siivous, piha-alueiden hoito sekä taloyhtiöiden ja yrityskohteiden kiinteistöhuolto.",
@@ -6464,6 +6484,7 @@
                 "BIZ_TRANSPORT": 40
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Laukaan Renki-Palvelut tarjoaa monipuolisia arjen apu- ja kiinteistönhoitopalveluita, kuten mökkihuoltoa, siivousta, pihatöitä, lumitöitä sekä muuttoapua Laukaan ja Keski-Suomen alueella.",
@@ -6753,6 +6774,7 @@
                 "HOME_MAINTENANCE": 100
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Laukaan Talopalvelu Oy tarjoaa monipuolisia kiinteistönhuollon ja talonmiespalveluiden ratkaisuja Laukaan ja Keski-Suomen alueella. Palveluihin kuuluvat mm. piha-alueiden hoito, lumityöt, korjaus- ja huoltotyöt sekä kiinteistöjen ylläpito taloyhtiöille ja yksityisasiakkaille.",
@@ -7053,6 +7075,7 @@
                 "BIZ_TRANSPORT": 30
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "LVI Jukka Pirttinen Oy tarjoaa LVI-alan palveluita kuten putkityöt, viemärien avaukset, lämmitysjärjestelmien huollot sekä kylpyhuone- ja vesijohtoremontit Laukaan ja Keski-Suomen alueella.",
@@ -7340,6 +7363,7 @@
                 "BIZ_IT": 20
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "LVI-Taitajat Oy tarjoaa LVI-alan asiantuntijapalveluita, kuten putki-, lämmitys-, vesi- ja ilmanvaihtojärjestelmien asennusta, huoltoa ja korjausta. Yritys palvelee sekä yksityisasiakkaita, yrityksiä että taloyhtiöitä.",
@@ -7582,6 +7606,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -7845,6 +7870,7 @@
                 "HOME_RENOVATION": 60
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -8129,6 +8155,7 @@
                 "HOME_MAINTENANCE": 100
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Talotekniikka Väyrynen tarjoaa talotekniikan asennus-, huolto- ja korjauspalveluita Laukaan ja Keski-Suomen alueella. Palveluihin kuuluvat mm. LVI-työt, putkityöt, lämmitysjärjestelmät ja kiinteistötekniikan ratkaisut niin koteihin kuin yrityksille.",
@@ -8423,6 +8450,7 @@
                 "HOME_MAINTENANCE": 100
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Tmi Eero Ylönen tarjoaa rakennus-, remontointi- ja kiinteistöhuoltopalveluita Laukaan ja Keski-Suomen alueella. Palveluihin kuuluu mm. saneeraus, korjaustyöt, pihatyöt sekä mökkien huolto ja ylläpito.",
@@ -8682,6 +8710,15 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
+        },
         "categories": {
             "core": {
                 "description": "Iso-Kuhajärven rannalla sijaitseva lomamökki ja majoituspalvelu. Tarjoaa rauhallisen majoituksen lapsiystävällisessä ympäristössä omalla hiekkarannalla. Mökissä on varusteltu keittiö (astianpesukone, uuni), takka, sauna, patio, terassi, ulkotakka ja grillausmahdollisuus. Majoituskapasiteetti: 2 makuuhuonetta ja 3 oleskelutilaa. Majoituspalvelujen lisäksi yrityksen toimialaan kuuluu kaikki muu laillinen liiketoiminta . Yritys on perustettu 1.8.2019 .",
@@ -8896,15 +8933,6 @@
             "last_updated": "2026-04-27T06:10:15.008Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
-        },
-        "capabilities": {
-            "SAUNA_FACILITY": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-245": {
@@ -8939,6 +8967,15 @@
             "node_links": [],
             "intent_codes": [],
             "intent_scores": {}
+        },
+        "capabilities": {
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         },
         "categories": {
             "core": {
@@ -9154,15 +9191,6 @@
             "last_updated": "2026-04-27T06:08:12.224Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
-        },
-        "capabilities": {
-            "SAUNA_FACILITY": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-287": {
@@ -9224,6 +9252,29 @@
             ],
             "intent_codes": [],
             "intent_scores": {}
+        },
+        "capabilities": {
+            "CANOE_RENTAL": {
+                "available": true,
+                "priority_score": 0.85,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "WATERCRAFT_RENTAL": {
+                "available": true,
+                "priority_score": 0.85,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         },
         "categories": {
             "core": {
@@ -9479,29 +9530,6 @@
             "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
-        },
-        "capabilities": {
-            "CANOE_RENTAL": {
-                "available": true,
-                "priority_score": 0.85,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "SAUNA_FACILITY": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "WATERCRAFT_RENTAL": {
-                "available": true,
-                "priority_score": 0.85,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-285": {
@@ -9550,6 +9578,22 @@
             ],
             "intent_scores": {
                 "VENUE_ACCOMMODATION": 100
+            }
+        },
+        "capabilities": {
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "WATERCRAFT_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
             }
         },
         "categories": {
@@ -9806,22 +9850,6 @@
             "last_updated": "2026-05-09T17:53:02.613Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
-        },
-        "capabilities": {
-            "SAUNA_FACILITY": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "WATERCRAFT_RENTAL": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-284": {
@@ -9897,6 +9925,22 @@
             ],
             "intent_codes": [],
             "intent_scores": {}
+        },
+        "capabilities": {
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "WATERCRAFT_RENTAL": {
+                "available": true,
+                "priority_score": 0.85,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         },
         "categories": {
             "core": {
@@ -10156,22 +10200,6 @@
             "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
-        },
-        "capabilities": {
-            "SAUNA_FACILITY": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "WATERCRAFT_RENTAL": {
-                "available": true,
-                "priority_score": 0.85,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-283": {
@@ -10244,7 +10272,9 @@
             "node_links": [
                 "MAJOITUS",
                 "SAUNA",
-                "LIIKUNTA"
+                "LIIKUNTA",
+                "ELÄIMET",
+                "LAPSET"
             ],
             "intent_codes": [
                 "VENUE_ACCOMMODATION",
@@ -10255,6 +10285,22 @@
                 "VENUE_ACCOMMODATION": 100,
                 "HOME_COTTAGE": 94,
                 "REC_OUTDOOR": 62
+            }
+        },
+        "capabilities": {
+            "WATERCRAFT_RENTAL": {
+                "available": true,
+                "priority_score": 0.85,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
             }
         },
         "categories": {
@@ -10512,22 +10558,6 @@
             "last_updated": "2026-05-21T12:47:51.347Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
-        },
-        "capabilities": {
-            "WATERCRAFT_RENTAL": {
-                "available": true,
-                "priority_score": 0.85,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "SAUNA_FACILITY": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-300": {
@@ -10610,6 +10640,7 @@
                 "HOME_COTTAGE": 100
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Nuohous Lapin Mies Oy tarjoaa ammattitaitoiset nuohouspalvelut Keski-Suomen alueella. Palveluihin kuuluvat savuhormien ja tulisijojen nuohous, tarkastukset sekä paloturvallisuuteen liittyvä neuvonta.",
@@ -10916,6 +10947,7 @@
                 "HOME_MAINTENANCE": 100
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Sähköpalvelu Valoisat Oy tarjoaa sähköasennukset, huollot ja korjaukset kotitalouksille, taloyhtiöille ja yrityksille. Yritys asentaa myös ilmalämpöpumput, ilma-vesilämpöpumput sekä aurinkopaneelit. Palvelu perustuu ammattitaitoon, luotettavuuteen ja asiakaslähtöiseen toteutukseen.",
@@ -11212,6 +11244,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Sähkötyöt Rissanen Oy on Lievestuoreella toimiva yritys, joka tarjoaa laajan valikoiman sähkötarvikkeita verkkokaupasta sekä sähköasennuspalveluita Keski-Suomen alueella. Valikoimaan kuuluu mm. valaisimet, termostaatit, kaapelit, pistorasiat ja muut sähköalan tuotteet.",
@@ -11499,6 +11532,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Puusepänliike Tourunen Oy on yli 40 vuotta alalla toiminut yritys, joka suunnittelee, valmistaa ja asentaa kiintokalusteita sekä mittatilauskalusteita koteihin ja kohteisiin ympäri Suomen. Palveluihin kuuluvat mm. keittiökalusteet, kylpyhuonekalusteet, liukuovet, komerot sekä erikoismitoitetut kalusteratkaisut.",
@@ -11785,6 +11819,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Laukaan Rakennustyö tarjoaa monipuolisia rakennus- ja remontointipalveluita Laukaan ja Keski-Suomen alueella. Palveluihin kuuluvat uudisrakentaminen, saneeraukset, huoneistoremontit, terassit, ulkorakennukset sekä kirvesmiestyöt.",
@@ -12114,6 +12149,7 @@
                 "COTTAGE_FIREWOOD": 100
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Suomen Säkkikauppa on Lievestuoreella toimiva verkkokauppa, joka on erikoistunut klapisäkkien, suursäkkien, säkitystelineiden ja muiden varastointi- ja kuljetussäkkien myyntiin koko Suomeen.",
@@ -12448,6 +12484,7 @@
                 "COTTAGE_RENO": 40
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "ALFACON tarjoaa pientalojen rakennuttamispalveluita. Rakennuttajan apuna hankesuunnitteluvaiheesta loppukatselmukseen saakka auttaen mm. rakennuslupa-asioissa ja urakoitsijoiden valinnassa. ARK-suunnittelu sisältää asemapiirustukset, pohjapiirustukset, leikkauspiirustukset ja julkisivupiirustukset. RAK-suunnittelu sisältää perustussuunnitelmat, runkosuunnitelmat, vesikattosuunnitelmat ja kattoristikoiden tilauspiirustukset. Lisäksi palveluihin kuuluu pientalotyömaan valvonta ja vastaavan työnjohtajan tehtävät.",

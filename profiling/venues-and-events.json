@@ -74,6 +74,36 @@
                 "ENT_PROGRAM": 68
             }
         },
+        "capabilities": {
+            "WATERCRAFT_RENTAL": {
+                "available": true,
+                "priority_score": 0.85,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "SUP_RENTAL": {
+                "available": true,
+                "priority_score": 0.85,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "ACCESSIBLE": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
+        },
         "categories": {
             "core": {
                 "description": "Saraaveden rannalla sijaitseva kesäinen satamakahvila ja tapahtumapaikka, joka tarjoaa kahvila- ja ravintolapalveluja, veneilyyn liittyviä palveluita sekä vapaa-ajan aktiviteetteja kuten SUP-lautoja ja vesijettejä. Tunnettu kesätapahtumista ja rantaterassista.",
@@ -320,36 +350,6 @@
             "last_updated": "2026-05-08T16:55:00.358Z",
             "verified_by": "ai-generated",
             "status": "draft"
-        },
-        "capabilities": {
-            "WATERCRAFT_RENTAL": {
-                "available": true,
-                "priority_score": 0.85,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "SUP_RENTAL": {
-                "available": true,
-                "priority_score": 0.85,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "SAUNA_FACILITY": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "ACCESSIBLE": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-274": {
@@ -376,6 +376,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -620,6 +621,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -860,6 +862,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -1184,6 +1187,15 @@
                 "VENUE_PARTY": 96
             }
         },
+        "capabilities": {
+            "ACCESSIBLE": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
+        },
         "categories": {
             "core": {
                 "description": "Tertan kahvila- ja puoti tarjoaa kahvila-, juhlatila- ja pitopalveluita Laukaan Vuonteella. Yritys tunnetaan lähiruoasta, juhlakakuista, muistotilaisuuksista ja yritysten kokouskahvituksista sekä viihtyisistä juhla- ja kokoustiloista.",
@@ -1419,15 +1431,6 @@
             "last_updated": "2026-05-21T11:51:04.923Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
-        },
-        "capabilities": {
-            "ACCESSIBLE": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-268": {
@@ -1530,6 +1533,15 @@
                 "EVT_WEDDING": 92,
                 "EVT_MEMORIAL": 90,
                 "BIZ_CATERING": 100
+            }
+        },
+        "capabilities": {
+            "ACCESSIBLE": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
             }
         },
         "categories": {
@@ -1760,15 +1772,6 @@
             "last_updated": "2026-05-21T11:59:49.058Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
-        },
-        "capabilities": {
-            "ACCESSIBLE": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-3": {
@@ -1798,6 +1801,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -2041,6 +2045,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -2284,6 +2289,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -2527,6 +2533,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -2767,6 +2774,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -3007,6 +3015,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -3247,6 +3256,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -3487,6 +3497,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -3727,6 +3738,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -3967,6 +3979,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -4207,6 +4220,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -4449,6 +4463,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -4691,6 +4706,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -4935,6 +4951,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Fysioterapia- ja hyvinvointipalveluihin erikoistunut yritys. Tarjoaa fysioterapiapalveluja Jyväskylän alueella . Osallistuu hyvinvointitapahtumiin ja tarjoaa mm. klassista hierontaa ja intialaista päähierontaa . Yritys on Kuntoutusyrittäjät ry:n jäsen .",
@@ -5175,6 +5192,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -5417,6 +5435,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -5660,6 +5679,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Hierontapalveluita tarjoava yritys Laukaassa. Perustettu 28.2.2009 .",
@@ -5902,6 +5922,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -6142,6 +6163,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -6382,6 +6404,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -6626,6 +6649,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -6870,6 +6894,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -7114,6 +7139,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -7358,6 +7384,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -7602,6 +7629,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -7846,6 +7874,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -8090,6 +8119,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -8334,6 +8364,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -8578,6 +8609,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -8822,6 +8854,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -9068,6 +9101,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -9312,6 +9346,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -9556,6 +9591,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -9800,6 +9836,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -10044,6 +10081,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -10288,6 +10326,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -10532,6 +10571,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -10776,6 +10816,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -11020,6 +11061,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -11264,6 +11306,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -11508,6 +11551,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -11752,6 +11796,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -11996,6 +12041,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -12240,6 +12286,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -12484,6 +12531,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -12774,6 +12822,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Yritys tarjoaa tapahtumien järjestämiseen, kokouspalveluihin sekä hyvinvointiin ja työhyvinvointiin liittyviä palveluita. Toimintaan voi kuulua erilaisten tilaisuuksien suunnittelu ja toteutus, yritysten tyhy-päivät sekä ryhmämuotoiset hyvinvointipalvelut Keski-Suomen alueella.",
@@ -13029,6 +13078,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -13273,6 +13323,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -13517,6 +13568,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -13761,6 +13813,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -14006,6 +14059,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -14248,6 +14302,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -14488,6 +14543,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -14728,6 +14784,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -14968,6 +15025,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -15208,6 +15266,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -15448,6 +15507,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -15688,6 +15748,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -15928,6 +15989,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -16176,6 +16238,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -16416,6 +16479,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -16667,6 +16731,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -16907,6 +16972,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -17147,6 +17213,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -17387,6 +17454,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -17647,6 +17715,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Kotileipomo ja kahvio-myymälä, joka valmistaa ja myy leipomotuotteita .",
@@ -17969,6 +18038,29 @@
                 "EVT_BIRTHDAY": 68
             }
         },
+        "capabilities": {
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "EQUIPMENT_RENTAL": {
+                "available": true,
+                "priority_score": 0.85,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
+        },
         "categories": {
             "core": {
                 "description": "AtSound Matti Laurila tarjoaa äänentoistoa, DJ-palveluita, tapahtumatekniikkaa, ohjelmapalveluita ja laitevuokrausta Laukaassa ja Keski-Suomen alueella. Yritys toteuttaa ääni- ja ohjelmapalveluita yritystapahtumiin, juhliin, häihin ja live-esiintymisiin. Palveluihin kuuluu myös artistivälitys, karaoke, soitinkorjaus sekä äänitteiden julkaiseminen.",
@@ -18212,29 +18304,6 @@
             "last_updated": "2026-05-13T14:42:49.775Z",
             "verified_by": "ai-profile-builder",
             "status": "updated"
-        },
-        "capabilities": {
-            "SAUNA_FACILITY": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "AV_RENTAL": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "EQUIPMENT_RENTAL": {
-                "available": true,
-                "priority_score": 0.85,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-103": {
@@ -18326,6 +18395,22 @@
                 "BIZ_CATERING": 95,
                 "EVT_MEMORIAL": 74,
                 "EVT_CORPORATE": 68
+            }
+        },
+        "capabilities": {
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
             }
         },
         "categories": {
@@ -18553,22 +18638,6 @@
             "last_updated": "2026-05-08T15:36:01.688Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
-        },
-        "capabilities": {
-            "SAUNA_FACILITY": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "AV_RENTAL": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-104": {
@@ -18639,6 +18708,7 @@
                 "EVT_CORPORATE": 72
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Laukaassa ja Toivakassa toimiva catering- ja pitopalveluyritys, joka toteuttaa yksilöllisiä tarjoiluja häihin, yritystilaisuuksiin, muistotilaisuuksiin ja juhliin. Käyttää kotimaisia raaka-aineita ja huomioi erityisruokavaliot.",
@@ -18929,6 +18999,15 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
+        },
         "categories": {
             "core": {
                 "description": "Tapahtumatuotantoon, juhlatiloihin ja huvi- ja virkistystoimintaan keskittynyt yritys. Pölkinahon juhlatila Peurungassa tarjoaa tunnelmallisen maalaistalomiljöön juhliin, muistotilaisuuksiin, kokouksiin ja yritystilaisuuksiin. Kautta yrityksen onnistuvat myös rantasauna, pitopalvelu, anniskelu, tarjoiluhenkilökunta, majoitus Peurungan kylpylähotellissa sekä live-musiikki ja tapahtumatuotanto. Yritys järjestää myös John Smith Rock Festivalin, Satama Festivalin ja toimii Laukaan satamassa.",
@@ -19171,15 +19250,6 @@
             "last_updated": "2026-04-29T17:57:31.970Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
-        },
-        "capabilities": {
-            "SAUNA_FACILITY": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-107": {
@@ -19206,6 +19276,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -19446,6 +19517,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -19686,6 +19758,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -19926,6 +19999,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -20166,6 +20240,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -20406,6 +20481,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -20646,6 +20722,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -20886,6 +20963,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -21194,7 +21272,8 @@
                 "JUHLATILA",
                 "SAUNA",
                 "HYVINVOINTI",
-                "LIIKUNTA"
+                "LIIKUNTA",
+                "ELÄIMET"
             ],
             "intent_codes": [
                 "EVT_WEDDING",
@@ -21205,6 +21284,22 @@
                 "EVT_WEDDING": 100,
                 "EVT_MEMORIAL": 96,
                 "ENT_PROGRAM": 82
+            }
+        },
+        "capabilities": {
+            "SUP_RENTAL": {
+                "available": true,
+                "priority_score": 0.85,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
             }
         },
         "categories": {
@@ -21459,22 +21554,6 @@
             "last_updated": "2026-05-21T12:47:51.347Z",
             "verified_by": "AI-analysis-v2",
             "status": "draft"
-        },
-        "capabilities": {
-            "SUP_RENTAL": {
-                "available": true,
-                "priority_score": 0.85,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "SAUNA_FACILITY": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-119": {
@@ -21554,6 +21633,7 @@
                 "EVT_WEDDING": 86
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Pitopalvelu J. Sojakka tarjoaa catering- ja juhlapalveluita Leppävedeltä käsin Keski-Suomen alueella. Yritys tunnetaan luomupainotteisista buffetkokonaisuuksista, hääcateringista sekä muistotilaisuuksien tarjoiluista.",
@@ -21842,6 +21922,22 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
+        },
         "categories": {
             "core": {
                 "description": "Musiikki- ja viihdepalveluihin erikoistunut osakeyhtiö. Toimialaan kuuluvat tapahtuma- ja tuotantopalvelut, ohjelmapalvelut, äänentoisto-, valaistus- ja äänisuunnittelupalvelut, studio- ja koulutuspalvelut sekä graafinen suunnittelu. Yhtiö toimii myös elämysmatkailu-, kennel- ja rakennusalan konsultoinnin parissa. Yhtiö omistaa Proxta Music Studion ja tarjoaa tapahtumatekniikkaa sekä live-musiikkiin liittyviä palveluita juhliin ja yritystilaisuuksiin.",
@@ -22081,22 +22177,6 @@
             "last_updated": "2026-05-08T16:55:00.358Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
-        },
-        "capabilities": {
-            "SAUNA_FACILITY": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "AV_RENTAL": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-122": {
@@ -22123,6 +22203,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -22383,6 +22464,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Rakennus- ja remonttipalveluja tarjoava toiminimi Laukaan alueella. Palveluihin kuuluu pienrakentaminen, korjaustyöt, puutyöt sekä kiinteistöjen ja mökkien huolto. Toimii erityisesti kotitalouksissa ja vapaa-ajan asunnoilla.",
@@ -22636,6 +22718,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Kauneushoitola, joka tarjoaa kosmetologisia hoitoja, sisustustuotteiden myyntiä ja markkinointia, sisustussuunnittelua ja neuvontaa . Yritys on perustettu 15.1.2009 ja se on yksityinen elinkeinonharjoittaja . Osallistuu paikallisiin hyvinvointitapahtumiin ja esittelee palveluitaan .",
@@ -22876,6 +22959,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -23119,6 +23203,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Kauneusalan yritys, jonka nimi viittaa kauneus- ja hyvinvointipalveluihin. Yrityksen kotipaikka on Laukaa .",
@@ -23359,6 +23444,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -23599,6 +23685,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -23892,6 +23979,15 @@
                 "BIZ_FLORIST": 100
             }
         },
+        "capabilities": {
+            "TRAILER_RENTAL": {
+                "available": true,
+                "priority_score": 0.85,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
+        },
         "categories": {
             "core": {
                 "description": "Yli 60 vuotta toiminut huonekaluliike sekä Kukka- ja Hautauspalvelu Vehviläinen, jolla on pitkät perinteet. Yritys myy huonekaluja kuten sohvia, sänkyjä, patjoja sekä tarjoaa kodinsisustustuotteita. Lisäksi palveluihin kuuluu kukkakauppa, kukkasidonta ja hautauspalvelut muistotilaisuuksien järjestämiseen. Yritys tarjoaa myös kuljetus- ja toimituspalveluja sekä on perheyritys.",
@@ -24108,15 +24204,6 @@
             "last_updated": "2026-05-07T12:07:42.477Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
-        },
-        "capabilities": {
-            "TRAILER_RENTAL": {
-                "available": true,
-                "priority_score": 0.85,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-132": {
@@ -24143,6 +24230,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -24469,6 +24557,7 @@
                 "MEDIA_PHOTO": 100
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Valokuvaamo Jenora Design on vuonna 2013 perustettu yksityinen elinkeinonharjoittaja, joka tarjoaa perheiden kuvauspalveluita, erikoismuotokuvauksia ja boudoirkuvauksia, valmistujaiskuvauksia (ylioppilas- ja rippikuvaukset), joulukorttikuvauksia, hautajaiskuvauksia sekä elämäntarinoiden visuaalista tallentamista. Yrityksen perustaja ja valokuvaaja on Jenni Oranen. Ydinosaamista ovat klassiset ja ajattomat muotokuvat sekä yksilöllinen asiakaskokemus.",
@@ -24755,6 +24844,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -24996,6 +25086,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -25240,6 +25331,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Parveke- ja terassilasitusten myyntiin ja asentamiseen erikoistunut yritys. Laadukkaat tuotteet tulevat tunnetuilta kotimaisilta valmistajilta. Asiakaskunta koostuu yksityisistä kotitalouksista, yrityksistä sekä taloyhtiöistä . Toimialana on lasitus (TOL 43342) .",
@@ -25480,6 +25572,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -25720,6 +25813,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -26032,6 +26126,7 @@
                 "EVT_CORPORATE": 50
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Merjan Risu&Ruusut on Laukaan alueella toimiva kukka- ja sidontapalvelu, joka tarjoaa kukkakimppuja, juhla- ja hääkoristeluita, hautasidontaa sekä sesonkikukkia yksityisille ja yrityksille. Yritys toteuttaa persoonallisia kukka-asetelmia juhliin, muistotilaisuuksiin ja yritystilaisuuksiin.",
@@ -26319,6 +26414,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -26559,6 +26655,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -26801,6 +26898,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -27041,6 +27139,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -27281,6 +27380,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -27521,6 +27621,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -27761,6 +27862,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -28001,6 +28103,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -28241,6 +28344,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -28481,6 +28585,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -28788,6 +28893,7 @@
                 "MEDIA_PHOTO": 100
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Dokumentaristiseen tyyliin erikoistunut valokuvaamo, joka tarjoaa henkilö-, urheilu- ja tapahtumakuvauspalveluja. Yrityksen omistaa ja sitä pyörittää Linda Malmström, joka on koulutukseltaan media-alan erikoisammattitutkinnon suorittanut valokuvaajamestari. Yritys on toiminut vuodesta 2022 lähtien. Yrityksen kotipaikka on Laukaa.",
@@ -29088,6 +29194,7 @@
                 "EVT_MEMORIAL": 100
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Pieneläintuhkaamopalvelu, joka tarjoaa lemmikkien tuhkaus- ja muistopalveluita.",
@@ -29334,6 +29441,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -29578,6 +29686,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -29818,6 +29927,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -30061,6 +30171,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Laukaassa toimiva parturi-kampaamo, joka tarjoaa hiuspalveluita. Tarkempia tietoja palveluvalikoimasta ei ole saatavilla julkisista lähteistä .",
@@ -30301,6 +30412,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -30541,6 +30653,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -30781,6 +30894,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -31021,6 +31135,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -31264,6 +31379,15 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
+        },
         "categories": {
             "core": {
                 "description": "",
@@ -31478,15 +31602,6 @@
             "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
-        },
-        "capabilities": {
-            "SAUNA_FACILITY": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-167": {
@@ -31515,6 +31630,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Parturi-kampaamo ja ekokampaamo, joka tarjoaa monipuolisia hiuspalveluita koko perheelle. Ekopalveluihin kuuluvat ekologiset hoidot (savi, turve, merilevä), savivaalennukset, kasvivärjäykset, intialainen päähieronta ja energisoiva hiustenleikkaus. Kampaamo on mahdollisimman tuoksuton palvellakseen tuoksuyliherkkiä ja hajusteallergisia asiakkaita. Kampaamossa työskentelevät parturi-kampaajat Katja ja Heli (molemmat ekokampaajia) .\n\nYrityksen kotipaikka on Laukaa, perustamisvuosi 2015. Toimiala: Parturit ja kampaamot (96021) .",
@@ -31755,6 +31871,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -32032,6 +32149,7 @@
                 "EVT_MEMORIAL": 100
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Tmi Mari Virtanen tarjoaa hyvinvointi- ja hoivapalveluita, kuten hierontaa ja arjen tukipalveluja. Palvelut toteutetaan usein kotikäynteinä Laukaan ja lähialueen asiakkaille.",
@@ -32289,6 +32407,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -32529,6 +32648,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -32769,6 +32889,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -33021,6 +33142,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -33261,6 +33383,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -33501,6 +33624,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -33741,6 +33865,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -33981,6 +34106,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -34221,6 +34347,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -34461,6 +34588,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -34701,6 +34829,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -34941,6 +35070,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -35181,6 +35311,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -35421,6 +35552,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -35661,6 +35793,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -35901,6 +36034,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -36141,6 +36275,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -36381,6 +36516,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -36628,6 +36764,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -36868,6 +37005,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -37108,6 +37246,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -37348,6 +37487,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -37588,6 +37728,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -37828,6 +37969,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -38068,6 +38210,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -38308,6 +38451,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -38548,6 +38692,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -38788,6 +38933,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -39028,6 +39174,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -39268,6 +39415,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -39508,6 +39656,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -39748,6 +39897,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -39988,6 +40138,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -40230,6 +40381,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -40471,6 +40623,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -40711,6 +40864,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -40951,6 +41105,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -41191,6 +41346,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -41431,6 +41587,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -41680,6 +41837,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Kiinteistönhoitopalveluihin erikoistunut osakeyhtiö. Palveluihin kuuluu kiinteistöjen kunnossapito, siivouspalvelut, lumen ja jään poisto, viheralueiden hoito sekä tekninen kiinteistönhuolto. Asiakkaina taloyhtiöt, yritykset ja julkiset organisaatiot . Yrityksellä on useita julkisia hankintasopimuksia, esim. Hartolan varastoalueen tie- ja piha-alueiden talvihoito (sopimusarvo 202 500 Ã¢â€šÂ¬) sekä Toivakan, Jyskän ja Hartolan kiinteistönhoitotyöt (sopimusarvo 1 200 000 Ã¢â€šÂ¬) .",
@@ -41920,6 +42078,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -42160,6 +42319,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -42400,6 +42560,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -42640,6 +42801,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -42880,6 +43042,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -43120,6 +43283,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -43360,6 +43524,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -43690,6 +43855,22 @@
                 "VENUE_PARTY": 90
             }
         },
+        "capabilities": {
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
+        },
         "categories": {
             "core": {
                 "description": "Perinnekylä ja monitoimipaikka, joka tarjoaa tiloja juhliin, kokouksiin ja virkistyspäiviin 15â€“150 hengen ryhmille. Tunnettu maailman suurimmasta savusaunasta (kapasiteetti 150 henkeä) . Tarjoaa majoitusta, ruokailuja, ohjelmapalveluita (mm. Nasusafari, teatteri, sepän paja), turvehoitoja, tyhy-päiviä sekä yrityspalveluita . Yritys järjestää myös yleisötapahtumia kuten naisten turvesaunailtoja, äitienpäivälounaita, perinnepäiviä ja joulumarkkinoita . Kaudesta 2026 tarjolla kesäteatteripaketteja . Sijaitsee Vinninlammen rannalla Kattamäen rinteiden kainalossa .",
@@ -43953,22 +44134,6 @@
             "last_updated": "2026-05-08T14:46:17.836Z",
             "verified_by": "ai-enriched-v2",
             "status": "enriched"
-        },
-        "capabilities": {
-            "SAUNA_FACILITY": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "AV_RENTAL": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-244": {
@@ -44041,6 +44206,15 @@
             "intent_scores": {
                 "EVT_WEDDING": 100,
                 "EVT_MEMORIAL": 100
+            }
+        },
+        "capabilities": {
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
             }
         },
         "categories": {
@@ -44273,15 +44447,6 @@
             "last_updated": "2026-05-02T17:57:23.798Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
-        },
-        "capabilities": {
-            "SAUNA_FACILITY": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-246": {
@@ -44313,6 +44478,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -44553,6 +44719,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -44831,6 +44998,7 @@
                 "EVT_WEDDING": 100
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Ravintola Karlvik-nimellä tunnettu ravintola, joka on erikoistunut lounas- ja ÃƒÂ  la carte -palveluihin, juhlapalveluihin ja kokoustarjoiluihin. Ravintola sijaitsee kauniissa Karlvikin kartanomaisemissa .",
@@ -45077,6 +45245,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -45330,6 +45499,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -45577,6 +45747,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -45817,6 +45988,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -46077,6 +46249,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Caffitella-brändillä toimiva ravintola- ja kahvilapalveluihin keskittyvä yritys, joka tarjoaa lounas- ja kahvilapalveluita sekä catering- ja tilausravintolapalveluita.",
@@ -46327,6 +46500,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Restel-konserniin kuuluva liikenneasema, joka toimii ST1-brändillä. Tarjoaa polttoaineen myynnin lisäksi mahdollisesti ravintolapalveluita ja asiakaspalvelua liikennöitsijöille .",
@@ -46567,6 +46741,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -46810,6 +46985,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Tunnettu nimellä Ysitien Grilli, on paikallinen grilli-kahvila, joka tarjoaa maukasta grilliruokaa, kuten ranskalaisia, hampurilaisia, makkara- ja lihapullaperunoita, lihapiirakoita, sekä kahvia ja leivonnaisia . Perustettu vuonna 2005, yksityinen elinkeinonharjoittaja .",
@@ -47050,6 +47226,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -47290,6 +47467,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -47605,6 +47783,29 @@
                 "EVT_WEDDING": 100
             }
         },
+        "capabilities": {
+            "CANOE_RENTAL": {
+                "available": true,
+                "priority_score": 0.95,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "FATBIKE_RENTAL": {
+                "available": true,
+                "priority_score": 0.85,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
+        },
         "categories": {
             "core": {
                 "description": "Varjolan Tilan Matkailu Oy on Kuusaankosken varrella sijaitseva matkailu- ja elämyskohde, joka tarjoaa majoitusta, juhla- ja kokoustiloja, savusaunoja, ravintolapalveluita sekä ympärivuotisia aktiviteetteja kuten koskenlaskua ja luontoliikuntaa. Kohde soveltuu erityisesti yritystapahtumiin, hääjuhliin ja hyvinvointipäiviin.",
@@ -47829,29 +48030,6 @@
             "last_updated": "2026-05-21T11:53:44.936Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
-        },
-        "capabilities": {
-            "CANOE_RENTAL": {
-                "available": true,
-                "priority_score": 0.95,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "FATBIKE_RENTAL": {
-                "available": true,
-                "priority_score": 0.85,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "SAUNA_FACILITY": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-264": {
@@ -47878,6 +48056,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -48202,6 +48381,7 @@
                 "EVT_CORPORATE": 78
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Lempileivos on Lievestuoreella toimiva kotileipomo ja pitopalvelu, joka tarjoaa catering-palveluita, juhla- ja yritystarjoiluja, hääkakkuja, tilauskakkuja sekä leivonnaisia erilaisiin tilaisuuksiin Keski-Suomen alueella. Yritys tunnetaan lähiraaka-aineista ja juhlapalveluista häihin, muistotilaisuuksiin ja yritystapahtumiin.",
@@ -48539,6 +48719,7 @@
                 "VENUE_MEETING": 78
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Lievestuoreella sijaitseva monikäyttöinen juhla- ja kokoontumistila, joka soveltuu häihin, syntymäpäiviin, kokouksiin, kylätapahtumiin ja muihin yksityis- ja yritystilaisuuksiin. Tilat tarjoavat paikallisen vaihtoehdon pieniin ja keskisuuriin tapahtumiin.",
@@ -48845,6 +49026,22 @@
                 "MEDIA_PHOTO": 100
             }
         },
+        "capabilities": {
+            "DRONE_FILMING": {
+                "available": true,
+                "priority_score": 0.85,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "LIVE_STREAMING": {
+                "available": true,
+                "priority_score": 0.85,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
+        },
         "categories": {
             "core": {
                 "description": "Mika Nuorva on valokuvaaja, joka tarjoaa monipuolisia kuvauspalveluja yksityis- ja yritysasiakkaille. Palveluihin kuuluvat henkilökuvaukset, tapahtuma- ja juhlakuvaukset, yrityskuvaukset sekä mahdolliset ympäristö- ja luontokuvaukset. Toiminnassa painotetaan tilanneherkkää dokumentaarista otetta sekä laadukasta kuvajälkeä.",
@@ -49090,22 +49287,6 @@
             "last_updated": "2026-05-08T16:55:00.359Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
-        },
-        "capabilities": {
-            "DRONE_FILMING": {
-                "available": true,
-                "priority_score": 0.85,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "LIVE_STREAMING": {
-                "available": true,
-                "priority_score": 0.85,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-291": {
@@ -49182,6 +49363,7 @@
                 "MEDIA_PHOTO": 100
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Keijo Penttinen PS Studio on valokuvauspalveluihin keskittynyt studio, joka tarjoaa monipuolisia kuvauspalveluja yksityis- ja yritysasiakkaille. Palveluihin kuuluvat henkilökuvaukset, studiokuvaukset, tapahtuma- ja juhlakuvaukset sekä tuote- ja yrityskuvaus. Studio painottaa laadukasta visuaalista lopputulosta ja asiakaslähtöistä palvelua.",
@@ -49522,6 +49704,29 @@
                 "VENUE_MEETING": 90
             }
         },
+        "capabilities": {
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "ACCESSIBLE": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
+        },
         "categories": {
             "core": {
                 "description": "Revontuli Resort on Hankasalmella sijaitseva lomakeskus, joka tarjoaa majoitusta, kokous- ja juhlatiloja, golfpalveluita sekä ympärivuotisia luonto- ja hyvinvointielämyksiä. Kohde tunnetaan erityisesti hääjuhlista, lasi-igluista, yritystapahtumista ja aktiivisista vapaa-ajan palveluista.",
@@ -49780,29 +49985,6 @@
             "last_updated": "2026-05-21T11:53:44.944Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
-        },
-        "capabilities": {
-            "SAUNA_FACILITY": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "ACCESSIBLE": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "AV_RENTAL": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-289": {
@@ -49813,7 +49995,7 @@
                 "events-and-celebrations": 100,
                 "business-events": 92,
                 "cottage-services": 55,
-                "funerals-and-memorials": 78,
+                "funerals-and-memorials": 100,
                 "moving-and-housing": 0,
                 "construction-and-maintenance": 0,
                 "housing-company-and-contracts": 0,
@@ -49878,12 +50060,37 @@
             "intent_codes": [
                 "VENUE_PARTY",
                 "EVT_WEDDING",
-                "VENUE_ACCOMMODATION"
+                "VENUE_ACCOMMODATION",
+                "EVT_MEMORIAL"
             ],
             "intent_scores": {
                 "EVT_WEDDING": 100,
                 "VENUE_PARTY": 100,
-                "VENUE_ACCOMMODATION": 92
+                "VENUE_ACCOMMODATION": 92,
+                "EVT_MEMORIAL": 100
+            }
+        },
+        "capabilities": {
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "ACCESSIBLE": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
             }
         },
         "categories": {
@@ -50158,29 +50365,6 @@
             "last_updated": "2026-05-21T12:47:51.346Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
-        },
-        "capabilities": {
-            "SAUNA_FACILITY": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "ACCESSIBLE": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "AV_RENTAL": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-280": {
@@ -50264,6 +50448,15 @@
                 "EVT_MEMORIAL": 100,
                 "VENUE_PARTY": 100,
                 "EVT_CORPORATE": 82
+            }
+        },
+        "capabilities": {
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
             }
         },
         "categories": {
@@ -50529,15 +50722,6 @@
             "last_updated": "2026-05-21T11:59:49.061Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
-        },
-        "capabilities": {
-            "AV_RENTAL": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-277": {
@@ -50639,6 +50823,22 @@
                 "BIZ_SEMINAR": 80,
                 "EVT_CORPORATE": 78,
                 "EVT_BIRTHDAY": 72
+            }
+        },
+        "capabilities": {
+            "ACCESSIBLE": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
             }
         },
         "categories": {
@@ -50887,22 +51087,6 @@
             "last_updated": "2026-05-07T11:38:46.254Z",
             "verified_by": "web-research",
             "status": "updated"
-        },
-        "capabilities": {
-            "ACCESSIBLE": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "AV_RENTAL": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-276": {
@@ -51018,6 +51202,29 @@
                 "EVT_PARTY": 85,
                 "VENUE_ACCOMMODATION": 20,
                 "REC_SWIMMING": 20
+            }
+        },
+        "capabilities": {
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "ACCESSIBLE": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
             }
         },
         "categories": {
@@ -51282,29 +51489,6 @@
             "last_updated": "2026-05-21T11:49:45.477Z",
             "verified_by": "web-enriched-ai",
             "status": "enriched"
-        },
-        "capabilities": {
-            "SAUNA_FACILITY": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "ACCESSIBLE": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "AV_RENTAL": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-282": {
@@ -51384,6 +51568,15 @@
                 "EVT_WEDDING": 100,
                 "EVT_MEMORIAL": 89,
                 "VENUE_PARTY": 95
+            }
+        },
+        "capabilities": {
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
             }
         },
         "categories": {
@@ -51650,15 +51843,6 @@
             "last_updated": "2026-05-21T11:55:50.149Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
-        },
-        "capabilities": {
-            "AV_RENTAL": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-281": {
@@ -51738,6 +51922,22 @@
                 "VENUE_PARTY": 100,
                 "VENUE_MEETING": 86,
                 "EVT_MEMORIAL": 100
+            }
+        },
+        "capabilities": {
+            "ACCESSIBLE": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
             }
         },
         "categories": {
@@ -52008,22 +52208,6 @@
             "last_updated": "2026-05-21T11:59:49.061Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
-        },
-        "capabilities": {
-            "ACCESSIBLE": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "AV_RENTAL": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-279": {
@@ -52103,6 +52287,22 @@
                 "EVT_WEDDING": 96,
                 "EVT_MEMORIAL": 90,
                 "VENUE_PARTY": 100
+            }
+        },
+        "capabilities": {
+            "ACCESSIBLE": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
             }
         },
         "categories": {
@@ -52372,22 +52572,6 @@
             "last_updated": "2026-05-21T11:57:38.385Z",
             "verified_by": "ai-enriched",
             "status": "enriched"
-        },
-        "capabilities": {
-            "ACCESSIBLE": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "AV_RENTAL": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-296": {
@@ -52471,6 +52655,22 @@
                 "BIZ_CATERING": 100,
                 "VENUE_PARTY": 92,
                 "EVT_CORPORATE": 84
+            }
+        },
+        "capabilities": {
+            "ACCESSIBLE": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
             }
         },
         "categories": {
@@ -52710,22 +52910,6 @@
             "last_updated": "2026-05-21T11:55:50.148Z",
             "verified_by": "ai-enriched",
             "status": "enriched"
-        },
-        "capabilities": {
-            "ACCESSIBLE": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "AV_RENTAL": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-294": {
@@ -52779,6 +52963,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Koivulan savukala on Lievestuoreella toimiva yritys, joka valmistaa ja myy savukalaa sekä muita kalatuotteita. Tarjoaa laadukasta lähiruokaa sekä palveluita juhliin, tapahtumiin ja yrityksille.",
@@ -53074,6 +53259,15 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {
+            "ACCESSIBLE": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
+        },
         "categories": {
             "core": {
                 "description": "Naissaaren Upee kahvila (Naissaaren Koskenhenki) on viihtyisä kahvila ja ruokapaikka Vaajakoskella koskimaisemissa. Tarjoaa kahvia, leivonnaisia ja ruokaa rennossa ympäristössä sekä palvelee myös ryhmiä ja tilaisuuksia.",
@@ -53310,15 +53504,6 @@
             "last_updated": "2026-05-04T16:33:57.041Z",
             "verified_by": "ai-enriched",
             "status": "enriched"
-        },
-        "capabilities": {
-            "ACCESSIBLE": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-301": {
@@ -53397,6 +53582,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "SS Notariaatti Oy tarjoaa notariaattipalveluita ja asiakirjojen vahvistamiseen liittyviä palveluja Lievestuoreen alueella. Palveluihin kuuluvat muun muassa valtakirjat, todistukset, asiakirjojen oikeaksi todistaminen sekä muut juridiset vahvistuspalvelut. Toimipiste palvelee sekä yksityishenkilöitä että yrityksiä joustavasti.",
@@ -53642,14 +53828,14 @@
                 "business-growth": 0,
                 "moving-and-housing": 0,
                 "construction-and-maintenance": 0,
-                "cottage-services": 10,
-                "accommodation": 94,
-                "wellbeing-and-beauty": 26,
+                "cottage-services": 28,
+                "accommodation": 96,
+                "wellbeing-and-beauty": 42,
                 "housing-company-and-contracts": 0,
                 "liikunta-ja-vapaaaika": 100,
-                "service-partner": 18,
+                "service-partner": 30,
                 "emergency-services": 0,
-                "family-and-children": 34,
+                "family-and-children": 52,
                 "animals": 0,
                 "auto-services": 0
             },
@@ -53693,23 +53879,23 @@
             ],
             "sub_contexts": [
                 "elämysilta",
-                "teemallinen tapahtuma",
                 "syntymäpäiväjuhla",
-                "workshop",
+                "luova workshop",
+                "teemallinen tapahtuma",
+                "ulkotapahtuma",
                 "virkistyspäivä",
                 "tiimipäivä",
-                "luova workshop",
                 "yritystapahtuma",
-                "ryhmätoiminta",
-                "luontoretkeily",
-                "eräopas",
-                "elämyspalvelut",
-                "yhteisötapahtumat",
-                "vapaa-aika",
-                "ryhmäaktiviteetit",
+                "luontoretki",
+                "ohjattu aktiviteetti",
+                "tyhy-päivä",
+                "fatbike-retki",
+                "kajakkiretki",
+                "perheaktiviteetti",
+                "luontoelämys",
                 "hyvinvointipäivä",
-                "ryhmäelämys",
-                "luova toiminta"
+                "metsäelämys",
+                "luova ryhmätoiminta"
             ],
             "node_links": [
                 "LIIKUNTA"
@@ -53717,21 +53903,120 @@
             "intent_codes": [
                 "ENT_PROGRAM",
                 "REC_OUTDOOR",
-                "EVT_CORPORATE"
+                "REC_RAFTING",
+                "EVT_CORPORATE",
+                "EVT_BIRTHDAY",
+                "EVT_BIRTHDAY_ADULTS",
+                "REC_CHILDREN"
             ],
             "intent_scores": {
                 "ENT_NATURE": 88,
                 "EVT_PARTY": 80,
-                "EVT_CORPORATE": 72,
+                "EVT_CORPORATE": 82,
                 "ENT_MUSIC": 40,
                 "BIZ_MEETING": 25,
                 "ENT_PROGRAM": 100,
-                "REC_OUTDOOR": 94
+                "REC_OUTDOOR": 96,
+                "REC_RAFTING": 84,
+                "EVT_BIRTHDAY": 74,
+                "EVT_BIRTHDAY_ADULTS": 70,
+                "REC_CHILDREN": 48
+            }
+        },
+        "capabilities": {
+            "FATBIKE_RENTAL": {
+                "available": true,
+                "priority_score": 0.86,
+                "inventory": [
+                    {
+                        "type": "fatbike",
+                        "count": 0
+                    }
+                ],
+                "additional_inventory": [
+                    "kypärät",
+                    "opastetut fatbike-retket",
+                    "maastoreittien opastus"
+                ],
+                "specs": {
+                    "guided_tours": true,
+                    "group_bookings": true,
+                    "beginner_friendly": true
+                }
+            },
+            "CANOE_RENTAL": {
+                "available": true,
+                "priority_score": 0.82,
+                "inventory": [
+                    {
+                        "type": "kajakki",
+                        "count": 0
+                    },
+                    {
+                        "type": "kanootti",
+                        "count": 0
+                    }
+                ],
+                "additional_inventory": [
+                    "melat",
+                    "pelastusliivit",
+                    "ohjatut melontaretket"
+                ],
+                "specs": {
+                    "guided_tours": true,
+                    "group_bookings": true,
+                    "beginner_friendly": true
+                }
+            },
+            "OUTDOOR_RENTAL": {
+                "available": true,
+                "priority_score": 0.88,
+                "inventory": [
+                    {
+                        "type": "fatbike",
+                        "count": 0
+                    },
+                    {
+                        "type": "kajakki",
+                        "count": 0
+                    }
+                ],
+                "additional_inventory": [
+                    "retkeilyvarusteet",
+                    "luontoliikuntavälineet",
+                    "ryhmäaktiviteettien välineistö"
+                ],
+                "specs": {
+                    "guided_activity": true,
+                    "corporate_groups": true,
+                    "weekend_available": true
+                }
+            },
+            "WATER_SPORT_RENTAL": {
+                "available": true,
+                "priority_score": 0.72,
+                "inventory": [
+                    {
+                        "type": "kajakki",
+                        "count": 0
+                    },
+                    {
+                        "type": "kanootti",
+                        "count": 0
+                    }
+                ],
+                "additional_inventory": [
+                    "melontavarusteet",
+                    "vesiretket"
+                ],
+                "specs": {
+                    "guided_tours": true
+                }
             }
         },
         "categories": {
             "core": {
-                "description": "Villi-Sessio on Lievestuoreella toimiva elämyksiin, luoviin workshopeihin ja ohjelmapalveluihin keskittyvä yritys. Yritys tarjoaa virkistyspäiviä, pienryhmätapahtumia, luontoretkiä ja yhteisöllisiä elämyksiä yrityksille ja yksityisryhmille.",
+                "description": "Villi-Sessio on Lievestuoreella toimiva elämyksiin, luoviin workshopeihin, luontoretkiin ja ohjelmapalveluihin keskittyvä yritys. Yritys järjestää virkistyspäiviä, tiimipäiviä, pienryhmätapahtumia sekä ohjattuja outdoor-aktiviteetteja. Palveluihin kuuluu myös fatbike-, kajakki- ja kanoottivuokrausta sekä opastettuja luontoelämyksiä yrityksille, yhteisöille ja yksityisryhmille.",
                 "website": "https://www.villi-sessio.fi",
                 "email": "",
                 "phone": ""
@@ -53969,7 +54254,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-21T11:49:45.478Z",
+            "last_updated": "2026-05-23T20:09:34.777Z",
             "verified_by": "ai-profile-builder",
             "status": "updated"
         }
@@ -54064,6 +54349,7 @@
                 "EVT_MEMORIAL": 55
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Kauppapuutarha Tervo Oy on Laukaassa toimiva kasvihuone- ja puutarhayritys, jonka toimialaan kuuluu vihannesten ja kukkien viljely kasvihuoneessa sekä puutarhatuotteiden myynti.",
@@ -54349,6 +54635,7 @@
                 "BIZ_ADVISORY": 65
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Lakiasiaintoimisto Esa Jäntti tarjoaa juridisia palveluita yksityishenkilöille ja yrityksille Laukaan ja Jyväskylän alueella. Palveluihin kuuluvat mm. perheoikeus, perunkirjoitukset, testamentit, sopimusasiat sekä kiinteistö- ja yritysjuridiikka.",
@@ -54681,6 +54968,7 @@
                 "EVT_BIRTHDAY_FAMILY": 58
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Lievestuoreella toimiva tilauskukkakauppa. Tilauksesta kukkia arkeen, juhlaan ja suruun. Toimitus Kelkkamäen kappeliin ja lähiseudulle.",

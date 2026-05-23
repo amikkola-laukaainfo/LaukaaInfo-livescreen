@@ -67,6 +67,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Terveys- ja hyvinvointipalvelu Riina Raitio tarjoaa sairaanhoitajataustaista asiantuntijapalvelua, joka keskittyy neurologiseen hoitotyöhön ja kokonaisvaltaiseen hyvinvointiin. Palveluihin kuuluvat neurologisten asiakkaiden ohjaus ja kuntoutus, aivoverenkiertohäiriöiden ennaltaehkäisy sekä toiminnallisten neurologisten oireiden hoito. Palveluja tarjotaan vastaanotolla sekä kotikäynteinä ja hyvinvointitapahtumissa.",
@@ -370,6 +371,7 @@
                 "WELLBEING_HEALTH": 82
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Laukaassa toimiva toimintaterapiapalvelu, joka tarjoaa kuntoutusta ja toimintakykyä tukevia terapiapalveluja lapsille, nuorille ja aikuisille.",
@@ -659,6 +661,15 @@
                 "REC_GYM": 100
             }
         },
+        "capabilities": {
+            "ACCESSIBLE": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
+        },
         "categories": {
             "core": {
                 "description": "OneFit on kuntosali- ja hyvinvointipalvelu, joka tarjoaa monipuolisia liikunta- ja valmennuspalveluja kuten kuntosaliharjoittelua, ryhmäliikuntaa ja personal training -ohjausta. Palvelut sopivat yksityishenkilöille sekä yrityksille esimerkiksi tyhypäiviin ja työhyvinvoinnin kehittämiseen.",
@@ -891,15 +902,6 @@
             "last_updated": "2026-05-08T15:32:40.282Z",
             "verified_by": "AI-analysis-v2",
             "status": "draft"
-        },
-        "capabilities": {
-            "ACCESSIBLE": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-27": {
@@ -977,6 +979,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Sosiaalipedagogista hevostoimintaa ja Green Care -palveluja tarjoava yritys Laukaan Kuusassa. Toiminta perustuu vuorovaikutukseen hevosten kanssa sosiaalisen hyvinvoinnin, kuntoutuksen ja arjen tukemiseksi. Palveluihin kuuluu yksilö- ja ryhmätoimintaa, eläinavusteista hyvinvointia, tyhy-päiviä, hyvinvointipäiviä ja luontoelämyksiä yrityksille sekä yksityisasiakkaille. Yrityksen työkavereina toimii useita hevosia ja poneja talliympäristössä.",
@@ -1280,6 +1283,7 @@
                 "REC_GYM": 100
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Koulutettu hieroja ja painonnostovalmentaja Laukaassa. Yritys tarjoaa hierontaa, urheiluhierontaa, mobilisoivaa hierontaa, triggerpistekäsittelyä, fascia-käsittelyä, kinesioteippausta sekä nivelten liikkuvuutta edistäviä hoitoja. Lisäksi palveluihin kuuluu painonnoston lajivalmennus yksilöille, pareille ja pienryhmille sekä keppijumppakoulutus. Yrityksen omistaa Jani Senilä.",
@@ -1542,6 +1546,15 @@
                 "BIZ_TRANSPORT": 100
             }
         },
+        "capabilities": {
+            "TRAILER_RENTAL": {
+                "available": true,
+                "priority_score": 0.85,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
+        },
         "categories": {
             "core": {
                 "description": "",
@@ -1756,15 +1769,6 @@
             "last_updated": "2026-05-16T18:12:33.888Z",
             "verified_by": "system-init-v3",
             "status": "draft"
-        },
-        "capabilities": {
-            "TRAILER_RENTAL": {
-                "available": true,
-                "priority_score": 0.85,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-100": {
@@ -1834,6 +1838,7 @@
                 "RENO_HARDWARE": 100
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Tokmanni Oy on Suomen suurin halpakauppaketju, joka tarjoaa laajan valikoiman kodin, vapaa-ajan, puutarhan ja arjen tuotteita edulliseen hintaan.",
@@ -2135,6 +2140,15 @@
                 "EVT_BIRTHDAY": 76
             }
         },
+        "capabilities": {
+            "ACCESSIBLE": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
+        },
         "categories": {
             "core": {
                 "description": "Lievestuoreella sijaitseva kesäkauden perhehuvipuisto, jossa on yli 19 huvilaitetta, pelejä ja koko perheen aktiviteetteja. Tunnettu erityisesti Cyclon-vuoristoradasta ja matalan kynnyksen perhepäivistä. Soveltuu lasten syntymäpäiviin, ryhmävierailuihin ja kesätapahtumiin.",
@@ -2373,15 +2387,6 @@
             "last_updated": "2026-05-08T13:47:08.799Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
-        },
-        "capabilities": {
-            "ACCESSIBLE": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-114": {
@@ -2434,6 +2439,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Luontaishoitola, joka tarjoaa erilaisia rentouttavia ja kokonaisvaltaisia hoitoja hyvinvoinnin tukemiseen. Palveluihin kuuluu esimerkiksi energiahoitoja ja muita kehoa ja mieltä tasapainottavia hoitomuotoja rauhallisessa hoitohuoneessa.",
@@ -2767,6 +2773,29 @@
                 "VENUE_PARTY": 90
             }
         },
+        "capabilities": {
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "ACCESSIBLE": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
+        },
         "categories": {
             "core": {
                 "description": "Peurunka Oy on Laukaassa toimiva kylpylähotelli ja hyvinvointikeskus, joka tarjoaa majoitusta, ravintola- ja kokouspalveluita, kuntoutusta sekä monipuolisia liikunta- ja wellness-palveluita. Kohde soveltuu yritystapahtumiin, juhliin, muistotilaisuuksiin ja aktiiviseen lomailuun ympäri vuoden.",
@@ -3025,29 +3054,6 @@
             "last_updated": "2026-05-21T11:53:44.943Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
-        },
-        "capabilities": {
-            "SAUNA_FACILITY": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "ACCESSIBLE": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "AV_RENTAL": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-124": {
@@ -3111,6 +3117,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Pieni maatila ja harrastetalli Laukaan Äijälässä. Toiminta keskittyy shetlanninponeihin ja tarjoaa ratsastustunteja, ponejen vuokrausta, kerhoja ja leirejä sekä elämyksellistä toimintaa kuten maastoilua, ajoa, agilityä ja talvisin rekiajelua. Sopii erityisesti ryhmille, virkistyspäiviin ja elämyspalveluihin.",
@@ -3414,6 +3421,7 @@
                 "WELLBEING_THERAPY": 28
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Kauneushoitola Ania tarjoaa kauneudenhoitopalveluita Lievestuoreella. Palveluihin kuuluvat kasvo- ja vartalohoidot, meikkaukset sekä ripsien ja kulmien käsittelyt. Yritys palvelee ajanvarauksella paikallisia asiakkaita sekä juhla- ja häävalmistautujia.",
@@ -3671,6 +3679,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -3963,6 +3972,7 @@
                 "SHOP_CHILDREN": 100
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Laukaassa toimiva käytettyjen lastenvaatteiden, lelujen ja äitiysvaatteiden myyntiin keskittyvä pienyritys. Toiminta painottuu verkkokauppa- ja huutokauppamyyntiin sekä kierrätystuotteisiin.",
@@ -4212,6 +4222,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -4489,6 +4500,15 @@
                 "MOVE_TRANSPORT": 100
             }
         },
+        "capabilities": {
+            "TRAILER_RENTAL": {
+                "available": true,
+                "priority_score": 1,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
+        },
         "categories": {
             "core": {
                 "description": "Väentupa R.Y. ylläpitää Kirpputori Retrokeidasta Laukaassa. Toiminta keskittyy kierrätykseen, käytettyjen tavaroiden myyntiin ja uudelleenkäyttöön. Lisäksi tarjolla on peräkärryn vuokraus muuttoihin ja tavaroiden kuljetukseen.",
@@ -4713,15 +4733,6 @@
             "last_updated": "2026-05-16T18:10:23.320Z",
             "verified_by": "AI-analysis-v2",
             "status": "draft"
-        },
-        "capabilities": {
-            "TRAILER_RENTAL": {
-                "available": true,
-                "priority_score": 1,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-203": {
@@ -4798,6 +4809,7 @@
                 "WELLBEING_THERAPY": 60
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Laukaan Kotipalvelu tarjoaa monipuolisia kotipalveluita arjen helpottamiseen, kuten siivousta, asiointiapua, kodinhoitoa, muuttoapua sekä tukea ikäihmisille ja kotitalouksille.",
@@ -5100,6 +5112,7 @@
                 "WELLBEING_FAMILY": 100
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Pikkupiika Kaarina tarjoaa lastenhoito- ja arjen tukipalveluita perheille, kuten lastenhoitoa, kotiapua ja tilapäistä arjen apua eri tilanteisiin.",
@@ -5351,6 +5364,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -5620,6 +5634,7 @@
             "intent_codes": [],
             "intent_scores": {}
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Kirpputori Majakka on Lievestuoreella Laukaassa toimiva kirpputori, joka tarjoaa käytettyjä tavaroita kuten vaatteita, kodintarvikkeita ja sisustusesineitä. Sopii erityisesti edulliseen hankintaan sekä kierrätykseen esimerkiksi muuton tai kodin perustamisen yhteydessä.",
@@ -5874,6 +5889,7 @@
                 "PETS_VET": 100
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "",
@@ -6169,6 +6185,22 @@
                 "REC_OUTDOOR": 100
             }
         },
+        "capabilities": {
+            "CANOE_RENTAL": {
+                "available": true,
+                "priority_score": 0.85,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
+        },
         "categories": {
             "core": {
                 "description": "Multamäen leirikeskus on luonnonläheinen leiri- ja majoituskohde Peurunkajärven rannalla Laukaassa. Kohde soveltuu leirikoulujen, nuorisoleirien, retkien, ryhmien ja yhdistysten majoitukseen sekä koulutus- ja virkistystapahtumiin. Alueella on majoitustiloja, ruokailu- ja kokoontumistiloja sekä hyvät ulkoilu- ja vesistömahdollisuudet. Rauhallinen järvimaisema tarjoaa puitteet ympärivuotiseen ryhmätoimintaan.",
@@ -6435,22 +6467,6 @@
             "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
-        },
-        "capabilities": {
-            "CANOE_RENTAL": {
-                "available": true,
-                "priority_score": 0.85,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "SAUNA_FACILITY": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
         }
     },
     "company-313": {
@@ -6532,6 +6548,7 @@
                 "SHOP_CHILDREN": 20
             }
         },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Laukaan Kädenjälki ry on Laukaassa toimiva käsityö- ja kulttuurialan yhdistys, joka edistää kädentaitajien yhteistyötä, käsityöalan toimintaa, käsityön hyvinvointivaikutuksia sekä kulttuuriperinnön ja käsityötaitojen säilyttämistä. Yhdistyksen yhteydessä toimii Kädenjälki-puoti, jossa myydään paikallisten käsityöläisten tuotteita, kuten koruja, tekstiilejä, keramiikkaa, lahjatavaroita ja käsityötarvikkeita.",
