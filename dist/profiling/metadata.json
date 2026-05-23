@@ -1,6 +1,6 @@
 {
-    "SCHEMA_VERSION": "5.0",
-    "DESCRIPTION": "LaukaaInfo Ratkaisulähtöinen profilointi v5. Sisältää eksplisiittisen graafirakenteen.",
+    "SCHEMA_VERSION": "6.0",
+    "DESCRIPTION": "LaukaaInfo Ratkaisulähtöinen profilointi v6. Sisältää graafirakenteen ja capability-kerroksen (vuokraukset / jaetut resurssit).",
     "nodes": {
         "group-events-and-celebrations": {
             "type": "group",

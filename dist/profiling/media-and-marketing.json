@@ -720,6 +720,22 @@
             "last_updated": "2026-05-21T11:57:38.386Z",
             "verified_by": "AI-analysis-v2",
             "status": "draft"
+        },
+        "capabilities": {
+            "DRONE_FILMING": {
+                "available": true,
+                "priority_score": 0.85,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-91": {
@@ -1251,6 +1267,15 @@
             "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
+        },
+        "capabilities": {
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-309": {

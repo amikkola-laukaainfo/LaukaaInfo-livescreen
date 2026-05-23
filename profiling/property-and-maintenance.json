@@ -2283,6 +2283,15 @@
             "last_updated": "2026-04-27T05:54:01.968Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
+        },
+        "capabilities": {
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-129": {
@@ -2632,6 +2641,15 @@
             "last_updated": "2026-05-08T14:24:53.507Z",
             "verified_by": "web-research",
             "status": "enriched"
+        },
+        "capabilities": {
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-134": {
@@ -8878,6 +8896,15 @@
             "last_updated": "2026-04-27T06:10:15.008Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
+        },
+        "capabilities": {
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-245": {
@@ -9127,6 +9154,15 @@
             "last_updated": "2026-04-27T06:08:12.224Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
+        },
+        "capabilities": {
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-287": {
@@ -9443,6 +9479,29 @@
             "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
+        },
+        "capabilities": {
+            "CANOE_RENTAL": {
+                "available": true,
+                "priority_score": 0.85,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "WATERCRAFT_RENTAL": {
+                "available": true,
+                "priority_score": 0.85,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-285": {
@@ -9747,6 +9806,22 @@
             "last_updated": "2026-05-09T17:53:02.613Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
+        },
+        "capabilities": {
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "WATERCRAFT_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-284": {
@@ -10081,6 +10156,22 @@
             "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
+        },
+        "capabilities": {
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "WATERCRAFT_RENTAL": {
+                "available": true,
+                "priority_score": 0.85,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-283": {
@@ -10421,6 +10512,22 @@
             "last_updated": "2026-05-21T12:47:51.347Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
+        },
+        "capabilities": {
+            "WATERCRAFT_RENTAL": {
+                "available": true,
+                "priority_score": 0.85,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-300": {

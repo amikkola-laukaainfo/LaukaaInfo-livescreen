@@ -891,6 +891,15 @@
             "last_updated": "2026-05-08T15:32:40.282Z",
             "verified_by": "AI-analysis-v2",
             "status": "draft"
+        },
+        "capabilities": {
+            "ACCESSIBLE": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-27": {
@@ -1747,6 +1756,15 @@
             "last_updated": "2026-05-16T18:12:33.888Z",
             "verified_by": "system-init-v3",
             "status": "draft"
+        },
+        "capabilities": {
+            "TRAILER_RENTAL": {
+                "available": true,
+                "priority_score": 0.85,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-100": {
@@ -2355,6 +2373,15 @@
             "last_updated": "2026-05-08T13:47:08.799Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
+        },
+        "capabilities": {
+            "ACCESSIBLE": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-114": {
@@ -2998,6 +3025,29 @@
             "last_updated": "2026-05-21T11:53:44.943Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
+        },
+        "capabilities": {
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "ACCESSIBLE": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-124": {
@@ -4663,6 +4713,15 @@
             "last_updated": "2026-05-16T18:10:23.320Z",
             "verified_by": "AI-analysis-v2",
             "status": "draft"
+        },
+        "capabilities": {
+            "TRAILER_RENTAL": {
+                "available": true,
+                "priority_score": 1,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-203": {
@@ -6376,6 +6435,22 @@
             "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
+        },
+        "capabilities": {
+            "CANOE_RENTAL": {
+                "available": true,
+                "priority_score": 0.85,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-313": {

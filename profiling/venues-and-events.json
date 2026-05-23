@@ -320,6 +320,36 @@
             "last_updated": "2026-05-08T16:55:00.358Z",
             "verified_by": "ai-generated",
             "status": "draft"
+        },
+        "capabilities": {
+            "WATERCRAFT_RENTAL": {
+                "available": true,
+                "priority_score": 0.85,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "SUP_RENTAL": {
+                "available": true,
+                "priority_score": 0.85,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "ACCESSIBLE": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-274": {
@@ -1389,6 +1419,15 @@
             "last_updated": "2026-05-21T11:51:04.923Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
+        },
+        "capabilities": {
+            "ACCESSIBLE": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-268": {
@@ -1721,6 +1760,15 @@
             "last_updated": "2026-05-21T11:59:49.058Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
+        },
+        "capabilities": {
+            "ACCESSIBLE": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-3": {
@@ -18164,6 +18212,29 @@
             "last_updated": "2026-05-13T14:42:49.775Z",
             "verified_by": "ai-profile-builder",
             "status": "updated"
+        },
+        "capabilities": {
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "EQUIPMENT_RENTAL": {
+                "available": true,
+                "priority_score": 0.85,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-103": {
@@ -18482,6 +18553,22 @@
             "last_updated": "2026-05-08T15:36:01.688Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
+        },
+        "capabilities": {
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-104": {
@@ -19084,6 +19171,15 @@
             "last_updated": "2026-04-29T17:57:31.970Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
+        },
+        "capabilities": {
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-107": {
@@ -21363,6 +21459,22 @@
             "last_updated": "2026-05-21T12:47:51.347Z",
             "verified_by": "AI-analysis-v2",
             "status": "draft"
+        },
+        "capabilities": {
+            "SUP_RENTAL": {
+                "available": true,
+                "priority_score": 0.85,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-119": {
@@ -21969,6 +22081,22 @@
             "last_updated": "2026-05-08T16:55:00.358Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
+        },
+        "capabilities": {
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-122": {
@@ -23980,6 +24108,15 @@
             "last_updated": "2026-05-07T12:07:42.477Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
+        },
+        "capabilities": {
+            "TRAILER_RENTAL": {
+                "available": true,
+                "priority_score": 0.85,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-132": {
@@ -31341,6 +31478,15 @@
             "last_updated": "2026-05-08T15:32:40.283Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
+        },
+        "capabilities": {
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-167": {
@@ -43807,6 +43953,22 @@
             "last_updated": "2026-05-08T14:46:17.836Z",
             "verified_by": "ai-enriched-v2",
             "status": "enriched"
+        },
+        "capabilities": {
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-244": {
@@ -44111,6 +44273,15 @@
             "last_updated": "2026-05-02T17:57:23.798Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
+        },
+        "capabilities": {
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-246": {
@@ -47658,6 +47829,29 @@
             "last_updated": "2026-05-21T11:53:44.936Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
+        },
+        "capabilities": {
+            "CANOE_RENTAL": {
+                "available": true,
+                "priority_score": 0.95,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "FATBIKE_RENTAL": {
+                "available": true,
+                "priority_score": 0.85,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-264": {
@@ -48896,6 +49090,22 @@
             "last_updated": "2026-05-08T16:55:00.359Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
+        },
+        "capabilities": {
+            "DRONE_FILMING": {
+                "available": true,
+                "priority_score": 0.85,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "LIVE_STREAMING": {
+                "available": true,
+                "priority_score": 0.85,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-291": {
@@ -49570,6 +49780,29 @@
             "last_updated": "2026-05-21T11:53:44.944Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
+        },
+        "capabilities": {
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "ACCESSIBLE": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-289": {
@@ -49925,6 +50158,29 @@
             "last_updated": "2026-05-21T12:47:51.346Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
+        },
+        "capabilities": {
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "ACCESSIBLE": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-280": {
@@ -50273,6 +50529,15 @@
             "last_updated": "2026-05-21T11:59:49.061Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
+        },
+        "capabilities": {
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-277": {
@@ -50622,6 +50887,22 @@
             "last_updated": "2026-05-07T11:38:46.254Z",
             "verified_by": "web-research",
             "status": "updated"
+        },
+        "capabilities": {
+            "ACCESSIBLE": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-276": {
@@ -51001,6 +51282,29 @@
             "last_updated": "2026-05-21T11:49:45.477Z",
             "verified_by": "web-enriched-ai",
             "status": "enriched"
+        },
+        "capabilities": {
+            "SAUNA_FACILITY": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "ACCESSIBLE": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-282": {
@@ -51346,6 +51650,15 @@
             "last_updated": "2026-05-21T11:55:50.149Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
+        },
+        "capabilities": {
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-281": {
@@ -51695,6 +52008,22 @@
             "last_updated": "2026-05-21T11:59:49.061Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
+        },
+        "capabilities": {
+            "ACCESSIBLE": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-279": {
@@ -52043,6 +52372,22 @@
             "last_updated": "2026-05-21T11:57:38.385Z",
             "verified_by": "ai-enriched",
             "status": "enriched"
+        },
+        "capabilities": {
+            "ACCESSIBLE": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-296": {
@@ -52365,6 +52710,22 @@
             "last_updated": "2026-05-21T11:55:50.148Z",
             "verified_by": "ai-enriched",
             "status": "enriched"
+        },
+        "capabilities": {
+            "ACCESSIBLE": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            },
+            "AV_RENTAL": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-294": {
@@ -52949,6 +53310,15 @@
             "last_updated": "2026-05-04T16:33:57.041Z",
             "verified_by": "ai-enriched",
             "status": "enriched"
+        },
+        "capabilities": {
+            "ACCESSIBLE": {
+                "available": true,
+                "priority_score": 0.8,
+                "confidence": "inferred",
+                "source": "migration",
+                "specs": {}
+            }
         }
     },
     "company-301": {

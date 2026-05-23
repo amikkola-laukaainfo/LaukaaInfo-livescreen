@@ -46,6 +46,200 @@ function getHaversineDistance(lat1, lon1, lat2, lon2) {
 
 const THRESHOLD_STRICT = 80;
 
+/** Pisteytyspainot kun capability-kerros on käytössä (v6). */
+const SCORE_WEIGHTS = {
+    context: 0.6,
+    capability: 0.3,
+    proximity: 0.1
+};
+
+function normalizeCapabilityCode(code) {
+    if (!code) return '';
+    return String(code).replace(/^capability-/i, '').toUpperCase();
+}
+
+function getCompanyCapabilities(c) {
+    return (c.profiling && c.profiling.capabilities) ? c.profiling.capabilities : {};
+}
+
+function getCapabilityEntry(c, code) {
+    const caps = getCompanyCapabilities(c);
+    const norm = normalizeCapabilityCode(code);
+    const raw = caps[norm] || caps[code] || null;
+    if (!raw) return null;
+    return normalizeCapabilityEntry(raw);
+}
+
+function normalizeInventoryItem(raw) {
+    if (!raw) return null;
+    if (typeof raw === 'string') {
+        const s = raw.trim();
+        return s ? { type: s } : null;
+    }
+    if (typeof raw === 'object' && !Array.isArray(raw)) {
+        const type = String(raw.type || raw.label || '').trim();
+        if (!type) return null;
+        const item = { type };
+        if (raw.label != null) item.label = String(raw.label);
+        if (raw.count != null && !isNaN(Number(raw.count))) item.count = Number(raw.count);
+        return item;
+    }
+    return null;
+}
+
+function normalizeCapabilityEntry(entry) {
+    const next = Object.assign({}, entry);
+    const specs = Object.assign({}, next.specs || {});
+
+    if (!next.inventory && Array.isArray(specs.inventory)) {
+        next.inventory = specs.inventory.map(normalizeInventoryItem).filter(Boolean);
+        delete specs.inventory;
+    }
+    if (!next.additional_inventory && Array.isArray(specs.additional_inventory)) {
+        next.additional_inventory = specs.additional_inventory.slice();
+        delete specs.additional_inventory;
+    }
+    if (!next.categories && Array.isArray(specs.categories)) {
+        next.categories = specs.categories.slice();
+        delete specs.categories;
+    }
+    next.specs = specs;
+    return next;
+}
+
+function getCapabilitySearchText(entry) {
+    if (!entry) return '';
+    const parts = [];
+    (entry.categories || []).forEach(function (c) { parts.push(c); });
+    (entry.inventory || []).forEach(function (item) {
+        parts.push(item.type);
+        if (item.label) parts.push(item.label);
+    });
+    (entry.additional_inventory || []).forEach(function (t) { parts.push(t); });
+    return parts.join(' ').toLowerCase();
+}
+
+function capabilityMatchesInventoryTerm(entry, term) {
+    if (!term) return true;
+    const hay = getCapabilitySearchText(entry);
+    const needle = String(term).toLowerCase().trim();
+    if (!needle) return true;
+    if (hay.indexOf(needle) !== -1) return true;
+    return needle.split(/\s+/).some(function (w) {
+        return w.length > 2 && hay.indexOf(w) !== -1;
+    });
+}
+
+function specsMeet(requiredSpecs, specs) {
+    if (!requiredSpecs || typeof requiredSpecs !== 'object') return true;
+    const actual = specs || {};
+    for (const key of Object.keys(requiredSpecs)) {
+        if (actual[key] !== requiredSpecs[key]) return false;
+    }
+    return true;
+}
+
+/**
+ * Yhden capability-vaatimuksen pisteytys 0–100.
+ * @param {object} entry - profiling.capabilities[CODE]
+ * @param {object|string} req - { code, min_priority?, required_specs? } tai pelkkä koodi
+ */
+function getSingleCapabilityScore(entry, req) {
+    const requirement = typeof req === 'string' ? { code: req } : (req || {});
+    if (!entry || entry.available === false) return 0;
+
+    const minPriority = requirement.min_priority != null ? requirement.min_priority : 0;
+    const priority = entry.priority_score != null ? entry.priority_score : 1;
+    if (priority < minPriority) return 0;
+
+    const specs = entry.specs != null ? entry.specs : {};
+    if (!specsMeet(requirement.required_specs, specs)) return 0;
+
+    if (requirement.inventory_match && !capabilityMatchesInventoryTerm(entry, requirement.inventory_match)) {
+        return 0;
+    }
+
+    return Math.min(100, Math.round(priority * 100));
+}
+
+/**
+ * Usean capability-vaatimuksen yhteispisteet.
+ * Oletus: kaikki vaaditut (mode !== 'any').
+ */
+function getCapabilityFit(c, requirements) {
+    if (!requirements || requirements.length === 0) return 100;
+
+    const list = requirements.map(r =>
+        typeof r === 'string' ? { code: r } : r
+    );
+    const mode = list[0] && list[0]._mode ? list[0]._mode : 'all';
+
+    const scores = list.map(req =>
+        getSingleCapabilityScore(getCapabilityEntry(c, req.code || req), req)
+    );
+
+    if (mode === 'any') return Math.max(0, ...scores);
+    return scores.length ? Math.min(...scores) : 0;
+}
+
+function meetsCapabilityRequirements(c, opt) {
+    const reqs = opt.capability_requirements;
+    if (!reqs || reqs.length === 0) return true;
+    return getCapabilityFit(c, reqs) > 0;
+}
+
+function getContextFit(c, context, opt) {
+    let score = getFitsForScore(c, context);
+    if (opt && opt.intent_codes && c.profiling?.core?.intent_scores) {
+        const intentScores = opt.intent_codes
+            .map(code => c.profiling.core.intent_scores[code] || 0);
+        if (intentScores.length) {
+            score = Math.max(score, ...intentScores);
+        }
+    }
+    return Math.min(100, score);
+}
+
+function getProximityFit(c, userLocation) {
+    if (!userLocation || userLocation.lat == null || userLocation.lng == null) return 50;
+    const lat = parseFloat(c.lat);
+    const lon = parseFloat(c.lon || c.lng);
+    if (isNaN(lat) || isNaN(lon)) return 30;
+    const dist = getHaversineDistance(userLocation.lat, userLocation.lng, lat, lon);
+    if (!isFinite(dist)) return 30;
+    if (dist <= 5) return 100;
+    if (dist <= 15) return 80;
+    if (dist <= 30) return 60;
+    if (dist <= 60) return 40;
+    return 20;
+}
+
+/**
+ * Yhdistetty pisteytys (v6). Käytetään järjestykseen kun opt/requirements käyttää capabilityä.
+ */
+function scoreCompany(c, opt, context, userLocation, taxonomyData) {
+    const contextFit = getContextFit(c, context, opt);
+    let capabilityReqs = opt.capability_requirements || [];
+
+    if (!capabilityReqs.length && taxonomyData?.intents && opt.intent_codes?.length) {
+        const boosts = new Set();
+        opt.intent_codes.forEach(code => {
+            const intent = taxonomyData.intents[code];
+            (intent?.capability_boosts || []).forEach(b => boosts.add(b));
+        });
+        if (boosts.size) capabilityReqs = [...boosts];
+    }
+
+    const capabilityFit = getCapabilityFit(c, capabilityReqs);
+    const proximityFit = getProximityFit(c, userLocation);
+
+    return (
+        contextFit * SCORE_WEIGHTS.context +
+        capabilityFit * SCORE_WEIGHTS.capability +
+        proximityFit * SCORE_WEIGHTS.proximity
+    );
+}
+
 function normalizeText(txt) {
     if (!txt) return "";
     return String(txt).toLowerCase()
@@ -271,6 +465,9 @@ function isMatch(c, opt, context, subContextsReq, noCateringSelected, taxonomyDa
     }
 
     if (isProfiledMatch) {
+        if (opt.capability_requirements && opt.capability_requirements.length > 0) {
+            if (!meetsCapabilityRequirements(c, opt)) return false;
+        }
         if (isVenueSearch) {
             const cap = getCompanyCapacity(c, context);
             if (cap === 0) return false;
@@ -431,6 +628,16 @@ function processSearchResults(allCompanies, selections, currentNeedId, needToPro
             const prioA = a.profiling?.core?.priority_score || 0;
             const prioB = b.profiling?.core?.priority_score || 0;
             if (prioB !== prioA) return prioB - prioA;
+
+            const hasCapabilitySignals = group.opt.capability_requirements?.length ||
+                (taxonomyData?.intents && group.opt.intent_codes?.some(code =>
+                    taxonomyData.intents[code]?.capability_boosts?.length
+                ));
+            if (hasCapabilitySignals) {
+                const v6A = scoreCompany(a, group.opt, profilingKey, userLocation, taxonomyData);
+                const v6B = scoreCompany(b, group.opt, profilingKey, userLocation, taxonomyData);
+                if (v6B !== v6A) return v6B - v6A;
+            }
 
             return 0;
         });
@@ -652,6 +859,18 @@ if (typeof module !== 'undefined') {
         getFitsForScore, 
         getCompanyCapacity, 
         getHaversineDistance,
+        normalizeCapabilityCode,
+        getCompanyCapabilities,
+        getCapabilityEntry,
+        normalizeCapabilityEntry,
+        getCapabilitySearchText,
+        capabilityMatchesInventoryTerm,
+        getCapabilityFit,
+        meetsCapabilityRequirements,
+        getContextFit,
+        getProximityFit,
+        scoreCompany,
+        SCORE_WEIGHTS,
         isMatch, 
         processSearchResults,
         generateSearchFingerprint,
