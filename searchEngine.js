@@ -230,6 +230,11 @@ function scoreCompany(c, opt, context, userLocation, taxonomyData) {
         if (boosts.size) capabilityReqs = [...boosts];
     }
 
+    // Handle direct capability_boost on option (v6.1)
+    if (!capabilityReqs.length && opt.capability_boost && Array.isArray(opt.capability_boost)) {
+        capabilityReqs = opt.capability_boost.map(code => ({ code }));
+    }
+
     const capabilityFit = getCapabilityFit(c, capabilityReqs);
     const proximityFit = getProximityFit(c, userLocation);
 

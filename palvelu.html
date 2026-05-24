@@ -1919,15 +1919,20 @@
                     }
                 }
                 
-                // Inventory
+                // Inventory from capabilities (v6.1)
                 const capabilities = c.profiling.capabilities || {};
                 let inventoryItems = new Set();
+                let inventoryCounts = {};
                 for (const key in capabilities) {
                     const cap = capabilities[key];
                     if (cap && cap.available) {
                         if (Array.isArray(cap.inventory)) {
                             cap.inventory.forEach(item => {
-                                if (item && item.type) inventoryItems.add(item.type.toLowerCase());
+                                if (item && item.type) {
+                                    const type = item.type.toLowerCase();
+                                    inventoryItems.add(type);
+                                    if (item.count) inventoryCounts[type] = item.count;
+                                }
                             });
                         }
                         if (Array.isArray(cap.additional_inventory)) {
@@ -1937,9 +1942,12 @@
                         }
                     }
                 }
-                if (inventoryItems.size > 0 && !inventoryNote) {
-                    const inventoryStr = Array.from(inventoryItems).join(', ');
-                    const capitalizedStr = inventoryStr.charAt(0).toUpperCase() + inventoryStr.slice(1);
+                if (inventoryItems.size > 0) {
+                    const inventoryList = Array.from(inventoryItems).map(item => {
+                        const count = inventoryCounts[item];
+                        return count ? `${item}×${count}` : item;
+                    }).join(', ');
+                    const capitalizedStr = inventoryList.charAt(0).toUpperCase() + inventoryList.slice(1);
                     inventoryNote = `<div style="font-size:0.85rem; color:#334155; margin-top:8px; margin-bottom:12px; padding:8px 12px; background:#f8fafc; border-radius:8px; border-left:3px solid var(--primary-blue);"><strong>Vuokrakalusto:</strong> ${capitalizedStr}</div>`;
                 }
 
