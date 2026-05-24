@@ -659,11 +659,11 @@ const NEEDS_CONFIG = {
                 "id": "tyyppi",
                 "question": { "fi": "Mitä olet vuokraamassa?", "en": "What are you renting?" },
                 "options": [
-                    { "id": "OPT_RENTAL_BOAT", "label": { "fi": "Venevuokraus", "en": "Boat rental" }, "sub_context": "venevuokraus", "tags": ["venevuokraus"] },
-                    { "id": "OPT_RENTAL_TRAILER", "label": { "fi": "Peräkärryn vuokraus", "en": "Trailer rental" }, "sub_context": "peräkärryn vuokraus", "tags": ["peräkärryn vuokraus"] },
-                    { "id": "OPT_RENTAL_EQUIPMENT", "label": { "fi": "Laitteisto- ja soitinvuokraus", "en": "Equipment and instrument rental" }, "sub_context": "laitteistovuokraus", "tags": ["laitteistovuokraus", "soitinvuokraus"] },
-                    { "id": "OPT_RENTAL_APARTMENT", "label": { "fi": "Asuntojen vuokraus", "en": "Apartment rental" }, "sub_context": "asuntojen-vuokraus", "tags": ["asuntojen-vuokraus"] },
-                    { "id": "OPT_RENTAL_OUTDOOR", "label": { "fi": "Luontoretkeily ja ulkoiluvälineet (esim. kajakki, fatbike)", "en": "Outdoor and hiking equipment (e.g. kayak, fatbike)" }, "sub_context": "luontoretkeily", "tags": ["ulkoiluvälinevuokraus", "fatbike", "kajakki", "kanootti", "retkeilyvarusteet", "luontoelämykset"], "intent_codes": ["REC_OUTDOOR", "REC_RAFTING"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "refinement_tags", "value": "ulkoiluvälinevuokraus" } }
+                    { "id": "OPT_RENTAL_BOAT", "label": { "fi": "Venevuokraus", "en": "Boat rental" }, "sub_context": "venevuokraus", "tags": ["venevuokraus"], "capability_boost": ["WATERCRAFT_RENTAL"] },
+                    { "id": "OPT_RENTAL_TRAILER", "label": { "fi": "Peräkärryn vuokraus", "en": "Trailer rental" }, "sub_context": "peräkärryn vuokraus", "tags": ["peräkärryn vuokraus"], "capability_boost": ["TRAILER_RENTAL"] },
+                    { "id": "OPT_RENTAL_EQUIPMENT", "label": { "fi": "Laitteisto- ja soitinvuokraus", "en": "Equipment and instrument rental" }, "sub_context": "laitteistovuokraus", "tags": ["laitteistovuokraus", "soitinvuokraus"], "capability_boost": ["EQUIPMENT_RENTAL", "AV_RENTAL"] },
+                    { "id": "OPT_RENTAL_APARTMENT", "label": { "fi": "Asuntojen vuokraus", "en": "Apartment rental" }, "sub_context": "asuntojen-vuokraus", "tags": ["asuntojen-vuokraus"], "capability_boost": ["SPACE_RENTAL"] },
+                    { "id": "OPT_RENTAL_OUTDOOR", "label": { "fi": "Luontoretkeily ja ulkoiluvälineet (esim. kajakki, fatbike)", "en": "Outdoor and hiking equipment (e.g. kayak, fatbike)" }, "sub_context": "luontoretkeily", "tags": ["ulkoiluvälinevuokraus", "fatbike", "kajakki", "kanootti", "retkeilyvarusteet", "luontoelämykset"], "intent_codes": ["REC_OUTDOOR", "REC_RAFTING"], "capability_boost": ["OUTDOOR_RENTAL", "FATBIKE_RENTAL", "CANOE_RENTAL", "SUP_RENTAL", "WATER_SPORT_RENTAL"], "profilointi_filter": { "section": "wellbeing_and_beauty", "field": "refinement_tags", "value": "ulkoiluväinevuokraus" } }
                 ]
             }
         ]
