@@ -1866,6 +1866,7 @@
             let isPartner = !isAnchorGroup && collaboratorsSet && (collaboratorsSet.has(c.id) || collaboratorsSet.has(c.nimi));
             let capacityNote = '';
             let distanceHtml = '';
+            let inventoryNote = '';
 
             if (anchorCoords && c.lat && (c.lon || c.lng)) {
                 const dist = getHaversineDistance(anchorCoords.lat, anchorCoords.lng, parseFloat(c.lat), parseFloat(c.lon || c.lng));
@@ -1905,6 +1906,31 @@
                         else capacityNote = `<div style="font-size:0.85rem; color:#d97706; font-weight:700; margin-bottom:10px;">${i18n.t('capacity_note').replace('{cap}', cap)}</div>`;
                     }
                 }
+                
+                // Inventory
+                const capabilities = c.profiling.capabilities || {};
+                let inventoryItems = new Set();
+                for (const key in capabilities) {
+                    const cap = capabilities[key];
+                    if (cap && cap.available) {
+                        if (Array.isArray(cap.inventory)) {
+                            cap.inventory.forEach(item => {
+                                if (item && item.type) inventoryItems.add(item.type.toLowerCase());
+                            });
+                        }
+                        if (Array.isArray(cap.additional_inventory)) {
+                            cap.additional_inventory.forEach(item => {
+                                if (typeof item === 'string') inventoryItems.add(item.toLowerCase());
+                            });
+                        }
+                    }
+                }
+                if (inventoryItems.size > 0) {
+                    const inventoryStr = Array.from(inventoryItems).join(', ');
+                    const capitalizedStr = inventoryStr.charAt(0).toUpperCase() + inventoryStr.slice(1);
+                    inventoryNote = `<div style="font-size:0.85rem; color:#334155; margin-top:8px; margin-bottom:12px; padding:8px 12px; background:#f8fafc; border-radius:8px; border-left:3px solid var(--primary-blue);"><strong>Vuokrakalusto:</strong> ${capitalizedStr}</div>`;
+                }
+
                 if (catData?.is_accessible) badges += '<span title="Esteetön pääsy">♿</span>';
                 if (catData?.has_sauna) badges += '<span title="Sauna saatavilla">🧖</span>';
                 if (core.home_service) badges += '<span title="Kotipalvelu">🏠</span>';
@@ -1977,6 +2003,7 @@
                     <h3>${c.nimi}</h3>
                     <div class="slogan">${(c.mainoslause || (c.esittely ? c.esittely.substring(0, 100) + '...' : fallbackSlogan)).replace(/@@/g, '')}</div>
                     ${capacityNote}
+                    ${inventoryNote}
                     <div class="card-meta">${distanceHtml}<div class="feature-badges">${badges}</div></div>
                     <div class="match-explanation">${getMatchExplanation(c, requestedCapacity, profilingKey)}</div>
                     ${actionHtml}

@@ -662,7 +662,8 @@ const NEEDS_CONFIG = {
                     { "id": "OPT_RENTAL_BOAT", "label": { "fi": "Venevuokraus", "en": "Boat rental" }, "sub_context": "venevuokraus", "tags": ["venevuokraus"] },
                     { "id": "OPT_RENTAL_TRAILER", "label": { "fi": "Peräkärryn vuokraus", "en": "Trailer rental" }, "sub_context": "peräkärryn vuokraus", "tags": ["peräkärryn vuokraus"] },
                     { "id": "OPT_RENTAL_EQUIPMENT", "label": { "fi": "Laitteisto- ja soitinvuokraus", "en": "Equipment and instrument rental" }, "sub_context": "laitteistovuokraus", "tags": ["laitteistovuokraus", "soitinvuokraus"] },
-                    { "id": "OPT_RENTAL_APARTMENT", "label": { "fi": "Asuntojen vuokraus", "en": "Apartment rental" }, "sub_context": "asuntojen-vuokraus", "tags": ["asuntojen-vuokraus"] }
+                    { "id": "OPT_RENTAL_APARTMENT", "label": { "fi": "Asuntojen vuokraus", "en": "Apartment rental" }, "sub_context": "asuntojen-vuokraus", "tags": ["asuntojen-vuokraus"] },
+                    { "id": "OPT_RENTAL_OUTDOOR", "label": { "fi": "Luontoretkeily ja ulkoiluvälineet (esim. kajakki, fatbike)", "en": "Outdoor and hiking equipment (e.g. kayak, fatbike)" }, "sub_context": "luontoretkeily", "tags": ["ulkoiluvälinevuokraus", "fatbike", "kajakki", "kanootti", "retkeilyvarusteet", "luontoelämykset"] }
                 ]
             }
         ]
