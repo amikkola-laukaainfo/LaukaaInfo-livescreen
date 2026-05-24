@@ -470,16 +470,6 @@ function isMatch(c, opt, context, subContextsReq, noCateringSelected, taxonomyDa
     }
 
     if (isProfiledMatch) {
-        // Check capability_boost requirements (v6.1)
-        if (opt.capability_boost && Array.isArray(opt.capability_boost) && opt.capability_boost.length > 0) {
-            const companyCapabilities = c.profiling?.capabilities || {};
-            const hasRequiredCapability = opt.capability_boost.some(code => {
-                const cap = companyCapabilities[code];
-                return cap && cap.available === true;
-            });
-            if (!hasRequiredCapability) return false;
-        }
-
         if (opt.capability_requirements && opt.capability_requirements.length > 0) {
             if (!meetsCapabilityRequirements(c, opt)) return false;
         }
