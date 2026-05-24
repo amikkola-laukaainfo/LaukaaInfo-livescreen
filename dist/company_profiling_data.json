@@ -28844,7 +28844,17 @@
                     "EVT_CORPORATE": 72
                 }
             },
-            "capabilities": {},
+            "capabilities": {
+                "DISH_RENTAL": {
+                    "available": true,
+                    "priority_score": 0.9,
+                    "confidence": "confirmed",
+                    "source": "manual",
+                    "specs": {
+                        "description": "Astiasto-, lasi- ja aterinvuokraus juhlatilaisuuksiin"
+                    }
+                }
+            },
             "categories": {
                 "core": {
                     "description": "Laukaassa ja Toivakassa toimiva catering- ja pitopalveluyritys, joka toteuttaa yksilöllisiä tarjoiluja häihin, yritystilaisuuksiin, muistotilaisuuksiin ja juhliin. Käyttää kotimaisia raaka-aineita ja huomioi erityisruokavaliot.",

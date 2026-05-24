@@ -1,1 +1,0 @@
-const fs=require("fs"),content=fs.readFileSync("needs_config.js","utf8"),options=content.match(/\{[^{}]*\"id\"\s*:\s*\"OPT_[^\"]+\"[^{}]*\}/g);options.forEach(s=>{if(!s.includes("intent_codes")&&!s.includes("hide_results")){const e=s.match(/\"id\"\s*:\s*\"(OPT_[^\"]+)\"/)[1],n=s.match(/\"label\"\s*:\s*\{[^}]*\"fi\"\s*:\s*\"([^\"]+)\"/);console.log(`${e}: ${n?n[1]:"N/A"}`)}});
