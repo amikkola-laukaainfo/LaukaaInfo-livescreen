@@ -1910,7 +1910,7 @@
                 // Rental types from tags (for vuokraus options)
                 const isRentalGroup = groupLabel && (groupLabel.toLowerCase().includes('vuokraus') || groupLabel.toLowerCase().includes('rental'));
                 if (isRentalGroup && c.tags) {
-                    const rentalTags = ['fatbike', 'kajakki', 'kanootti', 'venevuokraus', 'peräkärryn vuokraus', 'laitteistovuokraus', 'soitinvuokraus', 'ulkoiluvälinevuokraus'];
+                    const rentalTags = ['fatbike', 'kajakki', 'kanootti', 'sup', 'venevuokraus', 'peräkärryn vuokraus', 'laitteistovuokraus', 'konevuokraus', 'av-vuokraus', 'äänentoisto', 'valotekniikka', 'astiavuokraus', 'astiasto', 'telttavuokraus', 'katos', 'ulkoiluvälinevuokraus'];
                     const companyTags = c.tags.toLowerCase().split(',').map(t => t.trim());
                     const matchedRentalTags = companyTags.filter(tag => rentalTags.some(rt => tag.includes(rt)));
                     if (matchedRentalTags.length > 0) {
