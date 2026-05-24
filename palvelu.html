@@ -1907,6 +1907,18 @@
                     }
                 }
                 
+                // Rental types from tags (for vuokraus options)
+                const isRentalGroup = groupLabel && (groupLabel.toLowerCase().includes('vuokraus') || groupLabel.toLowerCase().includes('rental'));
+                if (isRentalGroup && c.tags) {
+                    const rentalTags = ['fatbike', 'kajakki', 'kanootti', 'venevuokraus', 'peräkärryn vuokraus', 'laitteistovuokraus', 'soitinvuokraus', 'ulkoiluvälinevuokraus'];
+                    const companyTags = c.tags.toLowerCase().split(',').map(t => t.trim());
+                    const matchedRentalTags = companyTags.filter(tag => rentalTags.some(rt => tag.includes(rt)));
+                    if (matchedRentalTags.length > 0) {
+                        const rentalTypes = matchedRentalTags.map(t => t.charAt(0).toUpperCase() + t.slice(1)).join(', ');
+                        inventoryNote = `<div style="font-size:0.85rem; color:#334155; margin-top:8px; margin-bottom:12px; padding:8px 12px; background:#f8fafc; border-radius:8px; border-left:3px solid var(--primary-blue);"><strong>Vuokraus:</strong> ${rentalTypes}</div>`;
+                    }
+                }
+                
                 // Inventory
                 const capabilities = c.profiling.capabilities || {};
                 let inventoryItems = new Set();
@@ -1925,7 +1937,7 @@
                         }
                     }
                 }
-                if (inventoryItems.size > 0) {
+                if (inventoryItems.size > 0 && !inventoryNote) {
                     const inventoryStr = Array.from(inventoryItems).join(', ');
                     const capitalizedStr = inventoryStr.charAt(0).toUpperCase() + inventoryStr.slice(1);
                     inventoryNote = `<div style="font-size:0.85rem; color:#334155; margin-top:8px; margin-bottom:12px; padding:8px 12px; background:#f8fafc; border-radius:8px; border-left:3px solid var(--primary-blue);"><strong>Vuokrakalusto:</strong> ${capitalizedStr}</div>`;
