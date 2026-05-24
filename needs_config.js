@@ -653,19 +653,64 @@ const NEEDS_CONFIG = {
         "title": { "fi": "Vuokrauspalvelut", "en": "Rental Services" },
         "icon": "🔑",
         "description": { "fi": "Vuokraa kalustoa ja laitteita tarpeen mukaan.", "en": "Rent equipment and machinery as needed." },
-        "profilointi_context": "vapaa-aika",
+        "profilointi_context": "liikunta-ja-vapaaaika",
         "steps": [
             {
                 "id": "tyyppi",
                 "question": { "fi": "Mitä olet vuokraamassa?", "en": "What are you renting?" },
                 "options": [
-                    { "id": "OPT_RENTAL_BOAT", "label": { "fi": "Venevuokraus", "en": "Boat rental" }, "sub_context": "venevuokraus", "tags": ["venevuokraus"], "capability_boost": ["WATERCRAFT_RENTAL"] },
-                    { "id": "OPT_RENTAL_TRAILER", "label": { "fi": "Peräkärryn vuokraus", "en": "Trailer rental" }, "sub_context": "peräkärryn vuokraus", "tags": ["peräkärryn vuokraus"], "capability_boost": ["TRAILER_RENTAL"] },
-                    { "id": "OPT_RENTAL_EQUIPMENT", "label": { "fi": "Kone- ja välinevuokraus", "en": "Equipment rental" }, "sub_context": "laitteistovuokraus", "tags": ["laitteistovuokraus", "konevuokraus"], "capability_boost": ["EQUIPMENT_RENTAL"] },
-                    { "id": "OPT_RENTAL_AV", "label": { "fi": "AV-laitteiden vuokraus", "en": "AV equipment rental" }, "sub_context": "av-vuokraus", "tags": ["av-vuokraus", "äänentoisto", "valotekniikka"], "capability_boost": ["AV_RENTAL"] },
-                    { "id": "OPT_RENTAL_DISH", "label": { "fi": "Astiavuokraus", "en": "Dish rental" }, "sub_context": "astiavuokraus", "tags": ["astiavuokraus", "astiasto"], "intent_codes": ["BIZ_CATERING", "EVT_WEDDING"], "capability_boost": ["DISH_RENTAL"] },
-                    { "id": "OPT_RENTAL_TENT", "label": { "fi": "Teltta ja katosvuokraus", "en": "Tent rental" }, "sub_context": "telttavuokraus", "tags": ["telttavuokraus", "katos"], "intent_codes": ["EVT_WEDDING"], "capability_boost": ["TENT_RENTAL"] },
-                    { "id": "OPT_RENTAL_OUTDOOR", "label": { "fi": "Luontoretkeily ja ulkoiluvälineet (esim. kajakki, fatbike, SUP)", "en": "Outdoor and hiking equipment (e.g. kayak, fatbike, SUP)" }, "sub_context": "luontoretkeily", "tags": ["ulkoiluvälinevuokraus", "fatbike", "kajakki", "kanootti", "sup", "retkeilyvarusteet", "luontoelämykset"], "intent_codes": ["REC_OUTDOOR", "REC_RAFTING"], "capability_boost": ["OUTDOOR_RENTAL", "FATBIKE_RENTAL", "CANOE_RENTAL", "SUP_RENTAL", "WATER_SPORT_RENTAL"] }
+                    {
+                        "id": "OPT_RENTAL_BOAT",
+                        "label": { "fi": "Venevuokraus", "en": "Boat rental" },
+                        "sub_context": "venevuokraus",
+                        "tags": ["venevuokraus"],
+                        "intent_codes": ["REC_OUTDOOR"],
+                        "capability_requirements": [{ "code": "WATERCRAFT_RENTAL" }]
+                    },
+                    {
+                        "id": "OPT_RENTAL_TRAILER",
+                        "label": { "fi": "Peräkärryn vuokraus", "en": "Trailer rental" },
+                        "sub_context": "peräkärryn vuokraus",
+                        "tags": ["peräkärryn vuokraus", "kuljetus"],
+                        "capability_requirements": [{ "code": "TRAILER_RENTAL" }]
+                    },
+                    {
+                        "id": "OPT_RENTAL_EQUIPMENT",
+                        "label": { "fi": "Rakennuskoneen tai muun laitteen vuokraus", "en": "Construction machine or other equipment rental" },
+                        "sub_context": "konevuokraus",
+                        "tags": ["konevuokraus", "rakennuskonevuokraus"],
+                        "capability_requirements": [{ "code": "EQUIPMENT_RENTAL" }]
+                    },
+                    {
+                        "id": "OPT_RENTAL_AV",
+                        "label": { "fi": "AV-laitteiden vuokraus (äänentoisto, valot, näytöt)", "en": "AV equipment rental (sound, lights, screens)" },
+                        "sub_context": "av-vuokraus",
+                        "tags": ["av-vuokraus", "äänentoisto", "valotekniikka"],
+                        "is_service": true,
+                        "capability_requirements": [{ "code": "AV_RENTAL" }]
+                    },
+                    {
+                        "id": "OPT_RENTAL_DISH",
+                        "label": { "fi": "Astiavuokraus (lautaset, lasit, aterimet)", "en": "Tableware rental (plates, glasses, cutlery)" },
+                        "sub_context": "astiavuokraus",
+                        "tags": ["astiavuokraus", "astiasto", "pitopalvelu"],
+                        "capability_requirements": [{ "code": "DISH_RENTAL" }]
+                    },
+                    {
+                        "id": "OPT_RENTAL_TENT",
+                        "label": { "fi": "Teltta- ja katosvuokraus (juhlateltta, markiisi)", "en": "Tent and canopy rental (party tent, marquee)" },
+                        "sub_context": "telttavuokraus",
+                        "tags": ["telttavuokraus", "katos", "juhlateltta"],
+                        "capability_requirements": [{ "code": "TENT_RENTAL" }]
+                    },
+                    {
+                        "id": "OPT_RENTAL_OUTDOOR",
+                        "label": { "fi": "Luontoretkeily ja ulkoiluvälineet (kajakki, fatbike, SUP, kanootti)", "en": "Outdoor and hiking equipment (kayak, fatbike, SUP, canoe)" },
+                        "sub_context": "luontoretkeily",
+                        "tags": ["ulkoiluvälinevuokraus", "fatbike", "kajakki", "kanootti", "sup", "retkeilyvarusteet", "luontoelämykset"],
+                        "intent_codes": ["REC_OUTDOOR", "REC_RAFTING"],
+                        "capability_boost": ["OUTDOOR_RENTAL", "FATBIKE_RENTAL", "CANOE_RENTAL", "SUP_RENTAL", "WATER_SPORT_RENTAL"]
+                    }
                 ]
             }
         ]
