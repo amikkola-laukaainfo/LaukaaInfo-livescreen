@@ -2725,7 +2725,6 @@
             ],
             "sub_contexts": [
                 "kylpylähäät",
-                "muistotilaisuus",
                 "yritysjuhla",
                 "saunailta",
                 "kokoushotelli",
@@ -2733,35 +2732,22 @@
                 "tyky-päivä",
                 "hyvinvointipäivä",
                 "kylpylä",
-                "hieronta",
-                "sauna",
-                "hyvinvointiloma",
                 "uinti",
                 "kuntosali",
-                "ryhmäliikunta",
-                "vesijumppa",
-                "kylpylähotelli",
-                "viikonloppuloma",
-                "perheloma",
-                "perheloma",
-                "uima-allas",
-                "lasten aktiviteetit"
+                "ryhmäliikunta"
             ],
             "node_links": [
                 "JUHLATILA",
                 "MAJOITUS",
-                "SAUNA",
+                "CATERING",
                 "HYVINVOINTI",
                 "LIIKUNTA",
-                "CATERING",
-                "LAPSET"
+                "SAUNA"
             ],
             "intent_codes": [
-                "REC_SWIMMING",
-                "REC_GYM",
                 "VENUE_ACCOMMODATION",
                 "EVT_WEDDING",
-                "EVT_MEMORIAL"
+                "EVT_CORPORATE"
             ],
             "intent_scores": {
                 "REC_SWIMMING": 100,
@@ -2798,7 +2784,7 @@
         },
         "categories": {
             "core": {
-                "description": "Peurunka Oy on Laukaassa toimiva kylpylähotelli ja hyvinvointikeskus, joka tarjoaa majoitusta, ravintola- ja kokouspalveluita, kuntoutusta sekä monipuolisia liikunta- ja wellness-palveluita. Kohde soveltuu yritystapahtumiin, juhliin, muistotilaisuuksiin ja aktiiviseen lomailuun ympäri vuoden.",
+                "description": "Peurunka Oy on Laukaassa toimiva kylpylähotelli ja hyvinvointikeskus, joka tarjoaa majoitusta, ravintola- ja kokouspalveluita, kuntoutusta sekä monipuolisia liikunta- ja wellness-palveluita.",
                 "website": "https://www.peurunka.fi",
                 "email": "peurunka@peurunka.fi",
                 "phone": "+358207516300"
@@ -3051,7 +3037,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-21T11:53:44.943Z",
+            "last_updated": "2026-05-24T12:17:56.083Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }

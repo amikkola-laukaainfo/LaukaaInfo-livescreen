@@ -5,16 +5,16 @@
         "core": {
             "fits_for": {
                 "events-and-celebrations": 86,
-                "business-events": 68,
+                "business-events": 72,
                 "funerals-and-memorials": 25,
                 "moving-and-housing": 0,
                 "construction-and-maintenance": 0,
                 "cottage-services": 78,
                 "housing-company-and-contracts": 0,
                 "startup-services": 0,
-                "business-growth": 10,
+                "business-growth": 15,
                 "wellbeing-and-beauty": 74,
-                "liikunta-ja-vapaaaika": 88,
+                "liikunta-ja-vapaaaika": 90,
                 "accommodation": 86
             },
             "priority_score": 60,
@@ -64,14 +64,16 @@
                 "SAUNA"
             ],
             "intent_codes": [
-                "VENUE_PARTY",
-                "REC_OUTDOOR",
-                "ENT_PROGRAM"
+                "EVT_CORPORATE",
+                "EVT_BIRTHDAY_FAMILY",
+                "REC_OUTDOOR"
             ],
             "intent_scores": {
                 "VENUE_PARTY": 86,
-                "REC_OUTDOOR": 82,
-                "ENT_PROGRAM": 68
+                "REC_OUTDOOR": 85,
+                "ENT_PROGRAM": 68,
+                "EVT_CORPORATE": 72,
+                "EVT_BIRTHDAY_FAMILY": 78
             }
         },
         "capabilities": {
@@ -107,8 +109,8 @@
         "categories": {
             "core": {
                 "description": "Saraaveden rannalla sijaitseva kesäinen satamakahvila ja tapahtumapaikka, joka tarjoaa kahvila- ja ravintolapalveluja, veneilyyn liittyviä palveluita sekä vapaa-ajan aktiviteetteja kuten SUP-lautoja ja vesijettejä. Tunnettu kesätapahtumista ja rantaterassista.",
-                "website": "[https://laukaansatama.fi](https://laukaansatama.fi)",
-                "email": "[info@laukaansatama.fi](mailto:info@laukaansatama.fi)",
+                "website": "https://laukaansatama.fi",
+                "email": "info@laukaansatama.fi",
                 "phone": "+358505664962"
             },
             "events_and_celebrations": {
@@ -347,7 +349,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T16:55:00.358Z",
+            "last_updated": "2026-05-24T12:13:01.412Z",
             "verified_by": "ai-generated",
             "status": "draft"
         }
@@ -18005,21 +18007,14 @@
             ],
             "sub_contexts": [
                 "äänentoisto",
-                "tapahtumatekniikka",
                 "dj-palvelut",
-                "ohjelmapalvelut",
-                "bändit",
-                "artistivälitys",
-                "laitteistovuokraus",
                 "karaoke",
-                "live-esiintyjät",
-                "häädj",
-                "yritystapahtuma",
-                "konserttitekniikka",
-                "musiikkitapahtuma",
-                "esiintymislava",
-                "miksaus",
-                "äänikalusto"
+                "live-musiikki",
+                "häät",
+                "juhlatekniikka",
+                "äänentoisto",
+                "seminaaritekniikka",
+                "tapahtumatekniikka"
             ],
             "node_links": [
                 "JUHLATILA"
@@ -18063,7 +18058,7 @@
         },
         "categories": {
             "core": {
-                "description": "AtSound Matti Laurila tarjoaa äänentoistoa, DJ-palveluita, tapahtumatekniikkaa, ohjelmapalveluita ja laitevuokrausta Laukaassa ja Keski-Suomen alueella. Yritys toteuttaa ääni- ja ohjelmapalveluita yritystapahtumiin, juhliin, häihin ja live-esiintymisiin. Palveluihin kuuluu myös artistivälitys, karaoke, soitinkorjaus sekä äänitteiden julkaiseminen.",
+                "description": "AtSound Matti Laurila tarjoaa äänentoistoa, DJ-palveluita, tapahtumatekniikkaa ja ohjelmapalveluita juhliin, yritystapahtumiin ja live-esiintymisiin Keski-Suomessa.",
                 "website": "https://www.atsound.fi",
                 "email": "",
                 "phone": "358405581753"
@@ -18301,7 +18296,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-13T14:42:49.775Z",
+            "last_updated": "2026-05-24T12:16:12.179Z",
             "verified_by": "ai-profile-builder",
             "status": "updated"
         }
@@ -21249,41 +21244,28 @@
                 "maalaismiljöö",
                 "heinälato",
                 "ulkohäät",
-                "juhlapäivä luonnossa",
-                "tyhy-päivä",
-                "green care",
                 "yrityksen virkistyspäivä",
                 "luontotiimipäivä",
                 "muistotilaisuus",
-                "rauhallinen maaseututila",
-                "kahvitus",
-                "eläinavusteinen hyvinvointi",
                 "luontohyvinvointi",
-                "green care",
-                "sup-lauta",
-                "retkeily",
-                "luontopolku",
-                "elämyspalvelu",
-                "lampaat",
-                "kanat",
-                "maatilan eläimet"
+                "eläinavusteinen toiminta"
             ],
             "node_links": [
                 "JUHLATILA",
                 "SAUNA",
                 "HYVINVOINTI",
-                "LIIKUNTA",
-                "ELÄIMET"
+                "LIIKUNTA"
             ],
             "intent_codes": [
                 "EVT_WEDDING",
                 "EVT_MEMORIAL",
-                "ENT_PROGRAM"
+                "EVT_CORPORATE"
             ],
             "intent_scores": {
                 "EVT_WEDDING": 100,
                 "EVT_MEMORIAL": 96,
-                "ENT_PROGRAM": 82
+                "ENT_PROGRAM": 82,
+                "EVT_CORPORATE": 85
             }
         },
         "capabilities": {
@@ -21304,7 +21286,7 @@
         },
         "categories": {
             "core": {
-                "description": "Perttulan tila Oy on Leppävedellä sijaitseva Green Care -maatila, joka tarjoaa juhla- ja kokoustiloja, hyvinvointi- ja elämyspalveluita sekä luontolähtöisiä yritys- ja yksityistapahtumia. Tilalla järjestetään häitä, muistotilaisuuksia, tyhy-päiviä ja eläinavusteisia hyvinvointikokemuksia.",
+                "description": "Perttulan tila Oy on Leppävedellä sijaitseva Green Care -maatila, joka tarjoaa juhla- ja kokoustiloja, hyvinvointi- ja elämyspalveluita sekä luontolähtöisiä tapahtumia.",
                 "website": "http://www.perttulantila.fi",
                 "email": "info@perttulantila.fi",
                 "phone": "040 6215113"
@@ -21551,7 +21533,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-21T12:47:51.347Z",
+            "last_updated": "2026-05-24T12:17:56.085Z",
             "verified_by": "AI-analysis-v2",
             "status": "draft"
         }
@@ -47745,22 +47727,13 @@
             ],
             "sub_contexts": [
                 "hääjuhla",
-                "juhlapalvelu",
-                "saunailta",
-                "yritysjuhla",
-                "kokouspaketti",
-                "tyhy-päivä",
                 "yritysretriitti",
-                "savusauna",
-                "avantouinti",
-                "hyvinvointiviikonloppu",
+                "saunailta",
                 "koskenlasku",
                 "fatbike",
                 "lumikenkäily",
-                "jääkalastus",
-                "riihihuvila",
-                "maaseutumajoitus",
-                "luontoloma"
+                "hyvinvointiviikonloppu",
+                "savusauna"
             ],
             "node_links": [
                 "JUHLATILA",
@@ -47808,7 +47781,7 @@
         },
         "categories": {
             "core": {
-                "description": "Varjolan Tilan Matkailu Oy on Kuusaankosken varrella sijaitseva matkailu- ja elämyskohde, joka tarjoaa majoitusta, juhla- ja kokoustiloja, savusaunoja, ravintolapalveluita sekä ympärivuotisia aktiviteetteja kuten koskenlaskua ja luontoliikuntaa. Kohde soveltuu erityisesti yritystapahtumiin, hääjuhliin ja hyvinvointipäiviin.",
+                "description": "Varjolan Tilan Matkailu Oy on Kuusaankosken varrella sijaitseva matkailu- ja elämyskohde, joka tarjoaa majoitusta, juhla- ja kokoustiloja, savusaunoja sekä ympärivuotisia aktiviteetteja kuten koskenlaskua.",
                 "website": "https://www.varjola.com",
                 "email": "varjola@varjola.com",
                 "phone": "0207928080"
@@ -48027,7 +48000,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-21T11:53:44.936Z",
+            "last_updated": "2026-05-24T12:16:12.179Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -48350,19 +48323,13 @@
                 "juhlabuffet",
                 "syntymäpäivät",
                 "rippijuhlat",
-                "juhlapalvelu",
-                "täytekakku",
                 "kahvitarjoilu",
+                "muistotilaisuus",
                 "kokoustarjoilu",
                 "yritystapahtuma",
                 "henkilöstöjuhlat",
-                "kahvitarjoilu",
-                "muistotilaisuus",
                 "surutarjoilu",
-                "kahvitarjoilu",
-                "syntymäpäivät",
-                "kakku",
-                "leivonnaiset"
+                "muistotilaisuus"
             ],
             "node_links": [
                 "CATERING",
@@ -48384,7 +48351,7 @@
         "capabilities": {},
         "categories": {
             "core": {
-                "description": "Lempileivos on Lievestuoreella toimiva kotileipomo ja pitopalvelu, joka tarjoaa catering-palveluita, juhla- ja yritystarjoiluja, hääkakkuja, tilauskakkuja sekä leivonnaisia erilaisiin tilaisuuksiin Keski-Suomen alueella. Yritys tunnetaan lähiraaka-aineista ja juhlapalveluista häihin, muistotilaisuuksiin ja yritystapahtumiin.",
+                "description": "Lempileivos on Lievestuoreella toimiva kotileipomo ja pitopalvelu, joka tarjoaa catering-palveluita, juhla- ja yritystarjoiluja, hääkakkuja, tilauskakkuja sekä leivonnaisia erilaisiin tilaisuuksiin Keski-Suomen alueella.",
                 "website": "https://www.lempileivos.com",
                 "email": "posti@lempileivos.com",
                 "phone": "+358405770421"
@@ -48639,7 +48606,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-21T11:49:45.476Z",
+            "last_updated": "2026-05-24T12:16:12.178Z",
             "verified_by": "ai-analysis-v3",
             "status": "enriched"
         }
@@ -53818,7 +53785,7 @@
     },
     "company-306": {
         "name": "Villi-Sessio",
-        "tags": "ohjelmapalvelut, eräopas, luontoretkeily, ulkoiluvälinevuokraus, fatbike, kajakki, kanootti",
+        "tags": "ohjelmapalvelut, eräopas, leipomo, elintarvike, kakut, leivonnaiset",
         "core": {
             "fits_for": {
                 "events-and-celebrations": 100,
@@ -53877,26 +53844,7 @@
                 "huvipuisto",
                 "pitopalvelu"
             ],
-            "sub_contexts": [
-                "elämysilta",
-                "syntymäpäiväjuhla",
-                "luova workshop",
-                "teemallinen tapahtuma",
-                "ulkotapahtuma",
-                "virkistyspäivä",
-                "tiimipäivä",
-                "yritystapahtuma",
-                "luontoretki",
-                "ohjattu aktiviteetti",
-                "tyhy-päivä",
-                "fatbike-retki",
-                "kajakkiretki",
-                "perheaktiviteetti",
-                "luontoelämys",
-                "hyvinvointipäivä",
-                "metsäelämys",
-                "luova ryhmätoiminta"
-            ],
+            "sub_contexts": [],
             "node_links": [
                 "LIIKUNTA"
             ],

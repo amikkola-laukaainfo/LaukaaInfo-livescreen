@@ -3675,14 +3675,6 @@
             "lon": 26.0041356,
             "address": "Myllylahdentie 401"
         },
-        "nodelink-MOkkI": {
-            "type": "nodelink",
-            "name": "MOkkI"
-        },
-        "nodelink-LEPPAVESI": {
-            "type": "nodelink",
-            "name": "LEPPAVESI"
-        },
         "company-284": {
             "type": "company",
             "name": "Ylä-Saarikon lomamökit",
@@ -3691,6 +3683,10 @@
             "lat": 62.5035225,
             "lon": 25.890444,
             "address": "Suolahdentie 719, 41370 Kuusa, Laukaa"
+        },
+        "nodelink-MOkkI": {
+            "type": "nodelink",
+            "name": "MOkkI"
         },
         "nodelink-VATIANJARVI": {
             "type": "nodelink",
@@ -3913,16 +3909,16 @@
             "core": {
                 "fits_for": {
                     "events-and-celebrations": 86,
-                    "business-events": 68,
+                    "business-events": 72,
                     "funerals-and-memorials": 25,
                     "moving-and-housing": 0,
                     "construction-and-maintenance": 0,
                     "cottage-services": 78,
                     "housing-company-and-contracts": 0,
                     "startup-services": 0,
-                    "business-growth": 10,
+                    "business-growth": 15,
                     "wellbeing-and-beauty": 74,
-                    "liikunta-ja-vapaaaika": 88,
+                    "liikunta-ja-vapaaaika": 90,
                     "accommodation": 86
                 },
                 "priority_score": 60,
@@ -3972,14 +3968,16 @@
                     "SAUNA"
                 ],
                 "intent_codes": [
-                    "VENUE_PARTY",
-                    "REC_OUTDOOR",
-                    "ENT_PROGRAM"
+                    "EVT_CORPORATE",
+                    "EVT_BIRTHDAY_FAMILY",
+                    "REC_OUTDOOR"
                 ],
                 "intent_scores": {
                     "VENUE_PARTY": 86,
-                    "REC_OUTDOOR": 82,
-                    "ENT_PROGRAM": 68
+                    "REC_OUTDOOR": 85,
+                    "ENT_PROGRAM": 68,
+                    "EVT_CORPORATE": 72,
+                    "EVT_BIRTHDAY_FAMILY": 78
                 }
             },
             "capabilities": {
@@ -4015,8 +4013,8 @@
             "categories": {
                 "core": {
                     "description": "Saraaveden rannalla sijaitseva kesäinen satamakahvila ja tapahtumapaikka, joka tarjoaa kahvila- ja ravintolapalveluja, veneilyyn liittyviä palveluita sekä vapaa-ajan aktiviteetteja kuten SUP-lautoja ja vesijettejä. Tunnettu kesätapahtumista ja rantaterassista.",
-                    "website": "[https://laukaansatama.fi](https://laukaansatama.fi)",
-                    "email": "[info@laukaansatama.fi](mailto:info@laukaansatama.fi)",
+                    "website": "https://laukaansatama.fi",
+                    "email": "info@laukaansatama.fi",
                     "phone": "+358505664962"
                 },
                 "events_and_celebrations": {
@@ -4255,7 +4253,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T16:55:00.358Z",
+                "last_updated": "2026-05-24T12:13:01.412Z",
                 "verified_by": "ai-generated",
                 "status": "draft"
             }
@@ -27818,21 +27816,14 @@
                 ],
                 "sub_contexts": [
                     "äänentoisto",
-                    "tapahtumatekniikka",
                     "dj-palvelut",
-                    "ohjelmapalvelut",
-                    "bändit",
-                    "artistivälitys",
-                    "laitteistovuokraus",
                     "karaoke",
-                    "live-esiintyjät",
-                    "häädj",
-                    "yritystapahtuma",
-                    "konserttitekniikka",
-                    "musiikkitapahtuma",
-                    "esiintymislava",
-                    "miksaus",
-                    "äänikalusto"
+                    "live-musiikki",
+                    "häät",
+                    "juhlatekniikka",
+                    "äänentoisto",
+                    "seminaaritekniikka",
+                    "tapahtumatekniikka"
                 ],
                 "node_links": [
                     "JUHLATILA"
@@ -27876,7 +27867,7 @@
             },
             "categories": {
                 "core": {
-                    "description": "AtSound Matti Laurila tarjoaa äänentoistoa, DJ-palveluita, tapahtumatekniikkaa, ohjelmapalveluita ja laitevuokrausta Laukaassa ja Keski-Suomen alueella. Yritys toteuttaa ääni- ja ohjelmapalveluita yritystapahtumiin, juhliin, häihin ja live-esiintymisiin. Palveluihin kuuluu myös artistivälitys, karaoke, soitinkorjaus sekä äänitteiden julkaiseminen.",
+                    "description": "AtSound Matti Laurila tarjoaa äänentoistoa, DJ-palveluita, tapahtumatekniikkaa ja ohjelmapalveluita juhliin, yritystapahtumiin ja live-esiintymisiin Keski-Suomessa.",
                     "website": "https://www.atsound.fi",
                     "email": "",
                     "phone": "358405581753"
@@ -28114,7 +28105,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-13T14:42:49.775Z",
+                "last_updated": "2026-05-24T12:16:12.179Z",
                 "verified_by": "ai-profile-builder",
                 "status": "updated"
             }
@@ -32291,41 +32282,28 @@
                     "maalaismiljöö",
                     "heinälato",
                     "ulkohäät",
-                    "juhlapäivä luonnossa",
-                    "tyhy-päivä",
-                    "green care",
                     "yrityksen virkistyspäivä",
                     "luontotiimipäivä",
                     "muistotilaisuus",
-                    "rauhallinen maaseututila",
-                    "kahvitus",
-                    "eläinavusteinen hyvinvointi",
                     "luontohyvinvointi",
-                    "green care",
-                    "sup-lauta",
-                    "retkeily",
-                    "luontopolku",
-                    "elämyspalvelu",
-                    "lampaat",
-                    "kanat",
-                    "maatilan eläimet"
+                    "eläinavusteinen toiminta"
                 ],
                 "node_links": [
                     "JUHLATILA",
                     "SAUNA",
                     "HYVINVOINTI",
-                    "LIIKUNTA",
-                    "ELÄIMET"
+                    "LIIKUNTA"
                 ],
                 "intent_codes": [
                     "EVT_WEDDING",
                     "EVT_MEMORIAL",
-                    "ENT_PROGRAM"
+                    "EVT_CORPORATE"
                 ],
                 "intent_scores": {
                     "EVT_WEDDING": 100,
                     "EVT_MEMORIAL": 96,
-                    "ENT_PROGRAM": 82
+                    "ENT_PROGRAM": 82,
+                    "EVT_CORPORATE": 85
                 }
             },
             "capabilities": {
@@ -32346,7 +32324,7 @@
             },
             "categories": {
                 "core": {
-                    "description": "Perttulan tila Oy on Leppävedellä sijaitseva Green Care -maatila, joka tarjoaa juhla- ja kokoustiloja, hyvinvointi- ja elämyspalveluita sekä luontolähtöisiä yritys- ja yksityistapahtumia. Tilalla järjestetään häitä, muistotilaisuuksia, tyhy-päiviä ja eläinavusteisia hyvinvointikokemuksia.",
+                    "description": "Perttulan tila Oy on Leppävedellä sijaitseva Green Care -maatila, joka tarjoaa juhla- ja kokoustiloja, hyvinvointi- ja elämyspalveluita sekä luontolähtöisiä tapahtumia.",
                     "website": "http://www.perttulantila.fi",
                     "email": "info@perttulantila.fi",
                     "phone": "040 6215113"
@@ -32593,7 +32571,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-21T12:47:51.347Z",
+                "last_updated": "2026-05-24T12:17:56.085Z",
                 "verified_by": "AI-analysis-v2",
                 "status": "draft"
             }
@@ -32656,7 +32634,6 @@
                 ],
                 "sub_contexts": [
                     "kylpylähäät",
-                    "muistotilaisuus",
                     "yritysjuhla",
                     "saunailta",
                     "kokoushotelli",
@@ -32664,35 +32641,22 @@
                     "tyky-päivä",
                     "hyvinvointipäivä",
                     "kylpylä",
-                    "hieronta",
-                    "sauna",
-                    "hyvinvointiloma",
                     "uinti",
                     "kuntosali",
-                    "ryhmäliikunta",
-                    "vesijumppa",
-                    "kylpylähotelli",
-                    "viikonloppuloma",
-                    "perheloma",
-                    "perheloma",
-                    "uima-allas",
-                    "lasten aktiviteetit"
+                    "ryhmäliikunta"
                 ],
                 "node_links": [
                     "JUHLATILA",
                     "MAJOITUS",
-                    "SAUNA",
+                    "CATERING",
                     "HYVINVOINTI",
                     "LIIKUNTA",
-                    "CATERING",
-                    "LAPSET"
+                    "SAUNA"
                 ],
                 "intent_codes": [
-                    "REC_SWIMMING",
-                    "REC_GYM",
                     "VENUE_ACCOMMODATION",
                     "EVT_WEDDING",
-                    "EVT_MEMORIAL"
+                    "EVT_CORPORATE"
                 ],
                 "intent_scores": {
                     "REC_SWIMMING": 100,
@@ -32729,7 +32693,7 @@
             },
             "categories": {
                 "core": {
-                    "description": "Peurunka Oy on Laukaassa toimiva kylpylähotelli ja hyvinvointikeskus, joka tarjoaa majoitusta, ravintola- ja kokouspalveluita, kuntoutusta sekä monipuolisia liikunta- ja wellness-palveluita. Kohde soveltuu yritystapahtumiin, juhliin, muistotilaisuuksiin ja aktiiviseen lomailuun ympäri vuoden.",
+                    "description": "Peurunka Oy on Laukaassa toimiva kylpylähotelli ja hyvinvointikeskus, joka tarjoaa majoitusta, ravintola- ja kokouspalveluita, kuntoutusta sekä monipuolisia liikunta- ja wellness-palveluita.",
                     "website": "https://www.peurunka.fi",
                     "email": "peurunka@peurunka.fi",
                     "phone": "+358207516300"
@@ -32982,7 +32946,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-21T11:53:44.943Z",
+                "last_updated": "2026-05-24T12:17:56.083Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -49479,7 +49443,7 @@
             "capabilities": {},
             "categories": {
                 "core": {
-                    "description": "",
+                    "description": "Colliers Finland Oy tarjoaa kiinteistö- ja asumiseen liittyviä palveluita.",
                     "website": "https://www.colliersasunnot.com",
                     "email": "",
                     "phone": "358201303003"
@@ -49689,7 +49653,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-08T15:32:40.283Z",
+                "last_updated": "2026-05-24T12:16:12.179Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -65308,7 +65272,9 @@
             "tags": "",
             "core": {
                 "fits_for": {
-                    "mökkipalvelut": 35
+                    "mökkipalvelut": 35,
+                    "accommodation": 100,
+                    "liikunta-ja-vapaaaika": 80
                 },
                 "priority_score": 0,
                 "service_area": {
@@ -65331,10 +65297,21 @@
                 "not_suitable_for": [
                     "keittiöremontti"
                 ],
-                "sub_contexts": [],
-                "node_links": [],
-                "intent_codes": [],
-                "intent_scores": {}
+                "sub_contexts": [
+                    "mökkimajoitus",
+                    "luonnonrauha"
+                ],
+                "node_links": [
+                    "MAJOITUS"
+                ],
+                "intent_codes": [
+                    "VENUE_ACCOMMODATION",
+                    "REC_OUTDOOR"
+                ],
+                "intent_scores": {
+                    "VENUE_ACCOMMODATION": 100,
+                    "REC_OUTDOOR": 80
+                }
             },
             "capabilities": {
                 "SAUNA_FACILITY": {
@@ -65347,7 +65324,7 @@
             },
             "categories": {
                 "core": {
-                    "description": "Mökkimajoituspalveluja tarjoava yritys kauniin ja kalaisan Mataroisjärven rannalla Laukaan Salmelankylässä. Kuusi erilaista mökkiä rantamökistä huvilaan, joista neljä on ympärivuotisessa käytössä. Mökeissä on täysin varustettu keittiö, takka, satelliitti-TV, DVD-/CD-soitin, sähkösauna ja pesukone . Tarjoaa tilaa rentouttavalle lomalle, juhlille tai kokouspäiville . Etäisyys Jyväskylästä noin puoli tuntia . Toimiala: Yhdistetty kasvinviljely ja kotieläintalous (01500) .",
+                    "description": "Mökkimajoituspalveluja tarjoava yritys rauhallisessa järvimaisemassa Laukaassa.",
                     "website": "pietilanlomamokit.com",
                     "email": "",
                     "phone": "+358 50 3403154"
@@ -65556,7 +65533,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-27T06:08:12.224Z",
+                "last_updated": "2026-05-24T12:17:56.086Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -69134,22 +69111,13 @@
                 ],
                 "sub_contexts": [
                     "hääjuhla",
-                    "juhlapalvelu",
-                    "saunailta",
-                    "yritysjuhla",
-                    "kokouspaketti",
-                    "tyhy-päivä",
                     "yritysretriitti",
-                    "savusauna",
-                    "avantouinti",
-                    "hyvinvointiviikonloppu",
+                    "saunailta",
                     "koskenlasku",
                     "fatbike",
                     "lumikenkäily",
-                    "jääkalastus",
-                    "riihihuvila",
-                    "maaseutumajoitus",
-                    "luontoloma"
+                    "hyvinvointiviikonloppu",
+                    "savusauna"
                 ],
                 "node_links": [
                     "JUHLATILA",
@@ -69197,7 +69165,7 @@
             },
             "categories": {
                 "core": {
-                    "description": "Varjolan Tilan Matkailu Oy on Kuusaankosken varrella sijaitseva matkailu- ja elämyskohde, joka tarjoaa majoitusta, juhla- ja kokoustiloja, savusaunoja, ravintolapalveluita sekä ympärivuotisia aktiviteetteja kuten koskenlaskua ja luontoliikuntaa. Kohde soveltuu erityisesti yritystapahtumiin, hääjuhliin ja hyvinvointipäiviin.",
+                    "description": "Varjolan Tilan Matkailu Oy on Kuusaankosken varrella sijaitseva matkailu- ja elämyskohde, joka tarjoaa majoitusta, juhla- ja kokoustiloja, savusaunoja sekä ympärivuotisia aktiviteetteja kuten koskenlaskua.",
                     "website": "https://www.varjola.com",
                     "email": "varjola@varjola.com",
                     "phone": "0207928080"
@@ -69416,7 +69384,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-21T11:53:44.936Z",
+                "last_updated": "2026-05-24T12:16:12.179Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -70012,19 +69980,13 @@
                     "juhlabuffet",
                     "syntymäpäivät",
                     "rippijuhlat",
-                    "juhlapalvelu",
-                    "täytekakku",
                     "kahvitarjoilu",
+                    "muistotilaisuus",
                     "kokoustarjoilu",
                     "yritystapahtuma",
                     "henkilöstöjuhlat",
-                    "kahvitarjoilu",
-                    "muistotilaisuus",
                     "surutarjoilu",
-                    "kahvitarjoilu",
-                    "syntymäpäivät",
-                    "kakku",
-                    "leivonnaiset"
+                    "muistotilaisuus"
                 ],
                 "node_links": [
                     "CATERING",
@@ -70046,7 +70008,7 @@
             "capabilities": {},
             "categories": {
                 "core": {
-                    "description": "Lempileivos on Lievestuoreella toimiva kotileipomo ja pitopalvelu, joka tarjoaa catering-palveluita, juhla- ja yritystarjoiluja, hääkakkuja, tilauskakkuja sekä leivonnaisia erilaisiin tilaisuuksiin Keski-Suomen alueella. Yritys tunnetaan lähiraaka-aineista ja juhlapalveluista häihin, muistotilaisuuksiin ja yritystapahtumiin.",
+                    "description": "Lempileivos on Lievestuoreella toimiva kotileipomo ja pitopalvelu, joka tarjoaa catering-palveluita, juhla- ja yritystarjoiluja, hääkakkuja, tilauskakkuja sekä leivonnaisia erilaisiin tilaisuuksiin Keski-Suomen alueella.",
                     "website": "https://www.lempileivos.com",
                     "email": "posti@lempileivos.com",
                     "phone": "+358405770421"
@@ -70301,7 +70263,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-21T11:49:45.476Z",
+                "last_updated": "2026-05-24T12:16:12.178Z",
                 "verified_by": "ai-analysis-v3",
                 "status": "enriched"
             }
@@ -74115,7 +74077,8 @@
                     "cottage-services": 95,
                     "events-and-celebrations": 35,
                     "business-events": 30,
-                    "accommodation": 100
+                    "accommodation": 100,
+                    "liikunta-ja-vapaaaika": 80
                 },
                 "priority_score": 0,
                 "service_area": {
@@ -74139,20 +74102,26 @@
                     "keittiöremontti",
                     "laituritarvikkeet / huolto"
                 ],
-                "sub_contexts": [],
+                "sub_contexts": [
+                    "rantasauna",
+                    "kalastus",
+                    "vene",
+                    "luonnonrauha",
+                    "terassi",
+                    "järvimaisema",
+                    "perhejuhla"
+                ],
                 "node_links": [
-                    "LAUKAA",
                     "MAJOITUS",
-                    "MOkkI",
-                    "SAUNA",
-                    "LEPPAVESI",
-                    "KALASTUS"
+                    "SAUNA"
                 ],
                 "intent_codes": [
-                    "VENUE_ACCOMMODATION"
+                    "VENUE_ACCOMMODATION",
+                    "REC_OUTDOOR"
                 ],
                 "intent_scores": {
-                    "VENUE_ACCOMMODATION": 100
+                    "VENUE_ACCOMMODATION": 100,
+                    "REC_OUTDOOR": 80
                 }
             },
             "capabilities": {
@@ -74173,9 +74142,9 @@
             },
             "categories": {
                 "core": {
-                    "description": "Leppäveden alueella luonnonrauhassa sijaitseva lomamökkikohde, joka tarjoaa ympärivuotista majoitusta järven läheisyydessä. Käytettävissä viihtyisiä ja hyvin varusteltuja lomamökkejä omalla saunalla, terassilla, takalla, keittiöllä ja luontoyhteydellä. Sopii lomailuun, perhemajoitukseen, kalastukseen, yritysryhmille sekä rauhallisiin virkistys- ja vapaa-ajan oleskeluihin. Alueella hyvät ulkoilu- ja luontoreitit sekä rantasaunamahdollisuuksia.",
+                    "description": "Leppäveden alueella sijaitseva lomamökkikohde, joka tarjoaa ympärivuotista majoitusta järven läheisyydessä.",
                     "website": "https://www.countryhakkinen.fi",
-                    "email": "Luonnonläheinen sijainti Leppäveden tuntumassa. Mahdollisuus saunaan, kalastukseen ja ulkoiluun. Helppo saavutettavuus Jyväskylän suunnasta.",
+                    "email": "Luonnonläheinen sijainti Leppäveden tuntumassa.",
                     "phone": "040 736 5166"
                 },
                 "events_and_celebrations": {
@@ -74422,7 +74391,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-09T17:53:02.613Z",
+                "last_updated": "2026-05-24T12:17:56.086Z",
                 "verified_by": "csv-reconciliation",
                 "status": "draft"
             }
@@ -78950,7 +78919,7 @@
         },
         "company-306": {
             "name": "Villi-Sessio",
-            "tags": "ohjelmapalvelut, eräopas, luontoretkeily, ulkoiluvälinevuokraus, fatbike, kajakki, kanootti",
+            "tags": "ohjelmapalvelut, eräopas, leipomo, elintarvike, kakut, leivonnaiset",
             "core": {
                 "fits_for": {
                     "events-and-celebrations": 100,
@@ -79009,26 +78978,7 @@
                     "huvipuisto",
                     "pitopalvelu"
                 ],
-                "sub_contexts": [
-                    "elämysilta",
-                    "syntymäpäiväjuhla",
-                    "luova workshop",
-                    "teemallinen tapahtuma",
-                    "ulkotapahtuma",
-                    "virkistyspäivä",
-                    "tiimipäivä",
-                    "yritystapahtuma",
-                    "luontoretki",
-                    "ohjattu aktiviteetti",
-                    "tyhy-päivä",
-                    "fatbike-retki",
-                    "kajakkiretki",
-                    "perheaktiviteetti",
-                    "luontoelämys",
-                    "hyvinvointipäivä",
-                    "metsäelämys",
-                    "luova ryhmätoiminta"
-                ],
+                "sub_contexts": [],
                 "node_links": [
                     "LIIKUNTA"
                 ],
@@ -81733,13 +81683,25 @@
             "from": "company-278",
             "to": "intent-REC_OUTDOOR",
             "relation": "offers",
-            "weight": 82
+            "weight": 85
         },
         {
             "from": "company-278",
             "to": "intent-ENT_PROGRAM",
             "relation": "offers",
             "weight": 68
+        },
+        {
+            "from": "company-278",
+            "to": "intent-EVT_CORPORATE",
+            "relation": "offers",
+            "weight": 72
+        },
+        {
+            "from": "company-278",
+            "to": "intent-EVT_BIRTHDAY_FAMILY",
+            "relation": "offers",
+            "weight": 78
         },
         {
             "from": "company-278",
@@ -81751,7 +81713,7 @@
             "from": "company-278",
             "to": "group-business-events",
             "relation": "fits_for",
-            "weight": 68
+            "weight": 72
         },
         {
             "from": "company-278",
@@ -81769,7 +81731,7 @@
             "from": "company-278",
             "to": "group-business-growth",
             "relation": "fits_for",
-            "weight": 10
+            "weight": 15
         },
         {
             "from": "company-278",
@@ -81781,7 +81743,7 @@
             "from": "company-278",
             "to": "group-liikunta-ja-vapaaaika",
             "relation": "fits_for",
-            "weight": 88
+            "weight": 90
         },
         {
             "from": "company-278",
@@ -85389,6 +85351,12 @@
         },
         {
             "from": "company-117",
+            "to": "intent-EVT_CORPORATE",
+            "relation": "offers",
+            "weight": 85
+        },
+        {
+            "from": "company-117",
             "to": "group-kokoukset",
             "relation": "fits_for",
             "weight": 35
@@ -85498,11 +85466,6 @@
         {
             "from": "company-117",
             "to": "nodelink-LIIKUNTA",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-117",
-            "to": "nodelink-ELÄIMET",
             "relation": "links_to"
         },
         {
@@ -85761,7 +85724,7 @@
         },
         {
             "from": "company-118",
-            "to": "nodelink-SAUNA",
+            "to": "nodelink-CATERING",
             "relation": "links_to"
         },
         {
@@ -85776,12 +85739,7 @@
         },
         {
             "from": "company-118",
-            "to": "nodelink-CATERING",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-118",
-            "to": "nodelink-LAPSET",
+            "to": "nodelink-SAUNA",
             "relation": "links_to"
         },
         {
@@ -90154,9 +90112,33 @@
         },
         {
             "from": "company-245",
+            "to": "intent-VENUE_ACCOMMODATION",
+            "relation": "offers",
+            "weight": 100
+        },
+        {
+            "from": "company-245",
+            "to": "intent-REC_OUTDOOR",
+            "relation": "offers",
+            "weight": 80
+        },
+        {
+            "from": "company-245",
             "to": "group-mökkipalvelut",
             "relation": "fits_for",
             "weight": 35
+        },
+        {
+            "from": "company-245",
+            "to": "group-accommodation",
+            "relation": "fits_for",
+            "weight": 100
+        },
+        {
+            "from": "company-245",
+            "to": "group-liikunta-ja-vapaaaika",
+            "relation": "fits_for",
+            "weight": 80
         },
         {
             "from": "company-245",
@@ -90177,6 +90159,11 @@
             "from": "company-245",
             "to": "region-keski-suomi",
             "relation": "located_in"
+        },
+        {
+            "from": "company-245",
+            "to": "nodelink-MAJOITUS",
+            "relation": "links_to"
         },
         {
             "from": "company-250",
@@ -92229,6 +92216,12 @@
         },
         {
             "from": "company-285",
+            "to": "intent-REC_OUTDOOR",
+            "relation": "offers",
+            "weight": 80
+        },
+        {
+            "from": "company-285",
             "to": "group-cottage-services",
             "relation": "fits_for",
             "weight": 95
@@ -92253,13 +92246,14 @@
         },
         {
             "from": "company-285",
-            "to": "region-lievestuore",
-            "relation": "located_in"
+            "to": "group-liikunta-ja-vapaaaika",
+            "relation": "fits_for",
+            "weight": 80
         },
         {
             "from": "company-285",
-            "to": "nodelink-LAUKAA",
-            "relation": "links_to"
+            "to": "region-lievestuore",
+            "relation": "located_in"
         },
         {
             "from": "company-285",
@@ -92268,22 +92262,7 @@
         },
         {
             "from": "company-285",
-            "to": "nodelink-MOkkI",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-285",
             "to": "nodelink-SAUNA",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-285",
-            "to": "nodelink-LEPPAVESI",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-285",
-            "to": "nodelink-KALASTUS",
             "relation": "links_to"
         },
         {

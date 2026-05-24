@@ -3601,7 +3601,7 @@
         "capabilities": {},
         "categories": {
             "core": {
-                "description": "",
+                "description": "Colliers Finland Oy tarjoaa kiinteistö- ja asumiseen liittyviä palveluita.",
                 "website": "https://www.colliersasunnot.com",
                 "email": "",
                 "phone": "358201303003"
@@ -3811,7 +3811,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T15:32:40.283Z",
+            "last_updated": "2026-05-24T12:16:12.179Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -8940,7 +8940,9 @@
         "tags": "",
         "core": {
             "fits_for": {
-                "mökkipalvelut": 35
+                "mökkipalvelut": 35,
+                "accommodation": 100,
+                "liikunta-ja-vapaaaika": 80
             },
             "priority_score": 0,
             "service_area": {
@@ -8963,10 +8965,21 @@
             "not_suitable_for": [
                 "keittiöremontti"
             ],
-            "sub_contexts": [],
-            "node_links": [],
-            "intent_codes": [],
-            "intent_scores": {}
+            "sub_contexts": [
+                "mökkimajoitus",
+                "luonnonrauha"
+            ],
+            "node_links": [
+                "MAJOITUS"
+            ],
+            "intent_codes": [
+                "VENUE_ACCOMMODATION",
+                "REC_OUTDOOR"
+            ],
+            "intent_scores": {
+                "VENUE_ACCOMMODATION": 100,
+                "REC_OUTDOOR": 80
+            }
         },
         "capabilities": {
             "SAUNA_FACILITY": {
@@ -8979,7 +8992,7 @@
         },
         "categories": {
             "core": {
-                "description": "Mökkimajoituspalveluja tarjoava yritys kauniin ja kalaisan Mataroisjärven rannalla Laukaan Salmelankylässä. Kuusi erilaista mökkiä rantamökistä huvilaan, joista neljä on ympärivuotisessa käytössä. Mökeissä on täysin varustettu keittiö, takka, satelliitti-TV, DVD-/CD-soitin, sähkösauna ja pesukone . Tarjoaa tilaa rentouttavalle lomalle, juhlille tai kokouspäiville . Etäisyys Jyväskylästä noin puoli tuntia . Toimiala: Yhdistetty kasvinviljely ja kotieläintalous (01500) .",
+                "description": "Mökkimajoituspalveluja tarjoava yritys rauhallisessa järvimaisemassa Laukaassa.",
                 "website": "pietilanlomamokit.com",
                 "email": "",
                 "phone": "+358 50 3403154"
@@ -9188,7 +9201,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-04-27T06:08:12.224Z",
+            "last_updated": "2026-05-24T12:17:56.086Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -9540,7 +9553,8 @@
                 "cottage-services": 95,
                 "events-and-celebrations": 35,
                 "business-events": 30,
-                "accommodation": 100
+                "accommodation": 100,
+                "liikunta-ja-vapaaaika": 80
             },
             "priority_score": 0,
             "service_area": {
@@ -9564,20 +9578,26 @@
                 "keittiöremontti",
                 "laituritarvikkeet / huolto"
             ],
-            "sub_contexts": [],
+            "sub_contexts": [
+                "rantasauna",
+                "kalastus",
+                "vene",
+                "luonnonrauha",
+                "terassi",
+                "järvimaisema",
+                "perhejuhla"
+            ],
             "node_links": [
-                "LAUKAA",
                 "MAJOITUS",
-                "MOkkI",
-                "SAUNA",
-                "LEPPAVESI",
-                "KALASTUS"
+                "SAUNA"
             ],
             "intent_codes": [
-                "VENUE_ACCOMMODATION"
+                "VENUE_ACCOMMODATION",
+                "REC_OUTDOOR"
             ],
             "intent_scores": {
-                "VENUE_ACCOMMODATION": 100
+                "VENUE_ACCOMMODATION": 100,
+                "REC_OUTDOOR": 80
             }
         },
         "capabilities": {
@@ -9598,9 +9618,9 @@
         },
         "categories": {
             "core": {
-                "description": "Leppäveden alueella luonnonrauhassa sijaitseva lomamökkikohde, joka tarjoaa ympärivuotista majoitusta järven läheisyydessä. Käytettävissä viihtyisiä ja hyvin varusteltuja lomamökkejä omalla saunalla, terassilla, takalla, keittiöllä ja luontoyhteydellä. Sopii lomailuun, perhemajoitukseen, kalastukseen, yritysryhmille sekä rauhallisiin virkistys- ja vapaa-ajan oleskeluihin. Alueella hyvät ulkoilu- ja luontoreitit sekä rantasaunamahdollisuuksia.",
+                "description": "Leppäveden alueella sijaitseva lomamökkikohde, joka tarjoaa ympärivuotista majoitusta järven läheisyydessä.",
                 "website": "https://www.countryhakkinen.fi",
-                "email": "Luonnonläheinen sijainti Leppäveden tuntumassa. Mahdollisuus saunaan, kalastukseen ja ulkoiluun. Helppo saavutettavuus Jyväskylän suunnasta.",
+                "email": "Luonnonläheinen sijainti Leppäveden tuntumassa.",
                 "phone": "040 736 5166"
             },
             "events_and_celebrations": {
@@ -9847,7 +9867,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-09T17:53:02.613Z",
+            "last_updated": "2026-05-24T12:17:56.086Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
         }

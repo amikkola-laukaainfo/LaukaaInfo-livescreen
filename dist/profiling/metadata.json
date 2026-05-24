@@ -3675,14 +3675,6 @@
             "lon": 26.0041356,
             "address": "Myllylahdentie 401"
         },
-        "nodelink-MOkkI": {
-            "type": "nodelink",
-            "name": "MOkkI"
-        },
-        "nodelink-LEPPAVESI": {
-            "type": "nodelink",
-            "name": "LEPPAVESI"
-        },
         "company-284": {
             "type": "company",
             "name": "Ylä-Saarikon lomamökit",
@@ -3691,6 +3683,10 @@
             "lat": 62.5035225,
             "lon": 25.890444,
             "address": "Suolahdentie 719, 41370 Kuusa, Laukaa"
+        },
+        "nodelink-MOkkI": {
+            "type": "nodelink",
+            "name": "MOkkI"
         },
         "nodelink-VATIANJARVI": {
             "type": "nodelink",
@@ -4022,13 +4018,25 @@
             "from": "company-278",
             "to": "intent-REC_OUTDOOR",
             "relation": "offers",
-            "weight": 82
+            "weight": 85
         },
         {
             "from": "company-278",
             "to": "intent-ENT_PROGRAM",
             "relation": "offers",
             "weight": 68
+        },
+        {
+            "from": "company-278",
+            "to": "intent-EVT_CORPORATE",
+            "relation": "offers",
+            "weight": 72
+        },
+        {
+            "from": "company-278",
+            "to": "intent-EVT_BIRTHDAY_FAMILY",
+            "relation": "offers",
+            "weight": 78
         },
         {
             "from": "company-278",
@@ -4040,7 +4048,7 @@
             "from": "company-278",
             "to": "group-business-events",
             "relation": "fits_for",
-            "weight": 68
+            "weight": 72
         },
         {
             "from": "company-278",
@@ -4058,7 +4066,7 @@
             "from": "company-278",
             "to": "group-business-growth",
             "relation": "fits_for",
-            "weight": 10
+            "weight": 15
         },
         {
             "from": "company-278",
@@ -4070,7 +4078,7 @@
             "from": "company-278",
             "to": "group-liikunta-ja-vapaaaika",
             "relation": "fits_for",
-            "weight": 88
+            "weight": 90
         },
         {
             "from": "company-278",
@@ -7678,6 +7686,12 @@
         },
         {
             "from": "company-117",
+            "to": "intent-EVT_CORPORATE",
+            "relation": "offers",
+            "weight": 85
+        },
+        {
+            "from": "company-117",
             "to": "group-kokoukset",
             "relation": "fits_for",
             "weight": 35
@@ -7787,11 +7801,6 @@
         {
             "from": "company-117",
             "to": "nodelink-LIIKUNTA",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-117",
-            "to": "nodelink-ELÄIMET",
             "relation": "links_to"
         },
         {
@@ -8050,7 +8059,7 @@
         },
         {
             "from": "company-118",
-            "to": "nodelink-SAUNA",
+            "to": "nodelink-CATERING",
             "relation": "links_to"
         },
         {
@@ -8065,12 +8074,7 @@
         },
         {
             "from": "company-118",
-            "to": "nodelink-CATERING",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-118",
-            "to": "nodelink-LAPSET",
+            "to": "nodelink-SAUNA",
             "relation": "links_to"
         },
         {
@@ -12443,9 +12447,33 @@
         },
         {
             "from": "company-245",
+            "to": "intent-VENUE_ACCOMMODATION",
+            "relation": "offers",
+            "weight": 100
+        },
+        {
+            "from": "company-245",
+            "to": "intent-REC_OUTDOOR",
+            "relation": "offers",
+            "weight": 80
+        },
+        {
+            "from": "company-245",
             "to": "group-mökkipalvelut",
             "relation": "fits_for",
             "weight": 35
+        },
+        {
+            "from": "company-245",
+            "to": "group-accommodation",
+            "relation": "fits_for",
+            "weight": 100
+        },
+        {
+            "from": "company-245",
+            "to": "group-liikunta-ja-vapaaaika",
+            "relation": "fits_for",
+            "weight": 80
         },
         {
             "from": "company-245",
@@ -12466,6 +12494,11 @@
             "from": "company-245",
             "to": "region-keski-suomi",
             "relation": "located_in"
+        },
+        {
+            "from": "company-245",
+            "to": "nodelink-MAJOITUS",
+            "relation": "links_to"
         },
         {
             "from": "company-250",
@@ -14518,6 +14551,12 @@
         },
         {
             "from": "company-285",
+            "to": "intent-REC_OUTDOOR",
+            "relation": "offers",
+            "weight": 80
+        },
+        {
+            "from": "company-285",
             "to": "group-cottage-services",
             "relation": "fits_for",
             "weight": 95
@@ -14542,13 +14581,14 @@
         },
         {
             "from": "company-285",
-            "to": "region-lievestuore",
-            "relation": "located_in"
+            "to": "group-liikunta-ja-vapaaaika",
+            "relation": "fits_for",
+            "weight": 80
         },
         {
             "from": "company-285",
-            "to": "nodelink-LAUKAA",
-            "relation": "links_to"
+            "to": "region-lievestuore",
+            "relation": "located_in"
         },
         {
             "from": "company-285",
@@ -14557,22 +14597,7 @@
         },
         {
             "from": "company-285",
-            "to": "nodelink-MOkkI",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-285",
             "to": "nodelink-SAUNA",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-285",
-            "to": "nodelink-LEPPAVESI",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-285",
-            "to": "nodelink-KALASTUS",
             "relation": "links_to"
         },
         {
