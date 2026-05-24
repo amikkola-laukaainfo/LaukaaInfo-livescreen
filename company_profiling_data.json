@@ -3938,7 +3938,6 @@
                 "weekend_service": true,
                 "not_suitable_for": [
                     "omilla tarjoiluilla",
-                    "luontoretkeily",
                     "tunnelmallinen kartano",
                     "saunatilat",
                     "laituritarvikkeet / huolto"
