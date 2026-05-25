@@ -661,46 +661,10 @@ const NEEDS_CONFIG = {
                 "question": { "fi": "Mitä olet vuokraamassa?", "en": "What are you renting?" },
                 "options": [
                     {
-                        "id": "OPT_RENTAL_BOAT",
-                        "label": { "fi": "Venevuokraus", "en": "Boat rental" },
-                        "intent_codes": ["REC_OUTDOOR", "WATER_SPORT_RENTAL"],
-                        "capability_requirements": [{ "code": "WATERCRAFT_RENTAL" }]
-                    },
-                    {
-                        "id": "OPT_RENTAL_CANOE",
-                        "label": { "fi": "Kanootin tai kajakin vuokraus", "en": "Canoe or kayak rental" },
-                        "intent_codes": ["REC_OUTDOOR", "REC_RAFTING", "WATER_SPORT_RENTAL"],
-                        "capability_requirements": [{ "code": "CANOE_RENTAL" }]
-                    },
-                    {
-                        "id": "OPT_RENTAL_SUP",
-                        "label": { "fi": "SUP-laudan vuokraus", "en": "SUP board rental" },
-                        "intent_codes": ["REC_OUTDOOR", "REC_SWIMMING", "WATER_SPORT_RENTAL"],
-                        "capability_requirements": [{ "code": "SUP_RENTAL" }]
-                    },
-                    {
-                        "id": "OPT_RENTAL_FATBIKE",
-                        "label": { "fi": "Fatbiken vuokraus", "en": "Fatbike rental" },
-                        "intent_codes": ["REC_OUTDOOR", "FATBIKE_RENTAL"],
-                        "capability_requirements": [{ "code": "FATBIKE_RENTAL" }]
-                    },
-                    {
-                        "id": "OPT_RENTAL_SAUNA",
-                        "label": { "fi": "Saunan vuokraus", "en": "Sauna rental" },
-                        "intent_codes": ["WELLBEING_BEAUTY", "REC_OUTDOOR", "HOME_COTTAGE"],
-                        "capability_requirements": [{ "code": "SAUNA_FACILITY" }]
-                    },
-                    {
-                        "id": "OPT_RENTAL_TRAILER",
-                        "label": { "fi": "Peräkärryn vuokraus", "en": "Trailer rental" },
-                        "intent_codes": ["HOME_MOVING", "MOVE_TRANSPORT"],
-                        "capability_requirements": [{ "code": "TRAILER_RENTAL" }]
-                    },
-                    {
-                        "id": "OPT_RENTAL_EQUIPMENT",
-                        "label": { "fi": "Rakennuskoneen tai muun laitteen vuokraus", "en": "Construction machine or other equipment rental" },
-                        "intent_codes": ["HOME_MAINTENANCE", "RENO_RENTAL", "HOME_RENOVATION"],
-                        "capability_requirements": [{ "code": "EQUIPMENT_RENTAL" }]
+                        "id": "OPT_RENTAL_DISH",
+                        "label": { "fi": "Astiavuokraus (lautaset, lasit, aterimet)", "en": "Tableware rental (plates, glasses, cutlery)" },
+                        "intent_codes": ["BIZ_CATERING", "EVT_WEDDING", "EVT_CORPORATE"],
+                        "capability_requirements": [{ "code": "DISH_RENTAL" }]
                     },
                     {
                         "id": "OPT_RENTAL_AV",
@@ -709,10 +673,48 @@ const NEEDS_CONFIG = {
                         "capability_requirements": [{ "code": "AV_RENTAL" }]
                     },
                     {
-                        "id": "OPT_RENTAL_DISH",
-                        "label": { "fi": "Astiavuokraus (lautaset, lasit, aterimet)", "en": "Tableware rental (plates, glasses, cutlery)" },
-                        "intent_codes": ["BIZ_CATERING", "EVT_WEDDING", "EVT_CORPORATE"],
-                        "capability_requirements": [{ "code": "DISH_RENTAL" }]
+                        "id": "OPT_RENTAL_FATBIKE",
+                        "label": { "fi": "Fatbiken vuokraus", "en": "Fatbike rental" },
+                        "intent_codes": ["REC_OUTDOOR", "FATBIKE_RENTAL"],
+                        "capability_requirements": [{ "code": "FATBIKE_RENTAL" }]
+                    },
+                    {
+                        "id": "OPT_RENTAL_CANOE",
+                        "label": { "fi": "Kanootin tai kajakin vuokraus", "en": "Canoe or kayak rental" },
+                        "intent_codes": ["REC_OUTDOOR", "REC_RAFTING", "WATER_SPORT_RENTAL"],
+                        "capability_requirements": [{ "code": "CANOE_RENTAL" }]
+                    },
+                    {
+                        "id": "OPT_RENTAL_TRAILER",
+                        "label": { "fi": "Peräkärryn vuokraus", "en": "Trailer rental" },
+                        "intent_codes": ["HOME_MOVING", "MOVE_TRANSPORT"],
+                        "capability_requirements": [{ "code": "TRAILER_RENTAL" }]
+                    },
+                    {
+                        "id": "OPT_RENTAL_BICYCLE",
+                        "label": { "fi": "Polkupyörän vuokraus (maastopyörä, kaupunkipyörä)", "en": "Bicycle rental (mountain bike, city bike)" },
+                        "capability_requirements": [
+                            { "code": "BICYCLE_RENTAL" },
+                            { "code": "OUTDOOR_RENTAL" }
+                        ]
+                    },
+                    {
+                        "id": "OPT_RENTAL_EQUIPMENT",
+                        "label": { "fi": "Rakennuskoneen tai muun laitteen vuokraus", "en": "Construction machine or other equipment rental" },
+                        "intent_codes": ["HOME_MAINTENANCE", "RENO_RENTAL", "HOME_RENOVATION"],
+                        "capability_requirements": [{ "code": "EQUIPMENT_RENTAL" }]
+                    },
+                    {
+                        "id": "OPT_RENTAL_SAUNA",
+                        "label": { "fi": "Saunan vuokraus", "en": "Sauna rental" },
+                        "intent_codes": ["WELLBEING_BEAUTY", "REC_OUTDOOR", "HOME_COTTAGE"],
+                        "capability_requirements": [{ "code": "SAUNA_FACILITY" }]
+                    },
+                    {
+                        "id": "OPT_RENTAL_SUP",
+                        "label": { "fi": "SUP-laudan vuokraus", "en": "SUP board rental" },
+                        "intent_codes": ["REC_OUTDOOR", "REC_SWIMMING", "WATER_SPORT_RENTAL"],
+                        "capability_requirements": [{ "code": "SUP_RENTAL" }]
                     },
                     {
                         "id": "OPT_RENTAL_TENT",
@@ -721,10 +723,10 @@ const NEEDS_CONFIG = {
                         "capability_requirements": [{ "code": "TENT_RENTAL" }]
                     },
                     {
-                        "id": "OPT_RENTAL_BICYCLE",
-                        "label": { "fi": "Pyörän vuokraus (maastopyörä, kaupunkipyörä)", "en": "Bicycle rental (mountain bike, city bike)" },
-                        "intent_codes": ["REC_OUTDOOR", "REC_GYM"],
-                        "capability_requirements": [{ "code": "OUTDOOR_RENTAL" }]
+                        "id": "OPT_RENTAL_BOAT",
+                        "label": { "fi": "Venevuokraus", "en": "Boat rental" },
+                        "intent_codes": ["REC_OUTDOOR", "WATER_SPORT_RENTAL"],
+                        "capability_requirements": [{ "code": "WATERCRAFT_RENTAL" }]
                     }
                 ]
             }

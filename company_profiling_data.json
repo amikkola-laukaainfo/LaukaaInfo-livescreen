@@ -3972,11 +3972,17 @@
                 }
             },
             "capabilities": {
-                "WATERCRAFT_RENTAL": {
+                "BICYCLE_RENTAL": {
                     "available": true,
                     "priority_score": 0.85,
                     "confidence": "inferred",
                     "source": "migration",
+                    "inventory": [
+                        {
+                            "type": "Polkupyörä",
+                            "count": 1
+                        }
+                    ],
                     "specs": {}
                 },
                 "SUP_RENTAL": {
@@ -3998,6 +4004,36 @@
                     "priority_score": 0.8,
                     "confidence": "inferred",
                     "source": "migration",
+                    "specs": {}
+                },
+                "CANOE_RENTAL": {
+                    "available": true,
+                    "priority_score": 0.75,
+                    "confidence": "draft",
+                    "source": "manual",
+                    "categories": [],
+                    "inventory": [
+                        {
+                            "type": "Kanootti"
+                        }
+                    ],
+                    "additional_inventory": [],
+                    "specs": {
+                        "canoe_count": 2
+                    }
+                },
+                "OUTDOOR_RENTAL": {
+                    "available": true,
+                    "priority_score": 0.75,
+                    "confidence": "draft",
+                    "source": "manual",
+                    "categories": [],
+                    "inventory": [
+                        {
+                            "type": "Padel"
+                        }
+                    ],
+                    "additional_inventory": [],
                     "specs": {}
                 }
             },
