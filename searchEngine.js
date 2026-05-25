@@ -124,12 +124,19 @@ function capabilityMatchesInventoryTerm(entry, term) {
     const hay = getCapabilitySearchText(entry);
     const needle = String(term).toLowerCase().trim();
     if (!needle) return true;
+    
+    // Tarkista inventoryn tyypit
+    const inventoryTypes = (entry.inventory || []).map(i => i.type.toLowerCase());
+    if (inventoryTypes.some(t => t.includes(needle) || needle.includes(t))) return true;
+    
+    // Sallitaan osuvuus kategorioihin
     if (hay.indexOf(needle) !== -1) return true;
-    return needle.split(/\s+/).some(function (w) {
-        return w.length > 2 && hay.indexOf(w) !== -1;
-    });
+    
+    // Salli yksittäiset sanat
+    return needle.split(/\s+/).some(w => 
+        w.length > 2 && (hay.indexOf(w) !== -1 || inventoryTypes.some(t => t.includes(w)))
+    );
 }
-
 function specsMeet(requiredSpecs, specs) {
     if (!requiredSpecs || typeof requiredSpecs !== 'object') return true;
     const actual = specs || {};
