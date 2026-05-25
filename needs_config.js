@@ -657,61 +657,74 @@ const NEEDS_CONFIG = {
         "steps": [
             {
                 "id": "tyyppi",
+                "multiple": true,
                 "question": { "fi": "Mitä olet vuokraamassa?", "en": "What are you renting?" },
                 "options": [
                     {
                         "id": "OPT_RENTAL_BOAT",
                         "label": { "fi": "Venevuokraus", "en": "Boat rental" },
-                        "sub_context": "venevuokraus",
-                        "tags": ["venevuokraus"],
-                        "intent_codes": ["REC_OUTDOOR"],
+                        "intent_codes": ["REC_OUTDOOR", "WATER_SPORT_RENTAL"],
                         "capability_requirements": [{ "code": "WATERCRAFT_RENTAL" }]
+                    },
+                    {
+                        "id": "OPT_RENTAL_CANOE",
+                        "label": { "fi": "Kanootin tai kajakin vuokraus", "en": "Canoe or kayak rental" },
+                        "intent_codes": ["REC_OUTDOOR", "REC_RAFTING", "WATER_SPORT_RENTAL"],
+                        "capability_requirements": [{ "code": "CANOE_RENTAL" }]
+                    },
+                    {
+                        "id": "OPT_RENTAL_SUP",
+                        "label": { "fi": "SUP-laudan vuokraus", "en": "SUP board rental" },
+                        "intent_codes": ["REC_OUTDOOR", "REC_SWIMMING", "WATER_SPORT_RENTAL"],
+                        "capability_requirements": [{ "code": "SUP_RENTAL" }]
+                    },
+                    {
+                        "id": "OPT_RENTAL_FATBIKE",
+                        "label": { "fi": "Fatbiken vuokraus", "en": "Fatbike rental" },
+                        "intent_codes": ["REC_OUTDOOR", "FATBIKE_RENTAL"],
+                        "capability_requirements": [{ "code": "FATBIKE_RENTAL" }]
+                    },
+                    {
+                        "id": "OPT_RENTAL_SAUNA",
+                        "label": { "fi": "Saunan vuokraus", "en": "Sauna rental" },
+                        "intent_codes": ["WELLBEING_BEAUTY", "REC_OUTDOOR", "HOME_COTTAGE"],
+                        "capability_requirements": [{ "code": "SAUNA_FACILITY" }]
                     },
                     {
                         "id": "OPT_RENTAL_TRAILER",
                         "label": { "fi": "Peräkärryn vuokraus", "en": "Trailer rental" },
-                        "sub_context": "peräkärryn vuokraus",
-                        "tags": ["peräkärryn vuokraus", "kuljetus"],
+                        "intent_codes": ["HOME_MOVING", "MOVE_TRANSPORT"],
                         "capability_requirements": [{ "code": "TRAILER_RENTAL" }]
                     },
                     {
                         "id": "OPT_RENTAL_EQUIPMENT",
                         "label": { "fi": "Rakennuskoneen tai muun laitteen vuokraus", "en": "Construction machine or other equipment rental" },
-                        "sub_context": "konevuokraus",
-                        "tags": ["konevuokraus", "rakennuskonevuokraus"],
+                        "intent_codes": ["HOME_MAINTENANCE", "RENO_RENTAL", "HOME_RENOVATION"],
                         "capability_requirements": [{ "code": "EQUIPMENT_RENTAL" }]
                     },
                     {
                         "id": "OPT_RENTAL_AV",
                         "label": { "fi": "AV-laitteiden vuokraus (äänentoisto, valot, näytöt)", "en": "AV equipment rental (sound, lights, screens)" },
-                        "sub_context": "av-vuokraus",
-                        "tags": ["av-vuokraus", "äänentoisto", "valotekniikka"],
-                        "is_service": true,
+                        "intent_codes": ["ENT_MUSIC", "ENT_PROGRAM", "EVT_CORPORATE", "EVT_WEDDING"],
                         "capability_requirements": [{ "code": "AV_RENTAL" }]
                     },
                     {
                         "id": "OPT_RENTAL_DISH",
                         "label": { "fi": "Astiavuokraus (lautaset, lasit, aterimet)", "en": "Tableware rental (plates, glasses, cutlery)" },
-                        "sub_context": "astiavuokraus",
-                        "tags": ["astiavuokraus", "astiasto", "pitopalvelu"],
-                        "intent_codes": ["BIZ_CATERING"],
+                        "intent_codes": ["BIZ_CATERING", "EVT_WEDDING", "EVT_CORPORATE"],
                         "capability_requirements": [{ "code": "DISH_RENTAL" }]
                     },
                     {
                         "id": "OPT_RENTAL_TENT",
                         "label": { "fi": "Teltta- ja katosvuokraus (juhlateltta, markiisi)", "en": "Tent and canopy rental (party tent, marquee)" },
-                        "sub_context": "telttavuokraus",
-                        "tags": ["telttavuokraus", "katos", "juhlateltta"],
-                        "intent_codes": ["EVT_WEDDING"],
+                        "intent_codes": ["EVT_WEDDING", "VENUE_PARTY", "EVT_CORPORATE"],
                         "capability_requirements": [{ "code": "TENT_RENTAL" }]
                     },
                     {
-                        "id": "OPT_RENTAL_OUTDOOR",
-                        "label": { "fi": "Luontoretkeily ja ulkoiluvälineet (kajakki, fatbike, SUP, kanootti)", "en": "Outdoor and hiking equipment (kayak, fatbike, SUP, canoe)" },
-                        "sub_context": "luontoretkeily",
-                        "tags": ["ulkoiluvälinevuokraus", "fatbike", "kajakki", "kanootti", "sup", "retkeilyvarusteet", "luontoelämykset"],
-                        "intent_codes": ["REC_OUTDOOR", "REC_RAFTING"],
-                        "capability_boost": ["OUTDOOR_RENTAL", "FATBIKE_RENTAL", "CANOE_RENTAL", "SUP_RENTAL", "WATER_SPORT_RENTAL"]
+                        "id": "OPT_RENTAL_BICYCLE",
+                        "label": { "fi": "Pyörän vuokraus (maastopyörä, kaupunkipyörä)", "en": "Bicycle rental (mountain bike, city bike)" },
+                        "intent_codes": ["REC_OUTDOOR", "REC_GYM"],
+                        "capability_requirements": [{ "code": "OUTDOOR_RENTAL" }]
                     }
                 ]
             }
