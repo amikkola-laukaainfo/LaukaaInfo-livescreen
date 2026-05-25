@@ -41,9 +41,13 @@ function populateNeedSelect(config) {
     if (!select) return;
 
     const placeholder = i18n.t('compact_select_placeholder');
-    const ids = PIKAHAUKU_NEED_ORDER.filter(id => config[id]);
-    Object.keys(config).forEach(id => {
-        if (!ids.includes(id)) ids.push(id);
+    
+    // Kerätään ja lajitellaan aakkosjärjestykseen i18n-getTextin perusteella
+    const ids = Object.keys(config).filter(id => config[id]);
+    ids.sort((a, b) => {
+        const titleA = i18n.getText(config[a].title);
+        const titleB = i18n.getText(config[b].title);
+        return titleA.localeCompare(titleB, i18n.currentLang === 'fi' ? 'fi' : 'en');
     });
 
     select.innerHTML = `<option value="">${placeholder}</option>` +
