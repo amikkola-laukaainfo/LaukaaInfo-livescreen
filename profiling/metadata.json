@@ -1,6 +1,6 @@
 {
-    "SCHEMA_VERSION": "6.0",
-    "DESCRIPTION": "LaukaaInfo Ratkaisulähtöinen profilointi v6. Sisältää graafirakenteen ja capability-kerroksen.",
+    "SCHEMA_VERSION": "6.2",
+    "DESCRIPTION": "LaukaaInfo Ratkaisulähtöinen profilointi v6.2. Sisältää graafirakenteen ja capability-kerroksen.",
     "nodes": {
         "group-events-and-celebrations": {
             "type": "group",
@@ -8368,6 +8368,24 @@
             "to": "group-yritysjuhlat",
             "relation": "fits_for",
             "weight": 5
+        },
+        {
+            "from": "company-120",
+            "to": "group-events-and-celebrations",
+            "relation": "fits_for",
+            "weight": 100
+        },
+        {
+            "from": "company-120",
+            "to": "group-business-events",
+            "relation": "fits_for",
+            "weight": 100
+        },
+        {
+            "from": "company-120",
+            "to": "group-liikunta-ja-vapaaaika",
+            "relation": "fits_for",
+            "weight": 100
         },
         {
             "from": "company-120",

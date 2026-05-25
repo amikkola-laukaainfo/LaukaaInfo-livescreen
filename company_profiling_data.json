@@ -1,6 +1,6 @@
 {
-    "SCHEMA_VERSION": "6.0",
-    "DESCRIPTION": "LaukaaInfo Ratkaisulähtöinen profilointi v6. Sisältää graafirakenteen ja capability-kerroksen.",
+    "SCHEMA_VERSION": "6.2",
+    "DESCRIPTION": "LaukaaInfo Ratkaisulähtöinen profilointi v6.2. Sisältää graafirakenteen ja capability-kerroksen.",
     "nodes": {
         "group-events-and-celebrations": {
             "type": "group",
@@ -3972,19 +3972,6 @@
                 }
             },
             "capabilities": {
-                "BICYCLE_RENTAL": {
-                    "available": true,
-                    "priority_score": 0.85,
-                    "confidence": "inferred",
-                    "source": "migration",
-                    "inventory": [
-                        {
-                            "type": "Polkupyörä",
-                            "count": 1
-                        }
-                    ],
-                    "specs": {}
-                },
                 "SUP_RENTAL": {
                     "available": true,
                     "priority_score": 0.85,
@@ -4024,7 +4011,7 @@
                 },
                 "OUTDOOR_RENTAL": {
                     "available": true,
-                    "priority_score": 0.75,
+                    "priority_score": 0.85,
                     "confidence": "draft",
                     "source": "manual",
                     "categories": [],
@@ -4035,6 +4022,18 @@
                     ],
                     "additional_inventory": [],
                     "specs": {}
+                },
+                "BICYCLE_RENTAL": {
+                    "available": true,
+                    "priority_score": 0.75,
+                    "confidence": "draft",
+                    "source": "manual",
+                    "categories": [],
+                    "inventory": [],
+                    "additional_inventory": [],
+                    "specs": {
+                        "bike_count": 1
+                    }
                 }
             },
             "categories": {
@@ -4276,6 +4275,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -4598,6 +4607,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -4838,6 +4857,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -5136,6 +5165,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -5381,6 +5420,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -5621,6 +5670,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -5976,6 +6035,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -6280,6 +6349,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -6621,6 +6700,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -7065,6 +7154,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -7308,6 +7407,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -7553,6 +7662,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -7796,6 +7915,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -8041,6 +8170,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -8281,6 +8420,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -8523,6 +8672,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -8763,6 +8922,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -9005,6 +9174,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -9245,6 +9424,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -9487,6 +9676,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -9727,6 +9926,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -9970,6 +10179,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -10263,6 +10482,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -10505,6 +10734,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -10750,6 +10989,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -11058,6 +11307,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -11369,6 +11628,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -11609,6 +11878,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -11906,6 +12185,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -12150,6 +12439,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -12392,6 +12691,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -12636,6 +12945,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -12877,6 +13196,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -13117,6 +13446,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -13416,6 +13755,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -13660,6 +14009,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -13906,6 +14265,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -14150,6 +14519,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -14452,6 +14831,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -14696,6 +15085,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -14986,6 +15385,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -15230,6 +15639,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -15476,6 +15895,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -15720,6 +16149,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -15966,6 +16405,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -16210,6 +16659,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -16492,6 +16951,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -16736,6 +17205,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -16984,6 +17463,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -17229,6 +17718,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -17473,6 +17972,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -17721,6 +18230,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -17965,6 +18484,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -18211,6 +18740,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -18456,6 +18995,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -18700,6 +19249,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -18973,6 +19532,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -19217,6 +19786,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -19463,6 +20042,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -19707,6 +20296,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -19953,6 +20552,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -20197,6 +20806,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -20443,6 +21062,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -20688,6 +21317,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -20932,6 +21571,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -21224,6 +21873,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -21527,6 +22186,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -21788,6 +22457,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -22032,6 +22711,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -22278,6 +22967,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -22522,6 +23221,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -22799,6 +23508,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -23045,6 +23764,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -23290,6 +24019,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -23533,6 +24272,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -23774,6 +24523,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -23818,19 +24577,7 @@
                 "home_service": false,
                 "weekend_service": false,
                 "not_suitable_for": [],
-                "sub_contexts": [
-                    "juhlaruoat",
-                    "kakkuvalikoima",
-                    "tarjoilut",
-                    "ruokatarvikkeet",
-                    "muistotilaisuuden tarjoilut",
-                    "kahvitarjoilut",
-                    "lasten eväät",
-                    "vauvatarvikkeet",
-                    "perheostokset",
-                    "lemmikkien ruoka",
-                    "lemmikkitarvikkeet"
-                ],
+                "sub_contexts": [],
                 "node_links": [
                     "CATERING"
                 ],
@@ -24057,6 +24804,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -24299,6 +25056,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -24539,6 +25306,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -24781,6 +25558,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -25022,6 +25809,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -25262,6 +26059,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -25526,6 +26333,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -25775,6 +26592,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -26015,6 +26842,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -26268,6 +27105,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -26508,6 +27355,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -26777,6 +27634,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -27018,6 +27885,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -27258,6 +28135,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -27519,6 +28406,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -27804,6 +28701,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -28150,6 +29057,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -28482,6 +29399,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -28817,6 +29744,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -29115,6 +30052,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -29437,6 +30384,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -29778,6 +30735,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -30018,6 +30985,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -30260,6 +31237,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -30500,6 +31487,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -30742,6 +31739,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -30982,6 +31989,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -31224,6 +32241,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -31464,6 +32491,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -31743,6 +32780,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -31983,6 +33030,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -32261,6 +33318,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -32626,6 +33693,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -32690,25 +33767,7 @@
                     "omilla tarjoiluilla",
                     "luennot"
                 ],
-                "sub_contexts": [
-                    "juhlatila",
-                    "hääjuhla",
-                    "yritysjuhla",
-                    "saunailta",
-                    "kokoushotelli",
-                    "tyky-päivä",
-                    "seminaari",
-                    "melonta",
-                    "soutuvene",
-                    "sup-lauta",
-                    "e-fatbike",
-                    "pyörävuokraus",
-                    "järviliikunta",
-                    "kylpylä",
-                    "sauna",
-                    "uiminen",
-                    "kuntosali"
-                ],
+                "sub_contexts": [],
                 "node_links": [
                     "JUHLATILA",
                     "MAJOITUS",
@@ -33116,6 +34175,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -33412,6 +34481,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -33429,7 +34508,10 @@
                     "yritystapahtumat": 88,
                     "vapaa-aika": 76,
                     "yrityksen-kehittäminen": 42,
-                    "yritysjuhlat": 5
+                    "yritysjuhlat": 5,
+                    "events-and-celebrations": 100,
+                    "business-events": 100,
+                    "liikunta-ja-vapaaaika": 100
                 },
                 "priority_score": 74,
                 "service_area": {
@@ -33736,6 +34818,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -33991,6 +35083,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -34231,6 +35333,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -34503,6 +35615,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -34805,6 +35927,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -35048,6 +36180,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -35288,6 +36430,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -35533,6 +36685,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -35773,6 +36935,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -36124,6 +37296,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -36364,6 +37546,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -36669,6 +37861,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -36909,6 +38111,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -37281,6 +38493,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -37617,6 +38839,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -37910,6 +39142,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -38154,6 +39396,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -38394,6 +39646,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -38639,6 +39901,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -38886,6 +40158,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -39127,6 +40409,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -39367,6 +40659,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -39728,6 +41030,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -39968,6 +41280,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -40261,6 +41583,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -40501,6 +41833,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -40745,6 +42087,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -40985,6 +42337,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -41227,6 +42589,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -41467,6 +42839,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -41709,6 +43091,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -41949,6 +43341,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -42191,6 +43593,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -42431,6 +43843,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -42764,6 +44186,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -43046,6 +44478,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -43347,6 +44789,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -43587,6 +45039,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -43833,6 +45295,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -44073,6 +45545,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -44318,6 +45800,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -44561,6 +46053,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -44801,6 +46303,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -45043,6 +46555,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -45284,6 +46806,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -45524,6 +47056,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -45777,6 +47319,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -46020,6 +47572,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -46260,6 +47822,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -46556,6 +48128,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -46796,6 +48378,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -47038,6 +48630,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -47278,6 +48880,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -47532,6 +49144,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -47772,6 +49394,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -48058,6 +49690,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -48106,21 +49748,7 @@
                 "home_service": false,
                 "weekend_service": true,
                 "not_suitable_for": [],
-                "sub_contexts": [
-                    "peräkärryn vuokraus",
-                    "omatoimimuutto",
-                    "tavaroiden kuljetus",
-                    "kodin tyhjennys",
-                    "kevyt varastointi",
-                    "käytetyt huonekalut",
-                    "sisustustavarat",
-                    "kierrätyskalusteet",
-                    "mökkitavaroiden kuljetus",
-                    "peräkärry mökkikäyttöön",
-                    "lastenvaatteet käytettynä",
-                    "second hand -lelut",
-                    "edulliset kodintavarat"
-                ],
+                "sub_contexts": [],
                 "node_links": [],
                 "intent_codes": [
                     "MOVE_TRANSPORT",
@@ -48378,6 +50006,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -48618,6 +50256,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -48860,6 +50508,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -49100,6 +50758,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -49342,6 +51010,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -49582,6 +51260,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -49827,6 +51515,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -50067,6 +51765,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -50309,6 +52017,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -50550,6 +52268,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -50790,6 +52518,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -51049,6 +52787,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -51354,6 +53102,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -51661,6 +53419,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -51961,6 +53729,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -52201,6 +53979,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -52443,6 +54231,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -52684,6 +54482,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -52924,6 +54732,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -53195,6 +55013,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -53443,6 +55271,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -53684,6 +55522,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -53924,6 +55772,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -54169,6 +56027,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -54410,6 +56278,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -54650,6 +56528,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -54973,6 +56861,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -55282,6 +57180,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -55571,6 +57479,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -55811,6 +57729,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -56103,6 +58031,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -56401,6 +58339,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -56701,6 +58649,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -56941,6 +58899,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -57183,6 +59151,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -57423,6 +59401,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -57716,6 +59704,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -57956,6 +59954,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -58245,6 +60253,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -58486,6 +60504,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -58726,6 +60754,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -58970,6 +61008,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -59210,6 +61258,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -59500,6 +61558,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -59741,6 +61809,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -59981,6 +62059,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -60225,6 +62313,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -60473,6 +62571,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -60738,6 +62846,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -60978,6 +63096,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -61220,6 +63348,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -61460,6 +63598,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -61702,6 +63850,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -61942,6 +64100,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -62238,6 +64406,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -62488,6 +64666,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -62729,6 +64917,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -62969,6 +65167,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -63264,6 +65472,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -63504,6 +65722,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -63746,6 +65974,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -63986,6 +66224,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -64228,6 +66476,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -64468,6 +66726,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -64727,6 +66995,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -65115,6 +67393,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -65428,6 +67716,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -65699,6 +67997,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -65945,6 +68253,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -66185,6 +68503,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -66465,6 +68793,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -66742,6 +69080,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -66988,6 +69336,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -67243,6 +69601,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -67491,6 +69859,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -67731,6 +70109,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -67994,6 +70382,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -68244,6 +70642,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -68484,6 +70892,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -68729,6 +71147,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -68970,6 +71398,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -69210,6 +71648,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -69550,6 +71998,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -69790,6 +72248,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -70064,6 +72532,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -70141,26 +72619,7 @@
                 "not_suitable_for": [
                     "omilla tarjoiluilla"
                 ],
-                "sub_contexts": [
-                    "häät",
-                    "syntymäpäivät",
-                    "rippijuhlat",
-                    "juhlatila",
-                    "tilauskakut",
-                    "hääkakku",
-                    "kahvitarjoilu",
-                    "juhlabuffet",
-                    "yritysjuhlat",
-                    "kokoustarjoilu",
-                    "henkilöstöjuhlat",
-                    "kahvituspalvelu",
-                    "muistotilaisuus",
-                    "surutarjoilu",
-                    "kahvitarjoilu",
-                    "majoitus maatilalla",
-                    "aittamajoitus",
-                    "juhlamajoitus"
-                ],
+                "sub_contexts": [],
                 "node_links": [
                     "JUHLATILA",
                     "CATERING",
@@ -70461,6 +72920,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -70712,6 +73181,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -71018,6 +73497,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -71358,6 +73847,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -71678,6 +74177,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -72055,6 +74564,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -72436,6 +74955,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -72784,6 +75313,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -73149,6 +75688,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -73529,6 +76078,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -73867,6 +76426,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -74231,6 +76800,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -74558,6 +77137,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -74908,6 +77497,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -75267,6 +77866,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -75612,6 +78221,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -75978,6 +78597,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -76342,6 +78971,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -76680,6 +79319,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -76966,6 +79615,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -77273,6 +79932,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -77593,6 +80262,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -77903,6 +80582,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -78205,6 +80894,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -78490,6 +81189,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -78781,6 +81490,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -79071,6 +81790,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -79496,6 +82225,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -79820,6 +82559,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -80107,6 +82856,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -80419,6 +83178,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -80757,6 +83526,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -81090,6 +83869,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -81425,6 +84214,16 @@
                 "auto_services": {
                     "replacement_car_available": false,
                     "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
+                    "collaborated_with": []
                 }
             },
             "meta": {
@@ -81720,6 +84519,16 @@
                 },
                 "auto_services": {
                     "replacement_car_available": false,
+                    "collaborated_with": []
+                },
+                "liikunta-ja-vapaaaika": {
+                    "refinement_tags": [],
+                    "collaborated_with": []
+                },
+                "accommodation": {
+                    "accommodation_beds": 0,
+                    "accommodation_included": false,
+                    "refinement_tags": [],
                     "collaborated_with": []
                 }
             },
@@ -86204,6 +89013,24 @@
             "to": "group-yritysjuhlat",
             "relation": "fits_for",
             "weight": 5
+        },
+        {
+            "from": "company-120",
+            "to": "group-events-and-celebrations",
+            "relation": "fits_for",
+            "weight": 100
+        },
+        {
+            "from": "company-120",
+            "to": "group-business-events",
+            "relation": "fits_for",
+            "weight": 100
+        },
+        {
+            "from": "company-120",
+            "to": "group-liikunta-ja-vapaaaika",
+            "relation": "fits_for",
+            "weight": 100
         },
         {
             "from": "company-120",
