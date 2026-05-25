@@ -4025,14 +4025,31 @@
                 },
                 "BICYCLE_RENTAL": {
                     "available": true,
-                    "priority_score": 0.75,
-                    "confidence": "draft",
-                    "source": "manual",
-                    "categories": [],
-                    "inventory": [],
-                    "additional_inventory": [],
+                    "priority_score": 0.85,
+                    "confidence": "inferred",
+                    "source": "migration",
+                    "categories": [
+                        "ulkoliikunta",
+                        "vuokraus"
+                    ],
+                    "inventory": [
+                        {
+                            "type": "polkupyörä",
+                            "count": 4
+                        },
+                        {
+                            "type": "lastenpyörä",
+                            "count": 2
+                        }
+                    ],
+                    "additional_inventory": [
+                        "kypärät",
+                        "lukot"
+                    ],
                     "specs": {
-                        "bike_count": 1
+                        "hourly_rental": true,
+                        "daily_rental": true,
+                        "guided_tours": false
                     }
                 }
             },
