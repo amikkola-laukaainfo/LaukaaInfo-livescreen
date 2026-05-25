@@ -459,6 +459,12 @@ function isMatch(c, opt, context, subContextsReq, noCateringSelected, taxonomyDa
         }
     }
 
+    if (!isProfiledMatch && opt.capability_requirements && opt.capability_requirements.length > 0) {
+        if (meetsCapabilityRequirements(c, opt)) {
+            isProfiledMatch = true;
+        }
+    }
+
     if (opt.capacity_req > 0) {
         const cap = getCompanyCapacity(c, context);
         if (cap === 0) return false;
