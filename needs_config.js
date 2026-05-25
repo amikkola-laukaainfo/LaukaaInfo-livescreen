@@ -692,7 +692,7 @@ const NEEDS_CONFIG = {
                     },
                     {
                         "id": "OPT_RENTAL_BICYCLE",
-                        "label": { "fi": "Polkupyörän vuokraus (maastopyörä, kaupunkipyörä)", "en": "Bicycle rental (mountain bike, city bike)" },
+                        "label": { "fi": "Polkupyörän vuokraus (maastopyörä, kaupunkipyörä, fatbike)", "en": "Bicycle rental (mountain bike, city bike, fatbike)" },
                         "capability_requirements": [
                             { "code": "BICYCLE_RENTAL" },
                             { "code": "OUTDOOR_RENTAL" }

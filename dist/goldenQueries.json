@@ -1,0 +1,49 @@
+[
+  {
+    "id": "haat_video",
+    "description": "Häät - Videokuvaaja",
+    "params": {
+      "id": "haat",
+      "selections": {
+        "palvelut": [
+          { "label": { "fi": "Videokuvaaja" }, "intent_codes": ["MEDIA_VIDEO"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "häävideo" } }
+        ]
+      }
+    },
+    "expected": {
+      "count": 2,
+      "topIds": ["company-2", "company-292"]
+    }
+  },
+  {
+    "id": "synttärit_kakku",
+    "description": "Syntymäpäivät - Kakut / Leivonnaiset",
+    "params": {
+      "id": "syntymapaivat",
+      "selections": {
+        "palvelut": [
+          { "label": { "fi": "Kakut / Leivonnaiset" }, "tags": ["leipomo", "elintarvike"], "profilointi_filter": { "section": "events_and_celebrations", "field": "refinement_tags", "value": "juhlakakku" } }
+        ]
+      }
+    },
+    "expected": {
+      "count": 6,
+      "topIds": ["company-270", "company-268", "company-306", "company-88", "company-99", "company-266"]
+    }
+  },
+  {
+    "id": "hautajaiset_tarjoilu",
+    "description": "Hautajaiset - Pitopalvelu",
+    "params": {
+      "id": "hautajaiset",
+      "selections": {
+        "tarjoilu": [
+          { "label": { "fi": "Pitopalvelu" }, "tags": ["pitopalvelu"], "intent_codes": ["BIZ_CATERING"] }
+        ]
+      }
+    },
+    "expected": {
+      "minCount": 5
+    }
+  }
+]
