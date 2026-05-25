@@ -8335,6 +8335,12 @@
         },
         {
             "from": "company-120",
+            "to": "intent-ENT_PROGRAM",
+            "relation": "offers",
+            "weight": 100
+        },
+        {
+            "from": "company-120",
             "to": "group-juhlat-ja-merkkipäivät",
             "relation": "fits_for",
             "weight": 82
@@ -8512,11 +8518,6 @@
         {
             "from": "company-121",
             "to": "region-laukaa",
-            "relation": "located_in"
-        },
-        {
-            "from": "company-121",
-            "to": "region-lievestuore",
             "relation": "located_in"
         },
         {

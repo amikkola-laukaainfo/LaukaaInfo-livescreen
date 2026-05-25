@@ -2053,8 +2053,7 @@
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
                 "regions": [
-                    "Laukaa",
-                    "Lievestuore"
+                    "Laukaa"
                 ],
                 "note": "Yrityksen kotipaikka on Laukaa ."
             },
@@ -2076,15 +2075,7 @@
                 "BIZ_IT": 90
             }
         },
-        "capabilities": {
-            "AV_RENTAL": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
-        },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Sähkötekniikan ja tapahtumatekniikan palveluihin erikoistunut yritys. Yritys on perustettu vuonna 2016 .",
@@ -2296,7 +2287,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-04-27T05:54:01.968Z",
+            "last_updated": "2026-05-25T09:08:13.822Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -2409,15 +2400,7 @@
                 "HOME_MAINTENANCE": 100
             }
         },
-        "capabilities": {
-            "AV_RENTAL": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
-        },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Fieldhill Oy / Fieldhill Guitars tarjoaa käytettyjen kitaroiden ja bassojen myyntiä, soitinhuoltoa sekä äänentoisto- ja musiikkipalveluita Laukaan Leppävedellä. Yritys palvelee musiikin harrastajia ja tapahtumajärjestäjiä Keski-Suomen alueella.",

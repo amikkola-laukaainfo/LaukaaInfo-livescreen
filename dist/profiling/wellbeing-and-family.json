@@ -3075,16 +3075,6 @@
                 "source": "migration",
                 "specs": {}
             },
-            "AV_RENTAL": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "LIVE_STREAMING": {
-                "available": true
-            },
             "OUTDOOR_RENTAL": {
                 "available": true,
                 "priority_score": 0.95,
@@ -3173,6 +3163,20 @@
                 "source": "manual",
                 "categories": [],
                 "inventory": [],
+                "additional_inventory": [],
+                "specs": {}
+            },
+            "WATERCRAFT_RENTAL": {
+                "available": true,
+                "priority_score": 0.75,
+                "confidence": "draft",
+                "source": "manual",
+                "categories": [],
+                "inventory": [
+                    {
+                        "type": "soutuvene"
+                    }
+                ],
                 "additional_inventory": [],
                 "specs": {}
             }

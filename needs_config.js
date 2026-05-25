@@ -705,7 +705,7 @@ const NEEDS_CONFIG = {
                     {
                         "id": "OPT_RENTAL_AV",
                         "label": { "fi": "AV-laitteiden vuokraus (äänentoisto, valot, näytöt)", "en": "AV equipment rental (sound, lights, screens)" },
-                        "intent_codes": ["ENT_MUSIC", "ENT_PROGRAM", "EVT_CORPORATE", "EVT_WEDDING"],
+                        "intent_codes": ["EVT_CORPORATE", "EVT_WEDDING", "VENUE_MEETING"],
                         "capability_requirements": [{ "code": "AV_RENTAL" }]
                     },
                     {

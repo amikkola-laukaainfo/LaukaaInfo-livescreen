@@ -17791,29 +17791,7 @@
                 "EVT_BIRTHDAY": 68
             }
         },
-        "capabilities": {
-            "SAUNA_FACILITY": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "AV_RENTAL": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "EQUIPMENT_RENTAL": {
-                "available": true,
-                "priority_score": 0.85,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
-        },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "AtSound Matti Laurila tarjoaa äänentoistoa, DJ-palveluita, tapahtumatekniikkaa ja ohjelmapalveluita juhliin, yritystapahtumiin ja live-esiintymisiin Keski-Suomessa.",
@@ -21669,18 +21647,15 @@
                 "AV_TEKNIIKKA",
                 "JUHLATILA"
             ],
-            "intent_codes": [],
-            "intent_scores": {}
+            "intent_codes": [
+                "ENT_PROGRAM"
+            ],
+            "intent_scores": {
+                "ENT_PROGRAM": 100
+            }
         },
         "capabilities": {
             "SAUNA_FACILITY": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
-            "AV_RENTAL": {
                 "available": true,
                 "priority_score": 0.8,
                 "confidence": "inferred",
@@ -50209,15 +50184,7 @@
                 "EVT_CORPORATE": 82
             }
         },
-        "capabilities": {
-            "AV_RENTAL": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
-        },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Lievestuoreen keskustassa sijaitseva juhla- ja kokoustila, joka soveltuu häihin, muistotilaisuuksiin, syntymäpäiviin, yritysjuhliin ja kokouksiin. Tilassa on AV-varustus, karaoke, terassi sekä mahdollisuus catering-palveluihin. Kesäisin käytössä myös piha-alue ja sataman läheisyys.",
@@ -51306,15 +51273,7 @@
                 "VENUE_PARTY": 95
             }
         },
-        "capabilities": {
-            "AV_RENTAL": {
-                "available": true,
-                "priority_score": 0.8,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            }
-        },
+        "capabilities": {},
         "categories": {
             "core": {
                 "description": "Laukaan Tuulenväre on Saraaveden rannalla sijaitseva persoonallinen juhla- ja kokoustila Tyvelänniemessä Laukaassa. Tila soveltuu erityisesti häihin, muistotilaisuuksiin, syntymäpäiviin ja yritystilaisuuksiin. Käytössä on flyygeli, parveke, takka ja mahdollisuus omiin tarjoiluihin.",

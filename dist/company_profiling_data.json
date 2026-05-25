@@ -27876,29 +27876,7 @@
                     "EVT_BIRTHDAY": 68
                 }
             },
-            "capabilities": {
-                "SAUNA_FACILITY": {
-                    "available": true,
-                    "priority_score": 0.8,
-                    "confidence": "inferred",
-                    "source": "migration",
-                    "specs": {}
-                },
-                "AV_RENTAL": {
-                    "available": true,
-                    "priority_score": 0.8,
-                    "confidence": "inferred",
-                    "source": "migration",
-                    "specs": {}
-                },
-                "EQUIPMENT_RENTAL": {
-                    "available": true,
-                    "priority_score": 0.85,
-                    "confidence": "inferred",
-                    "source": "migration",
-                    "specs": {}
-                }
-            },
+            "capabilities": {},
             "categories": {
                 "core": {
                     "description": "AtSound Matti Laurila tarjoaa äänentoistoa, DJ-palveluita, tapahtumatekniikkaa ja ohjelmapalveluita juhliin, yritystapahtumiin ja live-esiintymisiin Keski-Suomessa.",
@@ -32744,16 +32722,6 @@
                     "source": "migration",
                     "specs": {}
                 },
-                "AV_RENTAL": {
-                    "available": true,
-                    "priority_score": 0.8,
-                    "confidence": "inferred",
-                    "source": "migration",
-                    "specs": {}
-                },
-                "LIVE_STREAMING": {
-                    "available": true
-                },
                 "OUTDOOR_RENTAL": {
                     "available": true,
                     "priority_score": 0.95,
@@ -32842,6 +32810,20 @@
                     "source": "manual",
                     "categories": [],
                     "inventory": [],
+                    "additional_inventory": [],
+                    "specs": {}
+                },
+                "WATERCRAFT_RENTAL": {
+                    "available": true,
+                    "priority_score": 0.75,
+                    "confidence": "draft",
+                    "source": "manual",
+                    "categories": [],
+                    "inventory": [
+                        {
+                            "type": "soutuvene"
+                        }
+                    ],
                     "additional_inventory": [],
                     "specs": {}
                 }
@@ -33469,18 +33451,15 @@
                     "AV_TEKNIIKKA",
                     "JUHLATILA"
                 ],
-                "intent_codes": [],
-                "intent_scores": {}
+                "intent_codes": [
+                    "ENT_PROGRAM"
+                ],
+                "intent_scores": {
+                    "ENT_PROGRAM": 100
+                }
             },
             "capabilities": {
                 "SAUNA_FACILITY": {
-                    "available": true,
-                    "priority_score": 0.8,
-                    "confidence": "inferred",
-                    "source": "migration",
-                    "specs": {}
-                },
-                "AV_RENTAL": {
                     "available": true,
                     "priority_score": 0.8,
                     "confidence": "inferred",
@@ -33745,8 +33724,7 @@
                     "mode": "TOIMIPISTE",
                     "radius_km": 0,
                     "regions": [
-                        "Laukaa",
-                        "Lievestuore"
+                        "Laukaa"
                     ],
                     "note": "Yrityksen kotipaikka on Laukaa ."
                 },
@@ -33768,15 +33746,7 @@
                     "BIZ_IT": 90
                 }
             },
-            "capabilities": {
-                "AV_RENTAL": {
-                    "available": true,
-                    "priority_score": 0.8,
-                    "confidence": "inferred",
-                    "source": "migration",
-                    "specs": {}
-                }
-            },
+            "capabilities": {},
             "categories": {
                 "core": {
                     "description": "Sähkötekniikan ja tapahtumatekniikan palveluihin erikoistunut yritys. Yritys on perustettu vuonna 2016 .",
@@ -33988,7 +33958,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-04-27T05:54:01.968Z",
+                "last_updated": "2026-05-25T09:08:13.822Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -35884,15 +35854,7 @@
                     "HOME_MAINTENANCE": 100
                 }
             },
-            "capabilities": {
-                "AV_RENTAL": {
-                    "available": true,
-                    "priority_score": 0.8,
-                    "confidence": "inferred",
-                    "source": "migration",
-                    "specs": {}
-                }
-            },
+            "capabilities": {},
             "categories": {
                 "core": {
                     "description": "Fieldhill Oy / Fieldhill Guitars tarjoaa käytettyjen kitaroiden ja bassojen myyntiä, soitinhuoltoa sekä äänentoisto- ja musiikkipalveluita Laukaan Leppävedellä. Yritys palvelee musiikin harrastajia ja tapahtumajärjestäjiä Keski-Suomen alueella.",
@@ -72529,15 +72491,7 @@
                     "EVT_CORPORATE": 82
                 }
             },
-            "capabilities": {
-                "AV_RENTAL": {
-                    "available": true,
-                    "priority_score": 0.8,
-                    "confidence": "inferred",
-                    "source": "migration",
-                    "specs": {}
-                }
-            },
+            "capabilities": {},
             "categories": {
                 "core": {
                     "description": "Lievestuoreen keskustassa sijaitseva juhla- ja kokoustila, joka soveltuu häihin, muistotilaisuuksiin, syntymäpäiviin, yritysjuhliin ja kokouksiin. Tilassa on AV-varustus, karaoke, terassi sekä mahdollisuus catering-palveluihin. Kesäisin käytössä myös piha-alue ja sataman läheisyys.",
@@ -75364,15 +75318,7 @@
                     "VENUE_PARTY": 95
                 }
             },
-            "capabilities": {
-                "AV_RENTAL": {
-                    "available": true,
-                    "priority_score": 0.8,
-                    "confidence": "inferred",
-                    "source": "migration",
-                    "specs": {}
-                }
-            },
+            "capabilities": {},
             "categories": {
                 "core": {
                     "description": "Laukaan Tuulenväre on Saraaveden rannalla sijaitseva persoonallinen juhla- ja kokoustila Tyvelänniemessä Laukaassa. Tila soveltuu erityisesti häihin, muistotilaisuuksiin, syntymäpäiviin ja yritystilaisuuksiin. Käytössä on flyygeli, parveke, takka ja mahdollisuus omiin tarjoiluihin.",
@@ -86189,6 +86135,12 @@
         },
         {
             "from": "company-120",
+            "to": "intent-ENT_PROGRAM",
+            "relation": "offers",
+            "weight": 100
+        },
+        {
+            "from": "company-120",
             "to": "group-juhlat-ja-merkkipäivät",
             "relation": "fits_for",
             "weight": 82
@@ -86366,11 +86318,6 @@
         {
             "from": "company-121",
             "to": "region-laukaa",
-            "relation": "located_in"
-        },
-        {
-            "from": "company-121",
-            "to": "region-lievestuore",
             "relation": "located_in"
         },
         {
