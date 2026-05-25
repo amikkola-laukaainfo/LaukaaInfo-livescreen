@@ -14761,247 +14761,6 @@
             "status": "draft"
         }
     },
-    "company-84": {
-        "name": "Espedet Oy (K-Supermarket)",
-        "tags": "",
-        "core": {
-            "fits_for": {},
-            "priority_score": 0,
-            "service_area": {
-                "mode": "TOIMIPISTE",
-                "radius_km": 0,
-                "regions": [],
-                "note": ""
-            },
-            "emergency_available": false,
-            "contract_customer_available": false,
-            "paired_with_by_context": {},
-            "corporate_clients": false,
-            "home_service": false,
-            "weekend_service": false,
-            "not_suitable_for": [],
-            "sub_contexts": [],
-            "node_links": [],
-            "intent_codes": [],
-            "intent_scores": {}
-        },
-        "capabilities": {},
-        "categories": {
-            "core": {
-                "description": "",
-                "website": "https://www.k-ruoka.fi",
-                "email": "",
-                "phone": "358143480096"
-            },
-            "events_and_celebrations": {
-                "capacity_max": 0,
-                "seated_capacity": 0,
-                "standing_guests": 0,
-                "outdoor_capacity": 0,
-                "is_accessible": false,
-                "own_catering_allowed": false,
-                "inhouse_catering_available": false,
-                "is_lakeside": false,
-                "has_sauna": false,
-                "has_av_tech": false,
-                "has_stage": false,
-                "accommodation_beds": 0,
-                "alcohol_license": false,
-                "private_booking": false,
-                "late_night_events": false,
-                "wedding_specialized": false,
-                "catering_min_capacity": 0,
-                "catering_max_capacity": 0,
-                "dietary_specialties": [],
-                "staff_included": false,
-                "wedding_menu_available": false,
-                "cake_service": false,
-                "partner_venues": [],
-                "wedding_photography": false,
-                "drone_available": false,
-                "video_production": false,
-                "live_music": false,
-                "dj_services": false,
-                "karaoke_available": false,
-                "has_exclusive_catering": false,
-                "accommodation_included": false,
-                "refinement_tags": [],
-                "digitization_features": [],
-                "entertainment_features": [],
-                "collaborated_with": []
-            },
-            "business_events": {
-                "meeting_capacity": 0,
-                "seminar_capacity": 0,
-                "conference_rooms": 0,
-                "has_projector": false,
-                "has_streaming": false,
-                "has_wifi": false,
-                "has_stage": false,
-                "private_booking": false,
-                "invoice_billing": false,
-                "corporate_clients": false,
-                "vip_services": false,
-                "business_catering": false,
-                "event_hosting": false,
-                "corporate_gifts": false,
-                "branding_support": false,
-                "av_support": false,
-                "staff_events_specialized": false,
-                "refinement_tags": [],
-                "wellbeing_and_activity_features": [],
-                "entertainment_features": [],
-                "collaborated_with": []
-            },
-            "funerals_and_memorials": {
-                "memorial_service_capacity": 0,
-                "quiet_private_space": false,
-                "accessible_entry": false,
-                "memorial_catering": false,
-                "coffee_service": false,
-                "flower_arrangements": false,
-                "memorial_menu_available": false,
-                "funeral_flowers": false,
-                "memorial_arrangements": false,
-                "transport_assistance": false,
-                "urgent_booking_available": false,
-                "refinement_tags": [],
-                "digitization_features": [],
-                "collaborated_with": []
-            },
-            "moving_and_housing": {
-                "moving_truck_available": false,
-                "packing_service": false,
-                "storage_available": false,
-                "weekend_moves": false,
-                "urgent_moves": false,
-                "long_distance_moves": false,
-                "cleaning_after_move": false,
-                "electrician_available": false,
-                "renovation_support": false,
-                "insurance_support": false,
-                "refinement_tags": [],
-                "digitization_features": [],
-                "collaborated_with": []
-            },
-            "construction_and_maintenance": {
-                "emergency_service": false,
-                "certifications": [],
-                "wet_room_certification": false,
-                "provides_tools": false,
-                "material_supply": false,
-                "project_management": false,
-                "snow_removal": false,
-                "lawn_maintenance": false,
-                "property_monitoring": false,
-                "maintenance_contracts": false,
-                "housing_company_clients": false,
-                "refinement_tags": [],
-                "collaborated_with": []
-            },
-            "cottage_services": {
-                "key_holding": false,
-                "winter_monitoring": false,
-                "snow_removal": false,
-                "cleaning_service": false,
-                "lawn_service": false,
-                "remote_monitoring": false,
-                "emergency_visits": false,
-                "renovation_support": false,
-                "dock_maintenance": false,
-                "sauna_services": false,
-                "guest_preparation_service": false,
-                "refinement_tags": [],
-                "collaborated_with": []
-            },
-            "housing_company_and_contracts": {
-                "housing_company_clients": false,
-                "maintenance_contracts": false,
-                "emergency_response": false,
-                "scheduled_visits": false,
-                "property_reports": false,
-                "invoice_billing": false,
-                "contract_customer_available": false,
-                "priority_support": false,
-                "monthly_service_plan": false,
-                "refinement_tags": [],
-                "collaborated_with": []
-            },
-            "startup_services": {
-                "bookkeeping_startup": false,
-                "business_advisory": false,
-                "insurance_setup": false,
-                "legal_services": false,
-                "office_space_available": false,
-                "banking_support": false,
-                "website_creation": false,
-                "webshop_setup": false,
-                "branding_support": false,
-                "logo_design": false,
-                "business_photography": false,
-                "refinement_tags": [],
-                "collaborated_with": []
-            },
-            "business_growth": {
-                "google_ads": false,
-                "social_media_marketing": false,
-                "seo_services": false,
-                "content_creation": false,
-                "video_production": false,
-                "crm_support": false,
-                "recruitment_support": false,
-                "sales_development": false,
-                "automation_services": false,
-                "consulting_services": false,
-                "refinement_tags": [],
-                "collaborated_with": []
-            },
-            "wellbeing_and_beauty": {
-                "home_visits": false,
-                "online_booking": false,
-                "unisex_services": false,
-                "gift_cards": false,
-                "corporate_wellbeing_services": false,
-                "event_makeup": false,
-                "bridal_services": false,
-                "group_bookings": false,
-                "refinement_tags": [],
-                "collaborated_with": []
-            },
-            "animals": {
-                "emergency_service": false,
-                "home_visits": false,
-                "online_booking": false,
-                "specialization": [],
-                "grooming_available": false,
-                "boarding_available": false,
-                "supplies_sold": false,
-                "refinement_tags": [],
-                "collaborated_with": []
-            },
-            "family_and_children": {
-                "daycare_available": false,
-                "hobby_activities": false,
-                "educational_services": false,
-                "family_therapy": false,
-                "equipment_rental": false,
-                "accessible_with_stroller": false,
-                "baby_changing_room": false,
-                "kids_play_area": false,
-                "refinement_tags": [],
-                "collaborated_with": []
-            },
-            "auto_services": {
-                "replacement_car_available": false,
-                "collaborated_with": []
-            }
-        },
-        "meta": {
-            "last_updated": "2026-05-08T15:32:40.282Z",
-            "verified_by": "AI-analysis-v1",
-            "status": "draft"
-        }
-    },
     "company-86": {
         "name": "J. Kaurola Avoin yhtiö (K-MARKET TIITUS)",
         "tags": "",
@@ -18645,15 +18404,15 @@
                 "moving-and-housing": 0,
                 "construction-and-maintenance": 0,
                 "cottage-services": 0,
-                "housing-company-and-contracts": 10,
+                "housing-company-and-contracts": 12,
                 "startup-services": 0,
                 "business-growth": 0,
-                "service-partner": 52,
+                "service-partner": 58,
                 "emergency-services": 0,
-                "wellbeing-and-beauty": 5,
+                "wellbeing-and-beauty": 4,
                 "liikunta-ja-vapaaaika": 0,
                 "accommodation": 100,
-                "family-and-children": 20,
+                "family-and-children": 28,
                 "animals": 0,
                 "auto-services": 0
             },
@@ -18675,50 +18434,49 @@
             "home_service": false,
             "weekend_service": true,
             "not_suitable_for": [],
-            "sub_contexts": [
-                "pitopalvelu",
-                "häämenu",
-                "kakku",
-                "juhlabuffet",
-                "erityisruokavaliot",
-                "yrityscatering",
-                "kokoustarjoilu",
-                "henkilöstöjuhlat",
-                "muistotilaisuuden tarjoilut",
-                "kahvitarjoilu"
-            ],
+            "sub_contexts": [],
             "node_links": [
-                "CATERING",
-                "JUHLATILA"
+                "CATERING"
             ],
             "intent_codes": [
                 "BIZ_CATERING",
                 "EVT_WEDDING",
-                "EVT_CORPORATE"
+                "EVT_MEMORIAL"
             ],
             "intent_scores": {
                 "BIZ_CATERING": 100,
-                "EVT_WEDDING": 88,
-                "EVT_CORPORATE": 72
+                "EVT_WEDDING": 90,
+                "EVT_CORPORATE": 84,
+                "EVT_MEMORIAL": 88,
+                "EVT_BIRTHDAY_FAMILY": 72
             }
         },
         "capabilities": {
+            "ACCESSIBLE": {
+                "available": false
+            },
             "DISH_RENTAL": {
                 "available": true,
-                "priority_score": 0.9,
-                "confidence": "confirmed",
+                "priority_score": 0.75,
+                "confidence": "draft",
                 "source": "manual",
-                "specs": {
-                    "description": "Astiasto-, lasi- ja aterinvuokraus juhlatilaisuuksiin"
-                }
+                "categories": [],
+                "inventory": [
+                    {
+                        "type": "astiasto",
+                        "count": 150
+                    }
+                ],
+                "additional_inventory": [],
+                "specs": {}
             }
         },
         "categories": {
             "core": {
-                "description": "Laukaassa ja Toivakassa toimiva catering- ja pitopalveluyritys, joka toteuttaa yksilöllisiä tarjoiluja häihin, yritystilaisuuksiin, muistotilaisuuksiin ja juhliin. Käyttää kotimaisia raaka-aineita ja huomioi erityisruokavaliot.",
+                "description": "Catering KatinCa on Laukaan ja Toivakan alueella toimiva catering- ja pitopalveluyritys, joka toteuttaa tarjoiluja häihin, yritystilaisuuksiin, muistotilaisuuksiin ja perhejuhliin.",
                 "website": "https://katinca.fi",
                 "email": "toivakka@katinca.fi",
-                "phone": "0452356100"
+                "phone": "+358452356100"
             },
             "events_and_celebrations": {
                 "capacity_max": 0,
@@ -18929,7 +18687,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-21T11:57:38.385Z",
+            "last_updated": "2026-05-24T18:02:42.161Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -21263,7 +21021,8 @@
                 "JUHLATILA",
                 "SAUNA",
                 "HYVINVOINTI",
-                "LIIKUNTA"
+                "LIIKUNTA",
+                "ELÄIMET"
             ],
             "intent_codes": [
                 "EVT_WEDDING",
@@ -43741,17 +43500,23 @@
                 "yritysjuhlat": 35,
                 "kokoukset": 35,
                 "vapaa-aika": 35,
-                "events-and-celebrations": 90,
-                "business-events": 92,
-                "funerals-and-memorials": 80,
+                "events-and-celebrations": 96,
+                "business-events": 94,
+                "funerals-and-memorials": 78,
                 "moving-and-housing": 0,
                 "construction-and-maintenance": 0,
-                "cottage-services": 0,
+                "cottage-services": 18,
                 "housing-company-and-contracts": 0,
-                "startup-services": 10,
-                "business-growth": 30,
-                "wellbeing-and-beauty": 85,
-                "accommodation": 90
+                "startup-services": 84,
+                "business-growth": 20,
+                "wellbeing-and-beauty": 88,
+                "accommodation": 96,
+                "service-partner": 40,
+                "emergency-services": 0,
+                "liikunta-ja-vapaaaika": 82,
+                "family-and-children": 44,
+                "animals": 0,
+                "auto-services": 0
             },
             "priority_score": 0,
             "service_area": {
@@ -43805,45 +43570,28 @@
                 "majoitus",
                 "huvipuisto"
             ],
-            "sub_contexts": [
-                "perinnekylä",
-                "savusauna",
-                "maailman suurin savusauna",
-                "juhlatila",
-                "kokoustila",
-                "ravintola",
-                "pitopalvelu",
-                "ohjelmapalvelut",
-                "turvehoidot",
-                "tyhy-päivä",
-                "yritystapahtuma",
-                "kesäteatteri",
-                "perinnetapahtuma",
-                "järvimaisema",
-                "sauna",
-                "elämyspalvelut",
-                "ryhmämatkat"
-            ],
+            "sub_contexts": [],
             "node_links": [
-                "LAUKAA",
-                "KUUSA",
-                "TUPASWILLA",
-                "SAVUSAUNA",
-                "MAJOITUS",
-                "SAUNA",
-                "KOKOUKSET",
-                "HÄÄT",
-                "TYHY",
-                "KESKISUOMI",
-                "PITOPALVELU",
                 "JUHLATILA",
-                "CATERING"
+                "MAJOITUS",
+                "CATERING",
+                "SAUNA",
+                "HYVINVOINTI"
             ],
             "intent_codes": [
-                "VENUE_PARTY"
+                "VENUE_PARTY",
+                "EVT_CORPORATE",
+                "WELLBEING_HEALTH"
             ],
             "intent_scores": {
-                "VENUE_PARTY": 90
+                "VENUE_PARTY": 96,
+                "EVT_CORPORATE": 92,
+                "WELLBEING_HEALTH": 88,
+                "EVT_WEDDING": 86,
+                "VENUE_MEETING": 84,
+                "ENT_PROGRAM": 82,
+                "EVT_MEMORIAL": 76,
+                "VENUE_ACCOMMODATION": 62
             }
         },
         "capabilities": {
@@ -43852,7 +43600,10 @@
                 "priority_score": 0.8,
                 "confidence": "inferred",
                 "source": "migration",
-                "specs": {}
+                "specs": {
+                    "smoke_sauna": true,
+                    "large_group_capacity": true
+                }
             },
             "AV_RENTAL": {
                 "available": true,
@@ -43864,10 +43615,10 @@
         },
         "categories": {
             "core": {
-                "description": "Perinnekylä ja monitoimipaikka, joka tarjoaa tiloja juhliin, kokouksiin ja virkistyspäiviin 15â€“150 hengen ryhmille. Tunnettu maailman suurimmasta savusaunasta (kapasiteetti 150 henkeä) . Tarjoaa majoitusta, ruokailuja, ohjelmapalveluita (mm. Nasusafari, teatteri, sepän paja), turvehoitoja, tyhy-päiviä sekä yrityspalveluita . Yritys järjestää myös yleisötapahtumia kuten naisten turvesaunailtoja, äitienpäivälounaita, perinnepäiviä ja joulumarkkinoita . Kaudesta 2026 tarjolla kesäteatteripaketteja . Sijaitsee Vinninlammen rannalla Kattamäen rinteiden kainalossa .",
+                "description": "Laukaan Tupaswilla Oy on Kuusassa sijaitseva perinnekylä ja tapahtumakeskus, joka tunnetaan maailman suurimmasta savusaunasta sekä juhla-, kokous- ja hyvinvointipalveluista ryhmille.",
                 "website": "http://www.tupaswilla.fi",
                 "email": "myynti@tupaswilla.fi",
-                "phone": "0207 410100"
+                "phone": "+358207410100"
             },
             "events_and_celebrations": {
                 "capacity_max": 150,
@@ -44122,7 +43873,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-08T14:46:17.836Z",
+            "last_updated": "2026-05-24T18:02:42.161Z",
             "verified_by": "ai-enriched-v2",
             "status": "enriched"
         }
@@ -48265,16 +48016,16 @@
                 "funerals-and-memorials": 100,
                 "moving-and-housing": 0,
                 "construction-and-maintenance": 0,
-                "cottage-services": 22,
+                "cottage-services": 25,
                 "housing-company-and-contracts": 0,
                 "startup-services": 0,
                 "business-growth": 0,
                 "wellbeing-and-beauty": 18,
                 "accommodation": 100,
-                "service-partner": 35,
+                "service-partner": 40,
                 "emergency-services": 0,
                 "liikunta-ja-vapaaaika": 0,
-                "family-and-children": 48,
+                "family-and-children": 55,
                 "animals": 0,
                 "auto-services": 0
             },
@@ -48325,42 +48076,74 @@
                 "omilla tarjoiluilla"
             ],
             "sub_contexts": [
-                "pitopalvelu",
-                "catering",
-                "hääkakku",
-                "tilauskakku",
-                "juhlabuffet",
+                "häät",
                 "syntymäpäivät",
                 "rippijuhlat",
+                "juhlatila",
+                "tilauskakut",
+                "hääkakku",
                 "kahvitarjoilu",
-                "muistotilaisuus",
+                "juhlabuffet",
+                "yritysjuhlat",
                 "kokoustarjoilu",
-                "yritystapahtuma",
                 "henkilöstöjuhlat",
+                "kahvituspalvelu",
+                "muistotilaisuus",
                 "surutarjoilu",
-                "muistotilaisuus"
+                "kahvitarjoilu",
+                "majoitus maatilalla",
+                "aittamajoitus",
+                "juhlamajoitus"
             ],
             "node_links": [
+                "JUHLATILA",
                 "CATERING",
-                "JUHLATILA"
+                "MAJOITUS",
+                "KUKAT",
+                "MUSIIKKI"
             ],
             "intent_codes": [
                 "BIZ_CATERING",
                 "EVT_WEDDING",
-                "EVT_MEMORIAL"
+                "EVT_MEMORIAL",
+                "EVT_BIRTHDAY",
+                "EVT_CORPORATE",
+                "VENUE_PARTY",
+                "VENUE_ACCOMMODATION"
             ],
             "intent_scores": {
-                "EVT_WEDDING": 95,
+                "EVT_WEDDING": 96,
                 "EVT_MEMORIAL": 94,
                 "BIZ_CATERING": 100,
                 "EVT_BIRTHDAY": 92,
-                "EVT_CORPORATE": 78
+                "EVT_CORPORATE": 85,
+                "VENUE_PARTY": 88,
+                "VENUE_ACCOMMODATION": 80
             }
         },
-        "capabilities": {},
+        "capabilities": {
+            "DISH_RENTAL": {
+                "available": true,
+                "priority_score": 0.85,
+                "inventory": [
+                    {
+                        "type": "table_setting_set",
+                        "count": 100
+                    }
+                ],
+                "additional_inventory": [
+                    "Arabian Kesti -astiasto",
+                    "juhlatarjoiluastiat"
+                ],
+                "specs": {
+                    "delivery_available": true,
+                    "max_people": 100
+                }
+            }
+        },
         "categories": {
             "core": {
-                "description": "Lempileivos on Lievestuoreella toimiva kotileipomo ja pitopalvelu, joka tarjoaa catering-palveluita, juhla- ja yritystarjoiluja, hääkakkuja, tilauskakkuja sekä leivonnaisia erilaisiin tilaisuuksiin Keski-Suomen alueella.",
+                "description": "Lempileivos on Lievestuoreella toimiva kotileipomo ja pitopalvelu, joka tarjoaa catering-palveluita, juhla- ja yritystilaisuuksia, hääkakkuja, tilauskakkuja sekä juhlatilan ja majoitusmahdollisuuden maalaismiljöössä Keski-Suomessa.",
                 "website": "https://www.lempileivos.com",
                 "email": "posti@lempileivos.com",
                 "phone": "+358405770421"
@@ -48615,7 +48398,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-24T12:16:12.178Z",
+            "last_updated": "2026-05-25T07:22:49.401Z",
             "verified_by": "ai-analysis-v3",
             "status": "enriched"
         }
@@ -51071,20 +50854,20 @@
         "core": {
             "fits_for": {
                 "events-and-celebrations": 100,
-                "business-events": 92,
-                "funerals-and-memorials": 100,
-                "startup-services": 88,
+                "business-events": 90,
+                "funerals-and-memorials": 96,
+                "startup-services": 90,
                 "business-growth": 0,
                 "moving-and-housing": 0,
                 "construction-and-maintenance": 0,
-                "cottage-services": 12,
+                "cottage-services": 24,
                 "accommodation": 100,
-                "wellbeing-and-beauty": 28,
+                "wellbeing-and-beauty": 34,
                 "housing-company-and-contracts": 0,
-                "liikunta-ja-vapaaaika": 24,
+                "liikunta-ja-vapaaaika": 20,
                 "service-partner": 40,
                 "emergency-services": 0,
-                "family-and-children": 36,
+                "family-and-children": 34,
                 "animals": 0,
                 "auto-services": 0
             },
@@ -51131,29 +50914,7 @@
             "not_suitable_for": [
                 "saunatilat"
             ],
-            "sub_contexts": [
-                "juhlatila",
-                "hääjuhla",
-                "syntymäpäivät",
-                "valmistujaiset",
-                "kartano",
-                "pitopalvelu",
-                "juhlapalvelut",
-                "rantasauna",
-                "pikkujoulut",
-                "kokoustila",
-                "yritystapahtuma",
-                "koulutustila",
-                "tyky-päivä",
-                "dataprojektori",
-                "äänentoisto",
-                "muistotilaisuus",
-                "siunaustilaisuus",
-                "kahvitarjoilu",
-                "sauna",
-                "rantasauna",
-                "kartanonpuisto"
-            ],
+            "sub_contexts": [],
             "node_links": [
                 "JUHLATILA",
                 "CATERING",
@@ -51162,16 +50923,15 @@
             "intent_codes": [
                 "VENUE_PARTY",
                 "EVT_WEDDING",
-                "VENUE_MEETING",
                 "EVT_MEMORIAL"
             ],
             "intent_scores": {
                 "EVT_WEDDING": 98,
-                "EVT_MEMORIAL": 100,
+                "EVT_MEMORIAL": 96,
                 "VENUE_PARTY": 100,
-                "EVT_CORPORATE": 80,
-                "VENUE_MEETING": 88,
-                "BIZ_CATERING": 70,
+                "EVT_CORPORATE": 82,
+                "VENUE_MEETING": 90,
+                "BIZ_CATERING": 78,
                 "BIZ_MEETING": 75,
                 "BIZ_SEMINAR": 60,
                 "EVT_BIRTHDAY": 85,
@@ -51205,7 +50965,7 @@
         },
         "categories": {
             "core": {
-                "description": "Vuonteen Helmi on Vihtavuoressa sijaitseva historiallinen jugend-tyylinen juhla- ja kokouspaikka, joka soveltuu erityisesti häihin, yritystapahtumiin, muistotilaisuuksiin ja yksityisjuhliin. Kohteessa on juhlasali, kabinetti, rantasauna sekä järvenrantamiljöö jopa 80 hengen tilaisuuksiin.",
+                "description": "Vuonteen Helmi on Vihtavuoressa sijaitseva historiallinen jugend-tyylinen juhla- ja kokouspaikka, joka soveltuu häihin, yritystilaisuuksiin, muistotilaisuuksiin ja yksityisjuhliin järven rannalla.",
                 "website": "http://www.vuonteenhelmi.fi",
                 "email": "info@vuonteenhelmi.fi",
                 "phone": "+358440379651"
@@ -51462,7 +51222,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-21T11:49:45.477Z",
+            "last_updated": "2026-05-24T18:02:42.160Z",
             "verified_by": "web-enriched-ai",
             "status": "enriched"
         }

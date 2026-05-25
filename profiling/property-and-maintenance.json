@@ -9589,7 +9589,8 @@
             ],
             "node_links": [
                 "MAJOITUS",
-                "SAUNA"
+                "SAUNA",
+                "LAPSET"
             ],
             "intent_codes": [
                 "VENUE_ACCOMMODATION",
