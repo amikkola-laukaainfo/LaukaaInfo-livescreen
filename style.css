@@ -476,12 +476,12 @@ header.hero-split {
 .hero-network-silhouette {
     position: absolute;
     top: 50%;
-    left: 55%;
+    left: 50%;
     transform: translate(-50%, -50%);
     width: 80%;
     height: 80%;
     object-fit: contain;
-    opacity: 0.22;
+    opacity: 0.2;
     z-index: 3;
     pointer-events: none;
     mix-blend-mode: multiply;
@@ -541,8 +541,41 @@ header h1 {
 }
 
 .hero-actions {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
     margin-top: 1.5rem;
+    flex-wrap: wrap;
     text-align: left;
+}
+
+/* Tarkempi haku -napin erottuva tyyli */
+.btn-search-hero {
+    background: rgba(255, 255, 255, 0.2) !important;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-search-hero:hover {
+    background: rgba(255, 255, 255, 0.35) !important;
+    transform: translateY(-2px);
+}
+
+/* Mobiili: napit allekkain */
+@media (max-width: 768px) {
+    .hero-actions {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        gap: 0.75rem;
+    }
+    
+    .hero-actions .btn-primary {
+        width: auto;
+        min-width: 200px;
+        text-align: center;
+        justify-content: center;
+    }
 }
 
 @media (max-width: 768px) {
@@ -5735,10 +5768,6 @@ footer {
 
 .search-path { z-index: 100; }
 .browse-path { z-index: 10; }
-
-    text-align: center;
-    margin-bottom: 2.5rem;
-}
 
 .step-header h2 {
     font-family: var(--accent-font);
