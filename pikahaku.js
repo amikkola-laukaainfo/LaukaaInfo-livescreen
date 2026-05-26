@@ -210,12 +210,24 @@ function submitPikahaku(e) {
 
     PS().readCompactSelectionsFromForm(currentNeedId, selections, document);
 
+    // Tallenna valinnat sessionStorageen
     sessionStorage.setItem('pikahaku_pending', JSON.stringify({
         id: currentNeedId,
         selections: selections
     }));
 
-    window.location.href = `palvelu.html?id=${encodeURIComponent(currentNeedId)}&mode=compact&autosearch=1`;
+    // Näytä latausviesti ja ohjaa palvelu.html-sivulle
+    const submitBtn = document.getElementById('pikahaku-submit');
+    const originalText = submitBtn ? submitBtn.innerHTML : 'Hae palvelut';
+    if (submitBtn) {
+        submitBtn.innerHTML = '⏳ Siirrytään tuloksiin...';
+        submitBtn.disabled = true;
+    }
+    
+    // Pieni viive ennen siirtymistä (jotta käyttäjä näkee latausviestin)
+    setTimeout(() => {
+        window.location.href = `palvelu.html?id=${encodeURIComponent(currentNeedId)}&mode=compact&autosearch=1`;
+    }, 300);
 }
 
 function initUserLocation() {

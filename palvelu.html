@@ -1111,23 +1111,31 @@
             // Ladataan yritysdata jos sitä ei vielä ole
             try {
                 let retries = 0;
-                const maxRetries = 30; // Nostettu 15 -> 30
+                const maxRetries = 50; // Nostettu 30 -> 50 (10 sekuntia)
                 while (typeof loadCompanyData !== 'function' && retries < maxRetries) {
-                    await new Promise(r => setTimeout(r, 300));
+                    await new Promise(r => setTimeout(r, 200));
                     retries++;
                 }
 
                 if (typeof loadCompanyData === 'function') {
                     if (!window.allCompanies || window.allCompanies.length === 0) {
+                        console.log("Ladataan yritysdataa...");
                         await loadCompanyData();
                     }
                 }
                 
-                // Varmistetaan että data on latautunut
+                // Varmistetaan että data on latautunut (max 8 sekuntia)
                 let dataRetries = 0;
-                while ((!window.allCompanies || window.allCompanies.length === 0) && dataRetries < 20) {
+                const maxDataRetries = 40;
+                while ((!window.allCompanies || window.allCompanies.length === 0) && dataRetries < maxDataRetries) {
                     await new Promise(r => setTimeout(r, 200));
                     dataRetries++;
+                }
+                
+                if (window.allCompanies && window.allCompanies.length > 0) {
+                    console.log(`Yritysdataa ladattu: ${window.allCompanies.length} yritystä`);
+                } else {
+                    console.warn("Yritysdataa ei latautunut aikarajassa");
                 }
             } catch (e) {
                 console.error("Virhe ladattaessa yritysdataa:", e);
@@ -1484,9 +1492,10 @@
             if (list) list.innerHTML = '<div style="text-align:center; padding: 3rem;">Ladataan yritystietoja...</div>';
             document.getElementById('next-steps-container').style.display = 'none';
 
-            // Odotetaan että loadCompanyData on saatavilla
+            // Odotetaan että loadCompanyData on saatavilla (max 10 sekuntia)
             let retries = 0;
-            while (typeof loadCompanyData !== 'function' && retries < 20) {
+            const maxRetries = 50; // 50 * 200ms = 10 sekuntia
+            while (typeof loadCompanyData !== 'function' && retries < maxRetries) {
                 await new Promise(r => setTimeout(r, 200));
                 retries++;
             }
@@ -1501,9 +1510,10 @@
                     }
                 }
                 
-                // Odotetaan vielä hieman jos data on latautumassa
+                // Odotetaan datan latautumista (max 8 sekuntia)
                 let dataRetries = 0;
-                while ((!window.allCompanies || window.allCompanies.length === 0) && dataRetries < 30) {
+                const maxDataRetries = 40; // 40 * 200ms = 8 sekuntia
+                while ((!window.allCompanies || window.allCompanies.length === 0) && dataRetries < maxDataRetries) {
                     await new Promise(r => setTimeout(r, 200));
                     dataRetries++;
                 }
