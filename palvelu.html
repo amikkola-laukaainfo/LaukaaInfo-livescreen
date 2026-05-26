@@ -1110,22 +1110,27 @@
 
             // Ladataan yritysdata jos sitä ei vielä ole
             try {
-                // Odota että script.js on ladannut loadCompanyData-funktion
                 let retries = 0;
-                const maxRetries = 15;
+                const maxRetries = 30; // Nostettu 15 -> 30
                 while (typeof loadCompanyData !== 'function' && retries < maxRetries) {
-                    await new Promise(r => setTimeout(r, 400));
+                    await new Promise(r => setTimeout(r, 300));
                     retries++;
                 }
 
                 if (typeof loadCompanyData === 'function') {
-                    // Käytetään window-etuliitettä selvyyden vuoksi
                     if (!window.allCompanies || window.allCompanies.length === 0) {
                         await loadCompanyData();
                     }
-                } else {
+                }
+                
+                // Varmistetaan että data on latautunut
+                let dataRetries = 0;
+                while ((!window.allCompanies || window.allCompanies.length === 0) && dataRetries < 20) {
+                    await new Promise(r => setTimeout(r, 200));
+                    dataRetries++;
                 }
             } catch (e) {
+                console.error("Virhe ladattaessa yritysdataa:", e);
             }
 
             const modeBar = document.getElementById('palvelu-mode-bar');
@@ -1476,13 +1481,36 @@
             const compactSection = document.getElementById('compact-section');
             if (compactSection) compactSection.style.display = 'none';
             if (resultsContainer) resultsContainer.style.display = 'block';
-            if (list) list.innerHTML = '';
+            if (list) list.innerHTML = '<div style="text-align:center; padding: 3rem;">Ladataan yritystietoja...</div>';
             document.getElementById('next-steps-container').style.display = 'none';
 
+            // Odotetaan että loadCompanyData on saatavilla
+            let retries = 0;
+            while (typeof loadCompanyData !== 'function' && retries < 20) {
+                await new Promise(r => setTimeout(r, 200));
+                retries++;
+            }
+
+            // Ladataan yritysdata jos ei ole
             if (!window.allCompanies || window.allCompanies.length === 0) {
-                if (typeof loadCompanyData === 'function') await loadCompanyData();
+                if (typeof loadCompanyData === 'function') {
+                    try {
+                        await loadCompanyData();
+                    } catch (e) {
+                        console.error("Virhe ladattaessa yritysdataa:", e);
+                    }
+                }
+                
+                // Odotetaan vielä hieman jos data on latautumassa
+                let dataRetries = 0;
+                while ((!window.allCompanies || window.allCompanies.length === 0) && dataRetries < 30) {
+                    await new Promise(r => setTimeout(r, 200));
+                    dataRetries++;
+                }
+                
                 if (!window.allCompanies || window.allCompanies.length === 0) {
                     if (countEl) countEl.textContent = i18n.t('error_load_companies');
+                    if (list) list.innerHTML = `<div class="no-results" style="text-align:center; padding:2rem;"><h3>⚠️ Virhe tietojen latauksessa</h3><p>Yritystietoja ei voitu ladata. Yritä päivittää sivu.</p><button onclick="location.reload()" class="btn-radar" style="margin-top:1rem;">Päivitä sivu</button></div>`;
                     return;
                 }
             }
