@@ -4025,31 +4025,14 @@
                 },
                 "BICYCLE_RENTAL": {
                     "available": true,
-                    "priority_score": 0.85,
-                    "confidence": "inferred",
-                    "source": "migration",
-                    "categories": [
-                        "ulkoliikunta",
-                        "vuokraus"
-                    ],
-                    "inventory": [
-                        {
-                            "type": "polkupyörä",
-                            "count": 4
-                        },
-                        {
-                            "type": "lastenpyörä",
-                            "count": 2
-                        }
-                    ],
-                    "additional_inventory": [
-                        "kypärät",
-                        "lukot"
-                    ],
+                    "priority_score": 0.75,
+                    "confidence": "draft",
+                    "source": "manual",
+                    "categories": [],
+                    "inventory": [],
+                    "additional_inventory": [],
                     "specs": {
-                        "hourly_rental": true,
-                        "daily_rental": true,
-                        "guided_tours": false
+                        "bike_count": 1
                     }
                 }
             },
@@ -37659,15 +37642,7 @@
                     "BIZ_FLORIST": 100
                 }
             },
-            "capabilities": {
-                "TRAILER_RENTAL": {
-                    "available": true,
-                    "priority_score": 0.85,
-                    "confidence": "inferred",
-                    "source": "migration",
-                    "specs": {}
-                }
-            },
+            "capabilities": {},
             "categories": {
                 "core": {
                     "description": "Yli 60 vuotta toiminut huonekaluliike sekä Kukka- ja Hautauspalvelu Vehviläinen, jolla on pitkät perinteet. Yritys myy huonekaluja kuten sohvia, sänkyjä, patjoja sekä tarjoaa kodinsisustustuotteita. Lisäksi palveluihin kuuluu kukkakauppa, kukkasidonta ja hautauspalvelut muistotilaisuuksien järjestämiseen. Yritys tarjoaa myös kuljetus- ja toimituspalveluja sekä on perheyritys.",
@@ -75817,13 +75792,6 @@
                 }
             },
             "capabilities": {
-                "SAUNA_FACILITY": {
-                    "available": true,
-                    "priority_score": 0.8,
-                    "confidence": "inferred",
-                    "source": "migration",
-                    "specs": {}
-                },
                 "ACCESSIBLE": {
                     "available": true,
                     "priority_score": 0.8,
@@ -76174,23 +76142,9 @@
                 "intent_scores": {}
             },
             "capabilities": {
-                "CANOE_RENTAL": {
-                    "available": true,
-                    "priority_score": 0.85,
-                    "confidence": "inferred",
-                    "source": "migration",
-                    "specs": {}
-                },
                 "SAUNA_FACILITY": {
                     "available": true,
                     "priority_score": 0.8,
-                    "confidence": "inferred",
-                    "source": "migration",
-                    "specs": {}
-                },
-                "WATERCRAFT_RENTAL": {
-                    "available": true,
-                    "priority_score": 0.85,
                     "confidence": "inferred",
                     "source": "migration",
                     "specs": {}

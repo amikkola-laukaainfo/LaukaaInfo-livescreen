@@ -1886,125 +1886,104 @@
             }
 
             // ============================================================
-            // 1. VUOKRAUSKAPABILITEETIT (CAPABILITIES) lukumäärillä
+            // 1. VUOKRAUSKAPABILITEETIT (CAPABILITIES) - VAIN HAKUUN OSUVAT
             // ============================================================
             const capabilities = c.profiling?.capabilities || {};
             const rentalItems = [];
 
-            // Apufunktio lukumäärän hakemiseen inventorysta
-            function getItemCount(capability, itemType) {
-                if (!capability?.inventory || !Array.isArray(capability.inventory)) return null;
-                const found = capability.inventory.find(item => item.type === itemType);
-                return found?.count || null;
-            }
-
-            // Apufunktio ensisijaisen lukumäärän hakemiseen
-            function getPrimaryCount(capability) {
-                if (!capability?.inventory || !Array.isArray(capability.inventory)) return null;
-                if (capability.inventory.length === 1 && capability.inventory[0].count) {
-                    return capability.inventory[0].count;
-                }
+            // Määritellään haussa olevat vuokrausoptiot (groupLabel perusteella)
+            function getActiveRentalTypeFromGroup(groupLabel) {
+                const label = (groupLabel || '').toLowerCase();
+                if (label.includes('peräkärry') || label.includes('trailer')) return 'TRAILER_RENTAL';
+                if (label.includes('kanootti') || label.includes('kajakki')) return 'CANOE_RENTAL';
+                if (label.includes('fatbike') || label.includes('polkupyörä')) return 'FATBIKE_RENTAL';
+                if (label.includes('sup') || label.includes('lauta')) return 'SUP_RENTAL';
+                if (label.includes('sauna') || label.includes('saunavuokraus')) return 'SAUNA_FACILITY';
+                if (label.includes('astiavuokraus') || label.includes('astiasto')) return 'DISH_RENTAL';
+                if (label.includes('av-vuokraus') || label.includes('äänentoisto')) return 'AV_RENTAL';
+                if (label.includes('teltta')) return 'TENT_RENTAL';
+                if (label.includes('ulkoiluväline')) return 'OUTDOOR_RENTAL';
+                if (label.includes('konevuokraus')) return 'EQUIPMENT_RENTAL';
+                if (label.includes('vene')) return 'WATERCRAFT_RENTAL';
                 return null;
             }
 
-            const rentalMapping = [
-                { 
-                    check: () => capabilities.WATERCRAFT_RENTAL?.available === true, 
-                    icon: "🛶", 
-                    label: "Venevuokraus", 
-                    getCount: () => getPrimaryCount(capabilities.WATERCRAFT_RENTAL) || getItemCount(capabilities.WATERCRAFT_RENTAL, 'boat')
-                },
-                { 
-                    check: () => capabilities.CANOE_RENTAL?.available === true, 
-                    icon: "🛶", 
-                    label: "Kanootti/kajakki", 
-                    getCount: () => getPrimaryCount(capabilities.CANOE_RENTAL) || getItemCount(capabilities.CANOE_RENTAL, 'canoe') || getItemCount(capabilities.CANOE_RENTAL, 'kayak')
-                },
-                { 
-                    check: () => capabilities.SUP_RENTAL?.available === true, 
-                    icon: "🏄", 
-                    label: "SUP-lauta", 
-                    getCount: () => getPrimaryCount(capabilities.SUP_RENTAL) || getItemCount(capabilities.SUP_RENTAL, 'sup_board')
-                },
-                { 
-                    check: () => capabilities.FATBIKE_RENTAL?.available === true, 
-                    icon: "🚲", 
-                    label: "Fatbike", 
-                    getCount: () => getPrimaryCount(capabilities.FATBIKE_RENTAL) || getItemCount(capabilities.FATBIKE_RENTAL, 'fatbike') || getItemCount(capabilities.FATBIKE_RENTAL, 'e_fatbike')
-                },
-                { 
-                    check: () => capabilities.AV_RENTAL?.available === true, 
-                    icon: "🎤", 
-                    label: "AV-vuokraus", 
-                    getCount: () => getPrimaryCount(capabilities.AV_RENTAL)
-                },
-                { 
-                    check: () => capabilities.SAUNA_FACILITY?.available === true && capabilities.SAUNA_FACILITY?.for_rent === true, 
-                    icon: "🧖", 
-                    label: "Saunavuokraus", 
-                    getCount: () => getPrimaryCount(capabilities.SAUNA_FACILITY)
-                },
-                { 
-                    check: () => capabilities.TRAILER_RENTAL?.available === true, 
-                    icon: "🚛", 
-                    label: "Peräkärry", 
-                    getCount: () => getPrimaryCount(capabilities.TRAILER_RENTAL) || getItemCount(capabilities.TRAILER_RENTAL, 'perakarry')
-                },
-                { 
-                    check: () => capabilities.DISH_RENTAL?.available === true, 
-                    icon: "🍽️", 
-                    label: "Astiavuokraus", 
-                    getCount: () => {
-                        const inv = capabilities.DISH_RENTAL?.inventory;
-                        if (inv && Array.isArray(inv)) {
-                            const setting = inv.find(i => i.type === 'table_setting_set');
-                            if (setting && setting.count) return `${setting.count} kattaukseen`;
-                            const primary = inv.find(i => i.count);
-                            if (primary && primary.count) return `${primary.count} kpl`;
-                        }
-                        return null;
-                    }
-                },
-                { 
-                    check: () => capabilities.TENT_RENTAL?.available === true, 
-                    icon: "⛺", 
-                    label: "Telttavuokraus", 
-                    getCount: () => getPrimaryCount(capabilities.TENT_RENTAL)
-                },
-                { 
-                    check: () => capabilities.OUTDOOR_RENTAL?.available === true, 
-                    icon: "🥾", 
-                    label: "Ulkoiluvälineet", 
-                    getCount: () => getPrimaryCount(capabilities.OUTDOOR_RENTAL)
-                },
-                { 
-                    check: () => capabilities.EQUIPMENT_RENTAL?.available === true, 
-                    icon: "🔧", 
-                    label: "Konevuokraus", 
-                    getCount: () => getPrimaryCount(capabilities.EQUIPMENT_RENTAL)
-                }
-            ];
+            const activeRentalCode = getActiveRentalTypeFromGroup(groupLabel);
 
-            // Kerätään aktiiviset vuokrauspalvelut lukumäärineen
-            rentalMapping.forEach(rental => {
-                if (rental.check()) {
-                    const count = rental.getCount ? rental.getCount() : null;
-                    rentalItems.push({ 
-                        icon: rental.icon, 
-                        label: rental.label,
-                        count: count
-                    });
+            // Hae vuokrauspalvelu (jos osuu hakuun)
+            if (activeRentalCode && capabilities[activeRentalCode]?.available === true) {
+                const rental = capabilities[activeRentalCode];
+                let count = null;
+                let label = '';
+                let icon = '🔧';
+                
+                // Määritellään label ja ikoni aktiivisen tyypin mukaan
+                switch(activeRentalCode) {
+                    case 'FATBIKE_RENTAL':
+                        icon = '🚲';
+                        label = 'Fatbike vuokraus';
+                        count = rental.inventory?.find(i => i.type === 'fatbike' || i.type === 'e_fatbike')?.count;
+                        break;
+                    case 'CANOE_RENTAL':
+                        icon = '🛶';
+                        label = 'Kanootti/kajakki vuokraus';
+                        count = rental.inventory?.find(i => i.type === 'canoe' || i.type === 'kayak')?.count;
+                        break;
+                    case 'SUP_RENTAL':
+                        icon = '🏄';
+                        label = 'SUP-lauta vuokraus';
+                        count = rental.inventory?.find(i => i.type === 'sup_board')?.count;
+                        break;
+                    case 'SAUNA_FACILITY':
+                        icon = '🧖';
+                        label = 'Sauna vuokraus';
+                        count = rental.inventory?.find(i => i.type === 'sauna' || i.type === 'saunavuokraus')?.count;
+                        if (rental.specs?.smoke_sauna) label = 'Savusauna vuokraus';
+                        break;
+                    case 'TRAILER_RENTAL':
+                        icon = '🚛';
+                        label = 'Peräkärry vuokraus';
+                        count = rental.inventory?.find(i => i.type === 'perakarry')?.count;
+                        break;
+                    case 'DISH_RENTAL':
+                        icon = '🍽️';
+                        label = 'Astiavuokraus';
+                        const setting = rental.inventory?.find(i => i.type === 'table_setting_set');
+                        if (setting?.count) count = `${setting.count} kattaukseen`;
+                        break;
+                    case 'AV_RENTAL':
+                        icon = '🎤';
+                        label = 'AV-vuokraus';
+                        break;
+                    case 'TENT_RENTAL':
+                        icon = '⛺';
+                        label = 'Telttavuokraus';
+                        break;
+                    case 'OUTDOOR_RENTAL':
+                        icon = '🥾';
+                        label = 'Ulkoiluvälinevuokraus';
+                        break;
+                    case 'EQUIPMENT_RENTAL':
+                        icon = '🔧';
+                        label = 'Konevuokraus';
+                        break;
+                    case 'WATERCRAFT_RENTAL':
+                        icon = '⛵';
+                        label = 'Venevuokraus';
+                        count = rental.inventory?.find(i => i.type === 'boat' || i.type === 'vene')?.count;
+                        break;
+                    default:
+                        break;
                 }
-            });
-
-            // Muodostetaan vuokrausbadget HTML (lukumäärillä)
-            if (rentalItems.length > 0) {
-                rentalBadgesHtml = `<div class="rental-badges" style="display:flex; flex-wrap:wrap; gap:8px; margin:12px 0; padding:8px 0; border-top:1px solid #eef2f6; border-bottom:1px solid #eef2f6;">
-                    ${rentalItems.map(r => {
-                        const countText = r.count ? ` (${r.count})` : '';
-                        return `<span style="background:#f0fdf4; padding:4px 10px; border-radius:20px; font-size:0.75rem; font-weight:600; color:#16a34a; display:inline-flex; align-items:center; gap:5px;">${r.icon} ${r.label}${countText}</span>`;
-                    }).join('')}
-                </div>`;
+                
+                const countText = count ? ` (${count})` : '';
+                rentalBadgesHtml = `
+                    <div style="margin:12px 0; padding:8px 0; border-top:1px solid #eef2f6; border-bottom:1px solid #eef2f6;">
+                        <span style="background:#f0fdf4; padding:4px 10px; border-radius:20px; font-size:0.75rem; font-weight:600; color:#16a34a; display:inline-flex; align-items:center; gap:5px;">
+                            ${icon} ${label}${countText}
+                        </span>
+                    </div>
+                `;
             }
 
             // ============================================================
