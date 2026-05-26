@@ -649,7 +649,7 @@ const NEEDS_CONFIG = {
             }
         ]
     },
-    "vuokraus": {
+    "vuokrauspalvelut": {
         "title": { "fi": "Vuokrauspalvelut", "en": "Rental Services" },
         "icon": "🔑",
         "description": { "fi": "Vuokraa kalustoa ja laitteita tarpeen mukaan.", "en": "Rent equipment and machinery as needed." },

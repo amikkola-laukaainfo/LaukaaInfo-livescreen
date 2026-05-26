@@ -7,7 +7,8 @@ const PIKAHAUKU_NEED_ORDER = [
     'haat', 'yritysjuhlat', 'yritystilaisuudet', 'syntymapaivat', 'muutto', 'remontti',
     'mokkipalvelut', 'hautajaiset', 'yrityksen-perustaminen', 'yrityksen-kehittaminen',
     'vakituinen-palvelukumppani', 'kiinteistopalvelut', 'paivystavat-palvelut',
-    'terveys-ja-hyvinvointi', 'liikunta-ja-vapaaaika', 'elaimet', 'lapset-ja-perhe', 'autohuollot'
+    'terveys-ja-hyvinvointi', 'liikunta-ja-vapaaaika', 'elaimet', 'lapset-ja-perhe', 'autohuollot',
+    'vuokrauspalvelut'
 ];
 
 let currentNeedId = new URLSearchParams(window.location.search).get('id') || '';
