@@ -2057,8 +2057,8 @@
             // Määritellään haussa oleva vuokraustyyppi groupLabel perusteella
             function getActiveRentalCodeFromGroup(groupLabel) {
                 const label = (groupLabel || '').toLowerCase();
-                // Tarkempi järjestys: polkupyörä ensin (jotta ei mene fatbikelle)
-                if (label.includes('polkupyörä') || label.includes('pyörävuokraus') || (label.includes('pyörä') && !label.includes('fatbike'))) return 'BICYCLE_RENTAL';
+                // Polkupyörä ensin (tärkeysjärjestys)
+                if (label.includes('polkupyörä') || label.includes('pyörävuokraus')) return 'BICYCLE_RENTAL';
                 if (label.includes('fatbike')) return 'FATBIKE_RENTAL';
                 if (label.includes('peräkärry') || label.includes('trailer')) return 'TRAILER_RENTAL';
                 if (label.includes('kanootti') || label.includes('kajakki')) return 'CANOE_RENTAL';
@@ -2206,8 +2206,10 @@
                 // Esteettömyys
                 if (catData?.is_accessible) badges += '<span title="Esteetön pääsy" style="cursor:help; margin-right:5px;">♿</span>';
                 
-                // SAUNA - TARKISTETAAN VAIN JOS EI OLE JO LISÄTTY VUOKRAUKSENA
-                if (!saunaAlreadyAdded) {
+                // SAUNA - Näytetään VAIN jos käyttäjä on hakenut saunaa (groupLabel sisältää sauna)
+                const userRequestedSauna = groupLabel && groupLabel.toLowerCase().includes('sauna');
+                
+                if (!saunaAlreadyAdded && userRequestedSauna) {
                     const hasSauna = catData?.has_sauna === true || 
                                     core.has_sauna === true ||
                                     (c.tags && c.tags.toLowerCase().includes('sauna'));
