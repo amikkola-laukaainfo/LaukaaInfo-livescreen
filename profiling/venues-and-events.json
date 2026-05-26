@@ -21880,13 +21880,6 @@
             }
         },
         "capabilities": {
-            "SUP_RENTAL": {
-                "available": true,
-                "priority_score": 0.85,
-                "confidence": "inferred",
-                "source": "migration",
-                "specs": {}
-            },
             "SAUNA_FACILITY": {
                 "available": true,
                 "priority_score": 0.8,
