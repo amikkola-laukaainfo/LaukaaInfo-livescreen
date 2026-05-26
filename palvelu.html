@@ -1110,14 +1110,19 @@
 
             // Ladataan yritysdata jos sitä ei vielä ole
             try {
+                // Odotetaan että loadCompanyData on saatavilla tai companyDataPromise on olemassa
                 let retries = 0;
-                const maxRetries = 50; // Nostettu 30 -> 50 (10 sekuntia)
-                while (typeof loadCompanyData !== 'function' && retries < maxRetries) {
+                const maxRetries = 50; // 50 * 200ms = 10 sekuntia
+                while (!window.companyDataPromise && typeof loadCompanyData !== 'function' && retries < maxRetries) {
                     await new Promise(r => setTimeout(r, 200));
                     retries++;
                 }
 
-                if (typeof loadCompanyData === 'function') {
+                // Käytetään companyDataPromise:a jos mahdollista (estää kaksinkertaisen latauksen)
+                if (window.companyDataPromise) {
+                    console.log("Odotetaan yritysdatan latausta (companyDataPromise)...");
+                    await window.companyDataPromise;
+                } else if (typeof loadCompanyData === 'function') {
                     if (!window.allCompanies || window.allCompanies.length === 0) {
                         console.log("Ladataan yritysdataa...");
                         await loadCompanyData();
@@ -1492,17 +1497,24 @@
             if (list) list.innerHTML = '<div style="text-align:center; padding: 3rem;">Ladataan yritystietoja...</div>';
             document.getElementById('next-steps-container').style.display = 'none';
 
-            // Odotetaan että loadCompanyData on saatavilla (max 10 sekuntia)
+            // Odotetaan että data on saatavilla (max 10 sekuntia) - käytetään companyDataPromise:a
             let retries = 0;
             const maxRetries = 50; // 50 * 200ms = 10 sekuntia
-            while (typeof loadCompanyData !== 'function' && retries < maxRetries) {
+            while (!window.companyDataPromise && typeof loadCompanyData !== 'function' && retries < maxRetries) {
                 await new Promise(r => setTimeout(r, 200));
                 retries++;
             }
 
-            // Ladataan yritysdata jos ei ole
+            // Ladataan yritysdata jos ei ole - käytetään companyDataPromise:a kaksinkertaisen latauksen estoon
             if (!window.allCompanies || window.allCompanies.length === 0) {
-                if (typeof loadCompanyData === 'function') {
+                if (window.companyDataPromise) {
+                    try {
+                        console.log("Odotetaan yritysdatan latausta (companyDataPromise)...");
+                        await window.companyDataPromise;
+                    } catch (e) {
+                        console.error("Virhe odotettaessa companyDataPromise:a:", e);
+                    }
+                } else if (typeof loadCompanyData === 'function') {
                     try {
                         await loadCompanyData();
                     } catch (e) {
@@ -1520,7 +1532,7 @@
                 
                 if (!window.allCompanies || window.allCompanies.length === 0) {
                     if (countEl) countEl.textContent = i18n.t('error_load_companies');
-                    if (list) list.innerHTML = `<div class="no-results" style="text-align:center; padding:2rem;"><h3>⚠️ Virhe tietojen latauksessa</h3><p>Yritystietoja ei voitu ladata. Yritä päivittää sivu.</p><button onclick="location.reload()" class="btn-radar" style="margin-top:1rem;">Päivitä sivu</button></div>`;
+                    if (list) list.innerHTML = '<div class="no-results" style="text-align:center; padding:2rem;"><h3>⚠️ Virhe tietojen latauksessa</h3><p>Yritystietoja ei voitu ladata. Yritä päivittää sivu.</p><button onclick="location.reload()" class="btn-radar" style="margin-top:1rem;">Päivitä sivu</button></div>';
                     return;
                 }
             }
