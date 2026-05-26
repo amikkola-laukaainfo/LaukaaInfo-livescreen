@@ -1972,7 +1972,8 @@
 
         function renderCompanyCard(c, requestedCapacity, profilingKey, collaboratorsSet, anchorCoords = null, isAnchorGroup = false, isSelected = false, groupLabel = '') {
             const slug = typeof slugify === 'function' ? slugify(c.nimi) : String(c.nimi).toLowerCase().replace(/\s+/g, '-');
-            // Korjattu premium-tarkistus
+            
+            // Premium-tarkistus
             const isPremium = (c.paketti === 'premium' || c.paketti === 'pro' || 
                               c.tyyppi === 'premium' || c.tyyppi === 'pro' ||
                               c.is_premium === true ||
@@ -1998,7 +1999,10 @@
             let capacityNote = '';
             let distanceHtml = '';
             let inventoryNote = '';
-            let rentalBadgesHtml = '';
+            let rentalBadgesHtml = '';  // VAIN VUOKRAUS (haun perusteella)
+            
+            // TÄRKEÄ: Seurataan onko sauna jo lisätty badgeihin (estetään duplikaatti)
+            let saunaAlreadyAdded = false;
 
             // Etäisyys ankkuriin tai käyttäjään
             if (anchorCoords && c.lat && (c.lon || c.lng)) {
@@ -2025,10 +2029,11 @@
             // Määritellään haussa oleva vuokraustyyppi groupLabel perusteella
             function getActiveRentalCodeFromGroup(groupLabel) {
                 const label = (groupLabel || '').toLowerCase();
+                // Tarkempi järjestys: polkupyörä ensin (jotta ei mene fatbikelle)
+                if (label.includes('polkupyörä') || label.includes('pyörävuokraus') || (label.includes('pyörä') && !label.includes('fatbike'))) return 'BICYCLE_RENTAL';
+                if (label.includes('fatbike')) return 'FATBIKE_RENTAL';
                 if (label.includes('peräkärry') || label.includes('trailer')) return 'TRAILER_RENTAL';
                 if (label.includes('kanootti') || label.includes('kajakki')) return 'CANOE_RENTAL';
-                if (label.includes('fatbike')) return 'FATBIKE_RENTAL';
-                if (label.includes('polkupyörä') || label.includes('pyörä') || label.includes('bicycle')) return 'BICYCLE_RENTAL';
                 if (label.includes('sup') || label.includes('lauta')) return 'SUP_RENTAL';
                 if (label.includes('sauna')) return 'SAUNA_FACILITY';
                 if (label.includes('astia') || label.includes('astiasto')) return 'DISH_RENTAL';
@@ -2055,15 +2060,16 @@
                     case 'BICYCLE_RENTAL':
                         rentalIcon = '🚲';
                         label = 'Polkupyörä vuokraus';
-                        // Etsi inventorysta pyörät
                         if (rental.inventory && Array.isArray(rental.inventory)) {
                             const bikeItems = rental.inventory.filter(i => 
                                 i.type === 'fatbike' || i.type === 'e_fatbike' || 
                                 i.type === 'mountain_bike' || i.type === 'city_bike' ||
-                                i.type === 'bicycle'
+                                i.type === 'bicycle' || i.type === 'polkupyörä'
                             );
                             if (bikeItems.length > 0) {
                                 count = bikeItems.reduce((sum, i) => sum + (i.count || 0), 0);
+                            } else if (rental.inventory[0]?.count) {
+                                count = rental.inventory[0].count;
                             }
                         }
                         break;
@@ -2090,6 +2096,8 @@
                             count = saunaItem?.count;
                         }
                         if (rental.specs?.smoke_sauna) label = 'Savusauna vuokraus';
+                        // Merkitään että sauna on jo lisätty (jottei tule toista badgea)
+                        saunaAlreadyAdded = true;
                         break;
                     case 'TRAILER_RENTAL':
                         rentalIcon = '🚛';
@@ -2170,24 +2178,25 @@
                 // Esteettömyys
                 if (catData?.is_accessible) badges += '<span title="Esteetön pääsy" style="cursor:help; margin-right:5px;">♿</span>';
                 
-                // SAUNA - TARKISTETAAN MONESTA PAIKASTA
-                const hasSauna = catData?.has_sauna === true || 
-                                core.has_sauna === true ||
-                                (c.tags && c.tags.toLowerCase().includes('sauna')) ||
-                                (capabilities.SAUNA_FACILITY?.available === true);
-                
-                if (hasSauna) {
-                    badges += '<span title="Sauna saatavilla" style="cursor:help; margin-right:5px; background:#fef3c7; padding:2px 6px; border-radius:12px; font-size:0.7rem;">🧖 Sauna</span>';
+                // SAUNA - TARKISTETAAN VAIN JOS EI OLE JO LISÄTTY VUOKRAUKSENA
+                if (!saunaAlreadyAdded) {
+                    const hasSauna = catData?.has_sauna === true || 
+                                    core.has_sauna === true ||
+                                    (c.tags && c.tags.toLowerCase().includes('sauna'));
+                    
+                    if (hasSauna) {
+                        badges += '<span title="Sauna" style="background:#fef3c7; padding:2px 6px; border-radius:12px; font-size:0.7rem; margin-right:5px;">🧖 Sauna</span>';
+                    }
                 }
                 
                 // Kotipalvelu
-                if (core.home_service) badges += '<span title="Kotipalvelu" style="cursor:help; margin-right:5px;">🏠 Kotiin</span>';
+                if (core.home_service) badges += '<span title="Kotipalvelu" style="margin-right:5px;">🏠 Kotiin</span>';
                 
                 // Päivystys
-                if (core.emergency_available) badges += '<span title="Päivystys" style="cursor:help; margin-right:5px;">🚨 Päivystys</span>';
+                if (core.emergency_available) badges += '<span title="Päivystys" style="margin-right:5px;">🚨 Päivystys</span>';
                 
                 // Varastointi
-                if (core.storage_available) badges += '<span title="Varastointi" style="cursor:help; margin-right:5px;">📦 Varastointi</span>';
+                if (core.storage_available) badges += '<span title="Varastointi" style="margin-right:5px;">📦 Varastointi</span>';
                 
                 // Inventory note (vain jos ei ollut capability-pohjaista badgea)
                 const isRentalGroup = groupLabel && (groupLabel.toLowerCase().includes('vuokraus') || groupLabel.toLowerCase().includes('rental'));
