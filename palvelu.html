@@ -338,6 +338,123 @@
             border: 2px dashed #cbd5e1;
         }
 
+        /* Company card icon styles */
+        .company-result-card .result-icon {
+            width: 100%;
+            height: 120px;
+            margin-bottom: 1rem;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            transition: all 0.3s ease;
+            border: 1px solid #eef2f6;
+        }
+
+        .company-result-card:hover .result-icon {
+            transform: scale(1.02);
+            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+            border-color: var(--primary-blue);
+        }
+
+        .company-result-card .result-media {
+            width: 100%;
+            height: 140px;
+            margin-bottom: 1rem;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #f8fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #eef2f6;
+            transition: all 0.3s ease;
+        }
+
+        .company-result-card .result-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .company-result-card .result-media.is-logo img {
+            object-fit: contain;
+            padding: 20px;
+        }
+
+        .company-result-card:hover .result-media img {
+            transform: scale(1.05);
+        }
+
+        .company-result-card:hover .result-media {
+            border-color: var(--primary-blue);
+        }
+
+        /* Badge styles */
+        .badge-premium {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: #78350f;
+        }
+
+        .badge-top {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .badge-partner {
+            background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+            color: white;
+        }
+
+        .result-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            z-index: 2;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .company-result-card {
+            position: relative;
+        }
+
+        /* Dist badge */
+        .dist-badge {
+            background: #e2e8f0;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #475569;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Feature badges container */
+        .feature-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 10px 0;
+        }
+
         .next-steps-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(min(160px, 100%), 1fr));
@@ -1855,10 +1972,25 @@
 
         function renderCompanyCard(c, requestedCapacity, profilingKey, collaboratorsSet, anchorCoords = null, isAnchorGroup = false, isSelected = false, groupLabel = '') {
             const slug = typeof slugify === 'function' ? slugify(c.nimi) : String(c.nimi).toLowerCase().replace(/\s+/g, '-');
-            const isPremium = (c.paketti || c.tyyppi || '').toLowerCase().match(/premium|pro/);
+            // Korjattu premium-tarkistus
+            const isPremium = (c.paketti === 'premium' || c.paketti === 'pro' || 
+                              c.tyyppi === 'premium' || c.tyyppi === 'pro' ||
+                              c.is_premium === true ||
+                              (c.paketti || '').toLowerCase().match(/premium|pro/) !== null ||
+                              (c.tyyppi || '').toLowerCase().match(/premium|pro/) !== null);
+            
             const cardUrl = isPremium ? `yritys/${slug}.html` : `yrityskortti.html?id=${slug}`;
             const icons = window.categoryIcons || {};
-            const icon = icons[c.kategoria] || '🏢';
+            let icon = icons[c.kategoria] || '🏢';
+            
+            // Parempi ikonien haku
+            if (c.profiling && c.profiling.core && c.profiling.core.category_icon) {
+                icon = c.profiling.core.category_icon;
+            } else if (c.emoji) {
+                icon = c.emoji;
+            } else if (c.icon) {
+                icon = c.icon;
+            }
 
             let badges = '';
             let isTopMatch = (getFitsForScore(c, profilingKey) >= 80);
@@ -1886,89 +2018,108 @@
             }
 
             // ============================================================
-            // 1. VUOKRAUSKAPABILITEETIT (CAPABILITIES) - VAIN HAKUUN OSUVAT
+            // 1. VUOKRAUSKAPABILITEETIT - Näytetään VAIN se tyyppi, joka osuu hakuun
             // ============================================================
             const capabilities = c.profiling?.capabilities || {};
-            const rentalItems = [];
-
-            // Määritellään haussa olevat vuokrausoptiot (groupLabel perusteella)
-            function getActiveRentalTypeFromGroup(groupLabel) {
+            
+            // Määritellään haussa oleva vuokraustyyppi groupLabel perusteella
+            function getActiveRentalCodeFromGroup(groupLabel) {
                 const label = (groupLabel || '').toLowerCase();
                 if (label.includes('peräkärry') || label.includes('trailer')) return 'TRAILER_RENTAL';
                 if (label.includes('kanootti') || label.includes('kajakki')) return 'CANOE_RENTAL';
-                if (label.includes('fatbike') || label.includes('polkupyörä')) return 'FATBIKE_RENTAL';
+                if (label.includes('fatbike')) return 'FATBIKE_RENTAL';
+                if (label.includes('polkupyörä') || label.includes('pyörä') || label.includes('bicycle')) return 'BICYCLE_RENTAL';
                 if (label.includes('sup') || label.includes('lauta')) return 'SUP_RENTAL';
-                if (label.includes('sauna') || label.includes('saunavuokraus')) return 'SAUNA_FACILITY';
-                if (label.includes('astiavuokraus') || label.includes('astiasto')) return 'DISH_RENTAL';
-                if (label.includes('av-vuokraus') || label.includes('äänentoisto')) return 'AV_RENTAL';
-                if (label.includes('teltta')) return 'TENT_RENTAL';
-                if (label.includes('ulkoiluväline')) return 'OUTDOOR_RENTAL';
-                if (label.includes('konevuokraus')) return 'EQUIPMENT_RENTAL';
+                if (label.includes('sauna')) return 'SAUNA_FACILITY';
+                if (label.includes('astia') || label.includes('astiasto')) return 'DISH_RENTAL';
+                if (label.includes('av') || label.includes('äänentoisto')) return 'AV_RENTAL';
+                if (label.includes('teltta') || label.includes('katos')) return 'TENT_RENTAL';
+                if (label.includes('ulkoilu') || label.includes('väline')) return 'OUTDOOR_RENTAL';
+                if (label.includes('kone') || label.includes('laitte')) return 'EQUIPMENT_RENTAL';
                 if (label.includes('vene')) return 'WATERCRAFT_RENTAL';
                 return null;
             }
 
-            const activeRentalCode = getActiveRentalTypeFromGroup(groupLabel);
-
-            // Hae vuokrauspalvelu (jos osuu hakuun)
+            const activeRentalCode = getActiveRentalCodeFromGroup(groupLabel);
+            
+            // Hae vuokraustiedot JA tarkista että kyseinen tyyppi on oikeasti saatavilla
+            let rentalItem = null;
+            
             if (activeRentalCode && capabilities[activeRentalCode]?.available === true) {
                 const rental = capabilities[activeRentalCode];
                 let count = null;
                 let label = '';
-                let icon = '🔧';
+                let rentalIcon = '🔧';
                 
-                // Määritellään label ja ikoni aktiivisen tyypin mukaan
                 switch(activeRentalCode) {
+                    case 'BICYCLE_RENTAL':
+                        rentalIcon = '🚲';
+                        label = 'Polkupyörä vuokraus';
+                        // Etsi inventorysta pyörät
+                        if (rental.inventory && Array.isArray(rental.inventory)) {
+                            const bikeItems = rental.inventory.filter(i => 
+                                i.type === 'fatbike' || i.type === 'e_fatbike' || 
+                                i.type === 'mountain_bike' || i.type === 'city_bike' ||
+                                i.type === 'bicycle'
+                            );
+                            if (bikeItems.length > 0) {
+                                count = bikeItems.reduce((sum, i) => sum + (i.count || 0), 0);
+                            }
+                        }
+                        break;
                     case 'FATBIKE_RENTAL':
-                        icon = '🚲';
+                        rentalIcon = '🚲';
                         label = 'Fatbike vuokraus';
                         count = rental.inventory?.find(i => i.type === 'fatbike' || i.type === 'e_fatbike')?.count;
                         break;
                     case 'CANOE_RENTAL':
-                        icon = '🛶';
+                        rentalIcon = '🛶';
                         label = 'Kanootti/kajakki vuokraus';
                         count = rental.inventory?.find(i => i.type === 'canoe' || i.type === 'kayak')?.count;
                         break;
                     case 'SUP_RENTAL':
-                        icon = '🏄';
+                        rentalIcon = '🏄';
                         label = 'SUP-lauta vuokraus';
                         count = rental.inventory?.find(i => i.type === 'sup_board')?.count;
                         break;
                     case 'SAUNA_FACILITY':
-                        icon = '🧖';
+                        rentalIcon = '🧖';
                         label = 'Sauna vuokraus';
-                        count = rental.inventory?.find(i => i.type === 'sauna' || i.type === 'saunavuokraus')?.count;
+                        if (rental.inventory && Array.isArray(rental.inventory)) {
+                            const saunaItem = rental.inventory.find(i => i.type === 'sauna' || i.type === 'saunavuokraus');
+                            count = saunaItem?.count;
+                        }
                         if (rental.specs?.smoke_sauna) label = 'Savusauna vuokraus';
                         break;
                     case 'TRAILER_RENTAL':
-                        icon = '🚛';
+                        rentalIcon = '🚛';
                         label = 'Peräkärry vuokraus';
                         count = rental.inventory?.find(i => i.type === 'perakarry')?.count;
                         break;
                     case 'DISH_RENTAL':
-                        icon = '🍽️';
+                        rentalIcon = '🍽️';
                         label = 'Astiavuokraus';
                         const setting = rental.inventory?.find(i => i.type === 'table_setting_set');
                         if (setting?.count) count = `${setting.count} kattaukseen`;
                         break;
                     case 'AV_RENTAL':
-                        icon = '🎤';
+                        rentalIcon = '🎤';
                         label = 'AV-vuokraus';
                         break;
                     case 'TENT_RENTAL':
-                        icon = '⛺';
+                        rentalIcon = '⛺';
                         label = 'Telttavuokraus';
                         break;
                     case 'OUTDOOR_RENTAL':
-                        icon = '🥾';
+                        rentalIcon = '🥾';
                         label = 'Ulkoiluvälinevuokraus';
                         break;
                     case 'EQUIPMENT_RENTAL':
-                        icon = '🔧';
+                        rentalIcon = '🔧';
                         label = 'Konevuokraus';
                         break;
                     case 'WATERCRAFT_RENTAL':
-                        icon = '⛵';
+                        rentalIcon = '⛵';
                         label = 'Venevuokraus';
                         count = rental.inventory?.find(i => i.type === 'boat' || i.type === 'vene')?.count;
                         break;
@@ -1977,10 +2128,15 @@
                 }
                 
                 const countText = count ? ` (${count})` : '';
+                rentalItem = { icon: rentalIcon, label: label, countText: countText };
+            }
+            
+            // Muodostetaan vuokrausbadge (VAIN jos löytyi osuma)
+            if (rentalItem) {
                 rentalBadgesHtml = `
-                    <div style="margin:12px 0; padding:8px 0; border-top:1px solid #eef2f6; border-bottom:1px solid #eef2f6;">
-                        <span style="background:#f0fdf4; padding:4px 10px; border-radius:20px; font-size:0.75rem; font-weight:600; color:#16a34a; display:inline-flex; align-items:center; gap:5px;">
-                            ${icon} ${label}${countText}
+                    <div class="rental-badge" style="margin:12px 0; padding:8px 0; border-top:1px solid #eef2f6; border-bottom:1px solid #eef2f6;">
+                        <span style="background:#f0fdf4; padding:4px 12px; border-radius:20px; font-size:0.8rem; font-weight:600; color:#16a34a; display:inline-flex; align-items:center; gap:6px;">
+                            ${rentalItem.icon} ${rentalItem.label}${rentalItem.countText}
                         </span>
                     </div>
                 `;
@@ -1993,6 +2149,7 @@
                 const core = c.profiling.core || {};
                 const catData = getCategoryData(c, profilingKey);
                 
+                // Hybridi-badge (tila + ruoka)
                 const isHybrid = catData?.inhouse_catering_available || 
                                 (core.node_links && core.node_links.includes('JUHLATILA') && core.node_links.includes('CATERING'));
                 
@@ -2000,6 +2157,7 @@
                     badges += `<span class="hybrid-badge" style="background:#f0fdf4; color:#16a34a; border:1px solid #bbf7d0; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:bold; margin-right:5px;" title="${i18n.t('badge_hybrid_title')}">${i18n.t('badge_hybrid')}</span>`;
                 }
 
+                // Kapasiteettitarkistus (ei catering-ryhmille)
                 const isCateringGroup = groupLabel && groupLabel.toLowerCase().includes('pitopalvelu');
                 if (requestedCapacity > 0 && !isCateringGroup) {
                     const cap = getCompanyCapacity(c, profilingKey);
@@ -2009,19 +2167,37 @@
                     }
                 }
                 
+                // Esteettömyys
                 if (catData?.is_accessible) badges += '<span title="Esteetön pääsy" style="cursor:help; margin-right:5px;">♿</span>';
-                if (catData?.has_sauna) badges += '<span title="Sauna saatavilla" style="cursor:help; margin-right:5px;">🧖</span>';
-                if (core.home_service) badges += '<span title="Kotipalvelu" style="cursor:help; margin-right:5px;">🏠</span>';
-                if (core.emergency_available) badges += '<span title="Päivystys" style="cursor:help; margin-right:5px;">🚨</span>';
                 
+                // SAUNA - TARKISTETAAN MONESTA PAIKASTA
+                const hasSauna = catData?.has_sauna === true || 
+                                core.has_sauna === true ||
+                                (c.tags && c.tags.toLowerCase().includes('sauna')) ||
+                                (capabilities.SAUNA_FACILITY?.available === true);
+                
+                if (hasSauna) {
+                    badges += '<span title="Sauna saatavilla" style="cursor:help; margin-right:5px; background:#fef3c7; padding:2px 6px; border-radius:12px; font-size:0.7rem;">🧖 Sauna</span>';
+                }
+                
+                // Kotipalvelu
+                if (core.home_service) badges += '<span title="Kotipalvelu" style="cursor:help; margin-right:5px;">🏠 Kotiin</span>';
+                
+                // Päivystys
+                if (core.emergency_available) badges += '<span title="Päivystys" style="cursor:help; margin-right:5px;">🚨 Päivystys</span>';
+                
+                // Varastointi
+                if (core.storage_available) badges += '<span title="Varastointi" style="cursor:help; margin-right:5px;">📦 Varastointi</span>';
+                
+                // Inventory note (vain jos ei ollut capability-pohjaista badgea)
                 const isRentalGroup = groupLabel && (groupLabel.toLowerCase().includes('vuokraus') || groupLabel.toLowerCase().includes('rental'));
-                if (isRentalGroup && c.tags && rentalItems.length === 0) {
-                    const rentalTags = ['fatbike', 'kajakki', 'kanootti', 'sup', 'venevuokraus', 'peräkärryn vuokraus', 'laitteistovuokraus', 'konevuokraus', 'av-vuokraus', 'äänentoisto', 'valotekniikka', 'astiavuokraus', 'astiasto', 'telttavuokraus', 'katos', 'ulkoiluvälinevuokraus'];
-                    const companyTags = c.tags.toLowerCase().split(',').map(t => t.trim());
+                if (isRentalGroup && c.tags && !rentalItem) {
+                    const rentalTags = ['fatbike', 'kajakki', 'kanootti', 'sup', 'venevuokraus', 'peräkärry', 'laitteisto', 'konevuokraus', 'av-vuokraus', 'äänentoisto', 'astiavuokraus', 'telttavuokraus', 'polkupyörä', 'pyörävuokraus'];
+                    const companyTags = (c.tags || '').toLowerCase().split(',').map(t => t.trim());
                     const matchedRentalTags = companyTags.filter(tag => rentalTags.some(rt => tag.includes(rt)));
                     if (matchedRentalTags.length > 0) {
                         const rentalTypes = matchedRentalTags.map(t => t.charAt(0).toUpperCase() + t.slice(1)).join(', ');
-                        inventoryNote = `<div style="font-size:0.85rem; color:#334155; margin-top:8px; margin-bottom:12px; padding:8px 12px; background:#f8fafc; border-radius:8px; border-left:3px solid var(--primary-blue);"><strong>Vuokraus:</strong> ${rentalTypes}</div>`;
+                        inventoryNote = `<div style="font-size:0.85rem; color:#334155; margin-top:8px; margin-bottom:12px; padding:8px 12px; background:#f8fafc; border-radius:8px; border-left:3px solid var(--primary-blue);"><strong>📋 Vuokraus:</strong> ${rentalTypes}</div>`;
                     }
                 }
             }
@@ -2070,10 +2246,13 @@
             // 4. MEDIA (logo/kuva/ikoni)
             // ============================================================
             let mediaHtml = `<div class="result-icon">${icon}</div>`;
-            if (c.logo && c.logo !== '-' && c.logo.startsWith('http')) {
-                mediaHtml = `<div class="result-media is-logo"><img src="${c.logo}" alt="${c.nimi}" loading="lazy"></div>`;
-            } else if (c.media && Array.isArray(c.media) && c.media.length > 0 && c.media[0].url) {
-                mediaHtml = `<div class="result-media"><img src="${c.media[0].url}" alt="${c.nimi}" loading="lazy"></div>`;
+            const hasLogo = c.logo && c.logo !== '-' && (c.logo.startsWith('http') || c.logo.startsWith('/'));
+            const hasMediaImage = c.media && Array.isArray(c.media) && c.media.length > 0 && c.media[0].url;
+            
+            if (hasLogo) {
+                mediaHtml = `<div class="result-media is-logo"><img src="${c.logo}" alt="${c.nimi}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'result-icon\'>${icon}</div>'"></div>`;
+            } else if (hasMediaImage) {
+                mediaHtml = `<div class="result-media"><img src="${c.media[0].url}" alt="${c.nimi}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'result-icon\'>${icon}</div>'"></div>`;
             }
 
             // ============================================================
@@ -2088,6 +2267,14 @@
                              (c.alue_slug && c.alue_slug.length > 0);
             const fallbackSlogan = isLaukaa ? i18n.t('local_provider_laukaa') : i18n.t('network_provider');
             const wrapperClass = isSelected ? 'company-result-card selected-anchor' : 'company-result-card';
+            
+            // Sloganin käsittely
+            let slogan = c.mainoslause || '';
+            if (!slogan && c.esittely) {
+                slogan = c.esittely.substring(0, 100) + '...';
+            }
+            if (!slogan) slogan = fallbackSlogan;
+            slogan = slogan.replace(/@@/g, '');
 
             return `
                 <div class="${wrapperClass} ${isTopMatch ? 'top-match' : ''} ${isPartner ? 'partner-boost' : ''}">
@@ -2096,7 +2283,7 @@
                     ${isPremium && !isTopMatch && !isPartner ? `<div class="result-badge badge-premium">${i18n.t('badge_premium')}</div>` : ''}
                     ${mediaHtml}
                     <h3>${c.nimi}</h3>
-                    <div class="slogan">${(c.mainoslause || (c.esittely ? c.esittely.substring(0, 100) + '...' : fallbackSlogan)).replace(/@@/g, '')}</div>
+                    <div class="slogan">${slogan}</div>
                     ${capacityNote}
                     ${rentalBadgesHtml}
                     ${inventoryNote}

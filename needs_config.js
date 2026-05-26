@@ -674,7 +674,7 @@ const NEEDS_CONFIG = {
                     },
                     {
                         "id": "OPT_RENTAL_FATBIKE",
-                        "label": { "fi": "Fatbike vuokraus", "en": "Fatbike rental" },
+                        "label": { "fi": "Fatbiken vuokraus", "en": "Fatbike rental" },
                         "intent_codes": ["REC_OUTDOOR", "FATBIKE_RENTAL"],
                         "capability_requirements": [{ "code": "FATBIKE_RENTAL" }]
                     },
@@ -706,7 +706,7 @@ const NEEDS_CONFIG = {
                     },
                     {
                         "id": "OPT_RENTAL_SAUNA",
-                        "label": { "fi": "Saunan vuokraus (saunailta, savusauna)", "en": "Sauna rental (sauna evening, smoke sauna)" },
+                        "label": { "fi": "Saunan vuokraus", "en": "Sauna rental" },
                         "intent_codes": ["WELLBEING_BEAUTY", "REC_OUTDOOR", "HOME_COTTAGE"],
                         "capability_requirements": [{ "code": "SAUNA_FACILITY" }]
                     },
