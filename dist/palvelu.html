@@ -1111,23 +1111,31 @@
             // Ladataan yritysdata jos sitä ei vielä ole
             try {
                 let retries = 0;
-                const maxRetries = 30; // Nostettu 15 -> 30
+                const maxRetries = 50; // Nostettu 30 -> 50 (10 sekuntia)
                 while (typeof loadCompanyData !== 'function' && retries < maxRetries) {
-                    await new Promise(r => setTimeout(r, 300));
+                    await new Promise(r => setTimeout(r, 200));
                     retries++;
                 }
 
                 if (typeof loadCompanyData === 'function') {
                     if (!window.allCompanies || window.allCompanies.length === 0) {
+                        console.log("Ladataan yritysdataa...");
                         await loadCompanyData();
                     }
                 }
                 
-                // Varmistetaan että data on latautunut
+                // Varmistetaan että data on latautunut (max 8 sekuntia)
                 let dataRetries = 0;
-                while ((!window.allCompanies || window.allCompanies.length === 0) && dataRetries < 20) {
+                const maxDataRetries = 40;
+                while ((!window.allCompanies || window.allCompanies.length === 0) && dataRetries < maxDataRetries) {
                     await new Promise(r => setTimeout(r, 200));
                     dataRetries++;
+                }
+                
+                if (window.allCompanies && window.allCompanies.length > 0) {
+                    console.log(`Yritysdataa ladattu: ${window.allCompanies.length} yritystä`);
+                } else {
+                    console.warn("Yritysdataa ei latautunut aikarajassa");
                 }
             } catch (e) {
                 console.error("Virhe ladattaessa yritysdataa:", e);
@@ -1484,9 +1492,10 @@
             if (list) list.innerHTML = '<div style="text-align:center; padding: 3rem;">Ladataan yritystietoja...</div>';
             document.getElementById('next-steps-container').style.display = 'none';
 
-            // Odotetaan että loadCompanyData on saatavilla
+            // Odotetaan että loadCompanyData on saatavilla (max 10 sekuntia)
             let retries = 0;
-            while (typeof loadCompanyData !== 'function' && retries < 20) {
+            const maxRetries = 50; // 50 * 200ms = 10 sekuntia
+            while (typeof loadCompanyData !== 'function' && retries < maxRetries) {
                 await new Promise(r => setTimeout(r, 200));
                 retries++;
             }
@@ -1501,9 +1510,10 @@
                     }
                 }
                 
-                // Odotetaan vielä hieman jos data on latautumassa
+                // Odotetaan datan latautumista (max 8 sekuntia)
                 let dataRetries = 0;
-                while ((!window.allCompanies || window.allCompanies.length === 0) && dataRetries < 30) {
+                const maxDataRetries = 40; // 40 * 200ms = 8 sekuntia
+                while ((!window.allCompanies || window.allCompanies.length === 0) && dataRetries < maxDataRetries) {
                     await new Promise(r => setTimeout(r, 200));
                     dataRetries++;
                 }
@@ -2057,24 +2067,29 @@
             // Määritellään haussa oleva vuokraustyyppi groupLabel perusteella
             function getActiveRentalCodeFromGroup(groupLabel) {
                 const label = (groupLabel || '').toLowerCase();
-                // Tarkempi järjestys: polkupyörä ensin (jotta ei mene fatbikelle)
-                if (label.includes('polkupyörä') || label.includes('pyörävuokraus') || (label.includes('pyörä') && !label.includes('fatbike'))) return 'BICYCLE_RENTAL';
+                // Tarkka järjestys: spesifisimmät ensin
+                if (label.includes('polkupyörä') || label.includes('pyörävuokraus')) return 'BICYCLE_RENTAL';
                 if (label.includes('fatbike')) return 'FATBIKE_RENTAL';
-                if (label.includes('peräkärry') || label.includes('trailer')) return 'TRAILER_RENTAL';
                 if (label.includes('kanootti') || label.includes('kajakki')) return 'CANOE_RENTAL';
                 if (label.includes('sup') || label.includes('lauta')) return 'SUP_RENTAL';
-                if (label.includes('sauna')) return 'SAUNA_FACILITY';
                 if (label.includes('astia') || label.includes('astiasto')) return 'DISH_RENTAL';
+                if (label.includes('peräkärry') || label.includes('trailer')) return 'TRAILER_RENTAL';
                 if (label.includes('av') || label.includes('äänentoisto')) return 'AV_RENTAL';
                 if (label.includes('teltta') || label.includes('katos')) return 'TENT_RENTAL';
                 if (label.includes('ulkoilu') || label.includes('väline')) return 'OUTDOOR_RENTAL';
                 if (label.includes('kone') || label.includes('laitte')) return 'EQUIPMENT_RENTAL';
                 if (label.includes('vene')) return 'WATERCRAFT_RENTAL';
+                if (label.includes('sauna')) return 'SAUNA_FACILITY';
                 return null;
             }
 
             const activeRentalCode = getActiveRentalCodeFromGroup(groupLabel);
             
+            // Debug: tulosta vuokraustiedot
+            if (activeRentalCode) {
+                console.log("Vuokrauskoodi:", activeRentalCode, "capabilities:", capabilities[activeRentalCode]);
+            }
+
             // Hae vuokraustiedot JA tarkista että kyseinen tyyppi on oikeasti saatavilla
             let rentalItem = null;
             
@@ -2109,7 +2124,18 @@
                     case 'CANOE_RENTAL':
                         rentalIcon = '🛶';
                         label = 'Kanootti/kajakki vuokraus';
-                        count = rental.inventory?.find(i => i.type === 'canoe' || i.type === 'kayak')?.count;
+                        // Haetaan lukumäärä inventorysta
+                        if (rental.inventory && Array.isArray(rental.inventory)) {
+                            const canoeItems = rental.inventory.filter(i => 
+                                i.type === 'canoe' || i.type === 'kajakki' || i.type === 'kayak'
+                            );
+                            if (canoeItems.length > 0) {
+                                count = canoeItems.reduce((sum, i) => sum + (i.count || 0), 0);
+                            }
+                        }
+                        // Jos ei löytynyt inventorysta, käytetään suoraa count-kenttää
+                        if (!count && rental.count) count = rental.count;
+                        console.log("CANOE_RENTAL:", rental, "count:", count); // Debug
                         break;
                     case 'SUP_RENTAL':
                         rentalIcon = '🏄';
@@ -2135,29 +2161,56 @@
                     case 'DISH_RENTAL':
                         rentalIcon = '🍽️';
                         label = 'Astiavuokraus';
-                        const setting = rental.inventory?.find(i => i.type === 'table_setting_set');
-                        if (setting?.count) count = `${setting.count} kattaukseen`;
+                        // Haetaan lukumäärä inventorysta
+                        if (rental.inventory && Array.isArray(rental.inventory)) {
+                            const dishItems = rental.inventory.filter(i => 
+                                i.type === 'table_setting_set' || i.type === 'dishes' || 
+                                i.type === 'astiat' || i.type === 'astiasto'
+                            );
+                            if (dishItems.length > 0) {
+                                const totalCount = dishItems.reduce((sum, i) => sum + (i.count || 0), 0);
+                                if (totalCount > 0) count = `${totalCount} kpl`;
+                            }
+                            // Tarkistetaan myös erikseen table_setting_set
+                            const setting = rental.inventory.find(i => i.type === 'table_setting_set');
+                            if (setting?.count && !count) count = `${setting.count} kattaukseen`;
+                        }
+                        // Jos ei löytynyt inventorysta, käytetään suoraa count-kenttää
+                        if (!count && rental.count) count = `${rental.count} kpl`;
+                        console.log("DISH_RENTAL:", rental, "count:", count); // Debug
                         break;
                     case 'AV_RENTAL':
                         rentalIcon = '🎤';
                         label = 'AV-vuokraus';
+                        if (rental.count) count = rental.count;
                         break;
                     case 'TENT_RENTAL':
                         rentalIcon = '⛺';
                         label = 'Telttavuokraus';
+                        if (rental.inventory && Array.isArray(rental.inventory)) {
+                            const tentItems = rental.inventory.filter(i => i.type === 'tent' || i.type === 'teltta');
+                            if (tentItems.length > 0) count = tentItems.reduce((sum, i) => sum + (i.count || 0), 0);
+                        }
+                        if (!count && rental.count) count = rental.count;
                         break;
                     case 'OUTDOOR_RENTAL':
                         rentalIcon = '🥾';
                         label = 'Ulkoiluvälinevuokraus';
+                        if (rental.count) count = rental.count;
                         break;
                     case 'EQUIPMENT_RENTAL':
                         rentalIcon = '🔧';
                         label = 'Konevuokraus';
+                        if (rental.count) count = rental.count;
                         break;
                     case 'WATERCRAFT_RENTAL':
                         rentalIcon = '⛵';
                         label = 'Venevuokraus';
-                        count = rental.inventory?.find(i => i.type === 'boat' || i.type === 'vene')?.count;
+                        if (rental.inventory && Array.isArray(rental.inventory)) {
+                            const boatItems = rental.inventory.filter(i => i.type === 'boat' || i.type === 'vene');
+                            if (boatItems.length > 0) count = boatItems.reduce((sum, i) => sum + (i.count || 0), 0);
+                        }
+                        if (!count && rental.count) count = rental.count;
                         break;
                     default:
                         break;
@@ -2206,8 +2259,10 @@
                 // Esteettömyys
                 if (catData?.is_accessible) badges += '<span title="Esteetön pääsy" style="cursor:help; margin-right:5px;">♿</span>';
                 
-                // SAUNA - TARKISTETAAN VAIN JOS EI OLE JO LISÄTTY VUOKRAUKSENA
-                if (!saunaAlreadyAdded) {
+                // SAUNA - Näytetään VAIN jos käyttäjä on hakenut saunaa (groupLabel sisältää sauna)
+                const userRequestedSauna = groupLabel && groupLabel.toLowerCase().includes('sauna');
+                
+                if (!saunaAlreadyAdded && userRequestedSauna) {
                     const hasSauna = catData?.has_sauna === true || 
                                     core.has_sauna === true ||
                                     (c.tags && c.tags.toLowerCase().includes('sauna'));
