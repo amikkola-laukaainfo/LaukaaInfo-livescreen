@@ -4361,13 +4361,13 @@
             "from": "company-270",
             "to": "intent-EVT_WEDDING",
             "relation": "offers",
-            "weight": 100
+            "weight": 92
         },
         {
             "from": "company-270",
             "to": "intent-EVT_MEMORIAL",
             "relation": "offers",
-            "weight": 88
+            "weight": 95
         },
         {
             "from": "company-270",
@@ -4379,7 +4379,31 @@
             "from": "company-270",
             "to": "intent-VENUE_PARTY",
             "relation": "offers",
-            "weight": 96
+            "weight": 100
+        },
+        {
+            "from": "company-270",
+            "to": "intent-VENUE_MEETING",
+            "relation": "offers",
+            "weight": 88
+        },
+        {
+            "from": "company-270",
+            "to": "intent-EVT_CORPORATE",
+            "relation": "offers",
+            "weight": 82
+        },
+        {
+            "from": "company-270",
+            "to": "intent-EVT_BIRTHDAY",
+            "relation": "offers",
+            "weight": 78
+        },
+        {
+            "from": "company-270",
+            "to": "intent-EVT_BIRTHDAY_FAMILY",
+            "relation": "offers",
+            "weight": 84
         },
         {
             "from": "company-270",
@@ -4437,15 +4461,21 @@
         },
         {
             "from": "company-270",
+            "to": "group-startup-services",
+            "relation": "fits_for",
+            "weight": 88
+        },
+        {
+            "from": "company-270",
             "to": "group-wellbeing-and-beauty",
             "relation": "fits_for",
-            "weight": 10
+            "weight": 12
         },
         {
             "from": "company-270",
             "to": "group-liikunta-ja-vapaaaika",
             "relation": "fits_for",
-            "weight": 8
+            "weight": 24
         },
         {
             "from": "company-270",
@@ -4457,13 +4487,19 @@
             "from": "company-270",
             "to": "group-service-partner",
             "relation": "fits_for",
-            "weight": 18
+            "weight": 26
         },
         {
             "from": "company-270",
             "to": "group-family-and-children",
             "relation": "fits_for",
-            "weight": 20
+            "weight": 28
+        },
+        {
+            "from": "company-270",
+            "to": "group-animals",
+            "relation": "fits_for",
+            "weight": 6
         },
         {
             "from": "company-270",

@@ -5707,15 +5707,15 @@
                     "construction-and-maintenance": 0,
                     "cottage-services": 0,
                     "housing-company-and-contracts": 0,
-                    "startup-services": 0,
+                    "startup-services": 88,
                     "business-growth": 0,
-                    "wellbeing-and-beauty": 10,
-                    "liikunta-ja-vapaaaika": 8,
+                    "wellbeing-and-beauty": 12,
+                    "liikunta-ja-vapaaaika": 24,
                     "accommodation": 100,
-                    "service-partner": 18,
+                    "service-partner": 26,
                     "emergency-services": 0,
-                    "family-and-children": 20,
-                    "animals": 0,
+                    "family-and-children": 28,
+                    "animals": 6,
                     "auto-services": 0
                 },
                 "priority_score": 74,
@@ -5766,49 +5766,110 @@
                 ],
                 "sub_contexts": [
                     "juhlatila",
-                    "pitopalvelu",
-                    "hääkakku",
+                    "hääjuhla",
+                    "sukujuhla",
+                    "pyöreät vuodet",
                     "juhlakakku",
-                    "muistotilaisuus",
                     "kahvitus",
+                    "pitopalvelu",
+                    "astiavuokraus",
+                    "pöytäliinojen vuokraus",
                     "kokoustila",
-                    "kokouskahvit",
                     "yritystapahtuma",
-                    "kahvitarjoilu",
+                    "kokouskahvitus",
+                    "luentotila",
+                    "kurssitila",
                     "muistotilaisuus",
                     "surukahvit",
-                    "pitopalvelu",
-                    "kahvitus"
+                    "muistotilaisuuden tarjoilut",
+                    "lasten leikkihuone",
+                    "hoitopöytä",
+                    "perhejuhlat",
+                    "päiväretkikohde",
+                    "kahvilapysähdys",
+                    "pyöräilijöiden taukopaikka",
+                    "alppiruusupuisto"
                 ],
                 "node_links": [
                     "JUHLATILA",
                     "CATERING"
                 ],
                 "intent_codes": [
-                    "BIZ_CATERING",
                     "VENUE_PARTY",
+                    "VENUE_MEETING",
+                    "BIZ_CATERING",
+                    "EVT_WEDDING",
                     "EVT_MEMORIAL",
-                    "EVT_WEDDING"
+                    "EVT_CORPORATE",
+                    "EVT_BIRTHDAY",
+                    "EVT_BIRTHDAY_FAMILY"
                 ],
                 "intent_scores": {
-                    "EVT_WEDDING": 100,
-                    "EVT_MEMORIAL": 88,
+                    "EVT_WEDDING": 92,
+                    "EVT_MEMORIAL": 95,
                     "BIZ_CATERING": 100,
-                    "VENUE_PARTY": 96
+                    "VENUE_PARTY": 100,
+                    "VENUE_MEETING": 88,
+                    "EVT_CORPORATE": 82,
+                    "EVT_BIRTHDAY": 78,
+                    "EVT_BIRTHDAY_FAMILY": 84
                 }
             },
             "capabilities": {
                 "ACCESSIBLE": {
                     "available": true,
-                    "priority_score": 0.8,
+                    "priority_score": 0.88,
                     "confidence": "inferred",
                     "source": "migration",
-                    "specs": {}
+                    "specs": {
+                        "wheelchair_access": true,
+                        "accessible_wc": true
+                    }
+                },
+                "DISH_RENTAL": {
+                    "available": true,
+                    "priority_score": 0.92,
+                    "inventory": [
+                        {
+                            "type": "coffee_set",
+                            "count": 100
+                        },
+                        {
+                            "type": "dinner_plate_set",
+                            "count": 100
+                        },
+                        {
+                            "type": "wine_glass",
+                            "count": 100
+                        },
+                        {
+                            "type": "serving_dish",
+                            "count": 20
+                        },
+                        {
+                            "type": "tablecloth",
+                            "count": 20
+                        },
+                        {
+                            "type": "vase",
+                            "count": 30
+                        }
+                    ],
+                    "additional_inventory": [
+                        "kuohuviinilasit",
+                        "konjakkilasit",
+                        "lämpökynttiläkupit",
+                        "valkoiset pöytäliinat"
+                    ],
+                    "specs": {
+                        "max_people": 100,
+                        "self_pickup_available": true
+                    }
                 }
             },
             "categories": {
                 "core": {
-                    "description": "Tertan kahvila- ja puoti tarjoaa kahvila-, juhlatila- ja pitopalveluita Laukaan Vuonteella. Yritys tunnetaan lähiruoasta, juhlakakuista, muistotilaisuuksista ja yritysten kokouskahvituksista sekä viihtyisistä juhla- ja kokoustiloista.",
+                    "description": "Tertan kahvila- ja puoti on Laukaan Vuonteella sijaitseva maalaiskahvila, lähituotepuoti sekä juhla- ja kokoustila. Yritys tarjoaa juhla- ja yritystilaisuuksia, muistotilaisuuksia, kahvituksia, pitopalvelua sekä astiavuokrausta jopa 100 henkilölle. Tertalla järjestetään myös kursseja, tapahtumia ja kokouksia luonnonläheisessä ympäristössä alppiruusupuiston ja hedelmätarhan läheisyydessä.",
                     "website": "https://terta.fi",
                     "email": "info@terta.fi",
                     "phone": "+358408289075"
@@ -6048,7 +6109,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-21T11:51:04.923Z",
+                "last_updated": "2026-05-27T19:26:50.704Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -84970,13 +85031,13 @@
             "from": "company-270",
             "to": "intent-EVT_WEDDING",
             "relation": "offers",
-            "weight": 100
+            "weight": 92
         },
         {
             "from": "company-270",
             "to": "intent-EVT_MEMORIAL",
             "relation": "offers",
-            "weight": 88
+            "weight": 95
         },
         {
             "from": "company-270",
@@ -84988,7 +85049,31 @@
             "from": "company-270",
             "to": "intent-VENUE_PARTY",
             "relation": "offers",
-            "weight": 96
+            "weight": 100
+        },
+        {
+            "from": "company-270",
+            "to": "intent-VENUE_MEETING",
+            "relation": "offers",
+            "weight": 88
+        },
+        {
+            "from": "company-270",
+            "to": "intent-EVT_CORPORATE",
+            "relation": "offers",
+            "weight": 82
+        },
+        {
+            "from": "company-270",
+            "to": "intent-EVT_BIRTHDAY",
+            "relation": "offers",
+            "weight": 78
+        },
+        {
+            "from": "company-270",
+            "to": "intent-EVT_BIRTHDAY_FAMILY",
+            "relation": "offers",
+            "weight": 84
         },
         {
             "from": "company-270",
@@ -85046,15 +85131,21 @@
         },
         {
             "from": "company-270",
+            "to": "group-startup-services",
+            "relation": "fits_for",
+            "weight": 88
+        },
+        {
+            "from": "company-270",
             "to": "group-wellbeing-and-beauty",
             "relation": "fits_for",
-            "weight": 10
+            "weight": 12
         },
         {
             "from": "company-270",
             "to": "group-liikunta-ja-vapaaaika",
             "relation": "fits_for",
-            "weight": 8
+            "weight": 24
         },
         {
             "from": "company-270",
@@ -85066,13 +85157,19 @@
             "from": "company-270",
             "to": "group-service-partner",
             "relation": "fits_for",
-            "weight": 18
+            "weight": 26
         },
         {
             "from": "company-270",
             "to": "group-family-and-children",
             "relation": "fits_for",
-            "weight": 20
+            "weight": 28
+        },
+        {
+            "from": "company-270",
+            "to": "group-animals",
+            "relation": "fits_for",
+            "weight": 6
         },
         {
             "from": "company-270",
