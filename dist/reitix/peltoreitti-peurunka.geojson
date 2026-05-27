@@ -4,12 +4,12 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "image-1779819144601-0-wgwv0",
+        "id": "image-1779871447477-0-p5l8f",
         "title": "Peltoreitti Peurunka",
         "description": "Piirretty reitti. Pituus: 4.84 km",
         "type": "route",
         "routeColor": "#c0c0c0",
-        "routeThickness": 6
+        "routeThickness": 4
       },
       "geometry": {
         "type": "LineString",
@@ -2426,6 +2426,443 @@
             25.9030768,
             62.4347165
           ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779871447478-1-ni8oc",
+        "title": "Kohde 1",
+        "type": "point",
+        "image": "https://ik.imagekit.io/vowzx8znjs/reitix/images/media_09e80325.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779871447477-0-p5l8f",
+        "route": "Peltoreitti Peurunka"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.9055789,
+          62.4371895
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779871447478-2-htg51",
+        "title": "Kohde 2",
+        "type": "point",
+        "image": "https://ik.imagekit.io/vowzx8znjs/reitix/images/media_db245b5d.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779871447477-0-p5l8f",
+        "route": "Peltoreitti Peurunka"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.9094519,
+          62.4394044
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779871447478-3-zfh9l",
+        "title": "Kohde 3",
+        "type": "point",
+        "image": "https://ik.imagekit.io/vowzx8znjs/reitix/images/media_60178646.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779871447477-0-p5l8f",
+        "route": "Peltoreitti Peurunka"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.9094398,
+          62.4393957
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779871447478-4-df4hy",
+        "title": "Kohde 4",
+        "type": "point",
+        "image": "https://ik.imagekit.io/vowzx8znjs/reitix/images/media_70e78f86.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779871447477-0-p5l8f",
+        "route": "Peltoreitti Peurunka"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.9119755,
+          62.4413988
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779871447478-5-eewmk",
+        "title": "Kohde 5",
+        "type": "point",
+        "image": "https://ik.imagekit.io/vowzx8znjs/reitix/images/media_b0217655.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779871447477-0-p5l8f",
+        "route": "Peltoreitti Peurunka"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.9052501,
+          62.4407864
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779871447478-6-ouyhk",
+        "title": "Kohde 6",
+        "type": "point",
+        "image": "https://ik.imagekit.io/vowzx8znjs/reitix/images/media_a955d7b9.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779871447477-0-p5l8f",
+        "route": "Peltoreitti Peurunka"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.8972389,
+          62.439842
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779871447478-7-y66ab",
+        "title": "Kohde 7",
+        "type": "point",
+        "image": "https://ik.imagekit.io/vowzx8znjs/reitix/images/media_95df5b28.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779871447477-0-p5l8f",
+        "route": "Peltoreitti Peurunka"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.8919465,
+          62.4391561
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779871447478-8-6zid0",
+        "title": "Kohde 8",
+        "type": "point",
+        "image": "https://ik.imagekit.io/vowzx8znjs/reitix/images/media_99f28c0f.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779871447477-0-p5l8f",
+        "route": "Peltoreitti Peurunka"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.8919585,
+          62.4391556
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779871447478-9-xp6wd",
+        "title": "Kohde 9",
+        "type": "point",
+        "image": "https://ik.imagekit.io/vowzx8znjs/reitix/images/media_e2437cfb.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779871447477-0-p5l8f",
+        "route": "Peltoreitti Peurunka"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.8931283,
+          62.4363053
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779871447478-10-pcx99",
+        "title": "Kohde 10",
+        "type": "point",
+        "image": "https://ik.imagekit.io/vowzx8znjs/reitix/images/media_530d9279.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779871447477-0-p5l8f",
+        "route": "Peltoreitti Peurunka"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.892024,
+          62.4360554
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779871447479-11-s6m1j",
+        "title": "Kohde 11",
+        "type": "point",
+        "image": "https://ik.imagekit.io/vowzx8znjs/reitix/images/media_b9a15a6e.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779871447477-0-p5l8f",
+        "route": "Peltoreitti Peurunka"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.891584,
+          62.4354467
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779871447479-12-3mwjr",
+        "title": "Kohde 12",
+        "type": "point",
+        "image": "https://ik.imagekit.io/vowzx8znjs/reitix/images/media_1aad6867.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779871447477-0-p5l8f",
+        "route": "Peltoreitti Peurunka"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.8929969,
+          62.4348395
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779871447479-13-162t0",
+        "title": "Kohde 13",
+        "type": "point",
+        "image": "https://ik.imagekit.io/vowzx8znjs/reitix/images/media_0527b7aa.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779871447477-0-p5l8f",
+        "route": "Peltoreitti Peurunka"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.8930677,
+          62.4347835
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779871447479-14-yky25",
+        "title": "Kohde 14",
+        "type": "point",
+        "image": "https://ik.imagekit.io/vowzx8znjs/reitix/images/media_9102572b.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779871447477-0-p5l8f",
+        "route": "Peltoreitti Peurunka"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.8932595,
+          62.4348513
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779871447479-15-gp855",
+        "title": "Kohde 15",
+        "type": "point",
+        "image": "https://ik.imagekit.io/vowzx8znjs/reitix/images/media_3f35bf74.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779871447477-0-p5l8f",
+        "route": "Peltoreitti Peurunka"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.896575,
+          62.4336185
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779871447479-16-h4y72",
+        "title": "Kohde 16",
+        "type": "point",
+        "image": "https://ik.imagekit.io/vowzx8znjs/reitix/images/media_39b8bcbd.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779871447477-0-p5l8f",
+        "route": "Peltoreitti Peurunka"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.8981201,
+          62.4323301
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779871447479-17-cm5od",
+        "title": "Kohde 17",
+        "type": "point",
+        "image": "https://ik.imagekit.io/vowzx8znjs/reitix/images/media_c489d98d.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779871447477-0-p5l8f",
+        "route": "Peltoreitti Peurunka"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.9027954,
+          62.4299928
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779871447479-18-piugo",
+        "title": "Kohde 18",
+        "type": "point",
+        "image": "https://ik.imagekit.io/vowzx8znjs/reitix/images/media_278e9e0a.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779871447477-0-p5l8f",
+        "route": "Peltoreitti Peurunka"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.9053234,
+          62.4320293
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779871447479-19-rr1td",
+        "title": "Kohde 19",
+        "type": "point",
+        "image": "https://ik.imagekit.io/vowzx8znjs/reitix/images/media_a9a4af7d.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779871447477-0-p5l8f",
+        "route": "Peltoreitti Peurunka"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.9034012,
+          62.4348578
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779871447479-20-p1hdl",
+        "title": "Kohde 20",
+        "type": "point",
+        "image": "https://ik.imagekit.io/vowzx8znjs/reitix/images/media_5e0d73ed.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779871447477-0-p5l8f",
+        "route": "Peltoreitti Peurunka"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.9033994,
+          62.4348474
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779871447479-21-6pyha",
+        "title": "Kohde 22",
+        "type": "point",
+        "image": "https://ik.imagekit.io/vowzx8znjs/reitix/images/media_f9a6ddb6.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779871447477-0-p5l8f",
+        "route": "Peltoreitti Peurunka"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.903347,
+          62.4348212
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779871447479-22-wt6t0",
+        "title": "Kohde 23",
+        "type": "point",
+        "image": "https://ik.imagekit.io/vowzx8znjs/reitix/images/media_9609ba75.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779871447477-0-p5l8f",
+        "route": "Peltoreitti Peurunka"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.9033185,
+          62.4347664
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779871447479-23-idj75",
+        "title": "Kohde 24",
+        "type": "point",
+        "image": "https://ik.imagekit.io/vowzx8znjs/reitix/images/media_1c8dd543.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779871447477-0-p5l8f",
+        "route": "Peltoreitti Peurunka"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.9031519,
+          62.4347083
         ]
       }
     }
