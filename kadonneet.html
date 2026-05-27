@@ -25,33 +25,36 @@
         <div class="nav-container">
             <a href="index.html" class="nav-logo">
                 <img src="logo.png" alt="LaukaaInfo Logo">
-                <span>LaukaaInfo</span>
+                <span data-i18n="hero_title">LaukaaInfo</span>
             </a>
             <div class="desktop-nav">
                 <ul class="nav-links">
                     <li class="nav-item">
-                        <a href="#" class="nav-link">Kauppa <span class="arrow">▼</span></a>
+                        <a href="palvelun-esittely.html" class="nav-link">Palvelun esittely</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-i18n="nav_shop">Kauppa <span class="arrow">▼</span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="ilmoittaudu.html">Feed-julkaisu</a></li>
-                            <li><a href="kauppa.html">Osta lisää näkyvyyttä</a></li>
-                            <li><a href="lisaa-yritys.html">Yritysnäkyvyys</a></li>
+                            <li><a href="ilmoittaudu.html" data-i18n="nav_feed">Feed-julkaisu</a></li>
+                            <li><a href="kauppa.html" data-i18n="nav_shop_packages">Julkaisupaketit</a></li>
+                            <li><a href="lisaa-yritys.html" data-i18n="nav_business_profile">Yritysprofiili</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">Hakulinkit <span class="arrow">▼</span></a>
+                        <a href="#" class="nav-link" data-i18n="nav_search_links">Hakulinkit <span class="arrow">▼</span></a>
                         <ul class="dropdown-menu">
                             <li class="has-arrow">
-                                <a href="#">Suosituimmat</a>
+                                <a href="#" data-i18n="nav_featured">Suosituimmat</a>
                                 <ul class="nested-menu" id="nav-featured">
                                 </ul>
                             </li>
                             <li class="has-arrow">
-                                <a href="#">Kategoriat</a>
+                                <a href="#" data-i18n="nav_categories">Kategoriat</a>
                                 <ul class="nested-menu" id="nav-categories">
                                 </ul>
                             </li>
                             <li class="has-arrow">
-                                <a href="#">Taajamat</a>
+                                <a href="#" data-i18n="nav_areas">Taajamat</a>
                                 <ul class="nested-menu">
                                     <li><a href="laukaa.html">Laukaa kk</a></li>
                                     <li><a href="leppavesi.html">Leppävesi</a></li>
@@ -63,30 +66,35 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="ajankohtaista.html" class="nav-link">Ajankohtaista <span class="arrow">▼</span></a>
+                        <a href="ajankohtaista.html" class="nav-link" data-i18n="nav_current">Ajankohtaista <span class="arrow">▼</span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="ajankohtaista.html#events-card">Tapahtumat</a></li>
-                            <li><a href="ajankohtaista.html#news-card">Tiedotteet</a></li>
-                            <li><a href="ajankohtaista.html#decisions-card">Päätöksenteko</a></li>
-                            <li><a href="ajankohtaista.html#feedback-card">Palautteet</a></li>
+                            <li><a href="ajankohtaista.html#events-card" data-i18n="nav_events">Tapahtumat</a></li>
+                            <li><a href="ajankohtaista.html#news-card" data-i18n="nav_news">Tiedotteet</a></li>
+                            <li><a href="ajankohtaista.html#decisions-card" data-i18n="nav_decisions">Päätöksenteko</a></li>
+                            <li><a href="ajankohtaista.html#feedback-card" data-i18n="nav_feedback">Palautteet</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">Päätösten polut <span class="arrow">▼</span></a>
+                        <a href="#" class="nav-link" data-i18n="nav_paths">Päätösten polut <span class="arrow">▼</span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="asiahaku.html">Hae ja tutki</a></li>
+                            <li><a href="asiahaku.html" data-i18n="nav_search_explore">Hae ja tutki</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link active">Kartat &amp; Elämykset <span class="arrow">▼</span></a>
+                        <a href="#" class="nav-link" data-i18n="nav_maps">Kartat &amp; Elämykset <span class="arrow">▼</span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="kohdekartta.html">Karttakohteet</a></li>
-                            <li><a href="tarinakartta.html">Tarinakartta</a></li>
-                            <li><a href="muistokartta.html">Muistokartta</a></li>
-                            <li><a href="kadonneet.html">Kadonneet &amp; löydetyt</a></li>
+                            <li><a href="kohdekartta.html" data-i18n="nav_map_points">Karttakohteet</a></li>
+                            <li><a href="tarinakartta.html" data-i18n="nav_story_map">Tarinakartta</a></li>
+                            <li><a href="tarinakartta.html#kavelyreitit-section" data-i18n="nav_route_map">Reittikartta</a></li>
+                            <li><a href="muistokartta.html" data-i18n="nav_memorial_map">Muistokartta</a></li>
+                            <li><a href="kadonneet.html" data-i18n="nav_lost_found">Kadonneet &amp; löydetyt</a></li>
                         </ul>
                     </li>
                 </ul>
+            </div>
+            <div class="lang-switcher">
+                <button class="lang-btn" onclick="i18n.setLanguage('fi')" data-lang="fi">FI</button>
+                <button class="lang-btn" onclick="i18n.setLanguage('en')" data-lang="en">EN</button>
             </div>
             <button class="hamburger" id="hamburger-btn" aria-label="Avaa valikko">
                 <span></span>
@@ -104,38 +112,43 @@
         <div class="sidebar-header">
             <a href="index.html" class="nav-logo">
                 <img src="logo.png" alt="LaukaaInfo Logo">
-                <span>LaukaaInfo</span>
+                <span data-i18n="hero_title">LaukaaInfo</span>
             </a>
             <button class="close-btn" id="close-sidebar-btn" aria-label="Sulje valikko">&times;</button>
         </div>
 
         <div class="sidebar-content">
+            <div class="menu-section">
+                <ul class="menu-list">
+                    <li class="menu-item"><a href="palvelun-esittely.html" class="sidebar-link" style="font-weight: bold; color: var(--primary-blue);">Tietoa palvelusta</a></li>
+                </ul>
+            </div>
             <!-- Pääosio: KAUPPA -->
             <div class="menu-section">
-                <h3 class="section-title">KAUPPA</h3>
+                <h3 class="section-title" data-i18n="nav_shop">KAUPPA</h3>
                 <ul class="menu-list">
-                    <li class="menu-item"><a href="ilmoittaudu.html" class="sidebar-link">Feed-julkaisu</a></li>
-                    <li class="menu-item"><a href="kauppa.html" class="sidebar-link">Osta lisää näkyvyyttä</a></li>
-                    <li class="menu-item"><a href="lisaa-yritys.html" class="sidebar-link">Yritysnäkyvyys</a></li>
+                    <li class="menu-item"><a href="ilmoittaudu.html" class="sidebar-link" data-i18n="nav_feed">Feed-julkaisu</a></li>
+                    <li class="menu-item"><a href="kauppa.html" class="sidebar-link" data-i18n="nav_shop_packages">Julkaisupaketit</a></li>
+                    <li class="menu-item"><a href="lisaa-yritys.html" class="sidebar-link" data-i18n="nav_business_profile">Yritysprofiili</a></li>
                 </ul>
             </div>
 
             <!-- Pääosio: HAKULINKIT -->
             <div class="menu-section">
-                <h3 class="section-title">HAKULINKIT</h3>
+                <h3 class="section-title" data-i18n="nav_search_links">HAKULINKIT</h3>
                 <ul class="menu-list">
                     <li class="menu-item has-submenu">
-                        <a href="#" class="submenu-toggle">Suosituimmat <span class="arrow">▼</span></a>
+                        <a href="#" class="submenu-toggle" data-i18n="nav_featured">Suosituimmat <span class="arrow">▼</span></a>
                         <ul class="submenu" id="sidebar-featured">
                         </ul>
                     </li>
                     <li class="menu-item has-submenu">
-                        <a href="#" class="submenu-toggle">Kategoriat <span class="arrow">▼</span></a>
+                        <a href="#" class="submenu-toggle" data-i18n="nav_categories">Kategoriat <span class="arrow">▼</span></a>
                         <ul class="submenu" id="sidebar-categories">
                         </ul>
                     </li>
                     <li class="menu-item has-submenu">
-                        <a href="#" class="submenu-toggle">Taajamat <span class="arrow">▼</span></a>
+                        <a href="#" class="submenu-toggle" data-i18n="nav_areas">Taajamat <span class="arrow">▼</span></a>
                         <ul class="submenu">
                             <li><a href="laukaa.html" class="sidebar-link">Laukaa kk</a></li>
                             <li><a href="leppavesi.html" class="sidebar-link">Leppävesi</a></li>
@@ -149,40 +162,47 @@
 
             <!-- Pääosio: AJANKOHTAISTA -->
             <div class="menu-section">
-                <h3 class="section-title">AJANKOHTAISTA</h3>
+                <h3 class="section-title" data-i18n="nav_current">AJANKOHTAISTA</h3>
                 <ul class="menu-list">
-                    <li class="menu-item"><a href="ajankohtaista.html#events-card" class="sidebar-link">Tapahtumat</a>
+                    <li class="menu-item"><a href="ajankohtaista.html#events-card" class="sidebar-link" data-i18n="nav_events">Tapahtumat</a>
                     </li>
-                    <li class="menu-item"><a href="ajankohtaista.html#news-card" class="sidebar-link">Tiedotteet</a>
+                    <li class="menu-item"><a href="ajankohtaista.html#news-card" class="sidebar-link" data-i18n="nav_news">Tiedotteet</a>
                     </li>
                     <li class="menu-item"><a href="ajankohtaista.html#decisions-card"
-                            class="sidebar-link">Päätöksenteko</a></li>
-                    <li class="menu-item"><a href="ajankohtaista.html#feedback-card" class="sidebar-link">Palautteet</a>
+                            class="sidebar-link" data-i18n="nav_decisions">Päätöksenteko</a></li>
+                    <li class="menu-item"><a href="ajankohtaista.html#feedback-card" class="sidebar-link" data-i18n="nav_feedback">Palautteet</a>
                     </li>
                 </ul>
             </div>
 
             <!-- Pääosio: PÄÄTÖSTEN POLUT -->
             <div class="menu-section">
-                <h3 class="section-title">PÄÄTÖSTEN POLUT</h3>
+                <h3 class="section-title" data-i18n="nav_paths">PÄÄTÖSTEN POLUT</h3>
                 <ul class="menu-list">
-                    <li class="menu-item"><a href="asiahaku.html" class="sidebar-link">Hae ja tutki</a></li>
+                    <li class="menu-item"><a href="asiahaku.html" class="sidebar-link" data-i18n="nav_search_explore">Hae ja tutki</a></li>
                 </ul>
             </div>
 
             <!-- Korostettu osio: KARTAT & ELÄMYKSET -->
             <div class="menu-section highlight-section">
-                <h3 class="section-title">KARTAT &amp; ELÄMYKSET ⭐</h3>
+                <h3 class="section-title" data-i18n="nav_maps">KARTAT &amp; ELÄMYKSET â­</h3>
                 <ul class="menu-list">
-                    <li class="menu-item"><a href="kohdekartta.html" class="sidebar-link">Karttakohteet</a></li>
-                    <li class="menu-item"><a href="tarinakartta.html" class="sidebar-link">Tarinakartta</a></li>
-                    <li class="menu-item"><a href="muistokartta.html" class="sidebar-link">Muistokartta</a></li>
-                    <li class="menu-item"><a href="kadonneet.html" class="sidebar-link active">Kadonneet &amp; löydetyt</a>
+                    <li class="menu-item"><a href="kohdekartta.html" class="sidebar-link" data-i18n="nav_map_points">Karttakohteet</a></li>
+                    <li class="menu-item"><a href="tarinakartta.html" class="sidebar-link" data-i18n="nav_story_map">Tarinakartta</a></li>
+                    <li class="menu-item"><a href="tarinakartta.html#kavelyreitit-section" class="sidebar-link" data-i18n="nav_route_map">Reittikartta</a></li>
+                    <li class="menu-item"><a href="muistokartta.html" class="sidebar-link" data-i18n="nav_memorial_map">Muistokartta</a></li>
+                    <li class="menu-item"><a href="kadonneet.html" class="sidebar-link" data-i18n="nav_lost_found">Kadonneet &amp; löydetyt</a>
                     </li>
                 </ul>
             </div>
         </div>
     </aside>
+
+    
+
+    
+
+    
 
     <header>
         <div class="header-content">

@@ -64,7 +64,6 @@
 </head>
 
 <body>
-
     <nav class="top-nav">
         <div class="nav-container">
             <a href="index.html" class="nav-logo">
@@ -74,6 +73,9 @@
             <div class="desktop-nav">
                 <ul class="nav-links">
                     <li class="nav-item">
+                        <a href="palvelun-esittely.html" class="nav-link">Palvelun esittely</a>
+                    </li>
+                    <li class="nav-item">
                         <a href="#" class="nav-link" data-i18n="nav_shop">Kauppa <span class="arrow">▼</span></a>
                         <ul class="dropdown-menu">
                             <li><a href="ilmoittaudu.html" data-i18n="nav_feed">Feed-julkaisu</a></li>
@@ -82,7 +84,7 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link active" data-i18n="nav_search_links">Hakulinkit <span class="arrow">▼</span></a>
+                        <a href="#" class="nav-link" data-i18n="nav_search_links">Hakulinkit <span class="arrow">▼</span></a>
                         <ul class="dropdown-menu">
                             <li class="has-arrow">
                                 <a href="#" data-i18n="nav_featured">Suosituimmat</a>
@@ -126,6 +128,7 @@
                         <ul class="dropdown-menu">
                             <li><a href="kohdekartta.html" data-i18n="nav_map_points">Karttakohteet</a></li>
                             <li><a href="tarinakartta.html" data-i18n="nav_story_map">Tarinakartta</a></li>
+                            <li><a href="tarinakartta.html#kavelyreitit-section" data-i18n="nav_route_map">Reittikartta</a></li>
                             <li><a href="muistokartta.html" data-i18n="nav_memorial_map">Muistokartta</a></li>
                             <li><a href="kadonneet.html" data-i18n="nav_lost_found">Kadonneet &amp; löydetyt</a></li>
                         </ul>
@@ -144,8 +147,10 @@
         </div>
     </nav>
 
+    <!-- Sidebar Overlay -->
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
+    <!-- Sidebar Menu -->
     <aside class="sidebar-menu" id="sidebar-menu">
         <div class="sidebar-header">
             <a href="index.html" class="nav-logo">
@@ -156,6 +161,11 @@
         </div>
 
         <div class="sidebar-content">
+            <div class="menu-section">
+                <ul class="menu-list">
+                    <li class="menu-item"><a href="palvelun-esittely.html" class="sidebar-link" style="font-weight: bold; color: var(--primary-blue);">Tietoa palvelusta</a></li>
+                </ul>
+            </div>
             <!-- Pääosio: KAUPPA -->
             <div class="menu-section">
                 <h3 class="section-title" data-i18n="nav_shop">KAUPPA</h3>
@@ -186,7 +196,7 @@
                             <li><a href="laukaa.html" class="sidebar-link">Laukaa kk</a></li>
                             <li><a href="leppavesi.html" class="sidebar-link">Leppävesi</a></li>
                             <li><a href="lievestuore.html" class="sidebar-link">Lievestuore</a></li>
-                            <li><a href="vehnia.html" class="sidebar-link active">Vehniä</a></li>
+                            <li><a href="vehnia.html" class="sidebar-link">Vehniä</a></li>
                             <li><a href="vihtavuori.html" class="sidebar-link">Vihtavuori</a></li>
                         </ul>
                     </li>
@@ -218,10 +228,11 @@
 
             <!-- Korostettu osio: KARTAT & ELÄMYKSET -->
             <div class="menu-section highlight-section">
-                <h3 class="section-title" data-i18n="nav_maps">KARTAT &amp; ELÄMYKSET ⭐</h3>
+                <h3 class="section-title" data-i18n="nav_maps">KARTAT &amp; ELÄMYKSET â­</h3>
                 <ul class="menu-list">
                     <li class="menu-item"><a href="kohdekartta.html" class="sidebar-link" data-i18n="nav_map_points">Karttakohteet</a></li>
                     <li class="menu-item"><a href="tarinakartta.html" class="sidebar-link" data-i18n="nav_story_map">Tarinakartta</a></li>
+                    <li class="menu-item"><a href="tarinakartta.html#kavelyreitit-section" class="sidebar-link" data-i18n="nav_route_map">Reittikartta</a></li>
                     <li class="menu-item"><a href="muistokartta.html" class="sidebar-link" data-i18n="nav_memorial_map">Muistokartta</a></li>
                     <li class="menu-item"><a href="kadonneet.html" class="sidebar-link" data-i18n="nav_lost_found">Kadonneet &amp; löydetyt</a>
                     </li>
@@ -229,6 +240,13 @@
             </div>
         </div>
     </aside>
+
+
+    
+
+    
+
+    
 
     <main>
         <section id="region-hero" class="region-hero">

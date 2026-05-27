@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="fi">
+
+<head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terveys- ja hyvinvointipalvelu Riina Raitio – LaukaaInfo</title>
+
+    <!-- Fonts & Styles -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Outfit:wght@100..900&display=swap"
+        rel="stylesheet">
+
+    <!-- Leaflet Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <link rel="stylesheet" href="../style.13aa1008.css?v=20260420-2">
+    <link rel="stylesheet" href="../modal.13aa1008.css">
+    <script src="../translations.13aa1008.js?v=20260505"></script>
+    <style>
+        :root {
+            --primary-blue: #0056b3;
+            --secondary-blue: #003366;
+            --accent-blue: #00a8ff;
+            --light-blue: #f0f7ff;
+            --dark-text: #1a202c;
+            --light-text: #4a5568;
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --premium-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+            --border-radius: 24px;
+        }
+
+        body {
+            background-color: #f1f5f9;
+            font-family: 'Inter', sans-serif;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+
+        .nav-link {
+            color: white !important;
+            font-weight: 600 !important;
+        }
+
+        .nav-logo span {
+            color: white !important;
+        }
+
+        .dropdown-menu a {
+            color: var(--dark-text) !important;
+        }
+
+        .business-card-container {
+            max-width: 1200px;
+            margin: 2rem auto 5rem;
+            padding: 0 1.5rem;
+            background: white !important;
+        }
+
+        /* --- Header Section --- */
+        .card-header {
+            display: flex;
+            gap: 2.5rem;
+            align-items: flex-start;
+            margin-bottom: 3.5rem;
+            background: white;
+            padding: 3rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--premium-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--accent-blue));
+        }
+
+        .card-header.has-gallery::before {
+            display: none;
+        }
+
+        .card-logo-container {
+            width: 180px;
+            height: 180px;
+            background: #fff;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            border: 1px solid #edf2f7;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+
+        .card-logo-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .card-title-section {
+            flex: 1;
+        }
+
+        .card-category {
+            display: inline-block;
+            background: var(--light-blue);
+            color: var(--primary-blue);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1.25rem;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .card-title-section h1 {
+            font-size: 3.5rem;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            color: var(--secondary-blue);
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+        }
+
+        #display-headline {
+            font-size: 1.4rem;
+            color: var(--light-text);
+            font-weight: 400;
+            line-height: 1.5;
+            max-width: 800px;
+            word-break: normal;
+            overflow-wrap: break-word;
+            hyphens: none;
+        }
+
+        /* --- Grid Layout --- */
+        .card-grid {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 3rem;
+        }
+
+        /* --- Content Sections --- */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+        }
+
+        .gallery-container {
+            width: 100%;
+        }
+
+        .main-image-container {
+            width: 100%;
+            height: 500px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--card-shadow);
+            background: white !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #edf2f7;
+        }
+
+        .main-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .thumbnails {
+            display: flex;
+            gap: 1.25rem;
+            overflow-x: auto;
+            padding: 0.5rem 0;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-blue) #f1f1f1;
+        }
+
+        .thumbnails img {
+            width: 120px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .thumbnails img:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-blue);
+        }
+
+        .description-section h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            color: var(--secondary-blue);
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        #display-description {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: #2d3748;
+            background: white;
+            padding: 2.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--premium-shadow);
+            white-space: pre-wrap;
+            word-break: normal;
+            overflow-wrap: break-word;
+            hyphens: none;
+        }
+
+        /* --- Sidebar & Info Panel --- */
+        .info-panel {
+            background: white;
+            padding: 2.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--premium-shadow);
+            position: sticky;
+            top: 100px;
+        }
+
+        .info-panel h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.6rem;
+            color: var(--secondary-blue);
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #f7fafc;
+            padding-bottom: 1rem;
+        }
+
+        .contact-item {
+            display: flex;
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+            align-items: flex-start;
+        }
+
+        .contact-item div span {
+            display: block;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #a0aec0;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .contact-item strong, 
+        .contact-item a {
+            font-size: 1.1rem;
+            color: var(--dark-text);
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        .contact-item a {
+            color: var(--primary-blue);
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .contact-item a:hover {
+            color: var(--accent-blue);
+            text-decoration: underline;
+        }
+
+        .card-map {
+            height: 280px;
+            border-radius: 16px;
+            margin: 2rem 0;
+            border: 1px solid #edf2f7;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            display: block;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white !important;
+            padding: 1.25rem;
+            border-radius: 14px;
+            font-weight: 700;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 86, 179, 0.2);
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 86, 179, 0.3);
+            filter: brightness(1.1);
+        }
+
+        /* --- Social Icons --- */
+        #social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        #social-icons a {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f7fafc;
+            border-radius: 12px;
+            font-size: 1.25rem;
+            transition: all 0.2s;
+        }
+
+        #social-icons a:hover {
+            background: var(--light-blue);
+            transform: scale(1.1);
+        }
+
+        /* --- Mobile Responsiveness --- */
+        @media (max-width: 1024px) {
+            .card-grid {
+                display: flex;
+                flex-direction: column;
+                gap: 2rem;
+            }
+            .main-content {
+                display: contents; /* Allows reordering children within .card-grid */
+            }
+            .gallery-container { order: 1; }
+            .info-panel { 
+                order: 2; 
+                position: static;
+                padding: 1.5rem;
+                margin-top: 1rem;
+            }
+            .description-section { order: 3; }
+            #video-section { order: 4; }
+        }
+
+        @media (max-width: 768px) {
+            .business-card-container {
+                margin: 1rem auto 3rem;
+                padding: 1rem;
+            }
+
+            .card-header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                padding: 1.5rem 1rem;
+                gap: 1rem;
+            }
+
+            .card-title-section h1 {
+                font-size: 2rem;
+            }
+
+            #display-headline {
+                font-size: 1.1rem;
+            }
+
+            .main-image-container {
+                height: 250px;
+                margin-bottom: 1rem;
+            }
+
+            .thumbnails {
+                gap: 0.75rem;
+                padding-bottom: 1rem;
+            }
+
+            .thumbnails img {
+                width: 100px;
+                height: 75px;
+            }
+
+            .main-content {
+                gap: 1.5rem;
+                padding-bottom: 80px; /* Buffer for bottom bar */
+            }
+
+            #display-description {
+                padding: 1.5rem;
+                font-size: 1rem;
+                line-height: 1.6;
+                margin-bottom: 1.5rem;
+            }
+
+            .mobile-contact-bar {
+                display: flex;
+                position: fixed;
+                bottom: 20px;
+                left: 15px;
+                right: 15px;
+                background: white;
+                padding: 10px;
+                border-radius: 15px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                z-index: 1000;
+                gap: 10px;
+                justify-content: center;
+                animation: slideUp 0.4s ease;
+            }
+
+            .mobile-contact-bar .btn-cta {
+                flex: 1;
+                margin: 0;
+                padding: 10px;
+                font-size: 0.85rem;
+                text-align: center;
+                white-space: nowrap;
+            }
+
+            @keyframes slideUp {
+                from { transform: translateY(100px); opacity: 0; }
+                to { transform: translateY(0); opacity: 1; }
+            }
+        }
+
+        /* --- Video --- */
+        .video-container {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--premium-shadow);
+            aspect-ratio: 16/9;
+        }
+
+        /* --- RSS & Promotions --- */
+        .rss-section {
+            margin-top: 4rem;
+            background: white;
+            padding: 3rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--premium-shadow);
+        }
+
+        .rss-section h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            color: var(--secondary-blue);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .rss-item {
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .rss-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .rss-item h4 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .rss-item .rss-date {
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+
+        /* Promotional Section */
+        #promotional-links-section {
+            margin-top: 4rem;
+            background: linear-gradient(135deg, #fffcf5 0%, #fff9e6 100%);
+            padding: 3rem;
+            border-radius: var(--border-radius);
+            border: 2px solid #ffcc00;
+            box-shadow: 0 10px 30px rgba(255, 204, 0, 0.1);
+            display: none; /* Controlled by JS */
+        }
+
+        #promotional-links-section h3 {
+            color: #d2691e;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-family: 'Outfit';
+            font-size: 1.8rem;
+        }
+
+        #coupon-display {
+            background: white;
+            border: 2px dashed #ffa500;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            display: none; /* Controlled by JS */
+        }
+
+        .coupon-badge {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            background: #ffa500;
+            color: white;
+            padding: 5px 15px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            transform: rotate(-5deg);
+            text-transform: uppercase;
+        }
+
+        #coupon-text {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin: 0;
+            text-align: center;
+        }
+
+        /* Image Placeholder Watermark */
+        .image-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #fdfdfd;
+            position: relative;
+        }
+
+        .image-placeholder img {
+            width: 180px !important;
+            height: 180px !important;
+            opacity: 0.15;
+            filter: grayscale(1);
+        }
+
+        .image-placeholder .placeholder-text {
+            position: absolute;
+            bottom: 2rem;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* --- Dynamic Elements --- */
+        .service-area-badge {
+            background: #fff3e0;
+            color: #e65100;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            border: 1px solid #ffccbc;
+            font-weight: 800;
+            margin-left: 12px;
+            vertical-align: middle;
+            text-transform: uppercase;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .distance-badge {
+            margin-top: 0.75rem;
+            color: var(--primary-blue);
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Recommendation Cards */
+        .recommendation-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border: 1px solid #edf2f7;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            height: 100%;
+        }
+        .recommendation-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            border-color: var(--accent-blue);
+        }
+        .recommendation-card .rec-category {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            color: var(--primary-blue);
+            letter-spacing: 0.05em;
+        }
+        .recommendation-card h4 {
+            margin: 0;
+            font-size: 1.2rem;
+            color: var(--secondary-blue);
+            font-family: 'Outfit', sans-serif;
+        }
+        .recommendation-card p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--light-text);
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .recommendation-card .rec-cta {
+            margin-top: auto;
+            font-weight: 700;
+            color: var(--primary-blue);
+            font-size: 0.85rem;
+        }
+    </style>
+
+    <!-- Generated Premium OG Tags -->
+    <meta property="og:title" content="Terveys- ja hyvinvointipalvelu Riina Raitio – LaukaaInfo">
+    <meta property="og:description" content="Sairaanhoitajan kotikäynnit ja vastaanotolla tehtävät pientoimenpiteet.  Elämäntapavalmennus innos...">
+    <meta property="og:image" content="https://4b9cdf2285.clvaw-cdnwnd.com/e41d23daa8f17ba31d36b02f427c05ba/200000072-a9f8ba9f8c/Riina-9.webp?ph=4b9cdf2285">
+    <meta property="og:url" content="https://laukaainfo.fi/yritys/terveys-ja-hyvinvointipalvelu-riina-raitio.html">
+    <meta property="og:type" content="business.business">
+    <meta property="og:site_name" content="LaukaaInfo">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"LocalBusiness","name":"Terveys- ja hyvinvointipalvelu Riina Raitio","description":"Sairaanhoitajan kotikäynnit ja vastaanotolla tehtävät pientoimenpiteet. @@ Elämäntapavalmennus innos...","address":{"@type":"PostalAddress","streetAddress":"Huminankuja 2, 41400 Lievestuore"},"url":"https://laukaainfo.fi/yritys/terveys-ja-hyvinvointipalvelu-riina-raitio.html","image":"https://4b9cdf2285.clvaw-cdnwnd.com/e41d23daa8f17ba31d36b02f427c05ba/200000072-a9f8ba9f8c/Riina-9.webp?ph=4b9cdf2285","geo":{"@type":"GeoCoordinates","latitude":"62.2604021","longitude":"26.1947594"}}</script>
+</head>
+
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">
+                <img src="../logo.png" alt="LaukaaInfo Logo">
+                <span data-i18n="hero_title">LaukaaInfo</span>
+            </a>
+            <div class="desktop-nav">
+                <ul class="nav-links">
+                    <li class="nav-item">
+                        <a href="../palvelun-esittely.html" class="nav-link">Palvelun esittely</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-i18n="nav_shop">Kauppa <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="../ilmoittaudu.html" data-i18n="nav_feed">Feed-julkaisu</a></li>
+                            <li><a href="../kauppa.html" data-i18n="nav_shop_packages">Julkaisupaketit</a></li>
+                            <li><a href="../lisaa-yritys.html" data-i18n="nav_business_profile">Yritysprofiili</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-i18n="nav_search_links">Hakulinkit <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <li class="has-arrow">
+                                <a href="#" data-i18n="nav_featured">Suosituimmat</a>
+                                <ul class="nested-menu" id="nav-featured">
+                                </ul>
+                            </li>
+                            <li class="has-arrow">
+                                <a href="#" data-i18n="nav_categories">Kategoriat</a>
+                                <ul class="nested-menu" id="nav-categories">
+                                </ul>
+                            </li>
+                            <li class="has-arrow">
+                                <a href="#" data-i18n="nav_areas">Taajamat</a>
+                                <ul class="nested-menu">
+                                    <li><a href="../laukaa.html">Laukaa kk</a></li>
+                                    <li><a href="../leppavesi.html">Leppävesi</a></li>
+                                    <li><a href="../lievestuore.html">Lievestuore</a></li>
+                                    <li><a href="../vehnia.html">Vehniä</a></li>
+                                    <li><a href="../vihtavuori.html">Vihtavuori</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="../ajankohtaista.html" class="nav-link" data-i18n="nav_current">Ajankohtaista <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="ajankohtaista.html#events-card" data-i18n="nav_events">Tapahtumat</a></li>
+                            <li><a href="ajankohtaista.html#news-card" data-i18n="nav_news">Tiedotteet</a></li>
+                            <li><a href="ajankohtaista.html#decisions-card" data-i18n="nav_decisions">Päätöksenteko</a></li>
+                            <li><a href="ajankohtaista.html#feedback-card" data-i18n="nav_feedback">Palautteet</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-i18n="nav_paths">Päätösten polut <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="../asiahaku.html" data-i18n="nav_search_explore">Hae ja tutki</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-i18n="nav_maps">Kartat &amp; Elämykset <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="../kohdekartta.html" data-i18n="nav_map_points">Karttakohteet</a></li>
+                            <li><a href="../tarinakartta.html" data-i18n="nav_story_map">Tarinakartta</a></li>
+                            <li><a href="tarinakartta.html#kavelyreitit-section" data-i18n="nav_route_map">Reittikartta</a></li>
+                            <li><a href="../muistokartta.html" data-i18n="nav_memorial_map">Muistokartta</a></li>
+                            <li><a href="../kadonneet.html" data-i18n="nav_lost_found">Kadonneet &amp; löydetyt</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="lang-switcher">
+                <button class="lang-btn" onclick="i18n.setLanguage('fi')" data-lang="fi">FI</button>
+                <button class="lang-btn" onclick="i18n.setLanguage('en')" data-lang="en">EN</button>
+            </div>
+            <button class="hamburger" id="hamburger-btn" aria-label="Avaa valikko">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- Sidebar Menu -->
+    <aside class="sidebar-menu" id="sidebar-menu">
+        <div class="sidebar-header">
+            <a href="../index.html" class="nav-logo">
+                <img src="../logo.png" alt="LaukaaInfo Logo">
+                <span data-i18n="hero_title">LaukaaInfo</span>
+            </a>
+            <button class="close-btn" id="close-sidebar-btn" aria-label="Sulje valikko">&times;</button>
+        </div>
+
+        <div class="sidebar-content">
+            <div class="menu-section">
+                <ul class="menu-list">
+                    <li class="menu-item"><a href="../palvelun-esittely.html" class="sidebar-link" style="font-weight: bold; color: var(--primary-blue);">Tietoa palvelusta</a></li>
+                </ul>
+            </div>
+            <!-- Pääosio: KAUPPA -->
+            <div class="menu-section">
+                <h3 class="section-title" data-i18n="nav_shop">KAUPPA</h3>
+                <ul class="menu-list">
+                    <li class="menu-item"><a href="../ilmoittaudu.html" class="sidebar-link" data-i18n="nav_feed">Feed-julkaisu</a></li>
+                    <li class="menu-item"><a href="../kauppa.html" class="sidebar-link" data-i18n="nav_shop_packages">Julkaisupaketit</a></li>
+                    <li class="menu-item"><a href="../lisaa-yritys.html" class="sidebar-link" data-i18n="nav_business_profile">Yritysprofiili</a></li>
+                </ul>
+            </div>
+
+            <!-- Pääosio: HAKULINKIT -->
+            <div class="menu-section">
+                <h3 class="section-title" data-i18n="nav_search_links">HAKULINKIT</h3>
+                <ul class="menu-list">
+                    <li class="menu-item has-submenu">
+                        <a href="#" class="submenu-toggle" data-i18n="nav_featured">Suosituimmat <span class="arrow">▼</span></a>
+                        <ul class="submenu" id="sidebar-featured">
+                        </ul>
+                    </li>
+                    <li class="menu-item has-submenu">
+                        <a href="#" class="submenu-toggle" data-i18n="nav_categories">Kategoriat <span class="arrow">▼</span></a>
+                        <ul class="submenu" id="sidebar-categories">
+                        </ul>
+                    </li>
+                    <li class="menu-item has-submenu">
+                        <a href="#" class="submenu-toggle" data-i18n="nav_areas">Taajamat <span class="arrow">▼</span></a>
+                        <ul class="submenu">
+                            <li><a href="../laukaa.html" class="sidebar-link">Laukaa kk</a></li>
+                            <li><a href="../leppavesi.html" class="sidebar-link">Leppävesi</a></li>
+                            <li><a href="../lievestuore.html" class="sidebar-link">Lievestuore</a></li>
+                            <li><a href="../vehnia.html" class="sidebar-link">Vehniä</a></li>
+                            <li><a href="../vihtavuori.html" class="sidebar-link">Vihtavuori</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Pääosio: AJANKOHTAISTA -->
+            <div class="menu-section">
+                <h3 class="section-title" data-i18n="nav_current">AJANKOHTAISTA</h3>
+                <ul class="menu-list">
+                    <li class="menu-item"><a href="ajankohtaista.html#events-card" class="sidebar-link" data-i18n="nav_events">Tapahtumat</a>
+                    </li>
+                    <li class="menu-item"><a href="ajankohtaista.html#news-card" class="sidebar-link" data-i18n="nav_news">Tiedotteet</a>
+                    </li>
+                    <li class="menu-item"><a href="ajankohtaista.html#decisions-card"
+                            class="sidebar-link" data-i18n="nav_decisions">Päätöksenteko</a></li>
+                    <li class="menu-item"><a href="ajankohtaista.html#feedback-card" class="sidebar-link" data-i18n="nav_feedback">Palautteet</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Pääosio: PÄÄTÖSTEN POLUT -->
+            <div class="menu-section">
+                <h3 class="section-title" data-i18n="nav_paths">PÄÄTÖSTEN POLUT</h3>
+                <ul class="menu-list">
+                    <li class="menu-item"><a href="../asiahaku.html" class="sidebar-link" data-i18n="nav_search_explore">Hae ja tutki</a></li>
+                </ul>
+            </div>
+
+            <!-- Korostettu osio: KARTAT & ELÄMYKSET -->
+            <div class="menu-section highlight-section">
+                <h3 class="section-title" data-i18n="nav_maps">KARTAT &amp; ELÄMYKSET â­</h3>
+                <ul class="menu-list">
+                    <li class="menu-item"><a href="../kohdekartta.html" class="sidebar-link" data-i18n="nav_map_points">Karttakohteet</a></li>
+                    <li class="menu-item"><a href="../tarinakartta.html" class="sidebar-link" data-i18n="nav_story_map">Tarinakartta</a></li>
+                    <li class="menu-item"><a href="tarinakartta.html#kavelyreitit-section" class="sidebar-link" data-i18n="nav_route_map">Reittikartta</a></li>
+                    <li class="menu-item"><a href="../muistokartta.html" class="sidebar-link" data-i18n="nav_memorial_map">Muistokartta</a></li>
+                    <li class="menu-item"><a href="../kadonneet.html" class="sidebar-link" data-i18n="nav_lost_found">Kadonneet &amp; löydetyt</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </aside>
+
+
+    
+
+    
+
+    
+
+    <main class="business-card-container">
+        <div id="loading-overlay" style="text-align: center; padding: 4rem;">
+            <h2>Ladataan yrityksen tietoja...</h2>
+        </div>
+
+        <div id="card-content" style="display: none;">
+            <div class="card-header">
+                <div class="card-logo-container" id="logo-container" style="display: none;">
+                    <img id="display-logo" src="" alt="Logo">
+                </div>
+                <div class="card-title-section">
+                    <span class="card-category" id="display-category">Kategoria</span>
+                    <h1 id="display-name">Yrityksen nimi</h1>
+                    <p id="display-headline">Mainoslause tai lyhyt kuvaus.</p>
+                </div>
+            </div>
+
+            <div class="card-grid">
+                <div class="main-content">
+                    <div class="gallery-container" id="gallery-container">
+                        <div class="main-image-container" id="main-image">
+                            <!-- Päätiedosto tässä -->
+                        </div>
+                        <div class="thumbnails" id="image-thumbnails">
+                            <!-- Pienoiskuvat tässä -->
+                        </div>
+                    </div>
+
+                    <div class="description-section">
+                        <h2>Esittely</h2>
+                        <div id="display-description">
+                            Laajempi esittelyteksti yrityksestä...
+                        </div>
+                    </div>
+
+                    <div id="video-section" class="video-container" style="display: none;">
+                        <!-- YouTube iframe dynaamisesti -->
+                    </div>
+                </div>
+
+                <aside class="sidebar" id="info-panel">
+                    <div class="info-panel">
+                        <h2>Yhteystiedot</h2>
+
+                        <div class="contact-item" id="social-links">
+                            <div id="social-icons" style="display: flex; flex-wrap: wrap; gap: 0.8rem;"></div>
+                        </div>
+
+                        <div class="contact-item">
+                            <div>
+                                <span>Osoite</span>
+                                <strong id="display-address">Katuosoite, Postinumero</strong>
+                            </div>
+                        </div>
+
+                        <div class="contact-item" id="phone-item">
+                            <div>
+                                <span>Puhelin</span>
+                                <a href="#" id="display-phone">040 123 4567</a>
+                            </div>
+                        </div>
+
+                        <div class="contact-item" id="website-item">
+                            <div>
+                                <span>Kotisivut</span>
+                                <a href="#" id="display-website" target="_blank">www.yritys.fi</a>
+                            </div>
+                        </div>
+
+                        <div id="card-map" class="card-map"></div>
+
+                        <a href="#" id="google-maps-link" target="_blank" class="btn-primary"
+                            style="display: block; margin-top: 1rem; text-align: center; text-decoration: none;">
+                            📍 Avaa Google Mapsissa
+                        </a>
+                    </div>
+                </aside>
+            </div>
+
+            <div id="mobile-contact-bar" class="mobile-contact-bar" style="display: none;">
+                <!-- Filled via JS -->
+            </div>
+
+            <div id="rss-section" class="rss-section" style="display: none;">
+                <h3><span class="icon">📰</span> Ajankohtaista</h3>
+                <div id="rss-items-container">
+                    <!-- Uusimmat uutiset tässä -->
+                </div>
+                <div id="rss-more-section" style="display: none;">
+                    <button id="rss-toggle-btn" class="rss-more-toggle">
+                        Näytä muut uutiset <span class="arrow">▼</span>
+                    </button>
+                    <div id="rss-dropdown" class="rss-dropdown">
+                        <!-- Loput uutiset linkkeinä tässä -->
+                    </div>
+                </div>
+            </div>
+
+            <div id="promotional-links-section">
+                <h3><span class="icon">🔥</span> Ajankohtaiset tarjoukset</h3>
+                
+                <div id="coupon-display">
+                    <div class="coupon-badge">Kuponki</div>
+                    <p id="coupon-text"></p>
+                </div>
+
+                <div id="ad-links-list" style="display: flex; flex-wrap: wrap; gap: 1rem;">
+                    <!-- Linkit tähän -->
+                </div>
+            </div>
+
+            <!-- Recommendations Section -->
+            <div id="recommendations-section" class="rss-section" style="display: none; background: #f8fafc; border: 1px solid #e2e8f0; margin-top: 3rem;">
+                <h3><span class="icon">✨</span> Suositukset sinulle</h3>
+                <p id="recommendations-intro" style="margin-bottom: 2rem; color: #64748b;">Saatat olla kiinnostunut myös näistä palveluista:</p>
+                <div id="recommendations-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
+                    <!-- Suositukset tässä -->
+                </div>
+            </div>
+
+            <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 5rem 0;">
+        </div>
+
+        <!-- Selection Gate: Feed vs Brand -->
+        <section class="gate-section">
+            <div class="gate-container">
+                <div class="gate-header">
+                    <h2>Mitä haluat tehdä?</h2>
+                    <p>Valitse sinulle sopiva tapa näkyä Laukaassa</p>
+                </div>
+                <div class="gate-grid">
+                    <!-- Path 1: Feed Path -->
+                    <a href="../ilmoittaudu.html" class="path-card feed-path">
+                        <div class="path-badge">Suosittu</div>
+                        <div class="path-icon">📢</div>
+                        <h3>Julkaise ilmoitus</h3>
+                        <p>Luo uutisia, tarjouksia tai tapahtumia välittömästi Laukaan syötteeseen. Aloita maksutta (3 julkaisua).</p>
+                        <div class="path-cta">Aloita tästä &raquo;</div>
+                    </a>
+
+                    <!-- Path 2: Brand Path -->
+                    <a href="../lisaa-yritys.html" class="path-card brand-path">
+                        <div class="path-icon">🏢</div>
+                        <h3>Kasvata brändiäsi</h3>
+                        <p>Hanki pysyvä näkyvyys, oma yritysprofiili ja suora yhteys asiakkaisiin. Alk. 15 €/kk.</p>
+                        <div class="path-cta">Lue lisää &raquo;</div>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>© 2026 LaukaaInfo – Palvelua ylläpitää Mediazoo.fi</p>
+            <div class="footer-links">
+                <a href="../index.html">Etusivulle</a>
+                <a href="../tietosuoja.html">Tietosuoja</a>
+                <a href="../maksuehto.html">Maksuehdot</a>
+                <a href="https://mediazoo.fi/yhteystiedot/">Yhteystiedot</a>
+                <button id="pwa-install-btn"
+                    style="display: none; background: #00c3ff; color: white; border: none; padding: 5px 12px; border-radius: 20px; cursor: pointer; font-family: inherit; font-size: 0.9rem; margin-left: 10px;">Asenna
+                    sovellus</button>
+            </div>
+            <div class="app-badge">
+                <a href="https://play.google.com/store/apps/details?id=org.example.LaukaaLive&hl=fi" target="_blank">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+                        alt="Lataa Android-sovellus" style="height: 40px;">
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="../script.13aa1008.js?v=20260301"></script>
+    <script src="../yrityskortti.13aa1008.js?v=20260304-DEBUG-2"></script>
+</body>
+
+</html>
