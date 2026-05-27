@@ -4,12 +4,12 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "image-1779819144601-0-wgwv0",
-        "title": "Peltoreitti Peurunka",
+        "id": "image-1779868075119-0-8lyrw",
+        "title": "Peltoreitti",
         "description": "Piirretty reitti. Pituus: 4.84 km",
         "type": "route",
         "routeColor": "#c0c0c0",
-        "routeThickness": 6
+        "routeThickness": 2
       },
       "geometry": {
         "type": "LineString",
@@ -2426,6 +2426,443 @@
             25.9030768,
             62.4347165
           ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779868075122-1-4mev5",
+        "title": "Kohde 1",
+        "type": "point",
+        "image": "media_09e80325.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779868075119-0-8lyrw",
+        "route": "Peltoreitti"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.9055789,
+          62.4371895
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779868075122-2-09hut",
+        "title": "Kohde 2",
+        "type": "point",
+        "image": "media_db245b5d.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779868075119-0-8lyrw",
+        "route": "Peltoreitti"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.9094519,
+          62.4394044
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779868075122-3-ck1yg",
+        "title": "Kohde 3",
+        "type": "point",
+        "image": "media_60178646.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779868075119-0-8lyrw",
+        "route": "Peltoreitti"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.9094398,
+          62.4393957
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779868075122-4-0tcuv",
+        "title": "Kohde 4",
+        "type": "point",
+        "image": "media_70e78f86.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779868075119-0-8lyrw",
+        "route": "Peltoreitti"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.9119755,
+          62.4413988
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779868075122-5-cbls9",
+        "title": "Kohde 5",
+        "type": "point",
+        "image": "media_b0217655.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779868075119-0-8lyrw",
+        "route": "Peltoreitti"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.9052501,
+          62.4407864
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779868075122-6-5dp0i",
+        "title": "Kohde 6",
+        "type": "point",
+        "image": "media_a955d7b9.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779868075119-0-8lyrw",
+        "route": "Peltoreitti"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.8972389,
+          62.439842
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779868075122-7-w926g",
+        "title": "Kohde 7",
+        "type": "point",
+        "image": "media_95df5b28.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779868075119-0-8lyrw",
+        "route": "Peltoreitti"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.8919465,
+          62.4391561
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779868075122-8-oc093",
+        "title": "Kohde 8",
+        "type": "point",
+        "image": "media_99f28c0f.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779868075119-0-8lyrw",
+        "route": "Peltoreitti"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.8919585,
+          62.4391556
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779868075122-9-918fn",
+        "title": "Kohde 9",
+        "type": "point",
+        "image": "media_e2437cfb.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779868075119-0-8lyrw",
+        "route": "Peltoreitti"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.8931283,
+          62.4363053
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779868075122-10-kuga8",
+        "title": "Kohde 10",
+        "type": "point",
+        "image": "media_530d9279.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779868075119-0-8lyrw",
+        "route": "Peltoreitti"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.892024,
+          62.4360554
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779868075124-11-omaeq",
+        "title": "Kohde 11",
+        "type": "point",
+        "image": "media_b9a15a6e.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779868075119-0-8lyrw",
+        "route": "Peltoreitti"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.891584,
+          62.4354467
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779868075124-12-iuk5l",
+        "title": "Kohde 12",
+        "type": "point",
+        "image": "media_1aad6867.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779868075119-0-8lyrw",
+        "route": "Peltoreitti"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.8929969,
+          62.4348395
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779868075124-13-rns1t",
+        "title": "Kohde 13",
+        "type": "point",
+        "image": "media_0527b7aa.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779868075119-0-8lyrw",
+        "route": "Peltoreitti"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.8930677,
+          62.4347835
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779868075124-14-p15ru",
+        "title": "Kohde 14",
+        "type": "point",
+        "image": "media_9102572b.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779868075119-0-8lyrw",
+        "route": "Peltoreitti"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.8932595,
+          62.4348513
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779868075124-15-8655b",
+        "title": "Kohde 15",
+        "type": "point",
+        "image": "media_3f35bf74.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779868075119-0-8lyrw",
+        "route": "Peltoreitti"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.896575,
+          62.4336185
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779868075124-16-l2ikk",
+        "title": "Kohde 16",
+        "type": "point",
+        "image": "media_39b8bcbd.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779868075119-0-8lyrw",
+        "route": "Peltoreitti"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.8981201,
+          62.4323301
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779868075124-17-mc5s4",
+        "title": "Kohde 17",
+        "type": "point",
+        "image": "media_c489d98d.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779868075119-0-8lyrw",
+        "route": "Peltoreitti"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.9027954,
+          62.4299928
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779868075124-18-59re7",
+        "title": "Kohde 18",
+        "type": "point",
+        "image": "media_278e9e0a.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779868075119-0-8lyrw",
+        "route": "Peltoreitti"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.9053234,
+          62.4320293
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779868075124-19-emmc9",
+        "title": "Kohde 19",
+        "type": "point",
+        "image": "media_a9a4af7d.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779868075119-0-8lyrw",
+        "route": "Peltoreitti"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.9034012,
+          62.4348578
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779868075124-20-d2u3p",
+        "title": "Kohde 20",
+        "type": "point",
+        "image": "media_5e0d73ed.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779868075119-0-8lyrw",
+        "route": "Peltoreitti"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.9033994,
+          62.4348474
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779868075125-21-cjnzh",
+        "title": "Kohde 22",
+        "type": "point",
+        "image": "media_f9a6ddb6.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779868075119-0-8lyrw",
+        "route": "Peltoreitti"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.903347,
+          62.4348212
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779868075125-22-g3nzq",
+        "title": "Kohde 23",
+        "type": "point",
+        "image": "media_9609ba75.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779868075119-0-8lyrw",
+        "route": "Peltoreitti"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.9033185,
+          62.4347664
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "image-1779868075125-23-knh13",
+        "title": "Kohde 24",
+        "type": "point",
+        "image": "media_1c8dd543.jpg",
+        "mediaType": "IMAGE",
+        "routeId": "image-1779868075119-0-8lyrw",
+        "route": "Peltoreitti"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.9031519,
+          62.4347083
         ]
       }
     }
