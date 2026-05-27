@@ -2433,7 +2433,8 @@
       "type": "Feature",
       "properties": {
         "id": "image-1779871447478-1-ni8oc",
-        "title": "Kohde 1",
+        "title": "Reitin alku",
+        "description": "Metsää ja pellon laitaa. Reitti soveltuu kävelyyn tai juoksuun.",
         "type": "point",
         "image": "https://ik.imagekit.io/vowzx8znjs/reitix/images/media_09e80325.jpg",
         "mediaType": "IMAGE",
@@ -2661,7 +2662,7 @@
       "type": "Feature",
       "properties": {
         "id": "image-1779871447479-13-162t0",
-        "title": "Kohde 13",
+        "title": "Vuokrattavia veneitä",
         "type": "point",
         "image": "https://ik.imagekit.io/vowzx8znjs/reitix/images/media_0527b7aa.jpg",
         "mediaType": "IMAGE",
@@ -2832,7 +2833,7 @@
       "type": "Feature",
       "properties": {
         "id": "image-1779871447479-22-wt6t0",
-        "title": "Kohde 23",
+        "title": "Reittikarttoja alueelle",
         "type": "point",
         "image": "https://ik.imagekit.io/vowzx8znjs/reitix/images/media_9609ba75.jpg",
         "mediaType": "IMAGE",
@@ -2851,7 +2852,7 @@
       "type": "Feature",
       "properties": {
         "id": "image-1779871447479-23-idj75",
-        "title": "Kohde 24",
+        "title": "Kota ja leiripaikka",
         "type": "point",
         "image": "https://ik.imagekit.io/vowzx8znjs/reitix/images/media_1c8dd543.jpg",
         "mediaType": "IMAGE",
