@@ -391,49 +391,43 @@
             return shuffled;
         }
 
-        // Hae yritykset API:sta tai paikallisesta varadatasta
+        // Hae yritykset suoraan paikallisesta tiedostosta
         async function fetchCompanies() {
-            var raw = [];
-            
-            // Kokeillaan ensin API:a
             try {
-                var response = await fetch(API_URL + '?ts=' + Date.now());
-                if (!response.ok) throw new Error('API-virhe');
+                var response = await fetch('../companies_data.json');
+                if (!response.ok) throw new Error('Latausvirhe: ' + response.status);
                 var data = await response.json();
-                raw = Array.isArray(data) ? data : (data.results || data.data || []);
-            } catch (error) {
-                console.warn('API-haku epäonnistui, ladataan varadataa:', error);
-                // Fallback paikalliseen JSON-tiedostoon
-                try {
-                    var fallback = await fetch('../companies_data.json');
-                    if (!fallback.ok) throw new Error('Fallback-virhe');
-                    var fbData = await fallback.json();
-                    raw = Array.isArray(fbData) ? fbData : (fbData.results || fbData.data || []);
-                } catch (fbError) {
-                    console.error('Myös varadatan lataus epäonnistui:', fbError);
+                
+                // data on muodossa { results: [...] }
+                var raw = Array.isArray(data) ? data : (data.results || []);
+                if (!raw || raw.length === 0) {
+                    console.error('Yritysdataa ei löytynyt tiedostosta');
                     return [];
                 }
+                
+                // Suodatetaan testi-/demoyritykset
+                var companies = raw.filter(function(c) {
+                    var name = (c.nimi || '').toLowerCase();
+                    var desc = (c.esittely || '').toLowerCase();
+                    return name.indexOf('testi') === -1 && desc.indexOf('(demo)') === -1 && desc.indexOf('demo)') === -1;
+                });
+                
+                // Lisätään slug
+                companies.forEach(function(c) {
+                    if (c.nimi) {
+                        c.slug = c.nimi.toLowerCase()
+                            .replace(/[äå]/g, 'a')
+                            .replace(/ö/g, 'o')
+                            .replace(/[^a-z0-9]+/g, '-')
+                            .replace(/^-|-$/g, '');
+                    }
+                });
+                
+                return companies;
+            } catch (error) {
+                console.error('Virhe ladattaessa yritysdataa:', error);
+                return [];
             }
-            
-            // Suodatetaan testi-/demoyritykset
-            var companies = raw.filter(function(c) {
-                var name = (c.nimi || '').toLowerCase();
-                var desc = (c.esittely || '').toLowerCase();
-                return name.indexOf('testi') === -1 && desc.indexOf('(demo)') === -1 && desc.indexOf('demo)') === -1;
-            });
-            
-            // Lisätään slug
-            companies.forEach(function(c) {
-                if (c.nimi) {
-                    c.slug = c.nimi.toLowerCase()
-                        .replace(/[äå]/g, 'a')
-                        .replace(/ö/g, 'o')
-                        .replace(/[^a-z0-9]+/g, '-')
-                        .replace(/^-|-$/g, '');
-                }
-            });
-            
-            return companies;
         }
 
         function escapeHtml(str) {
@@ -466,7 +460,7 @@
             
             var mediaHtml = '';
             if (logo) {
-                mediaHtml = '<img src="' + logo + '" alt="' + name + '" class="company-logo" onerror="this.style.display=\'none\';this.parentElement.innerHTML=\'<div class=\\\\\'category-icon\\\\\'>' + categoryIconEmoji + '</div>\'">';
+                mediaHtml = '<div class="category-icon" style="font-size:1.5rem;">🖼️</div><img src="' + logo + '" alt="' + name + '" class="company-logo" onerror="this.style.display=\'none\'">';
             } else {
                 mediaHtml = '<div class="category-icon">' + categoryIconEmoji + '</div>';
             }
