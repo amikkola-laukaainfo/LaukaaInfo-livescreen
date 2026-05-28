@@ -6954,22 +6954,38 @@ footer {
 
 /* Hero - keskitetty mobiilissa WebView-ystävällisesti */
 @media (max-width: 768px) {
+    .hero-left {
+        padding: 3rem 1.25rem;
+    }
+
+    .hero-left-content {
+        text-align: center;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .hero-copy {
+        align-items: center;
+        text-align: center;
+        width: 100%;
+    }
+
+    .hero-tagline {
+        text-align: center;
+    }
+
+    .hero-actions {
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
     .hero-flex-container {
         flex-direction: column !important;
         align-items: center !important;
         text-align: center !important;
     }
-    .hero-copy {
-        align-items: center !important;
-        text-align: center !important;
-    }
-    .hero-actions {
-        justify-content: center !important;
-    }
-    .hero-left-content {
-        text-align: center !important;
-    }
-    .hero-subheading, .hero-tagline {
+    .hero-subheading {
         text-align: center !important;
     }
 }
