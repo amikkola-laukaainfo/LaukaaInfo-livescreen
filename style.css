@@ -6951,3 +6951,25 @@ footer {
         font-size: 1.35rem !important;
     }
 }
+
+/* Hero - keskitetty mobiilissa WebView-ystävällisesti */
+@media (max-width: 768px) {
+    .hero-flex-container {
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+    }
+    .hero-copy {
+        align-items: center !important;
+        text-align: center !important;
+    }
+    .hero-actions {
+        justify-content: center !important;
+    }
+    .hero-left-content {
+        text-align: center !important;
+    }
+    .hero-subheading, .hero-tagline {
+        text-align: center !important;
+    }
+}
