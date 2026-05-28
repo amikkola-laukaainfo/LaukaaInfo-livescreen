@@ -2249,7 +2249,8 @@
                 // Tarkka järjestys: spesifisimmät ensin
                 if (label.includes('polkupyörä') || label.includes('pyörävuokraus')) return 'BICYCLE_RENTAL';
                 if (label.includes('fatbike')) return 'FATBIKE_RENTAL';
-                if (label.includes('kanootti') || label.includes('kajakki')) return 'CANOE_RENTAL';
+                // Sanavartalot: 'kanootin'.includes('kanootti')=false, kaytetaan 'kanoot'/'kajak'
+                if (label.includes('kanoot') || label.includes('kajak')) return 'CANOE_RENTAL';
                 if (label.includes('sup') || label.includes('lauta')) return 'SUP_RENTAL';
                 if (label.includes('astia') || label.includes('astiasto')) return 'DISH_RENTAL';
                 if (label.includes('peräkärry') || label.includes('trailer')) return 'TRAILER_RENTAL';
