@@ -7012,3 +7012,86 @@ footer {
     }
 }
 
+/* =========================================
+   Elämykset & Kulttuuri -osion feature-kortit
+   Kuvien läpinäkyvyys vähennetty (0.1 → 0.25)
+   ========================================= */
+
+/* Elämykset & Kulttuuri -korttien tyylit - kuvat näkyvät paremmin */
+.experiences-section .feature-card {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+/* Korttien taustakuvan läpinäkyvyyden vähennys */
+.experiences-section .feature-card > div[style*="background-image"],
+.experiences-section .feature-card .feature-card-img {
+    position: relative;
+    z-index: 1;
+}
+
+/* Haalea taustakuva koko kortin takana - vähennetään läpinäkyvyyttä */
+.experiences-section .feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.25;  /* Muutettu 0.1 → 0.25 (enemmän näkyvyyttä) */
+    z-index: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+/* Yksittäisten korttien taustakuvat */
+.experiences-section .feature-card:nth-child(1)::before {
+    background-image: url('kuvia/kuva_6.jpg');
+}
+.experiences-section .feature-card:nth-child(2)::before {
+    background-image: url('kuvia/kuva_29.jpg');
+}
+.experiences-section .feature-card:nth-child(3)::before {
+    background-image: url('kuvia/kuva_32.jpg');
+}
+.experiences-section .feature-card:nth-child(4)::before {
+    background-image: url('kuvia/kuva_28.jpg');
+}
+
+/* Kortin hover-tilassa taustakuva tummenee hieman ja skaalautuu */
+.experiences-section .feature-card:hover::before {
+    opacity: 0.35;
+    transform: scale(1.02);
+}
+
+/* Pienoiskuva-alueen tyyli (yläosan kuva) */
+.experiences-section .feature-card-img {
+    position: relative;
+    z-index: 2;
+    height: 160px;  /* Hieman korkeampi */
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.5s ease;
+}
+
+/* Hover-tilassa pienoiskuva skaalautuu */
+.experiences-section .feature-card:hover .feature-card-img {
+    transform: scale(1.05);
+}
+
+/* Kortin sisältöalue */
+.experiences-section .feature-card-body {
+    position: relative;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.92); /* Hieman läpinäkyvä tausta */
+    backdrop-filter: blur(2px);
+    transition: background 0.3s ease;
+}
+
+.experiences-section .feature-card:hover .feature-card-body {
+    background: rgba(255, 255, 255, 0.96);
+}
+
