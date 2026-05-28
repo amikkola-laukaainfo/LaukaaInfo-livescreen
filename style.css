@@ -6983,3 +6983,32 @@ footer {
     }
 }
 
+/* Korjaus: poista punertava kosketuspalaute need-cardien päältä mobiilissa */
+@media (max-width: 768px) {
+    .need-card {
+        -webkit-tap-highlight-color: transparent;
+        tap-highlight-color: transparent;
+    }
+    
+    .btn-need {
+        background: transparent !important;
+        color: transparent !important;
+        -webkit-tap-highlight-color: transparent;
+        transition: none;
+    }
+    
+    .btn-need:active,
+    .btn-need:focus,
+    .btn-need:active:focus {
+        background: transparent !important;
+        outline: none !important;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* Kortin hover/active-tila - pehmeä skaalaus punaisen sijaan */
+    .need-card:active {
+        transform: scale(0.98);
+        transition: transform 0.05s ease;
+    }
+}
+
