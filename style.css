@@ -6465,34 +6465,55 @@ footer {
     }
 
     /* ------------------------------------------------
-       HERO-OSIO – kompaktimpi, lähemmäksi käyttökohdetta
+       HERO-OSIO – kompaktimpi + keskitetty + WebView-ystävällinen
        ------------------------------------------------ */
     header.hero-split {
         min-height: unset;
     }
     .hero-left {
-        padding: 1.1rem 0.85rem 1rem;
+        padding: 2rem 1.25rem;
         background: var(--secondary-blue);
+    }
+    .hero-left-content {
+        text-align: center;
+        width: 100%;
+        margin: 0 auto;
+    }
+    .hero-flex-container {
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        gap: 1rem;
+    }
+    .hero-copy {
+        text-align: center;
+        width: 100%;
     }
     header h1,
     header.hero-split h1 {
         font-size: 1.5rem !important;
         letter-spacing: -0.5px;
         margin-bottom: 0.3rem;
+        text-align: center;
     }
     .hero-subheading {
         font-size: 0.95rem;
         margin-bottom: 0.5rem;
         opacity: 0.9;
+        text-align: center !important;
     }
     .hero-tagline {
         font-size: 0.8rem;
         line-height: 1.4;
         margin-bottom: 0.25rem;
         opacity: 0.85;
+        text-align: center;
     }
     .hero-actions {
         margin-top: 0.85rem;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
     }
     .btn-primary {
         padding: 0.65rem 1.25rem;
@@ -6503,11 +6524,21 @@ footer {
         width: 44px;
         max-width: 44px !important;
     }
-    .hero-flex-container {
-        gap: 1rem;
-    }
     .hero-right {
         min-height: 120px;
+    }
+    /* WebView: poistaa Android-korostuksen (sininen hehku) hero-elementeiltä */
+    header.hero-split,
+    header.hero-split h1,
+    header.hero-split h2,
+    header.hero-split p,
+    .hero-left,
+    .hero-copy,
+    .hero-subheading,
+    .hero-tagline {
+        -webkit-tap-highlight-color: transparent;
+        -webkit-user-select: none;
+        user-select: none;
     }
 
     /* ------------------------------------------------
@@ -6952,40 +6983,3 @@ footer {
     }
 }
 
-/* Hero - keskitetty mobiilissa WebView-ystävällisesti */
-@media (max-width: 768px) {
-    .hero-left {
-        padding: 3rem 1.25rem;
-    }
-
-    .hero-left-content {
-        text-align: center;
-        width: 100%;
-        margin: 0 auto;
-    }
-
-    .hero-copy {
-        align-items: center;
-        text-align: center;
-        width: 100%;
-    }
-
-    .hero-tagline {
-        text-align: center;
-    }
-
-    .hero-actions {
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-    }
-
-    .hero-flex-container {
-        flex-direction: column !important;
-        align-items: center !important;
-        text-align: center !important;
-    }
-    .hero-subheading {
-        text-align: center !important;
-    }
-}
