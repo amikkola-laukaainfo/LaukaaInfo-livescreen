@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Satunnaiset yritykset | LaukaaInfo</title>
-    <meta name="description" content="Tutustu satunnaisiin laukaalaisiin yrityksiin – joka latauskerralla uusi kokoelma.">
-    <link rel="icon" href="logo.png">
+    <title>Yritysfeed | Satunnaiset yritykset Laukaasta</title>
+    <meta name="description" content="Tutustu satunnaisiin laukaalaisiin yrityksiin – joka latauskerralla uusi kokoelma. Löydä uusia suosikkeja!">
+    <link rel="icon" href="../logo.png">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,34 +31,39 @@
         body { font-family: 'Inter', sans-serif; background: var(--bg-light); color: var(--text-dark); line-height: 1.5; }
         
         /* Header */
-        .random-header {
-            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+        .feed-header {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
             color: white;
-            padding: 2.5rem 1.5rem;
+            padding: 2rem 1.5rem;
             text-align: center;
             border-bottom-left-radius: 30px;
             border-bottom-right-radius: 30px;
             margin-bottom: 2rem;
         }
-        .random-header h1 {
+        .feed-header h1 {
             font-family: 'Outfit', sans-serif;
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 800;
             margin-bottom: 0.5rem;
         }
-        .random-header p {
+        .feed-header p {
             font-size: 1rem;
             opacity: 0.9;
             max-width: 600px;
             margin: 0 auto;
         }
-        .random-header .badge {
-            display: inline-block;
-            background: rgba(255,255,255,0.2);
-            padding: 0.5rem 1.2rem;
-            border-radius: 50px;
-            font-size: 0.85rem;
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
             margin-top: 1rem;
+            font-size: 0.85rem;
+            opacity: 0.85;
+        }
+        .stats-bar span {
+            background: rgba(255,255,255,0.15);
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
         }
         
         .container {
@@ -91,9 +96,14 @@
             color: white;
             transform: translateY(-2px);
         }
+        .refresh-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
         
         /* Company grid */
-        .companies-grid {
+        .feed-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 1.75rem;
@@ -258,25 +268,29 @@
         }
         
         @media (max-width: 768px) {
-            .companies-grid {
+            .feed-grid {
                 grid-template-columns: 1fr;
                 gap: 1.25rem;
             }
-            .random-header h1 {
+            .feed-header h1 {
                 font-size: 1.8rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="random-header">
-        <h1>🎲 Satunnaiset yritykset</h1>
+    <div class="feed-header">
+        <h1>🎲 Yritysfeed</h1>
         <p>Joka kerta uusi kokoelma laukaalaisia yrityksiä – löydä yllättäviä helmiä!</p>
-        <div class="badge" id="company-count-badge">Ladataan...</div>
+        <div class="stats-bar">
+            <span>🔄 Päivittyy satunnaisesti</span>
+            <span>🏢 Paikallisia toimijoita</span>
+            <span id="company-count-badge">✨ Ladataan...</span>
+        </div>
     </div>
     
     <div class="container">
-        <a href="index.html" class="back-link">← Takaisin etusivulle</a>
+        <a href="../index.html" class="back-link">← Takaisin etusivulle</a>
         
         <div class="refresh-container">
             <button id="refresh-btn" class="refresh-btn">
@@ -284,7 +298,7 @@
             </button>
         </div>
         
-        <div id="companies-container" class="companies-grid">
+        <div id="feed-container" class="feed-grid">
             <!-- 6 skeleton-korttia -->
             <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-text skeleton-text-sm"></div></div>
             <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-text skeleton-text-sm"></div></div>
@@ -296,7 +310,7 @@
     </div>
     
     <footer>
-        <p>© 2026 LaukaaInfo – Kylien ja asukkaiden oma tietopankki</p>
+        <p>© 2026 LaukaaInfo – Paikalliset yritykset kootusti</p>
     </footer>
 
     <script>
@@ -377,9 +391,9 @@
             const isPremium = (company.tyyppi === 'maksu' || company.tyyppi === 'premium' || 
                               company.paketti === 'premium' || company.package === 'premium');
             
-            // Muodosta slug ja URL
+            // Muodosta slug ja URL (suhteellinen polku yrityskorttiin)
             const slug = slugify(name);
-            const url = `yrityskortti.html?id=${encodeURIComponent(slug)}`;
+            const url = `../yrityskortti.html?id=${encodeURIComponent(slug)}`;
             
             // Media-osa (logo tai ikoni)
             let mediaHtml = '';
@@ -409,13 +423,13 @@
         
         // Hae yritykset ja näytä 25 satunnaista
         async function loadRandomCompanies() {
-            const container = document.getElementById('companies-container');
+            const container = document.getElementById('feed-container');
             const badge = document.getElementById('company-count-badge');
             const refreshBtn = document.getElementById('refresh-btn');
             
             if (refreshBtn) {
                 refreshBtn.disabled = true;
-                refreshBtn.innerHTML = '⏳ Ladataan...';
+                refreshBtn.innerHTML = '⏳ Ladataan uusia yrityksiä...';
             }
             
             // Näytä skeletonit
@@ -430,8 +444,8 @@
             }
             
             try {
-                // Haetaan yritykset JSON-tiedostosta
-                const response = await fetch('companies_data.json?t=' + Date.now());
+                // KORJATTU: Haetaan JSON sivuston JUURESTA (ei feed-kansiosta)
+                const response = await fetch('/companies_data.json?t=' + Date.now());
                 if (!response.ok) throw new Error('HTTP ' + response.status);
                 
                 const data = await response.json();
@@ -469,16 +483,16 @@
                 
                 // Ota 25 satunnaista (tai vähemmän jos ei ole tarpeeksi)
                 const shuffled = shuffleArray(validCompanies);
-                const random25 = shuffled.slice(0, 25);
+                const randomCompanies = shuffled.slice(0, 25);
                 
                 // Päivitä badge
                 if (badge) {
-                    badge.textContent = `🎲 ${random25.length} satunnaista yritystä`;
+                    badge.textContent = `🎲 ${randomCompanies.length} yritystä`;
                 }
                 
                 // Renderöi kortit
                 if (container) {
-                    container.innerHTML = random25.map(renderCompanyCard).join('');
+                    container.innerHTML = randomCompanies.map(renderCompanyCard).join('');
                 }
                 
             } catch (error) {
@@ -488,11 +502,11 @@
                         <div class="empty-state">
                             <span>⚠️</span>
                             <p>Yritysten lataaminen epäonnistui.</p>
-                            <p style="font-size:0.8rem;margin-top:0.5rem;">Tarkista että companies_data.json löytyy sivuston juuresta.</p>
+                            <p style="font-size:0.8rem;margin-top:0.5rem;">Tarkista että /companies_data.json löytyy sivuston juuresta.</p>
                         </div>
                     `;
                 }
-                if (badge) badge.textContent = '❌ Virhe latauksessa';
+                if (badge) badge.textContent = '❌ Virhe';
             } finally {
                 if (refreshBtn) {
                     refreshBtn.disabled = false;
