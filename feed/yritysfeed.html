@@ -112,8 +112,10 @@
     <footer><p>© 2026 LaukaaInfo – Paikalliset yritykset kootusti</p></footer>
 
     <script>
-        // KÄYTETÄÄN VAIN JSON-TIEDOSTOA - API OHITETAAN KOKONAAN
-        var JSON_URL = 'https://www.laukaainfo.fi/companies_data.json';
+        // KÄYTETÄÄN SUHTEELLISTA POLKUA - EI CORS-ONGELMAA
+        // HUOM: TÄMÄ TIEDOSTO ON KANSIOSSA /feed/ - JSON on juuressa
+        var JSON_URL = '../companies_data.json';  // Suhteellinen polku juureen
+        
         var allCompanies = [];
         var displayedCompanies = [];
         var isLoading = false;
@@ -148,10 +150,10 @@
             return shuffled;
         }
 
-        // Hae yritykset VAIN JSON-tiedostosta
-        async function fetchCompaniesFromJSON() {
+        // Hae yritykset suhteellisella polulla - EI CORS-ongelmaa
+        async function fetchCompanies() {
             try {
-                console.log('Haetaan yrityksiä JSON-tiedostosta:', JSON_URL);
+                console.log('Haetaan yrityksiä polusta:', JSON_URL);
                 var resp = await fetch(JSON_URL + '?t=' + Date.now());
                 
                 if (!resp.ok) {
@@ -159,8 +161,7 @@
                 }
                 
                 var data = await resp.json();
-                console.log('JSON ladattu, data-tyyppi:', typeof data);
-                console.log('Data-avaimet:', Object.keys(data));
+                console.log('JSON ladattu onnistuneesti');
                 
                 // Poimitaan results-taulukko
                 var companies = null;
@@ -191,6 +192,7 @@
                 
             } catch (error) {
                 console.error('JSON-haku epäonnistui:', error);
+                console.log('Tarkista että tiedosto löytyy polusta:', JSON_URL);
                 return [];
             }
         }
@@ -378,16 +380,16 @@
             }
             
             if (container) {
-                container.innerHTML = '<p class="loading-text">📡 Ladataan yrityksiä JSON-tiedostosta...</p>';
+                container.innerHTML = '<p class="loading-text">📡 Ladataan yrityksiä...</p>';
             }
             
-            // Haetaan yritykset VAIN JSON-tiedostosta
-            var raw = await fetchCompaniesFromJSON();
+            // Haetaan yritykset JSON-tiedostosta
+            var raw = await fetchCompanies();
             
             if (!raw || raw.length === 0) {
-                console.error('Yrityksiä ei löytynyt JSON-tiedostosta');
+                console.error('Yrityksiä ei löytynyt');
                 if (container) {
-                    container.innerHTML = '<div class="empty-state"><span>⚠️</span><p>Yrityksiä ei ladattu. Tarkista verkkoyhteys tai yritä myöhemmin uudelleen.</p><p style="font-size:0.8rem;margin-top:1rem;">JSON-tiedosto: ' + JSON_URL + '</p></div>';
+                    container.innerHTML = '<div class="empty-state"><span>⚠️</span><p>Yrityksiä ei ladattu. Tarkista että companies_data.json löytyy sivuston juuresta.</p><p style="font-size:0.8rem;margin-top:1rem;">Haettu polku: ' + JSON_URL + '</p></div>';
                 }
                 if (loadBtn) loadBtn.style.display = 'none';
                 isLoading = false;
@@ -428,7 +430,6 @@
         // Liitetään tapahtumakuuntelija latausnapille
         var loadBtn = document.getElementById('load-more-btn');
         if (loadBtn) {
-            // Poistetaan vanhat tapahtumakuuntelijat ja lisätään uusi
             var newBtn = loadBtn.cloneNode(true);
             loadBtn.parentNode.replaceChild(newBtn, loadBtn);
             newBtn.addEventListener('click', function() {
