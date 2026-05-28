@@ -86,6 +86,7 @@
         .back-link:hover { text-decoration: underline; }
         footer { text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.8rem; border-top: 1px solid var(--border-light); margin-top: 2rem; }
         .loading-text { text-align: center; padding: 2rem; color: var(--text-muted); font-size: 1rem; }
+        .error-message { text-align: center; padding: 2rem; color: #d32f2f; background: #ffebee; border-radius: var(--radius-md); margin: 1rem; }
     </style>
 </head>
 <body>
@@ -111,20 +112,21 @@
     <footer><p>© 2026 LaukaaInfo – Paikalliset yritykset kootusti</p></footer>
 
     <script>
-        var API_URL = 'https://www.mediazoo.fi/laukaainfo-web/get_companies.php';
+        // Käytetään SUORAAN companies_data.json tiedostoa (vältetään API ongelmat)
+        var JSON_URL = 'https://www.laukaainfo.fi/companies_data.json';
         var allCompanies = [];
         var displayedCompanies = [];
         var isLoading = false;
         var currentOffset = 0;
-        var PAGE_SIZE = 25;
+        var PAGE_SIZE = 20;
 
         var categoryIcons = {
-            'Ravintolat ja kahvilat': '🍽️', 'Majoitus': '🏨', 'Hyvinvointi ja kauneus': '💆',
+            'Ravintolat ja kahvilat': '🍽️', 'Majoitus': '🏨', 'Hyvinvointi ja terveys': '💆',
             'Terveyspalvelut': '🏥', 'Rakentaminen ja remontointi': '🔨', 'Kodin ja talon huolto': '🏠',
             'Autopalvelut': '🚗', 'Myymälät ja kauppa': '🛍️', 'Tapahtumat ja viihde': '🎉',
             'Kulttuuri ja taide': '🎨', 'Liikunta ja ulkoilu': '🏃', 'Koulutus ja valmennus': '📚',
             'Digitaaliset palvelut': '💻', 'Siivous ja kiinteistöhuolto': '🧹', 'Logistiikka ja kuljetus': '🚚',
-            'default': '🏢'
+            'Auto ja kuljetus': '🚗', 'Elintarvikkeet': '🍎', 'default': '🏢'
         };
 
         function getCategoryIcon(category) {
@@ -146,78 +148,136 @@
             return shuffled;
         }
 
-        // Hae yritykset - kokeillaan ensin API:a, sitten paikallista JSON:ia
+        // Hae yritykset suoraan JSON-tiedostosta
         async function fetchCompanies() {
-            // API (kevyt versio)
             try {
-                var resp = await fetch(API_URL + '?ts=' + Date.now());
-                if (resp.ok) {
-                    var json = await resp.json();
-                    var list = Array.isArray(json) ? json : (json.results || json.data || []);
-                    if (list.length > 0) {
-                        console.log('API OK, yrityksiä:', list.length);
-                        return list;
+                console.log('Ladataan yrityksiä JSON-tiedostosta:', JSON_URL);
+                var resp = await fetch(JSON_URL + '?ts=' + Date.now());
+                if (!resp.ok) {
+                    throw new Error('HTTP ' + resp.status + ': ' + resp.statusText);
+                }
+                var data = await resp.json();
+                console.log('JSON-data vastaanotettu, tyyppi:', typeof data);
+                
+                // Käsitellään data - joko suoraan array tai {results: []} muodossa
+                var list = [];
+                if (Array.isArray(data)) {
+                    list = data;
+                } else if (data.results && Array.isArray(data.results)) {
+                    list = data.results;
+                } else if (data.companies && Array.isArray(data.companies)) {
+                    list = data.companies;
+                } else {
+                    // Yritetään löytää array jostain avaimesta
+                    for (var key in data) {
+                        if (Array.isArray(data[key]) && data[key].length > 0) {
+                            list = data[key];
+                            break;
+                        }
                     }
                 }
-            } catch (e) {
-                console.warn('API fail:', e);
-            }
-            
-            // Fallback: absolute URL to companies_data.json
-            try {
-                console.log('Ladataan companies_data.json...');
-                var resp = await fetch('https://www.laukaainfo.fi/companies_data.json');
-                if (!resp.ok) throw new Error('HTTP ' + resp.status);
-                var json = await resp.json();
-                var list = Array.isArray(json) ? json : (json.results || []);
-                console.log('JSON OK, yrityksiä:', list.length);
+                
+                console.log('Purettu lista, pituus:', list.length);
+                if (list.length === 0) {
+                    console.warn('JSON-tiedostosta ei löytynyt yrityksiä');
+                    return [];
+                }
+                
                 return list;
             } catch (e) {
-                console.error('JSON fail:', e);
+                console.error('JSON-haku epäonnistui:', e);
                 return [];
             }
         }
 
         function processCompanies(raw) {
+            if (!raw || !Array.isArray(raw)) {
+                console.warn('processCompanies: raw ei ole array', raw);
+                return [];
+            }
+            
             var arr = raw.filter(function(c) {
+                if (!c || typeof c !== 'object') return false;
                 var n = (c.nimi || '').toLowerCase();
-                var d = (c.esittely || '').toLowerCase();
-                return n.indexOf('testi') === -1 && d.indexOf('(demo)') === -1 && d.indexOf('demo)') === -1;
+                var d = (c.esittely || c.mainoslause || '').toLowerCase();
+                // Suodatetaan pois testiyritykset
+                if (n.indexOf('testi') !== -1) return false;
+                if (d.indexOf('(demo)') !== -1 || d.indexOf('demo)') !== -1) return false;
+                return true;
             });
+            
             arr.forEach(function(c) {
                 if (c.nimi) {
-                    c.slug = c.nimi.toLowerCase().replace(/[äå]/g,'a').replace(/ö/g,'o').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+                    c.slug = c.nimi.toLowerCase()
+                        .replace(/[äå]/g, 'a')
+                        .replace(/ö/g, 'o')
+                        .replace(/[^a-z0-9]+/g, '-')
+                        .replace(/^-|-$/g, '');
                 }
+                // Varmistetaan, että tarvittavat kentät ovat olemassa
+                if (!c.kategoria) c.kategoria = 'Palveluyritys';
+                if (!c.alue && c.alue_slug) c.alue = c.alue_slug;
+                if (!c.alue) c.alue = 'Laukaa';
             });
+            
+            console.log('Prosessoituja yrityksiä:', arr.length);
             return arr;
         }
 
         function escapeHtml(str) {
             if (!str) return '';
-            var s = str;
-            s = s.replace(/&/g, '&' + 'amp;');
-            s = s.replace(/</g, '&' + 'lt;');
-            s = s.replace(/>/g, '&' + 'gt;');
-            s = s.replace(/"/g, '&' + 'quot;');
-            s = s.replace(/'/g, '&' + '#39;');
+            var s = String(str);
+            s = s.replace(/&/g, '&amp;');
+            s = s.replace(/</g, '&lt;');
+            s = s.replace(/>/g, '&gt;');
+            s = s.replace(/"/g, '&quot;');
+            s = s.replace(/'/g, '&#39;');
             return s;
+        }
+
+        function truncateText(text, maxLength) {
+            if (!text) return '';
+            if (text.length <= maxLength) return text;
+            return text.substring(0, maxLength) + '...';
         }
 
         function renderCompanyCard(company) {
             var name = company.nimi || 'Nimetön yritys';
             var category = company.kategoria || 'Palveluyritys';
-            var description = company.esittely || company.mainoslause || 'Tutustu yritykseen ja sen palveluihin.';
-            var location = company.alue || company.kaupunki || 'Laukaa';
-            var logo = company.logo && company.logo !== '-' ? company.logo : null;
-            var icon = getCategoryIcon(category);
-            var shortDesc = description.length > 120 ? description.substring(0, 120) + '...' : description;
-            var isPremium = (company.paketti === 'premium' || company.paketti === 'pro' || company.tyyppi === 'premium');
-            var url = '../yritys/' + company.slug + '.html';
-            if (!company.slug || company.slug.length < 2) {
-                url = '../yrityskortti.html?id=' + encodeURIComponent(company.nimi);
+            // Käytetään mainoslause tai esittely tai oletusteksti
+            var description = company.mainoslause || company.esittely || '';
+            if (!description || description.length === 0) {
+                description = 'Tutustu yritykseen ja sen palveluihin.';
             }
-            var mediaHtml = logo ? '<img src="' + logo + '" alt="' + escapeHtml(name) + '" class="company-logo" onerror="this.style.display=\'none\'">' : '<div class="category-icon">' + icon + '</div>';
+            var location = company.alue || company.kaupunki || 'Laukaa';
+            var logo = company.logo && company.logo !== '-' && company.logo !== '' ? company.logo : null;
+            var icon = getCategoryIcon(category);
+            var shortDesc = truncateText(description, 120);
+            
+            // Tarkistetaan onko premium (paketti, package tai tyyppi)
+            var isPremium = (company.paketti === 'premium' || company.paketti === 'pro' || 
+                            company.package === 'premium' || company.tyyppi === 'premium' ||
+                            company.tyyppi === 'maksu');
+            
+            // Rakennetaan URL yrityksen sivulle
+            var url = '';
+            if (company.slug && company.slug.length > 2) {
+                url = '../yritys/' + company.slug + '.html';
+            } else if (company.id) {
+                url = '../yrityskortti.html?id=' + encodeURIComponent(company.id);
+            } else {
+                url = '../yrityskortti.html?nimi=' + encodeURIComponent(company.nimi);
+            }
+            
+            var mediaHtml = '';
+            if (logo) {
+                mediaHtml = '<img src="' + logo + '" alt="' + escapeHtml(name) + '" class="company-logo" onerror="this.style.display=\'none\';this.parentElement.innerHTML=\'<div class=\"category-icon\">' + icon + '</div>\'">';
+            } else {
+                mediaHtml = '<div class="category-icon">' + icon + '</div>';
+            }
+            
             var badge = isPremium ? '<span class="company-badge">⭐ Premium</span>' : '';
+            
             return '<a href="' + url + '" class="company-card">' +
                 '<div class="card-media">' + mediaHtml + '</div>' +
                 '<div class="card-content">' +
@@ -232,59 +292,113 @@
         function displayNextPage() {
             var container = document.getElementById('feed-container');
             var loadBtn = document.getElementById('load-more-btn');
+            
             if (isLoading) return;
-            if (displayedCompanies.length === 0) {
-                if (container) container.innerHTML = '<div class="empty-state"><span>🏢</span><p>Yrityksiä ei l&ouml;ytynyt.</p></div>';
+            
+            if (!displayedCompanies || displayedCompanies.length === 0) {
+                if (container && container.innerHTML.indexOf('empty-state') === -1) {
+                    container.innerHTML = '<div class="empty-state"><span>🏢</span><p>Yrityksiä ei löytynyt.</p></div>';
+                }
+                if (loadBtn) loadBtn.style.display = 'none';
                 return;
             }
+            
             var start = currentOffset;
             var end = Math.min(start + PAGE_SIZE, displayedCompanies.length);
             var batch = displayedCompanies.slice(start, end);
+            
             if (batch.length === 0) {
-                loadBtn.disabled = true;
-                loadBtn.innerHTML = '&#10024; Kaikki yritykset n&auml;ytetty &#10024;';
+                if (loadBtn) {
+                    loadBtn.disabled = true;
+                    loadBtn.innerHTML = '✨ Kaikki yritykset näytetty ✨';
+                }
                 return;
             }
-            if (currentOffset === 0) container.innerHTML = '';
-            batch.forEach(function(c) { container.insertAdjacentHTML('beforeend', renderCompanyCard(c)); });
+            
+            // Poistetaan skeleton/lataustekstit jos eka erä
+            if (currentOffset === 0 && container) {
+                container.innerHTML = '';
+            }
+            
+            // Lisätään batch containeriin
+            batch.forEach(function(c) {
+                if (container) container.insertAdjacentHTML('beforeend', renderCompanyCard(c));
+            });
+            
             currentOffset = end;
-            if (currentOffset >= displayedCompanies.length) {
-                loadBtn.disabled = true;
-                loadBtn.innerHTML = '&#127937; Kaikki yritykset n&auml;ytetty &#127937;';
-            } else {
-                loadBtn.innerHTML = '&#128260; Lataa lis&auml;&auml; (' + (displayedCompanies.length - currentOffset) + ' j&auml;ljell&auml;)';
-                loadBtn.disabled = false;
+            
+            if (loadBtn) {
+                if (currentOffset >= displayedCompanies.length) {
+                    loadBtn.disabled = true;
+                    loadBtn.innerHTML = '✨ Kaikki yritykset näytetty ✨';
+                } else {
+                    loadBtn.innerHTML = '🔄 Lataa lisää yrityksiä (' + (displayedCompanies.length - currentOffset) + ' jäljellä)';
+                    loadBtn.disabled = false;
+                }
             }
         }
 
         async function initFeed() {
             var container = document.getElementById('feed-container');
             var loadBtn = document.getElementById('load-more-btn');
+            
             isLoading = true;
             if (loadBtn) loadBtn.disabled = true;
             
-            container.innerHTML = '<p class="loading-text">&#128259; Ladataan yrityksi&auml;...</p>';
+            if (container) {
+                container.innerHTML = '<p class="loading-text">📡 Ladataan yrityksiä...</p>';
+            }
             
+            // Haetaan yritykset JSON-tiedostosta
             var raw = await fetchCompanies();
-            allCompanies = processCompanies(raw);
             
-            if (allCompanies.length === 0) {
-                container.innerHTML = '<div class="empty-state"><span>&#9888;&#65039;</span><p>Yrityksi&auml; ei ladattu. Yrit&auml; my&ouml;hemmin uudelleen.</p></div>';
+            if (!raw || raw.length === 0) {
+                console.error('Yrityksiä ei löytynyt JSON-tiedostosta');
+                if (container) {
+                    container.innerHTML = '<div class="empty-state"><span>⚠️</span><p>Yrityksiä ei ladattu. Tarkista verkkoyhteys tai yritä myöhemmin uudelleen.</p></div>';
+                }
                 if (loadBtn) loadBtn.style.display = 'none';
                 isLoading = false;
                 return;
             }
             
+            allCompanies = processCompanies(raw);
+            
+            if (allCompanies.length === 0) {
+                console.error('Prosessoinnin jälkeen ei yrityksiä');
+                if (container) {
+                    container.innerHTML = '<div class="empty-state"><span>🏢</span><p>Yrityksiä ei löytynyt tietokannasta.</p></div>';
+                }
+                if (loadBtn) loadBtn.style.display = 'none';
+                isLoading = false;
+                return;
+            }
+            
+            console.log('Näytetään yrityksiä:', allCompanies.length);
+            
+            // Sekoitetaan yritykset satunnaiseen järjestykseen
             displayedCompanies = shuffleArray(allCompanies);
             currentOffset = 0;
+            
+            // Näytetään ensimmäinen sivu
             displayNextPage();
+            
             isLoading = false;
+            if (loadBtn) {
+                loadBtn.disabled = (currentOffset >= displayedCompanies.length);
+                loadBtn.style.display = 'inline-flex';
+            }
         }
-
-        document.getElementById('load-more-btn').addEventListener('click', function() {
-            if (!isLoading) displayNextPage();
-        });
-
+        
+        // Liitetään tapahtumakuuntelija latausnapille
+        var loadBtn = document.getElementById('load-more-btn');
+        if (loadBtn) {
+            loadBtn.addEventListener('click', function() {
+                if (!isLoading) displayNextPage();
+            });
+        }
+        
+        // Käynnistetään feed
         initFeed();
     </script>
 </body>
