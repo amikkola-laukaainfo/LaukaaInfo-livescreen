@@ -7082,16 +7082,11 @@ footer {
     transform: scale(1.05);
 }
 
-/* Kortin sisältöalue */
+/* Kortin sisältöalue - 50% läpinäkyvyys, jotta taustakuva näkyy hieman */
 .experiences-section .feature-card-body {
     position: relative;
     z-index: 2;
-    background: rgba(255, 255, 255, 0.92); /* Hieman läpinäkyvä tausta */
-    backdrop-filter: blur(2px);
+    background: rgba(255, 255, 255, 0.5); /* 50% läpinäkyvä valkoinen tausta */
     transition: background 0.3s ease;
-}
-
-.experiences-section .feature-card:hover .feature-card-body {
-    background: rgba(255, 255, 255, 0.96);
 }
 
