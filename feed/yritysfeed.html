@@ -163,10 +163,10 @@
                 console.warn('API fail:', e);
             }
             
-            // Fallback: local JSON
+            // Fallback: absolute URL to companies_data.json
             try {
                 console.log('Ladataan companies_data.json...');
-                var resp = await fetch('../companies_data.json');
+                var resp = await fetch('https://www.laukaainfo.fi/companies_data.json');
                 if (!resp.ok) throw new Error('HTTP ' + resp.status);
                 var json = await resp.json();
                 var list = Array.isArray(json) ? json : (json.results || []);
