@@ -308,9 +308,13 @@
         // Description: full content with all @@ removed and hashtags stripped
         const description = fullContent.replaceAll('@@', '').replace(/#[a-zA-Z0-9åäöÅÄÖ]+/g, '').replace(/\s\s+/g, ' ').trim();
 
-        document.getElementById('display-headline').textContent = slogan;
-        document.getElementById('display-description').textContent = description;
-        document.getElementById('display-address').textContent = company.osoite || 'Laukaa';
+        // display-headline was removed in the 2.0 redesign — slogan is now shown in #bc-short-intro
+        const headlineEl = document.getElementById('display-headline');
+        if (headlineEl) headlineEl.textContent = slogan;
+        const descEl = document.getElementById('display-description');
+        if (descEl) descEl.textContent = description;
+        const addrEl = document.getElementById('display-address');
+        if (addrEl) addrEl.textContent = company.osoite || 'Laukaa';
 
         // Service methods (palvelutapa)
         const tags = (company.tags || '').split(',').map(t => t.trim().toLowerCase());
