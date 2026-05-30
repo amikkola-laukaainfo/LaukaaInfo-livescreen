@@ -945,9 +945,19 @@
 
         // 3. Shortened Address & Mock High-Quality Rating in Modern Header Banner
         const displayAddressShort = document.getElementById('display-address-short');
+        const displayPostalCity = document.getElementById('display-postal-city');
         if (displayAddressShort) {
             const fullAddress = company.osoite || 'Laukaa';
-            displayAddressShort.textContent = fullAddress.split(',')[0].trim();
+            const parts = fullAddress.split(',');
+            displayAddressShort.textContent = parts[0].trim();
+            if (displayPostalCity) {
+                if (parts.length > 1) {
+                    displayPostalCity.textContent = parts[1].trim();
+                    displayPostalCity.style.display = 'block';
+                } else {
+                    displayPostalCity.style.display = 'none';
+                }
+            }
         }
 
         const ratingStars = document.getElementById('display-rating-stars');
@@ -1050,6 +1060,8 @@
                     else if (bLower.includes('toimitus')) emoji = '🚚';
                     
                     span.innerHTML = `<span>${emoji}</span> ${badge}`;
+                    span.style.cursor = 'pointer';
+                    span.onclick = () => window.openTagModal(badge);
                     capList.appendChild(span);
                 });
                 capBlock.style.display = 'block';
@@ -1630,4 +1642,124 @@
     function deg2rad(deg) {
         return deg * (Math.PI / 180);
     }
+
+    // Modal logic for clicking tags
+    window.openTagModal = async function(tag) {
+        const modal = document.getElementById('tag-filter-modal');
+        const title = document.getElementById('tag-modal-title');
+        const grid = document.getElementById('tag-modal-grid');
+        const closeBtn = document.getElementById('close-tag-modal-btn');
+        
+        if (!modal || !grid) return;
+        
+        title.textContent = `${tag.charAt(0).toUpperCase() + tag.slice(1)} - Yritykset`;
+        grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 2rem;">Ladataan...</div>';
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        
+        const closeModal = () => {
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+        };
+
+        closeBtn.onclick = closeModal;
+        modal.onclick = (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        };
+
+        try {
+            // Retrieve companies using existing slim cache if possible
+            let allCompanies = [];
+            const slimCached = sessionStorage.getItem('laukaainfo_companies_slim');
+            const slimTime = sessionStorage.getItem('laukaainfo_companies_slim_time');
+            
+            if (slimCached && slimTime && (Date.now() - parseInt(slimTime) < 1800000)) {
+                const slimJson = JSON.parse(slimCached);
+                allCompanies = Array.isArray(slimJson) ? slimJson : (slimJson.results || []);
+            } else {
+                const dataSourceUrl = 'https://www.mediazoo.fi/laukaainfo-web/get_companies.php';
+                const slimRes = await fetch(`${dataSourceUrl}?t=${Date.now()}`);
+                const slimJson = await slimRes.json();
+                allCompanies = Array.isArray(slimJson) ? slimJson : (slimJson.results || []);
+                sessionStorage.setItem('laukaainfo_companies_slim', JSON.stringify(slimJson));
+                sessionStorage.setItem('laukaainfo_companies_slim_time', Date.now().toString());
+            }
+            
+            if (!allCompanies || allCompanies.length === 0) {
+                const isDist = window.location.pathname.includes('/yritys/');
+                const prefix = isDist ? '../' : './';
+                const localRes = await fetch(prefix + 'companies_data.json');
+                const localJson = await localRes.json();
+                allCompanies = Array.isArray(localJson) ? localJson : (localJson.results || []);
+            }
+
+            const searchTag = tag.toLowerCase().trim();
+            const matches = allCompanies.filter(c => {
+                const tags = (c.tags || '').toLowerCase();
+                const pvtapa = (c.palvelutapa || '').toLowerCase();
+                const kat = (c.kategoria || '').toLowerCase();
+                return tags.includes(searchTag) || pvtapa.includes(searchTag) || kat.includes(searchTag);
+            });
+            
+            grid.innerHTML = '';
+            
+            if (matches.length === 0) {
+                grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: #64748b; font-weight: 600;">Ei yrityksiä tällä tägillä.</div>';
+                return;
+            }
+            
+            matches.forEach(company => {
+                const card = document.createElement('a');
+                const compId = String(company.id).startsWith('company-') ? company.id.replace('company-', '') : company.id;
+                const cleanName = slugify(company.nimi);
+                
+                // Construct URL based on type
+                const isPremium = (company.package === 'premium' || company.tyyppi === 'maksu' || company.tyyppi === 'paid');
+                const isInDist = window.location.pathname.includes('/dist/') || window.location.hostname === 'laukaainfo.fi';
+                const distPrefix = isInDist ? '' : 'dist/';
+                
+                card.href = isPremium ? `${distPrefix}yritys/${cleanName}.html#tab-extended-profile` : `yrityskortti.html?id=${compId || cleanName}#tab-extended-profile`;
+                card.style.cssText = 'background: white; border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.25rem; display: flex; flex-direction: column; gap: 0.5rem; text-decoration: none; color: inherit; transition: all 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.02); cursor: pointer;';
+                card.onmouseover = () => { card.style.transform = 'translateY(-4px)'; card.style.borderColor = 'var(--accent-blue)'; card.style.boxShadow = '0 8px 15px rgba(0,0,0,0.05)'; };
+                card.onmouseout = () => { card.style.transform = ''; card.style.borderColor = '#e2e8f0'; card.style.boxShadow = '0 4px 6px rgba(0,0,0,0.02)'; };
+                
+                const shortAddr = (company.osoite || 'Laukaa').split(',')[0].trim();
+                
+                card.innerHTML = `
+                    <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--primary-blue); font-weight: 800; letter-spacing: 0.5px;">${company.kategoria || ''}</div>
+                    <h3 style="margin: 0; font-size: 1.15rem; color: var(--secondary-blue); font-family: 'Outfit'; font-weight: 700;">${company.nimi}</h3>
+                    <div style="font-size: 0.85rem; color: #64748b; margin-top: auto; display: flex; align-items: center; gap: 4px;"><span>📍</span> ${shortAddr}</div>
+                `;
+                
+                card.onclick = (e) => {
+                    // Navigate directly instead of keeping modal open
+                    e.preventDefault();
+                    closeModal();
+                    window.location.href = card.href;
+                    // If we are already on yrityskortti.html, reloading with same url might not trigger fetch if hash only changes
+                    // If it's a different id, the page will reload. 
+                    if (card.href.includes('yrityskortti.html?id=')) {
+                        const newId = card.href.split('id=')[1].split('#')[0];
+                        const params = new URLSearchParams(window.location.search);
+                        const currentId = params.get('id');
+                        if (newId !== currentId) {
+                            window.location.href = card.href;
+                        } else {
+                            // Same company, just switch tab
+                            const btnEp = document.getElementById('btn-tab-extended-profile');
+                            if (btnEp) btnEp.click();
+                        }
+                    }
+                };
+                
+                grid.appendChild(card);
+            });
+            
+        } catch (error) {
+            console.error("Virhe ladattaessa tägi-yrityksiä:", error);
+            grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: #ef4444; font-weight: 600;">Virhe tietojen latauksessa.</div>';
+        }
+    };
 })();
