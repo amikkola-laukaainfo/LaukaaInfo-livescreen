@@ -1667,8 +1667,10 @@
         
         title.textContent = `${tag.charAt(0).toUpperCase() + tag.slice(1)} - Yritykset`;
         grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 2rem;">Ladataan...</div>';
-        modal.style.display = 'flex';
+        // Force all display styles explicitly to avoid CSS class conflicts
+        modal.style.cssText = 'display:flex !important; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.55); z-index:10001; align-items:flex-start; justify-content:center; padding-top:5vh; box-sizing:border-box;';
         document.body.style.overflow = 'hidden';
+        console.log("Modaali asetettu näkyväksi. Display:", modal.style.display);
         
         const closeModal = () => {
             modal.style.display = 'none';
