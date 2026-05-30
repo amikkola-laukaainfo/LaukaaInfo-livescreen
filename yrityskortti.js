@@ -961,13 +961,10 @@
         }
 
         const ratingStars = document.getElementById('display-rating-stars');
-        const ratingVal = document.getElementById('display-rating-val');
-        if (ratingStars && ratingVal) {
-            if (company.google_reviews_url) {
+        if (ratingStars) {
+            if (company.google_reviews_url && company.google_reviews_url !== '-') {
                 ratingStars.style.display = 'inline-flex';
                 ratingStars.href = company.google_reviews_url;
-                const score = 4.5 + (company.nimi.charCodeAt(0) % 5) * 0.1;
-                ratingVal.textContent = score.toFixed(1);
             } else {
                 ratingStars.style.display = 'none';
             }
