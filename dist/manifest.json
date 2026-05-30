@@ -1,0 +1,30 @@
+{
+    "name": "LaukaaInfo",
+    "short_name": "LaukaaInfo",
+    "description": "Laukaan kylien ja asukkaiden oma tietopankki",
+    "start_url": "index.html",
+    "scope": ".",
+    "display": "standalone",
+    "background_color": "#0056b3",
+    "theme_color": "#0056b3",
+    "icons": [
+        {
+            "src": "icons/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "icons/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "icons/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ]
+}

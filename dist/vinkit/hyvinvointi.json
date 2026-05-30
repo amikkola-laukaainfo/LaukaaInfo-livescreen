@@ -1,0 +1,44 @@
+[
+    {
+        "nimi": "Peurunka Kylpylä & Hyvinvointi",
+        "nettilinkki": "https://peurunka.fi/",
+        "kuvaus": "Laukaan Peurungassa sijaitseva kylpylä ja hyvinvointikeskus. Tarjolla uima-allas, vesiliikuntatilat, hierontapalvelut, kauneudenhoito ja rentoutusosastot. Erinomainen valinta kosmetologikäynnin tai hemmottelupäivän järjestämiseen ennen tai jälkeen juhlan.",
+        "paikka": "Laukaa",
+        "yhteystiedot": "Peurungantie 85, 41340 Laukaa"
+    },
+    {
+        "nimi": "Revontuli Resort – Spa & Wellness",
+        "nettilinkki": "https://www.revontuli.fi/",
+        "kuvaus": "Hankasalmella sijaitseva laadukas kylpylä- ja hyvinvointikohde. Mahdollisuus yhdistää majoitus, spa-hoidot, hieronnat ja ulkoporealtaat yhdeksi kokonaisuudeksi ennen hääpäivää tai muuta tärkeää juhlaa.",
+        "paikka": "Hankasalmi",
+        "yhteystiedot": "Revontulentie 1, Hankasalmi"
+    },
+    {
+        "nimi": "Varjola – Hyvinvointi & Luontoelämykset",
+        "nettilinkki": "https://www.varjola.com/",
+        "kuvaus": "Luonnonkaunis matkailutila Laukaassa, johon kuuluu paljut, savusauna ja rentoutuspalveluja. Hemmottelupäivä tai kylpyläretki porukalla onnistuu Varjolassa lähellä Laukaata.",
+        "paikka": "Laukaa",
+        "yhteystiedot": "Kuusaantie 226, Laukaa"
+    },
+    {
+        "nimi": "Kampaamo- ja kauneuspalvelut Laukaassa",
+        "nettilinkki": "",
+        "kuvaus": "Laukaan alueella toimii useita kampaamoita ja kauneushoitoloita, jotka tarjoavat hääkampausta, meikkipalveluita, kynsihoitoja ja muita kauneushoitoja. Muista varata aika hyvissä ajoin ennen hääpäivää – suositut ajat täyttyvät nopeasti.",
+        "paikka": "Laukaa",
+        "yhteystiedot": "Hae LaukaaInfosta: 'Kampaamo' tai 'Kauneus'"
+    },
+    {
+        "nimi": "Hieronta ja rentoutus – Keski-Suomi",
+        "nettilinkki": "",
+        "kuvaus": "Keski-Suomessa toimii useita hierontapalveluita, joista löydät ammattimaisen klassisen hieronnan, urheiluhieronnan tai rentoutushieronnan. Esimerkiksi morsiamelle ja sulhaselle ennen hääpäivää suositeltu pari-hieronta on kauniisti yhdistettävissä muihin hyvinvointipalveluihin.",
+        "paikka": "Keski-Suomi",
+        "yhteystiedot": "Hae LaukaaInfosta: 'Hieronta'"
+    },
+    {
+        "nimi": "Pilates & Jooga Jyväskylän seutu",
+        "nettilinkki": "",
+        "kuvaus": "Jyväskylän seudulla toimii useita pilates- ja jooga-studoita, joissa voi rauhoittua ennen suurta päivää. Hääparille tai morsiusporukalle voi sopia oman ryhmätunnin useissa paikoissa.",
+        "paikka": "Jyväskylä / Laukaa",
+        "yhteystiedot": "Tarkista paikalliset liikuntakeskukset"
+    }
+]
