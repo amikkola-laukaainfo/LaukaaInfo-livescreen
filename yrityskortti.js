@@ -210,7 +210,8 @@
             if (descWrap) descWrap.style.display = 'none';
         }
 
-        document.getElementById('display-address').textContent = company.osoite || 'Laukaa';
+        const addrElExpired = document.getElementById('display-address');
+        if (addrElExpired) addrElExpired.textContent = company.osoite || 'Laukaa';
 
         const distEl = document.getElementById('display-distance');
         if (distEl) distEl.remove();
@@ -420,16 +421,18 @@
                 );
                 const distText = dist < 1 ? `${Math.round(dist * 1000)} m` : `${dist.toFixed(1)} km`;
 
-                // Add distance badge if not already there
-                const addressContainer = document.getElementById('display-address').parentElement;
+                // Add distance badge — attach to the compact address in the new 2.0 header
+                const addrShort = document.getElementById('display-address-short');
+                const addrFull = document.getElementById('display-address');
+                const addressContainer = addrShort ? addrShort.parentElement : (addrFull ? addrFull.parentElement : null);
                 let distElem = document.getElementById('display-distance');
-                if (!distElem) {
+                if (!distElem && addressContainer) {
                     distElem = document.createElement('div');
                     distElem.id = 'display-distance';
                     distElem.className = 'distance-badge';
                     addressContainer.appendChild(distElem);
                 }
-                distElem.innerHTML = `🚗 Etäisyys: ${distText}`;
+                if (distElem) distElem.innerHTML = `🚗 Etäisyys: ${distText}`;
             } catch (e) { console.error("Error calculating distance", e); }
         }
 
