@@ -67,50 +67,74 @@ console.log('3. Aloitetaan obfuskointi/minifiointi (JS, CSS, HTML)...');
 
 const assetMap = {};
 
-function minifyAndVersionFolder(dir) {
-    const entries = fs.readdirSync(dir, { withFileTypes: true });
-    for (const entry of entries) {
-        const fullPath = path.join(dir, entry.name);
-
-        if (entry.isDirectory()) {
-            // Älä minifioi kuvakansioita turhaan
-            if (entry.name !== 'icons' && entry.name !== 'drive_cache') {
-                minifyAndVersionFolder(fullPath);
+        function sleepSync(ms) {
+            try {
+                Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
+            } catch (e) {
+                const start = Date.now();
+                while (Date.now() - start < ms) {}
             }
-        } else {
-            if (entry.name.endsWith('.js') && entry.name !== 'sw.js') {
-                console.log(' -> Minifioidaan ja versioidaan JS:  ' + entry.name);
+        }
+
+        function renameSyncWithRetry(oldPath, newPath, retries = 5, delay = 200) {
+            for (let i = 0; i < retries; i++) {
                 try {
-                    execSync(`npx terser "${fullPath}" -o "${fullPath}" -c -m`);
-                    const newName = entry.name.replace('.js', `.${buildVersion}.js`);
-                    const newPath = path.join(dir, newName);
-                    fs.renameSync(fullPath, newPath);
-                    assetMap[entry.name] = newName;
+                    if (fs.existsSync(newPath)) {
+                        fs.unlinkSync(newPath); // Ensure target is not locked
+                    }
+                    fs.renameSync(oldPath, newPath);
+                    return;
                 } catch (e) {
-                    console.error(' Virhe JS-tiedostossa: ' + entry.name, e.message);
-                }
-            } else if (entry.name.endsWith('.css')) {
-                console.log(' -> Minifioidaan ja versioidaan CSS: ' + entry.name);
-                try {
-                    execSync(`npx cleancss -o "${fullPath}" "${fullPath}"`);
-                    const newName = entry.name.replace('.css', `.${buildVersion}.css`);
-                    const newPath = path.join(dir, newName);
-                    fs.renameSync(fullPath, newPath);
-                    assetMap[entry.name] = newName;
-                } catch (e) {
-                    console.error(' Virhe CSS-tiedostossa: ' + entry.name, e.message);
-                }
-            } else if (entry.name.endsWith('.html')) {
-                console.log(' -> Minifioidaan HTML: ' + entry.name);
-                try {
-                    execSync(`npx html-minifier --collapse-whitespace --remove-comments --minify-css true --minify-js true -o "${fullPath}" "${fullPath}"`);
-                } catch (e) {
-                    console.error(' Virhe HTML-tiedostossa: ' + entry.name, e.message);
+                    if (i === retries - 1) throw e;
+                    sleepSync(delay);
                 }
             }
         }
-    }
-}
+
+        function minifyAndVersionFolder(dir) {
+            const entries = fs.readdirSync(dir, { withFileTypes: true });
+            for (const entry of entries) {
+                const fullPath = path.join(dir, entry.name);
+
+                if (entry.isDirectory()) {
+                    // Älä minifioi kuvakansioita turhaan
+                    if (entry.name !== 'icons' && entry.name !== 'drive_cache') {
+                        minifyAndVersionFolder(fullPath);
+                    }
+                } else {
+                    if (entry.name.endsWith('.js') && entry.name !== 'sw.js') {
+                        console.log(' -> Minifioidaan ja versioidaan JS:  ' + entry.name);
+                        try {
+                            execSync(`npx terser "${fullPath}" -o "${fullPath}" -c -m`);
+                            const newName = entry.name.replace('.js', `.${buildVersion}.js`);
+                            const newPath = path.join(dir, newName);
+                            renameSyncWithRetry(fullPath, newPath);
+                            assetMap[entry.name] = newName;
+                        } catch (e) {
+                            console.error(' Virhe JS-tiedostossa: ' + entry.name, e.message);
+                        }
+                    } else if (entry.name.endsWith('.css')) {
+                        console.log(' -> Minifioidaan ja versioidaan CSS: ' + entry.name);
+                        try {
+                            execSync(`npx cleancss -o "${fullPath}" "${fullPath}"`);
+                            const newName = entry.name.replace('.css', `.${buildVersion}.css`);
+                            const newPath = path.join(dir, newName);
+                            renameSyncWithRetry(fullPath, newPath);
+                            assetMap[entry.name] = newName;
+                        } catch (e) {
+                            console.error(' Virhe CSS-tiedostossa: ' + entry.name, e.message);
+                        }
+                    } else if (entry.name.endsWith('.html')) {
+                        console.log(' -> Minifioidaan HTML: ' + entry.name);
+                        try {
+                            execSync(`npx html-minifier --collapse-whitespace --remove-comments --minify-css true --minify-js true -o "${fullPath}" "${fullPath}"`);
+                        } catch (e) {
+                            console.error(' Virhe HTML-tiedostossa: ' + entry.name, e.message);
+                        }
+                    }
+                }
+            }
+        }
 
 minifyAndVersionFolder(distDir);
 
