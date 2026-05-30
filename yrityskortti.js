@@ -1061,7 +1061,7 @@
                     
                     span.innerHTML = `<span>${emoji}</span> ${badge}`;
                     span.style.cursor = 'pointer';
-                    span.onclick = () => window.openTagModal(badge);
+                    span.setAttribute('onclick', `window.openTagModal('${badge.replace(/'/g, "\\'")}')`);
                     capList.appendChild(span);
                 });
                 capBlock.style.display = 'block';
@@ -1645,12 +1645,16 @@
 
     // Modal logic for clicking tags
     window.openTagModal = async function(tag) {
+        console.log("Avataan tägimodaali:", tag);
         const modal = document.getElementById('tag-filter-modal');
         const title = document.getElementById('tag-modal-title');
         const grid = document.getElementById('tag-modal-grid');
         const closeBtn = document.getElementById('close-tag-modal-btn');
         
-        if (!modal || !grid) return;
+        if (!modal || !grid) {
+            console.error("Modaali-elementtejä ei löytynyt DOM:sta!");
+            return;
+        }
         
         title.textContent = `${tag.charAt(0).toUpperCase() + tag.slice(1)} - Yritykset`;
         grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 2rem;">Ladataan...</div>';
