@@ -1735,7 +1735,7 @@
                 const isInDist = window.location.pathname.includes('/dist/') || window.location.hostname === 'laukaainfo.fi';
                 const distPrefix = isInDist ? '' : 'dist/';
                 
-                card.href = isPremium ? `${distPrefix}yritys/${cleanName}.html#tab-extended-profile` : `yrityskortti.html?id=${compId || cleanName}#tab-extended-profile`;
+                card.href = isPremium ? `${distPrefix}yritys/${cleanName}.html#tab-extended-profile` : `yrityskortti.html?id=${cleanName}#tab-extended-profile`;
                 card.style.cssText = 'background: white; border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.25rem; display: flex; flex-direction: column; gap: 0.5rem; text-decoration: none; color: inherit; transition: all 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.02); cursor: pointer;';
                 card.onmouseover = () => { card.style.transform = 'translateY(-4px)'; card.style.borderColor = 'var(--accent-blue)'; card.style.boxShadow = '0 8px 15px rgba(0,0,0,0.05)'; };
                 card.onmouseout = () => { card.style.transform = ''; card.style.borderColor = '#e2e8f0'; card.style.boxShadow = '0 4px 6px rgba(0,0,0,0.02)'; };
