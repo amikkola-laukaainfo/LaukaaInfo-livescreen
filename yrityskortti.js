@@ -1061,9 +1061,18 @@
                     
                     span.innerHTML = `<span>${emoji}</span> ${badge}`;
                     span.style.cursor = 'pointer';
-                    span.setAttribute('onclick', `window.openTagModal('${badge.replace(/'/g, "\\'")}')`);
+                    span.dataset.tag = badge;
                     capList.appendChild(span);
                 });
+
+                // Single delegated click listener on the container
+                capList.addEventListener('click', function(e) {
+                    const badge = e.target.closest('.cap-badge');
+                    if (badge && badge.dataset.tag) {
+                        window.openTagModal(badge.dataset.tag);
+                    }
+                });
+
                 capBlock.style.display = 'block';
             } else {
                 capBlock.style.display = 'none';
