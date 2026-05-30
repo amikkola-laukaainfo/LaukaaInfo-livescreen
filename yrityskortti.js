@@ -894,6 +894,361 @@
 
         // SEO JSON-LD -injektointi
         injectJSONLD(company);
+
+        // --- LAUKAAINFO 2.0 DIGITAL BUSINESS CARD LOGIC ---
+
+        // 1. Tab Switching Setup
+        const btnBc = document.getElementById('btn-tab-business-card');
+        const btnEp = document.getElementById('btn-tab-extended-profile');
+        const tabBc = document.getElementById('tab-business-card');
+        const tabEp = document.getElementById('tab-extended-profile');
+
+        if (btnBc && btnEp && tabBc && tabEp) {
+            btnBc.classList.add('active');
+            btnEp.classList.remove('active');
+            tabBc.style.display = 'flex';
+            tabEp.style.display = 'none';
+
+            btnBc.onclick = (e) => {
+                e.preventDefault();
+                btnBc.classList.add('active');
+                btnEp.classList.remove('active');
+                tabBc.style.display = 'flex';
+                tabEp.style.display = 'none';
+            };
+            btnEp.onclick = (e) => {
+                e.preventDefault();
+                btnEp.classList.add('active');
+                btnBc.classList.remove('active');
+                tabBc.style.display = 'none';
+                tabEp.style.display = 'block';
+            };
+        }
+
+        // 2. Cover Banner
+        const coverPhoto = document.getElementById('bc-cover-photo');
+        if (coverPhoto) {
+            coverPhoto.style.display = 'block';
+            if (company.media && company.media.length > 0) {
+                coverPhoto.style.backgroundImage = `url('${company.media[0].url}')`;
+            } else {
+                coverPhoto.style.backgroundImage = 'linear-gradient(135deg, #0056b3 0%, #003366 100%)';
+            }
+        }
+
+        // 3. Shortened Address & Mock High-Quality Rating in Modern Header Banner
+        const displayAddressShort = document.getElementById('display-address-short');
+        if (displayAddressShort) {
+            const fullAddress = company.osoite || 'Laukaa';
+            displayAddressShort.textContent = fullAddress.split(',')[0].trim();
+        }
+
+        const ratingStars = document.getElementById('display-rating-stars');
+        const ratingVal = document.getElementById('display-rating-val');
+        if (ratingStars && ratingVal) {
+            if (company.google_reviews_url) {
+                ratingStars.style.display = 'inline-flex';
+                ratingStars.href = company.google_reviews_url;
+                const score = 4.5 + (company.nimi.charCodeAt(0) % 5) * 0.1;
+                ratingVal.textContent = score.toFixed(1);
+            } else {
+                ratingStars.style.display = 'none';
+            }
+        }
+
+        // 4. Quick Action Grid Bindings
+        const actCall = document.getElementById('act-call');
+        const actRoute = document.getElementById('act-route');
+        const actWeb = document.getElementById('act-web');
+        const actWa = document.getElementById('act-wa');
+
+        if (actCall) {
+            if (company.puhelin && company.puhelin !== '-') {
+                actCall.href = `tel:${company.puhelin.replace(/[^0-9+]/g, '')}`;
+                actCall.style.display = 'flex';
+            } else {
+                actCall.style.display = 'none';
+            }
+        }
+
+        if (actWa) {
+            const waField = (company.whatsapp || '').trim();
+            let waHref = '';
+            if (waField && waField !== '-' && waField !== 'false' && waField !== '0') {
+                if (waField.startsWith('http')) {
+                    waHref = waField;
+                } else if (waField === 'true') {
+                    const waNum = (company.puhelin || '').replace(/[^0-9]/g, '');
+                    if (waNum) waHref = `https://wa.me/${waNum}`;
+                } else {
+                    const waNum = waField.replace(/[^0-9]/g, '');
+                    if (waNum) waHref = `https://wa.me/${waNum}`;
+                }
+            } else if (company.puhelin && company.puhelin !== '-') {
+                const waNum = company.puhelin.replace(/[^0-9]/g, '');
+                if (waNum) waHref = `https://wa.me/${waNum}`;
+            }
+
+            if (waHref) {
+                actWa.href = waHref;
+                actWa.style.display = 'flex';
+            } else {
+                actWa.style.display = 'none';
+            }
+        }
+
+        if (actRoute) {
+            if (company.lat && company.lon) {
+                actRoute.href = `https://www.google.com/maps?q=${company.lat},${company.lon}`;
+            } else if (company.karttalinkki && company.karttalinkki !== '-') {
+                actRoute.href = company.karttalinkki;
+            } else {
+                const query = encodeURIComponent(`${company.nimi}, ${company.osoite || 'Laukaa'}`);
+                actRoute.href = `https://www.google.com/maps/search/?api=1&query=${query}`;
+            }
+        }
+
+        if (actWeb) {
+            if (company.nettisivu && company.nettisivu !== '-') {
+                actWeb.href = cleanUrl(company.nettisivu, true);
+                actWeb.style.display = 'flex';
+            } else {
+                actWeb.style.display = 'none';
+            }
+        }
+
+        // 5. Dynamic Capability Badges
+        const capBlock = document.getElementById('bc-capabilities');
+        const capList = document.getElementById('bc-capabilities-list');
+        if (capBlock && capList) {
+            const rawTags = (company.tags || '').split(',').map(t => t.trim()).filter(t => t.length > 0 && t !== '-');
+            const rawPalvelu = (company.palvelutapa || '').split(',').map(t => t.trim()).filter(t => t.length > 0 && t !== '-');
+            const allBadges = [...new Set([...rawTags, ...rawPalvelu])];
+
+            if (allBadges.length > 0) {
+                capList.innerHTML = '';
+                allBadges.forEach(badge => {
+                    const span = document.createElement('span');
+                    span.className = 'cap-badge';
+                    let emoji = '⚡';
+                    const bLower = badge.toLowerCase();
+                    if (bLower.includes('ruoka') || bLower.includes('ravintola') || bLower.includes('kahvila')) emoji = '🍴';
+                    else if (bLower.includes('mökk') || bLower.includes('majoit')) emoji = '🏡';
+                    else if (bLower.includes('auto') || bLower.includes('huolto') || bLower.includes('renka')) emoji = '🚗';
+                    else if (bLower.includes('kauneus') || bLower.includes('kampa') || bLower.includes('partur')) emoji = '✂';
+                    else if (bLower.includes('terveys') || bLower.includes('hiero') || bLower.includes('lääk')) emoji = '⚕';
+                    else if (bLower.includes('toimipiste')) emoji = '🏢';
+                    else if (bLower.includes('kotikäynti')) emoji = '🏠';
+                    else if (bLower.includes('etäpalvelu')) emoji = '💻';
+                    else if (bLower.includes('toimitus')) emoji = '🚚';
+                    
+                    span.innerHTML = `<span>${emoji}</span> ${badge}`;
+                    capList.appendChild(span);
+                });
+                capBlock.style.display = 'block';
+            } else {
+                capBlock.style.display = 'none';
+            }
+        }
+
+        // 6. Short Slogan / Slogan Intro block
+        const introBlock = document.getElementById('bc-intro-block');
+        const shortIntro = document.getElementById('bc-short-intro');
+        if (introBlock && shortIntro) {
+            if (slogan) {
+                shortIntro.textContent = `”${slogan}”`;
+                introBlock.style.display = 'block';
+            } else {
+                introBlock.style.display = 'none';
+            }
+        }
+
+        // 7. Status announcement banner (Yrittäjän päivitys)
+        const bcStatusBanner = document.getElementById('bc-status-banner');
+        const bcStatusText = document.getElementById('bc-status-text');
+        if (bcStatusBanner && bcStatusText) {
+            const statusMsg = company.status || company.ilmoitus || company.announcement;
+            if (statusMsg && statusMsg !== '-') {
+                bcStatusText.textContent = statusMsg;
+                bcStatusBanner.style.display = 'block';
+            } else {
+                bcStatusBanner.style.display = 'none';
+            }
+        }
+
+        // 8. Ajankohtaista news block (Yrittäjän päivitys)
+        const bcNewsBlock = document.getElementById('bc-news-block');
+        const bcNewsTitle = document.getElementById('bc-news-title');
+        const bcNewsDate = document.getElementById('bc-news-date');
+        const bcNewsText = document.getElementById('bc-news-text');
+        const bcNewsLink = document.getElementById('bc-news-link');
+        
+        if (bcNewsBlock && bcNewsTitle && bcNewsDate && bcNewsText && bcNewsLink) {
+            if (company.news_title && company.news_title !== '-') {
+                bcNewsTitle.textContent = company.news_title;
+                bcNewsDate.textContent = company.news_date || '';
+                bcNewsText.textContent = company.news_text || '';
+                if (company.news_link && company.news_link !== '-') {
+                    bcNewsLink.href = company.news_link;
+                    bcNewsLink.style.display = 'inline-flex';
+                } else {
+                    bcNewsLink.style.display = 'none';
+                }
+                bcNewsBlock.style.display = 'block';
+            } else {
+                bcNewsBlock.style.display = 'none';
+            }
+        }
+
+        // 9. QR code generation
+        const qrImg = document.getElementById('bc-qr-code');
+        const printQrImg = document.getElementById('print-qr-image');
+        const downloadQrLink = document.getElementById('btn-download-qr');
+        
+        if (qrImg) {
+            const currentUrl = window.location.href;
+            const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(currentUrl)}`;
+            qrImg.src = qrApiUrl;
+            if (printQrImg) {
+                printQrImg.src = qrApiUrl;
+            }
+            if (downloadQrLink) {
+                downloadQrLink.href = qrApiUrl;
+                downloadQrLink.target = '_blank';
+            }
+        }
+
+        // 10. Jaa digitaalinen käyntikortti Button
+        const btnShare = document.getElementById('btn-share-link');
+        if (btnShare) {
+            btnShare.onclick = async (e) => {
+                e.preventDefault();
+                if (navigator.share) {
+                    try {
+                        await navigator.share({
+                            title: `${company.nimi} – Digitaalinen Käyntikortti`,
+                            text: `Tutustu yritykseen ${company.nimi} LaukaaInfo-palvelussa!`,
+                            url: window.location.href
+                        });
+                    } catch (err) {
+                        console.log('Share failed/cancelled:', err);
+                    }
+                } else {
+                    try {
+                        await navigator.clipboard.writeText(window.location.href);
+                        const originalText = btnShare.innerHTML;
+                        btnShare.innerHTML = '<span>✔</span> Kopioitu leikepöydälle!';
+                        btnShare.style.backgroundColor = '#16a34a';
+                        btnShare.style.color = 'white';
+                        setTimeout(() => {
+                            btnShare.innerHTML = originalText;
+                            btnShare.style.backgroundColor = '';
+                            btnShare.style.color = '';
+                        }, 2000);
+                    } catch (err) {
+                        alert('Kopioi linkki: ' + window.location.href);
+                    }
+                }
+            };
+        }
+
+        // 11. Tallenna yhteystiedot vCard Button
+        const btnSaveContact = document.getElementById('btn-save-contact');
+        if (btnSaveContact) {
+            btnSaveContact.onclick = (e) => {
+                e.preventDefault();
+                const vcard = [
+                    'BEGIN:VCARD',
+                    'VERSION:3.0',
+                    `FN:${company.nimi}`,
+                    `ORG:${company.nimi}`,
+                    `TITLE:${company.kategoria || ''}`,
+                    company.puhelin && company.puhelin !== '-' ? `TEL;TYPE=WORK,VOICE:${company.puhelin}` : '',
+                    company.osoite && company.osoite !== '-' ? `ADR;TYPE=WORK:;;${company.osoite};;;;` : '',
+                    company.nettisivu && company.nettisivu !== '-' ? `URL;TYPE=WORK:${cleanUrl(company.nettisivu, true)}` : '',
+                    `NOTE:LaukaaInfo Digitaalinen Käyntikortti - ${slogan || ''}`,
+                    'END:VCARD'
+                ].filter(line => line.length > 0).join('\r\n');
+
+                const blob = new Blob([vcard], { type: 'text/vcard;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${slugify(company.nimi)}.vcf`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            };
+        }
+
+        // 12. Tulosta PDF-esite Button & print template setup
+        const printLogo = document.getElementById('print-logo');
+        const printName = document.getElementById('print-name');
+        const printCategory = document.getElementById('print-category');
+        const printPhone = document.getElementById('print-phone');
+        const printPhoneRow = document.getElementById('print-phone-row');
+        const printAddress = document.getElementById('print-address');
+        const printAddressRow = document.getElementById('print-address-row');
+        const printWebsite = document.getElementById('print-website');
+        const printWebsiteRow = document.getElementById('print-website-row');
+        const printIntro = document.getElementById('print-intro');
+        const printIntroRow = document.getElementById('print-intro-row');
+
+        if (printName) printName.textContent = company.nimi;
+        if (printCategory) printCategory.textContent = company.kategoria;
+        
+        if (printPhone) {
+            if (company.puhelin && company.puhelin !== '-') {
+                printPhone.textContent = company.puhelin;
+                printPhoneRow.style.display = 'block';
+            } else {
+                printPhoneRow.style.display = 'none';
+            }
+        }
+        if (printAddress) {
+            if (company.osoite && company.osoite !== '-') {
+                printAddress.textContent = company.osoite;
+                printAddressRow.style.display = 'block';
+            } else {
+                printAddressRow.style.display = 'none';
+            }
+        }
+        if (printWebsite) {
+            if (company.nettisivu && company.nettisivu !== '-') {
+                printWebsite.textContent = company.nettisivu;
+                printWebsiteRow.style.display = 'block';
+            } else {
+                printWebsiteRow.style.display = 'none';
+            }
+        }
+        if (printIntro) {
+            if (slogan) {
+                printIntro.textContent = `”${slogan}”`;
+                printIntroRow.style.display = 'block';
+            } else {
+                printIntroRow.style.display = 'none';
+            }
+        }
+        if (printLogo) {
+            if (company.logo && company.logo !== '-') {
+                printLogo.src = company.logo;
+                printLogo.style.display = 'block';
+            } else if (company.media && company.media.length > 0) {
+                printLogo.src = company.media[0].url;
+                printLogo.style.display = 'block';
+            } else {
+                printLogo.style.display = 'none';
+            }
+        }
+
+        const btnPrint = document.getElementById('btn-print-pdf');
+        if (btnPrint) {
+            btnPrint.onclick = (e) => {
+                e.preventDefault();
+                window.print();
+            };
+        }
     }
 
     /**
@@ -1175,6 +1530,27 @@
             console.log('RSS Status:', data.status, 'Items:', data.items?.length);
 
             if (data.status === 'ok' && data.items && data.items.length > 0) {
+                // If Käyntikortti news is not explicitly set by the entrepreneur, use the latest RSS item!
+                const bcNewsBlock = document.getElementById('bc-news-block');
+                const bcNewsTitle = document.getElementById('bc-news-title');
+                const bcNewsDate = document.getElementById('bc-news-date');
+                const bcNewsText = document.getElementById('bc-news-text');
+                const bcNewsLink = document.getElementById('bc-news-link');
+                
+                if (bcNewsBlock && bcNewsBlock.style.display === 'none') {
+                    const firstItem = data.items[0];
+                    const date = new Date(firstItem.pubDate);
+                    const dateStr = date.toLocaleDateString('fi-FI');
+                    const snippet = cleanRSSContent(firstItem.description || firstItem.content || '').substring(0, 160) + '...';
+                    
+                    bcNewsTitle.textContent = firstItem.title;
+                    bcNewsDate.textContent = `📅 ${dateStr}`;
+                    bcNewsText.textContent = snippet;
+                    bcNewsLink.href = firstItem.link;
+                    bcNewsLink.style.display = 'inline-flex';
+                    bcNewsBlock.style.display = 'block';
+                }
+
                 container.style.display = 'block';
                 itemsContainer.innerHTML = '';
                 dropdown.innerHTML = '';

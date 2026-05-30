@@ -16,9 +16,9 @@
     <!-- Leaflet Map -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-    <link rel="stylesheet" href="../style.253d1ab7.css?v=20260420-2">
-    <link rel="stylesheet" href="../modal.253d1ab7.css">
-    <script src="../translations.253d1ab7.js?v=20260505"></script>
+    <link rel="stylesheet" href="../style.2e0cce37.css?v=20260420-2">
+    <link rel="stylesheet" href="../modal.2e0cce37.css">
+    <script src="../translations.2e0cce37.js?v=20260505"></script>
     <style>
         :root {
             --primary-blue: #0056b3;
@@ -644,6 +644,664 @@
             color: var(--primary-blue);
             font-size: 0.85rem;
         }
+        /* --- LaukaaInfo 2.0 Yrityskortti Styles --- */
+
+        /* Tabs Navigation Switcher */
+        .tab-container {
+            display: flex;
+            background: #e2e8f0;
+            padding: 5px;
+            border-radius: 50px;
+            margin: 1.5rem auto 2.5rem;
+            max-width: 600px;
+            position: relative;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+            border: 1px solid #cbd5e1;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 0.85rem 1.25rem;
+            border: none;
+            background: transparent;
+            color: #475569;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: 'Outfit', sans-serif;
+            outline: none;
+        }
+
+        .tab-btn:hover:not(.active) {
+            color: var(--primary-blue);
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: var(--primary-blue);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transform: scale(1.02);
+        }
+
+        /* --- Business Card (Käyntikortti) Layout & Blocks --- */
+        #tab-business-card {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Cover Image Banner with Floating Logo overlay */
+        .bc-cover-wrapper {
+            position: relative;
+            width: 100%;
+            height: 250px;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            background-color: #cbd5e1;
+            background-size: cover;
+            background-position: center;
+            border: 1px solid #e2e8f0;
+        }
+
+        .bc-cover-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.5) 100%);
+        }
+
+        .bc-header-content {
+            margin-top: 5rem;
+            background: white;
+            border-radius: 24px;
+            padding: 5rem 2rem 2rem; /* Big top padding to offset floating logo */
+            position: relative;
+            box-shadow: var(--premium-shadow);
+            border: 1px solid #edf2f7;
+            text-align: center;
+        }
+
+        .bc-logo-container {
+            position: absolute;
+            top: -65px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 130px;
+            height: 130px;
+            background: white;
+            border-radius: 24px;
+            padding: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+            border: 4px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .bc-logo-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .bc-name {
+            font-size: 2.2rem;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            color: var(--secondary-blue);
+            margin: 0.5rem 0 0.5rem;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+        }
+
+        .bc-meta {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-top: 0.75rem;
+            font-size: 0.95rem;
+            color: var(--light-text);
+        }
+
+        .bc-category-tag {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+            padding: 4px 14px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .bc-rating {
+            color: #f59e0b;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .bc-rating:hover {
+            text-decoration: underline;
+        }
+
+        .bc-address {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        /* Quick Actions Grid */
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-top: 0.5rem;
+        }
+
+        .action-card {
+            background: var(--light-blue);
+            border: 1px solid #bae6fd;
+            padding: 1.25rem 0.5rem;
+            border-radius: 20px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--primary-blue);
+            font-weight: 800;
+            font-size: 0.95rem;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            box-shadow: 0 4px 12px rgba(0, 86, 179, 0.03);
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .action-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 86, 179, 0.1);
+            filter: brightness(0.98);
+        }
+
+        .action-card span {
+            font-size: 1.8rem;
+            transition: transform 0.2s;
+        }
+        .action-card:hover span {
+            transform: scale(1.15);
+        }
+
+        .action-card.soita {
+            background: #f0fdf4;
+            border-color: #bbf7d0;
+            color: #16a34a;
+        }
+        .action-card.soita:hover {
+            background: #dcfce7;
+            box-shadow: 0 8px 20px rgba(22, 163, 74, 0.15);
+        }
+
+        .action-card.reitti {
+            background: #fef2f2;
+            border-color: #fecaca;
+            color: #dc2626;
+        }
+        .action-card.reitti:hover {
+            background: #fee2e2;
+            box-shadow: 0 8px 20px rgba(220, 38, 38, 0.15);
+        }
+
+        .action-card.wa {
+            background: #eafaf1;
+            border-color: #a3e635;
+            color: #15803d;
+        }
+        .action-card.wa:hover {
+            background: #dcfce7;
+            box-shadow: 0 8px 20px rgba(21, 128, 61, 0.15);
+        }
+
+        /* Lohkokohtaiset compact blocks */
+        .bc-block {
+            background: white;
+            border-radius: 20px;
+            padding: 1.25rem 1.5rem;
+            border: 1px solid #edf2f7;
+            box-shadow: var(--premium-shadow);
+            transition: transform 0.2s;
+        }
+
+        .bc-block:hover {
+            transform: translateY(-2px);
+        }
+
+        /* News & Status Announcements */
+        .status-banner {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border: 2px dashed #f59e0b;
+            padding: 1.25rem 1.5rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.08);
+        }
+        
+        .status-banner .badge {
+            display: inline-block;
+            background: #f59e0b;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 4px 12px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .status-banner p {
+            margin: 0;
+            font-weight: 700;
+            color: #78350f;
+            font-size: 1.05rem;
+            line-height: 1.5;
+        }
+
+        .news-block {
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 1.25rem 1.5rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            border-left: 5px solid var(--primary-blue);
+        }
+
+        .news-block h4 {
+            margin: 0 0 4px 0;
+            font-size: 1.2rem;
+            color: var(--secondary-blue);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+        }
+
+        .news-block .date {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .news-block p {
+            margin: 0 0 10px 0;
+            color: #475569;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .news-block a {
+            color: var(--primary-blue);
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .news-block a:hover {
+            color: var(--accent-blue);
+            text-decoration: underline;
+        }
+
+        /* Capability Badges */
+        .capabilities-block {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+        }
+
+        .capabilities-block h4 {
+            margin: 0 0 12px 0;
+            font-size: 0.85rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 800;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .badges-flex {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .cap-badge {
+            background: white;
+            border: 1px solid #cbd5e1;
+            color: #334155;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: all 0.2s;
+        }
+        
+        .cap-badge:hover {
+            border-color: var(--accent-blue);
+            color: var(--primary-blue);
+            transform: scale(1.05);
+        }
+
+        .intro-block p {
+            margin: 0;
+            color: #334155;
+            font-size: 1.05rem;
+            line-height: 1.7;
+            font-style: italic;
+            text-align: center;
+        }
+
+        /* QR Card & Actions Panel */
+        .qr-card {
+            border: 2px solid #edf2f7;
+            text-align: center;
+            padding: 2rem 1.5rem;
+            border-radius: 24px;
+        }
+
+        .qr-code-wrapper {
+            width: 170px;
+            height: 170px;
+            margin: 0 auto 1.25rem;
+            background: #f8fafc;
+            border-radius: 18px;
+            padding: 8px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.02);
+        }
+
+        .qr-code-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .qr-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
+            color: var(--secondary-blue);
+            margin: 0 0 6px 0;
+            font-weight: 800;
+        }
+
+        .qr-subtitle {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin: 0 0 1.5rem 0;
+            line-height: 1.4;
+            max-width: 320px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .qr-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .qr-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 0.8rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+            border-radius: 14px;
+            border: 1px solid #cbd5e1;
+            background: white;
+            color: #334155;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            font-family: 'Outfit', sans-serif;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .qr-btn:hover {
+            background: #f8fafc;
+            border-color: #94a3b8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+
+        .qr-btn.primary {
+            grid-column: span 2;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            border: none;
+            color: white;
+            font-size: 1rem;
+            padding: 0.95rem 1rem;
+            box-shadow: 0 4px 15px rgba(0, 86, 179, 0.2);
+        }
+
+        .qr-btn.primary:hover {
+            background: var(--secondary-blue);
+            box-shadow: 0 6px 20px rgba(0, 86, 179, 0.3);
+        }
+
+        /* Hide extended profile elements when in BC mode */
+        #tab-extended-profile {
+            display: none;
+        }
+
+        /* --- Print Stylesheet for Physical Business Cards / Posters --- */
+        @media print {
+            body {
+                background: white !important;
+                color: #000 !important;
+                font-family: 'Inter', sans-serif;
+            }
+
+            /* Hide all standard web structures */
+            .top-nav, footer, .top-bar, .hamburger, .sidebar-overlay, .sidebar-menu, 
+            .tab-container, .gate-section, #mobile-contact-bar, #recommendations-section, 
+            .btn-primary, .qr-actions, #social-links, #google-maps-link, .business-card-container,
+            #pwa-install-btn, .lang-switcher {
+                display: none !important;
+            }
+
+            /* Render exact print flyer */
+            .print-layout {
+                display: block !important;
+                width: 100% !important;
+            }
+
+            .print-card {
+                border: 3px solid #0f172a;
+                border-radius: 20px;
+                padding: 3rem;
+                max-width: 650px;
+                margin: 4rem auto;
+                page-break-inside: avoid;
+                background: white !important;
+                box-shadow: none !important;
+                position: relative;
+            }
+
+            .print-logo {
+                float: right;
+                width: 110px;
+                height: 110px;
+                object-fit: contain;
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                padding: 5px;
+                background: white;
+            }
+
+            .print-title {
+                font-size: 2.5rem !important;
+                font-weight: 900 !important;
+                color: #0f172a !important;
+                margin: 0 0 0.5rem 0 !important;
+                font-family: 'Outfit', sans-serif;
+            }
+
+            .print-category {
+                font-size: 1rem !important;
+                text-transform: uppercase !important;
+                color: #475569 !important;
+                font-weight: 800 !important;
+                margin-bottom: 2rem !important;
+                letter-spacing: 1px;
+            }
+
+            .print-details {
+                margin-top: 2rem;
+                font-size: 1.15rem !important;
+                line-height: 2 !important;
+                clear: both;
+            }
+
+            .print-details-item {
+                margin-bottom: 0.5rem;
+                border-bottom: 1px dashed #e2e8f0;
+                padding-bottom: 0.5rem;
+            }
+
+            .print-details-item strong {
+                color: #334155;
+            }
+
+            .print-qr-section {
+                margin-top: 3.5rem;
+                display: flex;
+                align-items: center;
+                gap: 2rem;
+                border-top: 3px dashed #cbd5e1;
+                padding-top: 2rem;
+            }
+
+            .print-qr-code {
+                width: 170px;
+                height: 170px;
+                border: 1px solid #cbd5e1;
+                padding: 5px;
+                border-radius: 12px;
+            }
+
+            .print-qr-text {
+                font-size: 1.05rem !important;
+                color: #334155 !important;
+                line-height: 1.6 !important;
+            }
+
+            .print-qr-text strong {
+                color: #0f172a !important;
+                font-size: 1.2rem;
+                display: block;
+                margin-bottom: 4px;
+            }
+            
+            .print-qr-text span {
+                color: #0056b3;
+                font-weight: bold;
+            }
+        }
+
+        /* --- Responsive Styles updates --- */
+        @media (max-width: 768px) {
+            .bc-cover-wrapper {
+                height: 180px;
+                border-radius: 18px;
+            }
+
+            .bc-header-content {
+                margin-top: 4rem;
+                padding: 4rem 1rem 1.5rem;
+                border-radius: 18px;
+            }
+
+            .bc-logo-container {
+                width: 100px;
+                height: 100px;
+                top: -50px;
+                border-radius: 18px;
+            }
+
+            .bc-name {
+                font-size: 1.65rem;
+            }
+
+            .bc-meta {
+                gap: 8px;
+                font-size: 0.85rem;
+            }
+
+            .actions-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .action-card {
+                padding: 1rem 0.25rem;
+                font-size: 0.85rem;
+                border-radius: 16px;
+            }
+
+            .action-card span {
+                font-size: 1.5rem;
+            }
+
+            .bc-block {
+                padding: 1rem 1rem;
+                border-radius: 16px;
+            }
+
+            .qr-actions {
+                grid-template-columns: 1fr;
+            }
+            
+            .qr-btn.primary {
+                grid-column: span 1;
+            }
+
+            .tab-btn {
+                padding: 0.65rem 0.5rem;
+                font-size: 0.8rem;
+                gap: 4px;
+            }
+        }
     </style>
 
     <!-- Generated Premium OG Tags -->
@@ -847,16 +1505,116 @@
         </div>
 
         <div id="card-content" style="display: none;">
-            <div class="card-header">
-                <div class="card-logo-container" id="logo-container" style="display: none;">
+            <!-- New Cover Photo Banner (Airbnb / Google Maps style) -->
+            <div id="bc-cover-photo" class="bc-cover-wrapper" style="display: none;">
+                <div class="bc-cover-gradient"></div>
+            </div>
+
+            <div class="card-header card-header-with-cover">
+                <!-- Floating logo container -->
+                <div class="bc-logo-container" id="logo-container" style="display: none;">
                     <img id="display-logo" src="" alt="Logo">
                 </div>
+                
                 <div class="card-title-section">
-                    <span class="card-category" id="display-category">Kategoria</span>
-                    <h1 id="display-name">Yrityksen nimi</h1>
-                    <p id="display-headline">Mainoslause tai lyhyt kuvaus.</p>
+                    <span class="bc-category-tag" id="display-category">Kategoria</span>
+                    <h1 class="bc-name" id="display-name">Yrityksen nimi</h1>
+                    
+                    <div class="bc-meta">
+                        <span class="bc-address">
+                            📍 <span id="display-address-short">Osoite</span>
+                        </span>
+                        <a href="#google-reviews-item" id="display-rating-stars" class="bc-rating" style="display: none;">
+                            ⭐ <span id="display-rating-val">4.8</span> (Google)
+                        </a>
+                    </div>
                 </div>
             </div>
+
+            <!-- Tab Switcher Pill Buttons -->
+            <div class="tab-container">
+                <button class="tab-btn active" id="btn-tab-business-card">
+                    📇 Digitaalinen käyntikortti
+                </button>
+                <button class="tab-btn" id="btn-tab-extended-profile">
+                    🏢 Laaja esittelyprofiili
+                </button>
+            </div>
+
+            <!-- Tab 1: Digitaalinen käyntikortti (Compact Business Card) -->
+            <div id="tab-business-card">
+                <!-- Status announcement banner (Yrittäjän päivitys) -->
+                <div id="bc-status-banner" class="status-banner" style="display: none;">
+                    <span class="badge">Ilmoitus</span>
+                    <p id="bc-status-text"></p>
+                </div>
+
+                <!-- Ajankohtaista news block (Yrittäjän päivitys) -->
+                <div id="bc-news-block" class="news-block" style="display: none;">
+                    <span class="badge" style="background:#0056b3; color:white; font-size:0.75rem; font-weight:800; padding:3px 10px; border-radius:50px; text-transform:uppercase; margin-bottom:8px; display:inline-block; font-family:'Outfit';">Ajankohtaista</span>
+                    <h4 id="bc-news-title"></h4>
+                    <span class="date" id="bc-news-date"></span>
+                    <p id="bc-news-text"></p>
+                    <a href="#" id="bc-news-link" target="_blank" style="display: none;">Lue lisää &raquo;</a>
+                </div>
+
+                <!-- Quick Action Grid -->
+                <div class="actions-grid">
+                    <a href="#" id="act-call" class="action-card soita" style="display: none;">
+                        <span>📞</span>
+                        <strong>Soita</strong>
+                    </a>
+                    <a href="#" id="act-route" class="action-card reitti" target="_blank">
+                        <span>📍</span>
+                        <strong>Reitti</strong>
+                    </a>
+                    <a href="#" id="act-web" class="action-card" target="_blank" style="display: none;">
+                        <span>🌐</span>
+                        <strong>Kotisivut</strong>
+                    </a>
+                    <a href="#" id="act-wa" class="action-card wa" target="_blank" style="display: none;">
+                        <span>💬</span>
+                        <strong>WhatsApp</strong>
+                    </a>
+                </div>
+
+                <!-- Dynamic Capability Badges -->
+                <div id="bc-capabilities" class="bc-block capabilities-block" style="display: none;">
+                    <h4>Tarjoamamme palvelut</h4>
+                    <div class="badges-flex" id="bc-capabilities-list"></div>
+                </div>
+
+                <!-- Short Slogan / Slogan Intro block -->
+                <div id="bc-intro-block" class="bc-block intro-block" style="display: none;">
+                    <p id="bc-short-intro"></p>
+                </div>
+
+                <!-- Dynamic QR Card (Save dynamic URL and print) -->
+                <div class="bc-block qr-card">
+                    <div class="qr-code-wrapper">
+                        <img id="bc-qr-code" src="" alt="QR">
+                    </div>
+                    <h3 class="qr-title" id="bc-qr-title">Yrityskortin QR</h3>
+                    <p class="qr-subtitle">Lataa QR-koodi markkinointiin, jaa käyntikortti tai tulosta PDF-esite messuille ja ilmoitustauluille.</p>
+                    <div class="qr-actions">
+                        <button class="qr-btn primary" id="btn-share-link">
+                            <span>🔗</span> Jaa digitaalinen käyntikortti
+                        </button>
+                        <button class="qr-btn" id="btn-save-contact">
+                            <span>👤</span> Tallenna yhteystiedot
+                        </button>
+                        <a href="#" class="qr-btn" id="btn-download-qr" download="qr_koodi.png">
+                            <span>📥</span> Lataa QR-kuva
+                        </a>
+                        <button class="qr-btn" id="btn-print-pdf">
+                            <span>🖨</span> Tulosta PDF-esite
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: Laaja profiili (Extended Profile) -->
+            <div id="tab-extended-profile">
 
             <div class="card-grid">
                 <div class="main-content">
@@ -961,6 +1719,41 @@
                 </div>
             </div>
 
+            </div><!-- End #tab-extended-profile -->
+
+            <!-- Hidden Print Card Container (Only visible during printing) -->
+            <div id="print-layout" class="print-layout" style="display: none;">
+                <div class="print-card">
+                    <img id="print-logo" class="print-logo" src="" alt="Logo" style="display: none;">
+                    <h1 id="print-name" class="print-title">Yrityksen Nimi</h1>
+                    <div id="print-category" class="print-category">Kategoria</div>
+                    
+                    <div class="print-details">
+                        <div class="print-details-item" id="print-phone-row">
+                            <strong>Puhelin:</strong> <span id="print-phone">-</span>
+                        </div>
+                        <div class="print-details-item" id="print-address-row">
+                            <strong>Osoite:</strong> <span id="print-address">-</span>
+                        </div>
+                        <div class="print-details-item" id="print-website-row">
+                            <strong>Verkkosivut:</strong> <span id="print-website">-</span>
+                        </div>
+                        <div class="print-details-item" id="print-intro-row">
+                            <p id="print-intro" style="font-style: italic; margin-top: 1.5rem;"></p>
+                        </div>
+                    </div>
+                    
+                    <div class="print-qr-section">
+                        <img id="print-qr-image" class="print-qr-code" src="" alt="QR">
+                        <div class="print-qr-text">
+                            <strong>Skannaa QR-koodi</strong>
+                            Tutustu yrityksen sähköiseen käyntikorttiin ja laajempaan esittelyyn LaukaaInfo-matkailuportaalissa.
+                            <br><span>laukaainfo.fi</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 5rem 0;">
         </div>
 
@@ -1016,8 +1809,8 @@
 
     <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="../script.253d1ab7.js?v=20260301"></script>
-    <script src="../yrityskortti.253d1ab7.js?v=20260304-DEBUG-2"></script>
+    <script src="../script.2e0cce37.js?v=20260301"></script>
+    <script src="../yrityskortti.2e0cce37.js?v=20260304-DEBUG-2"></script>
 </body>
 
 </html>
