@@ -2077,26 +2077,48 @@
         function searchNextStep(query) {
             if (!query) return;
 
-            // Check if the query matches a top-level "Need" in NEEDS_CONFIG
-            // We check both the key and the title (case-insensitive)
-            const lowerQuery = query.toLowerCase();
+            const lowerQuery = query.toLowerCase().trim();
             let foundNeedId = null;
 
             if (typeof NEEDS_CONFIG !== 'undefined') {
+                // 1. Check top-level need ID or title
                 for (const [id, config] of Object.entries(NEEDS_CONFIG)) {
                     if (id.toLowerCase() === lowerQuery || (config.title && i18n.getText(config.title).toLowerCase() === lowerQuery)) {
                         foundNeedId = id;
                         break;
                     }
                 }
+
+                // 2. If no top-level match, search inside options of each need
+                //    This handles recommendations that are option labels (e.g. "Fatbiken vuokraus")
+                if (!foundNeedId) {
+                    for (const [id, config] of Object.entries(NEEDS_CONFIG)) {
+                        if (!config.steps) continue;
+                        let matched = false;
+                        for (const step of config.steps) {
+                            if (!step.options) continue;
+                            for (const opt of step.options) {
+                                const optLabel = (i18n && opt.label) ? i18n.getText(opt.label).toLowerCase() : '';
+                                if (optLabel && (optLabel === lowerQuery || lowerQuery.includes(optLabel) || optLabel.includes(lowerQuery))) {
+                                    matched = true;
+                                    break;
+                                }
+                            }
+                            if (matched) break;
+                        }
+                        if (matched) {
+                            foundNeedId = id;
+                            break;
+                        }
+                    }
+                }
             }
 
             if (foundNeedId) {
-                // Stay in palvelu.html but switch to the new need
+                // Navigate to palvelu.html with the correct need ID
                 window.location.href = `palvelu.html?id=${foundNeedId}`;
             } else {
-                // Go to the general company/service search (index.html or koko-laukaa.html)
-                // In this project, koko-laukaa.html handles the free-text results.
+                // Fallback: free-text search in koko-laukaa.html
                 window.location.href = `koko-laukaa.html?q=${encodeURIComponent(query)}`;
             }
         }

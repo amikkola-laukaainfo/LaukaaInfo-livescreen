@@ -311,13 +311,36 @@ class NetworkMap {
                         badge.style.cursor = 'pointer';
                         badge.textContent = rec;
                         badge.onclick = () => {
-                            const lowerQuery = rec.toLowerCase();
+                            const lowerRec = rec.toLowerCase().trim();
                             let foundNeedId = null;
                             if (typeof window.NEEDS_CONFIG !== 'undefined') {
+                                // 1. Check top-level need ID or title
                                 for (const [id, config] of Object.entries(window.NEEDS_CONFIG)) {
-                                    if (id.toLowerCase() === lowerQuery || (config.title && (config.title.fi || config.title).toLowerCase() === lowerQuery)) {
+                                    if (id.toLowerCase() === lowerRec || (config.title && (config.title.fi || config.title).toLowerCase() === lowerRec)) {
                                         foundNeedId = id;
                                         break;
+                                    }
+                                }
+                                // 2. Search inside option labels of each need
+                                if (!foundNeedId) {
+                                    for (const [id, config] of Object.entries(window.NEEDS_CONFIG)) {
+                                        if (!config.steps) continue;
+                                        let matched = false;
+                                        for (const step of config.steps) {
+                                            if (!step.options) continue;
+                                            for (const opt of step.options) {
+                                                const optLabel = opt.label ? (opt.label.fi || opt.label.en || '').toLowerCase() : '';
+                                                if (optLabel && (optLabel === lowerRec || lowerRec.includes(optLabel) || optLabel.includes(lowerRec))) {
+                                                    matched = true;
+                                                    break;
+                                                }
+                                            }
+                                            if (matched) break;
+                                        }
+                                        if (matched) {
+                                            foundNeedId = id;
+                                            break;
+                                        }
                                     }
                                 }
                             }
