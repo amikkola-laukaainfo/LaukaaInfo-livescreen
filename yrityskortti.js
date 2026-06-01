@@ -810,10 +810,15 @@
 
             L.marker([company.lat, company.lon], { icon: icon }).addTo(map).bindPopup(company.nimi).openPopup();
 
-            // Varmistetaan, että kartta latautuu oikein asettamalla pieni viive ja tarkistamalla koko
-            setTimeout(() => {
+            // Varmistetaan, että kartta latautuu oikein asettamalla ResizeObserver
+            // Tämä pakottaa Leafletin päivittämään koon heti kun säiliön koko muuttuu
+            const resizeObserver = new ResizeObserver(() => {
                 map.invalidateSize();
-            }, 300);
+            });
+            resizeObserver.observe(mapContainer);
+
+            // Pidetään myös varalta viiveellä yksi päivitys animointien varalta
+            setTimeout(() => map.invalidateSize(), 1000);
 
             document.getElementById('google-maps-link').href = `https://www.google.com/maps?q=${company.lat},${company.lon}`;
         } else {
