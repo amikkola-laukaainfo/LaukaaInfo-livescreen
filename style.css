@@ -593,8 +593,50 @@ header h1 {
 
     .hero-right {
         position: relative;
+        height: 170px;
         min-height: 170px;
         flex: unset;
+        /* Smooth accordion expand */
+        transition: height 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+                    min-height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: hidden;
+    }
+
+    /* Laajennettu tila – koko ruudun korkeus */
+    .hero-right.hero-img-expanded {
+        height: 85svh;
+        height: 85vh; /* Fallback vanhemmille selaimille */
+        min-height: 85vh;
+    }
+
+    /* Caption toimii painikkeena mobiilissa */
+    .hero-right-caption {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+        transition: background 0.2s ease;
+    }
+
+    .hero-right-caption:active {
+        background: rgba(0, 0, 0, 0.7);
+    }
+
+    /* Nuoli-indikaattori */
+    .hero-caption-chevron {
+        display: inline-block;
+        font-style: normal;
+        font-size: 0.8rem;
+        opacity: 0.85;
+        transition: transform 0.4s ease;
+        line-height: 1;
+    }
+
+    /* Käännetään nuoli kun laajennettu */
+    .hero-right.hero-img-expanded .hero-caption-chevron {
+        transform: rotate(180deg);
     }
 
     .hero-right::after {

@@ -237,7 +237,14 @@
                 <img src="hero-kuva.jpg" alt="Laukaa maisema" class="hero-nature-img active">
             </picture>
             <img src="network-silhouette.png" class="hero-network-silhouette" alt="Verkosto silhuetti">
-            <div class="hero-right-caption" id="hero-caption">Laukaa, Keski-Suomi</div>
+            <div class="hero-right-caption" id="hero-caption"
+                 role="button"
+                 aria-expanded="false"
+                 aria-label="Laajenna tai pienennä kuva-aluetta"
+                 title="Klikkaa laajennaaksesi kuva">
+                <span id="hero-caption-text">Laukaa, Keski-Suomi</span>
+                <span class="hero-caption-chevron" id="hero-caption-chevron" aria-hidden="true">▾</span>
+            </div>
         </div>
     </header>
 
@@ -770,8 +777,49 @@
             }, 2000); // Viivästetään hieman, ettei häiritse sivun latausta
         })();
     </script>
+    <script>
+        // Hero image accordion – mobiilissa caption-nappi laajentaa kuva-alueen
+        (function () {
+            var heroRight = document.getElementById('hero-slideshow');
+            var caption   = document.getElementById('hero-caption');
+            var chevron   = document.getElementById('hero-caption-chevron');
+
+            if (!heroRight || !caption) return;
+
+            function isMobile() {
+                return window.matchMedia('(max-width: 768px)').matches;
+            }
+
+            caption.addEventListener('click', function () {
+                if (!isMobile()) return;
+
+                var expanded = heroRight.classList.toggle('hero-img-expanded');
+                caption.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+
+                // Nuoli kääntyy CSS:ssä – päivitetään vain aria
+                if (chevron) {
+                    chevron.textContent = expanded ? '▴' : '▾';
+                }
+
+                // Rullataan kuva-alue näkyviin jos laajennetaan
+                if (expanded) {
+                    setTimeout(function () {
+                        heroRight.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 80);
+                }
+            });
+
+            // Nollataan desktop-tilassa
+            window.addEventListener('resize', function () {
+                if (!isMobile() && heroRight.classList.contains('hero-img-expanded')) {
+                    heroRight.classList.remove('hero-img-expanded');
+                    caption.setAttribute('aria-expanded', 'false');
+                    if (chevron) chevron.textContent = '▾';
+                }
+            });
+        })();
+    </script>
 
 
-</body>
 
 </html>
