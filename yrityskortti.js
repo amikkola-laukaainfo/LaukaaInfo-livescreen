@@ -439,12 +439,33 @@
         // Logo
         const logoImg = document.getElementById('display-logo');
         const logoContainer = document.getElementById('logo-container');
+        
+        // Reset styles in case of re-render
+        logoImg.style.opacity = '1';
+        logoImg.style.filter = 'none';
+        const existingNoLogo = logoContainer.querySelector('.no-logo-text');
+        if (existingNoLogo) existingNoLogo.remove();
+
         if (company.logo && company.logo !== '-') {
             logoImg.src = company.logo;
             logoContainer.style.display = 'flex';
         } else if (company.media && company.media.length > 0) {
             // Fallback to first image if no logo defined
             logoImg.src = company.media[0].url;
+            logoContainer.style.display = 'flex';
+        } else {
+            // No logo and no media
+            logoImg.src = 'logo.png';
+            logoImg.style.opacity = '0.15';
+            logoImg.style.filter = 'grayscale(1)';
+            
+            const noLogoText = document.createElement('div');
+            noLogoText.className = 'no-logo-text';
+            noLogoText.style.cssText = 'position:absolute; bottom:15px; width:100%; text-align:center; font-size:0.8rem; color:#94a3b8; font-weight:700; text-transform:uppercase; letter-spacing:1px; left:0;';
+            noLogoText.textContent = 'Ei logoa';
+            logoContainer.style.position = 'relative';
+            logoContainer.appendChild(noLogoText);
+            
             logoContainer.style.display = 'flex';
         }
 
@@ -740,7 +761,7 @@
             mainImage.innerHTML = `
                 <div class="image-placeholder">
                     <img src="logo.png" alt="Ei kuvaa">
-                    <div class="placeholder-text">yrityksellä ei valokuvaa</div>
+                    <div class="placeholder-text">Yrityksen ilmaisprofiilissa ei ole kuvia</div>
                 </div>
             `;
             galleryContainer.style.display = 'block';
@@ -813,12 +834,27 @@
             // Varmistetaan, että kartta latautuu oikein asettamalla ResizeObserver
             // Tämä pakottaa Leafletin päivittämään koon heti kun säiliön koko muuttuu
             const resizeObserver = new ResizeObserver(() => {
-                map.invalidateSize();
+                map.invalidateSize(true);
             });
             resizeObserver.observe(mapContainer);
 
+            requestAnimationFrame(() => {
+                map.invalidateSize(true);
+            });
+
+            setTimeout(() => {
+                map.invalidateSize(true);
+            }, 100);
+
+            setTimeout(() => {
+                map.invalidateSize(true);
+            }, 500);
+
             // Pidetään myös varalta viiveellä yksi päivitys animointien varalta
-            setTimeout(() => map.invalidateSize(), 1000);
+            setTimeout(() => map.invalidateSize(true), 1000);
+            
+            // Tallennetaan map-instanssi globaaliin muuttujaan jotta siihen päästään käsiksi välilehtiä vaihdettaessa
+            window.companyMapInstance = map;
 
             document.getElementById('google-maps-link').href = `https://www.google.com/maps?q=${company.lat},${company.lon}`;
         } else {
@@ -932,6 +968,9 @@
                 btnEp.classList.remove('active');
                 tabBc.style.display = 'flex';
                 tabEp.style.display = 'none';
+                if (window.companyMapInstance) {
+                    setTimeout(() => window.companyMapInstance.invalidateSize(true), 50);
+                }
             };
             btnEp.onclick = (e) => {
                 e.preventDefault();
@@ -939,6 +978,9 @@
                 btnBc.classList.remove('active');
                 tabBc.style.display = 'none';
                 tabEp.style.display = 'block';
+                if (window.companyMapInstance) {
+                    setTimeout(() => window.companyMapInstance.invalidateSize(true), 50);
+                }
             };
         }
 
@@ -948,8 +990,10 @@
             coverPhoto.style.display = 'block';
             if (company.media && company.media.length > 0) {
                 coverPhoto.style.backgroundImage = `url('${company.media[0].url}')`;
+                coverPhoto.classList.add('has-photo');
             } else {
-                coverPhoto.style.backgroundImage = 'linear-gradient(135deg, #0056b3 0%, #003366 100%)';
+                coverPhoto.style.backgroundImage = 'linear-gradient(135deg, #007bff 0%, #0056b3 100%)';
+                coverPhoto.classList.remove('has-photo');
             }
         }
 
