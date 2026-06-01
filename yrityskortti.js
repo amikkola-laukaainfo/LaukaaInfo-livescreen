@@ -810,6 +810,11 @@
 
             L.marker([company.lat, company.lon], { icon: icon }).addTo(map).bindPopup(company.nimi).openPopup();
 
+            // Varmistetaan, että kartta latautuu oikein asettamalla pieni viive ja tarkistamalla koko
+            setTimeout(() => {
+                map.invalidateSize();
+            }, 300);
+
             document.getElementById('google-maps-link').href = `https://www.google.com/maps?q=${company.lat},${company.lon}`;
         } else {
             // Fallback for missing coordinates: use karttalinkki or search by name + address
