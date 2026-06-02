@@ -221,11 +221,12 @@
                     <img src="logo.png" alt="LaukaaInfo Logo" class="main-logo">
                     <div class="hero-copy">
                         <h1 id="brand-title">Laukaa<span class="highlight-i">I</span>nfo</h1>
-                        <h2 class="hero-subheading" data-i18n="hero_subheading">Kaikki Laukaasta yhdessä paikassa</h2>
-                        <p class="hero-tagline" data-i18n="hero_tagline">Löydä alueella palvelevat yritykset, yhteistyöverkostot,<br>tapahtumat ja ajankohtaiset tiedotteet helposti.</p>
-                        <div class="hero-actions">
-                            <a href="#service-needs" class="btn-primary" data-i18n="hero_button">Mitä olet järjestämässä? →</a>
-                            <a href="#search-section" class="btn-primary btn-search-hero" data-i18n="hero_search_button">🔍 Tarkempi haku</a>
+                        <h2 class="hero-subheading" data-i18n="hero_subheading">Yhteydet palveluihin, osaajiin ja mahdollisuuksiin.</h2>
+                        <div class="hero-actions" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 1rem;">
+                            <a href="#search-section" class="btn-primary" style="padding: 0.8rem; font-size: 0.9rem;">📍 Löydä palvelu</a>
+                            <a href="#service-needs" class="btn-primary" style="padding: 0.8rem; font-size: 0.9rem;">🤝 Löydä apua</a>
+                            <a href="#palveluverkosto-section" class="btn-primary" style="padding: 0.8rem; font-size: 0.9rem;">👥 Löydä ihmisiä</a>
+                            <a href="#feed-section" class="btn-primary" style="padding: 0.8rem; font-size: 0.9rem;">🚀 Luo jotain yhdessä</a>
                         </div>
                     </div>
                 </div>
@@ -343,6 +344,12 @@
                     </div>
 
                 </div>
+            </div>
+        </section>
+
+<section id="palveluverkosto-section" class="bg-full-gray" style="padding: 3rem 0; margin-bottom: 2rem;">
+            <div class="section-container" id="palveluverkosto-suositukset">
+                <!-- verkosto.js lataa suositukset tähän -->
             </div>
         </section>
 
@@ -519,71 +526,6 @@
 
 
 
-        <!-- Elämykset & Kulttuuri -->
-        <section id="experiences-section" class="experiences-section bg-full-gray">
-            <div class="section-header">
-                <h2 data-i18n="feature_experiences_title">Elämykset & Kulttuuri</h2>
-                <p data-i18n="feature_experiences_desc">Löydä Laukaan helmet, tarinat ja päätösten taustat.</p>
-            </div>
-            
-            <div class="feature-grid">
-                <a href="asiahaku.html" class="feature-card" style="height: 400px; position: relative; overflow: hidden; display: flex; flex-direction: column;">
-                    <!-- Haalea koko kortin taustakuva -->
-                    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: url('kuvia/kuva_6.jpg'); background-size: cover; background-position: center; opacity: 0.1; z-index: 0;"></div>
-                    
-                    <div class="feature-card-img" style="background-image: url('kuvia/kuva_6.jpg'); height: 140px; position: relative; z-index: 1;"></div>
-                    <div class="feature-card-body" style="padding: 2rem; position: relative; z-index: 1; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;">
-                        <div>
-                            <h3 data-i18n="exp_paths_title" style="margin-bottom: 0.75rem;">Päätösten polut</h3>
-                            <p data-i18n="exp_paths_desc">Tutki ja hae paikallisia päätöksiä helpon teemahaun avulla.</p>
-                        </div>
-                        <span class="btn-text" data-i18n="btn_explore">Tutki päätöksiä &raquo;</span>
-                    </div>
-                </a>
-                <a href="muistokartta.html" class="feature-card" style="height: 400px; position: relative; overflow: hidden; display: flex; flex-direction: column;">
-                    <!-- Haalea koko kortin taustakuva -->
-                    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: url('kuvia/kuva_29.jpg'); background-size: cover; background-position: center; opacity: 0.1; z-index: 0;"></div>
-                    
-                    <div class="feature-card-img" style="background-image: url('kuvia/kuva_29.jpg'); height: 140px; position: relative; z-index: 1;"></div>
-                    <div class="feature-card-body" style="padding: 2rem; position: relative; z-index: 1; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;">
-                        <div>
-                            <h3 data-i18n="exp_memorial_title" style="margin-bottom: 0.75rem;">Muistokartta</h3>
-                            <p data-i18n="exp_memorial_desc">Laukaan historialliset kohteet ja muistelmat kartalla.</p>
-                        </div>
-                        <span class="btn-text" data-i18n="btn_open">Avaa kartta &raquo;</span>
-                    </div>
-                </a>
-                <a href="tarinakartta.html" class="feature-card" style="height: 400px; position: relative; overflow: hidden; display: flex; flex-direction: column;">
-                    <!-- Haalea koko kortin taustakuva -->
-                    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: url('kuvia/kuva_32.jpg'); background-size: cover; background-position: center; opacity: 0.1; z-index: 0;"></div>
-                    
-                    <div class="feature-card-img" style="background-image: url('kuvia/kuva_32.jpg'); height: 140px; position: relative; z-index: 1;"></div>
-                    <div class="feature-card-body" style="padding: 2rem; position: relative; z-index: 1; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;">
-                        <div>
-                            <h3 data-i18n="exp_story_title" style="margin-bottom: 0.75rem;">Tarinakartta</h3>
-                            <p data-i18n="exp_story_desc">Lähde elämysmatkalle Laukaan tarinoiden ja reittien pariin.</p>
-                        </div>
-                        <span class="btn-text" data-i18n="btn_go">Lähde matkalle &raquo;</span>
-                    </div>
-                </a>
-                <a href="galleria.html" class="feature-card" style="height: 400px; position: relative; overflow: hidden; display: flex; flex-direction: column;">
-                    <!-- Haalea koko kortin taustakuva -->
-                    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: url('kuvia/kuva_28.jpg'); background-size: cover; background-position: center; opacity: 0.1; z-index: 0;"></div>
-                    
-                    <div class="feature-card-img" style="background-image: url('kuvia/kuva_28.jpg'); height: 140px; position: relative; z-index: 1;"></div>
-                    <div class="feature-card-body" style="padding: 2rem; position: relative; z-index: 1; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;">
-                        <div>
-                            <h3 data-i18n="exp_gallery_title" style="margin-bottom: 0.75rem;">Kuvagalleria</h3>
-                            <p data-i18n="exp_gallery_desc">Katso uusimmat kuvat ja videot Laukaasta kootusti.</p>
-                        </div>
-                        <span class="btn-text" data-i18n="btn_gallery">Avaa galleria &raquo;</span>
-                    </div>
-                </a>
-            </div>
-        </section>
-
-
-        <!-- Paikallinen syöte -lohko -->
         <section id="feed-section" class="feed-accordion-section bg-full-white" style="padding: 3rem 0; margin-bottom: 0;">
             <div class="section-container">
                 <div class="feed-accordion" style="border: none; box-shadow: 0 15px 45px rgba(0,0,0,0.08); border-radius: 24px; overflow: visible;">
@@ -729,6 +671,7 @@
     <script src="homepage-spotlight.js?v=20260521"></script>
     <script src="feed.js?v=20260323a"></script>
     <script src="carousel.js"></script>
+    <script src="verkosto.js"></script>
 
     <script>
         // Feed accordion toggle with persistence
