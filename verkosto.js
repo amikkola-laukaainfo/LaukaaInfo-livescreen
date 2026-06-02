@@ -42,7 +42,7 @@ function renderVerkosto(data, tagi, container) {
             <ul style="list-style: none; padding: 0; margin: 0;">`;
         verkosto.tarjoan_apua.forEach(id => {
             const ent = entities[id];
-            if (ent) html += `<li style="margin-bottom: 0.5rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;"><strong>${ent.otsikko}</strong></li>`;
+            if (ent) html += `<li style="margin-bottom: 0.5rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;"><a href="ilmoitukset.html?search=${encodeURIComponent(ent.otsikko)}" style="text-decoration:none; color:inherit; display:block; transition:color 0.2s;" onmouseover="this.style.color='#0056b3';" onmouseout="this.style.color='inherit';"><strong>${ent.otsikko}</strong></a></li>`;
         });
         html += `</ul></div>`;
     }
@@ -54,7 +54,7 @@ function renderVerkosto(data, tagi, container) {
             <ul style="list-style: none; padding: 0; margin: 0;">`;
         verkosto.harrastukset.forEach(id => {
             const ent = entities[id];
-            if (ent) html += `<li style="margin-bottom: 0.5rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;"><strong>${ent.otsikko}</strong><br><small style="color: #666;">Kiinnostuneita: ${ent.kiinnostuneet || 0}</small></li>`;
+            if (ent) html += `<li style="margin-bottom: 0.5rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;"><a href="ilmoitukset.html?search=${encodeURIComponent(ent.otsikko)}" style="text-decoration:none; color:inherit; display:block; transition:color 0.2s;" onmouseover="this.style.color='#0056b3';" onmouseout="this.style.color='inherit';"><strong>${ent.otsikko}</strong><br><small style="color: #666;">Kiinnostuneita: ${ent.kiinnostuneet || 0}</small></a></li>`;
         });
         html += `</ul></div>`;
     }
@@ -66,7 +66,7 @@ function renderVerkosto(data, tagi, container) {
             <ul style="list-style: none; padding: 0; margin: 0;">`;
         verkosto.projektit.forEach(id => {
             const ent = entities[id];
-            if (ent) html += `<li style="margin-bottom: 0.5rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;"><strong>${ent.otsikko}</strong></li>`;
+            if (ent) html += `<li style="margin-bottom: 0.5rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;"><a href="ilmoitukset.html?search=${encodeURIComponent(ent.otsikko)}" style="text-decoration:none; color:inherit; display:block; transition:color 0.2s;" onmouseover="this.style.color='#0056b3';" onmouseout="this.style.color='inherit';"><strong>${ent.otsikko}</strong></a></li>`;
         });
         html += `</ul></div>`;
     }
@@ -150,14 +150,17 @@ function renderPikakatsaus(tagi) {
             filtered.forEach(ilm => {
                 const emoji = INTENT_EMOJI[ilm.intent || ilm.tyyppi] || '📌';
                 const date = ilm.paivays ? ilm.paivays.substring(0, 10) : '';
+                const searchParam = encodeURIComponent(ilm.otsikko || '');
                 html += `
-                    <div style="display: flex; gap: 0.75rem; padding: 0.75rem; background: #f8faff; border-radius: 10px; border: 1px solid #e2e8f0;">
-                        <span style="font-size:1.4rem; flex-shrink:0;">${emoji}</span>
-                        <div>
-                            <div style="font-weight:600; color:#1a1a2e; font-size:0.95rem;">${escHtml(ilm.otsikko || 'Ilmoitus')}</div>
-                            <div style="color:#64748b; font-size:0.8rem; margin-top:0.2rem;">${escHtml(ilm.nimi || '')}${date ? ' · ' + date : ''}</div>
+                    <a href="ilmoitukset.html?tag=${encodeURIComponent(tagi)}&search=${searchParam}" style="text-decoration:none; color:inherit; display:block; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,86,179,0.1)';" onmouseout="this.style.transform='none'; this.style.boxShadow='none';">
+                        <div style="display: flex; gap: 0.75rem; padding: 0.75rem; background: #f8faff; border-radius: 10px; border: 1px solid #e2e8f0; cursor: pointer;">
+                            <span style="font-size:1.4rem; flex-shrink:0;">${emoji}</span>
+                            <div>
+                                <div style="font-weight:600; color:#1a1a2e; font-size:0.95rem;">${escHtml(ilm.otsikko || 'Ilmoitus')}</div>
+                                <div style="color:#64748b; font-size:0.8rem; margin-top:0.2rem;">${escHtml(ilm.nimi || '')}${date ? ' · ' + date : ''}</div>
+                            </div>
                         </div>
-                    </div>`;
+                    </a>`;
             });
 
             html += `</div>

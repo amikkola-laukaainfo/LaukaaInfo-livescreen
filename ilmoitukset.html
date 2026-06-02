@@ -339,6 +339,7 @@
         const urlParams = new URLSearchParams(window.location.search);
         const urlTag = urlParams.get('tag');
         const urlIntent = urlParams.get('intent');
+        const urlSearch = urlParams.get('search');
 
         async function loadIlmoitukset() {
             try {
@@ -347,10 +348,13 @@
                 if (data.status === 'success') {
                     allIlmoitukset = data.ilmoitukset || [];
 
-                    // Jos URL:ssa on tag-parametri, aseta haku
-                    if (urlTag) {
+                    // Jos URL:ssa on hakusana tai tag-parametri, aseta haku
+                    if (urlSearch) {
+                        document.getElementById('search-input').value = urlSearch;
+                    } else if (urlTag) {
                         document.getElementById('search-input').value = urlTag;
                     }
+                    
                     if (urlIntent) {
                         const btn = document.querySelector(`.filter-btn[onclick*="${urlIntent}"]`);
                         if (btn) setFilter(urlIntent, btn);
@@ -358,6 +362,15 @@
 
                     buildTagFilters(data.sanapilvi || {});
                     renderList();
+                    
+                    if (urlSearch || urlTag) {
+                        setTimeout(() => {
+                            const cards = document.querySelectorAll('.ilm-card');
+                            if (cards.length === 1) {
+                                toggleCard(0);
+                            }
+                        }, 100);
+                    }
                 }
             } catch (e) {
                 document.getElementById('ilm-list-container').innerHTML = `
