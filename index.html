@@ -554,10 +554,15 @@
         </section>
 
         <section id="palveluverkosto-section" class="bg-full-gray" style="padding: 3rem 0; margin-bottom: 2rem;">
-            <!-- Dynaaminen Sanapilvi (Ilmoituksista) -->
+            <!-- Otsikko näkyy aina -->
+            <div class="section-container" style="text-align: center; margin-bottom: 1.5rem;">
+                <h2 style="color: #0a2540; margin-bottom: 0.5rem; font-size: 2rem;">👥 Löydä ihmisiä</h2>
+                <p style="color: #4a5568; font-size: 1rem;">Palveluverkosto, harrastusryhmät ja avunpyynnöt Laukaassa.</p>
+            </div>
+
+            <!-- Dynaaminen Sanapilvi (Ilmoituksista) – näkyy vain jos dataa -->
             <div class="section-container" id="sanapilvi-container" style="text-align: center; margin-bottom: 2.5rem; display: none;">
-                <h2 style="color: #0a2540; margin-bottom: 1rem; font-size: 2rem;" data-i18n="network_title">👥 Löydä ihmisiä</h2>
-                <h3 style="color: #4a5568; margin-bottom: 1rem; font-size: 1.2rem;">📣 Mitä apua haetaan ja tarjotaan juuri nyt?</h3>
+                <h3 style="color: #4a5568; margin-bottom: 1rem; font-size: 1.1rem;">📣 Mitä apua haetaan ja tarjotaan juuri nyt?</h3>
                 <div id="sanapilvi-tags" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem;">
                     <!-- verkosto.js lataa tagit tähän -->
                 </div>
