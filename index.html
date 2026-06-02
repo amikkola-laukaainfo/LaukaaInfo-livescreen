@@ -250,6 +250,81 @@
     </header>
 
     <main>
+        <!-- Uutistikkeri / Swiper Slider -->
+        <section class="ticker-section" style="background-color: #f8fbff; padding: 2rem 0;">
+            <style>
+                .slider-container { width: 100%; max-width: 1200px; padding: 0 1rem; box-sizing: border-box; margin: 0 auto; }
+                .category-badge { display: inline-block; padding: 0.25rem 0.75rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; border-radius: 9999px; background-color: rgba(59, 130, 246, 0.25); color: #3b82f6; margin-bottom: 0.75rem; letter-spacing: 0.05em; }
+                .template-full-image { width: 100%; height: 400px; background-size: cover; background-position: center; position: relative; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+                .template-full-image .overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; padding: 2rem; background: linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0.2)); }
+                .template-full-image .content { max-width: 650px; color: #ffffff; position: relative; z-index: 2; text-align: center; }
+                .template-full-image .slide-title { font-size: 2.2rem; font-weight: 800; margin-bottom: 1rem; line-height: 1.2; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+                .template-full-image .slide-desc { font-size: 1.1rem; margin-bottom: 1.5rem; opacity: 0.9; text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
+                .template-full-image .slide-btn { display: inline-block; padding: 0.75rem 1.5rem; background-color: #3b82f6; color: white; text-decoration: none; font-weight: 600; border-radius: 0.375rem; transition: opacity 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
+                .template-full-image .slide-btn:hover { opacity: 0.9; }
+                @media(max-width: 768px) {
+                    .template-full-image { height: 350px; }
+                    .template-full-image .slide-title { font-size: 1.8rem; }
+                }
+            </style>
+            <div class="slider-container">
+                <div class="swiper" id="swiper-slider-ticker" style="border-radius: 16px;">
+                    <div class="swiper-wrapper">
+                        <!-- Slide ticker-1 -->
+                        <div class="swiper-slide" id="slide-ticker-1">
+                            <div class="template-full-image" style="background-image: url('https://ik.imagekit.io/vowzx8znjs/swiper-slider-generator/_9153607-Edit_1i92-2LyQ.jpg');">
+                                <div class="overlay">
+                                    <div class="content">
+                                        <div class="tags-row"><span class="category-badge">INFO</span></div>
+                                        <h2 class="slide-title">Yritys LaukaaInfoon 79€ / 6kk</h2>
+                                        <p class="slide-desc">Näe ja tule nähdyksi</p>
+                                        <a href="https://laukaainfo.fi/lisaa-yritys.html?utm_campaign=INFO&utm_source=ticker_toimitus&utm_medium=swiper-slider" data-tracking="ticker_toimitus" class="slide-btn">Lisää yritys</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Slide ticker-2 -->
+                        <div class="swiper-slide" id="slide-ticker-2">
+                            <div class="template-full-image" style="background-image: url('https://ik.imagekit.io/vowzx8znjs/swiper-slider-generator/DSC_0061-6_Efm4Fl64q.jpg');">
+                                <div class="overlay">
+                                    <div class="content">
+                                        <div class="tags-row"><span class="category-badge">UUTISET</span></div>
+                                        <h2 class="slide-title">Kuilun partaalla syyskuussa Lievestuoreella</h2>
+                                        <p class="slide-desc">Tutustu alueeseen videolla</p>
+                                        <a href="https://www.youtube.com/watch?v=LaG4todxP6c&utm_campaign=UUTISET&utm_source=ticker_tampere&utm_medium=swiper-slider" data-tracking="ticker_tampere" class="slide-btn">Lue lisää tiedotteesta</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    if (typeof Swiper !== 'undefined') {
+                        const tickerSwiper = new Swiper("#swiper-slider-ticker", {
+                            speed: 800,
+                            loop: true,
+                            slidesPerView: 1,
+                            spaceBetween: 0,
+                            autoplay: {
+                                delay: 5000,
+                                disableOnInteraction: false
+                            }
+                        });
+                    }
+                    const trackedElements = document.querySelectorAll("[data-tracking]");
+                    trackedElements.forEach(function(el) {
+                        el.addEventListener("click", function(event) {
+                            const targetId = el.getAttribute("data-tracking");
+                            const eventName = el.getAttribute("data-event-name") || "slider_btn_click";
+                            console.log("Analytics Trigger:", eventName, "Target ID:", targetId);
+                        });
+                    });
+                });
+            </script>
+        </section>
+
         <!-- Yhteisöllisyys / Welcome Hub -->
         <section class="community-section bg-full-white">
             <div class="section-container">
