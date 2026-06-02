@@ -124,26 +124,46 @@ function renderSanapilvi() {
                     let html = '';
 
                     const emojis = {
+                        // Vanhat tagit (taaksepäin yhteensopivuus)
                         'tietokoneet': '💻',
-                        'piha': '🏡',
+                        'piha': '🌳',
                         'rakentaminen': '🔨',
                         'kuljetus': '🚗',
-                        'seniorit': '👴',
+                        'seniorit': '👵',
                         'tapahtumat': '🎉',
                         'musiikki': '🎵',
-                        'muu': '📹'
+                        'muu': '📌',
+                        // Uudet wizard-taksonomiakategoriat
+                        'digitaaliset': '💻',
+                        'kodinhoito': '🏠',
+                        'piha_puutarha': '🌳',
+                        'rakentaminen_remontointi': '🛠',
+                        'liikenne': '🚗',
+                        'seniorit': '👵',
+                        'lapset': '👶',
+                        'oppiminen': '📚',
+                        'musiikki_wizard': '🎵',
+                        'valokuvaus': '📷',
+                        'liikunta': '🏃',
+                        'luonto': '🌱',
+                        'yhdistys': '🤝',
+                        'yrittajyys': '💼',
                     };
+
+                    // Luettava nimi tagista (poista alaviivat, iso alkukirjain)
+                    function tagLabel(tag) {
+                        return tag.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+                    }
 
                     tagNames.forEach(tag => {
                         const count = tags[tag];
                         const emoji = emojis[tag] || '📌';
-                        // Suurennetaan fonttia hieman suosituimmille (max 1.5rem, min 0.9rem)
                         const fontSize = Math.min(1.5, 0.9 + (count * 0.1));
 
                         html += `<button onclick="renderVerkostoData('${tag}')"
                             style="background: #e2e8f0; border: none; padding: 0.4rem 0.8rem; border-radius: 20px;
                             cursor: pointer; font-size: ${fontSize}rem; transition: background 0.2s; font-family: inherit;">
-                            ${emoji} ${tag} <span style="opacity: 0.6; font-size: 0.8em;">(${count})</span>
+                            ${emoji} ${tagLabel(tag)} <span style="opacity: 0.6; font-size: 0.8em;">(${count})</span>
                         </button>`;
                     });
 
