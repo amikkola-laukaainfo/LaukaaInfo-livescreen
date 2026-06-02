@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+﻿document.addEventListener('DOMContentLoaded', () => {
     const verkostoContainer = document.getElementById('palveluverkosto-suositukset');
     if (!verkostoContainer) return;
 
@@ -17,8 +17,8 @@ function renderVerkosto(data, tagi, container) {
 
     let html = `
         <div class="verkosto-header" style="text-align: center; margin-bottom: 2rem;">
-            <h2 style="color: #0a2540; margin-bottom: 0.5rem;">🧠 Palveluverkoston suositukset: ${verkosto.otsikko}</h2>
-            <p style="color: #4a5568;">Saattaisit olla kiinnostunut myös näistä paikallisista toimijoista ja mahdollisuuksista.</p>
+            <h2 style="color: #0a2540; margin-bottom: 0.5rem;">ðŸ§  Palveluverkoston suositukset: ${verkosto.otsikko}</h2>
+            <p style="color: #4a5568;">Saattaisit olla kiinnostunut myÃ¶s nÃ¤istÃ¤ paikallisista toimijoista ja mahdollisuuksista.</p>
         </div>
         <div class="verkosto-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
     `;
@@ -26,7 +26,7 @@ function renderVerkosto(data, tagi, container) {
     // Yritykset
     if (verkosto.yritykset && verkosto.yritykset.length > 0) {
         html += `<div class="verkosto-kategoria" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-            <h3 style="color: #0056b3; margin-bottom: 1rem; font-size: 1.2rem;">🏢 Yritykset</h3>
+            <h3 style="color: #0056b3; margin-bottom: 1rem; font-size: 1.2rem;">ðŸ¢ Yritykset</h3>
             <ul style="list-style: none; padding: 0; margin: 0;">`;
         verkosto.yritykset.forEach(id => {
             const ent = entities[id];
@@ -38,7 +38,7 @@ function renderVerkosto(data, tagi, container) {
     // Tarjoaa apua
     if (verkosto.tarjoan_apua && verkosto.tarjoan_apua.length > 0) {
         html += `<div class="verkosto-kategoria" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-            <h3 style="color: #28a745; margin-bottom: 1rem; font-size: 1.2rem;">🤝 Tarjoaa apua</h3>
+            <h3 style="color: #28a745; margin-bottom: 1rem; font-size: 1.2rem;">ðŸ¤ Tarjoaa apua</h3>
             <ul style="list-style: none; padding: 0; margin: 0;">`;
         verkosto.tarjoan_apua.forEach(id => {
             const ent = entities[id];
@@ -47,10 +47,10 @@ function renderVerkosto(data, tagi, container) {
         html += `</ul></div>`;
     }
 
-    // Harrastukset ja ryhmät
+    // Harrastukset ja ryhmÃ¤t
     if (verkosto.harrastukset && verkosto.harrastukset.length > 0) {
         html += `<div class="verkosto-kategoria" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-            <h3 style="color: #ffc107; margin-bottom: 1rem; font-size: 1.2rem;">👥 Harrastusryhmät</h3>
+            <h3 style="color: #ffc107; margin-bottom: 1rem; font-size: 1.2rem;">ðŸ‘¥ HarrastusryhmÃ¤t</h3>
             <ul style="list-style: none; padding: 0; margin: 0;">`;
         verkosto.harrastukset.forEach(id => {
             const ent = entities[id];
@@ -62,7 +62,7 @@ function renderVerkosto(data, tagi, container) {
     // Projektit
     if (verkosto.projektit && verkosto.projektit.length > 0) {
         html += `<div class="verkosto-kategoria" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-            <h3 style="color: #dc3545; margin-bottom: 1rem; font-size: 1.2rem;">🚀 Projektit</h3>
+            <h3 style="color: #dc3545; margin-bottom: 1rem; font-size: 1.2rem;">ðŸš€ Projektit</h3>
             <ul style="list-style: none; padding: 0; margin: 0;">`;
         verkosto.projektit.forEach(id => {
             const ent = entities[id];
@@ -105,3 +105,55 @@ window.renderVerkostoData = function(tagi) {
         })
         .catch(err => console.error('Virhe ladattaessa palveluverkoston dataa:', err));
 };
+
+// --- SANAPILVI LOGIIKKA (Ilmoitukset API) ---
+function renderSanapilvi() {
+    const container = document.getElementById('sanapilvi-tags');
+    const wrapper = document.getElementById('sanapilvi-container');
+    if (!container || !wrapper) return;
+
+    fetch('https://mediazoo.fi/laukaainfo-web/ilmoitukset-api.php?action=list')
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success' && data.sanapilvi) {
+                const tags = data.sanapilvi;
+                const tagNames = Object.keys(tags);
+                
+                if (tagNames.length > 0) {
+                    wrapper.style.display = 'block';
+                    let html = '';
+                    
+                    const emojis = {
+                        'tietokoneet': 'ðŸ’»',
+                        'piha': 'ðŸ¡',
+                        'rakentaminen': 'ðŸ”¨',
+                        'kuljetus': 'ðŸš—',
+                        'seniorit': 'ðŸ‘´',
+                        'tapahtumat': 'ðŸŽ‰',
+                        'musiikki': 'ðŸŽµ',
+                        'muu': 'ðŸ”¹'
+                    };
+
+                    tagNames.forEach(tag => {
+                        const count = tags[tag];
+                        const emoji = emojis[tag] || 'ðŸ“Œ';
+                        // Suurennetaan fonttia hieman suosituimmille (esim max 1.5rem, min 0.9rem)
+                        const fontSize = Math.min(1.5, 0.9 + (count * 0.1));
+                        
+                        html += <button onclick="renderVerkostoData(' + tag + ')" 
+                            style="background: #e2e8f0; border: none; padding: 0.4rem 0.8rem; border-radius: 20px; 
+                            cursor: pointer; font-size:  + fontSize + em; transition: background 0.2s;">
+                              <span style="opacity: 0.6; font-size: 0.8em;">()</span>
+                        </button>;
+                    });
+                    
+                    container.innerHTML = html;
+                }
+            }
+        })
+        .catch(err => console.error('Virhe sanapilven latauksessa:', err));
+}
+
+// KÃ¤ynnistetÃ¤Ã¤n sanapilvi heti sivun ladattua
+document.addEventListener('DOMContentLoaded', renderSanapilvi);
+
