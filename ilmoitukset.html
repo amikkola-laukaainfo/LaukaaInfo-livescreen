@@ -387,10 +387,9 @@
             const tags = Object.keys(sanapilvi).slice(0, 8); // Max 8 tagia
             if (tags.length === 0) return;
 
-            const sep = document.createElement('span');
-            sep.style.cssText = 'color:var(--border); margin: 0 0.25rem;';
-            sep.textContent = '|';
-            bar.appendChild(sep);
+            const breakEl = document.createElement('div');
+            breakEl.style.cssText = 'flex-basis: 100%; height: 0; margin: 0.25rem 0;';
+            bar.appendChild(breakEl);
 
             const lbl = document.createElement('span');
             lbl.className = 'filter-label';
