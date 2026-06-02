@@ -3,7 +3,7 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 
-$file = 'ilmoitukset.jsonl';
+$file = 'harrasteryhmat.jsonl';
 
 // Luodaan tiedosto jos ei ole
 if (!file_exists($file)) {
@@ -21,7 +21,7 @@ if ($method === 'OPTIONS') {
 
 // --- GET: Listaus tai Poisto ---
 if ($method === 'GET') {
-    // 1. POISTO (Käyttäjä klikkaa sähköpostissa tai ruudulla olevaa linkkiä)
+    // 1. POISTO
     if ($action === 'delete') {
         $id = isset($_GET['id']) ? $_GET['id'] : '';
         $token = isset($_GET['token']) ? $_GET['token'] : '';
@@ -39,7 +39,7 @@ if ($method === 'GET') {
             if ($data && isset($data['id']) && $data['id'] === $id) {
                 if (isset($data['delete_token']) && $data['delete_token'] === $token) {
                     $found = true;
-                    continue; // Skipataan tämä rivi -> poistetaan
+                    continue; 
                 }
             }
             $newLines[] = $line;
@@ -47,32 +47,28 @@ if ($method === 'GET') {
 
         if ($found) {
             file_put_contents($file, implode(PHP_EOL, $newLines) . PHP_EOL);
-            echo "<h2>Ilmoitus poistettu onnistuneesti!</h2><p><a href='../index.html'>Palaa etusivulle</a></p>";
+            echo "<h2>Harrasteryhmä poistettu onnistuneesti!</h2><p><a href='../index.html'>Palaa etusivulle</a></p>";
         } else {
-            echo "<h2>Virhe: Ilmoitusta ei löytynyt tai token on virheellinen.</h2>";
+            echo "<h2>Virhe: Ryhmää ei löytynyt tai token on virheellinen.</h2>";
         }
         exit;
     }
 
-    // 2. LISTAUS (Haetaan JSON-data sanapilveä ja listausta varten)
+    // 2. LISTAUS
     if ($action === 'list') {
         header('Content-Type: application/json; charset=utf-8');
         $lines = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        $activePosts = [];
+        $activeGroups = [];
         $tagCounts = [];
 
         foreach ($lines as $line) {
             $data = json_decode($line, true);
             if (!$data) continue;
             
-            // Tässä voisi tarkistaa 7 päivän vanhentumisen, jätetään nyt yksinkertaiseksi (kaikki näytetään ellei poistettu)
-            
-            // Piilotetaan sähköpostit listauksesta paitsi ehkä yhdellä napilla JS-puolella
-            unset($data['delete_token']); // Ei ikinä palauteta tokenia listauksessa!
+            unset($data['delete_token']); 
 
-            $activePosts[] = $data;
+            $activeGroups[] = $data;
 
-            // Lasketaan sanapilveä varten
             if (isset($data['tagit']) && is_array($data['tagit'])) {
                 foreach ($data['tagit'] as $tag) {
                     if (!isset($tagCounts[$tag])) $tagCounts[$tag] = 0;
@@ -81,19 +77,18 @@ if ($method === 'GET') {
             }
         }
 
-        // Lajitellaan tagit suosituimmasta alkaen
         arsort($tagCounts);
 
         echo json_encode([
             "status" => "success",
-            "ilmoitukset" => array_reverse($activePosts), // Uusin ensin
+            "ryhmat" => array_reverse($activeGroups),
             "sanapilvi" => $tagCounts
         ]);
         exit;
     }
 }
 
-// --- POST: Uuden ilmoituksen luonti ---
+// --- POST: Uuden ryhmän luonti ---
 if ($method === 'POST') {
     header('Content-Type: application/json; charset=utf-8');
     
@@ -106,36 +101,23 @@ if ($method === 'POST') {
         exit;
     }
 
-    // Perusvalidoinnit ja puhdistus
-    $tyyppi = isset($input['tyyppi']) ? strip_tags($input['tyyppi']) : 'tarjoan';
     $otsikko = isset($input['otsikko']) ? strip_tags($input['otsikko']) : '';
     $kuvaus = isset($input['kuvaus']) ? strip_tags($input['kuvaus']) : '';
     $nimi = isset($input['nimi']) ? strip_tags($input['nimi']) : '';
     $yhteys = isset($input['yhteys']) ? strip_tags($input['yhteys']) : '';
     $tagit = isset($input['tagit']) && is_array($input['tagit']) ? array_map('strip_tags', $input['tagit']) : [];
 
-    // Uudet rakenteiset kentät (Wizard)
-    $intent = isset($input['intent']) ? strip_tags($input['intent']) : '';
-    $category = isset($input['category']) ? strip_tags($input['category']) : '';
-    $subCategory = isset($input['subCategory']) ? strip_tags($input['subCategory']) : '';
-    $actionParam = isset($input['action']) ? strip_tags($input['action']) : '';
-
     if (empty($otsikko) || empty($nimi)) {
         http_response_code(400);
-        echo json_encode(["status" => "error", "message" => "Otsikko ja nimi ovat pakollisia."]);
+        echo json_encode(["status" => "error", "message" => "Ryhmän nimi (otsikko) ja yhteyshenkilön nimi ovat pakollisia."]);
         exit;
     }
 
-    $id = uniqid('ilm_');
-    $deleteToken = bin2hex(random_bytes(16)); // Turvallinen satunnainen token
+    $id = uniqid('harr_');
+    $deleteToken = bin2hex(random_bytes(16)); 
 
     $newItem = [
         "id" => $id,
-        "tyyppi" => $tyyppi,
-        "intent" => $intent,
-        "category" => $category,
-        "subCategory" => $subCategory,
-        "action" => $actionParam,
         "otsikko" => $otsikko,
         "kuvaus" => $kuvaus,
         "nimi" => $nimi,
@@ -145,14 +127,13 @@ if ($method === 'POST') {
         "delete_token" => $deleteToken
     ];
 
-    // Tallennetaan JSON Lines -tiedostoon
     file_put_contents($file, json_encode($newItem, JSON_UNESCAPED_UNICODE) . PHP_EOL, FILE_APPEND | LOCK_EX);
 
-    $deleteUrl = "https://mediazoo.fi/laukaainfo-web/ilmoitukset-api.php?action=delete&id={$id}&token={$deleteToken}";
+    $deleteUrl = "https://mediazoo.fi/laukaainfo-web/harrasteryhmat-api.php?action=delete&id={$id}&token={$deleteToken}";
 
     echo json_encode([
         "status" => "success",
-        "message" => "Ilmoitus julkaistu onnistuneesti!",
+        "message" => "Harrasteryhmä julkaistu onnistuneesti!",
         "delete_url" => $deleteUrl
     ]);
     exit;
