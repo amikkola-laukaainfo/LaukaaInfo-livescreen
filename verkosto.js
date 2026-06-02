@@ -104,7 +104,82 @@ window.renderVerkostoData = function(tagi) {
             }
         })
         .catch(err => console.error('Virhe ladattaessa palveluverkoston dataa:', err));
+
+    // Haetaan samalla pikakatsaus ilmoituksista tälle tagille
+    renderPikakatsaus(tagi);
 };
+
+// --- PIKAKATSAUS: Näytetään 3 uusinta ilmoitusta ko. tagista ---
+function renderPikakatsaus(tagi) {
+    const box = document.getElementById('ilm-pikakatsaus');
+    if (!box) return;
+
+    box.style.display = 'block';
+    box.innerHTML = '<p style="color:#64748b; font-size:0.9rem;">⏳ Haetaan ilmoituksia...</p>';
+
+    fetch('https://mediazoo.fi/laukaainfo-web/ilmoitukset-api.php?action=list')
+        .then(r => r.json())
+        .then(data => {
+            if (data.status !== 'success') { box.style.display = 'none'; return; }
+
+            const kaikki = data.ilmoitukset || [];
+            // Suodatetaan tagin mukaan
+            const filtered = kaikki.filter(ilm =>
+                (ilm.tagit || []).includes(tagi) ||
+                (ilm.category || '') === tagi ||
+                (ilm.subCategory || '') === tagi
+            ).slice(0, 3); // Max 3
+
+            if (filtered.length === 0) {
+                box.style.display = 'none';
+                return;
+            }
+
+            const INTENT_EMOJI = {
+                tarvitsen_apua: '🤝', tarjoan_apua: '🛠', etsin_seuraa: '👥',
+                perustetaan_projekti: '🚀', tarjoan: '🛠', tarvitsen: '🤝'
+            };
+
+            let html = `
+                <div style="background: white; border: 1.5px solid #bae6fd; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,86,179,0.06);">
+                    <h4 style="color:#0369a1; margin: 0 0 1rem; font-size: 1rem;">
+                        📋 Viimeisimmät ilmoitukset aiheesta "<strong>${escHtml(tagLabel(tagi))}</strong>"
+                    </h4>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">`;
+
+            filtered.forEach(ilm => {
+                const emoji = INTENT_EMOJI[ilm.intent || ilm.tyyppi] || '📌';
+                const date = ilm.paivays ? ilm.paivays.substring(0, 10) : '';
+                html += `
+                    <div style="display: flex; gap: 0.75rem; padding: 0.75rem; background: #f8faff; border-radius: 10px; border: 1px solid #e2e8f0;">
+                        <span style="font-size:1.4rem; flex-shrink:0;">${emoji}</span>
+                        <div>
+                            <div style="font-weight:600; color:#1a1a2e; font-size:0.95rem;">${escHtml(ilm.otsikko || 'Ilmoitus')}</div>
+                            <div style="color:#64748b; font-size:0.8rem; margin-top:0.2rem;">${escHtml(ilm.nimi || '')}${date ? ' · ' + date : ''}</div>
+                        </div>
+                    </div>`;
+            });
+
+            html += `</div>
+                    <div style="text-align:right; margin-top:1rem;">
+                        <a href="ilmoitukset.html?tag=${encodeURIComponent(tagi)}"
+                           style="color:#0056b3; font-weight:600; font-size:0.9rem; text-decoration:none;">
+                           Näytä kaikki ${tagi}-ilmoitukset →
+                        </a>
+                    </div>
+                </div>`;
+
+            box.innerHTML = html;
+        })
+        .catch(() => { box.style.display = 'none'; });
+}
+
+function escHtml(str) {
+    return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function tagLabel(tag) {
+    return (tag || '').replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+}
 
 // --- SANAPILVI LOGIIKKA (Ilmoitukset API) ---
 function renderSanapilvi() {
