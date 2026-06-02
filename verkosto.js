@@ -2,8 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const verkostoContainer = document.getElementById('palveluverkosto-suositukset');
     if (!verkostoContainer) return;
 
-    // Ladataan oletuksena arvottu tagi
-    const defaultTags = ['tietokoneet', 'rakentaminen', 'musiikki'];
+    // Ladataan oletuksena arvottu tagi (käytetään oikeita tageja joilla on osumia)
+    const defaultTags = ['ravintola', 'hieronta', 'autokorjaamot'];
     const randomTag = defaultTags[Math.floor(Math.random() * defaultTags.length)];
     renderVerkostoData(randomTag);
 });
@@ -17,7 +17,7 @@ function renderVerkosto(data, tagi, container) {
 
     let html = `
         <div class="verkosto-header" style="text-align: center; margin-bottom: 2rem;">
-            <h2 style="color: #0a2540; margin-bottom: 0.5rem;">🧠 Palveluverkoston suositukset: ${verkosto.otsikko}</h2>
+            <h2 style="color: #0a2540; margin-bottom: 0.5rem;">🤝 Palveluverkoston suositukset: ${verkosto.otsikko}</h2>
             <p style="color: #4a5568;">Saattaisit olla kiinnostunut myös näistä paikallisista toimijoista ja mahdollisuuksista.</p>
         </div>
         <div class="verkosto-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
@@ -25,14 +25,25 @@ function renderVerkosto(data, tagi, container) {
 
     // Yritykset
     if (verkosto.yritykset && verkosto.yritykset.length > 0) {
+        const searchUrl = `koko-laukaa.html?tag=${encodeURIComponent(tagi)}`;
         html += `<div class="verkosto-kategoria" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
             <h3 style="color: #0056b3; margin-bottom: 1rem; font-size: 1.2rem;">🏢 Yritykset</h3>
             <ul style="list-style: none; padding: 0; margin: 0;">`;
         verkosto.yritykset.forEach(id => {
             const ent = entities[id];
-            if (ent) html += `<li style="margin-bottom: 0.5rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;"><strong>${ent.nimi}</strong><br><small style="color: #666;">${ent.kuvaus}</small></li>`;
+            if (!ent) return;
+            const slug = ent.id ? ent.id.replace('yritys_', '') : '';
+            const cardUrl = ent.slug ? `yrityskortti.html?id=${ent.slug}` : `koko-laukaa.html?tag=${encodeURIComponent(tagi)}`;
+            html += `<li style="margin-bottom: 0.5rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;">
+                <a href="${cardUrl}" style="font-weight:bold; color:#0056b3; text-decoration:none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${ent.nimi}</a>
+                <br><small style="color: #666;">${ent.kuvaus || ''}</small>
+            </li>`;
         });
-        html += `</ul></div>`;
+        html += `</ul>
+            <a href="${searchUrl}" style="display:inline-block; margin-top:1rem; background:#0056b3; color:white; padding:0.5rem 1rem; border-radius:8px; text-decoration:none; font-size:0.85rem; font-weight:600; transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+                🔍 Katso kaikki aiheesta "${verkosto.otsikko}" →
+            </a>
+        </div>`;
     }
 
     // Tarjoaa apua

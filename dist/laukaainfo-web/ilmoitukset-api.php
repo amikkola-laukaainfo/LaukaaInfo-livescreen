@@ -64,8 +64,14 @@ if ($method === 'GET') {
         foreach ($lines as $line) {
             $data = json_decode($line, true);
             if (!$data) continue;
-            
-            // Tässä voisi tarkistaa 7 päivän vanhentumisen, jätetään nyt yksinkertaiseksi (kaikki näytetään ellei poistettu)
+            // 21 päivän vanhentuminen
+            if (isset($data['paivays'])) {
+                $postDate = strtotime($data['paivays']);
+                $ageInDays = (time() - $postDate) / (60 * 60 * 24);
+                if ($ageInDays > 21) {
+                    continue; // Piilotetaan yli 21 päivää vanhat
+                }
+            }
             
             // Piilotetaan sähköpostit listauksesta paitsi ehkä yhdellä napilla JS-puolella
             unset($data['delete_token']); // Ei ikinä palauteta tokenia listauksessa!
