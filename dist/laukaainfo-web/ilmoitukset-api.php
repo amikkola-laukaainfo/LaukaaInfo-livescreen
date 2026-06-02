@@ -114,6 +114,12 @@ if ($method === 'POST') {
     $yhteys = isset($input['yhteys']) ? strip_tags($input['yhteys']) : '';
     $tagit = isset($input['tagit']) && is_array($input['tagit']) ? array_map('strip_tags', $input['tagit']) : [];
 
+    // Uudet rakenteiset kentät (Wizard)
+    $intent = isset($input['intent']) ? strip_tags($input['intent']) : '';
+    $category = isset($input['category']) ? strip_tags($input['category']) : '';
+    $subCategory = isset($input['subCategory']) ? strip_tags($input['subCategory']) : '';
+    $actionParam = isset($input['action']) ? strip_tags($input['action']) : '';
+
     if (empty($otsikko) || empty($nimi)) {
         http_response_code(400);
         echo json_encode(["status" => "error", "message" => "Otsikko ja nimi ovat pakollisia."]);
@@ -126,6 +132,10 @@ if ($method === 'POST') {
     $newItem = [
         "id" => $id,
         "tyyppi" => $tyyppi,
+        "intent" => $intent,
+        "category" => $category,
+        "subCategory" => $subCategory,
+        "action" => $actionParam,
         "otsikko" => $otsikko,
         "kuvaus" => $kuvaus,
         "nimi" => $nimi,
