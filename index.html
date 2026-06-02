@@ -276,6 +276,74 @@
 
     <main>
         <!-- Uutistikkeri / Swiper Slider -->
+
+        <section id="search-section" class="search-section bg-full-blue" style="padding: 2.5rem 0 3.5rem;">
+            <div class="section-container">
+                <div class="section-header" style="margin-bottom: 2rem;">
+                    <h2 style="color: #0a2540;" data-i18n="search_advanced_title">Tarkempi haku</h2>
+                    <p style="color: #4a5568;" data-i18n="search_advanced_desc">Etsi tiettyä toimijaa, kategoriaa tai
+                        tutustu taajamien tarjontaan.</p>
+                </div>
+
+                <div class="hero-split-paths"
+                    style="display: flex; flex-direction: column; gap: 2.5rem; align-items: center; text-align: center; padding: 0 1rem; margin: 0 auto; max-width: 1000px;">
+
+                    <div class="hero-path search-path"
+                        style="background: white; border: 1px solid #d1e2f3; box-shadow: 0 10px 25px rgba(0,0,0,0.05); position: relative; overflow: visible;">
+                        <!-- Haalea taustakuva -->
+                        <div
+                            style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: url('kuvia/paivystavat.jpg'); background-size: cover; background-position: center; opacity: 0.15; z-index: 0; border-radius: inherit;">
+                        </div>
+
+                        <div class="hero-path-content" style="padding: 3.5rem 2rem; position: relative; z-index: 1;">
+                            <h3 style="color: #0a2540; font-size: 1.8rem; margin-bottom: 1.5rem;"
+                                data-i18n="search_company_title">Etsi yritystä tai palvelua</h3>
+                            <div class="main-search-box"
+                                style="margin: 0 auto; box-shadow: none; padding: 0; max-width: 600px; width: 100%;">
+                                <div class="search-input-wrapper" style="border: 1px solid #d1e2f3; background: white;">
+                                    <input type="text" id="company-search" data-i18n="[placeholder]search_placeholder"
+                                        placeholder="Etsi esim. parturi, digimedia" aria-label="Yrityshaku"
+                                        autocomplete="off">
+                                    <ul id="search-suggestions" class="search-suggestions"></ul>
+                                    <button id="search-btn" class="btn-search" data-i18n="btn_search">Hae</button>
+                                </div>
+                                <div class="search-options" style="margin-top: 1.25rem; text-align: center;">
+                                    <label class="checkbox-container" style="color: #4a5568; font-weight: 500;"
+                                        data-i18n="search_include_rss">
+                                        <input type="checkbox" id="include-rss">
+                                        <span class="checkmark"></span>
+                                        Tapahtumat ja tiedotteet
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hero-path browse-path"
+                        style="background: white; border: 1px solid #d1e2f3; box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
+                        <div class="hero-path-content" style="padding: 3.5rem 2rem;">
+                            <h3 style="color: #0a2540; font-size: 1.8rem; margin-bottom: 1.5rem;"
+                                data-i18n="hero_browse_title">Selaa taajamia</h3>
+                            <div class="homepage-region-selector"
+                                style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0.8rem;">
+                                <a href="laukaa.html" class="region-pill"
+                                    style="background: #0056b3; color: white; border-color: #0056b3;">Laukaa kk</a>
+                                <a href="leppavesi.html" class="region-pill"
+                                    style="background: #0056b3; color: white; border-color: #0056b3;">Leppävesi</a>
+                                <a href="lievestuore.html" class="region-pill"
+                                    style="background: #0056b3; color: white; border-color: #0056b3;">Lievestuore</a>
+                                <a href="vehnia.html" class="region-pill"
+                                    style="background: #0056b3; color: white; border-color: #0056b3;">Vehniä</a>
+                                <a href="vihtavuori.html" class="region-pill"
+                                    style="background: #0056b3; color: white; border-color: #0056b3;">Vihtavuori</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
         <section class="ticker-section" style="background-color: #f8fbff; padding: 0; margin-top: 2rem; width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;">
             <style>
                 .slider-container {
@@ -435,122 +503,6 @@
                     });
                 });
             </script>
-        </section>
-
-        <!-- Yhteisöllisyys / Welcome Hub -->
-        <section class="community-section bg-full-white">
-            <div class="section-container">
-                <div class="section-header">
-                    <h2 data-i18n="community_title">Osallistu ja pysy ajan tasalla</h2>
-                    <p data-i18n="community_desc">LaukaaInfo kokoaa yhteen keskustelut, videot ja tuoreimmat
-                        kuntatiedotteet.</p>
-                </div>
-
-                <div class="feature-grid">
-                    <a href="https://www.youtube.com/@laukaainfo" target="_blank" class="feature-card card-youtube">
-                        <div class="feature-card-img" style="background-image: url('kuvia/youtube.jpg');"></div>
-                        <div class="feature-card-body">
-                            <h3 data-i18n="feature_youtube_title">Laukaa YouTube</h3>
-                            <p data-i18n="feature_youtube_desc">Videoita, tapahtumia ja tunnelmia suoraan Laukaasta.</p>
-                            <span class="btn-text" data-i18n="feature_youtube_btn">Katso videot »</span>
-                        </div>
-                    </a>
-                    <a href="https://www.facebook.com/groups/892675230270311" target="_blank"
-                        class="feature-card card-facebook">
-                        <div class="feature-card-img" style="background-image: url('kuvia/keskustelu.jpg');"></div>
-                        <div class="feature-card-body">
-                            <h3 data-i18n="feature_fb_title">Keskustelu</h3>
-                            <p data-i18n="feature_fb_desc">Liity Laukaan omaan Facebook-ryhmään ja osallistu.</p>
-                            <span class="btn-text" data-i18n="feature_fb_btn">Liity ryhmään »</span>
-                        </div>
-                    </a>
-                    <a href="ajankohtaista.html#news-card" class="feature-card card-news">
-                        <div class="feature-card-img" style="background-image: url('kuvia/ajankohtaista.jpg');"></div>
-                        <div class="feature-card-body">
-                            <h3 data-i18n="feature_news_title">Ajankohtaista</h3>
-                            <p data-i18n="feature_news_desc">Tärkeimmät uutiset ja kuntatiedotteet kootusti.</p>
-                            <span class="btn-text" data-i18n="feature_news_btn">Lue uutiset »</span>
-                        </div>
-                    </a>
-                    <a href="#toggle-feed-btn" class="feature-card card-feed"
-                        onclick="document.getElementById('toggle-feed-btn').click();">
-                        <div class="feature-card-img" style="background-image: url('kuvia/syote.jpg');"></div>
-                        <div class="feature-card-body">
-                            <h3 data-i18n="feature_feed_title">Laukaa-syöte</h3>
-                            <p data-i18n="feature_feed_desc">Seuraa asukkaiden ja yritysten omia julkaisuja.</p>
-                            <span class="btn-text" data-i18n="feature_feed_btn">Avaa syöte »</span>
-                        </div>
-                    </a>
-                </div>
-
-            </div>
-        </section>
-
-        <section id="search-section" class="search-section bg-full-blue" style="padding: 2.5rem 0 3.5rem;">
-            <div class="section-container">
-                <div class="section-header" style="margin-bottom: 2rem;">
-                    <h2 style="color: #0a2540;" data-i18n="search_advanced_title">Tarkempi haku</h2>
-                    <p style="color: #4a5568;" data-i18n="search_advanced_desc">Etsi tiettyä toimijaa, kategoriaa tai
-                        tutustu taajamien tarjontaan.</p>
-                </div>
-
-                <div class="hero-split-paths"
-                    style="display: flex; flex-direction: column; gap: 2.5rem; align-items: center; text-align: center; padding: 0 1rem; margin: 0 auto; max-width: 1000px;">
-
-                    <div class="hero-path search-path"
-                        style="background: white; border: 1px solid #d1e2f3; box-shadow: 0 10px 25px rgba(0,0,0,0.05); position: relative; overflow: visible;">
-                        <!-- Haalea taustakuva -->
-                        <div
-                            style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: url('kuvia/paivystavat.jpg'); background-size: cover; background-position: center; opacity: 0.15; z-index: 0; border-radius: inherit;">
-                        </div>
-
-                        <div class="hero-path-content" style="padding: 3.5rem 2rem; position: relative; z-index: 1;">
-                            <h3 style="color: #0a2540; font-size: 1.8rem; margin-bottom: 1.5rem;"
-                                data-i18n="search_company_title">Etsi yritystä tai palvelua</h3>
-                            <div class="main-search-box"
-                                style="margin: 0 auto; box-shadow: none; padding: 0; max-width: 600px; width: 100%;">
-                                <div class="search-input-wrapper" style="border: 1px solid #d1e2f3; background: white;">
-                                    <input type="text" id="company-search" data-i18n="[placeholder]search_placeholder"
-                                        placeholder="Etsi esim. parturi, digimedia" aria-label="Yrityshaku"
-                                        autocomplete="off">
-                                    <ul id="search-suggestions" class="search-suggestions"></ul>
-                                    <button id="search-btn" class="btn-search" data-i18n="btn_search">Hae</button>
-                                </div>
-                                <div class="search-options" style="margin-top: 1.25rem; text-align: center;">
-                                    <label class="checkbox-container" style="color: #4a5568; font-weight: 500;"
-                                        data-i18n="search_include_rss">
-                                        <input type="checkbox" id="include-rss">
-                                        <span class="checkmark"></span>
-                                        Tapahtumat ja tiedotteet
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="hero-path browse-path"
-                        style="background: white; border: 1px solid #d1e2f3; box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
-                        <div class="hero-path-content" style="padding: 3.5rem 2rem;">
-                            <h3 style="color: #0a2540; font-size: 1.8rem; margin-bottom: 1.5rem;"
-                                data-i18n="hero_browse_title">Selaa taajamia</h3>
-                            <div class="homepage-region-selector"
-                                style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0.8rem;">
-                                <a href="laukaa.html" class="region-pill"
-                                    style="background: #0056b3; color: white; border-color: #0056b3;">Laukaa kk</a>
-                                <a href="leppavesi.html" class="region-pill"
-                                    style="background: #0056b3; color: white; border-color: #0056b3;">Leppävesi</a>
-                                <a href="lievestuore.html" class="region-pill"
-                                    style="background: #0056b3; color: white; border-color: #0056b3;">Lievestuore</a>
-                                <a href="vehnia.html" class="region-pill"
-                                    style="background: #0056b3; color: white; border-color: #0056b3;">Vehniä</a>
-                                <a href="vihtavuori.html" class="region-pill"
-                                    style="background: #0056b3; color: white; border-color: #0056b3;">Vihtavuori</a>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
         </section>
 
         <section id="palveluverkosto-section" class="bg-full-gray" style="padding: 3rem 0; margin-bottom: 2rem;">
@@ -805,7 +757,53 @@
             </div> <!-- End section-container -->
         </section>
 
+        <section class="community-section bg-full-white">
+            <div class="section-container">
+                <div class="section-header">
+                    <h2 data-i18n="community_title">Osallistu ja pysy ajan tasalla</h2>
+                    <p data-i18n="community_desc">LaukaaInfo kokoaa yhteen keskustelut, videot ja tuoreimmat
+                        kuntatiedotteet.</p>
+                </div>
 
+                <div class="feature-grid">
+                    <a href="https://www.youtube.com/@laukaainfo" target="_blank" class="feature-card card-youtube">
+                        <div class="feature-card-img" style="background-image: url('kuvia/youtube.jpg');"></div>
+                        <div class="feature-card-body">
+                            <h3 data-i18n="feature_youtube_title">Laukaa YouTube</h3>
+                            <p data-i18n="feature_youtube_desc">Videoita, tapahtumia ja tunnelmia suoraan Laukaasta.</p>
+                            <span class="btn-text" data-i18n="feature_youtube_btn">Katso videot »</span>
+                        </div>
+                    </a>
+                    <a href="https://www.facebook.com/groups/892675230270311" target="_blank"
+                        class="feature-card card-facebook">
+                        <div class="feature-card-img" style="background-image: url('kuvia/keskustelu.jpg');"></div>
+                        <div class="feature-card-body">
+                            <h3 data-i18n="feature_fb_title">Keskustelu</h3>
+                            <p data-i18n="feature_fb_desc">Liity Laukaan omaan Facebook-ryhmään ja osallistu.</p>
+                            <span class="btn-text" data-i18n="feature_fb_btn">Liity ryhmään »</span>
+                        </div>
+                    </a>
+                    <a href="ajankohtaista.html#news-card" class="feature-card card-news">
+                        <div class="feature-card-img" style="background-image: url('kuvia/ajankohtaista.jpg');"></div>
+                        <div class="feature-card-body">
+                            <h3 data-i18n="feature_news_title">Ajankohtaista</h3>
+                            <p data-i18n="feature_news_desc">Tärkeimmät uutiset ja kuntatiedotteet kootusti.</p>
+                            <span class="btn-text" data-i18n="feature_news_btn">Lue uutiset »</span>
+                        </div>
+                    </a>
+                    <a href="#toggle-feed-btn" class="feature-card card-feed"
+                        onclick="document.getElementById('toggle-feed-btn').click();">
+                        <div class="feature-card-img" style="background-image: url('kuvia/syote.jpg');"></div>
+                        <div class="feature-card-body">
+                            <h3 data-i18n="feature_feed_title">Laukaa-syöte</h3>
+                            <p data-i18n="feature_feed_desc">Seuraa asukkaiden ja yritysten omia julkaisuja.</p>
+                            <span class="btn-text" data-i18n="feature_feed_btn">Avaa syöte »</span>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+        </section>
 
         <section id="feed-section" class="feed-accordion-section bg-full-white"
             style="padding: 3rem 0; margin-bottom: 0;">
@@ -835,9 +833,35 @@
             </div>
         </section>
 
+        <section class="gate-section bg-full-white">
+            <div class="gate-container">
+                <div class="gate-header">
+                    <h2 data-i18n="gate_title">Mitä haluat tehdä?</h2>
+                    <p data-i18n="gate_desc">Valitse sinulle sopiva tapa näkyä Laukaassa</p>
+                </div>
+                <div class="gate-grid">
+                    <!-- Path 1: Feed Path -->
+                    <a href="ilmoittaudu.html" class="path-card feed-path">
+                        <div class="path-badge">Suosittu</div>
+                        <div class="path-icon">📢</div>
+                        <h3 data-i18n="gate_feed_title">Julkaise ilmoitus</h3>
+                        <p data-i18n="gate_feed_desc">Luo uutisia, tarjouksia tai tapahtumia välittömästi Laukaan
+                            syötteeseen. Aloita maksutta (3 julkaisua).</p>
+                        <div class="path-cta" data-i18n="btn_start_now">Aloita tästä &raquo;</div>
+                    </a>
 
+                    <!-- Path 2: Brand Path -->
+                    <a href="lisaa-yritys.html" class="path-card brand-path">
+                        <div class="path-icon">🏢</div>
+                        <h3 data-i18n="gate_brand_title">Kasvata brändiäsi</h3>
+                        <p data-i18n="gate_brand_desc">Hanki pysyvä näkyvyys, oma yritysprofiili ja suora yhteys
+                            asiakkaisiin. Alk. 15 €/kk.</p>
+                        <div class="path-cta" data-i18n="btn_read_more">Lue lisää &raquo;</div>
+                    </a>
+                </div>
+            </div>
+        </section>
 
-        <!-- Jakolinkki generaattori -->
         <section class="share-generator-section bg-full-blue">
             <div class="share-generator-card">
                 <h2 data-i18n="share_title">Luo jakolinkki LaukaaInfoon</h2>
@@ -889,36 +913,6 @@
                     </div>
                     <button id="show-qr-btn" class="btn-qr" data-i18n="btn_qr">Näytä QR-koodi</button>
                     <div id="qrcode-container" class="qr-container" style="display: none;"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Selection Gate: Feed vs Brand -->
-        <section class="gate-section bg-full-white">
-            <div class="gate-container">
-                <div class="gate-header">
-                    <h2 data-i18n="gate_title">Mitä haluat tehdä?</h2>
-                    <p data-i18n="gate_desc">Valitse sinulle sopiva tapa näkyä Laukaassa</p>
-                </div>
-                <div class="gate-grid">
-                    <!-- Path 1: Feed Path -->
-                    <a href="ilmoittaudu.html" class="path-card feed-path">
-                        <div class="path-badge">Suosittu</div>
-                        <div class="path-icon">📢</div>
-                        <h3 data-i18n="gate_feed_title">Julkaise ilmoitus</h3>
-                        <p data-i18n="gate_feed_desc">Luo uutisia, tarjouksia tai tapahtumia välittömästi Laukaan
-                            syötteeseen. Aloita maksutta (3 julkaisua).</p>
-                        <div class="path-cta" data-i18n="btn_start_now">Aloita tästä &raquo;</div>
-                    </a>
-
-                    <!-- Path 2: Brand Path -->
-                    <a href="lisaa-yritys.html" class="path-card brand-path">
-                        <div class="path-icon">🏢</div>
-                        <h3 data-i18n="gate_brand_title">Kasvata brändiäsi</h3>
-                        <p data-i18n="gate_brand_desc">Hanki pysyvä näkyvyys, oma yritysprofiili ja suora yhteys
-                            asiakkaisiin. Alk. 15 €/kk.</p>
-                        <div class="path-cta" data-i18n="btn_read_more">Lue lisää &raquo;</div>
-                    </a>
                 </div>
             </div>
         </section>
