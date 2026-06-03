@@ -152,7 +152,7 @@ window.LkiModal = (function() {
         }
 
         if (company.service_mode === 'SERVICE_AREA') {
-            badgeContainer.innerHTML += '<span class="lki-badge service-area" style="background: #fff3e0; color: #e65100; border: 1px solid #ffccbc;">🟠 PALVELEE ALUEELLA</span>';
+            badgeContainer.innerHTML += '<span class="lki-badge service-area" style="background: #e65100; color: #ffffff; border: 1px solid #bf4500;">🟠 PALVELEE ALUEELLA</span>';
         }
 
         // Basic Info

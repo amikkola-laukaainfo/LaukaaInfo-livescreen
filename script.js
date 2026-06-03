@@ -683,7 +683,7 @@ function addMarkersToMap(companies, forceShowAll = false) {
                         <h4 style="margin: 0 0 5px 0; color: #0056b3;">${company.nimi}</h4>
                         <div style="font-size: 0.8rem; margin-bottom: 8px; color: #666; display: flex; align-items: center; gap: 5px; flex-wrap: wrap;">
                             ${company.kategoria}
-                            ${(company.service_mode === 'SERVICE_AREA' || (company.service_radius && parseFloat(company.service_radius) > 0)) ? `<span class="service-area-badge" style="background: #fff3e0; color: #e65100; padding: 1px 6px; border-radius: 10px; font-size: 0.65rem; border: 1px solid #ffccbc; font-weight: bold;">🟠 ${i18n.t('label_serves_area')}</span>` : ''}
+                            ${(company.service_mode === 'SERVICE_AREA' || (company.service_radius && parseFloat(company.service_radius) > 0)) ? `<span class="service-area-badge" style="background: #e65100; color: #ffffff; padding: 1px 6px; border-radius: 10px; font-size: 0.65rem; border: 1px solid #bf4500; font-weight: bold;">🟠 ${i18n.t('label_serves_area')}</span>` : ''}
                             ${(function() {
                                 let icons = '';
                                 const combined = `${company.tags || ''},${company.palvelutapa || ''}`.toLowerCase();
@@ -2424,7 +2424,7 @@ function renderCatalog(companies) {
                 </div>
                 <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                     <span class="cat-tag">${displayedCat}</span>
-                    ${company.service_mode === 'SERVICE_AREA' ? '<span class="service-area-badge" style="background: #fff3e0; color: #e65100; padding: 1px 6px; border-radius: 10px; font-size: 0.65rem; border: 1px solid #ffccbc; font-weight: bold; display: inline-block;">🟠 PALVELEE ALUEELLA</span>' : ''}
+                    ${company.service_mode === 'SERVICE_AREA' ? '<span class="service-area-badge" style="background: #e65100; color: #ffffff; padding: 1px 6px; border-radius: 10px; font-size: 0.65rem; border: 1px solid #bf4500; font-weight: bold; display: inline-block;">🟠 PALVELEE ALUEELLA</span>' : ''}
                 </div>
             `;
 
