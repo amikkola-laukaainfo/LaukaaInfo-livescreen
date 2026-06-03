@@ -2261,9 +2261,10 @@ footer {
     .hamburger {
         display: none !important;
     }
-
     .desktop-nav {
-        display: block !important;
+        display: flex !important;
+        justify-content: center;
+        flex: 1;
     }
 }
 
