@@ -267,7 +267,15 @@
                 return;
             }
             if (selections[step.id] !== undefined) {
-                out[step.id] = selections[step.id];
+                let sel = selections[step.id];
+                if (step.hide_results && sel) {
+                    if (Array.isArray(sel)) {
+                        sel = sel.map(s => Object.assign({}, s, { hide_results: true }));
+                    } else if (typeof sel === 'object') {
+                        sel = Object.assign({}, sel, { hide_results: true });
+                    }
+                }
+                out[step.id] = sel;
             }
         });
 

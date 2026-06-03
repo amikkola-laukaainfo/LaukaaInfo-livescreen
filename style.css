@@ -7142,3 +7142,17 @@ footer {
     transition: background 0.3s ease;
 }
 
+
+/* === Tarkempi haku: Desktop full-width row layout === */
+@media (min-width: 900px) {
+    .hero-split-paths {
+        flex-direction: row !important;
+        align-items: stretch !important;
+        gap: 1.5rem !important;
+    }
+    .hero-split-paths .hero-path {
+        flex: 1 1 0;
+        min-width: 0;
+    }
+}
+

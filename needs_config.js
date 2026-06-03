@@ -13,10 +13,10 @@ const NEEDS_CONFIG = {
                 "hide_results": true,
                 "question": { "fi": "Millaista hääjuhlaa suunnittelette?", "en": "What kind of wedding are you planning?" },
                 "options": [
-                    { "id": "OPT_WED_TRADITIONAL", "label": { "fi": "Perinteiset häät", "en": "Traditional Wedding" }, "sub_context": "perinteiset häät", "tags": ["häät"], "intent_codes": ["EVT_WEDDING"] },
-                    { "id": "OPT_WED_SMALL", "label": { "fi": "Pienet häät / Intiimi juhla", "en": "Small Wedding / Intimate Celebration" }, "sub_context": "pienet häät", "tags": ["häät"], "intent_codes": ["EVT_WEDDING"] },
-                    { "id": "OPT_WED_THEME", "label": { "fi": "Teemahäät / Modernit häät", "en": "Theme Wedding / Modern Wedding" }, "sub_context": "teemahäät", "tags": ["häät"], "intent_codes": ["EVT_WEDDING"] },
-                    { "id": "OPT_WED_CEREMONY", "label": { "fi": "Vain vihkiminen ja kahvitus", "en": "Ceremony and Coffee Reception only" }, "sub_context": "vihkiminen", "tags": ["häät"], "intent_codes": ["EVT_WEDDING"] }
+                    { "id": "OPT_WED_TRADITIONAL", "label": { "fi": "Perinteiset häät", "en": "Traditional Wedding" }, "sub_context": "perinteiset häät" },
+                    { "id": "OPT_WED_SMALL", "label": { "fi": "Pienet häät / Intiimi juhla", "en": "Small Wedding / Intimate Celebration" }, "sub_context": "pienet häät" },
+                    { "id": "OPT_WED_THEME", "label": { "fi": "Teemahäät / Modernit häät", "en": "Theme Wedding / Modern Wedding" }, "sub_context": "teemahäät" },
+                    { "id": "OPT_WED_CEREMONY", "label": { "fi": "Vain vihkiminen ja kahvitus", "en": "Ceremony and Coffee Reception only" }, "sub_context": "vihkiminen" }
                 ]
             },
             {
@@ -83,7 +83,7 @@ const NEEDS_CONFIG = {
                 "options": [
                     { "id": "OPT_CORP_PARTY_XMAS", "label": { "fi": "Pikkujoulut", "en": "Christmas Party" }, "sub_context": "pikkujoulut" },
                     { "id": "OPT_CORP_PARTY_SUMMER", "label": { "fi": "Henkilöstöjuhlat / Kesäjuhlat", "en": "Staff Party / Summer Party" }, "sub_context": "henkilöstöjuhlat" },
-                    { "id": "OPT_CORP_PARTY_TEAM", "label": { "fi": "Virkistyspäivä / Tyky-päivä", "en": "Team Day / Wellness Day" }, "sub_context": "tyky-paiva", "tags": ["ohjelmapalvelut"], "intent_codes": ["ENT_PROGRAM"] }
+                    { "id": "OPT_CORP_PARTY_TEAM", "label": { "fi": "Virkistyspäivä / Tyky-päivä", "en": "Team Day / Wellness Day" }, "sub_context": "tyky-paiva" }
                 ]
             },
             {
@@ -180,9 +180,9 @@ const NEEDS_CONFIG = {
                 "hide_results": true,
                 "question": { "fi": "Kenen juhlia järjestetään?", "en": "Who is the celebration for?" },
                 "options": [
-                    { "id": "OPT_BDAY_KIDS", "label": { "fi": "Lasten syntymäpäivät", "en": "Children's birthday" }, "sub_context": "lasten synttärit", "tags": ["lapset"], "intent_codes": ["EVT_BIRTHDAY_KIDS"] },
-                    { "id": "OPT_BDAY_ADULTS", "label": { "fi": "Nuorten / Aikuisten juhlat", "en": "Teen / Adult party" }, "sub_context": "aikuisten synttärit", "require_fits_for": { "key": "events-and-celebrations", "min": 60 }, "capacity_req": 1, "intent_codes": ["EVT_BIRTHDAY_ADULTS"] },
-                    { "id": "OPT_BDAY_FAMILY", "label": { "fi": "Pyöreät vuodet / Sukujuhlat", "en": "Milestone birthday / Family celebration" }, "sub_context": "sukujuhlat", "require_fits_for": { "key": "events-and-celebrations", "min": 60 }, "capacity_req": 1, "intent_codes": ["EVT_BIRTHDAY_FAMILY"] }
+                    { "id": "OPT_BDAY_KIDS", "label": { "fi": "Lasten syntymäpäivät", "en": "Children's birthday" }, "sub_context": "lasten synttärit" },
+                    { "id": "OPT_BDAY_ADULTS", "label": { "fi": "Nuorten / Aikuisten juhlat", "en": "Teen / Adult party" }, "sub_context": "aikuisten synttärit", "require_fits_for": { "key": "events-and-celebrations", "min": 60 } },
+                    { "id": "OPT_BDAY_FAMILY", "label": { "fi": "Pyöreät vuodet / Sukujuhlat", "en": "Milestone birthday / Family celebration" }, "sub_context": "sukujuhlat", "require_fits_for": { "key": "events-and-celebrations", "min": 60 } }
                 ]
             },
             {
