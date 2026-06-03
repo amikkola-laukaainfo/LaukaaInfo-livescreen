@@ -801,6 +801,10 @@
             "type": "area",
             "name": "Vihtavuori"
         },
+        "nodelink-LAPSET": {
+            "type": "nodelink",
+            "name": "LAPSET"
+        },
         "company-269": {
             "type": "company",
             "name": "Terveys- ja hyvinvointipalvelu Riina Raitio",
@@ -1767,10 +1771,6 @@
         "nodelink-MATKAILU": {
             "type": "nodelink",
             "name": "MATKAILU"
-        },
-        "nodelink-LAPSET": {
-            "type": "nodelink",
-            "name": "LAPSET"
         },
         "company-103": {
             "type": "company",
@@ -3266,15 +3266,6 @@
             "lon": 25.931743,
             "address": "Niementie 21, 41330 Laukaa"
         },
-        "company-243": {
-            "type": "company",
-            "name": "Laukaan Tupaswilla Oy",
-            "category": "Ruokailu",
-            "package": "perus",
-            "lat": 62.458337,
-            "lon": 25.943189,
-            "address": "Äijäläntie 202, 41370 Laukaa"
-        },
         "company-244": {
             "type": "company",
             "name": "Maatila Kovanen",
@@ -4519,6 +4510,11 @@
         {
             "from": "company-270",
             "to": "nodelink-CATERING",
+            "relation": "links_to"
+        },
+        {
+            "from": "company-270",
+            "to": "nodelink-LAPSET",
             "relation": "links_to"
         },
         {
@@ -12261,340 +12257,6 @@
             "relation": "links_to"
         },
         {
-            "from": "company-243",
-            "to": "intent-VENUE_PARTY",
-            "relation": "offers",
-            "weight": 96
-        },
-        {
-            "from": "company-243",
-            "to": "intent-EVT_CORPORATE",
-            "relation": "offers",
-            "weight": 92
-        },
-        {
-            "from": "company-243",
-            "to": "intent-WELLBEING_HEALTH",
-            "relation": "offers",
-            "weight": 88
-        },
-        {
-            "from": "company-243",
-            "to": "intent-EVT_WEDDING",
-            "relation": "offers",
-            "weight": 86
-        },
-        {
-            "from": "company-243",
-            "to": "intent-VENUE_MEETING",
-            "relation": "offers",
-            "weight": 84
-        },
-        {
-            "from": "company-243",
-            "to": "intent-ENT_PROGRAM",
-            "relation": "offers",
-            "weight": 82
-        },
-        {
-            "from": "company-243",
-            "to": "intent-EVT_MEMORIAL",
-            "relation": "offers",
-            "weight": 76
-        },
-        {
-            "from": "company-243",
-            "to": "intent-VENUE_ACCOMMODATION",
-            "relation": "offers",
-            "weight": 62
-        },
-        {
-            "from": "company-243",
-            "to": "group-häät",
-            "relation": "fits_for",
-            "weight": 35
-        },
-        {
-            "from": "company-243",
-            "to": "group-yritysjuhlat",
-            "relation": "fits_for",
-            "weight": 35
-        },
-        {
-            "from": "company-243",
-            "to": "group-kokoukset",
-            "relation": "fits_for",
-            "weight": 35
-        },
-        {
-            "from": "company-243",
-            "to": "group-vapaa-aika",
-            "relation": "fits_for",
-            "weight": 35
-        },
-        {
-            "from": "company-243",
-            "to": "group-events-and-celebrations",
-            "relation": "fits_for",
-            "weight": 96
-        },
-        {
-            "from": "company-243",
-            "to": "group-business-events",
-            "relation": "fits_for",
-            "weight": 94
-        },
-        {
-            "from": "company-243",
-            "to": "group-funerals-and-memorials",
-            "relation": "fits_for",
-            "weight": 78
-        },
-        {
-            "from": "company-243",
-            "to": "group-cottage-services",
-            "relation": "fits_for",
-            "weight": 18
-        },
-        {
-            "from": "company-243",
-            "to": "group-startup-services",
-            "relation": "fits_for",
-            "weight": 84
-        },
-        {
-            "from": "company-243",
-            "to": "group-business-growth",
-            "relation": "fits_for",
-            "weight": 20
-        },
-        {
-            "from": "company-243",
-            "to": "group-wellbeing-and-beauty",
-            "relation": "fits_for",
-            "weight": 88
-        },
-        {
-            "from": "company-243",
-            "to": "group-accommodation",
-            "relation": "fits_for",
-            "weight": 96
-        },
-        {
-            "from": "company-243",
-            "to": "group-service-partner",
-            "relation": "fits_for",
-            "weight": 40
-        },
-        {
-            "from": "company-243",
-            "to": "group-liikunta-ja-vapaaaika",
-            "relation": "fits_for",
-            "weight": 82
-        },
-        {
-            "from": "company-243",
-            "to": "group-family-and-children",
-            "relation": "fits_for",
-            "weight": 44
-        },
-        {
-            "from": "company-243",
-            "to": "region-laukaa",
-            "relation": "located_in"
-        },
-        {
-            "from": "company-243",
-            "to": "region-kuusa",
-            "relation": "located_in"
-        },
-        {
-            "from": "company-243",
-            "to": "region-keski-suomi",
-            "relation": "located_in"
-        },
-        {
-            "from": "company-243",
-            "to": "nodelink-JUHLATILA",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-243",
-            "to": "nodelink-MAJOITUS",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-243",
-            "to": "nodelink-CATERING",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-243",
-            "to": "nodelink-SAUNA",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-243",
-            "to": "nodelink-HYVINVOINTI",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-243",
-            "to": "valokuvaajat",
-            "relation": "collaborated_with",
-            "category": "events_and_celebrations"
-        },
-        {
-            "from": "company-243",
-            "to": "ohjelmapalveluyritykset",
-            "relation": "collaborated_with",
-            "category": "events_and_celebrations"
-        },
-        {
-            "from": "company-243",
-            "to": "majoituspalvelut",
-            "relation": "collaborated_with",
-            "category": "events_and_celebrations"
-        },
-        {
-            "from": "company-243",
-            "to": "catering-palvelut",
-            "relation": "collaborated_with",
-            "category": "business_events"
-        },
-        {
-            "from": "company-243",
-            "to": "yrityskouluttajat",
-            "relation": "collaborated_with",
-            "category": "business_events"
-        },
-        {
-            "from": "company-243",
-            "to": "ohjelmapalvelut",
-            "relation": "collaborated_with",
-            "category": "business_events"
-        },
-        {
-            "from": "company-243",
-            "to": "kukat",
-            "relation": "collaborated_with",
-            "category": "funerals_and_memorials"
-        },
-        {
-            "from": "company-243",
-            "to": "majoitus",
-            "relation": "recommends_with",
-            "context": "events-and-celebrations"
-        },
-        {
-            "from": "company-243",
-            "to": "pitopalvelu",
-            "relation": "recommends_with",
-            "context": "events-and-celebrations"
-        },
-        {
-            "from": "company-243",
-            "to": "catering",
-            "relation": "recommends_with",
-            "context": "events-and-celebrations"
-        },
-        {
-            "from": "company-243",
-            "to": "valokuvaaja",
-            "relation": "recommends_with",
-            "context": "events-and-celebrations"
-        },
-        {
-            "from": "company-243",
-            "to": "kukat",
-            "relation": "recommends_with",
-            "context": "events-and-celebrations"
-        },
-        {
-            "from": "company-243",
-            "to": "ohjelmapalvelut",
-            "relation": "recommends_with",
-            "context": "events-and-celebrations"
-        },
-        {
-            "from": "company-243",
-            "to": "catering",
-            "relation": "recommends_with",
-            "context": "business-events"
-        },
-        {
-            "from": "company-243",
-            "to": "kokoustekniikka",
-            "relation": "recommends_with",
-            "context": "business-events"
-        },
-        {
-            "from": "company-243",
-            "to": "majoitus",
-            "relation": "recommends_with",
-            "context": "business-events"
-        },
-        {
-            "from": "company-243",
-            "to": "kahvitarjoilu",
-            "relation": "recommends_with",
-            "context": "funerals-and-memorials"
-        },
-        {
-            "from": "company-243",
-            "to": "pitopalvelu",
-            "relation": "recommends_with",
-            "context": "funerals-and-memorials"
-        },
-        {
-            "from": "company-243",
-            "to": "sauna",
-            "relation": "recommends_with",
-            "context": "cottage-services"
-        },
-        {
-            "from": "company-243",
-            "to": "savusauna",
-            "relation": "recommends_with",
-            "context": "cottage-services"
-        },
-        {
-            "from": "company-243",
-            "to": "majoitus",
-            "relation": "recommends_with",
-            "context": "cottage-services"
-        },
-        {
-            "from": "company-243",
-            "to": "Majoitus",
-            "relation": "recommends_with",
-            "context": "general"
-        },
-        {
-            "from": "company-243",
-            "to": "Valokuvaaja",
-            "relation": "recommends_with",
-            "context": "general"
-        },
-        {
-            "from": "company-243",
-            "to": "Pitopalvelu",
-            "relation": "recommends_with",
-            "context": "general"
-        },
-        {
-            "from": "company-243",
-            "to": "Catering",
-            "relation": "recommends_with",
-            "context": "general"
-        },
-        {
-            "from": "company-243",
-            "to": "Kukat",
-            "relation": "recommends_with",
-            "context": "general"
-        },
-        {
             "from": "company-244",
             "to": "intent-EVT_WEDDING",
             "relation": "offers",
@@ -17223,7 +16885,6 @@
         "company-239": "venues-and-events.json",
         "company-240": "venues-and-events.json",
         "company-242": "property-and-maintenance.json",
-        "company-243": "venues-and-events.json",
         "company-244": "venues-and-events.json",
         "company-245": "property-and-maintenance.json",
         "company-246": "venues-and-events.json",
