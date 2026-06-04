@@ -13,10 +13,14 @@ async function runBuild() {
     // 1. Asennetaan paketit devDependencies-osioon (jos ei jo asennettu)
 console.log('1. Tarkistetaan ja asennetaan minifiintipaketit... (Tämä voi kestää hetken)');
 try {
-    execSync('npm install --no-save terser clean-css-cli html-minifier', { stdio: 'ignore' });
+    execSync('npm install --no-save terser clean-css html-minifier-terser', { stdio: 'ignore' });
 } catch (e) {
     console.log('Pakettien asennuksessa tapahtui virhe, mutta yritetään jatkaa.');
 }
+
+const Terser = require('terser');
+const CleanCSS = require('clean-css');
+const minifyHtml = require('html-minifier-terser').minify;
 
 // 2. Luodaan tai tyhjennetään dist-kansio
 const distDir = path.join(__dirname, 'dist');
@@ -91,7 +95,7 @@ const assetMap = {};
             }
         }
 
-        function minifyAndVersionFolder(dir) {
+        async function minifyAndVersionFolder(dir) {
             const entries = fs.readdirSync(dir, { withFileTypes: true });
             for (const entry of entries) {
                 const fullPath = path.join(dir, entry.name);
@@ -99,16 +103,19 @@ const assetMap = {};
                 if (entry.isDirectory()) {
                     // Älä minifioi kuvakansioita turhaan
                     if (entry.name !== 'icons' && entry.name !== 'drive_cache') {
-                        minifyAndVersionFolder(fullPath);
+                        await minifyAndVersionFolder(fullPath);
                     }
                 } else {
                     if (entry.name.endsWith('.js') && entry.name !== 'sw.js') {
                         console.log(' -> Minifioidaan ja versioidaan JS:  ' + entry.name);
                         try {
-                            execSync(`npx terser "${fullPath}" -o "${fullPath}" -c -m`);
+                            const content = fs.readFileSync(fullPath, 'utf8');
+                            const result = await Terser.minify(content, { compress: true, mangle: true });
+                            if (result.error) throw result.error;
                             const newName = entry.name.replace('.js', `.${buildVersion}.js`);
                             const newPath = path.join(dir, newName);
-                            renameSyncWithRetry(fullPath, newPath);
+                            fs.writeFileSync(newPath, result.code, 'utf8');
+                            if (fullPath !== newPath) fs.unlinkSync(fullPath);
                             assetMap[entry.name] = newName;
                         } catch (e) {
                             console.error(' Virhe JS-tiedostossa: ' + entry.name, e.message);
@@ -116,10 +123,13 @@ const assetMap = {};
                     } else if (entry.name.endsWith('.css')) {
                         console.log(' -> Minifioidaan ja versioidaan CSS: ' + entry.name);
                         try {
-                            execSync(`npx cleancss -o "${fullPath}" "${fullPath}"`);
+                            const content = fs.readFileSync(fullPath, 'utf8');
+                            const result = new CleanCSS().minify(content);
+                            if (result.errors && result.errors.length > 0) throw new Error(result.errors.join('\n'));
                             const newName = entry.name.replace('.css', `.${buildVersion}.css`);
                             const newPath = path.join(dir, newName);
-                            renameSyncWithRetry(fullPath, newPath);
+                            fs.writeFileSync(newPath, result.styles, 'utf8');
+                            if (fullPath !== newPath) fs.unlinkSync(fullPath);
                             assetMap[entry.name] = newName;
                         } catch (e) {
                             console.error(' Virhe CSS-tiedostossa: ' + entry.name, e.message);
@@ -127,16 +137,28 @@ const assetMap = {};
                     } else if (entry.name.endsWith('.html')) {
                         console.log(' -> Minifioidaan HTML: ' + entry.name);
                         try {
-                            execSync(`npx html-minifier --collapse-whitespace --remove-comments --minify-css true --minify-js true -o "${fullPath}" "${fullPath}"`);
+                            const content = fs.readFileSync(fullPath, 'utf8');
+                            const result = await minifyHtml(content, {
+                                collapseWhitespace: true,
+                                removeComments: true,
+                                minifyCSS: true,
+                                minifyJS: true,
+                                decodeEntities: false
+                            });
+                            fs.writeFileSync(fullPath, result, 'utf8');
                         } catch (e) {
-                            console.error(' Virhe HTML-tiedostossa: ' + entry.name, e.message);
+                            let msg = e.message;
+                            if (msg.length > 200) msg = msg.substring(0, 200) + '... (trunkoitu)';
+                            console.error(' Virhe HTML-tiedostossa: ' + entry.name, msg);
                         }
                     }
                 }
+                // Allow Garbage Collection to run and prevent memory exhaustion
+                await new Promise(resolve => setTimeout(resolve, 5));
             }
         }
 
-minifyAndVersionFolder(distDir);
+await minifyAndVersionFolder(distDir);
 
 // 4.5 Generoidaan premium-yritysten staattiset sivut
 try {

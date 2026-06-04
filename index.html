@@ -33,6 +33,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="stylesheet" href="modal.css">
     <script src="translations.js?v=20260505"></script>
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
 </head>
 
 <body id="home-region-select">
@@ -246,10 +247,10 @@
                         <h2 class="hero-subheading" data-i18n="hero_subheading">Yhteydet palveluihin, osaajiin ja
                             mahdollisuuksiin.</h2>
                         <div class="hero-actions">
-                            <a href="#search-section" class="btn-primary">📍 Löydä palvelu</a>
-                            <a href="#service-needs" class="btn-primary">🤝 Löydä apua</a>
-                            <a href="#palveluverkosto-section" class="btn-primary">👥 Löydä ihmisiä</a>
-                            <a href="#feed-section" class="btn-primary">🚀 Luo jotain yhdessä</a>
+                            <a href="#search-section" class="btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;"><span class="iconify" data-icon="material-symbols-light:location-on-outline" style="font-size: 1.4em;"></span> Löydä palvelu</a>
+                            <a href="#service-needs" class="btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;"><span class="iconify" data-icon="material-symbols-light:handshake-outline" style="font-size: 1.4em;"></span> Löydä apua</a>
+                            <a href="#palveluverkosto-section" class="btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;"><span class="iconify" data-icon="material-symbols-light:group-outline" style="font-size: 1.4em;"></span> Löydä ihmisiä</a>
+                            <a href="#feed-section" class="btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;"><span class="iconify" data-icon="material-symbols-light:rocket-launch-outline" style="font-size: 1.4em;"></span> Luo jotain yhdessä</a>
                         </div>
                     </div>
                 </div>
@@ -527,18 +528,18 @@
         <section id="palveluverkosto-section" class="bg-full-gray" style="padding: 3rem 0; margin-bottom: 2rem;">
             <!-- Otsikko näkyy aina -->
             <div class="section-container" style="text-align: center; margin-bottom: 1.5rem;">
-                <h2 style="color: var(--dark-text); margin-bottom: 0.5rem; font-size: 2.2rem; font-weight: 700;">👥 Löydä ihmisiä</h2>
+                <h2 style="color: var(--dark-text); margin-bottom: 0.5rem; font-size: 2.2rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 0.5rem;"><span class="iconify" data-icon="material-symbols-light:group-outline"></span> Löydä ihmisiä</h2>
                 <p style="color: #64748b; font-size: 1.1rem; font-weight: 500;">Palveluverkosto, harrastusryhmät ja avunpyynnöt Laukaassa.</p>
             </div>
 
             <!-- Dynaaminen Sanapilvi (Ilmoituksista) – näkyy vain jos dataa -->
             <div class="section-container" id="sanapilvi-container" style="text-align: center; margin-bottom: 1.5rem; display: none;">
-                <h3 style="color: #64748b; margin-bottom: 1rem; font-size: 1.1rem; font-weight: 600;">📣 Mitä apua haetaan ja tarjotaan juuri nyt?</h3>
+                <h3 style="color: #64748b; margin-bottom: 1rem; font-size: 1.1rem; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 0.5rem;"><span class="iconify" data-icon="material-symbols-light:campaign-outline" style="font-size: 1.4rem;"></span> Mitä apua haetaan ja tarjotaan juuri nyt?</h3>
                 <div id="sanapilvi-tags" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem;">
                     <!-- verkosto.js lataa tagit tähän -->
                 </div>
                 <div style="margin-top: 1.25rem;">
-                    <a href="ilmoitukset.html" style="display: inline-block; background: #0056b3; color: white; padding: 0.6rem 1.5rem; border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: background 0.2s;">📋 Selaa kaikkia ilmoituksia →</a>
+                    <a href="ilmoitukset.html" style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0056b3; color: white; padding: 0.6rem 1.5rem; border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: background 0.2s;"><span class="iconify" data-icon="material-symbols-light:list-alt-outline" style="font-size: 1.2rem;"></span> Selaa kaikkia ilmoituksia &rarr;</a>
                 </div>
             </div>
 
@@ -564,17 +565,17 @@
                     style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-bottom: 2rem;">
                     <a href="verkostokartta.html" class="quick-link-box"
                         style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; background: #f0f9ff; border: 2px solid #bae6fd; border-radius: 12px; text-decoration: none; color: #0369a1; font-weight: 600; font-size: 0.9rem; transition: all 0.2s;">
-                        <span style="font-size: 1.2rem;">🗺️</span>
+                        <span class="iconify" data-icon="material-symbols-light:map-outline" style="font-size: 1.4rem;"></span>
                         <span>Verkostokartta</span>
                     </a>
                     <a href="pikahaku.html" class="quick-link-box"
                         style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; background: #fff7ed; border: 2px solid #fdba74; border-radius: 12px; text-decoration: none; color: #9a3412; font-weight: 600; font-size: 0.9rem; transition: all 0.2s;">
-                        <span style="font-size: 1.2rem;">⚡</span>
+                        <span class="iconify" data-icon="material-symbols-light:bolt-outline" style="font-size: 1.4rem;"></span>
                         <span>Pikahaku</span>
                     </a>
                     <a href="pikahaku.html?id=vuokrauspalvelut" class="quick-link-box"
                         style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; background: #e6f7ff; border: 2px solid #91d5ff; border-radius: 12px; text-decoration: none; color: #0050b3; font-weight: 600; font-size: 0.9rem; transition: all 0.2s;">
-                        <span style="font-size: 1.2rem;">🔧</span>
+                        <span class="iconify" data-icon="material-symbols-light:build-outline" style="font-size: 1.4rem;"></span>
                         <span>Vuokrauspalvelut</span>
                     </a>
                 </div>
