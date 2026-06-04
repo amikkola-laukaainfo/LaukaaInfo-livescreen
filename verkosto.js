@@ -17,7 +17,7 @@ function renderVerkosto(data, tagi, container) {
 
     let html = `
         <div class="verkosto-header" style="text-align: center; margin-bottom: 2rem;">
-            <h2 style="color: #0a2540; margin-bottom: 0.5rem;">🤝 Palveluverkoston suositukset: ${verkosto.otsikko}</h2>
+            <h2 style="color: #0a2540; margin-bottom: 0.5rem;"><span class="iconify" data-icon="material-symbols-light:handshake-outline"></span> Palveluverkoston suositukset: ${verkosto.otsikko}</h2>
             <p style="color: #4a5568;">Saattaisit olla kiinnostunut myös näistä paikallisista toimijoista ja mahdollisuuksista.</p>
         </div>
         <div class="verkosto-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
@@ -27,7 +27,7 @@ function renderVerkosto(data, tagi, container) {
     if (verkosto.yritykset && verkosto.yritykset.length > 0) {
         const searchUrl = `koko-laukaa.html?tag=${encodeURIComponent(tagi)}`;
         html += `<div class="verkosto-kategoria" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-            <h3 style="color: #0056b3; margin-bottom: 1rem; font-size: 1.2rem;">🏢 Yritykset</h3>
+            <h3 style="color: #0056b3; margin-bottom: 1rem; font-size: 1.2rem;"><span class="iconify" data-icon="material-symbols-light:domain"></span> Yritykset</h3>
             <ul style="list-style: none; padding: 0; margin: 0;">`;
         verkosto.yritykset.forEach(id => {
             const ent = entities[id];
@@ -41,7 +41,7 @@ function renderVerkosto(data, tagi, container) {
         });
         html += `</ul>
             <a href="${searchUrl}" style="display:inline-block; margin-top:1rem; background:#0056b3; color:white; padding:0.5rem 1rem; border-radius:8px; text-decoration:none; font-size:0.85rem; font-weight:600; transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
-                🔍 Katso kaikki aiheesta "${verkosto.otsikko}" →
+                <span class="iconify" data-icon="material-symbols-light:search"></span> Katso kaikki aiheesta "${verkosto.otsikko}" →
             </a>
         </div>`;
     }
@@ -49,7 +49,7 @@ function renderVerkosto(data, tagi, container) {
     // Tarjoaa apua
     if (verkosto.tarjoan_apua && verkosto.tarjoan_apua.length > 0) {
         html += `<div class="verkosto-kategoria" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-            <h3 style="color: #28a745; margin-bottom: 1rem; font-size: 1.2rem;">🤝 Tarjoaa apua</h3>
+            <h3 style="color: #28a745; margin-bottom: 1rem; font-size: 1.2rem;"><span class="iconify" data-icon="material-symbols-light:handshake-outline"></span> Tarjoaa apua</h3>
             <ul style="list-style: none; padding: 0; margin: 0;">`;
         verkosto.tarjoan_apua.forEach(id => {
             const ent = entities[id];
@@ -61,7 +61,7 @@ function renderVerkosto(data, tagi, container) {
     // Harrastukset ja ryhmät
     if (verkosto.harrastukset && verkosto.harrastukset.length > 0) {
         html += `<div class="verkosto-kategoria" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-            <h3 style="color: #ffc107; margin-bottom: 1rem; font-size: 1.2rem;">👥 Harrastusryhmät</h3>
+            <h3 style="color: #ffc107; margin-bottom: 1rem; font-size: 1.2rem;"><span class="iconify" data-icon="material-symbols-light:groups-outline"></span> Harrastusryhmät</h3>
             <ul style="list-style: none; padding: 0; margin: 0;">`;
         verkosto.harrastukset.forEach(id => {
             const ent = entities[id];
@@ -73,7 +73,7 @@ function renderVerkosto(data, tagi, container) {
     // Projektit
     if (verkosto.projektit && verkosto.projektit.length > 0) {
         html += `<div class="verkosto-kategoria" style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-            <h3 style="color: #dc3545; margin-bottom: 1rem; font-size: 1.2rem;">🚀 Projektit</h3>
+            <h3 style="color: #dc3545; margin-bottom: 1rem; font-size: 1.2rem;"><span class="iconify" data-icon="material-symbols-light:rocket-launch-outline"></span> Projektit</h3>
             <ul style="list-style: none; padding: 0; margin: 0;">`;
         verkosto.projektit.forEach(id => {
             const ent = entities[id];
@@ -147,8 +147,8 @@ function renderPikakatsaus(tagi) {
             }
 
             const INTENT_EMOJI = {
-                tarvitsen_apua: '🤝', tarjoan_apua: '🛠', etsin_seuraa: '👥',
-                perustetaan_projekti: '🚀', tarjoan: '🛠', tarvitsen: '🤝'
+                tarvitsen_apua: '<span class="iconify" data-icon="material-symbols-light:handshake-outline"></span>', tarjoan_apua: '<span class="iconify" data-icon="material-symbols-light:build-outline"></span>', etsin_seuraa: '<span class="iconify" data-icon="material-symbols-light:groups-outline"></span>',
+                perustetaan_projekti: '<span class="iconify" data-icon="material-symbols-light:rocket-launch-outline"></span>', tarjoan: '<span class="iconify" data-icon="material-symbols-light:build-outline"></span>', tarvitsen: '<span class="iconify" data-icon="material-symbols-light:handshake-outline"></span>'
             };
 
             let html = `
@@ -159,7 +159,7 @@ function renderPikakatsaus(tagi) {
                     <div style="display: flex; flex-direction: column; gap: 0.75rem;">`;
 
             filtered.forEach(ilm => {
-                const emoji = INTENT_EMOJI[ilm.intent || ilm.tyyppi] || '📌';
+                const emoji = INTENT_EMOJI[ilm.intent || ilm.tyyppi] || '<span class="iconify" data-icon="material-symbols-light:push-pin-outline"></span>';
                 const date = ilm.paivays ? ilm.paivays.substring(0, 10) : '';
                 const searchParam = encodeURIComponent(ilm.otsikko || '');
                 html += `
@@ -214,29 +214,29 @@ function renderSanapilvi() {
 
                     const emojis = {
                         // Vanhat tagit (taaksepäin yhteensopivuus)
-                        'tietokoneet': '💻',
-                        'piha': '🌳',
-                        'rakentaminen': '🔨',
-                        'kuljetus': '🚗',
-                        'seniorit': '👵',
-                        'tapahtumat': '🎉',
-                        'musiikki': '🎵',
-                        'muu': '📌',
+                        'tietokoneet': '<span class="iconify" data-icon="material-symbols-light:computer-outline"></span>',
+                        'piha': '<span class="iconify" data-icon="material-symbols-light:yard-outline"></span>',
+                        'rakentaminen': '<span class="iconify" data-icon="material-symbols-light:architecture"></span>',
+                        'kuljetus': '<span class="iconify" data-icon="material-symbols-light:directions-car-outline"></span>',
+                        'seniorit': '<span class="iconify" data-icon="material-symbols-light:elderly"></span>',
+                        'tapahtumat': '<span class="iconify" data-icon="material-symbols-light:celebration"></span>',
+                        'musiikki': '<span class="iconify" data-icon="material-symbols-light:music-note"></span>',
+                        'muu': '<span class="iconify" data-icon="material-symbols-light:push-pin-outline"></span>',
                         // Uudet wizard-taksonomiakategoriat
-                        'digitaaliset': '💻',
-                        'kodinhoito': '🏠',
-                        'piha_puutarha': '🌳',
-                        'rakentaminen_remontointi': '🛠',
-                        'liikenne': '🚗',
-                        'seniorit': '👵',
-                        'lapset': '👶',
-                        'oppiminen': '📚',
-                        'musiikki_wizard': '🎵',
-                        'valokuvaus': '📷',
-                        'liikunta': '🏃',
-                        'luonto': '🌱',
-                        'yhdistys': '🤝',
-                        'yrittajyys': '💼',
+                        'digitaaliset': '<span class="iconify" data-icon="material-symbols-light:computer-outline"></span>',
+                        'kodinhoito': '<span class="iconify" data-icon="material-symbols-light:home-outline"></span>',
+                        'piha_puutarha': '<span class="iconify" data-icon="material-symbols-light:yard-outline"></span>',
+                        'rakentaminen_remontointi': '<span class="iconify" data-icon="material-symbols-light:architecture"></span>',
+                        'liikenne': '<span class="iconify" data-icon="material-symbols-light:directions-car-outline"></span>',
+                        'seniorit': '<span class="iconify" data-icon="material-symbols-light:elderly"></span>',
+                        'lapset': '<span class="iconify" data-icon="material-symbols-light:child-care"></span>',
+                        'oppiminen': '<span class="iconify" data-icon="material-symbols-light:menu-book-outline"></span>',
+                        'musiikki_wizard': '<span class="iconify" data-icon="material-symbols-light:music-note"></span>',
+                        'valokuvaus': '<span class="iconify" data-icon="material-symbols-light:photo-camera-outline"></span>',
+                        'liikunta': '<span class="iconify" data-icon="material-symbols-light:exercise"></span>',
+                        'luonto': '<span class="iconify" data-icon="material-symbols-light:eco-outline"></span>',
+                        'yhdistys': '<span class="iconify" data-icon="material-symbols-light:handshake-outline"></span>',
+                        'yrittajyys': '<span class="iconify" data-icon="material-symbols-light:business-center-outline"></span>',
                     };
 
                     // Luettava nimi tagista (poista alaviivat, iso alkukirjain)
@@ -246,7 +246,7 @@ function renderSanapilvi() {
 
                     tagNames.forEach(tag => {
                         const count = tags[tag];
-                        const emoji = emojis[tag] || '📌';
+                        const emoji = emojis[tag] || '<span class="iconify" data-icon="material-symbols-light:push-pin-outline"></span>';
                         const fontSize = Math.min(1.5, 0.9 + (count * 0.1));
 
                         html += `<button onclick="renderVerkostoData('${tag}')"

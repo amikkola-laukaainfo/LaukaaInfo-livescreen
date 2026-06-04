@@ -878,6 +878,68 @@
             </div>
         </section>
 
+        <!-- Android App Promotion Card -->
+        <section class="bg-full-gray" style="padding: 3rem 0;">
+            <div class="section-container" style="max-width: 800px; margin: 0 auto;">
+                <div style="background: linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%); border-radius: 24px; box-shadow: 0 10px 40px rgba(0,86,179,0.08); border: 1px solid #e2e8f0; overflow: hidden; display: flex; align-items: center; gap: 2.5rem; padding: 2.5rem 3rem;">
+                    <!-- App Logo -->
+                    <div style="flex-shrink: 0; width: 120px; height: 120px; background: white; border-radius: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); display: flex; align-items: center; justify-content: center; padding: 12px; border: 1px solid #edf2f7;">
+                        <img src="logo.png" alt="LaukaaInfo Android-sovellus" style="width: 100%; height: 100%; object-fit: contain;">
+                    </div>
+                    <!-- App Info -->
+                    <div style="flex: 1;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                            <span class="iconify" data-icon="material-symbols-light:smartphone" style="font-size: 1.6rem; color: #0056b3;"></span>
+                            <h3 style="margin: 0; font-family: 'Outfit', sans-serif; font-size: 1.6rem; font-weight: 800; color: #0a2540;">LaukaaInfo Android-sovellus</h3>
+                        </div>
+                        <p style="color: #475569; font-size: 1.05rem; line-height: 1.6; margin: 0 0 1rem 0;">
+                            Sovelluksessa on lisätietolähteitä julkisiin ja yksityisiin palveluihin sekä karttahaku yrityksille — kaikki taskussasi.
+                        </p>
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.25rem;">
+                            <span style="display: inline-flex; align-items: center; gap: 4px; background: #f0f9ff; border: 1px solid #bae6fd; padding: 4px 12px; border-radius: 50px; font-size: 0.8rem; font-weight: 700; color: #0369a1;">
+                                <span class="iconify" data-icon="material-symbols-light:map-outline" style="font-size: 1.1em;"></span> Karttahaku
+                            </span>
+                            <span style="display: inline-flex; align-items: center; gap: 4px; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 4px 12px; border-radius: 50px; font-size: 0.8rem; font-weight: 700; color: #16a34a;">
+                                <span class="iconify" data-icon="material-symbols-light:domain" style="font-size: 1.1em;"></span> Palvelutiedot
+                            </span>
+                            <span style="display: inline-flex; align-items: center; gap: 4px; background: #fff7ed; border: 1px solid #fdba74; padding: 4px 12px; border-radius: 50px; font-size: 0.8rem; font-weight: 700; color: #9a3412;">
+                                <span class="iconify" data-icon="material-symbols-light:public" style="font-size: 1.1em;"></span> Julkiset palvelut
+                            </span>
+                        </div>
+                        <a href="https://play.google.com/store/apps/details?id=org.example.LaukaaLive&hl=fi" target="_blank" rel="noopener"
+                           style="display: inline-flex; align-items: center; gap: 0.75rem; background: linear-gradient(135deg, #0056b3, #003366); color: white; padding: 0.85rem 1.75rem; border-radius: 14px; text-decoration: none; font-weight: 700; font-size: 1rem; font-family: 'Outfit', sans-serif; box-shadow: 0 4px 15px rgba(0,86,179,0.25); transition: all 0.3s ease;"
+                           onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(0,86,179,0.35)';"
+                           onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 15px rgba(0,86,179,0.25)';">
+                            <span class="iconify" data-icon="mdi:google-play" style="font-size: 1.4em;"></span>
+                            Lataa Google Playsta
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <style>
+                @media (max-width: 768px) {
+                    .section-container > div[style*="display: flex"] {
+                        flex-direction: column !important;
+                        text-align: center;
+                        padding: 2rem 1.5rem !important;
+                        gap: 1.5rem !important;
+                    }
+                    .section-container > div[style*="display: flex"] > div[style*="flex-shrink: 0"] {
+                        margin: 0 auto;
+                        width: 90px !important;
+                        height: 90px !important;
+                    }
+                    .section-container > div[style*="display: flex"] div[style*="display: flex; flex-wrap: wrap"] {
+                        justify-content: center;
+                    }
+                    .section-container > div[style*="display: flex"] a[style*="display: inline-flex"] {
+                        justify-content: center;
+                        width: 100%;
+                    }
+                }
+            </style>
+        </section>
+
         <section class="share-generator-section bg-full-blue">
             <div class="share-generator-card">
                 <h2 data-i18n="share_title">Luo jakolinkki LaukaaInfoon</h2>
@@ -955,7 +1017,7 @@
                 <a href="palvelun-esittely.html" data-i18n="footer_about">Tietoa sovelluksesta</a>
                 <a href="tietosuoja.html" data-i18n="footer_privacy">Tietosuoja</a>
                 <a href="maksuehto.html" data-i18n="footer_terms">Maksuehdot</a>
-                <a href="https://mediazoo.fi/yhteystiedot/" class="footer-mailto-cta" data-i18n="footer_contact">✉️ Ota
+                <a href="https://mediazoo.fi/yhteystiedot/" class="footer-mailto-cta" data-i18n="footer_contact"><span class="iconify" data-icon="material-symbols-light:mail-outline" style="font-size: 1.2em; vertical-align: middle;"></span> Ota
                     yhteyttä</a>
                 <button id="pwa-install-btn"
                     style="display: none; background: #00c3ff; color: white; border: none; padding: 5px 12px; border-radius: 20px; cursor: pointer; font-family: inherit; font-size: 0.9rem; margin-left: 10px;"
