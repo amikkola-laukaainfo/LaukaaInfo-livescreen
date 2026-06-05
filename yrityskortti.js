@@ -463,7 +463,6 @@
             noLogoText.className = 'no-logo-text';
             noLogoText.style.cssText = 'position:absolute; bottom:15px; width:100%; text-align:center; font-size:0.8rem; color:#94a3b8; font-weight:700; text-transform:uppercase; letter-spacing:1px; left:0;';
             noLogoText.textContent = 'Ei logoa';
-            logoContainer.style.position = 'relative';
             logoContainer.appendChild(noLogoText);
             
             logoContainer.style.display = 'flex';
@@ -987,7 +986,7 @@
         // 2. Cover Banner
         const coverPhoto = document.getElementById('bc-cover-photo');
         if (coverPhoto) {
-            coverPhoto.style.display = 'block';
+            coverPhoto.style.display = 'flex';
             if (company.media && company.media.length > 0) {
                 coverPhoto.style.backgroundImage = `url('${company.media[0].url}')`;
                 coverPhoto.classList.add('has-photo');
