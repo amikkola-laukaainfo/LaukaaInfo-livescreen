@@ -16,9 +16,9 @@
     <!-- Leaflet Map -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-    <link rel="stylesheet" href="../style.317c055a.css?v=20260420-2">
-    <link rel="stylesheet" href="../modal.317c055a.css">
-    <script src="../translations.317c055a.js?v=20260505"></script>
+    <link rel="stylesheet" href="../style.3b60a57a.css?v=20260420-2">
+    <link rel="stylesheet" href="../modal.3b60a57a.css">
+    <script src="../translations.3b60a57a.js?v=20260505"></script>
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
     <style>
         :root {
@@ -1271,11 +1271,13 @@
         /* --- Responsive Styles updates --- */
         @media (max-width: 768px) {
             .bc-cover-wrapper {
-                height: 280px;
+                height: auto;
+                min-height: 180px;
                 border-radius: 18px;
-                padding: 1.5rem;
-                padding-right: 105px; /* jätä tila logolle oikealla */
-                align-items: flex-end;
+                padding: 1.25rem 105px 1.25rem 1.25rem; /* right: tila logolle */
+                padding-top: 100px; /* tila absoluuttiselle logolle (80px + 15px offset + 5px) */
+                align-items: flex-start;
+                justify-content: flex-start;
             }
 
             .bc-logo-container {
@@ -1862,8 +1864,8 @@
 
     <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="../script.317c055a.js?v=20260301"></script>
-    <script src="../yrityskortti.317c055a.js?v=20260304-DEBUG-2"></script>
+    <script src="../script.3b60a57a.js?v=20260301"></script>
+    <script src="../yrityskortti.3b60a57a.js?v=20260304-DEBUG-2"></script>
 </body>
 
 </html>
