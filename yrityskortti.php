@@ -120,24 +120,38 @@ if ($company) {
         }
 
         .card-header {
+            position: relative;
+            width: 100%;
+            min-height: 350px;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
             display: flex;
-            gap: 2rem;
             align-items: center;
+            justify-content: center;
+            padding: 2.5rem;
+            box-sizing: border-box;
             margin-bottom: 3rem;
-            flex-wrap: wrap;
+            color: white;
         }
 
         .card-logo-container {
-            width: 180px;
-            height: 180px;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 40px;
+            width: 150px;
+            height: 150px;
             background: white;
             border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            padding: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            padding: 10px;
             overflow: hidden;
+            z-index: 2;
         }
 
         .card-logo-container img {
@@ -147,25 +161,31 @@ if ($company) {
         }
 
         .card-title-section {
-            flex: 1;
-            min-width: 300px;
+            z-index: 2;
+            text-align: center;
+            max-width: 70%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .card-title-section h1 {
             font-size: 3rem;
-            color: var(--primary-blue);
+            color: white;
             margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
         }
 
         .card-category {
             display: inline-block;
-            background: var(--light-blue);
-            color: var(--primary-blue);
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
             padding: 0.4rem 1.2rem;
             border-radius: 50px;
             font-weight: 600;
             font-size: 0.9rem;
             margin-bottom: 1rem;
+            backdrop-filter: blur(4px);
         }
 
         .card-grid {

@@ -992,7 +992,7 @@
                 coverPhoto.style.backgroundImage = `url('${company.media[0].url}')`;
                 coverPhoto.classList.add('has-photo');
             } else {
-                coverPhoto.style.backgroundImage = 'linear-gradient(135deg, #007bff 0%, #0056b3 100%)';
+                coverPhoto.style.backgroundImage = 'linear-gradient(135deg, #4caf50 0%, #2e7d32 100%)';
                 coverPhoto.classList.remove('has-photo');
             }
         }

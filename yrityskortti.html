@@ -719,7 +719,7 @@
             border-radius: 24px;
             overflow: hidden;
             box-shadow: var(--premium-shadow);
-            background-color: #003366;
+            background-color: #2e7d32;
             background-size: cover;
             background-position: center;
             border: 1px solid #e2e8f0;
@@ -744,13 +744,14 @@
 
         .bc-logo-container {
             position: absolute;
-            top: 25px;
-            right: 25px;
-            width: 120px;
-            height: 120px;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 40px;
+            width: 150px;
+            height: 150px;
             background: white;
             border-radius: 20px;
-            padding: 8px;
+            padding: 10px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             display: flex;
             align-items: center;
@@ -768,12 +769,15 @@
             z-index: 2;
             color: white;
             text-align: center;
-            max-width: 100%;
+            max-width: 70%;
             margin: 0 auto;
             border-radius: 16px;
             padding: 1.5rem 2rem;
             transition: all 0.3s ease;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .bc-cover-wrapper.has-photo .bc-header-title-section {
@@ -1289,6 +1293,7 @@
                 top: 15px;
                 right: 15px !important;
                 left: auto !important;
+                transform: none;
                 border-radius: 12px;
             }
 
