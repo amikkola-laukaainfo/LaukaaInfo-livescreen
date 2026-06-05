@@ -1277,6 +1277,78 @@
                 font-weight: bold;
             }
         }
+        
+        /* Pienet vinkit -tyylit */
+        .bc-tip-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px;
+            background: #f8fafc;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #334155;
+            transition: all 0.2s ease;
+            border: 1px solid #e2e8f0;
+            position: relative;
+        }
+
+        .bc-tip-item:hover {
+            background: #f1f5f9;
+            transform: translateY(-2px);
+            border-color: #cbd5e1;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .bc-tip-icon {
+            font-size: 1.5rem;
+            line-height: 1;
+            margin-top: 2px;
+        }
+
+        .bc-tip-content {
+            flex: 1;
+        }
+
+        .bc-tip-title {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #0f172a;
+            margin-bottom: 3px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .bc-tip-desc {
+            font-size: 0.85rem;
+            color: #475569;
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        .bc-tip-badge {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: #e2e8f0;
+            color: #475569;
+            white-space: nowrap;
+        }
+        
+        .bc-tip-arrow {
+            color: #94a3b8;
+            font-size: 1.2rem;
+            align-self: center;
+            transition: transform 0.2s;
+        }
+        
+        .bc-tip-item:hover .bc-tip-arrow {
+            transform: translateX(3px);
+            color: var(--primary-blue);
+        }
 
         /* --- Responsive Styles updates --- */
         @media (max-width: 768px) {
@@ -1638,6 +1710,12 @@
                 <!-- Short Slogan / Slogan Intro block -->
                 <div id="bc-intro-block" class="bc-block intro-block" style="display: none;">
                     <p id="bc-short-intro"></p>
+                </div>
+
+                <!-- Pienet vinkit -osio -->
+                <div id="bc-tips-section" class="bc-block" style="display: none;">
+                    <h4 id="bc-tips-header" style="margin-top: 0; margin-bottom: 12px; font-size: 1.1rem; color: var(--primary-blue); display: flex; align-items: center; gap: 6px;">💡 Vinkkejä lähistöltä</h4>
+                    <div id="bc-tips-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
                 </div>
 
                 <!-- Dynamic QR Card (Save dynamic URL and print) -->

@@ -1327,6 +1327,72 @@
                 window.print();
             };
         }
+
+        // 13. Pienet Vinkit
+        loadYritysVinkit(company.id);
+    }
+
+    /**
+     * Lataa yrityskohtaiset vinkit vinkit/yritysvinkit.json -tiedostosta
+     */
+    async function loadYritysVinkit(companyId) {
+        try {
+            const rawId = String(companyId).replace('company-', '');
+            const resp = await fetch('vinkit/yritysvinkit.json?v=' + Date.now());
+            if (!resp.ok) return;
+            const data = await resp.json();
+            
+            // Kokeillaan löytää vinkit joko "company-XXX" tai "XXX" avaimella
+            let vinkitData = data[companyId] || data[rawId] || null;
+            
+            const section = document.getElementById('bc-tips-section');
+            const list = document.getElementById('bc-tips-list');
+            const header = document.getElementById('bc-tips-header');
+            
+            if (!vinkitData || !vinkitData.vinkit || vinkitData.vinkit.length === 0) {
+                if (section) section.style.display = 'none';
+                return;
+            }
+            
+            if (header && vinkitData.otsikko) {
+                header.innerHTML = `💡 ${vinkitData.otsikko}`;
+            }
+            
+            if (list) {
+                list.innerHTML = '';
+                vinkitData.vinkit.forEach(vinkki => {
+                    const a = document.createElement('a');
+                    a.href = vinkki.linkki;
+                    a.className = 'bc-tip-item';
+                    
+                    // Sisäiset linkit avautuu samassa, ulkoiset uudessa välilehdessä
+                    if (vinkki.tyyppi === 'ulkoinen') {
+                        a.target = '_blank';
+                        a.rel = 'noopener noreferrer';
+                    }
+                    
+                    const badgeHtml = vinkki.badge ? `<span class="bc-tip-badge">${vinkki.badge}</span>` : '';
+                    
+                    a.innerHTML = `
+                        <div class="bc-tip-icon">${vinkki.ikoni || '💡'}</div>
+                        <div class="bc-tip-content">
+                            <div class="bc-tip-title">${vinkki.nimi} ${badgeHtml}</div>
+                            <p class="bc-tip-desc">${vinkki.kuvaus}</p>
+                        </div>
+                        <div class="bc-tip-arrow">
+                            <span class="iconify" data-icon="material-symbols-light:arrow-forward-ios"></span>
+                        </div>
+                    `;
+                    list.appendChild(a);
+                });
+            }
+            
+            if (section) {
+                section.style.display = 'block';
+            }
+        } catch(e) {
+            console.warn('Virhe ladattaessa yritysvinkkejä:', e);
+        }
     }
 
     /**
