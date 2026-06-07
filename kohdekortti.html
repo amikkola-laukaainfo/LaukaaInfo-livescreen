@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kohdekortti – LaukaaInfo</title>
+
+    <!-- Fonts & Styles -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Outfit:wght@400;700;800&display=swap" rel="stylesheet">
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+
+    <link rel="stylesheet" href="style.css?v=20260420-2">
+
+    <style>
+        :root {
+            --primary-blue: #0056b3;
+            --secondary-blue: #003366;
+            --accent-blue: #00a8ff;
+            --light-blue: #f0f7ff;
+            --dark-text: #1a202c;
+            --light-text: #4a5568;
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --premium-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+            --border-radius: 24px;
+        }
+
+        body {
+            background-color: #f1f5f9;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .demo-bar {
+            background: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            text-align: center;
+            border-bottom: 2px solid #ffeeba;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .demo-bar select {
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-family: inherit;
+        }
+
+        .entity-card-container {
+            max-width: 1100px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .card-header {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            background: white;
+            padding: 3rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--premium-shadow);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, #10b981, #3b82f6);
+        }
+
+        .type-badge {
+            display: inline-block;
+            background: var(--light-blue);
+            color: var(--primary-blue);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .card-title h1 {
+            font-size: 3rem;
+            font-family: 'Outfit', sans-serif;
+            color: var(--secondary-blue);
+            margin: 0 0 1rem 0;
+            line-height: 1.1;
+        }
+
+        .card-short-desc {
+            font-size: 1.25rem;
+            color: var(--light-text);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        .main-section {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .image-banner {
+            width: 100%;
+            height: 400px;
+            border-radius: var(--border-radius);
+            object-fit: cover;
+            box-shadow: var(--card-shadow);
+        }
+
+        .content-box {
+            background: white;
+            padding: 2.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--premium-shadow);
+        }
+
+        .content-box h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            color: var(--secondary-blue);
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-box p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #2d3748;
+            white-space: pre-wrap;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .info-panel {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--premium-shadow);
+        }
+
+        .info-panel h3 {
+            font-family: 'Outfit', sans-serif;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .info-row .icon {
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            margin-top: 2px;
+        }
+
+        .info-row .details strong {
+            display: block;
+            font-size: 0.85rem;
+            color: #a0aec0;
+            text-transform: uppercase;
+            margin-bottom: 0.2rem;
+        }
+
+        .info-row .details span, .info-row .details a {
+            font-size: 1.05rem;
+            color: var(--dark-text);
+            text-decoration: none;
+        }
+
+        .tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            background: #e2e8f0;
+            color: #475569;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .relation-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--accent-blue);
+        }
+
+        .relation-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .relation-content {
+            font-size: 0.95rem;
+        }
+
+        .relation-content .rel-type {
+            font-size: 0.75rem;
+            color: var(--primary-blue);
+            font-weight: bold;
+            text-transform: uppercase;
+            display: block;
+        }
+
+        .specific-fields {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-top: 1.5rem;
+        }
+
+        .specific-fields h4 {
+            margin-top: 0;
+            color: #166534;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        @media (max-width: 768px) {
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Demo Navigation Bar -->
+    <div class="demo-bar">
+        <span>Katselutila: Kohdekortti Demo</span>
+        <select id="demo-selector">
+            <option value="">Ladataan kohteita...</option>
+        </select>
+    </div>
+
+    <div class="entity-card-container" id="card-container" style="display: none;">
+        
+        <div class="card-header">
+            <div class="card-title">
+                <span class="type-badge" id="el-type">Tyyppi</span>
+                <h1 id="el-name">Kohteen Nimi</h1>
+                <p class="card-short-desc" id="el-shortdesc">Lyhyt kuvaus kohteesta.</p>
+            </div>
+        </div>
+
+        <div class="card-grid">
+            <div class="main-section">
+                <img id="el-image" class="image-banner" src="" alt="Kohdekuva" style="display: none;">
+                
+                <div class="content-box">
+                    <h2>Tietoa kohteesta</h2>
+                    <p id="el-desc">Koko kuvaus tulee tähän.</p>
+                    
+                    <div id="el-specific-fields" class="specific-fields" style="display: none;">
+                        <!-- Tyyppikohtaiset kentät (esim. tapahtuma, yhdistys) renderöidään tänne -->
+                    </div>
+                </div>
+
+                <div class="content-box" id="relations-box" style="display: none;">
+                    <h2>Verkosto ja Kytkökset</h2>
+                    <div id="el-relations">
+                        <!-- Suhteet renderöidään tänne -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="info-panel">
+                    <h3>Yhteystiedot ja Sijainti</h3>
+                    
+                    <div class="info-row" id="row-address">
+                        <span class="icon iconify" data-icon="mdi:map-marker"></span>
+                        <div class="details">
+                            <strong>Osoite</strong>
+                            <span id="el-address">-</span>
+                        </div>
+                    </div>
+
+                    <div class="info-row" id="row-email">
+                        <span class="icon iconify" data-icon="mdi:email"></span>
+                        <div class="details">
+                            <strong>Sähköposti</strong>
+                            <a href="#" id="el-email">-</a>
+                        </div>
+                    </div>
+
+                    <div class="info-row" id="row-phone">
+                        <span class="icon iconify" data-icon="mdi:phone"></span>
+                        <div class="details">
+                            <strong>Puhelin</strong>
+                            <a href="#" id="el-phone">-</a>
+                        </div>
+                    </div>
+
+                    <div class="info-row" id="row-website">
+                        <span class="icon iconify" data-icon="mdi:web"></span>
+                        <div class="details">
+                            <strong>Verkkosivut</strong>
+                            <a href="#" target="_blank" id="el-website">-</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-panel">
+                    <h3>Profiili ja Luokittelu</h3>
+                    <div class="tag-container" id="el-tags">
+                        <!-- Tunnisteet tänne -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let kohteet = [];
+        let suhteet = [];
+
+        const typeTranslations = {
+            'event': 'Tapahtuma',
+            'association': 'Yhdistys',
+            'service': 'Palvelu',
+            'product': 'Tuote',
+            'business': 'Yritys'
+        };
+
+        async function init() {
+            try {
+                // Fetch data
+                const [kohteetRes, suhteetRes] = await Promise.all([
+                    fetch('kohteet.json'),
+                    fetch('suhteet.json')
+                ]);
+                
+                kohteet = await kohteetRes.json();
+                suhteet = await suhteetRes.json();
+
+                // Populate selector
+                const selector = document.getElementById('demo-selector');
+                selector.innerHTML = '';
+                
+                kohteet.forEach(k => {
+                    const opt = document.createElement('option');
+                    opt.value = k.id;
+                    opt.textContent = `${k.name} (${typeTranslations[k.type] || k.type})`;
+                    selector.appendChild(opt);
+                });
+
+                selector.addEventListener('change', (e) => {
+                    renderEntity(e.target.value);
+                });
+
+                // Check URL parameter, otherwise render first
+                const urlParams = new URLSearchParams(window.location.search);
+                const idFromUrl = urlParams.get('id');
+                
+                if (idFromUrl && kohteet.find(k => k.id === idFromUrl)) {
+                    selector.value = idFromUrl;
+                    renderEntity(idFromUrl);
+                } else if (kohteet.length > 0) {
+                    renderEntity(kohteet[0].id);
+                }
+
+            } catch (error) {
+                console.error("Virhe ladattaessa dataa:", error);
+            }
+        }
+
+        function renderEntity(id) {
+            const entity = kohteet.find(k => k.id === id);
+            if (!entity) return;
+
+            document.getElementById('card-container').style.display = 'block';
+
+            // Header
+            document.getElementById('el-type').textContent = typeTranslations[entity.type] || entity.type;
+            document.getElementById('el-name').textContent = entity.name;
+            document.getElementById('el-shortdesc').textContent = entity.shortDescription;
+            document.getElementById('el-desc').textContent = entity.description;
+
+            // Image
+            const imgEl = document.getElementById('el-image');
+            if (entity.images && entity.images.length > 0) {
+                imgEl.src = entity.images[0];
+                imgEl.style.display = 'block';
+            } else {
+                imgEl.style.display = 'none';
+            }
+
+            // Contact & Location
+            document.getElementById('el-address').textContent = `${entity.location.address || ''}, ${entity.location.postalCode || ''} ${entity.location.municipality || ''}`;
+            
+            const em = document.getElementById('el-email');
+            if (entity.contact.email) {
+                em.textContent = entity.contact.email;
+                em.href = `mailto:${entity.contact.email}`;
+                em.parentElement.parentElement.style.display = 'flex';
+            } else {
+                em.parentElement.parentElement.style.display = 'none';
+            }
+
+            const ph = document.getElementById('el-phone');
+            if (entity.contact.phone) {
+                ph.textContent = entity.contact.phone;
+                ph.href = `tel:${entity.contact.phone}`;
+                ph.parentElement.parentElement.style.display = 'flex';
+            } else {
+                ph.parentElement.parentElement.style.display = 'none';
+            }
+
+            const wb = document.getElementById('el-website');
+            if (entity.contact.website) {
+                wb.textContent = 'Avaa sivusto';
+                wb.href = entity.contact.website;
+                wb.parentElement.parentElement.style.display = 'flex';
+            } else {
+                wb.parentElement.parentElement.style.display = 'none';
+            }
+
+            // Tags & Profiles
+            const tagContainer = document.getElementById('el-tags');
+            tagContainer.innerHTML = '';
+            const allTags = [...(entity.tags || []), ...(entity.profiles || [])];
+            allTags.forEach(t => {
+                const sp = document.createElement('span');
+                sp.className = 'tag';
+                sp.textContent = t;
+                tagContainer.appendChild(sp);
+            });
+
+            // Specific fields
+            const specEl = document.getElementById('el-specific-fields');
+            specEl.innerHTML = '';
+            if (entity.type === 'event' && entity.event) {
+                specEl.style.display = 'block';
+                specEl.innerHTML = `
+                    <h4>Tapahtuman tiedot</h4>
+                    <p><strong>Aika:</strong> ${new Date(entity.event.startDate).toLocaleString('fi-FI')} - ${new Date(entity.event.endDate).toLocaleString('fi-FI')}</p>
+                    <p><strong>Järjestäjä:</strong> ${entity.event.organizer}</p>
+                    <p><strong>Paikka:</strong> ${entity.event.venue}</p>
+                `;
+            } else if (entity.type === 'association' && entity.association) {
+                specEl.style.display = 'block';
+                specEl.innerHTML = `
+                    <h4>Yhdistyksen tiedot</h4>
+                    <p><strong>Perustettu:</strong> ${entity.association.founded}</p>
+                    <p><strong>Puheenjohtaja:</strong> ${entity.association.chairperson}</p>
+                    <p><strong>Jäsenyys:</strong> ${entity.association.membershipInfo}</p>
+                `;
+            } else if (entity.type === 'service' && entity.service) {
+                specEl.style.display = 'block';
+                specEl.innerHTML = `
+                    <h4>Palvelun tiedot</h4>
+                    <p><strong>Tarjoaja:</strong> ${entity.service.provider}</p>
+                    <p><strong>Hinta/Tieto:</strong> ${entity.service.priceInfo}</p>
+                    ${entity.service.bookingUrl ? `<p><a href="${entity.service.bookingUrl}" target="_blank" style="color:var(--primary-blue); font-weight:bold;">Siirry varaukseen &rarr;</a></p>` : ''}
+                `;
+            } else {
+                specEl.style.display = 'none';
+            }
+
+            // Relations
+            const relBox = document.getElementById('relations-box');
+            const relContainer = document.getElementById('el-relations');
+            relContainer.innerHTML = '';
+            
+            // Find relations where this entity is either source or target
+            const entityRels = suhteet.filter(r => r.sourceId === entity.id || r.targetId === entity.id);
+            
+            if (entityRels.length > 0) {
+                relBox.style.display = 'block';
+                entityRels.forEach(r => {
+                    // Determine if we are source or target to format correctly
+                    const isSource = r.sourceId === entity.id;
+                    const otherType = isSource ? r.targetType : r.sourceType;
+                    const otherId = isSource ? r.targetId : r.sourceId;
+                    
+                    const div = document.createElement('div');
+                    div.className = 'relation-item';
+                    div.innerHTML = `
+                        <span class="icon iconify" data-icon="mdi:link-variant" style="font-size: 1.5rem; color: #94a3b8;"></span>
+                        <div class="relation-content">
+                            <span class="rel-type">${r.relationType} (${typeTranslations[otherType] || otherType})</span>
+                            <span>${r.description}</span>
+                            ${!otherId.startsWith('yritys_') ? `<br><a href="?id=${otherId}" style="font-size:0.85rem; color:var(--primary-blue);">Tarkastele kohdetta</a>` : '<br><span style="font-size:0.85rem; color:#64748b;">(Viittaa yrityskorttiin)</span>'}
+                        </div>
+                    `;
+                    relContainer.appendChild(div);
+                });
+            } else {
+                relBox.style.display = 'none';
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
