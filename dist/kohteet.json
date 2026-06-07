@@ -1,0 +1,99 @@
+[
+  {
+    "id": "kohde_001",
+    "type": "event",
+    "name": "Laukaan Kuntorastit",
+    "shortDescription": "Viikoittaiset kuntorastit Laukaan maastoissa.",
+    "description": "Kaikille avoimet kuntorastit. Sopii kaiken tasoisille suunnistajille. Tervetuloa liikkumaan luontoon!\n\nTapahtumassa on radat eri taitotasojen mukaan. Muista ottaa oma kompassi mukaan, tarvittaessa lainakompasseja saatavilla tapahtumapaikalla.",
+    "status": "active",
+    "created": "2026-06-07T12:00:00Z",
+    "updated": "2026-06-07T12:00:00Z",
+    "images": [
+      "hero-kuva.webp"
+    ],
+    "location": {
+      "address": "Urheilutie 1",
+      "postalCode": "41340",
+      "municipality": "Laukaa",
+      "latitude": "",
+      "longitude": ""
+    },
+    "contact": {
+      "email": "info@laukaanurheilijat.fi",
+      "phone": "040 123 4567",
+      "website": "https://laukaanurheilijat.fi"
+    },
+    "taxonomy": ["event", "event.sports", "event.community"],
+    "tags": ["suunnistus", "liikunta", "ulkoilu"],
+    "profiles": ["outdoor", "sports", "family"],
+    "event": {
+      "startDate": "2026-06-15T17:00:00Z",
+      "endDate": "2026-06-15T19:00:00Z",
+      "organizer": "Laukaan Urheilijat ry",
+      "ticketUrl": "",
+      "venue": "Laukaan Urheilukenttä"
+    }
+  },
+  {
+    "id": "kohde_002",
+    "type": "association",
+    "name": "Laukaan Urheilijat ry",
+    "shortDescription": "Paikallinen urheiluseura, joka liikuttaa kaikenikäisiä.",
+    "description": "Laukaan Urheilijat on perinteikäs yleisseura, joka tarjoaa monipuolisia liikuntamahdollisuuksia Laukaassa. Jaostojamme ovat muun muassa hiihto, yleisurheilu, suunnistus ja lentopallo.",
+    "status": "active",
+    "created": "2026-06-07T12:00:00Z",
+    "updated": "2026-06-07T12:00:00Z",
+    "images": [],
+    "location": {
+      "address": "Keskustie 2",
+      "postalCode": "41340",
+      "municipality": "Laukaa",
+      "latitude": "",
+      "longitude": ""
+    },
+    "contact": {
+      "email": "toimisto@laukaanurheilijat.fi",
+      "phone": "040 765 4321",
+      "website": "https://laukaanurheilijat.fi"
+    },
+    "taxonomy": ["association", "association.sports"],
+    "tags": ["urheilu", "yhdistys", "liikunta", "seura"],
+    "profiles": ["sports", "community", "children", "youth", "seniors"],
+    "association": {
+      "founded": "1932",
+      "membershipInfo": "Jäseneksi voi liittyä kuka tahansa. Jäsenmaksu 20€/vuosi (aikuiset) ja 10€/vuosi (lapset).",
+      "chairperson": "Matti Meikäläinen"
+    }
+  },
+  {
+    "id": "kohde_003",
+    "type": "service",
+    "name": "Suunnistusohjaus aloittelijoille",
+    "shortDescription": "Opi suunnistuksen perusteet asiantuntevassa ohjauksessa.",
+    "description": "Ohjattu suunnistuskurssi, jossa käydään läpi karttamerkit, kompassin käyttö ja reitinvalinnan perusteet. Kurssi sopii kaikille, joita kiinnostaa turvallinen liikkuminen luonnossa.",
+    "status": "active",
+    "created": "2026-06-07T12:00:00Z",
+    "updated": "2026-06-07T12:00:00Z",
+    "images": [],
+    "location": {
+      "address": "Urheilutie 1",
+      "postalCode": "41340",
+      "municipality": "Laukaa",
+      "latitude": "",
+      "longitude": ""
+    },
+    "contact": {
+      "email": "ohjaus@laukaanurheilijat.fi",
+      "phone": "",
+      "website": ""
+    },
+    "taxonomy": ["service", "service.education", "service.wellbeing"],
+    "tags": ["koulutus", "kurssi", "suunnistus"],
+    "profiles": ["education", "sports", "outdoor", "paid"],
+    "service": {
+      "provider": "Laukaan Urheilijat ry",
+      "priceInfo": "50€ / hlö",
+      "bookingUrl": "https://laukaanurheilijat.fi/ilmoittaudu"
+    }
+  }
+]
