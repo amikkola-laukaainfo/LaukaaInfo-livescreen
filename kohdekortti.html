@@ -476,11 +476,35 @@
             specEl.innerHTML = '';
             if (entity.type === 'event' && entity.event) {
                 specEl.style.display = 'block';
+
+                // Muodosta älykkäämpi päivämäärä-esitys
+                const start = entity.event.startDate ? new Date(entity.event.startDate) : null;
+                const end   = entity.event.endDate   ? new Date(entity.event.endDate)   : null;
+
+                let dateHtml = '';
+                if (start && end) {
+                    const startDay = start.toLocaleDateString('fi-FI', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+                    const endDay   = end.toLocaleDateString('fi-FI',   { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+                    const startTime = start.toLocaleTimeString('fi-FI', { hour: '2-digit', minute: '2-digit' });
+                    const endTime   = end.toLocaleTimeString('fi-FI',   { hour: '2-digit', minute: '2-digit' });
+
+                    if (start.toDateString() === end.toDateString()) {
+                        // Yhdenpäivän tapahtuma
+                        dateHtml = `<p><strong>📅 Päivä:</strong> ${startDay}</p>
+                                    <p><strong>🕐 Aika:</strong> ${startTime} – ${endTime}</p>`;
+                    } else {
+                        // Monipäiväinen tapahtuma
+                        dateHtml = `<p><strong>📅 Alkaa:</strong> ${startDay} klo ${startTime}</p>
+                                    <p><strong>📅 Päättyy:</strong> ${endDay} klo ${endTime}</p>`;
+                    }
+                }
+
                 specEl.innerHTML = `
                     <h4>Tapahtuman tiedot</h4>
-                    <p><strong>Aika:</strong> ${new Date(entity.event.startDate).toLocaleString('fi-FI')} - ${new Date(entity.event.endDate).toLocaleString('fi-FI')}</p>
-                    <p><strong>Järjestäjä:</strong> ${entity.event.organizer}</p>
-                    <p><strong>Paikka:</strong> ${entity.event.venue}</p>
+                    ${dateHtml}
+                    ${entity.event.organizer ? `<p><strong>Järjestäjä:</strong> ${entity.event.organizer}</p>` : ''}
+                    ${entity.event.venue     ? `<p><strong>Paikka:</strong> ${entity.event.venue}</p>` : ''}
+                    ${entity.event.ticketUrl ? `<p><a href="${entity.event.ticketUrl}" target="_blank" style="color:var(--primary-blue);font-weight:bold;">🎟 Osta liput / Ilmoittaudu &rarr;</a></p>` : ''}
                 `;
             } else if (entity.type === 'association' && entity.association) {
                 specEl.style.display = 'block';
