@@ -366,8 +366,8 @@
             try {
                 // Fetch data
                 const [kohteetRes, suhteetRes] = await Promise.all([
-                    fetch('kohteet.json'),
-                    fetch('suhteet.json')
+                    fetch('kohdekortit/kohteet.json'),
+                    fetch('kohdekortit/suhteet.json')
                 ]);
                 
                 kohteet = await kohteetRes.json();
