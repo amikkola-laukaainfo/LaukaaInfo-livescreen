@@ -359,19 +359,24 @@
             'association': 'Yhdistys',
             'service': 'Palvelu',
             'product': 'Tuote',
-            'business': 'Yritys'
+            'business': 'Yritys',
+            'offer': 'Tarjous'
         };
 
         async function init() {
             try {
                 // Fetch data
-                const [kohteetRes, suhteetRes] = await Promise.all([
+                const [kohteetRes, suhteetRes, tarjouksetRes] = await Promise.all([
                     fetch('kohdekortit/kohteet.json'),
-                    fetch('kohdekortit/suhteet.json')
+                    fetch('kohdekortit/suhteet.json'),
+                    fetch('kohdekortit/tarjoukset.json')
                 ]);
                 
-                kohteet = await kohteetRes.json();
+                const perusKohteet = await kohteetRes.json();
                 suhteet = await suhteetRes.json();
+                const tarjoukset = await tarjouksetRes.json();
+                
+                kohteet = [...perusKohteet, ...tarjoukset];
 
                 // Populate selector
                 const selector = document.getElementById('demo-selector');
@@ -492,6 +497,15 @@
                     <p><strong>Tarjoaja:</strong> ${entity.service.provider}</p>
                     <p><strong>Hinta/Tieto:</strong> ${entity.service.priceInfo}</p>
                     ${entity.service.bookingUrl ? `<p><a href="${entity.service.bookingUrl}" target="_blank" style="color:var(--primary-blue); font-weight:bold;">Siirry varaukseen &rarr;</a></p>` : ''}
+                `;
+            } else if (entity.type === 'offer' && entity.offer) {
+                specEl.style.display = 'block';
+                const isFree = entity.offer.discountType === 'free';
+                specEl.innerHTML = `
+                    <h4>Tarjouksen tiedot</h4>
+                    <p><strong>Edun tyyppi:</strong> ${isFree ? 'Ilmainen kokeilu' : entity.offer.discountValue + ' % alennus'}</p>
+                    ${entity.offer.couponCode ? `<p><strong>Alennuskoodi:</strong> <span style="background:var(--primary-blue); color:white; padding:2px 8px; border-radius:4px; font-family:monospace;">${entity.offer.couponCode}</span></p>` : ''}
+                    <p><strong>Voimassa:</strong> ${entity.offer.validUntil}</p>
                 `;
             } else {
                 specEl.style.display = 'none';

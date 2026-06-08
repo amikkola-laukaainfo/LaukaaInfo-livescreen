@@ -43,5 +43,23 @@
     "targetId": "kohde_tuote_001",
     "relationType": "sells",
     "description": "Yritys X myy Tuotetta A (yrityskortista kohdekorttiin)"
+  },
+  {
+    "id": "rel_006",
+    "sourceType": "business",
+    "sourceId": "yritys_123",
+    "targetType": "offer",
+    "targetId": "offer_001",
+    "relationType": "has_offer",
+    "description": "Yritys X tarjoaa alennuksen suunnistusvarusteista"
+  },
+  {
+    "id": "rel_007",
+    "sourceType": "event",
+    "sourceId": "kohde_001",
+    "targetType": "offer",
+    "targetId": "offer_002",
+    "relationType": "has_offer",
+    "description": "Laukaan Kuntorastit tarjoaa ilmaisen osallistumisen ensikertalaisille"
   }
 ]
