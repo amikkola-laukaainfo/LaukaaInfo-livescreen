@@ -356,6 +356,11 @@
             <div class="main-section">
                 <img id="el-image" class="image-banner" src="" alt="Kohdekuva" style="display: none;"
                      onerror="this.style.display='none'">
+                <div id="el-image-placeholder" style="display:none; align-items:center; justify-content:center; flex-direction:column; gap:0.5rem; background:#f8fafc; border:2px dashed #cbd5e1; border-radius:24px; height:200px; margin-bottom:1rem; color:#94a3b8;">
+                    <span style="font-size:2rem;">🖼</span>
+                    <span style="font-size:0.85rem; font-weight:600;">Kuva ei lataudu (SSL/HTTPS-ongelma)</span>
+                    <span class="img-url" style="font-size:0.75rem; font-family:monospace; word-break:break-all; max-width:80%; text-align:center; color:#64748b;"></span>
+                </div>
                 
                 <div class="content-box">
                     <h2>Tietoa kohteesta</h2>
@@ -500,13 +505,31 @@
             document.getElementById('el-shortdesc').textContent = entity.shortDescription;
             document.getElementById('el-desc').textContent = entity.description;
 
-            // Image — tukee sekä paikallisia tiedostoja että https-URL:ja
+            // Image — auto-upgrade http → https, onerror-fallback placeholder
             const imgEl = document.getElementById('el-image');
             if (entity.images && entity.images.length > 0 && entity.images[0]) {
-                imgEl.src = entity.images[0];
+                let imgSrc = entity.images[0];
+                // Automaattinen http → https -päivitys
+                if (imgSrc.startsWith('http://')) imgSrc = 'https://' + imgSrc.slice(7);
+                imgEl.src = imgSrc;
                 imgEl.style.display = 'block';
+                imgEl.onerror = () => {
+                    // Näytä placeholder jos kuva ei lataudu
+                    imgEl.style.display = 'none';
+                    const placeholder = document.getElementById('el-image-placeholder');
+                    if (placeholder) {
+                        placeholder.style.display = 'flex';
+                        placeholder.querySelector('.img-url').textContent = entity.images[0];
+                    }
+                };
+                imgEl.onload = () => {
+                    const placeholder = document.getElementById('el-image-placeholder');
+                    if (placeholder) placeholder.style.display = 'none';
+                };
             } else {
                 imgEl.style.display = 'none';
+                const placeholder = document.getElementById('el-image-placeholder');
+                if (placeholder) placeholder.style.display = 'none';
             }
 
             // Contact & Location
