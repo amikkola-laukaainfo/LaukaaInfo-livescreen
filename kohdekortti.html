@@ -333,6 +333,9 @@
     <!-- Navigaatiopalkki -->
     <div class="nav-bar">
         <span class="nav-brand">📍 LaukaaInfo – Kohdekortti</span>
+        <a href="https://laukaainfo.fi" style="color:var(--secondary-blue); text-decoration:none; font-weight:700; font-family:Outfit, sans-serif; display:flex; align-items:center; gap:0.4rem; font-size:0.95rem; margin: 0 auto;">
+            <span class="iconify" data-icon="mdi:home"></span> Etusivulle
+        </a>
         <select id="demo-selector">
             <option value="">Ladataan kohteita...</option>
         </select>
@@ -534,7 +537,13 @@
             }
 
             // Contact & Location
-            document.getElementById('el-address').textContent = `${entity.location.address || ''}, ${entity.location.postalCode || ''} ${entity.location.municipality || ''}`;
+            const addrText = `${entity.location.address || ''}, ${entity.location.postalCode || ''} ${entity.location.municipality || ''}`.replace(/^[,\s]+|[,\s]+$/g, '');
+            const addrEl = document.getElementById('el-address');
+            if (entity.location.mapUrl) {
+                addrEl.innerHTML = `<a href="${entity.location.mapUrl}" target="_blank" style="color:var(--primary-blue); text-decoration:none; border-bottom:1px dashed var(--primary-blue); padding-bottom:2px;">${addrText || 'Katso kartalta &rarr;'}</a>`;
+            } else {
+                addrEl.textContent = addrText || '-';
+            }
             
             const em = document.getElementById('el-email');
             if (entity.contact.email) {
