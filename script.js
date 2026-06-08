@@ -15,6 +15,7 @@ if (typeof i18n === 'undefined') {
 }
 
 let allRssItems = []; // Global storage for RSS content
+let allKohteet = []; // Global storage for Kohdekortti entities (kohteet.json)
 let allGeoEvents = []; // Global storage for event coordinates
 let currentCompany = null;
 let currentMediaIndex = 0;
@@ -1333,6 +1334,19 @@ async function loadCompanyData() {
                 console.warn('Yritysprofiloinnin lataus epäonnistui:', e);
             }
 
+            // Hae kohdekortit (entities) hakuehdotuksia varten
+            try {
+                const isSubdir = window.location.pathname.includes('/yritys/');
+                const prefix = isSubdir ? '../' : './';
+                const kohteetRes = await fetch(prefix + 'kohdekortit/kohteet.json?t=' + Date.now());
+                if (kohteetRes.ok) {
+                    allKohteet = await kohteetRes.json();
+                    console.log('Kohdekortit ladattu:', allKohteet.length);
+                }
+            } catch (e) {
+                console.warn('Kohdekorttien lataus epäonnistui:', e);
+            }
+
             initCompanyCatalog();
             initMap(window.allCompanies);
             initCategories(window.allCompanies);
@@ -2140,7 +2154,25 @@ function showSuggestions() {
         suggestions = [...suggestions, ...busMatches];
     }
 
-    // 6. Match RSS if checkbox is checked
+    // 6. Match Kohdekortit entities
+    if (searchTerm.length >= 2 && allKohteet.length > 0) {
+        const kohdeMatches = allKohteet
+            .filter(k => {
+                const name = (k.name || '').toLowerCase();
+                const shortDesc = (k.shortDescription || '').toLowerCase();
+                const tags = (k.tags || []).join(' ').toLowerCase();
+                const taxonomy = (k.taxonomy || []).join(' ').toLowerCase();
+                return name.includes(searchTerm) ||
+                       shortDesc.includes(searchTerm) ||
+                       tags.includes(searchTerm) ||
+                       taxonomy.includes(searchTerm);
+            })
+            .map(k => ({ type: 'kohde', entity: k }))
+            .slice(0, 3);
+        suggestions = [...suggestions, ...kohdeMatches];
+    }
+
+    // 7. Match RSS if checkbox is checked
     const includeRss = document.getElementById('include-rss')?.checked;
     if (includeRss && searchTerm.length > 0) {
         const rssMatches = allRssItems.filter(item =>
@@ -2185,6 +2217,11 @@ function showSuggestions() {
         } else if (item.type === 'business') {
             label = item.company.nimi;
             badge = `<span class="suggestion-cat">${item.company.kategoria}</span>`;
+        } else if (item.type === 'kohde') {
+            const typeLabels = { event: '📅 Tapahtuma', association: '🤝 Yhdistys', service: '🔧 Palvelu', nature: '🌲 Luonto', place: '📍 Paikka' };
+            const typeLabel = typeLabels[item.entity.type] || '📌 Kohde';
+            label = item.entity.name;
+            badge = `<span class="suggestion-kohde">${typeLabel}</span>`;
         } else if (item.type === 'rss') {
             label = item.title;
             badge = `<span class="suggestion-tag">${item.type}</span>`;
@@ -2310,6 +2347,8 @@ function selectSuggestion(item) {
             : `yrityskortti.html?id=${slugify(item.company.nimi)}${regionParam}`;
             
         window.location.href = cardUrl;
+    } else if (item.type === 'kohde') {
+        window.location.href = `kohdekortti.html?id=${encodeURIComponent(item.entity.id)}`;
     } else if (item.type === 'rss') {
         window.open(item.link, '_blank');
     }

@@ -1796,7 +1796,8 @@ h3 {
 
 .search-suggestions li .suggestion-cat,
 .search-suggestions li .suggestion-tag,
-.search-suggestions li .suggestion-region {
+.search-suggestions li .suggestion-region,
+.search-suggestions li .suggestion-kohde {
     font-size: 0.75rem;
     padding: 2px 8px;
     border-radius: 4px;
@@ -1818,6 +1819,13 @@ h3 {
     font-weight: 700;
     color: white;
     background: var(--primary-blue);
+}
+
+.search-suggestions li .suggestion-kohde {
+    font-weight: 600;
+    color: #166534;
+    background: #dcfce7;
+    border: 1px solid #bbf7d0;
 }
 
 .search-suggestions mark {
