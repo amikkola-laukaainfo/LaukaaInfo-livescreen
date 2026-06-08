@@ -31,24 +31,38 @@
             font-family: 'Inter', sans-serif;
         }
 
-        .demo-bar {
-            background: #fff3cd;
-            color: #856404;
-            padding: 15px;
-            text-align: center;
-            border-bottom: 2px solid #ffeeba;
-            font-weight: bold;
+        .nav-bar {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 12px 24px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 15px;
+            justify-content: space-between;
+            gap: 16px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .demo-bar select {
+        .nav-bar .nav-brand {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1rem;
+            color: var(--secondary-blue);
+            white-space: nowrap;
+        }
+
+        .nav-bar select {
             padding: 8px 12px;
             border-radius: 8px;
-            border: 1px solid #ccc;
+            border: 1px solid #cbd5e1;
             font-family: inherit;
+            font-size: 0.9rem;
+            color: var(--dark-text);
+            background: #f8fafc;
+            max-width: 340px;
+            cursor: pointer;
         }
 
         .entity-card-container {
@@ -315,9 +329,9 @@
 </head>
 <body>
 
-    <!-- Demo Navigation Bar -->
-    <div class="demo-bar">
-        <span>Katselutila: Kohdekortti Demo</span>
+    <!-- Navigaatiopalkki -->
+    <div class="nav-bar">
+        <span class="nav-brand">📍 LaukaaInfo – Kohdekortti</span>
         <select id="demo-selector">
             <option value="">Ladataan kohteita...</option>
         </select>
@@ -340,7 +354,8 @@
 
         <div class="card-grid">
             <div class="main-section">
-                <img id="el-image" class="image-banner" src="" alt="Kohdekuva" style="display: none;">
+                <img id="el-image" class="image-banner" src="" alt="Kohdekuva" style="display: none;"
+                     onerror="this.style.display='none'">
                 
                 <div class="content-box">
                     <h2>Tietoa kohteesta</h2>
@@ -360,6 +375,11 @@
             </div>
 
             <div class="sidebar">
+                <div class="info-panel" id="event-schedule-panel" style="display:none;">
+                    <h3>📅 Aikataulu</h3>
+                    <div id="el-schedule"></div>
+                </div>
+
                 <div class="info-panel">
                     <h3>Yhteystiedot ja Sijainti</h3>
                     
@@ -441,7 +461,10 @@
                 kohteet.forEach(k => {
                     const opt = document.createElement('option');
                     opt.value = k.id;
-                    opt.textContent = `${k.name} (${typeTranslations[k.type] || k.type})`;
+                    // Lisätään [demo] vain jos kohteella ei ole oikeaa kuvausta tai se on selkeästi testidata
+                    const isDemo = !k.description || k.id.startsWith('kohde_00') || k.id.startsWith('offer_');
+                    const typeLabel = typeTranslations[k.type] || k.type;
+                    opt.textContent = `${k.name} (${typeLabel}${isDemo ? ' · demo' : ''})`;
                     selector.appendChild(opt);
                 });
 
@@ -477,9 +500,9 @@
             document.getElementById('el-shortdesc').textContent = entity.shortDescription;
             document.getElementById('el-desc').textContent = entity.description;
 
-            // Image
+            // Image — tukee sekä paikallisia tiedostoja että https-URL:ja
             const imgEl = document.getElementById('el-image');
-            if (entity.images && entity.images.length > 0) {
+            if (entity.images && entity.images.length > 0 && entity.images[0]) {
                 imgEl.src = entity.images[0];
                 imgEl.style.display = 'block';
             } else {
@@ -514,6 +537,47 @@
                 wb.parentElement.parentElement.style.display = 'flex';
             } else {
                 wb.parentElement.parentElement.style.display = 'none';
+            }
+
+            // Aikataulu-paneeli sivupalkissa (vain event-tyypille)
+            const schedPanel = document.getElementById('event-schedule-panel');
+            const schedEl = document.getElementById('el-schedule');
+            if (entity.type === 'event' && entity.event && (entity.event.startDate || entity.event.endDate)) {
+                schedPanel.style.display = 'block';
+                const s = entity.event.startDate ? new Date(entity.event.startDate) : null;
+                const e = entity.event.endDate   ? new Date(entity.event.endDate)   : null;
+                let schedHtml = '';
+                if (s && e && s.toDateString() === e.toDateString()) {
+                    // Yhdenpäivän tapahtuma
+                    schedHtml = `
+                        <div style="font-size:1.15rem; font-weight:700; color:var(--secondary-blue); margin-bottom:0.5rem;">
+                            ${s.toLocaleDateString('fi-FI', {weekday:'long', day:'numeric', month:'long', year:'numeric'})}
+                        </div>
+                        <div style="font-size:1rem; color:var(--light-text);">
+                            🕐 ${s.toLocaleTimeString('fi-FI',{hour:'2-digit',minute:'2-digit'})} – ${e.toLocaleTimeString('fi-FI',{hour:'2-digit',minute:'2-digit'})}
+                        </div>`;
+                } else if (s && e) {
+                    // Monipäiväinen
+                    schedHtml = `
+                        <div style="margin-bottom:0.75rem;">
+                            <div style="font-size:0.75rem;color:#a0aec0;text-transform:uppercase;font-weight:700;">Alkaa</div>
+                            <div style="font-weight:700;color:var(--secondary-blue);">${s.toLocaleDateString('fi-FI',{weekday:'short',day:'numeric',month:'short'})}</div>
+                            <div style="color:var(--light-text);">klo ${s.toLocaleTimeString('fi-FI',{hour:'2-digit',minute:'2-digit'})}</div>
+                        </div>
+                        <div>
+                            <div style="font-size:0.75rem;color:#a0aec0;text-transform:uppercase;font-weight:700;">Päättyy</div>
+                            <div style="font-weight:700;color:var(--secondary-blue);">${e.toLocaleDateString('fi-FI',{weekday:'short',day:'numeric',month:'short'})}</div>
+                            <div style="color:var(--light-text);">klo ${e.toLocaleTimeString('fi-FI',{hour:'2-digit',minute:'2-digit'})}</div>
+                        </div>`;
+                } else if (s) {
+                    schedHtml = `<div style="font-weight:700;color:var(--secondary-blue);">${s.toLocaleDateString('fi-FI',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</div>`;
+                }
+                if (entity.event.ticketUrl) {
+                    schedHtml += `<a href="${entity.event.ticketUrl}" target="_blank" style="display:inline-block;margin-top:1rem;padding:0.5rem 1rem;background:var(--primary-blue);color:white;border-radius:8px;font-weight:700;font-size:0.85rem;text-decoration:none;">🎟 Liput / Ilmoittaudu</a>`;
+                }
+                schedEl.innerHTML = schedHtml;
+            } else {
+                schedPanel.style.display = 'none';
             }
 
             // Tags & Profiles
