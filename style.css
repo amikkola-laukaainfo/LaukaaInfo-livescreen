@@ -7276,3 +7276,89 @@ footer {
     box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
 }
 
+
+/* =========================================
+   MOBILE HERO REORDERING & LIGHT THEME
+   ========================================= */
+@media (max-width: 768px) {
+    header.hero-split {
+        display: flex !important;
+        flex-direction: column !important;
+        background: #ffffff !important;
+    }
+    
+    .hero-left, 
+    .hero-left-content, 
+    .hero-flex-container, 
+    .hero-copy {
+        display: contents !important;
+    }
+    
+    .main-logo {
+        order: 1 !important;
+        margin: 2.5rem auto 1rem !important;
+    }
+    
+    #brand-title {
+        order: 2 !important;
+        color: var(--dark-text) !important;
+        margin: 0 1.5rem !important;
+        text-align: center !important;
+    }
+    
+    .hero-subheading {
+        order: 3 !important;
+        color: #4a5568 !important;
+        margin: 0.5rem 1.5rem 1.5rem !important;
+        text-align: center !important;
+        font-weight: 500 !important;
+    }
+    
+    .hero-right {
+        order: 4 !important;
+        position: relative !important;
+        height: 260px !important;
+        min-height: 260px !important;
+        width: 100% !important;
+        border-radius: 0 !important;
+    }
+    
+    .hero-right.hero-img-expanded {
+        height: 70svh !important;
+        min-height: 70vh !important;
+    }
+    
+    .hero-actions {
+        order: 5 !important;
+        width: 100% !important;
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 0.8rem !important;
+        padding: 1.5rem !important;
+        box-sizing: border-box !important;
+        background: #ffffff !important;
+        margin-top: 0 !important;
+        border-bottom-left-radius: 24px;
+        border-bottom-right-radius: 24px;
+        border-top: 1px solid #f0f0f0;
+    }
+    
+    .hero-actions .btn-primary {
+        background: #f8fbff !important;
+        border: 1px solid #d1e2f3 !important;
+        color: var(--secondary-blue) !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.02) !important;
+        font-weight: 600 !important;
+        padding: 0.8rem 0.5rem !important;
+    }
+    
+    .hero-actions .btn-primary .iconify {
+        color: var(--accent-blue) !important;
+    }
+    
+    .search-section.bg-full-blue {
+        background-color: #f0fdf4 !important;
+        background-image: linear-gradient(to bottom, #ffffff, #f0fdf4) !important;
+    }
+}
+
