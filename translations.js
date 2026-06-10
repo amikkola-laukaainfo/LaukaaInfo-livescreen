@@ -450,7 +450,21 @@ const UI_TRANSLATIONS = {
         "step_tyhy_2_title": "Asiantuntijaluennot ja valmennus",
         "your_network_title": "Oma verkostosi",
         "no_selections": "Ei valintoja vielä. Aloita valitsemalla yritys ylhäältä.",
-        "btn_print_plan": "Tallenna suunnitelma »"
+        "btn_print_plan": "Tallenna suunnitelma »",
+        "nav_about_service": "Tietoa palvelusta",
+        "nav_service_intro": "Palvelun esittely",
+        "hero_btn_service": "Löydä palvelu",
+        "hero_btn_help": "Löydä apua",
+        "hero_btn_people": "Löydä ihmisiä",
+        "hero_btn_create": "Luo jotain yhdessä",
+        "hero_location": "Laukaa, Keski-Suomi",
+        "people_section_title": "Löydä ihmisiä",
+        "people_section_desc": "Palveluverkosto, harrastusryhmät ja avunpyynnöt Laukaassa.",
+        "people_cloud_title": "Mitä apua haetaan ja tarjotaan juuri nyt?",
+        "btn_browse_notices": "Selaa kaikkia ilmoituksia →",
+        "quicklink_network": "Verkostokartta",
+        "quicklink_quicksearch": "Pikahaku",
+        "quicklink_rental": "Vuokrauspalvelut"
     },
     en: {
         "nav_home": "Home",
@@ -894,7 +908,21 @@ const UI_TRANSLATIONS = {
         "step_tyhy_2_title": "Expert Lectures and Coaching",
         "your_network_title": "Your Custom Network",
         "no_selections": "No selections yet. Start by choosing a company above.",
-        "btn_print_plan": "Save Your Plan »"
+        "btn_print_plan": "Save Your Plan »",
+        "nav_about_service": "About the service",
+        "nav_service_intro": "Service presentation",
+        "hero_btn_service": "Find a service",
+        "hero_btn_help": "Find help",
+        "hero_btn_people": "Find people",
+        "hero_btn_create": "Create together",
+        "hero_location": "Laukaa, Central Finland",
+        "people_section_title": "Find people",
+        "people_section_desc": "Service network, hobby groups, and requests for help in Laukaa.",
+        "people_cloud_title": "What help is being sought and offered right now?",
+        "btn_browse_notices": "Browse all notices →",
+        "quicklink_network": "Network map",
+        "quicklink_quicksearch": "Quick search",
+        "quicklink_rental": "Rental services"
     }
 };
 

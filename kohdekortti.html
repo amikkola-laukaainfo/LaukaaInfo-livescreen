@@ -557,10 +557,11 @@
         async function init() {
             try {
                 // Fetch data
+                const cacheBuster = new Date().getTime();
                 const [kohteetRes, suhteetRes, tarjouksetRes] = await Promise.all([
-                    fetch('kohdekortit/kohteet.json'),
-                    fetch('kohdekortit/suhteet.json'),
-                    fetch('kohdekortit/tarjoukset.json')
+                    fetch('kohdekortit/kohteet.json?v=' + cacheBuster),
+                    fetch('kohdekortit/suhteet.json?v=' + cacheBuster),
+                    fetch('kohdekortit/tarjoukset.json?v=' + cacheBuster)
                 ]);
                 
                 const perusKohteet = await kohteetRes.json();
