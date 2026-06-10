@@ -4,7 +4,11 @@
       "id": "yritys_001",
       "nimi": "Laukaan IT-Palvelu",
       "tyyppi": "yritys",
-      "kategoriat": ["tietokoneet", "digituki", "seniorit"],
+      "kategoriat": [
+        "tietokoneet",
+        "digituki",
+        "seniorit"
+      ],
       "kuvaus": "Tietokone- ja digitukea.",
       "alue": "Laukaa"
     },
@@ -12,7 +16,10 @@
       "id": "yritys_002",
       "nimi": "Rakennus Oy Laukaa",
       "tyyppi": "yritys",
-      "kategoriat": ["rakentaminen", "remontti"],
+      "kategoriat": [
+        "rakentaminen",
+        "remontti"
+      ],
       "kuvaus": "Luotettava rakennuskumppani Laukaassa.",
       "alue": "Laukaa"
     },
@@ -20,103 +27,153 @@
       "id": "yritys_003",
       "nimi": "Laukaan Musiikkiliike",
       "tyyppi": "yritys",
-      "kategoriat": ["musiikki", "soittimet"],
+      "kategoriat": [
+        "musiikki",
+        "soittimet"
+      ],
       "kuvaus": "Soittimet ja tarvikkeet paikallisesti.",
       "alue": "Laukaa"
     },
     "apu_001": {
       "id": "apu_001",
       "tyyppi": "tarvitsen_apua",
-      "otsikko": "Apua sähköpostin käyttöön",
-      "tagit": ["tietokoneet", "digituki", "seniorit"],
+      "otsikko": "Apua sähköpostin käyttöön (demo)",
+      "tagit": [
+        "tietokoneet",
+        "digituki",
+        "seniorit"
+      ],
       "alue": "Laukaa"
     },
     "apu_002": {
       "id": "apu_002",
       "tyyppi": "tarjoan_apua",
-      "otsikko": "Autan Windows-ongelmissa",
-      "tagit": ["tietokoneet", "digituki"],
+      "otsikko": "Autan Windows-ongelmissa (demo)",
+      "tagit": [
+        "tietokoneet",
+        "digituki"
+      ],
       "alue": "Laukaa"
     },
     "apu_003": {
       "id": "apu_003",
       "tyyppi": "tarjoan_apua",
-      "otsikko": "Rakennusapua talkoisiin",
-      "tagit": ["rakentaminen", "vapaaehtoistyö"],
+      "otsikko": "Rakennusapua talkoisiin (demo)",
+      "tagit": [
+        "rakentaminen",
+        "vapaaehtoistyö"
+      ],
       "alue": "Lievestuore"
     },
     "ryhma_001": {
       "id": "ryhma_001",
       "tyyppi": "harrastus",
-      "otsikko": "Blender-opiskeluryhmä",
-      "tagit": ["3d", "blender", "animaatio", "tietokoneet"],
+      "otsikko": "Blender-opiskeluryhmä (demo)",
+      "tagit": [
+        "3d",
+        "blender",
+        "animaatio",
+        "tietokoneet"
+      ],
       "alue": "Laukaa",
       "kiinnostuneet": 7
     },
     "ryhma_002": {
       "id": "ryhma_002",
       "tyyppi": "harrastus",
-      "otsikko": "Laukaan Puhallinorkesteri",
-      "tagit": ["musiikki", "soitto"],
+      "otsikko": "Laukaan Puhallinorkesteri (demo)",
+      "tagit": [
+        "musiikki",
+        "soitto"
+      ],
       "alue": "Laukaa",
       "kiinnostuneet": 15
     },
     "projekti_001": {
       "id": "projekti_001",
       "tyyppi": "projekti",
-      "otsikko": "Luontopolun kunnostus",
-      "tagit": ["luonto", "vapaaehtoistyö", "ulkoilu", "rakentaminen"],
+      "otsikko": "Luontopolun kunnostus (demo)",
+      "tagit": [
+        "luonto",
+        "vapaaehtoistyö",
+        "ulkoilu",
+        "rakentaminen"
+      ],
       "alue": "Laukaa"
     },
     "projekti_002": {
       "id": "projekti_002",
       "tyyppi": "projekti",
-      "otsikko": "Kylätapahtuman järjestäminen",
-      "tagit": ["tapahtumat", "vapaaehtoistyö", "musiikki"],
+      "otsikko": "Kylätapahtuman järjestäminen (demo)",
+      "tagit": [
+        "tapahtumat",
+        "vapaaehtoistyö",
+        "musiikki"
+      ],
       "alue": "Vihtavuori"
     }
   },
   "verkosto": {
     "tietokoneet": {
       "otsikko": "Tietokoneet ja digi",
-      "yritykset": ["yritys_001"],
-      "tarjoan_apua": ["apu_002"],
-      "tarvitsen_apua": ["apu_001"],
-      "harrastukset": ["ryhma_001"],
+      "yritykset": [
+        "yritys_001"
+      ],
+      "tarjoan_apua": [
+        "apu_002"
+      ],
+      "tarvitsen_apua": [
+        "apu_001"
+      ],
+      "harrastukset": [
+        "ryhma_001"
+      ],
       "projektit": []
     },
     "rakentaminen": {
       "otsikko": "Rakentaminen ja remontointi",
-      "yritykset": ["yritys_002"],
-      "tarjoan_apua": ["apu_003"],
+      "yritykset": [
+        "yritys_002"
+      ],
+      "tarjoan_apua": [
+        "apu_003"
+      ],
       "tarvitsen_apua": [],
       "harrastukset": [],
-      "projektit": ["projekti_001"]
+      "projektit": [
+        "projekti_001"
+      ]
     },
     "musiikki": {
       "otsikko": "Musiikki ja esiintyminen",
-      "yritykset": ["yritys_003"],
+      "yritykset": [
+        "yritys_003"
+      ],
       "tarjoan_apua": [],
       "tarvitsen_apua": [],
-      "harrastukset": ["ryhma_002"],
-      "projektit": ["projekti_002"]
+      "harrastukset": [
+        "ryhma_002"
+      ],
+      "projektit": [
+        "projekti_002"
+      ]
     }
   },
   "uusimmat": {
     "tarpeet": [
-      "Apua pihan siivoukseen",
-      "Kimppakyyti Jyväskylään",
-      "Digitukea senioreille"
+      "Apua pihan siivoukseen (demo)",
+      "Kimppakyyti Jyväskylään (demo)",
+      "Digitukea senioreille (demo)"
     ],
     "ryhmat": [
-      "Kävelyryhmä",
-      "Blender-opiskeluryhmä",
-      "Shakkikerho"
+      "Kävelyryhmä (demo)",
+      "Blender-opiskeluryhmä (demo)",
+      "Shakkikerho (demo)"
     ],
     "projektit": [
-      "Kylätapahtuman järjestäminen",
-      "Luontopolun kunnostus",
-      "Nuorten mediaprojekti"
+      "Kylätapahtuman järjestäminen (demo)",
+      "Luontopolun kunnostus (demo)",
+      "Nuorten mediaprojekti (demo)"
     ]
   }
 }
