@@ -1,254 +1,262 @@
 <?xml version="1.0" encoding="UTF-8"?>
-		<!--	created with www.mysitemapgenerator.com	-->
-		<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+
 <url>
-	<loc>https://laukaainfo.fi/</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>1.0</priority>
+  <loc>https://laukaainfo.fi/</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>1.00</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/index.html</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>1.0</priority>
+  <loc>https://laukaainfo.fi/index.html</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/palvelun-esittely.html</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>1.0</priority>
+  <loc>https://laukaainfo.fi/palvelun-esittely.html</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/ilmoittaudu.html</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>1.0</priority>
+  <loc>https://laukaainfo.fi/ilmoittaudu.html</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/kauppa.html</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>1.0</priority>
+  <loc>https://laukaainfo.fi/kauppa.html</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/lisaa-yritys.html</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>1.0</priority>
+  <loc>https://laukaainfo.fi/lisaa-yritys.html</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/laukaa.html</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>1.0</priority>
+  <loc>https://laukaainfo.fi/laukaa.html</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/leppavesi.html</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>1.0</priority>
+  <loc>https://laukaainfo.fi/leppavesi.html</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/lievestuore.html</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>1.0</priority>
+  <loc>https://laukaainfo.fi/lievestuore.html</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/vehnia.html</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>1.0</priority>
+  <loc>https://laukaainfo.fi/vehnia.html</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/vihtavuori.html</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>1.0</priority>
+  <loc>https://laukaainfo.fi/vihtavuori.html</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/ajankohtaista.html</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>1.0</priority>
+  <loc>https://laukaainfo.fi/ajankohtaista.html</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/asiahaku.html</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>1.0</priority>
+  <loc>https://laukaainfo.fi/asiahaku.html</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/kohdekartta.html</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>1.0</priority>
+  <loc>https://laukaainfo.fi/kohdekartta.html</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/tarinakartta.html</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>1.0</priority>
+  <loc>https://laukaainfo.fi/tarinakartta.html</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/muistokartta.html</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>1.0</priority>
+  <loc>https://laukaainfo.fi/muistokartta.html</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/kadonneet.html</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>1.0</priority>
+  <loc>https://laukaainfo.fi/kadonneet.html</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/palvelu.html?id=haat</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>0.9</priority>
+  <loc>https://laukaainfo.fi/lisaa-yritys.html?utm_campaign=INFO&amp;utm_source=ticker_toimitus&amp;utm_medium=swiper-slider</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/palvelu.html?id=yritysjuhlat</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>0.9</priority>
+  <loc>https://laukaainfo.fi/ilmoitukset.html</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/palvelu.html?id=yritystilaisuudet</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>0.9</priority>
+  <loc>https://laukaainfo.fi/verkostokartta.html</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/palvelu.html?id=syntymapaivat</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>0.9</priority>
+  <loc>https://laukaainfo.fi/pikahaku.html</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/palvelu.html?id=muutto</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>0.9</priority>
+  <loc>https://laukaainfo.fi/pikahaku.html?id=vuokrauspalvelut</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/palvelu.html?id=remontti</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>0.9</priority>
+  <loc>https://laukaainfo.fi/palvelu.html?id=haat</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/palvelu.html?id=mokkipalvelut</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>0.9</priority>
+  <loc>https://laukaainfo.fi/palvelu.html?id=yritysjuhlat</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/palvelu.html?id=hautajaiset</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>0.9</priority>
+  <loc>https://laukaainfo.fi/palvelu.html?id=yritystilaisuudet</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/palvelu.html?id=yrityksen-perustaminen</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>0.9</priority>
+  <loc>https://laukaainfo.fi/palvelu.html?id=syntymapaivat</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/palvelu.html?id=yrityksen-kehittaminen</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>0.9</priority>
+  <loc>https://laukaainfo.fi/palvelu.html?id=muutto</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/palvelu.html?id=vakituinen-palvelukumppani</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>0.9</priority>
+  <loc>https://laukaainfo.fi/palvelu.html?id=remontti</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/palvelu.html?id=kiinteistopalvelut</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>0.9</priority>
+  <loc>https://laukaainfo.fi/palvelu.html?id=mokkipalvelut</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/palvelu.html?id=paivystavat-palvelut</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>0.9</priority>
+  <loc>https://laukaainfo.fi/palvelu.html?id=hautajaiset</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/palvelu.html?id=terveys-ja-hyvinvointi</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>0.9</priority>
+  <loc>https://laukaainfo.fi/palvelu.html?id=yrityksen-perustaminen</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/palvelu.html?id=liikunta-ja-vapaaaika</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>0.9</priority>
+  <loc>https://laukaainfo.fi/palvelu.html?id=yrityksen-kehittaminen</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/palvelu.html?id=elaimet</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>0.9</priority>
+  <loc>https://laukaainfo.fi/palvelu.html?id=vakituinen-palvelukumppani</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/palvelu.html?id=lapset-ja-perhe</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>0.9</priority>
+  <loc>https://laukaainfo.fi/palvelu.html?id=kiinteistopalvelut</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/palvelu.html?id=autohuollot</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>0.9</priority>
+  <loc>https://laukaainfo.fi/palvelu.html?id=paivystavat-palvelut</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/galleria.html</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>1.0</priority>
+  <loc>https://laukaainfo.fi/palvelu.html?id=terveys-ja-hyvinvointi</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/laukaan-ravintolat.html</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>1.0</priority>
+  <loc>https://laukaainfo.fi/palvelu.html?id=liikunta-ja-vapaaaika</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/laukaan-autohuollot.html</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>1.0</priority>
+  <loc>https://laukaainfo.fi/palvelu.html?id=elaimet</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/laukaan-parturit-ja-kauneus.html</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>1.0</priority>
+  <loc>https://laukaainfo.fi/palvelu.html?id=lapset-ja-perhe</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/tietosuoja.html</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>1.0</priority>
+  <loc>https://laukaainfo.fi/palvelu.html?id=autohuollot</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/maksuehto.html</loc>
-	<lastmod>2026-05-19T13:59:09+01:00</lastmod>
-	<priority>1.0</priority>
+  <loc>https://laukaainfo.fi/laukaan-ravintolat.html</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/tarinakartta.html?category=Matkailu&amp;topic=Lievestuore&amp;step=4</loc>
-	<lastmod>2026-05-19T13:59:13+01:00</lastmod>
-	<priority>0.9</priority>
+  <loc>https://laukaainfo.fi/laukaan-autohuollot.html</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/tarinakartta.html?category=Matkailu&amp;topic=Lievestuore&amp;step=5</loc>
-	<lastmod>2026-05-19T13:59:13+01:00</lastmod>
-	<priority>0.9</priority>
+  <loc>https://laukaainfo.fi/laukaan-parturit-ja-kauneus.html</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/tarinakartta.html?category=Matkailu&amp;topic=Lievestuore&amp;step=6</loc>
-	<lastmod>2026-05-19T13:59:13+01:00</lastmod>
-	<priority>0.9</priority>
+  <loc>https://laukaainfo.fi/tietosuoja.html</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/tarinakartta.html?category=Matkailu&amp;topic=Lievestuore&amp;step=7</loc>
-	<lastmod>2026-05-19T13:59:13+01:00</lastmod>
-	<priority>0.9</priority>
+  <loc>https://laukaainfo.fi/maksuehto.html</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/tarinakartta.html?category=Matkailu&amp;topic=Lievestuore&amp;step=12</loc>
-	<lastmod>2026-05-19T13:59:13+01:00</lastmod>
-	<priority>0.9</priority>
+  <loc>https://laukaainfo.fi/tarinakartta.html?category=Matkailu&amp;topic=Lievestuore&amp;step=4</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/tarinakartta.html?step=1&amp;r=rantakavely-1</loc>
-	<lastmod>2026-05-19T13:59:16+01:00</lastmod>
-	<priority>0.9</priority>
+  <loc>https://laukaainfo.fi/tarinakartta.html?category=Matkailu&amp;topic=Lievestuore&amp;step=5</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/palvelu.html?id=</loc>
-	<lastmod>2026-05-19T13:59:16+01:00</lastmod>
-	<priority>0.9</priority>
+  <loc>https://laukaainfo.fi/tarinakartta.html?category=Matkailu&amp;topic=Lievestuore&amp;step=6</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/koko-laukaa.html?q=</loc>
-	<lastmod>2026-05-19T13:59:16+01:00</lastmod>
-	<priority>0.9</priority>
+  <loc>https://laukaainfo.fi/tarinakartta.html?category=Matkailu&amp;topic=Lievestuore&amp;step=7</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
-	<loc>https://laukaainfo.fi/verkostokartta.html</loc>
-	<lastmod>2026-05-19T13:59:16+01:00</lastmod>
-	<priority>1.0</priority>
+  <loc>https://laukaainfo.fi/tarinakartta.html?category=Matkailu&amp;topic=Lievestuore&amp;step=12</loc>
+  <lastmod>2026-06-08T20:11:12+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
+
+
 </urlset>
