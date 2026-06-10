@@ -454,9 +454,9 @@ const UI_TRANSLATIONS = {
         "nav_about_service": "Tietoa palvelusta",
         "nav_service_intro": "Palvelun esittely",
         "hero_btn_service": "Löydä palvelu",
-        "hero_btn_help": "Löydä apua",
+        "hero_btn_help": "Löydä verkosto",
         "hero_btn_people": "Löydä ihmisiä",
-        "hero_btn_create": "Luo jotain yhdessä",
+        "hero_btn_create": "Julkaisut",
         "hero_location": "Laukaa, Keski-Suomi",
         "people_section_title": "Löydä ihmisiä",
         "people_section_desc": "Palveluverkosto, harrastusryhmät ja avunpyynnöt Laukaassa.",
@@ -960,7 +960,7 @@ class I18nManager {
     translatePage() {
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const attrValue = el.getAttribute('data-i18n');
-            
+
             // Support for [attr]key syntax
             const attrMatch = attrValue.match(/^\[([^\]]+)\](.*)$/);
             if (attrMatch) {
@@ -973,7 +973,7 @@ class I18nManager {
             const key = attrValue;
             const translation = this.t(key);
             const hasHTML = translation.includes('<br>') || translation.includes('</span>') || translation.includes('</i>');
-            
+
             if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
                 if (el.hasAttribute('placeholder')) el.placeholder = translation;
                 else el.value = translation;
@@ -1000,7 +1000,7 @@ class I18nManager {
                 }
             }
         });
-        
+
         // Update language switcher active state
         document.querySelectorAll('.lang-btn').forEach(btn => {
             btn.classList.toggle('active', btn.getAttribute('data-lang') === this.currentLang);
