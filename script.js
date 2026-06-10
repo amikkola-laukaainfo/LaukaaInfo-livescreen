@@ -126,6 +126,83 @@ function cleanUrl(url, isWebsite = false) {
     return cleaned;
 }
 
+function escapeHtml(str) {
+    return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function truncateText(text, maxLength) {
+    if (!text) return '';
+    text = text.trim();
+    if (text.length <= maxLength) return escapeHtml(text);
+    return escapeHtml(text.slice(0, maxLength).replace(/\s+$/g, '')) + '…';
+}
+
+function setHomepageOfficialHighlightsLoading() {
+    const root = document.getElementById('homepage-official-highlights');
+    if (root) {
+        root.innerHTML = '<div class="homepage-feed-highlights__loading">Ladataan ajankohtaisia nostoja…</div>';
+    }
+}
+
+function createHomepageHighlightCard(item) {
+    const img = item.imageUrl || 'kuvia/syote.jpg';
+    const title = escapeHtml(item.title || i18n.t('label_news') || 'Ajankohtaista');
+    const desc = truncateText(item.description || '', 110);
+    const type = escapeHtml(item.type || i18n.t('label_news'));
+    const href = item.link || '#';
+
+    const card = document.createElement('article');
+    card.className = 'homepage-feed-highlights__card';
+    card.innerHTML = `
+        <a href="${href}" target="_blank" rel="noopener noreferrer" class="homepage-feed-highlights__card-link">
+            <div class="homepage-feed-highlights__card-media" style="background-image:url('${String(img).replace(/'/g, "\\'")}');"></div>
+            <div class="homepage-feed-highlights__card-body">
+                <span class="homepage-feed-highlights__badge">${type}</span>
+                <h3 class="homepage-feed-highlights__card-title">${title}</h3>
+                <p class="homepage-feed-highlights__card-desc">${desc}</p>
+                <span class="homepage-feed-highlights__card-cta">Näytä lisää »</span>
+            </div>
+        </a>
+    `;
+    return card;
+}
+
+function renderHomepageOfficialHighlights() {
+    const root = document.getElementById('homepage-official-highlights');
+    if (!root) return;
+
+    const items = allRssItems
+        .filter(item => item.isRss && (item.typeClass === 'news' || item.typeClass === 'event'))
+        .slice()
+        .sort((a, b) => {
+            const aTime = a.date && !isNaN(a.date) ? a.date.getTime() : 0;
+            const bTime = b.date && !isNaN(b.date) ? b.date.getTime() : 0;
+            return bTime - aTime;
+        });
+
+    if (!items.length) {
+        root.innerHTML = '<div class="homepage-feed-highlights__empty">Ei ajankohtaisia nostoja tällä hetkellä.</div>';
+        return;
+    }
+
+    const cards = document.createElement('div');
+    cards.className = 'homepage-feed-highlights__cards';
+    items.slice(0, 3).forEach(item => cards.appendChild(createHomepageHighlightCard(item)));
+
+    root.innerHTML = '';
+    root.appendChild(cards);
+
+    const action = document.createElement('div');
+    action.className = 'homepage-feed-highlights__footer';
+    action.innerHTML = '<a href="ajankohtaista.html" class="btn-radar homepage-feed-highlights__button">Näytä lisää</a>';
+    root.appendChild(action);
+}
+
 
 
 // Globaali klikkauskuuntelija Facebook-linkeille
@@ -825,10 +902,16 @@ function selectFromMap(companyId) {
  * Alustaa kaikki RSS-syötteet.
  */
 function initRSSFeeds() {
-    fetchRSSFeed('https://www.laukaa.fi/asukkaat/kategoria/uutiset/feed/', document.getElementById('news-container'), i18n.t('rss_no_news'), 'utf-8');
-    fetchRSSFeed('https://laukaa.oncloudos.com/cgi/DREQUEST.PHP?page=rss/meetingitems&show=30', document.getElementById('decisions-container'), i18n.t('rss_no_decisions'), 'iso-8859-1');
-    fetchRSSFeed('https://visitlaukaa.fi/evofeed', document.getElementById('events-container'), i18n.t('rss_no_events'), 'utf-8');
-    fetchRSSFeed('https://laukaa.trimblefeedback.com/eFeedback/API/Feed/rss', document.getElementById('feedback-container'), i18n.t('rss_no_feedback'), 'utf-8');
+    const feedPromises = [
+        fetchRSSFeed('https://www.laukaa.fi/asukkaat/kategoria/uutiset/feed/', document.getElementById('news-container'), i18n.t('rss_no_news'), 'utf-8'),
+        fetchRSSFeed('https://laukaa.oncloudos.com/cgi/DREQUEST.PHP?page=rss/meetingitems&show=30', document.getElementById('decisions-container'), i18n.t('rss_no_decisions'), 'iso-8859-1'),
+        fetchRSSFeed('https://visitlaukaa.fi/evofeed', document.getElementById('events-container'), i18n.t('rss_no_events'), 'utf-8'),
+        fetchRSSFeed('https://laukaa.trimblefeedback.com/eFeedback/API/Feed/rss', document.getElementById('feedback-container'), i18n.t('rss_no_feedback'), 'utf-8')
+    ];
+
+    setHomepageOfficialHighlightsLoading();
+    Promise.allSettled(feedPromises).then(renderHomepageOfficialHighlights);
+
     // Ladataan Lievestuoreen Blogger-syöte taustalla hakua varten
     fetchLievestuoreItems();
 }
