@@ -535,6 +535,25 @@
             'offer': 'Tarjous'
         };
 
+        const relationTranslations = {
+            'organizes': 'Järjestää',
+            'hosts': 'Isännöi',
+            'sponsors': 'Sponsoroi',
+            'partners_with': 'Yhteistyökumppani',
+            'provides': 'Tarjoaa',
+            'offers': 'Tarjoaa',
+            'has_offer': 'Etu tai tarjous',
+            'managed_by': 'Hallinnoi',
+            'owned_by': 'Omistaa',
+            'located_at': 'Sijaitsee',
+            'promotes': 'Mainostaa',
+            'related_to': 'Liittyy',
+            'member_of': 'Jäsen',
+            'supports': 'Tukee',
+            'participates_in': 'Osallistuu',
+            'recommends': 'Suosittelee'
+        };
+
         async function init() {
             try {
                 // Fetch data
@@ -550,7 +569,7 @@
                 
                 kohteet = [...perusKohteet, ...tarjoukset];
 
-                // Suodata pois yli viikon vanhat tapahtumat
+                // Suodata pois yli viikon vanhat tapahtumat ja menneet tarjoukset
                 const now = new Date();
                 const sevenDaysInMillis = 7 * 24 * 60 * 60 * 1000;
                 kohteet = kohteet.filter(k => {
@@ -560,6 +579,14 @@
                             const eventDate = new Date(eventDateStr);
                             // Jos tapahtuma on päättynyt yli viikko sitten, piilotetaan se
                             if (now.getTime() - eventDate.getTime() > sevenDaysInMillis) {
+                                return false;
+                            }
+                        }
+                    } else if (k.type === 'offer' && k.offer) {
+                        if (k.offer.validUntil) {
+                            const validDate = new Date(k.offer.validUntil);
+                            validDate.setHours(23, 59, 59, 999);
+                            if (now > validDate) {
                                 return false;
                             }
                         }
@@ -808,14 +835,17 @@
                     const otherType = isSource ? r.targetType : r.sourceType;
                     const otherId = isSource ? r.targetId : r.sourceId;
                     
+                    const translatedRelation = relationTranslations[r.relationType] || r.relationType;
+                    const translatedOtherType = typeTranslations[otherType] || otherType;
+                    
                     const div = document.createElement('div');
                     div.className = 'relation-item';
                     div.innerHTML = `
                         <span class="icon iconify" data-icon="mdi:link-variant" style="font-size: 1.5rem; color: #94a3b8;"></span>
                         <div class="relation-content">
-                            <span class="rel-type">${r.relationType} (${typeTranslations[otherType] || otherType})</span>
+                            <span class="rel-type">${translatedRelation} (${translatedOtherType})</span>
                             <span>${r.description}</span>
-                            ${!otherId.startsWith('yritys_') ? `<br><a href="?id=${otherId}" style="font-size:0.85rem; color:var(--primary-blue);">Tarkastele kohdetta</a>` : '<br><span style="font-size:0.85rem; color:#64748b;">(Viittaa yrityskorttiin)</span>'}
+                            ${!otherId.startsWith('yritys_') ? `<br><a href="?id=${otherId}" style="font-size:0.85rem; color:var(--primary-blue);">Tarkastele kohdetta</a>` : `<br><a href="yrityskortti.html?id=${otherId}" style="font-size:0.85rem; color:var(--primary-blue);">Tarkastele yrityskorttia</a>`}
                         </div>
                     `;
                     relContainer.appendChild(div);
