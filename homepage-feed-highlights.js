@@ -17,7 +17,8 @@
         offer: 'Tarjous',
         notice: 'Ilmoitus',
         video: 'Video',
-        pikkuilmoitus: 'Ajankohtaista'
+        pikkuilmoitus: 'Ajankohtaista',
+        kohde: 'Kohde'
     };
 
     function escapeHtml(str) {
@@ -27,6 +28,41 @@
             .replace(/>/g, '&gt;')
             .replace(/"/g, '&quot;')
             .replace(/'/g, '&#39;');
+    }
+
+    function shuffleArray(array) {
+        const cloned = array.slice();
+        for (let i = cloned.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [cloned[i], cloned[j]] = [cloned[j], cloned[i]];
+        }
+        return cloned;
+    }
+
+    async function loadKohdekortit() {
+        try {
+            const response = await fetch(`kohdekortit/kohteet.json?ts=${Date.now()}`);
+            if (!response.ok) {
+                throw new Error(`Kohdekortit haussa HTTP ${response.status}`);
+            }
+            const json = await response.json();
+            return Array.isArray(json) ? json.filter(item => item && item.status !== 'inactive') : [];
+        } catch (err) {
+            console.warn('Kohdekorttien lataus epäonnistui:', err);
+            return [];
+        }
+    }
+
+    function normalizeKohdeEntity(entity) {
+        return {
+            source: 'kohde',
+            id: entity.id,
+            title: entity.name,
+            description: entity.shortDescription || entity.description || '',
+            image: Array.isArray(entity.images) && entity.images.length ? entity.images[0] : placeholderImage,
+            type: 'kohde',
+            targetUrl: `kohdekortti.html?id=${encodeURIComponent(entity.id)}`
+        };
     }
 
     function truncate(text, maxLength) {
@@ -41,7 +77,7 @@
         const title = escapeHtml(item.title || item.name || 'Laukaa-syöte');
         const desc = truncate(item.description || item.summary || '', 110);
         const type = escapeHtml(typeLabels[item.type] || 'Julkaisu');
-        const targetUrl = item.id ? `index.html?item=${encodeURIComponent(item.id)}&feed=open` : 'index.html?feed=open';
+        const targetUrl = item.targetUrl || (item.id ? `index.html?item=${encodeURIComponent(item.id)}&feed=open` : 'index.html?feed=open');
 
         const card = document.createElement('article');
         card.className = 'homepage-feed-highlights__card';
@@ -108,7 +144,18 @@
             }
 
             const promoted = items.filter(i => i.is_promoted || i.type === 'offer' || i.type === 'notice');
-            const selected = (promoted.length ? promoted : items).slice(0, maxHighlights);
+            const otherFeedItems = items.filter(i => !promoted.includes(i));
+            const kohteet = await loadKohdekortit();
+            const normalizedKohteet = shuffleArray(kohteet).map(normalizeKohdeEntity);
+
+            const includeKohde = normalizedKohteet.length > 0 && Math.random() < 0.65;
+            const kohdeCount = includeKohde ? Math.min(1 + Math.floor(Math.random() * 2), maxHighlights - 1) : 0;
+            const feedCount = maxHighlights - kohdeCount;
+
+            const selectedFeed = shuffleArray(promoted.concat(otherFeedItems)).slice(0, Math.max(1, feedCount));
+            const selectedKohde = normalizedKohteet.slice(0, kohdeCount);
+            const selected = shuffleArray([...selectedFeed, ...selectedKohde]).slice(0, maxHighlights);
+
             renderHighlights(selected);
         } catch (err) {
             console.error('Homepage feed highlights load failed:', err);

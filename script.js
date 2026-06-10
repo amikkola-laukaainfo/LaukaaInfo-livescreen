@@ -149,20 +149,79 @@ function setHomepageOfficialHighlightsLoading() {
     }
 }
 
+function getHomepageOfficialPriority(item) {
+    if (!item || !item.date || isNaN(item.date)) return 0;
+
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const msPerDay = 24 * 60 * 60 * 1000;
+    const deltaDays = Math.round((item.date.getTime() - today.getTime()) / msPerDay);
+
+    if (item.typeClass === 'event') {
+        if (deltaDays < 0) return 1;
+        if (deltaDays === 0) return 5;
+        if (deltaDays <= 1) return 4;
+        if (deltaDays <= 3) return 3;
+        if (deltaDays <= 7) return 2;
+        return 1;
+    }
+
+    if (item.typeClass === 'news') {
+        const ageDays = Math.round((today.getTime() - item.date.getTime()) / msPerDay);
+        if (ageDays <= 0) return 5;
+        if (ageDays <= 1) return 4;
+        if (ageDays <= 3) return 3;
+        if (ageDays <= 7) return 2;
+        return 1;
+    }
+
+    return 1;
+}
+
+function getHomepageOfficialUrgencyLabel(item) {
+    if (!item || !item.date || isNaN(item.date)) return '';
+
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const msPerDay = 24 * 60 * 60 * 1000;
+    const deltaDays = Math.round((item.date.getTime() - today.getTime()) / msPerDay);
+
+    if (item.typeClass === 'event') {
+        if (deltaDays === 0) return 'Tänään';
+        if (deltaDays === 1) return 'Huomenna';
+        if (deltaDays <= 3) return 'Lähipäivinä';
+        return '';
+    }
+
+    if (item.typeClass === 'news') {
+        const ageDays = Math.round((today.getTime() - item.date.getTime()) / msPerDay);
+        if (ageDays <= 1) return 'Uusin';
+        if (ageDays <= 3) return 'Viimeisin';
+        return '';
+    }
+
+    return '';
+}
+
 function createHomepageHighlightCard(item) {
     const img = item.imageUrl || 'kuvia/syote.jpg';
     const title = escapeHtml(item.title || i18n.t('label_news') || 'Ajankohtaista');
     const desc = truncateText(item.description || '', 110);
     const type = escapeHtml(item.type || i18n.t('label_news'));
+    const urgencyLabel = getHomepageOfficialUrgencyLabel(item);
+    const urgentClass = urgencyLabel ? ' homepage-feed-highlights__card--urgent' : '';
     const href = item.link || '#';
 
     const card = document.createElement('article');
-    card.className = 'homepage-feed-highlights__card';
+    card.className = 'homepage-feed-highlights__card' + urgentClass;
     card.innerHTML = `
         <a href="${href}" target="_blank" rel="noopener noreferrer" class="homepage-feed-highlights__card-link">
             <div class="homepage-feed-highlights__card-media" style="background-image:url('${String(img).replace(/'/g, "\\'")}');"></div>
             <div class="homepage-feed-highlights__card-body">
-                <span class="homepage-feed-highlights__badge">${type}</span>
+                <div class="homepage-feed-highlights__badge-row">
+                    <span class="homepage-feed-highlights__badge">${type}</span>
+                    ${urgencyLabel ? `<span class="homepage-feed-highlights__urgent-badge">${escapeHtml(urgencyLabel)}</span>` : ''}
+                </div>
                 <h3 class="homepage-feed-highlights__card-title">${title}</h3>
                 <p class="homepage-feed-highlights__card-desc">${desc}</p>
                 <span class="homepage-feed-highlights__card-cta">Näytä lisää »</span>
@@ -180,6 +239,10 @@ function renderHomepageOfficialHighlights() {
         .filter(item => item.isRss && (item.typeClass === 'news' || item.typeClass === 'event'))
         .slice()
         .sort((a, b) => {
+            const aPriority = getHomepageOfficialPriority(a);
+            const bPriority = getHomepageOfficialPriority(b);
+            if (bPriority !== aPriority) return bPriority - aPriority;
+
             const aTime = a.date && !isNaN(a.date) ? a.date.getTime() : 0;
             const bTime = b.date && !isNaN(b.date) ? b.date.getTime() : 0;
             return bTime - aTime;

@@ -550,12 +550,36 @@
   border-radius: 22px;
   box-shadow: 0 12px 28px rgba(0, 44, 110, 0.08);
   overflow: hidden;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.homepage-feed-highlights__card--urgent {
+  border: 1px solid rgba(0, 86, 179, 0.25);
+  box-shadow: 0 18px 40px rgba(0, 86, 179, 0.16);
 }
 
 .homepage-feed-highlights__card:hover {
   transform: translateY(-3px);
   box-shadow: 0 18px 35px rgba(0, 44, 110, 0.12);
+}
+
+.homepage-feed-highlights__badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.homepage-feed-highlights__urgent-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #0056b3;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.3rem 0.7rem;
 }
 
 .homepage-feed-highlights__card-link {
