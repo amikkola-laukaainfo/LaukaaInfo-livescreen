@@ -102,7 +102,7 @@ function renderVerkosto(data, tagi, container) {
 
 // Globaali apufunktio nappeja varten
 window.renderVerkostoData = function(tagi) {
-    const url = 'https://mediazoo.fi/laukaainfo-web/suosittelija.php?tag=' + encodeURIComponent(tagi);
+    const url = 'https://mediazoo.fi/laukaainfo-web/suosittelija.php?tag=' + encodeURIComponent(tagi) + '&v=' + Date.now();
 
     fetch(url)
         .then(response => response.json())
