@@ -234,11 +234,39 @@ class NetworkMap {
                 companyList.innerHTML = '';
                 
                 const matches = [];
+
+                const findMatchesForOption = (opt) => {
+                    // Primary: profiling-based match
+                    let companies = this.data.companies.filter(c => this.checkCompanyMatch(c, opt, need));
+
+                    // Fallback: if no companies matched via profiling/isMatch, try a keyword/tag-based heuristic
+                    if (!companies || companies.length === 0) {
+                        const label = (i18n.getText(opt.label) || '').toLowerCase();
+                        const optTags = (opt.tags || []).map(t => String(t).toLowerCase());
+
+                        companies = this.data.companies.filter(c => {
+                            const hay = (String(c.tags || '') + ' ' + String(c.kategoria || '') + ' ' + String(c.nimi || '')).toLowerCase();
+                            // match tags first
+                            if (optTags.some(t => t && hay.includes(t))) return true;
+                            // match label words
+                            if (label && label.length > 2 && hay.includes(label)) return true;
+                            // try splitting label into words
+                            return label.split(/\s+/).some(w => w.length > 2 && hay.includes(w));
+                        });
+                    }
+
+                    return companies;
+                };
+
                 this.selections.options.forEach(optId => {
-                    const [nId, stepId, idx] = optId.split('-');
+                    const parts = optId.split('-');
+                    const idx = parts.pop();
+                    const stepId = parts.pop();
+                    const nId = parts.join('-');
                     const step = need.steps.find(s => s.id === stepId);
-                    const opt = step.options[parseInt(idx)];
-                    const companies = this.data.companies.filter(c => this.checkCompanyMatch(c, opt, need));
+                    const opt = step && step.options ? step.options[parseInt(idx)] : null;
+                    if (!opt) return;
+                    const companies = findMatchesForOption(opt);
                     matches.push(...companies);
                 });
                 
@@ -264,7 +292,10 @@ class NetworkMap {
             if (this.selections.options.size > 0 && window.getRecommendations) {
                 const selectionsArr = [];
                 this.selections.options.forEach(optId => {
-                    const [nId, stepId, idx] = optId.split('-');
+                    const parts = optId.split('-');
+                    const idx = parts.pop();
+                    const stepId = parts.pop();
+                    const needId = parts.join('-');
                     const s = need.steps.find(st => st.id === stepId);
                     if (s) {
                         selectionsArr.push(s.options[parseInt(idx)]);
@@ -460,7 +491,10 @@ class NetworkMap {
 
             // Connect to matching options
             this.selections.options.forEach(optId => {
-                const [needId, stepId, idx] = optId.split('-');
+                const parts = optId.split('-');
+                const idx = parts.pop();
+                const stepId = parts.pop();
+                const needId = parts.join('-');
                 const need = this.data.needs[needId];
                 const step = need.steps.find(s => s.id === stepId);
                 const opt = step.options[parseInt(idx)];
