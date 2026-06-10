@@ -469,17 +469,23 @@ window.LkiModal = (function() {
             }
         }
 
-        const slug = slugify(companyName);
-        const isInDist = window.location.pathname.includes('/dist/') || 
-                         window.location.hostname === 'laukaainfo.fi' || 
-                         window.location.hostname.includes('github.io');
-        const distPrefix = isInDist ? '' : 'dist/';
-        
-        const cardUrl = isPremium 
-            ? `${distPrefix}yritys/${slug}.html`
-            : `yrityskortti.html?id=${slug}`;
+        // Company Card Link - only if companyName is available
+        if (companyName && companyName.trim()) {
+            const slug = slugify(companyName);
+            const isInDist = window.location.pathname.includes('/dist/') || 
+                             window.location.hostname === 'laukaainfo.fi' || 
+                             window.location.hostname.includes('github.io');
+            const distPrefix = isInDist ? '' : 'dist/';
+            
+            const cardUrl = isPremium 
+                ? `${distPrefix}yritys/${slug}.html`
+                : `yrityskortti.html?id=${slug}`;
 
-        footer.innerHTML += `<a href="${cardUrl}" class="lki-cta-btn card">📄 Yrityssivulle</a>`;
+            footer.innerHTML += `<a href="${cardUrl}" class="lki-cta-btn card">📄 Yrityssivulle</a>`;
+        } else {
+            // Show disabled button with message if no company name
+            footer.innerHTML += `<span class="lki-cta-btn card" style="opacity: 0.5; cursor: not-allowed; text-decoration: none;">📄 Ei linkkiä määritetty</span>`;
+        }
 
         // Local Feed Link (Laukaa-syöte)
         const rowid = String(company.business_id || company.business_rowid || company.id).replace('company-', '');
