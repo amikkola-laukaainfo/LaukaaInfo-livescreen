@@ -175,84 +175,90 @@ class NetworkMap {
 
     renderSidebar() {
         const sidebarContent = document.querySelector('.sidebar-content');
-        sidebarContent.innerHTML = '';
+        const categoryList = document.getElementById('category-list');
 
         if (!this.selections.needId) {
-            // Show all Needs
-            const catSection = document.createElement('div');
-            catSection.className = 'sidebar-section';
-            catSection.innerHTML = `<h3 data-i18n="need_section_title">Mitä olet järjestämässä?</h3><div id="need-list" class="selection-list"></div>`;
-            const needList = catSection.querySelector('#need-list');
-
+            // Show all Needs in category-list
+            categoryList.innerHTML = '';
             Object.entries(this.data.needs).forEach(([id, need]) => {
                 const label = i18n.getText(need.title);
                 const item = this.createItemElement(id, `${need.icon} ${label}`, null, () => this.toggleNeed(id));
-                needList.appendChild(item);
+                categoryList.appendChild(item);
             });
-            sidebarContent.appendChild(catSection);
         } else {
-            // Show selected Need with change button
+            // Show selected Need with options
+            categoryList.innerHTML = '';
             const needId = this.selections.needId;
             const need = this.data.needs[needId];
             const label = i18n.getText(need.title);
-
-            const catSection = document.createElement('div');
-            catSection.className = 'sidebar-section';
-            catSection.innerHTML = `<div id="need-list" class="selection-list"></div>`;
-            const needList = catSection.querySelector('#need-list');
 
             const backBtn = document.createElement('div');
             backBtn.className = 'back-to-categories';
             backBtn.innerHTML = `&larr; <span data-i18n="btn_change_category">Vaihda aihetta</span>`;
             backBtn.onclick = () => this.resetMap();
-            needList.appendChild(backBtn);
+            categoryList.appendChild(backBtn);
 
             const needItem = this.createItemElement(needId, `${need.icon} ${label}`, null, () => {}, true);
-            needList.appendChild(needItem);
-            sidebarContent.appendChild(catSection);
+            categoryList.appendChild(needItem);
 
-            // Steps and Options
-            need.steps.forEach((step, stepIdx) => {
-                const stepSection = document.createElement('div');
-                stepSection.className = 'sidebar-section';
-                stepSection.innerHTML = `<h3>${i18n.getText(step.question)}</h3><div class="selection-list"></div>`;
-                const optionList = stepSection.querySelector('.selection-list');
-
-                step.options.forEach((opt, optIdx) => {
-                    if (opt.hide_results && !opt.sub_context) return;
-                    
-                    const optId = `${needId}-${step.id}-${optIdx}`;
-                    const optLabel = i18n.getText(opt.label);
-                    const isActive = this.selections.options.has(optId);
-                    
-                    // Count matching companies for this option
-                    const count = this.data.companies.filter(c => this.checkCompanyMatch(c, opt, need)).length;
-                    
-                    const item = this.createItemElement(optId, optLabel, count, () => this.toggleOption(opt, step, optIdx), isActive);
-                    optionList.appendChild(item);
-
-                    if (isActive) {
-                        const subList = document.createElement('div');
-                        subList.className = 'sub-selection-list';
+            // Show intent-section and populate it
+            const intentSection = document.getElementById('intent-section');
+            const intentList = document.getElementById('intent-list');
+            if (need.steps && need.steps.length > 0) {
+                intentSection.style.display = 'block';
+                intentList.innerHTML = '';
+                
+                // Show all available options from all steps
+                need.steps.forEach((step, stepIdx) => {
+                    step.options?.forEach((opt, optIdx) => {
+                        if (opt.hide_results && !opt.sub_context) return;
                         
-                        const matches = this.data.companies.filter(c => this.checkCompanyMatch(c, opt, need));
-                        matches.sort((a, b) => {
-                            const aPkg = (a.package || '').toLowerCase();
-                            const bPkg = (b.package || '').toLowerCase();
-                            if (aPkg.includes('premium') && !bPkg.includes('premium')) return -1;
-                            return 0;
-                        });
-
-                        matches.forEach(comp => {
-                            const compActive = this.selections.companies.has(comp.id);
-                            const compItem = this.createItemElement(comp.id, comp.nimi, null, () => this.toggleCompany(comp.id, optId), compActive, 'company-item');
-                            subList.appendChild(compItem);
-                        });
-                        optionList.appendChild(subList);
-                    }
+                        const optId = `${needId}-${step.id}-${optIdx}`;
+                        const optLabel = i18n.getText(opt.label);
+                        const isActive = this.selections.options.has(optId);
+                        
+                        // Count matching companies
+                        const count = this.data.companies.filter(c => this.checkCompanyMatch(c, opt, need)).length;
+                        
+                        const item = this.createItemElement(optId, optLabel, count, () => this.toggleOption(opt, step, optIdx), isActive);
+                        intentList.appendChild(item);
+                    });
                 });
-                sidebarContent.appendChild(stepSection);
-            });
+            }
+
+            // Show company-section if any options are selected
+            if (this.selections.options.size > 0) {
+                const companySection = document.getElementById('company-section');
+                const companyList = document.getElementById('company-list');
+                companySection.style.display = 'block';
+                companyList.innerHTML = '';
+                
+                const matches = [];
+                this.selections.options.forEach(optId => {
+                    const [nId, stepId, idx] = optId.split('-');
+                    const step = need.steps.find(s => s.id === stepId);
+                    const opt = step.options[parseInt(idx)];
+                    const companies = this.data.companies.filter(c => this.checkCompanyMatch(c, opt, need));
+                    matches.push(...companies);
+                });
+                
+                // Deduplicate and sort
+                const uniqueCompanies = [...new Set(matches.map(c => c.id))].map(id => this.data.companies.find(c => c.id === id));
+                uniqueCompanies.sort((a, b) => {
+                    const aPkg = (a.package || '').toLowerCase();
+                    const bPkg = (b.package || '').toLowerCase();
+                    if (aPkg.includes('premium') && !bPkg.includes('premium')) return -1;
+                    return 0;
+                });
+                
+                uniqueCompanies.forEach(comp => {
+                    const compActive = this.selections.companies.has(comp.id);
+                    const compItem = this.createItemElement(comp.id, comp.nimi, null, () => this.toggleCompany(comp.id), compActive, 'company-item');
+                    companyList.appendChild(compItem);
+                });
+            } else {
+                document.getElementById('company-section').style.display = 'none';
+            }
 
             // Hae ja näytä suositukset (Next steps) valintojen perusteella
             if (this.selections.options.size > 0 && window.getRecommendations) {

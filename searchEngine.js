@@ -738,7 +738,9 @@ function getRecommendations(needId, context, selectionsArr, allCompanies, taxono
             intentIds = [...intentIds, ...group.codes];
         }
 
-        const matchingIntents = taxonomyData.intents.filter(i => intentIds.includes(i.id));
+        // Convert intents object to array
+        const intentsArray = Array.isArray(taxonomyData.intents) ? taxonomyData.intents : Object.entries(taxonomyData.intents).map(([id, data]) => ({ id, ...data }));
+        const matchingIntents = intentsArray.filter(i => intentIds.includes(i.id));
         
         matchingIntents.forEach(intent => {
             // 1. Subcontexts and Refinements
@@ -755,8 +757,13 @@ function getRecommendations(needId, context, selectionsArr, allCompanies, taxono
             if (taxonomyData.relations) {
                 const relations = taxonomyData.relations.filter(r => r.from === intent.id);
                 relations.forEach(r => {
-                    const target = taxonomyData.intents.find(i => i.id === r.to);
-                    if (target) addRec(target.label);
+                    let target;
+                    if (Array.isArray(taxonomyData.intents)) {
+                        target = taxonomyData.intents.find(i => i.id === r.to);
+                    } else if (taxonomyData.intents && typeof taxonomyData.intents === 'object') {
+                        target = taxonomyData.intents[r.to];
+                    }
+                    if (target) addRec(target.label || target.fi || target.en);
                     else addRec(r.to);
                 });
             }
@@ -768,8 +775,13 @@ function getRecommendations(needId, context, selectionsArr, allCompanies, taxono
                 opt.intent_codes.forEach(code => {
                     const rels = (taxonomyData.relations || []).filter(r => r.from === code);
                     rels.forEach(r => {
-                        const target = taxonomyData.intents.find(i => i.id === r.to);
-                        if (target) addRec(target.label);
+                        let target;
+                        if (Array.isArray(taxonomyData.intents)) {
+                            target = taxonomyData.intents.find(i => i.id === r.to);
+                        } else if (taxonomyData.intents && typeof taxonomyData.intents === 'object') {
+                            target = taxonomyData.intents[r.to];
+                        }
+                        if (target) addRec(target.label || target.fi || target.en);
                         else addRec(r.to);
                     });
                 });
