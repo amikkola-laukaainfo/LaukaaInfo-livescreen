@@ -4280,7 +4280,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-24T12:13:01.412Z",
+                "last_updated": "2026-06-05T15:23:58.875Z",
                 "verified_by": "ai-generated",
                 "status": "draft"
             }
@@ -75354,20 +75354,20 @@
             "core": {
                 "fits_for": {
                     "events-and-celebrations": 100,
-                    "business-events": 90,
-                    "funerals-and-memorials": 96,
-                    "startup-services": 90,
+                    "business-events": 92,
+                    "funerals-and-memorials": 95,
+                    "startup-services": 92,
                     "business-growth": 0,
                     "moving-and-housing": 0,
                     "construction-and-maintenance": 0,
-                    "cottage-services": 24,
+                    "cottage-services": 10,
                     "accommodation": 100,
-                    "wellbeing-and-beauty": 34,
+                    "wellbeing-and-beauty": 0,
                     "housing-company-and-contracts": 0,
                     "liikunta-ja-vapaaaika": 20,
-                    "service-partner": 40,
+                    "service-partner": 35,
                     "emergency-services": 0,
-                    "family-and-children": 34,
+                    "family-and-children": 40,
                     "animals": 0,
                     "auto-services": 0
                 },
@@ -75417,27 +75417,34 @@
                 "sub_contexts": [],
                 "node_links": [
                     "JUHLATILA",
-                    "CATERING",
-                    "SAUNA"
+                    "CATERING"
                 ],
                 "intent_codes": [
                     "VENUE_PARTY",
+                    "VENUE_MEETING",
                     "EVT_WEDDING",
-                    "EVT_MEMORIAL"
+                    "EVT_BIRTHDAY",
+                    "EVT_BIRTHDAY_ADULTS",
+                    "EVT_BIRTHDAY_FAMILY",
+                    "EVT_CORPORATE",
+                    "EVT_MEMORIAL",
+                    "BIZ_CATERING"
                 ],
                 "intent_scores": {
                     "EVT_WEDDING": 98,
-                    "EVT_MEMORIAL": 96,
+                    "EVT_MEMORIAL": 95,
                     "VENUE_PARTY": 100,
-                    "EVT_CORPORATE": 82,
-                    "VENUE_MEETING": 90,
-                    "BIZ_CATERING": 78,
+                    "EVT_CORPORATE": 90,
+                    "VENUE_MEETING": 92,
+                    "BIZ_CATERING": 75,
                     "BIZ_MEETING": 75,
                     "BIZ_SEMINAR": 60,
-                    "EVT_BIRTHDAY": 85,
+                    "EVT_BIRTHDAY": 88,
                     "EVT_PARTY": 85,
                     "VENUE_ACCOMMODATION": 20,
-                    "REC_SWIMMING": 20
+                    "REC_SWIMMING": 20,
+                    "EVT_BIRTHDAY_ADULTS": 88,
+                    "EVT_BIRTHDAY_FAMILY": 85
                 }
             },
             "capabilities": {
@@ -75453,12 +75460,29 @@
                     "priority_score": 0.8,
                     "confidence": "inferred",
                     "source": "migration",
-                    "specs": {}
+                    "specs": {},
+                    "inventory": [
+                        {
+                            "type": "projector",
+                            "count": 1
+                        },
+                        {
+                            "type": "sound_system",
+                            "count": 1
+                        },
+                        {
+                            "type": "projection_screen",
+                            "count": 1
+                        }
+                    ],
+                    "additional_inventory": [
+                        "piano"
+                    ]
                 }
             },
             "categories": {
                 "core": {
-                    "description": "Vuonteen Helmi on Vihtavuoressa sijaitseva historiallinen jugend-tyylinen juhla- ja kokouspaikka, joka soveltuu häihin, yritystilaisuuksiin, muistotilaisuuksiin ja yksityisjuhliin järven rannalla.",
+                    "description": "Vuonteen Helmi on Laukaan Vuonteella sijaitseva historiallinen juhla- ja kokouspaikka sekä tilausravintola. Kohde soveltuu häihin, syntymäpäiviin, muistotilaisuuksiin, yritysjuhliin, kokouksiin ja muihin yksityistilaisuuksiin. Tilat voidaan vuokrata pelkästään käyttöön tai tapahtuma voidaan toteuttaa tarjoiluineen. Kapasiteetti on noin 80 henkilöä ja käytettävissä on AV-laitteisto sekä piano.",
                     "website": "http://www.vuonteenhelmi.fi",
                     "email": "info@vuonteenhelmi.fi",
                     "phone": "+358440379651"
@@ -75469,10 +75493,10 @@
                     "standing_guests": 80,
                     "outdoor_capacity": 40,
                     "is_accessible": true,
-                    "own_catering_allowed": true,
+                    "own_catering_allowed": false,
                     "inhouse_catering_available": true,
                     "is_lakeside": true,
-                    "has_sauna": true,
+                    "has_sauna": false,
                     "has_av_tech": true,
                     "has_stage": true,
                     "accommodation_beds": 0,
@@ -75725,7 +75749,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-24T18:02:42.160Z",
+                "last_updated": "2026-06-11T12:31:57.793Z",
                 "verified_by": "web-enriched-ai",
                 "status": "enriched"
             }
@@ -94342,7 +94366,7 @@
             "from": "company-276",
             "to": "intent-EVT_MEMORIAL",
             "relation": "offers",
-            "weight": 96
+            "weight": 95
         },
         {
             "from": "company-276",
@@ -94354,19 +94378,19 @@
             "from": "company-276",
             "to": "intent-EVT_CORPORATE",
             "relation": "offers",
-            "weight": 82
+            "weight": 90
         },
         {
             "from": "company-276",
             "to": "intent-VENUE_MEETING",
             "relation": "offers",
-            "weight": 90
+            "weight": 92
         },
         {
             "from": "company-276",
             "to": "intent-BIZ_CATERING",
             "relation": "offers",
-            "weight": 78
+            "weight": 75
         },
         {
             "from": "company-276",
@@ -94384,7 +94408,7 @@
             "from": "company-276",
             "to": "intent-EVT_BIRTHDAY",
             "relation": "offers",
-            "weight": 85
+            "weight": 88
         },
         {
             "from": "company-276",
@@ -94406,6 +94430,18 @@
         },
         {
             "from": "company-276",
+            "to": "intent-EVT_BIRTHDAY_ADULTS",
+            "relation": "offers",
+            "weight": 88
+        },
+        {
+            "from": "company-276",
+            "to": "intent-EVT_BIRTHDAY_FAMILY",
+            "relation": "offers",
+            "weight": 85
+        },
+        {
+            "from": "company-276",
             "to": "group-events-and-celebrations",
             "relation": "fits_for",
             "weight": 100
@@ -94414,37 +94450,31 @@
             "from": "company-276",
             "to": "group-business-events",
             "relation": "fits_for",
-            "weight": 90
+            "weight": 92
         },
         {
             "from": "company-276",
             "to": "group-funerals-and-memorials",
             "relation": "fits_for",
-            "weight": 96
+            "weight": 95
         },
         {
             "from": "company-276",
             "to": "group-startup-services",
             "relation": "fits_for",
-            "weight": 90
+            "weight": 92
         },
         {
             "from": "company-276",
             "to": "group-cottage-services",
             "relation": "fits_for",
-            "weight": 24
+            "weight": 10
         },
         {
             "from": "company-276",
             "to": "group-accommodation",
             "relation": "fits_for",
             "weight": 100
-        },
-        {
-            "from": "company-276",
-            "to": "group-wellbeing-and-beauty",
-            "relation": "fits_for",
-            "weight": 34
         },
         {
             "from": "company-276",
@@ -94456,13 +94486,13 @@
             "from": "company-276",
             "to": "group-service-partner",
             "relation": "fits_for",
-            "weight": 40
+            "weight": 35
         },
         {
             "from": "company-276",
             "to": "group-family-and-children",
             "relation": "fits_for",
-            "weight": 34
+            "weight": 40
         },
         {
             "from": "company-276",
@@ -94487,11 +94517,6 @@
         {
             "from": "company-276",
             "to": "nodelink-CATERING",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-276",
-            "to": "nodelink-SAUNA",
             "relation": "links_to"
         },
         {

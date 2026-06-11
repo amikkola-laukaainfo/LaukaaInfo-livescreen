@@ -14068,7 +14068,7 @@
             "from": "company-276",
             "to": "intent-EVT_MEMORIAL",
             "relation": "offers",
-            "weight": 96
+            "weight": 95
         },
         {
             "from": "company-276",
@@ -14080,19 +14080,19 @@
             "from": "company-276",
             "to": "intent-EVT_CORPORATE",
             "relation": "offers",
-            "weight": 82
+            "weight": 90
         },
         {
             "from": "company-276",
             "to": "intent-VENUE_MEETING",
             "relation": "offers",
-            "weight": 90
+            "weight": 92
         },
         {
             "from": "company-276",
             "to": "intent-BIZ_CATERING",
             "relation": "offers",
-            "weight": 78
+            "weight": 75
         },
         {
             "from": "company-276",
@@ -14110,7 +14110,7 @@
             "from": "company-276",
             "to": "intent-EVT_BIRTHDAY",
             "relation": "offers",
-            "weight": 85
+            "weight": 88
         },
         {
             "from": "company-276",
@@ -14132,6 +14132,18 @@
         },
         {
             "from": "company-276",
+            "to": "intent-EVT_BIRTHDAY_ADULTS",
+            "relation": "offers",
+            "weight": 88
+        },
+        {
+            "from": "company-276",
+            "to": "intent-EVT_BIRTHDAY_FAMILY",
+            "relation": "offers",
+            "weight": 85
+        },
+        {
+            "from": "company-276",
             "to": "group-events-and-celebrations",
             "relation": "fits_for",
             "weight": 100
@@ -14140,37 +14152,31 @@
             "from": "company-276",
             "to": "group-business-events",
             "relation": "fits_for",
-            "weight": 90
+            "weight": 92
         },
         {
             "from": "company-276",
             "to": "group-funerals-and-memorials",
             "relation": "fits_for",
-            "weight": 96
+            "weight": 95
         },
         {
             "from": "company-276",
             "to": "group-startup-services",
             "relation": "fits_for",
-            "weight": 90
+            "weight": 92
         },
         {
             "from": "company-276",
             "to": "group-cottage-services",
             "relation": "fits_for",
-            "weight": 24
+            "weight": 10
         },
         {
             "from": "company-276",
             "to": "group-accommodation",
             "relation": "fits_for",
             "weight": 100
-        },
-        {
-            "from": "company-276",
-            "to": "group-wellbeing-and-beauty",
-            "relation": "fits_for",
-            "weight": 34
         },
         {
             "from": "company-276",
@@ -14182,13 +14188,13 @@
             "from": "company-276",
             "to": "group-service-partner",
             "relation": "fits_for",
-            "weight": 40
+            "weight": 35
         },
         {
             "from": "company-276",
             "to": "group-family-and-children",
             "relation": "fits_for",
-            "weight": 34
+            "weight": 40
         },
         {
             "from": "company-276",
@@ -14213,11 +14219,6 @@
         {
             "from": "company-276",
             "to": "nodelink-CATERING",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-276",
-            "to": "nodelink-SAUNA",
             "relation": "links_to"
         },
         {
