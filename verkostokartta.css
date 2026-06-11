@@ -321,16 +321,58 @@ body {
 
 @media (max-width: 768px) {
     body {
-        overflow: auto;
+        overflow: hidden;
     }
     .network-sidebar {
-        position: static;
+        position: absolute;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
         width: 100%;
-        border-radius: 0;
         height: auto;
+        max-height: 85vh;
+        border-radius: 24px 24px 0 0;
+        transform: translateY(calc(100% - 66px));
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        flex-direction: column;
+    }
+    .network-sidebar.open {
+        transform: translateY(0);
+    }
+    .network-sidebar .sidebar-header {
+        cursor: pointer;
+        padding: 16px 24px;
+        position: relative;
+    }
+    .network-sidebar .sidebar-header::after {
+        content: '▲';
+        color: white;
+        position: absolute;
+        right: 24px;
+        top: 50%;
+        transform: translateY(-50%);
+        transition: transform 0.3s ease;
+        font-size: 1.2rem;
+    }
+    .network-sidebar.open .sidebar-header::after {
+        transform: translateY(-50%) rotate(180deg);
+    }
+    .network-sidebar .sidebar-content {
+        height: calc(85vh - 66px);
+        overflow-y: auto;
     }
     #network-container {
-        height: 50vh;
+        height: 100vh;
+        display: block;
+    }
+    #cy {
+        height: 100%;
+        width: 100%;
+    }
+    .network-controls {
+        bottom: 80px;
     }
 }
 

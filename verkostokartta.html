@@ -266,5 +266,19 @@
     <script src="script.js"></script>
     <script src="modal.js"></script>
     <script src="verkostokartta.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebar = document.querySelector('.network-sidebar');
+            const header = document.querySelector('.network-sidebar .sidebar-header');
+            if(sidebar && header) {
+                header.addEventListener('click', () => {
+                    // Toggle the open class only on mobile view
+                    if(window.innerWidth <= 768) {
+                        sidebar.classList.toggle('open');
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
