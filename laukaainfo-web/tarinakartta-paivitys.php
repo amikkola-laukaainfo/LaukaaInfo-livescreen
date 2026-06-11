@@ -287,7 +287,31 @@ if (file_exists($readPath)) {
             font-family: inherit;
         }
         .form-group textarea { resize: vertical; height: 80px; }
-        .form-group input:focus { border-color: var(--primary); outline: none; }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--primary); outline: none; }
+
+        /* Form section grouping */
+        .form-section {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: rgba(15,23,42,0.4);
+        }
+        .form-section-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .form-section-label.accent { color: var(--accent); }
+        .form-section-label.primary { color: var(--primary); }
+        .form-section .form-group { margin-bottom: 0.6rem; }
+        .form-section .form-group:last-child { margin-bottom: 0; }
 
         .lat-lng-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
@@ -405,73 +429,90 @@ if (file_exists($readPath)) {
         </div>
         
         <div id="edit-form-overlay">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem;">
                 <h3 style="margin:0;">Muokkaa kohdetta</h3>
                 <button id="close-form" style="background:none; border:none; color:white; font-size:1.5rem; cursor:pointer;">&times;</button>
             </div>
-            
-            <div class="form-group">
-                <label>Otsikko (Title)</label>
-                <input type="text" id="f-title" placeholder="Kohteen nimi">
-            </div>
-            
-            <div class="form-group">
-                <label>Tarinan osa (Story name)</label>
-                <input type="text" id="f-story_name" placeholder="Esim. Kirkkoherran tarina">
-            </div>
-            
-            <div class="form-group">
-                <label>Kuvaus (Description)</label>
-                <textarea id="f-description" placeholder="Kerro tästä kohteesta..."></textarea>
-            </div>
-            
-            <div class="lat-lng-row">
+
+            <!-- RYHMÄ 1: Tarina-konteksti -->
+            <div class="form-section">
+                <div class="form-section-label accent">🗂️ Tarina-konteksti</div>
+
                 <div class="form-group">
-                    <label>Latitud (Leveys)</label>
-                    <input type="number" step="any" id="f-lat">
+                    <label>Kategoria <span style="color:var(--text-muted);font-weight:400;">(yläteema)</span></label>
+                    <input type="text" id="f-category" placeholder="Esim. Historia, Matkailu, Luonto" list="category-suggestions">
+                    <datalist id="category-suggestions"></datalist>
                 </div>
+
                 <div class="form-group">
-                    <label>Longitud (Pituus)</label>
-                    <input type="number" step="any" id="f-lng">
+                    <label>Alue / Aihe <span style="color:var(--text-muted);font-weight:400;">(tarkentava)</span></label>
+                    <input type="text" id="f-topic" placeholder="Esim. Lievestuore, Kirkkohistoria" list="topic-suggestions">
+                    <datalist id="topic-suggestions"></datalist>
                 </div>
-            </div>
-            <p style="font-size: 0.7rem; color: var(--accent); margin-top: -5px;">💡 Voit myös klikata karttaa asettaaksesi sijainnin.</p>
-            
-            <div class="row" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+
                 <div class="form-group">
-                    <label>Kategoria</label>
-                    <input type="text" id="f-category" placeholder="Esim. Historia">
+                    <label>Tarinan nimi <span style="color:var(--text-muted);font-weight:400;">(mihin tarinaan kuuluu)</span></label>
+                    <input type="text" id="f-story_name" placeholder="Esim. Kirkkoherran tarina" list="story-suggestions">
+                    <datalist id="story-suggestions"></datalist>
                 </div>
-                <div class="form-group">
-                    <label>Aihe (Topic)</label>
-                    <input type="text" id="f-topic" placeholder="Esim. Kirkkohistoria">
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label>Kuva URL(t) (Voit lisätä useita kuvia + -napilla)</label>
-                <div id="image-url-container" style="display:flex; flex-direction:column; gap:5px;">
-                    <!-- JS creates inputs here -->
-                </div>
-                <button type="button" class="btn btn-accent btn-small" id="add-image-url-btn" style="margin-top: 5px; padding: 4px 8px; font-size: 0.8rem;">+ Lisää kuva</button>
-                <div class="image-preview" id="f-img-preview">
-                    <span>Ei kuvaa</span>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label>Lisätietolinkki (URL)</label>
-                <input type="url" id="f-more_info_url" placeholder="https://...">
             </div>
 
-            <div class="form-group">
-                <label>Ääni URL (MP3/OGG)</label>
-                <input type="url" id="f-audio_url" placeholder="https://...">
+            <!-- RYHMÄ 2: Askeleen sisältö -->
+            <div class="form-section">
+                <div class="form-section-label primary">📍 Askeleen tiedot</div>
+
+                <div class="form-group">
+                    <label>Otsikko</label>
+                    <input type="text" id="f-title" placeholder="Kohteen nimi tällä askeleella">
+                </div>
+
+                <div class="form-group">
+                    <label>Kuvaus</label>
+                    <textarea id="f-description" placeholder="Kerro tästä kohteesta..."></textarea>
+                </div>
+
+                <div class="lat-lng-row">
+                    <div class="form-group">
+                        <label>Leveysaste (lat)</label>
+                        <input type="number" step="any" id="f-lat">
+                    </div>
+                    <div class="form-group">
+                        <label>Pituusaste (lng)</label>
+                        <input type="number" step="any" id="f-lng">
+                    </div>
+                </div>
+                <p style="font-size: 0.7rem; color: var(--accent); margin-top: -2px; margin-bottom:0;">💡 Voit myös klikata karttaa asettaaksesi sijainnin.</p>
             </div>
 
-            <div class="form-group">
-                <label>YouTube URL</label>
-                <input type="url" id="f-youtube_url" placeholder="https://youtube.com/...">
+            <!-- RYHMÄ 3: Media -->
+            <div class="form-section">
+                <div class="form-section-label" style="color:#a78bfa;">🎨 Media &amp; linkit</div>
+
+                <div class="form-group">
+                    <label>Kuva URL(t) <span style="color:var(--text-muted);font-weight:400;">(+ useita)</span></label>
+                    <div id="image-url-container" style="display:flex; flex-direction:column; gap:5px;">
+                        <!-- JS creates inputs here -->
+                    </div>
+                    <button type="button" class="btn btn-accent btn-small" id="add-image-url-btn" style="margin-top: 5px; padding: 4px 8px; font-size: 0.8rem;">+ Lisää kuva</button>
+                    <div class="image-preview" id="f-img-preview">
+                        <span>Ei kuvaa</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>🔗 Lisätietolinkki (URL)</label>
+                    <input type="url" id="f-more_info_url" placeholder="https://...">
+                </div>
+
+                <div class="form-group">
+                    <label>🔊 Ääni URL (MP3/OGG)</label>
+                    <input type="url" id="f-audio_url" placeholder="https://...">
+                </div>
+
+                <div class="form-group">
+                    <label>▶️ YouTube URL</label>
+                    <input type="url" id="f-youtube_url" placeholder="https://youtube.com/...">
+                </div>
             </div>
         </div>
         
@@ -507,7 +548,23 @@ if (file_exists($readPath)) {
     const formOverlay = document.getElementById('edit-form-overlay');
     const emptyState = document.getElementById('empty-state');
     const toast = document.getElementById('toast');
-    
+
+    // 2b. PÄIVITÄ DATALIST-EHDOTUKSET (kategoriat, aiheet, tarinat datasta)
+    function refreshSuggestions() {
+        const categories = [...new Set(steps.map(s => s.category).filter(Boolean))].sort();
+        const topics     = [...new Set(steps.map(s => s.topic).filter(Boolean))].sort();
+        const stories    = [...new Set(steps.map(s => s.story_name).filter(Boolean))].sort();
+
+        const fill = (id, arr) => {
+            const dl = document.getElementById(id);
+            if (!dl) return;
+            dl.innerHTML = arr.map(v => `<option value="${v}">`).join('');
+        };
+        fill('category-suggestions', categories);
+        fill('topic-suggestions', topics);
+        fill('story-suggestions', stories);
+    }
+
     // 3. MAP SETUP
     function initMap() {
         map = L.map('map').setView([62.4, 25.9], 10);
@@ -828,6 +885,7 @@ if (file_exists($readPath)) {
         initMap();
         renderList();
         updateMarkers();
+        refreshSuggestions();
         
         <?php if ($message): ?>
             showToast("<?php echo addslashes($message); ?>", <?php echo (strpos($message, 'Virhe') !== false) ? 'true' : 'false'; ?>);
