@@ -363,6 +363,10 @@ if (file_exists($readPath)) {
 </head>
 <body>
 
+<?php if ($message): ?>
+<div id="server-message" data-msg="<?php echo rawurlencode($message); ?>" style="display:none;"></div>
+<?php endif; ?>
+
 <header>
     <div class="logo-area">
         <img src="../logo.png" alt="Logo">
@@ -773,17 +777,50 @@ if (file_exists($readPath)) {
         }
     });
 
-    // 7. SAVE ALL
-    document.getElementById('save-all-btn').onclick = () => {
+    // 7. SAVE ALL (AJAX – sivu ei lataudu uudelleen, muutokset säilyvät)
+    document.getElementById('save-all-btn').onclick = async () => {
         const token = document.getElementById('auth-token').value;
         if (!token) {
             alert('Syötä Admin-token tallentaaksesi.');
             return;
         }
-        
-        document.getElementById('save-token').value = token;
-        document.getElementById('save-data').value = JSON.stringify(steps);
-        document.getElementById('save-form').submit();
+
+        const btn = document.getElementById('save-all-btn');
+        btn.disabled = true;
+        btn.innerHTML = '<span>⏳ Tallennetaan...</span>';
+
+        try {
+            const formData = new FormData();
+            formData.append('action', 'save');
+            formData.append('token', token);
+            formData.append('data', JSON.stringify(steps));
+
+            const response = await fetch(window.location.href, {
+                method: 'POST',
+                body: formData
+            });
+
+            const text = await response.text();
+
+            // Parsitaan PHP:n palauttama viesti sivun HTML:stä
+            const match = text.match(/id="server-message" data-msg="([^"]*)"/); 
+            const serverMsg = match ? decodeURIComponent(match[1]) : '';
+
+            if (serverMsg.includes('onnistuneesti')) {
+                showToast(serverMsg, false);
+            } else if (serverMsg) {
+                showToast(serverMsg, true);
+            } else if (response.ok) {
+                showToast('Tallennettu! ✅', false);
+            } else {
+                showToast('Virhe tallennuksessa.', true);
+            }
+        } catch (err) {
+            showToast('Verkkovirhe: ' + err.message, true);
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<span>💾 Tallenna kaikki</span>';
+        }
     };
 
     // 8. ON LOAD
@@ -793,13 +830,14 @@ if (file_exists($readPath)) {
         updateMarkers();
         
         <?php if ($message): ?>
-            showToast("<?php echo $message; ?>");
+            showToast("<?php echo addslashes($message); ?>", <?php echo (strpos($message, 'Virhe') !== false) ? 'true' : 'false'; ?>);
         <?php endif; ?>
     };
 
-    function showToast(msg) {
+    function showToast(msg, isError = false) {
         const toast = document.getElementById('toast');
         toast.textContent = msg;
+        toast.style.background = isError ? 'var(--error)' : 'var(--success)';
         toast.style.display = 'block';
         setTimeout(() => toast.style.display = 'none', 4000);
     }
