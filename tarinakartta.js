@@ -692,6 +692,77 @@ document.addEventListener('DOMContentLoaded', () => {
         locateBtn.addEventListener('click', locateUser);
     }
 
+    const desktopSearchBtn = document.getElementById('btn-desktop-search-loc');
+    const desktopInput = document.getElementById('desktop-location-input');
+    
+    if (desktopSearchBtn && desktopInput) {
+        desktopSearchBtn.addEventListener('click', () => {
+            const query = desktopInput.value.trim();
+            if (!query) return;
+            desktopSearchBtn.textContent = '...';
+            
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query + ', Finland')}`)
+                .then(res => res.json())
+                .then(data => {
+                    desktopSearchBtn.textContent = 'Hae';
+                    if (data && data.length > 0) {
+                        const lat = parseFloat(data[0].lat);
+                        const lon = parseFloat(data[0].lon);
+                        handleLocationFound(lat, lon);
+                    } else {
+                        alert('Sijaintia ei löytynyt.');
+                    }
+                })
+                .catch(err => {
+                    desktopSearchBtn.textContent = 'Hae';
+                    console.error('Geocoding error:', err);
+                    alert('Sijainnin haku epäonnistui.');
+                });
+        });
+        
+        desktopInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') desktopSearchBtn.click();
+        });
+    }
+
+    function handleLocationFound(latitude, longitude) {
+        const userPos = [latitude, longitude];
+
+        if (userMarker) {
+            userMarker.setLatLng(userPos);
+        } else {
+            userMarker = L.circleMarker(userPos, {
+                radius: 8,
+                fillColor: "#007bff",
+                color: "#fff",
+                weight: 3,
+                fillOpacity: 0.8
+            }).addTo(map).bindPopup("Sijaintisi");
+        }
+
+        // Etsi lähin kohde
+        if (filteredSteps.length > 0) {
+            let minDist = Infinity;
+            let closestIdx = -1;
+
+            filteredSteps.forEach((step, i) => {
+                if (step.lat && step.lng) {
+                    const d = calculateDistance(latitude, longitude, parseFloat(step.lat), parseFloat(step.lng));
+                    if (d < minDist) {
+                        minDist = d;
+                        closestIdx = i;
+                    }
+                }
+            });
+
+            if (closestIdx !== -1) {
+                goToStep(closestIdx);
+            }
+        } else {
+            map.setView(userPos, 14);
+        }
+    }
+
     function locateUser() {
         if (!navigator.geolocation) {
             alert("Selaimesi ei tue paikannusta.");
@@ -702,42 +773,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         navigator.geolocation.getCurrentPosition((position) => {
             const { latitude, longitude } = position.coords;
-            const userPos = [latitude, longitude];
-
-            if (userMarker) {
-                userMarker.setLatLng(userPos);
-            } else {
-                userMarker = L.circleMarker(userPos, {
-                    radius: 8,
-                    fillColor: "#007bff",
-                    color: "#fff",
-                    weight: 3,
-                    fillOpacity: 0.8
-                }).addTo(map).bindPopup("Olet tässä");
-            }
-
-            // Etsi lähin kohde
-            if (filteredSteps.length > 0) {
-                let minDist = Infinity;
-                let closestIdx = -1;
-
-                filteredSteps.forEach((step, i) => {
-                    if (step.lat && step.lng) {
-                        const d = calculateDistance(latitude, longitude, parseFloat(step.lat), parseFloat(step.lng));
-                        if (d < minDist) {
-                            minDist = d;
-                            closestIdx = i;
-                        }
-                    }
-                });
-
-                if (closestIdx !== -1) {
-                    goToStep(closestIdx);
-                }
-            } else {
-                map.setView(userPos, 14);
-            }
-
+            handleLocationFound(latitude, longitude);
             locateBtn.classList.remove('loading');
         }, (error) => {
             console.error("Geolocation error:", error);
