@@ -206,21 +206,90 @@
 
     <header>
         <div class="header-content">
-            <h1>Kadonneet & Löytyneet</h1>
-            <p>Tietoa kadonneista ja löytyneistä tavaroista alueella</p>
+            <h1>Kadonneet & Löytyneet tavarat</h1>
+            <p>Laukaassa kadonneet ja löydetyt tavarat eivät katoa "ilmoitustaululle" – ne löytyvät nyt helposti yhdestä paikasta.</p>
         </div>
     </header>
 
     <main>
-        <section id="kadonneet-news" class="card" style="margin-top: 2rem;">
-            <h2>Löytyneet tavarat</h2>
-            <p style="margin-bottom: 1.5rem; color: #444;">
-                Ilmoituksia kadonneista ja löytyneistä tavaroista voi jättää ilmaisen sovelluksen kautta:<br>
-                <a href="https://play.google.com/store/apps/details?id=fi.mediazoo.lostrefound" target="_blank"
-                    class="btn-primary" style="margin-top: 15px; display: inline-block;">
-                    📱 LostReFound – Tutustu ominaisuuksiin Google Play:ssa
-                </a>
+        <!-- INTRO SECTION -->
+        <section id="intro-section" class="card" style="margin-top: 2rem; background: linear-gradient(135deg, #f8f9ff 0%, #e8ecff 100%); border-left: 4px solid #0056b3;">
+            <h2>🧭 Kadonnut tai löytänyt jotain Laukaassa?</h2>
+            <p style="font-size: 1.05em; margin-bottom: 1.5rem;">
+                Jos olet kadottanut tavaran tai löytänyt jotakin, voit ilmoittaa siitä suoraan <strong>Lost&Found-sovelluksella</strong>. Ilmoitukset näkyvät reaaliaikaisesti ja niitä voi hakea alueen ja ajankohdan mukaan.
             </p>
+            <div style="text-align: center;">
+                <a href="https://play.google.com/store/apps/details?id=fi.mediazoo.lostrefound" target="_blank" class="btn-primary" style="display: inline-block; padding: 12px 24px; font-size: 1.05em;">
+                    📱 Avaa Lost&Found-sovellus (Google Play)
+                </a>
+            </div>
+        </section>
+
+        <!-- HOW IT WORKS SECTION -->
+        <section id="how-it-works" class="card">
+            <h2>🔎 Näin palvelu toimii</h2>
+            <div class="features-grid" style="display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-top: 1.5rem;">
+                <div class="feature-item" style="padding: 1rem; border-left: 3px solid #0056b3; background: #f8f9fa;">
+                    <h3 style="margin-top: 0;">⚡ Nopea ilmoitus</h3>
+                    <p>Kadonnut tai löytynyt esine lisätään sovellukseen muutamassa sekunnissa.</p>
+                </div>
+                <div class="feature-item" style="padding: 1rem; border-left: 3px solid #0056b3; background: #f8f9fa;">
+                    <h3 style="margin-top: 0;">📍 Alueittain selkeytetty</h3>
+                    <p>Voit valita Laukaa, tietyn lähialueen tai kirjoittaa tarkemman sijainnin.</p>
+                </div>
+                <div class="feature-item" style="padding: 1rem; border-left: 3px solid #0056b3; background: #f8f9fa;">
+                    <h3 style="margin-top: 0;">🕐 Uusimmat ensin</h3>
+                    <p>Näet aina uusimmat ilmoitukset ensimmäisenä, jotta et missaa omaa esinettäsi.</p>
+                </div>
+                <div class="feature-item" style="padding: 1rem; border-left: 3px solid #0056b3; background: #f8f9fa;">
+                    <h3 style="margin-top: 0;">🛠️ Monipuoliset tiedot</h3>
+                    <p>Ilmoitukseen voi lisätä:</p>
+                    <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                        <li>📍 Karttapaikan</li>
+                        <li>📷 Kuvan</li>
+                        <li>📘 Facebook-linkin (esim. puskaradio-viittaus)</li>
+                        <li>🔒 Piilotetut yhteystiedot</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- SAFETY SECTION -->
+        <section id="safety-section" class="card" style="background: linear-gradient(135deg, #fff5e6 0%, #fff9f0 100%); border-left: 4px solid #ff9800;">
+            <h2>🔐 Turvallinen yhteydenotto</h2>
+            <p style="margin-bottom: 1.5rem;">
+                Yhteystiedot eivät näy julkisesti. Ne avautuvat vasta, kun:
+            </p>
+            <div style="background: white; padding: 1.5rem; border-radius: 6px; margin-bottom: 1rem;">
+                <h3 style="margin-top: 0; color: #ff9800;">❓ Esine on todennettu oikeaksi tunnistuskysymyksen avulla</h3>
+                <p style="margin: 0.5rem 0;">Sovellus kysyy yksityiskohdan, jonka vain oikea omistaja voi tietää:</p>
+                <ul style="margin: 0.5rem 0 0 0; padding-left: 1.5rem;">
+                    <li><em>"Mitä lukee avaimenperässä?"</em></li>
+                    <li><em>"Minkä värinen yksityiskohta laukussa on?"</em></li>
+                    <li><em>"Mikä merkki lompakossa oli?"</em></li>
+                </ul>
+            </div>
+            <p style="color: #555; font-style: italic;">
+                💡 Tämä vähentää väärinkäytöksiä ja varmistaa, että oikea omistaja löytää esineet.
+            </p>
+        </section>
+
+        <!-- BROWSE FOUND ITEMS SECTION -->
+        <section id="browse-section" class="card">
+            <h2>📍 Katso löytyneet tavarat</h2>
+            <p style="margin-bottom: 1.5rem;">
+                Kaikki Laukaan alueen löydetyt esineet löytyvät täältä. Voit suodattaa alueen, esinetyyppin ja ajankohdan mukaan:
+            </p>
+            <div style="text-align: center;">
+                <a href="https://lostrefound.blogspot.com/2026/01/loytyneet-tavarat.html" target="_blank" class="btn-primary" style="display: inline-block; padding: 12px 24px; font-size: 1.05em;">
+                    🔍 Selaa löytyneitä tavaroita
+                </a>
+            </div>
+        </section>
+
+        <!-- RECENT POSTS FROM BLOG -->
+        <section id="kadonneet-news" class="card">
+            <h2>📰 Viimeisimmät ilmoitukset</h2>
             <div id="blogger-feed" class="rss-list">
                 <p>Ladataan ilmoituksia...</p>
             </div>
