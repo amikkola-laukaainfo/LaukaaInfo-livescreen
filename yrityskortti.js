@@ -135,8 +135,33 @@
                 sessionStorage.setItem('laukaainfo_full_' + actualId, JSON.stringify(storeVal));
             }
             
-            // New response format: {results: [...], total: N, page: N, limit: N}
             const companies = Array.isArray(json) ? json : (json.results || []);
+
+            // --- Ladataan enriched-data-clean.json ---
+            try {
+                const isDist = window.location.pathname.includes('/yritys/');
+                const prefix = isDist ? '../' : './';
+                const enrichedRes = await fetch(prefix + 'profiling/enriched-data-clean.json?t=' + Date.now());
+                if (enrichedRes.ok) {
+                    const enrichedData = await enrichedRes.json();
+                    const enrichedList = Array.isArray(enrichedData) ? enrichedData : (enrichedData.companies || enrichedData.results || []);
+                    
+                    companies.forEach(company => {
+                        const rawId = String(company.id).replace('company-', '');
+                        const match = enrichedList.find(e => {
+                            const eId = String(e.companyId || e.id || '');
+                            return eId === rawId || eId === company.id;
+                        });
+                        
+                        if (match && match.results) {
+                            company.enrichedData = match.results;
+                        }
+                    });
+                }
+            } catch (e) {
+                console.warn('Virhe ladattaessa rikastusdataa:', e);
+            }
+            // ------------------------------------------
 
             // Normalize URLs
             const baseUrl = dataSourceUrl.substring(0, dataSourceUrl.lastIndexOf('/') + 1);
@@ -579,8 +604,37 @@
                     a.style.cssText = 'display:inline-flex; align-items:center; text-decoration:none;';
                     a.innerHTML = `<span style="display:inline-flex; width:32px; height:32px; align-items:center; justify-content:center;">${info.svg}</span>`;
                     socialIcons.appendChild(a);
+                    
+                    // Merkitään, että tämä some-linkki on jo olemassa
+                    company[`has_${key}`] = true;
                 }
             });
+
+            // Lisätään puuttuvat some-linkit rikastusdatasta
+            if (company.enrichedData && Array.isArray(company.enrichedData.socialLinks)) {
+                company.enrichedData.socialLinks.forEach(linkObj => {
+                    if (!linkObj || !linkObj.url || !linkObj.platform) return;
+                    let platform = linkObj.platform.toLowerCase();
+                    if (platform === 'fb') platform = 'facebook';
+                    if (platform === 'ig') platform = 'instagram';
+                    
+                    // Varmistetaan url-muotoilu ja poistetaan mahdolliset virheelliset merkit alusta
+                    let url = cleanUrl(linkObj.url.replace(/^\[/, '').split('"')[0].split(']')[0]);
+                    
+                    if (socialMap[platform] && !company[`has_${platform}`] && url) {
+                        const info = socialMap[platform];
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.target = '_blank';
+                        a.rel = 'noopener noreferrer';
+                        a.title = info.label;
+                        a.style.cssText = 'display:inline-flex; align-items:center; text-decoration:none;';
+                        a.innerHTML = `<span style="display:inline-flex; width:32px; height:32px; align-items:center; justify-content:center;">${info.svg}</span>`;
+                        socialIcons.appendChild(a);
+                        company[`has_${platform}`] = true;
+                    }
+                });
+            }
 
             // WhatsApp: field can be a phone number, 'true', or a full wa.me URL
             const waField = (company.whatsapp || '').trim();
@@ -644,6 +698,108 @@
                 }
             };
             socialIcons.appendChild(shareBtn);
+        }
+
+        // --- RIKASTUSDATA: Ajanvaraus ja Ota yhteyttä ---
+        const actGrid = document.querySelector('.actions-grid');
+        const infoPanel = document.querySelector('.info-panel');
+        
+        const cleanEnrichedUrl = (url) => {
+            if (!url) return '';
+            return cleanUrl(url.replace(/^\[/, '').split('"')[0].split(']')[0], true);
+        };
+
+        if (company.enrichedData) {
+            // 1. Ajanvaraus
+            const booking = company.enrichedData.booking;
+            if (booking && booking.found && booking.url) {
+                const bUrl = cleanEnrichedUrl(booking.url);
+                if (bUrl) {
+                    // Lisätään quick action gridiin, jos mahdollista
+                    if (actGrid) {
+                        const actBooking = document.createElement('a');
+                        actBooking.href = bUrl;
+                        actBooking.target = '_blank';
+                        actBooking.rel = 'noopener noreferrer';
+                        actBooking.className = 'btn-action primary-action';
+                        actBooking.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+                        actBooking.style.border = 'none';
+                        actBooking.innerHTML = `<i>📅</i><span>Ajanvaraus</span>`;
+                        actGrid.appendChild(actBooking);
+                    }
+                    
+                    // Lisätään info paneeliin
+                    if (infoPanel) {
+                        const bookingItem = document.createElement('div');
+                        bookingItem.className = 'contact-item';
+                        bookingItem.innerHTML = `
+                            <div>
+                                <span>Ajanvaraus</span>
+                                <a href="${bUrl}" target="_blank" rel="noopener noreferrer" style="color:#059669; font-weight:bold;">
+                                    📅 Varaa aika tästä
+                                </a>
+                            </div>
+                        `;
+                        const firstChild = infoPanel.firstChild;
+                        if (firstChild) {
+                            infoPanel.insertBefore(bookingItem, firstChild);
+                        } else {
+                            infoPanel.appendChild(bookingItem);
+                        }
+                    }
+                }
+            }
+
+            // 2. Ota yhteyttä (Yhteyslomake / Sähköposti)
+            const contacts = company.enrichedData.contacts;
+            let contactLinkUrl = '';
+            
+            // Priorisoidaan contactPage sähköpostin yli
+            if (contacts && contacts.contactPage && contacts.contactPage !== '-') {
+                contactLinkUrl = cleanEnrichedUrl(contacts.contactPage);
+            } else if (company.contact_url && company.contact_url !== '-') {
+                contactLinkUrl = cleanEnrichedUrl(company.contact_url);
+            } else if (contacts && contacts.email && contacts.email !== '-' && !contacts.email.includes('Ei löytynyt')) {
+                // Käytetään mailtoa vain jos käyttäjä hyväksyy, mutta aiemman kommentin perusteella
+                // sähköposteja haluttiin poistaa. Tehdään kuitenkin fallback, että jos ei ole contactPagea
+                // ja haluttiin "email logo, jos mukana on sähköposti", lisätään silti.
+                // Ohjeen mukaan korostetaan yhteyslomake-linkkiä.
+                contactLinkUrl = `mailto:${contacts.email.trim()}`;
+            }
+
+            if (contactLinkUrl) {
+                if (actGrid) {
+                    const actContact = document.createElement('a');
+                    actContact.href = contactLinkUrl;
+                    if (!contactLinkUrl.startsWith('mailto:')) {
+                        actContact.target = '_blank';
+                        actContact.rel = 'noopener noreferrer';
+                    }
+                    actContact.className = 'btn-action';
+                    actContact.innerHTML = `<i>✉️</i><span>Ota yhteyttä</span>`;
+                    actGrid.appendChild(actContact);
+                }
+                
+                if (infoPanel) {
+                    const contactItem = document.createElement('div');
+                    contactItem.className = 'contact-item';
+                    contactItem.innerHTML = `
+                        <div>
+                            <span>Ota yhteyttä</span>
+                            <a href="${contactLinkUrl}" ${!contactLinkUrl.startsWith('mailto:') ? 'target="_blank" rel="noopener noreferrer"' : ''} style="color:var(--primary-blue); font-weight:bold;">
+                                ✉️ ${contactLinkUrl.startsWith('mailto:') ? 'Lähetä sähköpostia' : 'Siirry yhteyslomakkeelle'}
+                            </a>
+                        </div>
+                    `;
+                    // Lisätään ennen sosiaalisia linkkejä
+                    const socialLinksContainer = document.getElementById('social-links');
+                    if (socialLinksContainer) {
+                        infoPanel.insertBefore(contactItem, socialLinksContainer);
+                    } else {
+                        infoPanel.appendChild(contactItem);
+                    }
+                }
+            }
         }
 
         // Promotional Links & Coupon
