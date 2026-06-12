@@ -16,9 +16,9 @@
     <!-- Leaflet Map -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-    <link rel="stylesheet" href="../style.c57cd377.css?v=20260420-2">
-    <link rel="stylesheet" href="../modal.c57cd377.css">
-    <script src="../translations.c57cd377.js?v=20260505"></script>
+    <link rel="stylesheet" href="../style.ce80d74d.css?v=20260420-2">
+    <link rel="stylesheet" href="../modal.ce80d74d.css">
+    <script src="../translations.ce80d74d.js?v=20260505"></script>
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
     <style>
         :root {
@@ -840,13 +840,16 @@
 
         /* Quick Actions Grid */
         .actions-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            display: flex;
+            flex-wrap: nowrap;
             gap: 12px;
             margin-top: 0.5rem;
+            width: 100%;
         }
 
         .action-card {
+            flex: 1;
+            min-width: 0;
             background: var(--light-blue);
             border: 1px solid #bae6fd;
             padding: 1.25rem 0.5rem;
@@ -855,7 +858,7 @@
             text-decoration: none;
             color: var(--primary-blue);
             font-weight: 800;
-            font-size: 0.95rem;
+            font-size: clamp(0.7rem, 1.5vw, 0.95rem);
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
@@ -1391,6 +1394,7 @@
             }
 
             .actions-grid {
+                display: grid;
                 grid-template-columns: repeat(2, 1fr);
                 gap: 10px;
             }
@@ -1950,8 +1954,8 @@
 
     <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="../script.c57cd377.js?v=20260301"></script>
-    <script src="../yrityskortti.c57cd377.js?v=20260304-DEBUG-2"></script>
+    <script src="../script.ce80d74d.js?v=20260301"></script>
+    <script src="../yrityskortti.ce80d74d.js?v=20260304-DEBUG-2"></script>
 </body>
 
 </html>

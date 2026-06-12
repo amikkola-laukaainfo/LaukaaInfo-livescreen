@@ -714,10 +714,8 @@
                         actBooking.href = bUrl;
                         actBooking.target = '_blank';
                         actBooking.rel = 'noopener noreferrer';
-                        actBooking.className = 'btn-action primary-action';
-                        actBooking.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
-                        actBooking.style.border = 'none';
-                        actBooking.innerHTML = `<i>📅</i><span>Ajanvaraus</span>`;
+                        actBooking.className = 'action-card';
+                        actBooking.innerHTML = `<span><span class="iconify" data-icon="material-symbols-light:calendar-month-outline"></span></span><strong>Ajanvaraus</strong>`;
                         actGrid.appendChild(actBooking);
                     }
                     
@@ -768,8 +766,8 @@
                         actContact.target = '_blank';
                         actContact.rel = 'noopener noreferrer';
                     }
-                    actContact.className = 'btn-action';
-                    actContact.innerHTML = `<i>✉️</i><span>Ota yhteyttä</span>`;
+                    actContact.className = 'action-card';
+                    actContact.innerHTML = `<span><span class="iconify" data-icon="material-symbols-light:mail-outline"></span></span><strong>Ota yhteyttä</strong>`;
                     actGrid.appendChild(actContact);
                 }
                 
