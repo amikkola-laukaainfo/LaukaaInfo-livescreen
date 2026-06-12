@@ -405,6 +405,111 @@
             opacity: 1;
             transform: translateX(-50%) translateY(0);
         }
+
+        /* --- Print Stylesheet for Physical Flyers --- */
+        @media print {
+            body {
+                background: white !important;
+                color: #000 !important;
+                font-family: 'Inter', sans-serif;
+            }
+
+            /* Hide standard web UI elements */
+            .nav-bar, .entity-card-container, #tag-filter-modal, .share-toast {
+                display: none !important;
+            }
+
+            /* Show print layout */
+            .print-layout {
+                display: block !important;
+                width: 100% !important;
+            }
+
+            .print-card {
+                border: 3px solid #0f172a;
+                border-radius: 20px;
+                padding: 3rem;
+                max-width: 650px;
+                margin: 4rem auto;
+                page-break-inside: avoid;
+                background: white !important;
+                position: relative;
+            }
+
+            .print-logo {
+                float: right;
+                width: 140px;
+                height: 140px;
+                object-fit: cover;
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                background: white;
+            }
+
+            .print-title {
+                font-size: 2.5rem !important;
+                font-weight: 900 !important;
+                color: #0f172a !important;
+                margin: 0 0 0.5rem 0 !important;
+                font-family: 'Outfit', sans-serif;
+            }
+
+            .print-category {
+                font-size: 1rem !important;
+                text-transform: uppercase !important;
+                color: #475569 !important;
+                font-weight: 800 !important;
+                margin-bottom: 2rem !important;
+                letter-spacing: 1px;
+            }
+
+            .print-details {
+                margin-top: 2rem;
+                font-size: 1.15rem !important;
+                line-height: 1.8 !important;
+                clear: both;
+            }
+
+            .print-details-item {
+                margin-bottom: 0.5rem;
+                border-bottom: 1px dashed #e2e8f0;
+                padding-bottom: 0.5rem;
+            }
+
+            .print-details-item strong {
+                color: #334155;
+            }
+
+            .print-qr-section {
+                margin-top: 3.5rem;
+                display: flex;
+                align-items: center;
+                gap: 2rem;
+                border-top: 3px dashed #cbd5e1;
+                padding-top: 2rem;
+            }
+
+            .print-qr-code {
+                width: 170px;
+                height: 170px;
+                border: 1px solid #cbd5e1;
+                padding: 5px;
+                border-radius: 12px;
+            }
+
+            .print-qr-text {
+                font-size: 1.05rem !important;
+                color: #334155 !important;
+                line-height: 1.6 !important;
+            }
+
+            .print-qr-text strong {
+                color: #0f172a !important;
+                font-size: 1.2rem;
+                display: block;
+                margin-bottom: 4px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -428,10 +533,16 @@
                 <h1 id="el-name">Kohteen Nimi</h1>
                 <p class="card-short-desc" id="el-shortdesc">Lyhyt kuvaus kohteesta.</p>
             </div>
-            <button class="share-btn" id="share-btn" onclick="shareEntity()" title="Jaa tämä sivu">
-                <span class="iconify" data-icon="mdi:share-variant"></span>
-                Jaa
-            </button>
+            <div style="position: absolute; top: 1.5rem; right: 1.5rem; display: flex; gap: 0.5rem; z-index: 10;">
+                <button class="share-btn" id="print-btn" onclick="printEntity()" title="Tulosta PDF-esite" style="position: static; box-shadow: 0 2px 8px rgba(0,0,0,0.07);">
+                    <span class="iconify" data-icon="mdi:printer"></span>
+                    Tulosta
+                </button>
+                <button class="share-btn" id="share-btn" onclick="shareEntity()" title="Jaa tämä sivu" style="position: static; box-shadow: 0 2px 8px rgba(0,0,0,0.07);">
+                    <span class="iconify" data-icon="mdi:share-variant"></span>
+                    Jaa
+                </button>
+            </div>
         </div>
         <div class="share-toast" id="share-toast">🔗 Linkki kopioitu leikepöydälle!</div>
 
@@ -516,6 +627,45 @@
                     <h3>Profiili ja Luokittelu</h3>
                     <div class="tag-container" id="el-tags">
                         <!-- Tunnisteet tänne -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden Print Card Container -->
+    <div id="print-layout" class="print-layout" style="display: none;">
+        <div class="print-card">
+            <img id="print-logo" class="print-logo" src="" alt="Kuva" style="display: none;">
+            <h1 id="print-name" class="print-title">Kohteen Nimi</h1>
+            <div id="print-category" class="print-category">Kategoria</div>
+            
+            <div class="print-details">
+                <div class="print-details-item" id="print-shortdesc-row">
+                    <p id="print-shortdesc" style="font-weight: 600; margin-bottom: 1.5rem;"></p>
+                </div>
+                <div class="print-details-item" id="print-time-row" style="display: none;">
+                    <strong>Aika:</strong> <span id="print-time">-</span>
+                </div>
+                <div class="print-details-item" id="print-address-row" style="display: none;">
+                    <strong>Sijainti:</strong> <span id="print-address">-</span>
+                </div>
+                <div class="print-details-item" id="print-website-row" style="display: none;">
+                    <strong>Verkkosivut:</strong> <span id="print-website">-</span>
+                </div>
+                <div class="print-details-item" id="print-ticket-row" style="display: none;">
+                    <strong>Lisätiedot / Liput:</strong> <span id="print-ticket">-</span>
+                </div>
+            </div>
+            
+            <div class="print-qr-section">
+                <img id="print-qr-image" class="print-qr-code" src="" alt="QR">
+                <div class="print-qr-text">
+                    <strong>Skannaa QR-koodi</strong>
+                    Tutustu kohteeseen tarkemmin LaukaaInfo-matkailuportaalissa.
+                    <div class="print-links" style="margin-top: 15px; font-weight: 600;">
+                        <a id="print-card-link" href="#" style="color: var(--primary-blue, #0056b3); text-decoration: none; display: block; margin-bottom: 5px;">Kohdekortti-linkki</a>
+                        <a href="https://laukaainfo.fi" style="color: var(--primary-blue, #0056b3); text-decoration: none; display: block;">laukaainfo.fi</a>
                     </div>
                 </div>
             </div>
@@ -928,6 +1078,104 @@
                 // Viimeinen vaihtoehto: prompt
                 prompt('Kopioi linkki:', url);
             });
+        }
+
+        function printEntity() {
+            // Check if entity is currently loaded
+            const selector = document.getElementById('demo-selector');
+            const id = selector.value;
+            const entity = kohteet.find(k => k.id === id);
+            if (!entity) return;
+
+            // Populate Print Layout
+            document.getElementById('print-name').textContent = entity.name;
+            document.getElementById('print-category').textContent = typeTranslations[entity.type] || entity.type;
+            
+            const shortDescEl = document.getElementById('print-shortdesc');
+            shortDescEl.textContent = entity.shortDescription || '';
+            
+            // Image
+            const printLogo = document.getElementById('print-logo');
+            if (entity.images && entity.images.length > 0 && entity.images[0]) {
+                let imgSrc = entity.images[0];
+                if (imgSrc.startsWith('http://')) imgSrc = 'https://' + imgSrc.slice(7);
+                printLogo.src = imgSrc;
+                printLogo.style.display = 'block';
+            } else {
+                printLogo.style.display = 'none';
+            }
+
+            // Location
+            let addrText = '';
+            if (entity.location) {
+                addrText = `${entity.location.address || ''}, ${entity.location.postalCode || ''} ${entity.location.municipality || ''}`.replace(/^[,\s]+|[,\s]+$/g, '');
+            }
+            const printAddrRow = document.getElementById('print-address-row');
+            if (addrText) {
+                document.getElementById('print-address').textContent = addrText;
+                printAddrRow.style.display = 'block';
+            } else {
+                printAddrRow.style.display = 'none';
+            }
+
+            // Time/Schedule
+            const printTimeRow = document.getElementById('print-time-row');
+            if (entity.type === 'event' && entity.event && (entity.event.startDate || entity.event.endDate)) {
+                const s = entity.event.startDate ? new Date(entity.event.startDate) : null;
+                const e = entity.event.endDate   ? new Date(entity.event.endDate)   : null;
+                let timeStr = '';
+                if (s && e && s.toDateString() === e.toDateString()) {
+                    timeStr = `${s.toLocaleDateString('fi-FI')} klo ${s.toLocaleTimeString('fi-FI',{hour:'2-digit',minute:'2-digit'})} – ${e.toLocaleTimeString('fi-FI',{hour:'2-digit',minute:'2-digit'})}`;
+                } else if (s && e) {
+                    timeStr = `${s.toLocaleDateString('fi-FI')} klo ${s.toLocaleTimeString('fi-FI',{hour:'2-digit',minute:'2-digit'})} – ${e.toLocaleDateString('fi-FI')} klo ${e.toLocaleTimeString('fi-FI',{hour:'2-digit',minute:'2-digit'})}`;
+                } else if (s) {
+                    timeStr = `${s.toLocaleDateString('fi-FI')} klo ${s.toLocaleTimeString('fi-FI',{hour:'2-digit',minute:'2-digit'})}`;
+                }
+                document.getElementById('print-time').textContent = timeStr;
+                printTimeRow.style.display = 'block';
+            } else if (entity.type === 'offer' && entity.offer && entity.offer.validUntil) {
+                document.getElementById('print-time').textContent = 'Voimassa: ' + entity.offer.validUntil;
+                printTimeRow.style.display = 'block';
+            } else {
+                printTimeRow.style.display = 'none';
+            }
+
+            // Website
+            const printWebRow = document.getElementById('print-website-row');
+            if (entity.contact && entity.contact.website) {
+                document.getElementById('print-website').textContent = entity.contact.website;
+                printWebRow.style.display = 'block';
+            } else {
+                printWebRow.style.display = 'none';
+            }
+
+            // Ticket/Extra Links
+            const printTicketRow = document.getElementById('print-ticket-row');
+            if (entity.type === 'event' && entity.event && entity.event.ticketUrl) {
+                document.getElementById('print-ticket').textContent = entity.event.ticketUrl;
+                printTicketRow.style.display = 'block';
+            } else if (entity.type === 'service' && entity.service && entity.service.bookingUrl) {
+                document.getElementById('print-ticket').textContent = entity.service.bookingUrl;
+                printTicketRow.style.display = 'block';
+            } else {
+                printTicketRow.style.display = 'none';
+            }
+
+            // QR Code & Link
+            const currentUrl = window.location.origin + window.location.pathname + '?id=' + encodeURIComponent(entity.id);
+            const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(currentUrl)}`;
+            document.getElementById('print-qr-image').src = qrApiUrl;
+            
+            const printCardLink = document.getElementById('print-card-link');
+            if (printCardLink) {
+                printCardLink.href = currentUrl;
+                printCardLink.textContent = "Kohdekortti-linkki";
+            }
+
+            // Add short delay to allow image to load before printing
+            setTimeout(() => {
+                window.print();
+            }, 500);
         }
 
         window.addEventListener('DOMContentLoaded', init);
