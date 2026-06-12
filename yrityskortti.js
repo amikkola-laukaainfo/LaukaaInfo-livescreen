@@ -137,24 +137,17 @@
             
             const companies = Array.isArray(json) ? json : (json.results || []);
 
-            // --- Ladataan enriched-data-clean.json ---
+            // --- Ladataan yksittäisen yrityksen rikastusdata palvelimelta ---
             try {
-                const isDist = window.location.pathname.includes('/yritys/');
-                const prefix = isDist ? '../' : './';
-                const enrichedRes = await fetch(prefix + 'profiling/enriched-data-clean.json?t=' + Date.now());
+                // Haemme vain kyseisen yrityksen datan PHP-rajapinnan kautta, joka piilottaa täyden JSON-tiedoston
+                const enrichedRes = await fetch(`https://www.mediazoo.fi/laukaainfo-web/get_enriched_data.php?id=${encodeURIComponent(actualId)}&t=${Date.now()}`);
                 if (enrichedRes.ok) {
                     const enrichedData = await enrichedRes.json();
-                    const enrichedList = Array.isArray(enrichedData) ? enrichedData : (enrichedData.companies || enrichedData.results || []);
                     
                     companies.forEach(company => {
-                        const rawId = String(company.id).replace('company-', '');
-                        const match = enrichedList.find(e => {
-                            const eId = String(e.companyId || e.id || '');
-                            return eId === rawId || eId === company.id;
-                        });
-                        
-                        if (match && match.results) {
-                            company.enrichedData = match.results;
+                        // Varmistetaan, että saatu rikastusdata liitetään oikeaan yritykseen (vaikka PHP tekee sen jo)
+                        if (enrichedData && enrichedData.results) {
+                            company.enrichedData = enrichedData.results;
                         }
                     });
                 }
