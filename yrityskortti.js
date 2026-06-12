@@ -1345,7 +1345,7 @@
             const printCardLink = document.getElementById('print-card-link');
             if (printCardLink) {
                 printCardLink.href = currentUrl;
-                printCardLink.textContent = currentUrl;
+                printCardLink.textContent = "Yrityskortti-linkki " + currentUrl;
             }
         }
 
