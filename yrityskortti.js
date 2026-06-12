@@ -1341,6 +1341,12 @@
                 downloadQrLink.href = qrApiUrl;
                 downloadQrLink.target = '_blank';
             }
+            
+            const printCardLink = document.getElementById('print-card-link');
+            if (printCardLink) {
+                printCardLink.href = currentUrl;
+                printCardLink.textContent = currentUrl;
+            }
         }
 
         // 10. Jaa digitaalinen käyntikortti Button
