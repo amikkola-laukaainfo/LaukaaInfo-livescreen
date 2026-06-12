@@ -440,7 +440,7 @@
                 float: right;
                 width: 140px;
                 height: 140px;
-                object-fit: cover;
+                object-fit: contain;
                 border: 1px solid #e2e8f0;
                 border-radius: 12px;
                 background: white;
@@ -1143,7 +1143,7 @@
             // Website
             const printWebRow = document.getElementById('print-website-row');
             if (entity.contact && entity.contact.website) {
-                document.getElementById('print-website').textContent = entity.contact.website;
+                document.getElementById('print-website').innerHTML = `<a href="${entity.contact.website}" style="color: var(--primary-blue, #0056b3); text-decoration: none;">${entity.contact.website}</a>`;
                 printWebRow.style.display = 'block';
             } else {
                 printWebRow.style.display = 'none';
@@ -1152,10 +1152,10 @@
             // Ticket/Extra Links
             const printTicketRow = document.getElementById('print-ticket-row');
             if (entity.type === 'event' && entity.event && entity.event.ticketUrl) {
-                document.getElementById('print-ticket').textContent = entity.event.ticketUrl;
+                document.getElementById('print-ticket').innerHTML = `<a href="${entity.event.ticketUrl}" style="color: var(--primary-blue, #0056b3); text-decoration: none;">${entity.event.ticketUrl}</a>`;
                 printTicketRow.style.display = 'block';
             } else if (entity.type === 'service' && entity.service && entity.service.bookingUrl) {
-                document.getElementById('print-ticket').textContent = entity.service.bookingUrl;
+                document.getElementById('print-ticket').innerHTML = `<a href="${entity.service.bookingUrl}" style="color: var(--primary-blue, #0056b3); text-decoration: none;">${entity.service.bookingUrl}</a>`;
                 printTicketRow.style.display = 'block';
             } else {
                 printTicketRow.style.display = 'none';

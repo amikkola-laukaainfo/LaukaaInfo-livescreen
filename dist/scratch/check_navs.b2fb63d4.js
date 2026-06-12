@@ -1,1 +1,0 @@
-const fs=require("fs"),files=fs.readdirSync(".").filter(s=>s.endsWith(".html"));files.forEach(s=>{const e=fs.readFileSync(s,"utf8");let i=[];e.includes('class="desktop-nav"')||i.push("desktop-nav"),e.includes('class="sidebar-menu"')||e.includes('id="sidebar-menu"')||i.push("sidebar-menu"),i.length>0&&console.log(s+" missing: "+i.join(", "))});
