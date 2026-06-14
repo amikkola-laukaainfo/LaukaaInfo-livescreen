@@ -52954,7 +52954,7 @@
             "core": {
                 "description": "Laukaan Tuulenväre on Saraaveden rannalla sijaitseva persoonallinen juhla- ja kokoustila Tyvelänniemessä Laukaassa. Tila soveltuu erityisesti häihin, muistotilaisuuksiin, syntymäpäiviin ja yritystilaisuuksiin. Käytössä on flyygeli, parveke, takka ja mahdollisuus omiin tarjoiluihin.",
                 "website": "https://www.laukaantuulenvare.com",
-                "email": "",
+                "email": "Vuokra-aika sovitaan tapauskohtaisesti. Pääsääntöisesti vuokra-aika päättyy klo 22.00. Hiekoitettu piha-alue käytettävissä pysäköintiin.",
                 "phone": "+358401964487"
             },
             "events_and_celebrations": {
@@ -53221,7 +53221,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-21T11:55:50.149Z",
+            "last_updated": "2026-06-14T14:56:06.574Z",
             "verified_by": "csv-reconciliation",
             "status": "draft"
         }
@@ -53700,7 +53700,7 @@
             "core": {
                 "description": "Tunnelmallinen yli satavuotias työväentalo Lievestuoreella. Soveltuu häihin, muistotilaisuuksiin, kokouksiin, seminaareihin, pikkujouluihin ja muihin juhliin. Tilassa on suuri juhlasali, kahvila, sauna, videotykki sekä mahdollisuus lattiamajoitukseen.",
                 "website": "https://visitlaukaa.fi/palvelu/tyovaentalo-toivola/",
-                "email": "",
+                "email": "Tilaa vuokraa Laukaan Demarit. Saatavilla myös kahvilapalvelut, järjestysmiespalvelut ja mahdollisuus tilapäiseen lattiamajoitukseen.",
                 "phone": "0400540995"
             },
             "events_and_celebrations": {
@@ -53970,7 +53970,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-21T11:57:38.385Z",
+            "last_updated": "2026-06-14T14:56:06.574Z",
             "verified_by": "ai-enriched",
             "status": "enriched"
         }
@@ -56665,6 +56665,1080 @@
             "last_updated": "2026-05-17T17:57:25.382Z",
             "verified_by": "ai-profile-enrichment",
             "status": "enriched"
+        }
+    },
+    "company-316": {
+        "name": "Laukaan Pitopalvelu",
+        "tags": "",
+        "core": {
+            "fits_for": {
+                "events-and-celebrations": 100,
+                "business-events": 80
+            },
+            "priority_score": 0,
+            "service_area": {
+                "mode": "paikan päällä, toimitus",
+                "radius_km": 0,
+                "regions": [
+                    "laukaa kk"
+                ],
+                "note": "Tarjoaa pitopalvelua erilaisiin juhliin ja tapahtumiin asiakkaan toiveiden mukaan. Keskittyy yksityis- ja pienyritystilaisuuksiin Laukaan ja Keski-Suomen alueella."
+            },
+            "emergency_available": false,
+            "contract_customer_available": false,
+            "paired_with_by_context": {},
+            "corporate_clients": false,
+            "home_service": false,
+            "weekend_service": false,
+            "not_suitable_for": [],
+            "sub_contexts": [
+                "pitopalvelu",
+                "juhlat",
+                "häät",
+                "tarjoilu",
+                "tapahtumat"
+            ],
+            "node_links": [
+                "CATERING"
+            ],
+            "intent_codes": [
+                "EVT_WEDDING",
+                "EVT_CORPORATE",
+                "EVT_BIRTHDAY_FAMILY"
+            ],
+            "intent_scores": {
+                "EVT_WEDDING": 100,
+                "EVT_CORPORATE": 80,
+                "EVT_BIRTHDAY_FAMILY": 70
+            }
+        },
+        "capabilities": {},
+        "categories": {
+            "core": {
+                "description": "Laukaan Pitopalvelu tarjoaa catering- ja juhlapalveluita yksityis- ja yritystilaisuuksiin. Palveluihin kuuluvat räätälöidyt menut ja tapahtumien ruokatarjoilut Laukaan ja Keski-Suomen alueella.",
+                "website": "https://www.laukaanpitopalvelu.fi",
+                "email": "",
+                "phone": ""
+            },
+            "events_and_celebrations": {
+                "capacity_max": 0,
+                "seated_capacity": 0,
+                "standing_guests": 0,
+                "outdoor_capacity": 0,
+                "is_accessible": false,
+                "own_catering_allowed": false,
+                "inhouse_catering_available": false,
+                "is_lakeside": false,
+                "has_sauna": false,
+                "has_av_tech": false,
+                "has_stage": false,
+                "accommodation_beds": 0,
+                "alcohol_license": false,
+                "private_booking": false,
+                "late_night_events": false,
+                "wedding_specialized": false,
+                "catering_min_capacity": 0,
+                "catering_max_capacity": 0,
+                "dietary_specialties": [],
+                "staff_included": false,
+                "wedding_menu_available": false,
+                "cake_service": false,
+                "partner_venues": [],
+                "wedding_photography": false,
+                "drone_available": false,
+                "video_production": false,
+                "live_music": false,
+                "dj_services": false,
+                "karaoke_available": false,
+                "has_exclusive_catering": false,
+                "accommodation_included": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "entertainment_features": [],
+                "collaborated_with": []
+            },
+            "business_events": {
+                "meeting_capacity": 0,
+                "seminar_capacity": 0,
+                "conference_rooms": 0,
+                "has_projector": false,
+                "has_streaming": false,
+                "has_wifi": false,
+                "has_stage": false,
+                "private_booking": false,
+                "invoice_billing": false,
+                "corporate_clients": false,
+                "vip_services": false,
+                "business_catering": false,
+                "event_hosting": false,
+                "corporate_gifts": false,
+                "branding_support": false,
+                "av_support": false,
+                "staff_events_specialized": false,
+                "refinement_tags": [],
+                "wellbeing_and_activity_features": [],
+                "entertainment_features": [],
+                "collaborated_with": []
+            },
+            "funerals_and_memorials": {
+                "memorial_service_capacity": 0,
+                "quiet_private_space": false,
+                "accessible_entry": false,
+                "memorial_catering": false,
+                "coffee_service": false,
+                "flower_arrangements": false,
+                "memorial_menu_available": false,
+                "funeral_flowers": false,
+                "memorial_arrangements": false,
+                "transport_assistance": false,
+                "urgent_booking_available": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "moving_and_housing": {
+                "moving_truck_available": false,
+                "packing_service": false,
+                "storage_available": false,
+                "weekend_moves": false,
+                "urgent_moves": false,
+                "long_distance_moves": false,
+                "cleaning_after_move": false,
+                "electrician_available": false,
+                "renovation_support": false,
+                "insurance_support": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "construction_and_maintenance": {
+                "emergency_service": false,
+                "certifications": [],
+                "wet_room_certification": false,
+                "provides_tools": false,
+                "material_supply": false,
+                "project_management": false,
+                "snow_removal": false,
+                "lawn_maintenance": false,
+                "property_monitoring": false,
+                "maintenance_contracts": false,
+                "housing_company_clients": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "cottage_services": {
+                "key_holding": false,
+                "winter_monitoring": false,
+                "snow_removal": false,
+                "cleaning_service": false,
+                "lawn_service": false,
+                "remote_monitoring": false,
+                "emergency_visits": false,
+                "renovation_support": false,
+                "dock_maintenance": false,
+                "sauna_services": false,
+                "guest_preparation_service": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "housing_company_and_contracts": {
+                "housing_company_clients": false,
+                "maintenance_contracts": false,
+                "emergency_response": false,
+                "scheduled_visits": false,
+                "property_reports": false,
+                "invoice_billing": false,
+                "contract_customer_available": false,
+                "priority_support": false,
+                "monthly_service_plan": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "startup_services": {
+                "bookkeeping_startup": false,
+                "business_advisory": false,
+                "insurance_setup": false,
+                "legal_services": false,
+                "office_space_available": false,
+                "banking_support": false,
+                "website_creation": false,
+                "webshop_setup": false,
+                "branding_support": false,
+                "logo_design": false,
+                "business_photography": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "business_growth": {
+                "google_ads": false,
+                "social_media_marketing": false,
+                "seo_services": false,
+                "content_creation": false,
+                "video_production": false,
+                "crm_support": false,
+                "recruitment_support": false,
+                "sales_development": false,
+                "automation_services": false,
+                "consulting_services": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "wellbeing_and_beauty": {
+                "home_visits": false,
+                "online_booking": false,
+                "unisex_services": false,
+                "gift_cards": false,
+                "corporate_wellbeing_services": false,
+                "event_makeup": false,
+                "bridal_services": false,
+                "group_bookings": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "animals": {
+                "emergency_service": false,
+                "home_visits": false,
+                "online_booking": false,
+                "specialization": [],
+                "grooming_available": false,
+                "boarding_available": false,
+                "supplies_sold": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "family_and_children": {
+                "daycare_available": false,
+                "hobby_activities": false,
+                "educational_services": false,
+                "family_therapy": false,
+                "equipment_rental": false,
+                "accessible_with_stroller": false,
+                "baby_changing_room": false,
+                "kids_play_area": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "auto_services": {
+                "replacement_car_available": false,
+                "collaborated_with": []
+            },
+            "liikunta-ja-vapaaaika": {
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "accommodation": {
+                "accommodation_beds": 0,
+                "accommodation_included": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            }
+        },
+        "meta": {
+            "last_updated": "2026-06-14T14:59:18.132Z",
+            "verified_by": "csv-reconciliation",
+            "status": "draft"
+        }
+    },
+    "company-315": {
+        "name": "Äijäparkki",
+        "tags": "",
+        "core": {
+            "fits_for": {
+                "events-and-celebrations": 85,
+                "accommodation": 80,
+                "moving-and-housing": 40,
+                "cottage-services": 30,
+                "business-events": 60
+            },
+            "priority_score": 0,
+            "service_area": {
+                "mode": "paikan päällä",
+                "radius_km": 0,
+                "regions": [
+                    "leppävesi"
+                ],
+                "note": "Palveluihin kuuluu tilavuokraus (juhlat ja tapahtumat), ajoneuvojen ja veneiden talvisäilytys sekä pitkäaikaismajoitus. Lisäksi maatilaan liittyvää eläin- ja pihatoimintaa."
+            },
+            "emergency_available": false,
+            "contract_customer_available": false,
+            "paired_with_by_context": {},
+            "corporate_clients": false,
+            "home_service": false,
+            "weekend_service": false,
+            "not_suitable_for": [],
+            "sub_contexts": [
+                "maatila",
+                "tapahtumatila",
+                "tilavuokraus",
+                "juhlatila",
+                "talvisäilytys",
+                "pitkäaikaismajoitus",
+                "työmajoitus"
+            ],
+            "node_links": [
+                "MAJOITUS",
+                "JUHLATILA"
+            ],
+            "intent_codes": [
+                "EVT_BIRTHDAY_FAMILY",
+                "EVT_CORPORATE",
+                "EVT_WEDDING"
+            ],
+            "intent_scores": {
+                "EVT_BIRTHDAY_FAMILY": 70,
+                "EVT_CORPORATE": 60,
+                "EVT_WEDDING": 70
+            }
+        },
+        "capabilities": {},
+        "categories": {
+            "core": {
+                "description": "Äijäparkki on maatilaympäristössä toimiva palvelukokonaisuus Jyväskylän ja Laukaan rajalla. Se tarjoaa tiloja tapahtumiin, pitkäaikaista majoitusta sekä ajoneuvojen ja veneiden talvisäilytystä.",
+                "website": "https://www.aijaparkki.fi",
+                "email": "asiakaspalvelu@multamesta.fi",
+                "phone": "358500635217"
+            },
+            "events_and_celebrations": {
+                "capacity_max": 0,
+                "seated_capacity": 0,
+                "standing_guests": 0,
+                "outdoor_capacity": 0,
+                "is_accessible": false,
+                "own_catering_allowed": false,
+                "inhouse_catering_available": false,
+                "is_lakeside": false,
+                "has_sauna": false,
+                "has_av_tech": false,
+                "has_stage": false,
+                "accommodation_beds": 0,
+                "alcohol_license": false,
+                "private_booking": false,
+                "late_night_events": false,
+                "wedding_specialized": false,
+                "catering_min_capacity": 0,
+                "catering_max_capacity": 0,
+                "dietary_specialties": [],
+                "staff_included": false,
+                "wedding_menu_available": false,
+                "cake_service": false,
+                "partner_venues": [],
+                "wedding_photography": false,
+                "drone_available": false,
+                "video_production": false,
+                "live_music": false,
+                "dj_services": false,
+                "karaoke_available": false,
+                "has_exclusive_catering": false,
+                "accommodation_included": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "entertainment_features": [],
+                "collaborated_with": []
+            },
+            "business_events": {
+                "meeting_capacity": 0,
+                "seminar_capacity": 0,
+                "conference_rooms": 0,
+                "has_projector": false,
+                "has_streaming": false,
+                "has_wifi": false,
+                "has_stage": false,
+                "private_booking": false,
+                "invoice_billing": false,
+                "corporate_clients": false,
+                "vip_services": false,
+                "business_catering": false,
+                "event_hosting": false,
+                "corporate_gifts": false,
+                "branding_support": false,
+                "av_support": false,
+                "staff_events_specialized": false,
+                "refinement_tags": [],
+                "wellbeing_and_activity_features": [],
+                "entertainment_features": [],
+                "collaborated_with": []
+            },
+            "funerals_and_memorials": {
+                "memorial_service_capacity": 0,
+                "quiet_private_space": false,
+                "accessible_entry": false,
+                "memorial_catering": false,
+                "coffee_service": false,
+                "flower_arrangements": false,
+                "memorial_menu_available": false,
+                "funeral_flowers": false,
+                "memorial_arrangements": false,
+                "transport_assistance": false,
+                "urgent_booking_available": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "moving_and_housing": {
+                "moving_truck_available": false,
+                "packing_service": false,
+                "storage_available": false,
+                "weekend_moves": false,
+                "urgent_moves": false,
+                "long_distance_moves": false,
+                "cleaning_after_move": false,
+                "electrician_available": false,
+                "renovation_support": false,
+                "insurance_support": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "construction_and_maintenance": {
+                "emergency_service": false,
+                "certifications": [],
+                "wet_room_certification": false,
+                "provides_tools": false,
+                "material_supply": false,
+                "project_management": false,
+                "snow_removal": false,
+                "lawn_maintenance": false,
+                "property_monitoring": false,
+                "maintenance_contracts": false,
+                "housing_company_clients": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "cottage_services": {
+                "key_holding": false,
+                "winter_monitoring": false,
+                "snow_removal": false,
+                "cleaning_service": false,
+                "lawn_service": false,
+                "remote_monitoring": false,
+                "emergency_visits": false,
+                "renovation_support": false,
+                "dock_maintenance": false,
+                "sauna_services": false,
+                "guest_preparation_service": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "housing_company_and_contracts": {
+                "housing_company_clients": false,
+                "maintenance_contracts": false,
+                "emergency_response": false,
+                "scheduled_visits": false,
+                "property_reports": false,
+                "invoice_billing": false,
+                "contract_customer_available": false,
+                "priority_support": false,
+                "monthly_service_plan": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "startup_services": {
+                "bookkeeping_startup": false,
+                "business_advisory": false,
+                "insurance_setup": false,
+                "legal_services": false,
+                "office_space_available": false,
+                "banking_support": false,
+                "website_creation": false,
+                "webshop_setup": false,
+                "branding_support": false,
+                "logo_design": false,
+                "business_photography": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "business_growth": {
+                "google_ads": false,
+                "social_media_marketing": false,
+                "seo_services": false,
+                "content_creation": false,
+                "video_production": false,
+                "crm_support": false,
+                "recruitment_support": false,
+                "sales_development": false,
+                "automation_services": false,
+                "consulting_services": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "wellbeing_and_beauty": {
+                "home_visits": false,
+                "online_booking": false,
+                "unisex_services": false,
+                "gift_cards": false,
+                "corporate_wellbeing_services": false,
+                "event_makeup": false,
+                "bridal_services": false,
+                "group_bookings": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "animals": {
+                "emergency_service": false,
+                "home_visits": false,
+                "online_booking": false,
+                "specialization": [],
+                "grooming_available": false,
+                "boarding_available": false,
+                "supplies_sold": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "family_and_children": {
+                "daycare_available": false,
+                "hobby_activities": false,
+                "educational_services": false,
+                "family_therapy": false,
+                "equipment_rental": false,
+                "accessible_with_stroller": false,
+                "baby_changing_room": false,
+                "kids_play_area": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "auto_services": {
+                "replacement_car_available": false,
+                "collaborated_with": []
+            },
+            "liikunta-ja-vapaaaika": {
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "accommodation": {
+                "accommodation_beds": 0,
+                "accommodation_included": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            }
+        },
+        "meta": {
+            "last_updated": "2026-06-14T14:59:18.131Z",
+            "verified_by": "csv-reconciliation",
+            "status": "draft"
+        }
+    },
+    "company-314": {
+        "name": "Valkolan kyläyhdistys ry",
+        "tags": "",
+        "core": {
+            "fits_for": {
+                "events-and-celebrations": 90,
+                "business-events": 60,
+                "accommodation": 30
+            },
+            "priority_score": 0,
+            "service_area": {
+                "mode": "TOIMIPISTE",
+                "radius_km": 0,
+                "regions": [
+                    "laukaa kk"
+                ],
+                "note": ""
+            },
+            "emergency_available": false,
+            "contract_customer_available": false,
+            "paired_with_by_context": {},
+            "corporate_clients": false,
+            "home_service": false,
+            "weekend_service": false,
+            "not_suitable_for": [],
+            "sub_contexts": [
+                "kylätalo",
+                "juhlatila",
+                "kokoustila",
+                "kyläyhdistys",
+                "vuokratilat"
+            ],
+            "node_links": [
+                "JUHLATILA"
+            ],
+            "intent_codes": [
+                "EVT_BIRTHDAY_FAMILY",
+                "EVT_CORPORATE"
+            ],
+            "intent_scores": {
+                "EVT_BIRTHDAY_FAMILY": 80,
+                "EVT_CORPORATE": 50
+            }
+        },
+        "capabilities": {},
+        "categories": {
+            "core": {
+                "description": "Valkolan kyläyhdistys ry on paikallinen kyläyhdistys, joka ylläpitää kylätaloa ja tarjoaa vuokratiloja sekä yhteisöllistä toimintaa Valkolan alueella. Tilaa käytetään juhliin, kokouksiin ja kylätoimintaan.",
+                "website": "https://valkolankyla.yhdistysavain.fi",
+                "email": "",
+                "phone": ""
+            },
+            "events_and_celebrations": {
+                "capacity_max": 0,
+                "seated_capacity": 0,
+                "standing_guests": 0,
+                "outdoor_capacity": 0,
+                "is_accessible": false,
+                "own_catering_allowed": false,
+                "inhouse_catering_available": false,
+                "is_lakeside": false,
+                "has_sauna": false,
+                "has_av_tech": false,
+                "has_stage": false,
+                "accommodation_beds": 0,
+                "alcohol_license": false,
+                "private_booking": false,
+                "late_night_events": false,
+                "wedding_specialized": false,
+                "catering_min_capacity": 0,
+                "catering_max_capacity": 0,
+                "dietary_specialties": [],
+                "staff_included": false,
+                "wedding_menu_available": false,
+                "cake_service": false,
+                "partner_venues": [],
+                "wedding_photography": false,
+                "drone_available": false,
+                "video_production": false,
+                "live_music": false,
+                "dj_services": false,
+                "karaoke_available": false,
+                "has_exclusive_catering": false,
+                "accommodation_included": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "entertainment_features": [],
+                "collaborated_with": []
+            },
+            "business_events": {
+                "meeting_capacity": 0,
+                "seminar_capacity": 0,
+                "conference_rooms": 0,
+                "has_projector": false,
+                "has_streaming": false,
+                "has_wifi": false,
+                "has_stage": false,
+                "private_booking": false,
+                "invoice_billing": false,
+                "corporate_clients": false,
+                "vip_services": false,
+                "business_catering": false,
+                "event_hosting": false,
+                "corporate_gifts": false,
+                "branding_support": false,
+                "av_support": false,
+                "staff_events_specialized": false,
+                "refinement_tags": [],
+                "wellbeing_and_activity_features": [],
+                "entertainment_features": [],
+                "collaborated_with": []
+            },
+            "funerals_and_memorials": {
+                "memorial_service_capacity": 0,
+                "quiet_private_space": false,
+                "accessible_entry": false,
+                "memorial_catering": false,
+                "coffee_service": false,
+                "flower_arrangements": false,
+                "memorial_menu_available": false,
+                "funeral_flowers": false,
+                "memorial_arrangements": false,
+                "transport_assistance": false,
+                "urgent_booking_available": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "moving_and_housing": {
+                "moving_truck_available": false,
+                "packing_service": false,
+                "storage_available": false,
+                "weekend_moves": false,
+                "urgent_moves": false,
+                "long_distance_moves": false,
+                "cleaning_after_move": false,
+                "electrician_available": false,
+                "renovation_support": false,
+                "insurance_support": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "construction_and_maintenance": {
+                "emergency_service": false,
+                "certifications": [],
+                "wet_room_certification": false,
+                "provides_tools": false,
+                "material_supply": false,
+                "project_management": false,
+                "snow_removal": false,
+                "lawn_maintenance": false,
+                "property_monitoring": false,
+                "maintenance_contracts": false,
+                "housing_company_clients": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "cottage_services": {
+                "key_holding": false,
+                "winter_monitoring": false,
+                "snow_removal": false,
+                "cleaning_service": false,
+                "lawn_service": false,
+                "remote_monitoring": false,
+                "emergency_visits": false,
+                "renovation_support": false,
+                "dock_maintenance": false,
+                "sauna_services": false,
+                "guest_preparation_service": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "housing_company_and_contracts": {
+                "housing_company_clients": false,
+                "maintenance_contracts": false,
+                "emergency_response": false,
+                "scheduled_visits": false,
+                "property_reports": false,
+                "invoice_billing": false,
+                "contract_customer_available": false,
+                "priority_support": false,
+                "monthly_service_plan": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "startup_services": {
+                "bookkeeping_startup": false,
+                "business_advisory": false,
+                "insurance_setup": false,
+                "legal_services": false,
+                "office_space_available": false,
+                "banking_support": false,
+                "website_creation": false,
+                "webshop_setup": false,
+                "branding_support": false,
+                "logo_design": false,
+                "business_photography": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "business_growth": {
+                "google_ads": false,
+                "social_media_marketing": false,
+                "seo_services": false,
+                "content_creation": false,
+                "video_production": false,
+                "crm_support": false,
+                "recruitment_support": false,
+                "sales_development": false,
+                "automation_services": false,
+                "consulting_services": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "wellbeing_and_beauty": {
+                "home_visits": false,
+                "online_booking": false,
+                "unisex_services": false,
+                "gift_cards": false,
+                "corporate_wellbeing_services": false,
+                "event_makeup": false,
+                "bridal_services": false,
+                "group_bookings": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "animals": {
+                "emergency_service": false,
+                "home_visits": false,
+                "online_booking": false,
+                "specialization": [],
+                "grooming_available": false,
+                "boarding_available": false,
+                "supplies_sold": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "family_and_children": {
+                "daycare_available": false,
+                "hobby_activities": false,
+                "educational_services": false,
+                "family_therapy": false,
+                "equipment_rental": false,
+                "accessible_with_stroller": false,
+                "baby_changing_room": false,
+                "kids_play_area": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "auto_services": {
+                "replacement_car_available": false,
+                "collaborated_with": []
+            },
+            "liikunta-ja-vapaaaika": {
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "accommodation": {
+                "accommodation_beds": 0,
+                "accommodation_included": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            }
+        },
+        "meta": {
+            "last_updated": "2026-06-14T14:59:18.124Z",
+            "verified_by": "csv-reconciliation",
+            "status": "draft"
+        }
+    },
+    "company-243": {
+        "name": "Laukaan Tupaswilla Oy",
+        "tags": "",
+        "core": {
+            "fits_for": {},
+            "priority_score": 0,
+            "service_area": {
+                "mode": "TOIMIPISTE",
+                "radius_km": 0,
+                "regions": [
+                    "Laukaa kk"
+                ],
+                "note": ""
+            },
+            "emergency_available": false,
+            "contract_customer_available": false,
+            "paired_with_by_context": {},
+            "corporate_clients": false,
+            "home_service": false,
+            "weekend_service": false,
+            "not_suitable_for": [],
+            "sub_contexts": [],
+            "node_links": [],
+            "intent_codes": [],
+            "intent_scores": {}
+        },
+        "capabilities": {},
+        "categories": {
+            "core": {
+                "description": "",
+                "website": "",
+                "email": "",
+                "phone": "358405188461"
+            },
+            "events_and_celebrations": {
+                "capacity_max": 0,
+                "seated_capacity": 0,
+                "standing_guests": 0,
+                "outdoor_capacity": 0,
+                "is_accessible": false,
+                "own_catering_allowed": false,
+                "inhouse_catering_available": false,
+                "is_lakeside": false,
+                "has_sauna": false,
+                "has_av_tech": false,
+                "has_stage": false,
+                "accommodation_beds": 0,
+                "alcohol_license": false,
+                "private_booking": false,
+                "late_night_events": false,
+                "wedding_specialized": false,
+                "catering_min_capacity": 0,
+                "catering_max_capacity": 0,
+                "dietary_specialties": [],
+                "staff_included": false,
+                "wedding_menu_available": false,
+                "cake_service": false,
+                "partner_venues": [],
+                "wedding_photography": false,
+                "drone_available": false,
+                "video_production": false,
+                "live_music": false,
+                "dj_services": false,
+                "karaoke_available": false,
+                "has_exclusive_catering": false,
+                "accommodation_included": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "entertainment_features": [],
+                "collaborated_with": []
+            },
+            "business_events": {
+                "meeting_capacity": 0,
+                "seminar_capacity": 0,
+                "conference_rooms": 0,
+                "has_projector": false,
+                "has_streaming": false,
+                "has_wifi": false,
+                "has_stage": false,
+                "private_booking": false,
+                "invoice_billing": false,
+                "corporate_clients": false,
+                "vip_services": false,
+                "business_catering": false,
+                "event_hosting": false,
+                "corporate_gifts": false,
+                "branding_support": false,
+                "av_support": false,
+                "staff_events_specialized": false,
+                "refinement_tags": [],
+                "wellbeing_and_activity_features": [],
+                "entertainment_features": [],
+                "collaborated_with": []
+            },
+            "funerals_and_memorials": {
+                "memorial_service_capacity": 0,
+                "quiet_private_space": false,
+                "accessible_entry": false,
+                "memorial_catering": false,
+                "coffee_service": false,
+                "flower_arrangements": false,
+                "memorial_menu_available": false,
+                "funeral_flowers": false,
+                "memorial_arrangements": false,
+                "transport_assistance": false,
+                "urgent_booking_available": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "moving_and_housing": {
+                "moving_truck_available": false,
+                "packing_service": false,
+                "storage_available": false,
+                "weekend_moves": false,
+                "urgent_moves": false,
+                "long_distance_moves": false,
+                "cleaning_after_move": false,
+                "electrician_available": false,
+                "renovation_support": false,
+                "insurance_support": false,
+                "refinement_tags": [],
+                "digitization_features": [],
+                "collaborated_with": []
+            },
+            "construction_and_maintenance": {
+                "emergency_service": false,
+                "certifications": [],
+                "wet_room_certification": false,
+                "provides_tools": false,
+                "material_supply": false,
+                "project_management": false,
+                "snow_removal": false,
+                "lawn_maintenance": false,
+                "property_monitoring": false,
+                "maintenance_contracts": false,
+                "housing_company_clients": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "cottage_services": {
+                "key_holding": false,
+                "winter_monitoring": false,
+                "snow_removal": false,
+                "cleaning_service": false,
+                "lawn_service": false,
+                "remote_monitoring": false,
+                "emergency_visits": false,
+                "renovation_support": false,
+                "dock_maintenance": false,
+                "sauna_services": false,
+                "guest_preparation_service": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "housing_company_and_contracts": {
+                "housing_company_clients": false,
+                "maintenance_contracts": false,
+                "emergency_response": false,
+                "scheduled_visits": false,
+                "property_reports": false,
+                "invoice_billing": false,
+                "contract_customer_available": false,
+                "priority_support": false,
+                "monthly_service_plan": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "startup_services": {
+                "bookkeeping_startup": false,
+                "business_advisory": false,
+                "insurance_setup": false,
+                "legal_services": false,
+                "office_space_available": false,
+                "banking_support": false,
+                "website_creation": false,
+                "webshop_setup": false,
+                "branding_support": false,
+                "logo_design": false,
+                "business_photography": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "business_growth": {
+                "google_ads": false,
+                "social_media_marketing": false,
+                "seo_services": false,
+                "content_creation": false,
+                "video_production": false,
+                "crm_support": false,
+                "recruitment_support": false,
+                "sales_development": false,
+                "automation_services": false,
+                "consulting_services": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "wellbeing_and_beauty": {
+                "home_visits": false,
+                "online_booking": false,
+                "unisex_services": false,
+                "gift_cards": false,
+                "corporate_wellbeing_services": false,
+                "event_makeup": false,
+                "bridal_services": false,
+                "group_bookings": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "animals": {
+                "emergency_service": false,
+                "home_visits": false,
+                "online_booking": false,
+                "specialization": [],
+                "grooming_available": false,
+                "boarding_available": false,
+                "supplies_sold": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "family_and_children": {
+                "daycare_available": false,
+                "hobby_activities": false,
+                "educational_services": false,
+                "family_therapy": false,
+                "equipment_rental": false,
+                "accessible_with_stroller": false,
+                "baby_changing_room": false,
+                "kids_play_area": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "auto_services": {
+                "replacement_car_available": false,
+                "collaborated_with": []
+            },
+            "liikunta-ja-vapaaaika": {
+                "refinement_tags": [],
+                "collaborated_with": []
+            },
+            "accommodation": {
+                "accommodation_beds": 0,
+                "accommodation_included": false,
+                "refinement_tags": [],
+                "collaborated_with": []
+            }
+        },
+        "meta": {
+            "last_updated": "2026-06-14T14:56:06.576Z",
+            "verified_by": "csv-reconciliation",
+            "status": "draft"
         }
     }
 }

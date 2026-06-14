@@ -3883,6 +3883,42 @@
             "lat": null,
             "lon": null,
             "address": ""
+        },
+        "company-316": {
+            "type": "company",
+            "name": "Laukaan Pitopalvelu",
+            "category": "",
+            "package": "",
+            "lat": null,
+            "lon": null,
+            "address": ""
+        },
+        "company-315": {
+            "type": "company",
+            "name": "Äijäparkki",
+            "category": "",
+            "package": "",
+            "lat": null,
+            "lon": null,
+            "address": ""
+        },
+        "company-314": {
+            "type": "company",
+            "name": "Valkolan kyläyhdistys ry",
+            "category": "",
+            "package": "",
+            "lat": null,
+            "lon": null,
+            "address": ""
+        },
+        "company-243": {
+            "type": "company",
+            "name": "Laukaan Tupaswilla Oy",
+            "category": "Ruokailu",
+            "package": "perus",
+            "lat": 62.458337,
+            "lon": 25.943189,
+            "address": "Äijäläntie 202, 41370 Laukaa"
         }
     },
     "edges": [
@@ -16651,6 +16687,154 @@
             "from": "company-313",
             "to": "nodelink-HYVINVOINTI",
             "relation": "links_to"
+        },
+        {
+            "from": "company-316",
+            "to": "intent-EVT_WEDDING",
+            "relation": "offers",
+            "weight": 100
+        },
+        {
+            "from": "company-316",
+            "to": "intent-EVT_CORPORATE",
+            "relation": "offers",
+            "weight": 80
+        },
+        {
+            "from": "company-316",
+            "to": "intent-EVT_BIRTHDAY_FAMILY",
+            "relation": "offers",
+            "weight": 70
+        },
+        {
+            "from": "company-316",
+            "to": "group-events-and-celebrations",
+            "relation": "fits_for",
+            "weight": 100
+        },
+        {
+            "from": "company-316",
+            "to": "group-business-events",
+            "relation": "fits_for",
+            "weight": 80
+        },
+        {
+            "from": "company-316",
+            "to": "region-laukaa-kk",
+            "relation": "located_in"
+        },
+        {
+            "from": "company-316",
+            "to": "nodelink-CATERING",
+            "relation": "links_to"
+        },
+        {
+            "from": "company-315",
+            "to": "intent-EVT_BIRTHDAY_FAMILY",
+            "relation": "offers",
+            "weight": 70
+        },
+        {
+            "from": "company-315",
+            "to": "intent-EVT_CORPORATE",
+            "relation": "offers",
+            "weight": 60
+        },
+        {
+            "from": "company-315",
+            "to": "intent-EVT_WEDDING",
+            "relation": "offers",
+            "weight": 70
+        },
+        {
+            "from": "company-315",
+            "to": "group-events-and-celebrations",
+            "relation": "fits_for",
+            "weight": 85
+        },
+        {
+            "from": "company-315",
+            "to": "group-accommodation",
+            "relation": "fits_for",
+            "weight": 80
+        },
+        {
+            "from": "company-315",
+            "to": "group-moving-and-housing",
+            "relation": "fits_for",
+            "weight": 40
+        },
+        {
+            "from": "company-315",
+            "to": "group-cottage-services",
+            "relation": "fits_for",
+            "weight": 30
+        },
+        {
+            "from": "company-315",
+            "to": "group-business-events",
+            "relation": "fits_for",
+            "weight": 60
+        },
+        {
+            "from": "company-315",
+            "to": "region-leppävesi",
+            "relation": "located_in"
+        },
+        {
+            "from": "company-315",
+            "to": "nodelink-MAJOITUS",
+            "relation": "links_to"
+        },
+        {
+            "from": "company-315",
+            "to": "nodelink-JUHLATILA",
+            "relation": "links_to"
+        },
+        {
+            "from": "company-314",
+            "to": "intent-EVT_BIRTHDAY_FAMILY",
+            "relation": "offers",
+            "weight": 80
+        },
+        {
+            "from": "company-314",
+            "to": "intent-EVT_CORPORATE",
+            "relation": "offers",
+            "weight": 50
+        },
+        {
+            "from": "company-314",
+            "to": "group-events-and-celebrations",
+            "relation": "fits_for",
+            "weight": 90
+        },
+        {
+            "from": "company-314",
+            "to": "group-business-events",
+            "relation": "fits_for",
+            "weight": 60
+        },
+        {
+            "from": "company-314",
+            "to": "group-accommodation",
+            "relation": "fits_for",
+            "weight": 30
+        },
+        {
+            "from": "company-314",
+            "to": "region-laukaa-kk",
+            "relation": "located_in"
+        },
+        {
+            "from": "company-314",
+            "to": "nodelink-JUHLATILA",
+            "relation": "links_to"
+        },
+        {
+            "from": "company-243",
+            "to": "region-laukaa-kk",
+            "relation": "located_in"
         }
     ],
     "company_index": {
@@ -16939,7 +17123,11 @@
         "company-310": "property-and-maintenance.json",
         "company-312": "venues-and-events.json",
         "company-311": "property-and-maintenance.json",
-        "company-313": "wellbeing-and-family.json"
+        "company-313": "wellbeing-and-family.json",
+        "company-316": "venues-and-events.json",
+        "company-315": "venues-and-events.json",
+        "company-314": "venues-and-events.json",
+        "company-243": "venues-and-events.json"
     },
     "files": [
         "venues-and-events.json",
