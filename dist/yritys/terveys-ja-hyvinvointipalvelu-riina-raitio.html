@@ -16,9 +16,9 @@
     <!-- Leaflet Map -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-    <link rel="stylesheet" href="../style.6a523253.css?v=20260420-2">
-    <link rel="stylesheet" href="../modal.6a523253.css">
-    <script src="../translations.6a523253.js?v=20260505"></script>
+    <link rel="stylesheet" href="../style.068761c0.css?v=20260420-2">
+    <link rel="stylesheet" href="../modal.068761c0.css">
+    <script src="../translations.068761c0.js?v=20260505"></script>
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
     <style>
         :root {
@@ -1871,25 +1871,12 @@
             </div>
 
             <style>
-                /* Ensure the 3 company quick links (Soita / WhatsApp / Sivut) stay side-by-side and above footer */
-                @media (max-width: 768px) {
-                    #mobile-contact-bar.mobile-contact-bar {
-                        position: fixed;
-                        bottom: 20px;
-                        left: 15px;
-                        right: 15px;
-                        z-index: 9999;
-                        display: flex;
-                        gap: 10px;
-                        justify-content: center;
-                    }
-                    #mobile-contact-bar.mobile-contact-bar a {
-                        flex: 1;
-                        display: inline-flex;
-                        align-items: center;
-                        justify-content: center;
-                        min-width: 0;
-                    }
+                /* Yrityskortin mobiilissa: piilotetaan #mobile-contact-bar,
+                   koska nämä toiminnot ovat jo näkyvissä digitaalisessa käyntikortissa (actions-grid).
+                   Premium-sivuilla tämä estää myös päällekkäisen "Sivut"-footerlinkin.
+                */
+                #mobile-contact-bar.mobile-contact-bar {
+                    display: none !important;
                 }
             </style>
 
@@ -2036,8 +2023,8 @@
 
     <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="../script.6a523253.js?v=20260301"></script>
-    <script src="../yrityskortti.6a523253.js?v=20260304-DEBUG-2"></script>
+    <script src="../script.068761c0.js?v=20260301"></script>
+    <script src="../yrityskortti.068761c0.js?v=20260304-DEBUG-2"></script>
     <script>
         function toggleMarketingDropdown() {
             document.getElementById('marketing-dropdown-container').classList.toggle('open');
