@@ -510,6 +510,48 @@
                 margin-bottom: 4px;
             }
         }
+
+        /* Marketing Dropdown */
+        .marketing-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .marketing-dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 5px;
+            background-color: white;
+            min-width: 220px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            border-radius: 12px;
+            z-index: 100;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            text-align: left;
+        }
+        .marketing-dropdown-content a {
+            color: #334155;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: background 0.2s;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .marketing-dropdown-content a:last-child {
+            border-bottom: none;
+        }
+        .marketing-dropdown-content a:hover {
+            background-color: #f8fafc;
+            color: var(--primary-blue);
+        }
+        .marketing-dropdown.open .marketing-dropdown-content {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -533,11 +575,24 @@
                 <h1 id="el-name">Kohteen Nimi</h1>
                 <p class="card-short-desc" id="el-shortdesc">Lyhyt kuvaus kohteesta.</p>
             </div>
-            <div style="position: absolute; top: 1.5rem; right: 1.5rem; display: flex; gap: 0.5rem; z-index: 10;">
+            <div style="position: absolute; top: 1.5rem; right: 1.5rem; display: flex; gap: 0.5rem; z-index: 10; align-items: center;">
                 <button class="share-btn" id="print-btn" onclick="printEntity()" title="Tulosta PDF-esite" style="position: static; box-shadow: 0 2px 8px rgba(0,0,0,0.07);">
                     <span class="iconify" data-icon="mdi:printer"></span>
                     Tulosta
                 </button>
+                <div class="marketing-dropdown" id="marketing-dropdown-container">
+                    <button class="share-btn" id="btn-marketing-tools" onclick="toggleMarketingDropdown()" title="Markkinointityökalut" style="position: static; box-shadow: 0 2px 8px rgba(0,0,0,0.07);">
+                        <span class="iconify" data-icon="mdi:bullhorn"></span>
+                        Markkinointi ▼
+                    </button>
+                    <div class="marketing-dropdown-content">
+                        <a href="#" onclick="openMarketingTool('somekuva'); return false;">Luo somekuva</a>
+                        <a href="#" onclick="openMarketingTool('flyer'); return false;">Luo flyer</a>
+                        <a href="#" onclick="openMarketingTool('offer'); return false;">Luo tarjouskortti</a>
+                        <a href="#" onclick="openMarketingTool('qr'); return false;">Luo QR-juliste</a>
+                        <a href="#" onclick="openMarketingTool('business_card'); return false;">Luo käyntikortti PDF</a>
+                    </div>
+                </div>
                 <button class="share-btn" id="share-btn" onclick="shareEntity()" title="Jaa tämä sivu" style="position: static; box-shadow: 0 2px 8px rgba(0,0,0,0.07);">
                     <span class="iconify" data-icon="mdi:share-variant"></span>
                     Jaa
@@ -1177,6 +1232,30 @@
                 window.print();
             }, 500);
         }
+
+        function toggleMarketingDropdown() {
+            document.getElementById('marketing-dropdown-container').classList.toggle('open');
+        }
+
+        function openMarketingTool(type) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+            if (id) {
+                window.open('laukaainfo-web/mainoskortti.php?id=' + encodeURIComponent(id) + '&type=' + encodeURIComponent(type), '_blank');
+            } else {
+                alert('Kohteen ID ei ole tiedossa.');
+            }
+            const container = document.getElementById('marketing-dropdown-container');
+            if (container) container.classList.remove('open');
+        }
+
+        // Close dropdown when clicking outside
+        window.addEventListener('click', function(e) {
+            const container = document.getElementById('marketing-dropdown-container');
+            if (container && !container.contains(e.target)) {
+                container.classList.remove('open');
+            }
+        });
 
         window.addEventListener('DOMContentLoaded', init);
     </script>
