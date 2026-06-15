@@ -6,64 +6,136 @@ $type = isset($_GET['type']) ? preg_replace('/[^a-zA-Z0-9_-]/', '', $_GET['type'
 
 if (empty($id)) die('Virhe: ID puuttuu.');
 
-// --- Data fetch ---
+// PHP-version of JS slugify (handles Finnish ä/ö/å)
+function phpSlugify($text) {
+    $text = mb_strtolower(trim($text), 'UTF-8');
+    $map = ['ä'=>'a','ö'=>'o','å'=>'a','Ä'=>'a','Ö'=>'o','Å'=>'a','à'=>'a','á'=>'a','â'=>'a','ã'=>'a','è'=>'e','é'=>'e','ê'=>'e','ë'=>'e','ì'=>'i','í'=>'i','î'=>'i','ï'=>'i','ò'=>'o','ó'=>'o','ô'=>'o','õ'=>'o','ø'=>'o','ù'=>'u','ú'=>'u','û'=>'u','ü'=>'u'];
+    $text = strtr($text, $map);
+    $text = preg_replace('/[^a-z0-9\s-]/', '', $text);
+    $text = preg_replace('/[\s-]+/', '-', $text);
+    return trim($text, '-');
+}
+
+// Fetch from local file or remote URL
 function fetchJson($file, $url) {
     if (file_exists($file)) return file_get_contents($file);
     return @file_get_contents($url);
 }
 
 $company_data = null;
+$found_company_id = null;
 
+// Step 1: Find company in slim JSON (for ID resolution)
 $json = fetchJson('../companies_data.json', 'https://laukaainfo.fi/companies_data.json');
 if ($json) {
+    // Strip BOM if present
+    if (substr($json, 0, 3) === "\xEF\xBB\xBF") $json = substr($json, 3);
     $data  = json_decode($json, true);
     $items = isset($data['results']) ? $data['results'] : (array)$data;
     foreach ($items as $item) {
-        $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $item['nimi'] ?? '')));
-        if ($slug === strtolower($id) || (isset($item['id']) && $item['id'] === $id)) {
+        $slug = phpSlugify($item['nimi'] ?? '');
+        $matchId = isset($item['id']) && ($item['id'] === $id || $item['id'] === 'company-' . $id);
+        if ($slug === phpSlugify($id) || $matchId) {
             $company_data = $item;
+            $found_company_id = $item['id'] ?? null;
             break;
         }
     }
 }
 
+// Step 2: Fetch full company data from API (has phone, website etc.)
+if ($found_company_id) {
+    $api_url = 'https://www.mediazoo.fi/laukaainfo-web/get_companies.php?id=' . urlencode($found_company_id);
+    $api_json = @file_get_contents($api_url);
+    if ($api_json) {
+        $api_data = json_decode($api_json, true);
+        // API may return array or {results:[...]} or single object
+        if (is_array($api_data)) {
+            $first = isset($api_data['results']) ? ($api_data['results'][0] ?? null)
+                   : (isset($api_data[0]) ? $api_data[0] : $api_data);
+            if ($first && isset($first['nimi'])) {
+                // Merge API data over slim data (API has more fields)
+                $company_data = array_merge($company_data, $first);
+            }
+        }
+    }
+}
+
+// Step 3: Fallback – check kohdekortti data
 if (!$company_data) {
     $json = fetchJson('../kohdekortit/kohteet.json', 'https://laukaainfo.fi/kohdekortit/kohteet.json');
     if ($json) {
-        foreach (json_decode($json, true) as $item) {
-            if ($item['id'] === $id) {
+        foreach ((array)json_decode($json, true) as $item) {
+            if (($item['id'] ?? '') === $id || phpSlugify($item['name'] ?? '') === phpSlugify($id)) {
                 $company_data = $item;
-                $company_data['nimi']     = $item['name'];
-                $company_data['logo']     = $item['images'][0] ?? '';
-                $company_data['kategoria']= $item['type'] ?? '';
-                $company_data['puhelin']  = $item['contact']['phone'] ?? '';
-                $company_data['nettisivu']= $item['contact']['website'] ?? '';
+                $company_data['nimi']      = $item['name'] ?? '';
+                $company_data['logo']      = $item['images'][0] ?? '';
+                $company_data['kategoria'] = $item['type'] ?? '';
+                $company_data['puhelin']   = $item['contact']['phone'] ?? '';
+                $company_data['nettisivu'] = $item['contact']['website'] ?? '';
                 break;
             }
         }
     }
 }
 
-if (!$company_data) die("Yritystä/kohdetta '$id' ei löytynyt.");
+if (!$company_data) die("Yritystä/kohdetta '" . htmlspecialchars($id) . "' ei löytynyt.");
 
-$nimi      = htmlspecialchars($company_data['nimi']      ?? 'Yrityksen nimi');
-$kategoria = htmlspecialchars($company_data['kategoria'] ?? '');
-$puhelin   = htmlspecialchars($company_data['puhelin']   ?? '');
+// Extract fields
+$nimi      = $company_data['nimi']      ?? 'Yrityksen nimi';
+$kategoria = $company_data['kategoria'] ?? '';
+$puhelin   = $company_data['puhelin']   ?? '';
+if ($puhelin === '-') $puhelin = '';
+
 $nettisivu = $company_data['nettisivu'] ?? $company_data['website'] ?? '';
+if ($nettisivu === '-') $nettisivu = '';
 if ($nettisivu && !preg_match('/^https?:\/\//', $nettisivu)) $nettisivu = 'https://' . $nettisivu;
-$nettisivu_safe = htmlspecialchars($nettisivu);
 
 $logo = $company_data['logo'] ?? '';
 if ($logo === '-') $logo = '';
+// Normalise logo URL
 if ($logo && !preg_match('/^http/', $logo)) {
-    $logo = file_exists('../' . ltrim($logo, '/'))
-          ? '../' . ltrim($logo, '/')
-          : 'https://laukaainfo.fi/' . ltrim($logo, '/');
+    $local = '../' . ltrim($logo, '/');
+    $logo  = file_exists($local) ? $local : 'https://laukaainfo.fi/' . ltrim($logo, '/');
 }
-$logo_safe = htmlspecialchars($logo);
+// If media array has images, use first as fallback for logo
+if (!$logo && !empty($company_data['media'])) {
+    foreach ($company_data['media'] as $m) {
+        if (($m['type'] ?? '') === 'image' && !empty($m['url'])) {
+            $logo = $m['url'];
+            break;
+        }
+    }
+}
+if (!$logo && !empty($company_data['images'][0])) {
+    $logo = $company_data['images'][0];
+}
 
+// Function to convert image to base64 data URI (solves html2canvas CORS issues)
+function imageToBase64($url) {
+    if (!$url) return '';
+    $context = stream_context_create(['http' => ['ignore_errors' => true]]);
+    $data = @file_get_contents($url, false, $context);
+    if ($data) {
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        $type = $finfo->buffer($data) ?: 'image/png';
+        return 'data:' . $type . ';base64,' . base64_encode($data);
+    }
+    return htmlspecialchars($url); // Fallback to raw URL
+}
+
+$nimi_safe      = htmlspecialchars($nimi);
+$kategoria_safe = htmlspecialchars($kategoria);
+$puhelin_safe   = htmlspecialchars($puhelin);
+$nettisivu_safe = htmlspecialchars($nettisivu);
+$logo_safe      = imageToBase64($logo);
+$web_display    = htmlspecialchars(preg_replace('#^https?://#', '', rtrim($nettisivu, '/')));
+
+// Use yrityskortti URL (slug-based) for QR, as that's what works on live site
 $card_url = 'https://laukaainfo.fi/yrityskortti.html?id=' . urlencode($id);
 $qr_src   = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . urlencode($card_url);
+$qr_safe  = imageToBase64($qr_src);
+$li_logo_safe = imageToBase64('https://laukaainfo.fi/logo.png');
 
 $tyypit = [
     'somekuva'      => '📸 Somekuva (1080×1080)',
@@ -206,9 +278,9 @@ hr{border:none;border-top:1px solid #e2e8f0;margin:1.5rem 0;}
 
     <hr>
     <div style="font-size:.8rem;color:#64748b;line-height:1.6;">
-      <strong>Yritys:</strong> <?= $nimi ?><br>
-      <?php if($puhelin): ?><strong>Puhelin:</strong> <?= $puhelin ?><br><?php endif; ?>
-      <?php if($nettisivu): ?><strong>Nettisivu:</strong> <?= $nettisivu_safe ?><br><?php endif; ?>
+      <strong>Yritys:</strong> <?= $nimi_safe ?><br>
+      <?php if($puhelin): ?><strong>Puhelin:</strong> <?= $puhelin_safe ?><br><?php endif; ?>
+      <?php if($nettisivu): ?><strong>Nettisivu:</strong> <a href="<?= $nettisivu_safe ?>" style="color:var(--blue);"><?= $web_display ?></a><br><?php endif; ?>
     </div>
   </div>
 
@@ -219,29 +291,35 @@ hr{border:none;border-top:1px solid #e2e8f0;margin:1.5rem 0;}
     <?php if($type === 'somekuva'): ?>
       <div class="card-somekuva">
         <?php if($logo): ?><img src="<?= $logo_safe ?>" alt="Logo" class="logo"><?php endif; ?>
-        <?php if($kategoria): ?><div class="cat"><?= $kategoria ?></div><?php endif; ?>
-        <div class="name"><?= $nimi ?></div>
-        <?php if($puhelin): ?><div class="phone">📞 <?= $puhelin ?></div><?php endif; ?>
-        <?php if($nettisivu): ?><a href="<?= $nettisivu_safe ?>" class="web" style="color:rgba(255,255,255,.8);text-decoration:none;">🌐 <?= htmlspecialchars(preg_replace('#^https?://#','',$nettisivu)) ?></a><?php endif; ?>
-        <div class="footer-bar">📍 Tutustu: <a href="https://laukaainfo.fi" style="color:rgba(255,255,255,.9);text-decoration:none;">laukaainfo.fi</a></div>
+        <?php if($kategoria): ?><div class="cat"><?= $kategoria_safe ?></div><?php endif; ?>
+        <div class="name"><?= $nimi_safe ?></div>
+        <?php if($puhelin): ?><div class="phone">📞 <?= $puhelin_safe ?></div><?php endif; ?>
+        <?php if($nettisivu): ?><a href="<?= $nettisivu_safe ?>" class="web" style="color:rgba(255,255,255,.8);text-decoration:none;">🌐 <?= $web_display ?></a><?php endif; ?>
+        <div class="footer-bar">
+          <img src="<?= $li_logo_safe ?>" alt="LaukaaInfo" style="height:1.1em;vertical-align:middle;margin-right:4px;filter:brightness(0) invert(1);">
+          Tutustu: <a href="https://laukaainfo.fi" style="color:rgba(255,255,255,.9);text-decoration:none;">laukaainfo.fi</a>
+        </div>
       </div>
 
     <?php elseif($type === 'flyer'): ?>
       <div class="card-flyer">
         <div class="top-bar"></div>
         <?php if($logo): ?><img src="<?= $logo_safe ?>" alt="Logo" class="logo"><?php endif; ?>
-        <?php if($kategoria): ?><div class="cat"><?= $kategoria ?></div><?php endif; ?>
-        <div class="name"><?= $nimi ?></div>
+        <?php if($kategoria): ?><div class="cat"><?= $kategoria_safe ?></div><?php endif; ?>
+        <div class="name"><?= $nimi_safe ?></div>
         <div class="desc">Tutustu meihin LaukaaInfo-matkailuportaalissa ja katso yhteystietomme!</div>
         <div class="contact">
-          <?php if($puhelin): ?><div class="phone">📞 <?= $puhelin ?></div><?php endif; ?>
-          <?php if($nettisivu): ?><div style="margin-top:.3rem;"><a href="<?= $nettisivu_safe ?>" class="web-link">🌐 <?= htmlspecialchars(preg_replace('#^https?://#','',$nettisivu)) ?></a></div><?php endif; ?>
+          <?php if($puhelin): ?><div class="phone">📞 <?= $puhelin_safe ?></div><?php endif; ?>
+          <?php if($nettisivu): ?><div style="margin-top:.3rem;"><a href="<?= $nettisivu_safe ?>" class="web-link">🌐 <?= $web_display ?></a></div><?php endif; ?>
         </div>
         <div class="qr-row">
-          <img src="<?= htmlspecialchars($qr_src) ?>" alt="QR">
+          <a href="<?= htmlspecialchars($card_url) ?>"><img src="<?= $qr_safe ?>" alt="QR"></a>
           <div class="laukaainfo">
             Skannaa QR tai käy:<br>
-            <a href="<?= htmlspecialchars($card_url) ?>" style="color:var(--blue);font-weight:700;text-decoration:none;">laukaainfo.fi</a>
+            <div style="display:flex;align-items:center;gap:4px;margin-top:4px;">
+              <img src="<?= $li_logo_safe ?>" alt="LaukaaInfo" style="height:16px;width:auto;flex-shrink:0;object-fit:contain;">
+              <a href="<?= htmlspecialchars($card_url) ?>" style="color:var(--blue);font-weight:700;text-decoration:none;">laukaainfo.fi</a>
+            </div>
           </div>
         </div>
       </div>
@@ -249,16 +327,19 @@ hr{border:none;border-top:1px solid #e2e8f0;margin:1.5rem 0;}
     <?php elseif($type === 'offer'): ?>
       <div class="card-offer">
         <div class="left">
-          <div class="badge">Erikoistarjous</div>
-          <div class="name"><?= $nimi ?></div>
+          <div class="badge">Tutustu:</div>
+          <div class="name"><?= $nimi_safe ?></div>
           <div class="offer-text">ERIKOISTARJOUS!</div>
-          <?php if($puhelin): ?><div class="phone">📞 <?= $puhelin ?></div><?php endif; ?>
-          <?php if($nettisivu): ?><a href="<?= $nettisivu_safe ?>" class="web-link">🌐 <?= htmlspecialchars(preg_replace('#^https?://#','',$nettisivu)) ?></a><?php endif; ?>
-          <a href="https://laukaainfo.fi" style="font-size:.75rem;color:var(--blue);font-weight:700;text-decoration:none;">📍 laukaainfo.fi</a>
+          <?php if($puhelin): ?><div class="phone">📞 <?= $puhelin_safe ?></div><?php endif; ?>
+          <?php if($nettisivu): ?><a href="<?= $nettisivu_safe ?>" class="web-link">🌐 <?= $web_display ?></a><?php endif; ?>
+          <a href="https://laukaainfo.fi" style="font-size:.75rem;color:var(--blue);font-weight:700;text-decoration:none;display:flex;align-items:center;gap:4px;margin-top:auto;">
+            <img src="<?= $li_logo_safe ?>" alt="LaukaaInfo" style="height:16px;vertical-align:middle;">
+            laukaainfo.fi
+          </a>
         </div>
         <div class="right">
           <?php if($logo): ?><img src="<?= $logo_safe ?>" alt="Logo" class="logo"><?php endif; ?>
-          <a href="<?= htmlspecialchars($card_url) ?>"><img src="<?= htmlspecialchars($qr_src) ?>" alt="QR" class="qr"></a>
+          <a href="<?= htmlspecialchars($card_url) ?>"><img src="<?= $qr_safe ?>" alt="QR" class="qr"></a>
           <div class="li-tag">Skannaa yrityskortti</div>
         </div>
       </div>
@@ -267,25 +348,31 @@ hr{border:none;border-top:1px solid #e2e8f0;margin:1.5rem 0;}
       <div class="card-qr">
         <div class="top-accent"></div>
         <?php if($logo): ?><img src="<?= $logo_safe ?>" alt="Logo" class="logo"><?php endif; ?>
-        <?php if($kategoria): ?><div class="cat"><?= $kategoria ?></div><?php endif; ?>
-        <div class="name"><?= $nimi ?></div>
-        <a href="<?= htmlspecialchars($card_url) ?>"><img src="<?= htmlspecialchars($qr_src) ?>" alt="QR" class="qr-big"></a>
+        <?php if($kategoria): ?><div class="cat"><?= $kategoria_safe ?></div><?php endif; ?>
+        <div class="name"><?= $nimi_safe ?></div>
+        <a href="<?= htmlspecialchars($card_url) ?>"><img src="<?= $qr_safe ?>" alt="QR" class="qr-big"></a>
         <div class="scan-text">Skannaa QR-koodi ja tutustu yrityskorttiin</div>
-        <?php if($puhelin): ?><div class="phone">📞 <?= $puhelin ?></div><?php endif; ?>
-        <?php if($nettisivu): ?><a href="<?= $nettisivu_safe ?>" class="web-link">🌐 <?= htmlspecialchars(preg_replace('#^https?://#','',$nettisivu)) ?></a><?php endif; ?>
-        <div class="li-footer">📍 Tutustu: <a href="https://laukaainfo.fi" style="color:var(--blue);text-decoration:none;font-weight:700;">laukaainfo.fi</a></div>
+        <?php if($puhelin): ?><div class="phone">📞 <?= $puhelin_safe ?></div><?php endif; ?>
+        <?php if($nettisivu): ?><a href="<?= $nettisivu_safe ?>" class="web-link">🌐 <?= $web_display ?></a><?php endif; ?>
+        <div class="li-footer">
+          <img src="<?= $li_logo_safe ?>" alt="LaukaaInfo" style="height:18px;vertical-align:middle;margin-right:5px;">
+          Tutustu: <a href="https://laukaainfo.fi" style="color:var(--blue);text-decoration:none;font-weight:700;">laukaainfo.fi</a>
+        </div>
       </div>
 
     <?php else: /* business_card */ ?>
       <div class="card-biz">
         <div class="left">
           <?php if($logo): ?><img src="<?= $logo_safe ?>" alt="Logo" class="logo"><?php endif; ?>
-          <?php if($kategoria): ?><div class="cat"><?= $kategoria ?></div><?php endif; ?>
-          <div class="name"><?= $nimi ?></div>
+          <?php if($kategoria): ?><div class="cat"><?= $kategoria_safe ?></div><?php endif; ?>
+          <div class="name"><?= $nimi_safe ?></div>
           <div style="flex:1;"></div>
-          <?php if($puhelin): ?><div class="phone">📞 <?= $puhelin ?></div><?php endif; ?>
-          <?php if($nettisivu): ?><a href="<?= $nettisivu_safe ?>" class="web-link">🌐 <?= htmlspecialchars(preg_replace('#^https?://#','',$nettisivu)) ?></a><?php endif; ?>
-          <a href="<?= htmlspecialchars($card_url) ?>" class="li-link">📍 <a href="https://laukaainfo.fi" style="color:rgba(255,255,255,.7);text-decoration:none;">laukaainfo.fi</a></a>
+          <?php if($puhelin): ?><div class="phone">📞 <?= $puhelin_safe ?></div><?php endif; ?>
+          <?php if($nettisivu): ?><a href="<?= $nettisivu_safe ?>" class="web-link">🌐 <?= $web_display ?></a><?php endif; ?>
+          <a href="https://laukaainfo.fi" class="li-link" style="display:flex;align-items:center;gap:5px;">
+            <img src="<?= $li_logo_safe ?>" alt="LaukaaInfo" style="height:16px;filter:brightness(0) invert(1);">
+            laukaainfo.fi
+          </a>
         </div>
         <div class="right">
           <a href="<?= htmlspecialchars($card_url) ?>"><img src="<?= htmlspecialchars($qr_src) ?>" alt="QR" class="qr"></a>
@@ -305,6 +392,57 @@ hr{border:none;border-top:1px solid #e2e8f0;margin:1.5rem 0;}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
+// Korjataan html2canvas:n ongelma CSS-filttereiden kanssa invert-kuvissa
+window.addEventListener('load', function() {
+  const invertImages = document.querySelectorAll('img[style*="invert"]');
+  invertImages.forEach(img => {
+    if (img.dataset.inverted) return; // Estetään ikuinen looppi
+
+    if (img.complete && img.naturalHeight !== 0) {
+      applyInvertCanvas(img);
+    } else {
+      img.addEventListener('load', function onImgLoad() {
+        img.removeEventListener('load', onImgLoad);
+        applyInvertCanvas(img);
+      });
+    }
+  });
+
+  function applyInvertCanvas(img) {
+    if (img.dataset.inverted) return;
+    img.dataset.inverted = "true";
+
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = img.naturalWidth || 150;
+    canvas.height = img.naturalHeight || 50;
+    
+    // Varmistetaan laatu
+    ctx.imageSmoothingEnabled = true;
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    
+    try {
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const data = imageData.data;
+      for (let i = 0; i < data.length; i += 4) {
+        if (data[i+3] > 10) { // Jos ei läpinäkyvä
+          data[i] = 255;     // R
+          data[i+1] = 255;   // G
+          data[i+2] = 255;   // B
+        }
+      }
+      ctx.putImageData(imageData, 0, 0);
+      img.src = canvas.toDataURL('image/png');
+      img.style.filter = 'none';
+      img.style.width = 'auto';
+      img.style.objectFit = 'contain';
+      img.style.flexShrink = '0';
+    } catch (e) {
+      console.warn("Canvas-invertointi epäonnistui", e);
+    }
+  }
+});
+
 function downloadCard() {
   const el = document.getElementById('export-canvas');
   const btn = document.getElementById('btn-download');
