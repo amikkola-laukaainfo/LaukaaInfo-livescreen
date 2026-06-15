@@ -8,14 +8,22 @@ if (empty($id)) {
     die("Virhe: Yrityksen tai kohteen ID puuttuu.");
 }
 
-// Haetaan data (voit käyttää olemassa olevaa yritysdata-rajapintaa tai lukea suoraan tiedostosta)
+// Haetaan data (ensisijaisesti paikallisesta tiedostosta, toissijaisesti tuotantopalvelimelta laukaainfo.fi)
 $companies_file = '../companies_data.json';
+$companies_url = 'https://laukaainfo.fi/companies_data.json';
 $places_file = '../kohdekortit/kohteet.json';
+$places_url = 'https://laukaainfo.fi/kohdekortit/kohteet.json';
 
 $company_data = null;
 
 if (file_exists($companies_file)) {
     $json = file_get_contents($companies_file);
+} else {
+    // Mediazoo.fi:ssa haetaan suoraan laukaainfo.fi:stä
+    $json = @file_get_contents($companies_url);
+}
+
+if ($json) {
     $data = json_decode($json, true);
     $items = isset($data['results']) ? $data['results'] : $data;
     
@@ -28,20 +36,27 @@ if (file_exists($companies_file)) {
     }
 }
 
-if (!$company_data && file_exists($places_file)) {
-    $json = file_get_contents($places_file);
-    $data = json_decode($json, true);
+if (!$company_data) {
+    if (file_exists($places_file)) {
+        $json = file_get_contents($places_file);
+    } else {
+        $json = @file_get_contents($places_url);
+    }
     
-    foreach ($data as $item) {
-        if ($item['id'] === $id) {
-            $company_data = $item;
-            // Yhdenmukaistetaan kohdekortin data yrityskortin datan kanssa
-            $company_data['nimi'] = $item['name'];
-            $company_data['logo'] = isset($item['images']) && count($item['images']) > 0 ? $item['images'][0] : '';
-            $company_data['kategoria'] = $item['type'];
-            $company_data['puhelin'] = isset($item['contact']['phone']) ? $item['contact']['phone'] : '';
-            $company_data['osoite'] = isset($item['location']['address']) ? $item['location']['address'] : '';
-            break;
+    if ($json) {
+        $data = json_decode($json, true);
+        
+        foreach ($data as $item) {
+            if ($item['id'] === $id) {
+                $company_data = $item;
+                // Yhdenmukaistetaan kohdekortin data yrityskortin datan kanssa
+                $company_data['nimi'] = $item['name'];
+                $company_data['logo'] = isset($item['images']) && count($item['images']) > 0 ? $item['images'][0] : '';
+                $company_data['kategoria'] = $item['type'];
+                $company_data['puhelin'] = isset($item['contact']['phone']) ? $item['contact']['phone'] : '';
+                $company_data['osoite'] = isset($item['location']['address']) ? $item['location']['address'] : '';
+                break;
+            }
         }
     }
 }
@@ -55,9 +70,13 @@ $logo = isset($company_data['logo']) && $company_data['logo'] !== '-' ? $company
 $puhelin = isset($company_data['puhelin']) ? $company_data['puhelin'] : '';
 $kategoria = isset($company_data['kategoria']) ? $company_data['kategoria'] : '';
 
-// Varmista logon polku
+// Varmista logon polku (paikallinen dev vs tuotanto mediazoo.fi)
 if ($logo && !preg_match('/^http/', $logo)) {
-    $logo = '../' . ltrim($logo, '/');
+    if (file_exists('../' . ltrim($logo, '/'))) {
+        $logo = '../' . ltrim($logo, '/');
+    } else {
+        $logo = 'https://laukaainfo.fi/' . ltrim($logo, '/');
+    }
 }
 
 $qr_url = "https://laukaainfo.fi/yrityskortti.html?id=" . urlencode($id);

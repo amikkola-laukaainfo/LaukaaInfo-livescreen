@@ -1241,7 +1241,7 @@
             const urlParams = new URLSearchParams(window.location.search);
             const id = urlParams.get('id');
             if (id) {
-                window.open('laukaainfo-web/mainoskortti.php?id=' + encodeURIComponent(id) + '&type=' + encodeURIComponent(type), '_blank');
+                window.open('https://www.mediazoo.fi/laukaainfo-web/mainoskortti.php?id=' + encodeURIComponent(id) + '&type=' + encodeURIComponent(type), '_blank');
             } else {
                 alert('Kohteen ID ei ole tiedossa.');
             }
