@@ -1,10 +1,10 @@
-const VERSION = '48026ddc'; // Päivitetty reittidatan latauksen korjausta varten
+const VERSION = '6a523253'; // Päivitetty reittidatan latauksen korjausta varten
 const CACHE_NAME = `laukaainfo-${VERSION}`;
 const ASSETS = [
     './',
     './index.html',
-    './style.f3fdb606.48026ddc.css',
-    './script.f3fdb606.48026ddc.js',
+    './style.f3fdb606.6a523253.css',
+    './script.f3fdb606.6a523253.js',
     './manifest.json',
     './icons/icon-192.png',
     './icons/icon-512.png',
