@@ -1871,6 +1871,29 @@
                 <!-- Filled via JS -->
             </div>
 
+            <style>
+                /* Ensure the 3 company quick links (Soita / WhatsApp / Sivut) stay side-by-side and above footer */
+                @media (max-width: 768px) {
+                    #mobile-contact-bar.mobile-contact-bar {
+                        position: fixed;
+                        bottom: 20px;
+                        left: 15px;
+                        right: 15px;
+                        z-index: 9999;
+                        display: flex;
+                        gap: 10px;
+                        justify-content: center;
+                    }
+                    #mobile-contact-bar.mobile-contact-bar a {
+                        flex: 1;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        min-width: 0;
+                    }
+                }
+            </style>
+
             <div id="rss-section" class="rss-section" style="display: none;">
                 <h3><span class="icon"><span class="iconify" data-icon="material-symbols-light:newspaper-outline"></span></span> Ajankohtaista</h3>
                 <div id="rss-items-container">
