@@ -290,13 +290,13 @@ hr{border:none;border-top:1px solid #e2e8f0;margin:1.5rem 0;}
 
     <?php if($type === 'somekuva'): ?>
       <div class="card-somekuva">
-        <?php if($logo): ?><img src="<?= $logo_safe ?>" alt="Logo" class="logo"><?php endif; ?>
+        <?php if($logo): ?><img crossorigin="anonymous" src="<?= $logo_safe ?>" alt="Logo" class="logo"><?php endif; ?>
         <?php if($kategoria): ?><div class="cat"><?= $kategoria_safe ?></div><?php endif; ?>
         <div class="name"><?= $nimi_safe ?></div>
         <?php if($puhelin): ?><div class="phone">📞 <?= $puhelin_safe ?></div><?php endif; ?>
         <?php if($nettisivu): ?><a href="<?= $nettisivu_safe ?>" class="web" style="color:rgba(255,255,255,.8);text-decoration:none;">🌐 <?= $web_display ?></a><?php endif; ?>
         <div class="footer-bar">
-          <img src="<?= $li_logo_safe ?>" alt="LaukaaInfo" style="height:1.1em;vertical-align:middle;margin-right:4px;filter:brightness(0) invert(1);">
+          <img crossorigin="anonymous" src="<?= $li_logo_safe ?>" alt="LaukaaInfo" style="height:1.1em;vertical-align:middle;margin-right:4px;filter:brightness(0) invert(1);">
           Tutustu: <a href="https://laukaainfo.fi" style="color:rgba(255,255,255,.9);text-decoration:none;">laukaainfo.fi</a>
         </div>
       </div>
@@ -304,7 +304,7 @@ hr{border:none;border-top:1px solid #e2e8f0;margin:1.5rem 0;}
     <?php elseif($type === 'flyer'): ?>
       <div class="card-flyer">
         <div class="top-bar"></div>
-        <?php if($logo): ?><img src="<?= $logo_safe ?>" alt="Logo" class="logo"><?php endif; ?>
+        <?php if($logo): ?><img crossorigin="anonymous" src="<?= $logo_safe ?>" alt="Logo" class="logo"><?php endif; ?>
         <?php if($kategoria): ?><div class="cat"><?= $kategoria_safe ?></div><?php endif; ?>
         <div class="name"><?= $nimi_safe ?></div>
         <div class="desc">Tutustu meihin LaukaaInfo-matkailuportaalissa ja katso yhteystietomme!</div>
@@ -313,11 +313,11 @@ hr{border:none;border-top:1px solid #e2e8f0;margin:1.5rem 0;}
           <?php if($nettisivu): ?><div style="margin-top:.3rem;"><a href="<?= $nettisivu_safe ?>" class="web-link">🌐 <?= $web_display ?></a></div><?php endif; ?>
         </div>
         <div class="qr-row">
-          <a href="<?= htmlspecialchars($card_url) ?>"><img src="<?= $qr_safe ?>" alt="QR"></a>
+          <a href="<?= htmlspecialchars($card_url) ?>"><img crossorigin="anonymous" src="<?= $qr_safe ?>" alt="QR"></a>
           <div class="laukaainfo">
             Skannaa QR tai käy:<br>
             <div style="display:flex;align-items:center;gap:4px;margin-top:4px;">
-              <img src="<?= $li_logo_safe ?>" alt="LaukaaInfo" style="height:16px;width:auto;flex-shrink:0;object-fit:contain;">
+              <img crossorigin="anonymous" src="<?= $li_logo_safe ?>" alt="LaukaaInfo" style="height:16px;width:auto;flex-shrink:0;object-fit:contain;">
               <a href="<?= htmlspecialchars($card_url) ?>" style="color:var(--blue);font-weight:700;text-decoration:none;">laukaainfo.fi</a>
             </div>
           </div>
@@ -333,13 +333,13 @@ hr{border:none;border-top:1px solid #e2e8f0;margin:1.5rem 0;}
           <?php if($puhelin): ?><div class="phone">📞 <?= $puhelin_safe ?></div><?php endif; ?>
           <?php if($nettisivu): ?><a href="<?= $nettisivu_safe ?>" class="web-link">🌐 <?= $web_display ?></a><?php endif; ?>
           <a href="https://laukaainfo.fi" style="font-size:.75rem;color:var(--blue);font-weight:700;text-decoration:none;display:flex;align-items:center;gap:4px;margin-top:auto;">
-            <img src="<?= $li_logo_safe ?>" alt="LaukaaInfo" style="height:16px;vertical-align:middle;">
+            <img crossorigin="anonymous" src="<?= $li_logo_safe ?>" alt="LaukaaInfo" style="height:16px;vertical-align:middle;">
             laukaainfo.fi
           </a>
         </div>
         <div class="right">
-          <?php if($logo): ?><img src="<?= $logo_safe ?>" alt="Logo" class="logo"><?php endif; ?>
-          <a href="<?= htmlspecialchars($card_url) ?>"><img src="<?= $qr_safe ?>" alt="QR" class="qr"></a>
+          <?php if($logo): ?><img crossorigin="anonymous" src="<?= $logo_safe ?>" alt="Logo" class="logo"><?php endif; ?>
+          <a href="<?= htmlspecialchars($card_url) ?>"><img crossorigin="anonymous" src="<?= $qr_safe ?>" alt="QR" class="qr"></a>
           <div class="li-tag">Skannaa yrityskortti</div>
         </div>
       </div>
@@ -347,15 +347,15 @@ hr{border:none;border-top:1px solid #e2e8f0;margin:1.5rem 0;}
     <?php elseif($type === 'qr'): ?>
       <div class="card-qr">
         <div class="top-accent"></div>
-        <?php if($logo): ?><img src="<?= $logo_safe ?>" alt="Logo" class="logo"><?php endif; ?>
+        <?php if($logo): ?><img crossorigin="anonymous" src="<?= $logo_safe ?>" alt="Logo" class="logo"><?php endif; ?>
         <?php if($kategoria): ?><div class="cat"><?= $kategoria_safe ?></div><?php endif; ?>
         <div class="name"><?= $nimi_safe ?></div>
-        <a href="<?= htmlspecialchars($card_url) ?>"><img src="<?= $qr_safe ?>" alt="QR" class="qr-big"></a>
+        <a href="<?= htmlspecialchars($card_url) ?>"><img crossorigin="anonymous" src="<?= $qr_safe ?>" alt="QR" class="qr-big"></a>
         <div class="scan-text">Skannaa QR-koodi ja tutustu yrityskorttiin</div>
         <?php if($puhelin): ?><div class="phone">📞 <?= $puhelin_safe ?></div><?php endif; ?>
         <?php if($nettisivu): ?><a href="<?= $nettisivu_safe ?>" class="web-link">🌐 <?= $web_display ?></a><?php endif; ?>
         <div class="li-footer">
-          <img src="<?= $li_logo_safe ?>" alt="LaukaaInfo" style="height:18px;vertical-align:middle;margin-right:5px;">
+          <img crossorigin="anonymous" src="<?= $li_logo_safe ?>" alt="LaukaaInfo" style="height:18px;vertical-align:middle;margin-right:5px;">
           Tutustu: <a href="https://laukaainfo.fi" style="color:var(--blue);text-decoration:none;font-weight:700;">laukaainfo.fi</a>
         </div>
       </div>
@@ -363,19 +363,19 @@ hr{border:none;border-top:1px solid #e2e8f0;margin:1.5rem 0;}
     <?php else: /* business_card */ ?>
       <div class="card-biz">
         <div class="left">
-          <?php if($logo): ?><img src="<?= $logo_safe ?>" alt="Logo" class="logo"><?php endif; ?>
+          <?php if($logo): ?><img crossorigin="anonymous" src="<?= $logo_safe ?>" alt="Logo" class="logo"><?php endif; ?>
           <?php if($kategoria): ?><div class="cat"><?= $kategoria_safe ?></div><?php endif; ?>
           <div class="name"><?= $nimi_safe ?></div>
           <div style="flex:1;"></div>
           <?php if($puhelin): ?><div class="phone">📞 <?= $puhelin_safe ?></div><?php endif; ?>
           <?php if($nettisivu): ?><a href="<?= $nettisivu_safe ?>" class="web-link">🌐 <?= $web_display ?></a><?php endif; ?>
           <a href="https://laukaainfo.fi" class="li-link" style="display:flex;align-items:center;gap:5px;">
-            <img src="<?= $li_logo_safe ?>" alt="LaukaaInfo" style="height:16px;filter:brightness(0) invert(1);">
+            <img crossorigin="anonymous" src="<?= $li_logo_safe ?>" alt="LaukaaInfo" style="height:16px;filter:brightness(0) invert(1);">
             laukaainfo.fi
           </a>
         </div>
         <div class="right">
-          <a href="<?= htmlspecialchars($card_url) ?>"><img src="<?= htmlspecialchars($qr_src) ?>" alt="QR" class="qr"></a>
+          <a href="<?= htmlspecialchars($card_url) ?>"><img crossorigin="anonymous" src="<?= htmlspecialchars($qr_src) ?>" alt="QR" class="qr"></a>
           <div class="scan">Skannaa yrityskortti</div>
         </div>
       </div>
