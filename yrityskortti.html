@@ -2023,7 +2023,16 @@
 
         function openMarketingTool(type) {
             const urlParams = new URLSearchParams(window.location.search);
-            const id = urlParams.get('id');
+            let id = urlParams.get('id');
+
+            // Jos ei URL-parametria, päätellään ID tiedostonimestä (premium-staattiset sivut, esim. /yritys/vuonteen-helmi.html)
+            if (!id) {
+                const fileName = window.location.pathname.split('/').pop();
+                if (fileName && fileName.endsWith('.html') && fileName !== 'yrityskortti.html' && fileName !== 'index.html') {
+                    id = fileName.replace('.html', '');
+                }
+            }
+
             if (id) {
                 window.open('https://www.mediazoo.fi/laukaainfo-web/mainoskortti.php?id=' + encodeURIComponent(id) + '&type=' + encodeURIComponent(type), '_blank');
             } else {

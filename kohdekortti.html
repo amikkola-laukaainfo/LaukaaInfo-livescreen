@@ -1239,7 +1239,16 @@
 
         function openMarketingTool(type) {
             const urlParams = new URLSearchParams(window.location.search);
-            const id = urlParams.get('id');
+            let id = urlParams.get('id');
+
+            // Fallback: jos ei URL-parametria, käytetään valittua kohdetta pudotusvalikosta
+            if (!id) {
+                const selector = document.getElementById('demo-selector');
+                if (selector && selector.value) {
+                    id = selector.value;
+                }
+            }
+
             if (id) {
                 window.open('https://www.mediazoo.fi/laukaainfo-web/mainoskortti.php?id=' + encodeURIComponent(id) + '&type=' + encodeURIComponent(type), '_blank');
             } else {
