@@ -135,7 +135,7 @@ $web_display    = htmlspecialchars(preg_replace('#^https?://#', '', rtrim($netti
 $card_url = 'https://laukaainfo.fi/yrityskortti.html?id=' . urlencode($id);
 $qr_src   = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . urlencode($card_url);
 $qr_safe  = imageToBase64($qr_src);
-$li_logo_safe = imageToBase64('https://laukaainfo.fi/logo.png');
+$li_logo_safe = './logo.png';
 
 $tyypit = [
     'somekuva'      => '📸 Somekuva (1080×1080)',
@@ -296,7 +296,9 @@ hr{border:none;border-top:1px solid #e2e8f0;margin:1.5rem 0;}
         <?php if($puhelin): ?><div class="phone">📞 <?= $puhelin_safe ?></div><?php endif; ?>
         <?php if($nettisivu): ?><a href="<?= $nettisivu_safe ?>" class="web" style="color:rgba(255,255,255,.8);text-decoration:none;">🌐 <?= $web_display ?></a><?php endif; ?>
         <div class="footer-bar">
-          <img crossorigin="anonymous" src="<?= $li_logo_safe ?>" alt="LaukaaInfo" style="height:1.1em;vertical-align:middle;margin-right:4px;filter:brightness(0) invert(1);">
+          <div style="display:inline-flex; align-items:center; background:white; padding:2px; border-radius:4px; margin-right:6px;">
+            <img crossorigin="anonymous" src="<?= $li_logo_safe ?>" alt="LaukaaInfo" style="height:1.1em;vertical-align:middle;">
+          </div>
           Tutustu: <a href="https://laukaainfo.fi" style="color:rgba(255,255,255,.9);text-decoration:none;">laukaainfo.fi</a>
         </div>
       </div>
@@ -370,7 +372,9 @@ hr{border:none;border-top:1px solid #e2e8f0;margin:1.5rem 0;}
           <?php if($puhelin): ?><div class="phone">📞 <?= $puhelin_safe ?></div><?php endif; ?>
           <?php if($nettisivu): ?><a href="<?= $nettisivu_safe ?>" class="web-link">🌐 <?= $web_display ?></a><?php endif; ?>
           <a href="https://laukaainfo.fi" class="li-link" style="display:flex;align-items:center;gap:5px;">
-            <img crossorigin="anonymous" src="<?= $li_logo_safe ?>" alt="LaukaaInfo" style="height:16px;filter:brightness(0) invert(1);">
+            <div style="display:inline-flex; align-items:center; background:white; padding:2px; border-radius:4px;">
+              <img crossorigin="anonymous" src="<?= $li_logo_safe ?>" alt="LaukaaInfo" style="height:16px;">
+            </div>
             laukaainfo.fi
           </a>
         </div>
@@ -392,57 +396,6 @@ hr{border:none;border-top:1px solid #e2e8f0;margin:1.5rem 0;}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
-// Korjataan html2canvas:n ongelma CSS-filttereiden kanssa invert-kuvissa
-window.addEventListener('load', function() {
-  const invertImages = document.querySelectorAll('img[style*="invert"]');
-  invertImages.forEach(img => {
-    if (img.dataset.inverted) return; // Estetään ikuinen looppi
-
-    if (img.complete && img.naturalHeight !== 0) {
-      applyInvertCanvas(img);
-    } else {
-      img.addEventListener('load', function onImgLoad() {
-        img.removeEventListener('load', onImgLoad);
-        applyInvertCanvas(img);
-      });
-    }
-  });
-
-  function applyInvertCanvas(img) {
-    if (img.dataset.inverted) return;
-    img.dataset.inverted = "true";
-
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = img.naturalWidth || 150;
-    canvas.height = img.naturalHeight || 50;
-    
-    // Varmistetaan laatu
-    ctx.imageSmoothingEnabled = true;
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-    
-    try {
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const data = imageData.data;
-      for (let i = 0; i < data.length; i += 4) {
-        if (data[i+3] > 10) { // Jos ei läpinäkyvä
-          data[i] = 255;     // R
-          data[i+1] = 255;   // G
-          data[i+2] = 255;   // B
-        }
-      }
-      ctx.putImageData(imageData, 0, 0);
-      img.src = canvas.toDataURL('image/png');
-      img.style.filter = 'none';
-      img.style.width = 'auto';
-      img.style.objectFit = 'contain';
-      img.style.flexShrink = '0';
-    } catch (e) {
-      console.warn("Canvas-invertointi epäonnistui", e);
-    }
-  }
-});
-
 function downloadCard() {
   const el = document.getElementById('export-canvas');
   const btn = document.getElementById('btn-download');
