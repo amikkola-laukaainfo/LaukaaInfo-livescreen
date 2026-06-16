@@ -428,6 +428,12 @@
     <script>
         // ── Tapahtumakartta – lataa tapahtumat_geo.json ja lisää markerit ──
         (function () {
+            if (typeof L === 'undefined') {
+                document.getElementById('tapahtumakartta-map').innerHTML =
+                    '<p style="padding:2rem;color:#c00;font-size:1rem;">⚠️ Karttakirjastoa (Leaflet) ei voitu ladata. Tarkista internet-yhteys tai kokeile sivun uudelleenlataamista.</p>';
+                return;
+            }
+
             const MAP_CENTER = [62.38, 25.97];
             const MAP_ZOOM = 11;
 
