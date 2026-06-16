@@ -188,11 +188,17 @@ function updateReferences(dir) {
             }
             
             for (const [oldName, newName] of Object.entries(assetMap)) {
-                // Etsitään viittauksia tiedostoon (esim. src="script.js" tai href="style.css" tai "../style.css")
-                // Käytetään parannettua regexiä joka tukee myös ../ polkuja
-                // HUOM: negatiivinen lookbehind estää osumisen CDN-URLeihin (https://...)
-                const regex = new RegExp(`(?<![:/])(["'\/]|\\.\\.\\/)${oldName}(["'\\?])`, 'g');
-                content = content.replace(regex, `$1${newName}$2`);
+                // Korvataan vain paikalliset viittaukset – ei CDN/https-URLeja.
+                // Tarkistetaan jokainen match: jos sitä edeltää https://-alkuinen URL, jätetään koskematta.
+                const escapedOld = oldName.replace(/\./g, '\\.').replace(/\[/g, '\\[').replace(/\]/g, '\\]');
+                content = content.replace(new RegExp('(["\'/]|\\.\\.\\/)' + escapedOld + '(["\'\\?])', 'g'), (match, pre, post, offset) => {
+                    // Katso takaisin viimeisimmän lainausmerkin jälkeinen teksti
+                    const before = content.substring(Math.max(0, offset - 300), offset);
+                    const lastQ = Math.max(before.lastIndexOf('"'), before.lastIndexOf("'"));
+                    const urlStart = lastQ >= 0 ? before.substring(lastQ + 1) : before;
+                    if (/^https?:\/\//.test(urlStart)) return match; // CDN-URL, ei kosketa
+                    return pre + newName + post;
+                });
             }
             fs.writeFileSync(fullPath, content);
         } else if (entry.name === 'sw.js') {
