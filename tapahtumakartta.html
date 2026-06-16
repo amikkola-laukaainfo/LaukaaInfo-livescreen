@@ -1,3 +1,38 @@
 <!DOCTYPE html>
-<html lang="fi"><head>
-<aside class="sidebar-menu" id="sidebar-menu"><div class="sidebar-header"><a href="https://laukaainfo.fi/index.html" class="nav-logo"><img src="tapahtumakartta_files/logo.png" alt="LaukaaInfo Logo"> <span data-i18n="hero_title">LaukaaInfo</span> </a><button class="close-btn" id="close-sidebar-btn" aria-label="Sulje valikko">×</button></div><div class="sidebar-content"><div class="menu-section"><ul class="menu-list"><li class="menu-item"><a href="https://laukaainfo.fi/palvelun-esittely.html" class="sidebar-link" style="font-weight: bold; color: var(--primary-blue);">Tietoa palvelusta</a></li></ul></div><div class="menu-section"><h3 class="section-title" data-i18n="nav_shop">KAUPPA</h3><ul class="menu-list"><li class="menu-item"><a href="https://laukaainfo.fi/ilmoittaudu.html" class="sidebar-link" data-i18n="nav_feed">Feed-julkaisu</a></li><li class="menu-item"><a href="https://laukaainfo.fi/kauppa.html" class="sidebar-link" data-i18n="nav_shop_packages">Julkaisupaketit</a></li><li class="menu-item"><a href="https://laukaainfo.fi/lisaa-yritys.html" class="sidebar-link" data-i18n="nav_business_profile">Yritysprofiili</a></li></ul></div><div class="menu-section"><h3 class="section-title" data-i18n="nav_search_links">HAKULINKIT</h3><ul class="menu-list"><li class="menu-item has-submenu"><a href="#" class="submenu-toggle" data-i18n="nav_featured">Suosituimmat <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a><ul class="submenu" id="sidebar-featured"></ul></li><li class="menu-item has-submenu"><a href="#" class="submenu-toggle" data-i18n="nav_categories">Kategoriat <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a><ul class="submenu" id="sidebar-categories"></ul></li><li class="menu-item has-submenu"><a href="#" class="submenu-toggle" data-i18n="nav_areas">Taajamat <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a><ul class="submenu"><li><a href="https://laukaainfo.fi/laukaa.html" class="sidebar-link">Laukaa kk</a></li><li><a href="https://laukaainfo.fi/leppavesi.html" class="sidebar-link">Leppävesi</a></li><li><a href="https://laukaainfo.fi/lievestuore.html" class="sidebar-link">Lievestuore</a></li><li><a href="https://laukaainfo.fi/vehnia.html" class="sidebar-link">Vehniä</a></li><li><a href="https://laukaainfo.fi/vihtavuori.html" class="sidebar-link">Vihtavuori</a></li></ul></li></ul></div><div class="menu-section"><h3 class="section-title" data-i18n="nav_current">AJANKOHTAISTA</h3><ul class="menu-list"><li class="menu-item"><a href="https://laukaainfo.fi/ajankohtaista.html#events-card" class="sidebar-link" data-i18n="nav_events">Tapahtumat</a></li><li class="menu-item"><a href="https://laukaainfo.fi/ajankohtaista.html" class="sidebar-link" data-i18n="nav_current">Ajankohtaiset</a></li><li class="menu-item"><a href="https://laukaainfo.fi/tapahtumakartta.html" class="sidebar-link" style="font-weight:700;">Tapahtumakartta</a></li></ul></div><div class="menu-section"><h3 class="section-title" data-i18n="nav_paths">PÄÄTÖSTEN POLUT</h3><ul class="menu-list"><li class="menu-item"><a href="https://laukaainfo.fi/asiahaku.html" class="sidebar-link" data-i18n="nav_search_explore">Hae ja tutki</a></li></ul></div><div class="menu-section highlight-section"><h3 class="section-title" data-i18n="nav_maps">KARTAT &amp; ELÄMYKSET</h3><ul class="menu-list"><li class="menu-item"><a href="https://laukaainfo.fi/kohdekartta.html" class="sidebar-link" data-i18n="nav_map_points">Karttakohteet</a></li><li class="menu-item"><a href="https://laukaainfo.fi/tarinakartta.html" class="sidebar-link" data-i18n="nav_story_map">Tarinakartta</a></li><li class="menu-item"><a href="https://laukaainfo.fi/tarinakartta.html#kavelyreitit-section" class="sidebar-link" data-i18n="nav_route_map">Reittikartta</a></li><li class="menu-item"><a href="https://laukaainfo.fi/muistokartta.html" class="sidebar-link" data-i18n="nav_memorial_map">Muistokartta</a></li><li class="menu-item"><a href="https://laukaainfo.fi/kadonneet.html" class="sidebar-link" data-i18n="nav_lost_found">Kadonneet &amp; löydetyt</a></li></ul></div></div></aside>
+<html lang="fi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Tapahtumakartta – LaukaaInfo</title>
+    <meta name="description" id="page-description"
+        content="Tapahtumat kartalla Laukaassa. Klikkaa markeria nähdäksesi tapahtuman nimen, ajankohdan ja linkin Visit Laukaaseen.">
+    <link rel="icon" href="logo.png">
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0056b3">
+
+    <!-- Fonts & Styles -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Outfit:wght@100..900&display=swap"
+        rel="stylesheet">
+
+    <!-- Leaflet Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+
+    <link rel="stylesheet" href="style.css?v=20260505">
+    <script src="translations.js?v=20260505"></script>
+    <link rel="stylesheet" href="modal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+
+    <style>
+        .events-map-hero {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            padding: 4rem 1rem;
+            text-align: center;

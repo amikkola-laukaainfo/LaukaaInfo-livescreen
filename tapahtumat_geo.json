@@ -128,14 +128,6 @@
     "lng": 25.9568791
   },
   {
-    "nimi": "Sinkkujen juhannuspäivä 2026 EräKatrin kanssa",
-    "aika": "la, 20 kesä 2026 15:00:00",
-    "paikka": "* Vastaa kutsuun ja tule tapaamaan muita sinkkuja.",
-    "url": "https://visitlaukaa.fi/tapahtuma/juhannuspaiva-sinkkujen-juhannus-2026-erakatrin-kanssa-2/",
-    "lat": null,
-    "lng": null
-  },
-  {
     "nimi": "Sunnuntaitanssit Savion lavalla",
     "aika": "su, 21 kesä 2026 14:00:00",
     "paikka": "Saviontie 1312, Laukaa",
@@ -143,6 +135,7 @@
     "lat": 62.2703242,
     "lng": 26.0554971
   },
+
   {
     "nimi": "Koko perheen liikennepuistotreffit Laukaan satamassa",
     "aika": "ti, 23 kesä 2026 07:00:00",
