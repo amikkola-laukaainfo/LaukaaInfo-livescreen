@@ -120,9 +120,12 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
   .cta-banner{text-align:center;justify-content:center;}
 }
   /* Ensure hero CTA text is visible even without hover */
-  .kohde-cta-text:hover{color:#1e293b !important;}
-  .kohde-cta-text{color:#1e293b !important;}
-  .kohde-cta-text:visited{color:#1e293b !important;}
+  .kohde-cta-text:hover{color:inherit !important;}
+  .kohde-cta-text{color:inherit !important;}
+  .kohde-cta-text:visited{color:inherit !important;}
+  /* Keep button backgrounds as originally styled */
+  .kohde-cta-text{background:initial !important;}
+  .kohde-cta-text:hover{background:initial !important;}
 </style>
 </head>
 <body>
