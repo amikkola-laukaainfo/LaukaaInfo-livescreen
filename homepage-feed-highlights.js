@@ -111,7 +111,12 @@
 
         const action = document.createElement('div');
         action.className = 'homepage-feed-highlights__footer';
-        action.innerHTML = '<button type="button" class="btn-radar homepage-feed-highlights__button">Avaa koko syöte</button>';
+        action.innerHTML = `
+            <div style="display:flex; justify-content:center; gap:1rem; flex-wrap:wrap; width: 100%;">
+                <button type="button" class="btn-radar homepage-feed-highlights__button">Avaa koko syöte</button>
+                <a href="kohdekortit.html" class="btn-radar" style="text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:0.5rem; background: linear-gradient(135deg, #f5a623, #e09010); color: #000; box-shadow: 0 4px 12px rgba(245, 166, 35, 0.35);">📅 Kalenteri</a>
+            </div>
+        `;
         root.appendChild(action);
 
         const feedBtn = document.getElementById('toggle-feed-btn');

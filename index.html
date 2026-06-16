@@ -842,27 +842,19 @@
             <div class="section-container">
                 <div class="feed-accordion"
                     style="border: none; box-shadow: 0 15px 45px rgba(0,0,0,0.08); border-radius: 24px; overflow: visible;">
-                    <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
-                        <button class="feed-accordion-header closed" id="toggle-feed-btn"
-                            style="align-items: center; background: #0056b3; color: white; border-radius: 24px; padding: 1.8rem 2.5rem; transition: all 0.3s ease; border: none; flex:1; min-width:260px;">
-                            <div style="display: flex; flex-direction: column; align-items: flex-start;">
-                                <span data-i18n="feed_title" style="color: white; font-size: 1.4rem;">Paikallinen
-                                    syöte</span>
-                                <small
-                                    style="font-size: 0.9rem; font-weight: normal; opacity: 0.9; margin-top: 4px; color: rgba(255,255,255,0.85);"
-                                    data-i18n="feed_subtitle">Löydä ilmoitukset, tapahtumat ja paikalliset
-                                    tarjoukset</small>
-                            </div>
-                            <span class="icon-btn" data-i18n="feed_open"
-                                style="background: white; color: #0056b3; border: none; padding: 0.6rem 1.8rem; border-radius: 50px; font-weight: 800; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">Avaa</span>
-                        </button>
-                        <a href="kohdekortit.html"
-                            style="display:inline-flex; align-items:center; gap:0.5rem; background: linear-gradient(135deg,#f5a623,#e09010); color: #000; padding: 1rem 2rem; border-radius: 24px; font-weight: 800; font-size: 1rem; text-decoration: none; box-shadow: 0 4px 12px rgba(245,166,35,0.35); transition: all 0.2s; white-space:nowrap;"
-                            onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(245,166,35,0.5)'"
-                            onmouseout="this.style.transform='none';this.style.boxShadow='0 4px 12px rgba(245,166,35,0.35)'">
-                            📅 <span>Kalenteri</span>
-                        </a>
-                    </div>
+                    <button class="feed-accordion-header closed" id="toggle-feed-btn"
+                        style="align-items: center; background: #0056b3; color: white; border-radius: 24px; padding: 1.8rem 2.5rem; transition: all 0.3s ease; border: none;">
+                        <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                            <span data-i18n="feed_title" style="color: white; font-size: 1.4rem;">Paikallinen
+                                syöte</span>
+                            <small
+                                style="font-size: 0.9rem; font-weight: normal; opacity: 0.9; margin-top: 4px; color: rgba(255,255,255,0.85);"
+                                data-i18n="feed_subtitle">Löydä ilmoitukset, tapahtumat ja paikalliset
+                                tarjoukset</small>
+                        </div>
+                        <span class="icon-btn" data-i18n="feed_open"
+                            style="background: white; color: #0056b3; border: none; padding: 0.6rem 1.8rem; border-radius: 50px; font-weight: 800; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">Avaa</span>
+                    </button>
                     <div class="feed-accordion-content closed" id="feed-accordion-content"
                         style="background: #f8fbff; border-radius: 0 0 24px 24px;">
                         <!-- Aktiivinen aineisto (Dynaaminen API mediazoo.fi:stä) -->
