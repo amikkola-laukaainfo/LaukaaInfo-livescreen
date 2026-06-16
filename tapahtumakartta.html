@@ -467,7 +467,7 @@
                         const marker = L.marker([ev.lat, ev.lng]);
                         const popupHtml = `
                             <b>${escHtml(ev.nimi)}</b>
-                            <div class="popup-meta">🕐 ${escHtml(ev.aika)}</div>
+                            <div class="popup-meta">🕐 ${escHtml(ev.aika ? ev.aika.replace(/:00$/, '') : '')}</div>
                             <div class="popup-meta">📍 ${escHtml(ev.paikka)}</div>
                             ${ev.url ? `<a href="${escHtml(ev.url)}" target="_blank" rel="noopener">Lue lisää VisitLaukaa.fi →</a>` : ''}
                         `;
@@ -529,7 +529,7 @@
                         return `
                             <div class="event-list-item${hasGeo ? '' : ' no-geo'}">
                                 <div class="event-name">${escHtml(ev.nimi)}</div>
-                                <div class="event-meta">🕐 ${escHtml(ev.aika)}</div>
+                                <div class="event-meta">🕐 ${escHtml(ev.aika ? ev.aika.replace(/:00$/, '') : '')}</div>
                                 <div class="event-meta">📍 ${escHtml(ev.paikka)}</div>
                                 ${ev.url ? `<a href="${escHtml(ev.url)}" target="_blank" rel="noopener noreferrer">Lue lisää →</a>` : ''}
                             </div>
