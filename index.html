@@ -395,10 +395,21 @@
 
         <section class="homepage-feed-highlights-section bg-full-white">
             <div class="section-container">
-                <div class="section-header">
-                    <h2>Ajankohtaista Laukaassa</h2>
-                    <p>Viralliset kuntauutiset, tapahtumat ja julkiset tiedotteet yhdellä silmäyksellä.</p>
+                <div class="section-header" style="display:flex; gap:1rem; align-items:center; justify-content:space-between; flex-wrap:wrap;">
+                    <div>
+                        <h2>Ajankohtaista Laukaassa</h2>
+                        <p>Viralliset kuntauutiset, tapahtumat ja julkiset tiedotteet yhdellä silmäyksellä.</p>
+                    </div>
+
+                    <div style="flex-shrink:0; display:flex; align-items:center; gap:0.75rem;">
+                        <a href="tapahtumakartta.html"
+                            style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.65rem 1.1rem; background:#f0f9ff; border:2px solid #bae6fd; border-radius:12px; text-decoration:none; color:#0369a1; font-weight:700; font-size:0.95rem; transition:all 0.2s;">
+                            <span class="iconify" data-icon="material-symbols-light:map-outline" style="font-size:1.25rem;"></span>
+                            <span>Kartta</span>
+                        </a>
+                    </div>
                 </div>
+
                 <div id="homepage-official-highlights" class="homepage-feed-highlights"></div>
             </div>
         </section>
