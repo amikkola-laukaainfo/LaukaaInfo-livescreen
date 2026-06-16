@@ -23,6 +23,22 @@
             border-bottom-left-radius: 40px;
             border-bottom-right-radius: 40px;
             margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .palvelu-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('hero-kuva.webp') center/cover no-repeat;
+            opacity: 0.12;
+            z-index: 0;
+        }
+
+        .palvelu-hero > * {
+            position: relative;
+            z-index: 1;
         }
 
         .palvelu-hero h1 {

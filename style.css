@@ -681,25 +681,40 @@ header h1 {
    PLAIN HEADER (alisvudet ilman hero-split)
    ========================================= */
 header:not(.hero-split) {
-    background: var(--secondary-blue);
-    padding: 1.75rem 0 1.5rem;
+    background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
+    padding: 3rem 0 2.5rem;
     margin-bottom: 2rem;
     border-bottom-left-radius: 28px;
     border-bottom-right-radius: 28px;
     box-shadow: 0 4px 20px rgba(0, 51, 102, 0.15);
+    position: relative;
+    overflow: hidden;
+}
+
+header:not(.hero-split)::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('hero-kuva.webp') center/cover no-repeat;
+    opacity: 0.12;
+    z-index: 0;
+    pointer-events: none;
 }
 
 header:not(.hero-split) .header-content {
-    max-width: 1200px;
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
     margin: 0 auto;
-    padding: 0 1.5rem 0 15vw;
+    padding: 0 1.5rem;
+    text-align: center;
 }
 
 header:not(.hero-split) h1 {
     font-family: var(--accent-font);
-    font-size: 2.4rem;
+    font-size: 2.8rem;
     font-weight: 800;
-    margin: 0 0 0.35rem;
+    margin: 0 0 0.5rem;
     letter-spacing: -1px;
     line-height: 1.1;
     color: #ffffff;
@@ -707,19 +722,23 @@ header:not(.hero-split) h1 {
 }
 
 header:not(.hero-split) p {
-    font-size: 1rem;
-    opacity: 0.85;
-    color: rgba(255,255,255,0.9);
-    margin: 0;
+    font-size: 1.1rem;
+    opacity: 0.9;
+    color: rgba(255,255,255,0.95);
+    margin: 0 auto;
 }
 
 @media (max-width: 768px) {
+    header:not(.hero-split) {
+        padding: 2.5rem 0 2rem;
+    }
+    
     header:not(.hero-split) .header-content {
         padding: 0 1.5rem;
     }
 
     header:not(.hero-split) h1 {
-        font-size: 1.8rem;
+        font-size: 2rem;
     }
 }
 
