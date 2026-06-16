@@ -153,7 +153,10 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
         ➕ Lisää tapahtuma
       </a>
       <a href="#nodate-section" class="btn-hero-secondary">
-        🎁 Tarjoukset &amp; suositukset
+        🎁 Tarjoukset
+      </a>
+      <a href="https://www.mediazoo.fi/laukaainfo-web/lisaa-tarjous.php" target="_blank" class="btn-hero-primary">
+        ➕ Lisää tarjous
       </a>
     </div>
   </div>
@@ -166,8 +169,6 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
     <span class="filter-pill active" data-filter="all">Kaikki</span>
     <span class="filter-pill" data-filter="event">📅 Tapahtumat</span>
     <span class="filter-pill" data-filter="offer">🎁 Tarjoukset</span>
-    <span class="filter-pill" data-filter="association">🤝 Yhdistykset</span>
-    <span class="filter-pill" data-filter="service">🛠 Palvelut</span>
   </div>
 </div>
 
@@ -202,7 +203,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 <script>
 const SOURCES = [
   'kohdekortit/kohteet.json',
-  'kohdekortit/tarjoukset.json'
+  'tarjoukset.json'
 ];
 
 const TYPE_LABELS = {
@@ -280,8 +281,8 @@ function buildCard(item) {
 
   const actionBtns = [];
   if (ticketUrl) actionBtns.push(`<a href="${ticketUrl}" target="_blank" class="btn-card btn-card-primary">🎟 Liput</a>`);
-  if (website) actionBtns.push(`<a href="${website}" target="_blank" class="btn-card btn-card-secondary">🌐 Lisätiedot</a>`);
-  if (item.contact?.email) actionBtns.push(`<a href="mailto:${item.contact.email}" class="btn-card btn-card-secondary">✉️ Yhteys</a>`);
+  if (website) actionBtns.push(`<a href="${website}" target="_blank" class="btn-card btn-card-secondary">🌐 www</a>`);
+  if (item.id) actionBtns.push(`<a href="kohdekortti.html?id=${item.id}" class="btn-card btn-card-secondary">📇 Kortti</a>`);
 
   return `
 <div class="kohde-card" data-type="${item.type}" data-name="${(item.name||'').toLowerCase()}" data-tags="${tags.join(',')}">
