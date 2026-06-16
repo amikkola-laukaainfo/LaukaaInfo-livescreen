@@ -30,6 +30,25 @@
     <link rel="stylesheet" href="modal.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
     <style>
+        /* Center image inside Swiper slide inside the Leaflet popup modal */
+        .lki-modal-container .swiper-slide,
+        .lki-modal-container .swiper-slide > *{
+            margin-left:auto !important;
+            margin-right:auto !important;
+        }
+        .lki-modal-container .swiper-slide{
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+        }
+        .lki-modal-container img,
+        .lki-modal-container .swiper-slide img{
+            display:block;
+            margin-left:auto;
+            margin-right:auto;
+        }
+
         .region-hero {
             background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
             color: white;
