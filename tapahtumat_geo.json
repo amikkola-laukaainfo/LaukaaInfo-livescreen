@@ -167,14 +167,7 @@
     "lat": 62.4141648,
     "lng": 25.9608703
   },
-  {
-    "nimi": "MLL:n Leikkipuistotreffit Lievestuoreella",
-    "aika": "ti, 23 kesä 2026 17:30:00",
-    "paikka": "Mullostie 3, 41400 Lievestuore",
-    "url": "https://visitlaukaa.fi/tapahtuma/mlln-leikkipuistotreffit-lievestuoreella-8/",
-    "lat": 62.2603682,
-    "lng": 26.1812642
-  },
+
   {
     "nimi": "Nordic Tire Fitness – Outdoor Training Laukaa",
     "aika": "ti, 23 kesä 2026 15:00:00",
@@ -1215,22 +1208,7 @@
     "lat": 62.3336179,
     "lng": 25.8374007
   },
-  {
-    "nimi": "Laukaan hautausmaan kulttuuritarinakierros",
-    "aika": "ke, 26 elo 2026 18:00:00",
-    "paikka": "Kirkonkylän hautausmaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-hautausmaan-kulttuuritarinakierros-3/",
-    "lat": 60.3720517,
-    "lng": 25.2572553
-  },
-  {
-    "nimi": "Laukaan hautausmaan kulttuuritarinakierros",
-    "aika": "ke, 26 elo 2026 18:00:00",
-    "paikka": "Laukaan kirkonkylän hautausmaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-hautausmaan-kulttuuritarinakierros-2/",
-    "lat": null,
-    "lng": null
-  },
+
   {
     "nimi": "Sunset SUP Sessions – Laukaa",
     "aika": "to, 27 elo 2026 15:00:00",
