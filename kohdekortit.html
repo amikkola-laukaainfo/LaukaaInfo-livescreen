@@ -119,6 +119,10 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
   .cards-grid,.nodatecards{grid-template-columns:1fr;}
   .cta-banner{text-align:center;justify-content:center;}
 }
+  /* Ensure hero CTA text is visible even without hover */
+  .kohde-cta-text:hover{color:inherit !important;}
+  .kohde-cta-text{color:inherit !important;}
+  .kohde-cta-text:visited{color:inherit !important;}
 </style>
 </head>
 <body>
@@ -307,13 +311,13 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
     <h1>Tapahtumat &amp; Tarjoukset</h1>
     <p>Kaikki mitä Laukaassa tapahtuu – tapahtumat, tarjoukset ja suositukset yhdessä paikassa.</p>
     <div class="hero-actions">
-      <a href="https://www.mediazoo.fi/laukaainfo-web/lisaa-tapahtuma.php" target="_blank" class="btn-hero-primary">
+      <a href="https://www.mediazoo.fi/laukaainfo-web/lisaa-tapahtuma.php" target="_blank" class="btn-hero-primary kohde-cta-text">
         ➕ Lisää tapahtuma
       </a>
-      <a href="#nodate-section" class="btn-hero-secondary">
+      <a href="#nodate-section" class="btn-hero-secondary kohde-cta-text">
         🎁 Tarjoukset
       </a>
-      <a href="https://www.mediazoo.fi/laukaainfo-web/lisaa-tarjous.php" target="_blank" class="btn-hero-primary">
+      <a href="https://www.mediazoo.fi/laukaainfo-web/lisaa-tarjous.php" target="_blank" class="btn-hero-primary kohde-cta-text">
         ➕ Lisää tarjous
       </a>
     </div>
