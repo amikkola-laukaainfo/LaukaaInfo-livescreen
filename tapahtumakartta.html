@@ -499,17 +499,44 @@
                     grid.innerHTML = '<p style="color:#888;">Ei tapahtumia.</p>';
                     return;
                 }
-                grid.innerHTML = all.map(ev => {
-                    const hasGeo = ev.lat != null && ev.lng != null;
-                    return `
-                        <div class="event-list-item${hasGeo ? '' : ' no-geo'}">
-                            <div class="event-name">${escHtml(ev.nimi)}</div>
-                            <div class="event-meta">🕐 ${escHtml(ev.aika)}</div>
-                            <div class="event-meta">📍 ${escHtml(ev.paikka)}</div>
-                            ${ev.url ? `<a href="${escHtml(ev.url)}" target="_blank" rel="noopener noreferrer">Lue lisää →</a>` : ''}
-                        </div>
-                    `;
-                }).join('');
+                
+                // Group by month
+                const grouped = {};
+                all.forEach(ev => {
+                    let monthGroup = "Muu ajankohta";
+                    if (ev.aika) {
+                        const parts = ev.aika.split(' ');
+                        if (parts.length >= 4) {
+                            monthGroup = parts[2] + ' ' + parts[3]; // esim. "kesä 2026"
+                            // Varmistetaan iso alkukirjain kuukaudelle
+                            monthGroup = monthGroup.charAt(0).toUpperCase() + monthGroup.slice(1);
+                        } else {
+                            monthGroup = ev.aika; // Fallback
+                        }
+                    }
+                    if (!grouped[monthGroup]) {
+                        grouped[monthGroup] = [];
+                    }
+                    grouped[monthGroup].push(ev);
+                });
+
+                let html = '';
+                for (const [month, events] of Object.entries(grouped)) {
+                    html += `<h3 style="grid-column: 1 / -1; margin-top: 1.5rem; margin-bottom: 0.5rem; color: #333; border-bottom: 2px solid var(--primary-blue, #0056b3); padding-bottom: 0.3rem;">${escHtml(month)}</h3>`;
+                    
+                    html += events.map(ev => {
+                        const hasGeo = ev.lat != null && ev.lng != null;
+                        return `
+                            <div class="event-list-item${hasGeo ? '' : ' no-geo'}">
+                                <div class="event-name">${escHtml(ev.nimi)}</div>
+                                <div class="event-meta">🕐 ${escHtml(ev.aika)}</div>
+                                <div class="event-meta">📍 ${escHtml(ev.paikka)}</div>
+                                ${ev.url ? `<a href="${escHtml(ev.url)}" target="_blank" rel="noopener noreferrer">Lue lisää →</a>` : ''}
+                            </div>
+                        `;
+                    }).join('');
+                }
+                grid.innerHTML = html;
             }
 
             function escHtml(str) {
