@@ -1,0 +1,1629 @@
+[
+  {
+    "nimi": "Laukaan Kuvataide Lauk-Ku ry:n  taidenäyttely Vuonteella",
+    "aika": "ma, 01 kesä 2026 21:21:00",
+    "paikka": "Antinniementie 1, 41330 Vihtavuori",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-kuvataide-lauk-ku-ryn-taidenayttely-1-30-6-vuonteella-tertan-kahvila-puoti-paikassa/",
+    "lat": 62.3683034,
+    "lng": 25.9124894
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 16 kesä 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Testitapahtuma",
+    "aika": "ti, 16 kesä 2026 16:00:00",
+    "paikka": "Laukaan kunnantalo",
+    "url": "https://visitlaukaa.fi/tapahtuma/testitapahtuma-h/",
+    "lat": 62.4132066,
+    "lng": 25.959155
+  },
+  {
+    "nimi": "Vieraslajitalkoot Kuhankoskella",
+    "aika": "ti, 16 kesä 2026 17:00:00",
+    "paikka": "Kantolantie 442, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/vieraslajitalkoot-kuhankoskella/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Nordic Tire Fitness – Outdoor Training Laukaa",
+    "aika": "ti, 16 kesä 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/nordic-tire-fitness-outdoor-training-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Lavatanssien alkeet",
+    "aika": "ti, 16 kesä 2026 15:15:00",
+    "paikka": "Saviontie 1312 41400 Lievestuore",
+    "url": "https://visitlaukaa.fi/tapahtuma/lavatanssien-alkeet-2/",
+    "lat": 62.2703242,
+    "lng": 26.0554971
+  },
+  {
+    "nimi": "Pihapeli-ilta koululaisille",
+    "aika": "ke, 17 kesä 2026 14:30:00",
+    "paikka": "Lievestuoreen koulu, Laurinkyläntie 5, 41400 Lievestuore",
+    "url": "https://visitlaukaa.fi/tapahtuma/pihapeli-ilta-koululaisille-3/",
+    "lat": 62.2593337,
+    "lng": 26.2044547
+  },
+  {
+    "nimi": "Sunset SUP Sessions – Laukaa",
+    "aika": "to, 18 kesä 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sunset-sup-sessions-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "JUHANNUSETKOT – Sinkkujen juhannus 2026 EräKatrin kanssa",
+    "aika": "to, 18 kesä 2026 18:00:00",
+    "paikka": "Harhalantie 18, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/juhannusetkot-sinkkujen-juhannus-2026-erakatrin-kanssa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "JUHANNUSETKOT – Sinkkujen juhannus 2026 EräKatrin kanssa",
+    "aika": "pe, 19 kesä 2026 16:00:00",
+    "paikka": "Saravedentie 3, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/juhannusetkot-sinkkujen-juhannus-2026-erakatrin-kanssa-laukaan/",
+    "lat": 62.4140913,
+    "lng": 25.9595792
+  },
+  {
+    "nimi": "Trubaduuri Suvi Karjula",
+    "aika": "pe, 19 kesä 2026 17:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/trubaduuri-suvi-karjula/",
+    "lat": 62.4341199,
+    "lng": 25.8968081
+  },
+  {
+    "nimi": "Sataman Juhannus",
+    "aika": "pe, 19 kesä 2026 19:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sataman-juhannus-2/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Sunnuntaitanssit Savion lavalla",
+    "aika": "pe, 19 kesä 2026 17:00:00",
+    "paikka": "Saviontie 1312, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sunnuntaitanssit-savion-lavalla-9/",
+    "lat": 62.2703242,
+    "lng": 26.0554971
+  },
+  {
+    "nimi": "Savion lavan Juhannus",
+    "aika": "pe, 19 kesä 2026 20:00:00",
+    "paikka": "Lavaemäntä: Meeri Pirttinen p. 040 544 6542",
+    "url": "https://visitlaukaa.fi/tapahtuma/savion-lavan-juhannus/",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "nimi": "Juhannustanssit: Paavo Asunmaa",
+    "aika": "pe, 19 kesä 2026 22:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/juhannustanssit-paavo-asunmaa/",
+    "lat": 62.4341199,
+    "lng": 25.8968081
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 20 kesä 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Sinkkujen juhannuspäivä 2026 EräKatrin kanssa",
+    "aika": "la, 20 kesä 2026 15:00:00",
+    "paikka": "* Vastaa kutsuun ja tule tapaamaan muita sinkkuja.",
+    "url": "https://visitlaukaa.fi/tapahtuma/juhannuspaiva-sinkkujen-juhannus-2026-erakatrin-kanssa-2/",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "nimi": "Sunnuntaitanssit Savion lavalla",
+    "aika": "su, 21 kesä 2026 14:00:00",
+    "paikka": "Saviontie 1312, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sunnuntaitanssit-savion-lavalla-9/",
+    "lat": 62.2703242,
+    "lng": 26.0554971
+  },
+  {
+    "nimi": "Koko perheen liikennepuistotreffit Laukaan satamassa",
+    "aika": "ti, 23 kesä 2026 07:00:00",
+    "paikka": "Venetie 3, Laukaa, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/koko-perheen-liikennepuistotreffit-laukaan-satamassa/",
+    "lat": 62.4128706,
+    "lng": 25.9586553
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 23 kesä 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Vohvelikahvio Kalluntuvalla",
+    "aika": "ti, 23 kesä 2026 09:00:00",
+    "paikka": "Saravedentie 5",
+    "url": "https://visitlaukaa.fi/tapahtuma/vohvelikahvio-kalluntuvalla-3/",
+    "lat": 62.4141648,
+    "lng": 25.9608703
+  },
+
+  {
+    "nimi": "Nordic Tire Fitness – Outdoor Training Laukaa",
+    "aika": "ti, 23 kesä 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/nordic-tire-fitness-outdoor-training-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Lavatanssien alkeet",
+    "aika": "ti, 23 kesä 2026 15:15:00",
+    "paikka": "Saviontie 1312 41400 Lievestuore",
+    "url": "https://visitlaukaa.fi/tapahtuma/lavatanssien-alkeet-2/",
+    "lat": 62.2703242,
+    "lng": 26.0554971
+  },
+  {
+    "nimi": "Infopiste haitallisista vieraslajeista",
+    "aika": "ti, 23 kesä 2026 22:03:00",
+    "paikka": "Saravedentie 5",
+    "url": "https://visitlaukaa.fi/tapahtuma/infopiste-haitallisista-vieraslajeista-6/",
+    "lat": 62.4141648,
+    "lng": 25.9608703
+  },
+  {
+    "nimi": "Koko perheen puistopiknik",
+    "aika": "ke, 24 kesä 2026 18:00:00",
+    "paikka": "Venetie 3, Laukaa, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/koko-perheen-puistopiknik-9/",
+    "lat": 62.4128706,
+    "lng": 25.9586553
+  },
+  {
+    "nimi": "Laukaan Kuvataideyhdistyksen kesäretki 25.6.2026",
+    "aika": "to, 25 kesä 2026 00:00:00",
+    "paikka": "taidegraafikko/kuvanveistäjä Frans Toikkasen 100 v. juhlanäyttely, jossa nähtävillä Toikkasen ja taidegraafikko Klemolan monipuolista, harvinaisempaakin tuotantoa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-kuvataideyhdistyksen-kesaretki-25-6-2026/",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "nimi": "Sunset SUP Sessions – Laukaa",
+    "aika": "to, 25 kesä 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sunset-sup-sessions-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Mikko Alatalo – Suomen suosituimmat yhteislaulut",
+    "aika": "to, 25 kesä 2026 18:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/mikko-alatalo-suomen-suosituimmat-yhteislaulut/",
+    "lat": 62.4341199,
+    "lng": 25.8968081
+  },
+  {
+    "nimi": "Mikko Alatalo – Juicen ja Junnun parhaat",
+    "aika": "pe, 26 kesä 2026 18:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/mikko-alatalo-juicen-ja-junnun-parhaat/",
+    "lat": 62.4341199,
+    "lng": 25.8968081
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 27 kesä 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Trubaduuri Mika Rämä",
+    "aika": "la, 27 kesä 2026 19:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/trubaduuri-mika-rama/",
+    "lat": 62.4341199,
+    "lng": 25.8968081
+  },
+  {
+    "nimi": "Sunnuntaitanssit Savion lavalla",
+    "aika": "su, 28 kesä 2026 14:00:00",
+    "paikka": "Saviontie 1312, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sunnuntaitanssit-savion-lavalla-9/",
+    "lat": 62.2703242,
+    "lng": 26.0554971
+  },
+  {
+    "nimi": "Lupiinin torjuntatatalkoot",
+    "aika": "ma, 29 kesä 2026 09:00:00",
+    "paikka": "Mäkikalliontie, Lievestuore",
+    "url": "https://visitlaukaa.fi/tapahtuma/lupiinin-torjuntatatalkoot/",
+    "lat": 62.2572753,
+    "lng": 26.1904691
+  },
+  {
+    "nimi": "Koko perheen liikennepuistotreffit Laukaan satamassa",
+    "aika": "ti, 30 kesä 2026 07:00:00",
+    "paikka": "Venetie 3, Laukaa, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/koko-perheen-liikennepuistotreffit-laukaan-satamassa/",
+    "lat": 62.4128706,
+    "lng": 25.9586553
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 30 kesä 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Vohvelikahvio Kalluntuvalla",
+    "aika": "ti, 30 kesä 2026 09:00:00",
+    "paikka": "Saravedentie 5",
+    "url": "https://visitlaukaa.fi/tapahtuma/vohvelikahvio-kalluntuvalla-3/",
+    "lat": 62.4141648,
+    "lng": 25.9608703
+  },
+  {
+    "nimi": "Tiistaitanssit Savion lavalla",
+    "aika": "ti, 30 kesä 2026 10:00:00",
+    "paikka": "Saviontie 1312, 41400 Lievestuore",
+    "url": "https://visitlaukaa.fi/tapahtuma/tiistaitanssit-savion-lavalla/",
+    "lat": 62.2603682,
+    "lng": 26.1812642
+  },
+
+  {
+    "nimi": "Nordic Tire Fitness – Outdoor Training Laukaa",
+    "aika": "ti, 30 kesä 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/nordic-tire-fitness-outdoor-training-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Lavatanssien alkeet",
+    "aika": "ti, 30 kesä 2026 15:15:00",
+    "paikka": "Saviontie 1312 41400 Lievestuore",
+    "url": "https://visitlaukaa.fi/tapahtuma/lavatanssien-alkeet-2/",
+    "lat": 62.2703242,
+    "lng": 26.0554971
+  },
+  {
+    "nimi": "Pihapeli-ilta koululaisille",
+    "aika": "ke, 01 heinä 2026 14:30:00",
+    "paikka": "Lievestuoreen koulu, Laurinkyläntie 5, 41400 Lievestuore",
+    "url": "https://visitlaukaa.fi/tapahtuma/pihapeli-ilta-koululaisille-3/",
+    "lat": 62.2593337,
+    "lng": 26.2044547
+  },
+  {
+    "nimi": "Entäs jos… -taidenäyttely",
+    "aika": "to, 02 heinä 2026 12:00:00",
+    "paikka": "Antinniementie 1, 41330 Vihtavuori",
+    "url": "https://visitlaukaa.fi/tapahtuma/entas-jos-taidenayttely/",
+    "lat": 62.3683034,
+    "lng": 25.9124894
+  },
+  {
+    "nimi": "Sunset SUP Sessions – Laukaa",
+    "aika": "to, 02 heinä 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sunset-sup-sessions-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Avioliittosimulaattori",
+    "aika": "pe, 03 heinä 2026 16:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-2/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Trubaduuri Annika Nord",
+    "aika": "pe, 03 heinä 2026 19:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/trubaduuri-annika-nord/",
+    "lat": 62.4341199,
+    "lng": 25.8968081
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 04 heinä 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Avioliittosimulaattori",
+    "aika": "su, 05 heinä 2026 12:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-2/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Sunnuntaitanssit Savion lavalla",
+    "aika": "su, 05 heinä 2026 14:00:00",
+    "paikka": "Saviontie 1312, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sunnuntaitanssit-savion-lavalla-9/",
+    "lat": 62.2703242,
+    "lng": 26.0554971
+  },
+  {
+    "nimi": "Naisten turvesauna",
+    "aika": "ma, 06 heinä 2026 16:30:00",
+    "paikka": "Laukaan Tupaswilla, Ränssintie 5, 41370 Kuusa",
+    "url": "https://visitlaukaa.fi/tapahtuma/naisten-turvesauna-5/",
+    "lat": 62.4547219,
+    "lng": 25.9763206
+  },
+  {
+    "nimi": "Avioliittosimulaattori",
+    "aika": "ma, 06 heinä 2026 16:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-2/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Avioliittosimulaattori",
+    "aika": "ma, 06 heinä 2026 16:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-elokuu2026/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 07 heinä 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Vohvelikahvio Kalluntuvalla",
+    "aika": "ti, 07 heinä 2026 09:00:00",
+    "paikka": "Saravedentie 5",
+    "url": "https://visitlaukaa.fi/tapahtuma/vohvelikahvio-kalluntuvalla-3/",
+    "lat": 62.4141648,
+    "lng": 25.9608703
+  },
+  {
+    "nimi": "Nordic Tire Fitness – Outdoor Training Laukaa",
+    "aika": "ti, 07 heinä 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/nordic-tire-fitness-outdoor-training-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Lavatanssien alkeet",
+    "aika": "ti, 07 heinä 2026 15:15:00",
+    "paikka": "Saviontie 1312 41400 Lievestuore",
+    "url": "https://visitlaukaa.fi/tapahtuma/lavatanssien-alkeet-2/",
+    "lat": 62.2703242,
+    "lng": 26.0554971
+  },
+  {
+    "nimi": "Pihapeli-ilta koululaisille",
+    "aika": "ke, 08 heinä 2026 14:30:00",
+    "paikka": "Lievestuoreen koulu, Laurinkyläntie 5, 41400 Lievestuore",
+    "url": "https://visitlaukaa.fi/tapahtuma/pihapeli-ilta-koululaisille-3/",
+    "lat": 62.2593337,
+    "lng": 26.2044547
+  },
+  {
+    "nimi": "Avioliittosimulaattori",
+    "aika": "ke, 08 heinä 2026 16:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-2/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Avioliittosimulaattori",
+    "aika": "ke, 08 heinä 2026 16:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-elokuu2026/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Sunset SUP Sessions – Laukaa",
+    "aika": "to, 09 heinä 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sunset-sup-sessions-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Avioliittosimulaattori",
+    "aika": "pe, 10 heinä 2026 16:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-2/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Avioliittosimulaattori",
+    "aika": "pe, 10 heinä 2026 16:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-elokuu2026/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Trubaduuri Mika Rämä",
+    "aika": "pe, 10 heinä 2026 16:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/trubaduuri-mika-rama-2/",
+    "lat": 62.4341199,
+    "lng": 25.8968081
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 11 heinä 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Trubaduuri Mika Rämä",
+    "aika": "la, 11 heinä 2026 16:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/trubaduuri-mika-rama-2/",
+    "lat": 62.4341199,
+    "lng": 25.8968081
+  },
+  {
+    "nimi": "Johanna Tohnin Huonosti käyttäytyvät äidit",
+    "aika": "la, 11 heinä 2026 19:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/johanna-tohnin-huonosti-kayttaytyvat-aidit/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Avioliittosimulaattori",
+    "aika": "su, 12 heinä 2026 12:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-2/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Avioliittosimulaattori",
+    "aika": "su, 12 heinä 2026 12:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-elokuu2026/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Sunnuntaitanssit Savion lavalla",
+    "aika": "su, 12 heinä 2026 14:00:00",
+    "paikka": "Saviontie 1312, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sunnuntaitanssit-savion-lavalla-9/",
+    "lat": 62.2703242,
+    "lng": 26.0554971
+  },
+  {
+    "nimi": "Avioliittosimulaattori",
+    "aika": "ma, 13 heinä 2026 16:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-2/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Avioliittosimulaattori",
+    "aika": "ma, 13 heinä 2026 16:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-elokuu2026/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 14 heinä 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Vohvelikahvio Kalluntuvalla",
+    "aika": "ti, 14 heinä 2026 09:00:00",
+    "paikka": "Saravedentie 5",
+    "url": "https://visitlaukaa.fi/tapahtuma/vohvelikahvio-kalluntuvalla-3/",
+    "lat": 62.4141648,
+    "lng": 25.9608703
+  },
+  {
+    "nimi": "Tiistaitanssit Savion lavalla",
+    "aika": "ti, 14 heinä 2026 10:00:00",
+    "paikka": "Saviontie 1312, 41400 Lievestuore",
+    "url": "https://visitlaukaa.fi/tapahtuma/tiistaitanssit-savion-lavalla/",
+    "lat": 62.2603682,
+    "lng": 26.1812642
+  },
+  {
+    "nimi": "Nordic Tire Fitness – Outdoor Training Laukaa",
+    "aika": "ti, 14 heinä 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/nordic-tire-fitness-outdoor-training-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Lavatanssien alkeet",
+    "aika": "ti, 14 heinä 2026 15:15:00",
+    "paikka": "Saviontie 1312 41400 Lievestuore",
+    "url": "https://visitlaukaa.fi/tapahtuma/lavatanssien-alkeet-2/",
+    "lat": 62.2703242,
+    "lng": 26.0554971
+  },
+  {
+    "nimi": "Pihapeli-ilta koululaisille",
+    "aika": "ke, 15 heinä 2026 14:30:00",
+    "paikka": "Lievestuoreen koulu, Laurinkyläntie 5, 41400 Lievestuore",
+    "url": "https://visitlaukaa.fi/tapahtuma/pihapeli-ilta-koululaisille-3/",
+    "lat": 62.2593337,
+    "lng": 26.2044547
+  },
+  {
+    "nimi": "Avioliittosimulaattori",
+    "aika": "ke, 15 heinä 2026 16:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-2/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Avioliittosimulaattori",
+    "aika": "ke, 15 heinä 2026 16:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-elokuu2026/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "John Smith Rock Festival 2026",
+    "aika": "to, 16 heinä 2026 17:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/john-smith-rock-festival-2026/",
+    "lat": 62.4341199,
+    "lng": 25.8968081
+  },
+  {
+    "nimi": "Sunset SUP Sessions – Laukaa",
+    "aika": "to, 16 heinä 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sunset-sup-sessions-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Avioliittosimulaattori",
+    "aika": "pe, 17 heinä 2026 16:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-2/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Avioliittosimulaattori",
+    "aika": "pe, 17 heinä 2026 16:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-elokuu2026/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 18 heinä 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Avioliittosimulaattori",
+    "aika": "su, 19 heinä 2026 12:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-2/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Avioliittosimulaattori",
+    "aika": "su, 19 heinä 2026 12:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-elokuu2026/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Sunnuntaitanssit Savion lavalla",
+    "aika": "su, 19 heinä 2026 14:00:00",
+    "paikka": "Saviontie 1312, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sunnuntaitanssit-savion-lavalla-9/",
+    "lat": 62.2703242,
+    "lng": 26.0554971
+  },
+  {
+    "nimi": "Lupiinin torjuntatatalkoot",
+    "aika": "ma, 20 heinä 2026 09:00:00",
+    "paikka": "Mäkikalliontie, Lievestuore",
+    "url": "https://visitlaukaa.fi/tapahtuma/lupiinin-torjuntatatalkoot/",
+    "lat": 62.2572753,
+    "lng": 26.1904691
+  },
+  {
+    "nimi": "Avioliittosimulaattori",
+    "aika": "ma, 20 heinä 2026 16:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-2/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Avioliittosimulaattori",
+    "aika": "ma, 20 heinä 2026 16:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-elokuu2026/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 21 heinä 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Vohvelikahvio Kalluntuvalla",
+    "aika": "ti, 21 heinä 2026 09:00:00",
+    "paikka": "Saravedentie 5",
+    "url": "https://visitlaukaa.fi/tapahtuma/vohvelikahvio-kalluntuvalla-3/",
+    "lat": 62.4141648,
+    "lng": 25.9608703
+  },
+  {
+    "nimi": "Tiistaitanssit Savion lavalla",
+    "aika": "ti, 21 heinä 2026 10:00:00",
+    "paikka": "Saviontie 1312, 41400 Lievestuore",
+    "url": "https://visitlaukaa.fi/tapahtuma/tiistaitanssit-savion-lavalla/",
+    "lat": 62.2603682,
+    "lng": 26.1812642
+  },
+  {
+    "nimi": "Kansallispukutuuletus Kalluntuvalla",
+    "aika": "ti, 21 heinä 2026 14:00:00",
+    "paikka": "Saravedentie 5",
+    "url": "https://visitlaukaa.fi/tapahtuma/kansallispukutuuletus-kalluntuvalla/",
+    "lat": 62.4141648,
+    "lng": 25.9608703
+  },
+  {
+    "nimi": "Nordic Tire Fitness – Outdoor Training Laukaa",
+    "aika": "ti, 21 heinä 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/nordic-tire-fitness-outdoor-training-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Lavatanssien alkeet",
+    "aika": "ti, 21 heinä 2026 15:15:00",
+    "paikka": "Saviontie 1312 41400 Lievestuore",
+    "url": "https://visitlaukaa.fi/tapahtuma/lavatanssien-alkeet-2/",
+    "lat": 62.2703242,
+    "lng": 26.0554971
+  },
+  {
+    "nimi": "Pihapeli-ilta koululaisille",
+    "aika": "ke, 22 heinä 2026 14:30:00",
+    "paikka": "Lievestuoreen koulu, Laurinkyläntie 5, 41400 Lievestuore",
+    "url": "https://visitlaukaa.fi/tapahtuma/pihapeli-ilta-koululaisille-3/",
+    "lat": 62.2593337,
+    "lng": 26.2044547
+  },
+  {
+    "nimi": "Avioliittosimulaattori",
+    "aika": "ke, 22 heinä 2026 16:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-2/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Avioliittosimulaattori",
+    "aika": "ke, 22 heinä 2026 16:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-elokuu2026/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Sunset SUP Sessions – Laukaa",
+    "aika": "to, 23 heinä 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sunset-sup-sessions-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Avioliittosimulaattori",
+    "aika": "pe, 24 heinä 2026 16:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-2/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Avioliittosimulaattori",
+    "aika": "pe, 24 heinä 2026 16:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-elokuu2026/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 25 heinä 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Ruuhiwood Motor festival",
+    "aika": "la, 25 heinä 2026 10:00:00",
+    "paikka": "Ruuhimäki Areena",
+    "url": "https://visitlaukaa.fi/tapahtuma/ruuhiwood-motor-festival/",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "nimi": "Avioliittosimulaattori",
+    "aika": "su, 26 heinä 2026 12:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-2/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Avioliittosimulaattori",
+    "aika": "su, 26 heinä 2026 12:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-elokuu2026/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Sunnuntaitanssit Savion lavalla",
+    "aika": "su, 26 heinä 2026 14:00:00",
+    "paikka": "Saviontie 1312, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sunnuntaitanssit-savion-lavalla-9/",
+    "lat": 62.2703242,
+    "lng": 26.0554971
+  },
+  {
+    "nimi": "Avioliittosimulaattori",
+    "aika": "ma, 27 heinä 2026 16:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-2/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Avioliittosimulaattori",
+    "aika": "ma, 27 heinä 2026 16:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-elokuu2026/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 28 heinä 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Vohvelikahvio Kalluntuvalla",
+    "aika": "ti, 28 heinä 2026 09:00:00",
+    "paikka": "Saravedentie 5",
+    "url": "https://visitlaukaa.fi/tapahtuma/vohvelikahvio-kalluntuvalla-3/",
+    "lat": 62.4141648,
+    "lng": 25.9608703
+  },
+  {
+    "nimi": "Nordic Tire Fitness – Outdoor Training Laukaa",
+    "aika": "ti, 28 heinä 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/nordic-tire-fitness-outdoor-training-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Lavatanssien alkeet",
+    "aika": "ti, 28 heinä 2026 15:15:00",
+    "paikka": "Saviontie 1312 41400 Lievestuore",
+    "url": "https://visitlaukaa.fi/tapahtuma/lavatanssien-alkeet-2/",
+    "lat": 62.2703242,
+    "lng": 26.0554971
+  },
+  {
+    "nimi": "Pihapeli-ilta koululaisille",
+    "aika": "ke, 29 heinä 2026 14:30:00",
+    "paikka": "Lievestuoreen koulu, Laurinkyläntie 5, 41400 Lievestuore",
+    "url": "https://visitlaukaa.fi/tapahtuma/pihapeli-ilta-koululaisille-3/",
+    "lat": 62.2593337,
+    "lng": 26.2044547
+  },
+  {
+    "nimi": "Avioliittosimulaattori",
+    "aika": "ke, 29 heinä 2026 16:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-2/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Avioliittosimulaattori",
+    "aika": "ke, 29 heinä 2026 16:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-elokuu2026/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Sunset SUP Sessions – Laukaa",
+    "aika": "to, 30 heinä 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sunset-sup-sessions-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Avioliittosimulaattori",
+    "aika": "pe, 31 heinä 2026 16:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-2/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Avioliittosimulaattori",
+    "aika": "pe, 31 heinä 2026 16:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-elokuu2026/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 01 elo 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Avioliittosimulaattori",
+    "aika": "su, 02 elo 2026 12:00:00",
+    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-elokuu2026/",
+    "lat": 62.4547602,
+    "lng": 25.931507
+  },
+  {
+    "nimi": "Sunnuntaitanssit Savion lavalla",
+    "aika": "su, 02 elo 2026 14:00:00",
+    "paikka": "Saviontie 1312, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sunnuntaitanssit-savion-lavalla-9/",
+    "lat": 62.2703242,
+    "lng": 26.0554971
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 04 elo 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Tiistaitanssit Savion lavalla",
+    "aika": "ti, 04 elo 2026 10:00:00",
+    "paikka": "Saviontie 1312, 41400 Lievestuore",
+    "url": "https://visitlaukaa.fi/tapahtuma/tiistaitanssit-savion-lavalla/",
+    "lat": 62.2603682,
+    "lng": 26.1812642
+  },
+  {
+    "nimi": "Nordic Tire Fitness – Outdoor Training Laukaa",
+    "aika": "ti, 04 elo 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/nordic-tire-fitness-outdoor-training-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Koko perheen puistopiknik",
+    "aika": "ke, 05 elo 2026 18:00:00",
+    "paikka": "Venetie 3, Laukaa, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/koko-perheen-puistopiknik-8/",
+    "lat": 62.4128706,
+    "lng": 25.9586553
+  },
+  {
+    "nimi": "Sunset SUP Sessions – Laukaa",
+    "aika": "to, 06 elo 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sunset-sup-sessions-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 08 elo 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "LC-markkinat",
+    "aika": "la, 08 elo 2026 21:02:00",
+    "paikka": "Venetie 3, Laukaa, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/lc-markkinat/",
+    "lat": 62.4128706,
+    "lng": 25.9586553
+  },
+  {
+    "nimi": "Sunnuntaitanssit Savion lavalla",
+    "aika": "su, 09 elo 2026 14:00:00",
+    "paikka": "Saviontie 1312, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sunnuntaitanssit-savion-lavalla-9/",
+    "lat": 62.2703242,
+    "lng": 26.0554971
+  },
+  {
+    "nimi": "Naisten turvesauna",
+    "aika": "ma, 10 elo 2026 16:30:00",
+    "paikka": "Laukaan Tupaswilla, Ränssintie 5, 41370 Kuusa",
+    "url": "https://visitlaukaa.fi/tapahtuma/naisten-turvesauna-4/",
+    "lat": 62.4547219,
+    "lng": 25.9763206
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 11 elo 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Nordic Tire Fitness – Outdoor Training Laukaa",
+    "aika": "ti, 11 elo 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/nordic-tire-fitness-outdoor-training-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Sunset SUP Sessions – Laukaa",
+    "aika": "to, 13 elo 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sunset-sup-sessions-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "MizumiCon",
+    "aika": "pe, 14 elo 2026 14:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/mizumicon/",
+    "lat": 62.4341199,
+    "lng": 25.8968081
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 15 elo 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Laukaan harrastemessut",
+    "aika": "la, 15 elo 2026 10:00:00",
+    "paikka": "Hirviareena, Lintumäenkatu 3, Leppävesi",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-harrastemessut/",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "nimi": "Sunnuntaitanssit Savion lavalla",
+    "aika": "su, 16 elo 2026 14:00:00",
+    "paikka": "Saviontie 1312, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sunnuntaitanssit-savion-lavalla-9/",
+    "lat": 62.2703242,
+    "lng": 26.0554971
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 18 elo 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Tiistaitanssit Savion lavalla",
+    "aika": "ti, 18 elo 2026 10:00:00",
+    "paikka": "Saviontie 1312, 41400 Lievestuore",
+    "url": "https://visitlaukaa.fi/tapahtuma/tiistaitanssit-savion-lavalla/",
+    "lat": 62.2603682,
+    "lng": 26.1812642
+  },
+  {
+    "nimi": "Nordic Tire Fitness – Outdoor Training Laukaa",
+    "aika": "ti, 18 elo 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/nordic-tire-fitness-outdoor-training-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Sunset SUP Sessions – Laukaa",
+    "aika": "to, 20 elo 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sunset-sup-sessions-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 22 elo 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Tupaswillan Perinnepäivät",
+    "aika": "la, 22 elo 2026 10:00:00",
+    "paikka": "Laukaan Tupaswilla, Ränssintie 5, 41370 Kuusa",
+    "url": "https://visitlaukaa.fi/tapahtuma/tupaswillan-perinnepaivat-3/",
+    "lat": 62.4547219,
+    "lng": 25.9763206
+  },
+  {
+    "nimi": "Kotikulman avoimet ovet",
+    "aika": "la, 22 elo 2026 15:00:00",
+    "paikka": "Arwidssonintie 15-17",
+    "url": "https://visitlaukaa.fi/tapahtuma/kotikulman-avoimet-ovet/",
+    "lat": 62.4131074,
+    "lng": 25.9510179
+  },
+  {
+    "nimi": "Hetkiä ja helmiä -kamarikonsertti",
+    "aika": "su, 23 elo 2026 16:00:00",
+    "paikka": "Työväentalo Toivola",
+    "url": "https://visitlaukaa.fi/tapahtuma/hetkia-ja-helmia-kamarikonsertti/",
+    "lat": 62.2581123,
+    "lng": 26.1877599
+  },
+  {
+    "nimi": "Sunnuntaitanssit Savion lavalla",
+    "aika": "su, 23 elo 2026 14:00:00",
+    "paikka": "Saviontie 1312, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sunnuntaitanssit-savion-lavalla-9/",
+    "lat": 62.2703242,
+    "lng": 26.0554971
+  },
+  {
+    "nimi": "Ukrainalaisen kirjallisuuden ilta",
+    "aika": "ma, 24 elo 2026 18:00:00",
+    "paikka": "Laukaan pääkirjasto, Vuojärventie 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/ukrainalaisen-kirjallisuuden-ilta/",
+    "lat": 62.4152685,
+    "lng": 25.9481125
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 25 elo 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Kuusan iltarastit",
+    "aika": "ti, 25 elo 2026 17:00:00",
+    "paikka": "Kuusan Nuorisoseurantalo",
+    "url": "https://visitlaukaa.fi/tapahtuma/kuusan-iltarastit/",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "nimi": "Nordic Tire Fitness – Outdoor Training Laukaa",
+    "aika": "ti, 25 elo 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/nordic-tire-fitness-outdoor-training-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Ikäihmisten virkistyspäivä",
+    "aika": "ke, 26 elo 2026 12:00:00",
+    "paikka": "Lintumäenkatu 3, Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/ikaihmisten-virkistyspaiva-2/",
+    "lat": 62.3336179,
+    "lng": 25.8374007
+  },
+
+  {
+    "nimi": "Sunset SUP Sessions – Laukaa",
+    "aika": "to, 27 elo 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sunset-sup-sessions-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Tilkkuja ja tarinoita Laukaasta- työpaja",
+    "aika": "pe, 28 elo 2026 13:00:00",
+    "paikka": "Laukaantie 26",
+    "url": "https://visitlaukaa.fi/tapahtuma/tilkkuja-ja-tarinoita-laukaasta-tyopaja/",
+    "lat": 62.4151247,
+    "lng": 25.9519273
+  },
+  {
+    "nimi": "Neule ja Kehruu Miitti",
+    "aika": "la, 29 elo 2026 00:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/neule-ja-kehruu-miitti/",
+    "lat": 62.4341199,
+    "lng": 25.8968081
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 29 elo 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Vihtasillan Syyssutinat – 20 v. juhlamarkkinat",
+    "aika": "la, 29 elo 2026 11:00:00",
+    "paikka": "Mansikkaniementie 14, Vihtasilta",
+    "url": "https://visitlaukaa.fi/tapahtuma/vihtasillan-syyssutinat-20-v-juhlamarkkinat/",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "nimi": "Liepeen Miitti",
+    "aika": "la, 29 elo 2026 15:00:00",
+    "paikka": "Ajoneuvontie 39, 41400 Lievestuore",
+    "url": "https://visitlaukaa.fi/tapahtuma/liepeen-miitti/",
+    "lat": 62.2603682,
+    "lng": 26.1812642
+  },
+  {
+    "nimi": "Sunnuntain päivätanssit Savion lavalla",
+    "aika": "su, 30 elo 2026 15:00:00",
+    "paikka": "Saviontie 1312 41400 Lievestuore",
+    "url": "https://visitlaukaa.fi/tapahtuma/sunnuntain-paivatanssit-savion-lavalla-tanssittajina-laukaan-lauluklubi-ry/",
+    "lat": 62.2703242,
+    "lng": 26.0554971
+  },
+  {
+    "nimi": "Kulttuurikävely Laukaan kirkonkylässä",
+    "aika": "ma, 31 elo 2026 17:30:00",
+    "paikka": "Saravedentie 5",
+    "url": "https://visitlaukaa.fi/tapahtuma/kulttuurikavely-laukaan-kirkonkylassa/",
+    "lat": 62.4141648,
+    "lng": 25.9608703
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 01 syys 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Muistojen paikka – teosesittely ja ” puistotanssahtelu”",
+    "aika": "ti, 01 syys 2026 17:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-kulttuuriviikot-2026-muistojen-paikka-teosesittely-ja-puistotanssahtelu/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Nordic Tire Fitness – Outdoor Training Laukaa",
+    "aika": "ti, 01 syys 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/nordic-tire-fitness-outdoor-training-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Sunset SUP Sessions – Laukaa",
+    "aika": "to, 03 syys 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sunset-sup-sessions-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Tilkkuja ja tarinoita Laukaasta- työpaja",
+    "aika": "pe, 04 syys 2026 10:00:00",
+    "paikka": "",
+    "url": "https://visitlaukaa.fi/tapahtuma/tilkkuja-ja-tarinoita-laukaasta-tyopaja-2/",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "nimi": "Kesän päättärit ja Laukaan 4H:n 90-synttärit",
+    "aika": "pe, 04 syys 2026 16:00:00",
+    "paikka": "Kirkonkylän nuorisotila",
+    "url": "https://visitlaukaa.fi/tapahtuma/kesan-paattarit-laukaan-4hn-90-synttarit/",
+    "lat": null,
+    "lng": null
+  },
+  {
+    "nimi": "Tarinoiden keruu Muistojen paikka – teosta varten",
+    "aika": "pe, 04 syys 2026 17:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/tarinoiden-keruu-muistojen-paikka-teosta-varten/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 05 syys 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Muistojen paikka – teosesittely ja ohjattu ”puistotanssahtelu”",
+    "aika": "la, 05 syys 2026 12:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/muistojen-paikka-teosesittely-ja-ohjattu-puistotanssahtelu/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Saparojuhlat Saviolla",
+    "aika": "la, 05 syys 2026 12:01:00",
+    "paikka": "Saviontie 1312 41400 Lievestuore",
+    "url": "https://visitlaukaa.fi/tapahtuma/saparojuhlat-saviolla-2/",
+    "lat": 62.2703242,
+    "lng": 26.0554971
+  },
+  {
+    "nimi": "Lauluja Fridalle – musiikillinen monologi",
+    "aika": "la, 05 syys 2026 16:00:00",
+    "paikka": "Sydän-Laukaan koulun auditorio, Saralinnantie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/lauluja-fridalle-musiikillinen-monologi/",
+    "lat": 62.416344,
+    "lng": 25.9504153
+  },
+  {
+    "nimi": "Ruislinnun laulu korvissani",
+    "aika": "su, 06 syys 2026 18:00:00",
+    "paikka": "Jokiniementie 9, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/ruislinnun-laulu-korvissani/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 08 syys 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Nordic Tire Fitness – Outdoor Training Laukaa",
+    "aika": "ti, 08 syys 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/nordic-tire-fitness-outdoor-training-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Sunset SUP Sessions – Laukaa",
+    "aika": "to, 10 syys 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sunset-sup-sessions-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 12 syys 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 15 syys 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Nordic Tire Fitness – Outdoor Training Laukaa",
+    "aika": "ti, 15 syys 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/nordic-tire-fitness-outdoor-training-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Sunset SUP Sessions – Laukaa",
+    "aika": "to, 17 syys 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sunset-sup-sessions-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 19 syys 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 22 syys 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Nordic Tire Fitness – Outdoor Training Laukaa",
+    "aika": "ti, 22 syys 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/nordic-tire-fitness-outdoor-training-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Sunset SUP Sessions – Laukaa",
+    "aika": "to, 24 syys 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sunset-sup-sessions-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 26 syys 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 29 syys 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Nordic Tire Fitness – Outdoor Training Laukaa",
+    "aika": "ti, 29 syys 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/nordic-tire-fitness-outdoor-training-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Sunset SUP Sessions – Laukaa",
+    "aika": "to, 01 loka 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sunset-sup-sessions-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 03 loka 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 06 loka 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Nordic Tire Fitness – Outdoor Training Laukaa",
+    "aika": "ti, 06 loka 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/nordic-tire-fitness-outdoor-training-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Sunset SUP Sessions – Laukaa",
+    "aika": "to, 08 loka 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sunset-sup-sessions-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 10 loka 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Pete Parkkonen Peurunka Areenalla",
+    "aika": "la, 10 loka 2026 21:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/pete-parkkonen-peurunka-areenalla/",
+    "lat": 62.4341199,
+    "lng": 25.8968081
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 13 loka 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Nordic Tire Fitness – Outdoor Training Laukaa",
+    "aika": "ti, 13 loka 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/nordic-tire-fitness-outdoor-training-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Sunset SUP Sessions – Laukaa",
+    "aika": "to, 15 loka 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sunset-sup-sessions-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 17 loka 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 20 loka 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Nordic Tire Fitness – Outdoor Training Laukaa",
+    "aika": "ti, 20 loka 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/nordic-tire-fitness-outdoor-training-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Sunset SUP Sessions – Laukaa",
+    "aika": "to, 22 loka 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sunset-sup-sessions-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 24 loka 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 27 loka 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  },
+  {
+    "nimi": "Nordic Tire Fitness – Outdoor Training Laukaa",
+    "aika": "ti, 27 loka 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/nordic-tire-fitness-outdoor-training-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Sunset SUP Sessions – Laukaa",
+    "aika": "to, 29 loka 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sunset-sup-sessions-laukaa/",
+    "lat": 62.4082696,
+    "lng": 25.9460852
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 31 loka 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/",
+    "lat": 62.4104566,
+    "lng": 25.9568791
+  }
+]

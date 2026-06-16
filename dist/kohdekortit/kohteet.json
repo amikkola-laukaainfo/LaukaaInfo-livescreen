@@ -1,0 +1,62 @@
+[
+  {
+    "id": "kuilun-partaalla-festivaali",
+    "type": "event",
+    "name": "Kuilun Partaalla -festivaali",
+    "shortDescription": "Musiikin, valotaiteen ja tehdasmiljöön yhdistävä festivaali Lievestuoreen Haarlan rannassa.",
+    "description": "Kuilun Partaalla on Lievestuoreella järjestettävä elämyksellinen festivaali, jossa yhdistyvät live-esiintyjät, näyttävä valoshow sekä historiallinen tehdasympäristö. Tapahtuma tunnetaan ainutlaatuisesta tunnelmastaan ja visuaalisista toteutuksistaan. Festivaali kokoaa yhteen musiikin, kulttuurin ja tapahtumaelämysten ystäviä Laukaasta ja koko Keski-Suomesta.",
+    "status": "active",
+    "images": [
+      "https://bin.yhdistysavain.fi/1610872/KvIvfJe0iyVWa3jnn2tb0dlIRr/kp.png"
+    ],
+    "location": {
+      "address": "Haarlan ranta",
+      "postalCode": "41400",
+      "municipality": "Lievestuore",
+      "latitude": "",
+      "longitude": "",
+      "mapUrl": "https://www.google.com/maps/dir/60.297559,25.0197563/Haarlan+uimaranta,+Majasaarentie+6A,+41400+Lievestuore/@61.2559929,23.1892527,7z/data=!3m1!4b1!4m9!4m8!1m1!4e1!1m5!1m1!1s0x468513755a5d7d07:0xf61c307bcb8d8da2!2m2!1d26.1987925!2d62.2660982?entry=ttu&g_ep=EgoyMDI2MDYwMS4wIKXMDSoASAFQAw%3D%3D"
+    },
+    "contact": {
+      "email": "",
+      "phone": "",
+      "website": "https://kuilunpartaalla.fi"
+    },
+    "taxonomy": [
+      "event.festival",
+      "event.music",
+      "event.culture"
+    ],
+    "tags": [
+      "festivaali",
+      "musiikki",
+      "valotaide",
+      "lievestuore",
+      "haarla",
+      "kulttuuri",
+      "elämykset"
+    ],
+    "profiles": [
+      "culture",
+      "music",
+      "family"
+    ],
+    "event": {
+      "startDate": "2026-09-11T17:00:00",
+      "endDate": "2026-09-13T23:00:00",
+      "organizer": "H-R Events Oy",
+      "venue": "Haarlan ranta, Lievestuore",
+      "ticketUrl": "https://biletti.fi/e/kuilun-partaalla-lievestuore"
+    },
+    "posts": [
+      {
+        "id": "post_lpx2ro3",
+        "date": "2026-06-03",
+        "title": "Tilannekatsausta järjestelyistä",
+        "description": "katso video Haarlan rannalta",
+        "link": "https://www.youtube.com/watch?v=LaG4todxP6c",
+        "image": ""
+      }
+    ]
+  }
+]

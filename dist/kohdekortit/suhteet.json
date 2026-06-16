@@ -1,0 +1,65 @@
+[
+  {
+    "id": "rel_001",
+    "sourceType": "association",
+    "sourceId": "kohde_002",
+    "targetType": "event",
+    "targetId": "kohde_001",
+    "relationType": "organizes",
+    "description": "Laukaan Urheilijat järjestää Laukaan Kuntorastit"
+  },
+  {
+    "id": "rel_002",
+    "sourceType": "association",
+    "sourceId": "kohde_002",
+    "targetType": "service",
+    "targetId": "kohde_003",
+    "relationType": "offers",
+    "description": "Laukaan Urheilijat tarjoaa suunnistusohjausta"
+  },
+  {
+    "id": "rel_003",
+    "sourceType": "event",
+    "sourceId": "kohde_001",
+    "targetType": "business",
+    "targetId": "yritys_123",
+    "relationType": "sponsored_by",
+    "description": "Kuvitteellinen Urheiluliike X (yrityskortti) sponsoroi kuntorasteja"
+  },
+  {
+    "id": "rel_004",
+    "sourceType": "business",
+    "sourceId": "yritys_123",
+    "targetType": "business",
+    "targetId": "yritys_456",
+    "relationType": "partners_with",
+    "description": "Yritys X ja Yritys Y tekevät yhteistyötä (yrityskorttien välinen kytkös)"
+  },
+  {
+    "id": "rel_005",
+    "sourceType": "business",
+    "sourceId": "yritys_123",
+    "targetType": "product",
+    "targetId": "kohde_tuote_001",
+    "relationType": "sells",
+    "description": "Yritys X myy Tuotetta A (yrityskortista kohdekorttiin)"
+  },
+  {
+    "id": "rel_006",
+    "sourceType": "business",
+    "sourceId": "yritys_123",
+    "targetType": "offer",
+    "targetId": "offer_001",
+    "relationType": "has_offer",
+    "description": "Yritys X tarjoaa alennuksen suunnistusvarusteista"
+  },
+  {
+    "id": "rel_007",
+    "sourceType": "event",
+    "sourceId": "kohde_001",
+    "targetType": "offer",
+    "targetId": "offer_002",
+    "relationType": "has_offer",
+    "description": "Laukaan Kuntorastit tarjoaa ilmaisen osallistumisen ensikertalaisille"
+  }
+]
