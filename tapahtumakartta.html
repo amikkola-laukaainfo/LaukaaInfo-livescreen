@@ -452,8 +452,32 @@
             fetch('tapahtumat_geo.json')
                 .then(r => r.json())
                 .then(data => {
-                    const withGeo = data.filter(e => e.lat != null && e.lng != null);
-                    const noGeo = data.filter(e => e.lat == null || e.lng == null);
+                    const now = new Date();
+                    const yesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+                    
+                    const kuukaudet = {
+                        "tammi": 0, "helmi": 1, "maalis": 2, "huhti": 3, "touko": 4, "kesä": 5,
+                        "heinä": 6, "elo": 7, "syys": 8, "loka": 9, "marras": 10, "joulu": 11
+                    };
+
+                    const filteredData = data.filter(e => {
+                        if (!e.aika) return true;
+                        const parts = e.aika.split(' ');
+                        if (parts.length >= 4) {
+                            const day = parseInt(parts[1], 10);
+                            const monthStr = parts[2].toLowerCase();
+                            const year = parseInt(parts[3], 10);
+                            const month = kuukaudet[monthStr];
+                            if (month !== undefined && !isNaN(day) && !isNaN(year)) {
+                                const eventDate = new Date(year, month, day);
+                                return eventDate >= yesterday;
+                            }
+                        }
+                        return true;
+                    });
+
+                    const withGeo = filteredData.filter(e => e.lat != null && e.lng != null);
+                    const noGeo = filteredData.filter(e => e.lat == null || e.lng == null);
 
                     document.getElementById('geo-count').textContent = withGeo.length;
                     document.getElementById('nogeo-count').textContent = noGeo.length;
