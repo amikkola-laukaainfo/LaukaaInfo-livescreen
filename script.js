@@ -204,7 +204,6 @@ function getHomepageOfficialUrgencyLabel(item) {
 }
 
 function createHomepageHighlightCard(item) {
-    const img = item.imageUrl || 'kuvia/syote.jpg';
     const title = escapeHtml(item.title || i18n.t('label_news') || 'Ajankohtaista');
     const desc = truncateText(item.description || '', 110);
     const type = escapeHtml(item.type || i18n.t('label_news'));
@@ -213,21 +212,43 @@ function createHomepageHighlightCard(item) {
     const href = item.link || '#';
 
     const card = document.createElement('article');
-    card.className = 'homepage-feed-highlights__card' + urgentClass;
-    card.innerHTML = `
-        <a href="${href}" target="_blank" rel="noopener noreferrer" class="homepage-feed-highlights__card-link">
-            <div class="homepage-feed-highlights__card-media" style="background-image:url('${String(img).replace(/'/g, "\\'")}');"></div>
-            <div class="homepage-feed-highlights__card-body">
-                <div class="homepage-feed-highlights__badge-row">
-                    <span class="homepage-feed-highlights__badge">${type}</span>
-                    ${urgencyLabel ? `<span class="homepage-feed-highlights__urgent-badge">${escapeHtml(urgencyLabel)}</span>` : ''}
+
+    if (item.typeClass === 'event') {
+        card.className = 'homepage-feed-highlights__card homepage-feed-highlights__card--event-text' + urgentClass;
+        
+        card.innerHTML = `
+            <a href="${href}" target="_blank" rel="noopener noreferrer" class="homepage-feed-highlights__card-link">
+                <div class="homepage-feed-highlights__card-body homepage-feed-highlights__card-body--event-text">
+                    <div class="homepage-feed-highlights__event-date-badge">
+                        <span class="homepage-feed-highlights__event-date-icon">📅</span>
+                        <span class="homepage-feed-highlights__event-date-text">${escapeHtml(item.dateStr || '—')}</span>
+                        <span class="homepage-feed-highlights__badge homepage-feed-highlights__badge--event">${type}</span>
+                        ${urgencyLabel ? `<span class="homepage-feed-highlights__urgent-badge" style="margin-left:auto;">${escapeHtml(urgencyLabel)}</span>` : ''}
+                    </div>
+                    <h3 class="homepage-feed-highlights__card-title">${title}</h3>
+                    <p class="homepage-feed-highlights__card-desc">${desc}</p>
+                    <span class="homepage-feed-highlights__card-cta">Näytä koko tapahtuma »</span>
                 </div>
-                <h3 class="homepage-feed-highlights__card-title">${title}</h3>
-                <p class="homepage-feed-highlights__card-desc">${desc}</p>
-                <span class="homepage-feed-highlights__card-cta">Näytä lisää »</span>
-            </div>
-        </a>
-    `;
+            </a>
+        `;
+    } else {
+        const img = item.imageUrl || 'kuvia/syote.jpg';
+        card.className = 'homepage-feed-highlights__card' + urgentClass;
+        card.innerHTML = `
+            <a href="${href}" target="_blank" rel="noopener noreferrer" class="homepage-feed-highlights__card-link">
+                <div class="homepage-feed-highlights__card-media" style="background-image:url('${String(img).replace(/'/g, "\\'")}');"></div>
+                <div class="homepage-feed-highlights__card-body">
+                    <div class="homepage-feed-highlights__badge-row">
+                        <span class="homepage-feed-highlights__badge">${type}</span>
+                        ${urgencyLabel ? `<span class="homepage-feed-highlights__urgent-badge">${escapeHtml(urgencyLabel)}</span>` : ''}
+                    </div>
+                    <h3 class="homepage-feed-highlights__card-title">${title}</h3>
+                    <p class="homepage-feed-highlights__card-desc">${desc}</p>
+                    <span class="homepage-feed-highlights__card-cta">Näytä lisää »</span>
+                </div>
+            </a>
+        `;
+    }
     return card;
 }
 
