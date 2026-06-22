@@ -18,6 +18,112 @@
     <!-- Dependencies -->
     <script src="translations.js?v=20260512"></script>
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+
+<style>
+/* =========================================
+   SOME-YHTEISÖT (PÄIVITETYT TYYLIT SIVULLE)
+   ========================================= */
+.some-yhteisot-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.some-yhteiso-category-section {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f1f5f9;
+}
+
+.some-yhteiso-category-title {
+    font-size: 1.8rem;
+    color: var(--dark-text);
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 3px solid #f1f5f9;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.some-yhteiso-card {
+    background: var(--card-bg, linear-gradient(135deg, #ffffff 0%, #f8fafc 100%));
+    border: 1px solid var(--border-color, #e2e8f0);
+    padding: 1.5rem;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.some-yhteiso-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    border-color: var(--icon-color, #94a3b8);
+}
+
+.some-yhteiso-card__icon-wrapper {
+    width: 50px;
+    height: 50px;
+    background: var(--icon-bg, #f1f5f9);
+    color: var(--icon-color, #475569);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.some-yhteiso-card__title {
+    font-size: 1.15rem;
+    line-height: 1.4;
+    font-weight: 700;
+    color: var(--dark-text);
+    margin: 0;
+}
+
+.some-yhteiso-card__desc {
+    font-size: 0.95rem;
+    color: #475569;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.some-yhteiso-card__category {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--icon-color, #64748b);
+    letter-spacing: 0.05em;
+    margin-bottom: 0.25rem;
+}
+
+.some-yhteiso-card__arrow {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    color: #cbd5e1;
+    font-size: 1.5rem;
+    transition: color 0.3s;
+}
+
+.some-yhteiso-card:hover .some-yhteiso-card__arrow {
+    color: var(--icon-color, #0056b3);
+}
+</style>
 </head>
 <body>
     <nav class="top-nav">
@@ -153,3 +259,4 @@
     <script src="yhteisot.js"></script>
 </body>
 </html>
+
