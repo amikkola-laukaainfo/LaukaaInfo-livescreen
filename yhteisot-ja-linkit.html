@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="network_map_title">Laukaa somessa ja muut julkiset lähteet | LaukaaInfo</title>
+    <link rel="icon" href="logo.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css?v=20260512">
+    <link rel="stylesheet" href="modal.css">
+
+    <!-- Dependencies -->
+    <script src="translations.js?v=20260512"></script>
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="logo.png" alt="LaukaaInfo Logo">
+                <span data-i18n="hero_title">LaukaaInfo</span>
+            </a>
+            <div class="desktop-nav">
+                <ul class="nav-links">
+                    <li class="nav-item">
+                        <a href="palvelun-esittely.html" class="nav-link">Palvelun esittely</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-i18n="nav_shop">Kauppa <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="ilmoittaudu.html" data-i18n="nav_feed">Feed-julkaisu</a></li>
+                            <li><a href="kauppa.html" data-i18n="nav_shop_packages">Julkaisupaketit</a></li>
+                            <li><a href="lisaa-yritys.html" data-i18n="nav_business_profile">Yritysprofiili</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-i18n="nav_search_links">Hakulinkit <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <li class="has-arrow">
+                                <a href="#" data-i18n="nav_featured">Suosituimmat</a>
+                                <ul class="nested-menu" id="nav-featured">
+                                </ul>
+                            </li>
+                            <li class="has-arrow">
+                                <a href="#" data-i18n="nav_categories">Kategoriat</a>
+                                <ul class="nested-menu" id="nav-categories">
+                                </ul>
+                            </li>
+                            <li class="has-arrow">
+                                <a href="#" data-i18n="nav_areas">Taajamat</a>
+                                <ul class="nested-menu">
+                                    <li><a href="laukaa.html">Laukaa kk</a></li>
+                                    <li><a href="leppavesi.html">Leppävesi</a></li>
+                                    <li><a href="lievestuore.html">Lievestuore</a></li>
+                                    <li><a href="vehnia.html">Vehniä</a></li>
+                                    <li><a href="vihtavuori.html">Vihtavuori</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="ajankohtaista.html" class="nav-link" data-i18n="nav_current">Ajankohtaista <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="ajankohtaista.html#events-card" data-i18n="nav_events">Tapahtumat</a></li>
+                            <li><a href="ajankohtaista.html#news-card" data-i18n="nav_news">Tiedotteet</a></li>
+                            <li><a href="ajankohtaista.html#decisions-card" data-i18n="nav_decisions">Päätöksenteko</a></li>
+                            <li><a href="ajankohtaista.html#feedback-card" data-i18n="nav_feedback">Palautteet</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-i18n="nav_paths">Päätösten polut <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="asiahaku.html" data-i18n="nav_search_explore">Hae ja tutki</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-i18n="nav_maps">Kartat &amp; Elämykset <span class="arrow">▼</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="kohdekartta.html" data-i18n="nav_map_points">Karttakohteet</a></li>
+                            <li><a href="tarinakartta.html" data-i18n="nav_story_map">Tarinakartta</a></li>
+                            <li><a href="tarinakartta.html#kavelyreitit-section" data-i18n="nav_route_map">Reittikartta</a></li>
+                            <li><a href="muistokartta.html" data-i18n="nav_memorial_map">Muistokartta</a></li>
+                            <li><a href="kadonneet.html" data-i18n="nav_lost_found">Kadonneet &amp; löydetyt</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="lang-switcher">
+                <button class="lang-btn" onclick="i18n.setLanguage('fi')" data-lang="fi">FI</button>
+                <button class="lang-btn" onclick="i18n.setLanguage('en')" data-lang="en">EN</button>
+            </div>
+            <button class="hamburger" id="hamburger-btn" aria-label="Avaa valikko">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- Sidebar Menu (Sama kuin indexissä, lyhennettynä tässä jotta fokus säilyy) -->
+    <aside class="sidebar-menu" id="sidebar-menu">
+        <div class="sidebar-header">
+            <a href="index.html" class="nav-logo">
+                <img src="logo.png" alt="LaukaaInfo Logo">
+                <span data-i18n="hero_title">LaukaaInfo</span>
+            </a>
+            <button class="close-btn" id="close-sidebar-btn" aria-label="Sulje valikko">&times;</button>
+        </div>
+        <div class="sidebar-content">
+            <div class="menu-section">
+                <ul class="menu-list">
+                    <li class="menu-item"><a href="palvelun-esittely.html" class="sidebar-link" style="font-weight: bold; color: var(--primary-blue);">Tietoa palvelusta</a></li>
+                    <li class="menu-item"><a href="index.html" class="sidebar-link">Etusivulle</a></li>
+                </ul>
+            </div>
+        </div>
+    </aside>
+
+    <main class="bg-full-gray" style="padding-top: 100px; padding-bottom: 4rem; min-height: 80vh;">
+        <div class="section-container">
+            <a href="index.html" class="back-link" style="display: inline-block; margin-bottom: 2rem;">
+                <span>&larr;</span> <span data-i18n="btn_back">Takaisin</span>
+            </a>
+
+            <div style="text-align: center; margin-bottom: 3rem;">
+                <h1 style="color: var(--dark-text); margin-bottom: 0.5rem; font-size: 2.5rem; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="iconify" data-icon="material-symbols-light:forum-outline"></span> <span>Laukaa somessa ja muut julkiset lähteet</span>
+                </h1>
+                <p style="color: #64748b; font-size: 1.2rem; font-weight: 500; max-width: 600px; margin: 0 auto;">
+                    Täältä löydät kootusti Laukaan paikalliset Facebook-ryhmät, viralliset kanavat ja harrastusverkostot. Valitse kategoria ja liity mukaan keskusteluun!
+                </p>
+            </div>
+
+            <div id="all-communities-container">
+                <!-- yhteisot.js lataa tänne kategoriat -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="yhteisot.js"></script>
+</body>
+</html>

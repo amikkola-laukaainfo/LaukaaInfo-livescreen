@@ -261,10 +261,11 @@
                                     data-icon="material-symbols-light:handshake-outline"
                                     style="font-size: 1.4em;"></span> <span data-i18n="hero_btn_help">Löydä
                                     verkosto</span></a>
-                            <a href="#palveluverkosto-section" class="btn-primary"
+                            <a href="#some-yhteisot-section" class="btn-primary"
                                 style="display: inline-flex; align-items: center; gap: 0.5rem;"><span class="iconify"
-                                    data-icon="material-symbols-light:group-outline" style="font-size: 1.4em;"></span>
-                                <span data-i18n="hero_btn_people">Löydä ihmisiä</span></a>
+                                    data-icon="material-symbols-light:forum-outline" style="font-size: 1.4em;"></span>
+                                <span data-i18n="hero_btn_people">Some ja linkit</span></a>
+
                             <a href="#feed-section" class="btn-primary"
                                 style="display: inline-flex; align-items: center; gap: 0.5rem;"><span class="iconify"
                                     data-icon="material-symbols-light:rocket-launch-outline"
@@ -576,42 +577,28 @@
             </script>
         </section>
 
-        <section id="palveluverkosto-section" class="bg-full-gray" style="padding: 3rem 0; margin-bottom: 2rem;">
-            <!-- Otsikko näkyy aina -->
-            <div class="section-container" style="text-align: center; margin-bottom: 1.5rem;">
+        <section id="some-yhteisot-section" class="bg-full-gray" style="padding: 3rem 0; margin-bottom: 2rem;">
+            <!-- Otsikko -->
+            <div class="section-container" style="text-align: center; margin-bottom: 2rem;">
                 <h2
-                    style="color: var(--dark-text); margin-bottom: 0.5rem; font-size: 2.2rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
-                    <span class="iconify" data-icon="material-symbols-light:group-outline"></span> <span
-                        data-i18n="people_section_title">Löydä ihmisiä</span></h2>
-                <p style="color: #64748b; font-size: 1.1rem; font-weight: 500;" data-i18n="people_section_desc">
-                    Palveluverkosto, harrastusryhmät ja avunpyynnöt Laukaassa.</p>
+                    style="color: var(--dark-text); margin-bottom: 0.5rem; font-size: 2.2rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="iconify" data-icon="material-symbols-light:forum-outline"></span> <span>Laukaa somessa ja muut julkiset lähteet</span></h2>
+                <p style="color: #64748b; font-size: 1.1rem; font-weight: 500;">
+                    Laukaan paikalliset Facebook-ryhmät, viralliset kanavat ja harrastusverkostot yhdestä paikasta.</p>
             </div>
 
-            <!-- Dynaaminen Sanapilvi (Ilmoituksista) – näkyy vain jos dataa -->
-            <div class="section-container" id="sanapilvi-container"
-                style="text-align: center; margin-bottom: 1.5rem; display: none;">
-                <h3
-                    style="color: #64748b; margin-bottom: 1rem; font-size: 1.1rem; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
-                    <span class="iconify" data-icon="material-symbols-light:campaign-outline"
-                        style="font-size: 1.4rem;"></span> <span data-i18n="people_cloud_title">Mitä apua haetaan ja
-                        tarjotaan juuri nyt?</span></h3>
-                <div id="sanapilvi-tags" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem;">
-                    <!-- verkosto.js lataa tagit tähän -->
+            <div class="section-container">
+                <div id="some-yhteisot-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
+                    <!-- yhteisot.js renderöi tähän highlighted yhteisöt -->
                 </div>
-                <div style="margin-top: 1.25rem;">
-                    <a href="ilmoitukset.html"
-                        style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0056b3; color: white; padding: 0.6rem 1.5rem; border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: background 0.2s;"><span
-                            class="iconify" data-icon="material-symbols-light:list-alt-outline"
-                            style="font-size: 1.2rem;"></span> <span data-i18n="btn_browse_notices">Selaa kaikkia
-                            ilmoituksia &rarr;</span></a>
+                
+                <div style="text-align: center; margin-top: 2rem;">
+                    <a href="yhteisot-ja-linkit.html"
+                        style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0056b3; color: white; padding: 0.8rem 2rem; border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 1rem; transition: background 0.2s, box-shadow 0.2s; box-shadow: 0 4px 12px rgba(0,86,179,0.3);">
+                        <span class="iconify" data-icon="material-symbols-light:grid-view-outline" style="font-size: 1.2rem;"></span> 
+                        Selaa kaikkia yhteisöjä &rarr;
+                    </a>
                 </div>
-            </div>
-
-            <!-- Pikakatsaus ilmoituksiin (näytetään kun tagi klikataan) -->
-            <div class="section-container" id="ilm-pikakatsaus" style="display: none; margin-bottom: 1.5rem;"></div>
-
-            <div class="section-container" id="palveluverkosto-suositukset">
-                <!-- verkosto.js lataa suositukset tähän -->
             </div>
         </section>
 
@@ -1109,6 +1096,9 @@
     <script src="homepage-feed-highlights.js?v=20260610"></script>
     <script src="carousel.js"></script>
     <script src="verkosto.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="yhteisot.js"></script>
 
     <script>
         // Feed accordion toggle with persistence
