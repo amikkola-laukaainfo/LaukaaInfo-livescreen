@@ -73,26 +73,53 @@
     }
 
     function createCard(item) {
-        const img = item.image || (item.media && Array.isArray(item.media) ? item.media.find(m => m.type === 'image' && m.url)?.url : null) || placeholderImage;
         const title = escapeHtml(item.title || item.name || 'Laukaa-syöte');
         const desc = truncate(item.description || item.summary || '', 110);
         const type = escapeHtml(typeLabels[item.type] || 'Julkaisu');
         const targetUrl = item.targetUrl || (item.id ? `index.html?item=${encodeURIComponent(item.id)}&feed=open` : 'index.html?feed=open');
 
         const card = document.createElement('article');
-        card.className = 'homepage-feed-highlights__card';
 
-        card.innerHTML = `
-            <a href="${targetUrl}" class="homepage-feed-highlights__card-link">
-                <div class="homepage-feed-highlights__card-media" style="background-image:url('${String(img).replace(/'/g, "\\'")}');"></div>
-                <div class="homepage-feed-highlights__card-body">
-                    <span class="homepage-feed-highlights__badge">${type}</span>
-                    <h3 class="homepage-feed-highlights__card-title">${title}</h3>
-                    <p class="homepage-feed-highlights__card-desc">${desc}</p>
-                    <span class="homepage-feed-highlights__card-cta">Näytä koko nosto »</span>
-                </div>
-            </a>
-        `;
+        if (item.type === 'event') {
+            card.className = 'homepage-feed-highlights__card homepage-feed-highlights__card--event-text';
+            
+            // Yritetään poimia pvm, API voi palauttaa dateStr tai start_time
+            let dateStr = '—';
+            if (item.dateStr) {
+                dateStr = item.dateStr;
+            } else if (item.start_time) {
+                try { dateStr = new Date(item.start_time).toLocaleDateString('fi-FI'); } catch (e) {}
+            }
+
+            card.innerHTML = `
+                <a href="${targetUrl}" class="homepage-feed-highlights__card-link">
+                    <div class="homepage-feed-highlights__card-body homepage-feed-highlights__card-body--event-text">
+                        <div class="homepage-feed-highlights__event-date-badge">
+                            <span class="homepage-feed-highlights__event-date-icon">📅</span>
+                            <span class="homepage-feed-highlights__event-date-text">${escapeHtml(dateStr)}</span>
+                            <span class="homepage-feed-highlights__badge homepage-feed-highlights__badge--event">${type}</span>
+                        </div>
+                        <h3 class="homepage-feed-highlights__card-title">${title}</h3>
+                        <p class="homepage-feed-highlights__card-desc">${desc}</p>
+                        <span class="homepage-feed-highlights__card-cta">Näytä koko tapahtuma »</span>
+                    </div>
+                </a>
+            `;
+        } else {
+            card.className = 'homepage-feed-highlights__card';
+            const img = item.image || (item.media && Array.isArray(item.media) ? item.media.find(m => m.type === 'image' && m.url)?.url : null) || placeholderImage;
+            card.innerHTML = `
+                <a href="${targetUrl}" class="homepage-feed-highlights__card-link">
+                    <div class="homepage-feed-highlights__card-media" style="background-image:url('${String(img).replace(/'/g, "\\'")}');"></div>
+                    <div class="homepage-feed-highlights__card-body">
+                        <span class="homepage-feed-highlights__badge">${type}</span>
+                        <h3 class="homepage-feed-highlights__card-title">${title}</h3>
+                        <p class="homepage-feed-highlights__card-desc">${desc}</p>
+                        <span class="homepage-feed-highlights__card-cta">Näytä koko nosto »</span>
+                    </div>
+                </a>
+            `;
+        }
         return card;
     }
 

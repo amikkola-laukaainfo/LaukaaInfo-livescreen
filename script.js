@@ -1247,7 +1247,9 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
 
             for (const item of finalItems) {
                 const rssElement = document.createElement('div');
-                rssElement.className = 'rss-item';
+                // visitlaukaa.fi/evofeed -tapahtumille käytetään tekstipohjaista korttia (tekijänoikeussyistä ei kuvia)
+                const isEventItem = isEvent;
+                rssElement.className = isEventItem ? 'rss-item rss-item--event' : 'rss-item';
 
                 let analysisLink = '';
                 // Jos kyseessä on päätöksenteko ja otsikko täsmää helmikuun 2026 kunnanhallitukseen
@@ -1270,13 +1272,27 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
                     }
                 }
 
-                rssElement.innerHTML = `
-                    ${item.imageUrl ? `<img src="${item.imageUrl}" class="rss-item-image" loading="lazy">` : ''}
-                    <div class="rss-meta"><span class="date">📅 ${item.dateStr}</span> <span class="news-badge ${item.typeClass}">${item.type}</span></div>
-                    <h3><a href="${item.link}" target="_blank">${item.title}</a></h3>
-                    <p class="description">${item.description}</p>
-                    ${analysisLink}
-                `;
+                if (isEventItem) {
+                    // Tekstipohjainen tapahtumakortti ilman kuvia (visitlaukaa.fi)
+                    rssElement.innerHTML = `
+                        <div class="rss-event-date-badge">
+                            <span class="rss-event-date-icon">📅</span>
+                            <span class="rss-event-date-text">${item.dateStr || '—'}</span>
+                            <span class="news-badge event">${item.type}</span>
+                        </div>
+                        <h3 class="rss-event-title"><a href="${item.link}" target="_blank" rel="noopener noreferrer">${item.title}</a></h3>
+                        ${item.description ? `<p class="rss-event-desc">${item.description}</p>` : ''}
+                        <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="rss-event-link">Lue lisää VisitLaukaa.fi →</a>
+                    `;
+                } else {
+                    rssElement.innerHTML = `
+                        ${item.imageUrl ? `<img src="${item.imageUrl}" class="rss-item-image" loading="lazy">` : ''}
+                        <div class="rss-meta"><span class="date">📅 ${item.dateStr}</span> <span class="news-badge ${item.typeClass}">${item.type}</span></div>
+                        <h3><a href="${item.link}" target="_blank">${item.title}</a></h3>
+                        <p class="description">${item.description}</p>
+                        ${analysisLink}
+                    `;
+                }
                 if (container) container.appendChild(rssElement);
             }
             return; // Onnistui!
