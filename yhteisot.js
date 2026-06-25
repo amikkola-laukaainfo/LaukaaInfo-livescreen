@@ -329,7 +329,7 @@ async function renderAllCommunitiesPage() {
                 subTitle.style.color = '#334155';
                 subTitle.style.marginBottom = '1rem';
                 subTitle.style.paddingBottom = '0.5rem';
-                subTitle.style.borderBottom = \`2px solid \${style.borderColor}\`;
+                subTitle.style.borderBottom = '2px solid ' + style.borderColor;
                 subTitle.style.display = 'inline-block';
                 subWrapper.appendChild(subTitle);
             }
