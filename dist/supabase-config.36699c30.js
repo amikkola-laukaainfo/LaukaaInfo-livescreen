@@ -1,0 +1,1 @@
+const SUPABASE_URL="https://usswojtlvrnqtzwnffpg.supabase.co",SUPABASE_ANON_KEY="sb_publishable_SI9jkzJCyrxXQebhuoQGqQ_LN9wH8hl";let supabaseClient=null;"undefined"!=typeof supabase?supabaseClient=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):console.warn("Supabase ei ole konfiguroitu oikein tai @supabase/supabase-js puuttuu."),window.LaukaaSupabase=supabaseClient;

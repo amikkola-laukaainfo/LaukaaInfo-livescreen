@@ -1,0 +1,122 @@
+{
+  "default_slides": [
+    {
+      "id": "welcome_slide_1",
+      "image_url": "https://drive.google.com/file/d/1Exuh8AgP0bVRUUpV2Rcz0MgQ6T3OS4Un/view?usp=drive_link",
+      "title": "Tervetuloa Laukaaseen!",
+      "subtitle": "Koe Keski-Suomen sydän ja upea luonto.",
+      "category_badge": "Tiedote",
+      "action_url": "https://laukaainfo.fi"
+    },
+    {
+      "id": "explore_slide_2",
+      "image_url": "https://drive.google.com/file/d/1glEjVabOwqWGLCXYi1DscEvCmyMN9wbf/view?usp=drive_link",
+      "title": "Kesäiset vesireitit",
+      "subtitle": "Melontaa, kalastusta ja rentoutumista vesillä.",
+      "category_badge": "Aktiviteetit",
+      "action_url": "https://laukaainfo.fi"
+    },
+    {
+      "id": "slide_366986",
+      "image_url": "https://drive.google.com/file/d/1ol5R-McqhYdBZpg1564VxfAdeItr8UHo/view?usp=drive_link",
+      "title": "Kahviloita Laukaassa",
+      "subtitle": "Tutustu LaukaaInfon kautta",
+      "category_badge": "",
+      "action_url": "https://www.laukaainfo.fi"
+    },
+    {
+      "id": "slide_553352",
+      "image_url": "https://drive.google.com/file/d/1tgpsRr-aS70qpWBLZw-vtjRc-UTRrrWY/view?usp=drive_link",
+      "title": "Kuusaan koskella",
+      "subtitle": "",
+      "category_badge": "",
+      "action_url": "https://www.laukaainfo.fi"
+    },
+    {
+      "id": "slide_951764",
+      "image_url": "https://drive.google.com/file/d/1ihjpAocgq1_WVPru2ggez4Ysh9v7e773/view?usp=sharing",
+      "title": "",
+      "subtitle": "",
+      "category_badge": "",
+      "action_url": ""
+    },
+    {
+      "id": "slide_021035",
+      "image_url": "https://drive.google.com/file/d/10A765NrpF6rYZ4dglSAP4NJ7C4l2tFLp/view?usp=sharing",
+      "title": "",
+      "subtitle": "",
+      "category_badge": "",
+      "action_url": ""
+    },
+    {
+      "id": "slide_035481",
+      "image_url": "https://drive.google.com/file/d/1Tdxuw1F5X0MMQ2WO8SxytHW-AoUEVC1E/view?usp=sharing",
+      "title": "",
+      "subtitle": "",
+      "category_badge": "",
+      "action_url": ""
+    },
+    {
+      "id": "slide_099853",
+      "image_url": "https://drive.google.com/file/d/1dQ7c01vcxBhAzLmBayM_u1WYn-VwD8DQ/view?usp=sharing",
+      "title": "",
+      "subtitle": "",
+      "category_badge": "",
+      "action_url": ""
+    },
+    {
+      "id": "slide_136523",
+      "image_url": "https://drive.google.com/file/d/1moIoHn5s8sfHqSE68Cv2mMqTZ7h4skJw/view?usp=sharing",
+      "title": "",
+      "subtitle": "",
+      "category_badge": "",
+      "action_url": ""
+    },
+    {
+      "id": "slide_146522",
+      "image_url": "https://drive.google.com/file/d/1yyPDYZuZYvScivkhyb5peIh6RmwN1ILg/view?usp=sharing",
+      "title": "",
+      "subtitle": "",
+      "category_badge": "",
+      "action_url": ""
+    },
+    {
+      "id": "slide_203490",
+      "image_url": "https://drive.google.com/file/d/1JTydSHidJRfWlJkY8YQsTESPnBUeMZ9T/view?usp=sharing",
+      "title": "",
+      "subtitle": "",
+      "category_badge": "",
+      "action_url": ""
+    },
+    {
+      "id": "slide_246843",
+      "image_url": "https://drive.google.com/file/d/12qJQ6bjcaXKWObfAKsXPO0gZjtgNm8KL/view?usp=sharing",
+      "title": "",
+      "subtitle": "",
+      "category_badge": "",
+      "action_url": ""
+    },
+    {
+      "id": "slide_275603",
+      "image_url": "https://drive.google.com/file/d/1wgDqgb8AfiF1z6ArTTUzF3mqubyBZPZ0/view?usp=sharing",
+      "title": "",
+      "subtitle": "",
+      "category_badge": "",
+      "action_url": ""
+    }
+  ],
+  "fallback_images": [
+    {
+      "id": "fallback_lake",
+      "image_url": "android.resource://org.example.LaukaaLive/drawable/hero_fallback_lake"
+    },
+    {
+      "id": "fallback_forest",
+      "image_url": "android.resource://org.example.LaukaaLive/drawable/hero_fallback_forest"
+    },
+    {
+      "id": "fallback_village",
+      "image_url": "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&q=80&w=1200"
+    }
+  ]
+}
