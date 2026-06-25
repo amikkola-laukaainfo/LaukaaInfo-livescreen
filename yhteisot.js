@@ -94,7 +94,7 @@ function createCommunityCard(community) {
 
     card.innerHTML = `
         <div class="some-yhteiso-card__icon-wrapper">
-            <span class="iconify" data-icon="${community.icon || 'mdi:facebook'}"></span>
+            <span class="iconify" data-icon="${normalizeIcon(community.icon || 'mdi:facebook')}"></span>
         </div>
         <div class="some-yhteiso-card__content">
             <span class="some-yhteiso-card__category">${escapeHtml(community.category)}</span>
@@ -107,6 +107,34 @@ function createCommunityCard(community) {
     `;
     return card;
 }
+
+/**
+ * Normalisoi ikoninimi Iconify-yhteensopivaan muotoon.
+ * Jos ikonissa ei ole prefiksiä (esim. "users"), lisätään "lucide:".
+ * Jos prefiksi on jo olemassa (esim. "mdi:town-hall"), ei muuteta.
+ */
+function normalizeIcon(icon) {
+    if (!icon) return 'lucide:link';
+    // Jos sisältää jo kaksoispiste-erottimen (esim. "mdi:foo"), käytetään sellaisenaan
+    if (icon.includes(':')) return icon;
+    // Muunnostaulukko: tallennettu nimi → oikea Lucide-nimi
+    const aliases = {
+        'map-marker': 'map-pin',
+        'map-marker-star': 'map-pin',
+        'location': 'map-pin',
+        'town-hall': 'landmark',
+        'gamepad-variant': 'gamepad-2',
+        'account-group': 'users',
+        'shopping': 'shopping-bag',
+        'campfire': 'flame',
+        'dog': 'paw-print',
+        'forum': 'message-circle',
+        'trophy': 'trophy',
+    };
+    const resolved = aliases[icon] || icon;
+    return `lucide:${resolved}`;
+}
+
 
 function escapeHtml(str) {
     return String(str || '')
