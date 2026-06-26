@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fi">
 
-<head>
+<head><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mediazoo – LaukaaInfo</title>
@@ -16,9 +16,9 @@
     <!-- Leaflet Map -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-    <link rel="stylesheet" href="../style.css?v=20260420-2">
-    <link rel="stylesheet" href="../modal.css">
-    <script src="../translations.js?v=20260505"></script>
+    <link rel="stylesheet" href="../style.03d2d5c4.css?v=20260420-2">
+    <link rel="stylesheet" href="../modal.03d2d5c4.css">
+    <script src="../translations.03d2d5c4.js?v=20260505"></script>
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
     <style>
         :root {
@@ -1812,7 +1812,7 @@
                     <span class="iconify" data-icon="material-symbols-light:domain" style="font-size: 1.2em;"></span> Laaja esittelyprofiili
                 </button>
                 <button class="tab-btn" id="btn-tab-ai-info">
-                    <span class="iconify" data-icon="material-symbols-light:robot-2-outline" style="font-size: 1.2em;"></span> Tekoälykooste
+                    <span class="iconify" data-icon="material-symbols-light:info-outline" style="font-size: 1.2em;"></span> Lisätiedot
                 </button>
             </div>
 
@@ -2042,30 +2042,65 @@
 
             </div><!-- End #tab-extended-profile -->
 
-            <!-- Tab 3: Tekoälyn kooste (AI Info) -->
+            <!-- Tab 3: Lisätiedot (AI Info + profiling) -->
             <div id="tab-ai-info" style="display: none;">
                 <div class="card-grid">
                     <div class="main-content" style="width: 100%; max-width: 800px; margin: 0 auto;">
-                        
-                        <div class="description-section">
-                            <h2 style="display: flex; align-items: center; gap: 0.5rem;"><span class="iconify" data-icon="material-symbols-light:auto-awesome" style="font-size: 1.2em; color: var(--primary-blue);"></span> Yrityksen tekoälykooste</h2>
-                            <div id="display-ai-summary-full" style="font-size: 1.15rem; line-height: 1.8; color: #2d3748; background: white; padding: 2.5rem; border-radius: 24px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06); border-left: 4px solid var(--primary-blue);">
+
+                        <!-- AI Yhteenveto -->
+                        <div id="ai-summary-section" class="description-section">
+                            <h2 style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span class="iconify" data-icon="material-symbols-light:auto-awesome" style="font-size: 1.2em; color: var(--primary-blue);"></span>
+                                Yrityksen kuvaus
+                            </h2>
+                            <div id="display-ai-summary-full" style="font-size: 1.1rem; line-height: 1.8; color: #2d3748; background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 6px 30px rgba(0,0,0,0.06); border-left: 4px solid var(--primary-blue);">
                                 Ladataan tiivistelmää...
                             </div>
                         </div>
 
-                        <div id="ai-target-audience-section" class="description-section" style="margin-top: 3rem; display: none;">
-                            <h2 style="display: flex; align-items: center; gap: 0.5rem;"><span class="iconify" data-icon="material-symbols-light:groups-outline" style="font-size: 1.2em; color: var(--primary-blue);"></span> Kenelle palvelu sopii?</h2>
-                            <div id="display-ai-target-audience" style="background: white; padding: 2.5rem; border-radius: 24px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);">
-                                <!-- Target audience list will be generated here -->
-                            </div>
+                        <!-- Kohderyhmät -->
+                        <div id="ai-target-audience-section" class="description-section" style="margin-top: 2.5rem; display: none;">
+                            <h2 style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span class="iconify" data-icon="material-symbols-light:groups-outline" style="font-size: 1.2em; color: var(--primary-blue);"></span>
+                                Kenelle palvelu sopii?
+                            </h2>
+                            <div id="display-ai-target-audience" style="background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 6px 30px rgba(0,0,0,0.06);"></div>
                         </div>
-                        
-                        <div id="ai-keywords-section" class="description-section" style="margin-top: 3rem; display: none;">
-                            <h2 style="display: flex; align-items: center; gap: 0.5rem;"><span class="iconify" data-icon="material-symbols-light:tag" style="font-size: 1.2em; color: var(--primary-blue);"></span> Avainsanat & teemat</h2>
-                            <div id="display-ai-keywords" style="background: white; padding: 2.5rem; border-radius: 24px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06); display: flex; flex-wrap: wrap; gap: 10px;">
-                                <!-- Keywords will be generated here -->
-                            </div>
+
+                        <!-- Palvelualueet -->
+                        <div id="ai-service-areas-section" class="description-section" style="margin-top: 2.5rem; display: none;">
+                            <h2 style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span class="iconify" data-icon="material-symbols-light:location-on-outline" style="font-size: 1.2em; color: var(--primary-blue);"></span>
+                                Palvelualueet
+                            </h2>
+                            <div id="display-ai-service-areas" style="background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 6px 30px rgba(0,0,0,0.06); display: flex; flex-wrap: wrap; gap: 10px;"></div>
+                        </div>
+
+                        <!-- Avainsanat -->
+                        <div id="ai-keywords-section" class="description-section" style="margin-top: 2.5rem; display: none;">
+                            <h2 style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span class="iconify" data-icon="material-symbols-light:tag" style="font-size: 1.2em; color: var(--primary-blue);"></span>
+                                Avainsanat &amp; teemat
+                            </h2>
+                            <div id="display-ai-keywords" style="background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 6px 30px rgba(0,0,0,0.06); display: flex; flex-wrap: wrap; gap: 10px;"></div>
+                        </div>
+
+                        <!-- Paikallinen konteksti -->
+                        <div id="ai-local-context-section" class="description-section" style="margin-top: 2.5rem; display: none;">
+                            <h2 style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span class="iconify" data-icon="material-symbols-light:map-outline" style="font-size: 1.2em; color: var(--primary-blue);"></span>
+                                Sijainti ja ympäristö
+                            </h2>
+                            <div id="display-ai-local-context" style="background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 6px 30px rgba(0,0,0,0.06);"></div>
+                        </div>
+
+                        <!-- FAQ -->
+                        <div id="ai-faq-section" class="description-section" style="margin-top: 2.5rem; display: none;">
+                            <h2 style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span class="iconify" data-icon="material-symbols-light:help-outline" style="font-size: 1.2em; color: var(--primary-blue);"></span>
+                                Usein kysytyt kysymykset
+                            </h2>
+                            <div id="display-ai-faq" class="bc-faq-list" style="background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 6px 30px rgba(0,0,0,0.06);"></div>
                         </div>
 
                     </div>
@@ -2175,8 +2210,8 @@
 
     <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="../script.js?v=20260301"></script>
-    <script src="../yrityskortti.js?v=20260304-DEBUG-2"></script>
+    <script src="../script.03d2d5c4.js?v=20260301"></script>
+    <script src="../yrityskortti.03d2d5c4.js?v=20260304-DEBUG-2"></script>
     <script>
         function toggleMarketingDropdown() {
             document.getElementById('marketing-dropdown-container').classList.toggle('open');

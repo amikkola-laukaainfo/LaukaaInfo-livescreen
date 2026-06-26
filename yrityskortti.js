@@ -1706,7 +1706,9 @@
             aiSummaryBlock.style.display = 'block';
         }
 
-        // --- UUSI: Tekoälyn kooste -välilehti (Tab 3) ---
+        // --- Lisätiedot-välilehti (Tab 3) ---
+
+        // Kooste / yhteenveto
         const aiSummaryFull = document.getElementById('display-ai-summary-full');
         if (aiSummaryFull && aiSeo.ai_summary) {
             aiSummaryFull.textContent = aiSeo.ai_summary;
@@ -1717,9 +1719,19 @@
         const aiTargetAudience = document.getElementById('display-ai-target-audience');
         if (aiTargetAudienceSection && aiTargetAudience && aiSeo.target_audiences && aiSeo.target_audiences.length > 0) {
             aiTargetAudienceSection.style.display = 'block';
-            aiTargetAudience.innerHTML = '<ul style="margin:0; padding-left:20px; line-height:1.6; color:#475569;">' + 
-                aiSeo.target_audiences.map(item => `<li>${item}</li>`).join('') + 
+            aiTargetAudience.innerHTML = '<ul style="margin:0; padding-left:20px; line-height:1.9; color:#475569;">' +
+                aiSeo.target_audiences.map(item => `<li>${item}</li>`).join('') +
                 '</ul>';
+        }
+
+        // Palvelualueet
+        const aiServiceAreasSection = document.getElementById('ai-service-areas-section');
+        const aiServiceAreas = document.getElementById('display-ai-service-areas');
+        if (aiServiceAreasSection && aiServiceAreas && aiSeo.service_areas_text && aiSeo.service_areas_text.length > 0) {
+            aiServiceAreasSection.style.display = 'block';
+            aiServiceAreas.innerHTML = aiSeo.service_areas_text.map(area =>
+                `<span style="background:#f0fdf4; color:#166534; padding:5px 14px; border-radius:50px; font-size:0.9rem; font-weight:600; border:1px solid #bbf7d0;">📍 ${area}</span>`
+            ).join('');
         }
 
         // Avainsanat
@@ -1727,12 +1739,54 @@
         const aiKeywords = document.getElementById('display-ai-keywords');
         if (aiKeywordsSection && aiKeywords && aiSeo.keywords && aiSeo.keywords.length > 0) {
             aiKeywordsSection.style.display = 'block';
-            aiKeywords.innerHTML = aiSeo.keywords.map(kw => 
+            aiKeywords.innerHTML = aiSeo.keywords.map(kw =>
                 `<span style="background:var(--light-blue); color:var(--secondary-blue); padding:5px 12px; border-radius:50px; font-size:0.9rem; font-weight:600; border:1px solid #bae6fd;">#${kw}</span>`
             ).join('');
         }
 
-        // 2. FAQ laajaan esittelyprofiiliin (bc-faq-section)
+        // Paikallinen konteksti
+        const aiLocalCtxSection = document.getElementById('ai-local-context-section');
+        const aiLocalCtx = document.getElementById('display-ai-local-context');
+        if (aiLocalCtxSection && aiLocalCtx && aiSeo.local_context) {
+            const lc = aiSeo.local_context;
+            const hasLandmarks = lc.nearby_landmarks && lc.nearby_landmarks.length > 0;
+            const hasText = lc.text_description;
+            if (hasLandmarks || hasText) {
+                aiLocalCtxSection.style.display = 'block';
+                let html = '';
+                if (hasText) html += `<p style="margin:0 0 1rem; color:#475569; line-height:1.7;">${lc.text_description}</p>`;
+                if (hasLandmarks) {
+                    html += '<div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:0.5rem;">' +
+                        lc.nearby_landmarks.map(lm =>
+                            `<span style="background:#fef9c3; color:#854d0e; padding:4px 12px; border-radius:50px; font-size:0.85rem; font-weight:600; border:1px solid #fde68a;">🏔 ${lm}</span>`
+                        ).join('') + '</div>';
+                }
+                aiLocalCtx.innerHTML = html;
+            }
+        }
+
+        // FAQ Lisätiedot-välilehdellä
+        const aiFaqSection = document.getElementById('ai-faq-section');
+        const aiFaqList = document.getElementById('display-ai-faq');
+        if (aiFaqSection && aiFaqList && aiSeo.faq && aiSeo.faq.length > 0) {
+            aiFaqSection.style.display = 'block';
+            aiFaqList.innerHTML = '';
+            aiSeo.faq.forEach((item, i) => {
+                const details = document.createElement('details');
+                details.className = 'bc-faq-item';
+                if (i === 0) details.open = true;
+                details.innerHTML = `
+                    <summary class="bc-faq-question">
+                        <span class="bc-faq-icon"><span class="iconify" data-icon="material-symbols-light:help-outline" style="font-size:1.2em;"></span></span>
+                        ${item.question}
+                    </summary>
+                    <div class="bc-faq-answer">${item.answer}</div>
+                `;
+                aiFaqList.appendChild(details);
+            });
+        }
+
+        // 2. FAQ myös laajaan esittelyprofiiliin (bc-faq-section)
         const faqSection = document.getElementById('bc-faq-section');
         if (faqSection && aiSeo.faq && aiSeo.faq.length > 0) {
             faqSection.style.display = 'block';
@@ -1754,6 +1808,7 @@
                 });
             }
         }
+
 
         // 3. Päivitetään meta description hakukoneoptimoinnin parantamiseksi
         if (aiSeo.ai_summary) {
