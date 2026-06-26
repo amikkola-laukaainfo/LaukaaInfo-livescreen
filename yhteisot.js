@@ -221,10 +221,17 @@ async function renderAllCommunitiesPage() {
     });
 
     // Create Filters UI
+    const filtersWrapper = document.createElement('div');
+    filtersWrapper.style.cssText = 'display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem; align-items: center;';
+
     const filterContainer = document.createElement('div');
     filterContainer.className = 'some-yhteiso-filters';
-    filterContainer.style.cssText = 'display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; margin-bottom: 2rem;';
+    filterContainer.style.cssText = 'display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;';
     
+    const subFilterContainer = document.createElement('div');
+    subFilterContainer.className = 'some-yhteiso-subfilters';
+    subFilterContainer.style.cssText = 'display: none; gap: 0.5rem; flex-wrap: wrap; justify-content: center; padding: 0.75rem 1rem; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0; width: fit-content;';
+
     const allBtn = document.createElement('button');
     allBtn.textContent = 'Kaikki';
     allBtn.className = 'filter-btn active';
@@ -241,7 +248,9 @@ async function renderAllCommunitiesPage() {
         filterContainer.appendChild(btn);
     });
     
-    container.appendChild(filterContainer);
+    filtersWrapper.appendChild(filterContainer);
+    filtersWrapper.appendChild(subFilterContainer);
+    container.appendChild(filtersWrapper);
 
     const sectionsWrapper = document.createElement('div');
     sectionsWrapper.id = 'sections-wrapper';
@@ -272,10 +281,81 @@ async function renderAllCommunitiesPage() {
                 sec.style.display = 'block';
                 // Add a small fade-in animation
                 sec.style.animation = 'fadeIn 0.3s ease-in-out';
+                // Palauta kaikki alikategoriat näkyviin
+                const subSecs = sec.querySelectorAll('.some-yhteiso-sub-section');
+                subSecs.forEach(sub => sub.style.display = 'block');
             } else {
                 sec.style.display = 'none';
             }
         });
+
+        // Hallinnoi alikategoria-suodattimia
+        if (activeParent === 'Kaikki') {
+            subFilterContainer.style.display = 'none';
+            subFilterContainer.innerHTML = '';
+        } else {
+            const subs = Object.keys(grouped[activeParent]).sort((a, b) => {
+                if (a === '_yleiset') return -1;
+                if (b === '_yleiset') return 1;
+                return a.localeCompare(b);
+            });
+
+            if (subs.length > 1 || (subs.length === 1 && subs[0] !== '_yleiset')) {
+                subFilterContainer.style.display = 'flex';
+                subFilterContainer.innerHTML = '';
+
+                const allSubBtn = document.createElement('button');
+                allSubBtn.textContent = 'Kaikki';
+                allSubBtn.className = 'filter-btn active';
+                allSubBtn.style.cssText = 'padding: 0.4rem 1rem; font-size: 0.85rem; border-radius: 20px; border: none; background: #64748b; color: white; cursor: pointer; font-weight: bold; transition: all 0.2s;';
+                allSubBtn.onclick = () => filterSubSections(activeParent, 'Kaikki', allSubBtn);
+                subFilterContainer.appendChild(allSubBtn);
+
+                subs.forEach(sub => {
+                    const subName = sub === '_yleiset' ? 'Yleiset' : sub;
+                    const subBtn = document.createElement('button');
+                    subBtn.textContent = subName;
+                    subBtn.className = 'filter-btn';
+                    subBtn.style.cssText = 'padding: 0.4rem 1rem; font-size: 0.85rem; border-radius: 20px; border: 1px solid #cbd5e1; background: white; color: #475569; cursor: pointer; font-weight: 500; transition: all 0.2s;';
+                    subBtn.onclick = () => filterSubSections(activeParent, sub, subBtn);
+                    subFilterContainer.appendChild(subBtn);
+                });
+            } else {
+                subFilterContainer.style.display = 'none';
+                subFilterContainer.innerHTML = '';
+            }
+        }
+    }
+
+    function filterSubSections(parentName, activeSub, activeSubBtn) {
+        // Update sub button styles
+        const btns = subFilterContainer.querySelectorAll('button');
+        btns.forEach(b => {
+            b.style.background = 'white';
+            b.style.color = '#475569';
+            b.style.border = '1px solid #cbd5e1';
+            b.style.fontWeight = '500';
+            b.classList.remove('active');
+        });
+        activeSubBtn.style.background = '#64748b';
+        activeSubBtn.style.color = 'white';
+        activeSubBtn.style.border = 'none';
+        activeSubBtn.style.fontWeight = 'bold';
+        activeSubBtn.classList.add('active');
+
+        // Filter sub-sections
+        const section = sectionsWrapper.querySelector(`.some-yhteiso-category-section[data-parent="${parentName}"]`);
+        if (section) {
+            const subSecs = section.querySelectorAll('.some-yhteiso-sub-section');
+            subSecs.forEach(subSec => {
+                if (activeSub === 'Kaikki' || subSec.dataset.sub === activeSub) {
+                    subSec.style.display = 'block';
+                    subSec.style.animation = 'fadeIn 0.3s ease-in-out';
+                } else {
+                    subSec.style.display = 'none';
+                }
+            });
+        }
     }
 
     // Generate content sections
@@ -320,6 +400,7 @@ async function renderAllCommunitiesPage() {
         sortedSubs.forEach(sub => {
             const subWrapper = document.createElement('div');
             subWrapper.className = 'some-yhteiso-sub-section';
+            subWrapper.dataset.sub = sub;
             subWrapper.style.marginBottom = '1.5rem';
 
             if (sub !== '_yleiset') {
