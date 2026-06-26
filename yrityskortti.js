@@ -1686,8 +1686,12 @@
      * - Tekoälykooste -välilehti
      */
     function renderAiAndSeo(company) {
-        // ai_and_seo voi tulla joko suoraan company-objektista tai enrichedDatan kautta
-        const aiSeo = company.ai_and_seo || (company.enrichedData && company.enrichedData.ai_and_seo) || null;
+        // ai_and_seo voi tulla joko suoraan company-objektista, enrichedDatan kautta,
+        // tai staattisille premium-sivuille generate_premium.js:n injektoimana window-muuttujana
+        const aiSeo = company.ai_and_seo
+            || (company.enrichedData && company.enrichedData.ai_and_seo)
+            || window.__LAUKAAINFO_AI_SEO__
+            || null;
         if (!aiSeo) {
             const aiTabBtn = document.getElementById('btn-tab-ai-info');
             if (aiTabBtn) aiTabBtn.style.display = 'none';

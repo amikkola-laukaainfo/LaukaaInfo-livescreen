@@ -198,7 +198,12 @@ function generatePremiumPages() {
     <meta name="description" content="${description}">
     <script type="application/ld+json">${JSON.stringify(schema)}<\/script>${faqSchemaTag}
 `;
-            pageContent = pageContent.replace('<\/head>', ogTags + '<\/head>');
+            // 7. Inject ai_and_seo as inline JS variable for tab 3 rendering
+            let aiSeoInlineScript = '';
+            if (aiSeo) {
+                aiSeoInlineScript = `\n    <script>window.__LAUKAAINFO_AI_SEO__ = ${JSON.stringify(aiSeo)};<\/script>`;
+            }
+            pageContent = pageContent.replace('<\/head>', ogTags + aiSeoInlineScript + '<\/head>');
             
             const outputPath = path.join(yritysDir, `${slug}.html`);
             fs.writeFileSync(outputPath, pageContent);
