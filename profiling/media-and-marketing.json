@@ -754,9 +754,53 @@
             }
         },
         "meta": {
-            "last_updated": "2026-05-21T11:57:38.386Z",
+            "last_updated": "2026-06-26T12:41:20.370Z",
             "verified_by": "AI-analysis-v2",
             "status": "draft"
+        },
+        "ai_and_seo": {
+            "ai_summary": "Mediazoo on Lievestuoreella toimiva digimedia- ja markkinointialan yritys, joka tuottaa videotuotantoa, valokuvausta, drone-kuvausta sekä digimarkkinoinnin ja verkkosivujen ratkaisuja yrityksille ja tapahtumille Keski-Suomessa ja koko Suomessa.",
+            "target_audiences": [
+                "yritykset ja pk-yritykset",
+                "tapahtumajärjestäjät",
+                "hääparit ja yksityisasiakkaat",
+                "startupit ja kasvuyritykset",
+                "kunnat ja organisaatiot"
+            ],
+            "service_areas_text": [
+                "Lievestuore",
+                "Laukaa",
+                "Jyväskylä",
+                "Keski-Suomi",
+                "koko Suomi (digitointi ja erikoisprojektit)"
+            ],
+            "faq": [
+                {
+                    "question": "Mitä palveluita Mediazoo tarjoaa?",
+                    "answer": "Mediazoo tarjoaa videotuotantoa, valokuvausta, drone-kuvausta, verkkosivujen toteutusta sekä digitaalisen markkinoinnin palveluita kuten SEO, Google-mainontaa ja somemainontaa."
+                },
+                {
+                    "question": "Toimiiko Mediazoo myös tapahtumissa?",
+                    "answer": "Kyllä. Mediazoo toteuttaa tapahtuma- ja juhlakuvauksia, häävideoita, yritystapahtumien streamauksia sekä drone-kuvauksia eri kokoisiin tilaisuuksiin."
+                },
+                {
+                    "question": "Voiko palveluita tilata Jyväskylän tai Laukaan ulkopuolelle?",
+                    "answer": "Kyllä. Palvelualue kattaa Keski-Suomen, mutta projekteja toteutetaan sopimuksesta myös koko Suomessa sekä digitointipalveluita valtakunnallisesti."
+                },
+                {
+                    "question": "Tarjoaako Mediazoo verkkosivujen ja brändin rakentamista?",
+                    "answer": "Kyllä. Yritys toteuttaa verkkosivuja, logoja, brändi-ilmeitä sekä digitaalisen markkinoinnin kokonaisuuksia erityisesti startup- ja yrityskasvun tarpeisiin."
+                }
+            ],
+            "local_context": {
+                "nearby_landmarks": [
+                    "Lievestuoreen taajama",
+                    "Laukaan kirkko",
+                    "Jyväskylän keskusta",
+                    "Keski-Suomen järvialueet"
+                ],
+                "text_description": "Mediazoo toimii Lievestuoreelta käsin Keski-Suomessa, hyvien yhteyksien päässä Jyväskylästä ja Laukaasta. Alue on tunnettu järvimaisemista, pienistä taajamista ja aktiivisesta yritys- sekä tapahtumakentästä."
+            }
         }
     },
     "company-91": {

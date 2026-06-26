@@ -1482,6 +1482,105 @@
             display: block;
             animation: fadeIn 0.2s ease;
         }
+
+        /* --- AI Summary Block (Digitaalinen Käyntikortti) --- */
+        #bc-ai-summary-block {
+            display: none;
+            background: linear-gradient(135deg, #f0f7ff 0%, #e8f0fe 100%);
+            border: 1px solid #bfdbfe;
+            border-left: 4px solid var(--primary-blue);
+            border-radius: 20px;
+            padding: 1.25rem 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #bc-ai-summary-block::before {
+            content: '\2728'; /* sparkle */
+            position: absolute;
+            top: -6px;
+            right: 16px;
+            font-size: 2.5rem;
+            opacity: 0.08;
+        }
+
+        .bc-ai-label {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--primary-blue);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        #bc-ai-summary-text {
+            font-size: 0.95rem;
+            color: #1e3a5f;
+            line-height: 1.65;
+            margin: 0;
+            font-style: italic;
+        }
+
+        /* --- FAQ Accordion (Laaja Esittelyprofiili) --- */
+        #bc-faq-section {
+            display: none;
+            margin-top: 3rem;
+            background: white;
+            padding: 2.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--premium-shadow);
+        }
+
+        #bc-faq-section h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.6rem;
+            color: var(--secondary-blue);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .bc-faq-item {
+            border-bottom: 1px solid #f1f5f9;
+            padding: 0;
+        }
+
+        .bc-faq-item:last-child { border-bottom: none; }
+
+        .bc-faq-question {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 1.1rem 0;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--secondary-blue);
+            user-select: none;
+            transition: color 0.2s;
+        }
+
+        .bc-faq-question:hover { color: var(--primary-blue); }
+        .bc-faq-question::-webkit-details-marker { display: none; }
+        .bc-faq-item[open] .bc-faq-question { color: var(--primary-blue); }
+
+        .bc-faq-icon {
+            color: var(--primary-blue);
+            flex-shrink: 0;
+        }
+
+        .bc-faq-answer {
+            font-size: 0.95rem;
+            color: #475569;
+            line-height: 1.7;
+            padding: 0 0 1.25rem 2rem;
+        }
     </style>
 </head>
 
@@ -1760,6 +1859,15 @@
                     <p id="bc-short-intro"></p>
                 </div>
 
+                <!-- AI Yhteenveto -lohko -->
+                <div id="bc-ai-summary-block">
+                    <div class="bc-ai-label">
+                        <span class="iconify" data-icon="material-symbols-light:auto-awesome" style="font-size:1.1em;"></span>
+                        AI-yhteenveto
+                    </div>
+                    <p id="bc-ai-summary-text"></p>
+                </div>
+
                 <!-- Pienet vinkit -osio -->
                 <div id="bc-tips-section" class="bc-block" style="display: none;">
                     <h4 id="bc-tips-header" style="margin-top: 0; margin-bottom: 12px; font-size: 1.1rem; color: var(--primary-blue); display: flex; align-items: center; gap: 6px;">💡 Vinkkejä lähistöltä</h4>
@@ -1916,6 +2024,15 @@
                 <div id="recommendations-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
                     <!-- Suositukset tässä -->
                 </div>
+            </div>
+
+            <!-- FAQ -osio (täytetty JS:llä ai_and_seo.faq:sta) -->
+            <div id="bc-faq-section">
+                <h3>
+                    <span class="iconify" data-icon="material-symbols-light:help-outline" style="font-size:1.1em;"></span>
+                    Usein kysytyt kysymykset
+                </h3>
+                <div class="bc-faq-list"></div>
             </div>
 
             </div><!-- End #tab-extended-profile -->

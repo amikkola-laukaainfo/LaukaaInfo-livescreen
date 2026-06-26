@@ -1485,6 +1485,9 @@
 
         // 13. Pienet Vinkit
         loadYritysVinkit(company.id);
+
+        // 14. AI & SEO -lisädata (ai_and_seo)
+        renderAiAndSeo(company);
     }
 
     /**
@@ -1555,24 +1558,28 @@
      */
     function injectJSONLD(company) {
         try {
-            // Poistetaan vanha JSON-LD jos sellainen on (estää duplikaatit sivuston sisäisessä navigaatiossa)
-            const oldScript = document.getElementById('company-jsonld');
-            if (oldScript) {
-                oldScript.remove();
-            }
+            // Poistetaan vanhat JSON-LD -scriptit (estää duplikaatit)
+            ['company-jsonld', 'company-faq-jsonld'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.remove();
+            });
 
-            // Puhdistetaan kuvausteksti samalla tavalla kuin otsikon esittelyssä
+            // Puhdistetaan kuvausteksti
             const esittely = company.esittely || '';
             const mainoslause = company.mainoslause || '';
             const fullContent = esittely || mainoslause;
-            const description = fullContent.replaceAll('@@', '').replace(/#[a-zA-Z0-9åäöÅÄÖ]+/g, '').replace(/\s\s+/g, ' ').trim();
+            const baseDescription = fullContent.replaceAll('@@', '').replace(/#[a-zA-Z0-9åäöÅÄÖ]+/g, '').replace(/\s\s+/g, ' ').trim();
+
+            // AI-yhteenveto (ai_and_seo) käytetään ensisijaisena kuvauksena jos saatavilla
+            const aiSeo = company.ai_and_seo || (company.enrichedData && company.enrichedData.ai_and_seo) || null;
+            const description = (aiSeo && aiSeo.ai_summary) ? aiSeo.ai_summary : (baseDescription || (company.nimi + ' - Laukaan yritys.'));
 
             const schema = {
                 "@context": "https://schema.org",
                 "@type": "LocalBusiness",
                 "@id": `https://laukaainfo.fi/yrityskortti.html?id=${company.id}`,
                 "name": company.nimi,
-                "description": description || `${company.nimi} - Laukaan yritys.`,
+                "description": description,
                 "address": {
                     "@type": "PostalAddress",
                     "streetAddress": company.osoite || 'Laukaa',
@@ -1584,21 +1591,16 @@
             if (company.puhelin && company.puhelin !== '-') {
                 schema.telephone = company.puhelin;
             }
-
             if (company.nettisivu && company.nettisivu !== '-') {
                 let webUrl = company.nettisivu.trim();
-                if (!webUrl.startsWith('http')) {
-                    webUrl = 'https://' + webUrl;
-                }
+                if (!webUrl.startsWith('http')) webUrl = 'https://' + webUrl;
                 schema.url = webUrl;
             }
-
             if (company.logo && company.logo !== '-') {
                 schema.logo = company.logo;
             } else if (company.media && company.media.length > 0 && company.media[0].url) {
                 schema.logo = company.media[0].url;
             }
-
             if (company.lat && company.lon) {
                 schema.geo = {
                     "@type": "GeoCoordinates",
@@ -1607,30 +1609,107 @@
                 };
             }
 
+            // Palvelualueet (areaServed) ai_and_seo:sta
+            if (aiSeo && aiSeo.service_areas_text && aiSeo.service_areas_text.length > 0) {
+                schema.areaServed = aiSeo.service_areas_text;
+            }
+
             // Sosiaaliset mediat (sameAs)
             const sameAs = [];
             ['facebook', 'instagram', 'linkedin', 'tiktok'].forEach(key => {
                 let val = company[key] || '';
                 if (val && val !== '-') {
                     val = val.trim();
-                    if (!val.startsWith('http')) {
-                        val = 'https://' + val;
-                    }
+                    if (!val.startsWith('http')) val = 'https://' + val;
                     sameAs.push(val);
                 }
             });
-            if (sameAs.length > 0) {
-                schema.sameAs = sameAs;
-            }
+            if (sameAs.length > 0) schema.sameAs = sameAs;
 
             const script = document.createElement('script');
             script.id = 'company-jsonld';
             script.type = 'application/ld+json';
             script.text = JSON.stringify(schema, null, 2);
             document.head.appendChild(script);
-            console.log('✓ Injektoitu JSON-LD -skeema yritykselle:', company.nimi);
+
+            // FAQ Schema (erillinen FAQPage -schema, jos FAQ-dataa on)
+            if (aiSeo && aiSeo.faq && aiSeo.faq.length > 0) {
+                const faqSchema = {
+                    "@context": "https://schema.org",
+                    "@type": "FAQPage",
+                    "mainEntity": aiSeo.faq.map(item => ({
+                        "@type": "Question",
+                        "name": item.question,
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": item.answer
+                        }
+                    }))
+                };
+                const faqScript = document.createElement('script');
+                faqScript.id = 'company-faq-jsonld';
+                faqScript.type = 'application/ld+json';
+                faqScript.text = JSON.stringify(faqSchema, null, 2);
+                document.head.appendChild(faqScript);
+            }
+
+            console.log('✓ Injektoitu JSON-LD -skeema yritykselle:', company.nimi, aiSeo ? '(+ ai_and_seo)' : '');
         } catch (e) {
             console.error('Virhe JSON-LD -injektoinnissa:', e);
+        }
+    }
+
+    /**
+     * Renderöi AI & SEO -lisädata näkyväksi yrityskorttiin:
+     * - AI-yhteenveto -> digitaalinen käyntikortti -välilehti
+     * - FAQ -> laaja esittelyprofiili -välilehti
+     * - Kohderyhmät / palvelualueet -> sivun meta description
+     */
+    function renderAiAndSeo(company) {
+        // ai_and_seo voi tulla joko suoraan company-objektista tai enrichedDatan kautta
+        const aiSeo = company.ai_and_seo || (company.enrichedData && company.enrichedData.ai_and_seo) || null;
+        if (!aiSeo) return;
+
+        // 1. AI-yhteenveto digitaaliseen käyntikorttiin (bc-ai-summary-block)
+        const aiSummaryBlock = document.getElementById('bc-ai-summary-block');
+        const aiSummaryText = document.getElementById('bc-ai-summary-text');
+        if (aiSummaryBlock && aiSummaryText && aiSeo.ai_summary) {
+            aiSummaryText.textContent = aiSeo.ai_summary;
+            aiSummaryBlock.style.display = 'block';
+        }
+
+        // 2. FAQ laajaan esittelyprofiiliin (bc-faq-section)
+        const faqSection = document.getElementById('bc-faq-section');
+        if (faqSection && aiSeo.faq && aiSeo.faq.length > 0) {
+            faqSection.style.display = 'block';
+            const faqList = faqSection.querySelector('.bc-faq-list');
+            if (faqList) {
+                faqList.innerHTML = '';
+                aiSeo.faq.forEach((item, i) => {
+                    const details = document.createElement('details');
+                    details.className = 'bc-faq-item';
+                    if (i === 0) details.open = true;
+                    details.innerHTML = `
+                        <summary class="bc-faq-question">
+                            <span class="bc-faq-icon"><span class="iconify" data-icon="material-symbols-light:help-outline" style="font-size:1.2em;"></span></span>
+                            ${item.question}
+                        </summary>
+                        <div class="bc-faq-answer">${item.answer}</div>
+                    `;
+                    faqList.appendChild(details);
+                });
+            }
+        }
+
+        // 3. Päivitetään meta description hakukoneoptimoinnin parantamiseksi
+        if (aiSeo.ai_summary) {
+            let metaDesc = document.querySelector('meta[name="description"]');
+            if (!metaDesc) {
+                metaDesc = document.createElement('meta');
+                metaDesc.name = 'description';
+                document.head.appendChild(metaDesc);
+            }
+            metaDesc.content = aiSeo.ai_summary;
         }
     }
 

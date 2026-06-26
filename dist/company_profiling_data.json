@@ -7256,9 +7256,53 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-21T11:57:38.386Z",
+                "last_updated": "2026-06-26T12:41:20.370Z",
                 "verified_by": "AI-analysis-v2",
                 "status": "draft"
+            },
+            "ai_and_seo": {
+                "ai_summary": "Mediazoo on Lievestuoreella toimiva digimedia- ja markkinointialan yritys, joka tuottaa videotuotantoa, valokuvausta, drone-kuvausta sekä digimarkkinoinnin ja verkkosivujen ratkaisuja yrityksille ja tapahtumille Keski-Suomessa ja koko Suomessa.",
+                "target_audiences": [
+                    "yritykset ja pk-yritykset",
+                    "tapahtumajärjestäjät",
+                    "hääparit ja yksityisasiakkaat",
+                    "startupit ja kasvuyritykset",
+                    "kunnat ja organisaatiot"
+                ],
+                "service_areas_text": [
+                    "Lievestuore",
+                    "Laukaa",
+                    "Jyväskylä",
+                    "Keski-Suomi",
+                    "koko Suomi (digitointi ja erikoisprojektit)"
+                ],
+                "faq": [
+                    {
+                        "question": "Mitä palveluita Mediazoo tarjoaa?",
+                        "answer": "Mediazoo tarjoaa videotuotantoa, valokuvausta, drone-kuvausta, verkkosivujen toteutusta sekä digitaalisen markkinoinnin palveluita kuten SEO, Google-mainontaa ja somemainontaa."
+                    },
+                    {
+                        "question": "Toimiiko Mediazoo myös tapahtumissa?",
+                        "answer": "Kyllä. Mediazoo toteuttaa tapahtuma- ja juhlakuvauksia, häävideoita, yritystapahtumien streamauksia sekä drone-kuvauksia eri kokoisiin tilaisuuksiin."
+                    },
+                    {
+                        "question": "Voiko palveluita tilata Jyväskylän tai Laukaan ulkopuolelle?",
+                        "answer": "Kyllä. Palvelualue kattaa Keski-Suomen, mutta projekteja toteutetaan sopimuksesta myös koko Suomessa sekä digitointipalveluita valtakunnallisesti."
+                    },
+                    {
+                        "question": "Tarjoaako Mediazoo verkkosivujen ja brändin rakentamista?",
+                        "answer": "Kyllä. Yritys toteuttaa verkkosivuja, logoja, brändi-ilmeitä sekä digitaalisen markkinoinnin kokonaisuuksia erityisesti startup- ja yrityskasvun tarpeisiin."
+                    }
+                ],
+                "local_context": {
+                    "nearby_landmarks": [
+                        "Lievestuoreen taajama",
+                        "Laukaan kirkko",
+                        "Jyväskylän keskusta",
+                        "Keski-Suomen järvialueet"
+                    ],
+                    "text_description": "Mediazoo toimii Lievestuoreelta käsin Keski-Suomessa, hyvien yhteyksien päässä Jyväskylästä ja Laukaasta. Alue on tunnettu järvimaisemista, pienistä taajamista ja aktiivisesta yritys- sekä tapahtumakentästä."
+                }
             }
         },
         "company-3": {
@@ -75785,9 +75829,52 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-06-11T12:31:57.793Z",
+                "last_updated": "2026-06-26T12:47:16.542Z",
                 "verified_by": "web-enriched-ai",
                 "status": "enriched"
+            },
+            "ai_and_seo": {
+                "ai_summary": "Vuonteen Helmi on Laukaan Vuonteella sijaitseva historiallinen ja esteetön juhla- sekä kokouspaikka, joka tarjoaa täyden palvelun pitopalvelun häihin, juhliin, yritystapahtumiin ja muistotilaisuuksiin noin 80 hengelle.",
+                "target_audiences": [
+                    "hääparit ja juhlanjärjestäjät",
+                    "yritykset ja kokousasiakkaat",
+                    "muistotilaisuuksien järjestäjät",
+                    "perheet ja yksityistilaisuudet",
+                    "tapahtumajärjestäjät Keski-Suomessa"
+                ],
+                "service_areas_text": [
+                    "Laukaa",
+                    "Vihtavuori",
+                    "Jyväskylä",
+                    "Keski-Suomi"
+                ],
+                "faq": [
+                    {
+                        "question": "Mihin tilaisuuksiin Vuonteen Helmi sopii?",
+                        "answer": "Vuonteen Helmi soveltuu häihin, syntymäpäiviin, muistotilaisuuksiin, yritysjuhliin sekä kokouksiin ja muihin yksityistilaisuuksiin jopa 80 hengelle."
+                    },
+                    {
+                        "question": "Onko Vuonteen Helmellä pitopalvelu?",
+                        "answer": "Kyllä. Tilalla on oma pitopalvelu, joka tarjoaa tarjoilut juhliin ja kokouksiin, mukaan lukien erityisruokavaliot kuten gluteeniton, laktoositon ja vegaaninen vaihtoehto."
+                    },
+                    {
+                        "question": "Onko tila esteetön?",
+                        "answer": "Kyllä, Vuonteen Helmi on esteetön ja sopii hyvin myös muistotilaisuuksiin ja tilaisuuksiin, joissa saavutettavuus on tärkeää."
+                    },
+                    {
+                        "question": "Voiko tilaa käyttää yritystilaisuuksiin?",
+                        "answer": "Kyllä. Tila soveltuu kokouksiin, koulutuksiin, yritysjuhliin ja pikkujouluihin, ja käytössä on AV-laitteisto kuten projektori, äänentoisto ja valkokangas."
+                    }
+                ],
+                "local_context": {
+                    "nearby_landmarks": [
+                        "Vuonteenselkä",
+                        "Laukaan kirkko",
+                        "Jyväskylän keskusta",
+                        "Keski-Suomen järvimaisemat"
+                    ],
+                    "text_description": "Vuonteen Helmi sijaitsee rauhallisella Vuonteen alueella Laukaassa järvimaisemien äärellä. Sijainti on helposti saavutettavissa Jyväskylästä ja muualta Keski-Suomesta, mutta tarjoaa samalla historiallista miljöötä ja luonnonläheisen ympäristön juhla- ja kokouskäyttöön."
+                }
             }
         },
         "company-287": {
@@ -84242,13 +84329,7 @@
                 "home_service": false,
                 "weekend_service": false,
                 "not_suitable_for": [],
-                "sub_contexts": [
-                    "pitopalvelu",
-                    "juhlat",
-                    "häät",
-                    "tarjoilu",
-                    "tapahtumat"
-                ],
+                "sub_contexts": [],
                 "node_links": [
                     "CATERING"
                 ],
@@ -84517,15 +84598,7 @@
                 "home_service": false,
                 "weekend_service": false,
                 "not_suitable_for": [],
-                "sub_contexts": [
-                    "maatila",
-                    "tapahtumatila",
-                    "tilavuokraus",
-                    "juhlatila",
-                    "talvisäilytys",
-                    "pitkäaikaismajoitus",
-                    "työmajoitus"
-                ],
+                "sub_contexts": [],
                 "node_links": [
                     "MAJOITUS",
                     "JUHLATILA"
@@ -84793,13 +84866,7 @@
                 "home_service": false,
                 "weekend_service": false,
                 "not_suitable_for": [],
-                "sub_contexts": [
-                    "kylätalo",
-                    "juhlatila",
-                    "kokoustila",
-                    "kyläyhdistys",
-                    "vuokratilat"
-                ],
+                "sub_contexts": [],
                 "node_links": [
                     "JUHLATILA"
                 ],
