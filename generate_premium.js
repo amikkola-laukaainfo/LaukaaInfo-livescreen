@@ -39,17 +39,20 @@ function generatePremiumPages() {
     const data = JSON.parse(rawJson);
     const companies = data.results || [];
 
-    // Ladataan profilointidata (ai_and_seo-kent\u00e4t) jos saatavilla
+    // Ladataan profilointidata (ai_and_seo-kentat) jos saatavilla
     let profilingData = {};
     const profilingFile = path.join(__dirname, 'company_profiling_data.json');
     if (fs.existsSync(profilingFile)) {
         try {
             let rawProfiling = fs.readFileSync(profilingFile, 'utf8');
             if (rawProfiling.charCodeAt(0) === 0xFEFF) rawProfiling = rawProfiling.slice(1);
-            profilingData = JSON.parse(rawProfiling);
-            console.log(`Profilointidata ladattu: ${Object.keys(profilingData).length} yrityst\u00e4`);
+            const parsedProfiling = JSON.parse(rawProfiling);
+            // Rakenne on { SCHEMA_VERSION, nodes, profiles: { "company-2": {...} }, edges }
+            profilingData = parsedProfiling.profiles || parsedProfiling;
+            const count = Object.keys(profilingData).filter(k => k.startsWith('company-')).length;
+            console.log(`Profilointidata ladattu: ${count} yritystae`);
         } catch (e) {
-            console.warn('Varoitus: profilointidatan luku ep\u00e4onnistui:', e.message);
+            console.warn('Varoitus: profilointidatan luku epaonnistui:', e.message);
         }
     }
 
@@ -74,7 +77,9 @@ function generatePremiumPages() {
         console.error('Error: yrityskortti.html template not found');
         return;
     }
-    let template = fs.readFileSync(templatePath, 'utf8');
+    let template = fs.readFileSync(templatePath).toString('utf8');
+    // Strip BOM if present
+    if (template.charCodeAt(0) === 0xFEFF) template = template.slice(1);
     
     let generatedCount = 0;
     
@@ -206,7 +211,7 @@ function generatePremiumPages() {
             pageContent = pageContent.replace('<\/head>', ogTags + aiSeoInlineScript + '<\/head>');
             
             const outputPath = path.join(yritysDir, `${slug}.html`);
-            fs.writeFileSync(outputPath, pageContent);
+            fs.writeFileSync(outputPath, Buffer.from(pageContent, 'utf8'));
             generatedCount++;
             console.log(`  \u2713 Generoitu: yritys/${slug}.html`);
         }
