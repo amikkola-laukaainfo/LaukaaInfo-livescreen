@@ -1099,21 +1099,27 @@
         // 1. Tab Switching Setup
         const btnBc = document.getElementById('btn-tab-business-card');
         const btnEp = document.getElementById('btn-tab-extended-profile');
+        const btnAi = document.getElementById('btn-tab-ai-info');
         const tabBc = document.getElementById('tab-business-card');
         const tabEp = document.getElementById('tab-extended-profile');
+        const tabAi = document.getElementById('tab-ai-info');
 
         if (btnBc && btnEp && tabBc && tabEp) {
             btnBc.classList.add('active');
             btnEp.classList.remove('active');
+            if (btnAi) btnAi.classList.remove('active');
             tabBc.style.display = 'flex';
             tabEp.style.display = 'none';
+            if (tabAi) tabAi.style.display = 'none';
 
             btnBc.onclick = (e) => {
                 e.preventDefault();
                 btnBc.classList.add('active');
                 btnEp.classList.remove('active');
+                if (btnAi) btnAi.classList.remove('active');
                 tabBc.style.display = 'flex';
                 tabEp.style.display = 'none';
+                if (tabAi) tabAi.style.display = 'none';
                 if (window.companyMapInstance) {
                     setTimeout(() => window.companyMapInstance.invalidateSize(true), 50);
                 }
@@ -1122,12 +1128,25 @@
                 e.preventDefault();
                 btnEp.classList.add('active');
                 btnBc.classList.remove('active');
+                if (btnAi) btnAi.classList.remove('active');
                 tabBc.style.display = 'none';
                 tabEp.style.display = 'block';
+                if (tabAi) tabAi.style.display = 'none';
                 if (window.companyMapInstance) {
                     setTimeout(() => window.companyMapInstance.invalidateSize(true), 50);
                 }
             };
+            if (btnAi) {
+                btnAi.onclick = (e) => {
+                    e.preventDefault();
+                    btnAi.classList.add('active');
+                    btnBc.classList.remove('active');
+                    btnEp.classList.remove('active');
+                    tabBc.style.display = 'none';
+                    tabEp.style.display = 'none';
+                    if (tabAi) tabAi.style.display = 'block';
+                };
+            }
         }
 
         // 2. Cover Banner
@@ -1664,11 +1683,16 @@
      * - AI-yhteenveto -> digitaalinen käyntikortti -välilehti
      * - FAQ -> laaja esittelyprofiili -välilehti
      * - Kohderyhmät / palvelualueet -> sivun meta description
+     * - Tekoälykooste -välilehti
      */
     function renderAiAndSeo(company) {
         // ai_and_seo voi tulla joko suoraan company-objektista tai enrichedDatan kautta
         const aiSeo = company.ai_and_seo || (company.enrichedData && company.enrichedData.ai_and_seo) || null;
-        if (!aiSeo) return;
+        if (!aiSeo) {
+            const aiTabBtn = document.getElementById('btn-tab-ai-info');
+            if (aiTabBtn) aiTabBtn.style.display = 'none';
+            return;
+        }
 
         // 1. AI-yhteenveto digitaaliseen käyntikorttiin (bc-ai-summary-block)
         const aiSummaryBlock = document.getElementById('bc-ai-summary-block');
@@ -1676,6 +1700,32 @@
         if (aiSummaryBlock && aiSummaryText && aiSeo.ai_summary) {
             aiSummaryText.textContent = aiSeo.ai_summary;
             aiSummaryBlock.style.display = 'block';
+        }
+
+        // --- UUSI: Tekoälyn kooste -välilehti (Tab 3) ---
+        const aiSummaryFull = document.getElementById('display-ai-summary-full');
+        if (aiSummaryFull && aiSeo.ai_summary) {
+            aiSummaryFull.textContent = aiSeo.ai_summary;
+        }
+
+        // Kohderyhmät
+        const aiTargetAudienceSection = document.getElementById('ai-target-audience-section');
+        const aiTargetAudience = document.getElementById('display-ai-target-audience');
+        if (aiTargetAudienceSection && aiTargetAudience && aiSeo.target_audiences && aiSeo.target_audiences.length > 0) {
+            aiTargetAudienceSection.style.display = 'block';
+            aiTargetAudience.innerHTML = '<ul style="margin:0; padding-left:20px; line-height:1.6; color:#475569;">' + 
+                aiSeo.target_audiences.map(item => `<li>${item}</li>`).join('') + 
+                '</ul>';
+        }
+
+        // Avainsanat
+        const aiKeywordsSection = document.getElementById('ai-keywords-section');
+        const aiKeywords = document.getElementById('display-ai-keywords');
+        if (aiKeywordsSection && aiKeywords && aiSeo.keywords && aiSeo.keywords.length > 0) {
+            aiKeywordsSection.style.display = 'block';
+            aiKeywords.innerHTML = aiSeo.keywords.map(kw => 
+                `<span style="background:var(--light-blue); color:var(--secondary-blue); padding:5px 12px; border-radius:50px; font-size:0.9rem; font-weight:600; border:1px solid #bae6fd;">#${kw}</span>`
+            ).join('');
         }
 
         // 2. FAQ laajaan esittelyprofiiliin (bc-faq-section)

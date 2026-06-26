@@ -1809,6 +1809,9 @@
                 <button class="tab-btn" id="btn-tab-extended-profile">
                     <span class="iconify" data-icon="material-symbols-light:domain" style="font-size: 1.2em;"></span> Laaja esittelyprofiili
                 </button>
+                <button class="tab-btn" id="btn-tab-ai-info">
+                    <span class="iconify" data-icon="material-symbols-light:robot-2-outline" style="font-size: 1.2em;"></span> Tekoälykooste
+                </button>
             </div>
 
             <!-- Tab 1: Digitaalinen käyntikortti (Compact Business Card) -->
@@ -2037,6 +2040,35 @@
 
             </div><!-- End #tab-extended-profile -->
 
+            <!-- Tab 3: Tekoälyn kooste (AI Info) -->
+            <div id="tab-ai-info" style="display: none;">
+                <div class="card-grid">
+                    <div class="main-content" style="width: 100%; max-width: 800px; margin: 0 auto;">
+                        
+                        <div class="description-section">
+                            <h2 style="display: flex; align-items: center; gap: 0.5rem;"><span class="iconify" data-icon="material-symbols-light:auto-awesome" style="font-size: 1.2em; color: var(--primary-blue);"></span> Yrityksen tekoälykooste</h2>
+                            <div id="display-ai-summary-full" style="font-size: 1.15rem; line-height: 1.8; color: #2d3748; background: white; padding: 2.5rem; border-radius: 24px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06); border-left: 4px solid var(--primary-blue);">
+                                Ladataan tiivistelmää...
+                            </div>
+                        </div>
+
+                        <div id="ai-target-audience-section" class="description-section" style="margin-top: 3rem; display: none;">
+                            <h2 style="display: flex; align-items: center; gap: 0.5rem;"><span class="iconify" data-icon="material-symbols-light:groups-outline" style="font-size: 1.2em; color: var(--primary-blue);"></span> Kenelle palvelu sopii?</h2>
+                            <div id="display-ai-target-audience" style="background: white; padding: 2.5rem; border-radius: 24px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);">
+                                <!-- Target audience list will be generated here -->
+                            </div>
+                        </div>
+                        
+                        <div id="ai-keywords-section" class="description-section" style="margin-top: 3rem; display: none;">
+                            <h2 style="display: flex; align-items: center; gap: 0.5rem;"><span class="iconify" data-icon="material-symbols-light:tag" style="font-size: 1.2em; color: var(--primary-blue);"></span> Avainsanat & teemat</h2>
+                            <div id="display-ai-keywords" style="background: white; padding: 2.5rem; border-radius: 24px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06); display: flex; flex-wrap: wrap; gap: 10px;">
+                                <!-- Keywords will be generated here -->
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div><!-- End #tab-ai-info -->
 
             <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 5rem 0;">
         </div>

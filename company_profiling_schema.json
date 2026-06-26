@@ -132,6 +132,45 @@
                 "verified_by": { "type": "string" },
                 "status": { "type": "string", "enum": ["draft", "verified", "published", "updated", "enriched", "pending_review"] }
             }
+        },
+        "ai_and_seo": {
+            "type": "object",
+            "properties": {
+                "ai_summary": { "type": "string" },
+                "target_audiences": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                },
+                "service_areas_text": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                },
+                "keywords": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                },
+                "faq": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "question": { "type": "string" },
+                            "answer": { "type": "string" }
+                        },
+                        "required": ["question", "answer"]
+                    }
+                },
+                "local_context": {
+                    "type": "object",
+                    "properties": {
+                        "nearby_landmarks": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                        },
+                        "text_description": { "type": "string" }
+                    }
+                }
+            }
         }
     },
     "required": ["id", "name", "core", "categories", "meta"],
