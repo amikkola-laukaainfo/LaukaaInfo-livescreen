@@ -793,6 +793,54 @@
             }
         }
 
+        // --- UUSI: Suosittelemme lähistöllä (Sidebar) ---
+        // Haetaan suositukset joko suoraan tai enrichedDatan kautta
+        const aiSeoData = company.ai_and_seo 
+            || (company.enrichedData && company.enrichedData.ai_and_seo) 
+            || window.__LAUKAAINFO_AI_SEO__ 
+            || null;
+
+        if (aiSeoData && aiSeoData.nearby_recommendations && aiSeoData.nearby_recommendations.length > 0) {
+            const recommendationsDiv = document.createElement('div');
+            recommendationsDiv.className = 'contact-item nearby-recommendations';
+            recommendationsDiv.style.cssText = 'margin-top: 1.5rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem; display: flex; flex-direction: column; gap: 0.8rem;';
+            
+            let html = `
+                <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom: 0.5rem;">
+                    <span class="iconify" data-icon="material-symbols-light:location-on-outline" style="font-size: 1.4rem; color: #f59e0b;"></span>
+                    <h3 style="margin:0; font-size: 1.1rem; color: #1e293b;">Suosittelemme lähistöllä</h3>
+                </div>
+            `;
+            
+            aiSeoData.nearby_recommendations.forEach(rec => {
+                // Rakennetaan linkki, jos id löytyy (käytetään puhdasta nimeä tms.)
+                const linkHref = rec.company_id ? (window.location.pathname.includes('/yritys/') ? `../yritys/${rec.company_id.replace('company-', '')}.html` : `yrityskortti.html?id=${rec.company_id.replace('company-', '')}`) : '#';
+                
+                html += `
+                    <div style="background: white; border: 1px solid #cbd5e1; border-radius: 8px; padding: 0.8rem; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.3rem;">
+                            ${rec.company_id ? `<a href="${linkHref}" style="font-weight: 700; color: var(--primary-blue); text-decoration: none; font-size: 0.95rem;">${rec.name}</a>` : `<span style="font-weight: 700; color: #334155; font-size: 0.95rem;">${rec.name}</span>`}
+                            ${rec.distance_km ? `<span style="font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 2px 6px; border-radius: 4px;">${rec.distance_km} km</span>` : ''}
+                        </div>
+                        <div style="font-size: 0.85rem; color: #475569; margin-bottom: 0.4rem;">${rec.reason}</div>
+                        ${rec.type ? `<span style="font-size: 0.75rem; font-weight: 600; color: #059669; background: #dcfce7; padding: 2px 8px; border-radius: 50px;">${rec.type}</span>` : ''}
+                    </div>
+                `;
+            });
+            
+            recommendationsDiv.innerHTML = html;
+            
+            if (infoPanel) {
+                // Lisätään ennen karttaa tai lopuksi
+                const cardMap = document.getElementById('card-map');
+                if (cardMap) {
+                    infoPanel.insertBefore(recommendationsDiv, cardMap);
+                } else {
+                    infoPanel.appendChild(recommendationsDiv);
+                }
+            }
+        }
+
         // Promotional Links & Coupon
         const adSection = document.getElementById('promotional-links-section');
         const adList = document.getElementById('ad-links-list');
@@ -1744,23 +1792,63 @@
             ).join('');
         }
 
-        // Paikallinen konteksti
+        // Paikallinen konteksti, tarina ja tägit
         const aiLocalCtxSection = document.getElementById('ai-local-context-section');
         const aiLocalCtx = document.getElementById('display-ai-local-context');
-        if (aiLocalCtxSection && aiLocalCtx && aiSeo.local_context) {
-            const lc = aiSeo.local_context;
+        if (aiLocalCtxSection && aiLocalCtx && aiSeo) {
+            const lc = aiSeo.local_context || {};
             const hasLandmarks = lc.nearby_landmarks && lc.nearby_landmarks.length > 0;
             const hasText = lc.text_description;
-            if (hasLandmarks || hasText) {
+            const hasStory = lc.local_story;
+            const hasAtmosphere = aiSeo.atmosphere_tags && aiSeo.atmosphere_tags.length > 0;
+            const hasValues = aiSeo.values_tags && aiSeo.values_tags.length > 0;
+
+            if (hasLandmarks || hasText || hasStory || hasAtmosphere || hasValues) {
                 aiLocalCtxSection.style.display = 'block';
                 let html = '';
+
+                // 1. Paikallinen tarina (Local Story) korostetusti
+                if (hasStory) {
+                    html += `<div style="margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid #e2e8f0;">
+                                <h4 style="font-size: 1rem; color: #0f172a; margin: 0 0 0.5rem 0; display:flex; align-items:center; gap:0.4rem;">
+                                    <span class="iconify" data-icon="material-symbols-light:history-edu-outline" style="color:var(--primary-blue);"></span> Paikallinen tarina
+                                </h4>
+                                <p style="margin:0; color:#334155; line-height:1.7; font-style: italic;">"${lc.local_story}"</p>
+                             </div>`;
+                }
+
+                // 2. Sijainti ja maamerkit
                 if (hasText) html += `<p style="margin:0 0 1rem; color:#475569; line-height:1.7;">${lc.text_description}</p>`;
                 if (hasLandmarks) {
-                    html += '<div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:0.5rem;">' +
+                    html += '<div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:1.5rem;">' +
                         lc.nearby_landmarks.map(lm =>
-                            `<span style="background:#fef9c3; color:#854d0e; padding:4px 12px; border-radius:50px; font-size:0.85rem; font-weight:600; border:1px solid #fde68a;">🏔 ${lm}</span>`
+                            `<span style="background:#fef9c3; color:#854d0e; padding:4px 12px; border-radius:50px; font-size:0.85rem; font-weight:600; border:1px solid #fde68a;">📍 ${lm}</span>`
                         ).join('') + '</div>';
                 }
+
+                // 3. Tägit (Tunnelma & Arvot)
+                if (hasAtmosphere || hasValues) {
+                    html += `<div style="display:flex; flex-direction:column; gap:0.8rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;">`;
+                    
+                    if (hasAtmosphere) {
+                        html += `<div style="display:flex; flex-wrap:wrap; gap:6px; align-items:center;">
+                                    <span style="font-size:0.85rem; color:#64748b; font-weight:bold; margin-right:4px;">Tunnelma:</span>` +
+                            aiSeo.atmosphere_tags.map(tag =>
+                                `<span style="background:#f3e8ff; color:#6b21a8; padding:3px 10px; border-radius:4px; font-size:0.8rem; font-weight:600; border:1px solid #e9d5ff;">🎭 ${tag}</span>`
+                            ).join('') + `</div>`;
+                    }
+                    
+                    if (hasValues) {
+                        html += `<div style="display:flex; flex-wrap:wrap; gap:6px; align-items:center;">
+                                    <span style="font-size:0.85rem; color:#64748b; font-weight:bold; margin-right:4px;">Arvot:</span>` +
+                            aiSeo.values_tags.map(tag =>
+                                `<span style="background:#dcfce7; color:#166534; padding:3px 10px; border-radius:4px; font-size:0.8rem; font-weight:600; border:1px solid #bbf7d0;">🌿 ${tag}</span>`
+                            ).join('') + `</div>`;
+                    }
+                    
+                    html += `</div>`;
+                }
+
                 aiLocalCtx.innerHTML = html;
             }
         }
