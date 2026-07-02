@@ -144,10 +144,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!heroSlideshow) return;
 
     const images = [
-        'otsikkokuvat/hero-kuva.jpg',
         'otsikkokuvat/kuva-2478.jpg',
         'otsikkokuvat/kuva-2527 (1).jpg',
-        'otsikkokuvat/kuva-2589 (1).jpg'
+        'otsikkokuvat/kuva-2589 (1).jpg',
+        'otsikkokuvat/hero-kuva.jpg'
     ];
 
     let currentIndex = 0;
