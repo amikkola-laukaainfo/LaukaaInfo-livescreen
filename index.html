@@ -915,7 +915,7 @@
 
                 // Nuoli kääntyy CSS:ssä – päivitetään vain aria
                 if (chevron) {
-                    chevron.textContent = expanded ? '?' : '?';
+                    chevron.textContent = expanded ? '▲' : '▼';
                 }
 
                 // Rullataan kuva-alue näkyviin jos laajennetaan
@@ -931,7 +931,7 @@
                 if (!isMobile() && heroRight.classList.contains('hero-img-expanded')) {
                     heroRight.classList.remove('hero-img-expanded');
                     caption.setAttribute('aria-expanded', 'false');
-                    if (chevron) chevron.textContent = '?';
+                    if (chevron) chevron.textContent = '▼';
                 }
             });
         })();
