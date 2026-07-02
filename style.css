@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap');
 
 :root {
     --primary-blue: #2563eb;
@@ -111,7 +111,7 @@
 .radar-header h3 {
     margin: 0;
     color: #1a1a1a;
-    /* Tummempi väri */
+    /* Tummempi vÃ¤ri */
     font-size: 1.4rem;
     font-weight: 800;
 }
@@ -326,7 +326,7 @@ html {
     width: 100%;
 }
 
-/* Lisätään marginaalia ankkurikohteille, jotta ne eivät jää liian lähelle reunaa */
+/* LisÃ¤tÃ¤Ã¤n marginaalia ankkurikohteille, jotta ne eivÃ¤t jÃ¤Ã¤ liian lÃ¤helle reunaa */
 .card,
 section[id] {
     scroll-margin-top: 90px;
@@ -352,7 +352,7 @@ section[id] {
     border: 2px solid white !important;
 }
 
-/* Premium-paketti: Erittäin voimakas punainen syke */
+/* Premium-paketti: ErittÃ¤in voimakas punainen syke */
 .custom-marker.is-premium div {
     background-color: #ff4d4d !important;
     box-shadow: 0 0 20px rgba(255, 77, 77, 0.9) !important;
@@ -412,7 +412,7 @@ header.hero-split {
     color: var(--light-text);
     position: relative;
     z-index: 3;
-    max-width: 850px; /* Hieman leveämpi jotta logo mahtuu viereen */
+    max-width: 850px; /* Hieman leveÃ¤mpi jotta logo mahtuu viereen */
     text-align: left;
 }
 
@@ -448,7 +448,7 @@ header.hero-split {
     object-position: center;
     display: block;
     transition: opacity 1.5s ease-in-out, transform 0.8s ease;
-    filter: brightness(1.15) contrast(1.05); /* Lisätty valoisuutta ja kontrastia */
+    filter: brightness(1.15) contrast(1.05); /* LisÃ¤tty valoisuutta ja kontrastia */
     opacity: 0;
     z-index: 1;
 }
@@ -523,7 +523,7 @@ header h1 {
     font-family: var(--accent-font);
     font-size: 2.2rem;
     font-weight: 800;
-    margin: 0 0 0.5rem; /* Lisätty marginaali alaotsikkoon */
+    margin: 0 0 0.5rem; /* LisÃ¤tty marginaali alaotsikkoon */
     letter-spacing: -1px;
     line-height: 1.05;
     color: #ffffff;
@@ -616,7 +616,7 @@ header h1 {
         overflow: hidden;
     }
 
-    /* Laajennettu tila – koko ruudun korkeus */
+    /* Laajennettu tila â€“ koko ruudun korkeus */
     .hero-right.hero-img-expanded {
         height: 85svh;
         height: 85vh; /* Fallback vanhemmille selaimille */
@@ -648,7 +648,7 @@ header h1 {
         line-height: 1;
     }
 
-    /* Käännetään nuoli kun laajennettu */
+    /* KÃ¤Ã¤nnetÃ¤Ã¤n nuoli kun laajennettu */
     .hero-right.hero-img-expanded .hero-caption-chevron {
         transform: rotate(180deg);
     }
@@ -744,7 +744,7 @@ header:not(.hero-split) p {
 
 /* =========================================
    TAAJAMA-SIVUJEN HERO (region-hero)
-   Ylikirjoittaa laukaa.html jne. sisäiset tyylit
+   Ylikirjoittaa laukaa.html jne. sisÃ¤iset tyylit
    ========================================= */
 section.region-hero {
     background: var(--secondary-blue) !important;
@@ -805,7 +805,7 @@ section.region-hero .location-hint {
     }
 }
 
-/* Ylikirjoitukset tägäyksille, jotta ne rivittyvät mobiilissa "oikealta ulos vuotamisen" sijaan */
+/* Ylikirjoitukset tÃ¤gÃ¤yksille, jotta ne rivittyvÃ¤t mobiilissa "oikealta ulos vuotamisen" sijaan */
 section.region-hero .region-tag-cloud {
     display: flex !important;
     flex-wrap: wrap !important;
@@ -821,7 +821,7 @@ section.region-hero .region-tag-cloud .tag-pill {
     text-align: left;
 }
 
-/* Varmistetaan hakuehdotusten pysyminen kartan päällä */
+/* Varmistetaan hakuehdotusten pysyminen kartan pÃ¤Ã¤llÃ¤ */
 section.region-hero .main-search-box {
     position: relative;
     z-index: 1050; /* Leaflet map is usually around 400, suggestions need to be above map but below main nav */
@@ -888,7 +888,7 @@ section.region-hero .main-search-box {
     transition: background 0.35s ease, box-shadow 0.35s ease;
 }
 
-/* Isolla ruudulla sivun yläosassa hieman läpinäkyvämpi */
+/* Isolla ruudulla sivun ylÃ¤osassa hieman lÃ¤pinÃ¤kyvÃ¤mpi */
 @media (min-width: 1024px) {
     .top-nav {
         background: rgba(0, 56, 130, 0.72);
@@ -953,7 +953,7 @@ section.region-hero .main-search-box {
 .nav-logo img {
     height: 32px;
     width: 32px;
-    /* Kiinteä leveys */
+    /* KiinteÃ¤ leveys */
     max-width: 32px !important;
     flex-shrink: 0;
     border-radius: 6px;
@@ -1109,7 +1109,7 @@ section.region-hero .main-search-box {
 }
 
 .dropdown-menu .has-arrow>a::after {
-    content: '▶';
+    content: 'â–¶';
     font-size: 0.6rem;
     float: right;
     margin-left: 15px;
@@ -1165,7 +1165,7 @@ section.region-hero .main-search-box {
     position: fixed;
     top: 0;
     left: -320px;
-    /* Fallback selaimille jotka eivät tue transformia */
+    /* Fallback selaimille jotka eivÃ¤t tue transformia */
     width: 300px;
     height: 100%;
     background: var(--light-text);
@@ -1185,7 +1185,7 @@ section.region-hero .main-search-box {
     visibility: visible;
 }
 
-/* Jos selain tukee transformia, käytetään sitä (sulavampi) */
+/* Jos selain tukee transformia, kÃ¤ytetÃ¤Ã¤n sitÃ¤ (sulavampi) */
 @supports (transform: translateX(0)) {
     .sidebar-menu {
         left: 0;
@@ -1232,7 +1232,8 @@ section.region-hero .main-search-box {
 
 .section-title {
     font-size: 0.9rem;
-    color: #888;
+    color: #ff9900;
+    font-weight: 700;
     padding: 0 1.5rem;
     margin-bottom: 0.5rem;
     text-transform: uppercase;
@@ -1424,7 +1425,7 @@ h3 {
     gap: 1.5rem;
 }
 
-/* Ajankohtaista: tiedotteet + tapahtumat + palautteet rinnakkain isolla näytöllä */
+/* Ajankohtaista: tiedotteet + tapahtumat + palautteet rinnakkain isolla nÃ¤ytÃ¶llÃ¤ */
 .page-ajankohtaista #ajankohtaista-dashboard .dashboard-grid,
 #ajankohtaista-dashboard .dashboard-grid {
     grid-template-columns: repeat(3, 1fr);
@@ -1582,7 +1583,7 @@ h3 {
 .rss-item-image {
     width: 100%;
     height: 200px;
-    /* Kiinteä korkeus uutisvirrassa */
+    /* KiinteÃ¤ korkeus uutisvirrassa */
     object-fit: contain;
     background-color: #f0f0f0;
     border-radius: 12px;
@@ -1664,8 +1665,8 @@ h3 {
 
 /* =====================================================
    Tekstipohjainen tapahtumakortti (visitlaukaa.fi RSS)
-   Kuvat poistettu tekijänoikeussyistä – korostettu
-   typografia ja selkeä visuaalinen hierarkia
+   Kuvat poistettu tekijÃ¤noikeussyistÃ¤ â€“ korostettu
+   typografia ja selkeÃ¤ visuaalinen hierarkia
    ===================================================== */
 .rss-item--event {
     background: linear-gradient(135deg, #fff8f3 0%, #fff 100%);
@@ -1691,7 +1692,7 @@ h3 {
     padding-bottom: 1.2rem;
 }
 
-/* Päivämäärä-badge tapahtumakortissa */
+/* PÃ¤ivÃ¤mÃ¤Ã¤rÃ¤-badge tapahtumakortissa */
 .rss-event-date-badge {
     display: flex;
     align-items: center;
@@ -1753,7 +1754,7 @@ h3 {
     overflow: hidden;
 }
 
-/* "Lue lisää"-linkki tapahtumakortissa */
+/* "Lue lisÃ¤Ã¤"-linkki tapahtumakortissa */
 .rss-event-link {
     display: inline-flex;
     align-items: center;
@@ -1774,7 +1775,7 @@ h3 {
     text-decoration: underline;
 }
 
-/* Events-card otsikko pienemmillä näytöillä */
+/* Events-card otsikko pienemmillÃ¤ nÃ¤ytÃ¶illÃ¤ */
 #events-card .info-block__header {
     border-bottom-color: rgba(234, 88, 12, 0.2);
 }
@@ -1867,11 +1868,11 @@ h3 {
     display: flex;
     flex-direction: column;
     gap: 3rem;
-    /* Tilaa hakukenttien, videon ja tiedon välille */
+    /* Tilaa hakukenttien, videon ja tiedon vÃ¤lille */
     box-shadow: inset 0 2px 20px rgba(0, 0, 0, 0.04);
 }
 
-/* 1. Hakukentät (Ylimpänä) */
+/* 1. HakukentÃ¤t (YlimpÃ¤nÃ¤) */
 .spotlight-controls {
     display: flex;
     gap: 1.5rem;
@@ -2035,7 +2036,7 @@ h3 {
     background: white;
 }
 
-/* 2. Media (Keskellä) */
+/* 2. Media (KeskellÃ¤) */
 .spotlight-media-wrapper {
     width: 100%;
 }
@@ -2056,7 +2057,7 @@ h3 {
     overflow: hidden;
 }
 
-/* TÄRKEÄ: Pakotetaan video täyttämään koko kehyksen pystysuunnassa */
+/* TÃ„RKEÃ„: Pakotetaan video tÃ¤yttÃ¤mÃ¤Ã¤n koko kehyksen pystysuunnassa */
 .spotlight-media iframe {
     position: absolute;
     top: 50%;
@@ -2064,7 +2065,7 @@ h3 {
     transform: translate(-50%, -50%);
     width: 100%;
     height: 100% !important;
-    /* Estetään 'puolikas' näkymä */
+    /* EstetÃ¤Ã¤n 'puolikas' nÃ¤kymÃ¤ */
     border: none;
     display: block;
 }
@@ -2079,7 +2080,7 @@ h3 {
     display: block;
 }
 
-/* Navigointipisteet videon ALAPUOLELLE (ei päälle) */
+/* Navigointipisteet videon ALAPUOLELLE (ei pÃ¤Ã¤lle) */
 .slider-nav {
     display: flex;
     justify-content: center;
@@ -2165,7 +2166,7 @@ h3 {
     flex-wrap: wrap;
 }
 
-/* Responsiivinen hienosäätö */
+/* Responsiivinen hienosÃ¤Ã¤tÃ¶ */
 @media (max-width: 1200px) {
     .spotlight-container {
         grid-template-columns: 1fr;
@@ -2184,22 +2185,22 @@ h3 {
 @media (max-width: 768px) {
     .spotlight-section {
         padding: 0.8rem;
-        /* Hyvin pieni täyte mobiilissa */
+        /* Hyvin pieni tÃ¤yte mobiilissa */
         overflow: hidden;
-        /* Pakotetaan sisältö pysymään laatikossa */
+        /* Pakotetaan sisÃ¤ltÃ¶ pysymÃ¤Ã¤n laatikossa */
         width: 100%;
         box-sizing: border-box;
     }
 
     .spotlight-main {
         padding: 1.2rem 0.8rem;
-        /* Kapeampi täyte */
+        /* Kapeampi tÃ¤yte */
         width: 100% !important;
         max-width: 100%;
         box-sizing: border-box;
         gap: 1.5rem;
         border-radius: 12px;
-        /* Hieman pienempi pyöristys mobiilissa */
+        /* Hieman pienempi pyÃ¶ristys mobiilissa */
     }
 
     .spotlight-content h3 {
@@ -3138,7 +3139,7 @@ footer {
 }
 
 /* ============================================
-   LaukaaInfo Feed Component — feed.css
+   LaukaaInfo Feed Component â€” feed.css
    Drop-in component, does not affect global styles.
    Scope: .lki-feed and children
    ============================================ */
@@ -3477,7 +3478,7 @@ footer {
 .lki-social-icon:hover { transform: scale(1.15); color: #0056b3; }
 
 
-/* Footer "Ota yhteyttä" matalan kynnyksen CTA */
+/* Footer "Ota yhteyttÃ¤" matalan kynnyksen CTA */
 .footer-mailto-cta {
     display: inline-flex;
     align-items: center;
@@ -4232,7 +4233,7 @@ footer {
     transform: scale(0.96);
 }
 
-/* Älykkäät pikahakupainikkeet etusivulle */
+/* Ã„lykkÃ¤Ã¤t pikahakupainikkeet etusivulle */
 .btn-smart {
     display: inline-block;
     background-color: var(--accent-light);
@@ -4262,7 +4263,7 @@ footer {
     vertical-align: middle;
 }
 
-/* Tunnisteiden (tagien) lisävärit */
+/* Tunnisteiden (tagien) lisÃ¤vÃ¤rit */
 .tag-pill.tag-laukaa, .cat-tag.tag-laukaa {
     background: #e6fced;
     color: #1b5e20;
@@ -4427,7 +4428,7 @@ footer {
     transform: scale(0.96);
 }
 
-/* Älykkäät pikahakupainikkeet etusivulle */
+/* Ã„lykkÃ¤Ã¤t pikahakupainikkeet etusivulle */
 .btn-smart {
     display: inline-block;
     background-color: var(--accent-light);
@@ -4457,7 +4458,7 @@ footer {
     vertical-align: middle;
 }
 
-/* Tunnisteiden (tagien) lisävärit */
+/* Tunnisteiden (tagien) lisÃ¤vÃ¤rit */
 .tag-pill.tag-laukaa, .cat-tag.tag-laukaa {
     background: #e6fced;
     color: #1b5e20;
@@ -4653,7 +4654,7 @@ footer {
     border-bottom: 2px solid rgba(0, 0, 0, 0.04);
 }
 
-/* Alaryhmät sivupalkissa (Näkyy kartalla / Ei näy kartalla) */
+/* AlaryhmÃ¤t sivupalkissa (NÃ¤kyy kartalla / Ei nÃ¤y kartalla) */
 .sidebar-sub-group {
     margin-top: 0.5rem;
 }
@@ -5012,7 +5013,7 @@ footer {
 }
 
 .premium-select-wrapper::after {
-    content: '▼';
+    content: 'â–¼';
     position: absolute;
     right: 1.5rem;
     top: 50%;
@@ -5053,7 +5054,7 @@ footer {
 
 /* Community-section card overrides:
    Palauttaa overflow:hidden ja nollaa paddingin, jotta
-   .feature-card-img background-kuvat näkyvät oikein */
+   .feature-card-img background-kuvat nÃ¤kyvÃ¤t oikein */
 .community-section .feature-card {
     padding: 0;
     overflow: hidden;
@@ -5544,7 +5545,7 @@ footer {
     word-break: normal;
 }
 
-/* White balance fix for Syntymäpäivät card */
+/* White balance fix for SyntymÃ¤pÃ¤ivÃ¤t card */
 .card-white-balance {
     background-blend-mode: screen;
     background-color: rgba(255, 255, 255, 0.05);
@@ -6485,7 +6486,7 @@ footer {
     }
 }
 
-/* ===== Etusivu: kelluva "Esillä nyt" ===== */
+/* ===== Etusivu: kelluva "EsillÃ¤ nyt" ===== */
 .home-spotlight-widget {
     position: fixed;
     right: 20px;
@@ -6624,15 +6625,15 @@ footer {
 }
 
 /* ========================================================
-   MOBILE OPTIMIZATION – matkamaalle.fi inspired
-   v2026-05 – ONLY affects max-width: 768px
+   MOBILE OPTIMIZATION â€“ matkamaalle.fi inspired
+   v2026-05 â€“ ONLY affects max-width: 768px
    Desktop layout is completely unchanged.
    ======================================================== */
 
-/* --- Accent colours: rikkaampi väripaletti --- */
+/* --- Accent colours: rikkaampi vÃ¤ripaletti --- */
 :root {
-    --accent-coral:  #c94c36;   /* lämmin punainen / CTA */
-    --accent-forest: #2e7d52;   /* metsänvihreä */
+    --accent-coral:  #c94c36;   /* lÃ¤mmin punainen / CTA */
+    --accent-forest: #2e7d52;   /* metsÃ¤nvihreÃ¤ */
     --accent-amber:  #d97706;   /* kullankeltainen */
     --accent-teal:   #0e7490;   /* teal / lake blue */
 }
@@ -6646,7 +6647,7 @@ footer {
         background: #a83929;
     }
 
-    /* Hae-nappi saa voimakkaamman värin */
+    /* Hae-nappi saa voimakkaamman vÃ¤rin */
     .btn-search {
         background: var(--accent-coral);
         padding: 0 1.4rem;
@@ -6655,14 +6656,14 @@ footer {
         background: #a83929;
     }
 
-    /* need-card hover-nappi värimuutos */
+    /* need-card hover-nappi vÃ¤rimuutos */
     .btn-need:hover {
         background: var(--accent-coral);
         color: white;
     }
 
     /* ------------------------------------------------
-       NAVIGAATIO – tiiviimpi mobiilissa
+       NAVIGAATIO â€“ tiiviimpi mobiilissa
        ------------------------------------------------ */
     .top-nav .nav-container {
         padding: 0.45rem 0.75rem;
@@ -6678,7 +6679,7 @@ footer {
     }
 
     /* ------------------------------------------------
-       HERO-OSIO – kompaktimpi + keskitetty + WebView-ystävällinen
+       HERO-OSIO â€“ kompaktimpi + keskitetty + WebView-ystÃ¤vÃ¤llinen
        ------------------------------------------------ */
     header.hero-split {
         min-height: unset;
@@ -6740,7 +6741,7 @@ footer {
     .hero-right {
         min-height: 120px;
     }
-    /* WebView: poistaa Android-korostuksen (sininen hehku) hero-elementeiltä */
+    /* WebView: poistaa Android-korostuksen (sininen hehku) hero-elementeiltÃ¤ */
     header.hero-split,
     header.hero-split h1,
     header.hero-split h2,
@@ -6755,7 +6756,7 @@ footer {
     }
 
     /* ------------------------------------------------
-       SECTION-OTSIKOT – pienemmät mobiilissa
+       SECTION-OTSIKOT â€“ pienemmÃ¤t mobiilissa
        ------------------------------------------------ */
     h2 {
         font-size: 1.5rem;
@@ -6779,7 +6780,7 @@ footer {
     }
 
     /* ------------------------------------------------
-       PADDINGIT – koko näytön leveys käyttöön
+       PADDINGIT â€“ koko nÃ¤ytÃ¶n leveys kÃ¤yttÃ¶Ã¶n
        ------------------------------------------------ */
     main {
         padding: 0;
@@ -6797,7 +6798,7 @@ footer {
     }
 
     /* ------------------------------------------------
-       PALVELUKORTIT (need-grid) – 2 kolumnia, matalammat
+       PALVELUKORTIT (need-grid) â€“ 2 kolumnia, matalammat
        ------------------------------------------------ */
     .need-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -6827,7 +6828,7 @@ footer {
     .need-card p {
         display: none;
     }
-    /* btn-need peittää koko kortin näkymättömänä klikkialueena */
+    /* btn-need peittÃ¤Ã¤ koko kortin nÃ¤kymÃ¤ttÃ¶mÃ¤nÃ¤ klikkialueena */
     .btn-need {
         position: absolute;
         inset: 0;
@@ -6855,7 +6856,7 @@ footer {
     }
 
     /* ------------------------------------------------
-       FEATURE-KORTIT (Yhteisöllisyys, Elämykset)
+       FEATURE-KORTIT (YhteisÃ¶llisyys, ElÃ¤mykset)
        ------------------------------------------------ */
     .feature-grid {
         gap: 0.75rem;
@@ -6885,10 +6886,10 @@ footer {
     }
 
     /* ------------------------------------------------
-       HAKUOSIO – matkamaalle.fi-tyylinen kortti
+       HAKUOSIO â€“ matkamaalle.fi-tyylinen kortti
        ------------------------------------------------ */
 
-    /* Osion taustaväri: lämmin tumma teal */
+    /* Osion taustavÃ¤ri: lÃ¤mmin tumma teal */
     #search-section.bg-full-blue::before {
         background-color: #1b3a4b !important;
     }
@@ -6915,7 +6916,7 @@ footer {
         box-shadow: 0 8px 24px rgba(0,0,0,0.2) !important;
         overflow: hidden;
     }
-    /* Hakukortin sisäinen taustaoverlay tummempi */
+    /* Hakukortin sisÃ¤inen taustaoverlay tummempi */
     .hero-path.search-path > div[style*="background-image"] {
         opacity: 0.08 !important;
     }
@@ -6932,7 +6933,7 @@ footer {
         color: #0a2540 !important;
     }
 
-    /* Hakukentän wrapper */
+    /* HakukentÃ¤n wrapper */
     .search-input-wrapper {
         border-radius: 14px;
         padding: 5px 5px 5px 12px;
@@ -6973,7 +6974,7 @@ footer {
     }
 
     /* ------------------------------------------------
-       PAIKALLINEN SYÖTE -NAPPI
+       PAIKALLINEN SYÃ–TE -NAPPI
        ------------------------------------------------ */
     .feed-accordion-header {
         border-radius: 18px !important;
@@ -6998,7 +6999,7 @@ footer {
     }
 
     /* ------------------------------------------------
-       "MITÄ HALUAT TEHDÄ?" -GATE-SECTION
+       "MITÃ„ HALUAT TEHDÃ„?" -GATE-SECTION
        ------------------------------------------------ */
     .gate-section {
         padding-top: 2rem;
@@ -7114,7 +7115,7 @@ footer {
         gap: 0.75rem;
         padding: 0 0.75rem;
         display: grid;
-        grid-template-columns: repeat(2, 1fr); /* 2 kolumnia myös mobiilissa */
+        grid-template-columns: repeat(2, 1fr); /* 2 kolumnia myÃ¶s mobiilissa */
     }
     .category-card {
         padding: 1.25rem 0.5rem;
@@ -7175,11 +7176,11 @@ footer {
     }
     .rss-item .description {
         font-size: 0.85rem;
-        -webkit-line-clamp: 2; /* Vain 2 riviä tekstiä mobiilissa */
+        -webkit-line-clamp: 2; /* Vain 2 riviÃ¤ tekstiÃ¤ mobiilissa */
     }
 }
 
-/* Erittäin kapeat puhelimet (max 380px) */
+/* ErittÃ¤in kapeat puhelimet (max 380px) */
 @media (max-width: 380px) {
     .need-grid {
         gap: 0.4rem;
@@ -7196,7 +7197,7 @@ footer {
     }
 }
 
-/* Korjaus: poista punertava kosketuspalaute need-cardien päältä mobiilissa */
+/* Korjaus: poista punertava kosketuspalaute need-cardien pÃ¤Ã¤ltÃ¤ mobiilissa */
 @media (max-width: 768px) {
     .need-card {
         -webkit-tap-highlight-color: transparent;
@@ -7218,7 +7219,7 @@ footer {
         -webkit-tap-highlight-color: transparent;
     }
     
-    /* Kortin hover/active-tila - pehmeä skaalaus punaisen sijaan */
+    /* Kortin hover/active-tila - pehmeÃ¤ skaalaus punaisen sijaan */
     .need-card:active {
         transform: scale(0.98);
         transition: transform 0.05s ease;
@@ -7226,25 +7227,25 @@ footer {
 }
 
 /* =========================================
-   Elämykset & Kulttuuri -osion feature-kortit
-   Kuvien läpinäkyvyys vähennetty (0.1 → 0.25)
+   ElÃ¤mykset & Kulttuuri -osion feature-kortit
+   Kuvien lÃ¤pinÃ¤kyvyys vÃ¤hennetty (0.1 â†’ 0.25)
    ========================================= */
 
-/* Elämykset & Kulttuuri -korttien tyylit - kuvat näkyvät paremmin */
+/* ElÃ¤mykset & Kulttuuri -korttien tyylit - kuvat nÃ¤kyvÃ¤t paremmin */
 .experiences-section .feature-card {
     position: relative;
     overflow: hidden;
     transition: all 0.3s ease;
 }
 
-/* Korttien taustakuvan läpinäkyvyyden vähennys */
+/* Korttien taustakuvan lÃ¤pinÃ¤kyvyyden vÃ¤hennys */
 .experiences-section .feature-card > div[style*="background-image"],
 .experiences-section .feature-card .feature-card-img {
     position: relative;
     z-index: 1;
 }
 
-/* Haalea taustakuva koko kortin takana - vähennetään läpinäkyvyyttä */
+/* Haalea taustakuva koko kortin takana - vÃ¤hennetÃ¤Ã¤n lÃ¤pinÃ¤kyvyyttÃ¤ */
 .experiences-section .feature-card::before {
     content: '';
     position: absolute;
@@ -7254,13 +7255,13 @@ footer {
     bottom: 0;
     background-size: cover;
     background-position: center;
-    opacity: 0.25;  /* Muutettu 0.1 → 0.25 (enemmän näkyvyyttä) */
+    opacity: 0.25;  /* Muutettu 0.1 â†’ 0.25 (enemmÃ¤n nÃ¤kyvyyttÃ¤) */
     z-index: 0;
     transition: opacity 0.3s ease;
     pointer-events: none;
 }
 
-/* Yksittäisten korttien taustakuvat */
+/* YksittÃ¤isten korttien taustakuvat */
 .experiences-section .feature-card:nth-child(1)::before {
     background-image: url('kuvia/kuva_6.jpg');
 }
@@ -7280,7 +7281,7 @@ footer {
     transform: scale(1.02);
 }
 
-/* Pienoiskuva-alueen tyyli (yläosan kuva) */
+/* Pienoiskuva-alueen tyyli (ylÃ¤osan kuva) */
 .experiences-section .feature-card-img {
     position: relative;
     z-index: 2;
@@ -7295,11 +7296,11 @@ footer {
     transform: scale(1.05);
 }
 
-/* Kortin sisältöalue - 50% läpinäkyvyys, jotta taustakuva näkyy hieman */
+/* Kortin sisÃ¤ltÃ¶alue - 50% lÃ¤pinÃ¤kyvyys, jotta taustakuva nÃ¤kyy hieman */
 .experiences-section .feature-card-body {
     position: relative;
     z-index: 2;
-    background: rgba(255, 255, 255, 0.5); /* 50% läpinäkyvä valkoinen tausta */
+    background: rgba(255, 255, 255, 0.5); /* 50% lÃ¤pinÃ¤kyvÃ¤ valkoinen tausta */
     transition: background 0.3s ease;
 }
 
@@ -7319,7 +7320,7 @@ footer {
 
 /* =========================================
    GREEN ACCENT UTILITY CLASSES
-   Käytetään tuomaan vihreää väri-ilmettä
+   KÃ¤ytetÃ¤Ã¤n tuomaan vihreÃ¤Ã¤ vÃ¤ri-ilmettÃ¤
    eri sivuille kauppa.html:n tyyliin
    ========================================= */
 
@@ -7354,7 +7355,7 @@ footer {
     }
 }
 
-/* Sisäinen inline-banner (upotettava) */
+/* SisÃ¤inen inline-banner (upotettava) */
 .benefit-banner--inline {
     background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
     color: white;
@@ -7374,13 +7375,13 @@ footer {
     transform: scale(1.03);
 }
 
-/* Vihreä tekstikorostus */
+/* VihreÃ¤ tekstikorostus */
 .text-green {
     color: var(--accent-green);
     font-weight: 600;
 }
 
-/* Vihreä pehmeä taustalaatikko */
+/* VihreÃ¤ pehmeÃ¤ taustalaatikko */
 .bg-green-soft {
     background: var(--accent-green-light);
     border: 1px solid var(--accent-green-subtle);
@@ -7388,7 +7389,7 @@ footer {
     padding: 1.5rem;
 }
 
-/* Vihreä badge */
+/* VihreÃ¤ badge */
 .badge-green {
     display: inline-block;
     background: var(--accent-green);
@@ -7400,13 +7401,13 @@ footer {
     text-transform: uppercase;
 }
 
-/* Vihreä vasen reunaviiva */
+/* VihreÃ¤ vasen reunaviiva */
 .border-left-green {
     border-left: 4px solid var(--accent-green);
     padding-left: 1rem;
 }
 
-/* Vihreä reunuspainike */
+/* VihreÃ¤ reunuspainike */
 .btn-green-outline {
     display: inline-flex;
     align-items: center;
@@ -7517,7 +7518,7 @@ footer {
 
 
  / *   = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
-       S O M E - Y H T E I S � T   ( F a c e b o o k - r y h m � t ,   v i r a l l i s e t ) 
+       S O M E - Y H T E I S Ö T   ( F a c e b o o k - r y h m ä t ,   v i r a l l i s e t ) 
        = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =   * / 
  . s o m e - y h t e i s o t - g r i d   { 
          d i s p l a y :   g r i d ; 
@@ -7613,10 +7614,11 @@ footer {
  
  . s o m e - y h t e i s o - c a r d : h o v e r   . s o m e - y h t e i s o - c a r d _ _ a r r o w   { 
          c o l o r :   v a r ( - - p r i m a r y - b l u e ) ; 
- }  
+ } 
+ 
  
 /* =========================================
-   SOME-YHTEISÖT (PÄIVITETYT TYYLIT)
+   SOME-YHTEISÃ–T (PÃ„IVITETYT TYYLIT)
    ========================================= */
 .some-yhteisot-grid {
     display: grid;
