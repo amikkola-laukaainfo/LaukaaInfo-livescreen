@@ -92,7 +92,7 @@
                     <a href="${base}palvelun-esittely.html" class="nav-link${activeClass('palvelun-esittely')}">Palvelun esittely</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link${activeClass('kauppa')}" data-i18n="nav_shop">Kauppa <span class="arrow">▼</span></a>
+                    <a href="#" class="nav-link${activeClass('kauppa')}" data-i18n="nav_shop">Kauppa <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size:1.2em;vertical-align:middle"></span></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="${base}ilmoittaudu.html" data-i18n="nav_feed">Feed-julkaisu</a></li>
                         <li><a href="${base}kauppa.html" data-i18n="nav_shop_packages">Julkaisupaketit</a></li>
@@ -100,7 +100,7 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link${activeClass('hakulinkit')}" data-i18n="nav_search_links">Hakulinkit <span class="arrow">▼</span></a>
+                    <a href="#" class="nav-link${activeClass('hakulinkit')}" data-i18n="nav_search_links">Hakulinkit <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size:1.2em;vertical-align:middle"></span></span></a>
                     <ul class="dropdown-menu">
                         <li class="has-arrow">
                             <a href="#" data-i18n="nav_featured">Suosituimmat</a>
@@ -125,7 +125,7 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="${base}ajankohtaista.html" class="nav-link${activeClass('ajankohtaista')}" data-i18n="nav_current">Ajankohtaista <span class="arrow">▼</span></a>
+                    <a href="${base}ajankohtaista.html" class="nav-link${activeClass('ajankohtaista')}" data-i18n="nav_current">Ajankohtaista <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size:1.2em;vertical-align:middle"></span></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="${base}ajankohtaista.html#events-card" data-i18n="nav_events">Tapahtumat</a></li>
                         <li><a href="${base}ajankohtaista.html#news-card" data-i18n="nav_news">Tiedotteet</a></li>
@@ -134,13 +134,13 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link${activeClass('paatostenpolut')}" data-i18n="nav_paths">Päätösten polut <span class="arrow">▼</span></a>
+                    <a href="#" class="nav-link${activeClass('paatostenpolut')}" data-i18n="nav_paths">P&#228;&#228;t&#246;sten polut <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size:1.2em;vertical-align:middle"></span></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="${base}asiahaku.html" data-i18n="nav_search_explore">Hae ja tutki</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link${activeClass('kartat')}" data-i18n="nav_maps">Kartat &amp; Elämykset <span class="arrow">▼</span></a>
+                    <a href="#" class="nav-link${activeClass('kartat')}" data-i18n="nav_maps">Kartat &amp; El&#228;mykset <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size:1.2em;vertical-align:middle"></span></span></a>
                     <ul class="dropdown-menu" data-maps-nav-synced="1">
                         <li><a href="${base}kohdekartta.html" data-i18n="nav_map_points">Karttakohteet</a></li>
                         <li><a href="${base}tarinakartta.html" data-i18n="nav_story_map">Tarinakartta</a></li>
@@ -184,17 +184,17 @@
                 <h3 class="section-title" data-i18n="nav_search_links">HAKULINKIT</h3>
                 <ul class="menu-list">
                     <li class="menu-item has-submenu">
-                        <a href="#" class="submenu-toggle" data-i18n="nav_featured">Suosituimmat <span class="arrow">▼</span></a>
+                        <a href="#" class="submenu-toggle" data-i18n="nav_featured">Suosituimmat <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size:1.2em;vertical-align:middle"></span></span></a>
                         <ul class="submenu" id="sidebar-featured">
                         </ul>
                     </li>
                     <li class="menu-item has-submenu">
-                        <a href="#" class="submenu-toggle" data-i18n="nav_categories">Kategoriat <span class="arrow">▼</span></a>
+                        <a href="#" class="submenu-toggle" data-i18n="nav_categories">Kategoriat <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size:1.2em;vertical-align:middle"></span></span></a>
                         <ul class="submenu" id="sidebar-categories">
                         </ul>
                     </li>
                     <li class="menu-item has-submenu">
-                        <a href="#" class="submenu-toggle" data-i18n="nav_areas">Taajamat <span class="arrow">▼</span></a>
+                        <a href="#" class="submenu-toggle" data-i18n="nav_areas">Taajamat <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size:1.2em;vertical-align:middle"></span></span></a>
                         <ul class="submenu">
                             <li><a href="${base}laukaa.html" class="sidebar-link${sidebarActive(base + 'laukaa.html')}">Laukaa kk</a></li>
                             <li><a href="${base}leppavesi.html" class="sidebar-link${sidebarActive(base + 'leppavesi.html')}">Leppävesi</a></li>
@@ -231,7 +231,7 @@
 
             <!-- Korostettu osio: KARTAT & ELÄMYKSET -->
             <div class="menu-section highlight-section">
-                <h3 class="section-title" data-i18n="nav_maps">KARTAT &amp; ELÄMYKSET ⭐</h3>
+                <h3 class="section-title" data-i18n="nav_maps">KARTAT &amp; EL&#196;MYKSET &#11088;</h3>
                 <ul class="menu-list" data-maps-nav-synced="1">
                     <li class="menu-item"><a href="${base}kohdekartta.html" class="sidebar-link${sidebarActive(base + 'kohdekartta.html')}" data-i18n="nav_map_points">Karttakohteet</a></li>
                     <li class="menu-item"><a href="${base}tarinakartta.html" class="sidebar-link${sidebarActive(base + 'tarinakartta.html')}" data-i18n="nav_story_map">Tarinakartta</a></li>
