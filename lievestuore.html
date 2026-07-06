@@ -4,7 +4,25 @@
 
 
 
+
+
+
+
+
+
 <html lang="fi">
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -22,7 +40,19 @@
 
 
 
+
+
+
+
+
+
     <meta charset="UTF-8">
+
+
+
+
+
+
 
 
 
@@ -34,7 +64,19 @@
 
 
 
+
+
+
+
+
+
     <title id="page-title">Alue Â– LaukaaInfo: Laukaa taskussasi Â– tiedä, löydä ja osallistu.</title>
+
+
+
+
+
+
 
 
 
@@ -46,7 +88,19 @@
 
 
 
+
+
+
+
+
+
         content="Lokalisoituja palveluita, yrityksiä ja uutisia Laukaan alueelta.">
+
+
+
+
+
+
 
 
 
@@ -64,13 +118,37 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
     <!-- PWA -->
 
 
 
 
 
+
+
+
+
+
+
     <link rel="manifest" href="manifest.json">
+
+
+
+
+
+
 
 
 
@@ -88,7 +166,25 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
     <!-- Fonts & Styles -->
+
+
+
+
+
+
 
 
 
@@ -100,7 +196,19 @@
 
 
 
+
+
+
+
+
+
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+
+
+
+
+
 
 
 
@@ -112,7 +220,19 @@
 
 
 
+
+
+
+
+
+
         href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Outfit:wght@100..900&display=swap"
+
+
+
+
+
+
 
 
 
@@ -130,7 +250,25 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
     <!-- Leaflet Map -->
+
+
+
+
+
+
 
 
 
@@ -142,7 +280,19 @@
 
 
 
+
+
+
+
+
+
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+
+
+
+
+
+
 
 
 
@@ -160,7 +310,25 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
     <link rel="stylesheet" href="style.css?v=20260420-2">
+
+
+
+
+
+
 
 
 
@@ -172,7 +340,19 @@
 
 
 
+
+
+
+
+
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+
+
+
+
+
 
 
 
@@ -184,7 +364,19 @@
 
 
 
+
+
+
+
+
+
     <style>
+
+
+
+
+
+
 
 
 
@@ -196,7 +388,19 @@
 
 
 
+
+
+
+
+
+
             background: linear-gradient(rgba(0, 86, 179, 0.3), rgba(0, 61, 128, 0.3)), url('taivas_tausta.png');
+
+
+
+
+
+
 
 
 
@@ -208,7 +412,19 @@
 
 
 
+
+
+
+
+
+
             background-position: center;
+
+
+
+
+
+
 
 
 
@@ -220,7 +436,19 @@
 
 
 
+
+
+
+
+
+
             padding: 4rem 1rem;
+
+
+
+
+
+
 
 
 
@@ -232,7 +460,19 @@
 
 
 
+
+
+
+
+
+
             margin-bottom: 2rem;
+
+
+
+
+
+
 
 
 
@@ -244,7 +484,25 @@
 
 
 
+
+
+
+
+
+
         }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -262,7 +520,19 @@
 
 
 
+
+
+
+
+
+
             background: white;
+
+
+
+
+
+
 
 
 
@@ -274,7 +544,19 @@
 
 
 
+
+
+
+
+
+
             border-radius: var(--border-radius);
+
+
+
+
+
+
 
 
 
@@ -286,7 +568,19 @@
 
 
 
+
+
+
+
+
+
             box-shadow: var(--shadow);
+
+
+
+
+
+
 
 
 
@@ -298,7 +592,25 @@
 
 
 
+
+
+
+
+
+
         }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -316,7 +628,19 @@
 
 
 
+
+
+
+
+
+
             background: #f0f7ff;
+
+
+
+
+
+
 
 
 
@@ -328,13 +652,37 @@
 
 
 
+
+
+
+
+
+
             margin: 4rem -1rem -4rem -1rem;
 
 
 
 
 
+
+
+
+
+
+
         }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -352,7 +700,19 @@
 
 
 
+
+
+
+
+
+
             max-width: 1200px;
+
+
+
+
+
+
 
 
 
@@ -364,7 +724,25 @@
 
 
 
+
+
+
+
+
+
         }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -382,7 +760,19 @@
 
 
 
+
+
+
+
+
+
         .exploration-paths-wrapper {
+
+
+
+
+
+
 
 
 
@@ -394,13 +784,37 @@
 
 
 
+
+
+
+
+
+
             padding: 0 40px;
 
 
 
 
 
+
+
+
+
+
+
         }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -418,7 +832,19 @@
 
 
 
+
+
+
+
+
+
             padding: 20px 0 50px 0;
+
+
+
+
+
+
 
 
 
@@ -430,7 +856,25 @@
 
 
 
+
+
+
+
+
+
         }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -448,7 +892,19 @@
 
 
 
+
+
+
+
+
+
             background: white;
+
+
+
+
+
+
 
 
 
@@ -460,7 +916,19 @@
 
 
 
+
+
+
+
+
+
             padding: 2rem;
+
+
+
+
+
+
 
 
 
@@ -472,7 +940,19 @@
 
 
 
+
+
+
+
+
+
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+
+
+
+
+
+
 
 
 
@@ -484,7 +964,19 @@
 
 
 
+
+
+
+
+
+
             height: auto;
+
+
+
+
+
+
 
 
 
@@ -496,7 +988,19 @@
 
 
 
+
+
+
+
+
+
             flex-direction: column;
+
+
+
+
+
+
 
 
 
@@ -508,7 +1012,19 @@
 
 
 
+
+
+
+
+
+
             border: 1px solid #f0f4f8;
+
+
+
+
+
+
 
 
 
@@ -520,7 +1036,25 @@
 
 
 
+
+
+
+
+
+
         }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -538,7 +1072,19 @@
 
 
 
+
+
+
+
+
+
             transform: translateY(-5px);
+
+
+
+
+
+
 
 
 
@@ -550,7 +1096,25 @@
 
 
 
+
+
+
+
+
+
         }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -568,7 +1132,19 @@
 
 
 
+
+
+
+
+
+
             font-size: 2.5rem;
+
+
+
+
+
+
 
 
 
@@ -580,7 +1156,25 @@
 
 
 
+
+
+
+
+
+
         }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -598,7 +1192,19 @@
 
 
 
+
+
+
+
+
+
             font-family: 'Outfit', sans-serif;
+
+
+
+
+
+
 
 
 
@@ -610,7 +1216,19 @@
 
 
 
+
+
+
+
+
+
             margin-bottom: 1rem;
+
+
+
+
+
+
 
 
 
@@ -622,7 +1240,25 @@
 
 
 
+
+
+
+
+
+
         }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -640,7 +1276,19 @@
 
 
 
+
+
+
+
+
+
             font-size: 0.95rem;
+
+
+
+
+
+
 
 
 
@@ -652,7 +1300,19 @@
 
 
 
+
+
+
+
+
+
             margin-bottom: 1.5rem;
+
+
+
+
+
+
 
 
 
@@ -664,13 +1324,37 @@
 
 
 
+
+
+
+
+
+
             line-height: 1.5;
 
 
 
 
 
+
+
+
+
+
+
         }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -688,7 +1372,19 @@
 
 
 
+
+
+
+
+
+
             background: #0056b3;
+
+
+
+
+
+
 
 
 
@@ -700,7 +1396,19 @@
 
 
 
+
+
+
+
+
+
             padding: 0.75rem 1.5rem;
+
+
+
+
+
+
 
 
 
@@ -712,7 +1420,19 @@
 
 
 
+
+
+
+
+
+
             text-decoration: none;
+
+
+
+
+
+
 
 
 
@@ -724,7 +1444,19 @@
 
 
 
+
+
+
+
+
+
             transition: background 0.2s;
+
+
+
+
+
+
 
 
 
@@ -736,7 +1468,25 @@
 
 
 
+
+
+
+
+
+
         }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -754,13 +1504,37 @@
 
 
 
+
+
+
+
+
+
             background: #004494;
 
 
 
 
 
+
+
+
+
+
+
         }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -778,7 +1552,19 @@
 
 
 
+
+
+
+
+
+
             color: #0056b3;
+
+
+
+
+
+
 
 
 
@@ -790,7 +1576,19 @@
 
 
 
+
+
+
+
+
+
             width: 44px;
+
+
+
+
+
+
 
 
 
@@ -802,7 +1600,19 @@
 
 
 
+
+
+
+
+
+
             border-radius: 50%;
+
+
+
+
+
+
 
 
 
@@ -814,7 +1624,25 @@
 
 
 
+
+
+
+
+
+
         }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -832,7 +1660,19 @@
 
 
 
+
+
+
+
+
+
             font-size: 1.2rem;
+
+
+
+
+
+
 
 
 
@@ -844,7 +1684,25 @@
 
 
 
+
+
+
+
+
+
         }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -862,7 +1720,19 @@
 
 
 
+
+
+
+
+
+
             background: #0056b3;
+
+
+
+
+
+
 
 
 
@@ -874,7 +1744,19 @@
 
 
 
+
+
+
+
+
+
     </style>
+
+
+
+
+
+
 
 
 
@@ -892,7 +1774,25 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 <body>
+
+
+
+
+
+
 
 
 
@@ -904,7 +1804,19 @@
 
 
 
+
+
+
+
+
+
         <div class="nav-container">
+
+
+
+
+
+
 
 
 
@@ -916,7 +1828,19 @@
 
 
 
+
+
+
+
+
+
                 <img src="logo.png" alt="LaukaaInfo Logo">
+
+
+
+
+
+
 
 
 
@@ -928,7 +1852,19 @@
 
 
 
+
+
+
+
+
+
             </a>
+
+
+
+
+
+
 
 
 
@@ -940,13 +1876,31 @@
 
 
 
+
+
+
+
+
+
                 <ul class="nav-links">
 
 
 
 
 
+
+
+
+
+
+
                     <li class="nav-item">
+
+
+
+
+
+
 
 
 
@@ -958,13 +1912,31 @@
 
 
 
+
+
+
+
+
+
                     </li>
 
 
 
 
 
+
+
+
+
+
+
                     <li class="nav-item">
+
+
+
+
+
+
 
 
 
@@ -976,7 +1948,19 @@
 
 
 
+
+
+
+
+
+
                         <ul class="dropdown-menu">
+
+
+
+
+
+
 
 
 
@@ -988,7 +1972,19 @@
 
 
 
+
+
+
+
+
+
                             <li><a href="kauppa.html" data-i18n="nav_shop_packages">Julkaisupaketit</a></li>
+
+
+
+
+
+
 
 
 
@@ -1000,7 +1996,19 @@
 
 
 
+
+
+
+
+
+
                         </ul>
+
+
+
+
+
+
 
 
 
@@ -1012,7 +2020,19 @@
 
 
 
+
+
+
+
+
+
                     <li class="nav-item">
+
+
+
+
+
+
 
 
 
@@ -1024,13 +2044,31 @@
 
 
 
+
+
+
+
+
+
                         <ul class="dropdown-menu">
 
 
 
 
 
+
+
+
+
+
+
                             <li class="has-arrow">
+
+
+
+
+
+
 
 
 
@@ -1042,7 +2080,19 @@
 
 
 
+
+
+
+
+
+
                                 <ul class="nested-menu" id="nav-featured">
+
+
+
+
+
+
 
 
 
@@ -1054,13 +2104,31 @@
 
 
 
+
+
+
+
+
+
                             </li>
 
 
 
 
 
+
+
+
+
+
+
                             <li class="has-arrow">
+
+
+
+
+
+
 
 
 
@@ -1072,7 +2140,19 @@
 
 
 
+
+
+
+
+
+
                                 <ul class="nested-menu" id="nav-categories">
+
+
+
+
+
+
 
 
 
@@ -1084,7 +2164,19 @@
 
 
 
+
+
+
+
+
+
                             </li>
+
+
+
+
+
+
 
 
 
@@ -1096,7 +2188,19 @@
 
 
 
+
+
+
+
+
+
                                 <a href="#" data-i18n="nav_areas">Taajamat</a>
+
+
+
+
+
+
 
 
 
@@ -1108,7 +2212,19 @@
 
 
 
+
+
+
+
+
+
                                     <li><a href="laukaa.html">Laukaa kk</a></li>
+
+
+
+
+
+
 
 
 
@@ -1120,7 +2236,19 @@
 
 
 
+
+
+
+
+
+
                                     <li><a href="lievestuore.html">Lievestuore</a></li>
+
+
+
+
+
+
 
 
 
@@ -1132,7 +2260,19 @@
 
 
 
+
+
+
+
+
+
                                     <li><a href="vihtavuori.html">Vihtavuori</a></li>
+
+
+
+
+
+
 
 
 
@@ -1144,7 +2284,19 @@
 
 
 
+
+
+
+
+
+
                             </li>
+
+
+
+
+
+
 
 
 
@@ -1156,13 +2308,31 @@
 
 
 
+
+
+
+
+
+
                     </li>
 
 
 
 
 
+
+
+
+
+
+
                     <li class="nav-item">
+
+
+
+
+
+
 
 
 
@@ -1174,7 +2344,19 @@
 
 
 
+
+
+
+
+
+
                         <ul class="dropdown-menu">
+
+
+
+
+
+
 
 
 
@@ -1186,7 +2368,19 @@
 
 
 
+
+
+
+
+
+
                             <li><a href="ajankohtaista.html#news-card" data-i18n="nav_news">Tiedotteet</a></li>
+
+
+
+
+
+
 
 
 
@@ -1198,7 +2392,19 @@
 
 
 
+
+
+
+
+
+
                             <li><a href="ajankohtaista.html#feedback-card" data-i18n="nav_feedback">Palautteet</a></li>
+
+
+
+
+
+
 
 
 
@@ -1210,13 +2416,31 @@
 
 
 
+
+
+
+
+
+
                     </li>
 
 
 
 
 
+
+
+
+
+
+
                     <li class="nav-item">
+
+
+
+
+
+
 
 
 
@@ -1228,7 +2452,19 @@
 
 
 
+
+
+
+
+
+
                         <ul class="dropdown-menu">
+
+
+
+
+
+
 
 
 
@@ -1240,13 +2476,31 @@
 
 
 
+
+
+
+
+
+
                         </ul>
 
 
 
 
 
+
+
+
+
+
+
                     </li>
+
+
+
+
+
+
 
 
 
@@ -1258,7 +2512,19 @@
 
 
 
+
+
+
+
+
+
                         <a href="#" class="nav-link" data-i18n="nav_maps">Kartat &amp; Elämykset <span class="arrow">â–¼</span></a>
+
+
+
+
+
+
 
 
 
@@ -1270,7 +2536,19 @@
 
 
 
+
+
+
+
+
+
                             <li><a href="kohdekartta.html" data-i18n="nav_map_points">Karttakohteet</a></li>
+
+
+
+
+
+
 
 
 
@@ -1282,7 +2560,19 @@
 
 
 
+
+
+
+
+
+
                             <li><a href="tarinakartta.html#kavelyreitit-section" data-i18n="nav_route_map">Reittikartta</a></li>
+
+
+
+
+
+
 
 
 
@@ -1294,7 +2584,19 @@
 
 
 
+
+
+
+
+
+
                             <li><a href="kadonneet.html" data-i18n="nav_lost_found">Kadonneet &amp; löydetyt</a></li>
+
+
+
+
+
+
 
 
 
@@ -1306,7 +2608,19 @@
 
 
 
+
+
+
+
+
+
                     </li>
+
+
+
+
+
+
 
 
 
@@ -1318,7 +2632,19 @@
 
 
 
+
+
+
+
+
+
             </div>
+
+
+
+
+
+
 
 
 
@@ -1330,7 +2656,19 @@
 
 
 
+
+
+
+
+
+
                 <button class="lang-btn" onclick="i18n.setLanguage('fi')" data-lang="fi">FI</button>
+
+
+
+
+
+
 
 
 
@@ -1342,7 +2680,19 @@
 
 
 
+
+
+
+
+
+
             </div>
+
+
+
+
+
+
 
 
 
@@ -1354,19 +2704,43 @@
 
 
 
-                <span></span>
 
-
-
-
-
-                <span></span>
 
 
 
 
 
                 <span></span>
+
+
+
+
+
+
+
+
+
+
+
+                <span></span>
+
+
+
+
+
+
+
+
+
+
+
+                <span></span>
+
+
+
+
+
+
 
 
 
@@ -1378,7 +2752,19 @@
 
 
 
+
+
+
+
+
+
         </div>
+
+
+
+
+
+
 
 
 
@@ -1396,7 +2782,25 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
     <!-- Sidebar Overlay -->
+
+
+
+
+
+
 
 
 
@@ -1414,7 +2818,25 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
     <!-- Sidebar Menu -->
+
+
+
+
+
+
 
 
 
@@ -1426,7 +2848,19 @@
 
 
 
+
+
+
+
+
+
         <div class="sidebar-header">
+
+
+
+
+
+
 
 
 
@@ -1438,7 +2872,19 @@
 
 
 
+
+
+
+
+
+
                 <img src="logo.png" alt="LaukaaInfo Logo">
+
+
+
+
+
+
 
 
 
@@ -1450,7 +2896,19 @@
 
 
 
+
+
+
+
+
+
             </a>
+
+
+
+
+
+
 
 
 
@@ -1462,7 +2920,25 @@
 
 
 
+
+
+
+
+
+
         </div>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1480,13 +2956,31 @@
 
 
 
+
+
+
+
+
+
             <div class="menu-section">
 
 
 
 
 
+
+
+
+
+
+
                 <ul class="menu-list">
+
+
+
+
+
+
 
 
 
@@ -1498,13 +2992,31 @@
 
 
 
+
+
+
+
+
+
                 </ul>
 
 
 
 
 
+
+
+
+
+
+
             </div>
+
+
+
+
+
+
 
 
 
@@ -1516,7 +3028,19 @@
 
 
 
+
+
+
+
+
+
             <div class="menu-section">
+
+
+
+
+
+
 
 
 
@@ -1528,7 +3052,19 @@
 
 
 
+
+
+
+
+
+
                 <ul class="menu-list">
+
+
+
+
+
+
 
 
 
@@ -1540,7 +3076,19 @@
 
 
 
+
+
+
+
+
+
                     <li class="menu-item"><a href="kauppa.html" class="sidebar-link" data-i18n="nav_shop_packages">Julkaisupaketit</a></li>
+
+
+
+
+
+
 
 
 
@@ -1552,13 +3100,37 @@
 
 
 
+
+
+
+
+
+
                 </ul>
 
 
 
 
 
+
+
+
+
+
+
             </div>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1576,7 +3148,19 @@
 
 
 
+
+
+
+
+
+
             <div class="menu-section">
+
+
+
+
+
+
 
 
 
@@ -1588,13 +3172,31 @@
 
 
 
+
+
+
+
+
+
                 <ul class="menu-list">
 
 
 
 
 
+
+
+
+
+
+
                     <li class="menu-item has-submenu">
+
+
+
+
+
+
 
 
 
@@ -1606,7 +3208,19 @@
 
 
 
+
+
+
+
+
+
                         <ul class="submenu" id="sidebar-featured">
+
+
+
+
+
+
 
 
 
@@ -1618,13 +3232,31 @@
 
 
 
+
+
+
+
+
+
                     </li>
 
 
 
 
 
+
+
+
+
+
+
                     <li class="menu-item has-submenu">
+
+
+
+
+
+
 
 
 
@@ -1636,7 +3268,19 @@
 
 
 
+
+
+
+
+
+
                         <ul class="submenu" id="sidebar-categories">
+
+
+
+
+
+
 
 
 
@@ -1648,7 +3292,19 @@
 
 
 
+
+
+
+
+
+
                     </li>
+
+
+
+
+
+
 
 
 
@@ -1660,7 +3316,19 @@
 
 
 
+
+
+
+
+
+
                         <a href="#" class="submenu-toggle" data-i18n="nav_areas">Taajamat <span class="arrow">â–¼</span></a>
+
+
+
+
+
+
 
 
 
@@ -1672,7 +3340,19 @@
 
 
 
+
+
+
+
+
+
                             <li><a href="laukaa.html" class="sidebar-link">Laukaa kk</a></li>
+
+
+
+
+
+
 
 
 
@@ -1684,7 +3364,19 @@
 
 
 
+
+
+
+
+
+
                             <li><a href="lievestuore.html" class="sidebar-link">Lievestuore</a></li>
+
+
+
+
+
+
 
 
 
@@ -1696,7 +3388,19 @@
 
 
 
+
+
+
+
+
+
                             <li><a href="vihtavuori.html" class="sidebar-link">Vihtavuori</a></li>
+
+
+
+
+
+
 
 
 
@@ -1708,7 +3412,19 @@
 
 
 
+
+
+
+
+
+
                     </li>
+
+
+
+
+
+
 
 
 
@@ -1720,7 +3436,25 @@
 
 
 
+
+
+
+
+
+
             </div>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1738,7 +3472,19 @@
 
 
 
+
+
+
+
+
+
             <div class="menu-section">
+
+
+
+
+
+
 
 
 
@@ -1750,7 +3496,19 @@
 
 
 
+
+
+
+
+
+
                 <ul class="menu-list">
+
+
+
+
+
+
 
 
 
@@ -1762,7 +3520,19 @@
 
 
 
+
+
+
+
+
+
                     </li>
+
+
+
+
+
+
 
 
 
@@ -1774,7 +3544,19 @@
 
 
 
+
+
+
+
+
+
                     </li>
+
+
+
+
+
+
 
 
 
@@ -1786,7 +3568,19 @@
 
 
 
+
+
+
+
+
+
                             class="sidebar-link" data-i18n="nav_decisions">Päätöksenteko</a></li>
+
+
+
+
+
+
 
 
 
@@ -1798,7 +3592,19 @@
 
 
 
+
+
+
+
+
+
                     </li>
+
+
+
+
+
+
 
 
 
@@ -1810,7 +3616,25 @@
 
 
 
+
+
+
+
+
+
             </div>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1828,7 +3652,19 @@
 
 
 
+
+
+
+
+
+
             <div class="menu-section">
+
+
+
+
+
+
 
 
 
@@ -1840,7 +3676,19 @@
 
 
 
+
+
+
+
+
+
                 <ul class="menu-list">
+
+
+
+
+
+
 
 
 
@@ -1852,13 +3700,37 @@
 
 
 
+
+
+
+
+
+
                 </ul>
 
 
 
 
 
+
+
+
+
+
+
             </div>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1876,7 +3748,19 @@
 
 
 
+
+
+
+
+
+
             <div class="menu-section highlight-section">
+
+
+
+
+
+
 
 
 
@@ -1888,7 +3772,19 @@
 
 
 
+
+
+
+
+
+
                 <ul class="menu-list">
+
+
+
+
+
+
 
 
 
@@ -1900,7 +3796,19 @@
 
 
 
+
+
+
+
+
+
                     <li class="menu-item"><a href="tarinakartta.html" class="sidebar-link" data-i18n="nav_story_map">Tarinakartta</a></li>
+
+
+
+
+
+
 
 
 
@@ -1912,7 +3820,19 @@
 
 
 
+
+
+
+
+
+
                     <li class="menu-item"><a href="muistokartta.html" class="sidebar-link" data-i18n="nav_memorial_map">Muistokartta</a></li>
+
+
+
+
+
+
 
 
 
@@ -1924,7 +3844,19 @@
 
 
 
+
+
+
+
+
+
                     </li>
+
+
+
+
+
+
 
 
 
@@ -1936,13 +3868,31 @@
 
 
 
+
+
+
+
+
+
             </div>
 
 
 
 
 
+
+
+
+
+
+
         </div>
+
+
+
+
+
+
 
 
 
@@ -1966,6 +3916,24 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
 
 
@@ -1978,6 +3946,18 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
     
 
 
@@ -1990,7 +3970,31 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
     
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2008,7 +4012,19 @@
 
 
 
+
+
+
+
+
+
         <section id="region-hero" class="region-hero">
+
+
+
+
+
+
 
 
 
@@ -2020,7 +4036,19 @@
 
 
 
+
+
+
+
+
+
                 <h1 id="region-title">Ladataan aluetta...</h1>
+
+
+
+
+
+
 
 
 
@@ -2038,7 +4066,25 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
                 <div class="main-search-box" style="margin-top: 2rem;">
+
+
+
+
+
+
 
 
 
@@ -2050,7 +4096,19 @@
 
 
 
+
+
+
+
+
+
                         <input type="text" id="company-search"
+
+
+
+
+
+
 
 
 
@@ -2062,7 +4120,19 @@
 
 
 
+
+
+
+
+
+
                             autocomplete="off" data-i18n-placeholder="placeholder_search_region">
+
+
+
+
+
+
 
 
 
@@ -2074,7 +4144,19 @@
 
 
 
+
+
+
+
+
+
                         <button id="search-btn" class="btn-search" data-i18n="btn_search_short">Hae</button>
+
+
+
+
+
+
 
 
 
@@ -2086,7 +4168,19 @@
 
 
 
+
+
+
+
+
+
                     <p class="location-hint" data-i18n="region_search_hint">Kirjoita tai klikkaa sijaintisi ja löydä lähimmät kohteet, tapahtumat tai
+
+
+
+
+
+
 
 
 
@@ -2098,7 +4192,25 @@
 
 
 
+
+
+
+
+
+
                 </div>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2116,13 +4228,37 @@
 
 
 
+
+
+
+
+
+
             </div>
 
 
 
 
 
+
+
+
+
+
+
         </section>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2140,7 +4276,19 @@
 
 
 
+
+
+
+
+
+
         <section class="bg-full-white" style="padding: 1.5rem 0; margin-bottom: 2rem;">
+
+
+
+
+
+
 
 
 
@@ -2152,37 +4300,79 @@
 
 
 
+
+
+
+
+
+
                 <div style="background: #eef2ff; border: 2px solid #c7d2fe; border-radius: 12px; padding: 1.5rem; display: inline-block; width: 100%; box-sizing: border-box;">
+
+
+
 
 
                       <h3 style="color: #4338ca; font-size: 1.3rem; margin-top: 0; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
 
 
+
+
+
                           <span class="iconify" data-icon="material-symbols-light:mail-outline" style="font-size: 1.5em;"></span> Tarjouspyyntö alueen yrityksille
+
+
+
 
 
                       </h3>
 
 
+
+
+
                       <p style="color: #4f46e5; font-size: 1.05rem; margin-bottom: 1rem; font-weight: 500;">
+
+
+
 
 
                           Tavoita yhdellä viestillä palveluun sähköpostinsa lisänneet yritykset.
 
 
+
+
+
                       </p>
+
+
+
 
 
                       <a href="https://mediazoo.fi/laukaainfo-web/tarjouspyynto/ohjeet.html" target="_blank" style="display: inline-flex; align-items: center; gap: 0.5rem; background: #4f46e5; color: white; padding: 0.6rem 1.5rem; border-radius: 8px; text-decoration: none; font-weight: 600; transition: background 0.2s;">
 
 
+
+
+
                           Aloita tarjouspyyntö &raquo;
+
+
+
 
 
                       </a>
 
 
+
+
+
                   </div>
+
+
+
+
+
+
 
 
 
@@ -2194,7 +4384,19 @@
 
 
 
+
+
+
+
+
+
         </section>
+
+
+
+
+
+
 
 
 
@@ -2206,7 +4408,19 @@
 
 
 
+
+
+
+
+
+
             <div class="map-layout-wrapper">
+
+
+
+
+
+
 
 
 
@@ -2224,7 +4438,25 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
                 <!-- Toggle-painike kartan päällä -->
+
+
+
+
+
+
 
 
 
@@ -2236,7 +4468,19 @@
 
 
 
+
+
+
+
+
+
                     <span class="icon">ðŸš™</span>
+
+
+
+
+
+
 
 
 
@@ -2248,7 +4492,19 @@
 
 
 
+
+
+
+
+
+
                     <span id="service-count-badge" class="count-badge">0</span>
+
+
+
+
+
+
 
 
 
@@ -2266,7 +4522,25 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
                 <div id="map-sidebar" class="map-sidebar">
+
+
+
+
+
+
 
 
 
@@ -2278,7 +4552,19 @@
 
 
 
+
+
+
+
+
+
                     
+
+
+
+
+
+
 
 
 
@@ -2290,7 +4576,19 @@
 
 
 
+
+
+
+
+
+
                         <h4><span class="icon">ðŸš™</span> <span data-i18n="label_services_in_area">Palvelut alueella</span></h4>
+
+
+
+
+
+
 
 
 
@@ -2302,7 +4600,19 @@
 
 
 
+
+
+
+
+
+
                             Nämä yritykset tarjoavat palveluitaan tällä alueella (esim. kotiinkuljetus tai etäpalvelu).
+
+
+
+
+
+
 
 
 
@@ -2320,7 +4630,25 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
                         <div class="sidebar-sub-group" id="sidebar-group-on-map">
+
+
+
+
+
+
 
 
 
@@ -2332,7 +4660,19 @@
 
 
 
+
+
+
+
+
+
                             <ul id="service-areas-on-map-list" class="sidebar-list">
+
+
+
+
+
+
 
 
 
@@ -2344,13 +4684,31 @@
 
 
 
+
+
+
+
+
+
                             </ul>
 
 
 
 
 
+
+
+
+
+
+
                         </div>
+
+
+
+
+
+
 
 
 
@@ -2362,7 +4720,19 @@
 
 
 
+
+
+
+
+
+
                             <div class="sidebar-sub-label">ðŸŒ <span data-i18n="label_not_visible_on_map">Ei näy kartalla</span></div>
+
+
+
+
+
+
 
 
 
@@ -2374,7 +4744,19 @@
 
 
 
+
+
+
+
+
+
                                 <li class="empty-msg" data-i18n="rss_all_visible">Kaikki näkyvissä</li>
+
+
+
+
+
+
 
 
 
@@ -2386,7 +4768,19 @@
 
 
 
+
+
+
+
+
+
                         </div>
+
+
+
+
+
+
 
 
 
@@ -2398,7 +4792,19 @@
 
 
 
+
+
+
+
+
+
                 </div>
+
+
+
+
+
+
 
 
 
@@ -2410,7 +4816,25 @@
 
 
 
+
+
+
+
+
+
         </section>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2428,7 +4852,19 @@
 
 
 
+
+
+
+
+
+
             <div id="seo-info" class="seo-text-box" style="max-width: 1200px; margin: 0 auto;">
+
+
+
+
+
+
 
 
 
@@ -2440,7 +4876,19 @@
 
 
 
+
+
+
+
+
+
                     <!-- Automaattinen teksti -->
+
+
+
+
+
+
 
 
 
@@ -2452,13 +4900,37 @@
 
 
 
+
+
+
+
+
+
             </div>
 
 
 
 
 
+
+
+
+
+
+
         </section>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2476,7 +4948,19 @@
 
 
 
+
+
+
+
+
+
             <h2 id="categories-title" data-i18n="title_categories_in_area">Kategoriat alueella</h2>
+
+
+
+
+
+
 
 
 
@@ -2488,7 +4972,19 @@
 
 
 
+
+
+
+
+
+
                 <div class="loading-spinner" data-i18n="loading_categories">Ladataan kategorioita...</div>
+
+
+
+
+
+
 
 
 
@@ -2500,7 +4996,25 @@
 
 
 
+
+
+
+
+
+
         </section>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2518,7 +5032,19 @@
 
 
 
+
+
+
+
+
+
             <h2 id="featured-title">Suositellut yritykset</h2>
+
+
+
+
+
+
 
 
 
@@ -2530,7 +5056,25 @@
 
 
 
+
+
+
+
+
+
         </section>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2548,7 +5092,19 @@
 
 
 
+
+
+
+
+
+
             <div id="exploration-paths-container" style="max-width: 1200px; margin: 0 auto;">
+
+
+
+
+
+
 
 
 
@@ -2560,7 +5116,19 @@
 
 
 
+
+
+
+
+
+
                 
+
+
+
+
+
+
 
 
 
@@ -2572,7 +5140,19 @@
 
 
 
+
+
+
+
+
+
                     <div class="exploration-paths swiper">
+
+
+
+
+
+
 
 
 
@@ -2584,7 +5164,19 @@
 
 
 
+
+
+
+
+
+
                             <div class="exploration-card swiper-slide">
+
+
+
+
+
+
 
 
 
@@ -2596,7 +5188,19 @@
 
 
 
+
+
+
+
+
+
                                 <h3>Pysähdy matkalla</h3>
+
+
+
+
+
+
 
 
 
@@ -2608,7 +5212,19 @@
 
 
 
+
+
+
+
+
+
                                 <a href="tarinakartta.html?category=Matkailu&topic=Lievestuore&step=4" class="btn-explore">Avaa kartalla</a>
+
+
+
+
+
+
 
 
 
@@ -2620,7 +5236,19 @@
 
 
 
+
+
+
+
+
+
                             <div class="exploration-card swiper-slide">
+
+
+
+
+
+
 
 
 
@@ -2632,7 +5260,19 @@
 
 
 
+
+
+
+
+
+
                                 <h3>Päiväretki</h3>
+
+
+
+
+
+
 
 
 
@@ -2644,7 +5284,19 @@
 
 
 
+
+
+
+
+
+
                                 <a href="tarinakartta.html?category=Matkailu&topic=Lievestuore&step=5" class="btn-explore">Avaa kartalla</a>
+
+
+
+
+
+
 
 
 
@@ -2656,7 +5308,19 @@
 
 
 
+
+
+
+
+
+
                             <div class="exploration-card swiper-slide">
+
+
+
+
+
+
 
 
 
@@ -2668,7 +5332,19 @@
 
 
 
+
+
+
+
+
+
                                 <h3>Historia</h3>
+
+
+
+
+
+
 
 
 
@@ -2680,7 +5356,19 @@
 
 
 
+
+
+
+
+
+
                                 <a href="tarinakartta.html?category=Matkailu&topic=Lievestuore&step=6" class="btn-explore">Avaa kartalla</a>
+
+
+
+
+
+
 
 
 
@@ -2692,7 +5380,19 @@
 
 
 
+
+
+
+
+
+
                             <div class="exploration-card swiper-slide">
+
+
+
+
+
+
 
 
 
@@ -2704,7 +5404,19 @@
 
 
 
+
+
+
+
+
+
                                 <h3>Luonto</h3>
+
+
+
+
+
+
 
 
 
@@ -2716,13 +5428,31 @@
 
 
 
+
+
+
+
+
+
                                 <a href="tarinakartta.html?category=Matkailu&topic=Lievestuore&step=7" class="btn-explore">Avaa kartalla</a>
 
 
 
 
 
+
+
+
+
+
+
                             </div>
+
+
+
+
+
+
 
 
 
@@ -2734,7 +5464,19 @@
 
 
 
+
+
+
+
+
+
                                 <div class="icon">ðŸŽ¡</div>
+
+
+
+
+
+
 
 
 
@@ -2746,7 +5488,19 @@
 
 
 
+
+
+
+
+
+
                                 <p>Vietä kesän hauskun päivä Nokkakiven huvipuistossa, jossa viihtyy koko perhe.</p>
+
+
+
+
+
+
 
 
 
@@ -2758,7 +5512,19 @@
 
 
 
+
+
+
+
+
+
                             </div>
+
+
+
+
+
+
 
 
 
@@ -2770,7 +5536,19 @@
 
 
 
+
+
+
+
+
+
                         
+
+
+
+
+
+
 
 
 
@@ -2782,7 +5560,19 @@
 
 
 
+
+
+
+
+
+
                     </div>
+
+
+
+
+
+
 
 
 
@@ -2794,7 +5584,19 @@
 
 
 
+
+
+
+
+
+
                     <div class="swiper-button-prev"></div>
+
+
+
+
+
+
 
 
 
@@ -2806,13 +5608,37 @@
 
 
 
+
+
+
+
+
+
             </div>
 
 
 
 
 
+
+
+
+
+
+
         </section>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2830,7 +5656,19 @@
 
 
 
+
+
+
+
+
+
             <div class="nearby-container" style="max-width: 1200px; margin: 0 auto;">
+
+
+
+
+
+
 
 
 
@@ -2842,7 +5680,19 @@
 
 
 
+
+
+
+
+
+
                 <div id="nearby-list" class="catalog-list-home"></div>
+
+
+
+
+
+
 
 
 
@@ -2854,7 +5704,25 @@
 
 
 
+
+
+
+
+
+
         </section>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2872,7 +5740,19 @@
 
 
 
+
+
+
+
+
+
         <section class="business-nav-section bg-full-blue">
+
+
+
+
+
+
 
 
 
@@ -2884,7 +5764,19 @@
 
 
 
+
+
+
+
+
+
                 <h2 style="text-align: center; margin-bottom: 2rem;" data-i18n="title_grow_visibility">Kasvata näkyvyyttäsi Laukaassa</h2>
+
+
+
+
+
+
 
 
 
@@ -2896,7 +5788,19 @@
 
 
 
+
+
+
+
+
+
                 <a href="ilmoittaudu.html#ilm-form" class="nav-box">
+
+
+
+
+
+
 
 
 
@@ -2908,7 +5812,19 @@
 
 
 
+
+
+
+
+
+
                     <p data-i18n="desc_feed_start">Uusi käyttäjä? Aloita maksutta (3 julkaisua) ja tavoita paikalliset asiakkaat helposti.</p>
+
+
+
+
+
+
 
 
 
@@ -2920,7 +5836,19 @@
 
 
 
+
+
+
+
+
+
                 </a>
+
+
+
+
+
+
 
 
 
@@ -2932,7 +5860,19 @@
 
 
 
+
+
+
+
+
+
                     <h3 data-i18n="nav_shop_packages">Julkaisupaketit</h3>
+
+
+
+
+
+
 
 
 
@@ -2944,13 +5884,31 @@
 
 
 
+
+
+
+
+
+
                     <div class="btn-fake" data-i18n="btn_open_shop">Avaa kauppa &raquo;</div>
 
 
 
 
 
+
+
+
+
+
+
                 </a>
+
+
+
+
+
+
 
 
 
@@ -2962,7 +5920,19 @@
 
 
 
+
+
+
+
+
+
                     <h3 data-i18n="nav_business_profile">Yritysprofiili</h3>
+
+
+
+
+
+
 
 
 
@@ -2974,7 +5944,19 @@
 
 
 
+
+
+
+
+
+
                     <div class="btn-fake" data-i18n="btn_read_more">Lue lisää &raquo;</div>
+
+
+
+
+
+
 
 
 
@@ -2986,13 +5968,31 @@
 
 
 
+
+
+
+
+
+
             </div>
 
 
 
 
 
+
+
+
+
+
+
             </div>
+
+
+
+
+
+
 
 
 
@@ -3010,7 +6010,25 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
     <footer>
+
+
+
+
+
+
 
 
 
@@ -3022,7 +6040,19 @@
 
 
 
+
+
+
+
+
+
             <p data-i18n="footer_copyright">© 2026 LaukaaInfo â€“ Palvelua ylläpitää Mediazoo.fi</p>
+
+
+
+
+
+
 
 
 
@@ -3034,7 +6064,19 @@
 
 
 
+
+
+
+
+
+
                 <a href="index.html" data-i18n="nav_home">Etusivulle</a>
+
+
+
+
+
+
 
 
 
@@ -3046,7 +6088,19 @@
 
 
 
+
+
+
+
+
+
                 <a href="maksuehto.html" data-i18n="footer_terms">Maksuehdot</a>
+
+
+
+
+
+
 
 
 
@@ -3058,7 +6112,19 @@
 
 
 
+
+
+
+
+
+
                 <button id="pwa-install-btn"
+
+
+
+
+
+
 
 
 
@@ -3070,13 +6136,31 @@
 
 
 
+
+
+
+
+
+
                     sovellus</button>
 
 
 
 
 
+
+
+
+
+
+
             </div>
+
+
+
+
+
+
 
 
 
@@ -3088,13 +6172,19 @@
 
 
 
-                <a href="https://play.google.com/store/apps/details?id=org.example.LaukaaLive&hl=fi" target="_blank">
 
 
 
 
 
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+
+                <a href="https://play.google.com/store/apps/details?id=org.example.LaukaaLive"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+
+
+
+
+
+
 
 
 
@@ -3106,7 +6196,19 @@
 
 
 
+
+
+
+
+
+
                 </a>
+
+
+
+
+
+
 
 
 
@@ -3118,7 +6220,19 @@
 
 
 
+
+
+
+
+
+
         </div>
+
+
+
+
+
+
 
 
 
@@ -3136,7 +6250,25 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
     <!-- Scripts -->
+
+
+
+
+
+
 
 
 
@@ -3148,7 +6280,19 @@
 
 
 
+
+
+
+
+
+
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script><script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script><script src="modal.js"></script>
+
+
+
+
+
+
 
 
 
@@ -3160,7 +6304,19 @@
 
 
 
+
+
+
+
+
+
     <script src="mainostutka.js?v=20260306-1"></script>
+
+
+
+
+
+
 
 
 
@@ -3178,7 +6334,25 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
     <script>
+
+
+
+
+
+
 
 
 
@@ -3190,7 +6364,19 @@
 
 
 
+
+
+
+
+
+
         document.addEventListener('DOMContentLoaded', () => {
+
+
+
+
+
+
 
 
 
@@ -3202,7 +6388,19 @@
 
 
 
+
+
+
+
+
+
                 slidesPerView: 1,
+
+
+
+
+
+
 
 
 
@@ -3214,7 +6412,19 @@
 
 
 
+
+
+
+
+
+
                 loop: false,
+
+
+
+
+
+
 
 
 
@@ -3226,7 +6436,19 @@
 
 
 
+
+
+
+
+
+
                     el: '.swiper-pagination',
+
+
+
+
+
+
 
 
 
@@ -3238,7 +6460,19 @@
 
 
 
+
+
+
+
+
+
                 },
+
+
+
+
+
+
 
 
 
@@ -3250,7 +6484,19 @@
 
 
 
+
+
+
+
+
+
                     nextEl: '.swiper-button-next',
+
+
+
+
+
+
 
 
 
@@ -3262,7 +6508,19 @@
 
 
 
+
+
+
+
+
+
                 },
+
+
+
+
+
+
 
 
 
@@ -3274,7 +6532,19 @@
 
 
 
+
+
+
+
+
+
                     640: {
+
+
+
+
+
+
 
 
 
@@ -3286,7 +6556,19 @@
 
 
 
+
+
+
+
+
+
                     },
+
+
+
+
+
+
 
 
 
@@ -3298,7 +6580,19 @@
 
 
 
+
+
+
+
+
+
                         slidesPerView: 3,
+
+
+
+
+
+
 
 
 
@@ -3310,7 +6604,19 @@
 
 
 
+
+
+
+
+
+
                     1200: {
+
+
+
+
+
+
 
 
 
@@ -3322,7 +6628,19 @@
 
 
 
+
+
+
+
+
+
                     }
+
+
+
+
+
+
 
 
 
@@ -3334,7 +6652,19 @@
 
 
 
+
+
+
+
+
+
             });
+
+
+
+
+
+
 
 
 
@@ -3346,7 +6676,19 @@
 
 
 
+
+
+
+
+
+
     </script>
+
+
+
+
+
+
 
 
 
@@ -3364,7 +6706,43 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
