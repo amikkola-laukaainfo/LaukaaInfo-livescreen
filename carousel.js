@@ -144,6 +144,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!heroSlideshow) return;
 
     const images = [
+        'kuvia/hero_new_1.jpg',
+        'kuvia/hero_new_2.jpg',
+        'kuvia/hero_new_3.jpg',
+        'kuvia/hero_new_4.jpg',
+        'kuvia/hero_new_5.jpg',
+        'kuvia/hero_new_6.jpg',
+        'kuvia/hero_new_7.jpg',
+        'kuvia/hero_new_8.jpg',
+        'kuvia/hero_new_9.jpg',
         'kuvia/hero_1.jpg',
         'kuvia/hero_2.jpg',
         'kuvia/hero_3.jpg',
