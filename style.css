@@ -1109,7 +1109,7 @@ section.region-hero .main-search-box {
 }
 
 .dropdown-menu .has-arrow>a::after {
-    content: 'â–¶';
+    content: '›';
     font-size: 0.6rem;
     float: right;
     margin-left: 15px;
@@ -5013,7 +5013,7 @@ footer {
 }
 
 .premium-select-wrapper::after {
-    content: 'â–¼';
+    content: '▼';
     position: absolute;
     right: 1.5rem;
     top: 50%;

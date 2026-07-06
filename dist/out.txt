@@ -1,0 +1,33 @@
+has-arrow at 24506:
+
+.dropdown-menu li:hover>.nested-menu {
+    opacity: 1;
+    visibility: visible;
+}
+
+.dropdown-menu .has-arrow>a::after {
+    content: '›';
+    font-size: 0.6rem;
+    float: right;
+    margin-left: 15px;
+    margin-top: 3px;
+    opacity: 0.6;
+}
+
+.dropdown-menu li a {
+    display: block;
+    padding: 0.6rem 1.5rem;
+    color: var(--dark-text);
+    text-decoration: none;
+    font-size: 0.95rem;
+    t
+
+
+=== All class="arrow" contents ===
+'▼'
+'▼'
+'▼'
+'▼'
+'▼'
+'▼'
+'▼'
