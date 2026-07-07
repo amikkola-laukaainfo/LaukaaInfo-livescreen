@@ -146,6 +146,72 @@
             text-decoration: underline;
         }
 
+        .intl-presentation-section {
+            margin: 4rem 0 2rem;
+            background: #f8fbff;
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+
+        .intl-presentation-section h2 {
+            margin-top: 0 !important;
+            text-align: center;
+        }
+
+        .tabs-header {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 1.5rem;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary-blue);
+            background: rgba(0, 86, 179, 0.05);
+            border-radius: 8px 8px 0 0;
+        }
+
+        .tab-btn.active {
+            color: var(--primary-blue);
+            border-bottom-color: var(--primary-blue);
+        }
+
+        .tab-pane {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        .tab-pane h3 {
+            margin-top: 1rem !important;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         @media (max-width: 768px) {
             .presentation-hero {
                 padding: 4rem 1rem 3rem;
@@ -433,6 +499,68 @@
         <h2>Näkyvyyden tasot</h2>
         <p>Palvelu rakentuu mallille, jossa maksuton perustaso varmistaa vain yrityksesi löytymisen nimellä. <strong>Maksullinen Yrityskortti ja julkaisupaketit</strong> avaavat ovet aktiiviseen markkinointiin: yrityksesi nousee esiin hakutulosten kärjessä, etusivun karusellissa, karttanäkymissä sekä parantaa ratkaisevasti löydettävyyttä hakukoneissa ja tekoälyn suositteluissa.</p>
 
+        <div class="intl-presentation-section">
+            <h2>LaukaaInfo in other languages</h2>
+            <p style="text-align:center; color:#64748b; margin-bottom:1.5rem;">Short introduction to Laukaa and LaukaaInfo for international visitors.</p>
+            <div class="tabs-container">
+                <div class="tabs-header">
+                    <button class="tab-btn active" data-tab="sv">🇸🇪 Svenska</button>
+                    <button class="tab-btn" data-tab="et">🇪🇪 Eesti</button>
+                    <button class="tab-btn" data-tab="de">🇩🇪 Deutsch</button>
+                    <button class="tab-btn" data-tab="fr">🇫🇷 Français</button>
+                    <button class="tab-btn" data-tab="es">🇪🇸 Español</button>
+                </div>
+                <div class="tabs-content">
+
+                    <!-- Svenska -->
+                    <div class="tab-pane active" id="tab-sv">
+                        <h3>Vad är Laukaa?</h3>
+                        <p>Laukaa (svenska: Laukas) är en livlig landsbygdskommun i Mellersta Finland, strax norr om Jyväskylä. Kommunen är känd för sina vackra sjöar, sin mångsidiga natur och en aktiv och välkomnande gemenskap. Laukaa erbjuder en hög livskvalitet med moderna tjänster i en trygg och trivsam miljö.</p>
+                        <h3>Vad är LaukaaInfo?</h3>
+                        <p>LaukaaInfo är en lokal digital plattform som samlar Laukaas företag, tjänster, evenemang och nyheter på ett ställe. Tjänsten är tillgänglig som webbplats och Android-app och hjälper både invånare och besökare att snabbt hitta lokala tjänster, kontaktuppgifter och aktuell information. För företag erbjuder LaukaaInfo ett modernt sätt att synas lokalt och nå kunder online och via sökmotorer.</p>
+                        <p><a href="index.html" style="color:var(--primary-blue); font-weight:700;">Öppna LaukaaInfo →</a></p>
+                    </div>
+
+                    <!-- Eesti -->
+                    <div class="tab-pane" id="tab-et">
+                        <h3>Mis on Laukaa?</h3>
+                        <p>Laukaa on elav maapiirkond Kesk-Soomes, mis asub vahetult Jyväskylä põhjapool. Vald on tuntud oma kaunite järvede, mitmekülgse looduse ja aktiivse kogukonna poolest. Laukaa pakub kõrget elukvaliteeti tänapäevaste teenustega turvalises ja meeldivas keskkonnas.</p>
+                        <h3>Mis on LaukaaInfo?</h3>
+                        <p>LaukaaInfo on kohalik digitaalne platvorm, mis koondab ühte kohta Laukaa ettevõtted, teenused, üritused ja uudised. Teenus on saadaval nii veebisaidina kui ka Android-rakendusena ning aitab nii elanikel kui ka külastajatel kiiresti leida kohalikke teenuseid, kontaktandmeid ja ajakohast teavet. Ettevõtetele pakub LaukaaInfo kaasaegset võimalust olla nähtav kohalikul tasandil ning jõuda klientideni veebis ja otsingumootorites.</p>
+                        <p><a href="index.html" style="color:var(--primary-blue); font-weight:700;">Ava LaukaaInfo →</a></p>
+                    </div>
+
+                    <!-- Deutsch -->
+                    <div class="tab-pane" id="tab-de">
+                        <h3>Was ist Laukaa?</h3>
+                        <p>Laukaa ist eine lebendige Landgemeinde in Mittelfinnland, direkt nördlich von Jyväskylä. Die Gemeinde ist bekannt für ihre wunderschönen Seen, die vielfältige Natur und eine aktive, einladende Gemeinschaft. Laukaa bietet eine hohe Lebensqualität mit modernen Dienstleistungen in einer sicheren und angenehmen Umgebung.</p>
+                        <h3>Was ist LaukaaInfo?</h3>
+                        <p>LaukaaInfo ist eine lokale digitale Plattform, die Unternehmen, Dienstleistungen, Veranstaltungen und Nachrichten aus Laukaa an einem Ort bündelt. Der Dienst ist als Website und Android-App verfügbar und hilft sowohl Einwohnern als auch Besuchern, schnell lokale Dienste, Kontaktdaten und aktuelle Informationen zu finden. Für Unternehmen bietet LaukaaInfo einen modernen Weg, lokal sichtbar zu sein und Kunden online und über Suchmaschinen zu erreichen.</p>
+                        <p><a href="index.html" style="color:var(--primary-blue); font-weight:700;">LaukaaInfo öffnen →</a></p>
+                    </div>
+
+                    <!-- Français -->
+                    <div class="tab-pane" id="tab-fr">
+                        <h3>Qu'est-ce que Laukaa ?</h3>
+                        <p>Laukaa est une commune rurale dynamique de Finlande centrale, située juste au nord de Jyväskylä. La commune est réputée pour ses beaux lacs, sa nature diversifiée et sa communauté active et accueillante. Laukaa offre une haute qualité de vie avec des services modernes dans un environnement sûr et agréable.</p>
+                        <h3>Qu'est-ce que LaukaaInfo ?</h3>
+                        <p>LaukaaInfo est une plateforme numérique locale qui rassemble les entreprises, les services, les événements et les actualités de Laukaa en un seul endroit. Le service est disponible sous forme de site web et d'application Android, et aide aussi bien les résidents que les visiteurs à trouver rapidement des services locaux, des coordonnées et des informations actuelles. Pour les entreprises, LaukaaInfo offre un moyen moderne d'être visible localement et d'atteindre les clients en ligne et via les moteurs de recherche.</p>
+                        <p><a href="index.html" style="color:var(--primary-blue); font-weight:700;">Ouvrir LaukaaInfo →</a></p>
+                    </div>
+
+                    <!-- Español -->
+                    <div class="tab-pane" id="tab-es">
+                        <h3>¿Qué es Laukaa?</h3>
+                        <p>Laukaa es un animado municipio rural en Finlandia Central, situado justo al norte de Jyväskylä. El municipio es conocido por sus hermosos lagos, su naturaleza variada y su activa y acogedora comunidad. Laukaa ofrece una alta calidad de vida con servicios modernos en un entorno seguro y agradable.</p>
+                        <h3>¿Qué es LaukaaInfo?</h3>
+                        <p>LaukaaInfo es una plataforma digital local que reúne las empresas, servicios, eventos y noticias de Laukaa en un solo lugar. El servicio está disponible como sitio web y aplicación Android, y ayuda tanto a residentes como a visitantes a encontrar rápidamente servicios locales, datos de contacto e información actualizada. Para las empresas, LaukaaInfo ofrece una forma moderna de ser visible localmente y llegar a los clientes en línea y a través de los motores de búsqueda.</p>
+                        <p><a href="index.html" style="color:var(--primary-blue); font-weight:700;">Abrir LaukaaInfo →</a></p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
         <div class="cta-section">
             <h2>Tule mukaan rakentamaan paikallista näkyvyyttä</h2>
             <p>LaukaaInfo on paikallinen digitaalinen palvelu, jonka tavoitteena on tehdä alueen palveluista helpommin löydettäviä. Yrityksille palvelu tarjoaa mahdollisuuden näkyä siellä, missä asiakkaat jo etsivät tietoa.</p>
@@ -459,5 +587,24 @@
     </footer>
 
     <script src="script.js?v=20260505"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Poista aktiivinen luokka kaikilta
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    tabPanes.forEach(p => p.classList.remove('active'));
+
+                    // Lisää aktiivinen luokka valitulle
+                    btn.classList.add('active');
+                    const targetId = 'tab-' + btn.getAttribute('data-tab');
+                    document.getElementById(targetId).classList.add('active');
+                });
+            });
+        });
+    </script>
 </body>
 </html>
