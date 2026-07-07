@@ -1,4 +1,9 @@
-/**
+const fs = require('fs');
+const path = require('path');
+
+const targetPath = path.join(__dirname, '..', 'yhteisot.js');
+
+const jsContent = `/**
  * Laukaa some-yhteisöt (Facebook groups, pages, etc.)
  * Hakee dataa ensisijaisesti Supabasesta, ja käyttää mock-dataa varavaihtoehtona.
  */
@@ -163,21 +168,21 @@ function createCommunityCard(community) {
     card.style.setProperty('--icon-color', styleObj.iconColor);
     card.style.setProperty('--border-color', styleObj.borderColor);
 
-    const displayCategory = subCat ? `${parentCat} / ${subCat}` : parentCat;
+    const displayCategory = subCat ? \`\${parentCat} / \${subCat}\` : parentCat;
 
-    card.innerHTML = `
+    card.innerHTML = \`
         <div class="some-yhteiso-card__icon-wrapper">
-            <span class="iconify" data-icon="${normalizeIcon(community.icon || 'lucide:link')}"></span>
+            <span class="iconify" data-icon="\${normalizeIcon(community.icon || 'lucide:link')}"></span>
         </div>
         <div class="some-yhteiso-card__content">
-            <span class="some-yhteiso-card__category">${escapeHtml(displayCategory)}</span>
-            <h3 class="some-yhteiso-card__title">${escapeHtml(community.name)}</h3>
-            <p class="some-yhteiso-card__desc">${escapeHtml(community.description || '')}</p>
+            <span class="some-yhteiso-card__category">\${escapeHtml(displayCategory)}</span>
+            <h3 class="some-yhteiso-card__title">\${escapeHtml(community.name)}</h3>
+            <p class="some-yhteiso-card__desc">\${escapeHtml(community.description || '')}</p>
         </div>
         <div class="some-yhteiso-card__arrow">
             <span class="iconify" data-icon="material-symbols-light:arrow-outward-rounded"></span>
         </div>
-    `;
+    \`;
     return card;
 }
 
@@ -204,7 +209,7 @@ function normalizeIcon(icon) {
         'trophy': 'trophy',
     };
     const resolved = aliases[icon] || icon;
-    return `lucide:${resolved}`;
+    return \`lucide:\${resolved}\`;
 }
 
 function escapeHtml(str) {
@@ -312,13 +317,13 @@ async function renderAllCommunitiesPage() {
         header.className = 'link-dir-header';
         header.style.borderColor = style.borderColor;
         
-        header.innerHTML = `
+        header.innerHTML = \`
             <div class="link-dir-header-inner">
-                <span class="iconify accordion-icon" data-icon="${catIcon}" style="color:${style.iconColor}; background:${style.iconBg}"></span>
-                <span>${parent}</span>
+                <span class="iconify accordion-icon" data-icon="\${catIcon}" style="color:\${style.iconColor}; background:\${style.iconBg}"></span>
+                <span>\${parent}</span>
             </div>
             <span class="iconify link-dir-arrow" data-icon="lucide:chevron-down"></span>
-        `;
+        \`;
         
         const content = document.createElement('div');
         content.className = 'link-dir-content';
@@ -364,3 +369,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderHomepageCommunities();
     renderAllCommunitiesPage();
 });
+`;
+
+fs.writeFileSync(targetPath, jsContent, 'utf8');
+console.log('yhteisot.js replaced successfully!');
