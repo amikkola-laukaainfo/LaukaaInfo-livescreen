@@ -44,6 +44,13 @@ try {
     console.error('Virhe datan modularisoinnissa:', e.message);
 }
 
+console.log('1.6 Generoidaan sitemap...');
+try {
+    execSync('node generate_sitemap.js', { stdio: 'inherit' });
+} catch (e) {
+    console.error('Virhe sitemapin generoinnissa:', e.message);
+}
+
 // 3. Kopioidaan tiedostot
 console.log('2. Kopioidaan tiedostot dist-kansioon...');
 function copyRecursive(src, dest) {
