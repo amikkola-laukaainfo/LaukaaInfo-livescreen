@@ -1,4 +1,4 @@
-napp<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fi">
 <head>
     <meta charset="UTF-8">
@@ -621,6 +621,14 @@ napp<!DOCTYPE html>
                         <!-- Postaukset renderöidään tänne -->
                     </div>
                 </div>
+
+                <!-- Kohtaamiset -->
+                <div class="feed-box" id="kohtaamiset-box" style="display: none; margin-top: 2rem;">
+                    <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; color: var(--secondary-blue); margin-bottom: 1rem;">Täällä etsitään ja tarjotaan (Kohtaamiset)</h2>
+                    <div id="el-kohtaamiset" style="display: grid; grid-template-columns: 1fr; gap: 1rem;">
+                        <!-- Kohtaamiset renderöidään tänne -->
+                    </div>
+                </div>
             </div>
 
             <div class="sidebar">
@@ -1028,6 +1036,53 @@ napp<!DOCTYPE html>
                 specEl.style.display = 'none';
             }
 
+            // Kohtaamiset integraatio
+            if (typeof fetchEncounters === 'function' && typeof categories !== 'undefined') {
+                renderKohtaamisetForEntity(entity);
+            }
+
+        }
+
+        async function renderKohtaamisetForEntity(entity) {
+            const kohtaamisetBox = document.getElementById('kohtaamiset-box');
+            const kohtaamisetContainer = document.getElementById('el-kohtaamiset');
+            
+            try {
+                const allEncounters = await fetchEncounters();
+                const enNameLower = (entity.name || '').toLowerCase();
+                const enMuniLower = (entity.location && entity.location.municipality) ? entity.location.municipality.toLowerCase() : '';
+                
+                const related = allEncounters.filter(ad => {
+                    const loc = (ad.location || '').toLowerCase();
+                    const desc = (ad.description || '').toLowerCase();
+                    const title = (ad.title || '').toLowerCase();
+                    // Osuma nimeen tai sijaintiin (joka vastaa kuntaa/taajamaa)
+                    return loc.includes(enNameLower) || desc.includes(enNameLower) || title.includes(enNameLower) || 
+                           (enMuniLower && loc.includes(enMuniLower));
+                }).slice(0, 5); // Max 5
+
+                if (related.length > 0) {
+                    kohtaamisetBox.style.display = 'block';
+                    kohtaamisetContainer.innerHTML = related.map(ad => {
+                        const cat = categories[ad.type] || categories['need_help'];
+                        return `
+                        <a href="ilmoituskortti.html?id=${ad.id}" style="display: block; text-decoration: none; color: inherit; background: white; border-radius: 12px; padding: 1.2rem; border-left: 5px solid ${cat.color}; box-shadow: 0 2px 10px rgba(0,0,0,0.05); transition: transform 0.2s;">
+                            <div style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: ${cat.color}; margin-bottom: 0.3rem;">${cat.icon} ${cat.title}</div>
+                            <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; color: var(--secondary-blue); margin: 0 0 0.5rem 0;">${ad.title}</h3>
+                            <p style="font-size: 0.9rem; color: var(--light-text); margin: 0 0 0.5rem 0; line-height: 1.4;">${ad.description.substring(0, 100)}...</p>
+                            <div style="font-size: 0.85rem; font-weight: 600; color: var(--dark-text);">${ad.price_info || ''}</div>
+                        </a>
+                        `;
+                    }).join('');
+                } else {
+                    kohtaamisetBox.style.display = 'none';
+                }
+            } catch (err) {
+                console.error("Virhe kohtaamisten haussa:", err);
+                kohtaamisetBox.style.display = 'none';
+            }
+        }
+
             // Relations
             const relBox = document.getElementById('relations-box');
             const relContainer = document.getElementById('el-relations');
@@ -1261,7 +1316,6 @@ napp<!DOCTYPE html>
             if (container) container.classList.remove('open');
         }
 
-        // Close dropdown when clicking outside
         window.addEventListener('click', function(e) {
             const container = document.getElementById('marketing-dropdown-container');
             if (container && !container.contains(e.target)) {
@@ -1271,5 +1325,8 @@ napp<!DOCTYPE html>
 
         window.addEventListener('DOMContentLoaded', init);
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="kohtaamiset.js?v=20260708"></script>
 </body>
 </html>

@@ -1555,6 +1555,55 @@
 
         // 14. AI & SEO -lisädata (ai_and_seo)
         renderAiAndSeo(company);
+
+        // 15. Kohtaamiset integraatio
+        renderKohtaamisetForYritys(company);
+    }
+
+    async function renderKohtaamisetForYritys(company) {
+        if (typeof fetchEncounters !== 'function' || typeof categories === 'undefined') return;
+        
+        try {
+            const allEncounters = await fetchEncounters();
+            const coNameLower = (company.nimi || '').toLowerCase();
+            const coCityLower = (company.osoite || '').toLowerCase();
+            
+            const related = allEncounters.filter(ad => {
+                const loc = (ad.location || '').toLowerCase();
+                const desc = (ad.description || '').toLowerCase();
+                const title = (ad.title || '').toLowerCase();
+                return desc.includes(coNameLower) || title.includes(coNameLower) || 
+                       (coCityLower && loc.length > 3 && coCityLower.includes(loc));
+            }).slice(0, 5);
+
+            if (related.length > 0) {
+                const container = document.getElementById('tab-business-card');
+                if (!container) return;
+                
+                const box = document.createElement('div');
+                box.className = 'bc-block';
+                box.style.marginTop = '1.5rem';
+                box.innerHTML = `
+                    <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; color: var(--secondary-blue); margin-top: 0; margin-bottom: 1rem;">Laukaan Kohtaamispaikka</h2>
+                    <p style="font-size: 0.9rem; color: var(--light-text); margin-bottom: 1rem;">Tähän yritykseen tai sen sijaintiin liittyvät avoimet haut ja tarjoukset:</p>
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 1rem;">
+                        ${related.map(ad => {
+                            const cat = categories[ad.type] || categories['need_help'];
+                            return \`
+                            <a href="ilmoituskortti.html?id=\${ad.id}" style="display: block; text-decoration: none; color: inherit; background: #f8fafc; border-radius: 12px; padding: 1rem; border-left: 4px solid \${cat.color}; transition: background 0.2s;">
+                                <div style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: \${cat.color}; margin-bottom: 0.3rem;">\${cat.icon} \${cat.title}</div>
+                                <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.05rem; color: var(--secondary-blue); margin: 0 0 0.4rem 0;">\${ad.title}</h3>
+                                <div style="font-size: 0.85rem; font-weight: 600; color: var(--dark-text);">\${ad.price_info || ''}</div>
+                            </a>
+                            \`;
+                        }).join('')}
+                    </div>
+                `;
+                container.appendChild(box);
+            }
+        } catch(e) {
+            console.error('Kohtaamiset error:', e);
+        }
     }
 
     /**

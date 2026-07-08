@@ -75,6 +75,30 @@ const mockEncounters = [
 ];
 
 let activeFilter = 'all';
+let allEncounters = [];
+
+async function fetchEncounters() {
+    try {
+        if (window.LaukaaSupabase) {
+            const { data, error } = await window.LaukaaSupabase
+                .from('encounters')
+                .select('*')
+                .eq('status', 'active')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error('Supabase fetch error:', error);
+                return mockEncounters; // Fallback
+            }
+            if (data && data.length > 0) {
+                return data;
+            }
+        }
+    } catch (e) {
+        console.warn('Virhe haettaessa Supabasesta, käytetään mock-dataa:', e);
+    }
+    return mockEncounters;
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     const gridEl = document.getElementById('ad-grid');
@@ -88,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-function initIlmoituskortti() {
+async function initIlmoituskortti() {
     const params = new URLSearchParams(window.location.search);
     const id = params.get('id');
     const spinner = document.getElementById('loading-spinner');
@@ -99,8 +123,8 @@ function initIlmoituskortti() {
         return;
     }
 
-    // Haetaan mock-datasta
-    const ad = mockEncounters.find(a => a.id === id);
+    allEncounters = await fetchEncounters();
+    const ad = allEncounters.find(a => a.id === id || a.id.toString() === id);
 
     if (!ad) {
         if (spinner) spinner.innerHTML = 'Ilmoitusta ei löytynyt tai se on vanhentunut.';
@@ -121,12 +145,27 @@ function initIlmoituskortti() {
     document.getElementById('ad-price').innerText = ad.price_info;
     document.getElementById('ad-location').innerText = ad.location;
 
+    // Aseta "Ota yhteyttä" sähköpostiosoite jos löytyy (muuten deaktivoi)
+    const btn = document.getElementById('ad-contact-btn');
+    if (btn) {
+        if (ad.contact_email) {
+            btn.href = `mailto:${ad.contact_email}?subject=LaukaaInfo%3A%20${encodeURIComponent(ad.title)}`;
+            btn.innerText = 'Ota yhteyttä (Sähköposti)';
+        } else {
+            btn.href = '#';
+            btn.innerText = 'Ei yhteystietoja saatavilla';
+            btn.style.opacity = '0.5';
+            btn.style.cursor = 'not-allowed';
+        }
+    }
+
     const d = new Date(ad.created_at);
     document.getElementById('ad-date').innerText = d.toLocaleDateString('fi-FI');
 }
 
-function initKohtaamisetFeed() {
+async function initKohtaamisetFeed() {
     renderFilters();
+    allEncounters = await fetchEncounters();
     renderFeed();
 }
 
@@ -165,8 +204,8 @@ function renderFeed() {
 
     // Filtteröinti
     const filtered = activeFilter === 'all' 
-        ? mockEncounters 
-        : mockEncounters.filter(ad => ad.type === activeFilter);
+        ? allEncounters 
+        : allEncounters.filter(ad => ad.type === activeFilter);
 
     if (filtered.length === 0) {
         grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #64748b; background: white; border-radius: 16px;">Ei ilmoituksia valitussa kategoriassa juuri nyt. Ole ensimmäinen ja jätä ilmoitus!</div>`;

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jätä ilmoitus | Kohtaamispaikka</title>
+    <link rel="icon" href="logo.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=20260708">
+    
+    <script src="translations.js?v=20260708"></script>
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+
+    <style>
+        .form-container {
+            max-width: 600px;
+            margin: 3rem auto;
+            background: white;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #0f172a;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #0f172a;
+            box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.1);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: #0f172a;
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 1rem;
+        }
+
+        .submit-btn:hover {
+            background: #1e293b;
+        }
+
+        .submit-btn:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        .form-feedback {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: none;
+            font-weight: 600;
+        }
+
+        .form-feedback.success {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .form-feedback.error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin: 1rem 0 0 1rem;
+            font-weight: 600;
+            color: #475569;
+            text-decoration: none;
+        }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body class="bg-full-gray">
+
+    <!-- Navigointi -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="logo.png" alt="LaukaaInfo Logo">
+                <span>LaukaaInfo</span>
+            </a>
+            <button class="hamburger" id="hamburger-btn" aria-label="Avaa valikko">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <aside class="sidebar-menu" id="sidebar-menu">
+        <div class="sidebar-header">
+            <a href="index.html" class="nav-logo">
+                <img src="logo.png" alt="LaukaaInfo Logo">
+                <span>LaukaaInfo</span>
+            </a>
+            <button class="close-btn" id="close-sidebar-btn">&times;</button>
+        </div>
+    </aside>
+
+    <main style="padding-top: 80px; min-height: 80vh;">
+        <div style="max-width: 600px; margin: 0 auto;">
+            <a href="kohtaamiset.html" class="back-link">&larr; Takaisin kohtaamisiin</a>
+        </div>
+
+        <div class="form-container">
+            <h1 class="form-title">Jätä ilmoitus</h1>
+            
+            <div id="form-feedback" class="form-feedback"></div>
+
+            <form id="ad-form">
+                <div class="form-group">
+                    <label for="ad-type">Ilmoituksen tyyppi *</label>
+                    <select id="ad-type" class="form-control" required>
+                        <option value="">Valitse kategoria...</option>
+                        <option value="need_help">🟢 Tarvitsen palvelun</option>
+                        <option value="offer_service">🔵 Tarjoan palvelua</option>
+                        <option value="offer_skills">🟠 Tarjoan osaamistani</option>
+                        <option value="b2b_request">🟣 Yritysten tarjouspyyntö</option>
+                        <option value="gig">🟡 Työkeikka</option>
+                        <option value="volunteer">❤️ Talkoot</option>
+                        <option value="space_rental">🏠 Tilat ja kalusto</option>
+                        <option value="b2b_collab">🤝 Yhteistyöhaku</option>
+                        <option value="event_staff">🎉 Tapahtumahaku</option>
+                        <option value="high_value">💎 Arvotavarat (>2000€)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="ad-title">Otsikko *</label>
+                    <input type="text" id="ad-title" class="form-control" placeholder="Esim. Nurmikon leikkuu" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="ad-desc">Tarkempi kuvaus *</label>
+                    <textarea id="ad-desc" class="form-control" placeholder="Kerro tarkemmin mitä etsit tai tarjoat..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="ad-price">Hinta tai palkkio (valinnainen)</label>
+                    <input type="text" id="ad-price" class="form-control" placeholder="Esim. 20€/h, Tarjoa, tai Vapaaehtoistyö">
+                </div>
+
+                <div class="form-group">
+                    <label for="ad-location">Toiminta-alue (valinnainen)</label>
+                    <input type="text" id="ad-location" class="form-control" placeholder="Esim. Lievestuore">
+                </div>
+
+                <div class="form-group">
+                    <label for="ad-email">Sähköpostiosoitteesi *</label>
+                    <input type="email" id="ad-email" class="form-control" placeholder="Sinulle lähetetään varmistusviesti" required>
+                    <p style="font-size: 0.8rem; color: #64748b; margin-top: 4px;">Sähköpostiosoitetta ei näytetä julkisesti. Sitä käytetään yhteydenottojen välittämiseen.</p>
+                </div>
+
+                <button type="submit" id="submit-btn" class="submit-btn">Julkaise ilmoitus</button>
+            </form>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script>
+        document.getElementById('ad-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const btn = document.getElementById('submit-btn');
+            const feedback = document.getElementById('form-feedback');
+            
+            btn.disabled = true;
+            btn.innerText = 'Tallennetaan...';
+            feedback.className = 'form-feedback';
+            
+            const type = document.getElementById('ad-type').value;
+            const title = document.getElementById('ad-title').value;
+            const description = document.getElementById('ad-desc').value;
+            const price_info = document.getElementById('ad-price').value;
+            const location = document.getElementById('ad-location').value;
+            const contact_email = document.getElementById('ad-email').value;
+
+            try {
+                if (!window.LaukaaSupabase) throw new Error('Tietokantayhteys puuttuu');
+
+                const { error } = await window.LaukaaSupabase
+                    .from('encounters')
+                    .insert([
+                        { type, title, description, price_info, location, contact_email, status: 'active' }
+                    ]);
+
+                if (error) throw error;
+
+                feedback.innerText = 'Ilmoitus lisätty onnistuneesti! (Vaihe 2: Oikeassa versiossa tähän tulisi sähköpostivarmistus)';
+                feedback.classList.add('success');
+                document.getElementById('ad-form').reset();
+                
+                setTimeout(() => {
+                    window.location.href = 'kohtaamiset.html';
+                }, 3000);
+
+            } catch (err) {
+                console.error(err);
+                feedback.innerText = 'Virhe ilmoitusta lisättäessä: ' + err.message;
+                feedback.classList.add('error');
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'Julkaise ilmoitus';
+            }
+        });
+    </script>
+    
+    <script src="script.js"></script>
+    <script src="nav-sync.js"></script>
+</body>
+</html>
