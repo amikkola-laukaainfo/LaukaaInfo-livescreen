@@ -1162,7 +1162,7 @@ class I18nManager {
 
             const key = attrValue;
             const translation = this.t(key);
-            const hasHTML = translation.includes('<br>') || translation.includes('</span>') || translation.includes('</i>');
+            const hasHTML = translation.includes('<br>') || translation.includes('</span>') || translation.includes('</i>') || translation.includes('</a>') || translation.includes('</strong>');
 
             if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
                 if (el.hasAttribute('placeholder')) el.placeholder = translation;
