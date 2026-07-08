@@ -243,7 +243,18 @@
 
             } catch (err) {
                 console.error(err);
-                feedback.innerText = 'Virhe ilmoitusta lisättäessä: ' + err.message;
+                
+                // Tarkistetaan onko kyseessä meidän oma triggerin heittämä virhe (Supabase palauttaa sen usein err.message kentässä)
+                let errorMsg = 'Virhe ilmoitusta lisättäessä. Yritä myöhemmin uudelleen.';
+                if (err.message && err.message.includes('Sähköpostiosoite on estetty')) {
+                    errorMsg = 'Tällä sähköpostiosoitteella ei voi toistaiseksi jättää ilmoituksia (estetty).';
+                } else if (err.message && err.message.includes('yhden ilmoituksen vuorokaudessa')) {
+                    errorMsg = 'Voit jättää vain yhden ilmoituksen vuorokaudessa tällä sähköpostiosoitteella. Yritä huomenna uudelleen!';
+                } else if (err.message) {
+                    errorMsg = 'Virhe: ' + err.message;
+                }
+
+                feedback.innerText = errorMsg;
                 feedback.classList.add('error');
             } finally {
                 btn.disabled = false;
