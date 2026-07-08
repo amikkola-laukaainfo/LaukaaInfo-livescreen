@@ -241,7 +241,15 @@ async function renderAllCommunitiesPage() {
     container.innerHTML = '';
 
     // 1. Suosituimmat -osio (is_highlighted === true)
-    const highlighted = communities.filter(c => c.is_highlighted);
+    let highlighted = communities.filter(c => c.is_highlighted);
+    
+    // Shuffle array (Fisher-Yates) and take max 5
+    for (let i = highlighted.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [highlighted[i], highlighted[j]] = [highlighted[j], highlighted[i]];
+    }
+    highlighted = highlighted.slice(0, 5);
+
     if (highlighted.length > 0) {
         const featSection = document.createElement('div');
         featSection.className = 'link-dir-featured';
