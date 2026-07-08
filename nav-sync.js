@@ -94,6 +94,7 @@
                 <li class="nav-item">
                     <a href="#" class="nav-link${activeClass('kauppa')}" data-i18n="nav_shop">Kauppa <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size:1.2em;vertical-align:middle"></span></span></a>
                     <ul class="dropdown-menu">
+                        <li><a href="${base}kohtaamiset.html">Kohtaamispaikka</a></li>
                         <li><a href="${base}ilmoittaudu.html" data-i18n="nav_feed">Feed-julkaisu</a></li>
                         <li><a href="${base}kauppa.html" data-i18n="nav_shop_packages">Julkaisupaketit</a></li>
                         <li><a href="${base}lisaa-yritys.html" data-i18n="nav_business_profile">Yritysprofiili</a></li>
@@ -173,6 +174,7 @@
             <div class="menu-section">
                 <h3 class="section-title" data-i18n="nav_shop">KAUPPA</h3>
                 <ul class="menu-list">
+                    <li class="menu-item"><a href="${base}kohtaamiset.html" class="sidebar-link${sidebarActive(base + 'kohtaamiset.html')}">Kohtaamispaikka</a></li>
                     <li class="menu-item"><a href="${base}ilmoittaudu.html" class="sidebar-link${sidebarActive(base + 'ilmoittaudu.html')}" data-i18n="nav_feed">Feed-julkaisu</a></li>
                     <li class="menu-item"><a href="${base}kauppa.html" class="sidebar-link${sidebarActive(base + 'kauppa.html')}" data-i18n="nav_shop_packages">Julkaisupaketit</a></li>
                     <li class="menu-item"><a href="${base}lisaa-yritys.html" class="sidebar-link${sidebarActive(base + 'lisaa-yritys.html')}" data-i18n="nav_business_profile">Yritysprofiili</a></li>
