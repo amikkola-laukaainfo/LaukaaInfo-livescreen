@@ -603,9 +603,11 @@
             : `<p class="address">${c.osoite || 'Laukaa'}</p>`;
 
         const isPaid = c.tyyppi === 'maksu' || c.tyyppi === 'paid';
-        const isInDist = window.location.pathname.includes('/dist/');
-        const distPrefix = isInDist ? '' : 'dist/';
-        const cardUrl = isPaid ? `${distPrefix}${slugify(c.nimi)}.html` : `yrityskortti.html?id=${slugify(c.nimi)}`;
+        const cardUrl = isPaid ? `yritys/${slugify(c.nimi)}.html` : `yrityskortti.html?id=${slugify(c.nimi)}`;
+
+        card.setAttribute('data-card-url', cardUrl);
+        card.style.cursor = 'pointer';
+        card.onclick = () => { window.location.href = cardUrl; };
 
         card.innerHTML = `
         ${distBadge}
@@ -614,8 +616,8 @@
         ${infoHtml}
         <p>${description}</p>
         <div style="margin-top:1rem; display:flex; gap:10px;">
-            <a href="${cardUrl}" class="btn-primary" style="padding:0.4rem 1rem; font-size:0.8rem;">TIEDOT</a>
-            ${sanitizedUrl ? `<a href="${sanitizedUrl}" target="_blank" class="btn-primary" style="padding:0.4rem 1rem; font-size:0.8rem; background:#666;">WWW</a>` : ''}
+            <a href="${cardUrl}" class="btn-primary" style="padding:0.4rem 1rem; font-size:0.8rem;" onclick="event.stopPropagation()">TIEDOT</a>
+            ${sanitizedUrl ? `<a href="${sanitizedUrl}" target="_blank" class="btn-primary" style="padding:0.4rem 1rem; font-size:0.8rem; background:#666;" onclick="event.stopPropagation()">WWW</a>` : ''}
         </div>
     `;
         return card;
