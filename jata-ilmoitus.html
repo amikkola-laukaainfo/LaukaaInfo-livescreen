@@ -401,18 +401,30 @@
 
                 <hr class="ilm-divider">
 
-                <!-- Sähköposti -->
+                <!-- Sähköposti ja yhteydenotto -->
                 <div class="form-group">
                     <label for="ad-email">Sähköpostiosoitteesi <span class="required">*</span></label>
                     <input type="email" id="ad-email" class="form-control"
-                        placeholder="Sinulle lähetetään varmistusviesti" required>
-                    <div style="margin-top: 10px; display: flex; align-items: flex-start; gap: 8px;">
-                        <input type="checkbox" id="email-public" style="margin-top: 4px;">
-                        <label for="email-public" style="font-weight: normal; font-size: 0.85rem; color: #475569;">
-                            Näytä sähköpostiosoite julkisesti ilmoituksessa.<br>
-                            <span style="font-size: 0.8rem; color: #94a3b8;">Jos et valitse tätä, osoitteesi piilotetaan ja yhteydenotot tulevat järjestelmän kautta sähköpostiisi.</span>
+                        placeholder="Sähköpostiasi ei näytetä julkisesti. Sitä käytetään vain yhteydenottoihin." required>
+                    
+                    <label style="margin-top: 1rem;">Millaisen yhteydenoton sallit? <span class="required">*</span></label>
+                    <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 0.5rem;">
+                        <label style="font-weight: normal; font-size: 0.9rem; color: #334155; display: flex; align-items: flex-start; gap: 8px;">
+                            <input type="radio" name="contact_mode" value="message" checked style="margin-top: 2px;">
+                            <div>
+                                <strong>Salli vapaamuotoiset viestit</strong><br>
+                                <span style="font-size: 0.8rem; color: #64748b;">Yhteydenottaja voi kirjoittaa sinulle viestin lomakkeen kautta.</span>
+                            </div>
+                        </label>
+                        <label style="font-weight: normal; font-size: 0.9rem; color: #334155; display: flex; align-items: flex-start; gap: 8px;">
+                            <input type="radio" name="contact_mode" value="request_only" style="margin-top: 2px;">
+                            <div>
+                                <strong>Vain yhteydenottopyyntö</strong><br>
+                                <span style="font-size: 0.8rem; color: #64748b;">Yhteydenottaja lähettää vain nimensä ja yhteystietonsa. (Viestikenttä on piilotettu)</span>
+                            </div>
                         </label>
                     </div>
+                </div>
 
                 <button type="submit" id="submit-btn" class="submit-btn">
                     <span class="iconify" data-icon="lucide:send"></span> Julkaise ilmoitus
@@ -601,7 +613,8 @@
         const price_info   = document.getElementById('ad-price').value.trim();
         const location     = document.getElementById('ad-location').value.trim();
         const contact_email= document.getElementById('ad-email').value.trim();
-        const email_public = document.getElementById('email-public').checked;
+        const contact_mode = document.querySelector('input[name="contact_mode"]:checked').value;
+        const allow_messages = (contact_mode === 'message');
 
         if (!title || !description || !contact_email) return;
 
@@ -620,7 +633,7 @@
                     price_info:    price_info || null,
                     location:      location   || null,
                     contact_email,
-                    email_public,
+                    allow_messages,
                     tags:          selectedTags,
                     status:        'active'
                 }]);

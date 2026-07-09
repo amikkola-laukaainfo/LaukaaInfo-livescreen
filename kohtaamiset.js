@@ -448,16 +448,12 @@ async function initIlmoituskortti() {
 
     const btn = document.getElementById('ad-contact-btn');
     if (btn) {
-        if (ad.email_public && ad.contact_email) {
-            btn.href = `mailto:${ad.contact_email}?subject=LaukaaInfo%3A%20${encodeURIComponent(ad.title)}`;
-            btn.innerText = 'Ota yhteyttä (Sähköposti)';
-            btn.onclick = null;
-        } else if (ad.contact_email) {
+        if (ad.contact_email) {
             btn.href = '#';
-            btn.innerText = 'Ota yhteyttä (Lähetä viesti)';
+            btn.innerText = 'Ota yhteyttä ilmoittajaan';
             btn.onclick = (e) => {
                 e.preventDefault();
-                openContactModal(ad.id);
+                openContactModal(ad.id, ad.allow_messages !== false);
             };
         } else {
             btn.href = '#';
@@ -488,10 +484,34 @@ function escapeHtml(str) {
 // ===================================================
 // YHTEYDENOTTOMODAALI
 // ===================================================
-function openContactModal(adId) {
+function openContactModal(adId, allowMessages = true) {
     const modal = document.getElementById('contact-modal');
     if (modal) {
         document.getElementById('contact-ad-id').value = adId;
+        
+        const titleEl = modal.querySelector('.modal-title');
+        const messageGroup = document.getElementById('contact-message-group');
+        const messageInput = document.getElementById('contact-message');
+        const submitBtn = document.getElementById('contact-submit-btn');
+        
+        if (allowMessages === false) {
+            if (titleEl) titleEl.innerText = 'Lähetä yhteydenottopyyntö';
+            if (messageGroup) messageGroup.style.display = 'none';
+            if (messageInput) {
+                messageInput.required = false;
+                messageInput.value = 'Yhteydenottopyyntö (automaattinen)';
+            }
+            if (submitBtn) submitBtn.innerText = 'Lähetä pyyntö';
+        } else {
+            if (titleEl) titleEl.innerText = 'Lähetä viesti ilmoittajalle';
+            if (messageGroup) messageGroup.style.display = 'block';
+            if (messageInput) {
+                messageInput.required = true;
+                messageInput.value = '';
+            }
+            if (submitBtn) submitBtn.innerText = 'Lähetä viesti';
+        }
+        
         modal.classList.add('active');
     }
 }
