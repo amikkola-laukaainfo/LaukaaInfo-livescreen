@@ -4,206 +4,465 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kohtaamiset Laukaa | LaukaaInfo</title>
-    <meta name="description" content="Laukaan digitaalinen ekosysteemi. Löydä tekijät, keikat, talkoot ja palvelut läheltäsi.">
+    <meta name="description" content="Laukaan digitaalinen kohtaamispaikka. Löydä tekijät, keikat, talkoot, tilat ja palvelut läheltäsi.">
     <link rel="icon" href="logo.png">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=20260708">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=20260709">
     
-    <script src="translations.js?v=20260708"></script>
+    <script src="translations.js?v=20260709"></script>
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
 
     <style>
+        /* ===== CSS MUUTTUJAT ===== */
         :root {
-            --cat-need-help: #22c55e;
-            --cat-offer-service: #3b82f6;
+            --cat-need-help:    #22c55e;
+            --cat-offer-service:#3b82f6;
             --cat-offer-skills: #f97316;
-            --cat-b2b-request: #a855f7;
-            --cat-gig: #eab308;
-            --cat-volunteer: #ef4444;
-            --cat-space: #14b8a6;
-            --cat-collab: #6366f1;
-            --cat-event: #ec4899;
-            --cat-high-value: #fbbf24;
+            --cat-b2b-request:  #a855f7;
+            --cat-gig:          #eab308;
+            --cat-volunteer:    #ef4444;
+            --cat-space:        #14b8a6;
+            --cat-collab:       #6366f1;
+            --cat-event:        #ec4899;
+            --cat-high-value:   #fbbf24;
+
+            --sidebar-w: 240px;
+            --gap: 1.25rem;
         }
-        
-        .hero-section {
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            padding: 4rem 1rem;
+
+        /* ===== HERO (kompakti) ===== */
+        .km-hero {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #0f4c81 100%);
+            padding: 2.5rem 1.5rem 2rem;
             text-align: center;
-            border-bottom: 1px solid #cbd5e1;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
         }
-        
-        .hero-title {
+
+        .km-hero-title {
             font-family: 'Outfit', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: #0f172a;
-            margin-bottom: 1rem;
-        }
-        
-        .hero-subtitle {
-            font-size: 1.2rem;
-            color: #475569;
-            max-width: 600px;
-            margin: 0 auto 2rem auto;
-            line-height: 1.5;
+            font-size: 2rem;
+            font-weight: 900;
+            color: #fff;
+            margin: 0 0 0.5rem;
+            letter-spacing: -0.5px;
         }
 
-        .filter-container {
-            max-width: 1000px;
-            margin: 0 auto;
+        .km-hero-title span {
+            color: #38bdf8;
+        }
+
+        .km-hero-sub {
+            font-size: 1rem;
+            color: #94a3b8;
+            margin: 0 auto 1.5rem;
+            max-width: 560px;
+            line-height: 1.6;
+        }
+
+        .km-hero-actions {
             display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
+            gap: 0.75rem;
             justify-content: center;
+            flex-wrap: wrap;
         }
 
-        .filter-btn {
-            background: white;
-            border: 2px solid #e2e8f0;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
+        .km-btn-primary {
+            display: inline-flex;
             align-items: center;
             gap: 6px;
-            color: #475569;
-        }
-
-        .filter-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        .filter-btn.active {
-            border-color: #0f172a;
-            background: #0f172a;
-            color: white;
-        }
-
-        .ad-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-            max-width: 1200px;
-            margin: 3rem auto;
-            padding: 0 1rem;
-        }
-
-        .ad-card {
-            background: white;
-            border-radius: 16px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+            background: #0ea5e9;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.95rem;
+            padding: 10px 22px;
+            border-radius: 8px;
             text-decoration: none;
-            color: inherit;
-            transition: all 0.3s;
-            border-top: 6px solid #ccc; /* Tämä korvataan js:ssä värillä */
+            transition: background 0.2s, transform 0.15s;
+        }
+        .km-btn-primary:hover { background: #0284c7; transform: translateY(-1px); }
+
+        /* ===== HAKUPALKKI ===== */
+        .km-search-bar {
+            background: #fff;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 0.9rem 1.5rem;
+            position: sticky;
+            top: 60px; /* nav height */
+            z-index: 50;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .km-search-inner {
+            max-width: 1240px;
+            margin: 0 auto;
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .km-search-field {
+            flex: 1;
             position: relative;
         }
 
-        .ad-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        .km-search-field input {
+            width: 100%;
+            padding: 0.65rem 1rem 0.65rem 2.5rem;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: #f8fafc;
+        }
+        .km-search-field input:focus {
+            outline: none;
+            border-color: #0ea5e9;
+            box-shadow: 0 0 0 3px rgba(14,165,233,0.15);
+            background: #fff;
         }
 
-        .ad-type-badge {
-            display: inline-block;
-            font-size: 0.75rem;
-            font-weight: 800;
+        .km-search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            pointer-events: none;
+        }
+
+        .km-sort-select {
+            padding: 0.65rem 1rem;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: #475569;
+            background: #f8fafc;
+            cursor: pointer;
+        }
+        .km-sort-select:focus { outline: none; border-color: #0ea5e9; }
+
+        /* ===== PÄÄRAKENNE (sidebar + kortit) ===== */
+        .km-layout {
+            max-width: 1240px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: var(--sidebar-w) 1fr;
+            gap: var(--gap);
+            padding: 1.5rem 1.5rem 3rem;
+            align-items: start;
+        }
+
+        /* ===== SIVUPALKKI ===== */
+        .km-sidebar {
+            position: sticky;
+            top: 120px; /* nav + hakupalkki */
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .km-sidebar-header {
+            padding: 0.9rem 1rem;
+            border-bottom: 1px solid #f1f5f9;
+            font-weight: 700;
+            font-size: 0.8rem;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 0.25rem;
+            letter-spacing: 0.08em;
+            color: #64748b;
         }
 
-        .ad-title {
+        .km-cat-list {
+            list-style: none;
+            margin: 0;
+            padding: 0.4rem 0;
+        }
+
+        .km-cat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.6rem 1rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #374151;
+            font-weight: 500;
+            transition: background 0.15s;
+            border-left: 3px solid transparent;
+            user-select: none;
+        }
+
+        .km-cat-item:hover {
+            background: #f8fafc;
+        }
+
+        .km-cat-item.active {
+            background: #eff6ff;
+            color: #0f172a;
+            font-weight: 700;
+            border-left-color: var(--active-color, #0ea5e9);
+        }
+
+        .km-cat-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .km-cat-count {
+            margin-left: auto;
+            background: #f1f5f9;
+            color: #64748b;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 1px 7px;
+            border-radius: 10px;
+        }
+
+        .km-cat-item.active .km-cat-count {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        /* ===== PÄÄSISÄLTÖ ===== */
+        .km-main {}
+
+        .km-result-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .km-result-count {
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        /* ===== KORTTIGRID ===== */
+        .km-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 1rem;
+        }
+
+        /* ===== ILMOITUSKORTTI ===== */
+        .km-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.1rem 1.2rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            text-decoration: none;
+            color: inherit;
+            transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+            border-top: 4px solid #ccc;
+            position: relative;
+        }
+
+        .km-card:hover {
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+            transform: translateY(-3px);
+            border-color: #c7d2fe;
+            border-top-color: inherit; /* säilytetään värillinen yläreuna */
+        }
+
+        .km-card-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .km-card-title {
             font-family: 'Outfit', sans-serif;
-            font-size: 1.25rem;
+            font-size: 1.05rem;
             font-weight: 700;
             color: #0f172a;
             margin: 0;
             line-height: 1.3;
         }
 
-        .ad-desc {
-            font-size: 0.95rem;
+        .km-card-desc {
+            font-size: 0.88rem;
             color: #475569;
-            margin: 0;
-            line-height: 1.5;
+            line-height: 1.55;
             flex-grow: 1;
+            margin: 0;
         }
 
-        .ad-meta {
+        /* Tagit kortissa */
+        .km-card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 2px;
+        }
+
+        .km-tag {
+            display: inline-block;
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 6px;
+            background: #f1f5f9;
+            color: #475569;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+            text-decoration: none;
+            border: none;
+            font-family: inherit;
+        }
+
+        .km-tag:hover {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .km-tag.active {
+            background: #0ea5e9;
+            color: #fff;
+        }
+
+        /* Kortin alarivi */
+        .km-card-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.85rem;
-            color: #64748b;
-            padding-top: 1rem;
+            padding-top: 0.6rem;
             border-top: 1px solid #f1f5f9;
-            margin-top: auto;
+            font-size: 0.8rem;
+            color: #64748b;
         }
 
-        .ad-price {
-            font-weight: 700;
-            color: #0f172a;
-        }
-
-        .ad-location {
+        .km-card-location {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
         }
 
-        .add-new-btn {
+        .km-card-price {
+            font-weight: 700;
+            color: #0f172a;
+            font-size: 0.85rem;
+        }
+
+        /* Tyhjä tila */
+        .km-empty {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 4rem 2rem;
+            background: #fff;
+            border-radius: 12px;
+            border: 1px dashed #cbd5e1;
+            color: #64748b;
+        }
+        .km-empty-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+        .km-empty h3 { color: #374151; margin-bottom: 0.5rem; }
+
+        /* Aktiivinen tagifiltteri -banneri */
+        .km-tag-filter-bar {
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 0.5rem 0.9rem;
+            margin-bottom: 1rem;
+            font-size: 0.88rem;
+            color: #1d4ed8;
+        }
+        .km-tag-filter-bar.visible { display: flex; }
+        .km-tag-clear-btn {
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: #1d4ed8;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        .km-tag-clear-btn:hover { background: #bfdbfe; }
+
+        /* ===== MOBIILI ===== */
+        .km-mobile-cats {
+            display: none;
+            overflow-x: auto;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: #fff;
+            border-bottom: 1px solid #e2e8f0;
+            scrollbar-width: none;
+        }
+        .km-mobile-cats::-webkit-scrollbar { display: none; }
+
+        .km-mobile-cat-btn {
             display: inline-flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
-            background: #0056b3;
-            color: white;
-            font-weight: 700;
-            padding: 12px 24px;
-            border-radius: 8px;
-            text-decoration: none;
-            margin-top: 2rem;
-            transition: background 0.2s;
+            gap: 5px;
+            white-space: nowrap;
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1.5px solid #e2e8f0;
+            background: #fff;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: #475569;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.15s;
+            flex-shrink: 0;
+        }
+        .km-mobile-cat-btn:hover { background: #f1f5f9; }
+        .km-mobile-cat-btn.active {
+            background: #0f172a;
+            color: #fff;
+            border-color: #0f172a;
         }
 
-        .add-new-btn:hover {
-            background: #004494;
+        @media (max-width: 900px) {
+            .km-layout {
+                grid-template-columns: 1fr;
+                padding: 1rem 1rem 3rem;
+            }
+            .km-sidebar { display: none; }
+            .km-mobile-cats { display: flex; }
+            .km-hero-title { font-size: 1.65rem; }
         }
 
-        @media (max-width: 768px) {
-            .hero-title { font-size: 2rem; }
-            .filter-container { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; padding-bottom: 10px; }
-            .filter-btn { white-space: nowrap; }
+        @media (max-width: 540px) {
+            .km-grid { grid-template-columns: 1fr; }
+            .km-search-inner { flex-wrap: wrap; }
+            .km-sort-select { width: 100%; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Navigointi - Kopioitu ydinrakenteesta -->
+    <!-- Navigointi -->
     <nav class="top-nav">
         <div class="nav-container">
             <a href="index.html" class="nav-logo">
                 <img src="logo.png" alt="LaukaaInfo Logo">
                 <span>LaukaaInfo</span>
             </a>
-            <!-- Nav-linkit voidaan hakea nav-sync.js avulla, tässä yksinkertaistettu -->
             <button class="hamburger" id="hamburger-btn" aria-label="Avaa valikko">
-                <span></span>
-                <span></span>
-                <span></span>
+                <span></span><span></span><span></span>
             </button>
         </div>
     </nav>
@@ -220,41 +479,96 @@
             <div class="menu-section">
                 <ul class="menu-list">
                     <li class="menu-item"><a href="index.html" class="sidebar-link">Etusivu</a></li>
+                    <li class="menu-item"><a href="jata-ilmoitus.html" class="sidebar-link">+ Jätä ilmoitus</a></li>
                 </ul>
             </div>
         </div>
     </aside>
 
-    <header class="hero-section">
-        <h1 class="hero-title">Laukaan Kohtaamispaikka</h1>
-        <p class="hero-subtitle">Paikallinen digitaalinen ekosysteemi. Löydä tekijät, keikat, talkoot, tilat ja arvotavarat samasta paikasta.</p>
-        
-        <div class="filter-container" id="filter-container">
-            <!-- Suodattimet generoidaan JS:llä -->
+    <!-- Hero -->
+    <header class="km-hero">
+        <h1 class="km-hero-title">Laukaan <span>Kohtaamispaikka</span></h1>
+        <p class="km-hero-sub">Paikallinen digitaalinen ekosysteemi — löydä tekijät, keikat, talkoot, tilat ja palvelut samasta paikasta.</p>
+        <div class="km-hero-actions">
+            <a href="jata-ilmoitus.html" class="km-btn-primary" id="hero-jata-ilmoitus">
+                <span class="iconify" data-icon="lucide:plus-circle"></span> Jätä ilmoitus
+            </a>
         </div>
-
-        <a href="jata-ilmoitus.html" class="add-new-btn">
-            <span class="iconify" data-icon="lucide:plus-circle"></span> Jätä oma ilmoitus
-        </a>
     </header>
 
-    <main>
-        <div id="loading-spinner" style="text-align: center; padding: 4rem; color: #64748b;">
-            Ladataan kohtaamisia...
+    <!-- Hakupalkki -->
+    <div class="km-search-bar">
+        <div class="km-search-inner">
+            <div class="km-search-field">
+                <span class="km-search-icon">
+                    <span class="iconify" data-icon="lucide:search" style="font-size:1rem;"></span>
+                </span>
+                <input
+                    type="search"
+                    id="km-search-input"
+                    placeholder="Hae ilmoituksista..."
+                    autocomplete="off"
+                >
+            </div>
+            <select id="km-sort-select" class="km-sort-select" aria-label="Järjestys">
+                <option value="newest">Uusimmat ensin</option>
+                <option value="oldest">Vanhimmat ensin</option>
+            </select>
         </div>
-        <div class="ad-grid" id="ad-grid">
-            <!-- Ilmoituskortit generoidaan JS:llä -->
-        </div>
-    </main>
+    </div>
 
-    <footer style="margin-top: 4rem; background-color: #f8f9fa;">
-        <div class="footer-content" style="text-align: center; padding: 2rem;">
-            <p>© 2026 LaukaaInfo – Kohtaamispaikka</p>
-            <p style="font-size: 0.9rem; opacity: 0.7;">Tämä on Laukaan uusi digitaalinen ekosysteemi. Yhteistyössä luomme enemmän.</p>
-        </div>
+    <!-- Mobiilikatgorialista (alle 900px) -->
+    <div class="km-mobile-cats" id="km-mobile-cats">
+        <!-- Generoidaan JS:llä -->
+    </div>
+
+    <!-- Päärakenne -->
+    <div class="km-layout">
+        <!-- Vasempi sivupalkki -->
+        <aside class="km-sidebar" id="km-sidebar">
+            <div class="km-sidebar-header">Osasto</div>
+            <ul class="km-cat-list" id="km-cat-list">
+                <!-- Generoidaan JS:llä -->
+            </ul>
+        </aside>
+
+        <!-- Kortit -->
+        <main>
+            <!-- Aktiivinen tag-suodatin -->
+            <div class="km-tag-filter-bar" id="km-tag-filter-bar">
+                <span class="iconify" data-icon="lucide:tag" style="flex-shrink:0;"></span>
+                <span>Suodatettu tunnisteen mukaan: <strong id="km-active-tag-label"></strong></span>
+                <button class="km-tag-clear-btn" id="km-tag-clear-btn" onclick="clearTagFilter()">✕ Poista</button>
+            </div>
+
+            <!-- Tulosinfo -->
+            <div class="km-result-info">
+                <span id="km-result-count" class="km-result-count"></span>
+            </div>
+
+            <!-- Ladataan-spinner -->
+            <div id="km-loading" style="text-align:center; padding:3rem; color:#64748b;">
+                <span class="iconify" data-icon="lucide:loader-2" style="font-size:2rem; animation: spin 1s linear infinite;"></span>
+                <p>Ladataan kohtaamisia...</p>
+            </div>
+
+            <!-- Korttigrid -->
+            <div class="km-grid" id="km-grid"></div>
+        </main>
+    </div>
+
+    <footer style="background:#0f172a; color:#94a3b8; padding:2rem; text-align:center; margin-top:0;">
+        <p style="margin:0 0 0.3rem;">© 2026 LaukaaInfo – Kohtaamispaikka</p>
+        <p style="font-size:0.85rem; opacity:0.6; margin:0;">Yhteistyössä luomme enemmän. <a href="index.html" style="color:#38bdf8;">Takaisin etusivulle</a></p>
     </footer>
 
-    <script src="kohtaamiset.js?v=20260708"></script>
+    <style>
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="kohtaamiset.js?v=20260709"></script>
     <script src="script.js"></script>
     <script src="nav-sync.js"></script>
 </body>

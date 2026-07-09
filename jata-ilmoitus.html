@@ -3,59 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jätä ilmoitus | Kohtaamispaikka</title>
+    <title>Jätä ilmoitus | Kohtaamispaikka – LaukaaInfo</title>
     <link rel="icon" href="logo.png">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=20260708">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=20260709">
     
-    <script src="translations.js?v=20260708"></script>
+    <script src="translations.js?v=20260709"></script>
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
 
     <style>
-        .form-container {
-            max-width: 600px;
-            margin: 3rem auto;
-            background: white;
+        body.bg-full-gray { background: #f1f5f9; }
+
+        /* ===== LOMAKEKORTTI ===== */
+        .ilm-container {
+            max-width: 640px;
+            margin: 2rem auto 4rem;
+            background: #fff;
             padding: 2.5rem;
             border-radius: 16px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.07);
         }
 
-        .form-title {
+        .ilm-title {
             font-family: 'Outfit', sans-serif;
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            font-weight: 900;
             color: #0f172a;
+            margin: 0 0 0.3rem;
         }
 
+        .ilm-sub {
+            color: #64748b;
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Lomakekentät */
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.4rem;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
             font-weight: 600;
+            font-size: 0.9rem;
             color: #334155;
+        }
+
+        .form-group label .required {
+            color: #ef4444;
+            margin-left: 2px;
         }
 
         .form-control {
             width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1px solid #cbd5e1;
+            padding: 0.7rem 1rem;
+            border: 1.5px solid #cbd5e1;
             border-radius: 8px;
             font-family: 'Inter', sans-serif;
-            font-size: 1rem;
-            transition: border-color 0.2s;
+            font-size: 0.95rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: #f8fafc;
+            color: #0f172a;
+            box-sizing: border-box;
         }
 
         .form-control:focus {
             outline: none;
-            border-color: #0f172a;
-            box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.1);
+            border-color: #0ea5e9;
+            box-shadow: 0 0 0 3px rgba(14,165,233,0.15);
+            background: #fff;
         }
 
         textarea.form-control {
@@ -63,29 +84,184 @@
             resize: vertical;
         }
 
+        .form-hint {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+
+        /* ===== TAG-VALITSIN ===== */
+        .tag-selector {
+            border: 1.5px solid #cbd5e1;
+            border-radius: 8px;
+            background: #f8fafc;
+            padding: 0.75rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .tag-selector:focus-within {
+            border-color: #0ea5e9;
+            box-shadow: 0 0 0 3px rgba(14,165,233,0.15);
+            background: #fff;
+        }
+
+        /* Valitut tagit + kirjoituskenttä */
+        .tag-input-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .tag-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #0ea5e9;
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 3px 10px 3px 10px;
+            border-radius: 20px;
+        }
+
+        .tag-chip-remove {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.8);
+            cursor: pointer;
+            font-size: 0.9rem;
+            line-height: 1;
+            padding: 0 0 0 2px;
+            font-family: inherit;
+        }
+        .tag-chip-remove:hover { color: #fff; }
+
+        .tag-text-input {
+            flex: 1;
+            min-width: 120px;
+            border: none;
+            background: transparent;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            padding: 3px 4px;
+            outline: none;
+            color: #0f172a;
+        }
+
+        /* Ehdotetut tagit */
+        .tag-suggestions-label {
+            font-size: 0.78rem;
+            color: #94a3b8;
+            margin: 0.6rem 0 0.3rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .tag-suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .tag-suggestion-btn {
+            display: inline-block;
+            font-size: 0.78rem;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 6px;
+            background: #f1f5f9;
+            color: #475569;
+            cursor: pointer;
+            border: 1.5px solid #e2e8f0;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.15s;
+        }
+
+        .tag-suggestion-btn:hover:not(:disabled) {
+            background: #e0f2fe;
+            border-color: #7dd3fc;
+            color: #0369a1;
+        }
+
+        .tag-suggestion-btn:disabled {
+            opacity: 0.4;
+            cursor: default;
+        }
+
+        /* ===== KATEGORIANELIÖT ===== */
+        .cat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 0.6rem;
+        }
+
+        .cat-radio-item {
+            position: relative;
+        }
+
+        .cat-radio-item input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .cat-radio-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 0.75rem 0.5rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #374151;
+            text-align: center;
+            transition: all 0.15s;
+            background: #f8fafc;
+            line-height: 1.3;
+        }
+
+        .cat-radio-label .cat-emoji {
+            font-size: 1.6rem;
+        }
+
+        .cat-radio-item input:checked + .cat-radio-label {
+            border-color: var(--cat-color, #0ea5e9);
+            background: var(--cat-bg, #eff6ff);
+            color: #0f172a;
+            box-shadow: 0 0 0 3px rgba(14,165,233,0.15);
+        }
+
+        .cat-radio-label:hover {
+            border-color: #94a3b8;
+            background: #f1f5f9;
+        }
+
+        /* ===== SUBMIT-NAPPI ===== */
         .submit-btn {
             width: 100%;
-            background: #0f172a;
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
             color: white;
             padding: 1rem;
             border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
+            border-radius: 10px;
+            font-size: 1.05rem;
             font-weight: 700;
+            font-family: 'Inter', sans-serif;
             cursor: pointer;
             transition: all 0.2s;
-            margin-top: 1rem;
+            margin-top: 0.5rem;
         }
+        .submit-btn:hover { background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); transform: translateY(-1px); }
+        .submit-btn:disabled { background: #94a3b8; cursor: not-allowed; transform: none; }
 
-        .submit-btn:hover {
-            background: #1e293b;
-        }
-
-        .submit-btn:disabled {
-            background: #94a3b8;
-            cursor: not-allowed;
-        }
-
+        /* ===== PALAUTE ===== */
         .form-feedback {
             padding: 1rem;
             border-radius: 8px;
@@ -93,27 +269,29 @@
             display: none;
             font-weight: 600;
         }
+        .form-feedback.success { display: block; background: #dcfce7; color: #166534; }
+        .form-feedback.error   { display: block; background: #fee2e2; color: #991b1b; }
 
-        .form-feedback.success {
-            display: block;
-            background: #dcfce7;
-            color: #166534;
-        }
-
-        .form-feedback.error {
-            display: block;
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
+        /* Takaisilinkki */
         .back-link {
-            display: inline-block;
-            margin: 1rem 0 0 1rem;
-            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
             color: #475569;
             text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            transition: color 0.15s;
         }
-        .back-link:hover { text-decoration: underline; }
+        .back-link:hover { color: #0ea5e9; }
+
+        /* Erotinviiva */
+        .ilm-divider {
+            border: none;
+            border-top: 1px solid #f1f5f9;
+            margin: 1.5rem 0;
+        }
     </style>
 </head>
 <body class="bg-full-gray">
@@ -126,9 +304,7 @@
                 <span>LaukaaInfo</span>
             </a>
             <button class="hamburger" id="hamburger-btn" aria-label="Avaa valikko">
-                <span></span>
-                <span></span>
-                <span></span>
+                <span></span><span></span><span></span>
             </button>
         </div>
     </nav>
@@ -144,125 +320,342 @@
     </aside>
 
     <main style="padding-top: 80px; min-height: 80vh;">
-        <div style="max-width: 600px; margin: 0 auto;">
-            <a href="kohtaamiset.html" class="back-link">&larr; Takaisin kohtaamisiin</a>
+        <div style="max-width: 640px; margin: 0 auto; padding: 0 1rem;">
+            <a href="kohtaamiset.html" class="back-link">
+                <span class="iconify" data-icon="lucide:arrow-left"></span> Takaisin kohtaamisiin
+            </a>
         </div>
 
-        <div class="form-container">
-            <h1 class="form-title">Jätä ilmoitus</h1>
-            
+        <div class="ilm-container">
+            <h1 class="ilm-title">Jätä ilmoitus</h1>
+            <p class="ilm-sub">Tavoita laukaalaiset ilmaiseksi. Ilmoitus on voimassa 30 päivää.</p>
+
             <div id="form-feedback" class="form-feedback"></div>
 
-            <form id="ad-form">
+            <form id="ad-form" novalidate>
+
+                <!-- Kategoria -->
                 <div class="form-group">
-                    <label for="ad-type">Ilmoituksen tyyppi *</label>
-                    <select id="ad-type" class="form-control" required>
-                        <option value="">Valitse kategoria...</option>
-                        <option value="need_help">🟢 Tarvitsen palvelun</option>
-                        <option value="offer_service">🔵 Tarjoan palvelua</option>
-                        <option value="offer_skills">🟠 Tarjoan osaamistani</option>
-                        <option value="b2b_request">🟣 Yritysten tarjouspyyntö</option>
-                        <option value="gig">🟡 Työkeikka</option>
-                        <option value="volunteer">❤️ Talkoot</option>
-                        <option value="space_rental">🏠 Tilat ja kalusto</option>
-                        <option value="b2b_collab">🤝 Yhteistyöhaku</option>
-                        <option value="event_staff">🎉 Tapahtumahaku</option>
-                        <option value="high_value">💎 Arvotavarat (>2000€)</option>
-                    </select>
+                    <label>Ilmoituksen tyyppi <span class="required">*</span></label>
+                    <div class="cat-grid" id="cat-grid">
+                        <!-- Generoidaan JS:llä -->
+                    </div>
+                    <input type="hidden" id="ad-type" name="type" required>
+                    <div id="cat-error" style="font-size:0.82rem; color:#ef4444; margin-top:4px; display:none;">Valitse kategoria.</div>
                 </div>
 
+                <hr class="ilm-divider">
+
+                <!-- Otsikko -->
                 <div class="form-group">
-                    <label for="ad-title">Otsikko *</label>
-                    <input type="text" id="ad-title" class="form-control" placeholder="Esim. Nurmikon leikkuu" required>
+                    <label for="ad-title">Otsikko <span class="required">*</span></label>
+                    <input type="text" id="ad-title" class="form-control"
+                        placeholder="Esim. Nurmikon leikkuu tai DJ-palvelut juhliin" required maxlength="120">
                 </div>
 
+                <!-- Kuvaus -->
                 <div class="form-group">
-                    <label for="ad-desc">Tarkempi kuvaus *</label>
-                    <textarea id="ad-desc" class="form-control" placeholder="Kerro tarkemmin mitä etsit tai tarjoat..." required></textarea>
+                    <label for="ad-desc">Tarkempi kuvaus <span class="required">*</span></label>
+                    <textarea id="ad-desc" class="form-control"
+                        placeholder="Kerro tarkemmin mitä etsit tai tarjoat. Hyvä kuvaus tuo yhteydenottoja!" required maxlength="1000"></textarea>
                 </div>
 
+                <!-- Tunnisteet -->
                 <div class="form-group">
-                    <label for="ad-price">Hinta tai palkkio (valinnainen)</label>
-                    <input type="text" id="ad-price" class="form-control" placeholder="Esim. 20€/h, Tarjoa, tai Vapaaehtoistyö">
+                    <label for="tag-text-input">Tunnisteet (tagit)
+                        <span style="font-weight:400; color:#94a3b8;">– helpottaa löydettävyyttä</span>
+                    </label>
+                    <div class="tag-selector" id="tag-selector" onclick="document.getElementById('tag-text-input').focus()">
+                        <div class="tag-input-row" id="tag-input-row">
+                            <!-- Valitut tagit renderöidään tähän -->
+                            <input
+                                type="text"
+                                id="tag-text-input"
+                                class="tag-text-input"
+                                placeholder="Kirjoita tunniste ja paina Enter tai pilkku..."
+                                maxlength="40"
+                                autocomplete="off"
+                            >
+                        </div>
+                        <div id="tag-suggestions-area" style="display:none;">
+                            <div class="tag-suggestions-label">Ehdotetut tunnisteet</div>
+                            <div class="tag-suggestions" id="tag-suggestions"></div>
+                        </div>
+                    </div>
+                    <p class="form-hint">Enintään 5 tunnistetta. Kirjoita oma tai valitse alta. Esim: <em>pihatyöt, siivous, muutto</em></p>
                 </div>
 
+                <!-- Hinta -->
                 <div class="form-group">
-                    <label for="ad-location">Toiminta-alue (valinnainen)</label>
-                    <input type="text" id="ad-location" class="form-control" placeholder="Esim. Lievestuore">
+                    <label for="ad-price">Hinta tai palkkio</label>
+                    <input type="text" id="ad-price" class="form-control"
+                        placeholder="Esim. 20€/h, Sopimuksen mukaan tai Vapaaehtoistyö" maxlength="80">
                 </div>
 
+                <!-- Sijainti -->
                 <div class="form-group">
-                    <label for="ad-email">Sähköpostiosoitteesi *</label>
-                    <input type="email" id="ad-email" class="form-control" placeholder="Sinulle lähetetään varmistusviesti" required>
-                    <p style="font-size: 0.8rem; color: #64748b; margin-top: 4px;">Sähköpostiosoitetta ei näytetä julkisesti. Sitä käytetään yhteydenottojen välittämiseen.</p>
+                    <label for="ad-location">Toiminta-alue</label>
+                    <input type="text" id="ad-location" class="form-control"
+                        placeholder="Esim. Lievestuore tai Koko Laukaa" maxlength="80">
                 </div>
 
-                <button type="submit" id="submit-btn" class="submit-btn">Julkaise ilmoitus</button>
+                <hr class="ilm-divider">
+
+                <!-- Sähköposti -->
+                <div class="form-group">
+                    <label for="ad-email">Sähköpostiosoitteesi <span class="required">*</span></label>
+                    <input type="email" id="ad-email" class="form-control"
+                        placeholder="Sinulle lähetetään varmistusviesti" required>
+                    <p class="form-hint">Sähköpostiosoitetta ei näytetä julkisesti. Sitä käytetään yhteydenottojen välittämiseen.</p>
+                </div>
+
+                <button type="submit" id="submit-btn" class="submit-btn">
+                    <span class="iconify" data-icon="lucide:send"></span> Julkaise ilmoitus
+                </button>
             </form>
         </div>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
+
     <script>
-        document.getElementById('ad-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const btn = document.getElementById('submit-btn');
-            const feedback = document.getElementById('form-feedback');
-            
-            btn.disabled = true;
-            btn.innerText = 'Tallennetaan...';
-            feedback.className = 'form-feedback';
-            
-            const type = document.getElementById('ad-type').value;
-            const title = document.getElementById('ad-title').value;
-            const description = document.getElementById('ad-desc').value;
-            const price_info = document.getElementById('ad-price').value;
-            const location = document.getElementById('ad-location').value;
-            const contact_email = document.getElementById('ad-email').value;
+    // =============================================
+    // KATEGORIAT (sama lista kuin kohtaamiset.js)
+    // =============================================
+    const CATEGORIES = {
+        'need_help':     { title: 'Tarvitsen palvelun',     emoji: '🟢', color: '#22c55e', bg: '#dcfce7' },
+        'offer_service': { title: 'Tarjoan palvelua',       emoji: '🔵', color: '#3b82f6', bg: '#dbeafe' },
+        'offer_skills':  { title: 'Tarjoan osaamistani',    emoji: '🟠', color: '#f97316', bg: '#ffedd5' },
+        'b2b_request':   { title: 'Yritysten tarjouspyyntö',emoji: '🟣', color: '#a855f7', bg: '#f3e8ff' },
+        'gig':           { title: 'Työkeikka',              emoji: '🟡', color: '#eab308', bg: '#fef9c3' },
+        'volunteer':     { title: 'Talkoot',                emoji: '❤️', color: '#ef4444', bg: '#fee2e2' },
+        'space_rental':  { title: 'Tilat ja kalusto',       emoji: '🏠', color: '#14b8a6', bg: '#ccfbf1' },
+        'b2b_collab':    { title: 'Yhteistyöhaku',          emoji: '🤝', color: '#6366f1', bg: '#e0e7ff' },
+        'event_staff':   { title: 'Tapahtumahaku',          emoji: '🎉', color: '#ec4899', bg: '#fce7f3' },
+        'high_value':    { title: 'Arvotavarat (>2000€)',   emoji: '💎', color: '#fbbf24', bg: '#fef3c7' }
+    };
 
-            try {
-                if (!window.LaukaaSupabase) throw new Error('Tietokantayhteys puuttuu');
+    // Kategoriakohtaiset ehdotetut tagit
+    const TAG_SUGGESTIONS = {
+        'need_help':     ['pihatyöt', 'siivous', 'remontti', 'kuljetukset', 'it-tuki', 'lastenhoito', 'muutto'],
+        'offer_service': ['siivous', 'remontti', 'sähkötyöt', 'putkityöt', 'maalaus', 'kuljetukset', 'catering'],
+        'offer_skills':  ['graafisuus', 'valokuvaus', 'opetus', 'kirjanpito', 'ohjelmointi', 'markkinointi', 'käännökset'],
+        'b2b_request':   ['siivous', 'IT', 'markkinointi', 'logistiikka', 'rakentaminen', 'turvallisuus'],
+        'gig':           ['musiikki', 'DJ', 'valokuvaus', 'catering', 'asennus', 'kuljetus', 'myynti'],
+        'volunteer':     ['talkoot', 'maalaus', 'puutarha', 'muutto', 'siivous', 'kyläjuhla', 'yhdistystyö'],
+        'space_rental':  ['peräkärry', 'sähkötyökalut', 'juhlatila', 'varastotila', 'kokoustila', 'autotalli'],
+        'b2b_collab':    ['yhteistyö', 'myynti', 'markkinointi', 'sponsorointi', 'jakelu', 'tuotekehitys'],
+        'event_staff':   ['juontaja', 'DJ', 'tekniikka', 'järjestyksenvalvoja', 'catering', 'valokuvaus'],
+        'high_value':    ['mönkijä', 'auto', 'vene', 'moottoripyörä', 'huonekalut', 'elektroniikka', 'koru']
+    };
 
-                const { error } = await window.LaukaaSupabase
-                    .from('encounters')
-                    .insert([
-                        { type, title, description, price_info, location, contact_email, status: 'active' }
-                    ]);
+    // =============================================
+    // TILA
+    // =============================================
+    let selectedTags = [];
+    let selectedCategory = '';
 
-                if (error) throw error;
+    // =============================================
+    // KATEGORIAGRID
+    // =============================================
+    function renderCatGrid() {
+        const grid = document.getElementById('cat-grid');
+        grid.innerHTML = '';
+        Object.entries(CATEGORIES).forEach(([key, cat]) => {
+            const item = document.createElement('div');
+            item.className = 'cat-radio-item';
 
-                feedback.innerText = 'Ilmoitus lisätty onnistuneesti! (Vaihe 2: Oikeassa versiossa tähän tulisi sähköpostivarmistus)';
-                feedback.classList.add('success');
-                document.getElementById('ad-form').reset();
-                
-                setTimeout(() => {
-                    window.location.href = 'kohtaamiset.html';
-                }, 3000);
+            item.innerHTML = `
+                <input type="radio" name="cat-radio" id="cat-${key}" value="${key}">
+                <label class="cat-radio-label" for="cat-${key}"
+                    style="--cat-color: ${cat.color}; --cat-bg: ${cat.bg};">
+                    <span class="cat-emoji">${cat.emoji}</span>
+                    <span>${cat.title}</span>
+                </label>
+            `;
 
-            } catch (err) {
-                console.error(err);
-                
-                // Tarkistetaan onko kyseessä meidän oma triggerin heittämä virhe (Supabase palauttaa sen usein err.message kentässä)
-                let errorMsg = 'Virhe ilmoitusta lisättäessä. Yritä myöhemmin uudelleen.';
-                if (err.message && err.message.includes('Sähköpostiosoite on estetty')) {
-                    errorMsg = 'Tällä sähköpostiosoitteella ei voi toistaiseksi jättää ilmoituksia (estetty).';
-                } else if (err.message && err.message.includes('yhden ilmoituksen vuorokaudessa')) {
-                    errorMsg = 'Voit jättää vain yhden ilmoituksen vuorokaudessa tällä sähköpostiosoitteella. Yritä huomenna uudelleen!';
-                } else if (err.message) {
-                    errorMsg = 'Virhe: ' + err.message;
-                }
+            item.querySelector('input').addEventListener('change', () => {
+                selectedCategory = key;
+                document.getElementById('ad-type').value = key;
+                document.getElementById('cat-error').style.display = 'none';
+                updateTagSuggestions();
+            });
 
-                feedback.innerText = errorMsg;
-                feedback.classList.add('error');
-            } finally {
-                btn.disabled = false;
-                btn.innerText = 'Julkaise ilmoitus';
+            grid.appendChild(item);
+        });
+    }
+
+    // =============================================
+    // TAG-VALITSIN
+    // =============================================
+    function renderTagChips() {
+        const row = document.getElementById('tag-input-row');
+        // Poista vanhat chipit
+        row.querySelectorAll('.tag-chip').forEach(c => c.remove());
+
+        selectedTags.forEach(tag => {
+            const chip = document.createElement('span');
+            chip.className = 'tag-chip';
+            chip.innerHTML = `${escHtml(tag)}<button class="tag-chip-remove" type="button" aria-label="Poista ${escHtml(tag)}">✕</button>`;
+            chip.querySelector('button').onclick = () => removeTag(tag);
+            row.insertBefore(chip, document.getElementById('tag-text-input'));
+        });
+
+        // Piilota input kun max (5) saavutettu
+        const input = document.getElementById('tag-text-input');
+        input.style.display = selectedTags.length >= 5 ? 'none' : '';
+        input.placeholder = selectedTags.length === 0
+            ? 'Kirjoita tunniste ja paina Enter tai pilkku...'
+            : selectedTags.length < 5
+                ? `+ Lisää tunniste (${5 - selectedTags.length} jäljellä)`
+                : '';
+
+        updateTagSuggestions();
+    }
+
+    function addTag(rawTag) {
+        const tag = rawTag.trim().toLowerCase().replace(/[,;]+/g, '');
+        if (!tag || selectedTags.length >= 5) return;
+        if (selectedTags.includes(tag)) return; // Ei duplikaatteja
+        selectedTags.push(tag);
+        document.getElementById('tag-text-input').value = '';
+        renderTagChips();
+    }
+
+    function removeTag(tag) {
+        selectedTags = selectedTags.filter(t => t !== tag);
+        renderTagChips();
+    }
+
+    function updateTagSuggestions() {
+        const area = document.getElementById('tag-suggestions-area');
+        const container = document.getElementById('tag-suggestions');
+        const suggestions = TAG_SUGGESTIONS[selectedCategory] || [];
+
+        if (!selectedCategory || suggestions.length === 0) {
+            area.style.display = 'none';
+            return;
+        }
+
+        area.style.display = '';
+        container.innerHTML = '';
+
+        suggestions.forEach(tag => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'tag-suggestion-btn';
+            btn.textContent = tag;
+            const alreadyAdded = selectedTags.includes(tag);
+            btn.disabled = alreadyAdded || selectedTags.length >= 5;
+            btn.onclick = () => { addTag(tag); };
+            container.appendChild(btn);
+        });
+    }
+
+    // Tag-input: Enter tai pilkku lisää tagin
+    document.addEventListener('DOMContentLoaded', () => {
+        renderCatGrid();
+        renderTagChips();
+
+        const tagInput = document.getElementById('tag-text-input');
+
+        tagInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ',') {
+                e.preventDefault();
+                if (tagInput.value.trim()) addTag(tagInput.value);
+            } else if (e.key === 'Backspace' && tagInput.value === '' && selectedTags.length > 0) {
+                removeTag(selectedTags[selectedTags.length - 1]);
             }
         });
+
+        tagInput.addEventListener('blur', () => {
+            if (tagInput.value.trim()) addTag(tagInput.value);
+        });
+    });
+
+    // =============================================
+    // LOMAKKEEN LÄHETYS
+    // =============================================
+    document.getElementById('ad-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const btn      = document.getElementById('submit-btn');
+        const feedback = document.getElementById('form-feedback');
+        feedback.className = 'form-feedback';
+
+        // Validointi
+        const type    = document.getElementById('ad-type').value;
+        if (!type) {
+            document.getElementById('cat-error').style.display = '';
+            return;
+        }
+
+        const title        = document.getElementById('ad-title').value.trim();
+        const description  = document.getElementById('ad-desc').value.trim();
+        const price_info   = document.getElementById('ad-price').value.trim();
+        const location     = document.getElementById('ad-location').value.trim();
+        const contact_email= document.getElementById('ad-email').value.trim();
+
+        if (!title || !description || !contact_email) return;
+
+        btn.disabled  = true;
+        btn.innerText = 'Tallennetaan...';
+
+        try {
+            if (!window.LaukaaSupabase) throw new Error('Tietokantayhteys puuttuu');
+
+            const { error } = await window.LaukaaSupabase
+                .from('encounters')
+                .insert([{
+                    type,
+                    title,
+                    description,
+                    price_info:    price_info || null,
+                    location:      location   || null,
+                    contact_email,
+                    tags:          selectedTags,
+                    status:        'active'
+                }]);
+
+            if (error) throw error;
+
+            feedback.innerText = '✅ Ilmoitus lisätty onnistuneesti! Sinut ohjataan takaisin...';
+            feedback.classList.add('success');
+            document.getElementById('ad-form').reset();
+            selectedTags = [];
+            selectedCategory = '';
+            renderTagChips();
+            document.querySelectorAll('input[name="cat-radio"]').forEach(r => r.checked = false);
+            document.getElementById('ad-type').value = '';
+
+            setTimeout(() => { window.location.href = 'kohtaamiset.html'; }, 3000);
+
+        } catch (err) {
+            console.error(err);
+            let errorMsg = 'Virhe ilmoitusta lisättäessä. Yritä myöhemmin uudelleen.';
+            if (err.message?.includes('Sähköpostiosoite on estetty')) {
+                errorMsg = 'Tällä sähköpostiosoitteella ei voi toistaiseksi jättää ilmoituksia.';
+            } else if (err.message?.includes('yhden ilmoituksen vuorokaudessa')) {
+                errorMsg = 'Voit jättää vain yhden ilmoituksen vuorokaudessa. Yritä huomenna!';
+            } else if (err.message) {
+                errorMsg = 'Virhe: ' + err.message;
+            }
+            feedback.innerText = errorMsg;
+            feedback.classList.add('error');
+        } finally {
+            btn.disabled  = false;
+            btn.innerHTML = '<span class="iconify" data-icon="lucide:send"></span> Julkaise ilmoitus';
+        }
+    });
+
+    function escHtml(str) {
+        return String(str || '')
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
     </script>
-    
+
     <script src="script.js"></script>
     <script src="nav-sync.js"></script>
 </body>
