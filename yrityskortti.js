@@ -1588,9 +1588,10 @@
                         + '<div style="font-size:0.85rem;font-weight:600;color:var(--dark-text);">' + (ad.price_info || '') + '</div>'
                         + '</a>';
                 });
-                box.innerHTML = '<h2 style="font-size:1.3rem;color:var(--secondary-blue);margin-top:0;margin-bottom:0.75rem;">Laukaan Kohtaamispaikka</h2>'
-                    + '<p style="font-size:0.9rem;color:var(--light-text);margin-bottom:1rem;">T\u00e4h\u00e4n yritykseen liittyv\u00e4t avoimet haut:</p>'
-                    + cardsHtml;
+                box.innerHTML = '<h2 style="font-size:1.3rem;color:var(--secondary-blue);margin-top:0;margin-bottom:0.75rem;">Katso myös alueen ilmoituksia</h2>'
+                    + '<p style="font-size:0.9rem;color:var(--light-text);margin-bottom:1rem;">Esimerkkejä paikallisista ilmoituksista ja toiveista:</p>'
+                    + cardsHtml
+                    + '<a href="kohtaamiset.html" style="display:block;text-align:center;color:var(--primary-blue);font-weight:700;margin-top:1rem;text-decoration:none;">Katso kaikkia ilmoituksia &raquo;</a>';
                 container.appendChild(box);
             }
         } catch(e) {
