@@ -406,8 +406,13 @@
                     <label for="ad-email">Sähköpostiosoitteesi <span class="required">*</span></label>
                     <input type="email" id="ad-email" class="form-control"
                         placeholder="Sinulle lähetetään varmistusviesti" required>
-                    <p class="form-hint">Sähköpostiosoitetta ei näytetä julkisesti. Sitä käytetään yhteydenottojen välittämiseen.</p>
-                </div>
+                    <div style="margin-top: 10px; display: flex; align-items: flex-start; gap: 8px;">
+                        <input type="checkbox" id="email-public" style="margin-top: 4px;">
+                        <label for="email-public" style="font-weight: normal; font-size: 0.85rem; color: #475569;">
+                            Näytä sähköpostiosoite julkisesti ilmoituksessa.<br>
+                            <span style="font-size: 0.8rem; color: #94a3b8;">Jos et valitse tätä, osoitteesi piilotetaan ja yhteydenotot tulevat järjestelmän kautta sähköpostiisi.</span>
+                        </label>
+                    </div>
 
                 <button type="submit" id="submit-btn" class="submit-btn">
                     <span class="iconify" data-icon="lucide:send"></span> Julkaise ilmoitus
@@ -596,6 +601,7 @@
         const price_info   = document.getElementById('ad-price').value.trim();
         const location     = document.getElementById('ad-location').value.trim();
         const contact_email= document.getElementById('ad-email').value.trim();
+        const email_public = document.getElementById('email-public').checked;
 
         if (!title || !description || !contact_email) return;
 
@@ -614,6 +620,7 @@
                     price_info:    price_info || null,
                     location:      location   || null,
                     contact_email,
+                    email_public,
                     tags:          selectedTags,
                     status:        'active'
                 }]);

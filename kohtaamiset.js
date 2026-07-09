@@ -448,14 +448,23 @@ async function initIlmoituskortti() {
 
     const btn = document.getElementById('ad-contact-btn');
     if (btn) {
-        if (ad.contact_email) {
+        if (ad.email_public && ad.contact_email) {
             btn.href = `mailto:${ad.contact_email}?subject=LaukaaInfo%3A%20${encodeURIComponent(ad.title)}`;
             btn.innerText = 'Ota yhteyttä (Sähköposti)';
+            btn.onclick = null;
+        } else if (ad.contact_email) {
+            btn.href = '#';
+            btn.innerText = 'Ota yhteyttä (Lähetä viesti)';
+            btn.onclick = (e) => {
+                e.preventDefault();
+                openContactModal(ad.id);
+            };
         } else {
             btn.href = '#';
             btn.innerText = 'Ei yhteystietoja saatavilla';
             btn.style.opacity = '0.5';
             btn.style.cursor = 'not-allowed';
+            btn.onclick = (e) => e.preventDefault();
         }
     }
 
@@ -475,3 +484,82 @@ function escapeHtml(str) {
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
 }
+
+// ===================================================
+// YHTEYDENOTTOMODAALI
+// ===================================================
+function openContactModal(adId) {
+    const modal = document.getElementById('contact-modal');
+    if (modal) {
+        document.getElementById('contact-ad-id').value = adId;
+        modal.classList.add('active');
+    }
+}
+
+function closeContactModal() {
+    const modal = document.getElementById('contact-modal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.getElementById('contact-form').reset();
+        const feedback = document.getElementById('modal-feedback');
+        if (feedback) {
+            feedback.style.display = 'none';
+            feedback.className = '';
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('contact-submit-btn');
+            const feedback = document.getElementById('modal-feedback');
+            const adId = document.getElementById('contact-ad-id').value;
+            const name = document.getElementById('contact-name').value;
+            const email = document.getElementById('contact-email').value;
+            const message = document.getElementById('contact-message').value;
+
+            btn.disabled = true;
+            btn.innerText = 'Lähetetään...';
+            
+            try {
+                // Etsitään ad Supabasesta PHP:n puolella (turvallisempi) tai lähetetään tässä. 
+                // Välitämme PHP-skriptille vain ad_id:n ja PHP skripti hakee kohteen (ja sen kontaktisähköpostin)
+                const formData = new FormData();
+                formData.append('ad_id', adId);
+                formData.append('sender_name', name);
+                formData.append('sender_email', email);
+                formData.append('message', message);
+
+                const response = await fetch('https://mediazoo.fi/laukaainfo-web/send_kohtaaminen_message.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    feedback.innerText = 'Viesti lähetetty onnistuneesti!';
+                    feedback.style.color = '#166534';
+                    feedback.style.backgroundColor = '#dcfce7';
+                    feedback.style.display = 'block';
+                    contactForm.reset();
+                    setTimeout(closeContactModal, 3000);
+                } else {
+                    throw new Error(result.error || 'Tuntematon virhe');
+                }
+            } catch (err) {
+                console.error(err);
+                feedback.innerText = 'Virhe viestin lähetyksessä: ' + err.message;
+                feedback.style.color = '#991b1b';
+                feedback.style.backgroundColor = '#fee2e2';
+                feedback.style.display = 'block';
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'Lähetä viesti';
+            }
+        });
+    }
+});

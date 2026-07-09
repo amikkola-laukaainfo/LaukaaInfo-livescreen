@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS public.encounters (
     price_info    VARCHAR(80),
     location      VARCHAR(80),
     contact_email VARCHAR NOT NULL,
+    email_public  BOOLEAN DEFAULT false,  -- Näytetäänkö sähköposti julkisesti (true) vai käytetäänkö lomaketta (false)
     tags          TEXT[] DEFAULT '{}',    -- Tunnisteet, esim. ARRAY['pihatyöt','nurmikko']
     status        VARCHAR DEFAULT 'active', -- active | draft | closed
     created_at    TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
@@ -33,6 +34,9 @@ CREATE TABLE IF NOT EXISTS public.encounters (
 
 -- ALTER TABLE public.encounters
 --     ADD COLUMN IF NOT EXISTS tags TEXT[] DEFAULT '{}';
+
+-- ALTER TABLE public.encounters
+--     ADD COLUMN IF NOT EXISTS email_public BOOLEAN DEFAULT false;
 
 
 -- ============================================================
