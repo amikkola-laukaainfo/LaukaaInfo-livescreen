@@ -235,25 +235,33 @@ function makeSidebarItem(key, emoji, title, color, count) {
 // MOBIILIPAINIKKEET
 // ===================================================
 function renderMobileCats() {
-    const container = document.getElementById('km-mobile-cats');
-    if (!container) return;
-    container.innerHTML = '';
+    const select = document.getElementById('km-mobile-cat-select');
+    if (!select) return;
 
+    // Laske määrät
     const counts = countByCategory(allEncounters);
 
-    const allBtn = document.createElement('button');
-    allBtn.className = `km-mobile-cat-btn ${activeFilter === 'all' ? 'active' : ''}`;
-    allBtn.textContent = `Kaikki (${counts.all})`;
-    allBtn.onclick = () => setCategoryFilter('all');
-    container.appendChild(allBtn);
+    select.innerHTML = '';
 
+    // "Kaikki" -optio
+    const allOpt = document.createElement('option');
+    allOpt.value = 'all';
+    allOpt.textContent = `Kaikki kategoriat (${counts.all})`;
+    select.appendChild(allOpt);
+
+    // Kategoriat
     Object.entries(categories).forEach(([key, cat]) => {
-        const btn = document.createElement('button');
-        btn.className = `km-mobile-cat-btn ${activeFilter === key ? 'active' : ''}`;
-        btn.textContent = `${cat.emoji} ${cat.title}`;
-        btn.onclick = () => setCategoryFilter(key);
-        container.appendChild(btn);
+        const opt = document.createElement('option');
+        opt.value = key;
+        opt.textContent = `${cat.emoji} ${cat.title} (${counts[key] || 0})`;
+        select.appendChild(opt);
     });
+
+    // Aseta aktiivinen ja kuuntele muutoksia
+    select.value = activeFilter;
+    select.onchange = (e) => {
+        setCategoryFilter(e.target.value);
+    };
 }
 
 // ===================================================

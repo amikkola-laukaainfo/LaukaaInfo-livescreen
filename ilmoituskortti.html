@@ -189,6 +189,34 @@
         #modal-feedback {
             margin-top: 1rem; padding: 0.8rem; border-radius: 8px; display: none; font-weight: 600; font-size: 0.9rem;
         }
+
+        /* ===== MOBIILI ===== */
+        @media (max-width: 600px) {
+            .ad-single-container {
+                margin: 1rem;
+                border-radius: 12px;
+            }
+            .ad-single-header {
+                padding: 1.5rem 1.2rem;
+            }
+            .ad-single-title {
+                font-size: 1.6rem;
+            }
+            .ad-single-body {
+                padding: 1.5rem 1.2rem;
+            }
+            .ad-single-meta {
+                flex-direction: column;
+                gap: 0.8rem;
+                margin-bottom: 1.5rem;
+            }
+            .ad-single-desc {
+                font-size: 1.05rem;
+            }
+            .back-link {
+                margin: 0.5rem 0 0 1rem;
+            }
+        }
     </style>
 </head>
 <body class="bg-full-gray">
@@ -242,6 +270,12 @@
                     <div class="ad-single-meta-item">
                         <span class="iconify" data-icon="lucide:calendar"></span>
                         <span id="ad-date">Julkaistu</span>
+                    </div>
+                    <div class="ad-single-meta-item" style="margin-left: auto;">
+                        <button onclick="copyShareLink()" id="share-btn" style="background:none; border:none; color:#0ea5e9; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px; font-family:'Inter', sans-serif; font-size:0.95rem; padding:4px 8px; border-radius:6px; transition:background 0.2s;">
+                            <span class="iconify" data-icon="lucide:share-2"></span>
+                            <span>Kopioi linkki</span>
+                        </button>
                     </div>
                 </div>
 
@@ -320,5 +354,26 @@
     <script src="kohtaamiset.js?v=20260710"></script>
     <script src="script.js"></script>
     <script src="nav-sync.js"></script>
+
+    <script>
+        // Kopioi linkki
+        function copyShareLink() {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                const btn = document.getElementById('share-btn');
+                if (!btn) return;
+                const originalHtml = btn.innerHTML;
+                btn.innerHTML = '<span class="iconify" data-icon="lucide:check"></span><span>Kopioitu!</span>';
+                btn.style.color = '#16a34a';
+                setTimeout(() => {
+                    btn.innerHTML = originalHtml;
+                    btn.style.color = '#0ea5e9';
+                }, 2500);
+            }).catch(err => {
+                console.error('Kopiointi epäonnistui', err);
+                alert('Linkin kopiointi epäonnistui selaimen turva-asetusten vuoksi.');
+            });
+        }
+    </script>
 </body>
 </html>
