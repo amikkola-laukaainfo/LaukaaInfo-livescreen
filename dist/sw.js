@@ -1,10 +1,10 @@
-const VERSION = '5f949c74'; // Päivitetty reittidatan latauksen korjausta varten
+const VERSION = 'c31ccb86'; // Päivitetty reittidatan latauksen korjausta varten
 const CACHE_NAME = `laukaainfo-${VERSION}`;
 const ASSETS = [
     './',
     './index.html',
-    './style.f3fdb606.5f949c74.css',
-    './script.f3fdb606.5f949c74.js',
+    './style.f3fdb606.c31ccb86.css',
+    './script.f3fdb606.c31ccb86.js',
     './manifest.json',
     './icons/icon-192.png',
     './icons/icon-512.png',
@@ -75,6 +75,4 @@ self.addEventListener('fetch', event => {
 // Kuuntele viestejä (esim. SKIP_WAITING)
 self.addEventListener('message', event => {
     if (event.data && event.data.type === 'SKIP_WAITING') {
-        self.skipWaiting();
-    }
-});
+        self.skipWaitin
