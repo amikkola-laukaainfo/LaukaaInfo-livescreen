@@ -34,6 +34,7 @@ switch ($action) {
     case 'reply':              requireMethod('POST'); handleReply();             break;
     case 'get_thread':         requireMethod('GET');  handleGetThread();         break;
     case 'report':             requireMethod('POST'); handleReport();            break;
+    case 'resolve':            requireMethod('POST'); handleResolve();           break;
     default: jsonError('Tuntematon toiminto', 400);
 }
 
@@ -262,6 +263,72 @@ function handleReport() {
 }
 
 // ============================================================
+// TOIMINTO 5: Merkitse asia valmiiksi (Ilmoittaja sulkee)
+// ============================================================
+function handleResolve() {
+    $conv_id = trim($_POST['conversation_id'] ?? '');
+    $token   = trim($_POST['token'] ?? '');
+
+    if (!$conv_id || !$token) jsonError('Puuttuvia tietoja');
+    if (!isValidUuid($conv_id) || !isValidUuid($token)) jsonError('Virheelliset tunnisteet', 400);
+
+    // Tarkista keskustelu
+    $convs = sbGet('/rest/v1/conversations?id=eq.' . urlencode($conv_id) . '&select=*&limit=1');
+    if (empty($convs)) jsonError('Keskustelua ei löytynyt', 404);
+    $conv = $convs[0];
+
+    // Vain ilmoittaja (owner) voi päättää keskustelun ja ilmoituksen!
+    if ($token !== $conv['owner_token']) {
+        jsonError('Vain ilmoittaja voi merkitä asian valmiiksi.', 403);
+    }
+
+    if ($conv['status'] === 'resolved') {
+        jsonSuccess(['message' => 'Asia on jo merkitty valmiiksi.']);
+    }
+
+    $tomorrow = date('c', strtotime('+24 hours'));
+
+    // 1. Päivitä keskustelu: tila resolved ja vanhentuu 24h kuluttua
+    sbPatch('/rest/v1/conversations?id=eq.' . urlencode($conv_id), [
+        'status' => 'resolved',
+        'expires_at' => $tomorrow
+    ]);
+
+    // 2. Hae alkuperäinen ilmoitus ja sen tagit
+    $enc_id = $conv['encounter_id'];
+    $encs = sbGet('/rest/v1/encounters?id=eq.' . urlencode($enc_id) . '&select=id,tags&limit=1');
+    
+    if (!empty($encs)) {
+        $tags = $encs[0]['tags'] ?? [];
+        if (!is_array($tags)) {
+            // Jos Supabase palauttaa merkkijonona "{tag1,tag2}", parseroidaan tarvittaessa
+            // Mutta json-muodossa API palauttaa taulukon.
+            $tags = [];
+        }
+        
+        if (!in_array('resolved', $tags)) {
+            $tags[] = 'resolved';
+        }
+
+        // 3. Päivitä ilmoitus: lisää resolved-tag ja vanhentuu 24h kuluttua
+        sbPatch('/rest/v1/encounters?id=eq.' . urlencode($enc_id), [
+            'tags' => $tags,
+            'expires_at' => $tomorrow
+        ]);
+    }
+
+    // Tallenna systeemiviesti keskusteluun tiedoksi
+    sbPost('/rest/v1/messages', [
+        'conversation_id'=> $conv_id,
+        'sender_role'    => 'owner',
+        'sender_name'    => 'Järjestelmä',
+        'body'           => '✅ Ilmoittaja on merkinnyt asian valmiiksi. Tämä keskustelu ja ilmoitus poistuvat järjestelmästä 24 tunnin kuluttua. Uusia viestejä ei voi enää lähettää.',
+    ]);
+
+    jsonSuccess(['message' => 'Asia merkitty valmiiksi! Ilmoitus poistuu vuorokauden kuluttua.']);
+}
+
+// ============================================================
 // SUPABASE HELPERS
 // ============================================================
 function sbGet(string $path): array {
@@ -293,6 +360,28 @@ function sbPost(string $path, array $body, bool $return = false): mixed {
     curl_setopt_array($ch, [
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_POST           => true,
+        CURLOPT_POSTFIELDS     => json_encode($body),
+        CURLOPT_HTTPHEADER     => $headers,
+    ]);
+    $res = curl_exec($ch);
+    curl_close($ch);
+    $data = json_decode($res, true);
+    return is_array($data) ? $data : [];
+}
+
+function sbPatch(string $path, array $body): mixed {
+    $ch = curl_init(SUPABASE_URL . $path);
+    $headers = [
+        'apikey: '         . SUPABASE_SERVICE_KEY,
+        'Authorization: Bearer ' . SUPABASE_SERVICE_KEY,
+        'Content-Type: application/json',
+        'Accept: application/json',
+        'Prefer: return=minimal'
+    ];
+
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CUSTOMREQUEST  => 'PATCH',
         CURLOPT_POSTFIELDS     => json_encode($body),
         CURLOPT_HTTPHEADER     => $headers,
     ]);

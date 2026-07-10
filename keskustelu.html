@@ -217,6 +217,30 @@
         }
         .kv-submit-btn:disabled { background: #94a3b8; cursor: not-allowed; transform: none; }
 
+        .kv-resolve-btn {
+            width: 100%;
+            background: #fff;
+            color: #16a34a;
+            border: 2px solid #16a34a;
+            border-radius: 10px;
+            padding: 0.9rem;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 1rem;
+        }
+        .kv-resolve-btn:hover:not(:disabled) {
+            background: #f0fdf4;
+            transform: translateY(-1px);
+        }
+        .kv-resolve-btn:disabled { border-color: #94a3b8; color: #94a3b8; cursor: not-allowed; transform: none; }
+
         .kv-form-feedback {
             padding: 0.75rem 1rem;
             border-radius: 8px;
@@ -403,6 +427,11 @@
                     <div id="kv-form-feedback" class="kv-form-feedback"></div>
                 </form>
 
+                <button type="button" id="kv-resolve-btn" class="kv-resolve-btn" style="display:none;">
+                    <span class="iconify" data-icon="lucide:check-circle"></span>
+                    Asia valmis – Sulje ilmoitus
+                </button>
+
                 <p class="kv-privacy-note">
                     <span class="iconify" data-icon="lucide:lock" style="font-size:0.85rem;"></span>
                     Sähköpostiosoitteesi ei näy toiselle osapuolelle.
@@ -511,6 +540,11 @@
             // Vastauslomake (vain jos ei vanhentunut)
             if (!conversation.is_expired && conversation.status === 'open') {
                 document.getElementById('kv-reply-card').style.display = 'block';
+                
+                // Jos on owner, näytä myös resolve-nappi
+                if (role === 'owner') {
+                    document.getElementById('kv-resolve-btn').style.display = 'flex';
+                }
             }
 
         } catch (e) {
@@ -642,6 +676,41 @@
         } finally {
             btn.disabled = false;
             btn.innerHTML = '<span class="iconify" data-icon="lucide:send"></span> Lähetä vastaus';
+        }
+    });
+
+    // ============================================================
+    // ASIA VALMIS (RESOLVE)
+    // ============================================================
+    document.getElementById('kv-resolve-btn')?.addEventListener('click', async () => {
+        if (!confirm('Haluatko varmasti merkitä asian valmiiksi?\n\nIlmoitus ja tämä keskustelu poistuvat järjestelmästä 24 tunnin kuluttua, ja uusia viestejä ei voi enää lähettää.')) {
+            return;
+        }
+
+        const btn = document.getElementById('kv-resolve-btn');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="iconify spin" data-icon="lucide:loader-2"></span> Suljetaan...';
+
+        const formData = new FormData();
+        formData.append('conversation_id', window._kvConvId);
+        formData.append('token',           window._kvToken);
+
+        try {
+            const res  = await fetch(`${API}?action=resolve`, { method: 'POST', body: formData });
+            const data = await res.json();
+
+            if (data.success) {
+                alert('✅ Asia on merkitty valmiiksi!');
+                loadThread(); // Lataa ketju uudelleen -> piilottaa vastauskentän ja näyttää uuden statuksen
+            } else {
+                alert('Virhe: ' + (data.error || 'Tuntematon virhe'));
+            }
+        } catch (err) {
+            alert('Verkkovirhe. Tarkista yhteytesi.');
+            console.error(err);
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<span class="iconify" data-icon="lucide:check-circle"></span> Asia valmis – Sulje ilmoitus';
         }
     });
 
