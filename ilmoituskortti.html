@@ -255,6 +255,11 @@
                 </div>
 
                 <a href="#" class="contact-btn" id="ad-contact-btn">Ota yhteyttä ilmoittajaan</a>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <button onclick="openReportModal()" style="background:none; border:none; color:#94a3b8; font-size:0.85rem; cursor:pointer; text-decoration:underline;">
+                        <span class="iconify" data-icon="lucide:flag" style="vertical-align: middle;"></span> Ilmoita asiaton sisältö
+                    </button>
+                </div>
             </div>
         </div>
     </main>
@@ -282,6 +287,24 @@
                 </div>
                 <button type="submit" class="modal-submit" id="contact-submit-btn">Lähetä viesti</button>
                 <div id="modal-feedback"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Raportointimodaali -->
+    <div class="modal-overlay" id="report-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeReportModal()">&times;</button>
+            <h2 class="modal-title">Ilmoita asiaton sisältö</h2>
+            <form id="report-form">
+                <input type="hidden" id="report-ad-id">
+                <input type="text" id="report-website" name="website" style="display:none!important;" tabindex="-1" autocomplete="off">
+                <div class="modal-form-group">
+                    <label for="report-reason">Syy ilmoitukseen *</label>
+                    <textarea id="report-reason" class="modal-form-control" rows="4" placeholder="Kerro miksi tämä ilmoitus on asiaton tai sääntöjen vastainen..." required></textarea>
+                </div>
+                <button type="submit" class="modal-submit" id="report-submit-btn" style="background:#ef4444;">Lähetä ilmoitus</button>
+                <div id="report-feedback" style="margin-top: 1rem; padding: 0.8rem; border-radius: 8px; display: none; font-weight: 600; font-size: 0.9rem;"></div>
             </form>
         </div>
     </div>

@@ -601,3 +601,87 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+// ===================================================
+// RAPORTOINTIMODAALI
+// ===================================================
+function openReportModal() {
+    const modal = document.getElementById('report-modal');
+    if (!modal) return;
+    
+    // Hae adId oikeasta kentästä (contact modal field tai URL)
+    const adIdField = document.getElementById('contact-ad-id');
+    const adId = adIdField ? adIdField.value : new URLSearchParams(window.location.search).get('id');
+    
+    const reportAdIdField = document.getElementById('report-ad-id');
+    if (reportAdIdField) reportAdIdField.value = adId;
+
+    const form = document.getElementById('report-form');
+    if (form) form.reset();
+    const feedback = document.getElementById('report-feedback');
+    if (feedback) { feedback.style.display = 'none'; feedback.className = ''; }
+
+    modal.classList.add('active');
+}
+
+function closeReportModal() {
+    const modal = document.getElementById('report-modal');
+    if (!modal) return;
+    modal.classList.remove('active');
+    const form = document.getElementById('report-form');
+    if (form) form.reset();
+    const feedback = document.getElementById('report-feedback');
+    if (feedback) { feedback.style.display = 'none'; feedback.className = ''; }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const reportForm = document.getElementById('report-form');
+    if (!reportForm) return;
+
+    reportForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const btn      = document.getElementById('report-submit-btn');
+        const feedback = document.getElementById('report-feedback');
+        const targetId = document.getElementById('report-ad-id')?.value || '';
+        const reason   = document.getElementById('report-reason')?.value.trim() || '';
+        const honeypot = document.getElementById('report-website')?.value || '';
+
+        if (!targetId || !reason) return;
+
+        btn.disabled  = true;
+        btn.innerText = 'Lähetetään...';
+        if (feedback) { feedback.style.display = 'none'; feedback.className = ''; }
+
+        const formData = new FormData();
+        formData.append('type',      'encounter');
+        formData.append('target_id', targetId);
+        formData.append('reason',    reason);
+        formData.append('website',   honeypot);
+
+        try {
+            const res    = await fetch(KM_API + '?action=report', { method: 'POST', body: formData });
+            const result = await res.json();
+
+            if (result.success) {
+                if (feedback) {
+                    feedback.innerText = '✅ ' + (result.message || 'Raportti lähetetty onnistuneesti.');
+                    feedback.style.cssText = 'color:#166534; background:#dcfce7; border:1px solid #86efac; padding:.75rem 1rem; border-radius:8px; font-size:.88rem; display:block;';
+                }
+                reportForm.reset();
+                if (btn) btn.innerText = 'Lähetetty ✓';
+                setTimeout(closeReportModal, 3000);
+            } else {
+                throw new Error(result.error || 'Tuntematon virhe');
+            }
+        } catch (err) {
+            console.error(err);
+            if (feedback) {
+                feedback.innerText = 'Virhe: ' + err.message;
+                feedback.style.cssText = 'color:#991b1b; background:#fee2e2; border:1px solid #fca5a5; padding:.75rem 1rem; border-radius:8px; font-size:.88rem; display:block;';
+            }
+        } finally {
+            if (btn) { btn.disabled = false; if (btn.innerText !== 'Lähetetty ✓') btn.innerText = 'Lähetä ilmoitus'; }
+        }
+    });
+});

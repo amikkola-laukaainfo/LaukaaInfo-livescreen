@@ -33,6 +33,7 @@ switch ($action) {
     case 'start_conversation': requireMethod('POST'); handleStartConversation(); break;
     case 'reply':              requireMethod('POST'); handleReply();             break;
     case 'get_thread':         requireMethod('GET');  handleGetThread();         break;
+    case 'report':             requireMethod('POST'); handleReport();            break;
     default: jsonError('Tuntematon toiminto', 400);
 }
 
@@ -221,6 +222,43 @@ function handleGetThread() {
         'encounter'    => $encounter,
         'messages'     => $messages,
     ]);
+}
+
+// ============================================================
+// TOIMINTO 4: Raportoi asiaton sisältö
+// ============================================================
+function handleReport() {
+    if (!empty($_POST['website'])) {
+        jsonSuccess(['message' => 'Kiitos raportista.']); // Honeypot
+    }
+
+    $type   = trim($_POST['type'] ?? ''); // 'encounter' | 'conversation'
+    $target_id = trim($_POST['target_id'] ?? '');
+    $reason = trim($_POST['reason'] ?? '');
+
+    if (!$type || !$target_id || !$reason) {
+        jsonError('Kaikki kentät ovat pakollisia');
+    }
+
+    if (!isValidUuid($target_id)) {
+        jsonError('Virheellinen tunniste');
+    }
+
+    $adminEmail = 'info@mediazoo.fi'; // Ylläpidon osoite
+    $subject = "Ilmiannettu asiaton sisältö: $type";
+    
+    $body = "Hei ylläpito,\n\nKäyttäjä on ilmoittanut asiattomasta sisällöstä Kohtaamispaikassa.\n\n";
+    $body .= "Tyyppi: $type\n";
+    $body .= "Kohde ID: $target_id\n";
+    $body .= "Syy:\n$reason\n\n";
+    
+    if ($type === 'encounter') {
+        $body .= "Linkki ilmoitukseen: " . BASE_URL . "/ilmoituskortti.html?id=$target_id\n";
+    }
+
+    sendMail($adminEmail, $subject, $body);
+
+    jsonSuccess(['message' => 'Raportti lähetetty onnistuneesti. Kiitos ilmoituksesta!']);
 }
 
 // ============================================================
