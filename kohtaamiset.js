@@ -137,14 +137,17 @@ async function fetchEncounters() {
                 console.error('Supabase fetch error:', error);
                 return mockEncounters;
             }
-            if (data && data.length > 0) {
-                // Varmistetaan että tags on aina array
+            // Supabase on käytettävissä: palautetaan aina Supabase-data
+            // (myös tyhjänä taulukkona kun ilmoituksia ei ole vielä)
+            // → mock-data ei sekoitu oikeiden ID:iden kanssa
+            if (data !== null) {
                 return data.map(d => ({ ...d, tags: Array.isArray(d.tags) ? d.tags : [] }));
             }
         }
     } catch (e) {
         console.warn('Virhe haettaessa Supabasesta, käytetään mock-dataa:', e);
     }
+    // Fallback: käytetään mock-dataa vain jos Supabase ei ole saatavilla
     return mockEncounters;
 }
 
