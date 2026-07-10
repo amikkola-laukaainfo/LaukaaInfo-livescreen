@@ -611,7 +611,7 @@ function openReportModal() {
     
     // Hae adId oikeasta kentästä (contact modal field tai URL)
     const adIdField = document.getElementById('contact-ad-id');
-    const adId = adIdField ? adIdField.value : new URLSearchParams(window.location.search).get('id');
+    const adId = (adIdField && adIdField.value) ? adIdField.value : new URLSearchParams(window.location.search).get('id');
     
     const reportAdIdField = document.getElementById('report-ad-id');
     if (reportAdIdField) reportAdIdField.value = adId;
