@@ -455,7 +455,7 @@ const UI_TRANSLATIONS = {
         "nav_service_intro": "Palvelun esittely",
         "hero_btn_service": "Löydä palvelu",
         "hero_btn_help": "Löydä verkosto",
-        "hero_btn_people": "Some ja linkit",
+        "hero_btn_people": "Ilmoitukset",
         "hero_btn_create": "Julkaisut",
         "hero_location": "Laukaa, Keski-Suomi",
         "people_section_title": "Löydä ihmisiä",
