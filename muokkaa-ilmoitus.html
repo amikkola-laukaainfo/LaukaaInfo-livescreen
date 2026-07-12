@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muokkaa ilmoitusta | LaukaaInfo</title>
+    <link rel="icon" href="logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=20260712">
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+    <style>
+        body { background: #f1f5f9; }
+        .edit-wrap { max-width: 660px; margin: 2rem auto 4rem; padding: 0 1rem; }
+        .edit-card { background: #fff; border-radius: 16px; box-shadow: 0 8px 30px rgba(0,0,0,0.07); padding: 2.5rem; }
+        .edit-title { font-family: 'Outfit', sans-serif; font-size: 1.7rem; font-weight: 900; color: #0f172a; margin: 0 0 .25rem; }
+        .edit-sub { color: #64748b; font-size: .9rem; margin-bottom: 2rem; }
+        .form-group { margin-bottom: 1.3rem; }
+        .form-group label { display: block; font-weight: 600; font-size: .88rem; color: #334155; margin-bottom: .35rem; }
+        .form-control { width: 100%; padding: .65rem .9rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-family: 'Inter',sans-serif; font-size: .93rem; background: #f8fafc; color: #0f172a; box-sizing: border-box; transition: border-color .2s, box-shadow .2s; }
+        .form-control:focus { outline: none; border-color: #0ea5e9; box-shadow: 0 0 0 3px rgba(14,165,233,.15); background: #fff; }
+        textarea.form-control { min-height: 120px; resize: vertical; }
+        .form-hint { font-size: .78rem; color: #94a3b8; margin-top: 3px; }
+        .btn-save { width: 100%; background: linear-gradient(135deg,#0ea5e9,#0284c7); color: #fff; padding: .9rem; border: none; border-radius: 10px; font-size: 1rem; font-weight: 700; font-family: 'Inter',sans-serif; cursor: pointer; transition: all .2s; }
+        .btn-save:hover { background: linear-gradient(135deg,#0284c7,#0369a1); transform: translateY(-1px); }
+        .btn-save:disabled { background: #94a3b8; cursor: not-allowed; transform: none; }
+        .danger-zone { margin-top: 2.5rem; padding: 1.5rem; background: #fff5f5; border: 1.5px solid #fecaca; border-radius: 12px; }
+        .danger-zone h3 { color: #991b1b; margin: 0 0 .5rem; font-size: 1rem; }
+        .danger-zone p { color: #7f1d1d; font-size: .85rem; margin: 0 0 1rem; }
+        .btn-delete { background: #ef4444; color: #fff; border: none; padding: .75rem 1.5rem; border-radius: 8px; font-weight: 700; font-family: 'Inter',sans-serif; cursor: pointer; transition: background .2s; }
+        .btn-delete:hover { background: #dc2626; }
+        .btn-delete:disabled { background: #fca5a5; cursor: not-allowed; }
+        .status-select { display: flex; gap: .75rem; flex-wrap: wrap; margin-top: .4rem; }
+        .status-opt { display: none; }
+        .status-opt + label { padding: .45rem 1rem; border: 1.5px solid #e2e8f0; border-radius: 20px; font-size: .85rem; font-weight: 600; color: #475569; cursor: pointer; transition: all .15s; }
+        .status-opt:checked + label { border-color: #0ea5e9; background: #e0f2fe; color: #0369a1; }
+        .feedback { padding: .9rem 1rem; border-radius: 8px; margin-bottom: 1.5rem; display: none; font-weight: 600; font-size: .9rem; }
+        .feedback.ok { display: block; background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+        .feedback.err { display: block; background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+        .loading-msg { text-align: center; padding: 4rem; color: #64748b; }
+        .back-link { display: inline-flex; align-items: center; gap: 5px; color: #475569; text-decoration: none; font-weight: 600; font-size: .9rem; margin-bottom: 1rem; }
+        .back-link:hover { color: #0ea5e9; }
+        .tag-row { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; border: 1.5px solid #cbd5e1; border-radius: 8px; background: #f8fafc; padding: .5rem; }
+        .tag-chip { display: inline-flex; align-items: center; gap: 3px; background: #0ea5e9; color: #fff; font-size: .78rem; font-weight: 600; padding: 3px 9px; border-radius: 20px; }
+        .tag-chip button { background: none; border: none; color: rgba(255,255,255,.8); cursor: pointer; font-size: .85rem; padding: 0 0 0 2px; }
+        .tag-chip button:hover { color: #fff; }
+        .tag-input { border: none; background: transparent; font-family: 'Inter',sans-serif; font-size: .88rem; padding: 3px 4px; outline: none; min-width: 110px; color: #0f172a; flex: 1; }
+        #edit-form { display: none; }
+    </style>
+</head>
+<body>
+<nav class="top-nav">
+    <div class="nav-container">
+        <a href="index.html" class="nav-logo">
+            <img src="logo.png" alt="LaukaaInfo Logo">
+            <span>LaukaaInfo</span>
+        </a>
+        <button class="hamburger" id="hamburger-btn" aria-label="Avaa valikko">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</nav>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<aside class="sidebar-menu" id="sidebar-menu">
+    <div class="sidebar-header">
+        <a href="index.html" class="nav-logo"><img src="logo.png" alt="LaukaaInfo Logo"><span>LaukaaInfo</span></a>
+        <button class="close-btn" id="close-sidebar-btn">&times;</button>
+    </div>
+</aside>
+
+<main style="padding-top: 80px; min-height: 80vh;">
+    <div class="edit-wrap">
+        <a href="kohtaamiset.html" class="back-link">
+            <span class="iconify" data-icon="lucide:arrow-left"></span> Takaisin kohtaamisiin
+        </a>
+
+        <div id="loading-msg" class="loading-msg">Ladataan ilmoitusta…</div>
+        <div id="error-msg" class="loading-msg" style="display:none; color:#ef4444;"></div>
+
+        <div class="edit-card" id="edit-card" style="display:none;">
+            <h1 class="edit-title">✏️ Muokkaa ilmoitustasi</h1>
+            <p class="edit-sub">Muutokset tallentuvat heti. Ilmoituksesi linkki pysyy samana.</p>
+
+            <div class="feedback" id="feedback"></div>
+
+            <form id="edit-form">
+                <div class="form-group">
+                    <label>Otsikko *</label>
+                    <input type="text" id="f-title" class="form-control" maxlength="120" required>
+                </div>
+                <div class="form-group">
+                    <label>Kuvaus *</label>
+                    <textarea id="f-desc" class="form-control" maxlength="1000" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Hinta / palkkio</label>
+                    <input type="text" id="f-price" class="form-control" maxlength="80" placeholder="Esim. 20€/h tai Sopimuksen mukaan">
+                </div>
+                <div class="form-group">
+                    <label>Toiminta-alue</label>
+                    <input type="text" id="f-location" class="form-control" maxlength="80" placeholder="Esim. Laukaa tai Lievestuore">
+                </div>
+                <div class="form-group">
+                    <label>Tunnisteet (tagit)</label>
+                    <div class="tag-row" id="tag-row" onclick="document.getElementById('tag-input').focus()">
+                        <input type="text" id="tag-input" class="tag-input" placeholder="Kirjoita + Enter…" maxlength="40" autocomplete="off">
+                    </div>
+                    <p class="form-hint">Enintään 5 tunnistetta.</p>
+                </div>
+                <div class="form-group">
+                    <label>Yhteydenottoasetus</label>
+                    <div style="display:flex; flex-direction:column; gap:8px; margin-top:.4rem;">
+                        <label style="font-weight:normal; font-size:.9rem; color:#334155; display:flex; align-items:flex-start; gap:8px;">
+                            <input type="radio" name="allow_msg" value="true" id="msg-yes" style="margin-top:2px;">
+                            <div><strong>Salli vapaamuotoiset viestit</strong><br>
+                                <span style="font-size:.8rem;color:#64748b;">Yhteydenottaja voi kirjoittaa viestin.</span></div>
+                        </label>
+                        <label style="font-weight:normal; font-size:.9rem; color:#334155; display:flex; align-items:flex-start; gap:8px;">
+                            <input type="radio" name="allow_msg" value="false" id="msg-no" style="margin-top:2px;">
+                            <div><strong>Vain yhteydenottopyyntö</strong><br>
+                                <span style="font-size:.8rem;color:#64748b;">Viestikenttä piilotetaan.</span></div>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Ilmoituksen tila</label>
+                    <div class="status-select">
+                        <input type="radio" name="status" value="active" id="st-active" class="status-opt" checked>
+                        <label for="st-active">✅ Aktiivinen</label>
+                        <input type="radio" name="status" value="closed" id="st-closed" class="status-opt">
+                        <label for="st-closed">🔒 Suljettu / Varattu</label>
+                    </div>
+                    <p class="form-hint">Suljettu ilmoitus poistuu näkyvistä mutta ei poistu tietokannasta.</p>
+                </div>
+                <button type="submit" class="btn-save" id="btn-save">
+                    <span class="iconify" data-icon="lucide:save"></span> Tallenna muutokset
+                </button>
+            </form>
+
+            <!-- Vaaravyöhyke: poisto -->
+            <div class="danger-zone">
+                <h3>⚠️ Poista ilmoitus</h3>
+                <p>Tämä toiminto poistaa ilmoituksesi pysyvästi. Toimintoa ei voi peruuttaa.</p>
+                <button class="btn-delete" id="btn-delete" onclick="confirmDelete()">
+                    <span class="iconify" data-icon="lucide:trash-2"></span> Poista ilmoitus
+                </button>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script>
+const KM_API = 'https://mediazoo.fi/laukaainfo-web/kohtaamiset_api.php';
+const params = new URLSearchParams(window.location.search);
+const AD_ID  = params.get('id')   || '';
+const TOKEN  = params.get('token') || '';
+
+let currentTags = [];
+
+// ---- INIT ----
+async function init() {
+    if (!AD_ID || !TOKEN) {
+        showError('Virheellinen hallintakoodi. Tarkista linkki sähköpostistasi.');
+        return;
+    }
+    try {
+        const fd = new FormData();
+        fd.append('id', AD_ID);
+        fd.append('token', TOKEN);
+        const res  = await fetch(KM_API + '?action=verify_edit_token', { method: 'POST', body: fd });
+        const data = await res.json();
+        if (!data.success) { showError(data.error || 'Virheellinen hallintakoodi.'); return; }
+        populateForm(data.encounter);
+    } catch(e) {
+        showError('Verkkovirhe. Tarkista yhteytesi ja yritä uudelleen.');
+    }
+}
+
+function populateForm(enc) {
+    document.getElementById('loading-msg').style.display = 'none';
+    document.getElementById('edit-card').style.display   = 'block';
+    document.getElementById('edit-form').style.display   = 'block';
+
+    document.getElementById('f-title').value    = enc.title || '';
+    document.getElementById('f-desc').value     = enc.description || '';
+    document.getElementById('f-price').value    = enc.price_info || '';
+    document.getElementById('f-location').value = enc.location || '';
+
+    document.getElementById(enc.allow_messages !== false ? 'msg-yes' : 'msg-no').checked = true;
+    document.getElementById(enc.status === 'closed' ? 'st-closed' : 'st-active').checked = true;
+
+    currentTags = Array.isArray(enc.tags) ? [...enc.tags] : [];
+    renderTags();
+}
+
+function showError(msg) {
+    document.getElementById('loading-msg').style.display = 'none';
+    const el = document.getElementById('error-msg');
+    el.style.display = 'block';
+    el.innerHTML = '❌ ' + msg + '<br><br><a href="kohtaamiset.html" style="color:#0ea5e9;font-weight:700;">← Takaisin kohtaamisiin</a>';
+}
+
+// ---- TAGIT ----
+function renderTags() {
+    const row = document.getElementById('tag-row');
+    row.querySelectorAll('.tag-chip').forEach(c => c.remove());
+    const input = document.getElementById('tag-input');
+    currentTags.forEach(tag => {
+        const chip = document.createElement('span');
+        chip.className = 'tag-chip';
+        chip.innerHTML = escHtml(tag) + '<button type="button" onclick="removeTag(\'' + escHtml(tag) + '\')">✕</button>';
+        row.insertBefore(chip, input);
+    });
+    input.style.display = currentTags.length >= 5 ? 'none' : '';
+    input.placeholder   = currentTags.length >= 5 ? '' : (currentTags.length ? '+ Lisää…' : 'Kirjoita + Enter…');
+}
+
+function addTag(raw) {
+    const tag = raw.trim().toLowerCase().replace(/[,;]+/g,'');
+    if (!tag || currentTags.length >= 5 || currentTags.includes(tag)) return;
+    currentTags.push(tag);
+    document.getElementById('tag-input').value = '';
+    renderTags();
+}
+
+function removeTag(tag) {
+    currentTags = currentTags.filter(t => t !== tag);
+    renderTags();
+}
+
+document.getElementById('tag-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ',') {
+        e.preventDefault();
+        if (e.target.value.trim()) addTag(e.target.value);
+    } else if (e.key === 'Backspace' && !e.target.value && currentTags.length) {
+        removeTag(currentTags[currentTags.length - 1]);
+    }
+});
+document.getElementById('tag-input').addEventListener('blur', e => {
+    if (e.target.value.trim()) addTag(e.target.value);
+});
+
+// ---- TALLENNUS ----
+document.getElementById('edit-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const btn      = document.getElementById('btn-save');
+    const feedback = document.getElementById('feedback');
+    feedback.className = 'feedback';
+
+    btn.disabled  = true;
+    btn.innerText = 'Tallennetaan…';
+
+    const fd = new FormData();
+    fd.append('id',             AD_ID);
+    fd.append('token',          TOKEN);
+    fd.append('title',          document.getElementById('f-title').value.trim());
+    fd.append('description',    document.getElementById('f-desc').value.trim());
+    fd.append('price_info',     document.getElementById('f-price').value.trim());
+    fd.append('location',       document.getElementById('f-location').value.trim());
+    fd.append('allow_messages', document.querySelector('input[name="allow_msg"]:checked').value);
+    fd.append('status',         document.querySelector('input[name="status"]:checked').value);
+    fd.append('tags',           JSON.stringify(currentTags));
+
+    try {
+        const res  = await fetch(KM_API + '?action=update_encounter', { method: 'POST', body: fd });
+        const data = await res.json();
+        if (data.success) {
+            feedback.innerText  = '✅ ' + (data.message || 'Tallennettu!');
+            feedback.className  = 'feedback ok';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+            throw new Error(data.error || 'Tallennus epäonnistui.');
+        }
+    } catch(err) {
+        feedback.innerText = '❌ ' + err.message;
+        feedback.className = 'feedback err';
+    } finally {
+        btn.disabled  = false;
+        btn.innerHTML = '<span class="iconify" data-icon="lucide:save"></span> Tallenna muutokset';
+    }
+});
+
+// ---- POISTO ----
+function confirmDelete() {
+    const ok = confirm('Haluatko varmasti poistaa ilmoituksesi? Tätä toimintoa ei voi peruuttaa.');
+    if (!ok) return;
+    deleteEncounter();
+}
+
+async function deleteEncounter() {
+    const btn = document.getElementById('btn-delete');
+    btn.disabled  = true;
+    btn.innerText = 'Poistetaan…';
+
+    const fd = new FormData();
+    fd.append('id',    AD_ID);
+    fd.append('token', TOKEN);
+
+    try {
+        const res  = await fetch(KM_API + '?action=delete_encounter', { method: 'POST', body: fd });
+        const data = await res.json();
+        if (data.success) {
+            document.getElementById('edit-card').innerHTML =
+                '<div style="text-align:center;padding:3rem 2rem;">' +
+                '<div style="font-size:3rem;margin-bottom:1rem;">✅</div>' +
+                '<h2 style="font-family:Outfit,sans-serif;color:#0f172a;">Ilmoitus poistettu</h2>' +
+                '<p style="color:#64748b;">Ilmoituksesi on poistettu onnistuneesti.</p>' +
+                '<a href="kohtaamiset.html" style="display:inline-block;margin-top:1.5rem;background:#0f172a;color:#fff;padding:.75rem 1.5rem;border-radius:8px;text-decoration:none;font-weight:700;">← Takaisin kohtaamisiin</a>' +
+                '</div>';
+        } else {
+            throw new Error(data.error || 'Poisto epäonnistui.');
+        }
+    } catch(err) {
+        alert('Virhe: ' + err.message);
+        btn.disabled  = false;
+        btn.innerText = '🗑 Poista ilmoitus';
+    }
+}
+
+function escHtml(str) {
+    return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+<script src="script.js"></script>
+<script src="nav-sync.js"></script>
+</body>
+</html>

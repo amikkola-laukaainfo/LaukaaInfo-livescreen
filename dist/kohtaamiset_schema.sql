@@ -22,14 +22,15 @@ CREATE TABLE IF NOT EXISTS public.encounters (
     allow_messages BOOLEAN DEFAULT true,  -- Salliiko viestit vai vain yhteydenottopyynnön
     tags          TEXT[] DEFAULT '{}',    -- Tunnisteet, esim. ARRAY['pihatyöt','nurmikko']
     status        VARCHAR DEFAULT 'active', -- active | draft | closed
+    edit_token    UUID DEFAULT gen_random_uuid() NOT NULL, -- Magic link -hallintaa varten
     created_at    TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
     expires_at    TIMESTAMP WITH TIME ZONE DEFAULT (timezone('utc'::text, now()) + interval '30 days')
 );
 
 
 -- ============================================================
--- OSIO B: Migraatio – lisää tags-sarake olemassaolevaan tauluun
--- Aja tämä jos taulu on jo olemassa mutta tags puuttuu.
+-- OSIO B: Migraatio – lisää sarakkeet olemassaolevaan tauluun
+-- Aja tämä jos taulu on jo olemassa mutta sarakkeet puuttuvat.
 -- ============================================================
 
 -- ALTER TABLE public.encounters
@@ -37,6 +38,9 @@ CREATE TABLE IF NOT EXISTS public.encounters (
 
 -- ALTER TABLE public.encounters
 --     ADD COLUMN IF NOT EXISTS allow_messages BOOLEAN DEFAULT true;
+
+-- ALTER TABLE public.encounters
+--     ADD COLUMN IF NOT EXISTS edit_token UUID DEFAULT gen_random_uuid();
 
 
 -- ============================================================
@@ -56,6 +60,21 @@ DROP POLICY IF EXISTS "Anyone can insert encounters" ON public.encounters;
 CREATE POLICY "Anyone can insert encounters"
 ON public.encounters FOR INSERT
 WITH CHECK (true);
+
+-- 3. Muokkaaminen: sallitaan kun edit_token täsmää
+--    (Käytetään service_role-avaimella PHP-backendistä, ei suoraan clientistä)
+DROP POLICY IF EXISTS "Owner can update via edit_token" ON public.encounters;
+CREATE POLICY "Owner can update via edit_token"
+ON public.encounters FOR UPDATE
+USING (true)
+WITH CHECK (true);
+-- Huom: varsinainen token-tarkistus tehdään PHP-backendissä service_role-avaimella.
+
+-- 4. Poistaminen: sallitaan service_role-avaimella (PHP-backend tarkistaa tokenin)
+DROP POLICY IF EXISTS "Owner can delete via edit_token" ON public.encounters;
+CREATE POLICY "Owner can delete via edit_token"
+ON public.encounters FOR DELETE
+USING (true);
 
 
 -- ============================================================

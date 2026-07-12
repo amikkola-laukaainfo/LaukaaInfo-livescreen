@@ -640,7 +640,8 @@
 
             if (error) throw error;
 
-            feedback.innerText = '✅ Ilmoitus lisätty onnistuneesti! Sinut ohjataan takaisin...';
+            feedback.innerHTML = '✅ Ilmoitus lisätty onnistuneesti!<br><span style="font-size:.9rem;font-weight:400;">Voit myöhemmin muokata tai poistaa ilmoituksesi klikkaamalla ilmoituskorttisivulla <strong>"🔑 Hallinnoi ilmoitustasi"</strong> ja syöttämällä sähköpostiosoitteesi.</span>';
+
             feedback.classList.add('success');
             document.getElementById('ad-form').reset();
             selectedTags = [];

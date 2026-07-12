@@ -190,6 +190,31 @@
             margin-top: 1rem; padding: 0.8rem; border-radius: 8px; display: none; font-weight: 600; font-size: 0.9rem;
         }
 
+        /* Hallintanappi */
+        .manage-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 0.82rem;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            padding: 4px 0;
+            transition: color 0.15s;
+        }
+        .manage-btn:hover { color: #475569; }
+
+        /* Hallintamodaali */
+        #manage-modal .modal-content { max-width: 440px; }
+        #manage-feedback { margin-top: 1rem; padding: .8rem; border-radius: 8px; display: none; font-weight: 600; font-size: .88rem; }
+        .manage-input { width: 100%; padding: .7rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-family: 'Inter',sans-serif; font-size: .95rem; box-sizing: border-box; }
+        .manage-input:focus { outline: none; border-color: #0ea5e9; box-shadow: 0 0 0 3px rgba(14,165,233,.15); }
+        .manage-submit { width: 100%; background: #0f172a; color: #fff; padding: .9rem; border: none; border-radius: 8px; font-size: .95rem; font-weight: 700; cursor: pointer; margin-top: .5rem; transition: background .2s; }
+        .manage-submit:hover { background: #1e293b; }
+        .manage-submit:disabled { background: #94a3b8; cursor: not-allowed; }
+
         /* ===== MOBIILI ===== */
         @media (max-width: 600px) {
             .ad-single-container {
@@ -289,9 +314,12 @@
                 </div>
 
                 <a href="#" class="contact-btn" id="ad-contact-btn">Ota yhteyttä ilmoittajaan</a>
-                <div style="text-align: center; margin-top: 1rem;">
-                    <button onclick="openReportModal()" style="background:none; border:none; color:#94a3b8; font-size:0.85rem; cursor:pointer; text-decoration:underline;">
-                        <span class="iconify" data-icon="lucide:flag" style="vertical-align: middle;"></span> Ilmoita asiaton sisältö
+                <div style="text-align: center; margin-top: 1rem; display:flex; justify-content:center; gap:1.5rem; flex-wrap:wrap;">
+                    <button onclick="openReportModal()" style="background:none; border:none; color:#94a3b8; font-size:0.82rem; cursor:pointer; font-family:'Inter',sans-serif; display:inline-flex; align-items:center; gap:4px;">
+                        <span class="iconify" data-icon="lucide:flag"></span> Ilmoita asiaton sisältö
+                    </button>
+                    <button onclick="openManageModal()" class="manage-btn">
+                        <span class="iconify" data-icon="lucide:key"></span> Hallinnoi ilmoitustasi
                     </button>
                 </div>
             </div>
@@ -343,6 +371,27 @@
         </div>
     </div>
 
+    <!-- Hallintamodaali -->
+    <div class="modal-overlay" id="manage-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeManageModal()">&times;</button>
+            <h2 class="modal-title" style="font-size:1.3rem;">🔑 Hallinnoi ilmoitustasi</h2>
+            <p style="color:#64748b; font-size:.88rem; margin-bottom:1.2rem;">Syötä ilmoituksen jättämiseen käyttämäsi sähköpostiosoite. Lähetämme sinulle hallintakoodi-linkin.</p>
+            <div id="manage-feedback"></div>
+            <form id="manage-form">
+                <input type="hidden" id="manage-ad-id">
+                <input type="text" id="manage-website" name="website" style="display:none!important;" tabindex="-1" autocomplete="off">
+                <div style="margin-bottom:.9rem;">
+                    <label style="display:block; font-weight:600; font-size:.88rem; color:#334155; margin-bottom:.35rem;">Sähköpostiosoitteesi *</label>
+                    <input type="email" id="manage-email" class="manage-input" required placeholder="sama osoite kuin ilmoituksessa">
+                </div>
+                <button type="submit" id="manage-submit" class="manage-submit">
+                    <span class="iconify" data-icon="lucide:send"></span> Lähetä hallintakoodi
+                </button>
+            </form>
+        </div>
+    </div>
+
     <footer style="margin-top: 4rem; background-color: #f8f9fa;">
         <div class="footer-content" style="text-align: center; padding: 2rem;">
             <p>© 2026 LaukaaInfo – Kohtaamispaikka</p>
@@ -356,6 +405,69 @@
     <script src="nav-sync.js"></script>
 
     <script>
+        const KM_API_BASE = 'https://mediazoo.fi/laukaainfo-web/kohtaamiset_api.php';
+
+        // ---- Hallintamodaali ----
+        function openManageModal() {
+            const modal = document.getElementById('manage-modal');
+            if (!modal) return;
+            const adId = new URLSearchParams(window.location.search).get('id') || '';
+            document.getElementById('manage-ad-id').value = adId;
+            const form = document.getElementById('manage-form');
+            if (form) form.reset();
+            document.getElementById('manage-ad-id').value = adId;
+            const fb = document.getElementById('manage-feedback');
+            if (fb) { fb.style.display = 'none'; fb.className = ''; }
+            modal.classList.add('active');
+            setTimeout(() => document.getElementById('manage-email')?.focus(), 100);
+        }
+
+        function closeManageModal() {
+            const modal = document.getElementById('manage-modal');
+            if (modal) modal.classList.remove('active');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const manageForm = document.getElementById('manage-form');
+            if (!manageForm) return;
+
+            manageForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn      = document.getElementById('manage-submit');
+                const feedback = document.getElementById('manage-feedback');
+                const adId     = document.getElementById('manage-ad-id').value;
+                const email    = document.getElementById('manage-email').value.trim();
+                const honeypot = document.getElementById('manage-website').value;
+
+                if (honeypot) return; // botti
+                if (!adId || !email) return;
+
+                btn.disabled  = true;
+                btn.innerText = 'Lähetetään…';
+                if (feedback) { feedback.style.display = 'none'; }
+
+                const fd = new FormData();
+                fd.append('encounter_id', adId);
+                fd.append('email', email);
+
+                try {
+                    const res  = await fetch(KM_API_BASE + '?action=request_edit_link', { method: 'POST', body: fd });
+                    const data = await res.json();
+                    // Näytetään aina neutraali viesti tietoturvasyistä
+                    const msg  = data.message || 'Jos antamasi sähköposti täsmää ilmoituksen tietoihin, saat pian sähköpostiviestin.';
+                    feedback.innerText = '✅ ' + msg;
+                    feedback.style.cssText = 'display:block; color:#166534; background:#dcfce7; border:1px solid #86efac; padding:.75rem 1rem; border-radius:8px; font-size:.88rem;';
+                    manageForm.querySelector('button[type=submit]').style.display = 'none';
+                } catch(err) {
+                    feedback.innerText = '❌ Verkkovirhe. Yritä uudelleen.';
+                    feedback.style.cssText = 'display:block; color:#991b1b; background:#fee2e2; border:1px solid #fca5a5; padding:.75rem 1rem; border-radius:8px; font-size:.88rem;';
+                } finally {
+                    btn.disabled  = false;
+                    btn.innerHTML = '<span class="iconify" data-icon="lucide:send"></span> Lähetä hallintakoodi';
+                }
+            });
+        });
+
         // Kopioi linkki
         function copyShareLink() {
             const url = window.location.href;

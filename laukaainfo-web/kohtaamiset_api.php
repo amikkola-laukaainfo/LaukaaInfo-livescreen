@@ -35,6 +35,11 @@ switch ($action) {
     case 'get_thread':         requireMethod('GET');  handleGetThread();         break;
     case 'report':             requireMethod('POST'); handleReport();            break;
     case 'resolve':            requireMethod('POST'); handleResolve();           break;
+    // --- Ilmoitusten hallinta magic linkillä ---
+    case 'request_edit_link':  requireMethod('POST'); handleRequestEditLink();   break;
+    case 'verify_edit_token':  handleVerifyEditToken();                          break;
+    case 'update_encounter':   requireMethod('POST'); handleUpdateEncounter();   break;
+    case 'delete_encounter':   requireMethod('POST'); handleDeleteEncounter();   break;
     default: jsonError('Tuntematon toiminto', 400);
 }
 
@@ -449,4 +454,185 @@ function jsonError(string $msg, int $code = 400): void {
     http_response_code($code);
     echo json_encode(['success' => false, 'error' => $msg], JSON_UNESCAPED_UNICODE);
     exit;
+}
+
+// ============================================================
+// SUPABASE HELPER: DELETE
+// ============================================================
+function sbDelete(string $path): int {
+    $ch = curl_init(SUPABASE_URL . $path);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CUSTOMREQUEST  => 'DELETE',
+        CURLOPT_HTTPHEADER     => [
+            'apikey: '         . SUPABASE_SERVICE_KEY,
+            'Authorization: Bearer ' . SUPABASE_SERVICE_KEY,
+            'Prefer: return=minimal',
+        ],
+    ]);
+    curl_exec($ch);
+    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    return $code;
+}
+
+// ============================================================
+// TOIMINTO 6: Pyydä hallintakoodi (magic link)
+// POST: encounter_id, email
+// ============================================================
+function handleRequestEditLink(): void {
+    if (!empty($_POST['website'])) {
+        jsonSuccess(['message' => 'Jos antamasi sähköposti täsmää ilmoituksen tietoihin, saat pian sähköpostiviestin.']);
+    }
+
+    $encounter_id = trim($_POST['encounter_id'] ?? '');
+    $email        = strtolower(trim($_POST['email'] ?? ''));
+
+    if (!$encounter_id || !$email || !filter_var($email, FILTER_VALIDATE_EMAIL))
+        jsonError('Virheelliset parametrit.');
+    if (!isValidUuid($encounter_id))
+        jsonError('Virheellinen ilmoitustunniste.');
+
+    $neutral = 'Jos antamasi sähköposti täsmää ilmoituksen tietoihin, saat pian sähköpostiviestin.';
+
+    $rows = sbGet('/rest/v1/encounters?id=eq.' . urlencode($encounter_id)
+        . '&select=id,edit_token,contact_email,title,status&limit=1');
+
+    // Palautetaan aina neutraali viesti – ei paljasteta onko id tai email oikein
+    if (empty($rows)) {
+        jsonSuccess(['message' => $neutral]);
+    }
+
+    $enc = $rows[0];
+
+    if (strtolower($enc['contact_email']) !== $email || $enc['status'] !== 'active') {
+        jsonSuccess(['message' => $neutral]);
+    }
+
+    if (empty($enc['edit_token'])) {
+        jsonSuccess(['message' => $neutral]); // Ei pitäisi tapahtua
+    }
+
+    $edit_url = BASE_URL . '/muokkaa-ilmoitus.html?id=' . urlencode($enc['id'])
+              . '&token=' . urlencode($enc['edit_token']);
+    $title    = mb_substr(strip_tags($enc['title']), 0, 80);
+
+    $body = "Hei,\n\n"
+          . "Pyysit hallintakoodi ilmoituksellesi:\n"
+          . "\"$title\"\n\n"
+          . "Klikkaa alla olevaa linkkiä muokataksesi tai poistaaksesi ilmoituksesi:\n\n"
+          . $edit_url . "\n\n"
+          . "Linkki on voimassa niin kauan kuin ilmoituksesi on aktiivinen.\n\n"
+          . "Jos et pyyntänyt tätä viestiua, voit jättää sen huomiotta.\n\n"
+          . "Terveisin,\nLaukaaInfo Kohtaamispaikka";
+
+    sendMail($email, 'Hallintakoodi ilmoituksellesi – LaukaaInfo', $body);
+
+    jsonSuccess(['message' => $neutral]);
+}
+
+// ============================================================
+// TOIMINTO 7: Tarkista edit_token ja palauta encounter-data
+// GET tai POST: id, token
+// ============================================================
+function handleVerifyEditToken(): void {
+    $id    = trim($_REQUEST['id']    ?? '');
+    $token = trim($_REQUEST['token'] ?? '');
+
+    if (!$id || !$token) jsonError('Puuttuvat parametrit.');
+    if (!isValidUuid($id) || !isValidUuid($token)) jsonError('Virheelliset tunnisteet.');
+
+    $rows = sbGet('/rest/v1/encounters?id=eq.' . urlencode($id)
+        . '&edit_token=eq.' . urlencode($token)
+        . '&select=id,type,title,description,price_info,location,allow_messages,tags,status,created_at,expires_at&limit=1');
+
+    if (empty($rows)) jsonError('Virheellinen tai vanhentunut hallintakoodi.', 403);
+
+    jsonSuccess(['encounter' => $rows[0]]);
+}
+
+// ============================================================
+// TOIMINTO 8: Päivitä ilmoitus
+// POST: id, token, + päivitettävät kentät
+// ============================================================
+function handleUpdateEncounter(): void {
+    $id    = trim($_POST['id']    ?? '');
+    $token = trim($_POST['token'] ?? '');
+
+    if (!$id || !$token) jsonError('Puuttuvat parametrit.');
+    if (!isValidUuid($id) || !isValidUuid($token)) jsonError('Virheelliset tunnisteet.');
+
+    // Tarkista token
+    $rows = sbGet('/rest/v1/encounters?id=eq.' . urlencode($id)
+        . '&edit_token=eq.' . urlencode($token)
+        . '&select=id,status&limit=1');
+
+    if (empty($rows)) jsonError('Virheellinen hallintakoodi.', 403);
+    if ($rows[0]['status'] !== 'active') jsonError('Ilmoitus ei ole enää aktiivinen.');
+
+    $upd = [];
+
+    if (isset($_POST['title'])) {
+        $t = trim($_POST['title']);
+        if (mb_strlen($t) < 3 || mb_strlen($t) > 120) jsonError('Otsikko on liian lyhyt tai pitkä.');
+        $upd['title'] = $t;
+    }
+    if (isset($_POST['description'])) {
+        $d = trim($_POST['description']);
+        if (mb_strlen($d) < 10 || mb_strlen($d) > 1000) jsonError('Kuvaus on liian lyhyt tai pitkä.');
+        $upd['description'] = $d;
+    }
+    if (isset($_POST['price_info']))    $upd['price_info']    = mb_substr(trim($_POST['price_info']), 0, 80) ?: null;
+    if (isset($_POST['location']))      $upd['location']      = mb_substr(trim($_POST['location']), 0, 80) ?: null;
+    if (isset($_POST['allow_messages'])) $upd['allow_messages'] = in_array($_POST['allow_messages'], ['true','1'], true);
+    if (isset($_POST['status']) && in_array($_POST['status'], ['active','closed']))
+        $upd['status'] = $_POST['status'];
+
+    if (isset($_POST['tags'])) {
+        $raw = json_decode($_POST['tags'], true);
+        if (is_array($raw)) {
+            $upd['tags'] = array_slice(
+                array_values(array_unique(array_filter(
+                    array_map(fn($t) => strtolower(trim($t)), $raw),
+                    fn($t) => strlen($t) > 0 && strlen($t) <= 40
+                ))), 0, 5
+            );
+        }
+    }
+
+    if (empty($upd)) jsonError('Ei muutoksia tallennettavaksi.');
+
+    sbPatch('/rest/v1/encounters?id=eq.' . urlencode($id)
+        . '&edit_token=eq.' . urlencode($token), $upd);
+
+    jsonSuccess(['message' => 'Ilmoitus päivitetty onnistuneesti.']);
+}
+
+// ============================================================
+// TOIMINTO 9: Poista ilmoitus (kova DELETE)
+// POST: id, token
+// ============================================================
+function handleDeleteEncounter(): void {
+    $id    = trim($_POST['id']    ?? '');
+    $token = trim($_POST['token'] ?? '');
+
+    if (!$id || !$token) jsonError('Puuttuvat parametrit.');
+    if (!isValidUuid($id) || !isValidUuid($token)) jsonError('Virheelliset tunnisteet.');
+
+    // Varmista olemassaolo + oikea token ennen poistoa
+    $rows = sbGet('/rest/v1/encounters?id=eq.' . urlencode($id)
+        . '&edit_token=eq.' . urlencode($token)
+        . '&select=id&limit=1');
+
+    if (empty($rows)) jsonError('Virheellinen hallintakoodi tai ilmoitusta ei löydy.', 403);
+
+    $code = sbDelete('/rest/v1/encounters?id=eq.' . urlencode($id)
+        . '&edit_token=eq.' . urlencode($token));
+
+    if ($code >= 200 && $code < 300) {
+        jsonSuccess(['message' => 'Ilmoitus poistettu onnistuneesti.']);
+    } else {
+        error_log("handleDeleteEncounter: DELETE palautti HTTP $code id=$id");
+        jsonError('Poisto epäonnistui. Yritä uudelleen.');
+    }
 }
