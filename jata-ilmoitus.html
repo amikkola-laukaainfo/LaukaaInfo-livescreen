@@ -624,7 +624,7 @@
         try {
             if (!window.LaukaaSupabase) throw new Error('Tietokantayhteys puuttuu');
 
-            const { error } = await window.LaukaaSupabase
+            const { data, error } = await window.LaukaaSupabase
                 .from('encounters')
                 .insert([{
                     type,
@@ -636,11 +636,25 @@
                     allow_messages,
                     tags:          selectedTags,
                     status:        'active'
-                }]);
+                }])
+                .select();
 
             if (error) throw error;
 
-            feedback.innerHTML = '✅ Ilmoitus lisätty onnistuneesti!<br><span style="font-size:.9rem;font-weight:400;">Voit myöhemmin muokata tai poistaa ilmoituksesi klikkaamalla ilmoituskorttisivulla <strong>"🔑 Hallinnoi ilmoitustasi"</strong> ja syöttämällä sähköpostiosoitteesi.</span>';
+            // Lähetä hallintalinkki heti sähköpostiin
+            try {
+                if (data && data.length > 0) {
+                    const newId = data[0].id;
+                    const fd = new FormData();
+                    fd.append('encounter_id', newId);
+                    fd.append('email', contact_email);
+                    await fetch('https://mediazoo.fi/laukaainfo-web/kohtaamiset_api.php?action=request_edit_link', { method: 'POST', body: fd });
+                }
+            } catch (mailErr) {
+                console.error('Sähköpostin lähetys epäonnistui:', mailErr);
+            }
+
+            feedback.innerHTML = '✅ Ilmoitus lisätty onnistuneesti!<br><span style="font-size:.9rem;font-weight:400;">Olemme lähettäneet sähköpostiisi linkin, jonka kautta voit myöhemmin muokata tai poistaa ilmoituksesi.</span>';
 
             feedback.classList.add('success');
             document.getElementById('ad-form').reset();
