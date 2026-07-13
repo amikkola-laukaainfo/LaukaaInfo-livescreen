@@ -6,7 +6,6 @@
     <title>Admin – Roolien hallinta | LaukaaInfo</title>
     <meta name="robots" content="noindex, nofollow">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;900&display=swap" rel="stylesheet">
-    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
     <style>
         body { font-family: 'Inter', sans-serif; background: #f1f5f9; padding: 2rem; margin: 0; color: #0f172a; }
         .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
@@ -27,17 +26,19 @@
         .badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
         .badge.mod { background: #fee2e2; color: #991b1b; }
         .badge.admin { background: #e0e7ff; color: #3730a3; }
-        
+        #status-msg { background: #f0f9ff; border: 1px solid #bae6fd; color: #0369a1; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; display: none; font-size: 0.9rem; }
         #unauthorized { display: none; text-align: center; padding: 3rem; }
+        #unauthorized code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.82rem; }
         #app { display: none; }
     </style>
 </head>
 <body>
 
-<div id="unauthorized">
-    <h2>Ei oikeuksia</h2>
-    <p>Tämä sivu on tarkoitettu vain moderaattoreille.</p>
-    <a href="kirjaudu.html" style="color:#0ea5e9;">Kirjaudu sisään</a>
+<div style="max-width:800px; margin: 0 auto;">
+    <div id="status-msg"></div>
+</div>
+
+<div id="unauthorized" style="max-width:800px; margin: 0 auto; background:#fff; padding:2rem; border-radius:12px;">
 </div>
 
 <div id="app" class="container">
@@ -87,16 +88,66 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js?v=20260713"></script>
 <script>
+    const statusEl = document.getElementById('status-msg');
+
+    function showStatus(msg, isError) {
+        statusEl.style.display = 'block';
+        statusEl.style.background = isError ? '#fef2f2' : '#f0f9ff';
+        statusEl.style.borderColor = isError ? '#fecaca' : '#bae6fd';
+        statusEl.style.color = isError ? '#991b1b' : '#0369a1';
+        statusEl.textContent = msg;
+    }
+
     document.addEventListener('DOMContentLoaded', async () => {
-        if (!window.LaukaaAuth) return;
-        
-        const isMod = await window.LaukaaAuth.isModerator();
-        
-        if (!isMod) {
-            document.getElementById('unauthorized').style.display = 'block';
+        showStatus('⏳ Ladataan...');
+
+        // 1. Tarkista Supabase
+        if (!window.LaukaaAuth || !window.LaukaaSupabase) {
+            showStatus('❌ Supabase-yhteys puuttuu. Tarkista että supabase-config.js on ladattu oikein.', true);
             return;
         }
 
+        // 2. Tarkista kirjautuminen
+        const user = await window.LaukaaAuth.getUser();
+        if (!user) {
+            showStatus('', false);
+            statusEl.style.display = 'none';
+            document.getElementById('unauthorized').style.display = 'block';
+            document.getElementById('unauthorized').innerHTML = `
+                <h2>Et ole kirjautunut sisään</h2>
+                <p>Kirjaudu ensin osoitteessa <a href="kirjaudu.html" style="color:#0ea5e9;">kirjaudu.html</a>.</p>
+            `;
+            return;
+        }
+
+        showStatus(`⏳ Tarkistetaan rooli... (${user.email})`);
+
+        // 3. Tarkista roolit
+        const roles = await window.LaukaaAuth.getRoles();
+        console.log('[admin] käyttäjä:', user.email, '| roolit:', roles);
+
+        const isMod = roles.some(r => r.role_name === 'moderator');
+
+        if (!isMod) {
+            statusEl.style.display = 'none';
+            document.getElementById('unauthorized').style.display = 'block';
+            document.getElementById('unauthorized').innerHTML = `
+                <h2>Ei moderaattorin oikeuksia</h2>
+                <p>Kirjautunut: <strong>${user.email}</strong></p>
+                <p>Nykyiset roolit: <strong>${roles.length > 0 ? roles.map(r => r.role_name).join(', ') : '(ei yhtään)'}</strong></p>
+                <hr style="border:none;border-top:1px solid #e2e8f0; margin:1.5rem 0;">
+                <p style="font-size:0.88rem; color:#475569; text-align:left;">
+                    Lisää moderaattoriasema Supabasen <strong>Table Editor</strong> -näkymästä:<br><br>
+                    Taulu: <code>user_roles</code><br>
+                    Uusi rivi:<br>
+                    &nbsp;• <code>user_id</code> = <code>${user.id}</code><br>
+                    &nbsp;• <code>role_id</code> = <code>3</code>
+                </p>
+            `;
+            return;
+        }
+
+        statusEl.style.display = 'none';
         document.getElementById('app').style.display = 'block';
         
         const roleSelect = document.getElementById('role-select');
@@ -105,6 +156,7 @@
         roleSelect.addEventListener('change', () => {
             targetGroup.style.display = roleSelect.value === '2' ? 'block' : 'none';
         });
+        targetGroup.style.display = 'none';
 
         loadRoles();
 
@@ -122,39 +174,30 @@
             }
             
             document.getElementById('btn-submit').disabled = true;
+            msg.textContent = '';
             
             try {
-                // 1. Etsi käyttäjän UUID sähköpostin perusteella
-                // Huom: Supabasessa ei voi hakea suoraan auth.users clientin kautta, ellei tehdä RPC-funktiota.
-                // Tehdään tässä yksinkertaistettu RPC-kutsu "get_user_id_by_email" tai vaaditaan että admin
-                // syöttää UUID:n suoraan. Tehdään yksinkertaisin mahdollinen RPC.
-                
                 const { data: userId, error: rpcError } = await window.LaukaaSupabase.rpc('get_user_id_by_email', { email_input: email });
                 
                 if (rpcError || !userId) {
-                    throw new Error('Käyttäjää ei löydy tällä sähköpostilla. (Onko hän kirjautunut sisään kerran?)');
+                    throw new Error('Käyttäjää ei löydy sähköpostilla "' + email + '". (Onko hän kirjautunut sisään kerran?)');
                 }
 
-                // 2. Lisää rooli
                 const { error: insertError } = await window.LaukaaSupabase
                     .from('user_roles')
-                    .insert([{
-                        user_id: userId,
-                        role_id: roleId,
-                        target_id: targetId,
-                        granted_by: (await window.LaukaaAuth.getUser()).id
-                    }]);
+                    .insert([{ user_id: userId, role_id: roleId, target_id: targetId, granted_by: user.id }]);
                     
                 if (insertError) throw insertError;
                 
                 msg.className = 'success';
-                msg.textContent = 'Rooli lisätty!';
+                msg.textContent = '✅ Rooli lisätty!';
                 document.getElementById('role-form').reset();
+                targetGroup.style.display = 'none';
                 loadRoles();
                 
             } catch (err) {
                 msg.className = 'error';
-                msg.textContent = err.message || 'Virhe tallennuksessa';
+                msg.textContent = '❌ ' + (err.message || 'Virhe tallennuksessa');
             } finally {
                 document.getElementById('btn-submit').disabled = false;
             }
@@ -164,36 +207,23 @@
     async function loadRoles() {
         const tbody = document.querySelector('#roles-table tbody');
         try {
-            // Tarvitsemme VIEW:n tai RPC:n joka yhdistää sähköpostit ja roolit, 
-            // koska auth.users on suojattu. 
-            // Tehdään tähän toistaiseksi vain yksinkertainen select jos RPC löytyy.
             const { data, error } = await window.LaukaaSupabase.rpc('get_all_roles_admin');
-            
             if (error) throw error;
-            
             if (!data || data.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="4">Ei rooleja asetettu.</td></tr>';
                 return;
             }
-            
             tbody.innerHTML = data.map(r => `
                 <tr>
                     <td>${r.email}</td>
-                    <td>
-                        <span class="badge ${r.role_name === 'moderator' ? 'mod' : 'admin'}">
-                            ${r.role_name}
-                        </span>
-                    </td>
+                    <td><span class="badge ${r.role_name === 'moderator' ? 'mod' : 'admin'}">${r.role_name}</span></td>
                     <td>${r.target_id || '-'}</td>
-                    <td>
-                        <button class="btn-delete" onclick="deleteRole(${r.id})">Poista</button>
-                    </td>
+                    <td><button class="btn-delete" onclick="deleteRole(${r.id})">Poista</button></td>
                 </tr>
             `).join('');
-            
         } catch (err) {
-            console.error(err);
-            tbody.innerHTML = '<tr><td colspan="4" style="color:red;">Virhe ladattaessa. (Vaatii get_all_roles_admin RPC:n)</td></tr>';
+            console.error('[admin] loadRoles virhe:', err);
+            tbody.innerHTML = `<tr><td colspan="4" style="color:red;">Virhe: ${err.message || 'get_all_roles_admin RPC puuttuu'}</td></tr>`;
         }
     }
     
