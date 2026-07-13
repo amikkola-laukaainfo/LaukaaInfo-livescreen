@@ -444,6 +444,27 @@
                                 <span>Yhdistys</span>
                             </label>
                         </div>
+                        <div class="publisher-radio-item" id="pub-event-item">
+                            <input type="radio" name="publisher_type" id="pub-event" value="event">
+                            <label class="publisher-radio-label" for="pub-event">
+                                <span class="pub-emoji">🎉</span>
+                                <span>Tapahtuma</span>
+                            </label>
+                        </div>
+                        <div class="publisher-radio-item" id="pub-network-item">
+                            <input type="radio" name="publisher_type" id="pub-network" value="network">
+                            <label class="publisher-radio-label" for="pub-network">
+                                <span class="pub-emoji">🤝</span>
+                                <span>Verkosto</span>
+                            </label>
+                        </div>
+                        <div class="publisher-radio-item" id="pub-service-item">
+                            <input type="radio" name="publisher_type" id="pub-service" value="service">
+                            <label class="publisher-radio-label" for="pub-service">
+                                <span class="pub-emoji">🛍️</span>
+                                <span>Palvelu</span>
+                            </label>
+                        </div>
                     </div>
                     <p class="form-hint" style="margin-top: 6px;">Yritys- ja kohdevaihtoehdot näkyvät kirjautuneille ylläpitäjille.</p>
                 </div>
@@ -612,6 +633,38 @@
                 <div class="form-group">
                     <label for="link-facebook">Facebook-linkki</label>
                     <input type="url" id="link-facebook" class="form-control" placeholder="https://facebook.com/SivunNimi">
+                </div>
+                <div class="form-group">
+                    <label for="link-instagram">Instagram-linkki</label>
+                    <input type="url" id="link-instagram" class="form-control" placeholder="https://instagram.com/SivunNimi">
+                </div>
+                <div class="form-group">
+                    <label for="link-linkedin">LinkedIn-linkki</label>
+                    <input type="url" id="link-linkedin" class="form-control" placeholder="https://linkedin.com/in/SivunNimi">
+                </div>
+                <div class="form-group">
+                    <label for="link-tiktok">TikTok-linkki</label>
+                    <input type="url" id="link-tiktok" class="form-control" placeholder="https://tiktok.com/@SivunNimi">
+                </div>
+                <div class="form-group">
+                    <label for="link-youtube">YouTube-linkki</label>
+                    <input type="url" id="link-youtube" class="form-control" placeholder="https://youtube.com/@Kanava">
+                </div>
+                <div class="form-group">
+                    <label for="link-pdf">PDF-esite (URL)</label>
+                    <input type="url" id="link-pdf" class="form-control" placeholder="https://.../esite.pdf">
+                </div>
+                <div class="form-group">
+                    <label for="link-maps">Google Maps -linkki</label>
+                    <input type="url" id="link-maps" class="form-control" placeholder="https://maps.google.com/...">
+                </div>
+                <div class="form-group">
+                    <label for="link-booking">Ajanvaraus (Booking)</label>
+                    <input type="url" id="link-booking" class="form-control" placeholder="https://vello.fi/...">
+                </div>
+                <div class="form-group">
+                    <label for="link-rss">RSS-syöte (URL)</label>
+                    <input type="url" id="link-rss" class="form-control" placeholder="https://.../rss">
                 </div>
                 <button type="submit" id="submit-btn" class="submit-btn">
                     <span class="iconify" data-icon="lucide:send"></span> Julkaise ilmoitus
@@ -796,7 +849,7 @@
                 document.getElementById('publisher-name-input').required = false;
                 document.getElementById('publisher-name-input').value = '';
 
-                if (val === 'association') {
+                if (val === 'association' || val === 'event' || val === 'network' || val === 'service') {
                     nameGroup.style.display = 'block';
                     document.getElementById('publisher-name-input').required = true;
                 } else if (val === 'company') {
@@ -956,7 +1009,7 @@
         // Julkaisija
         const publisher_type = document.querySelector('input[name="publisher_type"]:checked')?.value || 'personal';
         let publisher_name = null;
-        if (publisher_type === 'association') {
+        if (publisher_type === 'association' || publisher_type === 'event' || publisher_type === 'network' || publisher_type === 'service') {
             publisher_name = document.getElementById('publisher-name-input')?.value.trim() || null;
         }
 
@@ -984,11 +1037,27 @@
         const linkPhone = document.getElementById('link-phone')?.value.trim();
         const linkWhatsapp = document.getElementById('link-whatsapp')?.value.trim();
         const linkFacebook = document.getElementById('link-facebook')?.value.trim();
+        const linkInstagram = document.getElementById('link-instagram')?.value.trim();
+        const linkLinkedin = document.getElementById('link-linkedin')?.value.trim();
+        const linkTiktok = document.getElementById('link-tiktok')?.value.trim();
+        const linkYoutube = document.getElementById('link-youtube')?.value.trim();
+        const linkPdf = document.getElementById('link-pdf')?.value.trim();
+        const linkMaps = document.getElementById('link-maps')?.value.trim();
+        const linkBooking = document.getElementById('link-booking')?.value.trim();
+        const linkRss = document.getElementById('link-rss')?.value.trim();
         
         if (linkWebsite) structured_links.website = linkWebsite;
         if (linkPhone) structured_links.phone = linkPhone;
         if (linkWhatsapp) structured_links.whatsapp = linkWhatsapp;
         if (linkFacebook) structured_links.facebook = linkFacebook;
+        if (linkInstagram) structured_links.instagram = linkInstagram;
+        if (linkLinkedin) structured_links.linkedin = linkLinkedin;
+        if (linkTiktok) structured_links.tiktok = linkTiktok;
+        if (linkYoutube) structured_links.youtube = linkYoutube;
+        if (linkPdf) structured_links.pdf = linkPdf;
+        if (linkMaps) structured_links.maps = linkMaps;
+        if (linkBooking) structured_links.booking = linkBooking;
+        if (linkRss) structured_links.rss = linkRss;
 
         if (!title || !description || !contact_email) return;
 

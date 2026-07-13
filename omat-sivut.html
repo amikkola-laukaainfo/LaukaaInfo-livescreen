@@ -222,7 +222,7 @@
         
         <div class="dashboard-header">
             <div class="dashboard-title">
-                <h1>Omat sivut</h1>
+                <h1>LaukaaInfo Työpöytä</h1>
                 <p>
                     <span class="iconify" data-icon="lucide:user"></span>
                     <span id="user-email">...</span>
@@ -280,6 +280,19 @@
             </div>
         </div>
 
+        <!-- Yhdistyksen admin osio -->
+        <div id="association-admin-section" class="section-card admin-section" style="border-color:#e9d5ff;">
+            <div class="section-header" style="border-bottom-color:#f3e8ff;">
+                <h2>Hallinnoimani yhdistykset <span style="font-size:0.85rem; font-weight:normal; color:#64748b;">(Ylläpitäjä)</span></h2>
+                <a href="jata-ilmoitus.html?publisher_type=association" id="btn-add-association-ad" class="btn-primary-sm" style="background:#a855f7;">
+                    <span class="iconify" data-icon="lucide:users"></span> Jätä yhdistyksen ilmoitus
+                </a>
+            </div>
+            <div id="association-ads-list" class="ad-list">
+                <!-- Sisältö ladataan JS:llä -->
+            </div>
+        </div>
+
         <!-- Saapuneet yhteydenotot -->
         <div class="section-card">
             <div class="section-header">
@@ -287,6 +300,24 @@
             </div>
             <p style="color:#475569; font-size:0.95rem; margin-bottom:1.5rem;">Pääset lukemaan ja vastaamaan yhteydenottoihin sähköpostiisi tulleen linkin kautta.</p>
             <p style="color:#64748b; font-size:0.85rem;">Tulevaisuudessa kaikki keskustelut löytyvät täältä suoraan.</p>
+        </div>
+
+        <!-- Tilastot (Placeholder) -->
+        <div class="section-card">
+            <div class="section-header">
+                <h2>📈 Tilastot (Tulossa)</h2>
+            </div>
+            <p style="color:#475569; font-size:0.95rem; margin-bottom:1.5rem;">Täältä näet jatkossa ilmoitustesi näyttökerrat, karttaklikkaukset, yrityskortin avaukset ja muut mielenkiintoiset datat.</p>
+            <div style="display:flex; gap:1rem; flex-wrap:wrap; opacity: 0.5;">
+                <div style="background:#f8fafc; border:1.5px solid #e2e8f0; padding:1rem; border-radius:12px; min-width:120px; text-align:center;">
+                    <div style="font-size:1.8rem; font-weight:700; color:#0f172a;">--</div>
+                    <div style="font-size:0.8rem; color:#64748b; font-weight:600;">Näyttökerrat</div>
+                </div>
+                <div style="background:#f8fafc; border:1.5px solid #e2e8f0; padding:1rem; border-radius:12px; min-width:120px; text-align:center;">
+                    <div style="font-size:1.8rem; font-weight:700; color:#0f172a;">--</div>
+                    <div style="font-size:0.8rem; color:#64748b; font-weight:600;">Some-klikit</div>
+                </div>
+            </div>
         </div>
 
         <!-- Moderaattori osio -->
@@ -350,6 +381,13 @@
         if (locationRoles.length > 0) {
             document.getElementById('location-admin-section').style.display = 'block';
             await loadLocationAds(locationRoles.map(r => r.target_id));
+        }
+
+        // Tarkista association_admin roolit
+        const associationRoles = userRoles.filter(r => r.role_name === 'association_admin');
+        if (associationRoles.length > 0) {
+            document.getElementById('association-admin-section').style.display = 'block';
+            await loadAssociationAds(associationRoles.map(r => r.target_id));
         }
 
         document.getElementById('loading-overlay').style.display = 'none';
@@ -441,6 +479,28 @@
                     `jata-ilmoitus.html?publisher_type=location&location_id=${locationIds[0]}`;
             }
             renderAdsList(data, list, 'Kohteella ei ole aktiivisia ilmoituksia.');
+        } catch (err) {
+            console.error(err);
+        }
+    }
+    
+    async function loadAssociationAds(assocIds) {
+        const list = document.getElementById('association-ads-list');
+        try {
+            // Tässä pitäisi käyttää uutta content_links taulua (Phase 4), mutta toistaiseksi tynkä
+            const { data, error } = await window.LaukaaSupabase
+                .from('encounters')
+                .select('*')
+                .eq('publisher_type', 'association')
+                .in('publisher_name', assocIds) // oletus
+                .order('created_at', { ascending: false });
+            if (error) throw error;
+
+            if (assocIds.length > 0) {
+                document.getElementById('btn-add-association-ad').href =
+                    `jata-ilmoitus.html?publisher_type=association&association_id=${assocIds[0]}`;
+            }
+            renderAdsList(data, list, 'Yhdistyksellä ei ole aktiivisia ilmoituksia.');
         } catch (err) {
             console.error(err);
         }

@@ -526,6 +526,46 @@ async function initIlmoituskortti() {
             <span class="iconify" data-icon="mdi:facebook"></span> Facebook
         </a>`;
     }
+    if (links.instagram) {
+        linksHtml += `<a href="${escapeHtml(links.instagram)}" target="_blank" style="background:#E1306C; color:white; padding:10px 15px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-weight:600; font-size:0.95rem;">
+            <span class="iconify" data-icon="mdi:instagram"></span> Instagram
+        </a>`;
+    }
+    if (links.linkedin) {
+        linksHtml += `<a href="${escapeHtml(links.linkedin)}" target="_blank" style="background:#0077b5; color:white; padding:10px 15px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-weight:600; font-size:0.95rem;">
+            <span class="iconify" data-icon="mdi:linkedin"></span> LinkedIn
+        </a>`;
+    }
+    if (links.tiktok) {
+        linksHtml += `<a href="${escapeHtml(links.tiktok)}" target="_blank" style="background:#000000; color:white; padding:10px 15px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-weight:600; font-size:0.95rem;">
+            <span class="iconify" data-icon="ic:baseline-tiktok"></span> TikTok
+        </a>`;
+    }
+    if (links.youtube) {
+        linksHtml += `<a href="${escapeHtml(links.youtube)}" target="_blank" style="background:#FF0000; color:white; padding:10px 15px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-weight:600; font-size:0.95rem;">
+            <span class="iconify" data-icon="mdi:youtube"></span> YouTube
+        </a>`;
+    }
+    if (links.pdf) {
+        linksHtml += `<a href="${escapeHtml(links.pdf)}" target="_blank" style="background:#ef4444; color:white; padding:10px 15px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-weight:600; font-size:0.95rem;">
+            <span class="iconify" data-icon="mdi:file-pdf-box"></span> PDF-esite
+        </a>`;
+    }
+    if (links.maps) {
+        linksHtml += `<a href="${escapeHtml(links.maps)}" target="_blank" style="background:#34d399; color:white; padding:10px 15px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-weight:600; font-size:0.95rem;">
+            <span class="iconify" data-icon="mdi:map-marker"></span> Kartta
+        </a>`;
+    }
+    if (links.booking) {
+        linksHtml += `<a href="${escapeHtml(links.booking)}" target="_blank" style="background:#8b5cf6; color:white; padding:10px 15px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-weight:600; font-size:0.95rem;">
+            <span class="iconify" data-icon="mdi:calendar-check"></span> Ajanvaraus
+        </a>`;
+    }
+    if (links.rss) {
+        linksHtml += `<a href="${escapeHtml(links.rss)}" target="_blank" style="background:#f97316; color:white; padding:10px 15px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-weight:600; font-size:0.95rem;">
+            <span class="iconify" data-icon="mdi:rss"></span> RSS
+        </a>`;
+    }
 
     if (linksHtml) {
         const linksContainer = document.createElement('div');
@@ -633,6 +673,15 @@ function renderPublisherBadge(ad) {
     }
     if (type === 'location' && name) {
         return `<span class="km-publisher-badge km-publisher-location">📍 ${name}</span>`;
+    }
+    if (type === 'event' && name) {
+        return `<span class="km-publisher-badge km-publisher-event">🎉 ${name}</span>`;
+    }
+    if (type === 'network' && name) {
+        return `<span class="km-publisher-badge km-publisher-network">🤝 ${name}</span>`;
+    }
+    if (type === 'service' && name) {
+        return `<span class="km-publisher-badge km-publisher-service">🛍️ ${name}</span>`;
     }
     // personal tai tuntematon – ei badgea
     return '';
