@@ -1564,21 +1564,64 @@
         if (typeof fetchEncounters !== 'function' || typeof categories === 'undefined') return;
         try {
             const allEncounters = await fetchEncounters();
+            
+            // 1. Yrityksen omat ilmoitukset (täsmäävä company_id)
+            const ownEncounters = allEncounters.filter(ad => ad.company_id === company.id || ad.company_id === String(company.id).replace('company-', ''));
+            
+            if (ownEncounters.length > 0) {
+                const box = document.getElementById('company-encounters-box');
+                const list = document.getElementById('company-encounters-list');
+                const btnAdd = document.getElementById('btn-add-encounter');
+                if (box && list) {
+                    list.innerHTML = '';
+                    ownEncounters.forEach(ad => {
+                        const cat = categories[ad.type] || categories['need_help'];
+                        list.innerHTML += `<a href="ilmoituskortti.html?id=${ad.id}" style="display:block;text-decoration:none;color:inherit;background:#f8fafc;border-radius:12px;padding:1rem;border-left:4px solid ${cat.color};transition:background 0.2s;margin-bottom:0.75rem;">
+                            <div style="font-size:0.75rem;font-weight:800;text-transform:uppercase;color:${cat.color};margin-bottom:0.3rem;">${cat.icon} ${cat.title}</div>
+                            <h3 style="font-size:1.05rem;color:var(--secondary-blue);margin:0 0 0.4rem 0;">${ad.title}</h3>
+                            <div style="font-size:0.85rem;font-weight:600;color:var(--dark-text);">${ad.price_info || ''}</div>
+                        </a>`;
+                    });
+                    if (btnAdd) {
+                        btnAdd.href = `jata-ilmoitus.html?company_id=${encodeURIComponent(company.id.replace('company-', ''))}`;
+                    }
+                    box.style.display = 'block';
+                }
+            } else {
+                // Piilotetaan boxi jos ei ilmoituksia, mutta pidetään lisäysnappula näkyvillä omistajalle?
+                // Yleisölle piilotetaan.
+                const box = document.getElementById('company-encounters-box');
+                if (box) box.style.display = 'none';
+            }
+
+            // 2. Lähistön ilmoitukset (Aiempien tapojen mukaan)
             const coNameLower = (company.nimi || '').toLowerCase();
             const coCityLower = (company.osoite || '').toLowerCase();
             const related = allEncounters.filter(function(ad) {
+                // Ohitetaan omat ilmoitukset
+                if (ad.company_id === company.id || ad.company_id === String(company.id).replace('company-', '')) return false;
+
                 var loc = (ad.location || '').toLowerCase();
                 var desc = (ad.description || '').toLowerCase();
                 var title = (ad.title || '').toLowerCase();
                 return desc.includes(coNameLower) || title.includes(coNameLower) ||
                        (coCityLower && loc.length > 3 && coCityLower.includes(loc));
             }).slice(0, 5);
+            
             if (related.length > 0) {
                 var container = document.getElementById('tab-business-card');
                 if (!container) return;
-                var box = document.createElement('div');
-                box.className = 'bc-block';
-                box.style.marginTop = '1.5rem';
+                
+                // Katsotaan onko jo lisätty, jos ei niin luodaan.
+                let box = document.getElementById('related-encounters-box');
+                if (!box) {
+                    box = document.createElement('div');
+                    box.id = 'related-encounters-box';
+                    box.className = 'bc-block';
+                    box.style.marginTop = '1.5rem';
+                    container.appendChild(box);
+                }
+                
                 var cardsHtml = '';
                 related.forEach(function(ad) {
                     var cat = categories[ad.type] || categories['need_help'];
@@ -1592,7 +1635,6 @@
                     + '<p style="font-size:0.9rem;color:var(--light-text);margin-bottom:1rem;">Esimerkkejä paikallisista ilmoituksista ja toiveista:</p>'
                     + cardsHtml
                     + '<a href="kohtaamiset.html" style="display:block;text-align:center;color:var(--primary-blue);font-weight:700;margin-top:1rem;text-decoration:none;">Katso kaikkia ilmoituksia &raquo;</a>';
-                container.appendChild(box);
             }
         } catch(e) {
             console.error('Kohtaamiset error:', e);

@@ -139,3 +139,15 @@ CREATE TRIGGER check_encounter_insert_trigger
 --     'testi@esimerkki.fi',
 --     ARRAY['pihatyöt', 'testi']
 -- );
+
+-- ============================================================
+-- OSIO C: Ekosysteemin laajennus (Vaihe 1)
+-- Aja tämä jos lisäät yritys/kohdelinkitykset olemassaolevaan tauluun
+-- ============================================================
+
+-- ALTER TABLE public.encounters
+--     ADD COLUMN IF NOT EXISTS company_id VARCHAR,
+--     ADD COLUMN IF NOT EXISTS location_id VARCHAR,
+--     ADD COLUMN IF NOT EXISTS sub_category VARCHAR,
+--     ADD COLUMN IF NOT EXISTS structured_links JSONB DEFAULT '{}'::jsonb;
+

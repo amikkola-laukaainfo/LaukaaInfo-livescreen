@@ -344,6 +344,17 @@
                     <div id="cat-error" style="font-size:0.82rem; color:#ef4444; margin-top:4px; display:none;">Valitse kategoria.</div>
                 </div>
 
+                <input type="hidden" id="ad-company-id">
+                <input type="hidden" id="ad-location-id">
+
+                <!-- Alakategoria -->
+                <div class="form-group" id="sub-cat-group" style="display: none;">
+                    <label for="ad-sub-cat">Tarkempi luokittelu</label>
+                    <select id="ad-sub-cat" class="form-control">
+                        <option value="">-- Valitse tarkempi kategoria --</option>
+                    </select>
+                </div>
+
                 <hr class="ilm-divider">
 
                 <!-- Otsikko -->
@@ -425,7 +436,27 @@
                         </label>
                     </div>
                 </div>
+                <hr class="ilm-divider">
 
+                <h3 style="font-size: 1.1rem; margin-bottom: 1rem; color: #0f172a;">Lisälinkit ja yhteystiedot (Vapaaehtoiset)</h3>
+                <p class="form-hint" style="margin-bottom: 1.5rem;">Nämä näkyvät painikkeina ilmoituskortissasi.</p>
+                
+                <div class="form-group">
+                    <label for="link-website">Verkkosivusto</label>
+                    <input type="url" id="link-website" class="form-control" placeholder="https://www.esimerkki.fi">
+                </div>
+                <div class="form-group">
+                    <label for="link-phone">Puhelinnumero (julkinen)</label>
+                    <input type="tel" id="link-phone" class="form-control" placeholder="040 123 4567">
+                </div>
+                <div class="form-group">
+                    <label for="link-whatsapp">WhatsApp-numero</label>
+                    <input type="tel" id="link-whatsapp" class="form-control" placeholder="040 123 4567">
+                </div>
+                <div class="form-group">
+                    <label for="link-facebook">Facebook-linkki</label>
+                    <input type="url" id="link-facebook" class="form-control" placeholder="https://facebook.com/SivunNimi">
+                </div>
                 <button type="submit" id="submit-btn" class="submit-btn">
                     <span class="iconify" data-icon="lucide:send"></span> Julkaise ilmoitus
                 </button>
@@ -467,6 +498,15 @@
         'high_value':    ['mönkijä', 'auto', 'vene', 'moottoripyörä', 'huonekalut', 'elektroniikka', 'koru']
     };
 
+    // Alakategoriat
+    const SUBCATEGORIES = {
+        'need_help': ['Siivous', 'Pihatyöt', 'Remontointi', 'Muuttoapu', 'IT-tuki', 'Lastenhoito', 'Muu'],
+        'offer_service': ['Siivous', 'Remontointi', 'Sähkötyöt', 'Putkityöt', 'Muu rakennustyö', 'Kauneus ja hyvinvointi', 'Muu'],
+        'b2b_request': ['Alinhankinta', 'Tarvikkeet', 'Asiantuntijapalvelut', 'Muu'],
+        'space_rental': ['Juhlatila', 'Kokoustila', 'Saunatila', 'Työpiste', 'Varasto', 'Autotalli', 'Työkone / Peräkärry', 'Muu'],
+        'gig': ['Esiintyjä / Muusikko', 'Valokuvaus / Video', 'Catering', 'Rakennusapulainen', 'Muu']
+    };
+
     // =============================================
     // TILA
     // =============================================
@@ -497,6 +537,19 @@
                 document.getElementById('ad-type').value = key;
                 document.getElementById('cat-error').style.display = 'none';
                 updateTagSuggestions();
+                
+                // Alakategoriat
+                const subCats = SUBCATEGORIES[key] || [];
+                const subCatGroup = document.getElementById('sub-cat-group');
+                const subCatSelect = document.getElementById('ad-sub-cat');
+                if (subCats.length > 0) {
+                    subCatSelect.innerHTML = '<option value="">-- Valitse tarkempi kategoria --</option>' + 
+                        subCats.map(sc => `<option value="${escHtml(sc)}">${escHtml(sc)}</option>`).join('');
+                    subCatGroup.style.display = 'block';
+                } else {
+                    subCatGroup.style.display = 'none';
+                    subCatSelect.innerHTML = '';
+                }
             });
 
             grid.appendChild(item);
@@ -575,6 +628,11 @@
         renderCatGrid();
         renderTagChips();
 
+        // Hae company_id / location_id URL:sta
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('company_id')) document.getElementById('ad-company-id').value = params.get('company_id');
+        if (params.get('location_id')) document.getElementById('ad-location-id').value = params.get('location_id');
+
         const tagInput = document.getElementById('tag-text-input');
 
         tagInput.addEventListener('keydown', (e) => {
@@ -616,6 +674,21 @@
         const contact_mode = document.querySelector('input[name="contact_mode"]:checked').value;
         const allow_messages = (contact_mode === 'message');
 
+        const company_id = document.getElementById('ad-company-id')?.value || null;
+        const location_id = document.getElementById('ad-location-id')?.value || null;
+        const sub_category = document.getElementById('ad-sub-cat') ? document.getElementById('ad-sub-cat').value : null;
+
+        const structured_links = {};
+        const linkWebsite = document.getElementById('link-website')?.value.trim();
+        const linkPhone = document.getElementById('link-phone')?.value.trim();
+        const linkWhatsapp = document.getElementById('link-whatsapp')?.value.trim();
+        const linkFacebook = document.getElementById('link-facebook')?.value.trim();
+        
+        if (linkWebsite) structured_links.website = linkWebsite;
+        if (linkPhone) structured_links.phone = linkPhone;
+        if (linkWhatsapp) structured_links.whatsapp = linkWhatsapp;
+        if (linkFacebook) structured_links.facebook = linkFacebook;
+
         if (!title || !description || !contact_email) return;
 
         btn.disabled  = true;
@@ -635,7 +708,11 @@
                     contact_email,
                     allow_messages,
                     tags:          selectedTags,
-                    status:        'active'
+                    status:        'active',
+                    company_id,
+                    location_id,
+                    sub_category:  sub_category || null,
+                    structured_links
                 }])
                 .select();
 

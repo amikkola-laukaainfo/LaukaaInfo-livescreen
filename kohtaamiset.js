@@ -452,7 +452,9 @@ async function initIlmoituskortti() {
     const header = document.getElementById('ad-header');
     if (header) header.style.backgroundColor = cat.color;
 
-    document.getElementById('ad-badge').innerHTML = `${cat.emoji} ${cat.title}`;
+    document.getElementById('ad-badge').innerHTML = `${cat.emoji} ${cat.title}` + 
+        (ad.sub_category ? ` <span style="opacity:0.7; font-weight:normal; margin-left:5px;">| ${escapeHtml(ad.sub_category)}</span>` : '');
+        
     document.getElementById('ad-title').innerText = ad.title;
     document.getElementById('ad-desc').innerText = ad.description;
     
@@ -470,6 +472,45 @@ async function initIlmoituskortti() {
 
     document.getElementById('ad-price').innerText = ad.price_info;
     document.getElementById('ad-location').innerText = ad.location;
+
+    // Rakenteelliset linkit
+    const links = ad.structured_links || {};
+    let linksHtml = '';
+    
+    if (links.website) {
+        linksHtml += `<a href="${escapeHtml(links.website)}" target="_blank" style="background:#0ea5e9; color:white; padding:10px 15px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-weight:600; font-size:0.95rem;">
+            <span class="iconify" data-icon="lucide:globe"></span> Verkkosivu
+        </a>`;
+    }
+    if (links.phone) {
+        linksHtml += `<a href="tel:${escapeHtml(links.phone)}" style="background:#10b981; color:white; padding:10px 15px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-weight:600; font-size:0.95rem;">
+            <span class="iconify" data-icon="lucide:phone"></span> Soita
+        </a>`;
+    }
+    if (links.whatsapp) {
+        const waNum = links.whatsapp.replace(/[^0-9]/g, '');
+        linksHtml += `<a href="https://wa.me/${waNum}" target="_blank" style="background:#25D366; color:white; padding:10px 15px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-weight:600; font-size:0.95rem;">
+            <span class="iconify" data-icon="mdi:whatsapp"></span> WhatsApp
+        </a>`;
+    }
+    if (links.facebook) {
+        linksHtml += `<a href="${escapeHtml(links.facebook)}" target="_blank" style="background:#1877F2; color:white; padding:10px 15px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-weight:600; font-size:0.95rem;">
+            <span class="iconify" data-icon="mdi:facebook"></span> Facebook
+        </a>`;
+    }
+
+    if (linksHtml) {
+        const linksContainer = document.createElement('div');
+        linksContainer.id = 'ad-structured-links';
+        linksContainer.style.cssText = 'display:flex; gap:10px; flex-wrap:wrap; margin-bottom:1.5rem; justify-content:center;';
+        linksContainer.innerHTML = linksHtml;
+        
+        // Etsi hinta-container ja lisää linkit sen perään
+        const priceContainer = document.querySelector('.ad-single-price');
+        if (priceContainer && priceContainer.parentNode && !document.getElementById('ad-structured-links')) {
+            priceContainer.parentNode.insertBefore(linksContainer, priceContainer.nextSibling);
+        }
+    }
 
     // Tagit
     const tagsContainer = document.getElementById('ad-tags');
