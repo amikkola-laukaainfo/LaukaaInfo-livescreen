@@ -16,14 +16,12 @@
 const categories = {
     'need_help':     { title: 'Tarvitsen palvelun',     icon: '🟢', emoji: '🟢', color: '#22c55e' },
     'offer_service': { title: 'Tarjoan palvelua',       icon: '🔵', emoji: '🔵', color: '#3b82f6' },
-    'offer_skills':  { title: 'Tarjoan osaamistani',    icon: '🟠', emoji: '🟠', color: '#f97316' },
-    'b2b_request':   { title: 'Yritysten tarjouspyyntö',icon: '🟣', emoji: '🟣', color: '#a855f7' },
-    'gig':           { title: 'Työkeikka',              icon: '🟡', emoji: '🟡', color: '#eab308' },
-    'volunteer':     { title: 'Talkoot',                icon: '❤️', emoji: '❤️', color: '#ef4444' },
+    'work_and_gigs': { title: 'Työ ja toimeksiannot',   icon: '💼', emoji: '💼', color: '#a855f7' },
+    'community':     { title: 'Yhteisö',                icon: '❤️', emoji: '❤️', color: '#ef4444' },
     'space_rental':  { title: 'Tilat ja kalusto',       icon: '🏠', emoji: '🏠', color: '#14b8a6' },
     'b2b_collab':    { title: 'Yhteistyöhaku',          icon: '🤝', emoji: '🤝', color: '#6366f1' },
     'event_staff':   { title: 'Tapahtumahaku',          icon: '🎉', emoji: '🎉', color: '#ec4899' },
-    'high_value':    { title: 'Arvotavarat (>2000€)',   icon: '💎', emoji: '💎', color: '#fbbf24' }
+    'high_value':    { title: 'Arvotavarat ja erikoiskohteet', icon: '💎', emoji: '💎', color: '#fbbf24' }
 };
 
 // ===================================================
@@ -42,7 +40,7 @@ const mockEncounters = [
     },
     {
         id: '2',
-        type: 'offer_skills',
+        type: 'work_and_gigs',
         title: 'Tietokoneiden asennus ja opastus',
         description: 'Olen IT-alan opiskelija ja autan mielelläni uuden tietokoneen tai puhelimen käyttöönotossa. Voin opastaa myös pankkitunnusten käytössä turvallisesti.',
         price_info: '25€ / h',
@@ -52,7 +50,7 @@ const mockEncounters = [
     },
     {
         id: '3',
-        type: 'b2b_request',
+        type: 'work_and_gigs',
         title: 'Tarjouspyyntö: Toimistotilojen siivous',
         description: 'Etsimme paikallista siivousyritystä hoitamaan toimistomme (150m2) siivouksen kerran viikossa. Yhteydenotot vain y-tunnuksellisilta toimijoilta.',
         price_info: 'Pyydä tarjous',
@@ -62,7 +60,7 @@ const mockEncounters = [
     },
     {
         id: '4',
-        type: 'volunteer',
+        type: 'community',
         title: 'Leppäveden Kyläjuhlat: Järjestyksenvalvojia',
         description: 'Etsimme vapaaehtoisia järjestyksenvalvojia (JV-kortti vaaditaan) kyläjuhliin lauantaille. Tarjoamme ruoat ja kahvit.',
         price_info: 'Vapaaehtoistyö',
@@ -102,7 +100,7 @@ const mockEncounters = [
     },
     {
         id: '8',
-        type: 'gig',
+        type: 'work_and_gigs',
         title: 'Keikkatyö: DJ juhlatilaisuuksiin',
         description: 'Kokenut DJ haluaa keikkatöitä häihin, syntymäpäiville ja yritystapahtumiin. Oma kalusto (äänijärjestelmä + valot). Esiintynyt 50+ tilaisuudessa.',
         price_info: 'Sopimuksen mukaan',

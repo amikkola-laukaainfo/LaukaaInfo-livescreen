@@ -347,11 +347,11 @@
                 <input type="hidden" id="ad-company-id">
                 <input type="hidden" id="ad-location-id">
 
-                <!-- Alakategoria -->
-                <div class="form-group" id="sub-cat-group" style="display: none;">
-                    <label for="ad-sub-cat">Tarkempi luokittelu</label>
-                    <select id="ad-sub-cat" class="form-control">
-                        <option value="">-- Valitse tarkempi kategoria --</option>
+                <!-- Yrityksen valinta ylläpitäjälle (täytetään JS:llä) -->
+                <div class="form-group" id="admin-company-group" style="display: none;">
+                    <label for="admin-company-select">Linkitä yritykseen (Ylläpitäjä)</label>
+                    <select id="admin-company-select" class="form-control">
+                        <option value="">-- Ei linkitystä --</option>
                     </select>
                 </div>
 
@@ -474,37 +474,24 @@
     const CATEGORIES = {
         'need_help':     { title: 'Tarvitsen palvelun',     emoji: '🟢', color: '#22c55e', bg: '#dcfce7' },
         'offer_service': { title: 'Tarjoan palvelua',       emoji: '🔵', color: '#3b82f6', bg: '#dbeafe' },
-        'offer_skills':  { title: 'Tarjoan osaamistani',    emoji: '🟠', color: '#f97316', bg: '#ffedd5' },
-        'b2b_request':   { title: 'Yritysten tarjouspyyntö',emoji: '🟣', color: '#a855f7', bg: '#f3e8ff' },
-        'gig':           { title: 'Työkeikka',              emoji: '🟡', color: '#eab308', bg: '#fef9c3' },
-        'volunteer':     { title: 'Talkoot',                emoji: '❤️', color: '#ef4444', bg: '#fee2e2' },
+        'work_and_gigs': { title: 'Työ ja toimeksiannot',   emoji: '💼', color: '#a855f7', bg: '#f3e8ff' },
+        'community':     { title: 'Yhteisö',                emoji: '❤️', color: '#ef4444', bg: '#fee2e2' },
         'space_rental':  { title: 'Tilat ja kalusto',       emoji: '🏠', color: '#14b8a6', bg: '#ccfbf1' },
         'b2b_collab':    { title: 'Yhteistyöhaku',          emoji: '🤝', color: '#6366f1', bg: '#e0e7ff' },
         'event_staff':   { title: 'Tapahtumahaku',          emoji: '🎉', color: '#ec4899', bg: '#fce7f3' },
-        'high_value':    { title: 'Arvotavarat (>2000€)',   emoji: '💎', color: '#fbbf24', bg: '#fef3c7' }
+        'high_value':    { title: 'Arvotavarat ja erikoiskohteet', emoji: '💎', color: '#fbbf24', bg: '#fef3c7' }
     };
 
     // Kategoriakohtaiset ehdotetut tagit
     const TAG_SUGGESTIONS = {
         'need_help':     ['pihatyöt', 'siivous', 'remontti', 'kuljetukset', 'it-tuki', 'lastenhoito', 'muutto'],
         'offer_service': ['siivous', 'remontti', 'sähkötyöt', 'putkityöt', 'maalaus', 'kuljetukset', 'catering'],
-        'offer_skills':  ['graafisuus', 'valokuvaus', 'opetus', 'kirjanpito', 'ohjelmointi', 'markkinointi', 'käännökset'],
-        'b2b_request':   ['siivous', 'IT', 'markkinointi', 'logistiikka', 'rakentaminen', 'turvallisuus'],
-        'gig':           ['musiikki', 'DJ', 'valokuvaus', 'catering', 'asennus', 'kuljetus', 'myynti'],
-        'volunteer':     ['talkoot', 'maalaus', 'puutarha', 'muutto', 'siivous', 'kyläjuhla', 'yhdistystyö'],
+        'work_and_gigs': ['graafisuus', 'valokuvaus', 'opetus', 'kirjanpito', 'siivous', 'IT', 'markkinointi', 'DJ'],
+        'community':     ['talkoot', 'maalaus', 'puutarha', 'muutto', 'siivous', 'kyläjuhla', 'yhdistystyö'],
         'space_rental':  ['peräkärry', 'sähkötyökalut', 'juhlatila', 'varastotila', 'kokoustila', 'autotalli'],
         'b2b_collab':    ['yhteistyö', 'myynti', 'markkinointi', 'sponsorointi', 'jakelu', 'tuotekehitys'],
         'event_staff':   ['juontaja', 'DJ', 'tekniikka', 'järjestyksenvalvoja', 'catering', 'valokuvaus'],
         'high_value':    ['mönkijä', 'auto', 'vene', 'moottoripyörä', 'huonekalut', 'elektroniikka', 'koru']
-    };
-
-    // Alakategoriat
-    const SUBCATEGORIES = {
-        'need_help': ['Siivous', 'Pihatyöt', 'Remontointi', 'Muuttoapu', 'IT-tuki', 'Lastenhoito', 'Muu'],
-        'offer_service': ['Siivous', 'Remontointi', 'Sähkötyöt', 'Putkityöt', 'Muu rakennustyö', 'Kauneus ja hyvinvointi', 'Muu'],
-        'b2b_request': ['Alinhankinta', 'Tarvikkeet', 'Asiantuntijapalvelut', 'Muu'],
-        'space_rental': ['Juhlatila', 'Kokoustila', 'Saunatila', 'Työpiste', 'Varasto', 'Autotalli', 'Työkone / Peräkärry', 'Muu'],
-        'gig': ['Esiintyjä / Muusikko', 'Valokuvaus / Video', 'Catering', 'Rakennusapulainen', 'Muu']
     };
 
     // =============================================
@@ -537,19 +524,6 @@
                 document.getElementById('ad-type').value = key;
                 document.getElementById('cat-error').style.display = 'none';
                 updateTagSuggestions();
-                
-                // Alakategoriat
-                const subCats = SUBCATEGORIES[key] || [];
-                const subCatGroup = document.getElementById('sub-cat-group');
-                const subCatSelect = document.getElementById('ad-sub-cat');
-                if (subCats.length > 0) {
-                    subCatSelect.innerHTML = '<option value="">-- Valitse tarkempi kategoria --</option>' + 
-                        subCats.map(sc => `<option value="${escHtml(sc)}">${escHtml(sc)}</option>`).join('');
-                    subCatGroup.style.display = 'block';
-                } else {
-                    subCatGroup.style.display = 'none';
-                    subCatSelect.innerHTML = '';
-                }
             });
 
             grid.appendChild(item);
@@ -650,7 +624,7 @@
 
         // Auth: Täytä sähköposti jos käyttäjä on kirjautunut
         if (window.LaukaaAuth) {
-            window.LaukaaAuth.getUser().then(user => {
+            window.LaukaaAuth.getUser().then(async user => {
                 if (user) {
                     const emailInput = document.getElementById('ad-email');
                     emailInput.value = user.email;
@@ -661,6 +635,26 @@
                     authNotice.style.cssText = 'background:#f0f9ff; color:#0369a1; padding:8px 12px; border-radius:8px; font-size:0.85rem; margin-top:8px; display:inline-flex; align-items:center; gap:6px;';
                     authNotice.innerHTML = '<span class="iconify" data-icon="lucide:check-circle"></span> Olet kirjautunut sisään. Ilmoitus lisätään tilillesi.';
                     emailInput.parentNode.appendChild(authNotice);
+                    
+                    // Ylläpitäjän yritysvalinta
+                    const isMod = await window.LaukaaAuth.isModerator();
+                    if (isMod) {
+                        try {
+                            const res = await fetch('companies_data.json');
+                            if (res.ok) {
+                                const companies = await res.json();
+                                const select = document.getElementById('admin-company-select');
+                                const data = Array.isArray(companies) ? companies : (companies.results || []);
+                                data.sort((a,b) => a.nimi.localeCompare(b.nimi)).forEach(c => {
+                                    const opt = document.createElement('option');
+                                    opt.value = c.id;
+                                    opt.textContent = c.nimi;
+                                    select.appendChild(opt);
+                                });
+                                document.getElementById('admin-company-group').style.display = 'block';
+                            }
+                        } catch(e) { console.warn(e); }
+                    }
                 }
             });
         }
@@ -691,9 +685,13 @@
         const contact_mode = document.querySelector('input[name="contact_mode"]:checked').value;
         const allow_messages = (contact_mode === 'message');
 
-        const company_id = document.getElementById('ad-company-id')?.value || null;
+        let company_id = document.getElementById('ad-company-id')?.value || null;
         const location_id = document.getElementById('ad-location-id')?.value || null;
-        const sub_category = document.getElementById('ad-sub-cat') ? document.getElementById('ad-sub-cat').value : null;
+        
+        const adminCompanySelect = document.getElementById('admin-company-select');
+        if (adminCompanySelect && adminCompanySelect.value) {
+            company_id = adminCompanySelect.value;
+        }
 
         const structured_links = {};
         const linkWebsite = document.getElementById('link-website')?.value.trim();
@@ -728,7 +726,6 @@
                     status:        'active',
                     company_id,
                     location_id,
-                    sub_category:  sub_category || null,
                     structured_links
                 }])
                 .select();
