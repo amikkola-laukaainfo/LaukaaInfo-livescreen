@@ -396,7 +396,7 @@ function renderFeed() {
             : '';
 
         const card = document.createElement('a');
-        card.href = `ilmoituskortti.html?id=${ad.id}`;
+        card.href = `ilmoituskortti.html?id=${ad.id}&slug=${generateSlug(ad.title)}`;
         card.className = 'km-card';
         card.style.borderTopColor = cat.color;
         if (isResolved) card.style.opacity = '0.85';
@@ -455,6 +455,19 @@ async function initIlmoituskortti() {
     document.getElementById('ad-badge').innerHTML = `${cat.emoji} ${cat.title}`;
     document.getElementById('ad-title').innerText = ad.title;
     document.getElementById('ad-desc').innerText = ad.description;
+    
+    // SEO & Meta päivitykset (Googlea ja tekoälybotteja varten)
+    document.title = `${ad.title} – LaukaaInfo Kohtaamiset`;
+    
+    let metaDesc = document.querySelector('meta[name="description"]');
+    if (!metaDesc) {
+        metaDesc = document.createElement('meta');
+        metaDesc.name = 'description';
+        document.head.appendChild(metaDesc);
+    }
+    const plainDesc = (ad.description || '').replace(/\n/g, ' ').trim();
+    metaDesc.content = plainDesc.substring(0, 155) + (plainDesc.length > 155 ? '...' : '');
+
     document.getElementById('ad-price').innerText = ad.price_info;
     document.getElementById('ad-location').innerText = ad.location;
 
@@ -513,6 +526,19 @@ function escapeHtml(str) {
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
+}
+
+function generateSlug(text) {
+    if (!text) return '';
+    return text.toString().toLowerCase()
+        .replace(/ä/g, 'a')
+        .replace(/ö/g, 'o')
+        .replace(/å/g, 'a')
+        .replace(/\s+/g, '-')           // välilyönnit viivoiksi
+        .replace(/[^\w\-]+/g, '')       // poista erikoismerkit
+        .replace(/\-\-+/g, '-')         // yhdistä peräkkäiset viivat
+        .replace(/^-+/, '')             // poista viivat alusta
+        .replace(/-+$/, '');            // poista viivat lopusta
 }
 
 // ===================================================
