@@ -118,11 +118,16 @@ let activeTag     = null;
 let searchQuery   = '';
 let sortOrder     = 'newest';
 let allEncounters = [];
+let encounterCache = null;
+let encounterCacheTime = 0;
 
 // ===================================================
 // DATAN HAKU
 // ===================================================
 async function fetchEncounters(currentUser = null) {
+    if (!currentUser && encounterCache && Date.now() - encounterCacheTime < 5 * 60 * 1000) {
+        return encounterCache;
+    }
     try {
         if (window.LaukaaSupabase) {
             let data, error;
@@ -148,7 +153,12 @@ async function fetchEncounters(currentUser = null) {
                 return mockEncounters;
             }
             if (data !== null) {
-                return data.map(d => ({ ...d, tags: Array.isArray(d.tags) ? d.tags : [] }));
+                const res = data.map(d => ({ ...d, tags: Array.isArray(d.tags) ? d.tags : [] }));
+                if (!currentUser) {
+                    encounterCache = res;
+                    encounterCacheTime = Date.now();
+                }
+                return res;
             }
         }
     } catch (e) {
@@ -457,6 +467,11 @@ async function initIlmoituskortti() {
     if (spinner) spinner.style.display = 'none';
     container.style.display = 'block';
 
+    if (window.LaukaaSupabase && !sessionStorage.getItem('km_viewed_' + ad.id)) {
+        sessionStorage.setItem('km_viewed_' + ad.id, '1');
+        window.LaukaaSupabase.rpc('increment_stat', { p_encounter_id: ad.id, p_stat_type: 'view' }).catch(()=>{});
+    }
+
     const cat = categories[ad.type] || categories['need_help'];
     const header = document.getElementById('ad-header');
     if (header) header.style.backgroundColor = cat.color;
@@ -506,7 +521,7 @@ async function initIlmoituskortti() {
     let linksHtml = '';
     
     if (links.website) {
-        linksHtml += `<a href="${escapeHtml(links.website)}" target="_blank" style="background:#0ea5e9; color:white; padding:10px 15px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-weight:600; font-size:0.95rem;">
+        linksHtml += `<a href="${escapeHtml(links.website)}" onclick="if(window.LaukaaSupabase) window.LaukaaSupabase.rpc('increment_stat', {p_encounter_id:'${ad.id}', p_stat_type:'click'}).catch(()=>{})" target="_blank" style="background:#0ea5e9; color:white; padding:10px 15px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-weight:600; font-size:0.95rem;">
             <span class="iconify" data-icon="lucide:globe"></span> Verkkosivu
         </a>`;
     }
@@ -557,7 +572,7 @@ async function initIlmoituskortti() {
         </a>`;
     }
     if (links.booking) {
-        linksHtml += `<a href="${escapeHtml(links.booking)}" target="_blank" style="background:#8b5cf6; color:white; padding:10px 15px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-weight:600; font-size:0.95rem;">
+        linksHtml += `<a href="${escapeHtml(links.booking)}" onclick="if(window.LaukaaSupabase) window.LaukaaSupabase.rpc('increment_stat', {p_encounter_id:'${ad.id}', p_stat_type:'click'}).catch(()=>{})" target="_blank" style="background:#8b5cf6; color:white; padding:10px 15px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-weight:600; font-size:0.95rem;">
             <span class="iconify" data-icon="mdi:calendar-check"></span> Ajanvaraus
         </a>`;
     }

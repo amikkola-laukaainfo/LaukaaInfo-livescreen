@@ -83,8 +83,20 @@ window.LaukaaAuth = {
         );
     },
 
-    /** Onko moderaattori? */
-    isModerator: async () => window.LaukaaAuth.hasRole('moderator'),
+    /** Tarkista onko käyttäjällä tietty oikeus (permission) */
+    hasPermission: async (permissionName) => {
+        if (!supabaseClient) return false;
+        try {
+            const { data, error } = await supabaseClient.rpc('check_permission', { p_name: permissionName });
+            if (error) return false;
+            return data === true;
+        } catch (e) {
+            return false;
+        }
+    },
+
+    /** Onko moderaattori? (Vanha apufunktio, käyttää nyt permissionia) */
+    isModerator: async () => window.LaukaaAuth.hasPermission('announcement.manage'),
 
     /** Onko yrityksen admin tietylle company_id:lle? */
     isCompanyAdmin: async (companyId) => {

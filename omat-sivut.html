@@ -302,20 +302,24 @@
             <p style="color:#64748b; font-size:0.85rem;">Tulevaisuudessa kaikki keskustelut löytyvät täältä suoraan.</p>
         </div>
 
-        <!-- Tilastot (Placeholder) -->
+        <!-- Tilastot -->
         <div class="section-card">
             <div class="section-header">
-                <h2>📈 Tilastot (Tulossa)</h2>
+                <h2>📈 Tilastot</h2>
             </div>
-            <p style="color:#475569; font-size:0.95rem; margin-bottom:1.5rem;">Täältä näet jatkossa ilmoitustesi näyttökerrat, karttaklikkaukset, yrityskortin avaukset ja muut mielenkiintoiset datat.</p>
-            <div style="display:flex; gap:1rem; flex-wrap:wrap; opacity: 0.5;">
+            <p style="color:#475569; font-size:0.95rem; margin-bottom:1.5rem;">Täältä näet ilmoitustesi näyttökerrat, linkkien klikkaukset ja some-jaot.</p>
+            <div id="stats-container" style="display:flex; gap:1rem; flex-wrap:wrap; opacity: 0.5; transition: opacity 0.3s;">
                 <div style="background:#f8fafc; border:1.5px solid #e2e8f0; padding:1rem; border-radius:12px; min-width:120px; text-align:center;">
-                    <div style="font-size:1.8rem; font-weight:700; color:#0f172a;">--</div>
+                    <div id="stat-views" style="font-size:1.8rem; font-weight:700; color:#0f172a;">--</div>
                     <div style="font-size:0.8rem; color:#64748b; font-weight:600;">Näyttökerrat</div>
                 </div>
                 <div style="background:#f8fafc; border:1.5px solid #e2e8f0; padding:1rem; border-radius:12px; min-width:120px; text-align:center;">
-                    <div style="font-size:1.8rem; font-weight:700; color:#0f172a;">--</div>
-                    <div style="font-size:0.8rem; color:#64748b; font-weight:600;">Some-klikit</div>
+                    <div id="stat-clicks" style="font-size:1.8rem; font-weight:700; color:#0f172a;">--</div>
+                    <div style="font-size:0.8rem; color:#64748b; font-weight:600;">Klikkaukset</div>
+                </div>
+                <div style="background:#f8fafc; border:1.5px solid #e2e8f0; padding:1rem; border-radius:12px; min-width:120px; text-align:center;">
+                    <div id="stat-shares" style="font-size:1.8rem; font-weight:700; color:#0f172a;">--</div>
+                    <div style="font-size:0.8rem; color:#64748b; font-weight:600;">Some-jaot</div>
                 </div>
             </div>
         </div>
@@ -368,6 +372,7 @@
         
         // Hae omat ilmoitukset (aktiiviset ensin)
         await loadMyAds();
+        await loadStats();
 
         // Tarkista company_admin roolit
         const companyRoles = userRoles.filter(r => r.role_name === 'company_admin');
@@ -503,6 +508,47 @@
             renderAdsList(data, list, 'Yhdistyksellä ei ole aktiivisia ilmoituksia.');
         } catch (err) {
             console.error(err);
+        }
+    }
+
+    async function loadStats() {
+        if (!currentUser) return;
+        try {
+            const { data: ads, error: err1 } = await window.LaukaaSupabase
+                .from('encounters')
+                .select('id')
+                .eq('user_id', currentUser.id);
+            if (err1) throw err1;
+            
+            if (!ads || ads.length === 0) {
+                document.getElementById('stat-views').textContent = '0';
+                document.getElementById('stat-clicks').textContent = '0';
+                document.getElementById('stat-shares').textContent = '0';
+                document.getElementById('stats-container').style.opacity = '1';
+                return;
+            }
+            
+            const ids = ads.map(a => a.id);
+            const { data: stats, error: err2 } = await window.LaukaaSupabase
+                .from('encounter_stats')
+                .select('views, clicks, social_shares')
+                .in('encounter_id', ids);
+            if (err2) throw err2;
+            
+            let v = 0, c = 0, s = 0;
+            if (stats) {
+                stats.forEach(st => {
+                    v += st.views || 0;
+                    c += st.clicks || 0;
+                    s += st.social_shares || 0;
+                });
+            }
+            document.getElementById('stat-views').textContent = v;
+            document.getElementById('stat-clicks').textContent = c;
+            document.getElementById('stat-shares').textContent = s;
+            document.getElementById('stats-container').style.opacity = '1';
+        } catch (e) {
+            console.error('Tilastojen haku epäonnistui:', e);
         }
     }
 
