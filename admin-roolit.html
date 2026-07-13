@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin – Roolien hallinta | LaukaaInfo</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;900&display=swap" rel="stylesheet">
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #f1f5f9; padding: 2rem; margin: 0; color: #0f172a; }
+        .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+        h1 { font-family: 'Outfit', sans-serif; margin-top: 0; color: #1e293b; }
+        .form-group { margin-bottom: 1rem; }
+        label { display: block; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9rem; }
+        input, select { width: 100%; padding: 0.5rem; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; }
+        button { background: #0ea5e9; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        button:hover { background: #0284c7; }
+        .error { color: #ef4444; font-size: 0.9rem; margin-top: 0.5rem; }
+        .success { color: #10b981; font-size: 0.9rem; margin-top: 0.5rem; }
+        table { width: 100%; border-collapse: collapse; margin-top: 2rem; }
+        th, td { text-align: left; padding: 0.75rem; border-bottom: 1px solid #e2e8f0; }
+        th { background: #f8fafc; font-weight: 600; font-size: 0.9rem; }
+        td { font-size: 0.9rem; }
+        .btn-delete { background: #ef4444; padding: 0.25rem 0.5rem; font-size: 0.8rem; }
+        .btn-delete:hover { background: #dc2626; }
+        .badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+        .badge.mod { background: #fee2e2; color: #991b1b; }
+        .badge.admin { background: #e0e7ff; color: #3730a3; }
+        
+        #unauthorized { display: none; text-align: center; padding: 3rem; }
+        #app { display: none; }
+    </style>
+</head>
+<body>
+
+<div id="unauthorized">
+    <h2>Ei oikeuksia</h2>
+    <p>Tämä sivu on tarkoitettu vain moderaattoreille.</p>
+    <a href="kirjaudu.html" style="color:#0ea5e9;">Kirjaudu sisään</a>
+</div>
+
+<div id="app" class="container">
+    <h1>Roolien hallinta</h1>
+    <p style="color:#64748b; font-size:0.9rem;">Lisää tai poista rooleja (moderaattori tai yrityksen admin).</p>
+    
+    <div style="background: #f8fafc; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; border: 1px solid #e2e8f0;">
+        <h3 style="margin-top:0;">Anna uusi rooli</h3>
+        <form id="role-form">
+            <div class="form-group">
+                <label>Käyttäjän sähköposti</label>
+                <input type="email" id="user-email" required placeholder="esim. matti@yritys.fi">
+            </div>
+            <div class="form-group">
+                <label>Rooli</label>
+                <select id="role-select" required>
+                    <option value="2">Yrityksen ylläpitäjä (company_admin)</option>
+                    <option value="3">Moderaattori (moderator)</option>
+                </select>
+            </div>
+            <div class="form-group" id="target-id-group">
+                <label>Yrityksen ID (vain jos company_admin)</label>
+                <input type="text" id="target-id" placeholder="esim. c489c6d...">
+                <p style="font-size:0.8rem; color:#64748b; margin-top:4px;">Kopioi tämä Yritykset-hallinnasta tai Supabasesta.</p>
+            </div>
+            <button type="submit" id="btn-submit">Tallenna rooli</button>
+            <div id="form-msg"></div>
+        </form>
+    </div>
+
+    <h3>Nykyiset roolit</h3>
+    <table id="roles-table">
+        <thead>
+            <tr>
+                <th>Sähköposti</th>
+                <th>Rooli</th>
+                <th>Kohde (Target)</th>
+                <th>Toiminto</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td colspan="4" style="text-align:center;">Ladataan...</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js?v=20260713"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        if (!window.LaukaaAuth) return;
+        
+        const isMod = await window.LaukaaAuth.isModerator();
+        
+        if (!isMod) {
+            document.getElementById('unauthorized').style.display = 'block';
+            return;
+        }
+
+        document.getElementById('app').style.display = 'block';
+        
+        const roleSelect = document.getElementById('role-select');
+        const targetGroup = document.getElementById('target-id-group');
+        
+        roleSelect.addEventListener('change', () => {
+            targetGroup.style.display = roleSelect.value === '2' ? 'block' : 'none';
+        });
+
+        loadRoles();
+
+        document.getElementById('role-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('user-email').value.trim();
+            const roleId = parseInt(roleSelect.value);
+            const targetId = roleId === 2 ? document.getElementById('target-id').value.trim() : null;
+            const msg = document.getElementById('form-msg');
+            
+            if (roleId === 2 && !targetId) {
+                msg.className = 'error';
+                msg.textContent = 'Yrityksen ID on pakollinen company_admin -roolille.';
+                return;
+            }
+            
+            document.getElementById('btn-submit').disabled = true;
+            
+            try {
+                // 1. Etsi käyttäjän UUID sähköpostin perusteella
+                // Huom: Supabasessa ei voi hakea suoraan auth.users clientin kautta, ellei tehdä RPC-funktiota.
+                // Tehdään tässä yksinkertaistettu RPC-kutsu "get_user_id_by_email" tai vaaditaan että admin
+                // syöttää UUID:n suoraan. Tehdään yksinkertaisin mahdollinen RPC.
+                
+                const { data: userId, error: rpcError } = await window.LaukaaSupabase.rpc('get_user_id_by_email', { email_input: email });
+                
+                if (rpcError || !userId) {
+                    throw new Error('Käyttäjää ei löydy tällä sähköpostilla. (Onko hän kirjautunut sisään kerran?)');
+                }
+
+                // 2. Lisää rooli
+                const { error: insertError } = await window.LaukaaSupabase
+                    .from('user_roles')
+                    .insert([{
+                        user_id: userId,
+                        role_id: roleId,
+                        target_id: targetId,
+                        granted_by: (await window.LaukaaAuth.getUser()).id
+                    }]);
+                    
+                if (insertError) throw insertError;
+                
+                msg.className = 'success';
+                msg.textContent = 'Rooli lisätty!';
+                document.getElementById('role-form').reset();
+                loadRoles();
+                
+            } catch (err) {
+                msg.className = 'error';
+                msg.textContent = err.message || 'Virhe tallennuksessa';
+            } finally {
+                document.getElementById('btn-submit').disabled = false;
+            }
+        });
+    });
+
+    async function loadRoles() {
+        const tbody = document.querySelector('#roles-table tbody');
+        try {
+            // Tarvitsemme VIEW:n tai RPC:n joka yhdistää sähköpostit ja roolit, 
+            // koska auth.users on suojattu. 
+            // Tehdään tähän toistaiseksi vain yksinkertainen select jos RPC löytyy.
+            const { data, error } = await window.LaukaaSupabase.rpc('get_all_roles_admin');
+            
+            if (error) throw error;
+            
+            if (!data || data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4">Ei rooleja asetettu.</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = data.map(r => `
+                <tr>
+                    <td>${r.email}</td>
+                    <td>
+                        <span class="badge ${r.role_name === 'moderator' ? 'mod' : 'admin'}">
+                            ${r.role_name}
+                        </span>
+                    </td>
+                    <td>${r.target_id || '-'}</td>
+                    <td>
+                        <button class="btn-delete" onclick="deleteRole(${r.id})">Poista</button>
+                    </td>
+                </tr>
+            `).join('');
+            
+        } catch (err) {
+            console.error(err);
+            tbody.innerHTML = '<tr><td colspan="4" style="color:red;">Virhe ladattaessa. (Vaatii get_all_roles_admin RPC:n)</td></tr>';
+        }
+    }
+    
+    async function deleteRole(id) {
+        if (!confirm('Poista rooli?')) return;
+        await window.LaukaaSupabase.from('user_roles').delete().eq('id', id);
+        loadRoles();
+    }
+</script>
+</body>
+</html>

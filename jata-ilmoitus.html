@@ -647,6 +647,23 @@
         tagInput.addEventListener('blur', () => {
             if (tagInput.value.trim()) addTag(tagInput.value);
         });
+
+        // Auth: Täytä sähköposti jos käyttäjä on kirjautunut
+        if (window.LaukaaAuth) {
+            window.LaukaaAuth.getUser().then(user => {
+                if (user) {
+                    const emailInput = document.getElementById('ad-email');
+                    emailInput.value = user.email;
+                    emailInput.readOnly = true;
+                    
+                    // Lisää maininta kirjautumisesta
+                    const authNotice = document.createElement('div');
+                    authNotice.style.cssText = 'background:#f0f9ff; color:#0369a1; padding:8px 12px; border-radius:8px; font-size:0.85rem; margin-top:8px; display:inline-flex; align-items:center; gap:6px;';
+                    authNotice.innerHTML = '<span class="iconify" data-icon="lucide:check-circle"></span> Olet kirjautunut sisään. Ilmoitus lisätään tilillesi.';
+                    emailInput.parentNode.appendChild(authNotice);
+                }
+            });
+        }
     });
 
     // =============================================
@@ -718,9 +735,15 @@
 
             if (error) throw error;
 
-            // Lähetä hallintalinkki heti sähköpostiin
+            // Lähetä hallintalinkki heti sähköpostiin (Vain jos ei ole kirjautunut)
+            let isAuthUser = false;
+            if (window.LaukaaAuth) {
+                const user = await window.LaukaaAuth.getUser();
+                if (user) isAuthUser = true;
+            }
+
             try {
-                if (data && data.length > 0) {
+                if (data && data.length > 0 && !isAuthUser) {
                     const newId = data[0].id;
                     const fd = new FormData();
                     fd.append('encounter_id', newId);
@@ -731,7 +754,11 @@
                 console.error('Sähköpostin lähetys epäonnistui:', mailErr);
             }
 
-            feedback.innerHTML = '✅ Ilmoitus lisätty onnistuneesti!<br><span style="font-size:.9rem;font-weight:400;">Olemme lähettäneet sähköpostiisi linkin, jonka kautta voit myöhemmin muokata tai poistaa ilmoituksesi.</span>';
+            if (isAuthUser) {
+                feedback.innerHTML = '✅ Ilmoitus lisätty onnistuneesti!<br><span style="font-size:.9rem;font-weight:400;">Löydät sen "Omat sivut" -valikosta.</span>';
+            } else {
+                feedback.innerHTML = '✅ Ilmoitus lisätty onnistuneesti!<br><span style="font-size:.9rem;font-weight:400;">Olemme lähettäneet sähköpostiisi linkin, jonka kautta voit myöhemmin muokata tai poistaa ilmoituksesi.</span>';
+            }
 
             feedback.classList.add('success');
             document.getElementById('ad-form').reset();

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Omat sivut – LaukaaInfo Kohtaamiset</title>
+    <meta name="robots" content="noindex">
+    <link rel="icon" href="logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=20260713">
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+    <style>
+        body { background: #f1f5f9; }
+        .page-wrap {
+            max-width: 900px;
+            margin: 3rem auto 5rem;
+            padding: 0 1rem;
+        }
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .dashboard-title h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: #0f172a;
+            margin: 0 0 0.5rem;
+        }
+        .dashboard-title p {
+            color: #64748b;
+            font-size: 0.95rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-logout {
+            background: #fff;
+            border: 1.5px solid #e2e8f0;
+            color: #475569;
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-logout:hover { background: #f8fafc; border-color: #cbd5e1; color: #0f172a; }
+        
+        .section-card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 1rem;
+        }
+        .section-header h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
+            color: #0f172a;
+            margin: 0;
+        }
+        .btn-primary-sm {
+            background: #0ea5e9;
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: background 0.2s;
+        }
+        .btn-primary-sm:hover { background: #0284c7; }
+        
+        .ad-list { display: flex; flex-direction: column; gap: 1rem; }
+        .ad-item {
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: #f8fafc;
+        }
+        .ad-item:hover { border-color: #cbd5e1; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+        .ad-info h3 { margin: 0 0 0.25rem; font-size: 1.05rem; color: #0f172a; }
+        .ad-meta { font-size: 0.82rem; color: #64748b; display: flex; gap: 12px; align-items: center; }
+        .ad-status {
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .status-active { background: #dcfce7; color: #166534; }
+        .status-closed { background: #f1f5f9; color: #475569; }
+        
+        .ad-actions { display: flex; gap: 8px; }
+        .btn-action {
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            border: 1.5px solid transparent;
+            transition: all 0.2s;
+        }
+        .btn-view { background: #f1f5f9; color: #334155; }
+        .btn-view:hover { background: #e2e8f0; }
+        .btn-edit { background: #e0f2fe; color: #0369a1; border-color: #bae6fd; }
+        .btn-edit:hover { background: #bae6fd; }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #64748b;
+        }
+        .empty-state-icon { font-size: 2.5rem; margin-bottom: 1rem; color: #cbd5e1; }
+        
+        /* Moderaattori / Admin lohkot */
+        .admin-section { display: none; border: 2px solid #e2e8f0; background: #f8fafc; }
+        .admin-section .section-header h2 { color: #334155; }
+        
+        /* Loading */
+        #loading-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: #f1f5f9; z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            font-family: 'Outfit', sans-serif; color: #64748b;
+        }
+        .spinner {
+            width: 40px; height: 40px; border: 4px solid #cbd5e1;
+            border-top-color: #0ea5e9; border-radius: 50%;
+            animation: spin 1s linear infinite; margin-bottom: 1rem;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        @media (max-width: 600px) {
+            .ad-item { flex-direction: column; align-items: flex-start; gap: 1rem; }
+            .ad-actions { width: 100%; justify-content: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="loading-overlay">
+    <div class="spinner"></div>
+    <div>Ladataan tietoja...</div>
+</div>
+
+<nav class="top-nav">
+    <div class="nav-container">
+        <a href="index.html" class="nav-logo">
+            <img src="logo.png" alt="LaukaaInfo Logo"><span>LaukaaInfo</span>
+        </a>
+        <button class="hamburger" id="hamburger-btn" aria-label="Avaa valikko">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</nav>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<aside class="sidebar-menu" id="sidebar-menu">
+    <div class="sidebar-header">
+        <a href="index.html" class="nav-logo">
+            <img src="logo.png" alt="LaukaaInfo Logo"><span>LaukaaInfo</span>
+        </a>
+        <button class="close-btn" id="close-sidebar-btn">&times;</button>
+    </div>
+</aside>
+
+<main style="padding-top: 80px; min-height: 80vh;">
+    <div class="page-wrap">
+        
+        <div class="dashboard-header">
+            <div class="dashboard-title">
+                <h1>Omat sivut</h1>
+                <p>
+                    <span class="iconify" data-icon="lucide:user"></span>
+                    <span id="user-email">...</span>
+                </p>
+            </div>
+            <button class="btn-logout" id="btn-logout">
+                <span class="iconify" data-icon="lucide:log-out"></span> Kirjaudu ulos
+            </button>
+        </div>
+
+        <!-- Omat ilmoitukset -->
+        <div class="section-card">
+            <div class="section-header">
+                <h2>Omat ilmoitukseni</h2>
+                <a href="jata-ilmoitus.html" class="btn-primary-sm">
+                    <span class="iconify" data-icon="lucide:plus"></span> Jätä uusi
+                </a>
+            </div>
+            <div id="my-ads-list" class="ad-list">
+                <!-- Sisältö ladataan JS:llä -->
+            </div>
+        </div>
+
+        <!-- Yrityksen admin osio (näkyy vain jos on company_admin) -->
+        <div id="company-admin-section" class="section-card admin-section">
+            <div class="section-header">
+                <h2>Yrityksen ilmoitukset <span style="font-size:0.85rem; font-weight:normal; color:#64748b;">(Ylläpitäjä)</span></h2>
+                <a href="jata-ilmoitus.html?company_id=me" id="btn-add-company-ad" class="btn-primary-sm" style="background:#334155;">
+                    <span class="iconify" data-icon="lucide:building"></span> Jätä yritysilmoitus
+                </a>
+            </div>
+            <div id="company-ads-list" class="ad-list">
+                <!-- Sisältö ladataan JS:llä -->
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js?v=20260713"></script>
+<script>
+    let currentUser = null;
+    let userRoles = [];
+
+    async function initDashboard() {
+        if (!window.LaukaaAuth) {
+            alert("Tietokantayhteys puuttuu.");
+            return;
+        }
+
+        // Tarkista kirjautuminen
+        currentUser = await window.LaukaaAuth.getUser();
+        if (!currentUser) {
+            window.location.href = 'kirjaudu.html';
+            return;
+        }
+
+        document.getElementById('user-email').textContent = currentUser.email;
+
+        // Hae roolit
+        userRoles = await window.LaukaaAuth.getRoles();
+        
+        // Hae omat ilmoitukset
+        await loadMyAds();
+
+        // Tarkista company_admin roolit
+        const companyRoles = userRoles.filter(r => r.role_name === 'company_admin');
+        if (companyRoles.length > 0) {
+            document.getElementById('company-admin-section').style.display = 'block';
+            await loadCompanyAds(companyRoles.map(r => r.target_id));
+        }
+
+        document.getElementById('loading-overlay').style.display = 'none';
+    }
+
+    async function loadMyAds() {
+        const list = document.getElementById('my-ads-list');
+        list.innerHTML = '<div style="text-align:center; padding:2rem;"><span class="iconify spinner" data-icon="lucide:loader-2"></span></div>';
+
+        try {
+            const { data, error } = await window.LaukaaSupabase
+                .from('encounters')
+                .select('*')
+                .eq('user_id', currentUser.id)
+                .order('created_at', { ascending: false });
+            
+            if (error) throw error;
+
+            renderAdsList(data, list, 'Et ole vielä jättänyt yhtään ilmoitusta.');
+        } catch (err) {
+            console.error(err);
+            list.innerHTML = '<div class="empty-state">Virhe haettaessa ilmoituksia.</div>';
+        }
+    }
+
+    async function loadCompanyAds(companyIds) {
+        const list = document.getElementById('company-ads-list');
+        
+        try {
+            // Lisätään prefix "company-" hakua varten jos sitä käytetään datassa
+            const searchIds = [];
+            companyIds.forEach(id => {
+                searchIds.push(id);
+                searchIds.push(`company-${id}`);
+            });
+
+            const { data, error } = await window.LaukaaSupabase
+                .from('encounters')
+                .select('*')
+                .in('company_id', searchIds)
+                .order('created_at', { ascending: false });
+            
+            if (error) throw error;
+
+            // Aseta napin linkki ensimmäiselle yritykselle (yksinkertaistus)
+            if (companyIds.length > 0) {
+                document.getElementById('btn-add-company-ad').href = `jata-ilmoitus.html?company_id=${companyIds[0]}`;
+            }
+
+            renderAdsList(data, list, 'Yrityksellä ei ole aktiivisia ilmoituksia.');
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    function renderAdsList(ads, container, emptyMsg) {
+        if (!ads || ads.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="iconify empty-state-icon" data-icon="lucide:inbox"></div>
+                    <p>${emptyMsg}</p>
+                </div>
+            `;
+            return;
+        }
+
+        let html = '';
+        ads.forEach(ad => {
+            const dateStr = new Date(ad.created_at).toLocaleDateString('fi-FI');
+            const isActive = ad.status === 'active';
+            const statusClass = isActive ? 'status-active' : 'status-closed';
+            const statusText = isActive ? 'Aktiivinen' : 'Suljettu';
+
+            html += `
+                <div class="ad-item">
+                    <div class="ad-info">
+                        <h3>${escapeHtml(ad.title)}</h3>
+                        <div class="ad-meta">
+                            <span class="ad-status ${statusClass}">${statusText}</span>
+                            <span>${dateStr}</span>
+                            ${ad.location ? `<span>📍 ${escapeHtml(ad.location)}</span>` : ''}
+                        </div>
+                    </div>
+                    <div class="ad-actions">
+                        <a href="ilmoituskortti.html?id=${ad.id}" class="btn-action btn-view" target="_blank">Näytä</a>
+                        <a href="muokkaa-ilmoitus.html?id=${ad.id}" class="btn-action btn-edit">Muokkaa</a>
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    function escapeHtml(str) {
+        return String(str || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    document.getElementById('btn-logout').addEventListener('click', async () => {
+        if (!confirm('Haluatko varmasti kirjautua ulos?')) return;
+        await window.LaukaaAuth.signOut();
+        window.location.href = 'kirjaudu.html';
+    });
+
+    document.addEventListener('DOMContentLoaded', initDashboard);
+</script>
+<script src="script.js"></script>
+<script src="nav-sync.js"></script>
+</body>
+</html>

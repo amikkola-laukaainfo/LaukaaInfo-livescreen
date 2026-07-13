@@ -555,6 +555,27 @@ async function initIlmoituskortti() {
             btn.onclick = (e) => e.preventDefault();
         }
     }
+
+    // Auth-tarkistus hallintanapille
+    if (window.LaukaaAuth) {
+        const user = await window.LaukaaAuth.getUser();
+        if (user) {
+            const isOwner = ad.user_id === user.id;
+            const isMod = await window.LaukaaAuth.isModerator();
+            
+            if (isOwner || isMod) {
+                const manageBtn = document.querySelector('.manage-btn');
+                if (manageBtn) {
+                    manageBtn.innerHTML = '<span class="iconify" data-icon="lucide:edit"></span> Muokkaa ilmoitusta';
+                    manageBtn.style.color = '#0ea5e9';
+                    manageBtn.style.fontWeight = '700';
+                    manageBtn.onclick = () => {
+                        window.location.href = `muokkaa-ilmoitus.html?id=${ad.id}`;
+                    };
+                }
+            }
+        }
+    }
 }
 
 // ===================================================

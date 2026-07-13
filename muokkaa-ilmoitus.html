@@ -159,12 +159,52 @@ const TOKEN  = params.get('token') || '';
 
 let currentTags = [];
 
+let isAuthMode = false;
+let currentUser = null;
+
 // ---- INIT ----
 async function init() {
-    if (!AD_ID || !TOKEN) {
-        showError('Virheellinen hallintakoodi. Tarkista linkki sähköpostistasi.');
+    if (!AD_ID) {
+        showError('Ilmoituksen ID puuttuu.');
         return;
     }
+
+    // 1. Tarkista onko kirjautunut sisään (Auth mode)
+    if (window.LaukaaAuth) {
+        currentUser = await window.LaukaaAuth.getUser();
+        if (currentUser) {
+            // Hae ilmoitus suoraan Supabasesta
+            const { data, error } = await window.LaukaaSupabase
+                .from('encounters')
+                .select('*')
+                .eq('id', AD_ID)
+                .single();
+
+            if (!error && data) {
+                // RLS on sallinut haun, mutta onko muokkausoikeus?
+                // Käyttäjä omistaa ilmoituksen (data.user_id === currentUser.id) TAI
+                // Käyttäjällä on moderaattorirooli.
+                // Tehdään testi: yritetään ladata data, ja tallennusvaiheessa RLS heittää virheen jos ei oikeutta.
+                // Mutta näytetään lomake, jos ollaan omistajia TAI on moderaattori.
+                
+                const isOwner = data.user_id === currentUser.id;
+                const isMod = await window.LaukaaAuth.isModerator();
+                
+                if (isOwner || isMod) {
+                    isAuthMode = true;
+                    populateForm(data);
+                    return;
+                }
+            }
+        }
+    }
+
+    // 2. Jos ei auth-oikeutta, tarkista onko token (Legacy mode)
+    if (!TOKEN) {
+        showError('Sinulla ei ole oikeutta muokata tätä ilmoitusta (kirjaudu sisään tai käytä sähköpostin linkkiä).');
+        return;
+    }
+
     try {
         const fd = new FormData();
         fd.append('id', AD_ID);
@@ -172,6 +212,7 @@ async function init() {
         const res  = await fetch(KM_API + '?action=verify_edit_token', { method: 'POST', body: fd });
         const data = await res.json();
         if (!data.success) { showError(data.error || 'Virheellinen hallintakoodi.'); return; }
+        isAuthMode = false;
         populateForm(data.encounter);
     } catch(e) {
         showError('Verkkovirhe. Tarkista yhteytesi ja yritä uudelleen.');
@@ -264,14 +305,38 @@ document.getElementById('edit-form').addEventListener('submit', async e => {
     fd.append('tags',           JSON.stringify(currentTags));
 
     try {
-        const res  = await fetch(KM_API + '?action=update_encounter', { method: 'POST', body: fd });
-        const data = await res.json();
-        if (data.success) {
-            feedback.innerText  = '✅ ' + (data.message || 'Tallennettu!');
+        if (isAuthMode) {
+            // Päivitys suoraan Supabaseen (RLS hoitaa turvallisuuden)
+            const { error } = await window.LaukaaSupabase
+                .from('encounters')
+                .update({
+                    title:          document.getElementById('f-title').value.trim(),
+                    description:    document.getElementById('f-desc').value.trim(),
+                    price_info:     document.getElementById('f-price').value.trim(),
+                    location:       document.getElementById('f-location').value.trim(),
+                    allow_messages: document.querySelector('input[name="allow_msg"]:checked').value === 'true',
+                    status:         document.querySelector('input[name="status"]:checked').value,
+                    tags:           currentTags
+                })
+                .eq('id', AD_ID);
+
+            if (error) throw error;
+            
+            feedback.innerText  = '✅ Tallennettu!';
             feedback.className  = 'feedback ok';
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            
         } else {
-            throw new Error(data.error || 'Tallennus epäonnistui.');
+            // Legacy päivitys PHP-API:n kautta
+            const res  = await fetch(KM_API + '?action=update_encounter', { method: 'POST', body: fd });
+            const data = await res.json();
+            if (data.success) {
+                feedback.innerText  = '✅ ' + (data.message || 'Tallennettu!');
+                feedback.className  = 'feedback ok';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                throw new Error(data.error || 'Tallennus epäonnistui.');
+            }
         }
     } catch(err) {
         feedback.innerText = '❌ ' + err.message;
@@ -299,24 +364,40 @@ async function deleteEncounter() {
     fd.append('token', TOKEN);
 
     try {
-        const res  = await fetch(KM_API + '?action=delete_encounter', { method: 'POST', body: fd });
-        const data = await res.json();
-        if (data.success) {
-            document.getElementById('edit-card').innerHTML =
-                '<div style="text-align:center;padding:3rem 2rem;">' +
-                '<div style="font-size:3rem;margin-bottom:1rem;">✅</div>' +
-                '<h2 style="font-family:Outfit,sans-serif;color:#0f172a;">Ilmoitus poistettu</h2>' +
-                '<p style="color:#64748b;">Ilmoituksesi on poistettu onnistuneesti.</p>' +
-                '<a href="kohtaamiset.html" style="display:inline-block;margin-top:1.5rem;background:#0f172a;color:#fff;padding:.75rem 1.5rem;border-radius:8px;text-decoration:none;font-weight:700;">← Takaisin kohtaamisiin</a>' +
-                '</div>';
+        if (isAuthMode) {
+            // Poisto suoraan Supabasesta
+            const { error } = await window.LaukaaSupabase
+                .from('encounters')
+                .delete()
+                .eq('id', AD_ID);
+
+            if (error) throw error;
+            showDeleteSuccess();
         } else {
-            throw new Error(data.error || 'Poisto epäonnistui.');
+            // Legacy poisto
+            const res  = await fetch(KM_API + '?action=delete_encounter', { method: 'POST', body: fd });
+            const data = await res.json();
+            if (data.success) {
+                showDeleteSuccess();
+            } else {
+                throw new Error(data.error || 'Poisto epäonnistui.');
+            }
         }
     } catch(err) {
         alert('Virhe: ' + err.message);
         btn.disabled  = false;
         btn.innerText = '🗑 Poista ilmoitus';
     }
+}
+
+function showDeleteSuccess() {
+    document.getElementById('edit-card').innerHTML =
+        '<div style="text-align:center;padding:3rem 2rem;">' +
+        '<div style="font-size:3rem;margin-bottom:1rem;">✅</div>' +
+        '<h2 style="font-family:Outfit,sans-serif;color:#0f172a;">Ilmoitus poistettu</h2>' +
+        '<p style="color:#64748b;">Ilmoituksesi on poistettu onnistuneesti.</p>' +
+        '<a href="kohtaamiset.html" style="display:inline-block;margin-top:1.5rem;background:#0f172a;color:#fff;padding:.75rem 1.5rem;border-radius:8px;text-decoration:none;font-weight:700;">← Takaisin kohtaamisiin</a>' +
+        '</div>';
 }
 
 function escHtml(str) {
