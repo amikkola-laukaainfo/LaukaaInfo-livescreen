@@ -123,14 +123,21 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Ilmoituksen tila</label>
+                    <label>Ilmoituksen tila ja elinkaari</label>
                     <div class="status-select">
+                        <input type="radio" name="status" value="draft" id="st-draft" class="status-opt">
+                        <label for="st-draft">📝 Luonnos</label>
                         <input type="radio" name="status" value="active" id="st-active" class="status-opt" checked>
                         <label for="st-active">✅ Aktiivinen</label>
                         <input type="radio" name="status" value="closed" id="st-closed" class="status-opt">
-                        <label for="st-closed">🔒 Suljettu / Varattu</label>
+                        <label for="st-closed">🔒 Suljettu</label>
+                        <input type="radio" name="status" value="archived" id="st-archived" class="status-opt">
+                        <label for="st-archived">📦 Arkistoitu</label>
                     </div>
-                    <p class="form-hint">Suljettu ilmoitus poistuu näkyvistä mutta ei poistu tietokannasta.</p>
+                    <p class="form-hint">
+                        <strong>Luonnos</strong> = vain sinä näet. <strong>Aktiivinen</strong> = julkinen. 
+                        <strong>Suljettu</strong> = ei uusia yhteydenottoja. <strong>Arkistoitu</strong> = piilossa, voit palauttaa.
+                    </p>
                 </div>
                 <button type="submit" class="btn-save" id="btn-save">
                     <span class="iconify" data-icon="lucide:save"></span> Tallenna muutokset
@@ -230,7 +237,12 @@ function populateForm(enc) {
     document.getElementById('f-location').value = enc.location || '';
 
     document.getElementById(enc.allow_messages !== false ? 'msg-yes' : 'msg-no').checked = true;
-    document.getElementById(enc.status === 'closed' ? 'st-closed' : 'st-active').checked = true;
+
+    // Aseta oikea tila – tue kaikkia elinkaariarvoja
+    const validStatuses = ['draft', 'active', 'closed', 'archived'];
+    const currentStatus = validStatuses.includes(enc.status) ? enc.status : 'active';
+    const statusEl = document.getElementById('st-' + currentStatus);
+    if (statusEl) statusEl.checked = true;
 
     currentTags = Array.isArray(enc.tags) ? [...enc.tags] : [];
     renderTags();

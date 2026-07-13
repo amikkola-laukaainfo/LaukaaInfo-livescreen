@@ -292,6 +292,84 @@
             border-top: 1px solid #f1f5f9;
             margin: 1.5rem 0;
         }
+
+        /* ===== JULKAISIJATYYPIN VALITSIN ===== */
+        .publisher-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 0.5rem;
+        }
+        .publisher-radio-item {
+            position: relative;
+        }
+        .publisher-radio-item input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .publisher-radio-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            padding: 0.6rem 0.5rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #374151;
+            text-align: center;
+            transition: all 0.15s;
+            background: #f8fafc;
+            line-height: 1.3;
+        }
+        .publisher-radio-label .pub-emoji { font-size: 1.3rem; }
+        .publisher-radio-item input:checked + .publisher-radio-label {
+            border-color: #0ea5e9;
+            background: #eff6ff;
+            color: #0f172a;
+            box-shadow: 0 0 0 3px rgba(14,165,233,0.15);
+        }
+        .publisher-radio-label:hover { border-color: #94a3b8; background: #f1f5f9; }
+
+        /* ===== NÄKYVYYS-VALITSIN ===== */
+        .visibility-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+        }
+        .vis-radio-item { position: relative; }
+        .vis-radio-item input[type="radio"] {
+            position: absolute; opacity: 0; width: 0; height: 0;
+        }
+        .vis-radio-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            padding: 0.6rem 0.4rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #374151;
+            text-align: center;
+            transition: all 0.15s;
+            background: #f8fafc;
+        }
+        .vis-radio-label .vis-icon { font-size: 1.2rem; }
+        .vis-radio-item input:checked + .vis-radio-label {
+            border-color: #6366f1;
+            background: #eef2ff;
+            color: #3730a3;
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+        }
+        .vis-radio-label:hover { border-color: #94a3b8; background: #f1f5f9; }
     </style>
 </head>
 <body class="bg-full-gray">
@@ -347,13 +425,91 @@
                 <input type="hidden" id="ad-company-id">
                 <input type="hidden" id="ad-location-id">
 
-                <!-- Yrityksen valinta ylläpitäjälle (täytetään JS:llä) -->
-                <div class="form-group" id="admin-company-group" style="display: none;">
-                    <label for="admin-company-select">Linkitä yritykseen (Ylläpitäjä)</label>
-                    <select id="admin-company-select" class="form-control">
-                        <option value="">-- Ei linkitystä --</option>
-                    </select>
+                <!-- ===== JULKAISIJAN TYYPPI ===== -->
+                <div class="form-group" id="publisher-type-group">
+                    <label>Julkaiset tämän nimissä <span class="required">*</span></label>
+                    <div class="publisher-grid" id="publisher-grid">
+                        <div class="publisher-radio-item">
+                            <input type="radio" name="publisher_type" id="pub-personal" value="personal" checked>
+                            <label class="publisher-radio-label" for="pub-personal">
+                                <span class="pub-emoji">👤</span>
+                                <span>Henkilökohtaisesti</span>
+                            </label>
+                        </div>
+                        <!-- Yritys ja kohde lisätään JS:llä jos käyttäjällä on oikeudet -->
+                        <div class="publisher-radio-item" id="pub-association-item">
+                            <input type="radio" name="publisher_type" id="pub-association" value="association">
+                            <label class="publisher-radio-label" for="pub-association">
+                                <span class="pub-emoji">🏛️</span>
+                                <span>Yhdistys</span>
+                            </label>
+                        </div>
+                    </div>
+                    <p class="form-hint" style="margin-top: 6px;">Yritys- ja kohdevaihtoehdot näkyvät kirjautuneille ylläpitäjille.</p>
                 </div>
+
+                <!-- Näytettävä julkaisijan nimi (yhdistys tai muu) -->
+                <div class="form-group" id="publisher-name-group" style="display:none;">
+                    <label for="publisher-name-input">Julkaisijan nimi <span class="required">*</span></label>
+                    <input type="text" id="publisher-name-input" class="form-control"
+                        placeholder="Esim. Leppäveden kyläyhdistys" maxlength="80">
+                    <p class="form-hint">Tämä nimi näkyy ilmoituksessa.</p>
+                </div>
+
+                <!-- Yritysvalinta (company_admin-käyttäjille) -->
+                <div class="form-group" id="company-select-group" style="display: none;">
+                    <label for="admin-company-select">Valitse yritys</label>
+                    <select id="admin-company-select" class="form-control">
+                        <option value="">-- Valitse yritys --</option>
+                    </select>
+                    <p class="form-hint">Ilmoitus näkyy yrityksen omalla sivulla.</p>
+                </div>
+
+                <!-- Kohdevalinta (location_admin-käyttäjille) -->
+                <div class="form-group" id="location-select-group" style="display: none;">
+                    <label for="admin-location-select">Valitse kohde</label>
+                    <select id="admin-location-select" class="form-control">
+                        <option value="">-- Valitse kohde --</option>
+                    </select>
+                    <p class="form-hint">Ilmoitus linkitetään valittuun kohteeseen.</p>
+                </div>
+
+                <hr class="ilm-divider">
+
+                <!-- ===== NÄKYVYYS ===== -->
+                <div class="form-group">
+                    <label>Kuka saa nähdä ilmoituksen?</label>
+                    <div class="visibility-grid">
+                        <div class="vis-radio-item">
+                            <input type="radio" name="visibility" id="vis-public" value="public" checked>
+                            <label class="vis-radio-label" for="vis-public">
+                                <span class="vis-icon">🌐</span>
+                                <span>Julkinen</span>
+                                <span style="font-size:0.7rem; font-weight:400; color:#64748b;">Kaikki näkevät</span>
+                            </label>
+                        </div>
+                        <div class="vis-radio-item">
+                            <input type="radio" name="visibility" id="vis-registered" value="registered">
+                            <label class="vis-radio-label" for="vis-registered">
+                                <span class="vis-icon">🔒</span>
+                                <span>Kirjautuneille</span>
+                                <span style="font-size:0.7rem; font-weight:400; color:#64748b;">Vain kirjautuneet</span>
+                            </label>
+                        </div>
+                        <div class="vis-radio-item" id="vis-company-only-item" style="display:none;">
+                            <input type="radio" name="visibility" id="vis-company-only" value="company_only">
+                            <label class="vis-radio-label" for="vis-company-only">
+                                <span class="vis-icon">🏢</span>
+                                <span>Suljettu</span>
+                                <span style="font-size:0.7rem; font-weight:400; color:#64748b;">Tarjouspyyntö</span>
+                            </label>
+                        </div>
+                    </div>
+                    <p class="form-hint" style="margin-top:6px;">Julkinen on suositeltu. Suljettu tarjouspyyntö on saatavilla yritysylläpitäjille.</p>
+                </div>
+
+                <!-- Takaisinyhteensopivuus: piilotettuja ID-kenttiä -->
+                <input type="hidden" id="admin-company-id-hidden">
 
                 <hr class="ilm-divider">
 
@@ -622,38 +778,150 @@
             if (tagInput.value.trim()) addTag(tagInput.value);
         });
 
-        // Auth: Täytä sähköposti jos käyttäjä on kirjautunut
+        // Julkaisijan tyyppi: näytä/piilota nimi-kenttä
+        document.querySelectorAll('input[name="publisher_type"]').forEach(radio => {
+            radio.addEventListener('change', () => {
+                const val = radio.value;
+                const nameGroup = document.getElementById('publisher-name-group');
+                const companyGroup = document.getElementById('company-select-group');
+                const locationGroup = document.getElementById('location-select-group');
+                const visCompanyOnly = document.getElementById('vis-company-only-item');
+
+                // Piilota kaikki ensin
+                nameGroup.style.display = 'none';
+                companyGroup.style.display = 'none';
+                locationGroup.style.display = 'none';
+                visCompanyOnly.style.display = 'none';
+
+                document.getElementById('publisher-name-input').required = false;
+                document.getElementById('publisher-name-input').value = '';
+
+                if (val === 'association') {
+                    nameGroup.style.display = 'block';
+                    document.getElementById('publisher-name-input').required = true;
+                } else if (val === 'company') {
+                    companyGroup.style.display = 'block';
+                    visCompanyOnly.style.display = 'block';
+                } else if (val === 'location') {
+                    locationGroup.style.display = 'block';
+                }
+            });
+        });
+
+        // Auth: Täytä sähköposti ja lataa roolikohtaiset vaihtoehdot
         if (window.LaukaaAuth) {
             window.LaukaaAuth.getUser().then(async user => {
                 if (user) {
                     const emailInput = document.getElementById('ad-email');
                     emailInput.value = user.email;
                     emailInput.readOnly = true;
-                    
-                    // Lisää maininta kirjautumisesta
+
                     const authNotice = document.createElement('div');
                     authNotice.style.cssText = 'background:#f0f9ff; color:#0369a1; padding:8px 12px; border-radius:8px; font-size:0.85rem; margin-top:8px; display:inline-flex; align-items:center; gap:6px;';
                     authNotice.innerHTML = '<span class="iconify" data-icon="lucide:check-circle"></span> Olet kirjautunut sisään. Ilmoitus lisätään tilillesi.';
                     emailInput.parentNode.appendChild(authNotice);
-                    
-                    // Ylläpitäjän yritysvalinta
-                    const isMod = await window.LaukaaAuth.isModerator();
-                    if (isMod) {
+
+                    // Hae käyttäjän roolit
+                    let userRoles = [];
+                    try {
+                        if (window.LaukaaAuth.getRoles) {
+                            userRoles = await window.LaukaaAuth.getRoles();
+                        }
+                    } catch(e) { console.warn('Roolien haku epäonnistui:', e); }
+
+                    const companyRoles = userRoles.filter(r => r.role_name === 'company_admin');
+                    const locationRoles = userRoles.filter(r => r.role_name === 'location_admin');
+                    const isMod = userRoles.some(r => r.role_name === 'moderator');
+
+                    // Yritysvaihtoehto publisher-gridiin
+                    if (companyRoles.length > 0 || isMod) {
+                        const pubGrid = document.getElementById('publisher-grid');
+                        const companyItem = document.createElement('div');
+                        companyItem.className = 'publisher-radio-item';
+                        companyItem.id = 'pub-company-item';
+                        companyItem.innerHTML = `
+                            <input type="radio" name="publisher_type" id="pub-company" value="company">
+                            <label class="publisher-radio-label" for="pub-company">
+                                <span class="pub-emoji">🏢</span>
+                                <span>Yrityksen nimissä</span>
+                            </label>`;
+                        // Lisää ennen yhdistys-itemin
+                        const assocItem = document.getElementById('pub-association-item');
+                        pubGrid.insertBefore(companyItem, assocItem);
+
+                        // Lataa yritykset valitsimeen
                         try {
-                            const res = await fetch('companies_data.json');
-                            if (res.ok) {
-                                const companies = await res.json();
-                                const select = document.getElementById('admin-company-select');
-                                const data = Array.isArray(companies) ? companies : (companies.results || []);
-                                data.sort((a,b) => a.nimi.localeCompare(b.nimi)).forEach(c => {
-                                    const opt = document.createElement('option');
-                                    opt.value = c.id;
-                                    opt.textContent = c.nimi;
-                                    select.appendChild(opt);
-                                });
-                                document.getElementById('admin-company-group').style.display = 'block';
+                            const select = document.getElementById('admin-company-select');
+                            if (isMod) {
+                                // Moderaattori: kaikki yritykset
+                                const res = await fetch('companies_data.json');
+                                if (res.ok) {
+                                    const companies = await res.json();
+                                    const data = Array.isArray(companies) ? companies : (companies.results || []);
+                                    data.sort((a,b) => (a.nimi||'').localeCompare(b.nimi||'')).forEach(c => {
+                                        const opt = document.createElement('option');
+                                        opt.value = c.id || c.nimi;
+                                        opt.textContent = c.nimi;
+                                        select.appendChild(opt);
+                                    });
+                                }
+                            } else {
+                                // company_admin: vain hallinnoimat yritykset
+                                // Haetaan target_id:t rooleista ja etsitään companies_data.json:stä
+                                const res = await fetch('companies_data.json');
+                                if (res.ok) {
+                                    const companies = await res.json();
+                                    const data = Array.isArray(companies) ? companies : (companies.results || []);
+                                    const myIds = companyRoles.map(r => r.target_id);
+                                    const myCompanies = data.filter(c => myIds.includes(String(c.id)) || myIds.includes(c.nimi));
+                                    myCompanies.forEach(c => {
+                                        const opt = document.createElement('option');
+                                        opt.value = c.id || c.nimi;
+                                        opt.textContent = c.nimi;
+                                        select.appendChild(opt);
+                                    });
+                                }
                             }
-                        } catch(e) { console.warn(e); }
+                        } catch(e) { console.warn('Yritysten lataus epäonnistui:', e); }
+
+                        // Lisää radio-kuuntelijat nyt kun uusi vaihtoehto on luotu
+                        document.querySelectorAll('input[name="publisher_type"]').forEach(r => {
+                            r.addEventListener('change', () => r.dispatchEvent(new Event('change')));
+                        });
+                    }
+
+                    // Kohdevaihtoehto location_admin-käyttäjille
+                    if (locationRoles.length > 0) {
+                        const pubGrid = document.getElementById('publisher-grid');
+                        const locationItem = document.createElement('div');
+                        locationItem.className = 'publisher-radio-item';
+                        locationItem.innerHTML = `
+                            <input type="radio" name="publisher_type" id="pub-location" value="location">
+                            <label class="publisher-radio-label" for="pub-location">
+                                <span class="pub-emoji">📍</span>
+                                <span>Kohteen nimissä</span>
+                            </label>`;
+                        pubGrid.appendChild(locationItem);
+
+                        // Lataa kohteet valitsimeen
+                        const locSelect = document.getElementById('admin-location-select');
+                        locationRoles.forEach(r => {
+                            if (r.target_id) {
+                                const opt = document.createElement('option');
+                                opt.value = r.target_id;
+                                opt.textContent = r.target_id; // TODO: hae kohteen nimi karttakohteet_data.js:stä
+                                locSelect.appendChild(opt);
+                            }
+                        });
+                    }
+
+                    // Pre-fill company_id URL:sta
+                    const params = new URLSearchParams(window.location.search);
+                    if (params.get('company_id')) {
+                        document.getElementById('ad-company-id').value = params.get('company_id');
+                    }
+                    if (params.get('location_id')) {
+                        document.getElementById('ad-location-id').value = params.get('location_id');
                     }
                 }
             });
@@ -685,12 +953,30 @@
         const contact_mode = document.querySelector('input[name="contact_mode"]:checked').value;
         const allow_messages = (contact_mode === 'message');
 
+        // Julkaisija
+        const publisher_type = document.querySelector('input[name="publisher_type"]:checked')?.value || 'personal';
+        let publisher_name = null;
+        if (publisher_type === 'association') {
+            publisher_name = document.getElementById('publisher-name-input')?.value.trim() || null;
+        }
+
+        // Näkyvyys
+        const visibility = document.querySelector('input[name="visibility"]:checked')?.value || 'public';
+
+        // Yritys- ja kohdelinkitys
         let company_id = document.getElementById('ad-company-id')?.value || null;
-        const location_id = document.getElementById('ad-location-id')?.value || null;
-        
+        let location_id = document.getElementById('ad-location-id')?.value || null;
+
         const adminCompanySelect = document.getElementById('admin-company-select');
-        if (adminCompanySelect && adminCompanySelect.value) {
+        if (publisher_type === 'company' && adminCompanySelect?.value) {
             company_id = adminCompanySelect.value;
+            publisher_name = adminCompanySelect.options[adminCompanySelect.selectedIndex]?.text || null;
+        }
+
+        const adminLocationSelect = document.getElementById('admin-location-select');
+        if (publisher_type === 'location' && adminLocationSelect?.value) {
+            location_id = adminLocationSelect.value;
+            publisher_name = adminLocationSelect.options[adminLocationSelect.selectedIndex]?.text || null;
         }
 
         const structured_links = {};
@@ -726,7 +1012,10 @@
                     status:        'active',
                     company_id,
                     location_id,
-                    structured_links
+                    structured_links,
+                    publisher_type,
+                    publisher_name,
+                    visibility
                 }])
                 .select();
 

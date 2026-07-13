@@ -137,6 +137,35 @@
         }
         .empty-state-icon { font-size: 2.5rem; margin-bottom: 1rem; color: #cbd5e1; }
         
+        /* ===== VÄLILEHDET omissa ilmoituksissa ===== */
+        .tabs-row {
+            display: flex;
+            gap: 4px;
+            background: #f1f5f9;
+            padding: 4px;
+            border-radius: 10px;
+            margin-bottom: 1.25rem;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 0.45rem 0.5rem;
+            border: none;
+            border-radius: 7px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #64748b;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .tab-btn.active {
+            background: #fff;
+            color: #0f172a;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        }
+        .tab-btn:hover:not(.active) { color: #334155; background: #e2e8f0; }
+
         /* Moderaattori / Admin lohkot */
         .admin-section { display: none; border: 2px solid #e2e8f0; background: #f8fafc; }
         .admin-section .section-header h2 { color: #334155; }
@@ -213,6 +242,13 @@
                     <span class="iconify" data-icon="lucide:plus"></span> Jätä uusi
                 </a>
             </div>
+            <!-- Välilehdet -->
+            <div class="tabs-row" id="my-ads-tabs">
+                <button class="tab-btn active" onclick="switchMyAdsTab('active', this)">Aktiiviset</button>
+                <button class="tab-btn" onclick="switchMyAdsTab('draft', this)">📝 Luonnokset</button>
+                <button class="tab-btn" onclick="switchMyAdsTab('closed', this)">🔒 Suljetut</button>
+                <button class="tab-btn" onclick="switchMyAdsTab('archived', this)">📦 Arkistoidut</button>
+            </div>
             <div id="my-ads-list" class="ad-list">
                 <!-- Sisältö ladataan JS:llä -->
             </div>
@@ -221,8 +257,8 @@
         <!-- Yrityksen admin osio (näkyy vain jos on company_admin) -->
         <div id="company-admin-section" class="section-card admin-section">
             <div class="section-header">
-                <h2>Yrityksen ilmoitukset <span style="font-size:0.85rem; font-weight:normal; color:#64748b;">(Ylläpitäjä)</span></h2>
-                <a href="jata-ilmoitus.html?company_id=me" id="btn-add-company-ad" class="btn-primary-sm" style="background:#334155;">
+                <h2>Hallinnoimani yritykset <span style="font-size:0.85rem; font-weight:normal; color:#64748b;">(Ylläpitäjä)</span></h2>
+                <a href="jata-ilmoitus.html?publisher_type=company" id="btn-add-company-ad" class="btn-primary-sm" style="background:#334155;">
                     <span class="iconify" data-icon="lucide:building"></span> Jätä yritysilmoitus
                 </a>
             </div>
@@ -231,15 +267,39 @@
             </div>
         </div>
 
+        <!-- Kohteen admin osio (näkyy vain jos on location_admin) -->
+        <div id="location-admin-section" class="section-card admin-section" style="border-color:#bbf7d0;">
+            <div class="section-header" style="border-bottom-color:#dcfce7;">
+                <h2>Hallinnoimani kohteet <span style="font-size:0.85rem; font-weight:normal; color:#64748b;">(Kohdeylläpitäjä)</span></h2>
+                <a href="jata-ilmoitus.html?publisher_type=location" id="btn-add-location-ad" class="btn-primary-sm" style="background:#15803d;">
+                    <span class="iconify" data-icon="lucide:map-pin"></span> Jätä kohteen ilmoitus
+                </a>
+            </div>
+            <div id="location-ads-list" class="ad-list">
+                <!-- Sisältö ladataan JS:llä -->
+            </div>
+        </div>
+
+        <!-- Saapuneet yhteydenotot -->
+        <div class="section-card">
+            <div class="section-header">
+                <h2>📬 Saapuneet yhteydenotot</h2>
+            </div>
+            <p style="color:#475569; font-size:0.95rem; margin-bottom:1.5rem;">Pääset lukemaan ja vastaamaan yhteydenottoihin sähköpostiisi tulleen linkin kautta.</p>
+            <p style="color:#64748b; font-size:0.85rem;">Tulevaisuudessa kaikki keskustelut löytyvät täältä suoraan.</p>
+        </div>
+
         <!-- Moderaattori osio -->
         <div id="moderator-section" class="section-card admin-section" style="border-color: #fca5a5;">
             <div class="section-header" style="border-bottom-color: #fee2e2;">
                 <h2>Järjestelmän hallinta <span style="font-size:0.85rem; font-weight:normal; color:#ef4444;">(Moderaattori)</span></h2>
             </div>
             <p style="color:#475569; font-size:0.95rem; margin-bottom:1.5rem;">Tervetuloa hallintapaneeliin. Täältä voit hallinnoida käyttöoikeuksia ja järjestelmän rooleja.</p>
-            <a href="admin-roolit.html" class="btn-primary-sm" style="background:#ef4444; color:#fff;">
-                <span class="iconify" data-icon="lucide:shield"></span> Hallitse rooleja
-            </a>
+            <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+                <a href="admin-roolit.html" class="btn-primary-sm" style="background:#ef4444; color:#fff;">
+                    <span class="iconify" data-icon="lucide:shield"></span> Hallitse rooleja
+                </a>
+            </div>
         </div>
 
     </div>
@@ -275,7 +335,7 @@
             document.getElementById('moderator-section').style.display = 'block';
         }
         
-        // Hae omat ilmoitukset
+        // Hae omat ilmoitukset (aktiiviset ensin)
         await loadMyAds();
 
         // Tarkista company_admin roolit
@@ -285,7 +345,23 @@
             await loadCompanyAds(companyRoles.map(r => r.target_id));
         }
 
+        // Tarkista location_admin roolit
+        const locationRoles = userRoles.filter(r => r.role_name === 'location_admin');
+        if (locationRoles.length > 0) {
+            document.getElementById('location-admin-section').style.display = 'block';
+            await loadLocationAds(locationRoles.map(r => r.target_id));
+        }
+
         document.getElementById('loading-overlay').style.display = 'none';
+    }
+
+    let currentMyAdsStatus = 'active';
+
+    function switchMyAdsTab(status, btn) {
+        currentMyAdsStatus = status;
+        document.querySelectorAll('#my-ads-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        loadMyAds();
     }
 
     async function loadMyAds() {
@@ -293,15 +369,28 @@
         list.innerHTML = '<div style="text-align:center; padding:2rem;"><span class="iconify spinner" data-icon="lucide:loader-2"></span></div>';
 
         try {
-            const { data, error } = await window.LaukaaSupabase
+            let query = window.LaukaaSupabase
                 .from('encounters')
                 .select('*')
                 .eq('user_id', currentUser.id)
                 .order('created_at', { ascending: false });
-            
+
+            if (currentMyAdsStatus === 'active') {
+                query = query.in('status', ['active']);
+            } else {
+                query = query.eq('status', currentMyAdsStatus);
+            }
+
+            const { data, error } = await query;
             if (error) throw error;
 
-            renderAdsList(data, list, 'Et ole vielä jättänyt yhtään ilmoitusta.');
+            const emptyMessages = {
+                active:   'Sinulla ei ole aktiivisia ilmoituksia.',
+                draft:    'Sinulla ei ole luonnoksia.',
+                closed:   'Sinulla ei ole suljettuja ilmoituksia.',
+                archived: 'Sinulla ei ole arkistoituja ilmoituksia.'
+            };
+            renderAdsList(data, list, emptyMessages[currentMyAdsStatus] || 'Ei ilmoituksia.');
         } catch (err) {
             console.error(err);
             list.innerHTML = '<div class="empty-state">Virhe haettaessa ilmoituksia.</div>';
@@ -333,6 +422,25 @@
             }
 
             renderAdsList(data, list, 'Yrityksellä ei ole aktiivisia ilmoituksia.');
+        } catch (err) {
+            console.error(err);
+        }
+    }
+    async function loadLocationAds(locationIds) {
+        const list = document.getElementById('location-ads-list');
+        try {
+            const { data, error } = await window.LaukaaSupabase
+                .from('encounters')
+                .select('*')
+                .in('location_id', locationIds)
+                .order('created_at', { ascending: false });
+            if (error) throw error;
+
+            if (locationIds.length > 0) {
+                document.getElementById('btn-add-location-ad').href =
+                    `jata-ilmoitus.html?publisher_type=location&location_id=${locationIds[0]}`;
+            }
+            renderAdsList(data, list, 'Kohteella ei ole aktiivisia ilmoituksia.');
         } catch (err) {
             console.error(err);
         }

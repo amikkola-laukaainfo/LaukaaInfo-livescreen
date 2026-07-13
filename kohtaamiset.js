@@ -122,22 +122,31 @@ let allEncounters = [];
 // ===================================================
 // DATAN HAKU
 // ===================================================
-async function fetchEncounters() {
+async function fetchEncounters(currentUser = null) {
     try {
         if (window.LaukaaSupabase) {
-            const { data, error } = await window.LaukaaSupabase
-                .from('encounters')
-                .select('*')
-                .eq('status', 'active')
-                .order('created_at', { ascending: false });
+            let data, error;
+
+            if (currentUser) {
+                // Kirjautunut: näytä julkiset + omat kaikissa tiloissa
+                ({ data, error } = await window.LaukaaSupabase
+                    .from('encounters')
+                    .select('*')
+                    .or(`status.eq.active,and(user_id.eq.${currentUser.id},status.in.(draft,closed,archived))`)
+                    .order('created_at', { ascending: false }));
+            } else {
+                // Anonyymi: vain aktiiviset julkiset ilmoitukset
+                ({ data, error } = await window.LaukaaSupabase
+                    .from('encounters')
+                    .select('*')
+                    .eq('status', 'active')
+                    .order('created_at', { ascending: false }));
+            }
 
             if (error) {
                 console.error('Supabase fetch error:', error);
                 return mockEncounters;
             }
-            // Supabase on käytettävissä: palautetaan aina Supabase-data
-            // (myös tyhjänä taulukkona kun ilmoituksia ei ole vielä)
-            // → mock-data ei sekoitu oikeiden ID:iden kanssa
             if (data !== null) {
                 return data.map(d => ({ ...d, tags: Array.isArray(d.tags) ? d.tags : [] }));
             }
@@ -145,7 +154,6 @@ async function fetchEncounters() {
     } catch (e) {
         console.warn('Virhe haettaessa Supabasesta, käytetään mock-dataa:', e);
     }
-    // Fallback: käytetään mock-dataa vain jos Supabase ei ole saatavilla
     return mockEncounters;
 }
 
@@ -399,8 +407,11 @@ function renderFeed() {
         card.style.borderTopColor = cat.color;
         if (isResolved) card.style.opacity = '0.85';
 
+        const publisherBadge = renderPublisherBadge(ad);
+
         card.innerHTML = `
             <span class="km-card-badge" style="color:${cat.color};">${cat.emoji} ${cat.title}</span>
+            ${publisherBadge ? `<div style="margin-bottom:4px;">${publisherBadge}</div>` : ''}
             ${resolvedBadge}
             <h3 class="km-card-title">${escapeHtml(ad.title)}</h3>
             <p class="km-card-desc">${escapeHtml(ad.description).substring(0, 110)}${ad.description.length > 110 ? '…' : ''}</p>
@@ -452,6 +463,25 @@ async function initIlmoituskortti() {
 
     document.getElementById('ad-badge').innerHTML = `${cat.emoji} ${cat.title}` + 
         (ad.sub_category ? ` <span style="opacity:0.7; font-weight:normal; margin-left:5px;">| ${escapeHtml(ad.sub_category)}</span>` : '');
+
+    // Julkaisijabadge yksittäispää varten
+    const publisherBadge = renderPublisherBadge(ad);
+    if (publisherBadge) {
+        const badgeEl = document.getElementById('ad-publisher-badge');
+        if (badgeEl) {
+            badgeEl.innerHTML = publisherBadge;
+            badgeEl.style.display = 'block';
+        } else {
+            // Fallback: lisätään badge-elementin jälkeen otsikkoa
+            const titleEl = document.getElementById('ad-title');
+            if (titleEl) {
+                const div = document.createElement('div');
+                div.style.cssText = 'margin-bottom: 0.75rem;';
+                div.innerHTML = publisherBadge;
+                titleEl.parentNode.insertBefore(div, titleEl);
+            }
+        }
+    }
         
     document.getElementById('ad-title').innerText = ad.title;
     document.getElementById('ad-desc').innerText = ad.description;
@@ -586,6 +616,26 @@ function escapeHtml(str) {
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
+}
+
+// ===================================================
+// JULKAISIJABADGE
+// ===================================================
+function renderPublisherBadge(ad) {
+    const type = ad.publisher_type || 'personal';
+    const name = ad.publisher_name ? escapeHtml(ad.publisher_name) : null;
+
+    if (type === 'company' && name) {
+        return `<span class="km-publisher-badge km-publisher-company">🏢 ${name}</span>`;
+    }
+    if (type === 'association' && name) {
+        return `<span class="km-publisher-badge km-publisher-association">🏛️ ${name}</span>`;
+    }
+    if (type === 'location' && name) {
+        return `<span class="km-publisher-badge km-publisher-location">📍 ${name}</span>`;
+    }
+    // personal tai tuntematon – ei badgea
+    return '';
 }
 
 function generateSlug(text) {

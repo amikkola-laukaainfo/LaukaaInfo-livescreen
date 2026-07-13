@@ -142,12 +142,45 @@ CREATE TRIGGER check_encounter_insert_trigger
 
 -- ============================================================
 -- OSIO C: Ekosysteemin laajennus (Vaihe 1)
--- Aja tämä jos lisäät yritys/kohdelinkitykset olemassaolevaan tauluun
+-- Nämä sarakkeet lisätään auth_schema.sql:n kanssa päällekkäin estämättä.
+-- Aja tämä Supabase SQL Editorissa jos sarakkeet puuttuvat.
 -- ============================================================
 
--- ALTER TABLE public.encounters
---     ADD COLUMN IF NOT EXISTS company_id VARCHAR,
---     ADD COLUMN IF NOT EXISTS location_id VARCHAR,
---     ADD COLUMN IF NOT EXISTS sub_category VARCHAR,
---     ADD COLUMN IF NOT EXISTS structured_links JSONB DEFAULT '{}'::jsonb;
+ALTER TABLE public.encounters
+    ADD COLUMN IF NOT EXISTS company_id        VARCHAR,
+    ADD COLUMN IF NOT EXISTS location_id       VARCHAR,
+    ADD COLUMN IF NOT EXISTS sub_category      VARCHAR,
+    ADD COLUMN IF NOT EXISTS structured_links  JSONB DEFAULT '{}'::jsonb;
+
+CREATE INDEX IF NOT EXISTS idx_encounters_company_id   ON public.encounters(company_id);
+CREATE INDEX IF NOT EXISTS idx_encounters_location_id  ON public.encounters(location_id);
+
+
+-- ============================================================
+-- OSIO D: Arkkitehtuurin laajennus v2 (Julkaisija, Näkyvyys, Elinkaari)
+-- Aja tämä kohtaamiset_rbac_v2.sql:n JÄLKEEN.
+-- ============================================================
+
+-- Julkaisijan identiteetti
+ALTER TABLE public.encounters
+    ADD COLUMN IF NOT EXISTS publisher_type  VARCHAR DEFAULT 'personal',
+    -- Arvot: personal | company | association | location
+    ADD COLUMN IF NOT EXISTS publisher_name  VARCHAR;
+    -- Vapaaehtoinen näytettävä nimi (esim. yrityksen nimi tai kohteen nimi)
+
+-- Näkyvyystaso
+ALTER TABLE public.encounters
+    ADD COLUMN IF NOT EXISTS visibility  VARCHAR DEFAULT 'public';
+    -- Arvot: public | registered | company_only
+
+-- Elinkaaritilojen laajennus (status-kenttä on jo olemassa, tässä dokumentointi)
+-- Sallitut arvot: draft | active | closed | archived | deleted
+-- draft      = luonnos, ei julkinen
+-- active     = julkaistu, kaikki sallitun näkyvyystason mukaan
+-- closed     = suljettu, ei ota uusia yhteydenottoja
+-- archived   = arkistoitu, vain omistaja näkee
+-- deleted    = pehmeä poisto, ei näy missään
+COMMENT ON COLUMN public.encounters.status IS
+    'Elinkaari: draft | active | closed | archived | deleted';
+
 
