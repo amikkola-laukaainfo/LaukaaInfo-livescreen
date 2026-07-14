@@ -469,7 +469,7 @@ async function initIlmoituskortti() {
 
     if (window.LaukaaSupabase && !sessionStorage.getItem('km_viewed_' + ad.id)) {
         sessionStorage.setItem('km_viewed_' + ad.id, '1');
-        window.LaukaaSupabase.rpc('increment_stat', { p_encounter_id: ad.id, p_stat_type: 'view' }).catch(()=>{});
+        (async () => { try { await window.LaukaaSupabase.rpc('increment_stat', { p_encounter_id: ad.id, p_stat_type: 'view' }); } catch(e) {} })();
     }
 
     const cat = categories[ad.type] || categories['need_help'];
@@ -521,7 +521,7 @@ async function initIlmoituskortti() {
     let linksHtml = '';
     
     if (links.website) {
-        linksHtml += `<a href="${escapeHtml(links.website)}" onclick="if(window.LaukaaSupabase) window.LaukaaSupabase.rpc('increment_stat', {p_encounter_id:'${ad.id}', p_stat_type:'click'}).catch(()=>{})" target="_blank" style="background:#0ea5e9; color:white; padding:10px 15px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-weight:600; font-size:0.95rem;">
+        linksHtml += `<a href="${escapeHtml(links.website)}" onclick="if(window.LaukaaSupabase)(async()=>{try{await window.LaukaaSupabase.rpc('increment_stat',{p_encounter_id:'${ad.id}',p_stat_type:'click'})}catch(e){}})()" target="_blank" style="background:#0ea5e9; color:white; padding:10px 15px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-weight:600; font-size:0.95rem;">
             <span class="iconify" data-icon="lucide:globe"></span> Verkkosivu
         </a>`;
     }
@@ -572,7 +572,7 @@ async function initIlmoituskortti() {
         </a>`;
     }
     if (links.booking) {
-        linksHtml += `<a href="${escapeHtml(links.booking)}" onclick="if(window.LaukaaSupabase) window.LaukaaSupabase.rpc('increment_stat', {p_encounter_id:'${ad.id}', p_stat_type:'click'}).catch(()=>{})" target="_blank" style="background:#8b5cf6; color:white; padding:10px 15px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-weight:600; font-size:0.95rem;">
+        linksHtml += `<a href="${escapeHtml(links.booking)}" onclick="if(window.LaukaaSupabase)(async()=>{try{await window.LaukaaSupabase.rpc('increment_stat',{p_encounter_id:'${ad.id}',p_stat_type:'click'})}catch(e){}})()" target="_blank" style="background:#8b5cf6; color:white; padding:10px 15px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-weight:600; font-size:0.95rem;">
             <span class="iconify" data-icon="mdi:calendar-check"></span> Ajanvaraus
         </a>`;
     }
