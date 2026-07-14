@@ -195,7 +195,7 @@ async function init() {
                 // Mutta näytetään lomake, jos ollaan omistajia TAI on moderaattori.
                 
                 const isOwner = data.user_id === currentUser.id;
-                const isMod = await window.LaukaaAuth.isModerator();
+                const isMod = await checkIsModerator();
                 
                 if (isOwner || isMod) {
                     isAuthMode = true;
@@ -223,6 +223,21 @@ async function init() {
         populateForm(data.encounter);
     } catch(e) {
         showError('Verkkovirhe. Tarkista yhteytesi ja yritä uudelleen.');
+    }
+}
+
+async function checkIsModerator() {
+    try {
+        const byPermission = await window.LaukaaAuth.isModerator();
+        if (byPermission) return true;
+    } catch (e) {
+        console.warn('isModerator() epäonnistui, kokeillaan roolia:', e);
+    }
+    try {
+        const roles = await window.LaukaaAuth.getRoles();
+        return roles.some(r => r.role_name === 'moderator');
+    } catch (e) {
+        return false;
     }
 }
 
