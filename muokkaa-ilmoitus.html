@@ -70,9 +70,14 @@
 
 <main style="padding-top: 80px; min-height: 80vh;">
     <div class="edit-wrap">
-        <a href="kohtaamiset.html" class="back-link">
-            <span class="iconify" data-icon="lucide:arrow-left"></span> Takaisin kohtaamisiin
-        </a>
+        <div style="display:flex; justify-content:space-between; margin-bottom: 1rem; align-items:center; flex-wrap:wrap; gap:10px;">
+            <a href="kohtaamiset.html" class="back-link" style="margin-bottom:0;">
+                <span class="iconify" data-icon="lucide:arrow-left"></span> Takaisin kohtaamisiin
+            </a>
+            <a href="omat-sivut.html" class="back-link" id="back-to-admin" style="margin-bottom:0; display:none;">
+                Työpöytä / Hallinta <span class="iconify" data-icon="lucide:arrow-right"></span>
+            </a>
+        </div>
 
         <div id="loading-msg" class="loading-msg">Ladataan ilmoitusta…</div>
         <div id="error-msg" class="loading-msg" style="display:none; color:#ef4444;"></div>
@@ -199,6 +204,12 @@ async function init() {
                 
                 if (isOwner || isMod) {
                     isAuthMode = true;
+                    if (isMod) {
+                        document.getElementById('back-to-admin').style.display = 'inline-flex';
+                    } else {
+                        document.getElementById('back-to-admin').href = 'omat-sivut.html';
+                        document.getElementById('back-to-admin').style.display = 'inline-flex';
+                    }
                     populateForm(data);
                     return;
                 }

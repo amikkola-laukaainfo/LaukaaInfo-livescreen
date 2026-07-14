@@ -6,6 +6,7 @@
     <title>Admin – Roolien hallinta | LaukaaInfo</title>
     <meta name="robots" content="noindex, nofollow">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;900&display=swap" rel="stylesheet">
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
     <style>
         body { font-family: 'Inter', sans-serif; background: #f1f5f9; padding: 2rem; margin: 0; color: #0f172a; }
         .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
@@ -42,8 +43,13 @@
 </div>
 
 <div id="app" class="container">
-    <h1>Roolien hallinta</h1>
-    <p style="color:#64748b; font-size:0.9rem;">Lisää tai poista rooleja (moderaattori tai yrityksen admin).</p>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h1 style="margin: 0;">Roolien hallinta</h1>
+        <a href="omat-sivut.html" style="color: #0ea5e9; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+            <span class="iconify" data-icon="lucide:arrow-left" style="font-size: 1.1rem;"></span> Työpöydälle
+        </a>
+    </div>
+    <p style="color:#64748b; font-size:0.9rem; margin-top: 0;">Lisää tai poista rooleja (moderaattori tai yrityksen admin).</p>
     
     <div style="background: #f8fafc; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; border: 1px solid #e2e8f0;">
         <h3 style="margin-top:0;">Anna uusi rooli</h3>
