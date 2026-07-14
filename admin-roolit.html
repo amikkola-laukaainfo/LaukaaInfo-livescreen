@@ -55,14 +55,15 @@
             <div class="form-group">
                 <label>Rooli</label>
                 <select id="role-select" required>
-                    <option value="2">Yrityksen ylläpitäjä (company_admin)</option>
-                    <option value="3">Moderaattori (moderator)</option>
+                    <option value="2">🏢 Yrityksen ylläpitäjä (company_admin)</option>
+                    <option value="4">📍 Kohteen ylläpitäjä (location_admin)</option>
+                    <option value="3">🛡️ Moderaattori (moderator)</option>
                 </select>
             </div>
             <div class="form-group" id="target-id-group">
-                <label>Yrityksen ID (vain jos company_admin)</label>
+                <label id="target-id-label">Yrityksen ID</label>
                 <input type="text" id="target-id" placeholder="esim. c489c6d...">
-                <p style="font-size:0.8rem; color:#64748b; margin-top:4px;">Kopioi tämä Yritykset-hallinnasta tai Supabasesta.</p>
+                <p style="font-size:0.8rem; color:#64748b; margin-top:4px;">Kopioi ID companies_data.json-tiedostosta tai Supabasesta.</p>
             </div>
             <button type="submit" id="btn-submit">Tallenna rooli</button>
             <div id="form-msg"></div>
@@ -152,11 +153,26 @@
         
         const roleSelect = document.getElementById('role-select');
         const targetGroup = document.getElementById('target-id-group');
-        
-        roleSelect.addEventListener('change', () => {
-            targetGroup.style.display = roleSelect.value === '2' ? 'block' : 'none';
-        });
-        targetGroup.style.display = 'none';
+        const targetLabel = document.getElementById('target-id-label');
+
+        const ROLES_NEEDING_TARGET = ['2', '4']; // company_admin, location_admin
+        const TARGET_LABELS = {
+            '2': 'Yrityksen ID (companies_data.json → "id"-kenttä)',
+            '4': 'Kohteen ID (location_id)'
+        };
+        const TARGET_ROLE_NAMES = {
+            '2': 'company_admin', '4': 'location_admin'
+        };
+
+        function updateTargetField() {
+            const v = roleSelect.value;
+            const needsTarget = ROLES_NEEDING_TARGET.includes(v);
+            targetGroup.style.display = needsTarget ? 'block' : 'none';
+            if (TARGET_LABELS[v]) targetLabel.textContent = TARGET_LABELS[v];
+        }
+
+        roleSelect.addEventListener('change', updateTargetField);
+        updateTargetField(); // Näytä heti oikea tila latauksen yhteydessä
 
         loadRoles();
 
@@ -164,12 +180,13 @@
             e.preventDefault();
             const email = document.getElementById('user-email').value.trim();
             const roleId = parseInt(roleSelect.value);
-            const targetId = roleId === 2 ? document.getElementById('target-id').value.trim() : null;
+            const needsTarget = ROLES_NEEDING_TARGET.includes(String(roleId));
+            const targetId = needsTarget ? document.getElementById('target-id').value.trim() : null;
             const msg = document.getElementById('form-msg');
-            
-            if (roleId === 2 && !targetId) {
+
+            if (needsTarget && !targetId) {
                 msg.className = 'error';
-                msg.textContent = 'Yrityksen ID on pakollinen company_admin -roolille.';
+                msg.textContent = `${TARGET_ROLE_NAMES[roleId] || 'Tämä'} -roolille ID on pakollinen.`;
                 return;
             }
             
