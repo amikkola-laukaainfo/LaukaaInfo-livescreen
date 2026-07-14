@@ -473,7 +473,10 @@
             return;
         }
 
-        const isMod = await window.LaukaaAuth.isModerator();
+        // Kaksoistarkistus: check_permission('announcement.manage') TAI roolin nimi 'moderator'
+        // Tämä vastaa omat-sivut.html:n logiikkaa ja toimii vaikka permission-taulut
+        // eivät olisi täysin synkronissa.
+        const isMod = await checkIsModerator();
         if (!isMod) {
             showAccessDenied();
             return;
@@ -485,6 +488,24 @@
 
         await loadAllEncounters();
         setupFilters();
+    }
+
+    async function checkIsModerator() {
+        try {
+            // Tapa 1: Tarkista permission (RBAC v3)
+            const byPermission = await window.LaukaaAuth.isModerator();
+            if (byPermission) return true;
+        } catch (e) {
+            console.warn('isModerator() (check_permission) epäonnistui, kokeillaan roolia:', e);
+        }
+        try {
+            // Tapa 2: Tarkista roolin nimi suoraan (sama kuin omat-sivut.html)
+            const roles = await window.LaukaaAuth.getRoles();
+            return roles.some(r => r.role_name === 'moderator');
+        } catch (e) {
+            console.error('getRoles() epäonnistui:', e);
+            return false;
+        }
     }
 
     function showAccessDenied() {
