@@ -414,6 +414,78 @@
     <script>
         const KM_API_BASE = 'https://mediazoo.fi/laukaainfo-web/kohtaamiset_api.php';
 
+        // ---- Raportointimodaali ----
+        function openReportModal() {
+            const modal = document.getElementById('report-modal');
+            if (!modal) return;
+            const adId = new URLSearchParams(window.location.search).get('id') || '';
+            document.getElementById('report-ad-id').value = adId;
+            document.getElementById('report-reason').value = '';
+            const fb = document.getElementById('report-feedback');
+            if (fb) { fb.style.display = 'none'; }
+            const btn = document.getElementById('report-submit-btn');
+            if (btn) { btn.disabled = false; btn.textContent = 'Lähetä ilmoitus'; }
+            modal.classList.add('active');
+            setTimeout(() => document.getElementById('report-reason')?.focus(), 100);
+        }
+
+        function closeReportModal() {
+            const modal = document.getElementById('report-modal');
+            if (modal) modal.classList.remove('active');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const reportForm = document.getElementById('report-form');
+            if (!reportForm) return;
+
+            reportForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn      = document.getElementById('report-submit-btn');
+                const feedback = document.getElementById('report-feedback');
+                const adId     = document.getElementById('report-ad-id').value;
+                const reason   = document.getElementById('report-reason').value.trim();
+                const honeypot = document.getElementById('report-website').value;
+
+                if (honeypot) return; // botti
+                if (!adId || !reason) return;
+
+                btn.disabled  = true;
+                btn.textContent = 'Lähetetään…';
+
+                try {
+                    // 1. Merkitään ilmoitus 'reported' – näkyy moderaattorin listalla
+                    const { error: sbError } = await window.LaukaaSupabase
+                        .from('encounters')
+                        .update({ status: 'reported' })
+                        .eq('id', adId);
+
+                    if (sbError) console.warn('Supabase-päivitys epäonnistui:', sbError);
+
+                    // 2. Lähetetään sähköposti-ilmoitus ylläpidolle PHP-API:n kautta
+                    const fd = new FormData();
+                    fd.append('type', 'encounter');
+                    fd.append('target_id', adId);
+                    fd.append('reason', reason);
+
+                    const res  = await fetch(KM_API_BASE + '?action=report', { method: 'POST', body: fd });
+                    const data = await res.json();
+
+                    if (!data.success) throw new Error(data.error || 'API-virhe');
+
+                    feedback.textContent = '✅ Ilmoitus vastaanotettu. Moderaattorit käsittelevät sen pian.';
+                    feedback.style.cssText = 'display:block; color:#166534; background:#dcfce7; border:1px solid #86efac; padding:.75rem 1rem; border-radius:8px; font-size:.88rem; margin-top:.75rem;';
+                    reportForm.querySelector('button[type=submit]').style.display = 'none';
+
+                } catch(err) {
+                    console.error('Raportointi epäonnistui:', err);
+                    feedback.textContent = '❌ Lähetys epäonnistui. Yritä uudelleen tai ota yhteyttä ylläpitoon.';
+                    feedback.style.cssText = 'display:block; color:#991b1b; background:#fee2e2; border:1px solid #fca5a5; padding:.75rem 1rem; border-radius:8px; font-size:.88rem; margin-top:.75rem;';
+                    btn.disabled = false;
+                    btn.textContent = 'Lähetä ilmoitus';
+                }
+            });
+        });
+
         // ---- Hallintamodaali ----
         function openManageModal() {
             const modal = document.getElementById('manage-modal');
