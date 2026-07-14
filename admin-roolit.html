@@ -57,6 +57,7 @@
                 <select id="role-select" required>
                     <option value="2">🏢 Yrityksen ylläpitäjä (company_admin)</option>
                     <option value="4">📍 Kohteen ylläpitäjä (location_admin)</option>
+                    <option value="5">🏛️ Yhdistyksen ylläpitäjä (association_admin)</option>
                     <option value="3">🛡️ Moderaattori (moderator)</option>
                 </select>
             </div>
@@ -155,13 +156,14 @@
         const targetGroup = document.getElementById('target-id-group');
         const targetLabel = document.getElementById('target-id-label');
 
-        const ROLES_NEEDING_TARGET = ['2', '4']; // company_admin, location_admin
+        const ROLES_NEEDING_TARGET = ['2', '4', '5']; // company_admin, location_admin, association_admin
         const TARGET_LABELS = {
             '2': 'Yrityksen ID (companies_data.json → "id"-kenttä)',
-            '4': 'Kohteen ID (location_id)'
+            '4': 'Kohteen ID (location_id)',
+            '5': 'Yhdistyksen ID (association_id)'
         };
         const TARGET_ROLE_NAMES = {
-            '2': 'company_admin', '4': 'location_admin'
+            '2': 'company_admin', '4': 'location_admin', '5': 'association_admin'
         };
 
         function updateTargetField() {
