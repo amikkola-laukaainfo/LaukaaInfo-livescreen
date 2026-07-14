@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ilmoitusten hallinta – Moderaattori | LaukaaInfo</title>
+    <meta name="robots" content="noindex">
+    <link rel="icon" href="logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=20260713">
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+    <style>
+        body { background: #f1f5f9; }
+
+        .page-wrap {
+            max-width: 1100px;
+            margin: 3rem auto 5rem;
+            padding: 0 1rem;
+        }
+
+        /* ── Header ── */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .page-header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: #0f172a;
+            margin: 0 0 0.4rem;
+        }
+        .page-header p { color: #64748b; font-size: 0.9rem; margin: 0; }
+        .header-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #fff;
+            border: 1.5px solid #e2e8f0;
+            color: #475569;
+            padding: 0.55rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .btn-back:hover { background: #f8fafc; border-color: #cbd5e1; color: #0f172a; }
+
+        /* ── Toolbar ── */
+        .toolbar {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .toolbar-search {
+            flex: 1;
+            min-width: 200px;
+            position: relative;
+        }
+        .toolbar-search input {
+            width: 100%;
+            padding: 0.6rem 0.9rem 0.6rem 2.3rem;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            background: #f8fafc;
+            color: #0f172a;
+            box-sizing: border-box;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .toolbar-search input:focus {
+            outline: none;
+            border-color: #f97316;
+            box-shadow: 0 0 0 3px rgba(249,115,22,0.12);
+            background: #fff;
+        }
+        .toolbar-search .search-icon {
+            position: absolute;
+            left: 0.7rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 0.95rem;
+            pointer-events: none;
+        }
+        .filter-select {
+            padding: 0.6rem 0.9rem;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.88rem;
+            background: #f8fafc;
+            color: #334155;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        .filter-select:focus { outline: none; border-color: #f97316; }
+        .toolbar-count {
+            font-size: 0.85rem;
+            color: #64748b;
+            white-space: nowrap;
+        }
+        .toolbar-count strong { color: #0f172a; }
+
+        /* ── Table card ── */
+        .table-card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+            overflow: hidden;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .data-table thead tr {
+            background: #f8fafc;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .data-table th {
+            text-align: left;
+            padding: 0.9rem 1rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+        }
+        .data-table td {
+            padding: 0.85rem 1rem;
+            font-size: 0.88rem;
+            color: #334155;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+        }
+        .data-table tbody tr:last-child td { border-bottom: none; }
+        .data-table tbody tr:hover td { background: #fafafa; }
+
+        .td-title strong {
+            display: block;
+            color: #0f172a;
+            font-weight: 600;
+            margin-bottom: 2px;
+            max-width: 340px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .td-title span {
+            font-size: 0.78rem;
+            color: #94a3b8;
+        }
+
+        /* ── Status badges ── */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 9px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .badge-active   { background: #dcfce7; color: #166534; }
+        .badge-draft    { background: #fef3c7; color: #92400e; }
+        .badge-closed   { background: #f1f5f9; color: #475569; }
+        .badge-archived { background: #ede9fe; color: #5b21b6; }
+        .badge-reported { background: #fee2e2; color: #991b1b; }
+
+        /* ── Action buttons ── */
+        .td-actions { white-space: nowrap; }
+        .btn-sm {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 0.35rem 0.7rem;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-decoration: none;
+            border: 1.5px solid transparent;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-family: 'Inter', sans-serif;
+        }
+        .btn-sm-edit {
+            background: #e0f2fe;
+            color: #0369a1;
+            border-color: #bae6fd;
+        }
+        .btn-sm-edit:hover { background: #bae6fd; }
+        .btn-sm-view {
+            background: #f1f5f9;
+            color: #334155;
+        }
+        .btn-sm-view:hover { background: #e2e8f0; }
+        .btn-sm-delete {
+            background: #fee2e2;
+            color: #991b1b;
+            border-color: #fecaca;
+        }
+        .btn-sm-delete:hover { background: #fecaca; }
+
+        /* ── Empty / loading states ── */
+        .state-row td {
+            text-align: center;
+            padding: 4rem 1rem;
+            color: #64748b;
+        }
+        .state-icon {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 0.75rem;
+            color: #cbd5e1;
+        }
+        .spinner-inline {
+            display: inline-block;
+            width: 22px;
+            height: 22px;
+            border: 3px solid #e2e8f0;
+            border-top-color: #f97316;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            vertical-align: middle;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── Access denied ── */
+        .access-denied {
+            text-align: center;
+            padding: 5rem 2rem;
+            display: none;
+        }
+        .access-denied .icon { font-size: 3.5rem; margin-bottom: 1rem; }
+        .access-denied h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.6rem;
+            color: #0f172a;
+            margin: 0 0 0.5rem;
+        }
+        .access-denied p { color: #64748b; }
+
+        /* ── Loading overlay ── */
+        #loading-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: #f1f5f9; z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            font-family: 'Outfit', sans-serif; color: #64748b;
+        }
+        .spinner {
+            width: 40px; height: 40px; border: 4px solid #cbd5e1;
+            border-top-color: #f97316; border-radius: 50%;
+            animation: spin 1s linear infinite; margin-bottom: 1rem;
+        }
+
+        /* ── Delete confirm modal ── */
+        .modal-overlay {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(15,23,42,0.5);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay.open { display: flex; }
+        .modal-box {
+            background: #fff;
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 420px;
+            width: 90%;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+        }
+        .modal-box h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.3rem;
+            color: #0f172a;
+            margin: 0 0 0.75rem;
+        }
+        .modal-box p { color: #475569; font-size: 0.9rem; margin-bottom: 1.5rem; }
+        .modal-actions { display: flex; gap: 0.75rem; justify-content: flex-end; }
+        .btn-modal-cancel {
+            background: #f1f5f9;
+            color: #334155;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: background 0.15s;
+        }
+        .btn-modal-cancel:hover { background: #e2e8f0; }
+        .btn-modal-confirm {
+            background: #ef4444;
+            color: #fff;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: background 0.15s;
+        }
+        .btn-modal-confirm:hover { background: #dc2626; }
+        .btn-modal-confirm:disabled { background: #fca5a5; cursor: not-allowed; }
+
+        @media (max-width: 768px) {
+            .data-table th:nth-child(4),
+            .data-table td:nth-child(4) { display: none; } /* piilota Julkaisija mobiilissa */
+            .td-title strong { max-width: 180px; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="loading-overlay">
+    <div class="spinner"></div>
+    <div>Tarkistetaan oikeuksia...</div>
+</div>
+
+<nav class="top-nav">
+    <div class="nav-container">
+        <a href="index.html" class="nav-logo">
+            <img src="logo.png" alt="LaukaaInfo Logo"><span>LaukaaInfo</span>
+        </a>
+        <button class="hamburger" id="hamburger-btn" aria-label="Avaa valikko">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</nav>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<aside class="sidebar-menu" id="sidebar-menu">
+    <div class="sidebar-header">
+        <a href="index.html" class="nav-logo">
+            <img src="logo.png" alt="LaukaaInfo Logo"><span>LaukaaInfo</span>
+        </a>
+        <button class="close-btn" id="close-sidebar-btn">&times;</button>
+    </div>
+</aside>
+
+<!-- Poiston vahvistusmodaali -->
+<div class="modal-overlay" id="delete-modal">
+    <div class="modal-box">
+        <h3>⚠️ Poista ilmoitus</h3>
+        <p id="delete-modal-desc">Haluatko varmasti poistaa tämän ilmoituksen? Toimintoa ei voi peruuttaa.</p>
+        <div class="modal-actions">
+            <button class="btn-modal-cancel" onclick="closeDeleteModal()">Peruuta</button>
+            <button class="btn-modal-confirm" id="btn-modal-confirm" onclick="executeDelete()">
+                <span class="iconify" data-icon="lucide:trash-2"></span> Poista
+            </button>
+        </div>
+    </div>
+</div>
+
+<main style="padding-top: 80px; min-height: 80vh;">
+    <div class="page-wrap">
+
+        <!-- Ei oikeuksia -näkymä -->
+        <div class="access-denied" id="access-denied">
+            <div class="icon">🔒</div>
+            <h2>Ei käyttöoikeutta</h2>
+            <p>Tämä sivu on tarkoitettu vain moderaattoreille.<br>
+               Kirjaudu sisään moderaattoritunnuksilla tai palaa takaisin.</p>
+            <a href="omat-sivut.html" class="btn-back" style="margin-top:1.5rem; display:inline-flex;">
+                <span class="iconify" data-icon="lucide:arrow-left"></span> Takaisin omille sivuille
+            </a>
+        </div>
+
+        <!-- Pääsisältö (näytetään vain moderaattorille) -->
+        <div id="main-content" style="display:none;">
+
+            <div class="page-header">
+                <div>
+                    <div class="header-badge">
+                        <span class="iconify" data-icon="lucide:shield-check"></span> MODERAATTORI
+                    </div>
+                    <h1>Ilmoitusten hallinta</h1>
+                    <p>Kaikki järjestelmän ilmoitukset – voit muokata ja poistaa niitä roolisi perusteella.</p>
+                </div>
+                <a href="omat-sivut.html" class="btn-back">
+                    <span class="iconify" data-icon="lucide:arrow-left"></span> Takaisin
+                </a>
+            </div>
+
+            <div class="toolbar">
+                <div class="toolbar-search">
+                    <span class="iconify search-icon" data-icon="lucide:search"></span>
+                    <input type="text" id="search-input" placeholder="Hae otsikolla..." autocomplete="off">
+                </div>
+                <select class="filter-select" id="status-filter">
+                    <option value="">Kaikki tilat</option>
+                    <option value="active">✅ Aktiiviset</option>
+                    <option value="draft">📝 Luonnokset</option>
+                    <option value="closed">🔒 Suljetut</option>
+                    <option value="archived">📦 Arkistoidut</option>
+                    <option value="reported">🚨 Ilmiannot</option>
+                </select>
+                <div class="toolbar-count" id="toolbar-count"></div>
+            </div>
+
+            <div class="table-card">
+                <table class="data-table" id="main-table">
+                    <thead>
+                        <tr>
+                            <th>Otsikko</th>
+                            <th>Tila</th>
+                            <th>Julkaistu</th>
+                            <th>Julkaisija</th>
+                            <th>Toiminnot</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        <tr class="state-row">
+                            <td colspan="5">
+                                <span class="spinner-inline"></span>
+                                <span style="margin-left:0.75rem; vertical-align:middle;">Ladataan ilmoituksia...</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js?v=20260713"></script>
+<script>
+    let allEncounters = [];
+    let pendingDeleteId = null;
+    let pendingDeleteTitle = '';
+
+    // ── INIT ──────────────────────────────────────────────────────────────────
+    async function init() {
+        if (!window.LaukaaAuth) {
+            showAccessDenied();
+            return;
+        }
+
+        const user = await window.LaukaaAuth.getUser();
+        if (!user) {
+            window.location.href = 'kirjaudu.html';
+            return;
+        }
+
+        const isMod = await window.LaukaaAuth.isModerator();
+        if (!isMod) {
+            showAccessDenied();
+            return;
+        }
+
+        // Käyttäjällä on oikeus – näytetään sisältö
+        document.getElementById('loading-overlay').style.display = 'none';
+        document.getElementById('main-content').style.display = 'block';
+
+        await loadAllEncounters();
+        setupFilters();
+    }
+
+    function showAccessDenied() {
+        document.getElementById('loading-overlay').style.display = 'none';
+        document.getElementById('access-denied').style.display = 'block';
+    }
+
+    // ── HAKU SUPABASESTA ──────────────────────────────────────────────────────
+    async function loadAllEncounters() {
+        const tbody = document.getElementById('table-body');
+        tbody.innerHTML = `
+            <tr class="state-row">
+                <td colspan="5">
+                    <span class="spinner-inline"></span>
+                    <span style="margin-left:0.75rem;vertical-align:middle;">Ladataan ilmoituksia...</span>
+                </td>
+            </tr>`;
+
+        try {
+            // Moderaattorilla on RLS-oikeus lukea KAIKKI rivit (announcement.manage)
+            const { data, error } = await window.LaukaaSupabase
+                .from('encounters')
+                .select('id, title, status, created_at, user_id, publisher_type, publisher_name, location')
+                .order('created_at', { ascending: false });
+
+            if (error) throw error;
+
+            allEncounters = data || [];
+            renderTable(allEncounters);
+        } catch (err) {
+            console.error('Haku epäonnistui:', err);
+            tbody.innerHTML = `
+                <tr class="state-row">
+                    <td colspan="5">
+                        <span class="state-icon">⚠️</span>
+                        <div>Ilmoitusten haku epäonnistui: ${escHtml(err.message)}</div>
+                    </td>
+                </tr>`;
+        }
+    }
+
+    // ── RENDERÖINTI ───────────────────────────────────────────────────────────
+    const STATUS_META = {
+        active:   { label: 'Aktiivinen',  cls: 'badge-active',   icon: '✅' },
+        draft:    { label: 'Luonnos',     cls: 'badge-draft',    icon: '📝' },
+        closed:   { label: 'Suljettu',    cls: 'badge-closed',   icon: '🔒' },
+        archived: { label: 'Arkistoitu',  cls: 'badge-archived', icon: '📦' },
+        reported: { label: 'Ilmiannettu', cls: 'badge-reported', icon: '🚨' },
+    };
+
+    function renderTable(rows) {
+        const tbody = document.getElementById('table-body');
+        document.getElementById('toolbar-count').innerHTML =
+            `Näytetään <strong>${rows.length}</strong> / ${allEncounters.length} ilmoitusta`;
+
+        if (rows.length === 0) {
+            tbody.innerHTML = `
+                <tr class="state-row">
+                    <td colspan="5">
+                        <span class="state-icon">📭</span>
+                        <div>Ei ilmoituksia valituilla suodattimilla.</div>
+                    </td>
+                </tr>`;
+            return;
+        }
+
+        let html = '';
+        rows.forEach(enc => {
+            const dateStr  = new Date(enc.created_at).toLocaleDateString('fi-FI');
+            const sm       = STATUS_META[enc.status] || { label: enc.status, cls: 'badge-closed', icon: '?' };
+            const publisher = enc.publisher_name
+                ? escHtml(enc.publisher_name)
+                : `<span style="color:#94a3b8;font-size:.78rem;">${enc.user_id ? enc.user_id.substring(0,8) + '…' : '–'}</span>`;
+
+            html += `
+                <tr>
+                    <td class="td-title">
+                        <strong title="${escHtml(enc.title)}">${escHtml(enc.title)}</strong>
+                        <span>${enc.location ? '📍 ' + escHtml(enc.location) : ''}</span>
+                    </td>
+                    <td>
+                        <span class="badge ${sm.cls}">${sm.icon} ${sm.label}</span>
+                    </td>
+                    <td style="white-space:nowrap; color:#64748b;">${dateStr}</td>
+                    <td>${publisher}</td>
+                    <td class="td-actions">
+                        <a href="ilmoituskortti.html?id=${enc.id}" class="btn-sm btn-sm-view" target="_blank" title="Näytä julkinen kortti">
+                            <span class="iconify" data-icon="lucide:eye"></span>
+                        </a>
+                        <a href="muokkaa-ilmoitus.html?id=${enc.id}" class="btn-sm btn-sm-edit" title="Muokkaa ilmoitusta">
+                            <span class="iconify" data-icon="lucide:pencil"></span> Muokkaa
+                        </a>
+                        <button class="btn-sm btn-sm-delete" title="Poista ilmoitus"
+                                onclick="openDeleteModal('${enc.id}', '${escHtml(enc.title).replace(/'/g, '\\&#39;')}')">
+                            <span class="iconify" data-icon="lucide:trash-2"></span>
+                        </button>
+                    </td>
+                </tr>`;
+        });
+        tbody.innerHTML = html;
+    }
+
+    // ── SUODATTIMET ───────────────────────────────────────────────────────────
+    function setupFilters() {
+        document.getElementById('search-input').addEventListener('input', applyFilters);
+        document.getElementById('status-filter').addEventListener('change', applyFilters);
+    }
+
+    function applyFilters() {
+        const query  = document.getElementById('search-input').value.toLowerCase().trim();
+        const status = document.getElementById('status-filter').value;
+
+        const filtered = allEncounters.filter(enc => {
+            const titleMatch  = !query || (enc.title || '').toLowerCase().includes(query);
+            const statusMatch = !status || enc.status === status;
+            return titleMatch && statusMatch;
+        });
+
+        renderTable(filtered);
+    }
+
+    // ── POISTOLOGIIKKA ────────────────────────────────────────────────────────
+    function openDeleteModal(id, title) {
+        pendingDeleteId    = id;
+        pendingDeleteTitle = title;
+        document.getElementById('delete-modal-desc').textContent =
+            `Haluatko varmasti poistaa ilmoituksen "${title}"? Toimintoa ei voi peruuttaa.`;
+        document.getElementById('delete-modal').classList.add('open');
+    }
+
+    function closeDeleteModal() {
+        pendingDeleteId = null;
+        document.getElementById('delete-modal').classList.remove('open');
+        const btn = document.getElementById('btn-modal-confirm');
+        btn.disabled  = false;
+        btn.innerHTML = '<span class="iconify" data-icon="lucide:trash-2"></span> Poista';
+    }
+
+    async function executeDelete() {
+        if (!pendingDeleteId) return;
+        const btn = document.getElementById('btn-modal-confirm');
+        btn.disabled  = true;
+        btn.textContent = 'Poistetaan…';
+
+        try {
+            const { error } = await window.LaukaaSupabase
+                .from('encounters')
+                .delete()
+                .eq('id', pendingDeleteId);
+
+            if (error) throw error;
+
+            // Poistetaan rivi paikallisesta taulukosta
+            allEncounters = allEncounters.filter(e => e.id !== pendingDeleteId);
+            closeDeleteModal();
+            applyFilters();
+
+        } catch (err) {
+            console.error('Poisto epäonnistui:', err);
+            alert('Poisto epäonnistui: ' + err.message);
+            closeDeleteModal();
+        }
+    }
+
+    // Sulje modaali klikkaamalla taustaa
+    document.getElementById('delete-modal').addEventListener('click', function(e) {
+        if (e.target === this) closeDeleteModal();
+    });
+
+    // ── UTILS ─────────────────────────────────────────────────────────────────
+    function escHtml(str) {
+        return String(str || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+</script>
+<script src="script.js"></script>
+<script src="nav-sync.js"></script>
+</body>
+</html>
