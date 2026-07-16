@@ -549,11 +549,15 @@
         list.innerHTML = '';
 
         if (premium.length > 0) {
-            const h2 = document.createElement('h2');
-            h2.textContent = '⭐ Suositellut yritykset';
-            h2.style.gridColumn = '1 / -1';
-            h2.style.marginTop = '2rem';
-            list.appendChild(h2);
+            const header = document.createElement('div');
+            header.style.gridColumn = '1 / -1';
+            header.style.marginTop = '2rem';
+            header.style.marginBottom = '0.5rem';
+            header.innerHTML = `
+                <h2 style="margin:0 0 0.25rem;">⭐ Suositellut palveluntarjoajat</h2>
+                <p style="color:#64748b; font-size:0.9rem; margin:0;">Nämä yritykset ovat rekisteröityneet palveluun ja tarjoavat laadukasta sisältöä.</p>
+            `;
+            list.appendChild(header);
 
             premium.forEach(c => {
                 list.appendChild(createCompanyCard(c));
@@ -561,11 +565,15 @@
         }
 
         if (free.length > 0) {
-            const h2 = document.createElement('h2');
-            h2.textContent = 'Palveluhakemisto';
-            h2.style.gridColumn = '1 / -1';
-            h2.style.marginTop = '4rem';
-            list.appendChild(h2);
+            const header = document.createElement('div');
+            header.style.gridColumn = '1 / -1';
+            header.style.marginTop = '4rem';
+            header.style.marginBottom = '0.5rem';
+            header.innerHTML = `
+                <h2 style="margin:0 0 0.25rem;">Palveluhakemisto</h2>
+                <p style="color:#64748b; font-size:0.9rem; margin:0;">Kaikki tämän toimialan palveluntarjoajat – klikkaa korttia yhteys- ja lisätietoihin.</p>
+            `;
+            list.appendChild(header);
 
             free.forEach(c => {
                 list.appendChild(createCompanyCard(c));
