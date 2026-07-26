@@ -2,7 +2,7 @@
     let userCoords = null;
     let distanceCache = new Map();
     let categoryCompanies = [];
-    let map, markers;
+    // map and markers are used from global scope (script.js)
 
     let selectedRegion = 'all';
     let regionCoords = null;
@@ -29,13 +29,28 @@
             .replace(/-+$/, '');
     }
 
+    /**
+     * Normalisoi tekstin poistamalla ääkköset vertailua varten
+     */
+    function normalizeForSearch(text) {
+        if (!text) return "";
+        return text.toString().toLowerCase()
+            .replace(/[äÄàáâãå]/g, 'a')
+            .replace(/[öÖòóôõø]/g, 'o');
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
         const params = new URLSearchParams(window.location.search);
-        const category = params.get('cat');
+        let category = params.get('cat');
+        if (!category && document.body.dataset.category) {
+            category = document.body.dataset.category;
+        }
         const regionFromUrl = params.get('region');
 
         // Resolve selected region: URL takes absolute priority
-        const rawRegion = (regionFromUrl || localStorage.getItem('selectedRegion') || 'all').trim();
+        // Jos olemme spesifillä laskeutumissivulla (data-category on asetettu), oletetaan 'all' ellei URL toisin sano.
+        const isLandingPage = !!document.body.dataset.category;
+        const rawRegion = (params.get('region') || (isLandingPage ? 'all' : localStorage.getItem('selectedRegion')) || 'all').trim();
         selectedRegion = rawRegion.toLowerCase();
 
         // Resolve coordinates
@@ -50,7 +65,10 @@
         }
 
         // Update localStorage to match current state
-        if (selectedRegion !== 'all') {
+        if (selectedRegion === 'all') {
+            localStorage.setItem('selectedRegion', 'all');
+            localStorage.removeItem('regionCoords');
+        } else {
             localStorage.setItem('selectedRegion', selectedRegion);
             if (regionCoords) {
                 localStorage.setItem('regionCoords', JSON.stringify(regionCoords));
@@ -84,8 +102,11 @@
         villageName = friendlyRegions[selectedRegion] || '';
         const displayTitle = villageName ? `${category} - ${villageName}` : category;
 
-        document.getElementById('category-name').textContent = displayTitle;
-        document.title = `${displayTitle} – LaukaaInfo`;
+        // Kun sivulla on kovakoodattu data-category (eli kyseessä on uusi SEO-alasivu), elä ylikirjoita sen Titlea tai H1-otsikkoa.
+        if (!document.body.dataset.category) {
+            document.getElementById('category-name').textContent = displayTitle;
+            document.title = `${displayTitle} – LaukaaInfo`;
+        }
 
         // Icon selection
         const categoryIcons = {
@@ -112,10 +133,11 @@
             '🏢';
         document.getElementById('category-icon').textContent = icon;
 
-        loadData(category);
+        const tagParam = params.get('tag');
+        loadData(category, tagParam);
     });
 
-    async function loadData(category) {
+    async function loadData(category, tagParam) {
         try {
             const dataSourceUrl = 'https://www.mediazoo.fi/laukaainfo-web/get_companies.php';
             const response = await fetch(dataSourceUrl + '?t=' + Date.now());
@@ -138,7 +160,85 @@
                 }
             });
 
-            const rawCategoryCompanies = allCompanies.filter(c => c.kategoria === category);
+            let rawCategoryCompanies;
+            const catLower = (category || '').trim().toLowerCase();
+            const tags = document.body.dataset.tags ? document.body.dataset.tags.toLowerCase().split(',').map(t => t.trim()) : [];
+            
+            if (catLower === 'autohuollot') {
+                rawCategoryCompanies = allCompanies.filter(c => {
+                    const searchStr = `${c.nimi || ''} ${c.kuvaus || ''} ${c.kategoria || ''} ${c.hakusana || c.hakusanat || ''}`.toLowerCase();
+                    return c.kategoria === 'Autokorjaamot' || c.kategoria === 'Auto ja kuljetus' || searchStr.includes('huolto') || searchStr.includes('korjaamo') || searchStr.includes('rengas');
+                });
+            } else if (catLower === 'parturit ja kauneus') {
+                rawCategoryCompanies = allCompanies.filter(c => {
+                    const searchStr = `${c.nimi || ''} ${c.kuvaus || ''} ${c.kategoria || ''} ${c.hakusana || c.hakusanat || ''}`.toLowerCase();
+                    return c.kategoria === 'Hyvinvointi ja terveys' && 
+                           (searchStr.includes('parturi') || searchStr.includes('kampaamo') || searchStr.includes('kauneus') || searchStr.includes('hius') || searchStr.includes('salon') || searchStr.includes('kynsi') || searchStr.includes('kosmetologi'));
+                });
+            } else if (tags.length > 0) {
+                // Suodatus avainsanojen (tägien) mukaan (käytetään tyypillisesti SEO-sivuilla)
+                rawCategoryCompanies = allCompanies.filter(c => {
+                    const name = normalizeForSearch(c.nimi);
+                    const desc = normalizeForSearch(c.kuvaus || c.description || c.esittely);
+                    const tags_f = normalizeForSearch(c.tags);
+                    const ptapa = normalizeForSearch(c.palvelutapa);
+                    return tags.some(tag => {
+                        const q = normalizeForSearch(tag);
+                        return name.includes(q) || desc.includes(q) || tags_f.includes(q) || ptapa.includes(q);
+                    });
+                });
+            } else if (category && category !== 'all') {
+                const normCat = normalizeForSearch(category);
+                const catBase = normCat.replace(/palvelut$/i, '').trim();
+                rawCategoryCompanies = allCompanies.filter(c => {
+                    const cCat = normalizeForSearch(c.kategoria || '');
+                    const cName = normalizeForSearch(c.nimi || '');
+                    const cTags = normalizeForSearch(c.tags || '');
+
+                    // Exact category match
+                    if (c.kategoria === category) return true;
+
+                    // Tag fallback: match base term in tags (e.g., "nuohous" from "Nuohouspalvelut")
+                    if (catBase && cTags.includes(catBase)) return true;
+
+                    // Extended search for longer category terms
+                    if (normCat.length > 3) {
+                        return cCat.includes(normCat) || cName.includes(normCat) || cTags.includes(normCat);
+                    }
+                    return false;
+                });
+            } else {
+                rawCategoryCompanies = allCompanies;
+            }
+
+            // Lisäsuodatus URL-parametrin 'tag' mukaan (esim. ?tag=etapalvelu)
+            if (tagParam) {
+                const query = normalizeForSearch(tagParam);
+                rawCategoryCompanies = rawCategoryCompanies.filter(c => {
+                    const name = normalizeForSearch(c.nimi);
+                    const desc = normalizeForSearch(c.kuvaus || c.description || c.esittely);
+                    const tags_f = normalizeForSearch(c.tags);
+                    const ptapa = normalizeForSearch(c.palvelutapa);
+                    const extra = normalizeForSearch(c.searchExtraInfo || '');
+                    const cat = normalizeForSearch(c.kategoria);
+                    
+                    // Suodatus: täsmääkö hakusana johonkin kenttään
+                    // Includes-haku molemmin päin auttaa yksikkö/monikko-ongelmissa (esim. "kahvilat" vs "kahvila")
+                    return name.includes(query) || 
+                           desc.includes(query) || 
+                           tags_f.includes(query) || 
+                           ptapa.includes(query) || 
+                           extra.includes(query) ||
+                           cat.includes(query) ||
+                           (query.length > 3 && query.includes(tags_f) && tags_f.length > 3);
+                });
+                
+                // Päivitetään otsikkoon tieto suodatuksesta, jos mahdollista
+                const titleEl = document.getElementById('category-name');
+                if (titleEl && !document.body.dataset.category) {
+                    titleEl.textContent += ` (${tagParam})`;
+                }
+            }
 
             if (regionCoords && selectedRegion && selectedRegion !== 'all') {
                 console.log(`Filtering by region: ${selectedRegion} (13km radius)`);
@@ -211,8 +311,39 @@
             displayCarousel = [...displayCarousel, ...randomPicks];
         }
 
+        // Inject JSON-LD Schema for SEO
+        injectSchema(categoryCompanies);
+
         renderFeatured(displayCarousel);
         renderDirectory(remainingPremium, free);
+    }
+
+    function injectSchema(companies) {
+        // Remove existing schemas to avoid duplicates if re-rendered
+        document.querySelectorAll('script[type="application/ld+json"][data-seo="localbusiness"]').forEach(el => el.remove());
+        
+        const schemas = companies.map(c => {
+            return {
+                "@context": "https://schema.org",
+                "@type": "LocalBusiness",
+                "name": c.nimi,
+                "address": {
+                    "@type": "PostalAddress",
+                    "streetAddress": c.osoite || "Laukaa",
+                    "addressLocality": "Laukaa",
+                    "addressCountry": "FI"
+                },
+                "url": c.nettisivu || `https://laukaainfo.fi/yrityskortti.html?id=${slugify(c.nimi)}`,
+                "telephone": c.puhelin || undefined,
+                "image": c.media && c.media.length > 0 && c.media[0].url ? c.media[0].url : undefined
+            };
+        });
+
+        const script = document.createElement('script');
+        script.type = 'application/ld+json';
+        script.setAttribute('data-seo', 'localbusiness');
+        script.textContent = JSON.stringify(schemas);
+        document.head.appendChild(script);
     }
 
     async function calculateDistances(reference) {
@@ -383,7 +514,7 @@
                 // Truncate description at @@
                 let description = (c.mainoslause || '').trim();
                 if (description.includes('@@')) {
-                    description = description.split('@@')[0].trim();
+                    description = description.replace(/@@/g, '').trim();
                 }
 
                 if (!description) {
@@ -391,7 +522,8 @@
                 }
 
                 // Clean website URL
-                const websiteShow = (c.nettisivu || '').replace(/^https?:\/\//, '').replace(/\/$/, '');
+                const sanitizedUrl = cleanUrl(c.nettisivu || '', true);
+                const websiteShow = sanitizedUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
 
                 const isPaid = c.tyyppi === 'maksu' || c.tyyppi === 'paid';
                 const cardUrl = isPaid ? `yritys/${slugify(c.nimi)}.html` : `yrityskortti.html?id=${slugify(c.nimi)}`;
@@ -417,11 +549,15 @@
         list.innerHTML = '';
 
         if (premium.length > 0) {
-            const h2 = document.createElement('h2');
-            h2.textContent = '⭐ Suositellut yritykset';
-            h2.style.gridColumn = '1 / -1';
-            h2.style.marginTop = '2rem';
-            list.appendChild(h2);
+            const header = document.createElement('div');
+            header.style.gridColumn = '1 / -1';
+            header.style.marginTop = '2rem';
+            header.style.marginBottom = '0.5rem';
+            header.innerHTML = `
+                <h2 style="margin:0 0 0.25rem;">⭐ Suositellut palveluntarjoajat</h2>
+                <p style="color:#64748b; font-size:0.9rem; margin:0;">Nämä yritykset ovat rekisteröityneet palveluun ja tarjoavat laadukasta sisältöä.</p>
+            `;
+            list.appendChild(header);
 
             premium.forEach(c => {
                 list.appendChild(createCompanyCard(c));
@@ -429,11 +565,15 @@
         }
 
         if (free.length > 0) {
-            const h2 = document.createElement('h2');
-            h2.textContent = 'Palveluhakemisto';
-            h2.style.gridColumn = '1 / -1';
-            h2.style.marginTop = '4rem';
-            list.appendChild(h2);
+            const header = document.createElement('div');
+            header.style.gridColumn = '1 / -1';
+            header.style.marginTop = '4rem';
+            header.style.marginBottom = '0.5rem';
+            header.innerHTML = `
+                <h2 style="margin:0 0 0.25rem;">Palveluhakemisto</h2>
+                <p style="color:#64748b; font-size:0.9rem; margin:0;">Kaikki tämän toimialan palveluntarjoajat – klikkaa korttia yhteys- ja lisätietoihin.</p>
+            `;
+            list.appendChild(header);
 
             free.forEach(c => {
                 list.appendChild(createCompanyCard(c));
@@ -451,69 +591,99 @@
         // Same logic as carousel for premium companies
         let description = c.mainoslause || '';
         if (isPremium && description.includes('@@')) {
-            description = description.split('@@')[0].trim();
+            description = description.replace(/@@/g, '').trim();
         }
 
-        const websiteShow = (c.nettisivu || '').replace(/^https?:\/\//, '').replace(/\/$/, '');
+        let serviceIcons = '';
+        const combinedTags = `${c.tags || ''},${c.palvelutapa || ''}`.toLowerCase();
+        if (combinedTags) {
+            const tagsArray = combinedTags.split(',').map(t => t.trim());
+            if (tagsArray.includes('toimipiste')) serviceIcons += '<span class="service-icon" title="Toimipiste">🏢</span>';
+            if (tagsArray.includes('kotikaynti') || tagsArray.includes('kotikäynti')) serviceIcons += '<span class="service-icon" title="Kotikäynti">🏠</span>';
+            if (tagsArray.includes('etapalvelu') || tagsArray.includes('etäpalvelu')) serviceIcons += '<span class="service-icon" title="Etäpalvelu">💻</span>';
+            if (tagsArray.includes('toimitus')) serviceIcons += '<span class="service-icon" title="Toimitus">🚚</span>';
+        }
+
+        const sanitizedUrl = cleanUrl(c.nettisivu || '', true);
+        const websiteShow = sanitizedUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
         const infoHtml = isPremium && websiteShow
             ? `<div style="margin-top:0.5rem;"><strong>${websiteShow}</strong></div>`
             : `<p class="address">${c.osoite || 'Laukaa'}</p>`;
 
         const isPaid = c.tyyppi === 'maksu' || c.tyyppi === 'paid';
-        const isInDist = window.location.pathname.includes('/dist/');
-        const distPrefix = isInDist ? '' : 'dist/';
-        const cardUrl = isPaid ? `${distPrefix}${slugify(c.nimi)}.html` : `yrityskortti.html?id=${slugify(c.nimi)}`;
+        const cardUrl = isPaid ? `yritys/${slugify(c.nimi)}.html` : `yrityskortti.html?id=${slugify(c.nimi)}`;
+
+        card.setAttribute('data-card-url', cardUrl);
+        card.style.cursor = 'pointer';
+        card.onclick = () => { window.location.href = cardUrl; };
 
         card.innerHTML = `
         ${distBadge}
-        <h3>${c.nimi}</h3>
+        <h3>${c.nimi} <span style="margin-left:5px; font-weight:normal;">${serviceIcons}</span></h3>
+        ${c.service_mode === 'SERVICE_AREA' ? '<div style="margin-bottom: 10px;"><span class="service-area-badge" style="background: #fff3e0; color: #e65100; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; border: 1px solid #ffccbc; font-weight: bold; display: inline-block;">🟠 PALVELEE ALUEELLA</span></div>' : ''}
         ${infoHtml}
         <p>${description}</p>
         <div style="margin-top:1rem; display:flex; gap:10px;">
-            <a href="${cardUrl}" class="btn-primary" style="padding:0.4rem 1rem; font-size:0.8rem;">TIEDOT</a>
-            ${c.nettisivu ? `<a href="${c.nettisivu}" target="_blank" class="btn-primary" style="padding:0.4rem 1rem; font-size:0.8rem; background:#666;">WWW</a>` : ''}
+            <a href="${cardUrl}" class="btn-primary" style="padding:0.4rem 1rem; font-size:0.8rem;" onclick="event.stopPropagation()">TIEDOT</a>
+            ${sanitizedUrl ? `<a href="${sanitizedUrl}" target="_blank" class="btn-primary" style="padding:0.4rem 1rem; font-size:0.8rem; background:#666;" onclick="event.stopPropagation()">WWW</a>` : ''}
         </div>
     `;
         return card;
     }
 
     function initMap(companies) {
-        if (map) return;
+        const mapContainer = document.getElementById('category-map');
+        if (!mapContainer || typeof L === 'undefined') return;
 
-        map = L.map('category-map').setView([62.4128, 25.9477], 11);
+        let regionMap;
+        if (typeof map !== 'undefined' && map) {
+            regionMap = map;
+        } else if (mapContainer._leaflet_id) {
+            console.warn('[Kategoria] Kartta-id löytyi, mutta map-muuttuja on hukassa.');
+            return;
+        } else {
+            // First initialization
+            regionMap = L.map('category-map').setView([62.4128, 25.9477], 11);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(regionMap);
+            if (typeof map !== 'undefined') map = regionMap;
+        }
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map);
-
-        markers = L.markerClusterGroup();
-
-        companies.forEach(company => {
-            if (company.lat && company.lon) {
-                const marker = L.marker([company.lat, company.lon]);
-                marker.bindPopup(`
-                <strong>${company.nimi}</strong><br>${company.osoite}<br><br>
-                <a href="yrityskortti.html?id=${slugify(company.nimi)}" style="
-                    display: block;
-                    background: #0056b3;
-                    color: white;
-                    text-decoration: none;
-                    text-align: center;
-                    padding: 5px 10px;
-                    border-radius: 4px;
-                    font-size: 0.8rem;
-                ">Näytä tiedot</a>
-            `);
-                markers.addLayer(marker);
+        let targetMarkers;
+        if (typeof markers !== 'undefined') {
+            if (!markers) {
+                markers = L.markerClusterGroup({
+                    showCoverageOnHover: false,
+                    maxClusterRadius: 50
+                });
+                regionMap.addLayer(markers);
             }
-        });
+            targetMarkers = markers;
+            targetMarkers.clearLayers();
+        } else {
+            targetMarkers = L.markerClusterGroup();
+            regionMap.addLayer(targetMarkers);
+        }
 
-        map.addLayer(markers);
+        // Varmista että serviceAreaLayer on olemassa (script.js vaatii tämän)
+        if (typeof serviceAreaLayer !== 'undefined') {
+            if (!serviceAreaLayer) {
+                serviceAreaLayer = L.layerGroup().addTo(regionMap);
+            }
+        }
+
+        // Delegate to shared script.js logic which correctly builds Sidebar and handles Regions/Service Areas
+        if (typeof addMarkersToMap === 'function') {
+            addMarkersToMap(companies);
+        } else {
+            console.error('[Kategoria] addMarkersToMap-funktiota ei löytynyt script.js:stä.');
+        }
 
         // Geolocation & Address Search Control
         const LocateControl = L.Control.extend({
             options: { position: 'topleft' },
-            onAdd: function (map) {
+            onAdd: function (controlMap) {
                 const container = L.DomUtil.create('div', 'leaflet-control-locate-wrapper');
                 container.style.position = 'relative';
                 container.style.display = 'flex';
@@ -524,7 +694,6 @@
                 button.href = '#';
                 button.title = 'Näytä oma sijainti';
 
-                // Address Search (Desktop)
                 const searchContainer = L.DomUtil.create('div', 'map-address-search', container);
                 searchContainer.innerHTML = `
                     <input type="text" placeholder="Kirjoita osoite..." id="map-addr-input">
@@ -534,7 +703,7 @@
                 L.DomEvent.on(button, 'click', function (e) {
                     L.DomEvent.stopPropagation(e);
                     L.DomEvent.preventDefault(e);
-                    map.locate({ setView: true, maxZoom: 15 });
+                    controlMap.locate({ setView: true, maxZoom: 15 });
                 });
 
                 const input = searchContainer.querySelector('#map-addr-input');
@@ -551,20 +720,16 @@
                             if (data && data.length > 0) {
                                 const result = data[0];
                                 const latlng = L.latLng(parseFloat(result.lat), parseFloat(result.lon));
-                                map.setView(latlng, 15);
+                                controlMap.setView(latlng, 15);
 
                                 userCoords = latlng;
                                 localStorage.setItem('userCoords', JSON.stringify({ lat: userCoords.lat, lng: userCoords.lng }));
                                 updateDisplay();
 
-                                if (userMarker) map.removeLayer(userMarker);
-                                const userIcon = L.divIcon({
-                                    className: 'user-location-marker',
-                                    iconSize: [20, 20],
-                                    iconAnchor: [10, 10]
-                                });
-                                userMarker = L.marker(latlng, { icon: userIcon }).addTo(map);
-                                userMarker.bindPopup(`Sijainti: ${query}`).openPopup();
+                                if (controlMap._userMarker) controlMap.removeLayer(controlMap._userMarker);
+                                const userIcon = L.divIcon({ className: 'user-location-marker', iconSize: [20, 20], iconAnchor: [10, 10] });
+                                controlMap._userMarker = L.marker(latlng, { icon: userIcon }).addTo(controlMap);
+                                controlMap._userMarker.bindPopup(`Sijainti: ${query}`).openPopup();
                             } else {
                                 alert("Osoitetta ei löytynyt.");
                             }
@@ -581,58 +746,51 @@
             }
         });
 
-        map.addControl(new LocateControl());
+        // Vältä duplikaatti-controllerit
+        if (!regionMap._locateControlAdded) {
+            regionMap.addControl(new LocateControl());
+            regionMap._locateControlAdded = true;
+        }
 
-        let userMarker;
-        map.on('locationfound', function (e) {
+        regionMap.on('locationfound', function (e) {
             userCoords = e.latlng;
             localStorage.setItem('userCoords', JSON.stringify({ lat: userCoords.lat, lng: userCoords.lng }));
             updateDisplay();
 
-            if (userMarker) map.removeLayer(userMarker);
-
-            const userIcon = L.divIcon({
-                className: 'user-location-marker',
-                iconSize: [20, 20],
-                iconAnchor: [10, 10]
-            });
-
-            userMarker = L.marker(e.latlng, { icon: userIcon }).addTo(map);
-            userMarker.bindPopup("Olet tässä").openPopup();
+            if (regionMap._userMarker) regionMap.removeLayer(regionMap._userMarker);
+            const userIcon = L.divIcon({ className: 'user-location-marker', iconSize: [20, 20], iconAnchor: [10, 10] });
+            regionMap._userMarker = L.marker(e.latlng, { icon: userIcon }).addTo(regionMap);
+            regionMap._userMarker.bindPopup("Olet tässä").openPopup();
         });
 
-        map.on('locationerror', function (e) {
+        regionMap.on('locationerror', function (e) {
             if (e.code === 1) { // PERMISSION_DENIED
-                alert("Sijainti estetty. Varmista, että käytät sivua https-osoitteessa ja olet sallinut paikannuksen selaimen asetuksista.");
-            } else {
-                alert("Sijaintia ei voitu hakea: " + e.message);
+                console.warn("Sijainti estetty.");
             }
         });
 
-        // Redundant check to ensure state is correct before map logic
-        const urlParams = new URLSearchParams(window.location.search);
-        const urlReg = urlParams.get('region');
-        if (urlReg) {
-            const normalizedReg = urlReg.trim().toLowerCase();
-            if (villageCoordsMap[normalizedReg]) {
-                selectedRegion = normalizedReg;
-                regionCoords = villageCoordsMap[normalizedReg];
-            }
-        }
-
-        const group = new L.featureGroup(markers.getLayers());
-        const hasMarkers = markers.getLayers().length > 0;
+        // Center map logic matching previous category.js functionality
+        const group = new L.featureGroup(targetMarkers.getLayers());
+        const hasMarkers = targetMarkers.getLayers().length > 0;
 
         if (selectedRegion && selectedRegion !== 'all' && regionCoords) {
-            // Use precise village center at zoom level 13 as requested.
-            // We no longer use fitBounds for regional views to ensure the center remains exactly 
-            // on the village coordinates (e.g. Vihtavuori school) and doesn't drift towards nearby markers.
-            map.setView([regionCoords.lat, regionCoords.lon], 13);
+            regionMap.setView([regionCoords.lat, regionCoords.lon], 13);
+        } else if (selectedRegion === 'all') {
+            regionMap.setView([62.4128, 25.9477], 11);
         } else if (hasMarkers) {
-            map.fitBounds(group.getBounds().pad(0.1));
+            regionMap.fitBounds(group.getBounds().pad(0.1));
         } else {
-            // Default center
-            map.setView([62.4128, 25.9477], 11);
+            regionMap.setView([62.4128, 25.9477], 11);
+        }
+
+        // Tapahtumakuuntelija päivittämään sivupaneelin kun karttaa liikutetaan
+        regionMap.off('moveend', handleMapMoveForSidebar);
+        regionMap.on('moveend', handleMapMoveForSidebar);
+    }
+    
+    function handleMapMoveForSidebar() {
+        if (typeof updateMapSidebar === 'function') {
+            updateMapSidebar(window.currentMapCompanies || categoryCompanies);
         }
     }
 })();

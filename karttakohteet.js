@@ -96,4 +96,66 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 5. Filter Event Listener
     categoryFilter.addEventListener('change', renderMarkers);
+
+    // 6. Handle URL Parameters for Deep Linking
+    function handleUrlParams() {
+        const params = new URLSearchParams(window.location.search);
+        const catParam = params.get('cat') || params.get('search');
+        
+        if (catParam) {
+            const lowerParam = catParam.toLowerCase();
+            const options = Array.from(categoryFilter.options);
+            
+            // Try to find a matching category (exact or partial)
+            const match = options.find(opt => 
+                opt.value.toLowerCase() === lowerParam || 
+                opt.value.toLowerCase().includes(lowerParam)
+            );
+            
+            if (match) {
+                categoryFilter.value = match.value;
+                renderMarkers();
+            }
+        }
+    }
+
+    // Call after data is loaded and categories are populated
+    handleUrlParams();
+
+    // 7. Share Functionality
+    const shareBtn = document.getElementById('share-map-btn');
+    if (shareBtn) {
+        shareBtn.addEventListener('click', async () => {
+            const currentCat = categoryFilter.value;
+            const url = new URL(window.location.href);
+            
+            if (currentCat !== 'all') {
+                url.searchParams.set('cat', currentCat);
+            } else {
+                url.searchParams.delete('cat');
+            }
+            url.searchParams.delete('search'); // Clean up search param
+
+            const shareData = {
+                title: 'LaukaaInfo - Karttakohteet',
+                text: currentCat !== 'all' ? `Löytyi kohteita kategoriasta: ${currentCat}` : 'Tutki Laukaan kohteita kartalla',
+                url: url.toString()
+            };
+
+            try {
+                if (navigator.share) {
+                    await navigator.share(shareData);
+                } else {
+                    await navigator.clipboard.writeText(url.toString());
+                    const originalText = shareBtn.innerHTML;
+                    shareBtn.innerHTML = '<span>Kopioitu!</span> ✅';
+                    setTimeout(() => {
+                        shareBtn.innerHTML = originalText;
+                    }, 2000);
+                }
+            } catch (err) {
+                console.error('Sharing failed', err);
+            }
+        });
+    }
 });

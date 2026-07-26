@@ -14,6 +14,16 @@ function slugify(text) {
         .replace(/-+$/, '');
 }
 
+/**
+ * Normalisoi tekstin poistamalla ääkköset vertailua varten
+ */
+function normalizeForSearch(text) {
+    if (!text) return "";
+    return text.toString().toLowerCase()
+        .replace(/[äÄàáâãå]/g, 'a')
+        .replace(/[öÖòóôõø]/g, 'o');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initRegionPage();
 });
@@ -21,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
 async function fetchRegionMetadata() {
     try {
         const response = await fetch(REGIONS_CSV_URL);
-        if (!response.ok) throw new Error('Alue-CSV lataus epäonnistui');
+        if (!response.ok) throw new Error(i18n.t('error_region_load_failed') || 'Alue-CSV lataus epäonnistui');
 
         // PHP proxy palauttaa suoraan jäsennellyn JSON-kirjaston
         const data = await response.json();
@@ -49,7 +59,8 @@ async function initRegionPage() {
 
     const areaSlug = params.get('area')?.toLowerCase() || pathArea;
     const catParam = params.get('cat')?.toLowerCase();
-    const tagParam = params.get('tag')?.toLowerCase();
+    const qParam = params.get('q')?.toLowerCase();
+    const tagParam = params.get('tag')?.toLowerCase() || qParam;
 
     // Hae ensin alueiden metadata CSV:stä
     await fetchRegionMetadata();
@@ -58,16 +69,15 @@ async function initRegionPage() {
     if (areaSlug === 'koko-laukaa') {
         area = {
             slug: 'koko-laukaa',
-            name: 'Koko Laukaa',
-            desc: 'Hae yrityksiä ja palveluita koko Laukaan alueelta.',
+            name: i18n.currentLang === 'fi' ? 'Koko Laukaa' : 'All Laukaa',
+            desc: i18n.t('desc_all_laukaa') || 'Hae yrityksiä ja palveluita koko Laukaan alueelta.',
             lat: 62.4128,
             lon: 25.9477
         };
     } else {
         if (!areaSlug || !areaMetadata[areaSlug]) {
-            console.warn('Aluetta ei tunnistettu:', areaSlug);
             const container = document.getElementById('catalog-list') || document.body;
-            container.innerHTML = '<p style="padding: 2rem;">Aluetta ei löytynyt tai dataa ladataan. Tarkista URL-osoite.</p>';
+            container.innerHTML = `<p style="padding: 2rem;">${i18n.t('error_region_not_found') || 'Aluetta ei löytynyt tai dataa ladataan. Tarkista URL-osoite.'}</p>`;
             return;
         }
         area = areaMetadata[areaSlug];
@@ -92,6 +102,11 @@ async function initRegionPage() {
     renderRegionContent(area, areaSlug, filtered, catParam, tagParam);
     initRegionMap(area, filtered);
     fetchRegionNews(area);
+    
+    // UUSI: Käännä sivu dynaamisen renderöinnin jälkeen
+    if (window.i18n) {
+        window.i18n.translatePage();
+    }
 }
 
 function updateMetadata(area, cat, tag) {
@@ -100,16 +115,40 @@ function updateMetadata(area, cat, tag) {
     const seoDescEl = document.getElementById('seo-description');
 
     let titleText = area.name;
-    if (tag) { const tagCap = tag.charAt(0).toUpperCase() + tag.slice(1); titleText = `${tagCap.endsWith('t') ? tagCap : tagCap + 't'} - ${area.name}`; }
-    else if (cat) titleText = `${cat.charAt(0).toUpperCase() + cat.slice(1)} - ${area.name}`;
+    const isKokoLaukaa = area.slug === 'koko-laukaa';
+    const locRef = isKokoLaukaa ? (i18n.currentLang === 'fi' ? "Laukaassa" : "in Laukaa") : area.name;
 
-    titleEl.textContent = titleText;
-    pageTitleEl.textContent = `${titleText} – LaukaaInfo: Laukaa taskussasi – tiedä, löydä ja osallistu.`;
+    if (tag) { 
+        titleText = i18n.currentLang === 'fi' ? `${tag.charAt(0).toUpperCase() + tag.slice(1)} -palvelut ${locRef}` : `${tag.charAt(0).toUpperCase() + tag.slice(1)} services ${locRef}`; 
+    } else if (cat) { 
+        titleText = `${cat.charAt(0).toUpperCase() + cat.slice(1)} ${locRef}`; 
+    }
 
-    let seoText = `<h3>${area.name} – yritykset, palvelut ja uutiset</h3>`;
-    seoText += `<p>${area.desc}</p>`;
+    if (titleEl) titleEl.textContent = titleText;
+    
+    if (area.slug === 'lievestuore' && !tag && !cat) {
+        pageTitleEl.textContent = `Löydä Lievestuore – LaukaaInfo`;
+    } else {
+        pageTitleEl.textContent = `${titleText} – LaukaaInfo: Laukaa taskussasi – tiedä, löydä ja osallistu.`;
+    }
+
+    const subtitleEl = document.getElementById('region-subtitle');
+    if (subtitleEl) {
+        if (tag || cat) {
+            subtitleEl.innerHTML = i18n.currentLang === 'fi' ? 
+                `Etsit palveluja alueella <strong>${area.name}</strong>.<br><small style="color: #666; font-size: 0.9em; display: inline-block; margin-top: 5px;">📍 Mukana myös muiden alueiden palveluntarjoajat, joiden palvelualue kattaa tämän sijainnin.</small>` :
+                `Searching for services in area <strong>${area.name}</strong>.<br><small style="color: #666; font-size: 0.9em; display: inline-block; margin-top: 5px;">📍 Including service providers from other areas that cover this location.</small>`;
+        } else {
+            subtitleEl.textContent = i18n.currentLang === 'fi' ? 
+                `Hae yrityksiä, tapahtumia ja tiedotteita alueella: ${area.name}` :
+                `Search for companies, events and bulletins in area: ${area.name}`;
+        }
+    }
+
+    let seoText = `<h3>${area.name} – ${i18n.t('seo_region_h3') || 'yritykset, palvelut ja uutiset'}</h3>`;
+    seoText += `<p>${area.desc || ''}</p>`;
     if (tag || cat) {
-        seoText += `<p>Tunnisteet: <strong>${tag || cat}</strong>.</p>`;
+        seoText += `<p>${i18n.currentLang === 'fi' ? 'Tunnisteet' : 'Tags'}: <strong>${tag || cat}</strong>.</p>`;
     }
     seoDescEl.innerHTML = seoText;
 }
@@ -138,18 +177,71 @@ const AREA_SLUG_ALIASES = {
     'koko-laukaa': [] // Kaikki alueet – käsitellään erikseen
 };
 
+// Estetään alueiden ja maakuntien ilmestyminen tunnisteiksi (tägeiksi)
+const FORBIDDEN_TAGS = [
+    'laukaa', 'laukaa kk', 'laukaa keskusta', 'laukaassa', 'laukaan',
+    'leppavesi', 'leppävesi',
+    'lievestuore', 'lievestuoreella',
+    'vehnia', 'vehniä',
+    'vihtavuori', 'vihtavuorella',
+    'keski-suomi', 'keski-suomessa',
+    'jyväskylä', 'jyväskylässä', 'äänekoski', 'uuraisten', 'uurainen', 'konnevesi', 'hankasalmi', 'muurame', 'petäjävesi'
+];
+
 function filterByArea(areaSlug, catParam, tagParam) {
     // Sallitut alue_slug-arvot tälle sivulle (normalisoituna pieniksi kirjaimiksi)
     const allowedSlugs = AREA_SLUG_ALIASES[areaSlug] || [areaSlug];
+    const area = areaMetadata[areaSlug];
 
     return allCompanies.filter(c => {
         const companySlug = (c.alue_slug || '').toLowerCase().trim();
-        const matchArea = areaSlug === 'koko-laukaa' || allowedSlugs.includes(companySlug);
-        if (!matchArea) return false;
+        let matchArea = areaSlug === 'koko-laukaa' || allowedSlugs.includes(companySlug);
+
+        // UUSI: Jos ei täsmää suoraan alueeseen, tarkistetaan onko palvelualueyritys joka kattaa tämän alueen
+        if (!matchArea && areaSlug !== 'koko-laukaa' && area) {
+            const isServiceArea = c.service_mode === 'SERVICE_AREA' || (parseFloat(c.service_radius) > 0);
+            
+            if (isServiceArea) {
+                const cLat = parseFloat(c.lat);
+                const cLon = parseFloat(c.lon || c.lng);
+                
+                if (isNaN(cLat) || isNaN(cLon)) {
+                    // Jos ei koordinaatteja, mutta on palvelualueyritys, 
+                    // sallitaan osuma alueen mukaan jos alue_slug tai kunta_slug täsmää,
+                    // tai oletetaan että se palvelee koko kuntaa jos se on Laukaassa.
+                    const companyKunta = (c.kunta_slug || '').toLowerCase();
+                    if (companyKunta === 'laukaa' || allowedSlugs.includes(companySlug)) {
+                        matchArea = true;
+                    }
+                } else {
+                    const dist = getHaversineDistance(area.lat, area.lon, cLat, cLon);
+                    const radius = parseFloat(c.service_radius) || 15; // Oletus 15km jos radius puuttuu
+                    
+                    if (dist <= radius) {
+                        matchArea = true;
+                    }
+                }
+            }
+        }
+
+        if (!matchArea && !tagParam) return false;
 
         if (tagParam) {
-            const tags = (c.tags || '').toLowerCase();
-            return tags.includes(tagParam);
+            const query = normalizeForSearch(tagParam);
+            const tags = normalizeForSearch(c.tags || '');
+            const ptapa = normalizeForSearch(c.palvelutapa || '');
+            const cat = normalizeForSearch(c.kategoria || '');
+            const name = normalizeForSearch(c.nimi || '');
+            const extra = normalizeForSearch(c.searchExtraInfo || '');
+            const subContexts = normalizeForSearch((c.profiling?.core?.sub_contexts || []).join(', '));
+            
+            return tags.includes(query) || 
+                   ptapa.includes(query) || 
+                   cat.includes(query) || 
+                   name.includes(query) || 
+                   extra.includes(query) ||
+                   subContexts.includes(query) ||
+                   (query.length > 3 && query.includes(tags) && tags.length > 3);
         }
         if (catParam) {
             return (c.kategoria || '').toLowerCase() === catParam.replace(/-/g, ' ');
@@ -179,7 +271,8 @@ function renderRegionContent(area, areaSlug, filtered, cat, tag) {
     // Tägit alueella
     const tagCloud = document.getElementById('region-tag-cloud');
     if (tagCloud) {
-        const allTags = filtered.flatMap(c => (c.tags || '').split(',').map(t => t.trim().toLowerCase())).filter(t => t.length > 0);
+        const allTags = filtered.flatMap(c => (c.tags || '').split(',').map(t => t.trim().toLowerCase()))
+            .filter(t => t.length > 0 && !FORBIDDEN_TAGS.includes(t));
         const tagCounts = allTags.reduce((acc, t) => { acc[t] = (acc[t] || 0) + 1; return acc; }, {});
         const uniqueTags = Object.keys(tagCounts).sort((a, b) => tagCounts[b] - tagCounts[a]).slice(0, 12);
 
@@ -198,20 +291,52 @@ function renderRegionContent(area, areaSlug, filtered, cat, tag) {
         const weight = parseFloat(c.karusellipaino) || 0;
         const sortScore = (Math.random() * 10) + (weight / 10);
         return { ...c, sortScore };
-    }).sort((a, b) => b.sortScore - a.sortScore).slice(0, 8);
-    if (typeof renderCatalog === 'function') {
-        renderCatalog(featured);
+    }).sort((a, b) => b.sortScore - a.sortScore);
+    
+    let displayCompanies = featured;
+    
+    // Jos suodatetaan tagilla tai kategorialla, näytetään kaikki. Muutoin vain top 8.
+    const titleEl = document.getElementById('featured-title');
+    if (!cat && !tag) {
+        displayCompanies = featured.slice(0, 8);
+        if (titleEl) titleEl.textContent = i18n.t('featured_companies') || 'Suositellut yritykset';
+    } else {
+        if (titleEl) titleEl.textContent = i18n.t('title_search_results') || 'Hakutulokset';
     }
 
-    renderNearby(area);
+    if (typeof renderCatalog === 'function') {
+        renderCatalog(displayCompanies);
+    }
+
+    renderNearby(area, cat, tag);
 }
 
-function renderNearby(area) {
+function renderNearby(area, catParam, tagParam) {
     const nearbyList = document.getElementById('nearby-list');
     if (!nearbyList) return;
 
+    // Jos olemme koko-laukaa sivulla (mikä on tavallaan globaali), 
+    // piilotetaan "Lähellä tätä aluetta" osio selkeyden vuoksi, varsinkin hauissa.
+    if (area.slug === 'koko-laukaa') {
+        const nearbySection = document.getElementById('nearby-section');
+        if (nearbySection) nearbySection.style.display = 'none';
+        return;
+    }
+
     const nearby = allCompanies.filter(c => {
         if (!c.lat || !c.lon || (c.alue_slug || '').toLowerCase() === area.slug) return false;
+        
+        // Sovelletaan samoja tägejä/kategorioita myös lähialueen suosituksiin
+        if (tagParam) {
+            const query = normalizeForSearch(tagParam);
+            const tags = normalizeForSearch(c.tags);
+            const ptapa = normalizeForSearch(c.palvelutapa);
+            if (!tags.includes(query) && !ptapa.includes(query)) return false;
+        }
+        if (catParam) {
+            if ((c.kategoria || '').toLowerCase() !== catParam.replace(/-/g, ' ')) return false;
+        }
+
         const dist = getHaversineDistance(area.lat, area.lon, parseFloat(c.lat), parseFloat(c.lon));
         return dist <= 12; // 12km säde
     })
@@ -222,6 +347,14 @@ function renderNearby(area) {
         })
         .slice(0, 8);
 
+    const nearbySection = document.getElementById('nearby-section');
+    if (nearby.length === 0) {
+        if (nearbySection) nearbySection.style.display = 'none';
+        return;
+    } else {
+        if (nearbySection) nearbySection.style.display = 'block';
+    }
+
     nearbyList.innerHTML = '';
     nearby.forEach(company => {
         const item = document.createElement('div');
@@ -229,9 +362,16 @@ function renderNearby(area) {
         const dist = getHaversineDistance(area.lat, area.lon, parseFloat(company.lat), parseFloat(company.lon));
         const distText = dist < 1 ? `${Math.round(dist * 1000)} m` : `${dist.toFixed(1)} km`;
 
+        let serviceIcons = '';
+        const combinedTags = `${company.tags || ''},${company.palvelutapa || ''}`.toLowerCase();
+        if (combinedTags.includes('toimipiste')) serviceIcons += '🏢';
+        if (combinedTags.includes('kotikaynti') || combinedTags.includes('kotikäynti')) serviceIcons += '🏠';
+        if (combinedTags.includes('etapalvelu') || combinedTags.includes('etäpalvelu')) serviceIcons += '💻';
+        if (combinedTags.includes('toimitus')) serviceIcons += '🚚';
+
         item.innerHTML = `
             <div class="catalog-item-header">
-                <h4>${company.nimi}</h4>
+                <h4>${company.nimi} <span style="margin-left:5px; font-weight:normal;">${serviceIcons}</span></h4>
                 <span class="dist-badge">🚗 ${distText}</span>
             </div>
             <span class="cat-tag">${company.kategoria}</span>
@@ -287,14 +427,14 @@ function initRegionMap(area, companies) {
         regionMap.addLayer(targetMarkers);
     }
 
-    // Lisätään vain kyseisen alueen/-haun mukaiset markerit
-    companies.forEach(company => {
-        if (company.lat && company.lon) {
-            const marker = L.marker([parseFloat(company.lat), parseFloat(company.lon)]);
-            marker.bindPopup(`<b>${company.nimi}</b><br>${company.kategoria}<br><br><a href="yrityskortti.html?id=${slugify(company.nimi)}" class="btn-primary" style="color:white; padding: 5px 10px; font-size: 0.8rem;">Avaa kortti</a>`);
-            targetMarkers.addLayer(marker);
-        }
-    });
+    // Lisätään vain kyseisen alueen/-haun mukaiset markerit käyttäen yhteistä funktiota script.js:ssä
+    if (typeof addMarkersToMap === 'function') {
+        const urlParams = new URLSearchParams(window.location.search);
+        const isSearch = urlParams.has('tag') || urlParams.has('q');
+        addMarkersToMap(companies, isSearch);
+    } else {
+        console.error('[Alue] addMarkersToMap-funktiota ei löytynyt script.js:stä.');
+    }
 }
 
 function fetchRegionNews(area) {
@@ -323,7 +463,7 @@ function fetchRegionNews(area) {
         script.id = 'blogger-script-tag';
         script.onerror = () => {
             console.error('[Blogger] Script-lataus epäonnistui, URL:', script.src);
-            container.innerHTML = '<p>Uutisten lataus epäonnistui (Blogger-virhe).</p>';
+            container.innerHTML = `<p>${i18n.t('error_news_load_failed') || 'Uutisten lataus epäonnistui (Blogger-virhe).'}</p>`;
         };
         // Poista vanha script-tagi jos sellainen on
         const oldScript = document.getElementById('blogger-script-tag');
@@ -334,8 +474,8 @@ function fetchRegionNews(area) {
         console.log('[Blogger] Ei bloggerId- eikä bloggerUrl-arvoa alueelle:', area.name);
         const fallbackHtml = `
             <div class="no-news-message" style="padding: 2rem; background: rgba(0,0,0,0.03); border-radius: 12px; text-align: center;">
-                <p style="margin-bottom: 0.5rem; font-weight: 500;">Tämän alueen uutissyöte ja tapahtumakalenteri päivittyvät tänne myöhemmin.</p>
-                <p style="font-size: 0.9rem; opacity: 0.7;">Seuraa tiedotusta!</p>
+                <p style="margin-bottom: 0.5rem; font-weight: 500;">${i18n.t('msg_news_coming_later') || 'Tämän alueen uutissyöte ja tapahtumakalenteri päivittyvät tänne myöhemmin.'}</p>
+                <p style="font-size: 0.9rem; opacity: 0.7;">${i18n.t('msg_follow_bulletins') || 'Seuraa tiedotusta!'}</p>
             </div>
         `;
         container.innerHTML = fallbackHtml;
@@ -359,7 +499,7 @@ window.renderBloggerFeed = function (data) {
 
     if (entries.length === 0) {
         console.log('[Blogger] Ei syötteitä (entries.length === 0).');
-        container.innerHTML = '<p>Ei julkaisuja.</p>';
+        container.innerHTML = `<p>${i18n.t('rss_no_news') || 'Ei julkaisuja.'}</p>`;
         return;
     }
 
@@ -374,7 +514,7 @@ window.renderBloggerFeed = function (data) {
 
     entries.slice(0, 5).forEach((entry, index) => {
         try {
-            const title = entry.title ? entry.title.$t : 'Ei otsikkoa';
+            const title = entry.title ? entry.title.$t : (i18n.t('rss_no_title') || 'Ei otsikkoa');
             let content = entry.content ? entry.content.$t : (entry.summary ? entry.summary.$t : '');
 
             // Poimi kuva jos sellainen on
@@ -402,7 +542,7 @@ window.renderBloggerFeed = function (data) {
             }
 
             const publishedDate = entry.published ? new Date(entry.published.$t) : new Date();
-            const dateStr = publishedDate.toLocaleDateString('fi-FI');
+            const dateStr = publishedDate.toLocaleDateString(i18n.currentLang === 'fi' ? 'fi-FI' : 'en-GB');
 
             const postEl = document.createElement('div');
             postEl.className = 'rss-item';
@@ -411,7 +551,7 @@ window.renderBloggerFeed = function (data) {
                 <div class="rss-meta"><span class="date">📅 ${dateStr}</span></div>
                 <h3><a href="${link}" target="_blank">${title}</a></h3>
                 <p class="description">${rawText}</p>
-                <a href="${link}" target="_blank" class="read-more">Lue koko uutinen →</a>
+                <a href="${link}" target="_blank" class="read-more">${i18n.t('btn_read_full_news') || 'Lue koko uutinen →'}</a>
             `;
 
             container.appendChild(postEl);
@@ -424,7 +564,7 @@ window.renderBloggerFeed = function (data) {
     if (blogLink && blogLink !== '#') {
         const allNewsLink = document.createElement('div');
         allNewsLink.className = 'view-all-news';
-        allNewsLink.innerHTML = `<a href="${blogLink}" target="_blank" class="btn-secondary">Katso kaikki uutiset Bloggerissa</a>`;
+        allNewsLink.innerHTML = `<a href="${blogLink}" target="_blank" class="btn-secondary">${i18n.t('btn_view_all_on_blogger') || 'Katso kaikki uutiset Bloggerissa'}</a>`;
         container.appendChild(allNewsLink);
     }
 };

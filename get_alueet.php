@@ -26,8 +26,13 @@ curl_close($ch);
 $regions = [];
 
 if ($csvData) {
-    // Parse CSV data
-    $lines = explode(PHP_EOL, $csvData);
+    // Remove UTF-8 BOM if present
+    if (substr($csvData, 0, 3) === "\xEF\xBB\xBF") {
+        $csvData = substr($csvData, 3);
+    }
+
+    // Parse CSV data – handle different line endings (CRLF, LF, CR)
+    $lines = preg_split('/\r\n|\r|\n/', $csvData);
     $headerParsed = false;
 
     foreach ($lines as $line) {

@@ -10,25 +10,53 @@ document.addEventListener('DOMContentLoaded', () => {
     let filteredSteps = [];  // suodatettu näkymä
     let currentStepIndex = 0;
     let markers = [];
+    let userMarker = null;
     let polyline = null;
 
     // Elements — valikot
-    const categorySelect = document.getElementById('select-category');
-    const topicSelect = document.getElementById('select-topic');
-    const storySelect = document.getElementById('select-story');
+    const categorySelect = document.getElementById('theme-select');
+    const topicSelect = document.getElementById('category-select');
+    const storySelect = document.getElementById('story-select');
 
     // Elements — info
     const stepTitle = document.getElementById('step-title');
     const stepCounter = document.getElementById('step-counter');
-    const stepDescription = document.getElementById('step-description');
+    const detailTitle = document.getElementById('detail-title');
+    const detailDesc = document.getElementById('detail-desc');
+    const detailMeta = document.getElementById('detail-meta');
     const stepImage = document.getElementById('step-image');
     const imagePlaceholder = document.getElementById('image-placeholder');
-    const prevBtn = document.getElementById('prev-btn');
-    const nextBtn = document.getElementById('next-btn');
-    const stepMoreInfo = document.getElementById('step-more-info');
+    const prevBtn = document.getElementById('prev-step');
+    const nextBtn = document.getElementById('next-step');
+    const storyDisplay = document.getElementById('story-display');
+    const stepSlider = document.getElementById('step-slider');
+
+    // ── Helper: Normalize Image URL ──────────────────────────────
+    function getStepImageUrl(rawUrl) {
+        if (!rawUrl || !rawUrl.trim()) return null;
+        let url = rawUrl.split('|')[0].trim();
+        if (url.includes('drive.google.com') || url.includes('drive_cache/')) {
+            const idMatch = url.match(/(?:id=|\/d\/|file\/d\/|drive_cache\/)([a-zA-Z0-9_-]+)/);
+            if (idMatch) return `https://www.mediazoo.fi/laukaainfo-web/get_image.php?id=${idMatch[1]}`;
+        }
+        return url;
+    }
+    
+    // QR elements
+    const showQrBtn = document.getElementById('show-qr-btn');
+    const qrModal = document.getElementById('qr-modal');
+    const qrOverlay = document.getElementById('qr-overlay');
+    const qrContainer = document.getElementById('qrcode-container');
+    const closeQrBtn = document.getElementById('close-qr');
+    const copyLinkBtn = document.getElementById('copy-link-btn');
+    const copyImgBtn = document.getElementById('copy-img-btn');
+
+    // Audio elements
+    const audioArea = document.getElementById('audio-area');
+    const stepAudio = document.getElementById('step-audio');
 
     // 2. Fetch Story Data
-    Papa.parse('tarinakartta_data.csv', {
+    Papa.parse('tarinakartta_data.csv?v=' + Date.now(), {
         download: true,
         header: true,
         skipEmptyLines: true,
@@ -36,7 +64,28 @@ document.addEventListener('DOMContentLoaded', () => {
             allSteps = results.data.sort((a, b) => parseInt(a.step_order) - parseInt(b.step_order));
             if (allSteps.length > 0) {
                 populateCategories();
-                applyFilters(); // initial render — kaikki tarinat
+                
+                const urlParams = new URLSearchParams(window.location.search);
+                const startupStep = urlParams.get('step');
+                const startupCategory = urlParams.get('category');
+                const startupTopic = urlParams.get('topic');
+
+                if (startupStep) {
+                    const found = allSteps.find(s => s.step_order === startupStep);
+                    if (found) {
+                        if (found.category) selectTheme(found.category);
+                        if (found.topic) selectTopic(found.topic);
+                        const stepName = found.story_name || found.title;
+                        selectStory(found.step_order, stepName);
+                    }
+                } else if (startupCategory) {
+                    selectTheme(startupCategory);
+                    if (startupTopic) {
+                        selectTopic(startupTopic);
+                    }
+                }
+                
+                applyFilters(); // initial render
             }
         },
         error: function (err) {
@@ -45,31 +94,110 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // ── Cascading Dropdowns ──────────────────────────────────────────
+    // ── Cascading Dropdowns & Wizard UI ──────────────────────────────
+    const themeBadges = document.getElementById('theme-badges');
+    const topicBadges = document.getElementById('topic-badges');
+    const storyList = document.getElementById('story-list');
+    
+    const step2 = document.getElementById('wizard-step-2');
+    const step3 = document.getElementById('wizard-step-3');
+    const wizardSelected = document.getElementById('wizard-selected');
+    const wizardSelectedName = document.getElementById('wizard-selected-name');
+    
+    const resetTopicBtn = document.getElementById('reset-topic');
+    const resetStoryBtn = document.getElementById('reset-story');
 
     function populateCategories() {
         const cats = [...new Set(allSteps.map(s => s.category).filter(Boolean))].sort();
+        if(themeBadges) themeBadges.innerHTML = '';
+        
         categorySelect.innerHTML = '<option value="">Kaikki teemat</option>';
+        
         cats.forEach(cat => {
             const opt = document.createElement('option');
             opt.value = cat;
             opt.textContent = cat;
             categorySelect.appendChild(opt);
+            
+            if (themeBadges) {
+                const badge = document.createElement('span');
+                badge.className = 'wizard-badge';
+                badge.textContent = cat;
+                badge.dataset.value = cat;
+                badge.addEventListener('click', () => selectTheme(cat));
+                themeBadges.appendChild(badge);
+            }
         });
+    }
+
+    function selectTheme(cat) {
+        categorySelect.value = cat;
+        
+        if(themeBadges) {
+            Array.from(themeBadges.children).forEach(b => {
+                if (b.dataset.value === cat) b.classList.add('active');
+                else b.classList.remove('active');
+            });
+        }
+        
+        if(step2) step2.classList.remove('wizard-step-hidden');
+        if(step3) step3.classList.add('wizard-step-hidden');
+        if(wizardSelected) wizardSelected.style.display = 'none';
+        
+        populateTopics(cat);
+        populateStories(cat, '');
+        storySelect.value = '';
+        
+        applyFilters(true);
     }
 
     function populateTopics(category) {
         const source = category ? allSteps.filter(s => s.category === category) : allSteps;
         const topics = [...new Set(source.map(s => s.topic).filter(Boolean))].sort();
 
+        if(topicBadges) topicBadges.innerHTML = '';
         topicSelect.innerHTML = '<option value="">Kaikki aiheet</option>';
+        
         topics.forEach(topic => {
             const opt = document.createElement('option');
             opt.value = topic;
             opt.textContent = topic;
             topicSelect.appendChild(opt);
+            
+            if (topicBadges) {
+                const badge = document.createElement('span');
+                badge.className = 'wizard-badge';
+                badge.textContent = topic;
+                badge.dataset.value = topic;
+                badge.addEventListener('click', () => selectTopic(topic));
+                topicBadges.appendChild(badge);
+            }
         });
         topicSelect.disabled = topics.length === 0;
+        
+        if(topics.length === 0 && step2) {
+            step2.classList.add('wizard-step-hidden');
+        }
+    }
+
+    function selectTopic(topic) {
+        topicSelect.value = topic;
+        
+        if(topicBadges) {
+            Array.from(topicBadges.children).forEach(b => {
+                if (b.dataset.value === topic) b.classList.add('active');
+                else b.classList.remove('active');
+            });
+        }
+        
+        if(step3) step3.classList.remove('wizard-step-hidden');
+        if(wizardSelected) wizardSelected.style.display = 'none';
+        
+        const cat = categorySelect.value;
+        populateStories(cat, topic);
+        storySelect.value = '';
+        
+        applyFilters(false);
     }
 
     function populateStories(category, topic) {
@@ -77,45 +205,75 @@ document.addEventListener('DOMContentLoaded', () => {
         if (category) source = source.filter(s => s.category === category);
         if (topic) source = source.filter(s => s.topic === topic);
 
+        if(storyList) storyList.innerHTML = '';
         storySelect.innerHTML = '<option value="">Kaikki tarinat</option>';
+        
         source.forEach(step => {
+            const stepName = step.story_name || step.title;
+            
             const opt = document.createElement('option');
             opt.value = step.step_order;
-            opt.textContent = step.story_name || step.title;
+            opt.textContent = stepName;
             storySelect.appendChild(opt);
+            
+            if (storyList) {
+                const item = document.createElement('div');
+                item.className = 'wizard-story-item';
+                item.dataset.value = step.step_order;
+                item.innerHTML = `<span>${stepName}</span><span class="wizard-story-arrow">❯</span>`;
+                item.addEventListener('click', () => selectStory(step.step_order, stepName));
+                storyList.appendChild(item);
+            }
         });
         storySelect.disabled = source.length === 0;
     }
 
-    categorySelect.addEventListener('change', () => {
-        const cat = categorySelect.value;
-        populateTopics(cat);
-        populateStories(cat, '');
-        storySelect.value = '';
-        applyFilters();
-    });
-
-    topicSelect.addEventListener('change', () => {
-        const cat = categorySelect.value;
-        const topic = topicSelect.value;
-        populateStories(cat, topic);
-        storySelect.value = '';
-        applyFilters();
-    });
-
-    storySelect.addEventListener('change', () => {
-        const selectedOrder = storySelect.value;
-        if (selectedOrder) {
-            const idx = filteredSteps.findIndex(s => s.step_order === selectedOrder);
+    function selectStory(order, name) {
+        storySelect.value = order;
+        
+        if(storyList) {
+            Array.from(storyList.children).forEach(b => {
+                if (b.dataset.value === order) b.classList.add('active');
+                else b.classList.remove('active');
+            });
+        }
+        
+        if(wizardSelected) {
+            wizardSelected.style.display = 'block';
+            if(wizardSelectedName) wizardSelectedName.textContent = name;
+        }
+        
+        if (order) {
+            const idx = filteredSteps.findIndex(s => s.step_order === order);
             if (idx >= 0) goToStep(idx);
         } else {
             applyFilters();
         }
+    }
+
+    if(resetTopicBtn) resetTopicBtn.addEventListener('click', () => {
+        categorySelect.value = '';
+        if(themeBadges) Array.from(themeBadges.children).forEach(b => b.classList.remove('active'));
+        if(step2) step2.classList.add('wizard-step-hidden');
+        if(step3) step3.classList.add('wizard-step-hidden');
+        if(wizardSelected) wizardSelected.style.display = 'none';
+        applyFilters(true);
+    });
+
+    if(resetStoryBtn) resetStoryBtn.addEventListener('click', () => {
+        topicSelect.value = '';
+        if(topicBadges) Array.from(topicBadges.children).forEach(b => b.classList.remove('active'));
+        if(step3) step3.classList.add('wizard-step-hidden');
+        if(wizardSelected) wizardSelected.style.display = 'none';
+        applyFilters(true);
     });
 
     // ── Filtteri & Kartta ────────────────────────────────────────────
 
-    function applyFilters() {
+    // ── Filtteri & Kartta ────────────────────────────────────────────
+    let pendingStepOrder = new URLSearchParams(window.location.search).get('step');
+
+    function applyFilters(skipMap = false) {
         const cat = categorySelect.value;
         const topic = topicSelect.value;
 
@@ -125,19 +283,34 @@ document.addEventListener('DOMContentLoaded', () => {
             return true;
         });
 
-        buildMapMarkers();
+        buildMapMarkers(skipMap);
+        renderSlider();
+
         if (filteredSteps.length > 0) {
-            goToStep(0);
+            storyDisplay.style.display = 'grid';
+            
+            // Tarkistetaan onko meillä "syvälinkki" odottamassa
+            if (pendingStepOrder) {
+                const targetIdx = filteredSteps.findIndex(s => s.step_order === pendingStepOrder);
+                pendingStepOrder = null; // Kulutetaan heti
+                if (targetIdx >= 0) {
+                    goToStep(targetIdx);
+                    return;
+                }
+            }
+            
+            goToStep(0, skipMap);
         } else {
+            storyDisplay.style.display = 'none';
             stepTitle.textContent = 'Ei tarinoita valinnalla';
             stepCounter.textContent = '0 / 0';
-            stepDescription.textContent = 'Valitse eri teema tai aihe.';
+            detailDesc.textContent = 'Valitse eri teema tai aihe.';
             stepImage.style.display = 'none';
             imagePlaceholder.style.display = 'block';
         }
     }
 
-    function buildMapMarkers() {
+    function buildMapMarkers(skipMap = false) {
         // Poista vanhat
         markers.forEach(m => map.removeLayer(m));
         markers = [];
@@ -159,11 +332,55 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
             }).addTo(map);
 
+            const imageUrl = getStepImageUrl(step.image_url);
+            let imageHtml = '';
+            if (imageUrl) {
+                imageHtml = `
+                    <div style="margin: 8px 0; border-radius: 8px; overflow: hidden; background: #f0f4f8; height: 120px; display: flex; align-items: center; justify-content: center;">
+                        <img src="${imageUrl}" data-lightbox="${imageUrl}" alt="${escapeHtml(step.title)}" style="width: 100%; height: 100%; object-fit: cover; cursor: zoom-in;" title="Klikkaa suurentaaksesi">
+                    </div>
+                `;
+            }
+
+            let videoHtml = '';
+            if (step.youtube_url && step.youtube_url.trim()) {
+                const getYoutubeId = (url) => {
+                    if (!url) return null;
+                    const regExp = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube\.com\/shorts\/)([^"&?\/\s]{11})/;
+                    const match = url.match(regExp);
+                    return (match && match[1]) ? match[1] : null;
+                };
+                const vId = getYoutubeId(step.youtube_url.trim());
+                if (vId) {
+                    videoHtml = `
+                        <div style="margin-top:8px; border-radius:8px; overflow:hidden; position:relative; padding-bottom:56.25%; height:0; box-shadow:0 2px 8px rgba(0,0,0,0.15);">
+                            <iframe src="https://www.youtube.com/embed/${vId}?autoplay=1&mute=1&rel=0" 
+                                style="position:absolute; top:0; left:0; width:100%; height:100%;" 
+                                frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <a href="https://www.youtube.com/watch?v=${vId}" target="_blank" style="display:block; margin-top:5px; font-size:0.75rem; color:#0056b3; text-decoration:none; font-weight:600; text-align:right;">📺 Katso YouTubessa &rarr;</a>
+                    `;
+                }
+            }
+
+            const popupHtml = `
+                <div style="min-width: 180px;">
+                    <h3 style="margin: 0 0 5px 0; color: #0056b3; font-size: 1rem; font-family: 'Outfit', sans-serif;">${escapeHtml(step.title)}</h3>
+                    <div style="font-size: 0.85rem; color: #666; margin-bottom: 4px;">Askel ${index + 1} / ${filteredSteps.length}</div>
+                    ${imageHtml}
+                    ${videoHtml}
+                    <a href="https://www.google.com/maps/search/?api=1&query=${lat},${lng}" target="_blank" style="background: #28a745; color: white; padding: 5px 10px; border-radius: 4px; text-decoration: none; font-size: 0.75rem; display: inline-flex; align-items: center; gap: 5px; font-weight: 600; margin-top: 5px;">📍 Avaa Google Mapsissa</a>
+                </div>
+            `;
+            marker.bindPopup(popupHtml);
+
             marker.on('click', () => goToStep(index));
             markers.push(marker);
             pathCoords.push([lat, lng]);
         });
 
+        if (skipMap) return;
+        
         if (pathCoords.length > 1) {
             polyline = L.polyline(pathCoords, {
                 color: '#0056b3',
@@ -179,68 +396,253 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function goToStep(index) {
+    function renderSlider() {
+        if (!stepSlider) return;
+        stepSlider.innerHTML = '';
+        
+        if (filteredSteps.length === 0) {
+            stepSlider.style.display = 'none';
+            return;
+        }
+        
+        stepSlider.style.display = 'flex';
+        
+        filteredSteps.forEach((step, index) => {
+            const card = document.createElement('div');
+            card.className = 'slider-card';
+            card.dataset.index = index;
+            
+            let imageUrl = getStepImageUrl(step.image_url) || 'icons/icon-512.png';
+            
+            card.innerHTML = `
+                <div class="slider-card-number">${index + 1}</div>
+                <img src="${imageUrl}" alt="${step.title}" loading="lazy">
+                <div class="slider-card-overlay">
+                    <div class="slider-card-title">${step.title}</div>
+                    <div class="slider-card-link">Tarkennus &rarr;</div>
+                </div>
+            `;
+            
+            card.addEventListener('click', () => {
+                goToStep(index);
+            });
+            
+            stepSlider.appendChild(card);
+        });
+    }
+
+    function goToStep(index, skipMap = false) {
         if (index < 0 || index >= filteredSteps.length) return;
 
         currentStepIndex = index;
         const step = filteredSteps[index];
+        const lat = parseFloat(step.lat);
+        const lng = parseFloat(step.lng);
+
+        // Päivitä osoitepalkki (ilman sivun latausta)
+        const url = new URL(window.location);
+        url.searchParams.set('step', step.step_order);
+        window.history.replaceState({}, '', url);
 
         // Päivitä UI
         stepTitle.textContent = step.title;
+        detailTitle.textContent = step.title;
         stepCounter.textContent = `Askel ${index + 1} / ${filteredSteps.length}`;
-        stepDescription.textContent = step.description;
+        detailDesc.innerHTML = escapeHtml(step.description || '').replace(/\\n/g, '<br>').replace(/\n/g, '<br>');
+
+        // Päivitä slider
+        document.querySelectorAll('.slider-card').forEach((card, i) => {
+            if (i === index) {
+                card.classList.add('active');
+                card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            } else {
+                card.classList.remove('active');
+            }
+        });
 
         // Synkronoi tarina-valikko
         storySelect.value = step.step_order;
 
         // Kuva
+        const sliderContainer = document.getElementById('step-image-slider');
+        const sliderPrev = document.getElementById('slider-prev');
+        const sliderNext = document.getElementById('slider-next');
+        const sliderDots = document.getElementById('slider-dots');
+        
+        if (sliderContainer) sliderContainer.innerHTML = '';
+        if (sliderDots) sliderDots.innerHTML = '';
+        
         if (step.image_url && step.image_url.trim()) {
-            let url = step.image_url.trim();
-
-            // Normalisoidaan Drive-linkit ja välimuistilinkit
-            if (url.includes('drive.google.com') || url.includes('drive_cache/')) {
-                const idMatch = url.match(/(?:id=|\/d\/|file\/d\/|drive_cache\/)([a-zA-Z0-9_-]+)/);
-                if (idMatch) {
-                    url = `get_image.php?id=${idMatch[1]}`;
+            const urls = step.image_url.split('|').map(u => u.trim()).filter(u => u);
+            
+            if (urls.length > 0) {
+                imagePlaceholder.style.display = 'none';
+                
+                urls.forEach((rawUrl, idx) => {
+                    let url = getStepImageUrl(rawUrl);
+                    
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.style.minWidth = '100%';
+                    img.style.flexShrink = '0';
+                    img.style.objectFit = 'cover';
+                    sliderContainer.appendChild(img);
+                    
+                    if (urls.length > 1) {
+                        const dot = document.createElement('div');
+                        dot.style.width = '8px';
+                        dot.style.height = '8px';
+                        dot.style.borderRadius = '50%';
+                        dot.style.background = idx === 0 ? 'white' : 'rgba(255,255,255,0.5)';
+                        dot.style.cursor = 'pointer';
+                        dot.dataset.idx = idx;
+                        sliderDots.appendChild(dot);
+                    }
+                });
+                
+                let currentSlide = 0;
+                const updateSlider = () => {
+                    sliderContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+                    Array.from(sliderDots.children).forEach((dot, i) => {
+                        dot.style.background = i === currentSlide ? 'white' : 'rgba(255,255,255,0.5)';
+                    });
+                };
+                
+                Array.from(sliderDots.children).forEach(dot => {
+                    dot.onclick = () => {
+                        currentSlide = parseInt(dot.dataset.idx);
+                        updateSlider();
+                    };
+                });
+                
+                if (urls.length > 1) {
+                    sliderPrev.style.display = 'flex';
+                    sliderNext.style.display = 'flex';
+                    sliderPrev.onclick = () => {
+                        currentSlide = (currentSlide - 1 + urls.length) % urls.length;
+                        updateSlider();
+                    };
+                    sliderNext.onclick = () => {
+                        currentSlide = (currentSlide + 1) % urls.length;
+                        updateSlider();
+                    };
+                } else {
+                    sliderPrev.style.display = 'none';
+                    sliderNext.style.display = 'none';
                 }
+            } else {
+                imagePlaceholder.style.display = 'block';
+                if (sliderPrev) sliderPrev.style.display = 'none';
+                if (sliderNext) sliderNext.style.display = 'none';
             }
-
-            stepImage.src = url;
-            stepImage.style.display = 'block';
-            stepImage.style.opacity = '0';
-            stepImage.onload = () => { stepImage.style.opacity = '1'; };
-            imagePlaceholder.style.display = 'none';
         } else {
-            stepImage.style.display = 'none';
             imagePlaceholder.style.display = 'block';
+            if (sliderPrev) sliderPrev.style.display = 'none';
+            if (sliderNext) sliderNext.style.display = 'none';
         }
 
-        // Lisätietoa-linkki
+        // Lisätietoa & Sijainti linkit
+        let metaHtml = '';
         if (step.more_info_url && step.more_info_url.trim()) {
-            stepMoreInfo.href = step.more_info_url;
-            stepMoreInfo.style.display = 'block';
+            const infoUrl = step.more_info_url.trim();
+            if (infoUrl.includes('?reitti=')) {
+                metaHtml += `<a href="${infoUrl}" onclick="
+                    event.preventDefault();
+                    try {
+                        var href = this.getAttribute('href');
+                        var reittiRaw = href.split('?reitti=')[1];
+                        if (reittiRaw) reittiRaw = reittiRaw.split('#')[0];
+                        var reittiUrl = reittiRaw ? decodeURIComponent(reittiRaw) : null;
+                        var select = document.getElementById('reitti-select');
+                        if (select && reittiUrl) {
+                            select.value = reittiUrl;
+                            select.dispatchEvent(new Event('change'));
+                        }
+                    } catch(e) { console.error('reitti link error', e); }
+                    setTimeout(function(){ document.getElementById('kavelyreitit-section').scrollIntoView({behavior:'smooth',block:'start'}); }, 300);
+                " style="color: #0056b3; font-weight: 600; text-decoration: none; display: block; margin-bottom: 8px;">&rarr; Siirry kävelyreitille</a>`;
+            } else {
+                metaHtml += `<a href="${infoUrl}" target="_blank" style="color: #0056b3; font-weight: 600; text-decoration: none; display: block; margin-bottom: 8px;">&rarr; Lue lisää tästä kohteesta</a>`;
+            }
+        }
+        
+        if (!isNaN(lat) && !isNaN(lng)) {
+            const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+            metaHtml += `<a href="${mapsUrl}" target="_blank" style="color: #28a745; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 5px;">📍 Sijainti Google Mapsissa</a>`;
+        }
+
+        if (metaHtml) {
+            detailMeta.innerHTML = metaHtml;
+            detailMeta.style.display = 'block';
         } else {
-            stepMoreInfo.style.display = 'none';
+            detailMeta.style.display = 'none';
+        }
+
+        // QR nappula näkyviin
+        if (showQrBtn) showQrBtn.style.display = 'flex';
+
+        // Audio hallinta
+        if (step.audio_url && step.audio_url.trim()) {
+            stepAudio.src = step.audio_url.trim();
+            stepAudio.load();
+            audioArea.style.display = 'block';
+        } else {
+            stepAudio.pause();
+            stepAudio.src = '';
+            audioArea.style.display = 'none';
+        }
+
+        // YouTube hallinta
+        const youtubeArea = document.getElementById('youtube-area');
+        const youtubeIframe = document.getElementById('step-youtube');
+        if (step.youtube_url && step.youtube_url.trim() && youtubeArea && youtubeIframe) {
+            let yUrl = step.youtube_url.trim();
+            
+            const getYoutubeId = (url) => {
+                if (!url) return null;
+                const regExp = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube\.com\/shorts\/)([^"&?\/\s]{11})/;
+                const match = url.match(regExp);
+                if (match && match[1]) {
+                    console.log("YouTube ID parsed (top map):", match[1], "from URL:", url);
+                    return match[1];
+                }
+                return null;
+            };
+
+            const videoId = getYoutubeId(yUrl);
+            if (videoId) {
+                youtubeIframe.src = `https://www.youtube.com/embed/${videoId}`;
+                youtubeArea.style.display = 'block';
+            } else {
+                youtubeArea.style.display = 'none';
+            }
+        } else if (youtubeArea) {
+            youtubeArea.style.display = 'none';
+            if (youtubeIframe) youtubeIframe.src = '';
         }
 
         // Kartta
-        const lat = parseFloat(step.lat);
-        const lng = parseFloat(step.lng);
-        if (!isNaN(lat) && !isNaN(lng)) {
+        if (!skipMap && !isNaN(lat) && !isNaN(lng)) {
             map.flyTo([lat, lng], 13, { duration: 1.2 });
         }
 
-        // Highlight-markkeri
+        // Highlight-markkeri & Popup
         markers.forEach((m, i) => {
+            const isSelected = i === index;
             const el = m.getElement();
             if (!el) return;
             const inner = el.querySelector('div');
             if (inner) {
-                inner.style.backgroundColor = i === index ? '#e85d04' : '#0056b3';
-                inner.style.transform = i === index ? 'scale(1.3)' : 'scale(1)';
+                inner.style.backgroundColor = isSelected ? '#e85d04' : '#0056b3';
+                inner.style.transform = isSelected ? 'scale(1.3)' : 'scale(1)';
                 inner.style.transition = 'all 0.2s ease';
             }
-            m.setZIndexOffset(i === index ? 1000 : 0);
+            m.setZIndexOffset(isSelected ? 1000 : 0);
+            
+            if (isSelected) {
+                // Pieni viive jotta flyTo ehtii alkaa/loppua ja markkeri on näkyvissä
+                setTimeout(() => m.openPopup(), 600);
+            }
         });
 
         // Napit
@@ -251,4 +653,181 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event Listeners
     prevBtn.addEventListener('click', () => goToStep(currentStepIndex - 1));
     nextBtn.addEventListener('click', () => goToStep(currentStepIndex + 1));
+
+    // QR Code Logic
+    if (showQrBtn) {
+        showQrBtn.addEventListener('click', () => {
+            const currentUrl = window.location.href;
+            qrContainer.innerHTML = ''; // Tyhjennä vanha
+            
+            const canvas = document.createElement('canvas');
+            qrContainer.appendChild(canvas);
+            
+            QRCode.toCanvas(canvas, currentUrl, {
+                width: 250,
+                margin: 2,
+                color: {
+                    dark: '#0056b3',
+                    light: '#ffffff'
+                }
+            }, function (error) {
+                if (error) console.error(error);
+                qrModal.style.display = 'flex';
+                qrOverlay.style.display = 'block';
+            });
+        });
+    }
+
+    const closeQr = () => {
+        qrModal.style.display = 'none';
+        qrOverlay.style.display = 'none';
+    };
+
+    if (closeQrBtn) closeQrBtn.addEventListener('click', closeQr);
+    if (qrOverlay) qrOverlay.addEventListener('click', closeQr);
+
+    // Location Logic
+    const locateBtn = document.getElementById('btn-locate-user');
+    if (locateBtn) {
+        locateBtn.addEventListener('click', locateUser);
+    }
+
+    const desktopSearchBtn = document.getElementById('btn-desktop-search-loc');
+    const desktopInput = document.getElementById('desktop-location-input');
+    
+    if (desktopSearchBtn && desktopInput) {
+        desktopSearchBtn.addEventListener('click', () => {
+            const query = desktopInput.value.trim();
+            if (!query) return;
+            desktopSearchBtn.textContent = '...';
+            
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query + ', Finland')}`)
+                .then(res => res.json())
+                .then(data => {
+                    desktopSearchBtn.textContent = 'Hae';
+                    if (data && data.length > 0) {
+                        const lat = parseFloat(data[0].lat);
+                        const lon = parseFloat(data[0].lon);
+                        handleLocationFound(lat, lon);
+                    } else {
+                        alert('Sijaintia ei löytynyt.');
+                    }
+                })
+                .catch(err => {
+                    desktopSearchBtn.textContent = 'Hae';
+                    console.error('Geocoding error:', err);
+                    alert('Sijainnin haku epäonnistui.');
+                });
+        });
+        
+        desktopInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') desktopSearchBtn.click();
+        });
+    }
+
+    function handleLocationFound(latitude, longitude) {
+        const userPos = [latitude, longitude];
+
+        if (userMarker) {
+            userMarker.setLatLng(userPos);
+        } else {
+            userMarker = L.circleMarker(userPos, {
+                radius: 8,
+                fillColor: "#007bff",
+                color: "#fff",
+                weight: 3,
+                fillOpacity: 0.8
+            }).addTo(map).bindPopup("Sijaintisi");
+        }
+
+        // Etsi lähin kohde
+        if (filteredSteps.length > 0) {
+            let minDist = Infinity;
+            let closestIdx = -1;
+
+            filteredSteps.forEach((step, i) => {
+                if (step.lat && step.lng) {
+                    const d = calculateDistance(latitude, longitude, parseFloat(step.lat), parseFloat(step.lng));
+                    if (d < minDist) {
+                        minDist = d;
+                        closestIdx = i;
+                    }
+                }
+            });
+
+            if (closestIdx !== -1) {
+                goToStep(closestIdx);
+            }
+        } else {
+            map.setView(userPos, 14);
+        }
+    }
+
+    function locateUser() {
+        if (!navigator.geolocation) {
+            alert("Selaimesi ei tue paikannusta.");
+            return;
+        }
+
+        locateBtn.classList.add('loading');
+        
+        navigator.geolocation.getCurrentPosition((position) => {
+            const { latitude, longitude } = position.coords;
+            handleLocationFound(latitude, longitude);
+            locateBtn.classList.remove('loading');
+        }, (error) => {
+            console.error("Geolocation error:", error);
+            locateBtn.classList.remove('loading');
+            alert("Sijaintia ei voitu hakea. Varmista että GPS on päällä ja olet antanut luvan.");
+        }, { enableHighAccuracy: true });
+    }
+
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371; // km
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                  Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
+    }
+
+    // Copy Link Logic
+    if (copyLinkBtn) {
+        copyLinkBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                const originalText = copyLinkBtn.textContent;
+                copyLinkBtn.textContent = '✅ Kopioitu!';
+                setTimeout(() => { copyLinkBtn.textContent = originalText; }, 2000);
+            });
+        });
+    }
+
+    // Copy Image Logic
+    if (copyImgBtn) {
+        copyImgBtn.addEventListener('click', () => {
+            const canvas = qrContainer.querySelector('canvas');
+            if (!canvas) return;
+            
+            canvas.toBlob((blob) => {
+                const item = new ClipboardItem({ 'image/png': blob });
+                navigator.clipboard.write([item]).then(() => {
+                    const originalText = copyImgBtn.textContent;
+                    copyImgBtn.textContent = '✅ Kuva kopioitu!';
+                    setTimeout(() => { copyImgBtn.textContent = originalText; }, 2000);
+                });
+            }, 'image/png');
+        });
+    }
+
+    function escapeHtml(unsafe) {
+        if (!unsafe) return '';
+        return unsafe.toString()
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
 });

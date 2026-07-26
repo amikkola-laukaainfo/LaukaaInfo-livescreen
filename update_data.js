@@ -15,6 +15,7 @@ https.get(dataSourceUrl, (res) => {
         return;
     }
 
+    res.setEncoding('utf8');
     let data = '';
     res.on('data', (chunk) => { data += chunk; });
     res.on('end', () => {

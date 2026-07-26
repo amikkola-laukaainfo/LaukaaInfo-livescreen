@@ -238,14 +238,20 @@ const Mainostutka = (function () {
         else if (type === 'ad') badgeText = '📢 MAINOS';
 
         let mainosText = ad.mainoslause || '';
-        if (mainosText.includes('@@')) mainosText = mainosText.split('@@')[0];
+        if (mainosText.includes('@@')) mainosText = mainosText.replace(/@@/g, '').trim();
         if (type === 'none' && !mainosText) mainosText = ad.kategoria || 'Yritys';
 
         let adLink = '#';
         if (ad.mainoslinkit) {
             try {
                 const links = JSON.parse(ad.mainoslinkit);
-                if (links && links.length > 0) adLink = links[0];
+                if (links && links.length > 0) {
+                    adLink = links[0];
+                    // Puhdistetaan linkki jos mahdollista
+                    if (typeof cleanUrl === 'function') {
+                        adLink = cleanUrl(adLink, true);
+                    }
+                }
             } catch (e) { }
         }
 

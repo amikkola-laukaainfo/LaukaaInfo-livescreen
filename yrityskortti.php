@@ -120,24 +120,38 @@ if ($company) {
         }
 
         .card-header {
+            position: relative;
+            width: 100%;
+            min-height: 350px;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
             display: flex;
-            gap: 2rem;
             align-items: center;
+            justify-content: center;
+            padding: 2.5rem;
+            box-sizing: border-box;
             margin-bottom: 3rem;
-            flex-wrap: wrap;
+            color: white;
         }
 
         .card-logo-container {
-            width: 180px;
-            height: 180px;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 40px;
+            width: 150px;
+            height: 150px;
             background: white;
             border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            padding: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            padding: 10px;
             overflow: hidden;
+            z-index: 2;
         }
 
         .card-logo-container img {
@@ -147,25 +161,31 @@ if ($company) {
         }
 
         .card-title-section {
-            flex: 1;
-            min-width: 300px;
+            z-index: 2;
+            text-align: center;
+            max-width: 70%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .card-title-section h1 {
             font-size: 3rem;
-            color: var(--primary-blue);
+            color: white;
             margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
         }
 
         .card-category {
             display: inline-block;
-            background: var(--light-blue);
-            color: var(--primary-blue);
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
             padding: 0.4rem 1.2rem;
             border-radius: 50px;
             font-weight: 600;
             font-size: 0.9rem;
             margin-bottom: 1rem;
+            backdrop-filter: blur(4px);
         }
 
         .card-grid {
@@ -526,7 +546,7 @@ if ($company) {
                     <li class="nav-item">
                         <a href="#" class="nav-link">Kartat &amp; Elämykset <span class="arrow">▼</span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="https://laukaainfo.fi/karttakohteet.html">Karttakohteet</a></li>
+                            <li><a href="https://laukaainfo.fi/kohdekartta.html">Karttakohteet</a></li>
                             <li><a href="https://laukaainfo.fi/tarinakartta.html">Tarinakartta</a></li>
                             <li><a href="https://laukaainfo.fi/muistokartta.html">Muistokartta</a></li>
                             <li><a href="https://laukaainfo.fi/kadonneet.html">Kadonneet &amp; löydetyt</a></li>
@@ -606,7 +626,7 @@ if ($company) {
             <div class="menu-section highlight-section">
                 <h3 class="section-title">KARTAT &amp; ELÄMYKSET ⭐</h3>
                 <ul class="menu-list">
-                    <li class="menu-item"><a href="https://laukaainfo.fi/karttakohteet.html" class="sidebar-link">Karttakohteet</a></li>
+                    <li class="menu-item"><a href="https://laukaainfo.fi/kohdekartta.html" class="sidebar-link">Karttakohteet</a></li>
                     <li class="menu-item"><a href="https://laukaainfo.fi/tarinakartta.html" class="sidebar-link">Tarinakartta</a></li>
                     <li class="menu-item"><a href="https://laukaainfo.fi/muistokartta.html" class="sidebar-link">Muistokartta</a></li>
                     <li class="menu-item"><a href="https://laukaainfo.fi/kadonneet.html" class="sidebar-link">Kadonneet &amp; löydetyt</a>
@@ -684,6 +704,18 @@ if ($company) {
                                 <a href="#" id="display-website" target="_blank">www.yritys.fi</a>
                             </div>
                         </div>
+
+                        <?php if (isset($company['google_reviews_url'])): ?>
+                        <div class="contact-item" id="google-reviews-item-static">
+                            <span class="icon">⭐</span>
+                            <div>
+                                <span>Google Arviot</span>
+                                <a href="<?php echo htmlspecialchars($company['google_reviews_url']); ?>" target="_blank" rel="noopener noreferrer" style="color:#f4b400; font-weight:bold;">
+                                    Lue ja jätä arvio
+                                </a>
+                            </div>
+                        </div>
+                        <?php endif; ?>
 
                         <div class="contact-item" id="social-links">
                             <span class="icon">🔗</span>

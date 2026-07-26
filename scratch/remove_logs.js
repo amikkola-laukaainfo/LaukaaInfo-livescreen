@@ -1,0 +1,6 @@
+const fs = require('fs');
+let content = fs.readFileSync('palvelu.html', 'utf8');
+content = content.replace(/^\s*console\.(log|warn|error|debug)\([^;]*(\([^)]*\)[^;]*)?\);\r?\n/gm, '');
+content = content.replace(/if \(isRiina\) console\.log\([^;]+\);?\s*/g, '');
+content = content.replace(/if \(isMediazoo\) console\.log\([^;]+\);?\s*/g, '');
+fs.writeFileSync('palvelu.html', content, 'utf8');

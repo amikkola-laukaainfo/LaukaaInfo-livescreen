@@ -1,0 +1,105 @@
+{
+  "entities": {
+    "yritys_001": {
+      "id": "yritys_001",
+      "nimi": "Laukaan ravintolat",
+      "tyyppi": "yritys",
+      "kategoriat": ["ravintola", "ruokailu"],
+      "kuvaus": "Hae kaikki paikalliset ravintolat ja kahvilat.",
+      "alue": "Laukaa"
+    },
+    "yritys_002": {
+      "id": "yritys_002",
+      "nimi": "Hierontapalvelut Laukaassa",
+      "tyyppi": "yritys",
+      "kategoriat": ["hieronta", "kauneuspalvelut"],
+      "kuvaus": "Hyvinvointipalvelut ja hierojat alueella.",
+      "alue": "Laukaa"
+    },
+    "yritys_003": {
+      "id": "yritys_003",
+      "nimi": "Autokorjaamot Laukaassa",
+      "tyyppi": "yritys",
+      "kategoriat": ["autokorjaamot"],
+      "kuvaus": "Luotettavat autokorjaamot ja huoltopalvelut.",
+      "alue": "Laukaa"
+    },
+    "apu_001": {
+      "id": "apu_001",
+      "tyyppi": "tarjoan_apua",
+      "otsikko": "Tarjoan kyytiä Laukaasta Jyväskylään",
+      "tagit": ["ravintola", "liikkuminen"],
+      "alue": "Laukaa"
+    },
+    "apu_002": {
+      "id": "apu_002",
+      "tyyppi": "tarjoan_apua",
+      "otsikko": "Autan pienten autohuoltojen kanssa",
+      "tagit": ["autokorjaamot"],
+      "alue": "Laukaa"
+    },
+    "apu_003": {
+      "id": "apu_003",
+      "tyyppi": "tarjoan_apua",
+      "otsikko": "Tarjoan hierontaa kotikäyntinä",
+      "tagit": ["hieronta"],
+      "alue": "Laukaa"
+    },
+    "ryhma_001": {
+      "id": "ryhma_001",
+      "tyyppi": "harrastus",
+      "otsikko": "Laukaan ruokaharrastajat",
+      "tagit": ["ravintola", "ruokailu"],
+      "kiinnostuneet": 12,
+      "alue": "Laukaa"
+    },
+    "ryhma_002": {
+      "id": "ryhma_002",
+      "tyyppi": "harrastus",
+      "otsikko": "Hyvinvointi & liike -ryhmä",
+      "tagit": ["hieronta", "hyvinvointi"],
+      "kiinnostuneet": 8,
+      "alue": "Laukaa"
+    },
+    "ryhma_003": {
+      "id": "ryhma_003",
+      "tyyppi": "harrastus",
+      "otsikko": "Autoharrastajat Laukaa",
+      "tagit": ["autokorjaamot", "autot"],
+      "kiinnostuneet": 15,
+      "alue": "Laukaa"
+    }
+  },
+  "verkosto": {
+    "ravintola": {
+      "otsikko": "Ravintolat & Kahvilat",
+      "yritykset": ["yritys_001"],
+      "tarjoan_apua": ["apu_001"],
+      "harrastukset": ["ryhma_001"],
+      "projektit": []
+    },
+    "hieronta": {
+      "otsikko": "Hieronta & Hyvinvointi",
+      "yritykset": ["yritys_002"],
+      "tarjoan_apua": ["apu_003"],
+      "harrastukset": ["ryhma_002"],
+      "projektit": []
+    },
+    "autokorjaamot": {
+      "otsikko": "Autokorjaamot & Huolto",
+      "yritykset": ["yritys_003"],
+      "tarjoan_apua": ["apu_002"],
+      "harrastukset": ["ryhma_003"],
+      "projektit": []
+    }
+  },
+  "ilmoitukset": [
+    {"id":"ilm_demo1","tyyppi":"tarvitsen_apua","intent":"tarvitsen_apua","otsikko":"Apua sähköpostin käyttöön (demo)","kuvaus":"Olen hankkinut uuden tietokoneen ja tarvitsisin apua sähköpostin asetuksien kanssa.","nimi":"Matti V.","yhteys":"040 123 4567","tagit":["tietokoneet","digituki"],"paivays":"2026-06-01 12:00:00"},
+    {"id":"ilm_demo2","tyyppi":"tarjoan_apua","intent":"tarjoan_apua","otsikko":"Autan Windows-ongelmissa (demo)","kuvaus":"Olen IT-alan opiskelija ja autan mielelläni kaikenlaisissa tietokoneongelmissa Laukaan alueella.","nimi":"Aleksi","yhteys":"aleksi@example.com","tagit":["tietokoneet","digituki"],"paivays":"2026-06-02 09:30:00"},
+    {"id":"ilm_demo3","tyyppi":"harrastus","intent":"etsin_seuraa","otsikko":"Blender-opiskeluryhmä (demo)","kuvaus":"Perustetaan 3D-mallinnuksesta ja Blenderistä kiinnostuneiden ryhmä. Kokoonnutaan kirjastolla!","nimi":"Sari","yhteys":"sari.3d@example.com","tagit":["tietokoneet","3d","harrastukset"],"paivays":"2026-06-02 10:00:00"},
+    {"id":"ilm_demo4","tyyppi":"projekti","intent":"perustetaan_projekti","otsikko":"Luontopolun kunnostus (demo)","kuvaus":"Talkoot tulossa! Tarvitaan väkeä raivaamaan vesakkoa ja maalaamaan opasteita.","nimi":"Kyläyhdistys","yhteys":"info@kylayhdistys.fi","tagit":["rakentaminen","vapaaehtoistyö","luonto"],"paivays":"2026-06-01 14:15:00"},
+    {"id":"ilm_demo5","tyyppi":"tarjoan_apua","intent":"tarjoan_apua","otsikko":"Rakennusapua talkoisiin (demo)","kuvaus":"Voin tulla auttamaan pienissä rakennus- ja remonttihommissa viikonloppuisin.","nimi":"Jarkko","yhteys":"jarkko.raksajäbä@example.com","tagit":["rakentaminen","vapaaehtoistyö"],"paivays":"2026-05-30 11:20:00"},
+    {"id":"ilm_demo6","tyyppi":"harrastus","intent":"etsin_seuraa","otsikko":"Laukaan Puhallinorkesteri (demo)","kuvaus":"Etsimme uusia soittajia mukaan puhallinorkesteriimme! Erityisesti vaskisoittajille tarvetta.","nimi":"Orkesterinjohtaja","yhteys":"050 987 6543","tagit":["musiikki","soitto"],"paivays":"2026-05-28 18:00:00"},
+    {"id":"ilm_demo7","tyyppi":"projekti","intent":"perustetaan_projekti","otsikko":"Kylätapahtuman järjestäminen (demo)","kuvaus":"Suunnitellaan yhdessä ensi kesän suurtapahtumaa. Kaikki ideat ja apukädet tervetulleita.","nimi":"Tapahtumatiimi","yhteys":"tapahtumat@lievestuore.fi","tagit":["tapahtumat","musiikki"],"paivays":"2026-06-02 08:00:00"}
+  ]
+}

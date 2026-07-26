@@ -1,0 +1,57 @@
+<?php
+/**
+ * get_hero_images.php
+ * 
+ * Tämä skripti sijoitetaan osoitteeseen: https://www.mediazoo.fi/laukaainfo-web/get_hero_images.php
+ * Se hakee tiedostolistan GitHubin API:n kautta ja palauttaa sen JSON-muodossa.
+ */
+
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *'); // Salli haku eri domainista
+
+$owner = "amikkola-laukaainfo";
+$repo = "LaukaaInfo-livescreen";
+$path = "otsikkokuvat";
+
+// Välimuisti (cache) 5 minuuttia, jotta API-rajoitukset eivät paukkuisi
+$cache_file = 'hero_images_cache.json';
+if (file_exists($cache_file) && (time() - filemtime($cache_file) < 300)) {
+    echo file_get_contents($cache_file);
+    exit;
+}
+
+$url = "https://api.github.com/repos/$owner/$repo/contents/$path";
+
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($ch, CURLOPT_USERAGENT, 'LaukaaInfo-App'); // GitHub vaatii User-Agentin
+
+$response = curl_exec($ch);
+$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+curl_close($ch);
+
+if ($http_code === 200) {
+    $data = json_decode($response, true);
+    $images = [];
+
+    foreach ($data as $file) {
+        if ($file['type'] === 'file') {
+            $name = $file['name'];
+            $ext = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+            if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp'])) {
+                // Palautetaan raaka URL tai pelkkä nimi
+                // GitHub raw URL: https://raw.githubusercontent.com/owner/repo/branch/path/filename
+                $images[] = "https://raw.githubusercontent.com/$owner/$repo/main/$path/" . $name;
+            }
+        }
+    }
+
+    $output = json_encode($images);
+    file_put_contents($cache_file, $output);
+    echo $output;
+} else {
+    // Jos API epäonnistuu (esim. kansiota ei vielä ole tai rate limit), palautetaan tyhjä lista
+    echo json_encode([]);
+}
+?>
