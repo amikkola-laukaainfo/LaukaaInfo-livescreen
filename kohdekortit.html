@@ -376,6 +376,8 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
   </div>
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js?v=20260713"></script>
 <script>
 const SOURCES = [
   'kohdekortit/kohteet.json',
@@ -404,6 +406,70 @@ let activeFilter = 'all';
 async function loadAll() {
   const results = await Promise.allSettled(SOURCES.map(s => fetch(s).then(r => r.json())));
   results.forEach(r => { if (r.status === 'fulfilled') allItems.push(...r.value); });
+  
+  if (window.LaukaaSupabase) {
+    try {
+      const { data, error } = await window.LaukaaSupabase
+          .from('offers')
+          .select('*')
+          .eq('status', 'active');
+      
+      if (!error && data) {
+        data.forEach(dbItem => {
+           let type = 'offer';
+           if (dbItem.taxonomy && dbItem.taxonomy.includes('Tapahtuma')) {
+               type = 'event';
+           } else if (dbItem.taxonomy && dbItem.taxonomy.includes('Tarjous')) {
+               type = 'offer';
+           } else if (dbItem.valid_from && dbItem.venue) {
+               type = 'event';
+           }
+
+           const item = {
+             id: dbItem.id,
+             type: type,
+             name: dbItem.name,
+             shortDescription: dbItem.short_description,
+             description: dbItem.description,
+             images: dbItem.image_url ? [dbItem.image_url] : [],
+             tags: dbItem.tags || [],
+             event: null,
+             offer: null,
+             location: {
+               venue: dbItem.venue,
+               address: dbItem.address,
+               municipality: dbItem.municipality
+             },
+             contact: {
+               email: dbItem.contact_email,
+               phone: dbItem.contact_phone,
+               website: dbItem.website
+             }
+           };
+
+           if (type === 'event') {
+             item.event = {
+               startDate: dbItem.valid_from,
+               endDate: dbItem.valid_until,
+               venue: dbItem.venue,
+               ticketUrl: dbItem.ticket_url,
+               organizer: dbItem.organizer
+             };
+           } else {
+             item.offer = {
+               validFrom: dbItem.valid_from,
+               validUntil: dbItem.valid_until
+             };
+           }
+
+           allItems.push(item);
+        });
+      }
+    } catch (e) {
+      console.error("Supabase fetch failed", e);
+    }
+  }
+
   render();
 }
 

@@ -7,9 +7,11 @@
 
     <!-- Fonts & Styles -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Outfit:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js?v=20260713"></script>
 
     <link rel="stylesheet" href="style.css?v=20260420-2">
 
@@ -792,6 +794,69 @@
                 const tarjoukset = await tarjouksetRes.json();
                 
                 kohteet = [...perusKohteet, ...tarjoukset];
+
+                if (window.LaukaaSupabase) {
+                    try {
+                        const { data, error } = await window.LaukaaSupabase
+                            .from('offers')
+                            .select('*')
+                            .eq('status', 'active');
+                        
+                        if (!error && data) {
+                            data.forEach(dbItem => {
+                               let type = 'offer';
+                               if (dbItem.taxonomy && dbItem.taxonomy.includes('Tapahtuma')) {
+                                   type = 'event';
+                               } else if (dbItem.taxonomy && dbItem.taxonomy.includes('Tarjous')) {
+                                   type = 'offer';
+                               } else if (dbItem.valid_from && dbItem.venue) {
+                                   type = 'event';
+                               }
+
+                               const item = {
+                                 id: dbItem.id,
+                                 type: type,
+                                 name: dbItem.name,
+                                 shortDescription: dbItem.short_description,
+                                 description: dbItem.description,
+                                 images: dbItem.image_url ? [dbItem.image_url] : [],
+                                 tags: dbItem.tags || [],
+                                 event: null,
+                                 offer: null,
+                                 location: {
+                                   venue: dbItem.venue,
+                                   address: dbItem.address,
+                                   municipality: dbItem.municipality
+                                 },
+                                 contact: {
+                                   email: dbItem.contact_email,
+                                   phone: dbItem.contact_phone,
+                                   website: dbItem.website
+                                 }
+                               };
+
+                               if (type === 'event') {
+                                 item.event = {
+                                   startDate: dbItem.valid_from,
+                                   endDate: dbItem.valid_until,
+                                   venue: dbItem.venue,
+                                   ticketUrl: dbItem.ticket_url,
+                                   organizer: dbItem.organizer
+                                 };
+                               } else {
+                                 item.offer = {
+                                   validFrom: dbItem.valid_from,
+                                   validUntil: dbItem.valid_until
+                                 };
+                               }
+
+                               kohteet.push(item);
+                            });
+                        }
+                    } catch (e) {
+                        console.error("Supabase fetch failed", e);
+                    }
+                }
 
                 // Suodata pois yli viikon vanhat tapahtumat ja menneet tarjoukset
                 const now = new Date();

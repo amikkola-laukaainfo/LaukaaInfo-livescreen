@@ -262,6 +262,11 @@
                     <span class="iconify" data-icon="lucide:building"></span> Jätä yritysilmoitus
                 </a>
             </div>
+            <div class="tabs-row" id="company-ads-tabs">
+                <button class="tab-btn active" onclick="switchCompanyAdsTab('encounters', this)">Kohtaamiset (Web)</button>
+                <button class="tab-btn" onclick="switchCompanyAdsTab('posts', this)">Uutiset (App)</button>
+                <button class="tab-btn" onclick="switchCompanyAdsTab('offers', this)">Tapahtumat & Tarjoukset (App)</button>
+            </div>
             <div id="company-ads-list" class="ad-list">
                 <!-- Sisältö ladataan JS:llä -->
             </div>
@@ -455,34 +460,107 @@
         }
     }
 
+    let currentCompanyAdsStatus = 'encounters';
+    let currentCompanyIds = [];
+
+    function switchCompanyAdsTab(status, btn) {
+        currentCompanyAdsStatus = status;
+        document.querySelectorAll('#company-ads-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        loadCompanyAds(currentCompanyIds);
+    }
+
     async function loadCompanyAds(companyIds) {
+        currentCompanyIds = companyIds;
         const list = document.getElementById('company-ads-list');
+        list.innerHTML = '<div style="text-align:center; padding:2rem;"><span class="iconify spinner" data-icon="lucide:loader-2"></span></div>';
         
         try {
-            // Lisätään prefix "company-" hakua varten jos sitä käytetään datassa
-            const searchIds = [];
-            companyIds.forEach(id => {
-                searchIds.push(id);
-                searchIds.push(`company-${id}`);
-            });
-
-            const { data, error } = await window.LaukaaSupabase
-                .from('encounters')
-                .select('*')
-                .in('company_id', searchIds)
-                .order('created_at', { ascending: false });
-            
-            if (error) throw error;
-
             // Aseta napin linkki ensimmäiselle yritykselle (yksinkertaistus)
             if (companyIds.length > 0) {
                 document.getElementById('btn-add-company-ad').href = `jata-ilmoitus.html?company_id=${companyIds[0]}`;
             }
 
-            renderAdsList(data, list, 'Yrityksellä ei ole aktiivisia ilmoituksia.');
+            if (currentCompanyAdsStatus === 'encounters') {
+                // Lisätään prefix "company-" hakua varten jos sitä käytetään datassa
+                const searchIds = [];
+                companyIds.forEach(id => {
+                    searchIds.push(id);
+                    searchIds.push(`company-${id}`);
+                });
+
+                const { data, error } = await window.LaukaaSupabase
+                    .from('encounters')
+                    .select('*')
+                    .in('company_id', searchIds)
+                    .order('created_at', { ascending: false });
+                
+                if (error) throw error;
+                renderAdsList(data, list, 'Yrityksellä ei ole kohtaamisia.');
+            } else if (currentCompanyAdsStatus === 'posts') {
+                const { data, error } = await window.LaukaaSupabase
+                    .from('posts')
+                    .select('*')
+                    .in('business_id', companyIds)
+                    .order('created_at', { ascending: false });
+                
+                if (error) throw error;
+                renderAppAdsList(data, list, 'posts', 'Yrityksellä ei ole uutisia (App).');
+            } else if (currentCompanyAdsStatus === 'offers') {
+                const { data, error } = await window.LaukaaSupabase
+                    .from('offers')
+                    .select('*')
+                    .in('business_id', companyIds)
+                    .order('created_at', { ascending: false });
+                
+                if (error) throw error;
+                renderAppAdsList(data, list, 'offers', 'Yrityksellä ei ole tapahtumia tai tarjouksia (App).');
+            }
         } catch (err) {
             console.error(err);
+            list.innerHTML = '<div class="empty-state">Virhe haettaessa ilmoituksia.</div>';
         }
+    }
+
+    function renderAppAdsList(ads, container, type, emptyMsg) {
+        if (!ads || ads.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="iconify empty-state-icon" data-icon="lucide:inbox"></div>
+                    <p>${emptyMsg}</p>
+                </div>
+            `;
+            return;
+        }
+
+        let html = '';
+        ads.forEach(ad => {
+            const dateStr = ad.created_at ? new Date(ad.created_at).toLocaleDateString('fi-FI') : '';
+            const title = ad.title || ad.name || 'Nimetön';
+            const statusClass = 'status-active';
+            let statusText = '';
+            if (type === 'posts') {
+                statusText = ad.type === 'event' ? 'Tapahtuma (App)' : (ad.type === 'offer' ? 'Tarjous (App)' : 'Uutinen (App)');
+            } else {
+                statusText = 'Tarjous/Tapahtuma (App)';
+            }
+
+            html += `
+                <div class="ad-item">
+                    <div class="ad-info">
+                        <h3>${escapeHtml(title)}</h3>
+                        <div class="ad-meta">
+                            <span class="ad-status ${statusClass}">${statusText}</span>
+                            <span>${dateStr}</span>
+                        </div>
+                    </div>
+                    <div class="ad-actions">
+                        <span style="font-size: 0.8rem; color: #64748b; font-style: italic; align-self: center;">Hallinnointi Android-sovelluksesta</span>
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
     }
     async function loadLocationAds(locationIds) {
         const list = document.getElementById('location-ads-list');
