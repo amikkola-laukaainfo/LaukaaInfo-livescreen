@@ -97,7 +97,8 @@ const LkiFeed = (() => {
     const dateStr = formatDate(item.publish_at);
     const title = escapeHtml(item.title);
     const desc = linkify(escapeHtml(item.description));
-    let imgSrc = item.image || 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80';
+    // Tukee sekä content.json ("image") että Supabase posts-taulun ("image_url") kenttiä
+    let imgSrc = item.image || item.image_url || 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80';
 
     // Robust video detection: if image is a youtube thumbnail OR a direct link, extract ID
     let video_id = item.video_id;
