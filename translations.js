@@ -559,7 +559,10 @@ const UI_TRANSLATIONS = {
         "pe_cta_p1": "LaukaaInfo on paikallinen digitaalinen palvelu, jonka tavoitteena on tehdä alueen palveluista helpommin löydettäviä.",
         "pe_cta_h3": "Ota yhteyttä",
         "pe_cta_p2": "Kiinnostuitko näkyvyydestä tai yhteistyöstä? Ota yhteyttä ja kysy lisää!",
-        "pe_cta_app": "Android-sovellus: Lataa Google Playsta"
+        "pe_cta_app": "Android-sovellus: Lataa Google Playsta",
+        "feed_open_publications": "Avaa julkaisujen syöte",
+        "feed_events_and_offers": "Tapahtumat ja tarjoukset",
+        "nav_leave_notice_app": "Jätä ilmoitus sovelluksen kautta"
     },
     en: {
         "nav_home": "Home",
@@ -1112,7 +1115,10 @@ const UI_TRANSLATIONS = {
         "pe_cta_p1": "LaukaaInfo is a local digital service whose goal is to make area services easier to find.",
         "pe_cta_h3": "Contact us",
         "pe_cta_p2": "Interested in visibility or collaboration? Get in touch and ask for more!",
-        "pe_cta_app": "Android app: Download on Google Play"
+        "pe_cta_app": "Android app: Download on Google Play",
+        "feed_open_publications": "Open publications feed",
+        "feed_events_and_offers": "Events and offers",
+        "nav_leave_notice_app": "Leave a notice via the app"
     }
 };
 
