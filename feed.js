@@ -129,6 +129,11 @@ const LkiFeed = (() => {
     }
     const isVideo = !!video_id;
 
+    // Use YouTube thumbnail if no explicit image was provided
+    if (isVideo && video_id && (imgSrc === 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80' || !imgSrc)) {
+        imgSrc = `https://img.youtube.com/vi/${video_id}/hqdefault.jpg`;
+    }
+
     let socialHtml = '';
     const socials = [];
     if (item.website_url)   socials.push(`<a href="${item.website_url}" target="_blank" class="lki-social-icon" title="Verkkosivut">🌐</a>`);
@@ -601,7 +606,16 @@ const LkiFeed = (() => {
       const card = e.target.closest('.lki-card');
 
       if (img && card) {
-        // NEW: Jos tämä on yrityskortti TAI sillä on rikkaampaa mediaa, avataan uusi Media Modal
+        if (card.classList.contains('lki-card--video')) {
+            e.preventDefault();
+            e.stopPropagation();
+            const vid = card.dataset.videoId;
+            const isShorts = card.dataset.isShorts === 'true';
+            openLightbox('', '', vid, isShorts);
+            return;
+        }
+
+        // NEW: Jos tämä on yrityskortti TAI sillä on rikkaampaa mediaa (mutta ei videota, jota juuri klikattiin), avataan uusi Media Modal
         const itemId = card.dataset.id;
         const item = currentItems.find(i => i.id == itemId); // Huom: == jotta string/number-id täsmää
         const isBusiness = item && (item.business_id || item.type === 'business' || item.type === 'community');
@@ -612,14 +626,7 @@ const LkiFeed = (() => {
         } else {
             e.preventDefault();
             e.stopPropagation();
-            
-            if (card.classList.contains('lki-card--video')) {
-                const vid = card.dataset.videoId;
-                const isShorts = card.dataset.isShorts === 'true';
-                openLightbox('', '', vid, isShorts);
-            } else {
-                openLightbox(img.src, img.alt);
-            }
+            openLightbox(img.src, img.alt);
             return;
         }
       }
