@@ -359,10 +359,15 @@ window.LkiModal = (function() {
         let feedVideoUrl = company.video_id ? `https://www.youtube.com/embed/${company.video_id}` : null;
         if (!feedVideoUrl && company.youtube_url) {
             let vid = '';
-            if (company.youtube_url.includes('youtube.com/watch?v=')) {
-                vid = company.youtube_url.split('v=')[1]?.split('&')[0];
-            } else if (company.youtube_url.includes('youtu.be/')) {
-                vid = company.youtube_url.split('youtu.be/')[1]?.split('?')[0];
+            const ytUrl = company.youtube_url;
+            if (ytUrl.includes('youtube.com/watch?v=')) {
+                vid = ytUrl.split('v=')[1]?.split('&')[0];
+            } else if (ytUrl.includes('youtu.be/')) {
+                vid = ytUrl.split('youtu.be/')[1]?.split('?')[0];
+            } else if (ytUrl.includes('youtube.com/shorts/')) {
+                vid = ytUrl.split('/shorts/')[1]?.split('?')[0]?.split('&')[0];
+            } else if (ytUrl.includes('youtube.com/embed/')) {
+                vid = ytUrl.split('/embed/')[1]?.split('?')[0];
             }
             if (vid) {
                 feedVideoUrl = `https://www.youtube.com/embed/${vid}`;
@@ -374,9 +379,9 @@ window.LkiModal = (function() {
             }
         }
 
-        // If no media, use logo or default (also check singular 'image')
+        // If no media, use logo or default (also check singular 'image' and 'image_url' from Supabase)
         if (mediaItems.length === 0) {
-            const fallbackImg = company.images?.[0] || company.image || (company.logo && company.logo !== '-' ? company.logo : 'logo.png');
+            const fallbackImg = company.images?.[0] || company.image || company.image_url || (company.logo && company.logo !== '-' ? company.logo : 'logo.png');
             mediaItems.push({ type: 'image', url: fallbackImg });
         }
 

@@ -605,7 +605,7 @@ const LkiFeed = (() => {
         const itemId = card.dataset.id;
         const item = currentItems.find(i => i.id == itemId); // Huom: == jotta string/number-id täsmää
         const isBusiness = item && (item.business_id || item.type === 'business' || item.type === 'community');
-        const hasRichMedia = item && ((item.images && item.images.length > 0) || (item.videos && item.videos.length > 0) || item.video_id);
+        const hasRichMedia = item && ((item.images && item.images.length > 0) || (item.videos && item.videos.length > 0) || item.video_id || item.youtube_url);
 
         if (isBusiness || hasRichMedia) {
             // Annetaan tapahtuman jatkaa alempaan card-käsittelijään, joka avaa Media Modalin
@@ -634,7 +634,7 @@ const LkiFeed = (() => {
         if (item && window.LkiModal) {
             const isBusiness = item.business_id || item.type === 'business' || item.type === 'community';
             // Only open modal if it's a "premium" or business item
-            if (isBusiness || (item.images && item.images.length > 0) || (item.videos && item.videos.length > 0) || item.video_id) {
+            if (isBusiness || (item.images && item.images.length > 0) || (item.videos && item.videos.length > 0) || item.video_id || item.youtube_url) {
                 LkiModal.open({
                    ...item,
                    nimi: item.title,
