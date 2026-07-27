@@ -116,6 +116,16 @@ const LkiFeed = (() => {
             }
         }
     }
+    
+    // Fallback: check youtube_url directly
+    if (!video_id && item.youtube_url) {
+        for (const p of ytPatterns) {
+            if (item.youtube_url.includes(p.key)) {
+                video_id = p.parser(item.youtube_url);
+                if (video_id) break;
+            }
+        }
+    }
     const isVideo = !!video_id;
 
     let socialHtml = '';
