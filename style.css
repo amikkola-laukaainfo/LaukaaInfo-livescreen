@@ -5527,7 +5527,6 @@ footer {
 }
 
 .need-card-content {
-    position: relative;
     z-index: 3;
     padding: 3rem;
     color: white;
@@ -5578,6 +5577,16 @@ footer {
     background: var(--primary-blue);
     color: white;
     transform: translateY(-3px);
+}
+
+.need-card .btn-need::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 10;
 }
 
 .need-card .arrow {
