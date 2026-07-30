@@ -1828,8 +1828,7 @@
             || window.__LAUKAAINFO_AI_SEO__
             || null;
         if (!aiSeo) {
-            const aiTabBtn = document.getElementById('btn-tab-ai-info');
-            if (aiTabBtn) aiTabBtn.style.display = 'none';
+            // Ei piiloteta tabia – Supabase saattaa silti ladata siihen sisältöä
             return;
         }
 
@@ -1845,8 +1844,10 @@
 
         // Kooste / yhteenveto
         const aiSummaryFull = document.getElementById('display-ai-summary-full');
+        const aiSummaryFullSection = document.getElementById('ai-summary-full-section');
         if (aiSummaryFull && aiSeo.ai_summary) {
             aiSummaryFull.textContent = aiSeo.ai_summary;
+            if (aiSummaryFullSection) aiSummaryFullSection.style.display = 'block';
         }
 
         // Kohderyhmät
