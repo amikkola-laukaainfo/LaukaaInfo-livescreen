@@ -1715,21 +1715,30 @@
     }
 
     async function renderRelatedPlacesForYritys(companyId) {
-        if (!window.LaukaaSupabase) return;
         try {
             const rawId = String(companyId).replace('company-', '');
-            
-            // Haetaan relaatiot (missä company_id täsmää ja on vahvistettu/hyväksytty)
-            const { data, error } = await window.LaukaaSupabase
-                .from('place_company_relations')
-                .select('place_id, context, places(name, canonical_name, type, municipality)')
-                .eq('company_id', rawId);
-                
-            if (error) {
-                console.error("Virhe haettaessa liittyviä paikkoja:", error);
+
+            // Paikkaverkko-data on eri Supabase-projektissa (profilointi)
+            const PAIKKA_URL = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
+            const PAIKKA_KEY = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
+
+            const res = await fetch(
+                `${PAIKKA_URL}/rest/v1/place_company_relations?select=place_id,context,places(name,canonical_name,type,municipality)&company_id=eq.${rawId}`,
+                {
+                    headers: {
+                        'apikey': PAIKKA_KEY,
+                        'Authorization': `Bearer ${PAIKKA_KEY}`,
+                        'Accept': 'application/json'
+                    }
+                }
+            );
+
+            if (!res.ok) {
+                console.warn('Related places fetch failed:', res.status);
                 return;
             }
-            
+
+            const data = await res.json();
             const section = document.getElementById('bc-related-places-section');
             const list = document.getElementById('bc-related-places-list');
             
