@@ -1626,6 +1626,9 @@
 
         // 15. Kohtaamiset integraatio
         renderKohtaamisetForYritys(company);
+
+        // 16. Liittyvät paikat integraatio
+        renderRelatedPlacesForYritys(company.id);
     }
 
     async function renderKohtaamisetForYritys(company) {
@@ -1708,6 +1711,57 @@
             }
         } catch(e) {
             console.error('Kohtaamiset error:', e);
+        }
+    }
+
+    async function renderRelatedPlacesForYritys(companyId) {
+        if (!window.LaukaaSupabase) return;
+        try {
+            const rawId = String(companyId).replace('company-', '');
+            
+            // Haetaan relaatiot (missä company_id täsmää ja on vahvistettu/hyväksytty)
+            const { data, error } = await window.LaukaaSupabase
+                .from('place_company_relations')
+                .select('place_id, context, places(name, canonical_name, type, municipality)')
+                .eq('company_id', rawId);
+                
+            if (error) {
+                console.error("Virhe haettaessa liittyviä paikkoja:", error);
+                return;
+            }
+            
+            const section = document.getElementById('bc-related-places-section');
+            const list = document.getElementById('bc-related-places-list');
+            
+            if (data && data.length > 0 && section && list) {
+                list.innerHTML = '';
+                
+                const linkBase = window.location.pathname.includes('/yritys/') ? '../' : '';
+                
+                data.forEach(rel => {
+                    const place = rel.places;
+                    if (!place) return;
+                    
+                    const placeName = place.canonical_name || place.name || 'Tuntematon paikka';
+                    const contextInfo = rel.context ? `<div style="font-size: 0.85rem; color: #4b5563; margin-top: 4px;">${rel.context}</div>` : '';
+                    
+                    list.innerHTML += `
+                        <a href="${linkBase}tietoa-paikasta.html?id=${rel.place_id}" style="display:block; text-decoration:none; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:12px; padding:12px; color:inherit; transition:background 0.2s;">
+                            <div style="font-weight: 700; color: #065f46; font-size: 1.05rem;">${placeName}</div>
+                            <div style="font-size: 0.75rem; text-transform: uppercase; color: #059669; font-weight: 800; margin-top: 2px;">
+                                ${place.type || 'Paikka'} • ${place.municipality || 'Laukaa'}
+                            </div>
+                            ${contextInfo}
+                        </a>
+                    `;
+                });
+                
+                if (list.innerHTML.trim() !== '') {
+                    section.style.display = 'block';
+                }
+            }
+        } catch(e) {
+            console.error('Related places error:', e);
         }
     }
 
