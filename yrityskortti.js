@@ -671,7 +671,12 @@
                 </span>
             `;
             shareBtn.onclick = () => {
-                const shareUrl = window.location.href;
+                const urlObj = new URL(window.location.href);
+                const activeTabBtn = document.querySelector('.tab-btn.active');
+                if (activeTabBtn) {
+                    urlObj.searchParams.set('tab', activeTabBtn.id.replace('btn-', ''));
+                }
+                const shareUrl = urlObj.toString();
 
                 const shareData = {
                     title: document.title,
@@ -1153,12 +1158,26 @@
         const tabAi = document.getElementById('tab-ai-info');
 
         if (btnBc && btnEp && tabBc && tabEp) {
-            btnBc.classList.add('active');
+            const urlTabParams = new URLSearchParams(window.location.search);
+            const activeTabParam = urlTabParams.get('tab');
+            
+            btnBc.classList.remove('active');
             btnEp.classList.remove('active');
             if (btnAi) btnAi.classList.remove('active');
-            tabBc.style.display = 'flex';
+            tabBc.style.display = 'none';
             tabEp.style.display = 'none';
             if (tabAi) tabAi.style.display = 'none';
+
+            if (activeTabParam === 'tab-extended-profile') {
+                btnEp.classList.add('active');
+                tabEp.style.display = 'block';
+            } else if (activeTabParam === 'tab-ai-info' && btnAi) {
+                btnAi.classList.add('active');
+                tabAi.style.display = 'block';
+            } else {
+                btnBc.classList.add('active');
+                tabBc.style.display = 'flex';
+            }
 
             btnBc.onclick = (e) => {
                 e.preventDefault();
