@@ -1555,6 +1555,7 @@
 
         // 14. AI & SEO -lisädata (ai_and_seo)
         renderAiAndSeo(company);
+        loadAiContentFromSupabase(company.id);
 
         // 15. Kohtaamiset integraatio
         renderKohtaamisetForYritys(company);
@@ -2411,3 +2412,161 @@
         }
     };
 })();
+
+// AI Content Loader for Supabase (Tab 3: Lisätiedot)
+async function loadAiContentFromSupabase(companyId) {
+    if (!window.LaukaaSupabase) {
+        console.warn("Supabase ei ole alustettu.");
+        const spinner = document.getElementById('ai-loading-spinner');
+        if (spinner) spinner.innerHTML = "Järjestelmävirhe: Tietokantayhteyttä ei löydy.";
+        return;
+    }
+
+    const container = document.getElementById('ai-dynamic-content-container');
+    const spinner = document.getElementById('ai-loading-spinner');
+    if (!container) return;
+
+    try {
+        const cleanId = String(companyId).replace('company-', '');
+        const prefixedId = 'company-' + cleanId;
+        
+        // Haetaan data, yritetään matchausta molemmilla ID-formaateilla (varotoimenpide)
+        const { data, error } = await window.LaukaaSupabase
+            .from('organization_ai_content')
+            .select('*')
+            .in('organization_id', [cleanId, prefixedId, companyId])
+            .eq('status', 'published')
+            .order('version_number', { ascending: false });
+
+        if (error) throw error;
+        
+        if (spinner) spinner.style.display = 'none';
+
+        if (!data || data.length === 0) {
+            container.innerHTML = '<div style="text-align:center; padding: 3rem; color: #64748b;">Ei julkaistuja lisätietoja saatavilla.</div>';
+            return;
+        }
+
+        // Group by content type to get the latest version only for each type
+        const latestContent = {};
+        for (const item of data) {
+            if (!latestContent[item.content_type]) {
+                latestContent[item.content_type] = item;
+            }
+        }
+
+        let html = '';
+
+        // Renderöintilogiikka eri tyypeille
+        const renderers = {
+            'summary': (item) => `
+                <div class="description-section" style="margin-bottom: 2.5rem;">
+                    <h2 style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="iconify" data-icon="material-symbols-light:auto-awesome" style="font-size: 1.2em; color: var(--primary-blue);"></span>
+                        Yrityksen kuvaus
+                    </h2>
+                    <div style="font-size: 1.1rem; line-height: 1.8; color: #2d3748; background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 6px 30px rgba(0,0,0,0.06); border-left: 4px solid var(--primary-blue); white-space: pre-wrap;">${item.content}</div>
+                </div>
+            `,
+            'faq': (item) => {
+                let parsed = [];
+                try { parsed = JSON.parse(item.content); } catch (e) { return renderers['default'](item, 'Usein kysytyt kysymykset'); }
+                if (!Array.isArray(parsed)) return renderers['default'](item, 'Usein kysytyt kysymykset');
+                
+                const faqHtml = parsed.map(f => `
+                    <details style="background: #f8fafc; padding: 1rem 1.5rem; border-radius: 12px; margin-bottom: 0.5rem; border: 1px solid #e2e8f0; cursor: pointer;">
+                        <summary style="font-weight: 600; color: #0f172a; outline: none; display: flex; justify-content: space-between; align-items: center;">
+                            ${f.q}
+                        </summary>
+                        <p style="margin-top: 1rem; color: #475569; line-height: 1.6;">${f.a}</p>
+                    </details>
+                `).join('');
+                
+                return `
+                <div class="description-section" style="margin-bottom: 2.5rem;">
+                    <h2 style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="iconify" data-icon="material-symbols-light:help-outline" style="font-size: 1.2em; color: var(--primary-blue);"></span>
+                        Usein kysytyt kysymykset
+                    </h2>
+                    <div style="background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 6px 30px rgba(0,0,0,0.06);">${faqHtml}</div>
+                </div>
+                `;
+            },
+            'seo': (item) => renderers['default'](item, 'Hakukoneoptimointiteksti', 'material-symbols-light:travel-explore'),
+            'google_business': (item) => renderers['default'](item, 'Google Yritys -kuvaus', 'material-symbols-light:storefront'),
+            'ai_profile': (item) => renderers['default'](item, 'Tekoäly-hakuprofiili', 'material-symbols-light:robot'),
+            'default': (item, defaultTitle, icon = 'material-symbols-light:info-outline') => `
+                <div class="description-section" style="margin-bottom: 2.5rem;">
+                    <h2 style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="iconify" data-icon="${icon}" style="font-size: 1.2em; color: var(--primary-blue);"></span>
+                        ${item.title || defaultTitle || item.content_type}
+                    </h2>
+                    <div style="background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 6px 30px rgba(0,0,0,0.06); white-space: pre-wrap; line-height: 1.8; color: #2d3748;">${item.content}</div>
+                </div>
+            `
+        };
+
+        // Renderöidään halutussa järjestyksessä
+        const order = ['summary', 'seo', 'faq', 'google_business', 'ai_profile'];
+        const rendered = new Set();
+        
+        for (const type of order) {
+            if (latestContent[type]) {
+                const renderer = renderers[type] || renderers['default'];
+                html += renderer(latestContent[type]);
+                rendered.add(type);
+                
+                // Päivitetään yhteenveto myös käyntikortti-tabiin
+                if (type === 'summary') {
+                    const aiSummaryBlock = document.getElementById('bc-ai-summary-block');
+                    const aiSummaryText = document.getElementById('bc-ai-summary-text');
+                    if (aiSummaryBlock && aiSummaryText) {
+                        aiSummaryText.textContent = latestContent[type].content;
+                        aiSummaryBlock.style.display = 'block';
+                    }
+                }
+            }
+        }
+        
+        // Renderöidään loput
+        for (const type in latestContent) {
+            if (!rendered.has(type) && type !== 'meta_description' && type !== 'schema') {
+                const renderer = renderers['default'];
+                html += renderer(latestContent[type]);
+            }
+        }
+        
+        // Inject schema jos löytyy
+        if (latestContent['schema']) {
+            const script = document.createElement('script');
+            script.type = 'application/ld+json';
+            script.textContent = latestContent['schema'].content;
+            document.head.appendChild(script);
+        }
+        
+        // Inject meta description jos löytyy
+        if (latestContent['meta_description']) {
+            let metaDesc = document.querySelector('meta[name="description"]');
+            if (metaDesc) {
+                metaDesc.setAttribute('content', latestContent['meta_description'].content);
+            } else {
+                metaDesc = document.createElement('meta');
+                metaDesc.name = 'description';
+                metaDesc.content = latestContent['meta_description'].content;
+                document.head.appendChild(metaDesc);
+            }
+        }
+
+        container.innerHTML = html;
+        
+        // Varmista että Lisätiedot-tab näkyy valikossa jos siinä on sisältöä
+        if (html) {
+            const aiTabBtn = document.getElementById('btn-tab-ai-info');
+            if (aiTabBtn) aiTabBtn.style.display = 'inline-flex';
+        }
+
+    } catch (e) {
+        console.error("Virhe AI-sisällön latauksessa:", e);
+        if (spinner) spinner.innerHTML = "Virhe tietojen latauksessa.";
+    }
+}
