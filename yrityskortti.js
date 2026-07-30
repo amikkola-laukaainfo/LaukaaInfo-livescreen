@@ -2795,9 +2795,13 @@ window.loadRelatedPlaces = async function(companyId) {
 
     if (!loadingEl || !listEl || !emptyEl) return;
 
-    const sb = window.LaukaaSupabase;
+    if (!aiSupabaseClient && typeof supabase !== 'undefined') {
+        aiSupabaseClient = supabase.createClient(AI_SUPABASE_URL, AI_SUPABASE_KEY);
+    }
+    
+    const sb = aiSupabaseClient;
     if (!sb) {
-        if (loadingEl) loadingEl.innerHTML = '<p style="color:#ef4444;">Supabase ei ole alustettu.</p>';
+        if (loadingEl) loadingEl.innerHTML = '<p style="color:#ef4444;">Supabase (AI) ei ole alustettu.</p>';
         return;
     }
 
