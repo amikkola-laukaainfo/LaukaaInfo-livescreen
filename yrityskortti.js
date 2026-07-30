@@ -1575,6 +1575,7 @@
                 if (box && list) {
                     list.innerHTML = '';
                     ownEncounters.forEach(ad => {
+                        const cat = categories[ad.type] || categories['need_help'];
                         const linkBase = window.location.pathname.includes('/yritys/') ? '../' : '';
                         list.innerHTML += `<a href="${linkBase}ilmoituskortti.html?id=${ad.id}" style="display:block;text-decoration:none;color:inherit;background:#f8fafc;border-radius:12px;padding:1rem;border-left:4px solid ${cat.color};transition:background 0.2s;margin-bottom:0.75rem;">
                             <div style="font-size:0.75rem;font-weight:800;text-transform:uppercase;color:${cat.color};margin-bottom:0.3rem;">${cat.icon} ${cat.title}</div>
