@@ -22,16 +22,21 @@ try {
         }
 
         const name = props.name.replace(/'/g, "''"); // escape SQL string
-        let type = "Muu kohde";
         
-        if (props.leisure === 'pitch') type = "Urheilukenttä";
-        else if (props.amenity === 'school') type = "Koulu";
-        else if (props.amenity === 'library') type = "Kirjasto";
-        else if (props.amenity === 'place_of_worship') type = "Kirkko/Kappeli";
-        else if (props.amenity === 'clinic') type = "Terveyskeskus";
-        else if (props.tourism === 'attraction') type = "Nähtävyys";
-        else if (props.leisure === 'park') type = "Puisto";
-        else if (props.natural === 'beach' || props.sport === 'beachvolleyball') type = "Uimaranta";
+        // Yksinkertainen canonical_name (voidaan myöhemmin rikastaa AI:lla)
+        let canonicalName = name.replace(/( koulu| kirkko| uimaranta| kylpylä| satama| päiväkoti)/i, "").trim();
+        
+        let type = "AREA"; // Default
+        
+        if (props.leisure === 'pitch' || props.sport) type = "SERVICE";
+        else if (props.amenity === 'school') type = "BUILDING";
+        else if (props.amenity === 'library') type = "SERVICE";
+        else if (props.amenity === 'place_of_worship') type = "LANDMARK";
+        else if (props.amenity === 'clinic') type = "SERVICE";
+        else if (props.tourism === 'attraction') type = "LANDMARK";
+        else if (props.leisure === 'park') type = "AREA";
+        else if (props.natural === 'beach' || props.sport === 'beachvolleyball') type = "NATURE";
+        else if (props.natural || props.leisure === 'nature_reserve') type = "NATURE";
 
         const lat = geom.coordinates[1];
         const lon = geom.coordinates[0];
@@ -40,13 +45,16 @@ try {
         
         // Kuntatieto
         let municipality = props['addr:city'] || DEFAULT_MUNICIPALITY;
+        let municipality_id = municipality.toLowerCase().replace(/ä/g, 'a').replace(/ö/g, 'o').trim();
         
-        // Joillain kohteilla on kylä addr:city kentässä (esim. Lievestuore),
-        // mutta haluamme ehkä pitää 'Laukaa' ja tarkentaa kylää erikseen,
-        // mutta jätetään nyt niin kuin se datassa on, Laukaa-kontekstissa.
+        // Oletetaan että nämä ovat Laukaan kohteita -> importance esim 50, verified = true
+        let importance = 50;
         
-        sqlOutput += `INSERT INTO places (name, type, lat, lon, municipality, source, source_id) `;
-        sqlOutput += `VALUES ('${name}', '${type}', ${lat}, ${lon}, '${municipality}', 'OSM_raw', '${source_id}');\n`;
+        // Jos on Peurunka tai Saraakallio, nostetaan importancea demona
+        if (name.includes('Peurunka') || name.includes('Saraakallio')) importance = 90;
+        
+        sqlOutput += `INSERT INTO places (name, canonical_name, type, lat, lon, municipality, municipality_id, importance, verified, created_by, status, source, source_id) `;
+        sqlOutput += `VALUES ('${name}', '${canonicalName}', '${type}', ${lat}, ${lon}, '${municipality}', '${municipality_id}', ${importance}, true, 'SYSTEM', 'ACTIVE', 'OSM', '${source_id}');\n`;
         count++;
     });
 
