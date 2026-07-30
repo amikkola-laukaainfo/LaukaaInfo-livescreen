@@ -1575,8 +1575,8 @@
                 if (box && list) {
                     list.innerHTML = '';
                     ownEncounters.forEach(ad => {
-                        const cat = categories[ad.type] || categories['need_help'];
-                        list.innerHTML += `<a href="ilmoituskortti.html?id=${ad.id}" style="display:block;text-decoration:none;color:inherit;background:#f8fafc;border-radius:12px;padding:1rem;border-left:4px solid ${cat.color};transition:background 0.2s;margin-bottom:0.75rem;">
+                        const linkBase = window.location.pathname.includes('/yritys/') ? '../' : '';
+                        list.innerHTML += `<a href="${linkBase}ilmoituskortti.html?id=${ad.id}" style="display:block;text-decoration:none;color:inherit;background:#f8fafc;border-radius:12px;padding:1rem;border-left:4px solid ${cat.color};transition:background 0.2s;margin-bottom:0.75rem;">
                             <div style="font-size:0.75rem;font-weight:800;text-transform:uppercase;color:${cat.color};margin-bottom:0.3rem;">${cat.icon} ${cat.title}</div>
                             <h3 style="font-size:1.05rem;color:var(--secondary-blue);margin:0 0 0.4rem 0;">${ad.title}</h3>
                             <div style="font-size:0.85rem;font-weight:600;color:var(--dark-text);">${ad.price_info || ''}</div>
@@ -1622,10 +1622,11 @@
                     container.appendChild(box);
                 }
                 
+                const linkBase = window.location.pathname.includes('/yritys/') ? '../' : '';
                 var cardsHtml = '';
                 related.forEach(function(ad) {
                     var cat = categories[ad.type] || categories['need_help'];
-                    cardsHtml += '<a href="ilmoituskortti.html?id=' + ad.id + '" style="display:block;text-decoration:none;color:inherit;background:#f8fafc;border-radius:12px;padding:1rem;border-left:4px solid ' + cat.color + ';transition:background 0.2s;margin-bottom:0.75rem;">'
+                    cardsHtml += '<a href="' + linkBase + 'ilmoituskortti.html?id=' + ad.id + '" style="display:block;text-decoration:none;color:inherit;background:#f8fafc;border-radius:12px;padding:1rem;border-left:4px solid ' + cat.color + ';transition:background 0.2s;margin-bottom:0.75rem;">'
                         + '<div style="font-size:0.75rem;font-weight:800;text-transform:uppercase;color:' + cat.color + ';margin-bottom:0.3rem;">' + cat.icon + ' ' + cat.title + '</div>'
                         + '<h3 style="font-size:1.05rem;color:var(--secondary-blue);margin:0 0 0.4rem 0;">' + ad.title + '</h3>'
                         + '<div style="font-size:0.85rem;font-weight:600;color:var(--dark-text);">' + (ad.price_info || '') + '</div>'
