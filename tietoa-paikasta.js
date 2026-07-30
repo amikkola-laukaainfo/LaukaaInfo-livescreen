@@ -57,11 +57,15 @@ function renderPlace(place, companyCount) {
     document.getElementById('place-type').textContent = getTypeLabel(place.type);
     document.getElementById('place-municipality').textContent = place.municipality || 'Laukaa';
     
-    // Kuvaus (V1 placeholder)
-    document.getElementById('display-description').innerHTML = 
-        `Tämä on <strong>${place.canonical_name || place.name}</strong>, joka on tyypiltään ${getTypeLabel(place.type).toLowerCase()}. ` +
-        `Sijaintina on ${place.municipality}. <br><br>` + 
-        `<em>Tekoälyn generoima kuvaus tälle paikalle lisätään myöhemmässä vaiheessa.</em>`;
+    // Kuvaus (V2)
+    if (place.description) {
+        document.getElementById('display-description').innerHTML = `<p>${place.description}</p>`;
+    } else {
+        document.getElementById('display-description').innerHTML = 
+            `Tämä on <strong>${place.canonical_name || place.name}</strong>, joka on tyypiltään ${getTypeLabel(place.type).toLowerCase()}. ` +
+            `Sijaintina on ${place.municipality}. <br><br>` + 
+            `<em>Tekoälyn generoima kuvaus tälle paikalle lisätään myöhemmässä vaiheessa.</em>`;
+    }
 
     // Tilastot
     document.getElementById('stat-companies').textContent = companyCount;
