@@ -9,8 +9,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     try {
+        const AI_SUPABASE_URL = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
+        const AI_SUPABASE_KEY = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
+        const aiSb = window.supabase.createClient(AI_SUPABASE_URL, AI_SUPABASE_KEY);
+
         // 2. Hae paikan tiedot Supabasesta
-        const { data: placeData, error: placeError } = await window.LaukaaSupabase
+        const { data: placeData, error: placeError } = await aiSb
             .from('places')
             .select('*')
             .eq('place_id', placeId)
@@ -23,7 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         // 3. Hae yritysten määrä tässä paikassa
-        const { data: relationsData, error: relationsError } = await window.LaukaaSupabase
+        const { data: relationsData, error: relationsError } = await aiSb
             .from('place_company_relations')
             .select('id')
             .eq('place_id', placeId);
