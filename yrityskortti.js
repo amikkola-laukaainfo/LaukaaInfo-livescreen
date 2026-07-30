@@ -2414,9 +2414,16 @@
 })();
 
 // AI Content Loader for Supabase (Tab 3: Lisätiedot)
+const AI_SUPABASE_URL = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
+const AI_SUPABASE_KEY = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
+let aiSupabaseClient = null;
+if (typeof supabase !== 'undefined') {
+    aiSupabaseClient = supabase.createClient(AI_SUPABASE_URL, AI_SUPABASE_KEY);
+}
+
 async function loadAiContentFromSupabase(companyId) {
-    if (!window.LaukaaSupabase) {
-        console.warn("Supabase ei ole alustettu.");
+    if (!aiSupabaseClient) {
+        console.warn("Supabase ei ole alustettu AI-sisällölle.");
         const spinner = document.getElementById('ai-loading-spinner');
         if (spinner) spinner.innerHTML = "Järjestelmävirhe: Tietokantayhteyttä ei löydy.";
         return;
@@ -2430,8 +2437,8 @@ async function loadAiContentFromSupabase(companyId) {
         const cleanId = String(companyId).replace('company-', '');
         const prefixedId = 'company-' + cleanId;
         
-        // Haetaan data, yritetään matchausta molemmilla ID-formaateilla (varotoimenpide)
-        const { data, error } = await window.LaukaaSupabase
+        // Haetaan data uudesta AI-sisällölle omistetusta projektista
+        const { data, error } = await aiSupabaseClient
             .from('organization_ai_content')
             .select('*')
             .in('organization_id', [cleanId, prefixedId, companyId])
