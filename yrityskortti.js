@@ -2451,7 +2451,8 @@ async function loadAiContentFromSupabase(companyId) {
         if (spinner) spinner.style.display = 'none';
 
         if (!data || data.length === 0) {
-            container.innerHTML = '<div style="text-align:center; padding: 3rem; color: #64748b;">Ei julkaistuja lisätietoja saatavilla.</div>';
+            // Ei Supabase-dataa – poistetaan spinner mutta säilytetään muu sisältö
+            if (spinner) spinner.remove();
             return;
         }
 
@@ -2565,7 +2566,13 @@ async function loadAiContentFromSupabase(companyId) {
             }
         }
 
-        container.innerHTML = html;
+        // Lisätään Supabase-sisältö containerin alkuun (prepend) jotta
+        // renderAiAndSeo()-funktion täyttämät elementit jäävät näkyviin perään
+        if (html) {
+            const supabaseDiv = document.createElement('div');
+            supabaseDiv.innerHTML = html;
+            container.prepend(supabaseDiv);
+        }
         
         // Varmista että Lisätiedot-tab näkyy valikossa jos siinä on sisältöä
         if (html) {
