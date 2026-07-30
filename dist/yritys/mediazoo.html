@@ -16,9 +16,9 @@
     <!-- Leaflet Map -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-    <link rel="stylesheet" href="../style.d4f042e8.css?v=20260420-2">
-    <link rel="stylesheet" href="../modal.d4f042e8.css">
-    <script src="../translations.d4f042e8.js?v=20260505"></script>
+    <link rel="stylesheet" href="../style.36018b65.css?v=20260420-2">
+    <link rel="stylesheet" href="../modal.36018b65.css">
+    <script src="../translations.36018b65.js?v=20260505"></script>
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
     <style>
         :root {
@@ -1814,6 +1814,9 @@
                 <button class="tab-btn" id="btn-tab-ai-info">
                     <span class="iconify" data-icon="material-symbols-light:info-outline" style="font-size: 1.2em;"></span> Lisätiedot
                 </button>
+                <button class="tab-btn" id="btn-tab-places">
+                    <span class="iconify" data-icon="material-symbols-light:location-on-outline" style="font-size: 1.2em;"></span> Paikat
+                </button>
             </div>
 
             <!-- Tab 1: Digitaalinen käyntikortti (Compact Business Card) -->
@@ -2125,6 +2128,21 @@
                 </div>
             </div><!-- End #tab-ai-info -->
 
+            <!-- Tab 4: Paikat (place_company_relations from Supabase) -->
+            <div id="tab-places" style="display: none;">
+                <div class="main-content" style="max-width: 900px; margin: 0 auto; padding: 2rem 0;">
+                    <div id="places-loading" style="text-align: center; padding: 3rem; color: #64748b;">
+                        <span class="iconify" data-icon="material-symbols-light:progress-activity" style="font-size: 2em; animation: spin 1s linear infinite;"></span>
+                        <p style="margin-top: 1rem;">Ladataan paikkoja...</p>
+                    </div>
+                    <div id="places-list" style="display: none;"></div>
+                    <div id="places-empty" style="display: none; text-align: center; padding: 3rem; background: white; border-radius: 20px; box-shadow: 0 6px 30px rgba(0,0,0,0.06); color: #64748b;">
+                        <span class="iconify" data-icon="material-symbols-light:location-off-outline" style="font-size: 3em; display: block; margin-bottom: 1rem;"></span>
+                        <p>Tälle yritykselle ei ole vielä kytketty paikkoja.</p>
+                    </div>
+                </div>
+            </div><!-- End #tab-places -->
+
             <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 5rem 0;">
         </div>
 
@@ -2228,8 +2246,8 @@
 
     <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="../script.d4f042e8.js?v=20260301"></script>
-    <script src="../yrityskortti.d4f042e8.js?v=20260304-DEBUG-2"></script>
+    <script src="../script.36018b65.js?v=20260301"></script>
+    <script src="../yrityskortti.36018b65.js?v=20260304-DEBUG-2"></script>
     <script>
         function toggleMarketingDropdown() {
             document.getElementById('marketing-dropdown-container').classList.toggle('open');
@@ -2265,8 +2283,8 @@
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../supabase-config.d4f042e8.js"></script>
-    <script src="../kohtaamiset.d4f042e8.js?v=20260708"></script>
+    <script src="../supabase-config.36018b65.js"></script>
+    <script src="../kohtaamiset.36018b65.js?v=20260708"></script>
 </body>
 
 </html>

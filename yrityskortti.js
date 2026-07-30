@@ -1187,9 +1187,11 @@
         const btnBc = document.getElementById('btn-tab-business-card');
         const btnEp = document.getElementById('btn-tab-extended-profile');
         const btnAi = document.getElementById('btn-tab-ai-info');
+        const btnPlaces = document.getElementById('btn-tab-places');
         const tabBc = document.getElementById('tab-business-card');
         const tabEp = document.getElementById('tab-extended-profile');
         const tabAi = document.getElementById('tab-ai-info');
+        const tabPlaces = document.getElementById('tab-places');
 
         if (btnBc && btnEp && tabBc && tabEp) {
             const urlTabParams = new URLSearchParams(window.location.search);
@@ -1198,9 +1200,11 @@
             btnBc.classList.remove('active');
             btnEp.classList.remove('active');
             if (btnAi) btnAi.classList.remove('active');
+            if (btnPlaces) btnPlaces.classList.remove('active');
             tabBc.style.display = 'none';
             tabEp.style.display = 'none';
             if (tabAi) tabAi.style.display = 'none';
+            if (tabPlaces) tabPlaces.style.display = 'none';
 
             if (activeTabParam === 'tab-extended-profile') {
                 btnEp.classList.add('active');
@@ -1208,6 +1212,10 @@
             } else if (activeTabParam === 'tab-ai-info' && btnAi) {
                 btnAi.classList.add('active');
                 tabAi.style.display = 'block';
+            } else if (activeTabParam === 'tab-places' && btnPlaces) {
+                btnPlaces.classList.add('active');
+                tabPlaces.style.display = 'block';
+                loadRelatedPlaces(company.id);
             } else {
                 btnBc.classList.add('active');
                 tabBc.style.display = 'flex';
@@ -1218,9 +1226,11 @@
                 btnBc.classList.add('active');
                 btnEp.classList.remove('active');
                 if (btnAi) btnAi.classList.remove('active');
+                if (btnPlaces) btnPlaces.classList.remove('active');
                 tabBc.style.display = 'flex';
                 tabEp.style.display = 'none';
                 if (tabAi) tabAi.style.display = 'none';
+                if (tabPlaces) tabPlaces.style.display = 'none';
                 
                 const url = new URL(window.location);
                 url.searchParams.delete('tab');
@@ -1235,9 +1245,11 @@
                 btnEp.classList.add('active');
                 btnBc.classList.remove('active');
                 if (btnAi) btnAi.classList.remove('active');
+                if (btnPlaces) btnPlaces.classList.remove('active');
                 tabBc.style.display = 'none';
                 tabEp.style.display = 'block';
                 if (tabAi) tabAi.style.display = 'none';
+                if (tabPlaces) tabPlaces.style.display = 'none';
                 
                 const url = new URL(window.location);
                 url.searchParams.set('tab', 'tab-extended-profile');
@@ -1253,13 +1265,38 @@
                     btnAi.classList.add('active');
                     btnBc.classList.remove('active');
                     btnEp.classList.remove('active');
+                    if (btnPlaces) btnPlaces.classList.remove('active');
                     tabBc.style.display = 'none';
                     tabEp.style.display = 'none';
                     if (tabAi) tabAi.style.display = 'block';
+                    if (tabPlaces) tabPlaces.style.display = 'none';
                     
                     const url = new URL(window.location);
                     url.searchParams.set('tab', 'tab-ai-info');
                     window.history.replaceState({}, '', url);
+                };
+            }
+            if (btnPlaces && tabPlaces) {
+                let placesLoaded = false;
+                btnPlaces.onclick = (e) => {
+                    e.preventDefault();
+                    btnPlaces.classList.add('active');
+                    btnBc.classList.remove('active');
+                    btnEp.classList.remove('active');
+                    if (btnAi) btnAi.classList.remove('active');
+                    tabBc.style.display = 'none';
+                    tabEp.style.display = 'none';
+                    if (tabAi) tabAi.style.display = 'none';
+                    tabPlaces.style.display = 'block';
+                    
+                    const url = new URL(window.location);
+                    url.searchParams.set('tab', 'tab-places');
+                    window.history.replaceState({}, '', url);
+
+                    if (!placesLoaded) {
+                        placesLoaded = true;
+                        loadRelatedPlaces(company.id);
+                    }
                 };
             }
         }
