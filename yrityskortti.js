@@ -2457,10 +2457,15 @@ async function loadAiContentFromSupabase(companyId) {
             return;
         }
 
-        // Group by content type to get the latest version only for each type
+        // Group by content type to get the latest version only for each type,
+        // BUT allow multiple expert articles and search FAQs
         const latestContent = {};
+        const multipleContentList = [];
+        
         for (const item of data) {
-            if (!latestContent[item.content_type]) {
+            if (['expert_article', 'search_faq'].includes(item.content_type)) {
+                multipleContentList.push(item);
+            } else if (!latestContent[item.content_type]) {
                 latestContent[item.content_type] = item;
             }
         }
@@ -2505,6 +2510,30 @@ async function loadAiContentFromSupabase(companyId) {
             'seo': (item) => renderers['default'](item, 'Hakukoneoptimointiteksti', 'material-symbols-light:travel-explore'),
             'google_business': (item) => renderers['default'](item, 'Google Yritys -kuvaus', 'material-symbols-light:storefront'),
             'ai_profile': (item) => renderers['default'](item, 'Tekoäly-hakuprofiili', 'material-symbols-light:robot'),
+            'expert_article': (item) => `
+                <div class="description-section" style="margin-bottom: 2.5rem;">
+                    <h2 style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="iconify" data-icon="material-symbols-light:auto-awesome" style="font-size: 1.2em; color: var(--primary-blue);"></span>
+                        ${item.topic || 'Asiantuntija-artikkeli'}
+                    </h2>
+                    <div style="background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 6px 30px rgba(0,0,0,0.06);">
+                        ${item.question ? `<h3 style="margin-top: 0; margin-bottom: 1rem; color: #0f172a;">${item.question}</h3>` : ''}
+                        <div style="white-space: pre-wrap; line-height: 1.8; color: #2d3748;">${item.answer || item.content}</div>
+                    </div>
+                </div>
+            `,
+            'search_faq': (item) => `
+                <div class="description-section" style="margin-bottom: 2.5rem;">
+                    <h2 style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="iconify" data-icon="material-symbols-light:help-outline" style="font-size: 1.2em; color: var(--primary-blue);"></span>
+                        Hyödyllistä tietoa${item.topic ? ': ' + item.topic : ''}
+                    </h2>
+                    <div style="background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 6px 30px rgba(0,0,0,0.06);">
+                        <h3 style="margin-top: 0; margin-bottom: 1rem; color: #0f172a;">${item.question || item.title || 'Kysymys'}</h3>
+                        <div style="white-space: pre-wrap; line-height: 1.8; color: #2d3748;">${item.answer || item.content}</div>
+                    </div>
+                </div>
+            `,
             'default': (item, defaultTitle, icon = 'material-symbols-light:info-outline') => `
                 <div class="description-section" style="margin-bottom: 2.5rem;">
                     <h2 style="display: flex; align-items: center; gap: 0.5rem;">
@@ -2544,6 +2573,12 @@ async function loadAiContentFromSupabase(companyId) {
                 const renderer = renderers['default'];
                 html += renderer(latestContent[type]);
             }
+        }
+        
+        // Renderöidään useat asiantuntijasisällöt (esim. expert_article ja search_faq)
+        for (const item of multipleContentList) {
+            const renderer = renderers[item.content_type] || renderers['default'];
+            html += renderer(item);
         }
         
         // Inject schema jos löytyy
