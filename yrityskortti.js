@@ -670,7 +670,7 @@
                     </svg>
                 </span>
             `;
-            shareBtn.onclick = () => {
+            const handleShareClick = (btnElement) => {
                 const urlObj = new URL(window.location.href);
                 const activeTabBtn = document.querySelector('.tab-btn.active');
                 if (activeTabBtn) {
@@ -689,13 +689,47 @@
                 } else {
                     // Fallback: Copy to clipboard
                     navigator.clipboard.writeText(shareUrl).then(() => {
-                        const originalHtml = shareBtn.innerHTML;
-                        shareBtn.innerHTML = '<span style="font-size:0.7rem; color:green; margin-left:0.5rem;">Kopioitu!</span>';
-                        setTimeout(() => { shareBtn.innerHTML = originalHtml; }, 2000);
+                        const originalHtml = btnElement.innerHTML;
+                        if (btnElement.tagName === 'A') {
+                            btnElement.innerHTML = `<span><span class="iconify" data-icon="material-symbols-light:check-circle-outline" style="color:green;"></span></span><strong style="color:green;">Kopioitu!</strong>`;
+                        } else {
+                            btnElement.innerHTML = '<span style="font-size:0.7rem; color:green; margin-left:0.5rem;">Kopioitu!</span>';
+                        }
+                        setTimeout(() => { btnElement.innerHTML = originalHtml; }, 2000);
                     }).catch(err => console.error('Could not copy text: ', err));
                 }
             };
+
+            shareBtn.onclick = () => handleShareClick(shareBtn);
             socialIcons.appendChild(shareBtn);
+
+            // Lisätään Jaa-nappi myös Käyntikortti-välilehdelle (actions-grid)
+            const bcActionsGrid = document.querySelector('#tab-business-card .actions-grid');
+            if (bcActionsGrid) {
+                const bcShare = document.createElement('a');
+                bcShare.href = '#';
+                bcShare.className = 'action-card';
+                bcShare.innerHTML = `<span><span class="iconify" data-icon="material-symbols-light:share-outline"></span></span><strong>Jaa sivu</strong>`;
+                bcShare.onclick = (e) => {
+                    e.preventDefault();
+                    handleShareClick(bcShare);
+                };
+                bcActionsGrid.appendChild(bcShare);
+            }
+
+            // Lisätään Jaa-nappi myös Lisätiedot-välilehdelle (ai-header)
+            const aiHeader = document.querySelector('.ai-header');
+            if (aiHeader) {
+                const aiShare = shareBtn.cloneNode(true);
+                aiShare.onclick = () => handleShareClick(aiShare);
+                aiShare.style.marginLeft = 'auto';
+                aiShare.style.marginRight = '10px';
+                
+                // Varmistetaan että header on flexbox
+                aiHeader.style.display = 'flex';
+                aiHeader.style.alignItems = 'center';
+                aiHeader.appendChild(aiShare);
+            }
         }
 
         // --- RIKASTUSDATA: Ajanvaraus ja Ota yhteyttä ---
@@ -1187,6 +1221,11 @@
                 tabBc.style.display = 'flex';
                 tabEp.style.display = 'none';
                 if (tabAi) tabAi.style.display = 'none';
+                
+                const url = new URL(window.location);
+                url.searchParams.delete('tab');
+                window.history.replaceState({}, '', url);
+                
                 if (window.companyMapInstance) {
                     setTimeout(() => window.companyMapInstance.invalidateSize(true), 50);
                 }
@@ -1199,6 +1238,11 @@
                 tabBc.style.display = 'none';
                 tabEp.style.display = 'block';
                 if (tabAi) tabAi.style.display = 'none';
+                
+                const url = new URL(window.location);
+                url.searchParams.set('tab', 'tab-extended-profile');
+                window.history.replaceState({}, '', url);
+                
                 if (window.companyMapInstance) {
                     setTimeout(() => window.companyMapInstance.invalidateSize(true), 50);
                 }
@@ -1212,6 +1256,10 @@
                     tabBc.style.display = 'none';
                     tabEp.style.display = 'none';
                     if (tabAi) tabAi.style.display = 'block';
+                    
+                    const url = new URL(window.location);
+                    url.searchParams.set('tab', 'tab-ai-info');
+                    window.history.replaceState({}, '', url);
                 };
             }
         }
