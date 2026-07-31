@@ -57,15 +57,35 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             if (!error && places) {
                 // Deduplikointi: poistetaan JSON-kohteet joille löytyy Supabase-paikka < 80m päässä
+                // Mutta tallennetaan poistetun JSON-kohteen kategoria vastaavaan Supabase-paikkaan
                 const DEDUP_THRESHOLD_M = 80;
+
+                // Rakennetaan place_id -> merged_categories -hakemisto
+                // Ensin alustetaan kaikilla paikoilla tyhjä lista
+                const placeCategoryMap = {};
+                places.forEach(p => { placeCategoryMap[p.place_id] = []; });
+
                 allFeatures = allFeatures.filter(f => {
                     if (f.geometry.type !== 'Point') return true;
                     const [fLon, fLat] = f.geometry.coordinates;
-                    const tooClose = places.some(p =>
+                    const matchingPlace = places.find(p =>
                         haversineMeters(fLat, fLon, p.lat, p.lon) < DEDUP_THRESHOLD_M
                     );
-                    if (tooClose) dedupedCount++;
-                    return !tooClose;
+                    if (matchingPlace) {
+                        // Liitetään JSON-kohteen kategoria Supabase-paikkaan
+                        const cat = f.properties && f.properties.category;
+                        if (cat && !placeCategoryMap[matchingPlace.place_id].includes(cat)) {
+                            placeCategoryMap[matchingPlace.place_id].push(cat);
+                        }
+                        dedupedCount++;
+                        return false;
+                    }
+                    return true;
+                });
+
+                // Lisätään merged_categories kentät Supabase-paikka-objekteihin
+                places.forEach(p => {
+                    p.merged_categories = placeCategoryMap[p.place_id] || [];
                 });
 
                 allPlacesData = places;
@@ -91,7 +111,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 3. Populate Categories
     function populateCategories() {
-        const categories = [...new Set(allFeatures.map(f => f.properties.category))].sort();
+        // Kerää kategoriat JSON-kohteista
+        const catSet = new Set(allFeatures.map(f => f.properties.category).filter(Boolean));
+        // Lisää myös Supabase-paikoilta periytyvät merged_categories
+        allPlacesData.forEach(p => {
+            if (p.merged_categories) {
+                p.merged_categories.forEach(cat => catSet.add(cat));
+            }
+        });
+        const categories = [...catSet].sort();
         categories.forEach(cat => {
             const opt = document.createElement('option');
             opt.value = cat;
@@ -122,7 +150,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Suodatetaan Supabase Paikat
         const filteredPlaces = allPlacesData.filter(p => {
             const nameMatch = searchVal === '' || (p.name && p.name.toLowerCase().includes(searchVal)) || (p.canonical_name && p.canonical_name.toLowerCase().includes(searchVal));
-            const catMatch = selectedCat === 'all' || selectedCat === '__places__';
+            // Näytetään paikka jos: kaikki valittu, tai '__places__' valittu,
+            // tai valittu kategoria löytyy paikan merged_categories-listasta
+            const catMatch = selectedCat === 'all' || selectedCat === '__places__' ||
+                (p.merged_categories && p.merged_categories.includes(selectedCat));
             
             return nameMatch && catMatch;
         });
