@@ -11,7 +11,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const AI_SUPABASE_URL = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
         const AI_SUPABASE_KEY = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
-        const aiSb = window.supabase.createClient(AI_SUPABASE_URL, AI_SUPABASE_KEY);
+        window.aiSb = window.supabase.createClient(AI_SUPABASE_URL, AI_SUPABASE_KEY);
+        const aiSb = window.aiSb;
 
         // 2. Hae paikan tiedot Supabasesta
         const { data: placeData, error: placeError } = await aiSb
@@ -241,10 +242,77 @@ async function loadEncountersForPlace(place) {
         
         if (error) {
             console.error('Virhe encounters haussa:', error);
-            return;
         }
         
-        renderEncounters(data || []);
+        let allItems = data || [];
+        
+        // Hae myös tapahtumat, yritysjulkaisut ja tarjoukset
+        if (window.aiSb && place.place_id) {
+            try {
+                // Contents-taulu (JSONB location->>place_id)
+                const { data: contentsData } = await window.aiSb
+                    .from('contents')
+                    .select('*')
+                    .eq('location->>place_id', place.place_id);
+                
+                // Yrityspostaukset
+                const { data: postsData } = await window.aiSb
+                    .from('company_posts')
+                    .select('*')
+                    .eq('place_id', place.place_id);
+                    
+                // Tarjoukset
+                const { data: offersData } = await window.aiSb
+                    .from('offers')
+                    .select('*')
+                    .eq('place_id', place.place_id);
+                    
+                if (contentsData) {
+                    contentsData.forEach(item => {
+                        allItems.push({
+                            id: item.id,
+                            type: item.type === 'EVENT' ? 'event' : item.type === 'OFFER' ? 'offer' : 'content_other',
+                            title: item.name,
+                            description: item.description,
+                            price_info: '',
+                            expires_at: item.metadata?.endDate || null,
+                            url: 'tapahtumakortti.html?id=' + item.id // Korjaa oikeaksi
+                        });
+                    });
+                }
+                
+                if (postsData) {
+                    postsData.forEach(item => {
+                        allItems.push({
+                            id: item.id,
+                            type: item.type === 'event' ? 'event' : 'feed_post',
+                            title: item.title,
+                            description: item.description,
+                            price_info: '',
+                            url: 'yrityskortti.html?id=' + item.business_id
+                        });
+                    });
+                }
+                
+                if (offersData) {
+                    offersData.forEach(item => {
+                        allItems.push({
+                            id: item.id,
+                            type: 'offer',
+                            title: item.name,
+                            description: item.description,
+                            price_info: item.discount_value ? '-' + item.discount_value + '%' : '',
+                            expires_at: item.valid_until || null,
+                            url: 'tarjouskortti.html?id=' + item.id // Korjaa oikeaksi
+                        });
+                    });
+                }
+            } catch (aiErr) {
+                console.error("Virhe lisäsisällön haussa", aiErr);
+            }
+        }
+        
+        renderEncounters(allItems);
     } catch (e) {
         console.error('Yllättävä virhe encounters haussa:', e);
     }
@@ -296,6 +364,10 @@ function renderEncounters(encounters) {
         'event_staff': 'Tapahtumahaku',
         'high_value': 'Arvotavarat ja erikoiskohteet',
         'lost_and_found': 'Kadonnut tai löytynyt',
+        'event': 'Tapahtumat',
+        'offer': 'Tarjoukset',
+        'feed_post': 'Yritysten ilmoitukset',
+        'content_other': 'Muu sisältö',
         'other': 'Muut ilmoitukset'
     };
     
@@ -304,7 +376,11 @@ function renderEncounters(encounters) {
         'sell': '🛒',
         'give': '🎁',
         'search': '🔍',
-        'local_notice': '📢'
+        'local_notice': '📢',
+        'event': '📅',
+        'offer': '🏷️',
+        'feed_post': '📰',
+        'content_other': '📌'
     };
     
     let html = '';
@@ -324,8 +400,9 @@ function renderEncounters(encounters) {
             const isLast = index === items.length - 1;
             const borderBottom = isLast ? '' : 'border-bottom: 1px solid #f1f5f9;';
             const priceHtml = item.price_info ? `<span style="font-weight: 600; color: #0f172a; font-size: 0.9rem;">${item.price_info}</span>` : '';
+            const linkUrl = item.url || `ilmoituskortti.html?id=${item.id}`;
             
-            html += `<a href="ilmoituskortti.html?id=${item.id}" style="display: block; padding: 1rem; text-decoration: none; color: inherit; ${borderBottom} transition: background 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
+            html += `<a href="${linkUrl}" style="display: block; padding: 1rem; text-decoration: none; color: inherit; ${borderBottom} transition: background 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
                     <div>
                         <div style="font-weight: 600; color: #0056b3; margin-bottom: 0.25rem;">${item.title}</div>
