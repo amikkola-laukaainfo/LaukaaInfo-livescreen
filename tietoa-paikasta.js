@@ -1,9 +1,10 @@
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. Hae ID URL:sta
     const urlParams = new URLSearchParams(window.location.search);
-    const placeId = urlParams.get('id');
+    let placeId = urlParams.get('id');
+    const placeNameParam = urlParams.get('name');
 
-    if (!placeId) {
+    if (!placeId && !placeNameParam) {
         showError();
         return;
     }
@@ -15,16 +16,28 @@ document.addEventListener('DOMContentLoaded', async () => {
         const aiSb = window.aiSb;
 
         // 2. Hae paikan tiedot Supabasesta
-        const { data: placeData, error: placeError } = await aiSb
-            .from('places')
-            .select('*')
-            .eq('place_id', placeId)
-            .single();
+        let placeQuery = aiSb.from('places').select('*');
+        
+        if (placeId) {
+            placeQuery = placeQuery.eq('place_id', placeId);
+        } else if (placeNameParam) {
+            const decodedName = decodeURIComponent(placeNameParam).replace(/_/g, ' ');
+            placeQuery = placeQuery.or(`name.ilike.${decodedName},canonical_name.ilike.${decodedName}`);
+        }
+        
+        const { data: placesData, error: placeError } = await placeQuery.limit(1);
 
-        if (placeError || !placeData) {
+        if (placeError || !placesData || placesData.length === 0) {
             console.error('Virhe haettaessa paikkaa:', placeError);
             showError();
             return;
+        }
+        
+        const placeData = placesData[0];
+        
+        // Ensure placeId is set for the rest of the logic if we searched by name
+        if (!placeId) {
+            placeId = placeData.place_id;
         }
 
         // 3. Hae kohteet ja tarjoukset JSON-tiedostoista
@@ -124,6 +137,36 @@ function renderPlace(place, relatedItems) {
     if (place.lat && place.lon) {
         document.getElementById('map-section').style.display = 'block';
         initMap(place.lat, place.lon, place.canonical_name || place.name);
+    }
+    
+    // Jakolinkki-toiminnallisuus
+    const shareBtn = document.getElementById('share-place-btn');
+    if (shareBtn) {
+        shareBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Luo nimestä tehty jakolinkki
+            const rawName = place.canonical_name || place.name || place.place_id;
+            const safeName = encodeURIComponent(rawName.replace(/\s+/g, '_'));
+            
+            const baseUrl = window.location.origin + window.location.pathname;
+            const shareUrl = `${baseUrl}?name=${safeName}`;
+            
+            navigator.clipboard.writeText(shareUrl).then(() => {
+                const originalHtml = shareBtn.innerHTML;
+                shareBtn.innerHTML = '<span class="iconify" data-icon="material-symbols:check" style="font-size: 1rem;"></span> Linkki kopioitu!';
+                shareBtn.style.color = '#059669';
+                shareBtn.style.borderColor = '#059669';
+                
+                setTimeout(() => {
+                    shareBtn.innerHTML = originalHtml;
+                    shareBtn.style.color = '';
+                    shareBtn.style.borderColor = '';
+                }, 3000);
+            }).catch(err => {
+                console.error('Kopiointi epäonnistui:', err);
+                alert('Jakolinkki: ' + shareUrl);
+            });
+        });
     }
 }
 
