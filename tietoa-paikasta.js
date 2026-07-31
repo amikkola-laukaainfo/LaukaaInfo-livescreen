@@ -189,9 +189,9 @@ function renderRelations(items) {
     }
 
     if (items.length === 0) {
-        container.innerHTML = `<div style="text-align:center; color: #94a3b8; padding: 2rem; border: 2px dashed #e2e8f0; border-radius: 16px;">
-            <span class="iconify" data-icon="material-symbols:link-off" style="font-size: 2rem;"></span>
-            <p style="margin-top: 0.5rem;">Ei kohteita tähän paikkaan liitettynä.</p></div>`;
+        container.innerHTML = `<div style="text-align:center; color: var(--light-text); padding: 3rem; border: 2px dashed #e5e7eb; border-radius: var(--inner-radius); background: #f9fafb;">
+            <span class="iconify" data-icon="material-symbols:link-off" style="font-size: 2.5rem; color: #d1d5db;"></span>
+            <p style="margin-top: 1rem; font-weight: 500;">Ei kohteita tähän paikkaan liitettynä.</p></div>`;
         return;
     }
 
@@ -214,16 +214,16 @@ function renderRelations(items) {
         }
 
         return `
-        <a href="${linkUrl}" style="text-decoration:none; color:inherit; display: flex; align-items: flex-start; gap: 1rem; padding: 1.25rem; background: #f8fafc; border-radius: 16px; border: 1px solid #e2e8f0; margin-bottom: 0.75rem; transition: background 0.2s;">
-            <div style="flex-shrink: 0; width: 44px; height: 44px; border-radius: 12px; background: #0596691a; display: flex; align-items: center; justify-content: center;">
-                <span class="iconify" data-icon="${iconName}" style="font-size: 1.5rem; color: #059669;"></span>
+        <a href="${linkUrl}" class="list-item-card">
+            <div class="list-icon-wrapper">
+                <span class="iconify list-icon" data-icon="${iconName}"></span>
             </div>
             <div style="flex: 1; min-width: 0;">
                 <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
-                    <span style="font-weight: 700; font-size: 1rem; color: #1a202c;">${displayName}</span>
-                    <span style="font-size: 0.7rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 50px; background: #0596691a; color: #059669; text-transform: uppercase; letter-spacing: 0.5px;">${typeLabel}</span>
+                    <span style="font-weight: 700; font-size: 1.05rem; color: var(--dark-text);">${displayName}</span>
+                    <span style="font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.8rem; border-radius: 50px; background: #dcfce7; color: #166534; text-transform: uppercase; letter-spacing: 0.5px;">${typeLabel}</span>
                 </div>
-                ${item.shortDescription ? `<div style="font-size: 0.9rem; color: #64748b; margin-top: 0.4rem; line-height: 1.5;">${item.shortDescription}</div>` : ''}
+                ${item.shortDescription ? `<div style="font-size: 0.95rem; color: var(--light-text); margin-top: 0.5rem; line-height: 1.5;">${item.shortDescription}</div>` : ''}
             </div>
         </a>`;
     }).join('');
@@ -432,24 +432,24 @@ function renderEncounters(encounters) {
         const label = typeLabels[type] || type;
         const icon = typeIcons[type] || '📌';
         
-        html += `<div style="margin-bottom: 1rem; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; background: #fff;">
-            <div style="padding: 1rem; background: #f8fafc; font-weight: 700; color: #1e293b; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between;">
-                <span>${icon} ${label}</span>
-                <span style="background: #e2e8f0; color: #475569; padding: 2px 8px; border-radius: 20px; font-size: 0.85rem;">${items.length} kpl</span>
+        html += `<div style="margin-bottom: 1.5rem; border: 1px solid #f3f4f6; border-radius: var(--inner-radius); overflow: hidden; background: var(--card-bg);">
+            <div style="padding: 1.25rem; background: #f9fafb; font-weight: 700; color: var(--dark-text); border-bottom: 1px solid #f3f4f6; display: flex; justify-content: space-between; align-items: center;">
+                <span style="display: flex; align-items: center; gap: 0.5rem;">${icon} ${label}</span>
+                <span style="background: var(--bg-color); color: var(--light-text); padding: 4px 10px; border-radius: 50px; font-size: 0.85rem;">${items.length} kpl</span>
             </div>
             <div style="padding: 0;">`;
             
         items.forEach((item, index) => {
             const isLast = index === items.length - 1;
-            const borderBottom = isLast ? '' : 'border-bottom: 1px solid #f1f5f9;';
-            const priceHtml = item.price_info ? `<span style="font-weight: 600; color: #0f172a; font-size: 0.9rem;">${item.price_info}</span>` : '';
+            const borderBottom = isLast ? '' : 'border-bottom: 1px solid #f3f4f6;';
+            const priceHtml = item.price_info ? `<span style="font-weight: 700; color: var(--primary-hover); font-size: 0.95rem; background: #f0fdf4; padding: 0.4rem 0.8rem; border-radius: 50px;">${item.price_info}</span>` : '';
             const linkUrl = item.url || `ilmoituskortti.html?id=${item.id}`;
             
-            html += `<a href="${linkUrl}" style="display: block; padding: 1rem; text-decoration: none; color: inherit; ${borderBottom} transition: background 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
+            html += `<a href="${linkUrl}" style="display: block; padding: 1.25rem; text-decoration: none; color: inherit; ${borderBottom} transition: background 0.2s;" onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='transparent'">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
                     <div>
-                        <div style="font-weight: 600; color: #0056b3; margin-bottom: 0.25rem;">${item.title}</div>
-                        <div style="font-size: 0.85rem; color: #64748b; line-height: 1.4;">${(item.description || '').substring(0, 100)}${(item.description && item.description.length > 100) ? '...' : ''}</div>
+                        <div style="font-weight: 700; color: var(--dark-text); font-size: 1.05rem; margin-bottom: 0.4rem;">${item.title}</div>
+                        <div style="font-size: 0.95rem; color: var(--light-text); line-height: 1.5;">${(item.description || '').substring(0, 100)}${(item.description && item.description.length > 100) ? '...' : ''}</div>
                     </div>
                     ${priceHtml}
                 </div>

@@ -28,59 +28,49 @@
     
     <style>
         :root {
-            --primary-blue: #0056b3;
-            --secondary-blue: #003366;
-            --accent-blue: #00a8ff;
-            --light-blue: #f0f7ff;
-            --dark-text: #1a202c;
-            --light-text: #4a5568;
-            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            --premium-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
-            --border-radius: 24px;
+            --primary-accent: #22c55e; /* Bright fresh green */
+            --primary-hover: #16a34a;
+            --bg-color: #eef1f4;
+            --card-bg: #ffffff;
+            --dark-text: #111827;
+            --light-text: #6b7280;
+            --card-shadow: 0 12px 36px rgba(0, 0, 0, 0.06);
+            --border-radius: 32px;
+            --inner-radius: 20px;
         }
 
         body {
-            background-color: #f1f5f9;
+            background-color: var(--bg-color);
             font-family: 'Inter', sans-serif;
             overflow-wrap: break-word;
+            color: var(--dark-text);
         }
 
         .business-card-container {
             max-width: 1200px;
             margin: 2rem auto 5rem;
-            padding: 0 1.5rem;
+            padding: 0 1rem;
         }
 
         /* --- Header Section --- */
         .card-header {
             display: flex;
-            gap: 2.5rem;
+            gap: 2rem;
             align-items: flex-start;
             margin-bottom: 2rem;
-            background: linear-gradient(135deg, #003366 0%, #0056b3 60%, #0077cc 100%);
-            padding: 3rem 3.5rem;
+            background: var(--card-bg);
+            padding: 3rem;
             border-radius: var(--border-radius);
-            box-shadow: var(--premium-shadow);
+            box-shadow: var(--card-shadow);
             position: relative;
             overflow: hidden;
-        }
-
-        .card-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            pointer-events: none;
+            border: 1px solid rgba(0,0,0,0.02);
         }
 
         .card-category {
             display: inline-block;
-            background: rgba(255,255,255,0.15);
-            color: #ffffff;
-            border: 1px solid rgba(255,255,255,0.3);
+            background: #dcfce7;
+            color: #166534;
             padding: 0.5rem 1.25rem;
             border-radius: 50px;
             font-weight: 700;
@@ -95,27 +85,69 @@
             font-size: 3.5rem;
             font-family: 'Outfit', sans-serif;
             font-weight: 800;
-            color: #ffffff;
+            color: var(--dark-text);
             line-height: 1.1;
             margin-bottom: 1rem;
             letter-spacing: -1px;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
         
         .municipality-tag {
             font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.85);
+            color: var(--light-text);
             font-weight: 500;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
+        /* --- Action Links --- */
+        .action-links {
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .btn-home {
+            background: #f3f4f6;
+            color: var(--dark-text);
+        }
+        
+        .btn-home:hover {
+            background: #e5e7eb;
+        }
+        
+        .btn-share {
+            background: var(--primary-accent);
+            color: white;
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+        }
+        
+        .btn-share:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(34, 197, 94, 0.4);
+        }
+
         /* --- Grid Layout --- */
         .card-grid {
             display: grid;
             grid-template-columns: 1fr 380px;
-            gap: 3rem;
+            gap: 2rem;
         }
 
         @media (max-width: 1024px) {
@@ -133,44 +165,45 @@
 
         .description-section h2 {
             font-family: 'Outfit', sans-serif;
-            font-size: 1.8rem;
-            color: var(--secondary-blue);
+            font-size: 1.5rem;
+            color: var(--dark-text);
             margin-bottom: 1.25rem;
-            font-weight: 700;
+            font-weight: 800;
             display: flex;
             align-items: center;
             gap: 0.75rem;
         }
 
         #display-description {
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             line-height: 1.8;
-            color: #2d3748;
-            background: white;
+            color: #374151;
+            background: var(--card-bg);
             padding: 2.5rem;
             border-radius: var(--border-radius);
-            box-shadow: var(--premium-shadow);
+            box-shadow: var(--card-shadow);
             white-space: pre-wrap;
+            border: 1px solid rgba(0,0,0,0.02);
         }
 
         /* --- Sidebar & Info Panel --- */
         .info-panel {
-            background: white;
+            background: var(--card-bg);
             padding: 2.5rem;
             border-radius: var(--border-radius);
-            box-shadow: var(--premium-shadow);
+            box-shadow: var(--card-shadow);
             display: flex;
             flex-direction: column;
             gap: 2rem;
+            border: 1px solid rgba(0,0,0,0.02);
         }
 
         .map-container {
             width: 100%;
             height: 250px;
-            border-radius: 16px;
+            border-radius: var(--inner-radius);
             overflow: hidden;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border: 1px solid #f3f4f6;
         }
 
         /* --- Stats Grid --- */
@@ -178,38 +211,43 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1rem;
-            margin-top: 1rem;
         }
 
         .stat-card {
-            background: #f8fafc;
+            background: #f9fafb;
             padding: 1.5rem;
-            border-radius: 16px;
-            border: 1px solid #e2e8f0;
+            border-radius: var(--inner-radius);
+            border: 1px solid #f3f4f6;
             text-align: center;
+            transition: transform 0.2s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+            border-color: #e5e7eb;
         }
         
         .stat-card.coming-soon {
-            opacity: 0.6;
+            opacity: 0.5;
         }
 
         .stat-value {
             font-size: 2rem;
             font-weight: 800;
-            color: var(--secondary-blue);
+            color: var(--dark-text);
             margin-bottom: 0.25rem;
             font-family: 'Outfit', sans-serif;
         }
 
         .stat-label {
-            font-size: 0.85rem;
-            font-weight: 600;
+            font-size: 0.8rem;
+            font-weight: 700;
             color: var(--light-text);
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
         
-        .loading-state {
+        .loading-state, .error-state {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -220,13 +258,50 @@
         
         .error-state {
             display: none;
-            text-align: center;
-            padding: 4rem;
-            background: white;
-            border-radius: 20px;
-            box-shadow: var(--premium-shadow);
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
             color: #ef4444;
+            padding: 4rem;
         }
+        
+        /* List Items styling */
+        .list-item-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1.25rem;
+            background: #ffffff;
+            border-radius: var(--inner-radius);
+            border: 1px solid #f3f4f6;
+            margin-bottom: 1rem;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .list-item-card:hover {
+            border-color: var(--primary-accent);
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.08);
+            transform: translateY(-2px);
+        }
+        
+        .list-icon-wrapper {
+            flex-shrink: 0;
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            background: #f0fdf4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .list-icon {
+            font-size: 1.5rem;
+            color: var(--primary-accent);
+        }
+
     </style>
 </head>
 
@@ -254,21 +329,21 @@
                     <div id="place-type" class="card-category">Ladataan...</div>
                     <h1 id="place-name">Ladataan...</h1>
                     <div class="municipality-tag">
-                        <span class="iconify" data-icon="material-symbols:location-on" style="color: rgba(255,255,255,0.8);"></span>
+                        <span class="iconify" data-icon="material-symbols:location-on" style="color: var(--primary-accent);"></span>
                         <span id="place-municipality">Laukaa</span>
                     </div>
                 </div>
             </header>
 
             <!-- Linkit -->
-            <div style="margin-bottom: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                <a href="index.html" style="display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; font-weight: 600; color: var(--light-text); text-decoration: none; background: white; padding: 0.5rem 1rem; border-radius: 50px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; transition: all 0.2s;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.12)'" onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.06)'">
-                    <span class="iconify" data-icon="material-symbols:home-outline" style="font-size: 1rem; color: #059669;"></span>
-                    LaukaaInfo – Etusivu
+            <div class="action-links">
+                <a href="index.html" class="action-btn btn-home">
+                    <span class="iconify" data-icon="material-symbols:arrow-back-rounded"></span>
+                    Etusivu
                 </a>
                 
-                <button id="share-place-btn" style="cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; font-weight: 600; color: var(--light-text); background: white; padding: 0.5rem 1rem; border-radius: 50px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; transition: all 0.2s;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.12)'" onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.06)'">
-                    <span class="iconify" data-icon="material-symbols:share-outline" style="font-size: 1rem; color: var(--primary-blue);"></span>
+                <button id="share-place-btn" class="action-btn btn-share">
+                    <span class="iconify" data-icon="material-symbols:share-outline"></span>
                     Jaa kohde
                 </button>
             </div>
@@ -280,7 +355,6 @@
                 <div class="main-content">
                     <div class="description-section">
                         <h2>
-                            <span class="iconify" data-icon="material-symbols:info-outline" style="color: #059669;"></span>
                             Tietoa paikasta
                         </h2>
                         <div id="display-description">
@@ -291,7 +365,6 @@
                     <!-- Aktiiviset ilmoitukset -->
                     <div class="description-section" id="encounters-section" style="margin-top: 2rem; display: none;">
                         <h2>
-                            <span class="iconify" data-icon="material-symbols:forum-outline" style="color: #059669;"></span>
                             Aktiiviset ilmoitukset
                         </h2>
                         <div id="encounters-list">
@@ -302,7 +375,6 @@
                     <!-- Liittyvät yritykset - täytetään JS:stä -->
                     <div class="description-section" style="margin-top: 2rem;">
                         <h2>
-                            <span class="iconify" data-icon="material-symbols:storefront-outline" style="color: #059669;"></span>
                             Liittyvät yritykset
                         </h2>
                         <div id="companies-list">
