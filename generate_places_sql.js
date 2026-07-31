@@ -53,8 +53,23 @@ try {
         // Jos on Peurunka tai Saraakallio, nostetaan importancea demona
         if (name.includes('Peurunka') || name.includes('Saraakallio')) importance = 90;
         
-        sqlOutput += `INSERT INTO places (name, canonical_name, type, lat, lon, municipality, municipality_id, importance, verified, created_by, status, source, source_id) `;
-        sqlOutput += `VALUES ('${name}', '${canonicalName}', '${type}', ${lat}, ${lon}, '${municipality}', '${municipality_id}', ${importance}, true, 'SYSTEM', 'ACTIVE', 'OSM', '${source_id}');\n`;
+        // Geometria, tunnistusalue ja taso
+        let geometry_type = 'POINT';
+        let recognition_zone = 100;
+        let place_level = 'LANDMARK';
+        
+        if (type === 'AREA' || type === 'NATURE' || type === 'SERVICE') {
+            recognition_zone = 200;
+        }
+        
+        // Karkea tason (level) päättely tyypistä
+        if (type === 'BUILDING') place_level = 'BUILDING';
+        else if (type === 'SERVICE') place_level = 'SERVICE';
+        else if (type === 'AREA' || type === 'NATURE') place_level = 'AREA';
+        else if (type === 'LANDMARK') place_level = 'LANDMARK';
+        
+        sqlOutput += `INSERT INTO places (name, canonical_name, type, lat, lon, municipality, municipality_id, importance, verified, created_by, status, source, source_id, geometry_type, recognition_zone, place_level) `;
+        sqlOutput += `VALUES ('${name}', '${canonicalName}', '${type}', ${lat}, ${lon}, '${municipality}', '${municipality_id}', ${importance}, true, 'SYSTEM', 'ACTIVE', 'OSM', '${source_id}', '${geometry_type}', ${recognition_zone}, '${place_level}');\n`;
         count++;
     });
 
