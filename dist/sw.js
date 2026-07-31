@@ -75,4 +75,6 @@ self.addEventListener('fetch', event => {
 // Kuuntele viestejä (esim. SKIP_WAITING)
 self.addEventListener('message', event => {
     if (event.data && event.data.type === 'SKIP_WAITING') {
-        self.skipWaitin
+        self.skipWaiting();
+    }
+});
