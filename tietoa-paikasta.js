@@ -26,16 +26,33 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        // 3. Hae yritysten määrä tässä paikassa
+        // 3. Hae relaatiot (yritykset + muut) tässä paikassa
         const { data: relationsData, error: relationsError } = await aiSb
-            .from('place_company_relations')
-            .select('id')
-            .eq('place_id', placeId);
+            .from('place_relations')
+            .select('entity_id, entity_type, relation_type, relation_context, strength')
+            .eq('place_id', placeId)
+            .order('strength', { ascending: true }); // PRIMARY ensin
 
-        const companyCount = relationsError ? 0 : (relationsData ? relationsData.length : 0);
+        const companyRelations = relationsError ? [] : (relationsData || []).filter(r => r.entity_type === 'COMPANY');
 
-        // 4. Päivitä DOM
-        renderPlace(placeData, companyCount);
+        // 4. Hae yritysten nimet company_profiles -taulusta
+        let companiesWithNames = [];
+        if (companyRelations.length > 0) {
+            const companyIds = companyRelations.map(r => r.entity_id);
+            const { data: profilesData } = await aiSb
+                .from('company_profiles')
+                .select('id, name')
+                .in('id', companyIds);
+            const profileMap = {};
+            (profilesData || []).forEach(p => { profileMap[p.id] = p.name; });
+            companiesWithNames = companyRelations.map(r => ({
+                ...r,
+                company_name: profileMap[r.entity_id] || 'Tuntematon yritys'
+            }));
+        }
+
+        // 5. Päivitä DOM
+        renderPlace(placeData, companiesWithNames);
 
     } catch (err) {
         console.error('Yllättävä virhe:', err);
@@ -48,7 +65,7 @@ function showError() {
     document.getElementById('error-message').style.display = 'block';
 }
 
-function renderPlace(place, companyCount) {
+function renderPlace(place, companyRelations) {
     document.getElementById('loading-spinner').style.display = 'none';
     document.getElementById('place-content').style.display = 'block';
 
@@ -68,13 +85,61 @@ function renderPlace(place, companyCount) {
     }
 
     // Tilastot
-    document.getElementById('stat-companies').textContent = companyCount;
+    document.getElementById('stat-companies').textContent = companyRelations.length;
+
+    // Yritykset: ryhmittele vahvuuden mukaan
+    renderCompanyRelations(companyRelations);
 
     // Kartta
     if (place.lat && place.lon) {
         document.getElementById('map-section').style.display = 'block';
         initMap(place.lat, place.lon, place.canonical_name || place.name);
     }
+}
+
+const STRENGTH_LABELS = { PRIMARY: 'Päätoimipaikka', SECONDARY: 'Säännöllinen', OCCASIONAL: 'Satunnainen' };
+const STRENGTH_COLORS = { PRIMARY: '#059669', SECONDARY: '#0056b3', OCCASIONAL: '#64748b' };
+const RELATION_LABELS = {
+    HEAD_OFFICE: 'Toimipaikka', SERVICE_AREA: 'Palvelualue', WORK_LOCATION: 'Työkohde',
+    EVENT_LOCATION: 'Tapahtumapaikka', CUSTOMER_LOCATION: 'Asiakaskohde',
+    LANDMARK: 'Maamerkki', ROUTE: 'Reitti', HISTORY: 'Historiallinen', MEMORY: 'Muisto',
+    OBSERVATION: 'Havainto', OTHER: 'Muu yhteys'
+};
+
+function renderCompanyRelations(relations) {
+    const container = document.getElementById('companies-list');
+    if (!container) return;
+
+    if (relations.length === 0) {
+        container.innerHTML = `<div style="text-align:center; color: #94a3b8; padding: 2rem; border: 2px dashed #e2e8f0; border-radius: 16px;">
+            <span class="iconify" data-icon="material-symbols:store-outline" style="font-size: 2rem;"></span>
+            <p style="margin-top: 0.5rem;">Ei vielä liitettyjä yrityksiä.</p></div>`;
+        return;
+    }
+
+    // Järjestä: PRIMARY ensin
+    const ORDER = ['PRIMARY', 'SECONDARY', 'OCCASIONAL'];
+    const sorted = [...relations].sort((a, b) => ORDER.indexOf(a.strength) - ORDER.indexOf(b.strength));
+
+    container.innerHTML = sorted.map(rel => {
+        const color = STRENGTH_COLORS[rel.strength] || '#64748b';
+        const strengthLabel = STRENGTH_LABELS[rel.strength] || rel.strength;
+        const relationLabel = RELATION_LABELS[rel.relation_type] || rel.relation_type;
+        return `
+        <div style="display: flex; align-items: flex-start; gap: 1rem; padding: 1.25rem; background: #f8fafc; border-radius: 16px; border: 1px solid #e2e8f0; margin-bottom: 0.75rem;">
+            <div style="flex-shrink: 0; width: 44px; height: 44px; border-radius: 12px; background: ${color}1a; display: flex; align-items: center; justify-content: center;">
+                <span class="iconify" data-icon="material-symbols:storefront-outline" style="font-size: 1.5rem; color: ${color};"></span>
+            </div>
+            <div style="flex: 1; min-width: 0;">
+                <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                    <span style="font-weight: 700; font-size: 1rem; color: #1a202c;">${rel.company_name}</span>
+                    <span style="font-size: 0.7rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 50px; background: ${color}1a; color: ${color}; text-transform: uppercase; letter-spacing: 0.5px;">${strengthLabel}</span>
+                </div>
+                <div style="font-size: 0.85rem; color: #059669; font-weight: 600; margin-top: 0.2rem;">${relationLabel}</div>
+                ${rel.relation_context ? `<div style="font-size: 0.9rem; color: #64748b; margin-top: 0.4rem; line-height: 1.5;">${rel.relation_context}</div>` : ''}
+            </div>
+        </div>`;
+    }).join('');
 }
 
 function initMap(lat, lon, name) {
