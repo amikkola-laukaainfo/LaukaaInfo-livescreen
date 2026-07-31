@@ -107,9 +107,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     populateCategories();
     renderMarkers();
-    const dedupNote = dedupedCount > 0 ? ` (${dedupedCount} JSON-kohdetta korvattu Supabase-paikalla)` : '';
-    statusText.textContent = `Yhteensä ${allFeatures.length} kohdetta${placesLoaded > 0 ? ' + ' + placesLoaded + ' paikkaa' : ''}${dedupNote}.`;
+    statusText.textContent = `Yhteensä ${allFeatures.length} kohdetta${placesLoaded > 0 ? ' + ' + placesLoaded + ' paikkaa' : ''}.`;
     handleUrlParams();
+
 
 
     // 3. Populate Categories
