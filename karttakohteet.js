@@ -6,18 +6,28 @@ document.addEventListener('DOMContentLoaded', async () => {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    // Group markers using MarkerCluster
-    const markersGroup = L.markerClusterGroup({
-        chunkedLoading: true,
-        maxClusterRadius: 50
-    });
+    // JSON-kohteiden markkerit (joilla ei ole place_id-vastinetta lähellä)
+    const markersGroup = L.markerClusterGroup({ chunkedLoading: true, maxClusterRadius: 50 });
     map.addLayer(markersGroup);
 
-    let allFeatures = [];
-    let allPlacesData = [];
-    const categoryFilter = document.getElementById('category-filter');
+    // Place_id-kohteiden markkerit (korvaavat läheiset JSON-kohteet)
+    const placeMarkersGroup = L.markerClusterGroup({ chunkedLoading: true, maxClusterRadius: 50 });
+    map.addLayer(placeMarkersGroup);
+
     const nameFilter = document.getElementById('name-filter');
     const statusText = document.getElementById('status-text');
+
+    // Piilota kategoriasuodatin – ei enää käytössä
+    const catFilterGroup = document.getElementById('category-filter');
+    if (catFilterGroup) {
+        const filterGroup = catFilterGroup.closest('.filter-group');
+        if (filterGroup) filterGroup.style.display = 'none';
+    }
+
+    // allFeatures = JSON-kohteet jotka EIVÄT saa place_id-vastinetta (jäävät näkyviin)
+    // visiblePlaces = Supabase-paikat jotka KORVAAVAT lähellä olevan JSON-kohteen
+    let allFeatures = [];
+    let visiblePlaces = [];
 
     // 2. Load JSON Data
     if (typeof window.getKarttaKohteet === 'function') {
@@ -27,23 +37,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // Haversin-etäisyys metreinä kahden koordinaattipisteen välillä
+    // Haversin-etäisyys metreinä
     function haversineMeters(lat1, lon1, lat2, lon2) {
         const R = 6371000;
         const dLat = (lat2 - lat1) * Math.PI / 180;
         const dLon = (lon2 - lon1) * Math.PI / 180;
-        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-                  Math.sin(dLon/2) * Math.sin(dLon/2);
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
         return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     }
 
-    // 3. Load Places from Supabase
-    const placeMarkersGroup = L.markerClusterGroup({ chunkedLoading: true, maxClusterRadius: 50 });
-    map.addLayer(placeMarkersGroup);
-    let placesLoaded = 0;
-    let dedupedCount = 0;
-
+    // 3. Load Places from Supabase ja deduploi
     try {
         const SB_URL = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
         const SB_KEY = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
@@ -56,15 +61,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                 .not('lon', 'is', null);
 
             if (!error && places) {
-                // Deduplikointi: poistetaan JSON-kohteet joille löytyy Supabase-paikka < 80m päässä
-                // Mutta tallennetaan poistetun JSON-kohteen kategoria vastaavaan Supabase-paikkaan
                 const DEDUP_THRESHOLD_M = 80;
 
-                // Rakennetaan place_id -> merged_categories -hakemisto
-                // Ensin alustetaan kaikilla paikoilla tyhjä lista
-                const placeCategoryMap = {};
-                places.forEach(p => { placeCategoryMap[p.place_id] = []; });
+                // Kerätään place_id-kohteet joilla on JSON-vastine lähellä
+                // Set välttää duplikaatit jos useampi JSON-kohde on saman paikan lähellä
+                const matchedPlaceIds = new Set();
 
+                // Suodatetaan allFeatures: poistetaan ne joille löytyy Supabase-paikka läheltä
                 allFeatures = allFeatures.filter(f => {
                     if (f.geometry.type !== 'Point') return true;
                     const [fLon, fLat] = f.geometry.coordinates;
@@ -72,126 +75,61 @@ document.addEventListener('DOMContentLoaded', async () => {
                         haversineMeters(fLat, fLon, p.lat, p.lon) < DEDUP_THRESHOLD_M
                     );
                     if (matchingPlace) {
-                        // Liitetään JSON-kohteen kategoria Supabase-paikkaan
-                        const cat = f.properties && f.properties.category;
-                        if (cat && !placeCategoryMap[matchingPlace.place_id].includes(cat)) {
-                            placeCategoryMap[matchingPlace.place_id].push(cat);
-                        }
-                        dedupedCount++;
-                        return false;
+                        // Merkitään tämä Supabase-paikka näytettäväksi
+                        matchedPlaceIds.add(matchingPlace.place_id);
+                        return false; // poistetaan JSON-kohde
                     }
-                    return true;
+                    return true; // pidetään JSON-kohde
                 });
 
-                // Lisätään merged_categories kentät Supabase-paikka-objekteihin
-                places.forEach(p => {
-                    p.merged_categories = placeCategoryMap[p.place_id] || [];
-                });
-
-                allPlacesData = places;
-                placesLoaded = allPlacesData.length;
-
-                // Lisätään "Paikat"-suodatin
-                const placeOpt = document.createElement('option');
-                placeOpt.value = '__places__';
-                placeOpt.textContent = `📍 Paikat (${placesLoaded})`;
-                categoryFilter.appendChild(placeOpt);
+                // Vain ne Supabase-paikat jotka korvaavat JSON-kohteen
+                visiblePlaces = places.filter(p => matchedPlaceIds.has(p.place_id));
             }
         }
     } catch (e) {
         console.warn('Supabase places lataus epäonnistui:', e);
     }
 
-    populateCategories();
+    const totalCount = allFeatures.length + visiblePlaces.length;
+    statusText.textContent = `Yhteensä ${totalCount} kohdetta.`;
+
     renderMarkers();
-    statusText.textContent = `Yhteensä ${allFeatures.length} kohdetta${placesLoaded > 0 ? ' + ' + placesLoaded + ' paikkaa' : ''}.`;
-    handleUrlParams();
 
-    // DEBUG: tulosta kategoriatilanne konsoliin
-    const dbgJsonCats = {};
-    allFeatures.forEach(f => {
-        const c = f.properties && f.properties.category;
-        if (c) dbgJsonCats[c] = (dbgJsonCats[c] || 0) + 1;
-    });
-    const dbgPlaceCats = {};
-    allPlacesData.forEach(p => {
-        if (p.merged_categories && p.merged_categories.length > 0) {
-            p.merged_categories.forEach(c => {
-                dbgPlaceCats[c] = (dbgPlaceCats[c] || 0) + 1;
-            });
-        }
-    });
-    console.log('[KarttaKohteet DEBUG] JSON-kohteet kategorioittain:', dbgJsonCats);
-    console.log('[KarttaKohteet DEBUG] Supabase-paikat merged_categories:', dbgPlaceCats);
-    console.log('[KarttaKohteet DEBUG] Deduplikoitu pois:', dedupedCount, 'kohdetta');
-
-
-
-    // 3. Populate Categories
-    function populateCategories() {
-        // Kerää kategoriat JSON-kohteista
-        const catSet = new Set(allFeatures.map(f => f.properties.category).filter(Boolean));
-        // Lisää myös Supabase-paikoilta periytyvät merged_categories
-        allPlacesData.forEach(p => {
-            if (p.merged_categories) {
-                p.merged_categories.forEach(cat => catSet.add(cat));
-            }
-        });
-        const categories = [...catSet].sort();
-        categories.forEach(cat => {
-            const opt = document.createElement('option');
-            opt.value = cat;
-            opt.textContent = cat;
-            categoryFilter.appendChild(opt);
-        });
-    }
-
-    // 4. Render Markers
+    // 4. Render Markers – suodatetaan vain nimen perusteella
     function renderMarkers() {
         markersGroup.clearLayers();
         placeMarkersGroup.clearLayers();
-        const selectedCat = categoryFilter.value;
-        const searchVal = nameFilter ? nameFilter.value.toLowerCase() : '';
+        const searchVal = nameFilter ? nameFilter.value.trim().toLowerCase() : '';
 
-        // Suodatetaan JSON kohteet
+        // JSON-kohteet (joilla ei ole place_id-vastinetta)
         const filteredFeatures = allFeatures.filter(f => {
+            if (!searchVal) return true;
             const props = f.properties;
-            const nameMatch = searchVal === '' || (props.name && props.name.toLowerCase().includes(searchVal));
-            const catMatch = selectedCat === 'all' || selectedCat === '__places__' || props.category === selectedCat;
-            
-            // Jos valittu '__places__', piilotetaan json kohteet kokonaan (tai voisi jättää jos halutaan vain paikat nimellä)
-            if (selectedCat === '__places__') return false;
-            
-            return nameMatch && catMatch;
+            return props.name && props.name.toLowerCase().includes(searchVal);
         });
 
-        // Suodatetaan Supabase Paikat
-        const filteredPlaces = allPlacesData.filter(p => {
-            const nameMatch = searchVal === '' || (p.name && p.name.toLowerCase().includes(searchVal)) || (p.canonical_name && p.canonical_name.toLowerCase().includes(searchVal));
-            // Näytetään paikka jos: kaikki valittu, tai '__places__' valittu,
-            // tai valittu kategoria löytyy paikan merged_categories-listasta
-            const catMatch = selectedCat === 'all' || selectedCat === '__places__' ||
-                (p.merged_categories && p.merged_categories.includes(selectedCat));
-            
-            return nameMatch && catMatch;
+        // Place_id-kohteet (korvaavat JSON-kohteet)
+        const filteredPlaces = visiblePlaces.filter(p => {
+            if (!searchVal) return true;
+            return (p.name && p.name.toLowerCase().includes(searchVal)) ||
+                (p.canonical_name && p.canonical_name.toLowerCase().includes(searchVal));
         });
 
         const newMarkers = [];
         const newPlaceMarkers = [];
         const coords = [];
 
-        // Rakennetaan JSON markerit
+        // Rakennetaan JSON-markerit
         filteredFeatures.forEach(f => {
             const props = f.properties;
             const geom = f.geometry;
             if (geom.type === 'Point') {
                 const [lon, lat] = geom.coordinates;
                 coords.push([lat, lon]);
-
                 const marker = L.marker([lat, lon]);
-                let popupHtml = `<div style="min-width: 200px;">
+                const popupHtml = `<div style="min-width: 200px;">
                     <h3 style="margin: 0 0 5px 0; color: #0056b3;">${props.name}</h3>
-                    <div style="font-size: 0.85rem; color: #666; margin-bottom: 8px;">${props.category}</div>
+                    <div style="font-size: 0.85rem; color: #666; margin-bottom: 8px;">${props.category || ''}</div>
                     ${props.address ? `<div style="font-size: 0.9rem; margin-bottom: 5px;">📍 ${props.address}</div>` : ''}
                     ${props.phone ? `<div style="font-size: 0.9rem; margin-bottom: 5px;">📞 ${props.phone}</div>` : ''}
                     <div style="margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap;">
@@ -205,7 +143,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         });
 
-        // Rakennetaan Paikat markerit
+        // Rakennetaan place_id-markerit (vihreä ikoni = Supabase-paikka)
         const placeTypeLabel = {
             NATURE: 'Luontokohde', LANDMARK: 'Nähtävyys',
             SERVICE: 'Palvelu', BUILDING: 'Rakennus', AREA: 'Alue', ROUTE: 'Reitti'
@@ -225,7 +163,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             const popupHtml = `<div style="min-width:200px;">
                 <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;color:#059669;margin-bottom:4px;">📍 ${label}</div>
                 <h3 style="margin:0 0 6px 0;color:#064e3b;font-size:1rem;">${title}</h3>
-                ${place.description ? `<p style="font-size:0.85rem;color:#555;margin:0 0 10px;">${place.description.slice(0,120)}${place.description.length>120?'…':''}</p>` : `<p style="font-size:0.85rem;color:#888;margin:0 0 10px;">${label} – ${place.municipality || 'Laukaa'}</p>`}
+                ${place.description
+                    ? `<p style="font-size:0.85rem;color:#555;margin:0 0 10px;">${place.description.slice(0, 120)}${place.description.length > 120 ? '…' : ''}</p>`
+                    : `<p style="font-size:0.85rem;color:#888;margin:0 0 10px;">${label} – ${place.municipality || 'Laukaa'}</p>`}
                 <a href="tietoa-paikasta.html?id=${encodeURIComponent(place.place_id)}" style="display:inline-block;background:#059669;color:white;padding:5px 12px;border-radius:20px;text-decoration:none;font-size:0.8rem;font-weight:700;">Tietoja paikasta →</a>
             </div>`;
             const marker = L.marker([place.lat, place.lon], { icon: placeIcon }).bindPopup(popupHtml);
@@ -241,73 +181,54 @@ document.addEventListener('DOMContentLoaded', async () => {
             map.fitBounds(bounds.pad(0.1));
         }
 
-        statusText.textContent = `Näytetään ${filteredFeatures.length} kohdetta${filteredPlaces.length > 0 ? ' + ' + filteredPlaces.length + ' paikkaa' : ''}.`;
+        const shown = filteredFeatures.length + filteredPlaces.length;
+        statusText.textContent = searchVal
+            ? `Näytetään ${shown} kohdetta haulla "${searchVal}".`
+            : `Yhteensä ${totalCount} kohdetta.`;
     }
 
-    // 5. Filter Event Listeners
-    categoryFilter.addEventListener('change', renderMarkers);
+    // 5. Nimihaku
     if (nameFilter) {
         nameFilter.addEventListener('input', renderMarkers);
     }
 
-    // 6. Handle URL Parameters for Deep Linking
-    function handleUrlParams() {
-        const params = new URLSearchParams(window.location.search);
-        const catParam = params.get('cat') || params.get('search');
-        
-        if (catParam) {
-            const lowerParam = catParam.toLowerCase();
-            const options = Array.from(categoryFilter.options);
-            
-            // Try to find a matching category (exact or partial)
-            const match = options.find(opt => 
-                opt.value.toLowerCase() === lowerParam || 
-                opt.value.toLowerCase().includes(lowerParam)
-            );
-            
-            if (match) {
-                categoryFilter.value = match.value;
-                renderMarkers();
-            }
-        }
-    }
-
-    // Call handled above after async loads
-
-    // 7. Share Functionality
+    // 6. Jakaminen (share-nappi)
     const shareBtn = document.getElementById('share-map-btn');
     if (shareBtn) {
         shareBtn.addEventListener('click', async () => {
-            const currentCat = categoryFilter.value;
+            const searchVal = nameFilter ? nameFilter.value.trim() : '';
             const url = new URL(window.location.href);
-            
-            if (currentCat !== 'all') {
-                url.searchParams.set('cat', currentCat);
+            if (searchVal) {
+                url.searchParams.set('search', searchVal);
             } else {
-                url.searchParams.delete('cat');
+                url.searchParams.delete('search');
             }
-            url.searchParams.delete('search'); // Clean up search param
-
+            url.searchParams.delete('cat');
             const shareData = {
                 title: 'LaukaaInfo - Karttakohteet',
-                text: currentCat !== 'all' ? `Löytyi kohteita kategoriasta: ${currentCat}` : 'Tutki Laukaan kohteita kartalla',
+                text: searchVal ? `Karttakohteet haulla: ${searchVal}` : 'Tutki Laukaan kohteita kartalla',
                 url: url.toString()
             };
-
             try {
                 if (navigator.share) {
                     await navigator.share(shareData);
                 } else {
                     await navigator.clipboard.writeText(url.toString());
-                    const originalText = shareBtn.innerHTML;
+                    const orig = shareBtn.innerHTML;
                     shareBtn.innerHTML = '<span>Kopioitu!</span> ✅';
-                    setTimeout(() => {
-                        shareBtn.innerHTML = originalText;
-                    }, 2000);
+                    setTimeout(() => { shareBtn.innerHTML = orig; }, 2000);
                 }
             } catch (err) {
                 console.error('Sharing failed', err);
             }
         });
+    }
+
+    // 7. URL-parametrit: ?search=hakusana
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchParam = urlParams.get('search') || urlParams.get('cat');
+    if (searchParam && nameFilter) {
+        nameFilter.value = searchParam;
+        renderMarkers();
     }
 });
