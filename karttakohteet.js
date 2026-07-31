@@ -107,6 +107,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     statusText.textContent = `Yhteensä ${allFeatures.length} kohdetta${placesLoaded > 0 ? ' + ' + placesLoaded + ' paikkaa' : ''}.`;
     handleUrlParams();
 
+    // DEBUG: tulosta kategoriatilanne konsoliin
+    const dbgJsonCats = {};
+    allFeatures.forEach(f => {
+        const c = f.properties && f.properties.category;
+        if (c) dbgJsonCats[c] = (dbgJsonCats[c] || 0) + 1;
+    });
+    const dbgPlaceCats = {};
+    allPlacesData.forEach(p => {
+        if (p.merged_categories && p.merged_categories.length > 0) {
+            p.merged_categories.forEach(c => {
+                dbgPlaceCats[c] = (dbgPlaceCats[c] || 0) + 1;
+            });
+        }
+    });
+    console.log('[KarttaKohteet DEBUG] JSON-kohteet kategorioittain:', dbgJsonCats);
+    console.log('[KarttaKohteet DEBUG] Supabase-paikat merged_categories:', dbgPlaceCats);
+    console.log('[KarttaKohteet DEBUG] Deduplikoitu pois:', dedupedCount, 'kohdetta');
+
 
 
     // 3. Populate Categories
