@@ -29,30 +29,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         // 3. Hae relaatiot (yritykset + muut) tässä paikassa
         const { data: relationsData, error: relationsError } = await aiSb
             .from('place_relations')
-            .select('entity_id, entity_type, relation_type, relation_context, strength')
+            .select('entity_id, entity_type, entity_name, relation_type, relation_context, strength')
             .eq('place_id', placeId)
             .order('strength', { ascending: true }); // PRIMARY ensin
 
         const companyRelations = relationsError ? [] : (relationsData || []).filter(r => r.entity_type === 'COMPANY');
 
-        // 4. Hae yritysten nimet company_profiles -taulusta
-        let companiesWithNames = [];
-        if (companyRelations.length > 0) {
-            const companyIds = companyRelations.map(r => r.entity_id);
-            const { data: profilesData } = await aiSb
-                .from('company_profiles')
-                .select('id, name')
-                .in('id', companyIds);
-            const profileMap = {};
-            (profilesData || []).forEach(p => { profileMap[p.id] = p.name; });
-            companiesWithNames = companyRelations.map(r => ({
-                ...r,
-                company_name: profileMap[r.entity_id] || 'Tuntematon yritys'
-            }));
-        }
-
-        // 5. Päivitä DOM
-        renderPlace(placeData, companiesWithNames);
+        // 4. Päivitä DOM
+        renderPlace(placeData, companyRelations);
 
     } catch (err) {
         console.error('Yllättävä virhe:', err);
@@ -132,7 +116,7 @@ function renderCompanyRelations(relations) {
             </div>
             <div style="flex: 1; min-width: 0;">
                 <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
-                    <span style="font-weight: 700; font-size: 1rem; color: #1a202c;">${rel.company_name}</span>
+                    <span style="font-weight: 700; font-size: 1rem; color: #1a202c;">${rel.entity_name || rel.entity_id}</span>
                     <span style="font-size: 0.7rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 50px; background: ${color}1a; color: ${color}; text-transform: uppercase; letter-spacing: 0.5px;">${strengthLabel}</span>
                 </div>
                 <div style="font-size: 0.85rem; color: #059669; font-weight: 600; margin-top: 0.2rem;">${relationLabel}</div>
