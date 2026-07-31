@@ -14,7 +14,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     map.addLayer(markersGroup);
 
     let allFeatures = [];
+    let allPlacesData = [];
     const categoryFilter = document.getElementById('category-filter');
+    const nameFilter = document.getElementById('name-filter');
     const statusText = document.getElementById('status-text');
 
     // 2. Load JSON Data
@@ -66,33 +68,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     return !tooClose;
                 });
 
-                const placeTypeLabel = {
-                    NATURE: 'Luontokohde', LANDMARK: 'Nähtävyys',
-                    SERVICE: 'Palvelu', BUILDING: 'Rakennus', AREA: 'Alue', ROUTE: 'Reitti'
-                };
-                const placeIcon = L.divIcon({
-                    className: '',
-                    html: `<div style="width:28px;height:28px;background:#059669;border:3px solid white;border-radius:50%;box-shadow:0 2px 8px rgba(5,150,105,0.5);display:flex;align-items:center;justify-content:center;">
-                               <svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='white'><path d='M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z'/></svg>
-                           </div>`,
-                    iconSize: [28, 28],
-                    iconAnchor: [14, 14]
-                });
-
-                const placeMarkers = places.map(place => {
-                    const label = placeTypeLabel[place.type] || 'Paikka';
-                    const title = place.canonical_name || place.name;
-                    const popupHtml = `<div style="min-width:200px;">
-                        <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;color:#059669;margin-bottom:4px;">📍 ${label}</div>
-                        <h3 style="margin:0 0 6px 0;color:#064e3b;font-size:1rem;">${title}</h3>
-                        ${place.description ? `<p style="font-size:0.85rem;color:#555;margin:0 0 10px;">${place.description.slice(0,120)}${place.description.length>120?'…':''}</p>` : `<p style="font-size:0.85rem;color:#888;margin:0 0 10px;">${label} – ${place.municipality || 'Laukaa'}</p>`}
-                        <a href="tietoa-paikasta.html?id=${encodeURIComponent(place.place_id)}" style="display:inline-block;background:#059669;color:white;padding:5px 12px;border-radius:20px;text-decoration:none;font-size:0.8rem;font-weight:700;">Tietoja paikasta →</a>
-                    </div>`;
-                    return L.marker([place.lat, place.lon], { icon: placeIcon }).bindPopup(popupHtml);
-                });
-
-                placeMarkersGroup.addLayers(placeMarkers);
-                placesLoaded = places.length;
+                allPlacesData = places;
+                placesLoaded = allPlacesData.length;
 
                 // Lisätään "Paikat"-suodatin
                 const placeOpt = document.createElement('option');
@@ -126,30 +103,36 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 4. Render Markers
     function renderMarkers() {
         markersGroup.clearLayers();
+        placeMarkersGroup.clearLayers();
         const selectedCat = categoryFilter.value;
+        const searchVal = nameFilter ? nameFilter.value.toLowerCase() : '';
 
-        // Jos valittu paikat-suodatin, näytä vain paikkamarkkerikerros
-        if (selectedCat === '__places__') {
-            placeMarkersGroup.addTo(map);
-            statusText.textContent = `Näytetään ${placesLoaded} paikkaa.`;
-            return;
-        }
-        // Muuten piilotetaan paikkamarkkerikerros jos katsotaan muita kategorioita kuin "kaikki"
-        if (selectedCat !== 'all') {
-            map.removeLayer(placeMarkersGroup);
-        } else {
-            placeMarkersGroup.addTo(map);
-        }
+        // Suodatetaan JSON kohteet
+        const filteredFeatures = allFeatures.filter(f => {
+            const props = f.properties;
+            const nameMatch = searchVal === '' || (props.name && props.name.toLowerCase().includes(searchVal));
+            const catMatch = selectedCat === 'all' || selectedCat === '__places__' || props.category === selectedCat;
+            
+            // Jos valittu '__places__', piilotetaan json kohteet kokonaan (tai voisi jättää jos halutaan vain paikat nimellä)
+            if (selectedCat === '__places__') return false;
+            
+            return nameMatch && catMatch;
+        });
 
-        const filtered = allFeatures.filter(f => {
-            if (selectedCat === 'all') return true;
-            return f.properties.category === selectedCat;
+        // Suodatetaan Supabase Paikat
+        const filteredPlaces = allPlacesData.filter(p => {
+            const nameMatch = searchVal === '' || (p.name && p.name.toLowerCase().includes(searchVal)) || (p.canonical_name && p.canonical_name.toLowerCase().includes(searchVal));
+            const catMatch = selectedCat === 'all' || selectedCat === '__places__';
+            
+            return nameMatch && catMatch;
         });
 
         const newMarkers = [];
+        const newPlaceMarkers = [];
         const coords = [];
 
-        filtered.forEach(f => {
+        // Rakennetaan JSON markerit
+        filteredFeatures.forEach(f => {
             const props = f.properties;
             const geom = f.geometry;
             if (geom.type === 'Point') {
@@ -157,7 +140,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 coords.push([lat, lon]);
 
                 const marker = L.marker([lat, lon]);
-
                 let popupHtml = `<div style="min-width: 200px;">
                     <h3 style="margin: 0 0 5px 0; color: #0056b3;">${props.name}</h3>
                     <div style="font-size: 0.85rem; color: #666; margin-bottom: 8px;">${props.category}</div>
@@ -169,24 +151,55 @@ document.addEventListener('DOMContentLoaded', async () => {
                         <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${props.name}, ${props.address || 'Laukaa'}`)}" target="_blank" style="background: #28a745; color: white; padding: 4px 10px; border-radius: 4px; text-decoration: none; font-size: 0.8rem;">📍 Googlessa</a>
                     </div>
                 </div>`;
-
                 marker.bindPopup(popupHtml);
                 newMarkers.push(marker);
             }
         });
 
+        // Rakennetaan Paikat markerit
+        const placeTypeLabel = {
+            NATURE: 'Luontokohde', LANDMARK: 'Nähtävyys',
+            SERVICE: 'Palvelu', BUILDING: 'Rakennus', AREA: 'Alue', ROUTE: 'Reitti'
+        };
+        const placeIcon = L.divIcon({
+            className: '',
+            html: `<div style="width:28px;height:28px;background:#059669;border:3px solid white;border-radius:50%;box-shadow:0 2px 8px rgba(5,150,105,0.5);display:flex;align-items:center;justify-content:center;">
+                       <svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='white'><path d='M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z'/></svg>
+                   </div>`,
+            iconSize: [28, 28],
+            iconAnchor: [14, 14]
+        });
+
+        filteredPlaces.forEach(place => {
+            const label = placeTypeLabel[place.type] || 'Paikka';
+            const title = place.canonical_name || place.name;
+            const popupHtml = `<div style="min-width:200px;">
+                <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;color:#059669;margin-bottom:4px;">📍 ${label}</div>
+                <h3 style="margin:0 0 6px 0;color:#064e3b;font-size:1rem;">${title}</h3>
+                ${place.description ? `<p style="font-size:0.85rem;color:#555;margin:0 0 10px;">${place.description.slice(0,120)}${place.description.length>120?'…':''}</p>` : `<p style="font-size:0.85rem;color:#888;margin:0 0 10px;">${label} – ${place.municipality || 'Laukaa'}</p>`}
+                <a href="tietoa-paikasta.html?id=${encodeURIComponent(place.place_id)}" style="display:inline-block;background:#059669;color:white;padding:5px 12px;border-radius:20px;text-decoration:none;font-size:0.8rem;font-weight:700;">Tietoja paikasta →</a>
+            </div>`;
+            const marker = L.marker([place.lat, place.lon], { icon: placeIcon }).bindPopup(popupHtml);
+            newPlaceMarkers.push(marker);
+            coords.push([place.lat, place.lon]);
+        });
+
         markersGroup.addLayers(newMarkers);
+        placeMarkersGroup.addLayers(newPlaceMarkers);
 
         if (coords.length > 0) {
             const bounds = L.latLngBounds(coords);
             map.fitBounds(bounds.pad(0.1));
         }
 
-        statusText.textContent = `Näytetään ${filtered.length} kohdetta${selectedCat === 'all' && placesLoaded > 0 ? ' + ' + placesLoaded + ' paikkaa' : ''}.`;
+        statusText.textContent = `Näytetään ${filteredFeatures.length} kohdetta${filteredPlaces.length > 0 ? ' + ' + filteredPlaces.length + ' paikkaa' : ''}.`;
     }
 
-    // 5. Filter Event Listener
+    // 5. Filter Event Listeners
     categoryFilter.addEventListener('change', renderMarkers);
+    if (nameFilter) {
+        nameFilter.addEventListener('input', renderMarkers);
+    }
 
     // 6. Handle URL Parameters for Deep Linking
     function handleUrlParams() {
