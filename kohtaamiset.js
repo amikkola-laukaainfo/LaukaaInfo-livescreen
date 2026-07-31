@@ -14,6 +14,13 @@
 // KATEGORIAT
 // ===================================================
 const categories = {
+    'service_request': { title: 'Palvelutarve',         icon: '🤝', emoji: '🤝', color: '#3b82f6' },
+    'sell':            { title: 'Myydään',              icon: '🛒', emoji: '🛒', color: '#eab308' },
+    'give':            { title: 'Annetaan',             icon: '🎁', emoji: '🎁', color: '#22c55e' },
+    'search':          { title: 'Etsitään',             icon: '🔍', emoji: '🔍', color: '#a855f7' },
+    'local_notice':    { title: 'Paikallinen ilmoitus', icon: '📢', emoji: '📢', color: '#ef4444' },
+    
+    // Legacy-kategoriat vanhoja ilmoituksia varten
     'need_help':     { title: 'Tarvitsen palvelun',     icon: '🟢', emoji: '🟢', color: '#22c55e' },
     'offer_service': { title: 'Tarjoan palvelua',       icon: '🔵', emoji: '🔵', color: '#3b82f6' },
     'work_and_gigs': { title: 'Työ ja toimeksiannot',   icon: '💼', emoji: '💼', color: '#a855f7' },

@@ -78,6 +78,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // 4. Päivitä DOM
         renderPlace(placeData, relatedItems);
+        loadEncountersForPlace(placeData);
 
     } catch (err) {
         console.error('Yllättävä virhe:', err);
@@ -206,4 +207,137 @@ function getTypeLabel(type) {
         'ROUTE': 'Reitti'
     };
     return types[type] || type || 'Paikka';
+}
+
+// ==========================================================
+// PAIKAN ILMOITUKSET (ENCOUNTERS)
+// ==========================================================
+async function loadEncountersForPlace(place) {
+    if (!window.LaukaaSupabase) {
+        console.warn('LaukaaSupabase (kohtaamiset) ei saatavilla. Varmista että supabase-config.js on ladattu.');
+        return;
+    }
+    
+    try {
+        // Hakee ilmoitukset jotka on linkitetty location_id:llä tai joilla on sama nimi (fallback)
+        const placeName = place.canonical_name || place.name || '';
+        
+        let query = window.LaukaaSupabase
+            .from('encounters')
+            .select('*')
+            .eq('status', 'active');
+            
+        // Jos haluamme kohdentaa tiukasti place_id:hen:
+        // mutta otetaan fallback string matchillä myös
+        if (place.place_id && placeName) {
+            query = query.or(`location_id.eq.${place.place_id},location.ilike.%${placeName}%`);
+        } else if (place.place_id) {
+            query = query.eq('location_id', place.place_id);
+        } else if (placeName) {
+            query = query.ilike('location', `%${placeName}%`);
+        }
+            
+        const { data, error } = await query;
+        
+        if (error) {
+            console.error('Virhe encounters haussa:', error);
+            return;
+        }
+        
+        renderEncounters(data || []);
+    } catch (e) {
+        console.error('Yllättävä virhe encounters haussa:', e);
+    }
+}
+
+function renderEncounters(encounters) {
+    const section = document.getElementById('encounters-section');
+    const container = document.getElementById('encounters-list');
+    if (!section || !container) return;
+    
+    // Suodata pois vanhentuneet jos sellaista logiikkaa on
+    const now = new Date();
+    const validEncounters = encounters.filter(e => {
+        if (e.expires_at) {
+            return new Date(e.expires_at) > now;
+        }
+        return true;
+    });
+    
+    if (validEncounters.length === 0) {
+        // Piilotetaan osio jos ei ilmoituksia
+        section.style.display = 'none';
+        return;
+    }
+    
+    section.style.display = 'block';
+    
+    // Ryhmittele tyypeittäin
+    const grouped = {};
+    validEncounters.forEach(e => {
+        const t = e.type || 'other';
+        if (!grouped[t]) grouped[t] = [];
+        grouped[t].push(e);
+    });
+    
+    // Mappaus nimille
+    const typeLabels = {
+        'service_request': 'Palvelutarpeet',
+        'need_help': 'Tarvitsen palvelun',
+        'sell': 'Myydään',
+        'give': 'Annetaan',
+        'search': 'Etsitään',
+        'local_notice': 'Paikalliset ilmoitukset',
+        'offer_service': 'Tarjoan palvelua',
+        'work_and_gigs': 'Työ ja toimeksiannot',
+        'community': 'Yhteisö',
+        'space_rental': 'Tilat ja kalusto',
+        'b2b_collab': 'Yhteistyöhaku',
+        'event_staff': 'Tapahtumahaku',
+        'high_value': 'Arvotavarat ja erikoiskohteet',
+        'lost_and_found': 'Kadonnut tai löytynyt',
+        'other': 'Muut ilmoitukset'
+    };
+    
+    const typeIcons = {
+        'service_request': '🤝',
+        'sell': '🛒',
+        'give': '🎁',
+        'search': '🔍',
+        'local_notice': '📢'
+    };
+    
+    let html = '';
+    
+    for (const [type, items] of Object.entries(grouped)) {
+        const label = typeLabels[type] || type;
+        const icon = typeIcons[type] || '📌';
+        
+        html += `<div style="margin-bottom: 1rem; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; background: #fff;">
+            <div style="padding: 1rem; background: #f8fafc; font-weight: 700; color: #1e293b; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between;">
+                <span>${icon} ${label}</span>
+                <span style="background: #e2e8f0; color: #475569; padding: 2px 8px; border-radius: 20px; font-size: 0.85rem;">${items.length} kpl</span>
+            </div>
+            <div style="padding: 0;">`;
+            
+        items.forEach((item, index) => {
+            const isLast = index === items.length - 1;
+            const borderBottom = isLast ? '' : 'border-bottom: 1px solid #f1f5f9;';
+            const priceHtml = item.price_info ? `<span style="font-weight: 600; color: #0f172a; font-size: 0.9rem;">${item.price_info}</span>` : '';
+            
+            html += `<a href="ilmoituskortti.html?id=${item.id}" style="display: block; padding: 1rem; text-decoration: none; color: inherit; ${borderBottom} transition: background 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
+                    <div>
+                        <div style="font-weight: 600; color: #0056b3; margin-bottom: 0.25rem;">${item.title}</div>
+                        <div style="font-size: 0.85rem; color: #64748b; line-height: 1.4;">${(item.description || '').substring(0, 100)}${(item.description && item.description.length > 100) ? '...' : ''}</div>
+                    </div>
+                    ${priceHtml}
+                </div>
+            </a>`;
+        });
+        
+        html += `</div></div>`;
+    }
+    
+    container.innerHTML = html;
 }
