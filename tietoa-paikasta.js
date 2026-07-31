@@ -26,18 +26,58 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        // 3. Hae relaatiot (yritykset + muut) tässä paikassa
+        // 3. Hae kohteet ja tarjoukset JSON-tiedostoista
+        const cacheBuster = new Date().getTime();
+        let kohteet = [];
+        let tarjoukset = [];
+        try {
+            const kohteetRes = await fetch('kohdekortit/kohteet.json?v=' + cacheBuster);
+            if (kohteetRes.ok) kohteet = await kohteetRes.json();
+            
+            const tarjouksetRes = await fetch('kohdekortit/tarjoukset.json?v=' + cacheBuster);
+            if (tarjouksetRes.ok) tarjoukset = await tarjouksetRes.json();
+        } catch (e) {
+            console.error('Virhe JSONien latauksessa:', e);
+        }
+        
+        // 4. Hae relaatiot Supabasesta (esim. mobiiliappin havainnot tai yritykset)
         const { data: relationsData, error: relationsError } = await aiSb
             .from('place_relations')
             .select('entity_id, entity_type, entity_name, relation_type, relation_context, strength')
-            .eq('place_id', placeId)
-            .order('strength', { ascending: true }); // PRIMARY ensin
+            .eq('place_id', placeId);
 
-        const companyRelations = relationsError ? [] : (relationsData || []).filter(r => r.entity_type === 'COMPANY');
-        const observationRelations = relationsError ? [] : (relationsData || []).filter(r => r.entity_type === 'OBSERVATION');
+        // 5. Yhdistä tiedot poistaen duplikaatit
+        const allItemsMap = new Map();
+        
+        // Lisätään JSONeista löytyneet
+        [...kohteet, ...tarjoukset].forEach(item => {
+            if (item.place_id === placeId) {
+                allItemsMap.set(String(item.id), item);
+            }
+        });
+        
+        // Lisätään Supabasesta löytyneet, jos niitä ei vielä ole
+        if (!relationsError && relationsData) {
+            relationsData.forEach(r => {
+                const eId = String(r.entity_id);
+                if (!allItemsMap.has(eId)) {
+                    let mappedType = (r.entity_type || 'other').toLowerCase();
+                    if (mappedType === 'company') mappedType = 'business';
+                    
+                    allItemsMap.set(eId, {
+                        id: eId,
+                        type: mappedType,
+                        name: r.entity_name || (mappedType === 'observation' ? 'Havainto' : eId),
+                        shortDescription: r.relation_context || r.relation_type
+                    });
+                }
+            });
+        }
+        
+        const relatedItems = Array.from(allItemsMap.values());
 
         // 4. Päivitä DOM
-        renderPlace(placeData, companyRelations, observationRelations, relationsData);
+        renderPlace(placeData, relatedItems);
 
     } catch (err) {
         console.error('Yllättävä virhe:', err);
@@ -50,7 +90,7 @@ function showError() {
     document.getElementById('error-message').style.display = 'block';
 }
 
-function renderPlace(place, companyRelations, observationRelations, allRelations) {
+function renderPlace(place, relatedItems) {
     document.getElementById('loading-spinner').style.display = 'none';
     document.getElementById('place-content').style.display = 'block';
 
@@ -70,13 +110,13 @@ function renderPlace(place, companyRelations, observationRelations, allRelations
     }
 
     // Tilastot
-    document.getElementById('stat-companies').textContent = companyRelations.length;
-    document.getElementById('stat-observations').textContent = observationRelations.length;
+    const companies = relatedItems.filter(i => i.type === 'business' || i.type === 'association' || i.type === 'service');
+    const others = relatedItems.filter(i => i.type !== 'business' && i.type !== 'association' && i.type !== 'service');
+    document.getElementById('stat-companies').textContent = companies.length;
+    document.getElementById('stat-observations').textContent = others.length;
 
-    // Verkostoyhteydet: ryhmittele vahvuuden mukaan (näytetään kaikki liitokset, myös havainnot)
-    // Suodatetaan pois tyhjät
-    const validRelations = (allRelations || []).filter(r => r.entity_type);
-    renderRelations(validRelations);
+    // Verkostoyhteydet
+    renderRelations(relatedItems);
 
     // Kartta
     if (place.lat && place.lon) {
@@ -85,63 +125,62 @@ function renderPlace(place, companyRelations, observationRelations, allRelations
     }
 }
 
-const STRENGTH_LABELS = { PRIMARY: 'Päätoimipaikka', SECONDARY: 'Säännöllinen', OCCASIONAL: 'Satunnainen' };
-const STRENGTH_COLORS = { PRIMARY: '#059669', SECONDARY: '#0056b3', OCCASIONAL: '#64748b' };
-const RELATION_LABELS = {
-    HEAD_OFFICE: 'Toimipaikka', SERVICE_AREA: 'Palvelualue', WORK_LOCATION: 'Työkohde',
-    EVENT_LOCATION: 'Tapahtumapaikka', CUSTOMER_LOCATION: 'Asiakaskohde',
-    LANDMARK: 'Maamerkki', ROUTE: 'Reitti', HISTORY: 'Historiallinen', MEMORY: 'Muisto',
-    OBSERVATION: 'Havainto', OTHER: 'Muu yhteys'
+const TYPE_LABELS = {
+    'business': 'Yritys',
+    'service': 'Palvelu',
+    'association': 'Yhdistys',
+    'event': 'Tapahtuma',
+    'offer': 'Tarjous',
+    'product': 'Tuote'
 };
 
-function renderRelations(relations) {
+function renderRelations(items) {
     const container = document.getElementById('companies-list');
     if (!container) return;
     
-    // Muutetaan otsikkoa dynaamisesti riippuen siitä mitä näytetään
     const sectionTitle = container.parentElement.querySelector('h2');
     if (sectionTitle) {
-        sectionTitle.innerHTML = `<span class="iconify" data-icon="material-symbols:account-tree-outline" style="color: #059669;"></span> Verkosto (${relations.length})`;
+        sectionTitle.innerHTML = `<span class="iconify" data-icon="material-symbols:account-tree-outline" style="color: #059669;"></span> Kohteet ja Tarjoukset (${items.length})`;
     }
 
-    if (relations.length === 0) {
+    if (items.length === 0) {
         container.innerHTML = `<div style="text-align:center; color: #94a3b8; padding: 2rem; border: 2px dashed #e2e8f0; border-radius: 16px;">
             <span class="iconify" data-icon="material-symbols:link-off" style="font-size: 2rem;"></span>
-            <p style="margin-top: 0.5rem;">Ei vielä verkostoyhteyksiä.</p></div>`;
+            <p style="margin-top: 0.5rem;">Ei kohteita tähän paikkaan liitettynä.</p></div>`;
         return;
     }
 
-    // Järjestä: PRIMARY ensin
-    const ORDER = ['PRIMARY', 'SECONDARY', 'OCCASIONAL'];
-    const sorted = [...relations].sort((a, b) => ORDER.indexOf(a.strength) - ORDER.indexOf(b.strength));
-
-    container.innerHTML = sorted.map(rel => {
-        const color = STRENGTH_COLORS[rel.strength] || '#64748b';
-        const strengthLabel = STRENGTH_LABELS[rel.strength] || rel.strength;
-        const relationLabel = RELATION_LABELS[rel.relation_type] || rel.relation_type;
+    container.innerHTML = items.map(item => {
+        const typeLabel = TYPE_LABELS[item.type] || item.type;
         
-        // Vaihda ikoni tyypin mukaan
         let iconName = 'material-symbols:storefront-outline';
-        if (rel.entity_type === 'OBSERVATION') iconName = 'material-symbols:visibility-outline';
-        else if (rel.entity_type === 'EVENT') iconName = 'material-symbols:event-outline';
-        else if (rel.entity_type === 'MEMORY') iconName = 'material-symbols:history-edu-outline';
+        if (item.type === 'event') iconName = 'material-symbols:event-outline';
+        else if (item.type === 'offer') iconName = 'material-symbols:local-offer-outline';
+        else if (item.type === 'association') iconName = 'material-symbols:groups-outline';
         
-        let displayName = rel.entity_name || (rel.entity_type === 'OBSERVATION' ? 'Havainto' : rel.entity_id);
+        const displayName = item.name || item.id;
+        let linkUrl = '?id=' + item.id;
+        if (item.id.startsWith('yritys_') || item.type === 'business') {
+            linkUrl = 'yrityskortti.html?id=' + item.id;
+        } else if (item.type === 'observation') {
+            linkUrl = 'ilmoituskortti.html?id=' + item.id;
+        } else {
+            linkUrl = 'kohdekortti.html?id=' + item.id;
+        }
 
         return `
-        <div style="display: flex; align-items: flex-start; gap: 1rem; padding: 1.25rem; background: #f8fafc; border-radius: 16px; border: 1px solid #e2e8f0; margin-bottom: 0.75rem;">
-            <div style="flex-shrink: 0; width: 44px; height: 44px; border-radius: 12px; background: ${color}1a; display: flex; align-items: center; justify-content: center;">
-                <span class="iconify" data-icon="${iconName}" style="font-size: 1.5rem; color: ${color};"></span>
+        <a href="${linkUrl}" style="text-decoration:none; color:inherit; display: flex; align-items: flex-start; gap: 1rem; padding: 1.25rem; background: #f8fafc; border-radius: 16px; border: 1px solid #e2e8f0; margin-bottom: 0.75rem; transition: background 0.2s;">
+            <div style="flex-shrink: 0; width: 44px; height: 44px; border-radius: 12px; background: #0596691a; display: flex; align-items: center; justify-content: center;">
+                <span class="iconify" data-icon="${iconName}" style="font-size: 1.5rem; color: #059669;"></span>
             </div>
             <div style="flex: 1; min-width: 0;">
                 <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
                     <span style="font-weight: 700; font-size: 1rem; color: #1a202c;">${displayName}</span>
-                    <span style="font-size: 0.7rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 50px; background: ${color}1a; color: ${color}; text-transform: uppercase; letter-spacing: 0.5px;">${strengthLabel}</span>
+                    <span style="font-size: 0.7rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 50px; background: #0596691a; color: #059669; text-transform: uppercase; letter-spacing: 0.5px;">${typeLabel}</span>
                 </div>
-                <div style="font-size: 0.85rem; color: #059669; font-weight: 600; margin-top: 0.2rem;">${relationLabel}</div>
-                ${rel.relation_context ? `<div style="font-size: 0.9rem; color: #64748b; margin-top: 0.4rem; line-height: 1.5;">${rel.relation_context}</div>` : ''}
+                ${item.shortDescription ? `<div style="font-size: 0.9rem; color: #64748b; margin-top: 0.4rem; line-height: 1.5;">${item.shortDescription}</div>` : ''}
             </div>
-        </div>`;
+        </a>`;
     }).join('');
 }
 

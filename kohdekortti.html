@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fi">
 <head>
     <meta charset="UTF-8">
@@ -609,13 +609,6 @@
                     </div>
                 </div>
 
-                <div class="content-box" id="relations-box" style="display: none;">
-                    <h2>Verkosto ja Kytkökset</h2>
-                    <div id="el-relations">
-                        <!-- Suhteet renderöidään tänne -->
-                    </div>
-                </div>
-
                 <!-- Feed/Tiedotteet -->
                 <div class="feed-box" id="feed-box" style="display: none;">
                     <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; color: var(--secondary-blue); margin-bottom: 1rem;">Ajankohtaista</h2>
@@ -749,7 +742,6 @@
 
     <script>
         let kohteet = [];
-        let suhteet = [];
 
         const typeTranslations = {
             'event': 'Tapahtuma',
@@ -760,42 +752,19 @@
             'offer': 'Tarjous'
         };
 
-        const relationTranslations = {
-            'organizes': 'Järjestää',
-            'hosts': 'Isännöi',
-            'sponsors': 'Sponsoroi',
-            'partners_with': 'Yhteistyökumppani',
-            'provides': 'Tarjoaa',
-            'offers': 'Tarjoaa',
-            'has_offer': 'Etu tai tarjous',
-            'managed_by': 'Hallinnoi',
-            'owned_by': 'Omistaa',
-            'located_at': 'Sijaitsee',
-            'promotes': 'Mainostaa',
-            'related_to': 'Liittyy',
-            'member_of': 'Jäsen',
-            'supports': 'Tukee',
-            'participates_in': 'Osallistuu',
-            'recommends': 'Suosittelee'
-        };
-
         async function init() {
             try {
                 // Fetch data
                 const cacheBuster = new Date().getTime();
-                const [kohteetRes, suhteetRes, tarjouksetRes] = await Promise.all([
+                const [kohteetRes, tarjouksetRes] = await Promise.all([
                     fetch('kohdekortit/kohteet.json?v=' + cacheBuster),
-                    fetch('kohdekortit/suhteet.json?v=' + cacheBuster),
                     fetch('kohdekortit/tarjoukset.json?v=' + cacheBuster)
                 ]);
                 
                 const perusKohteet = await kohteetRes.json();
-                suhteet = await suhteetRes.json();
                 const tarjoukset = await tarjouksetRes.json();
                 
-                kohteet = [...perusKohteet, ...tarjoukset];
-
-                if (window.LaukaaSupabase) {
+                kohteet = [...perusKohteet, ...tarjoukset];                if (window.LaukaaSupabase) {
                     try {
                         const { data, error } = await window.LaukaaSupabase
                             .from('offers')
@@ -1108,6 +1077,17 @@
                 specEl.style.display = 'none';
             }
 
+            if (entity.place_id) {
+                specEl.style.display = 'block';
+                specEl.innerHTML += `
+                    <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px dashed #e2e8f0;">
+                        <a href="tietoa-paikasta.html?id=${entity.place_id}" style="display:inline-flex; align-items:center; gap:0.5rem; background:var(--light-blue); color:var(--primary-blue); padding:0.75rem 1.25rem; border-radius:50px; text-decoration:none; font-weight:700; font-size:0.9rem; transition: background 0.2s;">
+                            <span class="iconify" data-icon="mdi:map-marker-radius"></span> Katso alueen muut kohteet
+                        </a>
+                    </div>
+                `;
+            }
+
             // Kohtaamiset integraatio
             if (typeof fetchEncounters === 'function' && typeof categories !== 'undefined') {
                 renderKohtaamisetForEntity(entity);
@@ -1190,41 +1170,6 @@
                 if (kohtaamisetBox) kohtaamisetBox.style.display = 'none';
             }
         }
-
-            // Relations
-            const relBox = document.getElementById('relations-box');
-            const relContainer = document.getElementById('el-relations');
-            relContainer.innerHTML = '';
-            
-            // Find relations where this entity is either source or target
-            const entityRels = suhteet.filter(r => r.sourceId === entity.id || r.targetId === entity.id);
-            
-            if (entityRels.length > 0) {
-                relBox.style.display = 'block';
-                entityRels.forEach(r => {
-                    // Determine if we are source or target to format correctly
-                    const isSource = r.sourceId === entity.id;
-                    const otherType = isSource ? r.targetType : r.sourceType;
-                    const otherId = isSource ? r.targetId : r.sourceId;
-                    
-                    const translatedRelation = relationTranslations[r.relationType] || r.relationType;
-                    const translatedOtherType = typeTranslations[otherType] || otherType;
-                    
-                    const div = document.createElement('div');
-                    div.className = 'relation-item';
-                    div.innerHTML = `
-                        <span class="icon iconify" data-icon="mdi:link-variant" style="font-size: 1.5rem; color: #94a3b8;"></span>
-                        <div class="relation-content">
-                            <span class="rel-type">${translatedRelation} (${translatedOtherType})</span>
-                            <span>${r.description}</span>
-                            ${!otherId.startsWith('yritys_') ? `<br><a href="?id=${otherId}" style="font-size:0.85rem; color:var(--primary-blue);">Tarkastele kohdetta</a>` : `<br><a href="yrityskortti.html?id=${otherId}" style="font-size:0.85rem; color:var(--primary-blue);">Tarkastele yrityskorttia</a>`}
-                        </div>
-                    `;
-                    relContainer.appendChild(div);
-                });
-            } else {
-                relBox.style.display = 'none';
-            }
 
             // Posts / Tiedotteet
             const feedBox = document.getElementById('feed-box');
