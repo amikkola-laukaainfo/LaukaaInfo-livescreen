@@ -18,7 +18,17 @@
         notice: 'Ilmoitus',
         video: 'Video',
         pikkuilmoitus: 'Ajankohtaista',
-        kohde: 'Kohde'
+        kohde: 'Kohde',
+        place: 'Paikka'
+    };
+
+    const placeTypeIcons = {
+        NATURE: '🌿',
+        LANDMARK: '🏛️',
+        SERVICE: '🏪',
+        BUILDING: '🏠',
+        AREA: '🗺️',
+        ROUTE: '🥾'
     };
 
     function escapeHtml(str) {
@@ -65,6 +75,41 @@
         };
     }
 
+    async function loadPlaces() {
+        try {
+            // Yritetään hakea Supabase-client globaalista scopesta
+            const sbUrl = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
+            const sbKey = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
+            if (!window.supabase) return [];
+            const sb = window.supabase.createClient(sbUrl, sbKey);
+            const { data, error } = await sb
+                .from('places')
+                .select('place_id, name, canonical_name, type, municipality, description')
+                .limit(30);
+            if (error || !data) return [];
+            return data;
+        } catch (e) {
+            console.warn('Places-haku epäonnistui:', e);
+            return [];
+        }
+    }
+
+    function normalizePlaceEntity(place) {
+        const icon = placeTypeIcons[place.type] || '📍';
+        const label = { NATURE: 'Luontokohde', LANDMARK: 'Nähtävyys', SERVICE: 'Palvelukeskus', BUILDING: 'Rakennus', AREA: 'Alue', ROUTE: 'Reitti' }[place.type] || 'Paikka';
+        return {
+            source: 'place',
+            id: place.place_id,
+            title: place.canonical_name || place.name,
+            description: place.description || `${icon} ${label} – ${place.municipality || 'Laukaa'}`,
+            image: placeholderImage,
+            type: 'place',
+            placeIcon: icon,
+            placeLabel: label,
+            targetUrl: `tietoa-paikasta.html?id=${encodeURIComponent(place.place_id)}`
+        };
+    }
+
     function truncate(text, maxLength) {
         if (!text) return '';
         text = text.trim();
@@ -102,6 +147,22 @@
                         <h3 class="homepage-feed-highlights__card-title">${title}</h3>
                         <p class="homepage-feed-highlights__card-desc">${desc}</p>
                         <span class="homepage-feed-highlights__card-cta">Näytä koko tapahtuma »</span>
+                    </div>
+                </a>
+            `;
+        } else if (item.type === 'place') {
+            // Paikkakortti – erityinen tyyli vihreällä aksentilla
+            card.className = 'homepage-feed-highlights__card homepage-feed-highlights__card--place';
+            card.innerHTML = `
+                <a href="${targetUrl}" class="homepage-feed-highlights__card-link">
+                    <div class="homepage-feed-highlights__card-body homepage-feed-highlights__card-body--place" style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border-top: 4px solid #059669; padding: 1.5rem; display:flex; flex-direction:column; gap:0.75rem; height:100%; box-sizing:border-box;">
+                        <div style="display:flex; align-items:center; gap:0.75rem;">
+                            <span style="font-size: 2rem; line-height:1;">${escapeHtml(item.placeIcon || '📍')}</span>
+                            <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #059669; background: #dcfce7; padding: 0.25rem 0.75rem; border-radius: 50px;">${escapeHtml(item.placeLabel || 'Paikka')}</span>
+                        </div>
+                        <h3 class="homepage-feed-highlights__card-title" style="color: #064e3b; font-size: 1.1rem; margin: 0;">${title}</h3>
+                        <p class="homepage-feed-highlights__card-desc" style="color: #047857; font-size: 0.9rem; margin: 0; flex:1;">${desc}</p>
+                        <span class="homepage-feed-highlights__card-cta" style="color: #059669; font-weight: 700;">Tutustu paikkaan »</span>
                     </div>
                 </a>
             `;
@@ -180,13 +241,22 @@
             const kohteet = await loadKohdekortit();
             const normalizedKohteet = shuffleArray(kohteet).map(normalizeKohdeEntity);
 
+            // Hae paikkoja Supabasesta
+            const places = await loadPlaces();
+            const normalizedPlaces = shuffleArray(places).map(normalizePlaceEntity);
+
+            // Satunnaisesti 0-1 paikkakorttia mukaan
+            const includePlaces = normalizedPlaces.length > 0 && Math.random() < 0.6;
+            const placeCount = includePlaces ? 1 : 0;
+
             const includeKohde = normalizedKohteet.length > 0 && Math.random() < 0.65;
-            const kohdeCount = includeKohde ? Math.min(1 + Math.floor(Math.random() * 2), maxHighlights - 1) : 0;
-            const feedCount = maxHighlights - kohdeCount;
+            const kohdeCount = includeKohde ? Math.min(1 + Math.floor(Math.random() * 2), maxHighlights - 1 - placeCount) : 0;
+            const feedCount = maxHighlights - kohdeCount - placeCount;
 
             const selectedFeed = shuffleArray(promoted.concat(otherFeedItems)).slice(0, Math.max(1, feedCount));
             const selectedKohde = normalizedKohteet.slice(0, kohdeCount);
-            const selected = shuffleArray([...selectedFeed, ...selectedKohde]).slice(0, maxHighlights);
+            const selectedPlaces = normalizedPlaces.slice(0, placeCount);
+            const selected = shuffleArray([...selectedFeed, ...selectedKohde, ...selectedPlaces]).slice(0, maxHighlights);
 
             renderHighlights(selected);
         } catch (err) {
