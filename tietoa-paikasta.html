@@ -454,6 +454,23 @@
         .tag-large:hover { background: #bae6fd; }
         .tag-medium { font-size: 0.95rem; }
         .tag-small { font-size: 0.85rem; opacity: 0.8; }
+
+        /* Nearby Tags Grid - 2 columns on desktop */
+        .nearby-tags-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.6rem;
+        }
+        .nearby-tags-grid .nearby-tag {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        @media (max-width: 768px) {
+            .nearby-tags-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 
@@ -541,6 +558,16 @@
                         <!-- Filled by JS -->
                     </div>
                 </section>
+
+                <!-- Nearby Places -->
+                <section id="nearby-places-section" class="content-block" style="display: none;">
+                    <h2 style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="iconify" style="color: #0284c7;" data-icon="material-symbols:location-on-outline"></span> Lähipaikat
+                    </h2>
+                    <div id="nearby-places-list" class="nearby-tags-grid">
+                        <!-- Filled by JS -->
+                    </div>
+                </section>
             </div>
 
             <!-- Right Column -->
@@ -550,14 +577,6 @@
                 <div id="map-section" style="display: none; height: 300px; width: 100%;">
                     <div id="map" style="width: 100%; height: 100%;"></div>
                 </div>
-
-                <!-- Nearby Places -->
-                <section id="nearby-places-section" style="display: none; margin-top: 1.5rem;">
-                    <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-main);">📍 Lähipaikat</h3>
-                    <div id="nearby-places-list" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                        <!-- Filled by JS -->
-                    </div>
-                </section>
 
                 <!-- 5. Visual Network Stats -->
                 <section class="network-stats">
