@@ -205,8 +205,8 @@ function renderPlace(place, relatedItems) {
     if (shareBtn) {
         shareBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            // Luo nimestä tehty jakolinkki
-            const rawName = place.name || place.canonical_name || place.place_id;
+            // Luo nimestä tehty jakolinkki (käytetään ensisijaisesti kanonista nimeä uniikkiuden vuoksi)
+            const rawName = place.canonical_name || place.name || place.place_id;
             const safeName = encodeURIComponent(rawName.replace(/\s+/g, '_'));
             
             const baseUrl = window.location.origin + window.location.pathname;
