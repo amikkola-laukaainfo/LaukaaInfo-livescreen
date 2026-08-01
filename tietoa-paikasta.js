@@ -228,6 +228,9 @@ function renderPlace(place, relatedItems) {
             });
         });
     }
+
+    // Ladataan lähipaikat tag-pilvenä
+    renderNearbyPlaces(place);
 }
 
 const TYPE_LABELS = {
@@ -669,4 +672,65 @@ function loadScript(src) {
         s.onerror = reject;
         document.head.appendChild(s);
     });
+}
+
+// ── LÄHIPAIKKOJEN LOGIIKKA (TAG CLOUD) ──
+function haversineMeters(lat1, lon1, lat2, lon2) {
+    const R = 6371000;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+async function renderNearbyPlaces(currentPlace) {
+    if (!currentPlace.lat || !currentPlace.lon) return;
+    const container = document.getElementById('nearby-places-section');
+    const list = document.getElementById('nearby-places-list');
+    if (!container || !list) return;
+
+    const sb = window.aiSb;
+    if (!sb) return;
+
+    try {
+        const { data: places, error } = await sb
+            .from('places')
+            .select('place_id, name, canonical_name, type, lat, lon')
+            .not('lat', 'is', null)
+            .not('lon', 'is', null);
+
+        if (error || !places) return;
+
+        let nearby = places.map(p => {
+            if (p.place_id === currentPlace.place_id) return null;
+            const dist = haversineMeters(currentPlace.lat, currentPlace.lon, p.lat, p.lon);
+            return { ...p, dist };
+        }).filter(p => p !== null && p.dist <= 5000);
+
+        nearby.sort((a, b) => a.dist - b.dist);
+        nearby = nearby.slice(0, 5);
+
+        if (nearby.length > 0) {
+            container.style.display = 'block';
+            list.innerHTML = nearby.map(p => {
+                const distText = p.dist < 1000
+                    ? Math.round(p.dist) + ' m'
+                    : (p.dist / 1000).toFixed(1).replace('.', ',') + ' km';
+
+                let tagClass = 'tag-medium';
+                if (p.dist < 300) tagClass = 'tag-large';
+                else if (p.dist > 1000) tagClass = 'tag-small';
+
+                const name = p.name || p.canonical_name;
+                const safeName = encodeURIComponent(name.replace(/\s+/g, '_'));
+                const hashName = name.replace(/\s+/g, '');
+
+                return `<a href="tietoa-paikasta.html?name=${safeName}" class="nearby-tag ${tagClass}">#${hashName} <span class="dist">\u00b7 ${distText}</span></a>`;
+            }).join('');
+        }
+    } catch (e) {
+        console.warn('Nearby places error:', e);
+    }
 }

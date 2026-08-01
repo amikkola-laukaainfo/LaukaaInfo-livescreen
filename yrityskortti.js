@@ -1628,7 +1628,7 @@
         }
         if (printIntro) {
             if (slogan) {
-                printIntro.textContent = `”${slogan}”`;
+                printIntro.textContent = `"${slogan}"`;
                 printIntroRow.style.display = 'block';
             } else {
                 printIntroRow.style.display = 'none';
@@ -1666,6 +1666,9 @@
 
         // 16. Liittyvät paikat integraatio
         renderRelatedPlacesForYritys(company.id);
+
+        // 17. Lähipaikat tag-pilvi
+        renderNearbyPlacesForCompany(company.id);
     }
 
     async function renderKohtaamisetForYritys(company) {
@@ -2891,3 +2894,94 @@ window.loadRelatedPlaces = async function(companyId) {
 
 // Varmistetaan että funktio näkyy globaalisti vaikka koodi olisi kääritty
 window.loadRelatedPlaces = loadRelatedPlaces;
+
+// ── LÄHIPAIKKOJEN LOGIIKKA (TAG CLOUD) ──
+function _haversineMeters(lat1, lon1, lat2, lon2) {
+    const R = 6371000;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+async function renderNearbyPlacesForCompany(companyId) {
+    const container = document.getElementById('nearby-places-section');
+    const list = document.getElementById('nearby-places-list');
+    if (!container || !list) return;
+
+    // Alusta supabase-client tarvittaessa
+    if (!aiSupabaseClient && typeof supabase !== 'undefined') {
+        aiSupabaseClient = supabase.createClient(AI_SUPABASE_URL, AI_SUPABASE_KEY);
+    }
+    const sb = aiSupabaseClient;
+    if (!sb) return;
+
+    try {
+        const prefixedId = 'company-' + String(companyId).replace('company-', '');
+        const isDist = window.location.pathname.includes('/yritys/');
+        const prefix = isDist ? '../' : './';
+
+        // Hae yrityksen kytketty paikka (place_relations)
+        const { data: relations } = await sb
+            .from('place_relations')
+            .select('place_id')
+            .eq('entity_id', prefixedId)
+            .limit(1);
+
+        if (!relations || relations.length === 0) return;
+        const linkedPlaceId = relations[0].place_id;
+
+        // Hae kytketyn paikan koordinaatit
+        const { data: linkedPlaces } = await sb
+            .from('places')
+            .select('lat, lon')
+            .eq('place_id', linkedPlaceId)
+            .limit(1);
+
+        if (!linkedPlaces || linkedPlaces.length === 0 || !linkedPlaces[0].lat) return;
+        const { lat: originLat, lon: originLon } = linkedPlaces[0];
+
+        // Hae kaikki paikat koordinaatteineen
+        const { data: allPlaces } = await sb
+            .from('places')
+            .select('place_id, name, canonical_name, type, lat, lon')
+            .not('lat', 'is', null)
+            .not('lon', 'is', null);
+
+        if (!allPlaces) return;
+
+        // Laske etäisyydet, suodata alle 5km ja ota 5 lähintä
+        let nearby = allPlaces
+            .filter(p => p.place_id !== linkedPlaceId)
+            .map(p => ({ ...p, dist: _haversineMeters(originLat, originLon, p.lat, p.lon) }))
+            .filter(p => p.dist <= 5000)
+            .sort((a, b) => a.dist - b.dist)
+            .slice(0, 5);
+
+        if (nearby.length === 0) return;
+
+        container.style.display = 'block';
+        list.innerHTML = nearby.map(p => {
+            const distText = p.dist < 1000
+                ? Math.round(p.dist) + ' m'
+                : (p.dist / 1000).toFixed(1).replace('.', ',') + ' km';
+
+            let tagClass = 'tag-medium';
+            if (p.dist < 300) tagClass = 'tag-large';
+            else if (p.dist > 1000) tagClass = 'tag-small';
+
+            const name = p.name || p.canonical_name;
+            const safeName = encodeURIComponent(name.replace(/\s+/g, '_'));
+            const hashName = name.replace(/\s+/g, '');
+
+            return `<a href="${prefix}tietoa-paikasta.html?name=${safeName}" class="nearby-tag ${tagClass}">
+                #${hashName} <span class="dist">· ${distText}</span>
+            </a>`;
+        }).join('');
+
+    } catch (e) {
+        console.warn('Nearby places (company) error:', e);
+    }
+}

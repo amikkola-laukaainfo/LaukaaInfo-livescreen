@@ -16,9 +16,9 @@
     <!-- Leaflet Map -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-    <link rel="stylesheet" href="../style.f7f94cbc.css?v=20260420-2">
-    <link rel="stylesheet" href="../modal.f7f94cbc.css">
-    <script src="../translations.f7f94cbc.js?v=20260505"></script>
+    <link rel="stylesheet" href="../style.055d37bf.css?v=20260420-2">
+    <link rel="stylesheet" href="../modal.055d37bf.css">
+    <script src="../translations.055d37bf.js?v=20260505"></script>
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
     <style>
         :root {
@@ -1571,7 +1571,34 @@
             line-height: 1.7;
             padding: 0 0 1.25rem 2rem;
         }
+
+        /* Nearby Tags */
+        .nearby-tag {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            border-radius: 50px;
+            background: #f1f5f9;
+            color: #334155;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+        .nearby-tag:hover {
+            background: #e2e8f0;
+            border-color: #cbd5e1;
+            transform: translateY(-2px);
+        }
+        .nearby-tag .dist {
+            opacity: 0.7;
+            font-weight: 500;
+        }
+        .tag-large { font-size: 1.05rem; background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; }
+        .tag-large:hover { background: #bae6fd; }
+        .tag-medium { font-size: 0.95rem; }
+        .tag-small { font-size: 0.85rem; opacity: 0.8; }
     </style>
+
 
     <!-- Generated Premium OG Tags -->
     <meta property="og:title" content="Terveys- ja hyvinvointipalvelu Riina Raitio – LaukaaInfo">
@@ -2037,6 +2064,14 @@
                 </div>
             </div>
 
+            <!-- Nearby Places Section -->
+            <div id="nearby-places-section" class="rss-section" style="display: none; background: #ffffff; border: 1px solid #e2e8f0; margin-top: 3rem; padding: 1.5rem; border-radius: 16px;">
+                <h3><span class="icon"><span class="iconify" data-icon="material-symbols:location-on-outline"></span></span> Lähellä tätä yritystä</h3>
+                <div id="nearby-places-list" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem;">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+
             <!-- Recommendations Section -->
             <div id="recommendations-section" class="rss-section" style="display: none; background: #f8fafc; border: 1px solid #e2e8f0; margin-top: 3rem;">
                 <h3><span class="icon"><span class="iconify" data-icon="material-symbols-light:auto-awesome-outline"></span></span> Suositukset sinulle</h3>
@@ -2244,8 +2279,8 @@
 
     <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="../script.f7f94cbc.js?v=20260301"></script>
-    <script src="../yrityskortti.f7f94cbc.js?v=20260304-DEBUG-2"></script>
+    <script src="../script.055d37bf.js?v=20260301"></script>
+    <script src="../yrityskortti.055d37bf.js?v=20260304-DEBUG-2"></script>
     <script>
         function toggleMarketingDropdown() {
             document.getElementById('marketing-dropdown-container').classList.toggle('open');
@@ -2281,8 +2316,8 @@
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../supabase-config.f7f94cbc.js"></script>
-    <script src="../kohtaamiset.f7f94cbc.js?v=20260708"></script>
+    <script src="../supabase-config.055d37bf.js"></script>
+    <script src="../kohtaamiset.055d37bf.js?v=20260708"></script>
 </body>
 
 </html>

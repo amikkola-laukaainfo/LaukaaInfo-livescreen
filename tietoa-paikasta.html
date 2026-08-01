@@ -428,6 +428,32 @@
         details.companies-accordion[open] .accordion-icon {
             transform: rotate(180deg);
         }
+
+        /* Nearby Tags */
+        .nearby-tag {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            border-radius: 50px;
+            background: #f1f5f9;
+            color: #334155;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+        .nearby-tag:hover {
+            background: #e2e8f0;
+            border-color: #cbd5e1;
+            transform: translateY(-2px);
+        }
+        .nearby-tag .dist {
+            opacity: 0.7;
+            font-weight: 500;
+        }
+        .tag-large { font-size: 1.05rem; background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; }
+        .tag-large:hover { background: #bae6fd; }
+        .tag-medium { font-size: 0.95rem; }
+        .tag-small { font-size: 0.85rem; opacity: 0.8; }
     </style>
 </head>
 
@@ -524,6 +550,14 @@
                 <div id="map-section" style="display: none; height: 300px; width: 100%;">
                     <div id="map" style="width: 100%; height: 100%;"></div>
                 </div>
+
+                <!-- Nearby Places -->
+                <section id="nearby-places-section" style="display: none; margin-top: 1.5rem;">
+                    <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-main);">📍 Lähipaikat</h3>
+                    <div id="nearby-places-list" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                        <!-- Filled by JS -->
+                    </div>
+                </section>
 
                 <!-- 5. Visual Network Stats -->
                 <section class="network-stats">

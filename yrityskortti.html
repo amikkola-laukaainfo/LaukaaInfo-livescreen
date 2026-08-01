@@ -1581,7 +1581,34 @@
             line-height: 1.7;
             padding: 0 0 1.25rem 2rem;
         }
+
+        /* Nearby Tags */
+        .nearby-tag {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            border-radius: 50px;
+            background: #f1f5f9;
+            color: #334155;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+        .nearby-tag:hover {
+            background: #e2e8f0;
+            border-color: #cbd5e1;
+            transform: translateY(-2px);
+        }
+        .nearby-tag .dist {
+            opacity: 0.7;
+            font-weight: 500;
+        }
+        .tag-large { font-size: 1.05rem; background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; }
+        .tag-large:hover { background: #bae6fd; }
+        .tag-medium { font-size: 0.95rem; }
+        .tag-small { font-size: 0.85rem; opacity: 0.8; }
     </style>
+
 </head>
 
 <body>
@@ -2034,6 +2061,14 @@
 
                 <div id="ad-links-list" style="display: flex; flex-wrap: wrap; gap: 1rem;">
                     <!-- Linkit tähän -->
+                </div>
+            </div>
+
+            <!-- Nearby Places Section -->
+            <div id="nearby-places-section" class="rss-section" style="display: none; background: #ffffff; border: 1px solid #e2e8f0; margin-top: 3rem; padding: 1.5rem; border-radius: 16px;">
+                <h3><span class="icon"><span class="iconify" data-icon="material-symbols:location-on-outline"></span></span> Lähellä tätä yritystä</h3>
+                <div id="nearby-places-list" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem;">
+                    <!-- Filled by JS -->
                 </div>
             </div>
 
