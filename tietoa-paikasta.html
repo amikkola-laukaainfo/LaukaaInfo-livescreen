@@ -265,11 +265,8 @@
         }
 
         /* Map */
-        #map-section {
-            border-radius: var(--radius-md);
-            overflow: hidden;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid #f1f5f9;
+        #map-container {
+            width: 100%;
         }
 
         /* 5. Visual Network Stats */
@@ -574,8 +571,13 @@
             <aside class="sidebar">
                 
                 <!-- Map -->
-                <div id="map-section" style="display: none; height: 300px; width: 100%;">
-                    <div id="map" style="width: 100%; height: 100%;"></div>
+                <div id="map-section" style="display: none; width: 100%;">
+                    <div id="map" style="width: 100%; height: 300px; border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-sm); border: 1px solid #f1f5f9;"></div>
+                    <div style="text-align: right; margin-top: 0.75rem; padding-right: 0.5rem;">
+                        <a href="kohdekartta.html" style="font-size: 0.95rem; font-weight: 600; color: #0284c7; text-decoration: none; display: inline-flex; align-items: center; gap: 0.2rem; transition: color 0.2s;" onmouseover="this.style.color='#0369a1'" onmouseout="this.style.color='#0284c7'">
+                            Katso kaikki paikat kartalla <span class="iconify" data-icon="material-symbols:arrow-forward-rounded"></span>
+                        </a>
+                    </div>
                 </div>
 
                 <!-- 5. Visual Network Stats -->
