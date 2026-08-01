@@ -92,8 +92,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // 4. Päivitä DOM
         renderPlace(placeData, relatedItems);
-        loadEncountersForPlace(placeData);
-        loadLostItemsForPlace(placeData);
+        await loadEncountersForPlace(placeData);
+        await loadLostItemsForPlace(placeData);
 
     } catch (err) {
         console.error('Yllättävä virhe:', err);

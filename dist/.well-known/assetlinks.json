@@ -1,0 +1,13 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "fi.mediazoo.lostrefound",
+      "sha256_cert_fingerprints": [
+        "94:A5:09:E4:31:EE:AB:B4:D1:B4:54:84:42:2E:4C:C1:62:AA:1D:F8:DB:79:78:39:3E:2C:85:77:18:2B:85:87",
+        "FF:02:F2:83:AE:09:51:CD:9F:E8:B8:38:AF:32:AB:09:53:DD:22:F8:49:55:70:E1:DE:3C:7C:BB:62:15:CF:A4"
+      ]
+    }
+  }
+]
