@@ -127,8 +127,56 @@ function renderPlace(place, relatedItems) {
     // Tilastot
     const companies = relatedItems.filter(i => i.type === 'business' || i.type === 'association' || i.type === 'service');
     const others = relatedItems.filter(i => i.type !== 'business' && i.type !== 'association' && i.type !== 'service');
-    document.getElementById('stat-companies').textContent = companies.length;
-    document.getElementById('stat-observations').textContent = others.length;
+    
+    const statCompanies = document.getElementById('stat-companies');
+    if (statCompanies) statCompanies.textContent = companies.length;
+    
+    const statObservations = document.getElementById('stat-observations');
+    if (statObservations) statObservations.textContent = others.length;
+
+    // Teemat / Liittyy teemoihin
+    const themesSection = document.getElementById('themes-section');
+    const themesList = document.getElementById('network-tags-list');
+    if (themesSection && themesList) {
+        const uniqueThemes = new Set();
+        if (place.type) uniqueThemes.add(getTypeLabel(place.type));
+        relatedItems.forEach(i => {
+            if (i.type && i.type !== 'observation' && i.type !== 'other') {
+                uniqueThemes.add(getTypeLabel(i.type));
+            }
+        });
+        
+        const themesArray = Array.from(uniqueThemes);
+        if (themesArray.length > 0) {
+            themesSection.style.display = 'block';
+            themesList.innerHTML = themesArray.map(t => `<span class="network-tag"><span class="iconify" data-icon="material-symbols:tag"></span> ${t}</span>`).join('');
+        } else {
+            themesSection.style.display = 'none';
+        }
+    }
+
+    // Aikajana (Havainnot)
+    const timelineSection = document.getElementById('timeline-section');
+    const timelineList = document.getElementById('timeline-list');
+    if (timelineSection && timelineList) {
+        const observations = others.filter(i => i.type === 'observation' || i.type === 'other' || !i.type);
+        if (observations.length > 0) {
+            timelineSection.style.display = 'block';
+            timelineList.innerHTML = observations.map((obs) => {
+                const label = obs.name || 'Havainto';
+                const desc = obs.shortDescription || '';
+                return `<div class="timeline-item">
+                            <div class="time-label">${label}</div>
+                            <div class="time-event">
+                                <span class="iconify" data-icon="material-symbols:info" style="color: #3b82f6; font-size: 1.5rem;"></span> 
+                                ${desc}
+                            </div>
+                        </div>`;
+            }).join('');
+        } else {
+            timelineSection.style.display = 'none';
+        }
+    }
 
     // Verkostoyhteydet
     renderRelations(relatedItems);
@@ -374,6 +422,15 @@ function renderEncounters(encounters) {
         }
         return true;
     });
+    
+    const offers = validEncounters.filter(e => e.type === 'offer');
+    const activeAlerts = validEncounters.filter(e => e.type !== 'offer');
+    
+    const statEncounters = document.getElementById('stat-encounters');
+    if (statEncounters) statEncounters.textContent = activeAlerts.length;
+    
+    const statOffers = document.getElementById('stat-offers');
+    if (statOffers) statOffers.textContent = offers.length;
     
     if (validEncounters.length === 0) {
         // Piilotetaan osio jos ei ilmoituksia
