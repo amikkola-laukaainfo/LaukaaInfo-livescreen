@@ -65,7 +65,7 @@ window.loadRelatedPlaces = async function(companyId) {
         (places || []).forEach(place => {
             const label = typeLabels[place.type] || place.type || 'Paikka';
             const context = contextMap[place.place_id] || '';
-            const name = place.canonical_name || place.name || 'Nimetön paikka';
+            const name = place.name || place.canonical_name || 'Nimetön paikka';
             const muni = place.municipality || 'Laukaa';
             const placeUrl = `${prefix}tietoa-paikasta.html?id=${encodeURIComponent(place.place_id)}`;
 

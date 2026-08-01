@@ -1789,7 +1789,7 @@
             relations.forEach(function(rel) {
                 const place = placeMap[rel.place_id];
                 if (!place) return;
-                const placeName = place.canonical_name || place.name || 'Tuntematon paikka';
+                const placeName = place.name || place.canonical_name || 'Tuntematon paikka';
                 const contextInfo = rel.context ? '<div style="font-size: 0.85rem; color: #4b5563; margin-top: 4px;">' + rel.context + '</div>' : '';
                 list.innerHTML += '<a href="' + linkBase + 'tietoa-paikasta.html?id=' + rel.place_id + '" style="display:block; text-decoration:none; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:12px; padding:12px; color:inherit; transition:background 0.2s;">'
                     + '<div style="font-weight: 700; color: #065f46; font-size: 1.05rem;">' + placeName + '</div>'
@@ -2853,7 +2853,7 @@ window.loadRelatedPlaces = async function(companyId) {
         (places || []).forEach(place => {
             const label = typeLabels[place.type] || place.type || 'Paikka';
             const context = contextMap[place.place_id] || '';
-            const name = place.canonical_name || place.name || 'Nimetön paikka';
+            const name = place.name || place.canonical_name || 'Nimetön paikka';
             const muni = place.municipality || 'Laukaa';
             const placeUrl = `${prefix}tietoa-paikasta.html?id=${encodeURIComponent(place.place_id)}`;
 

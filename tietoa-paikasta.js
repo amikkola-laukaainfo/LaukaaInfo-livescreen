@@ -111,7 +111,7 @@ function renderPlace(place, relatedItems) {
     document.getElementById('place-content').style.display = 'block';
 
     // Perustiedot
-    document.getElementById('place-name').textContent = place.canonical_name || place.name || 'Nimetön paikka';
+    document.getElementById('place-name').textContent = place.name || place.canonical_name || 'Nimetön paikka';
     document.getElementById('place-type').textContent = getTypeLabel(place.type);
     document.getElementById('place-municipality').textContent = place.municipality || 'Laukaa';
     
@@ -120,7 +120,7 @@ function renderPlace(place, relatedItems) {
         document.getElementById('display-description').innerHTML = `<p>${place.description}</p>`;
     } else {
         document.getElementById('display-description').innerHTML = 
-            `Tämä on <strong>${place.canonical_name || place.name}</strong>, joka on tyypiltään ${getTypeLabel(place.type).toLowerCase()}. ` +
+            `Tämä on <strong>${place.name || place.canonical_name}</strong>, joka on tyypiltään ${getTypeLabel(place.type).toLowerCase()}. ` +
             `Sijaintina on ${place.municipality}. <br><br>` + 
             `<em>Tekoälyn generoima kuvaus tälle paikalle lisätään myöhemmässä vaiheessa.</em>`;
     }
@@ -185,7 +185,7 @@ function renderPlace(place, relatedItems) {
     // Kartta ja sijaintinapit
     if (place.lat && place.lon) {
         document.getElementById('map-section').style.display = 'block';
-        initPlaceMap(place.lat, place.lon, place.canonical_name || place.name);
+        initPlaceMap(place.lat, place.lon, place.name || place.canonical_name);
         
         const routeBtn = document.getElementById('btn-route');
         if (routeBtn) {
@@ -205,7 +205,7 @@ function renderPlace(place, relatedItems) {
         shareBtn.addEventListener('click', (e) => {
             e.preventDefault();
             // Luo nimestä tehty jakolinkki
-            const rawName = place.canonical_name || place.name || place.place_id;
+            const rawName = place.name || place.canonical_name || place.place_id;
             const safeName = encodeURIComponent(rawName.replace(/\s+/g, '_'));
             
             const baseUrl = window.location.origin + window.location.pathname;
@@ -327,7 +327,7 @@ async function loadEncountersForPlace(place) {
     
     try {
         // Hakee ilmoitukset jotka on linkitetty location_id:llä tai joilla on sama nimi (fallback)
-        const placeName = place.canonical_name || place.name || '';
+        const placeName = place.name || place.canonical_name || '';
         
         let query = window.LaukaaSupabase
             .from('encounters')

@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         filteredPlaces.forEach(place => {
             const label = placeTypeLabel[place.type] || 'Paikka';
-            const title = place.canonical_name || place.name;
+            const title = place.name || place.canonical_name;
             const popupHtml = `<div style="min-width:200px;">
                 <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;color:#059669;margin-bottom:4px;">📍 ${label}</div>
                 <h3 style="margin:0 0 6px 0;color:#064e3b;font-size:1rem;">${title}</h3>

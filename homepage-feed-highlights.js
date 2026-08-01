@@ -100,7 +100,7 @@
         return {
             source: 'place',
             id: place.place_id,
-            title: place.canonical_name || place.name,
+            title: place.name || place.canonical_name,
             description: place.description || `${icon} ${label} – ${place.municipality || 'Laukaa'}`,
             image: placeholderImage,
             type: 'place',
