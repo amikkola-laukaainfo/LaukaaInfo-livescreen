@@ -724,12 +724,12 @@ async function renderNearbyPlaces(currentPlace) {
                 if (p.dist < 300) tagClass = 'tag-large';
                 else if (p.dist > 1000) tagClass = 'tag-small';
 
-                // Käytetään canonical_name hashtagina (ilman välejä), mutta linkataan place_id:llä
-                // jotta sama yleisnimi (esim. "urheilukenttä") ei vie aina samaan paikkaan.
-                const displayName = p.canonical_name || p.name;
+                // Näytetään oikea nimi (p.name) hashtagina, mutta haetaan kohde canonical-nimellä
+                const displayName = p.name || p.canonical_name;
                 const hashName = displayName.replace(/\s+/g, '');
+                const searchName = (p.canonical_name || p.name).replace(/\s+/g, '_');
 
-                return `<a href="tietoa-paikasta.html?id=${encodeURIComponent(p.place_id)}" class="nearby-tag ${tagClass}">#${hashName} <span class="dist">\u00b7 ${distText}</span></a>`;
+                return `<a href="tietoa-paikasta.html?name=${encodeURIComponent(searchName)}" class="nearby-tag ${tagClass}">#${hashName} <span class="dist">\u00b7 ${distText}</span></a>`;
             }).join('');
         }
     } catch (e) {
