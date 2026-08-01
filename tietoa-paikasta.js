@@ -586,11 +586,13 @@ async function loadLostItemsForPlace(place) {
         const db = firebase.firestore(window._lfApp);
         
         // Hae kyseisen paikan ilmoitukset placeId-kentällä (ilman status-kyselyä indeksien välttämiseksi)
+        console.log('Haetaan lostItems paikalle:', place.place_id);
         const snapshot = await db.collection('lostItems')
             .where('placeId', '==', place.place_id)
             .limit(50)
             .get();
         
+        console.log('LostItems snapshot:', snapshot.empty ? 'Tyhjä' : snapshot.docs.length + ' dokumenttia löydetty');
         if (snapshot.empty) return;
         
         // Suodata aktiiviset paikallisesti
@@ -599,6 +601,7 @@ async function loadLostItemsForPlace(place) {
             return status === 'ACTIVE' || status === 'active';
         });
         
+        console.log('Aktiiviset lostItems:', activeDocs.length);
         if (activeDocs.length === 0) return;
         
         const lostItems = activeDocs.map(doc => {
