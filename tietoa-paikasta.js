@@ -185,7 +185,7 @@ function renderPlace(place, relatedItems) {
     // Kartta ja sijaintinapit
     if (place.lat && place.lon) {
         document.getElementById('map-section').style.display = 'block';
-        initMap(place.lat, place.lon, place.canonical_name || place.name);
+        initPlaceMap(place.lat, place.lon, place.canonical_name || place.name);
         
         const routeBtn = document.getElementById('btn-route');
         if (routeBtn) {
@@ -289,7 +289,7 @@ function renderRelations(items) {
     }).join('');
 }
 
-function initMap(lat, lon, name) {
+function initPlaceMap(lat, lon, name) {
     // Odotetaan hieman jotta display: block ehtii vaikuttaa map-containeriin
     setTimeout(() => {
         if (window.placeMap) { window.placeMap.remove(); }
@@ -595,10 +595,10 @@ async function loadLostItemsForPlace(place) {
         console.log('LostItems snapshot:', snapshot.empty ? 'Tyhjä' : snapshot.docs.length + ' dokumenttia löydetty');
         if (snapshot.empty) return;
         
-        // Suodata aktiiviset paikallisesti
+        // Suodata aktiiviset paikallisesti (Android tallentaa tilaksi APPROVED)
         const activeDocs = snapshot.docs.filter(doc => {
             const status = doc.data().status;
-            return status === 'ACTIVE' || status === 'active';
+            return status === 'ACTIVE' || status === 'active' || status === 'APPROVED' || status === 'approved';
         });
         
         console.log('Aktiiviset lostItems:', activeDocs.length);
