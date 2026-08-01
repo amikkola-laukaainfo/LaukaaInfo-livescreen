@@ -181,10 +181,21 @@ function renderPlace(place, relatedItems) {
     // Verkostoyhteydet
     renderRelations(relatedItems);
 
-    // Kartta
+    // Kartta ja sijaintinapit
     if (place.lat && place.lon) {
         document.getElementById('map-section').style.display = 'block';
         initMap(place.lat, place.lon, place.canonical_name || place.name);
+        
+        const routeBtn = document.getElementById('btn-route');
+        if (routeBtn) {
+            routeBtn.setAttribute('onclick', `window.open('https://maps.google.com/?q=${place.lat},${place.lon}', '_blank')`);
+        }
+        
+        const svBtn = document.getElementById('btn-streetview');
+        if (svBtn) {
+            svBtn.style.display = 'inline-flex';
+            svBtn.setAttribute('onclick', `window.open('https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${place.lat},${place.lon}', '_blank')`);
+        }
     }
     
     // Jakolinkki-toiminnallisuus
