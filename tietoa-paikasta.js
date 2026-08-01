@@ -367,7 +367,8 @@ async function loadEncountersForPlace(place) {
                             description: item.description,
                             price_info: '',
                             expires_at: item.metadata?.endDate || null,
-                            url: 'tapahtumakortti.html?id=' + item.id // Korjaa oikeaksi
+                            url: 'tapahtumakortti.html?id=' + item.id,
+                            created_at: item.created_at
                         });
                     });
                 }
@@ -380,7 +381,8 @@ async function loadEncountersForPlace(place) {
                             title: item.title,
                             description: item.description,
                             price_info: '',
-                            url: 'yrityskortti.html?id=' + item.business_id
+                            url: 'yrityskortti.html?id=' + item.business_id,
+                            created_at: item.created_at
                         });
                     });
                 }
@@ -394,7 +396,8 @@ async function loadEncountersForPlace(place) {
                             description: item.description,
                             price_info: item.discount_value ? '-' + item.discount_value + '%' : '',
                             expires_at: item.valid_until || null,
-                            url: 'tarjouskortti.html?id=' + item.id // Korjaa oikeaksi
+                            url: 'tarjouskortti.html?id=' + item.id,
+                            created_at: item.created_at
                         });
                     });
                 }
@@ -431,6 +434,28 @@ function renderEncounters(encounters) {
     
     const statOffers = document.getElementById('stat-offers');
     if (statOffers) statOffers.textContent = offers.length;
+    
+    // Tarkistetaan aktiivisuus viikon sisällä
+    const statusEl = document.getElementById('place-activity-status');
+    const dotEl = document.getElementById('activity-dot');
+    const textEl = document.getElementById('place-activity-text');
+    
+    if (statusEl && textEl && validEncounters.length > 0) {
+        const latestDate = validEncounters.reduce((max, e) => {
+            if (!e.created_at) return max;
+            const d = new Date(e.created_at);
+            return d > max ? d : max;
+        }, new Date(0));
+        
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+        
+        if (latestDate > sevenDaysAgo) {
+            statusEl.style.display = 'flex';
+            if (dotEl) dotEl.style.display = 'inline';
+            textEl.textContent = 'Päivitetty hiljattain';
+        }
+    }
     
     if (validEncounters.length === 0) {
         // Piilotetaan osio jos ei ilmoituksia
