@@ -418,6 +418,16 @@
                 font-size: 0.85rem;
             }
         }
+        
+        details.companies-accordion summary::-webkit-details-marker {
+            display: none;
+        }
+        details.companies-accordion .accordion-icon {
+            transition: transform 0.3s ease;
+        }
+        details.companies-accordion[open] .accordion-icon {
+            transform: rotate(180deg);
+        }
     </style>
 </head>
 
@@ -552,11 +562,20 @@
                 </section>
 
                 <!-- 4. Companies -->
-                <section>
-                    <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-main);">Lähialueen toimijat</h2>
-                    <div id="companies-list">
-                        <!-- Filled by JS -->
-                    </div>
+                <section class="content-block" style="padding: 1.5rem; border-radius: var(--inner-radius); background: #ffffff; border: 1px solid #e5e7eb;">
+                    <details class="companies-accordion">
+                        <summary style="cursor: pointer; list-style: none; outline: none;">
+                            <h2 style="display: inline-flex; align-items: center; gap: 0.5rem; font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 700; margin: 0; color: var(--text-main); pointer-events: none;">
+                                Lähialueen toimijat
+                            </h2>
+                            <div class="accordion-icon" style="float: right; margin-top: 0.25rem;">
+                                <span class="iconify" data-icon="material-symbols:expand-more" style="font-size: 1.5rem; color: var(--text-muted);"></span>
+                            </div>
+                        </summary>
+                        <div id="companies-list" style="margin-top: 1.5rem;">
+                            <!-- Filled by JS -->
+                        </div>
+                    </details>
                 </section>
 
             </aside>
