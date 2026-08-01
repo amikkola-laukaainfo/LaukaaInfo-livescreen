@@ -93,6 +93,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // 4. Päivitä DOM
         renderPlace(placeData, relatedItems);
         loadEncountersForPlace(placeData);
+        loadLostItemsForPlace(placeData);
 
     } catch (err) {
         console.error('Yllättävä virhe:', err);
@@ -553,4 +554,106 @@ function renderEncounters(encounters) {
     }
     
     container.innerHTML = html;
+}
+
+// ==========================================================
+// LOSTNFOUND: FIREBASE FIRESTORE -HAU (kadonneet/löydetyt)
+// ==========================================================
+async function loadLostItemsForPlace(place) {
+    if (!place.place_id) return;
+    
+    try {
+        // Firebase SDK ladataan dynaamisesti jos ei vielä ladattu
+        if (!window.firebase) {
+            await Promise.all([
+                loadScript('https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js'),
+                loadScript('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js')
+            ]);
+        }
+        
+        // Alusta Firebase jos ei vielä alustettu
+        if (!window._lfApp) {
+            window._lfApp = firebase.initializeApp({
+                apiKey: 'AIzaSyA6l0FosuiXh9KxFfD5Q92BCP1EWbH8LN4',
+                authDomain: 'lostnfound-f0d25.firebaseapp.com',
+                projectId: 'lostnfound-f0d25',
+            }, 'lostnfound');
+        }
+        
+        const db = firebase.firestore(window._lfApp);
+        
+        // Hae kyseisen paikan ilmoitukset placeId-kentällä
+        const snapshot = await db.collection('lostItems')
+            .where('placeId', '==', place.place_id)
+            .where('status', 'in', ['ACTIVE', 'active'])
+            .limit(20)
+            .get();
+        
+        if (snapshot.empty) return;
+        
+        const lostItems = snapshot.docs.map(doc => {
+            const d = doc.data();
+            const isLost = d.category === 'LOST' || d.category === 'lost';
+            return {
+                id: doc.id,
+                type: 'lost_and_found',
+                title: (isLost ? '🔍 Kadonnut: ' : '📦 Löytynyt: ') + (d.title || 'Ilmoitus'),
+                description: d.description || '',
+                created_at: d.timestamp?.toDate?.()?.toISOString() || null,
+                url: `https://lostnfound-f0d25.web.app/item/${doc.id}`
+            };
+        });
+        
+        // Lisätään löydetyt/kadonneet olemassa olevaan encounters-listaan
+        const container = document.getElementById('encounters-list');
+        const section = document.getElementById('encounters-section');
+        if (!container || lostItems.length === 0) return;
+        
+        section.style.display = 'block';
+        
+        const icon = '🔍';
+        const label = 'Kadonnut & Löydetty (Lostnfound)';
+        
+        let html = `<div style="margin-bottom: 1.5rem; border: 1px solid #fde68a; border-radius: var(--inner-radius); overflow: hidden; background: #fffbeb;">
+            <div style="padding: 1.25rem; background: #fef9c3; font-weight: 700; color: #92400e; border-bottom: 1px solid #fde68a; display: flex; justify-content: space-between; align-items: center;">
+                <span style="display: flex; align-items: center; gap: 0.5rem;">${icon} ${label}</span>
+                <span style="background: #fef3c7; color: #92400e; padding: 4px 10px; border-radius: 50px; font-size: 0.85rem;">${lostItems.length} kpl</span>
+            </div>
+            <div>`;
+        
+        lostItems.forEach((item, index) => {
+            const isLast = index === lostItems.length - 1;
+            const border = isLast ? '' : 'border-bottom: 1px solid #fde68a;';
+            html += `<a href="${item.url}" target="_blank" rel="noopener noreferrer" 
+                style="display: block; padding: 1.25rem; text-decoration: none; color: inherit; ${border} transition: background 0.2s;" 
+                onmouseover="this.style.background='#fef9c3'" onmouseout="this.style.background='transparent'">
+                <div style="font-weight: 700; color: #1e293b; font-size: 1rem; margin-bottom: 0.3rem;">${item.title}</div>
+                <div style="font-size: 0.9rem; color: #64748b; line-height: 1.5;">${(item.description || '').substring(0, 120)}${item.description && item.description.length > 120 ? '...' : ''}</div>
+            </a>`;
+        });
+        
+        html += `</div></div>`;
+        container.insertAdjacentHTML('beforeend', html);
+        
+        // Päivitetään myös tilastolaskuri
+        const statEncounters = document.getElementById('stat-encounters');
+        if (statEncounters) {
+            const current = parseInt(statEncounters.textContent) || 0;
+            statEncounters.textContent = current + lostItems.length;
+        }
+        
+    } catch (err) {
+        console.warn('Lostnfound-haku epäonnistui:', err);
+    }
+}
+
+function loadScript(src) {
+    return new Promise((resolve, reject) => {
+        if (document.querySelector(`script[src="${src}"]`)) { resolve(); return; }
+        const s = document.createElement('script');
+        s.src = src;
+        s.onload = resolve;
+        s.onerror = reject;
+        document.head.appendChild(s);
+    });
 }
