@@ -292,7 +292,10 @@ function renderRelations(items) {
 function initMap(lat, lon, name) {
     // Odotetaan hieman jotta display: block ehtii vaikuttaa map-containeriin
     setTimeout(() => {
-        const map = L.map('map').setView([lat, lon], 14);
+        if (window.placeMap) { window.placeMap.remove(); }
+        window.placeMap = L.map('map').setView([lat, lon], 14);
+        const map = window.placeMap;
+        
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
@@ -334,7 +337,7 @@ async function loadEncountersForPlace(place) {
         // Jos haluamme kohdentaa tiukasti place_id:hen:
         // mutta otetaan fallback string matchillä myös
         if (place.place_id && placeName) {
-            query = query.or(`location_id.eq.${place.place_id},location.ilike.%${placeName}%`);
+            query = query.or(`location_id.eq.${place.place_id},location.ilike."*${placeName}*"`);
         } else if (place.place_id) {
             query = query.eq('location_id', place.place_id);
         } else if (placeName) {
