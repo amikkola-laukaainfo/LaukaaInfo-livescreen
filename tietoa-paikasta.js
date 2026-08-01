@@ -22,7 +22,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             placeQuery = placeQuery.eq('place_id', placeId);
         } else if (placeNameParam) {
             const decodedName = decodeURIComponent(placeNameParam).replace(/_/g, ' ');
-            placeQuery = placeQuery.or(`name.ilike.${decodedName},canonical_name.ilike.${decodedName}`);
+            const safeNameValue = decodedName.replace(/"/g, '');
+            placeQuery = placeQuery.or(`name.ilike."${safeNameValue}",canonical_name.ilike."${safeNameValue}"`);
         }
         
         const { data: placesData, error: placeError } = await placeQuery.limit(1);
