@@ -82,8 +82,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                     return true; // pidetään JSON-kohde
                 });
 
-                // Vain ne Supabase-paikat jotka korvaavat JSON-kohteen tai ovat alueita
-                visiblePlaces = places.filter(p => matchedPlaceIds.has(p.place_id) || p.type === 'AREA');
+                // Näytetään kaikki Supabase-paikat, jotka on ladattu. 
+                // allFeatures.filter yllä on jo poistanut ne JSON-kohteet, joiden lähellä on Supabase-paikka.
+                visiblePlaces = places;
             }
         }
     } catch (e) {
