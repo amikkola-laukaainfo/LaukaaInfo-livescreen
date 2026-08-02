@@ -237,17 +237,23 @@ function renderPlace(place, relatedItems, aiProfileData) {
         faqSection.style.display = 'block';
         
         faqList.innerHTML = aiProfileData.faq.map(faqItem => {
+            // Tukee sekä uutta (q, a) että vanhaa (question, answer) muotoa
+            const qText = faqItem.q || faqItem.question || '';
+            const aText = faqItem.a || faqItem.answer || '';
+            
+            if (!qText && !aText) return '';
+            
             return `
             <details class="service-accordion">
                 <summary>
                     <span style="display: flex; align-items: center; gap: 0.5rem;">
                         <span class="iconify" data-icon="material-symbols:info-outline" style="color: var(--accent);"></span>
-                        ${faqItem.question}
+                        ${qText}
                     </span>
                     <span class="iconify accordion-icon" data-icon="material-symbols:expand-more"></span>
                 </summary>
                 <div class="service-content">
-                    ${faqItem.answer}
+                    ${aText}
                 </div>
             </details>
             `;
