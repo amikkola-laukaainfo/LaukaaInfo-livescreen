@@ -328,6 +328,7 @@
         #companies-list {
             display: grid;
             grid-template-columns: 1fr;
+            grid-auto-rows: min-content;
             gap: 1rem;
             align-items: start;
         }
@@ -345,7 +346,8 @@
             transition: all 0.3s ease;
             box-shadow: var(--shadow-sm);
             align-self: start;
-            height: fit-content;
+            box-sizing: border-box;
+            overflow: hidden;
         }
         .list-item-card:hover {
             transform: translateY(-4px);
