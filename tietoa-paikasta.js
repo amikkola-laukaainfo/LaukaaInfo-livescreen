@@ -794,8 +794,11 @@ async function renderServicesForEntity(placeData) {
                 htmlArr.push(companySources.map(s => {
                     if (s.source_type === 'YOUTUBE' || s.source_type === 'YOUTUBE_VIDEO') {
                         let yid = '';
-                        const m = s.url.match(/(?:v=|youtu\.be\/)([^&]+)/);
-                        if (m) yid = m[1];
+                        if (s.url.includes('v=')) {
+                            yid = s.url.split('v=')[1].split('&')[0];
+                        } else if (s.url.includes('youtu.be/')) {
+                            yid = s.url.split('youtu.be/')[1].split('?')[0];
+                        }
                         return yid ? `<div style="margin-top:10px;"><iframe style="width:100%; aspect-ratio: 16/9; border-radius:8px;" src="https://www.youtube.com/embed/${yid}" frameborder="0" allowfullscreen></iframe></div>` : `<a href="${s.url}" target="_blank">${s.title}</a>`;
                     } else {
                         return `<div style="margin-top:8px;"><a href="${s.url}" target="_blank" style="color:var(--accent); font-weight:bold; text-decoration:none;">${s.title} &rarr;</a></div>`;
@@ -809,9 +812,12 @@ async function renderServicesForEntity(placeData) {
                     if (c.media_url) {
                         if (c.content_type === 'VIDEO' || c.storage_provider === 'YOUTUBE') {
                             let yid = '';
-                            const m = c.media_url.match(/(?:v=|youtu\.be\/)([^&]+)/);
-                            if (m) {
-                                yid = m[1];
+                            if (c.media_url.includes('v=')) {
+                                yid = c.media_url.split('v=')[1].split('&')[0];
+                            } else if (c.media_url.includes('youtu.be/')) {
+                                yid = c.media_url.split('youtu.be/')[1].split('?')[0];
+                            }
+                            if (yid) {
                                 mediaHtml = `<div style="margin-top:10px;"><iframe style="width:100%; aspect-ratio: 16/9; border-radius:8px;" src="https://www.youtube.com/embed/${yid}" frameborder="0" allowfullscreen></iframe></div>`;
                             } else {
                                 mediaHtml = `<div style="margin-top:8px;"><video src="${c.media_url}" controls style="width:100%; border-radius:8px;"></video></div>`;
