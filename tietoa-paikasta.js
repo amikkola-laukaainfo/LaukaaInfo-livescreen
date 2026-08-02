@@ -467,9 +467,11 @@ function renderRelations(items) {
     const container = document.getElementById('companies-list');
     if (!container) return;
     
-    const sectionTitle = container.parentElement.querySelector('h2');
+    const sectionTitle = document.getElementById('services-main-title');
     if (sectionTitle) {
-        sectionTitle.innerHTML = `<span class="iconify" data-icon="material-symbols:storefront-outline" style="color: var(--accent);"></span> Palveluja täällä (${items.length})`;
+        const count = items.length;
+        sectionTitle.innerHTML = `<span class="iconify" data-icon="material-symbols:storefront-outline" style="color: var(--accent);"></span> Palveluja täällä <span style="background: #ede9fe; color: #7c3aed; font-size: 0.8rem; font-weight: 700; padding: 2px 10px; border-radius: 50px; margin-left: 0.5rem;">${count}</span>`;
+    }
     }
 
     if (items.length === 0) {
