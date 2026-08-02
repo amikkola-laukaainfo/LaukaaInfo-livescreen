@@ -64,16 +64,30 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.warn('AI-dataa ei löytynyt tai tapahtui virhe:', err);
         }
 
-        // 3. Hae kohteet ja tarjoukset JSON-tiedostoista
+        // 3. Hae kohteet, tarjoukset ja yritykset JSON-tiedostoista
         const cacheBuster = new Date().getTime();
         let kohteet = [];
         let tarjoukset = [];
+        let yritykset = [];
         try {
-            const kohteetRes = await fetch('kohdekortit/kohteet.json?v=' + cacheBuster);
-            if (kohteetRes.ok) kohteet = await kohteetRes.json();
+            const [kohteetRes, tarjouksetRes, yrityksetRes, tempRes] = await Promise.all([
+                fetch('kohdekortit/kohteet.json?v=' + cacheBuster),
+                fetch('kohdekortit/tarjoukset.json?v=' + cacheBuster),
+                fetch('live_companies.json?v=' + cacheBuster),
+                fetch('temp_companies.json?v=' + cacheBuster)
+            ]);
             
-            const tarjouksetRes = await fetch('kohdekortit/tarjoukset.json?v=' + cacheBuster);
+            if (kohteetRes.ok) kohteet = await kohteetRes.json();
             if (tarjouksetRes.ok) tarjoukset = await tarjouksetRes.json();
+            
+            if (yrityksetRes.ok) {
+                const yData = await yrityksetRes.json();
+                if (yData.results) yritykset = yritykset.concat(yData.results);
+            }
+            if (tempRes.ok) {
+                const tData = await tempRes.json();
+                if (tData.results) yritykset = yritykset.concat(tData.results);
+            }
         } catch (e) {
             console.error('Virhe JSONien latauksessa:', e);
         }
@@ -100,11 +114,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                     let mappedType = (r.entity_type || 'other').toLowerCase();
                     if (mappedType === 'company') mappedType = 'business';
                     
+                    let companyData = null;
+                    if (mappedType === 'business') {
+                        companyData = yritykset.find(y => String(y.id) === eId);
+                    }
+                    
                     allItemsMap.set(eId, {
                         id: eId,
                         type: mappedType,
-                        name: r.entity_name || (mappedType === 'observation' ? 'Havainto' : eId),
-                        shortDescription: r.relation_context || r.relation_type
+                        name: r.entity_name || (companyData ? companyData.nimi : (mappedType === 'observation' ? 'Havainto' : eId)),
+                        shortDescription: r.relation_context || r.relation_type,
+                        logo: companyData ? companyData.logo : null,
+                        images: companyData ? companyData.images : null
                     });
                 }
             });
@@ -549,7 +570,13 @@ function renderRelations(items, allSources = [], allContents = []) {
             if (imgContent) thumbUrl = imgContent.media_url;
         }
         
-        const thumbHtml = thumbUrl ? `<div style="width: 48px; height: 48px; flex-shrink: 0; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; margin-left: auto;"><img src="${thumbUrl}" style="width: 100%; height: 100%; object-fit: cover;" /></div>` : '';
+        if (!thumbUrl) {
+            if (item.logo) thumbUrl = item.logo;
+            else if (item.images && item.images.length > 0) thumbUrl = item.images[0];
+            else if (item.image) thumbUrl = item.image;
+        }
+        
+        const thumbHtml = thumbUrl ? `<div style="width: 48px; height: 48px; flex-shrink: 0; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; margin-left: auto; background: #fff; display: flex; align-items: center; justify-content: center;"><img src="${thumbUrl}" style="max-width: 100%; max-height: 100%; object-fit: contain;" /></div>` : '';
 
         const headerHtml = `
             <div style="display: flex; align-items: center; gap: 1rem; flex: 1;">
