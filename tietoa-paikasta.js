@@ -196,7 +196,7 @@ function renderPlace(place, relatedItems, aiProfileData) {
         const themesArray = Array.from(uniqueThemes);
         if (themesArray.length > 0) {
             themesSection.style.display = 'block';
-            themesList.innerHTML = themesArray.map(t => `<span class="network-tag"><span class="iconify" data-icon="material-symbols:tag"></span> ${t}</span>`).join('');
+            themesList.innerHTML = themesArray.map(t => `<span class="network-tag" onclick="openTagModal('${t}', 'material-symbols:tag')" style="cursor:pointer;"><span class="iconify" data-icon="material-symbols:tag"></span> ${t}</span>`).join('');
         } else {
             themesSection.style.display = 'none';
         }
@@ -222,7 +222,7 @@ function renderPlace(place, relatedItems, aiProfileData) {
             if (nameLower.includes('luistelu')) icon = 'material-symbols:ice-skating-outline';
 
             return `
-            <div class="activity-pill" style="display: flex; align-items: center; gap: 0.5rem; background: #f1f5f9; padding: 0.6rem 1.2rem; border-radius: 50px; font-weight: 600; cursor: pointer; transition: all 0.2s; border: 1px solid transparent;" onmouseover="this.style.background='#e2e8f0'; this.style.borderColor='#cbd5e1'" onmouseout="this.style.background='#f1f5f9'; this.style.borderColor='transparent'">
+            <div class="activity-pill" onclick="openTagModal('${act}', '${icon}')" style="display: flex; align-items: center; gap: 0.5rem; background: #f1f5f9; padding: 0.6rem 1.2rem; border-radius: 50px; font-weight: 600; cursor: pointer; transition: all 0.2s; border: 1px solid transparent;" onmouseover="this.style.background='#e2e8f0'; this.style.borderColor='#cbd5e1'" onmouseout="this.style.background='#f1f5f9'; this.style.borderColor='transparent'">
                 <span class="iconify" data-icon="${icon}" style="font-size: 1.2rem; color: var(--accent);"></span>
                 ${act}
             </div>
@@ -960,3 +960,78 @@ async function renderServicesForEntity(placeData) {
         servicesBox.style.display = 'none';
     }
 }
+
+// ==========================================
+// TAG ACTION MODAL (AI Activities & Themes)
+// ==========================================
+
+let currentActiveTag = '';
+
+function openTagModal(tagName, iconName) {
+    currentActiveTag = tagName;
+    
+    // Päivitä modalin otsikko ja ikoni
+    document.getElementById('tag-modal-name').textContent = tagName;
+    document.getElementById('tag-modal-icon').setAttribute('data-icon', iconName);
+    
+    // Näytä modal
+    const modal = document.getElementById('tag-action-modal');
+    modal.style.display = 'flex';
+    
+    // Animaatio (pieni viive jotta display: flex ehtii tulla voimaan)
+    setTimeout(() => {
+        modal.querySelector('.modal-content').style.transform = 'translateY(0)';
+    }, 10);
+}
+
+function closeTagModal() {
+    const modal = document.getElementById('tag-action-modal');
+    modal.querySelector('.modal-content').style.transform = 'translateY(100%)';
+    
+    setTimeout(() => {
+        modal.style.display = 'none';
+        currentActiveTag = '';
+    }, 300); // Odota CSS-animaation loppumista
+}
+
+// Sulje jos klikataan taustaa
+document.addEventListener('click', (e) => {
+    const modal = document.getElementById('tag-action-modal');
+    if (e.target === modal) {
+        closeTagModal();
+    }
+});
+
+// Toiminnot
+function actionFilterLocal() {
+    closeTagModal();
+    // Yksinkertainen toteutus: skrollaa yrityslistaan (voisi oikeasti filtteröidä DOM-elementtejä)
+    const companiesSection = document.querySelector('.companies-accordion');
+    if (companiesSection) {
+        companiesSection.scrollIntoView({ behavior: 'smooth' });
+        // Vilkuta tai avaa
+        if (!companiesSection.open) {
+            companiesSection.open = true;
+        }
+        
+        // Bonus: Näytä ilmoitus käyttäjälle
+        setTimeout(() => {
+            alert(`Näytetään kohteen paikalliset palvelut teemaan "${currentActiveTag}" liittyen (tulossa)`);
+        }, 500);
+    }
+}
+
+function actionSearchGlobal() {
+    // Ohjaa kartalle ja vie teema parametrina
+    const themeUrl = encodeURIComponent(currentActiveTag);
+    window.location.href = `kohdekartta.html?search=${themeUrl}`;
+}
+
+function actionReportEncounter() {
+    // Ohjaa LostReFoundiin (tai paikalliseen ilmoituskaavakkeeseen)
+    const placeName = document.getElementById('place-name').textContent;
+    // Oikeassa tuotannossa voisi pre-fillata datan URL:iin
+    window.open('https://play.google.com/store/apps/details?id=fi.mediazoo.lostrefound', '_blank');
+    closeTagModal();
+}
+
