@@ -796,7 +796,7 @@ async function renderServicesForEntity(placeData) {
                         let yid = '';
                         const m = s.url.match(/(?:v=|youtu\.be\/)([^&]+)/);
                         if (m) yid = m[1];
-                        return yid ? `<div style="margin-top:10px;"><iframe width="100%" height="200" src="https://www.youtube.com/embed/${yid}" frameborder="0" allowfullscreen style="border-radius:8px;"></iframe></div>` : `<a href="${s.url}" target="_blank">${s.title}</a>`;
+                        return yid ? `<div style="margin-top:10px;"><iframe style="width:100%; aspect-ratio: 16/9; border-radius:8px;" src="https://www.youtube.com/embed/${yid}" frameborder="0" allowfullscreen></iframe></div>` : `<a href="${s.url}" target="_blank">${s.title}</a>`;
                     } else {
                         return `<div style="margin-top:8px;"><a href="${s.url}" target="_blank" style="color:var(--accent); font-weight:bold; text-decoration:none;">${s.title} &rarr;</a></div>`;
                     }
@@ -812,7 +812,7 @@ async function renderServicesForEntity(placeData) {
                             const m = c.media_url.match(/(?:v=|youtu\.be\/)([^&]+)/);
                             if (m) {
                                 yid = m[1];
-                                mediaHtml = `<div style="margin-top:10px;"><iframe width="100%" height="200" src="https://www.youtube.com/embed/${yid}" frameborder="0" allowfullscreen style="border-radius:8px;"></iframe></div>`;
+                                mediaHtml = `<div style="margin-top:10px;"><iframe style="width:100%; aspect-ratio: 16/9; border-radius:8px;" src="https://www.youtube.com/embed/${yid}" frameborder="0" allowfullscreen></iframe></div>`;
                             } else {
                                 mediaHtml = `<div style="margin-top:8px;"><video src="${c.media_url}" controls style="width:100%; border-radius:8px;"></video></div>`;
                             }
