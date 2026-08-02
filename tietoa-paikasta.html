@@ -426,6 +426,50 @@
             transform: rotate(180deg);
         }
 
+        /* --- Service Accordion (Paikan palvelut) --- */
+        .service-accordion {
+            background: white;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            border: 1px solid #f1f5f9;
+            border-left: 5px solid var(--accent);
+            transition: all 0.3s ease;
+        }
+        .service-accordion:hover {
+            box-shadow: var(--shadow-md);
+        }
+        .service-accordion summary {
+            padding: 1.25rem 1.5rem;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: var(--text-main);
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+        }
+        .service-accordion summary:hover {
+            background: #f8fafc;
+        }
+        .service-accordion summary::-webkit-details-marker {
+            display: none;
+        }
+        .service-accordion[open] summary .iconify {
+            transform: rotate(180deg);
+        }
+        .service-accordion .service-content {
+            padding: 0 1.5rem 1.5rem;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            border-top: 1px solid #f1f5f9;
+            margin-top: 0.5rem;
+            padding-top: 1rem;
+        }
+
+
         /* Nearby Tags */
         .nearby-tag {
             display: inline-block;
@@ -544,6 +588,14 @@
                 <section class="content-block" id="timeline-section" style="display: none;">
                     <h2>Viimeisimmät havainnot</h2>
                     <div class="timeline" id="timeline-list">
+                        <!-- Filled by JS -->
+                    </div>
+                </section>
+
+                <!-- Paikan palvelut -->
+                <section class="content-block" id="services-section" style="display: none;">
+                    <h2>Tähän paikkaan liittyvät palvelut</h2>
+                    <div id="el-services" style="display: flex; flex-direction: column; gap: 1rem;">
                         <!-- Filled by JS -->
                     </div>
                 </section>

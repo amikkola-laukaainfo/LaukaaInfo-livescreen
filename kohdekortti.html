@@ -554,6 +554,44 @@
         .marketing-dropdown.open .marketing-dropdown-content {
             display: block;
         }
+
+        /* --- Service Accordion (Paikan palvelut) --- */
+        .service-accordion {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            overflow: hidden;
+            border-left: 5px solid var(--accent-blue);
+        }
+        .service-accordion summary {
+            padding: 1.2rem;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: var(--secondary-blue);
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+        }
+        .service-accordion summary:hover {
+            background: #f8fafc;
+        }
+        .service-accordion summary::-webkit-details-marker {
+            display: none;
+        }
+        .service-accordion[open] summary .iconify {
+            transform: rotate(180deg);
+        }
+        .service-accordion .service-content {
+            padding: 0 1.2rem 1.2rem;
+            color: var(--dark-text);
+            font-size: 0.95rem;
+            border-top: 1px solid #f1f5f9;
+            margin-top: 0.5rem;
+            padding-top: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -614,6 +652,16 @@
                     <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; color: var(--secondary-blue); margin-bottom: 1rem;">Ajankohtaista</h2>
                     <div id="el-feed">
                         <!-- Postaukset renderöidään tänne -->
+                    </div>
+                </div>
+
+                <!-- Paikan palvelut -->
+                <div class="feed-box" id="services-box" style="display: none; margin-top: 2rem;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 1rem;">
+                        <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; color: var(--secondary-blue); margin: 0;">Tähän paikkaan liittyvät palvelut</h2>
+                    </div>
+                    <div id="el-services" style="display: flex; flex-direction: column; gap: 1rem;">
+                        <!-- Palvelut renderöidään tänne -->
                     </div>
                 </div>
 
@@ -1168,6 +1216,80 @@
             } catch (err) {
                 console.error("Virhe kohtaamisten haussa:", err);
                 if (kohtaamisetBox) kohtaamisetBox.style.display = 'none';
+            }
+        }
+
+        if (window.LaukaaSupabase) {
+            renderServicesForEntity(entity);
+        }
+
+        async function renderServicesForEntity(entity) {
+            const servicesBox = document.getElementById('services-box');
+            const servicesContainer = document.getElementById('el-services');
+            
+            try {
+                const placeIdStr = String(entity.id).replace('loc-', '');
+                
+                const { data: relations, error: relError } = await window.LaukaaSupabase
+                    .from('place_relations')
+                    .select('entity_id, entity_name, relation_context')
+                    .eq('place_id', placeIdStr)
+                    .eq('entity_type', 'COMPANY');
+                    
+                if (relError) throw relError;
+                
+                const { data: sources, error: srcError } = await window.LaukaaSupabase
+                    .from('place_sources')
+                    .select('id, entity_id, source_type, title, url')
+                    .eq('place_id', placeIdStr);
+                    
+                if (srcError) throw srcError;
+
+                if (!relations || relations.length === 0) {
+                    servicesBox.style.display = 'none';
+                    return;
+                }
+
+                servicesBox.style.display = 'block';
+                
+                servicesContainer.innerHTML = relations.map(rel => {
+                    const companySources = sources ? sources.filter(s => s.entity_id === rel.entity_id) : [];
+                    
+                    let sourcesHtml = '';
+                    if (companySources.length > 0) {
+                        sourcesHtml = companySources.map(s => {
+                            if (s.source_type === 'YOUTUBE' || s.source_type === 'YOUTUBE_VIDEO') {
+                                let yid = '';
+                                const m = s.url.match(/(?:v=|youtu\.be\\/)([^&]+)/);
+                                if (m) yid = m[1];
+                                return yid ? \`<div style="margin-top:10px;"><iframe width="100%" height="200" src="https://www.youtube.com/embed/\${yid}" frameborder="0" allowfullscreen style="border-radius:8px;"></iframe></div>\` : \`<a href="\${s.url}" target="_blank">\${s.title}</a>\`;
+                            } else {
+                                return \`<div style="margin-top:8px;"><a href="\${s.url}" target="_blank" style="color:var(--primary-blue); font-weight:bold; text-decoration:none;">\${s.title} &rarr;</a></div>\`;
+                            }
+                        }).join('');
+                    } else {
+                        sourcesHtml = \`<p style="color:var(--light-text); font-style:italic;">Ei lisättyjä sisältöjä. Ota yhteyttä yritykseen.</p>\`;
+                    }
+
+                    return \`
+                    <details class="service-accordion">
+                        <summary>
+                            <div>
+                                <div style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--accent-blue); margin-bottom: 0.2rem;">\${rel.entity_name}</div>
+                                <div style="font-family: 'Outfit', sans-serif;">\${rel.relation_context || 'Palvelu'}</div>
+                            </div>
+                            <span class="iconify" data-icon="mdi:chevron-down" style="font-size:1.5rem; color:var(--light-text); transition:transform 0.2s;"></span>
+                        </summary>
+                        <div class="service-content">
+                            \${sourcesHtml}
+                        </div>
+                    </details>
+                    \`;
+                }).join('');
+                
+            } catch (err) {
+                console.error("Virhe palveluiden haussa:", err);
+                if (servicesBox) servicesBox.style.display = 'none';
             }
         }
 
