@@ -705,6 +705,9 @@ function renderEncounters(encounters) {
     
     section.style.display = 'block';
     
+    const scrollBtn = document.getElementById('btn-scroll-encounters');
+    if (scrollBtn) scrollBtn.style.display = 'inline-flex';
+    
     // Ryhmittele tyypeittäin
     const grouped = {};
     validEncounters.forEach(e => {
