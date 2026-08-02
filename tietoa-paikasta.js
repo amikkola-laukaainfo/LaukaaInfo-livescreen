@@ -346,7 +346,7 @@ function renderRelations(items) {
     
     const sectionTitle = container.parentElement.querySelector('h2');
     if (sectionTitle) {
-        sectionTitle.innerHTML = `<span class="iconify" data-icon="material-symbols:account-tree-outline" style="color: #059669;"></span> Kohteet ja Tarjoukset (${items.length})`;
+        sectionTitle.innerHTML = `<span class="iconify" data-icon="material-symbols:storefront-outline" style="color: var(--accent);"></span> Palveluja täällä (${items.length})`;
     }
 
     if (items.length === 0) {
