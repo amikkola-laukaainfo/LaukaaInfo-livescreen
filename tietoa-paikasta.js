@@ -111,14 +111,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         
         const relatedItems = Array.from(allItemsMap.values());
+        
+        const placeIdStr = String(placeId);
+        let allSources = [];
+        let allContents = [];
+        try {
+            const [srcRes, cntRes] = await Promise.all([
+                aiSb.from('place_sources').select('*').eq('place_id', placeIdStr),
+                aiSb.from('place_content').select('*').eq('place_id', placeIdStr)
+            ]);
+            if (srcRes.data) allSources = srcRes.data;
+            if (cntRes.data) allContents = cntRes.data;
+        } catch (e) { console.warn(e); }
 
         // 6. Päivitä DOM
-        renderPlace(placeData, relatedItems, aiProfileData);
+        renderPlace(placeData, relatedItems, aiProfileData, allSources, allContents);
         await loadMemoriesForPlace(placeData);
         await loadMediaForPlace(placeData);
         await loadEncountersForPlace(placeData);
         await loadLostItemsForPlace(placeData);
-        await renderServicesForEntity(placeData);
 
     } catch (err) {
         console.error('Yllättävä virhe:', err);
@@ -247,7 +258,7 @@ async function loadMemoriesForPlace(place) {
     }
 }
 
-function renderPlace(place, relatedItems, aiProfileData) {
+function renderPlace(place, relatedItems, aiProfileData, allSources = [], allContents = []) {
     document.getElementById('loading-spinner').style.display = 'none';
     document.getElementById('place-content').style.display = 'block';
 
@@ -401,7 +412,35 @@ function renderPlace(place, relatedItems, aiProfileData) {
     }
 
     // Verkostoyhteydet
-    renderRelations(relatedItems);
+    renderRelations(relatedItems, allSources, allContents);
+
+    // Paikan omat lisäsisällöt (place_content ilman entity_id:tä)
+    const servicesContainer = document.getElementById('place-sources-list');
+    if (servicesContainer && allContents) {
+        const placeContents = allContents.filter(c => !c.entity_id || String(c.entity_id) === String(place.place_id));
+        if (placeContents.length > 0) {
+            servicesContainer.innerHTML = placeContents.map(c => {
+                let mediaHtml = '';
+                if (c.media_url) {
+                    if (c.content_type === 'VIDEO' || c.storage_provider === 'YOUTUBE') {
+                        let yid = '';
+                        if (c.media_url.includes('v=')) yid = c.media_url.split('v=')[1].split('&')[0];
+                        else if (c.media_url.includes('youtu.be/')) yid = c.media_url.split('youtu.be/')[1].split('?')[0];
+                        mediaHtml = yid ? `<div style="margin-top:10px;"><iframe style="width:100%; aspect-ratio: 16/9; border-radius:8px;" src="https://www.youtube.com/embed/${yid}" frameborder="0" allowfullscreen></iframe></div>` : '';
+                    } else if (c.content_type === 'PHOTO') {
+                        mediaHtml = `<div style="margin-top:8px;"><img src="${c.media_url}" alt="${c.title}" style="max-width:100%; border-radius:8px;"></div>`;
+                    }
+                }
+                return `<div style="padding: 1rem; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
+                    <div style="font-weight: 700; color: #1e293b; margin-bottom: 0.25rem;">${c.title || ''}</div>
+                    ${c.description ? `<div style="font-size: 0.85rem; color: #64748b;">${c.description}</div>` : ''}
+                    ${mediaHtml}
+                </div>`;
+            }).join('');
+        } else {
+            servicesContainer.innerHTML = '';
+        }
+    }
 
     // Kartta ja sijaintinapit
     if (place.lat && place.lon) {
@@ -463,7 +502,7 @@ const TYPE_LABELS = {
     'product': 'Tuote'
 };
 
-function renderRelations(items) {
+function renderRelations(items, allSources = [], allContents = []) {
     const container = document.getElementById('companies-list');
     if (!container) return;
     
@@ -497,20 +536,85 @@ function renderRelations(items) {
         } else {
             linkUrl = 'kohdekortti.html?id=' + item.id;
         }
+        
+        const itemSources = allSources.filter(s => String(s.entity_id) === String(item.id));
+        const itemContents = allContents.filter(c => String(c.entity_id) === String(item.id));
+        const hasExtraContent = itemSources.length > 0 || itemContents.length > 0;
+
+        const headerHtml = `
+            <div style="display: flex; align-items: center; gap: 1rem; flex: 1;">
+                <div class="list-icon-wrapper" style="margin:0;">
+                    <span class="iconify list-icon" data-icon="${iconName}"></span>
+                </div>
+                <div style="flex: 1; min-width: 0;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                        <span style="font-weight: 700; font-size: 1.05rem; color: var(--dark-text);">${displayName}</span>
+                        <span style="font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.8rem; border-radius: 50px; background: #dcfce7; color: #166534; text-transform: uppercase; letter-spacing: 0.5px;">${typeLabel}</span>
+                    </div>
+                    ${item.shortDescription ? `<div style="font-size: 0.95rem; color: var(--light-text); margin-top: 0.5rem; line-height: 1.5;">${item.shortDescription}</div>` : ''}
+                </div>
+            </div>
+        `;
+
+        if (!hasExtraContent) {
+            return `<a href="${linkUrl}" class="list-item-card" style="text-decoration:none; display:flex;">${headerHtml}</a>`;
+        }
+
+        let extraHtml = '';
+        if (itemSources.length > 0) {
+            extraHtml += itemSources.map(s => {
+                if (s.source_type === 'YOUTUBE' || s.source_type === 'YOUTUBE_VIDEO') {
+                    let yid = '';
+                    if (s.url && s.url.includes('v=')) yid = s.url.split('v=')[1].split('&')[0];
+                    else if (s.url && s.url.includes('youtu.be/')) yid = s.url.split('youtu.be/')[1].split('?')[0];
+                    return yid ? `<div style="margin-top:10px;"><iframe style="width:100%; aspect-ratio: 16/9; border-radius:8px;" src="https://www.youtube.com/embed/${yid}" frameborder="0" allowfullscreen></iframe></div>` : `<div style="margin-top:8px;"><a href="${s.url}" target="_blank" style="color:var(--accent); font-weight:bold; text-decoration:none;">${s.title} &rarr;</a></div>`;
+                } else {
+                    return `<div style="margin-top:8px;"><a href="${s.url}" target="_blank" style="color:var(--accent); font-weight:bold; text-decoration:none;">${s.title} &rarr;</a></div>`;
+                }
+            }).join('');
+        }
+
+        if (itemContents.length > 0) {
+            extraHtml += itemContents.map(c => {
+                let mediaHtml = '';
+                if (c.media_url) {
+                    if (c.content_type === 'VIDEO' || c.storage_provider === 'YOUTUBE') {
+                        let yid = '';
+                        if (c.media_url.includes('v=')) yid = c.media_url.split('v=')[1].split('&')[0];
+                        else if (c.media_url.includes('youtu.be/')) yid = c.media_url.split('youtu.be/')[1].split('?')[0];
+                        if (yid) {
+                            mediaHtml = `<div style="margin-top:10px;"><iframe style="width:100%; aspect-ratio: 16/9; border-radius:8px;" src="https://www.youtube.com/embed/${yid}" frameborder="0" allowfullscreen></iframe></div>`;
+                        } else {
+                            mediaHtml = `<div style="margin-top:8px;"><video src="${c.media_url}" controls style="width:100%; border-radius:8px;"></video></div>`;
+                        }
+                    } else if (c.content_type === 'PHOTO') {
+                        mediaHtml = `<div style="margin-top:8px;"><img src="${c.media_url}" alt="${c.title}" style="max-width:100%; border-radius:8px;"></div>`;
+                    } else {
+                        mediaHtml = `<div style="margin-top:8px;"><a href="${c.media_url}" target="_blank" style="color:var(--accent); font-weight:bold; text-decoration:none;">Katso media &rarr;</a></div>`;
+                    }
+                }
+                return `
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #e2e8f0;">
+                        <h4 style="margin: 0 0 5px 0; color: var(--text-main);">${c.title}</h4>
+                        ${c.description ? `<p style="margin: 0 0 10px 0; font-size: 0.9rem; color: var(--text-muted); line-height: 1.4;">${c.description}</p>` : ''}
+                        ${mediaHtml}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        extraHtml += `<div style="margin-top: 15px;"><a href="${linkUrl}" style="display:inline-block; padding:8px 16px; background:var(--accent); color:white; border-radius:50px; text-decoration:none; font-weight:bold; font-size:0.9rem;">Siirry yrityskortille &rarr;</a></div>`;
 
         return `
-        <a href="${linkUrl}" class="list-item-card">
-            <div class="list-icon-wrapper">
-                <span class="iconify list-icon" data-icon="${iconName}"></span>
+        <details class="service-accordion list-item-card" style="padding:0; cursor:pointer; display:block; margin-bottom: 0;">
+            <summary style="padding: 1.25rem; display: flex; justify-content: space-between; align-items: center; list-style: none;">
+                ${headerHtml}
+                <span class="iconify accordion-icon" data-icon="material-symbols:expand-more" style="font-size:1.5rem; color:var(--text-muted); margin-left:1rem;"></span>
+            </summary>
+            <div class="service-content" style="padding: 0 1.25rem 1.25rem 1.25rem; border-top: 1px solid #f1f5f9; cursor:default;">
+                ${extraHtml}
             </div>
-            <div style="flex: 1; min-width: 0;">
-                <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
-                    <span style="font-weight: 700; font-size: 1.05rem; color: var(--dark-text);">${displayName}</span>
-                    <span style="font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.8rem; border-radius: 50px; background: #dcfce7; color: #166534; text-transform: uppercase; letter-spacing: 0.5px;">${typeLabel}</span>
-                </div>
-                ${item.shortDescription ? `<div style="font-size: 0.95rem; color: var(--light-text); margin-top: 0.5rem; line-height: 1.5;">${item.shortDescription}</div>` : ''}
-            </div>
-        </a>`;
+        </details>`;
     }).join('');
 }
 
@@ -958,154 +1062,6 @@ async function renderNearbyPlaces(currentPlace) {
         }
     } catch (e) {
         console.warn('Nearby places error:', e);
-    }
-}
-
-async function renderServicesForEntity(placeData) {
-    // Käytetään uudessa rakenteessa services-main-section ja place-sources-list
-    const servicesBox = document.getElementById('services-main-section');
-    const servicesContainer = document.getElementById('place-sources-list');
-    
-    if (!servicesBox || !servicesContainer) return;
-    
-    try {
-        // Käytetään place_id sellaisenaan (ei poisteta mahdollista prefiksiä)
-        const placeIdStr = String(placeData.place_id);
-        
-        console.log('[Services] Haetaan palveluita paikalle:', placeIdStr);
-        
-        const { data: relations, error: relError } = await window.aiSb
-            .from('place_relations')
-            .select('entity_id, entity_name, relation_context')
-            .eq('place_id', placeIdStr)
-            .eq('entity_type', 'COMPANY');
-            
-        if (relError) throw relError;
-        console.log('[Services] place_relations tulokset:', relations);
-        
-        const { data: sources, error: srcError } = await window.aiSb
-            .from('place_sources')
-            .select('id, entity_id, source_type, title, url')
-            .eq('place_id', placeIdStr);
-            
-        if (srcError) throw srcError;
-        
-        const { data: contents, error: contentError } = await window.aiSb
-            .from('place_content')
-            .select('*')
-            .eq('place_id', placeIdStr);
-
-        // Renderöi paikan omat place_content -sisällöt (ei tarvitse relations-yritystä)
-        if (contents && contents.length > 0) {
-            const placeContents = contents.filter(c => !c.entity_id || c.entity_id === placeIdStr);
-            if (placeContents.length > 0) {
-                servicesBox.style.display = 'block';
-                const placeContentHtml = placeContents.map(c => {
-                    let mediaHtml = '';
-                    if (c.media_url) {
-                        if (c.content_type === 'VIDEO' || c.storage_provider === 'YOUTUBE') {
-                            let yid = '';
-                            if (c.media_url.includes('v=')) yid = c.media_url.split('v=')[1].split('&')[0];
-                            else if (c.media_url.includes('youtu.be/')) yid = c.media_url.split('youtu.be/')[1].split('?')[0];
-                            mediaHtml = yid ? `<div style="margin-top:10px;"><iframe style="width:100%; aspect-ratio: 16/9; border-radius:8px;" src="https://www.youtube.com/embed/${yid}" frameborder="0" allowfullscreen></iframe></div>` : '';
-                        } else if (c.content_type === 'PHOTO') {
-                            mediaHtml = `<div style="margin-top:8px;"><img src="${c.media_url}" alt="${c.title}" style="max-width:100%; border-radius:8px;"></div>`;
-                        }
-                    }
-                    return `<div style="padding: 1rem; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
-                        <div style="font-weight: 700; color: #1e293b; margin-bottom: 0.25rem;">${c.title || ''}</div>
-                        ${c.description ? `<div style="font-size: 0.85rem; color: #64748b;">${c.description}</div>` : ''}
-                        ${mediaHtml}
-                    </div>`;
-                }).join('');
-                servicesContainer.insertAdjacentHTML('beforeend', placeContentHtml);
-            }
-        }
-
-        if (!relations || relations.length === 0) {
-            return;
-        }
-
-        servicesBox.style.display = 'block';
-        
-        servicesContainer.innerHTML = relations.map(rel => {
-            const companySources = sources ? sources.filter(s => String(s.entity_id) === String(rel.entity_id)) : [];
-            const companyContents = contents ? contents.filter(c => String(c.entity_id) === String(rel.entity_id)) : [];
-
-            let htmlArr = [];
-            
-            if (companySources.length > 0) {
-                htmlArr.push(companySources.map(s => {
-                    if (s.source_type === 'YOUTUBE' || s.source_type === 'YOUTUBE_VIDEO') {
-                        let yid = '';
-                        if (s.url.includes('v=')) {
-                            yid = s.url.split('v=')[1].split('&')[0];
-                        } else if (s.url.includes('youtu.be/')) {
-                            yid = s.url.split('youtu.be/')[1].split('?')[0];
-                        }
-                        return yid ? `<div style="margin-top:10px;"><iframe style="width:100%; aspect-ratio: 16/9; border-radius:8px;" src="https://www.youtube.com/embed/${yid}" frameborder="0" allowfullscreen></iframe></div>` : `<a href="${s.url}" target="_blank">${s.title}</a>`;
-                    } else {
-                        return `<div style="margin-top:8px;"><a href="${s.url}" target="_blank" style="color:var(--accent); font-weight:bold; text-decoration:none;">${s.title} &rarr;</a></div>`;
-                    }
-                }).join(''));
-            }
-            
-            if (companyContents.length > 0) {
-                htmlArr.push(companyContents.map(c => {
-                    let mediaHtml = '';
-                    if (c.media_url) {
-                        if (c.content_type === 'VIDEO' || c.storage_provider === 'YOUTUBE') {
-                            let yid = '';
-                            if (c.media_url.includes('v=')) {
-                                yid = c.media_url.split('v=')[1].split('&')[0];
-                            } else if (c.media_url.includes('youtu.be/')) {
-                                yid = c.media_url.split('youtu.be/')[1].split('?')[0];
-                            }
-                            if (yid) {
-                                mediaHtml = `<div style="margin-top:10px;"><iframe style="width:100%; aspect-ratio: 16/9; border-radius:8px;" src="https://www.youtube.com/embed/${yid}" frameborder="0" allowfullscreen></iframe></div>`;
-                            } else {
-                                mediaHtml = `<div style="margin-top:8px;"><video src="${c.media_url}" controls style="width:100%; border-radius:8px;"></video></div>`;
-                            }
-                        } else if (c.content_type === 'PHOTO') {
-                            mediaHtml = `<div style="margin-top:8px;"><img src="${c.media_url}" alt="${c.title}" style="max-width:100%; border-radius:8px;"></div>`;
-                        } else {
-                            mediaHtml = `<div style="margin-top:8px;"><a href="${c.media_url}" target="_blank" style="color:var(--accent); font-weight:bold; text-decoration:none;">Katso media &rarr;</a></div>`;
-                        }
-                    }
-                    
-                    return `
-                        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #e2e8f0;">
-                            <h4 style="margin: 0 0 5px 0; color: var(--text-main);">${c.title}</h4>
-                            ${c.description ? `<p style="margin: 0 0 10px 0; font-size: 0.9rem; color: var(--text-muted); line-height: 1.4;">${c.description}</p>` : ''}
-                            ${mediaHtml}
-                        </div>
-                    `;
-                }).join(''));
-            }
-
-            let sourcesHtml = htmlArr.length > 0 
-                ? htmlArr.join('') 
-                : `<p style="color:var(--text-muted); font-style:italic;">Ei lisättyjä sisältöjä. Ota yhteyttä yritykseen.</p>`;
-
-            return `
-            <details class="service-accordion">
-                <summary>
-                    <div>
-                        <div style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--accent); margin-bottom: 0.2rem;">${rel.entity_name}</div>
-                        <div style="font-family: 'Outfit', sans-serif;">${rel.relation_context || 'Palvelu'}</div>
-                    </div>
-                    <span class="iconify" data-icon="mdi:chevron-down" style="font-size:1.5rem; color:var(--text-muted); transition:transform 0.2s;"></span>
-                </summary>
-                <div class="service-content">
-                    ${sourcesHtml}
-                </div>
-            </details>
-            `;
-        }).join('');
-        
-    } catch (err) {
-        console.error("Virhe palveluiden haussa:", err);
-        servicesBox.style.display = 'none';
     }
 }
 
