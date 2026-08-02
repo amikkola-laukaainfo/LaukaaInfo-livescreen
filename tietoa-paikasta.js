@@ -41,6 +41,29 @@ document.addEventListener('DOMContentLoaded', async () => {
             placeId = placeData.place_id;
         }
 
+        // 2.5. Hae AI-profilointidata (summary, themes, activities, faq)
+        let aiProfileData = null;
+        try {
+            const { data: aiContentData, error: aiError } = await aiSb
+                .from('organization_ai_content')
+                .select('content')
+                .eq('organization_id', placeId)
+                .eq('content_type', 'place_profile')
+                .order('created_at', { ascending: false })
+                .limit(1)
+                .single();
+
+            if (!aiError && aiContentData && aiContentData.content) {
+                try {
+                    aiProfileData = JSON.parse(aiContentData.content);
+                } catch (e) {
+                    console.error('Virhe AI-datan jäsentelyssä:', e);
+                }
+            }
+        } catch (err) {
+            console.warn('AI-dataa ei löytynyt tai tapahtui virhe:', err);
+        }
+
         // 3. Hae kohteet ja tarjoukset JSON-tiedostoista
         const cacheBuster = new Date().getTime();
         let kohteet = [];
@@ -90,7 +113,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const relatedItems = Array.from(allItemsMap.values());
 
         // 6. Päivitä DOM
-        renderPlace(placeData, relatedItems);
+        renderPlace(placeData, relatedItems, aiProfileData);
         await loadEncountersForPlace(placeData);
         await loadLostItemsForPlace(placeData);
         await renderServicesForEntity(placeData);
@@ -107,7 +130,7 @@ function showError() {
     document.getElementById('error-message').style.display = 'block';
 }
 
-function renderPlace(place, relatedItems) {
+function renderPlace(place, relatedItems, aiProfileData) {
     document.getElementById('loading-spinner').style.display = 'none';
     document.getElementById('place-content').style.display = 'block';
 
@@ -116,9 +139,15 @@ function renderPlace(place, relatedItems) {
     document.getElementById('place-type').textContent = getTypeLabel(place.type);
     document.getElementById('place-municipality').textContent = place.municipality || 'Laukaa';
     
-    // Kuvaus (V2)
+    // Kuvaus (V2 + AI)
     let descHtml = '';
-    if (place.description) {
+    
+    if (aiProfileData && aiProfileData.summary) {
+        // Jos AI-profilointidata löytyi
+        descHtml = `<p class="ai-summary" style="font-size: 1.15rem; color: var(--text-main); line-height: 1.7; margin-bottom: 1rem;">
+            ${aiProfileData.summary}
+        </p>`;
+    } else if (place.description) {
         descHtml = `<p>${place.description}</p>`;
     } else {
         descHtml = `Tämä on <strong>${place.name || place.canonical_name}</strong>, joka on tyypiltään ${getTypeLabel(place.type).toLowerCase()}. ` +
@@ -148,7 +177,16 @@ function renderPlace(place, relatedItems) {
     const themesList = document.getElementById('network-tags-list');
     if (themesSection && themesList) {
         const uniqueThemes = new Set();
+        
+        // Lisää AI-teemat jos olemassa
+        if (aiProfileData && aiProfileData.themes && Array.isArray(aiProfileData.themes)) {
+            aiProfileData.themes.forEach(t => uniqueThemes.add(t));
+        }
+
+        // Lisää tyyppi
         if (place.type) uniqueThemes.add(getTypeLabel(place.type));
+        
+        // Lisää relaatioista löytyvät
         relatedItems.forEach(i => {
             if (i.type && i.type !== 'observation' && i.type !== 'other') {
                 uniqueThemes.add(getTypeLabel(i.type));
@@ -162,6 +200,58 @@ function renderPlace(place, relatedItems) {
         } else {
             themesSection.style.display = 'none';
         }
+    }
+
+    // Aktiviteetit ("Mitä täällä voi tehdä?")
+    const activitiesSection = document.getElementById('activities-section');
+    const activitiesList = document.getElementById('activities-list');
+    if (activitiesSection && activitiesList && aiProfileData && aiProfileData.activities && Array.isArray(aiProfileData.activities) && aiProfileData.activities.length > 0) {
+        activitiesSection.style.display = 'block';
+        
+        // Yritä päätellä ikoni aktiviteetin nimestä (yksinkertainen mappaus tai geneerinen)
+        activitiesList.innerHTML = aiProfileData.activities.map(act => {
+            let icon = 'material-symbols:local-activity-outline';
+            const nameLower = act.toLowerCase();
+            if (nameLower.includes('uinti')) icon = 'material-symbols:pool-outline';
+            if (nameLower.includes('hiihto')) icon = 'material-symbols:downhill-skiing-outline';
+            if (nameLower.includes('ulkoilu') || nameLower.includes('kävely')) icon = 'material-symbols:directions-walk-outline';
+            if (nameLower.includes('pyöräily')) icon = 'material-symbols:directions-bike-outline';
+            if (nameLower.includes('pallopeli') || nameLower.includes('jalkapallo')) icon = 'material-symbols:sports-soccer-outline';
+            if (nameLower.includes('kuntoilu')) icon = 'material-symbols:fitness-center-outline';
+            if (nameLower.includes('kalastus')) icon = 'material-symbols:phishing-outline'; // Close enough
+            if (nameLower.includes('luistelu')) icon = 'material-symbols:ice-skating-outline';
+
+            return `
+            <div class="activity-pill" style="display: flex; align-items: center; gap: 0.5rem; background: #f1f5f9; padding: 0.6rem 1.2rem; border-radius: 50px; font-weight: 600; cursor: pointer; transition: all 0.2s; border: 1px solid transparent;" onmouseover="this.style.background='#e2e8f0'; this.style.borderColor='#cbd5e1'" onmouseout="this.style.background='#f1f5f9'; this.style.borderColor='transparent'">
+                <span class="iconify" data-icon="${icon}" style="font-size: 1.2rem; color: var(--accent);"></span>
+                ${act}
+            </div>
+            `;
+        }).join('');
+    }
+
+    // UKK (FAQ)
+    const faqSection = document.getElementById('faq-section');
+    const faqList = document.getElementById('faq-list');
+    if (faqSection && faqList && aiProfileData && aiProfileData.faq && Array.isArray(aiProfileData.faq) && aiProfileData.faq.length > 0) {
+        faqSection.style.display = 'block';
+        
+        faqList.innerHTML = aiProfileData.faq.map(faqItem => {
+            return `
+            <details class="service-accordion">
+                <summary>
+                    <span style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="iconify" data-icon="material-symbols:info-outline" style="color: var(--accent);"></span>
+                        ${faqItem.question}
+                    </span>
+                    <span class="iconify accordion-icon" data-icon="material-symbols:expand-more"></span>
+                </summary>
+                <div class="service-content">
+                    ${faqItem.answer}
+                </div>
+            </details>
+            `;
+        }).join('');
     }
 
     // Aikajana (Havainnot)
