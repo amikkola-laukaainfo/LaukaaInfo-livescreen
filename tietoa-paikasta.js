@@ -137,19 +137,14 @@ async function loadMemoriesForPlace(place) {
     if (!memoriesSection || !memoriesList) return;
 
     try {
-        const { data: memories, error } = await aiSb
+        // Hae muistot ensin (ilman nested select - entity_id on polymorfinen)
+        const { data: memoriesData, error: memoriesError } = await aiSb
             .from('memories')
-            .select(`
-                *,
-                entity_sources (*)
-            `)
+            .select('*')
             .eq('place_id', place.place_id)
             .order('year', { ascending: true });
 
-        if (error || !memories || memories.length === 0) {
-            // Jätetään tyhjä tila näkyviin tai piilotetaan
-            // memoriesSection.style.display = 'none'; 
-            // Oletus mock-data on HTML:ssä, joten korvataan se viestillä:
+        if (memoriesError || !memoriesData || memoriesData.length === 0) {
             memoriesList.innerHTML = `
                 <div style="background: #f8fafc; border: 1px dashed #cbd5e1; padding: 1.5rem; border-radius: 12px; text-align: center; color: #64748b;">
                     <span class="iconify" data-icon="material-symbols:history-edu-outline" style="font-size: 2rem; margin-bottom: 0.5rem; color: #94a3b8;"></span>
@@ -159,9 +154,21 @@ async function loadMemoriesForPlace(place) {
             return;
         }
 
-        memoriesSection.style.display = 'block';
+        // Hae lähteet erikseen
+        const memoryIds = memoriesData.map(m => m.id);
+        const { data: sourcesData } = await aiSb
+            .from('entity_sources')
+            .select('*')
+            .eq('entity_type', 'MEMORY')
+            .in('entity_id', memoryIds);
+
+        // Yhdistä lähteet muistoihin
+        const memories = memoriesData.map(m => ({
+            ...m,
+            entity_sources: (sourcesData || []).filter(s => s.entity_id === m.id)
+        }));
+
         memoriesList.innerHTML = memories.map(mem => {
-            // Haetaan jokin kuvaava ikoni tai media-ikoni
             let icon = 'material-symbols:history-edu';
             if (mem.entity_sources && mem.entity_sources.length > 0) {
                 const firstSource = mem.entity_sources[0];
@@ -179,7 +186,7 @@ async function loadMemoriesForPlace(place) {
                     <div style="font-weight: 600; color: #1e293b; margin-bottom: 0.25rem;">${mem.title}</div>
                     ${mem.description ? `<div style="font-size: 0.85rem; color: #475569; margin-bottom: 0.5rem;">${mem.description}</div>` : ''}
                     <div style="font-size: 0.85rem; color: #64748b; display: flex; align-items: center; gap: 0.25rem;">
-                        <span class="iconify" data-icon="${icon}"></span> ${mem.entity_sources?.length || 0} lähdettä
+                        <span class="iconify" data-icon="${icon}"></span> ${mem.entity_sources.length} lähdettä
                     </div>
                 </div>
             </div>
@@ -902,8 +909,9 @@ async function renderNearbyPlaces(currentPlace) {
 }
 
 async function renderServicesForEntity(placeData) {
-    const servicesBox = document.getElementById('services-section');
-    const servicesContainer = document.getElementById('el-services');
+    // Käytetään uudessa rakenteessa services-main-section ja place-sources-list
+    const servicesBox = document.getElementById('services-main-section');
+    const servicesContainer = document.getElementById('place-sources-list');
     
     if (!servicesBox || !servicesContainer) return;
     
