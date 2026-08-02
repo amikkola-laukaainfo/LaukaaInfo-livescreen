@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', async () => {
+﻿document.addEventListener('DOMContentLoaded', async () => {
     // 1. Hae ID URL:sta
     const urlParams = new URLSearchParams(window.location.search);
     let placeId = urlParams.get('id');
@@ -55,110 +55,21 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.error('Virhe JSONien latauksessa:', e);
         }
         
-        // 4. Hae relaatiot Supabasesta (esim. mobiiliappin havainnot tai yritykset)
+        // 4. Hae relaatiot Supabasesta
         const { data: relationsData, error: relationsError } = await aiSb
             .from('place_relations')
             .select('entity_id, entity_type, entity_name, relation_type, relation_context, strength')
             .eq('place_id', placeId);
 
-        // 5. Yhdistä tiedot poistaen duplikaatit
+        // 5. YhdistÃ¤ tiedot poistaen duplikaatit
         const allItemsMap = new Map();
         
-        // Lisätään JSONeista löytyneet
         [...kohteet, ...tarjoukset].forEach(item => {
             if (item.place_id === placeId) {
                 allItemsMap.set(String(item.id), item);
             }
         });
         
-        // Lisätään Supabasesta löytyneet, jos niitä ei vielä ole
-        if (!relationsError && relationsData) {
-            relationsData.forEach(r => {
-                const eId = String(r.entity_id);
-                if (!allItemsMap.has(eId)) {
-                    let mappedType = (r.entity_type || 'other').toLowerCase();
-                    if (mappedType === 'company') mappedType = 'business';
-                    
-                    allItemsMap.set(eId, {
-                        id: eId,
-                        type: mappedType,
-                        name: r.entity_name || (mappedType === 'observation' ? 'Havainto' : eId),
-                        shortDescription: r.relation_context || r.relation_type
-                    });
-document.addEventListener('DOMContentLoaded', async () => {
-    // 1. Hae ID URL:sta
-    const urlParams = new URLSearchParams(window.location.search);
-    let placeId = urlParams.get('id');
-    const placeNameParam = urlParams.get('name');
-
-    if (!placeId && !placeNameParam) {
-        showError();
-        return;
-    }
-
-    try {
-        const AI_SUPABASE_URL = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
-        const AI_SUPABASE_KEY = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
-        window.aiSb = window.supabase.createClient(AI_SUPABASE_URL, AI_SUPABASE_KEY);
-        const aiSb = window.aiSb;
-
-        // 2. Hae paikan tiedot Supabasesta
-        let placeQuery = aiSb.from('places').select('*');
-        
-        if (placeId) {
-            placeQuery = placeQuery.eq('place_id', placeId);
-        } else if (placeNameParam) {
-            const decodedName = decodeURIComponent(placeNameParam).replace(/_/g, ' ');
-            const safeNameValue = decodedName.replace(/"/g, '');
-            placeQuery = placeQuery.or(`name.ilike."${safeNameValue}",canonical_name.ilike."${safeNameValue}"`);
-        }
-        
-        const { data: placesData, error: placeError } = await placeQuery.limit(1);
-
-        if (placeError || !placesData || placesData.length === 0) {
-            console.error('Virhe haettaessa paikkaa:', placeError);
-            showError();
-            return;
-        }
-        
-        const placeData = placesData[0];
-        
-        // Ensure placeId is set for the rest of the logic if we searched by name
-        if (!placeId) {
-            placeId = placeData.place_id;
-        }
-
-        // 3. Hae kohteet ja tarjoukset JSON-tiedostoista
-        const cacheBuster = new Date().getTime();
-        let kohteet = [];
-        let tarjoukset = [];
-        try {
-            const kohteetRes = await fetch('kohdekortit/kohteet.json?v=' + cacheBuster);
-            if (kohteetRes.ok) kohteet = await kohteetRes.json();
-            
-            const tarjouksetRes = await fetch('kohdekortit/tarjoukset.json?v=' + cacheBuster);
-            if (tarjouksetRes.ok) tarjoukset = await tarjouksetRes.json();
-        } catch (e) {
-            console.error('Virhe JSONien latauksessa:', e);
-        }
-        
-        // 4. Hae relaatiot Supabasesta (esim. mobiiliappin havainnot tai yritykset)
-        const { data: relationsData, error: relationsError } = await aiSb
-            .from('place_relations')
-            .select('entity_id, entity_type, entity_name, relation_type, relation_context, strength')
-            .eq('place_id', placeId);
-
-        // 5. Yhdistä tiedot poistaen duplikaatit
-        const allItemsMap = new Map();
-        
-        // Lisätään JSONeista löytyneet
-        [...kohteet, ...tarjoukset].forEach(item => {
-            if (item.place_id === placeId) {
-                allItemsMap.set(String(item.id), item);
-            }
-        });
-        
-        // Lisätään Supabasesta löytyneet, jos niitä ei vielä ole
         if (!relationsError && relationsData) {
             relationsData.forEach(r => {
                 const eId = String(r.entity_id);
@@ -178,17 +89,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         const relatedItems = Array.from(allItemsMap.values());
 
-        // 4. Päivitä DOM
+        // 6. PÃ¤ivitÃ¤ DOM
         renderPlace(placeData, relatedItems);
         await loadEncountersForPlace(placeData);
         await loadLostItemsForPlace(placeData);
         await renderServicesForEntity(placeData);
 
     } catch (err) {
-        console.error('Yllättävä virhe:', err);
+        console.error('YllÃ¤ttÃ¤vÃ¤ virhe:', err);
         showError();
     }
 });
+
 
 function showError() {
     document.getElementById('loading-spinner').style.display = 'none';
@@ -200,7 +112,7 @@ function renderPlace(place, relatedItems) {
     document.getElementById('place-content').style.display = 'block';
 
     // Perustiedot
-    document.getElementById('place-name').textContent = place.name || place.canonical_name || 'Nimetön paikka';
+    document.getElementById('place-name').textContent = place.name || place.canonical_name || 'NimetÃ¶n paikka';
     document.getElementById('place-type').textContent = getTypeLabel(place.type);
     document.getElementById('place-municipality').textContent = place.municipality || 'Laukaa';
     
@@ -209,9 +121,9 @@ function renderPlace(place, relatedItems) {
         document.getElementById('display-description').innerHTML = `<p>${place.description}</p>`;
     } else {
         document.getElementById('display-description').innerHTML = 
-            `Tämä on <strong>${place.name || place.canonical_name}</strong>, joka on tyypiltään ${getTypeLabel(place.type).toLowerCase()}. ` +
+            `TÃ¤mÃ¤ on <strong>${place.name || place.canonical_name}</strong>, joka on tyypiltÃ¤Ã¤n ${getTypeLabel(place.type).toLowerCase()}. ` +
             `Sijaintina on ${place.municipality}. <br><br>` + 
-            `<em>Tekoälyn generoima kuvaus tälle paikalle lisätään myöhemmässä vaiheessa.</em>`;
+            `<em>TekoÃ¤lyn generoima kuvaus tÃ¤lle paikalle lisÃ¤tÃ¤Ã¤n myÃ¶hemmÃ¤ssÃ¤ vaiheessa.</em>`;
     }
 
     // Tilastot
@@ -293,7 +205,7 @@ function renderPlace(place, relatedItems) {
     if (shareBtn) {
         shareBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            // Luo nimestä tehty jakolinkki (käytetään ensisijaisesti kanonista nimeä uniikkiuden vuoksi)
+            // Luo nimestÃ¤ tehty jakolinkki (kÃ¤ytetÃ¤Ã¤n ensisijaisesti kanonista nimeÃ¤ uniikkiuden vuoksi)
             const rawName = place.canonical_name || place.name || place.place_id;
             const safeName = encodeURIComponent(rawName.replace(/\s+/g, '_'));
             
@@ -312,13 +224,13 @@ function renderPlace(place, relatedItems) {
                     shareBtn.style.borderColor = '';
                 }, 3000);
             }).catch(err => {
-                console.error('Kopiointi epäonnistui:', err);
+                console.error('Kopiointi epÃ¤onnistui:', err);
                 alert('Jakolinkki: ' + shareUrl);
             });
         });
     }
 
-    // Ladataan lähipaikat tag-pilvenä
+    // Ladataan lÃ¤hipaikat tag-pilvenÃ¤
     renderNearbyPlaces(place);
 }
 
@@ -343,7 +255,7 @@ function renderRelations(items) {
     if (items.length === 0) {
         container.innerHTML = `<div style="text-align:center; color: var(--light-text); padding: 3rem; border: 2px dashed #e5e7eb; border-radius: var(--inner-radius); background: #f9fafb;">
             <span class="iconify" data-icon="material-symbols:link-off" style="font-size: 2.5rem; color: #d1d5db;"></span>
-            <p style="margin-top: 1rem; font-weight: 500;">Ei kohteita tähän paikkaan liitettynä.</p></div>`;
+            <p style="margin-top: 1rem; font-weight: 500;">Ei kohteita tÃ¤hÃ¤n paikkaan liitettynÃ¤.</p></div>`;
         return;
     }
 
@@ -399,8 +311,8 @@ function initPlaceMap(lat, lon, name) {
 function getTypeLabel(type) {
     const types = {
         'NATURE': 'Luontokohde',
-        'LANDMARK': 'Nähtävyys',
-        'SERVICE': 'Palvelukeskittymä',
+        'LANDMARK': 'NÃ¤htÃ¤vyys',
+        'SERVICE': 'PalvelukeskittymÃ¤',
         'BUILDING': 'Rakennus',
         'AREA': 'Alue',
         'ROUTE': 'Reitti'
@@ -413,12 +325,12 @@ function getTypeLabel(type) {
 // ==========================================================
 async function loadEncountersForPlace(place) {
     if (!window.LaukaaSupabase) {
-        console.warn('LaukaaSupabase (kohtaamiset) ei saatavilla. Varmista että supabase-config.js on ladattu.');
+        console.warn('LaukaaSupabase (kohtaamiset) ei saatavilla. Varmista ettÃ¤ supabase-config.js on ladattu.');
         return;
     }
     
     try {
-        // Hakee ilmoitukset jotka on linkitetty location_id:llä tai joilla on sama nimi (fallback)
+        // Hakee ilmoitukset jotka on linkitetty location_id:llÃ¤ tai joilla on sama nimi (fallback)
         const placeName = place.name || place.canonical_name || '';
         
         let query = window.LaukaaSupabase
@@ -427,7 +339,7 @@ async function loadEncountersForPlace(place) {
             .eq('status', 'active');
             
         // Jos haluamme kohdentaa tiukasti place_id:hen:
-        // mutta otetaan fallback string matchillä myös
+        // mutta otetaan fallback string matchillÃ¤ myÃ¶s
         if (place.place_id && placeName) {
             query = query.or(`location_id.eq.${place.place_id},location.ilike."*${placeName}*"`);
         } else if (place.place_id) {
@@ -444,7 +356,7 @@ async function loadEncountersForPlace(place) {
         
         let allItems = data || [];
         
-        // Hae myös tapahtumat, yritysjulkaisut ja tarjoukset
+        // Hae myÃ¶s tapahtumat, yritysjulkaisut ja tarjoukset
         if (window.aiSb && place.place_id) {
             try {
                 // Contents-taulu (JSONB location->>place_id)
@@ -509,13 +421,13 @@ async function loadEncountersForPlace(place) {
                     });
                 }
             } catch (aiErr) {
-                console.error("Virhe lisäsisällön haussa", aiErr);
+                console.error("Virhe lisÃ¤sisÃ¤llÃ¶n haussa", aiErr);
             }
         }
         
         renderEncounters(allItems);
     } catch (e) {
-        console.error('Yllättävä virhe encounters haussa:', e);
+        console.error('YllÃ¤ttÃ¤vÃ¤ virhe encounters haussa:', e);
     }
 }
 
@@ -542,7 +454,7 @@ function renderEncounters(encounters) {
     const statOffers = document.getElementById('stat-offers');
     if (statOffers) statOffers.textContent = offers.length;
     
-    // Tarkistetaan aktiivisuus viikon sisällä
+    // Tarkistetaan aktiivisuus viikon sisÃ¤llÃ¤
     const statusEl = document.getElementById('place-activity-status');
     const dotEl = document.getElementById('activity-dot');
     const textEl = document.getElementById('place-activity-text');
@@ -560,7 +472,7 @@ function renderEncounters(encounters) {
         if (latestDate > sevenDaysAgo) {
             statusEl.style.display = 'flex';
             if (dotEl) dotEl.style.display = 'inline';
-            textEl.textContent = 'Päivitetty hiljattain';
+            textEl.textContent = 'PÃ¤ivitetty hiljattain';
         }
     }
     
@@ -572,7 +484,7 @@ function renderEncounters(encounters) {
     
     section.style.display = 'block';
     
-    // Ryhmittele tyypeittäin
+    // Ryhmittele tyypeittÃ¤in
     const grouped = {};
     validEncounters.forEach(e => {
         const t = e.type || 'other';
@@ -584,42 +496,42 @@ function renderEncounters(encounters) {
     const typeLabels = {
         'service_request': 'Palvelutarpeet',
         'need_help': 'Tarvitsen palvelun',
-        'sell': 'Myydään',
+        'sell': 'MyydÃ¤Ã¤n',
         'give': 'Annetaan',
-        'search': 'Etsitään',
+        'search': 'EtsitÃ¤Ã¤n',
         'local_notice': 'Paikalliset ilmoitukset',
         'offer_service': 'Tarjoan palvelua',
-        'work_and_gigs': 'Työ ja toimeksiannot',
-        'community': 'Yhteisö',
+        'work_and_gigs': 'TyÃ¶ ja toimeksiannot',
+        'community': 'YhteisÃ¶',
         'space_rental': 'Tilat ja kalusto',
-        'b2b_collab': 'Yhteistyöhaku',
+        'b2b_collab': 'YhteistyÃ¶haku',
         'event_staff': 'Tapahtumahaku',
         'high_value': 'Arvotavarat ja erikoiskohteet',
-        'lost_and_found': 'Kadonnut tai löytynyt',
+        'lost_and_found': 'Kadonnut tai lÃ¶ytynyt',
         'event': 'Tapahtumat',
         'offer': 'Tarjoukset',
         'feed_post': 'Yritysten ilmoitukset',
-        'content_other': 'Muu sisältö',
+        'content_other': 'Muu sisÃ¤ltÃ¶',
         'other': 'Muut ilmoitukset'
     };
     
     const typeIcons = {
-        'service_request': '🤝',
-        'sell': '🛒',
-        'give': '🎁',
-        'search': '🔍',
-        'local_notice': '📢',
-        'event': '📅',
-        'offer': '🏷️',
-        'feed_post': '📰',
-        'content_other': '📌'
+        'service_request': 'ðŸ¤',
+        'sell': 'ðŸ›’',
+        'give': 'ðŸŽ',
+        'search': 'ðŸ”',
+        'local_notice': 'ðŸ“¢',
+        'event': 'ðŸ“…',
+        'offer': 'ðŸ·ï¸',
+        'feed_post': 'ðŸ“°',
+        'content_other': 'ðŸ“Œ'
     };
     
     let html = '';
     
     for (const [type, items] of Object.entries(grouped)) {
         const label = typeLabels[type] || type;
-        const icon = typeIcons[type] || '📌';
+        const icon = typeIcons[type] || 'ðŸ“Œ';
         
         html += `<div style="margin-bottom: 1.5rem; border: 1px solid #f3f4f6; border-radius: var(--inner-radius); overflow: hidden; background: var(--card-bg);">
             <div style="padding: 1.25rem; background: #f9fafb; font-weight: 700; color: var(--dark-text); border-bottom: 1px solid #f3f4f6; display: flex; justify-content: space-between; align-items: center;">
@@ -652,13 +564,13 @@ function renderEncounters(encounters) {
 }
 
 // ==========================================================
-// LOSTNFOUND: FIREBASE FIRESTORE -HAU (kadonneet/löydetyt)
+// LOSTNFOUND: FIREBASE FIRESTORE -HAU (kadonneet/lÃ¶ydetyt)
 // ==========================================================
 async function loadLostItemsForPlace(place) {
     if (!place.place_id) return;
     
     try {
-        // Firebase SDK ladataan dynaamisesti jos ei vielä ladattu
+        // Firebase SDK ladataan dynaamisesti jos ei vielÃ¤ ladattu
         if (!window.firebase) {
             await Promise.all([
                 loadScript('https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js'),
@@ -666,7 +578,7 @@ async function loadLostItemsForPlace(place) {
             ]);
         }
         
-        // Alusta Firebase jos ei vielä alustettu
+        // Alusta Firebase jos ei vielÃ¤ alustettu
         if (!window._lfApp) {
             window._lfApp = firebase.initializeApp({
                 apiKey: 'AIzaSyA6l0FosuiXh9KxFfD5Q92BCP1EWbH8LN4',
@@ -677,14 +589,14 @@ async function loadLostItemsForPlace(place) {
         
         const db = firebase.firestore(window._lfApp);
         
-        // Hae kyseisen paikan ilmoitukset placeId-kentällä (ilman status-kyselyä indeksien välttämiseksi)
+        // Hae kyseisen paikan ilmoitukset placeId-kentÃ¤llÃ¤ (ilman status-kyselyÃ¤ indeksien vÃ¤lttÃ¤miseksi)
         console.log('Haetaan lostItems paikalle:', place.place_id);
         const snapshot = await db.collection('lostItems')
             .where('placeId', '==', place.place_id)
             .limit(50)
             .get();
         
-        console.log('LostItems snapshot:', snapshot.empty ? 'Tyhjä' : snapshot.docs.length + ' dokumenttia löydetty');
+        console.log('LostItems snapshot:', snapshot.empty ? 'TyhjÃ¤' : snapshot.docs.length + ' dokumenttia lÃ¶ydetty');
         if (snapshot.empty) return;
         
         // Suodata aktiiviset paikallisesti (Android tallentaa tilaksi APPROVED)
@@ -702,22 +614,22 @@ async function loadLostItemsForPlace(place) {
             return {
                 id: doc.id,
                 type: 'lost_and_found',
-                title: (isLost ? '🔍 Kadonnut: ' : '📦 Löytynyt: ') + (d.title || 'Ilmoitus'),
+                title: (isLost ? 'ðŸ” Kadonnut: ' : 'ðŸ“¦ LÃ¶ytynyt: ') + (d.title || 'Ilmoitus'),
                 description: d.description || '',
                 created_at: d.timestamp?.toDate?.()?.toISOString() || null,
                 url: `https://lostnfound-f0d25.web.app/item/${doc.id}`
             };
         });
         
-        // Lisätään löydetyt/kadonneet olemassa olevaan encounters-listaan
+        // LisÃ¤tÃ¤Ã¤n lÃ¶ydetyt/kadonneet olemassa olevaan encounters-listaan
         const container = document.getElementById('encounters-list');
         const section = document.getElementById('encounters-section');
         if (!container || lostItems.length === 0) return;
         
         section.style.display = 'block';
         
-        const icon = '🔍';
-        const label = 'Kadonnut & Löydetty (Lostnfound)';
+        const icon = 'ðŸ”';
+        const label = 'Kadonnut & LÃ¶ydetty (Lostnfound)';
         
         let html = `<div style="margin-bottom: 1.5rem; border: 1px solid #fde68a; border-radius: var(--inner-radius); overflow: hidden; background: #fffbeb;">
             <div style="padding: 1.25rem; background: #fef9c3; font-weight: 700; color: #92400e; border-bottom: 1px solid #fde68a; display: flex; justify-content: space-between; align-items: center;">
@@ -740,7 +652,7 @@ async function loadLostItemsForPlace(place) {
         html += `</div></div>`;
         container.insertAdjacentHTML('beforeend', html);
         
-        // Päivitetään myös tilastolaskuri
+        // PÃ¤ivitetÃ¤Ã¤n myÃ¶s tilastolaskuri
         const statEncounters = document.getElementById('stat-encounters');
         if (statEncounters) {
             const current = parseInt(statEncounters.textContent) || 0;
@@ -748,7 +660,7 @@ async function loadLostItemsForPlace(place) {
         }
         
     } catch (err) {
-        console.warn('Lostnfound-haku epäonnistui:', err);
+        console.warn('Lostnfound-haku epÃ¤onnistui:', err);
     }
 }
 
@@ -763,7 +675,7 @@ function loadScript(src) {
     });
 }
 
-// ── LÄHIPAIKKOJEN LOGIIKKA (TAG CLOUD) ──
+// â”€â”€ LÃ„HIPAIKKOJEN LOGIIKKA (TAG CLOUD) â”€â”€
 function haversineMeters(lat1, lon1, lat2, lon2) {
     const R = 6371000;
     const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -812,7 +724,7 @@ async function renderNearbyPlaces(currentPlace) {
                 if (p.dist < 300) tagClass = 'tag-large';
                 else if (p.dist > 1000) tagClass = 'tag-small';
 
-                // Näytetään oikea nimi (p.name) hashtagina, mutta haetaan kohde canonical-nimellä
+                // NÃ¤ytetÃ¤Ã¤n oikea nimi (p.name) hashtagina, mutta haetaan kohde canonical-nimellÃ¤
                 const displayName = p.name || p.canonical_name;
                 const hashName = displayName.replace(/\s+/g, '');
                 const searchName = (p.canonical_name || p.name).replace(/\s+/g, '_');
@@ -872,7 +784,7 @@ async function renderServicesForEntity(placeData) {
                     }
                 }).join('');
             } else {
-                sourcesHtml = `<p style="color:var(--text-muted); font-style:italic;">Ei lisättyjä sisältöjä. Ota yhteyttä yritykseen.</p>`;
+                sourcesHtml = `<p style="color:var(--text-muted); font-style:italic;">Ei lisÃ¤ttyjÃ¤ sisÃ¤ltÃ¶jÃ¤. Ota yhteyttÃ¤ yritykseen.</p>`;
             }
 
             return `
