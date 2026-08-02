@@ -1272,9 +1272,9 @@
                                 } else if (s.url.includes('youtu.be/')) {
                                     yid = s.url.split('youtu.be/')[1].split('?')[0];
                                 }
-                                return yid ? \`<div style="margin-top:10px;"><iframe style="width:100%; aspect-ratio: 16/9; border-radius:8px;" src="https://www.youtube.com/embed/\${yid}" frameborder="0" allowfullscreen></iframe></div>\` : \`<a href="\${s.url}" target="_blank">\${s.title}</a>\`;
+                                return yid ? `<div style="margin-top:10px;"><iframe style="width:100%; aspect-ratio: 16/9; border-radius:8px;" src="https://www.youtube.com/embed/${yid}" frameborder="0" allowfullscreen></iframe></div>` : `<a href="${s.url}" target="_blank">${s.title}</a>`;
                             } else {
-                                return \`<div style="margin-top:8px;"><a href="\${s.url}" target="_blank" style="color:var(--primary-blue); font-weight:bold; text-decoration:none;">\${s.title} &rarr;</a></div>\`;
+                                return `<div style="margin-top:8px;"><a href="${s.url}" target="_blank" style="color:var(--primary-blue); font-weight:bold; text-decoration:none;">${s.title} &rarr;</a></div>`;
                             }
                         }).join(''));
                     }
@@ -1291,45 +1291,45 @@
                                         yid = c.media_url.split('youtu.be/')[1].split('?')[0];
                                     }
                                     if (yid) {
-                                        mediaHtml = \`<div style="margin-top:10px;"><iframe style="width:100%; aspect-ratio: 16/9; border-radius:8px;" src="https://www.youtube.com/embed/\${yid}" frameborder="0" allowfullscreen></iframe></div>\`;
+                                        mediaHtml = `<div style="margin-top:10px;"><iframe style="width:100%; aspect-ratio: 16/9; border-radius:8px;" src="https://www.youtube.com/embed/${yid}" frameborder="0" allowfullscreen></iframe></div>`;
                                     } else {
-                                        mediaHtml = \`<div style="margin-top:8px;"><video src="\${c.media_url}" controls style="width:100%; border-radius:8px;"></video></div>\`;
+                                        mediaHtml = `<div style="margin-top:8px;"><video src="${c.media_url}" controls style="width:100%; border-radius:8px;"></video></div>`;
                                     }
                                 } else if (c.content_type === 'PHOTO') {
-                                    mediaHtml = \`<div style="margin-top:8px;"><img src="\${c.media_url}" alt="\${c.title}" style="max-width:100%; border-radius:8px;"></div>\`;
+                                    mediaHtml = `<div style="margin-top:8px;"><img src="${c.media_url}" alt="${c.title}" style="max-width:100%; border-radius:8px;"></div>`;
                                 } else {
-                                    mediaHtml = \`<div style="margin-top:8px;"><a href="\${c.media_url}" target="_blank" style="color:var(--primary-blue); font-weight:bold; text-decoration:none;">Katso media &rarr;</a></div>\`;
+                                    mediaHtml = `<div style="margin-top:8px;"><a href="${c.media_url}" target="_blank" style="color:var(--primary-blue); font-weight:bold; text-decoration:none;">Katso media &rarr;</a></div>`;
                                 }
                             }
                             
-                            return \`
+                            return `
                                 <div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #e2e8f0;">
-                                    <h4 style="margin: 0 0 5px 0; color: var(--dark-text);">\${c.title}</h4>
-                                    \${c.description ? \`<p style="margin: 0 0 10px 0; font-size: 0.9rem; color: var(--light-text); line-height: 1.4;">\${c.description}</p>\` : ''}
-                                    \${mediaHtml}
+                                    <h4 style="margin: 0 0 5px 0; color: var(--dark-text);">${c.title}</h4>
+                                    ${c.description ? `<p style="margin: 0 0 10px 0; font-size: 0.9rem; color: var(--light-text); line-height: 1.4;">${c.description}</p>` : ''}
+                                    ${mediaHtml}
                                 </div>
-                            \`;
+                            `;
                         }).join(''));
                     }
 
                     let sourcesHtml = htmlArr.length > 0 
                         ? htmlArr.join('') 
-                        : \`<p style="color:var(--light-text); font-style:italic;">Ei lisättyjä sisältöjä. Ota yhteyttä yritykseen.</p>\`;
+                        : `<p style="color:var(--light-text); font-style:italic;">Ei lisättyjä sisältöjä. Ota yhteyttä yritykseen.</p>`;
 
-                    return \`
+                    return `
                     <details class="service-accordion">
                         <summary>
                             <div>
-                                <div style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--accent-blue); margin-bottom: 0.2rem;">\${rel.entity_name}</div>
-                                <div style="font-family: 'Outfit', sans-serif;">\${rel.relation_context || 'Palvelu'}</div>
+                                <div style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--accent-blue); margin-bottom: 0.2rem;">${rel.entity_name}</div>
+                                <div style="font-family: 'Outfit', sans-serif;">${rel.relation_context || 'Palvelu'}</div>
                             </div>
                             <span class="iconify" data-icon="mdi:chevron-down" style="font-size:1.5rem; color:var(--light-text); transition:transform 0.2s;"></span>
                         </summary>
                         <div class="service-content">
-                            \${sourcesHtml}
+                            ${sourcesHtml}
                         </div>
                     </details>
-                    \`;
+                    `;
                 }).join('');
                 
             } catch (err) {
