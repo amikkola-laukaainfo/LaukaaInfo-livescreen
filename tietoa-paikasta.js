@@ -472,7 +472,6 @@ function renderRelations(items) {
         const count = items.length;
         sectionTitle.innerHTML = `<span class="iconify" data-icon="material-symbols:storefront-outline" style="color: var(--accent);"></span> Palveluja täällä <span style="background: #ede9fe; color: #7c3aed; font-size: 0.8rem; font-weight: 700; padding: 2px 10px; border-radius: 50px; margin-left: 0.5rem;">${count}</span>`;
     }
-    }
 
     if (items.length === 0) {
         container.innerHTML = `<div style="text-align:center; color: var(--light-text); padding: 3rem; border: 2px dashed #e5e7eb; border-radius: var(--inner-radius); background: #f9fafb;">
