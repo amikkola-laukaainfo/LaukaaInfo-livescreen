@@ -115,6 +115,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // 6. Päivitä DOM
         renderPlace(placeData, relatedItems, aiProfileData);
         await loadMemoriesForPlace(placeData);
+        await loadMediaForPlace(placeData);
         await loadEncountersForPlace(placeData);
         await loadLostItemsForPlace(placeData);
         await renderServicesForEntity(placeData);
@@ -129,6 +130,49 @@ document.addEventListener('DOMContentLoaded', async () => {
 function showError() {
     document.getElementById('loading-spinner').style.display = 'none';
     document.getElementById('error-message').style.display = 'block';
+}
+
+async function loadMediaForPlace(place) {
+    const mediaSection = document.getElementById('media-section');
+    const mediaList = document.getElementById('media-list');
+    const mediaBadge = document.getElementById('media-count-badge');
+    if (!mediaSection || !mediaList) return;
+
+    try {
+        const { data: sources, error } = await aiSb
+            .from('place_sources')
+            .select('*')
+            .eq('place_id', place.place_id)
+            .in('source_type', ['IMAGE', 'PHOTO', 'YOUTUBE', 'YOUTUBE_VIDEO', 'VIDEO']);
+
+        if (error || !sources || sources.length === 0) return;
+
+        mediaSection.style.display = 'block';
+        if (mediaBadge) mediaBadge.textContent = sources.length;
+
+        mediaList.innerHTML = sources.map(s => {
+            if (s.source_type === 'YOUTUBE' || s.source_type === 'YOUTUBE_VIDEO') {
+                let yid = '';
+                if (s.url && s.url.includes('v=')) yid = s.url.split('v=')[1].split('&')[0];
+                else if (s.url && s.url.includes('youtu.be/')) yid = s.url.split('youtu.be/')[1].split('?')[0];
+                if (yid) {
+                    return `<div style="flex: 0 0 280px; scroll-snap-align: start; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; background: #000;">
+                        <iframe style="width: 100%; aspect-ratio: 16/9; display: block;" src="https://www.youtube.com/embed/${yid}" frameborder="0" allowfullscreen></iframe>
+                        ${s.title ? `<div style="padding: 0.5rem; font-size: 0.85rem; color: #475569; background: white;">${s.title}</div>` : ''}
+                    </div>`;
+                }
+            }
+            if (s.url) {
+                return `<div style="flex: 0 0 200px; scroll-snap-align: start; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0;">
+                    <img src="${s.url}" alt="${s.title || 'Kuva'}" style="width: 100%; height: 140px; object-fit: cover; display: block;">
+                    ${s.title ? `<div style="padding: 0.5rem; font-size: 0.85rem; color: #475569;">${s.title}</div>` : ''}
+                </div>`;
+            }
+            return '';
+        }).join('');
+    } catch (err) {
+        console.error('Virhe median haussa:', err);
+    }
 }
 
 async function loadMemoriesForPlace(place) {
@@ -178,15 +222,20 @@ async function loadMemoriesForPlace(place) {
             }
 
             const yearText = mem.year ? mem.year : 'Historia';
+            const firstSourceUrl = mem.entity_sources.length > 0 ? mem.entity_sources[0].url : null;
+            const clickHandler = firstSourceUrl ? `onclick="window.open('${firstSourceUrl}', '_blank')"` : '';
+            const hoverStyles = firstSourceUrl ? `onmouseover="this.style.transform='scale(1.02)'; this.style.boxShadow='0 4px 16px rgba(225,29,72,0.1)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none';"` : '';
             
             return `
-            <div class="memory-card" style="background: #fff0f2; border: 1px solid #ffe4e6; padding: 1rem; border-radius: 12px; display: flex; gap: 1rem; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+            <div class="memory-card" ${clickHandler} ${hoverStyles} style="background: #fff0f2; border: 1px solid #ffe4e6; padding: 1rem; border-radius: 12px; display: flex; gap: 1rem; ${firstSourceUrl ? 'cursor: pointer;' : ''} transition: transform 0.2s;">
                 <div style="font-weight: 800; font-size: 1.2rem; color: #e11d48; white-space: nowrap;">${yearText}</div>
-                <div>
+                <div style="flex: 1;">
                     <div style="font-weight: 600; color: #1e293b; margin-bottom: 0.25rem;">${mem.title}</div>
                     ${mem.description ? `<div style="font-size: 0.85rem; color: #475569; margin-bottom: 0.5rem;">${mem.description}</div>` : ''}
                     <div style="font-size: 0.85rem; color: #64748b; display: flex; align-items: center; gap: 0.25rem;">
-                        <span class="iconify" data-icon="${icon}"></span> ${mem.entity_sources.length} lähdettä
+                        <span class="iconify" data-icon="${icon}"></span> 
+                        ${mem.entity_sources.length} lähdettä
+                        ${firstSourceUrl ? '<span style="color: #e11d48; margin-left: 4px;">&#8594; avaa</span>' : ''}
                     </div>
                 </div>
             </div>
@@ -942,8 +991,34 @@ async function renderServicesForEntity(placeData) {
             .select('*')
             .eq('place_id', placeIdStr);
 
+        // Renderöi paikan omat place_content -sisällöt (ei tarvitse relations-yritystä)
+        if (contents && contents.length > 0) {
+            const placeContents = contents.filter(c => !c.entity_id || c.entity_id === placeIdStr);
+            if (placeContents.length > 0) {
+                servicesBox.style.display = 'block';
+                const placeContentHtml = placeContents.map(c => {
+                    let mediaHtml = '';
+                    if (c.media_url) {
+                        if (c.content_type === 'VIDEO' || c.storage_provider === 'YOUTUBE') {
+                            let yid = '';
+                            if (c.media_url.includes('v=')) yid = c.media_url.split('v=')[1].split('&')[0];
+                            else if (c.media_url.includes('youtu.be/')) yid = c.media_url.split('youtu.be/')[1].split('?')[0];
+                            mediaHtml = yid ? `<div style="margin-top:10px;"><iframe style="width:100%; aspect-ratio: 16/9; border-radius:8px;" src="https://www.youtube.com/embed/${yid}" frameborder="0" allowfullscreen></iframe></div>` : '';
+                        } else if (c.content_type === 'PHOTO') {
+                            mediaHtml = `<div style="margin-top:8px;"><img src="${c.media_url}" alt="${c.title}" style="max-width:100%; border-radius:8px;"></div>`;
+                        }
+                    }
+                    return `<div style="padding: 1rem; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
+                        <div style="font-weight: 700; color: #1e293b; margin-bottom: 0.25rem;">${c.title || ''}</div>
+                        ${c.description ? `<div style="font-size: 0.85rem; color: #64748b;">${c.description}</div>` : ''}
+                        ${mediaHtml}
+                    </div>`;
+                }).join('');
+                servicesContainer.insertAdjacentHTML('beforeend', placeContentHtml);
+            }
+        }
+
         if (!relations || relations.length === 0) {
-            servicesBox.style.display = 'none';
             return;
         }
 
