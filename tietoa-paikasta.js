@@ -578,6 +578,24 @@ function renderRelations(items, allSources = [], allContents = []) {
         
         const thumbHtml = thumbUrl ? `<div style="width: 48px; height: 48px; flex-shrink: 0; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; margin-left: auto; background: #fff; display: flex; align-items: center; justify-content: center;"><img src="${thumbUrl}" style="max-width: 100%; max-height: 100%; object-fit: contain;" /></div>` : '';
 
+        const formatDateFi = (dStr) => {
+            if (!dStr) return '';
+            try { return new Date(dStr).toLocaleDateString('fi-FI'); } catch(e) { return dStr; }
+        };
+        let dateInfoHtml = '';
+        if (item.event && (item.event.startDate || item.event.endDate)) {
+            const sDate = formatDateFi(item.event.startDate);
+            const eDate = formatDateFi(item.event.endDate);
+            if (sDate && eDate && sDate !== eDate) dateInfoHtml = `<div style="font-size: 0.85rem; color: #0369a1; margin-top: 0.3rem; display: flex; align-items: center; gap: 0.3rem;"><span class="iconify" data-icon="material-symbols:calendar-month"></span> ${sDate} - ${eDate}</div>`;
+            else if (sDate) dateInfoHtml = `<div style="font-size: 0.85rem; color: #0369a1; margin-top: 0.3rem; display: flex; align-items: center; gap: 0.3rem;"><span class="iconify" data-icon="material-symbols:calendar-month"></span> ${sDate}</div>`;
+        } else if (item.offer && (item.offer.validFrom || item.offer.validUntil)) {
+            const fDate = formatDateFi(item.offer.validFrom);
+            const uDate = formatDateFi(item.offer.validUntil);
+            if (fDate && uDate) dateInfoHtml = `<div style="font-size: 0.85rem; color: #b45309; margin-top: 0.3rem; display: flex; align-items: center; gap: 0.3rem;"><span class="iconify" data-icon="material-symbols:schedule"></span> Voimassa: ${fDate} - ${uDate}</div>`;
+            else if (uDate) dateInfoHtml = `<div style="font-size: 0.85rem; color: #b45309; margin-top: 0.3rem; display: flex; align-items: center; gap: 0.3rem;"><span class="iconify" data-icon="material-symbols:schedule"></span> Päättyy: ${uDate}</div>`;
+            else if (fDate) dateInfoHtml = `<div style="font-size: 0.85rem; color: #b45309; margin-top: 0.3rem; display: flex; align-items: center; gap: 0.3rem;"><span class="iconify" data-icon="material-symbols:schedule"></span> Alkaa: ${fDate}</div>`;
+        }
+
         const headerHtml = `
             <div style="display: flex; align-items: center; gap: 1rem; flex: 1;">
                 <div class="list-icon-wrapper" style="margin:0; flex-shrink: 0;">
@@ -588,6 +606,7 @@ function renderRelations(items, allSources = [], allContents = []) {
                         <span style="font-weight: 700; font-size: 1.05rem; color: var(--dark-text);">${displayName}</span>
                         <span style="font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.8rem; border-radius: 50px; background: #dcfce7; color: #166534; text-transform: uppercase; letter-spacing: 0.5px;">${typeLabel}</span>
                     </div>
+                    ${dateInfoHtml}
                     ${item.shortDescription ? `<div style="font-size: 0.95rem; color: var(--light-text); margin-top: 0.5rem; line-height: 1.5;">${item.shortDescription}</div>` : ''}
                 </div>
                 ${thumbHtml}
