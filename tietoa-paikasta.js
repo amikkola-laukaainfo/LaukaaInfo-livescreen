@@ -541,9 +541,19 @@ function renderRelations(items, allSources = [], allContents = []) {
         const itemContents = allContents.filter(c => String(c.entity_id) === String(item.id));
         const hasExtraContent = itemSources.length > 0 || itemContents.length > 0;
 
+        let thumbUrl = null;
+        const imgSource = itemSources.find(s => s.source_type === 'PHOTO' || s.source_type === 'IMAGE');
+        if (imgSource) thumbUrl = imgSource.url;
+        else {
+            const imgContent = itemContents.find(c => c.content_type === 'PHOTO' && c.media_url);
+            if (imgContent) thumbUrl = imgContent.media_url;
+        }
+        
+        const thumbHtml = thumbUrl ? `<div style="width: 48px; height: 48px; flex-shrink: 0; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; margin-left: auto;"><img src="${thumbUrl}" style="width: 100%; height: 100%; object-fit: cover;" /></div>` : '';
+
         const headerHtml = `
             <div style="display: flex; align-items: center; gap: 1rem; flex: 1;">
-                <div class="list-icon-wrapper" style="margin:0;">
+                <div class="list-icon-wrapper" style="margin:0; flex-shrink: 0;">
                     <span class="iconify list-icon" data-icon="${iconName}"></span>
                 </div>
                 <div style="flex: 1; min-width: 0;">
@@ -553,6 +563,7 @@ function renderRelations(items, allSources = [], allContents = []) {
                     </div>
                     ${item.shortDescription ? `<div style="font-size: 0.95rem; color: var(--light-text); margin-top: 0.5rem; line-height: 1.5;">${item.shortDescription}</div>` : ''}
                 </div>
+                ${thumbHtml}
             </div>
         `;
 
