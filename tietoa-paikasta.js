@@ -117,14 +117,21 @@ function renderPlace(place, relatedItems) {
     document.getElementById('place-municipality').textContent = place.municipality || 'Laukaa';
     
     // Kuvaus (V2)
+    let descHtml = '';
     if (place.description) {
-        document.getElementById('display-description').innerHTML = `<p>${place.description}</p>`;
+        descHtml = `<p>${place.description}</p>`;
     } else {
-        document.getElementById('display-description').innerHTML = 
-            `Tämä on <strong>${place.name || place.canonical_name}</strong>, joka on tyypiltään ${getTypeLabel(place.type).toLowerCase()}. ` +
+        descHtml = `Tämä on <strong>${place.name || place.canonical_name}</strong>, joka on tyypiltään ${getTypeLabel(place.type).toLowerCase()}. ` +
             `Sijaintina on ${place.municipality}. <br><br>` + 
             `<em>Tekoälyn generoima kuvaus tälle paikalle lisätään myöhemmässä vaiheessa.</em>`;
     }
+    
+    // Ylimääräinen "place_content" -kenttä
+    if (place.place_content) {
+        descHtml += `<div style="margin-top: 1.5rem;" class="place-content-extra">${place.place_content}</div>`;
+    }
+
+    document.getElementById('display-description').innerHTML = descHtml;
 
     // Tilastot
     const companies = relatedItems.filter(i => i.type === 'business' || i.type === 'association' || i.type === 'service');
@@ -516,15 +523,15 @@ function renderEncounters(encounters) {
     };
     
     const typeIcons = {
-        'service_request': '�Y��',
-        'sell': '�Y>'',
-        'give': '�YZ�',
-        'search': '�Y"�',
-        'local_notice': '�Y"�',
-        'event': '�Y".',
-        'offer': '�Y��️',
-        'feed_post': '�Y"�',
-        'content_other': '�Y"O'
+        'service_request': '🛠️',
+        'sell': '💰',
+        'give': '🎁',
+        'search': '🔍',
+        'local_notice': '📢',
+        'event': '📅',
+        'offer': '🏷️',
+        'feed_post': '📰',
+        'content_other': '📄'
     };
     
     let html = '';
