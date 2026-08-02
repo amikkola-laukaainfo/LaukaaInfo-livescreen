@@ -597,8 +597,8 @@ function renderRelations(items, allSources = [], allContents = []) {
         }
 
         const headerHtml = `
-            <div style="display: flex; align-items: center; gap: 1rem; flex: 1;">
-                <div class="list-icon-wrapper" style="margin:0; flex-shrink: 0;">
+            <div style="display: flex; align-items: flex-start; gap: 1rem; width: 100%;">
+                <div class="list-icon-wrapper" style="margin:0; flex-shrink: 0; margin-top: 2px;">
                     <span class="iconify list-icon" data-icon="${iconName}"></span>
                 </div>
                 <div style="flex: 1; min-width: 0;">
@@ -614,7 +614,7 @@ function renderRelations(items, allSources = [], allContents = []) {
         `;
 
         if (!hasExtraContent) {
-            return `<a href="${linkUrl}" class="list-item-card" style="text-decoration:none; display:flex;">${headerHtml}</a>`;
+            return `<a href="${linkUrl}" class="list-item-card" style="text-decoration:none; display:flex; align-items:flex-start;">${headerHtml}</a>`;
         }
 
         let extraHtml = '';
