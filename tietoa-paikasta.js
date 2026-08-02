@@ -576,8 +576,9 @@ function renderRelations(items, allSources = [], allContents = []) {
             else if (item.image) thumbUrl = item.image;
         }
         
+        const isLogo = item.id.startsWith('yritys_') || item.type === 'business';
         const thumbWrapHtml = thumbUrl
-            ? `<div class="card-thumb-wrap"><img src="${thumbUrl}" alt="Kuva" loading="lazy" /></div>`
+            ? `<div class="card-thumb-wrap${isLogo ? ' card-thumb-logo' : ''}"><img src="${thumbUrl}" alt="${isLogo ? 'Logo' : 'Kuva'}" loading="lazy" /></div>`
             : '';
 
         const formatDateFi = (dStr) => {
