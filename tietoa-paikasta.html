@@ -324,7 +324,7 @@
             gap: 0.4rem;
         }
 
-        /* 4. Companies as Cards (Overriding JS inline styles) */
+        /* 4. Companies as Cards */
         #companies-list {
             display: grid;
             grid-template-columns: 1fr;
@@ -339,10 +339,7 @@
             border: 1px solid #f1f5f9;
             text-decoration: none;
             color: inherit;
-            display: flex;
-            flex-direction: row;
-            align-items: flex-start;
-            gap: 1rem;
+            display: block;
             transition: all 0.3s ease;
             box-shadow: var(--shadow-sm);
             align-self: start;
@@ -353,6 +350,52 @@
             transform: translateY(-4px);
             box-shadow: var(--shadow-hover);
             border-color: #e2e8f0;
+        }
+        /* Kortin sisäinen grid-asettelu */
+        .card-header-grid {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 0.75rem;
+            align-items: start;
+            width: 100%;
+        }
+        .card-icon-text {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        .card-thumb-wrap {
+            width: 56px;
+            height: 56px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .card-thumb-wrap img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        @media (max-width: 768px) {
+            .card-header-grid {
+                grid-template-columns: 1fr;
+            }
+            .card-thumb-wrap {
+                width: 100%;
+                height: 160px;
+                border-radius: 12px;
+                margin-top: 0.25rem;
+            }
+            .card-thumb-wrap img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
         }
         .list-icon-wrapper {
             background: #f8fafc;

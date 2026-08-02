@@ -576,7 +576,9 @@ function renderRelations(items, allSources = [], allContents = []) {
             else if (item.image) thumbUrl = item.image;
         }
         
-        const thumbHtml = thumbUrl ? `<div style="width: 48px; height: 48px; flex-shrink: 0; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; margin-left: auto; background: #fff; display: flex; align-items: center; justify-content: center;"><img src="${thumbUrl}" style="max-width: 100%; max-height: 100%; object-fit: contain;" /></div>` : '';
+        const thumbWrapHtml = thumbUrl
+            ? `<div class="card-thumb-wrap"><img src="${thumbUrl}" alt="Kuva" loading="lazy" /></div>`
+            : '';
 
         const formatDateFi = (dStr) => {
             if (!dStr) return '';
@@ -597,24 +599,26 @@ function renderRelations(items, allSources = [], allContents = []) {
         }
 
         const headerHtml = `
-            <div style="display: flex; align-items: flex-start; gap: 1rem; width: 100%;">
-                <div class="list-icon-wrapper" style="margin:0; flex-shrink: 0; margin-top: 2px;">
-                    <span class="iconify list-icon" data-icon="${iconName}"></span>
-                </div>
-                <div style="flex: 1; min-width: 0;">
-                    <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
-                        <span style="font-weight: 700; font-size: 1.05rem; color: var(--dark-text);">${displayName}</span>
-                        <span style="font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.8rem; border-radius: 50px; background: #dcfce7; color: #166534; text-transform: uppercase; letter-spacing: 0.5px;">${typeLabel}</span>
+            <div class="card-header-grid">
+                <div class="card-icon-text">
+                    <div class="list-icon-wrapper" style="margin:0; flex-shrink: 0; margin-top: 2px;">
+                        <span class="iconify list-icon" data-icon="${iconName}"></span>
                     </div>
-                    ${dateInfoHtml}
-                    ${item.shortDescription ? `<div style="font-size: 0.95rem; color: var(--light-text); margin-top: 0.5rem; line-height: 1.5;">${item.shortDescription}</div>` : ''}
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                            <span style="font-weight: 700; font-size: 1.05rem; color: var(--dark-text);">${displayName}</span>
+                            <span style="font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.8rem; border-radius: 50px; background: #dcfce7; color: #166534; text-transform: uppercase; letter-spacing: 0.5px;">${typeLabel}</span>
+                        </div>
+                        ${dateInfoHtml}
+                        ${item.shortDescription ? `<div style="font-size: 0.95rem; color: var(--light-text); margin-top: 0.5rem; line-height: 1.5;">${item.shortDescription}</div>` : ''}
+                    </div>
                 </div>
-                ${thumbHtml}
+                ${thumbWrapHtml}
             </div>
         `;
 
         if (!hasExtraContent) {
-            return `<a href="${linkUrl}" class="list-item-card" style="text-decoration:none; display:flex; align-items:flex-start;">${headerHtml}</a>`;
+            return `<a href="${linkUrl}" class="list-item-card" style="text-decoration:none;">${headerHtml}</a>`;
         }
 
         let extraHtml = '';
@@ -664,9 +668,9 @@ function renderRelations(items, allSources = [], allContents = []) {
 
         return `
         <details class="service-accordion list-item-card" style="padding:0; cursor:pointer; display:block; margin-bottom: 0;">
-            <summary style="padding: 1.25rem; display: flex; justify-content: space-between; align-items: center; list-style: none;">
+            <summary style="padding: 1.25rem; display: block; list-style: none;">
                 ${headerHtml}
-                <span class="iconify accordion-icon" data-icon="material-symbols:expand-more" style="font-size:1.5rem; color:var(--text-muted); margin-left:1rem;"></span>
+                <span class="iconify accordion-icon" data-icon="material-symbols:expand-more" style="font-size:1.5rem; color:var(--text-muted); margin-top: 0.5rem; display: block; text-align: right;"></span>
             </summary>
             <div class="service-content" style="padding: 0 1.25rem 1.25rem 1.25rem; border-top: 1px solid #f1f5f9; cursor:default;">
                 ${extraHtml}
