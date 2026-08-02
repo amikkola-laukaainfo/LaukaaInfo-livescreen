@@ -114,6 +114,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // 6. Päivitä DOM
         renderPlace(placeData, relatedItems, aiProfileData);
+        await loadMemoriesForPlace(placeData);
         await loadEncountersForPlace(placeData);
         await loadLostItemsForPlace(placeData);
         await renderServicesForEntity(placeData);
@@ -128,6 +129,66 @@ document.addEventListener('DOMContentLoaded', async () => {
 function showError() {
     document.getElementById('loading-spinner').style.display = 'none';
     document.getElementById('error-message').style.display = 'block';
+}
+
+async function loadMemoriesForPlace(place) {
+    const memoriesSection = document.getElementById('memories-section');
+    const memoriesList = document.getElementById('memories-teaser-list');
+    if (!memoriesSection || !memoriesList) return;
+
+    try {
+        const { data: memories, error } = await aiSb
+            .from('memories')
+            .select(`
+                *,
+                entity_sources (*)
+            `)
+            .eq('place_id', place.place_id)
+            .order('year', { ascending: true });
+
+        if (error || !memories || memories.length === 0) {
+            // Jätetään tyhjä tila näkyviin tai piilotetaan
+            // memoriesSection.style.display = 'none'; 
+            // Oletus mock-data on HTML:ssä, joten korvataan se viestillä:
+            memoriesList.innerHTML = `
+                <div style="background: #f8fafc; border: 1px dashed #cbd5e1; padding: 1.5rem; border-radius: 12px; text-align: center; color: #64748b;">
+                    <span class="iconify" data-icon="material-symbols:history-edu-outline" style="font-size: 2rem; margin-bottom: 0.5rem; color: #94a3b8;"></span>
+                    <p style="margin: 0; font-weight: 500;">Tälle paikalle ei ole vielä lisätty muistoja tai historiallista aineistoa.</p>
+                </div>
+            `;
+            return;
+        }
+
+        memoriesSection.style.display = 'block';
+        memoriesList.innerHTML = memories.map(mem => {
+            // Haetaan jokin kuvaava ikoni tai media-ikoni
+            let icon = 'material-symbols:history-edu';
+            if (mem.entity_sources && mem.entity_sources.length > 0) {
+                const firstSource = mem.entity_sources[0];
+                if (firstSource.media_type === 'VIDEO') icon = 'material-symbols:videocam';
+                else if (firstSource.media_type === 'IMAGE') icon = 'material-symbols:image';
+                else if (firstSource.source === 'OSM') icon = 'material-symbols:map';
+            }
+
+            const yearText = mem.year ? mem.year : 'Historia';
+            
+            return `
+            <div class="memory-card" style="background: #fff0f2; border: 1px solid #ffe4e6; padding: 1rem; border-radius: 12px; display: flex; gap: 1rem; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                <div style="font-weight: 800; font-size: 1.2rem; color: #e11d48; white-space: nowrap;">${yearText}</div>
+                <div>
+                    <div style="font-weight: 600; color: #1e293b; margin-bottom: 0.25rem;">${mem.title}</div>
+                    ${mem.description ? `<div style="font-size: 0.85rem; color: #475569; margin-bottom: 0.5rem;">${mem.description}</div>` : ''}
+                    <div style="font-size: 0.85rem; color: #64748b; display: flex; align-items: center; gap: 0.25rem;">
+                        <span class="iconify" data-icon="${icon}"></span> ${mem.entity_sources?.length || 0} lähdettä
+                    </div>
+                </div>
+            </div>
+            `;
+        }).join('');
+
+    } catch (err) {
+        console.error("Virhe muistojen haussa:", err);
+    }
 }
 
 function renderPlace(place, relatedItems, aiProfileData) {
@@ -1005,14 +1066,10 @@ document.addEventListener('click', (e) => {
 // Toiminnot
 function actionFilterLocal() {
     closeTagModal();
-    // Yksinkertainen toteutus: skrollaa yrityslistaan (voisi oikeasti filtteröidä DOM-elementtejä)
-    const companiesSection = document.querySelector('.companies-accordion');
+    // Yksinkertainen toteutus: skrollaa yrityslistaan
+    const companiesSection = document.getElementById('services-main-section');
     if (companiesSection) {
         companiesSection.scrollIntoView({ behavior: 'smooth' });
-        // Vilkuta tai avaa
-        if (!companiesSection.open) {
-            companiesSection.open = true;
-        }
         
         // Bonus: Näytä ilmoitus käyttäjälle
         setTimeout(() => {
