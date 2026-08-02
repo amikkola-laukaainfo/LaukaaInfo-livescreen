@@ -771,14 +771,11 @@ async function renderServicesForEntity(placeData) {
             .eq('place_id', placeIdStr);
             
         if (srcError) throw srcError;
-        console.log('[Services] place_sources tulokset:', sources);
         
-        if (relations) {
-            console.log('[Services] entity_id-arvot relations:', relations.map(r => r.entity_id));
-        }
-        if (sources && sources.length > 0) {
-            console.log('[Services] entity_id-arvot sources:', sources.map(s => s.entity_id));
-        }
+        const { data: contents, error: contentError } = await window.aiSb
+            .from('place_content')
+            .select('*')
+            .eq('place_id', placeIdStr);
 
         if (!relations || relations.length === 0) {
             servicesBox.style.display = 'none';
@@ -788,14 +785,13 @@ async function renderServicesForEntity(placeData) {
         servicesBox.style.display = 'block';
         
         servicesContainer.innerHTML = relations.map(rel => {
-            // Vertailu String()-muunnoksella varmuuden vuoksi
             const companySources = sources ? sources.filter(s => String(s.entity_id) === String(rel.entity_id)) : [];
-            console.log(`[Services] Yritys ${rel.entity_name} (${rel.entity_id}): ${companySources.length} lähdettä`);
+            const companyContents = contents ? contents.filter(c => String(c.entity_id) === String(rel.entity_id)) : [];
 
+            let htmlArr = [];
             
-            let sourcesHtml = '';
             if (companySources.length > 0) {
-                sourcesHtml = companySources.map(s => {
+                htmlArr.push(companySources.map(s => {
                     if (s.source_type === 'YOUTUBE' || s.source_type === 'YOUTUBE_VIDEO') {
                         let yid = '';
                         const m = s.url.match(/(?:v=|youtu\.be\/)([^&]+)/);
@@ -804,10 +800,42 @@ async function renderServicesForEntity(placeData) {
                     } else {
                         return `<div style="margin-top:8px;"><a href="${s.url}" target="_blank" style="color:var(--accent); font-weight:bold; text-decoration:none;">${s.title} &rarr;</a></div>`;
                     }
-                }).join('');
-            } else {
-                sourcesHtml = `<p style="color:var(--text-muted); font-style:italic;">Ei lisättyjä sisältöjä. Ota yhteyttä yritykseen.</p>`;
+                }).join(''));
             }
+            
+            if (companyContents.length > 0) {
+                htmlArr.push(companyContents.map(c => {
+                    let mediaHtml = '';
+                    if (c.media_url) {
+                        if (c.content_type === 'VIDEO' || c.storage_provider === 'YOUTUBE') {
+                            let yid = '';
+                            const m = c.media_url.match(/(?:v=|youtu\.be\/)([^&]+)/);
+                            if (m) {
+                                yid = m[1];
+                                mediaHtml = `<div style="margin-top:10px;"><iframe width="100%" height="200" src="https://www.youtube.com/embed/${yid}" frameborder="0" allowfullscreen style="border-radius:8px;"></iframe></div>`;
+                            } else {
+                                mediaHtml = `<div style="margin-top:8px;"><video src="${c.media_url}" controls style="width:100%; border-radius:8px;"></video></div>`;
+                            }
+                        } else if (c.content_type === 'PHOTO') {
+                            mediaHtml = `<div style="margin-top:8px;"><img src="${c.media_url}" alt="${c.title}" style="max-width:100%; border-radius:8px;"></div>`;
+                        } else {
+                            mediaHtml = `<div style="margin-top:8px;"><a href="${c.media_url}" target="_blank" style="color:var(--accent); font-weight:bold; text-decoration:none;">Katso media &rarr;</a></div>`;
+                        }
+                    }
+                    
+                    return `
+                        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #e2e8f0;">
+                            <h4 style="margin: 0 0 5px 0; color: var(--text-main);">${c.title}</h4>
+                            ${c.description ? `<p style="margin: 0 0 10px 0; font-size: 0.9rem; color: var(--text-muted); line-height: 1.4;">${c.description}</p>` : ''}
+                            ${mediaHtml}
+                        </div>
+                    `;
+                }).join(''));
+            }
+
+            let sourcesHtml = htmlArr.length > 0 
+                ? htmlArr.join('') 
+                : `<p style="color:var(--text-muted); font-style:italic;">Ei lisättyjä sisältöjä. Ota yhteyttä yritykseen.</p>`;
 
             return `
             <details class="service-accordion">
