@@ -406,21 +406,39 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (encountersContainer) {
                 encountersContainer.innerHTML = sbAjankohtainen.map(enc => {
                     const dateStr = enc.created_at ? new Date(enc.created_at).toLocaleDateString('fi-FI', { day:'numeric', month:'long', year:'numeric' }) : '';
-                    return `
-                        <div class="card event-card" style="border-left: 4px solid #10b981;">
-                            <div class="card-content">
-                                <span class="badge" style="background: #10b981;">Kohtaaminen</span>
-                                <h3 class="card-title">${enc.category || 'Julkaisu'}</h3>
-                                <p class="card-description" style="margin-top: 0.5rem;">${enc.description || ''}</p>
-                                <div class="card-meta">
-                                    <span class="meta-item">
-                                        <span class="iconify" data-icon="material-symbols:location-on-outline"></span> ${enc.location_name || 'Laukaa'}
-                                    </span>
-                                    ${dateStr ? `<span class="meta-item"><span class="iconify" data-icon="material-symbols:calendar-month-outline"></span> ${dateStr}</span>` : ''}
-                                </div>
+                    
+                    // Valitaan linkki tyypin mukaan
+                    let linkUrl = null;
+                    let badgeColor = '#10b981';
+                    let badgeLabel = enc.category || 'Julkaisu';
+                    if (enc.type === 'feed_post') {
+                        linkUrl = `ilmoituskortti.html?id=${enc.id}`;
+                        badgeColor = '#3b82f6';
+                        badgeLabel = 'Feed-julkaisu';
+                    } else if (enc.type === 'offer') {
+                        linkUrl = `ilmoituskortti.html?id=${enc.id}`;
+                        badgeColor = '#f59e0b';
+                        badgeLabel = 'Tarjous';
+                    } else if (enc.type === 'encounter') {
+                        linkUrl = `ilmoituskortti.html?id=${enc.id}`;
+                    }
+                    
+                    const cardInner = `
+                        <div class="card-content">
+                            <span class="badge" style="background: ${badgeColor};">${badgeLabel}</span>
+                            <h3 class="card-title">${enc.description ? enc.description.substring(0, 80) + (enc.description.length > 80 ? '...' : '') : ''}</h3>
+                            <div class="card-meta">
+                                ${enc.location_name ? `<span class="meta-item"><span class="iconify" data-icon="material-symbols:location-on-outline"></span> ${enc.location_name}</span>` : ''}
+                                ${dateStr ? `<span class="meta-item"><span class="iconify" data-icon="material-symbols:calendar-month-outline"></span> ${dateStr}</span>` : ''}
                             </div>
                         </div>
                     `;
+                    
+                    if (linkUrl) {
+                        return `<a href="${linkUrl}" class="card event-card" style="border-left: 4px solid ${badgeColor}; text-decoration: none; display: block; transition: box-shadow 0.2s;" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,0.12)'" onmouseout="this.style.boxShadow=''">${cardInner}</a>`;
+                    } else {
+                        return `<div class="card event-card" style="border-left: 4px solid ${badgeColor};">${cardInner}</div>`;
+                    }
                 }).join('');
             }
         }
