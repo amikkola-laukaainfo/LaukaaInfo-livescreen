@@ -673,7 +673,17 @@ function renderCompanies(scoredCompanies, allSources = [], allContents = []) {
     const containerTier4 = document.getElementById('premium-partners-container');
     const listTier4 = document.getElementById('premium-partners-list');
     
-    const tier1and2 = scoredCompanies.filter(c => c.tier <= 2).sort((a,b) => b.score - a.score);
+    const tier1and2 = scoredCompanies.filter(c => c.tier <= 2).sort((a,b) => {
+        const aHasExtra = allSources.some(s => String(s.entity_id) === String(a.id)) || 
+                          allContents.some(c => String(c.entity_id) === String(a.id));
+        const bHasExtra = allSources.some(s => String(s.entity_id) === String(b.id)) || 
+                          allContents.some(c => String(c.entity_id) === String(b.id));
+                          
+        if (aHasExtra && !bHasExtra) return -1;
+        if (!aHasExtra && bHasExtra) return 1;
+        
+        return b.score - a.score;
+    });
     const tier3 = scoredCompanies.filter(c => c.tier === 3).sort((a,b) => b.tagScore - a.tagScore).slice(0, 6); // Näytetään max 6
     const tier4 = scoredCompanies.filter(c => c.tier === 4).sort((a,b) => b.score - a.score);
     
