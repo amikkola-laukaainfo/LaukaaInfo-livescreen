@@ -2,6 +2,14 @@
 // Kokoaa yhteen paikat, yritykset ja tapahtumat tietyn tägin (teeman) perusteella
 // Käyttää theme_taxonomy.json-hierarkiaa synonyymien laajentamiseen
 
+// ── AI Supabase (entity_tags-hakuja varten) ──────────────────────────────────
+const AI_SB_URL = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
+const AI_SB_KEY = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
+let aiSbClient = null;
+if (typeof supabase !== 'undefined') {
+    aiSbClient = supabase.createClient(AI_SB_URL, AI_SB_KEY);
+}
+
 // ── Apufunktio: Kerää kaikki teemaan liittyvät hakutermit taksonomiasta ──────
 function buildSearchTerms(taxonomy, tagParam) {
     const terms = new Set([tagParam.toLowerCase()]);
@@ -142,22 +150,68 @@ document.addEventListener('DOMContentLoaded', async () => {
             allCompanies = Array.isArray(cData) ? cData : (cData.results || []);
         }
         
-        // Etsi Supabasesta paikkoja joilla voi olla tämä tag
+        // Etsi AI Supabasesta paikat joilla on tämä tag entity_tags-taulussa
         let sbPlaces = [];
-        if (window.supabaseClient) {
+        let sbAjankohtainen = []; // Tuleva: ilmoitukset, tarjoukset jne.
+
+        if (aiSbClient) {
             try {
-                // Tässä voitaisiin hakea Supabasen paikoista
-                // Esim. places -taulun description-kentästä tai omasta tag-taulusta.
-                // Tehdään nyt haku pelkästään 'type' ja 'description' perusteella
-                const { data, error } = await window.supabaseClient
-                    .from('places')
-                    .select('place_id, name, type, description, canonical_name');
-                    
-                if (!error && data) {
-                    sbPlaces = data;
+                // 1. Hae käypää tag_id:tä vastaava tietue tags-taulusta
+                const tagLower = searchTag.toLowerCase();
+                const { data: matchingTags } = await aiSbClient
+                    .from('tags')
+                    .select('tag_id, name')
+                    .or(`tag_id.eq.${tagLower},name.ilike.${tagLower}`);
+
+                const resolvedTagIds = (matchingTags || []).map(t => t.tag_id);
+
+                // Laajenna hakutermien perusteella: osa termeistä voi täsmätä tag_id:hen
+                for (const term of searchTerms) {
+                    resolvedTagIds.push(term);
+                }
+                const uniqueTagIds = [...new Set(resolvedTagIds)];
+
+                if (uniqueTagIds.length > 0) {
+                    // 2. Hae kaikki entity_tags-merkinnät
+                    const { data: taggedEntities } = await aiSbClient
+                        .from('entity_tags')
+                        .select('entity_type, entity_id, tag_id')
+                        .in('tag_id', uniqueTagIds);
+
+                    if (taggedEntities && taggedEntities.length > 0) {
+                        // Places: hae place_id:t
+                        const taggedPlaceIds = taggedEntities
+                            .filter(e => e.entity_type === 'place')
+                            .map(e => e.entity_id);
+
+                        if (taggedPlaceIds.length > 0) {
+                            const { data: sbPlaceData } = await aiSbClient
+                                .from('places')
+                                .select('place_id, name, canonical_name, type, description, municipality')
+                                .in('place_id', taggedPlaceIds)
+                                .eq('status', 'active');
+
+                            sbPlaces = (sbPlaceData || []).map(p => ({
+                                id: p.place_id,
+                                name: p.name || p.canonical_name,
+                                type: p.type,
+                                description: p.description,
+                                municipality: p.municipality,
+                                isSupabase: true,
+                                source: 'entity_tags'
+                            }));
+                        }
+
+                        // Tuleva: muu sisältö (ilmoitukset, tarjoukset, muistot jne.)
+                        const otherEntities = taggedEntities.filter(e => e.entity_type !== 'place');
+                        if (otherEntities.length > 0) {
+                            // Kun nämä taulut otetaan käyttöön, tähän tulee haku contents/announcements taulusta
+                            console.log('Löytyi muita entity_tags-merkintöjä (tulevia):', otherEntities.length, 'kpl');
+                        }
+                    }
                 }
             } catch(e) {
-                console.error("Supabase places fetch error:", e);
+                console.warn('AI Supabase entity_tags -haku epäonnistui:', e);
             }
         }
         
@@ -171,18 +225,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         const matchedEvents = matchedPlaces.filter(p => (p.type || '').toLowerCase() === 'event');
         const matchedPlaceNodes = matchedPlaces.filter(p => (p.type || '').toLowerCase() !== 'event');
         
-        // Supabase places (lisätään jos täsmää)
+        // Lisää entity_tags-pohjaiset Supabase-paikat (ei duplikaatteja)
         sbPlaces.forEach(p => {
-            if (matchesTerms(p.type, searchTerms) || matchesTerms(p.description, searchTerms)) {
-                if (!matchedPlaceNodes.find(existing => existing.id === p.place_id)) {
-                    matchedPlaceNodes.push({
-                        id: p.place_id,
-                        name: p.name || p.canonical_name,
-                        type: p.type,
-                        description: p.description,
-                        isSupabase: true
-                    });
-                }
+            if (!matchedPlaceNodes.find(existing => existing.id === p.id || existing.id === p.place_id)) {
+                matchedPlaceNodes.push(p);
             }
         });
         
@@ -287,6 +333,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Näytä sisältö
         document.getElementById('loading-spinner').style.display = 'none';
         document.getElementById('theme-content').style.display = 'block';
+
+        // Piilota paikat/tapahtumat-osio jos tyhjä
+        const placesSection = document.getElementById('places-section');
+        if (placesSection && matchedPlaceNodes.length === 0) {
+            placesSection.style.display = 'none';
+        }
+        const eventsSection = document.getElementById('events-section');
+        if (eventsSection && matchedEvents.length === 0) {
+            eventsSection.style.display = 'none';
+        }
         
     } catch (e) {
         console.error("Virhe ladattaessa teemadataa:", e);
