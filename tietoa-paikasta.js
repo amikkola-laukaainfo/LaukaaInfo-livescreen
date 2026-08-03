@@ -164,6 +164,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         const otherRelatedItems = Array.from(allItemsMap.values());
 
+        const placeIdStr = String(placeId);
+        let allSources = [];
+        let allContents = [];
+        try {
+            const [srcRes, cntRes] = await Promise.all([
+                aiSb.from('place_sources').select('*').eq('place_id', placeIdStr),
+                aiSb.from('place_content').select('*').eq('place_id', placeIdStr)
+            ]);
+            if (srcRes.data) allSources = srcRes.data;
+            if (cntRes.data) allContents = cntRes.data;
+        } catch (e) { console.warn(e); }
+
         // 6. Päivitä DOM
         renderPlace(placeData, otherRelatedItems, aiProfileData, allSources, allContents, scoredCompanies);
 
