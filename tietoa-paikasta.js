@@ -1473,65 +1473,18 @@ let currentActiveTag = '';
 
 function openTagModal(tagName, iconName) {
     currentActiveTag = tagName;
-    
-    // Päivitä modalin otsikko ja ikoni
-    document.getElementById('tag-modal-name').textContent = tagName;
-    document.getElementById('tag-modal-icon').setAttribute('data-icon', iconName);
-    
-    // Näytä modal
-    const modal = document.getElementById('tag-action-modal');
-    modal.style.display = 'flex';
-    
-    // Animaatio (pieni viive jotta display: flex ehtii tulla voimaan)
-    setTimeout(() => {
-        modal.querySelector('.modal-content').style.transform = 'translateY(0)';
-    }, 10);
+    console.log("Ohjataan teemasivulle:", tagName);
+    const searchTag = (tagName || '').toLowerCase().trim();
+    const isInDist = window.location.pathname.includes('/dist/') || window.location.hostname === 'laukaainfo.fi';
+    const distPrefix = isInDist ? '../' : './';
+    window.location.href = `${distPrefix}teema.html?tag=${encodeURIComponent(searchTag)}`;
 }
 
 function closeTagModal() {
-    const modal = document.getElementById('tag-action-modal');
-    modal.querySelector('.modal-content').style.transform = 'translateY(100%)';
-    
-    setTimeout(() => {
-        modal.style.display = 'none';
-        currentActiveTag = '';
-    }, 300); // Odota CSS-animaation loppumista
+    // Deprecated
 }
 
-// Sulje jos klikataan taustaa
-document.addEventListener('click', (e) => {
-    const modal = document.getElementById('tag-action-modal');
-    if (e.target === modal) {
-        closeTagModal();
-    }
-});
-
-// Toiminnot
-function actionFilterLocal() {
-    closeTagModal();
-    // Yksinkertainen toteutus: skrollaa yrityslistaan
-    const companiesSection = document.getElementById('services-main-section');
-    if (companiesSection) {
-        companiesSection.scrollIntoView({ behavior: 'smooth' });
-        
-        // Bonus: Näytä ilmoitus käyttäjälle
-        setTimeout(() => {
-            alert(`Näytetään kohteen paikalliset palvelut teemaan "${currentActiveTag}" liittyen (tulossa)`);
-        }, 500);
-    }
-}
-
-function actionSearchGlobal() {
-    // Ohjaa kartalle ja vie teema parametrina
-    const themeUrl = encodeURIComponent(currentActiveTag);
-    window.location.href = `kohdekartta.html?search=${themeUrl}`;
-}
-
-function actionReportEncounter() {
-    // Ohjaa LostReFoundiin (tai paikalliseen ilmoituskaavakkeeseen)
-    const placeName = document.getElementById('place-name').textContent;
-    // Oikeassa tuotannossa voisi pre-fillata datan URL:iin
-    window.open('https://play.google.com/store/apps/details?id=fi.mediazoo.lostrefound', '_blank');
-    closeTagModal();
-}
+function actionFilterLocal() {}
+function actionSearchGlobal() {}
+function actionReportEncounter() {}
 
