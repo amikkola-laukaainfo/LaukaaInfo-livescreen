@@ -441,16 +441,42 @@
         /* Responsive */
         @media (max-width: 992px) {
             .page-container {
-                grid-template-columns: 1fr;
-                gap: 3rem;
+                display: flex;
+                flex-direction: column;
+                gap: 2rem;
             }
-            .sidebar {
-                position: relative;
-                top: 0;
+            .left-col, .sidebar {
+                display: contents;
             }
             .hero-title {
                 font-size: 3rem;
             }
+            
+            /* Lohko 1: Identiteetti */
+            #intro-section { order: 1; }
+            #map-section { order: 2; }
+            #themes-section { order: 3; }
+            
+            /* Lohko 2: Mitä täällä on */
+            #activities-section { order: 10; }
+            #services-main-section { order: 11; }
+            #nearby-places-section { order: 12; }
+            
+            /* Lohko 3: Mitä tapahtuu juuri nyt */
+            #events-section { order: 20; }
+            #timeline-section { order: 21; }
+            #encounters-section { order: 22; }
+            
+            /* Lohko 4: Mitä on tapahtunut */
+            #memories-section { order: 30; }
+            #media-section { order: 31; }
+            
+            /* Lohko 5: Tutki lisää */
+            .network-stats { order: 40; }
+            #faq-section { order: 41; }
+            
+            /* Lohko 6: Osallistu */
+            #participate-section { order: 50; }
         }
 
         @media (max-width: 768px) {
@@ -625,15 +651,9 @@
                     <button id="btn-route" class="btn btn-light" onclick="window.open('https://maps.google.com/?q=Laukaa', '_blank')">
                         <span class="iconify" data-icon="material-symbols:route"></span> Reitti
                     </button>
-                    <button id="btn-streetview" class="btn btn-light" style="display: none;">
-                        <span class="iconify" data-icon="material-symbols:streetview"></span> Street View
-                    </button>
                     <button id="share-place-btn" class="btn btn-light">
                         <span class="iconify" data-icon="material-symbols:share-outline"></span> Jaa kohde
                     </button>
-                    <a href="https://play.google.com/store/apps/details?id=fi.mediazoo.lostrefound&pli=1" target="_blank" rel="noopener noreferrer" class="btn btn-light">
-                        <span class="iconify" data-icon="material-symbols:add"></span> Ilmoita havainto
-                    </a>
                     <button id="btn-scroll-encounters" class="btn btn-light" style="display: none; border: 1px solid #fde68a; background: #fffbeb;" onclick="document.getElementById('encounters-section').scrollIntoView({behavior: 'smooth'})">
                         <span class="iconify" data-icon="material-symbols:campaign-outline" style="color: #f59e0b;"></span> Ajankohtaista
                     </button>
@@ -648,7 +668,7 @@
             <div class="left-col">
                 
                 <!-- 1. Perustiedot & AI-yhteenveto -->
-                <section class="content-block">
+                <section id="intro-section" class="content-block">
                     <h2>Tietoa paikasta</h2>
                     <div id="display-description">
                         <!-- Filled by JS -->
@@ -831,11 +851,33 @@
                 </section>
 
                 <!-- 7. Place's Network -->
-                <section class="network-tree" id="themes-section" style="display: none;">
+                <section class="network-tree" id="themes-section" style="display: none; margin-bottom: 2rem;">
                     <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; font-weight: 700; margin-top: 0; margin-bottom: 1rem; color: var(--text-main);">Liittyy teemoihin</h3>
                     <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem;">Tämä paikka kytkeytyy seuraaviin aiheisiin Laukaassa:</p>
                     <div class="network-tags" id="network-tags-list">
                         <!-- Filled by JS -->
+                    </div>
+                </section>
+                
+                <!-- Osallistu (Floating buttons) -->
+                <section id="participate-section" class="stats-visual" style="margin-top: 1rem; position: sticky; top: 2rem; border-left: 4px solid var(--accent);">
+                    <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; margin-top: 0; color: var(--text-main);">Osallistu</h3>
+                    <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+                        <a href="https://play.google.com/store/apps/details?id=fi.mediazoo.lostrefound&pli=1" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                            <span class="iconify" data-icon="material-symbols:add"></span> Ilmoita havainto
+                        </a>
+                        <button class="btn btn-light" style="width: 100%; justify-content: flex-start; background: #f8fafc;" onclick="alert('Tulossa pian: Muistojen lisäys')">
+                            <span class="iconify" data-icon="material-symbols:favorite"></span> Lisää muisto
+                        </button>
+                        <button class="btn btn-light" style="width: 100%; justify-content: flex-start; background: #f8fafc;" onclick="alert('Tulossa pian: Kuvien lisäys')">
+                            <span class="iconify" data-icon="material-symbols:add-a-photo"></span> Lisää kuva
+                        </button>
+                        <button class="btn btn-light" style="width: 100%; justify-content: flex-start; background: #f8fafc;" onclick="alert('Tulossa pian: Yrityksen ehdotus')">
+                            <span class="iconify" data-icon="material-symbols:storefront"></span> Ehdota yritystä
+                        </button>
+                        <button id="btn-streetview-sidebar" class="btn btn-light" style="width: 100%; justify-content: flex-start; background: #f8fafc; display: none;">
+                            <span class="iconify" data-icon="material-symbols:streetview"></span> Street View
+                        </button>
                     </div>
                 </section>
 
