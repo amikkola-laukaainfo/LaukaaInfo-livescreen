@@ -921,8 +921,18 @@
                 // Check URL parameter, otherwise render first
                 const urlParams = new URLSearchParams(window.location.search);
                 const idFromUrl = urlParams.get('id');
+                const offerIdFromUrl = urlParams.get('offer');
                 
-                if (idFromUrl && kohteet.find(k => k.id === idFromUrl)) {
+                // Tuki suoralle tarjous-linkille: ?offer=UUID
+                if (offerIdFromUrl) {
+                    const offerItem = kohteet.find(k => k.id === offerIdFromUrl);
+                    if (offerItem) {
+                        selector.value = offerIdFromUrl;
+                        renderEntity(offerIdFromUrl);
+                    } else if (kohteet.length > 0) {
+                        renderEntity(kohteet[0].id);
+                    }
+                } else if (idFromUrl && kohteet.find(k => k.id === idFromUrl)) {
                     selector.value = idFromUrl;
                     renderEntity(idFromUrl);
                 } else if (kohteet.length > 0) {

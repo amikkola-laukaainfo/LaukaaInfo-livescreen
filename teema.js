@@ -416,7 +416,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         badgeColor = '#3b82f6';
                         badgeLabel = 'Feed-julkaisu';
                     } else if (enc.type === 'offer') {
-                        linkUrl = `ilmoituskortti.html?id=${enc.id}`;
+                        linkUrl = `kohdekortti.html?offer=${enc.id}`;
                         badgeColor = '#f59e0b';
                         badgeLabel = 'Tarjous';
                     } else if (enc.type === 'encounter') {
