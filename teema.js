@@ -412,7 +412,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     let badgeColor = '#10b981';
                     let badgeLabel = enc.category || 'Julkaisu';
                     if (enc.type === 'feed_post') {
-                        linkUrl = `ilmoituskortti.html?id=${enc.id}`;
+                        linkUrl = `index.html?item=${enc.id}&feed=open`;
                         badgeColor = '#3b82f6';
                         badgeLabel = 'Feed-julkaisu';
                     } else if (enc.type === 'offer') {
