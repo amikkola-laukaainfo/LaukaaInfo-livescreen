@@ -61,12 +61,29 @@ function buildSearchTerms(taxonomy, tagParam) {
     return terms;
 }
 
-// ── Apufunktio: Tarkista täsmääkö teksti johonkin hakutermiin ─────────────────
+// ── Apufunktiot: Haku ja suodatus ─────────────────
+function matchesTags(tagString, terms) {
+    if (!tagString) return false;
+    const tags = Array.isArray(tagString) ? tagString : tagString.split(',');
+    for (const tag of tags) {
+        const t = tag.trim().toLowerCase();
+        if (terms.has(t)) return true;
+    }
+    return false;
+}
+
 function matchesTerms(text, terms) {
     if (!text) return false;
     const lower = text.toLowerCase();
     for (const term of terms) {
-        if (lower.includes(term)) return true;
+        if (term.length <= 3) {
+            // Lyhyet termit (esim "ft", "spa"): vaadi sanarajat
+            const regex = new RegExp(`\\b${term}\\b`, 'i');
+            if (regex.test(text)) return true;
+        } else {
+            // Pidemmät termit: jos täsmää suoraan
+            if (lower.includes(term)) return true;
+        }
     }
     return false;
 }
@@ -146,8 +163,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         // 1. Suodata paikat käyttäen laajennettua hakutermilista
         const matchedPlaces = allPlaces.filter(p => {
-            const tags = Array.isArray(p.tags) ? p.tags : (p.tags || '').split(',');
-            if (tags.some(t => searchTerms.has(t.toLowerCase().trim()))) return true;
+            if (matchesTags(p.tags, searchTerms)) return true;
             return matchesTerms(p.type, searchTerms) || matchesTerms(p.description, searchTerms) || matchesTerms(p.name, searchTerms);
         });
 
@@ -172,10 +188,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         // 2. Suodata yritykset käyttäen laajennettua hakutermilista
         const matchedCompanies = allCompanies.filter(c => {
-            return matchesTerms(c.tags, searchTerms) ||
-                   matchesTerms(c.palvelutapa, searchTerms) ||
-                   matchesTerms(c.kategoria, searchTerms) ||
-                   matchesTerms(c.nimi, searchTerms);
+            // Täsmätään ensisijaisesti tagit tarkasti
+            if (matchesTags(c.tags, searchTerms)) return true;
+            // Muut kentät sallitaan, mutta ne ovat alttiita väärille osumille jos ei varovainen
+            return matchesTerms(c.palvelutapa, searchTerms) ||
+                   matchesTerms(c.kategoria, searchTerms);
         });
         
         // Renderöi Paikat
