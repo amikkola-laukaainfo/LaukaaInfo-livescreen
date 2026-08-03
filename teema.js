@@ -189,7 +189,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 .from('places')
                                 .select('place_id, name, canonical_name, type, description, municipality')
                                 .in('place_id', taggedPlaceIds)
-                                .eq('status', 'active');
+                                .or('status.eq.active,status.eq.ACTIVE,status.is.null');
 
                             sbPlaces = (sbPlaceData || []).map(p => ({
                                 id: p.place_id,
