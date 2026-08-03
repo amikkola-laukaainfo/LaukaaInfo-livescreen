@@ -202,11 +202,94 @@ document.addEventListener('DOMContentLoaded', async () => {
                             }));
                         }
 
-                        // Tuleva: muu sisältö (ilmoitukset, tarjoukset, muistot jne.)
-                        const otherEntities = taggedEntities.filter(e => e.entity_type !== 'place');
-                        if (otherEntities.length > 0) {
-                            // Kun nämä taulut otetaan käyttöön, tähän tulee haku contents/announcements taulusta
-                            console.log('Löytyi muita entity_tags-merkintöjä (tulevia):', otherEntities.length, 'kpl');
+                        // Hae kohtaamiset (encounters) LaukaaLive-Supabasesta
+                        const encounterIds = taggedEntities
+                            .filter(e => e.entity_type === 'encounter')
+                            .map(e => e.entity_id);
+                        
+                        if (encounterIds.length > 0 && window.LaukaaSupabase) {
+                            try {
+                                const { data: encounterData, error } = await window.LaukaaSupabase
+                                    .from('encounters')
+                                    .select('*')
+                                    .in('id', encounterIds)
+                                    .order('created_at', { ascending: false });
+
+                                if (!error && encounterData) {
+                                    encounterData.forEach(enc => {
+                                        sbAjankohtainen.push({
+                                            id: enc.id,
+                                            type: 'encounter',
+                                            category: enc.category,
+                                            description: enc.description,
+                                            location_name: enc.location_name,
+                                            photo_url: enc.photo_url,
+                                            created_at: enc.created_at,
+                                            isSupabase: true
+                                        });
+                                    });
+                                }
+                            } catch(err) {
+                                console.warn('Virhe haettaessa kohtaamisia LaukaaLive Supabasesta:', err);
+                            }
+                        }
+
+                        // Hae feed_post -julkaisut (posts-taulu)
+                        const feedPostEntities = taggedEntities.filter(e => e.entity_type === 'feed_post');
+                        if (feedPostEntities.length > 0) {
+                            try {
+                                const feedPostIds = feedPostEntities.map(e => e.entity_id);
+                                const { data: feedData, error: feedError } = await window.LaukaaSupabase
+                                    .from('posts')
+                                    .select('*')
+                                    .in('id', feedPostIds)
+                                    .order('created_at', { ascending: false });
+                                if (!feedError && feedData) {
+                                    feedData.forEach(post => {
+                                        sbAjankohtainen.push({
+                                            id: post.id,
+                                            type: 'feed_post',
+                                            category: 'Julkaisu',
+                                            description: post.content || post.title || '',
+                                            location_name: post.location_name || '',
+                                            photo_url: post.image_url || null,
+                                            created_at: post.created_at,
+                                            isSupabase: true
+                                        });
+                                    });
+                                }
+                            } catch(err) {
+                                console.warn('Virhe haettaessa feed-julkaisuja LaukaaLive Supabasesta:', err);
+                            }
+                        }
+
+                        // Hae offer -tarjoukset (offers-taulu)
+                        const offerEntities = taggedEntities.filter(e => e.entity_type === 'offer');
+                        if (offerEntities.length > 0) {
+                            try {
+                                const offerIds = offerEntities.map(e => e.entity_id);
+                                const { data: offersData, error: offersError } = await window.LaukaaSupabase
+                                    .from('offers')
+                                    .select('*')
+                                    .in('id', offerIds)
+                                    .order('created_at', { ascending: false });
+                                if (!offersError && offersData) {
+                                    offersData.forEach(offer => {
+                                        sbAjankohtainen.push({
+                                            id: offer.id,
+                                            type: 'offer',
+                                            category: 'Tarjous',
+                                            description: offer.description || offer.name || '',
+                                            location_name: '',
+                                            photo_url: offer.photo_url || null,
+                                            created_at: offer.created_at,
+                                            isSupabase: true
+                                        });
+                                    });
+                                }
+                            } catch(err) {
+                                console.warn('Virhe haettaessa tarjouksia LaukaaLive Supabasesta:', err);
+                            }
                         }
                     }
                 }
@@ -312,6 +395,35 @@ document.addEventListener('DOMContentLoaded', async () => {
             companiesContainer.innerHTML = html;
         }
         
+        // Renderöi Kohtaamiset (Encounters)
+        const encountersSection = document.getElementById('encounters-section');
+        const encountersContainer = document.getElementById('encounters-list');
+        
+        if (sbAjankohtainen.length === 0) {
+            if (encountersSection) encountersSection.style.display = 'none';
+        } else {
+            if (encountersSection) encountersSection.style.display = 'block';
+            if (encountersContainer) {
+                encountersContainer.innerHTML = sbAjankohtainen.map(enc => {
+                    const dateStr = enc.created_at ? new Date(enc.created_at).toLocaleDateString('fi-FI', { day:'numeric', month:'long', year:'numeric' }) : '';
+                    return `
+                        <div class="card event-card" style="border-left: 4px solid #10b981;">
+                            <div class="card-content">
+                                <span class="badge" style="background: #10b981;">Kohtaaminen</span>
+                                <h3 class="card-title">${enc.category || 'Julkaisu'}</h3>
+                                <p class="card-description" style="margin-top: 0.5rem;">${enc.description || ''}</p>
+                                <div class="card-meta">
+                                    <span class="meta-item">
+                                        <span class="iconify" data-icon="material-symbols:location-on-outline"></span> ${enc.location_name || 'Laukaa'}
+                                    </span>
+                                    ${dateStr ? `<span class="meta-item"><span class="iconify" data-icon="material-symbols:calendar-month-outline"></span> ${dateStr}</span>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
         // Renderöi Tapahtumat – suodatettu kohteet.json:n event-tyypeistä
         const eventsContainer = document.getElementById('events-list');
         if (matchedEvents.length === 0) {
