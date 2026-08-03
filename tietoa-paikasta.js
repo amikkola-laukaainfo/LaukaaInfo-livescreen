@@ -337,6 +337,9 @@ function scoreCompanies(allCompanies, place, relations, tagMatches) {
     
     // Taso 1-2: Fyysinen + Relaatiot
     for (const company of allCompanies) {
+        const compId = String(company.id);
+        if (seenIds.has(compId)) continue;
+
         let score = 0, tier = 99;
         const reasons = [];
         
@@ -676,6 +679,20 @@ function renderCompanies(scoredCompanies, allSources = [], allContents = []) {
         
         const displayName = item.nimi || item.name || item.id;
         let thumbUrl = item.logo || (item.images && item.images[0]) || item.image || null;
+        
+        const itemSources = allSources.filter(s => String(s.entity_id) === String(item.id));
+        const itemContents = allContents.filter(c => String(c.entity_id) === String(item.id));
+        const hasExtraContent = itemSources.length > 0 || itemContents.length > 0;
+        
+        if (!thumbUrl) {
+            const imgSource = itemSources.find(s => s.source_type === 'PHOTO' || s.source_type === 'IMAGE');
+            if (imgSource) thumbUrl = imgSource.url;
+            else {
+                const imgContent = itemContents.find(c => c.content_type === 'PHOTO' && c.media_url);
+                if (imgContent) thumbUrl = imgContent.media_url;
+            }
+        }
+        
         const thumbWrapHtml = thumbUrl
             ? `<div class="card-thumb-wrap card-thumb-logo"><img src="${thumbUrl}" alt="Logo" loading="lazy" /></div>`
             : '';
@@ -704,24 +721,82 @@ function renderCompanies(scoredCompanies, allSources = [], allContents = []) {
             `;
         }
 
-        return `
-            <a href="${linkUrl}" class="list-item-card" style="text-decoration:none; display: block;">
-                <div class="card-header-grid">
-                    <div class="card-icon-text">
-                        <div class="list-icon-wrapper" style="margin:0; flex-shrink: 0; margin-top: 2px;">
-                            <span class="iconify list-icon" data-icon="${isSemantic ? 'material-symbols:auto-awesome' : 'material-symbols:storefront-outline'}"></span>
-                        </div>
-                        <div style="flex: 1; min-width: 0;">
-                            <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
-                                <span style="font-weight: 700; font-size: 1.05rem; color: var(--dark-text);">${displayName}</span>
-                            </div>
-                            ${subtitleHtml}
-                        </div>
+        const headerHtml = `
+            <div class="card-header-grid">
+                <div class="card-icon-text">
+                    <div class="list-icon-wrapper" style="margin:0; flex-shrink: 0; margin-top: 2px;">
+                        <span class="iconify list-icon" data-icon="${isSemantic ? 'material-symbols:auto-awesome' : 'material-symbols:storefront-outline'}"></span>
                     </div>
-                    ${thumbWrapHtml}
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                            <span style="font-weight: 700; font-size: 1.05rem; color: var(--dark-text);">${displayName}</span>
+                        </div>
+                        ${subtitleHtml}
+                    </div>
                 </div>
-            </a>
+                ${thumbWrapHtml}
+            </div>
         `;
+
+        if (!hasExtraContent) {
+            return `<a href="${linkUrl}" class="list-item-card" style="text-decoration:none; display: block;">${headerHtml}</a>`;
+        }
+        
+        let extraHtml = '';
+        if (itemSources.length > 0) {
+            extraHtml += itemSources.map(s => {
+                if (s.source_type === 'YOUTUBE' || s.source_type === 'YOUTUBE_VIDEO') {
+                    let yid = '';
+                    if (s.url && s.url.includes('v=')) yid = s.url.split('v=')[1].split('&')[0];
+                    else if (s.url && s.url.includes('youtu.be/')) yid = s.url.split('youtu.be/')[1].split('?')[0];
+                    return yid ? `<div style="margin-top:10px;"><iframe style="width:100%; aspect-ratio: 16/9; border-radius:8px;" src="https://www.youtube.com/embed/${yid}" frameborder="0" allowfullscreen></iframe></div>` : `<div style="margin-top:8px;"><a href="${s.url}" target="_blank" style="color:var(--accent); font-weight:bold; text-decoration:none;">${s.title} &rarr;</a></div>`;
+                } else {
+                    return `<div style="margin-top:8px;"><a href="${s.url}" target="_blank" style="color:var(--accent); font-weight:bold; text-decoration:none;">${s.title} &rarr;</a></div>`;
+                }
+            }).join('');
+        }
+
+        if (itemContents.length > 0) {
+            extraHtml += itemContents.map(c => {
+                let mediaHtml = '';
+                if (c.media_url) {
+                    if (c.content_type === 'VIDEO' || c.storage_provider === 'YOUTUBE') {
+                        let yid = '';
+                        if (c.media_url.includes('v=')) yid = c.media_url.split('v=')[1].split('&')[0];
+                        else if (c.media_url.includes('youtu.be/')) yid = c.media_url.split('youtu.be/')[1].split('?')[0];
+                        if (yid) {
+                            mediaHtml = `<div style="margin-top:10px;"><iframe style="width:100%; aspect-ratio: 16/9; border-radius:8px;" src="https://www.youtube.com/embed/${yid}" frameborder="0" allowfullscreen></iframe></div>`;
+                        } else {
+                            mediaHtml = `<div style="margin-top:8px;"><video src="${c.media_url}" controls style="width:100%; border-radius:8px;"></video></div>`;
+                        }
+                    } else if (c.content_type === 'PHOTO') {
+                        mediaHtml = `<div style="margin-top:8px;"><img src="${c.media_url}" alt="${c.title}" style="max-width:100%; border-radius:8px;"></div>`;
+                    } else {
+                        mediaHtml = `<div style="margin-top:8px;"><a href="${c.media_url}" target="_blank" style="color:var(--accent); font-weight:bold; text-decoration:none;">Katso media &rarr;</a></div>`;
+                    }
+                }
+                return `
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #e2e8f0;">
+                        <h4 style="margin: 0 0 5px 0; color: var(--text-main);">${c.title}</h4>
+                        ${c.description ? `<p style="margin: 0 0 10px 0; font-size: 0.9rem; color: var(--text-muted); line-height: 1.4;">${c.description}</p>` : ''}
+                        ${mediaHtml}
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        extraHtml += `<div style="margin-top: 15px;"><a href="${linkUrl}" style="display:inline-block; padding:8px 16px; background:var(--accent); color:white; border-radius:50px; text-decoration:none; font-weight:bold; font-size:0.9rem;">Siirry yrityskortille &rarr;</a></div>`;
+
+        return `
+        <details class="service-accordion list-item-card" style="padding:0; cursor:pointer; display:block; margin-bottom: 0;">
+            <summary style="padding: 1.25rem; display: block; list-style: none;">
+                ${headerHtml}
+                <span class="iconify accordion-icon" data-icon="material-symbols:expand-more" style="font-size:1.5rem; color:var(--text-muted); margin-top: 0.5rem; display: block; text-align: right;"></span>
+            </summary>
+            <div class="service-content" style="padding: 0 1.25rem 1.25rem 1.25rem; border-top: 1px solid #f1f5f9; cursor:default;">
+                ${extraHtml}
+            </div>
+        </details>`;
     };
 
     // Render Tier 1 & 2
