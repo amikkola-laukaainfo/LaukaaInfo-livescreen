@@ -354,8 +354,15 @@ function scoreCompanies(allCompanies, place, relations, tagMatches) {
         // Fyysinen: etäisyys
         if (company.lat && company.lon && place.lat && place.lon) {
             const dist = haversineKm(company.lat, company.lon, place.lat, place.lon);
-            if (dist < 0.5) { score += 70; tier = Math.min(tier, 1); reasons.push({ type: 'NEAR', label: `${Math.round(dist*1000)} m` }); }
-            else if (dist < 2) { score += 50; tier = Math.min(tier, 1); }
+            if (dist < 2.0) {
+                // Mitä lähempänä, sitä enemmän pisteitä (10 - 70)
+                const distScore = Math.max(10, Math.round(70 - (dist / 2) * 60));
+                score += distScore;
+                tier = Math.min(tier, 1);
+                
+                let distLabel = dist < 1 ? `${Math.round(dist*1000)} m` : `${dist.toFixed(1).replace('.', ',')} km`;
+                reasons.push({ type: 'NEAR', label: distLabel });
+            }
         }
         
         // Relaatiot
@@ -738,8 +745,12 @@ function renderCompanies(scoredCompanies, allSources = [], allContents = []) {
             </div>
         `;
 
+        const isPlaceRelation = item.reasons && item.reasons.some(r => r.type !== 'NEAR' && r.type !== 'AREA');
+        const isHighlight = hasExtraContent || isPlaceRelation;
+        const highlightStyle = isHighlight ? ' background: #f0f9ff; border-color: #bae6fd;' : '';
+
         if (!hasExtraContent) {
-            return `<a href="${linkUrl}" class="list-item-card" style="text-decoration:none; display: block;">${headerHtml}</a>`;
+            return `<a href="${linkUrl}" class="list-item-card" style="text-decoration:none; display: block;${highlightStyle}">${headerHtml}</a>`;
         }
         
         let extraHtml = '';
@@ -788,7 +799,7 @@ function renderCompanies(scoredCompanies, allSources = [], allContents = []) {
         extraHtml += `<div style="margin-top: 15px;"><a href="${linkUrl}" style="display:inline-block; padding:8px 16px; background:var(--accent); color:white; border-radius:50px; text-decoration:none; font-weight:bold; font-size:0.9rem;">Siirry yrityskortille &rarr;</a></div>`;
 
         return `
-        <details class="service-accordion list-item-card" style="padding:0; cursor:pointer; display:block; margin-bottom: 0;">
+        <details class="service-accordion list-item-card" style="padding:0; cursor:pointer; display:block; margin-bottom: 0;${highlightStyle}">
             <summary style="padding: 1.25rem; display: block; list-style: none;">
                 ${headerHtml}
                 <span class="iconify accordion-icon" data-icon="material-symbols:expand-more" style="font-size:1.5rem; color:var(--text-muted); margin-top: 0.5rem; display: block; text-align: right;"></span>
@@ -802,7 +813,24 @@ function renderCompanies(scoredCompanies, allSources = [], allContents = []) {
     // Render Tier 1 & 2
     if (listTier12) {
         if (tier1and2.length > 0) {
-            listTier12.innerHTML = tier1and2.map(c => generateCardHtml(c, false)).join('');
+            const visibleTier12 = tier1and2.slice(0, 5);
+            let html = visibleTier12.map(c => generateCardHtml(c, false)).join('');
+            
+            if (tier1and2.length > 5) {
+                const moreCount = tier1and2.length - 5;
+                html += `
+                    <div style="text-align: center; margin-top: 1rem; margin-bottom: 1rem;">
+                        <button onclick="document.getElementById('more-tier12').style.display='flex'; this.style.display='none';" style="background: transparent; border: 1px solid #cbd5e1; color: #475569; padding: 0.6rem 1.2rem; border-radius: 50px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s;">
+                            Näytä ${moreCount} muuta lähellä
+                            <span class="iconify" data-icon="material-symbols:expand-more"></span>
+                        </button>
+                    </div>
+                    <div id="more-tier12" style="display: none; flex-direction: column; gap: 0;">
+                        ${tier1and2.slice(5).map(c => generateCardHtml(c, false)).join('')}
+                    </div>
+                `;
+            }
+            listTier12.innerHTML = html;
         } else {
             listTier12.innerHTML = `<div style="text-align:center; color: var(--light-text); padding: 2rem; background: #f9fafb; border-radius: 12px; font-size: 0.9rem;">Ei paikallisia yrityksiä tai palvelupisteitä rekisteröitynä tähän kohteeseen.</div>`;
         }
@@ -916,8 +944,10 @@ function renderRelations(items, allSources = [], allContents = []) {
             </div>
         `;
 
+        const highlightStyle = ' background: #f0f9ff; border-color: #bae6fd;';
+
         if (!hasExtraContent) {
-            return `<a href="${linkUrl}" class="list-item-card" style="text-decoration:none;">${headerHtml}</a>`;
+            return `<a href="${linkUrl}" class="list-item-card" style="text-decoration:none; display: block;${highlightStyle}">${headerHtml}</a>`;
         }
 
         let extraHtml = '';
@@ -966,7 +996,7 @@ function renderRelations(items, allSources = [], allContents = []) {
         extraHtml += `<div style="margin-top: 15px;"><a href="${linkUrl}" style="display:inline-block; padding:8px 16px; background:var(--accent); color:white; border-radius:50px; text-decoration:none; font-weight:bold; font-size:0.9rem;">Siirry yrityskortille &rarr;</a></div>`;
 
         return `
-        <details class="service-accordion list-item-card" style="padding:0; cursor:pointer; display:block; margin-bottom: 0;">
+        <details class="service-accordion list-item-card" style="padding:0; cursor:pointer; display:block; margin-bottom: 0;${highlightStyle}">
             <summary style="padding: 1.25rem; display: block; list-style: none;">
                 ${headerHtml}
                 <span class="iconify accordion-icon" data-icon="material-symbols:expand-more" style="font-size:1.5rem; color:var(--text-muted); margin-top: 0.5rem; display: block; text-align: right;"></span>
