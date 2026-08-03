@@ -34,17 +34,23 @@ document.addEventListener('DOMContentLoaded', async () => {
         let allPlaces = [];
         let allCompanies = [];
         
-        if (placesRes.ok) allPlaces = await placesRes.json();
-        if (companiesRes.ok) allCompanies = await companiesRes.json();
+        if (placesRes.ok) {
+            const pData = await placesRes.json();
+            allPlaces = Array.isArray(pData) ? pData : (pData.results || []);
+        }
+        if (companiesRes.ok) {
+            const cData = await companiesRes.json();
+            allCompanies = Array.isArray(cData) ? cData : (cData.results || []);
+        }
         
         // Etsi Supabasesta paikkoja joilla voi olla tämä tag
         let sbPlaces = [];
-        if (window.supabase) {
+        if (window.supabaseClient) {
             try {
                 // Tässä voitaisiin hakea Supabasen paikoista
                 // Esim. places -taulun description-kentästä tai omasta tag-taulusta.
                 // Tehdään nyt haku pelkästään 'type' ja 'description' perusteella
-                const { data, error } = await window.supabase
+                const { data, error } = await window.supabaseClient
                     .from('places')
                     .select('place_id, name, type, description, canonical_name');
                     
