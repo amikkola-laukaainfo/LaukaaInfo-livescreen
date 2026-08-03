@@ -248,7 +248,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         } else {
             placesContainer.innerHTML = matchedPlaceNodes.map(p => {
                 const url = `tietoa-paikasta.html?id=${encodeURIComponent(p.id)}`;
-                const typeName = p.type || 'Paikka';
+                const typeTranslations = {
+                    'LANDMARK': 'Nähtävyys',
+                    'NATURE': 'Luontokohde',
+                    'SERVICE': 'Palvelu',
+                    'BUILDING': 'Rakennus',
+                    'AREA': 'Alue',
+                    'ROUTE': 'Reitti'
+                };
+                const typeName = typeTranslations[p.type] || p.type || 'Paikka';
                 const desc = p.description ? p.description.substring(0, 100) + '...' : '';
                 
                 return `
