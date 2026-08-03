@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (matchedCompanies.length === 0) {
             companiesContainer.innerHTML = '<p style="color: var(--text-muted);">Ei palveluita tällä teemalla.</p>';
         } else {
-            companiesContainer.innerHTML = matchedCompanies.map(c => {
+            const generateCompanyHtml = (c) => {
                 const url = `yrityskortti.html?id=${encodeURIComponent(c.id)}`;
                 const rawTags = (c.tags || '').split(',').map(t => t.trim()).filter(t => t.length > 0 && t !== '-');
                 const tagHtml = rawTags.slice(0, 3).map(t => `<span class="tag-pill">${t}</span>`).join('');
@@ -143,7 +143,26 @@ document.addEventListener('DOMContentLoaded', async () => {
                         </div>
                     </a>
                 `;
-            }).join('');
+            };
+
+            const visibleCompanies = matchedCompanies.slice(0, 5);
+            let html = visibleCompanies.map(generateCompanyHtml).join('');
+            
+            if (matchedCompanies.length > 5) {
+                const moreCount = matchedCompanies.length - 5;
+                html += `
+                    <div style="text-align: center; margin-top: 1rem; margin-bottom: 1rem;">
+                        <button onclick="document.getElementById('more-companies').style.display='flex'; this.style.display='none';" style="background: transparent; border: 1px solid #cbd5e1; color: #475569; padding: 0.6rem 1.2rem; border-radius: 50px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s;">
+                            Näytä ${moreCount} muuta palvelua
+                            <span class="iconify" data-icon="material-symbols:expand-more"></span>
+                        </button>
+                    </div>
+                    <div id="more-companies" style="display: none; flex-direction: column; gap: 0;">
+                        ${matchedCompanies.slice(5).map(generateCompanyHtml).join('')}
+                    </div>
+                `;
+            }
+            companiesContainer.innerHTML = html;
         }
         
         // Renderöi Tapahtumat (tähän voi myöhemmin lisätä haun tapahtumat.json tai Supabasesta)
