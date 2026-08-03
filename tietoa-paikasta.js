@@ -177,7 +177,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         } catch (e) { console.warn(e); }
 
         // 6. Päivitä DOM
-        renderPlace(placeData, otherRelatedItems, aiProfileData, allSources, allContents, scoredCompanies);
+        await renderPlace(placeData, otherRelatedItems, aiProfileData, allSources, allContents, scoredCompanies);
 
         await loadMemoriesForPlace(placeData);
         await loadMediaForPlace(placeData);
@@ -421,7 +421,7 @@ function scoreCompanies(allCompanies, place, relations, tagMatches) {
     return results;
 }
 
-function renderPlace(place, relatedItems, aiProfileData, allSources = [], allContents = [], scoredCompanies = []) {
+async function renderPlace(place, relatedItems, aiProfileData, allSources = [], allContents = [], scoredCompanies = []) {
     document.getElementById('loading-spinner').style.display = 'none';
     document.getElementById('place-content').style.display = 'block';
 
