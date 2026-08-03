@@ -1,5 +1,75 @@
 // teema.js
 // Kokoaa yhteen paikat, yritykset ja tapahtumat tietyn tägin (teeman) perusteella
+// Käyttää theme_taxonomy.json-hierarkiaa synonyymien laajentamiseen
+
+// ── Apufunktio: Kerää kaikki teemaan liittyvät hakutermit taksonomiasta ──────
+function buildSearchTerms(taxonomy, tagParam) {
+    const terms = new Set([tagParam.toLowerCase()]);
+
+    const searchInGroups = (groups) => {
+        if (!groups) return;
+        for (const group of groups) {
+            // Tarkista matchaako ryhmä tai sen alla oleva tagi
+            const groupMatch = group.id === tagParam || group.label?.toLowerCase() === tagParam;
+            
+            if (group.tags) {
+                for (const tag of group.tags) {
+                    const tagMatch = tag.id === tagParam || tag.label?.toLowerCase() === tagParam;
+                    if (tagMatch || groupMatch) {
+                        terms.add(tag.id.toLowerCase());
+                        terms.add(tag.label.toLowerCase());
+                        (tag.synonyms || []).forEach(s => terms.add(s.toLowerCase()));
+                    }
+                }
+            }
+            if (group.groups) searchInGroups(group.groups);
+        }
+    };
+
+    if (!taxonomy?.main_groups) return terms;
+
+    for (const main of taxonomy.main_groups) {
+        const mainMatch = main.id === tagParam || main.label?.toLowerCase() === tagParam;
+        if (mainMatch) {
+            // Pääteema osui: lisätään kaikki sen alla olevat tagit
+            terms.add(main.label.toLowerCase());
+            if (main.groups) {
+                for (const group of main.groups) {
+                    if (group.tags) {
+                        for (const tag of group.tags) {
+                            terms.add(tag.id.toLowerCase());
+                            terms.add(tag.label.toLowerCase());
+                            (tag.synonyms || []).forEach(s => terms.add(s.toLowerCase()));
+                        }
+                    }
+                }
+            }
+        } else if (main.groups) {
+            searchInGroups(main.groups);
+        }
+    }
+
+    // Tarkista myös target_groups, seasons, features
+    for (const item of [...(taxonomy.target_groups || []), ...(taxonomy.seasons || []), ...(taxonomy.features || [])]) {
+        if (item.id === tagParam || item.label?.toLowerCase() === tagParam) {
+            terms.add(item.id.toLowerCase());
+            terms.add(item.label.toLowerCase());
+            (item.synonyms || []).forEach(s => terms.add(s.toLowerCase()));
+        }
+    }
+
+    return terms;
+}
+
+// ── Apufunktio: Tarkista täsmääkö teksti johonkin hakutermiin ─────────────────
+function matchesTerms(text, terms) {
+    if (!text) return false;
+    const lower = text.toLowerCase();
+    for (const term of terms) {
+        if (lower.includes(term)) return true;
+    }
+    return false;
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -25,12 +95,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const cacheBuster = new Date().getTime();
         
-        // Hae data JSON-tiedostoista (voit laajentaa hakemaan Supabasesta myös)
-        const [placesRes, companiesRes] = await Promise.all([
+        // Hae data JSON-tiedostoista ja taksonomia rinnakkain
+        const [placesRes, companiesRes, taxonomyRes] = await Promise.all([
             fetch('kohdekortit/kohteet.json?v=' + cacheBuster),
-            fetch('live_companies.json?v=' + cacheBuster)
+            fetch('live_companies.json?v=' + cacheBuster),
+            fetch('theme_taxonomy.json?v=' + cacheBuster)
         ]);
-        
+
+        // Lataa taksonomia synonyymejä varten
+        let taxonomy = null;
+        if (taxonomyRes.ok) {
+            try { taxonomy = await taxonomyRes.json(); } catch(e) {}
+        }
+
+        // Rakenna laajennetttu hakutermilista
+        const searchTerms = buildSearchTerms(taxonomy, searchTag);
+        console.log(`Teema "${tagParam}" – hakutermit:`, [...searchTerms]);
+
+
         let allPlaces = [];
         let allCompanies = [];
         
@@ -62,23 +144,22 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
         
-        // 1. Suodata paikat
-        // Kohteet.json
+        // 1. Suodata paikat käyttäen laajennettua hakutermilista
         const matchedPlaces = allPlaces.filter(p => {
-            const tags = (p.tags || []).map(t => t.toLowerCase());
-            const type = (p.type || '').toLowerCase();
-            const desc = (p.description || '').toLowerCase();
-            return tags.includes(searchTag) || type.includes(searchTag) || desc.includes(searchTag);
+            const tags = Array.isArray(p.tags) ? p.tags : (p.tags || '').split(',');
+            if (tags.some(t => searchTerms.has(t.toLowerCase().trim()))) return true;
+            return matchesTerms(p.type, searchTerms) || matchesTerms(p.description, searchTerms) || matchesTerms(p.name, searchTerms);
         });
+
+        // Tapahtumat erikseen (type === 'event')
+        const matchedEvents = matchedPlaces.filter(p => (p.type || '').toLowerCase() === 'event');
+        const matchedPlaceNodes = matchedPlaces.filter(p => (p.type || '').toLowerCase() !== 'event');
         
         // Supabase places (lisätään jos täsmää)
         sbPlaces.forEach(p => {
-            const type = (p.type || '').toLowerCase();
-            const desc = (p.description || '').toLowerCase();
-            if (type.includes(searchTag) || desc.includes(searchTag)) {
-                // Lisätään vain jos ei ole jo mukana
-                if (!matchedPlaces.find(existing => existing.id === p.place_id)) {
-                    matchedPlaces.push({
+            if (matchesTerms(p.type, searchTerms) || matchesTerms(p.description, searchTerms)) {
+                if (!matchedPlaceNodes.find(existing => existing.id === p.place_id)) {
+                    matchedPlaceNodes.push({
                         id: p.place_id,
                         name: p.name || p.canonical_name,
                         type: p.type,
@@ -89,25 +170,20 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         });
         
-        // 2. Suodata yritykset
+        // 2. Suodata yritykset käyttäen laajennettua hakutermilista
         const matchedCompanies = allCompanies.filter(c => {
-            const tags = (c.tags || '').toLowerCase();
-            const pvtapa = (c.palvelutapa || '').toLowerCase();
-            const kat = (c.kategoria || '').toLowerCase();
-            const nimi = (c.nimi || '').toLowerCase();
-            
-            return tags.includes(searchTag) || 
-                   pvtapa.includes(searchTag) || 
-                   kat.includes(searchTag) || 
-                   nimi.includes(searchTag);
+            return matchesTerms(c.tags, searchTerms) ||
+                   matchesTerms(c.palvelutapa, searchTerms) ||
+                   matchesTerms(c.kategoria, searchTerms) ||
+                   matchesTerms(c.nimi, searchTerms);
         });
         
         // Renderöi Paikat
         const placesContainer = document.getElementById('places-list');
-        if (matchedPlaces.length === 0) {
+        if (matchedPlaceNodes.length === 0) {
             placesContainer.innerHTML = '<p style="color: var(--text-muted);">Ei paikkoja tällä teemalla.</p>';
         } else {
-            placesContainer.innerHTML = matchedPlaces.map(p => {
+            placesContainer.innerHTML = matchedPlaceNodes.map(p => {
                 const url = `tietoa-paikasta.html?id=${encodeURIComponent(p.id)}`;
                 const typeName = p.type || 'Paikka';
                 const desc = p.description ? p.description.substring(0, 100) + '...' : '';
@@ -165,9 +241,31 @@ document.addEventListener('DOMContentLoaded', async () => {
             companiesContainer.innerHTML = html;
         }
         
-        // Renderöi Tapahtumat (tähän voi myöhemmin lisätä haun tapahtumat.json tai Supabasesta)
+        // Renderöi Tapahtumat – suodatettu kohteet.json:n event-tyypeistä
         const eventsContainer = document.getElementById('events-list');
-        eventsContainer.innerHTML = '<p style="color: var(--text-muted);">Tapahtumia ei löytynyt.</p>';
+        if (matchedEvents.length === 0) {
+            eventsContainer.innerHTML = '<p style="color: var(--text-muted);">Ei tapahtumia tällä teemalla.</p>';
+        } else {
+            eventsContainer.innerHTML = matchedEvents.map(e => {
+                const eventData = e.event || {};
+                const dateStr = eventData.startDate ? new Date(eventData.startDate).toLocaleDateString('fi-FI', { day:'numeric', month:'long', year:'numeric' }) : '';
+                const venue = eventData.venue || (e.location && e.location.municipality) || '';
+                const ticketUrl = eventData.ticketUrl || '';
+                const img = (e.images && e.images[0]) || '';
+                const desc = (e.shortDescription || e.description || '').substring(0, 110);
+                
+                return `
+                    <a href="tietoa-paikasta.html?id=${encodeURIComponent(e.id)}" class="list-item-card">
+                        ${img ? `<img src="${img}" alt="${e.name}" style="width:100%;height:120px;object-fit:cover;border-radius:10px;margin-bottom:0.75rem;">` : ''}
+                        <div style="font-size:0.8rem;font-weight:700;color:#7c3aed;text-transform:uppercase;margin-bottom:0.35rem;">🎉 Tapahtuma${dateStr ? ' · ' + dateStr : ''}</div>
+                        <h3 style="margin:0 0 0.4rem 0;font-family:Outfit,sans-serif;font-size:1.1rem;color:var(--text-main);">${e.name}</h3>
+                        ${venue ? `<div style="font-size:0.85rem;color:var(--text-muted);margin-bottom:0.4rem;">📍 ${venue}</div>` : ''}
+                        <p style="margin:0;font-size:0.9rem;color:var(--text-muted);">${desc}${desc.length >= 110 ? '...' : ''}</p>
+                        ${ticketUrl ? `<div style="margin-top:0.75rem;"><span style="display:inline-block;padding:0.3rem 0.8rem;background:#7c3aed;color:white;border-radius:50px;font-size:0.8rem;font-weight:700;">Liput &rarr;</span></div>` : ''}
+                    </a>
+                `;
+            }).join('');
+        }
         
         // Näytä sisältö
         document.getElementById('loading-spinner').style.display = 'none';
