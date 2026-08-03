@@ -92,11 +92,40 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.error('Virhe JSONien latauksessa:', e);
         }
         
-        // 4. Hae relaatiot Supabasesta
-        const { data: relationsData, error: relationsError } = await aiSb
-            .from('place_relations')
-            .select('entity_id, entity_type, entity_name, relation_type, relation_context, strength')
-            .eq('place_id', placeId);
+        // 4. Hae relaatiot Supabasesta (suorat relaatiot + tag-pohjaiset)
+        // entity_tags käyttää paikan nimen slugia (esim. 'laukaa-kk'),
+        // mutta placeId on Supabasen UUID/id. Lasketaan slug paikan nimen perusteella.
+        const toSlug = (text) => text.toString().toLowerCase()
+            .replace(/\s+/g, '-')
+            .replace(/ä/g, 'a').replace(/ö/g, 'o').replace(/å/g, 'a')
+            .replace(/[^\w\-]+/g, '')
+            .replace(/--+/g, '-')
+            .replace(/^-+|-+$/g, '');
+        
+        // Muodosta slug ensin paikan nimestä (Laukaa kk → laukaa-kk)
+        // Fallback: käytä placeId:tä jos slug-haku ei tuota tuloksia
+        const placeName = placeData.name || placeData.canonical_name || '';
+        const placeSlug = toSlug(placeName);
+
+        const [relationsResult, tagMatchResult] = await Promise.all([
+            aiSb
+                .from('place_relations')
+                .select('entity_id, entity_type, entity_name, relation_type, relation_context, strength')
+                .eq('place_id', placeId),
+            // Tag-pohjainen haku: kokeillaan ensin slugilla, sitten placeId:llä
+            aiSb.rpc('find_place_companies', { place_id: placeSlug, max_count: 20 })
+                .then(async r => {
+                    // Jos slug ei tuottanut tuloksia, kokeile suoraan placeId:llä
+                    if (!r.data || r.data.length === 0) {
+                        return aiSb.rpc('find_place_companies', { place_id: placeId, max_count: 20 });
+                    }
+                    return r;
+                })
+                .catch(() => ({ data: null, error: 'rpc not available' }))
+        ]);
+        const { data: relationsData, error: relationsError } = relationsResult;
+        const { data: tagMatches } = tagMatchResult;
+
 
         // 5. Yhdistä tiedot poistaen duplikaatit
         const allItemsMap = new Map();
@@ -107,46 +136,37 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         });
         
+        // Pisteytä yritykset uuden 4-tason mallin mukaisesti
+        // Haetaan ensin yritysten premium-kumppanuudet (simuloidaan company_visibility kentällä jos on)
+        // Tässä käytämme scoreCompanies funktiota
+        const scoredCompanies = scoreCompanies(yritykset, placeData, relationsData || [], tagMatches || []);
+        
+        // Lisää kohteet ja tarjoukset ja ei-yritys relaatiot allItemsMapiin,
+        // jotta ne näkyvät edelleen (esim. havainnot, tapahtumat)
         if (!relationsError && relationsData) {
             relationsData.forEach(r => {
                 const eId = String(r.entity_id);
-                if (!allItemsMap.has(eId)) {
-                    let mappedType = (r.entity_type || 'other').toLowerCase();
-                    if (mappedType === 'company') mappedType = 'business';
-                    
-                    let companyData = null;
-                    if (mappedType === 'business') {
-                        companyData = yritykset.find(y => String(y.id) === eId);
-                    }
-                    
+                let mappedType = (r.entity_type || 'other').toLowerCase();
+                if (mappedType === 'company') mappedType = 'business';
+                
+                if (mappedType !== 'business' && !allItemsMap.has(eId)) {
                     allItemsMap.set(eId, {
                         id: eId,
                         type: mappedType,
-                        name: r.entity_name || (companyData ? companyData.nimi : (mappedType === 'observation' ? 'Havainto' : eId)),
+                        name: r.entity_name || (mappedType === 'observation' ? 'Havainto' : eId),
                         shortDescription: r.relation_context || r.relation_type,
-                        logo: companyData ? companyData.logo : null,
-                        images: companyData ? companyData.images : null
+                        logo: null,
+                        images: null
                     });
                 }
             });
         }
         
-        const relatedItems = Array.from(allItemsMap.values());
-        
-        const placeIdStr = String(placeId);
-        let allSources = [];
-        let allContents = [];
-        try {
-            const [srcRes, cntRes] = await Promise.all([
-                aiSb.from('place_sources').select('*').eq('place_id', placeIdStr),
-                aiSb.from('place_content').select('*').eq('place_id', placeIdStr)
-            ]);
-            if (srcRes.data) allSources = srcRes.data;
-            if (cntRes.data) allContents = cntRes.data;
-        } catch (e) { console.warn(e); }
+        const otherRelatedItems = Array.from(allItemsMap.values());
 
         // 6. Päivitä DOM
-        renderPlace(placeData, relatedItems, aiProfileData, allSources, allContents);
+        renderPlace(placeData, otherRelatedItems, aiProfileData, allSources, allContents, scoredCompanies);
+
         await loadMemoriesForPlace(placeData);
         await loadMediaForPlace(placeData);
         await loadEncountersForPlace(placeData);
@@ -279,7 +299,107 @@ async function loadMemoriesForPlace(place) {
     }
 }
 
-function renderPlace(place, relatedItems, aiProfileData, allSources = [], allContents = []) {
+// ── APUFUNKTIOT ─────────────────────────────────────────────────────────────
+function haversineKm(lat1, lon1, lat2, lon2) {
+    if (!lat1 || !lon1 || !lat2 || !lon2) return null;
+    const R = 6371; // Earth's radius in km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+}
+
+const toSlugGlobal = (text) => text.toString().toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/ä/g, 'a').replace(/ö/g, 'o').replace(/å/g, 'a')
+    .replace(/[^\w\-]+/g, '')
+    .replace(/--+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+function scoreCompanies(allCompanies, place, relations, tagMatches) {
+    const results = [];
+    const seenIds = new Set();
+    
+    // Taso 1-2: Fyysinen + Relaatiot
+    for (const company of allCompanies) {
+        let score = 0, tier = 99;
+        const reasons = [];
+        
+        // Fyysinen: alue_slug
+        const cSlug = toSlugGlobal(company.alue_slug || '');
+        const pSlug = toSlugGlobal(place.name || place.canonical_name || '');
+        if (cSlug && pSlug && cSlug === pSlug) {
+            score += 80; tier = 1;
+            reasons.push({ type: 'AREA', label: 'Toimipaikka' });
+        }
+        
+        // Fyysinen: etäisyys
+        if (company.lat && company.lon && place.lat && place.lon) {
+            const dist = haversineKm(company.lat, company.lon, place.lat, place.lon);
+            if (dist < 0.5) { score += 70; tier = Math.min(tier, 1); reasons.push({ type: 'NEAR', label: `${Math.round(dist*1000)} m` }); }
+            else if (dist < 2) { score += 50; tier = Math.min(tier, 1); }
+        }
+        
+        // Relaatiot
+        const rel = relations.find(r => String(r.entity_id) === String(company.id) || String(r.entity_id) === `company-${company.id}`);
+        if (rel) {
+            const relScores = { HEAD_OFFICE: 100, INSIDE_PLACE: 90, EVENT_LOCATION: 50,
+                                PHOTO_LOCATION: 40, SERVICE_POINT: 40, PARTNER: 35, SPONSOR: 30 };
+            const pts = relScores[rel.relation_type] || 25;
+            score += pts;
+            tier = rel.relation_type === 'HEAD_OFFICE' ? 1 : Math.min(tier, 2);
+            let relationLabel = rel.relation_context || rel.relation_type;
+            if (rel.relation_type === 'EVENT_LOCATION') relationLabel = 'Tapahtumapaikka';
+            else if (rel.relation_type === 'PHOTO_LOCATION') relationLabel = 'Kuvauspaikka';
+            else if (rel.relation_type === 'SERVICE_POINT') relationLabel = 'Palvelupiste';
+            
+            reasons.push({ type: rel.relation_type, label: relationLabel });
+        }
+        
+        // Premium (Taso 4) - Yksinkertaistettu simulointi toistaiseksi
+        // Jos yrityksellä on jokin premium-tunniste, lisätään se tasolle 4 ellei jo korkeammalla.
+        if (company.isPremium || company.premium_type) {
+            score += 15;
+            tier = Math.min(tier, 4);
+        }
+        
+        if (tier <= 4) {
+            seenIds.add(String(company.id));
+            results.push({ ...company, score, tier, reasons });
+        }
+    }
+    
+    // Taso 3: Semanttinen Tag Match
+    if (tagMatches && Array.isArray(tagMatches)) {
+        for (const match of tagMatches) {
+            const numId = String(match.company_id).replace('company-', '');
+            if (seenIds.has(numId) || seenIds.has(match.company_id)) continue; // Yritys on jo tasolla 1, 2 tai 4
+            
+            const company = allCompanies.find(c => String(c.id) === numId || String(c.id) === match.company_id);
+            if (!company) continue;
+            
+            // Oletetaan paikan tageille vähintään 5 maksimiksi jotta skaalaus ei hyppää pienillä määrillä
+            const tagScore = Math.min(100, Math.round((match.matched_tags.length / 5) * 100));
+            
+            results.push({ 
+                ...company, 
+                score: tagScore, 
+                tier: 3, 
+                tagScore,
+                matchedTags: match.matched_tags, 
+                reasons: [] 
+            });
+            seenIds.add(numId);
+        }
+    }
+    
+    return results;
+}
+
+function renderPlace(place, relatedItems, aiProfileData, allSources = [], allContents = [], scoredCompanies = []) {
     document.getElementById('loading-spinner').style.display = 'none';
     document.getElementById('place-content').style.display = 'block';
 
@@ -432,8 +552,9 @@ function renderPlace(place, relatedItems, aiProfileData, allSources = [], allCon
         }
     }
 
-    // Verkostoyhteydet
-    renderRelations(relatedItems, allSources, allContents);
+    // Verkostoyhteydet ja Yritykset (4-tasomalli)
+    renderCompanies(scoredCompanies, allSources, allContents);
+    renderRelations(relatedItems, allSources, allContents); // Vanha renderointi jäljelle jääville (muut kuin yritykset)
 
     // Paikan omat lisäsisällöt (place_content ilman entity_id:tä)
     const servicesContainer = document.getElementById('place-sources-list');
@@ -523,20 +644,110 @@ const TYPE_LABELS = {
     'product': 'Tuote'
 };
 
+function renderCompanies(scoredCompanies, allSources = [], allContents = []) {
+    const listTier12 = document.getElementById('companies-list');
+    const containerTier3 = document.getElementById('semantic-matches-container');
+    const listTier3 = document.getElementById('semantic-matches-list');
+    const containerTier4 = document.getElementById('premium-partners-container');
+    const listTier4 = document.getElementById('premium-partners-list');
+    
+    const tier1and2 = scoredCompanies.filter(c => c.tier <= 2).sort((a,b) => b.score - a.score);
+    const tier3 = scoredCompanies.filter(c => c.tier === 3).sort((a,b) => b.tagScore - a.tagScore).slice(0, 6); // Näytetään max 6
+    const tier4 = scoredCompanies.filter(c => c.tier === 4).sort((a,b) => b.score - a.score);
+    
+    // Yleinen HTML generaattori korteille
+    const generateCardHtml = (item, isSemantic = false) => {
+        let linkUrl = '?id=' + item.id;
+        if (String(item.id).startsWith('yritys_') || item.type === 'business' || item.nimi) {
+            linkUrl = 'yrityskortti.html?id=' + item.id;
+        }
+        
+        const displayName = item.nimi || item.name || item.id;
+        let thumbUrl = item.logo || (item.images && item.images[0]) || item.image || null;
+        const thumbWrapHtml = thumbUrl
+            ? `<div class="card-thumb-wrap card-thumb-logo"><img src="${thumbUrl}" alt="Logo" loading="lazy" /></div>`
+            : '';
+            
+        let subtitleHtml = '';
+        if (isSemantic && item.matchedTags) {
+            const barWidth = Math.min(100, item.tagScore || 0);
+            subtitleHtml = `
+                <div style="margin-top: 0.5rem;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: #15803d; font-weight: 600; margin-bottom: 0.25rem;">
+                        <span class="iconify" data-icon="material-symbols:match-case"></span> ${item.tagScore}% Osuma
+                    </div>
+                    <div style="height: 4px; background: #dcfce7; border-radius: 4px; overflow: hidden; width: 100%; max-width: 150px; margin-bottom: 0.5rem;">
+                        <div style="height: 100%; background: #22c55e; width: ${barWidth}%;"></div>
+                    </div>
+                    <div style="font-size: 0.85rem; color: var(--light-text); display: flex; flex-wrap: wrap; gap: 4px;">
+                        ${item.matchedTags.slice(0, 4).map(t => `<span style="background:#f1f5f9; padding:2px 6px; border-radius:4px;">${t}</span>`).join('')}
+                    </div>
+                </div>
+            `;
+        } else if (item.reasons && item.reasons.length > 0) {
+            subtitleHtml = `
+                <div style="margin-top: 0.5rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                    ${item.reasons.map(r => `<span style="font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 50px; background: #e0f2fe; color: #0369a1; display:flex; align-items:center; gap:0.25rem;"><span class="iconify" data-icon="${r.type === 'AREA' ? 'material-symbols:location-on' : 'material-symbols:storefront'}"></span> ${r.label}</span>`).join('')}
+                </div>
+            `;
+        }
+
+        return `
+            <a href="${linkUrl}" class="list-item-card" style="text-decoration:none; display: block;">
+                <div class="card-header-grid">
+                    <div class="card-icon-text">
+                        <div class="list-icon-wrapper" style="margin:0; flex-shrink: 0; margin-top: 2px;">
+                            <span class="iconify list-icon" data-icon="${isSemantic ? 'material-symbols:auto-awesome' : 'material-symbols:storefront-outline'}"></span>
+                        </div>
+                        <div style="flex: 1; min-width: 0;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                                <span style="font-weight: 700; font-size: 1.05rem; color: var(--dark-text);">${displayName}</span>
+                            </div>
+                            ${subtitleHtml}
+                        </div>
+                    </div>
+                    ${thumbWrapHtml}
+                </div>
+            </a>
+        `;
+    };
+
+    // Render Tier 1 & 2
+    if (listTier12) {
+        if (tier1and2.length > 0) {
+            listTier12.innerHTML = tier1and2.map(c => generateCardHtml(c, false)).join('');
+        } else {
+            listTier12.innerHTML = `<div style="text-align:center; color: var(--light-text); padding: 2rem; background: #f9fafb; border-radius: 12px; font-size: 0.9rem;">Ei paikallisia yrityksiä tai palvelupisteitä rekisteröitynä tähän kohteeseen.</div>`;
+        }
+    }
+    
+    // Render Tier 3
+    if (containerTier3 && listTier3) {
+        if (tier3.length > 0) {
+            containerTier3.style.display = 'block';
+            listTier3.innerHTML = tier3.map(c => generateCardHtml(c, true)).join('');
+        } else {
+            containerTier3.style.display = 'none';
+        }
+    }
+    
+    // Render Tier 4
+    if (containerTier4 && listTier4) {
+        if (tier4.length > 0) {
+            containerTier4.style.display = 'block';
+            listTier4.innerHTML = tier4.map(c => generateCardHtml(c, false)).join('');
+        } else {
+            containerTier4.style.display = 'none';
+        }
+    }
+}
+
 function renderRelations(items, allSources = [], allContents = []) {
-    const container = document.getElementById('companies-list');
+    const container = document.getElementById('other-relations-list');
     if (!container) return;
     
-    const sectionTitle = document.getElementById('services-main-title');
-    if (sectionTitle) {
-        const count = items.length;
-        sectionTitle.innerHTML = `<span class="iconify" data-icon="material-symbols:storefront-outline" style="color: var(--accent);"></span> Palveluja täällä <span style="background: #ede9fe; color: #7c3aed; font-size: 0.8rem; font-weight: 700; padding: 2px 10px; border-radius: 50px; margin-left: 0.5rem;">${count}</span>`;
-    }
-
+    // Jos items ovat vain ei-yrityksiä, näytetään ne eri tavalla
     if (items.length === 0) {
-        container.innerHTML = `<div style="text-align:center; color: var(--light-text); padding: 3rem; border: 2px dashed #e5e7eb; border-radius: var(--inner-radius); background: #f9fafb;">
-            <span class="iconify" data-icon="material-symbols:link-off" style="font-size: 2.5rem; color: #d1d5db;"></span>
-            <p style="margin-top: 1rem; font-weight: 500;">Ei kohteita tähän paikkaan liitettynä.</p></div>`;
         return;
     }
 
