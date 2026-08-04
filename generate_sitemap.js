@@ -45,6 +45,8 @@ function generateSitemap() {
         'laukaan-ravintolat.html',
         'laukaan-autohuollot.html',
         'laukaan-parturit-ja-kauneus.html',
+        'tietoa-paikasta.html',
+        'laatu.html',
         'tietosuoja.html',
         'maksuehto.html'
     ];
@@ -132,6 +134,36 @@ function generateSitemap() {
             console.log(`✓ Lisätty ${premiumCount} premium-yritystä sitemapiin.`);
         } catch (e) {
             console.error('Virhe companies_data.json lukemisessa:', e.message);
+        }
+    }
+
+    // 3. Haetaan karttakohteet ja lisätään niille tietoa-paikasta.html?name=... osoitteet sitemapiin
+    const karttaFile = path.join(__dirname, 'karttakohteet_raw.json');
+    if (fs.existsSync(karttaFile)) {
+        try {
+            const rawJson = fs.readFileSync(karttaFile, 'utf8');
+            const data = JSON.parse(rawJson);
+            const features = data.features || [];
+            
+            let placeCount = 0;
+            const addedNames = new Set();
+
+            features.forEach(feature => {
+                const name = feature.properties && feature.properties.name;
+                if (name && !addedNames.has(name)) {
+                    addedNames.add(name);
+                    const formattedName = encodeURIComponent(name.trim().replace(/\s+/g, '_'));
+                    xml += `<url>
+  <loc>${baseUrl}tietoa-paikasta.html?name=${formattedName}</loc>
+  <lastmod>${currentDate}</lastmod>
+  <priority>0.70</priority>
+</url>\n`;
+                    placeCount++;
+                }
+            });
+            console.log(`✓ Lisätty ${placeCount} kohdesivua (tietoa-paikasta.html?name=...) sitemapiin.`);
+        } catch (e) {
+            console.error('Virhe karttakohteet_raw.json lukemisessa:', e.message);
         }
     }
 

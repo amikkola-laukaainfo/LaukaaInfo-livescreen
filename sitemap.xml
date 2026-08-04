@@ -122,6 +122,16 @@
   <priority>0.80</priority>
 </url>
 <url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/laatu.html</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
   <loc>https://laukaainfo.fi/tietosuoja.html</loc>
   <lastmod>2026-08-04T00:00:00+00:00</lastmod>
   <priority>0.80</priority>
@@ -245,6 +255,381 @@
   <loc>https://laukaainfo.fi/yritys/keski-suomen-parvekelasitus-oy.html</loc>
   <lastmod>2026-08-04T00:00:00+00:00</lastmod>
   <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Urheilukentt%C3%A4</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=P%C3%A4iv%C3%B6l%C3%A4ntien_tenniskentt%C3%A4</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Uimaranta</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Laukaan_p%C3%A4%C3%A4kirjasto</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Laukaan_kirkonkyl%C3%A4n_koulu</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Syd%C3%A4n-Laukaan_koulu</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Vehni%C3%A4n_koulu</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Peurungan_j%C3%A4%C3%A4halli</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Rajam%C3%A4en_ampumarata</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Ruuhim%C3%A4ki_circuit</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Laukaan_kirkko</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Lievestuoreen_urheilukentt%C3%A4</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Tervam%C3%A4en_urheilukentt%C3%A4</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Haukankujan_pallokentt%C3%A4</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Lievestuoreen_kirkko</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Lievestuoreen_helluntaiseurakunta</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Lepp%C3%A4veden_kirjasto</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Gradia%2C_Livestuoreen_toimipiste</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=%C3%84ij%C3%A4l%C3%A4n_koulu_(ei_toiminnassa)</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Laukaan_siunauskappeli</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Laukaan_kunnantalo</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Laukaan_linja-autoasema</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Laukaan_terveyskeskus</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Vihtavuoren_baptistiseurakunta</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Lepp%C3%A4veden_koulu</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Lepp%C3%A4veden_vanha_koulu</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Vihtavuoren_koulu</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Peurunka</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Kuusan_koulu</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Laukaan_rauhanyhdistys</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Satavuon_koulu</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Lievestuoreen_koulu</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=P%C3%A4iv%C3%A4koti</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Haarlan_ranta%2C_urheilukentt%C3%A4</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Kuhaniemen_koulu_(ei_k%C3%A4yt%C3%B6ss%C3%A4)</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Paloasema</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Lepp%C3%A4veden_liikuntapuisto_frisbeegolf</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Vehni%C3%A4n_baptistiseurakunta</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=P%C3%A4iv%C3%A4koti_Viilinki</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Lepp%C3%A4veden_p%C3%A4iv%C3%A4koti</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Vihtavuoren_paloasema</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Lievestuoreen_liikuntapuisto</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Haapalan_koulu</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Hirviareena</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Laukaan_paloasema</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Vihtavuoren_seurakuntatupa</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Lievestuoreen_kirjasto</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Laukaan_kotikulma_helluntaiseurakunta</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Vihtavuoren_kirjasto</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Lepp%C3%A4veden_liikuntapuisto</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Laukaan_lukio</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Pohjoisen_Keski-Suomen_ammattiopisto_Laukaa</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Harisevan_laavu</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Kuhaniemen_laavu</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Kalliolanm%C3%A4en_laavu</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Haukilammen_kota</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Vihtam%C3%A4en_laavu</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Haapalan_laavu</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Horinvuoren_laavu%2C_Horitupa</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Hietasyrj%C3%A4n_kota</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Kirvessaaren_laavu</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Kirkkoniemen_laavu</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Kotavuoren_laavu</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Peurungan_laavu</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Mustavuoren_laavu</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Kuham%C3%A4en_laavu</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Kuusaankosken_laavu</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Housiassuon_laavu</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Kuusisaaren_laavu</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Tyvel%C3%A4nsaaren_laavu</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Laajalahden_laavu</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Siikaj%C3%A4rven_kota</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Sylvi-laavu</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Majaj%C3%A4rven_laavu</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/tietoa-paikasta.html?name=Kota_Koiralampi</loc>
+  <lastmod>2026-08-04T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
 </url>
 
 </urlset>
