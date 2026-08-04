@@ -40,6 +40,30 @@
             --shadow-hover: 0 20px 40px rgba(0,0,0,0.1);
         }
 
+        .context-banner {
+            display: none;
+            background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: #fff;
+            padding: 0.6rem 2rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .context-banner a {
+            color: #6ee7b7;
+            text-decoration: none;
+            font-weight: 700;
+            margin-right: 1rem;
+            transition: color 0.2s;
+        }
+        .context-banner a:hover { color: #a7f3d0; }
+        .context-banner.active { display: flex; align-items: center; gap: 0.5rem; }
+
         body {
             background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             min-height: 100vh;
@@ -259,12 +283,21 @@
         <a href="index.html" class="btn btn-primary" style="margin-top: 1.5rem;">Palaa etusivulle</a>
     </div>
 
+    <!-- Kontekstibanneri: näkyy vain kun place_id on annettu -->
+    <div id="context-banner" class="context-banner">
+        <span class="iconify" data-icon="material-symbols:arrow-back"></span>
+        <a id="context-back-link" href="#">Takaisin paikkaan</a>
+        <span style="color: rgba(255,255,255,0.4);">|</span>
+        <span id="context-label" style="color: rgba(255,255,255,0.7);">Teemaan liittyvä sisältö lähialueelta</span>
+    </div>
+
     <main id="theme-content" style="display: none;">
         <section class="hero-section">
             <div class="hero-overlay"></div>
             <div class="hero-content">
-                <span class="badge">Teema</span>
+                <span class="badge" id="theme-badge">Teema</span>
                 <h1 id="theme-name" class="hero-title">Teeman nimi</h1>
+                <p id="theme-subtitle" style="font-size: 1rem; color: var(--text-muted); margin: 0; display: none;"></p>
                 <div class="action-buttons">
                     <a href="index.html" class="btn btn-primary">
                         <span class="iconify" data-icon="material-symbols:home-outline"></span> Etusivu
@@ -324,7 +357,35 @@
     <!-- Nav sync (if exists) -->
     <script src="nav-sync.js"></script>
     
+    <!-- Kontekstibanneri: aktivoituu jos place_id on URL:ssa -->
+    <script>
+        (function() {
+            const params = new URLSearchParams(window.location.search);
+            const placeId = params.get('place_id');
+            const tag = params.get('tag');
+            if (placeId) {
+                const banner = document.getElementById('context-banner');
+                const backLink = document.getElementById('context-back-link');
+                const label = document.getElementById('context-label');
+                const badge = document.getElementById('theme-badge');
+                const subtitle = document.getElementById('theme-subtitle');
+
+                if (banner) banner.classList.add('active');
+                if (backLink) {
+                    backLink.href = `tietoa-paikasta.html?id=${encodeURIComponent(placeId)}`;
+                    backLink.textContent = '← Takaisin paikkaan';
+                }
+                if (label && tag) label.textContent = `Näytetään: ${tag} – lähialueelta`;
+                if (badge) badge.textContent = 'Teema · Paikkakonteksti';
+                if (subtitle) {
+                    subtitle.textContent = 'Tulokset on rajattu valitun paikan lähialueeseen';
+                    subtitle.style.display = 'block';
+                }
+            }
+        })();
+    </script>
+
     <!-- Theme specific logic -->
-    <script src="teema.js?v=1"></script>
+    <script src="teema.js?v=2"></script>
 </body>
 </html>

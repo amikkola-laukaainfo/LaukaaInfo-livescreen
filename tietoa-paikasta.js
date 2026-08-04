@@ -505,10 +505,12 @@ async function renderPlace(place, relatedItems, aiProfileData, allSources = [], 
         const themesArray = Array.from(uniqueThemes);
         if (themesArray.length > 0) {
             themesSection.style.display = 'block';
-            // Tagit toimivat linkkeinä teema-sivulle (linssi-malli)
+            // Tagit toimivat linkkeinä teema-sivulle – place_id välittyy mukana kontekstuaalista hakua varten
             themesList.innerHTML = themesArray.map(t => {
                 const tagSlug = encodeURIComponent(t.toLowerCase());
-                return `<a href="teema.html?tag=${tagSlug}" class="network-tag" style="cursor:pointer; text-decoration:none;" title="Katso kaikki ${t}-teemaan liittyvä">
+                // Välitetään place.place_id, jolloin teema.html tietää mistä paikasta tultiin
+                const placeIdForTag = place.place_id ? `&place_id=${encodeURIComponent(place.place_id)}` : '';
+                return `<a href="teema.html?tag=${tagSlug}${placeIdForTag}" class="network-tag" style="cursor:pointer; text-decoration:none;" title="${t} – ${place.name || place.canonical_name || 'tämä paikka'} lähialueella">
                     <span class="iconify" data-icon="material-symbols:tag"></span> ${t}
                 </a>`;
             }).join('');
@@ -516,6 +518,7 @@ async function renderPlace(place, relatedItems, aiProfileData, allSources = [], 
             themesSection.style.display = 'none';
         }
     }
+
 
     // Aktiviteetit ("Mitä täällä voi tehdä?")
     const activitiesSection = document.getElementById('activities-section');
