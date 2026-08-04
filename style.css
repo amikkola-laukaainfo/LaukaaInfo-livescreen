@@ -7839,10 +7839,32 @@ footer {
    HERO-NEARBY WIDGET (Lähelläsi / Tutki paikkoja)
    ========================================= */
 
-.hero-nearby {
+/* 2-sarake CTA-ruudukko */
+.hero-cta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem 1rem;
     margin-top: 1.5rem;
+    align-items: start;
+}
+
+.hero-cta-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+}
+
+/* Napit täyttävät sarakkeen leveyden */
+.hero-cta-btn {
     width: 100%;
-    max-width: 420px;
+    justify-content: center;
+    padding: 0.75rem 0.9rem !important;
+    font-size: 0.9rem;
+}
+
+.hero-nearby {
+    width: 100%;
+    margin-top: 0;
 }
 
 /* ─── Trigger-nappi ─────────────────────────────────────── */
@@ -8119,9 +8141,13 @@ footer {
 
 /* ─── Mobiilimuutokset ──────────────────────────────────── */
 @media (max-width: 768px) {
+    .hero-cta-grid {
+        grid-template-columns: 1fr;
+    }
+
     .hero-nearby {
         max-width: 100%;
-        margin-top: 1.25rem;
+        margin-top: 0;
     }
 
     .nearby-trigger-btn {
