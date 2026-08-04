@@ -41,6 +41,40 @@ document.addEventListener('DOMContentLoaded', async () => {
             placeId = placeData.place_id;
         }
 
+        // 2.6. Hae hierarkia: pääkohde (jos tämä on alakohde) + alakohteet (jos tämä on pääkohde)
+        let parentPlace = null;
+        let subPlaces = [];
+        try {
+            const hierarchyPromises = [];
+
+            // Hae yläpaikka jos parent_place_id on asetettu
+            if (placeData.parent_place_id) {
+                hierarchyPromises.push(
+                    aiSb.from('places')
+                        .select('place_id, name, canonical_name, type, place_level, municipality, description')
+                        .eq('place_id', placeData.parent_place_id)
+                        .single()
+                        .then(r => { if (!r.error && r.data) parentPlace = r.data; })
+                );
+            } else {
+                hierarchyPromises.push(Promise.resolve());
+            }
+
+            // Hae alakohteet (paikat joiden parent_place_id on tämä paikka)
+            hierarchyPromises.push(
+                aiSb.from('places')
+                    .select('place_id, name, canonical_name, type, place_level, description, lat, lon')
+                    .eq('parent_place_id', placeId)
+                    .eq('status', 'ACTIVE')
+                    .order('importance', { ascending: false })
+                    .then(r => { if (!r.error && r.data) subPlaces = r.data; })
+            );
+
+            await Promise.all(hierarchyPromises);
+        } catch (hierarchyErr) {
+            console.warn('Hierarkiahaku epäonnistui:', hierarchyErr);
+        }
+
         // 2.5. Hae AI-profilointidata (summary, themes, activities, faq)
         let aiProfileData = null;
         try {
@@ -189,7 +223,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         } catch (e) { console.warn(e); }
 
         // 6. Päivitä DOM
-        await renderPlace(placeData, otherRelatedItems, aiProfileData, allSources, allContents, scoredCompanies);
+        await renderPlace(placeData, otherRelatedItems, aiProfileData, allSources, allContents, scoredCompanies, parentPlace, subPlaces);
 
         await loadMemoriesForPlace(placeData);
         await loadMediaForPlace(placeData);
@@ -464,7 +498,7 @@ function scoreCompanies(allCompanies, place, relations, tagMatches, visibilityDa
     return results;
 }
 
-async function renderPlace(place, relatedItems, aiProfileData, allSources = [], allContents = [], scoredCompanies = []) {
+async function renderPlace(place, relatedItems, aiProfileData, allSources = [], allContents = [], scoredCompanies = [], parentPlace = null, subPlaces = []) {
     document.getElementById('loading-spinner').style.display = 'none';
     document.getElementById('place-content').style.display = 'block';
 
@@ -723,9 +757,138 @@ async function renderPlace(place, relatedItems, aiProfileData, allSources = [], 
         });
     }
 
+    // Hierarkia: murupolku (jos alakohde) ja alakohteet (jos pääkohde)
+    renderHierarchyNav(place, parentPlace);
+    renderSubplaces(subPlaces, place);
+
     // Ladataan lähipaikat tag-pilvenä
     renderNearbyPlaces(place);
 }
+
+// ── HIERARKIA: MURUPOLKU (ALAKOHDE → YLÄPAIKKA) ────────────────────────────
+function renderHierarchyNav(place, parentPlace) {
+    const nav = document.getElementById('parent-navigation');
+    if (!nav) return;
+
+    if (parentPlace) {
+        // Ollaan alakohteessa – näytetään linkki yläpaikkaan
+        const parentName = parentPlace.name || parentPlace.canonical_name || 'Yläpaikka';
+        const parentUrl = `tietoa-paikasta.html?id=${encodeURIComponent(parentPlace.place_id)}`;
+        nav.style.display = 'flex';
+        nav.innerHTML = `
+            <a href="${parentUrl}" class="parent-nav-link">
+                <span class="iconify" data-icon="material-symbols:arrow-back-rounded"></span>
+                <span class="parent-nav-label">Osa aluetta:</span>
+                <span class="parent-nav-name">${parentName}</span>
+            </a>
+        `;
+    } else {
+        nav.style.display = 'none';
+    }
+}
+
+// ── HIERARKIA: ALAKOHTEET (PÄÄKOHDE → ALAKOHTEET) ──────────────────────────
+function renderSubplaces(subPlaces, parentPlace) {
+    const section = document.getElementById('subplaces-section');
+    const list = document.getElementById('subplaces-list');
+    if (!section || !list) return;
+
+    if (!subPlaces || subPlaces.length === 0) {
+        section.style.display = 'none';
+        return;
+    }
+
+    section.style.display = 'block';
+    list.innerHTML = subPlaces.map(sp => {
+        const spName = sp.name || sp.canonical_name || 'Kohde';
+        const typeLabel = getPlaceLevelLabel(sp.place_level, sp.type);
+        const icon = getPlaceLevelIcon(sp.place_level, sp.type);
+        return `
+            <div class="subplace-card" onclick="openSubplaceModal('${sp.place_id}', '${escapeForAttr(spName)}', '${escapeForAttr(sp.description || '')}', '${sp.lat || ''}', '${sp.lon || ''}', '${typeLabel}', '${icon}')">
+                <span class="subplace-icon iconify" data-icon="${icon}"></span>
+                <div class="subplace-info">
+                    <div class="subplace-name">${spName}</div>
+                    ${sp.description ? `<div class="subplace-desc">${sp.description.substring(0, 80)}${sp.description.length > 80 ? '...' : ''}</div>` : ''}
+                </div>
+                <span class="subplace-arrow iconify" data-icon="material-symbols:chevron-right"></span>
+            </div>
+        `;
+    }).join('');
+}
+
+function getPlaceLevelLabel(level, type) {
+    const levelMap = { 'AREA': 'Alue', 'LANDMARK': 'Nähtävyys', 'SUBPLACE': 'Kohde', 'POI': 'Piste' };
+    const typeMap = { 'NATURE': 'Luontokohde', 'SERVICE': 'Palvelu', 'BEACH': 'Uimaranta', 'ROUTE': 'Reitti' };
+    return levelMap[level] || typeMap[type] || 'Kohde';
+}
+
+function getPlaceLevelIcon(level, type) {
+    if (level === 'AREA') return 'material-symbols:map-outline';
+    if (level === 'LANDMARK') return 'material-symbols:landscape-outline';
+    const typeIconMap = {
+        'NATURE': 'material-symbols:park-outline',
+        'SERVICE': 'material-symbols:storefront-outline',
+        'BEACH': 'material-symbols:beach-access-outline',
+        'ROUTE': 'material-symbols:route-outline',
+        'BUILDING': 'material-symbols:home-outline',
+        'EVENT_LOCATION': 'material-symbols:event-outline',
+    };
+    return typeIconMap[type] || 'material-symbols:place-outline';
+}
+
+function escapeForAttr(str) {
+    return String(str).replace(/'/g, '&#39;').replace(/"/g, '&quot;').replace(/\n/g, ' ');
+}
+
+// ── ALAKOHDE MODAL ──────────────────────────────────────────────────────────
+function openSubplaceModal(placeId, name, description, lat, lon, typeLabel, icon) {
+    const modal = document.getElementById('subplace-modal');
+    if (!modal) return;
+
+    document.getElementById('subplace-modal-title').textContent = name;
+    document.getElementById('subplace-modal-type').textContent = typeLabel;
+    document.getElementById('subplace-modal-desc').textContent = description || 'Tarkempi kuvaus ladataan...';
+
+    const fullPageBtn = document.getElementById('subplace-modal-fullpage');
+    fullPageBtn.href = `tietoa-paikasta.html?id=${encodeURIComponent(placeId)}`;
+
+    const mapBtn = document.getElementById('subplace-modal-map');
+    if (lat && lon) {
+        mapBtn.style.display = 'inline-flex';
+        mapBtn.setAttribute('onclick', `window.open('https://maps.google.com/?q=${lat},${lon}', '_blank')`);
+    } else {
+        mapBtn.style.display = 'none';
+    }
+
+    // Jos kuvaus on lyhyt, haetaan tarkempi kuvaus Supabasesta
+    if (!description && window.aiSb) {
+        aiSb.from('places').select('description').eq('place_id', placeId).single()
+            .then(r => {
+                if (r.data && r.data.description) {
+                    document.getElementById('subplace-modal-desc').textContent = r.data.description;
+                }
+            });
+    }
+
+    modal.style.display = 'flex';
+    requestAnimationFrame(() => {
+        modal.querySelector('.subplace-modal-content').style.transform = 'translateY(0)';
+    });
+}
+
+function closeSubplaceModal() {
+    const modal = document.getElementById('subplace-modal');
+    if (!modal) return;
+    const content = modal.querySelector('.subplace-modal-content');
+    content.style.transform = 'translateY(100%)';
+    setTimeout(() => { modal.style.display = 'none'; }, 300);
+}
+
+// Suljetaan modal taustaa klikkaamalla
+document.addEventListener('click', (e) => {
+    const modal = document.getElementById('subplace-modal');
+    if (modal && e.target === modal) closeSubplaceModal();
+});
 
 const TYPE_LABELS = {
     'business': 'Yritys',

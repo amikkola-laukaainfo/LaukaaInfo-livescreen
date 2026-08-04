@@ -604,6 +604,166 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* ── Parent Navigation (Murupolku alakohteelle) ── */
+        .parent-nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: var(--text-main);
+            background: rgba(255,255,255,0.75);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(0,0,0,0.08);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.25s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            max-width: 100%;
+        }
+        .parent-nav-link:hover {
+            background: rgba(255,255,255,0.95);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            transform: translateX(-2px);
+        }
+        .parent-nav-label {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        .parent-nav-name {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* ── Subplaces (Alakohteiden lista) ── */
+        .subplace-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            background: white;
+            border: 1px solid #f1f5f9;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: var(--shadow-sm);
+        }
+        .subplace-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateX(4px);
+            border-color: var(--accent);
+        }
+        .subplace-icon {
+            font-size: 1.5rem;
+            color: var(--accent);
+            flex-shrink: 0;
+        }
+        .subplace-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .subplace-name {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-main);
+        }
+        .subplace-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.2rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .subplace-arrow {
+            color: var(--text-muted);
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+        .subplaces-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            margin-top: 1rem;
+        }
+
+        /* ── Subplace Modal (Bottom Sheet) ── */
+        .subplace-modal-content {
+            background: white;
+            width: 100%;
+            max-width: 540px;
+            border-radius: 28px 28px 0 0;
+            padding: 2rem;
+            transform: translateY(100%);
+            transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+            box-shadow: 0 -20px 60px rgba(0,0,0,0.15);
+        }
+        .subplace-modal-handle {
+            width: 44px;
+            height: 5px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            margin: 0 auto 1.75rem;
+        }
+        .subplace-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+        .subplace-modal-close {
+            background: #f1f5f9;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            transition: background 0.2s;
+            flex-shrink: 0;
+        }
+        .subplace-modal-close:hover { background: #e2e8f0; }
+        .subplace-modal-type-badge {
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent);
+            background: rgba(16, 185, 129, 0.1);
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+        .subplace-modal-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin: 0 0 0.5rem;
+            line-height: 1.2;
+        }
+        .subplace-modal-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.65;
+            margin-bottom: 1.5rem;
+        }
+        .subplace-modal-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        .subplace-modal-actions .btn {
+            flex: 1;
+            min-width: 120px;
+            justify-content: center;
+        }
     </style>
 </head>
 
@@ -628,6 +788,9 @@
         <section class="hero-section">
             <div class="hero-overlay"></div>
             <div class="hero-content">
+                <!-- Hierarkia-navigaatio (näytetään vain alakohteille) -->
+                <div id="parent-navigation" style="display: none;"></div>
+
                 <span id="place-type" class="badge">Ladataan...</span>
                 <h1 id="place-name" class="hero-title">Ladataan...</h1>
                 
@@ -670,6 +833,16 @@
             <!-- Left Column -->
             <div class="left-col">
                 
+                <!-- 1.5. Alakohteet (näytetään vain pääkohteilla, joilla on child-paikkoja) -->
+                <section id="subplaces-section" class="content-block" style="display: none;">
+                    <h2 style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="iconify" style="color: var(--accent);" data-icon="material-symbols:place-outline"></span>
+                        Tähän paikkaan kuuluu
+                    </h2>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); margin: 0;">Klikkauksella näet tarkemmat tiedot tai avaat kohteen omalle sivulleen.</p>
+                    <div id="subplaces-list" class="subplaces-list"></div>
+                </section>
+
                 <!-- 1. Perustiedot & AI-yhteenveto -->
                 <section id="intro-section" class="content-block">
                     <h2>Tietoa paikasta</h2>
@@ -915,6 +1088,33 @@
 
     <!-- Footer -->
     <footer></footer>
+
+    <!-- Subplace Modal (Bottom Sheet) -->
+    <div id="subplace-modal" style="display: none; align-items: flex-end; justify-content: center; z-index: 1100; position: fixed; inset: 0; background: rgba(0,0,0,0.45); backdrop-filter: blur(5px);">
+        <div class="subplace-modal-content">
+            <div class="subplace-modal-handle"></div>
+            <div class="subplace-modal-header">
+                <div>
+                    <span id="subplace-modal-type" class="subplace-modal-type-badge">Kohde</span>
+                    <h2 id="subplace-modal-title" class="subplace-modal-title">Kohteen nimi</h2>
+                </div>
+                <button class="subplace-modal-close" onclick="closeSubplaceModal()">
+                    <span class="iconify" data-icon="material-symbols:close" style="font-size: 1.25rem;"></span>
+                </button>
+            </div>
+            <p id="subplace-modal-desc" class="subplace-modal-desc">Ladataan...</p>
+            <div class="subplace-modal-actions">
+                <a id="subplace-modal-fullpage" href="#" class="btn btn-primary">
+                    <span class="iconify" data-icon="material-symbols:open-in-full"></span>
+                    Avaa koko sivu
+                </a>
+                <button id="subplace-modal-map" class="btn btn-light" style="display:none;">
+                    <span class="iconify" data-icon="material-symbols:route"></span>
+                    Reitti
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Tag Action Modal -->
     <div id="tag-action-modal" class="modal-overlay" style="display: none; align-items: flex-end; justify-content: center; z-index: 1000; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);">
