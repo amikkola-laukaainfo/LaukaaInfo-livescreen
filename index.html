@@ -389,22 +389,31 @@
                                 <span class="nearby-pin-icon">📍</span> Tutki paikkoja
                             </button>
 
-                            <!-- Tila 1b: Desktop – osoitekenttä (piilotettu aluksi) -->
-                            <div id="nearby-desktop-form" class="nearby-desktop-form" hidden>
-                                <label for="nearby-address-input" class="nearby-form-label">Missä olet?</label>
+                            <!-- Tila 1b: Hakulomake (osoite tai sijainti) -->
+                            <div id="nearby-desktop-form" class="nearby-search-form" hidden>
+                                <label for="nearby-address-input" class="nearby-form-label">Etsi paikkoja</label>
                                 <div class="nearby-input-row">
                                     <input
                                         id="nearby-address-input"
                                         class="nearby-address-input"
                                         type="text"
-                                        placeholder="Esim. Laukaantie 12"
+                                        placeholder="Kirjoita osoite..."
                                         autocomplete="street-address"
-                                        aria-label="Kirjoita osoitteesi"
+                                        aria-label="Kirjoita osoite"
                                     />
                                     <button id="nearby-address-btn" class="nearby-address-btn" type="button"
-                                        aria-label="Hae lähellä olevat paikat">
+                                        aria-label="Hae osoitteella">
                                         Hae
                                     </button>
+                                </div>
+                                <div style="margin-top: 0.8rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                                    <button id="nearby-geo-btn" class="btn-primary" type="button"
+                                        style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 0.5rem; background: var(--secondary-blue); padding: 0.6rem; border-radius: 8px;">
+                                        <span class="nearby-pin-icon">📍</span> Käytä sijaintiani
+                                    </button>
+                                    <a href="kohdekartta.html" style="text-align: center; font-size: 0.85rem; text-decoration: underline; color: inherit; opacity: 0.8; padding: 0.4rem;">
+                                        Näytä kaikki kartalla
+                                    </a>
                                 </div>
                             </div>
 

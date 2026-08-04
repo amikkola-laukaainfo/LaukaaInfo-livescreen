@@ -7527,6 +7527,45 @@ footer {
         border-color: #bbd4ed !important;
     }
     
+    /* Nearby lomake & tulokset - vaalea teema mobiiliin */
+    .nearby-search-form, .nearby-list {
+        background: #f8fbff !important;
+        border: 1px solid #d1e2f3 !important;
+    }
+    .nearby-form-label, .nearby-header-label, .nearby-place-name, #nearby-loading span {
+        color: var(--dark-text) !important;
+    }
+    .nearby-address-input {
+        background: #ffffff !important;
+        color: var(--dark-text) !important;
+        border: 1px solid #cbd5e0 !important;
+    }
+    .nearby-address-input::placeholder {
+        color: #718096 !important;
+    }
+    .nearby-address-input:focus {
+        background: #ffffff !important;
+        border-color: var(--secondary-blue) !important;
+    }
+    .nearby-address-btn {
+        background: var(--secondary-blue) !important;
+        color: #ffffff !important;
+    }
+    .nearby-place-dist {
+        color: #718096 !important;
+    }
+    .nearby-place-link:hover, .nearby-place-link:active {
+        background: rgba(0, 0, 0, 0.04) !important;
+    }
+    .nearby-all-link {
+        color: var(--secondary-blue) !important;
+        border-top-color: #e2e8f0 !important;
+    }
+    .nearby-all-link:hover {
+        background: #eef5ff !important;
+        color: var(--accent-blue) !important;
+    }
+    
     .hero-actions .btn-primary {
         background: #f8fbff !important;
         border: 1px solid #d1e2f3 !important;

@@ -203,36 +203,40 @@
     // ─── Init ────────────────────────────────────────────────────────────────────
     function init() {
         const trigger      = document.getElementById('nearby-trigger');
-        const desktopForm  = document.getElementById('nearby-desktop-form');
+        const searchForm   = document.getElementById('nearby-desktop-form');
         const desktopInput = document.getElementById('nearby-address-input');
         const desktopBtn   = document.getElementById('nearby-address-btn');
+        const geoBtn       = document.getElementById('nearby-geo-btn');
 
         if (!trigger) return; // Widget ei ole sivulla
 
-        const mobile = isMobileDevice();
+        // Avaa hakulomake kun painetaan "Tutki paikkoja"
+        trigger.innerHTML = '<span class="nearby-pin-icon">📍</span> Tutki paikkoja';
+        trigger.addEventListener('click', () => {
+            trigger.hidden = true;
+            if (searchForm) searchForm.hidden = false;
+            if (desktopInput) desktopInput.focus();
+        });
 
-        // Mobiili: näytä trigger-nappi suoraan geo-kutsulle
-        // Desktop: näytä trigger joka avaa tekstikentän
-        if (mobile) {
-            trigger.textContent = ''; // Aseta sisältö
-            trigger.innerHTML = '<span class="nearby-pin-icon">📍</span> Lähelläsi';
-            trigger.addEventListener('click', startGeolocation);
-        } else {
-            trigger.innerHTML = '<span class="nearby-pin-icon">📍</span> Tutki paikkoja';
-            trigger.addEventListener('click', () => {
-                trigger.hidden = true;
-                if (desktopForm) desktopForm.hidden = false;
-                if (desktopInput) desktopInput.focus();
+        // Sijaintinappi
+        if (geoBtn) {
+            geoBtn.addEventListener('click', () => {
+                if (searchForm) searchForm.hidden = true;
+                startGeolocation();
             });
         }
 
-        // Desktop form submit
+        // Osoitehaku
         if (desktopBtn && desktopInput) {
             desktopBtn.addEventListener('click', () => {
+                if (searchForm) searchForm.hidden = true;
                 startAddressSearch(desktopInput.value);
             });
             desktopInput.addEventListener('keydown', e => {
-                if (e.key === 'Enter') startAddressSearch(desktopInput.value);
+                if (e.key === 'Enter') {
+                    if (searchForm) searchForm.hidden = true;
+                    startAddressSearch(desktopInput.value);
+                }
             });
         }
     }
