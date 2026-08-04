@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const placeName = placeData.name || placeData.canonical_name || '';
         const placeSlug = toSlug(placeName);
 
-        const [relationsResult, tagMatchResult] = await Promise.all([
+        const [relationsResult, tagMatchResult, visibilityResult] = await Promise.all([
             aiSb
                 .from('place_relations')
                 .select('entity_id, entity_type, entity_name, relation_type, relation_context, strength')
@@ -115,17 +115,33 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Tag-pohjainen haku: kokeillaan ensin slugilla, sitten placeId:llä
             aiSb.rpc('find_place_companies', { place_id: placeSlug, max_count: 20 })
                 .then(async r => {
-                    // Jos slug ei tuottanut tuloksia, kokeile suoraan placeId:llä
                     if (!r.data || r.data.length === 0) {
                         return aiSb.rpc('find_place_companies', { place_id: placeId, max_count: 20 });
                     }
                     return r;
                 })
-                .catch(() => ({ data: null, error: 'rpc not available' }))
+                .catch(() => ({ data: null, error: 'rpc not available' })),
+            // Ostettu näkyvyys: haetaan yritykset joilla on aktiivinen company_visibility tähän paikkaan
+            aiSb
+                .from('company_visibility')
+                .select('company_id, visibility_type, priority, target_id, visibility_targets(target_type, target_id)')
+                .eq('status', 'ACTIVE')
+                .or(`ends_at.is.null,ends_at.gt.${new Date().toISOString()}`)
+                .catch(() => ({ data: null })) // Ei kaadu vaikka taulu puuttuisi
         ]);
         const { data: relationsData, error: relationsError } = relationsResult;
         const { data: tagMatches } = tagMatchResult;
+        // Suodata näkyvyysdata tähän paikkaan liittyviin merkintöihin
+        const allVisibility = visibilityResult?.data || [];
+        const visibilityData = allVisibility.filter(v => {
+            const vt = v.visibility_targets;
+            if (!vt) return false;
+            return (vt.target_type === 'PLACE' && vt.target_id === String(placeId)) ||
+                   (vt.target_type === 'AREA');
+        });
 
+        // Pisteytä yritykset uuden 4-tason mallin mukaisesti
+        const scoredCompanies = scoreCompanies(yritykset, placeData, relationsData || [], tagMatches || [], visibilityData);
 
         // 5. Yhdistä tiedot poistaen duplikaatit
         const allItemsMap = new Map();
@@ -135,11 +151,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 allItemsMap.set(String(item.id), item);
             }
         });
-        
-        // Pisteytä yritykset uuden 4-tason mallin mukaisesti
-        // Haetaan ensin yritysten premium-kumppanuudet (simuloidaan company_visibility kentällä jos on)
-        // Tässä käytämme scoreCompanies funktiota
-        const scoredCompanies = scoreCompanies(yritykset, placeData, relationsData || [], tagMatches || []);
         
         // Lisää kohteet ja tarjoukset ja ei-yritys relaatiot allItemsMapiin,
         // jotta ne näkyvät edelleen (esim. havainnot, tapahtumat)
@@ -331,11 +342,49 @@ const toSlugGlobal = (text) => text.toString().toLowerCase()
     .replace(/--+/g, '-')
     .replace(/^-+|-+$/g, '');
 
-function scoreCompanies(allCompanies, place, relations, tagMatches) {
+function scoreCompanies(allCompanies, place, relations, tagMatches, visibilityData = []) {
     const results = [];
     const seenIds = new Set();
+
+    // Koostetaan näkyvyys-Set nopeaa hakua varten
+    const visibilitySet = new Set((visibilityData || []).map(v => String(v.company_id)));
+    const visibilityPriorityMap = {};
+    (visibilityData || []).forEach(v => {
+        const id = String(v.company_id);
+        if (!visibilityPriorityMap[id] || v.priority > visibilityPriorityMap[id].priority) {
+            visibilityPriorityMap[id] = v;
+        }
+    });
+
+    // Pisteytystaulukko: uudet relation_type-arvot (007) + vanhat arvot yhteensopivuuden vuoksi
+    const RELATION_SCORES = {
+        // Uudet (007_add_relation_type.sql)
+        LOCATED_AT:      60,
+        OPERATES_AT:     55,
+        SERVICE_AT:      50,
+        SERVES_VISITORS: 30,
+        RECOMMENDED:     20,
+        NEARBY_SERVICE:  15,
+        GENERAL:         10,
+        // Vanhat (place_relations -taulusta)
+        HEAD_OFFICE:    100,
+        INSIDE_PLACE:    90,
+        EVENT_LOCATION:  50,
+        PHOTO_LOCATION:  40,
+        SERVICE_POINT:   40,
+        PARTNER:         35,
+        SPONSOR:         30
+    };
+    const RELATION_LABELS = {
+        LOCATED_AT: 'Toimii paikassa', OPERATES_AT: 'Toimii paikassa',
+        SERVICE_AT: 'Palvelee paikassa', SERVES_VISITORS: 'Palvelee kävijöitä',
+        NEARBY_SERVICE: 'Lähipalvelu', RECOMMENDED: 'Suositeltu',
+        HEAD_OFFICE: 'Toimipaikka', INSIDE_PLACE: 'Paikassa', 
+        EVENT_LOCATION: 'Tapahtumapaikka', PHOTO_LOCATION: 'Kuvauspaikka',
+        SERVICE_POINT: 'Palvelupiste', PARTNER: 'Kumppani', SPONSOR: 'Sponsori'
+    };
     
-    // Taso 1-2: Fyysinen + Relaatiot
+    // Taso 1-2: Fyysinen sijainti + Relaatiot
     for (const company of allCompanies) {
         const compId = String(company.id);
         if (seenIds.has(compId)) continue;
@@ -355,41 +404,36 @@ function scoreCompanies(allCompanies, place, relations, tagMatches) {
         if (company.lat && company.lon && place.lat && place.lon) {
             const dist = haversineKm(company.lat, company.lon, place.lat, place.lon);
             if (dist < 2.0) {
-                // Mitä lähempänä, sitä enemmän pisteitä (10 - 70)
                 const distScore = Math.max(10, Math.round(70 - (dist / 2) * 60));
                 score += distScore;
                 tier = Math.min(tier, 1);
-                
                 let distLabel = dist < 1 ? `${Math.round(dist*1000)} m` : `${dist.toFixed(1).replace('.', ',')} km`;
                 reasons.push({ type: 'NEAR', label: distLabel });
             }
         }
         
-        // Relaatiot
-        const rel = relations.find(r => String(r.entity_id) === String(company.id) || String(r.entity_id) === `company-${company.id}`);
+        // Relaatiot (place_company_relations + place_relations)
+        const rel = relations.find(r => String(r.entity_id) === compId || String(r.entity_id) === `company-${compId}`);
         if (rel) {
-            const relScores = { HEAD_OFFICE: 100, INSIDE_PLACE: 90, EVENT_LOCATION: 50,
-                                PHOTO_LOCATION: 40, SERVICE_POINT: 40, PARTNER: 35, SPONSOR: 30 };
-            const pts = relScores[rel.relation_type] || 25;
+            const pts = RELATION_SCORES[rel.relation_type] || 25;
             score += pts;
-            tier = rel.relation_type === 'HEAD_OFFICE' ? 1 : Math.min(tier, 2);
-            let relationLabel = rel.relation_context || rel.relation_type;
-            if (rel.relation_type === 'EVENT_LOCATION') relationLabel = 'Tapahtumapaikka';
-            else if (rel.relation_type === 'PHOTO_LOCATION') relationLabel = 'Kuvauspaikka';
-            else if (rel.relation_type === 'SERVICE_POINT') relationLabel = 'Palvelupiste';
-            
-            reasons.push({ type: rel.relation_type, label: relationLabel });
+            tier = (rel.relation_type === 'HEAD_OFFICE' || rel.relation_type === 'LOCATED_AT') ? 1 : Math.min(tier, 2);
+            reasons.push({ type: rel.relation_type, label: RELATION_LABELS[rel.relation_type] || rel.relation_context || rel.relation_type });
         }
         
-        // Premium (Taso 4) - Yksinkertaistettu simulointi toistaiseksi
-        // Jos yrityksellä on jokin premium-tunniste, lisätään se tasolle 4 ellei jo korkeammalla.
-        if (company.isPremium || company.premium_type) {
-            score += 15;
-            tier = Math.min(tier, 4);
+        // Taso 2: Ostettu näkyvyys (company_visibility)
+        if (visibilitySet.has(compId)) {
+            const visEntry = visibilityPriorityMap[compId];
+            score += 40;
+            tier = Math.min(tier, 2);
+            const visLabel = visEntry?.visibility_type === 'PLACE_PARTNER' ? 'Paikkakumppani' :
+                             visEntry?.visibility_type === 'AREA_PARTNER'  ? 'Aluekumppani'  :
+                             visEntry?.visibility_type === 'THEME_PARTNER' ? 'Teemakumppani' : 'Kumppani';
+            reasons.push({ type: 'VISIBILITY', label: visLabel });
         }
         
-        if (tier <= 4) {
-            seenIds.add(String(company.id));
+        if (tier <= 99 && score > 0) {
+            seenIds.add(compId);
             results.push({ ...company, score, tier, reasons });
         }
     }
@@ -398,14 +442,12 @@ function scoreCompanies(allCompanies, place, relations, tagMatches) {
     if (tagMatches && Array.isArray(tagMatches)) {
         for (const match of tagMatches) {
             const numId = String(match.company_id).replace('company-', '');
-            if (seenIds.has(numId) || seenIds.has(match.company_id)) continue; // Yritys on jo tasolla 1, 2 tai 4
+            if (seenIds.has(numId) || seenIds.has(match.company_id)) continue;
             
             const company = allCompanies.find(c => String(c.id) === numId || String(c.id) === match.company_id);
             if (!company) continue;
             
-            // Oletetaan paikan tageille vähintään 5 maksimiksi jotta skaalaus ei hyppää pienillä määrillä
             const tagScore = Math.min(100, Math.round((match.matched_tags.length / 5) * 100));
-            
             results.push({ 
                 ...company, 
                 score: tagScore, 
