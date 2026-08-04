@@ -231,13 +231,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                         const desc = p.description ? p.description.substring(0, 100) + '...' : '';
                         const reasonBadge = p.match_reason ? `<span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 4px; margin-left: 8px;">${p.match_reason}</span>` : '';
                         
-                        return \`
-                            <a href="\${url}" class="list-item-card">
-                                <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 0.5rem; display: flex; align-items: center;">📍 \${typeName} \${reasonBadge}</div>
-                                <h3 style="margin: 0 0 0.5rem 0; font-family: Outfit, sans-serif; font-size: 1.25rem; color: var(--text-main);">\${p.name}</h3>
-                                <p style="margin: 0; font-size: 0.95rem; color: var(--text-muted);">\${desc}</p>
+                        return `
+                            <a href="${url}" class="list-item-card">
+                                <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 0.5rem; display: flex; align-items: center;">📍 ${typeName} ${reasonBadge}</div>
+                                <h3 style="margin: 0 0 0.5rem 0; font-family: Outfit, sans-serif; font-size: 1.25rem; color: var(--text-main);">${p.name}</h3>
+                                <p style="margin: 0; font-size: 0.95rem; color: var(--text-muted);">${desc}</p>
                             </a>
-                        \`;
+                        `;
                     }).join('');
                 }
 
@@ -247,19 +247,19 @@ document.addEventListener('DOMContentLoaded', async () => {
                     companiesContainer.innerHTML = '<p style="color: var(--text-muted);">Ei yrityksiä tällä teemalla lähialueella.</p>';
                 } else {
                     companiesContainer.innerHTML = matchedCompanies.map(c => {
-                        const url = \`yrityskortti.html?id=\${encodeURIComponent(c.id)}\`;
-                        const reasonBadge = c.match_reason ? \`<span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-top: 4px;">\${c.match_reason}</span>\` : '';
-                        return \`
-                            <a href="\${url}" class="list-item-card">
+                        const url = `yrityskortti.html?id=${encodeURIComponent(c.id)}`;
+                        const reasonBadge = c.match_reason ? `<span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-top: 4px;">${c.match_reason}</span>` : '';
+                        return `
+                            <a href="${url}" class="list-item-card">
                                 <div class="card-header-grid">
                                     <div>
-                                        <h3 style="margin: 0 0 0.25rem 0; font-size: 1.1rem; color: var(--text-main);">\${c.nimi}</h3>
-                                        <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.25rem;">\${c.kategoria || ''}</div>
-                                        \${reasonBadge}
+                                        <h3 style="margin: 0 0 0.25rem 0; font-size: 1.1rem; color: var(--text-main);">${c.nimi}</h3>
+                                        <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.25rem;">${c.kategoria || ''}</div>
+                                        ${reasonBadge}
                                     </div>
                                 </div>
                             </a>
-                        \`;
+                        `;
                     }).join('');
                 }
 
