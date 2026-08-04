@@ -127,6 +127,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 .select('company_id, visibility_type, priority, target_id, visibility_targets(target_type, target_id)')
                 .eq('status', 'ACTIVE')
                 .or(`ends_at.is.null,ends_at.gt.${new Date().toISOString()}`)
+                .then(res => res)
                 .catch(() => ({ data: null })) // Ei kaadu vaikka taulu puuttuisi
         ]);
         const { data: relationsData, error: relationsError } = relationsResult;
