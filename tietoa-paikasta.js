@@ -1343,25 +1343,26 @@ async function loadEncountersForPlace(place) {
         let allItems = data || [];
         
         // Hae myös tapahtumat, yritysjulkaisut ja tarjoukset
+        const liveSb = window.LaukaaSupabase; // usswojtlvrnqtzwnffpg – Android-datan projekti
         if (window.aiSb && place.place_id) {
             try {
-                // Contents-taulu (JSONB location->>place_id)
+                // Contents-taulu (JSONB location->>place_id) – AI-projekti
                 const { data: contentsData } = await window.aiSb
                     .from('contents')
                     .select('*')
                     .eq('location->>place_id', place.place_id);
                 
-                // Yrityspostaukset
-                const { data: postsData } = await window.aiSb
-                    .from('company_posts')
-                    .select('*')
-                    .eq('place_id', place.place_id);
+                // Yrityspostaukset – LaukaaLive-projekti
+                const postsResult = liveSb
+                    ? await liveSb.from('company_posts').select('*').eq('place_id', place.place_id)
+                    : { data: null };
+                const postsData = postsResult.data;
                     
-                // Tarjoukset
-                const { data: offersData } = await window.aiSb
-                    .from('offers')
-                    .select('*')
-                    .eq('place_id', place.place_id);
+                // Tarjoukset/Tapahtumat – LaukaaLive-projekti
+                const offersResult = liveSb
+                    ? await liveSb.from('offers').select('*').eq('place_id', place.place_id)
+                    : { data: null };
+                const offersData = offersResult.data;
                     
                 if (contentsData) {
                     contentsData.forEach(item => {
