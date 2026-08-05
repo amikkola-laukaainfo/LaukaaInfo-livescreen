@@ -1352,9 +1352,9 @@ async function loadEncountersForPlace(place) {
                     .select('*')
                     .eq('location->>place_id', place.place_id);
                 
-                // Yrityspostaukset – LaukaaLive-projekti
+                // Feed-julkaisut (posts-taulu) – LaukaaLive-projekti
                 const postsResult = liveSb
-                    ? await liveSb.from('company_posts').select('*').eq('place_id', place.place_id)
+                    ? await liveSb.from('posts').select('*').eq('place_id', place.place_id)
                     : { data: null };
                 const postsData = postsResult.data;
                     
@@ -1386,9 +1386,21 @@ async function loadEncountersForPlace(place) {
                             type: item.type === 'event' ? 'event' : 'feed_post',
                             title: item.title,
                             description: item.description,
+                            image_url: item.image_url,
+                            website_url: item.website_url,
+                            facebook_url: item.facebook_url,
+                            instagram_url: item.instagram_url,
+                            youtube_url: item.youtube_url,
+                            video_id: item.video_id,
+                            is_shorts: item.is_shorts,
+                            is_promoted: item.is_promoted,
+                            publisher_name: item.publisher_name,
+                            contact_email: item.contact_email,
+                            contact_phone: item.contact_phone,
+                            show_contact: item.show_contact,
                             price_info: '',
-                            url: 'yrityskortti.html?id=' + item.business_id,
-                            created_at: item.created_at
+                            url: '/?item=' + item.id + '&feed=open',
+                            created_at: item.publish_at || item.created_at
                         });
                     });
                 }
