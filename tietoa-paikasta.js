@@ -187,9 +187,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         });
         
-        // Hae myös Supabasen offers-taulusta tarjoukset
+        // Hae myös Supabasen offers-taulusta tarjoukset (LaukaaLive-projekti: usswojtlvrnqtzwnffpg)
         try {
-            const { data: supabaseOffers } = await aiSb
+            const { data: supabaseOffers } = await window.LaukaaSupabase
                 .from('offers')
                 .select('*')
                 .eq('place_id', String(placeId));
