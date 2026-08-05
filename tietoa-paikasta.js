@@ -187,6 +187,34 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         });
         
+        // Hae myös Supabasen offers-taulusta tarjoukset
+        try {
+            const { data: supabaseOffers } = await aiSb
+                .from('offers')
+                .select('*')
+                .eq('place_id', String(placeId));
+                
+            if (supabaseOffers) {
+                supabaseOffers.forEach(o => {
+                    if (!allItemsMap.has(String(o.id))) {
+                        allItemsMap.set(String(o.id), {
+                            id: String(o.id),
+                            type: 'offer',
+                            name: o.name,
+                            shortDescription: o.short_description || o.description,
+                            image: o.image_url,
+                            offer: {
+                                validFrom: o.valid_from,
+                                validUntil: o.valid_until
+                            }
+                        });
+                    }
+                });
+            }
+        } catch (e) {
+            console.warn('Supabase offers haku epäonnistui:', e);
+        }
+        
         // Lisää kohteet ja tarjoukset ja ei-yritys relaatiot allItemsMapiin,
         // jotta ne näkyvät edelleen (esim. havainnot, tapahtumat)
         if (!relationsError && relationsData) {
