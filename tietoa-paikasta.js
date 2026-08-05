@@ -199,7 +199,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     if (!allItemsMap.has(String(o.id))) {
                         allItemsMap.set(String(o.id), {
                             id: String(o.id),
-                            type: 'offer',
+                            type: (o.taxonomy && o.taxonomy.includes('Tapahtuma')) ? 'event' : 'offer',
                             name: o.name,
                             shortDescription: o.short_description || o.description,
                             image: o.image_url,
@@ -1396,7 +1396,7 @@ async function loadEncountersForPlace(place) {
                     offersData.forEach(item => {
                         allItems.push({
                             id: item.id,
-                            type: 'offer',
+                            type: (item.taxonomy && item.taxonomy.includes('Tapahtuma')) ? 'event' : 'offer',
                             title: item.name,
                             description: item.description,
                             price_info: item.discount_value ? '-' + item.discount_value + '%' : '',
