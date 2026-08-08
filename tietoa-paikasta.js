@@ -1560,7 +1560,43 @@ function renderEncounters(encounters) {
         'QUESTION': '❓'
     };
     
-    // ── Yhteisöjulkaisut: renderöidään ensin omana visuaalisena lohkona ──────
+    // ── Säännölliset encounters: renderöidään ensin ───────────────────────────
+    let html = '';
+    
+    for (const [type, items] of Object.entries(grouped).filter(([t]) => !COMMUNITY_POST_TYPES.includes(t))) {
+        const label = typeLabels[type] || type;
+        const icon = typeIcons[type] || '🔔';
+        
+        html += `<div style="margin-bottom: 1.5rem; border: 1px solid #f3f4f6; border-radius: var(--inner-radius); overflow: hidden; background: var(--card-bg);">
+            <div style="padding: 1.25rem; background: #f9fafb; font-weight: 700; color: var(--dark-text); border-bottom: 1px solid #f3f4f6; display: flex; justify-content: space-between; align-items: center;">
+                <span style="display: flex; align-items: center; gap: 0.5rem;">${icon} ${label}</span>
+                <span style="background: var(--bg-color); color: var(--light-text); padding: 4px 10px; border-radius: 50px; font-size: 0.85rem;">${items.length} kpl</span>
+            </div>
+            <div style="padding: 0;">`;
+            
+        items.forEach((item, index) => {
+            const isLast = index === items.length - 1;
+            const borderBottom = isLast ? '' : 'border-bottom: 1px solid #f3f4f6;';
+            const priceHtml = item.price_info ? `<span style="font-weight: 700; color: var(--primary-hover); font-size: 0.95rem; background: #f0fdf4; padding: 0.4rem 0.8rem; border-radius: 50px;">${item.price_info}</span>` : '';
+            const linkUrl = item.url || `ilmoituskortti.html?id=${item.id}`;
+            
+            html += `<a href="${linkUrl}" style="display: block; padding: 1.25rem; text-decoration: none; color: inherit; ${borderBottom} transition: background 0.2s;" onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='transparent'">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
+                    <div>
+                        <div style="font-weight: 700; color: var(--dark-text); font-size: 1.05rem; margin-bottom: 0.4rem;">${item.title}</div>
+                        <div style="font-size: 0.95rem; color: var(--light-text); line-height: 1.5;">${(item.description || '').substring(0, 100)}${(item.description && item.description.length > 100) ? '...' : ''}</div>
+                    </div>
+                    ${priceHtml}
+                </div>
+            </a>`;
+        });
+        
+        html += `</div></div>`;
+    }
+    
+    container.innerHTML = html;
+    
+    // ── Yhteisöjulkaisut: lisätään säännöllisten encounters PÄÄLLE (alkuun) ──
     if (communityPosts.length > 0) {
         const communityGrouped = {};
         communityPosts.forEach(p => {
@@ -1598,7 +1634,7 @@ function renderEncounters(encounters) {
                 const imgHtml = item.image_url ? `<img src="${item.image_url}" alt="" style="width: 100%; max-height: 200px; object-fit: cover; border-radius: 8px; margin-top: 0.75rem;">` : '';
                 
                 communityHtml += `<div style="padding: 1.25rem; ${border}">
-                    <div style="font-weight: 700; color: ${s.headerColor}; font-size: 1rem; margin-bottom: 0.4rem; font-style: ${type === 'MEMORY' ? 'italic' : 'normal'};">"${item.title}"</div>
+                    <div style="font-weight: 700; color: ${s.headerColor}; font-size: 1rem; margin-bottom: 0.4rem; font-style: ${type === 'MEMORY' ? 'italic' : 'normal'};">${item.title}</div>
                     <div style="font-size: 0.95rem; color: #374151; line-height: 1.6; margin-bottom: 0.5rem;">${(item.description || '').substring(0, 200)}${(item.description || '').length > 200 ? '...' : ''}</div>
                     ${imgHtml}
                     <div style="margin-top: 0.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.25rem;">
@@ -1611,43 +1647,8 @@ function renderEncounters(encounters) {
             communityHtml += '</div></div>';
         }
         
-        container.innerHTML = communityHtml + container.innerHTML;
+        container.insertAdjacentHTML('afterbegin', communityHtml);
     }
-    
-    let html = '';
-    
-    for (const [type, items] of Object.entries(grouped).filter(([t]) => !COMMUNITY_POST_TYPES.includes(t))) {
-        const label = typeLabels[type] || type;
-        const icon = typeIcons[type] || '�Y"O';
-        
-        html += `<div style="margin-bottom: 1.5rem; border: 1px solid #f3f4f6; border-radius: var(--inner-radius); overflow: hidden; background: var(--card-bg);">
-            <div style="padding: 1.25rem; background: #f9fafb; font-weight: 700; color: var(--dark-text); border-bottom: 1px solid #f3f4f6; display: flex; justify-content: space-between; align-items: center;">
-                <span style="display: flex; align-items: center; gap: 0.5rem;">${icon} ${label}</span>
-                <span style="background: var(--bg-color); color: var(--light-text); padding: 4px 10px; border-radius: 50px; font-size: 0.85rem;">${items.length} kpl</span>
-            </div>
-            <div style="padding: 0;">`;
-            
-        items.forEach((item, index) => {
-            const isLast = index === items.length - 1;
-            const borderBottom = isLast ? '' : 'border-bottom: 1px solid #f3f4f6;';
-            const priceHtml = item.price_info ? `<span style="font-weight: 700; color: var(--primary-hover); font-size: 0.95rem; background: #f0fdf4; padding: 0.4rem 0.8rem; border-radius: 50px;">${item.price_info}</span>` : '';
-            const linkUrl = item.url || `ilmoituskortti.html?id=${item.id}`;
-            
-            html += `<a href="${linkUrl}" style="display: block; padding: 1.25rem; text-decoration: none; color: inherit; ${borderBottom} transition: background 0.2s;" onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='transparent'">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
-                    <div>
-                        <div style="font-weight: 700; color: var(--dark-text); font-size: 1.05rem; margin-bottom: 0.4rem;">${item.title}</div>
-                        <div style="font-size: 0.95rem; color: var(--light-text); line-height: 1.5;">${(item.description || '').substring(0, 100)}${(item.description && item.description.length > 100) ? '...' : ''}</div>
-                    </div>
-                    ${priceHtml}
-                </div>
-            </a>`;
-        });
-        
-        html += `</div></div>`;
-    }
-    
-    container.innerHTML = html;
 }
 
 // ==========================================================
