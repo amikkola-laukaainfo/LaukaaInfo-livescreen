@@ -202,25 +202,36 @@
         if (!query || query.trim().length < 2) return;
         showLoading();
         try {
+            let finalPlaces = [];
+
             // 1. Kokeillaan ensin suoraa nimihakua Supabasesta
-            const nameMatches = await searchPlacesByName(query.trim());
-            if (nameMatches && nameMatches.length > 0) {
-                renderList(nameMatches, `Hakutulokset: ${query.trim()}`);
-                return;
+            const nameMatches = await searchPlacesByName(query.trim()) || [];
+            finalPlaces = [...nameMatches];
+
+            // 2. Yritetään myös Nominatim-osoitehakua
+            const geo = await geocodeAddress(query + ' Laukaa');
+            if (geo) {
+                const geoPlaces = await fetchNearby(geo.lat, geo.lon) || [];
+                geoPlaces.forEach(gp => {
+                    const existing = finalPlaces.find(p => (p.place_id || p.id) === (gp.place_id || gp.id));
+                    if (existing) {
+                        existing.dist = gp.dist; // Päivitetään etäisyys jos löytyi jo nimellä
+                    } else {
+                        finalPlaces.push(gp); // Lisätään uutena jos tuli Nominatimista
+                    }
+                });
             }
 
-            // 2. Jos nimellä ei löytynyt, yritetään Nominatim-osoitehakua
-            const geo = await geocodeAddress(query + ' Laukaa');
-            if (!geo) {
+            if (finalPlaces.length > 0) {
+                renderList(finalPlaces.slice(0, MAX_RESULTS), `Hakutulokset: ${query.trim()}`);
+            } else {
                 showError('Osoitetta tai paikkaa ei löydetty. Tarkista kirjoitusasu.');
                 // Palauta kirjoituskenttä näkyviin
                 const form = document.getElementById('nearby-desktop-form');
                 const loading = document.getElementById('nearby-loading');
                 if (loading) loading.hidden = true;
                 if (form) form.hidden = false;
-                return;
             }
-            await handleGeoResult(geo.lat, geo.lon, query.trim());
         } catch (e) {
             console.error('hero-nearby: search error', e);
             renderFallback();
