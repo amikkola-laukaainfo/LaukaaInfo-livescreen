@@ -1,0 +1,1 @@
+const fs=require("fs");let rawData=fs.readFileSync("company_profiling_data.json","utf8");65279===rawData.charCodeAt(0)&&(rawData=rawData.slice(1));const data=JSON.parse(rawData),results=[];for(const[a,s]of Object.entries(data.profiles)){JSON.stringify(s).toLowerCase().includes("nuohous")&&results.push({id:a,name:s.name})}console.log(JSON.stringify(results,null,2));

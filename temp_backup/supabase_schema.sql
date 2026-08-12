@@ -12,7 +12,9 @@ CREATE TABLE public.company_owners (
 -- 2. Create the posts table (korvaa content.json:n)
 CREATE TABLE public.posts (
     id TEXT PRIMARY KEY,
-    business_id TEXT NOT NULL,
+    business_id TEXT, -- Mahdollistetaan myös yhteisön julkaisut (ei pakollinen)
+    author_id UUID REFERENCES auth.users(id), -- Yhteisöjulkaisujen tekijä
+    place_id TEXT, -- Paikkalinkitys (esim. kohdekortti tai reitti)
     type TEXT NOT NULL,
     title TEXT NOT NULL,
     description TEXT,
@@ -29,7 +31,9 @@ CREATE TABLE public.posts (
     publisher_name TEXT,
     contact_email TEXT,
     contact_phone TEXT,
-    show_contact BOOLEAN DEFAULT FALSE
+    show_contact BOOLEAN DEFAULT FALSE,
+    status TEXT DEFAULT 'APPROVED', -- PENDING, APPROVED, REJECTED, HIDDEN
+    tags TEXT[] DEFAULT '{}' -- Esim. 'lapsiperheet', 'liikunta'
 );
 
 -- 3. Create the offers table (korvaa lisaa-tarjous.php:n)
@@ -72,24 +76,30 @@ ALTER TABLE public.offers ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Owners can see their own mappings" ON public.company_owners
     FOR SELECT USING (auth.uid() = owner_id);
 
--- Kaikki saavat lukea kaikkia julkaisuja ja tarjouksia (Appin päänäkymät)
+-- Kaikki saavat lukea hyväksyttyjä julkaisuja (tai niitä, joilla ei ole statusta vanhastaan)
 CREATE POLICY "Public can read posts" ON public.posts
-    FOR SELECT USING (true);
+    FOR SELECT USING (status = 'APPROVED' OR status IS NULL);
 CREATE POLICY "Public can read offers" ON public.offers
     FOR SELECT USING (true);
 
--- Vain omistajat voivat luoda, muokata ja poistaa OMIA julkaisujaan
-CREATE POLICY "Owners can insert posts" ON public.posts
+-- Vain omistajat voivat luoda OMIA julkaisujaan, TAI tavalliset käyttäjät omia yhteisöjulkaisujaan
+CREATE POLICY "Owners and authors can insert posts" ON public.posts
     FOR INSERT WITH CHECK (
-        EXISTS (SELECT 1 FROM public.company_owners WHERE owner_id = auth.uid() AND business_id = public.posts.business_id)
+        (business_id IS NOT NULL AND EXISTS (SELECT 1 FROM public.company_owners WHERE owner_id = auth.uid() AND business_id = public.posts.business_id))
+        OR 
+        (author_id = auth.uid())
     );
-CREATE POLICY "Owners can update posts" ON public.posts
+CREATE POLICY "Owners and authors can update posts" ON public.posts
     FOR UPDATE USING (
-        EXISTS (SELECT 1 FROM public.company_owners WHERE owner_id = auth.uid() AND business_id = public.posts.business_id)
+        (business_id IS NOT NULL AND EXISTS (SELECT 1 FROM public.company_owners WHERE owner_id = auth.uid() AND business_id = public.posts.business_id))
+        OR 
+        (author_id = auth.uid())
     );
-CREATE POLICY "Owners can delete posts" ON public.posts
+CREATE POLICY "Owners and authors can delete posts" ON public.posts
     FOR DELETE USING (
-        EXISTS (SELECT 1 FROM public.company_owners WHERE owner_id = auth.uid() AND business_id = public.posts.business_id)
+        (business_id IS NOT NULL AND EXISTS (SELECT 1 FROM public.company_owners WHERE owner_id = auth.uid() AND business_id = public.posts.business_id))
+        OR 
+        (author_id = auth.uid())
     );
 
 -- Vain omistajat voivat luoda, muokata ja poistaa OMIA tarjouksiaan

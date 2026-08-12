@@ -1353,8 +1353,11 @@ async function loadEncountersForPlace(place) {
                     .eq('location->>place_id', place.place_id);
                 
                 // Feed-julkaisut (posts-taulu) – LaukaaLive-projekti
+                // Haetaan vain APPROVED-tilaiset tai ilman statusta (vanhat) – PENDING suodatetaan pois
                 const postsResult = liveSb
-                    ? await liveSb.from('posts').select('*').eq('place_id', place.place_id)
+                    ? await liveSb.from('posts').select('*')
+                        .eq('place_id', place.place_id)
+                        .or('status.eq.APPROVED,status.is.null')
                     : { data: null };
                 const postsData = postsResult.data;
                     
@@ -1363,6 +1366,9 @@ async function loadEncountersForPlace(place) {
                     ? await liveSb.from('offers').select('*').eq('place_id', place.place_id)
                     : { data: null };
                 const offersData = offersResult.data;
+                    
+                // Yhteisöjulkaisutyypit – käsitellään erikseen omaksi lohkokseen
+                const COMMUNITY_TYPES = ['MEMORY', 'TIP', 'PHOTO', 'OBSERVATION', 'QUESTION'];
                     
                 if (contentsData) {
                     contentsData.forEach(item => {
@@ -1381,9 +1387,14 @@ async function loadEncountersForPlace(place) {
                 
                 if (postsData) {
                     postsData.forEach(item => {
+                        // Tarkistetaan onko kyseessä yhteisöjulkaisu vai yrityksen julkaisu
+                        const postTypeUpper = (item.type || '').toUpperCase();
+                        const isCommunityPost = COMMUNITY_TYPES.includes(postTypeUpper);
+                        
                         allItems.push({
                             id: item.id,
-                            type: item.type === 'event' ? 'event' : 'feed_post',
+                            // Yhteisöjulkaisut saavat oman tyyppinsä, yritysposts pysyvät 'feed_post':na
+                            type: isCommunityPost ? postTypeUpper : (item.type === 'event' ? 'event' : 'feed_post'),
                             title: item.title,
                             description: item.description,
                             image_url: item.image_url,
@@ -1398,8 +1409,9 @@ async function loadEncountersForPlace(place) {
                             contact_email: item.contact_email,
                             contact_phone: item.contact_phone,
                             show_contact: item.show_contact,
+                            tags: item.tags || [],
                             price_info: '',
-                            url: '/?item=' + item.id + '&feed=open',
+                            url: isCommunityPost ? null : ('/?item=' + item.id + '&feed=open'),
                             created_at: item.publish_at || item.created_at
                         });
                     });
@@ -1494,6 +1506,13 @@ function renderEncounters(encounters) {
         grouped[t].push(e);
     });
     
+    // Yhteisöjulkaisutyypit – renderöidään erillisessä lohkossa
+    const COMMUNITY_POST_TYPES = ['MEMORY', 'TIP', 'PHOTO', 'OBSERVATION', 'QUESTION'];
+    
+    // Yhteisöjulkaisut erotellaan muista ennen renderöintiä
+    const communityPosts = validEncounters.filter(e => COMMUNITY_POST_TYPES.includes(e.type));
+    const regularEncounters = validEncounters.filter(e => !COMMUNITY_POST_TYPES.includes(e.type));
+    
     // Mappaus nimille
     const typeLabels = {
         'service_request': 'Palvelutarpeet',
@@ -1514,7 +1533,13 @@ function renderEncounters(encounters) {
         'offer': 'Tarjoukset',
         'feed_post': 'Yritysten ilmoitukset',
         'content_other': 'Muu sisältö',
-        'other': 'Muut ilmoitukset'
+        'other': 'Muut ilmoitukset',
+        // Yhteisöjulkaisut
+        'MEMORY': 'Muistot',
+        'TIP': 'Vinkit',
+        'PHOTO': 'Kuvat',
+        'OBSERVATION': 'Havainnot',
+        'QUESTION': 'Kysymykset'
     };
     
     const typeIcons = {
@@ -1526,14 +1551,21 @@ function renderEncounters(encounters) {
         'event': '📅',
         'offer': '🏷️',
         'feed_post': '📰',
-        'content_other': '📄'
+        'content_other': '📄',
+        // Yhteisöjulkaisut
+        'MEMORY': '📖',
+        'TIP': '💡',
+        'PHOTO': '📷',
+        'OBSERVATION': '📍',
+        'QUESTION': '❓'
     };
     
+    // ── Säännölliset encounters: renderöidään ensin ───────────────────────────
     let html = '';
     
-    for (const [type, items] of Object.entries(grouped)) {
+    for (const [type, items] of Object.entries(grouped).filter(([t]) => !COMMUNITY_POST_TYPES.includes(t))) {
         const label = typeLabels[type] || type;
-        const icon = typeIcons[type] || '�Y"O';
+        const icon = typeIcons[type] || '🔔';
         
         html += `<div style="margin-bottom: 1.5rem; border: 1px solid #f3f4f6; border-radius: var(--inner-radius); overflow: hidden; background: var(--card-bg);">
             <div style="padding: 1.25rem; background: #f9fafb; font-weight: 700; color: var(--dark-text); border-bottom: 1px solid #f3f4f6; display: flex; justify-content: space-between; align-items: center;">
@@ -1563,6 +1595,60 @@ function renderEncounters(encounters) {
     }
     
     container.innerHTML = html;
+    
+    // ── Yhteisöjulkaisut: lisätään säännöllisten encounters PÄÄLLE (alkuun) ──
+    if (communityPosts.length > 0) {
+        const communityGrouped = {};
+        communityPosts.forEach(p => {
+            if (!communityGrouped[p.type]) communityGrouped[p.type] = [];
+            communityGrouped[p.type].push(p);
+        });
+        
+        let communityHtml = '';
+        for (const [type, items] of Object.entries(communityGrouped)) {
+            const label = typeLabels[type] || type;
+            const icon = typeIcons[type] || '✏️';
+            
+            // Tyyppikohtaiset visuaaliset tyylit
+            const styleMap = {
+                'MEMORY':      { border: '#a78bfa', bg: '#f5f3ff', headerBg: '#ede9fe', headerColor: '#5b21b6' },
+                'TIP':         { border: '#34d399', bg: '#f0fdf9', headerBg: '#d1fae5', headerColor: '#065f46' },
+                'PHOTO':       { border: '#60a5fa', bg: '#eff6ff', headerBg: '#dbeafe', headerColor: '#1e40af' },
+                'OBSERVATION': { border: '#fb923c', bg: '#fff7ed', headerBg: '#fed7aa', headerColor: '#9a3412' },
+                'QUESTION':    { border: '#f472b6', bg: '#fdf2f8', headerBg: '#fce7f3', headerColor: '#9d174d' }
+            };
+            const s = styleMap[type] || { border: '#94a3b8', bg: '#f8fafc', headerBg: '#f1f5f9', headerColor: '#334155' };
+            
+            communityHtml += `<div style="margin-bottom: 1.5rem; border: 1px solid ${s.border}; border-radius: var(--inner-radius); overflow: hidden; background: ${s.bg};">
+                <div style="padding: 1.25rem; background: ${s.headerBg}; font-weight: 700; color: ${s.headerColor}; border-bottom: 1px solid ${s.border}; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="display: flex; align-items: center; gap: 0.5rem;">${icon} ${label}</span>
+                    <span style="background: white; color: ${s.headerColor}; padding: 4px 10px; border-radius: 50px; font-size: 0.85rem;">${items.length} kpl</span>
+                </div>
+                <div>`;
+            
+            items.forEach((item, idx) => {
+                const isLast = idx === items.length - 1;
+                const border = isLast ? '' : `border-bottom: 1px solid ${s.border};`;
+                const dateStr = item.created_at ? new Date(item.created_at).toLocaleDateString('fi-FI', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+                const authorHtml = item.publisher_name ? `<span style="font-size: 0.8rem; color: ${s.headerColor}; font-weight: 600;">— ${item.publisher_name}</span>` : '';
+                const imgHtml = item.image_url ? `<img src="${item.image_url}" alt="" style="width: 100%; max-height: 200px; object-fit: cover; border-radius: 8px; margin-top: 0.75rem;">` : '';
+                
+                communityHtml += `<div style="padding: 1.25rem; ${border}">
+                    <div style="font-weight: 700; color: ${s.headerColor}; font-size: 1rem; margin-bottom: 0.4rem; font-style: ${type === 'MEMORY' ? 'italic' : 'normal'};">${item.title}</div>
+                    <div style="font-size: 0.95rem; color: #374151; line-height: 1.6; margin-bottom: 0.5rem;">${(item.description || '').substring(0, 200)}${(item.description || '').length > 200 ? '...' : ''}</div>
+                    ${imgHtml}
+                    <div style="margin-top: 0.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.25rem;">
+                        ${authorHtml}
+                        ${dateStr ? `<span style="font-size: 0.8rem; color: #94a3b8;">${dateStr}</span>` : ''}
+                    </div>
+                </div>`;
+            });
+            
+            communityHtml += '</div></div>';
+        }
+        
+        container.insertAdjacentHTML('afterbegin', communityHtml);
+    }
 }
 
 // ==========================================================

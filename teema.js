@@ -369,14 +369,19 @@ document.addEventListener('DOMContentLoaded', async () => {
                                     .from('posts')
                                     .select('*')
                                     .in('id', feedPostIds)
+                                    .or('status.eq.APPROVED,status.is.null')
                                     .order('created_at', { ascending: false });
                                 if (!feedError && feedData) {
                                     feedData.forEach(post => {
+                                        // Määritetään tyyppi: yhteisöjulkaisut vs. yrityksen feedjulkaisut
+                                        const COMMUNITY_TYPES = ['MEMORY', 'TIP', 'PHOTO', 'OBSERVATION', 'QUESTION'];
+                                        const postTypeUpper = (post.type || '').toUpperCase();
+                                        const isCommunity = COMMUNITY_TYPES.includes(postTypeUpper);
                                         sbAjankohtainen.push({
                                             id: post.id,
-                                            type: 'feed_post',
-                                            category: 'Julkaisu',
-                                            description: post.content || post.title || '',
+                                            type: isCommunity ? postTypeUpper : 'feed_post',
+                                            category: isCommunity ? (post.type || 'Julkaisu') : 'Feed-julkaisu',
+                                            description: post.description || post.title || '',
                                             location_name: post.location_name || '',
                                             photo_url: post.image_url || null,
                                             created_at: post.created_at,
@@ -537,7 +542,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                     let linkUrl = null;
                     let badgeColor = '#10b981';
                     let badgeLabel = enc.category || 'Julkaisu';
-                    if (enc.type === 'feed_post') {
+                    // Yhteisöjulkaisutyypit – visuaaliset tyylit
+                    const communityStyles = {
+                        'MEMORY':      { color: '#7c3aed', label: '📖 Muisto' },
+                        'TIP':         { color: '#059669', label: '💡 Vinkki' },
+                        'PHOTO':       { color: '#2563eb', label: '📷 Kuva' },
+                        'OBSERVATION': { color: '#ea580c', label: '📍 Havainto' },
+                        'QUESTION':    { color: '#db2777', label: '❓ Kysymys' }
+                    };
+                    if (communityStyles[enc.type]) {
+                        badgeColor = communityStyles[enc.type].color;
+                        badgeLabel = communityStyles[enc.type].label;
+                    } else if (enc.type === 'feed_post') {
                         linkUrl = `index.html?item=${enc.id}&feed=open`;
                         badgeColor = '#3b82f6';
                         badgeLabel = 'Feed-julkaisu';
