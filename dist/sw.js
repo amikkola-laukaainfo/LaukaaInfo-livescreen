@@ -1,19 +1,10 @@
-<<<<<<< HEAD
-const VERSION = '74276947'; // Päivitetty reittidatan latauksen korjausta varten
-=======
-const VERSION = '83dbc54b'; // Päivitetty reittidatan latauksen korjausta varten
->>>>>>> 1612f4532dd310aeef4a0c25872b844c663f9ca6
+const VERSION = '7f9685b3'; // Päivitetty reittidatan latauksen korjausta varten
 const CACHE_NAME = `laukaainfo-${VERSION}`;
 const ASSETS = [
     './',
     './index.html',
-<<<<<<< HEAD
-    './style.f3fdb606.74276947.css',
-    './script.f3fdb606.74276947.js',
-=======
-    './style.f3fdb606.83dbc54b.css',
-    './script.f3fdb606.83dbc54b.js',
->>>>>>> 1612f4532dd310aeef4a0c25872b844c663f9ca6
+    './style.f3fdb606.7f9685b3.css',
+    './script.f3fdb606.7f9685b3.js',
     './manifest.json',
     './icons/icon-192.png',
     './icons/icon-512.png',

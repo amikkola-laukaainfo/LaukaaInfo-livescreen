@@ -172,14 +172,47 @@
         );
     }
 
-    // Desktop: osoitekenttä → Nominatim → paikat
+    // ─── Supabase Nimihaku ───────────────────────────────────────────────────────
+    async function searchPlacesByName(query) {
+        if (!window.supabase) return null;
+        const sbClient = window.supabase.createClient(SB_URL, SB_KEY);
+        const { data, error } = await sbClient
+            .from('places')
+            .select('place_id, name, canonical_name, type, lat, lon')
+            .not('lat', 'is', null)
+            .not('lon', 'is', null)
+            .limit(1000);
+            
+        if (error || !data || data.length === 0) return null;
+        
+        // Puhdistetaan hakusana (poistetaan välilyönnit ja erikoismerkit)
+        const normQuery = query.toLowerCase().replace(/[\s\-_,.]/g, '');
+        
+        const matches = data.filter(p => {
+            const normName = (p.name || '').toLowerCase().replace(/[\s\-_,.]/g, '');
+            const normCanonical = (p.canonical_name || '').toLowerCase().replace(/[\s\-_,.]/g, '');
+            return normName.includes(normQuery) || normCanonical.includes(normQuery);
+        });
+        
+        return matches.length > 0 ? matches.slice(0, MAX_RESULTS) : null;
+    }
+
+    // Desktop: osoitekenttä → Nimihaku Supabasesta -> Nominatim → paikat
     async function startAddressSearch(query) {
         if (!query || query.trim().length < 2) return;
         showLoading();
         try {
+            // 1. Kokeillaan ensin suoraa nimihakua Supabasesta
+            const nameMatches = await searchPlacesByName(query.trim());
+            if (nameMatches && nameMatches.length > 0) {
+                renderList(nameMatches, `Hakutulokset: ${query.trim()}`);
+                return;
+            }
+
+            // 2. Jos nimellä ei löytynyt, yritetään Nominatim-osoitehakua
             const geo = await geocodeAddress(query + ' Laukaa');
             if (!geo) {
-                showError('Osoitetta ei löydetty. Tarkista kirjoitusasu.');
+                showError('Osoitetta tai paikkaa ei löydetty. Tarkista kirjoitusasu.');
                 // Palauta kirjoituskenttä näkyviin
                 const form = document.getElementById('nearby-desktop-form');
                 const loading = document.getElementById('nearby-loading');
@@ -189,7 +222,7 @@
             }
             await handleGeoResult(geo.lat, geo.lon, query.trim());
         } catch (e) {
-            console.error('hero-nearby: geocode error', e);
+            console.error('hero-nearby: search error', e);
             renderFallback();
         }
     }
