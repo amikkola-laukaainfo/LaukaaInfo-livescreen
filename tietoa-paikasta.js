@@ -878,7 +878,10 @@ function openSubplaceModal(placeId, name, description, lat, lon, typeLabel, icon
     document.getElementById('subplace-modal-desc').textContent = description || 'Tarkempi kuvaus ladataan...';
 
     const fullPageBtn = document.getElementById('subplace-modal-fullpage');
-    fullPageBtn.href = `tietoa-paikasta.html?id=${encodeURIComponent(placeId)}`;
+    if (fullPageBtn) {
+        fullPageBtn.style.display = 'inline-flex';
+        fullPageBtn.href = `tietoa-paikasta.html?id=${encodeURIComponent(placeId)}`;
+    }
 
     const mapBtn = document.getElementById('subplace-modal-map');
     if (lat && lon) {
@@ -917,6 +920,27 @@ document.addEventListener('click', (e) => {
     const modal = document.getElementById('subplace-modal');
     if (modal && e.target === modal) closeSubplaceModal();
 });
+
+// ── HAVAINTO MODAL ──────────────────────────────────────────────────────────
+function openObservationModal(name, description) {
+    const modal = document.getElementById('subplace-modal');
+    if (!modal) return;
+
+    document.getElementById('subplace-modal-title').textContent = decodeURIComponent(name);
+    document.getElementById('subplace-modal-type').textContent = 'HAVAINTO';
+    document.getElementById('subplace-modal-desc').textContent = decodeURIComponent(description) || 'Ei tarkempaa kuvausta.';
+
+    const fullPageBtn = document.getElementById('subplace-modal-fullpage');
+    if (fullPageBtn) fullPageBtn.style.display = 'none';
+
+    const mapBtn = document.getElementById('subplace-modal-map');
+    if (mapBtn) mapBtn.style.display = 'none';
+
+    modal.style.display = 'flex';
+    requestAnimationFrame(() => {
+        modal.querySelector('.subplace-modal-content').style.transform = 'translateY(0)';
+    });
+}
 
 const TYPE_LABELS = {
     'business': 'Yritys',
@@ -1218,6 +1242,9 @@ function renderRelations(items, allSources = [], allContents = []) {
         const highlightStyle = ' background: #f0f9ff; border-color: #bae6fd;';
 
         if (!hasExtraContent) {
+            if (item.type === 'observation') {
+                return `<div onclick="openObservationModal('${encodeURIComponent(displayName)}', '${encodeURIComponent(item.shortDescription || '')}')" class="list-item-card" style="cursor:pointer; display: block;${highlightStyle}">${headerHtml}</div>`;
+            }
             return `<a href="${linkUrl}" class="list-item-card" style="text-decoration:none; display: block;${highlightStyle}">${headerHtml}</a>`;
         }
 
@@ -1264,7 +1291,12 @@ function renderRelations(items, allSources = [], allContents = []) {
             }).join('');
         }
 
-        extraHtml += `<div style="margin-top: 15px;"><a href="${linkUrl}" style="display:inline-block; padding:8px 16px; background:var(--accent); color:white; border-radius:50px; text-decoration:none; font-weight:bold; font-size:0.9rem;">Siirry yrityskortille &rarr;</a></div>`;
+        if (item.type === 'observation') {
+            extraHtml += `<div style="margin-top: 15px;"><button onclick="openObservationModal('${encodeURIComponent(displayName)}', '${encodeURIComponent(item.shortDescription || '')}')" style="display:inline-block; padding:8px 16px; background:var(--accent); color:white; border-radius:50px; border:none; cursor:pointer; font-weight:bold; font-size:0.9rem;">Näytä tiedot &rarr;</button></div>`;
+        } else {
+            const btnText = (item.id.startsWith('yritys_') || item.type === 'business') ? 'Siirry yrityskortille' : 'Siirry kohdekortille';
+            extraHtml += `<div style="margin-top: 15px;"><a href="${linkUrl}" style="display:inline-block; padding:8px 16px; background:var(--accent); color:white; border-radius:50px; text-decoration:none; font-weight:bold; font-size:0.9rem;">${btnText} &rarr;</a></div>`;
+        }
 
         return `
         <details class="service-accordion list-item-card" style="padding:0; cursor:pointer; display:block; margin-bottom: 0;${highlightStyle}">
