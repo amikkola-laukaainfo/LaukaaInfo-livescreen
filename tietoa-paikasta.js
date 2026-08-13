@@ -1411,7 +1411,7 @@ async function loadEncountersForPlace(place) {
                             show_contact: item.show_contact,
                             tags: item.tags || [],
                             price_info: '',
-                            url: isCommunityPost ? null : ('/?item=' + item.id + '&feed=open'),
+                            url: isCommunityPost ? ('ilmoituskortti.html?id=' + item.id) : ('/?item=' + item.id + '&feed=open'),
                             created_at: item.publish_at || item.created_at
                         });
                     });
@@ -1633,7 +1633,7 @@ function renderEncounters(encounters) {
                 const authorHtml = item.publisher_name ? `<span style="font-size: 0.8rem; color: ${s.headerColor}; font-weight: 600;">— ${item.publisher_name}</span>` : '';
                 const imgHtml = item.image_url ? `<img src="${item.image_url}" alt="" style="width: 100%; max-height: 200px; object-fit: cover; border-radius: 8px; margin-top: 0.75rem;">` : '';
                 
-                communityHtml += `<div style="padding: 1.25rem; ${border}">
+                communityHtml += `<a href="${item.url}" style="display: block; padding: 1.25rem; text-decoration: none; color: inherit; ${border} transition: background 0.2s;" onmouseover="this.style.background='rgba(0,0,0,0.02)'" onmouseout="this.style.background='transparent'">
                     <div style="font-weight: 700; color: ${s.headerColor}; font-size: 1rem; margin-bottom: 0.4rem; font-style: ${type === 'MEMORY' ? 'italic' : 'normal'};">${item.title}</div>
                     <div style="font-size: 0.95rem; color: #374151; line-height: 1.6; margin-bottom: 0.5rem;">${(item.description || '').substring(0, 200)}${(item.description || '').length > 200 ? '...' : ''}</div>
                     ${imgHtml}
@@ -1641,7 +1641,7 @@ function renderEncounters(encounters) {
                         ${authorHtml}
                         ${dateStr ? `<span style="font-size: 0.8rem; color: #94a3b8;">${dateStr}</span>` : ''}
                     </div>
-                </div>`;
+                </a>`;
             });
             
             communityHtml += '</div></div>';
