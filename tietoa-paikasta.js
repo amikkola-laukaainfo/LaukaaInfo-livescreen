@@ -563,10 +563,22 @@ async function renderPlace(place, relatedItems, aiProfileData, allSources = [], 
     const others = relatedItems.filter(i => i.type !== 'business' && i.type !== 'association' && i.type !== 'service');
     
     const statCompanies = document.getElementById('stat-companies');
-    if (statCompanies) statCompanies.textContent = companies.length;
+    const statCompaniesLabel = document.getElementById('stat-companies-label');
+    if (statCompanies) {
+        statCompanies.textContent = companies.length;
+        if (statCompaniesLabel) {
+            statCompaniesLabel.textContent = companies.length === 1 ? 'yritys' : 'yritystä';
+        }
+    }
     
     const statObservations = document.getElementById('stat-observations');
-    if (statObservations) statObservations.textContent = others.length;
+    const statObservationsLabel = document.getElementById('stat-observations-label');
+    if (statObservations) {
+        statObservations.textContent = others.length;
+        if (statObservationsLabel) {
+            statObservationsLabel.textContent = others.length === 1 ? 'ilmoitus' : 'ilmoitusta';
+        }
+    }
 
     // Teemat / Liittyy teemoihin
     const themesSection = document.getElementById('themes-section');
@@ -1585,10 +1597,22 @@ function renderEncounters(encounters) {
     const activeAlerts = validEncounters.filter(e => e.type !== 'offer');
     
     const statEncounters = document.getElementById('stat-encounters');
-    if (statEncounters) statEncounters.textContent = activeAlerts.length;
+    const statEncountersLabel = document.getElementById('stat-encounters-label');
+    if (statEncounters) {
+        statEncounters.textContent = activeAlerts.length;
+        if (statEncountersLabel) {
+            statEncountersLabel.textContent = activeAlerts.length === 1 ? 'aktiivinen ilmoitus' : 'aktiivista ilmoitusta';
+        }
+    }
     
     const statOffers = document.getElementById('stat-offers');
-    if (statOffers) statOffers.textContent = offers.length;
+    const statOffersLabel = document.getElementById('stat-offers-label');
+    if (statOffers) {
+        statOffers.textContent = offers.length;
+        if (statOffersLabel) {
+            statOffersLabel.textContent = offers.length === 1 ? 'tarjous' : 'tarjousta';
+        }
+    }
     
     // Tarkistetaan aktiivisuus viikon sisällä
     const statusEl = document.getElementById('place-activity-status');

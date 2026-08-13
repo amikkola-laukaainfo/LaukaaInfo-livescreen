@@ -100,7 +100,7 @@
 
             const nameSpan = document.createElement('span');
             nameSpan.className = 'nearby-place-name';
-            nameSpan.textContent = p.canonical_name || p.name;
+            nameSpan.textContent = p.name || p.canonical_name;
 
             a.appendChild(nameSpan);
 
