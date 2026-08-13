@@ -1411,7 +1411,9 @@ async function loadEncountersForPlace(place) {
                             show_contact: item.show_contact,
                             tags: item.tags || [],
                             price_info: '',
-                            url: isCommunityPost ? ('ilmoituskortti.html?id=' + item.id) : ('/?item=' + item.id + '&feed=open'),
+                            // posts-taulun julkaisut (myös yhteisöjulkaisut kuten OBSERVATION, MEMORY jne.)
+                            // ohjataan feed-näkymään – ilmoituskortti.html on vain encounters-taulun ilmoituksille
+                            url: '/?item=' + item.id + '&feed=open',
                             created_at: item.publish_at || item.created_at
                         });
                     });
