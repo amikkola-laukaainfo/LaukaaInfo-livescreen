@@ -922,13 +922,37 @@ document.addEventListener('click', (e) => {
 });
 
 // ── HAVAINTO MODAL ──────────────────────────────────────────────────────────
-function openObservationModal(name, description) {
+async function getFirebaseDbForObs() {
+    if (!window.firebase) {
+        try {
+            await Promise.all([
+                loadScript('https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js'),
+                loadScript('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js')
+            ]);
+        } catch (e) {
+            console.warn('Firebase lataus epäonnistui:', e);
+        }
+    }
+    if (window.firebase && !window._lfApp) {
+        window._lfApp = firebase.initializeApp({
+            apiKey: 'AIzaSyA6l0FosuiXh9KxFfD5Q92BCP1EWbH8LN4',
+            authDomain: 'lostnfound-f0d25.firebaseapp.com',
+            projectId: 'lostnfound-f0d25',
+        }, 'lostnfound');
+    }
+    return window.firebase ? firebase.firestore(window._lfApp) : null;
+}
+
+async function openObservationModal(id, name, description) {
     const modal = document.getElementById('subplace-modal');
     if (!modal) return;
 
-    document.getElementById('subplace-modal-title').textContent = decodeURIComponent(name);
+    const decodedName = name ? decodeURIComponent(name) : 'Havainto';
+    const decodedDesc = description ? decodeURIComponent(description) : '';
+
+    document.getElementById('subplace-modal-title').textContent = decodedName;
     document.getElementById('subplace-modal-type').textContent = 'HAVAINTO';
-    document.getElementById('subplace-modal-desc').textContent = decodeURIComponent(description) || 'Ei tarkempaa kuvausta.';
+    document.getElementById('subplace-modal-desc').textContent = decodedDesc || 'Haetaan havainnon tietoja...';
 
     const fullPageBtn = document.getElementById('subplace-modal-fullpage');
     if (fullPageBtn) fullPageBtn.style.display = 'none';
@@ -940,6 +964,73 @@ function openObservationModal(name, description) {
     requestAnimationFrame(() => {
         modal.querySelector('.subplace-modal-content').style.transform = 'translateY(0)';
     });
+
+    if (!id) return;
+
+    try {
+        const db = await getFirebaseDbForObs();
+        let foundData = null;
+
+        if (db) {
+            // 1. Kokeillaan Firebase observations -kokoelmasta
+            try {
+                const obsDoc = await db.collection('observations').doc(id).get();
+                if (obsDoc && obsDoc.exists) {
+                    foundData = obsDoc.data();
+                }
+            } catch(e) {}
+
+            if (!foundData) {
+                // 2. Kokeillaan Firebase lostItems -kokoelmasta
+                try {
+                    const lostDoc = await db.collection('lostItems').doc(id).get();
+                    if (lostDoc && lostDoc.exists) {
+                        foundData = lostDoc.data();
+                    }
+                } catch(e) {}
+            }
+        }
+
+        if (foundData) {
+            const title = foundData.title || foundData.name || decodedName;
+            const categoryStr = foundData.category ? `[${foundData.category}] ` : '';
+            const desc = foundData.description || foundData.area || foundData.address || '';
+            const dateStr = foundData.createdAt?.toDate ? foundData.createdAt.toDate().toLocaleDateString('fi-FI') : (foundData.timestamp?.toDate ? foundData.timestamp.toDate().toLocaleDateString('fi-FI') : '');
+
+            document.getElementById('subplace-modal-title').textContent = title;
+            
+            let contentHtml = '';
+            if (categoryStr || dateStr) {
+                contentHtml += `<div style="font-size:0.85rem; font-weight:600; color:#059669; margin-bottom:0.5rem;">${categoryStr}${dateStr ? ' • ' + dateStr : ''}</div>`;
+            }
+            contentHtml += `<div style="color:var(--text-main); line-height:1.5;">${desc || 'Ei tarkempaa kuvausta.'}</div>`;
+            
+            const imgs = foundData.imageUrls || (foundData.imageUrl1 ? [foundData.imageUrl1, foundData.imageUrl2].filter(Boolean) : []);
+            if (imgs && imgs.length > 0) {
+                contentHtml += `<div style="display:flex; gap:0.5rem; margin-top:0.75rem; overflow-x:auto;">${imgs.map(u => `<img src="${u}" style="max-height:160px; border-radius:8px; object-fit:cover;" />`).join('')}</div>`;
+            }
+
+            document.getElementById('subplace-modal-desc').innerHTML = contentHtml;
+            return;
+        }
+
+        if (window.aiSb) {
+            const { data: postData } = await aiSb.from('posts').select('*').eq('id', id).maybeSingle();
+            if (postData) {
+                document.getElementById('subplace-modal-title').textContent = postData.title || decodedName;
+                document.getElementById('subplace-modal-desc').textContent = postData.description || postData.content || decodedDesc || 'Ei tarkempaa kuvausta.';
+                return;
+            }
+            const { data: encData } = await aiSb.from('encounters').select('*').eq('id', id).maybeSingle();
+            if (encData) {
+                document.getElementById('subplace-modal-title').textContent = encData.title || decodedName;
+                document.getElementById('subplace-modal-desc').textContent = encData.description || decodedDesc || 'Ei tarkempaa kuvausta.';
+                return;
+            }
+        }
+    } catch (err) {
+        console.warn('Virhe havainnon hakemisessa:', err);
+    }
 }
 
 const TYPE_LABELS = {
@@ -1243,7 +1334,7 @@ function renderRelations(items, allSources = [], allContents = []) {
 
         if (!hasExtraContent) {
             if (item.type === 'observation') {
-                return `<div onclick="openObservationModal('${encodeURIComponent(displayName)}', '${encodeURIComponent(item.shortDescription || '')}')" class="list-item-card" style="cursor:pointer; display: block;${highlightStyle}">${headerHtml}</div>`;
+                return `<div onclick="openObservationModal('${item.id}', '${encodeURIComponent(displayName)}', '${encodeURIComponent(item.shortDescription || '')}')" class="list-item-card" style="cursor:pointer; display: block;${highlightStyle}">${headerHtml}</div>`;
             }
             return `<a href="${linkUrl}" class="list-item-card" style="text-decoration:none; display: block;${highlightStyle}">${headerHtml}</a>`;
         }
@@ -1292,7 +1383,7 @@ function renderRelations(items, allSources = [], allContents = []) {
         }
 
         if (item.type === 'observation') {
-            extraHtml += `<div style="margin-top: 15px;"><button onclick="openObservationModal('${encodeURIComponent(displayName)}', '${encodeURIComponent(item.shortDescription || '')}')" style="display:inline-block; padding:8px 16px; background:var(--accent); color:white; border-radius:50px; border:none; cursor:pointer; font-weight:bold; font-size:0.9rem;">Näytä tiedot &rarr;</button></div>`;
+            extraHtml += `<div style="margin-top: 15px;"><button onclick="openObservationModal('${item.id}', '${encodeURIComponent(displayName)}', '${encodeURIComponent(item.shortDescription || '')}')" style="display:inline-block; padding:8px 16px; background:var(--accent); color:white; border-radius:50px; border:none; cursor:pointer; font-weight:bold; font-size:0.9rem;">Näytä tiedot &rarr;</button></div>`;
         } else {
             const btnText = (item.id.startsWith('yritys_') || item.type === 'business') ? 'Siirry yrityskortille' : 'Siirry kohdekortille';
             extraHtml += `<div style="margin-top: 15px;"><a href="${linkUrl}" style="display:inline-block; padding:8px 16px; background:var(--accent); color:white; border-radius:50px; text-decoration:none; font-weight:bold; font-size:0.9rem;">${btnText} &rarr;</a></div>`;
