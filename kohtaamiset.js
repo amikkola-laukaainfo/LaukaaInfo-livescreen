@@ -389,8 +389,8 @@ function renderFeed() {
                 <div class="km-empty-icon">🔍</div>
                 <h3>Ei ilmoituksia</h3>
                 <p>Valituilla suodattimilla ei löydy ilmoituksia juuri nyt.</p>
-                <a href="jata-ilmoitus.html" class="km-btn-primary" style="display:inline-flex; margin-top:1rem;">
-                    + Jätä ensimmäinen ilmoitus
+                <a href="https://play.google.com/store/apps/details?id=org.example.LaukaaLive&hl=fi" target="_blank" rel="noopener" class="km-btn-primary" style="display:inline-flex; margin-top:1rem; gap:0.5rem;">
+                    📱 Jätä ilmoitus LaukaaLive-sovelluksessa
                 </a>
             </div>`;
         return;

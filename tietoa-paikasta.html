@@ -80,8 +80,59 @@
             width: 100%;
             padding: 0 2rem;
             display: flex;
+            flex-direction: row;
+            align-items: flex-end;
+            gap: 2rem;
+        }
+
+        /* Vasen sarake: nimi, meta, napit */
+        .hero-left {
+            flex: 1;
+            display: flex;
             flex-direction: column;
             gap: 1rem;
+            min-width: 0;
+        }
+
+        /* Paikan kuvakortti oikealla */
+        #place-photo-card {
+            display: none; /* piilotettu kunnes kuva saadaan */
+            flex-shrink: 0;
+            width: 180px;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+            border: 2px solid rgba(255,255,255,0.6);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        #place-photo-card:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 14px 40px rgba(0,0,0,0.22);
+        }
+        #place-photo-card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            display: block;
+        }
+        #place-photo-card .photo-card-label {
+            padding: 0.55rem 0.75rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            background: rgba(248,250,252,0.95);
+        }
+
+        @media (max-width: 640px) {
+            #place-photo-card { display: none !important; }
         }
 
         .badge {
@@ -788,41 +839,53 @@
         <section class="hero-section">
             <div class="hero-overlay"></div>
             <div class="hero-content">
-                <!-- Hierarkia-navigaatio (näytetään vain alakohteille) -->
-                <div id="parent-navigation" style="display: none;"></div>
+                <!-- Vasen sarake: otsikko, meta, napit -->
+                <div class="hero-left">
+                    <!-- Hierarkia-navigaatio (näytetään vain alakohteille) -->
+                    <div id="parent-navigation" style="display: none;"></div>
 
-                <span id="place-type" class="badge">Ladataan...</span>
-                <h1 id="place-name" class="hero-title">Ladataan...</h1>
-                
-                <div class="hero-meta">
-                    <span style="display: flex; align-items: center; gap: 0.4rem;">
-                        <span class="iconify" data-icon="material-symbols:location-on"></span>
-                        <span id="place-municipality">Laukaa</span>
-                    </span>
-                    <span id="activity-dot" style="display: none;">&bull;</span>
-                    <span id="place-activity-status" style="display: none; align-items: center; gap: 0.4rem;">
-                        <span class="iconify" data-icon="material-symbols:history-toggle-off" style="color: #10b981;"></span>
-                        <span id="place-activity-text">Päivitetty äskettäin</span>
-                    </span>
+                    <span id="place-type" class="badge">Ladataan...</span>
+                    <h1 id="place-name" class="hero-title">Ladataan...</h1>
+                    
+                    <div class="hero-meta">
+                        <span style="display: flex; align-items: center; gap: 0.4rem;">
+                            <span class="iconify" data-icon="material-symbols:location-on"></span>
+                            <span id="place-municipality">Laukaa</span>
+                        </span>
+                        <span id="activity-dot" style="display: none;">&bull;</span>
+                        <span id="place-activity-status" style="display: none; align-items: center; gap: 0.4rem;">
+                            <span class="iconify" data-icon="material-symbols:history-toggle-off" style="color: #10b981;"></span>
+                            <span id="place-activity-text">Päivitetty äskettäin</span>
+                        </span>
+                    </div>
+
+                    <!-- 2. Action Buttons -->
+                    <div class="action-buttons">
+                        <a href="index.html" class="btn btn-primary">
+                            <span class="iconify" data-icon="material-symbols:home-outline"></span> Etusivu
+                        </a>
+                        <button id="btn-route" class="btn btn-light" onclick="window.open('https://maps.google.com/?q=Laukaa', '_blank')">
+                            <span class="iconify" data-icon="material-symbols:route"></span> Reitti
+                        </button>
+                        <button id="btn-streetview" class="btn btn-light" style="display: none;">
+                            <span class="iconify" data-icon="material-symbols:streetview"></span> Street View
+                        </button>
+                        <button id="share-place-btn" class="btn btn-light">
+                            <span class="iconify" data-icon="material-symbols:share-outline"></span> Jaa kohde
+                        </button>
+                        <button id="btn-scroll-encounters" class="btn btn-light" style="display: none; border: 1px solid #fde68a; background: #fffbeb;" onclick="document.getElementById('encounters-section').scrollIntoView({behavior: 'smooth'})">
+                            <span class="iconify" data-icon="material-symbols:campaign-outline" style="color: #f59e0b;"></span> Ajankohtaista
+                        </button>
+                    </div>
                 </div>
 
-                <!-- 2. Action Buttons -->
-                <div class="action-buttons">
-                    <a href="index.html" class="btn btn-primary">
-                        <span class="iconify" data-icon="material-symbols:home-outline"></span> Etusivu
-                    </a>
-                    <button id="btn-route" class="btn btn-light" onclick="window.open('https://maps.google.com/?q=Laukaa', '_blank')">
-                        <span class="iconify" data-icon="material-symbols:route"></span> Reitti
-                    </button>
-                    <button id="btn-streetview" class="btn btn-light" style="display: none;">
-                        <span class="iconify" data-icon="material-symbols:streetview"></span> Street View
-                    </button>
-                    <button id="share-place-btn" class="btn btn-light">
-                        <span class="iconify" data-icon="material-symbols:share-outline"></span> Jaa kohde
-                    </button>
-                    <button id="btn-scroll-encounters" class="btn btn-light" style="display: none; border: 1px solid #fde68a; background: #fffbeb;" onclick="document.getElementById('encounters-section').scrollIntoView({behavior: 'smooth'})">
-                        <span class="iconify" data-icon="material-symbols:campaign-outline" style="color: #f59e0b;"></span> Ajankohtaista
-                    </button>
+                <!-- Oikealla: paikan viimeisin kuva Lostnfound-havainnoista -->
+                <div id="place-photo-card">
+                    <img id="place-photo-img" src="" alt="Paikan kuva">
+                    <div class="photo-card-label">
+                        <span>📷</span>
+                        <span id="place-photo-label">Havainnosta</span>
+                    </div>
                 </div>
             </div>
         </section>

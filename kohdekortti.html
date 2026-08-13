@@ -1179,7 +1179,7 @@
                 }
 
                 if (btnAdd) {
-                    btnAdd.href = `jata-ilmoitus.html?location_id=${encodeURIComponent(entity.id.replace('loc-', ''))}`;
+                    btnAdd.style.display = 'none'; // Ilmoitukset tehdään sovelluksessa
                 }
 
                 // 2. Lähistön ilmoitukset (Aiempien tapojen mukaan)

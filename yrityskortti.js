@@ -1695,7 +1695,7 @@
                         </a>`;
                     });
                     if (btnAdd) {
-                        btnAdd.href = `jata-ilmoitus.html?company_id=${encodeURIComponent(company.id.replace('company-', ''))}`;
+                        btnAdd.style.display = 'none'; // Ilmoitukset tehdään sovelluksessa
                     }
                     box.style.display = 'block';
                 }

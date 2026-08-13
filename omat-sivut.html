@@ -238,8 +238,8 @@
         <div class="section-card">
             <div class="section-header">
                 <h2>Omat ilmoitukseni</h2>
-                <a href="jata-ilmoitus.html" class="btn-primary-sm">
-                    <span class="iconify" data-icon="lucide:plus"></span> Jätä uusi
+                <a href="https://play.google.com/store/apps/details?id=org.example.LaukaaLive&hl=fi" target="_blank" rel="noopener" class="btn-primary-sm" title="Ilmoitukset tehdään LaukaaLive-sovelluksessa">
+                    <span class="iconify" data-icon="lucide:smartphone"></span> Sovelluksessa
                 </a>
             </div>
             <!-- Välilehdet -->
@@ -258,8 +258,8 @@
         <div id="company-admin-section" class="section-card admin-section">
             <div class="section-header">
                 <h2>Hallinnoimani yritykset <span style="font-size:0.85rem; font-weight:normal; color:#64748b;">(Ylläpitäjä)</span></h2>
-                <a href="jata-ilmoitus.html?publisher_type=company" id="btn-add-company-ad" class="btn-primary-sm" style="background:#334155;">
-                    <span class="iconify" data-icon="lucide:building"></span> Jätä yritysilmoitus
+                <a href="https://play.google.com/store/apps/details?id=org.example.LaukaaLive&hl=fi" id="btn-add-company-ad" target="_blank" rel="noopener" class="btn-primary-sm" style="background:#334155;" title="Ilmoitukset tehdään LaukaaLive-sovelluksessa">
+                    <span class="iconify" data-icon="lucide:smartphone"></span> Sovelluksessa
                 </a>
             </div>
             <div class="tabs-row" id="company-ads-tabs">
@@ -276,8 +276,8 @@
         <div id="location-admin-section" class="section-card admin-section" style="border-color:#bbf7d0;">
             <div class="section-header" style="border-bottom-color:#dcfce7;">
                 <h2>Hallinnoimani kohteet <span style="font-size:0.85rem; font-weight:normal; color:#64748b;">(Kohdeylläpitäjä)</span></h2>
-                <a href="jata-ilmoitus.html?publisher_type=location" id="btn-add-location-ad" class="btn-primary-sm" style="background:#15803d;">
-                    <span class="iconify" data-icon="lucide:map-pin"></span> Jätä kohteen ilmoitus
+                <a href="https://play.google.com/store/apps/details?id=org.example.LaukaaLive&hl=fi" id="btn-add-location-ad" target="_blank" rel="noopener" class="btn-primary-sm" style="background:#15803d;" title="Ilmoitukset tehdään LaukaaLive-sovelluksessa">
+                    <span class="iconify" data-icon="lucide:smartphone"></span> Sovelluksessa
                 </a>
             </div>
             <div id="location-ads-list" class="ad-list">
@@ -289,8 +289,8 @@
         <div id="association-admin-section" class="section-card admin-section" style="border-color:#e9d5ff;">
             <div class="section-header" style="border-bottom-color:#f3e8ff;">
                 <h2>Hallinnoimani yhdistykset <span style="font-size:0.85rem; font-weight:normal; color:#64748b;">(Ylläpitäjä)</span></h2>
-                <a href="jata-ilmoitus.html?publisher_type=association" id="btn-add-association-ad" class="btn-primary-sm" style="background:#a855f7;">
-                    <span class="iconify" data-icon="lucide:users"></span> Jätä yhdistyksen ilmoitus
+                <a href="https://play.google.com/store/apps/details?id=org.example.LaukaaLive&hl=fi" id="btn-add-association-ad" target="_blank" rel="noopener" class="btn-primary-sm" style="background:#a855f7;" title="Ilmoitukset tehdään LaukaaLive-sovelluksessa">
+                    <span class="iconify" data-icon="lucide:smartphone"></span> Sovelluksessa
                 </a>
             </div>
             <div id="association-ads-list" class="ad-list">
@@ -477,9 +477,7 @@
         
         try {
             // Aseta napin linkki ensimmäiselle yritykselle (yksinkertaistus)
-            if (companyIds.length > 0) {
-                document.getElementById('btn-add-company-ad').href = `jata-ilmoitus.html?company_id=${companyIds[0]}`;
-            }
+            // btn-add-company-ad ohjaa Play Storeen (asetettu HTML:ssä)
 
             if (currentCompanyAdsStatus === 'encounters') {
                 // Lisätään prefix "company-" hakua varten jos sitä käytetään datassa
@@ -572,10 +570,7 @@
                 .order('created_at', { ascending: false });
             if (error) throw error;
 
-            if (locationIds.length > 0) {
-                document.getElementById('btn-add-location-ad').href =
-                    `jata-ilmoitus.html?publisher_type=location&location_id=${locationIds[0]}`;
-            }
+            // btn-add-location-ad ohjaa Play Storeen (asetettu HTML:ssä)
             renderAdsList(data, list, 'Kohteella ei ole aktiivisia ilmoituksia.');
         } catch (err) {
             console.error(err);
@@ -594,10 +589,7 @@
                 .order('created_at', { ascending: false });
             if (error) throw error;
 
-            if (assocIds.length > 0) {
-                document.getElementById('btn-add-association-ad').href =
-                    `jata-ilmoitus.html?publisher_type=association&association_id=${assocIds[0]}`;
-            }
+            // btn-add-association-ad ohjaa Play Storeen (asetettu HTML:ssä)
             renderAdsList(data, list, 'Yhdistyksellä ei ole aktiivisia ilmoituksia.');
         } catch (err) {
             console.error(err);

@@ -1712,9 +1712,15 @@ function renderEncounters(encounters) {
     // ── Säännölliset encounters: renderöidään ensin ───────────────────────────
     let html = '';
     
+    // Accordion-ID counter (uniikki per sivu)
+    let _accId = 0;
+    
     for (const [type, items] of Object.entries(grouped).filter(([t]) => !COMMUNITY_POST_TYPES.includes(t))) {
         const label = typeLabels[type] || type;
         const icon = typeIcons[type] || '🔔';
+        
+        // feed_post ja event saavat oman accordion-renderöinnin
+        const isFeedType = (type === 'feed_post' || type === 'event');
         
         html += `<div style="margin-bottom: 1.5rem; border: 1px solid #f3f4f6; border-radius: var(--inner-radius); overflow: hidden; background: var(--card-bg);">
             <div style="padding: 1.25rem; background: #f9fafb; font-weight: 700; color: var(--dark-text); border-bottom: 1px solid #f3f4f6; display: flex; justify-content: space-between; align-items: center;">
@@ -1729,7 +1735,88 @@ function renderEncounters(encounters) {
             const priceHtml = item.price_info ? `<span style="font-weight: 700; color: var(--primary-hover); font-size: 0.95rem; background: #f0fdf4; padding: 0.4rem 0.8rem; border-radius: 50px;">${item.price_info}</span>` : '';
             const linkUrl = item.url || `ilmoituskortti.html?id=${item.id}`;
             
-            html += `<a href="${linkUrl}" style="display: block; padding: 1.25rem; text-decoration: none; color: inherit; ${borderBottom} transition: background 0.2s;" onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='transparent'">
+            if (isFeedType) {
+                // ── ACCORDION-KORTTI feed_post / event ──────────────────
+                const accId = `feed-acc-${_accId++}`;
+                const hasImage = !!item.image_url;
+                const hasVideo = !!item.video_id;
+                const hasLinks = !!(item.facebook_url || item.instagram_url || item.website_url || item.youtube_url);
+                const hasMedia = hasImage || hasVideo || hasLinks;
+                
+                const dateStr = item.created_at
+                    ? new Date(item.created_at).toLocaleDateString('fi-FI', { day: 'numeric', month: 'short', year: 'numeric' })
+                    : '';
+                const authorHtml = item.publisher_name
+                    ? `<span style="font-size:0.8rem;color:#64748b;font-weight:600;">${item.publisher_name}</span>`
+                    : '';
+                
+                // Pikkukuva otsikkopalkkiin
+                const thumbHtml = hasImage
+                    ? `<img src="${item.image_url}" alt="" style="width:48px;height:48px;object-fit:cover;border-radius:8px;flex-shrink:0;">`
+                    : (hasVideo ? `<div style="width:48px;height:48px;background:#fee2e2;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.4rem;">▶</div>` : '');
+                
+                // YouTube iframe tai kuva accordion-sisällössä
+                let mediaContent = '';
+                if (hasVideo) {
+                    const ytBase = item.is_shorts ? 'https://www.youtube.com/shorts/' : 'https://www.youtube.com/embed/';
+                    const aspectStyle = item.is_shorts
+                        ? 'padding-top: 177%'   // 9:16 Shorts
+                        : 'padding-top: 56.25%'; // 16:9 normaali
+                    mediaContent += `
+                        <div style="position:relative;${aspectStyle};border-radius:10px;overflow:hidden;margin-bottom:0.75rem;">
+                            <iframe src="${ytBase}${item.video_id}?rel=0" 
+                                style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;"
+                                allowfullscreen loading="lazy" title="${item.title || 'Video'}">
+                            </iframe>
+                        </div>`;
+                } else if (hasImage) {
+                    mediaContent += `<img src="${item.image_url}" alt="${item.title || 'Kuva'}" 
+                        style="width:100%;max-height:320px;object-fit:cover;border-radius:10px;margin-bottom:0.75rem;">`;
+                }
+                
+                // Linkki-ikonirivistö
+                if (hasLinks) {
+                    mediaContent += `<div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-top:0.5rem;">`;
+                    if (item.facebook_url)  mediaContent += `<a href="${item.facebook_url}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:0.3rem;font-size:0.82rem;background:#eff6ff;color:#1d4ed8;padding:0.35rem 0.8rem;border-radius:50px;text-decoration:none;font-weight:600;">📘 Facebook</a>`;
+                    if (item.instagram_url) mediaContent += `<a href="${item.instagram_url}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:0.3rem;font-size:0.82rem;background:#fdf4ff;color:#9333ea;padding:0.35rem 0.8rem;border-radius:50px;text-decoration:none;font-weight:600;">📸 Instagram</a>`;
+                    if (item.website_url)   mediaContent += `<a href="${item.website_url}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:0.3rem;font-size:0.82rem;background:#f0fdf4;color:#16a34a;padding:0.35rem 0.8rem;border-radius:50px;text-decoration:none;font-weight:600;">🌐 Verkkosivu</a>`;
+                    if (item.youtube_url && !hasVideo) mediaContent += `<a href="${item.youtube_url}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:0.3rem;font-size:0.82rem;background:#fef2f2;color:#dc2626;padding:0.35rem 0.8rem;border-radius:50px;text-decoration:none;font-weight:600;">▶ YouTube</a>`;
+                    mediaContent += `</div>`;
+                }
+                
+                html += `
+                <div style="${borderBottom}">
+                    <!-- accordion otsikko -->
+                    <div onclick="(function(el){var c=document.getElementById('${accId}');var open=c.style.maxHeight&&c.style.maxHeight!=='0px';c.style.maxHeight=open?'0px':c.scrollHeight+'px';c.style.opacity=open?'0':'1';el.querySelector('.acc-arrow').style.transform=open?'rotate(0deg)':'rotate(180deg)';})(this)"
+                        style="display:flex;align-items:flex-start;gap:0.85rem;padding:1.1rem 1.25rem;cursor:pointer;transition:background 0.2s;"
+                        onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='transparent'">
+                        ${thumbHtml}
+                        <div style="flex:1;min-width:0;">
+                            <div style="font-weight:700;color:var(--dark-text);font-size:1rem;margin-bottom:0.2rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${item.title}</div>
+                            <div style="font-size:0.88rem;color:#64748b;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${item.description || ''}</div>
+                            <div style="margin-top:0.4rem;display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+                                ${authorHtml}
+                                ${dateStr ? `<span style="font-size:0.75rem;color:#94a3b8;">${dateStr}</span>` : ''}
+                                ${item.is_promoted ? `<span style="font-size:0.72rem;background:#fef9c3;color:#92400e;padding:2px 7px;border-radius:50px;font-weight:700;">⭐ Nostettu</span>` : ''}
+                            </div>
+                        </div>
+                        ${hasMedia ? `<span class="acc-arrow" style="flex-shrink:0;font-size:1rem;color:#94a3b8;transition:transform 0.25s;transform:rotate(0deg);">▼</span>` : `<a href="${linkUrl}" onclick="event.stopPropagation()" style="flex-shrink:0;font-size:0.82rem;color:var(--primary);text-decoration:none;font-weight:600;white-space:nowrap;">Avaa →</a>`}
+                    </div>
+                    <!-- accordion sisältö -->
+                    ${hasMedia ? `
+                    <div id="${accId}" style="max-height:0;opacity:0;overflow:hidden;transition:max-height 0.35s ease,opacity 0.25s ease;">
+                        <div style="padding:0 1.25rem 1.25rem;">
+                            ${mediaContent}
+                            <a href="${linkUrl}" style="display:inline-flex;align-items:center;gap:0.4rem;margin-top:0.75rem;font-size:0.85rem;color:var(--primary);text-decoration:none;font-weight:700;">
+                                Avaa koko julkaisu →
+                            </a>
+                        </div>
+                    </div>` : ''}
+                </div>`;
+                
+            } else {
+                // ── NORMAALI RIVI muille tyypeille ──────────────────────
+                html += `<a href="${linkUrl}" style="display: block; padding: 1.25rem; text-decoration: none; color: inherit; ${borderBottom} transition: background 0.2s;" onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='transparent'">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
                     <div>
                         <div style="font-weight: 700; color: var(--dark-text); font-size: 1.05rem; margin-bottom: 0.4rem;">${item.title}</div>
@@ -1738,6 +1825,7 @@ function renderEncounters(encounters) {
                     ${priceHtml}
                 </div>
             </a>`;
+            }
         });
         
         html += `</div></div>`;
@@ -1844,6 +1932,35 @@ async function loadLostItemsForPlace(place) {
         
         console.log('Aktiiviset lostItems:', activeDocs.length);
         if (activeDocs.length === 0) return;
+        
+        // ── Hero-kuvakortti: poimitaan viimeisin kuva Lostnfound-havainnoista ──
+        // Järjestetään timestamp mukaan (uusin ensin) ja otetaan ensimmäinen jolla on imageUrl1
+        const sortedByDate = [...activeDocs].sort((a, b) => {
+            const tA = a.data().timestamp?.toMillis?.() || 0;
+            const tB = b.data().timestamp?.toMillis?.() || 0;
+            return tB - tA;
+        });
+        const docWithImage = sortedByDate.find(doc => !!doc.data().imageUrl1);
+        if (docWithImage) {
+            const imgData = docWithImage.data();
+            const photoCard = document.getElementById('place-photo-card');
+            const photoImg  = document.getElementById('place-photo-img');
+            const photoLabel = document.getElementById('place-photo-label');
+            if (photoCard && photoImg) {
+                photoImg.src = imgData.imageUrl1;
+                photoImg.alt = imgData.title || 'Paikan kuva';
+                // Näytetään ilmoituksen nimi kortissa
+                if (photoLabel) {
+                    const category = imgData.category === 'LOST' || imgData.category === 'lost' ? 'Kadonnut' : 'Löytynyt';
+                    photoLabel.textContent = `${category}: ${(imgData.title || 'Havainto').substring(0, 28)}`;
+                }
+                // Klikkaaminen avaa Lostnfound-ilmoituksen
+                photoCard.style.cursor = 'pointer';
+                photoCard.onclick = () => window.open(`https://lostnfound-f0d25.web.app/item/${docWithImage.id}`, '_blank');
+                photoCard.style.display = 'block';
+                console.log('Hero-kuvakortti asetettu:', imgData.imageUrl1);
+            }
+        }
         
         const lostItems = activeDocs.map(doc => {
             const d = doc.data();
