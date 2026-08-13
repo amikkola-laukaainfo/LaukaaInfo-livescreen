@@ -85,6 +85,7 @@
             const { data, error } = await sb
                 .from('places')
                 .select('place_id, name, canonical_name, type, municipality, description')
+                .or('status.eq.active,status.eq.ACTIVE,status.is.null')
                 .limit(30);
             if (error || !data) return [];
             return data;

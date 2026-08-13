@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const { data: places, error } = await sbClient
                 .from('places')
                 .select('place_id, name, canonical_name, type, municipality, lat, lon, description')
+                .or('status.eq.active,status.eq.ACTIVE,status.is.null')
                 .not('lat', 'is', null)
                 .not('lon', 'is', null);
 

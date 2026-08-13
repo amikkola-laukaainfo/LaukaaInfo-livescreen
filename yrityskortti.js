@@ -2830,6 +2830,7 @@ async function renderNearbyPlacesForCompany(companyId) {
         const { data: allPlaces } = await sb
             .from('places')
             .select('place_id, name, canonical_name, type, lat, lon')
+            .or('status.eq.active,status.eq.ACTIVE,status.is.null')
             .not('lat', 'is', null)
             .not('lon', 'is', null);
 

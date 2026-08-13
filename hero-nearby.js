@@ -50,6 +50,7 @@
         const { data, error } = await sbClient
             .from('places')
             .select('place_id, name, canonical_name, type, lat, lon')
+            .or('status.eq.active,status.eq.ACTIVE,status.is.null')
             .not('lat', 'is', null)
             .not('lon', 'is', null)
             .limit(500);
@@ -179,6 +180,7 @@
         const { data, error } = await sbClient
             .from('places')
             .select('place_id, name, canonical_name, type, lat, lon')
+            .or('status.eq.active,status.eq.ACTIVE,status.is.null')
             .not('lat', 'is', null)
             .not('lon', 'is', null)
             .limit(1000);
