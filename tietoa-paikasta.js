@@ -986,7 +986,7 @@ function renderCompanies(scoredCompanies, allSources = [], allContents = []) {
                     <div style="height: 4px; background: #dcfce7; border-radius: 4px; overflow: hidden; width: 100%; max-width: 150px; margin-bottom: 0.5rem;">
                         <div style="height: 100%; background: #22c55e; width: ${barWidth}%;"></div>
                     </div>
-                    <div style="font-size: 0.85rem; color: var(--light-text); display: flex; flex-wrap: wrap; gap: 4px;">
+                    <div style="font-size: 0.85rem; color: #64748b; display: flex; flex-wrap: wrap; gap: 4px;">
                         ${item.matchedTags.slice(0, 4).map(t => `<span style="background:#f1f5f9; padding:2px 6px; border-radius:4px;">${t}</span>`).join('')}
                     </div>
                 </div>
@@ -1060,7 +1060,7 @@ function renderCompanies(scoredCompanies, allSources = [], allContents = []) {
                 return `
                     <div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #e2e8f0;">
                         <h4 style="margin: 0 0 5px 0; color: var(--text-main);">${c.title}</h4>
-                        ${c.description ? `<p style="margin: 0 0 10px 0; font-size: 0.9rem; color: var(--text-muted); line-height: 1.4;">${c.description}</p>` : ''}
+                        ${c.description ? `<p style="margin: 0 0 10px 0; font-size: 0.9rem; color: #64748b; line-height: 1.4;">${c.description}</p>` : ''}
                         ${mediaHtml}
                     </div>
                 `;
@@ -1103,7 +1103,7 @@ function renderCompanies(scoredCompanies, allSources = [], allContents = []) {
             }
             listTier12.innerHTML = html;
         } else {
-            listTier12.innerHTML = `<div style="text-align:center; color: var(--light-text); padding: 2rem; background: #f9fafb; border-radius: 12px; font-size: 0.9rem;">Ei paikallisia yrityksiä tai palvelupisteitä rekisteröitynä tähän kohteeseen.</div>`;
+            listTier12.innerHTML = `<div style="text-align:center; color: #64748b; padding: 2rem; background: #f9fafb; border-radius: 12px; font-size: 0.9rem;">Ei paikallisia yrityksiä tai palvelupisteitä rekisteröitynä tähän kohteeseen.</div>`;
         }
     }
     
@@ -1150,7 +1150,7 @@ function renderRelations(items, allSources = [], allContents = []) {
         if (item.id.startsWith('yritys_') || item.type === 'business') {
             linkUrl = 'yrityskortti.html?id=' + item.id;
         } else if (item.type === 'observation') {
-            linkUrl = 'ilmoituskortti.html?id=' + item.id;
+            linkUrl = '/?item=' + item.id + '&feed=open';
         } else {
             linkUrl = 'kohdekortti.html?id=' + item.id;
         }
@@ -1208,7 +1208,7 @@ function renderRelations(items, allSources = [], allContents = []) {
                             <span style="font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.8rem; border-radius: 50px; background: #dcfce7; color: #166534; text-transform: uppercase; letter-spacing: 0.5px;">${typeLabel}</span>
                         </div>
                         ${dateInfoHtml}
-                        ${item.shortDescription ? `<div style="font-size: 0.95rem; color: var(--light-text); margin-top: 0.5rem; line-height: 1.5;">${item.shortDescription}</div>` : ''}
+                        ${item.shortDescription ? `<div style="font-size: 0.95rem; color: #64748b; margin-top: 0.5rem; line-height: 1.5;">${item.shortDescription}</div>` : ''}
                     </div>
                 </div>
                 ${thumbWrapHtml}
@@ -1508,7 +1508,7 @@ function renderEncounters(encounters) {
         grouped[t].push(e);
     });
     
-    // Yhteisöjulkaisutyypit – renderöidään erillisessä lohkossa
+    // Yhteisöjulkaisutyyppit – renderöidään erillisessä lohkossa
     const COMMUNITY_POST_TYPES = ['MEMORY', 'TIP', 'PHOTO', 'OBSERVATION', 'QUESTION'];
     
     // Yhteisöjulkaisut erotellaan muista ennen renderöintiä
@@ -1572,7 +1572,7 @@ function renderEncounters(encounters) {
         html += `<div style="margin-bottom: 1.5rem; border: 1px solid #f3f4f6; border-radius: var(--inner-radius); overflow: hidden; background: var(--card-bg);">
             <div style="padding: 1.25rem; background: #f9fafb; font-weight: 700; color: var(--dark-text); border-bottom: 1px solid #f3f4f6; display: flex; justify-content: space-between; align-items: center;">
                 <span style="display: flex; align-items: center; gap: 0.5rem;">${icon} ${label}</span>
-                <span style="background: var(--bg-color); color: var(--light-text); padding: 4px 10px; border-radius: 50px; font-size: 0.85rem;">${items.length} kpl</span>
+                <span style="background: var(--bg-color); color: #64748b; padding: 4px 10px; border-radius: 50px; font-size: 0.85rem;">${items.length} kpl</span>
             </div>
             <div style="padding: 0;">`;
             
@@ -1586,7 +1586,7 @@ function renderEncounters(encounters) {
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
                     <div>
                         <div style="font-weight: 700; color: var(--dark-text); font-size: 1.05rem; margin-bottom: 0.4rem;">${item.title}</div>
-                        <div style="font-size: 0.95rem; color: var(--light-text); line-height: 1.5;">${(item.description || '').substring(0, 100)}${(item.description && item.description.length > 100) ? '...' : ''}</div>
+                        <div style="font-size: 0.95rem; color: #64748b; line-height: 1.5;">${(item.description || '').substring(0, 150)}${(item.description && item.description.length > 150) ? '...' : ''}</div>
                     </div>
                     ${priceHtml}
                 </div>
