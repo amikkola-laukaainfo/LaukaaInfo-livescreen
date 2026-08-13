@@ -1,0 +1,1 @@
+const fs=require("fs"),content=fs.readFileSync("tarinakartta.html","utf8"),idx=content.indexOf("peltoreitti");-1===idx?console.log("peltoreitti not found in HTML!"):(console.log("Context around peltoreitti:"),console.log(content.substring(idx-50,idx+120)));
