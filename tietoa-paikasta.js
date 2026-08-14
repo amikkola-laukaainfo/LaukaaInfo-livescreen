@@ -455,23 +455,26 @@ function scoreCompanies(allCompanies, place, relations, tagMatches, visibilityDa
         let score = 0, tier = 99;
         const reasons = [];
         
-        // Fyysinen: alue_slug
-        const cSlug = toSlugGlobal(company.alue_slug || '');
-        const pSlug = toSlugGlobal(place.name || place.canonical_name || '');
-        if (cSlug && pSlug && cSlug === pSlug) {
-            score += 80; tier = 1;
-            reasons.push({ type: 'AREA', label: 'Toimipaikka' });
-        }
-        
-        // Fyysinen: etäisyys
-        if (company.lat && company.lon && place.lat && place.lon) {
-            const dist = haversineKm(company.lat, company.lon, place.lat, place.lon);
-            if (dist < 2.0) {
-                const distScore = Math.max(10, Math.round(70 - (dist / 2) * 60));
-                score += distScore;
-                tier = Math.min(tier, 1);
-                let distLabel = dist < 1 ? `${Math.round(dist*1000)} m` : `${dist.toFixed(1).replace('.', ',')} km`;
-                reasons.push({ type: 'NEAR', label: distLabel });
+        // Fyysiset osumat sallitaan vain jos paikka on kaupallisesti kiinnostava
+        if (place.commercial_visibility !== false) {
+            // Fyysinen: alue_slug
+            const cSlug = toSlugGlobal(company.alue_slug || '');
+            const pSlug = toSlugGlobal(place.name || place.canonical_name || '');
+            if (cSlug && pSlug && cSlug === pSlug) {
+                score += 80; tier = 1;
+                reasons.push({ type: 'AREA', label: 'Toimipaikka' });
+            }
+            
+            // Fyysinen: etäisyys
+            if (company.lat && company.lon && place.lat && place.lon) {
+                const dist = haversineKm(company.lat, company.lon, place.lat, place.lon);
+                if (dist < 2.0) {
+                    const distScore = Math.max(10, Math.round(70 - (dist / 2) * 60));
+                    score += distScore;
+                    tier = Math.min(tier, 1);
+                    let distLabel = dist < 1 ? `${Math.round(dist*1000)} m` : `${dist.toFixed(1).replace('.', ',')} km`;
+                    reasons.push({ type: 'NEAR', label: distLabel });
+                }
             }
         }
         
