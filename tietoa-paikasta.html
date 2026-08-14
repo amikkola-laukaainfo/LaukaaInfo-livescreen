@@ -1158,7 +1158,7 @@
                 <section id="participate-section" class="stats-visual" style="margin-top: 1rem; position: sticky; top: 2rem; border-left: 4px solid var(--accent);">
                     <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; margin-top: 0; color: var(--text-main);">Osallistu</h3>
                     <div style="display: flex; flex-direction: column; gap: 0.8rem;">
-                        <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="openAppDownloadModal()">
+                        <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="openLostrefoundModal()">
                             <span class="iconify" data-icon="material-symbols:add"></span> Lisää havainto
                         </button>
                         <button class="btn btn-light" style="width: 100%; justify-content: flex-start; background: #f8fafc;" onclick="openAppDownloadModal()">
@@ -1250,7 +1250,32 @@
         </div>
     </div>
 
-    <!-- App Download Modal -->
+    <!-- LostReFound Modal -->
+    <div id="lostrefound-modal" class="modal-overlay" style="display: none; align-items: flex-end; justify-content: center; z-index: 1000; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);" onclick="if(event.target === this) closeLostrefoundModal()">
+        <div class="modal-content" style="background: white; width: 100%; max-width: 500px; border-radius: 24px 24px 0 0; padding: 2rem; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 -10px 40px rgba(0,0,0,0.1);">
+            <div style="width: 40px; height: 4px; background: #e2e8f0; border-radius: 4px; margin: 0 auto 1.5rem;"></div>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 0.5rem; color: var(--text-main);">
+                    <span class="iconify" data-icon="material-symbols:phone-iphone" style="color: var(--accent);"></span>
+                    Lataa LostReFound
+                </h3>
+                <button onclick="closeLostrefoundModal()" style="background: none; border: none; cursor: pointer; color: var(--text-muted); padding: 0.5rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background 0.2s;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='transparent'">
+                    <span class="iconify" data-icon="material-symbols:close" style="font-size: 1.5rem;"></span>
+                </button>
+            </div>
+            
+            <p style="color: var(--text-main); font-size: 1rem; margin-bottom: 1.5rem; line-height: 1.6;">
+                Tee uusi paikallinen havainto kätevästi ilmaisella LostReFound-mobiilisovelluksella.
+            </p>
+            
+            <a href="https://play.google.com/store/apps/details?id=fi.mediazoo.lostrefound&pli=1" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 1rem; font-size: 1.1rem;">
+                <span class="iconify" data-icon="logos:google-play-icon" style="font-size: 1.25rem;"></span> Avaa Google Play
+            </a>
+        </div>
+    </div>
+
+    <!-- App Download Modal (LaukaaInfo) -->
     <div id="app-download-modal" class="modal-overlay" style="display: none; align-items: flex-end; justify-content: center; z-index: 1000; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);" onclick="if(event.target === this) closeAppDownloadModal()">
         <div class="modal-content" style="background: white; width: 100%; max-width: 500px; border-radius: 24px 24px 0 0; padding: 2rem; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 -10px 40px rgba(0,0,0,0.1);">
             <div style="width: 40px; height: 4px; background: #e2e8f0; border-radius: 4px; margin: 0 auto 1.5rem;"></div>
@@ -1266,14 +1291,14 @@
             </div>
             
             <p style="color: var(--text-main); font-size: 1rem; margin-bottom: 1.5rem; line-height: 1.6;">
-                Sisältöjen lisääminen, kuten havaintojen, muistojen ja kuvien jakaminen, onnistuu helposti ja täysin ilmaiseksi yksityishenkilöiltä LaukaaInfo -mobiilisovelluksen kautta. 
+                Sisältöjen lisääminen, kuten ilmoitusten, muistojen ja kuvien jakaminen, onnistuu helposti ja täysin ilmaiseksi yksityishenkilöiltä LaukaaInfo -mobiilisovelluksen kautta. 
             </p>
 
             <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem;">
                 Kirjaudu sisään sovellukseen ja rikasta paikan tarinaa!
             </p>
             
-            <a href="https://play.google.com/store/apps/details?id=fi.mediazoo.lostrefound&pli=1" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 1rem; font-size: 1.1rem;">
+            <a href="https://play.google.com/store/apps/details?id=org.example.LaukaaLive&hl=fi&pli=1" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 1rem; font-size: 1.1rem;">
                 <span class="iconify" data-icon="logos:google-play-icon" style="font-size: 1.25rem;"></span> Avaa Google Play
             </a>
         </div>
@@ -1306,6 +1331,17 @@
 
     <!-- Scripts -->
     <script>
+        function openLostrefoundModal() {
+            const modal = document.getElementById('lostrefound-modal');
+            modal.style.display = 'flex';
+            modal.offsetHeight; // trigger reflow
+            modal.querySelector('.modal-content').style.transform = 'translateY(0)';
+        }
+        function closeLostrefoundModal() {
+            const modal = document.getElementById('lostrefound-modal');
+            modal.querySelector('.modal-content').style.transform = 'translateY(100%)';
+            setTimeout(() => { modal.style.display = 'none'; }, 300);
+        }
         function openAppDownloadModal() {
             const modal = document.getElementById('app-download-modal');
             modal.style.display = 'flex';
