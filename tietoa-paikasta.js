@@ -852,10 +852,10 @@ function renderSubplaces(subPlaces, parentPlace) {
                 ${compactSubplaces.map(sp => {
                     const spName = sp.name || sp.canonical_name || 'Kohde';
                     const icon = getPlaceLevelEmoji(sp.type);
-                    return \`<div style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.95rem; color: #1e293b;">
-                        <span style="font-size: 1.25rem;">\${icon}</span>
-                        <span>\${spName}</span>
-                    </div>\`;
+                    return `<div style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.95rem; color: #1e293b;">
+                        <span style="font-size: 1.25rem;">${icon}</span>
+                        <span>${spName}</span>
+                    </div>`;
                 }).join('')}
             </div>
         </div>`;
@@ -866,16 +866,16 @@ function renderSubplaces(subPlaces, parentPlace) {
             const spName = sp.name || sp.canonical_name || 'Kohde';
             const typeLabel = getPlaceLevelLabel(sp.place_level, sp.type);
             const icon = getPlaceLevelIcon(sp.place_level, sp.type);
-            return \`
-                <div class="subplace-card" onclick="openSubplaceModal('\${sp.place_id}', '\${escapeForAttr(spName)}', '\${escapeForAttr(sp.description || '')}', '\${sp.lat || ''}', '\${sp.lon || ''}', '\${typeLabel}', '\${icon}')">
-                    <span class="subplace-icon iconify" data-icon="\${icon}"></span>
+            return `
+                <div class="subplace-card" onclick="openSubplaceModal('${sp.place_id}', '${escapeForAttr(spName)}', '${escapeForAttr(sp.description || '')}', '${sp.lat || ''}', '${sp.lon || ''}', '${typeLabel}', '${icon}')">
+                    <span class="subplace-icon iconify" data-icon="${icon}"></span>
                     <div class="subplace-info">
-                        <div class="subplace-name">\${spName}</div>
-                        \${sp.description ? \`<div class="subplace-desc">\${sp.description.substring(0, 80)}\${sp.description.length > 80 ? '...' : ''}</div>\` : ''}
+                        <div class="subplace-name">${spName}</div>
+                        ${sp.description ? `<div class="subplace-desc">${sp.description.substring(0, 80)}${sp.description.length > 80 ? '...' : ''}</div>` : ''}
                     </div>
                     <span class="subplace-arrow iconify" data-icon="material-symbols:chevron-right"></span>
                 </div>
-            \`;
+            `;
         }).join('');
     }
     
