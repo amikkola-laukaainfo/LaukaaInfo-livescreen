@@ -140,6 +140,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         let allPlaces = [];
         let allCompanies = [];
+        let sbPlaces = []; // Alustetaan ennen käyttöä, korjaa ReferenceError entity_tags-haussa
         
         if (placesRes.ok) {
             const pData = await placesRes.json();
@@ -317,6 +318,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 .in('place_id', taggedPlaceIds)
                                 .or('status.eq.active,status.eq.ACTIVE,status.is.null');
 
+                            // sbPlaces on alustettu rivillä 142 – ei ReferenceError
                             sbPlaces = (sbPlaceData || []).map(p => ({
                                 id: p.place_id,
                                 name: p.name || p.canonical_name,
@@ -333,9 +335,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                             .filter(e => e.entity_type === 'encounter')
                             .map(e => e.entity_id);
                         
-                        if (encounterIds.length > 0 && window.LaukaaSupabase) {
+                        if (encounterIds.length > 0 && (window.LaukaaSupabase || supabaseClient)) {
+                            const laukaaDb = window.LaukaaSupabase || supabaseClient;
                             try {
-                                const { data: encounterData, error } = await window.LaukaaSupabase
+                                const { data: encounterData, error } = await laukaaDb
                                     .from('encounters')
                                     .select('*')
                                     .in('id', encounterIds)
@@ -365,7 +368,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                         if (feedPostEntities.length > 0) {
                             try {
                                 const feedPostIds = feedPostEntities.map(e => e.entity_id);
-                                const { data: feedData, error: feedError } = await window.LaukaaSupabase
+                                const laukaaDb2 = window.LaukaaSupabase || supabaseClient;
+                                const { data: feedData, error: feedError } = await laukaaDb2
                                     .from('posts')
                                     .select('*')
                                     .in('id', feedPostIds)
@@ -399,7 +403,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                         if (offerEntities.length > 0) {
                             try {
                                 const offerIds = offerEntities.map(e => e.entity_id);
-                                const { data: offersData, error: offersError } = await window.LaukaaSupabase
+                                const laukaaDb3 = window.LaukaaSupabase || supabaseClient;
+                                const { data: offersData, error: offersError } = await laukaaDb3
                                     .from('offers')
                                     .select('*')
                                     .in('id', offerIds)

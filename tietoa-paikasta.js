@@ -2103,7 +2103,11 @@ function openTagModal(tagName, iconName) {
     const searchTag = (tagName || '').toLowerCase().trim();
     const isInDist = window.location.pathname.includes('/dist/') || window.location.hostname === 'laukaainfo.fi';
     const distPrefix = isInDist ? '../' : './';
-    window.location.href = `${distPrefix}teema.html?tag=${encodeURIComponent(searchTag)}`;
+    // Välitetään place_id mukana kontekstuaalista teemahakua varten (sama kuin network-tag-linkeissä)
+    const currentUrlParams = new URLSearchParams(window.location.search);
+    const currentPlaceId = currentUrlParams.get('id');
+    const placeContext = currentPlaceId ? `&place_id=${encodeURIComponent(currentPlaceId)}` : '';
+    window.location.href = `${distPrefix}teema.html?tag=${encodeURIComponent(searchTag)}${placeContext}`;
 }
 
 function closeTagModal() {
