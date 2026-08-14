@@ -132,7 +132,7 @@
         }
 
         @media (max-width: 640px) {
-            #place-photo-card { display: none !important; }
+            /* Poistettu piilotus: näytetään nyt pienenä tekstin alla */
         }
 
         .badge {
@@ -534,6 +534,35 @@
             .hero-section {
                 padding-top: 4rem;
                 padding-bottom: 2rem;
+            }
+            .hero-content {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1.5rem;
+            }
+            .hero-left {
+                width: 100%;
+            }
+            #place-photo-card[style*="display: block"] {
+                display: flex !important;
+            }
+            #place-photo-card {
+                width: 100%;
+                max-width: 320px;
+                height: 70px;
+                flex-direction: row;
+                align-items: center;
+                border-radius: 12px;
+            }
+            #place-photo-card img {
+                width: 70px;
+                height: 70px;
+                object-fit: cover;
+            }
+            #place-photo-card .photo-card-label {
+                flex: 1;
+                padding: 0 1rem;
+                background: transparent;
             }
             .hero-title {
                 font-size: 2.2rem;
