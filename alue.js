@@ -50,6 +50,8 @@ async function fetchRegionMetadata() {
     }
 }
 
+let allPlacesCache = null;
+
 async function fetchRegionPlaces() {
     if (allPlacesCache) return allPlacesCache;
     try {
