@@ -704,7 +704,62 @@ function addMarkersToMap(companies, forceShowAll = false) {
             let isPro = false;
             let isPremiumPkg = false;
             
-            if (company.isRss) {
+            if (company.isPlace) {
+                // Paikan merkki
+                markerHtml = `
+                    <div style="
+                        background-color: #10b981;
+                        width: 24px;
+                        height: 24px;
+                        border-radius: 50%;
+                        border: 2px solid white;
+                        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 14px;
+                    ">📍</div>
+                `;
+                
+                const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`;
+                const cardUrl = `tietoa-paikasta.html?id=${company.id}`;
+                
+                popupContent = `
+                    <div style="font-family: 'Outfit', sans-serif; min-width: 150px;">
+                        <span class="news-badge event" style="font-size: 0.7rem; margin-bottom: 5px; display: inline-block; background-color:#d1fae5; color:#065f46;">PAIKKA</span>
+                        <h4 style="margin: 0 0 5px 0; color: #047857;">${company.nimi}</h4>
+                        <div style="font-size: 0.8rem; margin-bottom: 8px; color: #666;">${company.kategoria || ''}</div>
+                        <div style="display: flex; flex-direction: column; gap: 5px;">
+                            <a href="${cardUrl}" style="
+                                display: block;
+                                background: #10b981;
+                                color: white;
+                                text-decoration: none;
+                                text-align: center;
+                                padding: 6px 10px;
+                                border-radius: 4px;
+                                cursor: pointer;
+                                width: 100%;
+                                font-size: 0.8rem;
+                                box-sizing: border-box;
+                            ">Tutustu paikkaan</a>
+                            <a href="${mapsUrl}" target="_blank" style="
+                                display: block;
+                                background: #28a745;
+                                color: white;
+                                text-decoration: none;
+                                text-align: center;
+                                padding: 6px 10px;
+                                border-radius: 4px;
+                                cursor: pointer;
+                                width: 100%;
+                                font-size: 0.8rem;
+                                box-sizing: border-box;
+                            ">🚗 ${i18n.t('btn_directions')}</a>
+                        </div>
+                    </div>
+                `;
+            } else if (company.isRss) {
                 // Tapahtuman merkki
                 markerHtml = `
                     <div style="

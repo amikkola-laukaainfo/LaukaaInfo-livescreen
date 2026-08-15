@@ -50,6 +50,35 @@ async function fetchRegionMetadata() {
     }
 }
 
+async function fetchRegionPlaces() {
+    if (allPlacesCache) return allPlacesCache;
+    try {
+        const url = 'https://duxluwyqxvbmkkjzuzkz.supabase.co/rest/v1/places?select=*&or=(commercial_visibility.eq.true,importance.gte.1)&status=eq.ACTIVE';
+        const res = await fetch(url, {
+            headers: {
+                apikey: 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu',
+                Authorization: 'Bearer sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu'
+            }
+        });
+        if (!res.ok) throw new Error('Failed to fetch places');
+        const data = await res.json();
+        
+        allPlacesCache = data.map(p => ({
+            ...p,
+            id: p.place_id,
+            nimi: p.name,
+            isPlace: true,
+            kategoria: p.type || 'Paikka',
+            tags: (p.type || '').toLowerCase()
+        }));
+        console.log(`[Alue] Ladattiin ${allPlacesCache.length} paikkaa Supabasesta.`);
+        return allPlacesCache;
+    } catch(e) {
+        console.error('[Alue] Paikkojen lataus epäonnistui:', e);
+        return [];
+    }
+}
+
 async function initRegionPage() {
     const params = new URLSearchParams(window.location.search);
 
@@ -97,10 +126,33 @@ async function initRegionPage() {
 
     // Odota että allCompanies on ladattu
     await waitForData();
+    const allPlaces = await fetchRegionPlaces();
 
     const filtered = filterByArea(areaSlug, catParam, tagParam);
+
+    // Suodata paikat
+    const filteredPlaces = allPlaces.filter(p => {
+        if (areaSlug !== 'koko-laukaa' && area.lat && area.lon && p.lat && p.lon) {
+            const dist = getHaversineDistance(area.lat, area.lon, parseFloat(p.lat), parseFloat(p.lon));
+            if (dist > 15) return false;
+        }
+        if (tagParam) {
+            const query = normalizeForSearch(tagParam);
+            const name = normalizeForSearch(p.nimi);
+            const type = normalizeForSearch(p.type || '');
+            if (!name.includes(query) && !type.includes(query)) return false;
+        }
+        if (catParam) {
+            if ((p.type || '').toLowerCase() !== catParam.replace(/-/g, ' ')) return false;
+        }
+        return true;
+    });
+
     renderRegionContent(area, areaSlug, filtered, catParam, tagParam);
-    initRegionMap(area, filtered);
+    renderPlaces(area, filteredPlaces);
+    
+    const combinedMapItems = [...filtered, ...filteredPlaces];
+    initRegionMap(area, combinedMapItems);
     fetchRegionNews(area);
     
     // UUSI: Käännä sivu dynaamisen renderöinnin jälkeen
@@ -108,6 +160,7 @@ async function initRegionPage() {
         window.i18n.translatePage();
     }
 }
+
 
 function updateMetadata(area, cat, tag) {
     const titleEl = document.getElementById('region-title');
@@ -382,6 +435,61 @@ function renderNearby(area, catParam, tagParam) {
             window.location.href = `yrityskortti.html?id=${slugify(company.nimi)}${regionParam}`;
         };
         nearbyList.appendChild(item);
+    });
+}
+
+function renderPlaces(area, places) {
+    // Etsitään paikka, johon renderöidä Paikat-lista (alueen lähimmät palvelut -osion viereen tai yläpuolelle)
+    const nearbySection = document.getElementById('nearby-section');
+    if (!nearbySection || places.length === 0) return;
+
+    // Etsitään tai luodaan "places-section"
+    let placesSection = document.getElementById('places-section');
+    if (!placesSection) {
+        placesSection = document.createElement('section');
+        placesSection.id = 'places-section';
+        placesSection.className = 'container';
+        placesSection.style.marginBottom = '2rem';
+        placesSection.innerHTML = `
+            <div class="section-header" style="margin-bottom: 1rem;">
+                <h3 style="margin: 0; color: var(--primary-blue); font-size: 1.25rem;">📍 Paikat alueella ${area.name}</h3>
+                <p style="margin: 5px 0 0 0; color: #64748b; font-size: 0.9rem;">Mitä täällä voi tehdä ja nähdä</p>
+            </div>
+            <div id="places-list" class="catalog-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px;"></div>
+        `;
+        // Insertataan ennen nearbySectionia
+        nearbySection.parentNode.insertBefore(placesSection, nearbySection);
+    }
+    
+    // Näytetään maksimissaan 8 paikkaa kerralla samalla logiikalla kuin nearby
+    const topPlaces = places.sort((a, b) => {
+        const dA = getHaversineDistance(area.lat, area.lon, parseFloat(a.lat), parseFloat(a.lon));
+        const dB = getHaversineDistance(area.lat, area.lon, parseFloat(b.lat), parseFloat(b.lon));
+        return dA - dB;
+    }).slice(0, 8);
+
+    const placesList = document.getElementById('places-list');
+    if (!placesList) return;
+    placesList.innerHTML = '';
+
+    topPlaces.forEach(p => {
+        const item = document.createElement('div');
+        item.className = 'catalog-item';
+        
+        const dist = getHaversineDistance(area.lat, area.lon, parseFloat(p.lat), parseFloat(p.lon));
+        const distText = dist < 1 ? `${Math.round(dist * 1000)} m` : `${dist.toFixed(1)} km`;
+
+        item.innerHTML = `
+            <div class="catalog-item-header">
+                <h4 style="color: #047857;">${p.nimi}</h4>
+                <span class="dist-badge" style="background:#d1fae5; color:#065f46;">📍 ${distText}</span>
+            </div>
+            <span class="cat-tag" style="background-color:#10b981; color:white;">${p.kategoria}</span>
+        `;
+        item.onclick = () => {
+            window.location.href = `tietoa-paikasta.html?id=${p.id}`;
+        };
+        placesList.appendChild(item);
     });
 }
 

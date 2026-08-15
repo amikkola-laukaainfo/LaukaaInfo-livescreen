@@ -257,16 +257,68 @@
                 categoryCompanies = rawCategoryCompanies;
             }
 
+            // Fetch places
+            const allPlaces = await fetchCategoryPlaces();
+            
+            // Filter places
+            let filteredPlaces = allPlaces.filter(p => {
+                if (regionCoords && selectedRegion !== 'all' && p.lat && p.lon) {
+                    const dist = getHaversineDistance(regionCoords.lat, regionCoords.lon, parseFloat(p.lat), parseFloat(p.lon));
+                    if (dist > 15) return false;
+                }
+                
+                if (tagParam) {
+                    const query = normalizeForSearch(tagParam);
+                    const name = normalizeForSearch(p.nimi);
+                    const type = normalizeForSearch(p.type || '');
+                    if (!name.includes(query) && !type.includes(query)) return false;
+                } else if (category && category !== 'all') {
+                    if ((p.type || '').toLowerCase() !== category.toLowerCase()) return false;
+                }
+                return true;
+            });
+
             // Initial render
-            updateDisplay();
-            initMap(categoryCompanies);
+            updateDisplay(filteredPlaces);
+            
+            const combinedForMap = [...categoryCompanies, ...filteredPlaces];
+            initMap(combinedForMap);
             initCarousel();
         } catch (error) {
             console.error('Error loading data:', error);
         }
     }
 
-    async function updateDisplay() {
+    let allPlacesCache = null;
+    async function fetchCategoryPlaces() {
+        if (allPlacesCache) return allPlacesCache;
+        try {
+            const url = 'https://duxluwyqxvbmkkjzuzkz.supabase.co/rest/v1/places?select=*&or=(commercial_visibility.eq.true,importance.gte.1)&status=eq.ACTIVE';
+            const res = await fetch(url, {
+                headers: {
+                    apikey: 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu',
+                    Authorization: 'Bearer sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu'
+                }
+            });
+            if (!res.ok) throw new Error('Failed to fetch places');
+            const data = await res.json();
+            
+            allPlacesCache = data.map(p => ({
+                ...p,
+                id: p.place_id,
+                nimi: p.name,
+                isPlace: true,
+                kategoria: p.type || 'Paikka',
+                tags: (p.type || '').toLowerCase()
+            }));
+            return allPlacesCache;
+        } catch(e) {
+            console.error('[Category] Paikkojen lataus epäonnistui:', e);
+            return [];
+        }
+    }
+
+    async function updateDisplay(places = []) {
         // Ensisijainen vertailupiste: käyttäjän sijainti. Toissijainen: valittu taajama.
         const referenceCoords = userCoords || (regionCoords ? L.latLng(regionCoords.lat, regionCoords.lon) : null);
 
@@ -315,7 +367,63 @@
         injectSchema(categoryCompanies);
 
         renderFeatured(displayCarousel);
+        renderPlaces(places);
         renderDirectory(remainingPremium, free);
+    }
+
+    function renderPlaces(places) {
+        const directorySection = document.getElementById('directory-section');
+        if (!directorySection) return;
+        
+        let placesSection = document.getElementById('category-places-section');
+        if (!placesSection) {
+            placesSection = document.createElement('section');
+            placesSection.id = 'category-places-section';
+            placesSection.className = 'container';
+            placesSection.style.marginBottom = '2rem';
+            placesSection.innerHTML = `
+                <div class="section-header" style="margin-bottom: 1rem;">
+                    <h3 style="margin: 0; color: var(--primary-blue); font-size: 1.25rem;">📍 Paikat alueella</h3>
+                    <p style="margin: 5px 0 0 0; color: #64748b; font-size: 0.9rem;">Mitä täällä voi tehdä ja nähdä</p>
+                </div>
+                <div id="category-places-list" class="catalog-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px;"></div>
+            `;
+            directorySection.parentNode.insertBefore(placesSection, directorySection);
+        }
+
+        if (places.length === 0) {
+            placesSection.style.display = 'none';
+            return;
+        } else {
+            placesSection.style.display = 'block';
+        }
+
+        const placesList = document.getElementById('category-places-list');
+        placesList.innerHTML = '';
+
+        places.slice(0, 8).forEach(p => {
+            const item = document.createElement('div');
+            item.className = 'catalog-item';
+            
+            let distHtml = '';
+            if (regionCoords && p.lat && p.lon) {
+                const dist = getHaversineDistance(regionCoords.lat, regionCoords.lon, parseFloat(p.lat), parseFloat(p.lon));
+                const distText = dist < 1 ? `${Math.round(dist * 1000)} m` : `${dist.toFixed(1)} km`;
+                distHtml = `<span class="dist-badge" style="background:#d1fae5; color:#065f46;">📍 ${distText}</span>`;
+            }
+
+            item.innerHTML = `
+                <div class="catalog-item-header">
+                    <h4 style="color: #047857;">${p.nimi}</h4>
+                    ${distHtml}
+                </div>
+                <span class="cat-tag" style="background-color:#10b981; color:white;">${p.kategoria}</span>
+            `;
+            item.onclick = () => {
+                window.location.href = `tietoa-paikasta.html?id=${p.id}`;
+            };
+            placesList.appendChild(item);
+        });
     }
 
     function injectSchema(companies) {
