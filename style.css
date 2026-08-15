@@ -8234,3 +8234,9 @@ footer {
 #hero-nearby [hidden] {
     display: none !important;
 }
+
+.badge-offer { background: #ff9900; color: #fff; }
+.badge-encounter { background: #17a2b8; color: #fff; }
+.badge-ad { background: #007bff; color: #fff; }
+.badge-nearby { background: #6c757d; color: #fff; }
+
