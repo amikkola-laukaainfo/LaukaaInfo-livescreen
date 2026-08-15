@@ -1312,8 +1312,8 @@
             // If opened via parameter or anchor, ensure we scroll to it
             if (forceOpen) {
                 setTimeout(() => {
-                    feedBtn.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 400); // 400ms is usually enough for initial layout
+                    feedBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 800); // 800ms to allow dynamic content (like swiper) to stabilize
             }
         }
 
