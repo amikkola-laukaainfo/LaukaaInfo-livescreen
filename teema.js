@@ -151,24 +151,84 @@ document.addEventListener('DOMContentLoaded', async () => {
             allCompanies = Array.isArray(cData) ? cData : (cData.results || []);
         }
         
-        // JOS place_id ON ANNETTU, KÄYTETÄÄN KONTEKSTUAALISTA HAKUA (Phase 1)
+        // JOS place_id ON ANNETTU, KÄYTETÄÄN KONTEKSTUAALISTA HAKUA
         const placeIdParam = urlParams.get('place_id');
         if (placeIdParam && aiSbClient) {
             console.log("Kontekstuaalinen teemahaku: place_id=", placeIdParam);
             try {
-                // 1. Hae paikan tiedot (nimeä varten)
+                // 1. Hae paikan tiedot (nimeä ja tageja varten)
                 const { data: placeData } = await aiSbClient
                     .from('places')
-                    .select('name, canonical_name')
+                    .select('name, canonical_name, description')
                     .eq('place_id', placeIdParam)
                     .single();
                     
+                let placeName = '';
                 if (placeData) {
-                    const placeName = placeData.name || placeData.canonical_name;
+                    placeName = placeData.name || placeData.canonical_name || '';
                     document.getElementById('theme-name').textContent = `${tagParam.charAt(0).toUpperCase() + tagParam.slice(1)} – ${placeName} lähialueella`;
+                    
+                    // Päivitä hero-subtitle paikan kuvauksella jos saatavilla
+                    const subtitleEl = document.getElementById('theme-subtitle');
+                    if (subtitleEl && placeData.description) {
+                        subtitleEl.textContent = placeData.description.substring(0, 160) + (placeData.description.length > 160 ? '...' : '');
+                        subtitleEl.style.display = 'block';
+                    }
                 }
 
-                // 2. Etsitään oikea tag_id
+                // 2. Hae paikan omat tagit aktiviteettilistaa varten
+                const { data: placeTagData } = await aiSbClient
+                    .from('entity_tags')
+                    .select('tag_id')
+                    .eq('entity_id', placeIdParam)
+                    .eq('entity_type', 'place');
+
+                if (placeTagData && placeTagData.length > 0) {
+                    const activitiesSection = document.getElementById('place-activities-section');
+                    const activitiesList = document.getElementById('place-activities-list');
+                    const activitiesTitle = document.getElementById('place-activities-title');
+                    
+                    if (activitiesSection && activitiesList) {
+                        // Sesonki: kesä (5-8) tai talvi (11-3)
+                        const month = new Date().getMonth(); // 0-indexed
+                        const isSummer = month >= 4 && month <= 7;
+                        const isWinter = month >= 10 || month <= 2;
+                        const seasonLabel = isSummer ? '☀️ Kesällä täällä voit:' : (isWinter ? '❄️ Talvella täällä voit:' : '🍂 Täällä voit:');
+                        if (activitiesTitle) activitiesTitle.textContent = seasonLabel;
+                        
+                        // Muunna tag_id:t luettaviksi teksteiksi taksonomian avulla
+                        const tagLabels = {};
+                        if (taxonomy && taxonomy.main_groups) {
+                            const scanForLabels = (items) => {
+                                if (!items) return;
+                                for (const item of items) {
+                                    if (item.id) tagLabels[item.id.toLowerCase()] = item.label || item.id;
+                                    if (item.tags) scanForLabels(item.tags);
+                                    if (item.groups) scanForLabels(item.groups);
+                                }
+                            };
+                            taxonomy.main_groups.forEach(m => {
+                                if (m.id) tagLabels[m.id.toLowerCase()] = m.label || m.id;
+                                scanForLabels(m.groups);
+                            });
+                            [...(taxonomy.features || []), ...(taxonomy.seasons || [])].forEach(f => {
+                                if (f.id) tagLabels[f.id.toLowerCase()] = f.label || f.id;
+                            });
+                        }
+                        
+                        const pillColors = ['#0ea5e9','#22c55e','#f59e0b','#8b5cf6','#ef4444','#06b6d4','#ec4899'];
+                        activitiesList.innerHTML = placeTagData.map((t, i) => {
+                            const label = tagLabels[t.tag_id.toLowerCase()] || t.tag_id;
+                            const color = pillColors[i % pillColors.length];
+                            const tagUrl = `teema.html?tag=${encodeURIComponent(t.tag_id)}&place_id=${encodeURIComponent(placeIdParam)}`;
+                            return `<a href="${tagUrl}" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.5rem 1rem;background:${color}18;color:${color};border:1.5px solid ${color}40;border-radius:50px;font-size:0.9rem;font-weight:600;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.background='${color}30'" onmouseout="this.style.background='${color}18'">${label}</a>`;
+                        }).join('');
+                        
+                        activitiesSection.style.display = 'block';
+                    }
+                }
+
+                // 3. Etsitään oikea tag_id
                 const tagLower = searchTag.toLowerCase();
                 const { data: matchingTags } = await aiSbClient.from('tags').select('tag_id').or(`tag_id.eq.${tagLower},name.ilike.${tagLower}`).limit(1);
                 let actualTagId = tagLower;
@@ -176,7 +236,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     actualTagId = matchingTags[0].tag_id;
                 }
 
-                // 3. Kutsu RPC
+                // 4. Kutsu RPC lähipaikkojen ja -yritysten hakuun
                 const { data: contextResults, error: rpcError } = await aiSbClient.rpc('get_contextual_theme_results', {
                     p_place_id: placeIdParam,
                     p_tag_id: actualTagId,
@@ -220,10 +280,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                     });
                 }
 
-                // Renderöi Paikat
+                // 5. Renderöi Paikat
                 const placesContainer = document.getElementById('places-list');
+                const placesSection = document.getElementById('places-section');
                 if (matchedPlaceNodes.length === 0) {
-                    placesContainer.innerHTML = '<p style="color: var(--text-muted);">Ei paikkoja tällä teemalla lähialueella.</p>';
+                    if (placesSection) placesSection.style.display = 'none';
                 } else {
                     placesContainer.innerHTML = matchedPlaceNodes.map(p => {
                         const url = `tietoa-paikasta.html?id=${encodeURIComponent(p.id)}`;
@@ -231,7 +292,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                         const typeName = typeTranslations[p.type] || p.type || 'Paikka';
                         const desc = p.description ? p.description.substring(0, 100) + '...' : '';
                         const reasonBadge = p.match_reason ? `<span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 4px; margin-left: 8px;">${p.match_reason}</span>` : '';
-                        
                         return `
                             <a href="${url}" class="list-item-card">
                                 <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 0.5rem; display: flex; align-items: center;">📍 ${typeName} ${reasonBadge}</div>
@@ -242,21 +302,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                     }).join('');
                 }
 
-                // Renderöi Yritykset
+                // 6. Renderöi Yritykset
                 const companiesContainer = document.getElementById('companies-list');
                 if (matchedCompanies.length === 0) {
                     companiesContainer.innerHTML = '<p style="color: var(--text-muted);">Ei yrityksiä tällä teemalla lähialueella.</p>';
                 } else {
-                    matchedCompanies.sort((a,b) => {
-                        const aTier = a.subscription_tier || 1;
-                        const bTier = b.subscription_tier || 1;
-                        return bTier - aTier;
-                    });
-                    
+                    matchedCompanies.sort((a,b) => (b.subscription_tier || 1) - (a.subscription_tier || 1));
                     companiesContainer.innerHTML = matchedCompanies.map(c => {
                         const url = `yrityskortti.html?id=${encodeURIComponent(c.id)}`;
                         const reasonBadge = c.match_reason ? `<span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-top: 4px;">${c.match_reason}</span>` : '';
-                        
                         const tier = c.subscription_tier || 1;
                         const displayIcon = tier >= 3 ? '⭐' : (tier === 2 ? '💎' : '');
                         return `
@@ -270,29 +324,115 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 </div>
                             </a>
                         `;
-                    }).join('') + `
-                        <div style="background: #f8fafc; border: 1px dashed #cbd5e1; padding: 1.5rem; border-radius: 12px; margin-top: 1rem; text-align: center;">
-                            <h4 style="margin: 0 0 0.5rem 0; color: #475569; font-size: 1.05rem;">Haluatko yrityksesi nousevan paremmin esiin?</h4>
-                            <p style="margin: 0 0 1rem 0; font-size: 0.9rem; color: #64748b;">Päivitä yritysprofiiliin ja nouse listan kärkeen logolla ja kuvauksella varustettuna.</p>
-                            <a href="kauppa.html" style="display: inline-block; padding: 0.5rem 1.25rem; background: #fff; border: 1px solid #cbd5e1; color: #0f172a; text-decoration: none; border-radius: 50px; font-size: 0.9rem; font-weight: 600;">Lue lisää profiileista</a>
-                        </div>
-                    `;
+                    }).join('');
                 }
 
-                // Piilota muut osiot (Vaihe 1)
-                const eventsSection = document.getElementById('events-section');
-                if (eventsSection) eventsSection.style.display = 'none';
+                // 7. Hae feed-julkaisut ja kohtaamiset place_id:n perusteella
+                const laukaaDb = window.LaukaaSupabase || supabaseClient;
+                if (laukaaDb) {
+                    const localFeedItems = [];
+                    
+                    try {
+                        // Tarjoukset place_id:n mukaan
+                        const { data: placeOffers } = await laukaaDb
+                            .from('offers')
+                            .select('id, title, description, photo_url, created_at, place_id')
+                            .eq('place_id', placeIdParam)
+                            .order('created_at', { ascending: false })
+                            .limit(5);
+                        
+                        if (placeOffers) {
+                            placeOffers.forEach(offer => {
+                                localFeedItems.push({
+                                    id: offer.id,
+                                    type: 'offer',
+                                    label: '🏷️ Tarjous',
+                                    color: '#f59e0b',
+                                    title: offer.title || offer.description || '',
+                                    description: offer.description || '',
+                                    photo_url: offer.photo_url,
+                                    created_at: offer.created_at,
+                                    linkUrl: `kohdekortti.html?offer=${offer.id}`
+                                });
+                            });
+                        }
+                    } catch(e) { console.warn('Tarjoushaku epäonnistui:', e); }
+
+                    try {
+                        // Kohtaamiset place_id:n mukaan
+                        const { data: placeEncounters } = await laukaaDb
+                            .from('encounters')
+                            .select('id, description, category, type, photo_url, created_at, location_name')
+                            .eq('place_id', placeIdParam)
+                            .order('created_at', { ascending: false })
+                            .limit(5);
+                        
+                        if (placeEncounters) {
+                            const communityStyles = {
+                                'MEMORY': { color: '#7c3aed', label: '📖 Muisto' },
+                                'TIP': { color: '#059669', label: '💡 Vinkki' },
+                                'PHOTO': { color: '#2563eb', label: '📷 Kuva' },
+                                'OBSERVATION': { color: '#ea580c', label: '📍 Havainto' },
+                                'QUESTION': { color: '#db2777', label: '❓ Kysymys' }
+                            };
+                            placeEncounters.forEach(enc => {
+                                const style = communityStyles[(enc.type || '').toUpperCase()] || { color: '#10b981', label: '💬 ' + (enc.category || 'Kohtaaminen') };
+                                localFeedItems.push({
+                                    id: enc.id,
+                                    type: 'encounter',
+                                    label: style.label,
+                                    color: style.color,
+                                    title: enc.description || '',
+                                    description: enc.location_name || '',
+                                    photo_url: enc.photo_url,
+                                    created_at: enc.created_at,
+                                    linkUrl: `ilmoituskortti.html?id=${enc.id}`
+                                });
+                            });
+                        }
+                    } catch(e) { console.warn('Kohtaamiset place_id-haku epäonnistui:', e); }
+
+                    // Renderöi paikallinen feed
+                    const localFeedSection = document.getElementById('local-feed-section');
+                    const localFeedList = document.getElementById('local-feed-list');
+                    if (localFeedItems.length > 0 && localFeedSection && localFeedList) {
+                        localFeedItems.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                        const localFeedTitle = document.getElementById('local-feed-title');
+                        if (localFeedTitle && placeName) localFeedTitle.textContent = `Vinkit ja julkaisut – ${placeName}`;
+                        
+                        localFeedList.innerHTML = localFeedItems.map(item => {
+                            const dateStr = item.created_at ? new Date(item.created_at).toLocaleDateString('fi-FI', { day:'numeric', month:'short' }) : '';
+                            const desc = item.title ? item.title.substring(0, 100) + (item.title.length > 100 ? '...' : '') : '';
+                            return `
+                                <a href="${item.linkUrl}" class="card event-card" style="border-left: 4px solid ${item.color}; text-decoration: none; display: block;">
+                                    <div class="card-content">
+                                        <span class="badge" style="background: ${item.color};">${item.label}</span>
+                                        <h3 class="card-title" style="margin: 0.5rem 0 0.25rem;">${desc}</h3>
+                                        ${item.description ? `<div class="card-meta" style="font-size:0.8rem;color:var(--text-muted);">📍 ${item.description}</div>` : ''}
+                                        ${dateStr ? `<div class="card-meta" style="font-size:0.75rem;color:var(--text-muted);margin-top:0.25rem;">${dateStr}</div>` : ''}
+                                    </div>
+                                </a>
+                            `;
+                        }).join('');
+                        localFeedSection.style.display = 'block';
+                    }
+                }
+
+                // 8. Tapahtumat – suodatetaan paikan ympäristöstä (ei piiloteta enää)
+                // Tapahtumat renderöidään normaalin hakulogiikan kautta alla
+                // Piilota vanha tagipohjainen encounters-section (se on place-feed:ssä nyt)
                 const encountersSection = document.getElementById('encounters-section');
                 if (encountersSection) encountersSection.style.display = 'none';
 
                 document.getElementById('loading-spinner').style.display = 'none';
                 document.getElementById('theme-content').style.display = 'block';
 
-                return; // Lopetetaan suoritus tähän, ettei mennä vanhaan hakulogiikkaan
+                // Ei palata – jatketaan tapahtumien renderöintiin alla
             } catch (err) {
                 console.error("Virhe kontekstuaalisessa haussa, jatketaan normaalilla:", err);
             }
         }
+
 
         let sbAjankohtainen = []; // Tuleva: ilmoitukset, tarjoukset jne.
 

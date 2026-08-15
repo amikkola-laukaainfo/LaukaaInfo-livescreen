@@ -310,37 +310,64 @@
         </section>
 
         <div class="page-container">
-            <!-- Pääpalsta: Paikat ja Tapahtumat -->
+            <!-- Pääpalsta -->
             <div class="left-col">
+
+                <!-- PAIKKAKONTEKSTI: Täällä voit tehdä (näkyy vain place_id-tilassa) -->
+                <section class="content-block" id="place-activities-section" style="display: none;">
+                    <h2 style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="iconify" style="color: #22c55e;" data-icon="material-symbols:sports-and-outdoors-outline"></span>
+                        <span id="place-activities-title">Täällä voit tehdä</span>
+                    </h2>
+                    <div id="place-activities-list" style="display: flex; flex-wrap: wrap; gap: 0.5rem; padding: 0.5rem 0;"></div>
+                </section>
+
+                <!-- Ajankohtaista (encounters + feed, tagipohjainen, EI paikkakonteksti) -->
                 <section class="content-block" id="encounters-section" style="display: none;">
                     <h2 style="display: flex; align-items: center; gap: 0.5rem;">
                         <span class="iconify" style="color: #10b981;" data-icon="material-symbols:feed-outline"></span> Ajankohtaista ja Kohtaamiset
                     </h2>
                     <div id="encounters-list" class="list-grid"></div>
                 </section>
-                
+
+                <!-- Paikat (tai "Muita paikkoja lähellä" place_id-tilassa) -->
                 <section class="content-block" id="places-section">
                     <h2 style="display: flex; align-items: center; gap: 0.5rem;">
-                        <span class="iconify" style="color: var(--accent);" data-icon="material-symbols:location-on-outline"></span> Paikat
+                        <span class="iconify" style="color: var(--accent);" data-icon="material-symbols:location-on-outline"></span>
+                        <span id="places-section-title">Paikat</span>
                     </h2>
                     <div id="places-list" class="list-grid"></div>
                 </section>
-                
+
+                <!-- Tapahtumat -->
                 <section class="content-block" id="events-section">
                     <h2 style="display: flex; align-items: center; gap: 0.5rem;">
-                        <span class="iconify" style="color: #8b5cf6;" data-icon="material-symbols:calendar-month-outline"></span> Tapahtumat
+                        <span class="iconify" style="color: #8b5cf6;" data-icon="material-symbols:calendar-month-outline"></span>
+                        <span id="events-section-title">Tapahtumat</span>
                     </h2>
                     <div id="events-list" class="list-grid"></div>
                 </section>
+
+                <!-- PAIKKAKONTEKSTI: Paikalliset vinkit ja Feed (näkyy vain place_id-tilassa) -->
+                <section class="content-block" id="local-feed-section" style="display: none;">
+                    <h2 style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="iconify" style="color: #3b82f6;" data-icon="material-symbols:forum-outline"></span>
+                        <span id="local-feed-title">Paikalliset vinkit ja Feed</span>
+                    </h2>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Julkaisuja ja havaintoja tähän paikkaan liittyen.</p>
+                    <div id="local-feed-list" class="list-grid"></div>
+                </section>
+
             </div>
 
             <!-- Sivupalsta: Yritykset ja Palvelut -->
             <aside class="sidebar">
                 <section class="content-block" id="companies-section">
                     <h2 style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0;">
-                        <span class="iconify" style="color: #f59e0b;" data-icon="material-symbols:storefront-outline"></span> Palvelut ja Yritykset
+                        <span class="iconify" style="color: #f59e0b;" data-icon="material-symbols:storefront-outline"></span>
+                        <span id="companies-section-title">Palvelut ja Yritykset</span>
                     </h2>
-                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">Nämä palvelut on kytketty tähän teemaan.</p>
+                    <p id="companies-section-desc" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">Nämä palvelut on kytketty tähän teemaan.</p>
                     <div id="companies-list" class="list-grid"></div>
                 </section>
             </aside>
@@ -375,12 +402,21 @@
                     backLink.href = `tietoa-paikasta.html?id=${encodeURIComponent(placeId)}`;
                     backLink.textContent = '← Takaisin paikkaan';
                 }
-                if (label && tag) label.textContent = `Näytetään: ${tag} – lähialueelta`;
+                if (label && tag) label.textContent = `${tag.charAt(0).toUpperCase() + tag.slice(1)} lähellä tätä paikkaa`;
                 if (badge) badge.textContent = 'Teema · Paikkakonteksti';
                 if (subtitle) {
-                    subtitle.textContent = 'Tulokset on rajattu valitun paikan lähialueeseen';
+                    subtitle.textContent = 'Sisältö on rajattu valitun paikan lähialueeseen. Palauta yleinen teema poistamalla paikkakonteksti.';
                     subtitle.style.display = 'block';
                 }
+                // Päivitä otsikoita paikkakontekstia varten
+                const placesTitle = document.getElementById('places-section-title');
+                if (placesTitle) placesTitle.textContent = 'Muita paikkoja lähellä';
+                const eventsTitle = document.getElementById('events-section-title');
+                if (eventsTitle && tag) eventsTitle.textContent = `${tag.charAt(0).toUpperCase() + tag.slice(1)}tapahtumat lähellä`;
+                const companiesTitle = document.getElementById('companies-section-title');
+                if (companiesTitle && tag) companiesTitle.textContent = `${tag.charAt(0).toUpperCase() + tag.slice(1)}palvelut lähellä`;
+                const companiesDesc = document.getElementById('companies-section-desc');
+                if (companiesDesc) companiesDesc.textContent = 'Palvelut, jotka liittyvät tähän teemaan ja ovat saatavilla lähialueella.';
             }
         })();
     </script>
