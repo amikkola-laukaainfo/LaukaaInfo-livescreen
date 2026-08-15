@@ -14,6 +14,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const placeMarkersGroup = L.markerClusterGroup({ chunkedLoading: true, maxClusterRadius: 50 });
     map.addLayer(placeMarkersGroup);
 
+    // Yritykset (erilaiset markerit tason mukaan)
+    const companyMarkersGroup = L.markerClusterGroup({ chunkedLoading: true, maxClusterRadius: 50 });
+    map.addLayer(companyMarkersGroup);
+
     const nameFilter = document.getElementById('name-filter');
     const statusText = document.getElementById('status-text');
 
@@ -28,6 +32,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // visiblePlaces = Supabase-paikat jotka KORVAAVAT lähellä olevan JSON-kohteen
     let allFeatures = [];
     let visiblePlaces = [];
+    let allCompanies = [];
 
     // 2. Load JSON Data
     if (typeof window.getKarttaKohteet === 'function') {
@@ -92,7 +97,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.warn('Supabase places lataus epäonnistui:', e);
     }
 
-    const totalCount = allFeatures.length + visiblePlaces.length;
+    // 3.5 Load Companies
+    try {
+        const cacheBuster = new Date().getTime();
+        const res = await fetch('live_companies.json?v=' + cacheBuster);
+        if (res.ok) {
+            const yData = await res.json();
+            if (yData.results) {
+                allCompanies = yData.results.filter(c => c.lat && c.lon);
+            }
+        }
+    } catch(e) {
+        console.warn('Yritysten lataus epäonnistui:', e);
+    }
+
+    const totalCount = allFeatures.length + visiblePlaces.length + allCompanies.length;
     statusText.textContent = `Yhteensä ${totalCount} kohdetta.`;
 
     renderMarkers();
@@ -117,8 +136,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                 (p.canonical_name && p.canonical_name.toLowerCase().includes(searchVal));
         });
 
+        // Yritykset
+        const filteredCompanies = allCompanies.filter(c => {
+            if (!searchVal) return true;
+            return c.name && c.name.toLowerCase().includes(searchVal);
+        });
+
         const newMarkers = [];
         const newPlaceMarkers = [];
+        const newCompanyMarkers = [];
         const coords = [];
 
         // Rakennetaan JSON-markerit
@@ -178,12 +204,58 @@ document.addEventListener('DOMContentLoaded', async () => {
         markersGroup.addLayers(newMarkers);
         placeMarkersGroup.addLayers(newPlaceMarkers);
 
+        // Rakennetaan yritysten markerit tason mukaan
+        filteredCompanies.forEach(company => {
+            const tier = company.subscription_tier || 1;
+            let iconHtml, iconSize, iconAnchor, zIndexOffset = 0;
+
+            if (tier >= 3) {
+                // Taso 3: Kumppani (Iso erottuva marker)
+                iconHtml = `<div style="width:36px;height:36px;background:#e11d48;border:3px solid white;border-radius:50%;box-shadow:0 0 15px rgba(225,29,72,0.8);display:flex;align-items:center;justify-content:center;font-size:16px;">⭐</div>`;
+                iconSize = [36, 36];
+                iconAnchor = [18, 18];
+                zIndexOffset = 1000;
+            } else if (tier === 2) {
+                // Taso 2: Yritysprofiili (brändiväri)
+                iconHtml = `<div style="width:28px;height:28px;background:#0056b3;border:2px solid white;border-radius:50%;box-shadow:0 2px 5px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:12px;">🏢</div>`;
+                iconSize = [28, 28];
+                iconAnchor = [14, 14];
+                zIndexOffset = 500;
+            } else {
+                // Taso 1: Ilmainen (pieni harmaa/sininen)
+                iconHtml = `<div style="width:16px;height:16px;background:#94a3b8;border:2px solid white;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>`;
+                iconSize = [16, 16];
+                iconAnchor = [8, 8];
+            }
+
+            const compIcon = L.divIcon({ className: '', html: iconHtml, iconSize, iconAnchor });
+            
+            let popupHtml = `<div style="min-width: 200px;">
+                <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;color:#64748b;margin-bottom:4px;">Yritys ${tier >= 2 ? '⭐' : ''}</div>
+                <h3 style="margin: 0 0 5px 0; color: #1e293b;">${company.name}</h3>`;
+                
+            if (tier >= 2) {
+                popupHtml += `<div style="font-size: 0.85rem; color: #475569; margin-bottom: 8px;">${company.description || company.short_description || ''}</div>`;
+                popupHtml += `<a href="yrityskortti.html?id=${company.id}" style="display:inline-block;background:#0056b3;color:white;padding:5px 12px;border-radius:20px;text-decoration:none;font-size:0.8rem;font-weight:700;">Katso profiili →</a>`;
+            } else {
+                popupHtml += `<div style="font-size: 0.85rem; color: #64748b;">Perustiedot</div>`;
+                popupHtml += `<a href="yrityskortti.html?id=${company.id}" style="display:inline-block;margin-top:5px;color:#0056b3;text-decoration:underline;font-size:0.8rem;">Katso tiedot</a>`;
+            }
+            popupHtml += `</div>`;
+
+            const marker = L.marker([company.lat, company.lon], { icon: compIcon, zIndexOffset }).bindPopup(popupHtml);
+            newCompanyMarkers.push(marker);
+            coords.push([company.lat, company.lon]);
+        });
+        
+        companyMarkersGroup.addLayers(newCompanyMarkers);
+
         if (coords.length > 0) {
             const bounds = L.latLngBounds(coords);
             map.fitBounds(bounds.pad(0.1));
         }
 
-        const shown = filteredFeatures.length + filteredPlaces.length;
+        const shown = filteredFeatures.length + filteredPlaces.length + filteredCompanies.length;
         statusText.textContent = searchVal
             ? `Näytetään ${shown} kohdetta haulla "${searchVal}".`
             : `Yhteensä ${totalCount} kohdetta.`;

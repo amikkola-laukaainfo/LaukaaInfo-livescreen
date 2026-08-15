@@ -244,7 +244,7 @@
                 console.log(`Filtering by region: ${selectedRegion} (13km radius)`);
                 categoryCompanies = rawCategoryCompanies.filter(c => {
                     // Yhtenäinen premium-määritys
-                    const isPremium = c.tyyppi === 'paid' || c.tyyppi === 'maksu' || c.taso === 'premium' || (c.media && c.media.length > 0);
+                    const isPremium = c.tyyppi === 'paid' || c.tyyppi === 'maksu' || c.taso === 'premium' || (c.media && c.media.length > 0) || c.subscription_tier >= 2;
                     if (isPremium) return true;
 
                     if (c.lat && c.lon) {
@@ -283,9 +283,9 @@
         const currentSort = referenceCoords ? sortByDistance : sortAlphabetically;
 
         // Separate Premium and Free
-        // Yhtenäinen premium-määritys: has media OR tyyppi is "maksu/paid"
-        let premium = categoryCompanies.filter(c => (c.media && c.media.length > 0) || c.tyyppi === 'maksu' || c.tyyppi === 'paid' || c.taso === 'premium');
-        const free = categoryCompanies.filter(c => !((c.media && c.media.length > 0) || c.tyyppi === 'maksu' || c.tyyppi === 'paid' || c.taso === 'premium')).sort(currentSort);
+        // Yhtenäinen premium-määritys: has media OR tyyppi is "maksu/paid" OR subscription_tier >= 2
+        let premium = categoryCompanies.filter(c => (c.media && c.media.length > 0) || c.tyyppi === 'maksu' || c.tyyppi === 'paid' || c.taso === 'premium' || c.subscription_tier >= 2);
+        const free = categoryCompanies.filter(c => !((c.media && c.media.length > 0) || c.tyyppi === 'maksu' || c.tyyppi === 'paid' || c.taso === 'premium' || c.subscription_tier >= 2)).sort(currentSort);
 
         // Probabilistic Weighted Sort for Premium Companies
         // Higher karusellipaino (0-100) increases the chance of being at the top
@@ -578,6 +578,18 @@
             free.forEach(c => {
                 list.appendChild(createCompanyCard(c));
             });
+            
+            // Upsell kortti ilmaisten listan perään
+            const upsell = document.createElement('div');
+            upsell.style.gridColumn = '1 / -1';
+            upsell.innerHTML = `
+                <div style="background: #f8fafc; border: 1px dashed #cbd5e1; padding: 2rem; border-radius: 12px; margin-top: 1rem; text-align: center;">
+                    <h4 style="margin: 0 0 0.5rem 0; color: #475569; font-size: 1.1rem;">Haluatko yrityksesi nousevan paremmin esiin?</h4>
+                    <p style="margin: 0 0 1rem 0; font-size: 0.95rem; color: #64748b;">Päivitä yritysprofiiliin ja nouse listan kärkeen logolla ja kuvauksella varustettuna.</p>
+                    <a href="kauppa.html" style="display: inline-block; padding: 0.6rem 1.5rem; background: #fff; border: 1px solid #cbd5e1; color: #0f172a; text-decoration: none; border-radius: 50px; font-size: 0.95rem; font-weight: 600;">Lue lisää profiileista</a>
+                </div>
+            `;
+            list.appendChild(upsell);
         }
     }
 

@@ -1103,6 +1103,20 @@ function renderCompanies(scoredCompanies, allSources = [], allContents = [], cur
     const listTier4 = document.getElementById('premium-partners-list');
     
     const tier1and2 = scoredCompanies.filter(c => c.tier <= 2).sort((a,b) => {
+        // Ensisijainen lajittelu: Osuman tarkkuus (tier 1 eli suora relaatio ennen tier 2)
+        if (a.tier !== b.tier) return a.tier - b.tier;
+
+        // Toissijainen lajittelu: Onko kumppani tai maksava profiili (subscription_tier 2)
+        const aIsPartner = a.reasons && a.reasons.some(r => r.type === 'VISIBILITY');
+        const bIsPartner = b.reasons && b.reasons.some(r => r.type === 'VISIBILITY');
+        if (aIsPartner && !bIsPartner) return -1;
+        if (!aIsPartner && bIsPartner) return 1;
+
+        const aTier = a.subscription_tier || 1;
+        const bTier = b.subscription_tier || 1;
+        if (aTier !== bTier) return bTier - aTier;
+
+        // Kolmas: Onko lisäsisältöä
         const aHasExtra = allSources.some(s => String(s.entity_id) === String(a.id)) || 
                           allContents.some(c => String(c.entity_id) === String(a.id));
         const bHasExtra = allSources.some(s => String(s.entity_id) === String(b.id)) || 
@@ -1118,12 +1132,18 @@ function renderCompanies(scoredCompanies, allSources = [], allContents = [], cur
     
     // Yleinen HTML generaattori korteille
     const generateCardHtml = (item, isSemantic = false) => {
+        const isPartner = item.reasons && item.reasons.some(r => r.type === 'VISIBILITY');
+        const subTier = item.subscription_tier || 1;
+        
         let linkUrl = '?id=' + item.id;
         if (String(item.id).startsWith('yritys_') || item.type === 'business' || item.nimi) {
             linkUrl = 'yrityskortti.html?id=' + item.id;
         }
         
         const displayName = item.nimi || item.name || item.id;
+        const displayIcon = isPartner ? '⭐' : (subTier === 2 ? '💎' : '');
+        const displayTitle = `${displayName} ${displayIcon}`;
+        
         let thumbUrl = item.logo || (item.images && item.images[0]) || item.image || null;
         
         const itemSources = allSources.filter(s => String(s.entity_id) === String(item.id));
@@ -1175,7 +1195,7 @@ function renderCompanies(scoredCompanies, allSources = [], allContents = [], cur
                     </div>
                     <div style="flex: 1; min-width: 0;">
                         <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
-                            <span style="font-weight: 700; font-size: 1.05rem; color: var(--dark-text);">${displayName}</span>
+                            <span style="font-weight: 700; font-size: 1.05rem; color: var(--dark-text);">${displayTitle}</span>
                         </div>
                         ${subtitleHtml}
                     </div>
@@ -1271,7 +1291,14 @@ function renderCompanies(scoredCompanies, allSources = [], allContents = [], cur
                     </div>
                 `;
             }
-            listTier12.innerHTML = html;
+            const upsellHtml = `
+            <div style="background: #f8fafc; border: 1px dashed #cbd5e1; padding: 1.25rem; border-radius: 12px; margin-top: 1rem; text-align: center;">
+                <h4 style="margin: 0 0 0.5rem 0; color: #475569; font-size: 0.95rem;">Onko yrityksesi tällä listalla vain perustiedoilla?</h4>
+                <p style="margin: 0 0 1rem 0; font-size: 0.85rem; color: #64748b;">Päivitä yritysprofiiliin (149 €/vuosi) ja nouse listan kärkeen logolla ja kuvauksella varustettuna.</p>
+                <a href="kauppa.html" style="display: inline-block; padding: 0.4rem 1rem; background: #fff; border: 1px solid #cbd5e1; color: #0f172a; text-decoration: none; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Lue lisää profiileista</a>
+            </div>`;
+            
+            listTier12.innerHTML = html + upsellHtml;
         } else {
             if (currentPlace && currentPlace.commercial_visibility === false) {
                 if (nonCommercialNotice) nonCommercialNotice.style.display = 'block';

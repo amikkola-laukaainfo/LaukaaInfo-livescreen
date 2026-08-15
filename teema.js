@@ -247,21 +247,36 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (matchedCompanies.length === 0) {
                     companiesContainer.innerHTML = '<p style="color: var(--text-muted);">Ei yrityksiä tällä teemalla lähialueella.</p>';
                 } else {
+                    matchedCompanies.sort((a,b) => {
+                        const aTier = a.subscription_tier || 1;
+                        const bTier = b.subscription_tier || 1;
+                        return bTier - aTier;
+                    });
+                    
                     companiesContainer.innerHTML = matchedCompanies.map(c => {
                         const url = `yrityskortti.html?id=${encodeURIComponent(c.id)}`;
                         const reasonBadge = c.match_reason ? `<span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-top: 4px;">${c.match_reason}</span>` : '';
+                        
+                        const tier = c.subscription_tier || 1;
+                        const displayIcon = tier >= 3 ? '⭐' : (tier === 2 ? '💎' : '');
                         return `
                             <a href="${url}" class="list-item-card">
                                 <div class="card-header-grid">
                                     <div>
-                                        <h3 style="margin: 0 0 0.25rem 0; font-size: 1.1rem; color: var(--text-main);">${c.nimi}</h3>
+                                        <h3 style="margin: 0 0 0.25rem 0; font-size: 1.1rem; color: var(--text-main);">${c.nimi} ${displayIcon}</h3>
                                         <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.25rem;">${c.kategoria || ''}</div>
                                         ${reasonBadge}
                                     </div>
                                 </div>
                             </a>
                         `;
-                    }).join('');
+                    }).join('') + `
+                        <div style="background: #f8fafc; border: 1px dashed #cbd5e1; padding: 1.5rem; border-radius: 12px; margin-top: 1rem; text-align: center;">
+                            <h4 style="margin: 0 0 0.5rem 0; color: #475569; font-size: 1.05rem;">Haluatko yrityksesi nousevan paremmin esiin?</h4>
+                            <p style="margin: 0 0 1rem 0; font-size: 0.9rem; color: #64748b;">Päivitä yritysprofiiliin ja nouse listan kärkeen logolla ja kuvauksella varustettuna.</p>
+                            <a href="kauppa.html" style="display: inline-block; padding: 0.5rem 1.25rem; background: #fff; border: 1px solid #cbd5e1; color: #0f172a; text-decoration: none; border-radius: 50px; font-size: 0.9rem; font-weight: 600;">Lue lisää profiileista</a>
+                        </div>
+                    `;
                 }
 
                 // Piilota muut osiot (Vaihe 1)
@@ -493,16 +508,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (matchedCompanies.length === 0) {
             companiesContainer.innerHTML = '<p style="color: var(--text-muted);">Ei palveluita tällä teemalla.</p>';
         } else {
+            matchedCompanies.sort((a,b) => {
+                const aTier = a.subscription_tier || 1;
+                const bTier = b.subscription_tier || 1;
+                return bTier - aTier;
+            });
+
             const generateCompanyHtml = (c) => {
                 const url = `yrityskortti.html?id=${encodeURIComponent(c.id)}`;
                 const rawTags = (c.tags || '').split(',').map(t => t.trim()).filter(t => t.length > 0 && t !== '-');
                 const tagHtml = rawTags.slice(0, 3).map(t => `<span class="tag-pill">${t}</span>`).join('');
                 
+                const tier = c.subscription_tier || 1;
+                const displayIcon = tier >= 3 ? '⭐' : (tier === 2 ? '💎' : '');
+                
                 return `
                     <a href="${url}" class="list-item-card">
                         <div class="card-header-grid">
                             <div>
-                                <h3 style="margin: 0 0 0.25rem 0; font-size: 1.1rem; color: var(--text-main);">${c.nimi}</h3>
+                                <h3 style="margin: 0 0 0.25rem 0; font-size: 1.1rem; color: var(--text-main);">${c.nimi} ${displayIcon}</h3>
                                 <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">${c.kategoria || ''}</div>
                                 <div>${tagHtml}</div>
                             </div>
@@ -528,6 +552,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </div>
                 `;
             }
+            
+            html += `
+                <div style="background: #f8fafc; border: 1px dashed #cbd5e1; padding: 1.5rem; border-radius: 12px; margin-top: 1rem; text-align: center;">
+                    <h4 style="margin: 0 0 0.5rem 0; color: #475569; font-size: 1.05rem;">Haluatko yrityksesi nousevan paremmin esiin?</h4>
+                    <p style="margin: 0 0 1rem 0; font-size: 0.9rem; color: #64748b;">Päivitä yritysprofiiliin ja nouse listan kärkeen logolla ja kuvauksella varustettuna.</p>
+                    <a href="kauppa.html" style="display: inline-block; padding: 0.5rem 1.25rem; background: #fff; border: 1px solid #cbd5e1; color: #0f172a; text-decoration: none; border-radius: 50px; font-size: 0.9rem; font-weight: 600;">Lue lisää profiileista</a>
+                </div>
+            `;
             companiesContainer.innerHTML = html;
         }
         
