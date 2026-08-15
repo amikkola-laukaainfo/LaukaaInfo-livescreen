@@ -1,10 +1,10 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ilmoitukset â€“ LaukaaInfo</title>
-    <meta name="description" content="Selaa laukaalaisien ilmoituksia: apupyynnÃ¶t, tarjoukset, harrastusryhmÃ¤t ja projektit. LÃ¶ydÃ¤ apua tai tarjoa omaa osaamistasi.">
+    <title>Ilmoitukset – LaukaaInfo</title>
+    <meta name="description" content="Selaa laukaalaisien ilmoituksia: apupyynnöt, tarjoukset, harrastusryhmät ja projektit. Löydä apua tai tarjoa omaa osaamistasi.">
     <link rel="icon" href="logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css?v=20260420-2">
@@ -271,32 +271,32 @@
     </nav>
 
     <div class="ilm-list-hero">
-        <h1>ğŸ“‹ Ilmoitukset</h1>
-        <p>Paikalliset avunpyynnÃ¶t, tarjoukset, harrastusryhmÃ¤t ja projektit</p>
+        <h1>?? Ilmoitukset</h1>
+        <p>Paikalliset avunpyynnöt, tarjoukset, harrastusryhmät ja projektit</p>
     </div>
 
     <div class="search-bar" style="padding-top:1.5rem;">
-        <input type="text" class="search-input" id="search-input" placeholder="ğŸ” Hae ilmoituksista..." oninput="filterIlmoitukset()">
+        <input type="text" class="search-input" id="search-input" placeholder="?? Hae ilmoituksista..." oninput="filterIlmoitukset()">
     </div>
 
     <div class="filter-bar">
         <div class="filter-inner">
             <span class="filter-label">Suodata:</span>
             <button class="filter-btn active" onclick="setFilter('kaikki', this)">Kaikki</button>
-            <button class="filter-btn" onclick="setFilter('tarvitsen_apua', this)">ğŸ¤ Tarvitsen apua</button>
-            <button class="filter-btn" onclick="setFilter('tarjoan_apua', this)">ğŸ›  Tarjoan apua</button>
-            <button class="filter-btn" onclick="setFilter('etsin_seuraa', this)">ğŸ‘¥ Etsin seuraa</button>
-            <button class="filter-btn" onclick="setFilter('perustetaan_projekti', this)">ğŸš€ Perustetaan projekti</button>
+            <button class="filter-btn" onclick="setFilter('tarvitsen_apua', this)">?? Tarvitsen apua</button>
+            <button class="filter-btn" onclick="setFilter('tarjoan_apua', this)">?? Tarjoan apua</button>
+            <button class="filter-btn" onclick="setFilter('etsin_seuraa', this)">?? Etsin seuraa</button>
+            <button class="filter-btn" onclick="setFilter('perustetaan_projekti', this)">?? Perustetaan projekti</button>
         </div>
     </div>
 
     <div class="ilm-list-main">
         <div class="ilm-cta-bar">
             <div>
-                <strong>Haluatko jÃ¤ttÃ¤Ã¤ ilmoituksen?</strong><br>
-                <small style="opacity:0.85;">Ohjattu prosessi â€“ valmis muutamassa minuutissa</small>
+                <strong>Haluatko jättää ilmoituksen?</strong><br>
+                <small style="opacity:0.85;">Ohjattu prosessi – valmis muutamassa minuutissa</small>
             </div>
-            <a href="ilmoittaudu.html">+ JÃ¤tÃ¤ ilmoitus</a>
+            <a href="ilmoittaudu.html">+ Jätä ilmoitus</a>
         </div>
 
         <div id="ilm-count" class="ilm-count"></div>
@@ -310,10 +310,10 @@
 
     <footer>
         <div class="footer-content">
-            <p>Â© 2026 LaukaaInfo â€“ Palvelua yllÃ¤pitÃ¤Ã¤ Mediazoo.fi</p>
+            <p>© 2026 LaukaaInfo – Palvelua ylläpitää Mediazoo.fi</p>
             <div class="footer-links">
                 <a href="index.html">Etusivu</a>
-                <a href="ilmoittaudu.html">JÃ¤tÃ¤ ilmoitus</a>
+                <a href="ilmoittaudu.html">Jätä ilmoitus</a>
                 <a href="tietosuoja.html">Tietosuoja</a>
             </div>
         </div>
@@ -324,13 +324,13 @@
         const API_URL = 'https://mediazoo.fi/laukaainfo-web/ilmoitukset-api.php?action=list';
 
         const INTENT_META = {
-            tarvitsen_apua:     { emoji: 'ğŸ¤', label: 'Tarvitsen apua',       css: 'intent-tarvitsen' },
-            tarjoan_apua:       { emoji: 'ğŸ› ', label: 'Tarjoan apua',         css: 'intent-tarjoan' },
-            etsin_seuraa:       { emoji: 'ğŸ‘¥', label: 'Etsin samanhenkisiÃ¤',  css: 'intent-etsin' },
-            perustetaan_projekti: { emoji: 'ğŸš€', label: 'Perustetaan projekti', css: 'intent-perustan' },
-            // TaaksepÃ¤in yhteensopivuus vanhalle formaatille
-            tarjoan:            { emoji: 'ğŸ› ', label: 'Tarjoan apua',         css: 'intent-tarjoan' },
-            tarvitsen:          { emoji: 'ğŸ¤', label: 'Tarvitsen apua',       css: 'intent-tarvitsen' },
+            tarvitsen_apua:     { emoji: '??', label: 'Tarvitsen apua',       css: 'intent-tarvitsen' },
+            tarjoan_apua:       { emoji: '??', label: 'Tarjoan apua',         css: 'intent-tarjoan' },
+            etsin_seuraa:       { emoji: '??', label: 'Etsin samanhenkisiä',  css: 'intent-etsin' },
+            perustetaan_projekti: { emoji: '??', label: 'Perustetaan projekti', css: 'intent-perustan' },
+            // Taaksepäin yhteensopivuus vanhalle formaatille
+            tarjoan:            { emoji: '??', label: 'Tarjoan apua',         css: 'intent-tarjoan' },
+            tarvitsen:          { emoji: '??', label: 'Tarvitsen apua',       css: 'intent-tarvitsen' },
         };
 
         let allIlmoitukset = [];
@@ -376,14 +376,14 @@
             } catch (e) {
                 document.getElementById('ilm-list-container').innerHTML = `
                     <div class="ilm-empty">
-                        <div class="ilm-empty-icon">ğŸ˜•</div>
-                        <p>Ilmoitusten lataus epÃ¤onnistui. Tarkista verkkoyhteys.</p>
+                        <div class="ilm-empty-icon">??</div>
+                        <p>Ilmoitusten lataus epäonnistui. Tarkista verkkoyhteys.</p>
                     </div>`;
             }
         }
 
         function buildTagFilters(sanapilvi) {
-            // LisÃ¤tÃ¤Ã¤n dynaamiset tagit suodatuspalkkiin
+            // Lisätään dynaamiset tagit suodatuspalkkiin
             const bar = document.querySelector('.filter-inner');
             const tags = Object.keys(sanapilvi).slice(0, 8); // Max 8 tagia
             if (tags.length === 0) return;
@@ -468,9 +468,9 @@
             if (list.length === 0) {
                 container.innerHTML = `
                     <div class="ilm-empty">
-                        <div class="ilm-empty-icon">ğŸ”</div>
-                        <p>Ei ilmoituksia tÃ¤llÃ¤ hakuehdolla.</p>
-                        <a href="ilmoittaudu.html" style="color:var(--primary); font-weight:600;">Ole ensimmÃ¤inen â€“ jÃ¤tÃ¤ ilmoitus â†’</a>
+                        <div class="ilm-empty-icon">??</div>
+                        <p>Ei ilmoituksia tällä hakuehdolla.</p>
+                        <a href="ilmoittaudu.html" style="color:var(--primary); font-weight:600;">Ole ensimmäinen – jätä ilmoitus ?</a>
                     </div>`;
                 return;
             }
@@ -480,7 +480,7 @@
 
         function renderCard(ilm, idx) {
             const intent = ilm.intent || ilm.tyyppi || 'muu';
-            const meta = INTENT_META[intent] || { emoji: 'ğŸ“Œ', label: intent, css: '' };
+            const meta = INTENT_META[intent] || { emoji: '??', label: intent, css: '' };
             const tagit = ilm.tagit || [];
             const date = ilm.paivays ? formatDate(ilm.paivays) : '';
             const kuvaus = ilm.kuvaus ? `<p class="ilm-card-kuvaus">${escHtml(ilm.kuvaus)}</p>` : '<p class="ilm-card-kuvaus" style="color:var(--muted);font-style:italic;">Ei tarkempaa kuvausta.</p>';
@@ -491,18 +491,18 @@
                     <div class="ilm-intent-badge">${meta.emoji}</div>
                     <div class="ilm-card-meta">
                         <div class="ilm-card-title">${escHtml(ilm.otsikko || 'Ilmoitus')}</div>
-                        <div class="ilm-card-date">ğŸ• ${date} Â· ${escHtml(ilm.nimi || 'Anonyymi')}</div>
+                        <div class="ilm-card-date">?? ${date} · ${escHtml(ilm.nimi || 'Anonyymi')}</div>
                         <div class="ilm-card-tags">
                             ${tagit.map(t => `<span class="ilm-tag-pill">${escHtml(tagLabel(t))}</span>`).join('')}
                         </div>
                     </div>
-                    <div class="ilm-expand-icon">â–¼</div>
+                    <div class="ilm-expand-icon">?</div>
                 </div>
                 <div class="ilm-card-body">
                     <div class="ilm-card-body-inner">
                         ${kuvaus}
                         <button class="ilm-contact-btn" onclick="revealContact(this, '${escHtml(ilm.yhteys || '')}', '${escHtml(ilm.nimi || '')}')">
-                            ğŸ“ NÃ¤ytÃ¤ yhteystieto
+                            ?? Näytä yhteystieto
                         </button>
                     </div>
                 </div>
@@ -518,8 +518,8 @@
             if (!yhteys) {
                 btn.insertAdjacentHTML('afterend', `
                     <div class="ilm-contact-revealed">
-                        <strong>${escHtml(nimi)}</strong> ei ole jÃ¤ttÃ¤nyt julkista yhteystietoa.<br>
-                        <small>Voit kokeilla hakea palveluverkoston kautta tai jÃ¤ttÃ¤Ã¤ oman ilmoituksen.</small>
+                        <strong>${escHtml(nimi)}</strong> ei ole jättänyt julkista yhteystietoa.<br>
+                        <small>Voit kokeilla hakea palveluverkoston kautta tai jättää oman ilmoituksen.</small>
                     </div>`);
             } else {
                 btn.insertAdjacentHTML('afterend', `
@@ -549,3 +549,4 @@
     </script>
 </body>
 </html>
+
