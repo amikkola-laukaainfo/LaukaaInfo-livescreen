@@ -1,0 +1,313 @@
+﻿{
+  "schema_version": "1.0",
+  "description": "LaukaaInfo yhtenäinen tagitaksonomia. Kaikki entiteetit (paikat, yritykset, tapahtumat, muistot) käyttävät samoja tag_id-arvoja.",
+  "categories": {
+    "THEME": "Pääteema",
+    "SECTOR": "Toimiala",
+    "SERVICE": "Palvelu",
+    "ACTIVITY": "Aktiviteetti",
+    "PLACE_TYPE": "Paikkatyyppi",
+    "EVENT_TYPE": "Tapahtumatyyppi",
+    "TARGET_GROUP": "Kohderyhmä",
+    "SEASON": "Sesonki",
+    "FEATURE": "Ominaisuus"
+  },
+  "main_groups": [
+    {
+      "id": "hyvinvointi", "label": "Hyvinvointi", "category": "THEME", "icon": "material-symbols:spa",
+      "groups": [
+        { "id": "hieronta-terapia", "label": "Hieronta ja terapia", "tags": [
+            { "id": "hieronta", "label": "Hieronta", "category": "SERVICE", "synonyms": ["hieroja", "klassinen hieronta", "urheiluhieronta", "koirahieronta", "jalkahoito"] },
+            { "id": "fysioterapia", "label": "Fysioterapia", "category": "SERVICE", "synonyms": ["fysioterapeutti", "ft", "kuntoutus"] },
+            { "id": "toimintaterapia", "label": "Toimintaterapia", "category": "SERVICE", "synonyms": ["toimintaterapeutti"] },
+            { "id": "tyonohjaus", "label": "Työnohjaus", "category": "SERVICE", "synonyms": ["mentorointi", "coaching"] }
+        ]},
+        { "id": "kylpyla-sauna", "label": "Kylpylä ja sauna", "tags": [
+            { "id": "kylpyla", "label": "Kylpylä", "category": "PLACE_TYPE", "synonyms": ["spa", "vesipuisto", "allasosasto", "uimahalli"] },
+            { "id": "sauna", "label": "Sauna", "category": "FEATURE", "synonyms": ["saunatilat", "savusauna", "saunavuokraus"] },
+            { "id": "uinti", "label": "Uinti", "category": "ACTIVITY", "synonyms": ["uimaranta", "uiminen", "vesijumppa"] }
+        ]},
+        { "id": "kauneus", "label": "Kauneus ja hoito", "tags": [
+            { "id": "parturikampaamo", "label": "Parturi-kampaamo", "category": "SERVICE", "synonyms": ["kampaaja", "parturi", "kampaamo", "hiustenleikkaus"] },
+            { "id": "kauneuspalvelut", "label": "Kauneuspalvelut", "category": "SERVICE", "synonyms": ["kauneushoitola", "kauneudenhoito", "meikkaus"] },
+            { "id": "kynsihoito", "label": "Kynsihoito", "category": "SERVICE", "synonyms": ["kynnet", "geelilakka", "rakennekynnet"] }
+        ]},
+        { "id": "liikunta-kunto", "label": "Liikunta ja kunto", "tags": [
+            { "id": "kuntosali", "label": "Kuntosali", "category": "ACTIVITY", "synonyms": ["sali", "punttisali", "gym", "kuntokeskus"] },
+            { "id": "golf", "label": "Golf", "category": "ACTIVITY", "synonyms": ["golfkenttä", "golftie"] }
+        ]}
+      ]
+    },
+    {
+      "id": "ulkoilu", "label": "Ulkoilu", "category": "THEME", "icon": "material-symbols:hiking",
+      "groups": [
+        { "id": "retkeily-vaellus", "label": "Retkeily ja vaellus", "tags": [
+            { "id": "retkeily", "label": "Retkeily", "category": "ACTIVITY", "synonyms": ["luontoretki", "retkiily", "patikointi"] },
+            { "id": "vaellus", "label": "Vaellus", "category": "ACTIVITY", "synonyms": ["patikkaretki", "vaellusreitti"] },
+            { "id": "erailu", "label": "Eräily", "category": "ACTIVITY", "synonyms": ["erätaidot", "selviytymiskoulu"] }
+        ]},
+        { "id": "pyoraily-lenkkeily", "label": "Pyöräily ja lenkkeily", "tags": [
+            { "id": "pyoraily", "label": "Pyöräily", "category": "ACTIVITY", "synonyms": ["maastopyöräily", "pyöräretki", "fatbike"] },
+            { "id": "lenkkeily", "label": "Lenkkeily", "category": "ACTIVITY", "synonyms": ["juoksu", "kävely", "sauvakävely"] }
+        ]},
+        { "id": "luontokohde", "label": "Luontokohteet", "tags": [
+            { "id": "luontokohde", "label": "Luontokohde", "category": "PLACE_TYPE", "synonyms": ["luontoreitti", "kansallispuisto", "luonnonsuojelualue"] },
+            { "id": "kalliomaalaukset", "label": "Kalliomaalaukset", "category": "PLACE_TYPE", "synonyms": ["kalliokuvat", "muinaispiirrokset"] }
+        ]}
+      ]
+    },
+    {
+      "id": "liikunta", "label": "Liikunta", "category": "THEME", "icon": "material-symbols:sports",
+      "groups": [
+        { "id": "talviliikunta", "label": "Talviliikunta", "tags": [
+            { "id": "hiihto", "label": "Hiihto", "category": "ACTIVITY", "synonyms": ["murtomaahiihto", "hiihtolatu", "latu"] },
+            { "id": "luistelu", "label": "Luistelu", "category": "ACTIVITY", "synonyms": ["luistelukenttä", "tekojää"] },
+            { "id": "laskettelu", "label": "Laskettelu", "category": "ACTIVITY", "synonyms": ["rinne", "mäenlasku", "pulkkailu"] }
+        ]},
+        { "id": "vesiliikunta", "label": "Vesiliikunta", "tags": [
+            { "id": "melonta", "label": "Melonta", "category": "ACTIVITY", "synonyms": ["kanootti", "kajak", "sup-lauta", "soutu"] },
+            { "id": "koskenlasku", "label": "Koskenlasku", "category": "ACTIVITY", "synonyms": ["rafting", "koskimelonta"] }
+        ]},
+        { "id": "kilpaurheilu", "label": "Kilpaurheilu", "tags": [
+            { "id": "karting", "label": "Karting", "category": "ACTIVITY", "synonyms": ["kartingradat", "go-kart"] },
+            { "id": "keilailu", "label": "Keilailu", "category": "ACTIVITY", "synonyms": ["keilarata", "bowlinghalli"] }
+        ]}
+      ]
+    },
+    {
+      "id": "luonto", "label": "Luonto", "category": "THEME", "icon": "material-symbols:forest",
+      "groups": [
+        { "id": "metsa", "label": "Metsä", "tags": [
+            { "id": "metsa", "label": "Metsä", "category": "FEATURE", "synonyms": ["metsäluonto", "metsäretki"] },
+            { "id": "marjastus", "label": "Marjastus ja sienestys", "category": "ACTIVITY", "synonyms": ["sienestys", "luonnontuotteet"] }
+        ]},
+        { "id": "vesisto", "label": "Vesistöt", "tags": [
+            { "id": "jarvi", "label": "Järvi", "category": "PLACE_TYPE", "synonyms": ["joki", "puro", "lampi", "vesistö", "järvimaisema"] },
+            { "id": "kalastus", "label": "Kalastus", "category": "ACTIVITY", "synonyms": ["onginta", "pilkkiminen", "perhokalastus"] },
+            { "id": "uimaranta", "label": "Uimaranta", "category": "PLACE_TYPE", "synonyms": ["rantasauna", "laivaranta", "järvenranta"] }
+        ]}
+      ]
+    },
+    {
+      "id": "matkailu", "label": "Matkailu", "category": "THEME", "icon": "material-symbols:travel",
+      "groups": [
+        { "id": "majoitus", "label": "Majoitus", "tags": [
+            { "id": "hotelli", "label": "Hotelli", "category": "PLACE_TYPE", "synonyms": ["kokoushotelli", "rantahotelli"] },
+            { "id": "mokki", "label": "Mökki", "category": "PLACE_TYPE", "synonyms": ["lomahuoneisto", "lomamökki", "vuokramökki", "mökit", "m\u00e4kit"] },
+            { "id": "leirikeskus", "label": "Leirikeskus", "category": "PLACE_TYPE", "synonyms": ["leirintäalue", "lomakeskus", "nuorisoleiri", "leirikoulu"] },
+            { "id": "majoitus", "label": "Majoitus", "category": "SERVICE", "synonyms": ["perhemajoitus", "ryhmämajoitus", "pienryhmämajoitus"] },
+            { "id": "iglu", "label": "Iglu", "category": "PLACE_TYPE", "synonyms": ["lasi-iglu", "iglut", "revontuli"] }
+        ]},
+        { "id": "luontomatkailu", "label": "Luontomatkailu", "tags": [
+            { "id": "luontomatkailu", "label": "Luontomatkailu", "category": "ACTIVITY", "synonyms": ["ekoturismi", "luontoelämys"] },
+            { "id": "elamykset", "label": "Elämykset", "category": "ACTIVITY", "synonyms": ["elämyspalvelut", "seikkailu", "aktiviteetit"] }
+        ]}
+      ]
+    },
+    {
+      "id": "kulttuuri", "label": "Kulttuuri", "category": "THEME", "icon": "material-symbols:theater-comedy",
+      "groups": [
+        { "id": "taide-musiikki", "label": "Taide ja musiikki", "tags": [
+            { "id": "musiikki", "label": "Musiikki", "category": "ACTIVITY", "synonyms": ["konsertti", "live-musiikki", "festivaali"] },
+            { "id": "taide", "label": "Taide", "category": "ACTIVITY", "synonyms": ["kuvataide", "valokuvataide", "taidenäyttely"] },
+            { "id": "kasityo", "label": "Käsityöt", "category": "ACTIVITY", "synonyms": ["käsityö", "artesaani", "savityöt"] }
+        ]},
+        { "id": "kulttuuri-kohteet", "label": "Kulttuurikohteet", "tags": [
+            { "id": "museo", "label": "Museo", "category": "PLACE_TYPE", "synonyms": ["kotiseutumuseo", "näyttely"] },
+            { "id": "kylatalo", "label": "Kylätalot", "category": "PLACE_TYPE", "synonyms": ["kyläkeskus", "kokoontumistila", "kylätalo"] }
+        ]}
+      ]
+    },
+    {
+      "id": "historia", "label": "Historia", "category": "THEME", "icon": "material-symbols:history-edu",
+      "groups": [
+        { "id": "historialliset-kohteet", "label": "Historialliset kohteet", "tags": [
+            { "id": "historia", "label": "Historia", "category": "THEME", "synonyms": ["historiallinen", "perinne", "kulttuuriperintö"] },
+            { "id": "muinaismuistot", "label": "Muinaismuistot", "category": "PLACE_TYPE", "synonyms": ["arkeologia", "muistomerkki", "linnavuori"] },
+            { "id": "kartano", "label": "Kartano", "category": "PLACE_TYPE", "synonyms": ["herraskartano", "kartanoalue"] }
+        ]}
+      ]
+    },
+    {
+      "id": "ruoka", "label": "Ruoka", "category": "THEME", "icon": "material-symbols:restaurant",
+      "groups": [
+        { "id": "ravintolat", "label": "Ravintolat ja kahvilat", "tags": [
+            { "id": "ravintola", "label": "Ravintola", "category": "PLACE_TYPE", "synonyms": ["lounasravintola", "tilausravintola", "kesäravintola"] },
+            { "id": "kahvila", "label": "Kahvila", "category": "PLACE_TYPE", "synonyms": ["kahvi", "kesäkahvila", "satamakahvila", "konditori"] },
+            { "id": "lounas", "label": "Lounas", "category": "SERVICE", "synonyms": ["buffetlounas", "lounasruoka"] }
+        ]},
+        { "id": "lahituotanto", "label": "Lähituotanto", "tags": [
+            { "id": "lahituotanto", "label": "Lähituotanto", "category": "FEATURE", "synonyms": ["lähiruoka", "kotimainen", "luomu"] },
+            { "id": "maatila", "label": "Maatila", "category": "PLACE_TYPE", "synonyms": ["tila", "kasvitila", "kotieläinpuisto"] },
+            { "id": "leipomo", "label": "Leipomo", "category": "SERVICE", "synonyms": ["leivonnaiset", "kakut", "konditoria"] }
+        ]},
+        { "id": "catering", "label": "Catering ja pitopalvelu", "tags": [
+            { "id": "pitopalvelu", "label": "Pitopalvelu", "category": "SERVICE", "synonyms": ["catering", "ruokapalvelu"] },
+            { "id": "burgerit", "label": "Burgerit ja grilliruoka", "category": "SERVICE", "synonyms": ["grilli", "pikaruoka"] }
+        ]}
+      ]
+    },
+    {
+      "id": "tapahtumat", "label": "Tapahtumat", "category": "THEME", "icon": "material-symbols:event",
+      "groups": [
+        { "id": "juhlat", "label": "Juhlat", "tags": [
+            { "id": "haat", "label": "Häät", "category": "EVENT_TYPE", "synonyms": ["hääjuhla", "hääpaikka", "hääpalvelut"] },
+            { "id": "synttarit", "label": "Syntymäpäiväjuhlat", "category": "EVENT_TYPE", "synonyms": ["syntymäpäivät", "lapsijuhlat", "juhlat"] },
+            { "id": "pikkujoulut", "label": "Pikkujoulut", "category": "EVENT_TYPE", "synonyms": ["joulujuhla", "yritystilaisuus"] },
+            { "id": "muistotilaisuus", "label": "Muistotilaisuus", "category": "EVENT_TYPE", "synonyms": ["hautajaisruokailu", "muistojuhla"] }
+        ]},
+        { "id": "tapahtumat-festivaalit", "label": "Tapahtumat ja festivaalit", "tags": [
+            { "id": "festivaali", "label": "Festivaali", "category": "EVENT_TYPE", "synonyms": ["musiikkifestivaali", "kulttuurifestivaali", "kesätapahtuma"] },
+            { "id": "urheilutapahtuma", "label": "Urheilutapahtuma", "category": "EVENT_TYPE", "synonyms": ["kilpailu", "turnaus"] },
+            { "id": "tori", "label": "Tori ja myyjäiset", "category": "EVENT_TYPE", "synonyms": ["kesätori", "markkinat", "kirpputori"] }
+        ]},
+        { "id": "kokous-seminaari", "label": "Kokoukset ja seminaarit", "tags": [
+            { "id": "kokous", "label": "Kokous", "category": "EVENT_TYPE", "synonyms": ["kokoontumistila", "neuvotteluhuone", "kokoustila", "kokoustilat"] },
+            { "id": "seminaari", "label": "Seminaari", "category": "EVENT_TYPE", "synonyms": ["konferenssi", "koulutustilaisuus", "sessiot"] },
+            { "id": "kokouspalvelut", "label": "Kokouspalvelut", "category": "SERVICE", "synonyms": ["kokoustarjoilu", "av-laitteet", "tilavuokraus"] }
+        ]}
+      ]
+    },
+    {
+      "id": "rakentaminen", "label": "Rakentaminen", "category": "SECTOR", "icon": "material-symbols:construction",
+      "groups": [
+        { "id": "rakentaminen-remontointi", "label": "Rakentaminen ja remontointi", "tags": [
+            { "id": "remontointi", "label": "Remontointi", "category": "SERVICE", "synonyms": ["saneeraus", "remonttipalvelu", "huoneistoremontti"] },
+            { "id": "uudisrakentaminen", "label": "Uudisrakentaminen", "category": "SERVICE", "synonyms": ["talonrakennus", "rakennusliike", "rakennuspalvelut", "rakennus"] },
+            { "id": "kirvesmies", "label": "Kirvesmies", "category": "SERVICE", "synonyms": ["rakennusmies", "puutyöt"] },
+            { "id": "ulkorakentaminen", "label": "Ulkorakentaminen", "category": "SERVICE", "synonyms": ["terassirakentaminen", "ulkorakennukset", "salaojat"] }
+        ]},
+        { "id": "sahko-lvi", "label": "Sähkö ja LVI", "tags": [
+            { "id": "sahkotyot", "label": "Sähkötyöt", "category": "SERVICE", "synonyms": ["sähköasennus", "sähköhuolto", "sähköliike", "sähköurakointi", "sähkötyöt"] },
+            { "id": "aurinkopaneelit", "label": "Aurinkopaneelit", "category": "SERVICE", "synonyms": ["aurinkosähkö"] },
+            { "id": "ilmalampopumppu", "label": "Ilmalämpöpumppu", "category": "SERVICE", "synonyms": ["lämpöpumppu", "maalämpö", "ILP"] },
+            { "id": "nuohous", "label": "Nuohous", "category": "SERVICE", "synonyms": ["nuohooja", "savuhormi", "hormien puhdistus"] }
+        ]},
+        { "id": "kalusteet-sisustus", "label": "Kalusteet ja sisustus", "tags": [
+            { "id": "kalusteet", "label": "Kalusteet", "category": "SERVICE", "synonyms": ["mittatilauskalusteet", "kiintokalusteet", "keittiökalusteet"] },
+            { "id": "puuseppa", "label": "Puuseppä", "category": "SERVICE", "synonyms": ["puusepänliike", "puukalusteet"] },
+            { "id": "liukuovet", "label": "Liukuovet", "category": "SERVICE", "synonyms": ["komerot", "kylpyhuonekalusteet"] }
+        ]},
+        { "id": "kiinteistopalvelut", "label": "Kiinteistöpalvelut", "tags": [
+            { "id": "kiinteistohoito", "label": "Kiinteistöhoito", "category": "SERVICE", "synonyms": ["kiinteistöhuolto", "isännöinti"] },
+            { "id": "siivous", "label": "Siivous", "category": "SERVICE", "synonyms": ["siivouspalvelu", "kotisiivous"] },
+            { "id": "jatehuolto", "label": "Jätehuolto", "category": "SERVICE", "synonyms": ["jätekuljetus", "kierrätys"] }
+        ]}
+      ]
+    },
+    {
+      "id": "palvelut", "label": "Palvelut", "category": "SECTOR", "icon": "material-symbols:storefront",
+      "groups": [
+        { "id": "terveys-hoiva", "label": "Terveys ja hoiva", "tags": [
+            { "id": "terveyspalvelut", "label": "Terveyspalvelut", "category": "SERVICE", "synonyms": ["lääkäri", "sairaanhoito"] },
+            { "id": "hoivapalvelu", "label": "Hoivapalvelu", "category": "SERVICE", "synonyms": ["kotihoito", "kotipalvelu", "omaishoitaja"] },
+            { "id": "hautauspalvelu", "label": "Hautauspalvelu", "category": "SERVICE", "synonyms": ["hautaustoimisto"] }
+        ]},
+        { "id": "juridiikka-talous", "label": "Juridiikka ja talous", "tags": [
+            { "id": "lakipalvelut", "label": "Lakipalvelut", "category": "SERVICE", "synonyms": ["asianajotoimisto", "juridiset palvelut", "lakimies"] },
+            { "id": "notariaatti", "label": "Notariaatti", "category": "SERVICE", "synonyms": ["notaaripalvelut", "asiakirjojen vahvistus", "todistukset"] }
+        ]},
+        { "id": "kuljetus-muutto", "label": "Kuljetus ja muutto", "tags": [
+            { "id": "kuljetus", "label": "Kuljetus", "category": "SERVICE", "synonyms": ["kuljetuspalvelu", "tavarankuljetus", "peräkärry"] },
+            { "id": "muutto", "label": "Muuttopalvelu", "category": "SERVICE", "synonyms": ["muuttofirma"] }
+        ]},
+        { "id": "puutarha-piha", "label": "Puutarha ja piha", "tags": [
+            { "id": "puutarha", "label": "Puutarha", "category": "SERVICE", "synonyms": ["puutarhapalvelu", "pihansuunnittelu"] },
+            { "id": "kauppapuutarha", "label": "Kauppapuutarha", "category": "PLACE_TYPE", "synonyms": ["kasvihuone", "taimikasvatus", "kukkakauppa", "kukat"] },
+            { "id": "pienkonehuolto", "label": "Pienkonehuolto", "category": "SERVICE", "synonyms": ["ruohonleikkuri", "pienkone"] }
+        ]}
+      ]
+    },
+    {
+      "id": "autoilu", "label": "Autoilu", "category": "SECTOR", "icon": "material-symbols:directions-car",
+      "groups": [
+        { "id": "autohuolto", "label": "Autohuolto ja korjaus", "tags": [
+            { "id": "autokorjaamo", "label": "Autokorjaamo", "category": "SERVICE", "synonyms": ["autohuolto", "autokorjaamot", "autonkorjaus"] },
+            { "id": "rengasliike", "label": "Rengasliike", "category": "SERVICE", "synonyms": ["renkaat", "rengastyöt", "rengasvaihto"] },
+            { "id": "katsastus", "label": "Katsastus", "category": "SERVICE", "synonyms": ["autokatsastus"] },
+            { "id": "autopesu", "label": "Autopesu", "category": "SERVICE", "synonyms": ["pesuasema", "autopesula"] }
+        ]},
+        { "id": "automyynti", "label": "Automyynti", "tags": [
+            { "id": "automyynti", "label": "Automyynti", "category": "SERVICE", "synonyms": ["autokauppa", "käytetyt autot"] },
+            { "id": "automaalaamo", "label": "Automaalaamo", "category": "SERVICE", "synonyms": ["kolarikorjaus", "pintakäsittely"] }
+        ]},
+        { "id": "raskaat-koneet", "label": "Raskaat koneet", "tags": [
+            { "id": "raskaskonehuolto", "label": "Raskaskonehuolto", "category": "SERVICE", "synonyms": ["maarakennuskone", "kaivinkone", "konety\u00f6t"] },
+            { "id": "pyorahuolto", "label": "Pyörähuolto", "category": "SERVICE", "synonyms": ["polkupyörä", "sähköpyörä", "pyöräkorjaamo"] }
+        ]}
+      ]
+    },
+    {
+      "id": "asuminen", "label": "Asuminen", "category": "SECTOR", "icon": "material-symbols:home",
+      "groups": [
+        { "id": "kiinteistovälitys", "label": "Kiinteistönvälitys", "tags": [
+            { "id": "kiinteistovalitys", "label": "Kiinteistönvälitys", "category": "SERVICE", "synonyms": ["asunnonvälitys", "asunnonosto", "kiinteistökauppa"] }
+        ]},
+        { "id": "it-teknologia", "label": "IT ja teknologia", "tags": [
+            { "id": "it-palvelut", "label": "IT-palvelut", "category": "SERVICE", "synonyms": ["tietotekniikka", "tietokonehuolto"] },
+            { "id": "kotisivut", "label": "Kotisivut", "category": "SERVICE", "synonyms": ["verkkosivut", "nettisivut", "verkkokauppa"] }
+        ]}
+      ]
+    },
+    {
+      "id": "koulutus", "label": "Koulutus", "category": "SECTOR", "icon": "material-symbols:school",
+      "groups": [
+        { "id": "koulutus-kurssit", "label": "Koulutus ja kurssit", "tags": [
+            { "id": "koulutus", "label": "Koulutus", "category": "SERVICE", "synonyms": ["oppiminen", "kurssit", "koulutuspalvelut"] }
+        ]}
+      ]
+    },
+    {
+      "id": "media", "label": "Media", "category": "SECTOR", "icon": "material-symbols:videocam",
+      "groups": [
+        { "id": "valokuvaus-video", "label": "Valokuvaus ja video", "tags": [
+            { "id": "valokuvaus", "label": "Valokuvaus", "category": "SERVICE", "synonyms": ["valokuvaaja", "muotokuvaus", "henkilökuvaus", "studioKuvaus"] },
+            { "id": "juhlakuvaus", "label": "Juhlakuvaus", "category": "SERVICE", "synonyms": ["häävideo", "hääkuvaus", "tapahtumakuvaus"] },
+            { "id": "videotuotanto", "label": "Videotuotanto", "category": "SERVICE", "synonyms": ["yritysvideo", "dokumentaarinen kuvaus", "digimedia"] },
+            { "id": "dronekuvaus", "label": "Dronekuvaus", "category": "SERVICE", "synonyms": ["ilmakuvaus", "drone"] }
+        ]},
+        { "id": "markkinointi-viestinta", "label": "Markkinointi ja viestintä", "tags": [
+            { "id": "markkinointi", "label": "Markkinointi", "category": "SERVICE", "synonyms": ["mainonta", "google-mainonta", "somemarkkinointi", "seo"] },
+            { "id": "grafiikka", "label": "Grafiikka", "category": "SERVICE", "synonyms": ["graafiset palvelut", "brändi", "logo", "luovat palvelut"] }
+        ]}
+      ]
+    },
+    {
+      "id": "maaseutu", "label": "Maaseutu", "category": "THEME", "icon": "material-symbols:agriculture",
+      "groups": [
+        { "id": "maaseutu-ela", "label": "Maaseutuelämä", "tags": [
+            { "id": "maaseutu", "label": "Maaseutu", "category": "THEME", "synonyms": ["maalaismaisema", "maalaisidylli"] },
+            { "id": "hevoset", "label": "Hevoset", "category": "ACTIVITY", "synonyms": ["ratsastus", "tallipalvelut", "poniretki"] },
+            { "id": "maatila-paikka", "label": "Maatila", "category": "PLACE_TYPE", "synonyms": ["karjatila", "kotieläinpuisto", "tila"] }
+        ]}
+      ]
+    },
+    {
+      "id": "vesistot", "label": "Vesistöt", "category": "THEME", "icon": "material-symbols:water",
+      "groups": [
+        { "id": "jarvet-joet", "label": "Järvet ja joet", "tags": [
+            { "id": "jarvi", "label": "Järvi", "category": "PLACE_TYPE", "synonyms": ["järvimaisema", "joki", "puro", "vesistö"] },
+            { "id": "saaristo", "label": "Saaristo", "category": "PLACE_TYPE", "synonyms": ["saaret", "naissaari", "saraavesi"] }
+        ]}
+      ]
+    }
+  ],
+  "target_groups": [
+    { "id": "perheet", "label": "Perheet", "category": "TARGET_GROUP", "synonyms": ["lapsiperhe", "lapset", "perhe"] },
+    { "id": "seniorit", "label": "Seniorit", "category": "TARGET_GROUP", "synonyms": ["eläkeläiset", "ikäihmiset"] },
+    { "id": "yritykset", "label": "Yritykset", "category": "TARGET_GROUP", "synonyms": ["yritysjuhlat", "yritystilaisuus", "b2b"] },
+    { "id": "nuoret", "label": "Nuoret", "category": "TARGET_GROUP", "synonyms": ["nuoriso", "opiskelijat"] },
+    { "id": "ryhmät", "label": "Ryhmät", "category": "TARGET_GROUP", "synonyms": ["ryhmämatka", "porukat"] }
+  ],
+  "seasons": [
+    { "id": "kesa", "label": "Kesä", "category": "SEASON", "synonyms": ["kesäsesonki", "lämmin kausi"] },
+    { "id": "talvi", "label": "Talvi", "category": "SEASON", "synonyms": ["talvikausi", "pakkanen", "lumi"] },
+    { "id": "ymparivuotinen", "label": "Ympärivuotinen", "category": "SEASON", "synonyms": ["ympäri vuoden", "koko vuosi"] }
+  ],
+  "features": [
+    { "id": "esteeton", "label": "Esteetön", "category": "FEATURE", "synonyms": ["liikuntaesteinen", "pyörätuoli"] },
+    { "id": "koirat-tervetuloa", "label": "Koirat tervetuloa", "category": "FEATURE", "synonyms": ["lemmikki", "koira sallittu"] },
+    { "id": "pysakointi", "label": "Pysäköinti", "category": "FEATURE", "synonyms": ["parkkipaikka", "autopaikka"] },
+    { "id": "wifi", "label": "WiFi", "category": "FEATURE", "synonyms": ["internet", "langaton verkko"] }
+  ]
+}
