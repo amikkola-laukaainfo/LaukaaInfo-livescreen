@@ -272,44 +272,103 @@ function showError() {
 
 async function loadMediaForPlace(place) {
     const mediaSection = document.getElementById('media-section');
-    const mediaList = document.getElementById('media-list');
-    const mediaBadge = document.getElementById('media-count-badge');
-    if (!mediaSection || !mediaList) return;
+    const heroContainer = document.getElementById('place-gallery-hero');
+    const thumbsContainer = document.getElementById('place-gallery-thumbnails');
+    const badge = document.getElementById('media-count-badge');
+    const viewAllBtn = document.getElementById('btn-view-all-images');
+    const totalCountSpan = document.getElementById('gallery-total-count');
+
+    if (!mediaSection || !heroContainer || !thumbsContainer) return;
 
     try {
-        const { data: sources, error } = await aiSb
-            .from('place_sources')
+        const { data: images, error } = await aiSb
+            .from('place_images')
             .select('*')
             .eq('place_id', place.place_id)
-            .in('source_type', ['IMAGE', 'PHOTO', 'YOUTUBE', 'YOUTUBE_VIDEO', 'VIDEO']);
+            .order('sort_order', { ascending: true })
+            .order('created_at', { ascending: false });
 
-        if (error || !sources || sources.length === 0) return;
+        if (error || !images || images.length === 0) return;
 
         mediaSection.style.display = 'block';
-        if (mediaBadge) mediaBadge.textContent = sources.length;
+        if (badge) badge.textContent = images.length;
 
-        mediaList.innerHTML = sources.map(s => {
-            if (s.source_type === 'YOUTUBE' || s.source_type === 'YOUTUBE_VIDEO') {
-                let yid = '';
-                if (s.url && s.url.includes('v=')) yid = s.url.split('v=')[1].split('&')[0];
-                else if (s.url && s.url.includes('youtu.be/')) yid = s.url.split('youtu.be/')[1].split('?')[0];
-                if (yid) {
-                    return `<div style="flex: 0 0 280px; scroll-snap-align: start; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; background: #000;">
-                        <iframe style="width: 100%; aspect-ratio: 16/9; display: block;" src="https://www.youtube.com/embed/${yid}" frameborder="0" allowfullscreen></iframe>
-                        ${s.title ? `<div style="padding: 0.5rem; font-size: 0.85rem; color: #475569; background: white;">${s.title}</div>` : ''}
-                    </div>`;
-                }
-            }
-            if (s.url) {
-                return `<div style="flex: 0 0 200px; scroll-snap-align: start; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0;">
-                    <img src="${s.url}" alt="${s.title || 'Kuva'}" style="width: 100%; height: 140px; object-fit: cover; display: block;">
-                    ${s.title ? `<div style="padding: 0.5rem; font-size: 0.85rem; color: #475569;">${s.title}</div>` : ''}
-                </div>`;
-            }
-            return '';
+        const storageBaseUrl = 'https://duxluwyqxvbmkkjzuzkz.supabase.co/storage/v1/object/public/';
+
+        const galleryItems = images.map(img => {
+            const url = img.storage_path.startsWith('http') ? img.storage_path : (storageBaseUrl + img.storage_path);
+            return {
+                src: url,
+                msrc: url,
+                w: 1600, // Default width (PhotoSwipe will scale it based on aspect ratio once loaded if we let it, but setting a large square is a safe fallback without explicit dimensions)
+                h: 1600,
+                alt: img.alt_text || img.caption || 'Kuva paikasta',
+                caption: img.caption || ''
+            };
+        });
+        
+        // Render hero (ensimmäinen kuva)
+        const heroImg = images[0];
+        const heroUrl = heroImg.storage_path.startsWith('http') ? heroImg.storage_path : (storageBaseUrl + heroImg.storage_path);
+        heroContainer.innerHTML = `<img src="${heroUrl}" alt="${heroImg.alt_text || ''}" style="width: 100%; height: 100%; object-fit: cover;" data-pswp-idx="0">`;
+        
+        // Render thumbnails (seuraavat 4)
+        const thumbImages = images.slice(1, 5);
+        thumbsContainer.innerHTML = thumbImages.map((img, idx) => {
+            const url = img.storage_path.startsWith('http') ? img.storage_path : (storageBaseUrl + img.storage_path);
+            return `<div style="aspect-ratio: 1; border-radius: 8px; overflow: hidden; cursor: pointer; background: #f1f5f9;">
+                <img src="${url}" alt="${img.alt_text || ''}" style="width: 100%; height: 100%; object-fit: cover;" data-pswp-idx="${idx + 1}">
+            </div>`;
         }).join('');
+
+        if (images.length > 5) {
+            viewAllBtn.style.display = 'flex';
+            if (totalCountSpan) totalCountSpan.textContent = images.length;
+        }
+
+        if (window.PhotoSwipeLightbox) {
+            let lightbox = new window.PhotoSwipeLightbox({
+                pswpModule: window.PhotoSwipe,
+                padding: { top: 20, bottom: 20, left: 20, right: 20 },
+                bgOpacity: 0.9
+            });
+            
+            lightbox.addFilter('itemData', (itemData, index) => {
+                return galleryItems[index];
+            });
+            
+            // Päivitetään kuvan koko kun se on latautunut (koska meillä ei ole alkuperäistä kokoa)
+            lightbox.on('contentLoad', (e) => {
+                const { content } = e;
+                if (content.type === 'image') {
+                    content.image.onload = () => {
+                        content.width = content.image.naturalWidth;
+                        content.height = content.image.naturalHeight;
+                        content.updatePosition();
+                    };
+                }
+            });
+
+            // Avataan oikea kuva klikattaessa
+            const onClick = (e) => {
+                if(e.target.tagName === 'IMG' && e.target.hasAttribute('data-pswp-idx')) {
+                    e.preventDefault();
+                    lightbox.loadAndOpen(parseInt(e.target.getAttribute('data-pswp-idx'), 10), galleryItems);
+                }
+            };
+            
+            heroContainer.addEventListener('click', onClick);
+            thumbsContainer.addEventListener('click', onClick);
+            
+            viewAllBtn.addEventListener('click', () => {
+                lightbox.loadAndOpen(0, galleryItems);
+            });
+            
+            lightbox.init();
+        }
+
     } catch (err) {
-        console.error('Virhe median haussa:', err);
+        console.error('Virhe kuvien haussa:', err);
     }
 }
 

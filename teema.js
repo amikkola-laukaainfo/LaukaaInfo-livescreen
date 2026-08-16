@@ -11,6 +11,33 @@ if (typeof supabase !== 'undefined') {
 }
 
 // ── Apufunktio: Kerää kaikki teemaan liittyvät hakutermit taksonomiasta ──────
+async function fetchRepresentativeImages(places, aiSbClient) {
+    if (!places || places.length === 0 || !aiSbClient) return {};
+    const placeIds = places.map(p => p.id || p.place_id).filter(id => id);
+    if (placeIds.length === 0) return {};
+    try {
+        const { data: imagesData } = await aiSbClient
+            .from('place_images')
+            .select('place_id, storage_path, alt_text, caption')
+            .in('place_id', placeIds)
+            .order('sort_order', { ascending: true })
+            .order('created_at', { ascending: false });
+        
+        const map = {};
+        if (imagesData) {
+            imagesData.forEach(img => {
+                if (!map[img.place_id]) {
+                    map[img.place_id] = img;
+                }
+            });
+        }
+        return map;
+    } catch(e) {
+        console.warn('Virhe kuvien haussa:', e);
+        return {};
+    }
+}
+
 function buildSearchTerms(taxonomy, tagParam) {
     const terms = new Set([tagParam.toLowerCase()]);
 
@@ -116,6 +143,44 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (mapBtn) {
         mapBtn.href = `karttakohteet.html?cat=${encodeURIComponent(tagParam)}`;
     }
+
+    // PhotoSwipe init
+    let themeLightbox = null;
+    if (window.PhotoSwipeLightbox) {
+        themeLightbox = new window.PhotoSwipeLightbox({
+            pswpModule: window.PhotoSwipe,
+            padding: { top: 20, bottom: 20, left: 20, right: 20 }
+        });
+        themeLightbox.on('contentLoad', (e) => {
+            const { content } = e;
+            if (content.type === 'image') {
+                content.image.onload = () => {
+                    content.width = content.image.naturalWidth;
+                    content.height = content.image.naturalHeight;
+                    content.updatePosition();
+                };
+            }
+        });
+        themeLightbox.init();
+    }
+    
+    // Yhteinen click handler (Event Delegation) kuvagallerialle
+    document.addEventListener('click', (e) => {
+        const target = e.target.closest('.pswp-trigger');
+        if (target && themeLightbox) {
+            e.preventDefault();
+            e.stopPropagation(); // estä linkin avautuminen
+            const src = target.getAttribute('data-src');
+            const caption = target.getAttribute('data-caption') || '';
+            const items = [{
+                src: src,
+                w: 1600,
+                h: 1600,
+                alt: caption
+            }];
+            themeLightbox.loadAndOpen(0, items);
+        }
+    });
 
     try {
         const cacheBuster = new Date().getTime();
@@ -286,14 +351,34 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (matchedPlaceNodes.length === 0) {
                     if (placesSection) placesSection.style.display = 'none';
                 } else {
+                    const imgMap = await fetchRepresentativeImages(matchedPlaceNodes, aiSbClient);
+                    const storageBaseUrl = 'https://duxluwyqxvbmkkjzuzkz.supabase.co/storage/v1/object/public/';
+
                     placesContainer.innerHTML = matchedPlaceNodes.map(p => {
                         const url = `tietoa-paikasta.html?id=${encodeURIComponent(p.id)}`;
                         const typeTranslations = { 'LANDMARK': 'Nähtävyys', 'NATURE': 'Luontokohde', 'SERVICE': 'Palvelu', 'BUILDING': 'Rakennus', 'AREA': 'Alue', 'ROUTE': 'Reitti' };
                         const typeName = typeTranslations[p.type] || p.type || 'Paikka';
                         const desc = p.description ? p.description.substring(0, 100) + '...' : '';
                         const reasonBadge = p.match_reason ? `<span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 4px; margin-left: 8px;">${p.match_reason}</span>` : '';
+                        
+                        let imgHtml = '';
+                        const imgObj = imgMap[p.id || p.place_id];
+                        if (imgObj) {
+                            const imgUrl = imgObj.storage_path.startsWith('http') ? imgObj.storage_path : (storageBaseUrl + imgObj.storage_path);
+                            const caption = imgObj.alt_text || p.name;
+                            imgHtml = `
+                                <div class="pswp-trigger" data-src="${imgUrl}" data-caption="${caption}" style="aspect-ratio: 16/9; margin-bottom: 1rem; border-radius: 8px; overflow: hidden; position: relative; cursor: pointer;">
+                                    <img src="${imgUrl}" alt="${caption}" style="width: 100%; height: 100%; object-fit: cover;">
+                                    <div style="position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.6); color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; display: flex; align-items: center; gap: 4px;">
+                                        <span class="iconify" data-icon="material-symbols:zoom-in"></span> Suurenna
+                                    </div>
+                                </div>
+                            `;
+                        }
+
                         return `
                             <a href="${url}" class="list-item-card">
+                                ${imgHtml}
                                 <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 0.5rem; display: flex; align-items: center;">📍 ${typeName} ${reasonBadge}</div>
                                 <h3 style="margin: 0 0 0.5rem 0; font-family: Outfit, sans-serif; font-size: 1.25rem; color: var(--text-main);">${p.name}</h3>
                                 <p style="margin: 0; font-size: 0.95rem; color: var(--text-muted);">${desc}</p>
@@ -620,6 +705,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (matchedPlaceNodes.length === 0) {
             placesContainer.innerHTML = '<p style="color: var(--text-muted);">Ei paikkoja tällä teemalla.</p>';
         } else {
+            const imgMap = await fetchRepresentativeImages(matchedPlaceNodes, aiSbClient);
+            const storageBaseUrl = 'https://duxluwyqxvbmkkjzuzkz.supabase.co/storage/v1/object/public/';
+
             placesContainer.innerHTML = matchedPlaceNodes.map(p => {
                 const url = `tietoa-paikasta.html?id=${encodeURIComponent(p.id)}`;
                 const typeTranslations = {
@@ -633,8 +721,24 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const typeName = typeTranslations[p.type] || p.type || 'Paikka';
                 const desc = p.description ? p.description.substring(0, 100) + '...' : '';
                 
+                let imgHtml = '';
+                const imgObj = imgMap[p.id || p.place_id];
+                if (imgObj) {
+                    const imgUrl = imgObj.storage_path.startsWith('http') ? imgObj.storage_path : (storageBaseUrl + imgObj.storage_path);
+                    const caption = imgObj.alt_text || p.name;
+                    imgHtml = `
+                        <div class="pswp-trigger" data-src="${imgUrl}" data-caption="${caption}" style="aspect-ratio: 16/9; margin-bottom: 1rem; border-radius: 8px; overflow: hidden; position: relative; cursor: pointer;">
+                            <img src="${imgUrl}" alt="${caption}" style="width: 100%; height: 100%; object-fit: cover;">
+                            <div style="position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.6); color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; display: flex; align-items: center; gap: 4px;">
+                                <span class="iconify" data-icon="material-symbols:zoom-in"></span> Suurenna
+                            </div>
+                        </div>
+                    `;
+                }
+
                 return `
                     <a href="${url}" class="list-item-card">
+                        ${imgHtml}
                         <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 0.5rem;">📍 ${typeName}</div>
                         <h3 style="margin: 0 0 0.5rem 0; font-family: Outfit, sans-serif; font-size: 1.25rem; color: var(--text-main);">${p.name}</h3>
                         <p style="margin: 0; font-size: 0.95rem; color: var(--text-muted);">${desc}</p>

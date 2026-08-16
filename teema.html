@@ -22,6 +22,9 @@
 
     <link rel="stylesheet" href="style.css">
     
+    <!-- PhotoSwipe -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.3/photoswipe.min.css">
+
     <script src="translations.js"></script>
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
     
@@ -383,6 +386,16 @@
     
     <!-- Nav sync (if exists) -->
     <script src="nav-sync.js"></script>
+    
+    <!-- PhotoSwipe -->
+    <script type="module">
+        import PhotoSwipeLightbox from 'https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.3/photoswipe-lightbox.esm.min.js';
+        import PhotoSwipe from 'https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.3/photoswipe.esm.min.js';
+        
+        window.PhotoSwipeLightbox = PhotoSwipeLightbox;
+        window.PhotoSwipe = PhotoSwipe;
+    </script>
+
     
     <!-- Kontekstibanneri: aktivoituu jos place_id on URL:ssa -->
     <script>
