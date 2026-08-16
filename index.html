@@ -709,62 +709,98 @@
             </style>
             <div class="slider-container">
                 <div class="swiper" id="swiper-slider-ticker">
-                    <div class="swiper-wrapper">
-                        <!-- Slide ticker-1 -->
-                        <div class="swiper-slide" id="slide-ticker-1">
-                            <div class="template-full-image"
-                                style="background-image: url('https://ik.imagekit.io/vowzx8znjs/swiper-slider-generator/_9153607-Edit_1i92-2LyQ.jpg');">
-                                <div class="overlay">
-                                    <div class="content">
-                                        <div class="tags-row"><span class="category-badge" data-i18n="ticker_badge_info">INFO</span></div>
-                                        <h2 class="slide-title" data-i18n="ticker_slide1_title">Yritys LaukaaInfoon 79€ / 6kk</h2>
-                                        <p class="slide-desc" data-i18n="ticker_slide1_desc">Näe ja tule nähdyksi</p>
-                                        <a href="https://laukaainfo.fi/lisaa-yritys.html?utm_campaign=INFO&utm_source=ticker_toimitus&utm_medium=swiper-slider"
-                                            data-tracking="ticker_toimitus" class="slide-btn" data-i18n="ticker_slide1_btn">Lisää yritys</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Slide ticker-2 -->
-                        <div class="swiper-slide" id="slide-ticker-2">
-                            <div class="template-full-image"
-                                style="background-image: url('https://ik.imagekit.io/vowzx8znjs/swiper-slider-generator/DSC_0061-6_Efm4Fl64q.jpg');">
-                                <div class="overlay">
-                                    <div class="content">
-                                        <div class="tags-row"><span class="category-badge" data-i18n="ticker_badge_news">UUTISET</span></div>
-                                        <h2 class="slide-title" data-i18n="ticker_slide2_title">Kuilun partaalla syyskuussa Lievestuoreella</h2>
-                                        <p class="slide-desc" data-i18n="ticker_slide2_desc">Tutustu alueeseen videolla</p>
-                                        <a href="https://www.youtube.com/watch?v=LaG4todxP6c&utm_campaign=UUTISET&utm_source=ticker_tampere&utm_medium=swiper-slider"
-                                            data-tracking="ticker_tampere" class="slide-btn" data-i18n="ticker_slide2_btn">LaukaaInfo Youtube</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="swiper-wrapper" id="swiper-slider-wrapper">
+                        <!-- Slidet ladataan dynaamisesti swiper-etusivu.json tiedostosta -->
                     </div>
                 </div>
             </div>
             <script>
                 document.addEventListener("DOMContentLoaded", function () {
-                    if (typeof Swiper !== 'undefined') {
-                        const tickerSwiper = new Swiper("#swiper-slider-ticker", {
-                            speed: 800,
-                            loop: true,
-                            slidesPerView: 1,
-                            spaceBetween: 0,
-                            autoplay: {
-                                delay: 5000,
-                                disableOnInteraction: false
-                            }
+                    const SWIPER_JSON_URL = 'swiper-etusivu.json?t=' + Date.now();
+
+                    function initSwiperWithData(sliderData) {
+                        const wrapper = document.getElementById('swiper-slider-wrapper');
+                        if (!wrapper) return;
+
+                        const today = new Date().toISOString().split('T')[0];
+                        const slides = (sliderData.slides || []).filter(function(slide) {
+                            if (!slide.active) return false;
+                            if (slide.startDate && slide.startDate > today) return false;
+                            if (slide.endDate && slide.endDate < today) return false;
+                            return true;
+                        });
+
+                        if (slides.length === 0) {
+                            wrapper.closest('.slider-container').style.display = 'none';
+                            return;
+                        }
+
+                        slides.forEach(function(slide, idx) {
+                            const imageUrl = slide.imageUrl || '';
+                            const category = slide.category || '';
+                            const title = slide.title || '';
+                            const desc = slide.description || slide.subtitle || '';
+                            const btnText = slide.buttonText || 'Lue lisää';
+                            const targetUrl = slide.targetUrl || '#';
+                            const openNewTab = slide.openInNewTab ? ' target="_blank" rel="noopener noreferrer"' : '';
+
+                            const div = document.createElement('div');
+                            div.className = 'swiper-slide';
+                            div.id = 'slide-ticker-' + (idx + 1);
+                            div.innerHTML = '<div class="template-full-image" style="background-image: url(\'' + imageUrl + '\');">' +
+                                '<div class="overlay">' +
+                                    '<div class="content">' +
+                                        (category ? '<div class="tags-row"><span class="category-badge">' + category + '</span></div>' : '') +
+                                        '<h2 class="slide-title">' + title + '</h2>' +
+                                        (desc ? '<p class="slide-desc">' + desc + '</p>' : '') +
+                                        (btnText ? '<a href="' + targetUrl + '"' + openNewTab + ' class="slide-btn" data-tracking="slide-' + (idx+1) + '">' + btnText + '</a>' : '') +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>';
+                            wrapper.appendChild(div);
+                        });
+
+                        if (typeof Swiper !== 'undefined') {
+                            const settings = sliderData.settings || {};
+                            new Swiper("#swiper-slider-ticker", {
+                                speed: settings.speed || 800,
+                                loop: settings.loop !== false,
+                                slidesPerView: 1,
+                                spaceBetween: 0,
+                                autoplay: settings.autoplay !== false ? {
+                                    delay: settings.autoplayDelay || 5000,
+                                    disableOnInteraction: false
+                                } : false,
+                                effect: settings.effect || 'slide'
+                            });
+                        }
+
+                        // Analytics tracking
+                        document.querySelectorAll("[data-tracking]").forEach(function(el) {
+                            el.addEventListener("click", function() {
+                                const targetId = el.getAttribute("data-tracking");
+                                console.log("Slider click:", targetId);
+                            });
                         });
                     }
-                    const trackedElements = document.querySelectorAll("[data-tracking]");
-                    trackedElements.forEach(function (el) {
-                        el.addEventListener("click", function (event) {
-                            const targetId = el.getAttribute("data-tracking");
-                            const eventName = el.getAttribute("data-event-name") || "slider_btn_click";
-                            console.log("Analytics Trigger:", eventName, "Target ID:", targetId);
+
+                    fetch(SWIPER_JSON_URL)
+                        .then(function(res) {
+                            if (!res.ok) throw new Error('swiper-etusivu.json not found');
+                            return res.json();
+                        })
+                        .then(function(data) {
+                            // Tuki sekä yksittäiselle sliderille { slides: [...] }
+                            // että taulukolle [{ slides: [...] }]
+                            const sliderData = Array.isArray(data) ? data[0] : data;
+                            initSwiperWithData(sliderData);
+                        })
+                        .catch(function(err) {
+                            console.warn('[LaukaaInfo Swiper] swiper-etusivu.json puuttuu tai on virheellinen:', err.message);
+                            // Piilotetaan slider-osio jos JSON puuttuu
+                            const container = document.querySelector('.ticker-section');
+                            if (container) container.style.display = 'none';
                         });
-                    });
                 });
             </script>
         </section>
