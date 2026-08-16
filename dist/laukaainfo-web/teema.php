@@ -361,6 +361,12 @@ function get_place_type_label2(string $type): string {
         @media (max-width: 768px) {
             .hero-section { padding-top: 4rem; padding-bottom: 2rem; }
             .page-container { padding: 0 1.5rem; }
+            .hero-title {
+                font-size: 2.5rem;
+                word-break: normal;
+                overflow-wrap: normal;
+                hyphens: none;
+            }
         }
 
         .content-block { margin-bottom: 3.5rem; }
