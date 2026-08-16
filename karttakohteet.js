@@ -139,7 +139,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Yritykset
         const filteredCompanies = allCompanies.filter(c => {
             if (!searchVal) return true;
-            return c.name && c.name.toLowerCase().includes(searchVal);
+            return (c.nimi && c.nimi.toLowerCase().includes(searchVal)) ||
+                   (c.name && c.name.toLowerCase().includes(searchVal));
         });
 
         const newMarkers = [];
@@ -232,7 +233,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             
             let popupHtml = `<div style="min-width: 200px;">
                 <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;color:#64748b;margin-bottom:4px;">Yritys ${tier >= 2 ? '⭐' : ''}</div>
-                <h3 style="margin: 0 0 5px 0; color: #1e293b;">${company.name}</h3>`;
+                <h3 style="margin: 0 0 5px 0; color: #1e293b;">${company.nimi || company.name || ''}</h3>`;
                 
             if (tier >= 2) {
                 popupHtml += `<div style="font-size: 0.85rem; color: #475569; margin-bottom: 8px;">${company.description || company.short_description || ''}</div>`;

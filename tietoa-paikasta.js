@@ -648,18 +648,26 @@ async function renderPlace(place, relatedItems, aiProfileData, allSources = [], 
     if (themesSection && themesList) {
         const uniqueThemes = new Set();
         
+        const normalizeTheme = (t) => {
+            if (!t) return t;
+            let normalized = t.trim().charAt(0).toUpperCase() + t.trim().slice(1).toLowerCase();
+            // Fix known typos
+            if (normalized === 'Hyvinvoinri') return 'Hyvinvointi';
+            return normalized;
+        };
+
         // Lisää AI-teemat jos olemassa
         if (aiProfileData && aiProfileData.themes && Array.isArray(aiProfileData.themes)) {
-            aiProfileData.themes.forEach(t => uniqueThemes.add(t));
+            aiProfileData.themes.forEach(t => uniqueThemes.add(normalizeTheme(t)));
         }
 
         // Lisää tyyppi
-        if (place.type) uniqueThemes.add(getTypeLabel(place.type));
+        if (place.type) uniqueThemes.add(normalizeTheme(getTypeLabel(place.type)));
         
         // Lisää relaatioista löytyvät
         relatedItems.forEach(i => {
             if (i.type && i.type !== 'observation' && i.type !== 'other') {
-                uniqueThemes.add(getTypeLabel(i.type));
+                uniqueThemes.add(normalizeTheme(getTypeLabel(i.type)));
             }
         });
 
@@ -674,7 +682,7 @@ async function renderPlace(place, relatedItems, aiProfileData, allSources = [], 
             if (entityTagData && entityTagData.length > 0) {
                 entityTagData.forEach(et => {
                     const tagName = et.tags?.name || et.tag_id;
-                    if (tagName) uniqueThemes.add(tagName);
+                    if (tagName) uniqueThemes.add(normalizeTheme(tagName));
                 });
             }
         } catch(e) {
