@@ -304,13 +304,19 @@ async function loadMediaForPlace(place) {
 
         const storageBaseUrl = 'https://duxluwyqxvbmkkjzuzkz.supabase.co/storage/v1/object/public/';
 
+        const getImgUrl = (img) => {
+            if (img.image_url) return img.image_url;
+            if (!img.storage_path) return '';
+            return img.storage_path.startsWith('http') ? img.storage_path : (storageBaseUrl + img.storage_path);
+        };
+
         const galleryItems = images.map(img => {
-            const url = img.storage_path.startsWith('http') ? img.storage_path : (storageBaseUrl + img.storage_path);
+            const url = getImgUrl(img);
             return {
                 src: url,
                 msrc: url,
-                w: 1600, // Default width (PhotoSwipe will scale it based on aspect ratio once loaded if we let it, but setting a large square is a safe fallback without explicit dimensions)
-                h: 1600,
+                w: img.width || 1600,
+                h: img.height || 1600,
                 alt: img.alt_text || img.caption || 'Kuva paikasta',
                 caption: img.caption || ''
             };
@@ -318,15 +324,15 @@ async function loadMediaForPlace(place) {
         
         // Render hero (ensimmäinen kuva)
         const heroImg = images[0];
-        const heroUrl = heroImg.storage_path.startsWith('http') ? heroImg.storage_path : (storageBaseUrl + heroImg.storage_path);
-        heroContainer.innerHTML = `<img src="${heroUrl}" alt="${heroImg.alt_text || ''}" style="width: 100%; height: 100%; object-fit: cover;" data-pswp-idx="0">`;
+        const heroUrl = getImgUrl(heroImg);
+        heroContainer.innerHTML = `<img src="${heroUrl}" alt="${heroImg.alt_text || heroImg.caption || ''}" style="width: 100%; height: 100%; object-fit: cover;" data-pswp-idx="0">`;
         
         // Render thumbnails (seuraavat 4)
         const thumbImages = images.slice(1, 5);
         thumbsContainer.innerHTML = thumbImages.map((img, idx) => {
-            const url = img.storage_path.startsWith('http') ? img.storage_path : (storageBaseUrl + img.storage_path);
+            const url = getImgUrl(img);
             return `<div style="aspect-ratio: 1; border-radius: 8px; overflow: hidden; cursor: pointer; background: #f1f5f9;">
-                <img src="${url}" alt="${img.alt_text || ''}" style="width: 100%; height: 100%; object-fit: cover;" data-pswp-idx="${idx + 1}">
+                <img src="${url}" alt="${img.alt_text || img.caption || ''}" style="width: 100%; height: 100%; object-fit: cover;" data-pswp-idx="${idx + 1}">
             </div>`;
         }).join('');
 
