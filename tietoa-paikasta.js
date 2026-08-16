@@ -290,9 +290,9 @@ async function loadMediaForPlace(place) {
 
         if (place.place_id === '6df61792-3c94-412c-bbb7-0068c9c1a861') {
             images = [
-                { image_url: 'https://images.unsplash.com/photo-1518605368461-1ee7c68856da?w=1200&q=80', caption: 'Haarlan urheilukenttä', width: 1200, height: 800 },
-                { image_url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=80', caption: 'Rantamaisema', width: 1200, height: 800 },
-                { image_url: 'https://images.unsplash.com/photo-1574629810360-7efbb98f45a5?w=1200&q=80', caption: 'Urheilukentän juoksurata', width: 1200, height: 800 }
+                { image_url: 'https://images.unsplash.com/photo-1518605368461-1ee7c68856da?auto=format&fit=crop&w=1200&q=80', caption: 'Haarlan urheilukenttä', width: 1200, height: 800 },
+                { image_url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80', caption: 'Rantamaisema', width: 1200, height: 800 },
+                { image_url: 'https://images.unsplash.com/photo-1574629810360-7efbb98f45a5?auto=format&fit=crop&w=1200&q=80', caption: 'Urheilukentän juoksurata', width: 1200, height: 800 }
             ];
             error = null;
         }
@@ -342,33 +342,30 @@ async function loadMediaForPlace(place) {
         }
 
         if (window.PhotoSwipeLightbox) {
+            // Rakennetaan dataSource PhotoSwipelle
+            const pswpDataSource = galleryItems.map(item => ({
+                src: item.src,
+                width: item.w,
+                height: item.h,
+                alt: item.alt,
+                caption: item.caption
+            }));
+
             let lightbox = new window.PhotoSwipeLightbox({
                 pswpModule: window.PhotoSwipe,
+                dataSource: pswpDataSource,
                 padding: { top: 20, bottom: 20, left: 20, right: 20 },
                 bgOpacity: 0.9
             });
-            
-            lightbox.addFilter('itemData', (itemData, index) => {
-                return galleryItems[index];
-            });
-            
-            // Päivitetään kuvan koko kun se on latautunut (koska meillä ei ole alkuperäistä kokoa)
-            lightbox.on('contentLoad', (e) => {
-                const { content } = e;
-                if (content.type === 'image') {
-                    content.image.onload = () => {
-                        content.width = content.image.naturalWidth;
-                        content.height = content.image.naturalHeight;
-                        content.updatePosition();
-                    };
-                }
-            });
+
+            lightbox.init();
 
             // Avataan oikea kuva klikattaessa
             const onClick = (e) => {
-                if(e.target.tagName === 'IMG' && e.target.hasAttribute('data-pswp-idx')) {
+                const imgEl = e.target.tagName === 'IMG' ? e.target : e.target.querySelector('img');
+                if (imgEl && imgEl.hasAttribute('data-pswp-idx')) {
                     e.preventDefault();
-                    lightbox.loadAndOpen(parseInt(e.target.getAttribute('data-pswp-idx'), 10), galleryItems);
+                    lightbox.loadAndOpen(parseInt(imgEl.getAttribute('data-pswp-idx'), 10));
                 }
             };
             
@@ -376,10 +373,8 @@ async function loadMediaForPlace(place) {
             thumbsContainer.addEventListener('click', onClick);
             
             viewAllBtn.addEventListener('click', () => {
-                lightbox.loadAndOpen(0, galleryItems);
+                lightbox.loadAndOpen(0);
             });
-            
-            lightbox.init();
         }
 
     } catch (err) {
