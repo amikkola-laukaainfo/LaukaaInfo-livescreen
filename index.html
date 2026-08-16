@@ -716,7 +716,10 @@
             </div>
             <script>
                 document.addEventListener("DOMContentLoaded", function () {
-                    const SWIPER_JSON_URL = 'swiper-etusivu.json?t=' + Date.now();
+                    let SWIPER_JSON_URL = 'swiper-etusivu.json';
+                    if (window.location.protocol !== 'file:') {
+                        SWIPER_JSON_URL += '?t=' + Date.now();
+                    }
 
                     function initSwiperWithData(sliderData) {
                         const wrapper = document.getElementById('swiper-slider-wrapper');
@@ -740,28 +743,29 @@
                             const category = slide.category || '';
                             const title = slide.title || '';
                             const desc = slide.description || slide.subtitle || '';
-                            const btnText = slide.buttonText || 'Lue lisää';
+                            const btnText = slide.buttonText || '';
                             const targetUrl = slide.targetUrl || '#';
                             const openNewTab = slide.openInNewTab ? ' target="_blank" rel="noopener noreferrer"' : '';
 
                             const div = document.createElement('div');
                             div.className = 'swiper-slide';
                             div.id = 'slide-ticker-' + (idx + 1);
-                            div.innerHTML = '<div class="template-full-image" style="background-image: url(\'' + imageUrl + '\');">' +
+                            
+                            let html = '<div class="template-full-image" style="background-image: url(\'' + imageUrl + '\');">' +
                                 '<div class="overlay">' +
-                                    '<div class="content">' +
-                                        (category ? '<div class="tags-row"><span class="category-badge">' + category + '</span></div>' : '') +
-                                        '<h2 class="slide-title">' + title + '</h2>' +
-                                        (desc ? '<p class="slide-desc">' + desc + '</p>' : '') +
-                                        (btnText ? '<a href="' + targetUrl + '"' + openNewTab + ' class="slide-btn" data-tracking="slide-' + (idx+1) + '">' + btnText + '</a>' : '') +
-                                    '</div>' +
-                                '</div>' +
-                            '</div>';
+                                    '<div class="content">';
+                            if (category) html += '<div class="tags-row"><span class="category-badge">' + category + '</span></div>';
+                            if (title) html += '<h2 class="slide-title">' + title + '</h2>';
+                            if (desc) html += '<p class="slide-desc">' + desc + '</p>';
+                            if (btnText) html += '<a href="' + targetUrl + '"' + openNewTab + ' class="slide-btn" data-tracking="slide-' + (idx+1) + '">' + btnText + '</a>';
+                            html += '</div></div></div>';
+                            
+                            div.innerHTML = html;
                             wrapper.appendChild(div);
                         });
 
                         if (typeof Swiper !== 'undefined') {
-                            const settings = sliderData.settings || {};
+                            const settings = sliderData.swiperSettings || {};
                             new Swiper("#swiper-slider-ticker", {
                                 speed: settings.speed || 800,
                                 loop: settings.loop !== false,
