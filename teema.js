@@ -614,6 +614,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                                     .select('*')
                                     .in('id', feedPostIds)
                                     .or('status.eq.APPROVED,status.is.null')
+                                    .or(`valid_until.is.null,valid_until.gte.${new Date().toISOString()}`)
                                     .order('created_at', { ascending: false });
                                 if (!feedError && feedData) {
                                     feedData.forEach(post => {

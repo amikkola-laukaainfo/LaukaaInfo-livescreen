@@ -1628,6 +1628,7 @@ async function loadEncountersForPlace(place) {
                     ? await liveSb.from('posts').select('*')
                         .eq('place_id', place.place_id)
                         .or('status.eq.APPROVED,status.is.null')
+                        .or(`valid_until.is.null,valid_until.gte.${new Date().toISOString()}`)
                     : { data: null };
                 const postsData = postsResult.data;
                     

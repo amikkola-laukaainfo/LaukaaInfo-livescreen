@@ -4,18 +4,23 @@
 
 CREATE TABLE IF NOT EXISTS place_images (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    place_id UUID NOT NULL REFERENCES places(place_id) ON DELETE CASCADE,
+    place_id UUID REFERENCES places(place_id) ON DELETE CASCADE, -- Säilytetään taaksepäinyhteensopivuus
+    entity_id UUID,                      -- Uusi yleisempi viittaus
+    entity_type TEXT DEFAULT 'PLACE',    -- 'PLACE', 'EVENT', 'BUSINESS', 'MEMORY' jne.
     storage_path TEXT NOT NULL,          -- Esim. 'place-images/{place_id}/{filename}.webp'
     caption TEXT,                        -- Kuvateksti
     alt_text TEXT,                       -- Alt-teksti saavutettavuuteen
     source TEXT,                         -- Esim. 'profiling_app', 'user_submission'
-    image_type TEXT DEFAULT 'gallery',   -- 'hero', 'gallery' jne.
+    image_type TEXT DEFAULT 'PLACE_GALLERY', -- 'PLACE_HERO', 'PLACE_GALLERY', 'THEME', 'EVENT', jne.
+    tag_id TEXT,                         -- Esim. tulevaisuuden teemakuvien yhdistämiseen
+    visibility TEXT DEFAULT 'PUBLIC',    -- 'PUBLIC', 'PRIVATE', 'DRAFT'
     sort_order INTEGER DEFAULT 0,        -- Järjestys, pienempi numero ensin
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- Indeksit
 CREATE INDEX IF NOT EXISTS idx_place_images_place_id ON place_images(place_id);
+CREATE INDEX IF NOT EXISTS idx_place_images_entity ON place_images(entity_id, entity_type);
 CREATE INDEX IF NOT EXISTS idx_place_images_image_type ON place_images(image_type);
 CREATE INDEX IF NOT EXISTS idx_place_images_sort_order ON place_images(sort_order);
 
