@@ -290,9 +290,9 @@ async function loadMediaForPlace(place) {
 
         if (place.place_id === '6df61792-3c94-412c-bbb7-0068c9c1a861') {
             images = [
-                { image_url: 'https://images.unsplash.com/photo-1518605368461-1ee7c68856da?auto=format&fit=crop&w=1200&q=80', caption: 'Haarlan urheilukenttä', width: 1200, height: 800 },
+                { image_url: 'https://images.unsplash.com/photo-1571008887538-b36bb32f4571?auto=format&fit=crop&w=1200&q=80', caption: 'Haarlan urheilukenttä', width: 1200, height: 800 },
                 { image_url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80', caption: 'Rantamaisema', width: 1200, height: 800 },
-                { image_url: 'https://images.unsplash.com/photo-1574629810360-7efbb98f45a5?auto=format&fit=crop&w=1200&q=80', caption: 'Urheilukentän juoksurata', width: 1200, height: 800 }
+                { image_url: 'https://placehold.co/1200x800/eeeeee/31343C.png?text=Urheilukentt%C3%A4', caption: 'Urheilukentän juoksurata', width: 1200, height: 800 }
             ];
             error = null;
         }
