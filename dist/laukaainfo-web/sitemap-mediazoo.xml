@@ -662,6 +662,11 @@
   <priority>0.80</priority>
 </url>
 <url>
+  <loc>https://www.mediazoo.fi/laukaainfo-web/place.php?id=6df61792-3c94-412c-bbb7-0068c9c1a861</loc>
+  <lastmod>2026-08-16T00:00:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
   <loc>https://www.mediazoo.fi/laukaainfo-web/place.php?id=03685046-d171-4ac7-982c-f9020cc64409</loc>
   <lastmod>2026-08-16T00:00:00+00:00</lastmod>
   <priority>0.80</priority>
@@ -683,11 +688,6 @@
 </url>
 <url>
   <loc>https://www.mediazoo.fi/laukaainfo-web/place.php?id=89836a2b-f9d7-4093-a427-065c97c7ce3b</loc>
-  <lastmod>2026-08-16T00:00:00+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://www.mediazoo.fi/laukaainfo-web/place.php?id=6df61792-3c94-412c-bbb7-0068c9c1a861</loc>
   <lastmod>2026-08-16T00:00:00+00:00</lastmod>
   <priority>0.80</priority>
 </url>
