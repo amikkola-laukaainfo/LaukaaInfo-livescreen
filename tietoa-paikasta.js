@@ -19,7 +19,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         let placeQuery = aiSb.from('places').select('*');
         
         if (placeId) {
-            placeQuery = placeQuery.eq('place_id', placeId);
+            const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(placeId);
+            if (isUuid) {
+                placeQuery = placeQuery.eq('place_id', placeId);
+            } else {
+                const safeName = placeId.replace(/-/g, ' ').replace(/"/g, '');
+                placeQuery = placeQuery.or(`name.ilike."%${safeName}%",canonical_name.ilike."%${safeName}%"`);
+            }
         } else if (placeNameParam) {
             const decodedName = decodeURIComponent(placeNameParam).replace(/_/g, ' ');
             const safeNameValue = decodedName.replace(/"/g, '');

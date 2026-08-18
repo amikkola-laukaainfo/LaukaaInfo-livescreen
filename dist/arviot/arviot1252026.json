@@ -1,0 +1,2822 @@
+[
+  {
+    "id": 1,
+    "internal_id": "305",
+    "company_name": "Sähköpalvelu Valoisat Oy",
+    "place_id": "ChIJ7etF-OALhUYRhO6Mf0fPxcc",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:25",
+    "address": "Jakotie 8, 41310 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ7etF-OALhUYRhO6Mf0fPxcc"
+  },
+  {
+    "id": 2,
+    "internal_id": "304",
+    "company_name": "Sähkötyöt Rissanen Oy",
+    "place_id": "ChIJT8nF_6YUhUYRGY-QZffnm8I",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:25",
+    "address": "Välilänraitti 5, 41400 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJT8nF_6YUhUYRGY-QZffnm8I"
+  },
+  {
+    "id": 3,
+    "internal_id": "303",
+    "company_name": "Puusepänliike Tourunen Oy",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Yläpohjantie 110, 41180 Vehniä, Laukaa, Suomi",
+    "reviews_url": null
+  },
+  {
+    "id": 4,
+    "internal_id": "302",
+    "company_name": "Laukaan Rakennustyö Oy",
+    "place_id": "ChIJj0n_RP0LhUYR5xtUQBo4JtA",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:27",
+    "address": "Kantolantie 290, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJj0n_RP0LhUYR5xtUQBo4JtA"
+  },
+  {
+    "id": 5,
+    "internal_id": "272",
+    "company_name": "RengasCenter Laukaa Rengaskanava Oy",
+    "place_id": "ChIJkX7eTAwJhUYRB_YbL2rQzYw",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:27",
+    "address": "Rokkamäentie 1, 41350 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJkX7eTAwJhUYRB_YbL2rQzYw"
+  },
+  {
+    "id": 6,
+    "internal_id": "37",
+    "company_name": "Arskan Autopalvelu",
+    "place_id": "ChIJ9TO2nLR0hUYRIogebBeJbag",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:29",
+    "address": "Sepänpolku 2, 41310 Leppävesi, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ9TO2nLR0hUYRIogebBeJbag"
+  },
+  {
+    "id": 7,
+    "internal_id": "38",
+    "company_name": "Asennuspalvelu J.Karvinen Oy",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Rokkakankaantie 10, Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 8,
+    "internal_id": "39",
+    "company_name": "Autokorjaamo Heikki Valkonen",
+    "place_id": "ChIJAQAAALAJhUYR96SbAfBITLw",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:30",
+    "address": "Rokkakankaan Teollisuusalue, 41350 Laukaa As, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJAQAAALAJhUYR96SbAfBITLw"
+  },
+  {
+    "id": 9,
+    "internal_id": "40",
+    "company_name": "Autokorjaamo J Ala-Könni",
+    "place_id": "ChIJnRp4uEwLhUYR7B4vh3-5lrw",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:31",
+    "address": "Mestarintie 10, 41310 Leppävesi, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJnRp4uEwLhUYR7B4vh3-5lrw"
+  },
+  {
+    "id": 10,
+    "internal_id": "41",
+    "company_name": "Autokorjaamo Kari-Huolto Leppävesi",
+    "place_id": "ChIJbQt_mrR0hUYROs1bK42h6lE",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:32",
+    "address": "Sepänpolku 3, 41310 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJbQt_mrR0hUYROs1bK42h6lE"
+  },
+  {
+    "id": 11,
+    "internal_id": "42",
+    "company_name": "Automaalaamo Autokori Oy",
+    "place_id": "ChIJiXUe4TsLhUYRNnARROCVsDg",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:32",
+    "address": "Sepänrinne 2, 41320 Leppävesi, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJiXUe4TsLhUYRNnARROCVsDg"
+  },
+  {
+    "id": 12,
+    "internal_id": "45",
+    "company_name": "GTI Car Center Oy",
+    "place_id": "ChIJB-ORRrN0hUYRt3WtqoLzEVM",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:33",
+    "address": "Leppävedenkatu 11, 41310 Leppävesi, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJB-ORRrN0hUYRt3WtqoLzEVM"
+  },
+  {
+    "id": 13,
+    "internal_id": "47",
+    "company_name": "Gyvers Garage",
+    "place_id": "ChIJ6xJo8xwLhUYR_TdnJZPBR7M",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:34",
+    "address": "Kumpurinne 7, 41310 Leppävesi, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ6xJo8xwLhUYR_TdnJZPBR7M"
+  },
+  {
+    "id": 14,
+    "internal_id": "48",
+    "company_name": "Hytösen Korjaamo",
+    "place_id": "ChIJ_ZQRh2oLhUYRjxyr9bPh8zc",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:34",
+    "address": "Eerolantie 20, 41310 Leppävesi, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ_ZQRh2oLhUYRjxyr9bPh8zc"
+  },
+  {
+    "id": 15,
+    "internal_id": "49",
+    "company_name": "Jannen Autokorjaus",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Sepänpolku 2, 41310 Leppävesi",
+    "reviews_url": null
+  },
+  {
+    "id": 16,
+    "internal_id": "50",
+    "company_name": "Suolehdontie 5",
+    "place_id": "ChIJ5YZ9dOsLhUYRXrq6zWcmjOM",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:35",
+    "address": "Suolehdontie 5, 41330 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ5YZ9dOsLhUYRXrq6zWcmjOM"
+  },
+  {
+    "id": 17,
+    "internal_id": "51",
+    "company_name": "JKL Asennus",
+    "place_id": "ChIJkfQkvpgLhUYRGdY5DlvHKeY",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:36",
+    "address": "Sikomäentie 28, 41330 Vihtavuori, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJkfQkvpgLhUYRGdY5DlvHKeY"
+  },
+  {
+    "id": 18,
+    "internal_id": "54",
+    "company_name": "Konehuolto Myyryläinen Oy",
+    "place_id": "ChIJX-tKgkYThUYR6QKzgT8bCnk",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:36",
+    "address": "Pirtinmutka 1, 41400 Laukaa Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJX-tKgkYThUYR6QKzgT8bCnk"
+  },
+  {
+    "id": 19,
+    "internal_id": "55",
+    "company_name": "LeisKart",
+    "place_id": "ChIJ9c5gX68JhUYR72e1C3zftiM",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:37",
+    "address": "Yritystie 13, 40320 Jyväskylä, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ9c5gX68JhUYR72e1C3zftiM"
+  },
+  {
+    "id": 20,
+    "internal_id": "56",
+    "company_name": "LRA-Raskashuolto Oy",
+    "place_id": "ChIJz3Zi13qnhUYRNMHXiJUG7NA",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:38",
+    "address": "Valkolantie 432, 41360 Valkola, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJz3Zi13qnhUYRNMHXiJUG7NA"
+  },
+  {
+    "id": 21,
+    "internal_id": "57",
+    "company_name": "Tmi Möykky",
+    "place_id": "ChIJwxuTEmMOhUYRThoWBU9HZRg",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:38",
+    "address": "Simunankoskentie 5, 41325 Laukkavirta, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJwxuTEmMOhUYRThoWBU9HZRg"
+  },
+  {
+    "id": 22,
+    "internal_id": "58",
+    "company_name": "Pajakulma Oy",
+    "place_id": "ChIJScoxGLR0hUYRK_kCMTlCpXI",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:39",
+    "address": "Rajamäentie 5, 41310 Leppävesi, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJScoxGLR0hUYRK_kCMTlCpXI"
+  },
+  {
+    "id": 23,
+    "internal_id": "60",
+    "company_name": "Printsport Oy",
+    "place_id": "ChIJwf8uHV4ThUYRMoL7TbjD66E",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:39",
+    "address": "Hohontie 10, 41400 Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJwf8uHV4ThUYRMoL7TbjD66E"
+  },
+  {
+    "id": 24,
+    "internal_id": "61",
+    "company_name": "RJJ - Huolto & Pesu Oy",
+    "place_id": "ChIJM1CsBU0LhUYR0aqAs-Bf3tM",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:40",
+    "address": "Mestarintie 4, 41310 Leppävesi, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJM1CsBU0LhUYR0aqAs-Bf3tM"
+  },
+  {
+    "id": 25,
+    "internal_id": "62",
+    "company_name": "Scania Jyväskylä",
+    "place_id": "ChIJ74MCg1ILhUYRZ1SDXMsPWzA",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:41",
+    "address": "Hallaperäntie 8, 41310 Leppävesi, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ74MCg1ILhUYRZ1SDXMsPWzA"
+  },
+  {
+    "id": 26,
+    "internal_id": "63",
+    "company_name": "Sepän Automaalaus",
+    "place_id": "ChIJ9TO2nLR0hUYRdaGlqLqkQu4",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:41",
+    "address": "Sepänpolku 2, 41310 Leppävesi, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ9TO2nLR0hUYRdaGlqLqkQu4"
+  },
+  {
+    "id": 27,
+    "internal_id": "64",
+    "company_name": "Service Palonen",
+    "place_id": "ChIJfXhMuf8LhUYREWvVFQvWpdE",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:42",
+    "address": "Kuhankoskentie 34, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJfXhMuf8LhUYREWvVFQvWpdE"
+  },
+  {
+    "id": 28,
+    "internal_id": "66",
+    "company_name": "Sk Raskashuolto",
+    "place_id": "ChIJMwykxH4MhUYRjQI1Fma_Qbc",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:42",
+    "address": "Järvikalliontie 11, 41330 Vihtasilta, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJMwykxH4MhUYRjQI1Fma_Qbc"
+  },
+  {
+    "id": 29,
+    "internal_id": "67",
+    "company_name": "T:mi Ari Hokkanen",
+    "place_id": "ChIJXfRQhpEThUYR7lUGO_cNamY",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:43",
+    "address": "Saarilammintie, 41400 Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJXfRQhpEThUYR7lUGO_cNamY"
+  },
+  {
+    "id": 30,
+    "internal_id": "68",
+    "company_name": "Tmi Autopalvelu Timo Lehtonen",
+    "place_id": "ChIJc50TB81shUYRJRCurPasbAo",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:44",
+    "address": "Ruuhimäentie 1, 41400 Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJc50TB81shUYRJRCurPasbAo"
+  },
+  {
+    "id": 31,
+    "internal_id": "69",
+    "company_name": "T:mi Autopesu Hietex",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Sepänpolku 3, 41310 LEPPÄVESI",
+    "reviews_url": null
+  },
+  {
+    "id": 32,
+    "internal_id": "70",
+    "company_name": "T:MI HUOLTO-KAKSIKKO S. ROIHA",
+    "place_id": "ChIJTTW7m7R0hUYRkzOa2gBSDyU",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:45",
+    "address": "Sepänpolku 2, 41310 Leppävesi, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJTTW7m7R0hUYRkzOa2gBSDyU"
+  },
+  {
+    "id": 33,
+    "internal_id": "71",
+    "company_name": "Tmi Jarkon korjaus ja apu",
+    "place_id": "ChIJ3Z-dxOwLhUYRCnH9TjZ_NhI",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:45",
+    "address": "Vehmasahontie 27, 41330 Vihtavuori, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ3Z-dxOwLhUYRCnH9TjZ_NhI"
+  },
+  {
+    "id": 34,
+    "internal_id": "72",
+    "company_name": "Tmi Jarno Räty",
+    "place_id": "ChIJbXG1qn4MhUYRki5faqKckdQ",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:46",
+    "address": "Järvilinnantie 10, 41330 Vihtasilta, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJbXG1qn4MhUYRki5faqKckdQ"
+  },
+  {
+    "id": 35,
+    "internal_id": "73",
+    "company_name": "Tmi Jukka Häkkinen",
+    "place_id": "ChIJYxPDElkLhUYRZa-X92m4g_Y",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:46",
+    "address": "Raikkolantie 45, 41310 Leppävesi, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJYxPDElkLhUYRZa-X92m4g_Y"
+  },
+  {
+    "id": 36,
+    "internal_id": "74",
+    "company_name": "Kuhalantie 5",
+    "place_id": "ChIJT-ePnY4LhUYR4q6AVoOkV6Q",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:47",
+    "address": "Kuhalantie 5, 41330 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJT-ePnY4LhUYR4q6AVoOkV6Q"
+  },
+  {
+    "id": 37,
+    "internal_id": "75",
+    "company_name": "Tähtipalvelut Lauttaanaho",
+    "place_id": "ChIJZ7BmVmAJhUYRNyfDjygdinM",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:48",
+    "address": "Kalliomäentie 108, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJZ7BmVmAJhUYRNyfDjygdinM"
+  },
+  {
+    "id": 38,
+    "internal_id": "76",
+    "company_name": "TMI Tero Hytönen",
+    "place_id": "ChIJDTB38ewUhUYRC2nv_kfUBc0",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:49",
+    "address": "Tahkomäentie 33, 41400 Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJDTB38ewUhUYRC2nv_kfUBc0"
+  },
+  {
+    "id": 39,
+    "internal_id": "77",
+    "company_name": "Tmi Tommi Kauppinen",
+    "place_id": "ChIJSeA74rYUhUYRR2CaTjf9DQE",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:49",
+    "address": "Lapinjärventie 376, 41400 Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJSeA74rYUhUYRR2CaTjf9DQE"
+  },
+  {
+    "id": 40,
+    "internal_id": "78",
+    "company_name": "Tecvest Oy",
+    "place_id": "ChIJ4cQ07GcJhUYRwszbHrzz7dw",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:50",
+    "address": "Petäälammentie 8, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ4cQ07GcJhUYRwszbHrzz7dw"
+  },
+  {
+    "id": 41,
+    "internal_id": "79",
+    "company_name": "TH-Pesu",
+    "place_id": "ChIJcV-gSEIJhUYRRWaYYw2Hsk0",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:51",
+    "address": "Raunilantie, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJcV-gSEIJhUYRRWaYYw2Hsk0"
+  },
+  {
+    "id": 42,
+    "internal_id": "80",
+    "company_name": "Wakpal Oy",
+    "place_id": "ChIJrXp7M4p0hUYR0pD2y8l7wiU",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:52",
+    "address": "Sepänpolku 5, 41310 Leppävesi, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJrXp7M4p0hUYR0pD2y8l7wiU"
+  },
+  {
+    "id": 43,
+    "internal_id": "81",
+    "company_name": "Vuonteen Kolaripaja",
+    "place_id": "ChIJV5bEzvQMhUYRsajaTF2eYm0",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:53",
+    "address": "Saviontie 361, 41330 Vihtavuori, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJV5bEzvQMhUYRsajaTF2eYm0"
+  },
+  {
+    "id": 44,
+    "internal_id": "253",
+    "company_name": "St1 Laukaa",
+    "place_id": "ChIJDTq_xxUJhUYRVxakxQdlNcU",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:53",
+    "address": "Yläniementie 51, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJDTq_xxUJhUYRVxakxQdlNcU"
+  },
+  {
+    "id": 45,
+    "internal_id": "83",
+    "company_name": "Alko Laukaa",
+    "place_id": "ChIJaYlnnj8JhUYR85hdjX0nXCU",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:54",
+    "address": "Vuojärventie 1, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJaYlnnj8JhUYR85hdjX0nXCU"
+  },
+  {
+    "id": 46,
+    "internal_id": "84",
+    "company_name": "K-Supermarket Laukaa",
+    "place_id": "ChIJo4aFOj8JhUYRyN0rR98hOpY",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:55",
+    "address": "Vuokaari 2, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJo4aFOj8JhUYRyN0rR98hOpY"
+  },
+  {
+    "id": 47,
+    "internal_id": "86",
+    "company_name": "K-Market Tiitus",
+    "place_id": "ChIJyY3_PkYLhUYRGvEEO474XvY",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:56",
+    "address": "Tiituspohjantie 36, 41310 Leppävesi, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJyY3_PkYLhUYRGvEEO474XvY"
+  },
+  {
+    "id": 48,
+    "internal_id": "87",
+    "company_name": "Kalaliike Pentti Rossi",
+    "place_id": "ChIJxwodjooGhUYRVqrpdAwi1iQ",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:57",
+    "address": "Särkeläntie 122, 41390 Äijälä, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJxwodjooGhUYRVqrpdAwi1iQ"
+  },
+  {
+    "id": 49,
+    "internal_id": "88",
+    "company_name": "Keliapakari",
+    "place_id": "ChIJk1siZ1cGhUYR0_RRcRirQyw",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:57",
+    "address": "Jokipurontie 5, 41390 Äijälä, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJk1siZ1cGhUYR0_RRcRirQyw"
+  },
+  {
+    "id": 50,
+    "internal_id": "89",
+    "company_name": "Simontie 1",
+    "place_id": "ChIJy15KsmAThUYR0C1vCRmzePU",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:58",
+    "address": "Simontie 1, 41400 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJy15KsmAThUYR0C1vCRmzePU"
+  },
+  {
+    "id": 51,
+    "internal_id": "92",
+    "company_name": "Lidl Laukaa",
+    "place_id": "ChIJTeP4oD8JhUYREFQ2gh4dk9A",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:58",
+    "address": "Vuojärventie 1, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJTeP4oD8JhUYREFQ2gh4dk9A"
+  },
+  {
+    "id": 52,
+    "internal_id": "94",
+    "company_name": "S-market Lievestuore",
+    "place_id": "ChIJjbxR5LIThUYRBA5F5WODM0Y",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:25:59",
+    "address": "Liepeentie 17, 41400 Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJjbxR5LIThUYRBA5F5WODM0Y"
+  },
+  {
+    "id": 53,
+    "internal_id": "95",
+    "company_name": "P. Helppi Ky (K-MARKET VIHTORI)",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Haavistontie 2, 41330 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 54,
+    "internal_id": "96",
+    "company_name": "Raudaskala",
+    "place_id": "ChIJR4Ng21kJhUYRAgh2RxgBKBw",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:00",
+    "address": "Muonamiehenkuja 19, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJR4Ng21kJhUYRAgh2RxgBKBw"
+  },
+  {
+    "id": 55,
+    "internal_id": "97",
+    "company_name": "T:mi Juhani P.E. Lampinen",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Majasaarentie 5 A, 41400 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 56,
+    "internal_id": "98",
+    "company_name": "T:mi Tökös",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Hermannintie, 41330 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 57,
+    "internal_id": "99",
+    "company_name": "Tmi Riihipellon Leipäpuu Kotileipomo",
+    "place_id": "ChIJlWLJaZEShUYRFJZ2WtBDXzA",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:02",
+    "address": "Lummelahdentie 109, 41400 Laukaa Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJlWLJaZEShUYRFJZ2WtBDXzA"
+  },
+  {
+    "id": 58,
+    "internal_id": "294",
+    "company_name": "Koivulan savukala",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Lievestuore",
+    "reviews_url": null
+  },
+  {
+    "id": 59,
+    "internal_id": "274",
+    "company_name": "Kotihoito A-M Huttunen",
+    "place_id": "ChIJN6maG-0LhUYR0eS7iJ0hqcs",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:03",
+    "address": "Marjarinne 20, 41330 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJN6maG-0LhUYR0eS7iJ0hqcs"
+  },
+  {
+    "id": 60,
+    "internal_id": "269",
+    "company_name": "Terveys- ja hyvinvointipalvelu Riina Raitio",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Huminankuja 2, 41400 Lievestuore",
+    "reviews_url": null
+  },
+  {
+    "id": 61,
+    "internal_id": "3",
+    "company_name": "Eevan Fysioterapia",
+    "place_id": "ChIJeRl7-GcThUYRKHrp_JOWuKI",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:04",
+    "address": "Liepeentie 11, 41400 Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJeRl7-GcThUYRKHrp_JOWuKI"
+  },
+  {
+    "id": 62,
+    "internal_id": "6",
+    "company_name": "kotisivut",
+    "place_id": "ChIJAQBwFUYLhUYR_G1e4ZEtaRg",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:05",
+    "address": "Ilvestie 1, 41310 Leppävesi, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJAQBwFUYLhUYR_G1e4ZEtaRg"
+  },
+  {
+    "id": 63,
+    "internal_id": "7",
+    "company_name": "Fysioterapia Oiva Ky",
+    "place_id": "ChIJo0WN-GcThUYRhaYVKRw5_2k",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:06",
+    "address": "Liepeentie 11, 41400 Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJo0WN-GcThUYRhaYVKRw5_2k"
+  },
+  {
+    "id": 64,
+    "internal_id": "8",
+    "company_name": "Fysioterapiapalvelu Hannele Kerkelä",
+    "place_id": "ChIJ6boBMGOnhUYRa34HFbgt7hw",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:07",
+    "address": "Arwidssonintie 15 -17, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ6boBMGOnhUYRa34HFbgt7hw"
+  },
+  {
+    "id": 65,
+    "internal_id": "9",
+    "company_name": "Hieroja Hilkka Katainen, Leppävesi",
+    "place_id": "ChIJT8fe-F8LhUYRxEd2DtLIyW8",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:07",
+    "address": "Lehtorinne 2 as 2, 41310 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJT8fe-F8LhUYRxEd2DtLIyW8"
+  },
+  {
+    "id": 66,
+    "internal_id": "10",
+    "company_name": "Hieroja Antero Kumpu",
+    "place_id": "ChIJoW_h0eoLhUYRdkbxsn0a0GA",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:08",
+    "address": "Patruunantie 1, 41330 Vihtavuori, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJoW_h0eoLhUYRdkbxsn0a0GA"
+  },
+  {
+    "id": 67,
+    "internal_id": "11",
+    "company_name": "Hierontapalvelu Soul&Body",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Lääsäntie 65, 41330 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 68,
+    "internal_id": "12",
+    "company_name": "Hierontapalvelut Anni Lappalainen",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Liepeentie 4, 41400 Lievestuore",
+    "reviews_url": null
+  },
+  {
+    "id": 69,
+    "internal_id": "15",
+    "company_name": "Mäntyrinne 1",
+    "place_id": "ChIJaxKI_T4LhUYRgSWmbjiyyR4",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:09",
+    "address": "Mäntyrinne 1, 41310 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJaxKI_T4LhUYRgSWmbjiyyR4"
+  },
+  {
+    "id": 70,
+    "internal_id": "16",
+    "company_name": "Koulutettu hieroja Anni Piilonen",
+    "place_id": "ChIJo3gf4fcIhUYRGZtCcDwegq8",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:10",
+    "address": "Oitinlammentie 31, 41370 Kuusa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJo3gf4fcIhUYRGZtCcDwegq8"
+  },
+  {
+    "id": 71,
+    "internal_id": "18",
+    "company_name": "Laukaan toimintaterapia",
+    "place_id": "ChIJEewqYpMLhUYRkUk9VSP3j5s",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:11",
+    "address": "Brittilänranta 16, 41330 Vihtavuori, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJEewqYpMLhUYRkUk9VSP3j5s"
+  },
+  {
+    "id": 72,
+    "internal_id": "20",
+    "company_name": "Liikkeen Viisaus",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Brittilänranta 20, 41330 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 73,
+    "internal_id": "23",
+    "company_name": "Onefit",
+    "place_id": "ChIJoU5O6VkJhUYRYIw8TILJ5gc",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:12",
+    "address": "Muonamiehenkuja 13, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJoU5O6VkJhUYRYIw8TILJ5gc"
+  },
+  {
+    "id": 74,
+    "internal_id": "27",
+    "company_name": "Ruskan Riemut",
+    "place_id": "ChIJF9NaCweohUYRN9ypz8918jE",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:12",
+    "address": "Salmirannankuja 5, 41370 Kuusa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJF9NaCweohUYRN9ypz8918jE"
+  },
+  {
+    "id": 75,
+    "internal_id": "28",
+    "company_name": "Sanna Niinikoski",
+    "place_id": "ChIJlTKshfQLhUYRrjghL8vxPxU",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:13",
+    "address": "Rysäkuja 3, 41330 Vihtavuori, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJlTKshfQLhUYRrjghL8vxPxU"
+  },
+  {
+    "id": 76,
+    "internal_id": "29",
+    "company_name": "Senilix Os et Musculus",
+    "place_id": "ChIJA1JpWeQJhUYRIhg_vZg2I0U",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:13",
+    "address": "Kantolantie 10, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJA1JpWeQJhUYRIhg_vZg2I0U"
+  },
+  {
+    "id": 77,
+    "internal_id": "30",
+    "company_name": "Terveystalo Laukaa Työterveys Vihtavuori",
+    "place_id": "ChIJXePiZLkLhUYRwJk4U1vmnG0",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:14",
+    "address": "Ruutitehtaantie 80, 41330 Vihtavuori, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJXePiZLkLhUYRwJk4U1vmnG0"
+  },
+  {
+    "id": 78,
+    "internal_id": "32",
+    "company_name": "Laukaan Hieronta ja kauneussalonki",
+    "place_id": "ChIJrZGSyUIJhUYRRaPGAigID-8",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:15",
+    "address": "Laukaantie 18 Huoneisto 6 (2 krs, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJrZGSyUIJhUYRRaPGAigID-8"
+  },
+  {
+    "id": 79,
+    "internal_id": "33",
+    "company_name": "Hyvinvointipalvelu Vire",
+    "place_id": "ChIJ57rVNdEUhUYR23Ne3nmcsN0",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:15",
+    "address": "Liepeentie 4 as 1, 41400 Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ57rVNdEUhUYR23Ne3nmcsN0"
+  },
+  {
+    "id": 80,
+    "internal_id": "35",
+    "company_name": "Laukaantie 12",
+    "place_id": "ChIJCT2fjDgJhUYRs0uqEhdllA4",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:16",
+    "address": "Laukaantie 12, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJCT2fjDgJhUYRs0uqEhdllA4"
+  },
+  {
+    "id": 81,
+    "internal_id": "36",
+    "company_name": "Tmi Heini Riekkinen",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Helvinkuja 3, 41400 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 82,
+    "internal_id": "106",
+    "company_name": "Hierontahelmi Laukaa",
+    "place_id": "ChIJU3TE36UJhUYRzLEPHZ4zA1w",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:17",
+    "address": "Kankaanpääntie 85, 41350 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJU3TE36UJhUYRzLEPHZ4zA1w"
+  },
+  {
+    "id": 83,
+    "internal_id": "107",
+    "company_name": "Koulutettu Hieroja Karvonen Veijo",
+    "place_id": "ChIJR5WM5uwLhUYR-SWVx7v7lNU",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:17",
+    "address": "Suolehdontie 1 A 3, 41330 Vihtavuori, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJR5WM5uwLhUYR-SWVx7v7lNU"
+  },
+  {
+    "id": 84,
+    "internal_id": "108",
+    "company_name": "Hierontahelmi Laukaa",
+    "place_id": "ChIJU3TE36UJhUYRzLEPHZ4zA1w",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:18",
+    "address": "Kankaanpääntie 85, 41350 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJU3TE36UJhUYRzLEPHZ4zA1w"
+  },
+  {
+    "id": 85,
+    "internal_id": "109",
+    "company_name": "Hierontapalvelu Virpi Myyryläinen",
+    "place_id": "ChIJfTdmU2QThUYRz9K_uxcdfNY",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:18",
+    "address": "Laitisentie (Lievestuore) 7, 41400 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJfTdmU2QThUYRz9K_uxcdfNY"
+  },
+  {
+    "id": 86,
+    "internal_id": "110",
+    "company_name": "Simonpolku 1",
+    "place_id": "ChIJA-9Y8D8LhUYRFKX5hQVtOpQ",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:19",
+    "address": "Simonpolku 1, 41310 Jyväskylä, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJA-9Y8D8LhUYRFKX5hQVtOpQ"
+  },
+  {
+    "id": 87,
+    "internal_id": "111",
+    "company_name": "Keski-Suomen Hieronta- ja lymfaterapiakeskus",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Veräjätie 7 B 6, 41340 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 88,
+    "internal_id": "112",
+    "company_name": "Koulutettu hieroja Antti-Pekka Ahonen",
+    "place_id": "ChIJDxbXCVIJhUYRVOneI0fdJAY",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:20",
+    "address": "Laukaantie 22, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJDxbXCVIJhUYRVOneI0fdJAY"
+  },
+  {
+    "id": 89,
+    "internal_id": "113",
+    "company_name": "Koulutettu hieroja Veera Vihtari",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Hietalantie 68, 41370 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 90,
+    "internal_id": "114",
+    "company_name": "Luontaishoitola Enkelihuone",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Katajatie 1, 41400 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 91,
+    "internal_id": "115",
+    "company_name": "Marjo Niininen koulutettu hieroja",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Koskisentie 2 As 10, 41340 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 92,
+    "internal_id": "122",
+    "company_name": "Tmi Maarit Roth HR-Hieronta",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Paavolantie 20, 41180 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 93,
+    "internal_id": "125",
+    "company_name": "Amelie Kauneushoitola",
+    "place_id": "ChIJ1_JKs3AJhUYRpcy8gO5MMFs",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:23",
+    "address": "Laukaantie 24, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ1_JKs3AJhUYRpcy8gO5MMFs"
+  },
+  {
+    "id": 94,
+    "internal_id": "126",
+    "company_name": "Välitie 3",
+    "place_id": "ChIJzwypXk8LhUYRjVRuHwf7M-g",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:24",
+    "address": "Välitie 3, 41310 Jyväskylä, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJzwypXk8LhUYRjVRuHwf7M-g"
+  },
+  {
+    "id": 95,
+    "internal_id": "127",
+    "company_name": "Kauneuspörssi",
+    "place_id": "ChIJWb5q0DgJhUYRAyDISMauZcE",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:24",
+    "address": "Laukaantie 18, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJWb5q0DgJhUYRAyDISMauZcE"
+  },
+  {
+    "id": 96,
+    "internal_id": "128",
+    "company_name": "Evenails",
+    "place_id": "ChIJB59HCft0hUYReO-FVgDQkWE",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:25",
+    "address": "Harkkotie 5a1, 40250 Jyväskylä, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJB59HCft0hUYReO-FVgDQkWE"
+  },
+  {
+    "id": 97,
+    "internal_id": "130",
+    "company_name": "Parturi-Kampaamo Carpe Diem",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Laukaantie 15, 41340 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 98,
+    "internal_id": "132",
+    "company_name": "Hiushuone Sonja",
+    "place_id": "ChIJ1yO5w0oUhUYRaQ8Ou7DuH_U",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:26",
+    "address": "Liepeentie 6, 41400 Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ1yO5w0oUhUYRaQ8Ou7DuH_U"
+  },
+  {
+    "id": 99,
+    "internal_id": "135",
+    "company_name": "Kauneus- ja jalkahoitola Ania",
+    "place_id": "ChIJP2x_40IThUYR88WlkRnoTus",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:27",
+    "address": "Huminankuja 2, 41400 Laukaa Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJP2x_40IThUYR88WlkRnoTus"
+  },
+  {
+    "id": 100,
+    "internal_id": "136",
+    "company_name": "Kauneushoitola Tunne",
+    "place_id": "ChIJ1xFIxTgJhUYRrq3nuqOijUA",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:27",
+    "address": "Laukaantie 15, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ1xFIxTgJhUYRrq3nuqOijUA"
+  },
+  {
+    "id": 101,
+    "internal_id": "137",
+    "company_name": "Kauneuspörssi",
+    "place_id": "ChIJWb5q0DgJhUYRAyDISMauZcE",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:28",
+    "address": "Laukaantie 18, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJWb5q0DgJhUYRAyDISMauZcE"
+  },
+  {
+    "id": 102,
+    "internal_id": "140",
+    "company_name": "Kosmetologi Helena Manninen",
+    "place_id": "ChIJly9C4qUJhUYRDuJwKt8exZA",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:29",
+    "address": "Peurungantie 85, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJly9C4qUJhUYRDuJwKt8exZA"
+  },
+  {
+    "id": 103,
+    "internal_id": "146",
+    "company_name": "Parturi-Kampaamo Anita Kuniala",
+    "place_id": "ChIJnX57ED8JhUYRX6l1AB4y-1U",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:30",
+    "address": "Laukaantie 18, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJnX57ED8JhUYRX6l1AB4y-1U"
+  },
+  {
+    "id": 104,
+    "internal_id": "147",
+    "company_name": "Parturi-Kampaamo Anne-Maria Arvola",
+    "place_id": "ChIJ_bJu5EIThUYRSOeg0NRF1xU",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:31",
+    "address": "Liepeentie 9, 41400 Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ_bJu5EIThUYRSOeg0NRF1xU"
+  },
+  {
+    "id": 105,
+    "internal_id": "148",
+    "company_name": "Parturi-Kampaamo Doris Maija Tuomainen",
+    "place_id": "ChIJKfrRGAdzhUYRbCx7LAexi18",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:31",
+    "address": "Juholanmäki 22, 41310 Leppävesi, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJKfrRGAdzhUYRbCx7LAexi18"
+  },
+  {
+    "id": 106,
+    "internal_id": "149",
+    "company_name": "Parturi-kampaamo Minna Näreaho",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Koiralammentie 17, 41310 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 107,
+    "internal_id": "150",
+    "company_name": "Parturi-Kampaamo Paulan Kampa",
+    "place_id": "ChIJRbuwVj8JhUYRmXc8j1PxuvU",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:32",
+    "address": "Arwidssonintie 15-17 H 16, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJRbuwVj8JhUYRmXc8j1PxuvU"
+  },
+  {
+    "id": 108,
+    "internal_id": "151",
+    "company_name": "Parturi-Kampaamo Raija Viinikainen",
+    "place_id": "ChIJC5AKwUIThUYRs5pjd25zu68",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:33",
+    "address": "Liepeentie 7, 41400 Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJC5AKwUIThUYRs5pjd25zu68"
+  },
+  {
+    "id": 109,
+    "internal_id": "152",
+    "company_name": "Parturi-Kampaamo Sandy",
+    "place_id": "ChIJlZ4xkpMLhUYRaB3va31zpqg",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:34",
+    "address": "Haavistontie 5, 41330 Vihtavuori, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJlZ4xkpMLhUYRaB3va31zpqg"
+  },
+  {
+    "id": 110,
+    "internal_id": "153",
+    "company_name": "Parturi-Kampaamo Tuula Häkkinen",
+    "place_id": "ChIJjW88axcJhUYRlUOhWPzoMMw",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:34",
+    "address": "Jokiniityntie 7, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJjW88axcJhUYRlUOhWPzoMMw"
+  },
+  {
+    "id": 111,
+    "internal_id": "156",
+    "company_name": "Pieni Helmi",
+    "place_id": "ChIJyWKQDe4LhUYRggqoDtiZJmA",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:35",
+    "address": "Brittilänranta 12, 41330 Vihtavuori, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJyWKQDe4LhUYRggqoDtiZJmA"
+  },
+  {
+    "id": 112,
+    "internal_id": "158",
+    "company_name": "Kynsiteknikko Kristi Ruul-Saari​",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Kuusisentie 53, 41340 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 113,
+    "internal_id": "159",
+    "company_name": "Hiushuone Soma",
+    "place_id": "ChIJ2fjnGz8JhUYR-9qoJ4ye5FI",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:36",
+    "address": "Laukaantie 26, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ2fjnGz8JhUYR-9qoJ4ye5FI"
+  },
+  {
+    "id": 114,
+    "internal_id": "160",
+    "company_name": "Spirello",
+    "place_id": "ChIJNUYJhDgJhUYRsCvhNkZu0u4",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:37",
+    "address": "Laukaantie 5, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJNUYJhDgJhUYRsCvhNkZu0u4"
+  },
+  {
+    "id": 115,
+    "internal_id": "162",
+    "company_name": "Hiihtomäentie 3",
+    "place_id": "ChIJWbbYOesLhUYRciRtpBArubg",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:37",
+    "address": "Hiihtomäentie 3, 41330 Jyväskylä, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJWbbYOesLhUYRciRtpBArubg"
+  },
+  {
+    "id": 116,
+    "internal_id": "163",
+    "company_name": "Tia's hair and beauty",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Nurmijärventie 222, 41390 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 117,
+    "internal_id": "164",
+    "company_name": "TMI Mari Virtanen",
+    "place_id": "ChIJWb5q0DgJhUYRaUKD8vOcqZI",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:38",
+    "address": "Laukaantie 26, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJWb5q0DgJhUYRaUKD8vOcqZI"
+  },
+  {
+    "id": 118,
+    "internal_id": "165",
+    "company_name": "Miettisentie 1",
+    "place_id": "ChIJLYzX4GgJhUYRL55wzRb68OU",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:39",
+    "address": "Miettisentie 1, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJLYzX4GgJhUYRL55wzRb68OU"
+  },
+  {
+    "id": 119,
+    "internal_id": "167",
+    "company_name": "Tmi Katja Vehviläinen (Parturi-kampaamo",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Laukaantie 22-24, 41340 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 120,
+    "internal_id": "168",
+    "company_name": "Liepeentie 6",
+    "place_id": "ChIJD5bcUl0ThUYRVEv3Ht_Gqhg",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:40",
+    "address": "Liepeentie 6, 41400 Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJD5bcUl0ThUYRVEv3Ht_Gqhg"
+  },
+  {
+    "id": 121,
+    "internal_id": "169",
+    "company_name": "TMI Mari Virtanen",
+    "place_id": "ChIJWb5q0DgJhUYRaUKD8vOcqZI",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:41",
+    "address": "Laukaantie 26, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJWb5q0DgJhUYRaUKD8vOcqZI"
+  },
+  {
+    "id": 122,
+    "internal_id": "170",
+    "company_name": "AM Oksanen",
+    "place_id": "ChIJ-SYCayEGhUYRlrupsUCjw8E",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:41",
+    "address": "Juha Kankkusen tie 12, 41370 Kuusa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ-SYCayEGhUYRlrupsUCjw8E"
+  },
+  {
+    "id": 123,
+    "internal_id": "171",
+    "company_name": "Saija Kärki",
+    "place_id": "ChIJVZq1TEQThUYR8yzSgPE2rGY",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:42",
+    "address": "Liepeentie 4, 41400 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJVZq1TEQThUYR8yzSgPE2rGY"
+  },
+  {
+    "id": 124,
+    "internal_id": "172",
+    "company_name": "Tmi SaraBella/Salon Belleza Gloriosa Sara Aho",
+    "place_id": "ChIJIfF67kELhUYRgFQW7Jqf3T8",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:42",
+    "address": "Tiituspohjantie 50, 41310 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJIfF67kELhUYRgFQW7Jqf3T8"
+  },
+  {
+    "id": 125,
+    "internal_id": "173",
+    "company_name": "Tmi Seija Puttonen",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Peurungantie 85, 41340 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 126,
+    "internal_id": "204",
+    "company_name": "Laukaan Kotipalvelu",
+    "place_id": "ChIJ2WiowEMIhUYRQ4T-1DZPHD4",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:43",
+    "address": "Vilppulantie 196, 41370 Kuusa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ2WiowEMIhUYRQ4T-1DZPHD4"
+  },
+  {
+    "id": 127,
+    "internal_id": "293",
+    "company_name": "Terviksen tilat",
+    "place_id": "ChIJDX9zYwAThUYRAi8eIB4I9pk",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:44",
+    "address": "Liepeentie (taajama) 49, 41400 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJDX9zYwAThUYRAi8eIB4I9pk"
+  },
+  {
+    "id": 128,
+    "internal_id": "290",
+    "company_name": "Revontuli Resort",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Revontulentie 1, 41500 Hankasalmi",
+    "reviews_url": null
+  },
+  {
+    "id": 129,
+    "internal_id": "289",
+    "company_name": "Taulun Kartano",
+    "place_id": "ChIJ3UMBy2ZqhUYR-Ht1uEJALoI",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:45",
+    "address": "Tauluntie 596, 41410 Kankainen, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ3UMBy2ZqhUYR-Ht1uEJALoI"
+  },
+  {
+    "id": 130,
+    "internal_id": "277",
+    "company_name": "Laukaan Asumispalvelusäätiö",
+    "place_id": "ChIJTTYsfkcJhUYRlaRYd_uJeZ8",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:46",
+    "address": "Laukaantie 6, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJTTYsfkcJhUYRlaRYd_uJeZ8"
+  },
+  {
+    "id": 131,
+    "internal_id": "276",
+    "company_name": "Vuonteen Helmi",
+    "place_id": "ChIJ1fOYAW-n6kIRx_KGAwcKpDU",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:46",
+    "address": "Tarvaalantie 22, 41330 Vihtavuori, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ1fOYAW-n6kIRx_KGAwcKpDU"
+  },
+  {
+    "id": 132,
+    "internal_id": "275",
+    "company_name": "Tyyni Hoiva Suomi Oy",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Koipilahdentie 210, Rautalampi",
+    "reviews_url": null
+  },
+  {
+    "id": 133,
+    "internal_id": "117",
+    "company_name": "Perttulan tila Oy",
+    "place_id": "ChIJfwTlh14LhUYRIa1PKnYCQkA",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:47",
+    "address": "Vaajakoskentie 113, 41310 Leppävesi, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJfwTlh14LhUYRIa1PKnYCQkA"
+  },
+  {
+    "id": 134,
+    "internal_id": "250",
+    "company_name": "Kartanoravintola Karlvik",
+    "place_id": "ChIJ2fyg374JhUYRmN_Ez4zeyLQ",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:48",
+    "address": "as, Valkolantie 68, 41350 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ2fyg374JhUYRmN_Ez4zeyLQ"
+  },
+  {
+    "id": 135,
+    "internal_id": "282",
+    "company_name": "Laukaan Tuulenväre",
+    "place_id": "ChIJ86yj6IQJhUYROYvhpSozw4I",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:48",
+    "address": "Ristonniementie 2, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ86yj6IQJhUYROYvhpSozw4I"
+  },
+  {
+    "id": 136,
+    "internal_id": "281",
+    "company_name": "Vehniän village hall Himma",
+    "place_id": "ChIJRQg0DcqmhUYRsppglmfppEY",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:49",
+    "address": "Yläpohjantie 34, 41180 Vehniä, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJRQg0DcqmhUYRsppglmfppEY"
+  },
+  {
+    "id": 137,
+    "internal_id": "279",
+    "company_name": "Työväentalo Toivola",
+    "place_id": "ChIJNcxff0QThUYRs-KU9B9eRLo",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:49",
+    "address": "Puutarhatie 1, 41400 Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJNcxff0QThUYRs-KU9B9eRLo"
+  },
+  {
+    "id": 138,
+    "internal_id": "280",
+    "company_name": "Juhlatalo Humina",
+    "place_id": "ChIJMT4DxEIThUYRdKgnt8VVQ8w",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:50",
+    "address": "Huminankuja 2, 41400 Laukaa Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJMT4DxEIThUYRdKgnt8VVQ8w"
+  },
+  {
+    "id": 139,
+    "internal_id": "295",
+    "company_name": "Naissaaren Upeen kahvila",
+    "place_id": "ChIJhZ17RbBzhUYRGKL1UDgiP-Q",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:51",
+    "address": "Naissaarentie 2, 40800 Jyväskylä, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJhZ17RbBzhUYRGKL1UDgiP-Q"
+  },
+  {
+    "id": 140,
+    "internal_id": "271",
+    "company_name": "Laukaan Optikko Fenno Optiikka",
+    "place_id": "ChIJ4e_tMT8JhUYRmsXqEA55PWs",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:51",
+    "address": "Laukaantie 22-24, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ4e_tMT8JhUYRmsXqEA55PWs"
+  },
+  {
+    "id": 141,
+    "internal_id": "270",
+    "company_name": "Tertan Kahvila & puoti",
+    "place_id": "ChIJe9mrm5YNhUYRJXu5PA6rDVs",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:52",
+    "address": "Antinniementie 1, 41330 Vihtavuori, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJe9mrm5YNhUYRJXu5PA6rDVs"
+  },
+  {
+    "id": 142,
+    "internal_id": "13",
+    "company_name": "Iloinen Noita Oy",
+    "place_id": "ChIJ_-y-s3EJhUYR-QwOe5jfveU",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:52",
+    "address": "Leipäpohjantie 45, 41350 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ_-y-s3EJhUYR-QwOe5jfveU"
+  },
+  {
+    "id": 143,
+    "internal_id": "17",
+    "company_name": "Laukaan Apteekki",
+    "place_id": "ChIJ4e_tMT8JhUYRHP14JrBJMyY",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:53",
+    "address": "Vuokaari 2, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ4e_tMT8JhUYRHP14JrBJMyY"
+  },
+  {
+    "id": 144,
+    "internal_id": "19",
+    "company_name": "Lievestuoreen Apteekki",
+    "place_id": "ChIJi_78i34ThUYRlml4tm3eS3E",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:54",
+    "address": "Liepeentie 8, 41400 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJi_78i34ThUYRlml4tm3eS3E"
+  },
+  {
+    "id": 145,
+    "internal_id": "82",
+    "company_name": "R-Kioski",
+    "place_id": "ChIJiR8hLj8JhUYR8x7GtC-uwXQ",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:54",
+    "address": "Laukaantie 22 24, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJiR8hLj8JhUYR8x7GtC-uwXQ"
+  },
+  {
+    "id": 146,
+    "internal_id": "90",
+    "company_name": "Laukaan Säästö-Market",
+    "place_id": "ChIJ0ZeMGs1shUYRzS6l-u6U244",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:55",
+    "address": "Kelkkamäentie 277, 41400 Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ0ZeMGs1shUYRzS6l-u6U244"
+  },
+  {
+    "id": 147,
+    "internal_id": "100",
+    "company_name": "Tokmanni Laukaa",
+    "place_id": "ChIJbcZTH-YJhUYRzSlxI680T-A",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:55",
+    "address": "Vuojärven puistotie 11, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJbcZTH-YJhUYRzSlxI680T-A"
+  },
+  {
+    "id": 148,
+    "internal_id": "129",
+    "company_name": "Fieldhill Guitars",
+    "place_id": "ChIJo2StAm0LhUYRvM92oN3CAVA",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:56",
+    "address": "Pienkuukkalantie 22, 41310 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJo2StAm0LhUYRvM92oN3CAVA"
+  },
+  {
+    "id": 149,
+    "internal_id": "134",
+    "company_name": "Jukka-tuote Juho Jussila",
+    "place_id": "ChIJFZBR55d0hUYR6G-7Ftto8O0",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:57",
+    "address": "Puulaakintie 6, 40320 Jyväskylä, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJFZBR55d0hUYR6G-7Ftto8O0"
+  },
+  {
+    "id": 150,
+    "internal_id": "141",
+    "company_name": "Laukaan KultaKello Avoin yhtiö",
+    "place_id": "ChIJm7QGRT8JhUYRaYnCXlKedM4",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:57",
+    "address": "Arwidssonintie 15, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJm7QGRT8JhUYRaYnCXlKedM4"
+  },
+  {
+    "id": 151,
+    "internal_id": "142",
+    "company_name": "Merjan Risu&Ruusut",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Kuukkasentie 1 A 1, 41340 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 152,
+    "internal_id": "143",
+    "company_name": "Rinnekuja 17",
+    "place_id": "ChIJ2RMZLFALhUYRr8etphf1xgA",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:59",
+    "address": "Rinnekuja 17, 41310 Leppävesi, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ2RMZLFALhUYRr8etphf1xgA"
+  },
+  {
+    "id": 153,
+    "internal_id": "166",
+    "company_name": "JP Puusta Oy",
+    "place_id": "ChIJKddJRHsLhUYRAhWlNPeTUIM",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:26:59",
+    "address": "Ravitie 3, 41330 Vihtavuori, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJKddJRHsLhUYRAhWlNPeTUIM"
+  },
+  {
+    "id": 154,
+    "internal_id": "176",
+    "company_name": "Väentupa R.Y. (Kirpputori Retrokeidas)",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Laukaantie 13, 41340 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 155,
+    "internal_id": "240",
+    "company_name": "Väentupa R.Y. (SER-TOIMINTA)",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Katajamäentie 6, 41340 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 156,
+    "internal_id": "265",
+    "company_name": "Kirpputori Majakka",
+    "place_id": "ChIJU05VD4wThUYRj3RrQVvGUgw",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:01",
+    "address": "Liepeentie 9, 41400 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJU05VD4wThUYRj3RrQVvGUgw"
+  },
+  {
+    "id": 157,
+    "internal_id": "118",
+    "company_name": "Spa & Resort Peurunka",
+    "place_id": "ChIJPdF7uaUJhUYRN5xsc0LLaas",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:03",
+    "address": "Peurungantie 85, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJPdF7uaUJhUYRN5xsc0LLaas"
+  },
+  {
+    "id": 158,
+    "internal_id": "242",
+    "company_name": "Suviranta -vuokramökki",
+    "place_id": "ChIJ2ZxZu4oLhUYRjw04DmH_06o",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:03",
+    "address": "Niementie 33, 41330 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ2ZxZu4oLhUYRjw04DmH_06o"
+  },
+  {
+    "id": 159,
+    "internal_id": "245",
+    "company_name": "Pietilän lomamökit",
+    "place_id": "ChIJ3f2wcUwMhUYR0MnUrxi5KHg",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:04",
+    "address": "Salmelankyläntie 202, 41330 Vihtavuori, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ3f2wcUwMhUYR0MnUrxi5KHg"
+  },
+  {
+    "id": 160,
+    "internal_id": "287",
+    "company_name": "Tarvaalan Kalamaja",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Tarvaalantie, 41340 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 161,
+    "internal_id": "286",
+    "company_name": "Multamäen leirikeskus",
+    "place_id": "ChIJr_eYPbUJhUYRrIxjJdp_eLo",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:05",
+    "address": "as, Finnintie 292, 41350 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJr_eYPbUJhUYRrIxjJdp_eLo"
+  },
+  {
+    "id": 162,
+    "internal_id": "285",
+    "company_name": "Country Häkkinen Lomamökit",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Myllylahdentie 401",
+    "reviews_url": null
+  },
+  {
+    "id": 163,
+    "internal_id": "284",
+    "company_name": "Ylä-Saarikko Holiday Cottages",
+    "place_id": "ChIJdz6XqF0IhUYRijYUKuylIGk",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:06",
+    "address": "Suolahdentie 719, 41370 Kuusa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJdz6XqF0IhUYRijYUKuylIGk"
+  },
+  {
+    "id": 164,
+    "internal_id": "283",
+    "company_name": "Pitkäniemen lomahuoneistot",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Pitkäniementie 171, 41390 Äijälä, Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 165,
+    "internal_id": "292",
+    "company_name": "Yrityskuvaus Mika Nuorva",
+    "place_id": "ChIJEQT2JqRzhUYRrof6N7FukpQ",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:07",
+    "address": "Konttisentie 8, 40800 Jyväskylä, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJEQT2JqRzhUYRrof6N7FukpQ"
+  },
+  {
+    "id": 166,
+    "internal_id": "291",
+    "company_name": "PS-Studio",
+    "place_id": "ChIJwVejjS50hUYR9GouyrGCBYk",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:07",
+    "address": "Mattilankatu 24, 40600 Jyväskylä, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJwVejjS50hUYR9GouyrGCBYk"
+  },
+  {
+    "id": 167,
+    "internal_id": "273",
+    "company_name": "Onnellinen Studio",
+    "place_id": "ChIJ-828gmMThUYR7CQ_vrNB8ac",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:08",
+    "address": "Vannastie 14, 41400 Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ-828gmMThUYR7CQ_vrNB8ac"
+  },
+  {
+    "id": 168,
+    "internal_id": "2",
+    "company_name": "Mediazoo",
+    "place_id": "ChIJK1ffuHwThUYRXEDuN2xgUIs",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:08",
+    "address": "Salmelantie 3, 41400 Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJK1ffuHwThUYRXEDuN2xgUIs"
+  },
+  {
+    "id": 169,
+    "internal_id": "53",
+    "company_name": "K&K Peni Oy",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Lahdenkuja 4,. 41340 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 170,
+    "internal_id": "91",
+    "company_name": "Laukaan yrityspalvelut",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Laukaantie 14, 41341 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 171,
+    "internal_id": "101",
+    "company_name": "Kuusirinne 5",
+    "place_id": "ChIJJS5Xzj4LhUYRnzXEUiZhaTc",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:10",
+    "address": "Kuusirinne 5, 41310 Jyväskylä, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJJS5Xzj4LhUYRnzXEUiZhaTc"
+  },
+  {
+    "id": 172,
+    "internal_id": "102",
+    "company_name": "Nokkakivi",
+    "place_id": "ChIJuYyx9MxshUYR3j4GfzF2qZw",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:10",
+    "address": "Ruuhimäentie 3, 41400 Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJuYyx9MxshUYR3j4GfzF2qZw"
+  },
+  {
+    "id": 173,
+    "internal_id": "104",
+    "company_name": "Catering KatinCa",
+    "place_id": "ChIJ7UZjeEcLhUYRGApGaBetY1M",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:11",
+    "address": "Koiralammentie 1, 41310 Leppävesi, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ7UZjeEcLhUYRGApGaBetY1M"
+  },
+  {
+    "id": 174,
+    "internal_id": "105",
+    "company_name": "Ext Ventures Oy",
+    "place_id": "ChIJp5wMcDgJhUYRd9qMjU-XnZs",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:12",
+    "address": "Peurungantie 97, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJp5wMcDgJhUYRd9qMjU-XnZs"
+  },
+  {
+    "id": 175,
+    "internal_id": "116",
+    "company_name": "Ketaramäentie 38",
+    "place_id": "ChIJlxonSn0ThUYRLb0grVhwNzM",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:12",
+    "address": "Ketaramäentie 38, 41400 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJlxonSn0ThUYRLb0grVhwNzM"
+  },
+  {
+    "id": 176,
+    "internal_id": "120",
+    "company_name": "Proxta Oy",
+    "place_id": "ChIJP58SsYgOhUYR1GSFyb_7IF4",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:13",
+    "address": "Koskenrannantie 127, 41325 Laukkavirta, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJP58SsYgOhUYR1GSFyb_7IF4"
+  },
+  {
+    "id": 177,
+    "internal_id": "121",
+    "company_name": "Rock Tekniikka Ky",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Brittilänranta 10, 41330 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 178,
+    "internal_id": "123",
+    "company_name": "Tmi Petri Puuhis Lähdemäki",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Laukaantie 2, 41340 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 179,
+    "internal_id": "124",
+    "company_name": "UntenOnnela Ranch",
+    "place_id": "ChIJi5M4Q0UHhUYRcvznXAfcWsg",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:14",
+    "address": "Rantakuja 7, 41390 Äijälä, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJi5M4Q0UHhUYRcvznXAfcWsg"
+  },
+  {
+    "id": 180,
+    "internal_id": "133",
+    "company_name": "Jenora Design valokuvaamo",
+    "place_id": "ChIJP9ePf-ZqhUYRGJe2z91CaMo",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:15",
+    "address": "Liepeentie 7 B 13, 41400 Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJP9ePf-ZqhUYRGJe2z91CaMo"
+  },
+  {
+    "id": 181,
+    "internal_id": "139",
+    "company_name": "Jokiniementie 9",
+    "place_id": "ChIJ-8bRSDkJhUYRL8E3ovHyPUI",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:16",
+    "address": "Jokiniementie 9, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ-8bRSDkJhUYRL8E3ovHyPUI"
+  },
+  {
+    "id": 182,
+    "internal_id": "154",
+    "company_name": "Photo Malmström",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Mustikkarinne 15, 41340 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 183,
+    "internal_id": "155",
+    "company_name": "Pieneläintuhkaamo Usva OY",
+    "place_id": "ChIJQc0UL14ThUYR6RXk_z_Ic1U",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:18",
+    "address": "Puhakantie 3, 41400 Laukaa Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJQc0UL14ThUYR6RXk_z_Ic1U"
+  },
+  {
+    "id": 184,
+    "internal_id": "174",
+    "company_name": "Topiron Ky",
+    "place_id": "ChIJMX3ThdsJhUYRsssTe76qbjs",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:18",
+    "address": "Valkolantie 257, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJMX3ThdsJhUYRsssTe76qbjs"
+  },
+  {
+    "id": 185,
+    "internal_id": "177",
+    "company_name": "Adven Oy",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Ruutitehtaantie 80, 41340 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 186,
+    "internal_id": "178",
+    "company_name": "Almek",
+    "place_id": "ChIJTUNj40IThUYR9fcrFn7jQ0U",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:19",
+    "address": "Liepeentie 7, 41400 Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJTUNj40IThUYR9fcrFn7jQ0U"
+  },
+  {
+    "id": 187,
+    "internal_id": "180",
+    "company_name": "Arkkitiimi Osuuskunta",
+    "place_id": "ChIJ93I63gwJhUYR0B_o6HF2j-M",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:20",
+    "address": "Rokkakankaantie 8, 41350 LAUKAA AS, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ93I63gwJhUYR0B_o6HF2j-M"
+  },
+  {
+    "id": 188,
+    "internal_id": "182",
+    "company_name": "Colliers International Finland",
+    "place_id": "ChIJVVVVVRZ0hUYRkjMrs-FWZVE",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:21",
+    "address": "Survontie 9 A, 40500 Jyväskylä, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJVVVVVRZ0hUYRkjMrs-FWZVE"
+  },
+  {
+    "id": 189,
+    "internal_id": "187",
+    "company_name": "IR-Kiinteistöt Irja Hokkeri",
+    "place_id": "ChIJL991-mcThUYRkJXTJFNKJPE",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:21",
+    "address": "Männiköntie 2C14, 41400 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJL991-mcThUYRkJXTJFNKJPE"
+  },
+  {
+    "id": 190,
+    "internal_id": "188",
+    "company_name": "Isännöinti Asuville Oy",
+    "place_id": "ChIJVwL6jDgJhUYROfVvOkYIJu8",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:22",
+    "address": "Laukaantie 12, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJVwL6jDgJhUYROfVvOkYIJu8"
+  },
+  {
+    "id": 191,
+    "internal_id": "189",
+    "company_name": "Isännöintitoimisto Sujuvaa",
+    "place_id": "ChIJB8oTul0JhUYRGhFcH61GEAQ",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:23",
+    "address": "Laukaantie 22-24, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJB8oTul0JhUYRGhFcH61GEAQ"
+  },
+  {
+    "id": 192,
+    "internal_id": "190",
+    "company_name": "Isännöitsijätoimisto Heikki Valkonen Ky",
+    "place_id": "ChIJ5TR2mqp0hUYRVjqJjzs-jTI",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:23",
+    "address": "Vihtiäläntie 159, 41310 Leppävesi, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ5TR2mqp0hUYRVjqJjzs-jTI"
+  },
+  {
+    "id": 193,
+    "internal_id": "193",
+    "company_name": "JL-Maanrakennus Oy",
+    "place_id": "ChIJexoh10YLhUYRNyLlqG1sAZc",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:24",
+    "address": "Varsatie 6, 41310 Leppävesi, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJexoh10YLhUYRNyLlqG1sAZc"
+  },
+  {
+    "id": 194,
+    "internal_id": "196",
+    "company_name": "Kake Security Oy",
+    "place_id": "ChIJvwNuUF0JhUYRdPIQAzPLb3s",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:24",
+    "address": "Katajamäentie 4, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJvwNuUF0JhUYRdPIQAzPLb3s"
+  },
+  {
+    "id": 195,
+    "internal_id": "197",
+    "company_name": "Kiinteistönvälitys HuippuMesta LKV",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Vuokaari 2, 41340 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 196,
+    "internal_id": "198",
+    "company_name": "Kiinteistöpalvelu Farox Oy",
+    "place_id": "ChIJ79AzvpkUhUYRELFj3fsO0GM",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:25",
+    "address": "Konttisentie 8, 40800 Jyväskylä, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ79AzvpkUhUYRELFj3fsO0GM"
+  },
+  {
+    "id": 197,
+    "internal_id": "199",
+    "company_name": "Kiinteistöpalvelu Petäjämäki ky",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Vatiantie 96, 41360 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 198,
+    "internal_id": "200",
+    "company_name": "Kuhankoski water power plant",
+    "place_id": "ChIJMdo4BvgLhUYRaMq7BpwfT14",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:26",
+    "address": "Koskentie 70, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJMdo4BvgLhUYRaMq7BpwfT14"
+  },
+  {
+    "id": 199,
+    "internal_id": "205",
+    "company_name": "Kiinteistö Oy Laukaan Pitkäniemi III",
+    "place_id": "ChIJyZ8Mfw0GhUYRNbxvHI2p054",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:27",
+    "address": "Pitkäniementie 150, 41390 Äijälä, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJyZ8Mfw0GhUYRNbxvHI2p054"
+  },
+  {
+    "id": 200,
+    "internal_id": "206",
+    "company_name": "Laukaan Puhtaanapito Oy",
+    "place_id": "ChIJr_xplw1bogwRDS8aAYhRJhM",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:28",
+    "address": "Rokkamäentie 1 C, 41350 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJr_xplw1bogwRDS8aAYhRJhM"
+  },
+  {
+    "id": 201,
+    "internal_id": "208",
+    "company_name": "Laukaan Talopalvelu Oy",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Laukaantie 12, 41340 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 202,
+    "internal_id": "209",
+    "company_name": "Äijäläntie 1422",
+    "place_id": "ChIJIZBnOtgGhUYRSOPdN-ytWjE",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:29",
+    "address": "Äijäläntie 1422, 41390 Äijälä, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJIZBnOtgGhUYRSOPdN-ytWjE"
+  },
+  {
+    "id": 203,
+    "internal_id": "210",
+    "company_name": "Lievestuoreen Lämpö Oy",
+    "place_id": "ChIJveWp4zYThUYRdWNBCzahg3U",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:29",
+    "address": "Varikontie 90, 41400 Kelkkamäki, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJveWp4zYThUYRdWNBCzahg3U"
+  },
+  {
+    "id": 204,
+    "internal_id": "217",
+    "company_name": "Monitac",
+    "place_id": "ChIJw5jR5idthUYRufFniUaPXqM",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:30",
+    "address": "Metsolahdentie 118, 41400 Metsolahti, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJw5jR5idthUYRufFniUaPXqM"
+  },
+  {
+    "id": 205,
+    "internal_id": "222",
+    "company_name": "Suur-Savon Sähkö Oy",
+    "place_id": "ChIJB3NCUmcThUYR2bQx72_lr_k",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:30",
+    "address": "Simontie 4, 41400 Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJB3NCUmcThUYR2bQx72_lr_k"
+  },
+  {
+    "id": 206,
+    "internal_id": "223",
+    "company_name": "Sydän-Suomen Kuljetus Oy",
+    "place_id": "ChIJ9wBnvnsThUYR1mMqh71dvyo",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:31",
+    "address": "Ketarakuja 5, 41400 Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ9wBnvnsThUYR1mMqh71dvyo"
+  },
+  {
+    "id": 207,
+    "internal_id": "232",
+    "company_name": "TeePee kiinteistöpalvelut Oy",
+    "place_id": "ChIJcejpovARhUYRWUcvj0_Ieq4",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:32",
+    "address": "Katvelantie 14, 41400 Laukaa Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJcejpovARhUYRWUcvj0_Ieq4"
+  },
+  {
+    "id": 208,
+    "internal_id": "235",
+    "company_name": "Tmi Eero Ylönen",
+    "place_id": "ChIJ0fpdNSMJhUYRimHbZotgULg",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:32",
+    "address": "Yläniementie 3, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ0fpdNSMJhUYRimHbZotgULg"
+  },
+  {
+    "id": 209,
+    "internal_id": "254",
+    "company_name": "Tarvaala Black Raven",
+    "place_id": "ChIJvROXcmMOhUYR1Z0Jm8jrP4g",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:33",
+    "address": "Simunankoskentie 8, 41325 Laukkavirta, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJvROXcmMOhUYR1Z0Jm8jrP4g"
+  },
+  {
+    "id": 210,
+    "internal_id": "267",
+    "company_name": "Hevosklinikka Laukaa",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Ravitie 4, 41330 Vihtavuori",
+    "reviews_url": null
+  },
+  {
+    "id": 211,
+    "internal_id": "59",
+    "company_name": "Ketunkuja 1",
+    "place_id": "ChIJgR2Hno0LhUYRsRBPaZwcTZM",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:34",
+    "address": "Ketunkuja 1, 41330 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJgR2Hno0LhUYRsRBPaZwcTZM"
+  },
+  {
+    "id": 212,
+    "internal_id": "138",
+    "company_name": "Keski-Suomen Parvekelasitus Oy",
+    "place_id": "ChIJCSD_om4IhUYRrZyp2B2GZoo",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:34",
+    "address": "as FI, Rokkamäentie 1, 41350 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJCSD_om4IhUYRrZyp2B2GZoo"
+  },
+  {
+    "id": 213,
+    "internal_id": "144",
+    "company_name": "Kylmäniementie 9",
+    "place_id": "ChIJpSSOdzsJhUYRcTa8DzYen6o",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:36",
+    "address": "Kylmäniementie 9, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJpSSOdzsJhUYRcTa8DzYen6o"
+  },
+  {
+    "id": 214,
+    "internal_id": "145",
+    "company_name": "Monipalvelu Suomivirta",
+    "place_id": "ChIJl2uW6wUMhUYREQxMlPfVWSk",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:36",
+    "address": "Kuhankoskentie 170, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJl2uW6wUMhUYREQxMlPfVWSk"
+  },
+  {
+    "id": 215,
+    "internal_id": "157",
+    "company_name": "Rakentajainpalvelu Järvinen",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Varsatie 8, 41310 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 216,
+    "internal_id": "161",
+    "company_name": "Sähköpalvelu M Leminen Ky",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Kuhnontie 18, 41400 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 217,
+    "internal_id": "175",
+    "company_name": "Veisto- ja Kalustetyö M. Ojala",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Kuparintie 27, 41180 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 218,
+    "internal_id": "179",
+    "company_name": "Apponen Pekka Juhani",
+    "place_id": "ChIJk9ytSLGmhUYR8QfnVdU_EqI",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:38",
+    "address": "Yläpohjantie 123, 41180 Vehniä, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJk9ytSLGmhUYR8QfnVdU_EqI"
+  },
+  {
+    "id": 219,
+    "internal_id": "181",
+    "company_name": "Sudenjälki 2",
+    "place_id": "ChIJY5S3EkgLhUYRy92_Wj6C-mg",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:39",
+    "address": "Sudenjälki 2, 41310 Jyväskylä, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJY5S3EkgLhUYRy92_Wj6C-mg"
+  },
+  {
+    "id": 220,
+    "internal_id": "183",
+    "company_name": "Duuni-Simppa Ky",
+    "place_id": "ChIJ23R8THsOhUYRmJHdJUALfQA",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:40",
+    "address": "Rantakyläntie 44, 41325 Laukkavirta, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ23R8THsOhUYRmJHdJUALfQA"
+  },
+  {
+    "id": 221,
+    "internal_id": "184",
+    "company_name": "Åströmintie 7",
+    "place_id": "ChIJldD6J2oLhUYRbun7WURc-J4",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:40",
+    "address": "Åströmintie 7, 41310 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJldD6J2oLhUYRbun7WURc-J4"
+  },
+  {
+    "id": 222,
+    "internal_id": "185",
+    "company_name": "Laukaa Works Oy",
+    "place_id": "ChIJuWeq0GwJhUYRALUNNuYNzMU",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:41",
+    "address": "Asemalammentie 41 A1, 41370 Kuusa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJuWeq0GwJhUYRALUNNuYNzMU"
+  },
+  {
+    "id": 223,
+    "internal_id": "186",
+    "company_name": "Lämpöpalvelu Forsström Oy",
+    "place_id": "ChIJN-457p8JhUYRSig3EhrKUek",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:41",
+    "address": "Ristonniementie 16, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJN-457p8JhUYRSig3EhrKUek"
+  },
+  {
+    "id": 224,
+    "internal_id": "191",
+    "company_name": "IV-urakointi Lehtonen Oy",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Rokkasuontie 52, 41350 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 225,
+    "internal_id": "192",
+    "company_name": "Kiinteistöjen korjaus ja huolto Lehtiö Jarmo",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Lehesvuorentie 193, 41340 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 226,
+    "internal_id": "194",
+    "company_name": "Jelppivä Oy",
+    "place_id": "ChIJMYQ-JGEJhUYR7WLjfi7sagA",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:43",
+    "address": "Lahdenkuja 4, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJMYQ-JGEJhUYR7WLjfi7sagA"
+  },
+  {
+    "id": 227,
+    "internal_id": "195",
+    "company_name": "Jyväsesudun LVI Oy",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Pitkärannantie 74, 41325 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 228,
+    "internal_id": "201",
+    "company_name": "Laatutyö Helama Oy",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Salmensillantie 40, 41340 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 229,
+    "internal_id": "202",
+    "company_name": "Laukaan Aave Oy",
+    "place_id": "ChIJVUu_7goJhUYRuc7dBNOFWA8",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:44",
+    "address": "Riekontie 1, 41350 Laukaa As, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJVUu_7goJhUYRuc7dBNOFWA8"
+  },
+  {
+    "id": 230,
+    "internal_id": "203",
+    "company_name": "Laukaan Arkiapupalvelut",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Vilppulantie 175, 41370 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 231,
+    "internal_id": "207",
+    "company_name": "Laukaan Renki-Palvelut",
+    "place_id": "ChIJ9QDtFosIhUYRwYzi63HmI2g",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:46",
+    "address": "Vähäharjuntie 8, 41370 Kuusa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ9QDtFosIhUYRwYzi63HmI2g"
+  },
+  {
+    "id": 232,
+    "internal_id": "211",
+    "company_name": "LVI-Hanaman",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Kuusiranta 16, 41330 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 233,
+    "internal_id": "212",
+    "company_name": "LVI Jukka Pirttinen Oy / LVI-huolto ja asennus",
+    "place_id": "ChIJm7QGRT8JhUYRuGvSeS-oRXM",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:47",
+    "address": "Arwidsonnintie 22, Saraharjunkatu 8, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJm7QGRT8JhUYRuGvSeS-oRXM"
+  },
+  {
+    "id": 234,
+    "internal_id": "213",
+    "company_name": "LVI-Sekuri Oy",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Järvilinnantie 135, 41330 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 235,
+    "internal_id": "214",
+    "company_name": "LVI-Taitajat Oy",
+    "place_id": "ChIJ14ZZicinhUYRn7tdVBNlkIU",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:48",
+    "address": "Valkolantie 622, 41360 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ14ZZicinhUYRn7tdVBNlkIU"
+  },
+  {
+    "id": 236,
+    "internal_id": "215",
+    "company_name": "LVI-Vestec oy",
+    "place_id": "ChIJr7tth8gLhUYRhuOSN72hiM8",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:49",
+    "address": "Eerolantie 6, 41310 Leppävesi, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJr7tth8gLhUYRhuOSN72hiM8"
+  },
+  {
+    "id": 237,
+    "internal_id": "216",
+    "company_name": "Mittakupari Oy",
+    "place_id": "ChIJHRAM4rAGhUYRka1aEhtZbB8",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:49",
+    "address": "Petterintie 9, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJHRAM4rAGhUYRka1aEhtZbB8"
+  },
+  {
+    "id": 238,
+    "internal_id": "218",
+    "company_name": "Osk. JS Keski-Suomi",
+    "place_id": "ChIJT-50rmoLhUYRLml7aeW7iNc",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:50",
+    "address": "Matinpolku 2, 41310 Leppävesi, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJT-50rmoLhUYRLml7aeW7iNc"
+  },
+  {
+    "id": 239,
+    "internal_id": "219",
+    "company_name": "Pikkupiika Kaarina",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Järvilinnantie 18, 41330 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 240,
+    "internal_id": "220",
+    "company_name": "Pinta-Putki Oy",
+    "place_id": "ChIJVXZN_xQLhUYRyoRYrB82N98",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:51",
+    "address": "Korpelantie 40, 41310 Leppävesi, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJVXZN_xQLhUYRyoRYrB82N98"
+  },
+  {
+    "id": 241,
+    "internal_id": "221",
+    "company_name": "Halkolaanintie 78",
+    "place_id": "ChIJBZxxEmALhUYRalymLtxkcTU",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:51",
+    "address": "Halkolaanintie 78, 41310 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJBZxxEmALhUYRalymLtxkcTU"
+  },
+  {
+    "id": 242,
+    "internal_id": "224",
+    "company_name": "Mullostie 6",
+    "place_id": "ChIJ1wOnG3sThUYRpwH2j0dDqCk",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:52",
+    "address": "Mullostie 6, 41400 Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ1wOnG3sThUYRpwH2j0dDqCk"
+  },
+  {
+    "id": 243,
+    "internal_id": "225",
+    "company_name": "Haukantie 3",
+    "place_id": "ChIJUT4MOgsJhUYRD2BYtPC7fWI",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:52",
+    "address": "Haukantie 3, 41350 Laukaa As, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJUT4MOgsJhUYRD2BYtPC7fWI"
+  },
+  {
+    "id": 244,
+    "internal_id": "226",
+    "company_name": "Kuhankoskentie 368",
+    "place_id": "ChIJeZd3GB0MhUYR7WsHA_Rk_v0",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:53",
+    "address": "Kuhankoskentie 368, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJeZd3GB0MhUYR7WsHA_Rk_v0"
+  },
+  {
+    "id": 245,
+    "internal_id": "227",
+    "company_name": "T:mi Maria Fägerholt",
+    "place_id": "ChIJYbQnNxULhUYRnV577k0dnxY",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:54",
+    "address": "Hiekkapohjantie 22, 41310 Leppävesi, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJYbQnNxULhUYRnV577k0dnxY"
+  },
+  {
+    "id": 246,
+    "internal_id": "228",
+    "company_name": "Tmi Pihaputsi",
+    "place_id": "ChIJfSSWzzgJhUYRHuufQk8v4_c",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:54",
+    "address": "Laukaantie 19, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJfSSWzzgJhUYRHuufQk8v4_c"
+  },
+  {
+    "id": 247,
+    "internal_id": "229",
+    "company_name": "T:mi Porrastyö",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Kuoppamäentie 100, 41325 Laukkavirta",
+    "reviews_url": null
+  },
+  {
+    "id": 248,
+    "internal_id": "230",
+    "company_name": "T.mi Susanna Niiniranta",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Mäntyrinne 2 A 10, 41310 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 249,
+    "internal_id": "231",
+    "company_name": "Talotekniikka Väyrynen",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Alasentie 85, 41180 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 250,
+    "internal_id": "233",
+    "company_name": "Tmi Aki Tuppurainen",
+    "place_id": "ChIJA0IrRuN0hUYR6Ni6-HNeauI",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:56",
+    "address": "Ritoharjuntie 12, 40270 Jyväskylä, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJA0IrRuN0hUYR6Ni6-HNeauI"
+  },
+  {
+    "id": 251,
+    "internal_id": "234",
+    "company_name": "Pitkärannantie 70",
+    "place_id": "ChIJ9bW4qO0OhUYRrvX-0OOX2LM",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:57",
+    "address": "Pitkärannantie 70, 41325 Laukkavirta, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ9bW4qO0OhUYRrvX-0OOX2LM"
+  },
+  {
+    "id": 252,
+    "internal_id": "236",
+    "company_name": "Tmi Marika Kurkipuro",
+    "place_id": "ChIJUZVEmTndIg8Rzv-ORyF_xX8",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:57",
+    "address": "Kankaistentie, 41400 Laukaa Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJUZVEmTndIg8Rzv-ORyF_xX8"
+  },
+  {
+    "id": 253,
+    "internal_id": "237",
+    "company_name": "Tmi Tuula Rutanen",
+    "place_id": "ChIJy3UWkf0JhUYRYZ5lNt4z7r4",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:58",
+    "address": "Vehniäntie 652, 41350 LAUKAA AS, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJy3UWkf0JhUYRYZ5lNt4z7r4"
+  },
+  {
+    "id": 254,
+    "internal_id": "238",
+    "company_name": "Toiminimi Veikko Nieminen",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Onkiniementie 9, 41400 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 255,
+    "internal_id": "239",
+    "company_name": "Sudenjälki 9",
+    "place_id": "ChIJl4JG-kgLhUYRGgB8ift55dY",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:27:59",
+    "address": "Sudenjälki 9, 41310 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJl4JG-kgLhUYRGgB8ift55dY"
+  },
+  {
+    "id": 256,
+    "internal_id": "296",
+    "company_name": "Bistro Puulaaki",
+    "place_id": "ChIJWzLhDgALhUYRxy0lGG5PBpc",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:28:00",
+    "address": "Lintumäenkatu 3, 41310 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJWzLhDgALhUYRxy0lGG5PBpc"
+  },
+  {
+    "id": 257,
+    "internal_id": "278",
+    "company_name": "Laukaan Satama",
+    "place_id": "ChIJJfuxDTgJhUYRfwvEvOx0pu8",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:28:00",
+    "address": "Satamatie 3, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJJfuxDTgJhUYRfwvEvOx0pu8"
+  },
+  {
+    "id": 258,
+    "internal_id": "268",
+    "company_name": "Bakery Cafeteria Jyväs Pakari",
+    "place_id": "ChIJX98Uq1gThUYRM4USHIY3jZQ",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:28:01",
+    "address": "Lievestuoreen Liisantie 15, 41400 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJX98Uq1gThUYRM4USHIY3jZQ"
+  },
+  {
+    "id": 259,
+    "internal_id": "93",
+    "company_name": "Grilli Jokis",
+    "place_id": "ChIJ5T5QGT0JhUYRo7HMKfP7hhE",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:28:02",
+    "address": "Vanhansillantie 3, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ5T5QGT0JhUYRo7HMKfP7hhE"
+  },
+  {
+    "id": 260,
+    "internal_id": "103",
+    "company_name": "Lounasravintola Rosanne",
+    "place_id": "ChIJK_PsJD8JhUYRoAOX6_XGF2Y",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:28:02",
+    "address": "Laukaantie 24, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJK_PsJD8JhUYRoAOX6_XGF2Y"
+  },
+  {
+    "id": 261,
+    "internal_id": "119",
+    "company_name": "Pitopalvelu J.Sojakka",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Asemanraitti 12, 41310 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 262,
+    "internal_id": "243",
+    "company_name": "Laukaan Tupaswilla",
+    "place_id": "ChIJh-3IAJMIhUYRXl0Ql3OrfKo",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:28:03",
+    "address": "41370 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJh-3IAJMIhUYRXl0Ql3OrfKo"
+  },
+  {
+    "id": 263,
+    "internal_id": "246",
+    "company_name": "Ravintola Vihtahousu",
+    "place_id": "ChIJh3tfkJMLhUYRnsRB2rXLTP8",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:28:04",
+    "address": "Haavistontie 5, 41330 Vihtavuori, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJh3tfkJMLhUYRnsRB2rXLTP8"
+  },
+  {
+    "id": 264,
+    "internal_id": "249",
+    "company_name": "Jabo -afrin",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Arwidssonintie 15 B 19, 41340 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 265,
+    "internal_id": "252",
+    "company_name": "Kuusan Koskikahvio",
+    "place_id": "ChIJXRQXPV8IhUYRjKDYn8W_yyU",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:28:05",
+    "address": "Suolahdentie 657, 41370 Kuusa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJXRQXPV8IhUYRjKDYn8W_yyU"
+  },
+  {
+    "id": 266,
+    "internal_id": "255",
+    "company_name": "Laukaan Matkailukeskus Oy",
+    "place_id": "ChIJGQcs_8xshUYRK_xrB1g577I",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:28:06",
+    "address": "Ruuhimäentie 1, 41400 Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJGQcs_8xshUYRK_xrB1g577I"
+  },
+  {
+    "id": 267,
+    "internal_id": "256",
+    "company_name": "Rastas Ravintola Oy",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Laukaantie 26, 41340 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 268,
+    "internal_id": "257",
+    "company_name": "Caffitella Laukaa",
+    "place_id": "ChIJIQuLhEAJhUYRN7vK8a2yzak",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:28:07",
+    "address": "Vuokaari 2, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJIQuLhEAJhUYRN7vK8a2yzak"
+  },
+  {
+    "id": 269,
+    "internal_id": "258",
+    "company_name": "St1 Laukaa Lievestuore",
+    "place_id": "ChIJ5frTGk8ThUYRAFfDgInHHAI",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:28:07",
+    "address": "Liepeentie 2 A, 41400 Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ5frTGk8ThUYRAFfDgInHHAI"
+  },
+  {
+    "id": 270,
+    "internal_id": "259",
+    "company_name": "Ruokalandia Oy",
+    "place_id": "ChIJc50TB81shUYRo4UwrcrGva8",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:28:08",
+    "address": "Ruuhimäentie 1, 41400 Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJc50TB81shUYRo4UwrcrGva8"
+  },
+  {
+    "id": 271,
+    "internal_id": "260",
+    "company_name": "9-tien Grilli",
+    "place_id": "ChIJE7kBuKIUhUYRyFFGzMVJi9c",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:28:08",
+    "address": "Kuopiontie 1897, 41400 Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJE7kBuKIUhUYRyFFGzMVJi9c"
+  },
+  {
+    "id": 272,
+    "internal_id": "261",
+    "company_name": "T. Lamio",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Liepeentie 11, 41400 Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 273,
+    "internal_id": "262",
+    "company_name": "New Roz",
+    "place_id": "ChIJ0w2vrUIThUYR6LcVDQ6V1cA",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:28:09",
+    "address": "Liepeentie 10, 41400 Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ0w2vrUIThUYR6LcVDQ6V1cA"
+  },
+  {
+    "id": 274,
+    "internal_id": "263",
+    "company_name": "Varjola",
+    "place_id": "ChIJEXpf_FgIhUYR8UUaxxVk-60",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:28:10",
+    "address": "Vilppulantie 51, 41370 Kuusa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJEXpf_FgIhUYR8UUaxxVk-60"
+  },
+  {
+    "id": 275,
+    "internal_id": "264",
+    "company_name": "Vihtavuorentie 180",
+    "place_id": "ChIJ85JHyI4LhUYRLCXRwN_82FM",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:28:11",
+    "address": "Vihtavuorentie 180, 41330 Jyväskylä, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJ85JHyI4LhUYRLCXRwN_82FM"
+  },
+  {
+    "id": 276,
+    "internal_id": "266",
+    "company_name": "Lempileivos",
+    "place_id": "ChIJu-Pa494VhUYRDswcyyQvahA",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:28:11",
+    "address": "Hohontie 453, 41400 Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJu-Pa494VhUYRDswcyyQvahA"
+  },
+  {
+    "id": 277,
+    "internal_id": "300",
+    "company_name": "Nuohous Lapin Mies Oy",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Pellonreuna 11 B 13, 40520 Jyväskylä, Suomi",
+    "reviews_url": null
+  },
+  {
+    "id": 278,
+    "internal_id": "301",
+    "company_name": "Sisä-Suomen Notariaatti LKV Tarja Kärki",
+    "place_id": "ChIJC5AKwUIThUYRui1n4dQuEls",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:28:12",
+    "address": "Liepeentie 10, 41400 Lievestuore, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJC5AKwUIThUYRui1n4dQuEls"
+  },
+  {
+    "id": 279,
+    "internal_id": "131",
+    "company_name": "Huonekaluliike Vehviläinen Oy (Kukka ja Hautauspalvelu Vehviläinen)",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "laukaantie 10, laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 280,
+    "internal_id": "306",
+    "company_name": "Villi-Sessio",
+    "place_id": null,
+    "status": "unresolved",
+    "confirmed_at": null,
+    "address": "Majasaarentie, 41400 Lievestuore, Laukaa",
+    "reviews_url": null
+  },
+  {
+    "id": 281,
+    "internal_id": "307",
+    "company_name": "Kauppapuutarha Tervo Oy, Laukaa",
+    "place_id": "ChIJVcL7yMcJhUYRgsJ2GUQLF_k",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:28:14",
+    "address": "as, Valkolantie 62, 41350 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJVcL7yMcJhUYRgsJ2GUQLF_k"
+  },
+  {
+    "id": 282,
+    "internal_id": "308",
+    "company_name": "Lakiasiaintoimisto Esa Jäntti",
+    "place_id": "ChIJGUG_6zgJhUYR8s4S_ELMhfI",
+    "status": "confirmed",
+    "confirmed_at": "2026-05-12 15:28:15",
+    "address": "Laukaantie 18, 41340 Laukaa, Finland",
+    "reviews_url": "https://search.google.com/local/reviews?placeid=ChIJGUG_6zgJhUYR8s4S_ELMhfI"
+  }
+]

@@ -44,9 +44,17 @@
     }
 
     // ─── Supabase fetch ──────────────────────────────────────────────────────────
-    async function fetchNearby(userLat, userLon) {
+    let sharedSbClient = null;
+    function getSbClient() {
+        if (sharedSbClient) return sharedSbClient;
         if (!window.supabase) return null;
-        const sbClient = window.supabase.createClient(SB_URL, SB_KEY);
+        sharedSbClient = window.supabase.createClient(SB_URL, SB_KEY);
+        return sharedSbClient;
+    }
+
+    async function fetchNearby(userLat, userLon) {
+        const sbClient = getSbClient();
+        if (!sbClient) return null;
         const { data, error } = await sbClient
             .from('places')
             .select('place_id, name, canonical_name, type, lat, lon')
@@ -175,14 +183,12 @@
 
     // ─── Supabase Nimihaku ───────────────────────────────────────────────────────
     async function searchPlacesByName(query) {
-        if (!window.supabase) return null;
-        const sbClient = window.supabase.createClient(SB_URL, SB_KEY);
+        const sbClient = getSbClient();
+        if (!sbClient) return null;
         const { data, error } = await sbClient
             .from('places')
             .select('place_id, name, canonical_name, type, lat, lon')
             .or('status.eq.active,status.eq.ACTIVE,status.is.null')
-            .not('lat', 'is', null)
-            .not('lon', 'is', null)
             .limit(1000);
             
         if (error || !data || data.length === 0) return null;
