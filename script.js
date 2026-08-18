@@ -3137,7 +3137,7 @@ function initShareGenerator(companies) {
     let feedAdvertisers = [];
     async function fetchFeedAdvertisers() {
         try {
-            let res = await fetch('laukaainfo-web/advertisers_cache.csv');
+            let res = await fetch('https://www.mediazoo.fi/laukaainfo-web/advertisers_cache.csv');
             if (!res.ok) {
                 res = await fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vSV1-67oQMZmF0talwT6HXNg01NP0YA5XCNpKJsrTQ2RHQNQhEL6dySYicrfM1pnIU6Z41UqpzQdtdz/pub?output=csv');
             }

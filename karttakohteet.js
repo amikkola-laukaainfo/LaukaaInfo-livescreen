@@ -57,7 +57,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const SB_URL = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
         const SB_KEY = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
-        const sbClient = window.supabase ? window.supabase.createClient(SB_URL, SB_KEY) : null;
+        if (window.supabase) {
+            window.aiSb = window.aiSb || window.supabase.createClient(SB_URL, SB_KEY);
+        }
+        const sbClient = window.aiSb || null;
         if (sbClient) {
             const { data: places, error } = await sbClient
                 .from('places')

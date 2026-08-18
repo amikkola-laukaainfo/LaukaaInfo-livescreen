@@ -44,12 +44,11 @@
     }
 
     // ─── Supabase fetch ──────────────────────────────────────────────────────────
-    let sharedSbClient = null;
     function getSbClient() {
-        if (sharedSbClient) return sharedSbClient;
+        if (window.aiSb) return window.aiSb;
         if (!window.supabase) return null;
-        sharedSbClient = window.supabase.createClient(SB_URL, SB_KEY);
-        return sharedSbClient;
+        window.aiSb = window.supabase.createClient(SB_URL, SB_KEY);
+        return window.aiSb;
     }
 
     async function fetchNearby(userLat, userLon) {

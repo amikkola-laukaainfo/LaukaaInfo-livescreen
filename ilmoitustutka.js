@@ -177,7 +177,8 @@ const Ilmoitustutka = (function () {
             if (window.supabase) {
                 const SB_URL = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
                 const SB_KEY = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
-                const sb = window.supabase.createClient(SB_URL, SB_KEY);
+                window.aiSb = window.aiSb || window.supabase.createClient(SB_URL, SB_KEY);
+                const sb = window.aiSb;
 
                 // Hae aktiiviset offers
                 const { data: offersData } = await sb.from('offers').select('*').eq('status', 'active');

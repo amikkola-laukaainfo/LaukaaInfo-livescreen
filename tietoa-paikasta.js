@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const AI_SUPABASE_URL = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
         const AI_SUPABASE_KEY = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
-        window.aiSb = window.supabase.createClient(AI_SUPABASE_URL, AI_SUPABASE_KEY);
+        window.aiSb = window.aiSb || window.supabase.createClient(AI_SUPABASE_URL, AI_SUPABASE_KEY);
         const aiSb = window.aiSb;
 
         // 2. Hae paikan tiedot Supabasesta

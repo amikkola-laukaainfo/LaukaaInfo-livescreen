@@ -81,7 +81,8 @@
             const sbUrl = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
             const sbKey = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
             if (!window.supabase) return [];
-            const sb = window.supabase.createClient(sbUrl, sbKey);
+            window.aiSb = window.aiSb || window.supabase.createClient(sbUrl, sbKey);
+            const sb = window.aiSb;
             const { data, error } = await sb
                 .from('places')
                 .select('place_id, name, canonical_name, type, municipality, description')

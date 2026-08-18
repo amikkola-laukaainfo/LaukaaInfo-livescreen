@@ -7,7 +7,8 @@ const AI_SB_URL = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
 const AI_SB_KEY = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
 let aiSbClient = null;
 if (typeof supabase !== 'undefined') {
-    aiSbClient = supabase.createClient(AI_SB_URL, AI_SB_KEY);
+    window.aiSb = window.aiSb || supabase.createClient(AI_SB_URL, AI_SB_KEY);
+    aiSbClient = window.aiSb;
 }
 
 // ── Apufunktio: Kerää kaikki teemaan liittyvät hakutermit taksonomiasta ──────
