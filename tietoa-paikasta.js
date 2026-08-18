@@ -533,8 +533,9 @@ function scoreCompanies(allCompanies, place, relations, tagMatches, visibilityDa
             }
             
             // Fyysinen: etäisyys
-            if (company.lat && company.lon && place.lat && place.lon) {
-                const dist = haversineKm(company.lat, company.lon, place.lat, place.lon);
+            const cLon = company.lon || company.lng;
+            if (company.lat && cLon && place.lat && place.lon) {
+                const dist = haversineKm(company.lat, cLon, place.lat, place.lon);
                 if (dist < 2.0) {
                     const distScore = Math.max(10, Math.round(70 - (dist / 2) * 60));
                     score += distScore;
