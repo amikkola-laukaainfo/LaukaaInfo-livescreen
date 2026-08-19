@@ -287,6 +287,7 @@ async function loadProject(projectId) {
             } else {
                 if (themesSection) themesSection.style.display = 'none';
             }
+            }
         } catch(e) {
             console.warn('Teemojen haku epäonnistui', e);
             const themesSection = document.getElementById('themes-section');
