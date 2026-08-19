@@ -268,50 +268,87 @@ async function loadProject(projectId) {
     }
 }
 
-function renderRelations(relations, companiesData = [], needsData = []) {
+async function renderRelations(relations, companiesData = [], needsData = []) {
     const companiesList = document.getElementById('companies-list');
+    const companiesSection = document.getElementById('companies-section');
+    const suggestedList = document.getElementById('suggested-list');
+    const suggestedSection = document.getElementById('suggested-section');
     const needsList = document.getElementById('needs-list');
-    // const ideasList = document.getElementById('ideas-list');
+    const needsSection = document.getElementById('needs-section');
+    const ideasList = document.getElementById('ideas-list');
+    const ideasSection = document.getElementById('ideas-section');
 
     let companiesHtml = '';
+    let suggestedHtml = '';
     let needsHtml = '';
 
     relations.forEach(rel => {
-        if (rel.source_type === 'COMPANY' && (rel.relation_type === 'PARTICIPATES_IN' || rel.relation_type === 'SUGGESTED_FOR')) {
+        if (rel.source_type === 'COMPANY') {
             const compObj = companiesData.find(c => c.id === rel.source_id);
-            const companyName = compObj?.name || rel.metadata?.name || 'Yritys (Nimetön)';
-            const badge = rel.relation_type === 'PARTICIPATES_IN' ? '<span class="tag-pill">Mukana</span>' : '<span class="tag-pill" style="background:#fef3c7; color:#b45309">Ehdotettu</span>';
-            companiesHtml += `
+            const companyName = compObj?.name || rel.metadata?.name || 'Yritys';
+            const card = `
                 <a href="yrityskortti.html?id=${rel.source_id}" class="list-item-card">
                     <div class="card-header-grid">
-                        <h3 style="margin:0; font-size:1.1rem">${companyName}</h3>
-                        ${badge}
+                        <h3 style="margin:0; font-size:1.05rem">${companyName}</h3>
+                        <span class="iconify" style="color:#10b981; font-size:1.2rem;" data-icon="material-symbols:check-circle-outline"></span>
+                    </div>
+                    <div style="margin-top:0.75rem;">
+                        <span style="display:inline-block;padding:0.3rem 0.8rem;background:#10b981;color:white;border-radius:50px;font-size:0.8rem;font-weight:700;">Tutustu →</span>
                     </div>
                 </a>
             `;
+            if (rel.relation_type === 'PARTICIPATES_IN') {
+                companiesHtml += card;
+            } else if (rel.relation_type === 'SUGGESTED_FOR') {
+                suggestedHtml += card;
+            }
         }
         
         if (rel.source_type === 'NEED') {
             const needObj = needsData.find(n => n.id === rel.source_id);
-            const needTitle = needObj?.title || rel.metadata?.title || 'Tarve ' + rel.source_id;
+            const needTitle = needObj?.title || rel.metadata?.title || 'Tarve';
             needsHtml += `
-                <div class="list-item-card">
-                    <h3 style="margin:0; font-size:1.1rem; color:#ef4444">${needTitle}</h3>
+                <div class="list-item-card" style="border-left: 3px solid #ef4444;">
+                    <h3 style="margin:0; font-size:1.05rem; color:#ef4444">${needTitle}</h3>
                 </div>
             `;
         }
     });
 
-    if (companiesHtml) {
+    // Mukana olevat yritykset
+    if (companiesHtml && companiesList && companiesSection) {
         companiesList.innerHTML = companiesHtml;
-    } else {
-        companiesList.innerHTML = '<p style="color:var(--text-muted)">Ei vielä yrityksiä.</p>';
+        companiesSection.style.display = 'block';
     }
 
-    if (needsHtml) {
+    // Sopivat yritykset
+    if (suggestedHtml && suggestedList && suggestedSection) {
+        suggestedList.innerHTML = suggestedHtml;
+        suggestedSection.style.display = 'block';
+    }
+
+    // Tarpeet
+    if (needsHtml && needsList && needsSection) {
         needsList.innerHTML = needsHtml;
-    } else {
-        needsList.innerHTML = '<p style="color:var(--text-muted)">Ei avoimia tarpeita tällä hetkellä.</p>';
+        needsSection.style.display = 'block';
+    }
+
+    // Ideat — haetaan ideas-taulusta
+    const ideaIds = relations.filter(r => r.source_type === 'IDEA').map(r => r.source_id);
+    if (ideaIds.length > 0 && mixonetClient) {
+        const { data: ideas } = await mixonetClient.from('ideas').select('id, title, description').in('id', ideaIds);
+        if (ideas && ideas.length > 0 && ideasList && ideasSection) {
+            ideasList.innerHTML = ideas.map(idea => {
+                const desc = (idea.description || '').substring(0, 100);
+                return `
+                    <div class="list-item-card" style="border-left: 3px solid #f59e0b;">
+                        <h3 style="margin:0 0 0.4rem; font-size:1.05rem; color:#b45309">${idea.title}</h3>
+                        ${desc ? `<p style="margin:0; font-size:0.9rem; color:var(--text-muted);">${desc}${desc.length >= 100 ? '...' : ''}</p>` : ''}
+                    </div>
+                `;
+            }).join('');
+            ideasSection.style.display = 'block';
+        }
     }
 }
 

@@ -352,8 +352,8 @@
                     </div>
                 </section>
 
-                <!-- Tarpeet -->
-                <section class="content-block" id="needs-section">
+                <!-- Tarpeet (piilotettu oletuksena, JS näyttää jos dataa) -->
+                <section class="content-block" id="needs-section" style="display:none;">
                     <h2 style="display: flex; align-items: center; gap: 0.5rem;">
                         <span class="iconify" style="color: #ef4444;" data-icon="material-symbols:campaign-outline"></span>
                         Tällä hetkellä tarvitaan
@@ -361,37 +361,49 @@
                     <div id="needs-list" class="list-grid"></div>
                 </section>
                 
-                <!-- Ideat -->
-                <section class="content-block" id="ideas-section">
+                <!-- Ideat (piilotettu oletuksena, JS näyttää jos dataa) -->
+                <section class="content-block" id="ideas-section" style="display:none;">
                     <h2 style="display: flex; align-items: center; gap: 0.5rem;">
                         <span class="iconify" style="color: #f59e0b;" data-icon="material-symbols:lightbulb-outline"></span>
-                        Ideoita
+                        💡 Ideat
                     </h2>
                     <div id="ideas-list" class="list-grid"></div>
                 </section>
 
             </div>
 
-                        <!-- Sivupalkki: Yritykset ja Palvelut -->
+            <!-- Sivupalkki: Yritykset ja Palvelut -->
             <aside class="sidebar">
 
-                <section class="content-block" id="companies-section">
+                <!-- Projektissa mukana (PARTICIPATES_IN) -->
+                <section class="content-block" id="companies-section" style="display:none;">
                     <h2 style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0;">
                         <span class="iconify" style="color: #10b981;" data-icon="material-symbols:storefront-outline"></span>
-                        Mukana olevat yritykset
+                        Projektissa mukana
                     </h2>
                     <div id="companies-list" class="list-grid"></div>
                 </section>
-                
+
+                <!-- Sopivia yrityksiä (SUGGESTED_FOR) -->
+                <section class="content-block" id="suggested-section" style="display:none;">
+                    <h2 style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="iconify" style="color: #6366f1;" data-icon="material-symbols:lightbulb-outline"></span>
+                        Sopivia yrityksiä
+                    </h2>
+                    <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:1rem;">Mixonet-verkosto on ehdottanut näitä yrityksiä projektiin.</p>
+                    <div id="suggested-list" class="list-grid"></div>
+                </section>
+
+                <!-- Liittyvät teemat -->
                 <section class="content-block" id="themes-section">
                     <h2 style="display: flex; align-items: center; gap: 0.5rem;">
                         <span class="iconify" style="color: #64748b;" data-icon="material-symbols:label-outline"></span>
                         Liittyvät teemat
                     </h2>
-                    <div id="themes-list" style="display: flex; flex-wrap: wrap;"></div>
+                    <div id="themes-list" style="display: flex; flex-wrap: wrap; gap: 0.5rem;"></div>
                 </section>
 
-                        </aside>
+            </aside>
         </div>
     </main>
     
@@ -453,7 +465,7 @@
     </script>
 
     <!-- Theme specific logic -->
-    <script src="projekti.js?v=4"></script>
+    <script src="projekti.js?v=5"></script>
 </body>
 </html>
 
