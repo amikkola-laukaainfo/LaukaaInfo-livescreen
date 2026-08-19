@@ -160,19 +160,18 @@ async function loadMixonetThemeContext(searchTag) {
     
     // Fallback: vanha logiikka, jos teemaa ei löytynyt
     try {
+        // Haetaan projektit projects-taulusta
         const { data: projects, error } = await mixonetClient
-            .from('opportunities')
-            .select('id, title, description, tags, status, created_at')
-            .eq('type', 'PROJECT');
+            .from('projects')
+            .select('id, title, description, status, created_at');
 
         if (error || !projects || projects.length === 0) return;
 
         const tagLower = searchTag.toLowerCase();
         const matched = projects.filter(p => {
-            const tags = (p.tags || '').toLowerCase();
             const desc = (p.description || '').toLowerCase();
             const title = (p.title || '').toLowerCase();
-            return tags.includes(tagLower) || desc.includes(tagLower) || title.includes(tagLower);
+            return desc.includes(tagLower) || title.includes(tagLower);
         });
 
         if (matched.length === 0) return;
