@@ -181,6 +181,42 @@ async function loadProject(projectId) {
             renderRelations([], [], []);
         }
 
+        // Hae liittyvät teemat (PROJECT on source, THEME on target)
+        try {
+            const { data: themeRelations } = await mixonetClient
+                .from('entity_relations')
+                .select('target_id')
+                .eq('source_id', projectId)
+                .eq('target_type', 'THEME');
+
+            const themesSection = document.getElementById('themes-section');
+            const themesList = document.getElementById('themes-list');
+
+            if (themeRelations && themeRelations.length > 0) {
+                const themeIds = themeRelations.map(r => r.target_id);
+                const { data: themes } = await mixonetClient
+                    .from('opportunities')
+                    .select('id, title, slug')
+                    .in('id', themeIds)
+                    .eq('type', 'THEME');
+
+                if (themes && themes.length > 0) {
+                    themesList.innerHTML = themes.map(t => {
+                        const href = `teema.html?tag=${encodeURIComponent(t.id)}`;
+                        return `<a href="${href}" class="tag-pill" style="background:#ede9fe; color:#5b21b6; text-decoration:none; font-size:0.95rem; padding:0.4rem 1rem;">${t.title || t.slug || t.id}</a>`;
+                    }).join('');
+                } else {
+                    if (themesSection) themesSection.style.display = 'none';
+                }
+            } else {
+                if (themesSection) themesSection.style.display = 'none';
+            }
+        } catch(e) {
+            console.warn('Teemojen haku epäonnistui', e);
+            const themesSection = document.getElementById('themes-section');
+            if (themesSection) themesSection.style.display = 'none';
+        }
+
     } catch (e) {
         console.error(e);
         showError('Odottamaton virhe ladattaessa projektia.');
