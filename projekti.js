@@ -15,7 +15,12 @@ async function init() {
     }
 
     if (typeof supabase !== 'undefined') {
-        mixonetClient = supabase.createClient(MIXONET_SB_URL, MIXONET_SB_KEY);
+        mixonetClient = supabase.createClient(MIXONET_SB_URL, MIXONET_SB_KEY, {
+            auth: {
+                persistSession: false,
+                storageKey: 'mixonet-public-anon-key'
+            }
+        });
         await loadProject(projectId);
     } else {
         showError('Virhe ladattaessa tietokantayhteyttä.');
@@ -31,10 +36,10 @@ function showError(msg) {
 async function loadProject(projectId) {
     try {
         // Hae projekti
+        // Hae projekti oikeasta taulusta (projects)
         const { data: projectData, error: projError } = await mixonetClient
-            .from('opportunities')
+            .from('projects')
             .select('*')
-            .eq('type', 'PROJECT')
             .eq('id', projectId)
             .single();
 

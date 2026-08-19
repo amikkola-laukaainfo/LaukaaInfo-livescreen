@@ -41,6 +41,7 @@ async function loadMixonetThemeContext(searchTag) {
         if (!themeErr && themes && themes.length > 0) {
             // Etsi sopiva teema
             const theme = themes.find(t => 
+                t.id === searchTag ||
                 (t.slug && t.slug.toLowerCase() === tagLower) || 
                 (t.title && t.title.toLowerCase() === tagLower) ||
                 (t.tags && t.tags.toLowerCase().includes(tagLower))
