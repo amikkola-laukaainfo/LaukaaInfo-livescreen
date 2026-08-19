@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { randomUUID } = require('crypto');
 
 const RAW_FILE = 'karttakohteet_raw.json';
 const OUTPUT_FILE = 'paikat_insert.sql';
@@ -45,7 +46,6 @@ try {
         
         // Kuntatieto
         let municipality = props['addr:city'] || DEFAULT_MUNICIPALITY;
-        let municipality_id = municipality.toLowerCase().replace(/ä/g, 'a').replace(/ö/g, 'o').trim();
         
         // Oletetaan että nämä ovat Laukaan kohteita -> importance esim 50, verified = true
         let importance = 50;
@@ -53,23 +53,9 @@ try {
         // Jos on Peurunka tai Saraakallio, nostetaan importancea demona
         if (name.includes('Peurunka') || name.includes('Saraakallio')) importance = 90;
         
-        // Geometria, tunnistusalue ja taso
-        let geometry_type = 'POINT';
-        let recognition_zone = 100;
-        let place_level = 'LANDMARK';
-        
-        if (type === 'AREA' || type === 'NATURE' || type === 'SERVICE') {
-            recognition_zone = 200;
-        }
-        
-        // Karkea tason (level) päättely tyypistä
-        if (type === 'BUILDING') place_level = 'BUILDING';
-        else if (type === 'SERVICE') place_level = 'SERVICE';
-        else if (type === 'AREA' || type === 'NATURE') place_level = 'AREA';
-        else if (type === 'LANDMARK') place_level = 'LANDMARK';
-        
-        sqlOutput += `INSERT INTO places (name, canonical_name, type, lat, lon, municipality, municipality_id, importance, verified, created_by, status, source, source_id, geometry_type, recognition_zone, place_level) `;
-        sqlOutput += `VALUES ('${name}', '${canonicalName}', '${type}', ${lat}, ${lon}, '${municipality}', '${municipality_id}', ${importance}, true, 'SYSTEM', 'ACTIVE', 'OSM', '${source_id}', '${geometry_type}', ${recognition_zone}, '${place_level}');\n`;
+        const newId = randomUUID();
+        sqlOutput += `INSERT INTO places (id, name, canonical_name, type, lat, lon, municipality, importance, verified, status, commercial_visibility) `;
+        sqlOutput += `VALUES ('${newId}', '${name}', '${canonicalName}', '${type}', ${lat}, ${lon}, '${municipality}', ${importance}, true, 'active', true);\n`;
         count++;
     });
 

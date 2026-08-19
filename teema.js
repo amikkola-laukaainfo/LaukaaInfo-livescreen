@@ -11,6 +11,196 @@ if (typeof supabase !== 'undefined') {
     aiSbClient = window.aiSb;
 }
 
+// ── Mixonet Supabase (projektien hakua varten) ────────────────────────────────
+const MIXONET_SB_URL = 'https://btwerbixrydfalqrpnmg.supabase.co';
+const MIXONET_SB_KEY = 'sb_publishable_8kDfiOTrAwvdb8ziM9XNMQ_CWc-vfat';
+let mixonetClient = null;
+if (typeof supabase !== 'undefined') {
+    window.mixonetSb = window.mixonetSb || supabase.createClient(MIXONET_SB_URL, MIXONET_SB_KEY, {
+        auth: {
+            persistSession: false,
+            storageKey: 'mixonet-public-anon-key'
+        }
+    });
+    mixonetClient = window.mixonetSb;
+}
+
+// ── Lataa Mixonet-teeman konteksti ja nostot ───────────────────────────────
+async function loadMixonetThemeContext(searchTag) {
+    if (!mixonetClient) return;
+    try {
+        const tagLower = searchTag.toLowerCase();
+        
+        // 1. Hae teema Mixonetista (slug tai title täsmää)
+        const { data: themes, error: themeErr } = await mixonetClient
+            .from('opportunities')
+            .select('*')
+            .eq('type', 'THEME')
+            .eq('status', 'published');
+
+        if (!themeErr && themes && themes.length > 0) {
+            // Etsi sopiva teema
+            const theme = themes.find(t => 
+                (t.slug && t.slug.toLowerCase() === tagLower) || 
+                (t.title && t.title.toLowerCase() === tagLower) ||
+                (t.tags && t.tags.toLowerCase().includes(tagLower))
+            );
+
+            if (theme) {
+                // Päivitä sivun pääotsikko teeman nimellä (korvaa UUID:n)
+                const titleEl = document.getElementById('theme-title');
+                if (titleEl && theme.title) {
+                    titleEl.textContent = theme.title;
+                }
+
+                // Päivitä teeman ingressi jos se on määritelty
+                if (theme.description) {
+                    const descEl = document.getElementById('theme-description');
+                    if (descEl) {
+                        descEl.textContent = theme.description;
+                        descEl.style.display = 'block';
+                    } else {
+                        // Luo ingressi-elementti otsikon alle
+                        const hero = document.querySelector('.hero-content');
+                        if (hero) {
+                            const p = document.createElement('p');
+                            p.id = 'theme-description';
+                            p.style.fontSize = '1.1rem';
+                            p.style.color = 'var(--text-muted)';
+                            p.style.marginTop = '1rem';
+                            p.style.maxWidth = '600px';
+                            p.textContent = theme.description;
+                            hero.appendChild(p);
+                        }
+                    }
+                }
+
+                // Hae teeman relaatiot
+                const { data: relations } = await mixonetClient
+                    .from('entity_relations')
+                    .select('*')
+                    .eq('target_type', 'THEME')
+                    .eq('target_id', theme.id);
+
+                if (relations && relations.length > 0) {
+                    const oppIds = relations
+                        .filter(r => r.source_type === 'OPPORTUNITY' || r.source_type === 'PROJECT' || r.source_type === 'IDEA' || r.source_type === 'NEED')
+                        .map(r => r.source_id);
+
+                    if (oppIds.length > 0) {
+                        // Hae eri tyyppiset asiat erikseen
+                        const [projRes, ideaRes, oppRes] = await Promise.all([
+                            mixonetClient.from('projects').select('id, title, description').in('id', oppIds),
+                            mixonetClient.from('ideas').select('id, title, description').in('id', oppIds),
+                            mixonetClient.from('opportunities').select('id, title, description, type').in('id', oppIds)
+                        ]);
+                        
+                        let opps = [];
+                        if (projRes.data) opps.push(...projRes.data.map(p => ({ ...p, type: 'PROJECT' })));
+                        if (ideaRes.data) opps.push(...ideaRes.data.map(i => ({ ...i, type: 'IDEA' })));
+                        if (oppRes.data) opps.push(...oppRes.data.map(o => ({ ...o, type: o.type })));
+
+                        if (opps.length > 0) {
+                            const section = document.getElementById('mixonet-projects-section');
+                            const list = document.getElementById('mixonet-projects-list');
+                            if (section && list) {
+                                // Järjestä siten, että nostetut (is_featured) ovat ensimmäisenä
+                                const enrichedOpps = opps.map(opp => {
+                                    const rel = relations.find(r => r.source_id === opp.id);
+                                    return { ...opp, is_featured: rel?.metadata?.is_featured || false };
+                                }).sort((a, b) => (b.is_featured ? 1 : 0) - (a.is_featured ? 1 : 0));
+
+                                section.style.display = 'block';
+                                
+                                // Päivitä otsikko näyttämään "Teeman verkosto"
+                                const titleEl = section.querySelector('h2');
+                                if (titleEl) {
+                                    titleEl.innerHTML = `<span class="iconify" style="color: #6366f1;" data-icon="material-symbols:rocket-launch-outline"></span> Teeman verkosto`;
+                                }
+                                
+                                const descSection = section.querySelector('p');
+                                if (descSection) descSection.textContent = 'Mixonet-verkostossa tähän teemaan liittyviä hankkeita, ideoita ja tarpeita.';
+
+                                list.innerHTML = enrichedOpps.map(p => {
+                                    const desc = (p.description || '').substring(0, 120);
+                                    let icon = '🚀';
+                                    let typeLabel = 'Projekti';
+                                    let color = '#6366f1';
+                                    
+                                    if (p.type === 'IDEA') { icon = '💡'; typeLabel = 'Idea'; color = '#f59e0b'; }
+                                    if (p.type === 'NEED') { icon = '📣'; typeLabel = 'Tarve'; color = '#ef4444'; }
+
+                                    return `
+                                        <a href="${p.type === 'PROJECT' ? 'projekti.html' : 'mixonet.html'}?id=${encodeURIComponent(p.id)}" class="list-item-card" style="border-left: 3px solid ${color}; ${p.is_featured ? 'background: #f8fafc; border-color: #f59e0b;' : ''}">
+                                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
+                                                <div style="font-size:0.8rem;font-weight:700;color:${color};text-transform:uppercase;letter-spacing:0.5px;">
+                                                    ${icon} ${typeLabel}
+                                                </div>
+                                                ${p.is_featured ? `<span style="font-size:0.7rem; background:#fef3c7; color:#d97706; padding:0.15rem 0.5rem; border-radius:1rem; font-weight:bold;">⭐ Nosto</span>` : ''}
+                                            </div>
+                                            <h3 style="margin:0 0 0.4rem 0;font-family:Outfit,sans-serif;font-size:1.1rem;color:var(--text-main);">${p.title}</h3>
+                                            ${desc ? `<p style="margin:0;font-size:0.9rem;color:var(--text-muted);">${desc}${desc.length >= 120 ? '...' : ''}</p>` : ''}
+                                            <div style="margin-top:0.75rem;">
+                                                <span style="display:inline-block;padding:0.3rem 0.8rem;background:${color};color:white;border-radius:50px;font-size:0.8rem;font-weight:700;">Tutustu →</span>
+                                            </div>
+                                        </a>
+                                    `;
+                                }).join('');
+                            }
+                        }
+                    }
+                }
+                return; // Jos teema löytyi, emme tee fallback-hakua
+            }
+        }
+    } catch (e) {
+        console.warn('Mixonet-teeman haku epäonnistui:', e);
+    }
+    
+    // Fallback: vanha logiikka, jos teemaa ei löytynyt
+    try {
+        const { data: projects, error } = await mixonetClient
+            .from('opportunities')
+            .select('id, title, description, tags, status, created_at')
+            .eq('type', 'PROJECT');
+
+        if (error || !projects || projects.length === 0) return;
+
+        const tagLower = searchTag.toLowerCase();
+        const matched = projects.filter(p => {
+            const tags = (p.tags || '').toLowerCase();
+            const desc = (p.description || '').toLowerCase();
+            const title = (p.title || '').toLowerCase();
+            return tags.includes(tagLower) || desc.includes(tagLower) || title.includes(tagLower);
+        });
+
+        if (matched.length === 0) return;
+
+        const section = document.getElementById('mixonet-projects-section');
+        const list = document.getElementById('mixonet-projects-list');
+        if (!section || !list) return;
+
+        section.style.display = 'block';
+        list.innerHTML = matched.map(p => {
+            const desc = (p.description || '').substring(0, 120);
+            return `
+                <a href="projekti.html?id=${encodeURIComponent(p.id)}" class="list-item-card" style="border-left: 3px solid #6366f1;">
+                    <div style="font-size:0.8rem;font-weight:700;color:#6366f1;text-transform:uppercase;margin-bottom:0.35rem;letter-spacing:0.5px;">
+                        🚀 Mixonet-projekti
+                    </div>
+                    <h3 style="margin:0 0 0.4rem 0;font-family:Outfit,sans-serif;font-size:1.1rem;color:var(--text-main);">${p.title}</h3>
+                    ${desc ? `<p style="margin:0;font-size:0.9rem;color:var(--text-muted);">${desc}${desc.length >= 120 ? '...' : ''}</p>` : ''}
+                    <div style="margin-top:0.75rem;">
+                        <span style="display:inline-block;padding:0.3rem 0.8rem;background:#6366f1;color:white;border-radius:50px;font-size:0.8rem;font-weight:700;">Tutustu →</span>
+                    </div>
+                </a>
+            `;
+        }).join('');
+    } catch (e) {
+        console.warn('Mixonet-projektien fallback-haku epäonnistui:', e);
+    }
+}
+
 // ── Apufunktio: Kerää kaikki teemaan liittyvät hakutermit taksonomiasta ──────
 async function fetchRepresentativeImages(places, aiSbClient) {
     if (!places || places.length === 0 || !aiSbClient) return {};
@@ -896,6 +1086,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Näytä sisältö
         document.getElementById('loading-spinner').style.display = 'none';
         document.getElementById('theme-content').style.display = 'block';
+
+        // Lataa Mixonet-teeman tiedot ja verkosto rinnakkain (ei estä muuta renderöintiä)
+        loadMixonetThemeContext(searchTag);
 
         // Piilota paikat/tapahtumat-osio jos tyhjä
         const placesSection = document.getElementById('places-section');
