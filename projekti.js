@@ -56,6 +56,51 @@ async function loadProject(projectId) {
         document.title = `${projectData.title} – LaukaaInfo`;
         document.getElementById('project-name').textContent = projectData.title;
         document.getElementById('project-full-desc').textContent = projectData.description || 'Ei kuvausta saatavilla.';
+
+        // Taustakuva hero-osioon
+        if (projectData.cover_image_url) {
+            const heroSection = document.querySelector('.hero-section');
+            if (heroSection) {
+                heroSection.style.backgroundImage = `url('${projectData.cover_image_url}')`;
+                heroSection.style.backgroundSize = 'cover';
+                heroSection.style.backgroundPosition = 'center';
+            }
+        }
+
+        // Video-upotus
+        if (projectData.video_url) {
+            const descSection = document.getElementById('desc-section');
+            if (descSection) {
+                let embedUrl = projectData.video_url;
+                // Muunna YouTube-linkki upotettavaan muotoon
+                const ytMatch = projectData.video_url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/);
+                const vimeoMatch = projectData.video_url.match(/vimeo\.com\/(\d+)/);
+                if (ytMatch) embedUrl = `https://www.youtube.com/embed/${ytMatch[1]}`;
+                if (vimeoMatch) embedUrl = `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+
+                const videoEl = document.createElement('div');
+                videoEl.style.cssText = 'margin-top:1.5rem; border-radius:12px; overflow:hidden; aspect-ratio:16/9;';
+                videoEl.innerHTML = `<iframe src="${embedUrl}" style="width:100%;height:100%;border:none;" allowfullscreen allow="autoplay; encrypted-media"></iframe>`;
+                descSection.appendChild(videoEl);
+            }
+        }
+
+        // Kuvagalleria
+        if (projectData.image_urls && projectData.image_urls.length > 0) {
+            const descSection = document.getElementById('desc-section');
+            if (descSection) {
+                const galleryEl = document.createElement('div');
+                galleryEl.style.cssText = 'margin-top:1.5rem; display:grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap:0.75rem;';
+                galleryEl.innerHTML = projectData.image_urls.map(url => `
+                    <a href="${url}" target="_blank" rel="noopener">
+                        <img src="${url}" alt="Projektin kuva" loading="lazy"
+                            style="width:100%; height:130px; object-fit:cover; border-radius:8px; cursor:zoom-in; transition:transform 0.2s;"
+                            onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+                    </a>
+                `).join('');
+                descSection.appendChild(galleryEl);
+            }
+        }
         
         // Deep link painike
         const btnMixonet = document.getElementById('btn-mixonet');

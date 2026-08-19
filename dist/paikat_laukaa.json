@@ -1,0 +1,56 @@
+[
+  {
+    "source": "Mock/OSM",
+    "source_id": "node/123456",
+    "name": "Saraakallio",
+    "type": "nähtävyys",
+    "lat": 62.2741,
+    "lon": 25.9616,
+    "municipality": "Laukaa",
+    "tags": {
+      "name": "Saraakallio",
+      "tourism": "attraction",
+      "historic": "archaeological_site"
+    }
+  },
+  {
+    "source": "Mock/OSM",
+    "source_id": "way/987654",
+    "name": "Peurunka",
+    "type": "luontokohde",
+    "lat": 62.4286,
+    "lon": 25.9324,
+    "municipality": "Laukaa",
+    "tags": {
+      "name": "Peurunka",
+      "leisure": "nature_reserve"
+    }
+  },
+  {
+    "source": "Mock/OSM",
+    "source_id": "node/555666",
+    "name": "Hitonhauta",
+    "type": "nähtävyys",
+    "lat": 62.3789,
+    "lon": 25.8456,
+    "municipality": "Laukaa",
+    "tags": {
+      "name": "Hitonhauta",
+      "tourism": "attraction",
+      "natural": "cliff"
+    }
+  },
+  {
+    "source": "Mock/OSM",
+    "source_id": "node/111222",
+    "name": "Sataman uimaranta",
+    "type": "uimaranta",
+    "lat": 62.4132,
+    "lon": 25.9542,
+    "municipality": "Laukaa",
+    "tags": {
+      "name": "Sataman uimaranta",
+      "natural": "beach"
+    }
+  }
+]

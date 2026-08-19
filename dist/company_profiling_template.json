@@ -1,0 +1,35 @@
+{
+    "SCHEMA_VERSION": "1.0",
+    "DESCRIPTION": "Tämä tiedosto sisältää yritysten profilointitietoa, jota käytetään palveluohjauksen (palvelu.html) tarkennettuun suodatukseen.",
+    "profiles": {
+        "company-EXAMPLE": {
+            "capacity": {
+                "max_persons": 120,
+                "note": "Saliin mahtuu 100, terassille 20 lisää"
+            },
+            "features": {
+                "accessibility": true,
+                "is_lakeside": true,
+                "wifi": true,
+                "sauna": true,
+                "parking": true,
+                "av_equipment": true
+            },
+            "services": {
+                "catering_allowed": "internal_only",
+                "catering_min_capacity": 10,
+                "catering_max_capacity": 500,
+                "liquor_license": true,
+                "accommodation_available": false
+            },
+            "catering_details": {
+                "dietary_options": ["gluteeniton", "vegaaninen", "laktoositon"],
+                "serves_lunch": true
+            },
+            "meta": {
+                "last_updated": "2026-04-26",
+                "verified_by": "admin"
+            }
+        }
+    }
+}
