@@ -49,7 +49,7 @@ async function loadMixonetThemeContext(searchTag) {
 
             if (theme) {
                 // Päivitä sivun pääotsikko teeman nimellä (korvaa UUID:n)
-                const titleEl = document.getElementById('theme-title');
+                const titleEl = document.getElementById('theme-name');
                 if (titleEl && theme.title) {
                     titleEl.textContent = theme.title;
                 }

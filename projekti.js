@@ -71,8 +71,26 @@ async function loadProject(projectId) {
 
         if (relError) {
             console.error("Virhe relaatioiden haussa", relError);
-        } else if (relations) {
-            renderRelations(relations);
+        } else if (relations && relations.length > 0) {
+            // Hae yritysten ja tarpeiden nimet kannasta, jotta ei näytetä pelkkiä UUID:itä
+            const companyIds = relations.filter(r => r.source_type === 'COMPANY').map(r => r.source_id);
+            const needIds = relations.filter(r => r.source_type === 'NEED').map(r => r.source_id);
+
+            let companiesData = [];
+            let needsData = [];
+
+            if (companyIds.length > 0) {
+                const { data } = await mixonetClient.from('companies').select('id, name').in('id', companyIds);
+                if (data) companiesData = data;
+            }
+            if (needIds.length > 0) {
+                const { data } = await mixonetClient.from('opportunities').select('id, title').in('id', needIds);
+                if (data) needsData = data;
+            }
+
+            renderRelations(relations, companiesData, needsData);
+        } else {
+            renderRelations([], [], []);
         }
 
     } catch (e) {
@@ -81,7 +99,7 @@ async function loadProject(projectId) {
     }
 }
 
-function renderRelations(relations) {
+function renderRelations(relations, companiesData = [], needsData = []) {
     const companiesList = document.getElementById('companies-list');
     const needsList = document.getElementById('needs-list');
     // const ideasList = document.getElementById('ideas-list');
@@ -91,9 +109,8 @@ function renderRelations(relations) {
 
     relations.forEach(rel => {
         if (rel.source_type === 'COMPANY' && (rel.relation_type === 'PARTICIPATES_IN' || rel.relation_type === 'SUGGESTED_FOR')) {
-            // Normaalisti tässä haettaisiin yrityksen nimi esim laukaainfon APIsta tai välimuistista.
-            // MVP:ssä näytetään vain linkki tai ID, jos nimeä ei ole metadata.
-            const companyName = rel.metadata?.name || 'Yritys (Ladataan...)';
+            const compObj = companiesData.find(c => c.id === rel.source_id);
+            const companyName = compObj?.name || rel.metadata?.name || 'Yritys (Nimetön)';
             const badge = rel.relation_type === 'PARTICIPATES_IN' ? '<span class="tag-pill">Mukana</span>' : '<span class="tag-pill" style="background:#fef3c7; color:#b45309">Ehdotettu</span>';
             companiesHtml += `
                 <a href="yrityskortti.html?id=${rel.source_id}" class="list-item-card">
@@ -106,8 +123,8 @@ function renderRelations(relations) {
         }
         
         if (rel.source_type === 'NEED') {
-            // Tarve
-            const needTitle = rel.metadata?.title || 'Tarve ' + rel.source_id;
+            const needObj = needsData.find(n => n.id === rel.source_id);
+            const needTitle = needObj?.title || rel.metadata?.title || 'Tarve ' + rel.source_id;
             needsHtml += `
                 <div class="list-item-card">
                     <h3 style="margin:0; font-size:1.1rem; color:#ef4444">${needTitle}</h3>
