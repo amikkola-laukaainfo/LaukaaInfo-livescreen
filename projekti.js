@@ -63,6 +63,79 @@ async function loadProject(projectId) {
             btnMixonet.href = `https://mixonet.fi/project/${projectId}`;
         }
 
+        // Rahoitus-osio
+        const fundingSection = document.getElementById('funding-section');
+        if (fundingSection && projectData.funding_status && projectData.funding_status !== 'NONE') {
+            fundingSection.style.display = 'block';
+            
+            const badgeEl = document.getElementById('funding-status-badge');
+            const detailsEl = document.getElementById('funding-details');
+            
+            // Status-pilleri
+            if (projectData.funding_status === 'FUNDED') {
+                badgeEl.style.background = '#dcfce7';
+                badgeEl.style.color = '#166534';
+                badgeEl.innerHTML = '<span class="iconify" data-icon="material-symbols:check-circle"></span> Rahoitus varmistunut';
+            } else {
+                badgeEl.style.background = '#fef3c7';
+                badgeEl.style.color = '#b45309';
+                badgeEl.innerHTML = '<span class="iconify" data-icon="material-symbols:hourglass-empty"></span> Rahoitus käynnissä';
+            }
+
+            let detailsHtml = '';
+
+            // 1. Rahoittajat / Kumppanit
+            if (projectData.funders && projectData.funders.trim() !== '') {
+                detailsHtml += `
+                    <div>
+                        <strong>Rahoitus:</strong><br>
+                        <span style="color: var(--text-muted);">${projectData.funders}</span>
+                    </div>
+                `;
+            }
+
+            // 2. Budjetti
+            if (projectData.is_budget_public && projectData.budget) {
+                detailsHtml += `
+                    <div>
+                        <strong>Budjetti:</strong><br>
+                        <span style="color: var(--text-muted);">${Number(projectData.budget).toLocaleString('fi-FI')} €</span>
+                    </div>
+                `;
+            }
+
+            // 3. Tavoite, Koossa, Puuttuu
+            if (projectData.is_funding_goal_public && projectData.funding_goal) {
+                const goal = Number(projectData.funding_goal) || 0;
+                const secured = Number(projectData.funding_secured) || 0;
+                const missing = Math.max(0, goal - secured);
+
+                detailsHtml += `
+                    <div style="margin-top: 0.5rem; background: #fff; padding: 1.5rem; border-radius: var(--radius-sm); border: 1px solid #e2e8f0;">
+                        <div style="margin-bottom: 0.8rem; font-style: italic; color: var(--text-muted);">
+                            Projektille etsitään yhteistyökumppaneita ja muuta rahoitusta.
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; text-align: center;">
+                            <div>
+                                <div style="font-size: 0.85rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Tavoite</div>
+                                <div style="font-size: 1.2rem; font-weight: 700; color: #1e293b;">${goal.toLocaleString('fi-FI')} €</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 0.85rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Koossa</div>
+                                <div style="font-size: 1.2rem; font-weight: 700; color: #10b981;">${secured.toLocaleString('fi-FI')} €</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 0.85rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Puuttuu</div>
+                                <div style="font-size: 1.2rem; font-weight: 700; color: #ef4444;">${missing.toLocaleString('fi-FI')} €</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            detailsEl.innerHTML = detailsHtml;
+        }
+
         // Hae projektiin liittyvät asiat entity_relations taulusta
         const { data: relations, error: relError } = await mixonetClient
             .from('entity_relations')
