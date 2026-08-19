@@ -80,8 +80,23 @@ async function loadProject(projectId) {
             let needsData = [];
 
             if (companyIds.length > 0) {
-                const { data } = await mixonetClient.from('companies').select('id, name').in('id', companyIds);
-                if (data) companiesData = data;
+                // Erottele oikeat UUID:t ja ulkoiset ID:t (esim. 'company-2'), koska Supabase kaatuu jos UUID-kenttään syöttää tekstiä
+                const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+                const validUuids = companyIds.filter(id => uuidRegex.test(id));
+                const externalIds = companyIds.filter(id => !uuidRegex.test(id));
+
+                const promises = [];
+                if (validUuids.length > 0) promises.push(mixonetClient.from('companies').select('id, name').in('id', validUuids));
+                if (externalIds.length > 0) promises.push(mixonetClient.from('companies').select('external_id, name').in('external_id', externalIds));
+
+                const results = await Promise.all(promises);
+                results.forEach(res => {
+                    if (res.data) {
+                        // Mappaa external_id takaisin id-kenttään jotta renderöinti löytää sen
+                        const mapped = res.data.map(c => ({ id: c.id || c.external_id, name: c.name }));
+                        companiesData.push(...mapped);
+                    }
+                });
             }
             if (needIds.length > 0) {
                 const { data } = await mixonetClient.from('opportunities').select('id, title').in('id', needIds);
