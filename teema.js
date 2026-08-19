@@ -91,15 +91,53 @@ async function loadMixonetThemeContext(searchTag) {
                     if (oppIds.length > 0) {
                         // Hae eri tyyppiset asiat erikseen
                         const [projRes, ideaRes, oppRes] = await Promise.all([
-                            mixonetClient.from('projects').select('id, title, description').in('id', oppIds),
+                            mixonetClient.from('projects').select('id, title, description, public_settings').in('id', oppIds),
                             mixonetClient.from('ideas').select('id, title, description').in('id', oppIds),
                             mixonetClient.from('opportunities').select('id, title, description, type').in('id', oppIds)
                         ]);
                         
                         let opps = [];
-                        if (projRes.data) opps.push(...projRes.data.map(p => ({ ...p, type: 'PROJECT' })));
+                        let featuredNeedsIds = [];
+                        let featuredIdeasIds = [];
+                        let featuredCompanyIds = [];
+
+                        if (projRes.data) {
+                            projRes.data.forEach(p => {
+                                const settings = p.public_settings || {};
+                                if (settings.is_published !== false) {
+                                    opps.push({ ...p, type: 'PROJECT', is_project_featured: true });
+                                    if (settings.featured_need_id) featuredNeedsIds.push(settings.featured_need_id);
+                                    if (settings.featured_idea_id) featuredIdeasIds.push(settings.featured_idea_id);
+                                    if (settings.featured_company_id) featuredCompanyIds.push(settings.featured_company_id);
+                                }
+                            });
+                        }
+
                         if (ideaRes.data) opps.push(...ideaRes.data.map(i => ({ ...i, type: 'IDEA' })));
                         if (oppRes.data) opps.push(...oppRes.data.map(o => ({ ...o, type: o.type })));
+
+                        // Hae lisäksi projektin nostamat asiat, jos ne eivät jo ole listalla
+                        const missingNeeds = featuredNeedsIds.filter(id => !opps.some(o => o.id === id));
+                        const missingIdeas = featuredIdeasIds.filter(id => !opps.some(o => o.id === id));
+                        const missingCompanies = featuredCompanyIds.filter(id => !opps.some(o => o.id === id));
+
+                        if (missingNeeds.length > 0) {
+                            const { data } = await mixonetClient.from('opportunities').select('id, title, description, type').in('id', missingNeeds);
+                            if (data) opps.push(...data.map(o => ({ ...o, type: o.type })));
+                        }
+                        if (missingIdeas.length > 0) {
+                            const { data } = await mixonetClient.from('ideas').select('id, title, description').in('id', missingIdeas);
+                            if (data) opps.push(...data.map(i => ({ ...i, type: 'IDEA' })));
+                        }
+                        if (missingCompanies.length > 0) {
+                            // Hae oikeat yritysnimet
+                            const { data } = await mixonetClient.from('companies').select('id, external_id, name').or(`id.in.(${missingCompanies.join(',')}),external_id.in.(${missingCompanies.map(c => `"${c}"`).join(',')})`);
+                            if (data) {
+                                data.forEach(c => {
+                                    opps.push({ id: c.id || c.external_id, title: c.name, type: 'COMPANY' });
+                                });
+                            }
+                        }
 
                         if (opps.length > 0) {
                             const section = document.getElementById('mixonet-projects-section');
@@ -108,8 +146,16 @@ async function loadMixonetThemeContext(searchTag) {
                                 // Järjestä siten, että nostetut (is_featured) ovat ensimmäisenä
                                 const enrichedOpps = opps.map(opp => {
                                     const rel = relations.find(r => r.source_id === opp.id);
-                                    return { ...opp, is_featured: rel?.metadata?.is_featured || false };
-                                }).sort((a, b) => (b.is_featured ? 1 : 0) - (a.is_featured ? 1 : 0));
+                                    let isFeatured = rel?.metadata?.is_featured || opp.is_project_featured || false;
+                                    
+                                    if (featuredNeedsIds.includes(opp.id) || featuredIdeasIds.includes(opp.id) || featuredCompanyIds.includes(opp.id)) {
+                                        isFeatured = true;
+                                    }
+
+                                    // Varmista ettei samaa oppia näytetä useasti
+                                    return { ...opp, is_featured: isFeatured };
+                                }).filter((value, index, self) => index === self.findIndex((t) => t.id === value.id))
+                                .sort((a, b) => (b.is_featured ? 1 : 0) - (a.is_featured ? 1 : 0));
 
                                 section.style.display = 'block';
                                 
@@ -130,9 +176,12 @@ async function loadMixonetThemeContext(searchTag) {
                                     
                                     if (p.type === 'IDEA') { icon = '💡'; typeLabel = 'Idea'; color = '#f59e0b'; }
                                     if (p.type === 'NEED') { icon = '📣'; typeLabel = 'Tarve'; color = '#ef4444'; }
+                                    if (p.type === 'COMPANY') { icon = '🏢'; typeLabel = 'Yritys'; color = '#10b981'; }
+
+                                    const url = p.type === 'PROJECT' ? 'projekti.html' : p.type === 'COMPANY' ? 'yrityskortti.html' : 'mixonet.html';
 
                                     return `
-                                        <a href="${p.type === 'PROJECT' ? 'projekti.html' : 'mixonet.html'}?id=${encodeURIComponent(p.id)}" class="list-item-card" style="border-left: 3px solid ${color}; ${p.is_featured ? 'background: #f8fafc; border-color: #f59e0b;' : ''}">
+                                        <a href="${url}?id=${encodeURIComponent(p.id)}" class="list-item-card" style="border-left: 4px solid ${color}; ${p.is_featured ? 'background: #f8fafc; border-color: #f59e0b;' : ''}">
                                             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
                                                 <div style="font-size:0.8rem;font-weight:700;color:${color};text-transform:uppercase;letter-spacing:0.5px;">
                                                     ${icon} ${typeLabel}
