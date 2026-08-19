@@ -21,3 +21,11 @@ Thumbs.db
 
 # Master data (if generated)
 # company_profiling_data.json
+alueet_insert.sql
+fix_ai_content_rls.sql
+fix_places_rls.sql
+generate_places_sql.js
+paikat_insert.sql
+places_api_function.sql
+dist/ajankohtaista.html
+backup/paikat_insert_20260818_0935.sql
