@@ -91,7 +91,7 @@ async function loadMixonetThemeContext(searchTag) {
                     if (oppIds.length > 0) {
                         // Hae eri tyyppiset asiat erikseen
                         const [projRes, ideaRes, oppRes] = await Promise.all([
-                            mixonetClient.from('projects').select('id, title, description, public_settings').in('id', oppIds),
+                            mixonetClient.from('projects').select('id, title, description, public_settings, is_published, visibility').in('id', oppIds),
                             mixonetClient.from('ideas').select('id, title, description').in('id', oppIds),
                             mixonetClient.from('opportunities').select('id, title, description, type').in('id', oppIds)
                         ]);
@@ -104,7 +104,7 @@ async function loadMixonetThemeContext(searchTag) {
                         if (projRes.data) {
                             projRes.data.forEach(p => {
                                 const settings = p.public_settings || {};
-                                if (settings.is_published !== false) {
+                                if (p.is_published !== false && p.visibility === 'PUBLIC') {
                                     opps.push({ ...p, type: 'PROJECT', is_project_featured: true });
                                     if (settings.featured_need_id) featuredNeedsIds.push(settings.featured_need_id);
                                     if (settings.featured_idea_id) featuredIdeasIds.push(settings.featured_idea_id);
@@ -209,10 +209,27 @@ async function loadMixonetThemeContext(searchTag) {
     
     // Fallback: vanha logiikka, jos teemaa ei löytynyt
     try {
-        // Haetaan projektit projects-taulusta
-        const { data: projects, error } = await mixonetClient
-            .from('projects')
-            .select('id, title, description, status, created_at');
+        // Haetaan projektit projects-taulusta tai rpc-funktiolla jos paikka valittu
+        let projects;
+        let error;
+        
+        if (typeof placeId !== 'undefined' && placeId) {
+            const res = await mixonetClient
+                .rpc('get_projects_by_place', { target_place_id: placeId });
+            projects = res.data;
+            error = res.error;
+        } else {
+            const res = await mixonetClient
+                .from('projects')
+                .select('id, title, description, status, created_at, visibility, is_published')
+                .eq('is_published', true);
+            projects = res.data;
+            error = res.error;
+            
+            if (projects) {
+                projects = projects.filter(p => p.visibility === 'PUBLIC');
+            }
+        }
 
         if (error || !projects || projects.length === 0) return;
 

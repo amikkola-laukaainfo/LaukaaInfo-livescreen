@@ -61,7 +61,7 @@ async function loadProject(projectId) {
             show_themes: true
         };
 
-        if (settings.is_published === false) {
+        if (projectData.is_published === false || projectData.visibility !== 'PUBLIC') {
             // Salli esikatselu, mutta näytä banneri
             const banner = document.createElement('div');
             banner.style.cssText = 'background: #fef08a; color: #854d0e; padding: 10px; text-align: center; font-weight: bold; position: sticky; top: 0; z-index: 100;';
