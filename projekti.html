@@ -25,6 +25,9 @@
     <!-- PhotoSwipe -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.3/photoswipe.min.css">
 
+    <!-- QRCode.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
     <script src="translations.js"></script>
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
     
@@ -278,6 +281,183 @@
             margin-right: 0.4rem;
             margin-bottom: 0.4rem;
         }
+
+        /* ===== SHARE MODAL ===== */
+        .share-modal-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9000;
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .share-modal-backdrop.active {
+            display: flex;
+            animation: shareBackdropIn 0.25s ease;
+        }
+        @keyframes shareBackdropIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        .share-modal {
+            background: #fff;
+            border-radius: 28px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 32px 80px rgba(0,0,0,0.18);
+            position: relative;
+            animation: shareModalIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes shareModalIn {
+            from { opacity: 0; transform: scale(0.92) translateY(16px); }
+            to   { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .share-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+        .share-modal-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0;
+        }
+        .share-close-btn {
+            background: #f1f5f9;
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s;
+            color: #64748b;
+            font-size: 1.1rem;
+        }
+        .share-close-btn:hover { background: #e2e8f0; }
+        .share-tabs {
+            display: flex;
+            gap: 0.5rem;
+            background: #f1f5f9;
+            border-radius: 50px;
+            padding: 4px;
+            margin-bottom: 1.5rem;
+        }
+        .share-tab {
+            flex: 1;
+            text-align: center;
+            padding: 0.55rem 1rem;
+            border-radius: 50px;
+            border: none;
+            background: transparent;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .share-tab.active {
+            background: #fff;
+            color: #0f172a;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .share-panel { display: none; }
+        .share-panel.active { display: block; }
+
+        /* Linkki-paneeli */
+        .share-link-row {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        .share-link-input {
+            flex: 1;
+            background: #f8fafc;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 0.7rem 1rem;
+            font-size: 0.85rem;
+            color: #334155;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .share-copy-btn {
+            background: #0f172a;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 0.7rem 1.1rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .share-copy-btn:hover {
+            background: #1e293b;
+            transform: translateY(-1px);
+        }
+        .share-copy-btn.copied {
+            background: #10b981;
+        }
+        .share-copy-feedback {
+            font-size: 0.82rem;
+            color: #10b981;
+            margin-top: 0.6rem;
+            font-weight: 500;
+            min-height: 1.2em;
+            transition: opacity 0.3s;
+        }
+
+        /* QR-paneeli */
+        .share-qr-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.5rem 0;
+        }
+        .share-qr-box {
+            background: #fff;
+            border-radius: 16px;
+            border: 2px solid #e2e8f0;
+            padding: 1rem;
+            display: inline-flex;
+        }
+        .share-qr-hint {
+            font-size: 0.85rem;
+            color: #64748b;
+            text-align: center;
+        }
+
+        /* Share-painike hero:ssa */
+        .btn-share {
+            background: rgba(255,255,255,0.85);
+            color: #0f172a;
+            border: 1.5px solid rgba(0,0,0,0.08);
+        }
+        .btn-share:hover {
+            background: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
     </style>
 </head>
 
@@ -317,6 +497,9 @@
                     <a href="karttakohteet.html" id="btn-mixonet" class="btn btn-light">
                         <span class="iconify" data-icon="material-symbols:open-in-new"></span> Tutustu projektiin Mixonetissä &rarr;
                     </a>
+                    <button id="btn-share-project" class="btn btn-share" onclick="openShareModal()">
+                        <span class="iconify" data-icon="material-symbols:share"></span> Jaa
+                    </button>
                 </div>
             </div>
         </section>
@@ -409,6 +592,52 @@
     
     <footer></footer>
 
+    <!-- ===== SHARE MODAL ===== -->
+    <div id="share-modal-backdrop" class="share-modal-backdrop" onclick="closeShareModalOnBackdrop(event)">
+        <div class="share-modal" role="dialog" aria-modal="true" aria-labelledby="share-modal-title">
+            <div class="share-modal-header">
+                <h2 id="share-modal-title" class="share-modal-title">
+                    <span class="iconify" data-icon="material-symbols:share" style="vertical-align: middle; margin-right: 0.4rem;"></span>
+                    Jaa projekti
+                </h2>
+                <button class="share-close-btn" onclick="closeShareModal()" aria-label="Sulje">
+                    <span class="iconify" data-icon="material-symbols:close"></span>
+                </button>
+            </div>
+
+            <div class="share-tabs" role="tablist">
+                <button id="tab-link" class="share-tab active" role="tab" aria-selected="true" onclick="switchShareTab('link')">
+                    <span class="iconify" data-icon="material-symbols:link"></span> Linkki
+                </button>
+                <button id="tab-qr" class="share-tab" role="tab" aria-selected="false" onclick="switchShareTab('qr')">
+                    <span class="iconify" data-icon="material-symbols:qr-code"></span> QR-koodi
+                </button>
+            </div>
+
+            <!-- Linkki-paneeli -->
+            <div id="share-panel-link" class="share-panel active">
+                <div class="share-link-row">
+                    <input id="share-link-input" class="share-link-input" type="text" readonly />
+                    <button id="share-copy-btn" class="share-copy-btn" onclick="copyShareLink()">
+                        <span class="iconify" data-icon="material-symbols:content-copy"></span>
+                        Kopioi
+                    </button>
+                </div>
+                <p id="share-copy-feedback" class="share-copy-feedback"></p>
+            </div>
+
+            <!-- QR-paneeli -->
+            <div id="share-panel-qr" class="share-panel">
+                <div class="share-qr-wrap">
+                    <div class="share-qr-box">
+                        <div id="share-qr-canvas"></div>
+                    </div>
+                    <p class="share-qr-hint">Skannaa QR-koodi jakaaksesi projektin</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Leaflet & Supabase (If needed later) -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -466,6 +695,94 @@
 
     <!-- Theme specific logic -->
     <script src="projekti.js?v=5"></script>
+
+    <!-- Share Modal Logic -->
+    <script>
+        let shareQrGenerated = false;
+
+        function openShareModal() {
+            const backdrop = document.getElementById('share-modal-backdrop');
+            const input = document.getElementById('share-link-input');
+            input.value = window.location.href;
+            backdrop.classList.add('active');
+            // Reset tab
+            switchShareTab('link');
+            shareQrGenerated = false;
+            // Remove old QR
+            const canvas = document.getElementById('share-qr-canvas');
+            canvas.innerHTML = '';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeShareModal() {
+            document.getElementById('share-modal-backdrop').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function closeShareModalOnBackdrop(e) {
+            if (e.target === document.getElementById('share-modal-backdrop')) {
+                closeShareModal();
+            }
+        }
+
+        function switchShareTab(tab) {
+            document.getElementById('share-panel-link').classList.toggle('active', tab === 'link');
+            document.getElementById('share-panel-qr').classList.toggle('active', tab === 'qr');
+            document.getElementById('tab-link').classList.toggle('active', tab === 'link');
+            document.getElementById('tab-qr').classList.toggle('active', tab === 'qr');
+            document.getElementById('tab-link').setAttribute('aria-selected', tab === 'link');
+            document.getElementById('tab-qr').setAttribute('aria-selected', tab === 'qr');
+
+            if (tab === 'qr' && !shareQrGenerated) {
+                generateShareQR();
+            }
+        }
+
+        function generateShareQR() {
+            const canvas = document.getElementById('share-qr-canvas');
+            canvas.innerHTML = '';
+            if (typeof QRCode !== 'undefined') {
+                new QRCode(canvas, {
+                    text: window.location.href,
+                    width: 200,
+                    height: 200,
+                    colorDark: '#0f172a',
+                    colorLight: '#ffffff',
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                shareQrGenerated = true;
+            } else {
+                canvas.innerHTML = '<p style="color:#ef4444;font-size:0.85rem;">QR-kirjasto ei latautunut.</p>';
+            }
+        }
+
+        function copyShareLink() {
+            const input = document.getElementById('share-link-input');
+            const btn = document.getElementById('share-copy-btn');
+            const feedback = document.getElementById('share-copy-feedback');
+
+            navigator.clipboard.writeText(input.value).then(() => {
+                btn.classList.add('copied');
+                btn.innerHTML = '<span class="iconify" data-icon="material-symbols:check"></span> Kopioitu!';
+                feedback.textContent = '✓ Linkki kopioitu leikepöydälle';
+                setTimeout(() => {
+                    btn.classList.remove('copied');
+                    btn.innerHTML = '<span class="iconify" data-icon="material-symbols:content-copy"></span> Kopioi';
+                    feedback.textContent = '';
+                }, 2500);
+            }).catch(() => {
+                input.select();
+                document.execCommand('copy');
+                feedback.textContent = '✓ Linkki kopioitu';
+                setTimeout(() => { feedback.textContent = ''; }, 2500);
+            });
+        }
+
+        // Sulje ESC-näppäimellä
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeShareModal();
+        });
+    </script>
 </body>
 </html>
 

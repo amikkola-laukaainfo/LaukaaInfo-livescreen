@@ -209,18 +209,34 @@ async function loadProject(projectId) {
             detailsEl.innerHTML = detailsHtml;
         }
 
-        // Hae projektiin liittyvät asiat entity_relations taulusta
+        // Hae projektiin liittyvät asiat entity_relations taulusta (vanha PARTICIPATES_IN, yms)
         const { data: relations, error: relError } = await mixonetClient
             .from('entity_relations')
             .select('*')
             .eq('target_id', projectId);
 
+        // UUSI: Hae project_actors taulusta osallistujat
+        const { data: actors } = await mixonetClient
+            .from('project_actors')
+            .select('*, organization:organizations(*), user_profile:user_profiles(*)')
+            .eq('project_id', projectId)
+            .eq('status', 'ACTIVE'); // Vain aktiiviset osallistujat
+
         if (relError) {
             console.error("Virhe relaatioiden haussa", relError);
-        } else if (relations && relations.length > 0) {
+        } else if ((relations && relations.length > 0) || (actors && actors.length > 0)) {
             // Hae yritysten ja tarpeiden nimet kannasta, jotta ei näytetä pelkkiä UUID:itä
-            const companyIds = relations.filter(r => r.source_type === 'COMPANY').map(r => r.source_id);
-            const needIds = relations.filter(r => r.source_type === 'NEED').map(r => r.source_id);
+            const companyIds = relations ? relations.filter(r => r.source_type === 'COMPANY').map(r => r.source_id) : [];
+            const needIds = relations ? relations.filter(r => r.source_type === 'NEED').map(r => r.source_id) : [];
+            
+            // Lisää project_actors company_external_id:t listaan, jos ne on COMPANY
+            if (actors) {
+                actors.forEach(actor => {
+                    if (actor.actor_type === 'COMPANY' && actor.company_external_id && !companyIds.includes(actor.company_external_id)) {
+                        companyIds.push(actor.company_external_id);
+                    }
+                });
+            }
 
             let companiesData = [];
             let needsData = [];
@@ -249,9 +265,9 @@ async function loadProject(projectId) {
                 if (data) needsData = data;
             }
 
-            renderRelations(relations, companiesData, needsData, settings);
+            renderRelations(relations || [], actors || [], companiesData, needsData, settings);
         } else {
-            renderRelations([], [], [], settings);
+            renderRelations([], [], [], [], settings);
         }
 
         // Hae liittyvät teemat (PROJECT on source, THEME on target)
@@ -300,7 +316,7 @@ async function loadProject(projectId) {
     }
 }
 
-async function renderRelations(relations, companiesData = [], needsData = [], settings = {}) {
+async function renderRelations(relations, actors, companiesData = [], needsData = [], settings = {}) {
     const companiesList = document.getElementById('companies-list');
     const companiesSection = document.getElementById('companies-section');
     const suggestedList = document.getElementById('suggested-list');
@@ -313,24 +329,96 @@ async function renderRelations(relations, companiesData = [], needsData = [], se
     let companiesHtml = '';
     let suggestedHtml = '';
     let needsHtml = '';
+    
+    // Yhdistetään old-school PARTICIPATES_IN (entity_relations) ja uudet project_actors
+    // Varmistetaan ettei tule duplikaatteja
+    const renderedCompanyIds = new Set();
+    
+    // --- 1. Käsittele uudet project_actors (etusijalla) ---
+    actors.forEach(actor => {
+        if (actor.actor_type === 'COMPANY') {
+            const externalId = actor.company_external_id;
+            if (externalId) {
+                renderedCompanyIds.add(externalId);
+                const compObj = companiesData.find(c => c.id === externalId);
+                const companyName = compObj?.name || 'Yritys';
+                const roleHtml = actor.project_role ? `<div style="font-size:0.85rem; color:var(--text-muted);">${actor.project_role}</div>` : '';
+                companiesHtml += `
+                    <a href="yrityskortti.html?id=${externalId}" class="list-item-card">
+                        <div class="card-header-grid">
+                            <div>
+                                <div style="font-size:0.8rem; text-transform:uppercase; color:#10b981; font-weight:700; margin-bottom:0.2rem;">🏢 Yritys</div>
+                                <h3 style="margin:0; font-size:1.05rem">${companyName}</h3>
+                                ${roleHtml}
+                            </div>
+                            <span class="iconify" style="color:#10b981; font-size:1.2rem;" data-icon="material-symbols:open-in-new"></span>
+                        </div>
+                    </a>
+                `;
+            }
+        } else if (actor.actor_type === 'ORG') {
+            const org = actor.organization;
+            if (org) {
+                const icon = org.org_type === 'MUNICIPALITY' ? '🏛️' : (org.org_type === 'ASSOCIATION' ? '🤝' : '🏢');
+                const typeText = org.org_type === 'MUNICIPALITY' ? 'Kunta' : (org.org_type === 'ASSOCIATION' ? 'Yhdistys' : 'Organisaatio');
+                const roleHtml = actor.project_role ? `<div style="font-size:0.85rem; color:var(--text-muted);">${actor.project_role}</div>` : '';
+                companiesHtml += `
+                    <div class="list-item-card">
+                        <div style="font-size:0.8rem; text-transform:uppercase; color:#8b5cf6; font-weight:700; margin-bottom:0.2rem;">${icon} ${typeText}</div>
+                        <h3 style="margin:0; font-size:1.05rem">${org.name}</h3>
+                        ${roleHtml}
+                    </div>
+                `;
+            }
+        } else if (actor.actor_type === 'PERSON') {
+            const user = actor.user_profile;
+            // project_actors RLS pitäisi taata että saamme vain sallitut (show_in_project=true)
+            if (user && actor.show_in_project) {
+                const parts = (user.name || '').trim().split(" ");
+                const shortName = parts.length >= 2 ? parts[0] + " " + parts[parts.length-1].charAt(0) + "." : (user.name || "Käyttäjä");
+                const roleHtml = actor.project_role ? `<div style="font-size:0.85rem; color:var(--text-muted);">${actor.project_role}</div>` : '';
+                const skillsHtml = user.skills && user.skills.length > 0 
+                    ? `<div style="margin-top:0.5rem; font-size:0.85rem; color:var(--text-muted);">${user.skills.slice(0,3).join(' · ')}</div>` : '';
+                const locationHtml = user.location ? `<div style="margin-top:0.3rem; font-size:0.8rem; color:var(--text-muted);">📍 ${user.location}</div>` : '';
+                
+                companiesHtml += `
+                    <div class="list-item-card">
+                        <div style="font-size:0.8rem; text-transform:uppercase; color:#3b82f6; font-weight:700; margin-bottom:0.2rem;">👤 Yksityinen osallistuja</div>
+                        <h3 style="margin:0; font-size:1.05rem">${shortName}</h3>
+                        ${roleHtml}
+                        ${skillsHtml}
+                        ${locationHtml}
+                    </div>
+                `;
+            }
+        }
+    });
 
+    // --- 2. Käsittele vanhat entity_relations ---
     relations.forEach(rel => {
         if (rel.source_type === 'COMPANY') {
             const compObj = companiesData.find(c => c.id === rel.source_id);
             const companyName = compObj?.name || rel.metadata?.name || 'Yritys';
+            const isParticipating = rel.relation_type === 'PARTICIPATES_IN';
+            
+            if (isParticipating && renderedCompanyIds.has(rel.source_id)) {
+                return; // Jo renderöity project_actors kautta
+            }
+            
             const card = `
                 <a href="yrityskortti.html?id=${rel.source_id}" class="list-item-card">
                     <div class="card-header-grid">
                         <h3 style="margin:0; font-size:1.05rem">${companyName}</h3>
-                        <span class="iconify" style="color:#10b981; font-size:1.2rem;" data-icon="material-symbols:check-circle-outline"></span>
+                        <span class="iconify" style="color:#10b981; font-size:1.2rem;" data-icon="material-symbols:open-in-new"></span>
                     </div>
                     <div style="margin-top:0.75rem;">
                         <span style="display:inline-block;padding:0.3rem 0.8rem;background:#10b981;color:white;border-radius:50px;font-size:0.8rem;font-weight:700;">Tutustu →</span>
                     </div>
                 </a>
             `;
-            if (rel.relation_type === 'PARTICIPATES_IN') {
+            if (isParticipating) {
                 companiesHtml += card;
+                renderedCompanyIds.add(rel.source_id);
             } else if (rel.relation_type === 'SUGGESTED_FOR') {
                 suggestedHtml += card;
             }

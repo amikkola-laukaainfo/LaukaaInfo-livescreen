@@ -9,5 +9,15 @@
         "FF:02:F2:83:AE:09:51:CD:9F:E8:B8:38:AF:32:AB:09:53:DD:22:F8:49:55:70:E1:DE:3C:7C:BB:62:15:CF:A4"
       ]
     }
+  },
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.mediazoo.mixonet",
+      "sha256_cert_fingerprints": [
+        "1A:78:02:6E:AB:40:A9:EA:7B:A9:E7:CE:B7:C9:31:1E:25:48:93:53:76:D3:EC:E5:98:C1:C2:A3:21:9C:A3:33"
+      ]
+    }
   }
 ]
