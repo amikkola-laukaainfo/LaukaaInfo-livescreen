@@ -263,6 +263,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         await loadMediaForPlace(placeData);
         await loadEncountersForPlace(placeData);
         await loadLostItemsForPlace(placeData);
+        loadMixonetContentForPlace(placeData); // Ei await – haetaan taustalla, ei estä muuta
 
     } catch (err) {
         console.error('Yllättävä virhe:', err);
@@ -2271,3 +2272,211 @@ function actionFilterLocal() {}
 function actionSearchGlobal() {}
 function actionReportEncounter() {}
 
+// ============================================================
+// MIXONET-INTEGRAATIO: Julkiset projektit ja ideat
+// Noutaa entity_relations-pohjaiset paikkasuhteet Mixonetista
+// ja näyttää vain julkisen sisällön LaukaaInfossa.
+//
+// Näkyvyysperiaate (isPubliclyVisible):
+//   COMPANY  → aina julkinen (yrityskortti on jo julkinen)
+//   PROJECT  → vain jos is_published = true AND visibility = 'PUBLIC'
+//   IDEA     → vain jos is_public = true
+//   USER     → EI KOSKAAN oletuksena (tietosuoja)
+//   muu      → ei näytetä
+// ============================================================
+
+async function loadMixonetContentForPlace(placeData) {
+    const MIXONET_SB_URL = 'https://btwerbixrydfalqrpnmg.supabase.co';
+    const MIXONET_SB_KEY = 'sb_publishable_8kDfiOTrAwvdb8ziM9XNMQ_CWc-vfat';
+
+    const projectsSection = document.getElementById('mixonet-projects-section');
+    const projectsList    = document.getElementById('mixonet-projects-list');
+    const ideasSection    = document.getElementById('mixonet-ideas-section');
+    const ideasList       = document.getElementById('mixonet-ideas-list');
+
+    if (!projectsSection || !projectsList || !ideasSection || !ideasList) return;
+
+    // Tarvitaan supabase-client
+    if (typeof supabase === 'undefined') return;
+
+    let mixonetClient;
+    try {
+        mixonetClient = window.mixonetSb || supabase.createClient(MIXONET_SB_URL, MIXONET_SB_KEY, {
+            auth: { persistSession: false, storageKey: 'mixonet-livescreen-anon' }
+        });
+        window.mixonetSb = mixonetClient;
+    } catch (e) {
+        console.warn('[Mixonet] Client init failed:', e);
+        return;
+    }
+
+    const placeId = placeData.place_id;
+    if (!placeId) return;
+
+    try {
+        // 1. Hae paikkasuhteet get_entities_by_place RPC:llä
+        const { data: relations, error: relError } = await mixonetClient
+            .rpc('get_entities_by_place', { target_place_id: placeId, min_weight: 0 });
+
+        if (relError) {
+            console.warn('[Mixonet] get_entities_by_place RPC ei löytynyt tai epäonnistui:', relError.message);
+            // Yritetään fallback: suora haku entity_relations-taulusta
+            await loadMixonetContentFallback(mixonetClient, placeId, projectsSection, projectsList, ideasSection, ideasList);
+            return;
+        }
+
+        if (!relations || relations.length === 0) return;
+
+        // 2. Näkyvyyssuodatin – USER ei koskaan julkinen
+        function isPubliclyVisible(sourceType) {
+            if (sourceType === 'USER')    return false; // Tietosuoja: ei oletuksena julkinen
+            if (sourceType === 'COMPANY') return true;  // Aina julkinen
+            if (sourceType === 'PROJECT') return true;  // Tarkistetaan myöhemmin is_published-kentästä
+            if (sourceType === 'IDEA')    return true;  // Tarkistetaan myöhemmin is_public-kentästä
+            return false;
+        }
+
+        const projectIds = relations
+            .filter(r => r.source_type === 'PROJECT' && isPubliclyVisible(r.source_type))
+            .map(r => r.source_id);
+
+        const ideaIds = relations
+            .filter(r => r.source_type === 'IDEA' && isPubliclyVisible(r.source_type))
+            .map(r => r.source_id);
+
+        // 3. Hae projektit ja ideat rinnakkain
+        const [projectsResult, ideasResult] = await Promise.all([
+            projectIds.length > 0
+                ? mixonetClient.from('projects')
+                    .select('id, title, description, cover_image_url, is_published, visibility, status')
+                    .in('id', projectIds)
+                : Promise.resolve({ data: [] }),
+            ideaIds.length > 0
+                ? mixonetClient.from('ideas')
+                    .select('id, title, description, is_public')
+                    .in('id', ideaIds)
+                : Promise.resolve({ data: [] })
+        ]);
+
+        // 4. Suodata julkisuuden mukaan
+        const publicProjects = (projectsResult.data || [])
+            .filter(p => p.is_published === true && p.visibility === 'PUBLIC');
+
+        const publicIdeas = (ideasResult.data || [])
+            .filter(i => i.is_public === true);
+
+        // 5. Renderöi projektit
+        if (publicProjects.length > 0) {
+            projectsList.innerHTML = publicProjects.map(project => {
+                const desc = (project.description || '').substring(0, 130);
+                const coverStyle = project.cover_image_url
+                    ? `background-image: url('${project.cover_image_url}'); background-size: cover; background-position: center;`
+                    : 'background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);';
+                return `
+                    <a href="projekti.html?id=${encodeURIComponent(project.id)}"
+                       class="list-item-card"
+                       style="border-left: 4px solid #6366f1; text-decoration: none; display: block;">
+                        ${project.cover_image_url ? `
+                        <div style="height: 120px; border-radius: 8px; overflow: hidden; margin-bottom: 0.75rem; ${coverStyle}"></div>
+                        ` : ''}
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.3rem;">
+                            <div style="font-size: 0.8rem; font-weight: 700; color: #6366f1; text-transform: uppercase; letter-spacing: 0.5px;">
+                                🚀 Mixonet-projekti
+                            </div>
+                        </div>
+                        <h3 style="margin: 0 0 0.4rem; font-family: Outfit, sans-serif; font-size: 1.1rem; color: var(--text-main);">${project.title}</h3>
+                        ${desc ? `<p style="margin: 0; font-size: 0.9rem; color: var(--text-muted);">${desc}${desc.length >= 130 ? '…' : ''}</p>` : ''}
+                        <div style="margin-top: 0.75rem;">
+                            <span style="display: inline-block; padding: 0.3rem 0.8rem; background: #6366f1; color: white; border-radius: 50px; font-size: 0.8rem; font-weight: 700;">Tutustu →</span>
+                        </div>
+                    </a>
+                `;
+            }).join('');
+            projectsSection.style.display = 'block';
+        }
+
+        // 6. Renderöi ideat
+        if (publicIdeas.length > 0) {
+            ideasList.innerHTML = publicIdeas.map(idea => {
+                const desc = (idea.description || '').substring(0, 130);
+                return `
+                    <div class="list-item-card" style="border-left: 4px solid #f59e0b;">
+                        <div style="font-size: 0.8rem; font-weight: 700; color: #d97706; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.3rem;">
+                            💡 Idea
+                        </div>
+                        <h3 style="margin: 0 0 0.4rem; font-family: Outfit, sans-serif; font-size: 1.05rem; color: var(--text-main);">${idea.title}</h3>
+                        ${desc ? `<p style="margin: 0; font-size: 0.9rem; color: var(--text-muted);">${desc}${desc.length >= 130 ? '…' : ''}</p>` : ''}
+                    </div>
+                `;
+            }).join('');
+            ideasSection.style.display = 'block';
+        }
+
+    } catch (err) {
+        // Mixonet-integraatio ei estä muuta sivun toimintaa
+        console.warn('[Mixonet] Paikkahaun virhe:', err);
+    }
+}
+
+// Fallback: haetaan suoraan entity_relations-taulusta jos RPC ei ole vielä asennettu
+async function loadMixonetContentFallback(mixonetClient, placeId, projectsSection, projectsList, ideasSection, ideasList) {
+    try {
+        const { data: relations, error } = await mixonetClient
+            .from('entity_relations')
+            .select('source_type, source_id, relation_type')
+            .eq('target_type', 'PLACE')
+            .eq('target_id', placeId);
+
+        if (error || !relations || relations.length === 0) {
+            console.info('[Mixonet] Ei paikkayhteyksiä entity_relations-taulussa place_id:lle:', placeId);
+            return;
+        }
+
+        const projectIds = relations.filter(r => r.source_type === 'PROJECT').map(r => r.source_id);
+        const ideaIds    = relations.filter(r => r.source_type === 'IDEA').map(r => r.source_id);
+        // USER-tyyppiset suodatetaan pois tässäkin – ei näytetä julkisesti
+
+        const [projectsResult, ideasResult] = await Promise.all([
+            projectIds.length > 0
+                ? mixonetClient.from('projects')
+                    .select('id, title, description, cover_image_url, is_published, visibility')
+                    .in('id', projectIds)
+                : Promise.resolve({ data: [] }),
+            ideaIds.length > 0
+                ? mixonetClient.from('ideas')
+                    .select('id, title, description, is_public')
+                    .in('id', ideaIds)
+                : Promise.resolve({ data: [] })
+        ]);
+
+        const publicProjects = (projectsResult.data || [])
+            .filter(p => p.is_published === true && p.visibility === 'PUBLIC');
+        const publicIdeas = (ideasResult.data || [])
+            .filter(i => i.is_public === true);
+
+        if (publicProjects.length > 0) {
+            projectsList.innerHTML = publicProjects.map(p => `
+                <a href="projekti.html?id=${encodeURIComponent(p.id)}" class="list-item-card" style="border-left: 4px solid #6366f1; text-decoration: none; display: block;">
+                    <div style="font-size: 0.8rem; font-weight: 700; color: #6366f1; text-transform: uppercase; margin-bottom: 0.3rem;">🚀 Mixonet-projekti</div>
+                    <h3 style="margin: 0 0 0.4rem; font-size: 1.05rem; color: var(--text-main);">${p.title}</h3>
+                    ${p.description ? `<p style="margin: 0; font-size: 0.9rem; color: var(--text-muted);">${p.description.substring(0, 120)}…</p>` : ''}
+                    <div style="margin-top: 0.75rem;"><span style="display: inline-block; padding: 0.3rem 0.8rem; background: #6366f1; color: white; border-radius: 50px; font-size: 0.8rem; font-weight: 700;">Tutustu →</span></div>
+                </a>
+            `).join('');
+            projectsSection.style.display = 'block';
+        }
+
+        if (publicIdeas.length > 0) {
+            ideasList.innerHTML = publicIdeas.map(i => `
+                <div class="list-item-card" style="border-left: 4px solid #f59e0b;">
+                    <div style="font-size: 0.8rem; font-weight: 700; color: #d97706; text-transform: uppercase; margin-bottom: 0.3rem;">💡 Idea</div>
+                    <h3 style="margin: 0 0 0.4rem; font-size: 1.05rem; color: var(--text-main);">${i.title}</h3>
+                    ${i.description ? `<p style="margin: 0; font-size: 0.9rem; color: var(--text-muted);">${i.description.substring(0, 120)}…</p>` : ''}
+                </div>
+            `).join('');
+            ideasSection.style.display = 'block';
+        }
+    } catch (err) {
+        console.warn('[Mixonet] Fallback-haku epäonnistui:', err);
+    }
+}

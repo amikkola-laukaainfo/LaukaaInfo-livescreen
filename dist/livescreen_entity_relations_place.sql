@@ -1,0 +1,110 @@
+-- ============================================================
+-- LIVESCREEN: entity_relations paikkasuhteet (Mixonet Supabase)
+-- Aja tämä Mixonetin Supabase SQL Editorissa (btwerbixrydfalqrpnmg)
+-- ============================================================
+--
+-- Paikkasuhteiden rakenne:
+--   source_type = 'PROJECT' | 'COMPANY' | 'USER' | 'IDEA' | 'OPPORTUNITY'
+--   source_id   = entiteetin UUID Mixonetissa
+--   relation_type = 'LOCATED_AT' | 'OPERATES_IN' | 'RELATES_TO' | 'SERVICE_AREA'
+--   target_type = 'PLACE'   ← uusi arvo (ei enum-rajoitetta, voidaan lisätä suoraan)
+--   target_id   = place_id UUID LaukaaInfon AI Supabasessa (usswojtlvrnqtzwnffpg)
+--
+-- Relevanssipaino relation_type-arvon mukaan:
+--   LOCATED_AT   = 100  (erittäin vahva – projekti/yritys on fyysisesti tässä)
+--   OPERATES_IN  = 90   (vahva – yritys/käyttäjä toimii tällä alueella)
+--   RELATES_TO   = 80   (vahva – idea tai hanke liittyy paikkaan)
+--   SERVICE_AREA = 40   (heikompi – palvelualue kattaa tämän alueen)
+-- ============================================================
+
+-- VAIHE 1: Tarkista Vihtavuoren place_id LaukaaInfon Supabasessa
+-- Aja tämä LaukaaInfon Supabasessa (usswojtlvrnqtzwnffpg):
+--   SELECT place_id, name, canonical_name, type
+--   FROM places
+--   WHERE canonical_name ILIKE '%vihtavuori%'
+--   ORDER BY importance DESC;
+--
+-- Kopioi place_id tähän muuttujaan:
+
+-- ============================================================
+-- TESTIDATA: Vihtavuori-paikkasuhteet
+-- Korvaa VIHTAVUORI_PLACE_ID oikealla UUID:lla (yllä oleva SQL)
+-- Korvaa PROJECT_UUID_X, COMPANY_UUID_X jne. oikeilla Mixonet-ID:illä
+-- ============================================================
+
+-- Esimerkki: Projekti sijaitsee Vihtavuoressa (LOCATED_AT)
+-- INSERT INTO entity_relations (source_type, source_id, relation_type, target_type, target_id, metadata)
+-- VALUES (
+--   'PROJECT',
+--   'KORVAA-PROJEKTIN-UUID-TÄHÄN',
+--   'LOCATED_AT',
+--   'PLACE',
+--   'KORVAA-VIHTAVUORI-PLACE_ID-TÄHÄN',
+--   '{"place_name": "Vihtavuori", "weight": 100}'::jsonb
+-- );
+
+-- Esimerkki: Yritys toimii Vihtavuoressa (OPERATES_IN)
+-- INSERT INTO entity_relations (source_type, source_id, relation_type, target_type, target_id, metadata)
+-- VALUES (
+--   'COMPANY',
+--   'KORVAA-YRITYKSEN-UUID-TAI-EXTERNAL_ID-TÄHÄN',
+--   'OPERATES_IN',
+--   'PLACE',
+--   'KORVAA-VIHTAVUORI-PLACE_ID-TÄHÄN',
+--   '{"place_name": "Vihtavuori", "weight": 90}'::jsonb
+-- );
+
+-- Esimerkki: Käyttäjä toimii Vihtavuoressa (OPERATES_IN)
+-- INSERT INTO entity_relations (source_type, source_id, relation_type, target_type, target_id, metadata)
+-- VALUES (
+--   'USER',
+--   'KORVAA-KAYTTAJAN-UUID-TÄHÄN',
+--   'OPERATES_IN',
+--   'PLACE',
+--   'KORVAA-VIHTAVUORI-PLACE_ID-TÄHÄN',
+--   '{"place_name": "Vihtavuori", "weight": 80}'::jsonb
+-- );
+
+-- Esimerkki: Idea liittyy Vihtavuoreen (RELATES_TO)
+-- INSERT INTO entity_relations (source_type, source_id, relation_type, target_type, target_id, metadata)
+-- VALUES (
+--   'IDEA',
+--   'KORVAA-IDEAN-UUID-TÄHÄN',
+--   'RELATES_TO',
+--   'PLACE',
+--   'KORVAA-VIHTAVUORI-PLACE_ID-TÄHÄN',
+--   '{"place_name": "Vihtavuori", "weight": 80}'::jsonb
+-- );
+
+-- ============================================================
+-- TARKISTUSKYSELY: Katso kaikki paikkasuhteet Vihtavuorelle
+-- ============================================================
+-- SELECT
+--   er.source_type,
+--   er.source_id,
+--   er.relation_type,
+--   er.target_type,
+--   er.target_id,
+--   er.metadata,
+--   er.created_at
+-- FROM entity_relations er
+-- WHERE er.target_type = 'PLACE'
+--   AND er.target_id = 'KORVAA-VIHTAVUORI-PLACE_ID-TÄHÄN'
+-- ORDER BY
+--   CASE er.relation_type
+--     WHEN 'LOCATED_AT'  THEN 1
+--     WHEN 'OPERATES_IN' THEN 2
+--     WHEN 'RELATES_TO'  THEN 3
+--     WHEN 'SERVICE_AREA' THEN 4
+--     ELSE 5
+--   END,
+--   er.created_at DESC;
+
+-- ============================================================
+-- PAINOTUSTAULUKKO (käytetään get_entities_by_place-funktiossa)
+-- ============================================================
+-- LOCATED_AT  = 100
+-- OPERATES_IN = 90  (USER ja COMPANY)
+-- RELATES_TO  = 80  (IDEAS ja OPPORTUNITIES)
+-- SERVICE_AREA = 40
+-- ============================================================

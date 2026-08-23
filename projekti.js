@@ -310,6 +310,56 @@ async function loadProject(projectId) {
             if (themesSection) themesSection.style.display = 'none';
         }
 
+        // Hae projektin paikka (LOCATED_AT -> PLACE)
+        try {
+            const placeSection = document.getElementById('project-place-section');
+            const placeList = document.getElementById('project-place-list');
+            
+            if (placeSection && placeList) {
+                const { data: placeRelations } = await mixonetClient
+                    .from('entity_relations')
+                    .select('target_id, metadata')
+                    .eq('source_id', projectId)
+                    .eq('source_type', 'PROJECT')
+                    .eq('target_type', 'PLACE')
+                    .in('relation_type', ['LOCATED_AT', 'OPERATES_IN', 'RELATES_TO']);
+
+                if (placeRelations && placeRelations.length > 0) {
+                    // Haetaan paikan tiedot AI Supabasesta (jos mahdollista)
+                    // Tai käytetään metadata.place_name fallbackina
+                    let placesHtml = '';
+                    
+                    for (const rel of placeRelations) {
+                        const placeId = rel.target_id;
+                        let placeName = rel.metadata?.place_name || 'Tuntematon paikka';
+                        
+                        // Yritetään hakea tarkka nimi window.aiSb:ltä, jos se on olemassa (ei välttämättä ole projekti.js:ssä vielä)
+                        // Koska projekti.js käyttää vain Mixonet-clienttiä tällä hetkellä, luotetaan metadataan 
+                        // TAI lisätään aiSb haku jos se tuodaan tänne.
+                        // Yksinkertaisin tapa nyt: käytetään metadataa.
+                        // Myöhemmin voidaan hakea paikan tiedot jos tarvitaan.
+                        
+                        placesHtml += `
+                            <a href="tietoa-paikasta.html?id=${encodeURIComponent(placeId)}" class="list-item-card" style="text-decoration: none; display: flex; align-items: center; gap: 0.5rem; border-left: 4px solid #0284c7;">
+                                <div style="width: 40px; height: 40px; border-radius: 8px; background: #e0f2fe; color: #0284c7; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                                    <span class="iconify" data-icon="material-symbols:location-on"></span>
+                                </div>
+                                <div>
+                                    <h3 style="margin: 0; font-size: 1rem; color: var(--text-main);">${placeName}</h3>
+                                    <div style="font-size: 0.8rem; color: #0284c7;">Siirry paikan sivulle &rarr;</div>
+                                </div>
+                            </a>
+                        `;
+                    }
+                    
+                    placeList.innerHTML = placesHtml;
+                    placeSection.style.display = 'block';
+                }
+            }
+        } catch (e) {
+            console.warn('Paikan haku epäonnistui', e);
+        }
+
     } catch (e) {
         console.error(e);
         showError('Odottamaton virhe ladattaessa projektia.');
