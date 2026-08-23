@@ -971,7 +971,30 @@
                     </div>
                 </section>
 
+                <!--
+                  MIXONET-VERKOSTO — ARKKITEHTUURIHUOMIO:
+                  ===========================================
+                  Tämä LaukaaInfo-paikka voi olla linkitetty Mixonetin
+                  verkostopaikkaan places.mixonet_place_id-sillan kautta.
+
+                  Mixonetin suhteet (haetaan entity_relations-taulusta):
+                    COMPANY  → OPERATES_IN → PLACE   (Yritykset täällä)
+                    PROJECT  → LOCATED_AT  → PLACE   (Projektit)
+                    IDEA     → RELATES_TO  → PLACE   (Ideat)
+
+                  LaukaaInfo vastaa paikallisesta esityksestä (mikrotaso).
+                  Mixonet vastaa verkostosuhteista (makrotaso).
+                  Silta: LaukaaInfo.places.mixonet_place_id = Mixonet.places.id
+
+                  JULKISUUS:
+                  Mixonet USER → PLACE -relaatioita EI näytetä tällä sivulla.
+                  Julkinen paikkasivu voi näyttää vain entiteetit,
+                  joilla on oma julkinen profiili tai julkaisu.
+                -->
+
                 <!-- 5. Yritykset (Palveluja täällä) -->
+                <!-- Tier 1–2: Yritykset haetaan Mixonetin OPERATES_IN-suhteella
+                     mixonet_place_id-sillan kautta: LaukaaInfo paikka → Mixonet paikka → yritykset -->
                 <section class="content-block" id="services-main-section">
                     <details id="services-details" open>
                         <summary style="cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between;">
@@ -1122,31 +1145,33 @@
                     </div>
                 </section>
 
-                <!-- Mixonet: Julkiset projektit (LOCATED_AT) -->
+                <!-- Mixonet: Julkiset projektit (LOCATED_AT → mixonet_place_id) -->
+                <!-- Haetaan: entity_relations WHERE relation_type='LOCATED_AT' AND place_id=mixonet_place_id -->
                 <section id="mixonet-projects-section" class="content-block" style="display: none;">
                     <h2 style="display: flex; align-items: center; gap: 0.5rem;">
                         <span class="iconify" style="color: #6366f1;" data-icon="material-symbols:rocket-launch-outline"></span>
                         Projektit
                     </h2>
                     <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1rem;">
-                        Mixonet-verkostossa tähän paikkaan liittyvät hankkeet ja projektit.
+                        Hankkeet ja projektit, jotka Mixonet-verkostossa on kytketty tähän alueeseen.
                     </p>
                     <div id="mixonet-projects-list" style="display: flex; flex-direction: column; gap: 1rem;">
-                        <!-- Filled by loadMixonetContentForPlace -->
+                        <!-- Filled by loadMixonetContentForPlace (tietoa-paikasta.js) -->
                     </div>
                 </section>
 
-                <!-- Mixonet: Julkiset ideat (RELATES_TO) -->
+                <!-- Mixonet: Julkiset ideat (RELATES_TO → mixonet_place_id) -->
+                <!-- Haetaan: entity_relations WHERE relation_type='RELATES_TO' AND place_id=mixonet_place_id -->
                 <section id="mixonet-ideas-section" class="content-block" style="display: none;">
                     <h2 style="display: flex; align-items: center; gap: 0.5rem;">
                         <span class="iconify" style="color: #f59e0b;" data-icon="material-symbols:lightbulb-outline"></span>
                         Ideat
                     </h2>
                     <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1rem;">
-                        Paikkaan tai sen kehittämiseen liittyvät ideat Mixonet-verkostosta.
+                        Alueen kehittämiseen liittyvät ideat Mixonet-verkostosta.
                     </p>
                     <div id="mixonet-ideas-list" style="display: flex; flex-direction: column; gap: 1rem;">
-                        <!-- Filled by loadMixonetContentForPlace -->
+                        <!-- Filled by loadMixonetContentForPlace (tietoa-paikasta.js) -->
                     </div>
                 </section>
             </div>
@@ -1162,6 +1187,24 @@
                             Katso kaikki paikat kartalla <span class="iconify" data-icon="material-symbols:arrow-forward-rounded"></span>
                         </a>
                     </div>
+                </div>
+
+                <!--
+                  Mixonet-verkostobanneri:
+                  Näytetään JS:n toimesta vain jos paikalla on mixonet_place_id.
+                  Käyttäjälle näkyy: "[Paikannimi] on yhdistetty Mixonet-verkostoon."
+                  Kehittäjälle: tarkista tietoa-paikasta.js → renderMixonetBanner()
+                -->
+                <div id="mixonet-network-banner" style="display: none; background: linear-gradient(135deg, #ede9fe, #f5f3ff); border: 1px solid #c4b5fd; border-radius: 16px; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+                        <span class="iconify" style="font-size: 1.5rem; color: #7c3aed;" data-icon="material-symbols:hub-outline"></span>
+                        <strong id="mixonet-banner-title" style="font-family: 'Outfit', sans-serif; font-size: 1rem; color: #4c1d95;">Verkostoyhteys</strong>
+                    </div>
+                    <p id="mixonet-banner-desc" style="margin: 0; font-size: 0.875rem; color: #5b21b6; line-height: 1.5;"></p>
+                    <a id="mixonet-banner-link" href="#" style="display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 0.75rem; font-size: 0.875rem; font-weight: 700; color: #6d28d9; text-decoration: none;">
+                        Tutustu alueeseen verkostossa
+                        <span class="iconify" data-icon="material-symbols:arrow-forward"></span>
+                    </a>
                 </div>
 
                 <!-- 5. Visual Network Stats -->

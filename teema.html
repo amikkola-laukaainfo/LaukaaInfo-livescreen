@@ -342,14 +342,55 @@
                     <div id="encounters-list" class="list-grid"></div>
                 </section>
 
-                <!-- Mixonetin projektit tähän teemaan liittyen -->
+                <!--
+                  MIXONET-VERKOSTO — ARKKITEHTUURIHUOMIO:
+                  ===========================================
+                  Teema kertoo mistä asiassa on kyse.
+                  Paikka kertoo missä verkostossa se tapahtuu.
+
+                  Mixonetin suhteet (haetaan entity_relations-taulusta):
+                    COMPANY  → OPERATES_IN → PLACE   (yritykset alueella)
+                    PROJECT  → LOCATED_AT  → PLACE   (projektit alueella)
+                    IDEA     → RELATES_TO  → PLACE   (ideat alueella)
+
+                  Yritykset näytetään vain kun teema on paikkasidonnainen
+                  (esim. teemalla on RELATES_TO-suhde johonkin alueeseen).
+                  Pelkällä teemalla (esim. "Metsästys") yrityksiä ei listata
+                  alueesta riippumatta — muuten tieto tunkeutuu väärälle sivulle.
+
+                  JULKISUUS:
+                  Mixonet USER → PLACE -relaatioita EI näytetä tällä sivulla.
+                -->
+
+                <!-- Mixonet-projektit (LOCATED_AT tai RELATES_TO) -->
+                <!-- Haetaan: entity_relations WHERE relation_type IN ('LOCATED_AT','RELATES_TO') AND place_id=mixonet_place_id -->
                 <section class="content-block" id="mixonet-projects-section" style="display: none;">
                     <h2 style="display: flex; align-items: center; gap: 0.5rem;">
                         <span class="iconify" style="color: #6366f1;" data-icon="material-symbols:rocket-launch-outline"></span>
                         Projektit
                     </h2>
-                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">Mixonet-verkostossa aktiivisia hankkeita tähän teemaan liittyen.</p>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">Mixonet-verkoston projektit, jotka on kytketty tähän teema-alueeseen.</p>
                     <div id="mixonet-projects-list" class="list-grid"></div>
+                </section>
+
+                <!--
+                  MIXONET-YRITYKSET (paikkasidonnainen, valinnainen):
+                  Tämä osio näytetään JS:n toimesta VAIN, jos:
+                    a) teema-sivulla on myös paikakonteksti (esim. place_id URL:ssa), TAI
+                    b) teema on linkitetty johonkin Mixonetin paikkasolmuun.
+
+                  Viestinä käyttäjälle esim.: "Vihtavuorella toimivat yritykset"
+                  EI: "Tähän teemaan liittyvät yritykset" (liian epämääräinen ilman paikkarajausta)
+                -->
+                <section class="content-block" id="mixonet-companies-section" style="display: none;">
+                    <h2 style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="iconify" style="color: #f59e0b;" data-icon="material-symbols:storefront-outline"></span>
+                        <span id="mixonet-companies-title">Täällä toimivat yritykset</span>
+                    </h2>
+                    <p id="mixonet-companies-desc" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">Yritykset, jotka ovat ilmoittaneet toimivansa tällä alueella.</p>
+                    <div id="mixonet-companies-list" class="list-grid">
+                        <!-- Täytetään JS:ssä vain paikkasidonnaisen teeman yhteydessä -->
+                    </div>
                 </section>
 
                 <!-- Paikat (tai "Muita paikkoja lähellä" place_id-tilassa) -->

@@ -586,7 +586,27 @@
                     <div id="themes-list" style="display: flex; flex-wrap: wrap; gap: 0.5rem;"></div>
                 </section>
 
-                <!-- Projektin paikka (LOCATED_AT → tietoa-paikasta.html) -->
+                <!--
+                  Projektin sijainti (LOCATED_AT → Mixonet Place → LaukaaInfo)
+                  =================================================================
+                  Navigaatioketju:
+
+                  projekti.html
+                       ↓ LOCATED_AT
+                  Mixonet Place (esim. "Vihtavuori")
+                       ↓ mixonet_place_id-silta
+                  LaukaaInfo paikka
+                       ↓
+                  tietoa-paikasta.html
+
+                  Projektisivu EI tunne LaukaaInfon paikka-ID:tä suoraan.
+                  JS hakee sillan: Mixonet place_id → LaukaaInfo mixonet_place_id-sarake.
+
+                  Käyttäjälle näytetään esim.:
+                    "📍 Vihtavuori"
+                    "Tämä projekti liittyy Vihtavuoren alueeseen."
+                    "Tutustu Vihtavuoreen →"
+                -->
                 <section class="content-block" id="project-place-section" style="display: none;">
                     <h2 style="display: flex; align-items: center; gap: 0.5rem;">
                         <span class="iconify" style="color: #0284c7;" data-icon="material-symbols:location-on-outline"></span>
@@ -594,6 +614,18 @@
                     </h2>
                     <div id="project-place-list" style="display: flex; flex-direction: column; gap: 0.75rem;">
                         <!-- Filled by loadProjectPlaces in projekti.js -->
+                    </div>
+                    <!--
+                      mixonet-place-info: JS täyttää tämän kun Mixonet-paikalle
+                      löytyy vastaava LaukaaInfo-paikkasivulinkin mixonet_place_id-sillan kautta.
+                      Käyttäjälle näytetään: "Tutustu [paikannimi]-alueeseen →"
+                    -->
+                    <div id="mixonet-place-info" style="display: none; margin-top: 0.75rem; padding: 1rem 1.25rem; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 12px;">
+                        <p id="mixonet-place-info-desc" style="margin: 0 0 0.75rem; font-size: 0.9rem; color: #1e40af;"></p>
+                        <a id="mixonet-place-info-link" href="#" style="display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.9rem; font-weight: 700; color: #1d4ed8; text-decoration: none;">
+                            Tutustu alueeseen
+                            <span class="iconify" data-icon="material-symbols:arrow-forward"></span>
+                        </a>
                     </div>
                 </section>
 
@@ -677,8 +709,10 @@
                 const banner = document.getElementById('context-banner');
                 const backLink = document.getElementById('context-back-link');
                 const label = document.getElementById('context-label');
-                const badge = document.getElementById('theme-badge');
-                const subtitle = document.getElementById('theme-subtitle');
+                // HUOM: projekti.html:ssä on project-badge ja project-description,
+                // ei theme-badge / theme-subtitle (ne ovat teema.html:ssä)
+                const badge = document.getElementById('project-badge');
+                const description = document.getElementById('project-description');
 
                 if (banner) banner.classList.add('active');
                 if (backLink) {
@@ -686,20 +720,11 @@
                     backLink.textContent = '← Takaisin paikkaan';
                 }
                 if (label && tag) label.textContent = `${tag.charAt(0).toUpperCase() + tag.slice(1)} lähellä tätä paikkaa`;
-                if (badge) badge.textContent = 'Teema · Paikkakonteksti';
-                if (subtitle) {
-                    subtitle.textContent = 'Sisältö on rajattu valitun paikan lähialueeseen. Palauta yleinen teema poistamalla paikkakonteksti.';
-                    subtitle.style.display = 'block';
+                if (badge) badge.textContent = 'Projekti · Paikkakonteksti';
+                if (description) {
+                    description.textContent = 'Sisältö on rajattu valitun paikan lähialueeseen.';
+                    description.style.display = 'block';
                 }
-                // Päivitä otsikoita paikkakontekstia varten
-                const placesTitle = document.getElementById('places-section-title');
-                if (placesTitle) placesTitle.textContent = 'Muita paikkoja lähellä';
-                const eventsTitle = document.getElementById('events-section-title');
-                if (eventsTitle && tag) eventsTitle.textContent = `${tag.charAt(0).toUpperCase() + tag.slice(1)}tapahtumat lähellä`;
-                const companiesTitle = document.getElementById('companies-section-title');
-                if (companiesTitle && tag) companiesTitle.textContent = `${tag.charAt(0).toUpperCase() + tag.slice(1)}palvelut lähellä`;
-                const companiesDesc = document.getElementById('companies-section-desc');
-                if (companiesDesc) companiesDesc.textContent = 'Palvelut, jotka liittyvät tähän teemaan ja ovat saatavilla lähialueella.';
             }
         })();
     </script>
