@@ -128,11 +128,28 @@ async function loadProject(projectId) {
             }
         }
         
-        // Deep link painike
+        // Deep link painike – avaa Mixonet-sovelluksen tai Google Playn
         const btnMixonet = document.getElementById('btn-mixonet');
         if (btnMixonet) {
-            btnMixonet.href = `https://mixonet.fi/project/${projectId}`;
+            const playStoreUrl = `https://play.google.com/store/apps/details?id=com.mediazoo.mixonet&hl=fi`;
+            const deepLinkUrl = `mixonet://project/${projectId}`;
+            // Yritetään avata sovellus intent-URLilla (Android), fallback Google Playhin
+            btnMixonet.href = playStoreUrl;
+            btnMixonet.removeAttribute('target');
+            btnMixonet.onclick = function(e) {
+                e.preventDefault();
+                // Yritetään avata sovellus deeplinkin kautta
+                const intentUrl = `intent://project/${projectId}#Intent;scheme=mixonet;package=com.mediazoo.mixonet;S.browser_fallback_url=${encodeURIComponent(playStoreUrl)};end`;
+                const isAndroid = /android/i.test(navigator.userAgent);
+                if (isAndroid) {
+                    window.location.href = intentUrl;
+                } else {
+                    // iOS / desktop – avataan Google Play uudessa välilehdessä
+                    window.open(playStoreUrl, '_blank', 'noopener');
+                }
+            };
         }
+
 
         // Rahoitus-osio
         const fundingSection = document.getElementById('funding-section');
