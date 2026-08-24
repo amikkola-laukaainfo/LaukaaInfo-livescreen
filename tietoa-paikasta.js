@@ -919,12 +919,32 @@ function renderSubplaces(subPlaces, parentPlace) {
     }
 
     section.style.display = 'block';
-    
+
+    const VISIBLE_LIMIT = 4; // Haitariraja: yli tästä näytetään "Näytä kaikki"
+
     const compactSubplaces = subPlaces.filter(sp => sp.importance === 1);
     const mainSubplaces = subPlaces.filter(sp => sp.importance !== 1);
 
+    // Rakentaa yhden subplace-kortin HTML:n
+    function buildSubplaceCard(sp) {
+        const spName = sp.name || sp.canonical_name || 'Kohde';
+        const typeLabel = getPlaceLevelLabel(sp.place_level, sp.type);
+        const icon = getPlaceLevelIcon(sp.place_level, sp.type);
+        return `
+            <div class="subplace-card" onclick="openSubplaceModal('${sp.place_id}', '${escapeForAttr(spName)}', '${escapeForAttr(sp.description || '')}', '${sp.lat || ''}', '${sp.lon || ''}', '${typeLabel}', '${icon}')">
+                <span class="subplace-icon iconify" data-icon="${icon}"></span>
+                <div class="subplace-info">
+                    <div class="subplace-name">${spName}</div>
+                    ${sp.description ? `<div class="subplace-desc">${sp.description.substring(0, 80)}${sp.description.length > 80 ? '...' : ''}</div>` : ''}
+                </div>
+                <span class="subplace-arrow iconify" data-icon="material-symbols:chevron-right"></span>
+            </div>
+        `;
+    }
+
     let html = '';
-    
+
+    // Compact (importance=1) lista – näytetään aina kokonaan omana blokkina
     if (compactSubplaces.length > 0) {
         html += `<div style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.5rem; background: #f8fafc; padding: 1rem; border-radius: 12px; border: 1px solid #e2e8f0;">
             <h4 style="margin: 0 0 0.5rem 0; font-size: 0.95rem; color: #475569; font-weight: 600;">Palvelut ja kohteet</h4>
@@ -941,26 +961,47 @@ function renderSubplaces(subPlaces, parentPlace) {
         </div>`;
     }
 
+    // Main-kortit haitarilla
     if (mainSubplaces.length > 0) {
-        html += mainSubplaces.map(sp => {
-            const spName = sp.name || sp.canonical_name || 'Kohde';
-            const typeLabel = getPlaceLevelLabel(sp.place_level, sp.type);
-            const icon = getPlaceLevelIcon(sp.place_level, sp.type);
-            return `
-                <div class="subplace-card" onclick="openSubplaceModal('${sp.place_id}', '${escapeForAttr(spName)}', '${escapeForAttr(sp.description || '')}', '${sp.lat || ''}', '${sp.lon || ''}', '${typeLabel}', '${icon}')">
-                    <span class="subplace-icon iconify" data-icon="${icon}"></span>
-                    <div class="subplace-info">
-                        <div class="subplace-name">${spName}</div>
-                        ${sp.description ? `<div class="subplace-desc">${sp.description.substring(0, 80)}${sp.description.length > 80 ? '...' : ''}</div>` : ''}
-                    </div>
-                    <span class="subplace-arrow iconify" data-icon="material-symbols:chevron-right"></span>
-                </div>
-            `;
-        }).join('');
+        const visible = mainSubplaces.slice(0, VISIBLE_LIMIT);
+        const hidden  = mainSubplaces.slice(VISIBLE_LIMIT);
+
+        html += visible.map(buildSubplaceCard).join('');
+
+        if (hidden.length > 0) {
+            html += `<div class="subplaces-overflow" id="subplaces-overflow">
+                ${hidden.map(buildSubplaceCard).join('')}
+            </div>
+            <button class="subplaces-toggle-btn" id="subplaces-toggle-btn"
+                onclick="toggleSubplacesAccordion()"
+                aria-expanded="false">
+                <span class="toggle-icon iconify" data-icon="material-symbols:expand-more-rounded"></span>
+                <span id="subplaces-toggle-label">Näytä kaikki (${mainSubplaces.length})</span>
+            </button>`;
+        }
     }
-    
+
     list.innerHTML = html;
 }
+
+function toggleSubplacesAccordion() {
+    const overflow = document.getElementById('subplaces-overflow');
+    const btn      = document.getElementById('subplaces-toggle-btn');
+    const label    = document.getElementById('subplaces-toggle-label');
+    if (!overflow || !btn) return;
+
+    const isOpen = overflow.classList.contains('open');
+    overflow.classList.toggle('open', !isOpen);
+    btn.classList.toggle('open', !isOpen);
+    btn.setAttribute('aria-expanded', String(!isOpen));
+
+    const total = btn.closest('.subplaces-list')
+        ? btn.closest('.subplaces-list').querySelectorAll('.subplace-card').length
+        : '';
+    label.textContent = isOpen ? `Näytä kaikki (${total || ''})` : 'Näytä vähemmän';
+}
+
+
 
 function getPlaceLevelEmoji(type) {
     const emojis = {

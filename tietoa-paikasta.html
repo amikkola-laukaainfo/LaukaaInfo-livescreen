@@ -772,6 +772,48 @@
             gap: 0.6rem;
             margin-top: 1rem;
         }
+        /* Haitari: piilotetut kortit */
+        .subplaces-overflow {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            transition: max-height 0.4s ease, opacity 0.3s ease;
+        }
+        .subplaces-overflow.open {
+            max-height: 2000px;
+            opacity: 1;
+        }
+        .subplaces-toggle-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            margin-top: 0.5rem;
+            padding: 0.7rem 1.25rem;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--accent);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .subplaces-toggle-btn:hover {
+            background: #e2e8f0;
+            border-color: var(--accent);
+        }
+        .subplaces-toggle-btn .toggle-icon {
+            transition: transform 0.3s ease;
+            font-size: 1.1rem;
+        }
+        .subplaces-toggle-btn.open .toggle-icon {
+            transform: rotate(180deg);
+        }
 
         /* ── Subplace Modal (Bottom Sheet) ── */
         .subplace-modal-content {
