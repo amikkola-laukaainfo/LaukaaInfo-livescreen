@@ -42,10 +42,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         const placeData = placesData[0];
         
-        // Ensure placeId is set for the rest of the logic if we searched by name
-        if (!placeId) {
-            placeId = placeData.place_id;
-        }
+        // Varmistetaan että placeId on aina UUID (ei slug), ennen hierarkiahakuja.
+        // Jos URL:ssa oli slug (esim. ?id=lievestuore), se ei täsmää parent_place_id:hin kannassa.
+        placeId = placeData.place_id;
 
         // 2.6. Hae hierarkia: pääkohde (jos tämä on alakohde) + alakohteet (jos tämä on pääkohde)
         let parentPlace = null;
@@ -67,11 +66,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
             // Hae alakohteet (paikat joiden parent_place_id on tämä paikka)
+            // Huom: status-suodatus sallii 'ACTIVE', 'active' ja null (julkaisemattomat näkyvät silti)
             hierarchyPromises.push(
                 aiSb.from('places')
                     .select('place_id, name, canonical_name, type, place_level, description, lat, lon, importance')
                     .eq('parent_place_id', placeId)
-                    .eq('status', 'ACTIVE')
+                    .or('status.eq.active,status.eq.ACTIVE,status.is.null')
                     .order('importance', { ascending: false })
                     .then(r => { if (!r.error && r.data) subPlaces = r.data; })
             );
