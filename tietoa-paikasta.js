@@ -1246,13 +1246,7 @@ function renderCompanies(scoredCompanies, allSources = [], allContents = [], cur
             subtitleHtml = `
                 <div style="margin-top: 0.5rem;">
                     <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: #15803d; font-weight: 600; margin-bottom: 0.25rem;">
-                        <span class="iconify" data-icon="material-symbols:match-case"></span> ${item.tagScore}% Osuma
-                    </div>
-                    <div style="height: 4px; background: #dcfce7; border-radius: 4px; overflow: hidden; width: 100%; max-width: 150px; margin-bottom: 0.5rem;">
-                        <div style="height: 100%; background: #22c55e; width: ${barWidth}%;"></div>
-                    </div>
-                    <div style="font-size: 0.85rem; color: #64748b; display: flex; flex-wrap: wrap; gap: 4px;">
-                        ${item.matchedTags.slice(0, 4).map(t => `<span style="background:#f1f5f9; padding:2px 6px; border-radius:4px;">${t}</span>`).join('')}
+                        <span class="iconify" data-icon="material-symbols:match-case"></span> Sopii profiiliin
                     </div>
                 </div>
             `;
@@ -1391,7 +1385,24 @@ function renderCompanies(scoredCompanies, allSources = [], allContents = [], cur
     if (containerTier3 && listTier3) {
         if (tier3.length > 0) {
             containerTier3.style.display = 'block';
-            listTier3.innerHTML = tier3.map(c => generateCardHtml(c, true)).join('');
+            const visibleTier3 = tier3.slice(0, 2);
+            let html = visibleTier3.map(c => generateCardHtml(c, true)).join('');
+            
+            if (tier3.length > 2) {
+                const moreCount = tier3.length - 2;
+                html += `
+                    <div style="text-align: center; margin-top: 0.5rem; margin-bottom: 0.5rem;">
+                        <button onclick="document.getElementById('more-tier3').style.display='flex'; this.style.display='none';" style="background: transparent; border: 1px solid #cbd5e1; color: #475569; padding: 0.6rem 1.2rem; border-radius: 50px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s;">
+                            Näytä ${moreCount} muuta
+                            <span class="iconify" data-icon="material-symbols:expand-more"></span>
+                        </button>
+                    </div>
+                    <div id="more-tier3" style="display: none; flex-direction: column; gap: 1rem;">
+                        ${tier3.slice(2).map(c => generateCardHtml(c, true)).join('')}
+                    </div>
+                `;
+            }
+            listTier3.innerHTML = html;
         } else {
             containerTier3.style.display = 'none';
         }
