@@ -200,8 +200,22 @@
             const normCanonical = (p.canonical_name || '').toLowerCase().replace(/[\s\-_,.]/g, '');
             return normName.includes(normQuery) || normCanonical.includes(normQuery);
         });
-        
-        return matches.length > 0 ? matches.slice(0, MAX_RESULTS) : null;
+
+        if (matches.length === 0) return null;
+
+        // Priorisoidaan: täsmällinen nimi > alkaa hakusanalla > sisältää hakusanan
+        matches.sort((a, b) => {
+            const scoreOf = (p) => {
+                const normName = (p.name || '').toLowerCase().replace(/[\s\-_,.]/g, '');
+                const normCanonical = (p.canonical_name || '').toLowerCase().replace(/[\s\-_,.]/g, '');
+                if (normName === normQuery || normCanonical === normQuery) return 0;          // täsmällinen
+                if (normName.startsWith(normQuery) || normCanonical.startsWith(normQuery)) return 1; // alkaa
+                return 2;                                                                     // sisältää
+            };
+            return scoreOf(a) - scoreOf(b);
+        });
+
+        return matches.slice(0, MAX_RESULTS);
     }
 
     // Desktop: osoitekenttä → Nimihaku Supabasesta -> Nominatim → paikat
