@@ -2098,45 +2098,23 @@ async function loadLostItemsForPlace(place) {
         console.log('Aktiiviset lostItems:', activeDocs.length);
         if (activeDocs.length === 0) return;
         
-        // ── Hero-kuvakortti: poimitaan viimeisin kuva Lostnfound-havainnoista ──
-        // Järjestetään timestamp mukaan (uusin ensin) ja otetaan ensimmäinen jolla on imageUrl1
         const sortedByDate = [...activeDocs].sort((a, b) => {
             const tA = a.data().timestamp?.toMillis?.() || 0;
             const tB = b.data().timestamp?.toMillis?.() || 0;
             return tB - tA;
         });
-        const docWithImage = sortedByDate.find(doc => !!doc.data().imageUrl1);
-        if (docWithImage) {
-            const imgData = docWithImage.data();
-            const photoCard = document.getElementById('place-photo-card');
-            const photoImg  = document.getElementById('place-photo-img');
-            const photoLabel = document.getElementById('place-photo-label');
-            if (photoCard && photoImg) {
-                photoImg.src = imgData.imageUrl1;
-                photoImg.alt = imgData.title || 'Paikan kuva';
-                // Näytetään ilmoituksen nimi kortissa
-                if (photoLabel) {
-                    const category = imgData.category === 'LOST' || imgData.category === 'lost' ? 'Kadonnut' : 'Löytynyt';
-                    photoLabel.textContent = `${category}: ${(imgData.title || 'Havainto').substring(0, 28)}`;
-                }
-                // Klikkaaminen avaa Lostnfound-ilmoituksen
-                photoCard.style.cursor = 'pointer';
-                photoCard.onclick = () => window.open(`https://lostnfound-f0d25.web.app/item/${docWithImage.id}`, '_blank');
-                photoCard.style.display = 'block';
-                console.log('Hero-kuvakortti asetettu:', imgData.imageUrl1);
-            }
-        }
         
-        const lostItems = activeDocs.map(doc => {
+        const lostItems = sortedByDate.map(doc => {
             const d = doc.data();
             const isLost = d.category === 'LOST' || d.category === 'lost';
             return {
                 id: doc.id,
                 type: 'lost_and_found',
-                title: (isLost ? '�Y"� Kadonnut: ' : '�Y"� Löytynyt: ') + (d.title || 'Ilmoitus'),
+                title: (isLost ? '🔍 Kadonnut: ' : '🔍 Löytynyt: ') + (d.title || 'Ilmoitus'),
                 description: d.description || '',
                 created_at: d.timestamp?.toDate?.()?.toISOString() || null,
-                url: `https://lostnfound-f0d25.web.app/item/${doc.id}`
+                url: `https://lostnfound-f0d25.web.app/item/${doc.id}`,
+                imageUrl: d.imageUrl1 || null
             };
         });
         
@@ -2147,7 +2125,11 @@ async function loadLostItemsForPlace(place) {
         
         section.style.display = 'block';
         
-        const icon = '�Y"�';
+        // Nostetaan myös scroll-painike näkyviin, jos on ilmoituksia
+        const scrollBtn = document.getElementById('btn-scroll-encounters');
+        if (scrollBtn) scrollBtn.style.display = 'inline-flex';
+        
+        const icon = '🔍';
         const label = 'Kadonnut & Löydetty (Lostnfound)';
         
         let html = `<div style="margin-bottom: 1.5rem; border: 1px solid #fde68a; border-radius: var(--inner-radius); overflow: hidden; background: #fffbeb;">
@@ -2159,13 +2141,49 @@ async function loadLostItemsForPlace(place) {
         
         lostItems.forEach((item, index) => {
             const isLast = index === lostItems.length - 1;
-            const border = isLast ? '' : 'border-bottom: 1px solid #fde68a;';
-            html += `<a href="${item.url}" target="_blank" rel="noopener noreferrer" 
-                style="display: block; padding: 1.25rem; text-decoration: none; color: inherit; ${border} transition: background 0.2s;" 
-                onmouseover="this.style.background='#fef9c3'" onmouseout="this.style.background='transparent'">
-                <div style="font-weight: 700; color: #1e293b; font-size: 1rem; margin-bottom: 0.3rem;">${item.title}</div>
-                <div style="font-size: 0.9rem; color: #64748b; line-height: 1.5;">${(item.description || '').substring(0, 120)}${item.description && item.description.length > 120 ? '...' : ''}</div>
-            </a>`;
+            const borderBottom = isLast ? '' : 'border-bottom: 1px solid #fde68a;';
+            const accId = `lost-acc-${index}`;
+            const hasImage = !!item.imageUrl;
+            
+            const dateStr = item.created_at
+                ? new Date(item.created_at).toLocaleDateString('fi-FI', { day: 'numeric', month: 'short', year: 'numeric' })
+                : '';
+                
+            const thumbHtml = hasImage
+                ? `<img src="${item.imageUrl}" alt="" style="width:48px;height:48px;object-fit:cover;border-radius:8px;flex-shrink:0;">`
+                : `<div style="width:48px;height:48px;background:#fef3c7;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.4rem;">🔍</div>`;
+                
+            let mediaContent = '';
+            if (hasImage) {
+                mediaContent += `<img src="${item.imageUrl}" alt="${item.title}" style="width:100%;max-height:320px;object-fit:cover;border-radius:10px;margin-bottom:0.75rem;">`;
+            }
+            
+            html += `
+            <div style="${borderBottom}">
+                <div onclick="(function(el){var c=document.getElementById('${accId}');var open=c.style.maxHeight&&c.style.maxHeight!=='0px';c.style.maxHeight=open?'0px':c.scrollHeight+'px';c.style.opacity=open?'0':'1';el.querySelector('.acc-arrow').style.transform=open?'rotate(0deg)':'rotate(180deg)';})(this)"
+                    style="display:flex;align-items:flex-start;gap:0.85rem;padding:1.1rem 1.25rem;cursor:pointer;transition:background 0.2s;"
+                    onmouseover="this.style.background='#fef9c3'" onmouseout="this.style.background='transparent'">
+                    ${thumbHtml}
+                    <div style="flex:1;min-width:0;">
+                        <div style="font-weight:700;color:#1e293b;font-size:1rem;margin-bottom:0.2rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${item.title}</div>
+                        <div style="font-size:0.88rem;color:#64748b;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${item.description || ''}</div>
+                        <div style="margin-top:0.4rem;display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+                            ${dateStr ? `<span style="font-size:0.75rem;color:#94a3b8;">${dateStr}</span>` : ''}
+                        </div>
+                    </div>
+                    <span class="acc-arrow" style="flex-shrink:0;font-size:1rem;color:#92400e;transition:transform 0.25s;transform:rotate(0deg);">▼</span>
+                </div>
+                
+                <div id="${accId}" style="max-height:0;opacity:0;overflow:hidden;transition:max-height 0.35s ease,opacity 0.25s ease;">
+                    <div style="padding:0 1.25rem 1.25rem;">
+                        ${mediaContent}
+                        <div style="font-size: 0.95rem; color: #1e293b; line-height: 1.6; margin-bottom: 1rem; white-space: pre-wrap;">${item.description || ''}</div>
+                        <a href="${item.url}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.4rem;background:#f59e0b;color:#fff;padding:0.5rem 1.2rem;border-radius:50px;font-size:0.9rem;text-decoration:none;font-weight:700;box-shadow:0 2px 4px rgba(245, 158, 11, 0.2);">
+                            Avaa LostReFoundissa →
+                        </a>
+                    </div>
+                </div>
+            </div>`;
         });
         
         html += `</div></div>`;
