@@ -76,6 +76,8 @@
             display: flex;
             align-items: flex-end;
             padding-bottom: 2.5rem;
+            border-radius: 0 0 20px 20px;  /* pyöristetyt alakulmat */
+            overflow: hidden;              /* rajaa kuva pyöristykseen */
         }
 
         .hero-overlay {
@@ -1013,23 +1015,25 @@
 
         /* ── Osallistu-sidebar ──
            TÄRKEÄÄ: #participate-section käyttää .stats-visual-luokkaa,
-           jolla on nyt display:grid. Ylikirjoitettava flexiksi! */
+           jolla on nyt display:grid. Ylikirjoitettava flexiksi!
+           Väri: valkoinen kortti + forest-vihreä vasen korostusviiva */
         #participate-section {
             display: flex !important;
             flex-direction: column !important;
             gap: 0.75rem !important;
-            grid-template-columns: unset !important;  /* kumoaa .stats-visual grid */
-            background: var(--color-forest) !important;
-            border-left: none !important;
+            grid-template-columns: unset !important;
+            background: #ffffff !important;          /* ei tumma, vaalea kortti */
+            border-left: 3px solid var(--color-forest) !important;
             border-radius: var(--radius-md);
             padding: 1.5rem;
-            box-shadow: var(--shadow-md) !important;
+            box-shadow: var(--shadow-sm) !important;
         }
         #participate-section h3 {
-            color: white;
-            font-family: 'Manrope', sans-serif;
-            font-size: 1rem;
-            margin: 0 0 0.25rem;
+            color: var(--color-forest) !important;   /* tumma teksti vaalealla taustalla */
+            font-family: 'Manrope', sans-serif !important;
+            font-size: 1rem !important;
+            font-weight: 700 !important;
+            margin: 0 0 0.5rem !important;
         }
         /* Osallistu-napit: täysin leveitä */
         #participate-section .btn {
@@ -1038,24 +1042,27 @@
             border-radius: 10px;
             padding: 0.7rem 1.1rem;
         }
+        /* Lisää havainto = päänappi, forest-vihreä */
         #participate-section .btn-primary {
-            background: var(--color-sand) !important;
-            color: var(--color-forest) !important;
+            background: var(--color-forest) !important;
+            color: #fff !important;
             font-weight: 700 !important;
             justify-content: center !important;
         }
         #participate-section .btn-primary:hover {
-            background: #c99446 !important;
-            box-shadow: 0 3px 12px rgba(217,168,92,0.35) !important;
+            background: var(--accent-hover) !important;
+            box-shadow: 0 3px 12px rgba(24,63,53,0.25) !important;
         }
+        /* Muut napit: sage-tausta, forest-teksti */
         #participate-section .btn-light {
-            background: rgba(255,255,255,0.08) !important;
-            color: rgba(255,255,255,0.88) !important;
-            border: 1px solid rgba(255,255,255,0.15) !important;
+            background: var(--color-sage) !important;
+            color: var(--color-forest) !important;
+            border: 1px solid rgba(24,63,53,0.12) !important;
+            font-weight: 600 !important;
         }
         #participate-section .btn-light:hover {
-            background: rgba(255,255,255,0.16) !important;
-            color: #fff !important;
+            background: #d4e5d8 !important;
+            border-color: rgba(24,63,53,0.22) !important;
         }
 
         /* ── Mixonet-banneri ── */
