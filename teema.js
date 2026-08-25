@@ -181,7 +181,10 @@ async function loadMixonetThemeContext(searchTag) {
                                     ideasList.innerHTML = ideas.map(i => {
                                         const desc = (i.summary || i.description || '').substring(0, 140);
                                         return `
-                                            <div class="list-item-card" style="border-left: 4px solid #f59e0b;">
+                                            <a href="https://play.google.com/store/apps/details?id=com.mediazoo.mixonet&hl=fi"
+                                               onclick="openMixonetIdea('${i.id}'); return false;"
+                                               class="list-item-card"
+                                               style="border-left: 4px solid #f59e0b; text-decoration: none; display: block; cursor: pointer;">
                                                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
                                                     <div style="font-size:0.8rem;font-weight:700;color:#d97706;text-transform:uppercase;letter-spacing:0.5px;">
                                                         💡 Idea · Mixonet-verkosto
@@ -195,7 +198,7 @@ async function loadMixonetThemeContext(searchTag) {
                                                         💡 Tutustu ideaan Mixonetissa →
                                                     </span>
                                                 </div>
-                                            </div>
+                                            </a>
                                         `;
                                     }).join('');
                                     ideasSection.style.display = 'block';
@@ -212,6 +215,19 @@ async function loadMixonetThemeContext(searchTag) {
     } catch (e) {
         console.warn('Mixonet-teeman haku epäonnistui:', e);
     }
+
+// Deeplink- tai Google Play -avaus idealle
+function openMixonetIdea(ideaId) {
+    const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.mediazoo.mixonet&hl=fi';
+    const isAndroid = /android/i.test(navigator.userAgent);
+    if (isAndroid) {
+        const intentUrl = `intent://idea/${encodeURIComponent(ideaId)}#Intent;scheme=mixonet;package=com.mediazoo.mixonet;S.browser_fallback_url=${encodeURIComponent(playStoreUrl)};end`;
+        window.location.href = intentUrl;
+    } else {
+        window.open(playStoreUrl, '_blank', 'noopener');
+    }
+}
+window.openMixonetIdea = openMixonetIdea;
     
     // Fallback: vanha logiikka, jos teemaa ei löytynyt
     try {

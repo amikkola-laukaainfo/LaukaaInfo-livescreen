@@ -2471,7 +2471,10 @@ async function loadMixonetContentForPlace(placeData) {
                 const desc = (idea.summary || idea.description || '').substring(0, 150);
                 const why = idea.why_interesting ? `<div style="margin-top: 0.5rem; font-size: 0.85rem; color: #78350f; background: #fef3c7; padding: 0.4rem 0.75rem; border-radius: 8px;">✨ <strong>Miksi hyvä:</strong> ${idea.why_interesting.substring(0, 110)}</div>` : '';
                 return `
-                    <div class="list-item-card" style="border-left: 4px solid #f59e0b; text-decoration: none; display: block;">
+                    <a href="https://play.google.com/store/apps/details?id=com.mediazoo.mixonet&hl=fi"
+                       onclick="openMixonetIdea('${idea.id}'); return false;"
+                       class="list-item-card"
+                       style="border-left: 4px solid #f59e0b; text-decoration: none; display: block; cursor: pointer;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
                             <div style="font-size: 0.8rem; font-weight: 700; color: #d97706; text-transform: uppercase; letter-spacing: 0.5px;">
                                 💡 Idea · Mixonet-verkosto
@@ -2486,7 +2489,7 @@ async function loadMixonetContentForPlace(placeData) {
                                 💡 Tutustu ideaan Mixonetissa →
                             </span>
                         </div>
-                    </div>
+                    </a>
                 `;
             }).join('');
             ideasSection.style.display = 'block';
@@ -2497,6 +2500,19 @@ async function loadMixonetContentForPlace(placeData) {
         console.warn('[Mixonet] Paikkahaun virhe:', err);
     }
 }
+
+// Deeplink- tai Google Play -avaus idealle
+function openMixonetIdea(ideaId) {
+    const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.mediazoo.mixonet&hl=fi';
+    const isAndroid = /android/i.test(navigator.userAgent);
+    if (isAndroid) {
+        const intentUrl = `intent://idea/${encodeURIComponent(ideaId)}#Intent;scheme=mixonet;package=com.mediazoo.mixonet;S.browser_fallback_url=${encodeURIComponent(playStoreUrl)};end`;
+        window.location.href = intentUrl;
+    } else {
+        window.open(playStoreUrl, '_blank', 'noopener');
+    }
+}
+window.openMixonetIdea = openMixonetIdea;
 
 // Fallback: haetaan suoraan entity_relations-taulusta jos RPC ei ole vielä asennettu
 async function loadMixonetContentFallback(mixonetClient, placeId, projectsSection, projectsList, ideasSection, ideasList) {
@@ -2550,7 +2566,10 @@ async function loadMixonetContentFallback(mixonetClient, placeId, projectsSectio
                 const desc = (i.summary || i.description || '').substring(0, 150);
                 const why = i.why_interesting ? `<div style="margin-top: 0.5rem; font-size: 0.85rem; color: #78350f; background: #fef3c7; padding: 0.4rem 0.75rem; border-radius: 8px;">✨ <strong>Miksi hyvä:</strong> ${i.why_interesting.substring(0, 110)}</div>` : '';
                 return `
-                    <div class="list-item-card" style="border-left: 4px solid #f59e0b; text-decoration: none; display: block;">
+                    <a href="https://play.google.com/store/apps/details?id=com.mediazoo.mixonet&hl=fi"
+                       onclick="openMixonetIdea('${i.id}'); return false;"
+                       class="list-item-card"
+                       style="border-left: 4px solid #f59e0b; text-decoration: none; display: block; cursor: pointer;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
                             <div style="font-size: 0.8rem; font-weight: 700; color: #d97706; text-transform: uppercase; letter-spacing: 0.5px;">💡 Idea · Mixonet-verkosto</div>
                             <span style="font-size: 0.75rem; background: #fef3c7; color: #b45309; padding: 0.2rem 0.6rem; border-radius: 50px; font-weight: 600;">Ehdotus</span>
@@ -2563,7 +2582,7 @@ async function loadMixonetContentFallback(mixonetClient, placeId, projectsSectio
                                 💡 Tutustu ideaan Mixonetissa →
                             </span>
                         </div>
-                    </div>
+                    </a>
                 `;
             }).join('');
             ideasSection.style.display = 'block';
