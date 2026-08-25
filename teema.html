@@ -15,7 +15,7 @@
     <!-- Fonts & Styles -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
 
     <!-- Leaflet Map -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -29,177 +29,247 @@
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
     
     <style>
+        /* ── LaukaaInfo Teemasivu – Luonnollinen ja moderni design-järjestelmä ── */
         :root {
-            --bg-color: #f8fafc;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --accent: #10b981;
-            --accent-hover: #059669;
-            --radius-lg: 32px;
-            --radius-md: 24px;
-            --radius-sm: 16px;
-            --shadow-sm: 0 4px 20px rgba(0,0,0,0.03);
-            --shadow-md: 0 12px 40px rgba(0,0,0,0.06);
-            --shadow-hover: 0 20px 40px rgba(0,0,0,0.1);
-        }
+            /* Pääpaletti */
+            --color-bg: #F7F8F5;               /* Luonnonvalkoinen tausta */
+            --color-forest: #183F35;           /* Syvä metsänvihreä */
+            --color-forest-dark: #123228;      /* Tumma metsä */
+            --color-sand: #D9A85C;             /* Lämmin kultahiekka CTA */
+            --color-sage: #E5EEE8;             /* Pehmeä salvia/reunat */
+            --color-sage-light: #F0F5F2;       /* Hyvin vaalea salvia */
+            --color-text: #26332F;             /* Tumma metsänvihreä leipäteksti */
+            --color-text-muted: #5C6E67;       /* Pehmeä teksti */
 
-        .context-banner {
-            display: none;
-            background: rgba(15, 23, 42, 0.92);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            color: #fff;
-            padding: 0.6rem 2rem;
-            font-size: 0.9rem;
-            font-weight: 500;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
+            --text-main: #26332F;
+            --text-muted: #5C6E67;
+            --accent: #183F35;
+            --accent-hover: #123228;
+
+            /* Muotoilu & varjot */
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --shadow-sm: 0 2px 8px rgba(24, 63, 53, 0.05);
+            --shadow-md: 0 6px 20px rgba(24, 63, 53, 0.07);
+            --shadow-hover: 0 10px 24px rgba(24, 63, 53, 0.12);
         }
-        .context-banner a {
-            color: #6ee7b7;
-            text-decoration: none;
-            font-weight: 700;
-            margin-right: 1rem;
-            transition: color 0.2s;
-        }
-        .context-banner a:hover { color: #a7f3d0; }
-        .context-banner.active { display: flex; align-items: center; gap: 0.5rem; }
 
         body {
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            background: var(--color-bg);
             min-height: 100vh;
             font-family: 'Inter', sans-serif;
-            color: var(--text-main);
+            color: var(--color-text);
             margin: 0;
             padding: 0;
             line-height: 1.6;
             overflow-x: hidden;
         }
 
+        /* ── Kontekstibanneri (näkyy vain kun place_id on annettu) ── */
+        .context-banner {
+            display: none;
+            background: rgba(18, 50, 40, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: #fff;
+            padding: 0.65rem 2rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(229, 238, 232, 0.15);
+        }
+        .context-banner a {
+            color: var(--color-sand);
+            text-decoration: none;
+            font-weight: 700;
+            margin-right: 1rem;
+            transition: opacity 0.2s;
+        }
+        .context-banner a:hover { opacity: 0.85; }
+        .context-banner.active { display: flex; align-items: center; gap: 0.5rem; }
+
+        /* ── Hero-osio ── */
         .hero-section {
             width: 100%;
             height: auto;
-            min-height: 300px;
-            padding-top: 7rem;
-            background: url('https://images.unsplash.com/photo-1542314831-c53cd4b85ca4?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+            min-height: 380px;
+            padding-top: 5rem;
+            background-color: var(--color-forest);
+            background-position: center 40%;
+            background-size: cover;
+            background-repeat: no-repeat;
             position: relative;
             display: flex;
             align-items: flex-end;
-            padding-bottom: 3rem;
+            padding-bottom: 2.5rem;
+            border-radius: 0 0 20px 20px;
+            overflow: hidden;
         }
 
         .hero-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(to top, #f8fafc 0%, rgba(248, 250, 252, 0.7) 50%, rgba(255, 255, 255, 0.4) 100%);
+            /* Editorial-overlay: alhaalta tumma tekstiä varten, ylhäältä kuva näkyy */
+            background: linear-gradient(
+                to top,
+                rgba(10, 28, 18, 0.90) 0%,
+                rgba(10, 28, 18, 0.58) 32%,
+                rgba(5,  15, 10, 0.20) 62%,
+                rgba(0,   0,  0, 0.00) 100%
+            );
         }
 
         .hero-content {
             position: relative;
             z-index: 10;
-            color: var(--text-main);
+            color: #fff;
             max-width: 1200px;
             margin: 0 auto;
             width: 100%;
             padding: 0 2rem;
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 0.75rem;
         }
 
+        /* Badge: pieni metadata-tagi */
         .badge {
             display: inline-block;
-            background: rgba(0, 0, 0, 0.05);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            padding: 0.4rem 1rem;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.10);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.85);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.2px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
             width: fit-content;
         }
 
+        /* Otsikko */
         .hero-title {
-            font-family: 'Outfit', sans-serif;
-            font-size: 4rem;
-            font-weight: 800;
+            font-family: 'Manrope', sans-serif;
+            font-size: 2.75rem;
+            font-weight: 700;
             line-height: 1.1;
             margin: 0;
             letter-spacing: -1px;
+            color: #fff;
+            text-shadow: 0 1px 10px rgba(0, 0, 0, 0.18);
             word-break: break-word;
             overflow-wrap: break-word;
             hyphens: auto;
+            max-width: 680px;
         }
 
+        .hero-subtitle {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.85) !important;
+            margin: 0;
+            max-width: 620px;
+        }
+
+        /* ── Painikkeet ── */
         .action-buttons {
             display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
+            gap: 0.75rem;
+            margin-top: 1rem;
             flex-wrap: wrap;
+            align-items: center;
         }
 
         .btn {
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
-            padding: 0.8rem 1.5rem;
-            border-radius: 50px;
+            gap: 0.45rem;
+            padding: 0.65rem 1.2rem;
+            border-radius: 10px;
             font-weight: 600;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
             border: none;
             text-decoration: none;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+        }
+
+        /* Hero: Etusivu = ghost */
+        .hero-section a.btn-primary {
+            background: transparent !important;
+            color: rgba(255, 255, 255, 0.6) !important;
+            border: 1px solid rgba(255, 255, 255, 0.18) !important;
+            font-size: 0.85rem !important;
+            padding: 0.55rem 0.95rem !important;
+            font-weight: 500 !important;
+            box-shadow: none !important;
+        }
+        .hero-section a.btn-primary:hover {
+            background: rgba(255, 255, 255, 0.08) !important;
+            color: #fff !important;
+            transform: none !important;
+        }
+
+        /* Hero: Näytä kartalla = sand primary */
+        .hero-section #btn-map {
+            background: var(--color-sand) !important;
+            color: var(--color-forest) !important;
+            font-weight: 700 !important;
+            border: none !important;
+            padding: 0.7rem 1.3rem !important;
+        }
+        .hero-section #btn-map:hover {
+            background: #c99446 !important;
+            box-shadow: 0 3px 12px rgba(217, 168, 92, 0.4) !important;
+            transform: translateY(-1px) !important;
+        }
+
+        /* Sivun yleiset painikkeet */
+        .btn-primary {
+            background: var(--color-forest);
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
         }
 
         .btn-light {
-            background: rgba(0, 0, 0, 0.05);
-            color: var(--text-main);
-            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: var(--color-sage);
+            color: var(--color-forest);
+            border: 1px solid rgba(24, 63, 53, 0.12);
         }
-
         .btn-light:hover {
-            background: rgba(0, 0, 0, 0.08);
-            transform: translateY(-2px);
+            background: #d4e5d8;
+            transform: translateY(-1px);
         }
 
-        .btn-primary {
-            background: var(--text-main);
-            color: #fff;
-        }
-
-        .btn-primary:hover {
-            background: #000;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
+        /* ── Sivun sisältöalue ── */
         .page-container {
             max-width: 1200px;
-            margin: 3rem auto;
+            margin: 2.5rem auto;
             padding: 0 2rem;
             display: grid;
             grid-template-columns: 1.5fr 1fr;
-            gap: 4rem;
+            gap: 3.5rem;
         }
 
         .content-block {
-            margin-bottom: 3.5rem;
+            margin-bottom: 3rem;
         }
 
         .content-block h2 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.75rem;
+            font-family: 'Manrope', sans-serif;
+            font-size: 1.4rem;
             font-weight: 700;
-            margin-bottom: 1.5rem;
-            color: var(--text-main);
+            margin-bottom: 1.25rem;
+            color: var(--color-forest);
+            border-bottom: 2px solid var(--color-sage);
+            padding-bottom: 0.5rem;
         }
 
         .sidebar {
@@ -211,26 +281,27 @@
         .list-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 1rem;
+            gap: 0.85rem;
             align-items: start;
         }
 
+        /* ── Kortit ── */
         .list-item-card {
-            background: #fff;
-            padding: 1.5rem;
+            background: #ffffff;
+            padding: 1.25rem 1.5rem;
             border-radius: var(--radius-md);
-            border: 1px solid #f1f5f9;
+            border: 1px solid var(--color-sage);
             text-decoration: none;
             color: inherit;
             display: block;
-            transition: all 0.3s ease;
+            transition: all 0.22s ease;
             box-shadow: var(--shadow-sm);
         }
 
         .list-item-card:hover {
-            transform: translateY(-4px);
+            transform: translateY(-2px);
             box-shadow: var(--shadow-hover);
-            border-color: #e2e8f0;
+            border-color: rgba(24, 63, 53, 0.22);
         }
 
         .card-header-grid {
@@ -238,6 +309,32 @@
             grid-template-columns: 1fr auto;
             gap: 0.75rem;
             align-items: start;
+        }
+
+        /* ── Tagit ── */
+        .tag-pill {
+            display: inline-block;
+            background: var(--color-sage-light);
+            color: var(--color-forest);
+            border: 1px solid rgba(24, 63, 53, 0.12);
+            padding: 0.35rem 0.85rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-right: 0.4rem;
+            margin-bottom: 0.4rem;
+            transition: all 0.2s ease;
+        }
+        .tag-pill:hover {
+            background: var(--color-sage);
+            border-color: rgba(24, 63, 53, 0.25);
+        }
+
+        /* ── Mixonet-projektiosio – korostettu vasemmalla sand-viivalla ── */
+        #mixonet-projects-section,
+        #mixonet-companies-section {
+            border-left: 3px solid var(--color-sand);
+            padding-left: 1.25rem;
         }
 
         #loading-spinner, #error-message {
@@ -255,28 +352,21 @@
                 display: flex;
                 flex-direction: column;
                 gap: 2rem;
+                padding: 0 1.25rem;
+                margin: 2rem auto;
             }
         }
         
         @media (max-width: 768px) {
             .hero-title {
-                font-size: 2.5rem;
-                word-break: normal;
-                overflow-wrap: normal;
-                hyphens: none;
+                font-size: 1.85rem;
+                letter-spacing: -0.3px;
+                max-width: 100%;
             }
-        }
-        
-        .tag-pill {
-            display: inline-block;
-            background: #f1f5f9;
-            color: #334155;
-            padding: 0.3rem 0.8rem;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-right: 0.4rem;
-            margin-bottom: 0.4rem;
+            .hero-section {
+                min-height: 300px;
+                padding-bottom: 2rem;
+            }
         }
     </style>
 </head>
@@ -304,12 +394,29 @@
     </div>
 
     <main id="theme-content" style="display: none;">
-        <section class="hero-section">
+        <section class="hero-section" id="theme-hero">
             <div class="hero-overlay"></div>
+            <script>
+                // 5 erilaista luonto-/metsä-/järvimaisemakuvaa – valitaan satunnaisesti sivun avautuessa
+                (function() {
+                    const heroImages = [
+                        'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1920&q=80', // 1. Kesäinen mäntymetsä & auringonpaiste
+                        'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1920&q=80', // 2. Rauhallinen järvi- ja rantamaisema
+                        'https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1920&q=80', // 3. Vehreä suomalainen havumetsä
+                        'https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=1920&q=80', // 4. Tyyni metsäjärvi & heijastus
+                        'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1920&q=80'  // 5. Luonnonranta & vesistö
+                    ];
+                    const selectedImg = heroImages[Math.floor(Math.random() * heroImages.length)];
+                    const hero = document.getElementById('theme-hero');
+                    if (hero) {
+                        hero.style.backgroundImage = 'url("' + selectedImg + '")';
+                    }
+                })();
+            </script>
             <div class="hero-content">
                 <span class="badge" id="theme-badge">Teema</span>
                 <h1 id="theme-name" class="hero-title">Teeman nimi</h1>
-                <p id="theme-subtitle" style="font-size: 1rem; color: var(--text-muted); margin: 0; display: none;"></p>
+                <p id="theme-subtitle" class="hero-subtitle" style="display: none;"></p>
                 <div class="action-buttons">
                     <a href="index.html" class="btn btn-primary">
                         <span class="iconify" data-icon="material-symbols:home-outline"></span> Etusivu
