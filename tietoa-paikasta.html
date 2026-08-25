@@ -69,26 +69,29 @@
         .hero-section {
             width: 100%;
             height: auto;
-            min-height: 380px;            /* lyhyempi – paikkasivu, ei banneri */
+            min-height: 380px;
             padding-top: 5rem;
-            background: url('https://images.unsplash.com/photo-1542314831-c53cd4b85ca4?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+            /* Kesäinen vihreä metsä – sopii Laukaan luontoon */
+            background: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1920&q=80') center 40%/cover no-repeat;
             position: relative;
             display: flex;
             align-items: flex-end;
             padding-bottom: 2.5rem;
-            border-radius: 0 0 20px 20px;  /* pyöristetyt alakulmat */
-            overflow: hidden;              /* rajaa kuva pyöristykseen */
+            border-radius: 0 0 20px 20px;
+            overflow: hidden;
         }
 
         .hero-overlay {
             position: absolute;
             inset: 0;
-            /* Kevyt vasemmalta oikealle – ei suorakaide-efektiä */
+            /* Klassinen editorial-overlay: alhaalta tumma – teksti erottuu aina
+               ylhäältä läpinäkyvä – kuva näkyy kauniisti */
             background: linear-gradient(
-                108deg,
-                rgba(18, 50, 40, 0.65) 0%,
-                rgba(18, 50, 40, 0.32) 55%,
-                rgba(0, 0, 0, 0.04) 100%
+                to top,
+                rgba(10, 28, 18, 0.90) 0%,     /* tekstialue: tumma */
+                rgba(10, 28, 18, 0.58) 32%,
+                rgba(5,  15, 10, 0.20) 62%,
+                rgba(0,   0,  0, 0.00) 100%     /* kuva näkyy yläosa */
             );
         }
 
