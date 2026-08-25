@@ -397,14 +397,30 @@
         <section class="hero-section" id="theme-hero">
             <div class="hero-overlay"></div>
             <script>
-                // 5 erilaista luonto-/metsä-/järvimaisemakuvaa – valitaan satunnaisesti sivun avautuessa
+                // Paikalliset optimoidut Laukaan luontokuvat – valitaan satunnaisesti sivun avautuessa
                 (function() {
                     const heroImages = [
-                        'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1920&q=80', // 1. Kesäinen mäntymetsä & auringonpaiste
-                        'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1920&q=80', // 2. Rauhallinen järvi- ja rantamaisema
-                        'https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1920&q=80', // 3. Vehreä suomalainen havumetsä
-                        'https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=1920&q=80', // 4. Tyyni metsäjärvi & heijastus
-                        'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1920&q=80'  // 5. Luonnonranta & vesistö
+                        'assets/hero_bg/hero-01.jpg',
+                        'assets/hero_bg/hero-02.jpg',
+                        'assets/hero_bg/hero-03.jpg',
+                        'assets/hero_bg/hero-04.jpg',
+                        'assets/hero_bg/hero-05.jpg',
+                        'assets/hero_bg/hero-06.jpg',
+                        'assets/hero_bg/hero-07.jpg',
+                        'assets/hero_bg/hero-08.jpg',
+                        'assets/hero_bg/hero-09.jpg',
+                        'assets/hero_bg/hero-10.jpg',
+                        'assets/hero_bg/hero-11.jpg',
+                        'assets/hero_bg/hero-12.jpg',
+                        'assets/hero_bg/hero-13.jpg',
+                        'assets/hero_bg/hero-14.jpg',
+                        'assets/hero_bg/hero-15.jpg',
+                        'assets/hero_bg/hero-16.jpg',
+                        'assets/hero_bg/hero-17.jpg',
+                        'assets/hero_bg/hero-18.jpg',
+                        'assets/hero_bg/hero-19.jpg',
+                        'assets/hero_bg/hero-20.jpg',
+                        'assets/hero_bg/hero-21.jpg'
                     ];
                     const selectedImg = heroImages[Math.floor(Math.random() * heroImages.length)];
                     const hero = document.getElementById('theme-hero');
