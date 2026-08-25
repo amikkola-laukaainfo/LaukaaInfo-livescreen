@@ -779,19 +779,42 @@ async function renderPlace(place, relatedItems, aiProfileData, allSources = [], 
     const timelineSection = document.getElementById('timeline-section');
     const timelineList = document.getElementById('timeline-list');
     if (timelineSection && timelineList) {
-        const observations = others.filter(i => i.type === 'observation' || i.type === 'other' || !i.type);
+        const observations = others.filter(i => i.type === 'observation' || i.type === 'other' || !i.type).slice(0, 5);
         if (observations.length > 0) {
             timelineSection.style.display = 'block';
             timelineList.innerHTML = observations.map((obs) => {
                 const label = obs.name || 'Havainto';
                 const desc = obs.shortDescription || '';
-                return `<div class="timeline-item">
-                            <div class="time-label">${label}</div>
-                            <div class="time-event">
-                                <span class="iconify" data-icon="material-symbols:info" style="color: #3b82f6; font-size: 1.5rem;"></span> 
-                                ${desc}
+                const titleLower = (label + ' ' + desc).toLowerCase();
+                
+                let dotEmoji = '🟢';
+                let dotColor = '#10b981';
+                if (titleLower.includes('puu') || titleLower.includes('este') || titleLower.includes('vaara') || titleLower.includes('rikki') || titleLower.includes('varoitus') || titleLower.includes('huom') || titleLower.includes('vaurio')) {
+                    dotEmoji = '🟠';
+                    dotColor = '#f59e0b';
+                } else if (titleLower.includes('roska') || titleLower.includes('kyltti') || titleLower.includes('huolto') || titleLower.includes('siivous') || titleLower.includes('ilmoitus')) {
+                    dotEmoji = '🔵';
+                    dotColor = '#3b82f6';
+                }
+
+                return `
+                <div class="timeline-item" style="cursor: pointer;" onclick="openObservationModal('${obs.id}', '${encodeURIComponent(label)}', '${encodeURIComponent(desc)}')">
+                    <div class="time-label" style="display:flex; align-items:center; justify-content:space-between;">
+                        <span>${label}</span>
+                    </div>
+                    <div class="time-event" style="cursor: pointer; transition: all 0.2s ease; border-left: 3px solid ${dotColor};" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='none'; this.style.boxShadow='var(--shadow-sm)';">
+                        <div style="display:flex; align-items:flex-start; gap:0.75rem; width:100%;">
+                            <span style="font-size:1.15rem; line-height:1.2; flex-shrink:0;">${dotEmoji}</span>
+                            <div style="flex:1; min-width:0;">
+                                <div style="font-weight:700; color:var(--text-main); font-size:1rem; margin-bottom:0.25rem;">${label}</div>
+                                ${desc ? `<div style="font-size:0.9rem; color:var(--text-muted); line-height:1.45;">${desc}</div>` : ''}
+                                <div style="margin-top:0.45rem; font-size:0.8rem; font-weight:700; color:#059669; display:flex; align-items:center; gap:0.2rem;">
+                                    Katso havaintotiedot &rarr;
+                                </div>
                             </div>
-                        </div>`;
+                        </div>
+                    </div>
+                </div>`;
             }).join('');
         } else {
             timelineSection.style.display = 'none';
@@ -1181,24 +1204,42 @@ async function openObservationModal(id, name, description) {
                 contentHtml += `<div style="display:flex; gap:0.5rem; margin-top:0.75rem; overflow-x:auto;">${imgs.map(u => `<img src="${u}" style="max-height:160px; border-radius:8px; object-fit:cover;" />`).join('')}</div>`;
             }
 
-            document.getElementById('subplace-modal-desc').innerHTML = contentHtml;
+            const appCtaHtml = `
+                <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end;">
+                    <a href="https://play.google.com/store/apps/details?id=fi.mediazoo.lostrefound" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:0.4rem; background:#059669; color:#fff; padding:0.5rem 1.2rem; border-radius:50px; font-size:0.85rem; font-weight:700; text-decoration:none; box-shadow:0 2px 6px rgba(5,150,105,0.2);">
+                        <span class="iconify" data-icon="material-symbols:phone-iphone"></span> Avaa LostReFoundissa →
+                    </a>
+                </div>
+            `;
+            document.getElementById('subplace-modal-desc').innerHTML = contentHtml + appCtaHtml;
             return;
         }
+
+        const fallbackCtaHtml = `
+            <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end;">
+                <a href="https://play.google.com/store/apps/details?id=fi.mediazoo.lostrefound" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:0.4rem; background:#059669; color:#fff; padding:0.5rem 1.2rem; border-radius:50px; font-size:0.85rem; font-weight:700; text-decoration:none; box-shadow:0 2px 6px rgba(5,150,105,0.2);">
+                    <span class="iconify" data-icon="material-symbols:phone-iphone"></span> Avaa LostReFoundissa →
+                </a>
+            </div>
+        `;
 
         if (window.aiSb) {
             const { data: postData } = await aiSb.from('posts').select('*').eq('id', id).maybeSingle();
             if (postData) {
                 document.getElementById('subplace-modal-title').textContent = postData.title || decodedName;
-                document.getElementById('subplace-modal-desc').textContent = postData.description || postData.content || decodedDesc || 'Ei tarkempaa kuvausta.';
+                document.getElementById('subplace-modal-desc').innerHTML = `<div style="color:var(--text-main); line-height:1.5;">${postData.description || postData.content || decodedDesc || 'Ei tarkempaa kuvausta.'}</div>` + fallbackCtaHtml;
                 return;
             }
             const { data: encData } = await aiSb.from('encounters').select('*').eq('id', id).maybeSingle();
             if (encData) {
                 document.getElementById('subplace-modal-title').textContent = encData.title || decodedName;
-                document.getElementById('subplace-modal-desc').textContent = encData.description || decodedDesc || 'Ei tarkempaa kuvausta.';
+                document.getElementById('subplace-modal-desc').innerHTML = `<div style="color:var(--text-main); line-height:1.5;">${encData.description || decodedDesc || 'Ei tarkempaa kuvausta.'}</div>` + fallbackCtaHtml;
                 return;
             }
         }
+        
+        // Perus-fallback
+        document.getElementById('subplace-modal-desc').innerHTML = `<div style="color:var(--text-main); line-height:1.5;">${decodedDesc || 'Ei tarkempaa kuvausta.'}</div>` + fallbackCtaHtml;
     } catch (err) {
         console.warn('Virhe havainnon hakemisessa:', err);
     }
@@ -1549,10 +1590,37 @@ function renderRelations(items, allSources = [], allContents = []) {
 
         const highlightStyle = ' background: #f0f9ff; border-color: #bae6fd;';
 
+        if (item.type === 'observation') {
+            return `
+            <div onclick="openObservationModal('${item.id}', '${encodeURIComponent(displayName)}', '${encodeURIComponent(item.shortDescription || '')}')"
+                 class="list-item-card"
+                 style="cursor: pointer; display: block; border-left: 4px solid #10b981; background: #f0fdf4; border-color: #bbf7d0; transition: transform 0.2s, box-shadow 0.2s;">
+                <div class="card-header-grid">
+                    <div class="card-icon-text">
+                        <div class="list-icon-wrapper" style="background: #dcfce7; color: #15803d; margin:0; flex-shrink: 0; margin-top: 2px;">
+                            <span class="iconify list-icon" data-icon="material-symbols:location-on"></span>
+                        </div>
+                        <div style="flex: 1; min-width: 0;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.25rem;">
+                                <span style="font-size: 0.75rem; font-weight: 700; color: #166534; text-transform: uppercase; letter-spacing: 0.5px;">📍 Havainto tästä paikasta</span>
+                                ${dateInfoHtml}
+                            </div>
+                            <h3 style="margin: 0 0 0.35rem; font-size: 1.08rem; font-weight: 700; color: var(--text-main); font-family: 'Manrope', sans-serif;">${displayName}</h3>
+                            ${item.shortDescription ? `<p style="margin: 0 0 0.5rem; font-size: 0.92rem; color: var(--text-muted); line-height: 1.5;">${item.shortDescription}</p>` : ''}
+                            <div style="margin-top: 0.5rem;">
+                                <span style="font-size: 0.82rem; font-weight: 700; color: #15803d; display: inline-flex; align-items: center; gap: 0.25rem;">
+                                    Katso havainto →
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    ${thumbWrapHtml}
+                </div>
+            </div>
+            `;
+        }
+
         if (!hasExtraContent) {
-            if (item.type === 'observation') {
-                return `<div onclick="openObservationModal('${item.id}', '${encodeURIComponent(displayName)}', '${encodeURIComponent(item.shortDescription || '')}')" class="list-item-card" style="cursor:pointer; display: block;${highlightStyle}">${headerHtml}</div>`;
-            }
             return `<a href="${linkUrl}" class="list-item-card" style="text-decoration:none; display: block;${highlightStyle}">${headerHtml}</a>`;
         }
 
