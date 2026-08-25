@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fi">
 
 <head>
@@ -69,24 +69,24 @@
         .hero-section {
             width: 100%;
             height: auto;
-            min-height: 480px;
-            padding-top: 7rem;
+            min-height: 380px;            /* lyhyempi – paikkasivu, ei banneri */
+            padding-top: 5rem;
             background: url('https://images.unsplash.com/photo-1542314831-c53cd4b85ca4?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
             position: relative;
             display: flex;
             align-items: flex-end;
-            padding-bottom: 3.5rem;
+            padding-bottom: 2.5rem;
         }
 
         .hero-overlay {
             position: absolute;
             inset: 0;
-            /* Tumma metsänvihreä gradientti kuvan päälle – teksti erottuu */
+            /* Kevyt vasemmalta oikealle – ei suorakaide-efektiä */
             background: linear-gradient(
-                to top,
-                rgba(18, 50, 40, 0.88) 0%,
-                rgba(18, 50, 40, 0.45) 45%,
-                rgba(0, 0, 0, 0.08) 100%
+                108deg,
+                rgba(18, 50, 40, 0.65) 0%,
+                rgba(18, 50, 40, 0.32) 55%,
+                rgba(0, 0, 0, 0.04) 100%
             );
         }
 
@@ -154,42 +154,45 @@
             /* Poistettu piilotus: näytetään nyt pienenä tekstin alla */
         }
 
+        /* Badge: metadata-tagi, ei markkinointitermi */
         .badge {
             display: inline-block;
-            background: rgba(255,255,255,0.18);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            padding: 0.35rem 1rem;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: rgba(255,255,255,0.95);
+            background: rgba(255,255,255,0.10);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.75);
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            border: 1px solid rgba(255,255,255,0.28);
+            letter-spacing: 1.2px;
+            border: 1px solid rgba(255,255,255,0.18);
             width: fit-content;
         }
 
+        /* Otsikko: pienempi, rennompi – ei koko banneria täyttävä */
         .hero-title {
             font-family: 'Manrope', sans-serif;
-            font-size: 3.6rem;
-            font-weight: 800;
-            line-height: 1.05;
+            font-size: 2.75rem;
+            font-weight: 700;
+            line-height: 1.1;
             margin: 0;
-            letter-spacing: -1.5px;
+            letter-spacing: -1px;
             color: #fff;
-            text-shadow: 0 2px 16px rgba(0,0,0,0.22);
+            text-shadow: 0 1px 10px rgba(0,0,0,0.18);
             word-break: break-word;
             overflow-wrap: break-word;
             hyphens: auto;
+            max-width: 680px;    /* ei täytä koko leveyttä */
         }
 
         .hero-meta {
             display: flex;
             align-items: center;
-            gap: 1rem;
-            font-size: 1rem;
-            color: rgba(255,255,255,0.82);
+            gap: 0.75rem;
+            font-size: 0.95rem;
+            color: rgba(255,255,255,0.78);
         }
 
         /* 2. Action Buttons (Icon Row) */
@@ -203,40 +206,66 @@
         .btn {
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.4rem;
-            border-radius: 50px;
+            gap: 0.45rem;
+            padding: 0.65rem 1.2rem;
+            border-radius: 10px;           /* ei pillimäinen – luonnollisempi */
             font-weight: 600;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
             border: none;
             text-decoration: none;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
         }
 
-        /* Hero-alueen napit: vaaleita glassmorphism-nappeja */
+        /* ── HERO: nappihierarkia ── */
+
+        /* Etusivu = erittäin toissijainen – käyttäjä on jo sivulla */
+        .hero-section a.btn-primary {
+            background: transparent !important;
+            color: rgba(255,255,255,0.55) !important;
+            border: 1px solid rgba(255,255,255,0.18) !important;
+            font-size: 0.82rem !important;
+            padding: 0.5rem 0.9rem !important;
+            font-weight: 500 !important;
+            box-shadow: none !important;
+        }
+        .hero-section a.btn-primary:hover {
+            background: rgba(255,255,255,0.08) !important;
+            color: rgba(255,255,255,0.8) !important;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        /* Reitti = tärkein toimintopainike */
+        .hero-section #btn-route {
+            background: var(--color-sand) !important;
+            color: var(--color-forest) !important;
+            font-weight: 700 !important;
+            border: none !important;
+            padding: 0.7rem 1.3rem !important;
+        }
+        .hero-section #btn-route:hover {
+            background: #c99446 !important;
+            box-shadow: 0 3px 12px rgba(217,168,92,0.4) !important;
+            transform: translateY(-1px) !important;
+        }
+
+        /* Muut hero-napit: kevyet ghost */
         .hero-section .btn-light {
-            background: rgba(255,255,255,0.15);
-            color: #fff;
-            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.10);
+            color: rgba(255,255,255,0.85);
+            border: 1px solid rgba(255,255,255,0.2);
+            font-size: 0.88rem;
         }
         .hero-section .btn-light:hover {
-            background: rgba(255,255,255,0.28);
-            transform: translateY(-2px);
+            background: rgba(255,255,255,0.20);
+            transform: translateY(-1px);
         }
 
-        /* Hero-alueen primary-nappi: sand/hiekka */
+        /* Placeholder: .btn-primary muualle sivulle (ei hero) */
         .hero-section .btn-primary {
-            background: var(--color-sand);
-            color: var(--color-forest);
-            font-weight: 700;
-        }
-        .hero-section .btn-primary:hover {
-            background: #c99446;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(217,168,92,0.4);
+            background: var(--color-forest);
+            color: #fff;
         }
 
         /* Sivun muiden osioiden napit: forest-vihreä */
@@ -570,7 +599,7 @@
                 display: contents;
             }
             .hero-title {
-                font-size: 2.8rem;
+                font-size: 2.2rem;
             }
             
             /* Lohko 1: Identiteetti */
@@ -635,15 +664,17 @@
                 background: transparent;
             }
             .hero-title {
-                font-size: 2rem;
-                letter-spacing: -0.5px;
+                font-size: 1.85rem;
+                letter-spacing: -0.3px;
+                max-width: 100%;
             }
             .hero-section {
-                min-height: 360px;
+                min-height: 300px;
+                padding-bottom: 2rem;
             }
             .page-container {
                 padding: 0 1.25rem;
-                margin: 2.5rem auto;
+                margin: 2rem auto;
             }
             .action-buttons {
                 display: grid;
@@ -980,34 +1011,51 @@
             font-family: 'Manrope', sans-serif !important;
         }
 
-        /* ── Osallistu-sidebar ── */
+        /* ── Osallistu-sidebar ──
+           TÄRKEÄÄ: #participate-section käyttää .stats-visual-luokkaa,
+           jolla on nyt display:grid. Ylikirjoitettava flexiksi! */
         #participate-section {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 0.75rem !important;
+            grid-template-columns: unset !important;  /* kumoaa .stats-visual grid */
             background: var(--color-forest) !important;
             border-left: none !important;
             border-radius: var(--radius-md);
-            padding: 1.75rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-md) !important;
         }
         #participate-section h3 {
             color: white;
             font-family: 'Manrope', sans-serif;
-            font-size: 1.1rem;
+            font-size: 1rem;
+            margin: 0 0 0.25rem;
+        }
+        /* Osallistu-napit: täysin leveitä */
+        #participate-section .btn {
+            width: 100%;
+            justify-content: flex-start;
+            border-radius: 10px;
+            padding: 0.7rem 1.1rem;
         }
         #participate-section .btn-primary {
             background: var(--color-sand) !important;
             color: var(--color-forest) !important;
-            font-weight: 700;
+            font-weight: 700 !important;
+            justify-content: center !important;
         }
         #participate-section .btn-primary:hover {
             background: #c99446 !important;
-            box-shadow: 0 4px 14px rgba(217,168,92,0.4) !important;
+            box-shadow: 0 3px 12px rgba(217,168,92,0.35) !important;
         }
         #participate-section .btn-light {
-            background: rgba(255,255,255,0.1) !important;
-            color: white !important;
-            border: 1px solid rgba(255,255,255,0.2) !important;
+            background: rgba(255,255,255,0.08) !important;
+            color: rgba(255,255,255,0.88) !important;
+            border: 1px solid rgba(255,255,255,0.15) !important;
         }
         #participate-section .btn-light:hover {
-            background: rgba(255,255,255,0.2) !important;
+            background: rgba(255,255,255,0.16) !important;
+            color: #fff !important;
         }
 
         /* ── Mixonet-banneri ── */
