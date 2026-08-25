@@ -486,14 +486,23 @@
                 -->
 
                 <!-- Mixonet-projektit (LOCATED_AT tai RELATES_TO) -->
-                <!-- Haetaan: entity_relations WHERE relation_type IN ('LOCATED_AT','RELATES_TO') AND place_id=mixonet_place_id -->
                 <section class="content-block" id="mixonet-projects-section" style="display: none;">
                     <h2 style="display: flex; align-items: center; gap: 0.5rem;">
                         <span class="iconify" style="color: #6366f1;" data-icon="material-symbols:rocket-launch-outline"></span>
-                        Projektit
+                        Projektit teemassa
                     </h2>
-                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">Mixonet-verkoston projektit, jotka on kytketty tähän teema-alueeseen.</p>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">Mixonet-verkoston hankkeet ja kehitysprojektit tässä teemassa.</p>
                     <div id="mixonet-projects-list" class="list-grid"></div>
+                </section>
+
+                <!-- Mixonet-ideat (RELATES_TO) -->
+                <section class="content-block" id="mixonet-ideas-section" style="display: none;">
+                    <h2 style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="iconify" style="color: #f59e0b;" data-icon="material-symbols:lightbulb-outline"></span>
+                        💡 Ideat teemassa
+                    </h2>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">Ehdotukset, ajatukset ja kehitysideat Mixonet-verkostossa.</p>
+                    <div id="mixonet-ideas-list" class="list-grid"></div>
                 </section>
 
                 <!--

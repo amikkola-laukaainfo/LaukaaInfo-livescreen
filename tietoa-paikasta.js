@@ -2423,17 +2423,17 @@ async function loadMixonetContentForPlace(placeData) {
                 : Promise.resolve({ data: [] }),
             ideaIds.length > 0
                 ? mixonetClient.from('ideas')
-                    .select('id, title, description, is_public')
+                    .select('id, title, summary, description, why_interesting, challenge, is_published, visibility, status')
                     .in('id', ideaIds)
                 : Promise.resolve({ data: [] })
         ]);
 
         // 4. Suodata julkisuuden mukaan
         const publicProjects = (projectsResult.data || [])
-            .filter(p => p.is_published === true && p.visibility === 'PUBLIC');
+            .filter(p => p.is_published !== false && p.visibility === 'PUBLIC');
 
         const publicIdeas = (ideasResult.data || [])
-            .filter(i => i.is_public === true);
+            .filter(i => i.is_published !== false && (i.visibility === 'PUBLIC' || i.visibility === 'NETWORK' || !i.visibility));
 
         // 5. Renderöi projektit
         if (publicProjects.length > 0) {
@@ -2451,13 +2451,13 @@ async function loadMixonetContentForPlace(placeData) {
                         ` : ''}
                         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.3rem;">
                             <div style="font-size: 0.8rem; font-weight: 700; color: #6366f1; text-transform: uppercase; letter-spacing: 0.5px;">
-                                🚀 Mixonet-projekti
+                                🚀 Projekti · Mixonet
                             </div>
                         </div>
-                        <h3 style="margin: 0 0 0.4rem; font-family: Outfit, sans-serif; font-size: 1.1rem; color: var(--text-main);">${project.title}</h3>
+                        <h3 style="margin: 0 0 0.4rem; font-family: 'Manrope', sans-serif; font-size: 1.15rem; color: var(--text-main); font-weight: 700;">${project.title}</h3>
                         ${desc ? `<p style="margin: 0; font-size: 0.9rem; color: var(--text-muted);">${desc}${desc.length >= 130 ? '…' : ''}</p>` : ''}
                         <div style="margin-top: 0.75rem;">
-                            <span style="display: inline-block; padding: 0.3rem 0.8rem; background: #6366f1; color: white; border-radius: 50px; font-size: 0.8rem; font-weight: 700;">Tutustu →</span>
+                            <span style="display: inline-block; padding: 0.3rem 0.8rem; background: #6366f1; color: white; border-radius: 50px; font-size: 0.8rem; font-weight: 700;">Tutustu projektiin →</span>
                         </div>
                     </a>
                 `;
@@ -2468,14 +2468,24 @@ async function loadMixonetContentForPlace(placeData) {
         // 6. Renderöi ideat
         if (publicIdeas.length > 0) {
             ideasList.innerHTML = publicIdeas.map(idea => {
-                const desc = (idea.description || '').substring(0, 130);
+                const desc = (idea.summary || idea.description || '').substring(0, 150);
+                const why = idea.why_interesting ? `<div style="margin-top: 0.5rem; font-size: 0.85rem; color: #78350f; background: #fef3c7; padding: 0.4rem 0.75rem; border-radius: 8px;">✨ <strong>Miksi hyvä:</strong> ${idea.why_interesting.substring(0, 110)}</div>` : '';
                 return `
-                    <div class="list-item-card" style="border-left: 4px solid #f59e0b;">
-                        <div style="font-size: 0.8rem; font-weight: 700; color: #d97706; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.3rem;">
-                            💡 Idea
+                    <div class="list-item-card" style="border-left: 4px solid #f59e0b; text-decoration: none; display: block;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+                            <div style="font-size: 0.8rem; font-weight: 700; color: #d97706; text-transform: uppercase; letter-spacing: 0.5px;">
+                                💡 Idea · Mixonet-verkosto
+                            </div>
+                            <span style="font-size: 0.75rem; background: #fef3c7; color: #b45309; padding: 0.2rem 0.6rem; border-radius: 50px; font-weight: 600;">Ehdotus</span>
                         </div>
-                        <h3 style="margin: 0 0 0.4rem; font-family: Outfit, sans-serif; font-size: 1.05rem; color: var(--text-main);">${idea.title}</h3>
-                        ${desc ? `<p style="margin: 0; font-size: 0.9rem; color: var(--text-muted);">${desc}${desc.length >= 130 ? '…' : ''}</p>` : ''}
+                        <h3 style="margin: 0 0 0.4rem; font-family: 'Manrope', sans-serif; font-size: 1.15rem; color: var(--text-main); font-weight: 700;">${idea.title}</h3>
+                        ${desc ? `<p style="margin: 0; font-size: 0.92rem; color: var(--text-muted); line-height: 1.5;">${desc}${desc.length >= 150 ? '…' : ''}</p>` : ''}
+                        ${why}
+                        <div style="margin-top: 0.85rem;">
+                            <span style="display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.35rem 0.9rem; background: #fef3c7; color: #92400e; border-radius: 50px; font-size: 0.82rem; font-weight: 700;">
+                                💡 Tutustu ideaan Mixonetissa →
+                            </span>
+                        </div>
                     </div>
                 `;
             }).join('');
@@ -2504,7 +2514,6 @@ async function loadMixonetContentFallback(mixonetClient, placeId, projectsSectio
 
         const projectIds = relations.filter(r => r.source_type === 'PROJECT').map(r => r.source_id);
         const ideaIds    = relations.filter(r => r.source_type === 'IDEA').map(r => r.source_id);
-        // USER-tyyppiset suodatetaan pois tässäkin – ei näytetä julkisesti
 
         const [projectsResult, ideasResult] = await Promise.all([
             projectIds.length > 0
@@ -2514,36 +2523,49 @@ async function loadMixonetContentFallback(mixonetClient, placeId, projectsSectio
                 : Promise.resolve({ data: [] }),
             ideaIds.length > 0
                 ? mixonetClient.from('ideas')
-                    .select('id, title, description, is_public')
+                    .select('id, title, summary, description, why_interesting, is_published, visibility')
                     .in('id', ideaIds)
                 : Promise.resolve({ data: [] })
         ]);
 
         const publicProjects = (projectsResult.data || [])
-            .filter(p => p.is_published === true && p.visibility === 'PUBLIC');
+            .filter(p => p.is_published !== false && p.visibility === 'PUBLIC');
         const publicIdeas = (ideasResult.data || [])
-            .filter(i => i.is_public === true);
+            .filter(i => i.is_published !== false && (i.visibility === 'PUBLIC' || i.visibility === 'NETWORK' || !i.visibility));
 
         if (publicProjects.length > 0) {
             projectsList.innerHTML = publicProjects.map(p => `
                 <a href="projekti.html?id=${encodeURIComponent(p.id)}" class="list-item-card" style="border-left: 4px solid #6366f1; text-decoration: none; display: block;">
-                    <div style="font-size: 0.8rem; font-weight: 700; color: #6366f1; text-transform: uppercase; margin-bottom: 0.3rem;">🚀 Mixonet-projekti</div>
-                    <h3 style="margin: 0 0 0.4rem; font-size: 1.05rem; color: var(--text-main);">${p.title}</h3>
+                    <div style="font-size: 0.8rem; font-weight: 700; color: #6366f1; text-transform: uppercase; margin-bottom: 0.3rem;">🚀 Projekti · Mixonet</div>
+                    <h3 style="margin: 0 0 0.4rem; font-family: 'Manrope', sans-serif; font-size: 1.15rem; color: var(--text-main); font-weight: 700;">${p.title}</h3>
                     ${p.description ? `<p style="margin: 0; font-size: 0.9rem; color: var(--text-muted);">${p.description.substring(0, 120)}…</p>` : ''}
-                    <div style="margin-top: 0.75rem;"><span style="display: inline-block; padding: 0.3rem 0.8rem; background: #6366f1; color: white; border-radius: 50px; font-size: 0.8rem; font-weight: 700;">Tutustu →</span></div>
+                    <div style="margin-top: 0.75rem;"><span style="display: inline-block; padding: 0.3rem 0.8rem; background: #6366f1; color: white; border-radius: 50px; font-size: 0.8rem; font-weight: 700;">Tutustu projektiin →</span></div>
                 </a>
             `).join('');
             projectsSection.style.display = 'block';
         }
 
         if (publicIdeas.length > 0) {
-            ideasList.innerHTML = publicIdeas.map(i => `
-                <div class="list-item-card" style="border-left: 4px solid #f59e0b;">
-                    <div style="font-size: 0.8rem; font-weight: 700; color: #d97706; text-transform: uppercase; margin-bottom: 0.3rem;">💡 Idea</div>
-                    <h3 style="margin: 0 0 0.4rem; font-size: 1.05rem; color: var(--text-main);">${i.title}</h3>
-                    ${i.description ? `<p style="margin: 0; font-size: 0.9rem; color: var(--text-muted);">${i.description.substring(0, 120)}…</p>` : ''}
-                </div>
-            `).join('');
+            ideasList.innerHTML = publicIdeas.map(i => {
+                const desc = (i.summary || i.description || '').substring(0, 150);
+                const why = i.why_interesting ? `<div style="margin-top: 0.5rem; font-size: 0.85rem; color: #78350f; background: #fef3c7; padding: 0.4rem 0.75rem; border-radius: 8px;">✨ <strong>Miksi hyvä:</strong> ${i.why_interesting.substring(0, 110)}</div>` : '';
+                return `
+                    <div class="list-item-card" style="border-left: 4px solid #f59e0b; text-decoration: none; display: block;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+                            <div style="font-size: 0.8rem; font-weight: 700; color: #d97706; text-transform: uppercase; letter-spacing: 0.5px;">💡 Idea · Mixonet-verkosto</div>
+                            <span style="font-size: 0.75rem; background: #fef3c7; color: #b45309; padding: 0.2rem 0.6rem; border-radius: 50px; font-weight: 600;">Ehdotus</span>
+                        </div>
+                        <h3 style="margin: 0 0 0.4rem; font-family: 'Manrope', sans-serif; font-size: 1.15rem; color: var(--text-main); font-weight: 700;">${i.title}</h3>
+                        ${desc ? `<p style="margin: 0; font-size: 0.92rem; color: var(--text-muted); line-height: 1.5;">${desc}${desc.length >= 150 ? '…' : ''}</p>` : ''}
+                        ${why}
+                        <div style="margin-top: 0.85rem;">
+                            <span style="display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.35rem 0.9rem; background: #fef3c7; color: #92400e; border-radius: 50px; font-size: 0.82rem; font-weight: 700;">
+                                💡 Tutustu ideaan Mixonetissa →
+                            </span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
             ideasSection.style.display = 'block';
         }
     } catch (err) {

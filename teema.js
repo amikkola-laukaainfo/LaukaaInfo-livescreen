@@ -140,62 +140,68 @@ async function loadMixonetThemeContext(searchTag) {
                         }
 
                         if (opps.length > 0) {
-                            const section = document.getElementById('mixonet-projects-section');
-                            const list = document.getElementById('mixonet-projects-list');
-                            if (section && list) {
-                                // Järjestä siten, että nostetut (is_featured) ovat ensimmäisenä
-                                const enrichedOpps = opps.map(opp => {
-                                    const rel = relations.find(r => r.source_id === opp.id);
-                                    let isFeatured = rel?.metadata?.is_featured || opp.is_project_featured || false;
-                                    
-                                    if (featuredNeedsIds.includes(opp.id) || featuredIdeasIds.includes(opp.id) || featuredCompanyIds.includes(opp.id)) {
-                                        isFeatured = true;
-                                    }
+                            const projSection = document.getElementById('mixonet-projects-section');
+                            const projList = document.getElementById('mixonet-projects-list');
+                            const ideasSection = document.getElementById('mixonet-ideas-section');
+                            const ideasList = document.getElementById('mixonet-ideas-list');
 
-                                    // Varmista ettei samaa oppia näytetä useasti
-                                    return { ...opp, is_featured: isFeatured };
-                                }).filter((value, index, self) => index === self.findIndex((t) => t.id === value.id))
-                                .sort((a, b) => (b.is_featured ? 1 : 0) - (a.is_featured ? 1 : 0));
+                            const projects = opps.filter(o => o.type === 'PROJECT');
+                            const ideas = opps.filter(o => o.type === 'IDEA');
+                            const others = opps.filter(o => o.type !== 'PROJECT' && o.type !== 'IDEA');
 
-                                section.style.display = 'block';
-                                
-                                // Päivitä otsikko näyttämään "Teeman verkosto"
-                                const titleEl = section.querySelector('h2');
-                                if (titleEl) {
-                                    titleEl.innerHTML = `<span class="iconify" style="color: #6366f1;" data-icon="material-symbols:rocket-launch-outline"></span> Teeman verkosto`;
-                                }
-                                
-                                const descSection = section.querySelector('p');
-                                if (descSection) descSection.textContent = 'Mixonet-verkostossa tähän teemaan liittyviä hankkeita, ideoita ja tarpeita.';
-
-                                list.innerHTML = enrichedOpps.map(p => {
-                                    const desc = (p.description || '').substring(0, 120);
-                                    let icon = '🚀';
-                                    let typeLabel = 'Projekti';
-                                    let color = '#6366f1';
-                                    
-                                    if (p.type === 'IDEA') { icon = '💡'; typeLabel = 'Idea'; color = '#f59e0b'; }
-                                    if (p.type === 'NEED') { icon = '📣'; typeLabel = 'Tarve'; color = '#ef4444'; }
-                                    if (p.type === 'COMPANY') { icon = '🏢'; typeLabel = 'Yritys'; color = '#10b981'; }
-
-                                    const url = p.type === 'PROJECT' ? 'projekti.html' : p.type === 'COMPANY' ? 'yrityskortti.html' : 'mixonet.html';
-
-                                    return `
-                                        <a href="${url}?id=${encodeURIComponent(p.id)}" class="list-item-card" style="border-left: 4px solid ${color}; ${p.is_featured ? 'background: #f8fafc; border-color: #f59e0b;' : ''}">
-                                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
-                                                <div style="font-size:0.8rem;font-weight:700;color:${color};text-transform:uppercase;letter-spacing:0.5px;">
-                                                    ${icon} ${typeLabel}
+                            // Renderöi projektit
+                            if (projSection && projList) {
+                                if (projects.length > 0) {
+                                    projList.innerHTML = projects.map(p => {
+                                        const desc = (p.description || '').substring(0, 120);
+                                        return `
+                                            <a href="projekti.html?id=${encodeURIComponent(p.id)}" class="list-item-card" style="border-left: 4px solid #6366f1;">
+                                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
+                                                    <div style="font-size:0.8rem;font-weight:700;color:#6366f1;text-transform:uppercase;letter-spacing:0.5px;">
+                                                        🚀 Projekti · Mixonet
+                                                    </div>
                                                 </div>
-                                                ${p.is_featured ? `<span style="font-size:0.7rem; background:#fef3c7; color:#d97706; padding:0.15rem 0.5rem; border-radius:1rem; font-weight:bold;">⭐ Nosto</span>` : ''}
+                                                <h3 style="margin:0 0 0.4rem 0;font-family:'Manrope',sans-serif;font-size:1.1rem;color:var(--text-main);">${p.title}</h3>
+                                                ${desc ? `<p style="margin:0;font-size:0.9rem;color:var(--text-muted);">${desc}${desc.length >= 120 ? '...' : ''}</p>` : ''}
+                                                <div style="margin-top:0.75rem;">
+                                                    <span style="display:inline-block;padding:0.3rem 0.8rem;background:#6366f1;color:white;border-radius:50px;font-size:0.8rem;font-weight:700;">Tutustu projektiin →</span>
+                                                </div>
+                                            </a>
+                                        `;
+                                    }).join('');
+                                    projSection.style.display = 'block';
+                                } else {
+                                    projSection.style.display = 'none';
+                                }
+                            }
+
+                            // Renderöi ideat
+                            if (ideasSection && ideasList) {
+                                if (ideas.length > 0) {
+                                    ideasList.innerHTML = ideas.map(i => {
+                                        const desc = (i.summary || i.description || '').substring(0, 140);
+                                        return `
+                                            <div class="list-item-card" style="border-left: 4px solid #f59e0b;">
+                                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
+                                                    <div style="font-size:0.8rem;font-weight:700;color:#d97706;text-transform:uppercase;letter-spacing:0.5px;">
+                                                        💡 Idea · Mixonet-verkosto
+                                                    </div>
+                                                    <span style="font-size:0.75rem; background:#fef3c7; color:#b45309; padding:0.15rem 0.55rem; border-radius:50px; font-weight:600;">Ehdotus</span>
+                                                </div>
+                                                <h3 style="margin:0 0 0.4rem 0;font-family:'Manrope',sans-serif;font-size:1.1rem;color:var(--text-main);">${i.title}</h3>
+                                                ${desc ? `<p style="margin:0;font-size:0.9rem;color:var(--text-muted);">${desc}${desc.length >= 140 ? '...' : ''}</p>` : ''}
+                                                <div style="margin-top:0.75rem;">
+                                                    <span style="display:inline-flex; align-items:center; gap:0.3rem; padding:0.3rem 0.8rem; background:#fef3c7; color:#92400e; border-radius:50px; font-size:0.8rem; font-weight:700;">
+                                                        💡 Tutustu ideaan Mixonetissa →
+                                                    </span>
+                                                </div>
                                             </div>
-                                            <h3 style="margin:0 0 0.4rem 0;font-family:Outfit,sans-serif;font-size:1.1rem;color:var(--text-main);">${p.title}</h3>
-                                            ${desc ? `<p style="margin:0;font-size:0.9rem;color:var(--text-muted);">${desc}${desc.length >= 120 ? '...' : ''}</p>` : ''}
-                                            <div style="margin-top:0.75rem;">
-                                                <span style="display:inline-block;padding:0.3rem 0.8rem;background:${color};color:white;border-radius:50px;font-size:0.8rem;font-weight:700;">Tutustu →</span>
-                                            </div>
-                                        </a>
-                                    `;
-                                }).join('');
+                                        `;
+                                    }).join('');
+                                    ideasSection.style.display = 'block';
+                                } else {
+                                    ideasSection.style.display = 'none';
+                                }
                             }
                         }
                     }
