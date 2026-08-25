@@ -264,6 +264,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         await loadEncountersForPlace(placeData);
         await loadLostItemsForPlace(placeData);
         loadMixonetContentForPlace(placeData); // Ei await – haetaan taustalla, ei estä muuta
+        await loadRoutesForPlace(placeData);
 
     } catch (err) {
         console.error('Yllättävä virhe:', err);
@@ -2657,5 +2658,59 @@ async function loadMixonetContentFallback(mixonetClient, placeId, projectsSectio
         }
     } catch (err) {
         console.warn('[Mixonet] Fallback-haku epäonnistui:', err);
+    }
+}
+
+// ── REITTILOGIIKKA ──────────────────────────
+async function loadRoutesForPlace(place) {
+    const routesContainer = document.getElementById('routes-list-container');
+    const routesList = document.getElementById('routes-list');
+    if (!routesContainer || !routesList) return;
+
+    try {
+        const { data: routes, error } = await window.aiSb
+            .from('routes')
+            .select('id, place_id, title, description, visibility, category, distance_meters')
+            .eq('place_id', place.place_id);
+
+        if (error) {
+            console.error('Virhe haettaessa reittejä:', error);
+            return;
+        }
+
+        if (routes && routes.length > 0) {
+            routesContainer.style.display = 'block';
+            
+            routesList.innerHTML = routes.map(r => {
+                const isPrivate = r.visibility === 'private';
+                const distStr = r.distance_meters ? `${(r.distance_meters / 1000).toFixed(1).replace('.', ',')} km` : '';
+                const categoryStr = r.category || 'Reitti';
+                
+                let iconHtml = isPrivate 
+                    ? '<span class="iconify" data-icon="material-symbols:lock" style="color: #e11d48; font-size: 1.2rem;"></span>' 
+                    : '<span class="iconify" data-icon="material-symbols:directions-walk" style="color: #059669; font-size: 1.2rem;"></span>';
+
+                let metaStr = isPrivate 
+                    ? `${distStr ? distStr + ' &middot; ' : ''}Suojattu elämyspolku`
+                    : `${distStr ? distStr + ' &middot; ' : ''}${categoryStr}`;
+
+                return `
+                <a href="reitti.html?id=${r.id}" style="text-decoration: none; color: inherit; display: block; border-left: 3px solid ${isPrivate ? '#e11d48' : '#059669'}; background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); padding: 1rem; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='none'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.05)';">
+                    <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                        <div style="background: ${isPrivate ? '#fff1f2' : '#ecfdf5'}; padding: 0.6rem; border-radius: 50%;">
+                            ${iconHtml}
+                        </div>
+                        <div style="flex: 1;">
+                            <h4 style="margin: 0 0 0.2rem 0; font-family: 'Manrope', sans-serif; font-size: 1.05rem; color: #1e293b;">${r.title}</h4>
+                            <div style="font-size: 0.85rem; font-weight: 700; color: #64748b; margin-bottom: 0.3rem;">${metaStr}</div>
+                            ${r.description ? `<p style="margin: 0; font-size: 0.9rem; color: #475569; line-height: 1.4;">${r.description}</p>` : ''}
+                            ${isPrivate ? '<div style="margin-top: 0.5rem; display: inline-block; font-size: 0.8rem; font-weight: 700; color: #e11d48; background: #ffe4e6; padding: 0.2rem 0.6rem; border-radius: 50px;">Avaa koodilla &rarr;</div>' : '<div style="margin-top: 0.5rem; display: inline-block; font-size: 0.8rem; font-weight: 700; color: #059669;">Tutustu reittiin &rarr;</div>'}
+                        </div>
+                    </div>
+                </a>`;
+            }).join('');
+        }
+    } catch (e) {
+        console.warn('Poikkeus ladattaessa reittejä:', e);
     }
 }

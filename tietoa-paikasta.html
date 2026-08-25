@@ -1298,17 +1298,27 @@
                     <details id="services-details" open>
                         <summary style="cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between;">
                             <h2 id="services-main-title" style="display: flex; align-items: center; gap: 0.5rem; margin: 0; font-family: 'Manrope', sans-serif; font-size: 1.35rem; font-weight: 700; color: var(--text-main);">
-                                <span class="iconify" data-icon="material-symbols:storefront-outline" style="color: var(--accent);"></span>
-                                Lähellä ja tähän paikkaan liittyen
+                                <span class="iconify" data-icon="material-symbols:local-florist-outline" style="color: var(--accent);"></span>
+                                Tähän paikkaan liittyy
                             </h2>
                             <span class="iconify" data-icon="material-symbols:expand-more" style="font-size: 1.5rem; color: var(--text-muted); transition: transform 0.2s;"></span>
                         </summary>
-                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem; margin-bottom: 1rem;">Tapahtumat, yritykset, palvelut ja muu sisältö.</p>
+                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem; margin-bottom: 1rem;">Tapahtumat, yritykset, reitit, havainnot ja muu sisältö.</p>
                         
                         <div id="non-commercial-notice" style="display: none; margin-top: 1rem; margin-bottom: 1.5rem; padding: 1.5rem; background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1; text-align: center;">
                             <span class="iconify" data-icon="material-symbols:nature-people-outline" style="font-size: 2rem; color: #94a3b8; margin-bottom: 0.5rem;"></span>
                             <p style="margin: 0; color: #64748b; font-size: 0.95rem;">Tämä on yhteisöllinen tai luontokohde.</p>
                             <p style="margin: 0; color: #94a3b8; font-size: 0.85rem; margin-top: 0.25rem;">Yrityksiä näytetään vain, jos niillä on suora yhteys paikkaan.</p>
+                        </div>
+
+                        <!-- Reitit ja elämykset -->
+                        <div id="routes-list-container" style="margin-top: 1rem; display: none;">
+                            <h3 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; font-family: 'Manrope', sans-serif;">
+                                🚶 Reitit ja elämykset
+                            </h3>
+                            <div id="routes-list" style="display: flex; flex-direction: column; gap: 1rem;">
+                                <!-- Filled by JS (renderRoutes) -->
+                            </div>
                         </div>
 
                         <div id="other-relations-list" style="margin-top: 1rem;">

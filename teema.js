@@ -1177,6 +1177,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Lataa Mixonet-teeman tiedot ja verkosto rinnakkain (ei estä muuta renderöintiä)
         loadMixonetThemeContext(searchTag);
+        loadThemeRoutes(searchTag);
 
         // Piilota paikat/tapahtumat-osio jos tyhjä
         const placesSection = document.getElementById('places-section');
@@ -1194,3 +1195,60 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('error-message').style.display = 'flex';
     }
 });
+
+// ── REITTILOGIIKKA TEEMOILLE ──────────────────────────
+async function loadThemeRoutes(themeName) {
+    if (!aiSbClient) return;
+
+    // Jos teema ei ole 'luontopolut', 'historiapolut' yms. voimme käyttää tagia route_categorynä
+    // Tässä yksinkertaistettu haku: jos reitillä on category = teema, näytetään se.
+    // Voit laajentaa tätä myöhemmin tarkemmaksi.
+    const normalizedTheme = themeName.toLowerCase();
+    let categoryFilter = normalizedTheme;
+    
+    // Yleisimmät teemamappaukset
+    if (normalizedTheme === 'luontopolut' || normalizedTheme === 'luonto') categoryFilter = 'luonto';
+    else if (normalizedTheme === 'historia' || normalizedTheme === 'historiapolut') categoryFilter = 'historia';
+
+    try {
+        const { data: routes, error } = await aiSbClient
+            .from('routes')
+            .select('id, place_id, title, description, visibility, category, distance_meters')
+            .eq('category', categoryFilter);
+
+        if (error || !routes || routes.length === 0) return;
+
+        // Etsi DOM-elementti johon reitit lisätään (jos ei ole, luodaan)
+        let routesSection = document.getElementById('routes-section');
+        if (!routesSection) {
+            const placesSection = document.getElementById('places-section');
+            if (placesSection) {
+                const sectionHtml = `
+                <section id="routes-section" class="container" style="margin-top: 3rem;">
+                    <h2 class="section-title"><span class="iconify" data-icon="material-symbols:directions-walk"></span> Kokemuspolut</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Koe ${themeName} reiteillä ja elämyspoluilla.</p>
+                    <div id="theme-routes-list" style="display: flex; flex-direction: column; gap: 1rem;"></div>
+                    <a href="#" style="display: inline-block; margin-top: 1.5rem; font-weight: 600; color: #059669; text-decoration: none;">Näytä kaikki &rarr;</a>
+                </section>`;
+                placesSection.insertAdjacentHTML('beforebegin', sectionHtml);
+                routesSection = document.getElementById('routes-section');
+            }
+        }
+
+        const routesList = document.getElementById('theme-routes-list');
+        if (routesList) {
+            routesList.innerHTML = routes.map(r => {
+                const isPrivate = r.visibility === 'private';
+                const distStr = r.distance_meters ? `${(r.distance_meters / 1000).toFixed(1).replace('.', ',')} km` : '';
+                return `
+                <a href="reitti.html?id=${r.id}" style="text-decoration: none; color: inherit; display: block; background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); padding: 1rem; transition: transform 0.2s; border-left: 3px solid ${isPrivate ? '#e11d48' : '#059669'};" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+                    <div style="font-weight: 700; color: #1e293b; margin-bottom: 0.25rem;">${isPrivate ? '🔒 ' : ''}${r.title}</div>
+                    <div style="font-size: 0.85rem; color: #64748b;">${distStr} &middot; ${r.category || 'Reitti'}</div>
+                </a>`;
+            }).join('');
+        }
+
+    } catch(e) {
+        console.warn('Reittien lataus teemasivulla epäonnistui', e);
+    }
+}
