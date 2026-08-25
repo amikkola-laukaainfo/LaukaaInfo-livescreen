@@ -71,8 +71,11 @@
             height: auto;
             min-height: 380px;
             padding-top: 5rem;
-            /* Kesäinen vihreä metsä – sopii Laukaan luontoon */
-            background: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1920&q=80') center 40%/cover no-repeat;
+            /* Oletustaustakuva – vaihdetaan dynaamisesti 5 eri luontokuvan välillä */
+            background-color: var(--color-forest);
+            background-position: center 40%;
+            background-size: cover;
+            background-repeat: no-repeat;
             position: relative;
             display: flex;
             align-items: flex-end;
@@ -1131,8 +1134,25 @@
     <main id="place-content" style="display: none;">
         
         <!-- 1. Hero Area -->
-        <section class="hero-section">
+        <section class="hero-section" id="place-hero">
             <div class="hero-overlay"></div>
+            <script>
+                // 5 erilaista luonto-/metsä-/järvimaisemakuvaa – valitaan satunnaisesti sivun avautuessa
+                (function() {
+                    const heroImages = [
+                        'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1920&q=80', // 1. Kesäinen mäntymetsä & auringonpaiste
+                        'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1920&q=80', // 2. Rauhallinen järvi- ja rantamaisema
+                        'https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1920&q=80', // 3. Vehreä suomalainen havumetsä
+                        'https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=1920&q=80', // 4. Tyyni metsäjärvi & heijastus
+                        'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1920&q=80'  // 5. Luonnonranta & vesistö
+                    ];
+                    const selectedImg = heroImages[Math.floor(Math.random() * heroImages.length)];
+                    const hero = document.getElementById('place-hero');
+                    if (hero) {
+                        hero.style.backgroundImage = 'url("' + selectedImg + '")';
+                    }
+                })();
+            </script>
             <div class="hero-content">
                 <!-- Vasen sarake: otsikko, meta, napit -->
                 <div class="hero-left">
