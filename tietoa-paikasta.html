@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fi">
 
 <head>
@@ -15,7 +15,7 @@
     <!-- Fonts & Styles -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
 
     <!-- Leaflet Map -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -30,22 +30,33 @@
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
     
     <style>
+        /* =========================================================
+           TIETOA-PAIKASTA – Pagetason tyylit (ei vaikuta muihin sivuihin)
+           Paletti: Laukaan luonto – metsänvihreä + salviavihreä + hiekka
+           Fontit: Manrope (otsikot) + Inter (leipäteksti)
+           ========================================================= */
         :root {
-            --bg-color: #f8fafc; /* Very light cool gray */
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --accent: #10b981;
-            --accent-hover: #059669;
-            --radius-lg: 32px;
-            --radius-md: 24px;
-            --radius-sm: 16px;
-            --shadow-sm: 0 4px 20px rgba(0,0,0,0.03);
-            --shadow-md: 0 12px 40px rgba(0,0,0,0.06);
-            --shadow-hover: 0 20px 40px rgba(0,0,0,0.1);
+            /* Uusi luonnonlähteinen paletti */
+            --bg-color: #F7F8F5;              /* luonnonvalkoinen tausta */
+            --color-forest: #183F35;          /* metsänvihreä pääväri */
+            --color-sage: #E5EEE8;            /* vaalea salviavihreä */
+            --color-sand: #D9A85C;            /* lämmin hiekka/aurinko */
+            --text-main: #26332F;             /* lämmin tumma teksti */
+            --text-muted: #4a5f58;            /* muted-teksti */
+            --accent: #183F35;
+            --accent-hover: #0f2920;
+            /* Pienennetty border-radius – ei liian pehmeä */
+            --radius-lg: 20px;
+            --radius-md: 16px;
+            --radius-sm: 10px;
+            /* Vihreäsävyiset varjot */
+            --shadow-sm: 0 2px 12px rgba(24,63,53,0.07);
+            --shadow-md: 0 8px 28px rgba(24,63,53,0.10);
+            --shadow-hover: 0 16px 40px rgba(24,63,53,0.15);
         }
 
         body {
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            background: var(--bg-color);      /* tasainen, ei gradienttia */
             min-height: 100vh;
             font-family: 'Inter', sans-serif;
             color: var(--text-main);
@@ -58,26 +69,31 @@
         .hero-section {
             width: 100%;
             height: auto;
-            min-height: 300px;
+            min-height: 480px;
             padding-top: 7rem;
-            /* Placeholder image, can be replaced dynamically if place image exists */
             background: url('https://images.unsplash.com/photo-1542314831-c53cd4b85ca4?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
             position: relative;
             display: flex;
             align-items: flex-end;
-            padding-bottom: 3rem;
+            padding-bottom: 3.5rem;
         }
 
         .hero-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(to top, rgba(248, 250, 252, 1) 0%, rgba(248, 250, 252, 0.7) 50%, rgba(255, 255, 255, 0.4) 100%);
+            /* Tumma metsänvihreä gradientti kuvan päälle – teksti erottuu */
+            background: linear-gradient(
+                to top,
+                rgba(18, 50, 40, 0.88) 0%,
+                rgba(18, 50, 40, 0.45) 45%,
+                rgba(0, 0, 0, 0.08) 100%
+            );
         }
 
         .hero-content {
             position: relative;
             z-index: 10;
-            color: var(--text-main);
+            color: #fff;              /* kaikki hero-teksti valkoiseksi */
             max-width: 1200px;
             margin: 0 auto;
             width: 100%;
@@ -93,7 +109,7 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 0.85rem;
             min-width: 0;
         }
 
@@ -140,26 +156,29 @@
 
         .badge {
             display: inline-block;
-            background: rgba(0, 0, 0, 0.05);
+            background: rgba(255,255,255,0.18);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
-            padding: 0.4rem 1rem;
+            padding: 0.35rem 1rem;
             border-radius: 50px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 700;
-            color: var(--text-main);
+            color: rgba(255,255,255,0.95);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
+            border: 1px solid rgba(255,255,255,0.28);
             width: fit-content;
         }
 
         .hero-title {
-            font-family: 'Outfit', sans-serif;
-            font-size: 4rem;
+            font-family: 'Manrope', sans-serif;
+            font-size: 3.6rem;
             font-weight: 800;
-            line-height: 1.1;
+            line-height: 1.05;
             margin: 0;
-            letter-spacing: -1px;
+            letter-spacing: -1.5px;
+            color: #fff;
+            text-shadow: 0 2px 16px rgba(0,0,0,0.22);
             word-break: break-word;
             overflow-wrap: break-word;
             hyphens: auto;
@@ -169,8 +188,8 @@
             display: flex;
             align-items: center;
             gap: 1rem;
-            font-size: 1.1rem;
-            opacity: 0.9;
+            font-size: 1rem;
+            color: rgba(255,255,255,0.82);
         }
 
         /* 2. Action Buttons (Icon Row) */
@@ -185,38 +204,61 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            padding: 0.8rem 1.5rem;
+            padding: 0.75rem 1.4rem;
             border-radius: 50px;
             font-weight: 600;
             font-size: 0.95rem;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             border: none;
             text-decoration: none;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
         }
 
-        .btn-light {
-            background: rgba(0, 0, 0, 0.05);
-            color: var(--text-main);
-            border: 1px solid rgba(0,0,0,0.1);
+        /* Hero-alueen napit: vaaleita glassmorphism-nappeja */
+        .hero-section .btn-light {
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .hero-section .btn-light:hover {
+            background: rgba(255,255,255,0.28);
+            transform: translateY(-2px);
         }
 
+        /* Hero-alueen primary-nappi: sand/hiekka */
+        .hero-section .btn-primary {
+            background: var(--color-sand);
+            color: var(--color-forest);
+            font-weight: 700;
+        }
+        .hero-section .btn-primary:hover {
+            background: #c99446;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(217,168,92,0.4);
+        }
+
+        /* Sivun muiden osioiden napit: forest-vihreä */
+        .btn-light {
+            background: white;
+            color: var(--text-main);
+            border: 1px solid var(--color-sage);
+        }
         .btn-light:hover {
-            background: rgba(0, 0, 0, 0.08);
+            background: var(--color-sage);
+            border-color: rgba(24,63,53,0.2);
             transform: translateY(-2px);
         }
 
         .btn-primary {
-            background: var(--text-main);
+            background: var(--color-forest);
             color: #fff;
         }
-
         .btn-primary:hover {
-            background: #000;
+            background: #0f2920;
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(24,63,53,0.25);
         }
 
         /* 3. Layout Grid */
@@ -230,37 +272,43 @@
         }
 
         .content-block {
-            margin-bottom: 3.5rem;
+            margin-bottom: 4rem;
         }
 
         .content-block h2 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.75rem;
+            font-family: 'Manrope', sans-serif;
+            font-size: 1.4rem;
             font-weight: 700;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
+            margin-top: 0;
             color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--color-sage);
         }
-        
+
         .content-block h3 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.25rem;
+            font-family: 'Manrope', sans-serif;
+            font-size: 1.15rem;
             font-weight: 700;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             color: var(--text-main);
         }
 
-        /* Less boxes, cleaner text area */
+        /* Perusteksti */
         #display-description {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             line-height: 1.8;
             color: var(--text-muted);
         }
 
-        /* 6. Timeline */
+        /* 6. Havainto-aikajana */
         .timeline {
             position: relative;
             padding-left: 1.5rem;
-            margin-top: 2rem;
+            margin-top: 1.5rem;
         }
         .timeline::before {
             content: '';
@@ -269,43 +317,43 @@
             top: 0;
             bottom: 0;
             width: 2px;
-            background: #e2e8f0;
+            background: var(--color-sage);
             border-radius: 2px;
         }
         .timeline-item {
             position: relative;
-            margin-bottom: 2rem;
+            margin-bottom: 1.75rem;
         }
         .timeline-item::before {
             content: '';
             position: absolute;
             left: -1.85rem;
             top: 0.4rem;
-            width: 12px;
-            height: 12px;
+            width: 11px;
+            height: 11px;
             border-radius: 50%;
             background: #fff;
-            border: 2px solid var(--accent);
+            border: 2px solid var(--color-sand);
             z-index: 1;
         }
         .time-label {
-            font-size: 0.85rem;
-            font-weight: 600;
+            font-size: 0.82rem;
+            font-weight: 700;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
         }
         .time-event {
             background: #fff;
-            padding: 1.25rem;
+            padding: 1.1rem 1.25rem;
             border-radius: var(--radius-sm);
             box-shadow: var(--shadow-sm);
             font-weight: 500;
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            border: 1px solid #f1f5f9;
+            border: 1px solid var(--color-sage);
         }
 
         /* Right Sidebar */
@@ -314,68 +362,87 @@
             top: 2rem;
             display: flex;
             flex-direction: column;
-            gap: 2.5rem;
+            gap: 2rem;
         }
 
         /* Map */
         #map-container {
             width: 100%;
         }
+        #map {
+            border: 1px solid rgba(24,63,53,0.12) !important;
+        }
 
-        /* 5. Visual Network Stats */
+        /* 5. Verkoston tilanne – 2×2 numero-grid */
         .stats-visual {
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 1rem;
-            background: #fff;
+            background: var(--color-sage);
             padding: 1.5rem;
             border-radius: var(--radius-md);
             box-shadow: var(--shadow-sm);
-            border: 1px solid #f1f5f9;
+            border: 1px solid rgba(24,63,53,0.10);
         }
         .stat-row {
             display: flex;
-            align-items: center;
-            gap: 1rem;
-            font-weight: 500;
-            font-size: 1.05rem;
+            flex-direction: column;
+            gap: 0.2rem;
         }
-        .dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            display: inline-block;
-        }
+        /* Piilota väripisteet – numerot kertovat kaiken */
+        .stat-row .dot { display: none; }
         .stat-value {
-            font-weight: 700;
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.2rem;
+            font-family: 'Manrope', sans-serif;
+            font-weight: 800;
+            font-size: 2rem;
+            color: var(--color-forest);
+            line-height: 1;
+        }
+        .stat-row > span:last-child {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        /* 7. Place's Network Tags */
+        /* 7. Teemat-sidebar */
         .network-tree {
             background: #fff;
             padding: 1.5rem;
             border-radius: var(--radius-md);
             box-shadow: var(--shadow-sm);
-            border: 1px solid #f1f5f9;
+            border: 1px solid var(--color-sage);
+        }
+        .network-tree h3 {
+            font-family: 'Manrope', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-main);
         }
         .network-tags {
             display: flex;
             flex-wrap: wrap;
             gap: 0.5rem;
-            margin-top: 1rem;
+            margin-top: 0.75rem;
         }
         .network-tag {
-            background: #f1f5f9;
-            color: var(--text-main);
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            font-weight: 500;
+            background: white;
+            border: 1px solid var(--color-sage);
+            color: var(--color-forest);
+            padding: 0.45rem 0.9rem;
+            border-radius: 8px;           /* suorakulmaisempi kuin 50px */
+            font-size: 0.85rem;
+            font-weight: 600;
             display: flex;
             align-items: center;
             gap: 0.4rem;
+            transition: background 0.2s, border-color 0.2s;
+            cursor: pointer;
+        }
+        .network-tag:hover {
+            background: var(--color-sage);
+            border-color: rgba(24,63,53,0.25);
         }
 
         /* 4. Companies as Cards */
@@ -388,22 +455,22 @@
         }
         .list-item-card {
             background: #fff;
-            padding: 1.5rem;
+            padding: 1.25rem 1.5rem;
             border-radius: var(--radius-md);
-            border: 1px solid #f1f5f9;
+            border: 1px solid var(--color-sage);
             text-decoration: none;
             color: inherit;
             display: block;
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
             box-shadow: var(--shadow-sm);
             align-self: start;
             box-sizing: border-box;
             overflow: hidden;
         }
         .list-item-card:hover {
-            transform: translateY(-4px);
+            transform: translateY(-3px);
             box-shadow: var(--shadow-hover);
-            border-color: #e2e8f0;
+            border-color: rgba(24,63,53,0.22);
         }
         /* Kortin sisäinen grid-asettelu */
         .card-header-grid {
@@ -468,14 +535,14 @@
             }
         }
         .list-icon-wrapper {
-            background: #f8fafc;
+            background: var(--color-sage);
             width: 40px;
             height: 40px;
-            border-radius: 12px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--accent);
+            color: var(--color-forest);
             font-size: 1.25rem;
             margin-bottom: 0;
             flex-shrink: 0;
@@ -503,7 +570,7 @@
                 display: contents;
             }
             .hero-title {
-                font-size: 3rem;
+                font-size: 2.8rem;
             }
             
             /* Lohko 1: Identiteetti */
@@ -568,11 +635,15 @@
                 background: transparent;
             }
             .hero-title {
-                font-size: 2.2rem;
+                font-size: 2rem;
+                letter-spacing: -0.5px;
+            }
+            .hero-section {
+                min-height: 360px;
             }
             .page-container {
-                padding: 0 1.5rem;
-                margin: 2rem auto;
+                padding: 0 1.25rem;
+                margin: 2.5rem auto;
             }
             .action-buttons {
                 display: grid;
@@ -607,9 +678,9 @@
             border-radius: var(--radius-md);
             box-shadow: var(--shadow-sm);
             overflow: hidden;
-            border: 1px solid #f1f5f9;
-            border-left: 5px solid var(--accent);
-            transition: all 0.3s ease;
+            border: 1px solid var(--color-sage);
+            border-left: 4px solid var(--color-sand);
+            transition: all 0.25s ease;
         }
         .service-accordion:hover {
             box-shadow: var(--shadow-md);
@@ -617,8 +688,9 @@
         .service-accordion summary {
             padding: 1.25rem 1.5rem;
             cursor: pointer;
-            font-weight: bold;
-            font-size: 1.1rem;
+            font-weight: 700;
+            font-family: 'Manrope', sans-serif;
+            font-size: 1rem;
             color: var(--text-main);
             list-style: none;
             display: flex;
@@ -627,7 +699,7 @@
             transition: background 0.2s;
         }
         .service-accordion summary:hover {
-            background: #f8fafc;
+            background: var(--color-sage);
         }
         .service-accordion summary::-webkit-details-marker {
             display: none;
@@ -639,7 +711,7 @@
             padding: 0 1.5rem 1.5rem;
             color: var(--text-main);
             font-size: 0.95rem;
-            border-top: 1px solid #f1f5f9;
+            border-top: 1px solid var(--color-sage);
             margin-top: 0.5rem;
             padding-top: 1rem;
         }
@@ -648,28 +720,29 @@
         /* Nearby Tags */
         .nearby-tag {
             display: inline-block;
-            padding: 0.4rem 0.8rem;
-            border-radius: 50px;
-            background: #f1f5f9;
-            color: #334155;
+            padding: 0.4rem 0.85rem;
+            border-radius: 8px;
+            background: white;
+            color: var(--color-forest);
             text-decoration: none;
             font-weight: 600;
             transition: all 0.2s ease;
-            border: 1px solid transparent;
+            border: 1px solid var(--color-sage);
+            font-size: 0.9rem;
         }
         .nearby-tag:hover {
-            background: #e2e8f0;
-            border-color: #cbd5e1;
+            background: var(--color-sage);
+            border-color: rgba(24,63,53,0.2);
             transform: translateY(-2px);
         }
         .nearby-tag .dist {
-            opacity: 0.7;
+            opacity: 0.65;
             font-weight: 500;
         }
-        .tag-large { font-size: 1.05rem; background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; }
-        .tag-large:hover { background: #bae6fd; }
-        .tag-medium { font-size: 0.95rem; }
-        .tag-small { font-size: 0.85rem; opacity: 0.8; }
+        .tag-large { font-size: 1rem; background: var(--color-sage); color: var(--color-forest); border: 1px solid rgba(24,63,53,0.15); }
+        .tag-large:hover { background: #d4e5d8; }
+        .tag-medium { font-size: 0.9rem; }
+        .tag-small { font-size: 0.82rem; opacity: 0.85; }
 
         /* Nearby Tags Grid - 2 columns on desktop */
         .nearby-tags-grid {
@@ -694,30 +767,28 @@
             align-items: center;
             gap: 0.5rem;
             text-decoration: none;
-            color: var(--text-main);
-            background: rgba(255,255,255,0.75);
+            color: rgba(255,255,255,0.9);
+            background: rgba(255,255,255,0.15);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(0,0,0,0.08);
-            padding: 0.5rem 1rem;
+            border: 1px solid rgba(255,255,255,0.28);
+            padding: 0.45rem 1rem;
             border-radius: 50px;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             font-weight: 600;
             transition: all 0.25s ease;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
             max-width: 100%;
         }
         .parent-nav-link:hover {
-            background: rgba(255,255,255,0.95);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            background: rgba(255,255,255,0.28);
             transform: translateX(-2px);
         }
         .parent-nav-label {
-            color: var(--text-muted);
+            color: rgba(255,255,255,0.7);
             font-weight: 500;
         }
         .parent-nav-name {
-            color: var(--accent);
+            color: rgba(255,255,255,0.95);
             font-weight: 700;
         }
 
@@ -726,22 +797,23 @@
             display: flex;
             align-items: center;
             gap: 1rem;
-            padding: 1rem 1.25rem;
+            padding: 0.9rem 1.25rem;
             background: white;
-            border: 1px solid #f1f5f9;
+            border: 1px solid var(--color-sage);
             border-radius: var(--radius-sm);
             cursor: pointer;
-            transition: all 0.25s ease;
+            transition: all 0.22s ease;
             box-shadow: var(--shadow-sm);
         }
         .subplace-card:hover {
+            background: var(--color-sage);
             box-shadow: var(--shadow-md);
-            transform: translateX(4px);
-            border-color: var(--accent);
+            transform: translateX(3px);
+            border-color: rgba(24,63,53,0.25);
         }
         .subplace-icon {
-            font-size: 1.5rem;
-            color: var(--accent);
+            font-size: 1.4rem;
+            color: var(--color-forest);
             flex-shrink: 0;
         }
         .subplace-info {
@@ -749,34 +821,35 @@
             min-width: 0;
         }
         .subplace-name {
+            font-family: 'Manrope', sans-serif;
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 0.98rem;
             color: var(--text-main);
         }
         .subplace-desc {
-            font-size: 0.85rem;
+            font-size: 0.83rem;
             color: var(--text-muted);
-            margin-top: 0.2rem;
+            margin-top: 0.15rem;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
         .subplace-arrow {
             color: var(--text-muted);
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             flex-shrink: 0;
         }
         .subplaces-list {
             display: flex;
             flex-direction: column;
-            gap: 0.6rem;
+            gap: 0.5rem;
             margin-top: 1rem;
         }
         /* Haitari: piilotetut kortit */
         .subplaces-overflow {
             display: flex;
             flex-direction: column;
-            gap: 0.6rem;
+            gap: 0.5rem;
             overflow: hidden;
             max-height: 0;
             opacity: 0;
@@ -793,19 +866,19 @@
             gap: 0.5rem;
             width: 100%;
             margin-top: 0.5rem;
-            padding: 0.7rem 1.25rem;
-            background: #f1f5f9;
-            border: 1px solid #e2e8f0;
+            padding: 0.65rem 1.25rem;
+            background: white;
+            border: 1px solid var(--color-sage);
             border-radius: var(--radius-sm);
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             font-weight: 600;
-            color: var(--accent);
+            color: var(--color-forest);
             cursor: pointer;
             transition: all 0.2s ease;
         }
         .subplaces-toggle-btn:hover {
-            background: #e2e8f0;
-            border-color: var(--accent);
+            background: var(--color-sage);
+            border-color: rgba(24,63,53,0.2);
         }
         .subplaces-toggle-btn .toggle-icon {
             transition: transform 0.3s ease;
@@ -820,16 +893,16 @@
             background: white;
             width: 100%;
             max-width: 540px;
-            border-radius: 28px 28px 0 0;
+            border-radius: 24px 24px 0 0;
             padding: 2rem;
             transform: translateY(100%);
             transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
-            box-shadow: 0 -20px 60px rgba(0,0,0,0.15);
+            box-shadow: 0 -20px 60px rgba(24,63,53,0.15);
         }
         .subplace-modal-handle {
             width: 44px;
-            height: 5px;
-            background: #e2e8f0;
+            height: 4px;
+            background: var(--color-sage);
             border-radius: 4px;
             margin: 0 auto 1.75rem;
         }
@@ -840,7 +913,7 @@
             margin-bottom: 0.5rem;
         }
         .subplace-modal-close {
-            background: #f1f5f9;
+            background: var(--color-sage);
             border: none;
             cursor: pointer;
             padding: 0.5rem;
@@ -852,22 +925,22 @@
             transition: background 0.2s;
             flex-shrink: 0;
         }
-        .subplace-modal-close:hover { background: #e2e8f0; }
+        .subplace-modal-close:hover { background: #d4e5d8; }
         .subplace-modal-type-badge {
             font-size: 0.78rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: var(--accent);
-            background: rgba(16, 185, 129, 0.1);
+            color: var(--color-forest);
+            background: var(--color-sage);
             padding: 0.25rem 0.75rem;
-            border-radius: 50px;
+            border-radius: 6px;
             display: inline-block;
             margin-bottom: 1rem;
         }
         .subplace-modal-title {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.6rem;
+            font-family: 'Manrope', sans-serif;
+            font-size: 1.55rem;
             font-weight: 800;
             color: var(--text-main);
             margin: 0 0 0.5rem;
@@ -888,6 +961,96 @@
             flex: 1;
             min-width: 120px;
             justify-content: center;
+        }
+
+        /* ── Aikamatka-muistokortit ── */
+        .memory-card {
+            background: var(--color-sage) !important;
+            border: 1px solid rgba(24,63,53,0.12) !important;
+            border-radius: var(--radius-md) !important;
+            transition: transform 0.2s, border-color 0.2s !important;
+        }
+        .memory-card:hover {
+            transform: translateX(4px) !important;
+            border-color: rgba(24,63,53,0.25) !important;
+        }
+        /* Vuosiluvut vihreäksi, ei punaiseksi */
+        .memory-card > div:first-child {
+            color: var(--color-forest) !important;
+            font-family: 'Manrope', sans-serif !important;
+        }
+
+        /* ── Osallistu-sidebar ── */
+        #participate-section {
+            background: var(--color-forest) !important;
+            border-left: none !important;
+            border-radius: var(--radius-md);
+            padding: 1.75rem;
+        }
+        #participate-section h3 {
+            color: white;
+            font-family: 'Manrope', sans-serif;
+            font-size: 1.1rem;
+        }
+        #participate-section .btn-primary {
+            background: var(--color-sand) !important;
+            color: var(--color-forest) !important;
+            font-weight: 700;
+        }
+        #participate-section .btn-primary:hover {
+            background: #c99446 !important;
+            box-shadow: 0 4px 14px rgba(217,168,92,0.4) !important;
+        }
+        #participate-section .btn-light {
+            background: rgba(255,255,255,0.1) !important;
+            color: white !important;
+            border: 1px solid rgba(255,255,255,0.2) !important;
+        }
+        #participate-section .btn-light:hover {
+            background: rgba(255,255,255,0.2) !important;
+        }
+
+        /* ── Mixonet-banneri ── */
+        #mixonet-network-banner {
+            background: linear-gradient(135deg, var(--color-sage), rgba(229,238,232,0.5)) !important;
+            border: 1px solid rgba(24,63,53,0.14) !important;
+            border-radius: var(--radius-md) !important;
+        }
+        #mixonet-network-banner strong {
+            color: var(--color-forest) !important;
+            font-family: 'Manrope', sans-serif !important;
+        }
+        #mixonet-network-banner p {
+            color: #3a5a52 !important;
+        }
+        #mixonet-network-banner a {
+            color: var(--color-forest) !important;
+            font-weight: 700;
+        }
+
+        /* ── Verkoston tilanne -otsikko ── */
+        .network-stats h3 {
+            font-family: 'Manrope', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 1rem;
+        }
+
+        /* ── Services details (Lähellä ja tähän paikkaan liittyen) ── */
+        #services-details > summary h2 {
+            font-family: 'Manrope', sans-serif !important;
+        }
+
+        /* ── Projektit & Ideat – korostettu vasemmalla viivalla ── */
+        #mixonet-projects-section,
+        #mixonet-ideas-section {
+            border-left: 3px solid var(--color-sand);
+            padding-left: 1.25rem;
+        }
+        #mixonet-projects-section > h2,
+        #mixonet-ideas-section > h2 {
+            border-bottom-color: rgba(217,168,92,0.3);
         }
     </style>
 </head>
@@ -990,7 +1153,7 @@
 
                 <!-- 2. Kuvagalleria -->
                 <section class="content-block" id="media-section" style="display: none;">
-                    <h2 style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; font-family: 'Outfit', sans-serif; font-size: 1.35rem; font-weight: 700; color: var(--text-main);">
+                    <h2 style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; font-family: 'Manrope', sans-serif; font-size: 1.35rem; font-weight: 700; color: var(--text-main);">
                         <span class="iconify" style="color: #ec4899;" data-icon="material-symbols:add-a-photo-outline"></span> Kuvat paikasta
                         <span id="media-count-badge" style="background: #fce7f3; color: #db2777; font-size: 0.8rem; font-weight: 700; padding: 2px 10px; border-radius: 50px; margin-left: 0.5rem;">0</span>
                     </h2>
@@ -1040,7 +1203,7 @@
                 <section class="content-block" id="services-main-section">
                     <details id="services-details" open>
                         <summary style="cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between;">
-                            <h2 id="services-main-title" style="display: flex; align-items: center; gap: 0.5rem; margin: 0; font-family: 'Outfit', sans-serif; font-size: 1.35rem; font-weight: 700; color: var(--text-main);">
+                            <h2 id="services-main-title" style="display: flex; align-items: center; gap: 0.5rem; margin: 0; font-family: 'Manrope', sans-serif; font-size: 1.35rem; font-weight: 700; color: var(--text-main);">
                                 <span class="iconify" data-icon="material-symbols:storefront-outline" style="color: var(--accent);"></span>
                                 Lähellä ja tähän paikkaan liittyen
                             </h2>
@@ -1064,7 +1227,7 @@
 
                         <!-- Semanttiset osumat (Sopii tähän paikkaan, tier 3) -->
                         <div id="semantic-matches-container" style="display: none; margin-top: 2rem;">
-                            <h3 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; font-family: 'Outfit', sans-serif;">
+                            <h3 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; font-family: 'Manrope', sans-serif;">
                                 <span class="iconify" data-icon="material-symbols:auto-awesome" style="color: #f59e0b;"></span> Sopii tähän paikkaan
                             </h3>
                             <div id="semantic-matches-list" style="display: flex; flex-direction: column; gap: 1rem;">
@@ -1074,7 +1237,7 @@
 
                         <!-- Premium-kumppanit (Kumppanit, tier 4) -->
                         <div id="premium-partners-container" style="display: none; margin-top: 2rem;">
-                            <h3 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; font-family: 'Outfit', sans-serif;">
+                            <h3 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; font-family: 'Manrope', sans-serif;">
                                 <span class="iconify" data-icon="material-symbols:stars" style="color: #eab308;"></span> Kumppanit
                             </h3>
                             <div id="premium-partners-list" style="display: flex; flex-direction: column; gap: 1rem;">
@@ -1240,7 +1403,7 @@
                 <div id="mixonet-network-banner" style="display: none; background: linear-gradient(135deg, #ede9fe, #f5f3ff); border: 1px solid #c4b5fd; border-radius: 16px; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem;">
                     <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
                         <span class="iconify" style="font-size: 1.5rem; color: #7c3aed;" data-icon="material-symbols:hub-outline"></span>
-                        <strong id="mixonet-banner-title" style="font-family: 'Outfit', sans-serif; font-size: 1rem; color: #4c1d95;">Verkostoyhteys</strong>
+                        <strong id="mixonet-banner-title" style="font-family: 'Manrope', sans-serif; font-size: 1rem; color: #4c1d95;">Verkostoyhteys</strong>
                     </div>
                     <p id="mixonet-banner-desc" style="margin: 0; font-size: 0.875rem; color: #5b21b6; line-height: 1.5;"></p>
                     <a id="mixonet-banner-link" href="#" style="display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 0.75rem; font-size: 0.875rem; font-weight: 700; color: #6d28d9; text-decoration: none;">
@@ -1251,7 +1414,7 @@
 
                 <!-- 5. Visual Network Stats -->
                 <section class="network-stats">
-                    <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-main);">Verkoston tilanne</h3>
+                    <h3 style="font-family: 'Manrope', sans-serif; font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-main);">Verkoston tilanne</h3>
                     <div class="stats-visual">
                         <div class="stat-row">
                             <span class="dot" style="background: #10b981;"></span>
@@ -1278,7 +1441,7 @@
 
                 <!-- 7. Place's Network -->
                 <section class="network-tree" id="themes-section" style="display: none; margin-bottom: 2rem;">
-                    <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; font-weight: 700; margin-top: 0; margin-bottom: 1rem; color: var(--text-main);">Liittyy teemoihin</h3>
+                    <h3 style="font-family: 'Manrope', sans-serif; font-size: 1.25rem; font-weight: 700; margin-top: 0; margin-bottom: 1rem; color: var(--text-main);">Liittyy teemoihin</h3>
                     <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem;">Tämä paikka kytkeytyy seuraaviin aiheisiin Laukaassa:</p>
                     <div class="network-tags" id="network-tags-list">
                         <!-- Filled by JS -->
@@ -1287,7 +1450,7 @@
                 
                 <!-- Osallistu (Floating buttons) -->
                 <section id="participate-section" class="stats-visual" style="margin-top: 1rem; position: sticky; top: 2rem; border-left: 4px solid var(--accent);">
-                    <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; margin-top: 0; color: var(--text-main);">Osallistu</h3>
+                    <h3 style="font-family: 'Manrope', sans-serif; font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; margin-top: 0; color: var(--text-main);">Osallistu</h3>
                     <div style="display: flex; flex-direction: column; gap: 0.8rem;">
                         <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="openLostrefoundModal()">
                             <span class="iconify" data-icon="material-symbols:add"></span> Lisää havainto
@@ -1342,7 +1505,7 @@
             <div style="width: 40px; height: 4px; background: #e2e8f0; border-radius: 4px; margin: 0 auto 1.5rem;"></div>
             
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                <h3 id="tag-modal-title" style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 0.5rem; color: var(--text-main);">
+                <h3 id="tag-modal-title" style="font-family: 'Manrope', sans-serif; font-size: 1.5rem; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 0.5rem; color: var(--text-main);">
                     <span id="tag-modal-icon" class="iconify" data-icon="material-symbols:local-activity"></span>
                     <span id="tag-modal-name">Aktiviteetti</span>
                 </h3>
@@ -1387,7 +1550,7 @@
             <div style="width: 40px; height: 4px; background: #e2e8f0; border-radius: 4px; margin: 0 auto 1.5rem;"></div>
             
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 0.5rem; color: var(--text-main);">
+                <h3 style="font-family: 'Manrope', sans-serif; font-size: 1.5rem; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 0.5rem; color: var(--text-main);">
                     <span class="iconify" data-icon="material-symbols:phone-iphone" style="color: var(--accent);"></span>
                     Lataa LostReFound
                 </h3>
@@ -1412,7 +1575,7 @@
             <div style="width: 40px; height: 4px; background: #e2e8f0; border-radius: 4px; margin: 0 auto 1.5rem;"></div>
             
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 0.5rem; color: var(--text-main);">
+                <h3 style="font-family: 'Manrope', sans-serif; font-size: 1.5rem; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 0.5rem; color: var(--text-main);">
                     <span class="iconify" data-icon="material-symbols:phone-iphone" style="color: var(--accent);"></span>
                     Lataa LaukaaInfo -sovellus
                 </h3>
@@ -1441,7 +1604,7 @@
             <div style="width: 40px; height: 4px; background: #e2e8f0; border-radius: 4px; margin: 0 auto 1.5rem;"></div>
             
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 0.5rem; color: var(--text-main);">
+                <h3 style="font-family: 'Manrope', sans-serif; font-size: 1.5rem; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 0.5rem; color: var(--text-main);">
                     <span class="iconify" data-icon="material-symbols:storefront" style="color: #f59e0b;"></span>
                     Yrityksesi mukaan?
                 </h3>
