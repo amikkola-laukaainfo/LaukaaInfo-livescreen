@@ -423,6 +423,90 @@ document.addEventListener('DOMContentLoaded', async () => {
         mapBtn.href = `karttakohteet.html?cat=${encodeURIComponent(tagParam)}`;
     }
 
+    // Jakolinkki-toiminnallisuus (Dropdown)
+    const shareBtn = document.getElementById('share-theme-btn');
+    if (shareBtn) {
+        const safeTag = encodeURIComponent(tagParam);
+        const baseUrl = window.location.origin + window.location.pathname;
+        const shareUrl = `${baseUrl}?tag=${safeTag}`;
+
+        let sharePanel = document.getElementById('share-dropdown-panel');
+        if (!sharePanel) {
+            sharePanel = document.createElement('div');
+            sharePanel.id = 'share-dropdown-panel';
+            sharePanel.style.cssText = `
+                display: none; position: absolute; z-index: 900;
+                background: #fff; border: 1px solid #e2e8f0; border-radius: 14px;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.14); padding: 1rem;
+                min-width: 260px; flex-direction: column; gap: 0.75rem;
+            `;
+            sharePanel.innerHTML = `
+                <p style="margin:0 0 0.5rem; font-size:0.8rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.5px;">Jaa teema</p>
+                <button id="share-copy-link-btn" style="display:flex; align-items:center; gap:0.75rem; width:100%; background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:0.7rem 1rem; cursor:pointer; font-weight:600; font-size:0.9rem; color:#1e293b; transition:background 0.2s;">
+                    <span class="iconify" data-icon="material-symbols:link" style="font-size:1.2rem; color:#0284c7;"></span>
+                    Kopioi linkki
+                </button>
+                <button id="share-qr-btn" style="display:flex; align-items:center; gap:0.75rem; width:100%; background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:0.7rem 1rem; cursor:pointer; font-weight:600; font-size:0.9rem; color:#1e293b; transition:background 0.2s;">
+                    <span class="iconify" data-icon="material-symbols:qr-code" style="font-size:1.2rem; color:#7c3aed;"></span>
+                    Luo QR-koodi
+                </button>
+                <div id="share-qr-container" style="display:none; flex-direction:column; align-items:center; gap:0.75rem; padding-top:0.5rem; border-top:1px solid #f1f5f9;">
+                    <img id="share-qr-img" src="" alt="QR-koodi" style="width:160px; height:160px; border-radius:8px; border:1px solid #e2e8f0;">
+                    <button id="share-qr-copy-btn" style="display:flex; align-items:center; gap:0.5rem; background:#7c3aed; color:#fff; border:none; border-radius:8px; padding:0.5rem 1.1rem; cursor:pointer; font-weight:600; font-size:0.85rem;">
+                        <span class="iconify" data-icon="material-symbols:download" style="font-size:1rem;"></span>
+                        Tallenna QR
+                    </button>
+                </div>
+            `;
+            shareBtn.parentElement.style.position = 'relative';
+            shareBtn.insertAdjacentElement('afterend', sharePanel);
+        }
+
+        shareBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isVisible = sharePanel.style.display === 'flex';
+            sharePanel.style.display = isVisible ? 'none' : 'flex';
+            if (!isVisible) {
+                sharePanel.style.top = (shareBtn.offsetTop + shareBtn.offsetHeight + 8) + 'px';
+                sharePanel.style.left = shareBtn.offsetLeft + 'px';
+                if (window.Iconify) window.Iconify.scan(sharePanel);
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('#share-copy-link-btn')) {
+                navigator.clipboard.writeText(shareUrl).then(() => {
+                    const btn = document.getElementById('share-copy-link-btn');
+                    const orig = btn.innerHTML;
+                    btn.innerHTML = '<span class="iconify" data-icon="material-symbols:check" style="font-size:1.2rem; color:#059669;"></span> Kopioitu!';
+                    btn.style.borderColor = '#059669';
+                    setTimeout(() => { btn.innerHTML = orig; btn.style.borderColor = ''; }, 2500);
+                }).catch(() => alert('Jakolinkki: ' + shareUrl));
+            }
+            if (e.target.closest('#share-qr-btn')) {
+                const qrContainer = document.getElementById('share-qr-container');
+                const qrImg = document.getElementById('share-qr-img');
+                const encoded = encodeURIComponent(shareUrl);
+                qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encoded}&format=png&margin=10`;
+                qrContainer.style.display = 'flex';
+                document.getElementById('share-qr-btn').style.display = 'none';
+            }
+            if (e.target.closest('#share-qr-copy-btn')) {
+                const qrImg = document.getElementById('share-qr-img');
+                fetch(qrImg.src).then(res => res.blob()).then(blob => {
+                    const a = document.createElement('a');
+                    a.href = URL.createObjectURL(blob);
+                    a.download = `laukaainfo-qr-teema-${safeTag}.png`;
+                    a.click();
+                    URL.revokeObjectURL(a.href);
+                });
+            }
+            if (!e.target.closest('#share-dropdown-panel') && !e.target.closest('#share-theme-btn')) {
+                if (sharePanel) sharePanel.style.display = 'none';
+            }
+        });
+    }
+
     // PhotoSwipe init
     let themeLightbox = null;
     if (window.PhotoSwipeLightbox) {
