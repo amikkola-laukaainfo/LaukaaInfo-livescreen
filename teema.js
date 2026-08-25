@@ -435,9 +435,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             sharePanel = document.createElement('div');
             sharePanel.id = 'share-dropdown-panel';
             sharePanel.style.cssText = `
-                display: none; position: absolute; z-index: 900;
+                display: none; position: absolute; z-index: 9999;
                 background: #fff; border: 1px solid #e2e8f0; border-radius: 14px;
-                box-shadow: 0 8px 32px rgba(0,0,0,0.14); padding: 1rem;
+                box-shadow: 0 12px 40px rgba(0,0,0,0.2); padding: 1rem;
                 min-width: 260px; flex-direction: column; gap: 0.75rem;
             `;
             sharePanel.innerHTML = `
@@ -458,8 +458,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </button>
                 </div>
             `;
-            shareBtn.parentElement.style.position = 'relative';
-            shareBtn.insertAdjacentElement('afterend', sharePanel);
+            document.body.appendChild(sharePanel);
         }
 
         shareBtn.addEventListener('click', (e) => {
@@ -467,8 +466,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             const isVisible = sharePanel.style.display === 'flex';
             sharePanel.style.display = isVisible ? 'none' : 'flex';
             if (!isVisible) {
-                sharePanel.style.top = (shareBtn.offsetTop + shareBtn.offsetHeight + 8) + 'px';
-                sharePanel.style.left = shareBtn.offsetLeft + 'px';
+                const rect = shareBtn.getBoundingClientRect();
+                sharePanel.style.top = (window.scrollY + rect.bottom + 8) + 'px';
+                
+                let leftPos = window.scrollX + rect.left;
+                if (leftPos + 280 > window.innerWidth) {
+                    leftPos = window.innerWidth - 290;
+                }
+                sharePanel.style.left = Math.max(10, leftPos) + 'px';
+                
                 if (window.Iconify) window.Iconify.scan(sharePanel);
             }
         });
