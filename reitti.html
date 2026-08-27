@@ -16,6 +16,107 @@
     <link rel="stylesheet" href="modal.css">
 
     <style>
+        /* Proximity Toast */
+        #proximity-toast {
+            position: fixed;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(120%);
+            z-index: 10000;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.18), 0 2px 12px rgba(0,0,0,0.1);
+            padding: 1.1rem 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            min-width: 280px;
+            max-width: 90vw;
+            border-left: 5px solid #059669;
+            transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        #proximity-toast.visible {
+            transform: translateX(-50%) translateY(0);
+        }
+        #toast-icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+        #toast-body {
+            flex: 1;
+            min-width: 0;
+        }
+        #toast-label {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #059669;
+            margin-bottom: 0.1rem;
+        }
+        #toast-point-name {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #0f172a;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        #toast-point-dist {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: 0.1rem;
+        }
+        #toast-open-btn {
+            background: #059669;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 0.5rem 0.9rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+            font-family: inherit;
+            transition: background 0.2s;
+        }
+        #toast-open-btn:hover { background: #047857; }
+        #toast-close-btn {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 0.2rem;
+            flex-shrink: 0;
+            line-height: 1;
+        }
+        #toast-close-btn:hover { color: #475569; }
+        #gps-status-btn {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 9000;
+            background: #fff;
+            border: none;
+            border-radius: 50px;
+            padding: 0.4rem 0.9rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: background 0.2s;
+        }
+        #gps-status-btn.active { background: #dcfce7; color: #166534; }
+        #gps-status-btn.error { background: #fee2e2; color: #b91c1c; }
+    </style>
+
+    <style>
         :root {
             --bg-color: #f8fafc;
             --text-main: #0f172a;
@@ -196,6 +297,24 @@
             <div id="point-modal-link-container" class="lki-modal-footer"></div>
         </div>
     </div>
+</div>
+
+<!-- GPS Status Button -->
+<button id="gps-status-btn" onclick="window.toggleGPS && window.toggleGPS()" title="GPS-seuranta">
+    <span id="gps-dot">📍</span>
+    <span id="gps-label">GPS pois</span>
+</button>
+
+<!-- Proximity Toast -->
+<div id="proximity-toast">
+    <div id="toast-icon">📍</div>
+    <div id="toast-body">
+        <div id="toast-label">Olet lähellä kohdetta</div>
+        <div id="toast-point-name">...</div>
+        <div id="toast-point-dist"></div>
+    </div>
+    <button id="toast-open-btn">Avaa →</button>
+    <button id="toast-close-btn">✕</button>
 </div>
 
 <script src="reitti.js"></script>

@@ -94,6 +94,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Init Map
         const map = L.map('map');
+        window._leafletMap = map;  // stored for GPS user marker
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
@@ -155,9 +156,165 @@ document.addEventListener('DOMContentLoaded', async () => {
         }).join('');
         
         window.routePoints = points;
+
+        // Start GPS tracking after route is rendered (auto-start)
+        if (navigator.geolocation) {
+            initGPS(points);
+        }
     }
 
-    // Unlock event
+    // ─── GPS PROXIMITY SYSTEM ───────────────────────────────────────────────
+
+    let gpsWatchId = null;
+    let gpsActive = false;
+    let proximityState = {};  // { pointKey: { triggered: bool, lastDist: number } }
+    let activeToastPoint = null;
+    let userMarker = null;
+    let gpsMap = null;  // reference set after map init
+
+    // Haversine formula — returns distance in metres
+    function haversineMeters(lat1, lng1, lat2, lng2) {
+        const R = 6371000;
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLng = (lng2 - lng1) * Math.PI / 180;
+        const a = Math.sin(dLat / 2) ** 2 +
+                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                  Math.sin(dLng / 2) ** 2;
+        return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+
+    function pointKey(p, idx) {
+        return p.id || p.title || ('point_' + idx);
+    }
+
+    function initGPS(points) {
+        const gpsBtn = document.getElementById('gps-status-btn');
+        const gpsLabel = document.getElementById('gps-label');
+
+        window.toggleGPS = function() {
+            if (gpsActive) {
+                stopGPS();
+            } else {
+                startGPS(points);
+            }
+        };
+
+        // Auto-start silently — user can dismiss
+        startGPS(points);
+    }
+
+    function startGPS(points) {
+        if (!navigator.geolocation) return;
+        const gpsBtn = document.getElementById('gps-status-btn');
+        const gpsLabel = document.getElementById('gps-label');
+
+        gpsWatchId = navigator.geolocation.watchPosition(
+            (pos) => onPositionUpdate(pos, points),
+            (err) => {
+                console.warn('GPS-virhe:', err.message);
+                if (gpsBtn) { gpsBtn.className = 'error'; gpsLabel.textContent = 'GPS-virhe'; }
+            },
+            { enableHighAccuracy: true, maximumAge: 5000, timeout: 20000 }
+        );
+        gpsActive = true;
+        if (gpsBtn) { gpsBtn.className = 'active'; gpsLabel.textContent = 'GPS päällä'; }
+    }
+
+    function stopGPS() {
+        if (gpsWatchId !== null) navigator.geolocation.clearWatch(gpsWatchId);
+        gpsWatchId = null;
+        gpsActive = false;
+        const gpsBtn = document.getElementById('gps-status-btn');
+        const gpsLabel = document.getElementById('gps-label');
+        if (gpsBtn) { gpsBtn.className = ''; gpsLabel.textContent = 'GPS pois'; }
+        closeProximityToast();
+    }
+
+    function onPositionUpdate(pos, points) {
+        const userLat = pos.coords.latitude;
+        const userLng = pos.coords.longitude;
+
+        // Update user marker on map
+        updateUserMarker(userLat, userLng);
+
+        // Check each point with a notificationDistance
+        points.forEach((p, idx) => {
+            const dist = p.notificationDistance || p.notification_distance_m || 0;
+            if (!dist) return;
+
+            const key = pointKey(p, idx);
+            if (!proximityState[key]) proximityState[key] = { triggered: false, lastDist: Infinity };
+            const state = proximityState[key];
+
+            const pointLat = p.lat || (p.geometry && p.geometry.coordinates && p.geometry.coordinates[1]);
+            const pointLng = p.lng || (p.geometry && p.geometry.coordinates && p.geometry.coordinates[0]);
+            if (pointLat == null || pointLng == null) return;
+
+            const currentDist = Math.round(haversineMeters(userLat, userLng, pointLat, pointLng));
+            state.lastDist = currentDist;
+
+            if (!state.triggered && currentDist <= dist) {
+                // Enter proximity zone — show toast
+                state.triggered = true;
+                showProximityToast(p, currentDist);
+            } else if (state.triggered && currentDist > dist * 3) {
+                // Reset hysteresis — left zone
+                state.triggered = false;
+            }
+        });
+    }
+
+    function updateUserMarker(lat, lng) {
+        // Find current map instance
+        const mapEl = document.getElementById('map');
+        if (!mapEl || !mapEl._leaflet_id) return;
+        const map = window._leafletMap;
+        if (!map) return;
+
+        const L = window.L;
+        if (!L) return;
+
+        if (userMarker) {
+            userMarker.setLatLng([lat, lng]);
+        } else {
+            const icon = L.divIcon({
+                html: `<div style="width:16px;height:16px;background:#2563eb;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 4px rgba(37,99,235,0.25);"></div>`,
+                className: '',
+                iconSize: [16, 16],
+                iconAnchor: [8, 8]
+            });
+            userMarker = L.marker([lat, lng], { icon, zIndexOffset: 1000 }).addTo(map);
+        }
+    }
+
+    function showProximityToast(p, distMeters) {
+        activeToastPoint = p;
+        document.getElementById('toast-point-name').textContent = p.title || 'Kohde';
+        document.getElementById('toast-point-dist').textContent = `Noin ${distMeters} m päässä`;
+
+        const toast = document.getElementById('proximity-toast');
+        toast.classList.add('visible');
+
+        // Wire open button
+        document.getElementById('toast-open-btn').onclick = () => {
+            window.openPointModal && window.openPointModal(p);
+        };
+
+        // Auto-hide after 12 s
+        clearTimeout(window._toastTimer);
+        window._toastTimer = setTimeout(closeProximityToast, 12000);
+    }
+
+    window.closeProximityToast = function() {
+        document.getElementById('proximity-toast').classList.remove('visible');
+        clearTimeout(window._toastTimer);
+        activeToastPoint = null;
+    };
+
+    document.getElementById('toast-close-btn').addEventListener('click', window.closeProximityToast);
+
+    // Start
+    loadRoute();
     document.getElementById('btn-unlock').addEventListener('click', async () => {
         const code = document.getElementById('access-code').value.trim();
         if (!code) return;
@@ -174,9 +331,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('btn-unlock').textContent = 'Avaa reitti';
         }
     });
-
-    // Start
-    loadRoute();
 
     // Modal Logic
     function getYoutubeId(url) {
