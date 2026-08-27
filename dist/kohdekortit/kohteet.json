@@ -1,1 +1,48 @@
-[]
+[
+  {
+    "id": "kohde_a7b3x9z",
+    "type": "event",
+    "name": "Kuilun Partaalla",
+    "shortDescription": "Kuilun Partaalla on Lievestuoreen Haarlan rannassa järjestettävä kolmipäiväinen musiikkifestivaali, jossa on live-musiikkia, valoshow ja sunnuntaina perhepäivä.",
+    "description": "Kuilun Partaalla -festivaali järjestetään Lievestuoreen satamassa eli Haarlan rannassa 11.–13.9.2026. Ohjelmassa on monipuolista musiikkia, esiintyjiä ja näyttävä valoshow, ja sunnuntai on perhepäivä, jonka ohjelmassa ovat Lastenmusiikkiorkesteri Loiskis ja improteatteri Thö Säälittävät. Tapahtuma-alueella on esiintymisteltta sekä ruokaa ja juomaa tarjoavia myyntipisteitä.",
+    "status": "active",
+    "images": [
+      "http://kuilunpartaalla.fi/wp-content/uploads/2026/03/top2-1.jpg"
+    ],
+    "location": {
+      "address": "Majasaarentie 6A, Lievestuoreen satama",
+      "postalCode": "41400",
+      "municipality": "Laukaa",
+      "latitude": "",
+      "longitude": "",
+      "mapUrl": "https://www.google.com/maps/search/?api=1&query=Majasaarentie+6A%2C+41400+Lievestuore"
+    },
+    "contact": {
+      "email": "",
+      "phone": "",
+      "website": "https://kuilunpartaalla.fi/"
+    },
+    "taxonomy": [
+      "event.music",
+      "event.festival"
+    ],
+    "tags": [
+      "Tapahtumat",
+      "Kulttuuri",
+      "festivaali",
+      "musiikki",
+      "Perheet"
+    ],
+    "profiles": [
+      "culture",
+      "family"
+    ],
+    "event": {
+      "startDate": "2026-09-11T16:00:00",
+      "endDate": "2026-09-13T16:00:00",
+      "organizer": "H-R Events Oy",
+      "venue": "Lievestuoreen satama, Haarlan ranta",
+      "ticketUrl": "https://biletti.fi/e/kuilun-partaalla-lievestuore"
+    }
+  }
+]
