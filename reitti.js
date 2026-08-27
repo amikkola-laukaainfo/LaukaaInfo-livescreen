@@ -136,12 +136,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         pointsList.innerHTML = points.map((p, idx) => {
             let mediaPreview = '';
-            if (p.media) {
-                const mediaUrl = Array.isArray(p.media) ? p.media[0] : p.media;
+            const pMedia = p.media || p.imageUrl || p.image;
+            if (pMedia) {
+                const mediaUrl = Array.isArray(pMedia) ? pMedia[0] : pMedia;
                 if (mediaUrl) {
                     mediaPreview = `<div style="margin-top: 10px;"><button class="btn-light" style="padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid #cbd5e1; background: #f8fafc;" onclick="window.openPointModal(window.routePoints[${idx}])">Näytä sisältö</button></div>`;
                 }
-            } else if (p.description || p.link || p.url) {
+            } else if (p.description || p.link || p.url || p.infoLink) {
                 mediaPreview = `<div style="margin-top: 10px;"><button class="btn-light" style="padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid #cbd5e1; background: #f8fafc;" onclick="window.openPointModal(window.routePoints[${idx}])">Näytä tiedot</button></div>`;
             }
 
@@ -193,8 +194,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         mediaContainer.innerHTML = '';
         mediaContainer.style.display = 'none';
 
-        if (p.media) {
-            const mediaUrl = Array.isArray(p.media) ? p.media[0] : p.media;
+        const pMedia = p.media || p.imageUrl || p.image;
+        if (pMedia) {
+            const mediaUrl = Array.isArray(pMedia) ? pMedia[0] : pMedia;
             if (mediaUrl) {
                 mediaContainer.style.display = 'block';
                 const ytId = getYoutubeId(mediaUrl);
@@ -210,7 +212,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const linkContainer = document.getElementById('point-modal-link-container');
         linkContainer.innerHTML = '';
-        const targetLink = p.link || p.url;
+        const targetLink = p.link || p.url || p.infoLink;
         if (targetLink) {
             linkContainer.style.display = 'flex';
             linkContainer.innerHTML = `<a href="${targetLink}" target="_blank" class="lki-cta-btn website">Lisätietoja</a>`;
