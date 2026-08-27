@@ -117,10 +117,33 @@ document.addEventListener('DOMContentLoaded', async () => {
             },
             onEachFeature: function (feature, layer) {
                 if (feature.geometry.type === 'Point' && feature.properties) {
-                    points.push(feature.properties);
-                    if (feature.properties.title) {
-                        layer.bindPopup(`<b>${feature.properties.title}</b>`);
+                    const p = feature.properties;
+                    points.push(p);
+                    
+                    let popupHtml = `<div style="max-width: 250px; font-family: 'Manrope', sans-serif;">`;
+                    if (p.title) {
+                        popupHtml += `<h3 style="margin:0 0 8px 0; font-size:1.1rem; color:#0f172a;">${p.title}</h3>`;
                     }
+                    if (p.media) {
+                        const mediaUrl = Array.isArray(p.media) ? p.media[0] : p.media;
+                        if (mediaUrl) {
+                            if (mediaUrl.toLowerCase().match(/\.(mp4|webm|ogg)$/)) {
+                                popupHtml += `<video controls style="width:100%; border-radius:8px; margin-bottom:10px;"><source src="${mediaUrl}"></video>`;
+                            } else {
+                                popupHtml += `<img src="${mediaUrl}" style="width:100%; border-radius:8px; margin-bottom:10px;" alt="Kuva">`;
+                            }
+                        }
+                    }
+                    if (p.description) {
+                        popupHtml += `<p style="margin:0 0 10px 0; font-size:14px; color:#64748b; line-height:1.4;">${p.description}</p>`;
+                    }
+                    if (p.link || p.url) {
+                        const targetLink = p.link || p.url;
+                        popupHtml += `<a href="${targetLink}" target="_blank" style="display:inline-block; padding:6px 12px; background:#059669; color:#fff; text-decoration:none; border-radius:6px; font-weight:600; font-size:13px;">Lisätietoja</a>`;
+                    }
+                    popupHtml += `</div>`;
+                    
+                    layer.bindPopup(popupHtml);
                 }
             }
         }).addTo(map);
@@ -134,18 +157,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         pointsList.innerHTML = points.map((p, idx) => {
             let mediaHtml = '';
             if (p.media) {
-                // p.media is assumed to be an array or string url. Handle accordingly.
                 const mediaUrl = Array.isArray(p.media) ? p.media[0] : p.media;
                 if (mediaUrl) {
-                    mediaHtml = `<div class="media-container"><img src="${mediaUrl}" alt="${p.title}"></div>`;
+                    if (mediaUrl.toLowerCase().match(/\.(mp4|webm|ogg)$/)) {
+                        mediaHtml = `<div class="media-container"><video controls style="width:100%; max-width:400px; border-radius:8px;"><source src="${mediaUrl}"></video></div>`;
+                    } else {
+                        mediaHtml = `<div class="media-container"><img src="${mediaUrl}" alt="${p.title}" style="max-width:400px; width:100%; border-radius:8px;"></div>`;
+                    }
                 }
             }
+
+            const linkHtml = (p.link || p.url) ? `<a href="${p.link || p.url}" target="_blank" style="display:inline-block; margin-top:12px; padding:8px 16px; background:#f1f5f9; color:#0f172a; text-decoration:none; border-radius:8px; font-weight:600; font-size:14px;">Lisätietoja</a>` : '';
 
             return `
             <div class="point-card">
                 <h3>${idx + 1}. ${p.title || 'Piste ' + (idx + 1)}</h3>
                 ${p.description ? `<p>${p.description}</p>` : ''}
                 ${mediaHtml}
+                ${linkHtml}
             </div>
             `;
         }).join('');
