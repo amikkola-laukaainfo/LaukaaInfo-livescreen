@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
+    <link rel="stylesheet" href="modal.css">
+
     <style>
         :root {
             --bg-color: #f8fafc;
@@ -179,6 +181,19 @@
         <h2 style="margin-top: 3rem; margin-bottom: 1rem;">Kokemuspisteet <span id="point-count" style="color: var(--text-muted); font-size: 1.2rem; font-weight: 400;"></span></h2>
         <div class="timeline" id="points-list">
             <!-- Renderöidään js:llä -->
+        </div>
+    </div>
+</div>
+
+<!-- LKI MODAL (Kohdepisteen pop-up) -->
+<div id="point-modal" class="lki-modal-overlay">
+    <div class="lki-modal-container">
+        <button class="lki-modal-close" id="point-modal-close">&times;</button>
+        <div id="point-modal-media-container" class="lki-modal-media" style="display:none;"></div>
+        <div class="lki-modal-body">
+            <h2 id="point-modal-title" class="lki-modal-title"></h2>
+            <div id="point-modal-desc" class="lki-modal-description"></div>
+            <div id="point-modal-link-container" class="lki-modal-footer"></div>
         </div>
     </div>
 </div>

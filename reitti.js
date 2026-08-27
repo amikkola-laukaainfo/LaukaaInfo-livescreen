@@ -120,30 +120,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const p = feature.properties;
                     points.push(p);
                     
-                    let popupHtml = `<div style="max-width: 250px; font-family: 'Manrope', sans-serif;">`;
-                    if (p.title) {
-                        popupHtml += `<h3 style="margin:0 0 8px 0; font-size:1.1rem; color:#0f172a;">${p.title}</h3>`;
-                    }
-                    if (p.media) {
-                        const mediaUrl = Array.isArray(p.media) ? p.media[0] : p.media;
-                        if (mediaUrl) {
-                            if (mediaUrl.toLowerCase().match(/\.(mp4|webm|ogg)$/)) {
-                                popupHtml += `<video controls style="width:100%; border-radius:8px; margin-bottom:10px;"><source src="${mediaUrl}"></video>`;
-                            } else {
-                                popupHtml += `<img src="${mediaUrl}" style="width:100%; border-radius:8px; margin-bottom:10px;" alt="Kuva">`;
-                            }
-                        }
-                    }
-                    if (p.description) {
-                        popupHtml += `<p style="margin:0 0 10px 0; font-size:14px; color:#64748b; line-height:1.4;">${p.description}</p>`;
-                    }
-                    if (p.link || p.url) {
-                        const targetLink = p.link || p.url;
-                        popupHtml += `<a href="${targetLink}" target="_blank" style="display:inline-block; padding:6px 12px; background:#059669; color:#fff; text-decoration:none; border-radius:6px; font-weight:600; font-size:13px;">Lisätietoja</a>`;
-                    }
-                    popupHtml += `</div>`;
-                    
-                    layer.bindPopup(popupHtml);
+                    // Bind click event to open custom modal instead of default popup
+                    layer.on('click', () => {
+                        window.openPointModal(p);
+                    });
                 }
             }
         }).addTo(map);
@@ -155,29 +135,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('point-count').textContent = `(${points.length})`;
         
         pointsList.innerHTML = points.map((p, idx) => {
-            let mediaHtml = '';
+            let mediaPreview = '';
             if (p.media) {
                 const mediaUrl = Array.isArray(p.media) ? p.media[0] : p.media;
                 if (mediaUrl) {
-                    if (mediaUrl.toLowerCase().match(/\.(mp4|webm|ogg)$/)) {
-                        mediaHtml = `<div class="media-container"><video controls style="width:100%; max-width:400px; border-radius:8px;"><source src="${mediaUrl}"></video></div>`;
-                    } else {
-                        mediaHtml = `<div class="media-container"><img src="${mediaUrl}" alt="${p.title}" style="max-width:400px; width:100%; border-radius:8px;"></div>`;
-                    }
+                    mediaPreview = `<div style="margin-top: 10px;"><button class="btn-light" style="padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid #cbd5e1; background: #f8fafc;" onclick="window.openPointModal(window.routePoints[${idx}])">Näytä sisältö</button></div>`;
                 }
+            } else if (p.description || p.link || p.url) {
+                mediaPreview = `<div style="margin-top: 10px;"><button class="btn-light" style="padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid #cbd5e1; background: #f8fafc;" onclick="window.openPointModal(window.routePoints[${idx}])">Näytä tiedot</button></div>`;
             }
 
-            const linkHtml = (p.link || p.url) ? `<a href="${p.link || p.url}" target="_blank" style="display:inline-block; margin-top:12px; padding:8px 16px; background:#f1f5f9; color:#0f172a; text-decoration:none; border-radius:8px; font-weight:600; font-size:14px;">Lisätietoja</a>` : '';
-
             return `
-            <div class="point-card">
+            <div class="point-card" style="cursor: pointer;" onclick="window.openPointModal(window.routePoints[${idx}])">
                 <h3>${idx + 1}. ${p.title || 'Piste ' + (idx + 1)}</h3>
-                ${p.description ? `<p>${p.description}</p>` : ''}
-                ${mediaHtml}
-                ${linkHtml}
+                ${mediaPreview}
             </div>
             `;
         }).join('');
+        
+        window.routePoints = points;
     }
 
     // Unlock event
@@ -200,4 +176,63 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Start
     loadRoute();
+
+    // Modal Logic
+    function getYoutubeId(url) {
+        if (!url) return null;
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        const match = url.match(regExp);
+        return (match && match[2].length === 11) ? match[2] : null;
+    }
+
+    window.openPointModal = function(p) {
+        document.getElementById('point-modal-title').textContent = p.title || 'Nimetön piste';
+        document.getElementById('point-modal-desc').innerHTML = p.description ? p.description.replace(/\n/g, '<br>') : '';
+        
+        const mediaContainer = document.getElementById('point-modal-media-container');
+        mediaContainer.innerHTML = '';
+        mediaContainer.style.display = 'none';
+
+        if (p.media) {
+            const mediaUrl = Array.isArray(p.media) ? p.media[0] : p.media;
+            if (mediaUrl) {
+                mediaContainer.style.display = 'block';
+                const ytId = getYoutubeId(mediaUrl);
+                if (ytId) {
+                    mediaContainer.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+                } else if (mediaUrl.toLowerCase().match(/\.(mp4|webm|ogg)$/)) {
+                    mediaContainer.innerHTML = `<video controls autoplay style="width:100%; height:100%; object-fit: contain;"><source src="${mediaUrl}"></video>`;
+                } else {
+                    mediaContainer.innerHTML = `<img src="${mediaUrl}" alt="Kuva" style="width:100%; height:100%; object-fit: contain;">`;
+                }
+            }
+        }
+
+        const linkContainer = document.getElementById('point-modal-link-container');
+        linkContainer.innerHTML = '';
+        const targetLink = p.link || p.url;
+        if (targetLink) {
+            linkContainer.style.display = 'flex';
+            linkContainer.innerHTML = `<a href="${targetLink}" target="_blank" class="lki-cta-btn website">Lisätietoja</a>`;
+        } else {
+            linkContainer.style.display = 'none';
+        }
+
+        document.getElementById('point-modal').classList.add('active');
+    };
+
+    const closeModalBtn = document.getElementById('point-modal-close');
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', () => {
+            document.getElementById('point-modal').classList.remove('active');
+            document.getElementById('point-modal-media-container').innerHTML = ''; // Stop video
+        });
+    }
+
+    document.getElementById('point-modal').addEventListener('click', (e) => {
+        if (e.target.id === 'point-modal') {
+            document.getElementById('point-modal').classList.remove('active');
+            document.getElementById('point-modal-media-container').innerHTML = '';
+        }
+    });
 });
