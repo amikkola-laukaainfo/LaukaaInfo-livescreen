@@ -1,351 +1,9 @@
 [
   {
-    "nimi": "Entäs jos… -taidenäyttely",
-    "aika": "to, 02 heinä 2026 12:00:00",
-    "paikka": "Antinniementie 1, 41330 Vihtavuori",
-    "url": "https://visitlaukaa.fi/tapahtuma/entas-jos-taidenayttely/"
-  },
-  {
-    "nimi": "Nojosniemen tilan kesäkahvila",
-    "aika": "pe, 31 heinä 2026 08:00:00",
-    "paikka": "Nojosniementie 320",
-    "url": "https://visitlaukaa.fi/tapahtuma/nojosniemen-tilan-kesakahvila/"
-  },
-  {
-    "nimi": "Avioliittosimulaattori",
-    "aika": "pe, 31 heinä 2026 16:00:00",
-    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-2/"
-  },
-  {
-    "nimi": "Avioliittosimulaattori",
-    "aika": "pe, 31 heinä 2026 16:00:00",
-    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-elokuu2026/"
-  },
-  {
-    "nimi": "Laukaan Apua Ukrainaan keräys",
-    "aika": "la, 01 elo 2026 06:00:00",
-    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/"
-  },
-  {
-    "nimi": "Lättähattujunalla erikoiskokeelle Leustu1 ja Leustu2",
-    "aika": "la, 01 elo 2026 09:06:00",
+    "nimi": "Luontohyvinvointi tehtävärata Haukilammen kodalla",
+    "aika": "ma, 24 elo 2026 13:00:00",
     "paikka": "",
-    "url": "https://visitlaukaa.fi/tapahtuma/1-8-lattahattujunalla-erikoiskokeelle-leustu1-ja-leustu2-areena/"
-  },
-  {
-    "nimi": "Pizzalauantai",
-    "aika": "la, 01 elo 2026 10:00:00",
-    "paikka": "Valkolan kylätalo, Puralanharjuntie 76, 41360 Valkola",
-    "url": "https://visitlaukaa.fi/tapahtuma/pizzalauantai-12/"
-  },
-  {
-    "nimi": "Avioliittosimulaattori",
-    "aika": "su, 02 elo 2026 12:00:00",
-    "paikka": "Kanavateatteri, Koskelantie 43, 41370 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/avioliittosimulaattori-elokuu2026/"
-  },
-  {
-    "nimi": "Sunnuntaitanssit Savion lavalla",
-    "aika": "su, 02 elo 2026 14:00:00",
-    "paikka": "Saviontie 1312, Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/sunnuntaitanssit-savion-lavalla-9/"
-  },
-  {
-    "nimi": "Laukaan Apua Ukrainaan keräys",
-    "aika": "ti, 04 elo 2026 08:00:00",
-    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/"
-  },
-  {
-    "nimi": "Tiistaitanssit Savion lavalla",
-    "aika": "ti, 04 elo 2026 10:00:00",
-    "paikka": "Saviontie 1312, 41400 Lievestuore",
-    "url": "https://visitlaukaa.fi/tapahtuma/tiistaitanssit-savion-lavalla/"
-  },
-  {
-    "nimi": "eFoil Experience – Lennä veden yllä Laukaassa",
-    "aika": "ti, 04 elo 2026 13:45:00",
-    "paikka": "premium@arcticcluxury, +358 50 464 7996",
-    "url": "https://visitlaukaa.fi/tapahtuma/efoil-experience-lenna-veden-ylla-laukaassa/"
-  },
-  {
-    "nimi": "Nordic Tire Fitness – Outdoor Training Laukaa",
-    "aika": "ti, 04 elo 2026 15:00:00",
-    "paikka": "Satamatie 3, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/nordic-tire-fitness-outdoor-training-laukaa/"
-  },
-  {
-    "nimi": "Laukaan Kuvataide Lauk-Ku ry järjestää ’maalausleirin’",
-    "aika": "ke, 05 elo 2026 05:08:00",
-    "paikka": "Ruotajärventie 23, Konnevesi",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-kuvataide-lauk-ku-ry-jarjestaa-maalausleirin-maalata-voi-oljyvareilla-akryylivareilla-akvarellivareilla-pastellivareilla-ym/"
-  },
-  {
-    "nimi": "Koko perheen puistopiknik",
-    "aika": "ke, 05 elo 2026 18:00:00",
-    "paikka": "Venetie 3, Laukaa, Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/koko-perheen-puistopiknik-8/"
-  },
-  {
-    "nimi": "Saraakallio Sunset SUP Experience – Laukaa",
-    "aika": "to, 06 elo 2026 15:00:00",
-    "paikka": "premium@arcticcluxury, +358 50 464 7996",
-    "url": "https://visitlaukaa.fi/tapahtuma/sunset-sup-sessions-laukaa/"
-  },
-  {
-    "nimi": "Laukaan Apua Ukrainaan keräys",
-    "aika": "la, 08 elo 2026 06:00:00",
-    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/"
-  },
-  {
-    "nimi": "LC-markkinat",
-    "aika": "la, 08 elo 2026 21:02:00",
-    "paikka": "Venetie 3, Laukaa, Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/lc-markkinat/"
-  },
-  {
-    "nimi": "Sunnuntaitanssit Savion lavalla",
-    "aika": "su, 09 elo 2026 14:00:00",
-    "paikka": "Saviontie 1312, Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/sunnuntaitanssit-savion-lavalla-9/"
-  },
-  {
-    "nimi": "Naisten turvesauna",
-    "aika": "ma, 10 elo 2026 16:30:00",
-    "paikka": "Laukaan Tupaswilla, Ränssintie 5, 41370 Kuusa",
-    "url": "https://visitlaukaa.fi/tapahtuma/naisten-turvesauna-4/"
-  },
-  {
-    "nimi": "Laukaan Apua Ukrainaan keräys",
-    "aika": "ti, 11 elo 2026 08:00:00",
-    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/"
-  },
-  {
-    "nimi": "eFoil Experience – Lennä veden yllä Laukaassa",
-    "aika": "ti, 11 elo 2026 13:45:00",
-    "paikka": "premium@arcticcluxury, +358 50 464 7996",
-    "url": "https://visitlaukaa.fi/tapahtuma/efoil-experience-lenna-veden-ylla-laukaassa/"
-  },
-  {
-    "nimi": "Nordic Tire Fitness – Outdoor Training Laukaa",
-    "aika": "ti, 11 elo 2026 15:00:00",
-    "paikka": "Satamatie 3, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/nordic-tire-fitness-outdoor-training-laukaa/"
-  },
-  {
-    "nimi": "Saraakallio Sunset SUP Experience – Laukaa",
-    "aika": "to, 13 elo 2026 15:00:00",
-    "paikka": "premium@arcticcluxury, +358 50 464 7996",
-    "url": "https://visitlaukaa.fi/tapahtuma/sunset-sup-sessions-laukaa/"
-  },
-  {
-    "nimi": "MizumiCon",
-    "aika": "pe, 14 elo 2026 14:00:00",
-    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/mizumicon/"
-  },
-  {
-    "nimi": "Leenan levytanssit",
-    "aika": "pe, 14 elo 2026 18:00:00",
-    "paikka": "Saviontie 1312, 41400 Laukaa Lievestuore",
-    "url": "https://visitlaukaa.fi/tapahtuma/leenan-levytanssit/"
-  },
-  {
-    "nimi": "Laukaan Apua Ukrainaan keräys",
-    "aika": "la, 15 elo 2026 06:00:00",
-    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/"
-  },
-  {
-    "nimi": "Laukaan harrastemessut",
-    "aika": "la, 15 elo 2026 10:00:00",
-    "paikka": "Hirviareena, Lintumäenkatu 3, Leppävesi. Näytteilleasettajia ja lajikokeiluja Areenahallissa, kahvilassa, ylipainehallissa ja Hirviareenan pihapiirissä.",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-harrastemessut/"
-  },
-  {
-    "nimi": "Hyvän mielen haasteturnaus",
-    "aika": "la, 15 elo 2026 10:00:00",
-    "paikka": "Lintumäenkatu 3, Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/hyvan-mielen-haasteturnaus/"
-  },
-  {
-    "nimi": "PölkkiLIVE",
-    "aika": "la, 15 elo 2026 20:00:00",
-    "paikka": "Peurungantie 97, 41350 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/polkkilive-2/"
-  },
-  {
-    "nimi": "Sunnuntaitanssit Savion lavalla",
-    "aika": "su, 16 elo 2026 14:00:00",
-    "paikka": "Saviontie 1312, Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/sunnuntaitanssit-savion-lavalla-9/"
-  },
-  {
-    "nimi": "Laukaan Apua Ukrainaan keräys",
-    "aika": "ti, 18 elo 2026 08:00:00",
-    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/"
-  },
-  {
-    "nimi": "Tiistaitanssit Savion lavalla",
-    "aika": "ti, 18 elo 2026 10:00:00",
-    "paikka": "Saviontie 1312, 41400 Lievestuore",
-    "url": "https://visitlaukaa.fi/tapahtuma/tiistaitanssit-savion-lavalla/"
-  },
-  {
-    "nimi": "eFoil Experience – Lennä veden yllä Laukaassa",
-    "aika": "ti, 18 elo 2026 13:45:00",
-    "paikka": "premium@arcticcluxury, +358 50 464 7996",
-    "url": "https://visitlaukaa.fi/tapahtuma/efoil-experience-lenna-veden-ylla-laukaassa/"
-  },
-  {
-    "nimi": "Nordic Tire Fitness – Outdoor Training Laukaa",
-    "aika": "ti, 18 elo 2026 15:00:00",
-    "paikka": "Satamatie 3, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/nordic-tire-fitness-outdoor-training-laukaa/"
-  },
-  {
-    "nimi": "Saraakallio Sunset SUP Experience – Laukaa",
-    "aika": "to, 20 elo 2026 15:00:00",
-    "paikka": "premium@arcticcluxury, +358 50 464 7996",
-    "url": "https://visitlaukaa.fi/tapahtuma/sunset-sup-sessions-laukaa/"
-  },
-  {
-    "nimi": "Laukaan Apua Ukrainaan keräys",
-    "aika": "la, 22 elo 2026 06:00:00",
-    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/"
-  },
-  {
-    "nimi": "Tapsa Cup – harrastefutisturnaus Vihtavuoren liikuntapuistossa",
-    "aika": "la, 22 elo 2026 10:00:00",
-    "paikka": "Lammasmäenkuja 2",
-    "url": "https://visitlaukaa.fi/tapahtuma/tapsa-cup-harrastefutisturnaus-vihtavuoren-liikuntapuistossa/"
-  },
-  {
-    "nimi": "Tupaswillan Perinnepäivät",
-    "aika": "la, 22 elo 2026 10:00:00",
-    "paikka": "Laukaan Tupaswilla, Ränssintie 5, 41370 Kuusa",
-    "url": "https://visitlaukaa.fi/tapahtuma/tupaswillan-perinnepaivat-3/"
-  },
-  {
-    "nimi": "Vihtavuoren kultturellit syysmarkkinat",
-    "aika": "la, 22 elo 2026 11:00:00",
-    "paikka": "",
-    "url": "https://visitlaukaa.fi/tapahtuma/vihtavuoren-kultturellit-syysmarkkinat/"
-  },
-  {
-    "nimi": "Vihtavuoren kulttuurikävely",
-    "aika": "la, 22 elo 2026 14:00:00",
-    "paikka": "Vihtavuoren liikuntahallin edusta",
-    "url": "https://visitlaukaa.fi/tapahtuma/vihtavuoren-kulttuurikavely-2/"
-  },
-  {
-    "nimi": "Kotikulman avoimet ovet",
-    "aika": "la, 22 elo 2026 15:00:00",
-    "paikka": "Arwidssonintie 15-17",
-    "url": "https://visitlaukaa.fi/tapahtuma/kotikulman-avoimet-ovet/"
-  },
-  {
-    "nimi": "Hetkiä ja helmiä -kamarikonsertti",
-    "aika": "su, 23 elo 2026 16:00:00",
-    "paikka": "Työväentalo Toivola",
-    "url": "https://visitlaukaa.fi/tapahtuma/hetkia-ja-helmia-kamarikonsertti/"
-  },
-  {
-    "nimi": "Sunnuntaitanssit Savion lavalla",
-    "aika": "su, 23 elo 2026 14:00:00",
-    "paikka": "Saviontie 1312, Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/sunnuntaitanssit-savion-lavalla-9/"
-  },
-  {
-    "nimi": "Ukrainalainen taidekahvila Saralinnassa",
-    "aika": "ma, 24 elo 2026 14:00:00",
-    "paikka": "Saralinnantie 1, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/ukrainalainen-taidekahvila-saralinnassa/"
-  },
-  {
-    "nimi": "Ukrainalaisen kirjallisuuden ilta",
-    "aika": "ma, 24 elo 2026 18:00:00",
-    "paikka": "Laukaan pääkirjasto, Vuojärventie 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/ukrainalaisen-kirjallisuuden-ilta/"
-  },
-  {
-    "nimi": "Laukaan Apua Ukrainaan keräys",
-    "aika": "ti, 25 elo 2026 08:00:00",
-    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/"
-  },
-  {
-    "nimi": "eFoil Experience – Lennä veden yllä Laukaassa",
-    "aika": "ti, 25 elo 2026 13:45:00",
-    "paikka": "premium@arcticcluxury, +358 50 464 7996",
-    "url": "https://visitlaukaa.fi/tapahtuma/efoil-experience-lenna-veden-ylla-laukaassa/"
-  },
-  {
-    "nimi": "lähiLUMO-luontotapahtuma Laukaan pääkirjastossa",
-    "aika": "ti, 25 elo 2026 17:00:00",
-    "paikka": "Laukaan kirjasto, Vuojärventie 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/lahilumo-luontotapahtuma-laukaan-paakirjastossa/"
-  },
-  {
-    "nimi": "Kuusan iltarastit",
-    "aika": "ti, 25 elo 2026 17:00:00",
-    "paikka": "Kuusan Nuorisoseurantalo",
-    "url": "https://visitlaukaa.fi/tapahtuma/kuusan-iltarastit/"
-  },
-  {
-    "nimi": "Laukaan kulttuurimatkailu ja Saraakallio-ilta",
-    "aika": "ti, 25 elo 2026 17:30:00",
-    "paikka": "Laukaan pääkirjasto, Vuojärventie 2, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-kulttuurimatkailu-ja-saraakallio-ilta/"
-  },
-  {
-    "nimi": "Nordic Tire Fitness – Outdoor Training Laukaa",
-    "aika": "ti, 25 elo 2026 15:00:00",
-    "paikka": "Satamatie 3, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/nordic-tire-fitness-outdoor-training-laukaa/"
-  },
-  {
-    "nimi": "Ikäihmisten virkistyspäivä",
-    "aika": "ke, 26 elo 2026 12:00:00",
-    "paikka": "Lintumäenkatu 3, Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/ikaihmisten-virkistyspaiva-2/"
-  },
-  {
-    "nimi": "Graffitijamit",
-    "aika": "ke, 26 elo 2026 17:00:00",
-    "paikka": "22.8. – 6.9.2026 ohjelmaa.",
-    "url": "https://visitlaukaa.fi/tapahtuma/graffitijamit/"
-  },
-  {
-    "nimi": "Laukaan hautausmaan kulttuuritarinakierros",
-    "aika": "ke, 26 elo 2026 18:00:00",
-    "paikka": "Kirkonkylän hautausmaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-hautausmaan-kulttuuritarinakierros-3/"
-  },
-  {
-    "nimi": "Laukaan hautausmaan kulttuuritarinakierros",
-    "aika": "ke, 26 elo 2026 18:00:00",
-    "paikka": "Laukaan kirkonkylän hautausmaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-hautausmaan-kulttuuritarinakierros-2/"
-  },
-  {
-    "nimi": "Einö Grönin kirkkokonsertti",
-    "aika": "to, 27 elo 2026 18:00:00",
-    "paikka": "Jokiniementie 9, 41340 Laukaa",
-    "url": "https://visitlaukaa.fi/tapahtuma/eino-gronin-kirkkokonsertti/"
-  },
-  {
-    "nimi": "Saraakallio Sunset SUP Experience – Laukaa",
-    "aika": "to, 27 elo 2026 15:00:00",
-    "paikka": "premium@arcticcluxury, +358 50 464 7996",
-    "url": "https://visitlaukaa.fi/tapahtuma/sunset-sup-sessions-laukaa/"
+    "url": "https://visitlaukaa.fi/tapahtuma/luontohyvinvointi-tehtavarata-haukilammen-kodalla/"
   },
   {
     "nimi": "Tilkkuja ja tarinoita Laukaasta -työpaja",
@@ -354,8 +12,14 @@
     "url": "https://visitlaukaa.fi/tapahtuma/tilkkuja-ja-tarinoita-laukaasta-tyopaja/"
   },
   {
+    "nimi": "Laukaan sataman kesäkauden päättäjäiset",
+    "aika": "pe, 28 elo 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sataman-kesakauden-paattajaiset/"
+  },
+  {
     "nimi": "Neule ja Kehruu Miitti",
-    "aika": "la, 29 elo 2026 00:00:00",
+    "aika": "la, 29 elo 2026 10:16:00",
     "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
     "url": "https://visitlaukaa.fi/tapahtuma/neule-ja-kehruu-miitti/"
   },
@@ -372,10 +36,28 @@
     "url": "https://visitlaukaa.fi/tapahtuma/vihtasillan-syyssutinat-20-v-juhlamarkkinat/"
   },
   {
+    "nimi": "Vanhan ajan iltamat",
+    "aika": "la, 29 elo 2026 12:00:00",
+    "paikka": "Valkolan kylätalo, Puralanharjuntie 76, 41360 Valkola",
+    "url": "https://visitlaukaa.fi/tapahtuma/vanhan-ajan-iltamat-2/"
+  },
+  {
     "nimi": "Liepeen Miitti",
     "aika": "la, 29 elo 2026 15:00:00",
     "paikka": "Ajoneuvontie 39, 41400 Lievestuore",
     "url": "https://visitlaukaa.fi/tapahtuma/liepeen-miitti/"
+  },
+  {
+    "nimi": "Laukaan sataman kesäkauden päättäjäiset",
+    "aika": "la, 29 elo 2026 15:00:00",
+    "paikka": "Satamatie 3, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sataman-kesakauden-paattajaiset/"
+  },
+  {
+    "nimi": "Laukaan Maatalousseuran 90-vuotisjuhla",
+    "aika": "su, 30 elo 2026 13:30:00",
+    "paikka": "Saralinnantie 1, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-maatalousseuran-90-vuotisjuhla/"
   },
   {
     "nimi": "Sunnuntain päivätanssit Savion lavalla",
@@ -385,7 +67,7 @@
   },
   {
     "nimi": "Kulttuurikävely Laukaan kirkonkylässä",
-    "aika": "ma, 31 elo 2026 17:01:00",
+    "aika": "ma, 31 elo 2026 17:00:00",
     "paikka": "Jokiniementie 9, 41340 Laukaa",
     "url": "https://visitlaukaa.fi/tapahtuma/kulttuurikavely-laukaan-kirkonkyla-2/"
   },
@@ -402,9 +84,9 @@
     "url": "https://visitlaukaa.fi/tapahtuma/efoil-experience-lenna-veden-ylla-laukaassa/"
   },
   {
-    "nimi": "Muistojen paikka – teosesittely ja ” puistotanssahtelu”",
+    "nimi": "Muistojen paikka – Teosesittely, ohjattu puistotanssahtelu ja muistojen sekä tarinoiden keruu",
     "aika": "ti, 01 syys 2026 17:00:00",
-    "paikka": "Satamatie 3, 41340 Laukaa",
+    "paikka": "Laukaan kulttuuriviikkojen 2026",
     "url": "https://visitlaukaa.fi/tapahtuma/laukaan-kulttuuriviikot-2026-muistojen-paikka-teosesittely-ja-puistotanssahtelu/"
   },
   {
@@ -426,6 +108,12 @@
     "url": "https://visitlaukaa.fi/tapahtuma/kulttuuria-ja-liiketta-multamaessa/"
   },
   {
+    "nimi": "Voimauttava kuvataide",
+    "aika": "to, 03 syys 2026 17:00:00",
+    "paikka": "Peurungantie 85, rakennus 7, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/voimauttava-kuvataide-2/"
+  },
+  {
     "nimi": "Kastehelmi",
     "aika": "to, 03 syys 2026 18:00:00",
     "paikka": "Laukaan pääkirjasto, Vuojärventie 2, 41340 Laukaa",
@@ -436,6 +124,12 @@
     "aika": "to, 03 syys 2026 15:00:00",
     "paikka": "premium@arcticcluxury, +358 50 464 7996",
     "url": "https://visitlaukaa.fi/tapahtuma/sunset-sup-sessions-laukaa/"
+  },
+  {
+    "nimi": "Vanhan ajan iltamat",
+    "aika": "to, 03 syys 2026 15:00:00",
+    "paikka": "Valkolan kylätalo, Puralanharjuntie 76, 41360 Valkola",
+    "url": "https://visitlaukaa.fi/tapahtuma/vanhan-ajan-iltamat-2/"
   },
   {
     "nimi": "Tilkkuja ja tarinoita Laukaasta- työpaja",
@@ -450,9 +144,9 @@
     "url": "https://visitlaukaa.fi/tapahtuma/kesan-paattarit-laukaan-4hn-90-synttarit/"
   },
   {
-    "nimi": "Tarinoiden keruu Muistojen paikka – teosta varten",
+    "nimi": "Muistojen paikka – teosesittely ja muistojen sekä tarinoiden keruu",
     "aika": "pe, 04 syys 2026 17:00:00",
-    "paikka": "Satamatie 3, 41340 Laukaa",
+    "paikka": "Laukaan kulttuuriviikkojen 2026",
     "url": "https://visitlaukaa.fi/tapahtuma/tarinoiden-keruu-muistojen-paikka-teosta-varten/"
   },
   {
@@ -462,9 +156,15 @@
     "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/"
   },
   {
-    "nimi": "Muistojen paikka – teosesittely ja ohjattu ”puistotanssahtelu”",
+    "nimi": "Leppäveden Luppopäivät",
+    "aika": "la, 05 syys 2026 10:00:00",
+    "paikka": "Tapahtuman järjestää Leppäveden kyläyhdistys. Muutokset ohjelmaan ovat mahdollisia.",
+    "url": "https://visitlaukaa.fi/tapahtuma/leppaveden-luppopaivat-2/"
+  },
+  {
+    "nimi": "Muistojen paikka – teosesittely ja ohjattu puistotanssahtelu",
     "aika": "la, 05 syys 2026 12:00:00",
-    "paikka": "Satamatie 3, 41340 Laukaa",
+    "paikka": "Laukaan kulttuuriviikkojen 2026",
     "url": "https://visitlaukaa.fi/tapahtuma/muistojen-paikka-teosesittely-ja-ohjattu-puistotanssahtelu/"
   },
   {
@@ -480,10 +180,28 @@
     "url": "https://visitlaukaa.fi/tapahtuma/pizzalauantai-12/"
   },
   {
-    "nimi": "Lauluja Fridalle – musiikillinen monologi",
+    "nimi": "Vanhan ajan iltamat",
+    "aika": "la, 05 syys 2026 12:00:00",
+    "paikka": "Valkolan kylätalo, Puralanharjuntie 76, 41360 Valkola",
+    "url": "https://visitlaukaa.fi/tapahtuma/vanhan-ajan-iltamat-2/"
+  },
+  {
+    "nimi": "PERUTTU: Lauluja Fridalle – musiikillinen monologi",
     "aika": "la, 05 syys 2026 16:00:00",
     "paikka": "Sydän-Laukaan koulun auditorio, Saralinnantie 3, 41340 Laukaa",
     "url": "https://visitlaukaa.fi/tapahtuma/lauluja-fridalle-musiikillinen-monologi/"
+  },
+  {
+    "nimi": "MLL Laukaan kirppispäivä",
+    "aika": "su, 06 syys 2026 13:00:00",
+    "paikka": "Ilmoittautumiset myyjäksi 31.8.2026 mennessä",
+    "url": "https://visitlaukaa.fi/tapahtuma/mll-laukaan-kirppispaiva/"
+  },
+  {
+    "nimi": "Vanhan ajan iltamat",
+    "aika": "su, 06 syys 2026 13:00:00",
+    "paikka": "Valkolan kylätalo, Puralanharjuntie 76, 41360 Valkola",
+    "url": "https://visitlaukaa.fi/tapahtuma/vanhan-ajan-iltamat-2/"
   },
   {
     "nimi": "Ruislinnun laulu korvissani",
@@ -516,10 +234,34 @@
     "url": "https://visitlaukaa.fi/tapahtuma/sunset-sup-sessions-laukaa/"
   },
   {
+    "nimi": "Vanhan ajan iltamat",
+    "aika": "to, 10 syys 2026 15:00:00",
+    "paikka": "Valkolan kylätalo, Puralanharjuntie 76, 41360 Valkola",
+    "url": "https://visitlaukaa.fi/tapahtuma/vanhan-ajan-iltamat/"
+  },
+  {
+    "nimi": "Kuilun Partaalla",
+    "aika": "pe, 11 syys 2026 18:00:00",
+    "paikka": "Majaniementie 6A, 41400 Lievestuore",
+    "url": "https://visitlaukaa.fi/tapahtuma/kuilun-partaalla/"
+  },
+  {
     "nimi": "Laukaan Apua Ukrainaan keräys",
     "aika": "la, 12 syys 2026 06:00:00",
     "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
     "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/"
+  },
+  {
+    "nimi": "Vanhan ajan iltamat",
+    "aika": "la, 12 syys 2026 12:00:00",
+    "paikka": "Valkolan kylätalo, Puralanharjuntie 76, 41360 Valkola",
+    "url": "https://visitlaukaa.fi/tapahtuma/vanhan-ajan-iltamat/"
+  },
+  {
+    "nimi": "Vanhan ajan iltamat",
+    "aika": "su, 13 syys 2026 13:00:00",
+    "paikka": "Valkolan kylätalo, Puralanharjuntie 76, 41360 Valkola",
+    "url": "https://visitlaukaa.fi/tapahtuma/vanhan-ajan-iltamat/"
   },
   {
     "nimi": "Laukaan Apua Ukrainaan keräys",
@@ -540,16 +282,40 @@
     "url": "https://visitlaukaa.fi/tapahtuma/nordic-tire-fitness-outdoor-training-laukaa/"
   },
   {
+    "nimi": "Vanhan ajan iltamat",
+    "aika": "ke, 16 syys 2026 15:00:00",
+    "paikka": "Valkolan kylätalo, Puralanharjuntie 76, 41360 Valkola",
+    "url": "https://visitlaukaa.fi/tapahtuma/vanhan-ajan-iltamat/"
+  },
+  {
     "nimi": "Saraakallio Sunset SUP Experience – Laukaa",
     "aika": "to, 17 syys 2026 15:00:00",
     "paikka": "premium@arcticcluxury, +358 50 464 7996",
     "url": "https://visitlaukaa.fi/tapahtuma/sunset-sup-sessions-laukaa/"
   },
   {
+    "nimi": "Vanhan ajan iltamat",
+    "aika": "pe, 18 syys 2026 15:00:00",
+    "paikka": "Valkolan kylätalo, Puralanharjuntie 76, 41360 Valkola",
+    "url": "https://visitlaukaa.fi/tapahtuma/vanhan-ajan-iltamat/"
+  },
+  {
     "nimi": "Laukaan Apua Ukrainaan keräys",
     "aika": "la, 19 syys 2026 06:00:00",
     "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
     "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/"
+  },
+  {
+    "nimi": "Tertan hyvinvointipäivä",
+    "aika": "su, 20 syys 2026 11:00:00",
+    "paikka": "Antinniementie 1, 41330 Vihtavuori",
+    "url": "https://visitlaukaa.fi/tapahtuma/tertan-hyvinvointipaiva/"
+  },
+  {
+    "nimi": "Vanhan ajan iltamat",
+    "aika": "su, 20 syys 2026 13:00:00",
+    "paikka": "Valkolan kylätalo, Puralanharjuntie 76, 41360 Valkola",
+    "url": "https://visitlaukaa.fi/tapahtuma/vanhan-ajan-iltamat/"
   },
   {
     "nimi": "Laukaan Apua Ukrainaan keräys",
@@ -562,6 +328,12 @@
     "aika": "ti, 22 syys 2026 13:45:00",
     "paikka": "premium@arcticcluxury, +358 50 464 7996",
     "url": "https://visitlaukaa.fi/tapahtuma/efoil-experience-lenna-veden-ylla-laukaassa/"
+  },
+  {
+    "nimi": "Sieni-ilta Laukaan pääkirjastossa",
+    "aika": "ti, 22 syys 2026 17:00:00",
+    "paikka": "Laukaan kirjasto, Vuojärventie 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sieni-ilta-laukaan-paakirjastossa-2/"
   },
   {
     "nimi": "Nordic Tire Fitness – Outdoor Training Laukaa",
@@ -580,6 +352,12 @@
     "aika": "la, 26 syys 2026 06:00:00",
     "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
     "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/"
+  },
+  {
+    "nimi": "Oktoberfest",
+    "aika": "la, 26 syys 2026 18:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/oktoberfest/"
   },
   {
     "nimi": "Laukaan Apua Ukrainaan keräys",
@@ -690,10 +468,22 @@
     "url": "https://visitlaukaa.fi/tapahtuma/sunset-sup-sessions-laukaa/"
   },
   {
+    "nimi": "Ti-Ti Nallen Rytmiretki -konsertti",
+    "aika": "to, 15 loka 2026 18:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/ti-ti-nallen-rytmiretki-konsertti/"
+  },
+  {
     "nimi": "Laukaan Apua Ukrainaan keräys",
     "aika": "la, 17 loka 2026 06:00:00",
     "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
     "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/"
+  },
+  {
+    "nimi": "william & Cledos",
+    "aika": "la, 17 loka 2026 18:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/william-cledos/"
   },
   {
     "nimi": "Laukaan Apua Ukrainaan keräys",
@@ -718,6 +508,18 @@
     "aika": "to, 22 loka 2026 15:00:00",
     "paikka": "premium@arcticcluxury, +358 50 464 7996",
     "url": "https://visitlaukaa.fi/tapahtuma/sunset-sup-sessions-laukaa/"
+  },
+  {
+    "nimi": "Hurma",
+    "aika": "to, 22 loka 2026 19:30:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/hurma/"
+  },
+  {
+    "nimi": "Haloo Helsinki!",
+    "aika": "pe, 23 loka 2026 20:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/haloo-helsinki-2/"
   },
   {
     "nimi": "Laukaan Apua Ukrainaan keräys",
@@ -750,10 +552,22 @@
     "url": "https://visitlaukaa.fi/tapahtuma/sunset-sup-sessions-laukaa/"
   },
   {
+    "nimi": "Sinitaivas",
+    "aika": "to, 29 loka 2026 19:30:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/sinitaivas/"
+  },
+  {
     "nimi": "Laukaan Apua Ukrainaan keräys",
     "aika": "la, 31 loka 2026 06:00:00",
     "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
     "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/"
+  },
+  {
+    "nimi": "Komiat ja Kake Randelin",
+    "aika": "la, 31 loka 2026 20:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/komiat-ja-kake-randelin/"
   },
   {
     "nimi": "Laukaan Apua Ukrainaan keräys",
@@ -786,6 +600,18 @@
     "url": "https://visitlaukaa.fi/tapahtuma/sunset-sup-sessions-laukaa/"
   },
   {
+    "nimi": "Taikakuu",
+    "aika": "to, 05 marras 2026 19:30:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/taikakuu/"
+  },
+  {
+    "nimi": "Arttu Wiskari   Elonkerjuu",
+    "aika": "pe, 06 marras 2026 20:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/arttu-wiskari-elonkerjuu/"
+  },
+  {
     "nimi": "Laukaan Apua Ukrainaan keräys",
     "aika": "la, 07 marras 2026 06:00:00",
     "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
@@ -816,6 +642,12 @@
     "url": "https://visitlaukaa.fi/tapahtuma/the-italian-tenors/"
   },
   {
+    "nimi": "Neljä Ruusua   Technicolour",
+    "aika": "pe, 13 marras 2026 20:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/nelja-ruusua-technicolour/"
+  },
+  {
     "nimi": "Laukaan Apua Ukrainaan keräys",
     "aika": "la, 14 marras 2026 06:00:00",
     "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
@@ -834,10 +666,28 @@
     "url": "https://visitlaukaa.fi/tapahtuma/efoil-experience-lenna-veden-ylla-laukaassa/"
   },
   {
+    "nimi": "Keiski & ENO",
+    "aika": "to, 19 marras 2026 19:30:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/keiski-eno-2/"
+  },
+  {
+    "nimi": "Eläkeläiset ja Steve ’n’ Seagulls",
+    "aika": "pe, 20 marras 2026 20:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/elakelaiset-ja-steve-n-seagulls/"
+  },
+  {
     "nimi": "Laukaan Apua Ukrainaan keräys",
     "aika": "la, 21 marras 2026 06:00:00",
     "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
     "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/"
+  },
+  {
+    "nimi": "Olavi Uusivirta & Mira Luoti",
+    "aika": "la, 21 marras 2026 20:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/olavi-uusivirta-mira-luoti/"
   },
   {
     "nimi": "Laukaan Apua Ukrainaan keräys",
@@ -846,14 +696,98 @@
     "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/"
   },
   {
+    "nimi": "Jarkko Yli-Sikkilä & Soiva Orkesteri",
+    "aika": "to, 26 marras 2026 19:30:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/jarkko-yli-sikkila-soiva-orkesteri/"
+  },
+  {
+    "nimi": "Yö   Olli Halonen",
+    "aika": "pe, 27 marras 2026 20:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/yo-olli-halonen/"
+  },
+  {
     "nimi": "Laukaan Apua Ukrainaan keräys",
     "aika": "la, 28 marras 2026 06:00:00",
     "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
     "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/"
   },
   {
+    "nimi": "Popeda ja Dingo",
+    "aika": "la, 28 marras 2026 20:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/popeda-ja-dingo/"
+  },
+  {
     "nimi": "Laukaan Apua Ukrainaan keräys",
     "aika": "ti, 01 joulu 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/"
+  },
+  {
+    "nimi": "Kaverikoirat Laukaan pääkirjastossa",
+    "aika": "ke, 02 joulu 2026 14:00:00",
+    "paikka": "Laukaan kirjasto, Vuojärventie 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/kaverikoirat-laukaan-paakirjastossa/"
+  },
+  {
+    "nimi": "Elastinen ja Stig",
+    "aika": "pe, 04 joulu 2026 20:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/elastinen-ja-stig/"
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 05 joulu 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/"
+  },
+  {
+    "nimi": "Vesterinen yhtyeineen Folk Saimaa",
+    "aika": "la, 05 joulu 2026 20:00:00",
+    "paikka": "Peurunka, Peurungantie 85, 41350 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/vesterinen-yhtyeineen-folk-saimaa/"
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 08 joulu 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/"
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 12 joulu 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/"
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 15 joulu 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/"
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 19 joulu 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/"
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 22 joulu 2026 08:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/"
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "la, 26 joulu 2026 06:00:00",
+    "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
+    "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-3/"
+  },
+  {
+    "nimi": "Laukaan Apua Ukrainaan keräys",
+    "aika": "ti, 29 joulu 2026 08:00:00",
     "paikka": "Laukaan vanha nuorisotalo, Sarakuja 2, 41340 Laukaa",
     "url": "https://visitlaukaa.fi/tapahtuma/laukaan-apua-ukrainaan-kerays-2/"
   }
