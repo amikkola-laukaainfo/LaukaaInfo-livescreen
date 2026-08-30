@@ -266,6 +266,34 @@ document.addEventListener('DOMContentLoaded', async () => {
         loadMixonetContentForPlace(placeData); // Ei await – haetaan taustalla, ei estä muuta
         await loadRoutesForPlace(placeData);
 
+        // V2.8 Ladataan Paikan Media (Hero + Kuvat/Videot)
+        if (window.LaukaaSupabase || typeof supabase !== 'undefined') {
+            const db = window.LaukaaSupabase || (typeof supabaseClient !== 'undefined' ? supabaseClient : null);
+            if (db) {
+                try {
+                    const { data: dashboardData } = await db.rpc('get_place_dashboard', { p_place_id_text: placeIdStr });
+                    if (dashboardData && dashboardData.media && dashboardData.media.length > 0) {
+                        const heroMedia = dashboardData.media.find(m => m.usage === 'HERO' && m.media_type === 'IMAGE');
+                        if (heroMedia && heroMedia.imagekit_path) {
+                            const heroSection = document.querySelector('.hero');
+                            if (heroSection) {
+                                heroSection.style.backgroundImage = `url('${heroMedia.imagekit_path}')`;
+                                heroSection.style.backgroundSize = 'cover';
+                                heroSection.style.backgroundPosition = 'center';
+                            }
+                        }
+                        
+                        const galleryMedia = dashboardData.media.filter(m => m.id !== (heroMedia ? heroMedia.id : null));
+                        if (galleryMedia.length > 0) {
+                            renderPlaceGallery(galleryMedia);
+                        }
+                    }
+                } catch (err) {
+                    console.error('Virhe paikkamedian latauksessa', err);
+                }
+            }
+        }
+
     } catch (err) {
         console.error('Yllättävä virhe:', err);
         showError();
@@ -2774,5 +2802,56 @@ async function loadRoutesForPlace(place) {
         }
     } catch (e) {
         console.warn('Poikkeus ladattaessa reittejä:', e);
+    }
+}
+
+function renderPlaceGallery(media) {
+    const contentArea = document.getElementById('place-content');
+    if (!contentArea) return;
+    
+    // Create section
+    const section = document.createElement('section');
+    section.className = 'content-section';
+    section.style.cssText = 'padding: 4rem 1.5rem; background: #fff; border-top: 1px solid #eaeaea;';
+    
+    const container = document.createElement('div');
+    container.className = 'section-container';
+    container.style.cssText = 'max-width: 1200px; margin: 0 auto;';
+    
+    container.innerHTML = `<h2 class="section-title" style="margin-bottom: 2rem; font-size: 1.8rem; color: var(--color-forest);">Paikan media</h2>`;
+    
+    const grid = document.createElement('div');
+    grid.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;';
+    
+    media.forEach(item => {
+        const card = document.createElement('div');
+        card.style.cssText = 'border-radius: 12px; overflow: hidden; background: #f8fafc; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); position: relative; aspect-ratio: 16/9;';
+        
+        if (item.media_type === 'IMAGE') {
+            card.innerHTML = `<img src="${item.imagekit_path}" alt="${item.title || 'Paikkakuva'}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">`;
+        } else if (item.media_type === 'YOUTUBE' && item.youtube_id) {
+            card.innerHTML = `
+                <img src="https://img.youtube.com/vi/${item.youtube_id}/mqdefault.jpg" alt="YouTube video" style="width: 100%; height: 100%; object-fit: cover;">
+                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); pointer-events: none;">
+                    <div style="width: 48px; height: 48px; background: red; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
+                        ▶
+                    </div>
+                </div>
+            `;
+            card.style.cursor = 'pointer';
+            card.onclick = () => window.open(`https://www.youtube.com/watch?v=${item.youtube_id}`, '_blank');
+        }
+        grid.appendChild(card);
+    });
+    
+    container.appendChild(grid);
+    section.appendChild(container);
+    
+    // Insert after hero
+    const hero = document.querySelector('.hero');
+    if (hero && hero.nextSibling) {
+        contentArea.insertBefore(section, hero.nextSibling);
+    } else {
+        contentArea.appendChild(section);
     }
 }

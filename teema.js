@@ -1261,8 +1261,36 @@ document.addEventListener('DOMContentLoaded', async () => {
             }).join('');
         }
         
-        // Näytä sisältö
-        document.getElementById('loading-spinner').style.display = 'none';
+        // V2.8 Ladataan Teeman Media (Hero + Kuvat/Videot)
+      if (window.LaukaaSupabase || typeof supabase !== 'undefined') {
+          const db = window.LaukaaSupabase || (typeof supabaseClient !== 'undefined' ? supabaseClient : null);
+          if (db) {
+              try {
+                  const { data: themeData } = await db.rpc('get_theme_dashboard', { p_tag_id: searchTag });
+                  if (themeData && themeData.media && themeData.media.length > 0) {
+                      const heroMedia = themeData.media.find(m => m.usage === 'HERO' && m.media_type === 'IMAGE');
+                      if (heroMedia && heroMedia.imagekit_path) {
+                          const heroSection = document.getElementById('theme-hero');
+                          if (heroSection) {
+                              heroSection.style.backgroundImage = `url('${heroMedia.imagekit_path}')`;
+                              heroSection.style.backgroundSize = 'cover';
+                              heroSection.style.backgroundPosition = 'center';
+                          }
+                      }
+                      
+                      const galleryMedia = themeData.media.filter(m => m.id !== heroMedia?.id);
+                      if (galleryMedia.length > 0) {
+                          renderThemeGallery(galleryMedia);
+                      }
+                  }
+              } catch (err) {
+                  console.error('Virhe teemamedian latauksessa', err);
+              }
+          }
+      }
+
+      // Lataa kaikki sisältö
+      document.getElementById('loading-spinner').style.display = 'none';
         document.getElementById('theme-content').style.display = 'block';
 
         // Lataa Mixonet-teeman tiedot ja verkosto rinnakkain (ei estä muuta renderöintiä)
@@ -1340,5 +1368,56 @@ async function loadThemeRoutes(themeName) {
 
     } catch(e) {
         console.warn('Reittien lataus teemasivulla epäonnistui', e);
+    }
+}
+
+function renderThemeGallery(media) {
+    const contentArea = document.getElementById('theme-content');
+    if (!contentArea) return;
+    
+    // Create section
+    const section = document.createElement('section');
+    section.className = 'content-section';
+    section.style.cssText = 'padding: 4rem 1.5rem; background: #fff; border-top: 1px solid #eaeaea;';
+    
+    const container = document.createElement('div');
+    container.className = 'section-container';
+    container.style.cssText = 'max-width: 1200px; margin: 0 auto;';
+    
+    container.innerHTML = `<h2 class="section-title" style="margin-bottom: 2rem; font-size: 1.8rem; color: var(--color-forest);">Teemaan liittyvä media</h2>`;
+    
+    const grid = document.createElement('div');
+    grid.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;';
+    
+    media.forEach(item => {
+        const card = document.createElement('div');
+        card.style.cssText = 'border-radius: 12px; overflow: hidden; background: #f8fafc; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); position: relative; aspect-ratio: 16/9;';
+        
+        if (item.media_type === 'IMAGE') {
+            card.innerHTML = `<img src="${item.imagekit_path}" alt="${item.title || 'Teemakuva'}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">`;
+        } else if (item.media_type === 'YOUTUBE' && item.youtube_id) {
+            card.innerHTML = `
+                <img src="https://img.youtube.com/vi/${item.youtube_id}/mqdefault.jpg" alt="YouTube video" style="width: 100%; height: 100%; object-fit: cover;">
+                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); pointer-events: none;">
+                    <div style="width: 48px; height: 48px; background: red; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
+                        ▶
+                    </div>
+                </div>
+            `;
+            card.style.cursor = 'pointer';
+            card.onclick = () => window.open(`https://www.youtube.com/watch?v=${item.youtube_id}`, '_blank');
+        }
+        grid.appendChild(card);
+    });
+    
+    container.appendChild(grid);
+    section.appendChild(container);
+    
+    // Insert after hero
+    const hero = document.getElementById('theme-hero');
+    if (hero && hero.nextSibling) {
+        contentArea.insertBefore(section, hero.nextSibling);
+    } else {
+        contentArea.appendChild(section);
     }
 }
