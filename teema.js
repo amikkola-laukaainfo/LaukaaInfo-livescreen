@@ -1262,32 +1262,31 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         
         // V2.8 Ladataan Teeman Media (Hero + Kuvat/Videot)
-      if (window.LaukaaSupabase || typeof supabase !== 'undefined') {
-          const db = window.LaukaaSupabase || (typeof supabaseClient !== 'undefined' ? supabaseClient : null);
-          if (db) {
-              try {
-                  const { data: themeData } = await db.rpc('get_theme_dashboard', { p_tag_id: searchTag });
-                  if (themeData && themeData.media && themeData.media.length > 0) {
-                      const heroMedia = themeData.media.find(m => m.usage === 'HERO' && m.media_type === 'IMAGE');
-                      if (heroMedia && heroMedia.imagekit_path) {
-                          const heroSection = document.getElementById('theme-hero');
-                          if (heroSection) {
-                              heroSection.style.backgroundImage = `url('${heroMedia.imagekit_path}')`;
-                              heroSection.style.backgroundSize = 'cover';
-                              heroSection.style.backgroundPosition = 'center';
-                          }
-                      }
-                      
-                      const galleryMedia = themeData.media.filter(m => m.id !== heroMedia?.id);
-                      if (galleryMedia.length > 0) {
-                          renderThemeGallery(galleryMedia);
-                      }
-                  }
-              } catch (err) {
-                  console.error('Virhe teemamedian latauksessa', err);
-              }
-          }
-      }
+        // place_media on AI Supabase -kannassa (aiSbClient)
+        if (aiSbClient) {
+            try {
+                const { data: themeData } = await aiSbClient.rpc('get_theme_dashboard', { p_tag_id: searchTag });
+                if (themeData && themeData.media && themeData.media.length > 0) {
+                    const heroMedia = themeData.media.find(m => m.usage === 'HERO' && m.media_type === 'IMAGE');
+                    if (heroMedia && heroMedia.imagekit_path) {
+                        const heroSection = document.getElementById('theme-hero');
+                        if (heroSection) {
+                            // Ylikirjoittaa HTML:n paikallisen fallback-kuvan
+                            heroSection.style.backgroundImage = `url('${heroMedia.imagekit_path}')`;
+                            heroSection.style.backgroundSize = 'cover';
+                            heroSection.style.backgroundPosition = 'center';
+                        }
+                    }
+                    
+                    const galleryMedia = themeData.media.filter(m => m.id !== heroMedia?.id);
+                    if (galleryMedia.length > 0) {
+                        renderThemeGallery(galleryMedia);
+                    }
+                }
+            } catch (err) {
+                console.error('Virhe teemamedian latauksessa', err);
+            }
+        }
 
       // Lataa kaikki sisältö
       document.getElementById('loading-spinner').style.display = 'none';

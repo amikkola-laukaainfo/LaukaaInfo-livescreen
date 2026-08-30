@@ -267,30 +267,30 @@ document.addEventListener('DOMContentLoaded', async () => {
         await loadRoutesForPlace(placeData);
 
         // V2.8 Ladataan Paikan Media (Hero + Kuvat/Videot)
-        if (window.LaukaaSupabase || typeof supabase !== 'undefined') {
-            const db = window.LaukaaSupabase || (typeof supabaseClient !== 'undefined' ? supabaseClient : null);
-            if (db) {
-                try {
-                    const { data: dashboardData } = await db.rpc('get_place_dashboard', { p_place_id_text: placeIdStr });
-                    if (dashboardData && dashboardData.media && dashboardData.media.length > 0) {
-                        const heroMedia = dashboardData.media.find(m => m.usage === 'HERO' && m.media_type === 'IMAGE');
-                        if (heroMedia && heroMedia.imagekit_path) {
-                            const heroSection = document.querySelector('.hero');
-                            if (heroSection) {
-                                heroSection.style.backgroundImage = `url('${heroMedia.imagekit_path}')`;
-                                heroSection.style.backgroundSize = 'cover';
-                                heroSection.style.backgroundPosition = 'center';
-                            }
-                        }
-                        
-                        const galleryMedia = dashboardData.media.filter(m => m.id !== (heroMedia ? heroMedia.id : null));
-                        if (galleryMedia.length > 0) {
-                            renderPlaceGallery(galleryMedia);
+        // place_media on AI Supabase -kannassa (aiSb)
+        const mediaDb = window.aiSb;
+        if (mediaDb) {
+            try {
+                const { data: dashboardData } = await mediaDb.rpc('get_place_dashboard', { p_place_id_text: placeIdStr });
+                if (dashboardData && dashboardData.media && dashboardData.media.length > 0) {
+                    const heroMedia = dashboardData.media.find(m => m.usage === 'HERO' && m.media_type === 'IMAGE');
+                    if (heroMedia && heroMedia.imagekit_path) {
+                        // Ylikirjoittaa HTML:n paikallisen satunnaisen fallback-kuvan
+                        const heroSection = document.getElementById('place-hero');
+                        if (heroSection) {
+                            heroSection.style.backgroundImage = `url('${heroMedia.imagekit_path}')`;
+                            heroSection.style.backgroundSize = 'cover';
+                            heroSection.style.backgroundPosition = 'center';
                         }
                     }
-                } catch (err) {
-                    console.error('Virhe paikkamedian latauksessa', err);
+                    
+                    const galleryMedia = dashboardData.media.filter(m => m.id !== (heroMedia ? heroMedia.id : null));
+                    if (galleryMedia.length > 0) {
+                        renderPlaceGallery(galleryMedia);
+                    }
                 }
+            } catch (err) {
+                console.error('Virhe paikkamedian latauksessa', err);
             }
         }
 
@@ -2848,7 +2848,7 @@ function renderPlaceGallery(media) {
     section.appendChild(container);
     
     // Insert after hero
-    const hero = document.querySelector('.hero');
+    const hero = document.getElementById('place-hero');
     if (hero && hero.nextSibling) {
         contentArea.insertBefore(section, hero.nextSibling);
     } else {
