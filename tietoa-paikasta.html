@@ -1137,37 +1137,32 @@
         <section class="hero-section" id="place-hero">
             <div class="hero-overlay"></div>
             <script>
-                // Paikalliset optimoidut Laukaan luontokuvat – valitaan satunnaisesti sivun avautuessa
-                (function() {
-                    const heroImages = [
-                        'assets/hero_bg/hero-01.jpg',
-                        'assets/hero_bg/hero-02.jpg',
-                        'assets/hero_bg/hero-03.jpg',
-                        'assets/hero_bg/hero-04.jpg',
-                        'assets/hero_bg/hero-05.jpg',
-                        'assets/hero_bg/hero-06.jpg',
-                        'assets/hero_bg/hero-07.jpg',
-                        'assets/hero_bg/hero-08.jpg',
-                        'assets/hero_bg/hero-09.jpg',
-                        'assets/hero_bg/hero-10.jpg',
-                        'assets/hero_bg/hero-11.jpg',
-                        'assets/hero_bg/hero-12.jpg',
-                        'assets/hero_bg/hero-13.jpg',
-                        'assets/hero_bg/hero-14.jpg',
-                        'assets/hero_bg/hero-15.jpg',
-                        'assets/hero_bg/hero-16.jpg',
-                        'assets/hero_bg/hero-17.jpg',
-                        'assets/hero_bg/hero-18.jpg',
-                        'assets/hero_bg/hero-19.jpg',
-                        'assets/hero_bg/hero-20.jpg',
-                        'assets/hero_bg/hero-21.jpg'
-                    ];
-                    const selectedImg = heroImages[Math.floor(Math.random() * heroImages.length)];
-                    const hero = document.getElementById('place-hero');
-                    if (hero) {
-                        hero.style.backgroundImage = 'url("' + selectedImg + '")';
-                    }
-                })();
+                // Tallennetaan fallback-kuvat globaalisti. JS asettaa hero-kuvan:
+                // 1. ImageKit-kuva (ensisijainen, haetaan Supabasesta)
+                // 2. Paikallinen fallback-kuva (jos ImageKit-kuvaa ei ole)
+                window.heroFallbackImages = [
+                    'assets/hero_bg/hero-01.jpg',
+                    'assets/hero_bg/hero-02.jpg',
+                    'assets/hero_bg/hero-03.jpg',
+                    'assets/hero_bg/hero-04.jpg',
+                    'assets/hero_bg/hero-05.jpg',
+                    'assets/hero_bg/hero-06.jpg',
+                    'assets/hero_bg/hero-07.jpg',
+                    'assets/hero_bg/hero-08.jpg',
+                    'assets/hero_bg/hero-09.jpg',
+                    'assets/hero_bg/hero-10.jpg',
+                    'assets/hero_bg/hero-11.jpg',
+                    'assets/hero_bg/hero-12.jpg',
+                    'assets/hero_bg/hero-13.jpg',
+                    'assets/hero_bg/hero-14.jpg',
+                    'assets/hero_bg/hero-15.jpg',
+                    'assets/hero_bg/hero-16.jpg',
+                    'assets/hero_bg/hero-17.jpg',
+                    'assets/hero_bg/hero-18.jpg',
+                    'assets/hero_bg/hero-19.jpg',
+                    'assets/hero_bg/hero-20.jpg',
+                    'assets/hero_bg/hero-21.jpg'
+                ];
             </script>
             <div class="hero-content">
                 <!-- Vasen sarake: otsikko, meta, napit -->

@@ -1266,6 +1266,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (aiSbClient) {
             try {
                 const { data: themeData } = await aiSbClient.rpc('get_theme_dashboard', { p_tag_id: searchTag });
+                let heroSet = false;
                 if (themeData && themeData.media && themeData.media.length > 0) {
                     const heroMedia = themeData.media.find(m => m.usage === 'HERO' && m.media_type === 'IMAGE');
                     if (heroMedia && heroMedia.imagekit_path) {
@@ -1275,16 +1276,42 @@ document.addEventListener('DOMContentLoaded', async () => {
                             heroSection.style.backgroundImage = `url('${heroMedia.imagekit_path}')`;
                             heroSection.style.backgroundSize = 'cover';
                             heroSection.style.backgroundPosition = 'center';
+                            heroSet = true;
                         }
                     }
                     
-                    const galleryMedia = themeData.media.filter(m => m.id !== heroMedia?.id);
+                    const galleryMedia = themeData.media.filter(m => m.id !== (themeData.media.find(m2 => m2.usage === 'HERO' && m2.media_type === 'IMAGE') || {}).id);
                     if (galleryMedia.length > 0) {
                         renderThemeGallery(galleryMedia);
                     }
                 }
+                // Fallback: aseta satunnainen paikallinen kuva jos ImageKit-kuvaa ei ole
+                if (!heroSet && window.heroFallbackImages && window.heroFallbackImages.length > 0) {
+                    const heroSection = document.getElementById('theme-hero');
+                    if (heroSection) {
+                        const idx = Math.floor(Math.random() * window.heroFallbackImages.length);
+                        heroSection.style.backgroundImage = `url('${window.heroFallbackImages[idx]}')`;
+                    }
+                }
             } catch (err) {
                 console.error('Virhe teemamedian latauksessa', err);
+                // Fallback virhetilanteessa
+                if (window.heroFallbackImages && window.heroFallbackImages.length > 0) {
+                    const heroSection = document.getElementById('theme-hero');
+                    if (heroSection) {
+                        const idx = Math.floor(Math.random() * window.heroFallbackImages.length);
+                        heroSection.style.backgroundImage = `url('${window.heroFallbackImages[idx]}')`;
+                    }
+                }
+            }
+        } else {
+            // Ei Supabase-yhteyttä – aseta fallback heti
+            if (window.heroFallbackImages && window.heroFallbackImages.length > 0) {
+                const heroSection = document.getElementById('theme-hero');
+                if (heroSection) {
+                    const idx = Math.floor(Math.random() * window.heroFallbackImages.length);
+                    heroSection.style.backgroundImage = `url('${window.heroFallbackImages[idx]}')`;
+                }
             }
         }
 

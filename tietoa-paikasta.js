@@ -272,6 +272,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (mediaDb) {
             try {
                 const { data: dashboardData } = await mediaDb.rpc('get_place_dashboard', { p_place_id_text: placeIdStr });
+                let heroSet = false;
                 if (dashboardData && dashboardData.media && dashboardData.media.length > 0) {
                     const heroMedia = dashboardData.media.find(m => m.usage === 'HERO' && m.media_type === 'IMAGE');
                     if (heroMedia && heroMedia.imagekit_path) {
@@ -281,6 +282,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                             heroSection.style.backgroundImage = `url('${heroMedia.imagekit_path}')`;
                             heroSection.style.backgroundSize = 'cover';
                             heroSection.style.backgroundPosition = 'center';
+                            heroSet = true;
                         }
                     }
                     
@@ -289,8 +291,33 @@ document.addEventListener('DOMContentLoaded', async () => {
                         renderPlaceGallery(galleryMedia);
                     }
                 }
+                // Fallback: aseta satunnainen paikallinen kuva jos ImageKit-kuvaa ei löydy
+                if (!heroSet && window.heroFallbackImages && window.heroFallbackImages.length > 0) {
+                    const heroSection = document.getElementById('place-hero');
+                    if (heroSection) {
+                        const idx = Math.floor(Math.random() * window.heroFallbackImages.length);
+                        heroSection.style.backgroundImage = `url('${window.heroFallbackImages[idx]}')`;
+                    }
+                }
             } catch (err) {
                 console.error('Virhe paikkamedian latauksessa', err);
+                // Fallback virhetilanteessa
+                if (window.heroFallbackImages && window.heroFallbackImages.length > 0) {
+                    const heroSection = document.getElementById('place-hero');
+                    if (heroSection) {
+                        const idx = Math.floor(Math.random() * window.heroFallbackImages.length);
+                        heroSection.style.backgroundImage = `url('${window.heroFallbackImages[idx]}')`;
+                    }
+                }
+            }
+        } else {
+            // Ei Supabase-yhteyttä – aseta fallback heti
+            if (window.heroFallbackImages && window.heroFallbackImages.length > 0) {
+                const heroSection = document.getElementById('place-hero');
+                if (heroSection) {
+                    const idx = Math.floor(Math.random() * window.heroFallbackImages.length);
+                    heroSection.style.backgroundImage = `url('${window.heroFallbackImages[idx]}')`;
+                }
             }
         }
 
