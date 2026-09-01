@@ -381,9 +381,10 @@ header.hero-split {
     min-height: 57vh; /* ~1/3 matalampi kuin aiempi 85vh */
     margin-bottom: 0; /* Flush with content if needed, but we have padding in sections */
     border-radius: 0; /* Remove rounding for full-width feel */
-    overflow: hidden;
+    overflow: visible; /* Sallitaan hakutulosdropdown näkymään herolta ulos */
     box-shadow: none;
     position: relative;
+    z-index: 200; /* Varmistaa että dropdown näkyy seuraavan lohkon yllä */
 }
 
 .hero-left {
