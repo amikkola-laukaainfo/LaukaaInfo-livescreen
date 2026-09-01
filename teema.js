@@ -1041,6 +1041,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                             }
                         }
                     }
+
+                    // V4.5: Hae yritykset company_tags / entity_tags (entity_type = 'company') kautta
+                    const companyTagEntities = taggedEntities.filter(e =>
+                        e.entity_type === 'company' || e.entity_type === 'COMPANY'
+                    );
+                    window._sbTaggedCompanyIds = companyTagEntities.map(e => String(e.entity_id));
                 }
             } catch(e) {
                 console.warn('AI Supabase entity_tags -haku epäonnistui:', e);
@@ -1072,7 +1078,24 @@ document.addEventListener('DOMContentLoaded', async () => {
             return matchesTerms(c.palvelutapa, searchTerms) ||
                    matchesTerms(c.kategoria, searchTerms);
         });
-        
+
+        // V4.5: Sulauteta Supabase entity_tags -pohjaiset yritykset (company_tags)
+        if (window._sbTaggedCompanyIds && window._sbTaggedCompanyIds.length > 0) {
+            window._sbTaggedCompanyIds.forEach(sbId => {
+                const alreadyIn = matchedCompanies.find(c => String(c.id) === sbId || `company-${c.id}` === sbId);
+                if (!alreadyIn) {
+                    // Etsi JSON-listasta id-vastaavuus
+                    const fromJson = allCompanies.find(c => String(c.id) === sbId || `company-${c.id}` === sbId);
+                    if (fromJson) {
+                        matchedCompanies.push({ ...fromJson, source: 'company_tags' });
+                    } else {
+                        // Stub: nimi näytetään id:nä kunnes tarkempi data saatavilla
+                        matchedCompanies.push({ id: sbId, nimi: sbId, kategoria: '', tags: '', source: 'company_tags' });
+                    }
+                }
+            });
+        }
+
         // Renderöi Paikat
         const placesContainer = document.getElementById('places-list');
         if (matchedPlaceNodes.length === 0) {
