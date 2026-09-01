@@ -265,6 +265,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         await loadLostItemsForPlace(placeData);
         loadMixonetContentForPlace(placeData); // Ei await – haetaan taustalla, ei estä muuta
         await loadRoutesForPlace(placeData);
+        await loadThemesForPlace(placeData);
 
         // V2.8 Ladataan Paikan Media (Hero + Kuvat/Videot)
         // place_media on AI Supabase -kannassa (aiSb)
@@ -2880,5 +2881,71 @@ function renderPlaceGallery(media) {
         contentArea.insertBefore(section, hero.nextSibling);
     } else {
         contentArea.appendChild(section);
+    }
+}
+
+/* ==========================================================================
+   LaukaaInfo V4 – Paikan näkökulmat / teemat (2-suuntainen silmukka)
+   ========================================================================== */
+async function loadThemesForPlace(placeData) {
+    if (!placeData || !window.aiSb) return;
+    const container = document.getElementById('place-themes-v4-list');
+    const section = document.getElementById('place-themes-v4-section');
+    if (!container || !section) return;
+
+    const safeHtml = (str) => String(str ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+    try {
+        const placeId = placeData.place_id;
+
+        // 1. Hae place_tags liitokset Supabasesta
+        let { data: tagRows, error } = await window.aiSb
+            .from('place_tags')
+            .select('tag_id, tags(tag_id, name)')
+            .eq('place_id', placeId);
+
+        let tags = [];
+        if (!error && tagRows && tagRows.length > 0) {
+            tags = tagRows.map(r => ({
+                tag_id: r.tags?.tag_id || r.tag_id,
+                name: r.tags?.name || r.tag_id
+            }));
+        } else {
+            // Fallback: entity_tags
+            const { data: entityTagRows } = await window.aiSb
+                .from('entity_tags')
+                .select('tag_id, tags(tag_id, name)')
+                .eq('entity_id', placeId)
+                .eq('entity_type', 'place');
+            if (entityTagRows) {
+                tags = entityTagRows.map(r => ({
+                    tag_id: r.tags?.tag_id || r.tag_id,
+                    name: r.tags?.name || r.tag_id
+                }));
+            }
+        }
+
+        if (tags.length === 0) {
+            section.style.display = 'none';
+            return;
+        }
+
+        const colors = ['#059669', '#0284c7', '#d97706', '#7c3aed', '#db2777', '#0891b2'];
+        container.innerHTML = tags.map((t, idx) => {
+            const color = colors[idx % colors.length];
+            const url = `teema.html?tag=${encodeURIComponent(t.tag_id)}&place_id=${encodeURIComponent(placeId)}`;
+            const name = t.name || t.tag_id;
+            return `
+                <a href="${url}" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.55rem 1.1rem;background:${color}12;color:${color};border:1.5px solid ${color}35;border-radius:50px;font-size:0.92rem;font-weight:700;text-decoration:none;transition:all 0.2s;"
+                   onmouseover="this.style.background='${color}25';this.style.transform='translateY(-2px)';"
+                   onmouseout="this.style.background='${color}12';this.style.transform='none';">
+                    🌲 ${safeHtml(name)}
+                </a>
+            `;
+        }).join('');
+
+        section.style.display = 'block';
+    } catch (e) {
+        console.warn('Virhe paikan teemojen haussa:', e);
     }
 }

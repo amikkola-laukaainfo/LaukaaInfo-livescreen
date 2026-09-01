@@ -750,7 +750,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 ${imgHtml}
                                 <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 0.5rem; display: flex; align-items: center;">📍 ${typeName} ${reasonBadge}</div>
                                 <h3 style="margin: 0 0 0.5rem 0; font-family: Outfit, sans-serif; font-size: 1.25rem; color: var(--text-main);">${p.name}</h3>
-                                <p style="margin: 0; font-size: 0.95rem; color: var(--text-muted);">${desc}</p>
+                                <p style="margin: 0 0 1rem 0; font-size: 0.95rem; color: var(--text-muted);">${desc}</p>
+                                <div>
+                                    <span style="display:inline-block; padding:0.4rem 0.9rem; background:var(--color-forest); color:white; border-radius:50px; font-size:0.85rem; font-weight:700;">Tutustu paikkaan →</span>
+                                </div>
                             </a>
                         `;
                     }).join('');
@@ -1111,7 +1114,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                         ${imgHtml}
                         <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 0.5rem;">📍 ${typeName}</div>
                         <h3 style="margin: 0 0 0.5rem 0; font-family: Outfit, sans-serif; font-size: 1.25rem; color: var(--text-main);">${p.name}</h3>
-                        <p style="margin: 0; font-size: 0.95rem; color: var(--text-muted);">${desc}</p>
+                        <p style="margin: 0 0 1rem 0; font-size: 0.95rem; color: var(--text-muted);">${desc}</p>
+                        <div>
+                            <span style="display:inline-block; padding:0.4rem 0.9rem; background:var(--color-forest); color:white; border-radius:50px; font-size:0.85rem; font-weight:700;">Tutustu paikkaan →</span>
+                        </div>
                     </a>
                 `;
             }).join('');

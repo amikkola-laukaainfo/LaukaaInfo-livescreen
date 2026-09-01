@@ -455,6 +455,16 @@
                     <div id="place-activities-list" style="display: flex; flex-wrap: wrap; gap: 0.5rem; padding: 0.5rem 0;"></div>
                 </section>
 
+                <!-- Paikat (V4: Teemasivun ensisijainen tehtävä on johdattaa käyttäjä paikkoihin) -->
+                <section class="content-block" id="places-section">
+                    <h2 style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="iconify" style="color: var(--accent);" data-icon="material-symbols:location-on-outline"></span>
+                        <span id="places-section-title">Paikat teemassa</span>
+                    </h2>
+                    <p style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1.25rem;">Tutustu Laukaan kohteisiin ja alueisiin tämän näkökulman kautta.</p>
+                    <div id="places-list" class="list-grid"></div>
+                </section>
+
                 <!-- Ajankohtaista (encounters + feed, tagipohjainen, EI paikkakonteksti) -->
                 <section class="content-block" id="encounters-section" style="display: none;">
                     <h2 style="display: flex; align-items: center; gap: 0.5rem;">
@@ -521,15 +531,6 @@
                     <div id="mixonet-companies-list" class="list-grid">
                         <!-- Täytetään JS:ssä vain paikkasidonnaisen teeman yhteydessä -->
                     </div>
-                </section>
-
-                <!-- Paikat (tai "Muita paikkoja lähellä" place_id-tilassa) -->
-                <section class="content-block" id="places-section">
-                    <h2 style="display: flex; align-items: center; gap: 0.5rem;">
-                        <span class="iconify" style="color: var(--accent);" data-icon="material-symbols:location-on-outline"></span>
-                        <span id="places-section-title">Paikat</span>
-                    </h2>
-                    <div id="places-list" class="list-grid"></div>
                 </section>
 
                 <!-- Tapahtumat -->

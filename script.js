@@ -3586,3 +3586,197 @@ function locateOnMap(lat, lon, companyId) {
         }
     });
 }
+
+/* ==========================================================================
+   LaukaaInfo V4 – Yleishaku & Näkökulmat
+   ========================================================================== */
+
+let v4ActiveThemesCache = [];
+
+async function initV4Themes() {
+    const container = document.getElementById('v4-themes-list');
+    if (!container) return;
+
+    try {
+        const AI_SB_URL = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
+        const AI_SB_KEY = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
+        if (typeof window.supabase !== 'undefined') {
+            window.aiSb = window.aiSb || window.supabase.createClient(AI_SB_URL, AI_SB_KEY);
+        }
+
+        let themes = [];
+        if (window.aiSb) {
+            const { data, error } = await window.aiSb.rpc('get_active_themes_with_counts');
+            if (!error && data) {
+                themes = data;
+            }
+        }
+
+        if (!themes || themes.length === 0) {
+            if (window.aiSb) {
+                const { data } = await window.aiSb.from('tags').select('tag_id, name');
+                if (data) themes = data.map(t => ({ ...t, places_count: 1, media_count: 0, observations_count: 0 }));
+            }
+        }
+
+        v4ActiveThemesCache = themes;
+        const activeThemes = themes.filter(t => (t.places_count || 0) > 0 || (t.media_count || 0) > 0).slice(0, 12);
+
+        if (activeThemes.length === 0) {
+            container.innerHTML = '<div style="color: #94a3b8; padding: 0.5rem;">Ei vielä julkisia näkökulmia.</div>';
+            return;
+        }
+
+        container.innerHTML = activeThemes.map(t => {
+            const name = t.name || t.tag_id;
+            const pCount = t.places_count || 0;
+            const mCount = t.media_count || 0;
+            const oCount = t.observations_count || 0;
+            return `
+                <a href="teema.html?tag=${encodeURIComponent(t.tag_id)}" style="display: block; text-decoration: none; padding: 1rem; border-radius: 12px; background: #f8fafc; border: 1px solid #e2e8f0; transition: all 0.2s;" onmouseover="this.style.borderColor='#3b82f6'; this.style.transform='translateY(-2px)';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.transform='none';">
+                    <div style="font-weight: 700; color: #0f172a; font-size: 1.05rem; margin-bottom: 0.25rem;">🌲 ${escapeHtml(name)}</div>
+                    <div style="font-size: 0.85rem; color: #64748b; font-weight: 500;">
+                        📍 ${pCount} paikkaa ${mCount > 0 ? `· 📷 ${mCount}` : ''} ${oCount > 0 ? `· 👀 ${oCount}` : ''}
+                    </div>
+                </a>
+            `;
+        }).join('');
+
+    } catch (e) {
+        console.warn('initV4Themes epäonnistui:', e);
+        if (container) {
+            container.innerHTML = '<div style="color: #94a3b8; padding: 0.5rem;">Näkökulmien lataus epäonnistui.</div>';
+        }
+    }
+}
+
+function initV4GlobalSearch() {
+    const input = document.getElementById('v4-global-search');
+    const dropdown = document.getElementById('v4-search-dropdown');
+    if (!input || !dropdown) return;
+
+    let debounceTimer = null;
+
+    input.addEventListener('input', (e) => {
+        const query = e.target.value.trim();
+        clearTimeout(debounceTimer);
+
+        if (query.length < 2) {
+            dropdown.style.display = 'none';
+            dropdown.innerHTML = '';
+            return;
+        }
+
+        debounceTimer = setTimeout(() => {
+            performV4Search(query, dropdown);
+        }, 200);
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.style.display = 'none';
+        }
+    });
+
+    input.addEventListener('focus', () => {
+        if (input.value.trim().length >= 2) {
+            dropdown.style.display = 'block';
+        }
+    });
+}
+
+async function performV4Search(query, dropdown) {
+    const q = query.toLowerCase();
+    const qNorm = normalizeForSearch(q);
+
+    const matchedThemes = (v4ActiveThemesCache || []).filter(t => {
+        const name = (t.name || t.tag_id).toLowerCase();
+        return name.includes(q) || normalizeForSearch(name).includes(qNorm);
+    }).slice(0, 3);
+
+    let matchedPlaces = [];
+    try {
+        if (window.aiSb) {
+            const { data } = await window.aiSb.from('places')
+                .select('place_id, name, canonical_name, type')
+                .or(`name.ilike."%${q}%",canonical_name.ilike."%${q}%"`)
+                .limit(4);
+            if (data) matchedPlaces = data;
+        }
+    } catch (e) {
+        console.warn('V4 haku paikoista epäonnistui:', e);
+    }
+
+    let matchedCompanies = [];
+    if (window.allCompanies && window.allCompanies.length > 0) {
+        matchedCompanies = window.allCompanies.filter(c => {
+            const name = (c.nimi || c.name || '').toLowerCase();
+            const cat = (c.kategoria || '').toLowerCase();
+            return name.includes(q) || cat.includes(q) || normalizeForSearch(name).includes(qNorm);
+        }).slice(0, 3);
+    }
+
+    let html = '';
+
+    if (matchedThemes.length > 0) {
+        html += `<div style="font-size: 0.75rem; font-weight: 800; color: #059669; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem;">🌲 NÄKÖKULMAT</div>`;
+        matchedThemes.forEach(t => {
+            html += `
+                <a href="teema.html?tag=${encodeURIComponent(t.tag_id)}" style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0.75rem; border-radius: 6px; text-decoration: none; color: #1e293b; font-size: 0.95rem; font-weight: 600;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
+                    <span>🌲 ${escapeHtml(t.name || t.tag_id)}</span>
+                    <span style="font-size: 0.8rem; color: #64748b;">📍 ${t.places_count || 0}</span>
+                </a>
+            `;
+        });
+        html += `<div style="height: 1px; background: #f1f5f9; margin: 0.5rem 0;"></div>`;
+    }
+
+    if (matchedPlaces.length > 0) {
+        html += `<div style="font-size: 0.75rem; font-weight: 800; color: #0284c7; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem;">📍 PAIKAT</div>`;
+        matchedPlaces.forEach(p => {
+            html += `
+                <a href="tietoa-paikasta.html?id=${encodeURIComponent(p.place_id)}" style="display: block; padding: 0.5rem 0.75rem; border-radius: 6px; text-decoration: none; color: #1e293b; font-size: 0.95rem; font-weight: 600;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
+                    📍 ${escapeHtml(p.name || p.canonical_name)}
+                </a>
+            `;
+        });
+        html += `<div style="height: 1px; background: #f1f5f9; margin: 0.5rem 0;"></div>`;
+    }
+
+    if (matchedCompanies.length > 0) {
+        html += `<div style="font-size: 0.75rem; font-weight: 800; color: #d97706; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem;">🛠 PALVELUT & YRITYKSET</div>`;
+        matchedCompanies.forEach(c => {
+            const catParam = encodeURIComponent(c.kategoria || '');
+            html += `
+                <a href="kategoria.html?cat=${catParam}" style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0.75rem; border-radius: 6px; text-decoration: none; color: #1e293b; font-size: 0.95rem; font-weight: 600;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
+                    <span>🏢 ${escapeHtml(c.nimi || c.name)}</span>
+                    <span style="font-size: 0.8rem; color: #64748b;">${escapeHtml(c.kategoria || '')}</span>
+                </a>
+            `;
+        });
+        html += `<div style="height: 1px; background: #f1f5f9; margin: 0.5rem 0;"></div>`;
+    }
+
+    if (html === '') {
+        html = `<div style="padding: 0.75rem; text-align: center; color: #94a3b8; font-size: 0.9rem;">Ei hakutuloksia hakusanalla "${escapeHtml(query)}"</div>`;
+    } else {
+        html += `
+            <a href="asiahaku.html?q=${encodeURIComponent(query)}" style="display: block; padding: 0.6rem 0.75rem; text-align: center; font-weight: 700; color: #3b82f6; text-decoration: none; font-size: 0.9rem; border-top: 1px solid #e2e8f0; margin-top: 0.5rem;" onmouseover="this.style.background='#eff6ff';" onmouseout="this.style.background='transparent';">
+                Näytä kaikki hakutulokset →
+            </a>
+        `;
+    }
+
+    dropdown.innerHTML = html;
+    dropdown.style.display = 'block';
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        initV4Themes();
+        initV4GlobalSearch();
+    });
+} else {
+    initV4Themes();
+    initV4GlobalSearch();
+}

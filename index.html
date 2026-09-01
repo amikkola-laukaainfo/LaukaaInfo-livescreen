@@ -359,8 +359,8 @@
                         <h2 class="hero-subheading" data-i18n="hero_subheading">Yhteydet palveluihin, osaajiin ja
                             mahdollisuuksiin.</h2>
                         <!-- V4 Yleishaku -->
-                        <div class="v4-hero-search">
-                            <h3 style="font-size: 1.1rem; color: #475569; margin-bottom: 0.5rem; font-weight: 600;">Mitä etsit Laukaasta?</h3>
+                        <div class="v4-hero-search" style="margin-top: 1.5rem;">
+                            <h3 style="font-size: 1.2rem; color: #ffffff; margin-bottom: 0.75rem; font-weight: 700; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);">Mitä etsit Laukaasta?</h3>
                             <div class="v4-search-bar" style="position: relative; width: 100%; max-width: 500px;">
                                 <span class="iconify" data-icon="material-symbols-light:search" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); font-size: 1.5rem; color: #64748b;"></span>
                                 <input type="text" id="v4-global-search" placeholder="Hae palvelua, paikkaa tai näkökulmaa..." style="width: 100%; padding: 1rem 1rem 1rem 3rem; border-radius: 50px; border: 2px solid #e2e8f0; font-size: 1.1rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); outline: none; transition: all 0.3s;" onfocus="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.2)';" onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='0 4px 6px -1px rgba(0, 0, 0, 0.1)';">
@@ -397,13 +397,12 @@
                     </h2>
                     <p style="color: #64748b; font-size: 1.1rem; margin-bottom: 1.5rem;">Mitä tarvitset?</p>
                     <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;" id="v4-services-list">
-                        <!-- Staattiset esimerkit alkuun, voidaan ladata JS:llä -->
-                        <a href="palvelu.html?c=autoilu-liikenne" class="btn-outline">Autoilu</a>
-                        <a href="palvelu.html?c=rakentaminen-remontointi" class="btn-outline">Rakentaminen</a>
-                        <a href="palvelu.html?c=ravintolat-kahvilat" class="btn-outline">Ravintolat</a>
-                        <a href="palvelu.html?c=hyvinvointi-kauneus" class="btn-outline">Hyvinvointi</a>
-                        <a href="palvelu.html?c=ostokset-kaupat" class="btn-outline">Ostokset</a>
-                        <a href="palvelu.html?c=yrityspalvelut" class="btn-outline">Yrityspalvelut</a>
+                        <a href="kategoria.html?cat=Auto+ja+kuljetus" class="btn-outline">Autoilu</a>
+                        <a href="kategoria.html?cat=Rakentaminen+ja+remontointi" class="btn-outline">Rakentaminen</a>
+                        <a href="kategoria.html?cat=Ravintolat" class="btn-outline">Ravintolat</a>
+                        <a href="kategoria.html?cat=Hyvinvointi+ja+terveys" class="btn-outline">Hyvinvointi</a>
+                        <a href="kategoria.html?cat=Ostokset" class="btn-outline">Ostokset</a>
+                        <a href="kategoria.html?cat=Yrityspalvelut" class="btn-outline">Yrityspalvelut</a>
                     </div>
                 </div>
 
@@ -414,9 +413,9 @@
                     </h2>
                     <p style="color: #64748b; font-size: 1.1rem; margin-bottom: 1.5rem;">Löydä uutta läheltäsi</p>
                     <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;" id="v4-places-list">
-                        <a href="tietoa-paikasta.html?place=vihtavuori" class="btn-outline">Vihtavuori</a>
-                        <a href="tietoa-paikasta.html?place=hyyppaavuori" class="btn-outline">Hyyppäävuori</a>
-                        <a href="tietoa-paikasta.html?place=haarla" class="btn-outline">Haarla</a>
+                        <a href="tietoa-paikasta.html?id=vihtavuori" class="btn-outline">Vihtavuori</a>
+                        <a href="tietoa-paikasta.html?id=hyyppaavuori" class="btn-outline">Hyyppäävuori</a>
+                        <a href="tietoa-paikasta.html?id=haarla" class="btn-outline">Haarla</a>
                         <a href="kohdekartta.html" class="btn-primary" style="padding: 0.5rem 1rem; font-size: 0.95rem;">Kaikki paikat kartalla →</a>
                     </div>
                 </div>
@@ -1374,10 +1373,8 @@
         })();
     </script>
 
-    <!-- V4 Core Script -->
-    <script src="v4-core.js"></script>
-
     <!-- Lähelläsi-widget -->
     <script src="hero-nearby.js"></script>
+
 </html>
 
