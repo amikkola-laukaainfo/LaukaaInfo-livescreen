@@ -3607,9 +3607,7 @@ async function initV4Themes() {
         let themes = [];
         if (window.aiSb) {
             const { data, error } = await window.aiSb.rpc('get_active_themes_with_counts');
-            if (!error && data) {
-                themes = data;
-            }
+            if (!error && data) themes = data;
         }
 
         if (!themes || themes.length === 0) {
@@ -3620,33 +3618,81 @@ async function initV4Themes() {
         }
 
         v4ActiveThemesCache = themes;
-        const activeThemes = themes.filter(t => (t.places_count || 0) > 0 || (t.media_count || 0) > 0).slice(0, 12);
 
+        const activeThemes = themes.filter(t => (t.places_count || 0) > 0 || (t.media_count || 0) > 0);
         if (activeThemes.length === 0) {
-            container.innerHTML = '<div style="color: #94a3b8; padding: 0.5rem;">Ei vielä julkisia näkökulmia.</div>';
+            container.innerHTML = '<span style="color:#94a3b8;font-size:0.85rem;">Ei vielä julkisia näkökulmia.</span>';
             return;
         }
 
-        container.innerHTML = activeThemes.map(t => {
+        // Satunnaista ja näytä enintään 8 pilleriä
+        const shuffled = activeThemes.sort(() => Math.random() - 0.5).slice(0, 8);
+        const colors = ['#059669','#0284c7','#d97706','#7c3aed','#db2777','#0891b2','#16a34a','#b45309'];
+
+        container.innerHTML = shuffled.map((t, idx) => {
             const name = t.name || t.tag_id;
-            const pCount = t.places_count || 0;
-            const mCount = t.media_count || 0;
-            const oCount = t.observations_count || 0;
-            return `
-                <a href="teema.html?tag=${encodeURIComponent(t.tag_id)}" style="display: block; text-decoration: none; padding: 1rem; border-radius: 12px; background: #f8fafc; border: 1px solid #e2e8f0; transition: all 0.2s;" onmouseover="this.style.borderColor='#3b82f6'; this.style.transform='translateY(-2px)';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.transform='none';">
-                    <div style="font-weight: 700; color: #0f172a; font-size: 1.05rem; margin-bottom: 0.25rem;">🌲 ${escapeHtml(name)}</div>
-                    <div style="font-size: 0.85rem; color: #64748b; font-weight: 500;">
-                        📍 ${pCount} paikkaa ${mCount > 0 ? `· 📷 ${mCount}` : ''} ${oCount > 0 ? `· 👀 ${oCount}` : ''}
-                    </div>
-                </a>
-            `;
+            const color = colors[idx % colors.length];
+            return `<a href="teema.html?tag=${encodeURIComponent(t.tag_id)}"
+                style="display:inline-flex;align-items:center;gap:0.35rem;padding:0.45rem 0.9rem;background:${color}12;color:${color};border:1.5px solid ${color}30;border-radius:50px;font-size:0.85rem;font-weight:700;text-decoration:none;transition:all 0.2s;"
+                onmouseover="this.style.background='${color}25';this.style.transform='translateY(-2px)';"
+                onmouseout="this.style.background='${color}12';this.style.transform='none';">
+                🌲 ${escapeHtml(name)}
+            </a>`;
         }).join('');
 
     } catch (e) {
         console.warn('initV4Themes epäonnistui:', e);
-        if (container) {
-            container.innerHTML = '<div style="color: #94a3b8; padding: 0.5rem;">Näkökulmien lataus epäonnistui.</div>';
+        if (container) container.innerHTML = '<span style="color:#94a3b8;font-size:0.85rem;">Näkökulmien lataus epäonnistui.</span>';
+    }
+}
+
+async function initV4Places() {
+    const container = document.getElementById('v4-places-list');
+    if (!container) return;
+
+    try {
+        const AI_SB_URL = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
+        const AI_SB_KEY = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
+        if (typeof window.supabase !== 'undefined') {
+            window.aiSb = window.aiSb || window.supabase.createClient(AI_SB_URL, AI_SB_KEY);
         }
+
+        let places = [];
+        if (window.aiSb) {
+            const { data } = await window.aiSb
+                .from('places')
+                .select('place_id, name')
+                .or('status.eq.active,status.eq.ACTIVE,status.is.null')
+                .limit(200);
+            if (data) places = data;
+        }
+
+        if (places.length === 0) {
+            // Fallback: staattiset paikat
+            container.innerHTML = `
+                <a href="tietoa-paikasta.html?id=vihtavuori" class="btn-outline" style="font-size:0.85rem;padding:0.4rem 0.85rem;">Vihtavuori</a>
+                <a href="tietoa-paikasta.html?id=hyyppaavuori" class="btn-outline" style="font-size:0.85rem;padding:0.4rem 0.85rem;">Hyyppäävuori</a>
+                <a href="tietoa-paikasta.html?id=haarla" class="btn-outline" style="font-size:0.85rem;padding:0.4rem 0.85rem;">Haarla</a>`;
+            return;
+        }
+
+        // Satunnaista ja näytä 6 paikkaa
+        const shuffled = places.sort(() => Math.random() - 0.5).slice(0, 6);
+        const colors = ['#059669','#0284c7','#d97706','#7c3aed','#db2777','#0891b2'];
+
+        container.innerHTML = shuffled.map((p, idx) => {
+            const color = colors[idx % colors.length];
+            const name = p.name || p.place_id;
+            return `<a href="tietoa-paikasta.html?id=${encodeURIComponent(p.place_id)}"
+                style="display:inline-flex;align-items:center;gap:0.35rem;padding:0.45rem 0.9rem;background:${color}12;color:${color};border:1.5px solid ${color}30;border-radius:50px;font-size:0.85rem;font-weight:700;text-decoration:none;transition:all 0.2s;"
+                onmouseover="this.style.background='${color}25';this.style.transform='translateY(-2px)';"
+                onmouseout="this.style.background='${color}12';this.style.transform='none';">
+                📍 ${escapeHtml(name)}
+            </a>`;
+        }).join('');
+
+    } catch (e) {
+        console.warn('initV4Places epäonnistui:', e);
     }
 }
 
@@ -3774,9 +3820,11 @@ async function performV4Search(query, dropdown) {
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
         initV4Themes();
+        initV4Places();
         initV4GlobalSearch();
     });
 } else {
     initV4Themes();
+    initV4Places();
     initV4GlobalSearch();
 }

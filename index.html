@@ -388,49 +388,74 @@
 
     <main>
         <section class="v4-entry-points-section bg-full-white" style="padding: 4rem 0; position: relative; z-index: 10;">
-            <div class="section-container" style="max-width: 1000px; margin: 0 auto; padding: 0 1.5rem; display: grid; gap: 3rem;">
-                
-                <!-- 1. Palvelut -->
-                <div class="v4-entry-block">
-                    <h2 style="font-size: 1.8rem; font-weight: 800; color: #0a2540; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem;">
-                        <span style="font-size: 2rem;">🛠</span> Hae palveluja
-                    </h2>
-                    <p style="color: #64748b; font-size: 1.1rem; margin-bottom: 1.5rem;">Mitä tarvitset?</p>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;" id="v4-services-list">
-                        <a href="kategoria.html?cat=Auto+ja+kuljetus" class="btn-outline">Autoilu</a>
-                        <a href="kategoria.html?cat=Rakentaminen+ja+remontointi" class="btn-outline">Rakentaminen</a>
-                        <a href="kategoria.html?cat=Ravintolat" class="btn-outline">Ravintolat</a>
-                        <a href="kategoria.html?cat=Hyvinvointi+ja+terveys" class="btn-outline">Hyvinvointi</a>
-                        <a href="kategoria.html?cat=Ostokset" class="btn-outline">Ostokset</a>
-                        <a href="kategoria.html?cat=Yrityspalvelut" class="btn-outline">Yrityspalvelut</a>
-                    </div>
-                </div>
+            <div class="section-container" style="max-width: 1200px; margin: 0 auto; padding: 0 1.5rem;">
 
-                <!-- 2. Paikat -->
-                <div class="v4-entry-block">
-                    <h2 style="font-size: 1.8rem; font-weight: 800; color: #0a2540; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem;">
-                        <span style="font-size: 2rem;">📍</span> Tutustu paikkoihin
-                    </h2>
-                    <p style="color: #64748b; font-size: 1.1rem; margin-bottom: 1.5rem;">Löydä uutta läheltäsi</p>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;" id="v4-places-list">
-                        <a href="tietoa-paikasta.html?id=vihtavuori" class="btn-outline">Vihtavuori</a>
-                        <a href="tietoa-paikasta.html?id=hyyppaavuori" class="btn-outline">Hyyppäävuori</a>
-                        <a href="tietoa-paikasta.html?id=haarla" class="btn-outline">Haarla</a>
-                        <a href="kohdekartta.html" class="btn-primary" style="padding: 0.5rem 1rem; font-size: 0.95rem;">Kaikki paikat kartalla →</a>
-                    </div>
-                </div>
+                <!-- 3-sarakkeinen korttiruudukko -->
+                <div id="v4-entry-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; align-items: start;">
 
-                <!-- 3. Näkökulmat (Ladataan JS:llä) -->
-                <div class="v4-entry-block">
-                    <h2 style="font-size: 1.8rem; font-weight: 800; color: #0a2540; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem;">
-                        <span style="font-size: 2rem;">🌲</span> Tutustu näkökulmasta
-                    </h2>
-                    <p style="color: #64748b; font-size: 1.1rem; margin-bottom: 1.5rem;">Sukella teemoihin</p>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem;" id="v4-themes-list">
+                    <!-- 1. Palvelut -->
+                    <div class="v4-entry-card" style="background: #fff; border: 1.5px solid #e2e8f0; border-radius: 20px; padding: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.05); display: flex; flex-direction: column; gap: 1rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <span style="width:44px; height:44px; background: linear-gradient(135deg,#6366f1,#8b5cf6); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0;">🛠</span>
+                            <div>
+                                <h2 style="font-size:1.2rem; font-weight:800; color:#0a2540; margin:0 0 0.15rem 0;">Hae palveluja</h2>
+                                <p style="color:#64748b; font-size:0.88rem; margin:0;">Mitä tarvitset?</p>
+                            </div>
+                        </div>
+                        <div id="v4-services-list" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                            <a href="kategoria.html?cat=Auto+ja+kuljetus" class="btn-outline" style="font-size:0.85rem; padding:0.4rem 0.85rem;">Autoilu</a>
+                            <a href="kategoria.html?cat=Rakentaminen+ja+remontointi" class="btn-outline" style="font-size:0.85rem; padding:0.4rem 0.85rem;">Rakentaminen</a>
+                            <a href="kategoria.html?cat=Ravintolat" class="btn-outline" style="font-size:0.85rem; padding:0.4rem 0.85rem;">Ravintolat</a>
+                            <a href="kategoria.html?cat=Hyvinvointi+ja+terveys" class="btn-outline" style="font-size:0.85rem; padding:0.4rem 0.85rem;">Hyvinvointi</a>
+                            <a href="kategoria.html?cat=Ostokset" class="btn-outline" style="font-size:0.85rem; padding:0.4rem 0.85rem;">Ostokset</a>
+                            <a href="kategoria.html?cat=Yrityspalvelut" class="btn-outline" style="font-size:0.85rem; padding:0.4rem 0.85rem;">Yrityspalvelut</a>
+                        </div>
+                        <a href="kategoria.html" style="display:inline-flex; align-items:center; gap:0.4rem; font-size:0.85rem; font-weight:700; color:#6366f1; text-decoration:none; margin-top:auto;">Kaikki palvelukategoriat →</a>
+                    </div>
+
+                    <!-- 2. Paikat (satunnainen JS:llä) -->
+                    <div class="v4-entry-card" style="background: #fff; border: 1.5px solid #e2e8f0; border-radius: 20px; padding: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.05); display: flex; flex-direction: column; gap: 1rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <span style="width:44px; height:44px; background: linear-gradient(135deg,#059669,#10b981); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0;">📍</span>
+                            <div>
+                                <h2 style="font-size:1.2rem; font-weight:800; color:#0a2540; margin:0 0 0.15rem 0;">Tutustu paikkoihin</h2>
+                                <p style="color:#64748b; font-size:0.88rem; margin:0;">Löydä uutta läheltäsi</p>
+                            </div>
+                        </div>
+                        <!-- Täytetään JS:llä satunnaisilla paikoilla -->
+                        <div id="v4-places-list" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                            <span style="color:#94a3b8; font-size:0.85rem;">Ladataan paikkoja...</span>
+                        </div>
+                        <a href="kohdekartta.html" style="display:inline-flex; align-items:center; gap:0.4rem; font-size:0.85rem; font-weight:700; color:#059669; text-decoration:none; margin-top:auto;">Kaikki paikat kartalla →</a>
+                    </div>
+
+                    <!-- 3. Näkökulmat (satunnainen JS:llä) -->
+                    <div class="v4-entry-card" style="background: #fff; border: 1.5px solid #e2e8f0; border-radius: 20px; padding: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.05); display: flex; flex-direction: column; gap: 1rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <span style="width:44px; height:44px; background: linear-gradient(135deg,#0284c7,#0ea5e9); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0;">🌲</span>
+                            <div>
+                                <h2 style="font-size:1.2rem; font-weight:800; color:#0a2540; margin:0 0 0.15rem 0;">Tutustu näkökulmasta</h2>
+                                <p style="color:#64748b; font-size:0.88rem; margin:0;">Sukella teemoihin</p>
+                            </div>
+                        </div>
                         <!-- Täytetään get_active_themes_with_counts -kutsulla JS:ssä -->
-                        <div style="padding: 1rem; border: 1px solid #e2e8f0; border-radius: 8px; color: #94a3b8;">Ladataan näkökulmia...</div>
+                        <div id="v4-themes-list" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                            <span style="color:#94a3b8; font-size:0.85rem;">Ladataan näkökulmia...</span>
+                        </div>
+                        <a href="teema.html" style="display:inline-flex; align-items:center; gap:0.4rem; font-size:0.85rem; font-weight:700; color:#0284c7; text-decoration:none; margin-top:auto;">Kaikki näkökulmat →</a>
                     </div>
-                </div>
+
+                </div><!-- /v4-entry-grid -->
+
+                <!-- Responsiivisuus: alle 768px pystysuoraan -->
+                <style>
+                @media (max-width: 900px) {
+                    #v4-entry-grid { grid-template-columns: 1fr 1fr !important; }
+                }
+                @media (max-width: 600px) {
+                    #v4-entry-grid { grid-template-columns: 1fr !important; }
+                }
+                </style>
 
             </div>
         </section>
