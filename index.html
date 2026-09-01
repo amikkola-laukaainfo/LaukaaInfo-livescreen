@@ -358,89 +358,17 @@
                         <h1 id="brand-title">Laukaa<span class="highlight-i">I</span>nfo</h1>
                         <h2 class="hero-subheading" data-i18n="hero_subheading">Yhteydet palveluihin, osaajiin ja
                             mahdollisuuksiin.</h2>
-                        <!-- Nappirivi: Löydä palvelu | Ilmoitukset | Julkaisut -->
-                        <div class="hero-actions">
-                            <a href="#search-section" class="btn-primary"
-                                style="display: inline-flex; align-items: center; gap: 0.5rem;">
-                                <span class="iconify" data-icon="material-symbols-light:location-on-outline"
-                                    style="font-size: 1.4em;"></span>
-                                <span data-i18n="hero_btn_service">Löydä palvelu</span>
-                            </a>
-                            <a href="kohtaamiset.html" class="btn-primary"
-                                style="display: inline-flex; align-items: center; gap: 0.5rem;">
-                                <span class="iconify" data-icon="material-symbols-light:forum-outline"
-                                    style="font-size: 1.4em;"></span>
-                                <span data-i18n="hero_btn_people">Ilmoitukset</span>
-                            </a>
-                            <a href="#feed-section" class="btn-primary"
-                                style="display: inline-flex; align-items: center; gap: 0.5rem;">
-                                <span class="iconify" data-icon="material-symbols-light:rocket-launch-outline"
-                                    style="font-size: 1.4em;"></span>
-                                <span data-i18n="hero_btn_create">Julkaisut</span>
-                            </a>
+                        <!-- V4 Yleishaku -->
+                        <div class="v4-hero-search">
+                            <h3 style="font-size: 1.1rem; color: #475569; margin-bottom: 0.5rem; font-weight: 600;">Mitä etsit Laukaasta?</h3>
+                            <div class="v4-search-bar" style="position: relative; width: 100%; max-width: 500px;">
+                                <span class="iconify" data-icon="material-symbols-light:search" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); font-size: 1.5rem; color: #64748b;"></span>
+                                <input type="text" id="v4-global-search" placeholder="Hae palvelua, paikkaa tai näkökulmaa..." style="width: 100%; padding: 1rem 1rem 1rem 3rem; border-radius: 50px; border: 2px solid #e2e8f0; font-size: 1.1rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); outline: none; transition: all 0.3s;" onfocus="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.2)';" onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='0 4px 6px -1px rgba(0, 0, 0, 0.1)';">
+                                <div id="v4-search-dropdown" class="v4-search-dropdown" style="display: none; position: absolute; top: 110%; left: 0; right: 0; background: white; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.2); z-index: 100; max-height: 400px; overflow-y: auto; padding: 1rem; text-align: left;">
+                                    <!-- Hakutulokset renderöidään tänne lennosta (PAIKAT, PALVELUT, NÄKÖKULMAT) -->
+                                </div>
+                            </div>
                         </div>
-
-                        <!-- ═══ LÄHELLÄSI-WIDGET ═══ -->
-                        <div class="hero-nearby" id="hero-nearby" aria-label="Lähellä olevat paikat">
-
-                            <!-- Tila 1: Trigger-nappi -->
-                            <button id="nearby-trigger" class="nearby-trigger-btn" type="button"
-                                aria-label="Näytä lähellä olevat paikat">
-                                <span class="nearby-pin-icon">📍</span> Tutki paikkoja
-                            </button>
-
-                            <!-- Tila 1b: Hakulomake (osoite tai sijainti) -->
-                            <div id="nearby-desktop-form" class="nearby-search-form" hidden>
-                                <label for="nearby-address-input" class="nearby-form-label">Etsi paikkoja</label>
-                                <div class="nearby-input-row">
-                                    <input
-                                        id="nearby-address-input"
-                                        class="nearby-address-input"
-                                        type="text"
-                                        placeholder="Kirjoita osoite..."
-                                        autocomplete="street-address"
-                                        aria-label="Kirjoita osoite"
-                                    />
-                                    <button id="nearby-address-btn" class="nearby-address-btn" type="button"
-                                        aria-label="Hae osoitteella">
-                                        Hae
-                                    </button>
-                                </div>
-                                <div style="margin-top: 0.8rem; display: flex; flex-direction: column; gap: 0.5rem;">
-                                    <button id="nearby-geo-btn" class="btn-primary" type="button"
-                                        style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 0.5rem; background: var(--secondary-blue); padding: 0.6rem; border-radius: 8px;">
-                                        <span class="nearby-pin-icon">📍</span> Käytä sijaintiani
-                                    </button>
-                                    <a href="kohdekartta.html" style="text-align: center; font-size: 0.85rem; text-decoration: underline; color: inherit; opacity: 0.8; padding: 0.4rem;">
-                                        Näytä kaikki kartalla
-                                    </a>
-                                </div>
-                            </div>
-
-                            <!-- Tila 2: Latausanimaatio -->
-                            <div id="nearby-loading" class="nearby-loading" hidden aria-live="polite">
-                                <span class="nearby-spinner" aria-hidden="true"></span>
-                                <span>Haetaan lähellä olevia paikkoja…</span>
-                            </div>
-
-                            <!-- Tila 2b: Virheviesti -->
-                            <p id="nearby-error" class="nearby-error" hidden role="alert"></p>
-
-                            <!-- Tila 3: Tuloslista -->
-                            <div id="nearby-list" class="nearby-list" hidden>
-                                <div class="nearby-header">
-                                    <span class="nearby-header-pin" aria-hidden="true">📍</span>
-                                    <span id="nearby-label" class="nearby-header-label">Lähelläsi</span>
-                                </div>
-                                <ul id="nearby-places" class="nearby-places-ul" role="list"></ul>
-                                <a href="kohdekartta.html" class="nearby-all-link">
-                                    Näytä kaikki kartalla
-                                    <span aria-hidden="true">→</span>
-                                </a>
-                            </div>
-
-                        </div>
-                        <!-- ═══ /LÄHELLÄSI-WIDGET ═══ -->
 
 
                     </div>
@@ -459,27 +387,52 @@
     </header>
 
     <main>
-        <section class="intro-section bg-full-white" style="padding: 4rem 0; text-align: center; position: relative; z-index: 10;">
-            <div class="section-container" style="max-width: 900px; margin: 0 auto; padding: 0 1.5rem;">
-                <h2 data-i18n="home_intro_title" style="font-size: 2.2rem; font-weight: 800; color: #0a2540; margin-bottom: 2rem; font-family: 'Outfit', sans-serif; line-height: 1.3;">
-                    LaukaaInfo on Laukaan monipuolinen paikallinen palvelualusta
-                </h2>
+        <section class="v4-entry-points-section bg-full-white" style="padding: 4rem 0; position: relative; z-index: 10;">
+            <div class="section-container" style="max-width: 1000px; margin: 0 auto; padding: 0 1.5rem; display: grid; gap: 3rem;">
                 
-                <p data-i18n="home_intro_p1" style="font-size: 1.15rem; color: #475569; line-height: 1.8; margin-bottom: 1.5rem;">
-                    Löydät yhdestä paikasta yritykset, palvelut, paikat, tapahtumat, yhdistykset, ajankohtaiset tiedotteet ja paikalliset vinkit – helposti haettavana verkkopalvelussa ja <a href="https://play.google.com/store/apps/details?id=org.example.LaukaaLive" target="_blank" rel="noopener" style="color: #0056b3; font-weight: 700; text-decoration: underline; text-underline-offset: 4px;">Android-sovelluksessa</a>.
-                </p>
-                
-                <p data-i18n="home_intro_p2" style="font-size: 1.1rem; color: #475569; line-height: 1.8; margin-bottom: 1.5rem;">
-                    Etsitkö paikallista yritystä tai palvelua, suunnitteletko juhlia, remonttia tai vapaa-aikaa, vai haluatko löytää kiinnostavan paikan, tapahtuman tai tekemistä läheltäsi? LaukaaInfo auttaa löytämään sopivat palvelut, paikat ja paikalliset sisällöt tilanteen mukaan.
-                </p>
-                
-                <p data-i18n="home_intro_p3" style="font-size: 1.1rem; color: #475569; line-height: 1.8; margin-bottom: 2.5rem;">
-                    Voit lähestyä palvelua tarpeen, paikan tai teeman kautta – esimerkiksi löytää palveluita tietyn paikan läheltä, tutustua alueen kohteisiin tai etsiä tiettyyn aiheeseen liittyviä yrityksiä, tapahtumia ja palveluita.
-                </p>
-                
-                <p data-i18n="home_intro_tagline" class="intro-section__tagline" style="font-size: 1.3rem; font-weight: 700; color: #0a2540; margin-top: 1rem; padding-top: 2rem; border-top: 2px solid #f1f5f9; font-family: 'Outfit', sans-serif;">
-                    LaukaaInfo yhdistää ihmiset, paikat, yritykset ja palvelut – kaikki lähelläsi, yhdessä paikassa.
-                </p>
+                <!-- 1. Palvelut -->
+                <div class="v4-entry-block">
+                    <h2 style="font-size: 1.8rem; font-weight: 800; color: #0a2540; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem;">
+                        <span style="font-size: 2rem;">🛠</span> Hae palveluja
+                    </h2>
+                    <p style="color: #64748b; font-size: 1.1rem; margin-bottom: 1.5rem;">Mitä tarvitset?</p>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;" id="v4-services-list">
+                        <!-- Staattiset esimerkit alkuun, voidaan ladata JS:llä -->
+                        <a href="palvelu.html?c=autoilu-liikenne" class="btn-outline">Autoilu</a>
+                        <a href="palvelu.html?c=rakentaminen-remontointi" class="btn-outline">Rakentaminen</a>
+                        <a href="palvelu.html?c=ravintolat-kahvilat" class="btn-outline">Ravintolat</a>
+                        <a href="palvelu.html?c=hyvinvointi-kauneus" class="btn-outline">Hyvinvointi</a>
+                        <a href="palvelu.html?c=ostokset-kaupat" class="btn-outline">Ostokset</a>
+                        <a href="palvelu.html?c=yrityspalvelut" class="btn-outline">Yrityspalvelut</a>
+                    </div>
+                </div>
+
+                <!-- 2. Paikat -->
+                <div class="v4-entry-block">
+                    <h2 style="font-size: 1.8rem; font-weight: 800; color: #0a2540; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem;">
+                        <span style="font-size: 2rem;">📍</span> Tutustu paikkoihin
+                    </h2>
+                    <p style="color: #64748b; font-size: 1.1rem; margin-bottom: 1.5rem;">Löydä uutta läheltäsi</p>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;" id="v4-places-list">
+                        <a href="tietoa-paikasta.html?place=vihtavuori" class="btn-outline">Vihtavuori</a>
+                        <a href="tietoa-paikasta.html?place=hyyppaavuori" class="btn-outline">Hyyppäävuori</a>
+                        <a href="tietoa-paikasta.html?place=haarla" class="btn-outline">Haarla</a>
+                        <a href="kohdekartta.html" class="btn-primary" style="padding: 0.5rem 1rem; font-size: 0.95rem;">Kaikki paikat kartalla →</a>
+                    </div>
+                </div>
+
+                <!-- 3. Näkökulmat (Ladataan JS:llä) -->
+                <div class="v4-entry-block">
+                    <h2 style="font-size: 1.8rem; font-weight: 800; color: #0a2540; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem;">
+                        <span style="font-size: 2rem;">🌲</span> Tutustu näkökulmasta
+                    </h2>
+                    <p style="color: #64748b; font-size: 1.1rem; margin-bottom: 1.5rem;">Sukella teemoihin</p>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem;" id="v4-themes-list">
+                        <!-- Täytetään get_active_themes_with_counts -kutsulla JS:ssä -->
+                        <div style="padding: 1rem; border: 1px solid #e2e8f0; border-radius: 8px; color: #94a3b8;">Ladataan näkökulmia...</div>
+                    </div>
+                </div>
+
             </div>
         </section>
 
@@ -1421,8 +1374,10 @@
         })();
     </script>
 
+    <!-- V4 Core Script -->
+    <script src="v4-core.js"></script>
+
     <!-- Lähelläsi-widget -->
     <script src="hero-nearby.js"></script>
-
 </html>
 
