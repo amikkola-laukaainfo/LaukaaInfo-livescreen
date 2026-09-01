@@ -911,37 +911,48 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const uniqueTagIds = [...new Set(resolvedTagIds)];
 
                 if (uniqueTagIds.length > 0) {
-                    // 2. Hae kaikki entity_tags-merkinnät
-                    const { data: taggedEntities } = await aiSbClient
-                        .from('entity_tags')
-                        .select('entity_type, entity_id, tag_id')
-                        .in('tag_id', uniqueTagIds);
+                    // 2. Hae sekä entity_tags- että place_tags-merkinnät Supabasesta
+                    const [entityTagsRes, placeTagsRes] = await Promise.all([
+                        aiSbClient
+                            .from('entity_tags')
+                            .select('entity_type, entity_id, tag_id')
+                            .in('tag_id', uniqueTagIds),
+                        aiSbClient
+                            .from('place_tags')
+                            .select('place_id, tag_id')
+                            .in('tag_id', uniqueTagIds)
+                    ]);
+
+                    const taggedEntities = entityTagsRes.data || [];
+                    const placeTagRows = placeTagsRes.data || [];
+
+                    // Yhdistä paikkojen ID:t molemmista tauluista
+                    const taggedPlaceIds = [
+                        ...taggedEntities.filter(e => e.entity_type === 'place').map(e => e.entity_id),
+                        ...placeTagRows.map(r => r.place_id)
+                    ];
+                    const uniquePlaceIds = [...new Set(taggedPlaceIds.filter(Boolean))];
+
+                    if (uniquePlaceIds.length > 0) {
+                        const { data: sbPlaceData } = await aiSbClient
+                            .from('places')
+                            .select('place_id, name, canonical_name, type, description, municipality')
+                            .in('place_id', uniquePlaceIds)
+                            .or('status.eq.active,status.eq.ACTIVE,status.is.null');
+
+                        // sbPlaces on alustettu rivillä 142 – ei ReferenceError
+                        sbPlaces = (sbPlaceData || []).map(p => ({
+                            id: p.place_id,
+                            name: p.name || p.canonical_name,
+                            type: p.type,
+                            description: p.description,
+                            municipality: p.municipality,
+                            isSupabase: true,
+                            source: 'place_tags'
+                        }));
+                    }
 
                     if (taggedEntities && taggedEntities.length > 0) {
-                        // Places: hae place_id:t
-                        const taggedPlaceIds = taggedEntities
-                            .filter(e => e.entity_type === 'place')
-                            .map(e => e.entity_id);
-
-                        if (taggedPlaceIds.length > 0) {
-                            const { data: sbPlaceData } = await aiSbClient
-                                .from('places')
-                                .select('place_id, name, canonical_name, type, description, municipality')
-                                .in('place_id', taggedPlaceIds)
-                                .or('status.eq.active,status.eq.ACTIVE,status.is.null');
-
-                            // sbPlaces on alustettu rivillä 142 – ei ReferenceError
-                            sbPlaces = (sbPlaceData || []).map(p => ({
-                                id: p.place_id,
-                                name: p.name || p.canonical_name,
-                                type: p.type,
-                                description: p.description,
-                                municipality: p.municipality,
-                                isSupabase: true,
-                                source: 'entity_tags'
-                            }));
-                        }
-
                         // Hae kohtaamiset (encounters) LaukaaLive-Supabasesta
                         const encounterIds = taggedEntities
                             .filter(e => e.entity_type === 'encounter')
