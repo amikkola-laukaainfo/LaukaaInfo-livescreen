@@ -3807,7 +3807,7 @@ async function performV4Search(query, dropdown) {
         html = `<div style="padding: 0.75rem; text-align: center; color: #94a3b8; font-size: 0.9rem;">Ei hakutuloksia hakusanalla "${escapeHtml(query)}"</div>`;
     } else {
         html += `
-            <a href="asiahaku.html?q=${encodeURIComponent(query)}" style="display: block; padding: 0.6rem 0.75rem; text-align: center; font-weight: 700; color: #3b82f6; text-decoration: none; font-size: 0.9rem; border-top: 1px solid #e2e8f0; margin-top: 0.5rem;" onmouseover="this.style.background='#eff6ff';" onmouseout="this.style.background='transparent';">
+            <a href="javascript:void(0)" onclick="openV4SearchModal('${escapeHtml(query).replace(/'/g, "\\'")}')" style="display: block; padding: 0.6rem 0.75rem; text-align: center; font-weight: 700; color: #3b82f6; text-decoration: none; font-size: 0.9rem; border-top: 1px solid #e2e8f0; margin-top: 0.5rem;" onmouseover="this.style.background='#eff6ff';" onmouseout="this.style.background='transparent';">
                 Näytä kaikki hakutulokset →
             </a>
         `;
@@ -3815,6 +3815,127 @@ async function performV4Search(query, dropdown) {
 
     dropdown.innerHTML = html;
     dropdown.style.display = 'block';
+}
+
+async function openV4SearchModal(query) {
+    const modal = document.getElementById('v4-search-modal');
+    const queryEl = document.getElementById('v4-modal-query');
+    const resultsContainer = document.getElementById('v4-modal-results');
+    const dropdown = document.getElementById('v4-search-dropdown');
+
+    if (!modal || !resultsContainer) return;
+
+    if (dropdown) dropdown.style.display = 'none';
+
+    queryEl.textContent = query;
+    modal.style.display = 'block';
+    document.body.style.overflow = 'hidden'; // estä taustan scrollaus
+
+    // Lisätään sulkemislogiikka body overflowlle
+    const closeBtn = modal.querySelector('button');
+    if (closeBtn && !closeBtn.dataset.bound) {
+        closeBtn.dataset.bound = "true";
+        const oldClick = closeBtn.onclick;
+        closeBtn.onclick = function(e) {
+            if (oldClick) oldClick.call(this, e);
+            document.body.style.overflow = '';
+        };
+    }
+    
+    // Klikkaus modalin ulkopuolelle sulkee
+    modal.onclick = function(e) {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+    };
+
+    resultsContainer.innerHTML = '<div style="text-align: center; color: #94a3b8; padding: 2rem 0;">Ladataan tuloksia...</div>';
+
+    const q = query.toLowerCase();
+    const qNorm = normalizeForSearch(q);
+
+    const matchedThemes = (v4ActiveThemesCache || []).filter(t => {
+        const name = (t.name || t.tag_id).toLowerCase();
+        return name.includes(q) || normalizeForSearch(name).includes(qNorm);
+    }); // Näytetään kaikki osumat
+
+    let matchedPlaces = [];
+    try {
+        if (window.aiSb) {
+            const { data } = await window.aiSb.from('places')
+                .select('place_id, name, canonical_name, municipality, type')
+                .or(`name.ilike."%${q}%",canonical_name.ilike."%${q}%"`)
+                .limit(50);
+            if (data) matchedPlaces = data;
+        }
+    } catch (e) {
+        console.warn('V4 modal haku paikoista epäonnistui:', e);
+    }
+
+    let matchedCompanies = [];
+    if (window.allCompanies && window.allCompanies.length > 0) {
+        matchedCompanies = window.allCompanies.filter(c => {
+            const name = (c.nimi || c.name || '').toLowerCase();
+            const cat = (c.kategoria || '').toLowerCase();
+            return name.includes(q) || cat.includes(q) || normalizeForSearch(name).includes(qNorm);
+        });
+    }
+
+    let html = '';
+
+    if (matchedThemes.length > 0) {
+        html += `<div>
+            <h3 style="font-size: 0.85rem; font-weight: 800; color: #059669; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem;">🌲 Näkökulmat (${matchedThemes.length})</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem;">`;
+        matchedThemes.forEach(t => {
+            html += `
+                <a href="teema.html?tag=${encodeURIComponent(t.tag_id)}" style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid #e2e8f0; text-decoration: none; color: #1e293b; font-size: 0.95rem; font-weight: 700; background: #f8fafc; transition: all 0.2s;" onmouseover="this.style.borderColor='#059669'; this.style.background='white';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.background='#f8fafc';">
+                    <span>${escapeHtml(t.name || t.tag_id)}</span>
+                    <span style="font-size: 0.8rem; color: #64748b; font-weight: 500;">📍 ${t.places_count || 0}</span>
+                </a>
+            `;
+        });
+        html += `</div></div>`;
+    }
+
+    if (matchedPlaces.length > 0) {
+        html += `<div>
+            <h3 style="font-size: 0.85rem; font-weight: 800; color: #0284c7; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem; margin-top: 1.5rem;">📍 Paikat (${matchedPlaces.length})</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 0.75rem;">`;
+        matchedPlaces.forEach(p => {
+            const subtitle = [p.type, p.municipality].filter(Boolean).join(' · ');
+            html += `
+                <a href="tietoa-paikasta.html?id=${encodeURIComponent(p.place_id)}" style="display: block; padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid #e2e8f0; text-decoration: none; color: #1e293b; font-size: 0.95rem; font-weight: 700; background: #f8fafc; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284c7'; this.style.background='white';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.background='#f8fafc';">
+                    <div style="margin-bottom: 0.15rem;">${escapeHtml(p.name || p.canonical_name)}</div>
+                    ${subtitle ? `<div style="font-size: 0.75rem; color: #64748b; font-weight: 500;">${escapeHtml(subtitle)}</div>` : ''}
+                </a>
+            `;
+        });
+        html += `</div></div>`;
+    }
+
+    if (matchedCompanies.length > 0) {
+        html += `<div>
+            <h3 style="font-size: 0.85rem; font-weight: 800; color: #d97706; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem; margin-top: 1.5rem;">🛠 Palvelut & Yritykset (${matchedCompanies.length})</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 0.75rem;">`;
+        matchedCompanies.forEach(c => {
+            const catParam = encodeURIComponent(c.kategoria || '');
+            html += `
+                <a href="kategoria.html?cat=${catParam}" style="display: block; padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid #e2e8f0; text-decoration: none; color: #1e293b; font-size: 0.95rem; font-weight: 700; background: #f8fafc; transition: all 0.2s;" onmouseover="this.style.borderColor='#d97706'; this.style.background='white';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.background='#f8fafc';">
+                    <div style="margin-bottom: 0.15rem;">${escapeHtml(c.nimi || c.name)}</div>
+                    <div style="font-size: 0.75rem; color: #64748b; font-weight: 500;">${escapeHtml(c.kategoria || '')}</div>
+                </a>
+            `;
+        });
+        html += `</div></div>`;
+    }
+
+    if (html === '') {
+        html = `<div style="text-align: center; color: #94a3b8; padding: 2rem 0; font-size: 1.1rem;">Ei hakutuloksia hakusanalla "${escapeHtml(query)}"</div>`;
+    }
+
+    resultsContainer.innerHTML = html;
 }
 
 if (document.readyState === 'loading') {
