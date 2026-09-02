@@ -976,9 +976,6 @@ async function renderPlace(place, relatedItems, aiProfileData, aiFaqData, allSou
 
             const linksHtml = externalLinks.map(link => {
                 const meta = typeLabels[link.type] || typeLabels.OTHER;
-                const verifiedBadge = link.verified
-                    ? `<span style="font-size:0.68rem;background:#ecfdf5;color:#059669;border-radius:20px;padding:2px 8px;font-weight:700;margin-left:4px;">✓ Tarkistettu</span>`
-                    : '';
                 return `
                 <a href="${link.url}" target="_blank" rel="noopener noreferrer"
                    style="display:flex;align-items:center;gap:0.75rem;padding:0.65rem 0.85rem;border-radius:10px;border:1px solid #f1f5f9;text-decoration:none;color:#1e293b;background:#f8fafc;transition:background 0.15s;margin-bottom:0.5rem;"
@@ -986,7 +983,7 @@ async function renderPlace(place, relatedItems, aiProfileData, aiFaqData, allSou
                     <span class="iconify" data-icon="${meta.icon}" style="font-size:1.2rem;color:${meta.color};flex-shrink:0;"></span>
                     <span style="flex:1;min-width:0;">
                         <span style="display:block;font-weight:700;font-size:0.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${link.title}</span>
-                        <span style="display:block;font-size:0.72rem;color:#94a3b8;">${meta.label}${verifiedBadge}</span>
+                        <span style="display:block;font-size:0.72rem;color:#94a3b8;">${meta.label}</span>
                     </span>
                     <span class="iconify" data-icon="material-symbols:open-in-new" style="font-size:0.9rem;color:#cbd5e1;flex-shrink:0;"></span>
                 </a>`;
