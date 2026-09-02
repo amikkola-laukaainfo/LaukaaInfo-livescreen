@@ -658,7 +658,7 @@ function scoreCompanies(allCompanies, place, relations, tagMatches, visibilityDa
     return results;
 }
 
-async function renderPlace(place, relatedItems, aiProfileData, allSources = [], allContents = [], scoredCompanies = [], parentPlace = null, subPlaces = []) {
+async function renderPlace(place, relatedItems, aiProfileData, aiFaqData, allSources = [], allContents = [], scoredCompanies = [], parentPlace = null, subPlaces = []) {
     document.getElementById('loading-spinner').style.display = 'none';
     document.getElementById('place-content').style.display = 'block';
 
