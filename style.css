@@ -6924,9 +6924,9 @@ footer {
         border-radius: 18px !important;
         border: none !important;
         box-shadow: 0 8px 24px rgba(0,0,0,0.2) !important;
-        overflow: hidden;
+        overflow: visible !important; /* Ei saa leikata suggestions-dropdownia */
     }
-    /* Hakukortin sisÃ¤inen taustaoverlay tummempi */
+    /* Hakukortin sisäinen taustaoverlay tummempi */
     .hero-path.search-path > div[style*="background-image"] {
         opacity: 0.08 !important;
     }
@@ -8240,4 +8240,35 @@ footer {
 .badge-encounter { background: #17a2b8; color: #fff; }
 .badge-ad { background: #007bff; color: #fff; }
 .badge-nearby { background: #6c757d; color: #fff; }
+
+/* ===== MOBIILI: hakuehdotukset nousevat kuvan ylapuolelle ===== */
+@media (max-width: 768px) {
+    /* Hakukortti ei saa leikata sisaltoa */
+    .hero-path.search-path,
+    .hero-path.browse-path {
+        overflow: visible !important;
+    }
+    /* Wrapper: luo oma stacking context */
+    .search-input-wrapper {
+        overflow: visible !important;
+        position: relative !important;
+        z-index: 100 !important;
+    }
+    /* Suggestions-lista: nousee kaiken ylapuolelle */
+    .search-suggestions {
+        position: absolute !important;
+        z-index: 9999 !important;
+        left: 0 !important;
+        right: 0 !important;
+        top: 100% !important;
+        margin-top: 4px !important;
+        background: #fff !important;
+        border-radius: 12px !important;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.22) !important;
+        border: 1px solid #e2e8f0 !important;
+        max-height: 60vh !important;
+        overflow-y: auto !important;
+    }
+}
+
 
