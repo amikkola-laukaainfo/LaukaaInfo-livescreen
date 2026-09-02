@@ -724,7 +724,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const imgMap = await fetchRepresentativeImages(matchedPlaceNodes, aiSbClient);
                     const storageBaseUrl = 'https://duxluwyqxvbmkkjzuzkz.supabase.co/storage/v1/object/public/';
 
-                    placesContainer.innerHTML = matchedPlaceNodes.map(p => {
+                    const PLACES_INITIAL = 5;
+                    const placeCards = matchedPlaceNodes.map(p => {
                         const url = `tietoa-paikasta.html?id=${encodeURIComponent(p.id)}`;
                         const typeTranslations = { 'LANDMARK': 'Nähtävyys', 'NATURE': 'Luontokohde', 'SERVICE': 'Palvelu', 'BUILDING': 'Rakennus', 'AREA': 'Alue', 'ROUTE': 'Reitti' };
                         const typeName = typeTranslations[p.type] || p.type || 'Paikka';
@@ -757,7 +758,40 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 </div>
                             </a>
                         `;
-                    }).join('');
+                    });
+
+                    const visibleCards = placeCards.slice(0, PLACES_INITIAL);
+                    const hiddenCards = placeCards.slice(PLACES_INITIAL);
+                    const hiddenId = 'places-extra-' + Date.now();
+
+                    let html = visibleCards.join('');
+                    if (hiddenCards.length > 0) {
+                        html += `
+                            <div id="${hiddenId}" style="display:none; grid-column: 1 / -1;">
+                                <div style="display: grid; grid-template-columns: inherit; gap: inherit;">
+                                    ${hiddenCards.join('')}
+                                </div>
+                            </div>
+                            <div style="grid-column: 1 / -1; text-align: center; margin-top: 0.5rem;">
+                                <button id="btn-places-more-${hiddenId}"
+                                    onclick="(function(btn, id){
+                                        var el = document.getElementById(id);
+                                        var hidden = el.style.display === 'none';
+                                        el.style.display = hidden ? 'block' : 'none';
+                                        btn.innerHTML = hidden
+                                            ? '<span style=\\'margin-right:0.4em;\\'>▲</span> Näytä vähemmän'
+                                            : '<span style=\\'margin-right:0.4em;\\'>▼</span> Näytä kaikki ${hiddenCards.length} lisää';
+                                    })(this, '${hiddenId}')"
+                                    style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.65rem 1.5rem;
+                                        background:#f0fdf4; color:#166534; border:2px solid #bbf7d0;
+                                        border-radius:50px; font-weight:700; font-size:0.9rem; cursor:pointer;
+                                        transition:all 0.2s;">
+                                    <span style="margin-right:0.4em;">▼</span> Näytä kaikki ${hiddenCards.length} lisää
+                                </button>
+                            </div>
+                        `;
+                    }
+                    placesContainer.innerHTML = html;
                 }
 
                 // 6. Renderöi Yritykset
