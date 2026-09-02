@@ -8466,13 +8466,13 @@ footer {
     }
 }
 
-/* ===== Hero-hakukentän h3-teksti: tummempi sävy ===== */
+/* ===== Hero-hakukentän h3-teksti: valkoinen työpöydällä, tumma mobiilissa ===== */
 header .v4-hero-search h3,
 .hero-left .v4-hero-search h3,
 .hero-copy .v4-hero-search h3,
 .hero-left-content .v4-hero-search h3 {
-    color: #0a2540 !important;
-    text-shadow: none !important;
+    color: #ffffff !important;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.6) !important;
 }
 
 /* ===== MOBIILI: etusivun HERO-hakukentta (Mita etsit Laukaasta) ===== */
