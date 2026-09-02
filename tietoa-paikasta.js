@@ -191,7 +191,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         const allItemsMap = new Map();
         
         [...kohteet, ...tarjoukset].forEach(item => {
-            if (item.place_id === placeId) {
+            const pId = item.place_id || item.placeId || (item.location && (item.location.place_id || item.location.placeId));
+            let matches = false;
+            if (pId) {
+                if (Array.isArray(pId)) {
+                    matches = pId.some(id => String(id) === String(placeId));
+                } else {
+                    matches = String(pId) === String(placeId);
+                }
+            }
+            if (matches) {
                 allItemsMap.set(String(item.id), item);
             }
         });
