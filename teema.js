@@ -1115,113 +1115,114 @@ document.addEventListener('DOMContentLoaded', async () => {
             const placesContainer = document.getElementById('places-list');
             if (matchedPlaceNodes.length === 0) {
                 placesContainer.innerHTML = '<p style="color: var(--text-muted);">Ei paikkoja tällä teemalla.</p>';
-        } else {
-            const imgMap = await fetchRepresentativeImages(matchedPlaceNodes, aiSbClient);
-            const storageBaseUrl = 'https://duxluwyqxvbmkkjzuzkz.supabase.co/storage/v1/object/public/';
+            } else {
+                const imgMap = await fetchRepresentativeImages(matchedPlaceNodes, aiSbClient);
+                const storageBaseUrl = 'https://duxluwyqxvbmkkjzuzkz.supabase.co/storage/v1/object/public/';
 
-            placesContainer.innerHTML = matchedPlaceNodes.map(p => {
-                const url = `tietoa-paikasta.html?id=${encodeURIComponent(p.id)}`;
-                const typeTranslations = {
-                    'LANDMARK': 'Nähtävyys',
-                    'NATURE': 'Luontokohde',
-                    'SERVICE': 'Palvelu',
-                    'BUILDING': 'Rakennus',
-                    'AREA': 'Alue',
-                    'ROUTE': 'Reitti'
-                };
-                const typeName = typeTranslations[p.type] || p.type || 'Paikka';
-                const desc = p.description ? p.description.substring(0, 100) + '...' : '';
-                
-                let imgHtml = '';
-                const imgObj = imgMap[p.id || p.place_id];
-                if (imgObj) {
-                    const imgUrl = imgObj.storage_path.startsWith('http') ? imgObj.storage_path : (storageBaseUrl + imgObj.storage_path);
-                    const caption = imgObj.alt_text || p.name;
-                    imgHtml = `
-                        <div class="pswp-trigger" data-src="${imgUrl}" data-caption="${caption}" style="aspect-ratio: 16/9; margin-bottom: 1rem; border-radius: 8px; overflow: hidden; position: relative; cursor: pointer;">
-                            <img src="${imgUrl}" alt="${caption}" style="width: 100%; height: 100%; object-fit: cover;">
-                            <div style="position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.6); color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; display: flex; align-items: center; gap: 4px;">
-                                <span class="iconify" data-icon="material-symbols:zoom-in"></span> Suurenna
+                placesContainer.innerHTML = matchedPlaceNodes.map(p => {
+                    const url = `tietoa-paikasta.html?id=${encodeURIComponent(p.id)}`;
+                    const typeTranslations = {
+                        'LANDMARK': 'Nähtävyys',
+                        'NATURE': 'Luontokohde',
+                        'SERVICE': 'Palvelu',
+                        'BUILDING': 'Rakennus',
+                        'AREA': 'Alue',
+                        'ROUTE': 'Reitti'
+                    };
+                    const typeName = typeTranslations[p.type] || p.type || 'Paikka';
+                    const desc = p.description ? p.description.substring(0, 100) + '...' : '';
+                    
+                    let imgHtml = '';
+                    const imgObj = imgMap[p.id || p.place_id];
+                    if (imgObj) {
+                        const imgUrl = imgObj.storage_path.startsWith('http') ? imgObj.storage_path : (storageBaseUrl + imgObj.storage_path);
+                        const caption = imgObj.alt_text || p.name;
+                        imgHtml = `
+                            <div class="pswp-trigger" data-src="${imgUrl}" data-caption="${caption}" style="aspect-ratio: 16/9; margin-bottom: 1rem; border-radius: 8px; overflow: hidden; position: relative; cursor: pointer;">
+                                <img src="${imgUrl}" alt="${caption}" style="width: 100%; height: 100%; object-fit: cover;">
+                                <div style="position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.6); color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; display: flex; align-items: center; gap: 4px;">
+                                    <span class="iconify" data-icon="material-symbols:zoom-in"></span> Suurenna
+                                </div>
                             </div>
-                        </div>
-                    `;
-                }
+                        `;
+                    }
 
-                return `
-                    <a href="${url}" class="list-item-card">
-                        ${imgHtml}
-                        <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 0.5rem;">📍 ${typeName}</div>
-                        <h3 style="margin: 0 0 0.5rem 0; font-family: Outfit, sans-serif; font-size: 1.25rem; color: var(--text-main);">${p.name}</h3>
-                        <p style="margin: 0 0 1rem 0; font-size: 0.95rem; color: var(--text-muted);">${desc}</p>
-                        <div>
-                            <span style="display:inline-block; padding:0.4rem 0.9rem; background:var(--color-forest); color:white; border-radius:50px; font-size:0.85rem; font-weight:700;">Tutustu paikkaan →</span>
-                        </div>
-                    </a>
-                `;
-            }).join('');
-        }
+                    return `
+                        <a href="${url}" class="list-item-card">
+                            ${imgHtml}
+                            <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 0.5rem;">📍 ${typeName}</div>
+                            <h3 style="margin: 0 0 0.5rem 0; font-family: Outfit, sans-serif; font-size: 1.25rem; color: var(--text-main);">${p.name}</h3>
+                            <p style="margin: 0 0 1rem 0; font-size: 0.95rem; color: var(--text-muted);">${desc}</p>
+                            <div>
+                                <span style="display:inline-block; padding:0.4rem 0.9rem; background:var(--color-forest); color:white; border-radius:50px; font-size:0.85rem; font-weight:700;">Tutustu paikkaan →</span>
+                            </div>
+                        </a>
+                    `;
+                }).join('');
+            }
+        } // /if (!isContextualRendered) paikat
         
         // Renderöi Yritykset (vain jos kontekstuaalinen haku ei jo tehnyt tätä)
         if (!isContextualRendered) {
             const companiesContainer = document.getElementById('companies-list');
             if (matchedCompanies.length === 0) {
                 companiesContainer.innerHTML = '<p style="color: var(--text-muted);">Ei palveluita tällä teemalla.</p>';
-        } else {
-            matchedCompanies.sort((a,b) => {
-                const aTier = a.subscription_tier || 1;
-                const bTier = b.subscription_tier || 1;
-                return bTier - aTier;
-            });
+            } else {
+                matchedCompanies.sort((a,b) => {
+                    const aTier = a.subscription_tier || 1;
+                    const bTier = b.subscription_tier || 1;
+                    return bTier - aTier;
+                });
 
-            const generateCompanyHtml = (c) => {
-                const url = `yrityskortti.html?id=${encodeURIComponent(c.id)}`;
-                const rawTags = (c.tags || '').split(',').map(t => t.trim()).filter(t => t.length > 0 && t !== '-');
-                const tagHtml = rawTags.slice(0, 3).map(t => `<span class="tag-pill">${t}</span>`).join('');
-                
-                const tier = c.subscription_tier || 1;
-                const displayIcon = tier >= 3 ? '⭐' : (tier === 2 ? '💎' : '');
-                
-                return `
-                    <a href="${url}" class="list-item-card">
-                        <div class="card-header-grid">
-                            <div>
-                                <h3 style="margin: 0 0 0.25rem 0; font-size: 1.1rem; color: var(--text-main);">${c.nimi} ${displayIcon}</h3>
-                                <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">${c.kategoria || ''}</div>
-                                <div>${tagHtml}</div>
+                const generateCompanyHtml = (c) => {
+                    const url = `yrityskortti.html?id=${encodeURIComponent(c.id)}`;
+                    const rawTags = (c.tags || '').split(',').map(t => t.trim()).filter(t => t.length > 0 && t !== '-');
+                    const tagHtml = rawTags.slice(0, 3).map(t => `<span class="tag-pill">${t}</span>`).join('');
+                    
+                    const tier = c.subscription_tier || 1;
+                    const displayIcon = tier >= 3 ? '⭐' : (tier === 2 ? '💎' : '');
+                    
+                    return `
+                        <a href="${url}" class="list-item-card">
+                            <div class="card-header-grid">
+                                <div>
+                                    <h3 style="margin: 0 0 0.25rem 0; font-size: 1.1rem; color: var(--text-main);">${c.nimi} ${displayIcon}</h3>
+                                    <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">${c.kategoria || ''}</div>
+                                    <div>${tagHtml}</div>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                `;
-            };
+                        </a>
+                    `;
+                };
 
-            const visibleCompanies = matchedCompanies.slice(0, 5);
-            let html = visibleCompanies.map(generateCompanyHtml).join('');
-            
-            if (matchedCompanies.length > 5) {
-                const moreCount = matchedCompanies.length - 5;
+                const visibleCompanies = matchedCompanies.slice(0, 5);
+                let html = visibleCompanies.map(generateCompanyHtml).join('');
+                
+                if (matchedCompanies.length > 5) {
+                    const moreCount = matchedCompanies.length - 5;
+                    html += `
+                        <div style="text-align: center; margin-top: 1rem; margin-bottom: 1rem;">
+                            <button onclick="document.getElementById('more-companies').style.display='flex'; this.style.display='none';" style="background: transparent; border: 1px solid #cbd5e1; color: #475569; padding: 0.6rem 1.2rem; border-radius: 50px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s;">
+                                Näytä ${moreCount} muuta palvelua
+                                <span class="iconify" data-icon="material-symbols:expand-more"></span>
+                            </button>
+                        </div>
+                        <div id="more-companies" style="display: none; flex-direction: column; gap: 0;">
+                            ${matchedCompanies.slice(5).map(generateCompanyHtml).join('')}
+                        </div>
+                    `;
+                }
+                
                 html += `
-                    <div style="text-align: center; margin-top: 1rem; margin-bottom: 1rem;">
-                        <button onclick="document.getElementById('more-companies').style.display='flex'; this.style.display='none';" style="background: transparent; border: 1px solid #cbd5e1; color: #475569; padding: 0.6rem 1.2rem; border-radius: 50px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s;">
-                            Näytä ${moreCount} muuta palvelua
-                            <span class="iconify" data-icon="material-symbols:expand-more"></span>
-                        </button>
-                    </div>
-                    <div id="more-companies" style="display: none; flex-direction: column; gap: 0;">
-                        ${matchedCompanies.slice(5).map(generateCompanyHtml).join('')}
+                    <div style="background: #f8fafc; border: 1px dashed #cbd5e1; padding: 1.5rem; border-radius: 12px; margin-top: 1rem; text-align: center;">
+                        <h4 style="margin: 0 0 0.5rem 0; color: #475569; font-size: 1.05rem;">Haluatko yrityksesi nousevan paremmin esiin?</h4>
+                        <p style="margin: 0 0 1rem 0; font-size: 0.9rem; color: #64748b;">Päivitä yritysprofiiliin ja nouse listan kärkeen logolla ja kuvauksella varustettuna.</p>
+                        <a href="kauppa.html" style="display: inline-block; padding: 0.5rem 1.25rem; background: #fff; border: 1px solid #cbd5e1; color: #0f172a; text-decoration: none; border-radius: 50px; font-size: 0.9rem; font-weight: 600;">Lue lisää profiileista</a>
                     </div>
                 `;
+                companiesContainer.innerHTML = html;
             }
-            
-            html += `
-                <div style="background: #f8fafc; border: 1px dashed #cbd5e1; padding: 1.5rem; border-radius: 12px; margin-top: 1rem; text-align: center;">
-                    <h4 style="margin: 0 0 0.5rem 0; color: #475569; font-size: 1.05rem;">Haluatko yrityksesi nousevan paremmin esiin?</h4>
-                    <p style="margin: 0 0 1rem 0; font-size: 0.9rem; color: #64748b;">Päivitä yritysprofiiliin ja nouse listan kärkeen logolla ja kuvauksella varustettuna.</p>
-                    <a href="kauppa.html" style="display: inline-block; padding: 0.5rem 1.25rem; background: #fff; border: 1px solid #cbd5e1; color: #0f172a; text-decoration: none; border-radius: 50px; font-size: 0.9rem; font-weight: 600;">Lue lisää profiileista</a>
-                </div>
-            `;
-            companiesContainer.innerHTML = html;
-        } // Sulkee else-haaran
-        } // Sulkee if (!isContextualRendered) -lohkon
+        } // /if (!isContextualRendered) yritykset
         
         // Renderöi Kohtaamiset (Encounters)
         const encountersSection = document.getElementById('encounters-section');
