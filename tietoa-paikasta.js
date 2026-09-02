@@ -260,7 +260,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         } catch (e) { console.warn(e); }
 
         // 6. Päivitä DOM
-        await renderPlace(placeData, otherRelatedItems, aiProfileData, allSources, allContents, scoredCompanies, parentPlace, subPlaces);
+        await renderPlace(placeData, otherRelatedItems, aiProfileData, aiFaqData, allSources, allContents, scoredCompanies, parentPlace, subPlaces);
 
         await loadMemoriesForPlace(placeData);
         await loadMediaForPlace(placeData);
