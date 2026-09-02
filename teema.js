@@ -931,7 +931,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                     // Yhdistä paikkojen ID:t molemmista tauluista
                     const taggedPlaceIds = [
-                        ...taggedEntities.filter(e => e.entity_type === 'place').map(e => e.entity_id),
+                        ...taggedEntities.filter(e => (e.entity_type || '').toLowerCase() === 'place').map(e => e.entity_id),
                         ...placeTagRows.map(r => r.place_id)
                     ];
                     const uniquePlaceIds = [...new Set(taggedPlaceIds.filter(Boolean))];
