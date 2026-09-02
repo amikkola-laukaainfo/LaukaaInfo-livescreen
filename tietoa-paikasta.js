@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 aiSb.from('places')
                     .select('place_id, name, canonical_name, type, place_level, description, lat, lon, importance')
                     .eq('parent_place_id', placeId)
-                    .or('status.eq.active,status.eq.ACTIVE,status.is.null')
+                    .or('status.eq.active,status.eq.ACTIVE,status.eq.PUBLISHED,status.eq.published,status.is.null')
                     .order('importance', { ascending: false })
                     .then(r => { if (!r.error && r.data) subPlaces = r.data; })
             );
@@ -807,7 +807,7 @@ async function renderPlace(place, relatedItems, aiProfileData, aiFaqData, allSou
     // Sopii erityisesti (visitor_types)
     const visitorSection = document.getElementById('visitor-types-section');
     const visitorList = document.getElementById('visitor-types-list');
-    const vtData = aiProfileData?.visitor_types || placeData?.visitor_types;
+    const vtData = aiProfileData?.visitor_types || place?.visitor_types;
     if (visitorSection && visitorList && Array.isArray(vtData) && vtData.length > 0) {
         visitorSection.style.display = 'block';
         const visitorIcons = {

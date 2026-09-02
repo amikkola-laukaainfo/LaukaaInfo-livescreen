@@ -3662,7 +3662,7 @@ async function initV4Places() {
             const { data } = await window.aiSb
                 .from('places')
                 .select('place_id, name')
-                .or('status.eq.active,status.eq.ACTIVE,status.is.null')
+                .or('status.eq.active,status.eq.ACTIVE,status.eq.PUBLISHED,status.eq.published,status.is.null')
                 .limit(200);
             if (data) places = data;
         }
