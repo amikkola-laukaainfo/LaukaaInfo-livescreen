@@ -1153,7 +1153,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const imgMap = await fetchRepresentativeImages(matchedPlaceNodes, aiSbClient);
                 const storageBaseUrl = 'https://duxluwyqxvbmkkjzuzkz.supabase.co/storage/v1/object/public/';
 
-                placesContainer.innerHTML = matchedPlaceNodes.map(p => {
+                const PLACES_INITIAL2 = 5;
+                const placeCards2 = matchedPlaceNodes.map(p => {
                     const url = `tietoa-paikasta.html?id=${encodeURIComponent(p.id)}`;
                     const typeTranslations = {
                         'LANDMARK': 'Nähtävyys',
@@ -1192,7 +1193,40 @@ document.addEventListener('DOMContentLoaded', async () => {
                             </div>
                         </a>
                     `;
-                }).join('');
+                });
+
+                const visibleCards2 = placeCards2.slice(0, PLACES_INITIAL2);
+                const hiddenCards2 = placeCards2.slice(PLACES_INITIAL2);
+                const hiddenId2 = 'places-extra2-' + Date.now();
+
+                let html2 = visibleCards2.join('');
+                if (hiddenCards2.length > 0) {
+                    html2 += `
+                        <div id="${hiddenId2}" style="display:none; grid-column: 1 / -1;">
+                            <div style="display: grid; grid-template-columns: inherit; gap: inherit;">
+                                ${hiddenCards2.join('')}
+                            </div>
+                        </div>
+                        <div style="grid-column: 1 / -1; text-align: center; margin-top: 0.5rem;">
+                            <button id="btn-places-more2-${hiddenId2}"
+                                onclick="(function(btn, id){
+                                    var el = document.getElementById(id);
+                                    var hidden = el.style.display === 'none';
+                                    el.style.display = hidden ? 'block' : 'none';
+                                    btn.innerHTML = hidden
+                                        ? '<span style=\\'margin-right:0.4em;\\'>▲</span> Näytä vähemmän'
+                                        : '<span style=\\'margin-right:0.4em;\\'>▼</span> Näytä kaikki ${hiddenCards2.length} lisää';
+                                })(this, '${hiddenId2}')"
+                                style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.65rem 1.5rem;
+                                    background:#f0fdf4; color:#166534; border:2px solid #bbf7d0;
+                                    border-radius:50px; font-weight:700; font-size:0.9rem; cursor:pointer;
+                                    transition:all 0.2s;">
+                                <span style="margin-right:0.4em;">▼</span> Näytä kaikki ${hiddenCards2.length} lisää
+                            </button>
+                        </div>
+                    `;
+                }
+                placesContainer.innerHTML = html2;
             }
         } // /if (!isContextualRendered) paikat
         
