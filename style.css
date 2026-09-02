@@ -8466,13 +8466,13 @@ footer {
     }
 }
 
-/* ===== Hero-hakukentän h3-teksti: pakota valkoinen, ylikirjoittaa kaiken ===== */
+/* ===== Hero-hakukentän h3-teksti: tummempi sävy ===== */
 header .v4-hero-search h3,
 .hero-left .v4-hero-search h3,
 .hero-copy .v4-hero-search h3,
 .hero-left-content .v4-hero-search h3 {
-    color: #ffffff !important;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.6) !important;
+    color: #0a2540 !important;
+    text-shadow: none !important;
 }
 
 /* ===== MOBIILI: etusivun HERO-hakukentta (Mita etsit Laukaasta) ===== */
@@ -8509,9 +8509,9 @@ header .v4-hero-search h3,
         max-height: 65vh !important;
         overflow-y: auto !important;
     }
-    /* "Mita etsit Laukaasta?" otsikko: aina valkoinen */
+    /* "Mita etsit Laukaasta?" otsikko: tummempi sävy mobiilissa */
     .v4-hero-search h3 {
-        color: #ffffff !important;
-        text-shadow: 0 1px 4px rgba(0,0,0,0.5) !important;
+        color: #0a2540 !important;
+        text-shadow: none !important;
     }
 }
