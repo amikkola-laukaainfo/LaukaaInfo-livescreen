@@ -941,7 +941,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                             .from('places')
                             .select('place_id, name, canonical_name, type, description, municipality')
                             .in('place_id', uniquePlaceIds)
-                            .or('status.eq.active,status.eq.ACTIVE,status.is.null');
+                            .or('status.eq.active,status.eq.ACTIVE,status.eq.PUBLISHED,status.eq.published,status.is.null');
 
                         // sbPlaces on alustettu rivillä 142 – ei ReferenceError
                         sbPlaces = (sbPlaceData || []).map(p => ({
