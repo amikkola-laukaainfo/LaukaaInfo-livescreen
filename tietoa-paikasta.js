@@ -81,24 +81,27 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.warn('Hierarkiahaku epäonnistui:', hierarchyErr);
         }
 
-        // 2.5. Hae AI-profilointidata (summary, themes, activities, faq)
+        // 2.5. Hae AI-profilointidata (summary, themes, activities, visitor_types, faq)
         let aiProfileData = null;
+        let aiFaqData = null;  // Erillinen FAQ-lähde (place_faq content_type)
         try {
-            const { data: aiContentData, error: aiError } = await aiSb
-                .from('organization_ai_content')
-                .select('content')
-                .eq('organization_id', placeId)
-                .eq('content_type', 'place_profile')
-                .order('created_at', { ascending: false })
-                .limit(1)
-                .single();
+            // Hae place_profile ja place_faq rinnakkain
+            const [profileRes, faqRes] = await Promise.all([
+                aiSb.from('organization_ai_content').select('content')
+                    .eq('organization_id', placeId).eq('content_type', 'place_profile')
+                    .order('created_at', { ascending: false }).limit(1).maybeSingle(),
+                aiSb.from('organization_ai_content').select('content')
+                    .eq('organization_id', placeId).eq('content_type', 'place_faq')
+                    .order('created_at', { ascending: false }).limit(1).maybeSingle()
+            ]);
 
-            if (!aiError && aiContentData && aiContentData.content) {
-                try {
-                    aiProfileData = JSON.parse(aiContentData.content);
-                } catch (e) {
-                    console.error('Virhe AI-datan jäsentelyssä:', e);
-                }
+            if (profileRes.data?.content) {
+                try { aiProfileData = JSON.parse(profileRes.data.content); }
+                catch (e) { console.error('Virhe AI-profiilin jäsentelyssä:', e); }
+            }
+            if (faqRes.data?.content) {
+                try { aiFaqData = JSON.parse(faqRes.data.content); }
+                catch (e) { console.error('Virhe AI-FAQ:n jäsentelyssä:', e); }
             }
         } catch (err) {
             console.warn('AI-dataa ei löytynyt tai tapahtui virhe:', err);
@@ -780,7 +783,6 @@ async function renderPlace(place, relatedItems, aiProfileData, allSources = [], 
     if (activitiesSection && activitiesList && aiProfileData && aiProfileData.activities && Array.isArray(aiProfileData.activities) && aiProfileData.activities.length > 0) {
         activitiesSection.style.display = 'block';
         
-        // Yritä päätellä ikoni aktiviteetin nimestä (yksinkertainen mappaus tai geneerinen)
         activitiesList.innerHTML = aiProfileData.activities.map(act => {
             let icon = 'material-symbols:local-activity-outline';
             const nameLower = act.toLowerCase();
@@ -790,7 +792,7 @@ async function renderPlace(place, relatedItems, aiProfileData, allSources = [], 
             if (nameLower.includes('pyöräily')) icon = 'material-symbols:directions-bike-outline';
             if (nameLower.includes('pallopeli') || nameLower.includes('jalkapallo')) icon = 'material-symbols:sports-soccer-outline';
             if (nameLower.includes('kuntoilu')) icon = 'material-symbols:fitness-center-outline';
-            if (nameLower.includes('kalastus')) icon = 'material-symbols:phishing-outline'; // Close enough
+            if (nameLower.includes('kalastus')) icon = 'material-symbols:phishing-outline';
             if (nameLower.includes('luistelu')) icon = 'material-symbols:ice-skating-outline';
 
             return `
@@ -802,14 +804,35 @@ async function renderPlace(place, relatedItems, aiProfileData, allSources = [], 
         }).join('');
     }
 
+    // Sopii erityisesti (visitor_types)
+    const visitorSection = document.getElementById('visitor-types-section');
+    const visitorList = document.getElementById('visitor-types-list');
+    const vtData = aiProfileData?.visitor_types || placeData?.visitor_types;
+    if (visitorSection && visitorList && Array.isArray(vtData) && vtData.length > 0) {
+        visitorSection.style.display = 'block';
+        const visitorIcons = {
+            'Perheet': '👨\u200d👩\u200d👧', 'Lapset': '🧒', 'Nuoret': '🧑',
+            'Seniorit': '👴', 'Urheilijat': '🏃', 'Retkeilijät': '🚶',
+            'Pyöräilijät': '🚴', 'Valokuvaajat': '📷', 'Yritykset': '🏢',
+            'Ryhmät': '👥', 'Koiranomistajat': '🐕'
+        };
+        visitorList.innerHTML = vtData.map(vt => {
+            const icon = visitorIcons[vt] || '👤';
+            return `<span style="display:inline-flex;align-items:center;gap:0.35rem;background:#f0f9ff;border:1px solid #bae6fd;border-radius:50px;padding:0.4rem 0.9rem;font-size:0.88rem;font-weight:600;color:#0369a1;">${icon} ${vt}</span>`;
+        }).join('');
+    }
+
+    // UKK (FAQ) – käytä place_faq:a ensisijaisesti, fallback place_profile
+    const effectiveFaq = (aiFaqData?.faq?.length > 0) ? aiFaqData.faq :
+                         (aiProfileData?.faq?.length > 0) ? aiProfileData.faq : null;
+
     // UKK (FAQ)
     const faqSection = document.getElementById('faq-section');
     const faqList = document.getElementById('faq-list');
-    if (faqSection && faqList && aiProfileData && aiProfileData.faq && Array.isArray(aiProfileData.faq) && aiProfileData.faq.length > 0) {
+    if (faqSection && faqList && effectiveFaq && effectiveFaq.length > 0) {
         faqSection.style.display = 'block';
         
-        faqList.innerHTML = aiProfileData.faq.map(faqItem => {
-            // Tukee sekä uutta (q, a) että vanhaa (question, answer) muotoa
+        faqList.innerHTML = effectiveFaq.map(faqItem => {
             const qText = faqItem.q || faqItem.question || '';
             const aText = faqItem.a || faqItem.answer || '';
             
