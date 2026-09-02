@@ -8227,6 +8227,201 @@ footer {
     }
 }
 
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.nearby-address-btn:hover {
+    background: #e8f0fe;
+    transform: translateY(-1px);
+}
+
+.nearby-address-btn:active {
+    transform: translateY(0);
+}
+
+/* ─── Latausanimaatio ───────────────────────────────────── */
+.nearby-loading {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 0.6rem 0;
+}
+
+.nearby-spinner {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 2.5px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: nearbySpin 0.75s linear infinite;
+    flex-shrink: 0;
+}
+
+@keyframes nearbySpin {
+    to { transform: rotate(360deg); }
+}
+
+/* ─── Virheviesti ───────────────────────────────────────── */
+.nearby-error {
+    color: #fca5a5;
+    font-size: 0.88rem;
+    font-weight: 500;
+    margin: 0.4rem 0 0;
+    padding: 0.5rem 0.75rem;
+    background: rgba(239, 68, 68, 0.18);
+    border-radius: 8px;
+    border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
+/* ─── Tuloslista ────────────────────────────────────────── */
+.nearby-list {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1.5px solid rgba(255, 255, 255, 0.28);
+    border-radius: 16px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    animation: nearbyFadeIn 0.35s ease forwards;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes nearbyFadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.nearby-header {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.75rem 1rem 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.nearby-header-pin {
+    font-size: 0.9rem;
+}
+
+.nearby-header-label {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.nearby-places-ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nearby-place-item {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    animation: nearbySlideIn 0.3s ease both;
+}
+
+.nearby-place-item:last-child {
+    border-bottom: none;
+}
+
+@keyframes nearbySlideIn {
+    from { opacity: 0; transform: translateX(-8px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+.nearby-place-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.65rem 1rem;
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 0.93rem;
+    font-weight: 500;
+    transition: background 0.18s ease;
+    gap: 0.75rem;
+}
+
+.nearby-place-link:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.nearby-place-link:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.7);
+    outline-offset: -2px;
+}
+
+.nearby-place-name {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.nearby-place-dist {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.6);
+    white-space: nowrap;
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+}
+
+.nearby-all-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.6rem 1rem;
+    background: rgba(255, 255, 255, 0.07);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.75);
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    transition: background 0.2s, color 0.2s;
+}
+
+.nearby-all-link:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+}
+
+/* ─── Mobiilimuutokset ──────────────────────────────────── */
+@media (max-width: 768px) {
+    .hero-cta-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-nearby {
+        max-width: 100%;
+        margin-top: 0;
+    }
+
+    .nearby-trigger-btn {
+        width: 100%;
+        justify-content: center;
+        font-size: 1rem;
+        padding: 0.75rem 1.25rem;
+    }
+
+    .nearby-list {
+        border-radius: 12px;
+    }
+
+    .nearby-place-link {
+        padding: 0.75rem 0.9rem;
+    }
+}
+
 /* ─── Kriittinen: estä display:flex/block kumoamasta hidden-attribuuttia ── */
 .nearby-loading[hidden],
 .nearby-list[hidden],
@@ -8271,4 +8466,43 @@ footer {
     }
 }
 
-
+/* ===== MOBIILI: etusivun HERO-hakukentta (Mita etsit Laukaasta) ===== */
+@media (max-width: 768px) {
+    /* Hero-left ei saa leikata dropdownia */
+    .hero-left {
+        overflow: visible !important;
+    }
+    .hero-left-content {
+        overflow: visible !important;
+    }
+    /* v4-hero-search: oma stacking context */
+    .v4-hero-search {
+        position: relative !important;
+        z-index: 500 !important;
+        overflow: visible !important;
+    }
+    /* v4-search-bar: sallitaan ylivuoto */
+    .v4-search-bar {
+        overflow: visible !important;
+        position: relative;
+    }
+    /* Hero-haun dropdown: pysyy valkoisen taustana kaiken paalla */
+    #v4-search-dropdown {
+        position: absolute !important;
+        z-index: 9999 !important;
+        top: 110% !important;
+        left: 0 !important;
+        right: 0 !important;
+        background: #ffffff !important;
+        border-radius: 14px !important;
+        box-shadow: 0 16px 48px rgba(0,0,0,0.28) !important;
+        border: 1px solid #e2e8f0 !important;
+        max-height: 65vh !important;
+        overflow-y: auto !important;
+    }
+    /* "Mita etsit Laukaasta?" otsikko: aina valkoinen */
+    .v4-hero-search h3 {
+        color: #ffffff !important;
+        text-shadow: 0 1px 4px rgba(0,0,0,0.5) !important;
+    }
+}
