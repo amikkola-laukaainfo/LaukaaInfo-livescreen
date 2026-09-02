@@ -1371,8 +1371,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         loadThemeRoutes(searchTag);
 
         // Piilota paikat/tapahtumat-osio jos tyhjä
+        // (ei piiloteta jos kontekstuaalinen haku jo näytti tuloksia)
         const placesSection = document.getElementById('places-section');
-        if (placesSection && matchedPlaceNodes.length === 0) {
+        if (placesSection && matchedPlaceNodes.length === 0 && !isContextualRendered) {
             placesSection.style.display = 'none';
         }
         const eventsSection = document.getElementById('events-section');
