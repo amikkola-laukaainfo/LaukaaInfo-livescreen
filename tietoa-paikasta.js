@@ -948,8 +948,99 @@ async function renderPlace(place, relatedItems, aiProfileData, aiFaqData, allSou
             svBtn.style.display = 'inline-flex';
             svBtn.setAttribute('onclick', `window.open('https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${place.lat},${place.lon}', '_blank')`);
         }
+
+        // Lisätietolinkit (external_links) – popup streetview-napin viereen
+        const externalLinks = place.external_links;
+        if (Array.isArray(externalLinks) && externalLinks.length > 0) {
+            const typeLabels = {
+                OFFICIAL: { label: 'Virallinen sivusto', icon: 'material-symbols:language', color: '#0284c7' },
+                CATALOG: { label: 'Tietokanta / Luettelo', icon: 'material-symbols:menu-book', color: '#7c3aed' },
+                BOOKING: { label: 'Varauspalvelu', icon: 'material-symbols:calendar-month', color: '#059669' },
+                SOCIAL: { label: 'Sosiaalinen media', icon: 'material-symbols:share', color: '#db2777' },
+                MAP: { label: 'Karttapalvelu', icon: 'material-symbols:map', color: '#d97706' },
+                EVENTS: { label: 'Tapahtumat', icon: 'material-symbols:event', color: '#dc2626' },
+                MENU: { label: 'Menu / Hinnasto', icon: 'material-symbols:restaurant-menu', color: '#65a30d' },
+                OTHER: { label: 'Lisätietoja', icon: 'material-symbols:open-in-new', color: '#475569' },
+            };
+
+            // Luo popup-paneeli
+            const panel = document.createElement('div');
+            panel.id = 'external-links-panel';
+            panel.style.cssText = `
+                display: none; position: fixed; z-index: 9999;
+                background: #fff; border: 1px solid #e2e8f0; border-radius: 16px;
+                box-shadow: 0 16px 48px rgba(0,0,0,0.2); padding: 1.25rem;
+                min-width: 280px; max-width: 340px;
+                animation: fadeInUp 0.18s ease;
+            `;
+
+            const linksHtml = externalLinks.map(link => {
+                const meta = typeLabels[link.type] || typeLabels.OTHER;
+                const verifiedBadge = link.verified
+                    ? `<span style="font-size:0.68rem;background:#ecfdf5;color:#059669;border-radius:20px;padding:2px 8px;font-weight:700;margin-left:4px;">✓ Tarkistettu</span>`
+                    : '';
+                return `
+                <a href="${link.url}" target="_blank" rel="noopener noreferrer"
+                   style="display:flex;align-items:center;gap:0.75rem;padding:0.65rem 0.85rem;border-radius:10px;border:1px solid #f1f5f9;text-decoration:none;color:#1e293b;background:#f8fafc;transition:background 0.15s;margin-bottom:0.5rem;"
+                   onmouseover="this.style.background='#f0f9ff'" onmouseout="this.style.background='#f8fafc'">
+                    <span class="iconify" data-icon="${meta.icon}" style="font-size:1.2rem;color:${meta.color};flex-shrink:0;"></span>
+                    <span style="flex:1;min-width:0;">
+                        <span style="display:block;font-weight:700;font-size:0.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${link.title}</span>
+                        <span style="display:block;font-size:0.72rem;color:#94a3b8;">${meta.label}${verifiedBadge}</span>
+                    </span>
+                    <span class="iconify" data-icon="material-symbols:open-in-new" style="font-size:0.9rem;color:#cbd5e1;flex-shrink:0;"></span>
+                </a>`;
+            }).join('');
+
+            panel.innerHTML = `
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.85rem;">
+                    <p style="margin:0;font-size:0.78rem;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;">🔗 Lisätietolinkit</p>
+                    <button id="close-ext-links" style="background:none;border:none;cursor:pointer;color:#94a3b8;font-size:1.1rem;line-height:1;padding:2px 6px;border-radius:6px;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='none'">×</button>
+                </div>
+                ${linksHtml}
+                <p style="margin:0.5rem 0 0;font-size:0.7rem;color:#cbd5e1;text-align:right;">Linkit tarkastettu LaukaaInfon toimesta</p>
+            `;
+            document.body.appendChild(panel);
+
+            document.getElementById('close-ext-links')?.addEventListener('click', () => {
+                panel.style.display = 'none';
+            });
+            document.addEventListener('click', (e) => {
+                if (!panel.contains(e.target) && e.target.id !== 'btn-external-links') {
+                    panel.style.display = 'none';
+                }
+            });
+
+            // Luo nappi streetview-napin viereen
+            const svContainer = svBtn?.parentElement;
+            if (svContainer) {
+                const extBtn = document.createElement('button');
+                extBtn.id = 'btn-external-links';
+                extBtn.style.cssText = `
+                    display: inline-flex; align-items: center; gap: 0.45rem;
+                    padding: 0.5rem 1rem; background: #eff6ff; color: #1d4ed8;
+                    border: 1.5px solid #bfdbfe; border-radius: 50px; cursor: pointer;
+                    font-size: 0.82rem; font-weight: 700; transition: all 0.2s;
+                    white-space: nowrap;
+                `;
+                extBtn.innerHTML = `<span class="iconify" data-icon="material-symbols:link" style="font-size:1rem;"></span> Lisätietoja`;
+                extBtn.onmouseover = () => { extBtn.style.background = '#dbeafe'; extBtn.style.borderColor = '#93c5fd'; };
+                extBtn.onmouseout = () => { extBtn.style.background = '#eff6ff'; extBtn.style.borderColor = '#bfdbfe'; };
+                extBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const rect = extBtn.getBoundingClientRect();
+                    panel.style.display = 'block';
+                    const panelW = 340;
+                    let left = rect.left + window.scrollX;
+                    if (left + panelW > window.innerWidth - 12) left = window.innerWidth - panelW - 12;
+                    panel.style.left = `${Math.max(8, left)}px`;
+                    panel.style.top = `${rect.bottom + window.scrollY + 8}px`;
+                });
+                svContainer.appendChild(extBtn);
+            }
+        }
     }
-    
+
     // Jakolinkki-toiminnallisuus (Dropdown)
     const shareBtn = document.getElementById('share-place-btn');
     if (shareBtn) {
