@@ -3828,7 +3828,7 @@ async function openV4SearchModal(query) {
     if (dropdown) dropdown.style.display = 'none';
 
     queryEl.textContent = query;
-    modal.style.display = 'block';
+    modal.style.display = 'flex';
     document.body.style.overflow = 'hidden'; // estä taustan scrollaus
 
     // Lisätään sulkemislogiikka body overflowlle

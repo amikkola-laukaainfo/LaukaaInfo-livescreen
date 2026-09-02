@@ -1399,13 +1399,13 @@
     </script>
 
     <!-- V4 Koko Ruudun Hakutulos-Modal -->
-    <div id="v4-search-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.7); z-index: 10000; backdrop-filter: blur(4px); overflow-y: auto;">
-        <div style="background: white; width: 90%; max-width: 700px; margin: 4rem auto; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); display: flex; flex-direction: column;">
-            <div style="padding: 1.5rem 2rem; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: white; border-radius: 16px 16px 0 0; z-index: 10;">
+    <div id="v4-search-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.7); z-index: 10000; backdrop-filter: blur(4px); align-items: flex-start; justify-content: center; overflow: hidden;">
+        <div style="background: white; width: 90%; max-width: 700px; margin: 4rem auto; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); display: flex; flex-direction: column; max-height: calc(100vh - 8rem); overflow: hidden;">
+            <div style="padding: 1.5rem 2rem; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; background: white; border-radius: 16px 16px 0 0; z-index: 10;">
                 <h2 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: #0f172a;">Kaikki hakutulokset: <span id="v4-modal-query" style="color: #3b82f6;"></span></h2>
                 <button onclick="document.getElementById('v4-search-modal').style.display='none'" style="background: #f1f5f9; border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 1.25rem; cursor: pointer; color: #64748b; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" onmouseover="this.style.background='#e2e8f0'; this.style.color='#0f172a';" onmouseout="this.style.background='#f1f5f9'; this.style.color='#64748b';">&times;</button>
             </div>
-            <div id="v4-modal-results" style="padding: 2rem; display: flex; flex-direction: column; gap: 1.5rem;">
+            <div id="v4-modal-results" style="padding: 2rem; display: flex; flex-direction: column; gap: 1.5rem; overflow-y: auto; flex: 1;">
                 <div style="text-align: center; color: #94a3b8; padding: 2rem 0;">Ladataan tuloksia...</div>
             </div>
         </div>
