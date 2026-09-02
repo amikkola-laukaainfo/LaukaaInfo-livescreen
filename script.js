@@ -3792,9 +3792,17 @@ async function performV4Search(query, dropdown) {
     if (matchedCompanies.length > 0) {
         html += `<div style="font-size: 0.75rem; font-weight: 800; color: #d97706; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem;">🛠 PALVELUT & YRITYKSET</div>`;
         matchedCompanies.forEach(c => {
-            const catParam = encodeURIComponent(c.kategoria || '');
+            const isPaid = c.tyyppi === 'maksu' || c.tyyppi === 'paid';
+            const isInDist = window.location.pathname.includes('/dist/') || window.location.hostname === 'laukaainfo.fi' || window.location.hostname.includes('github.io');
+            const distPrefix = isInDist ? '' : 'dist/';
+            const region = localStorage.getItem('selectedRegion');
+            const regionParam = (region && region !== 'all') ? `&region=${region}` : '';
+            const cardUrl = isPaid 
+                ? `${distPrefix}yritys/${slugify(c.nimi || c.name)}.html` 
+                : `yrityskortti.html?id=${slugify(c.nimi || c.name)}${regionParam}`;
+
             html += `
-                <a href="kategoria.html?cat=${catParam}" style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0.75rem; border-radius: 6px; text-decoration: none; color: #1e293b; font-size: 0.95rem; font-weight: 600;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
+                <a href="${cardUrl}" style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0.75rem; border-radius: 6px; text-decoration: none; color: #1e293b; font-size: 0.95rem; font-weight: 600;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
                     <span>🏢 ${escapeHtml(c.nimi || c.name)}</span>
                     <span style="font-size: 0.8rem; color: #64748b;">${escapeHtml(c.kategoria || '')}</span>
                 </a>
@@ -3920,9 +3928,17 @@ async function openV4SearchModal(query) {
             <h3 style="font-size: 0.85rem; font-weight: 800; color: #d97706; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem; margin-top: 1.5rem;">🛠 Palvelut & Yritykset (${matchedCompanies.length})</h3>
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 0.75rem;">`;
         matchedCompanies.forEach(c => {
-            const catParam = encodeURIComponent(c.kategoria || '');
+            const isPaid = c.tyyppi === 'maksu' || c.tyyppi === 'paid';
+            const isInDist = window.location.pathname.includes('/dist/') || window.location.hostname === 'laukaainfo.fi' || window.location.hostname.includes('github.io');
+            const distPrefix = isInDist ? '' : 'dist/';
+            const region = localStorage.getItem('selectedRegion');
+            const regionParam = (region && region !== 'all') ? `&region=${region}` : '';
+            const cardUrl = isPaid 
+                ? `${distPrefix}yritys/${slugify(c.nimi || c.name)}.html` 
+                : `yrityskortti.html?id=${slugify(c.nimi || c.name)}${regionParam}`;
+
             html += `
-                <a href="kategoria.html?cat=${catParam}" style="display: block; padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid #e2e8f0; text-decoration: none; color: #1e293b; font-size: 0.95rem; font-weight: 700; background: #f8fafc; transition: all 0.2s;" onmouseover="this.style.borderColor='#d97706'; this.style.background='white';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.background='#f8fafc';">
+                <a href="${cardUrl}" style="display: block; padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid #e2e8f0; text-decoration: none; color: #1e293b; font-size: 0.95rem; font-weight: 700; background: #f8fafc; transition: all 0.2s;" onmouseover="this.style.borderColor='#d97706'; this.style.background='white';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.background='#f8fafc';">
                     <div style="margin-bottom: 0.15rem;">${escapeHtml(c.nimi || c.name)}</div>
                     <div style="font-size: 0.75rem; color: #64748b; font-weight: 500;">${escapeHtml(c.kategoria || '')}</div>
                 </a>
