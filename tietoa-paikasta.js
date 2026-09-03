@@ -2233,8 +2233,8 @@ function renderEncounters(encounters) {
     let _accId = 0;
     
     for (const [type, items] of Object.entries(grouped).filter(([t]) => !COMMUNITY_POST_TYPES.includes(t))) {
-        const label = typeLabels[type] || type;
-        const icon = typeIcons[type] || '🔔';
+        const label = typeLabels[type] || typeLabels[(type || '').toLowerCase()] || type;
+        const icon = typeIcons[type] || typeIcons[(type || '').toLowerCase()] || '🔔';
         
         // feed_post ja event saavat oman accordion-renderöinnin
         const isFeedType = (type === 'feed_post' || type === 'event');

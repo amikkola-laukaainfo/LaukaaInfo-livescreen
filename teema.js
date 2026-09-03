@@ -1356,26 +1356,71 @@ document.addEventListener('DOMContentLoaded', async () => {
                     // Valitaan linkki tyypin mukaan
                     let linkUrl = null;
                     let badgeColor = '#10b981';
-                    let badgeLabel = enc.category || 'Julkaisu';
-                    // Yhteisöjulkaisutyypit – visuaaliset tyylit
-                    const communityStyles = {
-                        'MEMORY':      { color: '#7c3aed', label: '📖 Muisto' },
-                        'TIP':         { color: '#059669', label: '💡 Vinkki' },
-                        'PHOTO':       { color: '#2563eb', label: '📷 Kuva' },
-                        'OBSERVATION': { color: '#ea580c', label: '📍 Havainto' },
-                        'QUESTION':    { color: '#db2777', label: '❓ Kysymys' }
+
+                    // Suomenkieliset nimet encounter-tyypeille
+                    const encounterTypeLabels = {
+                        'service_request': '🛠️ Palvelutarve',
+                        'sell':            '💰 Myydään',
+                        'give':            '🎁 Annetaan',
+                        'search':          '🔍 Etsitään',
+                        'local_notice':    '📢 Ilmoitus',
+                        'need_help':       '🤝 Tarvitsen palvelun',
+                        'offer_service':   '🔵 Tarjoan palvelua',
+                        'work_and_gigs':   '💼 Työ ja toimeksiannot',
+                        'community':       '❤️ Yhteisö',
+                        'space_rental':    '🏠 Tilat ja kalusto',
+                        'b2b_collab':      '🤝 Yhteistyöhaku',
+                        'event_staff':     '🎉 Tapahtumahaku',
+                        'high_value':      '💎 Arvotavarat',
+                        'lost_and_found':  '🔎 Löytötavarat',
+                        'event':           '📅 Tapahtuma',
+                        'offer':           '🏷️ Tarjous',
+                        'feed_post':       '📰 Julkaisu',
+                        'other':           '💬 Ilmoitus',
+                        // Yhteisöjulkaisut
+                        'MEMORY':      '📖 Muisto',
+                        'TIP':         '💡 Vinkki',
+                        'PHOTO':       '📷 Kuva',
+                        'OBSERVATION': '📍 Havainto',
+                        'QUESTION':    '❓ Kysymys'
                     };
-                    if (communityStyles[enc.type]) {
-                        badgeColor = communityStyles[enc.type].color;
-                        badgeLabel = communityStyles[enc.type].label;
-                    } else if (enc.type === 'feed_post') {
+                    const encounterTypeColors = {
+                        'service_request': '#3b82f6',
+                        'sell':            '#eab308',
+                        'give':            '#22c55e',
+                        'search':          '#a855f7',
+                        'local_notice':    '#ef4444',
+                        'need_help':       '#22c55e',
+                        'offer_service':   '#3b82f6',
+                        'work_and_gigs':   '#a855f7',
+                        'community':       '#ef4444',
+                        'space_rental':    '#14b8a6',
+                        'b2b_collab':      '#6366f1',
+                        'event_staff':     '#ec4899',
+                        'high_value':      '#fbbf24',
+                        'event':           '#7c3aed',
+                        'offer':           '#f59e0b',
+                        'feed_post':       '#3b82f6',
+                        'MEMORY':      '#7c3aed',
+                        'TIP':         '#059669',
+                        'PHOTO':       '#2563eb',
+                        'OBSERVATION': '#ea580c',
+                        'QUESTION':    '#db2777'
+                    };
+
+                    // Raakatekstin suomennos: käytetään type-kenttää ensin, sitten category
+                    const rawType = enc.type || enc.category || 'other';
+                    let badgeLabel = encounterTypeLabels[rawType]
+                        || encounterTypeLabels[(rawType || '').toLowerCase()]
+                        || enc.category
+                        || '💬 Ilmoitus';
+                    badgeColor = encounterTypeColors[rawType] || encounterTypeColors[(rawType || '').toLowerCase()] || '#10b981';
+
+                    if (enc.type === 'feed_post') {
                         linkUrl = `index.html?item=${enc.id}&feed=open`;
-                        badgeColor = '#3b82f6';
-                        badgeLabel = 'Feed-julkaisu';
                     } else if (enc.type === 'offer') {
                         linkUrl = `kohdekortti.html?offer=${enc.id}`;
-                        badgeColor = '#f59e0b';
-                        badgeLabel = 'Tarjous';
+
                     } else if (enc.type === 'encounter') {
                         linkUrl = `ilmoituskortti.html?id=${enc.id}`;
                     }
