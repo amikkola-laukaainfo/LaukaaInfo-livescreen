@@ -1978,7 +1978,7 @@ async function loadEncountersForPlace(place) {
         // Jos haluamme kohdentaa tiukasti place_id:hen:
         // mutta otetaan fallback string matchillä myös
         if (place.place_id && placeName) {
-            query = query.or(`location_id.eq.${place.place_id},location.ilike."*${placeName}*"`);
+            query = query.or(`location_id.eq.${place.place_id},location.ilike.%${placeName}%`);
         } else if (place.place_id) {
             query = query.eq('location_id', place.place_id);
         } else if (placeName) {

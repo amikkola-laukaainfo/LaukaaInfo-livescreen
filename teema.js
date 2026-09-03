@@ -854,8 +854,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                         // Kohtaamiset place_id:n mukaan
                         const { data: placeEncounters } = await laukaaDb
                             .from('encounters')
-                            .select('id, description, category, type, image_url, photo_url, created_at, location_name')
-                            .eq('place_id', placeIdParam)
+                            .select('id, description, category, type, image_url, photo_url, created_at, location')
+                            .eq('location_id', placeIdParam)
                             .order('created_at', { ascending: false })
                             .limit(5);
                         
@@ -875,7 +875,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                                     label: style.label,
                                     color: style.color,
                                     title: enc.description || '',
-                                    description: enc.location_name || '',
+                                    description: enc.location || '',
                                     photo_url: enc.image_url || enc.photo_url,
                                     created_at: enc.created_at,
                                     linkUrl: `ilmoituskortti.html?id=${enc.id}`
