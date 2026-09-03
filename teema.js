@@ -412,6 +412,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
+    // ─── LÄHITEEMA-REITITYS ───────────────────────────────────────────────────
+    // Jos place_id (tai place) on annettu URL:ssä, aktivoidaan Lähiteema-tila.
+    // Tällöin käytetään get_contextual_theme_dashboard RPC:tä ja erillisiä
+    // renderöintifunktioita. Vanha JSON-pohjainen hakulogiikka jatkuu alla.
+    const placeIdFromUrl = urlParams.get('place_id') || urlParams.get('place');
+    if (placeIdFromUrl && typeof loadContextualTheme === 'function') {
+        await loadContextualTheme(tagParam, placeIdFromUrl);
+        return; // Lopetetaan tähän – normaali hakulogiikka ei aja
+    }
+    // ─────────────────────────────────────────────────────────────────────────
+
     const searchTag = tagParam.toLowerCase().trim();
     
     // Aseta hero-otsikko
@@ -1655,5 +1666,181 @@ function renderThemeGallery(media) {
         contentArea.insertBefore(section, hero.nextSibling);
     } else {
         contentArea.appendChild(section);
+    }
+}
+
+// =============================================================================
+// LÄHITEEMA – Kontekstuaalinen teemafunktio (V3.8)
+// Käytetään kun URL:ssa on ?tag=X&place_id=Y
+// Hakee datan suoraan get_contextual_theme_dashboard RPC:stä.
+// Normaali loadNormalTheme() (vanha DOMContentLoaded-logiikka) pysyy koskemattomana.
+// =============================================================================
+async function loadContextualTheme(tagParam, placeId) {
+    const safeHtml = (str) => String(str ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    // Näytä latausikoni heti
+    const spinner = document.getElementById('loading-spinner');
+    const content = document.getElementById('theme-content');
+    if (spinner) spinner.style.display = 'flex';
+    if (content) content.style.display = 'none';
+
+    try {
+        if (!aiSbClient) throw new Error('Supabase-client ei saatavilla');
+
+        // 1. Hae paikan nimi otsikkoa varten
+        let placeName = placeId;
+        try {
+            const { data: placeRow } = await aiSbClient
+                .from('places')
+                .select('name, canonical_name')
+                .or(`place_id.eq.${placeId},id.eq.${placeId}`)
+                .single();
+            if (placeRow) {
+                placeName = placeRow.name || placeRow.canonical_name || placeId;
+            }
+        } catch(e) { /* Jatketaan placeId:llä */ }
+
+        // 2. Selvitä todellinen tag_id (slug voi erota näyttönimestä)
+        const tagLower = tagParam.toLowerCase().trim();
+        let actualTagId = tagLower;
+        let tagDisplayName = tagParam.charAt(0).toUpperCase() + tagParam.slice(1);
+        try {
+            const { data: tagRow } = await aiSbClient
+                .from('tags')
+                .select('tag_id, name')
+                .or(`tag_id.eq.${tagLower},name.ilike.${tagLower}`)
+                .limit(1)
+                .single();
+            if (tagRow) {
+                actualTagId = tagRow.tag_id;
+                tagDisplayName = tagRow.name || tagDisplayName;
+            }
+        } catch(e) { /* Jatketaan tagParam:lla */ }
+
+        // 3. Päivitä otsikko muotoon "Paikka · Teema" heti
+        const themeNameEl = document.getElementById('theme-name');
+        if (themeNameEl) themeNameEl.textContent = `${placeName} · ${tagDisplayName}`;
+
+        // 3b. Lisää paikkaan takaisin -linkki (breadcrumb) otsikon yläpuolelle
+        const heroContent = document.querySelector('.hero-content');
+        if (heroContent && !document.getElementById('ctx-place-backlink')) {
+            const backLink = document.createElement('a');
+            backLink.id = 'ctx-place-backlink';
+            backLink.href = `tietoa-paikasta.html?id=${encodeURIComponent(placeId)}`;
+            backLink.style.cssText = 'display:inline-flex;align-items:center;gap:0.35rem;font-size:0.9rem;font-weight:600;color:rgba(255,255,255,0.85);text-decoration:none;margin-bottom:0.5rem;transition:color 0.2s;';
+            backLink.onmouseover = () => backLink.style.color = '#fff';
+            backLink.onmouseout = () => backLink.style.color = 'rgba(255,255,255,0.85)';
+            backLink.innerHTML = `← ${safeHtml(placeName)}`;
+            heroContent.insertBefore(backLink, heroContent.firstChild);
+        }
+
+        // 4. Kutsu uutta kontekstuaalista RPC:tä
+        const { data: dashboard, error: rpcError } = await aiSbClient.rpc(
+            'get_contextual_theme_dashboard',
+            { p_tag_id: actualTagId, p_place_id: placeId }
+        );
+        if (rpcError) throw rpcError;
+
+        // 5. Renderöi Hero-kuva
+        const media = dashboard?.media || [];
+        const heroImg = media.find(m => m.media_type === 'IMAGE' && m.usage === 'HERO')
+            || media.find(m => m.media_type === 'IMAGE');
+        if (heroImg?.imagekit_path) {
+            const heroSection = document.getElementById('place-hero') || document.querySelector('.hero-section');
+            if (heroSection) {
+                heroSection.style.backgroundImage = `url('${heroImg.imagekit_path}')`;
+                heroSection.style.backgroundSize = 'cover';
+                heroSection.style.backgroundPosition = 'center';
+            }
+        }
+
+        // 6. Aseta kuvailuteksti
+        const subtitleEl = document.getElementById('theme-subtitle');
+        if (subtitleEl) {
+            subtitleEl.textContent = `Tutustu teemaan ${tagDisplayName.toLowerCase()} alueella ${placeName}.`;
+            subtitleEl.style.display = 'block';
+        }
+
+        // 7. Renderöi KOHTEET (places RPC:stä)
+        const places = dashboard?.places || [];
+        const placesSection = document.getElementById('places-section');
+        const placesList = document.getElementById('places-list');
+        if (placesList) {
+            if (places.length === 0) {
+                if (placesSection) placesSection.style.display = 'none';
+            } else {
+                placesList.innerHTML = places.map(p => {
+                    const displayName = p.canonical_name || p.name || p.place_id || '';
+                    const desc = p.description ? p.description.substring(0, 100) + '...' : '';
+                    const typeLabel = { LANDMARK: 'Nähtävyys', NATURE: 'Luontokohde', SERVICE: 'Palvelu', BUILDING: 'Rakennus', AREA: 'Alue' }[p.type] || p.type || 'Paikka';
+                    const ctx = p.theme_context || {};
+                    const ctxBadge = (ctx.media > 0 || ctx.observations > 0)
+                        ? `<span style="font-size:0.75rem;background:#e0f2fe;color:#0369a1;padding:2px 8px;border-radius:50px;margin-left:6px;">${ctx.media > 0 ? '📷 '+ctx.media : ''}${ctx.media > 0 && ctx.observations > 0 ? ' · ' : ''}${ctx.observations > 0 ? '👁 '+ctx.observations : ''}</span>`
+                        : '';
+                    return `
+                        <a href="tietoa-paikasta.html?id=${encodeURIComponent(p.id || p.place_id)}" class="list-item-card">
+                            <div style="font-size:0.8rem;font-weight:700;color:var(--accent);text-transform:uppercase;margin-bottom:0.35rem;">📍 ${safeHtml(typeLabel)}${ctxBadge}</div>
+                            <h3 style="margin:0 0 0.4rem 0;font-family:Outfit,sans-serif;font-size:1.15rem;color:var(--text-main);">${safeHtml(displayName)}</h3>
+                            ${desc ? `<p style="margin:0 0 0.75rem 0;font-size:0.9rem;color:var(--text-muted);">${safeHtml(desc)}</p>` : ''}
+                            <span style="display:inline-block;padding:0.35rem 0.9rem;background:var(--color-forest);color:white;border-radius:50px;font-size:0.82rem;font-weight:700;">Tutustu paikkaan →</span>
+                        </a>`;
+                }).join('');
+                if (placesSection) placesSection.style.display = 'block';
+            }
+        }
+
+        // 8. Renderöi HAVAINNOT
+        const observations = dashboard?.observations || [];
+        if (observations.length > 0) {
+            let obsSection = document.getElementById('ctx-observations-section');
+            if (!obsSection && content) {
+                obsSection = document.createElement('section');
+                obsSection.id = 'ctx-observations-section';
+                obsSection.style.cssText = 'padding:2rem 1.5rem;border-top:1px solid #eaeaea;';
+                obsSection.innerHTML = `
+                    <div style="max-width:1200px;margin:0 auto;">
+                        <h2 style="font-size:1.4rem;font-weight:800;color:var(--color-forest);margin-bottom:1rem;">👁 Havainnot</h2>
+                        <div id="ctx-observations-list" style="display:flex;flex-direction:column;gap:0.75rem;"></div>
+                    </div>`;
+                content.appendChild(obsSection);
+            }
+            const obsList = document.getElementById('ctx-observations-list');
+            if (obsList) {
+                obsList.innerHTML = observations.map(obs => {
+                    const dateStr = obs.year || (obs.created_at ? new Date(obs.created_at).getFullYear() : '');
+                    return `
+                        <div style="background:#f8fafc;border-radius:10px;padding:1rem 1.25rem;border-left:3px solid #7c3aed;">
+                            <div style="font-weight:700;color:#1e293b;margin-bottom:0.25rem;">${safeHtml(obs.title)}</div>
+                            ${obs.description ? `<div style="font-size:0.9rem;color:var(--text-muted);">${safeHtml(obs.description.substring(0, 150))}</div>` : ''}
+                            ${dateStr ? `<div style="font-size:0.75rem;color:#94a3b8;margin-top:0.35rem;">${dateStr}</div>` : ''}
+                        </div>`;
+                }).join('');
+                obsSection.style.display = 'block';
+            }
+        }
+
+        // 9. Renderöi MEDIAGALLERIA (IMAGE + YOUTUBE, pl. HERO)
+        const galleryMedia = media.filter(m => !(
+            m.media_type === 'IMAGE' && m.usage === 'HERO'
+        ));
+        if (galleryMedia.length > 0) {
+            renderThemeGallery(galleryMedia);
+        }
+
+        // 10. Piilota encounters-section joka näyttäisi vanhaa dataa
+        const encountersSec = document.getElementById('encounters-section');
+        if (encountersSec) encountersSec.style.display = 'none';
+
+    } catch (err) {
+        console.error('loadContextualTheme epäonnistui:', err);
+        // Näytä virheilmoitus
+        const errorEl = document.getElementById('error-message');
+        if (errorEl) {
+            errorEl.innerHTML += `<p style="font-size:0.9rem;color:#ef4444;margin-top:0.5rem;">Lähiteeman lataus epäonnistui: ${err.message || err}</p>`;
+            errorEl.style.display = 'flex';
+        }
+    } finally {
+        if (spinner) spinner.style.display = 'none';
+        if (content) content.style.display = 'block';
     }
 }
