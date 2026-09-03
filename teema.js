@@ -1789,6 +1789,40 @@ async function loadContextualTheme(tagParam, placeId) {
             }
         }
 
+        // 7.5 Renderöi TOIMIJAT (Yritykset/Toimijat)
+        const actors = dashboard?.actors || [];
+        if (actors.length > 0) {
+            let actorsSection = document.getElementById('ctx-actors-section');
+            if (!actorsSection && content) {
+                actorsSection = document.createElement('section');
+                actorsSection.id = 'ctx-actors-section';
+                actorsSection.style.cssText = 'padding:2rem 1.5rem;border-top:1px solid #eaeaea;';
+                actorsSection.innerHTML = `
+                    <div style="max-width:1200px;margin:0 auto;">
+                        <h2 style="font-size:1.4rem;font-weight:800;color:var(--color-forest);margin-bottom:1rem;">🏢 Toimijat</h2>
+                        <div id="ctx-actors-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;"></div>
+                    </div>`;
+                // Lisätään kohteiden jälkeen
+                const placesSec = document.getElementById('places-section');
+                if (placesSec && placesSec.parentNode) {
+                    placesSec.parentNode.insertBefore(actorsSection, placesSec.nextSibling);
+                } else {
+                    content.appendChild(actorsSection);
+                }
+            }
+            const actorsList = document.getElementById('ctx-actors-list');
+            if (actorsList) {
+                actorsList.innerHTML = actors.map(actor => {
+                    const displayName = actor.name || actor.actor_id || 'Yritys';
+                    return `
+                        <div style="background:#f8fafc;border-radius:10px;padding:1rem 1.25rem;border-left:3px solid #f59e0b;display:flex;align-items:center;gap:0.75rem;">
+                            <span style="font-size:1.5rem;">🏢</span>
+                            <span style="font-weight:700;color:#1e293b;font-size:1.1rem;">${safeHtml(displayName)}</span>
+                        </div>`;
+                }).join('');
+            }
+        }
+
         // 8. Renderöi HAVAINNOT
         const observations = dashboard?.observations || [];
         if (observations.length > 0) {
