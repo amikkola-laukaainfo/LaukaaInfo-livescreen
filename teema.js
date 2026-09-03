@@ -992,7 +992,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     if (taggedEntities && taggedEntities.length > 0) {
                         // Hae kohtaamiset (encounters) LaukaaLive-Supabasesta
                         const encounterIds = taggedEntities
-                            .filter(e => e.entity_type === 'encounter')
+                            .filter(e => (e.entity_type || '').toLowerCase() === 'encounter')
                             .map(e => e.entity_id);
                         
                         if (encounterIds.length > 0 && (window.LaukaaSupabase || supabaseClient)) {
