@@ -1466,13 +1466,17 @@ async function openObservationModal(id, name, description) {
             const { data: postData } = await aiSb.from('posts').select('*').eq('id', id).maybeSingle();
             if (postData) {
                 document.getElementById('subplace-modal-title').textContent = postData.title || decodedName;
-                document.getElementById('subplace-modal-desc').innerHTML = `<div style="color:var(--text-main); line-height:1.5;">${postData.description || postData.content || decodedDesc || 'Ei tarkempaa kuvausta.'}</div>` + fallbackCtaHtml;
+                const postImg = postData.image_url;
+                const imgHtml = postImg ? `<div style="margin-top:0.75rem;"><img src="${postImg}" style="width:100%; max-height:300px; object-fit:cover; border-radius:8px;" alt="${postData.title || 'Kuva'}" /></div>` : '';
+                document.getElementById('subplace-modal-desc').innerHTML = `<div style="color:var(--text-main); line-height:1.5;">${postData.description || postData.content || decodedDesc || 'Ei tarkempaa kuvausta.'}</div>` + imgHtml + fallbackCtaHtml;
                 return;
             }
             const { data: encData } = await aiSb.from('encounters').select('*').eq('id', id).maybeSingle();
             if (encData) {
                 document.getElementById('subplace-modal-title').textContent = encData.title || decodedName;
-                document.getElementById('subplace-modal-desc').innerHTML = `<div style="color:var(--text-main); line-height:1.5;">${encData.description || decodedDesc || 'Ei tarkempaa kuvausta.'}</div>` + fallbackCtaHtml;
+                const encImg = encData.image_url || encData.photo_url;
+                const imgHtml = encImg ? `<div style="margin-top:0.75rem;"><img src="${encImg}" style="width:100%; max-height:300px; object-fit:cover; border-radius:8px;" alt="${encData.title || 'Kuva'}" /></div>` : '';
+                document.getElementById('subplace-modal-desc').innerHTML = `<div style="color:var(--text-main); line-height:1.5;">${encData.description || decodedDesc || 'Ei tarkempaa kuvausta.'}</div>` + imgHtml + fallbackCtaHtml;
                 return;
             }
         }

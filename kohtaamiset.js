@@ -508,6 +508,22 @@ async function initIlmoituskortti() {
     document.getElementById('ad-title').innerText = ad.title;
     document.getElementById('ad-desc').innerText = ad.description;
     
+    // Kuva jos saatavilla
+    const imgUrl = ad.image_url || ad.photo_url;
+    if (imgUrl) {
+        const existingImg = document.getElementById('ad-single-image-wrap');
+        if (!existingImg) {
+            const imgDiv = document.createElement('div');
+            imgDiv.id = 'ad-single-image-wrap';
+            imgDiv.style.cssText = 'margin-bottom: 1.5rem; text-align: center; border-radius: 12px; overflow: hidden;';
+            imgDiv.innerHTML = `<img id="ad-single-image" src="${escapeHtml(imgUrl)}" alt="${escapeHtml(ad.title)}" style="max-width:100%; max-height:450px; object-fit:cover; border-radius:12px;" />`;
+            const descEl = document.getElementById('ad-desc');
+            if (descEl && descEl.parentNode) {
+                descEl.parentNode.insertBefore(imgDiv, descEl);
+            }
+        }
+    }
+    
     // SEO & Meta päivitykset (Googlea ja tekoälybotteja varten)
     document.title = `${ad.title} – LaukaaInfo Kohtaamiset`;
     
