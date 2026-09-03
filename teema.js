@@ -1090,7 +1090,56 @@ document.addEventListener('DOMContentLoaded', async () => {
                         }
                     }
 
-                    // V4.5: Hae yritykset company_tags / entity_tags (entity_type = 'company') kautta
+                    // ── Suora haku encounters.tags[] -taulukosta (Android-sovellus tallentaa teemat tänne) ─────
+                    const laukaaDbDirect = window.LaukaaSupabase;
+                    if (laukaaDbDirect && uniqueTagIds.length > 0) {
+                        try {
+                            // Hae jo löydettyjen encounterien ID:t ettei tule duplikaatteja
+                            const alreadyFoundIds = new Set(sbAjankohtainen.map(e => e.id));
+
+                            // Supabase ei tue suoraa array overlap -kyselyä JS-clientillä kaikkein helpoiten;
+                            // käytetään cs (contains) -operaattoria jokaiselle tagille erikseen ja
+                            // yhdistetään tulokset tai haetaan kaikki ja filtteröidään JS:ssä
+                            const encountersByTagsResults = await Promise.all(
+                                uniqueTagIds.map(tagId =>
+                                    laukaaDbDirect
+                                        .from('encounters')
+                                        .select('id, title, type, sub_category, description, location, image_url, photo_url, created_at, tags, status, expires_at')
+                                        .contains('tags', [tagId])
+                                        .or('status.eq.active,status.is.null')
+                                        .order('created_at', { ascending: false })
+                                        .limit(20)
+                                )
+                            );
+
+                            const now = new Date();
+                            encountersByTagsResults.forEach(res => {
+                                if (res.error || !res.data) return;
+                                res.data.forEach(enc => {
+                                    // Suodata vanhat ilmoitukset pois
+                                    if (enc.expires_at && new Date(enc.expires_at) < now) return;
+                                    // Älä lisää duplikaatteja
+                                    if (alreadyFoundIds.has(enc.id)) return;
+                                    alreadyFoundIds.add(enc.id);
+                                    sbAjankohtainen.push({
+                                        id: enc.id,
+                                        type: 'encounter',
+                                        category: enc.sub_category || enc.type || 'Ilmoitus',
+                                        title: enc.title || '',
+                                        description: enc.description || '',
+                                        location_name: enc.location || '',
+                                        photo_url: enc.image_url || enc.photo_url,
+                                        created_at: enc.created_at,
+                                        isSupabase: true
+                                    });
+                                });
+                            });
+                        } catch(err) {
+                            console.warn('Virhe haettaessa kohtaamisia encounters.tags[]-taulukosta:', err);
+                        }
+                    }
+
+
                     const companyTagEntities = taggedEntities.filter(e =>
                         e.entity_type === 'company' || e.entity_type === 'COMPANY'
                     );
@@ -1334,7 +1383,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const cardInner = `
                         <div class="card-content">
                             <span class="badge" style="background: ${badgeColor};">${badgeLabel}</span>
-                            <h3 class="card-title">${enc.description ? enc.description.substring(0, 80) + (enc.description.length > 80 ? '...' : '') : ''}</h3>
+                            <h3 class="card-title">${(() => { const text = enc.title || enc.description || ''; return text.substring(0, 120) + (text.length > 120 ? '...' : ''); })()}</h3>
                             <div class="card-meta">
                                 ${enc.location_name ? `<span class="meta-item"><span class="iconify" data-icon="material-symbols:location-on-outline"></span> ${enc.location_name}</span>` : ''}
                                 ${dateStr ? `<span class="meta-item"><span class="iconify" data-icon="material-symbols:calendar-month-outline"></span> ${dateStr}</span>` : ''}
