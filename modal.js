@@ -134,30 +134,108 @@ window.LkiModal = (function() {
         }
     }
 
+    const ENCOUNTER_CATEGORIES = {
+        'search':     { title: 'Etsin',               emoji: '🔍', color: '#a855f7' },
+        'offer':      { title: 'Tarjoan',             emoji: '🟢', color: '#22c55e' },
+        'sell':       { title: 'Myyn',                emoji: '🛒', color: '#eab308' },
+        'give':       { title: 'Annan',               emoji: '🎁', color: '#14b8a6' },
+        'notice':     { title: 'Ilmoitan',            emoji: '📢', color: '#ef4444' },
+        'idea':       { title: 'Idea',                emoji: '💡', color: '#f97316' },
+        'lost_found': { title: 'Kadonnut / löytynyt', emoji: '🎒', color: '#f59e0b' },
+    };
+
+    const SUB_CATEGORY_LABELS = {
+        'service':       'Palvelua',
+        'item':          'Tavaraa',
+        'space':         'Tilaa tai paikkaa',
+        'work':          'Työtä tai tekijää',
+        'collaboration': 'Yhteistyötä',
+        'event_staff':   'Tapahtumaan osallistujia',
+        'skill':         'Osaamista',
+        'transport':     'Kyytiä',
+        'help':          'Apua',
+        'lost':          'Kadonnut',
+        'found':         'Löytynyt',
+        'other':         'Muuta',
+    };
+
+    const LEGACY_MAP = {
+        'service_request': { cat: 'search',     sub: 'service' },
+        'need_help':       { cat: 'search',     sub: 'service' },
+        'offer_service':   { cat: 'offer',      sub: 'service' },
+        'b2b_collab':      { cat: 'search',     sub: 'collaboration' },
+        'event_staff':     { cat: 'search',     sub: 'event_staff' },
+        'space_rental':    { cat: 'search',     sub: 'space' },
+        'work_and_gigs':   { cat: 'search',     sub: 'work' },
+        'local_notice':    { cat: 'notice',     sub: null },
+        'lost_and_found':  { cat: 'lost_found', sub: null },
+        'community':       { cat: 'notice',     sub: null },
+        'high_value':      { cat: 'sell',       sub: null },
+    };
+
+    function resolveEncounterCategory(type, subCategory = null) {
+        if (ENCOUNTER_CATEGORIES[type]) {
+            const cat = ENCOUNTER_CATEGORIES[type];
+            const subLabel = (subCategory && SUB_CATEGORY_LABELS[subCategory]) || null;
+            return { ...cat, subLabel };
+        }
+        const mapped = LEGACY_MAP[type];
+        if (mapped) {
+            const cat = ENCOUNTER_CATEGORIES[mapped.cat] || ENCOUNTER_CATEGORIES['notice'];
+            const effectiveSub = subCategory || mapped.sub;
+            const subLabel = (effectiveSub && SUB_CATEGORY_LABELS[effectiveSub]) || null;
+            return { ...cat, subLabel };
+        }
+        return { emoji: '📢', title: 'Ilmoitus', color: '#64748b', subLabel: null };
+    }
+
+    function isEncounterItem(item) {
+        if (!item) return false;
+        if (item.is_encounter || item.entity_type === 'encounter') return true;
+        if (item.sub_category !== undefined && item.sub_category !== null) return true;
+        if (item.price_info !== undefined && item.price_info !== null && item.price_info !== '') return true;
+        const encounterTypes = ['search', 'offer', 'sell', 'give', 'notice', 'idea', 'lost_found',
+                                'service_request', 'need_help', 'offer_service', 'work_and_gigs',
+                                'space_rental', 'b2b_collab', 'event_staff', 'local_notice', 'lost_and_found'];
+        if (item.type && encounterTypes.includes(item.type.toLowerCase())) return true;
+        return false;
+    }
+
     function renderContent(company) {
+        const isEncounter = isEncounterItem(company);
         const tier = (company.package || company.taso || 'perus').toLowerCase();
         const container = document.getElementById('lki-modal-container');
         
-        // Tier styles
-        container.className = 'lki-modal-container ' + tier;
-        
-        // Badge
+        // Badge & Title & Category
         const badgeContainer = document.getElementById('lki-modal-badge-container');
-        if (tier === 'premium') {
-            badgeContainer.innerHTML = '<span class="lki-badge premium">PREMIUM JYVÄSKYLÄ / LAUKAA</span>';
-        } else if (tier === 'pro') {
-            badgeContainer.innerHTML = '<span class="lki-badge pro">SUOSITELTU</span>';
+        if (isEncounter) {
+            container.className = 'lki-modal-container perus';
+            const catInfo = resolveEncounterCategory(company.type, company.sub_category);
+            const subPart = catInfo.subLabel ? ` · ${catInfo.subLabel}` : '';
+            badgeContainer.innerHTML = `<span class="lki-badge encounter-badge" style="background: ${catInfo.color}; color: #ffffff; padding: 6px 14px; border-radius: 50px; font-weight: 700; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 6px;">${catInfo.emoji} ${catInfo.title}${subPart}</span>`;
+            document.getElementById('lki-modal-title').textContent = company.title || company.nimi || 'Ilmoitus';
+            document.getElementById('lki-modal-category').textContent = `${catInfo.emoji} ${catInfo.title}${subPart}`;
         } else {
-            badgeContainer.innerHTML = '';
-        }
+            // Tier styles
+            container.className = 'lki-modal-container ' + tier;
+            
+            // Badge
+            if (tier === 'premium') {
+                badgeContainer.innerHTML = '<span class="lki-badge premium">PREMIUM JYVÄSKYLÄ / LAUKAA</span>';
+            } else if (tier === 'pro') {
+                badgeContainer.innerHTML = '<span class="lki-badge pro">SUOSITELTU</span>';
+            } else {
+                badgeContainer.innerHTML = '';
+            }
 
-        if (company.service_mode === 'SERVICE_AREA') {
-            badgeContainer.innerHTML += '<span class="lki-badge service-area" style="background: #e65100; color: #ffffff; border: 1px solid #bf4500;">🟠 PALVELEE ALUEELLA</span>';
-        }
+            if (company.service_mode === 'SERVICE_AREA') {
+                badgeContainer.innerHTML += '<span class="lki-badge service-area" style="background: #e65100; color: #ffffff; border: 1px solid #bf4500;">🟠 PALVELEE ALUEELLA</span>';
+            }
 
-        // Basic Info
-        document.getElementById('lki-modal-title').textContent = company.nimi;
-        document.getElementById('lki-modal-category').textContent = company.kategoria || company.category || '';
+            // Basic Info
+            document.getElementById('lki-modal-title').textContent = company.nimi;
+            document.getElementById('lki-modal-category').textContent = company.kategoria || company.category || '';
+        }
         
         // Use full description if available, otherwise fallback to mainoslause
         const rawDescription = company.esittely || company.description || company.mainoslause || '';
@@ -174,9 +252,11 @@ window.LkiModal = (function() {
         });
         
         document.getElementById('lki-modal-description').innerHTML = linkedDesc;
-        document.getElementById('lki-modal-address').textContent = company.osoite || 'Laukaa';
         
-        const phone = company.puhelin || company.phone || '';
+        const locName = company.place_name || company.location || company.location_name || company.osoite || 'Laukaa';
+        document.getElementById('lki-modal-address').textContent = locName;
+        
+        const phone = company.contact_phone || company.puhelin || company.phone || '';
         const phoneItem = document.getElementById('lki-modal-phone-item');
         if (phone && phone !== '-') {
             document.getElementById('lki-modal-phone').textContent = phone;
@@ -185,7 +265,7 @@ window.LkiModal = (function() {
             phoneItem.style.display = 'none';
         }
 
-        const email = company.email || '';
+        const email = company.contact_email || company.email || '';
         const emailItem = document.getElementById('lki-modal-email-item');
         if (email && email !== '-') {
             document.getElementById('lki-modal-email').textContent = email;
@@ -255,6 +335,39 @@ window.LkiModal = (function() {
                 ${company.service_note ? `<div style="font-size: 0.85rem; color: #666; font-style: italic; margin-top: 4px; padding-top: 4px; border-top: 1px dotted #ccc;">${company.service_note}</div>` : ''}
             `;
             infoGrid.appendChild(confDiv);
+        }
+
+        // Encounter-spesifit lisätiedot (Hinta, Julkaisija, Päivämäärä)
+        const oldPrice = infoGrid.querySelector('.lki-price-item');
+        if (oldPrice) oldPrice.remove();
+        const oldPub = infoGrid.querySelector('.lki-publisher-item');
+        if (oldPub) oldPub.remove();
+        const oldDate = infoGrid.querySelector('.lki-date-item');
+        if (oldDate) oldDate.remove();
+
+        if (company.price_info) {
+            const priceDiv = document.createElement('div');
+            priceDiv.className = 'lki-info-item lki-price-item';
+            priceDiv.style.cssText = 'grid-column: 1 / -1; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 10px 14px; margin-top: 8px; font-weight: 700; color: #15803d; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;';
+            priceDiv.innerHTML = `<span>💰 Hinta / Palkkio:</span> <span>${company.price_info}</span>`;
+            infoGrid.appendChild(priceDiv);
+        }
+
+        if (company.publisher_name) {
+            const pubDiv = document.createElement('div');
+            pubDiv.className = 'lki-info-item lki-publisher-item';
+            pubDiv.style.cssText = 'grid-column: 1 / -1; color: #475569; font-weight: 600; font-size: 0.9rem; margin-top: 4px; display: flex; align-items: center; gap: 6px;';
+            pubDiv.innerHTML = `<span>👤 Julkaisija:</span> <span>${company.publisher_name}</span>`;
+            infoGrid.appendChild(pubDiv);
+        }
+
+        if (company.created_at) {
+            const dateStr = new Date(company.created_at).toLocaleDateString('fi-FI', { day: 'numeric', month: 'long', year: 'numeric' });
+            const dateDiv = document.createElement('div');
+            dateDiv.className = 'lki-info-item lki-date-item';
+            dateDiv.style.cssText = 'grid-column: 1 / -1; color: #94a3b8; font-size: 0.82rem; margin-top: 2px; display: flex; align-items: center; gap: 6px;';
+            dateDiv.innerHTML = `<span>📅 Julkaistu:</span> <span>${dateStr}</span>`;
+            infoGrid.appendChild(dateDiv);
         }
 
         // Jakolinkki kohteeseen
@@ -460,6 +573,28 @@ window.LkiModal = (function() {
             footer.style.display = 'none';
         };
         footer.appendChild(hideBtn);
+
+        // Encounter-tyyppinen CTA: Suora linkki Kohtaamispaikkaan (kohtaamiset.html)
+        if (isEncounterItem(company)) {
+            const encId = company.id || '';
+            const encUrl = `kohtaamiset.html?id=${encodeURIComponent(encId)}`;
+            footer.innerHTML += `<a href="${encUrl}" class="lki-cta-btn feed" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #ffffff; font-weight: 700; padding: 12px 18px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-size: 0.95rem; justify-content: center; width: 100%; box-sizing: border-box; margin-bottom: 8px; border: none;">📋 Katso kaikki ilmoitukset (Kohtaamispaikka) →</a>`;
+
+            const phone = company.contact_phone || company.puhelin || company.phone || '';
+            if (phone && phone !== '-' && phone !== '') {
+                const waNum = phone.replace(/[^0-9]/g, '');
+                if (waNum) {
+                    footer.innerHTML += `<a href="https://wa.me/${waNum}" target="_blank" class="lki-cta-btn whatsapp">💬 WhatsApp</a>`;
+                }
+                footer.innerHTML += `<a href="tel:${phone.replace(/[^0-9+]/g, '')}" class="lki-cta-btn phone">📞 Soita</a>`;
+            }
+
+            const email = company.contact_email || company.email || '';
+            if (email && email !== '-') {
+                footer.innerHTML += `<a href="mailto:${email}" class="lki-cta-btn email">✉️ Sähköposti</a>`;
+            }
+            return;
+        }
 
         // Company Card Link (Lue lisää)
         let companyName = company.publisher_name || company.nimi;

@@ -2232,6 +2232,10 @@ function renderEncounters(encounters) {
     // Accordion-ID counter (uniikki per sivu)
     let _accId = 0;
     
+    // Rekisteröidään ilmoitukset muistiin pop-up modal -avausta varten
+    window._encounterMap = window._encounterMap || {};
+    validEncounters.forEach(e => { if (e.id) window._encounterMap[e.id] = e; });
+
     for (const [type, items] of Object.entries(grouped).filter(([t]) => !COMMUNITY_POST_TYPES.includes(t))) {
         const label = typeLabels[type] || typeLabels[(type || '').toLowerCase()] || type;
         const icon = typeIcons[type] || typeIcons[(type || '').toLowerCase()] || '🔔';
@@ -2332,8 +2336,8 @@ function renderEncounters(encounters) {
                 </div>`;
                 
             } else {
-                // ── NORMAALI RIVI muille tyypeille ──────────────────────
-                html += `<a href="${linkUrl}" style="display: block; padding: 1.25rem; text-decoration: none; color: inherit; ${borderBottom} transition: background 0.2s;" onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='transparent'">
+                // ── NORMAALI RIVI muille tyypeille -> POP-UP MODAL ───────
+                html += `<div onclick="if(window.LkiModal && window._encounterMap['${item.id}']){ LkiModal.open(window._encounterMap['${item.id}']); }" style="display: block; padding: 1.25rem; cursor: pointer; text-decoration: none; color: inherit; ${borderBottom} transition: background 0.2s;" onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='transparent'">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
                     <div>
                         <div style="font-weight: 700; color: var(--dark-text); font-size: 1.05rem; margin-bottom: 0.4rem;">${item.title}</div>
@@ -2341,7 +2345,7 @@ function renderEncounters(encounters) {
                     </div>
                     ${priceHtml}
                 </div>
-            </a>`;
+            </div>`;
             }
         });
         

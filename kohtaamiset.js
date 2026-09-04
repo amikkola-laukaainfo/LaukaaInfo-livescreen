@@ -11,24 +11,96 @@
  */
 
 // ===================================================
-// KATEGORIAT
+// KATEGORIAT — Uusi 7-tyypin malli + legacy-mapitus
 // ===================================================
+
+/** Uudet päätyypit (tallentuvat encounters.type -kenttään) */
+const ENCOUNTER_CATEGORIES = {
+    'search':     { title: 'Etsin',               emoji: '🔍', color: '#a855f7', description: 'Etsin jotain tai jotakuta' },
+    'offer':      { title: 'Tarjoan',             emoji: '🟢', color: '#22c55e', description: 'Voin tarjota jotain' },
+    'sell':       { title: 'Myyn',                emoji: '🛒', color: '#eab308', description: 'Myyn jotain' },
+    'give':       { title: 'Annan',               emoji: '🎁', color: '#14b8a6', description: 'Annan jotain ilmaiseksi' },
+    'notice':     { title: 'Ilmoitan',            emoji: '📢', color: '#ef4444', description: 'Haluan kertoa paikallisesta asiasta' },
+    'idea':       { title: 'Idea',                emoji: '💡', color: '#f97316', description: 'Minulla on idea tai kehitysajatus' },
+    'lost_found': { title: 'Kadonnut / löytynyt', emoji: '🎒', color: '#f59e0b', description: 'Jotain on kadonnut tai löytynyt' },
+};
+
+/**
+ * Sub-kategorioiden nimet (encounters.sub_category -kenttä)
+ */
+const SUB_CATEGORY_LABELS = {
+    'service':       'Palvelua',
+    'item':          'Tavaraa',
+    'space':         'Tilaa tai paikkaa',
+    'work':          'Työtä tai tekijää',
+    'collaboration': 'Yhteistyötä',
+    'event_staff':   'Tapahtumaan osallistujia',
+    'skill':         'Osaamista',
+    'transport':     'Kyytiä',
+    'help':          'Apua',
+    'lost':          'Kadonnut',
+    'found':         'Löytynyt',
+    'other':         'Muuta',
+};
+
+/**
+ * Legacy-mapitus: vanha type → uusi kategoria + sub_category
+ * Käytetään kun encounters.type on vanha arvo (esim. need_help, offer_service)
+ */
+const LEGACY_MAP = {
+    'service_request': { cat: 'search',     sub: 'service' },
+    'need_help':       { cat: 'search',     sub: 'service' },
+    'offer_service':   { cat: 'offer',      sub: 'service' },
+    'b2b_collab':      { cat: 'search',     sub: 'collaboration' },
+    'event_staff':     { cat: 'search',     sub: 'event_staff' },
+    'space_rental':    { cat: 'search',     sub: 'space' },
+    'work_and_gigs':   { cat: 'search',     sub: 'work' },
+    'local_notice':    { cat: 'notice',     sub: null },
+    'lost_and_found':  { cat: 'lost_found', sub: null },
+    'community':       { cat: 'notice',     sub: null },
+    'high_value':      { cat: 'sell',       sub: null },
+};
+
+/**
+ * Palauttaa uuden kategoriaobjektin mille tahansa type-arvolle (uusi tai legacy).
+ * @param {string} type  encounters.type -kentän arvo
+ * @param {string|null} subCategory  encounters.sub_category -kentän arvo (valinnainen)
+ * @returns {{ emoji, title, color, subLabel }}
+ */
+function resolveCategory(type, subCategory = null) {
+    // Uusi ID → suora haku
+    if (ENCOUNTER_CATEGORIES[type]) {
+        const cat = ENCOUNTER_CATEGORIES[type];
+        const subLabel = (subCategory && SUB_CATEGORY_LABELS[subCategory]) || null;
+        return { ...cat, subLabel };
+    }
+    // Legacy ID → mapitus
+    const mapped = LEGACY_MAP[type];
+    if (mapped) {
+        const cat = ENCOUNTER_CATEGORIES[mapped.cat] || ENCOUNTER_CATEGORIES['notice'];
+        const effectiveSub = subCategory || mapped.sub;
+        const subLabel = (effectiveSub && SUB_CATEGORY_LABELS[effectiveSub]) || null;
+        return { ...cat, subLabel };
+    }
+    // Fallback
+    return { emoji: '📢', title: 'Ilmoitus', color: '#64748b', subLabel: null };
+}
+
+/** @deprecated Käytä resolveCategory() uudessa koodissa */
 const categories = {
-    'service_request': { title: 'Palvelutarve',         icon: '🤝', emoji: '🤝', color: '#3b82f6' },
-    'sell':            { title: 'Myydään',              icon: '🛒', emoji: '🛒', color: '#eab308' },
-    'give':            { title: 'Annetaan',             icon: '🎁', emoji: '🎁', color: '#22c55e' },
-    'search':          { title: 'Etsitään',             icon: '🔍', emoji: '🔍', color: '#a855f7' },
-    'local_notice':    { title: 'Paikallinen ilmoitus', icon: '📢', emoji: '📢', color: '#ef4444' },
-    
-    // Legacy-kategoriat vanhoja ilmoituksia varten
-    'need_help':     { title: 'Tarvitsen palvelun',     icon: '🟢', emoji: '🟢', color: '#22c55e' },
-    'offer_service': { title: 'Tarjoan palvelua',       icon: '🔵', emoji: '🔵', color: '#3b82f6' },
-    'work_and_gigs': { title: 'Työ ja toimeksiannot',   icon: '💼', emoji: '💼', color: '#a855f7' },
-    'community':     { title: 'Yhteisö',                icon: '❤️', emoji: '❤️', color: '#ef4444' },
-    'space_rental':  { title: 'Tilat ja kalusto',       icon: '🏠', emoji: '🏠', color: '#14b8a6' },
-    'b2b_collab':    { title: 'Yhteistyöhaku',          icon: '🤝', emoji: '🤝', color: '#6366f1' },
-    'event_staff':   { title: 'Tapahtumahaku',          icon: '🎉', emoji: '🎉', color: '#ec4899' },
-    'high_value':    { title: 'Arvotavarat ja erikoiskohteet', icon: '💎', emoji: '💎', color: '#fbbf24' }
+    ...Object.fromEntries(Object.entries(ENCOUNTER_CATEGORIES).map(([k, v]) => [k, { ...v, icon: v.emoji }])),
+    // Legacy-aliakset taaksepäin-yhteensopivuuteen
+    'service_request': { title: 'Etsin • Palvelua',     icon: '🔍', emoji: '🔍', color: '#a855f7' },
+    'need_help':       { title: 'Etsin • Palvelua',     icon: '🔍', emoji: '🔍', color: '#a855f7' },
+    'offer_service':   { title: 'Tarjoan • Palvelua',   icon: '🟢', emoji: '🟢', color: '#22c55e' },
+    'work_and_gigs':   { title: 'Etsin • Työtä',        icon: '🔍', emoji: '🔍', color: '#a855f7' },
+    'community':       { title: 'Ilmoitan',             icon: '📢', emoji: '📢', color: '#ef4444' },
+    'space_rental':    { title: 'Etsin • Tilaa',        icon: '🔍', emoji: '🔍', color: '#a855f7' },
+    'b2b_collab':      { title: 'Etsin • Yhteistyötä',  icon: '🔍', emoji: '🔍', color: '#a855f7' },
+    'event_staff':     { title: 'Etsin • Osallistujia', icon: '🔍', emoji: '🔍', color: '#a855f7' },
+    'high_value':      { title: 'Myyn',                 icon: '🛒', emoji: '🛒', color: '#eab308' },
+    'local_notice':    { title: 'Ilmoitan',             icon: '📢', emoji: '📢', color: '#ef4444' },
+    'lost_and_found':  { title: 'Kadonnut / löytynyt',  icon: '🎒', emoji: '🎒', color: '#f59e0b' },
 };
 
 // ===================================================
@@ -216,6 +288,16 @@ async function initKohtaamisetFeed() {
     // Piilota spinner
     const loading = document.getElementById('km-loading');
     if (loading) loading.style.display = 'none';
+
+    // Jos URL sisältää ?id=, avaa pop-up modal automaattisesti
+    const urlParams = new URLSearchParams(window.location.search);
+    const targetId = urlParams.get('id');
+    if (targetId && window.LkiModal) {
+        const found = allEncounters.find(a => a.id === targetId || a.id?.toString() === targetId);
+        if (found) {
+            setTimeout(() => LkiModal.open(found), 100);
+        }
+    }
 }
 
 // ===================================================
@@ -234,7 +316,7 @@ function renderSidebar() {
     const allItem = makeSidebarItem('all', '📋', 'Kaikki ilmoitukset', '#64748b', counts.all);
     list.appendChild(allItem);
 
-    Object.entries(categories).forEach(([key, cat]) => {
+    Object.entries(ENCOUNTER_CATEGORIES).forEach(([key, cat]) => {
         const item = makeSidebarItem(key, cat.emoji, cat.title, cat.color, counts[key] || 0);
         list.appendChild(item);
     });
@@ -273,7 +355,7 @@ function renderMobileCats() {
     select.appendChild(allOpt);
 
     // Kategoriat
-    Object.entries(categories).forEach(([key, cat]) => {
+    Object.entries(ENCOUNTER_CATEGORIES).forEach(([key, cat]) => {
         const opt = document.createElement('option');
         opt.value = key;
         opt.textContent = `${cat.emoji} ${cat.title} (${counts[key] || 0})`;
@@ -324,12 +406,15 @@ function updateTagFilterBar() {
     }
 }
 
-// Laske ilmoitusten määrät kategorioittain
+// Laske ilmoitusten määrät kategorioittain (normalisoi legacy → uusi)
 function countByCategory(encounters) {
     const counts = { all: encounters.length };
-    Object.keys(categories).forEach(k => { counts[k] = 0; });
+    Object.keys(ENCOUNTER_CATEGORIES).forEach(k => { counts[k] = 0; });
     encounters.forEach(e => {
-        if (counts[e.type] !== undefined) counts[e.type]++;
+        const resolved = resolveCategory(e.type, e.sub_category);
+        // Etsi oikea avain ENCOUNTER_CATEGORIES-objektista
+        const key = Object.keys(ENCOUNTER_CATEGORIES).find(k => ENCOUNTER_CATEGORIES[k].title === resolved.title && ENCOUNTER_CATEGORIES[k].emoji === resolved.emoji);
+        if (key) counts[key] = (counts[key] || 0) + 1;
     });
     return counts;
 }
@@ -343,9 +428,13 @@ function renderFeed() {
 
     let filtered = [...allEncounters];
 
-    // Kategoria
+    // Kategoria — suodata normalisoinnin kautta (legacy-tyypit myös)
     if (activeFilter !== 'all') {
-        filtered = filtered.filter(ad => ad.type === activeFilter);
+        const target = ENCOUNTER_CATEGORIES[activeFilter];
+        filtered = filtered.filter(ad => {
+            const resolved = resolveCategory(ad.type, ad.sub_category);
+            return target && resolved.title === target.title && resolved.emoji === target.emoji;
+        });
     }
 
     // Haku (otsikko + kuvaus + tagit)
@@ -397,9 +486,7 @@ function renderFeed() {
     }
 
     filtered.forEach(ad => {
-        const cat = categories[ad.type];
-        if (!cat) return;
-
+        const cat = resolveCategory(ad.type, ad.sub_category);
         const dateStr = new Date(ad.created_at).toLocaleDateString('fi-FI');
         const tags = Array.isArray(ad.tags) ? ad.tags : [];
 
@@ -418,16 +505,28 @@ function renderFeed() {
             ? `<div style="background:#fefce8; color:#a16207; padding:4px 8px; border-radius:6px; font-size:0.75rem; font-weight:700; display:inline-block; margin-bottom:0.5rem; border:1px solid #fef08a;">⏳ Ratkaistu (Poistuu pian)</div>`
             : '';
 
+        // Sub-category badge
+        const subBadge = cat.subLabel
+            ? `<span style="display:inline-block; margin-left:6px; padding:1px 7px; background:${cat.color}20; color:${cat.color}; border-radius:50px; font-size:0.78rem; font-weight:600;">${escapeHtml(cat.subLabel)}</span>`
+            : '';
+
         const card = document.createElement('a');
         card.href = `ilmoituskortti.html?id=${ad.id}&slug=${generateSlug(ad.title)}`;
         card.className = 'km-card';
         card.style.borderTopColor = cat.color;
         if (isResolved) card.style.opacity = '0.85';
 
+        card.onclick = (e) => {
+            if (window.LkiModal) {
+                e.preventDefault();
+                LkiModal.open(ad);
+            }
+        };
+
         const publisherBadge = renderPublisherBadge(ad);
 
         card.innerHTML = `
-            <span class="km-card-badge" style="color:${cat.color};">${cat.emoji} ${cat.title}</span>
+            <span class="km-card-badge" style="color:${cat.color};">${cat.emoji} ${cat.title}${subBadge}</span>
             ${publisherBadge ? `<div style="margin-bottom:4px;">${publisherBadge}</div>` : ''}
             ${resolvedBadge}
             <h3 class="km-card-title">${escapeHtml(ad.title)}</h3>
@@ -479,12 +578,14 @@ async function initIlmoituskortti() {
         (async () => { try { await window.LaukaaSupabase.rpc('increment_stat', { p_encounter_id: ad.id, p_stat_type: 'view' }); } catch(e) {} })();
     }
 
-    const cat = categories[ad.type] || categories['need_help'];
+    const cat = resolveCategory(ad.type, ad.sub_category);
     const header = document.getElementById('ad-header');
     if (header) header.style.backgroundColor = cat.color;
 
-    document.getElementById('ad-badge').innerHTML = `${cat.emoji} ${cat.title}` + 
-        (ad.sub_category ? ` <span style="opacity:0.7; font-weight:normal; margin-left:5px;">| ${escapeHtml(ad.sub_category)}</span>` : '');
+    const subBadgeDetail = cat.subLabel
+        ? ` <span style="font-size:0.85em; opacity:0.9; font-weight:500; margin-left:6px; padding:2px 8px; background:rgba(255,255,255,0.25); border-radius:50px;">· ${escapeHtml(cat.subLabel)}</span>`
+        : '';
+    document.getElementById('ad-badge').innerHTML = `${cat.emoji} ${cat.title}${subBadgeDetail}`;
 
     // Julkaisijabadge yksittäispää varten
     const publisherBadge = renderPublisherBadge(ad);

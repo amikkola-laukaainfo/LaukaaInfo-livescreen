@@ -1361,7 +1361,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         } else {
             if (encountersSection) encountersSection.style.display = 'block';
             if (encountersContainer) {
+                window._encounterMap = window._encounterMap || {};
                 encountersContainer.innerHTML = sbAjankohtainen.map(enc => {
+                    if (enc.id) window._encounterMap[enc.id] = enc;
                     const dateStr = enc.created_at ? new Date(enc.created_at).toLocaleDateString('fi-FI', { day:'numeric', month:'long', year:'numeric' }) : '';
                     
                     // Valitaan linkki tyypin mukaan
@@ -1431,9 +1433,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                         linkUrl = `index.html?item=${enc.id}&feed=open`;
                     } else if (enc.type === 'offer') {
                         linkUrl = `kohdekortti.html?offer=${enc.id}`;
-
-                    } else if (enc.type === 'encounter') {
-                        linkUrl = `ilmoituskortti.html?id=${enc.id}`;
                     }
                     
                     const cardInner = `
@@ -1450,7 +1449,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     if (linkUrl) {
                         return `<a href="${linkUrl}" class="card event-card" style="border-left: 4px solid ${badgeColor}; text-decoration: none; display: block; transition: box-shadow 0.2s;" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,0.12)'" onmouseout="this.style.boxShadow=''">${cardInner}</a>`;
                     } else {
-                        return `<div class="card event-card" style="border-left: 4px solid ${badgeColor};">${cardInner}</div>`;
+                        return `<div onclick="if(window.LkiModal && window._encounterMap['${enc.id}']){ LkiModal.open(window._encounterMap['${enc.id}']); }" class="card event-card" style="border-left: 4px solid ${badgeColor}; cursor: pointer; transition: box-shadow 0.2s;" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,0.12)'" onmouseout="this.style.boxShadow=''">${cardInner}</div>`;
                     }
                 }).join('');
             }
