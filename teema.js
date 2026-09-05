@@ -1430,6 +1430,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     badgeColor = encounterTypeColors[rawType] || encounterTypeColors[(rawType || '').toLowerCase()] || '#10b981';
 
                     // Valitaan linkki tyypin mukaan — kaikki ohjataan suoraan, ei modal-popuppia
+                    linkUrl = '';
                     if (enc.type === 'feed_post') {
                         linkUrl = `index.html?item=${enc.id}&feed=open`;
                     } else if (enc.type === 'offer') {
@@ -1449,7 +1450,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         </div>
                     `;
 
-                    return `<a href="${linkUrl}" class="card event-card" style="border-left: 4px solid ${badgeColor}; text-decoration: none; display: block; transition: box-shadow 0.2s;" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,0.12)'" onmouseout="this.style.boxShadow=''>${cardInner}</a>`;
+                    return `<a href="${linkUrl}" class="card event-card" style="border-left: 4px solid ${badgeColor}; text-decoration: none; display: block; transition: box-shadow 0.2s;" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,0.12)'" onmouseout="this.style.boxShadow='none'">${cardInner}</a>`;
                 }).join('');
             }
         }
