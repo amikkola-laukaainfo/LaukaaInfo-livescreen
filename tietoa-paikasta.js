@@ -752,23 +752,31 @@ async function renderPlace(place, relatedItems, aiProfileData, aiFaqData, allSou
 
         // Lisää theme_places- ja entity_tags-tauluista hyväksytyt paikan aidot teemat
         try {
-            const [tpRes, etRes] = await Promise.all([
-                aiSb.from('theme_places').select('tag_id, tags(name)').eq('place_id', place.place_id),
-                aiSb.from('entity_tags').select('tag_id, tags(name)').eq('entity_type', 'place').eq('entity_id', place.place_id)
-            ]);
-
-            if (tpRes.data && tpRes.data.length > 0) {
-                tpRes.data.forEach(tp => {
-                    const tagName = tp.tags?.name || tp.tag_id;
+            const { data: rpcThemes } = await aiSb.rpc('fetch_publishable_themes', { p_place_id: place.place_id });
+            if (rpcThemes && rpcThemes.length > 0) {
+                rpcThemes.forEach(tp => {
+                    const tagName = tp.tag_name || tp.name || tp.tag_id;
                     if (tagName) uniqueThemes.add(normalizeTheme(tagName));
                 });
-            }
+            } else {
+                const [tpRes, etRes] = await Promise.all([
+                    aiSb.from('theme_places').select('tag_id, tags(name)').eq('place_id', place.place_id),
+                    aiSb.from('entity_tags').select('tag_id, tags(name)').eq('entity_type', 'place').eq('entity_id', place.place_id)
+                ]);
 
-            if (etRes.data && etRes.data.length > 0) {
-                etRes.data.forEach(et => {
-                    const tagName = et.tags?.name || et.tag_id;
-                    if (tagName) uniqueThemes.add(normalizeTheme(tagName));
-                });
+                if (tpRes.data && tpRes.data.length > 0) {
+                    tpRes.data.forEach(tp => {
+                        const tagName = tp.tags?.name || tp.tag_id;
+                        if (tagName) uniqueThemes.add(normalizeTheme(tagName));
+                    });
+                }
+
+                if (etRes.data && etRes.data.length > 0) {
+                    etRes.data.forEach(et => {
+                        const tagName = et.tags?.name || et.tag_id;
+                        if (tagName) uniqueThemes.add(normalizeTheme(tagName));
+                    });
+                }
             }
         } catch(e) {
             console.warn('Paikan teemojen haku epäonnistui:', e);
