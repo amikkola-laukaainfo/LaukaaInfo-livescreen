@@ -515,13 +515,7 @@ function renderFeed() {
         card.className = 'km-card';
         card.style.borderTopColor = cat.color;
         if (isResolved) card.style.opacity = '0.85';
-
-        card.onclick = (e) => {
-            if (window.LkiModal) {
-                e.preventDefault();
-                LkiModal.open(ad);
-            }
-        };
+        // Navigoidaan suoraan ilmoituskortti-sivulle — ei modal pop-uppia
 
         const publisherBadge = renderPublisherBadge(ad);
 
