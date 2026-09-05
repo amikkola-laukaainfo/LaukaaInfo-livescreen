@@ -192,16 +192,21 @@ const mockEncounters = [
 // ===================================================
 // TILA
 // ===================================================
-let activeFilter  = 'all';
-let activeTag     = null;
-let searchQuery   = '';
-let sortOrder     = 'newest';
-let allEncounters = [];
+let activeFilter   = 'all';
+let activePlaceId  = 'all';
+let activeThemeId  = 'all';
+let activeTag      = null;
+let searchQuery    = '';
+let sortOrder      = 'newest';
+let allEncounters  = [];
+let placesList     = [];
+let themesList     = [];
+let themePlacesMap = [];
 let encounterCache = null;
 let encounterCacheTime = 0;
 
 // ===================================================
-// DATAN HAKU
+// DATAN HAKU (Encounters, Places, Themes, Theme_Places)
 // ===================================================
 async function fetchEncounters(currentUser = null) {
     if (!currentUser && encounterCache && Date.now() - encounterCacheTime < 5 * 60 * 1000) {
@@ -246,6 +251,81 @@ async function fetchEncounters(currentUser = null) {
     return mockEncounters.map(m => ({ ...m, is_encounter: true }));
 }
 
+async function fetchPlacesList() {
+    if (window.LaukaaSupabase) {
+        try {
+            const { data, error } = await window.LaukaaSupabase
+                .from('places')
+                .select('place_id, name, canonical_name, address')
+                .order('name');
+            if (!error && data && data.length > 0) return data;
+        } catch (e) {
+            console.warn('Virhe haettaessa paikkoja Supabasesta:', e);
+        }
+    }
+    return [
+        { place_id: 'p-kirjasto', name: 'Laukaan pääkirjasto', canonical_name: 'Laukaan pääkirjasto' },
+        { place_id: 'p-peurunka', name: 'Peurunka', canonical_name: 'Peurunka' },
+        { place_id: 'p-satama', name: 'Laukaan satama', canonical_name: 'Laukaan satama' },
+        { place_id: 'p-vihtavuori', name: 'Vihtavuori', canonical_name: 'Vihtavuori' },
+        { place_id: 'p-lievestuore', name: 'Lievestuore', canonical_name: 'Lievestuore' },
+        { place_id: 'p-leppavesi', name: 'Leppävesi', canonical_name: 'Leppävesi' },
+        { place_id: 'p-vehnia', name: 'Vehniä', canonical_name: 'Vehniä' },
+        { place_id: 'p-saraakallio', name: 'Saraakallio', canonical_name: 'Saraakallio' },
+        { place_id: 'p-hitonhauta', name: 'Hitonhauta', canonical_name: 'Hitonhauta' },
+    ];
+}
+
+async function fetchThemesList() {
+    if (window.LaukaaSupabase) {
+        try {
+            const { data, error } = await window.LaukaaSupabase
+                .from('tags')
+                .select('tag_id, name, category_id')
+                .order('name');
+            if (!error && data && data.length > 0) return data;
+        } catch (e) {
+            console.warn('Virhe haettaessa teemoja Supabasesta:', e);
+        }
+    }
+    return [
+        { tag_id: 'kirjastot', name: 'Kirjastot' },
+        { tag_id: 'kulttuuri', name: 'Kulttuuri' },
+        { tag_id: 'lukeminen', name: 'Lukeminen' },
+        { tag_id: 'liikunta', name: 'Liikunta & Urheilu' },
+        { tag_id: 'luonto', name: 'Luonto & Retkeily' },
+        { tag_id: 'tapahtumat', name: 'Tapahtumat' },
+        { tag_id: 'talkoot', name: 'Talkoot & Vapaaehtoistyö' },
+        { tag_id: 'tilat', name: 'Tilat & Vuokraus' },
+        { tag_id: 'it-tuki', name: 'IT-tuki & Digiapu' },
+        { tag_id: 'siivous', name: 'Siivous & Kotiapu' },
+        { tag_id: 'pihatyot', name: 'Pihatyöt & Puutarha' },
+        { tag_id: 'musiikki', name: 'Musiikki & Esiintyjät' },
+    ];
+}
+
+async function fetchThemePlacesMap() {
+    if (window.LaukaaSupabase) {
+        try {
+            const { data, error } = await window.LaukaaSupabase
+                .from('theme_places')
+                .select('place_id, tag_id');
+            if (!error && data) return data;
+        } catch (e) {
+            console.warn('Virhe haettaessa theme_places-taulua Supabasesta:', e);
+        }
+    }
+    return [
+        { place_id: 'p-kirjasto', tag_id: 'kirjastot' },
+        { place_id: 'p-kirjasto', tag_id: 'kulttuuri' },
+        { place_id: 'p-kirjasto', tag_id: 'lukeminen' },
+        { place_id: 'p-peurunka', tag_id: 'liikunta' },
+        { place_id: 'p-peurunka', tag_id: 'tapahtumat' },
+        { place_id: 'p-satama', tag_id: 'tapahtumat' },
+        { place_id: 'p-satama', tag_id: 'luonto' },
+    ];
+}
+
 // ===================================================
 // INIT
 // ===================================================
@@ -254,42 +334,94 @@ document.addEventListener('DOMContentLoaded', () => {
     if (grid) {
         initKohtaamisetFeed();
     } else {
-        // ilmoituskortti.html käyttää myös tätä scriptia
         const single = document.getElementById('ad-single-container');
         if (single) initIlmoituskortti();
     }
 });
 
 async function initKohtaamisetFeed() {
-    // Haku-input
+    // 1. Hae kaikki aineistot rinnakkain
+    const [encounters, places, themes, themePlaces] = await Promise.all([
+        fetchEncounters(),
+        fetchPlacesList(),
+        fetchThemesList(),
+        fetchThemePlacesMap()
+    ]);
+
+    allEncounters  = encounters;
+    placesList     = places;
+    themesList     = themes;
+    themePlacesMap = themePlaces;
+
+    // 2. Alusta valikot
+    renderPlaceSelectOptions();
+    await updateThemeDropdown();
+
+    // 3. Tapahtumakuuntelijat
     const searchInput = document.getElementById('km-search-input');
     if (searchInput) {
         searchInput.addEventListener('input', () => {
             searchQuery = searchInput.value.trim().toLowerCase();
+            updateActiveFiltersBar();
             renderFeed();
         });
     }
 
-    // Lajittelu
+    const placeSelect = document.getElementById('km-place-select');
+    if (placeSelect) {
+        placeSelect.addEventListener('change', async (e) => {
+            activePlaceId = e.target.value;
+            await updateThemeDropdown();
+            updateActiveFiltersBar();
+            renderFeed();
+        });
+    }
+
+    const themeSelect = document.getElementById('km-theme-select');
+    if (themeSelect) {
+        themeSelect.addEventListener('change', (e) => {
+            activeThemeId = e.target.value;
+            updateActiveFiltersBar();
+            renderFeed();
+        });
+    }
+
+    const typeSelect = document.getElementById('km-type-select');
+    if (typeSelect) {
+        typeSelect.addEventListener('change', (e) => {
+            setCategoryFilter(e.target.value);
+        });
+    }
+
     const sortSelect = document.getElementById('km-sort-select');
     if (sortSelect) {
-        sortSelect.addEventListener('change', () => {
-            sortOrder = sortSelect.value;
+        sortSelect.addEventListener('change', (e) => {
+            sortOrder = e.target.value;
             renderFeed();
         });
     }
 
-    allEncounters = await fetchEncounters();
+    // Pika-osastot (preset chips)
+    const presetChips = document.getElementById('km-preset-chips');
+    if (presetChips) {
+        presetChips.querySelectorAll('.km-chip').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const cat = e.target.dataset.cat;
+                setCategoryFilter(cat);
+            });
+        });
+    }
 
     renderSidebar();
     renderMobileCats();
+    updateActiveFiltersBar();
     renderFeed();
 
     // Piilota spinner
     const loading = document.getElementById('km-loading');
     if (loading) loading.style.display = 'none';
 
-    // Jos URL sisältää ?id=, avaa pop-up modal automaattisesti
+    // URL ?id= pop-up modal check
     const urlParams = new URLSearchParams(window.location.search);
     const targetId = urlParams.get('id');
     if (targetId && window.LkiModal) {
@@ -301,18 +433,107 @@ async function initKohtaamisetFeed() {
 }
 
 // ===================================================
-// SIVUPALKKI
+// KONTEKSTUAALINEN PAIKKA & TEEMA LOGIIKKA (V2 Dual-Axis)
+// ===================================================
+function renderPlaceSelectOptions() {
+    const select = document.getElementById('km-place-select');
+    if (!select) return;
+
+    select.innerHTML = '<option value="all">📍 Kaikki paikat (Koko Laukaa)</option>';
+    placesList.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.place_id || p.name;
+        opt.textContent = `📍 ${p.name}`;
+        select.appendChild(opt);
+    });
+}
+
+async function updateThemeDropdown() {
+    const themeSelect = document.getElementById('km-theme-select');
+    if (!themeSelect) return;
+
+    const currentTheme = activeThemeId;
+    themeSelect.innerHTML = '<option value="all">🏷️ Kaikki teemat</option>';
+
+    const contextBanner = document.getElementById('km-context-banner');
+    const contextText   = document.getElementById('km-context-text');
+
+    if (activePlaceId !== 'all') {
+        const placeObj  = placesList.find(p => p.place_id === activePlaceId || p.name === activePlaceId);
+        const placeUuid = placeObj ? placeObj.place_id : activePlaceId;
+        const placeName = placeObj ? placeObj.name : activePlaceId;
+
+        // Etsi theme_places kytkökset kyseiselle paikalle
+        const placeThemeLinks = themePlacesMap.filter(tp => tp.place_id === placeUuid || tp.place_id === activePlaceId);
+        const placeTagIds     = new Set(placeThemeLinks.map(tp => tp.tag_id));
+
+        if (placeTagIds.size > 0) {
+            if (contextBanner && contextText) {
+                contextText.innerHTML = `📍 Valitulla paikalla (<strong>${escapeHtml(placeName)}</strong>) on ${placeTagIds.size} omaleimaista teemaa (theme_places), jotka on nostettu teemavalikon kärkeen.`;
+                contextBanner.style.display = 'flex';
+            }
+
+            // Ryhmä 1: Paikan aidot teemat
+            const groupPlace = document.createElement('optgroup');
+            groupPlace.label = '📍 Paikkaan liittyvät teemat';
+
+            const genuineThemes = themesList.filter(t => placeTagIds.has(t.tag_id || t.name));
+            genuineThemes.forEach(t => {
+                const opt = document.createElement('option');
+                opt.value = t.tag_id || t.name;
+                opt.textContent = `📍 ${t.name}`;
+                groupPlace.appendChild(opt);
+            });
+            themeSelect.appendChild(groupPlace);
+
+            // Ryhmä 2: Muut teemat
+            const groupOther = document.createElement('optgroup');
+            groupOther.label = '🌐 Muut teemat';
+            const otherThemes = themesList.filter(t => !placeTagIds.has(t.tag_id || t.name));
+            otherThemes.forEach(t => {
+                const opt = document.createElement('option');
+                opt.value = t.tag_id || t.name;
+                opt.textContent = t.name;
+                groupOther.appendChild(opt);
+            });
+            themeSelect.appendChild(groupOther);
+        } else {
+            if (contextBanner && contextText) {
+                contextText.innerHTML = `📍 Kohteelle <strong>${escapeHtml(placeName)}</strong> ei ole asetettu omia teemoja. Näytetään kaikki yleiset teemat.`;
+                contextBanner.style.display = 'flex';
+            }
+
+            themesList.forEach(t => {
+                const opt = document.createElement('option');
+                opt.value = t.tag_id || t.name;
+                opt.textContent = t.name;
+                themeSelect.appendChild(opt);
+            });
+        }
+    } else {
+        if (contextBanner) contextBanner.style.display = 'none';
+
+        themesList.forEach(t => {
+            const opt = document.createElement('option');
+            opt.value = t.tag_id || t.name;
+            opt.textContent = t.name;
+            themeSelect.appendChild(opt);
+        });
+    }
+
+    themeSelect.value = currentTheme;
+}
+
+// ===================================================
+// SIVUPALKKI & MOBIILIVALIKKO
 // ===================================================
 function renderSidebar() {
     const list = document.getElementById('km-cat-list');
     if (!list) return;
 
-    // Laske määrät
     const counts = countByCategory(allEncounters);
-
     list.innerHTML = '';
 
-    // "Kaikki" -item
     const allItem = makeSidebarItem('all', '📋', 'Kaikki ilmoitukset', '#64748b', counts.all);
     list.appendChild(allItem);
 
@@ -336,25 +557,18 @@ function makeSidebarItem(key, emoji, title, color, count) {
     return li;
 }
 
-// ===================================================
-// MOBIILIPAINIKKEET
-// ===================================================
 function renderMobileCats() {
     const select = document.getElementById('km-mobile-cat-select');
     if (!select) return;
 
-    // Laske määrät
     const counts = countByCategory(allEncounters);
-
     select.innerHTML = '';
 
-    // "Kaikki" -optio
     const allOpt = document.createElement('option');
     allOpt.value = 'all';
     allOpt.textContent = `Kaikki kategoriat (${counts.all})`;
     select.appendChild(allOpt);
 
-    // Kategoriat
     Object.entries(ENCOUNTER_CATEGORIES).forEach(([key, cat]) => {
         const opt = document.createElement('option');
         opt.value = key;
@@ -362,57 +576,133 @@ function renderMobileCats() {
         select.appendChild(opt);
     });
 
-    // Aseta aktiivinen ja kuuntele muutoksia
     select.value = activeFilter;
-    select.onchange = (e) => {
-        setCategoryFilter(e.target.value);
-    };
+    select.onchange = (e) => setCategoryFilter(e.target.value);
 }
 
 // ===================================================
-// FILTTERÖINTI
+// FILTTERÖINTI APUFUNKTIOT
 // ===================================================
 function setCategoryFilter(key) {
     activeFilter = key;
-    activeTag = null; // Tyhjennä tagifiltteri kategorian vaihtuessa
+    const typeSelect = document.getElementById('km-type-select');
+    if (typeSelect) typeSelect.value = key;
     renderSidebar();
     renderMobileCats();
-    updateTagFilterBar();
+    updateActiveFiltersBar();
+    renderFeed();
+}
+
+function setPlaceFilter(placeId) {
+    activePlaceId = placeId;
+    const placeSelect = document.getElementById('km-place-select');
+    if (placeSelect) placeSelect.value = placeId;
+    updateThemeDropdown();
+    updateActiveFiltersBar();
+    renderFeed();
+}
+
+function setThemeFilter(themeId) {
+    activeThemeId = themeId;
+    const themeSelect = document.getElementById('km-theme-select');
+    if (themeSelect) themeSelect.value = themeId;
+    updateActiveFiltersBar();
     renderFeed();
 }
 
 function setTagFilter(tag) {
     activeTag = tag;
-    updateTagFilterBar();
+    updateActiveFiltersBar();
     renderFeed();
 }
 
 function clearTagFilter() {
     activeTag = null;
-    updateTagFilterBar();
+    updateActiveFiltersBar();
     renderFeed();
 }
 
-function updateTagFilterBar() {
-    const bar = document.getElementById('km-tag-filter-bar');
-    const label = document.getElementById('km-active-tag-label');
-    if (!bar || !label) return;
-
-    if (activeTag) {
-        label.textContent = activeTag;
-        bar.classList.add('visible');
-    } else {
-        bar.classList.remove('visible');
-    }
+function clearSearchQuery() {
+    searchQuery = '';
+    const input = document.getElementById('km-search-input');
+    if (input) input.value = '';
+    updateActiveFiltersBar();
+    renderFeed();
 }
 
-// Laske ilmoitusten määrät kategorioittain (normalisoi legacy → uusi)
+function clearAllFilters() {
+    activeFilter  = 'all';
+    activePlaceId = 'all';
+    activeThemeId = 'all';
+    activeTag     = null;
+    searchQuery   = '';
+
+    const searchInput = document.getElementById('km-search-input');
+    if (searchInput) searchInput.value = '';
+
+    const placeSelect = document.getElementById('km-place-select');
+    if (placeSelect) placeSelect.value = 'all';
+
+    const themeSelect = document.getElementById('km-theme-select');
+    if (themeSelect) themeSelect.value = 'all';
+
+    const typeSelect = document.getElementById('km-type-select');
+    if (typeSelect) typeSelect.value = 'all';
+
+    renderSidebar();
+    renderMobileCats();
+    updateThemeDropdown();
+    updateActiveFiltersBar();
+    renderFeed();
+}
+
+function updateActiveFiltersBar() {
+    const bar = document.getElementById('km-active-filters-bar');
+    const container = document.getElementById('km-active-chips-container');
+    if (!bar || !container) return;
+
+    container.innerHTML = '';
+    let hasFilters = false;
+
+    if (searchQuery) {
+        hasFilters = true;
+        container.innerHTML += `<span class="km-active-chip">🔍 "${escapeHtml(searchQuery)}" <button class="km-active-chip-remove" onclick="clearSearchQuery()">✕</button></span>`;
+    }
+
+    if (activePlaceId !== 'all') {
+        hasFilters = true;
+        const placeObj = placesList.find(p => p.place_id === activePlaceId || p.name === activePlaceId);
+        const placeName = placeObj ? placeObj.name : activePlaceId;
+        container.innerHTML += `<span class="km-active-chip">📍 ${escapeHtml(placeName)} <button class="km-active-chip-remove" onclick="setPlaceFilter('all')">✕</button></span>`;
+    }
+
+    if (activeThemeId !== 'all') {
+        hasFilters = true;
+        const themeObj = themesList.find(t => t.tag_id === activeThemeId || t.name === activeThemeId);
+        const themeName = themeObj ? themeObj.name : activeThemeId;
+        container.innerHTML += `<span class="km-active-chip">🏷️ ${escapeHtml(themeName)} <button class="km-active-chip-remove" onclick="setThemeFilter('all')">✕</button></span>`;
+    }
+
+    if (activeFilter !== 'all') {
+        hasFilters = true;
+        const catObj = ENCOUNTER_CATEGORIES[activeFilter];
+        const catTitle = catObj ? `${catObj.emoji} ${catObj.title}` : activeFilter;
+        container.innerHTML += `<span class="km-active-chip">${catTitle} <button class="km-active-chip-remove" onclick="setCategoryFilter('all')">✕</button></span>`;
+    }
+
+    if (activeTag) {
+        hasFilters = true;
+        container.innerHTML += `<span class="km-active-chip">🏷️ #${escapeHtml(activeTag)} <button class="km-active-chip-remove" onclick="clearTagFilter()">✕</button></span>`;
+    }
+
+    bar.style.display = hasFilters ? 'flex' : 'none';
+}
+
 function countByCategory(encounters) {
     const counts = { all: encounters.length };
     Object.keys(ENCOUNTER_CATEGORIES).forEach(k => { counts[k] = 0; });
     encounters.forEach(e => {
         const resolved = resolveCategory(e.type, e.sub_category);
-        // Etsi oikea avain ENCOUNTER_CATEGORIES-objektista
         const key = Object.keys(ENCOUNTER_CATEGORIES).find(k => ENCOUNTER_CATEGORIES[k].title === resolved.title && ENCOUNTER_CATEGORIES[k].emoji === resolved.emoji);
         if (key) counts[key] = (counts[key] || 0) + 1;
     });
@@ -420,7 +710,7 @@ function countByCategory(encounters) {
 }
 
 // ===================================================
-// FEED-RENDERÖINTI
+// FEED-RENDERÖINTI (MISSÄ + MISTÄ + MITÄ)
 // ===================================================
 function renderFeed() {
     const grid = document.getElementById('km-grid');
@@ -428,28 +718,64 @@ function renderFeed() {
 
     let filtered = [...allEncounters];
 
-    // Kategoria — suodata normalisoinnin kautta (legacy-tyypit myös)
+    // 1. Kategoria / Tyyppi
     if (activeFilter !== 'all') {
-        const target = ENCOUNTER_CATEGORIES[activeFilter];
+        if (activeFilter === 'space') {
+            filtered = filtered.filter(ad => ad.type === 'space_rental' || ad.sub_category === 'space' || (ad.tags || []).includes('tila'));
+        } else if (activeFilter === 'talkoot') {
+            filtered = filtered.filter(ad => (ad.tags || []).includes('talkoot') || ad.type === 'community');
+        } else if (activeFilter === 'event') {
+            filtered = filtered.filter(ad => ad.type === 'event_staff' || (ad.tags || []).includes('tapahtumat'));
+        } else {
+            const target = ENCOUNTER_CATEGORIES[activeFilter];
+            filtered = filtered.filter(ad => {
+                const resolved = resolveCategory(ad.type, ad.sub_category);
+                return target && resolved.title === target.title && resolved.emoji === target.emoji;
+            });
+        }
+    }
+
+    // 2. Paikka suodatus (Place)
+    if (activePlaceId !== 'all') {
+        const placeObj  = placesList.find(p => p.place_id === activePlaceId || p.name === activePlaceId);
+        const placeName = (placeObj ? placeObj.name : activePlaceId).toLowerCase();
+        const placeUuid = placeObj ? placeObj.place_id : activePlaceId;
+
         filtered = filtered.filter(ad => {
-            const resolved = resolveCategory(ad.type, ad.sub_category);
-            return target && resolved.title === target.title && resolved.emoji === target.emoji;
+            if (ad.place_id && ad.place_id === placeUuid) return true;
+            if (ad.location && ad.location.toLowerCase().includes(placeName)) return true;
+            return false;
         });
     }
 
-    // Haku (otsikko + kuvaus + tagit)
+    // 3. Teema suodatus (Theme)
+    if (activeThemeId !== 'all') {
+        const themeObj  = themesList.find(t => t.tag_id === activeThemeId || t.name === activeThemeId);
+        const themeName = (themeObj ? themeObj.name : activeThemeId).toLowerCase();
+        const themeId   = themeObj ? themeObj.tag_id : activeThemeId;
+
+        filtered = filtered.filter(ad => {
+            const tags = (ad.tags || []).map(t => t.toLowerCase());
+            if (tags.includes(themeName) || tags.includes(themeId.toLowerCase())) return true;
+            if (ad.theme_tag_id && ad.theme_tag_id === themeId) return true;
+            return false;
+        });
+    }
+
+    // 4. Tekstihaku
     if (searchQuery) {
         filtered = filtered.filter(ad => {
             const tags = (ad.tags || []).join(' ').toLowerCase();
             return (
                 (ad.title || '').toLowerCase().includes(searchQuery) ||
                 (ad.description || '').toLowerCase().includes(searchQuery) ||
+                (ad.location || '').toLowerCase().includes(searchQuery) ||
                 tags.includes(searchQuery)
             );
         });
     }
 
-    // Tagifiltteri
+    // 5. Klikattu Tag-suodatin
     if (activeTag) {
         filtered = filtered.filter(ad =>
             Array.isArray(ad.tags) && ad.tags.map(t => t.toLowerCase()).includes(activeTag.toLowerCase())
@@ -462,12 +788,24 @@ function renderFeed() {
         return sortOrder === 'newest' ? db - da : da - db;
     });
 
+    // Päivitä preset chips -aktiivisuudet
+    const presetContainer = document.getElementById('km-preset-chips');
+    if (presetContainer) {
+        presetContainer.querySelectorAll('.km-chip').forEach(chip => {
+            if (chip.dataset.cat === activeFilter) {
+                chip.classList.add('active');
+            } else {
+                chip.classList.remove('active');
+            }
+        });
+    }
+
     // Tulosten määrä
     const countEl = document.getElementById('km-result-count');
     if (countEl) {
         countEl.textContent = filtered.length === 0
-            ? 'Ei tuloksia'
-            : `${filtered.length} ilmoitu${filtered.length === 1 ? 's' : 'sta'}`;
+            ? 'Ei tuloksia valitulla haulla'
+            : `${filtered.length} kohtaamis${filtered.length === 1 ? 'i' : 'ta'}`;
     }
 
     grid.innerHTML = '';
@@ -476,11 +814,11 @@ function renderFeed() {
         grid.innerHTML = `
             <div class="km-empty">
                 <div class="km-empty-icon">🔍</div>
-                <h3>Ei ilmoituksia</h3>
-                <p>Valituilla suodattimilla ei löydy ilmoituksia juuri nyt.</p>
-                <a href="https://play.google.com/store/apps/details?id=org.example.LaukaaLive&hl=fi" target="_blank" rel="noopener" class="km-btn-primary" style="display:inline-flex; margin-top:1rem; gap:0.5rem;">
-                    📱 Jätä ilmoitus LaukaaLive-sovelluksessa
-                </a>
+                <h3>Ei ilmoituksia valituilla hakuehdoilla</h3>
+                <p>Kokeile vaihtaa paikkaa, teemaa tai tyhjennä hakusuodattimet.</p>
+                <button onclick="clearAllFilters()" class="km-btn-primary" style="display:inline-flex; margin-top:1rem; gap:0.5rem; border:none; cursor:pointer;">
+                    🔄 Tyhjennä kaikki suodattimet
+                </button>
             </div>`;
         return;
     }
@@ -497,15 +835,14 @@ function renderFeed() {
             ? `<div class="km-card-tags">${displayTags.map(t =>
                 `<button class="km-tag${activeTag === t ? ' active' : ''}"
                     onclick="event.preventDefault(); setTagFilter('${escapeHtml(t)}')"
-                    title="Suodata: ${escapeHtml(t)}">${escapeHtml(t)}</button>`
+                    title="Suodata teemalla: ${escapeHtml(t)}">🏷️ ${escapeHtml(t)}</button>`
               ).join('')}</div>`
             : '';
 
         const resolvedBadge = isResolved
-            ? `<div style="background:#fefce8; color:#a16207; padding:4px 8px; border-radius:6px; font-size:0.75rem; font-weight:700; display:inline-block; margin-bottom:0.5rem; border:1px solid #fef08a;">⏳ Ratkaistu (Poistuu pian)</div>`
+            ? `<div style="background:#fefce8; color:#a16207; padding:4px 8px; border-radius:6px; font-size:0.75rem; font-weight:700; display:inline-block; margin-bottom:0.5rem; border:1px solid #fef08a;">⏳ Ratkaistu</div>`
             : '';
 
-        // Sub-category badge
         const subBadge = cat.subLabel
             ? `<span style="display:inline-block; margin-left:6px; padding:1px 7px; background:${cat.color}20; color:${cat.color}; border-radius:50px; font-size:0.78rem; font-weight:600;">${escapeHtml(cat.subLabel)}</span>`
             : '';
@@ -515,7 +852,6 @@ function renderFeed() {
         card.className = 'km-card';
         card.style.borderTopColor = cat.color;
         if (isResolved) card.style.opacity = '0.85';
-        // Navigoidaan suoraan ilmoituskortti-sivulle — ei modal pop-uppia
 
         const publisherBadge = renderPublisherBadge(ad);
 
