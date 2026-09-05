@@ -3748,6 +3748,22 @@ async function performV4Search(query, dropdown) {
                 .or(`name.ilike."%${q}%",canonical_name.ilike."%${q}%"`)
                 .limit(4);
             if (data) matchedPlaces = data;
+
+            // Hae paikkojen theme_places-kytkökset V2 kaksoisakselin mukaisesti
+            if (matchedPlaces.length > 0) {
+                const placeIds = matchedPlaces.map(p => p.place_id);
+                const { data: tpData } = await window.aiSb.from('theme_places')
+                    .select('place_id, tag_id, tags(name)')
+                    .in('place_id', placeIds);
+                if (tpData) {
+                    matchedPlaces.forEach(p => {
+                        p.genuineThemes = tpData
+                            .filter(tp => tp.place_id === p.place_id)
+                            .map(tp => tp.tags?.name || tp.tag_id)
+                            .slice(0, 3);
+                    });
+                }
+            }
         }
     } catch (e) {
         console.warn('V4 haku paikoista epäonnistui:', e);
@@ -3760,6 +3776,20 @@ async function performV4Search(query, dropdown) {
             const cat = (c.kategoria || '').toLowerCase();
             return name.includes(q) || cat.includes(q) || normalizeForSearch(name).includes(qNorm);
         }).slice(0, 3);
+    }
+
+    let matchedEncounters = [];
+    try {
+        if (window.aiSb) {
+            const { data: encData } = await window.aiSb.from('encounters')
+                .select('id, title, type, location, price_info')
+                .eq('status', 'active')
+                .or(`title.ilike."%${q}%",description.ilike."%${q}%",location.ilike."%${q}%"`)
+                .limit(3);
+            if (encData) matchedEncounters = encData;
+        }
+    } catch (e) {
+        console.warn('V4 haku kohtaamisista epäonnistui:', e);
     }
 
     let html = '';
@@ -3778,11 +3808,31 @@ async function performV4Search(query, dropdown) {
     }
 
     if (matchedPlaces.length > 0) {
-        html += `<div style="font-size: 0.75rem; font-weight: 800; color: #0284c7; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem;">📍 PAIKAT</div>`;
+        html += `<div style="font-size: 0.75rem; font-weight: 800; color: #0284c7; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem;">📍 PAIKAT (MISSÄ)</div>`;
         matchedPlaces.forEach(p => {
+            const themesBadge = (p.genuineThemes && p.genuineThemes.length > 0)
+                ? `<div style="font-size: 0.76rem; color: #0284c7; font-weight: 500; margin-top: 2px;">🏷️ ${escapeHtml(p.genuineThemes.join(' · '))}</div>`
+                : '';
             html += `
                 <a href="tietoa-paikasta.html?id=${encodeURIComponent(p.place_id)}" style="display: block; padding: 0.5rem 0.75rem; border-radius: 6px; text-decoration: none; color: #1e293b; font-size: 0.95rem; font-weight: 600;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
-                    📍 ${escapeHtml(p.name || p.canonical_name)}
+                    <div>📍 ${escapeHtml(p.name || p.canonical_name)}</div>
+                    ${themesBadge}
+                </a>
+            `;
+        });
+        html += `<div style="height: 1px; background: #f1f5f9; margin: 0.5rem 0;"></div>`;
+    }
+
+    if (matchedEncounters.length > 0) {
+        html += `<div style="font-size: 0.75rem; font-weight: 800; color: #a855f7; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem;">🤝 KOHTAAMISET & ILMOITUKSET</div>`;
+        matchedEncounters.forEach(e => {
+            html += `
+                <a href="kohtaamiset.html?id=${encodeURIComponent(e.id)}" style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0.75rem; border-radius: 6px; text-decoration: none; color: #1e293b; font-size: 0.95rem; font-weight: 600;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
+                    <div>
+                        <span>🤝 ${escapeHtml(e.title)}</span>
+                        ${e.location ? `<span style="display: block; font-size: 0.76rem; color: #64748b; font-weight: 500;">📍 ${escapeHtml(e.location)}</span>` : ''}
+                    </div>
+                    ${e.price_info ? `<span style="font-size: 0.8rem; color: #a855f7; font-weight: 700;">${escapeHtml(e.price_info)}</span>` : ''}
                 </a>
             `;
         });
@@ -3837,9 +3887,8 @@ async function openV4SearchModal(query) {
 
     queryEl.textContent = query;
     modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden'; // estä taustan scrollaus
+    document.body.style.overflow = 'hidden';
 
-    // Lisätään sulkemislogiikka body overflowlle
     const closeBtn = modal.querySelector('button');
     if (closeBtn && !closeBtn.dataset.bound) {
         closeBtn.dataset.bound = "true";
@@ -3850,7 +3899,6 @@ async function openV4SearchModal(query) {
         };
     }
     
-    // Klikkaus modalin ulkopuolelle sulkee
     modal.onclick = function(e) {
         if (e.target === modal) {
             modal.style.display = 'none';
@@ -3866,7 +3914,7 @@ async function openV4SearchModal(query) {
     const matchedThemes = (v4ActiveThemesCache || []).filter(t => {
         const name = (t.name || t.tag_id).toLowerCase();
         return name.includes(q) || normalizeForSearch(name).includes(qNorm);
-    }); // Näytetään kaikki osumat
+    });
 
     let matchedPlaces = [];
     try {
@@ -3876,9 +3924,37 @@ async function openV4SearchModal(query) {
                 .or(`name.ilike."%${q}%",canonical_name.ilike."%${q}%"`)
                 .limit(50);
             if (data) matchedPlaces = data;
+
+            if (matchedPlaces.length > 0) {
+                const placeIds = matchedPlaces.map(p => p.place_id);
+                const { data: tpData } = await window.aiSb.from('theme_places')
+                    .select('place_id, tag_id, tags(name)')
+                    .in('place_id', placeIds);
+                if (tpData) {
+                    matchedPlaces.forEach(p => {
+                        p.genuineThemes = tpData
+                            .filter(tp => tp.place_id === p.place_id)
+                            .map(tp => tp.tags?.name || tp.tag_id);
+                    });
+                }
+            }
         }
     } catch (e) {
         console.warn('V4 modal haku paikoista epäonnistui:', e);
+    }
+
+    let matchedEncounters = [];
+    try {
+        if (window.aiSb) {
+            const { data: encData } = await window.aiSb.from('encounters')
+                .select('id, title, type, location, price_info, tags')
+                .eq('status', 'active')
+                .or(`title.ilike."%${q}%",description.ilike."%${q}%",location.ilike."%${q}%"`)
+                .limit(20);
+            if (encData) matchedEncounters = encData;
+        }
+    } catch (e) {
+        console.warn('V4 modal haku kohtaamisista epäonnistui:', e);
     }
 
     let matchedCompanies = [];
@@ -3913,10 +3989,29 @@ async function openV4SearchModal(query) {
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 0.75rem;">`;
         matchedPlaces.forEach(p => {
             const subtitle = [p.type, p.municipality].filter(Boolean).join(' · ');
+            const themesBadge = (p.genuineThemes && p.genuineThemes.length > 0)
+                ? `<div style="font-size: 0.76rem; color: #0284c7; font-weight: 500; margin-top: 3px;">🏷️ ${escapeHtml(p.genuineThemes.join(' · '))}</div>`
+                : '';
             html += `
                 <a href="tietoa-paikasta.html?id=${encodeURIComponent(p.place_id)}" style="display: block; padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid #e2e8f0; text-decoration: none; color: #1e293b; font-size: 0.95rem; font-weight: 700; background: #f8fafc; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284c7'; this.style.background='white';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.background='#f8fafc';">
                     <div style="margin-bottom: 0.15rem;">${escapeHtml(p.name || p.canonical_name)}</div>
                     ${subtitle ? `<div style="font-size: 0.75rem; color: #64748b; font-weight: 500;">${escapeHtml(subtitle)}</div>` : ''}
+                    ${themesBadge}
+                </a>
+            `;
+        });
+        html += `</div></div>`;
+    }
+
+    if (matchedEncounters.length > 0) {
+        html += `<div>
+            <h3 style="font-size: 0.85rem; font-weight: 800; color: #a855f7; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem; margin-top: 1.5rem;">🤝 Kohtaamiset & Ilmoitukset (${matchedEncounters.length})</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 0.75rem;">`;
+        matchedEncounters.forEach(e => {
+            html += `
+                <a href="kohtaamiset.html?id=${encodeURIComponent(e.id)}" style="display: block; padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid #e2e8f0; text-decoration: none; color: #1e293b; font-size: 0.95rem; font-weight: 700; background: #f8fafc; transition: all 0.2s;" onmouseover="this.style.borderColor='#a855f7'; this.style.background='white';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.background='#f8fafc';">
+                    <div style="margin-bottom: 0.15rem;">🤝 ${escapeHtml(e.title)}</div>
+                    <div style="font-size: 0.75rem; color: #64748b; font-weight: 500;">📍 ${escapeHtml(e.location || 'Koko Laukaa')}${e.price_info ? ` · ${escapeHtml(e.price_info)}` : ''}</div>
                 </a>
             `;
         });
