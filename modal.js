@@ -281,9 +281,16 @@ window.LkiModal = (function() {
         }
 
         // Service Methods (Palvelutapa)
+        // NOTE: tags may be an array (from Supabase TEXT[]) or a comma-separated string
         let waysMarkup = '';
-        const tags = (company.tags || '').split(',').map(t => t.trim().toLowerCase());
-        const pvtapa = (company.palvelutapa || '').split(',').map(t => t.trim().toLowerCase());
+        const rawTags = company.tags;
+        const tags = Array.isArray(rawTags)
+            ? rawTags.map(t => String(t).trim().toLowerCase())
+            : (typeof rawTags === 'string' ? rawTags : '').split(',').map(t => t.trim().toLowerCase()).filter(Boolean);
+        const rawPvtapa = company.palvelutapa || '';
+        const pvtapa = Array.isArray(rawPvtapa)
+            ? rawPvtapa.map(t => String(t).trim().toLowerCase())
+            : rawPvtapa.split(',').map(t => t.trim().toLowerCase()).filter(Boolean);
         const combinedWays = [...new Set([...tags, ...pvtapa])];
         
         let waysIcons = '';
