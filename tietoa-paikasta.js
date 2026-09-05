@@ -750,22 +750,28 @@ async function renderPlace(place, relatedItems, aiProfileData, aiFaqData, allSou
             }
         });
 
-        // Lisää entity_tags-taulusta hyväksytyt tagit
+        // Lisää theme_places- ja entity_tags-tauluista hyväksytyt paikan aidot teemat
         try {
-            const { data: entityTagData } = await aiSb
-                .from('entity_tags')
-                .select('tag_id, tags(name)')
-                .eq('entity_type', 'place')
-                .eq('entity_id', place.place_id);
-            
-            if (entityTagData && entityTagData.length > 0) {
-                entityTagData.forEach(et => {
+            const [tpRes, etRes] = await Promise.all([
+                aiSb.from('theme_places').select('tag_id, tags(name)').eq('place_id', place.place_id),
+                aiSb.from('entity_tags').select('tag_id, tags(name)').eq('entity_type', 'place').eq('entity_id', place.place_id)
+            ]);
+
+            if (tpRes.data && tpRes.data.length > 0) {
+                tpRes.data.forEach(tp => {
+                    const tagName = tp.tags?.name || tp.tag_id;
+                    if (tagName) uniqueThemes.add(normalizeTheme(tagName));
+                });
+            }
+
+            if (etRes.data && etRes.data.length > 0) {
+                etRes.data.forEach(et => {
                     const tagName = et.tags?.name || et.tag_id;
                     if (tagName) uniqueThemes.add(normalizeTheme(tagName));
                 });
             }
         } catch(e) {
-            console.warn('entity_tags haku epäonnistui:', e);
+            console.warn('Paikan teemojen haku epäonnistui:', e);
         }
         
         const themesArray = Array.from(uniqueThemes);
