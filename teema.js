@@ -1429,12 +1429,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                         || '💬 Ilmoitus';
                     badgeColor = encounterTypeColors[rawType] || encounterTypeColors[(rawType || '').toLowerCase()] || '#10b981';
 
+                    // Valitaan linkki tyypin mukaan — kaikki ohjataan suoraan, ei modal-popuppia
                     if (enc.type === 'feed_post') {
                         linkUrl = `index.html?item=${enc.id}&feed=open`;
                     } else if (enc.type === 'offer') {
                         linkUrl = `kohdekortti.html?offer=${enc.id}`;
+                    } else {
+                        linkUrl = `ilmoituskortti.html?id=${enc.id}`;
                     }
-                    
+
                     const cardInner = `
                         <div class="card-content">
                             <span class="badge" style="background: ${badgeColor};">${badgeLabel}</span>
@@ -1445,12 +1448,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                             </div>
                         </div>
                     `;
-                    
-                    if (linkUrl) {
-                        return `<a href="${linkUrl}" class="card event-card" style="border-left: 4px solid ${badgeColor}; text-decoration: none; display: block; transition: box-shadow 0.2s;" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,0.12)'" onmouseout="this.style.boxShadow=''">${cardInner}</a>`;
-                    } else {
-                        return `<div onclick="if(window.LkiModal && window._encounterMap['${enc.id}']){ LkiModal.open(window._encounterMap['${enc.id}']); }" class="card event-card" style="border-left: 4px solid ${badgeColor}; cursor: pointer; transition: box-shadow 0.2s;" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,0.12)'" onmouseout="this.style.boxShadow=''">${cardInner}</div>`;
-                    }
+
+                    return `<a href="${linkUrl}" class="card event-card" style="border-left: 4px solid ${badgeColor}; text-decoration: none; display: block; transition: box-shadow 0.2s;" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,0.12)'" onmouseout="this.style.boxShadow=''>${cardInner}</a>`;
                 }).join('');
             }
         }

@@ -2336,8 +2336,8 @@ function renderEncounters(encounters) {
                 </div>`;
                 
             } else {
-                // ── NORMAALI RIVI muille tyypeille -> POP-UP MODAL ───────
-                html += `<div onclick="if(window.LkiModal && window._encounterMap['${item.id}']){ LkiModal.open(window._encounterMap['${item.id}']); }" style="display: block; padding: 1.25rem; cursor: pointer; text-decoration: none; color: inherit; ${borderBottom} transition: background 0.2s;" onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='transparent'">
+                // ── NORMAALI RIVI muille tyypeille -> suora linkki ilmoituskortti.html ───────
+                html += `<a href="ilmoituskortti.html?id=${item.id}" style="display: block; padding: 1.25rem; cursor: pointer; text-decoration: none; color: inherit; ${borderBottom} transition: background 0.2s;" onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='transparent'">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
                     <div>
                         <div style="font-weight: 700; color: var(--dark-text); font-size: 1.05rem; margin-bottom: 0.4rem;">${item.title}</div>
@@ -2345,7 +2345,7 @@ function renderEncounters(encounters) {
                     </div>
                     ${priceHtml}
                 </div>
-            </div>`;
+            </a>`;
             }
         });
         
