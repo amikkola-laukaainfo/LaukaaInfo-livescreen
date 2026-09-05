@@ -163,6 +163,10 @@ window.LkiModal = (function() {
         'service_request': { cat: 'search',     sub: 'service' },
         'need_help':       { cat: 'search',     sub: 'service' },
         'offer_service':   { cat: 'offer',      sub: 'service' },
+        'offer_skills':    { cat: 'offer',      sub: 'skill' },
+        'b2b_request':     { cat: 'search',     sub: 'collaboration' },
+        'gig':             { cat: 'search',     sub: 'work' },
+        'volunteer':       { cat: 'offer',      sub: 'help' },
         'b2b_collab':      { cat: 'search',     sub: 'collaboration' },
         'event_staff':     { cat: 'search',     sub: 'event_staff' },
         'space_rental':    { cat: 'search',     sub: 'space' },
@@ -195,8 +199,10 @@ window.LkiModal = (function() {
         if (item.sub_category !== undefined && item.sub_category !== null) return true;
         if (item.price_info !== undefined && item.price_info !== null && item.price_info !== '') return true;
         const encounterTypes = ['search', 'offer', 'sell', 'give', 'notice', 'idea', 'lost_found',
-                                'service_request', 'need_help', 'offer_service', 'work_and_gigs',
-                                'space_rental', 'b2b_collab', 'event_staff', 'local_notice', 'lost_and_found'];
+                                'service_request', 'need_help', 'offer_service', 'offer_skills',
+                                'b2b_request', 'gig', 'volunteer', 'work_and_gigs',
+                                'space_rental', 'b2b_collab', 'event_staff', 'high_value',
+                                'local_notice', 'lost_and_found', 'community', 'encounter'];
         if (item.type && encounterTypes.includes(item.type.toLowerCase())) return true;
         return false;
     }
@@ -577,8 +583,11 @@ window.LkiModal = (function() {
         // Encounter-tyyppinen CTA: Suora linkki Kohtaamispaikkaan (kohtaamiset.html)
         if (isEncounterItem(company)) {
             const encId = company.id || '';
-            const encUrl = `kohtaamiset.html?id=${encodeURIComponent(encId)}`;
-            footer.innerHTML += `<a href="${encUrl}" class="lki-cta-btn feed" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #ffffff; font-weight: 700; padding: 12px 18px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-size: 0.95rem; justify-content: center; width: 100%; box-sizing: border-box; margin-bottom: 8px; border: none;">📋 Katso kaikki ilmoitukset (Kohtaamispaikka) →</a>`;
+            if (encId) {
+                const cardUrl = `ilmoituskortti.html?id=${encodeURIComponent(encId)}`;
+                footer.innerHTML += `<a href="${cardUrl}" class="lki-cta-btn card" style="background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); color: #ffffff; font-weight: 700; padding: 12px 18px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-size: 0.95rem; justify-content: center; width: 100%; box-sizing: border-box; margin-bottom: 8px; border: none;">💬 Avaa ilmoitus & vastaa →</a>`;
+            }
+            footer.innerHTML += `<a href="kohtaamiset.html" class="lki-cta-btn feed" style="background: #f1f5f9; color: #334155; font-weight: 600; padding: 10px 16px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; justify-content: center; width: 100%; box-sizing: border-box; margin-bottom: 8px; border: 1px solid #cbd5e1;">📋 Kaikki ilmoitukset (Kohtaamispaikka)</a>`;
 
             const phone = company.contact_phone || company.puhelin || company.phone || '';
             if (phone && phone !== '-' && phone !== '') {

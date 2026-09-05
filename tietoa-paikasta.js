@@ -1991,7 +1991,7 @@ async function loadEncountersForPlace(place) {
             console.error('Virhe encounters haussa:', error);
         }
         
-        let allItems = data || [];
+        let allItems = (data || []).map(item => ({ ...item, is_encounter: true }));
         
         // Hae myös tapahtumat, yritysjulkaisut ja tarjoukset
         const liveSb = window.LaukaaSupabase; // usswojtlvrnqtzwnffpg – Android-datan projekti
@@ -2234,7 +2234,7 @@ function renderEncounters(encounters) {
     
     // Rekisteröidään ilmoitukset muistiin pop-up modal -avausta varten
     window._encounterMap = window._encounterMap || {};
-    validEncounters.forEach(e => { if (e.id) window._encounterMap[e.id] = e; });
+    validEncounters.forEach(e => { if (e.id) { e.is_encounter = true; window._encounterMap[e.id] = e; } });
 
     for (const [type, items] of Object.entries(grouped).filter(([t]) => !COMMUNITY_POST_TYPES.includes(t))) {
         const label = typeLabels[type] || typeLabels[(type || '').toLowerCase()] || type;

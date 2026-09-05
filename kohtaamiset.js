@@ -232,7 +232,7 @@ async function fetchEncounters(currentUser = null) {
                 return mockEncounters;
             }
             if (data !== null) {
-                const res = data.map(d => ({ ...d, tags: Array.isArray(d.tags) ? d.tags : [] }));
+                const res = data.map(d => ({ ...d, is_encounter: true, tags: Array.isArray(d.tags) ? d.tags : [] }));
                 if (!currentUser) {
                     encounterCache = res;
                     encounterCacheTime = Date.now();
@@ -243,7 +243,7 @@ async function fetchEncounters(currentUser = null) {
     } catch (e) {
         console.warn('Virhe haettaessa Supabasesta, käytetään mock-dataa:', e);
     }
-    return mockEncounters;
+    return mockEncounters.map(m => ({ ...m, is_encounter: true }));
 }
 
 // ===================================================
