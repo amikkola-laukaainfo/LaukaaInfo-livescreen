@@ -863,9 +863,12 @@ function renderFeed() {
             <p class="km-card-desc">${escapeHtml(ad.description).substring(0, 110)}${ad.description.length > 110 ? '…' : ''}</p>
             ${tagsHtml}
             <div class="km-card-footer">
-                <span class="km-card-location">
-                    <span class="iconify" data-icon="lucide:map-pin" style="font-size:0.85rem;"></span>
-                    ${escapeHtml(ad.location || '—')}
+                <span class="km-card-location"
+                    onclick="event.preventDefault(); event.stopPropagation(); setPlaceFilter('${escapeHtml(ad.place_id || ad.location)}')"
+                    title="Suodata paikalla: ${escapeHtml(ad.location || '—')}"
+                    style="cursor:pointer;">
+                    <span class="iconify" data-icon="lucide:map-pin" style="font-size:0.85rem; color:#0ea5e9;"></span>
+                    <strong style="color:#334155;">📍 ${escapeHtml(ad.location || 'Koko Laukaa')}</strong>
                 </span>
                 <span class="km-card-price">${escapeHtml(ad.price_info || '')}</span>
             </div>
