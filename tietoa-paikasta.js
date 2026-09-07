@@ -1480,6 +1480,15 @@ async function openObservationModal(id, name, description) {
         `;
 
         if (window.aiSb) {
+            const { data: obsData } = await aiSb.from('observations').select('*').eq('id', id).maybeSingle();
+            if (obsData) {
+                document.getElementById('subplace-modal-title').textContent = obsData.title || decodedName;
+                const obsImg = obsData.photo_url || (obsData.images && obsData.images[0]);
+                const imgHtml = obsImg ? `<div style="margin-top:0.75rem;"><img src="${obsImg}" style="width:100%; max-height:300px; object-fit:cover; border-radius:8px;" alt="${obsData.title || 'Kuva'}" /></div>` : '';
+                const linkHtml = obsData.external_url ? `<div style="margin-top:0.75rem;"><a href="${obsData.external_url}" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:0.4rem; color:#2563eb; font-weight:600; text-decoration:underline;">🌐 ${obsData.external_source || 'Avaa verkko-osoite'} →</a></div>` : '';
+                document.getElementById('subplace-modal-desc').innerHTML = `<div style="color:var(--text-main); line-height:1.5;">${obsData.description || decodedDesc || 'Ei tarkempaa kuvausta.'}</div>` + imgHtml + linkHtml + fallbackCtaHtml;
+                return;
+            }
             const { data: postData } = await aiSb.from('posts').select('*').eq('id', id).maybeSingle();
             if (postData) {
                 document.getElementById('subplace-modal-title').textContent = postData.title || decodedName;
@@ -1493,7 +1502,8 @@ async function openObservationModal(id, name, description) {
                 document.getElementById('subplace-modal-title').textContent = encData.title || decodedName;
                 const encImg = encData.image_url || encData.photo_url;
                 const imgHtml = encImg ? `<div style="margin-top:0.75rem;"><img src="${encImg}" style="width:100%; max-height:300px; object-fit:cover; border-radius:8px;" alt="${encData.title || 'Kuva'}" /></div>` : '';
-                document.getElementById('subplace-modal-desc').innerHTML = `<div style="color:var(--text-main); line-height:1.5;">${encData.description || decodedDesc || 'Ei tarkempaa kuvausta.'}</div>` + imgHtml + fallbackCtaHtml;
+                const linkHtml = encData.external_url ? `<div style="margin-top:0.75rem;"><a href="${encData.external_url}" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:0.4rem; color:#2563eb; font-weight:600; text-decoration:underline;">🌐 ${encData.external_source || 'Avaa verkko-osoite'} →</a></div>` : '';
+                document.getElementById('subplace-modal-desc').innerHTML = `<div style="color:var(--text-main); line-height:1.5;">${encData.description || decodedDesc || 'Ei tarkempaa kuvausta.'}</div>` + imgHtml + linkHtml + fallbackCtaHtml;
                 return;
             }
         }
