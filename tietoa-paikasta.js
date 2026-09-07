@@ -279,6 +279,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         await loadRoutesForPlace(placeData);
         await loadThemesForPlace(placeData);
 
+        // Hae ja näytä paikan hyväksytyt havainnot (LostReFound-integraatio)
+        loadPlaceObservations(placeId);
+
         // V2.8 Ladataan Paikan Media (Hero + Kuvat/Videot)
         // place_media on AI Supabase -kannassa (aiSb)
         const mediaDb = window.aiSb;
@@ -3089,5 +3092,69 @@ async function loadThemesForPlace(placeData) {
         section.style.display = 'block';
     } catch (e) {
         console.warn('Virhe paikan teemojen haussa:', e);
+    }
+}
+
+// ── Paikan havainnot (LostReFound / Supabase observations) ────────────────────
+async function loadPlaceObservations(placeId) {
+    const section = document.getElementById('timeline-section');
+    const list = document.getElementById('timeline-list');
+    if (!section || !list || !window.aiSb) return;
+
+    try {
+        const { data: obs, error } = await window.aiSb
+            .from('observations')
+            .select('id, title, description, photo_url, external_url, external_source, created_at, category')
+            .eq('place_id', placeId)
+            .eq('status', 'approved')
+            .order('created_at', { ascending: false })
+            .limit(10);
+
+        if (error || !obs || obs.length === 0) return;
+
+        const safeHtml = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+        list.innerHTML = obs.map(o => {
+            const dateStr = o.created_at
+                ? new Date(o.created_at).toLocaleDateString('fi-FI')
+                : '';
+            const photoHtml = o.photo_url
+                ? `<div style="width:100%;height:180px;overflow:hidden;border-radius:10px;margin-bottom:0.75rem;background:#e2e8f0;">
+                       <img src="${o.photo_url}" alt="${safeHtml(o.title)}" style="width:100%;height:100%;object-fit:cover;" loading="lazy"
+                           onerror="this.parentElement.style.display='none'">
+                   </div>`
+                : '';
+            const srcBadge = o.external_source
+                ? (o.external_source === 'facebook'
+                    ? `<span style="display:inline-flex;align-items:center;gap:3px;background:#dbeafe;color:#1d4ed8;border:1px solid #bfdbfe;border-radius:50px;padding:2px 8px;font-size:0.72rem;font-weight:700;">📘 Facebook</span>`
+                    : o.external_source === 'instagram'
+                    ? `<span style="display:inline-flex;align-items:center;gap:3px;background:#fce7f3;color:#be185d;border:1px solid #fbcfe8;border-radius:50px;padding:2px 8px;font-size:0.72rem;font-weight:700;">📷 Instagram</span>`
+                    : `<span style="display:inline-flex;align-items:center;gap:3px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:50px;padding:2px 8px;font-size:0.72rem;font-weight:700;">🔗 ${safeHtml(o.external_source)}</span>`)
+                : '';
+            const linkHtml = o.external_url
+                ? `<a href="${o.external_url}" target="_blank" rel="noopener noreferrer"
+                       style="display:inline-flex;align-items:center;gap:4px;font-size:0.83rem;color:#2563eb;font-weight:600;text-decoration:none;margin-top:0.4rem;"
+                       onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">
+                       🔗 Avaa linkki
+                   </a>`
+                : '';
+            return `
+                <div style="background:#fff;border-radius:12px;border:1px solid #e2e8f0;box-shadow:0 2px 8px rgba(0,0,0,0.05);padding:1.1rem 1.25rem;margin-bottom:0.75rem;border-left:3px solid #059669;">
+                    ${photoHtml}
+                    <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.4rem;">
+                        ${srcBadge}
+                        ${o.category ? `<span style="font-size:0.75rem;background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;border-radius:50px;padding:2px 8px;font-weight:600;">${safeHtml(o.category)}</span>` : ''}
+                        ${dateStr ? `<span style="font-size:0.75rem;color:#94a3b8;">${dateStr}</span>` : ''}
+                    </div>
+                    <div style="font-weight:700;color:#1e293b;font-size:1rem;margin-bottom:0.3rem;">${safeHtml(o.title)}</div>
+                    ${o.description ? `<div style="font-size:0.88rem;color:#475569;line-height:1.5;">${safeHtml(o.description.substring(0, 220))}</div>` : ''}
+                    ${linkHtml}
+                </div>`;
+        }).join('');
+
+        section.style.display = 'block';
+
+    } catch (e) {
+        console.warn('loadPlaceObservations virhe:', e);
     }
 }

@@ -1822,7 +1822,7 @@ async function loadContextualTheme(tagParam, placeId) {
             }
         }
 
-        // 8. Renderöi HAVAINNOT
+        // 8. Renderöi HAVAINNOT (kuva + linkki mukana)
         const observations = dashboard?.observations || [];
         if (observations.length > 0) {
             let obsSection = document.getElementById('ctx-observations-section');
@@ -1832,20 +1832,50 @@ async function loadContextualTheme(tagParam, placeId) {
                 obsSection.style.cssText = 'padding:2rem 1.5rem;border-top:1px solid #eaeaea;';
                 obsSection.innerHTML = `
                     <div style="max-width:1200px;margin:0 auto;">
-                        <h2 style="font-size:1.4rem;font-weight:800;color:var(--color-forest);margin-bottom:1rem;">👁 Havainnot</h2>
-                        <div id="ctx-observations-list" style="display:flex;flex-direction:column;gap:0.75rem;"></div>
+                        <h2 style="font-size:1.4rem;font-weight:800;color:var(--color-forest);margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem;">
+                            <span style="font-size:1.3rem;">👁</span> Yhteisön havainnot
+                        </h2>
+                        <div id="ctx-observations-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem;"></div>
                     </div>`;
                 content.appendChild(obsSection);
             }
             const obsList = document.getElementById('ctx-observations-list');
             if (obsList) {
                 obsList.innerHTML = observations.map(obs => {
-                    const dateStr = obs.year || (obs.created_at ? new Date(obs.created_at).getFullYear() : '');
+                    const dateStr = obs.created_at
+                        ? new Date(obs.created_at).toLocaleDateString('fi-FI')
+                        : (obs.year || '');
+                    const photoHtml = obs.photo_url
+                        ? `<div style="width:100%;height:160px;overflow:hidden;border-radius:8px 8px 0 0;background:#e2e8f0;">
+                               <img src="${obs.photo_url}" alt="${safeHtml(obs.title)}" style="width:100%;height:100%;object-fit:cover;" loading="lazy" onerror="this.parentElement.style.display='none'">
+                           </div>`
+                        : '';
+                    const srcLabel = obs.external_source
+                        ? (obs.external_source === 'facebook'
+                            ? `<span style="display:inline-flex;align-items:center;gap:3px;background:#dbeafe;color:#1d4ed8;border:1px solid #bfdbfe;border-radius:50px;padding:2px 8px;font-size:0.72rem;font-weight:700;">📘 Facebook</span>`
+                            : obs.external_source === 'instagram'
+                            ? `<span style="display:inline-flex;align-items:center;gap:3px;background:#fce7f3;color:#be185d;border:1px solid #fbcfe8;border-radius:50px;padding:2px 8px;font-size:0.72rem;font-weight:700;">📷 Instagram</span>`
+                            : `<span style="display:inline-flex;align-items:center;gap:3px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:50px;padding:2px 8px;font-size:0.72rem;font-weight:700;">🔗 ${safeHtml(obs.external_source)}</span>`)
+                        : '';
+                    const linkHtml = obs.external_url
+                        ? `<a href="${obs.external_url}" target="_blank" rel="noopener noreferrer"
+                               style="display:inline-flex;align-items:center;gap:4px;font-size:0.82rem;color:#2563eb;font-weight:600;text-decoration:none;margin-top:0.5rem;"
+                               onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">
+                               🔗 Avaa linkki
+                           </a>`
+                        : '';
                     return `
-                        <div style="background:#f8fafc;border-radius:10px;padding:1rem 1.25rem;border-left:3px solid #7c3aed;">
-                            <div style="font-weight:700;color:#1e293b;margin-bottom:0.25rem;">${safeHtml(obs.title)}</div>
-                            ${obs.description ? `<div style="font-size:0.9rem;color:var(--text-muted);">${safeHtml(obs.description.substring(0, 150))}</div>` : ''}
-                            ${dateStr ? `<div style="font-size:0.75rem;color:#94a3b8;margin-top:0.35rem;">${dateStr}</div>` : ''}
+                        <div style="background:#fff;border-radius:12px;border:1px solid #e2e8f0;box-shadow:0 2px 8px rgba(0,0,0,0.06);overflow:hidden;display:flex;flex-direction:column;">
+                            ${photoHtml}
+                            <div style="padding:1rem;flex:1;display:flex;flex-direction:column;gap:0.35rem;border-left:3px solid #7c3aed;">
+                                <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+                                    ${srcLabel}
+                                    ${dateStr ? `<span style="font-size:0.75rem;color:#94a3b8;">${dateStr}</span>` : ''}
+                                </div>
+                                <div style="font-weight:700;color:#1e293b;font-size:0.98rem;">${safeHtml(obs.title)}</div>
+                                ${obs.description ? `<div style="font-size:0.88rem;color:var(--text-muted);line-height:1.5;">${safeHtml(obs.description.substring(0, 200))}</div>` : ''}
+                                ${linkHtml}
+                            </div>
                         </div>`;
                 }).join('');
                 obsSection.style.display = 'block';
