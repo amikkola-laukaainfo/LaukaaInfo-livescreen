@@ -108,10 +108,14 @@
             });
 
             matchingThemes.forEach(t => {
+                const themeSearchResults = (typeof window.executeContextSearch === 'function')
+                    ? window.executeContextSearch({ themeId: t, placeContext: currentPlaceContext }, companiesData, [], [])
+                    : { companies: [] };
+                const count = themeSearchResults.companies ? themeSearchResults.companies.length : 0;
                 html += `
                     <div class="search-suggestion-item" data-type="theme" data-theme="${t}" style="padding: 0.5rem 0.75rem; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s;" onmouseover="this.style.background='#f8fafc';" onmouseout="this.style.background='transparent';">
-                        <span style="font-weight: 700; color: #0f172a;">🏷️ ${escapeHtml(t)}</span>
-                        <span style="font-size: 0.75rem; background: #fef3c7; color: #b45309; padding: 0.2rem 0.5rem; border-radius: 12px; font-weight: 600;">Teema</span>
+                        <span style="font-weight: 700; color: #0f172a;">🌲 ${escapeHtml(t)}</span>
+                        <span style="font-size: 0.75rem; background: #fef3c7; color: #b45309; padding: 0.2rem 0.5rem; border-radius: 12px; font-weight: 600;">📍 ${count}</span>
                     </div>
                 `;
             });
