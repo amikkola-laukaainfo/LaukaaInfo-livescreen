@@ -883,6 +883,102 @@ function rehydrateSelectionsFromConfig(needId, rawSelections) {
     return out;
 }
 
+/**
+ * Executes a decoupled context search across Companies, Places, and Events using PlaceContext.
+ * 
+ * @param {Object} searchContext - PlaceContext instance or { query, placeContext, themeId }
+ * @param {Array} companies - Array of company objects
+ * @param {Array} places - Array of place objects
+ * @param {Array} events - Array of event objects
+ * @returns {Object} { companies: [], places: [], events: [] }
+ */
+function executeContextSearch(searchContext, companies = [], places = [], events = []) {
+    if (!searchContext) {
+        return { companies: [], places: [], events: [] };
+    }
+
+    const query = (searchContext.query || '').toLowerCase().trim();
+    const pContext = searchContext.placeContext || (searchContext.targetPlace ? searchContext : null);
+    const themeId = searchContext.themeId || null;
+
+    // Filter Companies
+    const matchedCompanies = companies.filter(c => {
+        // Place filter
+        if (pContext && pContext.targetPlace) {
+            const matchesPlace = pContext.matchesPlace(c.place_id || c.id, c.municipality || c.address || c.city);
+            if (!matchesPlace) return false;
+        }
+
+        // Theme / Actor-theme-places filter
+        if (themeId) {
+            const themes = c.actor_themes || c.themes || c.tags || [];
+            const matchesTheme = Array.isArray(themes) 
+                ? themes.some(t => String(t).toLowerCase().includes(themeId.toLowerCase()))
+                : String(themes).toLowerCase().includes(themeId.toLowerCase());
+            if (!matchesTheme) return false;
+        }
+
+        // Query filter
+        if (query) {
+            const searchHaystack = [
+                c.name,
+                c.description,
+                c.category,
+                c.municipality,
+                c.city,
+                ...(Array.isArray(c.tags) ? c.tags : []),
+                ...(Array.isArray(c.actor_themes) ? c.actor_themes : [])
+            ].filter(Boolean).join(' ').toLowerCase();
+
+            if (!searchHaystack.includes(query)) return false;
+        }
+
+        return true;
+    });
+
+    // Filter Places
+    const matchedPlaces = places.filter(p => {
+        if (pContext && pContext.targetPlace) {
+            const matchesPlace = pContext.matchesPlace(p.id || p.place_id, p.municipality || p.name);
+            if (!matchesPlace) return false;
+        }
+
+        if (query) {
+            const nameMatch = (p.name || '').toLowerCase().includes(query) ||
+                              (p.canonical_name || '').toLowerCase().includes(query) ||
+                              (p.municipality || '').toLowerCase().includes(query);
+            if (!nameMatch) return false;
+        }
+
+        return true;
+    });
+
+    // Filter Events
+    const matchedEvents = events.filter(e => {
+        if (pContext && pContext.targetPlace) {
+            const matchesPlace = pContext.matchesPlace(e.place_id, e.location || e.venue || e.municipality);
+            if (!matchesPlace) return false;
+        }
+
+        if (query) {
+            const haystack = [e.title, e.name, e.description, e.location].filter(Boolean).join(' ').toLowerCase();
+            if (!haystack.includes(query)) return false;
+        }
+
+        return true;
+    });
+
+    return {
+        companies: matchedCompanies,
+        places: matchedPlaces,
+        events: matchedEvents
+    };
+}
+
+if (typeof window !== 'undefined') {
+    window.executeContextSearch = executeContextSearch;
+}
+
 if (typeof module !== 'undefined') {
     module.exports = { 
         getCategoryData, 
@@ -905,6 +1001,8 @@ if (typeof module !== 'undefined') {
         processSearchResults,
         generateSearchFingerprint,
         getRecommendations,
-        rehydrateSelectionsFromConfig
+        rehydrateSelectionsFromConfig,
+        executeContextSearch
     };
 }
+
