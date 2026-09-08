@@ -151,16 +151,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         pointsList.innerHTML = points.map((p, idx) => {
             let mediaPreview = '';
-            const pMedia = p.media || p.imageUrl || p.image || p.youtubeUrl || p.youtube || p.videoUrl || p.video;
-            if (pMedia) {
-                mediaPreview = `<div style="margin-top: 10px;"><button class="btn-light" style="padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid #cbd5e1; background: #f8fafc;" onclick="window.openPointModal(window.routePoints[${idx}])">Näytä sisältö</button></div>`;
-            } else if (p.description || p.link || p.url || p.infoLink) {
+            
+            const rawVideos = [p.youtubeUrl, p.youtube_url, p.youtube, p.videoUrl, p.video_url, p.video, p.youtube_id, p.video_id].flat().filter(Boolean);
+            const hasVideo = rawVideos.some(v => isValidVideoUrl(typeof v === 'string' ? v : (v.url || '')));
+
+            const rawImages = [p.imageUrl, p.images, p.image, p.media, p.photos, p.photo, p.picture].flat().filter(Boolean);
+            const hasImage = rawImages.some(i => isValidImageUrl(typeof i === 'string' ? i : (i.url || '')));
+
+            const hasLink = !!(p.infoLink || p.info_link || p.link || p.url || p.website);
+            const hasDesc = !!(p.description || p.desc || p.text || p.details);
+
+            if (hasVideo || hasImage) {
+                const btnText = hasVideo ? (hasImage ? '🎬 Video / 🖼️ Kuva' : '🎬 Katso video') : '🖼️ Näytä kuva';
+                mediaPreview = `<div style="margin-top: 10px;"><button class="btn-light" style="padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid #cbd5e1; background: #f8fafc;" onclick="window.openPointModal(window.routePoints[${idx}])">${btnText}</button></div>`;
+            } else if (hasDesc || hasLink) {
                 mediaPreview = `<div style="margin-top: 10px;"><button class="btn-light" style="padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid #cbd5e1; background: #f8fafc;" onclick="window.openPointModal(window.routePoints[${idx}])">Näytä tiedot</button></div>`;
             }
 
             return `
             <div class="point-card" style="cursor: pointer;" onclick="window.openPointModal(window.routePoints[${idx}])">
-                <h3>${idx + 1}. ${p.title || 'Piste ' + (idx + 1)}</h3>
+                <h3>${idx + 1}. ${p.title || p.name || 'Piste ' + (idx + 1)}</h3>
                 ${mediaPreview}
             </div>
             `;
@@ -345,10 +355,48 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Modal Logic & Helpers
     function getYoutubeId(url) {
-        if (!url) return null;
+        if (!url || typeof url !== 'string') return null;
+        const trimmed = url.trim();
         const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
-        const match = url.match(regExp);
-        return (match && match[2].length === 11) ? match[2] : null;
+        const match = trimmed.match(regExp);
+        if (match && match[2] && match[2].length === 11) return match[2];
+        if (/^[a-zA-Z0-9_-]{11}$/.test(trimmed)) return trimmed;
+        return null;
+    }
+
+    function isValidVideoUrl(url) {
+        if (!url || typeof url !== 'string') return false;
+        const trimmed = url.trim();
+        if (trimmed.length < 3) return false;
+        if (getYoutubeId(trimmed)) return true;
+        if (/\.(mp4|webm|ogg)(\?.*)?$/i.test(trimmed)) return true;
+        if (trimmed.includes('youtube.com') || trimmed.includes('youtu.be') || trimmed.includes('vimeo.com')) return true;
+        return false;
+    }
+
+    function isValidImageUrl(url) {
+        if (!url || typeof url !== 'string') return false;
+        const trimmed = url.trim();
+        if (trimmed.length < 5) return false;
+        const lower = trimmed.toLowerCase();
+        if (['kuva', 'kuvat', 'image', 'images', 'photo', 'photos', 'none', 'null', 'undefined', '-', 'kuva.jpg'].includes(lower)) return false;
+        if (isValidVideoUrl(trimmed)) return false;
+        if (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('data:image/') || trimmed.startsWith('blob:') || trimmed.startsWith('/') || trimmed.startsWith('./')) {
+            return true;
+        }
+        if (/\.(jpg|jpeg|png|gif|webp|svg|bmp)(\?.*)?$/i.test(trimmed)) return true;
+        return false;
+    }
+
+    function isValidLinkUrl(url) {
+        if (!url || typeof url !== 'string') return false;
+        const trimmed = url.trim();
+        if (trimmed.length < 5) return false;
+        if (isValidVideoUrl(trimmed) || isValidImageUrl(trimmed)) return false;
+        if (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('www.')) {
+            return true;
+        }
+        return false;
     }
 
     let pointSwiperInstance = null;
@@ -356,8 +404,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.openPointModal = function(p) {
         if (!p) return;
 
-        document.getElementById('point-modal-title').textContent = p.title || 'Nimetön piste';
-        document.getElementById('point-modal-desc').innerHTML = p.description ? p.description.replace(/\n/g, '<br>') : '';
+        const modalTitle = p.title || p.name || 'Nimetön piste';
+        const modalDesc = p.description || p.desc || p.text || p.details || '';
+
+        document.getElementById('point-modal-title').textContent = modalTitle;
+        document.getElementById('point-modal-desc').innerHTML = modalDesc ? modalDesc.replace(/\n/g, '<br>') : '';
         
         const mediaContainer = document.getElementById('point-modal-media-container');
         const tabsContainer = document.getElementById('point-modal-tabs');
@@ -368,34 +419,45 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (tabsContainer) { tabsContainer.innerHTML = ''; tabsContainer.style.display = 'none'; }
         if (linkContainer) { linkContainer.innerHTML = ''; linkContainer.style.display = 'none'; }
 
-        // 1. Extract Image URLs
-        const rawImages = [p.imageUrl, p.images, p.image, p.media].flat().filter(Boolean);
-        const images = [];
-        rawImages.forEach(item => {
-            let url = typeof item === 'string' ? item : (item.url || item.blobUrl || item.imageUrl);
-            if (url && typeof url === 'string') {
-                if (!url.includes('youtube.com') && !url.includes('youtu.be') && !url.match(/\.(mp4|webm|ogg)$/i)) {
-                    if (!images.includes(url)) images.push(url);
-                }
-            }
-        });
+        // 1. Extract Video URLs
+        const rawVideoSources = [
+            p.youtubeUrl, p.youtube_url, p.youtube, p.videoUrl, p.video_url, p.video, 
+            p.youtube_id, p.video_id, p.media, p.imageUrl, p.image
+        ].flat().filter(Boolean);
 
-        // 2. Extract Video URLs (YouTube & direct video files)
-        const rawVideos = [p.youtubeUrl, p.youtube, p.videoUrl, p.video, p.video_url, p.imageUrl, p.media, p.images].flat().filter(Boolean);
         const videos = [];
-        rawVideos.forEach(item => {
-            let url = typeof item === 'string' ? item : (item.url || item.blobUrl);
-            if (url && typeof url === 'string') {
-                const isYt = url.includes('youtube.com') || url.includes('youtu.be');
-                const isFile = url.match(/\.(mp4|webm|ogg)$/i);
-                if (isYt || isFile) {
-                    if (!videos.includes(url)) videos.push(url);
-                }
+        rawVideoSources.forEach(item => {
+            let url = typeof item === 'string' ? item : (item.url || item.blobUrl || item.videoUrl || item.youtubeUrl);
+            if (url && typeof url === 'string' && isValidVideoUrl(url)) {
+                const trimmed = url.trim();
+                if (!videos.includes(trimmed)) videos.push(trimmed);
             }
         });
 
-        const targetLink = p.infoLink || p.link || p.url;
-        const hasDesc = !!(p.description || p.text);
+        // 2. Extract Image URLs
+        const rawImageSources = [
+            p.imageUrl, p.images, p.image, p.media, p.photos, p.photo, p.picture
+        ].flat().filter(Boolean);
+
+        const images = [];
+        rawImageSources.forEach(item => {
+            let url = typeof item === 'string' ? item : (item.url || item.blobUrl || item.imageUrl);
+            if (url && typeof url === 'string' && isValidImageUrl(url)) {
+                const trimmed = url.trim();
+                if (!images.includes(trimmed)) images.push(trimmed);
+            }
+        });
+
+        // 3. Extract External Link
+        const rawLinkSources = [p.infoLink, p.info_link, p.link, p.url, p.website].flat().filter(Boolean);
+        let targetLink = null;
+        for (const item of rawLinkSources) {
+            let url = typeof item === 'string' ? item : item.url;
+            if (url && typeof url === 'string' && isValidLinkUrl(url)) {
+                targetLink = url.trim().startsWith('www.') ? 'https://' + url.trim() : url.trim();
+                break;
+            }
+        }
 
         // Helper to render video view
         function renderVideoView(videoUrl) {
@@ -404,10 +466,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (ytId) {
                 mediaContainer.innerHTML = `
                     <div class="lki-modal-video-wrapper">
-                        <iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                        <a href="https://www.youtube.com/watch?v=${ytId}" target="_blank" class="lki-modal-yt-link">📺 Katso YouTubessa &rarr;</a>
+                        <iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+                        <a href="https://www.youtube.com/watch?v=${ytId}" target="_blank" rel="noopener" class="lki-modal-yt-link">📺 Katso YouTubessa &rarr;</a>
                     </div>`;
-            } else if (videoUrl.match(/\.(mp4|webm|ogg)$/i)) {
+            } else if (videoUrl.match(/\.(mp4|webm|ogg)(\?.*)?$/i)) {
                 mediaContainer.innerHTML = `<video controls autoplay style="width:100%; height:100%; object-fit: contain;"><source src="${videoUrl}"></video>`;
             } else {
                 mediaContainer.innerHTML = `<iframe src="${videoUrl}" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>`;
@@ -423,12 +485,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
             if (imgList.length === 1) {
-                mediaContainer.innerHTML = `<img src="${imgList[0]}" alt="Kuva" style="width:100%; height:100%; object-fit: contain;">`;
+                mediaContainer.innerHTML = `<img src="${imgList[0]}" alt="${modalTitle}" style="width:100%; height:100%; object-fit: contain;">`;
             } else {
                 mediaContainer.innerHTML = `
                     <div class="swiper" id="point-modal-swiper">
                         <div class="swiper-wrapper">
-                            ${imgList.map(img => `<div class="swiper-slide"><img src="${img}" alt="Kuva" style="width:100%; height:100%; object-fit: contain;"></div>`).join('')}
+                            ${imgList.map(img => `<div class="swiper-slide"><img src="${img}" alt="${modalTitle}" style="width:100%; height:100%; object-fit: contain;"></div>`).join('')}
                         </div>
                         <div class="swiper-pagination"></div>
                         <div class="swiper-button-next"></div>
@@ -447,27 +509,34 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
 
-        // Determine default view mode
+        // Determine initial view state
+        // Preference: If images exist, show images first; otherwise show video
         let currentTab = 'none';
-        if (videos.length > 0) {
-            currentTab = 'video';
-            renderVideoView(videos[0]);
-        } else if (images.length > 0) {
+        if (images.length > 0) {
             currentTab = 'images';
             renderImageView(images);
+        } else if (videos.length > 0) {
+            currentTab = 'video';
+            renderVideoView(videos[0]);
         }
 
-        // Build Content Selector Tabs if multiple elements exist
+        // Build Content Selector Tabs at bottom of modal
         const availableTabs = [];
-        if (videos.length > 0) availableTabs.push({ id: 'video', label: `🎬 Video ${videos.length > 1 ? `(${videos.length})` : ''}` });
-        if (images.length > 0) availableTabs.push({ id: 'images', label: `🖼️ Kuvat (${images.length})` });
-        if (hasDesc) availableTabs.push({ id: 'text', label: `📝 Kuvaus` });
-        if (targetLink) availableTabs.push({ id: 'link', label: `🌐 Lisätiedot` });
+        if (images.length > 0) {
+            const imgLabel = images.length > 1 ? `🖼️ Esittelykuvat (${images.length})` : `🖼️ Esittelykuva`;
+            availableTabs.push({ id: 'images', label: imgLabel });
+        }
+        if (videos.length > 0) {
+            availableTabs.push({ id: 'video', label: `🎬 Video ${videos.length > 1 ? `(${videos.length})` : ''}` });
+        }
+        if (targetLink) {
+            availableTabs.push({ id: 'link', label: `🌐 Lisätietoa` });
+        }
 
-        if (tabsContainer && availableTabs.length > 1) {
+        if (tabsContainer && availableTabs.length > 0) {
             tabsContainer.style.display = 'flex';
             tabsContainer.innerHTML = availableTabs.map(t => `
-                <button type="button" class="point-modal-tab-btn ${t.id === 'video' ? 'video-btn' : ''} ${t.id === currentTab ? 'active' : ''}" data-tab="${t.id}">
+                <button type="button" class="point-modal-tab-btn ${t.id === 'video' ? 'video-btn' : ''} ${t.id === 'link' ? 'link-btn' : ''} ${t.id === currentTab ? 'active' : ''}" data-tab="${t.id}">
                     ${t.label}
                 </button>
             `).join('');
@@ -475,29 +544,28 @@ document.addEventListener('DOMContentLoaded', async () => {
             tabsContainer.querySelectorAll('.point-modal-tab-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const tabId = btn.getAttribute('data-tab');
+                    
+                    if (tabId === 'link') {
+                        window.open(targetLink, '_blank', 'noopener,noreferrer');
+                        return;
+                    }
+
                     tabsContainer.querySelectorAll('.point-modal-tab-btn').forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
 
-                    if (tabId === 'video') {
-                        renderVideoView(videos[0]);
-                    } else if (tabId === 'images') {
+                    if (tabId === 'images') {
                         renderImageView(images);
-                    } else if (tabId === 'text') {
-                        if (pointSwiperInstance) { pointSwiperInstance.destroy(true, true); pointSwiperInstance = null; }
-                        mediaContainer.style.display = 'none';
-                        mediaContainer.innerHTML = '';
-                        document.getElementById('point-modal-desc').scrollIntoView({ behavior: 'smooth' });
-                    } else if (tabId === 'link') {
-                        window.open(targetLink, '_blank');
+                    } else if (tabId === 'video') {
+                        renderVideoView(videos[0]);
                     }
                 });
             });
         }
 
-        // External Link Footer
+        // External Link Footer Button
         if (targetLink && linkContainer) {
             linkContainer.style.display = 'flex';
-            linkContainer.innerHTML = `<a href="${targetLink}" target="_blank" class="lki-cta-btn website">Lisätietoja &rarr;</a>`;
+            linkContainer.innerHTML = `<a href="${targetLink}" target="_blank" rel="noopener" class="lki-cta-btn website">Lisätietoa kohteesta &rarr;</a>`;
         }
 
         document.getElementById('point-modal').classList.add('active');

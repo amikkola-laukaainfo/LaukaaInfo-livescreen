@@ -447,6 +447,12 @@
     box-shadow: 0 4px 12px rgba(225, 29, 72, 0.25);
 }
 
+.point-modal-tab-btn.link-btn:hover {
+    background: #2563eb;
+    color: #ffffff;
+    border-color: #2563eb;
+}
+
 @media (prefers-color-scheme: dark) {
     .point-modal-tabs {
         border-top-color: rgba(255, 255, 255, 0.1);
