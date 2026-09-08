@@ -39,8 +39,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         const d = currentRouteData;
         if (!d) return;
 
-        // Basic Info
-        document.getElementById('route-title').textContent = d.title || 'Nimetön reitti';
+        // Determine route title with GeoJSON fallback if needed
+        let title = d.title;
+        if (!title || title === 'Nimetön reitti') {
+            if (d.route_geojson) {
+                try {
+                    const geo = typeof d.route_geojson === 'string' ? JSON.parse(d.route_geojson) : d.route_geojson;
+                    if (geo.name && geo.name !== 'Uusi projekti') title = geo.name;
+                    else if (geo.title) title = geo.title;
+                    else if (geo.features?.[0]?.properties?.name) title = geo.features[0].properties.name;
+                } catch (e) {}
+            }
+        }
+
+        const finalTitle = title || 'Nimetön reitti';
+        document.getElementById('route-title').textContent = finalTitle;
+        document.title = `${finalTitle} – LaukaaInfo`;
         document.getElementById('route-desc').textContent = d.description || '';
         
         if (d.distance_meters) {
@@ -137,12 +151,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         pointsList.innerHTML = points.map((p, idx) => {
             let mediaPreview = '';
-            const pMedia = p.media || p.imageUrl || p.image;
+            const pMedia = p.media || p.imageUrl || p.image || p.youtubeUrl || p.youtube || p.videoUrl || p.video;
             if (pMedia) {
-                const mediaUrl = Array.isArray(pMedia) ? pMedia[0] : pMedia;
-                if (mediaUrl) {
-                    mediaPreview = `<div style="margin-top: 10px;"><button class="btn-light" style="padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid #cbd5e1; background: #f8fafc;" onclick="window.openPointModal(window.routePoints[${idx}])">Näytä sisältö</button></div>`;
-                }
+                mediaPreview = `<div style="margin-top: 10px;"><button class="btn-light" style="padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid #cbd5e1; background: #f8fafc;" onclick="window.openPointModal(window.routePoints[${idx}])">Näytä sisältö</button></div>`;
             } else if (p.description || p.link || p.url || p.infoLink) {
                 mediaPreview = `<div style="margin-top: 10px;"><button class="btn-light" style="padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid #cbd5e1; background: #f8fafc;" onclick="window.openPointModal(window.routePoints[${idx}])">Näytä tiedot</button></div>`;
             }
@@ -332,63 +343,183 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    // Modal Logic
+    // Modal Logic & Helpers
     function getYoutubeId(url) {
         if (!url) return null;
-        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
         const match = url.match(regExp);
         return (match && match[2].length === 11) ? match[2] : null;
     }
 
+    let pointSwiperInstance = null;
+
     window.openPointModal = function(p) {
+        if (!p) return;
+
         document.getElementById('point-modal-title').textContent = p.title || 'Nimetön piste';
         document.getElementById('point-modal-desc').innerHTML = p.description ? p.description.replace(/\n/g, '<br>') : '';
         
         const mediaContainer = document.getElementById('point-modal-media-container');
+        const tabsContainer = document.getElementById('point-modal-tabs');
+        const linkContainer = document.getElementById('point-modal-link-container');
+        
         mediaContainer.innerHTML = '';
         mediaContainer.style.display = 'none';
+        if (tabsContainer) { tabsContainer.innerHTML = ''; tabsContainer.style.display = 'none'; }
+        if (linkContainer) { linkContainer.innerHTML = ''; linkContainer.style.display = 'none'; }
 
-        const pMedia = p.media || p.imageUrl || p.image;
-        if (pMedia) {
-            const mediaUrl = Array.isArray(pMedia) ? pMedia[0] : pMedia;
-            if (mediaUrl) {
-                mediaContainer.style.display = 'block';
-                const ytId = getYoutubeId(mediaUrl);
-                if (ytId) {
-                    mediaContainer.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-                } else if (mediaUrl.toLowerCase().match(/\.(mp4|webm|ogg)$/)) {
-                    mediaContainer.innerHTML = `<video controls autoplay style="width:100%; height:100%; object-fit: contain;"><source src="${mediaUrl}"></video>`;
-                } else {
-                    mediaContainer.innerHTML = `<img src="${mediaUrl}" alt="Kuva" style="width:100%; height:100%; object-fit: contain;">`;
+        // 1. Extract Image URLs
+        const rawImages = [p.imageUrl, p.images, p.image, p.media].flat().filter(Boolean);
+        const images = [];
+        rawImages.forEach(item => {
+            let url = typeof item === 'string' ? item : (item.url || item.blobUrl || item.imageUrl);
+            if (url && typeof url === 'string') {
+                if (!url.includes('youtube.com') && !url.includes('youtu.be') && !url.match(/\.(mp4|webm|ogg)$/i)) {
+                    if (!images.includes(url)) images.push(url);
                 }
+            }
+        });
+
+        // 2. Extract Video URLs (YouTube & direct video files)
+        const rawVideos = [p.youtubeUrl, p.youtube, p.videoUrl, p.video, p.video_url, p.imageUrl, p.media, p.images].flat().filter(Boolean);
+        const videos = [];
+        rawVideos.forEach(item => {
+            let url = typeof item === 'string' ? item : (item.url || item.blobUrl);
+            if (url && typeof url === 'string') {
+                const isYt = url.includes('youtube.com') || url.includes('youtu.be');
+                const isFile = url.match(/\.(mp4|webm|ogg)$/i);
+                if (isYt || isFile) {
+                    if (!videos.includes(url)) videos.push(url);
+                }
+            }
+        });
+
+        const targetLink = p.infoLink || p.link || p.url;
+        const hasDesc = !!(p.description || p.text);
+
+        // Helper to render video view
+        function renderVideoView(videoUrl) {
+            mediaContainer.style.display = 'block';
+            const ytId = getYoutubeId(videoUrl);
+            if (ytId) {
+                mediaContainer.innerHTML = `
+                    <div class="lki-modal-video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                        <a href="https://www.youtube.com/watch?v=${ytId}" target="_blank" class="lki-modal-yt-link">📺 Katso YouTubessa &rarr;</a>
+                    </div>`;
+            } else if (videoUrl.match(/\.(mp4|webm|ogg)$/i)) {
+                mediaContainer.innerHTML = `<video controls autoplay style="width:100%; height:100%; object-fit: contain;"><source src="${videoUrl}"></video>`;
+            } else {
+                mediaContainer.innerHTML = `<iframe src="${videoUrl}" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>`;
             }
         }
 
-        const linkContainer = document.getElementById('point-modal-link-container');
-        linkContainer.innerHTML = '';
-        const targetLink = p.link || p.url || p.infoLink;
-        if (targetLink) {
+        // Helper to render image slider view
+        function renderImageView(imgList) {
+            mediaContainer.style.display = 'block';
+            if (pointSwiperInstance) {
+                pointSwiperInstance.destroy(true, true);
+                pointSwiperInstance = null;
+            }
+
+            if (imgList.length === 1) {
+                mediaContainer.innerHTML = `<img src="${imgList[0]}" alt="Kuva" style="width:100%; height:100%; object-fit: contain;">`;
+            } else {
+                mediaContainer.innerHTML = `
+                    <div class="swiper" id="point-modal-swiper">
+                        <div class="swiper-wrapper">
+                            ${imgList.map(img => `<div class="swiper-slide"><img src="${img}" alt="Kuva" style="width:100%; height:100%; object-fit: contain;"></div>`).join('')}
+                        </div>
+                        <div class="swiper-pagination"></div>
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                    </div>`;
+                
+                setTimeout(() => {
+                    if (typeof Swiper !== 'undefined') {
+                        pointSwiperInstance = new Swiper('#point-modal-swiper', {
+                            pagination: { el: '.swiper-pagination', clickable: true },
+                            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+                            loop: true,
+                        });
+                    }
+                }, 50);
+            }
+        }
+
+        // Determine default view mode
+        let currentTab = 'none';
+        if (videos.length > 0) {
+            currentTab = 'video';
+            renderVideoView(videos[0]);
+        } else if (images.length > 0) {
+            currentTab = 'images';
+            renderImageView(images);
+        }
+
+        // Build Content Selector Tabs if multiple elements exist
+        const availableTabs = [];
+        if (videos.length > 0) availableTabs.push({ id: 'video', label: `🎬 Video ${videos.length > 1 ? `(${videos.length})` : ''}` });
+        if (images.length > 0) availableTabs.push({ id: 'images', label: `🖼️ Kuvat (${images.length})` });
+        if (hasDesc) availableTabs.push({ id: 'text', label: `📝 Kuvaus` });
+        if (targetLink) availableTabs.push({ id: 'link', label: `🌐 Lisätiedot` });
+
+        if (tabsContainer && availableTabs.length > 1) {
+            tabsContainer.style.display = 'flex';
+            tabsContainer.innerHTML = availableTabs.map(t => `
+                <button type="button" class="point-modal-tab-btn ${t.id === 'video' ? 'video-btn' : ''} ${t.id === currentTab ? 'active' : ''}" data-tab="${t.id}">
+                    ${t.label}
+                </button>
+            `).join('');
+
+            tabsContainer.querySelectorAll('.point-modal-tab-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tabId = btn.getAttribute('data-tab');
+                    tabsContainer.querySelectorAll('.point-modal-tab-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    if (tabId === 'video') {
+                        renderVideoView(videos[0]);
+                    } else if (tabId === 'images') {
+                        renderImageView(images);
+                    } else if (tabId === 'text') {
+                        if (pointSwiperInstance) { pointSwiperInstance.destroy(true, true); pointSwiperInstance = null; }
+                        mediaContainer.style.display = 'none';
+                        mediaContainer.innerHTML = '';
+                        document.getElementById('point-modal-desc').scrollIntoView({ behavior: 'smooth' });
+                    } else if (tabId === 'link') {
+                        window.open(targetLink, '_blank');
+                    }
+                });
+            });
+        }
+
+        // External Link Footer
+        if (targetLink && linkContainer) {
             linkContainer.style.display = 'flex';
-            linkContainer.innerHTML = `<a href="${targetLink}" target="_blank" class="lki-cta-btn website">Lisätietoja</a>`;
-        } else {
-            linkContainer.style.display = 'none';
+            linkContainer.innerHTML = `<a href="${targetLink}" target="_blank" class="lki-cta-btn website">Lisätietoja &rarr;</a>`;
         }
 
         document.getElementById('point-modal').classList.add('active');
     };
 
+    function closePointModal() {
+        document.getElementById('point-modal').classList.remove('active');
+        document.getElementById('point-modal-media-container').innerHTML = ''; // Stop video
+        if (pointSwiperInstance) {
+            pointSwiperInstance.destroy(true, true);
+            pointSwiperInstance = null;
+        }
+    }
+
     const closeModalBtn = document.getElementById('point-modal-close');
     if (closeModalBtn) {
-        closeModalBtn.addEventListener('click', () => {
-            document.getElementById('point-modal').classList.remove('active');
-            document.getElementById('point-modal-media-container').innerHTML = ''; // Stop video
-        });
+        closeModalBtn.addEventListener('click', closePointModal);
     }
 
     document.getElementById('point-modal').addEventListener('click', (e) => {
         if (e.target.id === 'point-modal') {
-            document.getElementById('point-modal').classList.remove('active');
-            document.getElementById('point-modal-media-container').innerHTML = '';
+            closePointModal();
         }
     });
 });

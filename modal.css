@@ -398,3 +398,65 @@
     transform: scale(1.05);
     border-color: transparent;
 }
+
+/* Reitti Point Modal Tab Selector Buttons */
+.point-modal-tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(0,0,0,0.08);
+}
+
+.point-modal-tab-btn {
+    flex: 1;
+    min-width: 110px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    background: #f8fafc;
+    color: #334155;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.point-modal-tab-btn:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+}
+
+.point-modal-tab-btn.active {
+    background: #059669;
+    color: #ffffff;
+    border-color: #059669;
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+}
+
+.point-modal-tab-btn.video-btn.active {
+    background: #e11d48;
+    color: #ffffff;
+    border-color: #e11d48;
+    box-shadow: 0 4px 12px rgba(225, 29, 72, 0.25);
+}
+
+@media (prefers-color-scheme: dark) {
+    .point-modal-tabs {
+        border-top-color: rgba(255, 255, 255, 0.1);
+    }
+    .point-modal-tab-btn {
+        background: rgba(255, 255, 255, 0.08);
+        color: #f1f5f9;
+        border-color: rgba(255, 255, 255, 0.15);
+    }
+    .point-modal-tab-btn:hover {
+        background: rgba(255, 255, 255, 0.15);
+    }
+}
