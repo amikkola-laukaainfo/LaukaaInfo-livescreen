@@ -437,12 +437,83 @@
         }
         /* Ensure Leaflet markers allow overflow for pulse rings */
         .leaflet-marker-icon { overflow: visible !important; }
+
+        /* ─── EMBED MODE (&embed=1) ─────────────────────────────────── */
+        body.is-embed-mode {
+            background: #0f172a;
+            padding: 0 !important;
+            margin: 0 !important;
+            height: 100vh;
+            overflow: hidden;
+        }
+        body.is-embed-mode .container {
+            max-width: 100% !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            border-radius: 0;
+            box-shadow: none;
+        }
+        body.is-embed-mode > .container > a,
+        body.is-embed-mode .header {
+            display: none !important;
+        }
+        body.is-embed-mode #content-area {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            flex: 1;
+            padding: 0;
+            margin: 0;
+        }
+        body.is-embed-mode #map {
+            flex: 1;
+            height: 100% !important;
+            min-height: 200px;
+            border-radius: 0 !important;
+        }
+        body.is-embed-mode h2,
+        body.is-embed-mode .timeline {
+            display: none !important;
+        }
+        body.is-embed-mode #gps-progress-panel {
+            border-radius: 0 !important;
+            margin: 0 !important;
+            box-shadow: 0 -4px 16px rgba(0,0,0,0.15);
+        }
+        .embed-badge {
+            position: fixed;
+            top: 12px;
+            right: 12px;
+            z-index: 9999;
+            background: rgba(15, 23, 42, 0.88);
+            backdrop-filter: blur(8px);
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.4rem 0.85rem;
+            border-radius: 50px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.2s ease;
+        }
+        .embed-badge:hover {
+            background: #059669;
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <a href="javascript:history.back()" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--text-muted); text-decoration: none; margin-bottom: 1rem; font-weight: 600;">
+    <a href="index.html" id="back-link" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--text-muted); text-decoration: none; margin-bottom: 1rem; font-weight: 600;">
         <span class="iconify" data-icon="material-symbols:arrow-back"></span> Palaa
     </a>
 

@@ -2,6 +2,37 @@ document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const routeId = urlParams.get('id');
 
+    const isEmbed = urlParams.get('embed') === '1' || urlParams.get('embed') === 'true';
+    if (isEmbed) {
+        document.body.classList.add('is-embed-mode');
+        
+        // Add "LaukaaInfo ↗" link badge pointing to standalone page
+        const standaloneUrl = window.location.href.replace(/([?&])embed=[^&]*&?/, '$1').replace(/[?&]$/, '');
+        const badge = document.createElement('a');
+        badge.className = 'embed-badge';
+        badge.href = standaloneUrl;
+        badge.target = '_blank';
+        badge.rel = 'noopener noreferrer';
+        badge.innerHTML = 'LaukaaInfo.fi <span class="iconify" data-icon="material-symbols:open-in-new"></span>';
+        document.body.appendChild(badge);
+    }
+
+    // Smart Palaa-button handler
+    const backBtn = document.getElementById('back-link');
+    if (backBtn) {
+        backBtn.addEventListener('click', (e) => {
+            const ref = document.referrer;
+            const host = window.location.hostname;
+            if (ref && (ref.includes('laukaainfo.fi') || (host && ref.includes(host)))) {
+                if (window.history.length > 1) {
+                    e.preventDefault();
+                    window.history.back();
+                }
+            }
+            // Otherwise fallback link href="index.html" navigates to LaukaaInfo frontpage
+        });
+    }
+
     if (!routeId) {
         document.getElementById('route-title').textContent = 'Reittiä ei löytynyt';
         return;
