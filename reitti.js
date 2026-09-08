@@ -200,11 +200,51 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         map.fitBounds(geojsonLayer.getBounds(), { padding: [50, 50] });
 
+        function isPointUnlocked(p) {
+            if (!p) return true;
+            const mode = p.unlock_mode || (p.unlock_mode === 'ON_LOCATION' || p.unlock_mode === 'REQUIRE_PREVIOUS' ? p.unlock_mode : 'PUBLIC');
+            if (mode === 'PUBLIC') return true;
+            if (p._unlocked) return true;
+            const pointId = p.id || `pt_${p._lat || p.lat}_${p._lng || p.lng}`;
+            try {
+                if (localStorage.getItem('unlocked_point_' + pointId) === 'true') {
+                    p._unlocked = true;
+                    if (p.locked_content) {
+                        if (p.locked_content.description) p.description = p.locked_content.description;
+                        if (p.locked_content.imageUrl) p.imageUrl = p.locked_content.imageUrl;
+                        if (p.locked_content.image) p.image = p.locked_content.image;
+                        if (p.locked_content.audioUrl) p.audioUrl = p.locked_content.audioUrl;
+                        if (p.locked_content.audio) p.audio = p.locked_content.audio;
+                        if (p.locked_content.youtubeUrl) p.youtubeUrl = p.locked_content.youtubeUrl;
+                        if (p.locked_content.infoLink) p.infoLink = p.locked_content.infoLink;
+                    }
+                    return true;
+                }
+            } catch(e) {}
+            return false;
+        }
+        window.isPointUnlocked = isPointUnlocked;
+
         // Render Points Timeline
         const pointsList = document.getElementById('points-list');
         document.getElementById('point-count').textContent = `(${points.length})`;
         
         pointsList.innerHTML = points.map((p, idx) => {
+            const unlocked = isPointUnlocked(p);
+
+            if (!unlocked) {
+                const radius = p.unlock_radius || p.arrival_radius || 30;
+                return `
+                <div class="point-card point-card-locked" id="point-card-${idx}" style="cursor: pointer; border-left: 4px solid #f59e0b; background: #fffbeb; padding: 12px 14px; border-radius: 10px; margin-bottom: 8px;" onclick="window.openPointModal(window.routePoints[${idx}])">
+                    <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                        <h3 style="margin:0; font-size:14px; font-weight:700; color:#1e293b;">${idx + 1}. ${p.title || p.name || 'Piste ' + (idx + 1)}</h3>
+                        <span class="point-locked-badge" style="font-size: 10px; font-weight: 700; background: #fef3c7; color: #b45309; padding: 2px 8px; border-radius: 12px; white-space: nowrap;">🔒 Avautuu kohteessa</span>
+                    </div>
+                    <div class="point-locked-teaser" style="font-size: 12px; color: #78350f; margin-top: 6px;">📍 Saavu kohteeseen (${radius} m) avataksesi tarinan</div>
+                </div>
+                `;
+            }
+
             let mediaPreview = '';
             
             const rawVideos = [p.youtubeUrl, p.youtube_url, p.youtube, p.videoUrl, p.video_url, p.video, p.youtube_id, p.video_id].flat().filter(Boolean);
@@ -728,6 +768,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function markPointVisited(idx, p) {
+        p._unlocked = true;
+        const pointId = p.id || `pt_${p._lat || p.lat}_${p._lng || p.lng}`;
+        try {
+            localStorage.setItem('unlocked_point_' + pointId, 'true');
+        } catch(e) {}
+
+        // Unpack locked_content if present
+        if (p.locked_content) {
+            if (p.locked_content.description) p.description = p.locked_content.description;
+            if (p.locked_content.imageUrl) p.imageUrl = p.locked_content.imageUrl;
+            if (p.locked_content.image) p.image = p.locked_content.image;
+            if (p.locked_content.audioUrl) p.audioUrl = p.locked_content.audioUrl;
+            if (p.locked_content.audio) p.audio = p.locked_content.audio;
+            if (p.locked_content.youtubeUrl) p.youtubeUrl = p.locked_content.youtubeUrl;
+            if (p.locked_content.infoLink) p.infoLink = p.locked_content.infoLink;
+        }
+
         // Turn map marker green
         if (p._layer && p._layer.setStyle) {
             p._layer.setStyle({ fillColor: '#059669', radius: 10 });
@@ -738,11 +795,22 @@ document.addEventListener('DOMContentLoaded', async () => {
             setMarkerPulse(p, null);
         }, 3000);
 
-        // Highlight timeline card
+        // Highlight timeline card and update locked state UI
         const card = document.getElementById(`point-card-${idx}`);
         if (card) {
             card.style.borderLeft = '4px solid #059669';
             card.style.background = '#f0fdf4';
+            const badge = card.querySelector('.point-locked-badge');
+            if (badge) {
+                badge.style.background = '#dcfce7';
+                badge.style.color = '#15803d';
+                badge.innerHTML = '🔓 Sisältö avattu';
+            }
+            const teaser = card.querySelector('.point-locked-teaser');
+            if (teaser) {
+                teaser.style.color = '#047857';
+                teaser.innerHTML = '✨ Olet saapunut kohteeseen – napauta lukeaksesi tarinan!';
+            }
         }
     }
 
@@ -895,9 +963,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.openPointModal = function(p) {
         if (!p) return;
 
-        const modalTitle = p.title || p.name || 'Nimetön piste';
-        const modalDesc = p.description || p.desc || p.text || p.details || '';
-
         const mediaContainer = document.getElementById('point-modal-media-container');
         const tabsContainer = document.getElementById('point-modal-tabs');
         const linkContainer = document.getElementById('point-modal-link-container');
@@ -905,6 +970,50 @@ document.addEventListener('DOMContentLoaded', async () => {
         mediaContainer.innerHTML = '';
         mediaContainer.style.display = 'none';
         if (tabsContainer) { tabsContainer.innerHTML = ''; tabsContainer.style.display = 'none'; }
+        if (linkContainer) { linkContainer.innerHTML = ''; linkContainer.style.display = 'none'; }
+
+        // Check if point is locked
+        if (window.isPointUnlocked && !window.isPointUnlocked(p)) {
+            const modalTitle = p.title || p.name || 'Salainen kokemuspiste';
+            const radius = p.unlock_radius || p.arrival_radius || 30;
+            const points = window.routePoints || [];
+            const idx = points.findIndex(pt => pt === p || (pt.id && pt.id === p.id));
+
+            let sequenceNotice = '';
+            if (idx > 0) {
+                const prevPoint = points[idx - 1];
+                const prevUnlocked = window.isPointUnlocked(prevPoint);
+                if (!prevUnlocked) {
+                    const prevName = prevPoint ? (prevPoint.title || prevPoint.name || `Piste #${idx}`) : `Piste #${idx}`;
+                    sequenceNotice = `
+                        <div style="margin-top: 0.9rem; padding: 0.7rem 0.8rem; background: #fff7ed; border: 1px solid #ffedd5; border-radius: 10px; font-size: 0.83rem; color: #c2410c; text-align: left;">
+                            <strong>🔢 Kokemuspolku kierretään järjestyksessä:</strong><br/>
+                            Avaa ensin aiemmat kokemuspisteet (esim. <em>${idx}. ${prevName}</em>) kiertämällä polku järjestyksessä.
+                        </div>
+                    `;
+                }
+            }
+            
+            document.getElementById('point-modal-title').textContent = modalTitle;
+            document.getElementById('point-modal-desc').innerHTML = `
+                <div style="text-align:center; padding: 1.5rem 1rem; background: #fffbeb; border: 1px solid #fef3c7; border-radius: 14px; margin-top: 1rem;">
+                    <div style="font-size: 2.8rem; margin-bottom: 0.6rem;">🔒</div>
+                    <h4 style="margin: 0 0 0.5rem 0; color: #92400e; font-size: 1.15rem; font-weight: 700;">Avautuu vasta kohteessa</h4>
+                    <p style="margin: 0; color: #b45309; font-size: 0.9rem; line-height: 1.55;">
+                        Tämän kokemuspisteen tarina ja sisältö paljastuvat vasta kun saavut fyysisesti kohteeseen!
+                    </p>
+                    ${sequenceNotice}
+                    <div style="margin-top: 1.2rem; padding: 0.75rem; background: #fef08a; border-radius: 10px; font-size: 0.85rem; font-weight: 700; color: #78350f; display: inline-flex; align-items: center; gap: 6px;">
+                        📍 Avautumisetäisyys: ${radius} m
+                    </div>
+                </div>
+            `;
+            document.getElementById('point-modal').style.display = 'flex';
+            return;
+        }
+
+        const modalTitle = p.title || p.name || 'Nimetön piste';
+        const modalDesc = p.description || p.desc || p.text || p.details || '';
         if (linkContainer) { linkContainer.innerHTML = ''; linkContainer.style.display = 'none'; }
 
         // 1. Extract Video URLs
