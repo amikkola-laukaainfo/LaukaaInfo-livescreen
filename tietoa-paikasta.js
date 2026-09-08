@@ -2941,15 +2941,35 @@ async function loadRoutesForPlace(place) {
     if (!routesContainer || !routesList) return;
 
     try {
-        const { data: routes, error } = await window.aiSb
+        // Direct routes (routes.place_id)
+        const { data: directRoutes, error: directErr } = await window.aiSb
             .from('routes')
             .select('id, place_id, title, description, visibility, category, distance_meters')
             .eq('place_id', place.place_id);
 
-        if (error) {
-            console.error('Virhe haettaessa reittejä:', error);
-            return;
+        if (directErr) {
+            console.error('Virhe haettaessa suoria reittejä:', directErr);
         }
+
+        // N-to-N routes (route_places junction table)
+        let junctionRoutes = [];
+        try {
+            const { data: jData } = await window.aiSb
+                .from('route_places')
+                .select('route_id, routes(id, place_id, title, description, visibility, category, distance_meters)')
+                .eq('place_id', place.place_id);
+            if (jData) {
+                junctionRoutes = jData.map(j => j.routes).filter(Boolean);
+            }
+        } catch (e) {
+            // route_places table optional fallback
+        }
+
+        // Combine and deduplicate by route id
+        const routeMap = new Map();
+        (directRoutes || []).forEach(r => routeMap.set(r.id, r));
+        junctionRoutes.forEach(r => routeMap.set(r.id, r));
+        const routes = Array.from(routeMap.values());
 
         if (routes && routes.length > 0) {
             routesContainer.style.display = 'block';

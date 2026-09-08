@@ -1575,12 +1575,30 @@ async function loadThemeRoutes(themeName) {
     else if (normalizedTheme === 'historia' || normalizedTheme === 'historiapolut') categoryFilter = 'historia';
 
     try {
-        const { data: routes, error } = await aiSbClient
+        // Direct routes query (category or theme_id)
+        const { data: directRoutes } = await aiSbClient
             .from('routes')
             .select('id, place_id, title, description, visibility, category, distance_meters')
-            .eq('category', categoryFilter);
+            .or(`theme_id.eq.${themeName},category.ilike.%${categoryFilter}%`);
 
-        if (error || !routes || routes.length === 0) return;
+        // Junction routes query (route_themes)
+        let junctionRoutes = [];
+        try {
+            const { data: jData } = await aiSbClient
+                .from('route_themes')
+                .select('route_id, routes(id, place_id, title, description, visibility, category, distance_meters)')
+                .eq('theme_id', themeName);
+            if (jData) {
+                junctionRoutes = jData.map(j => j.routes).filter(Boolean);
+            }
+        } catch (e) {}
+
+        const routeMap = new Map();
+        (directRoutes || []).forEach(r => routeMap.set(r.id, r));
+        junctionRoutes.forEach(r => routeMap.set(r.id, r));
+        const routes = Array.from(routeMap.values());
+
+        if (!routes || routes.length === 0) return;
 
         // Etsi DOM-elementti johon reitit lisätään (jos ei ole, luodaan)
         let routesSection = document.getElementById('routes-section');
