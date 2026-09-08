@@ -115,9 +115,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Add GeoJSON to map
         const points = [];
+        let routeLineCoords = [];  // [[lng, lat], ...] from GeoJSON LineString
+
         const geojsonLayer = L.geoJSON(geojson, {
             style: function (feature) {
-                return { color: '#059669', weight: 5, opacity: 0.8 };
+                if (feature.geometry && feature.geometry.type === 'LineString') {
+                    return { color: '#059669', weight: 5, opacity: 0.8 };
+                }
+                return {};
             },
             pointToLayer: function (feature, latlng) {
                 const marker = L.circleMarker(latlng, {
@@ -131,10 +136,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return marker;
             },
             onEachFeature: function (feature, layer) {
+                if (feature.geometry.type === 'LineString') {
+                    // Capture route coords for GPS distance/progress calculations
+                    routeLineCoords = feature.geometry.coordinates; // [[lng, lat], ...]
+                }
                 if (feature.geometry.type === 'Point' && feature.properties) {
                     const p = feature.properties;
+                    // Attach coordinates and layer ref directly for GPS engine
+                    p._lat = feature.geometry.coordinates[1];
+                    p._lng = feature.geometry.coordinates[0];
+                    p._layer = layer;
                     points.push(p);
-                    
+
                     // Bind click event to open custom modal instead of default popup
                     layer.on('click', () => {
                         window.openPointModal(p);
@@ -142,6 +155,17 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             }
         }).addTo(map);
+
+        // Sort by explicit `order` property — never trust FeatureCollection order alone
+        points.sort((a, b) => {
+            const ao = (a.order != null) ? Number(a.order) : Infinity;
+            const bo = (b.order != null) ? Number(b.order) : Infinity;
+            return ao !== bo ? ao - bo : 0;
+        });
+
+        // Expose globally for GPS navigation engine
+        window.routeLineCoords = routeLineCoords;
+        window.totalRouteLength = computeRouteLength(routeLineCoords);
 
         map.fitBounds(geojsonLayer.getBounds(), { padding: [50, 50] });
 
@@ -176,7 +200,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
             return `
-            <div class="point-card" style="cursor: pointer;" onclick="window.openPointModal(window.routePoints[${idx}])">
+            <div class="point-card" id="point-card-${idx}" style="cursor: pointer;" onclick="window.openPointModal(window.routePoints[${idx}])">
                 <h3>${idx + 1}. ${p.title || p.name || 'Piste ' + (idx + 1)}</h3>
                 ${mediaPreview}
             </div>
@@ -185,22 +209,34 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         window.routePoints = points;
 
-        // Start GPS tracking after route is rendered (auto-start)
+        // Start GPS navigation engine after route is rendered
         if (navigator.geolocation) {
             initGPS(points);
         }
     }
 
-    // ─── GPS PROXIMITY SYSTEM ───────────────────────────────────────────────
+    // ─── GPS NAVIGATION ENGINE ───────────────────────────────────────────────
 
     let gpsWatchId = null;
     let gpsActive = false;
-    let proximityState = {};  // { pointKey: { triggered: bool, lastDist: number } }
-    let activeToastPoint = null;
     let userMarker = null;
-    let gpsMap = null;  // reference set after map init
+    let userAccuracyCircle = null;
 
-    // Haversine formula — returns distance in metres
+    // Navigation state — direction-aware, monotonically progressing
+    let nextPointIndex = 0;          // index of next unvisited point
+    let progressIndex = 0;           // highest visited index (never decreases)
+    const visitedPoints = new Set(); // set of visited point indices
+    let approachToastVisible = false;
+
+    // Route deviation state machine
+    const ROUTE_STATES = { ON_ROUTE: 0, SLIGHTLY_OFF: 1, OFF_ROUTE: 2, LEFT_ROUTE: 3 };
+    let routeState = ROUTE_STATES.ON_ROUTE;
+    let offRouteSince = null;
+    const OFF_ROUTE_TIMEOUT_MS = 15000; // ms before showing LEFT_ROUTE alert
+
+    // ─── GEOMETRY HELPERS ────────────────────────────────────────────────────
+
+    // Haversine — returns distance in metres
     function haversineMeters(lat1, lng1, lat2, lng2) {
         const R = 6371000;
         const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -211,23 +247,72 @@ document.addEventListener('DOMContentLoaded', async () => {
         return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     }
 
-    function pointKey(p, idx) {
-        return p.id || p.title || ('point_' + idx);
+    // Distance from point to line segment, in metres
+    function distanceToSegmentMeters(lat, lng, lat1, lng1, lat2, lng2) {
+        const dx = lat2 - lat1, dy = lng2 - lng1;
+        if (dx === 0 && dy === 0) return haversineMeters(lat, lng, lat1, lng1);
+        const t = Math.max(0, Math.min(1,
+            ((lat - lat1) * dx + (lng - lng1) * dy) / (dx * dx + dy * dy)
+        ));
+        return haversineMeters(lat, lng, lat1 + t * dx, lng1 + t * dy);
     }
 
-    function initGPS(points) {
-        const gpsBtn = document.getElementById('gps-status-btn');
-        const gpsLabel = document.getElementById('gps-label');
+    // Minimum distance from point to GeoJSON LineString (coords = [[lng,lat],...])
+    function distanceToLineString(lat, lng, coords) {
+        if (!coords || coords.length < 2) return Infinity;
+        let minDist = Infinity;
+        for (let i = 0; i < coords.length - 1; i++) {
+            const d = distanceToSegmentMeters(
+                lat, lng,
+                coords[i][1], coords[i][0],
+                coords[i + 1][1], coords[i + 1][0]
+            );
+            if (d < minDist) minDist = d;
+        }
+        return minDist;
+    }
 
-        window.toggleGPS = function() {
-            if (gpsActive) {
-                stopGPS();
-            } else {
-                startGPS(points);
+    // Total route length from LineString coords
+    function computeRouteLength(coords) {
+        if (!coords || coords.length < 2) return 0;
+        let total = 0;
+        for (let i = 0; i < coords.length - 1; i++) {
+            total += haversineMeters(coords[i][1], coords[i][0], coords[i + 1][1], coords[i + 1][0]);
+        }
+        return total;
+    }
+
+    // Project (lat, lng) onto route → cumulative distance from route start
+    function projectToRouteDistance(lat, lng, coords) {
+        if (!coords || coords.length < 2) return 0;
+        let bestDist = Infinity, bestProjected = 0, cumDist = 0;
+        for (let i = 0; i < coords.length - 1; i++) {
+            const segLen = haversineMeters(coords[i][1], coords[i][0], coords[i + 1][1], coords[i + 1][0]);
+            const dx = coords[i + 1][1] - coords[i][1];
+            const dy = coords[i + 1][0] - coords[i][0];
+            const denom = dx * dx + dy * dy;
+            const t = denom === 0 ? 0 : Math.max(0, Math.min(1,
+                ((lat - coords[i][1]) * dx + (lng - coords[i][0]) * dy) / denom
+            ));
+            const nearLat = coords[i][1] + t * dx;
+            const nearLng = coords[i][0] + t * dy;
+            const d = haversineMeters(lat, lng, nearLat, nearLng);
+            if (d < bestDist) {
+                bestDist = d;
+                bestProjected = cumDist + t * segLen;
             }
-        };
+            cumDist += segLen;
+        }
+        return bestProjected;
+    }
 
-        // Auto-start silently — user can dismiss
+    // ─── GPS CORE ────────────────────────────────────────────────────────────
+
+    function initGPS(points) {
+        window.toggleGPS = function() {
+            if (gpsActive) stopGPS();
+            else startGPS(points);
+        };
         startGPS(points);
     }
 
@@ -246,6 +331,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         );
         gpsActive = true;
         if (gpsBtn) { gpsBtn.className = 'active'; gpsLabel.textContent = 'GPS päällä'; }
+        const panel = document.getElementById('gps-progress-panel');
+        if (panel) panel.style.display = 'block';
     }
 
     function stopGPS() {
@@ -256,89 +343,259 @@ document.addEventListener('DOMContentLoaded', async () => {
         const gpsLabel = document.getElementById('gps-label');
         if (gpsBtn) { gpsBtn.className = ''; gpsLabel.textContent = 'GPS pois'; }
         closeProximityToast();
+        closeArrivalToast();
+        const panel = document.getElementById('gps-progress-panel');
+        if (panel) panel.style.display = 'none';
     }
 
     function onPositionUpdate(pos, points) {
         const userLat = pos.coords.latitude;
         const userLng = pos.coords.longitude;
+        const accuracy = pos.coords.accuracy || 15;
 
-        // Update user marker on map
-        updateUserMarker(userLat, userLng);
-
-        // Check each point with a notificationDistance
-        points.forEach((p, idx) => {
-            const dist = p.notificationDistance || p.notification_distance_m || 0;
-            if (!dist) return;
-
-            const key = pointKey(p, idx);
-            if (!proximityState[key]) proximityState[key] = { triggered: false, lastDist: Infinity };
-            const state = proximityState[key];
-
-            const pointLat = p.lat || (p.geometry && p.geometry.coordinates && p.geometry.coordinates[1]);
-            const pointLng = p.lng || (p.geometry && p.geometry.coordinates && p.geometry.coordinates[0]);
-            if (pointLat == null || pointLng == null) return;
-
-            const currentDist = Math.round(haversineMeters(userLat, userLng, pointLat, pointLng));
-            state.lastDist = currentDist;
-
-            if (!state.triggered && currentDist <= dist) {
-                // Enter proximity zone — show toast
-                state.triggered = true;
-                showProximityToast(p, currentDist);
-            } else if (state.triggered && currentDist > dist * 3) {
-                // Reset hysteresis — left zone
-                state.triggered = false;
-            }
-        });
+        updateUserMarker(userLat, userLng, accuracy);
+        updateRouteStatus(userLat, userLng);
+        updateProgressPanel(userLat, userLng);
+        checkNextPoint(userLat, userLng, accuracy, points);
     }
 
-    function updateUserMarker(lat, lng) {
-        // Find current map instance
-        const mapEl = document.getElementById('map');
-        if (!mapEl || !mapEl._leaflet_id) return;
-        const map = window._leafletMap;
-        if (!map) return;
+    // ─── USER MARKER ─────────────────────────────────────────────────────────
 
-        const L = window.L;
-        if (!L) return;
+    function updateUserMarker(lat, lng, accuracy) {
+        const map = window._leafletMap;
+        if (!map || !window.L) return;
 
         if (userMarker) {
             userMarker.setLatLng([lat, lng]);
         } else {
             const icon = L.divIcon({
-                html: `<div style="width:16px;height:16px;background:#2563eb;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 4px rgba(37,99,235,0.25);"></div>`,
+                html: `<div style="width:16px;height:16px;background:#2563eb;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 4px rgba(37,99,235,0.25);position:relative;z-index:2;"></div>`,
                 className: '',
                 iconSize: [16, 16],
                 iconAnchor: [8, 8]
             });
             userMarker = L.marker([lat, lng], { icon, zIndexOffset: 1000 }).addTo(map);
         }
+
+        // Accuracy uncertainty circle — shown when accuracy > 10 m
+        if (accuracy && accuracy > 10) {
+            if (userAccuracyCircle) {
+                userAccuracyCircle.setLatLng([lat, lng]).setRadius(accuracy);
+            } else {
+                userAccuracyCircle = L.circle([lat, lng], {
+                    radius: accuracy,
+                    color: '#2563eb',
+                    fillColor: '#2563eb',
+                    fillOpacity: 0.08,
+                    weight: 1,
+                    opacity: 0.3
+                }).addTo(map);
+            }
+        }
     }
 
-    function showProximityToast(p, distMeters) {
-        activeToastPoint = p;
-        document.getElementById('toast-point-name').textContent = p.title || 'Kohde';
+    // ─── ROUTE STATUS STATE MACHINE ──────────────────────────────────────────
+
+    function updateRouteStatus(userLat, userLng) {
+        const coords = window.routeLineCoords || [];
+        if (coords.length < 2) return;
+        const statusEl = document.getElementById('gps-route-status');
+        if (!statusEl) return;
+
+        const dist = Math.round(distanceToLineString(userLat, userLng, coords));
+
+        let targetState;
+        if (dist <= 30)       targetState = ROUTE_STATES.ON_ROUTE;
+        else if (dist <= 75)  targetState = ROUTE_STATES.SLIGHTLY_OFF;
+        else if (dist <= 150) targetState = ROUTE_STATES.OFF_ROUTE;
+        else                  targetState = ROUTE_STATES.LEFT_ROUTE;
+
+        if (targetState > routeState) {
+            // Getting worse — update immediately
+            routeState = targetState;
+            if (routeState >= ROUTE_STATES.OFF_ROUTE && !offRouteSince) {
+                offRouteSince = Date.now();
+            }
+        } else if (targetState < routeState) {
+            // Getting better — update immediately, reset timer
+            routeState = targetState;
+            offRouteSince = null;
+        }
+
+        // Show LEFT_ROUTE only after sustained 15 s deviation
+        const showLeftRoute = routeState === ROUTE_STATES.LEFT_ROUTE &&
+                              offRouteSince &&
+                              (Date.now() - offRouteSince) >= OFF_ROUTE_TIMEOUT_MS;
+        const displayState = showLeftRoute ? ROUTE_STATES.LEFT_ROUTE
+                                           : Math.min(routeState, ROUTE_STATES.OFF_ROUTE);
+
+        const cfg = [
+            { emoji: '🟢', text: 'Reitillä',                     color: '#059669', bg: '#ecfdf5' },
+            { emoji: '🟡', text: `Hieman sivussa — ${dist} m`,    color: '#b45309', bg: '#fffbeb' },
+            { emoji: '🟠', text: `Poikkeama — ${dist} m`,         color: '#c2410c', bg: '#fff7ed' },
+            { emoji: '🔴', text: `Poistunut reitiltä — ${dist} m`,color: '#b91c1c', bg: '#fef2f2' },
+        ][displayState];
+
+        statusEl.textContent = `${cfg.emoji} ${cfg.text}`;
+        statusEl.style.color = cfg.color;
+        statusEl.style.background = cfg.bg;
+    }
+
+    // ─── PROGRESS PANEL ──────────────────────────────────────────────────────
+
+    function updateProgressPanel(userLat, userLng) {
+        const coords = window.routeLineCoords || [];
+        const totalLen = window.totalRouteLength || 0;
+        if (coords.length < 2 || totalLen === 0) return;
+
+        const projDist = projectToRouteDistance(userLat, userLng, coords);
+
+        // Monotonically increasing: progressIndex never goes backward (handles return trip)
+        if (projDist > (window._maxProjDist || 0)) window._maxProjDist = projDist;
+        const effectiveDist = window._maxProjDist || 0;
+        const pct = Math.min(100, Math.round((effectiveDist / totalLen) * 100));
+
+        const fill = document.getElementById('gps-progress-bar-fill');
+        const text = document.getElementById('gps-progress-text');
+        if (fill) fill.style.width = pct + '%';
+        if (text) text.textContent =
+            `${(effectiveDist / 1000).toFixed(1).replace('.', ',')} km` +
+            ` / ${(totalLen / 1000).toFixed(1).replace('.', ',')} km`;
+    }
+
+    // ─── NEXT POINT NAVIGATION ───────────────────────────────────────────────
+    // Only ever checks points[nextPointIndex] — never loops over all points.
+    // This makes paluumatka (return trip) completely safe: visited points stay frozen.
+
+    function checkNextPoint(userLat, userLng, accuracy, points) {
+        const nextEl = document.getElementById('gps-next-point');
+        if (nextPointIndex >= points.length) {
+            if (nextEl) nextEl.innerHTML = '🎉 Kaikki kokemuspisteet saavutettu!';
+            return;
+        }
+
+        const p = points[nextPointIndex];
+        const pLat = p._lat ?? p.lat;
+        const pLng = p._lng ?? p.lng;
+        if (pLat == null || pLng == null) return;
+
+        const dist = Math.round(haversineMeters(userLat, userLng, pLat, pLng));
+        const arrivalR  = p.arrival_radius  ?? 30;
+        const warningR  = p.warning_radius  ?? p.notificationDistance ?? 100;
+
+        // Update "next point" info panel
+        updateNextPointDisplay(p, dist, nextPointIndex, points.length);
+
+        // Widen arrival radius if GPS accuracy is poor (never smaller than arrivalR)
+        const effectiveArrivalR = arrivalR + Math.max(0, accuracy - 20);
+
+        if (dist <= effectiveArrivalR) {
+            // ✅ ARRIVED
+            visitedPoints.add(nextPointIndex);
+            markPointVisited(nextPointIndex, p);
+            showArrivalToast(p);
+            nextPointIndex++;
+            progressIndex = Math.max(progressIndex, nextPointIndex);
+        } else if (dist <= warningR && !approachToastVisible) {
+            showApproachingToast(p, dist);
+        }
+    }
+
+    function updateNextPointDisplay(p, dist, idx, total) {
+        const nextEl = document.getElementById('gps-next-point');
+        if (!nextEl) return;
+        const name = p.title || p.name || `Piste ${idx + 1}`;
+        const distText = dist >= 1000
+            ? `${(dist / 1000).toFixed(1).replace('.', ',')} km`
+            : `${dist} m`;
+        const dots = Array.from({ length: total }, (_, i) =>
+            visitedPoints.has(i) ? '<span style="color:#059669;">●</span>'
+            : (i === idx       ? '<span style="color:#2563eb;">◉</span>'
+                               : '<span style="color:#cbd5e1;">○</span>')
+        ).join(' ');
+        nextEl.innerHTML =
+            `<span class="next-label">SEURAAVA ${idx + 1}/${total}</span>` +
+            `<span class="next-name">${name}</span>` +
+            `<span class="next-dist">${distText} →</span>` +
+            `<span class="next-dots">${dots}</span>`;
+    }
+
+    function markPointVisited(idx, p) {
+        // Turn map marker green
+        if (p._layer && p._layer.setStyle) {
+            p._layer.setStyle({ fillColor: '#059669', radius: 10 });
+        }
+        // Highlight timeline card
+        const card = document.getElementById(`point-card-${idx}`);
+        if (card) {
+            card.style.borderLeft = '4px solid #059669';
+            card.style.background = '#f0fdf4';
+        }
+    }
+
+    // ─── TOASTS ──────────────────────────────────────────────────────────────
+
+    // "Kohde lähestyy" — amber approaching toast
+    function showApproachingToast(p, distMeters) {
+        approachToastVisible = true;
+        const name = p.title || p.name || 'Kohde';
+        document.getElementById('toast-label').textContent = 'Kohde lähestyy';
+        document.getElementById('toast-icon').textContent = '📍';
+        document.getElementById('toast-point-name').textContent = name;
         document.getElementById('toast-point-dist').textContent = `Noin ${distMeters} m päässä`;
 
         const toast = document.getElementById('proximity-toast');
+        toast.style.borderLeftColor = '#f59e0b';
         toast.classList.add('visible');
 
-        // Wire open button
         document.getElementById('toast-open-btn').onclick = () => {
             window.openPointModal && window.openPointModal(p);
         };
-
-        // Auto-hide after 12 s
         clearTimeout(window._toastTimer);
-        window._toastTimer = setTimeout(closeProximityToast, 12000);
+        window._toastTimer = setTimeout(() => {
+            approachToastVisible = false;
+            closeProximityToast();
+        }, 8000);
     }
+
+    // "Olet saapunut" — green arrival toast (separate element)
+    function showArrivalToast(p) {
+        approachToastVisible = false;
+        closeProximityToast();
+
+        const name = p.title || p.name || 'Kohde';
+        document.getElementById('arrival-name').textContent = name;
+        const toast = document.getElementById('arrival-toast');
+        toast.classList.add('visible');
+
+        document.getElementById('arrival-open-btn').onclick = () => {
+            window.openPointModal && window.openPointModal(p);
+            closeArrivalToast();
+        };
+
+        // Auto-open modal if point is configured with auto_open: true
+        if (p.auto_open === true) {
+            setTimeout(() => {
+                window.openPointModal && window.openPointModal(p);
+            }, 600);
+        }
+
+        clearTimeout(window._arrivalTimer);
+        window._arrivalTimer = setTimeout(closeArrivalToast, 15000);
+    }
+
+    window.closeArrivalToast = function() {
+        const toast = document.getElementById('arrival-toast');
+        if (toast) toast.classList.remove('visible');
+        clearTimeout(window._arrivalTimer);
+    };
+    document.getElementById('arrival-close-btn').addEventListener('click', window.closeArrivalToast);
 
     window.closeProximityToast = function() {
         document.getElementById('proximity-toast').classList.remove('visible');
         clearTimeout(window._toastTimer);
-        activeToastPoint = null;
+        approachToastVisible = false;
     };
-
     document.getElementById('toast-close-btn').addEventListener('click', window.closeProximityToast);
 
     // Start
