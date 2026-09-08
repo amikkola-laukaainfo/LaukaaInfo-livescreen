@@ -547,6 +547,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Update "next point" info panel
         updateNextPointDisplay(p, dist, nextPointIndex, points.length);
 
+        // Proximity map zoom & pulse marker management
+        updateMapProximity(p, dist, nextPointIndex);
+
         // ── ARRIVAL LOGIC ────────────────────────────────────────────────────
         //
         // Finnish smartphone GPS reality (Traficom / GPS.gov):
@@ -602,6 +605,78 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    // ─── PROXIMITY ZOOM & PULSE MARKERS ──────────────────────────────────────
+    let _lastZone = null;
+    let _lastZonePointIdx = -1;
+
+    function setMarkerPulse(p, type) {
+        const map = window._leafletMap;
+        if (!map || !window.L) return;
+        const pLat = p._lat ?? p.lat;
+        const pLng = p._lng ?? p.lng;
+        if (pLat == null || pLng == null) return;
+
+        if (!type) {
+            if (p._pulseMarker) {
+                map.removeLayer(p._pulseMarker);
+                p._pulseMarker = null;
+            }
+            return;
+        }
+
+        const html = `<div class="lki-pulse-ring ${type}"></div>`;
+        const icon = L.divIcon({
+            className: 'lki-pulse-wrapper',
+            html: html,
+            iconSize: [0, 0],
+            iconAnchor: [0, 0]
+        });
+
+        if (p._pulseMarker) {
+            p._pulseMarker.setIcon(icon);
+        } else {
+            p._pulseMarker = L.marker([pLat, pLng], { icon, zIndexOffset: -100, interactive: false }).addTo(map);
+        }
+    }
+
+    function updateMapProximity(p, dist, idx) {
+        const map = window._leafletMap;
+        if (!map || !window.L) return;
+        const pLat = p._lat ?? p.lat;
+        const pLng = p._lng ?? p.lng;
+        if (pLat == null || pLng == null) return;
+
+        const arrivalR = p.arrival_radius ?? 30;
+
+        let currentZone = 0;
+        if (dist <= arrivalR) {
+            currentZone = 3;
+        } else if (dist <= 50) {
+            currentZone = 2;
+        } else if (dist <= 100) {
+            currentZone = 1;
+        }
+
+        // Only act when zone changes or target point changes to prevent continuous map jittering
+        if (currentZone !== _lastZone || idx !== _lastZonePointIdx) {
+            _lastZone = currentZone;
+            _lastZonePointIdx = idx;
+
+            if (currentZone === 3) {
+                setMarkerPulse(p, 'arrival');
+                map.flyTo([pLat, pLng], 18, { duration: 1.2 });
+            } else if (currentZone === 2) {
+                setMarkerPulse(p, 'near');
+                map.flyTo([pLat, pLng], 17, { duration: 1.0 });
+            } else if (currentZone === 1) {
+                setMarkerPulse(p, 'approach');
+                map.flyTo([pLat, pLng], 16, { duration: 1.2 });
+            } else {
+                setMarkerPulse(p, null);
+            }
+        }
+    }
+
     function updateNextPointDisplay(p, dist, idx, total) {
         const nextEl = document.getElementById('gps-next-point');
         if (!nextEl) return;
@@ -626,6 +701,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (p._layer && p._layer.setStyle) {
             p._layer.setStyle({ fillColor: '#059669', radius: 10 });
         }
+        // Arrival pulse on marker, clear after 3 seconds
+        setMarkerPulse(p, 'arrival');
+        setTimeout(() => {
+            setMarkerPulse(p, null);
+        }, 3000);
+
         // Highlight timeline card
         const card = document.getElementById(`point-card-${idx}`);
         if (card) {
