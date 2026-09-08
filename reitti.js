@@ -158,11 +158,18 @@ document.addEventListener('DOMContentLoaded', async () => {
             const rawImages = [p.imageUrl, p.images, p.image, p.media, p.photos, p.photo, p.picture].flat().filter(Boolean);
             const hasImage = rawImages.some(i => isValidImageUrl(typeof i === 'string' ? i : (i.url || '')));
 
+            const rawAudios = [p.audioUrl, p.audio_url, p.audio, p.audioId].flat().filter(Boolean);
+            const hasAudio = rawAudios.some(a => isValidAudioUrl(typeof a === 'string' ? a : (a.url || '')));
+
             const hasLink = !!(p.infoLink || p.info_link || p.link || p.url || p.website);
             const hasDesc = !!(p.description || p.desc || p.text || p.details);
 
-            if (hasVideo || hasImage) {
-                const btnText = hasVideo ? (hasImage ? '🎬 Video / 🖼️ Kuva' : '🎬 Katso video') : '🖼️ Näytä kuva';
+            if (hasVideo || hasImage || hasAudio) {
+                let parts = [];
+                if (hasVideo) parts.push('🎬 Video');
+                if (hasImage) parts.push('🖼️ Kuva');
+                if (hasAudio) parts.push('🎧 Äänileike');
+                const btnText = parts.join(' / ');
                 mediaPreview = `<div style="margin-top: 10px;"><button class="btn-light" style="padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid #cbd5e1; background: #f8fafc;" onclick="window.openPointModal(window.routePoints[${idx}])">${btnText}</button></div>`;
             } else if (hasDesc || hasLink) {
                 mediaPreview = `<div style="margin-top: 10px;"><button class="btn-light" style="padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid #cbd5e1; background: #f8fafc;" onclick="window.openPointModal(window.routePoints[${idx}])">Näytä tiedot</button></div>`;
@@ -399,6 +406,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         return false;
     }
 
+    function isValidAudioUrl(url) {
+        if (!url || typeof url !== 'string') return false;
+        const trimmed = url.trim();
+        if (trimmed.length < 5) return false;
+        const lower = trimmed.toLowerCase();
+        if (['audio', 'aanileike', 'aani', 'sound', 'none', 'null', 'undefined', '-'].includes(lower)) return false;
+        if (isValidVideoUrl(trimmed) || isValidImageUrl(trimmed)) return false;
+        if (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('data:audio/') || trimmed.startsWith('blob:') || trimmed.startsWith('/') || trimmed.startsWith('./')) {
+            return true;
+        }
+        if (/\.(mp3|m4a|wav|ogg|aac|flac)(\?.*)?$/i.test(trimmed)) return true;
+        return false;
+    }
+
     let pointSwiperInstance = null;
 
     window.openPointModal = function(p) {
@@ -407,9 +428,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         const modalTitle = p.title || p.name || 'Nimetön piste';
         const modalDesc = p.description || p.desc || p.text || p.details || '';
 
-        document.getElementById('point-modal-title').textContent = modalTitle;
-        document.getElementById('point-modal-desc').innerHTML = modalDesc ? modalDesc.replace(/\n/g, '<br>') : '';
-        
         const mediaContainer = document.getElementById('point-modal-media-container');
         const tabsContainer = document.getElementById('point-modal-tabs');
         const linkContainer = document.getElementById('point-modal-link-container');
@@ -448,7 +466,21 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         });
 
-        // 3. Extract External Link
+        // 3. Extract Audio URLs
+        const rawAudioSources = [
+            p.audioUrl, p.audio_url, p.audio, p.audioId, p.media
+        ].flat().filter(Boolean);
+
+        const audios = [];
+        rawAudioSources.forEach(item => {
+            let url = typeof item === 'string' ? item : (item.url || item.blobUrl || item.audioUrl);
+            if (url && typeof url === 'string' && isValidAudioUrl(url)) {
+                const trimmed = url.trim();
+                if (!audios.includes(trimmed)) audios.push(trimmed);
+            }
+        });
+
+        // 4. Extract External Link
         const rawLinkSources = [p.infoLink, p.info_link, p.link, p.url, p.website].flat().filter(Boolean);
         let targetLink = null;
         for (const item of rawLinkSources) {
@@ -458,6 +490,24 @@ document.addEventListener('DOMContentLoaded', async () => {
                 break;
             }
         }
+
+        // Render Title & Description with inline audio player bar if audio exists
+        document.getElementById('point-modal-title').textContent = modalTitle;
+        
+        let audioBarHtml = '';
+        if (audios.length > 0) {
+            audioBarHtml = `
+                <div style="margin-top: 20px; padding: 14px 18px; background: rgba(37, 99, 235, 0.08); border-radius: 14px; border: 1px solid rgba(37, 99, 235, 0.2); display: flex; align-items: center; gap: 14px;">
+                    <span style="font-size: 1.8rem; flex-shrink: 0;">🎧</span>
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 6px;">Äänileike kuunneltavissa</div>
+                        <audio controls style="width: 100%; height: 36px; outline: none;">
+                            <source src="${audios[0]}">
+                        </audio>
+                    </div>
+                </div>`;
+        }
+        document.getElementById('point-modal-desc').innerHTML = (modalDesc ? modalDesc.replace(/\n/g, '<br>') : '') + audioBarHtml;
 
         // Helper to render video view
         function renderVideoView(videoUrl) {
@@ -509,8 +559,25 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
 
+        // Helper to render audio view in media container
+        function renderAudioView(audioUrl) {
+            mediaContainer.style.display = 'block';
+            if (pointSwiperInstance) {
+                pointSwiperInstance.destroy(true, true);
+                pointSwiperInstance = null;
+            }
+            mediaContainer.innerHTML = `
+                <div style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#0f172a; padding:24px; text-align:center; box-sizing:border-box;">
+                    <div style="font-size:3.5rem; margin-bottom:10px;">🎧</div>
+                    <div style="color:#f8fafc; font-size:1.2rem; font-weight:800; margin-bottom:14px;">Kuuntele äänileike</div>
+                    <audio controls autoplay style="width:100%; max-width:440px; outline:none; border-radius:30px;">
+                        <source src="${audioUrl}">
+                        Selaimesi ei tue äänitoistoa.
+                    </audio>
+                </div>`;
+        }
+
         // Determine initial view state
-        // Preference: If images exist, show images first; otherwise show video
         let currentTab = 'none';
         if (images.length > 0) {
             currentTab = 'images';
@@ -518,6 +585,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         } else if (videos.length > 0) {
             currentTab = 'video';
             renderVideoView(videos[0]);
+        } else if (audios.length > 0) {
+            currentTab = 'audio';
+            renderAudioView(audios[0]);
         }
 
         // Build Content Selector Tabs at bottom of modal
@@ -529,6 +599,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (videos.length > 0) {
             availableTabs.push({ id: 'video', label: `🎬 Video ${videos.length > 1 ? `(${videos.length})` : ''}` });
         }
+        if (audios.length > 0) {
+            availableTabs.push({ id: 'audio', label: `🎧 Äänileike ${audios.length > 1 ? `(${audios.length})` : ''}` });
+        }
         if (targetLink) {
             availableTabs.push({ id: 'link', label: `🌐 Lisätietoa` });
         }
@@ -536,7 +609,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (tabsContainer && availableTabs.length > 0) {
             tabsContainer.style.display = 'flex';
             tabsContainer.innerHTML = availableTabs.map(t => `
-                <button type="button" class="point-modal-tab-btn ${t.id === 'video' ? 'video-btn' : ''} ${t.id === 'link' ? 'link-btn' : ''} ${t.id === currentTab ? 'active' : ''}" data-tab="${t.id}">
+                <button type="button" class="point-modal-tab-btn ${t.id === 'video' ? 'video-btn' : ''} ${t.id === 'audio' ? 'audio-btn' : ''} ${t.id === 'link' ? 'link-btn' : ''} ${t.id === currentTab ? 'active' : ''}" data-tab="${t.id}">
                     ${t.label}
                 </button>
             `).join('');
@@ -557,6 +630,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                         renderImageView(images);
                     } else if (tabId === 'video') {
                         renderVideoView(videos[0]);
+                    } else if (tabId === 'audio') {
+                        renderAudioView(audios[0]);
                     }
                 });
             });

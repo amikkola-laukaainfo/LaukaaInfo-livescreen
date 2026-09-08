@@ -453,6 +453,19 @@
     border-color: #2563eb;
 }
 
+.point-modal-tab-btn.audio-btn.active {
+    background: #2563eb;
+    color: #ffffff;
+    border-color: #2563eb;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+.point-modal-tab-btn.audio-btn:hover {
+    background: #1d4ed8;
+    color: #ffffff;
+    border-color: #1d4ed8;
+}
+
 @media (prefers-color-scheme: dark) {
     .point-modal-tabs {
         border-top-color: rgba(255, 255, 255, 0.1);
