@@ -227,6 +227,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let progressIndex = 0;           // highest visited index (never decreases)
     const visitedPoints = new Set(); // set of visited point indices
     let approachToastVisible = false;
+    let _insideCount = 0;            // consecutive GPS readings inside arrival_radius
 
     // Route deviation state machine
     const ROUTE_STATES = { ON_ROUTE: 0, SLIGHTLY_OFF: 1, OFF_ROUTE: 2, LEFT_ROUTE: 3 };
@@ -317,15 +318,55 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function startGPS(points) {
-        if (!navigator.geolocation) return;
-        const gpsBtn = document.getElementById('gps-status-btn');
+        const gpsBtn   = document.getElementById('gps-status-btn');
         const gpsLabel = document.getElementById('gps-label');
+
+        // Chrome on Android requires HTTPS for Geolocation API.
+        // Detect HTTP early and show a clear message instead of a cryptic error.
+        if (location.protocol === 'http:' && !location.hostname.includes('localhost')) {
+            if (gpsBtn) {
+                gpsBtn.className = 'error';
+                gpsLabel.textContent = 'GPS ei käytettävissä';
+            }
+            showGpsErrorBanner(
+                '🔒 GPS vaatii suojatun yhteyden',
+                'Chrome edellyttää HTTPS-osoitetta sijaintitietoihin. ' +
+                'Avaa sivu osoitteella <strong>https://</strong>laukaainfo.fi/... ' +
+                'tai kokeile Operaa / Firefoxia.'
+            );
+            return;
+        }
+
+        if (!navigator.geolocation) {
+            if (gpsBtn) { gpsBtn.className = 'error'; gpsLabel.textContent = 'GPS ei tuettu'; }
+            showGpsErrorBanner('GPS ei ole käytettävissä', 'Selaimesi ei tue paikannusta.');
+            return;
+        }
 
         gpsWatchId = navigator.geolocation.watchPosition(
             (pos) => onPositionUpdate(pos, points),
             (err) => {
-                console.warn('GPS-virhe:', err.message);
-                if (gpsBtn) { gpsBtn.className = 'error'; gpsLabel.textContent = 'GPS-virhe'; }
+                console.warn('GPS-virhe:', err.code, err.message);
+
+                // err.code: 1=PERMISSION_DENIED, 2=POSITION_UNAVAILABLE, 3=TIMEOUT
+                let label = 'GPS-virhe';
+                let detail = '';
+                if (err.code === 1) {
+                    label  = 'Sijaintilupa evätty';
+                    detail = 'Myönnä sijaintilupa selaimelle: asetukset → sivuston asetukset → sijainti → Salli. ' +
+                             'Chromessa lupa voidaan myöntää vain HTTPS-sivuille.';
+                } else if (err.code === 2) {
+                    label  = 'Sijaintia ei saatu';
+                    detail = 'GPS-signaali ei tavoita laitettasi. Siirry avoimemmalle alueelle tai tarkista ' +
+                             'puhelimen sijaintipalvelut.';
+                } else if (err.code === 3) {
+                    label  = 'GPS aikakatkaisu';
+                    detail = 'Sijainnin haku kesti liian kauan. Kokeile uudelleen ulkona.';
+                }
+
+                if (gpsBtn) { gpsBtn.className = 'error'; gpsLabel.textContent = label; }
+                showGpsErrorBanner(label, detail);
+                gpsActive = false;
             },
             { enableHighAccuracy: true, maximumAge: 5000, timeout: 20000 }
         );
@@ -334,6 +375,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         const panel = document.getElementById('gps-progress-panel');
         if (panel) panel.style.display = 'block';
     }
+
+    function showGpsErrorBanner(title, detail) {
+        let banner = document.getElementById('gps-error-banner');
+        if (!banner) {
+            banner = document.createElement('div');
+            banner.id = 'gps-error-banner';
+            banner.style.cssText = [
+                'background:#fef2f2', 'border:1px solid #fecaca', 'border-radius:12px',
+                'padding:1rem 1.2rem', 'margin-bottom:1.2rem', 'font-size:0.82rem',
+                'line-height:1.5', 'color:#991b1b'
+            ].join(';');
+            // Insert before the map element
+            const mapEl = document.getElementById('map');
+            if (mapEl && mapEl.parentNode) mapEl.parentNode.insertBefore(banner, mapEl);
+        }
+        banner.innerHTML =
+            `<strong style="display:block;margin-bottom:0.3rem;">⚠️ ${title}</strong>${detail}`;
+        banner.style.display = 'block';
+    }
+
 
     function stopGPS() {
         if (gpsWatchId !== null) navigator.geolocation.clearWatch(gpsWatchId);
@@ -486,18 +547,58 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Update "next point" info panel
         updateNextPointDisplay(p, dist, nextPointIndex, points.length);
 
-        // Widen arrival radius if GPS accuracy is poor (never smaller than arrivalR)
-        const effectiveArrivalR = arrivalR + Math.max(0, accuracy - 20);
+        // ── ARRIVAL LOGIC ────────────────────────────────────────────────────
+        //
+        // Finnish smartphone GPS reality (Traficom / GPS.gov):
+        //   Open terrain:  2–5 m accuracy
+        //   Forest path:   5–15 m accuracy
+        //   Dense forest: 10–30 m accuracy
+        //
+        // Rule: user arrives only when BOTH conditions hold:
+        //   1. dist <= arrival_radius   (GPS position is inside the zone)
+        //   2. accuracy <= arrival_radius + 15
+        //      (GPS is accurate enough to trust this reading)
+        //
+        // Additionally we require 2 consecutive readings inside the zone
+        // to avoid triggering from a single noisy GPS spike.
+        //
+        // If dist is inside the zone but accuracy is too poor, we stay in
+        // the "approaching" state and wait for a better GPS fix.
 
-        if (dist <= effectiveArrivalR) {
-            // ✅ ARRIVED
-            visitedPoints.add(nextPointIndex);
-            markPointVisited(nextPointIndex, p);
-            showArrivalToast(p);
-            nextPointIndex++;
-            progressIndex = Math.max(progressIndex, nextPointIndex);
-        } else if (dist <= warningR && !approachToastVisible) {
-            showApproachingToast(p, dist);
+        const accuracyThreshold = arrivalR + 15; // e.g. 45 m for 30 m arrival_radius
+        const accuracyOk = accuracy <= accuracyThreshold;
+
+        if (dist <= arrivalR) {
+            if (accuracyOk) {
+                _insideCount++;
+                if (_insideCount >= 2) {
+                    // ✅ ARRIVED — two solid readings inside the zone
+                    _insideCount = 0;
+                    visitedPoints.add(nextPointIndex);
+                    markPointVisited(nextPointIndex, p);
+                    showArrivalToast(p);
+                    nextPointIndex++;
+                    progressIndex = Math.max(progressIndex, nextPointIndex);
+                }
+                // else: wait for second reading (no toast yet)
+            } else {
+                // Inside zone but GPS too imprecise — show gentle warning text
+                _insideCount = 0; // reset; imprecise reading doesn't count
+                const nextEl = document.getElementById('gps-next-point');
+                if (nextEl) {
+                    const name = p.title || p.name || `Piste ${nextPointIndex + 1}`;
+                    nextEl.innerHTML =
+                        `<span class="next-label">GPS TARKENTUU...</span>` +
+                        `<span class="next-name">${name} — noin ${dist} m</span>` +
+                        `<span class="next-dist" style="color:#f59e0b;">📡 Tarkkuus ±${Math.round(accuracy)} m — odotetaan parempaa signaalia</span>`;
+                }
+            }
+        } else {
+            // Outside arrival zone
+            _insideCount = 0;
+            if (dist <= warningR && !approachToastVisible) {
+                showApproachingToast(p, dist);
+            }
         }
     }
 
