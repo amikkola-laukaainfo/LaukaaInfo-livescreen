@@ -674,32 +674,32 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        const accuracyThreshold = arrivalR + 15; // e.g. 45 m for 30 m arrival_radius
+        // Good accuracy: arrive after 2 readings. Poor accuracy: allow arrival after 4 readings
+        // so that weak GPS signals (forest, urban canyon) don't block activation entirely.
+        const accuracyThreshold = arrivalR + 15; // 45 m for 30 m radius
         const accuracyOk = accuracy <= accuracyThreshold;
+        // For very poor GPS (>80m), still allow but require even more readings
+        const requiredReadings = accuracyOk ? 2 : (accuracy <= 80 ? 4 : 6);
 
         if (dist <= arrivalR) {
-            if (accuracyOk) {
-                _insideCount++;
-                if (_insideCount >= 2) {
-                    // ✅ ARRIVED — two solid readings inside the zone
-                    _insideCount = 0;
-                    visitedPoints.add(nextPointIndex);
-                    markPointVisited(nextPointIndex, p);
-                    showArrivalToast(p);
-                    nextPointIndex++;
-                    progressIndex = Math.max(progressIndex, nextPointIndex);
-                }
-                // else: wait for second reading (no toast yet)
+            _insideCount++;
+            if (_insideCount >= requiredReadings) {
+                // ✅ ARRIVED
+                _insideCount = 0;
+                visitedPoints.add(nextPointIndex);
+                markPointVisited(nextPointIndex, p);
+                showArrivalToast(p);
+                nextPointIndex++;
+                progressIndex = Math.max(progressIndex, nextPointIndex);
             } else {
-                // Inside zone but GPS too imprecise — show gentle warning text
-                _insideCount = 0; // reset; imprecise reading doesn't count
+                // Show feedback in panel while accumulating readings
                 const nextEl = document.getElementById('gps-next-point');
-                if (nextEl) {
+                if (nextEl && !accuracyOk) {
                     const name = p.title || p.name || `Piste ${nextPointIndex + 1}`;
                     nextEl.innerHTML =
-                        `<span class="next-label">GPS TARKENTUU...</span>` +
+                        `<span class="next-label">GPS TARKENTUU... (${_insideCount}/${requiredReadings})</span>` +
                         `<span class="next-name">${name} — noin ${dist} m</span>` +
-                        `<span class="next-dist" style="color:#f59e0b;">📡 Tarkkuus ±${Math.round(accuracy)} m — odotetaan parempaa signaalia</span>`;
+                        `<span class="next-dist" style="color:#f59e0b;">📡 Tarkkuus ±${Math.round(accuracy)} m — seiso paikalla hetki</span>`;
                 }
             }
         } else {
