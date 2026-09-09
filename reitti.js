@@ -187,11 +187,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }).addTo(map);
 
-        // Sort by explicit `order` property — never trust FeatureCollection order alone
+        // Sort by explicit `order` property — fallback to initial index if missing or equal
+        points.forEach((p, idx) => {
+            p._initialIdx = idx;
+        });
         points.sort((a, b) => {
-            const ao = (a.order != null) ? Number(a.order) : Infinity;
-            const bo = (b.order != null) ? Number(b.order) : Infinity;
-            return ao !== bo ? ao - bo : 0;
+            const ao = (a.order != null && !isNaN(a.order)) ? Number(a.order) : Infinity;
+            const bo = (b.order != null && !isNaN(b.order)) ? Number(b.order) : Infinity;
+            if (ao !== bo) return ao - bo;
+            return a._initialIdx - b._initialIdx;
         });
 
         // Expose globally for GPS navigation engine
