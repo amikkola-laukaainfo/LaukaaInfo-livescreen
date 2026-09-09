@@ -674,14 +674,20 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        // Good accuracy: arrive after 2 readings. Poor accuracy: allow arrival after 4 readings
-        // so that weak GPS signals (forest, urban canyon) don't block activation entirely.
+        // Hysteresis zones:
+        //  dist <= arrivalR        → firmly inside → increment count
+        //  dist <= arrivalR * 2    → jitter zone   → hold count (don't reset)
+        //  dist >  arrivalR * 2    → clearly outside → reset count
+        //
+        // This prevents GPS jitter (readings bouncing ±10–20 m) from
+        // blocking arrival when the user is physically standing at the point.
         const accuracyThreshold = arrivalR + 15; // 45 m for 30 m radius
         const accuracyOk = accuracy <= accuracyThreshold;
-        // For very poor GPS (>80m), still allow but require even more readings
-        const requiredReadings = accuracyOk ? 2 : (accuracy <= 80 ? 4 : 6);
+        // Poor GPS needs more accumulation before triggering
+        const requiredReadings = accuracyOk ? 1 : (accuracy <= 80 ? 3 : 5);
 
         if (dist <= arrivalR) {
+            // Inside arrival zone — accumulate
             _insideCount++;
             if (_insideCount >= requiredReadings) {
                 // ✅ ARRIVED
@@ -692,24 +698,26 @@ document.addEventListener('DOMContentLoaded', async () => {
                 nextPointIndex++;
                 progressIndex = Math.max(progressIndex, nextPointIndex);
             } else {
-                // Show feedback in panel while accumulating readings
+                // Accumulating — show panel feedback
                 const nextEl = document.getElementById('gps-next-point');
-                if (nextEl && !accuracyOk) {
+                if (nextEl) {
                     const name = p.title || p.name || `Piste ${nextPointIndex + 1}`;
                     nextEl.innerHTML =
-                        `<span class="next-label">GPS TARKENTUU... (${_insideCount}/${requiredReadings})</span>` +
+                        `<span class="next-label">SAAVUTAAN... (${_insideCount}/${requiredReadings})</span>` +
                         `<span class="next-name">${name} — noin ${dist} m</span>` +
-                        `<span class="next-dist" style="color:#f59e0b;">📡 Tarkkuus ±${Math.round(accuracy)} m — seiso paikalla hetki</span>`;
+                        `<span class="next-dist" style="color:#059669;">📍 Seiso paikalla hetki${!accuracyOk ? ` · GPS ±${Math.round(accuracy)} m` : ''}</span>`;
                 }
             }
-        } else {
-            // Outside arrival zone
+        } else if (dist > arrivalR * 2) {
+            // Clearly outside zone — reset count
             _insideCount = 0;
-            // Don't show approach toast while arrival cooldown or another toast is active
+            // Show approach toast when within warning range
             if (dist <= warningR && !approachToastVisible && Date.now() >= _arrivalCooldownUntil) {
                 showApproachingToast(p, dist);
             }
         }
+        // else: dist between arrivalR and arrivalR*2 → GPS jitter zone, hold count
+
     }
 
     // ─── PROXIMITY ZOOM & PULSE MARKERS ──────────────────────────────────────
