@@ -225,6 +225,17 @@ document.addEventListener('DOMContentLoaded', async () => {
                     return true;
                 }
             } catch(e) {}
+
+            // For REQUIRE_PREVIOUS, enforce that the previous point in sequence must be unlocked first
+            if (mode === 'REQUIRE_PREVIOUS' && window.routePoints && Array.isArray(window.routePoints)) {
+                const idx = window.routePoints.findIndex(pt => (pt.id || `pt_${pt._lat || pt.lat}_${pt._lng || pt.lng}`) === pointId);
+                if (idx > 0) {
+                    const prevPoint = window.routePoints[idx - 1];
+                    if (!isPointUnlocked(prevPoint)) {
+                        return false;
+                    }
+                }
+            }
             return false;
         }
         window.isPointUnlocked = isPointUnlocked;
@@ -303,6 +314,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const visitedPoints = new Set(); // set of visited point indices
     let approachToastVisible = false;
     let _insideCount = 0;            // consecutive GPS readings inside arrival_radius
+    let _arrivalCooldownUntil = 0;   // timestamp: block new arrivals until this time
 
     // Route deviation state machine
     const ROUTE_STATES = { ON_ROUTE: 0, SLIGHTLY_OFF: 1, OFF_ROUTE: 2, LEFT_ROUTE: 3 };
@@ -643,6 +655,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         // If dist is inside the zone but accuracy is too poor, we stay in
         // the "approaching" state and wait for a better GPS fix.
 
+        // Do not trigger new arrival toast while an arrival toast or modal is currently active,
+        // or while the arrival cooldown is in effect (prevents adjacent points from firing too fast)
+        const arrivalToastEl = document.getElementById('arrival-toast');
+        const isArrivalToastVisible = arrivalToastEl && arrivalToastEl.classList.contains('visible');
+        const pointModalEl = document.getElementById('point-modal');
+        const isModalActive = pointModalEl && (pointModalEl.classList.contains('active') || pointModalEl.style.display === 'flex');
+        const isCooldown = Date.now() < _arrivalCooldownUntil;
+
+        if (isArrivalToastVisible || isModalActive || isCooldown) {
+            _insideCount = 0;
+            return;
+        }
+
+        // If current point is locked (e.g. REQUIRE_PREVIOUS), pause arrival triggering until previous point is viewed
+        if (!isPointUnlocked(p)) {
+            _insideCount = 0;
+            return;
+        }
+
         const accuracyThreshold = arrivalR + 15; // e.g. 45 m for 30 m arrival_radius
         const accuracyOk = accuracy <= accuracyThreshold;
 
@@ -674,7 +705,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         } else {
             // Outside arrival zone
             _insideCount = 0;
-            if (dist <= warningR && !approachToastVisible) {
+            // Don't show approach toast while arrival cooldown or another toast is active
+            if (dist <= warningR && !approachToastVisible && Date.now() >= _arrivalCooldownUntil) {
                 showApproachingToast(p, dist);
             }
         }
@@ -848,12 +880,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         approachToastVisible = false;
         closeProximityToast();
 
+        // Set cooldown: next arrival cannot trigger for 8 seconds after this toast appears.
+        // This prevents adjacent points from immediately overwriting the current toast.
+        _arrivalCooldownUntil = Date.now() + 8000;
+
         const name = p.title || p.name || 'Kohde';
         document.getElementById('arrival-name').textContent = name;
         const toast = document.getElementById('arrival-toast');
         toast.classList.add('visible');
 
         document.getElementById('arrival-open-btn').onclick = () => {
+            // Extend cooldown while user has opened the modal — next arrival
+            // should not fire until well after the modal is closed.
+            _arrivalCooldownUntil = Date.now() + 5000;
             window.openPointModal && window.openPointModal(p);
             closeArrivalToast();
         };
