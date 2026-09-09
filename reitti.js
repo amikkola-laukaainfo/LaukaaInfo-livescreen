@@ -2,6 +2,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const routeId = urlParams.get('id');
 
+    const isResetLocks = urlParams.get('reset') === '1' || urlParams.get('reset') === 'true' || urlParams.get('reset_locks') === '1';
+    if (isResetLocks) {
+        try {
+            Object.keys(localStorage).forEach(key => {
+                if (key.startsWith('unlocked_point_')) {
+                    localStorage.removeItem(key);
+                }
+            });
+        } catch(e) {}
+    }
+
     const isEmbed = urlParams.get('embed') === '1' || urlParams.get('embed') === 'true';
     if (isEmbed) {
         document.body.classList.add('is-embed-mode');
@@ -206,7 +217,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         function isPointUnlocked(p) {
             if (!p) return true;
-            const mode = p.unlock_mode || (p.unlock_mode === 'ON_LOCATION' || p.unlock_mode === 'REQUIRE_PREVIOUS' ? p.unlock_mode : 'PUBLIC');
+            const mode = p.unlock_mode || 'PUBLIC';
             if (mode === 'PUBLIC') return true;
             if (p._unlocked) return true;
             const pointId = p.id || `pt_${p._lat || p.lat}_${p._lng || p.lng}`;
