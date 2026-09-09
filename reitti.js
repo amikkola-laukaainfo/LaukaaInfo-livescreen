@@ -295,6 +295,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         window.routePoints = points;
 
+        // Immediately style all markers: Point 1 becomes Blue ('🎯 Seuraava kohde') awaiting encounter, future points stay red, visited stay green
+        updateAllMarkerStyles();
+
         // Start GPS navigation engine after route is rendered
         if (navigator.geolocation) {
             initGPS(points);
@@ -872,7 +875,110 @@ document.addEventListener('DOMContentLoaded', async () => {
                 teaser.innerHTML = '✨ Olet saapunut kohteeseen – napauta lukeaksesi tarinan!';
             }
         }
+        // Update all marker styles so current point stays green and NEXT point immediately turns blue ('🎯 Seuraava kohde')
+        updateAllMarkerStyles();
     }
+
+    // ─── MARKER VISUAL STATE ENGINE ("Odottaa kohtaamista") ─────────────────
+    function updateAllMarkerStyles() {
+        const points = window.routePoints;
+        if (!points || !Array.isArray(points)) return;
+
+        // Find index of first unvisited point
+        let activeIdx = -1;
+        for (let i = 0; i < points.length; i++) {
+            if (!isPointUnlocked(points[i])) {
+                activeIdx = i;
+                break;
+            }
+        }
+
+        points.forEach((p, idx) => {
+            const card = document.getElementById(`point-card-${idx}`);
+            const unlocked = isPointUnlocked(p);
+
+            if (unlocked) {
+                // 🟢 Käyty / Avattu piste: Vihreä karttamarkkeri
+                if (p._layer && p._layer.setStyle) {
+                    p._layer.setStyle({
+                        fillColor: '#059669',
+                        color: '#ffffff',
+                        weight: 2,
+                        radius: 10,
+                        fillOpacity: 0.9
+                    });
+                }
+
+                if (card) {
+                    card.style.borderLeft = '4px solid #059669';
+                    card.style.background = '#f0fdf4';
+                    const badge = card.querySelector('.point-locked-badge');
+                    if (badge) {
+                        badge.style.background = '#dcfce7';
+                        badge.style.color = '#15803d';
+                        badge.innerHTML = '🔓 Sisältö avattu';
+                    }
+                    const teaser = card.querySelector('.point-locked-teaser');
+                    if (teaser) {
+                        teaser.style.color = '#047857';
+                        teaser.innerHTML = '✨ Olet saapunut kohteeseen – napauta lukeaksesi tarinan!';
+                    }
+                }
+            } else if (idx === activeIdx) {
+                // 🔵 Odottamaan kohtaamista: Seuraava kohde saa sinisen erottuvan markkerin & sykkivän renkaan!
+                if (p._layer && p._layer.setStyle) {
+                    p._layer.setStyle({
+                        fillColor: '#2563eb', // Kirkas sininen
+                        color: '#ffffff',
+                        weight: 3,
+                        radius: 12,
+                        fillOpacity: 1
+                    });
+                }
+                // Sykkivä kelta/sininen rengas koodista "Odottaa kohtaamista"
+                setMarkerPulse(p, 'approach');
+
+                if (card) {
+                    card.style.borderLeft = '4px solid #2563eb';
+                    card.style.background = '#eff6ff';
+                    const badge = card.querySelector('.point-locked-badge');
+                    if (badge) {
+                        badge.style.background = '#dbeafe';
+                        badge.style.color = '#1e40af';
+                        badge.innerHTML = '🎯 Seuraava kohde';
+                    }
+                    const teaser = card.querySelector('.point-locked-teaser');
+                    if (teaser) {
+                        teaser.style.color = '#1d4ed8';
+                        teaser.innerHTML = `📍 Suuntaa kohteelle (${p.unlock_radius || p.arrival_radius || 30} m) avataksesi tarinan`;
+                    }
+                }
+            } else {
+                // 🔴 Tulevat lukitut pisteet: Standardi punainen karttamarkkeri
+                if (p._layer && p._layer.setStyle) {
+                    p._layer.setStyle({
+                        fillColor: '#e11d48',
+                        color: '#ffffff',
+                        weight: 2,
+                        radius: 8,
+                        fillOpacity: 0.7
+                    });
+                }
+
+                if (card) {
+                    card.style.borderLeft = '4px solid #f59e0b';
+                    card.style.background = '#fffbeb';
+                    const badge = card.querySelector('.point-locked-badge');
+                    if (badge) {
+                        badge.style.background = '#fef3c7';
+                        badge.style.color = '#b45309';
+                        badge.innerHTML = '🔒 Avautuu kohteessa';
+                    }
+                }
+            }
+        });
+    }
+    window.updateAllMarkerStyles = updateAllMarkerStyles;
 
     // ─── AUDIO & VIBRATION NOTIFICATIONS ────────────────────────────────────
     let _audioCtx = null;
