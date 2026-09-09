@@ -874,6 +874,77 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    // ─── AUDIO & VIBRATION NOTIFICATIONS ────────────────────────────────────
+    let _audioCtx = null;
+    function getAudioCtx() {
+        if (!_audioCtx) {
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            if (AudioCtx) _audioCtx = new AudioCtx();
+        }
+        if (_audioCtx && _audioCtx.state === 'suspended') {
+            _audioCtx.resume().catch(() => {});
+        }
+        return _audioCtx;
+    }
+
+    // Unlock audio context on user interaction
+    ['click', 'touchstart'].forEach(evt => {
+        document.addEventListener(evt, () => { getAudioCtx(); }, { once: true, capture: true });
+    });
+
+    function triggerFeedback(type) {
+        // 1. Vibration (Android / supporting browsers)
+        if (navigator.vibrate) {
+            try {
+                if (type === 'arrival') {
+                    navigator.vibrate([200, 100, 200, 100, 300]); // Festive 3-pulse pattern
+                } else if (type === 'approach') {
+                    navigator.vibrate([150]); // Short single pulse
+                }
+            } catch(e) {}
+        }
+
+        // 2. Audio Chime (Web Audio API synthesized sound - no external audio file needed)
+        try {
+            const ctx = getAudioCtx();
+            if (!ctx || ctx.state !== 'running') return;
+
+            const now = ctx.currentTime;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            if (type === 'arrival') {
+                // Happy 3-note ascending fanfare chime (C5 → E5 → G5)
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(523.25, now);       // C5
+                osc.frequency.setValueAtTime(659.25, now + 0.12); // E5
+                osc.frequency.setValueAtTime(783.99, now + 0.24); // G5
+
+                gain.gain.setValueAtTime(0.01, now);
+                gain.gain.exponentialRampToValueAtTime(0.25, now + 0.05);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.65);
+
+                osc.start(now);
+                osc.stop(now + 0.65);
+            } else if (type === 'approach') {
+                // Gentle ping sound (A5)
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(880, now); // A5
+
+                gain.gain.setValueAtTime(0.01, now);
+                gain.gain.exponentialRampToValueAtTime(0.15, now + 0.03);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+                osc.start(now);
+                osc.stop(now + 0.35);
+            }
+        } catch(e) {
+            console.warn('Audio chime error:', e);
+        }
+    }
+
     // ─── TOASTS ──────────────────────────────────────────────────────────────
 
     // "Kohde lähestyy" — amber approaching toast
@@ -888,6 +959,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const toast = document.getElementById('proximity-toast');
         toast.style.borderLeftColor = '#f59e0b';
         toast.classList.add('visible');
+
+        triggerFeedback('approach');
 
         document.getElementById('toast-open-btn').onclick = () => {
             window.openPointModal && window.openPointModal(p);
@@ -912,6 +985,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('arrival-name').textContent = name;
         const toast = document.getElementById('arrival-toast');
         toast.classList.add('visible');
+
+        triggerFeedback('arrival');
 
         document.getElementById('arrival-open-btn').onclick = () => {
             // Extend cooldown while user has opened the modal — next arrival
