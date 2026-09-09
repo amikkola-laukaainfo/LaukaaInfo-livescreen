@@ -44,6 +44,13 @@ try {
     console.error('Virhe datan modularisoinnissa:', e.message);
 }
 
+console.log('1.55 Generoidaan SEO-hakemistosivut (/kohteet/ ja /teemat/)...');
+try {
+    execSync('node generate_seo_pages.js', { stdio: 'inherit' });
+} catch (e) {
+    console.error('Virhe SEO-sivujen generoinnissa:', e.message);
+}
+
 console.log('1.6 Generoidaan sitemap...');
 try {
     execSync('node generate_sitemap.js', { stdio: 'inherit' });

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saraakallion kalliomaalaukset – historia, kohteet ja elämykset | LaukaaInfo</title>
+    <meta name="description" content="Pohjoismaiden laajin kalliomaalausalue Saraaveden rannalla Laukaassa. Saraakallion maalaukset ajoittuvat 5000–7000 vuoden taakse.">
+    <link rel="canonical" href="https://laukaainfo.fi/kohteet/saraakallio.html">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Saraakallion kalliomaalaukset – historia, kohteet ja elämykset | LaukaaInfo">
+    <meta property="og:description" content="Pohjoismaiden laajin kalliomaalausalue Saraaveden rannalla Laukaassa. Saraakallion maalaukset ajoittuvat 5000–7000 vuoden taakse.">
+    <meta property="og:url" content="https://laukaainfo.fi/kohteet/saraakallio.html">
+    <meta property="og:image" content="../hero-kuva.webp">
+    <meta property="og:site_name" content="LaukaaInfo">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Saraakallion kalliomaalaukset – historia, kohteet ja elämykset | LaukaaInfo">
+    <meta name="twitter:description" content="Pohjoismaiden laajin kalliomaalausalue Saraaveden rannalla Laukaassa. Saraakallion maalaukset ajoittuvat 5000–7000 vuoden taakse.">
+    <meta name="twitter:image" content="../hero-kuva.webp">
+
+    <!-- Google Fonts & Style -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #0f766e;
+            --primary-dark: #115e59;
+            --primary-light: #ccfbf1;
+            --accent: #d97706;
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --font-heading: 'Outfit', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        a {
+            color: #38bdf8;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        a:hover {
+            color: #7dd3fc;
+            text-decoration: underline;
+        }
+
+        /* Top Navigation Header */
+        .site-header {
+            background-color: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand-logo {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .brand-logo span {
+            color: #2dd4bf;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        /* Breadcrumbs */
+        .breadcrumb-section {
+            max-width: 1200px;
+            margin: 1rem auto 0;
+            padding: 0 1.5rem;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .breadcrumb-section a {
+            color: var(--text-muted);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            padding: 4rem 1.5rem 3rem;
+            border-bottom: 1px solid var(--border-color);
+            margin-top: 1rem;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.75) 0%, rgba(15, 23, 42, 0.95) 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+            z-index: 1;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(45, 212, 191, 0.15);
+            color: #2dd4bf;
+            border: 1px solid rgba(45, 212, 191, 0.3);
+            padding: 0.35rem 0.85rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .hero h1 {
+            font-family: var(--font-heading);
+            font-size: clamp(2rem, 5vw, 3.25rem);
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .hero-lead {
+            font-size: 1.2rem;
+            color: #cbd5e1;
+            max-width: 800px;
+            margin-bottom: 1.75rem;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: #ffffff;
+            font-weight: 700;
+            padding: 0.85rem 1.75rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 14px rgba(15, 118, 110, 0.4);
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(15, 118, 110, 0.6);
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        /* Content Container */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto 4rem;
+            padding: 0 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 2.5rem;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Main Content */
+        .main-content section {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .main-content h2 {
+            font-family: var(--font-heading);
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0.5rem;
+        }
+
+        .text-body p {
+            margin-bottom: 1rem;
+            color: #cbd5e1;
+        }
+
+        .tag-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .tag-chip {
+            background: #334155;
+            color: #e2e8f0;
+            padding: 0.4rem 0.9rem;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .tag-chip:hover {
+            background: var(--primary);
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.25rem;
+            margin-top: 1rem;
+        }
+
+        .content-card {
+            background: #0f172a;
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            transition: border-color 0.2s;
+        }
+
+        .content-card:hover {
+            border-color: #38bdf8;
+        }
+
+        .content-card h3 {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .content-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        /* Sidebar */
+        .sidebar-widget {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 1.75rem;
+            margin-bottom: 1.75rem;
+        }
+
+        .sidebar-widget h3 {
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            color: #ffffff;
+            margin-bottom: 1rem;
+        }
+
+        .action-box {
+            background: linear-gradient(180deg, rgba(15, 118, 110, 0.2) 0%, rgba(15, 23, 42, 0.4) 100%);
+            border: 1px solid rgba(45, 212, 191, 0.3);
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            text-align: center;
+        }
+
+        .action-box p {
+            font-size: 0.95rem;
+            color: #cbd5e1;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        .site-footer {
+            background-color: #090d16;
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 1.5rem;
+            margin-top: auto;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+
+        .footer-brand {
+            max-width: 400px;
+        }
+
+        .footer-brand h4 {
+            color: #ffffff;
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* JSON-LD */
+        script[type="application/ld+json"] {
+            display: none;
+        }
+    </style>
+
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Etusivu","item":"https://laukaainfo.fi/"},{"@type":"ListItem","position":2,"name":"Kohteet","item":"https://laukaainfo.fi/kohteet/"},{"@type":"ListItem","position":3,"name":"Saraakallion kalliomaalaukset","item":"https://laukaainfo.fi/kohteet/saraakallio.html"}]},{"@type":"Place","name":"Saraakallion kalliomaalaukset","description":"Pohjoismaiden laajin kalliomaalausalue Saraaveden rannalla Laukaassa. Saraakallion maalaukset ajoittuvat 5000–7000 vuoden taakse.","image":"https://laukaainfo.fi/../hero-kuva.webp","address":{"@type":"PostalAddress","addressLocality":"Laukaa Kirkonkylä","addressCountry":"FI"},"url":"https://laukaainfo.fi/kohteet/saraakallio.html"}]}
+    </script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="nav-container">
+            <a href="../index.html" class="brand-logo">Laukaa<span>Info</span></a>
+            <ul class="nav-links">
+                <li><a href="../index.html">Etusivu</a></li>
+                <li><a href="../laukaa.html">Paikat</a></li>
+                <li><a href="../asiahaku.html">Teemat</a></li>
+                <li><a href="../ajankohtaista.html">Ajankohtaista</a></li>
+                <li><a href="../tarinakartta.html">Tarinat</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <nav class="breadcrumb-section" aria-label="Murupolku">
+        <a href="../index.html">Etusivu</a> &gt; <a href="../laukaa.html">Kohteet</a> &gt; <span>Saraakallion kalliomaalaukset</span>
+    </nav>
+
+    <div class="hero" style="background-image: url('../hero-kuva.webp');">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <span class="badge">Kohde • Laukaa Kirkonkylä</span>
+            <h1>Saraakallion kalliomaalaukset</h1>
+            <p class="hero-lead">Pohjoismaiden laajin kalliomaalausalue Saraaveden rannalla Laukaassa. Saraakallion maalaukset ajoittuvat 5000–7000 vuoden taakse.</p>
+            <a href="../tietoa-paikasta.html?id=saraakallio" class="cta-button">
+                Avaa kohde LaukaaInfo-palvelussa &rarr;
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+        <main class="main-content">
+            
+            <section>
+                <h2>Yleiskatsaus ja historia</h2>
+                <div class="text-body">
+                    <p>Saraakallion kalliomaalaukset sisältävät yli 100 tunnistettua kuviohahmoa, kuten hirviä, ihmisiä ja veneitä. Ne kertovat kivikauden ihmisten elämästä, uskomuksista ja pyhistä paikoista.</p>
+                </div>
+            </section>
+            
+
+            
+            <section>
+                <h2>Liittyvät teemat</h2>
+                <p>Tutustu aihealueisiin ja teemoihin, joihin Saraakallion kalliomaalaukset liittyy:</p>
+                <div class="tag-cloud">
+                    
+                        <a href="../teemat/luonto.html" class="tag-chip">
+                            # Luonto ja retkeily
+                        </a>
+                    
+                </div>
+            </section>
+            
+
+            
+
+            
+        </main>
+
+        <aside class="sidebar">
+            <div class="sidebar-widget action-box">
+                <h3>Interaktiivinen kartta</h3>
+                <p>Tutustu kohteen <strong>Saraakallion kalliomaalaukset</strong> sijaintiin, reitteihin ja lähipalveluihin interaktiivisella kartallamme.</p>
+                <a href="../tietoa-paikasta.html?id=saraakallio" class="cta-button" style="width: 100%; justify-content: center;">
+                    Siirry sovellukseen
+                </a>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3>Alue</h3>
+                <p><strong>Alue:</strong> Laukaa Kirkonkylä</p>
+                <p style="margin-top: 0.5rem;"><a href="../laukaa.html">Katso kaikki Laukaan kohteet &rarr;</a></p>
+            </div>
+        </aside>
+    </div>
+    
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h4>LaukaaInfo</h4>
+                <p>Laukaan paikkojen, teemojen ja kokemusten digitaalinen hakemisto ja interaktiivinen palvelu.</p>
+            </div>
+            <div>
+                <p>&copy; 2026 LaukaaInfo • <a href="../tietosuoja.html">Tietosuoja</a> • <a href="../index.html">Palaa LaukaaInfoon</a></p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

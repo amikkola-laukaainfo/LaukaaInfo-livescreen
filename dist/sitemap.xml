@@ -237,6 +237,81 @@
   <priority>0.80</priority>
 </url>
 <url>
+  <loc>https://laukaainfo.fi/kohteet/haaralan-tehdas.html</loc>
+  <lastmod>2026-09-09T00:00:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/kohteet/hitonhauta.html</loc>
+  <lastmod>2026-09-09T00:00:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/kohteet/hyyppaanvuori.html</loc>
+  <lastmod>2026-09-09T00:00:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/kohteet/kuusankoski.html</loc>
+  <lastmod>2026-09-09T00:00:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/kohteet/laukaan-satama.html</loc>
+  <lastmod>2026-09-09T00:00:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/kohteet/lievestuore.html</loc>
+  <lastmod>2026-09-09T00:00:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/kohteet/peurunka.html</loc>
+  <lastmod>2026-09-09T00:00:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/kohteet/saraakallio.html</loc>
+  <lastmod>2026-09-09T00:00:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/kohteet/tarvaala.html</loc>
+  <lastmod>2026-09-09T00:00:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/kohteet/vihtavuori.html</loc>
+  <lastmod>2026-09-09T00:00:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/teemat/historia.html</loc>
+  <lastmod>2026-09-09T00:00:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/teemat/luonto.html</loc>
+  <lastmod>2026-09-09T00:00:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/teemat/perheille.html</loc>
+  <lastmod>2026-09-09T00:00:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/teemat/teollisuushistoria.html</loc>
+  <lastmod>2026-09-09T00:00:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://laukaainfo.fi/teemat/vesistot.html</loc>
+  <lastmod>2026-09-09T00:00:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
   <loc>https://laukaainfo.fi/yritys/terveys-ja-hyvinvointipalvelu-riina-raitio.html</loc>
   <lastmod>2026-09-09T00:00:00+00:00</lastmod>
   <priority>0.90</priority>

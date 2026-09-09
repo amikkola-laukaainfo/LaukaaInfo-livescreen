@@ -123,6 +123,22 @@ async function generateSitemap() {
 </url>\n`;
     });
 
+    // 1b. Lisätään generoidut SEO-hakemistosivut (/kohteet/*.html ja /teemat/*.html)
+    ['kohteet', 'teemat'].forEach(dirName => {
+        const dirPath = path.join(__dirname, dirName);
+        if (fs.existsSync(dirPath)) {
+            const files = fs.readdirSync(dirPath).filter(f => f.endsWith('.html'));
+            files.forEach(file => {
+                xml += `<url>
+  <loc>${baseUrl}${dirName}/${file}</loc>
+  <lastmod>${currentDate}</lastmod>
+  <priority>0.90</priority>
+</url>\n`;
+            });
+            console.log(`✓ Lisätty ${files.length} SEO-sivua kansiosta /${dirName}/ sitemapiin.`);
+        }
+    });
+
     // 2. Haetaan Premium-yritykset ja lisätään ne sitemapiin
     const companiesFile = path.join(__dirname, 'companies_data.json');
     if (fs.existsSync(companiesFile)) {
