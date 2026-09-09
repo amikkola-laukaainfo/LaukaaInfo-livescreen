@@ -655,12 +655,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         // If dist is inside the zone but accuracy is too poor, we stay in
         // the "approaching" state and wait for a better GPS fix.
 
-        // Do not trigger new arrival toast while an arrival toast or modal is currently active,
+        // Do not trigger new arrival toast while an arrival toast is currently visible,
         // or while the arrival cooldown is in effect (prevents adjacent points from firing too fast)
         const arrivalToastEl = document.getElementById('arrival-toast');
         const isArrivalToastVisible = arrivalToastEl && arrivalToastEl.classList.contains('visible');
+        // Check modal via class only (not style.display — openPointModal sets it and it may not be cleared)
         const pointModalEl = document.getElementById('point-modal');
-        const isModalActive = pointModalEl && (pointModalEl.classList.contains('active') || pointModalEl.style.display === 'flex');
+        const isModalActive = pointModalEl && pointModalEl.classList.contains('active');
         const isCooldown = Date.now() < _arrivalCooldownUntil;
 
         if (isArrivalToastVisible || isModalActive || isCooldown) {
@@ -668,10 +669,25 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        // If current point is locked (e.g. REQUIRE_PREVIOUS), pause arrival triggering until previous point is viewed
-        if (!isPointUnlocked(p)) {
-            _insideCount = 0;
-            return;
+        // Sequential ordering: REQUIRE_PREVIOUS mode blocks arrival until previous point is physically visited.
+        // ON_LOCATION mode: arrival detection ALWAYS runs — that's how the point gets unlocked.
+        // PUBLIC mode: always runs.
+        if (p.unlock_mode === 'REQUIRE_PREVIOUS') {
+            const pts = window.routePoints || [];
+            const idx = pts.findIndex(pt => pt === p || (pt.id && pt.id === p.id));
+            if (idx > 0) {
+                const prev = pts[idx - 1];
+                const prevVisited = prev._unlocked || (() => {
+                    try {
+                        const prevId = prev.id || `pt_${prev._lat || prev.lat}_${prev._lng || prev.lng}`;
+                        return localStorage.getItem('unlocked_point_' + prevId) === 'true';
+                    } catch(e) { return false; }
+                })();
+                if (!prevVisited) {
+                    _insideCount = 0;
+                    return;
+                }
+            }
         }
 
         // Hysteresis zones:
