@@ -648,7 +648,70 @@
             margin: 0.5rem 0 1rem 0;
             line-height: 1.6;
         }
+
+        /* ─── OIKAISU-YHDISTIN TIMELINESSA ─────────────────────────────────── */
+        .shortcut-connector {
+            position: relative;
+            margin: -4px 0 4px -2rem; /* ulottuu timelineviivan yli */
+            padding-left: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0;
+            pointer-events: none;
+        }
+        .shortcut-connector-arrow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+        .shortcut-connector-arrow-line {
+            width: 2px;
+            height: 28px;
+            background: repeating-linear-gradient(
+                to bottom,
+                #f97316 0px, #f97316 5px,
+                transparent 5px, transparent 9px
+            );
+            border-radius: 1px;
+        }
+        .shortcut-connector-arrow-head {
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 7px solid #f97316;
+        }
+        .shortcut-connector-label {
+            background: linear-gradient(135deg, #fff7ed, #fffbeb);
+            border: 1.5px solid #fed7aa;
+            border-radius: 10px;
+            padding: 5px 10px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #c2410c;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap;
+            pointer-events: auto;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+            box-shadow: 0 1px 4px rgba(194,65,12,0.1);
+        }
+        .shortcut-connector-label:hover {
+            background: linear-gradient(135deg, #ffedd5, #fff7ed);
+            border-color: #fb923c;
+        }
+        .shortcut-connector-skip {
+            font-weight: 400;
+            color: #ea580c;
+            font-size: 10px;
+        }
     </style>
+
 
 </head>
 <body>

@@ -264,6 +264,32 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const shortcutBadge = hasShortcut
                     ? `<span class="shortcut-available-badge" onclick="event.stopPropagation(); window.openPointModal(window.routePoints[${idx}])" title="Tästä pisteestä on oikaisumahdollisuus">⏭ Oikaisu</span>`
                     : '';
+
+                // Connector tämän kortin jälkeen
+                let lockedConnector = '';
+                const lockedShortcutId = p.shortcut_to || p.shortcutTo;
+                if (lockedShortcutId) {
+                    const targetIdx = points.findIndex(pt => pt.id === lockedShortcutId);
+                    if (targetIdx > idx) {
+                        const targetPoint = points[targetIdx];
+                        const targetName = targetPoint?.title || targetPoint?.name || `Piste ${targetIdx + 1}`;
+                        const skipCount = targetIdx - idx - 1;
+                        const skipLabel = skipCount > 0
+                            ? `<span class="shortcut-connector-skip">(ohittaa ${skipCount} kohde${skipCount > 1 ? 'tta' : 'en'})</span>`
+                            : '';
+                        lockedConnector = `
+                            <div class="shortcut-connector" id="shortcut-connector-${idx}">
+                                <div class="shortcut-connector-arrow">
+                                    <div class="shortcut-connector-arrow-line"></div>
+                                    <div class="shortcut-connector-arrow-head"></div>
+                                </div>
+                                <div class="shortcut-connector-label" onclick="window.openPointModal(window.routePoints[${idx}])">
+                                    ⏭ Oikaisu → ${targetName} ${skipLabel}
+                                </div>
+                            </div>`;
+                    }
+                }
+
                 return `
                 <div class="point-card point-card-locked" id="point-card-${idx}" style="cursor: pointer; border-left: 4px solid #f59e0b; background: #fffbeb; padding: 12px 14px; border-radius: 10px; margin-bottom: 8px;" onclick="window.openPointModal(window.routePoints[${idx}])">
                     <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
@@ -275,8 +301,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </div>
                     <div class="point-locked-teaser" style="font-size: 12px; color: #78350f; margin-top: 6px;">📍 Saavu kohteeseen (${radius} m) avataksesi tarinan</div>
                 </div>
-                `;
+                ${lockedConnector}`;
             }
+
 
 
             let mediaPreview = '';
@@ -310,6 +337,31 @@ document.addEventListener('DOMContentLoaded', async () => {
                 ? `<span class="shortcut-available-badge" onclick="event.stopPropagation(); window.openPointModal(window.routePoints[${idx}])" title="Tästä pisteestä on oikaisumahdollisuus — avaa piste nähdäksesi vaihtoehto">⏭ Oikaisu</span>`
                 : '';
 
+            // ⏭ Oikaisu-connector timelinessa tämän kortin jälkeen
+            let shortcutConnector = '';
+            const shortcutId = p.shortcut_to || p.shortcutTo;
+            if (shortcutId) {
+                const targetIdx = points.findIndex(pt => pt.id === shortcutId);
+                if (targetIdx > idx) {
+                    const targetPoint = points[targetIdx];
+                    const targetName = targetPoint?.title || targetPoint?.name || `Piste ${targetIdx + 1}`;
+                    const skipCount = targetIdx - idx - 1;
+                    const skipLabel = skipCount > 0
+                        ? `<span class="shortcut-connector-skip">(ohittaa ${skipCount} kohde${skipCount > 1 ? 'tta' : 'en'})</span>`
+                        : '';
+                    shortcutConnector = `
+                        <div class="shortcut-connector" id="shortcut-connector-${idx}">
+                            <div class="shortcut-connector-arrow">
+                                <div class="shortcut-connector-arrow-line"></div>
+                                <div class="shortcut-connector-arrow-head"></div>
+                            </div>
+                            <div class="shortcut-connector-label" onclick="window.openPointModal(window.routePoints[${idx}])">
+                                ⏭ Oikaisu → ${targetName} ${skipLabel}
+                            </div>
+                        </div>`;
+                }
+            }
+
             return `
             <div class="point-card" id="point-card-${idx}" style="cursor: pointer;" onclick="window.openPointModal(window.routePoints[${idx}])">
                 <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
@@ -318,11 +370,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 </div>
                 ${mediaPreview}
             </div>
-            `;
+            ${shortcutConnector}`;
         }).join('');
 
         
         window.routePoints = points;
+
 
         // Immediately style all markers: Point 1 becomes Blue ('🎯 Seuraava kohde') awaiting encounter, future points stay red, visited stay green
         updateAllMarkerStyles();
