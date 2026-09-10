@@ -185,7 +185,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         // Debuggaus: tarkista parentPlace ja placeData slugit
-        console.debug('[scoreCompanies] placeData.name:', placeData.name, '| placeData.alue_slug:', placeData.alue_slug, '| parentPlace:', parentPlace?.name);
+        console.debug('[scoreCompanies] placeData.name:', placeData.name,
+            '| commercial_visibility:', placeData.commercial_visibility,
+            '| placeData.lat:', placeData.lat, 'lon:', placeData.lon,
+            '| alue_slug:', placeData.alue_slug,
+            '| parentPlace:', parentPlace?.name, 'lat:', parentPlace?.lat, 'lon:', parentPlace?.lon);
         console.debug('[scoreCompanies] yritykset count:', yritykset.length);
 
         // Pisteytä yritykset uuden 4-tason mallin mukaisesti
