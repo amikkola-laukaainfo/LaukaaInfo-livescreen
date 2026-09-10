@@ -625,22 +625,27 @@ function scoreCompanies(allCompanies, place, relations, tagMatches, visibilityDa
                 reasons.push({ type: 'AREA', label: 'Lähialueella' });
             }
             
-            // Fyysinen: etäisyys
+            // Fyysinen: etäisyys (käytetään paikan tai yläpaikan koordinaatteja)
             const cLon = company.lon || company.lng;
-            if (company.lat && cLon && place.lat && place.lon) {
-                const dist = haversineKm(Number(company.lat), Number(cLon), Number(place.lat), Number(place.lon));
-                console.debug(`[DIST] ${company.nimi}: dist=${dist} km`);
-                if (dist < 2.0) {
-                    const distScore = Math.max(10, Math.round(70 - (dist / 2) * 60));
+            const placeLat = place.lat || (parentPlace && parentPlace.lat);
+            const placeLon = place.lon || (parentPlace && parentPlace.lon);
+            const usingParentCoords = !place.lat && parentPlace && parentPlace.lat;
+            if (company.lat && cLon && placeLat && placeLon) {
+                const dist = haversineKm(Number(company.lat), Number(cLon), Number(placeLat), Number(placeLon));
+                console.debug(`[DIST] ${company.nimi}: dist=${dist?.toFixed(2)} km (${usingParentCoords ? 'yläpaikka' : 'paikka'})`);
+                // Jos käytetään yläpaikan koordinaatteja, suurempi säde (3 km)
+                const distThreshold = usingParentCoords ? 3.0 : 2.0;
+                if (dist < distThreshold) {
+                    const distScore = Math.max(10, Math.round(70 - (dist / distThreshold) * 60));
                     score += distScore;
-                    tier = Math.min(tier, 1);
+                    tier = Math.min(tier, usingParentCoords ? 2 : 1);
                     let distLabel = dist < 1 ? `${Math.round(dist*1000)} m` : `${dist.toFixed(1).replace('.', ',')} km`;
                     reasons.push({ type: 'NEAR', label: distLabel });
                 }
             } else {
                 // Logaa miksi etäisyyslasku ohitetaan
                 if (company.nimi && company.nimi.includes('Tertan')) {
-                    console.debug(`[DIST SKIP] ${company.nimi}: lat=${company.lat} lon=${cLon} place.lat=${place.lat} place.lon=${place.lon}`);
+                    console.debug(`[DIST SKIP] ${company.nimi}: lat=${company.lat} lon=${cLon} place.lat=${place.lat} place.lon=${place.lon} parent.lat=${parentPlace?.lat}`);
                 }
             }
         }
