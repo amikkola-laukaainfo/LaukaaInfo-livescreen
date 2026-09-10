@@ -265,6 +265,20 @@ document.addEventListener('DOMContentLoaded', async () => {
                     ? `<span class="shortcut-available-badge" onclick="event.stopPropagation(); window.openPointModal(window.routePoints[${idx}])" title="Tästä pisteestä on oikaisumahdollisuus">⏭ Oikaisu</span>`
                     : '';
 
+    // Apufunktio ohitettavien pisteiden tekstimuotoiluun (esim. "ohittaa kohteen 2" tai "ohittaa kohteet 2 ja 3")
+    function getSkippedPointsText(fromIdx, targetIdx) {
+        const skipped = [];
+        for (let i = fromIdx + 1; i < targetIdx; i++) {
+            skipped.push(i + 1);
+        }
+        if (skipped.length === 0) return '';
+        if (skipped.length === 1) {
+            return `ohittaa kohteen ${skipped[0]}`;
+        }
+        const last = skipped.pop();
+        return `ohittaa kohteet ${skipped.join(', ')} ja ${last}`;
+    }
+
                 // Connector tämän kortin jälkeen
                 let lockedConnector = '';
                 const lockedShortcutId = p.shortcut_to || p.shortcutTo;
@@ -273,9 +287,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                     if (targetIdx > idx) {
                         const targetPoint = points[targetIdx];
                         const targetName = targetPoint?.title || targetPoint?.name || `Piste ${targetIdx + 1}`;
-                        const skipCount = targetIdx - idx - 1;
-                        const skipLabel = skipCount > 0
-                            ? `<span class="shortcut-connector-skip">(ohittaa ${skipCount} kohde${skipCount > 1 ? 'tta' : 'en'})</span>`
+                        const skipText = getSkippedPointsText(idx, targetIdx);
+                        const skipLabel = skipText
+                            ? `<span class="shortcut-connector-skip">(${skipText})</span>`
                             : '';
                         lockedConnector = `
                             <div class="shortcut-connector" id="shortcut-connector-${idx}">
@@ -345,9 +359,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (targetIdx > idx) {
                     const targetPoint = points[targetIdx];
                     const targetName = targetPoint?.title || targetPoint?.name || `Piste ${targetIdx + 1}`;
-                    const skipCount = targetIdx - idx - 1;
-                    const skipLabel = skipCount > 0
-                        ? `<span class="shortcut-connector-skip">(ohittaa ${skipCount} kohde${skipCount > 1 ? 'tta' : 'en'})</span>`
+                    const skipText = getSkippedPointsText(idx, targetIdx);
+                    const skipLabel = skipText
+                        ? `<span class="shortcut-connector-skip">(${skipText})</span>`
                         : '';
                     shortcutConnector = `
                         <div class="shortcut-connector" id="shortcut-connector-${idx}">
@@ -1683,15 +1697,24 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 if (shortcutTargetNameEl) shortcutTargetNameEl.textContent = targetName;
 
-                // Päivitetään kuvaus ohitettavien pisteiden määrällä
+                // Päivitetään kuvaus ohitettavien pisteiden nimillä/numeroilla
                 const descEl = document.getElementById('shortcut-panel-desc');
-                if (descEl && skippedCount > 0) {
-                    descEl.innerHTML = `Voit siirtyä suoraan pisteeseen <strong>${targetName}</strong>. ` +
-                        `${skippedCount} piste${skippedCount > 1 ? 'ttä' : ''} ohitetaan — ` +
-                        `niiden sisältö säilyy <strong>lukittuna</strong>.`;
-                } else if (descEl) {
-                    descEl.innerHTML = `Voit siirtyä suoraan pisteeseen <strong>${targetName}</strong>. ` +
-                        `Ohitettujen pisteiden sisältö säilyy <strong>lukittuna</strong>.`;
+                if (descEl) {
+                    const skippedNums = [];
+                    for (let i = currentIdx + 1; i < targetIdx; i++) {
+                        skippedNums.push(i + 1);
+                    }
+                    if (skippedNums.length === 1) {
+                        descEl.innerHTML = `Voit siirtyä suoraan pisteeseen <strong>${targetName}</strong>. ` +
+                            `Kohde <strong>${skippedNums[0]}</strong> ohitetaan — sen sisältö säilyy <strong>lukittuna</strong>.`;
+                    } else if (skippedNums.length > 1) {
+                        const lastNum = skippedNums.pop();
+                        descEl.innerHTML = `Voit siirtyä suoraan pisteeseen <strong>${targetName}</strong>. ` +
+                            `Kohteet <strong>${skippedNums.join(', ')} ja ${lastNum}</strong> ohitetaan — niiden sisältö säilyy <strong>lukittuna</strong>.`;
+                    } else {
+                        descEl.innerHTML = `Voit siirtyä suoraan pisteeseen <strong>${targetName}</strong>. ` +
+                            `Ohitettujen pisteiden sisältö säilyy <strong>lukittuna</strong>.`;
+                    }
                 }
 
                 shortcutPanelEl.classList.add('visible');
