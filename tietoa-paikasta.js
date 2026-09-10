@@ -184,8 +184,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                    (vt.target_type === 'AREA');
         });
 
+        // Debuggaus: tarkista parentPlace ja placeData slugit
+        console.debug('[scoreCompanies] placeData.name:', placeData.name, '| placeData.alue_slug:', placeData.alue_slug, '| parentPlace:', parentPlace?.name);
+        console.debug('[scoreCompanies] yritykset count:', yritykset.length);
+
         // Pisteytä yritykset uuden 4-tason mallin mukaisesti
-        const scoredCompanies = scoreCompanies(yritykset, placeData, relationsData || [], tagMatches || [], visibilityData);
+        const scoredCompanies = scoreCompanies(yritykset, placeData, relationsData || [], tagMatches || [], visibilityData, parentPlace);
+        console.debug('[scoreCompanies] scoredCompanies count:', scoredCompanies.length, '| top 5:', scoredCompanies.slice(0,5).map(c => c.nimi || c.name));
 
         // 5. Yhdistä tiedot poistaen duplikaatit
         const allItemsMap = new Map();
@@ -545,7 +550,7 @@ const toSlugGlobal = (text) => text.toString().toLowerCase()
     .replace(/--+/g, '-')
     .replace(/^-+|-+$/g, '');
 
-function scoreCompanies(allCompanies, place, relations, tagMatches, visibilityData = []) {
+function scoreCompanies(allCompanies, place, relations, tagMatches, visibilityData = [], parentPlace = null) {
     const results = [];
     const seenIds = new Set();
 
@@ -597,24 +602,45 @@ function scoreCompanies(allCompanies, place, relations, tagMatches, visibilityDa
         
         // Fyysiset osumat sallitaan vain jos paikka on kaupallisesti kiinnostava
         if (place.commercial_visibility !== false) {
-            // Fyysinen: alue_slug
+            // Fyysinen: alue_slug – tarkista sekä nykyinen paikka, sen alue_slug-kenttä että yläpaikka
             const cSlug = toSlugGlobal(company.alue_slug || '');
             const pSlug = toSlugGlobal(place.name || place.canonical_name || '');
+            const pAreaSlug = place.alue_slug ? toSlugGlobal(place.alue_slug) : '';
+            const parentSlug = parentPlace ? toSlugGlobal(parentPlace.name || parentPlace.canonical_name || '') : '';
+
+            // Debug yksittäiselle yritykselle
+            if (cSlug && (cSlug === pSlug || cSlug === parentSlug || cSlug === pAreaSlug)) {
+                console.debug(`[AREA MATCH] ${company.nimi}: cSlug=${cSlug} pSlug=${pSlug} parentSlug=${parentSlug} pAreaSlug=${pAreaSlug}`);
+            }
+
             if (cSlug && pSlug && cSlug === pSlug) {
                 score += 80; tier = 1;
                 reasons.push({ type: 'AREA', label: 'Toimipaikka' });
+            } else if (cSlug && (
+                (parentSlug && cSlug === parentSlug) ||
+                (pAreaSlug && cSlug === pAreaSlug)
+            )) {
+                // Yritys on liitetty yläpaikkaan tai paikan alue_slug täsmää
+                score += 50; tier = Math.min(tier, 2);
+                reasons.push({ type: 'AREA', label: 'Lähialueella' });
             }
             
             // Fyysinen: etäisyys
             const cLon = company.lon || company.lng;
             if (company.lat && cLon && place.lat && place.lon) {
-                const dist = haversineKm(company.lat, cLon, place.lat, place.lon);
+                const dist = haversineKm(Number(company.lat), Number(cLon), Number(place.lat), Number(place.lon));
+                console.debug(`[DIST] ${company.nimi}: dist=${dist} km`);
                 if (dist < 2.0) {
                     const distScore = Math.max(10, Math.round(70 - (dist / 2) * 60));
                     score += distScore;
                     tier = Math.min(tier, 1);
                     let distLabel = dist < 1 ? `${Math.round(dist*1000)} m` : `${dist.toFixed(1).replace('.', ',')} km`;
                     reasons.push({ type: 'NEAR', label: distLabel });
+                }
+            } else {
+                // Logaa miksi etäisyyslasku ohitetaan
+                if (company.nimi && company.nimi.includes('Tertan')) {
+                    console.debug(`[DIST SKIP] ${company.nimi}: lat=${company.lat} lon=${cLon} place.lat=${place.lat} place.lon=${place.lon}`);
                 }
             }
         }
