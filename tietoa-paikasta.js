@@ -637,8 +637,8 @@ function scoreCompanies(allCompanies, place, relations, tagMatches, visibilityDa
             if (company.lat && cLon && placeLat && placeLon) {
                 const dist = haversineKm(Number(company.lat), Number(cLon), Number(placeLat), Number(placeLon));
                 console.debug(`[DIST] ${company.nimi}: dist=${dist?.toFixed(2)} km (${usingParentCoords ? 'yläpaikka' : 'paikka'})`);
-                // Jos käytetään yläpaikan koordinaatteja, suurempi säde (3 km)
-                const distThreshold = usingParentCoords ? 3.0 : 2.0;
+                // Jos käytetään yläpaikan koordinaatteja, suurempi säde (5 km) koska alue voi olla laaja
+                const distThreshold = usingParentCoords ? 5.0 : 2.0;
                 if (dist < distThreshold) {
                     const distScore = Math.max(10, Math.round(70 - (dist / distThreshold) * 60));
                     score += distScore;
