@@ -508,7 +508,148 @@
             color: #ffffff;
             transform: translateY(-1px);
         }
+
+        /* ─── OIKAISU (SHORTCUT) ────────────────────────────────────────────── */
+
+        /* Ohitettu piste kortissa */
+        .point-card-skipped {
+            background: #f8fafc !important;
+            border-left: 4px solid #cbd5e1 !important;
+            opacity: 0.65;
+        }
+        .point-card-skipped h3 {
+            color: #94a3b8 !important;
+            text-decoration: line-through;
+        }
+        /* ⏭ pieni badge kortin oikeaan yläkulmaan */
+        .shortcut-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 10px;
+            font-weight: 800;
+            background: #f1f5f9;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+            padding: 2px 7px;
+            border-radius: 12px;
+            white-space: nowrap;
+            cursor: default;
+        }
+        /* Pienen ⏭-nuolen badge kortin reunassa jos pisteellä on oikaisu */
+        .shortcut-available-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 10px;
+            font-weight: 800;
+            background: #fff7ed;
+            color: #c2410c;
+            border: 1px solid #fed7aa;
+            padding: 2px 7px;
+            border-radius: 12px;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .shortcut-available-badge:hover {
+            background: #ffedd5;
+        }
+
+        /* Oikaisu-paneeli modaalin sisällä */
+        #shortcut-panel {
+            display: none;
+            margin-top: 1.5rem;
+            padding: 1rem 1.2rem;
+            background: linear-gradient(135deg, #fff7ed, #fffbeb);
+            border: 1.5px solid #fed7aa;
+            border-radius: 14px;
+        }
+        #shortcut-panel.visible {
+            display: block;
+            animation: shortcutFadeIn 0.3s ease;
+        }
+        @keyframes shortcutFadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .shortcut-panel-title {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: #92400e;
+            margin-bottom: 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .shortcut-panel-desc {
+            font-size: 0.78rem;
+            color: #b45309;
+            line-height: 1.5;
+            margin-bottom: 0.9rem;
+        }
+        .shortcut-panel-actions {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+        .btn-continue-normal {
+            flex: 1;
+            padding: 0.5rem 0.8rem;
+            background: #fff;
+            color: #475569;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+            transition: background 0.15s, border-color 0.15s;
+            min-width: 110px;
+        }
+        .btn-continue-normal:hover { background: #f8fafc; border-color: #cbd5e1; }
+        .btn-take-shortcut {
+            flex: 1;
+            padding: 0.5rem 0.8rem;
+            background: #c2410c;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            cursor: pointer;
+            font-family: inherit;
+            transition: background 0.2s, transform 0.15s;
+            min-width: 110px;
+        }
+        .btn-take-shortcut:hover { background: #b91c1c; transform: scale(1.03); }
+
+        /* Reitin loppuyhteenveto */
+        #route-summary-panel {
+            display: none;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+            text-align: center;
+        }
+        #route-summary-panel.visible { display: block; }
+        .summary-score {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 0.25rem;
+        }
+        .summary-score span { color: #059669; }
+        .summary-skipped-list {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin: 0.5rem 0 1rem 0;
+            line-height: 1.6;
+        }
     </style>
+
 </head>
 <body>
 
@@ -559,6 +700,12 @@
         <div class="timeline" id="points-list">
             <!-- Renderöidään js:llä -->
         </div>
+        <!-- Reitin loppuyhteenveto (näkyy kun kaikki pisteet saavutettu) -->
+        <div id="route-summary-panel">
+            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🎉</div>
+            <div class="summary-score">Olet kokenut <span id="summary-visited-count">0</span> / <span id="summary-total-count">0</span> pistettä</div>
+            <div class="summary-skipped-list" id="summary-skipped-info"></div>
+        </div>
     </div>
 </div>
 
@@ -572,6 +719,18 @@
             <div id="point-modal-desc" class="lki-modal-description"></div>
             <div id="point-modal-tabs" class="point-modal-tabs" style="display:none;"></div>
             <div id="point-modal-link-container" class="lki-modal-footer"></div>
+            <!-- Oikaisu-paneeli (näkyy vain jos pisteellä on shortcut_to) -->
+            <div id="shortcut-panel">
+                <div class="shortcut-panel-title">⏭️ Oikaise reittiä</div>
+                <div class="shortcut-panel-desc" id="shortcut-panel-desc">
+                    Voit siirtyä suoraan myöhempään kokemuspisteseen.
+                    Ohitettujen pisteiden sisältö säilyy <strong>lukittuna</strong>.
+                </div>
+                <div class="shortcut-panel-actions">
+                    <button class="btn-continue-normal" id="shortcut-btn-normal">Jatka normaalisti</button>
+                    <button class="btn-take-shortcut" id="shortcut-btn-take">⏭ Oikaise → <span id="shortcut-target-name"></span></button>
+                </div>
+            </div>
         </div>
     </div>
 </div>

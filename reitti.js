@@ -260,16 +260,24 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             if (!unlocked) {
                 const radius = p.unlock_radius || p.arrival_radius || 30;
+                const hasShortcut = !!(p.shortcut_to || p.shortcutTo);
+                const shortcutBadge = hasShortcut
+                    ? `<span class="shortcut-available-badge" onclick="event.stopPropagation(); window.openPointModal(window.routePoints[${idx}])" title="Tästä pisteestä on oikaisumahdollisuus">⏭ Oikaisu</span>`
+                    : '';
                 return `
                 <div class="point-card point-card-locked" id="point-card-${idx}" style="cursor: pointer; border-left: 4px solid #f59e0b; background: #fffbeb; padding: 12px 14px; border-radius: 10px; margin-bottom: 8px;" onclick="window.openPointModal(window.routePoints[${idx}])">
                     <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
                         <h3 style="margin:0; font-size:14px; font-weight:700; color:#1e293b;">${idx + 1}. ${p.title || p.name || 'Piste ' + (idx + 1)}</h3>
-                        <span class="point-locked-badge" style="font-size: 10px; font-weight: 700; background: #fef3c7; color: #b45309; padding: 2px 8px; border-radius: 12px; white-space: nowrap;">🔒 Avautuu kohteessa</span>
+                        <div style="display:flex; gap:4px; align-items:center; flex-shrink:0;">
+                            ${shortcutBadge}
+                            <span class="point-locked-badge" style="font-size: 10px; font-weight: 700; background: #fef3c7; color: #b45309; padding: 2px 8px; border-radius: 12px; white-space: nowrap;">🔒 Avautuu kohteessa</span>
+                        </div>
                     </div>
                     <div class="point-locked-teaser" style="font-size: 12px; color: #78350f; margin-top: 6px;">📍 Saavu kohteeseen (${radius} m) avataksesi tarinan</div>
                 </div>
                 `;
             }
+
 
             let mediaPreview = '';
             
@@ -326,6 +334,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let nextPointIndex = 0;          // index of next unvisited point
     let progressIndex = 0;           // highest visited index (never decreases)
     const visitedPoints = new Set(); // set of visited point indices
+    const skippedPoints = new Set(); // set of skipped (shortcutted-over) point indices
     let approachToastVisible = false;
     let _insideCount = 0;            // consecutive GPS readings inside arrival_radius
     let _arrivalCooldownUntil = 0;   // timestamp: block new arrivals until this time
@@ -725,8 +734,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 visitedPoints.add(nextPointIndex);
                 markPointVisited(nextPointIndex, p);
                 showArrivalToast(p);
-                nextPointIndex++;
-                progressIndex = Math.max(progressIndex, nextPointIndex);
+                activatePoint(nextPointIndex + 1, { reason: 'arrived', fromIndex: nextPointIndex });
             } else {
                 // Accumulating — show panel feedback
                 const nextEl = document.getElementById('gps-next-point');
@@ -895,14 +903,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         const points = window.routePoints;
         if (!points || !Array.isArray(points)) return;
 
-        // Find index of first unvisited point
-        let activeIdx = -1;
-        for (let i = 0; i < points.length; i++) {
-            if (!isPointUnlocked(points[i])) {
-                activeIdx = i;
-                break;
-            }
-        }
+        // Käytetään nextPointIndex:ä suoraan — se on ainoa auktoritatiivinen tieto siitä
+        // mikä piste on seuraavana. isPointUnlocked-haku ei toimi oikaisun jälkeen,
+        // koska ohitetut pisteet ovat edelleen locked mutta eivät "seuraavia".
+        const activeIdx = nextPointIndex;
 
         points.forEach((p, idx) => {
             const card = document.getElementById(`point-card-${idx}`);
@@ -964,6 +968,30 @@ document.addEventListener('DOMContentLoaded', async () => {
                         teaser.innerHTML = `📍 Suuntaa kohteelle (${p.unlock_radius || p.arrival_radius || 30} m) avataksesi tarinan`;
                     }
                 }
+            } else if (skippedPoints.has(idx)) {
+                // ⏭ Ohitettu piste: harmaa markkeri, kortissa skipped-tyyli
+                if (p._layer && p._layer.setStyle) {
+                    p._layer.setStyle({
+                        fillColor: '#94a3b8',
+                        color: '#ffffff',
+                        weight: 1,
+                        radius: 6,
+                        fillOpacity: 0.5
+                    });
+                }
+                setMarkerPulse(p, null);
+
+                if (card) {
+                    card.classList.add('point-card-skipped');
+                    // Päivitetään badge ohitetuksi
+                    const badge = card.querySelector('.point-locked-badge');
+                    if (badge) {
+                        badge.className = 'shortcut-badge';
+                        badge.innerHTML = '⏭ Ohitettu';
+                    }
+                    const teaser = card.querySelector('.point-locked-teaser');
+                    if (teaser) teaser.style.display = 'none';
+                }
             } else {
                 // 🔴 Tulevat lukitut pisteet: Standardi punainen karttamarkkeri
                 if (p._layer && p._layer.setStyle) {
@@ -990,6 +1018,64 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
     window.updateAllMarkerStyles = updateAllMarkerStyles;
+
+    // ─── ACTIVATE POINT (keskitetty navigaation tilan vaihto) ─────────────────
+    // Käytetään sekä normaaliin etenemiseen (reason: 'arrived') että oikaisuun (reason: 'shortcut').
+    //   targetIndex  = uusi nextPointIndex arvo
+    //   opts.fromIndex = lähtöpiste (oikaisussa: ohitettujen väli merkitty skippedPoints:iin)
+    //   opts.reason    = 'arrived' | 'shortcut'
+    function activatePoint(targetIndex, opts = {}) {
+        const { reason = 'arrived', fromIndex = null } = opts;
+        const points = window.routePoints || [];
+
+        if (reason === 'shortcut' && fromIndex !== null) {
+            // Merkitaan kaikki välipisteet ohitetuiksi (skipped)
+            for (let i = fromIndex + 1; i < targetIndex; i++) {
+                skippedPoints.add(i);
+            }
+        }
+
+        nextPointIndex = targetIndex;
+        progressIndex = Math.max(progressIndex, targetIndex);
+
+        // Päivitetään markerit ja timelinen kortit
+        updateAllMarkerStyles();
+
+        // Jos kaikki pisteet on käyty / ohitettu, näytetään loppuyhteenveto
+        if (targetIndex >= points.length) {
+            showRouteSummary(points);
+        }
+    }
+    window.activatePoint = activatePoint;
+
+    // ─── REITIN LOPPUYHTEENVETO ───────────────────────────────────────────────
+    function showRouteSummary(points) {
+        const summaryPanel = document.getElementById('route-summary-panel');
+        if (!summaryPanel) return;
+
+        const visitedCount = visitedPoints.size;
+        const totalCount = points.length;
+        const skippedCount = skippedPoints.size;
+
+        document.getElementById('summary-visited-count').textContent = visitedCount;
+        document.getElementById('summary-total-count').textContent = totalCount;
+
+        let skippedInfo = '';
+        if (skippedCount > 0) {
+            const skippedNames = Array.from(skippedPoints)
+                .sort((a, b) => a - b)
+                .map(i => `${i + 1}. ${points[i]?.title || points[i]?.name || ('Piste ' + (i + 1))}`);
+            skippedInfo = `
+                <div style="margin-top:0.5rem; padding:0.75rem; background:#f8fafc; border-radius:10px; font-size:0.8rem; color:#64748b;">
+                    ⏭ Ohitit pisteet: ${skippedNames.join(', ')}<br>
+                    <span style="font-size:0.75rem; color:#94a3b8;">Niiden sisältö on edelleen lukittuna.</span>
+                </div>`;
+        }
+        document.getElementById('summary-skipped-info').innerHTML = skippedInfo;
+
+        summaryPanel.classList.add('visible');
+        summaryPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
 
     // ─── AUDIO & VIBRATION NOTIFICATIONS ────────────────────────────────────
     let _audioCtx = null;
@@ -1480,6 +1566,76 @@ document.addEventListener('DOMContentLoaded', async () => {
             linkContainer.style.display = 'flex';
             linkContainer.innerHTML = `<a href="${targetLink}" target="_blank" rel="noopener" class="lki-cta-btn website">Lisätietoa kohteesta &rarr;</a>`;
         }
+
+        // ─── OIKAISU-PANEELI ─────────────────────────────────────────────────
+        // Näytetään vain jos:
+        //  1) piste on avattu (unlocked)
+        //  2) pisteellä on shortcut_to tai shortcutTo kenttä
+        //  3) oikaisu-kohde on myöhempi piste (indeksi > nykyinen nextPointIndex - 1)
+        //  4) käyttäjä ei ole jo ohittanut tai vieraillut kohdepisteessä
+        const shortcutTargetId = p.shortcut_to || p.shortcutTo;
+        const shortcutPanelEl = document.getElementById('shortcut-panel');
+        const shortcutBtnNormal = document.getElementById('shortcut-btn-normal');
+        const shortcutBtnTake = document.getElementById('shortcut-btn-take');
+        const shortcutTargetNameEl = document.getElementById('shortcut-target-name');
+
+        // Piilotetaan paneeli oletuksena
+        if (shortcutPanelEl) shortcutPanelEl.classList.remove('visible');
+
+        if (shortcutTargetId && shortcutPanelEl) {
+            const points = window.routePoints || [];
+            const currentIdx = points.findIndex(pt => pt === p || (pt.id && pt.id === p.id));
+            const targetIdx = points.findIndex(pt => pt.id === shortcutTargetId);
+
+            // Validointi: kohde on myöhempi piste, ei vielä käyty tai ohitettu
+            const isValidShortcut = (
+                targetIdx > currentIdx &&              // kohde on myöhempi
+                !visitedPoints.has(targetIdx) &&       // ei vielä käyty
+                !skippedPoints.has(targetIdx) &&       // ei jo ohitettu
+                targetIdx > nextPointIndex - 1         // GPS ei ole jo ohittanut tämän
+            );
+
+            if (isValidShortcut) {
+                const targetPoint = points[targetIdx];
+                const targetName = targetPoint?.title || targetPoint?.name || `Piste ${targetIdx + 1}`;
+                const skippedCount = targetIdx - currentIdx - 1;
+
+                if (shortcutTargetNameEl) shortcutTargetNameEl.textContent = targetName;
+
+                // Päivitetään kuvaus ohitettavien pisteiden määrällä
+                const descEl = document.getElementById('shortcut-panel-desc');
+                if (descEl && skippedCount > 0) {
+                    descEl.innerHTML = `Voit siirtyä suoraan pisteeseen <strong>${targetName}</strong>. ` +
+                        `${skippedCount} piste${skippedCount > 1 ? 'ttä' : ''} ohitetaan — ` +
+                        `niiden sisältö säilyy <strong>lukittuna</strong>.`;
+                } else if (descEl) {
+                    descEl.innerHTML = `Voit siirtyä suoraan pisteeseen <strong>${targetName}</strong>. ` +
+                        `Ohitettujen pisteiden sisältö säilyy <strong>lukittuna</strong>.`;
+                }
+
+                shortcutPanelEl.classList.add('visible');
+
+                // Nappien toiminnot
+                if (shortcutBtnNormal) {
+                    shortcutBtnNormal.onclick = () => {
+                        shortcutPanelEl.classList.remove('visible');
+                    };
+                }
+                if (shortcutBtnTake) {
+                    shortcutBtnTake.onclick = () => {
+                        // Merkitään nykyinen piste käydyksi jos ei vielä merkitty
+                        if (currentIdx >= 0 && !visitedPoints.has(currentIdx)) {
+                            visitedPoints.add(currentIdx);
+                        }
+                        // Aktivoidaan kohdepiste shortcut-syyllä
+                        activatePoint(targetIdx, { reason: 'shortcut', fromIndex: currentIdx });
+                        shortcutPanelEl.classList.remove('visible');
+                        closePointModal();
+                    };
+                }
+            }
+        }
+        // ─── END OIKAISU-PANEELI ─────────────────────────────────────────────
 
         document.getElementById('point-modal').classList.add('active');
     };
