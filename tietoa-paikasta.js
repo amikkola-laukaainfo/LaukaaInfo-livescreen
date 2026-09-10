@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (placeData.parent_place_id) {
                 hierarchyPromises.push(
                     aiSb.from('places')
-                        .select('place_id, name, canonical_name, type, place_level, municipality, description')
+                        .select('place_id, name, canonical_name, type, place_level, municipality, description, lat, lon')
                         .eq('place_id', placeData.parent_place_id)
                         .single()
                         .then(r => { if (!r.error && r.data) parentPlace = r.data; })
