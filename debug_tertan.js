@@ -9,8 +9,8 @@ const allCompanies = data.results || [];
 const placeData = {
     name: 'Tertan alue',
     canonical_name: 'Tertan alue',
-    lat: 62.3421842,   // Tertan kahvila koordinaatit
-    lon: 25.9688631,
+    lat: 62.325583,   // Tertan kahvila tärkeät koordinaatit
+    lon: 25.994593,
     alue_slug: null,
     commercial_visibility: undefined  // undefined = ei asetettu = sallitaan
 };
