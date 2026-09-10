@@ -9,8 +9,8 @@ const allCompanies = data.results || [];
 const placeData = {
     name: 'Tertan alue',
     canonical_name: 'Tertan alue',
-    lat: null,   // <-- TÄHÄN Supabasen arvo, tai null jos puuttuu
-    lon: null,   // <-- TÄHÄN Supabasen arvo, tai null jos puuttuu
+    lat: 62.3421842,   // Tertan kahvila koordinaatit
+    lon: 25.9688631,
     alue_slug: null,
     commercial_visibility: undefined  // undefined = ei asetettu = sallitaan
 };
@@ -69,23 +69,23 @@ for (const targetId of targets) {
         }
 
         const cLon = company.lon || company.lng;
-        const placeLat = placeData.lat || (parentPlace && parentPlace.lat);
-        const placeLon = placeData.lon || (parentPlace && parentPlace.lon);
-        const usingParent = !placeData.lat && parentPlace?.lat;
+        const distToPlace = (placeData.lat && placeData.lon && company.lat && cLon) ? haversineKm(Number(company.lat), Number(cLon), Number(placeData.lat), Number(placeData.lon)) : null;
+        const distToParent = (parentPlace?.lat && parentPlace?.lon && company.lat && cLon) ? haversineKm(Number(company.lat), Number(cLon), Number(parentPlace.lat), Number(parentPlace.lon)) : null;
 
-        if (company.lat && cLon && placeLat && placeLon) {
-            const dist = haversineKm(Number(company.lat), Number(cLon), Number(placeLat), Number(placeLon));
-            const threshold = usingParent ? 3.0 : 2.0;
-            console.log(`  Etäisyys: ${dist?.toFixed(3)} km (threshold: ${threshold} km, käyttää: ${usingParent ? 'yläpaikka' : 'paikka'})`);
-            if (dist < threshold) {
-                score += Math.max(10, Math.round(70 - (dist / threshold) * 60));
-                tier = Math.min(tier, usingParent ? 2 : 1);
+        const dist = distToPlace !== null ? distToPlace : distToParent;
+        const distThreshold = distToPlace !== null ? 3.0 : 5.0;
+
+        if (dist !== null) {
+            console.log(`  Etäisyys: ${dist?.toFixed(3)} km (threshold: ${distThreshold} km, distToPlace: ${distToPlace?.toFixed(3)}, distToParent: ${distToParent?.toFixed(3)})`);
+            if (dist < distThreshold) {
+                score += Math.max(10, Math.round(70 - (dist / distThreshold) * 60));
+                tier = Math.min(tier, 1);
                 reasons.push(`NEAR_${dist.toFixed(2)}km`);
             } else {
                 console.log(`  !! ETÄISYYS YLITTYY - ei mukaan`);
             }
         } else {
-            console.log(`  !! Etäisyyslasku ohitettu: company.lat=${company.lat} placeLat=${placeLat} placeLon=${placeLon}`);
+            console.log(`  !! Etäisyyslasku ohitettu: company.lat=${company.lat}`);
         }
     } else {
         console.log(`  !! commercial_visibility === false -> ohitetaan`);
