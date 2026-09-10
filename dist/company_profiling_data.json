@@ -1,6 +1,6 @@
 {
-    "SCHEMA_VERSION": "6.2",
-    "DESCRIPTION": "LaukaaInfo Ratkaisulähtöinen profilointi v6.2. Sisältää graafirakenteen ja capability-kerroksen.",
+    "SCHEMA_VERSION": "7.0",
+    "DESCRIPTION": "LaukaaInfo Ratkaisulähtöinen profilointi v7.0. Uutta: ai_and_seo.atmosphere_tags, values_tags, local_context.local_story, nearby_recommendations.",
     "nodes": {
         "group-events-and-celebrations": {
             "type": "group",
@@ -817,23 +817,6 @@
         "region-lievestuore": {
             "type": "area",
             "name": "Lievestuore"
-        },
-        "company-268": {
-            "type": "company",
-            "name": "Jyväs Pakari Lievestuore",
-            "category": "Ruokailu",
-            "package": "perus",
-            "lat": 62.2530703,
-            "lon": 26.2089623,
-            "address": "Lievestuoreen Liisantie 15, 41400 Lievestuore"
-        },
-        "group-juhlat": {
-            "type": "group",
-            "name": "juhlat"
-        },
-        "group-muistotilaisuus": {
-            "type": "group",
-            "name": "muistotilaisuus"
         },
         "company-2": {
             "type": "company",
@@ -1792,6 +1775,10 @@
         "group-catering": {
             "type": "group",
             "name": "catering"
+        },
+        "group-juhlat": {
+            "type": "group",
+            "name": "juhlat"
         },
         "company-104": {
             "type": "company",
@@ -4316,9 +4303,17 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-06-05T15:23:58.875Z",
+                "last_updated": "2026-07-01T13:35:17.582Z",
                 "verified_by": "ai-generated",
                 "status": "draft"
+            },
+            "ai_and_seo": {
+                "nearby_recommendations": [
+                    {
+                        "name": "",
+                        "relation_type": "complement"
+                    }
+                ]
             }
         },
         "company-275": {
@@ -5750,7 +5745,6 @@
                     "mode": "TOIMIPISTE",
                     "radius_km": 0,
                     "regions": [
-                        "Laukaa",
                         "Vihtavuori"
                     ],
                     "note": "Sijaitsee Laukaan Vuonteella osoitteessa Antinniementie 1, 41330 Vihtavuori. Kahvila, lähituotepuoti sekä juhla- ja kokoustilat samalla toimipisteellä."
@@ -6137,7 +6131,7 @@
                 }
             },
             "meta": {
-                "last_updated": "2026-05-27T19:26:50.704Z",
+                "last_updated": "2026-09-10T11:38:42.321Z",
                 "verified_by": "AI-analysis-v1",
                 "status": "draft"
             }
@@ -6455,357 +6449,6 @@
                 "last_updated": "2026-05-08T15:32:40.282Z",
                 "verified_by": "AI-analysis-v2",
                 "status": "published"
-            }
-        },
-        "company-268": {
-            "name": "Jyväs Pakari Lievestuore",
-            "tags": "",
-            "core": {
-                "fits_for": {
-                    "häät": 75,
-                    "juhlat": 85,
-                    "pitopalvelu": 80,
-                    "muistotilaisuus": 75,
-                    "yritysjuhlat": 70,
-                    "kokoukset": 45,
-                    "events-and-celebrations": 100,
-                    "business-events": 100,
-                    "funerals-and-memorials": 100,
-                    "moving-and-housing": 0,
-                    "construction-and-maintenance": 0,
-                    "cottage-services": 0,
-                    "housing-company-and-contracts": 0,
-                    "startup-services": 0,
-                    "business-growth": 0,
-                    "service-partner": 34,
-                    "emergency-services": 0,
-                    "wellbeing-and-beauty": 8,
-                    "liikunta-ja-vapaaaika": 5,
-                    "accommodation": 100,
-                    "family-and-children": 20,
-                    "animals": 0,
-                    "auto-services": 0
-                },
-                "priority_score": 58,
-                "service_area": {
-                    "mode": "TOIMIPISTE",
-                    "radius_km": 0,
-                    "regions": [
-                        "Laukaa",
-                        "Lievestuore"
-                    ],
-                    "note": "Lievestuoreen leipomomyymälä ja kahvila osoitteessa Lievestuoreen Liisantie 15, 41400 Lievestuore. Lounas ma-la ja tilausleivonnaiset juhliin."
-                },
-                "emergency_available": false,
-                "contract_customer_available": true,
-                "paired_with_by_context": {
-                    "events-and-celebrations": [
-                        "juhlatila",
-                        "catering"
-                    ],
-                    "funerals-and-memorials": [
-                        "juhlatila",
-                        "kahvitarjoilu"
-                    ],
-                    "business-events": [
-                        "kokoustila",
-                        "kahvitarjoilu"
-                    ],
-                    "general": [
-                        "Juhlatila",
-                        "Catering",
-                        "Kahvila",
-                        "Pitopalvelu"
-                    ]
-                },
-                "corporate_clients": true,
-                "home_service": false,
-                "weekend_service": true,
-                "not_suitable_for": [
-                    "kartano",
-                    "hautajaiset",
-                    "yritysjuhlat",
-                    "omilla tarjoiluilla",
-                    "muistotilaisuus",
-                    "luonnonläheinen tila"
-                ],
-                "sub_contexts": [
-                    "hääkakku",
-                    "juhlakakku",
-                    "kahvitarjoilu",
-                    "pitopalvelu",
-                    "tilausleivonnaiset",
-                    "kokoustarjoilu",
-                    "yrityskahvitus",
-                    "lounastarjoilu",
-                    "muistotilaisuuden tarjoilut",
-                    "kahvitarjoilu",
-                    "pitopalvelu",
-                    "syntymäpäiväkakut",
-                    "kahvila"
-                ],
-                "node_links": [
-                    "JUHLATILA",
-                    "CATERING"
-                ],
-                "intent_codes": [
-                    "BIZ_CATERING",
-                    "EVT_WEDDING",
-                    "EVT_MEMORIAL"
-                ],
-                "intent_scores": {
-                    "EVT_WEDDING": 92,
-                    "EVT_MEMORIAL": 90,
-                    "BIZ_CATERING": 100
-                }
-            },
-            "capabilities": {
-                "ACCESSIBLE": {
-                    "available": true,
-                    "priority_score": 0.8,
-                    "confidence": "inferred",
-                    "source": "migration",
-                    "specs": {}
-                }
-            },
-            "categories": {
-                "core": {
-                    "description": "Lievestuoreella toimiva leipomo, kahvila ja juhliin erikoistunut tilausleivonnainen-palvelu. Tarjoaa hääkakkuja, juhlakakkuja, muistotilaisuuksien tarjoiluja, yrityskahvituksia sekä pitopalvelua eri tilaisuuksiin. Kahvilassa tarjolla lounasta ja leipomotuotteita päivittäin.",
-                    "website": "https://www.jyvaspakari.fi",
-                    "email": "info@jyvaspakari.fi",
-                    "phone": "0103270654"
-                },
-                "events_and_celebrations": {
-                    "capacity_max": 40,
-                    "seated_capacity": 30,
-                    "standing_guests": 0,
-                    "outdoor_capacity": 0,
-                    "is_accessible": true,
-                    "own_catering_allowed": false,
-                    "inhouse_catering_available": false,
-                    "is_lakeside": false,
-                    "has_sauna": false,
-                    "has_av_tech": false,
-                    "has_stage": false,
-                    "accommodation_beds": 0,
-                    "alcohol_license": false,
-                    "private_booking": false,
-                    "late_night_events": false,
-                    "wedding_specialized": true,
-                    "catering_min_capacity": 10,
-                    "catering_max_capacity": 150,
-                    "dietary_specialties": [
-                        "erityisruokavaliot",
-                        "tilauskakut",
-                        "suolaiset ja makeat leivonnaiset"
-                    ],
-                    "staff_included": true,
-                    "wedding_menu_available": true,
-                    "cake_service": true,
-                    "partner_venues": [],
-                    "wedding_photography": false,
-                    "drone_available": false,
-                    "video_production": false,
-                    "live_music": false,
-                    "dj_services": false,
-                    "karaoke_available": false,
-                    "has_exclusive_catering": false,
-                    "accommodation_included": false,
-                    "refinement_tags": [
-                        "hääkakku",
-                        "juhlakakku",
-                        "kahvitarjoilu"
-                    ],
-                    "digitization_features": [],
-                    "entertainment_features": [],
-                    "collaborated_with": []
-                },
-                "business_events": {
-                    "meeting_capacity": 20,
-                    "seminar_capacity": 0,
-                    "conference_rooms": 0,
-                    "has_projector": false,
-                    "has_streaming": false,
-                    "has_wifi": false,
-                    "has_stage": false,
-                    "private_booking": false,
-                    "invoice_billing": true,
-                    "corporate_clients": true,
-                    "vip_services": false,
-                    "business_catering": true,
-                    "event_hosting": false,
-                    "corporate_gifts": true,
-                    "branding_support": false,
-                    "av_support": false,
-                    "staff_events_specialized": false,
-                    "refinement_tags": [
-                        "kahvitarjoilu",
-                        "lounas"
-                    ],
-                    "wellbeing_and_activity_features": [],
-                    "entertainment_features": [],
-                    "collaborated_with": []
-                },
-                "funerals_and_memorials": {
-                    "memorial_service_capacity": 40,
-                    "quiet_private_space": true,
-                    "accessible_entry": true,
-                    "memorial_catering": true,
-                    "coffee_service": true,
-                    "flower_arrangements": false,
-                    "memorial_menu_available": true,
-                    "funeral_flowers": false,
-                    "memorial_arrangements": false,
-                    "transport_assistance": false,
-                    "urgent_booking_available": true,
-                    "refinement_tags": [
-                        "muistotilaisuus",
-                        "kahvitarjoilu"
-                    ],
-                    "digitization_features": [],
-                    "collaborated_with": []
-                },
-                "moving_and_housing": {
-                    "moving_truck_available": false,
-                    "packing_service": false,
-                    "storage_available": false,
-                    "weekend_moves": false,
-                    "urgent_moves": false,
-                    "long_distance_moves": false,
-                    "cleaning_after_move": false,
-                    "electrician_available": false,
-                    "renovation_support": false,
-                    "insurance_support": false,
-                    "refinement_tags": [],
-                    "digitization_features": [],
-                    "collaborated_with": []
-                },
-                "construction_and_maintenance": {
-                    "emergency_service": false,
-                    "certifications": [],
-                    "wet_room_certification": false,
-                    "provides_tools": false,
-                    "material_supply": false,
-                    "project_management": false,
-                    "snow_removal": false,
-                    "lawn_maintenance": false,
-                    "property_monitoring": false,
-                    "maintenance_contracts": false,
-                    "housing_company_clients": false,
-                    "refinement_tags": [],
-                    "collaborated_with": []
-                },
-                "cottage_services": {
-                    "key_holding": false,
-                    "winter_monitoring": false,
-                    "snow_removal": false,
-                    "cleaning_service": false,
-                    "lawn_service": false,
-                    "remote_monitoring": false,
-                    "emergency_visits": false,
-                    "renovation_support": false,
-                    "dock_maintenance": false,
-                    "sauna_services": false,
-                    "guest_preparation_service": false,
-                    "refinement_tags": [],
-                    "collaborated_with": []
-                },
-                "housing_company_and_contracts": {
-                    "housing_company_clients": false,
-                    "maintenance_contracts": false,
-                    "emergency_response": false,
-                    "scheduled_visits": false,
-                    "property_reports": false,
-                    "invoice_billing": true,
-                    "contract_customer_available": true,
-                    "priority_support": false,
-                    "monthly_service_plan": false,
-                    "refinement_tags": [],
-                    "collaborated_with": []
-                },
-                "startup_services": {
-                    "bookkeeping_startup": false,
-                    "business_advisory": false,
-                    "insurance_setup": false,
-                    "legal_services": false,
-                    "office_space_available": false,
-                    "banking_support": false,
-                    "website_creation": false,
-                    "webshop_setup": false,
-                    "branding_support": false,
-                    "logo_design": false,
-                    "business_photography": false,
-                    "refinement_tags": [],
-                    "collaborated_with": []
-                },
-                "business_growth": {
-                    "google_ads": false,
-                    "social_media_marketing": false,
-                    "seo_services": false,
-                    "content_creation": false,
-                    "video_production": false,
-                    "crm_support": false,
-                    "recruitment_support": false,
-                    "sales_development": false,
-                    "automation_services": false,
-                    "consulting_services": false,
-                    "refinement_tags": [],
-                    "collaborated_with": []
-                },
-                "wellbeing_and_beauty": {
-                    "home_visits": false,
-                    "online_booking": false,
-                    "unisex_services": false,
-                    "gift_cards": true,
-                    "corporate_wellbeing_services": false,
-                    "event_makeup": false,
-                    "bridal_services": false,
-                    "group_bookings": false,
-                    "refinement_tags": [],
-                    "collaborated_with": []
-                },
-                "animals": {
-                    "emergency_service": false,
-                    "home_visits": false,
-                    "online_booking": false,
-                    "specialization": [],
-                    "grooming_available": false,
-                    "boarding_available": false,
-                    "supplies_sold": false,
-                    "refinement_tags": [],
-                    "collaborated_with": []
-                },
-                "family_and_children": {
-                    "daycare_available": false,
-                    "hobby_activities": false,
-                    "educational_services": false,
-                    "family_therapy": false,
-                    "equipment_rental": false,
-                    "accessible_with_stroller": false,
-                    "baby_changing_room": false,
-                    "kids_play_area": false,
-                    "refinement_tags": [],
-                    "collaborated_with": []
-                },
-                "auto_services": {
-                    "replacement_car_available": false,
-                    "collaborated_with": []
-                },
-                "liikunta-ja-vapaaaika": {
-                    "refinement_tags": [],
-                    "collaborated_with": []
-                },
-                "accommodation": {
-                    "accommodation_beds": 0,
-                    "accommodation_included": false,
-                    "refinement_tags": [],
-                    "collaborated_with": []
-                }
-            },
-            "meta": {
-                "last_updated": "2026-05-21T11:59:49.058Z",
-                "verified_by": "AI-analysis-v1",
-                "status": "draft"
             }
         },
         "company-2": {
@@ -85969,11 +85612,6 @@
         },
         {
             "from": "company-270",
-            "to": "region-laukaa",
-            "relation": "located_in"
-        },
-        {
-            "from": "company-270",
             "to": "region-vihtavuori",
             "relation": "located_in"
         },
@@ -86196,188 +85834,6 @@
         {
             "from": "company-269",
             "to": "terveyspalvelut",
-            "relation": "recommends_with",
-            "context": "general"
-        },
-        {
-            "from": "company-268",
-            "to": "intent-EVT_WEDDING",
-            "relation": "offers",
-            "weight": 92
-        },
-        {
-            "from": "company-268",
-            "to": "intent-EVT_MEMORIAL",
-            "relation": "offers",
-            "weight": 90
-        },
-        {
-            "from": "company-268",
-            "to": "intent-BIZ_CATERING",
-            "relation": "offers",
-            "weight": 100
-        },
-        {
-            "from": "company-268",
-            "to": "group-häät",
-            "relation": "fits_for",
-            "weight": 75
-        },
-        {
-            "from": "company-268",
-            "to": "group-juhlat",
-            "relation": "fits_for",
-            "weight": 85
-        },
-        {
-            "from": "company-268",
-            "to": "group-pitopalvelu",
-            "relation": "fits_for",
-            "weight": 80
-        },
-        {
-            "from": "company-268",
-            "to": "group-muistotilaisuus",
-            "relation": "fits_for",
-            "weight": 75
-        },
-        {
-            "from": "company-268",
-            "to": "group-yritysjuhlat",
-            "relation": "fits_for",
-            "weight": 70
-        },
-        {
-            "from": "company-268",
-            "to": "group-kokoukset",
-            "relation": "fits_for",
-            "weight": 45
-        },
-        {
-            "from": "company-268",
-            "to": "group-events-and-celebrations",
-            "relation": "fits_for",
-            "weight": 100
-        },
-        {
-            "from": "company-268",
-            "to": "group-business-events",
-            "relation": "fits_for",
-            "weight": 100
-        },
-        {
-            "from": "company-268",
-            "to": "group-funerals-and-memorials",
-            "relation": "fits_for",
-            "weight": 100
-        },
-        {
-            "from": "company-268",
-            "to": "group-service-partner",
-            "relation": "fits_for",
-            "weight": 34
-        },
-        {
-            "from": "company-268",
-            "to": "group-wellbeing-and-beauty",
-            "relation": "fits_for",
-            "weight": 8
-        },
-        {
-            "from": "company-268",
-            "to": "group-liikunta-ja-vapaaaika",
-            "relation": "fits_for",
-            "weight": 5
-        },
-        {
-            "from": "company-268",
-            "to": "group-accommodation",
-            "relation": "fits_for",
-            "weight": 100
-        },
-        {
-            "from": "company-268",
-            "to": "group-family-and-children",
-            "relation": "fits_for",
-            "weight": 20
-        },
-        {
-            "from": "company-268",
-            "to": "region-laukaa",
-            "relation": "located_in"
-        },
-        {
-            "from": "company-268",
-            "to": "region-lievestuore",
-            "relation": "located_in"
-        },
-        {
-            "from": "company-268",
-            "to": "nodelink-JUHLATILA",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-268",
-            "to": "nodelink-CATERING",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-268",
-            "to": "juhlatila",
-            "relation": "recommends_with",
-            "context": "events-and-celebrations"
-        },
-        {
-            "from": "company-268",
-            "to": "catering",
-            "relation": "recommends_with",
-            "context": "events-and-celebrations"
-        },
-        {
-            "from": "company-268",
-            "to": "juhlatila",
-            "relation": "recommends_with",
-            "context": "funerals-and-memorials"
-        },
-        {
-            "from": "company-268",
-            "to": "kahvitarjoilu",
-            "relation": "recommends_with",
-            "context": "funerals-and-memorials"
-        },
-        {
-            "from": "company-268",
-            "to": "kokoustila",
-            "relation": "recommends_with",
-            "context": "business-events"
-        },
-        {
-            "from": "company-268",
-            "to": "kahvitarjoilu",
-            "relation": "recommends_with",
-            "context": "business-events"
-        },
-        {
-            "from": "company-268",
-            "to": "Juhlatila",
-            "relation": "recommends_with",
-            "context": "general"
-        },
-        {
-            "from": "company-268",
-            "to": "Catering",
-            "relation": "recommends_with",
-            "context": "general"
-        },
-        {
-            "from": "company-268",
-            "to": "Kahvila",
-            "relation": "recommends_with",
-            "context": "general"
-        },
-        {
-            "from": "company-268",
-            "to": "Pitopalvelu",
             "relation": "recommends_with",
             "context": "general"
         },

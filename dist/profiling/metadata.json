@@ -1,6 +1,6 @@
 {
-    "SCHEMA_VERSION": "6.2",
-    "DESCRIPTION": "LaukaaInfo Ratkaisulähtöinen profilointi v6.2. Sisältää graafirakenteen ja capability-kerroksen.",
+    "SCHEMA_VERSION": "7.0",
+    "DESCRIPTION": "LaukaaInfo Ratkaisulähtöinen profilointi v7.0. Uutta: ai_and_seo.atmosphere_tags, values_tags, local_context.local_story, nearby_recommendations.",
     "nodes": {
         "group-events-and-celebrations": {
             "type": "group",
@@ -817,23 +817,6 @@
         "region-lievestuore": {
             "type": "area",
             "name": "Lievestuore"
-        },
-        "company-268": {
-            "type": "company",
-            "name": "Jyväs Pakari Lievestuore",
-            "category": "Ruokailu",
-            "package": "perus",
-            "lat": 62.2530703,
-            "lon": 26.2089623,
-            "address": "Lievestuoreen Liisantie 15, 41400 Lievestuore"
-        },
-        "group-juhlat": {
-            "type": "group",
-            "name": "juhlat"
-        },
-        "group-muistotilaisuus": {
-            "type": "group",
-            "name": "muistotilaisuus"
         },
         "company-2": {
             "type": "company",
@@ -1792,6 +1775,10 @@
         "group-catering": {
             "type": "group",
             "name": "catering"
+        },
+        "group-juhlat": {
+            "type": "group",
+            "name": "juhlat"
         },
         "company-104": {
             "type": "company",
@@ -4530,11 +4517,6 @@
         },
         {
             "from": "company-270",
-            "to": "region-laukaa",
-            "relation": "located_in"
-        },
-        {
-            "from": "company-270",
             "to": "region-vihtavuori",
             "relation": "located_in"
         },
@@ -4757,188 +4739,6 @@
         {
             "from": "company-269",
             "to": "terveyspalvelut",
-            "relation": "recommends_with",
-            "context": "general"
-        },
-        {
-            "from": "company-268",
-            "to": "intent-EVT_WEDDING",
-            "relation": "offers",
-            "weight": 92
-        },
-        {
-            "from": "company-268",
-            "to": "intent-EVT_MEMORIAL",
-            "relation": "offers",
-            "weight": 90
-        },
-        {
-            "from": "company-268",
-            "to": "intent-BIZ_CATERING",
-            "relation": "offers",
-            "weight": 100
-        },
-        {
-            "from": "company-268",
-            "to": "group-häät",
-            "relation": "fits_for",
-            "weight": 75
-        },
-        {
-            "from": "company-268",
-            "to": "group-juhlat",
-            "relation": "fits_for",
-            "weight": 85
-        },
-        {
-            "from": "company-268",
-            "to": "group-pitopalvelu",
-            "relation": "fits_for",
-            "weight": 80
-        },
-        {
-            "from": "company-268",
-            "to": "group-muistotilaisuus",
-            "relation": "fits_for",
-            "weight": 75
-        },
-        {
-            "from": "company-268",
-            "to": "group-yritysjuhlat",
-            "relation": "fits_for",
-            "weight": 70
-        },
-        {
-            "from": "company-268",
-            "to": "group-kokoukset",
-            "relation": "fits_for",
-            "weight": 45
-        },
-        {
-            "from": "company-268",
-            "to": "group-events-and-celebrations",
-            "relation": "fits_for",
-            "weight": 100
-        },
-        {
-            "from": "company-268",
-            "to": "group-business-events",
-            "relation": "fits_for",
-            "weight": 100
-        },
-        {
-            "from": "company-268",
-            "to": "group-funerals-and-memorials",
-            "relation": "fits_for",
-            "weight": 100
-        },
-        {
-            "from": "company-268",
-            "to": "group-service-partner",
-            "relation": "fits_for",
-            "weight": 34
-        },
-        {
-            "from": "company-268",
-            "to": "group-wellbeing-and-beauty",
-            "relation": "fits_for",
-            "weight": 8
-        },
-        {
-            "from": "company-268",
-            "to": "group-liikunta-ja-vapaaaika",
-            "relation": "fits_for",
-            "weight": 5
-        },
-        {
-            "from": "company-268",
-            "to": "group-accommodation",
-            "relation": "fits_for",
-            "weight": 100
-        },
-        {
-            "from": "company-268",
-            "to": "group-family-and-children",
-            "relation": "fits_for",
-            "weight": 20
-        },
-        {
-            "from": "company-268",
-            "to": "region-laukaa",
-            "relation": "located_in"
-        },
-        {
-            "from": "company-268",
-            "to": "region-lievestuore",
-            "relation": "located_in"
-        },
-        {
-            "from": "company-268",
-            "to": "nodelink-JUHLATILA",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-268",
-            "to": "nodelink-CATERING",
-            "relation": "links_to"
-        },
-        {
-            "from": "company-268",
-            "to": "juhlatila",
-            "relation": "recommends_with",
-            "context": "events-and-celebrations"
-        },
-        {
-            "from": "company-268",
-            "to": "catering",
-            "relation": "recommends_with",
-            "context": "events-and-celebrations"
-        },
-        {
-            "from": "company-268",
-            "to": "juhlatila",
-            "relation": "recommends_with",
-            "context": "funerals-and-memorials"
-        },
-        {
-            "from": "company-268",
-            "to": "kahvitarjoilu",
-            "relation": "recommends_with",
-            "context": "funerals-and-memorials"
-        },
-        {
-            "from": "company-268",
-            "to": "kokoustila",
-            "relation": "recommends_with",
-            "context": "business-events"
-        },
-        {
-            "from": "company-268",
-            "to": "kahvitarjoilu",
-            "relation": "recommends_with",
-            "context": "business-events"
-        },
-        {
-            "from": "company-268",
-            "to": "Juhlatila",
-            "relation": "recommends_with",
-            "context": "general"
-        },
-        {
-            "from": "company-268",
-            "to": "Catering",
-            "relation": "recommends_with",
-            "context": "general"
-        },
-        {
-            "from": "company-268",
-            "to": "Kahvila",
-            "relation": "recommends_with",
-            "context": "general"
-        },
-        {
-            "from": "company-268",
-            "to": "Pitopalvelu",
             "relation": "recommends_with",
             "context": "general"
         },
@@ -16846,7 +16646,6 @@
         "company-271": "venues-and-events.json",
         "company-270": "venues-and-events.json",
         "company-269": "wellbeing-and-family.json",
-        "company-268": "venues-and-events.json",
         "company-2": "media-and-marketing.json",
         "company-3": "venues-and-events.json",
         "company-6": "venues-and-events.json",
