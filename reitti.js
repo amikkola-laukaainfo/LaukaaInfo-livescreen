@@ -304,13 +304,23 @@ document.addEventListener('DOMContentLoaded', async () => {
                 mediaPreview = `<div style="margin-top: 10px;"><button class="btn-light" style="padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid #cbd5e1; background: #f8fafc;" onclick="window.openPointModal(window.routePoints[${idx}])">Näytä tiedot</button></div>`;
             }
 
+            // ⏭ Oikaisu-badge myös avoimissa pisteissä (shortcut_to tai shortcutTo)
+            const hasShortcutUnlocked = !!(p.shortcut_to || p.shortcutTo);
+            const shortcutBadgeUnlocked = hasShortcutUnlocked
+                ? `<span class="shortcut-available-badge" onclick="event.stopPropagation(); window.openPointModal(window.routePoints[${idx}])" title="Tästä pisteestä on oikaisumahdollisuus — avaa piste nähdäksesi vaihtoehto">⏭ Oikaisu</span>`
+                : '';
+
             return `
             <div class="point-card" id="point-card-${idx}" style="cursor: pointer;" onclick="window.openPointModal(window.routePoints[${idx}])">
-                <h3>${idx + 1}. ${p.title || p.name || 'Piste ' + (idx + 1)}</h3>
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
+                    <h3 style="margin:0;">${idx + 1}. ${p.title || p.name || 'Piste ' + (idx + 1)}</h3>
+                    ${shortcutBadgeUnlocked}
+                </div>
                 ${mediaPreview}
             </div>
             `;
         }).join('');
+
         
         window.routePoints = points;
 
@@ -1338,6 +1348,23 @@ document.addEventListener('DOMContentLoaded', async () => {
                     `;
                 }
             }
+
+            // Oikaisu-info lukitussa modaalissa
+            let shortcutNotice = '';
+            const shortcutTargetIdLocked = p.shortcut_to || p.shortcutTo;
+            if (shortcutTargetIdLocked) {
+                const targetPoint = points.find(pt => pt.id === shortcutTargetIdLocked);
+                const targetName = targetPoint?.title || targetPoint?.name || 'myöhempään pisteeseen';
+                shortcutNotice = `
+                    <div style="margin-top: 0.9rem; padding: 0.75rem 0.9rem; background: linear-gradient(135deg, #fff7ed, #fffbeb); border: 1.5px solid #fed7aa; border-radius: 12px; font-size: 0.82rem; color: #92400e; text-align: left; display: flex; align-items: flex-start; gap: 8px;">
+                        <span style="font-size: 1.1rem; flex-shrink:0;">⏭</span>
+                        <div>
+                            <strong>Oikaisumahdollisuus:</strong> Tällä pisteellä voit halutessasi siirtyä suoraan pisteeseen <em>${targetName}</em>.<br>
+                            <span style="font-size:0.78rem; color:#b45309;">Saavu ensin tähän kohteeseen — oikaisu tulee käyttöön kun avaat pisteen.</span>
+                        </div>
+                    </div>
+                `;
+            }
             
             document.getElementById('point-modal-title').textContent = modalTitle;
             document.getElementById('point-modal-desc').innerHTML = `
@@ -1348,6 +1375,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         Tämän kokemuspisteen tarina ja sisältö paljastuvat vasta kun saavut fyysisesti kohteeseen!
                     </p>
                     ${sequenceNotice}
+                    ${shortcutNotice}
                     <div style="margin-top: 1.2rem; padding: 0.75rem; background: #fef08a; border-radius: 10px; font-size: 0.85rem; font-weight: 700; color: #78350f; display: inline-flex; align-items: center; gap: 6px;">
                         📍 Avautumisetäisyys: ${radius} m
                     </div>
