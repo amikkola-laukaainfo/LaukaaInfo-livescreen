@@ -70,6 +70,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             currentRouteData = data;
             renderRouteState();
+            loadLaukaaInfoPlaces();
             
         } catch (err) {
             console.error('Virhe reitin latauksessa:', err);
@@ -614,6 +615,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         updateRouteStatus(userLat, userLng);
         updateProgressPanel(userLat, userLng);
         checkNextPoint(userLat, userLng, accuracy, points);
+        updateNearbyPlacesUI(userLat, userLng);
     }
 
     // ─── USER MARKER ─────────────────────────────────────────────────────────
@@ -1556,6 +1558,106 @@ document.addEventListener('DOMContentLoaded', async () => {
         approachToastVisible = false;
     };
     document.getElementById('toast-close-btn').addEventListener('click', window.closeProximityToast);
+
+    // ─── 📍 LÄHISTÖLLÄ -OSIO (LaukaaInfo Places) ──────────────────────────────
+    let cachedLaukaaInfoPlaces = [];
+    let isNearbySectionCollapsed = false;
+    let lastNearbyUserLat = null;
+    let lastNearbyUserLng = null;
+
+    async function loadLaukaaInfoPlaces() {
+        try {
+            if (!supabase) return;
+            const { data, error } = await supabase
+                .from('places')
+                .select('place_id, name, canonical_name, type, lat, lon')
+                .or('status.eq.active,status.eq.ACTIVE,status.is.null')
+                .not('lat', 'is', null)
+                .not('lon', 'is', null)
+                .limit(350);
+
+            if (error || !data) return;
+            cachedLaukaaInfoPlaces = data;
+
+            // Trigger initial UI update if user location is already known
+            if (userMarker) {
+                const latLng = userMarker.getLatLng();
+                if (latLng) updateNearbyPlacesUI(latLng.lat, latLng.lng);
+            }
+        } catch(e) {
+            console.warn('Lähistöllä-paikkojen latausvirhe:', e);
+        }
+    }
+
+    function updateNearbyPlacesUI(userLat, userLng) {
+        const container = document.getElementById('nearby-places-container');
+        if (!container || !cachedLaukaaInfoPlaces || cachedLaukaaInfoPlaces.length === 0) return;
+
+        if (isNearbySectionCollapsed) return;
+
+        // Skip sorting if user moved less than 10 meters
+        if (lastNearbyUserLat != null && lastNearbyUserLng != null) {
+            const movedMeters = haversineMeters(userLat, userLng, lastNearbyUserLat, lastNearbyUserLng);
+            if (movedMeters < 10) return;
+        }
+        lastNearbyUserLat = userLat;
+        lastNearbyUserLng = userLng;
+
+        const routePointIds = new Set((window.routePoints || []).map(pt => pt.id).filter(Boolean));
+
+        const withDist = cachedLaukaaInfoPlaces
+            .filter(p => p.lat != null && p.lon != null && !routePointIds.has(p.place_id))
+            .map(p => {
+                const distMeters = haversineMeters(userLat, userLng, Number(p.lat), Number(p.lon));
+                return { ...p, distMeters };
+            })
+            .sort((a, b) => a.distMeters - b.distMeters)
+            .slice(0, 4);
+
+        if (withDist.length === 0) {
+            container.innerHTML = `<div style="font-size:0.82rem; color:#94a3b8; padding:0.8rem; text-align:center; background:#f8fafc; border-radius:12px;">Ei muita LaukaaInfo-kohteita välittömässä läheisyydessä.</div>`;
+            return;
+        }
+
+        container.innerHTML = withDist.map(p => {
+            const name = p.name || p.canonical_name || 'LaukaaInfo-kohde';
+            const category = p.type || 'Kohde';
+            const distStr = p.distMeters >= 1000
+                ? `${(p.distMeters / 1000).toFixed(1).replace('.', ',')} km`
+                : `${Math.round(p.distMeters)} m`;
+
+            return `
+                <a href="tietoa-paikasta.html?id=${encodeURIComponent(p.place_id)}" target="_blank" rel="noopener" style="text-decoration:none; display:flex; align-items:center; justify-content:space-between; padding:0.75rem 1rem; background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; transition:background 0.2s, border-color 0.2s;">
+                    <div style="display:flex; align-items:center; gap:0.75rem; min-width:0;">
+                        <span style="font-size:0.8rem; font-weight:800; color:#2563eb; background:#dbeafe; padding:0.25rem 0.65rem; border-radius:20px; white-space:nowrap; flex-shrink:0;">${distStr}</span>
+                        <div style="min-width:0;">
+                            <div style="font-size:0.92rem; font-weight:700; color:#0f172a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${name}</div>
+                            <div style="font-size:0.75rem; color:#64748b;">${category}</div>
+                        </div>
+                    </div>
+                    <span style="font-size:0.82rem; font-weight:700; color:#059669; flex-shrink:0; margin-left:0.5rem;">Näytä →</span>
+                </a>
+            `;
+        }).join('');
+    }
+
+    window.toggleNearbySection = function() {
+        isNearbySectionCollapsed = !isNearbySectionCollapsed;
+        const container = document.getElementById('nearby-places-container');
+        const btn = document.getElementById('toggle-nearby-btn');
+        if (!container || !btn) return;
+        if (isNearbySectionCollapsed) {
+            container.style.display = 'none';
+            btn.textContent = 'Laajenna';
+        } else {
+            container.style.display = 'flex';
+            btn.textContent = 'Pienennä';
+            if (userMarker) {
+                const latLng = userMarker.getLatLng();
+                if (latLng) updateNearbyPlacesUI(latLng.lat, latLng.lng);
+            }
+        }
+    };
 
     // Start
     loadRoute();
