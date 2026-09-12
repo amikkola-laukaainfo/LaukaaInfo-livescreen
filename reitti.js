@@ -149,6 +149,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
+        // Reset nearby places state before rendering
+        nearbyPlacesEnabled = false;
+        const initNearbyEl = document.getElementById('nearby-places-section');
+        if (initNearbyEl) initNearbyEl.style.display = 'none';
+
         // Init Map
         const map = L.map('map');
         window._leafletMap = map;  // stored for GPS user marker
@@ -182,6 +187,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (feature.geometry.type === 'LineString') {
                     // Capture route coords for GPS distance/progress calculations
                     routeLineCoords = feature.geometry.coordinates; // [[lng, lat], ...]
+
+                    nearbyPlacesEnabled = feature.properties?.show_nearby !== false;
+                    const nearbyEl = document.getElementById('nearby-places-section');
+                    if (nearbyEl) {
+                        nearbyEl.style.display = nearbyPlacesEnabled ? 'block' : 'none';
+                    }
                 }
                 if (feature.geometry.type === 'Point' && feature.properties) {
                     const p = feature.properties;
@@ -1560,6 +1571,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('toast-close-btn').addEventListener('click', window.closeProximityToast);
 
     // ─── 📍 LÄHISTÖLLÄ -OSIO (LaukaaInfo Places) ──────────────────────────────
+    let nearbyPlacesEnabled = false;
     let cachedLaukaaInfoPlaces = [];
     let isNearbySectionCollapsed = false;
     let lastNearbyUserLat = null;
@@ -1591,7 +1603,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function updateNearbyPlacesUI(userLat, userLng) {
         const container = document.getElementById('nearby-places-container');
-        if (!container || !cachedLaukaaInfoPlaces || cachedLaukaaInfoPlaces.length === 0) return;
+        if (!nearbyPlacesEnabled || !container || !cachedLaukaaInfoPlaces || cachedLaukaaInfoPlaces.length === 0) return;
 
         if (isNearbySectionCollapsed) return;
 
