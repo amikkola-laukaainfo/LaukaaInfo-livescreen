@@ -398,6 +398,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (navigator.geolocation) {
             initGPS(points);
         }
+
+        // Palauta edistyminen localStorage:sta (esim. puhelimen selain virkistyi kesken polun)
+        // Kutsutaan initGPS:n jälkeen, jotta GPS-guard-muuttujat ovat käytettävissä
+        setTimeout(() => {
+            if (typeof restoreRouteProgress === 'function') {
+                restoreRouteProgress(points);
+            }
+        }, 300);
     }
 
     // ─── GPS NAVIGATION ENGINE ───────────────────────────────────────────────
@@ -411,6 +419,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let nextPointIndex = 0;          // index of next unvisited point
     let progressIndex = 0;           // highest visited index (never decreases)
     const visitedPoints = new Set(); // set of visited point indices
+    const arrivedPoints = new Set(); // set of ARRIVED indices (GPS ok, mutta ei vielä kuitattu)
     const skippedPoints = new Set(); // set of skipped (shortcutted-over) point indices
     let approachToastVisible = false;
     let _insideCount = 0;            // consecutive GPS readings inside arrival_radius
@@ -728,8 +737,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (pLat == null || pLng == null) return;
 
         const dist = Math.round(haversineMeters(userLat, userLng, pLat, pLng));
-        const arrivalR  = p.arrival_radius  ?? 30;
-        const warningR  = p.warning_radius  ?? p.notificationDistance ?? 100;
+        const arrivalR  = p.arrival_radius  ?? p.properties?.arrival_radius ?? 30;
+        const warningR  = p.warning_radius  ?? p.properties?.warning_radius ?? p.notificationDistance ?? 100;
+
+        // Dynamic per-point audio & vibration notifications (Web Audio API)
+        handlePointAudio(p, dist);
 
         // Update "next point" info panel
         updateNextPointDisplay(p, dist, nextPointIndex, points.length);
@@ -766,6 +778,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (isArrivalToastVisible || isModalActive || isCooldown) {
             _insideCount = 0;
+            return;
+        }
+
+        // Jos piste on jo ARRIVED-tilassa, ei ajeta saapumislogiikkaa uudelleen.
+        // Käyttäjä näkee #arrived-bar:n ja kuittaa itse.
+        if (arrivedPoints.has(nextPointIndex)) {
             return;
         }
 
@@ -806,12 +824,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Inside arrival zone — accumulate
             _insideCount++;
             if (_insideCount >= requiredReadings) {
-                // ✅ ARRIVED
+                // ✅ ARRIVED — piste siirtyy ARRIVED-tilaan, EI vielä activatePoint
                 _insideCount = 0;
-                visitedPoints.add(nextPointIndex);
-                markPointVisited(nextPointIndex, p);
-                showArrivalToast(p);
-                activatePoint(nextPointIndex + 1, { reason: 'arrived', fromIndex: nextPointIndex });
+                markPointArrived(nextPointIndex, p);
             } else {
                 // Accumulating — show panel feedback
                 const nextEl = document.getElementById('gps-next-point');
@@ -989,8 +1004,37 @@ document.addEventListener('DOMContentLoaded', async () => {
             const card = document.getElementById(`point-card-${idx}`);
             const unlocked = isPointUnlocked(p);
 
-            if (unlocked) {
-                // 🟢 Käyty / Avattu piste: Vihreä karttamarkkeri
+            if (arrivedPoints.has(idx)) {
+                // 📍 ARRIVED — GPS on havainnut saapumisen, käyttäjä ei vielä kuittanut
+                // Kirkas vihreä + jatkuva pulssi, "Avaa kokemuspiste"-teksti kortissa
+                if (p._layer && p._layer.setStyle) {
+                    p._layer.setStyle({
+                        fillColor: '#10b981',
+                        color: '#ffffff',
+                        weight: 3,
+                        radius: 13,
+                        fillOpacity: 1
+                    });
+                }
+                setMarkerPulse(p, 'arrival');
+
+                if (card) {
+                    card.style.borderLeft = '4px solid #10b981';
+                    card.style.background = '#f0fdf4';
+                    const badge = card.querySelector('.point-locked-badge');
+                    if (badge) {
+                        badge.style.background = '#bbf7d0';
+                        badge.style.color = '#065f46';
+                        badge.innerHTML = '📍 Saapunut';
+                    }
+                    const teaser = card.querySelector('.point-locked-teaser');
+                    if (teaser) {
+                        teaser.style.color = '#047857';
+                        teaser.innerHTML = '📖 Avaa kokemuspiste tai paina Jatka alakortista';
+                    }
+                }
+            } else if (visitedPoints.has(idx)) {
+                // ✅ Käyty / kuitattu piste: Vihreä karttamarkkeri (ei pulssia)
                 if (p._layer && p._layer.setStyle) {
                     p._layer.setStyle({
                         fillColor: '#059669',
@@ -1000,6 +1044,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         fillOpacity: 0.9
                     });
                 }
+                setMarkerPulse(p, null); // varmistetaan ettei pulssi jää päälle
 
                 if (card) {
                     card.style.borderLeft = '4px solid #059669';
@@ -1172,56 +1217,130 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.addEventListener(evt, () => { getAudioCtx(); }, { once: true, capture: true });
     });
 
-    function triggerFeedback(type) {
-        // 1. Vibration (Android / supporting browsers)
-        if (navigator.vibrate) {
-            try {
-                if (type === 'arrival') {
-                    navigator.vibrate([200, 100, 200, 100, 300]); // Festive 3-pulse pattern
-                } else if (type === 'approach') {
-                    navigator.vibrate([150]); // Short single pulse
-                }
-            } catch(e) {}
-        }
+    let audioNotificationsEnabled = true;
+    try {
+        const savedAudio = localStorage.getItem('route_audio_enabled');
+        if (savedAudio === 'false') audioNotificationsEnabled = false;
+    } catch(e) {}
 
-        // 2. Audio Chime (Web Audio API synthesized sound - no external audio file needed)
+    function updateAudioBtnUI() {
+        const btn = document.getElementById('audio-status-btn');
+        const label = document.getElementById('audio-label');
+        const dot = document.getElementById('audio-dot');
+        if (!btn) return;
+        if (audioNotificationsEnabled) {
+            btn.className = 'active';
+            if (label) label.textContent = 'Äänet päällä';
+            if (dot) dot.textContent = '🔊';
+        } else {
+            btn.className = 'muted';
+            if (label) label.textContent = 'Äänet pois';
+            if (dot) dot.textContent = '🔇';
+        }
+    }
+    updateAudioBtnUI();
+
+    window.toggleAudioNotifications = function() {
+        audioNotificationsEnabled = !audioNotificationsEnabled;
+        try {
+            localStorage.setItem('route_audio_enabled', String(audioNotificationsEnabled));
+        } catch(e) {}
+        if (audioNotificationsEnabled) {
+            getAudioCtx();
+        }
+        updateAudioBtnUI();
+    };
+
+    function playWarningBeep() {
         try {
             const ctx = getAudioCtx();
             if (!ctx || ctx.state !== 'running') return;
-
             const now = ctx.currentTime;
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
             osc.connect(gain);
             gain.connect(ctx.destination);
 
-            if (type === 'arrival') {
-                // Happy 3-note ascending fanfare chime (C5 → E5 → G5)
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(523.25, now);       // C5
-                osc.frequency.setValueAtTime(659.25, now + 0.12); // E5
-                osc.frequency.setValueAtTime(783.99, now + 0.24); // G5
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(880, now); // A5 gentle ping
 
-                gain.gain.setValueAtTime(0.01, now);
-                gain.gain.exponentialRampToValueAtTime(0.25, now + 0.05);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.65);
+            gain.gain.setValueAtTime(0.01, now);
+            gain.gain.exponentialRampToValueAtTime(0.2, now + 0.03);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
 
-                osc.start(now);
-                osc.stop(now + 0.65);
-            } else if (type === 'approach') {
-                // Gentle ping sound (A5)
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(880, now); // A5
+            osc.start(now);
+            osc.stop(now + 0.2);
+        } catch(e) {}
+    }
 
-                gain.gain.setValueAtTime(0.01, now);
-                gain.gain.exponentialRampToValueAtTime(0.15, now + 0.03);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+    function playArrivalBeep() {
+        try {
+            const ctx = getAudioCtx();
+            if (!ctx || ctx.state !== 'running') return;
+            const now = ctx.currentTime;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
 
-                osc.start(now);
-                osc.stop(now + 0.35);
-            }
-        } catch(e) {
-            console.warn('Audio chime error:', e);
+            // Double-tone chime (D5 -> A5)
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(587.33, now);       // D5
+            osc.frequency.setValueAtTime(880.00, now + 0.14); // A5
+
+            gain.gain.setValueAtTime(0.01, now);
+            gain.gain.exponentialRampToValueAtTime(0.3, now + 0.04);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+
+            osc.start(now);
+            osc.stop(now + 0.45);
+        } catch(e) {}
+    }
+
+    function triggerVibration(type) {
+        if (navigator.vibrate) {
+            try {
+                if (type === 'arrival') {
+                    navigator.vibrate([200, 100, 200, 100, 300]);
+                } else if (type === 'approach') {
+                    navigator.vibrate([150]);
+                }
+            } catch(e) {}
+        }
+    }
+
+    function handlePointAudio(point, distance) {
+        if (!audioNotificationsEnabled || !point) return;
+
+        const warningRadius = Number(point.warning_radius ?? point.properties?.warning_radius ?? 100);
+        const arrivalRadius = Number(point.arrival_radius ?? point.properties?.arrival_radius ?? 30);
+
+        const isAudioWarningAllowed = (point.audio_warning ?? point.properties?.audio_warning) !== false;
+        const isAudioArrivalAllowed = (point.audio_arrival ?? point.properties?.audio_arrival) !== false;
+
+        // 1. Warning audio ("piip") - played when arrivalRadius < distance <= warningRadius
+        if (
+            isAudioWarningAllowed &&
+            !point._audioWarningPlayed &&
+            warningRadius > 0 &&
+            distance <= warningRadius &&
+            distance > arrivalRadius
+        ) {
+            playWarningBeep();
+            triggerVibration('approach');
+            point._audioWarningPlayed = true;
+        }
+
+        // 2. Arrival audio ("piip-piip") - played when distance <= arrivalRadius
+        if (
+            isAudioArrivalAllowed &&
+            !point._audioArrivalPlayed &&
+            arrivalRadius > 0 &&
+            distance <= arrivalRadius
+        ) {
+            playArrivalBeep();
+            triggerVibration('arrival');
+            point._audioArrivalPlayed = true;
         }
     }
 
@@ -1253,13 +1372,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // "Olet saapunut" — green arrival toast (separate element)
-    function showArrivalToast(p) {
+    // EI enää autoclosea — käyttäjä päättää itse
+    function showArrivalToast(idx, p) {
         approachToastVisible = false;
         closeProximityToast();
 
-        // Set cooldown: next arrival cannot trigger for 8 seconds after this toast appears.
-        // This prevents adjacent points from immediately overwriting the current toast.
-        _arrivalCooldownUntil = Date.now() + 8000;
+        // Set cooldown: next arrival cannot trigger for 5 seconds after this toast appears.
+        _arrivalCooldownUntil = Date.now() + 5000;
 
         const name = p.title || p.name || 'Kohde';
         document.getElementById('arrival-name').textContent = name;
@@ -1268,11 +1387,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         triggerFeedback('arrival');
 
+        // [Avaa] → avaa modal, ARRIVED-tila säilyy
         document.getElementById('arrival-open-btn').onclick = () => {
-            // Extend cooldown while user has opened the modal — next arrival
-            // should not fire until well after the modal is closed.
-            _arrivalCooldownUntil = Date.now() + 5000;
             window.openPointModal && window.openPointModal(p);
+            closeArrivalToast();
+            // #arrived-bar jää näkyviin
+        };
+
+        // [Jatka →] → kuittaa pisteen ja etenee
+        document.getElementById('arrival-next-btn').onclick = () => {
+            completeCurrentPoint(idx);
             closeArrivalToast();
         };
 
@@ -1283,16 +1407,148 @@ document.addEventListener('DOMContentLoaded', async () => {
             }, 600);
         }
 
-        clearTimeout(window._arrivalTimer);
-        window._arrivalTimer = setTimeout(closeArrivalToast, 15000);
+        // EI autoclose-ajastinta enkään — x sulkee vain toastin, #arrived-bar jää
     }
 
     window.closeArrivalToast = function() {
         const toast = document.getElementById('arrival-toast');
         if (toast) toast.classList.remove('visible');
-        clearTimeout(window._arrivalTimer);
+        // EI tyhjennetä _arrivalTimer:ia — ei ole enää ajastinta
+        // #arrived-bar jää näkyviin jos piste on edelleen ARRIVED-tilassa
     };
     document.getElementById('arrival-close-btn').addEventListener('click', window.closeArrivalToast);
+
+    // ─── ARRIVED-TILAN HALLINTA ──────────────────────────────────────────────
+
+    // Piste siirtyy ARRIVED-tilaan: GPS on havainnut saapumisen
+    // activatePoint kutsutaan vasta käyttäjän kuitattua pisteen
+    function markPointArrived(idx, p) {
+        arrivedPoints.add(idx);
+        p._unlocked = true;
+        const pointId = p.id || `pt_${p._lat || p.lat}_${p._lng || p.lng}`;
+        try {
+            localStorage.setItem('unlocked_point_' + pointId, 'true');
+        } catch(e) {}
+
+        // Unpack locked_content if present
+        if (p.locked_content) {
+            if (p.locked_content.description) p.description = p.locked_content.description;
+            if (p.locked_content.imageUrl) p.imageUrl = p.locked_content.imageUrl;
+            if (p.locked_content.image) p.image = p.locked_content.image;
+            if (p.locked_content.audioUrl) p.audioUrl = p.locked_content.audioUrl;
+            if (p.locked_content.audio) p.audio = p.locked_content.audio;
+            if (p.locked_content.youtubeUrl) p.youtubeUrl = p.locked_content.youtubeUrl;
+            if (p.locked_content.infoLink) p.infoLink = p.locked_content.infoLink;
+        }
+
+        updateAllMarkerStyles();
+        showArrivedBar(idx, p);    // pysyvä alakortti
+        showArrivalToast(idx, p);  // toast (ei autoclose)
+        saveRouteProgress();
+    }
+
+    // Käyttäjä kuittaa pisteen "Jatka"-painikkeella -> siirtyy VISITED-tilaan ja etenee NEXT-pisteeseen
+    function completeCurrentPoint(idx) {
+        arrivedPoints.delete(idx);
+        visitedPoints.add(idx);
+        hideArrivedBar();
+        closeArrivalToast();
+        const points = window.routePoints || [];
+        const p = points[idx];
+        if (p) {
+            markPointVisited(idx, p);
+        }
+        const nextIdx = getNextAvailablePoint(idx);
+        activatePoint(nextIdx, { reason: 'completed', fromIndex: idx });
+        _arrivalCooldownUntil = Date.now() + 3000;
+        saveRouteProgress();
+    }
+    window.completeCurrentPoint = completeCurrentPoint;
+
+    // Palauttaa seuraavan käytännön pisteen indeksin
+    // Tässä yksinkertaisesti idx+1; myöhemmin haarautuma-/oikaisu-logiikka voidaan lisätä tähän
+    function getNextAvailablePoint(fromIdx) {
+        return fromIdx + 1;
+    }
+
+    // Näytä #arrived-bar
+    function showArrivedBar(idx, p) {
+        const bar = document.getElementById('arrived-bar');
+        if (!bar) return;
+        const name = p.title || p.name || `Piste ${idx + 1}`;
+        document.getElementById('arrived-bar-name').textContent = `${idx + 1}. ${name}`;
+        bar.style.display = 'flex';
+        // Animaatio käynnistyy näkyvyysmuutoksen jälkeen
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => bar.classList.add('visible'));
+        });
+        document.getElementById('arrived-bar-open-btn').onclick = () => {
+            window.openPointModal && window.openPointModal(p);
+        };
+        document.getElementById('arrived-bar-next-btn').onclick = () => {
+            completeCurrentPoint(idx);
+        };
+    }
+
+    // Piilota #arrived-bar
+    function hideArrivedBar() {
+        const bar = document.getElementById('arrived-bar');
+        if (!bar) return;
+        bar.classList.remove('visible');
+        setTimeout(() => {
+            bar.style.display = 'none';
+        }, 400); // odota animaatio
+    }
+
+    // ─── REITTIEDISTYMISEN PERSISTOINTI (localStorage) ──────────────────────
+    // Tallennetaan edistyminen niin ett\u00e4 puhelimen virkistyminen ei katko ARRIVED-tilaa.
+
+    function saveRouteProgress() {
+        try {
+            localStorage.setItem('route_progress_' + routeId, JSON.stringify({
+                arrived:  [...arrivedPoints],
+                visited:  [...visitedPoints],
+                skipped:  [...skippedPoints],
+                nextPointIndex,
+                savedAt:  Date.now()
+            }));
+        } catch(e) {}
+    }
+
+    function loadRouteProgress() {
+        try {
+            const raw = localStorage.getItem('route_progress_' + routeId);
+            if (!raw) return null;
+            return JSON.parse(raw);
+        } catch(e) { return null; }
+    }
+
+    // Kutsutaan renderGeoJSON:n lopussa pisteiden alustuksen j\u00e4lkeen
+    function restoreRouteProgress(points) {
+        const saved = loadRouteProgress();
+        if (!saved) return;
+
+        // Rajoitetaan indeksit pisteiden m\u00e4\u00e4r\u00e4\u00e4n
+        const max = points.length;
+
+        (saved.visited || []).forEach(i => { if (i < max) visitedPoints.add(i); });
+        (saved.skipped || []).forEach(i => { if (i < max) skippedPoints.add(i); });
+
+        if (saved.nextPointIndex != null && saved.nextPointIndex <= max) {
+            nextPointIndex = saved.nextPointIndex;
+        }
+
+        // Palauta ARRIVED-tila: n\u00e4yt\u00e4 #arrived-bar takaisin
+        (saved.arrived || []).forEach(i => {
+            if (i < max) {
+                arrivedPoints.add(i);
+                const p = points[i];
+                if (p) showArrivedBar(i, p);
+            }
+        });
+
+        updateAllMarkerStyles();
+    }
 
     window.closeProximityToast = function() {
         document.getElementById('proximity-toast').classList.remove('visible');
@@ -1303,6 +1559,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Start
     loadRoute();
+
     document.getElementById('btn-unlock').addEventListener('click', async () => {
         const code = document.getElementById('access-code').value.trim();
         if (!code) return;
@@ -1395,11 +1652,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (linkContainer) { linkContainer.innerHTML = ''; linkContainer.style.display = 'none'; }
 
         // Check if point is locked
-        if (window.isPointUnlocked && !window.isPointUnlocked(p)) {
+        // Pistettä ei saa blokkata jos se on ARRIVED-tilassa (GPS on havainnut saapumisen)
+        const _allPoints = window.routePoints || [];
+        const _pointIdx = _allPoints.findIndex(pt => pt === p || (pt.id && pt.id === p.id));
+        const _isArrived = arrivedPoints.has(_pointIdx);
+
+        if (window.isPointUnlocked && !window.isPointUnlocked(p) && !_isArrived) {
             const modalTitle = p.title || p.name || 'Salainen kokemuspiste';
             const radius = p.unlock_radius || p.arrival_radius || 30;
             const points = window.routePoints || [];
-            const idx = points.findIndex(pt => pt === p || (pt.id && pt.id === p.id));
+            const idx = _pointIdx;
+
 
             let sequenceNotice = '';
             if (idx > 0) {
@@ -1656,10 +1919,41 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
         }
 
-        // External Link Footer Button
-        if (targetLink && linkContainer) {
-            linkContainer.style.display = 'flex';
-            linkContainer.innerHTML = `<a href="${targetLink}" target="_blank" rel="noopener" class="lki-cta-btn website">Lisätietoa kohteesta &rarr;</a>`;
+        // Modal Footer Buttons (External Link & Jatka action)
+        if (linkContainer) {
+            linkContainer.innerHTML = '';
+            let hasFooterContent = false;
+
+            if (targetLink) {
+                const linkBtn = document.createElement('a');
+                linkBtn.href = targetLink;
+                linkBtn.target = '_blank';
+                linkBtn.rel = 'noopener';
+                linkBtn.className = 'lki-cta-btn website';
+                linkBtn.textContent = 'Lisätietoa kohteesta →';
+                linkContainer.appendChild(linkBtn);
+                hasFooterContent = true;
+            }
+
+            if (_isArrived) {
+                const continueBtn = document.createElement('button');
+                continueBtn.type = 'button';
+                continueBtn.className = 'lki-cta-btn continue';
+                continueBtn.style.cssText = 'background:#059669; color:#fff; border:none; padding:12px 20px; border-radius:12px; font-size:0.95rem; font-weight:700; cursor:pointer; width:100%; margin-top:8px; display:flex; align-items:center; justify-content:center; gap:8px; font-family:inherit; transition:background 0.2s;';
+                continueBtn.innerHTML = 'Jatka eteenpäin &rarr;';
+                continueBtn.onclick = () => {
+                    completeCurrentPoint(_pointIdx);
+                    closePointModal();
+                };
+                linkContainer.appendChild(continueBtn);
+                hasFooterContent = true;
+            }
+
+            linkContainer.style.display = hasFooterContent ? 'flex' : 'none';
+            if (hasFooterContent) {
+                linkContainer.style.flexDirection = 'column';
+                linkContainer.style.gap = '8px';
+            }
         }
 
         // ─── OIKAISU-PANEELI ─────────────────────────────────────────────────
@@ -1727,14 +2021,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
                 if (shortcutBtnTake) {
                     shortcutBtnTake.onclick = () => {
-                        // Merkitään nykyinen piste käydyksi jos ei vielä merkitty
+                        arrivedPoints.delete(currentIdx);
                         if (currentIdx >= 0 && !visitedPoints.has(currentIdx)) {
                             visitedPoints.add(currentIdx);
+                            const currentP = points[currentIdx];
+                            if (currentP) markPointVisited(currentIdx, currentP);
                         }
-                        // Aktivoidaan kohdepiste shortcut-syyllä
+                        hideArrivedBar();
+                        closeArrivalToast();
                         activatePoint(targetIdx, { reason: 'shortcut', fromIndex: currentIdx });
                         shortcutPanelEl.classList.remove('visible');
                         closePointModal();
+                        saveRouteProgress();
                     };
                 }
             }

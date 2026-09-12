@@ -118,6 +118,28 @@
         }
         #gps-status-btn.active { background: #dcfce7; color: #166534; }
         #gps-status-btn.error { background: #fee2e2; color: #b91c1c; }
+
+        #audio-status-btn {
+            position: fixed;
+            top: 1rem;
+            right: 8.5rem;
+            z-index: 9000;
+            background: #fff;
+            border: none;
+            border-radius: 50px;
+            padding: 0.4rem 0.9rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: background 0.2s, color 0.2s;
+        }
+        #audio-status-btn.active { background: #dbeafe; color: #1e40af; }
+        #audio-status-btn.muted { background: #f1f5f9; color: #64748b; }
     </style>
 
     <style>
@@ -369,21 +391,41 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+        /* Arrival toast buttons */
+        .arrival-btn-row {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            flex-shrink: 0;
+        }
         #arrival-open-btn {
             background: #059669;
             color: #fff;
             border: none;
             border-radius: 10px;
-            padding: 0.55rem 1rem;
-            font-size: 0.82rem;
+            padding: 0.5rem 0.9rem;
+            font-size: 0.78rem;
             font-weight: 700;
             cursor: pointer;
             white-space: nowrap;
-            flex-shrink: 0;
             font-family: inherit;
             transition: background 0.2s, transform 0.15s;
         }
-        #arrival-open-btn:hover { background: #047857; transform: scale(1.04); }
+        #arrival-open-btn:hover { background: #047857; transform: scale(1.03); }
+        #arrival-next-btn {
+            background: #f0fdf4;
+            color: #059669;
+            border: 1.5px solid #6ee7b7;
+            border-radius: 10px;
+            padding: 0.5rem 0.9rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            font-family: inherit;
+            transition: background 0.2s, border-color 0.2s;
+        }
+        #arrival-next-btn:hover { background: #dcfce7; border-color: #34d399; }
         #arrival-close-btn {
             background: none;
             border: none;
@@ -395,6 +437,82 @@
             line-height: 1;
         }
         #arrival-close-btn:hover { color: #475569; }
+
+        /* ─── ARRIVED BAR (pysyvä alakortti) ────────────────────────────────── */
+        #arrived-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 9999;
+            background: #fff;
+            border-top: 3px solid #059669;
+            box-shadow: 0 -4px 24px rgba(5,150,105,0.18), 0 -1px 8px rgba(0,0,0,0.08);
+            padding: 0.75rem 1rem;
+            display: none;
+            align-items: center;
+            gap: 0.75rem;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        #arrived-bar.visible {
+            transform: translateY(0);
+            display: flex;
+        }
+        #arrived-bar-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        #arrived-bar-body {
+            flex: 1;
+            min-width: 0;
+        }
+        #arrived-bar-label {
+            font-size: 0.6rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #059669;
+            margin-bottom: 0.1rem;
+        }
+        #arrived-bar-name {
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: #0f172a;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        #arrived-bar-open-btn {
+            background: #059669;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 0.45rem 0.8rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+            font-family: inherit;
+            transition: background 0.2s;
+        }
+        #arrived-bar-open-btn:hover { background: #047857; }
+        #arrived-bar-next-btn {
+            background: #f0fdf4;
+            color: #047857;
+            border: 1.5px solid #6ee7b7;
+            border-radius: 8px;
+            padding: 0.45rem 0.8rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+            font-family: inherit;
+            transition: background 0.2s, border-color 0.2s;
+        }
+        #arrived-bar-next-btn:hover { background: #dcfce7; border-color: #34d399; }
 
         /* ─── PROXIMITY MARKER PULSE ANIMATIONS ────────────────────── */
         @keyframes pulseApproach {
@@ -798,6 +916,12 @@
     </div>
 </div>
 
+<!-- Audio Status Button -->
+<button id="audio-status-btn" class="active" onclick="window.toggleAudioNotifications && window.toggleAudioNotifications()" title="Ääni-ilmoitukset">
+    <span id="audio-dot">🔊</span>
+    <span id="audio-label">Äänet päällä</span>
+</button>
+
 <!-- GPS Status Button -->
 <button id="gps-status-btn" onclick="window.toggleGPS && window.toggleGPS()" title="GPS-seuranta">
     <span id="gps-dot">📍</span>
@@ -811,8 +935,22 @@
         <div id="arrival-label">Olet saapunut kokemuspisteelle!</div>
         <div id="arrival-name">...</div>
     </div>
-    <button id="arrival-open-btn">Avaa →</button>
+    <div class="arrival-btn-row">
+        <button id="arrival-open-btn">Avaa →</button>
+        <button id="arrival-next-btn">Jatka →</button>
+    </div>
     <button id="arrival-close-btn">✕</button>
+</div>
+
+<!-- Arrived Bar (pysyvä alakortti kun piste on ARRIVED-tilassa) -->
+<div id="arrived-bar">
+    <div id="arrived-bar-icon">📍</div>
+    <div id="arrived-bar-body">
+        <div id="arrived-bar-label">Saapunut kokemuspisteelle</div>
+        <div id="arrived-bar-name">...</div>
+    </div>
+    <button id="arrived-bar-open-btn">Avaa</button>
+    <button id="arrived-bar-next-btn">Jatka →</button>
 </div>
 
 <!-- Proximity Toast (lähestyminen) -->
