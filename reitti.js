@@ -2091,6 +2091,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </div>
                 </div>
             `;
+            document.getElementById('point-modal').classList.add('active');
             document.getElementById('point-modal').style.display = 'flex';
             return;
         }
@@ -2281,7 +2282,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const tabId = btn.getAttribute('data-tab');
                     
                     if (tabId === 'link') {
-                        window.open(targetLink, '_blank', 'noopener,noreferrer');
+                        try {
+                            const win = window.open(targetLink, '_blank', 'noopener,noreferrer');
+                            if (!win || win.closed || typeof win.closed === 'undefined') {
+                                window.location.href = targetLink;
+                            }
+                        } catch(e) {
+                            window.location.href = targetLink;
+                        }
                         return;
                     }
 
@@ -2423,7 +2431,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
 
     function closePointModal() {
-        document.getElementById('point-modal').classList.remove('active');
+        const modal = document.getElementById('point-modal');
+        if (modal) {
+            modal.classList.remove('active');
+            modal.style.display = '';
+        }
         document.getElementById('point-modal-media-container').innerHTML = ''; // Stop video
         if (pointSwiperInstance) {
             pointSwiperInstance.destroy(true, true);
