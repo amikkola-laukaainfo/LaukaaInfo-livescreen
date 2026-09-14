@@ -56,7 +56,36 @@
                 throw new Error(`Kohdekortit haussa HTTP ${response.status}`);
             }
             const json = await response.json();
-            return Array.isArray(json) ? json.filter(item => item && item.status !== 'inactive') : [];
+            const now = new Date();
+            return Array.isArray(json) ? json.filter(item => {
+                if (!item || item.status === 'inactive') return false;
+                if (item.type === 'event' && item.event) {
+                    const dateStr = item.event.endDate || item.event.startDate;
+                    if (dateStr) {
+                        let eventDate;
+                        if (typeof dateStr === 'string' && !dateStr.includes('T') && !dateStr.includes(':')) {
+                            const parts = dateStr.split('-');
+                            if (parts.length === 3) {
+                                eventDate = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10), 23, 59, 59, 999);
+                            } else {
+                                eventDate = new Date(dateStr);
+                                eventDate.setHours(23, 59, 59, 999);
+                            }
+                        } else {
+                            eventDate = new Date(dateStr);
+                            if (!item.event.endDate && !isNaN(eventDate.getTime())) {
+                                const endOfDay = new Date(eventDate);
+                                endOfDay.setHours(23, 59, 59, 999);
+                                if (endOfDay > eventDate) eventDate = endOfDay;
+                            }
+                        }
+                        if (!isNaN(eventDate.getTime()) && now > eventDate) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }) : [];
         } catch (err) {
             console.warn('Kohdekorttien lataus epäonnistui:', err);
             return [];

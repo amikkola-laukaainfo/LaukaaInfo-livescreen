@@ -455,28 +455,34 @@ function isExpired(item) {
   const now = new Date();
   
   if (item.type === 'event') {
-    let targetDate = null;
-    if (item.event?.endDate) {
-      targetDate = new Date(item.event.endDate);
-    } else if (item.event?.startDate) {
-      targetDate = new Date(item.event.startDate);
+    const dateStr = item.event?.endDate || item.event?.startDate;
+    if (!dateStr) return false;
+
+    let eventDate;
+    if (typeof dateStr === 'string' && !dateStr.includes('T') && !dateStr.includes(':')) {
+      const parts = dateStr.split('-');
+      if (parts.length === 3) {
+        eventDate = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10), 23, 59, 59, 999);
+      } else {
+        eventDate = new Date(dateStr);
+        eventDate.setHours(23, 59, 59, 999);
+      }
+    } else {
+      eventDate = new Date(dateStr);
+      if (!item.event?.endDate && !isNaN(eventDate.getTime())) {
+        const endOfDay = new Date(eventDate);
+        endOfDay.setHours(23, 59, 59, 999);
+        if (endOfDay > eventDate) eventDate = endOfDay;
+      }
     }
-    
-    if (targetDate) {
-      const expirationDate = new Date(targetDate);
-      expirationDate.setDate(expirationDate.getDate() + 3);
-      return now > expirationDate;
-    }
+    return !isNaN(eventDate.getTime()) && now > eventDate;
   } else if (item.type === 'offer') {
-    let targetDate = null;
     if (item.offer?.validUntil) {
-      targetDate = new Date(item.offer.validUntil);
-    }
-    
-    if (targetDate) {
-      const expirationDate = new Date(targetDate);
-      expirationDate.setDate(expirationDate.getDate() + 1);
-      return now > expirationDate;
+      const validDate = new Date(item.offer.validUntil);
+      if (!isNaN(validDate.getTime())) {
+        validDate.setHours(23, 59, 59, 999);
+        return now > validDate;
+      }
     }
   }
   
