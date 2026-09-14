@@ -64,6 +64,38 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     let currentRouteData = null;
 
+    // Follow-me / Auto-center state
+    let isFollowingUser = true;
+    let isFirstPosition = true;
+    let lastUserLat = null;
+    let lastUserLng = null;
+
+    function recenterOnUser() {
+        isFollowingUser = true;
+        updateRecenterBtnUI();
+        const map = window._leafletMap;
+        if (map && lastUserLat != null && lastUserLng != null) {
+            map.setView([lastUserLat, lastUserLng], Math.max(map.getZoom(), 16), {
+                animate: true,
+                duration: 0.6
+            });
+        }
+    }
+    window.recenterOnUser = recenterOnUser;
+
+    function updateRecenterBtnUI() {
+        const btn = document.getElementById('map-recenter-btn');
+        if (!btn) return;
+        if (isFollowingUser) {
+            btn.classList.add('active');
+            btn.title = 'Seurataan sijaintia (napauta vapauttaaksesi)';
+        } else {
+            btn.classList.remove('active');
+            btn.title = 'Keskitä omaan sijaintiin';
+        }
+    }
+    window.updateRecenterBtnUI = updateRecenterBtnUI;
+
     // Load initial route data (no GeoJSON if private without code)
     async function loadRoute(code = null) {
         if (code && ADMIN_PASSWORDS.includes(code.trim().toLowerCase())) {
@@ -235,6 +267,38 @@ document.addEventListener('DOMContentLoaded', async () => {
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
+
+        // Recenter control (Keskitä omaan sijaintiin / Seuraa minua)
+        const RecenterControl = L.Control.extend({
+            options: { position: 'bottomright' },
+            onAdd: function() {
+                const btn = L.DomUtil.create('button', 'leaflet-bar map-recenter-btn' + (isFollowingUser ? ' active' : ''));
+                btn.id = 'map-recenter-btn';
+                btn.title = isFollowingUser ? 'Seurataan sijaintia (napauta vapauttaaksesi)' : 'Keskitä omaan sijaintiin';
+                btn.setAttribute('aria-label', 'Keskitä sijaintiin');
+                btn.innerHTML = `<span class="iconify" data-icon="material-symbols:my-location"></span>`;
+                L.DomEvent.disableClickPropagation(btn);
+                L.DomEvent.on(btn, 'click', function(e) {
+                    L.DomEvent.stop(e);
+                    if (isFollowingUser) {
+                        isFollowingUser = false;
+                        updateRecenterBtnUI();
+                    } else {
+                        recenterOnUser();
+                    }
+                });
+                return btn;
+            }
+        });
+        map.addControl(new RecenterControl());
+
+        // Stop auto-follow when user manually drags the map
+        map.on('dragstart', function() {
+            if (isFollowingUser) {
+                isFollowingUser = false;
+                updateRecenterBtnUI();
+            }
+        });
 
         // Add GeoJSON to map
         const points = [];
@@ -750,6 +814,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }).addTo(map);
             }
         }
+
+        // Auto-follow: keskitetään kartta käyttäjään ja pidetään sijaintipiste ruudulla
+        lastUserLat = lat;
+        lastUserLng = lng;
+        if (isFirstPosition) {
+            isFirstPosition = false;
+            map.setView([lat, lng], Math.max(map.getZoom(), 16), { animate: true });
+        } else if (isFollowingUser) {
+            map.panTo([lat, lng], { animate: true, duration: 0.6 });
+        }
     }
 
     // ─── ROUTE STATUS STATE MACHINE ──────────────────────────────────────────
@@ -882,10 +956,51 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        // Jos piste on jo ARRIVED-tilassa, ei ajeta saapumislogiikkaa uudelleen.
-        // Käyttäjä näkee #arrived-bar:n ja kuittaa itse.
+        // Jos piste on jo ARRIVED-tilassa:
+        // Käyttäjä voi kuitata sen #arrived-bar:sta tai #arrival-toast:sta.
+        // Mutta jos käyttäjä jatkaa kävelyä kohteelta eteenpäin kuittaamatta ruudulta,
+        // varmistetaan että kohde vähintään avautuu (unlocked), ei jää lukkoon,
+        // ja siirrytään automaattisesti seuraavaan kohteeseen!
         if (arrivedPoints.has(nextPointIndex)) {
+            const autoAdvanceThreshold = Math.max(arrivalR * 1.8, 45);
+            let isMovingAway = dist >= autoAdvanceThreshold;
+
+            if (!isMovingAway && nextPointIndex + 1 < points.length) {
+                const nextP = points[nextPointIndex + 1];
+                const nLat = nextP._lat ?? nextP.lat;
+                const nLng = nextP._lng ?? nextP.lng;
+                if (nLat != null && nLng != null) {
+                    const distToNext = haversineMeters(userLat, userLng, nLat, nLng);
+                    if (distToNext < dist && dist > arrivalR) {
+                        isMovingAway = true;
+                    }
+                }
+            }
+
+            if (isMovingAway) {
+                console.log(`Automaattinen siirtymä pisteestä ${nextPointIndex + 1} seuraavaan (etäisyys ${dist} m). Kohde auki.`);
+                completeCurrentPoint(nextPointIndex);
+                return;
+            }
             return;
+        }
+
+        // Varmistus: Jos käyttäjä käveli lähelle kohdetta (esim. <= arrivalR * 1.4)
+        // ja etenee jo kohti seuraavaa pistettä, avataan kohde silti,
+        // jottei se jää lukkoon epätarkan GPS-signaalin takia!
+        if (nextPointIndex + 1 < points.length && dist <= Math.max(arrivalR * 1.4, 40)) {
+            const nextP = points[nextPointIndex + 1];
+            const nLat = nextP._lat ?? nextP.lat;
+            const nLng = nextP._lng ?? nextP.lng;
+            if (nLat != null && nLng != null) {
+                const distToNext = haversineMeters(userLat, userLng, nLat, nLng);
+                if (distToNext < dist && !arrivedPoints.has(nextPointIndex)) {
+                    console.log(`Kohde ${nextPointIndex + 1} sivuutettu lähietäisyydeltä (${dist} m) -> avataan sisältö ja jatketaan.`);
+                    markPointArrived(nextPointIndex, p);
+                    completeCurrentPoint(nextPointIndex);
+                    return;
+                }
+            }
         }
 
         // Sequential ordering: REQUIRE_PREVIOUS mode blocks arrival until previous point is physically visited.
@@ -1010,13 +1125,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             if (currentZone === 3) {
                 setMarkerPulse(p, 'arrival');
-                map.flyTo([pLat, pLng], 18, { duration: 1.2 });
             } else if (currentZone === 2) {
                 setMarkerPulse(p, 'near');
-                map.flyTo([pLat, pLng], 17, { duration: 1.0 });
             } else if (currentZone === 1) {
                 setMarkerPulse(p, 'approach');
-                map.flyTo([pLat, pLng], 16, { duration: 1.2 });
             } else {
                 setMarkerPulse(p, null);
             }
@@ -1313,9 +1425,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         return _audioCtx;
     }
 
-    // Unlock audio context on user interaction
-    ['click', 'touchstart'].forEach(evt => {
-        document.addEventListener(evt, () => { getAudioCtx(); }, { once: true, capture: true });
+    // Unlock audio context and vibration on user interaction
+    ['click', 'touchstart', 'pointerdown'].forEach(evt => {
+        document.addEventListener(evt, () => {
+            getAudioCtx();
+            if (navigator && typeof navigator.vibrate === 'function') {
+                try { navigator.vibrate(10); } catch(e) {}
+            }
+        }, { once: true, capture: true });
     });
 
     let audioNotificationsEnabled = true;
@@ -1399,19 +1516,30 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function triggerVibration(type) {
-        if (navigator.vibrate) {
+        if (navigator && typeof navigator.vibrate === 'function') {
             try {
                 if (type === 'arrival') {
-                    navigator.vibrate([200, 100, 200, 100, 300]);
+                    // Triumphant 3-pulse vibration: 300ms on, 120ms off, 300ms on, 120ms off, 500ms on
+                    navigator.vibrate([300, 120, 300, 120, 500]);
                 } else if (type === 'approach') {
-                    navigator.vibrate([150]);
+                    // Distinctive 2-pulse alert: 200ms on, 100ms off, 200ms on
+                    navigator.vibrate([200, 100, 200]);
                 }
-            } catch(e) {}
+            } catch(e) {
+                console.warn('Haptinen tärinä ei onnistunut:', e);
+            }
         }
     }
 
+    // Alias: triggerFeedback kutsutaan showApproachingToastissa ja showArrivalToastissa
+    function triggerFeedback(type) {
+        triggerVibration(type);
+    }
+    window.triggerFeedback = triggerFeedback;
+    window.triggerVibration = triggerVibration;
+
     function handlePointAudio(point, distance) {
-        if (!audioNotificationsEnabled || !point) return;
+        if (!point) return;
 
         const warningRadius = Number(point.warning_radius ?? point.properties?.warning_radius ?? 100);
         const arrivalRadius = Number(point.arrival_radius ?? point.properties?.arrival_radius ?? 30);
@@ -1419,27 +1547,29 @@ document.addEventListener('DOMContentLoaded', async () => {
         const isAudioWarningAllowed = (point.audio_warning ?? point.properties?.audio_warning) !== false;
         const isAudioArrivalAllowed = (point.audio_arrival ?? point.properties?.audio_arrival) !== false;
 
-        // 1. Warning audio ("piip") - played when arrivalRadius < distance <= warningRadius
+        // 1. Warning audio & vibration - played when arrivalRadius < distance <= warningRadius
         if (
-            isAudioWarningAllowed &&
             !point._audioWarningPlayed &&
             warningRadius > 0 &&
             distance <= warningRadius &&
             distance > arrivalRadius
         ) {
-            playWarningBeep();
+            if (audioNotificationsEnabled && isAudioWarningAllowed) {
+                playWarningBeep();
+            }
             triggerVibration('approach');
             point._audioWarningPlayed = true;
         }
 
-        // 2. Arrival audio ("piip-piip") - played when distance <= arrivalRadius
+        // 2. Arrival audio & vibration - played when distance <= arrivalRadius
         if (
-            isAudioArrivalAllowed &&
             !point._audioArrivalPlayed &&
             arrivalRadius > 0 &&
             distance <= arrivalRadius
         ) {
-            playArrivalBeep();
+            if (audioNotificationsEnabled && isAudioArrivalAllowed) {
+                playArrivalBeep();
+            }
             triggerVibration('arrival');
             point._audioArrivalPlayed = true;
         }
