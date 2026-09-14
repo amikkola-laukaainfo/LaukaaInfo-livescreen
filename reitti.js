@@ -351,6 +351,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         window.isPointUnlocked = isPointUnlocked;
 
+        // Apufunktio ohitettavien pisteiden tekstimuotoiluun (esim. "ohittaa kohteen 2" tai "ohittaa kohteet 2 ja 3")
+        function getSkippedPointsText(fromIdx, targetIdx) {
+            const skipped = [];
+            for (let i = fromIdx + 1; i < targetIdx; i++) {
+                skipped.push(i + 1);
+            }
+            if (skipped.length === 0) return '';
+            if (skipped.length === 1) {
+                return `ohittaa kohteen ${skipped[0]}`;
+            }
+            const last = skipped.pop();
+            return `ohittaa kohteet ${skipped.join(', ')} ja ${last}`;
+        }
+
         // Render Points Timeline
         const pointsList = document.getElementById('points-list');
         document.getElementById('point-count').textContent = `(${points.length})`;
@@ -364,20 +378,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const shortcutBadge = hasShortcut
                     ? `<span class="shortcut-available-badge" onclick="event.stopPropagation(); window.openPointModal(window.routePoints[${idx}])" title="Tästä pisteestä on oikaisumahdollisuus">⏭ Oikaisu</span>`
                     : '';
-
-    // Apufunktio ohitettavien pisteiden tekstimuotoiluun (esim. "ohittaa kohteen 2" tai "ohittaa kohteet 2 ja 3")
-    function getSkippedPointsText(fromIdx, targetIdx) {
-        const skipped = [];
-        for (let i = fromIdx + 1; i < targetIdx; i++) {
-            skipped.push(i + 1);
-        }
-        if (skipped.length === 0) return '';
-        if (skipped.length === 1) {
-            return `ohittaa kohteen ${skipped[0]}`;
-        }
-        const last = skipped.pop();
-        return `ohittaa kohteet ${skipped.join(', ')} ja ${last}`;
-    }
 
                 // Connector tämän kortin jälkeen
                 let lockedConnector = '';
