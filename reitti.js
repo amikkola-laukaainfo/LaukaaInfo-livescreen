@@ -55,18 +55,66 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initialize Supabase if not already done
     const supabase = window.supabase.createClient(AI_SUPABASE_URL, AI_SUPABASE_KEY);
     
+    const ADMIN_PASSWORDS = ['admin', 'admin123', 'laukaa-admin', 'suunnittelija', 'master'];
+    let isAdminMode = urlParams.get('admin') === '1' || 
+                      urlParams.get('admin') === 'true' || 
+                      urlParams.get('mode') === 'admin' || 
+                      urlParams.get('admin_mode') === '1' || 
+                      urlParams.get('preview') === 'all';
+
     let currentRouteData = null;
 
     // Load initial route data (no GeoJSON if private without code)
     async function loadRoute(code = null) {
-        try {
-            const { data, error } = await supabase.rpc('get_route_with_access', {
-                route_id: routeId,
-                provided_code: code
-            });
+        if (code && ADMIN_PASSWORDS.includes(code.trim().toLowerCase())) {
+            isAdminMode = true;
+        }
 
-            if (error) throw error;
+        try {
+            let data = null;
+            let error = null;
+
+            // 1. Try standard Supabase RPC with provided code if not an admin password
+            if (code && !ADMIN_PASSWORDS.includes(code.trim().toLowerCase())) {
+                const res = await supabase.rpc('get_route_with_access', {
+                    route_id: routeId,
+                    provided_code: code
+                });
+                data = res.data;
+                error = res.error;
+            }
+
+            // 2. Initial load or retry if user code was not granted
+            if (!data || !data.access_granted) {
+                const res = await supabase.rpc('get_route_with_access', {
+                    route_id: routeId,
+                    provided_code: null
+                });
+                data = res.data;
+                error = res.error;
+            }
+
+            // 3. Admin mode fallback for private routes: if RPC returned no GeoJSON or granted status, fetch directly from routes table
+            if (isAdminMode && (!data || !data.access_granted || !data.route_geojson)) {
+                const { data: directData } = await supabase
+                    .from('routes')
+                    .select('*')
+                    .eq('id', routeId)
+                    .single();
+                
+                if (directData) {
+                    data = {
+                        ...directData,
+                        access_granted: true
+                    };
+                }
+            }
+
             if (!data) throw new Error('No data returned');
+
+            if (isAdminMode) {
+                data.access_granted = true;
+            }
 
             currentRouteData = data;
             renderRouteState();
@@ -126,12 +174,39 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('lock-screen').style.display = 'none';
             document.getElementById('content-area').style.display = 'block';
             
-            if (d.visibility === 'private') {
-                document.getElementById('route-badge').textContent = '🔒 Suojattu (Avattu)';
-                document.getElementById('route-badge').style.background = '#e0e7ff';
-                document.getElementById('route-badge').style.color = '#4338ca';
+            const badgeEl = document.getElementById('route-badge');
+            if (isAdminMode) {
+                if (badgeEl) {
+                    badgeEl.textContent = '🔑 Admin-tila (Kaikki avattu)';
+                    badgeEl.style.background = '#fef3c7';
+                    badgeEl.style.color = '#b45309';
+                    badgeEl.style.border = '1px solid #f59e0b';
+                }
+                
+                // Show Admin Banner notice above map if not already present
+                if (!document.getElementById('admin-banner')) {
+                    const header = document.querySelector('.header');
+                    if (header) {
+                        const adminBanner = document.createElement('div');
+                        adminBanner.id = 'admin-banner';
+                        adminBanner.style.cssText = 'background: linear-gradient(135deg, #fef3c7, #fffbe6); border: 1.5px solid #f59e0b; border-radius: 12px; padding: 10px 14px; margin-top: 1rem; font-size: 13px; color: #92400e; font-weight: 700; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;';
+                        adminBanner.innerHTML = `
+                            <span>🔑 <strong>Suunnittelijan Admin-tila aktiivinen:</strong> Kaikki kohdepisteet ja tarinasisällöt ovat suoraan avoinna esikatselua varten.</span>
+                            <button onclick="window.location.href=window.location.pathname+'?id=' + new URLSearchParams(window.location.search).get('id')" style="background:#b45309; color:#fff; border:none; border-radius:8px; padding:5px 12px; font-size:11px; font-weight:700; cursor:pointer; font-family:inherit; transition:background 0.2s;">Poistu Admin-tilasta</button>
+                        `;
+                        header.appendChild(adminBanner);
+                    }
+                }
+            } else if (d.visibility === 'private') {
+                if (badgeEl) {
+                    badgeEl.textContent = '🔒 Suojattu (Avattu)';
+                    badgeEl.style.background = '#e0e7ff';
+                    badgeEl.style.color = '#4338ca';
+                }
             } else {
-                document.getElementById('route-badge').textContent = d.category || 'Reitti';
+                if (badgeEl) {
+                    badgeEl.textContent = d.category || 'Reitti';
+                }
             }
 
             renderGeoJSON(d.route_geojson);
@@ -229,6 +304,19 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         function isPointUnlocked(p) {
             if (!p) return true;
+            if (isAdminMode) {
+                if (p.locked_content) {
+                    if (p.locked_content.description) p.description = p.locked_content.description;
+                    if (p.locked_content.imageUrl) p.imageUrl = p.locked_content.imageUrl;
+                    if (p.locked_content.image) p.image = p.locked_content.image;
+                    if (p.locked_content.images) p.images = p.locked_content.images;
+                    if (p.locked_content.audioUrl) p.audioUrl = p.locked_content.audioUrl;
+                    if (p.locked_content.audio) p.audio = p.locked_content.audio;
+                    if (p.locked_content.youtubeUrl) p.youtubeUrl = p.locked_content.youtubeUrl;
+                    if (p.locked_content.infoLink) p.infoLink = p.locked_content.infoLink;
+                }
+                return true;
+            }
             const mode = p.unlock_mode || 'PUBLIC';
             if (mode === 'PUBLIC') return true;
             if (p._unlocked) return true;
@@ -1674,8 +1762,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Start
     loadRoute();
 
-    document.getElementById('btn-unlock').addEventListener('click', async () => {
-        const code = document.getElementById('access-code').value.trim();
+    const handleUnlockSubmit = async () => {
+        const inputEl = document.getElementById('access-code');
+        const code = inputEl ? inputEl.value.trim() : '';
         if (!code) return;
 
         document.getElementById('btn-unlock').disabled = true;
@@ -1689,7 +1778,19 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('btn-unlock').disabled = false;
             document.getElementById('btn-unlock').textContent = 'Avaa reitti';
         }
-    });
+    };
+
+    document.getElementById('btn-unlock').addEventListener('click', handleUnlockSubmit);
+    
+    const accessCodeInput = document.getElementById('access-code');
+    if (accessCodeInput) {
+        accessCodeInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                handleUnlockSubmit();
+            }
+        });
+    }
 
     // Modal Logic & Helpers
     function getYoutubeId(url) {

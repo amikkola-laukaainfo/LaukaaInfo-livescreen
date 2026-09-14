@@ -25,9 +25,15 @@ const minifyHtml = require('html-minifier-terser').minify;
 // 2. Luodaan tai tyhjennetään dist-kansio
 const distDir = path.join(__dirname, 'dist');
 if (fs.existsSync(distDir)) {
-    fs.rmSync(distDir, { recursive: true, force: true });
+    try {
+        fs.rmSync(distDir, { recursive: true, force: true });
+    } catch(e) {
+        console.log('Huom: dist-kansion tyhjennyksessä vaihtoehtoinen siivous.');
+    }
 }
-fs.mkdirSync(distDir);
+if (!fs.existsSync(distDir)) {
+    fs.mkdirSync(distDir, { recursive: true });
+}
 
 // 2.5 Suoritetaan tietämysgraafin rakentaminen ja yritysdatan modularisointi
 console.log('1.4 Rakennetaan tietämysgraafi...');
