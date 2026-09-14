@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let currentRouteData = null;
 
     // Follow-me / Auto-center state
-    let isFollowingUser = true;
+    let isFollowingUser = false;
     let isFirstPosition = true;
     let lastUserLat = null;
     let lastUserLng = null;
@@ -820,7 +820,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         lastUserLng = lng;
         if (isFirstPosition) {
             isFirstPosition = false;
-            map.setView([lat, lng], Math.max(map.getZoom(), 16), { animate: true });
+            if (isFollowingUser) {
+                map.setView([lat, lng], Math.max(map.getZoom(), 16), { animate: true });
+            }
         } else if (isFollowingUser) {
             map.panTo([lat, lng], { animate: true, duration: 0.6 });
         }
