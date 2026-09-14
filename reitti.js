@@ -1800,35 +1800,68 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function loadLaukaaInfoPlaces() {
         try {
             if (!supabase) return;
-            const { data, error } = await supabase
-                .from('places')
-                .select('place_id, name, canonical_name, type, lat, lon')
-                .or('status.eq.active,status.eq.ACTIVE,status.is.null')
-                .not('lat', 'is', null)
-                .not('lon', 'is', null)
-                .limit(350);
 
-            if (error || !data) return;
+            // Käytetään RPC-funktiota joka ohittaa RLS:n (SECURITY DEFINER)
+            let data = null;
+            let error = null;
+            const rpcResult = await supabase.rpc('get_places_for_mixonet', { p_max_results: 350 });
+            if (!rpcResult.error && rpcResult.data && rpcResult.data.length > 0) {
+                // RPC palauttaa: id, name, canonical_name, type, lat, lon, ...
+                data = rpcResult.data.map(p => ({
+                    place_id: String(p.id),
+                    name: p.name,
+                    canonical_name: p.canonical_name,
+                    type: p.type,
+                    lat: p.lat,
+                    lon: p.lon
+                })).filter(p => p.lat != null && p.lon != null);
+            } else {
+                // Fallback: suora tauluhaku
+                if (rpcResult.error) console.warn('[Lähistöllä] RPC-virhe, kokeillaan suoraa kyselyä:', rpcResult.error.message);
+                const fallback = await supabase
+                    .from('places')
+                    .select('place_id, name, canonical_name, type, lat, lon')
+                    .or('status.eq.active,status.eq.ACTIVE,status.eq.PUBLISHED,status.eq.published,status.is.null')
+                    .not('lat', 'is', null)
+                    .not('lon', 'is', null)
+                    .limit(350);
+                error = fallback.error;
+                data = fallback.data ? fallback.data.map(p => ({ ...p, place_id: String(p.place_id) })) : null;
+            }
+
+            if (error) { console.warn('[Lähistöllä] Kyselyvirhe:', error.message); return; }
+            if (!data || data.length === 0) { console.warn('[Lähistöllä] Ei paikkoja löydetty'); return; }
+
+            console.log(`[Lähistöllä] Ladattu ${data.length} paikkaa`);
             cachedLaukaaInfoPlaces = data;
 
-            // Trigger initial UI update if user location is already known
+            // Päivitä UI heti jos GPS-sijainti on jo saatavilla
             if (userMarker) {
                 const latLng = userMarker.getLatLng();
-                if (latLng) updateNearbyPlacesUI(latLng.lat, latLng.lng);
+                if (latLng) { updateNearbyPlacesUI(latLng.lat, latLng.lng, true); return; }
+            }
+            // Fallback: käytetään reitin ensimmäistä pistettä jotta lista näkyy myös ilman GPS:ää
+            const pts = window.routePoints || [];
+            if (pts.length > 0 && pts[0]._lat != null && pts[0]._lng != null) {
+                updateNearbyPlacesUI(pts[0]._lat, pts[0]._lng, true);
+            } else if (window.routeLineCoords && window.routeLineCoords.length > 0) {
+                const first = window.routeLineCoords[0]; // [lng, lat]
+                updateNearbyPlacesUI(first[1], first[0], true);
             }
         } catch(e) {
-            console.warn('Lähistöllä-paikkojen latausvirhe:', e);
+            console.warn('[Lähistöllä] Latausvirhe:', e);
         }
     }
 
-    function updateNearbyPlacesUI(userLat, userLng) {
+    function updateNearbyPlacesUI(userLat, userLng, force = false) {
         const container = document.getElementById('nearby-places-container');
         if (!nearbyPlacesEnabled || !container || !cachedLaukaaInfoPlaces || cachedLaukaaInfoPlaces.length === 0) return;
+        if (userLat == null || userLng == null) return;
 
         if (isNearbySectionCollapsed) return;
 
-        // Skip sorting if user moved less than 10 meters
-        if (lastNearbyUserLat != null && lastNearbyUserLng != null) {
+        // Skip sorting if user moved less than 10 meters (ohitetaan ensilatauksessa)
+        if (!force && lastNearbyUserLat != null && lastNearbyUserLng != null) {
             const movedMeters = haversineMeters(userLat, userLng, lastNearbyUserLat, lastNearbyUserLng);
             if (movedMeters < 10) return;
         }
