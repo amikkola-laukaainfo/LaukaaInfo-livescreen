@@ -803,15 +803,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
 
+    // Off-route guidance state
+    let isOffRoute = false;
+    let consecutiveOffRouteCount = 0;
+    let lastReportedStepDistance = 0;
+
     function stopGPS() {
         if (gpsWatchId !== null) navigator.geolocation.clearWatch(gpsWatchId);
         gpsWatchId = null;
         gpsActive = false;
+
+        // Nollataan poikkeamaseurannan tilat
+        isOffRoute = false;
+        consecutiveOffRouteCount = 0;
+        lastReportedStepDistance = 0;
+
         const gpsBtn = document.getElementById('gps-status-btn');
         const gpsLabel = document.getElementById('gps-label');
         if (gpsBtn) { gpsBtn.className = ''; gpsLabel.textContent = 'GPS pois'; }
         closeProximityToast();
         closeArrivalToast();
+        closeOffRouteToast();
         const panel = document.getElementById('gps-progress-panel');
         if (panel) panel.style.display = 'none';
     }
@@ -823,9 +835,173 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         updateUserMarker(userLat, userLng, accuracy);
         updateRouteStatus(userLat, userLng);
+        checkOffRouteGuidance(userLat, userLng, accuracy, points);
         updateProgressPanel(userLat, userLng);
         checkNextPoint(userLat, userLng, accuracy, points);
         updateNearbyPlacesUI(userLat, userLng);
+    }
+
+    // ─── OFF-ROUTE GUIDANCE LOGIC ────────────────────────────────────────────
+
+    function checkOffRouteGuidance(userLat, userLng, accuracy, points) {
+        // Aktivoituu vasta kun 1. piste (indeksi 0) on saavutettu ja avattu
+        if (visitedPoints.size === 0 && progressIndex === 0) {
+            isOffRoute = false;
+            consecutiveOffRouteCount = 0;
+            return;
+        }
+
+        // Suodatetaan heikko GPS-tarkkuus (> 50 m)
+        if (accuracy && accuracy > 50) return;
+
+        const coords = window.routeLineCoords || [];
+        if (!coords || coords.length < 2) return;
+
+        const dist = Math.round(distanceToLineString(userLat, userLng, coords));
+
+        if (!isOffRoute) {
+            // Poikkeamakynnys: > 50 m reittiviivasta
+            if (dist > 50) {
+                consecutiveOffRouteCount++;
+                // Vaatii 2 peräkkäistä GPS-havaintoa > 50 m, ettei yksittäinen sijaintihyppy aiheuta virhehälytystä
+                if (consecutiveOffRouteCount >= 2) {
+                    isOffRoute = true;
+                    lastReportedStepDistance = Math.floor(dist / 50) * 50;
+                    if (audioNotificationsEnabled) {
+                        playOffRouteBeep();
+                    }
+                    triggerVibration('offroute');
+                    showOffRouteToast(dist, points);
+                }
+            } else {
+                consecutiveOffRouteCount = 0;
+            }
+        } else {
+            // Ollaan poikkeamatilassa. Tarkistetaan paluukynnys (< 30 m hystereesi)
+            if (dist < 30) {
+                isOffRoute = false;
+                consecutiveOffRouteCount = 0;
+                lastReportedStepDistance = 0;
+                if (audioNotificationsEnabled) {
+                    playReturnBeep();
+                }
+                triggerVibration('return');
+                showReturnOnRouteToast();
+            } else {
+                // Päivitetään etäisyysteksti portaittain (> 100 m, > 150 m) Ilman uutta ääntä/tärinää
+                const currentStepDistance = Math.floor(dist / 50) * 50;
+                if (currentStepDistance >= lastReportedStepDistance + 50) {
+                    lastReportedStepDistance = currentStepDistance;
+                    updateOffRouteToastDistance(dist);
+                }
+            }
+        }
+    }
+
+    function showOffRouteToast(distMeters, points) {
+        closeProximityToast();
+        closeArrivalToast();
+
+        let toast = document.getElementById('offroute-toast');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'offroute-toast';
+            toast.style.cssText = [
+                'position:fixed', 'bottom:1.5rem', 'left:50%',
+                'transform:translateX(-50%) translateY(140%)', 'z-index:10002',
+                'background:#fff', 'border-radius:20px',
+                'box-shadow:0 24px 60px rgba(185,28,28,0.22), 0 4px 16px rgba(0,0,0,0.12)',
+                'padding:1.2rem 1.5rem', 'display:flex', 'flex-direction:column', 'gap:0.75rem',
+                'min-width:300px', 'max-width:90vw', 'border-left:6px solid #b91c1c',
+                'transition:transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                'font-family:inherit'
+            ].join(';');
+            document.body.appendChild(toast);
+        }
+
+        const nextPoint = points && points[nextPointIndex] ? (points[nextPointIndex].title || points[nextPointIndex].name) : 'seuraavaa kohdetta';
+
+        toast.innerHTML = `
+            <div style="display:flex; align-items:center; gap:0.9rem;">
+                <div style="font-size:2.2rem; flex-shrink:0;">⚠️</div>
+                <div style="flex:1; min-width:0;">
+                    <div style="font-size:0.65rem; font-weight:800; text-transform:uppercase; letter-spacing:0.08em; color:#b91c1c; margin-bottom:0.15rem;">Olet sivussa reitiltä</div>
+                    <div id="offroute-dist-text" style="font-size:0.95rem; font-weight:800; color:#0f172a;">Reitti on noin ${distMeters} m päässä</div>
+                    <div style="font-size:0.78rem; color:#64748b; margin-top:0.15rem;">Palaa takaisin reitille jatkaaksesi kohti: ${nextPoint}</div>
+                </div>
+            </div>
+            <div style="display:flex; gap:0.5rem; justify-content:flex-end;">
+                <button id="btn-recenter-route" style="background:#059669; color:#fff; border:none; border-radius:10px; padding:0.5rem 0.9rem; font-size:0.78rem; font-weight:700; cursor:pointer; font-family:inherit;">↩ Palaa reitille</button>
+                <button id="btn-quit-route" style="background:#f1f5f9; color:#64748b; border:1px solid #cbd5e1; border-radius:10px; padding:0.5rem 0.9rem; font-size:0.78rem; font-weight:700; cursor:pointer; font-family:inherit;">✕ Lopeta reitti</button>
+            </div>
+        `;
+
+        requestAnimationFrame(() => {
+            toast.style.transform = 'translateX(-50%) translateY(0)';
+        });
+
+        document.getElementById('btn-recenter-route').onclick = () => {
+            if (window._leafletMap && lastUserLat && lastUserLng) {
+                window._leafletMap.setView([lastUserLat, lastUserLng], Math.max(window._leafletMap.getZoom(), 17), { animate: true });
+            }
+        };
+
+        document.getElementById('btn-quit-route').onclick = () => {
+            if (confirm('Haluatko lopettaa elämyspolun seurannan?')) {
+                stopGPS();
+            }
+        };
+    }
+
+    function updateOffRouteToastDistance(distMeters) {
+        const el = document.getElementById('offroute-dist-text');
+        if (el) {
+            el.textContent = `Reitti on noin ${distMeters} m päässä`;
+        }
+    }
+
+    function closeOffRouteToast() {
+        const toast = document.getElementById('offroute-toast');
+        if (toast) {
+            toast.style.transform = 'translateX(-50%) translateY(140%)';
+        }
+    }
+
+    function showReturnOnRouteToast() {
+        closeOffRouteToast();
+        let toast = document.getElementById('return-toast');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'return-toast';
+            toast.style.cssText = [
+                'position:fixed', 'bottom:1.5rem', 'left:50%',
+                'transform:translateX(-50%) translateY(140%)', 'z-index:10002',
+                'background:#fff', 'border-radius:20px',
+                'box-shadow:0 24px 60px rgba(5,150,105,0.22), 0 4px 16px rgba(0,0,0,0.12)',
+                'padding:1rem 1.4rem', 'display:flex', 'align-items:center', 'gap:0.9rem',
+                'min-width:280px', 'max-width:90vw', 'border-left:6px solid #059669',
+                'transition:transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                'font-family:inherit'
+            ].join(';');
+            document.body.appendChild(toast);
+        }
+
+        toast.innerHTML = `
+            <div style="font-size:2rem; flex-shrink:0;">✅</div>
+            <div style="flex:1; min-width:0;">
+                <div style="font-size:0.65rem; font-weight:800; text-transform:uppercase; letter-spacing:0.08em; color:#059669; margin-bottom:0.1rem;">Olet jälleen reitillä</div>
+                <div style="font-size:0.9rem; font-weight:800; color:#0f172a;">Jatka kohti seuraavaa kohdetta!</div>
+            </div>
+        `;
+
+        requestAnimationFrame(() => {
+            toast.style.transform = 'translateX(-50%) translateY(0)';
+        });
+
+        clearTimeout(window._returnToastTimer);
+        window._returnToastTimer = setTimeout(() => {
+            toast.style.transform = 'translateX(-50%) translateY(140%)';
+        }, 4500);
     }
 
     // ─── USER MARKER ─────────────────────────────────────────────────────────
@@ -1478,7 +1654,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const audioMap = {
         test: new Audio('assets/audio/test.wav'),
         approach: new Audio('assets/audio/approach.wav'),
-        arrival: new Audio('assets/audio/arrival.wav')
+        arrival: new Audio('assets/audio/arrival.wav'),
+        offroute: new Audio('assets/audio/offroute.wav'),
+        return: new Audio('assets/audio/return.wav')
     };
 
     Object.values(audioMap).forEach(audio => {
@@ -1670,6 +1848,88 @@ document.addEventListener('DOMContentLoaded', async () => {
         playAudioFile('arrival', playArrivalBeepWebAudio);
     }
 
+    // Web Audio Fallback: Laskeva poikkeama-ääni (A4 -> F4 -> D4)
+    function playOffRouteBeepWebAudio() {
+        try {
+            const ctx = getAudioCtx();
+            if (!ctx) return;
+            const playSound = () => {
+                const now = ctx.currentTime;
+                const notes = [
+                    { freq: 440.00, start: 0.00, duration: 0.14 },
+                    { freq: 349.23, start: 0.14, duration: 0.14 },
+                    { freq: 293.66, start: 0.28, duration: 0.22 }
+                ];
+                notes.forEach(note => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(note.freq, now + note.start);
+                    const noteStart = now + note.start;
+                    const noteEnd = noteStart + note.duration;
+                    gain.gain.setValueAtTime(0.01, noteStart);
+                    gain.gain.exponentialRampToValueAtTime(0.25, noteStart + 0.02);
+                    gain.gain.exponentialRampToValueAtTime(0.001, noteEnd);
+                    osc.start(noteStart);
+                    osc.stop(noteEnd);
+                });
+            };
+
+            if (ctx.state === 'suspended') {
+                ctx.resume().then(() => playSound()).catch(() => {});
+            } else {
+                playSound();
+            }
+        } catch(e) {}
+    }
+
+    function playOffRouteBeep() {
+        playAudioFile('offroute', playOffRouteBeepWebAudio);
+    }
+
+    // Web Audio Fallback: Nouseva paluu-ääni (D5 -> F#5 -> A5)
+    function playReturnBeepWebAudio() {
+        try {
+            const ctx = getAudioCtx();
+            if (!ctx) return;
+            const playSound = () => {
+                const now = ctx.currentTime;
+                const notes = [
+                    { freq: 587.33, start: 0.00, duration: 0.12 },
+                    { freq: 739.99, start: 0.12, duration: 0.12 },
+                    { freq: 880.00, start: 0.24, duration: 0.22 }
+                ];
+                notes.forEach(note => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(note.freq, now + note.start);
+                    const noteStart = now + note.start;
+                    const noteEnd = noteStart + note.duration;
+                    gain.gain.setValueAtTime(0.01, noteStart);
+                    gain.gain.exponentialRampToValueAtTime(0.25, noteStart + 0.02);
+                    gain.gain.exponentialRampToValueAtTime(0.001, noteEnd);
+                    osc.start(noteStart);
+                    osc.stop(noteEnd);
+                });
+            };
+
+            if (ctx.state === 'suspended') {
+                ctx.resume().then(() => playSound()).catch(() => {});
+            } else {
+                playSound();
+            }
+        } catch(e) {}
+    }
+
+    function playReturnBeep() {
+        playAudioFile('return', playReturnBeepWebAudio);
+    }
+
     function triggerVibration(type) {
         if (navigator && typeof navigator.vibrate === 'function') {
             try {
@@ -1682,6 +1942,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 } else if (type === 'test') {
                     // Vahvistusvärinä testipiippaukselle: 150ms on, 70ms off, 150ms on
                     navigator.vibrate([150, 70, 150]);
+                } else if (type === 'offroute') {
+                    // Poikkeamavärinä: 200ms on, 100ms off, 200ms on, 100ms off, 200ms on
+                    navigator.vibrate([200, 100, 200, 100, 200]);
+                } else if (type === 'return') {
+                    // Paluuvärinä: 150ms on, 80ms off, 150ms on
+                    navigator.vibrate([150, 80, 150]);
                 }
             } catch(e) {
                 console.warn('Haptinen tärinä ei onnistunut:', e);

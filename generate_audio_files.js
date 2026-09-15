@@ -94,6 +94,22 @@ const arrivalNotes = [
 ];
 const arrivalSamples = generateToneSequence(arrivalNotes, 0.48);
 
+// 4. offroute.wav: Descending warning chime A4 (440.00Hz) -> F4 (349.23Hz) -> D4 (293.66Hz)
+const offrouteNotes = [
+    { freq: 440.00, start: 0.00, duration: 0.14, volume: 0.4 },
+    { freq: 349.23, start: 0.14, duration: 0.14, volume: 0.4 },
+    { freq: 293.66, start: 0.28, duration: 0.22, volume: 0.45 }
+];
+const offrouteSamples = generateToneSequence(offrouteNotes, 0.52);
+
+// 5. return.wav: Ascending cheerful resolution D5 (587.33Hz) -> F#5 (739.99Hz) -> A5 (880.00Hz)
+const returnNotes = [
+    { freq: 587.33, start: 0.00, duration: 0.12, volume: 0.4 },
+    { freq: 739.99, start: 0.12, duration: 0.12, volume: 0.4 },
+    { freq: 880.00, start: 0.24, duration: 0.22, volume: 0.45 }
+];
+const returnSamples = generateToneSequence(returnNotes, 0.48);
+
 // Target folder
 const audioDir = path.join(__dirname, 'assets', 'audio');
 if (!fs.existsSync(audioDir)) {
@@ -103,5 +119,7 @@ if (!fs.existsSync(audioDir)) {
 fs.writeFileSync(path.join(audioDir, 'test.wav'), createWavBuffer(testSamples));
 fs.writeFileSync(path.join(audioDir, 'approach.wav'), createWavBuffer(approachSamples));
 fs.writeFileSync(path.join(audioDir, 'arrival.wav'), createWavBuffer(arrivalSamples));
+fs.writeFileSync(path.join(audioDir, 'offroute.wav'), createWavBuffer(offrouteSamples));
+fs.writeFileSync(path.join(audioDir, 'return.wav'), createWavBuffer(returnSamples));
 
-console.log('✓ Luotu WAV-äänitiedostot kansioon assets/audio/: test.wav, approach.wav, arrival.wav');
+console.log('✓ Luotu WAV-äänitiedostot kansioon assets/audio/: test.wav, approach.wav, arrival.wav, offroute.wav, return.wav');
