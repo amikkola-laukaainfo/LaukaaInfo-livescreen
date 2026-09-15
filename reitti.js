@@ -1430,7 +1430,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Unlock audio context and vibration on user interaction
     ['click', 'touchstart', 'pointerdown'].forEach(evt => {
         document.addEventListener(evt, () => {
-            getAudioCtx();
+            const ctx = getAudioCtx();
+            if (ctx && ctx.state === 'suspended') {
+                ctx.resume().catch(() => {});
+            }
             if (navigator && typeof navigator.vibrate === 'function') {
                 try { navigator.vibrate(10); } catch(e) {}
             }
@@ -1460,13 +1463,69 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     updateAudioBtnUI();
 
+    function playTestBeep() {
+        try {
+            const ctx = getAudioCtx();
+            if (!ctx) return;
+            const playSound = () => {
+                const now = ctx.currentTime;
+                // Bright 3-tone test chime: E5 (659.25 Hz) -> G#5 (830.61 Hz) -> B5 (987.77 Hz)
+                const notes = [
+                    { freq: 659.25, start: 0.00, duration: 0.11 },
+                    { freq: 830.61, start: 0.12, duration: 0.11 },
+                    { freq: 987.77, start: 0.24, duration: 0.14 }
+                ];
+                
+                notes.forEach(note => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(note.freq, now + note.start);
+                    
+                    const noteStart = now + note.start;
+                    const noteEnd = noteStart + note.duration;
+                    gain.gain.setValueAtTime(0.01, noteStart);
+                    gain.gain.exponentialRampToValueAtTime(0.25, noteStart + 0.02);
+                    gain.gain.exponentialRampToValueAtTime(0.001, noteEnd);
+                    
+                    osc.start(noteStart);
+                    osc.stop(noteEnd);
+                });
+            };
+
+            if (ctx.state === 'suspended') {
+                ctx.resume().then(() => playSound()).catch(() => {});
+            } else {
+                playSound();
+            }
+        } catch(e) {
+            console.warn('Testipiippaus epäonnistui:', e);
+        }
+    }
+    window.playTestBeep = playTestBeep;
+
     window.toggleAudioNotifications = function() {
         audioNotificationsEnabled = !audioNotificationsEnabled;
         try {
             localStorage.setItem('route_audio_enabled', String(audioNotificationsEnabled));
         } catch(e) {}
+        
         if (audioNotificationsEnabled) {
-            getAudioCtx();
+            const ctx = getAudioCtx();
+            if (ctx && ctx.state === 'suspended') {
+                ctx.resume().then(() => {
+                    if (ctx.state === 'running') {
+                        playTestBeep();
+                        triggerVibration('test');
+                    }
+                }).catch(() => {});
+            } else if (ctx && ctx.state === 'running') {
+                playTestBeep();
+                triggerVibration('test');
+            }
         }
         updateAudioBtnUI();
     };
@@ -1474,46 +1533,62 @@ document.addEventListener('DOMContentLoaded', async () => {
     function playWarningBeep() {
         try {
             const ctx = getAudioCtx();
-            if (!ctx || ctx.state !== 'running') return;
-            const now = ctx.currentTime;
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.connect(gain);
-            gain.connect(ctx.destination);
+            if (!ctx) return;
+            const playSound = () => {
+                const now = ctx.currentTime;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
 
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(880, now); // A5 gentle ping
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(880, now); // A5 gentle ping
 
-            gain.gain.setValueAtTime(0.01, now);
-            gain.gain.exponentialRampToValueAtTime(0.2, now + 0.03);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+                gain.gain.setValueAtTime(0.01, now);
+                gain.gain.exponentialRampToValueAtTime(0.2, now + 0.03);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
 
-            osc.start(now);
-            osc.stop(now + 0.2);
+                osc.start(now);
+                osc.stop(now + 0.2);
+            };
+
+            if (ctx.state === 'suspended') {
+                ctx.resume().then(() => playSound()).catch(() => {});
+            } else {
+                playSound();
+            }
         } catch(e) {}
     }
 
     function playArrivalBeep() {
         try {
             const ctx = getAudioCtx();
-            if (!ctx || ctx.state !== 'running') return;
-            const now = ctx.currentTime;
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.connect(gain);
-            gain.connect(ctx.destination);
+            if (!ctx) return;
+            const playSound = () => {
+                const now = ctx.currentTime;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
 
-            // Double-tone chime (D5 -> A5)
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(587.33, now);       // D5
-            osc.frequency.setValueAtTime(880.00, now + 0.14); // A5
+                // Double-tone chime (D5 -> A5)
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(587.33, now);       // D5
+                osc.frequency.setValueAtTime(880.00, now + 0.14); // A5
 
-            gain.gain.setValueAtTime(0.01, now);
-            gain.gain.exponentialRampToValueAtTime(0.3, now + 0.04);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+                gain.gain.setValueAtTime(0.01, now);
+                gain.gain.exponentialRampToValueAtTime(0.3, now + 0.04);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
 
-            osc.start(now);
-            osc.stop(now + 0.45);
+                osc.start(now);
+                osc.stop(now + 0.45);
+            };
+
+            if (ctx.state === 'suspended') {
+                ctx.resume().then(() => playSound()).catch(() => {});
+            } else {
+                playSound();
+            }
         } catch(e) {}
     }
 
@@ -1521,11 +1596,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (navigator && typeof navigator.vibrate === 'function') {
             try {
                 if (type === 'arrival') {
-                    // Triumphant 3-pulse vibration: 300ms on, 120ms off, 300ms on, 120ms off, 500ms on
-                    navigator.vibrate([300, 120, 300, 120, 500]);
+                    // Selkeä ja erottuva saapumisrytmitys: 250ms on, 100ms off, 250ms on, 100ms off, 700ms on
+                    navigator.vibrate([250, 100, 250, 100, 700]);
                 } else if (type === 'approach') {
-                    // Distinctive 2-pulse alert: 200ms on, 100ms off, 200ms on
-                    navigator.vibrate([200, 100, 200]);
+                    // Napakka 2-sykkeinen lähestymisvärinä: 180ms on, 80ms off, 180ms on
+                    navigator.vibrate([180, 80, 180]);
+                } else if (type === 'test') {
+                    // Vahvistusvärinä testipiippaukselle: 150ms on, 70ms off, 150ms on
+                    navigator.vibrate([150, 70, 150]);
                 }
             } catch(e) {
                 console.warn('Haptinen tärinä ei onnistunut:', e);
