@@ -2240,12 +2240,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // 3. Extract Audio URLs
         const rawAudioSources = [
-            p.audioUrl, p.audio_url, p.audio, p.audioId, p.media
+            p.audioUrl, p.audio_url, p.audio_file, p.audioFile, p.audio, p.audioId, p.media
         ].flat().filter(Boolean);
 
         const audios = [];
         rawAudioSources.forEach(item => {
-            let url = typeof item === 'string' ? item : (item.url || item.blobUrl || item.audioUrl);
+            let url = typeof item === 'string' ? item : (item.url || item.blobUrl || item.audioUrl || item.audio_file || item.audioFile);
             if (url && typeof url === 'string' && isValidAudioUrl(url)) {
                 const trimmed = url.trim();
                 if (!audios.includes(trimmed)) audios.push(trimmed);
@@ -2269,14 +2269,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         let audioBarHtml = '';
         if (audios.length > 0) {
             audioBarHtml = `
-                <div style="margin-top: 20px; padding: 14px 18px; background: rgba(37, 99, 235, 0.08); border-radius: 14px; border: 1px solid rgba(37, 99, 235, 0.2); display: flex; align-items: center; gap: 14px;">
-                    <span style="font-size: 1.8rem; flex-shrink: 0;">🎧</span>
-                    <div style="flex: 1; min-width: 0;">
-                        <div style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb; margin-bottom: 6px;">Äänileike kuunneltavissa</div>
-                        <audio controls style="width: 100%; height: 36px; outline: none;">
-                            <source src="${audios[0]}">
-                        </audio>
+                <div style="margin-top: 20px; padding: 14px 18px; background: linear-gradient(135deg, #f0fdf4, #ecfdf5); border-radius: 14px; border: 1.5px solid #a7f3d0; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 2px 8px rgba(5,150,105,0.08);">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div style="font-size: 0.85rem; font-weight: 800; color: #047857; display: flex; align-items: center; gap: 6px;">
+                            <span>🎧</span> Ääniopastus
+                        </div>
+                        <span style="font-size: 0.72rem; font-weight: 600; color: #059669; background: #dcfce7; padding: 2px 8px; border-radius: 12px;">Kuuntele opastus</span>
                     </div>
+                    <audio controls style="width: 100%; height: 38px; outline: none; border-radius: 8px;">
+                        <source src="${audios[0]}">
+                    </audio>
                 </div>`;
         }
         document.getElementById('point-modal-desc').innerHTML = (modalDesc ? modalDesc.replace(/\n/g, '<br>') : '') + audioBarHtml;
@@ -2544,6 +2546,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (modal) {
             modal.classList.remove('active');
             modal.style.display = '';
+            const modalAudios = modal.querySelectorAll('audio');
+            modalAudios.forEach(a => {
+                try { a.pause(); a.currentTime = 0; } catch(e) {}
+            });
         }
         document.getElementById('point-modal-media-container').innerHTML = ''; // Stop video
         if (pointSwiperInstance) {
