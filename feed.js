@@ -443,18 +443,17 @@ const LkiFeed = (() => {
       }
 
       const SB_KEY = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
-      // Supabase REST endpoint for feed posts (include apikey in query string to avoid preflight CORS issues)
       const SUPABASE_POSTS_URL = `https://duxluwyqxvbmkkjzuzkz.supabase.co/rest/v1/posts?select=*&order=published_at.desc&apikey=${SB_KEY}`;
-      const SUPABASE_HEADERS = {
-        'apikey': SB_KEY,
-        'Authorization': `Bearer ${SB_KEY}`
-      };
 
       // Create a promise for minimum display duration (800ms)
       const minDelay = new Promise(resolve => setTimeout(resolve, forceRefresh ? 800 : 0));
 
-      const fetchPromise = fetch(SUPABASE_POSTS_URL, { headers: SUPABASE_HEADERS })
+      const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+      const timeoutId = controller ? setTimeout(() => controller.abort(), 3500) : null;
+
+      const fetchPromise = fetch(SUPABASE_POSTS_URL, controller ? { signal: controller.signal } : {})
         .then(r => {
+          if (timeoutId) clearTimeout(timeoutId);
           if (!r.ok) throw new Error(`HTTP ${r.status}`);
           return r.json();
         })
@@ -466,22 +465,30 @@ const LkiFeed = (() => {
           }));
         })
         .catch(err => {
-          console.warn('[LkiFeed] Supabase fetch failed, trying fallback URL:', err);
-          let fallbackUrl = (dataUrl && dataUrl !== 'supabase') ? dataUrl : 'https://www.mediazoo.fi/laukaainfo-web/lki-tori-api.php';
-          fallbackUrl = fallbackUrl + (fallbackUrl.includes('?') ? '&' : '?') + 'ts=' + Date.now();
-          return fetch(fallbackUrl).then(r => r.ok ? r.json() : []).catch(() => []);
+          if (timeoutId) clearTimeout(timeoutId);
+          console.warn('[LkiFeed] Supabase fetch failed or timed out, trying demo-data.json fallback:', err);
+          return fetch('demo-data.json')
+            .then(r => r.ok ? r.json() : [])
+            .catch(() => []);
         });
 
-      // Fetch pikkuilmoitukset directly from Supabase
+      const pikkuController = typeof AbortController !== 'undefined' ? new AbortController() : null;
+      const pikkuTimeout = pikkuController ? setTimeout(() => pikkuController.abort(), 3500) : null;
       const pikkuUrl = `https://duxluwyqxvbmkkjzuzkz.supabase.co/rest/v1/posts?select=*&type=eq.pikkuilmoitus&order=published_at.desc&apikey=${SB_KEY}`;
-      const pikkuPromise = fetch(pikkuUrl, { headers: SUPABASE_HEADERS })
-        .then(r => r.ok ? r.json() : [])
+      const pikkuPromise = fetch(pikkuUrl, pikkuController ? { signal: pikkuController.signal } : {})
+        .then(r => {
+          if (pikkuTimeout) clearTimeout(pikkuTimeout);
+          return r.ok ? r.json() : [];
+        })
         .then(items => ({
           status: 'ok',
           count: items.length,
           data: items.map(i => ({ ...i, image: i.image || i.image_url, publish_at: i.publish_at || i.published_at }))
         }))
-        .catch(() => null);
+        .catch(() => {
+          if (pikkuTimeout) clearTimeout(pikkuTimeout);
+          return null;
+        });
 
       Promise.all([fetchPromise, pikkuPromise, minDelay])
         .then(([res, pikkuRes]) => {

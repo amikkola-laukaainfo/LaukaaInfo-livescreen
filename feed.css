@@ -178,10 +178,22 @@
   display: flex;
   flex-direction: column;
   gap: 1.1rem;
-  max-height: 600px;
+  max-height: 550px;
   overflow-y: auto;
   padding-right: 6px;
   scroll-behavior: smooth;
+}
+
+.lki-feed__empty,
+.lki-feed__error {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: var(--text-muted, #6b7a90);
+  font-size: 0.95rem;
+  font-weight: 500;
+  background: var(--card-bg, #ffffff);
+  border-radius: var(--card-radius, 16px);
+  box-shadow: var(--card-shadow, 0 2px 12px rgba(0, 56, 150, 0.08));
 }
 
 .lki-feed__list::-webkit-scrollbar {
