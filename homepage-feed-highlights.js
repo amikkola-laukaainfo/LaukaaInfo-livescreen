@@ -257,11 +257,29 @@
         root.innerHTML = '<div class="homepage-feed-highlights__loading">Ladataan nostoja…</div>';
 
         try {
-            const response = await fetch(`${feedUrl}${feedUrl.includes('?') ? '&' : '?'}ts=${Date.now()}`);
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const SUPABASE_POSTS_URL = 'https://duxluwyqxvbmkkjzuzkz.supabase.co/rest/v1/posts?select=*&order=published_at.desc';
+            const SUPABASE_HEADERS = {
+                'apikey': 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu',
+                'Authorization': 'Bearer sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu'
+            };
 
-            const json = await response.json();
-            const items = Array.isArray(json) ? json : (json.data || []);
+            let items = [];
+            try {
+                const response = await fetch(SUPABASE_POSTS_URL, { headers: SUPABASE_HEADERS });
+                if (response.ok) {
+                    const rawPosts = await response.json();
+                    items = (rawPosts || []).map(p => ({
+                        ...p,
+                        image: p.image || p.image_url,
+                        publish_at: p.publish_at || p.published_at
+                    }));
+                }
+            } catch (err) {
+                console.warn('[Highlights] Supabase fetch failed, falling back to feedUrl:', err);
+                const response = await fetch(`${feedUrl}${feedUrl.includes('?') ? '&' : '?'}ts=${Date.now()}`);
+                const json = await response.json();
+                items = Array.isArray(json) ? json : (json.data || []);
+            }
             if (!items || !items.length) {
                 renderHighlights([]);
                 return;

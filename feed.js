@@ -425,47 +425,43 @@ const LkiFeed = (() => {
         statusText.classList.remove('hidden');
       }
 
-      // Bypass cache with timestamp
-      const fetchUrl = dataUrl + (dataUrl.includes('?') ? '&' : '?') + 'ts=' + Date.now();
-      const pikkuUrl = 'https://www.mediazoo.fi/laukaainfo-web/lki-tori-api.php?ts=' + Date.now();
+      // Supabase REST endpoint for feed posts
+      const SUPABASE_POSTS_URL = 'https://duxluwyqxvbmkkjzuzkz.supabase.co/rest/v1/posts?select=*&order=published_at.desc';
+      const SUPABASE_HEADERS = {
+        'apikey': 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu',
+        'Authorization': 'Bearer sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu'
+      };
 
       // Create a promise for minimum display duration (800ms)
       const minDelay = new Promise(resolve => setTimeout(resolve, forceRefresh ? 800 : 0));
 
-      const fetchPromise = fetch(fetchUrl)
+      const fetchPromise = fetch(SUPABASE_POSTS_URL, { headers: SUPABASE_HEADERS })
         .then(r => {
           if (!r.ok) throw new Error(`HTTP ${r.status}`);
           return r.json();
+        })
+        .then(posts => {
+          return (posts || []).map(item => ({
+            ...item,
+            image: item.image || item.image_url,
+            publish_at: item.publish_at || item.published_at
+          }));
+        })
+        .catch(err => {
+          console.warn('[LkiFeed] Supabase fetch failed, trying legacy mediazoo URL:', err);
+          const legacyUrl = dataUrl + (dataUrl.includes('?') ? '&' : '?') + 'ts=' + Date.now();
+          return fetch(legacyUrl).then(r => r.json());
         });
 
-      // Implement 12-hour caching for Pikkuilmot summary
-      const CACHE_KEY = 'lki_pikku_cache';
-      const CACHE_EXPIRY = 12 * 60 * 60 * 1000; // 12 hours
-      let pikkuPromise;
-
-      if (!forceRefresh) {
-        try {
-          const cached = localStorage.getItem(CACHE_KEY);
-          if (cached) {
-            const parsed = JSON.parse(cached);
-            if (Date.now() - parsed.ts < CACHE_EXPIRY) {
-              pikkuPromise = Promise.resolve(parsed.data);
-            }
-          }
-        } catch (e) { console.warn('Cache read error', e); }
-      }
-
-      if (!pikkuPromise) {
-        pikkuPromise = fetch(pikkuUrl)
-          .then(r => r.ok ? r.json() : null)
-          .then(res => {
-            if (res && res.status === 'ok') {
-               localStorage.setItem(CACHE_KEY, JSON.stringify({ data: res, ts: Date.now() }));
-            }
-            return res;
-          })
-          .catch(() => null);
-      }
+      // Fetch pikkuilmoitukset directly from Supabase
+      const pikkuPromise = fetch('https://duxluwyqxvbmkkjzuzkz.supabase.co/rest/v1/posts?select=*&type=eq.pikkuilmoitus&order=published_at.desc', { headers: SUPABASE_HEADERS })
+        .then(r => r.ok ? r.json() : [])
+        .then(items => ({
+          status: 'ok',
+          count: items.length,
+          data: items.map(i => ({ ...i, image: i.image || i.image_url, publish_at: i.publish_at || i.published_at }))
+        }))
+        .catch(() => null);
 
       Promise.all([fetchPromise, pikkuPromise, minDelay])
         .then(([res, pikkuRes]) => {
