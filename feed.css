@@ -23,7 +23,7 @@
   --border: #e4eaf3;
 
   font-family: 'Outfit', 'Inter', system-ui, sans-serif;
-  max-width: 680px;
+  max-width: 900px;
   margin: 0 auto;
   padding: 1.5rem 1rem 3rem;
 }
@@ -178,10 +178,11 @@
   display: flex;
   flex-direction: column;
   gap: 1.1rem;
-  max-height: 550px;
+  max-height: 580px;
   overflow-y: auto;
-  padding-right: 6px;
+  padding-right: 10px;
   scroll-behavior: smooth;
+  scrollbar-gutter: stable;
 }
 
 .lki-feed__empty,
@@ -197,7 +198,7 @@
 }
 
 .lki-feed__list::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 .lki-feed__list::-webkit-scrollbar-track {
   background: #edf2f9;
@@ -239,7 +240,7 @@
 /* Card */
 .lki-card {
   display: grid;
-  grid-template-columns: 110px 1fr;
+  grid-template-columns: 150px 1fr;
   background: var(--card-bg);
   border-radius: var(--card-radius);
   box-shadow: var(--card-shadow);
