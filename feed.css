@@ -173,16 +173,11 @@
   color: #fff;
 }
 
-/* Card List (Hissi / Scroll box) */
+/* Card List */
 .lki-feed__list {
   display: flex;
   flex-direction: column;
   gap: 1.1rem;
-  max-height: 580px;
-  overflow-y: auto;
-  padding-right: 10px;
-  scroll-behavior: smooth;
-  scrollbar-gutter: stable;
 }
 
 .lki-feed__empty,
@@ -195,21 +190,6 @@
   background: var(--card-bg, #ffffff);
   border-radius: var(--card-radius, 16px);
   box-shadow: var(--card-shadow, 0 2px 12px rgba(0, 56, 150, 0.08));
-}
-
-.lki-feed__list::-webkit-scrollbar {
-  width: 10px;
-}
-.lki-feed__list::-webkit-scrollbar-track {
-  background: #edf2f9;
-  border-radius: 6px;
-}
-.lki-feed__list::-webkit-scrollbar-thumb {
-  background: var(--primary, #0056b3);
-  border-radius: 6px;
-}
-.lki-feed__list::-webkit-scrollbar-thumb:hover {
-  background: #003d80;
 }
 
 .lki-feed__elevator-btn {
