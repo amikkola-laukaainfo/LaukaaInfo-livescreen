@@ -279,16 +279,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 maxZoom: 18,
                 attribution: 'Kartta &copy; Esri &mdash; USGS, NOAA jne.'
             }),
-            "positron": L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-                maxZoom: 20,
-                subdomains: 'abcd',
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>'
-            }),
-            "dark": L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-                maxZoom: 20,
-                subdomains: 'abcd',
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>'
-            }),
             "satellite": L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
                 maxZoom: 18,
                 attribution: 'Kuvat &copy; Esri, i-cubed, USDA, USGS jne.'
@@ -308,8 +298,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             "🗺️ Peruskartta (OSM)": tileLayers.osm,
             "🥾 Maastokartta (OpenTopo)": tileLayers.topo,
             "🌲 Retkeily & Maasto (Esri Topo)": tileLayers.esri_topo,
-            "🤍 Vaalea (CartoDB Positron)": tileLayers.positron,
-            "🌙 Tumma / Yötila (CartoDB Dark)": tileLayers.dark,
             "🛰️ Ilmakuva (Esri Satelliitti)": tileLayers.satellite
         };
 
