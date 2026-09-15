@@ -1427,13 +1427,31 @@ document.addEventListener('DOMContentLoaded', async () => {
         return _audioCtx;
     }
 
-    // Unlock audio context and vibration on user interaction
+    // HTML5 Audio element -säiliö (ensisijainen Bluetooth-yhteensopiva mediatoisto)
+    const audioMap = {
+        test: new Audio('assets/audio/test.wav'),
+        approach: new Audio('assets/audio/approach.wav'),
+        arrival: new Audio('assets/audio/arrival.wav')
+    };
+
+    Object.values(audioMap).forEach(audio => {
+        audio.preload = 'auto';
+    });
+
+    // Avataan ja alustetaan audio-elementit käyttäjän eleestä
+    function unlockRouteAudio() {
+        getAudioCtx();
+        Object.values(audioMap).forEach(audio => {
+            try {
+                audio.load();
+            } catch(e) {}
+        });
+    }
+
+    // Rekisteröidään alustus ensimmäiseen kosketukseen
     ['click', 'touchstart', 'pointerdown'].forEach(evt => {
         document.addEventListener(evt, () => {
-            const ctx = getAudioCtx();
-            if (ctx && ctx.state === 'suspended') {
-                ctx.resume().catch(() => {});
-            }
+            unlockRouteAudio();
             if (navigator && typeof navigator.vibrate === 'function') {
                 try { navigator.vibrate(10); } catch(e) {}
             }
@@ -1463,34 +1481,53 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     updateAudioBtnUI();
 
-    function playTestBeep() {
+    // Ensisijainen toistohandleri: HTML5 Audio, fallbackina Web Audio API
+    function playAudioFile(name, fallbackBeepFn) {
+        const audio = audioMap[name];
+        if (!audio) {
+            if (fallbackBeepFn) fallbackBeepFn();
+            return;
+        }
+
+        try {
+            audio.currentTime = 0;
+            const p = audio.play();
+            if (p && typeof p.catch === 'function') {
+                p.catch(err => {
+                    console.warn(`HTML5 Äänen (${name}) toisto epäonnistui, käytetään Web Audio -fallbackia:`, err);
+                    if (fallbackBeepFn) fallbackBeepFn();
+                });
+            }
+        } catch(e) {
+            console.warn(`Äänen (${name}) käynnistys epäonnistui, käytetään Web Audio -fallbackia:`, e);
+            if (fallbackBeepFn) fallbackBeepFn();
+        }
+    }
+
+    // Web Audio Fallback: 3-sävelinen testipiippaus
+    function playTestBeepWebAudio() {
         try {
             const ctx = getAudioCtx();
             if (!ctx) return;
             const playSound = () => {
                 const now = ctx.currentTime;
-                // Bright 3-tone test chime: E5 (659.25 Hz) -> G#5 (830.61 Hz) -> B5 (987.77 Hz)
                 const notes = [
                     { freq: 659.25, start: 0.00, duration: 0.11 },
                     { freq: 830.61, start: 0.12, duration: 0.11 },
                     { freq: 987.77, start: 0.24, duration: 0.14 }
                 ];
-                
                 notes.forEach(note => {
                     const osc = ctx.createOscillator();
                     const gain = ctx.createGain();
                     osc.connect(gain);
                     gain.connect(ctx.destination);
-                    
                     osc.type = 'sine';
                     osc.frequency.setValueAtTime(note.freq, now + note.start);
-                    
                     const noteStart = now + note.start;
                     const noteEnd = noteStart + note.duration;
                     gain.gain.setValueAtTime(0.01, noteStart);
                     gain.gain.exponentialRampToValueAtTime(0.25, noteStart + 0.02);
                     gain.gain.exponentialRampToValueAtTime(0.001, noteEnd);
-                    
                     osc.start(noteStart);
                     osc.stop(noteEnd);
                 });
@@ -1501,9 +1538,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             } else {
                 playSound();
             }
-        } catch(e) {
-            console.warn('Testipiippaus epäonnistui:', e);
-        }
+        } catch(e) {}
+    }
+
+    function playTestBeep() {
+        playAudioFile('test', playTestBeepWebAudio);
     }
     window.playTestBeep = playTestBeep;
 
@@ -1514,23 +1553,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         } catch(e) {}
         
         if (audioNotificationsEnabled) {
-            const ctx = getAudioCtx();
-            if (ctx && ctx.state === 'suspended') {
-                ctx.resume().then(() => {
-                    if (ctx.state === 'running') {
-                        playTestBeep();
-                        triggerVibration('test');
-                    }
-                }).catch(() => {});
-            } else if (ctx && ctx.state === 'running') {
-                playTestBeep();
-                triggerVibration('test');
-            }
+            unlockRouteAudio();
+            playTestBeep();
+            triggerVibration('test');
         }
         updateAudioBtnUI();
     };
 
-    function playWarningBeep() {
+    function playWarningBeepWebAudio() {
         try {
             const ctx = getAudioCtx();
             if (!ctx) return;
@@ -1540,14 +1570,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const gain = ctx.createGain();
                 osc.connect(gain);
                 gain.connect(ctx.destination);
-
                 osc.type = 'sine';
-                osc.frequency.setValueAtTime(880, now); // A5 gentle ping
-
+                osc.frequency.setValueAtTime(880, now);
                 gain.gain.setValueAtTime(0.01, now);
                 gain.gain.exponentialRampToValueAtTime(0.2, now + 0.03);
                 gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
-
                 osc.start(now);
                 osc.stop(now + 0.2);
             };
@@ -1560,7 +1587,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         } catch(e) {}
     }
 
-    function playArrivalBeep() {
+    function playWarningBeep() {
+        playAudioFile('approach', playWarningBeepWebAudio);
+    }
+
+    function playArrivalBeepWebAudio() {
         try {
             const ctx = getAudioCtx();
             if (!ctx) return;
@@ -1570,16 +1601,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const gain = ctx.createGain();
                 osc.connect(gain);
                 gain.connect(ctx.destination);
-
-                // Double-tone chime (D5 -> A5)
                 osc.type = 'sine';
                 osc.frequency.setValueAtTime(587.33, now);       // D5
                 osc.frequency.setValueAtTime(880.00, now + 0.14); // A5
-
                 gain.gain.setValueAtTime(0.01, now);
                 gain.gain.exponentialRampToValueAtTime(0.3, now + 0.04);
                 gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
-
                 osc.start(now);
                 osc.stop(now + 0.45);
             };
@@ -1590,6 +1617,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 playSound();
             }
         } catch(e) {}
+    }
+
+    function playArrivalBeep() {
+        playAudioFile('arrival', playArrivalBeepWebAudio);
     }
 
     function triggerVibration(type) {
