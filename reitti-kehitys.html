@@ -698,6 +698,37 @@
             <div style="font-size:1rem;color:#047857;">Olet kokenut <span id="summary-visited-count">0</span> / <span id="summary-total-count">0</span> pistettä</div>
             <div id="summary-skipped-info"></div>
         </div>
+
+        <!-- ─── Fallback-aloituspiste: "Reitti katkesi?" ─────────────────────
+             Tarkoituksella huomaamaton — normaali käyttäjä ei tarvitse tätä.
+             Avautuu <details>-elementillä vasta käyttäjän klikkauksesta.
+        ──────────────────────────────────────────────────────────────────── -->
+        <section id="fallback-start-section" style="margin:2.5rem 0 1rem; border-top:1px solid #e2e8f0; padding-top:1.2rem;">
+            <details id="fallback-details">
+                <summary style="color:#94a3b8; font-size:0.78rem; cursor:pointer; list-style:none; user-select:none; display:flex; align-items:center; gap:0.4rem;">
+                    <span>🔧</span> <span>Reitti katkesi?</span>
+                </summary>
+                <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:1rem 1.2rem; margin-top:0.75rem; font-size:0.82rem; color:#475569; display:flex; flex-direction:column; gap:0.75rem;">
+                    <p style="margin:0; line-height:1.5;">
+                        Jos jouduit sulkemaan selaimen tai reitti ei muuten jatkunut,
+                        voit aloittaa uudelleen haluamastasi kohdepisteestä.
+                    </p>
+                    <div style="display:flex; flex-direction:column; gap:0.35rem;">
+                        <label for="fallback-point-select" style="font-size:0.75rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.05em;">Aloita tästä:</label>
+                        <select id="fallback-point-select" style="border:1px solid #cbd5e1; border-radius:8px; padding:0.5rem 0.75rem; font-size:0.85rem; color:#0f172a; background:#fff; font-family:inherit; cursor:pointer; width:100%;">
+                            <!-- Täytetään JS:ssä initFallbackUI() -->
+                        </select>
+                    </div>
+                    <p style="margin:0; font-size:0.72rem; color:#94a3b8; line-height:1.4;">
+                        Aiemmat kohdepisteet pysyvät lukittuina.
+                        Tästä pisteestä etenet normaalisti järjestyksessä.
+                    </p>
+                    <button id="fallback-start-btn" style="background:#0f172a; color:#fff; border:none; border-radius:8px; padding:0.55rem 1.1rem; font-size:0.82rem; font-weight:700; cursor:pointer; font-family:inherit; align-self:flex-start; transition:opacity 0.15s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+                        ▶ Jatka tästä
+                    </button>
+                </div>
+            </details>
+        </section>
     </div>
 </div>
 

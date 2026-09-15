@@ -223,6 +223,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 // Palauta mahdollinen aiempi edistyminen
                 setTimeout(() => {
                     if (typeof restoreRouteProgress === 'function') restoreRouteProgress(pts);
+                    if (typeof initFallbackUI === 'function') initFallbackUI(pts);
                 }, 300);
             }
         });
@@ -688,6 +689,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (typeof restoreRouteProgress === 'function' && gpsStartedFromOverlay) {
                 restoreRouteProgress(points);
             }
+            if (typeof initFallbackUI === 'function') initFallbackUI(points);
         }, 300);
     }
 
@@ -706,6 +708,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     let approachToastVisible = false;
     let _insideCount = 0;
     let _arrivalCooldownUntil = 0;
+
+    // Fallback-aloituspisteen tila:
+    // true  = normaali tila (off-route-seuranta aktiivinen kun ensimmäinen piste saavutettu)
+    // false = fallback-sessio, off-route PYSYY POIS PÄÄLTÄ kunnes GPS vahvistaa aloituspisteeseen saapumisen
+    let _fallbackPointReached = true;
 
     const ROUTE_STATES = { ON_ROUTE: 0, SLIGHTLY_OFF: 1, OFF_ROUTE: 2, LEFT_ROUTE: 3 };
     let routeState = ROUTE_STATES.ON_ROUTE;
@@ -882,6 +889,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             consecutiveOffRouteCount = 0;
             return;
         }
+
+        // Fallback-sessio: off-route-seuranta pysyy pois päältä kunnes GPS vahvistaa
+        // saapumisen valittuun aloituspisteeseen (completeCurrentPoint nollaa lipun)
+        if (!_fallbackPointReached) return;
 
         // Suodatetaan heikko GPS-tarkkuus (> 50 m)
         if (accuracy && accuracy > 50) return;
@@ -1739,6 +1750,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const nextIdx = getNextAvailablePoint(idx);
         activatePoint(nextIdx, { reason: 'completed', fromIndex: idx });
         _arrivalCooldownUntil = Date.now() + 3000;
+        // Fallback-sessio: GPS on nyt vahvistanut aloituspisteen — aktivoidaan off-route-seuranta
+        _fallbackPointReached = true;
         saveRouteProgress();
     }
     window.completeCurrentPoint = completeCurrentPoint;
@@ -1797,6 +1810,126 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (i < max) { arrivedPoints.add(i); const p = points[i]; if (p) showArrivedBar(i, p); }
         });
         updateAllMarkerStyles();
+    }
+
+    // ─── FALLBACK-ALOITUSPISTE ("Reitti katkesi?") ──────────────────────────
+
+    function setFallbackStartPoint(idx, points) {
+        const p = points[idx];
+        if (!p) return;
+
+        // 1. Nollataan kaikki etenemistila
+        visitedPoints.clear();
+        arrivedPoints.clear();
+        skippedPoints.clear();
+        nextPointIndex = idx;
+        progressIndex  = idx;
+        window._maxProjDist = 0;
+
+        // 2. Nollataan GPS-saapumislogiikan tilamuuttujat
+        _insideCount          = 0;
+        _arrivalCooldownUntil = 0;
+        approachToastVisible  = false;
+
+        // 3. Nollataan off-route-tila täydellisesti
+        isOffRoute                = false;
+        consecutiveOffRouteCount  = 0;
+        lastReportedStepDistance  = 0;
+        routeState                = ROUTE_STATES.ON_ROUTE;
+        offRouteSince             = null;
+
+        // 4. Off-route-seuranta pois päältä kunnes GPS vahvistaa aloituspiste
+        _fallbackPointReached = false;
+
+        // 5. Suljetaan kaikki aktiiviset toastit
+        closeOffRouteToast();
+        if (window.closeArrivalToast) window.closeArrivalToast();
+        if (window.closeProximityToast) window.closeProximityToast();
+        hideArrivedBar();
+
+        // 6. Avataan valittu piste
+        markPointVisited(idx, p);
+
+        // 7. Tallennetaan sessio
+        saveRouteProgress();
+    }
+    window.setFallbackStartPoint = setFallbackStartPoint;
+
+    function initFallbackUI(points) {
+        const section = document.getElementById('fallback-start-section');
+        if (!section) return;
+
+        const select = document.getElementById('fallback-point-select');
+        if (select) {
+            select.innerHTML = '';
+            points.forEach((p, idx) => {
+                const opt = document.createElement('option');
+                opt.value = idx;
+                opt.textContent = `${idx + 1}. ${p.title || p.name || 'Kohde ' + (idx + 1)}`;
+                select.appendChild(opt);
+            });
+        }
+
+        const btn = document.getElementById('fallback-start-btn');
+        if (!btn) return;
+
+        btn.addEventListener('click', () => {
+            const idx = parseInt(document.getElementById('fallback-point-select').value, 10);
+            if (isNaN(idx) || idx < 0 || idx >= points.length) return;
+
+            const p = points[idx];
+            const name = p ? (p.title || p.name || `Kohde ${idx + 1}`) : `kohde ${idx + 1}`;
+            const prevCount = idx;
+
+            const msg = prevCount > 0
+                ? `Aloitetaanko pisteestä ${idx + 1}?\n"${name}"\n\nPisteet 1–${idx} jäävät lukituiksi.`
+                : `Aloitetaanko reitin alusta pisteestä 1?\n"${name}"`;
+
+            if (!confirm(msg)) return;
+
+            setFallbackStartPoint(idx, points);
+
+            const details = document.getElementById('fallback-details');
+            if (details) details.open = false;
+
+            showFallbackConfirmToast(idx, name, prevCount);
+        });
+    }
+
+    function showFallbackConfirmToast(idx, name, prevCount) {
+        let toast = document.getElementById('fallback-confirm-toast');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'fallback-confirm-toast';
+            toast.style.cssText = [
+                'position:fixed', 'bottom:1.5rem', 'left:50%',
+                'transform:translateX(-50%) translateY(140%)', 'z-index:10003',
+                'background:#0f172a', 'color:#fff', 'border-radius:16px',
+                'box-shadow:0 16px 48px rgba(15,23,42,0.32)', 'padding:0.9rem 1.3rem',
+                'max-width:88vw', 'min-width:260px',
+                'transition:transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                'font-family:inherit'
+            ].join(';');
+            document.body.appendChild(toast);
+        }
+
+        const lockedText = prevCount > 0
+            ? `<div style="font-size:0.72rem;color:#94a3b8;margin-top:0.3rem;">Pisteet 1–${idx} pysyvät lukittuina</div>`
+            : '';
+
+        toast.innerHTML =
+            `<div style="font-size:0.82rem;font-weight:700;">▶ Jatketaan pisteestä ${idx + 1}</div>` +
+            `<div style="font-size:0.9rem;margin-top:0.15rem;">${name}</div>` +
+            lockedText;
+
+        requestAnimationFrame(() => {
+            toast.style.transform = 'translateX(-50%) translateY(0)';
+        });
+
+        clearTimeout(window._fallbackToastTimer);
+        window._fallbackToastTimer = setTimeout(() => {
+            toast.style.transform = 'translateX(-50%) translateY(140%)';
+        }, 4500);
     }
 
     window.closeProximityToast = function() {
