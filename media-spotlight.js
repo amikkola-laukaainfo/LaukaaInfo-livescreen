@@ -3,19 +3,22 @@
     const wrapper = document.getElementById('media-gallery-wrapper');
     if (!wrapper) return;
 
-    // 1️⃣ Fetch feed data
-    const feedEl = document.getElementById('homepage-feed');
-    // Fallback URL if we are on the standalone gallery page
-    const feedUrl = feedEl?.dataset.feedSrc || 'https://www.mediazoo.fi/laukaainfo-web/api.php';
+    // 1️⃣ Fetch feed data from Supabase posts table
+    const SUPABASE_URL = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
     let feedItems = [];
-    if (feedUrl) {
-        try {
-            const resp = await fetch(`${feedUrl}${feedUrl.includes('?') ? '&' : '?'}ts=${Date.now()}`);
-            const json = await resp.json();
-            feedItems = (json.data || []).slice(0, 24); // Show more items on standalone page
-        } catch (e) {
-            console.error('Media Spotlight – feed fetch error:', e);
+    try {
+        const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+        const resp = await fetch(
+            `${SUPABASE_URL}/rest/v1/posts?select=*&status=eq.APPROVED&type=neq.pikkuilmoitus&published_at=gte.${sevenDaysAgo}&order=is_promoted.desc,published_at.desc&limit=24`,
+            { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+        );
+        if (resp.ok) {
+            const posts = await resp.json();
+            feedItems = (posts || []).map(p => ({ ...p, image: p.image_url || p.image }));
         }
+    } catch (e) {
+        console.error('Media Spotlight - Supabase feed fetch error:', e);
     }
 
     // 2️⃣ Load companies data

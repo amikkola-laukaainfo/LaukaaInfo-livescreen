@@ -14,6 +14,8 @@
         rel="stylesheet">
     <link rel="stylesheet" href="style.css?v=20260420-2">
     <script src="translations.js?v=20260505"></script>
+    <!-- Supabase JS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <style>
         :root {
             --market-yellow: #ffb100;
@@ -333,38 +335,45 @@
     </footer>
 
     <script>
+        // Supabase-konfiguraatio (sama kuin supabaseLaukaaLive)
+        const SUPABASE_URL = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
+        const sbClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
         let allItems = [];
         let activeTag = 'kaikki';
 
         async function fetchAds() {
             try {
-                // Käytetään absoluuttista polkua, jotta se toimii myös paikallisesti testatessa
-                const API_URL = 'https://www.mediazoo.fi/laukaainfo-web/lki-tori-api.php?ts=' + Date.now();
-                console.log('Fetching ads from:', API_URL);
-                const r = await fetch(API_URL);
-                if (!r.ok) {
-                    throw new Error(`Palvelin vastasi virheellä: ${r.status} ${r.statusText}`);
-                }
-                const text = await r.text();
-                try {
-                    const res = JSON.parse(text);
-                    console.log('Ads loaded:', res);
-                    allItems = res.data || [];
-                    
-                    const params = new URLSearchParams(window.location.search);
-                    const listTag = params.get('tag');
-                    if (listTag) {
-                        activeTag = listTag.toLowerCase();
-                    }
+                // Haetaan pikkuilmoitukset suoraan Supabasesta
+                const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+                const { data, error } = await sbClient
+                    .from('posts')
+                    .select('*')
+                    .eq('type', 'pikkuilmoitus')
+                    .eq('status', 'APPROVED')
+                    .gte('published_at', sevenDaysAgo)
+                    .order('published_at', { ascending: false });
 
-                    renderTags();
-                    renderAds();
-                    checkUrlParam();
-                } catch (jsonErr) {
-                    console.error('JSON Parse Error. Server outputted:', text);
-                    const snippet = text.substring(0, 200).replace(/</g, '&lt;').replace(/>/g, '&gt;');
-                    throw new Error(`Palvelimen vastaus ei ole JSON-muodossa. Vastaus alkaa: <br><pre style="background: #eee; padding: 10px; font-size: 0.8rem; overflow: auto; max-width: 100%;">${snippet}...</pre>`);
+                if (error) throw error;
+
+                // Normalisoi tags-kenttä (voi olla jsonb array tai string)
+                allItems = (data || []).map(item => ({
+                    ...item,
+                    publish_at: item.published_at,
+                    tags: Array.isArray(item.tags) ? item.tags :
+                          (typeof item.tags === 'string' && item.tags ? item.tags.split(',').map(t => t.trim()) : [])
+                }));
+
+                const params = new URLSearchParams(window.location.search);
+                const listTag = params.get('tag');
+                if (listTag) {
+                    activeTag = listTag.toLowerCase();
                 }
+
+                renderTags();
+                renderAds();
+                checkUrlParam();
             } catch (err) {
                 console.error('Fetch error:', err);
                 document.getElementById('ad-list').innerHTML = `<div class="empty-state">Virhe ladattaessa ilmoituksia: ${err.message}</div>`;
