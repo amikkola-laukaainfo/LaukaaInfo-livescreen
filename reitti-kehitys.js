@@ -396,9 +396,68 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const map = L.map('map');
         window._leafletMap = map;
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
+
+        // ─── ERILAISET KARTTAPOHJAT (TILE LAYERS) ──────────────────────────
+        const tileLayers = {
+            "osm": L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>'
+            }),
+            "topo": L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+                maxZoom: 17,
+                attribution: 'Kartta: &copy; <a href="https://opentopomap.org" target="_blank">OpenTopoMap</a>'
+            }),
+            "esri_topo": L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+                maxZoom: 18,
+                attribution: 'Kartta &copy; Esri &mdash; USGS, NOAA jne.'
+            }),
+            "positron": L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                maxZoom: 20,
+                subdomains: 'abcd',
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>'
+            }),
+            "dark": L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                maxZoom: 20,
+                subdomains: 'abcd',
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>'
+            }),
+            "satellite": L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                maxZoom: 18,
+                attribution: 'Kuvat &copy; Esri, i-cubed, USDA, USGS jne.'
+            })
+        };
+
+        // Hae tallennettu karttatyyli tai käytä peruskarttaa (osm)
+        let savedStyle = 'osm';
+        try {
+            savedStyle = localStorage.getItem('route_map_tile_style') || 'osm';
+        } catch(e) {}
+        if (!tileLayers[savedStyle]) savedStyle = 'osm';
+
+        tileLayers[savedStyle].addTo(map);
+
+        const baseMaps = {
+            "🗺️ Peruskartta (OSM)": tileLayers.osm,
+            "🥾 Maastokartta (OpenTopo)": tileLayers.topo,
+            "🌲 Retkeily & Maasto (Esri Topo)": tileLayers.esri_topo,
+            "🤍 Vaalea (CartoDB Positron)": tileLayers.positron,
+            "🌙 Tumma / Yötila (CartoDB Dark)": tileLayers.dark,
+            "🛰️ Ilmakuva (Esri Satelliitti)": tileLayers.satellite
+        };
+
+        L.control.layers(baseMaps, null, {
+            position: 'topright',
+            collapsed: true
         }).addTo(map);
+
+        map.on('baselayerchange', function(e) {
+            for (const [key, layer] of Object.entries(tileLayers)) {
+                if (layer === e.layer) {
+                    try { localStorage.setItem('route_map_tile_style', key); } catch(err) {}
+                    break;
+                }
+            }
+        });
 
         const RecenterControl = L.Control.extend({
             options: { position: 'bottomright' },
