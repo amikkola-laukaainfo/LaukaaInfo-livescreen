@@ -304,6 +304,8 @@ const LkiFeed = (() => {
           <span class="lki-live-dot"></span>
           <h2>Uusimmat julkaisut</h2>
           <div class="lki-feed__header-actions">
+            <button class="lki-feed__elevator-btn" id="lki-elevator-up" title="Hissi: Siirry ylös">⬆️</button>
+            <button class="lki-feed__elevator-btn" id="lki-elevator-down" title="Hissi: Siirry alas">⬇️</button>
             <button class="lki-feed__share-btn" id="lki-share-trigger" title="Jaa tämä näkymä">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 14 20 9 15 4"></polyline><path d="M4 20v-7a4 4 0 0 1 4-4h12"></path></svg>
               <span>Jaa</span>
@@ -330,9 +332,24 @@ const LkiFeed = (() => {
     const list = container.querySelector('.lki-feed__list');
     const refreshBtn = container.querySelector('#lki-refresh-trigger');
     const shareFeedBtn = container.querySelector('#lki-share-trigger');
+    const elevatorUpBtn = container.querySelector('#lki-elevator-up');
+    const elevatorDownBtn = container.querySelector('#lki-elevator-down');
     const statusText = container.querySelector('#lki-status-text');
     const newAlert = container.querySelector('#lki-new-alert');
     const filterBar = container.querySelector('.lki-feed__filters');
+
+    if (elevatorUpBtn) {
+      elevatorUpBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        list.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+    if (elevatorDownBtn) {
+      elevatorDownBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        list.scrollTo({ top: list.scrollHeight, behavior: 'smooth' });
+      });
+    }
 
     let currentItems = [];
     let activeFilter = options.initialFilter || 'all';
