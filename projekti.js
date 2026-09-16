@@ -128,46 +128,84 @@ async function loadProject(projectId) {
         }
 
         // Taustakuva hero-osioon
-        if (projectData.cover_image_url) {
+        if (projectData.cover_image_url && projectData.cover_image_url.trim() !== '') {
             const heroSection = document.querySelector('.hero-section');
             if (heroSection) {
-                heroSection.style.backgroundImage = `url('${projectData.cover_image_url}')`;
+                heroSection.style.backgroundImage = `url('${escapeHtml(projectData.cover_image_url.trim())}')`;
                 heroSection.style.backgroundSize = 'cover';
                 heroSection.style.backgroundPosition = 'center';
             }
         }
 
-        // Video-upotus
-        if (projectData.video_url) {
+        // Video-upotus (YouTube, Vimeo, MP4)
+        if (projectData.video_url && projectData.video_url.trim() !== '') {
             const descSection = document.getElementById('desc-section');
             if (descSection) {
-                let embedUrl = projectData.video_url;
-                // Muunna YouTube-linkki upotettavaan muotoon
-                const ytMatch = projectData.video_url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/);
-                const vimeoMatch = projectData.video_url.match(/vimeo\.com\/(\d+)/);
-                if (ytMatch) embedUrl = `https://www.youtube.com/embed/${ytMatch[1]}`;
-                if (vimeoMatch) embedUrl = `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+                const rawVideoUrl = projectData.video_url.trim();
+                let embedUrl = rawVideoUrl;
+                let isDirectVideo = false;
 
-                const videoEl = document.createElement('div');
-                videoEl.style.cssText = 'margin-top:1.5rem; border-radius:12px; overflow:hidden; aspect-ratio:16/9;';
-                videoEl.innerHTML = `<iframe src="${embedUrl}" style="width:100%;height:100%;border:none;" allowfullscreen allow="autoplay; encrypted-media"></iframe>`;
-                descSection.appendChild(videoEl);
+                const ytMatch = rawVideoUrl.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/i);
+                const vimeoMatch = rawVideoUrl.match(/vimeo\.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|video\/|)(\d+)/i);
+
+                if (ytMatch && ytMatch[1]) {
+                    embedUrl = `https://www.youtube.com/embed/${ytMatch[1]}?rel=0`;
+                } else if (vimeoMatch && (vimeoMatch[3] || vimeoMatch[1])) {
+                    const vimeoId = vimeoMatch[3] || vimeoMatch[1];
+                    embedUrl = `https://player.vimeo.com/video/${vimeoId}`;
+                } else if (/\.(mp4|webm|ogg|mov)($|\?)/i.test(rawVideoUrl)) {
+                    isDirectVideo = true;
+                }
+
+                const videoSection = document.createElement('div');
+                videoSection.style.cssText = 'margin-top: 2rem; margin-bottom: 1.5rem;';
+                
+                const titleHtml = `
+                    <h3 style="font-family: Outfit, sans-serif; font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; color: var(--text-main);">
+                        <span class="iconify" data-icon="material-symbols:play-circle-outline" style="color: #ef4444; font-size: 1.5rem;"></span>
+                        Esittelyvideo
+                    </h3>
+                `;
+
+                if (isDirectVideo) {
+                    videoSection.innerHTML = titleHtml + `
+                        <div style="border-radius: 16px; overflow: hidden; background: #000; box-shadow: 0 10px 30px rgba(0,0,0,0.12);">
+                            <video src="${escapeHtml(rawVideoUrl)}" controls style="width: 100%; max-height: 480px; display: block;"></video>
+                        </div>
+                    `;
+                } else {
+                    videoSection.innerHTML = titleHtml + `
+                        <div style="border-radius: 16px; overflow: hidden; aspect-ratio: 16/9; background: #000; box-shadow: 0 10px 30px rgba(0,0,0,0.12);">
+                            <iframe src="${escapeHtml(embedUrl)}" style="width: 100%; height: 100%; border: none;" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+                        </div>
+                    `;
+                }
+                descSection.appendChild(videoSection);
             }
         }
 
         // Kuvagalleria
-        if (projectData.image_urls && projectData.image_urls.length > 0) {
+        const imagesList = Array.isArray(projectData.image_urls) ? projectData.image_urls : (typeof projectData.image_urls === 'string' ? [projectData.image_urls] : []);
+        if (imagesList.length > 0) {
             const descSection = document.getElementById('desc-section');
             if (descSection) {
                 const galleryEl = document.createElement('div');
-                galleryEl.style.cssText = 'margin-top:1.5rem; display:grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap:0.75rem;';
-                galleryEl.innerHTML = projectData.image_urls.map(url => `
-                    <a href="${url}" target="_blank" rel="noopener">
-                        <img src="${url}" alt="Projektin kuva" loading="lazy"
-                            style="width:100%; height:130px; object-fit:cover; border-radius:8px; cursor:zoom-in; transition:transform 0.2s;"
-                            onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
-                    </a>
-                `).join('');
+                galleryEl.style.cssText = 'margin-top: 2rem; margin-bottom: 1.5rem;';
+                galleryEl.innerHTML = `
+                    <h3 style="font-family: Outfit, sans-serif; font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; color: var(--text-main);">
+                        <span class="iconify" data-icon="material-symbols:photo-library-outline" style="color: #10b981; font-size: 1.5rem;"></span>
+                        Kuvat
+                    </h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem;">
+                        ${imagesList.map(url => `
+                            <a href="${escapeHtml(url)}" target="_blank" rel="noopener" style="display: block; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.06);">
+                                <img src="${escapeHtml(url)}" alt="Projektin kuva" loading="lazy"
+                                    style="width: 100%; height: 140px; object-fit: cover; cursor: zoom-in; transition: transform 0.25s ease;"
+                                    onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                            </a>
+                        `).join('')}
+                    </div>
+                `;
                 descSection.appendChild(galleryEl);
             }
         }
