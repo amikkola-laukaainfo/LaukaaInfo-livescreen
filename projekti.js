@@ -360,39 +360,115 @@ async function loadProject(projectId) {
             renderRelations([], [], [], [], settings);
         }
 
-        // Hae liittyvät teemat (PROJECT on source, THEME on target)
+        // Hae teemat monesta lähteestä (theme_custom, theme_taxonomy_id, entity_relations -> THEME / TAXONOMY)
         try {
             const themesSection = document.getElementById('themes-section');
+            const heroThemesContainer = document.getElementById('hero-themes-container');
+
             if (settings.show_themes === false) {
                 if (themesSection) themesSection.style.display = 'none';
+                if (heroThemesContainer) heroThemesContainer.style.display = 'none';
             } else {
-                const { data: themeRelations } = await mixonetClient
-                    .from('entity_relations')
-                    .select('target_id')
-                    .eq('source_id', projectId)
-                    .eq('target_type', 'THEME');
+                const collectedThemes = []; // Array of { id, label }
 
-                const themesList = document.getElementById('themes-list');
+                // 1. Mukautetut teemat (theme_custom, esim "Dokumentit, Paikallishistoria, Digitointi, Mediatuotanto, Tekoäly")
+                if (projectData.theme_custom && projectData.theme_custom.trim() !== '') {
+                    const customList = projectData.theme_custom.split(',').map(s => s.trim()).filter(s => s.length > 0);
+                    customList.forEach(tName => {
+                        if (!collectedThemes.some(t => t.label.toLowerCase() === tName.toLowerCase())) {
+                            collectedThemes.push({ id: tName, label: tName });
+                        }
+                    });
+                }
 
-            if (themeRelations && themeRelations.length > 0) {
-                const themeIds = themeRelations.map(r => r.target_id);
-                const { data: themes } = await mixonetClient
-                    .from('opportunities')
-                    .select('id, title, slug')
-                    .in('id', themeIds)
-                    .eq('type', 'THEME');
+                // 2. Teema-relaatiot (entity_relations)
+                try {
+                    const { data: themeRels } = await mixonetClient
+                        .from('entity_relations')
+                        .select('target_id, target_type, relation_type, metadata')
+                        .eq('source_id', projectId);
 
-                if (themes && themes.length > 0) {
-                    themesList.innerHTML = themes.map(t => {
+                    if (themeRels && themeRels.length > 0) {
+                        const targetIds = themeRels
+                            .filter(r => r.target_type === 'THEME' || r.relation_type === 'THEME' || r.relation_type === 'HAS_THEME' || r.target_type === 'TAXONOMY')
+                            .map(r => r.target_id);
+
+                        if (targetIds.length > 0) {
+                            const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+                            const validUuids = targetIds.filter(id => uuidRegex.test(id));
+                            const nonUuids = targetIds.filter(id => !uuidRegex.test(id));
+
+                            nonUuids.forEach(lbl => {
+                                if (!collectedThemes.some(t => t.label.toLowerCase() === lbl.toLowerCase())) {
+                                    collectedThemes.push({ id: lbl, label: lbl });
+                                }
+                            });
+
+                            if (validUuids.length > 0) {
+                                const [taxRes, oppRes] = await Promise.all([
+                                    mixonetClient.from('taxonomy').select('id, label, slug').in('id', validUuids),
+                                    mixonetClient.from('opportunities').select('id, title, slug').in('id', validUuids)
+                                ]);
+                                if (taxRes.data) {
+                                    taxRes.data.forEach(t => {
+                                        const name = t.label || t.slug || t.id;
+                                        if (!collectedThemes.some(x => x.id === t.id)) {
+                                            collectedThemes.push({ id: t.id, label: name });
+                                        }
+                                    });
+                                }
+                                if (oppRes.data) {
+                                    oppRes.data.forEach(t => {
+                                        const name = t.title || t.slug || t.id;
+                                        if (!collectedThemes.some(x => x.id === t.id)) {
+                                            collectedThemes.push({ id: t.id, label: name });
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    }
+                } catch (rErr) {
+                    console.warn('Virhe teemarelaatioiden haussa:', rErr);
+                }
+
+                // 3. Pääteema (theme_taxonomy_id)
+                if (projectData.theme_taxonomy_id) {
+                    try {
+                        const { data: mainTax } = await mixonetClient
+                            .from('taxonomy')
+                            .select('id, label, slug')
+                            .eq('id', projectData.theme_taxonomy_id)
+                            .single();
+                        if (mainTax && !collectedThemes.some(x => x.id === mainTax.id)) {
+                            collectedThemes.unshift({ id: mainTax.id, label: mainTax.label || mainTax.slug });
+                        }
+                    } catch (_) {}
+                }
+
+                // Renderöidään teemat hero-osioon ja teema-osioon
+                if (collectedThemes.length > 0) {
+                    const heroHtml = collectedThemes.map(t => {
                         const href = `teema.html?tag=${encodeURIComponent(t.id)}`;
-                        return `<a href="${href}" class="tag-pill" style="background:#ede9fe; color:#5b21b6; text-decoration:none; font-size:0.95rem; padding:0.4rem 1rem;">${t.title || t.slug || t.id}</a>`;
+                        return `<a href="${href}" class="tag-pill" style="background: rgba(255, 255, 255, 0.9); color: #4c1d95; text-decoration: none; font-size: 0.9rem; font-weight: 700; padding: 0.35rem 0.9rem; border-radius: 50px; backdrop-filter: blur(4px); box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid rgba(139, 92, 246, 0.3);">🏷️ ${escapeHtml(t.label)}</a>`;
                     }).join('');
+
+                    const sidebarHtml = collectedThemes.map(t => {
+                        const href = `teema.html?tag=${encodeURIComponent(t.id)}`;
+                        return `<a href="${href}" class="tag-pill" style="background:#ede9fe; color:#5b21b6; text-decoration:none; font-size:0.95rem; font-weight:600; padding:0.4rem 1rem; border-radius:8px;">${escapeHtml(t.label)}</a>`;
+                    }).join('');
+
+                    if (heroThemesContainer) {
+                        heroThemesContainer.innerHTML = heroHtml;
+                        heroThemesContainer.style.display = 'flex';
+                    }
+                    const themesList = document.getElementById('themes-list');
+                    if (themesList) themesList.innerHTML = sidebarHtml;
+                    if (themesSection) themesSection.style.display = 'block';
                 } else {
                     if (themesSection) themesSection.style.display = 'none';
+                    if (heroThemesContainer) heroThemesContainer.style.display = 'none';
                 }
-            } else {
-                if (themesSection) themesSection.style.display = 'none';
-            }
             }
         } catch(e) {
             console.warn('Teemojen haku epäonnistui', e);
