@@ -82,9 +82,49 @@ async function loadProject(projectId) {
         
         const descSection = document.getElementById('desc-section');
         if (settings.show_description !== false) {
-            document.getElementById('project-full-desc').textContent = projectData.description || 'Ei kuvausta saatavilla.';
+            let descContent = '';
+            if (projectData.summary && projectData.summary.trim() !== '') {
+                descContent += `<p style="font-weight: 600; font-size: 1.15rem; color: #1e293b; margin-bottom: 1rem;">${escapeHtml(projectData.summary)}</p>`;
+            }
+            if (projectData.description && projectData.description.trim() !== '') {
+                descContent += `<p style="font-size: 1.05rem; line-height: 1.7; color: #334155;">${escapeHtml(projectData.description).replace(/\n/g, '<br>')}</p>`;
+            }
+            document.getElementById('project-full-desc').innerHTML = descContent || 'Ei kuvausta saatavilla.';
         } else if (descSection) {
             descSection.style.display = 'none';
+        }
+
+        // Haaste & Ongelma
+        const challengeSection = document.getElementById('challenge-section');
+        if (challengeSection) {
+            if (projectData.challenge && projectData.challenge.trim() !== '') {
+                document.getElementById('project-challenge-text').innerHTML = escapeHtml(projectData.challenge).replace(/\n/g, '<br>');
+                challengeSection.style.display = 'block';
+            } else {
+                challengeSection.style.display = 'none';
+            }
+        }
+
+        // Tavoitteet
+        const goalsSection = document.getElementById('goals-section');
+        if (goalsSection) {
+            if (projectData.goal_custom && projectData.goal_custom.trim() !== '') {
+                document.getElementById('project-goals-text').innerHTML = escapeHtml(projectData.goal_custom).replace(/\n/g, '<br>');
+                goalsSection.style.display = 'block';
+            } else {
+                goalsSection.style.display = 'none';
+            }
+        }
+
+        // Kohderyhmä / Hyötyjät
+        const benSection = document.getElementById('beneficiary-section');
+        if (benSection) {
+            if (projectData.beneficiary && projectData.beneficiary.trim() !== '') {
+                document.getElementById('project-beneficiary-text').innerHTML = escapeHtml(projectData.beneficiary).replace(/\n/g, '<br>');
+                benSection.style.display = 'block';
+            } else {
+                benSection.style.display = 'none';
+            }
         }
 
         // Taustakuva hero-osioon
@@ -597,3 +637,13 @@ async function renderRelations(relations, actors, companiesData = [], needsData 
 }
 
 document.addEventListener('DOMContentLoaded', init);
+
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
