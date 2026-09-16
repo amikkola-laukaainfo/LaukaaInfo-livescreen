@@ -2801,8 +2801,10 @@ async function loadMixonetContentForPlace(placeData) {
         ]);
 
         // 4. Suodata julkisuuden mukaan
+        // Huom: LAUKAAINFO-profiloinnista tallennetut projektit ovat visibility='NETWORK',
+        // julkisuus ohjataan is_published-kentällä ja public_settings.is_published:lla.
         const publicProjects = (projectsResult.data || [])
-            .filter(p => p.is_published !== false && p.visibility === 'PUBLIC');
+            .filter(p => p.is_published !== false && (p.visibility === 'PUBLIC' || p.visibility === 'NETWORK'));
 
         const publicIdeas = (ideasResult.data || [])
             .filter(i => i.is_published !== false && (i.visibility === 'PUBLIC' || i.visibility === 'NETWORK' || !i.visibility));
@@ -2917,7 +2919,7 @@ async function loadMixonetContentFallback(mixonetClient, placeId, projectsSectio
         ]);
 
         const publicProjects = (projectsResult.data || [])
-            .filter(p => p.is_published !== false && p.visibility === 'PUBLIC');
+            .filter(p => p.is_published !== false && (p.visibility === 'PUBLIC' || p.visibility === 'NETWORK'));
         const publicIdeas = (ideasResult.data || [])
             .filter(i => i.is_published !== false && (i.visibility === 'PUBLIC' || i.visibility === 'NETWORK' || !i.visibility));
 
