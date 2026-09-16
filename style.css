@@ -8509,12 +8509,14 @@ header .v4-hero-search h3,
         max-height: 65vh !important;
         overflow-y: auto !important;
     }
-    /* "Mita etsit Laukaasta?" otsikko: yhtenäinen harmaa mobiilissa */
+    /* "Mita etsit Laukaasta?" otsikko: valkoinen ja selkeästi luettava mobiilissa */
     header .v4-hero-search h3,
     .hero-left .v4-hero-search h3,
     .hero-copy .v4-hero-search h3,
     .hero-left-content .v4-hero-search h3 {
-        color: #cbd5e1 !important;
-        text-shadow: 0 1px 3px rgba(0,0,0,0.5) !important;
+        color: #ffffff !important;
+        text-shadow: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
     }
 }
