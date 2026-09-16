@@ -69,9 +69,9 @@ console.log('2. Kopioidaan tiedostot dist-kansioon...');
 function copyRecursive(src, dest) {
     const entries = fs.readdirSync(src, { withFileTypes: true });
     for (const entry of entries) {
-        // Ohitetaan nämä tiedostot ja kansiot
-        if (['node_modules', '.git', 'dist', 'build.js', 'package.json', 'package-lock.json'].includes(entry.name)) continue;
-        if (entry.name.endsWith('.md')) continue;
+        // Ohitetaan nämä tiedostot ja kansiot tuotantoversiossa
+        if (['node_modules', '.git', 'dist', 'build.js', 'package.json', 'package-lock.json', 'scratch', 'reitti-kehitys.html', 'reitti-kehitys.js', 'diag_encoding.js'].includes(entry.name)) continue;
+        if (entry.name.endsWith('.md') || entry.name.endsWith('.map')) continue;
 
         const srcPath = path.join(src, entry.name);
         const destPath = path.join(dest, entry.name);
@@ -126,11 +126,24 @@ const assetMap = {};
                         await minifyAndVersionFolder(fullPath);
                     }
                 } else {
-                    if (entry.name.endsWith('.js') && entry.name !== 'sw.js') {
+                    if (entry.name.endsWith('.js') && entry.name !== 'sw.js' && !/\.[a-f0-9]{8}\.js$/.test(entry.name)) {
                         console.log(' -> Minifioidaan ja versioidaan JS:  ' + entry.name);
                         try {
                             const content = fs.readFileSync(fullPath, 'utf8');
-                            const result = await Terser.minify(content, { compress: true, mangle: true });
+                            const result = await Terser.minify(content, {
+                                compress: {
+                                    drop_console: true,
+                                    drop_debugger: true,
+                                    passes: 2
+                                },
+                                mangle: {
+                                    toplevel: false
+                                },
+                                output: {
+                                    comments: false,
+                                    preamble: '/* © Mediazoo / LaukaaInfo - Elämyspolku Engine v1.0 */'
+                                }
+                            });
                             if (result.error) throw result.error;
                             const newName = entry.name.replace('.js', `.${buildVersion}.js`);
                             const newPath = path.join(dir, newName);
@@ -140,7 +153,7 @@ const assetMap = {};
                         } catch (e) {
                             console.error(' Virhe JS-tiedostossa: ' + entry.name, e.message);
                         }
-                    } else if (entry.name.endsWith('.css')) {
+                    } else if (entry.name.endsWith('.css') && !/\.[a-f0-9]{8}\.css$/.test(entry.name)) {
                         console.log(' -> Minifioidaan ja versioidaan CSS: ' + entry.name);
                         try {
                             const content = fs.readFileSync(fullPath, 'utf8');

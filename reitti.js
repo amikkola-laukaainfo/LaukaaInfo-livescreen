@@ -55,7 +55,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initialize Supabase if not already done
     const supabase = window.supabase.createClient(AI_SUPABASE_URL, AI_SUPABASE_KEY);
     
-    const ADMIN_PASSWORDS = ['admin', 'admin123', 'laukaa-admin', 'suunnittelija', 'master'];
     let isAdminMode = urlParams.get('admin') === '1' || 
                       urlParams.get('admin') === 'true' || 
                       urlParams.get('mode') === 'admin' || 
@@ -98,16 +97,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Load initial route data (no GeoJSON if private without code)
     async function loadRoute(code = null) {
-        if (code && ADMIN_PASSWORDS.includes(code.trim().toLowerCase())) {
-            isAdminMode = true;
-        }
-
         try {
             let data = null;
             let error = null;
 
-            // 1. Try standard Supabase RPC with provided code if not an admin password
-            if (code && !ADMIN_PASSWORDS.includes(code.trim().toLowerCase())) {
+            // 1. Try standard Supabase RPC with provided code if given
+            if (code) {
                 const res = await supabase.rpc('get_route_with_access', {
                     route_id: routeId,
                     provided_code: code
@@ -116,7 +111,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 error = res.error;
             }
 
-            // 2. Initial load or retry if user code was not granted
+            // 2. Initial load or retry if user code was not provided or not granted
             if (!data || !data.access_granted) {
                 const res = await supabase.rpc('get_route_with_access', {
                     route_id: routeId,

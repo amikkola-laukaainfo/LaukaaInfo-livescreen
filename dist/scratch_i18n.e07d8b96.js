@@ -1,1 +1,0 @@
-const fs=require("fs");let content=fs.readFileSync("translations.js","utf8");

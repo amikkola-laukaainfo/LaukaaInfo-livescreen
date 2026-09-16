@@ -65,7 +65,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const AI_SUPABASE_KEY = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
     const supabase = window.supabase.createClient(AI_SUPABASE_URL, AI_SUPABASE_KEY);
 
-    const ADMIN_PASSWORDS = ['admin', 'admin123', 'laukaa-admin', 'suunnittelija', 'master'];
     let isAdminMode = urlParams.get('admin') === '1' ||
                       urlParams.get('admin') === 'true' ||
                       urlParams.get('mode') === 'admin' ||
@@ -259,14 +258,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     // ─── ROUTE LOADING ─────────────────────────────────────────────────────────
 
     async function loadRoute(code = null) {
-        if (code && ADMIN_PASSWORDS.includes(code.trim().toLowerCase())) {
-            isAdminMode = true;
-        }
         try {
             let data = null;
             let error = null;
 
-            if (code && !ADMIN_PASSWORDS.includes(code.trim().toLowerCase())) {
+            if (code) {
                 const res = await supabase.rpc('get_route_with_access', {
                     route_id: routeId, provided_code: code
                 });
