@@ -446,28 +446,18 @@ async function loadProject(projectId) {
                     } catch (_) {}
                 }
 
-                // Renderöidään teemat hero-osioon ja teema-osioon
+                // Renderöidään teemat oikeaan sivupalkkiin (Liittyvät teemat)
                 if (collectedThemes.length > 0) {
-                    const heroHtml = collectedThemes.map(t => {
-                        const href = `teema.html?tag=${encodeURIComponent(t.id)}`;
-                        return `<a href="${href}" class="tag-pill" style="background: rgba(255, 255, 255, 0.9); color: #4c1d95; text-decoration: none; font-size: 0.9rem; font-weight: 700; padding: 0.35rem 0.9rem; border-radius: 50px; backdrop-filter: blur(4px); box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid rgba(139, 92, 246, 0.3);">🏷️ ${escapeHtml(t.label)}</a>`;
-                    }).join('');
-
                     const sidebarHtml = collectedThemes.map(t => {
                         const href = `teema.html?tag=${encodeURIComponent(t.id)}`;
                         return `<a href="${href}" class="tag-pill" style="background:#ede9fe; color:#5b21b6; text-decoration:none; font-size:0.95rem; font-weight:600; padding:0.4rem 1rem; border-radius:8px;">${escapeHtml(t.label)}</a>`;
                     }).join('');
 
-                    if (heroThemesContainer) {
-                        heroThemesContainer.innerHTML = heroHtml;
-                        heroThemesContainer.style.display = 'flex';
-                    }
                     const themesList = document.getElementById('themes-list');
                     if (themesList) themesList.innerHTML = sidebarHtml;
                     if (themesSection) themesSection.style.display = 'block';
                 } else {
                     if (themesSection) themesSection.style.display = 'none';
-                    if (heroThemesContainer) heroThemesContainer.style.display = 'none';
                 }
             }
         } catch(e) {
