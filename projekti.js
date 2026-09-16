@@ -61,7 +61,11 @@ async function loadProject(projectId) {
             show_themes: true
         };
 
-        if (projectData.is_published === false || projectData.visibility !== 'PUBLIC') {
+        // Näytä esikatselubanneri vain jos is_published on nimenomaisesti false.
+        // visibility='NETWORK' on normaali arvo LAUKAAINFO-profiloinnissa tallennetuille projekteille.
+        const isPublished = projectData.is_published !== false &&
+            (settings.is_published !== false);
+        if (!isPublished) {
             // Salli esikatselu, mutta näytä banneri
             const banner = document.createElement('div');
             banner.style.cssText = 'background: #fef08a; color: #854d0e; padding: 10px; text-align: center; font-weight: bold; position: sticky; top: 0; z-index: 100;';
