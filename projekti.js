@@ -237,11 +237,40 @@ async function loadProject(projectId) {
             .eq('target_id', projectId);
 
         // UUSI: Hae project_actors taulusta osallistujat
-        const { data: actors } = await mixonetClient
-            .from('project_actors')
-            .select('*, organization:organizations(*), user_profile:user_profiles(*)')
-            .eq('project_id', projectId)
-            .eq('status', 'ACTIVE'); // Vain aktiiviset osallistujat
+        let actors = [];
+        try {
+            const { data: rawActors, error: actorsError } = await mixonetClient
+                .from('project_actors')
+                .select('*, organization:organizations(*)')
+                .eq('project_id', projectId)
+                .eq('status', 'ACTIVE'); // Vain aktiiviset osallistujat
+
+            if (!actorsError && rawActors && rawActors.length > 0) {
+                actors = rawActors;
+                const userIds = actors
+                    .filter(a => a.actor_type === 'PERSON' && a.user_id)
+                    .map(a => a.user_id);
+                if (userIds.length > 0) {
+                    try {
+                        const { data: profiles } = await mixonetClient
+                            .from('user_profiles')
+                            .select('*')
+                            .in('id', userIds);
+                        if (profiles) {
+                            actors.forEach(a => {
+                                if (a.actor_type === 'PERSON') {
+                                    a.user_profile = profiles.find(p => p.id === a.user_id);
+                                }
+                            });
+                        }
+                    } catch (pErr) {
+                        console.error("Virhe käyttäjäprofiilien haussa", pErr);
+                    }
+                }
+            }
+        } catch (aErr) {
+            console.error("Virhe project_actors haussa", aErr);
+        }
 
         if (relError) {
             console.error("Virhe relaatioiden haussa", relError);
