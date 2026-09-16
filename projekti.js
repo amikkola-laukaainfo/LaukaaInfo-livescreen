@@ -538,7 +538,7 @@ async function loadProject(projectId) {
                     });
                 }
 
-                // 2. Haetaan paikkojen nimet Supabasen places-taulusta
+                // 2. Haetaan paikkojen nimet Supabasen places-taulusta (kyselöidään SEKÄ id ETTÄ place_id rinnakkain)
                 let fetchedPlaces = [];
                 if (targetPlaceIds.size > 0) {
                     const placeIdsArray = Array.from(targetPlaceIds);
@@ -546,30 +546,35 @@ async function loadProject(projectId) {
                     const validUuids = placeIdsArray.filter(id => uuidRegex.test(id));
 
                     if (validUuids.length > 0) {
-                        const { data: pData } = await mixonetClient
-                            .from('places')
-                            .select('id, place_id, name, canonical_name, type, municipality')
-                            .in('place_id', validUuids);
+                        const [resByPlaceId, resById] = await Promise.all([
+                            mixonetClient.from('places').select('id, place_id, name, canonical_name, type, municipality').in('place_id', validUuids),
+                            mixonetClient.from('places').select('id, place_id, name, canonical_name, type, municipality').in('id', validUuids)
+                        ]);
 
-                        if (pData && pData.length > 0) {
-                            fetchedPlaces.push(...pData);
-                        } else {
-                            // Fallback kysely id-sarakkeella
-                            const { data: pDataId } = await mixonetClient
-                                .from('places')
-                                .select('id, place_id, name, canonical_name, type, municipality')
-                                .in('id', validUuids);
-                            if (pDataId) fetchedPlaces.push(...pDataId);
-                        }
+                        const pMap = new Map();
+                        if (resByPlaceId.data) resByPlaceId.data.forEach(p => { if (p) pMap.set(p.place_id || p.id, p); });
+                        if (resById.data) resById.data.forEach(p => { if (p) pMap.set(p.id || p.place_id, p); });
+
+                        fetchedPlaces = Array.from(pMap.values());
                     }
                 }
 
                 let placesHtml = '';
 
+                // Apufunktio siistiin paikannimen ratkaisuun ilman raaka-UUIDeja
+                const resolvePlaceName = (pId, fallbackLabel = 'Sijainti') => {
+                    const pObj = fetchedPlaces.find(p => p.place_id === pId || p.id === pId);
+                    if (pObj && (pObj.name || pObj.canonical_name)) {
+                        return pObj.name || pObj.canonical_name;
+                    }
+                    // Jos pId on UUID eikä nimeä löydy kannasta, ei näytetä 36-merkkistä UUID-koodia
+                    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(pId);
+                    return isUuid ? fallbackLabel : pId;
+                };
+
                 // Renderöidään ensisijainen paikka
                 if (projectData.place_id) {
-                    const pObj = fetchedPlaces.find(p => p.place_id === projectData.place_id || p.id === projectData.place_id);
-                    const pName = pObj?.name || pObj?.canonical_name || 'Ensisijainen paikka';
+                    const pName = resolvePlaceName(projectData.place_id, 'Ensisijainen paikka');
                     placesHtml += `
                         <a href="tietoa-paikasta.html?id=${encodeURIComponent(projectData.place_id)}" class="list-item-card" style="text-decoration: none; display: flex; align-items: center; gap: 0.75rem; border-left: 4px solid #0284c7; background: #f0f9ff; margin-bottom: 0.5rem;">
                             <div style="width: 42px; height: 42px; border-radius: 10px; background: #e0f2fe; color: #0284c7; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0;">
@@ -585,15 +590,19 @@ async function loadProject(projectId) {
                 }
 
                 // Renderöidään muut paikat ja toiminta-alueet (OPERATES_IN, LOCATED_IN jne)
+                const renderedIds = new Set();
+                if (projectData.place_id) renderedIds.add(projectData.place_id);
+
                 if (placeRelations && placeRelations.length > 0) {
                     placeRelations.forEach(rel => {
                         const placeId = rel.target_id;
-                        if (placeId === projectData.place_id) return; // Älä duplikoi ensisijaista paikkaa
+                        if (!placeId || renderedIds.has(placeId)) return; // Älä duplikoi ensisijaista paikkaa tai jo renderöityä
+                        renderedIds.add(placeId);
 
-                        const pObj = fetchedPlaces.find(p => p.place_id === placeId || p.id === placeId);
-                        const placeName = pObj?.name || pObj?.canonical_name || rel.metadata?.place_name || placeId;
                         const isOperates = rel.relation_type === 'OPERATES_IN';
-                        const badgeText = isOperates ? '🗺️ Toiminta-alue' : '📍 Sijainti';
+                        const placeName = resolvePlaceName(placeId, rel.metadata?.place_name || (isOperates ? 'Toiminta-alue' : 'Sijaintikohde'));
+
+                        const badgeText = isOperates ? '🗺️ Toiminta-alue' : '📍 Lisätty sijainti';
                         const borderColor = isOperates ? '#8b5cf6' : '#0284c7';
                         const iconBg = isOperates ? '#f3e8ff' : '#e0f2fe';
                         const iconColor = isOperates ? '#7c3aed' : '#0284c7';
