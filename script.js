@@ -3835,10 +3835,14 @@ async function performV4Search(query, dropdown) {
         html += `<div style="font-size: 0.75rem; font-weight: 800; color: #059669; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem;">🌲 NÄKÖKULMAT</div>`;
         matchedThemes.forEach(t => {
             const displayName = formatThemeName(t) || t.name || t.tag_id;
+            const count = (t.places_count && t.places_count > 0)
+                ? t.places_count
+                : (window.allCompanies ? window.allCompanies.filter(c => (c.tags || '').toLowerCase().includes((t.tag_id || t.name || '').toLowerCase())).length : 0);
+            const countBadge = count > 0 ? `<span style="font-size: 0.8rem; color: #64748b;">📍 ${count}</span>` : '';
             html += `
                 <a href="teema.html?tag=${encodeURIComponent(t.tag_id)}" style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0.75rem; border-radius: 6px; text-decoration: none; color: #1e293b; font-size: 0.95rem; font-weight: 600;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
                     <span>🌲 ${escapeHtml(displayName)}</span>
-                    <span style="font-size: 0.8rem; color: #64748b;">📍 ${t.places_count || 0}</span>
+                    ${countBadge}
                 </a>
             `;
         });
@@ -4013,10 +4017,15 @@ async function openV4SearchModal(query) {
             <h3 style="font-size: 0.85rem; font-weight: 800; color: #059669; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem;">🌲 Näkökulmat (${matchedThemes.length})</h3>
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem;">`;
         matchedThemes.forEach(t => {
+            const displayName = formatThemeName(t) || t.name || t.tag_id;
+            const count = (t.places_count && t.places_count > 0)
+                ? t.places_count
+                : (window.allCompanies ? window.allCompanies.filter(c => (c.tags || '').toLowerCase().includes((t.tag_id || t.name || '').toLowerCase())).length : 0);
+            const countBadge = count > 0 ? `<span style="font-size: 0.8rem; color: #64748b; font-weight: 500;">📍 ${count}</span>` : '';
             html += `
                 <a href="teema.html?tag=${encodeURIComponent(t.tag_id)}" style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid #e2e8f0; text-decoration: none; color: #1e293b; font-size: 0.95rem; font-weight: 700; background: #f8fafc; transition: all 0.2s;" onmouseover="this.style.borderColor='#059669'; this.style.background='white';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.background='#f8fafc';">
-                    <span>${escapeHtml(t.name || t.tag_id)}</span>
-                    <span style="font-size: 0.8rem; color: #64748b; font-weight: 500;">📍 ${t.places_count || 0}</span>
+                    <span>${escapeHtml(displayName)}</span>
+                    ${countBadge}
                 </a>
             `;
         });
