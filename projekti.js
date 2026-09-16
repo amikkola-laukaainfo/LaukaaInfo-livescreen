@@ -514,50 +514,122 @@ async function loadProject(projectId) {
             if (themesSection) themesSection.style.display = 'none';
         }
 
-        // Hae projektin paikka (LOCATED_AT -> PLACE)
+        // Hae projektin paikka (place_id, place_custom, LOCATED_IN / OPERATES_IN -> PLACE)
         try {
             const placeSection = document.getElementById('project-place-section');
             const placeList = document.getElementById('project-place-list');
             
             if (placeSection && placeList) {
+                // 1. Hae entity_relations (LOCATED_IN, OPERATES_IN, LOCATED_AT, RELATES_TO, PRIMARY_PLACE)
                 const { data: placeRelations } = await mixonetClient
                     .from('entity_relations')
-                    .select('target_id, metadata')
+                    .select('target_id, relation_type, metadata')
                     .eq('source_id', projectId)
                     .eq('source_type', 'PROJECT')
                     .eq('target_type', 'PLACE')
-                    .in('relation_type', ['LOCATED_AT', 'OPERATES_IN', 'RELATES_TO']);
+                    .in('relation_type', ['LOCATED_IN', 'OPERATES_IN', 'LOCATED_AT', 'RELATES_TO', 'PRIMARY_PLACE']);
+
+                const targetPlaceIds = new Set();
+                if (projectData.place_id) targetPlaceIds.add(projectData.place_id);
 
                 if (placeRelations && placeRelations.length > 0) {
-                    // Haetaan paikan tiedot AI Supabasesta (jos mahdollista)
-                    // Tai käytetään metadata.place_name fallbackina
-                    let placesHtml = '';
-                    
-                    for (const rel of placeRelations) {
+                    placeRelations.forEach(r => {
+                        if (r.target_id) targetPlaceIds.add(r.target_id);
+                    });
+                }
+
+                // 2. Haetaan paikkojen nimet Supabasen places-taulusta
+                let fetchedPlaces = [];
+                if (targetPlaceIds.size > 0) {
+                    const placeIdsArray = Array.from(targetPlaceIds);
+                    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+                    const validUuids = placeIdsArray.filter(id => uuidRegex.test(id));
+
+                    if (validUuids.length > 0) {
+                        const { data: pData } = await mixonetClient
+                            .from('places')
+                            .select('id, place_id, name, canonical_name, type, municipality')
+                            .in('place_id', validUuids);
+
+                        if (pData && pData.length > 0) {
+                            fetchedPlaces.push(...pData);
+                        } else {
+                            // Fallback kysely id-sarakkeella
+                            const { data: pDataId } = await mixonetClient
+                                .from('places')
+                                .select('id, place_id, name, canonical_name, type, municipality')
+                                .in('id', validUuids);
+                            if (pDataId) fetchedPlaces.push(...pDataId);
+                        }
+                    }
+                }
+
+                let placesHtml = '';
+
+                // Renderöidään ensisijainen paikka
+                if (projectData.place_id) {
+                    const pObj = fetchedPlaces.find(p => p.place_id === projectData.place_id || p.id === projectData.place_id);
+                    const pName = pObj?.name || pObj?.canonical_name || 'Ensisijainen paikka';
+                    placesHtml += `
+                        <a href="tietoa-paikasta.html?id=${encodeURIComponent(projectData.place_id)}" class="list-item-card" style="text-decoration: none; display: flex; align-items: center; gap: 0.75rem; border-left: 4px solid #0284c7; background: #f0f9ff; margin-bottom: 0.5rem;">
+                            <div style="width: 42px; height: 42px; border-radius: 10px; background: #e0f2fe; color: #0284c7; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0;">
+                                <span class="iconify" data-icon="material-symbols:location-on"></span>
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="font-size: 0.72rem; text-transform: uppercase; color: #0369a1; font-weight: 700;">📍 Ensisijainen paikka</div>
+                                <h3 style="margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--text-main);">${escapeHtml(pName)}</h3>
+                            </div>
+                            <span class="iconify" style="color: #0284c7; font-size: 1.2rem;" data-icon="material-symbols:arrow-forward"></span>
+                        </a>
+                    `;
+                }
+
+                // Renderöidään muut paikat ja toiminta-alueet (OPERATES_IN, LOCATED_IN jne)
+                if (placeRelations && placeRelations.length > 0) {
+                    placeRelations.forEach(rel => {
                         const placeId = rel.target_id;
-                        let placeName = rel.metadata?.place_name || 'Tuntematon paikka';
-                        
-                        // Yritetään hakea tarkka nimi window.aiSb:ltä, jos se on olemassa (ei välttämättä ole projekti.js:ssä vielä)
-                        // Koska projekti.js käyttää vain Mixonet-clienttiä tällä hetkellä, luotetaan metadataan 
-                        // TAI lisätään aiSb haku jos se tuodaan tänne.
-                        // Yksinkertaisin tapa nyt: käytetään metadataa.
-                        // Myöhemmin voidaan hakea paikan tiedot jos tarvitaan.
-                        
+                        if (placeId === projectData.place_id) return; // Älä duplikoi ensisijaista paikkaa
+
+                        const pObj = fetchedPlaces.find(p => p.place_id === placeId || p.id === placeId);
+                        const placeName = pObj?.name || pObj?.canonical_name || rel.metadata?.place_name || placeId;
+                        const isOperates = rel.relation_type === 'OPERATES_IN';
+                        const badgeText = isOperates ? '🗺️ Toiminta-alue' : '📍 Sijainti';
+                        const borderColor = isOperates ? '#8b5cf6' : '#0284c7';
+                        const iconBg = isOperates ? '#f3e8ff' : '#e0f2fe';
+                        const iconColor = isOperates ? '#7c3aed' : '#0284c7';
+
                         placesHtml += `
-                            <a href="tietoa-paikasta.html?id=${encodeURIComponent(placeId)}" class="list-item-card" style="text-decoration: none; display: flex; align-items: center; gap: 0.5rem; border-left: 4px solid #0284c7;">
-                                <div style="width: 40px; height: 40px; border-radius: 8px; background: #e0f2fe; color: #0284c7; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
-                                    <span class="iconify" data-icon="material-symbols:location-on"></span>
+                            <a href="tietoa-paikasta.html?id=${encodeURIComponent(placeId)}" class="list-item-card" style="text-decoration: none; display: flex; align-items: center; gap: 0.75rem; border-left: 4px solid ${borderColor}; margin-bottom: 0.5rem;">
+                                <div style="width: 40px; height: 40px; border-radius: 10px; background: ${iconBg}; color: ${iconColor}; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;">
+                                    <span class="iconify" data-icon="material-symbols:map"></span>
                                 </div>
-                                <div>
-                                    <h3 style="margin: 0; font-size: 1rem; color: var(--text-main);">${placeName}</h3>
-                                    <div style="font-size: 0.8rem; color: #0284c7;">Siirry paikan sivulle &rarr;</div>
+                                <div style="flex: 1;">
+                                    <div style="font-size: 0.72rem; text-transform: uppercase; color: ${iconColor}; font-weight: 700;">${badgeText}</div>
+                                    <h3 style="margin: 0; font-size: 1rem; font-weight: 700; color: var(--text-main);">${escapeHtml(placeName)}</h3>
                                 </div>
+                                <span class="iconify" style="color: ${iconColor}; font-size: 1.2rem;" data-icon="material-symbols:arrow-forward"></span>
                             </a>
                         `;
-                    }
-                    
+                    });
+                }
+
+                // Renderöidään vapaamuotoinen paikkakuvaus (place_custom) jos määritelty
+                if (projectData.place_custom && projectData.place_custom.trim() !== '') {
+                    placesHtml += `
+                        <div style="padding: 0.85rem 1rem; background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1; font-size: 0.9rem; color: var(--text-main); margin-top: 0.5rem;">
+                            <strong style="color: #475569; display: flex; align-items: center; gap: 0.3rem; margin-bottom: 0.2rem;">
+                                <span class="iconify" data-icon="material-symbols:info-outline"></span> Aluekuvaus:
+                            </strong>
+                            <span style="color: #334155; font-weight: 500;">${escapeHtml(projectData.place_custom)}</span>
+                        </div>
+                    `;
+                }
+
+                if (placesHtml.trim() !== '') {
                     placeList.innerHTML = placesHtml;
                     placeSection.style.display = 'block';
+                } else {
+                    placeSection.style.display = 'none';
                 }
             }
         } catch (e) {
