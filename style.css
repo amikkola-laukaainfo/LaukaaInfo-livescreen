@@ -8484,11 +8484,17 @@ header .v4-hero-search h3,
     .hero-left-content {
         overflow: visible !important;
     }
-    /* v4-hero-search: oma stacking context */
+    /* v4-hero-search: oma stacking context ja mobiili-järjestys */
     .v4-hero-search {
         position: relative !important;
         z-index: 500 !important;
         overflow: visible !important;
+        order: 3.5 !important;
+        width: 100% !important;
+        max-width: 500px !important;
+        margin: 1rem auto 1.5rem !important;
+        padding: 0 1.5rem !important;
+        box-sizing: border-box !important;
     }
     /* v4-search-bar: sallitaan ylivuoto */
     .v4-search-bar {
@@ -8509,12 +8515,17 @@ header .v4-hero-search h3,
         max-height: 65vh !important;
         overflow-y: auto !important;
     }
-    /* "Mita etsit Laukaasta?" otsikko: valkoinen ja selkeästi luettava mobiilissa */
+    /* "Mita etsit Laukaasta?" otsikko: tumma ja selkeasti luettava mobiilissa */
     header .v4-hero-search h3,
     .hero-left .v4-hero-search h3,
     .hero-copy .v4-hero-search h3,
-    .hero-left-content .v4-hero-search h3 {
-        color: #ffffff !important;
+    .hero-left-content .v4-hero-search h3,
+    .v4-hero-search-title {
+        color: var(--dark-text) !important;
+        font-size: 1.15rem !important;
+        font-weight: 700 !important;
+        text-align: center !important;
+        margin-bottom: 0.75rem !important;
         text-shadow: none !important;
         backdrop-filter: none !important;
         -webkit-backdrop-filter: none !important;

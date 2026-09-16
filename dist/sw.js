@@ -1,4 +1,4 @@
-const VERSION = '3d71631b'; // Päivitetty reittidatan latauksen korjausta varten
+const VERSION = 'fc5b3e67'; // Päivitetty reittidatan latauksen korjausta varten
 const CACHE_NAME = `laukaainfo-${VERSION}`;
 const ASSETS = [
     './',
