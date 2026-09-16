@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ilmoitukset ñ LaukaaInfo</title>
-    <meta name="description" content="Selaa laukaalaisien ilmoituksia: apupyynnˆt, tarjoukset, harrastusryhm‰t ja projektit. Lˆyd‰ apua tai tarjoa omaa osaamistasi.">
+    <title>Ilmoitukset ‚Äì LaukaaInfo</title>
+    <meta name="description" content="Selaa laukaalaisien ilmoituksia: apupyynn√∂t, tarjoukset, harrastusryhm√§t ja projektit. L√∂yd√§ apua tai tarjoa omaa osaamistasi.">
     <link rel="icon" href="logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css?v=20260420-2">
@@ -272,7 +272,7 @@
 
     <div class="ilm-list-hero">
         <h1>?? Ilmoitukset</h1>
-        <p>Paikalliset avunpyynnˆt, tarjoukset, harrastusryhm‰t ja projektit</p>
+        <p>Paikalliset avunpyynn√∂t, tarjoukset, harrastusryhm√§t ja projektit</p>
     </div>
 
     <div class="search-bar" style="padding-top:1.5rem;">
@@ -293,10 +293,10 @@
     <div class="ilm-list-main">
         <div class="ilm-cta-bar">
             <div>
-                <strong>Haluatko j‰tt‰‰ ilmoituksen?</strong><br>
-                <small style="opacity:0.85;">Ohjattu prosessi ñ valmis muutamassa minuutissa</small>
+                <strong>Haluatko j√§tt√§√§ ilmoituksen?</strong><br>
+                <small style="opacity:0.85;">Ohjattu prosessi ‚Äì valmis muutamassa minuutissa</small>
             </div>
-            <a href="ilmoittaudu.html">+ J‰t‰ ilmoitus</a>
+            <a href="ilmoittaudu.html">+ J√§t√§ ilmoitus</a>
         </div>
 
         <div id="ilm-count" class="ilm-count"></div>
@@ -310,10 +310,10 @@
 
     <footer>
         <div class="footer-content">
-            <p>© 2026 LaukaaInfo ñ Palvelua yll‰pit‰‰ Mediazoo.fi</p>
+            <p>¬© 2026 LaukaaInfo ‚Äì Palvelua yll√§pit√§√§ Mediazoo.fi</p>
             <div class="footer-links">
                 <a href="index.html">Etusivu</a>
-                <a href="ilmoittaudu.html">J‰t‰ ilmoitus</a>
+                <a href="ilmoittaudu.html">J√§t√§ ilmoitus</a>
                 <a href="tietosuoja.html">Tietosuoja</a>
             </div>
         </div>
@@ -326,9 +326,9 @@
         const INTENT_META = {
             tarvitsen_apua:     { emoji: '??', label: 'Tarvitsen apua',       css: 'intent-tarvitsen' },
             tarjoan_apua:       { emoji: '??', label: 'Tarjoan apua',         css: 'intent-tarjoan' },
-            etsin_seuraa:       { emoji: '??', label: 'Etsin samanhenkisi‰',  css: 'intent-etsin' },
+            etsin_seuraa:       { emoji: '??', label: 'Etsin samanhenkisi√§',  css: 'intent-etsin' },
             perustetaan_projekti: { emoji: '??', label: 'Perustetaan projekti', css: 'intent-perustan' },
-            // Taaksep‰in yhteensopivuus vanhalle formaatille
+            // Taaksep√§in yhteensopivuus vanhalle formaatille
             tarjoan:            { emoji: '??', label: 'Tarjoan apua',         css: 'intent-tarjoan' },
             tarvitsen:          { emoji: '??', label: 'Tarvitsen apua',       css: 'intent-tarvitsen' },
         };
@@ -377,13 +377,13 @@
                 document.getElementById('ilm-list-container').innerHTML = `
                     <div class="ilm-empty">
                         <div class="ilm-empty-icon">??</div>
-                        <p>Ilmoitusten lataus ep‰onnistui. Tarkista verkkoyhteys.</p>
+                        <p>Ilmoitusten lataus ep√§onnistui. Tarkista verkkoyhteys.</p>
                     </div>`;
             }
         }
 
         function buildTagFilters(sanapilvi) {
-            // Lis‰t‰‰n dynaamiset tagit suodatuspalkkiin
+            // Lis√§t√§√§n dynaamiset tagit suodatuspalkkiin
             const bar = document.querySelector('.filter-inner');
             const tags = Object.keys(sanapilvi).slice(0, 8); // Max 8 tagia
             if (tags.length === 0) return;
@@ -469,8 +469,8 @@
                 container.innerHTML = `
                     <div class="ilm-empty">
                         <div class="ilm-empty-icon">??</div>
-                        <p>Ei ilmoituksia t‰ll‰ hakuehdolla.</p>
-                        <a href="ilmoittaudu.html" style="color:var(--primary); font-weight:600;">Ole ensimm‰inen ñ j‰t‰ ilmoitus ?</a>
+                        <p>Ei ilmoituksia t√§ll√§ hakuehdolla.</p>
+                        <a href="ilmoittaudu.html" style="color:var(--primary); font-weight:600;">Ole ensimm√§inen ‚Äì j√§t√§ ilmoitus ?</a>
                     </div>`;
                 return;
             }
@@ -491,7 +491,7 @@
                     <div class="ilm-intent-badge">${meta.emoji}</div>
                     <div class="ilm-card-meta">
                         <div class="ilm-card-title">${escHtml(ilm.otsikko || 'Ilmoitus')}</div>
-                        <div class="ilm-card-date">?? ${date} ∑ ${escHtml(ilm.nimi || 'Anonyymi')}</div>
+                        <div class="ilm-card-date">?? ${date} ¬∑ ${escHtml(ilm.nimi || 'Anonyymi')}</div>
                         <div class="ilm-card-tags">
                             ${tagit.map(t => `<span class="ilm-tag-pill">${escHtml(tagLabel(t))}</span>`).join('')}
                         </div>
@@ -502,7 +502,7 @@
                     <div class="ilm-card-body-inner">
                         ${kuvaus}
                         <button class="ilm-contact-btn" onclick="revealContact(this, '${escHtml(ilm.yhteys || '')}', '${escHtml(ilm.nimi || '')}')">
-                            ?? N‰yt‰ yhteystieto
+                            ?? N√§yt√§ yhteystieto
                         </button>
                     </div>
                 </div>
@@ -518,8 +518,8 @@
             if (!yhteys) {
                 btn.insertAdjacentHTML('afterend', `
                     <div class="ilm-contact-revealed">
-                        <strong>${escHtml(nimi)}</strong> ei ole j‰tt‰nyt julkista yhteystietoa.<br>
-                        <small>Voit kokeilla hakea palveluverkoston kautta tai j‰tt‰‰ oman ilmoituksen.</small>
+                        <strong>${escHtml(nimi)}</strong> ei ole j√§tt√§nyt julkista yhteystietoa.<br>
+                        <small>Voit kokeilla hakea palveluverkoston kautta tai j√§tt√§√§ oman ilmoituksen.</small>
                     </div>`);
             } else {
                 btn.insertAdjacentHTML('afterend', `
