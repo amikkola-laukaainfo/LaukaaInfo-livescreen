@@ -574,10 +574,9 @@ async function renderRelations(relations, actors, companiesData = [], needsData 
     let suggestedHtml = '';
     let needsHtml = '';
     
-    // Yhdistetään old-school PARTICIPATES_IN (entity_relations) ja uudet project_actors
-    // Varmistetaan ettei tule duplikaatteja
     const renderedCompanyIds = new Set();
-    
+    const activeActorCards = [];
+
     // --- 1. Käsittele uudet project_actors (etusijalla) ---
     actors.forEach(actor => {
         if (actor.actor_type === 'COMPANY') {
@@ -586,59 +585,59 @@ async function renderRelations(relations, actors, companiesData = [], needsData 
                 renderedCompanyIds.add(externalId);
                 const compObj = companiesData.find(c => c.id === externalId);
                 const companyName = compObj?.name || 'Yritys';
-                const roleHtml = actor.project_role ? `<div style="font-size:0.85rem; color:var(--text-muted);">${actor.project_role}</div>` : '';
-                companiesHtml += `
-                    <a href="yrityskortti.html?id=${externalId}" class="list-item-card">
+                const roleHtml = actor.project_role ? `<div style="font-size:0.85rem; color:var(--text-muted); font-weight:500;">${escapeHtml(actor.project_role)}</div>` : '';
+                activeActorCards.push(`
+                    <a href="yrityskortti.html?id=${externalId}" class="list-item-card" style="border-left: 4px solid #10b981;">
                         <div class="card-header-grid">
                             <div>
-                                <div style="font-size:0.8rem; text-transform:uppercase; color:#10b981; font-weight:700; margin-bottom:0.2rem;">🏢 Yritys</div>
-                                <h3 style="margin:0; font-size:1.05rem">${companyName}</h3>
+                                <div style="font-size:0.75rem; text-transform:uppercase; color:#10b981; font-weight:700; margin-bottom:0.2rem;">🏢 Mukana oleva yritys</div>
+                                <h3 style="margin:0; font-size:1.05rem; font-weight:700;">${escapeHtml(companyName)}</h3>
                                 ${roleHtml}
                             </div>
                             <span class="iconify" style="color:#10b981; font-size:1.2rem;" data-icon="material-symbols:open-in-new"></span>
                         </div>
                     </a>
-                `;
+                `);
             }
         } else if (actor.actor_type === 'ORG') {
             const org = actor.organization;
             if (org) {
                 const icon = org.org_type === 'MUNICIPALITY' ? '🏛️' : (org.org_type === 'ASSOCIATION' ? '🤝' : '🏢');
                 const typeText = org.org_type === 'MUNICIPALITY' ? 'Kunta' : (org.org_type === 'ASSOCIATION' ? 'Yhdistys' : 'Organisaatio');
-                const roleHtml = actor.project_role ? `<div style="font-size:0.85rem; color:var(--text-muted);">${actor.project_role}</div>` : '';
-                companiesHtml += `
-                    <div class="list-item-card">
-                        <div style="font-size:0.8rem; text-transform:uppercase; color:#8b5cf6; font-weight:700; margin-bottom:0.2rem;">${icon} ${typeText}</div>
-                        <h3 style="margin:0; font-size:1.05rem">${org.name}</h3>
+                const roleHtml = actor.project_role ? `<div style="font-size:0.85rem; color:var(--text-muted); font-weight:500;">${escapeHtml(actor.project_role)}</div>` : '';
+                activeActorCards.push(`
+                    <div class="list-item-card" style="border-left: 4px solid #8b5cf6;">
+                        <div style="font-size:0.75rem; text-transform:uppercase; color:#8b5cf6; font-weight:700; margin-bottom:0.2rem;">${icon} ${typeText}</div>
+                        <h3 style="margin:0; font-size:1.05rem; font-weight:700;">${escapeHtml(org.name)}</h3>
                         ${roleHtml}
                     </div>
-                `;
+                `);
             }
         } else if (actor.actor_type === 'PERSON') {
             const user = actor.user_profile;
-            // project_actors RLS pitäisi taata että saamme vain sallitut (show_in_project=true)
-            if (user && actor.show_in_project) {
-                const parts = (user.name || '').trim().split(" ");
-                const shortName = parts.length >= 2 ? parts[0] + " " + parts[parts.length-1].charAt(0) + "." : (user.name || "Käyttäjä");
-                const roleHtml = actor.project_role ? `<div style="font-size:0.85rem; color:var(--text-muted);">${actor.project_role}</div>` : '';
+            if (user && (actor.show_in_project || actor.status === 'ACTIVE')) {
+                const nameStr = user.full_name || user.name || user.username || "Osallistuja";
+                const parts = nameStr.trim().split(" ");
+                const shortName = parts.length >= 2 ? parts[0] + " " + parts[parts.length-1].charAt(0) + "." : nameStr;
+                const roleHtml = actor.project_role ? `<div style="font-size:0.85rem; color:#3b82f6; font-weight:600;">${escapeHtml(actor.project_role)}</div>` : '';
                 const skillsHtml = user.skills && user.skills.length > 0 
-                    ? `<div style="margin-top:0.5rem; font-size:0.85rem; color:var(--text-muted);">${user.skills.slice(0,3).join(' · ')}</div>` : '';
-                const locationHtml = user.location ? `<div style="margin-top:0.3rem; font-size:0.8rem; color:var(--text-muted);">📍 ${user.location}</div>` : '';
+                    ? `<div style="margin-top:0.35rem; font-size:0.82rem; color:var(--text-muted);">${escapeHtml(user.skills.slice(0,3).join(' · '))}</div>` : '';
+                const locationHtml = user.location ? `<div style="margin-top:0.25rem; font-size:0.8rem; color:var(--text-muted);">📍 ${escapeHtml(user.location)}</div>` : '';
                 
-                companiesHtml += `
-                    <div class="list-item-card">
-                        <div style="font-size:0.8rem; text-transform:uppercase; color:#3b82f6; font-weight:700; margin-bottom:0.2rem;">👤 Yksityinen osallistuja</div>
-                        <h3 style="margin:0; font-size:1.05rem">${shortName}</h3>
+                activeActorCards.push(`
+                    <div class="list-item-card" style="border-left: 4px solid #3b82f6;">
+                        <div style="font-size:0.75rem; text-transform:uppercase; color:#3b82f6; font-weight:700; margin-bottom:0.2rem;">👤 Osallistuja</div>
+                        <h3 style="margin:0; font-size:1.05rem; font-weight:700;">${escapeHtml(shortName)}</h3>
                         ${roleHtml}
                         ${skillsHtml}
                         ${locationHtml}
                     </div>
-                `;
+                `);
             }
         }
     });
 
-    // --- 2. Käsittele vanhat entity_relations ---
+    // --- 2. Käsittele vanhat entity_relations (PARTICIPATES_IN, SUGGESTED_FOR, NEEDS, IDEA) ---
     relations.forEach(rel => {
         if (rel.source_type === 'COMPANY') {
             const compObj = companiesData.find(c => c.id === rel.source_id);
@@ -646,54 +645,121 @@ async function renderRelations(relations, actors, companiesData = [], needsData 
             const isParticipating = rel.relation_type === 'PARTICIPATES_IN';
             
             if (isParticipating && renderedCompanyIds.has(rel.source_id)) {
-                return; // Jo renderöity project_actors kautta
+                return;
             }
             
             const card = `
-                <a href="yrityskortti.html?id=${rel.source_id}" class="list-item-card">
+                <a href="yrityskortti.html?id=${rel.source_id}" class="list-item-card" style="border-left: 4px solid #10b981;">
                     <div class="card-header-grid">
-                        <h3 style="margin:0; font-size:1.05rem">${companyName}</h3>
+                        <div>
+                            <div style="font-size:0.75rem; text-transform:uppercase; color:#10b981; font-weight:700; margin-bottom:0.2rem;">🏢 Yritys</div>
+                            <h3 style="margin:0; font-size:1.05rem">${escapeHtml(companyName)}</h3>
+                        </div>
                         <span class="iconify" style="color:#10b981; font-size:1.2rem;" data-icon="material-symbols:open-in-new"></span>
-                    </div>
-                    <div style="margin-top:0.75rem;">
-                        <span style="display:inline-block;padding:0.3rem 0.8rem;background:#10b981;color:white;border-radius:50px;font-size:0.8rem;font-weight:700;">Tutustu →</span>
                     </div>
                 </a>
             `;
             if (isParticipating) {
-                companiesHtml += card;
+                activeActorCards.push(card);
                 renderedCompanyIds.add(rel.source_id);
             } else if (rel.relation_type === 'SUGGESTED_FOR') {
                 suggestedHtml += card;
             }
         } else if (rel.source_type === 'NEED') {
             const needObj = needsData.find(n => n.id === rel.source_id);
-            const needTitle = needObj?.title || rel.metadata?.title || 'Tarve';
+            const needTitle = needObj?.title || rel.metadata?.title || rel.target_id || 'Tarve';
+            const compModel = rel.compensation_model || rel.metadata?.compensation_model;
+            
+            let compBadge = '';
+            if (compModel === 'PAID') compBadge = '<span style="font-size:0.75rem; font-weight:700; color:#047857; background:#dcfce7; padding:0.2rem 0.6rem; border-radius:50px;">💰 Maksettu</span>';
+            else if (compModel === 'VOLUNTEER') compBadge = '<span style="font-size:0.75rem; font-weight:700; color:#1e40af; background:#dbeafe; padding:0.2rem 0.6rem; border-radius:50px;">🤝 Vapaaehtoinen</span>';
+            else if (compModel === 'TALENT') compBadge = '<span style="font-size:0.75rem; font-weight:700; color:#6b21a8; background:#f3e8ff; padding:0.2rem 0.6rem; border-radius:50px;">🎓 Osaaminen</span>';
+
+            let needIcon = '📣';
+            const lowerTitle = needTitle.toLowerCase();
+            if (lowerTitle.includes('video') || lowerTitle.includes('kuva')) needIcon = '🎥';
+            else if (lowerTitle.includes('ääni') || lowerTitle.includes('podcast') || lowerTitle.includes('musiikki')) needIcon = '🎙️';
+            else if (lowerTitle.includes('digit') || lowerTitle.includes('arkisto')) needIcon = '📼';
+            else if (lowerTitle.includes('edit') || lowerTitle.includes('koodi') || lowerTitle.includes('web')) needIcon = '🧑‍💻';
+            else if (lowerTitle.includes('idea')) needIcon = '💡';
+
             needsHtml += `
-                <div class="list-item-card" style="border-left: 4px solid #f59e0b;">
-                    <div style="font-size:0.8rem; text-transform:uppercase; color:#d97706; font-weight:700; margin-bottom:0.2rem;">Etsitään</div>
-                    <h3 style="margin:0; font-size:1.1rem; color:#1e293b;">${needTitle}</h3>
+                <div class="list-item-card" style="border-left: 4px solid #ef4444; display: flex; flex-direction: column; justify-content: space-between; gap: 0.75rem;">
+                    <div>
+                        <div style="display:flex; items-center; justify-content:space-between; gap:0.5rem; margin-bottom:0.4rem;">
+                            <span style="font-size:0.75rem; text-transform:uppercase; color:#dc2626; font-weight:700;">${needIcon} Tarve</span>
+                            ${compBadge}
+                        </div>
+                        <h3 style="margin:0; font-size:1.05rem; font-weight:700; color:#0f172a;">${escapeHtml(needTitle)}</h3>
+                    </div>
+                    <div style="margin-top:0.25rem;">
+                        <a href="https://play.google.com/store/apps/details?id=com.mediazoo.mixonet&hl=fi" target="_blank" rel="noopener" style="font-size:0.82rem; font-weight:700; color:#ef4444; text-decoration:none; display:inline-flex; align-items:center; gap:0.3rem;">
+                            Voin auttaa tässä / Osallistu Mixonetissa →
+                        </a>
+                    </div>
                 </div>
             `;
         } else if (rel.source_type === 'IDEA') {
             const ideaTitle = rel.metadata?.title || 'Idea';
             ideasHtml += `
                 <div class="list-item-card" style="border-left: 4px solid #3b82f6;">
-                    <div style="font-size:0.8rem; text-transform:uppercase; color:#2563eb; font-weight:700; margin-bottom:0.2rem;">Idea</div>
-                    <h3 style="margin:0; font-size:1.1rem; color:#1e293b;">${ideaTitle}</h3>
+                    <div style="font-size:0.75rem; text-transform:uppercase; color:#2563eb; font-weight:700; margin-bottom:0.2rem;">💡 Idea</div>
+                    <h3 style="margin:0; font-size:1.05rem; font-weight:700; color:#0f172a;">${escapeHtml(ideaTitle)}</h3>
                 </div>
             `;
         }
     });
 
-    if (settings.show_participating === false) companiesHtml = '';
+    if (settings.show_participating === false) activeActorCards.length = 0;
     if (settings.show_suggested === false) suggestedHtml = '';
     if (settings.show_needs === false) needsHtml = '';
 
-    // Yritykset
-    if (companiesHtml) {
-        if (companiesList) companiesList.innerHTML = companiesHtml;
-        if (companiesSection) companiesSection.style.display = 'block';
+    // Renderöi "Projektissa mukana"
+    const activeCount = activeActorCards.length;
+    const interestedCount = actors.filter(a => a.status === 'PENDING').length;
+
+    if (activeCount > 0 || interestedCount > 0) {
+        const maxDisplay = 5;
+        const displayedCards = activeActorCards.slice(0, maxDisplay).join('');
+        const extraCount = activeCount > maxDisplay ? activeCount - maxDisplay : 0;
+
+        const extraHtml = extraCount > 0 ? `
+            <div style="padding: 0.75rem 1rem; background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1; text-align: center; font-size: 0.85rem; font-weight: 700; color: #64748b;">
+                + ${extraCount} muuta osallistujaa
+            </div>
+        ` : '';
+
+        const badgeText = `${activeCount} osallistujaa${interestedCount > 0 ? ` · ${interestedCount} kiinnostunutta` : ''}`;
+
+        const headerBlock = `
+            <div style="margin-bottom: 1rem;">
+                <h2 style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0; margin-bottom: 0.4rem; font-family: Outfit, sans-serif;">
+                    <span class="iconify" style="color: #10b981;" data-icon="material-symbols:group-outline"></span>
+                    Projektissa mukana
+                </h2>
+                <div style="display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.4rem;">
+                    <span style="font-size: 0.82rem; font-weight: 700; color: #047857; background: #ecfdf5; padding: 0.25rem 0.75rem; border-radius: 50px; border: 1px solid #a7f3d0;">
+                        ${badgeText}
+                    </span>
+                </div>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0; font-weight: 500; line-height: 1.4;">
+                    🌱 Verkosto rakentuu parhaillaan. Osallistumisen hallinta tapahtuu Mixonet-sovelluksessa.
+                </p>
+            </div>
+        `;
+
+        const footerCta = `
+            <div style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid #f1f5f9; text-align: right;">
+                <a href="https://play.google.com/store/apps/details?id=com.mediazoo.mixonet&hl=fi" target="_blank" rel="noopener" style="font-size: 0.85rem; font-weight: 700; color: #10b981; text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem;">
+                    Tutustu ja osallistu Mixonetissa →
+                </a>
+            </div>
+        `;
+
+        if (companiesSection) {
+            companiesSection.innerHTML = headerBlock + (displayedCards ? `<div class="list-grid">${displayedCards}${extraHtml}</div>` : '') + footerCta;
+            companiesSection.style.display = 'block';
+        }
     } else {
         if (companiesSection) companiesSection.style.display = 'none';
     }
