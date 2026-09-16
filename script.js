@@ -2335,11 +2335,15 @@ function showSuggestions() {
 
     // 2. Collect Categories and Tags from context
     const categories = [...new Set(companiesInContext.map(c => c.kategoria))].filter(Boolean);
-    const tags = [...new Set(companiesInContext.flatMap(c => {
+    const rawTags = companiesInContext.flatMap(c => {
         const profilingSubContexts = c.profiling?.core?.sub_contexts || [];
         const combined = `${c.tags || ''},${c.palvelutapa || ''},${profilingSubContexts.join(',')}`;
         return combined.split(',').map(t => t.trim()).filter(Boolean);
-    }))];
+    });
+
+    const tags = [...new Set(rawTags)]
+        .map(t => (t.toLowerCase() === 'catering' ? 'pitopalvelu' : t))
+        .filter(t => !isTechnicalOrRawCodeTag(t));
 
     // 3. Match Categories
     const catMatches = categories
@@ -2348,7 +2352,7 @@ function showSuggestions() {
 
     // 4. Match Tags (from live data)
     const tagMatches = tags
-        .filter(t => t.toLowerCase().includes(searchTerm))
+        .filter(t => !isTechnicalOrRawCodeTag(t) && t.toLowerCase().includes(searchTerm))
         .map(t => ({ type: 'tag', name: t, region: contextRegion?.id }));
 
     let mixedCatTags = [...catMatches, ...tagMatches];
@@ -2356,7 +2360,7 @@ function showSuggestions() {
     // 4b. Match Pre-defined Tags (from search_tags.js)
     if (typeof SEARCH_TAG_LIST !== 'undefined') {
         const preDefinedMatches = SEARCH_TAG_LIST
-            .filter(t => t.term.toLowerCase().includes(searchTerm))
+            .filter(t => !isTechnicalOrRawCodeTag(t.term) && t.term.toLowerCase().includes(searchTerm))
             .map(t => ({ type: 'tag', name: t.term, category: t.category }));
         
         // Add unique matches only
@@ -3593,6 +3597,34 @@ function locateOnMap(lat, lon, companyId) {
 
 let v4ActiveThemesCache = [];
 
+function isTechnicalOrRawCodeTag(term) {
+    if (!term || typeof term !== 'string') return true;
+    const t = term.trim();
+    if (t.length < 2) return true;
+    if (t.includes('_')) return true;
+    if (/^(BIZ|OPT|EVT|INTENT|CAPABILITY|ROLE)[-_]/i.test(t)) return true;
+    if (t.toLowerCase() === 'catering') return true;
+    if (/^[A-Z0-9_-]{4,}$/.test(t) && !['LVI', 'IT', 'LKI', 'Y-TUNNUS', 'GPS'].includes(t)) return true;
+    return false;
+}
+
+function formatThemeName(t) {
+    if (!t) return '';
+    const rawId = (t.tag_id || t.id || '').toString();
+    const rawName = (t.name || t.term || '').toString();
+    
+    if (rawId === 'BIZ_CATERING' || rawId.toLowerCase() === 'catering' || rawName.toLowerCase() === 'catering') {
+        return 'Pitopalvelu';
+    }
+    if (rawName && !isTechnicalOrRawCodeTag(rawName)) {
+        return rawName;
+    }
+    if (rawId && !isTechnicalOrRawCodeTag(rawId)) {
+        return rawId;
+    }
+    return '';
+}
+
 async function initV4Themes() {
     const container = document.getElementById('v4-themes-list');
     if (!container) return;
@@ -3619,7 +3651,10 @@ async function initV4Themes() {
 
         v4ActiveThemesCache = themes;
 
-        const activeThemes = themes.filter(t => (t.places_count || 0) > 0 || (t.media_count || 0) > 0);
+        const activeThemes = themes.filter(t => {
+            const name = formatThemeName(t);
+            return name && !isTechnicalOrRawCodeTag(name) && ((t.places_count || 0) > 0 || (t.media_count || 0) > 0);
+        });
         if (activeThemes.length === 0) {
             container.innerHTML = '<span style="color:#94a3b8;font-size:0.85rem;">Ei vielä julkisia näkökulmia.</span>';
             return;
@@ -3630,7 +3665,7 @@ async function initV4Themes() {
         const colors = ['#059669','#0284c7','#d97706','#7c3aed','#db2777','#0891b2','#16a34a','#b45309'];
 
         container.innerHTML = shuffled.map((t, idx) => {
-            const name = t.name || t.tag_id;
+            const name = formatThemeName(t);
             const color = colors[idx % colors.length];
             return `<a href="teema.html?tag=${encodeURIComponent(t.tag_id)}"
                 style="display:inline-flex;align-items:center;gap:0.35rem;padding:0.45rem 0.9rem;background:${color}12;color:${color};border:1.5px solid ${color}30;border-radius:50px;font-size:0.85rem;font-weight:700;text-decoration:none;transition:all 0.2s;"
@@ -3736,8 +3771,10 @@ async function performV4Search(query, dropdown) {
     const qNorm = normalizeForSearch(q);
 
     const matchedThemes = (v4ActiveThemesCache || []).filter(t => {
-        const name = (t.name || t.tag_id).toLowerCase();
-        return name.includes(q) || normalizeForSearch(name).includes(qNorm);
+        const name = formatThemeName(t);
+        if (!name || isTechnicalOrRawCodeTag(name)) return false;
+        const nameLower = name.toLowerCase();
+        return nameLower.includes(q) || normalizeForSearch(nameLower).includes(qNorm);
     }).slice(0, 3);
 
     let matchedPlaces = [];
@@ -3797,9 +3834,10 @@ async function performV4Search(query, dropdown) {
     if (matchedThemes.length > 0) {
         html += `<div style="font-size: 0.75rem; font-weight: 800; color: #059669; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem;">🌲 NÄKÖKULMAT</div>`;
         matchedThemes.forEach(t => {
+            const displayName = formatThemeName(t) || t.name || t.tag_id;
             html += `
                 <a href="teema.html?tag=${encodeURIComponent(t.tag_id)}" style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0.75rem; border-radius: 6px; text-decoration: none; color: #1e293b; font-size: 0.95rem; font-weight: 600;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
-                    <span>🌲 ${escapeHtml(t.name || t.tag_id)}</span>
+                    <span>🌲 ${escapeHtml(displayName)}</span>
                     <span style="font-size: 0.8rem; color: #64748b;">📍 ${t.places_count || 0}</span>
                 </a>
             `;
@@ -3912,8 +3950,10 @@ async function openV4SearchModal(query) {
     const qNorm = normalizeForSearch(q);
 
     const matchedThemes = (v4ActiveThemesCache || []).filter(t => {
-        const name = (t.name || t.tag_id).toLowerCase();
-        return name.includes(q) || normalizeForSearch(name).includes(qNorm);
+        const name = formatThemeName(t);
+        if (!name || isTechnicalOrRawCodeTag(name)) return false;
+        const nameLower = name.toLowerCase();
+        return nameLower.includes(q) || normalizeForSearch(nameLower).includes(qNorm);
     });
 
     let matchedPlaces = [];
