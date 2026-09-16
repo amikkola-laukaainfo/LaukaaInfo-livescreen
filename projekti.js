@@ -308,11 +308,11 @@ async function loadProject(projectId) {
             detailsEl.innerHTML = detailsHtml;
         }
 
-        // Hae projektiin liittyvät asiat entity_relations taulusta (vanha PARTICIPATES_IN, yms)
+        // Hae projektiin liittyvät asiat entity_relations taulusta (sekä source että target)
         const { data: relations, error: relError } = await mixonetClient
             .from('entity_relations')
             .select('*')
-            .eq('target_id', projectId);
+            .or(`target_id.eq.${projectId},source_id.eq.${projectId}`);
 
         // UUSI: Hae project_actors taulusta osallistujat
         let actors = [];
@@ -355,7 +355,7 @@ async function loadProject(projectId) {
         } else if ((relations && relations.length > 0) || (actors && actors.length > 0)) {
             // Hae yritysten ja tarpeiden nimet kannasta, jotta ei näytetä pelkkiä UUID:itä
             const companyIds = relations ? relations.filter(r => r.source_type === 'COMPANY').map(r => r.source_id) : [];
-            const needIds = relations ? relations.filter(r => r.source_type === 'NEED').map(r => r.source_id) : [];
+            const needIds = relations ? relations.filter(r => r.source_type === 'NEED' || r.relation_type === 'NEEDS').map(r => r.target_id || r.source_id).filter(Boolean) : [];
             
             // Lisää project_actors company_external_id:t listaan, jos ne on COMPANY
             if (actors) {
@@ -389,8 +389,18 @@ async function loadProject(projectId) {
                 });
             }
             if (needIds.length > 0) {
-                const { data } = await mixonetClient.from('opportunities').select('id, title').in('id', needIds);
-                if (data) needsData = data;
+                const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+                const validUuids = needIds.filter(id => uuidRegex.test(id));
+                if (validUuids.length > 0) {
+                    const [oppRes, taxRes] = await Promise.all([
+                        mixonetClient.from('opportunities').select('id, title').in('id', validUuids),
+                        mixonetClient.from('taxonomy').select('id, label').in('id', validUuids)
+                    ]);
+                    if (oppRes.data) needsData.push(...oppRes.data);
+                    if (taxRes.data) {
+                        taxRes.data.forEach(t => needsData.push({ id: t.id, title: t.label }));
+                    }
+                }
             }
 
             renderRelations(relations || [], actors || [], companiesData, needsData, settings);
@@ -665,9 +675,16 @@ async function renderRelations(relations, actors, companiesData = [], needsData 
             } else if (rel.relation_type === 'SUGGESTED_FOR') {
                 suggestedHtml += card;
             }
-        } else if (rel.source_type === 'NEED') {
-            const needObj = needsData.find(n => n.id === rel.source_id);
-            const needTitle = needObj?.title || rel.metadata?.title || rel.target_id || 'Tarve';
+        } else if (rel.source_type === 'NEED' || rel.relation_type === 'NEEDS') {
+            const targetId = rel.target_id || rel.source_id;
+            const needObj = needsData.find(n => n.id === targetId);
+            let needTitle = needObj?.title || needObj?.label || rel.metadata?.title || rel.metadata?.label || targetId || 'Tarve';
+            
+            // Jos targetId on custom label eikä UUID, käytetään sitä jos ei muuta löytynyt
+            if (!needObj && targetId && !targetId.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)) {
+                needTitle = targetId;
+            }
+
             const compModel = rel.compensation_model || rel.metadata?.compensation_model;
             
             let compBadge = '';
@@ -676,7 +693,7 @@ async function renderRelations(relations, actors, companiesData = [], needsData 
             else if (compModel === 'TALENT') compBadge = '<span style="font-size:0.75rem; font-weight:700; color:#6b21a8; background:#f3e8ff; padding:0.2rem 0.6rem; border-radius:50px;">🎓 Osaaminen</span>';
 
             let needIcon = '📣';
-            const lowerTitle = needTitle.toLowerCase();
+            const lowerTitle = String(needTitle).toLowerCase();
             if (lowerTitle.includes('video') || lowerTitle.includes('kuva')) needIcon = '🎥';
             else if (lowerTitle.includes('ääni') || lowerTitle.includes('podcast') || lowerTitle.includes('musiikki')) needIcon = '🎙️';
             else if (lowerTitle.includes('digit') || lowerTitle.includes('arkisto')) needIcon = '📼';
@@ -686,7 +703,7 @@ async function renderRelations(relations, actors, companiesData = [], needsData 
             needsHtml += `
                 <div class="list-item-card" style="border-left: 4px solid #ef4444; display: flex; flex-direction: column; justify-content: space-between; gap: 0.75rem;">
                     <div>
-                        <div style="display:flex; items-center; justify-content:space-between; gap:0.5rem; margin-bottom:0.4rem;">
+                        <div style="display:flex; align-items:center; justify-content:space-between; gap:0.5rem; margin-bottom:0.4rem;">
                             <span style="font-size:0.75rem; text-transform:uppercase; color:#dc2626; font-weight:700;">${needIcon} Tarve</span>
                             ${compBadge}
                         </div>
