@@ -84,10 +84,10 @@ async function loadProject(projectId) {
         if (settings.show_description !== false) {
             let descContent = '';
             if (projectData.summary && projectData.summary.trim() !== '') {
-                descContent += `<p style="font-weight: 600; font-size: 1.15rem; color: #1e293b; margin-bottom: 1rem;">${escapeHtml(projectData.summary)}</p>`;
+                descContent += `<p style="font-weight: 600; font-size: 1.15rem; color: #1e293b; margin-bottom: 1.25rem;">${escapeHtml(projectData.summary)}</p>`;
             }
             if (projectData.description && projectData.description.trim() !== '') {
-                descContent += `<p style="font-size: 1.05rem; line-height: 1.7; color: #334155;">${escapeHtml(projectData.description).replace(/\n/g, '<br>')}</p>`;
+                descContent += formatLongText(projectData.description);
             }
             document.getElementById('project-full-desc').innerHTML = descContent || 'Ei kuvausta saatavilla.';
         } else if (descSection) {
@@ -98,7 +98,7 @@ async function loadProject(projectId) {
         const challengeSection = document.getElementById('challenge-section');
         if (challengeSection) {
             if (projectData.challenge && projectData.challenge.trim() !== '') {
-                document.getElementById('project-challenge-text').innerHTML = escapeHtml(projectData.challenge).replace(/\n/g, '<br>');
+                document.getElementById('project-challenge-text').innerHTML = formatLongText(projectData.challenge);
                 challengeSection.style.display = 'block';
             } else {
                 challengeSection.style.display = 'none';
@@ -109,7 +109,7 @@ async function loadProject(projectId) {
         const goalsSection = document.getElementById('goals-section');
         if (goalsSection) {
             if (projectData.goal_custom && projectData.goal_custom.trim() !== '') {
-                document.getElementById('project-goals-text').innerHTML = escapeHtml(projectData.goal_custom).replace(/\n/g, '<br>');
+                document.getElementById('project-goals-text').innerHTML = formatLongText(projectData.goal_custom);
                 goalsSection.style.display = 'block';
             } else {
                 goalsSection.style.display = 'none';
@@ -120,7 +120,7 @@ async function loadProject(projectId) {
         const benSection = document.getElementById('beneficiary-section');
         if (benSection) {
             if (projectData.beneficiary && projectData.beneficiary.trim() !== '') {
-                document.getElementById('project-beneficiary-text').innerHTML = escapeHtml(projectData.beneficiary).replace(/\n/g, '<br>');
+                document.getElementById('project-beneficiary-text').innerHTML = formatLongText(projectData.beneficiary);
                 benSection.style.display = 'block';
             } else {
                 benSection.style.display = 'none';
@@ -915,3 +915,42 @@ function escapeHtml(str) {
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
 }
+
+/**
+ * Muotoilee pitkän tekstikentän (description, challenge, goals, beneficiary)
+ * kappaleiksi (<p>), listoiksi (<ul>/<ol>) ja rivivaihdoiksi (<br>) turvallisesti.
+ */
+function formatLongText(text) {
+    if (!text || typeof text !== 'string') return '';
+    const cleanText = text.trim();
+    if (!cleanText) return '';
+
+    // Jaa teksti osioihin kahden tai useamman peräkkäisen rivivaihdon perusteella (tyhjä rivi kappaleiden välissä)
+    const blocks = cleanText.split(/\n\s*\n/);
+
+    const formattedBlocks = blocks.map(block => {
+        const trimmedBlock = block.trim();
+        if (!trimmedBlock) return '';
+
+        const lines = trimmedBlock.split('\n');
+
+        // Tarkista onko kpl kokonaan ranskalaisten viivojen tai numerolistan muotoinen
+        const isBulletList = lines.length > 0 && lines.every(l => /^\s*[\-\*\•]\s+/.test(l));
+        const isNumberedList = lines.length > 0 && lines.every(l => /^\s*\d+[\.\)]\s+/.test(l));
+
+        if (isBulletList) {
+            const items = lines.map(l => `<li>${escapeHtml(l.replace(/^\s*[\-\*\•]\s+/, ''))}</li>`).join('');
+            return `<ul class="formatted-list">${items}</ul>`;
+        } else if (isNumberedList) {
+            const items = lines.map(l => `<li>${escapeHtml(l.replace(/^\s*\d+[\.\)]\s+/, ''))}</li>`).join('');
+            return `<ol class="formatted-list">${items}</ol>`;
+        }
+
+        // Tavanomainen tekstikappale: yksittäiset rivivaihdot korvataan <br>-tagilla
+        const formattedParagraph = lines.map(l => escapeHtml(l.trim())).join('<br>');
+        return `<p>${formattedParagraph}</p>`;
+    });
+
+    return `<div class="formatted-text-content">${formattedBlocks.join('')}</div>`;
+}
+
