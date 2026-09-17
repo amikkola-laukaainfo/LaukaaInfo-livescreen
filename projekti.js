@@ -350,63 +350,99 @@ async function loadProject(projectId) {
             console.error("Virhe project_actors haussa", aErr);
         }
 
+        // Hae suorat tarpeet mixonet_needs ja opportunities -tauluista
+        let directProjectNeeds = [];
+        if (mixonetClient) {
+            try {
+                const { data: needsFromTable } = await mixonetClient
+                    .from('mixonet_needs')
+                    .select('*')
+                    .or(`project_id.eq.${projectId},entity_id.eq.${projectId}`);
+                if (needsFromTable && needsFromTable.length > 0) {
+                    directProjectNeeds.push(...needsFromTable);
+                }
+            } catch (e1) {
+                console.warn('mixonet_needs query error', e1);
+            }
+
+            try {
+                const { data: oppsFromTable } = await mixonetClient
+                    .from('opportunities')
+                    .select('*')
+                    .eq('project_id', projectId);
+                if (oppsFromTable && oppsFromTable.length > 0) {
+                    directProjectNeeds.push(...oppsFromTable);
+                }
+            } catch (e2) {
+                console.warn('opportunities query error', e2);
+            }
+        }
+
         if (relError) {
             console.error("Virhe relaatioiden haussa", relError);
-        } else if ((relations && relations.length > 0) || (actors && actors.length > 0)) {
-            // Hae yritysten ja tarpeiden nimet kannasta, jotta ei näytetä pelkkiä UUID:itä
-            const companyIds = relations ? relations.filter(r => r.source_type === 'COMPANY').map(r => r.source_id) : [];
-            const needIds = relations ? relations.filter(r => r.source_type === 'NEED' || r.relation_type === 'NEEDS').map(r => r.target_id || r.source_id).filter(Boolean) : [];
-            
-            // Lisää project_actors company_external_id:t listaan, jos ne on COMPANY
-            if (actors) {
-                actors.forEach(actor => {
-                    if (actor.actor_type === 'COMPANY' && actor.company_external_id && !companyIds.includes(actor.company_external_id)) {
-                        companyIds.push(actor.company_external_id);
-                    }
-                });
-            }
-
-            let companiesData = [];
-            let needsData = [];
-
-            if (companyIds.length > 0) {
-                // Erottele oikeat UUID:t ja ulkoiset ID:t (esim. 'company-2'), koska Supabase kaatuu jos UUID-kenttään syöttää tekstiä
-                const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-                const validUuids = companyIds.filter(id => uuidRegex.test(id));
-                const externalIds = companyIds.filter(id => !uuidRegex.test(id));
-
-                const promises = [];
-                if (validUuids.length > 0) promises.push(mixonetClient.from('companies').select('id, name').in('id', validUuids));
-                if (externalIds.length > 0) promises.push(mixonetClient.from('companies').select('external_id, name').in('external_id', externalIds));
-
-                const results = await Promise.all(promises);
-                results.forEach(res => {
-                    if (res.data) {
-                        // Mappaa external_id takaisin id-kenttään jotta renderöinti löytää sen
-                        const mapped = res.data.map(c => ({ id: c.id || c.external_id, name: c.name }));
-                        companiesData.push(...mapped);
-                    }
-                });
-            }
-            if (needIds.length > 0) {
-                const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-                const validUuids = needIds.filter(id => uuidRegex.test(id));
-                if (validUuids.length > 0) {
-                    const [oppRes, taxRes] = await Promise.all([
-                        mixonetClient.from('opportunities').select('id, title').in('id', validUuids),
-                        mixonetClient.from('taxonomy').select('id, label').in('id', validUuids)
-                    ]);
-                    if (oppRes.data) needsData.push(...oppRes.data);
-                    if (taxRes.data) {
-                        taxRes.data.forEach(t => needsData.push({ id: t.id, title: t.label }));
-                    }
-                }
-            }
-
-            renderRelations(relations || [], actors || [], companiesData, needsData, settings);
-        } else {
-            renderRelations([], [], [], [], settings);
         }
+
+        // Hae yritysten ja tarpeiden nimet kannasta
+        const companyIds = relations ? relations.filter(r => r.source_type === 'COMPANY').map(r => r.source_id) : [];
+        const rawNeedIds = relations ? relations.filter(r => r.source_type === 'NEED' || r.relation_type === 'NEEDS' || r.target_type === 'NEED' || r.relation_type === 'HAS_NEED').map(r => r.source_id === projectId ? r.target_id : r.source_id).filter(Boolean) : [];
+        const needIds = rawNeedIds.filter(id => id !== projectId);
+
+        // Lisää project_actors company_external_id:t listaan, jos ne on COMPANY
+        if (actors) {
+            actors.forEach(actor => {
+                if (actor.actor_type === 'COMPANY' && actor.company_external_id && !companyIds.includes(actor.company_external_id)) {
+                    companyIds.push(actor.company_external_id);
+                }
+            });
+        }
+
+        let companiesData = [];
+        let needsData = [...directProjectNeeds];
+
+        if (companyIds.length > 0) {
+            const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+            const validUuids = companyIds.filter(id => uuidRegex.test(id));
+            const externalIds = companyIds.filter(id => !uuidRegex.test(id));
+
+            const promises = [];
+            if (validUuids.length > 0) promises.push(mixonetClient.from('companies').select('id, name').in('id', validUuids));
+            if (externalIds.length > 0) promises.push(mixonetClient.from('companies').select('external_id, name').in('external_id', externalIds));
+
+            const results = await Promise.all(promises);
+            results.forEach(res => {
+                if (res.data) {
+                    const mapped = res.data.map(c => ({ id: c.id || c.external_id, name: c.name }));
+                    companiesData.push(...mapped);
+                }
+            });
+        }
+
+        if (needIds.length > 0) {
+            const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+            const validUuids = needIds.filter(id => uuidRegex.test(id));
+            const nonUuidLabels = needIds.filter(id => !uuidRegex.test(id));
+
+            if (validUuids.length > 0) {
+                const [oppRes, taxRes, mixRes] = await Promise.all([
+                    mixonetClient.from('opportunities').select('id, title, description, compensation_model').in('id', validUuids),
+                    mixonetClient.from('taxonomy').select('id, label').in('id', validUuids),
+                    mixonetClient.from('mixonet_needs').select('id, title, description, category, status').in('id', validUuids)
+                ]);
+                if (oppRes && oppRes.data) needsData.push(...oppRes.data);
+                if (taxRes && taxRes.data) {
+                    taxRes.data.forEach(t => needsData.push({ id: t.id, title: t.label }));
+                }
+                if (mixRes && mixRes.data) needsData.push(...mixRes.data);
+            }
+
+            nonUuidLabels.forEach(lbl => {
+                if (!needsData.some(n => n.id === lbl || n.title === lbl)) {
+                    needsData.push({ id: lbl, title: lbl });
+                }
+            });
+        }
+
+        renderRelations(relations || [], actors || [], companiesData, needsData, settings);
 
         // Hae teemat monesta lähteestä (theme_custom, theme_taxonomy_id, entity_relations -> THEME / TAXONOMY)
         try {
@@ -756,47 +792,6 @@ async function renderRelations(relations, actors, companiesData = [], needsData 
             } else if (rel.relation_type === 'SUGGESTED_FOR') {
                 suggestedHtml += card;
             }
-        } else if (rel.source_type === 'NEED' || rel.relation_type === 'NEEDS') {
-            const targetId = rel.target_id || rel.source_id;
-            const needObj = needsData.find(n => n.id === targetId);
-            let needTitle = needObj?.title || needObj?.label || rel.metadata?.title || rel.metadata?.label || targetId || 'Tarve';
-            
-            // Jos targetId on custom label eikä UUID, käytetään sitä jos ei muuta löytynyt
-            if (!needObj && targetId && !targetId.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)) {
-                needTitle = targetId;
-            }
-
-            const compModel = rel.compensation_model || rel.metadata?.compensation_model;
-            
-            let compBadge = '';
-            if (compModel === 'PAID') compBadge = '<span style="font-size:0.75rem; font-weight:700; color:#047857; background:#dcfce7; padding:0.2rem 0.6rem; border-radius:50px;">💰 Maksettu</span>';
-            else if (compModel === 'VOLUNTEER') compBadge = '<span style="font-size:0.75rem; font-weight:700; color:#1e40af; background:#dbeafe; padding:0.2rem 0.6rem; border-radius:50px;">🤝 Vapaaehtoinen</span>';
-            else if (compModel === 'TALENT') compBadge = '<span style="font-size:0.75rem; font-weight:700; color:#6b21a8; background:#f3e8ff; padding:0.2rem 0.6rem; border-radius:50px;">🎓 Osaaminen</span>';
-
-            let needIcon = '📣';
-            const lowerTitle = String(needTitle).toLowerCase();
-            if (lowerTitle.includes('video') || lowerTitle.includes('kuva')) needIcon = '🎥';
-            else if (lowerTitle.includes('ääni') || lowerTitle.includes('podcast') || lowerTitle.includes('musiikki')) needIcon = '🎙️';
-            else if (lowerTitle.includes('digit') || lowerTitle.includes('arkisto')) needIcon = '📼';
-            else if (lowerTitle.includes('edit') || lowerTitle.includes('koodi') || lowerTitle.includes('web')) needIcon = '🧑‍💻';
-            else if (lowerTitle.includes('idea')) needIcon = '💡';
-
-            needsHtml += `
-                <div class="list-item-card" style="border-left: 4px solid #ef4444; display: flex; flex-direction: column; justify-content: space-between; gap: 0.75rem;">
-                    <div>
-                        <div style="display:flex; align-items:center; justify-content:space-between; gap:0.5rem; margin-bottom:0.4rem;">
-                            <span style="font-size:0.75rem; text-transform:uppercase; color:#dc2626; font-weight:700;">${needIcon} Tarve</span>
-                            ${compBadge}
-                        </div>
-                        <h3 style="margin:0; font-size:1.05rem; font-weight:700; color:#0f172a;">${escapeHtml(needTitle)}</h3>
-                    </div>
-                    <div style="margin-top:0.25rem;">
-                        <a href="https://play.google.com/store/apps/details?id=com.mediazoo.mixonet&hl=fi" target="_blank" rel="noopener" style="font-size:0.82rem; font-weight:700; color:#ef4444; text-decoration:none; display:inline-flex; align-items:center; gap:0.3rem;">
-                            Voin auttaa tässä / Osallistu Mixonetissa →
-                        </a>
-                    </div>
-                </div>
-            `;
         } else if (rel.source_type === 'IDEA') {
             const ideaTitle = rel.metadata?.title || 'Idea';
             ideasHtml += `
@@ -806,6 +801,53 @@ async function renderRelations(relations, actors, companiesData = [], needsData 
                 </div>
             `;
         }
+    });
+
+    // --- 3. Käsittele kaikkien eri lähteiden tarpeet (needsData) ---
+    const renderedNeedTitles = new Set();
+
+    needsData.forEach(need => {
+        const needTitle = need.title || need.label || 'Tarve';
+        if (!needTitle || needTitle.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)) {
+            return;
+        }
+        const key = needTitle.toLowerCase().trim();
+        if (renderedNeedTitles.has(key)) return;
+        renderedNeedTitles.add(key);
+
+        const compModel = need.compensation_model || need.budget_type || need.urgency;
+        let compBadge = '';
+        if (compModel === 'PAID' || compModel === 'PAID_SERVICE') compBadge = '<span style="font-size:0.75rem; font-weight:700; color:#047857; background:#dcfce7; padding:0.2rem 0.6rem; border-radius:50px;">💰 Maksettu</span>';
+        else if (compModel === 'VOLUNTEER' || compModel === 'VOLUNTARY') compBadge = '<span style="font-size:0.75rem; font-weight:700; color:#1e40af; background:#dbeafe; padding:0.2rem 0.6rem; border-radius:50px;">🤝 Vapaaehtoinen</span>';
+        else if (compModel === 'TALENT' || compModel === 'SKILL') compBadge = '<span style="font-size:0.75rem; font-weight:700; color:#6b21a8; background:#f3e8ff; padding:0.2rem 0.6rem; border-radius:50px;">🎓 Osaaminen</span>';
+
+        let needIcon = '📣';
+        const lowerTitle = key;
+        if (lowerTitle.includes('video') || lowerTitle.includes('kuva')) needIcon = '🎥';
+        else if (lowerTitle.includes('ääni') || lowerTitle.includes('podcast') || lowerTitle.includes('musiikki')) needIcon = '🎙️';
+        else if (lowerTitle.includes('digit') || lowerTitle.includes('arkisto')) needIcon = '📼';
+        else if (lowerTitle.includes('edit') || lowerTitle.includes('koodi') || lowerTitle.includes('web')) needIcon = '🧑‍💻';
+        else if (lowerTitle.includes('idea')) needIcon = '💡';
+
+        const descHtml = need.description && need.description.trim() !== '' ? `<p style="margin:0.25rem 0 0; font-size:0.88rem; color:var(--text-muted); line-height:1.4;">${escapeHtml(need.description)}</p>` : '';
+
+        needsHtml += `
+            <div class="list-item-card" style="border-left: 4px solid #ef4444; display: flex; flex-direction: column; justify-content: space-between; gap: 0.75rem;">
+                <div>
+                    <div style="display:flex; align-items:center; justify-content:space-between; gap:0.5rem; margin-bottom:0.4rem;">
+                        <span style="font-size:0.75rem; text-transform:uppercase; color:#dc2626; font-weight:700;">${needIcon} Tarve</span>
+                        ${compBadge}
+                    </div>
+                    <h3 style="margin:0; font-size:1.05rem; font-weight:700; color:#0f172a;">${escapeHtml(needTitle)}</h3>
+                    ${descHtml}
+                </div>
+                <div style="margin-top:0.25rem;">
+                    <a href="https://play.google.com/store/apps/details?id=com.mediazoo.mixonet&hl=fi" target="_blank" rel="noopener" style="font-size:0.82rem; font-weight:700; color:#ef4444; text-decoration:none; display:inline-flex; align-items:center; gap:0.3rem;">
+                        Voin auttaa tässä / Osallistu Mixonetissa →
+                    </a>
+                </div>
+            </div>
+        `;
     });
 
     if (settings.show_participating === false) activeActorCards.length = 0;
