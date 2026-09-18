@@ -2753,21 +2753,29 @@ async function loadMixonetContentForPlace(placeData) {
     }
 
     const placeId = placeData.place_id;
-    if (!placeId) return;
+    const placeName = (placeData.name || placeData.canonical_name || '').trim();
+    if (!placeId && !placeName) return;
 
     try {
-        // 1. Hae rinnakkain:
-        //    a) Suorat projektit, joissa projects.place_id = target_place_id (Mixonet Android-sovelluksen kautta lisätyt)
-        //    b) Relaatiot get_entities_by_place RPC:llä (profiloinnin / entity_relations kautta kytketyt)
-        const [directProjectsRes, relationsRes] = await Promise.all([
-            mixonetClient
-                .from('projects')
-                .select('id, title, description, cover_image_url, is_published, visibility, status')
-                .eq('place_id', placeId),
-            mixonetClient
-                .rpc('get_entities_by_place', { target_place_id: placeId, min_weight: 0 })
-                .catch(err => ({ data: null, error: err }))
-        ]);
+        const placeIdFilter = [placeId, placeData.mixonet_place_id].filter(Boolean);
+
+        // Hae rinnakkain:
+        // 1. Suorat UUID-kytkennät (place_id / mixonet_place_id)
+        // 2. Vapaatekstipaikalla kytketyt projektit (place_custom ILIKE %placeName%)
+        // 3. Relaatiot get_entities_by_place RPC:llä
+        const queries = [
+            placeIdFilter.length > 0
+                ? mixonetClient.from('projects').select('id, title, description, cover_image_url, is_published, visibility, status').in('place_id', placeIdFilter)
+                : Promise.resolve({ data: [] }),
+            placeName
+                ? mixonetClient.from('projects').select('id, title, description, cover_image_url, is_published, visibility, status').ilike('place_custom', `%${placeName}%`)
+                : Promise.resolve({ data: [] }),
+            placeId
+                ? mixonetClient.rpc('get_entities_by_place', { target_place_id: placeId, min_weight: 0 }).catch(err => ({ data: null, error: err }))
+                : Promise.resolve({ data: [] })
+        ];
+
+        const [directProjectsRes, customProjectsRes, relationsRes] = await Promise.all(queries);
 
         const relations = relationsRes && !relationsRes.error ? (relationsRes.data || []) : [];
 
@@ -2802,9 +2810,10 @@ async function loadMixonetContentForPlace(placeData) {
                 : Promise.resolve({ data: [] })
         ]);
 
-        // Yhdistetään suorat ja relaatioprojektit (poistetaan duplikaatit ID:n perusteella)
+        // Yhdistetään kaikki löydetyt projektit (poistetaan duplikaatit ID:n perusteella)
         const combinedProjectsMap = new Map();
         (directProjectsRes.data || []).forEach(p => combinedProjectsMap.set(p.id, p));
+        (customProjectsRes.data || []).forEach(p => combinedProjectsMap.set(p.id, p));
         (relProjectsRes.data || []).forEach(p => combinedProjectsMap.set(p.id, p));
         const allProjects = Array.from(combinedProjectsMap.values());
 
