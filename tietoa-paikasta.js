@@ -280,15 +280,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         // 6. Päivitä DOM
         await renderPlace(placeData, otherRelatedItems, aiProfileData, aiFaqData, allSources, allContents, scoredCompanies, parentPlace, subPlaces);
 
-        await loadMemoriesForPlace(placeData);
-        await loadMediaForPlace(placeData);
-        await loadEncountersForPlace(placeData);
-        await loadLostItemsForPlace(placeData);
-        loadMixonetContentForPlace(placeData); // Ei await – haetaan taustalla, ei estä muuta
-        await loadRoutesForPlace(placeData);
-        await loadThemesForPlace(placeData);
-
-        // Hae ja näytä paikan hyväksytyt havainnot (LostReFound-integraatio)
+        // Ladataan kaikki rinnakkaisosiot turvallisesti siten, ettei mikään estä toisen osion toimintaa
+        loadMixonetContentForPlace(placeData);
+        
+        loadMemoriesForPlace(placeData).catch(e => console.warn('[Memories] error:', e));
+        loadMediaForPlace(placeData).catch(e => console.warn('[Media] error:', e));
+        loadEncountersForPlace(placeData).catch(e => console.warn('[Encounters] error:', e));
+        loadLostItemsForPlace(placeData).catch(e => console.warn('[LostItems] error:', e));
+        loadRoutesForPlace(placeData).catch(e => console.warn('[Routes] error:', e));
+        loadThemesForPlace(placeData).catch(e => console.warn('[Themes] error:', e));
         loadPlaceObservations(placeId);
 
         // V2.8 Ladataan Paikan Media (Hero + Kuvat/Videot)
@@ -2035,7 +2035,8 @@ async function loadEncountersForPlace(place) {
         // Jos haluamme kohdentaa tiukasti place_id:hen:
         // mutta otetaan fallback string matchillä myös
         if (place.place_id && placeName) {
-            query = query.or(`location_id.eq.${place.place_id},location.ilike.%${placeName}%`);
+            const safeName = placeName.replace(/["%,]/g, ' ').trim();
+            query = query.or(`location_id.eq.${place.place_id},location.ilike."*${safeName}*"`);
         } else if (place.place_id) {
             query = query.eq('location_id', place.place_id);
         } else if (placeName) {
