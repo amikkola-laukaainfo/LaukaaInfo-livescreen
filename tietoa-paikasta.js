@@ -2886,6 +2886,11 @@ async function loadMixonetContentForPlace(placeData) {
                 `;
                 projectsContainer.style.display = 'block';
             }
+
+            const nonCommercialNotice = document.getElementById('non-commercial-notice');
+            if (nonCommercialNotice) {
+                nonCommercialNotice.style.display = 'none';
+            }
         }
 
         // 6. Renderöi ideat
