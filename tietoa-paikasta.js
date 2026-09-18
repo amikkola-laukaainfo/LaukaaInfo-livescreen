@@ -2074,9 +2074,11 @@ async function loadEncountersForPlace(place) {
                     ? await liveSb.from('posts').select('*')
                         .eq('place_id', place.place_id)
                         .or('status.eq.APPROVED,status.is.null')
-                        .or(`valid_until.is.null,valid_until.gte.${new Date().toISOString()}`)
                     : { data: null };
-                const postsData = postsResult.data;
+                const postsData = (postsResult.data || []).filter(item => {
+                    if (!item.valid_until) return true;
+                    return new Date(item.valid_until) >= new Date();
+                });
                     
                 // Tarjoukset/Tapahtumat – LaukaaLive-projekti
                 const offersResult = liveSb
@@ -2752,7 +2754,13 @@ async function loadMixonetContentForPlace(placeData) {
     let mixonetClient;
     try {
         mixonetClient = window.mixonetSb || supabase.createClient(MIXONET_SB_URL, MIXONET_SB_KEY, {
-            auth: { persistSession: false, storageKey: 'mixonet-livescreen-anon' }
+            auth: { persistSession: false, storageKey: 'mixonet-livescreen-anon' },
+            global: {
+                headers: {
+                    apikey: MIXONET_SB_KEY,
+                    Authorization: `Bearer ${MIXONET_SB_KEY}`
+                }
+            }
         });
         window.mixonetSb = mixonetClient;
     } catch (e) {
