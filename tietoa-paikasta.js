@@ -2756,18 +2756,20 @@ async function loadMixonetContentForPlace(placeData) {
     if (!placeId) return;
 
     try {
-        // 1. Hae paikkasuhteet get_entities_by_place RPC:llä
-        const { data: relations, error: relError } = await mixonetClient
-            .rpc('get_entities_by_place', { target_place_id: placeId, min_weight: 0 });
+        // 1. Hae rinnakkain:
+        //    a) Suorat projektit, joissa projects.place_id = target_place_id (Mixonet Android-sovelluksen kautta lisätyt)
+        //    b) Relaatiot get_entities_by_place RPC:llä (profiloinnin / entity_relations kautta kytketyt)
+        const [directProjectsRes, relationsRes] = await Promise.all([
+            mixonetClient
+                .from('projects')
+                .select('id, title, description, cover_image_url, is_published, visibility, status')
+                .eq('place_id', placeId),
+            mixonetClient
+                .rpc('get_entities_by_place', { target_place_id: placeId, min_weight: 0 })
+                .catch(err => ({ data: null, error: err }))
+        ]);
 
-        if (relError) {
-            console.warn('[Mixonet] get_entities_by_place RPC ei löytynyt tai epäonnistui:', relError.message);
-            // Yritetään fallback: suora haku entity_relations-taulusta
-            await loadMixonetContentFallback(mixonetClient, placeId, projectsSection, projectsList, ideasSection, ideasList);
-            return;
-        }
-
-        if (!relations || relations.length === 0) return;
+        const relations = relationsRes && !relationsRes.error ? (relationsRes.data || []) : [];
 
         // 2. Näkyvyyssuodatin – USER ei koskaan julkinen
         function isPubliclyVisible(sourceType) {
@@ -2778,35 +2780,43 @@ async function loadMixonetContentForPlace(placeData) {
             return false;
         }
 
-        const projectIds = relations
+        const projectIdsFromRel = relations
             .filter(r => r.source_type === 'PROJECT' && isPubliclyVisible(r.source_type))
             .map(r => r.source_id);
 
-        const ideaIds = relations
+        const ideaIdsFromRel = relations
             .filter(r => r.source_type === 'IDEA' && isPubliclyVisible(r.source_type))
             .map(r => r.source_id);
 
-        // 3. Hae projektit ja ideat rinnakkain
-        const [projectsResult, ideasResult] = await Promise.all([
-            projectIds.length > 0
+        // 3. Hae relaatioiden kautta löytyvät projektit ja ideat
+        const [relProjectsRes, relIdeasRes] = await Promise.all([
+            projectIdsFromRel.length > 0
                 ? mixonetClient.from('projects')
                     .select('id, title, description, cover_image_url, is_published, visibility, status')
-                    .in('id', projectIds)
+                    .in('id', projectIdsFromRel)
                 : Promise.resolve({ data: [] }),
-            ideaIds.length > 0
+            ideaIdsFromRel.length > 0
                 ? mixonetClient.from('ideas')
                     .select('id, title, summary, description, why_interesting, challenge, is_published, visibility, status')
-                    .in('id', ideaIds)
+                    .in('id', ideaIdsFromRel)
                 : Promise.resolve({ data: [] })
         ]);
 
-        // 4. Suodata julkisuuden mukaan
-        // Huom: LAUKAAINFO-profiloinnista tallennetut projektit ovat visibility='NETWORK',
-        // julkisuus ohjataan is_published-kentällä ja public_settings.is_published:lla.
-        const publicProjects = (projectsResult.data || [])
-            .filter(p => p.is_published !== false && (p.visibility === 'PUBLIC' || p.visibility === 'NETWORK'));
+        // Yhdistetään suorat ja relaatioprojektit (poistetaan duplikaatit ID:n perusteella)
+        const combinedProjectsMap = new Map();
+        (directProjectsRes.data || []).forEach(p => combinedProjectsMap.set(p.id, p));
+        (relProjectsRes.data || []).forEach(p => combinedProjectsMap.set(p.id, p));
+        const allProjects = Array.from(combinedProjectsMap.values());
 
-        const publicIdeas = (ideasResult.data || [])
+        const combinedIdeasMap = new Map();
+        (relIdeasRes.data || []).forEach(i => combinedIdeasMap.set(i.id, i));
+        const allIdeas = Array.from(combinedIdeasMap.values());
+
+        // 4. Suodata julkisuuden mukaan
+        const publicProjects = allProjects
+            .filter(p => p.is_published !== false && (p.visibility === 'PUBLIC' || p.visibility === 'NETWORK' || !p.visibility));
+
+        const publicIdeas = allIdeas
             .filter(i => i.is_published !== false && (i.visibility === 'PUBLIC' || i.visibility === 'NETWORK' || !i.visibility));
 
         // 5. Renderöi projektit
