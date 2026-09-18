@@ -1,23 +1,19 @@
-const VERSION = '82a00104'; // Päivitetty reittidatan latauksen korjausta varten
+const VERSION = 'e9cf375e';
 const CACHE_NAME = `laukaainfo-${VERSION}`;
 const ASSETS = [
     './',
     './index.html',
-    './style.f3fdb606.css',
-    './script.f3fdb606.js',
     './manifest.json',
     './icons/icon-192.png',
     './icons/icon-512.png',
-    './feed.f3fdb606.js',
-    './demo-data.json',
     'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;700&display=swap'
 ];
 
-// Asennus - välimuistitaan staattiset tiedostot
+// Asennus - välimuistitaan staattiset tiedostot turvallisesti
 self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE_NAME)
-            .then(cache => cache.addAll(ASSETS))
+            .then(cache => Promise.allSettled(ASSETS.map(url => cache.add(url))))
             .then(() => self.skipWaiting())
     );
 });
@@ -25,31 +21,30 @@ self.addEventListener('install', event => {
 // Aktivointi - siivotaan vanhat välimuistit ja otetaan hallinta heti
 self.addEventListener('activate', event => {
     event.waitUntil(
-        Promise.all([
-            caches.keys().then(keys => {
-                return Promise.all(
-                    keys.filter(key => key !== CACHE_NAME)
-                        .map(key => caches.delete(key))
-                );
-            }),
-            self.clients.claim()
-        ])
+        caches.keys().then(keys => {
+            return Promise.all(
+                keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
+            );
+        }).then(() => self.clients.claim())
     );
 });
 
-// Nouto-strategia
+// Nouto-strategia: Network First JS, HTML ja datatiedostoille jotta päivitykset tulevat heti läpi
 self.addEventListener('fetch', event => {
     const url = new URL(event.request.url);
 
-    // Strategia: Network First (Datalle kuten PHP-rajapinnat ja JSON)
-    // Erityisesti api.php, jota ei haluta välimuistittaa pysyvästi
-    if (url.pathname.includes('api.php') || url.pathname.endsWith('.json')) {
+    // Dynamic Network First for HTML, JS and API/JSON data
+    if (
+        event.request.mode === 'navigate' ||
+        url.pathname.endsWith('.html') ||
+        url.pathname.endsWith('.js') ||
+        url.pathname.includes('api.php') ||
+        url.pathname.endsWith('.json')
+    ) {
         event.respondWith(
             fetch(event.request)
                 .then(response => {
-                    // Älä välimuistita api.php kutsuja, jos niissä on timestamp (ts=)
-                    // Tämä estää välimuistin paisumisen
-                    if (!url.search.includes('ts=')) {
+                    if (response.ok && !url.search.includes('ts=')) {
                         const clonedResponse = response.clone();
                         caches.open(CACHE_NAME).then(cache => cache.put(event.request, clonedResponse));
                     }
@@ -60,19 +55,15 @@ self.addEventListener('fetch', event => {
         return;
     }
 
-    // Strategia: Cache First (Staattisille asseteille)
+    // Cache First kuville ja tyyleille
     event.respondWith(
-        caches.match(event.request)
-            .then(cachedResponse => {
-                if (cachedResponse) {
-                    return cachedResponse;
-                }
-                return fetch(event.request);
-            })
+        caches.match(event.request).then(cachedResponse => {
+            return cachedResponse || fetch(event.request);
+        })
     );
 });
 
-// Kuuntele viestejä (esim. SKIP_WAITING)
+// Kuuntele viestejä
 self.addEventListener('message', event => {
     if (event.data && event.data.type === 'SKIP_WAITING') {
         self.skipWaiting();
