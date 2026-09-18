@@ -36,14 +36,22 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
     const url = new URL(event.request.url);
 
-    // Strategia: Network First (Datalle kuten PHP-rajapinnat ja JSON)
-    // Erityisesti api.php, jota ei haluta välimuistittaa pysyvästi
+    // 1. Ohita kaikki cross-origin pyynnöt (Supabase, external API:t, CORS-proxy:t jne.)
+    //    SW ei saa yrittää välimuistittaa näitä – aiheuttaa CORS-virheitä
+    if (url.origin !== self.location.origin) {
+        return; // Annetaan selaimen hoitaa suoraan
+    }
+
+    // 2. Ohita Chrome-extension ja non-http(s) protokollat
+    if (!url.protocol.startsWith('http')) {
+        return;
+    }
+
+    // 3. Strategia: Network First (Datalle kuten PHP-rajapinnat ja JSON)
     if (url.pathname.includes('api.php') || url.pathname.endsWith('.json')) {
         event.respondWith(
             fetch(event.request)
                 .then(response => {
-                    // Älä välimuistita api.php kutsuja, jos niissä on timestamp (ts=)
-                    // Tämä estää välimuistin paisumisen
                     if (!url.search.includes('ts=')) {
                         const clonedResponse = response.clone();
                         caches.open(CACHE_NAME).then(cache => cache.put(event.request, clonedResponse));
@@ -55,7 +63,22 @@ self.addEventListener('fetch', event => {
         return;
     }
 
-    // Strategia: Cache First (Staattisille asseteille)
+    // 4. Strategia: Network First myös versioituneille JS/CSS-tiedostoille
+    //    (hash muuttuu joka buildissa, ei haluta vanhentuneita versioita välimuistista)
+    if (url.pathname.match(/\.[a-f0-9]{8}\.(js|css)$/)) {
+        event.respondWith(
+            fetch(event.request)
+                .then(response => {
+                    const clonedResponse = response.clone();
+                    caches.open(CACHE_NAME).then(cache => cache.put(event.request, clonedResponse));
+                    return response;
+                })
+                .catch(() => caches.match(event.request))
+        );
+        return;
+    }
+
+    // 5. Strategia: Cache First (Staattisille, ei-versioituneille asseteille: HTML, kuvat jne.)
     event.respondWith(
         caches.match(event.request)
             .then(cachedResponse => {
@@ -66,6 +89,7 @@ self.addEventListener('fetch', event => {
             })
     );
 });
+
 
 // Kuuntele viestejä (esim. SKIP_WAITING)
 self.addEventListener('message', event => {
