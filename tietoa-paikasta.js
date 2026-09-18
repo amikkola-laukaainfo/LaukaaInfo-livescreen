@@ -30,13 +30,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (isUuid) {
                 placeQuery = placeQuery.eq('place_id', placeId);
             } else {
-                const safeName = placeId.replace(/-/g, ' ').replace(/"/g, '');
-                placeQuery = placeQuery.or(`name.ilike."%${safeName}%",canonical_name.ilike."%${safeName}%"`);
+                const rawName = placeId.replace(/["']/g, '').trim();
+                const spaceName = rawName.replace(/-/g, ' ');
+                placeQuery = placeQuery.or(`name.ilike.%${rawName}%,canonical_name.ilike.%${rawName}%,name.ilike.%${spaceName}%,canonical_name.ilike.%${spaceName}%`);
             }
         } else if (placeNameParam) {
             const decodedName = decodeURIComponent(placeNameParam).replace(/_/g, ' ');
-            const safeNameValue = decodedName.replace(/"/g, '');
-            placeQuery = placeQuery.or(`name.ilike."${safeNameValue}",canonical_name.ilike."${safeNameValue}"`);
+            const cleanNameValue = decodedName.replace(/["']/g, '').trim();
+            placeQuery = placeQuery.or(`name.ilike.%${cleanNameValue}%,canonical_name.ilike.%${cleanNameValue}%`);
         }
         
         const { data: placesData, error: placeError } = await placeQuery.limit(1);
@@ -2043,7 +2044,7 @@ async function loadEncountersForPlace(place) {
         // mutta otetaan fallback string matchillä myös
         if (place.place_id && placeName) {
             const safeName = placeName.replace(/["%,]/g, ' ').trim();
-            query = query.or(`location_id.eq.${place.place_id},location.ilike."*${safeName}*"`);
+            query = query.or(`location_id.eq.${place.place_id},location.ilike.%${safeName}%`);
         } else if (place.place_id) {
             query = query.eq('location_id', place.place_id);
         } else if (placeName) {
