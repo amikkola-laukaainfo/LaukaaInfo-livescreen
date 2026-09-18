@@ -2759,30 +2759,23 @@ async function loadMixonetContentForPlace(placeData) {
     try {
         const placeIdFilter = [placeId, placeData.mixonet_place_id].filter(Boolean);
 
-        // Yhdistetty haku: place_id (UUID) TAI place_custom (vapaateksti) TAI mixonet_place_id
-        // Kaikki yhdessä OR-kyselyssä + entity_relations RPC rinnakkain
-        const orParts = [];
-        if (placeIdFilter.length > 0) {
-            placeIdFilter.forEach(pid => orParts.push(`place_id.eq.${pid}`));
-        }
-        if (placeName) {
-            orParts.push(`place_custom.ilike.%${placeName}%`);
-        }
-
-        const [combinedProjectsRes, relationsRes] = await Promise.all([
-            orParts.length > 0
-                ? mixonetClient.from('projects')
-                    .select('id, title, description, cover_image_url, is_published, visibility, status')
-                    .or(orParts.join(','))
+        // Hae rinnakkain:
+        // 1. Suorat UUID-kytkennät (place_id / mixonet_place_id)
+        // 2. Vapaatekstipaikalla kytketyt projektit (place_custom ILIKE %placeName%)
+        // 3. Relaatiot get_entities_by_place RPC:llä
+        const queries = [
+            placeIdFilter.length > 0
+                ? mixonetClient.from('projects').select('id, title, description, cover_image_url, is_published, visibility, status').in('place_id', placeIdFilter)
+                : Promise.resolve({ data: [] }),
+            placeName
+                ? mixonetClient.from('projects').select('id, title, description, cover_image_url, is_published, visibility, status').ilike('place_custom', `%${placeName}%`)
                 : Promise.resolve({ data: [] }),
             placeId
                 ? mixonetClient.rpc('get_entities_by_place', { target_place_id: placeId, min_weight: 0 }).catch(err => ({ data: null, error: err }))
                 : Promise.resolve({ data: [] })
-        ]);
+        ];
 
-        // Yhteensopivuus vanhan muuttujanimistön kanssa
-        const directProjectsRes = combinedProjectsRes;
-        const customProjectsRes = { data: [] };
+        const [directProjectsRes, customProjectsRes, relationsRes] = await Promise.all(queries);
 
         const relations = relationsRes && !relationsRes.error ? (relationsRes.data || []) : [];
 
