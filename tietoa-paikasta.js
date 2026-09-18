@@ -2750,11 +2750,12 @@ async function loadMixonetContentForPlace(placeData) {
     if (!projectsSection || !projectsList || !ideasSection || !ideasList) return;
 
     // Tarvitaan supabase-client
-    if (typeof supabase === 'undefined') return;
+    const sbLib = window.supabase || (typeof supabase !== 'undefined' ? supabase : null);
+    if (!sbLib && !window.mixonetSb) return;
 
     let mixonetClient;
     try {
-        mixonetClient = window.mixonetSb || supabase.createClient(MIXONET_SB_URL, MIXONET_SB_KEY, {
+        mixonetClient = window.mixonetSb || sbLib.createClient(MIXONET_SB_URL, MIXONET_SB_KEY, {
             auth: { persistSession: false, storageKey: 'mixonet-livescreen-anon' },
             global: {
                 headers: {
