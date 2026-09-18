@@ -2847,7 +2847,7 @@ async function loadMixonetContentForPlace(placeData) {
 
         // 5. Renderöi projektit
         if (publicProjects.length > 0) {
-            projectsList.innerHTML = publicProjects.map(project => {
+            const projectsHtml = publicProjects.map(project => {
                 const desc = (project.description || '').substring(0, 130);
                 const coverStyle = project.cover_image_url
                     ? `background-image: url('${project.cover_image_url}'); background-size: cover; background-position: center;`
@@ -2872,7 +2872,20 @@ async function loadMixonetContentForPlace(placeData) {
                     </a>
                 `;
             }).join('');
+
+            projectsList.innerHTML = projectsHtml;
             projectsSection.style.display = 'block';
+
+            const projectsContainer = document.getElementById('mixonet-projects-container');
+            if (projectsContainer) {
+                projectsContainer.innerHTML = `
+                    <h3 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; font-family: 'Manrope', sans-serif;">
+                        <span class="iconify" data-icon="material-symbols:rocket-launch-outline" style="color: #6366f1;"></span> Projektit täällä
+                    </h3>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">${projectsHtml}</div>
+                `;
+                projectsContainer.style.display = 'block';
+            }
         }
 
         // 6. Renderöi ideat

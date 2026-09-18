@@ -1354,11 +1354,38 @@
                             </div>
                         </div>
 
-                        <!-- Paikan omat lähteet ja videot (renderServicesForEntity) -->
-                        <div id="place-sources-list" style="margin-top: 1rem; display: flex; flex-direction: column; gap: 1rem;">
-                            <!-- Filled by JS (renderServicesForEntity) -->
-                        </div>
+                        <!-- Mixonet-projektit haitariosion sisällä -->
+                        <div id="mixonet-projects-container" style="display: none; margin-top: 1rem;"></div>
+                        <div id="mixonet-ideas-container" style="display: none; margin-top: 1rem;"></div>
                     </details>
+                </section>
+
+                <!-- Mixonet: Julkiset projektit (LOCATED_AT → mixonet_place_id) -->
+                <section id="mixonet-projects-section" class="content-block" style="display: none;">
+                    <h2 style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="iconify" style="color: #6366f1;" data-icon="material-symbols:rocket-launch-outline"></span>
+                        Projektit täällä
+                    </h2>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1rem;">
+                        Alueelle sijoittuvat hankkeet ja kehitysprojektit Mixonet-verkostossa.
+                    </p>
+                    <div id="mixonet-projects-list" style="display: flex; flex-direction: column; gap: 1rem;">
+                        <!-- Filled by loadMixonetContentForPlace (tietoa-paikasta.js) -->
+                    </div>
+                </section>
+
+                <!-- Mixonet: Julkiset ideat (RELATES_TO → mixonet_place_id) -->
+                <section id="mixonet-ideas-section" class="content-block" style="display: none;">
+                    <h2 style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="iconify" style="color: #f59e0b;" data-icon="material-symbols:lightbulb-outline"></span>
+                        💡 Ideoita tästä paikasta
+                    </h2>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1rem;">
+                        Alueen asukkaiden ja tekijöiden ehdotukset ja kehitysideat Mixonet-verkostossa.
+                    </p>
+                    <div id="mixonet-ideas-list" style="display: flex; flex-direction: column; gap: 1rem;">
+                        <!-- Filled by loadMixonetContentForPlace (tietoa-paikasta.js) -->
+                    </div>
                 </section>
 
                 <!-- 4. Aktiviteetit -->
@@ -1471,33 +1498,7 @@
                     </div>
                 </section>
 
-                <!-- Mixonet: Julkiset projektit (LOCATED_AT → mixonet_place_id) -->
-                <section id="mixonet-projects-section" class="content-block" style="display: none;">
-                    <h2 style="display: flex; align-items: center; gap: 0.5rem;">
-                        <span class="iconify" style="color: #6366f1;" data-icon="material-symbols:rocket-launch-outline"></span>
-                        Projektit täällä
-                    </h2>
-                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1rem;">
-                        Alueelle sijoittuvat hankkeet ja kehitysprojektit Mixonet-verkostossa.
-                    </p>
-                    <div id="mixonet-projects-list" style="display: flex; flex-direction: column; gap: 1rem;">
-                        <!-- Filled by loadMixonetContentForPlace (tietoa-paikasta.js) -->
-                    </div>
-                </section>
 
-                <!-- Mixonet: Julkiset ideat (RELATES_TO → mixonet_place_id) -->
-                <section id="mixonet-ideas-section" class="content-block" style="display: none;">
-                    <h2 style="display: flex; align-items: center; gap: 0.5rem;">
-                        <span class="iconify" style="color: #f59e0b;" data-icon="material-symbols:lightbulb-outline"></span>
-                        💡 Ideoita tästä paikasta
-                    </h2>
-                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1rem;">
-                        Alueen asukkaiden ja tekijöiden ehdotukset ja kehitysideat Mixonet-verkostossa.
-                    </p>
-                    <div id="mixonet-ideas-list" style="display: flex; flex-direction: column; gap: 1rem;">
-                        <!-- Filled by loadMixonetContentForPlace (tietoa-paikasta.js) -->
-                    </div>
-                </section>
             </div>
 
             <!-- Right Column -->
