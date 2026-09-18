@@ -2754,6 +2754,7 @@ async function loadMixonetContentForPlace(placeData) {
 
     const placeId = placeData.place_id;
     const placeName = (placeData.name || placeData.canonical_name || '').trim();
+    console.log('[Mixonet] loadMixonetContentForPlace called. placeId:', placeId, 'placeName:', placeName, 'mixonet_place_id:', placeData.mixonet_place_id);
     if (!placeId && !placeName) return;
 
     try {
