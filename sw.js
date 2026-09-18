@@ -37,13 +37,26 @@ self.addEventListener('fetch', event => {
     const url = new URL(event.request.url);
 
     // 1. Ohita kaikki cross-origin pyynnöt (Supabase, external API:t, CORS-proxy:t jne.)
-    //    SW ei saa yrittää välimuistittaa näitä – aiheuttaa CORS-virheitä
     if (url.origin !== self.location.origin) {
-        return; // Annetaan selaimen hoitaa suoraan
+        return;
     }
 
     // 2. Ohita Chrome-extension ja non-http(s) protokollat
     if (!url.protocol.startsWith('http')) {
+        return;
+    }
+
+    // 3. HTML-sivut: Network First – aina tuorein versio jossa oikeat JS-viittaukset
+    if (event.request.mode === 'navigate' || url.pathname.endsWith('.html') || url.pathname === '/') {
+        event.respondWith(
+            fetch(event.request)
+                .then(response => {
+                    const cloned = response.clone();
+                    caches.open(CACHE_NAME).then(c => c.put(event.request, cloned));
+                    return response;
+                })
+                .catch(() => caches.match(event.request))
+        );
         return;
     }
 
