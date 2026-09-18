@@ -2739,70 +2739,128 @@ function actionReportEncounter() {}
 // ============================================================
 
 async function loadMixonetContentForPlace(placeData) {
+    console.log('[Mixonet] Initializing loadMixonetContentForPlace with data:', placeData);
     const MIXONET_SB_URL = 'https://btwerbixrydfalqrpnmg.supabase.co';
     const MIXONET_SB_KEY = 'sb_publishable_8kDfiOTrAwvdb8ziM9XNMQ_CWc-vfat';
 
-    const projectsSection = document.getElementById('mixonet-projects-section');
-    const projectsList    = document.getElementById('mixonet-projects-list');
-    const ideasSection    = document.getElementById('mixonet-ideas-section');
-    const ideasList       = document.getElementById('mixonet-ideas-list');
+    const projectsSection   = document.getElementById('mixonet-projects-section');
+    const projectsList      = document.getElementById('mixonet-projects-list');
+    const projectsContainer = document.getElementById('mixonet-projects-container');
+    const ideasSection      = document.getElementById('mixonet-ideas-section');
+    const ideasList         = document.getElementById('mixonet-ideas-list');
+    const ideasContainer    = document.getElementById('mixonet-ideas-container');
 
-    if (!projectsSection || !projectsList || !ideasSection || !ideasList) return;
-
-    // Tarvitaan supabase-client
-    const sbLib = window.supabase || (typeof supabase !== 'undefined' ? supabase : null);
-    if (!sbLib && !window.mixonetSb) return;
-
-    let mixonetClient;
-    try {
-        mixonetClient = window.mixonetSb || sbLib.createClient(MIXONET_SB_URL, MIXONET_SB_KEY, {
-            auth: { persistSession: false, storageKey: 'mixonet-livescreen-anon' },
-            global: {
-                headers: {
-                    apikey: MIXONET_SB_KEY,
-                    Authorization: `Bearer ${MIXONET_SB_KEY}`
-                }
-            }
-        });
-        window.mixonetSb = mixonetClient;
-    } catch (e) {
-        console.warn('[Mixonet] Client init failed:', e);
+    // Jos mitään säiliötä ei löydy, ei voi renderöidä
+    if (!projectsSection && !projectsList && !projectsContainer) {
+        console.warn('[Mixonet] No project containers found in DOM');
         return;
     }
 
-    const placeId = placeData.place_id;
-    const placeName = (placeData.name || placeData.canonical_name || '').trim();
-    if (!placeId && !placeName) return;
+    // Etsi Supabase createClient -funktio turvallisesti
+    let mixonetClient = window.mixonetSb;
+    if (!mixonetClient) {
+        let createFn = null;
+        if (window.supabase && typeof window.supabase.createClient === 'function') {
+            createFn = window.supabase.createClient.bind(window.supabase);
+        } else if (typeof supabase !== 'undefined' && typeof supabase.createClient === 'function') {
+            createFn = supabase.createClient.bind(supabase);
+        }
+
+        if (createFn) {
+            try {
+                mixonetClient = createFn(MIXONET_SB_URL, MIXONET_SB_KEY, {
+                    auth: { persistSession: false, storageKey: 'mixonet-livescreen-anon' },
+                    global: {
+                        headers: {
+                            apikey: MIXONET_SB_KEY,
+                            Authorization: `Bearer ${MIXONET_SB_KEY}`
+                        }
+                    }
+                });
+                window.mixonetSb = mixonetClient;
+            } catch (e) {
+                console.error('[Mixonet] Client creation error:', e);
+            }
+        }
+    }
+
+    if (!mixonetClient) {
+        console.warn('[Mixonet] Supabase createClient not available; fallbacking to REST fetch');
+    }
+
+    const placeId = placeData ? (placeData.place_id || placeData.id) : null;
+    const placeName = placeData ? (placeData.name || placeData.canonical_name || '').trim() : '';
+    if (!placeId && !placeName) {
+        console.warn('[Mixonet] Missing placeId and placeName');
+        return;
+    }
 
     try {
-        const placeIdFilter = [placeId, placeData.mixonet_place_id].filter(Boolean);
+        const placeIdFilter = [placeId, placeData ? placeData.mixonet_place_id : null].filter(Boolean);
 
-        // Hae rinnakkain:
-        // 1. Suorat UUID-kytkennät (place_id / mixonet_place_id)
-        // 2. Vapaatekstipaikalla kytketyt projektit (place_custom ILIKE %placeName%)
-        // 3. Relaatiot get_entities_by_place RPC:llä
-        const queries = [
-            placeIdFilter.length > 0
-                ? mixonetClient.from('projects').select('id, title, description, cover_image_url, is_published, visibility, status').in('place_id', placeIdFilter)
-                : Promise.resolve({ data: [] }),
-            placeName
-                ? mixonetClient.from('projects').select('id, title, description, cover_image_url, is_published, visibility, status').ilike('place_custom', `%${placeName}%`)
-                : Promise.resolve({ data: [] }),
-            placeId
-                ? mixonetClient.rpc('get_entities_by_place', { target_place_id: placeId, min_weight: 0 }).catch(err => ({ data: null, error: err }))
-                : Promise.resolve({ data: [] })
-        ];
+        console.log('[Mixonet] Querying Mixonet Supabase for placeId:', placeId, 'placeName:', placeName, 'placeIdFilter:', placeIdFilter);
 
-        const [directProjectsRes, customProjectsRes, relationsRes] = await Promise.all(queries);
+        let directProjectsRes = { data: [] };
+        let customProjectsRes = { data: [] };
+        let relationsRes = { data: [] };
+        let directRelRes = { data: [] };
 
-        const relations = relationsRes && !relationsRes.error ? (relationsRes.data || []) : [];
+        if (mixonetClient) {
+            const queries = [
+                placeIdFilter.length > 0
+                    ? mixonetClient.from('projects').select('id, title, description, cover_image_url, is_published, visibility, status').in('place_id', placeIdFilter)
+                    : Promise.resolve({ data: [] }),
+                placeName
+                    ? mixonetClient.from('projects').select('id, title, description, cover_image_url, is_published, visibility, status').ilike('place_custom', `%${placeName}%`)
+                    : Promise.resolve({ data: [] }),
+                placeId
+                    ? mixonetClient.rpc('get_entities_by_place', { target_place_id: placeId, min_weight: 0 }).catch(err => ({ data: null, error: err }))
+                    : Promise.resolve({ data: [] }),
+                placeId
+                    ? mixonetClient.from('entity_relations').select('source_id, source_type, relation_type').eq('target_id', placeId)
+                    : Promise.resolve({ data: [] })
+            ];
 
-        // 2. Näkyvyyssuodatin – USER ei koskaan julkinen
+            const [dp, cp, rel, drel] = await Promise.all(queries);
+            directProjectsRes = dp || { data: [] };
+            customProjectsRes = cp || { data: [] };
+            relationsRes = rel || { data: [] };
+            directRelRes = drel || { data: [] };
+        } else {
+            // Suora REST-haku jos Supabase-kirjasto ei ole saatavilla
+            const headers = {
+                'apikey': MIXONET_SB_KEY,
+                'Authorization': `Bearer ${MIXONET_SB_KEY}`
+            };
+            const relUrl = `${MIXONET_SB_URL}/rest/v1/entity_relations?select=source_id,source_type,relation_type&target_id=eq.${encodeURIComponent(placeId)}`;
+            try {
+                const rRes = await fetch(relUrl, { headers });
+                if (rRes.ok) {
+                    const rData = await rRes.json();
+                    directRelRes = { data: rData };
+                }
+            } catch (e) {
+                console.warn('[Mixonet] REST fetch error:', e);
+            }
+        }
+
+        const rpcRelations = relationsRes && !relationsRes.error ? (relationsRes.data || []) : [];
+        const tableRelations = directRelRes && !directRelRes.error ? (directRelRes.data || []) : [];
+
+        // Yhdistetään RPC ja suora taulukysely relaatioista
+        const relationsMap = new Map();
+        rpcRelations.forEach(r => relationsMap.set(`${r.source_type}:${r.source_id}`, r));
+        tableRelations.forEach(r => relationsMap.set(`${r.source_type}:${r.source_id}`, r));
+        const relations = Array.from(relationsMap.values());
+
+        console.log('[Mixonet] Found relations for place:', relations);
+
+        // Näkyvyyssuodatin – USER ei koskaan julkinen
         function isPubliclyVisible(sourceType) {
-            if (sourceType === 'USER')    return false; // Tietosuoja: ei oletuksena julkinen
-            if (sourceType === 'COMPANY') return true;  // Aina julkinen
-            if (sourceType === 'PROJECT') return true;  // Tarkistetaan myöhemmin is_published-kentästä
-            if (sourceType === 'IDEA')    return true;  // Tarkistetaan myöhemmin is_public-kentästä
+            if (sourceType === 'USER')    return false;
+            if (sourceType === 'COMPANY') return true;
+            if (sourceType === 'PROJECT') return true;
+            if (sourceType === 'IDEA')    return true;
             return false;
         }
 
@@ -2814,19 +2872,42 @@ async function loadMixonetContentForPlace(placeData) {
             .filter(r => r.source_type === 'IDEA' && isPubliclyVisible(r.source_type))
             .map(r => r.source_id);
 
-        // 3. Hae relaatioiden kautta löytyvät projektit ja ideat
-        const [relProjectsRes, relIdeasRes] = await Promise.all([
-            projectIdsFromRel.length > 0
-                ? mixonetClient.from('projects')
-                    .select('id, title, description, cover_image_url, is_published, visibility, status')
-                    .in('id', projectIdsFromRel)
-                : Promise.resolve({ data: [] }),
-            ideaIdsFromRel.length > 0
-                ? mixonetClient.from('ideas')
-                    .select('id, title, summary, description, why_interesting, challenge, is_published, visibility, status')
-                    .in('id', ideaIdsFromRel)
-                : Promise.resolve({ data: [] })
-        ]);
+        console.log('[Mixonet] Relation project IDs:', projectIdsFromRel, 'Idea IDs:', ideaIdsFromRel);
+
+        // Hae relaatioiden kautta löytyvät projektit ja ideat
+        let relProjectsRes = { data: [] };
+        let relIdeasRes = { data: [] };
+
+        if (mixonetClient) {
+            const [rp, ri] = await Promise.all([
+                projectIdsFromRel.length > 0
+                    ? mixonetClient.from('projects')
+                        .select('id, title, description, cover_image_url, is_published, visibility, status')
+                        .in('id', projectIdsFromRel)
+                    : Promise.resolve({ data: [] }),
+                ideaIdsFromRel.length > 0
+                    ? mixonetClient.from('ideas')
+                        .select('id, title, summary, description, why_interesting, challenge, is_published, visibility, status')
+                        .in('id', ideaIdsFromRel)
+                    : Promise.resolve({ data: [] })
+            ]);
+            relProjectsRes = rp || { data: [] };
+            relIdeasRes = ri || { data: [] };
+        } else if (projectIdsFromRel.length > 0) {
+            const headers = {
+                'apikey': MIXONET_SB_KEY,
+                'Authorization': `Bearer ${MIXONET_SB_KEY}`
+            };
+            const pUrl = `${MIXONET_SB_URL}/rest/v1/projects?select=id,title,description,cover_image_url,is_published,visibility,status&id=in.(${projectIdsFromRel.join(',')})`;
+            try {
+                const pRes = await fetch(pUrl, { headers });
+                if (pRes.ok) {
+                    relProjectsRes = { data: await pRes.json() };
+                }
+            } catch (e) {
+                console.warn('[Mixonet] REST projects fetch error:', e);
+            }
+        }
 
         // Yhdistetään kaikki löydetyt projektit (poistetaan duplikaatit ID:n perusteella)
         const combinedProjectsMap = new Map();
