@@ -156,10 +156,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 .select('entity_id, entity_type, entity_name, relation_type, relation_context, strength')
                 .eq('place_id', placeId),
             // Tag-pohjainen haku: kokeillaan ensin slugilla, sitten placeId:llä
-            aiSb.rpc('find_place_companies', { place_id: placeSlug, max_count: 20 }).catch(() => ({ data: null, error: 'find_place_companies not available' }))
+            aiSb.rpc('find_place_companies', { place_id: placeSlug, max_count: 20 })
                 .then(async r => {
                     if (!r.data || r.data.length === 0) {
-                        return aiSb.rpc('find_place_companies', { place_id: placeId, max_count: 20 }).catch(() => ({ data: null, error: 'find_place_companies not available' }));
+                        return aiSb.rpc('find_place_companies', { place_id: placeId, max_count: 20 });
                     }
                     return r;
                 })
@@ -2062,13 +2062,11 @@ async function loadEncountersForPlace(place) {
                 
                 // Feed-julkaisut (posts-taulu) – LaukaaLive-projekti
                 // Haetaan vain APPROVED-tilaiset tai ilman statusta (vanhat) – PENDING suodatetaan pois
-                // Huom: kaksi .or()-kutsua ei toimi – yhdistetään AND-loogisesti käyttämällä filter+or yhdistelmää
-                const nowIso = new Date().toISOString();
                 const postsResult = liveSb
                     ? await liveSb.from('posts').select('*')
                         .eq('place_id', place.place_id)
-                        .or(`status.eq.APPROVED,status.is.null`)
-                        .gte('valid_until', nowIso)
+                        .or('status.eq.APPROVED,status.is.null')
+                        .or(`valid_until.is.null,valid_until.gte.${new Date().toISOString()}`)
                     : { data: null };
                 const postsData = postsResult.data;
                     
@@ -2756,87 +2754,79 @@ async function loadMixonetContentForPlace(placeData) {
 
     const placeId = placeData.place_id;
     const placeName = (placeData.name || placeData.canonical_name || '').trim();
-    console.log('[Mixonet] loadMixonetContentForPlace called. placeId:', placeId, 'placeName:', placeName, 'mixonet_place_id:', placeData.mixonet_place_id);
     if (!placeId && !placeName) return;
 
     try {
-        // ──────────────────────────────────────────────
-        // Haku 1: projects.place_id = placeId (UUID-kytkentä, Mixonet Android)
-        // Haku 2: projects.place_custom ILIKE %placeName% (vapaatekstikytkentä)
-        // Haku 3: entity_relations → source_type='PROJECT' target_type='PLACE'
-        // ──────────────────────────────────────────────
-        const q1 = placeId
-            ? mixonetClient.from('projects')
-                .select('id, title, description, cover_image_url, is_published, visibility, status')
-                .eq('place_id', placeId)
-            : Promise.resolve({ data: [] });
+        const placeIdFilter = [placeId, placeData.mixonet_place_id].filter(Boolean);
 
-        const q2 = placeName
-            ? mixonetClient.from('projects')
-                .select('id, title, description, cover_image_url, is_published, visibility, status')
-                .ilike('place_custom', `%${placeName}%`)
-            : Promise.resolve({ data: [] });
-
-        const q3 = placeId
-            ? mixonetClient.from('entity_relations')
-                .select('source_type, source_id')
-                .eq('target_type', 'PLACE')
-                .eq('target_id', placeId)
-                .eq('source_type', 'PROJECT')
-                .catch(() => ({ data: [] }))
-            : Promise.resolve({ data: [] });
-
-        const q4 = placeName
-            ? mixonetClient.from('entity_relations')
-                .select('source_type, source_id')
-                .eq('target_type', 'PLACE')
-                .ilike('target_id', `%${placeId || ''}%`)
-                .eq('source_type', 'IDEA')
-                .catch(() => ({ data: [] }))
-            : Promise.resolve({ data: [] });
-
-        const [r1, r2, r3, r4] = await Promise.all([q1, q2, q3, q4]);
-
-        console.log('[Mixonet] q1 (place_id):', r1?.data?.length, r1?.error);
-        console.log('[Mixonet] q2 (place_custom):', r2?.data?.length, r2?.error);
-        console.log('[Mixonet] q3 (entity_rel projects):', r3?.data?.length, r3?.error);
-
-        // Kerää projekti-ID:t entity_relations-tuloksesta
-        const relProjectIds = (r3?.data || []).map(r => r.source_id);
-
-        // Hae entity_relations-projektit jos löytyi ID:tä
-        let relProjects = [];
-        if (relProjectIds.length > 0) {
-            const rp = await mixonetClient.from('projects')
-                .select('id, title, description, cover_image_url, is_published, visibility, status')
-                .in('id', relProjectIds);
-            relProjects = rp?.data || [];
+        // Yhdistetty haku: place_id (UUID) TAI place_custom (vapaateksti) TAI mixonet_place_id
+        // Kaikki yhdessä OR-kyselyssä + entity_relations RPC rinnakkain
+        const orParts = [];
+        if (placeIdFilter.length > 0) {
+            placeIdFilter.forEach(pid => orParts.push(`place_id.eq.${pid}`));
+        }
+        if (placeName) {
+            orParts.push(`place_custom.ilike.%${placeName}%`);
         }
 
-        // Yhdistä kaikki projektit (deduplicate by id)
-        const projectMap = new Map();
-        [...(r1?.data || []), ...(r2?.data || []), ...relProjects]
-            .forEach(p => projectMap.set(p.id, p));
-        const allProjects = Array.from(projectMap.values());
+        const [combinedProjectsRes, relationsRes] = await Promise.all([
+            orParts.length > 0
+                ? mixonetClient.from('projects')
+                    .select('id, title, description, cover_image_url, is_published, visibility, status')
+                    .or(orParts.join(','))
+                : Promise.resolve({ data: [] }),
+            placeId
+                ? mixonetClient.rpc('get_entities_by_place', { target_place_id: placeId, min_weight: 0 }).catch(err => ({ data: null, error: err }))
+                : Promise.resolve({ data: [] })
+        ]);
 
-        console.log('[Mixonet] allProjects before filter:', allProjects.length);
+        // Yhteensopivuus vanhan muuttujanimistön kanssa
+        const directProjectsRes = combinedProjectsRes;
+        const customProjectsRes = { data: [] };
 
-        // Ideat entity_relations-kautta (IDEA source_type)
-        const ideaRelRes = placeId
-            ? await mixonetClient.from('entity_relations')
-                .select('source_type, source_id')
-                .eq('target_type', 'PLACE')
-                .eq('target_id', placeId)
-                .eq('source_type', 'IDEA')
-            : { data: [] };
-        const ideaIds = (ideaRelRes?.data || []).map(r => r.source_id);
-        let allIdeas = [];
-        if (ideaIds.length > 0) {
-            const ir = await mixonetClient.from('ideas')
-                .select('id, title, summary, description, why_interesting, challenge, is_published, visibility, status')
-                .in('id', ideaIds);
-            allIdeas = ir?.data || [];
+        const relations = relationsRes && !relationsRes.error ? (relationsRes.data || []) : [];
+
+        // 2. Näkyvyyssuodatin – USER ei koskaan julkinen
+        function isPubliclyVisible(sourceType) {
+            if (sourceType === 'USER')    return false; // Tietosuoja: ei oletuksena julkinen
+            if (sourceType === 'COMPANY') return true;  // Aina julkinen
+            if (sourceType === 'PROJECT') return true;  // Tarkistetaan myöhemmin is_published-kentästä
+            if (sourceType === 'IDEA')    return true;  // Tarkistetaan myöhemmin is_public-kentästä
+            return false;
         }
+
+        const projectIdsFromRel = relations
+            .filter(r => r.source_type === 'PROJECT' && isPubliclyVisible(r.source_type))
+            .map(r => r.source_id);
+
+        const ideaIdsFromRel = relations
+            .filter(r => r.source_type === 'IDEA' && isPubliclyVisible(r.source_type))
+            .map(r => r.source_id);
+
+        // 3. Hae relaatioiden kautta löytyvät projektit ja ideat
+        const [relProjectsRes, relIdeasRes] = await Promise.all([
+            projectIdsFromRel.length > 0
+                ? mixonetClient.from('projects')
+                    .select('id, title, description, cover_image_url, is_published, visibility, status')
+                    .in('id', projectIdsFromRel)
+                : Promise.resolve({ data: [] }),
+            ideaIdsFromRel.length > 0
+                ? mixonetClient.from('ideas')
+                    .select('id, title, summary, description, why_interesting, challenge, is_published, visibility, status')
+                    .in('id', ideaIdsFromRel)
+                : Promise.resolve({ data: [] })
+        ]);
+
+        // Yhdistetään kaikki löydetyt projektit (poistetaan duplikaatit ID:n perusteella)
+        const combinedProjectsMap = new Map();
+        (directProjectsRes.data || []).forEach(p => combinedProjectsMap.set(p.id, p));
+        (customProjectsRes.data || []).forEach(p => combinedProjectsMap.set(p.id, p));
+        (relProjectsRes.data || []).forEach(p => combinedProjectsMap.set(p.id, p));
+        const allProjects = Array.from(combinedProjectsMap.values());
+
+        const combinedIdeasMap = new Map();
+        (relIdeasRes.data || []).forEach(i => combinedIdeasMap.set(i.id, i));
+        const allIdeas = Array.from(combinedIdeasMap.values());
 
         // 4. Suodata julkisuuden mukaan
         const publicProjects = allProjects

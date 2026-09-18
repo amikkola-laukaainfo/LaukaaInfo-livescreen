@@ -1,11 +1,16 @@
-const VERSION = '28faa33b'; // Auto-updated by build
+const VERSION = '79aba649'; // Päivitetty reittidatan latauksen korjausta varten
 const CACHE_NAME = `laukaainfo-${VERSION}`;
 const ASSETS = [
     './',
     './index.html',
+    './style.f3fdb606.css',
+    './script.f3fdb606.js',
     './manifest.json',
     './icons/icon-192.png',
-    './icons/icon-512.png'
+    './icons/icon-512.png',
+    './feed.f3fdb606.js',
+    './demo-data.json',
+    'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;700&display=swap'
 ];
 
 // Asennus - välimuistitaan staattiset tiedostot
@@ -36,35 +41,14 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
     const url = new URL(event.request.url);
 
-    // 1. Ohita kaikki cross-origin pyynnöt (Supabase, external API:t, CORS-proxy:t jne.)
-    if (url.origin !== self.location.origin) {
-        return;
-    }
-
-    // 2. Ohita Chrome-extension ja non-http(s) protokollat
-    if (!url.protocol.startsWith('http')) {
-        return;
-    }
-
-    // 3. HTML-sivut: Network First – aina tuorein versio jossa oikeat JS-viittaukset
-    if (event.request.mode === 'navigate' || url.pathname.endsWith('.html') || url.pathname === '/') {
-        event.respondWith(
-            fetch(event.request)
-                .then(response => {
-                    const cloned = response.clone();
-                    caches.open(CACHE_NAME).then(c => c.put(event.request, cloned));
-                    return response;
-                })
-                .catch(() => caches.match(event.request))
-        );
-        return;
-    }
-
-    // 3. Strategia: Network First (Datalle kuten PHP-rajapinnat ja JSON)
+    // Strategia: Network First (Datalle kuten PHP-rajapinnat ja JSON)
+    // Erityisesti api.php, jota ei haluta välimuistittaa pysyvästi
     if (url.pathname.includes('api.php') || url.pathname.endsWith('.json')) {
         event.respondWith(
             fetch(event.request)
                 .then(response => {
+                    // Älä välimuistita api.php kutsuja, jos niissä on timestamp (ts=)
+                    // Tämä estää välimuistin paisumisen
                     if (!url.search.includes('ts=')) {
                         const clonedResponse = response.clone();
                         caches.open(CACHE_NAME).then(cache => cache.put(event.request, clonedResponse));
@@ -76,22 +60,7 @@ self.addEventListener('fetch', event => {
         return;
     }
 
-    // 4. Strategia: Network First myös versioituneille JS/CSS-tiedostoille
-    //    (hash muuttuu joka buildissa, ei haluta vanhentuneita versioita välimuistista)
-    if (url.pathname.match(/\.[a-f0-9]{8}\.(js|css)$/)) {
-        event.respondWith(
-            fetch(event.request)
-                .then(response => {
-                    const clonedResponse = response.clone();
-                    caches.open(CACHE_NAME).then(cache => cache.put(event.request, clonedResponse));
-                    return response;
-                })
-                .catch(() => caches.match(event.request))
-        );
-        return;
-    }
-
-    // 5. Strategia: Cache First (Staattisille, ei-versioituneille asseteille: HTML, kuvat jne.)
+    // Strategia: Cache First (Staattisille asseteille)
     event.respondWith(
         caches.match(event.request)
             .then(cachedResponse => {
@@ -102,7 +71,6 @@ self.addEventListener('fetch', event => {
             })
     );
 });
-
 
 // Kuuntele viestejä (esim. SKIP_WAITING)
 self.addEventListener('message', event => {
