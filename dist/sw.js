@@ -1,4 +1,4 @@
-const VERSION = 'a50234f4'; // Auto-updated by build
+const VERSION = '043ce7a9'; // Auto-updated by build
 const CACHE_NAME = `laukaainfo-${VERSION}`;
 const ASSETS = [
     './',

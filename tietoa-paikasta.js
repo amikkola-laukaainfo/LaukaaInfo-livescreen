@@ -156,10 +156,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 .select('entity_id, entity_type, entity_name, relation_type, relation_context, strength')
                 .eq('place_id', placeId),
             // Tag-pohjainen haku: kokeillaan ensin slugilla, sitten placeId:llä
-            aiSb.rpc('find_place_companies', { place_id: placeSlug, max_count: 20 })
+            aiSb.rpc('find_place_companies', { place_id: placeSlug, max_count: 20 }).catch(() => ({ data: null, error: 'find_place_companies not available' }))
                 .then(async r => {
                     if (!r.data || r.data.length === 0) {
-                        return aiSb.rpc('find_place_companies', { place_id: placeId, max_count: 20 });
+                        return aiSb.rpc('find_place_companies', { place_id: placeId, max_count: 20 }).catch(() => ({ data: null, error: 'find_place_companies not available' }));
                     }
                     return r;
                 })
@@ -2062,11 +2062,13 @@ async function loadEncountersForPlace(place) {
                 
                 // Feed-julkaisut (posts-taulu) – LaukaaLive-projekti
                 // Haetaan vain APPROVED-tilaiset tai ilman statusta (vanhat) – PENDING suodatetaan pois
+                // Huom: kaksi .or()-kutsua ei toimi – yhdistetään AND-loogisesti käyttämällä filter+or yhdistelmää
+                const nowIso = new Date().toISOString();
                 const postsResult = liveSb
                     ? await liveSb.from('posts').select('*')
                         .eq('place_id', place.place_id)
-                        .or('status.eq.APPROVED,status.is.null')
-                        .or(`valid_until.is.null,valid_until.gte.${new Date().toISOString()}`)
+                        .or(`status.eq.APPROVED,status.is.null`)
+                        .gte('valid_until', nowIso)
                     : { data: null };
                 const postsData = postsResult.data;
                     
