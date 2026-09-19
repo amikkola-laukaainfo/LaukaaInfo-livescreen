@@ -151,7 +151,7 @@
     </footer>
 
     <script>
-      // Parse ID / org URL parameters: ?org=company-313 OR ?id=company-313
+      // Parse ID / org URL parameters: ?org=company-313 OR ?id=company-313 OR ?org=company-2
       const urlParams = new URLSearchParams(window.location.search);
       const rawOrgParam = urlParams.get('org') || urlParams.get('id');
       const searchName = urlParams.get('name');
@@ -161,6 +161,13 @@
       if (orgId && !orgId.startsWith('company-') && !isNaN(orgId)) {
         orgId = 'company-' + orgId;
       }
+
+      // Supabase Client Initialization
+      const SUPABASE_URL = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
+      const SUPABASE_KEY = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
+      const supabaseClient = (window.supabase && typeof window.supabase.createClient === 'function')
+        ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+        : null;
 
       // Sample publications pool
       let publications = [
@@ -188,11 +195,11 @@
         },
         {
           id: '3',
-          orgId: 'company-101',
+          orgId: 'company-2',
           orgName: 'Mediazoo',
           type: 'news',
-          title: '🎥 Uusi dokumenttiprojekti Laukaan historiasta käynnistyy',
-          content: 'Tallennamme paikallisia tarinoita ja muistoja uuteen videodokumenttisarjaan.',
+          title: '🎥 Uusi videodokumenttisarja ja digikoulutukset Laukaassa',
+          content: 'Mediazoo auttaa yrityksiä ja yhdistyksiä viestinnässä, videotuotannoissa ja diginäkyvyyden kehittämisessä.',
           place: 'Lievestuore',
           date: '15.9.2026',
           isPinned: false
@@ -210,7 +217,7 @@
         }
       ];
 
-      // Setup page according to single org vs global wall mode
+      // Setup page mode
       if (isSingleOrgMode) {
         document.getElementById('orgHeaderSection').classList.remove('hidden');
         document.getElementById('globalHeaderSection').classList.add('hidden');
@@ -231,27 +238,119 @@
 
       async function loadOrgProfile() {
         try {
-          const res = await fetch('companies_data.json');
-          if (res.ok) {
-            const data = await res.json();
-            const list = Array.isArray(data) ? data : (data.profiles ? Object.values(data.profiles) : []);
-            const profile = list.find(p => p.id === orgId || (searchName && p.name.toLowerCase().includes(searchName.toLowerCase())));
-            if (profile) {
-              const name = profile.name || 'Organisaatio';
-              document.getElementById('orgTitle').innerText = name;
-              document.getElementById('pageTitle').innerText = `${name} — Oma seinä · LaukaaInfo`;
-              
-              const isAssoc = name.toLowerCase().endsWith('ry') || (profile.core && profile.core.sub_contexts && profile.core.sub_contexts.includes('yhdistys'));
-              document.getElementById('orgBadge').innerText = isAssoc ? '🤝 Yhdistys' : '🏢 Yritys';
-              document.getElementById('orgLogo').innerText = isAssoc ? '🤝' : '🏢';
-              
-              if (profile.categories && profile.categories.core && profile.categories.core.description) {
-                document.getElementById('orgBio').innerText = profile.categories.core.description;
+          let profile = null;
+
+          // 1. Check company_profiling_data.json
+          try {
+            const pRes = await fetch('company_profiling_data.json');
+            if (pRes.ok) {
+              const pData = await pRes.json();
+              if (pData && pData.profiles && pData.profiles[orgId]) {
+                profile = pData.profiles[orgId];
+                profile.id = orgId;
+              } else if (pData && pData[orgId]) {
+                profile = pData[orgId];
+                profile.id = orgId;
+              }
+            }
+          } catch (e) {
+            console.warn('Profiling fetch failed:', e);
+          }
+
+          // 2. Check companies_data.json
+          if (!profile) {
+            try {
+              const cRes = await fetch('companies_data.json');
+              if (cRes.ok) {
+                const cData = await cRes.json();
+                const list = Array.isArray(cData) ? cData : (cData.results || (cData.profiles ? Object.values(cData.profiles) : []));
+                profile = list.find(p => p.id === orgId || (searchName && (p.name || p.nimi || '').toLowerCase().includes(searchName.toLowerCase())));
+              }
+            } catch (e) {
+              console.warn('Companies data fetch failed:', e);
+            }
+          }
+
+          if (profile) {
+            const name = profile.name || profile.nimi || 'Organisaatio';
+            document.getElementById('orgTitle').innerText = name;
+            document.getElementById('pageTitle').innerText = `${name} — Oma seinä · LaukaaInfo`;
+            
+            const isAssoc = name.toLowerCase().endsWith('ry') || (profile.core && profile.core.sub_contexts && profile.core.sub_contexts.includes('yhdistys'));
+            document.getElementById('orgBadge').innerText = isAssoc ? '🤝 Yhdistys' : '🏢 Yritys';
+            document.getElementById('orgLogo').innerText = isAssoc ? '🤝' : '🏢';
+
+            const loc = profile.address || profile.osoite || profile.alue_slug || 'Laukaa';
+            document.getElementById('orgLocation').innerText = `📍 ${loc}`;
+
+            let bioText = '';
+            if (profile.categories && profile.categories.core && profile.categories.core.description) {
+              bioText = profile.categories.core.description;
+            } else if (profile.mainoslause || profile.kuvaus) {
+              bioText = (profile.mainoslause || profile.kuvaus).replace(/@@/g, ' ');
+            } else if (profile.description) {
+              bioText = profile.description;
+            } else if (name === 'Mediazoo') {
+              bioText = 'Viestinnän, digimediapalvelujen, IT-ratkaisujen ja sisällöntuotannon ammattilainen Lievestuoreella ja Laukaassa.';
+            } else {
+              bioText = `${name} — Digitaalinen kotipesä LaukaaInfossa.`;
+            }
+            document.getElementById('orgBio').innerText = bioText;
+
+            // Badges / Tags
+            const tagsContainer = document.getElementById('orgBadgesContainer');
+            if (tagsContainer) {
+              let tagList = [];
+              if (profile.tags) {
+                tagList = typeof profile.tags === 'string' ? profile.tags.split(',').map(t => t.trim()) : profile.tags;
+              }
+              if (tagList.length > 0) {
+                tagsContainer.innerHTML = `
+                  <span class="text-xs px-2.5 py-1 bg-slate-100 rounded-lg text-slate-600 font-medium flex items-center gap-1">
+                    📍 ${loc}
+                  </span>
+                  ${tagList.slice(0, 4).map(t => `<span class="text-xs px-2.5 py-1 bg-violet-50 text-violet-700 border border-violet-200/60 rounded-lg font-bold">🧩 ${t}</span>`).join('')}
+                `;
               }
             }
           }
         } catch (e) {
-          console.warn('Profiilidatan lataus ohitettu:', e);
+          console.warn('Profiilidatan lataus virhe:', e);
+        }
+      }
+
+      async function fetchDbPosts() {
+        if (!supabaseClient) return;
+        try {
+          let query = supabaseClient.from('posts').select('*').order('created_at', { ascending: false });
+          if (isSingleOrgMode) {
+            query = query.eq('org_id', orgId);
+          }
+          const { data, error } = await query;
+          if (!error && data && data.length > 0) {
+            const orgNameNow = document.getElementById('orgTitle')?.innerText || 'Organisaatio';
+            const dbMapped = data.map(p => ({
+              id: p.id,
+              orgId: p.org_id || orgId,
+              orgName: p.org_name || orgNameNow,
+              type: p.type || 'announcement',
+              title: p.title,
+              content: p.content,
+              place: p.place || 'Laukaa',
+              date: p.created_at ? new Date(p.created_at).toLocaleDateString('fi-FI') : 'Tänään',
+              isPinned: Boolean(p.is_pinned)
+            }));
+            
+            // Merge with local sample pool avoiding duplicate titles
+            const existingTitles = new Set(dbMapped.map(p => p.title));
+            const sampleFiltered = (isSingleOrgMode ? publications.filter(p => p.orgId === orgId) : publications)
+              .filter(p => !existingTitles.has(p.title));
+            
+            publications = [...dbMapped, ...sampleFiltered];
+            renderFeed();
+          }
+        } catch (e) {
+          console.warn('DB posts retrieval error:', e);
         }
       }
 
@@ -266,8 +365,8 @@
         if (pinned) {
           document.getElementById('pinnedSection').classList.remove('hidden');
           document.getElementById('pinnedTitle').innerText = pinned.title;
-          document.getElementById('pinnedContent').innerText = pinned.content;
-          document.getElementById('pinnedDate').innerText = pinned.date;
+          document.getElementById('pinnedContent').innerText = pinned.content || '';
+          document.getElementById('pinnedDate').innerText = pinned.date || 'Tänään';
           document.getElementById('pinnedPlace').innerText = '📍 ' + (pinned.place || 'Laukaa');
         } else {
           document.getElementById('pinnedSection').classList.add('hidden');
@@ -307,6 +406,7 @@
       }
 
       renderFeed();
+      fetchDbPosts();
     </script>
   </body>
 </html>
