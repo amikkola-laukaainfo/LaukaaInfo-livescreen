@@ -235,6 +235,14 @@
         switchTab('wall');
       }
 
+      function deletePost(id) {
+        if (!confirm('Haluatko varmasti poistaa tämän julkaisun?')) return;
+        const index = samplePubs.findIndex(p => p.id === id);
+        if (index !== -1) samplePubs.splice(index, 1);
+        renderWall();
+        renderList();
+      }
+
       function renderWall() {
         const pinnedContainer = document.getElementById('pinned-container');
         const feedContainer = document.getElementById('wall-feed-container');
@@ -245,7 +253,10 @@
             <div class="bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-white p-4 rounded-2xl border-2 border-amber-400 shadow-sm space-y-2">
               <div class="flex items-center justify-between">
                 <span class="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase bg-amber-500 text-white flex items-center gap-1">📌 KIINNITETTY JULKAISU</span>
-                <button onclick="togglePin(${pinned.id})" class="text-[10px] font-bold text-amber-800 hover:underline">Irrota</button>
+                <div class="flex items-center gap-2">
+                  <button onclick="togglePin(${pinned.id})" class="text-[10px] font-bold text-amber-800 hover:underline">Irrota</button>
+                  <button onclick="deletePost(${pinned.id})" class="text-[10px] font-bold text-red-600 hover:underline">🗑️</button>
+                </div>
               </div>
               <h4 class="text-xs font-bold text-slate-900">${pinned.title}</h4>
               <p class="text-xs text-slate-700">${pinned.content || ''}</p>
@@ -267,6 +278,7 @@
               <div class="flex items-center gap-2">
                 <span class="text-slate-400">${p.date}</span>
                 <button onclick="togglePin(${p.id})" title="Kiinnitä yläosaan" class="text-slate-400 hover:text-amber-500">📌</button>
+                <button onclick="deletePost(${p.id})" title="Poista" class="text-slate-400 hover:text-red-500">🗑️</button>
               </div>
             </div>
             <h4 class="text-xs font-bold text-slate-900">${p.title}</h4>
@@ -284,7 +296,10 @@
               <span class="px-2 py-0.5 rounded-full font-bold uppercase ${p.status === 'published' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}">
                 ${p.status === 'published' ? '🟢 Julkaistu' : '📝 Luonnos'} ${p.isPinned ? '📌' : ''}
               </span>
-              <span class="text-slate-400">${p.date}</span>
+              <div class="flex items-center gap-2">
+                <span class="text-slate-400">${p.date}</span>
+                <button onclick="deletePost(${p.id})" title="Poista" class="text-slate-400 hover:text-red-500 font-bold">🗑️ Poista</button>
+              </div>
             </div>
             <h3 class="text-xs font-bold text-slate-900">${p.title}</h3>
             <p class="text-[10px] text-slate-500">📍 ${p.place}</p>
