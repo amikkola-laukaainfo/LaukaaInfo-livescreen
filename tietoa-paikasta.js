@@ -760,7 +760,7 @@ async function renderPlace(place, relatedItems, aiProfileData, aiFaqData, allSou
     if (statObservations) {
         statObservations.textContent = others.length;
         if (statObservationsLabel) {
-            statObservationsLabel.textContent = others.length === 1 ? 'ilmoitus' : 'ilmoitusta';
+            statObservationsLabel.textContent = others.length === 1 ? 'havainto' : 'havaintoa';
         }
     }
 
@@ -2188,7 +2188,7 @@ function renderEncounters(encounters) {
     if (statEncounters) {
         statEncounters.textContent = activeAlerts.length;
         if (statEncountersLabel) {
-            statEncountersLabel.textContent = activeAlerts.length === 1 ? 'aktiivinen ilmoitus' : 'aktiivista ilmoitusta';
+            statEncountersLabel.textContent = activeAlerts.length === 1 ? 'avoin ilmoitus' : 'avointa ilmoitusta';
         }
     }
     
