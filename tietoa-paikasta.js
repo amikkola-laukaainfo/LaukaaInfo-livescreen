@@ -2983,6 +2983,17 @@ async function loadMixonetContentForPlace(placeData) {
             if (nonCommercialNotice) {
                 nonCommercialNotice.style.display = 'none';
             }
+
+            const statProjects = document.getElementById('stat-projects');
+            const statProjectsLabel = document.getElementById('stat-projects-label');
+            const statProjectsRow = document.getElementById('stat-projects-row');
+            if (statProjects && statProjectsRow) {
+                statProjects.textContent = publicProjects.length;
+                if (statProjectsLabel) {
+                    statProjectsLabel.textContent = publicProjects.length === 1 ? 'projekti' : 'projektia';
+                }
+                statProjectsRow.style.display = 'flex';
+            }
         }
 
         // 6. Renderöi ideat
@@ -3013,6 +3024,17 @@ async function loadMixonetContentForPlace(placeData) {
                 `;
             }).join('');
             ideasSection.style.display = 'block';
+
+            const statIdeas = document.getElementById('stat-ideas');
+            const statIdeasLabel = document.getElementById('stat-ideas-label');
+            const statIdeasRow = document.getElementById('stat-ideas-row');
+            if (statIdeas && statIdeasRow) {
+                statIdeas.textContent = publicIdeas.length;
+                if (statIdeasLabel) {
+                    statIdeasLabel.textContent = publicIdeas.length === 1 ? 'idea' : 'ideaa';
+                }
+                statIdeasRow.style.display = 'flex';
+            }
         }
 
     } catch (err) {
