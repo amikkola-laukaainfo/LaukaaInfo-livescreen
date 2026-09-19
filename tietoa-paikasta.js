@@ -710,6 +710,8 @@ function scoreCompanies(allCompanies, place, relations, tagMatches, visibilityDa
 
 async function renderPlace(place, relatedItems, aiProfileData, aiFaqData, allSources = [], allContents = [], scoredCompanies = [], parentPlace = null, subPlaces = []) {
     document.getElementById('loading-spinner').style.display = 'none';
+    const errEl = document.getElementById('error-message');
+    if (errEl) errEl.style.display = 'none';
     document.getElementById('place-content').style.display = 'block';
 
     // Perustiedot
@@ -2796,16 +2798,23 @@ async function loadMixonetContentForPlace(placeData) {
     }
 
     try {
-        const placeIdFilter = [placeId, placeData ? placeData.mixonet_place_id : null].filter(Boolean);
+        const mixonetPlaceId = placeData ? placeData.mixonet_place_id : null;
+        const placeIdFilter = Array.from(new Set([placeId, mixonetPlaceId].filter(Boolean)));
 
-        console.log('[Mixonet] Querying Mixonet Supabase for placeId:', placeId, 'placeName:', placeName, 'placeIdFilter:', placeIdFilter);
+        console.log('[Mixonet] Querying Mixonet Supabase for placeId:', placeId, 'mixonetPlaceId:', mixonetPlaceId, 'placeName:', placeName, 'placeIdFilter:', placeIdFilter);
 
         let directProjectsRes = { data: [] };
         let customProjectsRes = { data: [] };
-        let relationsRes = { data: [] };
+        let rpcRelationsResList = [];
         let directRelRes = { data: [] };
 
         if (mixonetClient) {
+            const rpcPromises = placeIdFilter.map(id =>
+                mixonetClient.rpc('get_entities_by_place', { target_place_id: id, min_weight: 0 })
+                    .then(r => r)
+                    .catch(err => ({ data: null, error: err }))
+            );
+
             const queries = [
                 placeIdFilter.length > 0
                     ? mixonetClient.from('projects').select('id, title, description, cover_image_url, is_published, visibility, status').in('place_id', placeIdFilter)
@@ -2813,18 +2822,17 @@ async function loadMixonetContentForPlace(placeData) {
                 placeName
                     ? mixonetClient.from('projects').select('id, title, description, cover_image_url, is_published, visibility, status').ilike('place_custom', `%${placeName}%`)
                     : Promise.resolve({ data: [] }),
-                placeId
-                    ? mixonetClient.rpc('get_entities_by_place', { target_place_id: placeId, min_weight: 0 }).catch(err => ({ data: null, error: err }))
-                    : Promise.resolve({ data: [] }),
-                placeId
-                    ? mixonetClient.from('entity_relations').select('source_id, source_type, relation_type').eq('target_id', placeId)
-                    : Promise.resolve({ data: [] })
+                Promise.all(rpcPromises),
+                mixonetClient.from('entity_relations')
+                    .select('source_id, source_type, relation_type, target_id, target_type')
+                    .eq('target_type', 'PLACE')
+                    .in('target_id', placeIdFilter)
             ];
 
-            const [dp, cp, rel, drel] = await Promise.all(queries);
+            const [dp, cp, rpcList, drel] = await Promise.all(queries);
             directProjectsRes = dp || { data: [] };
             customProjectsRes = cp || { data: [] };
-            relationsRes = rel || { data: [] };
+            rpcRelationsResList = rpcList || [];
             directRelRes = drel || { data: [] };
         } else {
             // Suora REST-haku jos Supabase-kirjasto ei ole saatavilla
@@ -2832,7 +2840,8 @@ async function loadMixonetContentForPlace(placeData) {
                 'apikey': MIXONET_SB_KEY,
                 'Authorization': `Bearer ${MIXONET_SB_KEY}`
             };
-            const relUrl = `${MIXONET_SB_URL}/rest/v1/entity_relations?select=source_id,source_type,relation_type&target_id=eq.${encodeURIComponent(placeId)}`;
+            const inFilter = placeIdFilter.map(id => `eq.${encodeURIComponent(id)}`).join(',');
+            const relUrl = `${MIXONET_SB_URL}/rest/v1/entity_relations?select=source_id,source_type,relation_type,target_id,target_type&target_type=eq.PLACE&target_id=in.(${placeIdFilter.map(encodeURIComponent).join(',')})`;
             try {
                 const rRes = await fetch(relUrl, { headers });
                 if (rRes.ok) {
@@ -2844,13 +2853,14 @@ async function loadMixonetContentForPlace(placeData) {
             }
         }
 
-        const rpcRelations = relationsRes && !relationsRes.error ? (relationsRes.data || []) : [];
+        const rpcRelations = rpcRelationsResList
+            .flatMap(res => (res && !res.error && res.data) ? res.data : []);
         const tableRelations = directRelRes && !directRelRes.error ? (directRelRes.data || []) : [];
 
         // Yhdistetään RPC ja suora taulukysely relaatioista
         const relationsMap = new Map();
-        rpcRelations.forEach(r => relationsMap.set(`${r.source_type}:${r.source_id}`, r));
-        tableRelations.forEach(r => relationsMap.set(`${r.source_type}:${r.source_id}`, r));
+        rpcRelations.forEach(r => relationsMap.set(`${r.source_type}:${r.source_id}:${r.relation_type || ''}`, r));
+        tableRelations.forEach(r => relationsMap.set(`${r.source_type}:${r.source_id}:${r.relation_type || ''}`, r));
         const relations = Array.from(relationsMap.values());
 
         console.log('[Mixonet] Found relations for place:', relations);
@@ -2864,8 +2874,10 @@ async function loadMixonetContentForPlace(placeData) {
             return false;
         }
 
+        // Kohdistetaan projektit ensisijaisesti LOCATED_AT / RELATES_TO relaatioihin
         const projectIdsFromRel = relations
-            .filter(r => r.source_type === 'PROJECT' && isPubliclyVisible(r.source_type))
+            .filter(r => r.source_type === 'PROJECT' && isPubliclyVisible(r.source_type) &&
+                (!r.relation_type || r.relation_type === 'LOCATED_AT' || r.relation_type === 'RELATES_TO' || r.relation_type === 'OPERATES_IN'))
             .map(r => r.source_id);
 
         const ideaIdsFromRel = relations
