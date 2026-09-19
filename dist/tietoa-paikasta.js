@@ -2983,6 +2983,30 @@ async function loadMixonetContentForPlace(placeData) {
             if (nonCommercialNotice) {
                 nonCommercialNotice.style.display = 'none';
             }
+        }       }r-radius: 50px; font-size: 0.8rem; font-weight: 700;">Tutustu projektiin →</span>
+                        </div>
+                    </a>
+                `;
+            }).join('');
+
+            projectsList.innerHTML = projectsHtml;
+            projectsSection.style.display = 'block';
+
+            const projectsContainer = document.getElementById('mixonet-projects-container');
+            if (projectsContainer) {
+                projectsContainer.innerHTML = `
+                    <h3 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; font-family: 'Manrope', sans-serif;">
+                        <span class="iconify" data-icon="material-symbols:rocket-launch-outline" style="color: #6366f1;"></span> Projektit täällä
+                    </h3>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">${projectsHtml}</div>
+                `;
+                projectsContainer.style.display = 'block';
+            }
+
+            const nonCommercialNotice = document.getElementById('non-commercial-notice');
+            if (nonCommercialNotice) {
+                nonCommercialNotice.style.display = 'none';
+            }
         }
 
         // 6. Renderöi ideat
@@ -3366,4 +3390,3 @@ async function loadPlaceObservations(placeId) {
         console.warn('loadPlaceObservations virhe:', e);
     }
 }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
