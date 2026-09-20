@@ -2823,21 +2823,46 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         document.getElementById('point-modal-desc').innerHTML = (modalDesc ? modalDesc.replace(/\n/g, '<br>') : '') + audioBarHtml;
 
-        // Helper to render video view
+        // Helper for landscape fullscreen video playback
+        if (!window.requestLandscapeFullscreen) {
+            window.requestLandscapeFullscreen = function(btn) {
+                const container = btn.closest('.lki-modal-video-container') || btn.parentElement;
+                if (!container) return;
+
+                if (container.requestFullscreen) {
+                    container.requestFullscreen().catch(function(){});
+                } else if (container.webkitRequestFullscreen) {
+                    container.webkitRequestFullscreen();
+                }
+
+                if (screen.orientation && screen.orientation.lock) {
+                    screen.orientation.lock('landscape').catch(function(){});
+                }
+            };
+        }
+
+        // Helper to render video view with landscape fullscreen support
         function renderVideoView(videoUrl) {
             mediaContainer.style.display = 'block';
             const ytId = getYoutubeId(videoUrl);
+            let innerContent = '';
             if (ytId) {
-                mediaContainer.innerHTML = `
-                    <div class="lki-modal-video-wrapper">
-                        <iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+                innerContent = `
+                    <div class="lki-modal-video-wrapper" style="width:100%; height:100%;">
+                        <iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1&modestbranding=1" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>
                         <a href="https://www.youtube.com/watch?v=${ytId}" target="_blank" rel="noopener" class="lki-modal-yt-link">📺 Katso YouTubessa &rarr;</a>
                     </div>`;
             } else if (videoUrl.match(/\.(mp4|webm|ogg)(\?.*)?$/i)) {
-                mediaContainer.innerHTML = `<video controls autoplay style="width:100%; height:100%; object-fit: contain;"><source src="${videoUrl}"></video>`;
+                innerContent = `<video controls autoplay playsinline style="width:100%; height:100%; object-fit: contain;"><source src="${videoUrl}"></video>`;
             } else {
-                mediaContainer.innerHTML = `<iframe src="${videoUrl}" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>`;
+                innerContent = `<iframe src="${videoUrl}" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>`;
             }
+
+            mediaContainer.innerHTML = `
+                <div class="lki-modal-video-container" style="position:relative; width:100%; height:100%; background:#000;">
+                    <button type="button" class="lki-video-fullscreen-btn" onclick="requestLandscapeFullscreen(this)">⛶ Koko näyttö (Vaaka)</button>
+                    ${innerContent}
+                </div>`;
         }
 
         // Helper to render image slider view

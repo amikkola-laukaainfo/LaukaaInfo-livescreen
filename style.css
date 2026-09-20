@@ -5364,6 +5364,36 @@ footer {
     background-color: var(--secondary-blue);
 }
 
+/* Video Landscape Fullscreen Button & Layout */
+.lki-modal-video-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: #000;
+}
+
+.lki-video-fullscreen-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+    padding: 6px 12px;
+    background: rgba(12, 10, 9, 0.85);
+    color: #34d399;
+    border: 1px solid rgba(52, 211, 153, 0.4);
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    transition: background 0.2s, color 0.2s;
+}
+
+.lki-video-fullscreen-btn:hover {
+    background: #059669;
+    color: #fff;
+}
+
 /* YouTube Video Links in Modal & Lightbox */
 .lki-modal-video-wrapper, .lki-lightbox__video {
     position: relative;
