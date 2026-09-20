@@ -727,22 +727,48 @@ document.addEventListener('DOMContentLoaded', async () => {
         startGPS(points);
     }
 
+    let _gpsHistory = []; // Puskuri 3 viimeisimmälle GPS-havainnolle (jitter-suodatus)
+
+    function getSmoothedPosition(userLat, userLng, accuracy) {
+        const now = Date.now();
+        // Säilytetään enintään 15s vanhat havainnot, max 3 pistettä
+        _gpsHistory = _gpsHistory.filter(p => now - p.time <= 15000);
+        _gpsHistory.push({ lat: userLat, lng: userLng, accuracy, time: now });
+        if (_gpsHistory.length > 3) _gpsHistory.shift();
+
+        if (_gpsHistory.length === 1) {
+            return { lat: userLat, lng: userLng, accuracy };
+        }
+
+        let sumLat = 0, sumLng = 0, sumAcc = 0;
+        _gpsHistory.forEach(p => {
+            sumLat += p.lat;
+            sumLng += p.lng;
+            sumAcc += p.accuracy;
+        });
+
+        return {
+            lat: sumLat / _gpsHistory.length,
+            lng: sumLng / _gpsHistory.length,
+            accuracy: sumAcc / _gpsHistory.length
+        };
+    }
+
     function startGPS(points) {
         const gpsBtn   = document.getElementById('gps-status-btn');
         const gpsLabel = document.getElementById('gps-label');
 
         // Chrome on Android requires HTTPS for Geolocation API.
-        // Detect HTTP early and show a clear message instead of a cryptic error.
         if (location.protocol === 'http:' && !location.hostname.includes('localhost')) {
             if (gpsBtn) {
                 gpsBtn.className = 'error';
-                gpsLabel.textContent = 'GPS ei käytettävissä';
+                gpsLabel.textContent = '🔒 HTTPS puuttuu';
             }
             showGpsErrorBanner(
                 '🔒 GPS vaatii suojatun yhteyden',
-                'Chrome edellyttää HTTPS-osoitetta sijaintitietoihin. ' +
+                'Mobiiliselaimet edellyttävät HTTPS-osoitetta sijaintitietoihin. ' +
                 'Avaa sivu osoitteella <strong>https://</strong>laukaainfo.fi/... ' +
-                'tai kokeile Operaa / Firefoxia.'
+                'tai kokeile suojattua yhteyttä.'
             );
             return;
         }
@@ -753,37 +779,76 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        gpsWatchId = navigator.geolocation.watchPosition(
-            (pos) => onPositionUpdate(pos, points),
-            (err) => {
-                console.warn('GPS-virhe:', err.code, err.message);
+        if (gpsBtn) {
+            gpsBtn.className = 'warning';
+            gpsLabel.textContent = '📍 Haetaan sijaintia...';
+        }
 
-                // err.code: 1=PERMISSION_DENIED, 2=POSITION_UNAVAILABLE, 3=TIMEOUT
-                let label = 'GPS-virhe';
-                let detail = '';
-                if (err.code === 1) {
-                    label  = 'Sijaintilupa evätty';
-                    detail = 'Myönnä sijaintilupa selaimelle: asetukset → sivuston asetukset → sijainti → Salli. ' +
-                             'Chromessa lupa voidaan myöntää vain HTTPS-sivuille.';
-                } else if (err.code === 2) {
-                    label  = 'Sijaintia ei saatu';
-                    detail = 'GPS-signaali ei tavoita laitettasi. Siirry avoimemmalle alueelle tai tarkista ' +
-                             'puhelimen sijaintipalvelut.';
-                } else if (err.code === 3) {
-                    label  = 'GPS aikakatkaisu';
-                    detail = 'Sijainnin haku kesti liian kauan. Kokeile uudelleen ulkona.';
-                }
+        // Kaksivaiheinen GPS-käynnistys (vakaampi vanhoilla Android-laitteilla):
+        // 1. Pyydetään alustava sijainti (getCurrentPosition)
+        // 2. Käynnistetään lennossa jatkuva watchPosition
+        let watchStarted = false;
 
-                if (gpsBtn) { gpsBtn.className = 'error'; gpsLabel.textContent = label; }
-                showGpsErrorBanner(label, detail);
-                gpsActive = false;
+        const initWatch = () => {
+            if (watchStarted) return;
+            watchStarted = true;
+
+            gpsWatchId = navigator.geolocation.watchPosition(
+                (pos) => onPositionUpdate(pos, points),
+                (err) => handleGpsError(err, gpsBtn, gpsLabel),
+                { enableHighAccuracy: true, maximumAge: 5000, timeout: 20000 }
+            );
+            gpsActive = true;
+            const panel = document.getElementById('gps-progress-panel');
+            if (panel) panel.style.display = 'block';
+        };
+
+        // Ensimmäinen haku: Yritetään hakea nopeasti alustava sijainti (timeout 10s)
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                onPositionUpdate(pos, points);
+                initWatch();
             },
-            { enableHighAccuracy: true, maximumAge: 5000, timeout: 20000 }
+            (err) => {
+                console.warn('Alustava GPS-haku viivästyi:', err.code, err.message);
+                // Jos HighAccuracy epäonnistui tai aikakatkaistiin (koodi 2 tai 3), kokeillaan verkko-fallbackia
+                if (err.code === 2 || err.code === 3) {
+                    navigator.geolocation.getCurrentPosition(
+                        (pos) => {
+                            onPositionUpdate(pos, points);
+                            initWatch();
+                        },
+                        () => { initWatch(); },
+                        { enableHighAccuracy: false, maximumAge: 10000, timeout: 15000 }
+                    );
+                } else {
+                    initWatch();
+                }
+            },
+            { enableHighAccuracy: true, maximumAge: 5000, timeout: 10000 }
         );
-        gpsActive = true;
-        if (gpsBtn) { gpsBtn.className = 'active'; gpsLabel.textContent = 'GPS päällä'; }
-        const panel = document.getElementById('gps-progress-panel');
-        if (panel) panel.style.display = 'block';
+    }
+
+    function handleGpsError(err, gpsBtn, gpsLabel) {
+        console.warn('GPS-virhe:', err.code, err.message);
+
+        // err.code: 1=PERMISSION_DENIED, 2=POSITION_UNAVAILABLE, 3=TIMEOUT
+        let label = '🔴 GPS-virhe';
+        let detail = '';
+        if (err.code === 1) {
+            label  = '🔴 Sijaintilupa evätty';
+            detail = 'Myönnä sijaintilupa selaimelle ja varmista Android-asetuksista: <strong>Sovellukset → Selain → Käyttöoikeudet → Sijainti → Tarkka sijainti</strong>.';
+        } else if (err.code === 2) {
+            label  = '🔴 Sijainti ei saatavilla';
+            detail = 'GPS-signaali ei tavoita laitetta (Virhe 2). Siirry avoimemmalle alueelle ja tarkista että puhelimen GPS on kytketty päälle.';
+        } else if (err.code === 3) {
+            label  = '🟡 GPS aikakatkaisu';
+            detail = 'Sijainnin haku kesti liian kauan (Virhe 3). Siirry pois katveesta ja kokeile uudelleen.';
+        }
+
+        if (gpsBtn) { gpsBtn.className = 'error'; gpsLabel.textContent = label; }
+        showGpsErrorBanner(label, detail);
+        gpsActive = false;
     }
 
     function showGpsErrorBanner(title, detail) {
@@ -816,10 +881,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         gpsWatchId = null;
         gpsActive = false;
 
-        // Nollataan poikkeamaseurannan tilat
+        // Nollataan poikkeamaseurannan ja puskurin tilat
         isOffRoute = false;
         consecutiveOffRouteCount = 0;
         lastReportedStepDistance = 0;
+        _gpsHistory = [];
 
         const gpsBtn = document.getElementById('gps-status-btn');
         const gpsLabel = document.getElementById('gps-label');
@@ -834,14 +900,35 @@ document.addEventListener('DOMContentLoaded', async () => {
     function onPositionUpdate(pos, points) {
         const userLat = pos.coords.latitude;
         const userLng = pos.coords.longitude;
-        const accuracy = pos.coords.accuracy || 15;
+        const rawAccuracy = pos.coords.accuracy || 15;
 
-        updateUserMarker(userLat, userLng, accuracy);
-        updateRouteStatus(userLat, userLng);
-        checkOffRouteGuidance(userLat, userLng, accuracy, points);
-        updateProgressPanel(userLat, userLng);
-        checkNextPoint(userLat, userLng, accuracy, points);
-        updateNearbyPlacesUI(userLat, userLng);
+        // Tasoitetaan koordinaatit liukuvan keskiarvon puskurilla (jitter-suodatus)
+        const smoothed = getSmoothedPosition(userLat, userLng, rawAccuracy);
+        const accuracy = smoothed.accuracy;
+
+        // Päivitetään selkeä GPS-tilailmoitus suoraan painikkeeseen
+        const gpsBtn = document.getElementById('gps-status-btn');
+        const gpsLabel = document.getElementById('gps-label');
+        if (gpsBtn && gpsLabel) {
+            const accRounded = Math.round(rawAccuracy);
+            if (rawAccuracy <= 25) {
+                gpsBtn.className = 'active';
+                gpsLabel.textContent = `🟢 GPS OK (${accRounded} m)`;
+            } else if (rawAccuracy <= 50) {
+                gpsBtn.className = 'warning';
+                gpsLabel.textContent = `🟡 Signaali heikko (${accRounded} m)`;
+            } else {
+                gpsBtn.className = 'warning';
+                gpsLabel.textContent = `⚠️ Epätarkka (${accRounded} m)`;
+            }
+        }
+
+        updateUserMarker(smoothed.lat, smoothed.lng, accuracy);
+        updateRouteStatus(smoothed.lat, smoothed.lng);
+        checkOffRouteGuidance(smoothed.lat, smoothed.lng, accuracy, points);
+        updateProgressPanel(smoothed.lat, smoothed.lng);
+        checkNextPoint(smoothed.lat, smoothed.lng, accuracy, points);
+        updateNearbyPlacesUI(smoothed.lat, smoothed.lng);
     }
 
     // ─── OFF-ROUTE GUIDANCE LOGIC ────────────────────────────────────────────
@@ -858,8 +945,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         // saapumisen valittuun aloituspisteeseen (completeCurrentPoint nollaa lipun)
         if (!_fallbackPointReached) return;
 
-        // Suodatetaan heikko GPS-tarkkuus (> 50 m)
-        if (accuracy && accuracy > 50) return;
+        // Suodatetaan heikko GPS-tarkkuus (> 40 m) virhehälytysten estämiseksi
+        if (accuracy && accuracy > 40) return;
 
         const coords = window.routeLineCoords || [];
         if (!coords || coords.length < 2) return;
@@ -870,8 +957,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Poikkeamakynnys: > 50 m reittiviivasta
             if (dist > 50) {
                 consecutiveOffRouteCount++;
-                // Vaatii 2 peräkkäistä GPS-havaintoa > 50 m, ettei yksittäinen sijaintihyppy aiheuta virhehälytystä
-                if (consecutiveOffRouteCount >= 2) {
+                // Vaaditaan 2-3 peräkkäistä GPS-havaintoa > 50 m, ettei yksittäinen sijaintihyppy aiheuta virhehälytystä
+                const requiredCount = accuracy > 25 ? 3 : 2;
+                if (consecutiveOffRouteCount >= requiredCount) {
                     isOffRoute = true;
                     lastReportedStepDistance = Math.floor(dist / 50) * 50;
                     if (audioNotificationsEnabled) {
@@ -1265,8 +1353,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         // blocking arrival when the user is physically standing at the point.
         const accuracyThreshold = arrivalR + 15; // 45 m for 30 m radius
         const accuracyOk = accuracy <= accuracyThreshold;
-        // Poor GPS needs more accumulation before triggering
-        const requiredReadings = accuracyOk ? 1 : (accuracy <= 80 ? 3 : 5);
+        // Require at least 2 consecutive readings (even when accuracyOk) to prevent single GPS spikes from auto-triggering arrival
+        const requiredReadings = accuracyOk ? 2 : (accuracy <= 60 ? 3 : 5);
 
         if (dist <= arrivalR) {
             // Inside arrival zone — accumulate
