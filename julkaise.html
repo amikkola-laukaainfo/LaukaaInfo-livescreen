@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>LaukaaInfo — Organisaation Julkaisupiste</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
       body {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -18,14 +19,17 @@
     <header class="bg-white border-b border-slate-200 p-4 sticky top-0 z-30 shadow-sm">
       <div class="max-w-md mx-auto flex items-center justify-between">
         <div class="flex items-center gap-2.5">
-          <div class="w-9 h-9 rounded-xl bg-violet-100 text-violet-700 font-black flex items-center justify-center text-lg">
+          <div class="w-9 h-9 rounded-xl bg-violet-100 text-violet-700 font-black flex items-center justify-center text-lg shadow-xs">
             🤝
           </div>
           <div>
             <p class="text-[9px] font-black uppercase tracking-widest text-violet-600">LaukaaInfo Julkaisupiste</p>
-            <h1 class="text-xs font-bold text-slate-900" id="orgName">Laukaan Kädenjälki ry</h1>
+            <h1 class="text-xs font-bold text-slate-900" id="orgName">Organisaation Julkaisupiste</h1>
           </div>
         </div>
+        <a href="seina.html" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold transition-all">
+          🧱 Seinälle →
+        </a>
       </div>
     </header>
 
@@ -64,24 +68,19 @@
                 🤝
               </div>
               <div>
-                <span class="px-2 py-0.5 rounded-md text-[9px] font-black uppercase bg-violet-100 text-violet-800">
-                  Yhdistys
+                <span id="orgHeaderBadge" class="px-2 py-0.5 rounded-md text-[9px] font-black uppercase bg-violet-100 text-violet-800">
+                  Organisaatio
                 </span>
-                <h2 class="text-xs font-bold text-slate-900 leading-tight">Laukaan Kädenjälki ry</h2>
+                <h2 class="text-xs font-bold text-slate-900 leading-tight mt-0.5" id="orgCardTitle">Organisaatio</h2>
               </div>
             </div>
-            <button onclick="switchTab('publish')" class="px-3 py-1.5 bg-violet-600 text-white rounded-xl text-xs font-bold shadow-xs">
+            <button onclick="switchTab('publish')" class="px-3 py-1.5 bg-violet-600 text-white rounded-xl text-xs font-bold shadow-xs hover:bg-violet-700 transition-all">
               + Kirjoita
             </button>
           </div>
-          <p class="text-xs text-slate-600 leading-relaxed">
-            Käsityötä, kulttuuria ja paikallista elävää tekemistä Laukaassa. Tervetuloa mukaan toimintaan!
+          <p class="text-xs text-slate-600 leading-relaxed" id="orgCardBio">
+            Hallitse ja luo julkaisuja organisaatiollesi LaukaaInfon julkaisukerroksessa.
           </p>
-          <div class="flex flex-wrap gap-1.5 pt-1">
-            <span class="text-[10px] px-2 py-0.5 bg-slate-100 rounded-lg text-slate-600 font-medium">📍 Laukaa</span>
-            <span class="text-[10px] px-2 py-0.5 bg-violet-50 text-violet-700 rounded-lg font-bold">🧩 Käsityö</span>
-            <span class="text-[10px] px-2 py-0.5 bg-violet-50 text-violet-700 rounded-lg font-bold">🧩 Kulttuuri</span>
-          </div>
         </div>
 
         <!-- Kiinnitetty julkaisu -->
@@ -100,18 +99,27 @@
 
       <!-- TAB 1: UUSI JULKAISU -->
       <section id="tab-publish" class="space-y-4 hidden">
-        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+        <div class="bg-white p-4.5 rounded-2xl border border-slate-200 shadow-sm space-y-3.5">
           <h2 class="text-xs font-black uppercase tracking-wider text-slate-500">Luo uusi julkaisu seinälle</h2>
 
           <!-- Tyyppi -->
           <div>
-            <label class="text-[10px] font-bold text-slate-500 uppercase mb-1 block">Tyyppi</label>
+            <label class="text-[10px] font-bold text-slate-500 uppercase mb-1 block">Sisältötyyppi</label>
             <div class="grid grid-cols-2 gap-1.5">
               <button type="button" onclick="setType('announcement')" id="type-announcement" class="type-btn py-2 px-2.5 rounded-xl text-xs font-bold border bg-violet-600 text-white border-violet-600 text-left">📢 Ilmoitus</button>
               <button type="button" onclick="setType('news')" id="type-news" class="type-btn py-2 px-2.5 rounded-xl text-xs font-bold border bg-slate-50 text-slate-800 border-slate-200 text-left">📰 Uutinen</button>
               <button type="button" onclick="setType('event')" id="type-event" class="type-btn py-2 px-2.5 rounded-xl text-xs font-bold border bg-slate-50 text-slate-800 border-slate-200 text-left">📅 Tapahtuma</button>
               <button type="button" onclick="setType('offer')" id="type-offer" class="type-btn py-2 px-2.5 rounded-xl text-xs font-bold border bg-slate-50 text-slate-800 border-slate-200 text-left">🏷️ Tarjous</button>
             </div>
+          </div>
+
+          <!-- Näkyvyys (Public / Link) -->
+          <div>
+            <label class="text-[10px] font-bold text-slate-500 uppercase mb-1 block">🔒 Julkaisun näkyvyys</label>
+            <select id="visibility" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-violet-500">
+              <option value="public">🌐 Julkinen (Näkyy omalla + yleisellä seinällä)</option>
+              <option value="link">🔒 Vain linkillä (Näkyy vain omalla seinällä / suoralla linkillä)</option>
+            </select>
           </div>
 
           <!-- Otsikko -->
@@ -126,21 +134,66 @@
             <textarea id="content" rows="3" placeholder="Kirjoita julkaisun sisältö..." class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-violet-500"></textarea>
           </div>
 
-          <!-- Paikka -->
-          <div>
-            <label class="text-[10px] font-bold text-slate-500 uppercase mb-1 block">📍 Missä?</label>
-            <select id="place" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-violet-500">
-              <option value="Laukaa">Laukaa (Koko kunta)</option>
-              <option value="Laukaan kirkonkylä">Laukaan kirkonkylä</option>
-              <option value="Lievestuore">Lievestuore</option>
-              <option value="Vihtavuori">Vihtavuori</option>
-            </select>
+          <!-- Paikka & Teemat -->
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="text-[10px] font-bold text-slate-500 uppercase mb-1 block">📍 Paikka</label>
+              <select id="place" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-violet-500">
+                <option value="Laukaa">Laukaa (Koko kunta)</option>
+                <option value="Laukaan kirkonkylä">Laukaan kirkonkylä</option>
+                <option value="Lievestuore">Lievestuore</option>
+                <option value="Vihtavuori">Vihtavuori</option>
+                <option value="Peurunka">Peurunka</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-[10px] font-bold text-slate-500 uppercase mb-1 block">🧩 Teema / Tagi</label>
+              <input type="text" id="themeInput" placeholder="esim. Käsityö, Kulttuuri" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-violet-500" />
+            </div>
+          </div>
+
+          <!-- Rikas Media (Kuvat / Videot) -->
+          <div class="p-3 bg-violet-50/60 rounded-2xl border border-violet-100 space-y-2">
+            <span class="text-[10px] font-black uppercase tracking-wider text-violet-800 flex items-center gap-1">
+              🎥 Media (Kuva tai Video)
+            </span>
+            <div>
+              <label class="text-[9px] font-bold text-slate-500 block mb-0.5">Kuva URL</label>
+              <input type="url" id="imageUrl" placeholder="https://..." class="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs outline-none focus:ring-1 focus:ring-violet-500" />
+            </div>
+            <div>
+              <label class="text-[9px] font-bold text-slate-500 block mb-0.5">Video URL (YouTube Embed / MP4)</label>
+              <input type="url" id="videoUrl" placeholder="https://www.youtube.com/embed/..." class="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs outline-none focus:ring-1 focus:ring-violet-500" />
+            </div>
+          </div>
+
+          <!-- CTA / Ulkoinen Linkki -->
+          <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
+            <span class="text-[10px] font-black uppercase tracking-wider text-slate-700 flex items-center gap-1">
+              🔗 Linkki / Painike (CTA)
+            </span>
+            <div class="grid grid-cols-2 gap-1.5">
+              <input type="text" id="linkTitle" placeholder="Painikkeen teksti (esim. Lue lisää)" class="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs outline-none" />
+              <input type="url" id="linkUrl" placeholder="Osoite (https://...)" class="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs outline-none" />
+            </div>
+          </div>
+
+          <!-- Voimassaolo & Kiinnitys -->
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <div>
+              <label class="text-[9px] font-bold text-slate-500 uppercase block mb-0.5">⌛ Vanhentuu (Expires)</label>
+              <input type="date" id="expiresAt" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none" />
+            </div>
+            <div>
+              <label class="text-[9px] font-bold text-slate-500 uppercase block mb-0.5">📌 Kiinnitetty asti</label>
+              <input type="date" id="pinnedUntil" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none" />
+            </div>
           </div>
 
           <!-- Painikkeet -->
           <div class="pt-2 grid grid-cols-2 gap-2">
-            <button type="button" onclick="publish('draft')" class="w-full py-2.5 px-3 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-700 hover:bg-slate-50">Tallenna luonnokseksi</button>
-            <button type="button" onclick="publish('published')" class="w-full py-2.5 px-3 rounded-xl bg-violet-600 text-white text-xs font-bold hover:bg-violet-700 shadow-sm">🚀 Julkaise seinälle</button>
+            <button type="button" onclick="publish('draft')" class="w-full py-2.5 px-3 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-700 hover:bg-slate-50 transition-all">Tallenna luonnokseksi</button>
+            <button type="button" onclick="publish('published')" class="w-full py-2.5 px-3 rounded-xl bg-violet-600 text-white text-xs font-bold hover:bg-violet-700 shadow-sm transition-all">🚀 Julkaise seinälle</button>
           </div>
 
         </div>
@@ -167,7 +220,7 @@
             <label class="text-[10px] font-bold text-slate-500 uppercase mb-1 block">Perustelu</label>
             <textarea id="theme-reason" rows="3" placeholder="Miksi tämä teema olisi hyödyllinen?" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-violet-500"></textarea>
           </div>
-          <button type="button" onclick="suggestTheme()" class="w-full py-2.5 px-4 rounded-xl bg-violet-600 text-white text-xs font-bold hover:bg-violet-700 shadow-sm">Lähetä ehdotus ylläpidolle</button>
+          <button type="button" onclick="suggestTheme()" class="w-full py-2.5 px-4 rounded-xl bg-violet-600 text-white text-xs font-bold hover:bg-violet-700 shadow-sm transition-all">Lähetä ehdotus ylläpidolle</button>
         </div>
       </section>
 
@@ -179,22 +232,40 @@
       if (targetOrgId && !targetOrgId.startsWith('company-') && !isNaN(targetOrgId)) {
         targetOrgId = 'company-' + targetOrgId;
       }
-      if (!targetOrgId) {
-        document.getElementById('orgName').innerText = 'Julkaisupiste';
-      } else if (targetOrgId === 'company-313') {
-        document.getElementById('orgName').innerText = 'Laukaan Kädenjälki ry';
-      } else if (targetOrgId === 'company-2') {
-        document.getElementById('orgName').innerText = 'Mediazoo';
-      } else {
-        document.getElementById('orgName').innerText = `Organisaatio (${targetOrgId})`;
-      }
+
+      // Supabase Client
+      const SUPABASE_URL = 'https://duxluwyqxvbmkkjzuzkz.supabase.co';
+      const SUPABASE_KEY = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
+      const supabaseClient = (window.supabase && typeof window.supabase.createClient === 'function')
+        ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+        : null;
 
       let currentPubType = 'announcement';
-      const samplePubs = [
-        { id: 1, title: '📌 Syksyn käsityöillat alkavat taas torstaisin!', content: 'Tule mukaan rentoon käsityöiltaan joka torstai klo 18. Omat tekeleet mukaan!', place: 'Laukaan kirkonkylä', status: 'published', isPinned: true, date: '18.9.2026' },
-        { id: 2, title: '📅 Joulumyyjäiset 2026 Seurahuoneella', content: 'Uniikkeja lahjaideoita, leivonnaisia ja käsitöitä.', place: 'Laukaa', status: 'published', isPinned: false, date: '12.12.2026' },
-        { id: 3, title: '💡 Etsimme vapaaehtoisia ohjaajia', content: 'Haluatko jakaa kädentaitojasi muille?', place: 'Laukaa', status: 'draft', isPinned: false, date: '1.10.2026' }
+      let samplePubs = [
+        { id: '1', title: '📌 Syksyn käsityöillat alkavat taas torstaisin!', content: 'Tule mukaan rentoon käsityöiltaan joka torstai klo 18. Omat tekeleet mukaan!', place: 'Laukaan kirkonkylä', status: 'published', isPinned: true, date: '18.9.2026' },
+        { id: '2', title: '📅 Joulumyyjäiset 2026 Seurahuoneella', content: 'Uniikkeja lahjaideoita, leivonnaisia ja käsitöitä.', place: 'Laukaa', status: 'published', isPinned: false, date: '12.12.2026' },
+        { id: '3', title: '💡 Etsimme vapaaehtoisia ohjaajia', content: 'Haluatko jakaa kädentaitojasi muille?', place: 'Laukaa', status: 'draft', isPinned: false, date: '1.10.2026' }
       ];
+
+      async function initOrg() {
+        if (!targetOrgId) {
+          document.getElementById('orgName').innerText = 'Julkaisupiste';
+          document.getElementById('orgCardTitle').innerText = 'Organisaation Julkaisupiste';
+          return;
+        }
+
+        let orgName = targetOrgId === 'company-313' ? 'Laukaan Kädenjälki ry' : (targetOrgId === 'company-2' ? 'Mediazoo' : `Organisaatio (${targetOrgId})`);
+
+        if (supabaseClient) {
+          try {
+            const { data } = await supabaseClient.from('organizations').select('name').eq('id', targetOrgId).maybeSingle();
+            if (data && data.name) orgName = data.name;
+          } catch (e) { console.warn(e); }
+        }
+
+        document.getElementById('orgName').innerText = orgName;
+        document.getElementById('orgCardTitle').innerText = orgName;
+      }
 
       function switchTab(tab) {
         ['wall', 'publish', 'list', 'suggest'].forEach(t => {
@@ -230,23 +301,90 @@
         renderList();
       }
 
-      function publish(status) {
+      async function publish(status) {
         const title = document.getElementById('title').value;
         if (!title.trim()) return alert('Anna otsikko!');
-        
-        samplePubs.unshift({
-          id: Date.now(),
+
+        const content = document.getElementById('content').value;
+        const place = document.getElementById('place').value;
+        const visibility = document.getElementById('visibility').value;
+        const themeText = document.getElementById('themeInput').value;
+        const imageUrl = document.getElementById('imageUrl').value;
+        const videoUrl = document.getElementById('videoUrl').value;
+        const linkTitle = document.getElementById('linkTitle').value;
+        const linkUrl = document.getElementById('linkUrl').value;
+        const expiresAt = document.getElementById('expiresAt').value;
+        const pinnedUntil = document.getElementById('pinnedUntil').value;
+
+        const newPostId = crypto.randomUUID ? crypto.randomUUID() : String(Date.now());
+
+        // Local state insert
+        const newPub = {
+          id: newPostId,
           title: title,
-          content: document.getElementById('content').value,
-          place: document.getElementById('place').value,
+          content: content,
+          place: place,
           status: status,
-          isPinned: false,
+          visibility: visibility,
+          isPinned: Boolean(pinnedUntil),
           date: new Date().toLocaleDateString('fi-FI')
-        });
+        };
+        samplePubs.unshift(newPub);
+
+        // Supabase DB insertion
+        if (supabaseClient) {
+          try {
+            await supabaseClient.from('posts').insert([{
+              id: newPostId,
+              organization_id: targetOrgId || 'company-313',
+              title: title,
+              content: content,
+              type: currentPubType,
+              visibility: visibility,
+              status: status,
+              expires_at: expiresAt ? new Date(expiresAt).toISOString() : null,
+              pinned_until: pinnedUntil ? new Date(pinnedUntil).toISOString() : null,
+              is_pinned: Boolean(pinnedUntil),
+              created_at: new Date().toISOString()
+            }]);
+
+            // Insert place
+            if (place) {
+              await supabaseClient.from('post_places').insert([{ post_id: newPostId, place_id: place, relation: 'venue' }]);
+            }
+
+            // Insert themes
+            if (themeText.trim()) {
+              const tags = themeText.split(',').map(t => t.trim()).filter(Boolean);
+              for (const tag of tags) {
+                await supabaseClient.from('post_themes').insert([{ post_id: newPostId, tag_id: tag }]);
+              }
+            }
+
+            // Insert media
+            if (imageUrl.trim()) {
+              await supabaseClient.from('post_media').insert([{ post_id: newPostId, media_type: 'image', url: imageUrl.trim() }]);
+            }
+            if (videoUrl.trim()) {
+              await supabaseClient.from('post_media').insert([{ post_id: newPostId, media_type: 'video', url: videoUrl.trim() }]);
+            }
+
+            // Insert links
+            if (linkUrl.trim()) {
+              await supabaseClient.from('post_links').insert([{ post_id: newPostId, url: linkUrl.trim(), title: linkTitle.trim() || 'Lue lisää', link_type: 'external' }]);
+            }
+          } catch (dbErr) {
+            console.warn('Supabase publish insert error (local state preserved):', dbErr);
+          }
+        }
 
         alert(status === 'published' ? 'Julkaistu seinälle!' : 'Tallennettu luonnokseksi!');
         document.getElementById('title').value = '';
         document.getElementById('content').value = '';
+        document.getElementById('imageUrl').value = '';
+        document.getElementById('videoUrl').value = '';
+        document.getElementById('linkTitle').value = '';
+        document.getElementById('linkUrl').value = '';
         switchTab('wall');
       }
 
@@ -254,6 +392,9 @@
         if (!confirm('Haluatko varmasti poistaa tämän julkaisun?')) return;
         const index = samplePubs.findIndex(p => p.id === id);
         if (index !== -1) samplePubs.splice(index, 1);
+        if (supabaseClient) {
+          supabaseClient.from('posts').delete().eq('id', id).catch(e => console.warn(e));
+        }
         renderWall();
         renderList();
       }
@@ -263,37 +404,33 @@
         const feedContainer = document.getElementById('wall-feed-container');
 
         const pinned = samplePubs.find(p => p.status === 'published' && p.isPinned);
-        if (pinned) {
-          pinnedContainer.innerHTML = `
-            <div class="bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-white p-4 rounded-2xl border-2 border-amber-400 shadow-sm space-y-2">
-              <div class="flex items-center justify-between">
-                <span class="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase bg-amber-500 text-white flex items-center gap-1">📌 KIINNITETTY JULKAISU</span>
-                <div class="flex items-center gap-2">
-                  <button onclick="togglePin(${pinned.id})" class="text-[10px] font-bold text-amber-800 hover:underline">Irrota</button>
-                  <button onclick="deletePost(${pinned.id})" class="text-[10px] font-bold text-red-600 hover:underline">🗑️</button>
-                </div>
-              </div>
-              <h4 class="text-xs font-bold text-slate-900">${pinned.title}</h4>
-              <p class="text-xs text-slate-700">${pinned.content || ''}</p>
-              <div class="flex justify-between text-[10px] text-slate-500 pt-1 border-t border-amber-200">
-                <span>📍 ${pinned.place}</span>
-                <span>${pinned.date}</span>
+        pinnedContainer.innerHTML = pinned ? `
+          <div class="bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-white p-4 rounded-2xl border-2 border-amber-400 shadow-sm space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase bg-amber-500 text-white flex items-center gap-1">📌 KIINNITETTY JULKAISU</span>
+              <div class="flex items-center gap-2">
+                <button onclick="togglePin('${pinned.id}')" class="text-[10px] font-bold text-amber-800 hover:underline">Irrota</button>
+                <button onclick="deletePost('${pinned.id}')" class="text-[10px] font-bold text-red-600 hover:underline">🗑️</button>
               </div>
             </div>
-          `;
-        } else {
-          pinnedContainer.innerHTML = '';
-        }
+            <h4 class="text-xs font-bold text-slate-900">${pinned.title}</h4>
+            <p class="text-xs text-slate-700">${pinned.content || ''}</p>
+            <div class="flex justify-between text-[10px] text-slate-500 pt-1 border-t border-amber-200">
+              <span>📍 ${pinned.place}</span>
+              <span>${pinned.date}</span>
+            </div>
+          </div>
+        ` : '';
 
-        const wallPubs = samplePubs.filter(p => p.status === 'published' && !p.isPinned);
-        feedContainer.innerHTML = wallPubs.map(p => `
+        const activePubs = samplePubs.filter(p => p.status === 'published' && !p.isPinned);
+        feedContainer.innerHTML = activePubs.map(p => `
           <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm space-y-1.5">
             <div class="flex items-center justify-between text-[10px]">
               <span class="px-2 py-0.5 rounded-md font-bold uppercase bg-violet-50 text-violet-700">📢 Julkaisu</span>
               <div class="flex items-center gap-2">
                 <span class="text-slate-400">${p.date}</span>
-                <button onclick="togglePin(${p.id})" title="Kiinnitä yläosaan" class="text-slate-400 hover:text-amber-500">📌</button>
-                <button onclick="deletePost(${p.id})" title="Poista" class="text-slate-400 hover:text-red-500">🗑️</button>
+                <button onclick="togglePin('${p.id}')" title="Kiinnitä yläosaan" class="text-slate-400 hover:text-amber-500">📌</button>
+                <button onclick="deletePost('${p.id}')" title="Poista" class="text-slate-400 hover:text-red-500">🗑️</button>
               </div>
             </div>
             <h4 class="text-xs font-bold text-slate-900">${p.title}</h4>
@@ -304,8 +441,7 @@
       }
 
       function renderList() {
-        const container = document.getElementById('pub-list-container');
-        container.innerHTML = samplePubs.map(p => `
+        document.getElementById('pub-list-container').innerHTML = samplePubs.map(p => `
           <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
             <div class="flex items-center justify-between text-[10px]">
               <span class="px-2 py-0.5 rounded-full font-bold uppercase ${p.status === 'published' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}">
@@ -313,7 +449,7 @@
               </span>
               <div class="flex items-center gap-2">
                 <span class="text-slate-400">${p.date}</span>
-                <button onclick="deletePost(${p.id})" title="Poista" class="text-slate-400 hover:text-red-500 font-bold">🗑️ Poista</button>
+                <button onclick="deletePost('${p.id}')" title="Poista" class="text-slate-400 hover:text-red-500 font-bold">🗑️ Poista</button>
               </div>
             </div>
             <h3 class="text-xs font-bold text-slate-900">${p.title}</h3>
@@ -323,14 +459,13 @@
       }
 
       function suggestTheme() {
-        const name = document.getElementById('theme-name').value;
-        if (!name.trim()) return alert('Anna teeman nimi!');
+        if (!document.getElementById('theme-name').value.trim()) return alert('Anna teeman nimi!');
         alert('Ehdotus lähetetty ylläpidolle!');
         document.getElementById('theme-name').value = '';
         document.getElementById('theme-reason').value = '';
       }
 
-      // Alustetaan seinä
+      initOrg();
       renderWall();
     </script>
   </body>
