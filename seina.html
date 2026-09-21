@@ -584,6 +584,7 @@
                   post_links: linksMap[p.id] || (p.website_url ? [{ title: 'Lue lisää', url: p.website_url, link_type: 'external' }] : [])
                 };
               });
+            }
           } catch (err) {
             console.warn('DB Post Query error, falling back to schema pool:', err);
           }
