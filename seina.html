@@ -418,6 +418,24 @@
         await fetchPostsFromDb(null);
       }
 
+      // Cache for organization names
+      let orgNamesCache = {
+        'company-313': 'Laukaan Kädenjälki ry',
+        'company-2': 'Mediazoo',
+        'company-202': 'Laukaan Yrittäjät',
+        'company-101': 'Peurunka'
+      };
+
+      function getOrgNameSync(orgId, fallbackName) {
+        if (fallbackName && fallbackName !== 'Organisaatio' && fallbackName !== 'undefined') return fallbackName;
+        if (orgId && orgNamesCache[orgId]) return orgNamesCache[orgId];
+        if (orgId === 'company-2' || orgId === '2') return 'Mediazoo';
+        if (orgId === 'company-313' || orgId === '313') return 'Laukaan Kädenjälki ry';
+        if (orgId === 'company-202' || orgId === '202') return 'Laukaan Yrittäjät';
+        if (orgId === 'company-101' || orgId === '101') return 'Peurunka';
+        return 'Organisaatio';
+      }
+
       // Helper to resolve organization ID from ID or org name
       function resolveOrgId(rawOrgId, rawOrgName) {
         let id = rawOrgId || '';
@@ -452,6 +470,20 @@
 
             if (!postsError && postsData && postsData.length > 0) {
               const postIds = postsData.map(p => p.id);
+              const rawOrgIds = Array.from(new Set(postsData.map(p => p.organization_id || p.org_id || p.business_id).filter(Boolean)));
+
+              // Bulk fetch organization names for all posts
+              if (rawOrgIds.length > 0) {
+                try {
+                  const { data: orgsData } = await supabaseClient.from('organizations').select('id, name').in('id', rawOrgIds);
+                  if (orgsData) orgsData.forEach(o => { if (o.id && o.name) orgNamesCache[o.id] = o.name; });
+
+                  const { data: compsData } = await supabaseClient.from('companies').select('id, name, nimi').in('id', rawOrgIds);
+                  if (compsData) compsData.forEach(c => { if (c.id) orgNamesCache[c.id] = c.name || c.nimi || orgNamesCache[c.id]; });
+                } catch (orgErr) {
+                  console.warn('Bulk org name fetch notice:', orgErr);
+                }
+              }
 
               // Fetch related sub-tables independently for robust execution
               let placesMap = {}, themesMap = {}, mediaMap = {}, linksMap = {};
@@ -473,13 +505,14 @@
               }
 
               fetchedPosts = postsData.map(p => {
-                const orgName = p.publisher_name || p.org_name || (document.getElementById('orgTitle')?.innerText !== 'Organisaation nimi' ? document.getElementById('orgTitle').innerText : 'Organisaatio');
-                const resolvedId = resolveOrgId(p.organization_id || p.org_id || orgFilterId, orgName);
+                const rawName = p.publisher_name || p.org_name;
+                const resolvedId = resolveOrgId(p.organization_id || p.org_id || orgFilterId, rawName);
+                const resolvedName = getOrgNameSync(resolvedId, rawName);
 
                 return {
                   id: p.id,
                   organization_id: resolvedId,
-                  org_name: orgName,
+                  org_name: resolvedName,
                   type: p.type || 'announcement',
                   title: p.title,
                   content: p.content || p.description || '',
