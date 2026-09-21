@@ -345,10 +345,15 @@ LANGUAGE plpgsql
 SECURITY DEFINER
 AS $$
 DECLARE
+    v_clean_key TEXT;
+    v_hash TEXT;
     v_cred RECORD;
     v_post_org TEXT;
     v_pinned_until TIMESTAMPTZ;
 BEGIN
+    v_clean_key := UPPER(REGEXP_REPLACE(p_publish_key, '[^A-Z0-9]', '', 'g'));
+    v_hash := encode(digest(v_clean_key, 'sha256'), 'hex');
+
     SELECT * INTO v_cred
     FROM public.organization_publish_credentials
     WHERE organization_id = p_organization_id
@@ -360,7 +365,7 @@ BEGIN
         RETURN jsonb_build_object('success', false, 'error', 'Organisaatiolla ei ole voimassaolevaa julkaisuavainta');
     END IF;
 
-    IF v_cred.key_hash <> encode(digest(p_publish_key, 'sha256'), 'hex') THEN
+    IF v_cred.code_hash <> v_hash THEN
         RETURN jsonb_build_object('success', false, 'error', 'Virheellinen julkaisuavain');
     END IF;
 
@@ -382,4 +387,88 @@ BEGIN
     RETURN jsonb_build_object('success', true, 'pinned_until', v_pinned_until, 'message', CASE WHEN p_hours > 0 THEN 'Julkaisu kiinnitetty!' ELSE 'Kiinnitys irrotettu!' END);
 END;
 $$;
+
+-- 6. RPC: Tunnista organisaatio pelkän julkaisuavaimen perusteella
+CREATE OR REPLACE FUNCTION public.resolve_publisher_key(
+    p_publish_key TEXT
+)
+RETURNS JSONB
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE
+    v_clean_key TEXT;
+    v_hash TEXT;
+    v_cred RECORD;
+    v_org RECORD;
+BEGIN
+    v_clean_key := UPPER(REGEXP_REPLACE(p_publish_key, '[^A-Z0-9]', '', 'g'));
+    IF LENGTH(v_clean_key) < 6 THEN
+        RETURN jsonb_build_object('valid', false, 'error', 'Syötä vähintään 6-merkkinen julkaisuavain.');
+    END IF;
+
+    v_hash := encode(digest(v_clean_key, 'sha256'), 'hex');
+
+    SELECT * INTO v_cred
+    FROM public.organization_publish_credentials
+    WHERE code_hash = v_hash
+      AND revoked_at IS NULL
+    ORDER BY created_at DESC
+    LIMIT 1;
+
+    IF NOT FOUND THEN
+        RETURN jsonb_build_object('valid', false, 'error', 'Virheellinen tai vanhentunut julkaisuavain.');
+    END IF;
+
+    -- Tarkistetaan organisaatio
+    SELECT id, name, publisher_enabled INTO v_org
+    FROM public.organizations
+    WHERE id = v_cred.organization_id;
+
+    IF v_org.publisher_enabled IS FALSE THEN
+        RETURN jsonb_build_object('valid', false, 'error', 'Organisaation julkaisuoikeus on estetty.');
+    END IF;
+
+    -- Päivitetään käyttöaika
+    UPDATE public.organization_publish_credentials
+    SET last_used_at = NOW()
+    WHERE id = v_cred.id;
+
+    RETURN jsonb_build_object(
+        'valid', true,
+        'org_id', v_cred.organization_id,
+        'org_name', COALESCE(v_org.name, v_cred.organization_id)
+    );
+END;
+$$;
+
+-- 7. RPC: Poista julkaisu avaimella
+CREATE OR REPLACE FUNCTION public.delete_post_with_key(
+    p_organization_id TEXT,
+    p_publish_key TEXT,
+    p_post_id UUID
+)
+RETURNS JSONB
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE
+    v_verify_res JSONB;
+BEGIN
+    v_verify_res := public.verify_publisher_key(p_organization_id, p_publish_key);
+    
+    IF (v_verify_res->>'valid')::BOOLEAN IS NOT TRUE THEN
+        RETURN jsonb_build_object('success', false, 'error', COALESCE(v_verify_res->>'error', 'Käyttöoikeus evätty.'));
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM public.posts WHERE id = p_post_id AND organization_id = p_organization_id) THEN
+        RETURN jsonb_build_object('success', false, 'error', 'Julkaisua ei löytynyt tai se ei kuulu organisaatiollesi.');
+    END IF;
+
+    DELETE FROM public.posts WHERE id = p_post_id AND organization_id = p_organization_id;
+
+    RETURN jsonb_build_object('success', true, 'message', 'Julkaisu poistettu onnistuneesti!');
+END;
+$$;
+
 

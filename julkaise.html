@@ -41,30 +41,22 @@
     <!-- Main Container -->
     <main class="flex-1 max-w-md w-full mx-auto p-4 space-y-4">
 
-      <!-- VAIHE 1: TUNNISTAUTUMINEN (Organisaation valinta + Julkaisuavain) -->
+      <!-- VAIHE 1: TUNNISTAUTUMINEN (Julkaisuavain-kirjautuminen) -->
       <section id="authSection" class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-4">
         <div class="text-center space-y-1">
           <div class="w-12 h-12 rounded-2xl bg-violet-100 text-violet-700 font-black flex items-center justify-center text-2xl mx-auto shadow-xs">
             🔑
           </div>
-          <h2 class="text-base font-bold text-slate-900">Organisaation Julkaisu</h2>
+          <h2 class="text-base font-bold text-slate-900">Organisaation Julkaisupiste</h2>
           <p class="text-xs text-slate-500 leading-relaxed">
-            Ei salasanoja eikä rekisteröitymistä. Valitse organisaatiosi ja syötä 8-merkkinen julkaisuavaimesi.
+            Syötä organisaatiollesi annettu 8-merkkinen Julkaisuavain. Järjestelmä tunnistaa organisaatiosi automaattisesti.
           </p>
-        </div>
-
-        <!-- Organisaatiovalikko -->
-        <div>
-          <label class="text-[10px] font-bold text-slate-500 uppercase mb-1 block">1. Valitse organisaatio</label>
-          <select id="authOrgSelect" onchange="onOrgSelectChange()" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-900 outline-none focus:ring-2 focus:ring-violet-500">
-            <option value="">Ladataan organisaatioita...</option>
-          </select>
         </div>
 
         <!-- Julkaisuavain syöte -->
         <div>
-          <label class="text-[10px] font-bold text-slate-500 uppercase mb-1 block">2. Julkaisuavain (esim. K7M4-X9P2)</label>
-          <input type="text" id="authKeyInput" placeholder="K7M4-X9P2" maxlength="10" oninput="formatKeyInput(this)" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-mono tracking-widest uppercase font-bold text-center outline-none focus:ring-2 focus:ring-violet-500" />
+          <label class="text-[10px] font-bold text-slate-500 uppercase mb-1 block">Julkaisuavain (esim. K7M4-X9P2)</label>
+          <input type="text" id="authKeyInput" placeholder="K7M4-X9P2" maxlength="10" oninput="formatKeyInput(this)" onkeyup="if(event.key==='Enter') verifyAndContinue()" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-mono tracking-widest uppercase font-bold text-center outline-none focus:ring-2 focus:ring-violet-500" />
         </div>
 
         <!-- Error Message Container -->
@@ -72,12 +64,12 @@
         </div>
 
         <button type="button" onclick="verifyAndContinue()" class="w-full py-3 px-4 bg-violet-600 hover:bg-violet-700 text-white text-xs font-bold rounded-xl shadow-xs transition-all flex items-center justify-center gap-1.5">
-          <span>Jatka julkaisemaan</span>
+          <span>Kirjaudu julkaisemaan</span>
           <span>→</span>
         </button>
 
         <div class="text-[10px] text-slate-400 text-center leading-relaxed pt-2 border-t border-slate-100">
-          💡 Jos julkaisuavaimesi on kadonnut, ota yhteyttä LaukaaInfon ylläpitoon uuden avaimen aktivoimiseksi.
+          💡 Jos organisaatiollasi ei ole avainta tai se on kadonnut, ota yhteyttä LaukaaInfon ylläpitoon.
         </div>
       </section>
 
@@ -91,12 +83,15 @@
             <h3 class="text-xs font-bold text-white" id="verifiedOrgTitle">Organisaatio</h3>
           </div>
           <button onclick="resetAuth()" class="px-2.5 py-1 bg-white/10 hover:bg-white/20 text-white rounded-lg text-[10px] font-bold transition-all">
-            Vaihda 🔄
+            Kirjaudu ulos 🚪
           </button>
         </div>
 
-        <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-4">
-          <h2 class="text-xs font-black uppercase tracking-wider text-slate-500">Luo uusi julkaisu seinälle</h2>
+        <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-4" id="formCard">
+          <div class="flex items-center justify-between">
+            <h2 class="text-xs font-black uppercase tracking-wider text-slate-700" id="formTitleText">Luo uusi julkaisu seinälle</h2>
+            <span id="editBadge" class="hidden text-[9px] font-extrabold bg-amber-100 text-amber-800 px-2 py-0.5 rounded-md">Muokkaustila</span>
+          </div>
 
           <!-- Sisältötyyppi -->
           <div>
@@ -224,12 +219,35 @@
             <button type="button" id="submitPublishBtn" onclick="submitPostViaRpc('published')" class="w-full py-3 px-4 bg-violet-600 hover:bg-violet-700 text-white text-xs font-bold rounded-xl shadow-xs transition-all flex items-center justify-center gap-1">
               <span>🚀 Julkaise seinälle</span>
             </button>
+            <button type="button" id="cancelEditBtn" onclick="cancelEditMode()" class="hidden w-full py-2 px-3 border border-slate-300 text-slate-700 text-xs font-bold rounded-xl hover:bg-slate-100 transition-all">
+              ❌ Peruuta muokkaus
+            </button>
             <button type="button" onclick="submitPostViaRpc('draft')" class="w-full py-2 px-3 border border-slate-200 bg-white text-slate-600 text-xs font-bold rounded-xl hover:bg-slate-50">
               Tallenna luonnokseksi
             </button>
           </div>
 
         </div>
+
+        <!-- HALLINNOINTISEKTIO: ORGANISAATION OMAT JULKAISUT -->
+        <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div>
+              <h3 class="text-xs font-black uppercase tracking-wider text-slate-800 flex items-center gap-1.5">
+                <span>📋</span> Organisaation aiemmat julkaisut
+              </h3>
+              <p class="text-[10px] text-slate-400">Muokkaa, poista tai kiinnitä julkaisujasi</p>
+            </div>
+            <button type="button" onclick="loadMyPosts()" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold rounded-lg transition-all">
+              Päivitä 🔄
+            </button>
+          </div>
+
+          <div id="myPostsContainer" class="space-y-2.5">
+            <p class="text-xs text-slate-400 text-center py-4">Ladataan julkaisuja...</p>
+          </div>
+        </div>
+
       </section>
 
     </main>
@@ -246,17 +264,11 @@
       let selectedOrgId = '';
       let activePublishKey = '';
       let verifiedOrgName = '';
+      let editingPostId = null;
+      let loadedMyPosts = [];
       let currentPubType = 'announcement';
       let availableTags = ['Käsityö', 'Kulttuuri', 'Yrittäjyys', 'Verkostot', 'VIDEOTUOTANTO', 'DIGITAALISUUS', 'KOULUTUS', 'Liikunta', 'Nuoret', 'Tapahtumat', 'Perinteet'];
       let selectedThemes = new Set();
-
-      // Organization list options
-      const sampleOrgs = [
-        { id: 'company-313', name: 'Laukaan Kädenjälki ry' },
-        { id: 'company-2', name: 'Mediazoo' },
-        { id: 'company-202', name: 'Laukaan Yrittäjät' },
-        { id: 'company-101', name: 'Peurunka' }
-      ];
 
       // Page Init
       async function initPublishingPoint() {
@@ -266,32 +278,7 @@
           paramOrg = 'company-' + paramOrg;
         }
 
-        // Load organizations into select
-        await loadOrganizations(paramOrg);
         await loadThemesFromSupabase();
-      }
-
-      async function loadOrganizations(defaultOrgId) {
-        const select = document.getElementById('authOrgSelect');
-        let orgs = sampleOrgs;
-
-        if (supabaseClient) {
-          try {
-            const { data } = await supabaseClient.from('organizations').select('id, name').order('name');
-            if (data && data.length > 0) {
-              orgs = data;
-            }
-          } catch (e) {
-            console.warn('Organizations fetch warning:', e);
-          }
-        }
-
-        select.innerHTML = '<option value="">-- Valitse Organisaatio --</option>' + 
-          orgs.map(o => `<option value="${o.id}" ${o.id === defaultOrgId ? 'selected' : ''}>🏢 ${o.name}</option>`).join('');
-
-        if (defaultOrgId) {
-          selectedOrgId = defaultOrgId;
-        }
       }
 
       async function loadThemesFromSupabase() {
@@ -345,24 +332,12 @@
         input.value = val;
       }
 
-      function onOrgSelectChange() {
-        selectedOrgId = document.getElementById('authOrgSelect').value;
-      }
-
-      // Step 1 -> Step 2 Verification via Server RPC
+      // Step 1 -> Step 2 Verification via Server RPC (Key auto-detects organization)
       async function verifyAndContinue() {
-        const orgSelect = document.getElementById('authOrgSelect');
-        selectedOrgId = orgSelect.value;
         const rawKey = document.getElementById('authKeyInput').value;
 
         const errorBox = document.getElementById('authError');
         errorBox.classList.add('hidden');
-
-        if (!selectedOrgId) {
-          errorBox.innerText = 'Valitse organisaatiosi valikosta!';
-          errorBox.classList.remove('hidden');
-          return;
-        }
 
         if (!rawKey || rawKey.replace('-', '').length < 6) {
           errorBox.innerText = 'Syötä 8-merkkinen julkaisuavaimesi!';
@@ -370,35 +345,41 @@
           return;
         }
 
-        // Perform server-side RPC verification
         let isValid = false;
-        let orgName = orgSelect.options[orgSelect.selectedIndex].text.replace('🏢 ', '');
+        let orgId = '';
+        let orgName = '';
 
         if (supabaseClient) {
           try {
-            const { data, error } = await supabaseClient.rpc('verify_publisher_key', {
-              p_organization_id: selectedOrgId,
+            const { data, error } = await supabaseClient.rpc('resolve_publisher_key', {
               p_publish_key: rawKey
             });
 
             if (!error && data && data.valid) {
               isValid = true;
-              if (data.org_name) orgName = data.org_name;
-            } else if (error || (data && !data.valid)) {
-              errorBox.innerText = (data && data.error) ? data.error : 'Virheellinen julkaisuavain!';
+              orgId = data.org_id;
+              orgName = data.org_name;
+            } else {
+              errorBox.innerText = (data && data.error) ? data.error : (error?.message || 'Virheellinen julkaisuavain!');
               errorBox.classList.remove('hidden');
               return;
             }
           } catch (e) {
-            console.warn('RPC verify error, falling back to client mode:', e);
-            isValid = true; // Fallback for dev/offline testing
+            console.warn('RPC resolve error, falling back:', e);
+            // Fallback for dev mode
+            isValid = true;
+            orgId = 'company-2';
+            orgName = 'Mediazoo';
           }
         } else {
           isValid = true;
+          orgId = 'company-2';
+          orgName = 'Mediazoo';
         }
 
         if (isValid) {
           activePublishKey = rawKey;
+          selectedOrgId = orgId;
           verifiedOrgName = orgName;
 
           // Unlock Editor
@@ -408,10 +389,17 @@
           document.getElementById('headerOrgName').innerText = orgName;
           document.getElementById('verifiedOrgTitle').innerText = orgName;
           document.getElementById('submitPublishBtn').innerText = `🚀 Julkaise ${orgName} seinälle`;
+
+          // Load posts for this organization
+          await loadMyPosts();
         }
       }
 
       function resetAuth() {
+        activePublishKey = '';
+        selectedOrgId = '';
+        verifiedOrgName = '';
+        cancelEditMode();
         document.getElementById('editorSection').classList.add('hidden');
         document.getElementById('authSection').classList.remove('hidden');
       }
@@ -434,7 +422,205 @@
         }
       }
 
-      // Step 2 Server-side RPC Publish
+      // Load organisaation omat julkaisut
+      async function loadMyPosts() {
+        const container = document.getElementById('myPostsContainer');
+        if (!container) return;
+
+        container.innerHTML = '<p class="text-xs text-slate-400 text-center py-3">Päivitetään julkaisulistaa...</p>';
+
+        if (!supabaseClient || !selectedOrgId) {
+          container.innerHTML = '<p class="text-xs text-slate-400 text-center py-3">Ei julkaisuja saatavilla ilman tietokantayhteyttä.</p>';
+          return;
+        }
+
+        try {
+          const { data: posts, error } = await supabaseClient
+            .from('posts')
+            .select(`
+              *,
+              post_media(url, media_type),
+              post_links(url, title),
+              post_places(place_id),
+              post_themes(tag_id)
+            `)
+            .eq('organization_id', selectedOrgId)
+            .order('created_at', { ascending: false });
+
+          if (error) {
+            console.error('Error fetching org posts:', error);
+            container.innerHTML = '<p class="text-xs text-red-500 text-center py-3">Virhe julkaisujen latauksessa.</p>';
+            return;
+          }
+
+          loadedMyPosts = posts || [];
+
+          if (loadedMyPosts.length === 0) {
+            container.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">Ei vielä julkaisuja. Luo ensimmäinen yllä olevalla lomakkeella!</p>';
+            return;
+          }
+
+          const typeIcons = { announcement: '📢', news: '📰', event: '📅', offer: '🏷️' };
+
+          container.innerHTML = loadedMyPosts.map(p => {
+            const isPinned = p.is_pinned && p.pinned_until && new Date(p.pinned_until) > new Date();
+            const createdStr = p.created_at ? new Date(p.created_at).toLocaleDateString('fi-FI') : '';
+            const typeIcon = typeIcons[p.type] || '📝';
+
+            return `
+              <div class="p-3 bg-slate-50 rounded-2xl border ${isPinned ? 'border-amber-300 bg-amber-50/40' : 'border-slate-200'} space-y-2">
+                <div class="flex items-start justify-between gap-2">
+                  <div class="space-y-0.5 flex-1 min-w-0">
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                      <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-700">${typeIcon} ${p.type}</span>
+                      ${isPinned ? '<span class="text-[9px] font-extrabold bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full">📌 KIINNITETTY</span>' : ''}
+                      <span class="text-[10px] text-slate-400">${createdStr}</span>
+                    </div>
+                    <h4 class="text-xs font-bold text-slate-900 truncate">${p.title}</h4>
+                    ${p.content ? `<p class="text-[11px] text-slate-600 line-clamp-2">${p.content}</p>` : ''}
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-1.5 pt-1 border-t border-slate-200/60 text-[10px]">
+                  <button type="button" onclick="editPost('${p.id}')" class="px-2.5 py-1 bg-violet-100 hover:bg-violet-200 text-violet-800 font-bold rounded-lg transition-all">
+                    ✏️ Muokkaa
+                  </button>
+                  <button type="button" onclick="togglePinPost('${p.id}', ${isPinned})" class="px-2.5 py-1 ${isPinned ? 'bg-amber-200 hover:bg-amber-300 text-amber-900' : 'bg-slate-200 hover:bg-slate-300 text-slate-800'} font-bold rounded-lg transition-all">
+                    ${isPinned ? '📌 Irrota' : '📌 Kiinnitä 2h'}
+                  </button>
+                  <button type="button" onclick="deletePost('${p.id}')" class="px-2.5 py-1 bg-red-100 hover:bg-red-200 text-red-700 font-bold rounded-lg transition-all ml-auto">
+                    🗑️ Poista
+                  </button>
+                </div>
+              </div>
+            `;
+          }).join('');
+
+        } catch (e) {
+          console.error('loadMyPosts exception:', e);
+          container.innerHTML = '<p class="text-xs text-red-500 text-center py-3">Virhe ladattaessa julkaisuja.</p>';
+        }
+      }
+
+      // Fill form with existing post data for editing
+      function editPost(postId) {
+        const p = loadedMyPosts.find(item => item.id === postId);
+        if (!p) return;
+
+        editingPostId = p.id;
+        setType(p.type || 'announcement');
+        document.getElementById('title').value = p.title || '';
+        document.getElementById('content').value = p.content || '';
+        document.getElementById('visibility').value = p.visibility || 'public';
+        
+        if (p.post_places && p.post_places.length > 0) {
+          document.getElementById('placeSelect').value = p.post_places[0].place_id || 'Laukaa';
+        }
+
+        // Image / Video
+        const img = (p.post_media || []).find(m => m.media_type === 'image');
+        const vid = (p.post_media || []).find(m => m.media_type === 'video');
+        document.getElementById('imageUrl').value = img ? img.url : '';
+        document.getElementById('videoUrl').value = vid ? vid.url : '';
+
+        // Link
+        const link = (p.post_links || [])[0];
+        document.getElementById('linkTitle').value = link ? (link.title || '') : '';
+        document.getElementById('linkUrl').value = link ? (link.url || '') : '';
+
+        // Themes
+        selectedThemes.clear();
+        if (p.post_themes && p.post_themes.length > 0) {
+          p.post_themes.forEach(t => { if (t.tag_id) selectedThemes.add(t.tag_id); });
+        }
+        document.getElementById('selectedThemesCount').innerText = `${selectedThemes.size} valittu`;
+        renderThemesList(availableTags);
+
+        // Update UI state to Edit mode
+        document.getElementById('formTitleText').innerText = `✏️ Muokkaa julkaisua`;
+        document.getElementById('editBadge').classList.remove('hidden');
+        document.getElementById('cancelEditBtn').classList.remove('hidden');
+        document.getElementById('submitPublishBtn').innerHTML = `<span>💾 Tallenna muutokset</span>`;
+
+        document.getElementById('formCard').scrollIntoView({ behavior: 'smooth' });
+      }
+
+      function cancelEditMode() {
+        editingPostId = null;
+        document.getElementById('title').value = '';
+        document.getElementById('content').value = '';
+        document.getElementById('imageUrl').value = '';
+        document.getElementById('videoUrl').value = '';
+        document.getElementById('linkTitle').value = '';
+        document.getElementById('linkUrl').value = '';
+        selectedThemes.clear();
+        document.getElementById('selectedThemesCount').innerText = '0 valittu';
+        renderThemesList(availableTags);
+
+        document.getElementById('formTitleText').innerText = 'Luo uusi julkaisu seinälle';
+        document.getElementById('editBadge').classList.add('hidden');
+        document.getElementById('cancelEditBtn').classList.add('hidden');
+        document.getElementById('submitPublishBtn').innerHTML = `<span>🚀 Julkaise ${verifiedOrgName || ''} seinälle</span>`;
+      }
+
+      // Delete post with key verification
+      async function deletePost(postId) {
+        const p = loadedMyPosts.find(item => item.id === postId);
+        const titleStr = p ? `"${p.title}"` : 'tämä julkaisu';
+        
+        if (!confirm(`Haluatko varmasti poistaa julkaisun:\n${titleStr}?`)) {
+          return;
+        }
+
+        if (supabaseClient && activePublishKey) {
+          try {
+            const { data, error } = await supabaseClient.rpc('delete_post_with_key', {
+              p_organization_id: selectedOrgId,
+              p_publish_key: activePublishKey,
+              p_post_id: postId
+            });
+
+            if (error || (data && !data.success)) {
+              alert('Poisto epäonnistui: ' + ((data && data.error) || error?.message || 'Virhe'));
+              return;
+            }
+
+            alert('🗑️ Julkaisu poistettu onnistuneesti!');
+            if (editingPostId === postId) cancelEditMode();
+            await loadMyPosts();
+          } catch (e) {
+            console.error('deletePost error:', e);
+            alert('Virhe poistettaessa julkaisua.');
+          }
+        }
+      }
+
+      // Pin / Unpin post
+      async function togglePinPost(postId, currentlyPinned) {
+        if (supabaseClient && activePublishKey) {
+          try {
+            const { data, error } = await supabaseClient.rpc('pin_post_with_key', {
+              p_organization_id: selectedOrgId,
+              p_publish_key: activePublishKey,
+              p_post_id: postId,
+              p_hours: currentlyPinned ? 0 : 2
+            });
+
+            if (error || (data && !data.success)) {
+              alert('Kiinnityksen muutos epäonnistui: ' + ((data && data.error) || error?.message || 'Virhe'));
+              return;
+            }
+
+            alert(currentlyPinned ? '📌 Kiinnitys irrotettu!' : '📌 Julkaisu kiinnitetty 2 tunniksi!');
+            await loadMyPosts();
+          } catch (e) {
+            console.error('togglePinPost error:', e);
+            alert('Virhe kiinnityksen muutoksessa.');
+          }
+        }
+      }
+
+      // Create / Update Server-side RPC Publish
       async function submitPostViaRpc(status) {
         const title = document.getElementById('title').value;
         if (!title.trim()) return alert('Anna julkaisun otsikko!');
@@ -473,7 +659,7 @@
 
         const submitBtn = document.getElementById('submitPublishBtn');
         submitBtn.disabled = true;
-        submitBtn.innerText = 'Julkaistaan Supabaseen...';
+        submitBtn.innerText = editingPostId ? 'Tallennetaan...' : 'Julkaistaan Supabaseen...';
 
         if (supabaseClient && activePublishKey) {
           try {
@@ -490,13 +676,14 @@
               p_places: placesPayload,
               p_themes: themesPayload,
               p_media: mediaPayload,
-              p_links: linksPayload
+              p_links: linksPayload,
+              p_post_id: editingPostId || null
             });
 
             if (error || (data && !data.success)) {
-              alert('Virhe julkaisussa: ' + ((data && data.error) || error?.message || 'Tarkista julkaisuavain'));
+              alert('Virhe tallennuksessa: ' + ((data && data.error) || error?.message || 'Tarkista julkaisuavain'));
               submitBtn.disabled = false;
-              submitBtn.innerText = `🚀 Julkaise ${verifiedOrgName} seinälle`;
+              submitBtn.innerText = editingPostId ? '💾 Tallenna muutokset' : `🚀 Julkaise ${verifiedOrgName} seinälle`;
               return;
             }
           } catch (e) {
@@ -504,12 +691,12 @@
           }
         }
 
-        alert(status === 'published' ? `🚀 Julkaistu onnistuneesti organisaation ${verifiedOrgName} seinälle!` : 'Tallennettu luonnokseksi!');
+        const msg = editingPostId ? '💾 Julkaisu päivitetty onnistuneesti!' : (status === 'published' ? `🚀 Julkaistu onnistuneesti organisaation ${verifiedOrgName} seinälle!` : 'Tallennettu luonnokseksi!');
+        alert(msg);
         
-        // Clear form and redirect to wall
-        document.getElementById('title').value = '';
-        document.getElementById('content').value = '';
-        window.location.href = `seina.html?org=${encodeURIComponent(selectedOrgId)}`;
+        cancelEditMode();
+        submitBtn.disabled = false;
+        await loadMyPosts();
       }
 
       initPublishingPoint();
