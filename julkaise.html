@@ -192,16 +192,31 @@
             </div>
           </div>
 
-          <!-- Ajastukset -->
-          <div class="grid grid-cols-2 gap-2 text-xs">
-            <div>
-              <label class="text-[9px] font-bold text-slate-500 uppercase block mb-0.5">⌛ Vanhentuu (Expires)</label>
-              <input type="date" id="expiresAt" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none" />
+          <!-- Kiinnitys seinälle (Dynaaminen) -->
+          <div class="p-3 bg-amber-50/60 rounded-2xl border border-amber-200/80 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-black uppercase tracking-wider text-amber-900 flex items-center gap-1">
+                📌 Kiinnitys seinän yläosaan
+              </span>
+              <span class="text-[9px] font-bold text-amber-700">Pysyy nostona</span>
             </div>
-            <div>
-              <label class="text-[9px] font-bold text-slate-500 uppercase block mb-0.5">📌 Kiinnitetty asti</label>
-              <input type="date" id="pinnedUntil" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none" />
+            <select id="pinDurationSelect" onchange="onPinDurationChange(this.value)" class="w-full p-2 bg-white border border-amber-200 rounded-xl text-xs font-bold text-slate-800 outline-none focus:ring-2 focus:ring-amber-500">
+              <option value="0">Tavallinen julkaisu (Ei kiinnitystä)</option>
+              <option value="2" selected>📌 Kiinnitä 2 tuntia (suositus: pika-ilmoitukset)</option>
+              <option value="24">📌 Kiinnitä 24 tuntia (1 vrk)</option>
+              <option value="168">📌 Kiinnitä 7 päivää (1 viikko)</option>
+              <option value="custom">📅 Omavalintainen päättymisaika...</option>
+            </select>
+            <div id="customPinPickerContainer" class="hidden pt-1">
+              <label class="text-[9px] font-bold text-amber-800 uppercase block mb-0.5">Kiinnitetty asti (pv/klo)</label>
+              <input type="datetime-local" id="pinnedUntilCustom" class="w-full p-2 bg-white border border-amber-200 rounded-xl text-xs outline-none" />
             </div>
+          </div>
+
+          <!-- Vanhentuminen -->
+          <div>
+            <label class="text-[9px] font-bold text-slate-500 uppercase block mb-0.5">⌛ Vanhentuu (Poistuu seinältä automaattisesti)</label>
+            <input type="date" id="expiresAt" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none" />
           </div>
 
           <!-- Julkaisupainike -->
@@ -410,6 +425,15 @@
         document.getElementById('type-' + type).classList.add('bg-violet-600', 'text-white', 'border-violet-600');
       }
 
+      function onPinDurationChange(val) {
+        const customBox = document.getElementById('customPinPickerContainer');
+        if (val === 'custom') {
+          customBox.classList.remove('hidden');
+        } else {
+          customBox.classList.add('hidden');
+        }
+      }
+
       // Step 2 Server-side RPC Publish
       async function submitPostViaRpc(status) {
         const title = document.getElementById('title').value;
@@ -423,7 +447,18 @@
         const linkTitle = document.getElementById('linkTitle').value;
         const linkUrl = document.getElementById('linkUrl').value;
         const expiresAt = document.getElementById('expiresAt').value;
-        const pinnedUntil = document.getElementById('pinnedUntil').value;
+        
+        // Pin calculation
+        const pinDuration = document.getElementById('pinDurationSelect').value;
+        let pinnedUntilIso = null;
+
+        if (pinDuration === 'custom') {
+          const customVal = document.getElementById('pinnedUntilCustom').value;
+          if (customVal) pinnedUntilIso = new Date(customVal).toISOString();
+        } else if (pinDuration && parseInt(pinDuration, 10) > 0) {
+          const hours = parseInt(pinDuration, 10);
+          pinnedUntilIso = new Date(Date.now() + hours * 3600 * 1000).toISOString();
+        }
 
         // Build media & links payloads
         const mediaPayload = [];
@@ -451,7 +486,7 @@
               p_visibility: visibility,
               p_status: status,
               p_expires_at: expiresAt ? new Date(expiresAt).toISOString() : null,
-              p_pinned_until: pinnedUntil ? new Date(pinnedUntil).toISOString() : null,
+              p_pinned_until: pinnedUntilIso,
               p_places: placesPayload,
               p_themes: themesPayload,
               p_media: mediaPayload,

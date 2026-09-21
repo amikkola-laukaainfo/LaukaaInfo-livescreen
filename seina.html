@@ -125,6 +125,13 @@
             </span>
             <span class="text-xs text-amber-800 font-bold" id="pinnedDate">Tänään</span>
           </div>
+
+          <!-- Organisaation nimi ja linkki oma seinällä -->
+          <div class="flex items-center gap-2">
+            <a id="pinnedOrgLink" href="#" class="text-[11px] font-bold px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 hover:bg-violet-100 hover:text-violet-800 transition-colors">
+              🏢 <span id="pinnedOrgName">Organisaatio</span>
+            </a>
+          </div>
           
           <h2 class="text-base md:text-lg font-bold text-slate-900 leading-snug" id="pinnedTitle">
             Otsikko
@@ -207,13 +214,13 @@
           organization_id: 'company-313',
           org_name: 'Laukaan Kädenjälki ry',
           type: 'announcement',
-          title: '📌 Syksyn käsityöillat alkavat taas torstaisin!',
+          title: 'Syksyn käsityöillat alkavat taas torstaisin!',
           content: 'Tule mukaan rentoon käsityöiltaan joka torstai klo 18. Omat tekeleet mukaan ja kahvihuone auki kaikille käsityöihmisille! Työpajat järjestetään Seurahuoneen puodilla.',
           visibility: 'public',
           status: 'published',
           created_at: new Date(Date.now() - 3600000 * 5).toISOString(),
-          pinned_until: new Date(Date.now() + 86400000 * 30).toISOString(),
-          is_pinned: true,
+          pinned_until: null,
+          is_pinned: false,
           post_places: [{ place_id: 'Laukaan kirkonkylä', relation: 'venue' }],
           post_themes: [{ tag_id: 'Käsityö' }, { tag_id: 'Kulttuuri' }],
           post_media: [],
@@ -484,12 +491,39 @@
           pinnedSection.classList.remove('hidden');
           document.getElementById('pinnedTitle').innerText = pinnedPost.title;
           document.getElementById('pinnedContent').innerText = pinnedPost.content || '';
-          document.getElementById('pinnedDate').innerText = pinnedPost.created_at ? new Date(pinnedPost.created_at).toLocaleDateString('fi-FI') : 'Ajankohtainen';
+          
+          let timeLabel = pinnedPost.created_at ? new Date(pinnedPost.created_at).toLocaleDateString('fi-FI') : 'Ajankohtainen';
+          if (pinnedPost.pinned_until && new Date(pinnedPost.pinned_until) > now) {
+            const diffMinutes = Math.max(1, Math.round((new Date(pinnedPost.pinned_until) - now) / 60000));
+            if (diffMinutes < 60) {
+              timeLabel += ` · ⌛ Kiinnitetty (n. ${diffMinutes} min jäljellä)`;
+            } else if (diffMinutes < 1440) {
+              const hours = Math.round(diffMinutes / 60);
+              timeLabel += ` · ⌛ Kiinnitetty (n. ${hours} h jäljellä)`;
+            } else {
+              timeLabel += ` · ⌛ Kiinnitetty ${new Date(pinnedPost.pinned_until).toLocaleDateString('fi-FI')} asti`;
+            }
+          } else {
+            timeLabel += ` · 📌 Kiinnitetty tiedote`;
+          }
+          document.getElementById('pinnedDate').innerText = timeLabel;
           
           const placeText = (pinnedPost.post_places && pinnedPost.post_places.length > 0)
             ? pinnedPost.post_places.map(p => p.place_id).join(', ')
             : 'Laukaa';
           document.getElementById('pinnedPlace').innerText = `📍 ${placeText}`;
+
+          // Organisaation nimi + linkki oma seinälle
+          const orgNameEl = document.getElementById('pinnedOrgName');
+          const orgLinkEl = document.getElementById('pinnedOrgLink');
+          if (orgNameEl && orgLinkEl) {
+            orgNameEl.innerText = pinnedPost.org_name || 'Organisaatio';
+            if (pinnedPost.organization_id) {
+              orgLinkEl.href = `seina.html?org=${encodeURIComponent(pinnedPost.organization_id)}`;
+            } else {
+              orgLinkEl.removeAttribute('href');
+            }
+          }
 
           // Pinned Media Slot
           const mediaSlot = document.getElementById('pinnedMediaSlot');

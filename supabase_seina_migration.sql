@@ -332,3 +332,54 @@ BEGIN
     RETURN jsonb_build_object('success', true, 'post_id', v_post_id, 'message', 'Julkaisu luotu onnistuneesti!');
 END;
 $$;
+
+-- 5. RPC: Kiinnitä tai irrota kiinnitys julkaisuavaimella
+CREATE OR REPLACE FUNCTION public.pin_post_with_key(
+    p_organization_id TEXT,
+    p_publish_key TEXT,
+    p_post_id UUID,
+    p_hours INT DEFAULT 2
+)
+RETURNS JSONB
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE
+    v_cred RECORD;
+    v_post_org TEXT;
+    v_pinned_until TIMESTAMPTZ;
+BEGIN
+    SELECT * INTO v_cred
+    FROM public.organization_publish_credentials
+    WHERE organization_id = p_organization_id
+      AND revoked_at IS NULL
+    ORDER BY created_at DESC
+    LIMIT 1;
+
+    IF NOT FOUND THEN
+        RETURN jsonb_build_object('success', false, 'error', 'Organisaatiolla ei ole voimassaolevaa julkaisuavainta');
+    END IF;
+
+    IF v_cred.key_hash <> encode(digest(p_publish_key, 'sha256'), 'hex') THEN
+        RETURN jsonb_build_object('success', false, 'error', 'Virheellinen julkaisuavain');
+    END IF;
+
+    SELECT organization_id INTO v_post_org FROM public.posts WHERE id = p_post_id;
+    IF v_post_org IS NULL OR v_post_org <> p_organization_id THEN
+        RETURN jsonb_build_object('success', false, 'error', 'Julkaisu ei kuulu tälle organisaatiolle');
+    END IF;
+
+    IF p_hours > 0 THEN
+        v_pinned_until := NOW() + (p_hours || ' hours')::INTERVAL;
+        -- Irrotetaan aiemmat kiinnitykset saman organisaation julkaisuilta
+        UPDATE public.posts SET is_pinned = FALSE, pinned_until = NULL WHERE organization_id = p_organization_id;
+        -- Kiinnitetään valittu julkaisu
+        UPDATE public.posts SET is_pinned = TRUE, pinned_until = v_pinned_until WHERE id = p_post_id;
+    ELSE
+        UPDATE public.posts SET is_pinned = FALSE, pinned_until = NULL WHERE id = p_post_id;
+    END IF;
+
+    RETURN jsonb_build_object('success', true, 'pinned_until', v_pinned_until, 'message', CASE WHEN p_hours > 0 THEN 'Julkaisu kiinnitetty!' ELSE 'Kiinnitys irrotettu!' END);
+END;
+$$;
+
