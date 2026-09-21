@@ -3,18 +3,33 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title id="pageTitle">LaukaaInfo — Seinä</title>
+    <title id="pageTitle">LaukaaInfo — Seinä (Julkaisukerros)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
       body {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       }
+      .aspect-video-container {
+        position: relative;
+        padding-bottom: 56.25%; /* 16:9 ratio */
+        height: 0;
+        overflow: hidden;
+      }
+      .aspect-video-container iframe,
+      .aspect-video-container video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 1rem;
+      }
     </style>
   </head>
   <body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
 
-    <!-- Top Navigation -->
+    <!-- Ylänavigaatio -->
     <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs">
       <div class="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between">
         <a href="index.html" class="flex items-center gap-2 text-slate-900 font-bold hover:text-violet-600 transition-all">
@@ -34,10 +49,10 @@
       </div>
     </header>
 
-    <!-- Main Content Container -->
+    <!-- Pääsisältöalue -->
     <main class="flex-1 max-w-3xl w-full mx-auto p-4 md:p-6 space-y-6">
 
-      <!-- TILA 1: Organisaation oma seinä (Jos URL sisältää ?id= tai ?org=) -->
+      <!-- TILA 1: Organisaation oma seinä (Jos URL sisältää ?org= tai ?id=) -->
       <section id="orgHeaderSection" class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4 hidden">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div class="flex items-center gap-3.5">
@@ -49,95 +64,104 @@
                 <span id="orgBadge" class="px-2.5 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider bg-violet-100 text-violet-800">
                   Yhdistys
                 </span>
-                <span id="orgLocation" class="text-xs text-slate-400 font-medium">📍 Laukaa</span>
+                <span id="orgVisibilityBadge" class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-600">
+                  🌐 Julkinen seinä
+                </span>
               </div>
-              <h1 class="text-xl font-bold text-slate-900 leading-tight mt-0.5" id="orgTitle">
-                Laukaan Kädenjälki ry
+              <h1 class="text-xl font-bold text-slate-900 leading-tight mt-1" id="orgTitle">
+                Organisaation nimi
               </h1>
-              <p class="text-[10px] font-bold text-violet-600 mt-0.5">🧱 Organisaation oma digitaalinen kotipesä</p>
+              <p class="text-[10px] font-bold uppercase tracking-wider text-violet-600 mt-0.5">
+                🧱 ORGANISAATION SEINÄ
+              </p>
             </div>
           </div>
           <a id="manageLink" href="julkaise.html" class="px-4 py-2 bg-slate-900 hover:bg-black text-white text-xs font-bold rounded-xl text-center shadow-xs transition-all shrink-0">
-            + Hallitse julkaisuja
+            + Kirjoita julkaisu
           </a>
         </div>
 
         <p class="text-sm text-slate-600 leading-relaxed" id="orgBio">
-          Käsityötä, kulttuuria ja paikallista elävää tekemistä Laukaassa. Tervetuloa mukaan toimintaan, työpajoihin ja tapahtumiin!
+          Ladataan organisaation tietoja...
         </p>
 
         <!-- Teemat ja Paikat -->
         <div id="orgBadgesContainer" class="flex flex-wrap gap-2 pt-2 border-t border-slate-100">
-          <span class="text-xs px-2.5 py-1 bg-slate-100 rounded-lg text-slate-600 font-medium flex items-center gap-1">
-            📍 Laukaa & Kirkonkylä
-          </span>
-          <span class="text-xs px-2.5 py-1 bg-violet-50 text-violet-700 border border-violet-200/60 rounded-lg font-bold">
-            🧩 Käsityö
-          </span>
-          <span class="text-xs px-2.5 py-1 bg-violet-50 text-violet-700 border border-violet-200/60 rounded-lg font-bold">
-            🧩 Kulttuuri
-          </span>
+          <!-- Dynamically inserted location and theme chips -->
         </div>
       </section>
 
       <!-- TILA 2: Yleinen LaukaaInfon seinä (Jos ei ID-parametria) -->
-      <section id="globalHeaderSection" class="bg-gradient-to-r from-violet-900 to-slate-900 text-white rounded-3xl p-6 shadow-md space-y-3">
+      <section id="globalHeaderSection" class="bg-gradient-to-r from-violet-900 via-slate-900 to-slate-900 text-white rounded-3xl p-6 shadow-md space-y-4">
         <div class="flex items-center gap-3">
-          <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-2xl font-black">
+          <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-2xl font-black shrink-0">
             🧱
           </div>
           <div>
             <span class="text-[10px] font-black uppercase tracking-widest text-violet-300">LaukaaInfo Sisältövirta</span>
-            <h1 class="text-xl font-bold text-white">LaukaaInfon Seinä</h1>
+            <h1 class="text-xl font-bold text-white">LaukaaInfon Yleinen Seinä</h1>
           </div>
         </div>
         <p class="text-xs text-slate-300 leading-relaxed">
-          Koko Laukaan ajankohtaiset julkaisut, tapahtumat, ilmoitukset ja tarjoukset paikallisilta organisaatioilta.
+          Koko Laukaan ajankohtaiset julkaisut, tapahtumat, ilmoitukset ja rikas mediasisältö paikallisilta organisaatioilta.
         </p>
 
         <!-- Sirusuodattimet -->
-        <div class="flex flex-wrap gap-2 pt-2">
-          <button class="px-3 py-1 bg-white text-slate-900 rounded-xl text-xs font-bold shadow-xs">Kaikki</button>
-          <button class="px-3 py-1 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-medium">📍 Kirkonkylä</button>
-          <button class="px-3 py-1 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-medium">📍 Lievestuore</button>
-          <button class="px-3 py-1 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-medium">🧩 Käsityö & Kulttuuri</button>
-          <button class="px-3 py-1 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-medium">🤝 Yhdistykset</button>
+        <div class="flex flex-wrap gap-2 pt-1" id="filterChipsContainer">
+          <button onclick="filterFeed('all')" id="filter-all" class="px-3 py-1 bg-white text-slate-900 rounded-xl text-xs font-bold shadow-xs transition-all">Kaikki</button>
+          <button onclick="filterFeed('announcement')" id="filter-announcement" class="px-3 py-1 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-medium transition-all">📢 Ilmoitukset</button>
+          <button onclick="filterFeed('event')" id="filter-event" class="px-3 py-1 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-medium transition-all">📅 Tapahtumat</button>
+          <button onclick="filterFeed('news')" id="filter-news" class="px-3 py-1 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-medium transition-all">📰 Uutiset</button>
+          <button onclick="filterFeed('video')" id="filter-video" class="px-3 py-1 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-medium transition-all">🎥 Videot</button>
         </div>
       </section>
 
-      <!-- 📌 KIINNITETTY JULKAISU (Vain Oma seinä -tilassa) -->
+      <!-- 📌 KIINNITETTY JULKAISU -->
       <section id="pinnedSection" class="hidden">
-        <div class="bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-white p-5 rounded-3xl border-2 border-amber-400 shadow-sm space-y-2.5">
+        <div class="bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-white p-5 md:p-6 rounded-3xl border-2 border-amber-400 shadow-sm space-y-3">
           <div class="flex items-center justify-between">
-            <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase bg-amber-500 text-white flex items-center gap-1">
+            <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase bg-amber-500 text-white flex items-center gap-1 shadow-xs">
               📌 KIINNITETTY SISÄLTÖ
             </span>
-            <span class="text-xs text-amber-800 font-bold" id="pinnedDate">18.9.2026</span>
+            <span class="text-xs text-amber-800 font-bold" id="pinnedDate">Tänään</span>
           </div>
-          <h2 class="text-base font-bold text-slate-900 leading-snug" id="pinnedTitle">
-            Syksyn käsityöillat alkavat taas torstaisin!
+          
+          <h2 class="text-base md:text-lg font-bold text-slate-900 leading-snug" id="pinnedTitle">
+            Otsikko
           </h2>
-          <p class="text-sm text-slate-700 leading-relaxed" id="pinnedContent">
-            Tule mukaan rentoon käsityöiltaan joka torstai klo 18. Omat tekeleet mukaan ja kahvihuone auki kaikille käsityöihmisille!
+          
+          <p class="text-sm text-slate-700 leading-relaxed whitespace-pre-line" id="pinnedContent">
+            Sisältö...
           </p>
-          <div class="flex justify-between items-center text-xs text-slate-500 pt-2 border-t border-amber-200/80">
-            <span id="pinnedPlace">📍 Laukaan kirkonkylä</span>
+
+          <!-- Pinned Media Slot -->
+          <div id="pinnedMediaSlot" class="space-y-2 pt-1"></div>
+
+          <!-- Pinned Links Slot -->
+          <div id="pinnedLinksSlot" class="flex flex-wrap gap-2 pt-1"></div>
+
+          <div class="flex justify-between items-center text-xs text-slate-500 pt-3 border-t border-amber-200/80">
+            <span id="pinnedPlace" class="font-medium">📍 Laukaa</span>
             <span class="text-amber-700 font-bold">Avoin kaikille</span>
           </div>
         </div>
       </section>
 
       <!-- 🧱 AIKAJANA -->
-      <section class="space-y-3">
+      <section class="space-y-4">
         <div class="flex items-center justify-between">
           <h2 class="text-sm font-black uppercase tracking-wider text-slate-500 flex items-center gap-2" id="feedHeading">
             <span>🧱</span> Seinän julkaisut
           </h2>
-          <span id="updateTime" class="text-xs text-slate-400">Päivitetty tänään</span>
+          <span id="updateTime" class="text-xs text-slate-400">Päivitetty suoraan tietokannasta</span>
         </div>
 
         <div id="postsFeed" class="space-y-4">
           <!-- Dynamically inserted posts -->
+          <div class="bg-white p-8 rounded-3xl border border-slate-200 text-center space-y-3">
+            <div class="inline-block animate-spin text-2xl">🌿</div>
+            <p class="text-xs text-slate-500 font-medium">Haetaan julkaisuja LaukaaInfon Supabasesta...</p>
+          </div>
         </div>
       </section>
 
@@ -146,20 +170,23 @@
     <!-- Footer -->
     <footer class="bg-white border-t border-slate-200 py-6 mt-12">
       <div class="max-w-3xl mx-auto px-4 text-center text-xs text-slate-400">
-        LaukaaInfo Content Infrastructure · <span id="footerLabel">Organisaation Oma seinä</span>
+        LaukaaInfo Content Infrastructure · <span id="footerLabel">LaukaaInfon julkaisukerros</span>
       </div>
     </footer>
 
+    <!-- JavaScript - Supabase Data Layer & Dynamic Rendering -->
     <script>
-      // Parse ID / org URL parameters: ?org=company-313 OR ?id=company-313 OR ?org=company-2
+      // 1. URL Parameters & Setup
       const urlParams = new URLSearchParams(window.location.search);
       const rawOrgParam = urlParams.get('org') || urlParams.get('id');
       const searchName = urlParams.get('name');
 
-      let isSingleOrgMode = Boolean(rawOrgParam || searchName);
-      let orgId = rawOrgParam || 'company-313';
-      if (orgId && !orgId.startsWith('company-') && !isNaN(orgId)) {
-        orgId = 'company-' + orgId;
+      const isSingleOrgMode = Boolean(rawOrgParam || searchName);
+      let targetOrgId = rawOrgParam || '';
+
+      // Normalisoidaan ID jos se on pelkkä numero (esim. '313' -> 'company-313')
+      if (targetOrgId && !targetOrgId.startsWith('company-') && !isNaN(targetOrgId)) {
+        targetOrgId = 'company-' + targetOrgId;
       }
 
       // Supabase Client Initialization
@@ -169,244 +196,443 @@
         ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
         : null;
 
-      // Sample publications pool
-      let publications = [
+      // Local State
+      let allPosts = [];
+      let activeFilter = 'all';
+
+      // 2. Demo Fallback Pool (Schema-compliant)
+      const samplePosts = [
         {
-          id: '1',
-          orgId: 'company-313',
-          orgName: 'Laukaan Kädenjälki ry',
+          id: 'demo-1',
+          organization_id: 'company-313',
+          org_name: 'Laukaan Kädenjälki ry',
           type: 'announcement',
           title: '📌 Syksyn käsityöillat alkavat taas torstaisin!',
-          content: 'Tule mukaan rentoon käsityöiltaan joka torstai klo 18. Omat tekeleet mukaan ja kahvihuone auki kaikille käsityöihmisille!',
-          place: 'Laukaan kirkonkylä',
-          date: '18.9.2026',
-          isPinned: true
+          content: 'Tule mukaan rentoon käsityöiltaan joka torstai klo 18. Omat tekeleet mukaan ja kahvihuone auki kaikille käsityöihmisille! Työpajat järjestetään Seurahuoneen puodilla.',
+          visibility: 'public',
+          status: 'published',
+          created_at: new Date(Date.now() - 3600000 * 5).toISOString(),
+          pinned_until: new Date(Date.now() + 86400000 * 30).toISOString(),
+          is_pinned: true,
+          post_places: [{ place_id: 'Laukaan kirkonkylä', relation: 'venue' }],
+          post_themes: [{ tag_id: 'Käsityö' }, { tag_id: 'Kulttuuri' }],
+          post_media: [],
+          post_links: [
+            { title: 'Ilmoittaudu työpajaan', url: 'https://laukaainfo.fi', link_type: 'external' }
+          ]
         },
         {
-          id: '2',
-          orgId: 'company-313',
-          orgName: 'Laukaan Kädenjälki ry',
-          type: 'event',
-          title: '📅 Joulumyyjäiset 2026 Seurahuoneella',
-          content: 'Paikallisten kädentaitajien uniikkeja lahjaideoita, leivonnaisia ja käsitöitä Kädenjälki-puodin tiloissa.',
-          place: 'Laukaa',
-          date: '12.12.2026',
-          isPinned: false
-        },
-        {
-          id: '3',
-          orgId: 'company-2',
-          orgName: 'Mediazoo',
+          id: 'demo-2',
+          organization_id: 'company-2',
+          org_name: 'Mediazoo',
           type: 'news',
           title: '🎥 Uusi videodokumenttisarja ja digikoulutukset Laukaassa',
-          content: 'Mediazoo auttaa yrityksiä ja yhdistyksiä viestinnässä, videotuotannoissa ja diginäkyvyyden kehittämisessä.',
-          place: 'Lievestuore',
-          date: '15.9.2026',
-          isPinned: false
+          content: 'Mediazoo käynnistää uuden dokumenttisarjan Laukaan elinkeinoelämästä ja kulttuurihistoriasta. Katso sarjan ensimmäinen esittelyvideo alta!',
+          visibility: 'public',
+          status: 'published',
+          created_at: new Date(Date.now() - 3600000 * 24).toISOString(),
+          pinned_until: null,
+          is_pinned: false,
+          target_id: 'projekti-media-2026',
+          target_type: 'project',
+          post_places: [{ place_id: 'Lievestuore', relation: 'area' }],
+          post_themes: [{ tag_id: 'VIDEOTUOTANTO' }, { tag_id: 'DIGITAALISUUS' }, { tag_id: 'KOULUTUS' }],
+          post_media: [
+            {
+              media_type: 'video',
+              url: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+              title: 'Esittelyvideo 2026'
+            }
+          ],
+          post_links: [
+            { title: 'Katso koko projekti →', url: 'projekti.html?id=mediazoo-doc', link_type: 'project' },
+            { title: 'Lue uutinen Mediazoon sivuilla', url: 'https://mediazoo.fi', link_type: 'external' }
+          ]
         },
         {
-          id: '4',
-          orgId: 'company-202',
-          orgName: 'Laukaan Yrittäjät',
-          type: 'announcement',
-          title: '📣 Yrittäjien aamukahvit Peurungassa',
-          content: 'Verkostoidu ja kuule uusimmat vinkit elinkeinoelämän ajankohtaisista asioista.',
-          place: 'Peurunka',
-          date: '10.9.2026',
-          isPinned: false
+          id: 'demo-3',
+          organization_id: 'company-202',
+          org_name: 'Laukaan Yrittäjät',
+          type: 'event',
+          title: '📅 Yrittäjien aamukahvit Peurungassa',
+          content: 'Tervetuloa verkostoitumaan ja kuulemaan uusimmat vinkit elinkeinoelämän ajankohtaisista asioista. Kahvitarjoilu!',
+          visibility: 'public',
+          status: 'published',
+          created_at: new Date(Date.now() - 3600000 * 48).toISOString(),
+          pinned_until: null,
+          is_pinned: false,
+          post_places: [{ place_id: 'Peurunka', relation: 'venue' }],
+          post_themes: [{ tag_id: 'Yrittäjyys' }, { tag_id: 'Verkostot' }],
+          post_media: [],
+          post_links: [
+            { title: 'Ilmoittaudu aamukahveille', url: 'ilmoittaudu.html?event=aamukahvit', link_type: 'event' }
+          ]
         }
       ];
 
-      // Setup page mode
-      if (isSingleOrgMode) {
-        document.getElementById('orgHeaderSection').classList.remove('hidden');
-        document.getElementById('globalHeaderSection').classList.add('hidden');
-        document.getElementById('feedHeading').innerText = '🧱 Organisaation Oma seinä';
-        document.getElementById('footerLabel').innerText = 'Organisaation Oma seinä';
-        
-        document.getElementById('publishLink').href = `julkaise.html?org=${encodeURIComponent(orgId)}`;
-        document.getElementById('manageLink').href = `julkaise.html?org=${encodeURIComponent(orgId)}`;
-
-        loadOrgProfile();
-      } else {
-        document.getElementById('globalHeaderSection').classList.remove('hidden');
-        document.getElementById('orgHeaderSection').classList.add('hidden');
-        document.getElementById('feedHeading').innerText = '🧱 Kaikkien julkaisujen paikallisvirta';
-        document.getElementById('footerLabel').innerText = 'LaukaaInfon yleinen seinä';
-        document.getElementById('pageTitle').innerText = 'LaukaaInfo — Seinä (Yleinen paikallisvirta)';
-      }
-
-      async function loadOrgProfile() {
-        try {
-          let profile = null;
-
-          // 1. Check company_profiling_data.json
-          try {
-            const pRes = await fetch('company_profiling_data.json');
-            if (pRes.ok) {
-              const pData = await pRes.json();
-              if (pData && pData.profiles && pData.profiles[orgId]) {
-                profile = pData.profiles[orgId];
-                profile.id = orgId;
-              } else if (pData && pData[orgId]) {
-                profile = pData[orgId];
-                profile.id = orgId;
-              }
-            }
-          } catch (e) {
-            console.warn('Profiling fetch failed:', e);
-          }
-
-          // 2. Check companies_data.json
-          if (!profile) {
-            try {
-              const cRes = await fetch('companies_data.json');
-              if (cRes.ok) {
-                const cData = await cRes.json();
-                const list = Array.isArray(cData) ? cData : (cData.results || (cData.profiles ? Object.values(cData.profiles) : []));
-                profile = list.find(p => p.id === orgId || (searchName && (p.name || p.nimi || '').toLowerCase().includes(searchName.toLowerCase())));
-              }
-            } catch (e) {
-              console.warn('Companies data fetch failed:', e);
-            }
-          }
-
-          if (profile) {
-            const name = profile.name || profile.nimi || 'Organisaatio';
-            document.getElementById('orgTitle').innerText = name;
-            document.getElementById('pageTitle').innerText = `${name} — Oma seinä · LaukaaInfo`;
-            
-            const isAssoc = name.toLowerCase().endsWith('ry') || (profile.core && profile.core.sub_contexts && profile.core.sub_contexts.includes('yhdistys'));
-            document.getElementById('orgBadge').innerText = isAssoc ? '🤝 Yhdistys' : '🏢 Yritys';
-            document.getElementById('orgLogo').innerText = isAssoc ? '🤝' : '🏢';
-
-            const loc = profile.address || profile.osoite || profile.alue_slug || 'Laukaa';
-            document.getElementById('orgLocation').innerText = `📍 ${loc}`;
-
-            let bioText = '';
-            if (profile.categories && profile.categories.core && profile.categories.core.description) {
-              bioText = profile.categories.core.description;
-            } else if (profile.mainoslause || profile.kuvaus) {
-              bioText = (profile.mainoslause || profile.kuvaus).replace(/@@/g, ' ');
-            } else if (profile.description) {
-              bioText = profile.description;
-            } else if (name === 'Mediazoo') {
-              bioText = 'Viestinnän, digimediapalvelujen, IT-ratkaisujen ja sisällöntuotannon ammattilainen Lievestuoreella ja Laukaassa.';
-            } else {
-              bioText = `${name} — Digitaalinen kotipesä LaukaaInfossa.`;
-            }
-            document.getElementById('orgBio').innerText = bioText;
-
-            // Badges / Tags
-            const tagsContainer = document.getElementById('orgBadgesContainer');
-            if (tagsContainer) {
-              let tagList = [];
-              if (profile.tags) {
-                tagList = typeof profile.tags === 'string' ? profile.tags.split(',').map(t => t.trim()) : profile.tags;
-              }
-              if (tagList.length > 0) {
-                tagsContainer.innerHTML = `
-                  <span class="text-xs px-2.5 py-1 bg-slate-100 rounded-lg text-slate-600 font-medium flex items-center gap-1">
-                    📍 ${loc}
-                  </span>
-                  ${tagList.slice(0, 4).map(t => `<span class="text-xs px-2.5 py-1 bg-violet-50 text-violet-700 border border-violet-200/60 rounded-lg font-bold">🧩 ${t}</span>`).join('')}
-                `;
-              }
-            }
-          }
-        } catch (e) {
-          console.warn('Profiilidatan lataus virhe:', e);
-        }
-      }
-
-      async function fetchDbPosts() {
-        if (!supabaseClient) return;
-        try {
-          let query = supabaseClient.from('posts').select('*').order('created_at', { ascending: false });
-          if (isSingleOrgMode) {
-            query = query.eq('org_id', orgId);
-          }
-          const { data, error } = await query;
-          if (!error && data && data.length > 0) {
-            const orgNameNow = document.getElementById('orgTitle')?.innerText || 'Organisaatio';
-            const dbMapped = data.map(p => ({
-              id: p.id,
-              orgId: p.org_id || orgId,
-              orgName: p.org_name || orgNameNow,
-              type: p.type || 'announcement',
-              title: p.title,
-              content: p.content,
-              place: p.place || 'Laukaa',
-              date: p.created_at ? new Date(p.created_at).toLocaleDateString('fi-FI') : 'Tänään',
-              isPinned: Boolean(p.is_pinned)
-            }));
-            
-            // Merge with local sample pool avoiding duplicate titles
-            const existingTitles = new Set(dbMapped.map(p => p.title));
-            const sampleFiltered = (isSingleOrgMode ? publications.filter(p => p.orgId === orgId) : publications)
-              .filter(p => !existingTitles.has(p.title));
-            
-            publications = [...dbMapped, ...sampleFiltered];
-            renderFeed();
-          }
-        } catch (e) {
-          console.warn('DB posts retrieval error:', e);
-        }
-      }
-
-      function renderFeed() {
-        let displayPubs = publications;
-        
+      // 3. Main Init Function
+      async function initPage() {
         if (isSingleOrgMode) {
-          displayPubs = publications.filter(p => p.orgId === orgId);
-        }
-
-        const pinned = isSingleOrgMode ? displayPubs.find(p => p.isPinned) : null;
-        if (pinned) {
-          document.getElementById('pinnedSection').classList.remove('hidden');
-          document.getElementById('pinnedTitle').innerText = pinned.title;
-          document.getElementById('pinnedContent').innerText = pinned.content || '';
-          document.getElementById('pinnedDate').innerText = pinned.date || 'Tänään';
-          document.getElementById('pinnedPlace').innerText = '📍 ' + (pinned.place || 'Laukaa');
+          document.getElementById('orgHeaderSection').classList.remove('hidden');
+          document.getElementById('globalHeaderSection').classList.add('hidden');
+          document.getElementById('feedHeading').innerText = '🧱 Organisaation Oma seinä';
+          document.getElementById('footerLabel').innerText = 'Organisaation Oma seinä';
+          
+          if (targetOrgId) {
+            document.getElementById('publishLink').href = `julkaise.html?org=${encodeURIComponent(targetOrgId)}`;
+            document.getElementById('manageLink').href = `julkaise.html?org=${encodeURIComponent(targetOrgId)}`;
+          }
+          await loadOrganizationWall(targetOrgId);
         } else {
-          document.getElementById('pinnedSection').classList.add('hidden');
+          document.getElementById('globalHeaderSection').classList.remove('hidden');
+          document.getElementById('orgHeaderSection').classList.add('hidden');
+          document.getElementById('feedHeading').innerText = '🧱 Kaikkien julkaisujen paikallisvirta';
+          document.getElementById('footerLabel').innerText = 'LaukaaInfon yleinen seinä';
+          document.getElementById('pageTitle').innerText = 'LaukaaInfo — Yleinen Seinä';
+          await loadGlobalWall();
+        }
+      }
+
+      // 4. Load Organization Wall Mode
+      async function loadOrganizationWall(orgId) {
+        let orgData = null;
+
+        // Try fetching organization info from Supabase
+        if (supabaseClient && orgId) {
+          try {
+            // First check 'organizations' table
+            let { data: org, error } = await supabaseClient
+              .from('organizations')
+              .select('*')
+              .eq('id', orgId)
+              .maybeSingle();
+
+            if (!org) {
+              // Fallback check 'companies' table
+              let { data: comp } = await supabaseClient
+                .from('companies')
+                .select('*')
+                .eq('id', orgId)
+                .maybeSingle();
+              if (comp) org = comp;
+            }
+
+            if (org) orgData = org;
+          } catch (e) {
+            console.warn('Organization DB fetch error:', e);
+          }
         }
 
-        const feed = document.getElementById('postsFeed');
-        const timelinePubs = displayPubs.filter(p => !p.isPinned);
+        // Render Organization Header Info
+        const orgName = (orgData && (orgData.name || orgData.nimi)) || (orgId === 'company-313' ? 'Laukaan Kädenjälki ry' : (orgId === 'company-2' ? 'Mediazoo' : 'Organisaatio'));
+        document.getElementById('orgTitle').innerText = orgName;
+        document.getElementById('pageTitle').innerText = `${orgName} — Oma seinä · LaukaaInfo`;
 
-        if (timelinePubs.length === 0 && !pinned) {
+        const isAssoc = orgName.toLowerCase().endsWith('ry') || (orgData && orgData.type === 'association');
+        document.getElementById('orgBadge').innerText = isAssoc ? '🤝 Yhdistys' : '🏢 Yritys';
+        document.getElementById('orgLogo').innerText = isAssoc ? '🤝' : '🏢';
+
+        const wallVis = orgData && orgData.wall_visibility === 'link' ? '🔒 Vain linkillä' : '🌐 Julkinen seinä';
+        document.getElementById('orgVisibilityBadge').innerText = wallVis;
+
+        const loc = (orgData && (orgData.address || orgData.location || orgData.alue_slug)) || 'Laukaa';
+        const bio = (orgData && (orgData.description || orgData.bio)) || `${orgName} — Digitaalinen kotipesä ja ajankohtaiset julkaisut LaukaaInfossa.`;
+        document.getElementById('orgBio').innerText = bio;
+
+        const badgesContainer = document.getElementById('orgBadgesContainer');
+        badgesContainer.innerHTML = `
+          <span class="text-xs px-2.5 py-1 bg-slate-100 rounded-lg text-slate-600 font-medium flex items-center gap-1">
+            📍 ${loc}
+          </span>
+          <span class="text-xs px-2.5 py-1 bg-violet-50 text-violet-700 border border-violet-200/60 rounded-lg font-bold">
+            🧩 Ajankohtaista
+          </span>
+          <span class="text-xs px-2.5 py-1 bg-violet-50 text-violet-700 border border-violet-200/60 rounded-lg font-bold">
+            🧩 Julkaisut
+          </span>
+        `;
+
+        // Fetch Posts for Organization
+        await fetchPostsFromDb(orgId);
+      }
+
+      // 5. Load Global Wall Mode
+      async function loadGlobalWall() {
+        await fetchPostsFromDb(null);
+      }
+
+      // 6. Fetch Posts from Supabase (with Schema Fallback)
+      async function fetchPostsFromDb(orgFilterId) {
+        let fetchedPosts = [];
+
+        if (supabaseClient) {
+          try {
+            let query = supabaseClient.from('posts').select('*').order('created_at', { ascending: false });
+            
+            if (orgFilterId) {
+              query = query.eq('organization_id', orgFilterId);
+            } else {
+              query = query.or('visibility.eq.public,visibility.is.null');
+            }
+
+            const { data: postsData, error: postsError } = await query;
+
+            if (!postsError && postsData && postsData.length > 0) {
+              const postIds = postsData.map(p => p.id);
+
+              // Fetch related sub-tables independently for robust execution
+              let placesMap = {}, themesMap = {}, mediaMap = {}, linksMap = {};
+
+              try {
+                const { data: pPlaces } = await supabaseClient.from('post_places').select('*').in('post_id', postIds);
+                if (pPlaces) pPlaces.forEach(p => { (placesMap[p.post_id] = placesMap[p.post_id] || []).push(p); });
+
+                const { data: pThemes } = await supabaseClient.from('post_themes').select('*').in('post_id', postIds);
+                if (pThemes) pThemes.forEach(t => { (themesMap[t.post_id] = themesMap[t.post_id] || []).push(t); });
+
+                const { data: pMedia } = await supabaseClient.from('post_media').select('*').in('post_id', postIds);
+                if (pMedia) pMedia.forEach(m => { (mediaMap[m.post_id] = mediaMap[m.post_id] || []).push(m); });
+
+                const { data: pLinks } = await supabaseClient.from('post_links').select('*').in('post_id', postIds);
+                if (pLinks) pLinks.forEach(l => { (linksMap[l.post_id] = linksMap[l.post_id] || []).push(l); });
+              } catch (subErr) {
+                console.warn('Sub-tables fetch notice:', subErr);
+              }
+
+              fetchedPosts = postsData.map(p => ({
+                id: p.id,
+                organization_id: p.organization_id || p.org_id || orgFilterId || 'company-313',
+                org_name: p.publisher_name || p.org_name || (document.getElementById('orgTitle')?.innerText !== 'Organisaation nimi' ? document.getElementById('orgTitle').innerText : 'Organisaatio'),
+                type: p.type || 'announcement',
+                title: p.title,
+                content: p.content || p.description || '',
+                visibility: p.visibility || 'public',
+                status: p.status || 'published',
+                created_at: p.created_at,
+                expires_at: p.expires_at,
+                pinned_until: p.pinned_until,
+                is_pinned: Boolean(p.is_pinned),
+                target_id: p.target_id,
+                target_type: p.target_type,
+                post_places: placesMap[p.id] || (p.place ? [{ place_id: p.place }] : []),
+                post_themes: themesMap[p.id] || (p.tags ? (Array.isArray(p.tags) ? p.tags.map(t => ({ tag_id: t })) : []) : []),
+                post_media: mediaMap[p.id] || (p.image_url ? [{ media_type: 'image', url: p.image_url }] : []),
+                post_links: linksMap[p.id] || (p.website_url ? [{ title: 'Lue lisää', url: p.website_url, link_type: 'external' }] : [])
+              }));
+            }
+          } catch (err) {
+            console.warn('DB Post Query error, falling back to schema pool:', err);
+          }
+        }
+
+        // Merge DB results with schema sample pool to guarantee rich content display during testing
+        const existingTitles = new Set(fetchedPosts.map(p => p.title));
+        const filteredSample = samplePosts.filter(p => {
+          if (orgFilterId && p.organization_id !== orgFilterId) return false;
+          return !existingTitles.has(p.title);
+        });
+
+        allPosts = [...fetchedPosts, ...filteredSample];
+        renderFeed();
+      }
+
+      // 7. Filter & Expiry Check Logic
+      function filterFeed(filterType) {
+        activeFilter = filterType;
+        
+        // Update filter button styling
+        document.querySelectorAll('#filterChipsContainer button').forEach(b => {
+          b.className = 'px-3 py-1 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-medium transition-all';
+        });
+        const activeBtn = document.getElementById('filter-' + filterType);
+        if (activeBtn) {
+          activeBtn.className = 'px-3 py-1 bg-white text-slate-900 rounded-xl text-xs font-bold shadow-xs transition-all';
+        }
+
+        renderFeed();
+      }
+
+      // 8. Render Feed UI
+      function renderFeed() {
+        const now = new Date();
+
+        // 8.1 Filter out expired posts
+        let activePosts = allPosts.filter(p => {
+          if (p.expires_at && new Date(p.expires_at) <= now) return false;
+          if (p.status && p.status !== 'published' && p.status !== 'APPROVED') return false;
+          return true;
+        });
+
+        // 8.2 Filter by active filter type chip
+        if (activeFilter !== 'all') {
+          if (activeFilter === 'video') {
+            activePosts = activePosts.filter(p => p.post_media && p.post_media.some(m => m.media_type === 'video'));
+          } else {
+            activePosts = activePosts.filter(p => p.type === activeFilter);
+          }
+        }
+
+        // 8.3 Identify Pinned Post
+        const pinnedPost = activePosts.find(p => {
+          if (p.pinned_until && new Date(p.pinned_until) > now) return true;
+          return p.is_pinned === true;
+        });
+
+        // Render Pinned Section
+        const pinnedSection = document.getElementById('pinnedSection');
+        if (pinnedPost && (isSingleOrgMode || activeFilter === 'all')) {
+          pinnedSection.classList.remove('hidden');
+          document.getElementById('pinnedTitle').innerText = pinnedPost.title;
+          document.getElementById('pinnedContent').innerText = pinnedPost.content || '';
+          document.getElementById('pinnedDate').innerText = pinnedPost.created_at ? new Date(pinnedPost.created_at).toLocaleDateString('fi-FI') : 'Ajankohtainen';
+          
+          const placeText = (pinnedPost.post_places && pinnedPost.post_places.length > 0)
+            ? pinnedPost.post_places.map(p => p.place_id).join(', ')
+            : 'Laukaa';
+          document.getElementById('pinnedPlace').innerText = `📍 ${placeText}`;
+
+          // Pinned Media Slot
+          const mediaSlot = document.getElementById('pinnedMediaSlot');
+          mediaSlot.innerHTML = renderMediaHTML(pinnedPost.post_media);
+
+          // Pinned Links Slot
+          const linksSlot = document.getElementById('pinnedLinksSlot');
+          linksSlot.innerHTML = renderLinksHTML(pinnedPost.post_links, pinnedPost.target_id, pinnedPost.target_type);
+        } else {
+          pinnedSection.classList.add('hidden');
+        }
+
+        // 8.4 Timeline Feed
+        const feed = document.getElementById('postsFeed');
+        const timelinePosts = activePosts.filter(p => p.id !== (pinnedPost ? pinnedPost.id : null));
+
+        if (timelinePosts.length === 0 && (!pinnedPost || pinnedSection.classList.contains('hidden'))) {
           feed.innerHTML = `
-            <div class="bg-white p-8 rounded-3xl border border-slate-200 text-center space-y-3">
-              <p class="text-sm text-slate-500">Tällä seinällä ei ole vielä julkaisuja.</p>
-              <a href="julkaise.html?org=${encodeURIComponent(orgId)}" class="inline-block px-4 py-2 bg-violet-600 text-white text-xs font-bold rounded-xl shadow-xs">
-                + Kirjoita ensimmäinen julkaisu
+            <div class="bg-white p-8 rounded-3xl border border-slate-200 text-center space-y-3 shadow-xs">
+              <p class="text-sm font-bold text-slate-700">Ei julkaisuja valitulla rajauksella.</p>
+              <p class="text-xs text-slate-500">Ole ensimmäinen ja lisää julkaisu organisaatiollesi!</p>
+              <a href="julkaise.html?org=${encodeURIComponent(targetOrgId || 'company-313')}" class="inline-block px-4 py-2 bg-violet-600 text-white text-xs font-bold rounded-xl shadow-xs hover:bg-violet-700 transition-all">
+                + Kirjoita uusi julkaisu
               </a>
             </div>
           `;
           return;
         }
 
-        feed.innerHTML = timelinePubs.map(p => `
-          <article class="bg-white p-5 rounded-3xl border border-slate-200 shadow-xs space-y-2.5 hover:border-slate-300 transition-all">
-            <div class="flex items-center justify-between text-xs">
-              <a href="seina.html?org=${encodeURIComponent(p.orgId)}" class="px-2.5 py-0.5 rounded-md font-bold uppercase bg-violet-50 text-violet-700 hover:bg-violet-100 transition-colors">
-                🏢 ${p.orgName || 'Organisaatio'}
-              </a>
-              <span class="text-slate-400 font-medium">${p.date}</span>
-            </div>
-            <h3 class="text-sm font-bold text-slate-900 leading-snug">${p.title}</h3>
-            <p class="text-xs text-slate-600 leading-relaxed">${p.content || ''}</p>
-            <div class="flex items-center justify-between text-xs text-slate-400 pt-2 border-t border-slate-100">
-              <span>📍 ${p.place || 'Laukaa'}</span>
-              <a href="seina.html?org=${encodeURIComponent(p.orgId)}" class="text-violet-600 font-bold hover:underline">Oma seinä →</a>
-            </div>
-          </article>
-        `).join('');
+        feed.innerHTML = timelinePosts.map(p => {
+          const formattedDate = p.created_at ? new Date(p.created_at).toLocaleDateString('fi-FI') : 'Tänään';
+          const placeText = (p.post_places && p.post_places.length > 0)
+            ? p.post_places.map(pl => pl.place_id).join(', ')
+            : 'Laukaa';
+          const themeChips = (p.post_themes && p.post_themes.length > 0)
+            ? p.post_themes.map(t => `<span class="text-[10px] px-2 py-0.5 bg-violet-50 text-violet-700 rounded-md font-bold border border-violet-100">🧩 ${t.tag_id}</span>`).join(' ')
+            : '';
+          
+          const typeBadge = getTypeBadgeHTML(p.type);
+          const visibilityBadge = p.visibility === 'link' ? '<span class="text-[10px] px-2 py-0.5 bg-amber-50 text-amber-700 rounded-md font-bold">🔒 Vain linkillä</span>' : '';
+
+          return `
+            <article class="bg-white p-5 md:p-6 rounded-3xl border border-slate-200 shadow-xs space-y-3.5 hover:border-violet-200 transition-all">
+              <div class="flex items-center justify-between text-xs">
+                <div class="flex items-center gap-2">
+                  <a href="seina.html?org=${encodeURIComponent(p.organization_id)}" class="px-2.5 py-1 rounded-lg font-bold uppercase bg-slate-100 text-slate-800 hover:bg-violet-100 hover:text-violet-800 transition-colors flex items-center gap-1">
+                    🏢 ${p.org_name || 'Organisaatio'}
+                  </a>
+                  ${typeBadge}
+                  ${visibilityBadge}
+                </div>
+                <span class="text-slate-400 font-medium">${formattedDate}</span>
+              </div>
+
+              <h3 class="text-base font-bold text-slate-900 leading-snug">${p.title}</h3>
+              
+              ${p.content ? `<p class="text-xs md:text-sm text-slate-600 leading-relaxed whitespace-pre-line">${p.content}</p>` : ''}
+
+              <!-- Rich Media Slot -->
+              ${renderMediaHTML(p.post_media)}
+
+              <!-- Places & Themes Chips -->
+              <div class="flex flex-wrap gap-1.5 pt-1">
+                <span class="text-[10px] px-2 py-0.5 bg-slate-100 text-slate-600 rounded-md font-medium">📍 ${placeText}</span>
+                ${themeChips}
+              </div>
+
+              <!-- CTA Links Slot -->
+              ${renderLinksHTML(p.post_links, p.target_id, p.target_type)}
+
+              <div class="flex items-center justify-between text-xs text-slate-400 pt-3 border-t border-slate-100">
+                <span>LaukaaInfo Content Stream</span>
+                <a href="seina.html?org=${encodeURIComponent(p.organization_id)}" class="text-violet-600 font-bold hover:underline">Organisaation oma seinä →</a>
+              </div>
+            </article>
+          `;
+        }).join('');
       }
 
-      renderFeed();
-      fetchDbPosts();
+      // 9. Media Rendering Helper (Supports 16:9 Videos & Images)
+      function renderMediaHTML(mediaList) {
+        if (!mediaList || mediaList.length === 0) return '';
+
+        return mediaList.map(m => {
+          if (m.media_type === 'video') {
+            return `
+              <div class="my-2 aspect-video-container bg-slate-900 rounded-2xl shadow-sm">
+                <iframe src="${m.url}" title="${m.title || 'Video'}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+              </div>
+            `;
+          } else {
+            return `
+              <div class="my-2 rounded-2xl overflow-hidden border border-slate-200 shadow-2xs">
+                <img src="${m.url}" alt="${m.alt_text || m.title || 'Julkaisukuva'}" class="w-full max-h-96 object-cover hover:scale-[1.01] transition-all" />
+              </div>
+            `;
+          }
+        }).join('');
+      }
+
+      // 10. Links & CTA Rendering Helper
+      function renderLinksHTML(linksList, targetId, targetType) {
+        let html = '';
+
+        // Render target link if attached (e.g. Project / Event)
+        if (targetId) {
+          const targetUrl = targetType === 'project' ? `projekti.html?id=${targetId}` : `tapahtuma.html?id=${targetId}`;
+          html += `
+            <a href="${targetUrl}" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-violet-600 hover:bg-violet-700 text-white rounded-xl text-xs font-bold shadow-xs transition-all">
+              🚀 Katso liittyvä kohde (${targetType || 'sisältö'}) →
+            </a>
+          `;
+        }
+
+        if (linksList && linksList.length > 0) {
+          html += linksList.map(l => `
+            <a href="${l.url}" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-slate-900 hover:bg-black text-white rounded-xl text-xs font-bold shadow-xs transition-all">
+              🔗 ${l.title || 'Lue lisää'} →
+            </a>
+          `).join(' ');
+        }
+
+        return html ? `<div class="flex flex-wrap gap-2 pt-1">${html}</div>` : '';
+      }
+
+      // 11. Type Badge Helper
+      function getTypeBadgeHTML(type) {
+        switch (type) {
+          case 'announcement':
+            return '<span class="text-[10px] px-2 py-0.5 bg-violet-100 text-violet-800 rounded-md font-bold">📢 Ilmoitus</span>';
+          case 'event':
+            return '<span class="text-[10px] px-2 py-0.5 bg-amber-100 text-amber-800 rounded-md font-bold">📅 Tapahtuma</span>';
+          case 'news':
+            return '<span class="text-[10px] px-2 py-0.5 bg-blue-100 text-blue-800 rounded-md font-bold">📰 Uutinen</span>';
+          case 'offer':
+            return '<span class="text-[10px] px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-md font-bold">🏷️ Tarjous</span>';
+          default:
+            return '<span class="text-[10px] px-2 py-0.5 bg-slate-100 text-slate-700 rounded-md font-bold">🧱 Julkaisu</span>';
+        }
+      }
+
+      // Execute Initialization
+      initPage();
     </script>
   </body>
 </html>
