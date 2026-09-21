@@ -832,8 +832,8 @@
             `;
           } else {
             return `
-              <div class="my-2 rounded-2xl overflow-hidden border border-slate-200 shadow-2xs bg-slate-950 flex items-center justify-center max-h-[550px]">
-                <img src="${m.url}" alt="${m.alt_text || m.title || 'Julkaisukuva'}" class="w-full h-auto max-h-[550px] object-contain object-center rounded-2xl hover:scale-[1.005] transition-all" onerror="this.parentElement.style.display='none';" />
+              <div class="my-2 rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 flex items-center justify-center max-h-[550px] w-full">
+                <img src="${m.url}" alt="${m.alt_text || m.title || 'Julkaisukuva'}" class="w-auto h-auto max-w-full max-h-[550px] object-contain object-center rounded-2xl hover:scale-[1.005] transition-all shadow-2xs" onerror="this.parentElement.style.display='none';" />
               </div>
             `;
           }
