@@ -175,9 +175,18 @@
 
     <script>
       const urlParams = new URLSearchParams(window.location.search);
-      let targetOrgId = urlParams.get('org') || urlParams.get('id') || 'company-313';
-      if (!targetOrgId.startsWith('company-') && !isNaN(targetOrgId)) {
+      let targetOrgId = urlParams.get('org') || urlParams.get('id') || '';
+      if (targetOrgId && !targetOrgId.startsWith('company-') && !isNaN(targetOrgId)) {
         targetOrgId = 'company-' + targetOrgId;
+      }
+      if (!targetOrgId) {
+        document.getElementById('orgName').innerText = 'Julkaisupiste';
+      } else if (targetOrgId === 'company-313') {
+        document.getElementById('orgName').innerText = 'Laukaan Kädenjälki ry';
+      } else if (targetOrgId === 'company-2') {
+        document.getElementById('orgName').innerText = 'Mediazoo';
+      } else {
+        document.getElementById('orgName').innerText = `Organisaatio (${targetOrgId})`;
       }
 
       let currentPubType = 'announcement';

@@ -401,7 +401,7 @@
 
               fetchedPosts = postsData.map(p => ({
                 id: p.id,
-                organization_id: p.organization_id || p.org_id || orgFilterId || 'company-313',
+                organization_id: p.organization_id || p.org_id || orgFilterId || '',
                 org_name: p.publisher_name || p.org_name || (document.getElementById('orgTitle')?.innerText !== 'Organisaation nimi' ? document.getElementById('orgTitle').innerText : 'Organisaatio'),
                 type: p.type || 'announcement',
                 title: p.title,
@@ -511,7 +511,7 @@
             <div class="bg-white p-8 rounded-3xl border border-slate-200 text-center space-y-3 shadow-xs">
               <p class="text-sm font-bold text-slate-700">Ei julkaisuja valitulla rajauksella.</p>
               <p class="text-xs text-slate-500">Ole ensimmäinen ja lisää julkaisu organisaatiollesi!</p>
-              <a href="julkaise.html?org=${encodeURIComponent(targetOrgId || 'company-313')}" class="inline-block px-4 py-2 bg-violet-600 text-white text-xs font-bold rounded-xl shadow-xs hover:bg-violet-700 transition-all">
+              <a href="julkaise.html${targetOrgId ? `?org=${encodeURIComponent(targetOrgId)}` : ''}" class="inline-block px-4 py-2 bg-violet-600 text-white text-xs font-bold rounded-xl shadow-xs hover:bg-violet-700 transition-all">
                 + Kirjoita uusi julkaisu
               </a>
             </div>
