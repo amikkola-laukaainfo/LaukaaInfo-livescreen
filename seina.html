@@ -276,6 +276,34 @@
           post_links: [
             { title: 'Ilmoittaudu aamukahveille', url: 'ilmoittaudu.html?event=aamukahvit', link_type: 'event' }
           ]
+        },
+        {
+          id: 'demo-peurunka-open',
+          organization_id: 'company-101',
+          org_name: 'LaukaaInfo',
+          type: 'announcement',
+          title: 'Peurunka avoimien ovien päivä (Multi-media Swiper)',
+          content: 'Tutustu Peurungan avoimien ovien päivään! Mukana esittelyvideo sekä tunnelmakuvat sliderissa.',
+          visibility: 'public',
+          status: 'published',
+          created_at: new Date(Date.now() - 3600000 * 12).toISOString(),
+          pinned_until: null,
+          is_pinned: false,
+          post_places: [{ place_id: 'Peurunka', relation: 'venue' }],
+          post_themes: [{ tag_id: 'Hyvinvointi' }, { tag_id: 'Tapahtumat' }],
+          post_media: [
+            {
+              media_type: 'image',
+              url: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80',
+              title: 'Peurunka kuva'
+            },
+            {
+              media_type: 'video',
+              url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+              title: 'Peurunka video'
+            }
+          ],
+          post_links: []
         }
       ];
 
@@ -511,6 +539,30 @@
                 const resolvedId = resolveOrgId(p.organization_id || p.org_id || orgFilterId, rawName);
                 const resolvedName = getOrgNameSync(resolvedId, rawName);
 
+                // Multi-source media resolution (Combines post_media rows, image_url, video_url & content video links)
+                let pMedia = mediaMap[p.id] ? [...mediaMap[p.id]] : [];
+
+                if (p.image_url && p.image_url.trim() && !pMedia.some(m => m.url === p.image_url)) {
+                  pMedia.push({ media_type: isVideoUrl(p.image_url, 'image') ? 'video' : 'image', url: p.image_url });
+                }
+
+                [p.video_url, p.video, p.youtube_url, p.media_url].forEach(v => {
+                  if (v && v.trim() && !pMedia.some(m => m.url === v)) {
+                    pMedia.push({ media_type: 'video', url: v });
+                  }
+                });
+
+                const contentText = (p.content || '') + ' ' + (p.description || '');
+                const youtubeMatches = contentText.match(/https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/|vimeo\.com\/)[a-zA-Z0-9_\-\?&=]+/gi);
+                if (youtubeMatches) {
+                  youtubeMatches.forEach(ytUrl => {
+                    const cleanYt = ytUrl.trim();
+                    if (!pMedia.some(m => m.url === cleanYt || formatYouTubeEmbedUrl(m.url) === formatYouTubeEmbedUrl(cleanYt))) {
+                      pMedia.push({ media_type: 'video', url: cleanYt });
+                    }
+                  });
+                }
+
                 return {
                   id: p.id,
                   organization_id: resolvedId,
@@ -528,11 +580,10 @@
                   target_type: p.target_type,
                   post_places: placesMap[p.id] || (p.place ? [{ place_id: p.place }] : []),
                   post_themes: themesMap[p.id] || (p.tags ? (Array.isArray(p.tags) ? p.tags.map(t => ({ tag_id: t })) : []) : []),
-                  post_media: mediaMap[p.id] || (p.image_url ? [{ media_type: 'image', url: p.image_url }] : []),
+                  post_media: pMedia,
                   post_links: linksMap[p.id] || (p.website_url ? [{ title: 'Lue lisää', url: p.website_url, link_type: 'external' }] : [])
                 };
               });
-            }
           } catch (err) {
             console.warn('DB Post Query error, falling back to schema pool:', err);
           }
