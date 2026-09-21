@@ -300,6 +300,40 @@
         }
       }
 
+      // Cache for organization logos
+      let orgLogosCache = {};
+
+      async function resolveOrganizationLogo(orgId, orgData) {
+        if (!orgId) return null;
+        if (orgLogosCache[orgId]) return orgLogosCache[orgId];
+
+        let logoUrl = (orgData && (orgData.logo_url || orgData.logo || orgData.image_url || orgData.kuva)) || null;
+
+        if (!logoUrl) {
+          try {
+            const res = await fetch('companies_data.json');
+            if (res.ok) {
+              const json = await res.json();
+              const list = Array.isArray(json) ? json : (json.results || []);
+              const cleanId = String(orgId).replace('company-', '');
+              const match = list.find(c => String(c.id) === String(orgId) || String(c.id) === cleanId || ('company-' + c.id) === String(orgId));
+              if (match) {
+                if (match.logo && match.logo.trim() && match.logo !== '-') logoUrl = match.logo;
+                else if (match.images && match.images.length > 0) logoUrl = match.images[0];
+                else if (match.media && match.media.length > 0 && match.media[0].url) logoUrl = match.media[0].url;
+              }
+            }
+          } catch (e) {
+            console.warn('Logo fallback fetch notice:', e);
+          }
+        }
+
+        if (logoUrl) {
+          orgLogosCache[orgId] = logoUrl;
+        }
+        return logoUrl;
+      }
+
       // 4. Load Organization Wall Mode
       async function loadOrganizationWall(orgId) {
         let orgData = null;
@@ -337,7 +371,22 @@
 
         const isAssoc = orgName.toLowerCase().endsWith('ry') || (orgData && orgData.type === 'association');
         document.getElementById('orgBadge').innerText = isAssoc ? '🤝 Yhdistys' : '🏢 Yritys';
-        document.getElementById('orgLogo').innerText = isAssoc ? '🤝' : '🏢';
+        
+        // Fetch and display organization logo from yrityskortti / Supabase / companies_data.json
+        const logoUrl = await resolveOrganizationLogo(orgId, orgData);
+        const logoContainer = document.getElementById('orgLogo');
+
+        if (logoUrl && logoUrl.trim() && logoUrl !== '-') {
+          let cleanLogoUrl = logoUrl;
+          if (!cleanLogoUrl.startsWith('http') && !cleanLogoUrl.startsWith('/') && !cleanLogoUrl.startsWith('./')) {
+            cleanLogoUrl = './' + cleanLogoUrl;
+          }
+          logoContainer.className = "w-14 h-14 rounded-2xl bg-white border border-slate-200 shadow-xs shrink-0 overflow-hidden flex items-center justify-center p-1";
+          logoContainer.innerHTML = `<img src="${cleanLogoUrl}" alt="${orgName} logo" class="w-full h-full object-contain rounded-xl" onerror="this.parentElement.className='w-14 h-14 rounded-2xl bg-violet-100 text-violet-700 font-black flex items-center justify-center text-2xl shadow-xs shrink-0'; this.parentElement.innerHTML='${isAssoc ? '🤝' : '🏢'}';" />`;
+        } else {
+          logoContainer.className = "w-14 h-14 rounded-2xl bg-violet-100 text-violet-700 font-black flex items-center justify-center text-2xl shadow-xs shrink-0";
+          logoContainer.innerText = isAssoc ? '🤝' : '🏢';
+        }
 
         const wallVis = orgData && orgData.wall_visibility === 'link' ? '🔒 Vain linkillä' : '🌐 Julkinen seinä';
         document.getElementById('orgVisibilityBadge').innerText = wallVis;
@@ -346,6 +395,7 @@
         const bio = (orgData && (orgData.description || orgData.bio)) || `${orgName} — Digitaalinen kotipesä ja ajankohtaiset julkaisut LaukaaInfossa.`;
         document.getElementById('orgBio').innerText = bio;
 
+        const cleanId = orgId ? orgId.replace('company-', '') : '';
         const badgesContainer = document.getElementById('orgBadgesContainer');
         badgesContainer.innerHTML = `
           <span class="text-xs px-2.5 py-1 bg-slate-100 rounded-lg text-slate-600 font-medium flex items-center gap-1">
@@ -354,9 +404,9 @@
           <span class="text-xs px-2.5 py-1 bg-violet-50 text-violet-700 border border-violet-200/60 rounded-lg font-bold">
             🧩 Ajankohtaista
           </span>
-          <span class="text-xs px-2.5 py-1 bg-violet-50 text-violet-700 border border-violet-200/60 rounded-lg font-bold">
-            🧩 Julkaisut
-          </span>
+          <a href="yrityskortti.html?id=${encodeURIComponent(cleanId || orgId)}" class="text-xs px-2.5 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200/80 rounded-lg font-bold hover:bg-emerald-100 transition-all flex items-center gap-1">
+            📇 Yrityskortti →
+          </a>
         `;
 
         // Fetch Posts for Organization
