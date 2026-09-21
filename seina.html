@@ -682,10 +682,10 @@
           }
           document.getElementById('pinnedDate').innerText = timeLabel;
           
-          const placeText = (pinnedPost.post_places && pinnedPost.post_places.length > 0)
-            ? pinnedPost.post_places.map(p => p.place_id).join(', ')
-            : 'Laukaa';
-          document.getElementById('pinnedPlace').innerText = `📍 ${placeText}`;
+          const placeChipsHTML = (pinnedPost.post_places && pinnedPost.post_places.length > 0)
+            ? pinnedPost.post_places.map(pl => `<a href="tietoa-paikasta.html?id=${encodeURIComponent(pl.place_id)}" class="hover:underline font-bold text-slate-700">📍 ${pl.place_id}</a>`).join(', ')
+            : `<a href="tietoa-paikasta.html?id=Laukaa" class="hover:underline font-bold text-slate-700">📍 Laukaa</a>`;
+          document.getElementById('pinnedPlace').innerHTML = placeChipsHTML;
 
           // Organisaation nimi + linkki oma seinälle
           const orgNameEl = document.getElementById('pinnedOrgName');
@@ -730,11 +730,12 @@
 
         feed.innerHTML = timelinePosts.map(p => {
           const formattedDate = p.created_at ? new Date(p.created_at).toLocaleDateString('fi-FI') : 'Tänään';
-          const placeText = (p.post_places && p.post_places.length > 0)
-            ? p.post_places.map(pl => pl.place_id).join(', ')
-            : 'Laukaa';
+          const placeChips = (p.post_places && p.post_places.length > 0)
+            ? p.post_places.map(pl => `<a href="tietoa-paikasta.html?id=${encodeURIComponent(pl.place_id)}" class="text-[10px] px-2 py-0.5 bg-slate-100 hover:bg-emerald-100 text-slate-700 hover:text-emerald-900 rounded-md font-medium border border-slate-200/60 transition-colors inline-flex items-center gap-1 no-underline">📍 ${pl.place_id}</a>`).join(' ')
+            : `<a href="tietoa-paikasta.html?id=Laukaa" class="text-[10px] px-2 py-0.5 bg-slate-100 hover:bg-emerald-100 text-slate-700 hover:text-emerald-900 rounded-md font-medium border border-slate-200/60 transition-colors inline-flex items-center gap-1 no-underline">📍 Laukaa</a>`;
+          
           const themeChips = (p.post_themes && p.post_themes.length > 0)
-            ? p.post_themes.map(t => `<span class="text-[10px] px-2 py-0.5 bg-violet-50 text-violet-700 rounded-md font-bold border border-violet-100">🧩 ${t.tag_id}</span>`).join(' ')
+            ? p.post_themes.map(t => `<a href="teema.html?tag=${encodeURIComponent(t.tag_id)}" class="text-[10px] px-2 py-0.5 bg-violet-50 hover:bg-violet-100 text-violet-700 hover:text-violet-900 rounded-md font-bold border border-violet-200/80 transition-colors inline-flex items-center gap-1 no-underline">🧩 ${t.tag_id}</a>`).join(' ')
             : '';
           
           const typeBadge = getTypeBadgeHTML(p.type);
@@ -771,7 +772,7 @@
 
               <!-- Places & Themes Chips -->
               <div class="flex flex-wrap gap-1.5 pt-1">
-                <span class="text-[10px] px-2 py-0.5 bg-slate-100 text-slate-600 rounded-md font-medium">📍 ${placeText}</span>
+                ${placeChips}
                 ${themeChips}
               </div>
 

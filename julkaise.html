@@ -125,39 +125,86 @@
             <textarea id="content" rows="3" placeholder="Kirjoita julkaisun sisältö..." class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-violet-500"></textarea>
           </div>
 
-          <!-- Paikkavalinta Supabasesta (Hierarkkinen valikko) -->
+          <!-- Paikkavalinta Supabasesta (Kokonaiset paikkojen nimet) -->
           <div>
-            <label class="text-[10px] font-bold text-slate-500 uppercase mb-1 block">📍 Paikka (Hierarkkinen valikko)</label>
+            <label class="text-[10px] font-bold text-slate-500 uppercase mb-1 block">📍 Paikka (Valitse kohde tai alue)</label>
             <select id="placeSelect" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-violet-500">
-              <option value="Laukaa">📍 Koko Laukaa</option>
+              <option value="Laukaa">📍 Koko Laukaan alue</option>
               <optgroup label="Taajamat & Kylät">
                 <option value="Laukaan kirkonkylä">📍 Laukaan kirkonkylä</option>
-                <option value="Lievestuore">📍 Lievestuore</option>
-                <option value="Vihtavuori">📍 Vihtavuori</option>
-                <option value="Leppävesi">📍 Leppävesi</option>
-                <option value="Vehniä">📍 Vehniä</option>
+                <option value="Lievestuore">📍 Lievestuoreen taajama</option>
+                <option value="Vihtavuori">📍 Vihtavuoren taajama</option>
+                <option value="Leppävesi">📍 Leppäveden taajama</option>
+                <option value="Vehniä">📍 Vehniän kylä</option>
+                <option value="Vuontee">📍 Vuonteen kylä</option>
+                <option value="Tarvaala">📍 Tarvaalan kylä</option>
+                <option value="Äijälä">📍 Äijälän kylä</option>
               </optgroup>
-              <optgroup label="Kohteet & Alueet">
-                <option value="Peurunka">📍 Peurunka</option>
-                <option value="Haarlan tehdasalue">📍 Haarlan tehdasalue</option>
+              <optgroup label="Kohteet & Suositut Alueet">
+                <option value="Peurunka">📍 Peurungan matkailu- ja virkistysalue</option>
+                <option value="Haarlan ranta ja urheilukenttä">📍 Haarlan ranta ja urheilukenttä</option>
                 <option value="Hyyppäänvuori">📍 Hyyppäänvuori</option>
-                <option value="Saraakallio">📍 Saraakallio</option>
-                <option value="Kuusankoski">📍 Kuusankoski</option>
+                <option value="Saraakallio">📍 Saraakallio (Kalliomaalaukset)</option>
+                <option value="Kuusaankosken laavu">📍 Kuusaankosken alue</option>
+                <option value="Laukaan satama">📍 Laukaan satama</option>
+                <option value="Laukaan pääkirjasto">📍 Laukaan pääkirjasto</option>
+                <option value="Lievestuoreen urheilukenttä">📍 Lievestuoreen urheilukenttä</option>
+                <option value="Ruuhimäki circuit">📍 Ruuhimäki circuit</option>
               </optgroup>
             </select>
           </div>
 
-          <!-- Teemojen Monivalinta Supabasesta -->
+          <!-- Teemojen Valinta (Pääteemojen pudotusvalikko + Tunnisteet) -->
           <div>
             <div class="flex items-center justify-between mb-1">
-              <label class="text-[10px] font-bold text-slate-500 uppercase block">🧩 Teemat (Valitse teemat)</label>
+              <label class="text-[10px] font-bold text-slate-500 uppercase block">🧩 Teemat & Tunnisteet</label>
               <span id="selectedThemesCount" class="text-[10px] font-bold text-violet-600">0 valittu</span>
             </div>
+
+            <!-- Pääteemojen Pudotusvalikko -->
+            <select id="mainThemeSelect" onchange="addThemeFromDropdown(this.value)" class="w-full p-2.5 mb-2 bg-violet-50/80 border border-violet-200 rounded-xl text-xs font-bold text-violet-900 outline-none focus:ring-2 focus:ring-violet-500 cursor-pointer">
+              <option value="">➕ Valitse pääteema pudotusvalikosta...</option>
+              <optgroup label="🎨 Kulttuuri, Vapaa-aika & Tapahtumat">
+                <option value="Kulttuuri">🎨 Kulttuuri</option>
+                <option value="Käsityö">🧵 Käsityö</option>
+                <option value="Musiikki">🎵 Musiikki</option>
+                <option value="Perinteet">📜 Perinteet</option>
+                <option value="Tapahtumat">📅 Tapahtumat</option>
+                <option value="Matkailu">🌲 Matkailu</option>
+                <option value="Luonto">🍃 Luonto</option>
+              </optgroup>
+              <optgroup label="⚽ Liikunta, Hyvinvointi & Perhe">
+                <option value="Liikunta">⚽ Liikunta & Urheilu</option>
+                <option value="Hyvinvointi">🏥 Hyvinvointi & Terveys</option>
+                <option value="Nuoret">🧢 Nuoret</option>
+                <option value="Lapset & Perhe">👨‍👩‍👧 Lapset & Perhe</option>
+                <option value="Eläimet & Lemmikit">🐾 Eläimet & Lemmikit</option>
+              </optgroup>
+              <optgroup label="💼 Elinkeino, Yrittäjyys & Digitaalisuus">
+                <option value="Yrittäjyys">💼 Yrittäjyys</option>
+                <option value="Verkostot">🤝 Verkostot</option>
+                <option value="Yrityspalvelut">🏢 Yrityspalvelut</option>
+                <option value="Koulutus">🎓 Koulutus</option>
+                <option value="DIGITAALISUUS">💻 Digitaalisuus</option>
+                <option value="VIDEOTUOTANTO">🎥 Videotuotanto & Media</option>
+              </optgroup>
+              <optgroup label="🛍️ Palvelut, Arki & Asuminen">
+                <option value="Ravintolat">🍕 Ruokailu & Ravintolat</option>
+                <option value="Ostokset">🛍️ Kaupat & Ostokset</option>
+                <option value="Autoilu">🚗 Autoilu & Huolto</option>
+                <option value="Rakentaminen">🏠 Remontti & Rakentaminen</option>
+                <option value="Asuminen">🔑 Muutto & Asuminen</option>
+                <option value="Mökkipalvelut">🏡 Mökkipalvelut</option>
+                <option value="Päivystys">🚨 Päivystys & Huolto</option>
+              </optgroup>
+            </select>
+
             <div class="relative mb-2">
-              <input type="text" id="themeSearchInput" oninput="filterThemes(this.value)" placeholder="🔍 Hae teemaa (esim. Käsityö, Kulttuuri...)" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs outline-none" />
+              <input type="text" id="themeSearchInput" oninput="filterThemes(this.value)" placeholder="🔍 Hae muuta teemaa/tunnistetta..." class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs outline-none" />
             </div>
+
             <div id="themesContainer" class="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto p-2 bg-slate-50 rounded-xl border border-slate-200">
-              <!-- Dynamically populated from Supabase tags -->
+              <!-- Dynamically populated tags -->
             </div>
           </div>
 
@@ -278,7 +325,59 @@
           paramOrg = 'company-' + paramOrg;
         }
 
-        await loadThemesFromSupabase();
+        await Promise.all([
+          loadThemesFromSupabase(),
+          loadPlacesFromSupabase()
+        ]);
+      }
+
+      async function loadPlacesFromSupabase() {
+        const select = document.getElementById('placeSelect');
+        if (!select || !supabaseClient) return;
+
+        try {
+          const { data: dbPlaces } = await supabaseClient
+            .from('places')
+            .select('name, type')
+            .order('name', { ascending: true });
+
+          if (dbPlaces && dbPlaces.length > 0) {
+            const existingValues = new Set(Array.from(select.options).map(o => o.value.toLowerCase().trim()));
+
+            let dynamicGroup = document.getElementById('dynamicDbPlacesGroup');
+            if (!dynamicGroup) {
+              dynamicGroup = document.createElement('optgroup');
+              dynamicGroup.id = 'dynamicDbPlacesGroup';
+              dynamicGroup.label = 'Kaikki Laukaan kohteet & paikat';
+              select.appendChild(dynamicGroup);
+            }
+
+            dbPlaces.forEach(p => {
+              const nameClean = p.name ? p.name.trim() : '';
+              if (nameClean && !existingValues.has(nameClean.toLowerCase())) {
+                existingValues.add(nameClean.toLowerCase());
+                const opt = document.createElement('option');
+                opt.value = nameClean;
+                opt.textContent = `📍 ${nameClean}`;
+                dynamicGroup.appendChild(opt);
+              }
+            });
+          }
+        } catch (e) {
+          console.warn('Places fetch notice:', e);
+        }
+      }
+
+      function addThemeFromDropdown(val) {
+        if (!val) return;
+        selectedThemes.add(val);
+        if (!availableTags.includes(val)) {
+          availableTags.unshift(val);
+        }
+        document.getElementById('selectedThemesCount').innerText = `${selectedThemes.size} valittu`;
+        renderThemesList(availableTags);
+        const sel = document.getElementById('mainThemeSelect');
+        if (sel) sel.value = '';
       }
 
       async function loadThemesFromSupabase() {
