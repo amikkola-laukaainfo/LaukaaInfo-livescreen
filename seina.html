@@ -418,6 +418,22 @@
         await fetchPostsFromDb(null);
       }
 
+      // Helper to resolve organization ID from ID or org name
+      function resolveOrgId(rawOrgId, rawOrgName) {
+        let id = rawOrgId || '';
+        if (!id && rawOrgName) {
+          const nameLower = rawOrgName.toLowerCase().trim();
+          if (nameLower.includes('mediazoo')) id = 'company-2';
+          else if (nameLower.includes('kädenjälki')) id = 'company-313';
+          else if (nameLower.includes('yrittäjät')) id = 'company-202';
+          else if (nameLower.includes('peurunka')) id = 'company-101';
+        }
+        if (id && !id.startsWith('company-') && !isNaN(id)) {
+          id = 'company-' + id;
+        }
+        return id;
+      }
+
       // 6. Fetch Posts from Supabase (with Schema Fallback)
       async function fetchPostsFromDb(orgFilterId) {
         let fetchedPosts = [];
@@ -456,26 +472,31 @@
                 console.warn('Sub-tables fetch notice:', subErr);
               }
 
-              fetchedPosts = postsData.map(p => ({
-                id: p.id,
-                organization_id: p.organization_id || p.org_id || orgFilterId || '',
-                org_name: p.publisher_name || p.org_name || (document.getElementById('orgTitle')?.innerText !== 'Organisaation nimi' ? document.getElementById('orgTitle').innerText : 'Organisaatio'),
-                type: p.type || 'announcement',
-                title: p.title,
-                content: p.content || p.description || '',
-                visibility: p.visibility || 'public',
-                status: p.status || 'published',
-                created_at: p.created_at,
-                expires_at: p.expires_at,
-                pinned_until: p.pinned_until,
-                is_pinned: Boolean(p.is_pinned),
-                target_id: p.target_id,
-                target_type: p.target_type,
-                post_places: placesMap[p.id] || (p.place ? [{ place_id: p.place }] : []),
-                post_themes: themesMap[p.id] || (p.tags ? (Array.isArray(p.tags) ? p.tags.map(t => ({ tag_id: t })) : []) : []),
-                post_media: mediaMap[p.id] || (p.image_url ? [{ media_type: 'image', url: p.image_url }] : []),
-                post_links: linksMap[p.id] || (p.website_url ? [{ title: 'Lue lisää', url: p.website_url, link_type: 'external' }] : [])
-              }));
+              fetchedPosts = postsData.map(p => {
+                const orgName = p.publisher_name || p.org_name || (document.getElementById('orgTitle')?.innerText !== 'Organisaation nimi' ? document.getElementById('orgTitle').innerText : 'Organisaatio');
+                const resolvedId = resolveOrgId(p.organization_id || p.org_id || orgFilterId, orgName);
+
+                return {
+                  id: p.id,
+                  organization_id: resolvedId,
+                  org_name: orgName,
+                  type: p.type || 'announcement',
+                  title: p.title,
+                  content: p.content || p.description || '',
+                  visibility: p.visibility || 'public',
+                  status: p.status || 'published',
+                  created_at: p.created_at,
+                  expires_at: p.expires_at,
+                  pinned_until: p.pinned_until,
+                  is_pinned: Boolean(p.is_pinned),
+                  target_id: p.target_id,
+                  target_type: p.target_type,
+                  post_places: placesMap[p.id] || (p.place ? [{ place_id: p.place }] : []),
+                  post_themes: themesMap[p.id] || (p.tags ? (Array.isArray(p.tags) ? p.tags.map(t => ({ tag_id: t })) : []) : []),
+                  post_media: mediaMap[p.id] || (p.image_url ? [{ media_type: 'image', url: p.image_url }] : []),
+                  post_links: linksMap[p.id] || (p.website_url ? [{ title: 'Lue lisää', url: p.website_url, link_type: 'external' }] : [])
+                };
+              });
             }
           } catch (err) {
             console.warn('DB Post Query error, falling back to schema pool:', err);
@@ -568,8 +589,9 @@
           const orgLinkEl = document.getElementById('pinnedOrgLink');
           if (orgNameEl && orgLinkEl) {
             orgNameEl.innerText = pinnedPost.org_name || 'Organisaatio';
-            if (pinnedPost.organization_id) {
-              orgLinkEl.href = `seina.html?org=${encodeURIComponent(pinnedPost.organization_id)}`;
+            const pinnedOrgId = resolveOrgId(pinnedPost.organization_id, pinnedPost.org_name);
+            if (pinnedOrgId) {
+              orgLinkEl.href = `seina.html?org=${encodeURIComponent(pinnedOrgId)}`;
             } else {
               orgLinkEl.removeAttribute('href');
             }
@@ -615,13 +637,22 @@
           const typeBadge = getTypeBadgeHTML(p.type);
           const visibilityBadge = p.visibility === 'link' ? '<span class="text-[10px] px-2 py-0.5 bg-amber-50 text-amber-700 rounded-md font-bold">🔒 Vain linkillä</span>' : '';
 
+          const cardOrgId = resolveOrgId(p.organization_id, p.org_name);
+          const orgUrl = cardOrgId ? `seina.html?org=${encodeURIComponent(cardOrgId)}` : null;
+
           return `
             <article class="bg-white p-5 md:p-6 rounded-3xl border border-slate-200 shadow-xs space-y-3.5 hover:border-violet-200 transition-all">
               <div class="flex items-center justify-between text-xs">
                 <div class="flex items-center gap-2">
-                  <a href="seina.html?org=${encodeURIComponent(p.organization_id)}" class="px-2.5 py-1 rounded-lg font-bold uppercase bg-slate-100 text-slate-800 hover:bg-violet-100 hover:text-violet-800 transition-colors flex items-center gap-1">
-                    🏢 ${p.org_name || 'Organisaatio'}
-                  </a>
+                  ${orgUrl ? `
+                    <a href="${orgUrl}" class="px-2.5 py-1 rounded-lg font-bold uppercase bg-slate-100 text-slate-800 hover:bg-violet-100 hover:text-violet-800 transition-colors flex items-center gap-1">
+                      🏢 ${p.org_name || 'Organisaatio'}
+                    </a>
+                  ` : `
+                    <span class="px-2.5 py-1 rounded-lg font-bold uppercase bg-slate-100 text-slate-800 flex items-center gap-1">
+                      🏢 ${p.org_name || 'Organisaatio'}
+                    </span>
+                  `}
                   ${typeBadge}
                   ${visibilityBadge}
                 </div>
@@ -646,7 +677,7 @@
 
               <div class="flex items-center justify-between text-xs text-slate-400 pt-3 border-t border-slate-100">
                 <span>LaukaaInfo Content Stream</span>
-                <a href="seina.html?org=${encodeURIComponent(p.organization_id)}" class="text-violet-600 font-bold hover:underline">Organisaation oma seinä →</a>
+                ${orgUrl ? `<a href="${orgUrl}" class="text-violet-600 font-bold hover:underline">Organisaation oma seinä →</a>` : ''}
               </div>
             </article>
           `;
