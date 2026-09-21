@@ -482,6 +482,13 @@
         return id;
       }
 
+      // Helper to extract YouTube video ID
+      function extractYouTubeId(url) {
+        if (!url) return null;
+        const m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/|vi\/)|youtu\.be\/|ytimg\.com\/vi\/)([a-zA-Z0-9_-]+)/);
+        return m ? m[1] : null;
+      }
+
       // 6. Fetch Posts from Supabase (with Schema Fallback)
       async function fetchPostsFromDb(orgFilterId) {
         let fetchedPosts = [];
@@ -542,12 +549,21 @@
                 // Multi-source media resolution (Combines post_media rows, image_url, video_url & content video links)
                 let pMedia = mediaMap[p.id] ? [...mediaMap[p.id]] : [];
 
-                if (p.image_url && p.image_url.trim() && !pMedia.some(m => m.url === p.image_url)) {
-                  pMedia.push({ media_type: isVideoUrl(p.image_url, 'image') ? 'video' : 'image', url: p.image_url });
+                const rawVideoUrls = [p.video_url, p.video, p.youtube_url, p.media_url].filter(v => v && v.trim());
+                const videoYtIds = new Set(rawVideoUrls.map(extractYouTubeId).filter(Boolean));
+
+                if (p.image_url && p.image_url.trim()) {
+                  const imgYtId = extractYouTubeId(p.image_url);
+                  const isYtThumb = p.image_url.includes('img.youtube.com') || p.image_url.includes('ytimg.com');
+                  const isSameAsVideoThumb = isYtThumb && imgYtId && videoYtIds.has(imgYtId);
+
+                  if (!isSameAsVideoThumb && !pMedia.some(m => m.url === p.image_url)) {
+                    pMedia.push({ media_type: isVideoUrl(p.image_url, 'image') ? 'video' : 'image', url: p.image_url });
+                  }
                 }
 
-                [p.video_url, p.video, p.youtube_url, p.media_url].forEach(v => {
-                  if (v && v.trim() && !pMedia.some(m => m.url === v)) {
+                rawVideoUrls.forEach(v => {
+                  if (!pMedia.some(m => m.url === v)) {
                     pMedia.push({ media_type: 'video', url: v });
                   }
                 });
@@ -785,10 +801,14 @@
       }
 
       function isVideoUrl(url, mediaType) {
-        if (mediaType === 'video') return true;
+        if (mediaType === 'image') return false;
         if (!url) return false;
-        const u = url.toLowerCase();
-        return u.includes('youtube.com') || u.includes('youtu.be') || u.includes('vimeo.com') || u.endsWith('.mp4') || u.endsWith('.webm');
+        const u = url.toLowerCase().trim();
+        if (u.endsWith('.jpg') || u.endsWith('.jpeg') || u.endsWith('.png') || u.endsWith('.webp') || u.endsWith('.gif') || u.includes('img.youtube.com') || u.includes('ytimg.com')) {
+          return false;
+        }
+        if (mediaType === 'video') return true;
+        return u.includes('youtube.com/watch') || u.includes('youtube.com/embed/') || u.includes('youtube.com/shorts/') || u.includes('youtu.be/') || u.includes('vimeo.com') || u.endsWith('.mp4') || u.endsWith('.webm');
       }
 
       // 9. Media Rendering Helper (Supports 16:9 Videos, Images & Interactive Swiper/Carousel for Multiple Media)
@@ -812,8 +832,8 @@
             `;
           } else {
             return `
-              <div class="my-2 rounded-2xl overflow-hidden border border-slate-200 shadow-2xs">
-                <img src="${m.url}" alt="${m.alt_text || m.title || 'Julkaisukuva'}" class="w-full max-h-96 object-cover hover:scale-[1.01] transition-all" onerror="this.parentElement.style.display='none';" />
+              <div class="my-2 rounded-2xl overflow-hidden border border-slate-200 shadow-2xs bg-slate-950 flex items-center justify-center">
+                <img src="${m.url}" alt="${m.alt_text || m.title || 'Julkaisukuva'}" class="w-full max-h-96 object-cover object-center hover:scale-[1.01] transition-all" onerror="this.parentElement.style.display='none';" />
               </div>
             `;
           }
@@ -827,14 +847,14 @@
           if (isVid) {
             const embedUrl = formatYouTubeEmbedUrl(m.url);
             return `
-              <div class="snap-center shrink-0 w-full aspect-video-container bg-slate-900 rounded-2xl overflow-hidden relative">
+              <div class="snap-center shrink-0 w-full min-w-full aspect-video-container bg-slate-900 rounded-2xl overflow-hidden relative">
                 <iframe src="${embedUrl}" title="${m.title || 'Video ' + (idx + 1)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
               </div>
             `;
           } else {
             return `
-              <div class="snap-center shrink-0 w-full rounded-2xl overflow-hidden border border-slate-800 bg-slate-950 flex items-center justify-center relative max-h-96">
-                <img src="${m.url}" alt="${m.alt_text || m.title || 'Julkaisukuva ' + (idx + 1)}" class="w-full h-full max-h-96 object-cover" onerror="this.parentElement.style.display='none';" />
+              <div class="snap-center shrink-0 w-full min-w-full h-64 sm:h-80 md:h-96 rounded-2xl overflow-hidden border border-slate-800 bg-slate-950 flex items-center justify-center relative">
+                <img src="${m.url}" alt="${m.alt_text || m.title || 'Julkaisukuva ' + (idx + 1)}" class="w-full h-full object-cover object-center" onerror="this.parentElement.style.display='none';" />
               </div>
             `;
           }
