@@ -827,7 +827,7 @@
             const embedUrl = formatYouTubeEmbedUrl(m.url);
             return `
               <div class="my-2 aspect-video-container bg-slate-900 rounded-2xl shadow-sm overflow-hidden border border-slate-800">
-                <iframe src="${embedUrl}" title="${m.title || 'Video'}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe src="${embedUrl}" title="${m.title || 'Video'}" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; web-share" allowfullscreen></iframe>
               </div>
             `;
           } else {
@@ -848,7 +848,7 @@
             const embedUrl = formatYouTubeEmbedUrl(m.url);
             return `
               <div class="snap-center shrink-0 w-full min-w-full aspect-video-container bg-slate-900 rounded-2xl overflow-hidden relative">
-                <iframe src="${embedUrl}" title="${m.title || 'Video ' + (idx + 1)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe src="${embedUrl}" title="${m.title || 'Video ' + (idx + 1)}" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; web-share" allowfullscreen></iframe>
               </div>
             `;
           } else {
