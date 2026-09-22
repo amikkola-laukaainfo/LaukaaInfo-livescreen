@@ -1,4 +1,4 @@
-const VERSION = '29b28fcc';
+const VERSION = 'c68feb5b';
 const CACHE_NAME = `laukaainfo-${VERSION}`;
 const ASSETS = [
     './',

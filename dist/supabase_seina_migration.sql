@@ -64,8 +64,28 @@ ALTER TABLE public.posts ADD COLUMN IF NOT EXISTS pinned_until TIMESTAMPTZ;
 ALTER TABLE public.posts ADD COLUMN IF NOT EXISTS is_pinned BOOLEAN DEFAULT FALSE;
 ALTER TABLE public.posts ADD COLUMN IF NOT EXISTS target_id TEXT;
 ALTER TABLE public.posts ADD COLUMN IF NOT EXISTS target_type TEXT;
+ALTER TABLE public.posts ADD COLUMN IF NOT EXISTS cleanup_attempts INT DEFAULT 0;
+ALTER TABLE public.posts ADD COLUMN IF NOT EXISTS cleanup_last_attempt_at TIMESTAMPTZ;
+ALTER TABLE public.posts ADD COLUMN IF NOT EXISTS cleanup_error TEXT;
 
--- 4. POST_PLACES (Julkaisun paikat)
+-- 4. POST_ATTACHMENTS (Keskitetty liiterekisteri: kuvat, PDF:t, YouTube-videot)
+CREATE TABLE IF NOT EXISTS public.post_attachments (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    post_id UUID REFERENCES public.posts(id) ON DELETE CASCADE,
+    type TEXT NOT NULL, -- 'image' | 'pdf' | 'youtube'
+    provider TEXT NOT NULL, -- 'imagekit' | 'supabase' | 'youtube'
+    storage_path TEXT, -- PDF: publication-files/{post_id}/{attachment_id}.pdf
+    imagekit_file_id TEXT, -- Kuva: ImageKit tiedostotunniste poistoa varten
+    youtube_video_id TEXT, -- YouTube: Puhdas ID esim. ABC123
+    url TEXT NOT NULL,
+    file_name TEXT, -- Alkuperäinen tiedostonimi esim. Jasenkirje-2026.pdf
+    mime_type TEXT,
+    file_size BIGINT,
+    sort_order INT DEFAULT 0,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 5. POST_PLACES (Julkaisun paikat)
 CREATE TABLE IF NOT EXISTS public.post_places (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     post_id UUID REFERENCES public.posts(id) ON DELETE CASCADE,
@@ -74,7 +94,7 @@ CREATE TABLE IF NOT EXISTS public.post_places (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 5. POST_THEMES (Julkaisun teemat/tagit)
+-- 6. POST_THEMES (Julkaisun teemat/tagit)
 CREATE TABLE IF NOT EXISTS public.post_themes (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     post_id UUID REFERENCES public.posts(id) ON DELETE CASCADE,
@@ -82,11 +102,11 @@ CREATE TABLE IF NOT EXISTS public.post_themes (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 6. POST_MEDIA (0..N kuvat & videot)
+-- 7. POST_MEDIA (Legacy/fallback media)
 CREATE TABLE IF NOT EXISTS public.post_media (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     post_id UUID REFERENCES public.posts(id) ON DELETE CASCADE,
-    media_type TEXT NOT NULL, -- 'image' | 'video'
+    media_type TEXT NOT NULL,
     url TEXT NOT NULL,
     thumbnail_url TEXT,
     title TEXT,
@@ -95,12 +115,12 @@ CREATE TABLE IF NOT EXISTS public.post_media (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 7. POST_LINKS (0..N ulkoiset & sisäiset CTA-linkit)
+-- 8. POST_LINKS (CTA-linkit)
 CREATE TABLE IF NOT EXISTS public.post_links (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     post_id UUID REFERENCES public.posts(id) ON DELETE CASCADE,
     url TEXT NOT NULL,
-    title TEXT NOT NULL, -- esim. 'Lue lisää', 'Ilmoittaudu', 'Katso video', 'Siirry projektiin'
+    title TEXT NOT NULL,
     link_type TEXT DEFAULT 'external',
     sort_order INT DEFAULT 0,
     created_at TIMESTAMPTZ DEFAULT NOW()
@@ -113,6 +133,7 @@ CREATE TABLE IF NOT EXISTS public.post_links (
 ALTER TABLE public.organizations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.organization_publish_credentials ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.posts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.post_attachments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.post_places ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.post_themes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.post_media ENABLE ROW LEVEL SECURITY;
@@ -121,7 +142,7 @@ ALTER TABLE public.post_links ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Public can read organizations" ON public.organizations;
 CREATE POLICY "Public can read organizations" ON public.organizations FOR SELECT USING (true);
 
--- Credentials are secret (never readable by public client)
+-- Credentials are secret
 DROP POLICY IF EXISTS "No public access to credentials" ON public.organization_publish_credentials;
 CREATE POLICY "No public access to credentials" ON public.organization_publish_credentials FOR SELECT USING (false);
 
@@ -130,6 +151,9 @@ CREATE POLICY "Public read posts" ON public.posts FOR SELECT USING (
     (status = 'published' OR status = 'APPROVED' OR status IS NULL)
     AND (expires_at IS NULL OR expires_at > NOW())
 );
+
+DROP POLICY IF EXISTS "Public read post_attachments" ON public.post_attachments;
+CREATE POLICY "Public read post_attachments" ON public.post_attachments FOR SELECT USING (true);
 
 DROP POLICY IF EXISTS "Public read post_places" ON public.post_places;
 CREATE POLICY "Public read post_places" ON public.post_places FOR SELECT USING (true);
@@ -259,7 +283,9 @@ CREATE OR REPLACE FUNCTION public.publish_post_with_key(
     p_places JSONB DEFAULT '[]'::jsonb,
     p_themes JSONB DEFAULT '[]'::jsonb,
     p_media JSONB DEFAULT '[]'::jsonb,
-    p_links JSONB DEFAULT '[]'::jsonb
+    p_links JSONB DEFAULT '[]'::jsonb,
+    p_duration_days INT DEFAULT 30,
+    p_attachments JSONB DEFAULT '[]'::jsonb
 )
 RETURNS JSONB
 LANGUAGE plpgsql
@@ -269,6 +295,8 @@ DECLARE
     v_verify_res JSONB;
     v_post_id UUID;
     v_elem JSONB;
+    v_duration INT;
+    v_calculated_expires_at TIMESTAMPTZ;
 BEGIN
     -- 1. Palvelinpuolen avaintarkistus
     v_verify_res := public.verify_publisher_key(p_organization_id, p_publish_key);
@@ -277,7 +305,15 @@ BEGIN
         RETURN jsonb_build_object('success', false, 'error', COALESCE(v_verify_res->>'error', 'Käyttöoikeus evätty.'));
     END IF;
 
-    -- 2. Luodaan uusi julkaisu
+    -- 2. Lasketaan palvelinpuolen expires_at keston perusteella
+    v_duration := COALESCE(p_duration_days, 30);
+    IF v_duration NOT IN (7, 14, 30) THEN
+        v_duration := 30;
+    END IF;
+    
+    v_calculated_expires_at := COALESCE(p_expires_at, NOW() + (v_duration || ' days')::INTERVAL);
+
+    -- 3. Luodaan uusi julkaisu
     v_post_id := gen_random_uuid();
 
     INSERT INTO public.posts (
@@ -285,10 +321,10 @@ BEGIN
         expires_at, pinned_until, is_pinned, created_at, published_at
     ) VALUES (
         v_post_id, p_organization_id, p_title, p_content, p_type, p_visibility, p_status,
-        p_expires_at, p_pinned_until, (p_pinned_until IS NOT NULL AND p_pinned_until > NOW()), NOW(), NOW()
+        v_calculated_expires_at, p_pinned_until, (p_pinned_until IS NOT NULL AND p_pinned_until > NOW()), NOW(), NOW()
     );
 
-    -- 3. Paikat
+    -- 4. Paikat
     IF jsonb_array_length(p_places) > 0 THEN
         FOR v_elem IN SELECT * FROM jsonb_array_elements(p_places) LOOP
             INSERT INTO public.post_places (post_id, place_id, relation)
@@ -296,7 +332,7 @@ BEGIN
         END LOOP;
     END IF;
 
-    -- 4. Teemat
+    -- 5. Teemat
     IF jsonb_array_length(p_themes) > 0 THEN
         FOR v_elem IN SELECT * FROM jsonb_array_elements(p_themes) LOOP
             INSERT INTO public.post_themes (post_id, tag_id)
@@ -304,7 +340,28 @@ BEGIN
         END LOOP;
     END IF;
 
-    -- 5. Media (Kuvat / Videot)
+    -- 6. Liitteet (post_attachments: Kuva, PDF, YouTube)
+    IF jsonb_array_length(p_attachments) > 0 THEN
+        FOR v_elem IN SELECT * FROM jsonb_array_elements(p_attachments) LOOP
+            INSERT INTO public.post_attachments (
+                post_id, type, provider, storage_path, imagekit_file_id, youtube_video_id, url, file_name, mime_type, file_size, sort_order
+            ) VALUES (
+                v_post_id,
+                COALESCE(v_elem->>'type', 'image'),
+                COALESCE(v_elem->>'provider', 'imagekit'),
+                v_elem->>'storage_path',
+                v_elem->>'imagekit_file_id',
+                v_elem->>'youtube_video_id',
+                COALESCE(v_elem->>'url', ''),
+                v_elem->>'file_name',
+                v_elem->>'mime_type',
+                (v_elem->>'file_size')::BIGINT,
+                COALESCE((v_elem->>'sort_order')::INT, 0)
+            );
+        END LOOP;
+    END IF;
+
+    -- 7. Legacy Media (Kuvat / Videot)
     IF jsonb_array_length(p_media) > 0 THEN
         FOR v_elem IN SELECT * FROM jsonb_array_elements(p_media) LOOP
             IF (v_elem->>'url') IS NOT NULL AND LENGTH(v_elem->>'url') > 5 THEN
@@ -314,7 +371,7 @@ BEGIN
         END LOOP;
     END IF;
 
-    -- 6. Linkit
+    -- 8. Linkit
     IF jsonb_array_length(p_links) > 0 THEN
         FOR v_elem IN SELECT * FROM jsonb_array_elements(p_links) LOOP
             IF (v_elem->>'url') IS NOT NULL AND LENGTH(v_elem->>'url') > 5 THEN
@@ -329,7 +386,7 @@ BEGIN
     SET last_used_at = NOW()
     WHERE organization_id = p_organization_id AND revoked_at IS NULL;
 
-    RETURN jsonb_build_object('success', true, 'post_id', v_post_id, 'message', 'Julkaisu luotu onnistuneesti!');
+    RETURN jsonb_build_object('success', true, 'post_id', v_post_id, 'expires_at', v_calculated_expires_at, 'message', 'Julkaisu luotu onnistuneesti!');
 END;
 $$;
 
@@ -442,7 +499,7 @@ BEGIN
 END;
 $$;
 
--- 7. RPC: Poista julkaisu avaimella
+-- 7. RPC: Poista julkaisu avaimella (Merkitään poistoon, käynnistää siivouksen)
 CREATE OR REPLACE FUNCTION public.delete_post_with_key(
     p_organization_id TEXT,
     p_publish_key TEXT,
@@ -465,9 +522,96 @@ BEGIN
         RETURN jsonb_build_object('success', false, 'error', 'Julkaisua ei löytynyt tai se ei kuulu organisaatiollesi.');
     END IF;
 
-    DELETE FROM public.posts WHERE id = p_post_id AND organization_id = p_organization_id;
+    -- Merkitään julkaisu cleanup_pending-tilaan välittömästi (piilotetaan seinältä)
+    UPDATE public.posts
+    SET status = 'cleanup_pending', updated_at = NOW()
+    WHERE id = p_post_id AND organization_id = p_organization_id;
 
-    RETURN jsonb_build_object('success', true, 'message', 'Julkaisu poistettu onnistuneesti!');
+    RETURN jsonb_build_object('success', true, 'message', 'Julkaisu merkitty poistettavaksi.');
+END;
+$$;
+
+-- 8. RPC: Siivousrutiini (Merkitsee vanhentuneet julkaisut cleanup_pending-tilaan)
+CREATE OR REPLACE FUNCTION public.mark_expired_posts_pending()
+RETURNS INT
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE
+    v_count INT;
+BEGIN
+    UPDATE public.posts
+    SET status = 'cleanup_pending', updated_at = NOW()
+    WHERE expires_at <= NOW() AND status = 'published';
+
+    GET DIAGNOSTICS v_count = ROW_COUNT;
+    RETURN v_count;
+END;
+$$;
+
+-- 9. RPC: Hae siivousta odottavat julkaisut ja niiden liitteet
+CREATE OR REPLACE FUNCTION public.get_pending_cleanup_posts()
+RETURNS JSONB
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE
+    v_res JSONB;
+BEGIN
+    -- Varmistetaan että vanhentuneet on merkitty
+    PERFORM public.mark_expired_posts_pending();
+
+    SELECT jsonb_agg(
+        jsonb_build_object(
+            'post_id', p.id,
+            'cleanup_attempts', p.cleanup_attempts,
+            'attachments', (
+                SELECT COALESCE(jsonb_agg(
+                    jsonb_build_object(
+                        'id', a.id,
+                        'type', a.type,
+                        'provider', a.provider,
+                        'storage_path', a.storage_path,
+                        'imagekit_file_id', a.imagekit_file_id,
+                        'youtube_video_id', a.youtube_video_id,
+                        'url', a.url
+                    )
+                ), '[]'::jsonb)
+                FROM public.post_attachments a
+                WHERE a.post_id = p.id
+            )
+        )
+    ) INTO v_res
+    FROM public.posts p
+    WHERE p.status = 'cleanup_pending';
+
+    RETURN COALESCE(v_res, '[]'::jsonb);
+END;
+$$;
+
+-- 10. RPC: Viimeistele julkaisun poisto (Kun fyysiset tiedostot on siivottu)
+CREATE OR REPLACE FUNCTION public.finalize_post_deletion(
+    p_post_id UUID,
+    p_success BOOLEAN DEFAULT TRUE,
+    p_error_msg TEXT DEFAULT NULL
+)
+RETURNS JSONB
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+    IF p_success THEN
+        -- ON DELETE CASCADE poistaa automaattisesti post_attachments rivit
+        DELETE FROM public.posts WHERE id = p_post_id;
+        RETURN jsonb_build_object('success', true, 'post_id', p_post_id, 'message', 'Julkaisu ja sen liitteet poistettu.');
+    ELSE
+        UPDATE public.posts
+        SET cleanup_attempts = cleanup_attempts + 1,
+            cleanup_last_attempt_at = NOW(),
+            cleanup_error = p_error_msg
+        WHERE id = p_post_id;
+        RETURN jsonb_build_object('success', false, 'post_id', p_post_id, 'error', p_error_msg);
+    END IF;
 END;
 $$;
 

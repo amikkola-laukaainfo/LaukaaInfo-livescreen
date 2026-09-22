@@ -122,13 +122,16 @@
           <!-- Sisältö -->
           <div>
             <label class="text-[10px] font-bold text-slate-500 uppercase mb-1 block">Mitä haluat kertoa?</label>
-            <textarea id="content" rows="3" placeholder="Kirjoita julkaisun sisältö..." class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-violet-500"></textarea>
+            <textarea id="content" rows="3" oninput="updateLivePreview()" placeholder="Kirjoita julkaisun sisältö..." class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-violet-500"></textarea>
+            <p class="text-[10px] text-slate-400 mt-1">
+              💡 Voit lisätä linkin tekstiin: <code class="bg-slate-100 px-1 py-0.5 rounded text-violet-700 font-mono">[Osta liput](https://kauppa.fi)</code>
+            </p>
           </div>
 
-          <!-- Paikkavalinta Supabasesta (Kokonaiset paikkojen nimet) -->
+          <!-- Paikkavalinta Supabasesta -->
           <div>
             <label class="text-[10px] font-bold text-slate-500 uppercase mb-1 block">📍 Paikka (Valitse kohde tai alue)</label>
-            <select id="placeSelect" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-violet-500">
+            <select id="placeSelect" onchange="updateLivePreview()" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-violet-500">
               <option value="Laukaa">📍 Koko Laukaan alue</option>
               <optgroup label="Taajamat & Kylät">
                 <option value="Laukaan kirkonkylä">📍 Laukaan kirkonkylä</option>
@@ -154,14 +157,13 @@
             </select>
           </div>
 
-          <!-- Teemojen Valinta (Pääteemojen pudotusvalikko + Tunnisteet) -->
+          <!-- Teemojen Valinta -->
           <div>
             <div class="flex items-center justify-between mb-1">
               <label class="text-[10px] font-bold text-slate-500 uppercase block">🧩 Teemat & Tunnisteet</label>
               <span id="selectedThemesCount" class="text-[10px] font-bold text-violet-600">0 valittu</span>
             </div>
 
-            <!-- Pääteemojen Pudotusvalikko -->
             <select id="mainThemeSelect" onchange="addThemeFromDropdown(this.value)" class="w-full p-2.5 mb-2 bg-violet-50/80 border border-violet-200 rounded-xl text-xs font-bold text-violet-900 outline-none focus:ring-2 focus:ring-violet-500 cursor-pointer">
               <option value="">➕ Valitse pääteema pudotusvalikosta...</option>
               <optgroup label="🎨 Kulttuuri, Vapaa-aika & Tapahtumat">
@@ -204,37 +206,55 @@
             </div>
 
             <div id="themesContainer" class="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto p-2 bg-slate-50 rounded-xl border border-slate-200">
-              <!-- Dynamically populated tags -->
             </div>
           </div>
 
-          <!-- Rikas Media -->
-          <div class="p-3 bg-violet-50/60 rounded-2xl border border-violet-100 space-y-2">
-            <span class="text-[10px] font-black uppercase tracking-wider text-violet-800 flex items-center gap-1">
-              🎥 Media (Kuva tai Video)
-            </span>
-            <div>
-              <label class="text-[9px] font-bold text-slate-500 block mb-0.5">Kuva URL</label>
-              <input type="url" id="imageUrl" placeholder="https://..." class="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs outline-none focus:ring-1 focus:ring-violet-500" />
+          <!-- Liitteiden Hallinta (📷 Kuva, 📄 PDF, ▶ YouTube) -->
+          <div class="p-3.5 bg-violet-50/70 rounded-2xl border border-violet-200/80 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-black uppercase tracking-wider text-violet-900 flex items-center gap-1">
+                📎 Julkaisun liitteet (Valinnainen)
+              </span>
+              <span class="text-[9px] font-bold text-violet-600">Max 5 MB tiedostokoko</span>
             </div>
-            <div>
-              <label class="text-[9px] font-bold text-slate-500 block mb-0.5">Video URL (YouTube Embed / MP4)</label>
-              <input type="url" id="videoUrl" placeholder="https://www.youtube.com/embed/..." class="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs outline-none focus:ring-1 focus:ring-violet-500" />
+
+            <div class="grid grid-cols-3 gap-2">
+              <label class="cursor-pointer py-2 px-2 bg-white hover:bg-violet-100 text-violet-800 border border-violet-200 rounded-xl text-center text-xs font-bold transition-all flex items-center justify-center gap-1 shadow-2xs">
+                <span>📷 Kuva</span>
+                <input type="file" id="imageFileInput" accept="image/*" class="hidden" onchange="handleImageSelect(this)" />
+              </label>
+
+              <label class="cursor-pointer py-2 px-2 bg-white hover:bg-violet-100 text-violet-800 border border-violet-200 rounded-xl text-center text-xs font-bold transition-all flex items-center justify-center gap-1 shadow-2xs">
+                <span>📄 PDF</span>
+                <input type="file" id="pdfFileInput" accept="application/pdf" class="hidden" onchange="handlePdfSelect(this)" />
+              </label>
+
+              <button type="button" onclick="promptYouTubeUrl()" class="py-2 px-2 bg-white hover:bg-violet-100 text-violet-800 border border-violet-200 rounded-xl text-center text-xs font-bold transition-all flex items-center justify-center gap-1 shadow-2xs">
+                <span>▶ YouTube</span>
+              </button>
             </div>
+
+            <!-- Latauksen tila & Virheilmoitukset -->
+            <div id="uploadStatusBox" class="hidden p-2.5 bg-violet-100 text-violet-900 text-xs font-medium rounded-xl text-center"></div>
+
+            <!-- Liitelistaus -->
+            <div id="attachmentsList" class="space-y-2"></div>
           </div>
 
-          <!-- CTA- / Ulkoinen Linkki -->
+          <!-- Voimassaoloaika / Kesto -->
           <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
-            <span class="text-[10px] font-black uppercase tracking-wider text-slate-700 flex items-center gap-1">
-              🔗 Linkki / Painike (CTA)
-            </span>
-            <div class="grid grid-cols-2 gap-1.5">
-              <input type="text" id="linkTitle" placeholder="Painikkeen teksti (esim. Katso projekti)" class="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs outline-none" />
-              <input type="url" id="linkUrl" placeholder="Osoite (https://...)" class="w-full p-2 bg-white border border-slate-200 rounded-lg text-xs outline-none" />
+            <label class="text-[10px] font-bold text-slate-600 uppercase block">⌛ Julkaisun voimassaoloaika</label>
+            <div class="grid grid-cols-3 gap-1.5">
+              <button type="button" onclick="setDurationDays(7)" id="dur-7" class="dur-btn py-2 px-2 rounded-xl text-xs font-bold border bg-slate-100 text-slate-700 border-slate-200">7 päivää</button>
+              <button type="button" onclick="setDurationDays(14)" id="dur-14" class="dur-btn py-2 px-2 rounded-xl text-xs font-bold border bg-slate-100 text-slate-700 border-slate-200">14 päivää</button>
+              <button type="button" onclick="setDurationDays(30)" id="dur-30" class="dur-btn py-2 px-2 rounded-xl text-xs font-bold border bg-violet-600 text-white border-violet-600">30 päivää</button>
             </div>
+            <p class="text-[9px] text-slate-400 leading-tight">
+              💡 Julkaisu ja sen kuvat/PDF:t poistuvat automaattisesti tallennuspaikoista valitun ajan kuluttua.
+            </p>
           </div>
 
-          <!-- Kiinnitys seinälle (Dynaaminen) -->
+          <!-- Kiinnitys seinälle -->
           <div class="p-3 bg-amber-50/60 rounded-2xl border border-amber-200/80 space-y-2">
             <div class="flex items-center justify-between">
               <span class="text-[10px] font-black uppercase tracking-wider text-amber-900 flex items-center gap-1">
@@ -255,24 +275,32 @@
             </div>
           </div>
 
-          <!-- Vanhentuminen -->
-          <div>
-            <label class="text-[9px] font-bold text-slate-500 uppercase block mb-0.5">⌛ Vanhentuu (Poistuu seinältä automaattisesti)</label>
-            <input type="date" id="expiresAt" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none" />
+          <!-- REAALIAIKAINEN ESIKATSELUKORTTI -->
+          <div class="p-4 bg-slate-900 text-white rounded-3xl space-y-3 shadow-md" id="livePreviewCard">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+              <span class="text-[10px] font-black uppercase tracking-widest text-violet-400">👁️ Esikatselu (Seinä-näkymä)</span>
+              <span class="text-[9px] font-bold text-slate-400" id="previewDurationLabel">Voimassa 30 vrk</span>
+            </div>
+            <div class="space-y-2">
+              <h3 class="text-sm font-bold text-white" id="previewTitle">Syötä julkaisun otsikko...</h3>
+              <div class="text-xs text-slate-300 leading-relaxed space-y-1" id="previewContent">Sisältö tulee tähän...</div>
+              
+              <!-- Attached Media Preview Slot -->
+              <div id="previewMediaSlot" class="space-y-2 pt-1"></div>
+            </div>
           </div>
 
-          <!-- Julkaisupainike -->
+          <!-- Julkaisupainikkeet -->
           <div class="pt-2 space-y-2">
-            <button type="button" id="submitPublishBtn" onclick="submitPostViaRpc('published')" class="w-full py-3 px-4 bg-violet-600 hover:bg-violet-700 text-white text-xs font-bold rounded-xl shadow-xs transition-all flex items-center justify-center gap-1">
+            <button type="button" id="submitPublishBtn" onclick="submitPostViaRpc('published')" class="w-full py-3.5 px-4 bg-violet-600 hover:bg-violet-700 text-white text-xs font-bold rounded-xl shadow-xs transition-all flex items-center justify-center gap-1.5">
               <span>🚀 Julkaise seinälle</span>
             </button>
             <button type="button" id="cancelEditBtn" onclick="cancelEditMode()" class="hidden w-full py-2 px-3 border border-slate-300 text-slate-700 text-xs font-bold rounded-xl hover:bg-slate-100 transition-all">
               ❌ Peruuta muokkaus
             </button>
-            <button type="button" onclick="submitPostViaRpc('draft')" class="w-full py-2 px-3 border border-slate-200 bg-white text-slate-600 text-xs font-bold rounded-xl hover:bg-slate-50">
-              Tallenna luonnokseksi
-            </button>
           </div>
+
+        </div>
 
         </div>
 
@@ -669,6 +697,335 @@
         
         if (!confirm(`Haluatko varmasti poistaa julkaisun:\n${titleStr}?`)) {
           return;
+      // Global Attachment & Duration State
+      let attachedItems = [];
+      let selectedDurationDays = 30;
+
+      function escapeHtml(text) {
+        if (!text) return '';
+        return text
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      function parseMarkdownLinks(rawText) {
+        if (!rawText) return '';
+        let escaped = escapeHtml(rawText);
+
+        const mdRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+        escaped = escaped.replace(mdRegex, (match, linkText, linkUrl) => {
+          const cleanUrl = linkUrl.trim();
+          try {
+            const parsed = new URL(cleanUrl);
+            if ((parsed.protocol === 'http:' || parsed.protocol === 'https:') && parsed.hostname !== '') {
+              return `<a href="${parsed.href}" target="_blank" rel="noopener noreferrer" class="text-violet-400 font-bold hover:underline">${linkText}</a>`;
+            }
+          } catch (e) {}
+          return match;
+        });
+
+        const linkPrefixRegex = /link:([^=]+)=([^\s]+)/g;
+        escaped = escaped.replace(linkPrefixRegex, (match, linkText, linkUrl) => {
+          const cleanUrl = linkUrl.trim();
+          try {
+            const parsed = new URL(cleanUrl);
+            if ((parsed.protocol === 'http:' || parsed.protocol === 'https:') && parsed.hostname !== '') {
+              return `<a href="${parsed.href}" target="_blank" rel="noopener noreferrer" class="text-violet-400 font-bold hover:underline">${linkText}</a>`;
+            }
+          } catch (e) {}
+          return match;
+        });
+
+        return escaped;
+      }
+
+      function extractYouTubeId(urlStr) {
+        if (!urlStr) return null;
+        try {
+          const parsed = new URL(urlStr.trim());
+          if (parsed.hostname.includes('youtube.com')) {
+            if (parsed.pathname === '/watch') {
+              return parsed.searchParams.get('v');
+            } else if (parsed.pathname.startsWith('/shorts/')) {
+              return parsed.pathname.split('/shorts/')[1].split('/')[0].split('?')[0];
+            } else if (parsed.pathname.startsWith('/embed/')) {
+              return parsed.pathname.split('/embed/')[1].split('/')[0].split('?')[0];
+            }
+          } else if (parsed.hostname.includes('youtu.be')) {
+            return parsed.pathname.substring(1).split('/')[0].split('?')[0];
+          }
+        } catch (e) {
+          if (/^[a-zA-Z0-9_-]{11}$/.test(urlStr.trim())) {
+            return urlStr.trim();
+          }
+        }
+        return null;
+      }
+
+      function setDurationDays(days) {
+        selectedDurationDays = days;
+        document.querySelectorAll('.dur-btn').forEach(b => {
+          b.classList.remove('bg-violet-600', 'text-white', 'border-violet-600');
+          b.classList.add('bg-slate-100', 'text-slate-700', 'border-slate-200');
+        });
+        const activeBtn = document.getElementById('dur-' + days);
+        if (activeBtn) {
+          activeBtn.classList.remove('bg-slate-100', 'text-slate-700');
+          activeBtn.classList.add('bg-violet-600', 'text-white', 'border-violet-600');
+        }
+        document.getElementById('previewDurationLabel').innerText = `Voimassa ${days} vrk`;
+      }
+
+      function showUploadStatus(msg, isError = false) {
+        const box = document.getElementById('uploadStatusBox');
+        if (!box) return;
+        box.innerText = msg;
+        box.className = `p-2.5 rounded-xl text-xs font-bold text-center ${isError ? 'bg-red-100 text-red-700 border border-red-200' : 'bg-violet-100 text-violet-900'}`;
+        box.classList.remove('hidden');
+      }
+
+      function hideUploadStatus() {
+        const box = document.getElementById('uploadStatusBox');
+        if (box) box.classList.add('hidden');
+      }
+
+      async function handleImageSelect(input) {
+        const file = input.files[0];
+        if (!file) return;
+
+        if (file.size > 5 * 1024 * 1024) {
+          showUploadStatus('❌ Kuva on liian suuri. Suurin sallittu tiedostokoko on 5 MB.', true);
+          input.value = '';
+          return;
+        }
+
+        showUploadStatus('⏳ Optimoidaan ja ladataan kuvaa ImageKitiin...');
+
+        try {
+          const authRes = await fetch(`imagekit-api.php?yritys=${encodeURIComponent(selectedOrgId || 'demo')}&token=demo&action=auth`);
+          const authData = await authRes.json();
+
+          const formData = new FormData();
+          formData.append('file', file);
+          formData.append('fileName', `${selectedOrgId || 'org'}_${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`);
+          formData.append('publicKey', authData.publicKey || '');
+          formData.append('signature', authData.signature || '');
+          formData.append('expire', authData.expire || '');
+          formData.append('token', authData.token || '');
+          formData.append('folder', '/mediazoo/offers');
+
+          const ikRes = await fetch('https://upload.imagekit.io/api/v1/files/upload', {
+            method: 'POST',
+            body: formData
+          });
+
+          const ikData = await ikRes.json();
+          let finalUrl = ikData.url || URL.createObjectURL(file);
+          let ikFileId = ikData.fileId || `file_${Date.now()}`;
+
+          attachedItems.push({
+            type: 'image',
+            provider: 'imagekit',
+            url: finalUrl,
+            imagekit_file_id: ikFileId,
+            file_name: file.name,
+            file_size: file.size,
+            mime_type: file.type
+          });
+
+          hideUploadStatus();
+          renderAttachmentsList();
+          updateLivePreview();
+        } catch (err) {
+          console.warn('ImageKit upload fallback:', err);
+          attachedItems.push({
+            type: 'image',
+            provider: 'imagekit',
+            url: URL.createObjectURL(file),
+            imagekit_file_id: `temp_${Date.now()}`,
+            file_name: file.name,
+            file_size: file.size,
+            mime_type: file.type
+          });
+          hideUploadStatus();
+          renderAttachmentsList();
+          updateLivePreview();
+        }
+
+        input.value = '';
+      }
+
+      async function handlePdfSelect(input) {
+        const file = input.files[0];
+        if (!file) return;
+
+        if (file.size > 5 * 1024 * 1024) {
+          showUploadStatus('❌ PDF on liian suuri. Suurin sallittu tiedostokoko on 5 MB.', true);
+          input.value = '';
+          return;
+        }
+
+        if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+          showUploadStatus('❌ Vain PDF-tiedostot ovat sallittuja liitteenä.', true);
+          input.value = '';
+          return;
+        }
+
+        showUploadStatus('⏳ Tallennetaan PDF-tiedostoa Supabase Storageen...');
+
+        let storagePath = null;
+        let publicUrl = null;
+
+        if (supabaseClient) {
+          try {
+            const fileUuid = crypto.randomUUID ? crypto.randomUUID() : ('pdf_' + Date.now());
+            const tempPostId = editingPostId || ('temp_' + Date.now());
+            storagePath = `publication-files/${tempPostId}/${fileUuid}.pdf`;
+
+            const { data, error } = await supabaseClient.storage
+              .from('publication-files')
+              .upload(storagePath, file, {
+                cacheControl: '3600',
+                upsert: true,
+                contentType: 'application/pdf'
+              });
+
+            if (!error && data) {
+              const { data: pubUrlData } = supabaseClient.storage.from('publication-files').getPublicUrl(storagePath);
+              publicUrl = pubUrlData ? pubUrlData.publicUrl : null;
+            }
+          } catch (e) {
+            console.warn('Storage upload notice:', e);
+          }
+        }
+
+        attachedItems.push({
+          type: 'pdf',
+          provider: 'supabase',
+          storage_path: storagePath || `publication-files/demo/${file.name}`,
+          url: publicUrl || '#',
+          file_name: file.name,
+          file_size: file.size,
+          mime_type: 'application/pdf'
+        });
+
+        hideUploadStatus();
+        renderAttachmentsList();
+        updateLivePreview();
+        input.value = '';
+      }
+
+      function promptYouTubeUrl() {
+        const url = prompt('Liitä YouTube-osoite (esim. https://www.youtube.com/watch?v=... tai https://youtu.be/...):');
+        if (!url) return;
+
+        const ytid = extractYouTubeId(url);
+        if (!ytid) {
+          alert('❌ Tunnistamatonta YouTube-osoitetta ei voitu lisätä. Tarkista linkki.');
+          return;
+        }
+
+        attachedItems.push({
+          type: 'youtube',
+          provider: 'youtube',
+          youtube_video_id: ytid,
+          url: `https://www.youtube.com/watch?v=${ytid}`
+        });
+
+        renderAttachmentsList();
+        updateLivePreview();
+      }
+
+      function removeAttachment(index) {
+        attachedItems.splice(index, 1);
+        renderAttachmentsList();
+        updateLivePreview();
+      }
+
+      function renderAttachmentsList() {
+        const container = document.getElementById('attachmentsList');
+        if (!container) return;
+
+        if (attachedItems.length === 0) {
+          container.innerHTML = '<p class="text-[11px] text-slate-400 italic text-center py-1">Ei vielä lisättyjä liitteitä.</p>';
+          return;
+        }
+
+        container.innerHTML = attachedItems.map((item, idx) => {
+          let icon = '📎';
+          let label = item.file_name || item.url;
+          let sizeStr = item.file_size ? ` (${(item.file_size / (1024 * 1024)).toFixed(1)} MB)` : '';
+
+          if (item.type === 'image') icon = '📷 Kuva';
+          else if (item.type === 'pdf') icon = '📄 PDF';
+          else if (item.type === 'youtube') {
+            icon = '🎬 YouTube';
+            label = `Video ID: ${item.youtube_video_id}`;
+          }
+
+          return `
+            <div class="flex items-center justify-between p-2 bg-white rounded-xl border border-violet-100 shadow-2xs">
+              <div class="flex items-center gap-2 min-w-0 flex-1">
+                <span class="text-xs font-bold text-violet-800 shrink-0">${icon}</span>
+                <span class="text-xs font-medium text-slate-700 truncate">${escapeHtml(label)}${sizeStr}</span>
+              </div>
+              <button type="button" onclick="removeAttachment(${idx})" class="text-red-500 hover:text-red-700 text-xs font-bold px-2 py-0.5 rounded hover:bg-red-50 transition-all shrink-0">
+                ❌
+              </button>
+            </div>
+          `;
+        }).join('');
+      }
+
+      function updateLivePreview() {
+        const title = document.getElementById('title').value || 'Syötä julkaisun otsikko...';
+        const contentRaw = document.getElementById('content').value || 'Sisältö tulee tähän...';
+
+        document.getElementById('previewTitle').innerText = title;
+        document.getElementById('previewContent').innerHTML = parseMarkdownLinks(contentRaw);
+
+        const mediaSlot = document.getElementById('previewMediaSlot');
+        if (!mediaSlot) return;
+
+        let slotHtml = '';
+
+        attachedItems.forEach(item => {
+          if (item.type === 'image' && item.url) {
+            slotHtml += `
+              <div class="rounded-xl overflow-hidden border border-slate-700 max-h-48 bg-black/20">
+                <img src="${item.url}" class="w-full h-auto object-cover max-h-48" alt="Kuva esikatselu" />
+              </div>
+            `;
+          } else if (item.type === 'pdf') {
+            const sizeStr = item.file_size ? ` · ${(item.file_size / (1024 * 1024)).toFixed(1)} MB` : '';
+            slotHtml += `
+              <div class="p-2.5 bg-slate-800 rounded-xl border border-slate-700 flex items-center justify-between">
+                <span class="text-xs font-bold text-slate-200">📄 ${escapeHtml(item.file_name || 'PDF liite')}${sizeStr}</span>
+                <span class="text-[10px] font-bold text-violet-400 underline">Avaa PDF</span>
+              </div>
+            `;
+          } else if (item.type === 'youtube' && item.youtube_video_id) {
+            slotHtml += `
+              <div class="aspect-video-container rounded-xl overflow-hidden border border-slate-700">
+                <iframe src="https://www.youtube.com/embed/${item.youtube_video_id}" frameborder="0" allowfullscreen></iframe>
+              </div>
+            `;
+          }
+        });
+
+        mediaSlot.innerHTML = slotHtml;
+      }
+
+      // Delete post with key verification (Marks as cleanup_pending for immediate removal)
+      async function deletePost(postId) {
+        const p = loadedMyPosts.find(item => item.id === postId);
+        const titleStr = p ? `"${p.title}"` : 'tämä julkaisu';
+        
+        if (!confirm(`Haluatko varmasti poistaa julkaisun:\n${titleStr}?`)) {
+          return;
         }
 
         if (supabaseClient && activePublishKey) {
@@ -719,7 +1076,7 @@
         }
       }
 
-      // Create / Update Server-side RPC Publish
+      // Create / Update Server-side RPC Publish with Duration & Attachments
       async function submitPostViaRpc(status) {
         const title = document.getElementById('title').value;
         if (!title.trim()) return alert('Anna julkaisun otsikko!');
@@ -727,11 +1084,6 @@
         const content = document.getElementById('content').value;
         const visibility = document.getElementById('visibility').value;
         const place = document.getElementById('placeSelect').value;
-        const imageUrl = document.getElementById('imageUrl').value;
-        const videoUrl = document.getElementById('videoUrl').value;
-        const linkTitle = document.getElementById('linkTitle').value;
-        const linkUrl = document.getElementById('linkUrl').value;
-        const expiresAt = document.getElementById('expiresAt').value;
         
         // Pin calculation
         const pinDuration = document.getElementById('pinDurationSelect').value;
@@ -744,14 +1096,6 @@
           const hours = parseInt(pinDuration, 10);
           pinnedUntilIso = new Date(Date.now() + hours * 3600 * 1000).toISOString();
         }
-
-        // Build media & links payloads
-        const mediaPayload = [];
-        if (imageUrl.trim()) mediaPayload.push({ media_type: 'image', url: imageUrl.trim() });
-        if (videoUrl.trim()) mediaPayload.push({ media_type: 'video', url: videoUrl.trim() });
-
-        const linksPayload = [];
-        if (linkUrl.trim()) linksPayload.push({ title: linkTitle.trim() || 'Lue lisää', url: linkUrl.trim(), link_type: 'external' });
 
         const placesPayload = [{ place_id: place, relation: 'venue' }];
         const themesPayload = Array.from(selectedThemes).map(t => ({ tag_id: t }));
@@ -770,13 +1114,11 @@
               p_type: currentPubType,
               p_visibility: visibility,
               p_status: status,
-              p_expires_at: expiresAt ? new Date(expiresAt).toISOString() : null,
+              p_duration_days: selectedDurationDays,
               p_pinned_until: pinnedUntilIso,
               p_places: placesPayload,
               p_themes: themesPayload,
-              p_media: mediaPayload,
-              p_links: linksPayload,
-              p_post_id: editingPostId || null
+              p_attachments: attachedItems
             });
 
             if (error || (data && !data.success)) {
@@ -790,12 +1132,29 @@
           }
         }
 
-        const msg = editingPostId ? '💾 Julkaisu päivitetty onnistuneesti!' : (status === 'published' ? `🚀 Julkaistu onnistuneesti organisaation ${verifiedOrgName} seinälle!` : 'Tallennettu luonnokseksi!');
+        const msg = editingPostId ? '💾 Julkaisu päivitetty onnistuneesti!' : `🚀 Julkaistu onnistuneesti organisaation ${verifiedOrgName} seinälle!`;
         alert(msg);
         
         cancelEditMode();
         submitBtn.disabled = false;
         await loadMyPosts();
+      }
+
+      function cancelEditMode() {
+        editingPostId = null;
+        document.getElementById('title').value = '';
+        document.getElementById('content').value = '';
+        attachedItems = [];
+        selectedThemes.clear();
+        document.getElementById('selectedThemesCount').innerText = '0 valittu';
+        renderThemesList(availableTags);
+        renderAttachmentsList();
+        updateLivePreview();
+
+        document.getElementById('formTitleText').innerText = 'Luo uusi julkaisu seinälle';
+        document.getElementById('editBadge').classList.add('hidden');
+        document.getElementById('cancelEditBtn').classList.add('hidden');
+        document.getElementById('submitPublishBtn').innerHTML = `<span>🚀 Julkaise ${verifiedOrgName || ''} seinälle</span>`;
       }
 
       initPublishingPoint();

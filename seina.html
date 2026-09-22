@@ -523,7 +523,7 @@
               }
 
               // Fetch related sub-tables independently for robust execution
-              let placesMap = {}, themesMap = {}, mediaMap = {}, linksMap = {};
+              let placesMap = {}, themesMap = {}, mediaMap = {}, linksMap = {}, attachmentsMap = {};
 
               try {
                 const { data: pPlaces } = await supabaseClient.from('post_places').select('*').in('post_id', postIds);
@@ -531,6 +531,9 @@
 
                 const { data: pThemes } = await supabaseClient.from('post_themes').select('*').in('post_id', postIds);
                 if (pThemes) pThemes.forEach(t => { (themesMap[t.post_id] = themesMap[t.post_id] || []).push(t); });
+
+                const { data: pAttachments } = await supabaseClient.from('post_attachments').select('*').in('post_id', postIds);
+                if (pAttachments) pAttachments.forEach(a => { (attachmentsMap[a.post_id] = attachmentsMap[a.post_id] || []).push(a); });
 
                 const { data: pMedia } = await supabaseClient.from('post_media').select('*').in('post_id', postIds);
                 if (pMedia) pMedia.forEach(m => { (mediaMap[m.post_id] = mediaMap[m.post_id] || []).push(m); });
@@ -546,8 +549,28 @@
                 const resolvedId = resolveOrgId(p.organization_id || p.org_id || orgFilterId, rawName);
                 const resolvedName = getOrgNameSync(resolvedId, rawName);
 
-                // Multi-source media resolution (Combines post_media rows, image_url, video_url & content video links)
+                // Combine post_attachments with post_media
                 let pMedia = mediaMap[p.id] ? [...mediaMap[p.id]] : [];
+                let pAttachments = attachmentsMap[p.id] ? [...attachmentsMap[p.id]] : [];
+
+                // Convert post_attachments into media representation for gallery
+                pAttachments.forEach(att => {
+                  if (att.type === 'image' && att.url) {
+                    let optimizedUrl = att.url;
+                    if (att.provider === 'imagekit' && !optimizedUrl.includes('tr=')) {
+                      optimizedUrl += (optimizedUrl.includes('?') ? '&' : '?') + 'tr=w-1000,f-auto,q-auto';
+                    }
+                    if (!pMedia.some(m => m.url === att.url || m.url === optimizedUrl)) {
+                      pMedia.push({ media_type: 'image', url: optimizedUrl, title: att.file_name });
+                    }
+                  } else if (att.type === 'youtube' && (att.youtube_video_id || att.url)) {
+                    const ytId = att.youtube_video_id || extractYouTubeId(att.url);
+                    const embedUrl = ytId ? `https://www.youtube.com/embed/${ytId}` : att.url;
+                    if (!pMedia.some(m => m.url === embedUrl)) {
+                      pMedia.push({ media_type: 'video', url: embedUrl, title: 'YouTube Video' });
+                    }
+                  }
+                });
 
                 const rawVideoUrls = [p.video_url, p.video, p.youtube_url, p.media_url].filter(v => v && v.trim());
                 const videoYtIds = new Set(rawVideoUrls.map(extractYouTubeId).filter(Boolean));
@@ -568,17 +591,6 @@
                   }
                 });
 
-                const contentText = (p.content || '') + ' ' + (p.description || '');
-                const youtubeMatches = contentText.match(/https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/|vimeo\.com\/)[a-zA-Z0-9_\-\?&=]+/gi);
-                if (youtubeMatches) {
-                  youtubeMatches.forEach(ytUrl => {
-                    const cleanYt = ytUrl.trim();
-                    if (!pMedia.some(m => m.url === cleanYt || formatYouTubeEmbedUrl(m.url) === formatYouTubeEmbedUrl(cleanYt))) {
-                      pMedia.push({ media_type: 'video', url: cleanYt });
-                    }
-                  });
-                }
-
                 return {
                   id: p.id,
                   organization_id: resolvedId,
@@ -596,6 +608,7 @@
                   target_type: p.target_type,
                   post_places: placesMap[p.id] || (p.place ? [{ place_id: p.place }] : []),
                   post_themes: themesMap[p.id] || (p.tags ? (Array.isArray(p.tags) ? p.tags.map(t => ({ tag_id: t })) : []) : []),
+                  post_attachments: pAttachments,
                   post_media: pMedia,
                   post_links: linksMap[p.id] || (p.website_url ? [{ title: 'Lue lisää', url: p.website_url, link_type: 'external' }] : [])
                 };

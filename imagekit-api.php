@@ -152,9 +152,37 @@ if ($action === 'delete') {
     exit;
 }
 
+if ($action === 'delete_file_id') {
+    $fileId = $_GET['file_id'] ?? $_POST['file_id'] ?? '';
+    if (empty($fileId)) {
+        http_response_code(400);
+        echo json_encode(['error' => 'file_id puuttuu']);
+        exit;
+    }
+
+    $delUrl = "https://api.imagekit.io/v1/files/$fileId";
+    $delCh = curl_init($delUrl);
+    curl_setopt($delCh, CURLOPT_CUSTOMREQUEST, "DELETE");
+    curl_setopt($delCh, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($delCh, CURLOPT_HTTPHEADER, [
+        "Authorization: Basic " . base64_encode($privateKey . ":")
+    ]);
+    
+    $delResponse = curl_exec($delCh);
+    $delHttpCode = curl_getinfo($delCh, CURLINFO_HTTP_CODE);
+    curl_close($delCh);
+
+    if ($delHttpCode === 204 || $delHttpCode === 404) {
+        echo json_encode(['result' => 'ok', 'message' => 'Kuva poistettu ImageKitistä.']);
+    } else {
+        http_response_code($delHttpCode ?: 500);
+        echo json_encode(['error' => 'Poisto epäonnistui', 'details' => $delResponse]);
+    }
+    exit;
+}
+
 if ($action === 'auth') {
     // Generate auth parameters for client-side upload
-    // A dynamically generated token, expire, and signature
     $tokenParam = bin2hex(random_bytes(16));
     $expire = time() + (60 * 30); // 30 mins
     $signature = hash_hmac('sha1', $tokenParam . $expire, $privateKey);
