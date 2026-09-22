@@ -52,7 +52,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         // Varmistetaan että placeId on aina UUID (ei slug), ennen hierarkiahakuja.
         // Jos URL:ssa oli slug (esim. ?id=lievestuore), se ei täsmää parent_place_id:hin kannassa.
-        placeId = placeData.place_id;
+        placeId = placeData.id || placeData.place_id;
+
+        // 2.7. Place Identity Layer V1 - Yhteisen paikkakontekstin lataus (get_place_context)
+        let placeNetworkContext = null;
+        try {
+            const placeUuid = placeData.id || placeData.place_id;
+            if (typeof PlaceContext !== 'undefined' && PlaceContext.fetchContext) {
+                placeNetworkContext = await PlaceContext.fetchContext(placeUuid, aiSb);
+            } else {
+                const { data: netData } = await aiSb.rpc('get_place_context', { p_place_id: placeUuid });
+                placeNetworkContext = netData;
+            }
+            if (placeNetworkContext) {
+                console.log('Place Identity Layer context loaded for place:', placeData.name, placeNetworkContext);
+                window.activePlaceNetworkContext = placeNetworkContext;
+            }
+        } catch (netErr) {
+            console.warn('Place Identity Layer context haku epaonnistui:', netErr);
+        }
 
         // 2.6. Hae hierarkia: pääkohde (jos tämä on alakohde) + alakohteet (jos tämä on pääkohde)
         let parentPlace = null;

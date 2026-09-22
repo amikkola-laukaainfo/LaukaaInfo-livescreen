@@ -64,6 +64,24 @@ class PlaceContext {
         return false;
     }
 
+    /**
+     * Fetch unified Place Identity Layer context from Supabase get_place_context RPC.
+     */
+    static async fetchContext(placeId, supabaseClient = window.aiSb) {
+        if (!placeId || !supabaseClient) return null;
+        try {
+            const { data, error } = await supabaseClient.rpc('get_place_context', { p_place_id: placeId });
+            if (error) {
+                console.warn('PlaceContext.fetchContext error:', error);
+                return null;
+            }
+            return data;
+        } catch (err) {
+            console.error('PlaceContext.fetchContext failed:', err);
+            return null;
+        }
+    }
+
     toJSON() {
         return {
             targetPlace: this.targetPlace,
