@@ -606,6 +606,14 @@
                   is_pinned: Boolean(p.is_pinned),
                   target_id: p.target_id,
                   target_type: p.target_type,
+                  event_start_at: p.event_start_at,
+                  event_end_at: p.event_end_at,
+                  event_all_day: Boolean(p.event_all_day),
+                  event_location_detail: p.event_location_detail,
+                  event_registration_url: p.event_registration_url,
+                  offer_start_at: p.offer_start_at,
+                  offer_end_at: p.offer_end_at,
+                  offer_terms: p.offer_terms,
                   post_places: placesMap[p.id] || (p.place ? [{ place_id: p.place }] : []),
                   post_themes: themesMap[p.id] || (p.tags ? (Array.isArray(p.tags) ? p.tags.map(t => ({ tag_id: t })) : []) : []),
                   post_attachments: pAttachments,
@@ -677,7 +685,7 @@
         if (pinnedPost && (isSingleOrgMode || activeFilter === 'all')) {
           pinnedSection.classList.remove('hidden');
           document.getElementById('pinnedTitle').innerText = pinnedPost.title;
-          document.getElementById('pinnedContent').innerText = pinnedPost.content || '';
+          document.getElementById('pinnedContent').innerHTML = parseMarkdownLinks(pinnedPost.content || '');
           
           let timeLabel = pinnedPost.created_at ? new Date(pinnedPost.created_at).toLocaleDateString('fi-FI') : 'Ajankohtainen';
           if (pinnedPost.pinned_until && new Date(pinnedPost.pinned_until) > now) {
@@ -776,12 +784,44 @@
                 <span class="text-slate-400 font-medium">${formattedDate}</span>
               </div>
 
-              <h3 class="text-base font-bold text-slate-900 leading-snug">${p.title}</h3>
+              <h3 class="text-base font-bold text-slate-900 leading-snug">${escapeHtml(p.title)}</h3>
               
-              ${p.content ? `<p class="text-xs md:text-sm text-slate-600 leading-relaxed whitespace-pre-line">${p.content}</p>` : ''}
+              ${p.content ? `<p class="text-xs md:text-sm text-slate-600 leading-relaxed whitespace-pre-line">${parseMarkdownLinks(p.content)}</p>` : ''}
+
+              <!-- Tapahtuman dynaaminen osio -->
+              ${p.type === 'event' && p.event_start_at ? `
+                <div class="p-3.5 bg-amber-50/80 rounded-2xl border border-amber-200/90 space-y-1.5 shadow-2xs">
+                  <div class="flex items-center gap-2 text-amber-950 font-bold text-xs">
+                    <span class="text-sm">📅</span>
+                    <span>${formatEventDate(p.event_start_at, p.event_end_at, p.event_all_day)}</span>
+                  </div>
+                  ${p.event_location_detail ? `<div class="text-xs text-amber-900 font-medium">📍 Tarkempi paikka: <strong>${escapeHtml(p.event_location_detail)}</strong></div>` : ''}
+                  ${p.event_registration_url ? `
+                    <div class="pt-1">
+                      <a href="${escapeHtml(p.event_registration_url)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl text-xs transition-colors shadow-2xs">
+                        🔗 Ilmoittaudu tästä →
+                      </a>
+                    </div>
+                  ` : ''}
+                </div>
+              ` : ''}
+
+              <!-- Tarjouksen dynaaminen osio -->
+              ${p.type === 'offer' && (p.offer_start_at || p.offer_terms) ? `
+                <div class="p-3.5 bg-emerald-50/80 rounded-2xl border border-emerald-200/90 space-y-1.5 shadow-2xs">
+                  <div class="flex items-center gap-2 text-emerald-950 font-bold text-xs">
+                    <span class="text-sm">🏷️</span>
+                    <span>${formatOfferDate(p.offer_start_at, p.offer_end_at)}</span>
+                  </div>
+                  ${p.offer_terms ? `<div class="text-xs text-emerald-900 font-medium leading-relaxed"><strong>Ehdot:</strong> ${escapeHtml(p.offer_terms)}</div>` : ''}
+                </div>
+              ` : ''}
 
               <!-- Rich Media Slot -->
               ${renderMediaHTML(p.post_media)}
+
+              <!-- PDF Attachments -->
+              ${renderPdfPillsHTML(p.post_attachments)}
 
               <!-- Places & Themes Chips -->
               <div class="flex flex-wrap gap-1.5 pt-1">
@@ -799,6 +839,93 @@
             </article>
           `;
         }).join('');
+      }
+
+      function formatEventDate(startAt, endAt, isAllDay) {
+        if (!startAt) return '';
+        const startDate = new Date(startAt);
+        const dayStr = startDate.toLocaleDateString('fi-FI', { weekday: 'short', day: 'numeric', month: 'numeric', year: 'numeric' });
+        
+        if (isAllDay) {
+          return `${dayStr} · Koko päivä`;
+        }
+        
+        const startTimeStr = startDate.toLocaleTimeString('fi-FI', { hour: '2-digit', minute: '2-digit' });
+        if (endAt) {
+          const endDate = new Date(endAt);
+          const endTimeStr = endDate.toLocaleTimeString('fi-FI', { hour: '2-digit', minute: '2-digit' });
+          if (startDate.toDateString() === endDate.toDateString()) {
+            return `${dayStr} klo ${startTimeStr}–${endTimeStr}`;
+          } else {
+            const endDayStr = endDate.toLocaleDateString('fi-FI', { day: 'numeric', month: 'numeric', year: 'numeric' });
+            return `${dayStr} klo ${startTimeStr} – ${endDayStr} klo ${endTimeStr}`;
+          }
+        }
+        return `${dayStr} klo ${startTimeStr}`;
+      }
+
+      function formatOfferDate(startAt, endAt) {
+        if (!startAt && !endAt) return 'Tarjous voimassa';
+        const startStr = startAt ? new Date(startAt).toLocaleDateString('fi-FI') : '';
+        const endStr = endAt ? new Date(endAt).toLocaleDateString('fi-FI') : '';
+        if (startStr && endStr) return `Voimassa ${startStr} – ${endStr}`;
+        if (endStr) return `Voimassa ${endStr} asti`;
+        return `Voimassa alkaen ${startStr}`;
+      }
+
+      // HTML Escape
+      function escapeHtml(text) {
+        if (!text) return '';
+        return text
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+
+      // Markdown Link Parser: [Teksti](https://...) -> <a> (strict HTTP/HTTPS only)
+      function parseMarkdownLinks(rawText) {
+        if (!rawText) return '';
+        let escaped = escapeHtml(rawText);
+        // [Linkin teksti](https://osoite)
+        escaped = escaped.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, linkText, linkUrl) => {
+          const cleanUrl = linkUrl.trim();
+          try {
+            const parsed = new URL(cleanUrl);
+            if ((parsed.protocol === 'http:' || parsed.protocol === 'https:') && parsed.hostname !== '') {
+              return `<a href="${parsed.href}" target="_blank" rel="noopener noreferrer" class="text-violet-600 font-bold hover:underline">${linkText}</a>`;
+            }
+          } catch (e) {}
+          return escapeHtml(match);
+        });
+        // Legacy: link:Teksti=https://osoite
+        escaped = escaped.replace(/link:([^=]+)=([^\s]+)/g, (match, linkText, linkUrl) => {
+          const cleanUrl = linkUrl.trim();
+          try {
+            const parsed = new URL(cleanUrl);
+            if ((parsed.protocol === 'http:' || parsed.protocol === 'https:') && parsed.hostname !== '') {
+              return `<a href="${parsed.href}" target="_blank" rel="noopener noreferrer" class="text-violet-600 font-bold hover:underline">${linkText}</a>`;
+            }
+          } catch (e) {}
+          return escapeHtml(match);
+        });
+        return escaped;
+      }
+
+      // PDF Attachment Pill Renderer
+      function renderPdfPillsHTML(attachmentsList) {
+        if (!attachmentsList || attachmentsList.length === 0) return '';
+        const pdfs = attachmentsList.filter(a => a.type === 'pdf' && a.url && a.url !== '#');
+        if (pdfs.length === 0) return '';
+        const pillsHtml = pdfs.map(pdf => {
+          const label = escapeHtml(pdf.file_name || 'Avaa PDF');
+          const sizeStr = pdf.file_size ? ` · ${(pdf.file_size / (1024 * 1024)).toFixed(1)} MB` : '';
+          return `<a href="${pdf.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-800 border border-red-200 rounded-xl text-xs font-bold shadow-xs transition-all">
+            📄 ${label}${sizeStr}
+          </a>`;
+        }).join(' ');
+        return `<div class="flex flex-wrap gap-2 pt-1">${pillsHtml}</div>`;
       }
 
       // YouTube Embed Formatter

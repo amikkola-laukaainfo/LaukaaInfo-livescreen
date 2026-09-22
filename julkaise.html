@@ -104,6 +104,68 @@
             </div>
           </div>
 
+          <!-- DYNAAMISET LISÄKENTÄT: TAPAHTUMA -->
+          <div id="eventFieldsContainer" class="hidden p-3.5 bg-amber-50/70 rounded-2xl border border-amber-200/80 space-y-3">
+            <div class="flex items-center justify-between border-b border-amber-200/60 pb-1.5">
+              <span class="text-[10px] font-black uppercase tracking-wider text-amber-900 flex items-center gap-1">
+                📅 Tapahtuman ajankohta & paikka
+              </span>
+              <span class="text-[9px] font-bold text-amber-700">Tapahtumatiedot</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="text-[9px] font-bold text-amber-900 uppercase mb-0.5 block">Alkaa *</label>
+                <input type="datetime-local" id="eventStartAt" onchange="updateLivePreview()" class="w-full p-2 bg-white border border-amber-200 rounded-xl text-xs outline-none focus:ring-2 focus:ring-amber-500" />
+              </div>
+              <div>
+                <label class="text-[9px] font-bold text-amber-900 uppercase mb-0.5 block">Päättyy</label>
+                <input type="datetime-local" id="eventEndAt" onchange="updateLivePreview()" class="w-full p-2 bg-white border border-amber-200 rounded-xl text-xs outline-none focus:ring-2 focus:ring-amber-500" />
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2 pt-0.5">
+              <input type="checkbox" id="eventAllDay" onchange="toggleEventAllDay(this.checked)" class="w-4 h-4 text-amber-600 rounded border-amber-300 focus:ring-amber-500 cursor-pointer" />
+              <label for="eventAllDay" class="text-xs font-bold text-amber-900 cursor-pointer">Koko päivän tapahtuma</label>
+            </div>
+
+            <div>
+              <label class="text-[9px] font-bold text-amber-900 uppercase mb-0.5 block">Tarkempi paikka / tila (esim. Nuorisotalon sali)</label>
+              <input type="text" id="eventLocationDetail" oninput="updateLivePreview()" placeholder="esim. Pääkirjaston monitoimitila" class="w-full p-2 bg-white border border-amber-200 rounded-xl text-xs outline-none focus:ring-2 focus:ring-amber-500" />
+            </div>
+
+            <div>
+              <label class="text-[9px] font-bold text-amber-900 uppercase mb-0.5 block">🔗 Ilmoittautumislinkki (Valinnainen)</label>
+              <input type="url" id="eventRegistrationUrl" oninput="updateLivePreview()" placeholder="https://ilmoittaudu.fi/..." class="w-full p-2 bg-white border border-amber-200 rounded-xl text-xs outline-none focus:ring-2 focus:ring-amber-500" />
+            </div>
+          </div>
+
+          <!-- DYNAAMISET LISÄKENTÄT: TARJOUS -->
+          <div id="offerFieldsContainer" class="hidden p-3.5 bg-emerald-50/70 rounded-2xl border border-emerald-200/80 space-y-3">
+            <div class="flex items-center justify-between border-b border-emerald-200/60 pb-1.5">
+              <span class="text-[10px] font-black uppercase tracking-wider text-emerald-900 flex items-center gap-1">
+                🏷️ Tarjouksen voimassaolo & ehdot
+              </span>
+              <span class="text-[9px] font-bold text-emerald-700">Tarjoustiedot</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="text-[9px] font-bold text-emerald-900 uppercase mb-0.5 block">Tarjous alkaa</label>
+                <input type="date" id="offerStartAt" onchange="updateLivePreview()" class="w-full p-2 bg-white border border-emerald-200 rounded-xl text-xs outline-none focus:ring-2 focus:ring-emerald-500" />
+              </div>
+              <div>
+                <label class="text-[9px] font-bold text-emerald-900 uppercase mb-0.5 block">Tarjous päättyy</label>
+                <input type="date" id="offerEndAt" onchange="updateLivePreview()" class="w-full p-2 bg-white border border-emerald-200 rounded-xl text-xs outline-none focus:ring-2 focus:ring-emerald-500" />
+              </div>
+            </div>
+
+            <div>
+              <label class="text-[9px] font-bold text-emerald-900 uppercase mb-0.5 block">Tarjouksen ehdot (esim. -20% koodilla LAUKAA)</label>
+              <textarea id="offerTerms" rows="2" oninput="updateLivePreview()" placeholder="Kirjoita tarjouksen ehdot tähän..." class="w-full p-2 bg-white border border-emerald-200 rounded-xl text-xs outline-none focus:ring-2 focus:ring-emerald-500"></textarea>
+            </div>
+          </div>
+
           <!-- Näkyvyys -->
           <div>
             <label class="text-[10px] font-bold text-slate-500 uppercase mb-1 block">🔒 Julkaisun näkyvyys</label>
@@ -123,9 +185,11 @@
           <div>
             <label class="text-[10px] font-bold text-slate-500 uppercase mb-1 block">Mitä haluat kertoa?</label>
             <textarea id="content" rows="3" oninput="updateLivePreview()" placeholder="Kirjoita julkaisun sisältö..." class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-violet-500"></textarea>
-            <p class="text-[10px] text-slate-400 mt-1">
-              💡 Voit lisätä linkin tekstiin: <code class="bg-slate-100 px-1 py-0.5 rounded text-violet-700 font-mono">[Osta liput](https://kauppa.fi)</code>
-            </p>
+            <div class="mt-1.5 p-2.5 bg-violet-50/80 border border-violet-200/80 rounded-xl text-[11px] text-violet-900 leading-relaxed">
+              <span class="font-bold flex items-center gap-1">💡 Linkin lisääminen tekstin sivuun (inline-linkki):</span>
+              <span class="block mt-0.5 text-slate-600">Kirjoita näkyvä teksti hakasulkeisiin <code class="text-violet-700 font-bold">[ ]</code> ja nettiosoite sulkeisiin <code class="text-violet-700 font-bold">( )</code> perään:</span>
+              <code class="bg-white px-2 py-1 rounded-lg border border-violet-200 text-violet-800 font-mono font-bold select-all inline-block mt-1 text-[10px] shadow-2xs">[Lue lisää tästä](https://esimerkki.fi)</code>
+            </div>
           </div>
 
           <!-- Paikkavalinta Supabasesta -->
@@ -537,7 +601,37 @@
           b.classList.remove('bg-violet-600', 'text-white', 'border-violet-600');
           b.classList.add('bg-slate-50', 'text-slate-800', 'border-slate-200');
         });
-        document.getElementById('type-' + type).classList.add('bg-violet-600', 'text-white', 'border-violet-600');
+        const activeBtn = document.getElementById('type-' + type);
+        if (activeBtn) {
+          activeBtn.classList.remove('bg-slate-50', 'text-slate-800');
+          activeBtn.classList.add('bg-violet-600', 'text-white', 'border-violet-600');
+        }
+
+        const eventBox = document.getElementById('eventFieldsContainer');
+        const offerBox = document.getElementById('offerFieldsContainer');
+        if (eventBox) {
+          if (type === 'event') eventBox.classList.remove('hidden');
+          else eventBox.classList.add('hidden');
+        }
+        if (offerBox) {
+          if (type === 'offer') offerBox.classList.remove('hidden');
+          else offerBox.classList.add('hidden');
+        }
+        updateLivePreview();
+      }
+
+      function toggleEventAllDay(isAllDay) {
+        const endInput = document.getElementById('eventEndAt');
+        if (endInput) {
+          if (isAllDay) {
+            endInput.disabled = true;
+            endInput.classList.add('opacity-50');
+          } else {
+            endInput.disabled = false;
+            endInput.classList.remove('opacity-50');
+          }
+        }
+        updateLivePreview();
       }
 
       function onPinDurationChange(val) {
@@ -644,16 +738,57 @@
           document.getElementById('placeSelect').value = p.post_places[0].place_id || 'Laukaa';
         }
 
-        // Image / Video
-        const img = (p.post_media || []).find(m => m.media_type === 'image');
-        const vid = (p.post_media || []).find(m => m.media_type === 'video');
-        document.getElementById('imageUrl').value = img ? img.url : '';
-        document.getElementById('videoUrl').value = vid ? vid.url : '';
+        // Attachments: restore from post_attachments (new) or post_media (legacy)
+        attachedItems = [];
+        const att = p.post_attachments || [];
+        const media = p.post_media || [];
+        if (att.length > 0) {
+          att.forEach(a => {
+            attachedItems.push({
+              type: a.type,
+              provider: a.provider,
+              url: a.url,
+              storage_path: a.storage_path || null,
+              imagekit_file_id: a.imagekit_file_id || null,
+              youtube_video_id: a.youtube_video_id || null,
+              file_name: a.file_name || null,
+              file_size: a.file_size || null,
+              mime_type: a.mime_type || null
+            });
+          });
+        } else {
+          // Legacy fallback: rebuild from post_media
+          media.forEach(m => {
+            if (m.media_type === 'image') {
+              attachedItems.push({ type: 'image', provider: 'imagekit', url: m.url, file_name: m.title });
+            } else if (m.media_type === 'video') {
+              const ytid = extractYouTubeId(m.url);
+              if (ytid) attachedItems.push({ type: 'youtube', provider: 'youtube', youtube_video_id: ytid, url: m.url });
+            }
+          });
+        }
+        renderAttachmentsList();
+        updateLivePreview();
 
         // Link
         const link = (p.post_links || [])[0];
         document.getElementById('linkTitle').value = link ? (link.title || '') : '';
         document.getElementById('linkUrl').value = link ? (link.url || '') : '';
+
+        // Tapahtuma- ja Tarjous-kenttien palautus
+        if (p.type === 'event') {
+          if (document.getElementById('eventStartAt')) document.getElementById('eventStartAt').value = p.event_start_at ? p.event_start_at.slice(0, 16) : '';
+          if (document.getElementById('eventEndAt')) document.getElementById('eventEndAt').value = p.event_end_at ? p.event_end_at.slice(0, 16) : '';
+          const isAllDay = !!p.event_all_day;
+          if (document.getElementById('eventAllDay')) document.getElementById('eventAllDay').checked = isAllDay;
+          toggleEventAllDay(isAllDay);
+          if (document.getElementById('eventLocationDetail')) document.getElementById('eventLocationDetail').value = p.event_location_detail || '';
+          if (document.getElementById('eventRegistrationUrl')) document.getElementById('eventRegistrationUrl').value = p.event_registration_url || '';
+        } else if (p.type === 'offer') {
+          if (document.getElementById('offerStartAt')) document.getElementById('offerStartAt').value = p.offer_start_at ? p.offer_start_at.slice(0, 10) : '';
+          if (document.getElementById('offerEndAt')) document.getElementById('offerEndAt').value = p.offer_end_at ? p.offer_end_at.slice(0, 10) : '';
+          if (document.getElementById('offerTerms')) document.getElementById('offerTerms').value = p.offer_terms || '';
+        }
 
         // Themes
         selectedThemes.clear();
@@ -676,13 +811,12 @@
         editingPostId = null;
         document.getElementById('title').value = '';
         document.getElementById('content').value = '';
-        document.getElementById('imageUrl').value = '';
-        document.getElementById('videoUrl').value = '';
-        document.getElementById('linkTitle').value = '';
-        document.getElementById('linkUrl').value = '';
+        attachedItems = [];
         selectedThemes.clear();
         document.getElementById('selectedThemesCount').innerText = '0 valittu';
         renderThemesList(availableTags);
+        renderAttachmentsList();
+        updateLivePreview();
 
         document.getElementById('formTitleText').innerText = 'Luo uusi julkaisu seinälle';
         document.getElementById('editBadge').classList.add('hidden');
@@ -697,6 +831,8 @@
         
         if (!confirm(`Haluatko varmasti poistaa julkaisun:\n${titleStr}?`)) {
           return;
+        }
+
       // Global Attachment & Duration State
       let attachedItems = [];
       let selectedDurationDays = 30;
@@ -1084,6 +1220,43 @@
         const content = document.getElementById('content').value;
         const visibility = document.getElementById('visibility').value;
         const place = document.getElementById('placeSelect').value;
+
+        // Tapahtuma- ja Tarjouskohtainen käsittely ja validointi
+        let eventStartIso = null;
+        let eventEndIso = null;
+        let eventAllDay = false;
+        let eventLocDetail = null;
+        let eventRegUrl = null;
+
+        let offerStartIso = null;
+        let offerEndIso = null;
+        let offerTermsVal = null;
+
+        if (currentPubType === 'event') {
+          const startVal = document.getElementById('eventStartAt').value;
+          const endVal = document.getElementById('eventEndAt').value;
+          eventAllDay = document.getElementById('eventAllDay') ? document.getElementById('eventAllDay').checked : false;
+          eventLocDetail = document.getElementById('eventLocationDetail') ? document.getElementById('eventLocationDetail').value.trim() || null : null;
+          eventRegUrl = document.getElementById('eventRegistrationUrl') ? document.getElementById('eventRegistrationUrl').value.trim() || null : null;
+
+          if (startVal) eventStartIso = new Date(startVal).toISOString();
+          if (endVal) eventEndIso = new Date(endVal).toISOString();
+
+          if (eventStartIso && eventEndIso && new Date(eventEndIso) < new Date(eventStartIso)) {
+            return alert('❌ Tapahtuman päättymisaika ei voi olla ennen alkamisaikaa!');
+          }
+        } else if (currentPubType === 'offer') {
+          const startVal = document.getElementById('offerStartAt').value;
+          const endVal = document.getElementById('offerEndAt').value;
+          offerTermsVal = document.getElementById('offerTerms') ? document.getElementById('offerTerms').value.trim() || null : null;
+
+          if (startVal) offerStartIso = new Date(startVal).toISOString();
+          if (endVal) offerEndIso = new Date(endVal).toISOString();
+
+          if (offerStartIso && offerEndIso && new Date(offerEndIso) < new Date(offerStartIso)) {
+            return alert('❌ Tarjouksen päättymispäivä ei voi olla ennen alkamispäivää!');
+          }
+        }
         
         // Pin calculation
         const pinDuration = document.getElementById('pinDurationSelect').value;
@@ -1118,7 +1291,15 @@
               p_pinned_until: pinnedUntilIso,
               p_places: placesPayload,
               p_themes: themesPayload,
-              p_attachments: attachedItems
+              p_attachments: attachedItems,
+              p_event_start_at: eventStartIso,
+              p_event_end_at: eventEndIso,
+              p_event_all_day: eventAllDay,
+              p_event_location_detail: eventLocDetail,
+              p_event_registration_url: eventRegUrl,
+              p_offer_start_at: offerStartIso,
+              p_offer_end_at: offerEndIso,
+              p_offer_terms: offerTermsVal
             });
 
             if (error || (data && !data.success)) {
@@ -1144,6 +1325,16 @@
         editingPostId = null;
         document.getElementById('title').value = '';
         document.getElementById('content').value = '';
+        if (document.getElementById('eventStartAt')) document.getElementById('eventStartAt').value = '';
+        if (document.getElementById('eventEndAt')) document.getElementById('eventEndAt').value = '';
+        if (document.getElementById('eventAllDay')) document.getElementById('eventAllDay').checked = false;
+        toggleEventAllDay(false);
+        if (document.getElementById('eventLocationDetail')) document.getElementById('eventLocationDetail').value = '';
+        if (document.getElementById('eventRegistrationUrl')) document.getElementById('eventRegistrationUrl').value = '';
+        if (document.getElementById('offerStartAt')) document.getElementById('offerStartAt').value = '';
+        if (document.getElementById('offerEndAt')) document.getElementById('offerEndAt').value = '';
+        if (document.getElementById('offerTerms')) document.getElementById('offerTerms').value = '';
+
         attachedItems = [];
         selectedThemes.clear();
         document.getElementById('selectedThemesCount').innerText = '0 valittu';

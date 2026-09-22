@@ -51,7 +51,17 @@ CREATE TABLE IF NOT EXISTS public.posts (
     is_pinned BOOLEAN DEFAULT FALSE,
     target_id TEXT,
     target_type TEXT, -- 'project' | 'event' | 'route' | 'place'
-    image_url TEXT -- Legacy/fallback
+    image_url TEXT, -- Legacy/fallback
+    -- Tapahtuman dynaamiset kentät
+    event_start_at TIMESTAMPTZ,
+    event_end_at TIMESTAMPTZ,
+    event_all_day BOOLEAN DEFAULT FALSE,
+    event_location_detail TEXT,
+    event_registration_url TEXT,
+    -- Tarjouksen dynaamiset kentät
+    offer_start_at TIMESTAMPTZ,
+    offer_end_at TIMESTAMPTZ,
+    offer_terms TEXT
 );
 
 ALTER TABLE public.posts ADD COLUMN IF NOT EXISTS organization_id TEXT;
@@ -67,6 +77,14 @@ ALTER TABLE public.posts ADD COLUMN IF NOT EXISTS target_type TEXT;
 ALTER TABLE public.posts ADD COLUMN IF NOT EXISTS cleanup_attempts INT DEFAULT 0;
 ALTER TABLE public.posts ADD COLUMN IF NOT EXISTS cleanup_last_attempt_at TIMESTAMPTZ;
 ALTER TABLE public.posts ADD COLUMN IF NOT EXISTS cleanup_error TEXT;
+ALTER TABLE public.posts ADD COLUMN IF NOT EXISTS event_start_at TIMESTAMPTZ;
+ALTER TABLE public.posts ADD COLUMN IF NOT EXISTS event_end_at TIMESTAMPTZ;
+ALTER TABLE public.posts ADD COLUMN IF NOT EXISTS event_all_day BOOLEAN DEFAULT FALSE;
+ALTER TABLE public.posts ADD COLUMN IF NOT EXISTS event_location_detail TEXT;
+ALTER TABLE public.posts ADD COLUMN IF NOT EXISTS event_registration_url TEXT;
+ALTER TABLE public.posts ADD COLUMN IF NOT EXISTS offer_start_at TIMESTAMPTZ;
+ALTER TABLE public.posts ADD COLUMN IF NOT EXISTS offer_end_at TIMESTAMPTZ;
+ALTER TABLE public.posts ADD COLUMN IF NOT EXISTS offer_terms TEXT;
 
 -- 4. POST_ATTACHMENTS (Keskitetty liiterekisteri: kuvat, PDF:t, YouTube-videot)
 CREATE TABLE IF NOT EXISTS public.post_attachments (
@@ -285,7 +303,17 @@ CREATE OR REPLACE FUNCTION public.publish_post_with_key(
     p_media JSONB DEFAULT '[]'::jsonb,
     p_links JSONB DEFAULT '[]'::jsonb,
     p_duration_days INT DEFAULT 30,
-    p_attachments JSONB DEFAULT '[]'::jsonb
+    p_attachments JSONB DEFAULT '[]'::jsonb,
+    -- Tapahtumakentät
+    p_event_start_at TIMESTAMPTZ DEFAULT NULL,
+    p_event_end_at TIMESTAMPTZ DEFAULT NULL,
+    p_event_all_day BOOLEAN DEFAULT FALSE,
+    p_event_location_detail TEXT DEFAULT NULL,
+    p_event_registration_url TEXT DEFAULT NULL,
+    -- Tarjouskentät
+    p_offer_start_at TIMESTAMPTZ DEFAULT NULL,
+    p_offer_end_at TIMESTAMPTZ DEFAULT NULL,
+    p_offer_terms TEXT DEFAULT NULL
 )
 RETURNS JSONB
 LANGUAGE plpgsql
@@ -305,7 +333,16 @@ BEGIN
         RETURN jsonb_build_object('success', false, 'error', COALESCE(v_verify_res->>'error', 'Käyttöoikeus evätty.'));
     END IF;
 
-    -- 2. Lasketaan palvelinpuolen expires_at keston perusteella
+    -- 2. Tyyppikohtainen validointi
+    IF p_type = 'event' AND p_event_start_at IS NOT NULL AND p_event_end_at IS NOT NULL AND p_event_end_at < p_event_start_at THEN
+        RETURN jsonb_build_object('success', false, 'error', 'Tapahtuman päättymisaika ei voi olla ennen alkamisaikaa.');
+    END IF;
+
+    IF p_type = 'offer' AND p_offer_start_at IS NOT NULL AND p_offer_end_at IS NOT NULL AND p_offer_end_at < p_offer_start_at THEN
+        RETURN jsonb_build_object('success', false, 'error', 'Tarjouksen päättymispäivä ei voi olla ennen alkamispäivää.');
+    END IF;
+
+    -- 3. Lasketaan palvelinpuolen expires_at keston perusteella
     v_duration := COALESCE(p_duration_days, 30);
     IF v_duration NOT IN (7, 14, 30) THEN
         v_duration := 30;
@@ -313,15 +350,25 @@ BEGIN
     
     v_calculated_expires_at := COALESCE(p_expires_at, NOW() + (v_duration || ' days')::INTERVAL);
 
-    -- 3. Luodaan uusi julkaisu
+    -- 4. Luodaan uusi julkaisu
     v_post_id := gen_random_uuid();
 
     INSERT INTO public.posts (
         id, organization_id, title, content, type, visibility, status,
-        expires_at, pinned_until, is_pinned, created_at, published_at
+        expires_at, pinned_until, is_pinned, created_at, published_at,
+        event_start_at, event_end_at, event_all_day, event_location_detail, event_registration_url,
+        offer_start_at, offer_end_at, offer_terms
     ) VALUES (
         v_post_id, p_organization_id, p_title, p_content, p_type, p_visibility, p_status,
-        v_calculated_expires_at, p_pinned_until, (p_pinned_until IS NOT NULL AND p_pinned_until > NOW()), NOW(), NOW()
+        v_calculated_expires_at, p_pinned_until, (p_pinned_until IS NOT NULL AND p_pinned_until > NOW()), NOW(), NOW(),
+        CASE WHEN p_type = 'event' THEN p_event_start_at ELSE NULL END,
+        CASE WHEN p_type = 'event' THEN p_event_end_at ELSE NULL END,
+        CASE WHEN p_type = 'event' THEN COALESCE(p_event_all_day, FALSE) ELSE FALSE END,
+        CASE WHEN p_type = 'event' THEN p_event_location_detail ELSE NULL END,
+        CASE WHEN p_type = 'event' THEN p_event_registration_url ELSE NULL END,
+        CASE WHEN p_type = 'offer' THEN p_offer_start_at ELSE NULL END,
+        CASE WHEN p_type = 'offer' THEN p_offer_end_at ELSE NULL END,
+        CASE WHEN p_type = 'offer' THEN p_offer_terms ELSE NULL END
     );
 
     -- 4. Paikat
