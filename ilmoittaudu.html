@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Feed-julkaisu – Feed-julkaisu</title>
-    <meta name="description" content="Julkaise tapahtumia, tarjouksia ja ilmoituksia LaukaaInfossa. Tavoita paikalliset asukkaat ja asiakkaat – aloita ilmaiseksi.">
+    <title>Seinä &amp; Feed – Julkaisukanavat | LaukaaInfo</title>
+    <meta name="description" content="Tutustu LaukaaInfon julkaisukanaviin: Yhdistysten ja yritysten digitaalinen Seinä sekä kirjautuneiden käyttäjien LaukaaFeed ja Kohtaamiset.">
     <link rel="icon" href="logo.png">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Outfit:wght@100..900&display=swap"
-        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css?v=20260420-2">
     <script src="translations.js?v=20260505"></script>
     <style>
@@ -35,7 +35,7 @@
 
         /* HERO */
         .ilm-hero {
-            background: linear-gradient(135deg, #0056b3 0%, #00273d 100%);
+            background: linear-gradient(135deg, #00273d 0%, #004080 50%, #0056b3 100%);
             color: white;
             padding: 5rem 1.5rem 4rem;
             text-align: center;
@@ -47,381 +47,305 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: radial-gradient(ellipse at 70% 50%, rgba(0, 195, 255, 0.15) 0%, transparent 70%);
+            background: radial-gradient(ellipse at 50% 30%, rgba(0, 195, 255, 0.2) 0%, transparent 70%);
+        }
+
+        .ilm-hero .hero-inner {
+            position: relative;
+            z-index: 2;
+            max-width: 850px;
+            margin: 0 auto;
         }
 
         .ilm-hero .badge {
             display: inline-block;
-            background: rgba(255,255,255,0.15);
-            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.18);
+            border: 1px solid rgba(255,255,255,0.35);
             color: white;
-            padding: 0.4rem 1rem;
+            padding: 0.4rem 1.2rem;
             border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 600;
+            font-size: 0.9rem;
+            font-weight: 700;
             margin-bottom: 1.5rem;
             letter-spacing: 0.05em;
+            text-transform: uppercase;
         }
 
         .ilm-hero h1 {
             font-family: 'Outfit', sans-serif;
-            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-size: clamp(2.2rem, 5vw, 3.4rem);
             font-weight: 800;
             margin: 0 0 1.2rem;
             line-height: 1.15;
+            color: #ffffff;
         }
 
         .ilm-hero p {
             font-size: 1.15rem;
-            opacity: 0.85;
-            max-width: 600px;
-            margin: 0 auto 2rem;
+            opacity: 0.9;
+            max-width: 720px;
+            margin: 0 auto 2.2rem;
             line-height: 1.6;
         }
 
-        .ilm-hero-cta {
+        .ilm-hero-btns {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .ilm-btn-primary {
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
-            background: white;
+            gap: 0.6rem;
+            background: #ffffff;
             color: var(--primary);
+            font-weight: 800;
+            font-size: 1.05rem;
+            padding: 1.1rem 2.2rem;
+            border-radius: 14px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        }
+
+        .ilm-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 32px rgba(0,0,0,0.3);
+            background: #f8fafc;
+        }
+
+        .ilm-btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            border: 2px solid rgba(255, 255, 255, 0.4);
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 1.05rem;
             padding: 1rem 2rem;
             border-radius: 14px;
             text-decoration: none;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+            transition: all 0.25s ease;
+            backdrop-filter: blur(8px);
         }
 
-        .ilm-hero-cta:hover {
+        .ilm-btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: #ffffff;
             transform: translateY(-2px);
-            box-shadow: 0 12px 32px rgba(0,0,0,0.24);
         }
 
-        /* BENEFITS */
-        .ilm-benefits {
+        /* COMPARISON SECTION */
+        .ilm-channels-section {
             padding: 4rem 1.5rem;
-            max-width: 900px;
+            max-width: 1100px;
             margin: 0 auto;
         }
 
-        .ilm-benefits h2 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 2rem;
+        .ilm-channels-section .section-header {
             text-align: center;
+            margin-bottom: 3rem;
         }
 
-        .ilm-benefit-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .ilm-benefit-card {
-            background: white;
-            border-radius: 16px;
-            padding: 1.8rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-            border: 1px solid var(--border);
-            transition: transform 0.2s;
-        }
-
-        .ilm-benefit-card:hover {
-            transform: translateY(-3px);
-        }
-
-        .ilm-benefit-card .icon {
-            font-size: 2rem;
+        .ilm-channels-section h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--primary);
             margin-bottom: 0.8rem;
         }
 
-        .ilm-benefit-card h3 {
-            font-family: 'Outfit', sans-serif;
+        .ilm-channels-section p.lead {
             font-size: 1.1rem;
-            font-weight: 700;
-            margin: 0 0 0.5rem;
-        }
-
-        .ilm-benefit-card p {
             color: var(--muted);
-            font-size: 0.9rem;
-            margin: 0;
+            max-width: 750px;
+            margin: 0 auto;
             line-height: 1.6;
         }
 
-        /* TIERS */
-        .ilm-tiers {
-            background: white;
-            padding: 4rem 1.5rem;
-        }
-
-        .ilm-tiers-inner {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .ilm-tiers h2 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 2.5rem;
-        }
-
-        .ilm-tier-grid {
+        .ilm-channels-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
         }
 
-        .ilm-tier {
+        .ilm-channel-card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 2.5rem 2rem;
             border: 2px solid var(--border);
-            border-radius: 18px;
-            padding: 2rem;
-            text-align: center;
-            position: relative;
-            background: var(--page-bg);
-            transition: transform 0.2s, border-color 0.2s;
-        }
-
-        .ilm-tier.featured {
-            border-color: var(--primary);
-            background: var(--primary-light);
-        }
-
-        .ilm-tier .tier-name {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .ilm-tier .tier-price {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--primary);
-            margin: 0.5rem 0;
-        }
-
-        .ilm-tier .tier-tag {
-            background: var(--success);
-            color: white;
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 0.25rem 0.7rem;
-            border-radius: 50px;
-            display: inline-block;
-            margin-bottom: 1rem;
-        }
-
-        .ilm-tier ul {
-            list-style: none;
-            padding: 0;
-            margin: 0 0 1.5rem;
-            text-align: left;
-            font-size: 0.9rem;
-        }
-
-        .ilm-tier ul li {
-            padding: 0.4rem 0;
-            border-bottom: 1px solid rgba(0,0,0,0.06);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .ilm-tier ul li::before {
-            content: '✓';
-            color: var(--success);
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-
-        /* FORM */
-        .ilm-form-section {
-            padding: 4rem 1.5rem;
-            max-width: 640px;
-            margin: 0 auto;
-        }
-
-        .ilm-form-section h2 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .ilm-form-section p.subtitle {
-            color: var(--muted);
-            margin-bottom: 2rem;
-        }
-
-        .ilm-form-card {
-            background: white;
-            border-radius: 20px;
-            padding: 2.5rem;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.07);
-        }
-
-        .ilm-form-card label {
-            display: block;
-            font-weight: 600;
-            font-size: 0.9rem;
-            margin-bottom: 0.4rem;
-            margin-top: 1.2rem;
-        }
-
-        .ilm-form-card label:first-child {
-            margin-top: 0;
-        }
-
-        .ilm-form-card input[type="text"],
-        .ilm-form-card input[type="email"],
-        .ilm-form-card textarea {
-            width: 100%;
-            padding: 0.85rem 1rem;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            font-family: inherit;
-            font-size: 1rem;
-            box-sizing: border-box;
-            transition: border-color 0.2s;
-            background: var(--page-bg);
-        }
-
-        .ilm-form-card input:focus,
-        .ilm-form-card textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            background: white;
-        }
-
-        .ilm-form-card textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        .ilm-radio-group {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             display: flex;
             flex-direction: column;
-            gap: 0.6rem;
-            margin-top: 0.5rem;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
         }
 
-        .ilm-radio-label {
+        .ilm-channel-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .ilm-channel-card.card-seina {
+            border-top: 6px solid #6f42c1;
+        }
+
+        .ilm-channel-card.card-feed {
+            border-top: 6px solid #0056b3;
+        }
+
+        .channel-tag {
+            display: inline-block;
+            align-self: flex-start;
+            font-size: 0.8rem;
+            font-weight: 800;
+            padding: 0.3rem 0.9rem;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.2rem;
+        }
+
+        .card-seina .channel-tag {
+            background: #f3ebff;
+            color: #6f42c1;
+        }
+
+        .card-feed .channel-tag {
+            background: #e8f0fe;
+            color: #0056b3;
+        }
+
+        .ilm-channel-card h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.7rem;
+            font-weight: 800;
+            margin: 0 0 1rem;
+            color: var(--text);
             display: flex;
             align-items: center;
             gap: 0.6rem;
-            font-size: 0.95rem;
-            cursor: pointer;
-            padding: 0.6rem 0.8rem;
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            transition: border-color 0.2s, background 0.2s;
         }
 
-        .ilm-radio-label:has(input:checked) {
-            border-color: var(--primary);
-            background: var(--primary-light);
-        }
-
-        .ilm-radio-label input {
-            accent-color: var(--primary);
-        }
-
-        .ilm-submit-btn {
-            margin-top: 1.8rem;
-            width: 100%;
-            background: linear-gradient(135deg, var(--primary), #0074d9);
-            color: white;
-            border: none;
-            padding: 1.1rem 2rem;
-            border-radius: 14px;
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: opacity 0.2s, transform 0.2s;
-            box-shadow: 0 4px 16px rgba(0, 86, 179, 0.35);
-        }
-
-        .ilm-submit-btn:hover {
-            opacity: 0.92;
-            transform: translateY(-1px);
-        }
-
-        .ilm-footer-note {
-            text-align: center;
-            margin-top: 1rem;
-            font-size: 0.82rem;
+        .ilm-channel-card p.desc {
             color: var(--muted);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
         }
 
-        /* SUCCESS */
-        .ilm-success {
-            display: none;
-            background: #f0fdf4;
-            border: 2px solid #bbf7d0;
-            border-radius: 16px;
-            padding: 2rem;
-            text-align: center;
-            margin-top: 1.5rem;
+        .ilm-channel-card ul.features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 2rem;
+            flex-grow: 1;
         }
 
-        .ilm-success.visible {
+        .ilm-channel-card ul.features li {
+            padding: 0.6rem 0;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+            line-height: 1.5;
+        }
+
+        .ilm-channel-card ul.features li strong {
+            color: var(--text);
+        }
+
+        .ilm-channel-card ul.features li .bullet-icon {
+            font-weight: bold;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .card-seina ul.features li .bullet-icon { color: #6f42c1; }
+        .card-feed ul.features li .bullet-icon { color: #0056b3; }
+
+        .card-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-top: auto;
+        }
+
+        .btn-card-action {
             display: block;
-        }
-
-        .ilm-success h3 {
-            color: #15803d;
-            margin: 0 0 0.5rem;
-        }
-
-        /* Smoother scrolling */
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* Hero CTA visibility */
-        .ilm-hero-cta {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            background: white;
-            color: var(--primary);
+            text-align: center;
+            padding: 0.9rem 1.4rem;
+            border-radius: 12px;
             font-weight: 700;
-            font-size: 1.1rem;
-            padding: 1.2rem 2.5rem;
-            border-radius: 14px;
+            font-size: 0.98rem;
             text-decoration: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-            cursor: pointer;
-            border: none;
-            position: relative;
-            z-index: 10;
+            transition: all 0.2s ease;
         }
 
-        .ilm-hero-cta:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.35);
-            background: #f8faff;
+        .btn-purple {
+            background: #6f42c1;
+            color: white;
+        }
+        .btn-purple:hover {
+            background: #5a32a3;
         }
 
-        .ilm-hero-cta:active {
-            transform: translateY(-1px);
+        .btn-purple-outline {
+            background: transparent;
+            color: #6f42c1;
+            border: 2px solid #6f42c1;
+        }
+        .btn-purple-outline:hover {
+            background: #f3ebff;
         }
 
-        /* Responsive adjustments */
-        @media (max-width: 640px) {
-            .ilm-hero { padding: 4rem 1rem 3rem; }
-            .ilm-form-card { padding: 1.5rem; }
-            .ilm-hero-cta { width: 100%; padding: 1rem; }
+        .btn-blue {
+            background: #0056b3;
+            color: white;
+        }
+        .btn-blue:hover {
+            background: #004080;
+        }
+
+        .btn-blue-outline {
+            background: transparent;
+            color: #0056b3;
+            border: 2px solid #0056b3;
+        }
+        .btn-blue-outline:hover {
+            background: #e8f0fe;
+        }
+
+        /* WIZARD CONTAINER SECTION */
+        .wizard-section {
+            background: #ffffff;
+            padding: 4rem 1.5rem;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .wizard-section-inner {
+            max-width: 750px;
+            margin: 0 auto;
+        }
+
+        .wizard-section h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .wizard-section p.sub {
+            text-align: center;
+            color: var(--muted);
+            margin-bottom: 2.5rem;
+            font-size: 1rem;
         }
 
         /* WIZARD STYLES */
@@ -443,9 +367,9 @@
         .wizard-card-btn {
             background: white;
             border: 2px solid var(--border);
-            border-radius: 12px;
+            border-radius: 14px;
             padding: 1.5rem 1rem;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
@@ -462,7 +386,7 @@
         .wizard-list {
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 0.6rem;
         }
         .wizard-radio {
             display: flex;
@@ -471,7 +395,7 @@
             padding: 1rem;
             background: white;
             border: 2px solid var(--border);
-            border-radius: 10px;
+            border-radius: 12px;
             cursor: pointer;
             transition: all 0.2s;
         }
@@ -529,6 +453,62 @@
             background: var(--primary);
             color: white;
         }
+        
+        .ilm-form-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+        .ilm-form-card label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.4rem;
+            margin-top: 1.2rem;
+        }
+        .ilm-form-card label:first-child { margin-top: 0; }
+        .ilm-form-card input[type="text"],
+        .ilm-form-card textarea {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            box-sizing: border-box;
+            background: var(--page-bg);
+        }
+        .ilm-form-card input:focus, .ilm-form-card textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+        }
+        .ilm-submit-btn {
+            margin-top: 1.8rem;
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary), #0074d9);
+            color: white;
+            border: none;
+            padding: 1.1rem 2rem;
+            border-radius: 14px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(0, 86, 179, 0.35);
+        }
+        .ilm-success {
+            display: none;
+            background: #f0fdf4;
+            border: 2px solid #bbf7d0;
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        .ilm-success.visible { display: block; }
     </style>
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
 </head>
@@ -548,7 +528,7 @@
                     <li class="nav-item">
                         <a href="#" class="nav-link" data-i18n="nav_shop">Kauppa <span class="arrow"><span class="iconify" data-icon="material-symbols-light:keyboard-arrow-down" style="font-size: 1.2em; vertical-align: middle;"></span></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="ilmoittaudu.html" data-i18n="nav_feed">Feed-julkaisu</a></li>
+                            <li><a href="ilmoittaudu.html" data-i18n="nav_feed">Julkaisukanavat</a></li>
                             <li><a href="kauppa.html" data-i18n="nav_shop_packages">Julkaisupaketit</a></li>
                             <li><a href="lisaa-yritys.html" data-i18n="nav_business_profile">Yritysprofiili</a></li>
                         </ul>
@@ -640,7 +620,7 @@
             <div class="menu-section">
                 <h3 class="section-title" data-i18n="nav_shop">KAUPPA</h3>
                 <ul class="menu-list">
-                    <li class="menu-item"><a href="ilmoittaudu.html" class="sidebar-link" data-i18n="nav_feed">Feed-julkaisu</a></li>
+                    <li class="menu-item"><a href="ilmoittaudu.html" class="sidebar-link" data-i18n="nav_feed">Julkaisukanavat</a></li>
                     <li class="menu-item"><a href="kauppa.html" class="sidebar-link" data-i18n="nav_shop_packages">Julkaisupaketit</a></li>
                     <li class="menu-item"><a href="lisaa-yritys.html" class="sidebar-link" data-i18n="nav_business_profile">Yritysprofiili</a></li>
                 </ul>
@@ -681,8 +661,7 @@
                     </li>
                     <li class="menu-item"><a href="ajankohtaista.html#news-card" class="sidebar-link" data-i18n="nav_news">Tiedotteet</a>
                     </li>
-                    <li class="menu-item"><a href="ajankohtaista.html#decisions-card"
-                            class="sidebar-link" data-i18n="nav_decisions">Päätöksenteko</a></li>
+                    <li class="menu-item"><a href="ajankohtaista.html#decisions-card" class="sidebar-link" data-i18n="nav_decisions">Päätöksenteko</a></li>
                     <li class="menu-item"><a href="ajankohtaista.html#feedback-card" class="sidebar-link" data-i18n="nav_feedback">Palautteet</a>
                     </li>
                 </ul>
@@ -698,7 +677,7 @@
 
             <!-- Korostettu osio: KARTAT & ELÄMYKSET -->
             <div class="menu-section highlight-section">
-                <h3 class="section-title" data-i18n="nav_maps">KARTAT &amp; ELÄMYKSET ⭐</h3>
+                <h3 class="section-title" data-i18n="nav_maps">KARTAT &amp; ELÄMYKSET ⭐ </h3>
                 <ul class="menu-list">
                     <li class="menu-item"><a href="kohdekartta.html" class="sidebar-link" data-i18n="nav_map_points">Karttakohteet</a></li>
                     <li class="menu-item"><a href="tarinakartta.html" class="sidebar-link" data-i18n="nav_story_map">Tarinakartta</a></li>
@@ -711,61 +690,128 @@
         </div>
     </aside>
 
-    <!-- Nav (sama kuin index.html) -->
-    
-
-    
-    
-
     <!-- HERO -->
     <section class="ilm-hero">
-        <span class="badge">📢 FEED-JULKAISU</span>
-        <h1>Feed-julkaisu on nyt sovelluksessa!</h1>
-        <p>Lataa LaukaaInfo-sovellus ja tavoita paikalliset helposti. Feed-julkaisut on tarkoitettu yritys- ja yhteisöjäsenille. Yksityishenkilöiden ilmoitukset ovat kaikille ilmaisia sovelluksen kautta.</p>
-        <a href="https://play.google.com/store/apps/details?id=org.example.LaukaaLive&hl=fi&pli=1" target="_blank" class="ilm-hero-cta" style="margin-top: 1rem;">
-            <span class="iconify" data-icon="lucide:smartphone" style="font-size: 1.2em; vertical-align: middle;"></span> Lataa sovellus →
-        </a>
-    </section>
-
-    <!-- Selection Gate: Feed vs Brand (sama kuin index.html) -->
-    <section class="gate-section" style="background: white; border-top: none; padding-top: 0; padding-bottom: 4rem;">
-        <div class="gate-container">
-            <div class="gate-grid">
-                <!-- Path 1: Yritys- ja yhteisöjäsenet -->
-                <div class="path-card feed-path active-path" style="border-color: var(--primary); background: var(--primary-light);">
-                    <div class="path-badge">Feed-julkaisut</div>
-                    <div class="path-icon">📣</div>
-                    <h3>Yrityksille ja yhteisöille</h3>
-                    <p>Syötteen julkaisut tehdään kätevästi suoraan sovelluksesta yritysprofiililla.</p>
-                </div>
-
-                <!-- Path 2: Yksityishenkilöt -->
-                <a href="kohtaamiset.html" class="path-card brand-path">
-                    <div class="path-icon">🤝</div>
-                    <h3>Yksityishenkilöt</h3>
-                    <p>Apu, kohtaamiset ja löydöt – ilmoittaminen on täysin ilmaista kaikille sovelluksen kautta.</p>
-                    <div class="path-cta">Katso ilmoitukset &raquo;</div>
+        <div class="hero-inner">
+            <span class="badge">📢 JULKAISUKANAVAT: SEINÄ &amp; LAUKAAFEED</span>
+            <h1>Julkaise oikeassa paikassa – Tavoita lauakaalaiset</h1>
+            <p>LaukaaInfossa yritysten ja yhdistysten viralliset ajankohtaisjulkaisut sekä asukkaiden yhteisölliset ilmoitukset kohtaavat selkeästi omissa kanavissaan. Valitse tarpeisiisi sopivin tapa näkyä!</p>
+            <div class="ilm-hero-btns">
+                <a href="seina.html" class="ilm-btn-primary">
+                    📣 Siirry Seinälle →
+                </a>
+                <a href="kohtaamiset.html" class="ilm-btn-secondary">
+                    🤝 Katso Kohtaamiset &amp; Feed
                 </a>
             </div>
         </div>
     </section>
 
+    <!-- KANAVATERVETULOA & VERTAILU -->
+    <section class="ilm-channels-section">
+        <div class="section-header">
+            <h2>Kaksi eri kanavaa – Eri tarkoitukseen</h2>
+            <p class="lead">Seinä ja LaukaaFeed täydentävät toisiaan. Katso alla olevasta vertailusta, miten kanavat eroavat ja mikä sopii parhaiten sinun tarpeisiisi.</p>
+        </div>
 
+        <div class="ilm-channels-grid">
+            <!-- KORTTI 1: SEINÄ -->
+            <div class="ilm-channel-card card-seina">
+                <span class="channel-tag">Yhdistykset &amp; Yritykset</span>
+                <h3>📣 Seinä – Digitaalinen ilmoitustaulu</h3>
+                <p class="desc">Yritysten ja yhdistysten virallinen julkaisualusta tiedotteille, uutisille, tapahtumille, tarjouksille ja ajankohtaisille asioille.</p>
+
+                <ul class="features">
+                    <li>
+                        <span class="bullet-icon">✓</span>
+                        <span><strong>Kaksi näkymää:</strong> Voit tarkastella ja jakaa koko Laukaan <em>yhteistä Seinää</em> tai tietyn toimijan <em>omaa Seinää</em>.</span>
+                    </li>
+                    <li>
+                        <span class="bullet-icon">✓</span>
+                        <span><strong>Paikkakohtaiset julkaisut:</strong> Julkaisut kiinnittyvät myös tiettyyn paikkaan, käyntikohteeseen tai taajamaan (esim. Laukaa kk, Peurunka, Lievestuore) ja löytyvät kohdekorteilta ja kartalta.</span>
+                    </li>
+                    <li>
+                        <span class="bullet-icon">✓</span>
+                        <span><strong>Kytkeytyy yritysprofiiliin:</strong> Jokainen julkaisu näkyy suoraan toimijan omalla yrityskortilla sekä yhteisellä Seinällä.</span>
+                    </li>
+                    <li>
+                        <span class="bullet-icon">✓</span>
+                        <span><strong>Web &amp; Android -näkyvyys:</strong> Julkaisusi tavoittavat asukkaat ja kävijät sekä LaukaaInfo.fi-sivustolla että mobiilisovelluksessa.</span>
+                    </li>
+                    <li>
+                        <span class="bullet-icon">✓</span>
+                        <span><strong>Julkaisutyypit:</strong> Tiedotteet, uutiset, tapahtumat, tarjoukset ja yleiset ajankohtaisnostot.</span>
+                    </li>
+                </ul>
+
+                <div class="card-actions">
+                    <a href="seina.html" class="btn-card-action btn-purple">Siirry julkiselle Seinälle →</a>
+                    <a href="kauppa.html" class="btn-card-action btn-purple-outline">Tutustu julkaisupaketteihin</a>
+                </div>
+            </div>
+
+            <!-- KORTTI 2: LAUKAAFEED & KOHTAAMISET -->
+            <div class="ilm-channel-card card-feed">
+                <span class="channel-tag">Asukkaat &amp; Kirjautuneet käyttäjät</span>
+                <h3>🤝 LaukaaFeed &amp; Kohtaamiset</h3>
+                <p class="desc">Yhteisöllinen syöte arjen kohtaamisille, avunpyynnöille, harrastusilmoituksille ja löydetyille tavaroille.</p>
+
+                <ul class="features">
+                    <li>
+                        <span class="bullet-icon">✓</span>
+                        <span><strong>Kaikille kirjautuneille:</strong> Jokainen rekisteröitynyt sovelluskäyttäjä voi jättää ilmoituksen helposti puhelimellaan.</span>
+                    </li>
+                    <li>
+                        <span class="bullet-icon">✓</span>
+                        <span><strong>Paikkakohtainen syöte:</strong> Ilmoitukset voidaan kohdistaa tiettyyn kylään, taajamaan tai kohteeseen, jolloin ne palvelevat paikallista yhteisöä.</span>
+                    </li>
+                    <li>
+                        <span class="bullet-icon">✓</span>
+                        <span><strong>Mobiilisovelluksen kautta:</strong> Ilmoitukset syötetään LaukaaInfo Android -mobiilisovelluksessa, jossa ne moderoidaan.</span>
+                    </li>
+                    <li>
+                        <span class="bullet-icon">✓</span>
+                        <span><strong>Kohtaamiset-sivun julkisuus:</strong> Moderoidut ilmoitukset julkaistaan sovelluksen lisäksi sivuston <em>kohtaamiset.html</em> -osioon.</span>
+                    </li>
+                    <li>
+                        <span class="bullet-icon">✓</span>
+                        <span><strong>Aihealueet:</strong> Apu &amp; tuki, löydetyt &amp; kadonneet, yhteisöporukat, paikallistapahtumat ja arjen ilmoitukset.</span>
+                    </li>
+                </ul>
+
+                <div class="card-actions">
+                    <a href="kohtaamiset.html" class="btn-card-action btn-blue">Lue Kohtaamiset-ilmoituksia →</a>
+                    <a href="https://play.google.com/store/apps/details?id=org.example.LaukaaLive&hl=fi&pli=1" target="_blank" class="btn-card-action btn-blue-outline">📱 Lataa Android-sovellus</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WIZARD SECTION: APURI JULKAISUN VALINTAAN -->
+    <section class="wizard-section">
+        <div class="wizard-section-inner">
+            <h2>✨ Ilmoitusapuri &amp; Hakulinkit</h2>
+            <p class="sub">Etsitkö tiettyä aihealutta tai haluatko jättää nopean yhteisöilmoituksen? Käytä vaiheittaista ilmoitusapuria alla.</p>
+
+            <div id="wizard-container">
+                <!-- Dynamically rendered by ilmoittaudu-wizard.js -->
+            </div>
+        </div>
+    </section>
 
     <footer>
         <div class="footer-content">
             <p>© 2026 LaukaaInfo – Palvelua ylläpitää Mediazoo.fi</p>
             <div class="footer-links">
-                <a href="https://www.mediazoo.fi/laukaainfo/index.html">Tietoa sovelluksesta</a>
+                <a href="palvelun-esittely.html">Tietoa palvelusta</a>
                 <a href="tietosuoja.html">Tietosuoja</a>
                 <a href="maksuehto.html">Maksuehdot</a>
                 <a href="https://mediazoo.fi/yhteystiedot/" class="footer-mailto-cta">✉️ Ota yhteyttä</a>
             </div>
         </div>
     </footer>
+
     <script src="script.js?v=20260324-1"></script>
     <script src="ilmoittaudu-wizard.js"></script>
 </body>
 </html>
-
-
