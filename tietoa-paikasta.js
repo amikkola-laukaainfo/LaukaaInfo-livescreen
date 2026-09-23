@@ -804,19 +804,30 @@ async function renderPlace(place, relatedItems, aiProfileData, aiFaqData, allSou
     
     const statCompanies = document.getElementById('stat-companies');
     const statCompaniesLabel = document.getElementById('stat-companies-label');
+    const statCompaniesRow = document.getElementById('stat-companies-row') || (statCompanies ? statCompanies.closest('.place-stat-pill, .stat-row') : null);
     if (statCompanies) {
         statCompanies.textContent = companies.length;
         if (statCompaniesLabel) {
-            statCompaniesLabel.textContent = companies.length === 1 ? 'yritys' : 'yritystä';
+            const isToimijaa = statCompaniesLabel.textContent.includes('toimij');
+            statCompaniesLabel.textContent = companies.length === 1 
+                ? (isToimijaa ? 'toimija' : 'yritys') 
+                : (isToimijaa ? 'toimijaa' : 'yritystä');
+        }
+        if (statCompaniesRow) {
+            statCompaniesRow.style.display = companies.length > 0 ? '' : 'none';
         }
     }
     
     const statObservations = document.getElementById('stat-observations');
     const statObservationsLabel = document.getElementById('stat-observations-label');
+    const statObservationsRow = document.getElementById('stat-observations-row') || (statObservations ? statObservations.closest('.place-stat-pill, .stat-row') : null);
     if (statObservations) {
         statObservations.textContent = others.length;
         if (statObservationsLabel) {
             statObservationsLabel.textContent = others.length === 1 ? 'havainto' : 'havaintoa';
+        }
+        if (statObservationsRow) {
+            statObservationsRow.style.display = others.length > 0 ? '' : 'none';
         }
     }
 
@@ -2362,19 +2373,27 @@ function renderEncounters(encounters) {
     
     const statEncounters = document.getElementById('stat-encounters');
     const statEncountersLabel = document.getElementById('stat-encounters-label');
+    const statEncountersRow = document.getElementById('stat-encounters-row') || (statEncounters ? statEncounters.closest('.place-stat-pill, .stat-row') : null);
     if (statEncounters) {
         statEncounters.textContent = activeAlerts.length;
-        if (statEncountersLabel) {
+        if (statEncountersLabel && statEncountersLabel.tagName === 'SPAN') {
             statEncountersLabel.textContent = activeAlerts.length === 1 ? 'avoin ilmoitus' : 'avointa ilmoitusta';
+        }
+        if (statEncountersRow) {
+            statEncountersRow.style.display = activeAlerts.length > 0 ? '' : 'none';
         }
     }
     
     const statOffers = document.getElementById('stat-offers');
     const statOffersLabel = document.getElementById('stat-offers-label');
+    const statOffersRow = document.getElementById('stat-offers-row') || (statOffers ? statOffers.closest('.place-stat-pill, .stat-row') : null);
     if (statOffers) {
         statOffers.textContent = offers.length;
-        if (statOffersLabel) {
+        if (statOffersLabel && statOffersLabel.tagName === 'SPAN') {
             statOffersLabel.textContent = offers.length === 1 ? 'tarjous' : 'tarjousta';
+        }
+        if (statOffersRow) {
+            statOffersRow.style.display = offers.length > 0 ? '' : 'none';
         }
     }
     
@@ -2794,7 +2813,12 @@ async function loadLostItemsForPlace(place) {
         const statEncounters = document.getElementById('stat-encounters');
         if (statEncounters) {
             const current = parseInt(statEncounters.textContent) || 0;
-            statEncounters.textContent = current + lostItems.length;
+            const total = current + lostItems.length;
+            statEncounters.textContent = total;
+            const statEncountersRow = document.getElementById('stat-encounters-row') || statEncounters.closest('.place-stat-pill, .stat-row');
+            if (statEncountersRow) {
+                statEncountersRow.style.display = total > 0 ? '' : 'none';
+            }
         }
         
     } catch (err) {
