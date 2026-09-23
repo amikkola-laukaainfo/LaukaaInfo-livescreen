@@ -2080,12 +2080,7 @@ function initPlaceMap(lat, lon, name, subPlaces = [], companies = []) {
         }).addTo(map);
 
         window.mapPlacesGroup = L.layerGroup();
-        window.mapCompaniesGroup = (typeof L.markerClusterGroup === 'function') 
-            ? L.markerClusterGroup({ disableClusteringAtZoom: 15, maxClusterRadius: 35 }) 
-            : L.layerGroup();
-
         let placesCount = 0;
-        let companiesCount = 0;
 
         // 1. Pääpaikan merkki
         if (lat && lon) {
@@ -2094,7 +2089,7 @@ function initPlaceMap(lat, lon, name, subPlaces = [], companies = []) {
             placesCount++;
         }
 
-        // 2. Alapaikat
+        // 2. Alapaikat ja muut paikat
         if (Array.isArray(subPlaces)) {
             subPlaces.forEach(sp => {
                 const sLat = parseFloat(sp.lat);
@@ -2110,64 +2105,23 @@ function initPlaceMap(lat, lon, name, subPlaces = [], companies = []) {
             });
         }
 
-        // 3. Yritykset / toimijat (Tier 1-3)
-        if (Array.isArray(companies)) {
-            const visibleCompanies = companies.filter(c => c.tier !== 'TIER4' && c.tier !== 'OTHER');
-            const companyIcon = L.divIcon({
-                className: 'custom-company-map-pin',
-                html: `<div style="background:#0056b3;color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;box-shadow:0 2px 6px rgba(0,0,0,0.3);border:2px solid #fff;">🏢</div>`,
-                iconSize: [28, 28],
-                iconAnchor: [14, 14]
-            });
-
-            visibleCompanies.forEach(c => {
-                const cLat = parseFloat(c.lat || c.latitude || (c.location && c.location.lat));
-                const cLon = parseFloat(c.lon || c.lng || c.longitude || (c.location && c.location.lon));
-                if (!isNaN(cLat) && !isNaN(cLon)) {
-                    const cName = c.nimi || c.name || 'Yritys';
-                    const cDesc = c.kuvaus || c.description || c.kategoria || '';
-                    const cUrl = c.kotisivu || c.url || '#';
-                    const cId = c.id || c.company_id || c.slug || c.ytunnus;
-                    const cardUrl = cId ? `yrityskortti.html?id=${encodeURIComponent(cId)}` : null;
-
-                    const titleHtml = cardUrl 
-                        ? `<a href="${cardUrl}" style="color:#0056b3;text-decoration:none;font-weight:700;">🏢 ${cName}</a>`
-                        : `<b>🏢 ${cName}</b>`;
-
-                    let linksHtml = '';
-                    if (cardUrl) {
-                        linksHtml += `<div style="margin-top:6px;"><a href="${cardUrl}" style="display:inline-block;background:#0056b3;color:#fff;padding:4px 10px;border-radius:14px;font-size:0.78rem;font-weight:600;text-decoration:none;">Avaa yrityskortti →</a></div>`;
-                    }
-                    if (cUrl && cUrl !== '#') {
-                        linksHtml += `<div style="margin-top:4px;"><a href="${cUrl}" target="_blank" rel="noopener" style="color:#4b5563;font-size:0.78rem;text-decoration:none;">Kotisivut ↗</a></div>`;
-                    }
-
-                    const descSnippet = cDesc ? `<br><span style="font-size:0.82rem;color:#555;">${cDesc.substring(0, 90)}${cDesc.length > 90 ? '...' : ''}</span>` : '';
-
-                    const marker = L.marker([cLat, cLon], { icon: companyIcon })
-                        .bindPopup(`<div style="font-family:sans-serif;">${titleHtml}${descSnippet}${linksHtml}</div>`);
-                    window.mapCompaniesGroup.addLayer(marker);
-                    companiesCount++;
-                }
-            });
-        }
-
-        // Lisätään molemmat kerrokset kartalle
+        // Lisätään paikkakerros kartalle (ei yrityksiä paikkasivun pienellä kartalla)
         window.mapPlacesGroup.addTo(map);
-        window.mapCompaniesGroup.addTo(map);
 
         // Päivitetään laskurit
         const placesCountEl = document.getElementById('map-count-places');
         const companiesCountEl = document.getElementById('map-count-companies');
         const allCountEl = document.getElementById('map-count-all');
         if (placesCountEl) placesCountEl.textContent = placesCount;
-        if (companiesCountEl) companiesCountEl.textContent = companiesCount;
-        if (allCountEl) allCountEl.textContent = placesCount + companiesCount;
+        if (companiesCountEl) companiesCountEl.textContent = 0;
+        if (allCountEl) allCountEl.textContent = placesCount;
+
+        const bCompanies = document.getElementById('filter-btn-companies');
+        if (bCompanies) bCompanies.style.display = 'none';
 
         // Sovitetaan näkymä kartalla oleviin kohteisiin
         const allBounds = [];
         window.mapPlacesGroup.eachLayer(l => { if (l.getLatLng) allBounds.push(l.getLatLng()); });
-        window.mapCompaniesGroup.eachLayer(l => { if (l.getLatLng) allBounds.push(l.getLatLng()); });
 
         if (allBounds.length > 1) {
             map.fitBounds(L.latLngBounds(allBounds), { padding: [30, 30], maxZoom: 15 });
@@ -2178,22 +2132,12 @@ function initPlaceMap(lat, lon, name, subPlaces = [], companies = []) {
             if (!window.placeMap) return;
             const bAll = document.getElementById('filter-btn-all');
             const bPlaces = document.getElementById('filter-btn-places');
-            const bCompanies = document.getElementById('filter-btn-companies');
-
-            [bAll, bPlaces, bCompanies].forEach(b => b && b.classList.remove('active'));
+            [bAll, bPlaces].forEach(b => b && b.classList.remove('active'));
 
             if (filterMode === 'places') {
                 if (bPlaces) bPlaces.classList.add('active');
-                if (!map.hasLayer(window.mapPlacesGroup)) map.addLayer(window.mapPlacesGroup);
-                if (map.hasLayer(window.mapCompaniesGroup)) map.removeLayer(window.mapCompaniesGroup);
-            } else if (filterMode === 'companies') {
-                if (bCompanies) bCompanies.classList.add('active');
-                if (map.hasLayer(window.mapPlacesGroup)) map.removeLayer(window.mapPlacesGroup);
-                if (!map.hasLayer(window.mapCompaniesGroup)) map.addLayer(window.mapCompaniesGroup);
             } else {
                 if (bAll) bAll.classList.add('active');
-                if (!map.hasLayer(window.mapPlacesGroup)) map.addLayer(window.mapPlacesGroup);
-                if (!map.hasLayer(window.mapCompaniesGroup)) map.addLayer(window.mapCompaniesGroup);
             }
         };
 
