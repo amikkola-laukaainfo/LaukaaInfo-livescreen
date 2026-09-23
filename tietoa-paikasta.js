@@ -176,11 +176,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         const placeName = placeData.name || placeData.canonical_name || '';
         const placeSlug = toSlug(placeName);
 
-        const [relationsResult, tagMatchResult, visibilityResult] = await Promise.all([
+        const [relationsResult, pcrResult, tagMatchResult, visibilityResult] = await Promise.all([
             aiSb
                 .from('place_relations')
                 .select('entity_id, entity_type, entity_name, relation_type, relation_context, strength')
                 .eq('place_id', placeId),
+            aiSb
+                .from('place_company_relations')
+                .select('company_id, context')
+                .eq('place_id', placeId)
+                .catch(() => ({ data: [] })),
             // Tag-pohjainen haku: kokeillaan ensin slugilla, sitten placeId:llä
             aiSb.rpc('find_place_companies', { place_id: placeSlug, max_count: 20 })
                 .then(async r => {
@@ -202,6 +207,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         ]);
         const { data: relationsData, error: relationsError } = relationsResult;
         const { data: tagMatches } = tagMatchResult;
+
+        // Yhdistä place_company_relations (pcr) -relaatiot place_relations-tietoihin
+        let combinedRelations = relationsData ? [...relationsData] : [];
+        if (pcrResult?.data && Array.isArray(pcrResult.data)) {
+            pcrResult.data.forEach(pcr => {
+                const compId = String(pcr.company_id);
+                if (!combinedRelations.some(r => String(r.entity_id) === compId || String(r.entity_id) === `company-${compId}`)) {
+                    combinedRelations.push({
+                        entity_id: compId,
+                        entity_type: 'COMPANY',
+                        entity_name: compId,
+                        relation_type: 'LOCATED_AT',
+                        relation_context: pcr.context || 'Kytketty paikkaan',
+                        strength: 100
+                    });
+                }
+            });
+        }
         // Suodata näkyvyysdata tähän paikkaan liittyviin merkintöihin
         const allVisibility = visibilityResult?.data || [];
         const visibilityData = allVisibility.filter(v => {
@@ -220,7 +243,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.debug('[scoreCompanies] yritykset count:', yritykset.length);
 
         // Pisteytä yritykset uuden 4-tason mallin mukaisesti
-        const scoredCompanies = scoreCompanies(yritykset, placeData, relationsData || [], tagMatches || [], visibilityData, parentPlace);
+        const scoredCompanies = scoreCompanies(yritykset, placeData, combinedRelations, tagMatches || [], visibilityData, parentPlace);
         console.debug('[scoreCompanies] scoredCompanies count:', scoredCompanies.length, '| top 5:', scoredCompanies.slice(0,5).map(c => c.nimi || c.name));
 
         // 5. Yhdistä tiedot poistaen duplikaatit
