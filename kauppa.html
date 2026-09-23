@@ -500,10 +500,10 @@
             </div>
             
             <div style="text-align: center;">
-                <a href="mailto:info@mediazoo.fi?subject=Tilaus: Yrityksen näkyvyyspaketti" class="btn-payment btn-mobilepay" style="display: inline-block; max-width: 300px; padding: 1.2rem;">
+                <button type="button" onclick="openInquiryModal('Yrityksen näkyvyyspaketti (249 €/v)');" class="btn-payment btn-mobilepay" style="display: inline-block; max-width: 320px; padding: 1.2rem; width: 100%; border: none; cursor: pointer;">
                     Tilaa näkyvyyspaketti 📧
-                </a>
-                <p class="vat-note" style="margin-top: 1rem;">Klikkaamalla avaat sähköpostiviestin.</p>
+                </button>
+                <p class="vat-note" style="margin-top: 1rem;">Klikkaamalla avaat kyselylomakkeen.</p>
             </div>
         </section>
 
@@ -524,7 +524,7 @@
                     <li>QR-koodilla jaettava yrityskortti</li>
                     <li>Näkyvyys LaukaaInfo.fi & Android-sovelluksessa</li>
                 </ul>
-                <a href="mailto:info@mediazoo.fi?subject=Tilaus: Yritysprofiili ja Seinä" class="btn-payment btn-mailto" style="margin-top: 1rem; width: 100%; text-align: center; border-radius: 8px;">Kysy lisää</a>
+                <button type="button" onclick="openInquiryModal('Yritysprofiili + Oma Seinä (149 €/v)');" class="btn-payment btn-mailto" style="margin-top: 1rem; width: 100%; text-align: center; border-radius: 8px; cursor: pointer;">Kysy lisää</button>
             </div>
 
             <div class="plan-card">
@@ -537,7 +537,7 @@
                     <li>"Paikkaan liittyvät palvelut" -nosto</li>
                     <li>Näkyvyys paikan tapahtumissa</li>
                 </ul>
-                <a href="mailto:info@mediazoo.fi?subject=Tilaus: Paikkakumppani" class="btn-payment btn-mailto" style="margin-top: 1rem; width: 100%; text-align: center; border-radius: 8px;">Kysy lisää</a>
+                <button type="button" onclick="openInquiryModal('Paikkakumppani (49 €/v)');" class="btn-payment btn-mailto" style="margin-top: 1rem; width: 100%; text-align: center; border-radius: 8px; cursor: pointer;">Kysy lisää</button>
             </div>
 
             <div class="plan-card">
@@ -550,7 +550,7 @@
                     <li>Näkyvyys aluesivuilla</li>
                     <li>Tehokas tapa tavoittaa tietty asuinalue</li>
                 </ul>
-                <a href="mailto:info@mediazoo.fi?subject=Tilaus: Aluekumppani" class="btn-payment btn-mailto" style="margin-top: 1rem; width: 100%; text-align: center; border-radius: 8px;">Kysy lisää</a>
+                <button type="button" onclick="openInquiryModal('Aluekumppani (79 €/v)');" class="btn-payment btn-mailto" style="margin-top: 1rem; width: 100%; text-align: center; border-radius: 8px; cursor: pointer;">Kysy lisää</button>
             </div>
 
             <div class="plan-card">
@@ -563,7 +563,7 @@
                     <li>"Sopii tähän" -nostot</li>
                     <li>LaukaaInfon profilointi etsii sopivat paikat</li>
                 </ul>
-                <a href="mailto:info@mediazoo.fi?subject=Tilaus: Teemakumppani" class="btn-payment btn-mailto" style="margin-top: 1rem; width: 100%; text-align: center; border-radius: 8px;">Kysy lisää</a>
+                <button type="button" onclick="openInquiryModal('Teemakumppani (49 €/v)');" class="btn-payment btn-mailto" style="margin-top: 1rem; width: 100%; text-align: center; border-radius: 8px; cursor: pointer;">Kysy lisää</button>
             </div>
 
         </section>
@@ -582,7 +582,7 @@
                         <li>"Tämän paikan yhteistyökumppani" -nosto</li>
                         <li>Voimakas brändäys (esim. uimarannat, liikuntapaikat)</li>
                     </ul>
-                    <a href="mailto:info@mediazoo.fi?subject=Kysely: Premium-paikkakumppanuus" class="btn-payment btn-mailto" style="margin-top: auto; text-align: center;">Pyydä tarjous</a>
+                    <button type="button" onclick="openInquiryModal('Premium-paikkakumppanuus (alk. 99 €/v)');" class="btn-payment btn-mailto" style="margin-top: auto; text-align: center; width: 100%; border-radius: 8px; cursor: pointer;">Pyydä tarjous</button>
                 </div>
 
                 <div class="plan-card" style="border: none; background: #f8f9fa;">
@@ -595,7 +595,7 @@
                         <li>Esim: "Autokorjaamot Laukaassa", "Hierojat"</li>
                         <li>Suositeltu/esillä-status kyseisessä haussa</li>
                     </ul>
-                    <a href="mailto:info@mediazoo.fi?subject=Tilaus: Hakunäkyvyys" class="btn-payment btn-mailto" style="margin-top: auto; text-align: center;">Kysy lisää</a>
+                    <button type="button" onclick="openInquiryModal('Hakunäkyvyys (39 €/v)');" class="btn-payment btn-mailto" style="margin-top: auto; text-align: center; width: 100%; border-radius: 8px; cursor: pointer;">Kysy lisää</button>
                 </div>
             </div>
         </section>
@@ -604,13 +604,66 @@
         <section class="instructions" style="text-align: center;">
             <h2>Miten tilaus toimii?</h2>
             <p style="font-size: 1.1rem; max-width: 600px; margin: 0 auto 2rem;">
-                Tällä hetkellä palvelemme yrittäjiä henkilökohtaisesti sähköpostin kautta. 
-                Kerro meille, millaista näkyvyyttä toivot, niin rakennamme sinulle sopivan paketin!
+                Kerro meille, millaista näkyvyyttä toivot, niin rakennamme yrityksellesi tai yhdistyksellesi sopivan paketin!
             </p>
-            <a href="mailto:info@mediazoo.fi" class="btn-payment btn-mobilepay" style="display: inline-block; max-width: 300px; padding: 1.2rem;">
-                Ota yhteyttä: info@mediazoo.fi
-            </a>
+            <button type="button" onclick="openInquiryModal('Yleinen yhteydenotto / Tilauskysely');" class="btn-payment btn-mobilepay" style="display: inline-block; max-width: 320px; padding: 1.2rem; width: 100%; border: none; cursor: pointer;">
+                Avaa yhteydenottolomake 📩
+            </button>
         </section>
+    </div>
+
+    <!-- Kysely / Yhteydenotto Modal -->
+    <div id="inquiry-modal" style="display: none; position: fixed; inset: 0; z-index: 99999; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(4px); align-items: center; justify-content: center; padding: 1rem;">
+        <div style="background: white; border-radius: 20px; max-width: 520px; width: 100%; padding: 2rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); position: relative; max-height: 90vh; overflow-y: auto;">
+            
+            <!-- Sulje-nappi -->
+            <button id="close-inquiry-modal" type="button" style="position: absolute; top: 1.25rem; right: 1.25rem; background: #f1f5f9; border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 1.25rem; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #64748b; transition: all 0.2s;" onmouseover="this.style.background='#e2e8f0';" onmouseout="this.style.background='#f1f5f9';">&times;</button>
+            
+            <!-- Otsikko -->
+            <div style="margin-bottom: 1.5rem; text-align: center;">
+                <span style="font-size: 2.5rem; display: block; margin-bottom: 0.5rem;">📩</span>
+                <h2 style="margin: 0; color: #0f172a; font-family: 'Outfit', sans-serif; font-size: 1.6rem;">Lähetä kysely / yhteydenotto</h2>
+                <p style="color: #64748b; font-size: 0.95rem; margin-top: 0.4rem; margin-bottom: 0;">Viesti lähetetään osoitteeseen <strong>info@mediazoo.fi</strong></p>
+            </div>
+            
+            <!-- Lomake -->
+            <form id="inquiry-form">
+                <input type="hidden" id="inquiry-subject" name="_subject" value="Kysely LaukaaInfo Kaupasta">
+                
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; font-weight: 600; font-size: 0.88rem; color: #334155; margin-bottom: 0.3rem;">Valittu paketti / Aihe</label>
+                    <input type="text" id="inquiry-package-name" name="Paketti" readonly style="width: 100%; padding: 0.75rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 10px; background: #f8fafc; font-size: 0.95rem; font-weight: 600; color: #1e40af; box-sizing: border-box;">
+                </div>
+                
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; font-weight: 600; font-size: 0.88rem; color: #334155; margin-bottom: 0.3rem;">Yritys / Yhdistys / Nimi <span style="color: #ef4444;">*</span></label>
+                    <input type="text" name="Yritys_tai_nimi" required placeholder="Esim. Laukaan Yrittäjät Ry" style="width: 100%; padding: 0.75rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.95rem; box-sizing: border-box;">
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div>
+                        <label style="display: block; font-weight: 600; font-size: 0.88rem; color: #334155; margin-bottom: 0.3rem;">Sähköposti <span style="color: #ef4444;">*</span></label>
+                        <input type="email" name="Sahkoposti" required placeholder="yhteys@yritys.fi" style="width: 100%; padding: 0.75rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.95rem; box-sizing: border-box;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-weight: 600; font-size: 0.88rem; color: #334155; margin-bottom: 0.3rem;">Puhelinnumero</label>
+                        <input type="tel" name="Puhelin" placeholder="040 1234567" style="width: 100%; padding: 0.75rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.95rem; box-sizing: border-box;">
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; font-weight: 600; font-size: 0.88rem; color: #334155; margin-bottom: 0.3rem;">Viesti / Lisätiedot</label>
+                    <textarea name="Viesti" rows="3" placeholder="Kirjoita toiveesi tai kysymyksesi tähän..." style="width: 100%; padding: 0.75rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.95rem; font-family: inherit; box-sizing: border-box; resize: vertical;"></textarea>
+                </div>
+                
+                <button type="submit" id="inquiry-submit-btn" style="width: 100%; background: linear-gradient(135deg, #0056b3, #003d82); color: white; border: none; padding: 1rem; border-radius: 12px; font-weight: 700; font-size: 1.05rem; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(0,86,179,0.3);">
+                    Lähetä kysely 🚀
+                </button>
+                
+                <div id="inquiry-status" style="margin-top: 1rem; text-align: center; font-size: 0.95rem; display: none;"></div>
+            </form>
+        </div>
+    </div>
     </div>
 
     <footer>
@@ -625,6 +678,95 @@
     </footer>
 
     <script src="script.js"></script>
+    <script>
+        function openInquiryModal(packageName) {
+            const modal = document.getElementById('inquiry-modal');
+            const packageInput = document.getElementById('inquiry-package-name');
+            const subjectInput = document.getElementById('inquiry-subject');
+            const statusDiv = document.getElementById('inquiry-status');
+            
+            if (packageInput) packageInput.value = packageName || 'Yleinen yhteydenotto';
+            if (subjectInput) subjectInput.value = 'LaukaaInfo Kauppa: ' + (packageName || 'Yhteydenotto');
+            if (statusDiv) statusDiv.style.display = 'none';
+            
+            if (modal) {
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeInquiryModal() {
+            const modal = document.getElementById('inquiry-modal');
+            if (modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const closeBtn = document.getElementById('close-inquiry-modal');
+            const modal = document.getElementById('inquiry-modal');
+            const form = document.getElementById('inquiry-form');
+            
+            if (closeBtn) closeBtn.addEventListener('click', closeInquiryModal);
+            if (modal) {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) closeInquiryModal();
+                });
+            }
+            
+            if (form) {
+                form.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const submitBtn = document.getElementById('inquiry-submit-btn');
+                    const statusDiv = document.getElementById('inquiry-status');
+                    
+                    submitBtn.disabled = true;
+                    submitBtn.innerText = 'Lähetetään... ⏳';
+                    statusDiv.style.display = 'block';
+                    statusDiv.style.color = '#3b82f6';
+                    statusDiv.innerText = 'Lähetetään viestiä osoitteeseen info@mediazoo.fi...';
+                    
+                    const formData = new FormData(form);
+                    const data = {};
+                    formData.forEach((val, key) => data[key] = val);
+                    
+                    try {
+                        const response = await fetch('https://formsubmit.co/ajax/info@mediazoo.fi', {
+                            method: 'POST',
+                            headers: { 
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify(data)
+                        });
+                        
+                        if (response.ok) {
+                            statusDiv.style.color = '#059669';
+                            statusDiv.innerHTML = '✅ <strong>Kiitos yhteydenotosta!</strong> Kyselysi on lähetetty osoitteeseen info@mediazoo.fi. Otamme sinuun yhteyttä pian.';
+                            form.reset();
+                            submitBtn.innerText = 'Kysely lähetetty!';
+                            setTimeout(function() {
+                                closeInquiryModal();
+                                submitBtn.disabled = false;
+                                submitBtn.innerText = 'Lähetä kysely 🚀';
+                            }, 3500);
+                        } else {
+                            throw new Error('Lähetys epäonnistui');
+                        }
+                    } catch (err) {
+                        console.warn('FormSubmit AJAX fallback:', err);
+                        const mailtoUrl = `mailto:info@mediazoo.fi?subject=${encodeURIComponent(data._subject)}&body=${encodeURIComponent("Yritys/Nimi: " + (data.Yritys_tai_nimi||"") + "\nSähköposti: " + (data.Sahkoposti||"") + "\nPuhelin: " + (data.Puhelin||"") + "\nPaketti: " + (data.Paketti||"") + "\nViesti: " + (data.Viesti||""))}`;
+                        window.location.href = mailtoUrl;
+                        statusDiv.style.color = '#059669';
+                        statusDiv.innerText = 'Avataan sähköpostisovellus...';
+                        submitBtn.disabled = false;
+                        submitBtn.innerText = 'Lähetä kysely 🚀';
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
 
