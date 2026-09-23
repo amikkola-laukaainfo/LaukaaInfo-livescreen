@@ -1,58 +1,64 @@
--- --------------------------------------------------------
--- Paikkaverkko (Place Network) Schema
--- Tämä taulu toimii yhteisenä nimittäjänä LaukaaInfolle ja LostReFoundille
--- --------------------------------------------------------
+-- ============================================================================
+-- PAIKKAVERKKO (PLACE NETWORK) SCHEMA
+-- Yhteinen paikkaverkosto LaukaaInfolle, LostReFoundille ja Mixonetille
+-- Päivitetty 2026-09-23 Supabase-livetietokanta-auditin mukaiseksi
+-- ============================================================================
 
 CREATE TABLE IF NOT EXISTS places (
-    place_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    name TEXT NOT NULL,                  -- Paikan nimi (esim. "Saraakallio")
-    canonical_name TEXT,                 -- Normalisoitu nimi AI/hakua varten (esim. "Saraakallio", "Peurunka")
-    type TEXT,                           -- Vakioitu tyyppi (esim. 'NATURE', 'LANDMARK', 'SERVICE', 'EVENT_LOCATION', 'BUILDING', 'AREA', 'ROUTE')
-    description TEXT,                    -- Lyhyt kuvaus paikasta
-    lat DOUBLE PRECISION,                -- Leveysaste (Valinnainen, geometry myöhemmin)
-    lon DOUBLE PRECISION,                -- Pituusaste (Valinnainen)
-    municipality TEXT,                   -- Kunnan nimi
-    municipality_id TEXT,                -- Kunnan tunniste (esim. 'laukaa', 'jyvaskyla')
-    parent_place_id UUID REFERENCES places(place_id), -- Hierarkia (esim. Saraakallio -> Laukaa)
-    status TEXT DEFAULT 'ACTIVE',        -- Tila (esim. 'ACTIVE', 'PENDING', 'CLOSED')
-    verified BOOLEAN DEFAULT false,      -- Onko paikka luotettava/vahvistettu
-    importance INTEGER DEFAULT 0,        -- Järjestyksen/suositusten painoarvo (0-100)
-    created_by TEXT,                     -- Kuka loi (UUID tai "SYSTEM")
-    source TEXT,                         -- Tietolähde (esim. "OSM", "Käyttäjä")
-    source_id TEXT,                      -- Alkuperäisen lähteen ID (esim. "node/12345678")
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    place_id TEXT GENERATED ALWAYS AS (id::text) STORED, -- Automaattisesti johdettu id:stä tekstinä
+    name TEXT NOT NULL,                                  -- Paikan nimi (esim. "Saraakallio", "Laukaa")
+    canonical_name TEXT,                                 -- Normalisoitu nimi hakuun/AI-prosessointiin
+    type TEXT,                                           -- Hierarkiataso tai kohdetyyppi ('REGION', 'KUNTA', 'AREA', 'LANDMARK', 'NATURE', 'SERVICE', 'BUILDING', 'ROUTE')
+    place_type TEXT,                                     -- Vaihtoehtoinen/tarkentava kohdetyyppi ('ALUE', 'KOHDE', 'KUNTA')
+    description TEXT,                                    -- Kuvausteksti
+    lat DOUBLE PRECISION,                                -- Leveysaste
+    lon DOUBLE PRECISION,                                -- Pituusaste
+    municipality TEXT,                                   -- Kunta (Legacy-hakukenttä, kanoninen tieto parent_place_id-ketjusta)
+    parent_place_id UUID REFERENCES places(id) ON DELETE SET NULL, -- ⭐ Maantieteellinen hierarkia
+    status TEXT DEFAULT 'PUBLISHED',                     -- Tila ('PUBLISHED', 'DRAFT', 'ARCHIVED', 'DELETED')
+    verified BOOLEAN DEFAULT false,                      -- Vahvistettu kohde
+    importance INTEGER DEFAULT 50,                       -- Järjestyksen/suositusten painoarvo (0-100)
+    tier TEXT DEFAULT 'PRIMARY',                         -- Solmutaso ('PRIMARY', 'SUB_PLACE', 'SPOT')
+    show_in_main_list BOOLEAN DEFAULT true,              -- Näytetäänkö päälistauksessa
+    quality_score INTEGER DEFAULT 0,                     -- Laatuskori (0-100)
+    commercial_visibility BOOLEAN DEFAULT false,         -- Kaupallinen näkyvyys
+    is_visibility_target BOOLEAN DEFAULT false,          -- Näkyvyyskampanjakohde
+    mixonet_place_id UUID,                               -- Linkki Mixonet-verkoston solmuun
+    visitor_types JSONB DEFAULT '[]'::jsonb,             -- Kohderyhmät (JSON)
+    search_keywords JSONB DEFAULT '[]'::jsonb,           -- Hakusanat (JSON)
+    history_text TEXT,                                   -- Historiatieto
+    external_links JSONB DEFAULT '[]'::jsonb,            -- Ulkoiset linkit (JSON)
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Indeksit nopeita hakuja varten
-CREATE INDEX IF NOT EXISTS idx_places_municipality ON places(municipality);
-CREATE INDEX IF NOT EXISTS idx_places_municipality_id ON places(municipality_id);
+-- Indeksit nopeita hierarkia- ja aluehakuja varten
+CREATE INDEX IF NOT EXISTS idx_places_parent_place_id ON places(parent_place_id);
 CREATE INDEX IF NOT EXISTS idx_places_type ON places(type);
 CREATE INDEX IF NOT EXISTS idx_places_canonical_name ON places(canonical_name);
-CREATE INDEX IF NOT EXISTS idx_places_source_id ON places(source, source_id);
+CREATE INDEX IF NOT EXISTS idx_places_status ON places(status);
+CREATE INDEX IF NOT EXISTS idx_places_tier ON places(tier);
 
--- RLS (Row Level Security) -säännöt
--- Oletuksena kaikki voivat lukea (jos Supabasen RLS on päällä)
+-- Row Level Security (RLS)
 ALTER TABLE places ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Salli luku kaikille" ON places;
 CREATE POLICY "Salli luku kaikille" 
 ON places FOR SELECT 
 USING (true);
 
--- Kirjoitusoikeudet riippuvat projektin Supabase-authista, 
--- mutta aluksi voidaan pitää avoimena ylläpitäjille tai API-avaimella.
-
 -- --------------------------------------------------------
 -- Yritys-Paikka -suhteet (Context-verkosto)
--- Yhdistää LaukaaInfo-yritykset paikkaverkon kohteisiin.
+-- Yhdistää yritykset paikkaverkon kohteisiin.
 -- Suhteella on aina syy (context), joka kertoo MIKSI yhteys on olemassa.
 -- Aluerajoja ei ole – yritys voi liittyä mihin tahansa paikkaan.
 -- --------------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS place_company_relations (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    place_id UUID NOT NULL REFERENCES places(place_id) ON DELETE CASCADE,
-    company_id TEXT NOT NULL,              -- Viittaus LaukaaInfo-profiiliin (esim. "company-123")
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    place_id UUID NOT NULL REFERENCES places(id) ON DELETE CASCADE,
+    company_id TEXT NOT NULL,              -- Viittaus yritysprofiiliin
     company_name TEXT NOT NULL,            -- Denormalisoitu nimi nopeaa hakua varten
     context TEXT NOT NULL,                 -- Yhteyden syy (esim. "Tapahtumakuvaus", "Toimipiste", "Palvelualue")
     confidence INTEGER DEFAULT 50,         -- AI:n arvio todennäköisyydestä (0-100)
@@ -67,6 +73,10 @@ CREATE INDEX IF NOT EXISTS idx_pcr_company_id ON place_company_relations(company
 
 -- RLS
 ALTER TABLE place_company_relations ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "pcr_select_public" ON place_company_relations;
+DROP POLICY IF EXISTS "pcr_insert_anon" ON place_company_relations;
+DROP POLICY IF EXISTS "pcr_delete_anon" ON place_company_relations;
 
 CREATE POLICY "pcr_select_public"
   ON place_company_relations FOR SELECT

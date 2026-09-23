@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    // 1. Hae ID URL:sta
+    // 1. Hae ID URL:sta tai window.PLACE_CONTEXT-alustuksesta
     const urlParams = new URLSearchParams(window.location.search);
-    let placeId = urlParams.get('id');
-    const placeNameParam = urlParams.get('name');
+    let placeId = urlParams.get('id') || (window.PLACE_CONTEXT && window.PLACE_CONTEXT.rootPlaceId);
+    const placeNameParam = urlParams.get('name') || (window.PLACE_CONTEXT && window.PLACE_CONTEXT.slug);
 
     if (!placeId && !placeNameParam) {
         showError();
