@@ -185,6 +185,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 .from('place_company_relations')
                 .select('company_id, context')
                 .eq('place_id', placeId)
+                .then(res => res)
                 .catch(() => ({ data: [] })),
             // Tag-pohjainen haku: kokeillaan ensin slugilla, sitten placeId:llä
             aiSb.rpc('find_place_companies', { place_id: placeSlug, max_count: 20 })
