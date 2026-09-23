@@ -31,16 +31,14 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
             margin-bottom: 1.5rem;
             display: flex;
-            gap: 1rem;
+            gap: 1.25rem;
             flex-wrap: wrap;
-            align-items: center;
+            align-items: flex-end;
         }
 
         .filter-group {
             display: flex;
             flex-direction: column;
-            flex: 1;
-            min-width: 200px;
         }
 
         .filter-group label {
@@ -50,20 +48,38 @@
             margin-bottom: 0.35rem;
         }
 
-        .filter-group select {
-            padding: 0.65rem 0.9rem;
-            border: 1.5px solid #dde3ec;
-            border-radius: 8px;
-            font-family: inherit;
-            font-size: 0.95rem;
-            color: #333;
-            background: #f7f9fc;
+        .map-filter-tabs {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .map-filter-tab {
+            padding: 0.55rem 1.1rem;
+            border-radius: 999px;
+            border: 1.5px solid #cbd5e1;
+            background: #fff;
+            color: #475569;
+            font-size: 0.88rem;
+            font-weight: 600;
             cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%230056b3' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 0.75rem center;
-            padding-right: 2rem;
+            transition: all 0.18s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-family: inherit;
+        }
+
+        .map-filter-tab:hover {
+            border-color: #0056b3;
+            color: #0056b3;
+        }
+
+        .map-filter-tab.active {
+            background: #0056b3;
+            border-color: #0056b3;
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(0, 86, 179, 0.25);
         }
 
         #kohteet-map {
@@ -274,25 +290,26 @@
 
     <main>
         <section class="map-filters card">
-            <div class="filter-group">
+            <div class="filter-group" style="flex: 1; min-width: 200px; max-width: 320px;">
                 <label for="name-filter">Etsi nimellä</label>
-                <input type="text" id="name-filter" placeholder="Kirjoita nimi..." style="padding: 0.65rem 0.9rem; border: 1.5px solid #dde3ec; border-radius: 8px; font-family: inherit; font-size: 0.95rem; flex: 1; max-width: 300px;">
+                <input type="text" id="name-filter" placeholder="Kirjoita nimi..." style="padding: 0.65rem 0.9rem; border: 1.5px solid #dde3ec; border-radius: 8px; font-family: inherit; font-size: 0.95rem; width: 100%; box-sizing: border-box;">
             </div>
-            <div class="filter-group">
-                <label for="category-filter">Valitse kategoria</label>
-                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: flex-end;">
-                    <select id="category-filter" style="flex: 1;">
-                        <option value="all">Kaikki kohteet</option>
-                    </select>
-                    <button id="share-map-btn"
-                        style="padding: 0.65rem 1rem; background: #0056b3; color: white; border: none; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 0.4rem; transition: background 0.2s;">
-                        <span>Jaa haku</span>
-                    </button>
+            <div class="filter-group" style="flex: 2; min-width: 280px;">
+                <label>Näytä kartalla</label>
+                <div class="map-filter-tabs">
+                    <button class="map-filter-tab active" data-type="all" id="btn-filter-all">🌐 Kaikki (<span id="count-all">0</span>)</button>
+                    <button class="map-filter-tab" data-type="places" id="btn-filter-places">📍 Paikat &amp; kohteet (<span id="count-places">0</span>)</button>
+                    <button class="map-filter-tab" data-type="companies" id="btn-filter-companies">🏢 Yritykset &amp; toimijat (<span id="count-companies">0</span>)</button>
                 </div>
             </div>
-            <div id="status-text" style="font-size: 0.9rem; color: #666;">Ladataan kohteita...</div>
-            <p class="location-hint" style="margin-top: 1rem; width: 100%; color: #111 !important;">Kirjoita tai klikkaa sijaintisi ja löydä
-                lähimmät kohteet, tapahtumat tai tarjoukset kartalla.</p>
+            <div style="display: flex; align-items: flex-end; margin-left: auto;">
+                <button id="share-map-btn"
+                    style="padding: 0.65rem 1rem; background: #0056b3; color: white; border: none; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 0.4rem; transition: background 0.2s;">
+                    <span>Jaa haku</span>
+                </button>
+            </div>
+            <div id="status-text" style="font-size: 0.9rem; color: #666; width: 100%; margin-top: 0.5rem;">Ladataan kohteita...</div>
+            <p class="location-hint" style="margin-top: 0.5rem; width: 100%; color: #111 !important;">Kirjoita tai klikkaa sijaintisi ja löydä lähimmät kohteet, tapahtumat tai tarjoukset kartalla.</p>
         </section>
 
         <div id="kohteet-map"></div>

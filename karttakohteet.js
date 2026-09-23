@@ -21,12 +21,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     const nameFilter = document.getElementById('name-filter');
     const statusText = document.getElementById('status-text');
 
-    // Piilota kategoriasuodatin – ei enää käytössä
-    const catFilterGroup = document.getElementById('category-filter');
-    if (catFilterGroup) {
-        const filterGroup = catFilterGroup.closest('.filter-group');
-        if (filterGroup) filterGroup.style.display = 'none';
+    const urlParams = new URLSearchParams(window.location.search);
+    let currentTypeFilter = urlParams.get('type') || 'all';
+    const initialSearch = urlParams.get('search') || urlParams.get('cat');
+    if (initialSearch && nameFilter) {
+        nameFilter.value = initialSearch;
     }
+
+    // Suodatintabit: Kaikki, Paikat & kohteet, Yritykset & toimijat
+    const filterTabs = document.querySelectorAll('.map-filter-tab');
+    filterTabs.forEach(tab => {
+        if (tab.dataset.type === currentTypeFilter) {
+            filterTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+        }
+        tab.addEventListener('click', () => {
+            filterTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            currentTypeFilter = tab.dataset.type;
+            renderMarkers();
+        });
+    });
 
     // allFeatures = JSON-kohteet jotka EIVÄT saa place_id-vastinetta (jäävät näkyviin)
     // visiblePlaces = Supabase-paikat jotka KORVAAVAT lähellä olevan JSON-kohteen
@@ -71,12 +86,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             if (!error && places) {
                 const DEDUP_THRESHOLD_M = 80;
-
-                // Kerätään place_id-kohteet joilla on JSON-vastine lähellä
-                // Set välttää duplikaatit jos useampi JSON-kohde on saman paikan lähellä
                 const matchedPlaceIds = new Set();
 
-                // Suodatetaan allFeatures: poistetaan ne joille löytyy Supabase-paikka läheltä
                 allFeatures = allFeatures.filter(f => {
                     if (f.geometry.type !== 'Point') return true;
                     const [fLon, fLat] = f.geometry.coordinates;
@@ -84,15 +95,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                         haversineMeters(fLat, fLon, p.lat, p.lon) < DEDUP_THRESHOLD_M
                     );
                     if (matchingPlace) {
-                        // Merkitään tämä Supabase-paikka näytettäväksi
                         matchedPlaceIds.add(matchingPlace.place_id);
-                        return false; // poistetaan JSON-kohde
+                        return false;
                     }
-                    return true; // pidetään JSON-kohde
+                    return true;
                 });
 
-                // Näytetään kaikki Supabase-paikat, jotka on ladattu. 
-                // allFeatures.filter yllä on jo poistanut ne JSON-kohteet, joiden lähellä on Supabase-paikka.
                 visiblePlaces = places;
             }
         }
@@ -114,15 +122,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.warn('Yritysten lataus epäonnistui:', e);
     }
 
-    const totalCount = allFeatures.length + visiblePlaces.length + allCompanies.length;
-    statusText.textContent = `Yhteensä ${totalCount} kohdetta.`;
-
     renderMarkers();
 
-    // 4. Render Markers – suodatetaan vain nimen perusteella
+    // 4. Render Markers
     function renderMarkers() {
         markersGroup.clearLayers();
         placeMarkersGroup.clearLayers();
+        companyMarkersGroup.clearLayers();
+
         const searchVal = nameFilter ? nameFilter.value.trim().toLowerCase() : '';
 
         // JSON-kohteet (joilla ei ole place_id-vastinetta)
@@ -146,6 +153,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                    (c.name && c.name.toLowerCase().includes(searchVal));
         });
 
+        const placesCount = filteredFeatures.length + filteredPlaces.length;
+        const companiesCount = filteredCompanies.length;
+        const totalCount = placesCount + companiesCount;
+
+        // Päivitetään tabien laskurit
+        const countAllEl = document.getElementById('count-all');
+        const countPlacesEl = document.getElementById('count-places');
+        const countCompaniesEl = document.getElementById('count-companies');
+        if (countAllEl) countAllEl.textContent = totalCount;
+        if (countPlacesEl) countPlacesEl.textContent = placesCount;
+        if (countCompaniesEl) countCompaniesEl.textContent = companiesCount;
+
         const newMarkers = [];
         const newPlaceMarkers = [];
         const newCompanyMarkers = [];
@@ -157,7 +176,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             const geom = f.geometry;
             if (geom.type === 'Point') {
                 const [lon, lat] = geom.coordinates;
-                coords.push([lat, lon]);
+                if (currentTypeFilter === 'all' || currentTypeFilter === 'places') {
+                    coords.push([lat, lon]);
+                }
                 const marker = L.marker([lat, lon]);
                 const popupHtml = `<div style="min-width: 200px;">
                     <h3 style="margin: 0 0 5px 0; color: #0056b3;">${props.name}</h3>
@@ -192,6 +213,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         filteredPlaces.forEach(place => {
             const label = placeTypeLabel[place.type] || 'Paikka';
             const title = place.name || place.canonical_name;
+            if (currentTypeFilter === 'all' || currentTypeFilter === 'places') {
+                coords.push([place.lat, place.lon]);
+            }
             const popupHtml = `<div style="min-width:200px;">
                 <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;color:#059669;margin-bottom:4px;">📍 ${label}</div>
                 <h3 style="margin:0 0 6px 0;color:#064e3b;font-size:1rem;">${title}</h3>
@@ -202,42 +226,41 @@ document.addEventListener('DOMContentLoaded', async () => {
             </div>`;
             const marker = L.marker([place.lat, place.lon], { icon: placeIcon }).bindPopup(popupHtml);
             newPlaceMarkers.push(marker);
-            coords.push([place.lat, place.lon]);
         });
 
         markersGroup.addLayers(newMarkers);
         placeMarkersGroup.addLayers(newPlaceMarkers);
 
-        // Rakennetaan yritysten markerit tason mukaan
+        // Rakennetaan yritysten markerit
         filteredCompanies.forEach(company => {
             const tier = company.subscription_tier || 1;
             let iconHtml, iconSize, iconAnchor, zIndexOffset = 0;
 
             if (tier >= 3) {
-                // Taso 3: Kumppani (Iso erottuva marker)
                 iconHtml = `<div style="width:36px;height:36px;background:#e11d48;border:3px solid white;border-radius:50%;box-shadow:0 0 15px rgba(225,29,72,0.8);display:flex;align-items:center;justify-content:center;font-size:16px;">⭐</div>`;
                 iconSize = [36, 36];
                 iconAnchor = [18, 18];
                 zIndexOffset = 1000;
             } else if (tier === 2) {
-                // Taso 2: Yritysprofiili (brändiväri)
                 iconHtml = `<div style="width:28px;height:28px;background:#0056b3;border:2px solid white;border-radius:50%;box-shadow:0 2px 5px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:12px;">🏢</div>`;
                 iconSize = [28, 28];
                 iconAnchor = [14, 14];
                 zIndexOffset = 500;
             } else {
-                // Taso 1: Ilmainen (pieni harmaa/sininen)
                 iconHtml = `<div style="width:16px;height:16px;background:#94a3b8;border:2px solid white;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>`;
                 iconSize = [16, 16];
                 iconAnchor = [8, 8];
             }
 
             const compIcon = L.divIcon({ className: '', html: iconHtml, iconSize, iconAnchor });
-            
+            if (currentTypeFilter === 'all' || currentTypeFilter === 'companies') {
+                coords.push([company.lat, company.lon]);
+            }
+
             let popupHtml = `<div style="min-width: 200px;">
                 <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;color:#64748b;margin-bottom:4px;">Yritys ${tier >= 2 ? '⭐' : ''}</div>
                 <h3 style="margin: 0 0 5px 0; color: #1e293b;">${company.nimi || company.name || ''}</h3>`;
-                
+
             if (tier >= 2) {
                 popupHtml += `<div style="font-size: 0.85rem; color: #475569; margin-bottom: 8px;">${company.description || company.short_description || ''}</div>`;
                 popupHtml += `<a href="yrityskortti.html?id=${company.id}" style="display:inline-block;background:#0056b3;color:white;padding:5px 12px;border-radius:20px;text-decoration:none;font-size:0.8rem;font-weight:700;">Katso profiili →</a>`;
@@ -249,20 +272,40 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             const marker = L.marker([company.lat, company.lon], { icon: compIcon, zIndexOffset }).bindPopup(popupHtml);
             newCompanyMarkers.push(marker);
-            coords.push([company.lat, company.lon]);
         });
-        
+
         companyMarkersGroup.addLayers(newCompanyMarkers);
+
+        // Hallitaan mitä kerroksia kartalla näytetään
+        if (currentTypeFilter === 'places') {
+            if (!map.hasLayer(markersGroup)) map.addLayer(markersGroup);
+            if (!map.hasLayer(placeMarkersGroup)) map.addLayer(placeMarkersGroup);
+            if (map.hasLayer(companyMarkersGroup)) map.removeLayer(companyMarkersGroup);
+        } else if (currentTypeFilter === 'companies') {
+            if (map.hasLayer(markersGroup)) map.removeLayer(markersGroup);
+            if (map.hasLayer(placeMarkersGroup)) map.removeLayer(placeMarkersGroup);
+            if (!map.hasLayer(companyMarkersGroup)) map.addLayer(companyMarkersGroup);
+        } else {
+            if (!map.hasLayer(markersGroup)) map.addLayer(markersGroup);
+            if (!map.hasLayer(placeMarkersGroup)) map.addLayer(placeMarkersGroup);
+            if (!map.hasLayer(companyMarkersGroup)) map.addLayer(companyMarkersGroup);
+        }
 
         if (coords.length > 0) {
             const bounds = L.latLngBounds(coords);
             map.fitBounds(bounds.pad(0.1));
         }
 
-        const shown = filteredFeatures.length + filteredPlaces.length + filteredCompanies.length;
-        statusText.textContent = searchVal
-            ? `Näytetään ${shown} kohdetta haulla "${searchVal}".`
-            : `Yhteensä ${totalCount} kohdetta.`;
+        // Päivitetään ilmoitusteksti
+        if (searchVal) {
+            statusText.textContent = `Näytetään ${currentTypeFilter === 'places' ? placesCount : (currentTypeFilter === 'companies' ? companiesCount : totalCount)} kohdetta haulla "${searchVal}".`;
+        } else if (currentTypeFilter === 'places') {
+            statusText.textContent = `Näytetään ${placesCount} paikkaa & kohdetta.`;
+        } else if (currentTypeFilter === 'companies') {
+            statusText.textContent = `Näytetään ${companiesCount} yritystä & toimijaa.`;
+        } else {
+            statusText.textContent = `Yhteensä ${totalCount} kohdetta (${placesCount} paikkaa, ${companiesCount} yritystä).`;
+        }
     }
 
     // 5. Nimihaku
@@ -281,7 +324,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             } else {
                 url.searchParams.delete('search');
             }
+            if (currentTypeFilter && currentTypeFilter !== 'all') {
+                url.searchParams.set('type', currentTypeFilter);
+            } else {
+                url.searchParams.delete('type');
+            }
             url.searchParams.delete('cat');
+
             const shareData = {
                 title: 'LaukaaInfo - Karttakohteet',
                 text: searchVal ? `Karttakohteet haulla: ${searchVal}` : 'Tutki Laukaan kohteita kartalla',
@@ -300,13 +349,5 @@ document.addEventListener('DOMContentLoaded', async () => {
                 console.error('Sharing failed', err);
             }
         });
-    }
-
-    // 7. URL-parametrit: ?search=hakusana
-    const urlParams = new URLSearchParams(window.location.search);
-    const searchParam = urlParams.get('search') || urlParams.get('cat');
-    if (searchParam && nameFilter) {
-        nameFilter.value = searchParam;
-        renderMarkers();
     }
 });
