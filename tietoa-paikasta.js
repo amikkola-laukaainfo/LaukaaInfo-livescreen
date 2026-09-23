@@ -2766,7 +2766,7 @@ async function renderNearbyPlaces(currentPlace) {
                 const hashName = displayName.replace(/\s+/g, '');
                 const searchName = (p.canonical_name || p.name).replace(/\s+/g, '_');
 
-                return `<a href="tietoa-paikasta.html?name=${encodeURIComponent(searchName)}" class="nearby-tag ${tagClass}">#${hashName} <span class="dist">\u00b7 ${distText}</span></a>`;
+                return `<a href="tietoa-paikasta.html?name=${encodeURIComponent(searchName)}" class="nearby-tag ${tagClass}">${displayName} <span class="dist">\u00b7 ${distText}</span></a>`;
             }).join('');
         }
     } catch (e) {
