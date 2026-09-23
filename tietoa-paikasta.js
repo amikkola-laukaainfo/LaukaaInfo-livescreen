@@ -184,8 +184,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Tag-pohjainen haku: kokeillaan ensin slugilla, sitten placeId:llä
             aiSb.rpc('find_place_companies', { place_id: placeSlug, max_count: 20 })
                 .then(async r => {
+                    if (r.error) return { data: null };
                     if (!r.data || r.data.length === 0) {
-                        return aiSb.rpc('find_place_companies', { place_id: placeId, max_count: 20 });
+                        return aiSb.rpc('find_place_companies', { place_id: placeId, max_count: 20 }).catch(() => ({ data: null }));
                     }
                     return r;
                 })
@@ -1447,10 +1448,8 @@ document.addEventListener('click', (e) => {
 async function getFirebaseDbForObs() {
     if (!window.firebase) {
         try {
-            await Promise.all([
-                loadScript('https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js'),
-                loadScript('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js')
-            ]);
+            await loadScript('https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js');
+            await loadScript('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js');
         } catch (e) {
             console.warn('Firebase lataus epäonnistui:', e);
         }
@@ -2032,6 +2031,8 @@ function renderRelations(items, allSources = [], allContents = []) {
 function initPlaceMap(lat, lon, name) {
     // Odotetaan hieman jotta display: block ehtii vaikuttaa map-containeriin
     setTimeout(() => {
+        const container = document.getElementById('map');
+        if (!container) return; // Turvatarkistus jos sivulla ei ole #map-elementtiä
         if (window.placeMap) { window.placeMap.remove(); }
         window.placeMap = L.map('map').setView([lat, lon], 14);
         const map = window.placeMap;
@@ -2520,10 +2521,8 @@ async function loadLostItemsForPlace(place) {
     try {
         // Firebase SDK ladataan dynaamisesti jos ei vielä ladattu
         if (!window.firebase) {
-            await Promise.all([
-                loadScript('https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js'),
-                loadScript('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js')
-            ]);
+            await loadScript('https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js');
+            await loadScript('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js');
         }
         
         // Alusta Firebase jos ei vielä alustettu
