@@ -1323,7 +1323,6 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
 
             for (const item of finalItems) {
                 const rssElement = document.createElement('div');
-                // visitlaukaa.fi/evofeed -tapahtumille käytetään tekstipohjaista korttia (tekijänoikeussyistä ei kuvia)
                 const isEventItem = isEvent;
                 rssElement.className = isEventItem ? 'rss-item rss-item--event' : 'rss-item';
 
@@ -1349,8 +1348,9 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
                 }
 
                 if (isEventItem) {
-                    // Tekstipohjainen tapahtumakortti ilman kuvia (visitlaukaa.fi)
+                    // Tapahtumakortti visitlaukaa.fi RSS-syötteestä — kuva ladataan syötteestä jos saatavilla
                     rssElement.innerHTML = `
+                        ${item.imageUrl ? `<img src="${item.imageUrl}" class="rss-item-image rss-event-image" loading="lazy" alt="${item.title}">` : ''}
                         <div class="rss-event-date-badge">
                             <span class="rss-event-date-icon">📅</span>
                             <span class="rss-event-date-text">${item.dateStr || '—'}</span>
