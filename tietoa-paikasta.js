@@ -2116,10 +2116,25 @@ function initPlaceMap(lat, lon, name, subPlaces = [], companies = []) {
                     const cName = c.nimi || c.name || 'Yritys';
                     const cDesc = c.kuvaus || c.description || c.kategoria || '';
                     const cUrl = c.kotisivu || c.url || '#';
-                    const linkHtml = (cUrl && cUrl !== '#') ? `<br><a href="${cUrl}" target="_blank" rel="noopener" style="color:#0056b3;font-weight:600;font-size:0.85rem;">Kotisivut →</a>` : '';
-                    
+                    const cId = c.id || c.company_id || c.slug || c.ytunnus;
+                    const cardUrl = cId ? `yrityskortti.html?id=${encodeURIComponent(cId)}` : null;
+
+                    const titleHtml = cardUrl 
+                        ? `<a href="${cardUrl}" style="color:#0056b3;text-decoration:none;font-weight:700;">🏢 ${cName}</a>`
+                        : `<b>🏢 ${cName}</b>`;
+
+                    let linksHtml = '';
+                    if (cardUrl) {
+                        linksHtml += `<div style="margin-top:6px;"><a href="${cardUrl}" style="display:inline-block;background:#0056b3;color:#fff;padding:4px 10px;border-radius:14px;font-size:0.78rem;font-weight:600;text-decoration:none;">Avaa yrityskortti →</a></div>`;
+                    }
+                    if (cUrl && cUrl !== '#') {
+                        linksHtml += `<div style="margin-top:4px;"><a href="${cUrl}" target="_blank" rel="noopener" style="color:#4b5563;font-size:0.78rem;text-decoration:none;">Kotisivut ↗</a></div>`;
+                    }
+
+                    const descSnippet = cDesc ? `<br><span style="font-size:0.82rem;color:#555;">${cDesc.substring(0, 90)}${cDesc.length > 90 ? '...' : ''}</span>` : '';
+
                     const marker = L.marker([cLat, cLon], { icon: companyIcon })
-                        .bindPopup(`<b>🏢 ${cName}</b><br><span style="font-size:0.82rem;color:#555;">${cDesc.substring(0, 90)}...</span>${linkHtml}`);
+                        .bindPopup(`<div style="font-family:sans-serif;">${titleHtml}${descSnippet}${linksHtml}</div>`);
                     window.mapCompaniesGroup.addLayer(marker);
                     companiesCount++;
                 }
