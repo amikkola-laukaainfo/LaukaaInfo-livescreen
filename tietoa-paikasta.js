@@ -1059,7 +1059,7 @@ async function renderPlace(place, relatedItems, aiProfileData, aiFaqData, allSou
     if (place.lat && place.lon) {
         const mapSec = document.getElementById('map-section');
         if (mapSec) mapSec.style.display = 'block';
-        initPlaceMap(place.lat, place.lon, place.name || place.canonical_name);
+        initPlaceMap(place.lat, place.lon, place.name || place.canonical_name, subPlaces);
         
         const routeBtn = document.getElementById('btn-route');
         if (routeBtn) {
@@ -2052,20 +2052,39 @@ function renderRelations(items, allSources = [], allContents = []) {
     }).join('');
 }
 
-function initPlaceMap(lat, lon, name) {
+function initPlaceMap(lat, lon, name, subPlaces = []) {
     // Odotetaan hieman jotta display: block ehtii vaikuttaa map-containeriin
     setTimeout(() => {
         const container = document.getElementById('map');
         if (!container) return; // Turvatarkistus jos sivulla ei ole #map-elementtiä
         if (window.placeMap) { window.placeMap.remove(); }
-        window.placeMap = L.map('map').setView([lat, lon], 14);
+        
+        const centerLat = parseFloat(lat) || 62.2625;
+        const centerLon = parseFloat(lon) || 26.2039;
+        window.placeMap = L.map('map').setView([centerLat, centerLon], 13);
         const map = window.placeMap;
         
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        L.marker([lat, lon]).addTo(map).bindPopup(`<b>${name}</b>`).openPopup();
+        if (lat && lon) {
+            L.marker([centerLat, centerLon]).addTo(map).bindPopup(`<b>📍 ${name}</b>`).openPopup();
+        }
+
+        if (Array.isArray(subPlaces)) {
+            subPlaces.forEach(sp => {
+                const sLat = parseFloat(sp.lat);
+                const sLon = parseFloat(sp.lon);
+                if (!isNaN(sLat) && !isNaN(sLon)) {
+                    const spName = sp.name || sp.canonical_name || 'Kohde';
+                    const spUrl = `tietoa-paikasta.html?id=${encodeURIComponent(sp.place_id)}`;
+                    L.marker([sLat, sLon])
+                        .addTo(map)
+                        .bindPopup(`<b>${spName}</b><br><a href="${spUrl}">Avaa kohdesivu →</a>`);
+                }
+            });
+        }
     }, 100);
 }
 
