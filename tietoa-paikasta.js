@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (placeId) {
             const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(placeId);
             if (isUuid) {
-                placeQuery = placeQuery.eq('place_id', placeId);
+                placeQuery = placeQuery.or(`id.eq.${placeId},place_id.eq.${placeId}`);
             } else {
                 const rawName = placeId.replace(/["']/g, '').trim();
                 const spaceName = rawName.replace(/-/g, ' ');
@@ -380,8 +380,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
 function showError() {
-    document.getElementById('loading-spinner').style.display = 'none';
-    document.getElementById('error-message').style.display = 'block';
+    const spinner = document.getElementById('loading-spinner');
+    if (spinner) spinner.style.display = 'none';
+
+    const errEl = document.getElementById('error-message');
+    if (errEl) errEl.style.display = 'block';
 }
 
 async function loadMediaForPlace(place) {
