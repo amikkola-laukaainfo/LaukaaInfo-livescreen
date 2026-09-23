@@ -2787,33 +2787,86 @@
         </section>
 
         <div class="page-container" style="max-width: 1200px; margin: 0 auto 3rem; padding: 0 1.5rem;">
-            <!-- Kartta-osio (Karttakohteet & paikkaverkko) -->
-            <section id="map-section" class="content-block" style="margin-bottom: 2.5rem; background: white; padding: 1.5rem; border-radius: 20px; border: 1px solid #e5eee8; box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
-                <h2 style="font-size: 1.3rem; font-weight: 700; color: #183F35; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                    🗺️ Lievestuore kartalla
-                </h2>
-                <div id="map" style="height: 420px; width: 100%; border-radius: 14px; overflow: hidden; z-index: 1;"></div>
+            
+            <!-- 1. IDENTITEETTI (Tietoa paikasta & Ingressi) -->
+            <section id="intro-section" class="content-block" style="margin-bottom: 2.5rem; background: white; padding: 2rem; border-radius: 20px; border: 1px solid #e5eee8; box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
+                <h2 style="font-size: 1.5rem; font-weight: 800; color: #183F35; margin-bottom: 1rem;">Tietoa Lievestuoreesta</h2>
+                <div id="display-description" style="font-size: 1.05rem; line-height: 1.7; color: #334155;"></div>
             </section>
 
-            <!-- Subplaces section (Lapsikohteet) -->
-            <section id="subplaces-section" class="content-block" style="margin-bottom: 2.5rem; background: white; padding: 2rem; border-radius: 20px; border: 1px solid #e5eee8; box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
-                <h2 style="font-size: 1.5rem; font-weight: 800; color: #183F35; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                    📍 Lievestuoreen kohteet
-                </h2>
-                <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 1.5rem;">Alla olevat kohteet ovat kytkettynä Lievestuoreen paikkaverkkoon tietokannassa.</p>
-                <div id="subplaces-list" class="subplaces-list"></div>
-            </section>
-
-            <!-- Place Themes section -->
+            <!-- 2. TEEMAT (Tutustu Lievestuoreeseen näkökulmista) -->
             <section id="place-themes-v4-section" class="content-block" style="margin-bottom: 2.5rem; background: white; padding: 2rem; border-radius: 20px; border: 1px solid #e5eee8; box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
-                <h2 style="font-size: 1.3rem; font-weight: 700; color: #183F35; margin-bottom: 1rem;">🌲 Paikan teemat ja luokitukset</h2>
+                <h2 style="font-size: 1.4rem; font-weight: 800; color: #183F35; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                    🌲 Tutustu Lievestuoreeseen näkökulmista
+                </h2>
+                <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 1.25rem;">Tarkastele aluetta teemojen ja aihepiirien kautta.</p>
                 <div id="place-themes-v4-list" style="display: flex; flex-wrap: wrap; gap: 0.6rem;"></div>
             </section>
 
-            <!-- Perustiedot -->
-            <section id="intro-section" class="content-block" style="margin-bottom: 2.5rem; background: white; padding: 2rem; border-radius: 20px; border: 1px solid #e5eee8;">
-                <h2 style="font-size: 1.3rem; font-weight: 700; color: #183F35; margin-bottom: 1rem;">Tietoa paikasta</h2>
-                <div id="display-description"></div>
+            <!-- 3. PAIKAT JA KOHTEET (Kartta + 14 kohdetta yhtenä kokonaisuutena) -->
+            <section id="subplaces-section" class="content-block" style="margin-bottom: 2.5rem; background: white; padding: 2rem; border-radius: 20px; border: 1px solid #e5eee8; box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
+                <h2 style="font-size: 1.5rem; font-weight: 800; color: #183F35; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                    📍 Paikat ja kohteet
+                </h2>
+                <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 1.5rem;">Lievestuoreella on 14 tähän paikkaan kytkettyä kohdetta ja karttakohtaa.</p>
+                
+                <!-- Kartta sijoitettuna osion sisään -->
+                <div id="map-section" style="margin-bottom: 1.75rem;">
+                    <div id="map" style="height: 420px; width: 100%; border-radius: 14px; overflow: hidden; z-index: 1;"></div>
+                </div>
+
+                <!-- 14 kohdetta listattuna/kortteina kartan alla -->
+                <div id="subplaces-list" class="subplaces-list"></div>
+            </section>
+
+            <!-- 4. TOIMIJAT JA PALVELUT (Kuka täällä toimii & kuka voi auttaa) -->
+            <section id="actors-services-section" class="content-block" style="margin-bottom: 2.5rem; background: white; padding: 2rem; border-radius: 20px; border: 1px solid #e5eee8; box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
+                <h2 style="font-size: 1.4rem; font-weight: 800; color: #183F35; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                    🏢 Toimijat ja palvelut
+                </h2>
+                
+                <!-- Paikalliset toimijat (place_company_relations -kytkennät) -->
+                <div id="local-actors-container" style="display: none; margin-bottom: 1.5rem;">
+                    <h3 style="font-size: 1.1rem; font-weight: 700; color: #0f172a; margin-bottom: 0.75rem;">📍 Paikalliset toimijat</h3>
+                    <div id="local-actors-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem;"></div>
+                </div>
+
+                <!-- Lievestuoretta palvelevat yritykset (Palveluohjaus) -->
+                <div id="serving-companies-container">
+                    <h3 style="font-size: 1.1rem; font-weight: 700; color: #0f172a; margin-bottom: 0.75rem;">🚙 Lievestuoretta palvelevat yritykset ja palvelut</h3>
+                    <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 1rem;">Seuraavat yritykset ja organisaatiot tarjoavat palveluitaan tällä alueella.</p>
+                    <div id="catalog-list" class="catalog-list-home"></div>
+                </div>
+            </section>
+
+            <!-- 5. AJANKOHTAISTA LIEVESTUOREELLA (Julkaisukerros + Uutiset) -->
+            <section id="news-events-section" class="content-block" style="margin-bottom: 2.5rem; background: white; padding: 2rem; border-radius: 20px; border: 1px solid #e5eee8; box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
+                <h2 style="font-size: 1.4rem; font-weight: 800; color: #183F35; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                    📢 Ajankohtaista Lievestuoreella
+                </h2>
+                <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 1.5rem;">Alueen tuoreet uutiset, tapahtumat ja ilmoitukset.</p>
+                <div id="news-container" class="news-grid"></div>
+            </section>
+
+            <!-- 6. KONDITIONAALISET OSIOT (Näytetään vain kun Supabasessa on dataa) -->
+            <section id="projects-section" class="content-block" style="display: none; margin-bottom: 2.5rem; background: white; padding: 2rem; border-radius: 20px; border: 1px solid #e5eee8;">
+                <h2>📁 Projektit</h2>
+                <div id="projects-list"></div>
+            </section>
+
+            <section id="routes-section" class="content-block" style="display: none; margin-bottom: 2.5rem; background: white; padding: 2rem; border-radius: 20px; border: 1px solid #e5eee8;">
+                <h2>🗺️ Reitit ja elämykset</h2>
+                <div id="routes-list"></div>
+            </section>
+
+            <section id="observations-section" class="content-block" style="display: none; margin-bottom: 2.5rem; background: white; padding: 2rem; border-radius: 20px; border: 1px solid #e5eee8;">
+                <h2>👁️ Havainnot</h2>
+                <div id="observations-list"></div>
+            </section>
+
+            <section id="memories-section" class="content-block" style="display: none; margin-bottom: 2.5rem; background: white; padding: 2rem; border-radius: 20px; border: 1px solid #e5eee8;">
+                <h2>💭 Muistot</h2>
+                <div id="memories-list"></div>
             </section>
         </div>
     </div>
