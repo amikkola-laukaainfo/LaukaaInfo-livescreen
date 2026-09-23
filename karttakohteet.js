@@ -115,7 +115,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (res.ok) {
             const yData = await res.json();
             if (yData.results) {
-                allCompanies = yData.results.filter(c => c.lat && c.lon);
+                const seenCompIds = new Set();
+                allCompanies = yData.results.filter(c => {
+                    if (!c.lat || !c.lon || !c.id) return false;
+                    if (seenCompIds.has(c.id)) return false;
+                    seenCompIds.add(c.id);
+                    return true;
+                });
             }
         }
     } catch(e) {

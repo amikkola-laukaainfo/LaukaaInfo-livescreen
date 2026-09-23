@@ -149,13 +149,28 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (kohteetRes.ok) kohteet = await kohteetRes.json();
             if (tarjouksetRes.ok) tarjoukset = await tarjouksetRes.json();
             
+            const seenCompanyIds = new Set();
             if (yrityksetRes.ok) {
                 const yData = await yrityksetRes.json();
-                if (yData.results) yritykset = yritykset.concat(yData.results);
+                if (yData.results) {
+                    yData.results.forEach(c => {
+                        if (c.id && !seenCompanyIds.has(c.id)) {
+                            seenCompanyIds.add(c.id);
+                            yritykset.push(c);
+                        }
+                    });
+                }
             }
             if (tempRes.ok) {
                 const tData = await tempRes.json();
-                if (tData.results) yritykset = yritykset.concat(tData.results);
+                if (tData.results) {
+                    tData.results.forEach(c => {
+                        if (c.id && !seenCompanyIds.has(c.id)) {
+                            seenCompanyIds.add(c.id);
+                            yritykset.push(c);
+                        }
+                    });
+                }
             }
         } catch (e) {
             console.error('Virhe JSONien latauksessa:', e);
