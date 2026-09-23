@@ -25,6 +25,9 @@
         }
         .place-identity-hero .place-breadcrumb{font-size:.85rem;opacity:.75;margin-bottom:.5rem;letter-spacing:.04em;}
         .place-identity-hero h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:700;margin:0 0 .4rem;line-height:1.15;}
+        /* Legacy themes section — hidden, place-themes-v4-section handles this */
+        #themes-section { display: none !important; }
+
         /* ── HERO ─────────────────────────────────────────────────────── */
         .place-identity-hero { text-shadow: 0 1px 3px rgba(0,0,0,.4); }
         .place-identity-hero h1 { letter-spacing: -.02em; }
@@ -113,10 +116,12 @@
         #nearby-places-list { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: .5rem; }
         #nearby-places-list li a, #nearby-places-list a {
             display: inline-flex; align-items: center; gap: .4rem;
-            padding: .45rem 1rem; border-radius: 999px;
+            padding: .45rem 1rem; border-radius: 12px;
             background: #fff; border: 1.5px solid #e2e8f0;
-            font-size: .88rem; font-weight: 600; color: #0a1940;
+            font-size: .85rem; font-weight: 600; color: #0a1940;
             text-decoration: none; transition: all .18s;
+            white-space: normal; word-break: break-word;
+            max-width: 220px; line-height: 1.35;
         }
         #nearby-places-list li a:hover, #nearby-places-list a:hover { background: #eff6ff; border-color: #93c5fd; }
 
