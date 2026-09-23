@@ -727,15 +727,24 @@ function scoreCompanies(allCompanies, place, relations, tagMatches, visibilityDa
 }
 
 async function renderPlace(place, relatedItems, aiProfileData, aiFaqData, allSources = [], allContents = [], scoredCompanies = [], parentPlace = null, subPlaces = []) {
-    document.getElementById('loading-spinner').style.display = 'none';
+    const spinner = document.getElementById('loading-spinner');
+    if (spinner) spinner.style.display = 'none';
+
     const errEl = document.getElementById('error-message');
     if (errEl) errEl.style.display = 'none';
-    document.getElementById('place-content').style.display = 'block';
+
+    const contentEl = document.getElementById('place-content');
+    if (contentEl) contentEl.style.display = 'block';
 
     // Perustiedot
-    document.getElementById('place-name').textContent = place.name || place.canonical_name || 'Nimetön paikka';
-    document.getElementById('place-type').textContent = getTypeLabel(place.type);
-    document.getElementById('place-municipality').textContent = place.municipality || 'Laukaa';
+    const nameEl = document.getElementById('place-name');
+    if (nameEl) nameEl.textContent = place.name || place.canonical_name || 'Nimetön paikka';
+
+    const typeEl = document.getElementById('place-type');
+    if (typeEl) typeEl.textContent = getTypeLabel(place.type);
+
+    const muniEl = document.getElementById('place-municipality');
+    if (muniEl) muniEl.textContent = place.municipality || 'Laukaa';
     
     // Kuvaus (V2 + AI)
     let descHtml = '';
@@ -758,7 +767,8 @@ async function renderPlace(place, relatedItems, aiProfileData, aiFaqData, allSou
         descHtml += `<div style="margin-top: 1.5rem;" class="place-content-extra">${place.place_content}</div>`;
     }
 
-    document.getElementById('display-description').innerHTML = descHtml;
+    const descEl = document.getElementById('display-description');
+    if (descEl) descEl.innerHTML = descHtml;
 
     // Tilastot
     const companies = relatedItems.filter(i => i.type === 'business' || i.type === 'association' || i.type === 'service');
@@ -1019,7 +1029,8 @@ async function renderPlace(place, relatedItems, aiProfileData, aiFaqData, allSou
 
     // Kartta ja sijaintinapit
     if (place.lat && place.lon) {
-        document.getElementById('map-section').style.display = 'block';
+        const mapSec = document.getElementById('map-section');
+        if (mapSec) mapSec.style.display = 'block';
         initPlaceMap(place.lat, place.lon, place.name || place.canonical_name);
         
         const routeBtn = document.getElementById('btn-route');

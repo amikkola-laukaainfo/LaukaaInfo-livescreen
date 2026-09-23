@@ -2772,6 +2772,38 @@
 
     </nav>
 
+    <!-- PLACE IDENTITY LAYER CONTAINER (Pilot) -->
+    <div id="loading-spinner" style="display: none; padding: 2rem; text-align: center; color: #64748b;">Ladataan paikkatietoja...</div>
+    <div id="error-message" style="display: none; padding: 2rem; text-align: center; color: #ef4444;">Paikkaa ei löytynyt.</div>
+    <div id="place-content" style="display: block;">
+        <section id="place-hero" class="hero-section" style="padding: 3rem 1.5rem; background: linear-gradient(135deg, #183F35 0%, #0f2920 100%); color: white; border-radius: 0 0 24px 24px; margin-bottom: 2rem;">
+            <div class="hero-content" style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
+                <div class="hero-left">
+                    <span id="place-type" class="badge" style="background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">ALUE</span>
+                    <h1 id="place-name" class="hero-title" style="font-size: 2.75rem; font-weight: 800; margin: 0.5rem 0;">Lievestuore</h1>
+                    <div class="hero-meta" style="opacity: 0.9; font-size: 1.05rem;">Kunta: <span id="place-municipality" style="font-weight: 700;">Laukaa</span></div>
+                </div>
+            </div>
+        </section>
+
+        <div class="page-container" style="max-width: 1200px; margin: 0 auto 3rem; padding: 0 1.5rem;">
+            <!-- Subplaces section (Lapsikohteet) -->
+            <section id="subplaces-section" class="content-block" style="margin-bottom: 2.5rem; background: white; padding: 2rem; border-radius: 20px; border: 1px solid #e5eee8; box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
+                <h2 style="font-size: 1.5rem; font-weight: 800; color: #183F35; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                    📍 Lievestuoreen kohteet
+                </h2>
+                <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 1.5rem;">Alla olevat kohteet ovat kytkettynä Lievestuoreen paikkaverkkoon tietokannassa.</p>
+                <div id="subplaces-list" class="subplaces-list"></div>
+            </section>
+
+            <!-- Perustiedot -->
+            <section id="intro-section" class="content-block" style="margin-bottom: 2.5rem; background: white; padding: 2rem; border-radius: 20px; border: 1px solid #e5eee8;">
+                <h2 style="font-size: 1.3rem; font-weight: 700; color: #183F35; margin-bottom: 1rem;">Tietoa paikasta</h2>
+                <div id="display-description"></div>
+            </section>
+        </div>
+    </div>
+
 
 
 
