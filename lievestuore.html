@@ -475,21 +475,21 @@
             </div>
         </section>
 
-        <!-- Activities -->
-        <section id="activities-section" class="place-section-wrap" style="display:none;">
-            <div class="place-section">
-                <h2>Mita taalla voi tehda</h2>
-                <ul id="activities-list" style="list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:.5rem;"></ul>
-            </div>
-        </section>
-
-        <!-- Visitor types -->
-        <section id="visitor-types-section" class="place-section-wrap alt" style="display:none;">
-            <div class="place-section">
-                <h2>Kenelle sopii</h2>
-                <ul id="visitor-types-list" style="list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:.5rem;"></ul>
-            </div>
-        </section>
+        <!-- 2-column row: Activities & Visitor types -->
+        <div class="place-2col-row">
+            <section id="activities-section" class="place-section-wrap" style="display:none;">
+                <div class="place-section">
+                    <h2>Mita taalla voi tehda</h2>
+                    <ul id="activities-list" style="list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:.5rem;"></ul>
+                </div>
+            </section>
+            <section id="visitor-types-section" class="place-section-wrap alt" style="display:none;">
+                <div class="place-section">
+                    <h2>Kenelle sopii</h2>
+                    <ul id="visitor-types-list" style="list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:.5rem;"></ul>
+                </div>
+            </section>
+        </div>
 
         <!-- 5. NEWS & FEED -->
         <section id="encounters-section" class="place-section-wrap" style="display:none;">
@@ -500,13 +500,21 @@
             </div>
         </section>
 
-        <!-- Nearby places -->
-        <section id="nearby-places-section" class="place-section-wrap alt" style="display:none;">
-            <div class="place-section">
-                <h2>Lahialueet</h2>
-                <ul id="nearby-places-list" style="list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.8rem;"></ul>
-            </div>
-        </section>
+        <!-- 2-column row: Nearby places & FAQ -->
+        <div class="place-2col-row" style="margin-top:1.25rem;">
+            <section id="nearby-places-section" class="place-section-wrap alt" style="display:none;">
+                <div class="place-section">
+                    <h2>Lahialueet</h2>
+                    <ul id="nearby-places-list" style="list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:.5rem;"></ul>
+                </div>
+            </section>
+            <section id="faq-section" class="place-section-wrap" style="display:none;">
+                <div class="place-section">
+                    <h2>Usein kysyttya</h2>
+                    <ul id="faq-list" style="list-style:none;padding:0;"></ul>
+                </div>
+            </section>
+        </div>
 
         <!-- 6. CONDITIONAL SECTIONS -->
         <section id="semantic-matches-container" class="place-section-wrap" style="display:none;">
@@ -534,13 +542,6 @@
             <div class="place-section">
                 <h2>Muistot</h2>
                 <ul id="memories-teaser-list" style="list-style:none;padding:0;"></ul>
-            </div>
-        </section>
-
-        <section id="faq-section" class="place-section-wrap" style="display:none;">
-            <div class="place-section">
-                <h2>Usein kysyttya</h2>
-                <ul id="faq-list" style="list-style:none;padding:0;"></ul>
             </div>
         </section>
 

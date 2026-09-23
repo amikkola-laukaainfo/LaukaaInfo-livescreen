@@ -8561,3 +8561,43 @@ header .v4-hero-search h3,
         -webkit-backdrop-filter: none !important;
     }
 }
+
+/* ===== TAAJAMASIVUT: 2-sarakkeen tiivis lohkoasettelu ===== */
+.place-2col-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    box-sizing: border-box;
+}
+
+.place-2col-row > .place-section-wrap {
+    flex: 1 1 320px;
+    border-bottom: none !important;
+    margin: 0 !important;
+    background: transparent !important;
+}
+
+.place-2col-row > .place-section-wrap > .place-section {
+    padding: 1.6rem 1.4rem !important;
+    background: #ffffff !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 14px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03) !important;
+    height: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.place-2col-row > .place-section-wrap.alt > .place-section {
+    background: #f8fafc !important;
+}
+
+@media (max-width: 768px) {
+    .place-2col-row {
+        padding: 0 1rem;
+        gap: 0.85rem;
+    }
+}
+
