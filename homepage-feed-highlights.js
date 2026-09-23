@@ -157,18 +157,12 @@
         const card = document.createElement('article');
 
         if (item.type === 'event') {
-            card.className = 'homepage-feed-highlights__card homepage-feed-highlights__card--event-text';
-            
-            // Yritetään poimia pvm, API voi palauttaa dateStr tai start_time
-            let dateStr = '—';
-            if (item.dateStr) {
-                dateStr = item.dateStr;
-            } else if (item.start_time) {
-                try { dateStr = new Date(item.start_time).toLocaleDateString('fi-FI'); } catch (e) {}
-            }
+            card.className = 'homepage-feed-highlights__card';
+            const img = item.image || item.imageUrl || (item.media && Array.isArray(item.media) ? item.media.find(m => m.type === 'image' && m.url)?.url : null);
 
             card.innerHTML = `
                 <a href="${targetUrl}" class="homepage-feed-highlights__card-link">
+                    ${img ? `<div class="homepage-feed-highlights__card-media" style="background-image:url('${String(img).replace(/'/g, "\\'")}');"></div>` : ''}
                     <div class="homepage-feed-highlights__card-body homepage-feed-highlights__card-body--event-text">
                         <div class="homepage-feed-highlights__event-date-badge">
                             <span class="homepage-feed-highlights__event-date-icon">📅</span>

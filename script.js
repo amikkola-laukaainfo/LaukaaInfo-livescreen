@@ -210,14 +210,15 @@ function createHomepageHighlightCard(item) {
     const urgencyLabel = getHomepageOfficialUrgencyLabel(item);
     const urgentClass = urgencyLabel ? ' homepage-feed-highlights__card--urgent' : '';
     const href = item.link || '#';
+    const img = item.imageUrl || item.image;
 
     const card = document.createElement('article');
 
     if (item.typeClass === 'event') {
-        card.className = 'homepage-feed-highlights__card homepage-feed-highlights__card--event-text' + urgentClass;
-        
+        card.className = 'homepage-feed-highlights__card' + urgentClass;
         card.innerHTML = `
             <a href="${href}" target="_blank" rel="noopener noreferrer" class="homepage-feed-highlights__card-link">
+                ${img ? `<div class="homepage-feed-highlights__card-media" style="background-image:url('${String(img).replace(/'/g, "\\'")}');"></div>` : ''}
                 <div class="homepage-feed-highlights__card-body homepage-feed-highlights__card-body--event-text">
                     <div class="homepage-feed-highlights__event-date-badge">
                         <span class="homepage-feed-highlights__event-date-icon">📅</span>
@@ -232,11 +233,10 @@ function createHomepageHighlightCard(item) {
             </a>
         `;
     } else {
-        const img = item.imageUrl || 'kuvia/syote.jpg';
         card.className = 'homepage-feed-highlights__card' + urgentClass;
         card.innerHTML = `
             <a href="${href}" target="_blank" rel="noopener noreferrer" class="homepage-feed-highlights__card-link">
-                <div class="homepage-feed-highlights__card-media" style="background-image:url('${String(img).replace(/'/g, "\\'")}');"></div>
+                <div class="homepage-feed-highlights__card-media" style="background-image:url('${String(img || 'kuvia/syote.jpg').replace(/'/g, "\\'")}');"></div>
                 <div class="homepage-feed-highlights__card-body">
                     <div class="homepage-feed-highlights__badge-row">
                         <span class="homepage-feed-highlights__badge">${type}</span>
@@ -1243,12 +1243,17 @@ async function fetchRSSFeed(url, container, emptyMessage, encoding = 'utf-8') {
 
                 let imageUrl = '';
                 const enclosure = item.querySelector('enclosure');
-                const mediaContent = item.querySelector('content[url]') || item.querySelector('thumbnail');
-                if (enclosure && enclosure.getAttribute('type')?.includes('image')) imageUrl = enclosure.getAttribute('url');
-                else if (mediaContent) imageUrl = mediaContent.getAttribute('url');
-                else {
-                    const desc = item.querySelector('description')?.textContent || '';
-                    const imgMatch = desc.match(/<img[^>]+src="([^">]+)"/);
+                const mediaContent = item.querySelector('media\\:content, content') || item.getElementsByTagName('media:content')[0] || item.getElementsByTagName('content')[0];
+                const mediaThumb = item.querySelector('media\\:thumbnail, thumbnail') || item.getElementsByTagName('media:thumbnail')[0] || item.getElementsByTagName('thumbnail')[0];
+                if (enclosure && enclosure.getAttribute('type')?.includes('image')) {
+                    imageUrl = enclosure.getAttribute('url');
+                } else if (mediaContent && mediaContent.getAttribute('url')) {
+                    imageUrl = mediaContent.getAttribute('url');
+                } else if (mediaThumb && mediaThumb.getAttribute('url')) {
+                    imageUrl = mediaThumb.getAttribute('url');
+                } else {
+                    const desc = item.querySelector('description')?.textContent || item.querySelector('content')?.textContent || '';
+                    const imgMatch = desc.match(/<img[^>]+src=["']([^"'>]+)["']/i);
                     if (imgMatch) imageUrl = imgMatch[1];
                 }
 

@@ -1585,7 +1585,7 @@ h3 {
     width: 100%;
     height: 200px;
     /* KiinteÃ¤ korkeus uutisvirrassa */
-    object-fit: contain;
+    object-fit: cover;
     background-color: #f0f0f0;
     border-radius: 12px;
     margin-bottom: 0.5rem;
@@ -1696,9 +1696,11 @@ h3 {
 
 /* Tapahtumien valokuvat RSS-syötteestä (visitlaukaa.fi evofeed) */
 .rss-item--event .rss-event-image {
-    width: calc(100% + 2.8rem);
+    width: calc(100% + 2.8rem) !important;
+    max-width: none !important;
+    align-self: stretch !important;
     margin: 0 -1.4rem 0.85rem -1.4rem;
-    height: 180px;
+    height: 190px !important;
     object-fit: cover;
     object-position: center;
     background-color: #fef3eb;
