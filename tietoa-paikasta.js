@@ -677,23 +677,34 @@ function scoreCompanies(allCompanies, place, relations, tagMatches, visibilityDa
         if (place.commercial_visibility !== false) {
             // Fyysinen: alue_slug – tarkista sekä nykyinen paikka, sen alue_slug-kenttä että yläpaikka
             const cSlug = toSlugGlobal(company.alue_slug || '');
-            const pSlug = toSlugGlobal(place.name || place.canonical_name || '');
+            const pSlug = toSlugGlobal(place.name || '');
+            const pCanonSlug = place.canonical_name ? toSlugGlobal(place.canonical_name) : '';
             const pAreaSlug = place.alue_slug ? toSlugGlobal(place.alue_slug) : '';
             const parentSlug = parentPlace ? toSlugGlobal(parentPlace.name || parentPlace.canonical_name || '') : '';
 
-            // Debug yksittäiselle yritykselle
-            if (cSlug && (cSlug === pSlug || cSlug === parentSlug || cSlug === pAreaSlug)) {
-                console.debug(`[AREA MATCH] ${company.nimi}: cSlug=${cSlug} pSlug=${pSlug} parentSlug=${parentSlug} pAreaSlug=${pAreaSlug}`);
+            function areaSlugsMatch(s1, s2) {
+                if (!s1 || !s2) return false;
+                if (s1 === s2) return true;
+                const n = (s) => s.replace(/[\-_\s]+/g, '').replace(/kk$/, '').replace(/en$/, '').replace(/an$/, '').replace(/kirkonkyla$/, '');
+                const n1 = n(s1);
+                const n2 = n(s2);
+                if (n1 === n2 && n1.length > 2) return true;
+                if (n1.length > 3 && n2.length > 3 && (n1.startsWith(n2) || n2.startsWith(n1))) return true;
+                return false;
             }
 
-            if (cSlug && pSlug && cSlug === pSlug) {
+            const isExactAreaMatch = cSlug && (
+                areaSlugsMatch(cSlug, pSlug) ||
+                areaSlugsMatch(cSlug, pCanonSlug) ||
+                areaSlugsMatch(cSlug, pAreaSlug)
+            );
+
+            const isParentAreaMatch = cSlug && parentSlug && areaSlugsMatch(cSlug, parentSlug);
+
+            if (isExactAreaMatch) {
                 score += 80; tier = 1;
                 reasons.push({ type: 'AREA', label: 'Toimipaikka' });
-            } else if (cSlug && (
-                (parentSlug && cSlug === parentSlug) ||
-                (pAreaSlug && cSlug === pAreaSlug)
-            )) {
-                // Yritys on liitetty yläpaikkaan tai paikan alue_slug täsmää
+            } else if (isParentAreaMatch) {
                 score += 50; tier = Math.min(tier, 2);
                 reasons.push({ type: 'AREA', label: 'Lähialueella' });
             }
@@ -1085,7 +1096,8 @@ async function renderPlace(place, relatedItems, aiProfileData, aiFaqData, allSou
     if (place.lat && place.lon) {
         const mapSec = document.getElementById('map-section');
         if (mapSec) mapSec.style.display = 'block';
-        initPlaceMap(place.lat, place.lon, place.name || place.canonical_name, subPlaces, scoredCompanies);
+        const isAreaPage = place.type === 'AREA' || (place.type && place.type.toUpperCase() === 'AREA') || !!window.PLACE_CONTEXT || location.pathname.includes('laukaa.html') || location.pathname.includes('lievestuore.html') || location.pathname.includes('leppavesi.html') || location.pathname.includes('vihtavuori.html') || location.pathname.includes('vehnia.html');
+        initPlaceMap(place.lat, place.lon, place.name || place.canonical_name, subPlaces, scoredCompanies, isAreaPage);
         
         const routeBtn = document.getElementById('btn-route');
         if (routeBtn) {
@@ -2078,7 +2090,7 @@ function renderRelations(items, allSources = [], allContents = []) {
     }).join('');
 }
 
-function initPlaceMap(lat, lon, name, subPlaces = [], companies = []) {
+function initPlaceMap(lat, lon, name, subPlaces = [], companies = [], isAreaPage = false) {
     // Odotetaan hieman jotta display: block ehtii vaikuttaa map-containeriin
     setTimeout(() => {
         const container = document.getElementById('map');
@@ -2095,7 +2107,9 @@ function initPlaceMap(lat, lon, name, subPlaces = [], companies = []) {
         }).addTo(map);
 
         window.mapPlacesGroup = L.layerGroup();
+        window.mapCompaniesGroup = L.layerGroup();
         let placesCount = 0;
+        let companiesCount = 0;
 
         // 1. Pääpaikan merkki
         if (lat && lon) {
@@ -2120,23 +2134,61 @@ function initPlaceMap(lat, lon, name, subPlaces = [], companies = []) {
             });
         }
 
-        // Lisätään paikkakerros kartalle (ei yrityksiä paikkasivun pienellä kartalla)
+        // 3. Yritykset (aluesivuilla kuten laukaa.html, lievestuore.html jne.)
+        if (isAreaPage && Array.isArray(companies)) {
+            companies.forEach(comp => {
+                const cLat = parseFloat(comp.lat);
+                const cLon = parseFloat(comp.lon || comp.lng);
+                if (!isNaN(cLat) && !isNaN(cLon) && comp.score > 0) {
+                    const cTier = comp.subscription_tier || 1;
+                    let iconHtml, iconSize, iconAnchor;
+                    if (cTier >= 3) {
+                        iconHtml = `<div style="width:32px;height:32px;background:#e11d48;border:2px solid white;border-radius:50%;box-shadow:0 0 10px rgba(225,29,72,0.8);display:flex;align-items:center;justify-content:center;font-size:14px;">⭐</div>`;
+                        iconSize = [32, 32]; iconAnchor = [16, 16];
+                    } else if (cTier === 2) {
+                        iconHtml = `<div style="width:26px;height:26px;background:#0056b3;border:2px solid white;border-radius:50%;box-shadow:0 2px 4px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;color:white;font-size:11px;">🏢</div>`;
+                        iconSize = [26, 26]; iconAnchor = [13, 13];
+                    } else {
+                        iconHtml = `<div style="width:14px;height:14px;background:#94a3b8;border:2px solid white;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>`;
+                        iconSize = [14, 14]; iconAnchor = [7, 7];
+                    }
+                    const compIcon = L.divIcon({ className: '', html: iconHtml, iconSize, iconAnchor });
+                    let popupHtml = `<div style="min-width:180px;">
+                        <div style="font-size:0.75rem;font-weight:700;color:#64748b;margin-bottom:3px;">Yritys ${cTier >= 2 ? '⭐' : ''}</div>
+                        <h4 style="margin:0 0 5px 0;color:#1e293b;">${comp.nimi || comp.name || ''}</h4>
+                        <a href="yrityskortti.html?id=${comp.id}" style="display:inline-block;background:#0056b3;color:white;padding:4px 10px;border-radius:15px;text-decoration:none;font-size:0.78rem;font-weight:700;">Katso yrityskortti →</a>
+                    </div>`;
+                    const marker = L.marker([cLat, cLon], { icon: compIcon }).bindPopup(popupHtml);
+                    window.mapCompaniesGroup.addLayer(marker);
+                    companiesCount++;
+                }
+            });
+        }
+
         window.mapPlacesGroup.addTo(map);
+        if (isAreaPage && companiesCount > 0) {
+            window.mapCompaniesGroup.addTo(map);
+        }
 
         // Päivitetään laskurit
         const placesCountEl = document.getElementById('map-count-places');
         const companiesCountEl = document.getElementById('map-count-companies');
         const allCountEl = document.getElementById('map-count-all');
         if (placesCountEl) placesCountEl.textContent = placesCount;
-        if (companiesCountEl) companiesCountEl.textContent = 0;
-        if (allCountEl) allCountEl.textContent = placesCount;
+        if (companiesCountEl) companiesCountEl.textContent = companiesCount;
+        if (allCountEl) allCountEl.textContent = placesCount + companiesCount;
 
         const bCompanies = document.getElementById('filter-btn-companies');
-        if (bCompanies) bCompanies.style.display = 'none';
+        if (bCompanies) {
+            bCompanies.style.display = (isAreaPage && companiesCount > 0) ? 'inline-flex' : 'none';
+        }
 
         // Sovitetaan näkymä kartalla oleviin kohteisiin
         const allBounds = [];
         window.mapPlacesGroup.eachLayer(l => { if (l.getLatLng) allBounds.push(l.getLatLng()); });
+        if (isAreaPage && companiesCount > 0) {
+            window.mapCompaniesGroup.eachLayer(l => { if (l.getLatLng) allBounds.push(l.getLatLng()); });
+        }
 
         if (allBounds.length > 1) {
             map.fitBounds(L.latLngBounds(allBounds), { padding: [30, 30], maxZoom: 15 });
@@ -2147,12 +2199,21 @@ function initPlaceMap(lat, lon, name, subPlaces = [], companies = []) {
             if (!window.placeMap) return;
             const bAll = document.getElementById('filter-btn-all');
             const bPlaces = document.getElementById('filter-btn-places');
-            [bAll, bPlaces].forEach(b => b && b.classList.remove('active'));
+            const bCompanies = document.getElementById('filter-btn-companies');
+            [bAll, bPlaces, bCompanies].forEach(b => b && b.classList.remove('active'));
 
             if (filterMode === 'places') {
                 if (bPlaces) bPlaces.classList.add('active');
+                if (!map.hasLayer(window.mapPlacesGroup)) map.addLayer(window.mapPlacesGroup);
+                if (map.hasLayer(window.mapCompaniesGroup)) map.removeLayer(window.mapCompaniesGroup);
+            } else if (filterMode === 'companies') {
+                if (bCompanies) bCompanies.classList.add('active');
+                if (map.hasLayer(window.mapPlacesGroup)) map.removeLayer(window.mapPlacesGroup);
+                if (!map.hasLayer(window.mapCompaniesGroup)) map.addLayer(window.mapCompaniesGroup);
             } else {
                 if (bAll) bAll.classList.add('active');
+                if (!map.hasLayer(window.mapPlacesGroup)) map.addLayer(window.mapPlacesGroup);
+                if (!map.hasLayer(window.mapCompaniesGroup)) map.addLayer(window.mapCompaniesGroup);
             }
         };
 
