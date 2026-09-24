@@ -252,6 +252,112 @@ function scoreCompany(c, opt, context, userLocation, taxonomyData) {
     );
 }
 
+/**
+ * Calculates spatial match score (0-100) and relation info between a company and a place search context.
+ * 
+ * Returns:
+ * {
+ *   score: number (0-100),
+ *   relationType: string ('DIRECT_LOCATION' | 'SUBTREE_LOCATION' | 'PCR_RELATION' | 'ANCESTOR_LOCATION' | 'TEXT_MATCH' | 'NONE'),
+ *   matchedPlaceName: string | null,
+ *   contextLabel: string | null
+ * }
+ */
+function scoreCompanyPlaceContext(c, placeSearchContext) {
+    if (!placeSearchContext || !placeSearchContext.selectedPlace) {
+        return { score: 50, relationType: 'NONE', matchedPlaceName: null, contextLabel: null };
+    }
+
+    const { selectedPlace, descendantPlaceIds = [], ancestorPlaceIds = [], relatedCompanyRelations = {} } = placeSearchContext;
+    const companyId = c.company_id || c.id || c.business_id || c.nRO;
+
+    // Check 1: Explicit place_company_relations (PCR) for this company
+    const pcrList = relatedCompanyRelations[companyId] || relatedCompanyRelations[String(companyId)] || [];
+    if (pcrList.length > 0) {
+        const directPcr = pcrList.find(r => r.place_id === selectedPlace.id);
+        if (directPcr) {
+            return {
+                score: 100,
+                relationType: 'PCR_RELATION',
+                matchedPlaceName: selectedPlace.name || selectedPlace.canonical_name,
+                contextLabel: directPcr.context || 'Liittyy kohteeseen'
+            };
+        }
+        const descendantPcr = pcrList.find(r => descendantPlaceIds.includes(r.place_id));
+        if (descendantPcr) {
+            return {
+                score: 90,
+                relationType: 'PCR_RELATION',
+                matchedPlaceName: selectedPlace.name,
+                contextLabel: descendantPcr.context || 'Liittyy alikohteeseen'
+            };
+        }
+        const ancestorPcr = pcrList.find(r => ancestorPlaceIds.includes(r.place_id));
+        if (ancestorPcr) {
+            return {
+                score: 80,
+                relationType: 'PCR_RELATION',
+                matchedPlaceName: selectedPlace.name,
+                contextLabel: ancestorPcr.context || 'Palvelee aluetta'
+            };
+        }
+    }
+
+    // Check 2: Direct physical place linkage in company data
+    const companyPlaceId = c.place_id || (c.profiling && c.profiling.place_id);
+    if (companyPlaceId) {
+        if (companyPlaceId === selectedPlace.id || companyPlaceId === selectedPlace.place_id) {
+            return {
+                score: 100,
+                relationType: 'DIRECT_LOCATION',
+                matchedPlaceName: selectedPlace.name,
+                contextLabel: 'Sijaitsee kohteessa'
+            };
+        }
+        if (descendantPlaceIds.includes(companyPlaceId)) {
+            return {
+                score: 95,
+                relationType: 'SUBTREE_LOCATION',
+                matchedPlaceName: selectedPlace.name,
+                contextLabel: 'Sijaitsee alikohteessa'
+            };
+        }
+        if (ancestorPlaceIds.includes(companyPlaceId)) {
+            return {
+                score: 75,
+                relationType: 'ANCESTOR_LOCATION',
+                matchedPlaceName: selectedPlace.name,
+                contextLabel: 'Sijaitsee alueella'
+            };
+        }
+    }
+
+    // Check 3: Text fallback matching
+    const targetName = (selectedPlace.name || selectedPlace.canonical_name || '').toLowerCase();
+    const companyCity = (c.city || c.municipality || (c.profiling?.core?.municipality) || '').toLowerCase();
+    const companyDesc = (c.description || (c.profiling?.core?.description) || (c.nimi || '')).toLowerCase();
+
+    if (targetName && companyCity && (companyCity.includes(targetName) || targetName.includes(companyCity))) {
+        return {
+            score: 70,
+            relationType: 'TEXT_MATCH',
+            matchedPlaceName: selectedPlace.name,
+            contextLabel: 'Toimii kunnassa'
+        };
+    }
+
+    if (targetName && companyDesc.includes(targetName)) {
+        return {
+            score: 40,
+            relationType: 'TEXT_MATCH',
+            matchedPlaceName: selectedPlace.name,
+            contextLabel: 'Mainittu kuvauksessa'
+        };
+    }
+
+    return { score: 10, relationType: 'NONE', matchedPlaceName: null, contextLabel: null };
+}
+
 function normalizeText(txt) {
     if (!txt) return "";
     return String(txt).toLowerCase()
@@ -505,7 +611,7 @@ function isMatch(c, opt, context, subContextsReq, noCateringSelected, taxonomyDa
  * Main processing function for search results.
  * Identical logic for both palvelu.html and React simulator.
  */
-function processSearchResults(allCompanies, selections, currentNeedId, needToProfilingMap, taxonomyData, userLocation = null, activeCollaborators = []) {
+function processSearchResults(allCompanies, selections, currentNeedId, needToProfilingMap, taxonomyData, userLocation = null, activeCollaborators = [], placeSearchContext = null) {
     const profilingKey = needToProfilingMap[currentNeedId] || currentNeedId;
     const requestedCapacity = selections.find(s => s.capacity_req)?.capacity_req || 0;
     const requestedFeatures = {
@@ -633,6 +739,17 @@ function processSearchResults(allCompanies, selections, currentNeedId, needToPro
                 } else {
                     if (!isNaN(distA)) return -1;
                     if (!isNaN(distB)) return 1;
+                }
+            }
+
+            // Place Context Spatial scoring boost
+            if (placeSearchContext && placeSearchContext.selectedPlace) {
+                const placeResA = scoreCompanyPlaceContext(a, placeSearchContext);
+                const placeResB = scoreCompanyPlaceContext(b, placeSearchContext);
+                a._placeRelationInfo = placeResA;
+                b._placeRelationInfo = placeResB;
+                if (placeResA.score !== placeResB.score) {
+                    return placeResB.score - placeResA.score;
                 }
             }
 
