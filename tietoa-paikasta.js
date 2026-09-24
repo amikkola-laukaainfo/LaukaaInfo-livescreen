@@ -202,17 +202,20 @@ document.addEventListener('DOMContentLoaded', async () => {
                 .eq('place_id', placeId)
                 .then(res => res)
                 .catch(() => ({ data: [] })),
-            // Tag-pohjainen haku: kokeillaan ensin slugilla, UUID-fallback vain jos ei virhettä mutta tyhjä tulos
+            // Tag-pohjainen haku: slug ensin, UUID-fallback
+            // Funktio hyväksyy molemmat – 400 tulee ajon aikaisesta virheestä (esim. companies-taulu puuttuu)
             aiSb.rpc('find_place_companies', { place_id: placeSlug, max_count: 20 })
                 .then(async r => {
-                    // Jos RPC-funktio ei löydy tai parametri on väärä (400) → palautetaan null hiljaisesti
-                    if (r.error) return { data: null };
-                    // Jos slug tuotti tyhjän tuloksen, ei yritetä UUID:lla (aiheuttaa 400)
-                    // – "koko-laukaa" slugilla haetaan erikseen paikan place_id-tekstikentästä
+                    if (r.error) {
+                        console.debug('[find_place_companies] slug-haku epäonnistui:', r.error?.message || r.error);
+                        return { data: null };
+                    }
                     if (!r.data || r.data.length === 0) {
-                        const placeIdText = placeData.place_id || '';
-                        if (placeIdText && placeIdText !== placeSlug && !/^[0-9a-f-]{36}$/i.test(placeIdText)) {
-                            return aiSb.rpc('find_place_companies', { place_id: placeIdText, max_count: 20 })
+                        // Kokeile UUID-fallback vain jos placeId on aito UUID
+                        const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(placeId);
+                        if (isUuid) {
+                            return aiSb.rpc('find_place_companies', { place_id: placeId, max_count: 20 })
+                                .then(r2 => r2.error ? { data: null } : r2)
                                 .catch(() => ({ data: null }));
                         }
                         return { data: null };
