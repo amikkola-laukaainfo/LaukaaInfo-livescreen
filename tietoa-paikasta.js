@@ -344,7 +344,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         } catch (e) { console.warn(e); }
 
         // 6. Päivitä DOM
-        await renderPlace(placeData, otherRelatedItems, aiProfileData, aiFaqData, allSources, allContents, scoredCompanies, parentPlace, subPlaces);
+        await renderPlace(placeData, otherRelatedItems, aiProfileData, aiFaqData, allSources, allContents, scoredCompanies, parentPlace, subPlaces, yritykset);
 
         // Ladataan kaikki rinnakkaisosiot turvallisesti siten, ettei mikään estä toisen osion toimintaa
         loadMixonetContentForPlace(placeData);
@@ -780,7 +780,7 @@ function scoreCompanies(allCompanies, place, relations, tagMatches, visibilityDa
     return results;
 }
 
-async function renderPlace(place, relatedItems, aiProfileData, aiFaqData, allSources = [], allContents = [], scoredCompanies = [], parentPlace = null, subPlaces = []) {
+async function renderPlace(place, relatedItems, aiProfileData, aiFaqData, allSources = [], allContents = [], scoredCompanies = [], parentPlace = null, subPlaces = [], allCompanies = []) {
     const spinner = document.getElementById('loading-spinner');
     if (spinner) spinner.style.display = 'none';
 
@@ -1097,7 +1097,20 @@ async function renderPlace(place, relatedItems, aiProfileData, aiFaqData, allSou
         const mapSec = document.getElementById('map-section');
         if (mapSec) mapSec.style.display = 'block';
         const isAreaPage = place.type === 'AREA' || (place.type && place.type.toUpperCase() === 'AREA') || !!window.PLACE_CONTEXT || location.pathname.includes('laukaa.html') || location.pathname.includes('lievestuore.html') || location.pathname.includes('leppavesi.html') || location.pathname.includes('vihtavuori.html') || location.pathname.includes('vehnia.html');
-        initPlaceMap(place.lat, place.lon, place.name || place.canonical_name, subPlaces, scoredCompanies, isAreaPage);
+        // Hakutilanteessa yhdistetään kaikki yritykset (allCompanies) pisteytyksen kanssa,
+        // jotta hakusanaan täsmäävät yritykset löytyvät vaikka niillä score === 0
+        const activeSearchQ = (new URLSearchParams(window.location.search).get('q') || new URLSearchParams(window.location.search).get('tag') || '').trim();
+        let companiesForMap = scoredCompanies;
+        if (activeSearchQ && Array.isArray(allCompanies) && allCompanies.length > 0) {
+            // Lisätään allCompanies-listalta ne, joita ei jo ole scoredCompanies:ssa
+            const scoredIds = new Set(scoredCompanies.map(c => String(c.id)));
+            const extraCompanies = allCompanies
+                .filter(c => !scoredIds.has(String(c.id)) && (c.lat || c.lon))
+                .map(c => ({ ...c, score: 0, tier: 99, reasons: [] }));
+            companiesForMap = [...scoredCompanies, ...extraCompanies];
+            console.debug('[map] Hakusana "' + activeSearchQ + '" → scoredCompanies:', scoredCompanies.length, '+ extra:', extraCompanies.length, '= yhteensä:', companiesForMap.length);
+        }
+        initPlaceMap(place.lat, place.lon, place.name || place.canonical_name, subPlaces, companiesForMap, isAreaPage);
         
         const routeBtn = document.getElementById('btn-route');
         if (routeBtn) {
