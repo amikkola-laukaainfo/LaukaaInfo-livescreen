@@ -1680,6 +1680,36 @@ const TYPE_LABELS = {
     'offer': 'Tarjous',
     'product': 'Tuote'
 };
+function isCompanySearchMatch(comp, searchQuery) {
+    if (!searchQuery || typeof searchQuery !== 'string') return false;
+    const q = searchQuery.toLowerCase().trim();
+    if (!q) return false;
+
+    // Suomen kielen taivutusleikkuri (stemming) esim. valokuvaaja -> valokuva, valokuvaus -> valokuva
+    let qStem = q;
+    if (q.length > 4) {
+        if (q.endsWith('aja') || q.endsWith('äjä')) qStem = q.slice(0, -3);
+        else if (q.endsWith('us') || q.endsWith('ys')) qStem = q.slice(0, -2);
+        else if (q.endsWith('inen')) qStem = q.slice(0, -4);
+        else if (q.endsWith('sta') || q.endsWith('stä')) qStem = q.slice(0, -3);
+        else if (q.endsWith('lla') || q.endsWith('llä')) qStem = q.slice(0, -3);
+        else if (q.endsWith('issa') || q.endsWith('issä')) qStem = q.slice(0, -4);
+    }
+
+    const fields = [
+        comp.nimi, comp.name,
+        comp.mainoslause, comp.esittely, comp.description,
+        comp.tags, comp.kategoria, comp.kunta, comp.municipality,
+        comp.palvelutapa, comp.service_note
+    ];
+    if (comp._placeRelationInfo && comp._placeRelationInfo.matchedPlaceName) {
+        fields.push(comp._placeRelationInfo.matchedPlaceName);
+    }
+
+    const haystack = fields.filter(Boolean).join(' ').toLowerCase();
+
+    return haystack.includes(q) || (qStem.length >= 4 && haystack.includes(qStem));
+}
 
 function renderCompanies(scoredCompanies, allSources = [], allContents = [], currentPlace = null) {
     const listTier12 = document.getElementById('companies-list');
@@ -1688,31 +1718,37 @@ function renderCompanies(scoredCompanies, allSources = [], allContents = [], cur
     const containerTier4 = document.getElementById('premium-partners-container');
     const listTier4 = document.getElementById('premium-partners-list');
     
-    const tier1and2 = scoredCompanies.filter(c => c.tier <= 2).sort((a,b) => {
-        // Ensisijainen lajittelu: Osuman tarkkuus (tier 1 eli suora relaatio ennen tier 2)
-        if (a.tier !== b.tier) return a.tier - b.tier;
+    const activeSearchQ = (new URLSearchParams(window.location.search).get('q') || new URLSearchParams(window.location.search).get('tag') || '').trim();
+    
+    let tier1and2;
+    if (activeSearchQ) {
+        tier1and2 = scoredCompanies.filter(c => isCompanySearchMatch(c, activeSearchQ));
+        const statCompaniesEl = document.getElementById('stat-companies');
+        if (statCompaniesEl) statCompaniesEl.textContent = tier1and2.length;
+    } else {
+        tier1and2 = scoredCompanies.filter(c => c.tier <= 2).sort((a,b) => {
+            if (a.tier !== b.tier) return a.tier - b.tier;
 
-        // Toissijainen lajittelu: Onko kumppani tai maksava profiili (subscription_tier 2)
-        const aIsPartner = a.reasons && a.reasons.some(r => r.type === 'VISIBILITY');
-        const bIsPartner = b.reasons && b.reasons.some(r => r.type === 'VISIBILITY');
-        if (aIsPartner && !bIsPartner) return -1;
-        if (!aIsPartner && bIsPartner) return 1;
+            const aIsPartner = a.reasons && a.reasons.some(r => r.type === 'VISIBILITY');
+            const bIsPartner = b.reasons && b.reasons.some(r => r.type === 'VISIBILITY');
+            if (aIsPartner && !bIsPartner) return -1;
+            if (!aIsPartner && bIsPartner) return 1;
 
-        const aTier = a.subscription_tier || 1;
-        const bTier = b.subscription_tier || 1;
-        if (aTier !== bTier) return bTier - aTier;
+            const aTier = a.subscription_tier || 1;
+            const bTier = b.subscription_tier || 1;
+            if (aTier !== bTier) return bTier - aTier;
 
-        // Kolmas: Onko lisäsisältöä
-        const aHasExtra = allSources.some(s => String(s.entity_id) === String(a.id)) || 
-                          allContents.some(c => String(c.entity_id) === String(a.id));
-        const bHasExtra = allSources.some(s => String(s.entity_id) === String(b.id)) || 
-                          allContents.some(c => String(c.entity_id) === String(b.id));
-                          
-        if (aHasExtra && !bHasExtra) return -1;
-        if (!aHasExtra && bHasExtra) return 1;
-        
-        return b.score - a.score;
-    });
+            const aHasExtra = allSources.some(s => String(s.entity_id) === String(a.id)) || 
+                              allContents.some(c => String(c.entity_id) === String(a.id));
+            const bHasExtra = allSources.some(s => String(s.entity_id) === String(b.id)) || 
+                              allContents.some(c => String(c.entity_id) === String(b.id));
+                              
+            if (aHasExtra && !bHasExtra) return -1;
+            if (!aHasExtra && bHasExtra) return 1;
+            
+            return b.score - a.score;
+        });
+    }
     const tier3 = scoredCompanies.filter(c => c.tier === 3).sort((a,b) => b.tagScore - a.tagScore).slice(0, 6); // Näytetään max 6
     const tier4 = scoredCompanies.filter(c => c.tier === 4).sort((a,b) => b.score - a.score);
     
@@ -2195,18 +2231,8 @@ function initPlaceMap(lat, lon, name, subPlaces = [], companies = [], isAreaPage
                 const compCat = (comp.kategoria || '').toLowerCase();
                 const compMunicipality = (comp.kunta || comp.municipality || '').toLowerCase();
 
-                const isQueryMatch = searchNormalized && (
-                    compName.includes(searchNormalized) ||
-                    compTags.includes(searchNormalized) ||
-                    compCat.includes(searchNormalized) ||
-                    compMunicipality.includes(searchNormalized) ||
-                    compDesc.includes(searchNormalized) ||
-                    (comp._placeRelationInfo && comp._placeRelationInfo.matchedPlaceName &&
-                        comp._placeRelationInfo.matchedPlaceName.toLowerCase().includes(searchNormalized))
-                );
-
-                // Kun hakusana on aktiivinen mutta ei osumaa → piilotetaan tai näytetään himmennettyinä pieninä pisteinä
-                const isGreyedOut = searchNormalized && !isQueryMatch;
+                const isQueryMatch = isCompanySearchMatch(comp, searchQuery);
+                if (searchNormalized && !isQueryMatch) return;
 
                 let iconHtml, iconSize, iconAnchor;
                 if (isQueryMatch) {
