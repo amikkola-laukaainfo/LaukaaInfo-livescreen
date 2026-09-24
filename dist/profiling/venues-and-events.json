@@ -1197,6 +1197,7 @@
                 "mode": "TOIMIPISTE",
                 "radius_km": 0,
                 "regions": [
+                    "Laukaa",
                     "Vihtavuori"
                 ],
                 "note": "Sijaitsee Laukaan Vuonteella osoitteessa Antinniementie 1, 41330 Vihtavuori. Kahvila, lähituotepuoti sekä juhla- ja kokoustilat samalla toimipisteellä."
@@ -1583,7 +1584,7 @@
             }
         },
         "meta": {
-            "last_updated": "2026-09-10T11:38:42.321Z",
+            "last_updated": "2026-05-27T19:26:50.704Z",
             "verified_by": "AI-analysis-v1",
             "status": "draft"
         }
@@ -52184,7 +52185,8 @@
             "home_service": false,
             "weekend_service": true,
             "not_suitable_for": [
-                "saunatilat"
+                "saunatilat",
+                "omilla tarjoiluilla"
             ],
             "sub_contexts": [],
             "node_links": [
@@ -52415,7 +52417,7 @@
                 "emergency_visits": false,
                 "renovation_support": false,
                 "dock_maintenance": false,
-                "sauna_services": true,
+                "sauna_services": false,
                 "guest_preparation_service": false,
                 "refinement_tags": [
                     "rantasauna",
@@ -52521,9 +52523,9 @@
             }
         },
         "meta": {
-            "last_updated": "2026-06-26T12:47:16.542Z",
+            "last_updated": "2026-09-24T11:39:56.589Z",
             "verified_by": "web-enriched-ai",
-            "status": "enriched"
+            "status": "verified"
         },
         "ai_and_seo": {
             "ai_summary": "Vuonteen Helmi on Laukaan Vuonteella sijaitseva historiallinen ja esteetön juhla- sekä kokouspaikka, joka tarjoaa täyden palvelun pitopalvelun häihin, juhliin, yritystapahtumiin ja muistotilaisuuksiin noin 80 hengelle.",

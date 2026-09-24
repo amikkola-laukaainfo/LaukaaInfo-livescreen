@@ -4517,6 +4517,11 @@
         },
         {
             "from": "company-270",
+            "to": "region-laukaa",
+            "relation": "located_in"
+        },
+        {
+            "from": "company-270",
             "to": "region-vihtavuori",
             "relation": "located_in"
         },

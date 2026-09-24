@@ -163,8 +163,10 @@ class PlaceContext {
                 }
             }
 
-            // 4. Combined place IDs
+            // 4. Combined place IDs and Map
             const allPlaceIds = Array.from(new Set([targetUuid, ...descendantPlaceIds, ...ancestorPlaceIds]));
+            const placesMap = {};
+            allPlaces.forEach(p => { placesMap[p.id] = p; });
 
             // 5. Fetch place_company_relations for all relevant place IDs
             let relatedCompanyRelations = {};
@@ -191,7 +193,8 @@ class PlaceContext {
                 descendantPlaceIds,
                 ancestorPlaceIds,
                 relatedCompanyRelations,
-                allPlaceIds
+                allPlaceIds,
+                placesMap
             };
         } catch (err) {
             console.error('getPlaceSearchContext failed:', err);

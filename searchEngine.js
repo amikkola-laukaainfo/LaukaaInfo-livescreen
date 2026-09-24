@@ -268,7 +268,7 @@ function scoreCompanyPlaceContext(c, placeSearchContext) {
         return { score: 50, relationType: 'NONE', matchedPlaceName: null, contextLabel: null };
     }
 
-    const { selectedPlace, descendantPlaceIds = [], ancestorPlaceIds = [], relatedCompanyRelations = {} } = placeSearchContext;
+    const { selectedPlace, descendantPlaceIds = [], ancestorPlaceIds = [], relatedCompanyRelations = {}, placesMap = {} } = placeSearchContext;
     const companyId = c.company_id || c.id || c.business_id || c.nRO;
 
     // Check 1: Explicit place_company_relations (PCR) for this company
@@ -280,24 +280,26 @@ function scoreCompanyPlaceContext(c, placeSearchContext) {
                 score: 100,
                 relationType: 'PCR_RELATION',
                 matchedPlaceName: selectedPlace.name || selectedPlace.canonical_name,
-                contextLabel: directPcr.context || 'Liittyy kohteeseen'
+                contextLabel: directPcr.context || 'Toimipiste'
             };
         }
         const descendantPcr = pcrList.find(r => descendantPlaceIds.includes(r.place_id));
         if (descendantPcr) {
+            const specificChildName = placesMap[descendantPcr.place_id]?.name || selectedPlace.name;
             return {
                 score: 90,
                 relationType: 'PCR_RELATION',
-                matchedPlaceName: selectedPlace.name,
+                matchedPlaceName: specificChildName,
                 contextLabel: descendantPcr.context || 'Liittyy alikohteeseen'
             };
         }
         const ancestorPcr = pcrList.find(r => ancestorPlaceIds.includes(r.place_id));
         if (ancestorPcr) {
+            const ancestorName = placesMap[ancestorPcr.place_id]?.name || selectedPlace.name;
             return {
                 score: 80,
                 relationType: 'PCR_RELATION',
-                matchedPlaceName: selectedPlace.name,
+                matchedPlaceName: ancestorName,
                 contextLabel: ancestorPcr.context || 'Palvelee aluetta'
             };
         }
@@ -315,19 +317,21 @@ function scoreCompanyPlaceContext(c, placeSearchContext) {
             };
         }
         if (descendantPlaceIds.includes(companyPlaceId)) {
+            const specificChildName = placesMap[companyPlaceId]?.name || selectedPlace.name;
             return {
                 score: 95,
                 relationType: 'SUBTREE_LOCATION',
-                matchedPlaceName: selectedPlace.name,
-                contextLabel: 'Sijaitsee alikohteessa'
+                matchedPlaceName: specificChildName,
+                contextLabel: 'Sijaitsee kohteessa'
             };
         }
         if (ancestorPlaceIds.includes(companyPlaceId)) {
+            const ancestorName = placesMap[companyPlaceId]?.name || selectedPlace.name;
             return {
                 score: 75,
                 relationType: 'ANCESTOR_LOCATION',
-                matchedPlaceName: selectedPlace.name,
-                contextLabel: 'Sijaitsee alueella'
+                matchedPlaceName: ancestorName,
+                contextLabel: 'Toimii alueella'
             };
         }
     }
