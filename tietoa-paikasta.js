@@ -2134,6 +2134,24 @@ function initPlaceMap(lat, lon, name, subPlaces = [], companies = [], isAreaPage
             });
         }
 
+        // Check if page was loaded with a search query parameter (e.g. ?q=Häät or ?tag=häät)
+        const activeUrlParams = new URLSearchParams(window.location.search);
+        const searchQuery = (activeUrlParams.get('q') || activeUrlParams.get('tag') || '').trim();
+        const searchNormalized = searchQuery.toLowerCase();
+        let queryMatchBounds = [];
+
+        // Render search query notification banner above map if present
+        if (searchQuery) {
+            let searchNoticeEl = document.getElementById('map-search-query-notice');
+            if (!searchNoticeEl) {
+                searchNoticeEl = document.createElement('div');
+                searchNoticeEl.id = 'map-search-query-notice';
+                searchNoticeEl.style.cssText = 'background:#f0f7ff; border:1px solid #bae6fd; border-radius:10px; padding:0.6rem 1rem; margin-bottom:1rem; font-size:0.9rem; color:#0369a1; display:flex; align-items:center; justify-content:space-between; font-weight:600;';
+                container.parentNode.insertBefore(searchNoticeEl, container);
+            }
+            searchNoticeEl.innerHTML = `<span>🎯 Hakusana kartalla: <strong>"${searchQuery}"</strong></span> <button onclick="window.location.href=window.location.pathname" style="background:#0284c7; color:white; border:none; border-radius:6px; padding:3px 8px; font-size:0.75rem; cursor:pointer;">Poista rajaus ✖</button>`;
+        }
+
         // 3. Yritykset (aluesivuilla kuten laukaa.html, lievestuore.html jne.)
         if (isAreaPage && Array.isArray(companies)) {
             companies.forEach(comp => {
@@ -2141,8 +2159,25 @@ function initPlaceMap(lat, lon, name, subPlaces = [], companies = [], isAreaPage
                 const cLon = parseFloat(comp.lon || comp.lng);
                 if (!isNaN(cLat) && !isNaN(cLon) && comp.score > 0) {
                     const cTier = comp.subscription_tier || 1;
+                    const compName = (comp.nimi || comp.name || '').toLowerCase();
+                    const compDesc = (comp.esittely || comp.description || '').toLowerCase();
+                    const compTags = (comp.tags || '').toLowerCase();
+                    const compCat = (comp.kategoria || '').toLowerCase();
+
+                    const isQueryMatch = searchNormalized && (
+                        compName.includes(searchNormalized) ||
+                        compDesc.includes(searchNormalized) ||
+                        compTags.includes(searchNormalized) ||
+                        compCat.includes(searchNormalized) ||
+                        (comp._placeRelationInfo && comp._placeRelationInfo.matchedPlaceName && comp._placeRelationInfo.matchedPlaceName.toLowerCase().includes(searchNormalized))
+                    );
+
                     let iconHtml, iconSize, iconAnchor;
-                    if (cTier >= 3) {
+                    if (isQueryMatch) {
+                        iconHtml = `<div style="width:36px;height:36px;background:linear-gradient(135deg,#8b5cf6,#6d28d9);border:2px solid white;border-radius:50%;box-shadow:0 0 12px rgba(139,92,246,0.9);display:flex;align-items:center;justify-content:center;color:white;font-size:16px;">🎯</div>`;
+                        iconSize = [36, 36]; iconAnchor = [18, 18];
+                        queryMatchBounds.push([cLat, cLon]);
+                    } else if (cTier >= 3) {
                         iconHtml = `<div style="width:32px;height:32px;background:#e11d48;border:2px solid white;border-radius:50%;box-shadow:0 0 10px rgba(225,29,72,0.8);display:flex;align-items:center;justify-content:center;font-size:14px;">⭐</div>`;
                         iconSize = [32, 32]; iconAnchor = [16, 16];
                     } else if (cTier === 2) {
@@ -2154,7 +2189,7 @@ function initPlaceMap(lat, lon, name, subPlaces = [], companies = [], isAreaPage
                     }
                     const compIcon = L.divIcon({ className: '', html: iconHtml, iconSize, iconAnchor });
                     let popupHtml = `<div style="min-width:180px;">
-                        <div style="font-size:0.75rem;font-weight:700;color:#64748b;margin-bottom:3px;">Yritys ${cTier >= 2 ? '⭐' : ''}</div>
+                        <div style="font-size:0.75rem;font-weight:700;color:#64748b;margin-bottom:3px;">${isQueryMatch ? '🎯 Hakutulos' : 'Yritys ' + (cTier >= 2 ? '⭐' : '')}</div>
                         <h4 style="margin:0 0 5px 0;color:#1e293b;">${comp.nimi || comp.name || ''}</h4>
                         <a href="yrityskortti.html?id=${comp.id}" style="display:inline-block;background:#0056b3;color:white;padding:4px 10px;border-radius:15px;text-decoration:none;font-size:0.78rem;font-weight:700;">Katso yrityskortti →</a>
                     </div>`;
@@ -2183,15 +2218,19 @@ function initPlaceMap(lat, lon, name, subPlaces = [], companies = [], isAreaPage
             bCompanies.style.display = (isAreaPage && companiesCount > 0) ? 'inline-flex' : 'none';
         }
 
-        // Sovitetaan näkymä kartalla oleviin kohteisiin
-        const allBounds = [];
-        window.mapPlacesGroup.eachLayer(l => { if (l.getLatLng) allBounds.push(l.getLatLng()); });
-        if (isAreaPage && companiesCount > 0) {
-            window.mapCompaniesGroup.eachLayer(l => { if (l.getLatLng) allBounds.push(l.getLatLng()); });
-        }
+        // Sovitetaan näkymä kartalla oleviin kohteisiin (jos hakusana on annettu, sovita ensisijaisesti hakutuloksiin)
+        if (queryMatchBounds.length > 0) {
+            map.fitBounds(L.latLngBounds(queryMatchBounds), { padding: [40, 40], maxZoom: 15 });
+        } else {
+            const allBounds = [];
+            window.mapPlacesGroup.eachLayer(l => { if (l.getLatLng) allBounds.push(l.getLatLng()); });
+            if (isAreaPage && companiesCount > 0) {
+                window.mapCompaniesGroup.eachLayer(l => { if (l.getLatLng) allBounds.push(l.getLatLng()); });
+            }
 
-        if (allBounds.length > 1) {
-            map.fitBounds(L.latLngBounds(allBounds), { padding: [30, 30], maxZoom: 15 });
+            if (allBounds.length > 1) {
+                map.fitBounds(L.latLngBounds(allBounds), { padding: [30, 30], maxZoom: 15 });
+            }
         }
 
         // Globaali suodatusfunktio
