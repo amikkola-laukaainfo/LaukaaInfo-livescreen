@@ -202,12 +202,20 @@ document.addEventListener('DOMContentLoaded', async () => {
                 .eq('place_id', placeId)
                 .then(res => res)
                 .catch(() => ({ data: [] })),
-            // Tag-pohjainen haku: kokeillaan ensin slugilla, sitten placeId:llä
+            // Tag-pohjainen haku: kokeillaan ensin slugilla, UUID-fallback vain jos ei virhettä mutta tyhjä tulos
             aiSb.rpc('find_place_companies', { place_id: placeSlug, max_count: 20 })
                 .then(async r => {
+                    // Jos RPC-funktio ei löydy tai parametri on väärä (400) → palautetaan null hiljaisesti
                     if (r.error) return { data: null };
+                    // Jos slug tuotti tyhjän tuloksen, ei yritetä UUID:lla (aiheuttaa 400)
+                    // – "koko-laukaa" slugilla haetaan erikseen paikan place_id-tekstikentästä
                     if (!r.data || r.data.length === 0) {
-                        return aiSb.rpc('find_place_companies', { place_id: placeId, max_count: 20 }).catch(() => ({ data: null }));
+                        const placeIdText = placeData.place_id || '';
+                        if (placeIdText && placeIdText !== placeSlug && !/^[0-9a-f-]{36}$/i.test(placeIdText)) {
+                            return aiSb.rpc('find_place_companies', { place_id: placeIdText, max_count: 20 })
+                                .catch(() => ({ data: null }));
+                        }
+                        return { data: null };
                     }
                     return r;
                 })
