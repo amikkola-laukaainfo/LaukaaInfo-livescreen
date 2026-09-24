@@ -2157,51 +2157,70 @@ function initPlaceMap(lat, lon, name, subPlaces = [], companies = [], isAreaPage
             companies.forEach(comp => {
                 const cLat = parseFloat(comp.lat);
                 const cLon = parseFloat(comp.lon || comp.lng);
-                if (!isNaN(cLat) && !isNaN(cLon) && comp.score > 0) {
-                    const cTier = comp.subscription_tier || 1;
-                    const compName = (comp.nimi || comp.name || '').toLowerCase();
-                    const compDesc = (comp.esittely || comp.description || '').toLowerCase();
-                    const compTags = (comp.tags || '').toLowerCase();
-                    const compCat = (comp.kategoria || '').toLowerCase();
+                if (isNaN(cLat) || isNaN(cLon)) return;
 
-                    const isQueryMatch = searchNormalized && (
-                        compName.includes(searchNormalized) ||
-                        compDesc.includes(searchNormalized) ||
-                        compTags.includes(searchNormalized) ||
-                        compCat.includes(searchNormalized) ||
-                        (comp._placeRelationInfo && comp._placeRelationInfo.matchedPlaceName && comp._placeRelationInfo.matchedPlaceName.toLowerCase().includes(searchNormalized))
-                    );
+                // Jos hakusana on aktiivinen: näytetään kaikki koordinaatit omaavat yritykset kartalla.
+                // Jos ei hakusanaa: käytetään score-suodatusta kuten ennenkin.
+                const scoreOk = comp.score > 0;
+                if (!searchNormalized && !scoreOk) return;
 
-                    let iconHtml, iconSize, iconAnchor;
-                    if (isQueryMatch) {
-                        iconHtml = `<div style="width:36px;height:36px;background:linear-gradient(135deg,#8b5cf6,#6d28d9);border:2px solid white;border-radius:50%;box-shadow:0 0 12px rgba(139,92,246,0.9);display:flex;align-items:center;justify-content:center;color:white;font-size:16px;">🎯</div>`;
-                        iconSize = [36, 36]; iconAnchor = [18, 18];
-                        queryMatchBounds.push([cLat, cLon]);
-                    } else if (cTier >= 3) {
-                        iconHtml = `<div style="width:32px;height:32px;background:#e11d48;border:2px solid white;border-radius:50%;box-shadow:0 0 10px rgba(225,29,72,0.8);display:flex;align-items:center;justify-content:center;font-size:14px;">⭐</div>`;
-                        iconSize = [32, 32]; iconAnchor = [16, 16];
-                    } else if (cTier === 2) {
-                        iconHtml = `<div style="width:26px;height:26px;background:#0056b3;border:2px solid white;border-radius:50%;box-shadow:0 2px 4px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;color:white;font-size:11px;">🏢</div>`;
-                        iconSize = [26, 26]; iconAnchor = [13, 13];
-                    } else {
-                        iconHtml = `<div style="width:14px;height:14px;background:#94a3b8;border:2px solid white;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>`;
-                        iconSize = [14, 14]; iconAnchor = [7, 7];
-                    }
-                    const compIcon = L.divIcon({ className: '', html: iconHtml, iconSize, iconAnchor });
-                    let popupHtml = `<div style="min-width:180px;">
-                        <div style="font-size:0.75rem;font-weight:700;color:#64748b;margin-bottom:3px;">${isQueryMatch ? '🎯 Hakutulos' : 'Yritys ' + (cTier >= 2 ? '⭐' : '')}</div>
-                        <h4 style="margin:0 0 5px 0;color:#1e293b;">${comp.nimi || comp.name || ''}</h4>
-                        <a href="yrityskortti.html?id=${comp.id}" style="display:inline-block;background:#0056b3;color:white;padding:4px 10px;border-radius:15px;text-decoration:none;font-size:0.78rem;font-weight:700;">Katso yrityskortti →</a>
-                    </div>`;
-                    const marker = L.marker([cLat, cLon], { icon: compIcon }).bindPopup(popupHtml);
-                    window.mapCompaniesGroup.addLayer(marker);
-                    companiesCount++;
+                const cTier = comp.subscription_tier || 1;
+                const compName = (comp.nimi || comp.name || '').toLowerCase();
+                const compDesc = (comp.esittely || comp.description || '').toLowerCase();
+                const compTags = (comp.tags || '').toLowerCase();
+                const compCat = (comp.kategoria || '').toLowerCase();
+                const compMunicipality = (comp.kunta || comp.municipality || '').toLowerCase();
+
+                const isQueryMatch = searchNormalized && (
+                    compName.includes(searchNormalized) ||
+                    compTags.includes(searchNormalized) ||
+                    compCat.includes(searchNormalized) ||
+                    compMunicipality.includes(searchNormalized) ||
+                    compDesc.includes(searchNormalized) ||
+                    (comp._placeRelationInfo && comp._placeRelationInfo.matchedPlaceName &&
+                        comp._placeRelationInfo.matchedPlaceName.toLowerCase().includes(searchNormalized))
+                );
+
+                // Kun hakusana on aktiivinen mutta ei osumaa → piilotetaan tai näytetään himmennettyinä pieninä pisteinä
+                const isGreyedOut = searchNormalized && !isQueryMatch;
+
+                let iconHtml, iconSize, iconAnchor;
+                if (isQueryMatch) {
+                    iconHtml = `<div style="width:38px;height:38px;background:linear-gradient(135deg,#8b5cf6,#6d28d9);border:2px solid white;border-radius:50%;box-shadow:0 0 14px rgba(139,92,246,0.9);display:flex;align-items:center;justify-content:center;color:white;font-size:17px;">🎯</div>`;
+                    iconSize = [38, 38]; iconAnchor = [19, 19];
+                    queryMatchBounds.push([cLat, cLon]);
+                } else if (isGreyedOut) {
+                    // Himmennetty piste hakusanan ulkopuolisille yrityksille
+                    iconHtml = `<div style="width:10px;height:10px;background:#cbd5e1;border:1.5px solid #94a3b8;border-radius:50%;opacity:0.4;"></div>`;
+                    iconSize = [10, 10]; iconAnchor = [5, 5];
+                } else if (cTier >= 3) {
+                    iconHtml = `<div style="width:32px;height:32px;background:#e11d48;border:2px solid white;border-radius:50%;box-shadow:0 0 10px rgba(225,29,72,0.8);display:flex;align-items:center;justify-content:center;font-size:14px;">⭐</div>`;
+                    iconSize = [32, 32]; iconAnchor = [16, 16];
+                } else if (cTier === 2) {
+                    iconHtml = `<div style="width:26px;height:26px;background:#0056b3;border:2px solid white;border-radius:50%;box-shadow:0 2px 4px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;color:white;font-size:11px;">🏢</div>`;
+                    iconSize = [26, 26]; iconAnchor = [13, 13];
+                } else {
+                    iconHtml = `<div style="width:14px;height:14px;background:#94a3b8;border:2px solid white;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>`;
+                    iconSize = [14, 14]; iconAnchor = [7, 7];
                 }
+
+                const compIcon = L.divIcon({ className: '', html: iconHtml, iconSize, iconAnchor });
+                const popupLabel = isQueryMatch ? '🎯 Hakutulos' : `Yritys ${cTier >= 2 ? '⭐' : ''}`;
+                let popupHtml = `<div style="min-width:180px;">
+                    <div style="font-size:0.75rem;font-weight:700;color:#64748b;margin-bottom:3px;">${popupLabel}</div>
+                    <h4 style="margin:0 0 5px 0;color:#1e293b;">${comp.nimi || comp.name || ''}</h4>
+                    ${comp.mainoslause ? `<p style="margin:0 0 6px;font-size:0.82rem;color:#475569;">${comp.mainoslause}</p>` : ''}
+                    <a href="yrityskortti.html?id=${comp.id}" style="display:inline-block;background:#0056b3;color:white;padding:4px 10px;border-radius:15px;text-decoration:none;font-size:0.78rem;font-weight:700;">Katso yrityskortti →</a>
+                </div>`;
+                const marker = L.marker([cLat, cLon], { icon: compIcon }).bindPopup(popupHtml);
+                window.mapCompaniesGroup.addLayer(marker);
+                companiesCount++;
             });
         }
 
         window.mapPlacesGroup.addTo(map);
-        if (isAreaPage && companiesCount > 0) {
+        // Näytetään yrityskerros joko aluesivuilla tai kun hakusana on aktiivinen
+        if ((isAreaPage || searchNormalized) && companiesCount > 0) {
             window.mapCompaniesGroup.addTo(map);
         }
 
