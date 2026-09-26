@@ -188,6 +188,48 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
         }
 
+        // Fetch active ticket products for route from Supabase
+        if (d.id && supabase) {
+            supabase
+                .from('ticket_products')
+                .select('*')
+                .eq('route_id', d.id)
+                .eq('is_active', true)
+                .order('price_eur', { ascending: true })
+                .then(res => {
+                    const sec = document.getElementById('ticket-products-section');
+                    if (!sec) return;
+                    if (res.data && res.data.length > 0) {
+                        sec.style.display = 'block';
+                        sec.innerHTML = `
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem; margin-top: 1rem;">
+                                <h3 style="font-size: 0.85rem; font-weight: 800; color: #334155; margin: 0 0 0.75rem 0; text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 0.4rem;">
+                                    <span class="iconify" data-icon="material-symbols:confirmation-number-outline" style="color: #d97706; font-size: 1.1rem;"></span> Lipputuotteet
+                                </h3>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem;">
+                                    ${res.data.map(p => `
+                                        <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px; padding: 0.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                                            <div style="font-weight: 700; color: #0f172a; font-size: 0.9rem;">${p.name}</div>
+                                            <div style="font-size: 0.75rem; color: #64748b; margin-top: 0.2rem;">
+                                                ${p.max_activations} ${p.max_activations === 1 ? 'aktivointi' : 'aktivointia'} · ${p.validity_hours} h
+                                            </div>
+                                            ${p.price_eur != null ? `
+                                                <div style="font-size: 1rem; font-weight: 800; color: #059669; margin-top: 0.4rem;">
+                                                    ${p.price_eur.toFixed(2).replace('.', ',')} ${p.currency || '€'}
+                                                </div>
+                                            ` : ''}
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        sec.style.display = 'none';
+                    }
+                })
+                .catch(err => console.warn('Virhe lipputuotteiden haussa:', err));
+        }
+
         // View logic
         if (d.visibility === 'private' && !d.access_granted) {
             // Show lock screen
