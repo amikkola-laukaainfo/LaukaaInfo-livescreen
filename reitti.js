@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', async () => {
+﻿document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const routeId = urlParams.get('id');
 
@@ -174,6 +174,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('route-title').textContent = finalTitle;
         document.title = `${finalTitle} – LaukaaInfo`;
         document.getElementById('route-desc').textContent = d.description || '';
+
+        // Reitin esittelykuva (ImageKit CDN)
+        const coverWrap = document.getElementById('route-cover-image-wrap');
+        const coverImg = document.getElementById('route-cover-image');
+        if (coverWrap && coverImg) {
+            const rawUrl = d.cover_image || null;
+            if (rawUrl) {
+                // Lisää ImageKit-optimointiparametrit jos kyseessä ImageKit-URL
+                let src = rawUrl;
+                if (rawUrl.includes('ik.imagekit.io') && !rawUrl.includes('tr=')) {
+                    src = rawUrl + (rawUrl.includes('?') ? '&' : '?') + 'tr=w-800,h-440,fo-auto,q-80';
+                }
+                coverImg.src = src;
+                coverImg.alt = d.title || 'Reitin esittelykuva';
+                coverWrap.style.display = 'block';
+            } else {
+                coverWrap.style.display = 'none';
+            }
+        }
         
         if (d.distance_meters) {
             document.getElementById('route-distance').innerHTML = `<span class="iconify" data-icon="material-symbols:route"></span> ${(d.distance_meters / 1000).toFixed(1).replace('.', ',')} km`;
