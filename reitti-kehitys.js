@@ -322,7 +322,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         if (d.place_id) {
-            supabase.from('places').select('name').eq('place_id', d.place_id).single().then(res => {
+            supabase.from('places').select('name').or(`id.eq.${d.place_id},slug.eq.${d.place_id}`).single().then(res => {
                 if (res.data) {
                     document.getElementById('route-place').innerHTML =
                         `<span class="iconify" data-icon="material-symbols:location-on"></span> ${res.data.name}`;
@@ -2133,10 +2133,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 })).filter(p => p.lat != null && p.lon != null);
             } else {
                 const fallback = await supabase.from('places')
-                    .select('place_id, name, canonical_name, type, lat, lon')
+                    .select('id, name, canonical_name, type, lat, lon')
                     .or('status.eq.active,status.eq.ACTIVE,status.eq.PUBLISHED,status.eq.published,status.is.null')
                     .not('lat', 'is', null).not('lon', 'is', null).limit(350);
-                data = fallback.data ? fallback.data.map(p => ({ ...p, place_id: String(p.place_id) })) : null;
+                data = fallback.data ? fallback.data.map(p => ({ ...p, place_id: String(p.id) })) : null;
             }
             if (!data || data.length === 0) return;
             cachedLaukaaInfoPlaces = data;

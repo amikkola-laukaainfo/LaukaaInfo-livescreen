@@ -1,4 +1,4 @@
-﻿document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const routeId = urlParams.get('id');
 
@@ -200,7 +200,7 @@
 
         // Fetch place name if possible (optional enhancement, assuming place_id is available)
         if (d.place_id) {
-            supabase.from('places').select('name').eq('place_id', d.place_id).single().then(res => {
+            supabase.from('places').select('name').or(`id.eq.${d.place_id},slug.eq.${d.place_id}`).single().then(res => {
                 if (res.data) {
                     document.getElementById('route-place').innerHTML = `<span class="iconify" data-icon="material-symbols:location-on"></span> ${res.data.name}`;
                 }
@@ -225,20 +225,35 @@
                                 <h3 style="font-size: 0.85rem; font-weight: 800; color: #334155; margin: 0 0 0.75rem 0; text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 0.4rem;">
                                     <span class="iconify" data-icon="material-symbols:confirmation-number-outline" style="color: #d97706; font-size: 1.1rem;"></span> Lipputuotteet
                                 </h3>
-                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem;">
-                                    ${res.data.map(p => `
-                                        <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px; padding: 0.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                                            <div style="font-weight: 700; color: #0f172a; font-size: 0.9rem;">${p.name}</div>
-                                            <div style="font-size: 0.75rem; color: #64748b; margin-top: 0.2rem;">
-                                                ${p.max_activations} ${p.max_activations === 1 ? 'aktivointi' : 'aktivointia'} · ${p.validity_hours} h
-                                            </div>
-                                            ${p.price_eur != null ? `
-                                                <div style="font-size: 1rem; font-weight: 800; color: #059669; margin-top: 0.4rem;">
-                                                    ${p.price_eur.toFixed(2).replace('.', ',')} ${p.currency || '€'}
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem;">
+                                    ${res.data.map(p => {
+                                        const actText = p.max_activations === 1 ? '1 laite / aktivointi' : `Max ${p.max_activations} laitetta / aktivointia`;
+                                        const valText = p.validity_hours >= 24 && p.validity_hours % 24 === 0 
+                                            ? `${p.validity_hours / 24} vrk voimassa` 
+                                            : `${p.validity_hours} h voimassa`;
+                                        const curr = (p.currency === 'EUR' || !p.currency) ? '€' : p.currency;
+                                        return `
+                                            <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 0.85rem; box-shadow: 0 2px 6px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: space-between;">
+                                                <div>
+                                                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                                                        <div style="font-weight: 800; color: #0f172a; font-size: 0.95rem;">${p.name}</div>
+                                                        ${p.product_slug ? `<span style="font-size: 0.68rem; font-weight: 800; background: #f1f5f9; color: #475569; padding: 0.15rem 0.45rem; border-radius: 6px; border: 1px solid #cbd5e1;">${p.product_slug}</span>` : ''}
+                                                    </div>
+                                                    ${p.description ? `<div style="font-size: 0.78rem; color: #475569; margin-bottom: 0.4rem; line-height: 1.35;">${p.description}</div>` : ''}
+                                                    <div style="font-size: 0.72rem; color: #64748b; font-weight: 600; display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.25rem;">
+                                                        <span>🎟️ ${actText}</span>
+                                                        <span>⏱️ ${valText}</span>
+                                                    </div>
                                                 </div>
-                                            ` : ''}
-                                        </div>
-                                    `).join('')}
+                                                ${p.price_eur != null ? `
+                                                    <div style="font-size: 1rem; font-weight: 800; color: #059669; margin-top: 0.6rem; border-top: 1px dashed #e2e8f0; padding-top: 0.4rem; display: flex; justify-content: space-between; align-items: center;">
+                                                        <span style="font-size: 0.75rem; color: #64748b; font-weight: 700;">Hinta:</span>
+                                                        <span>${p.price_eur.toFixed(2).replace('.', ',')} ${curr}</span>
+                                                    </div>
+                                                ` : ''}
+                                            </div>
+                                        `;
+                                    }).join('')}
                                 </div>
                             </div>
                         `;
@@ -2530,13 +2545,13 @@
                 if (rpcResult.error) console.warn('[Lähistöllä] RPC-virhe, kokeillaan suoraa kyselyä:', rpcResult.error.message);
                 const fallback = await supabase
                     .from('places')
-                    .select('place_id, name, canonical_name, type, lat, lon')
+                    .select('id, name, canonical_name, type, lat, lon')
                     .or('status.eq.active,status.eq.ACTIVE,status.eq.PUBLISHED,status.eq.published,status.is.null')
                     .not('lat', 'is', null)
                     .not('lon', 'is', null)
                     .limit(350);
                 error = fallback.error;
-                data = fallback.data ? fallback.data.map(p => ({ ...p, place_id: String(p.place_id) })) : null;
+                data = fallback.data ? fallback.data.map(p => ({ ...p, place_id: String(p.id) })) : null;
             }
 
             if (error) { console.warn('[Lähistöllä] Kyselyvirhe:', error.message); return; }
