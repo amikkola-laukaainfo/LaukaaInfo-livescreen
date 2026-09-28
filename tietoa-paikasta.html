@@ -1480,12 +1480,21 @@
                     </div>
                 </section>
 
-                <!-- 8. Aktiiviset ilmoitukset -->
+                <!-- 8. Seinä-ilmoitukset ja aktiiviset ilmoitukset (Haitari) -->
                 <section id="encounters-section" class="content-block" style="display: none;">
-                    <h2>Aktiiviset ilmoitukset</h2>
-                    <div id="encounters-list">
-                        <!-- Filled by JS -->
-                    </div>
+                    <details id="encounters-details" class="service-accordion" open>
+                        <summary style="cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between;">
+                            <h2 style="display: flex; align-items: center; gap: 0.5rem; margin: 0; font-family: 'Manrope', sans-serif; font-size: 1.35rem; font-weight: 700; color: var(--text-main);">
+                                <span class="iconify" data-icon="material-symbols:campaign-outline" style="color: #f59e0b;"></span>
+                                Seinä-ilmoitukset ja ajankohtaiset
+                            </h2>
+                            <span class="iconify" data-icon="material-symbols:expand-more" style="font-size: 1.5rem; color: var(--text-muted); transition: transform 0.2s;"></span>
+                        </summary>
+                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem; margin-bottom: 1rem;">Paikkaan kytketyt ilmoitukset, uutiset, tarjoukset ja tapahtumat.</p>
+                        <div id="encounters-list" style="margin-top: 1rem;">
+                            <!-- Filled by JS -->
+                        </div>
+                    </details>
                 </section>
 
                 <!-- UKK -->
