@@ -463,28 +463,138 @@
         return logoUrl;
       }
 
+      // Helper for date formatting
+      function formatDate(dateInput) {
+        if (!dateInput) return 'Tänään';
+        try {
+          const d = new Date(dateInput);
+          if (isNaN(d.getTime())) return String(dateInput);
+          return d.toLocaleDateString('fi-FI', { day: 'numeric', month: 'numeric', year: 'numeric' });
+        } catch (e) {
+          return String(dateInput);
+        }
+      }
+
       // 4. Mode 3: Load Single Post Landing View (?post=abc123)
       async function loadSinglePostView(postId) {
+        // Show loading state initially
+        const contentSlot = document.getElementById('singlePostContentSlot');
+        contentSlot.innerHTML = `
+          <div class="p-8 text-center bg-slate-50 rounded-2xl space-y-3">
+            <div class="inline-block animate-spin text-2xl">🌿</div>
+            <p class="text-xs text-slate-600 font-bold">Haetaan julkaisua LaukaaInfon Supabasesta...</p>
+            <p class="text-[11px] text-slate-400 font-mono">ID: ${escapeHtml(postId)}</p>
+          </div>
+        `;
+
         let post = samplePosts.find(p => String(p.id) === String(postId));
 
         if (!post && supabaseClient) {
           try {
-            const { data } = await supabaseClient
+            const { data: rawPost, error: postErr } = await supabaseClient
               .from('posts')
               .select('*')
               .eq('id', postId)
               .maybeSingle();
-            if (data) post = data;
+
+            if (rawPost) {
+              const rawOrgId = rawPost.organization_id || rawPost.org_id || rawPost.business_id;
+              const rawOrgName = rawPost.publisher_name || rawPost.org_name;
+              let resolvedOrgId = resolveOrgId(rawOrgId, rawOrgName);
+
+              // Fetch organization name if not cached
+              if (rawOrgId && !orgNamesCache[rawOrgId]) {
+                try {
+                  const { data: oData } = await supabaseClient.from('organizations').select('id, name').eq('id', rawOrgId).maybeSingle();
+                  if (oData && oData.name) orgNamesCache[oData.id] = oData.name;
+                  const { data: cData } = await supabaseClient.from('companies').select('id, name, nimi').eq('id', rawOrgId).maybeSingle();
+                  if (cData) orgNamesCache[cData.id] = cData.name || cData.nimi || orgNamesCache[cData.id];
+                } catch (e) {}
+              }
+              let resolvedOrgName = getOrgNameSync(resolvedOrgId, rawOrgName);
+
+              // Fetch related sub-tables for this post
+              let pMedia = [], pLinks = [], pAttachments = [], pPlaces = [], pThemes = [];
+              try {
+                const { data: media } = await supabaseClient.from('post_media').select('*').eq('post_id', postId);
+                if (media) pMedia = media;
+                const { data: links } = await supabaseClient.from('post_links').select('*').eq('post_id', postId);
+                if (links) pLinks = links;
+                const { data: atts } = await supabaseClient.from('post_attachments').select('*').eq('post_id', postId);
+                if (atts) pAttachments = atts;
+                const { data: places } = await supabaseClient.from('post_places').select('*').eq('post_id', postId);
+                if (places) pPlaces = places;
+                const { data: themes } = await supabaseClient.from('post_themes').select('*').eq('post_id', postId);
+                if (themes) pThemes = themes;
+              } catch (subErr) {
+                console.warn('Single post sub-tables notice:', subErr);
+              }
+
+              // Process attachments into media gallery
+              pAttachments.forEach(att => {
+                if (att.type === 'image' && att.url) {
+                  let optimizedUrl = att.url;
+                  if (att.provider === 'imagekit' && !optimizedUrl.includes('tr=')) {
+                    optimizedUrl += (optimizedUrl.includes('?') ? '&' : '?') + 'tr=w-1000,f-auto,q-auto';
+                  }
+                  if (!pMedia.some(m => m.url === att.url || m.url === optimizedUrl)) {
+                    pMedia.push({ media_type: 'image', url: optimizedUrl, title: att.file_name });
+                  }
+                } else if (att.type === 'youtube' && (att.youtube_video_id || att.url)) {
+                  const ytId = att.youtube_video_id || extractYouTubeId(att.url);
+                  const embedUrl = ytId ? `https://www.youtube.com/embed/${ytId}` : att.url;
+                  if (!pMedia.some(m => m.url === embedUrl)) {
+                    pMedia.push({ media_type: 'video', url: embedUrl, title: 'YouTube Video' });
+                  }
+                }
+              });
+
+              if (rawPost.image_url && rawPost.image_url.trim() && !pMedia.some(m => m.url === rawPost.image_url)) {
+                pMedia.push({ media_type: isVideoUrl(rawPost.image_url, 'image') ? 'video' : 'image', url: rawPost.image_url });
+              }
+
+              post = {
+                id: rawPost.id,
+                organization_id: resolvedOrgId,
+                org_name: resolvedOrgName,
+                type: rawPost.type || 'announcement',
+                title: rawPost.title,
+                content: rawPost.content || rawPost.description || '',
+                visibility: rawPost.visibility || 'public',
+                status: rawPost.status || 'published',
+                created_at: rawPost.created_at,
+                published_at: rawPost.published_at || rawPost.created_at,
+                target_id: rawPost.target_id,
+                target_type: rawPost.target_type,
+                event_start_at: rawPost.event_start_at,
+                event_end_at: rawPost.event_end_at,
+                event_all_day: Boolean(rawPost.event_all_day),
+                event_location_detail: rawPost.event_location_detail,
+                event_registration_url: rawPost.event_registration_url,
+                offer_start_at: rawPost.offer_start_at,
+                offer_end_at: rawPost.offer_end_at,
+                offer_terms: rawPost.offer_terms,
+                post_places: pPlaces.length > 0 ? pPlaces : (rawPost.place ? [{ place_id: rawPost.place }] : []),
+                post_themes: pThemes.length > 0 ? pThemes : (rawPost.tags ? (Array.isArray(rawPost.tags) ? rawPost.tags.map(t => ({ tag_id: t })) : []) : []),
+                post_attachments: pAttachments,
+                post_media: pMedia,
+                post_links: pLinks.length > 0 ? pLinks : (rawPost.website_url ? [{ title: 'Lue lisää', url: rawPost.website_url, link_type: 'external' }] : [])
+              };
+            }
           } catch (e) {
             console.warn('Single post DB fetch error:', e);
           }
         }
 
         if (!post) {
-          document.getElementById('singlePostContentSlot').innerHTML = `
+          contentSlot.innerHTML = `
             <div class="p-8 text-center bg-slate-50 rounded-2xl space-y-3">
-              <p class="text-slate-600 font-bold text-sm">Julkaisua ei löytynyt tai se on poistettu.</p>
-              <a href="seina.html" class="inline-block px-4 py-2 bg-violet-600 text-white font-bold rounded-xl text-xs shadow-xs">Palaa Seinälle</a>
+              <div class="text-3xl">🔍</div>
+              <p class="text-slate-700 font-bold text-sm">Julkaisua ei löytynyt tietokannasta.</p>
+              <p class="text-xs text-slate-500">Julkaisua ID:llä <code class="bg-slate-200 px-1.5 py-0.5 rounded text-[11px] font-mono text-slate-800">${escapeHtml(postId)}</code> ei löydy Supabasesta tai se on poistettu.</p>
+              <div class="pt-2">
+                <a href="seina.html" class="inline-block px-4 py-2 bg-violet-600 text-white font-bold rounded-xl text-xs shadow-xs hover:bg-violet-700 transition-all">Palaa Seinälle</a>
+              </div>
             </div>
           `;
           return;
@@ -493,21 +603,22 @@
         const orgId = resolveOrgId(post.organization_id, post.org_name);
         const orgName = getOrgNameSync(orgId, post.org_name);
         const dateStr = formatDate(post.created_at || post.published_at);
-        const title = escapeHtml(post.title);
-        const desc = linkify(escapeHtml(post.content || post.description || ''));
+        const title = escapeHtml(post.title || 'Nimetön julkaisu');
+        const desc = parseMarkdownLinks(post.content || post.description || '');
 
         document.getElementById('pageTitle').innerText = `${title} — ${orgName} · LaukaaInfo`;
 
         // Render Single Post Content
-        document.getElementById('singlePostContentSlot').innerHTML = `
+        contentSlot.innerHTML = `
           <div class="space-y-4">
             <div class="flex items-center justify-between text-xs text-slate-500">
               <span class="font-bold text-violet-700 flex items-center gap-1">🏢 ${escapeHtml(orgName)}</span>
               <span>🕐 ${dateStr}</span>
             </div>
             <h1 class="text-xl md:text-2xl font-black text-slate-900 leading-tight">${title}</h1>
-            <div class="text-sm md:text-base text-slate-700 leading-relaxed whitespace-pre-line">${desc}</div>
-            ${renderMediaHTML(post.post_media || [], post.id, post.type, post.content || post.description, post.image_url || post.image, post.video_id, post.youtube_url)}
+            ${desc ? `<div class="text-sm md:text-base text-slate-700 leading-relaxed whitespace-pre-line">${desc}</div>` : ''}
+            ${renderMediaHTML(post.post_media || [])}
+            ${typeof renderPdfPillsHTML === 'function' ? renderPdfPillsHTML(post.post_attachments || []) : ''}
             ${renderLinksHTML(post.post_links || [], post.target_id, post.target_type)}
           </div>
         `;
