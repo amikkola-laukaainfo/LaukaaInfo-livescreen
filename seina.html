@@ -54,6 +54,33 @@
     <!-- Pääsisältöalue -->
     <main class="flex-1 max-w-3xl w-full mx-auto p-4 md:p-6 space-y-6">
 
+      <!-- TILA 3: Yksittäisen julkaisun landing view (Jos URL sisältää ?post= tai ?item=) -->
+      <section id="singlePostSection" class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-5 hidden">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <a href="seina.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-violet-600 transition-colors">
+            <span>←</span> <span>Takaisin Koko Seinälle</span>
+          </a>
+          <span id="singlePostBadge" class="px-2.5 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider bg-violet-100 text-violet-800">
+            📢 Julkaisu
+          </span>
+        </div>
+
+        <!-- Single Post Main Content Slot -->
+        <div id="singlePostContentSlot" class="space-y-4">
+          <!-- Dynamically filled by script -->
+        </div>
+
+        <!-- Single Post Share Bar -->
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-100" id="singlePostShareBar">
+          <!-- Dynamically filled share and copy buttons -->
+        </div>
+
+        <!-- Bottom Org Card Snippet -->
+        <div id="singlePostOrgSnippet" class="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <!-- Dynamically filled org snippet + button -->
+        </div>
+      </section>
+
       <!-- TILA 1: Organisaation oma seinä (Jos URL sisältää ?org= tai ?id=) -->
       <section id="orgHeaderSection" class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4 hidden">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -78,9 +105,17 @@
               </p>
             </div>
           </div>
-          <a id="manageLink" href="julkaise.html" class="px-4 py-2 bg-slate-900 hover:bg-black text-white text-xs font-bold rounded-xl text-center shadow-xs transition-all shrink-0">
-            + Kirjoita julkaisu
-          </a>
+          <div class="flex flex-wrap items-center gap-2">
+            <button id="orgShareBtn" class="px-3.5 py-2 bg-violet-600 hover:bg-violet-700 text-white text-xs font-bold rounded-xl shadow-xs transition-all flex items-center gap-1">
+              <span>↗</span> <span>Jaa Seinä</span>
+            </button>
+            <button id="orgCopyBtn" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-all flex items-center gap-1">
+              <span>🔗</span> <span>Kopioi linkki</span>
+            </button>
+            <a id="manageLink" href="julkaise.html" class="px-3.5 py-2 bg-slate-900 hover:bg-black text-white text-xs font-bold rounded-xl text-center shadow-xs transition-all shrink-0">
+              + Kirjoita
+            </a>
+          </div>
         </div>
 
         <p class="text-sm text-slate-600 leading-relaxed" id="orgBio">
@@ -93,15 +128,25 @@
         </div>
       </section>
 
-      <!-- TILA 2: Yleinen LaukaaInfon seinä (Jos ei ID-parametria) -->
+      <!-- TILA 2: Yleinen LaukaaInfon seinä (Jos ei ID/post/org-parametria) -->
       <section id="globalHeaderSection" class="bg-gradient-to-r from-violet-900 via-slate-900 to-slate-900 text-white rounded-3xl p-6 shadow-md space-y-4">
-        <div class="flex items-center gap-3">
-          <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-2xl font-black shrink-0">
-            🧱
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-2xl font-black shrink-0">
+              🧱
+            </div>
+            <div>
+              <span class="text-[10px] font-black uppercase tracking-widest text-violet-300">LaukaaInfo Sisältövirta</span>
+              <h1 class="text-xl font-bold text-white">LaukaaInfon Yleinen Seinä</h1>
+            </div>
           </div>
-          <div>
-            <span class="text-[10px] font-black uppercase tracking-widest text-violet-300">LaukaaInfo Sisältövirta</span>
-            <h1 class="text-xl font-bold text-white">LaukaaInfon Yleinen Seinä</h1>
+          <div class="flex items-center gap-2">
+            <button onclick="shareContent({ title: 'LaukaaInfon Yleinen Seinä', text: 'Katso Laukaan ajankohtaiset julkaisut LaukaaInfossa!', url: 'seina.html' })" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1">
+              <span>↗</span> <span>Jaa Seinä</span>
+            </button>
+            <button onclick="copyToClipboard('seina.html')" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1">
+              <span>🔗</span> <span>Kopioi linkki</span>
+            </button>
           </div>
         </div>
         <p class="text-xs text-slate-300 leading-relaxed">
@@ -185,12 +230,53 @@
 
     <!-- JavaScript - Supabase Data Layer & Dynamic Rendering -->
     <script>
+      // ── Global Helper Functions: Sharing & Toast Notifications ────────────
+      window.showToast = function(msg, icon = '🔗') {
+        let toast = document.getElementById('lkiToast');
+        if (!toast) {
+          toast = document.createElement('div');
+          toast.id = 'lkiToast';
+          toast.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-xl text-xs font-bold flex items-center gap-2 opacity-0 pointer-events-none transition-all duration-300';
+          document.body.appendChild(toast);
+        }
+        toast.innerHTML = `<span class="text-base">${icon}</span> <span>${msg}</span>`;
+        toast.classList.remove('opacity-0', 'pointer-events-none');
+        setTimeout(() => {
+          toast.classList.add('opacity-0', 'pointer-events-none');
+        }, 2500);
+      };
+
+      window.shareContent = async function({ title, text, url }) {
+        const absoluteUrl = new URL(url || window.location.href, window.location.origin).href;
+        if (navigator.share) {
+          try {
+            await navigator.share({ title: title || 'LaukaaInfo', text: text || '', url: absoluteUrl });
+            return;
+          } catch (e) {
+            if (e.name === 'AbortError') return;
+          }
+        }
+        window.copyToClipboard(absoluteUrl);
+      };
+
+      window.copyToClipboard = async function(url) {
+        const absoluteUrl = new URL(url || window.location.href, window.location.origin).href;
+        try {
+          await navigator.clipboard.writeText(absoluteUrl);
+          window.showToast("Linkki kopioitu leikepöydälle!", "🔗");
+        } catch (err) {
+          prompt("Kopioi linkki tästä:", absoluteUrl);
+        }
+      };
+
       // 1. URL Parameters & Setup
       const urlParams = new URLSearchParams(window.location.search);
-      const rawOrgParam = urlParams.get('org') || urlParams.get('id');
+      const postParam = urlParams.get('post') || urlParams.get('item') || urlParams.get('feed_item');
+      const rawOrgParam = urlParams.get('org') || urlParams.get('id') || urlParams.get('business_id') || urlParams.get('company');
       const searchName = urlParams.get('name');
 
-      const isSingleOrgMode = Boolean(rawOrgParam || searchName);
+      const isSinglePostMode = Boolean(postParam);
+      const isSingleOrgMode = Boolean(!isSinglePostMode && (rawOrgParam || searchName));
       let targetOrgId = rawOrgParam || '';
 
       // Normalisoidaan ID jos se on pelkkä numero (esim. '313' -> 'company-313')
@@ -307,9 +393,20 @@
         }
       ];
 
-      // 3. Main Init Function
+      // 3. Main Init Function (Handles 3 Canonical View Modes)
       async function initPage() {
-        if (isSingleOrgMode) {
+        if (isSinglePostMode) {
+          // TILA 3: Yksittäisen julkaisun landing view (?post=abc123)
+          document.getElementById('singlePostSection').classList.remove('hidden');
+          document.getElementById('orgHeaderSection').classList.add('hidden');
+          document.getElementById('globalHeaderSection').classList.add('hidden');
+          document.getElementById('pinnedSection').classList.add('hidden');
+          document.getElementById('feedHeading').innerText = '🧱 Tämän organisaation muut julkaisut';
+          document.getElementById('footerLabel').innerText = 'LaukaaInfo Julkaisu';
+          await loadSinglePostView(postParam);
+        } else if (isSingleOrgMode) {
+          // TILA 2: Organisaation oma Seinä / Digikäyntikortti (?org=mediazoo)
+          document.getElementById('singlePostSection').classList.add('hidden');
           document.getElementById('orgHeaderSection').classList.remove('hidden');
           document.getElementById('globalHeaderSection').classList.add('hidden');
           document.getElementById('feedHeading').innerText = '🧱 Organisaation Oma seinä';
@@ -319,8 +416,10 @@
             document.getElementById('publishLink').href = `julkaise.html?org=${encodeURIComponent(targetOrgId)}`;
             document.getElementById('manageLink').href = `julkaise.html?org=${encodeURIComponent(targetOrgId)}`;
           }
-          await loadOrganizationWall(targetOrgId);
+          await loadOrganizationWall(targetOrgId || searchName);
         } else {
+          // TILA 1: Koko LaukaaInfon Yleinen Seinä (/seina.html)
+          document.getElementById('singlePostSection').classList.add('hidden');
           document.getElementById('globalHeaderSection').classList.remove('hidden');
           document.getElementById('orgHeaderSection').classList.add('hidden');
           document.getElementById('feedHeading').innerText = '🧱 Kaikkien julkaisujen paikallisvirta';
@@ -364,46 +463,148 @@
         return logoUrl;
       }
 
-      // 4. Load Organization Wall Mode
-      async function loadOrganizationWall(orgId) {
-        let orgData = null;
+      // 4. Mode 3: Load Single Post Landing View (?post=abc123)
+      async function loadSinglePostView(postId) {
+        let post = samplePosts.find(p => String(p.id) === String(postId));
 
-        // Try fetching organization info from Supabase
-        if (supabaseClient && orgId) {
+        if (!post && supabaseClient) {
           try {
-            // First check 'organizations' table
-            let { data: org, error } = await supabaseClient
-              .from('organizations')
+            const { data } = await supabaseClient
+              .from('posts')
               .select('*')
-              .eq('id', orgId)
+              .eq('id', postId)
               .maybeSingle();
-
-            if (!org) {
-              // Fallback check 'companies' table
-              let { data: comp } = await supabaseClient
-                .from('companies')
-                .select('*')
-                .eq('id', orgId)
-                .maybeSingle();
-              if (comp) org = comp;
-            }
-
-            if (org) orgData = org;
+            if (data) post = data;
           } catch (e) {
-            console.warn('Organization DB fetch error:', e);
+            console.warn('Single post DB fetch error:', e);
           }
         }
 
-        // Render Organization Header Info
-        const orgName = (orgData && (orgData.name || orgData.nimi)) || (orgId === 'company-313' ? 'Laukaan Kädenjälki ry' : (orgId === 'company-2' ? 'Mediazoo' : 'Organisaatio'));
+        if (!post) {
+          document.getElementById('singlePostContentSlot').innerHTML = `
+            <div class="p-8 text-center bg-slate-50 rounded-2xl space-y-3">
+              <p class="text-slate-600 font-bold text-sm">Julkaisua ei löytynyt tai se on poistettu.</p>
+              <a href="seina.html" class="inline-block px-4 py-2 bg-violet-600 text-white font-bold rounded-xl text-xs shadow-xs">Palaa Seinälle</a>
+            </div>
+          `;
+          return;
+        }
+
+        const orgId = resolveOrgId(post.organization_id, post.org_name);
+        const orgName = getOrgNameSync(orgId, post.org_name);
+        const dateStr = formatDate(post.created_at || post.published_at);
+        const title = escapeHtml(post.title);
+        const desc = linkify(escapeHtml(post.content || post.description || ''));
+
+        document.getElementById('pageTitle').innerText = `${title} — ${orgName} · LaukaaInfo`;
+
+        // Render Single Post Content
+        document.getElementById('singlePostContentSlot').innerHTML = `
+          <div class="space-y-4">
+            <div class="flex items-center justify-between text-xs text-slate-500">
+              <span class="font-bold text-violet-700 flex items-center gap-1">🏢 ${escapeHtml(orgName)}</span>
+              <span>🕐 ${dateStr}</span>
+            </div>
+            <h1 class="text-xl md:text-2xl font-black text-slate-900 leading-tight">${title}</h1>
+            <div class="text-sm md:text-base text-slate-700 leading-relaxed whitespace-pre-line">${desc}</div>
+            ${renderMediaHTML(post.post_media || [], post.id, post.type, post.content || post.description, post.image_url || post.image, post.video_id, post.youtube_url)}
+            ${renderLinksHTML(post.post_links || [], post.target_id, post.target_type)}
+          </div>
+        `;
+
+        // Share & Copy Bar for Single Post
+        const postUrl = `seina.html?post=${encodeURIComponent(post.id)}`;
+        document.getElementById('singlePostShareBar').innerHTML = `
+          <div class="flex flex-wrap items-center gap-2">
+            <button onclick="shareContent({ title: '${title.replace(/'/g, "\\'")}', text: '${escapeHtml(orgName).replace(/'/g, "\\'")}', url: '${postUrl}' })" class="px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white font-bold rounded-xl text-xs shadow-xs transition-all flex items-center gap-1.5">
+              <span>↗</span> <span>Jaa julkaisu</span>
+            </button>
+            <button onclick="copyToClipboard('${postUrl}')" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all flex items-center gap-1.5">
+              <span>🔗</span> <span>Kopioi linkki</span>
+            </button>
+          </div>
+        `;
+
+        // Org Snippet at Bottom
+        const orgSlug = (orgName.toLowerCase().includes('mediazoo')) ? 'mediazoo' : (orgId || '');
+        const orgWallUrl = `seina.html?org=${encodeURIComponent(orgSlug)}`;
+
+        document.getElementById('singlePostOrgSnippet').innerHTML = `
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-violet-100 text-violet-800 font-black flex items-center justify-center text-lg shrink-0">🏢</div>
+            <div>
+              <div class="font-bold text-slate-900 text-xs">${escapeHtml(orgName)}</div>
+              <div class="text-[11px] text-slate-500">Katso organisaation muut ajankohtaiset julkaisut</div>
+            </div>
+          </div>
+          <a href="${orgWallUrl}" class="px-3.5 py-2 bg-slate-900 hover:bg-black text-white rounded-xl text-xs font-bold transition-all shrink-0">
+            Katso organisaation kaikki julkaisut →
+          </a>
+        `;
+
+        // Load org's other posts underneath
+        await fetchPostsFromDb(orgId);
+      }
+
+      // 5. Mode 2: Load Organization Wall Mode (?org=mediazoo)
+      async function loadOrganizationWall(targetOrgParam) {
+        let orgData = null;
+        let resolvedOrgId = targetOrgParam;
+
+        // Support slug resolution (e.g. ?org=mediazoo or ?org=company-2)
+        if (supabaseClient && targetOrgParam) {
+          try {
+            let { data: orgBySlug } = await supabaseClient
+              .from('companies')
+              .select('*')
+              .or(`slug.eq.${targetOrgParam},id.eq.${targetOrgParam},business_id.eq.${targetOrgParam}`)
+              .maybeSingle();
+
+            if (!orgBySlug) {
+              let { data: orgByOrg } = await supabaseClient
+                .from('organizations')
+                .select('*')
+                .or(`slug.eq.${targetOrgParam},id.eq.${targetOrgParam}`)
+                .maybeSingle();
+              if (orgByOrg) orgBySlug = orgByOrg;
+            }
+
+            if (orgBySlug) {
+              orgData = orgBySlug;
+              resolvedOrgId = orgBySlug.id || targetOrgParam;
+            }
+          } catch (e) {
+            console.warn('Organization slug lookup notice:', e);
+          }
+        }
+
+        const orgName = (orgData && (orgData.name || orgData.nimi)) || (targetOrgParam.toLowerCase().includes('mediazoo') ? 'Mediazoo' : (targetOrgParam === 'company-313' ? 'Laukaan Kädenjälki ry' : 'Organisaatio'));
+        const orgSlug = (orgData && orgData.slug) || targetOrgParam;
+        const orgWallUrl = `seina.html?org=${encodeURIComponent(orgSlug)}`;
+
         document.getElementById('orgTitle').innerText = orgName;
         document.getElementById('pageTitle').innerText = `${orgName} — Oma seinä · LaukaaInfo`;
+
+        // Configure Org Header Share & Copy Buttons
+        const shareBtn = document.getElementById('orgShareBtn');
+        const copyBtn = document.getElementById('orgCopyBtn');
+
+        if (shareBtn) {
+          shareBtn.onclick = () => window.shareContent({
+            title: `${orgName} – LaukaaInfo`,
+            text: `Katso organisaation ${orgName} ajankohtaiset julkaisut LaukaaInfossa!`,
+            url: orgWallUrl
+          });
+        }
+        if (copyBtn) {
+          copyBtn.onclick = () => window.copyToClipboard(orgWallUrl);
+        }
 
         const isAssoc = orgName.toLowerCase().endsWith('ry') || (orgData && orgData.type === 'association');
         document.getElementById('orgBadge').innerText = isAssoc ? '🤝 Yhdistys' : '🏢 Yritys';
         
-        // Fetch and display organization logo from yrityskortti / Supabase / companies_data.json
-        const logoUrl = await resolveOrganizationLogo(orgId, orgData);
+        // Fetch and display organization logo
+        const logoUrl = await resolveOrganizationLogo(resolvedOrgId || targetOrgParam, orgData);
         const logoContainer = document.getElementById('orgLogo');
 
         if (logoUrl && logoUrl.trim() && logoUrl !== '-') {
@@ -425,7 +626,7 @@
         const bio = (orgData && (orgData.description || orgData.bio)) || `${orgName} — Digitaalinen kotipesä ja ajankohtaiset julkaisut LaukaaInfossa.`;
         document.getElementById('orgBio').innerText = bio;
 
-        const cleanId = orgId ? orgId.replace('company-', '') : '';
+        const cleanId = resolvedOrgId ? String(resolvedOrgId).replace('company-', '') : '';
         const badgesContainer = document.getElementById('orgBadgesContainer');
         badgesContainer.innerHTML = `
           <span class="text-xs px-2.5 py-1 bg-slate-100 rounded-lg text-slate-600 font-medium flex items-center gap-1">
@@ -434,13 +635,13 @@
           <span class="text-xs px-2.5 py-1 bg-violet-50 text-violet-700 border border-violet-200/60 rounded-lg font-bold">
             🧩 Ajankohtaista
           </span>
-          <a href="yrityskortti.html?id=${encodeURIComponent(cleanId || orgId)}" class="text-xs px-2.5 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200/80 rounded-lg font-bold hover:bg-emerald-100 transition-all flex items-center gap-1">
+          <a href="yrityskortti.html?id=${encodeURIComponent(cleanId || resolvedOrgId)}" class="text-xs px-2.5 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200/80 rounded-lg font-bold hover:bg-emerald-100 transition-all flex items-center gap-1">
             📇 Yrityskortti →
           </a>
         `;
 
         // Fetch Posts for Organization
-        await fetchPostsFromDb(orgId);
+        await fetchPostsFromDb(resolvedOrgId);
       }
 
       // 5. Load Global Wall Mode
@@ -832,9 +1033,18 @@
               <!-- CTA Links Slot -->
               ${renderLinksHTML(p.post_links, p.target_id, p.target_type)}
 
-              <div class="flex items-center justify-between text-xs text-slate-400 pt-3 border-t border-slate-100">
-                <span>LaukaaInfo Content Stream</span>
-                ${orgUrl ? `<a href="${orgUrl}" class="text-violet-600 font-bold hover:underline">Organisaation oma seinä →</a>` : ''}
+              <div class="flex items-center justify-between text-xs text-slate-400 pt-3 border-t border-slate-100 flex-wrap gap-2">
+                <div class="flex items-center gap-2">
+                  ${orgUrl ? `<a href="${orgUrl}" class="text-violet-600 font-bold hover:underline">Organisaation oma seinä →</a>` : '<span class="text-slate-400 font-medium">LaukaaInfo Stream</span>'}
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <button onclick="shareContent({ title: '${escapeHtml(p.title).replace(/'/g, "\\'")}', text: '${escapeHtml(p.org_name || '').replace(/'/g, "\\'")}', url: 'seina.html?post=${encodeURIComponent(p.id)}' })" class="px-2 py-1 bg-slate-100 hover:bg-violet-100 text-slate-700 hover:text-violet-900 rounded-lg font-bold transition-all flex items-center gap-1">
+                    <span>↗</span> <span>Jaa</span>
+                  </button>
+                  <button onclick="copyToClipboard('seina.html?post=${encodeURIComponent(p.id)}')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg font-bold transition-all flex items-center gap-1" title="Kopioi suora linkki julkaisuun">
+                    <span>🔗</span>
+                  </button>
+                </div>
               </div>
             </article>
           `;
