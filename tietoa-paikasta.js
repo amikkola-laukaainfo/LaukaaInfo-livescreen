@@ -2350,21 +2350,22 @@ async function loadEncountersForPlace(place) {
     }
     
     try {
-        // Hakee ilmoitukset jotka on linkitetty location_id:llä tai joilla on sama nimi (fallback)
+        // Hakee ilmoitukset jotka on linkitetty location_id:llä (UUID tai slug) tai joilla on sama nimi (fallback)
         const placeName = place.name || place.canonical_name || '';
+        const targetIds = [place.place_id, place.id].filter(Boolean);
         
         let query = window.LaukaaSupabase
             .from('encounters')
             .select('*')
             .eq('status', 'active');
             
-        // Jos haluamme kohdentaa tiukasti place_id:hen:
-        // mutta otetaan fallback string matchillä myös
-        if (place.place_id && placeName) {
+        if (targetIds.length > 0 && placeName) {
             const safeName = placeName.replace(/["%,]/g, ' ').trim();
-            query = query.or(`location_id.eq.${place.place_id},location.ilike.%${safeName}%`);
-        } else if (place.place_id) {
-            query = query.eq('location_id', place.place_id);
+            const idConditions = targetIds.map(idVal => `location_id.eq.${idVal}`).join(',');
+            query = query.or(`${idConditions},location.ilike.%${safeName}%`);
+        } else if (targetIds.length > 0) {
+            const idConditions = targetIds.map(idVal => `location_id.eq.${idVal}`).join(',');
+            query = query.or(idConditions);
         } else if (placeName) {
             query = query.ilike('location', `%${placeName}%`);
         }
@@ -2379,19 +2380,21 @@ async function loadEncountersForPlace(place) {
         
         // Hae myös tapahtumat, yritysjulkaisut ja tarjoukset
         const liveSb = window.LaukaaSupabase; // usswojtlvrnqtzwnffpg – Android-datan projekti
-        if (window.aiSb && place.place_id) {
+        if (window.aiSb && targetIds.length > 0) {
             try {
                 // Contents-taulu (JSONB location->>place_id) – AI-projekti
+                const contentsQuery = targetIds.map(idVal => `location->>place_id.eq.${idVal}`).join(',');
                 const { data: contentsData } = await window.aiSb
                     .from('contents')
                     .select('*')
-                    .eq('location->>place_id', place.place_id);
+                    .or(contentsQuery);
                 
                 // Feed-julkaisut (posts-taulu) – LaukaaLive-projekti
                 // Haetaan vain APPROVED-tilaiset tai ilman statusta (vanhat) – PENDING suodatetaan pois
+                const postsQuery = targetIds.map(idVal => `place_id.eq.${idVal}`).join(',');
                 const postsResult = liveSb
                     ? await liveSb.from('posts').select('*')
-                        .eq('place_id', place.place_id)
+                        .or(postsQuery)
                         .or('status.eq.APPROVED,status.is.null')
                     : { data: null };
                 const postsData = (postsResult.data || []).filter(item => {
@@ -2400,8 +2403,9 @@ async function loadEncountersForPlace(place) {
                 });
                     
                 // Tarjoukset/Tapahtumat – LaukaaLive-projekti
+                const offersQuery = targetIds.map(idVal => `place_id.eq.${idVal}`).join(',');
                 const offersResult = liveSb
-                    ? await liveSb.from('offers').select('*').eq('place_id', place.place_id)
+                    ? await liveSb.from('offers').select('*').or(offersQuery)
                     : { data: null };
                 const offersData = offersResult.data;
                     
