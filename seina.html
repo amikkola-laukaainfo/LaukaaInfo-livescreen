@@ -204,6 +204,8 @@
           <span id="updateTime" class="text-xs text-slate-400">Päivitetty suoraan tietokannasta</span>
         </div>
 
+        <div id="orgAccessCodeContainer"></div>
+
         <div id="postsFeed" class="space-y-4">
           <!-- Dynamically inserted posts -->
           <div class="bg-white p-8 rounded-3xl border border-slate-200 text-center space-y-3">
@@ -745,6 +747,9 @@
           </a>
         `;
 
+        // Check if organization has an access code for protected posts
+        await checkAndRenderOrgAccessCodeUi(resolvedOrgId);
+
         // Fetch Posts for Organization
         await fetchPostsFromDb(resolvedOrgId);
       }
@@ -940,8 +945,99 @@
           return !existingTitles.has(p.title);
         });
 
-        allPosts = [...fetchedPosts, ...filteredSample];
+        allPosts = [...fetchedPosts, ...unlockedProtectedPosts, ...filteredSample];
         renderFeed();
+      }
+
+      let unlockedProtectedPosts = [];
+
+      async function checkAndRenderOrgAccessCodeUi(orgId) {
+        unlockedProtectedPosts = [];
+        const container = document.getElementById('orgAccessCodeContainer');
+        if (!container) return;
+        container.innerHTML = '';
+
+        if (!orgId || !supabaseClient) return;
+
+        try {
+          const { data: st } = await supabaseClient.rpc('get_org_wall_access_status', { p_organization_id: orgId });
+          if (st && st.has_access_code) {
+            container.innerHTML = `
+              <div id="protectedUnlockBox" class="bg-violet-50/80 border border-violet-200/90 rounded-2xl p-4 mb-4 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h3 class="text-xs font-bold text-violet-900 flex items-center gap-1.5">
+                    <span>🔒</span> Organisaatiolla on lisäksi avauskoodilla suojattuja julkaisuja
+                  </h3>
+                  <p class="text-[11px] text-violet-700 mt-0.5">Syötä organisaation avauskoodi avataksesi suojatut sisällöt.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                  <input type="password" id="wallAccessCodeInput" placeholder="Syötä avauskoodi..." class="px-3 py-1.5 bg-white border border-violet-300 rounded-xl text-xs font-mono font-bold outline-none focus:ring-2 focus:ring-violet-500 w-40" />
+                  <button onclick="unlockProtectedPosts('${escapeHtml(orgId)}')" class="px-3.5 py-1.5 bg-violet-600 hover:bg-violet-700 text-white font-bold rounded-xl text-xs transition-all shadow-xs shrink-0 flex items-center gap-1">
+                    <span>Avaa</span> <span>➔</span>
+                  </button>
+                </div>
+              </div>
+            `;
+          }
+        } catch (e) {
+          console.warn('Access code status check notice:', e);
+        }
+      }
+
+      async function unlockProtectedPosts(orgId) {
+        const input = document.getElementById('wallAccessCodeInput');
+        if (!input || !input.value.trim()) {
+          alert('Syötä avauskoodi!');
+          return;
+        }
+        const code = input.value.trim();
+
+        try {
+          const { data, error } = await supabaseClient.rpc('get_protected_org_posts', {
+            p_organization_id: orgId,
+            p_access_code: code
+          });
+
+          if (error || (data && !data.success)) {
+            alert('❌ ' + ((data && data.error) || error?.message || 'Virheellinen avauskoodi.'));
+            return;
+          }
+
+          const protPosts = (data && data.posts) ? data.posts : [];
+          if (protPosts.length === 0) {
+            alert('ℹ️ Avauskoodi oli oikein, mutta organisaatiolla ei ole tällä hetkellä aktiivisia suojattuja julkaisuja.');
+          } else {
+            if (window.showToast) window.showToast(`Avattu ${protPosts.length} suojattua julkaisua!`, '🔓');
+          }
+
+          unlockedProtectedPosts = protPosts.map(p => ({
+            ...p,
+            org_name: getOrgNameSync(orgId, 'Organisaatio'),
+            is_protected_unlocked: true,
+            post_places: p.post_places || [],
+            post_themes: p.post_themes || [],
+            post_media: p.post_media || (p.image_url ? [{ media_type: 'image', url: p.image_url }] : []),
+            post_links: p.post_links || []
+          }));
+
+          const unlockBox = document.getElementById('protectedUnlockBox');
+          if (unlockBox) {
+            unlockBox.className = "bg-emerald-50 border border-emerald-200 rounded-2xl p-4 mb-4 text-xs font-bold text-emerald-900 flex items-center justify-between shadow-2xs";
+            unlockBox.innerHTML = `
+              <span class="flex items-center gap-2">
+                <span>✅</span> <span>Suojatut sisällöt avattu onnistuneesti (${protPosts.length} suojattua julkaisua näkyvillä)</span>
+              </span>
+              <span class="px-2.5 py-1 bg-emerald-200/80 text-emerald-900 rounded-lg text-[10px] uppercase font-black tracking-wider">Avattu 🔓</span>
+            `;
+          }
+
+          // Combine with existing allPosts and re-render
+          allPosts = [...allPosts.filter(p => !p.is_protected_unlocked), ...unlockedProtectedPosts];
+          renderFeed();
+        } catch (e) {
+          console.error('unlockProtectedPosts error:', e);
+          alert('Virhe avattaessa suojattuja julkaisuja.');
+        }
       }
 
       // 7. Filter & Expiry Check Logic

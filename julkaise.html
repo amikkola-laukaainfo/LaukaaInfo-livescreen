@@ -170,8 +170,8 @@
           <div>
             <label class="text-[10px] font-bold text-slate-500 uppercase mb-1 block">🔒 Julkaisun näkyvyys</label>
             <select id="visibility" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-violet-500">
-              <option value="public">🌐 Julkinen (Näkyy omalla + yleisellä seinällä)</option>
-              <option value="link">🔒 Vain linkillä (Näkyy vain omalla seinällä / suoralla linkillä)</option>
+              <option value="public">🌐 Julkinen (Näkyy LaukaaInfon seinällä ja organisaation omalla seinällä)</option>
+              <option value="code_protected">🔒 Avauskoodilla (Ei näkyy julkisella seinällä. Näkyy organisaation seinällä vasta avauskoodin jälkeen)</option>
             </select>
           </div>
 
@@ -580,6 +580,19 @@
           document.getElementById('headerOrgName').innerText = orgName;
           document.getElementById('verifiedOrgTitle').innerText = orgName;
           document.getElementById('submitPublishBtn').innerText = `🚀 Julkaise ${orgName} seinälle`;
+
+          // Tarkistetaan organisaation oletusnäkyvyys Supabasesta
+          if (supabaseClient && orgId) {
+            try {
+              const { data: stData } = await supabaseClient.rpc('get_org_wall_access_status', { p_organization_id: orgId });
+              if (stData && stData.default_post_visibility) {
+                const visSelect = document.getElementById('visibility');
+                if (visSelect) visSelect.value = stData.default_post_visibility;
+              }
+            } catch (e) {
+              console.warn('Default visibility fetch notice:', e);
+            }
+          }
 
           // Load posts for this organization
           await loadMyPosts();
