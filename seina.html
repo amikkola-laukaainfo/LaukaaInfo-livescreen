@@ -949,6 +949,33 @@
         });
 
         allPosts = [...fetchedPosts, ...unlockedProtectedPosts, ...filteredSample];
+
+        // V4.0: Näytä info suojatuista julkaisuista yleisellä seinällä
+        if (!orgFilterId && supabaseClient) {
+          try {
+            const { data: protectedCountData } = await supabaseClient
+              .from('posts')
+              .select('id', { count: 'exact', head: true })
+              .eq('visibility', 'code_protected')
+              .or('status.eq.published,status.eq.APPROVED,status.is.null');
+            const protectedCount = protectedCountData ? (Array.isArray(protectedCountData) ? protectedCountData.length : 0) : 0;
+            if (protectedCount > 0) {
+              const existingBanner = document.getElementById('globalProtectedInfoBanner');
+              if (!existingBanner) {
+                const banner = document.createElement('div');
+                banner.id = 'globalProtectedInfoBanner';
+                banner.className = 'bg-violet-50 border border-violet-200 rounded-2xl px-4 py-3 text-xs text-violet-800 flex items-center justify-between gap-3 mt-2';
+                banner.innerHTML = `
+                  <span class="flex items-center gap-2"><span>🔒</span> <span>Osa sisällöistä on suojattu organisaatioiden omilla avauskoodeilla.</span></span>
+                  <a href="seina.html" class="font-bold underline shrink-0 hover:text-violet-900">Avaa org-seinä →</a>
+                `;
+                const postsFeed = document.getElementById('postsFeed');
+                if (postsFeed) postsFeed.parentElement.insertBefore(banner, postsFeed);
+              }
+            }
+          } catch(e) { /* ei kriittinen */ }
+        }
+
         renderFeed();
       }
 
