@@ -809,12 +809,15 @@
             let query = supabaseClient.from('posts').select('*').order('created_at', { ascending: false });
             
             if (orgFilterId) {
-              query = query.eq('organization_id', orgFilterId);
+              query = query.eq('organization_id', orgFilterId).or('visibility.eq.public,visibility.is.null');
             } else {
               query = query.or('visibility.eq.public,visibility.is.null');
             }
 
-            const { data: postsData, error: postsError } = await query;
+            let { data: postsData, error: postsError } = await query;
+            if (postsData) {
+              postsData = postsData.filter(p => p.visibility !== 'code_protected');
+            }
 
             if (!postsError && postsData && postsData.length > 0) {
               const postIds = postsData.map(p => p.id);

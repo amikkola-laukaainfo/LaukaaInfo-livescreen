@@ -1647,7 +1647,7 @@ async function openObservationModal(id, name, description) {
                 return;
             }
             const { data: postData } = await aiSb.from('posts').select('*').eq('id', id).maybeSingle();
-            if (postData) {
+            if (postData && postData.visibility !== 'code_protected') {
                 document.getElementById('subplace-modal-title').textContent = postData.title || decodedName;
                 const postImg = postData.image_url;
                 const imgHtml = postImg ? `<div style="margin-top:0.75rem;"><img src="${postImg}" style="width:100%; max-height:300px; object-fit:cover; border-radius:8px;" alt="${postData.title || 'Kuva'}" /></div>` : '';
@@ -2390,14 +2390,16 @@ async function loadEncountersForPlace(place) {
                     .or(contentsQuery);
                 
                 // Feed-julkaisut (posts-taulu) – LaukaaLive-projekti
-                // Haetaan vain APPROVED-tilaiset tai ilman statusta (vanhat) – PENDING suodatetaan pois
+                // Haetaan vain APPROVED-tilaiset tai ilman statusta (vanhat) – PENDING ja code_protected suodatetaan pois
                 const postsQuery = targetIds.map(idVal => `place_id.eq.${idVal}`).join(',');
                 const postsResult = liveSb
                     ? await liveSb.from('posts').select('*')
                         .or(postsQuery)
                         .or('status.eq.APPROVED,status.is.null')
+                        .or('visibility.eq.public,visibility.is.null')
                     : { data: null };
                 const postsData = (postsResult.data || []).filter(item => {
+                    if (item.visibility === 'code_protected') return false;
                     if (!item.valid_until) return true;
                     return new Date(item.valid_until) >= new Date();
                 });

@@ -426,7 +426,7 @@ const LkiFeed = (() => {
       }
 
       const SB_KEY = 'sb_publishable_HgfWyipuSO7gvsVUR1smNQ_aXox2OPu';
-      const SUPABASE_POSTS_URL = `https://duxluwyqxvbmkkjzuzkz.supabase.co/rest/v1/posts?select=*&order=published_at.desc&apikey=${SB_KEY}`;
+      const SUPABASE_POSTS_URL = `https://duxluwyqxvbmkkjzuzkz.supabase.co/rest/v1/posts?select=*&or=(visibility.eq.public,visibility.is.null)&order=published_at.desc&apikey=${SB_KEY}`;
 
       // Create a promise for minimum display duration (800ms)
       const minDelay = new Promise(resolve => setTimeout(resolve, forceRefresh ? 800 : 0));
@@ -441,11 +441,13 @@ const LkiFeed = (() => {
           return r.json();
         })
         .then(posts => {
-          return (posts || []).map(item => ({
-            ...item,
-            image: item.image || item.image_url,
-            publish_at: item.publish_at || item.published_at
-          }));
+          return (posts || [])
+            .filter(item => item.visibility !== 'code_protected')
+            .map(item => ({
+              ...item,
+              image: item.image || item.image_url,
+              publish_at: item.publish_at || item.published_at
+            }));
         })
         .catch(err => {
           if (timeoutId) clearTimeout(timeoutId);

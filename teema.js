@@ -1045,10 +1045,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                                     .select('*')
                                     .in('id', feedPostIds)
                                     .or('status.eq.APPROVED,status.is.null')
+                                    .or('visibility.eq.public,visibility.is.null')
                                     .or(`valid_until.is.null,valid_until.gte.${new Date().toISOString()}`)
                                     .order('created_at', { ascending: false });
                                 if (!feedError && feedData) {
-                                    feedData.forEach(post => {
+                                    feedData.filter(p => p.visibility !== 'code_protected').forEach(post => {
                                         // Määritetään tyyppi: yhteisöjulkaisut vs. yrityksen feedjulkaisut
                                         const COMMUNITY_TYPES = ['MEMORY', 'TIP', 'PHOTO', 'OBSERVATION', 'QUESTION'];
                                         const postTypeUpper = (post.type || '').toUpperCase();

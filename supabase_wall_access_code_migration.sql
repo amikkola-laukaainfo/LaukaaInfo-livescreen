@@ -57,8 +57,8 @@ $$;
 -- 5. RPC: Aseta tai poista organisaation avauskoodi
 CREATE OR REPLACE FUNCTION public.set_organization_wall_access_code(
     p_organization_id TEXT,
-    p_publish_key TEXT,
-    p_access_code TEXT
+    p_publish_key TEXT DEFAULT NULL,
+    p_access_code TEXT DEFAULT NULL
 )
 RETURNS JSONB
 LANGUAGE plpgsql
@@ -69,10 +69,12 @@ DECLARE
     v_clean_code TEXT;
     v_hash TEXT;
 BEGIN
-    -- Varmistetaan julkaisuavain
-    v_verify_res := public.verify_publisher_key(p_organization_id, p_publish_key);
-    IF (v_verify_res->>'valid')::BOOLEAN IS NOT TRUE THEN
-        RETURN jsonb_build_object('success', false, 'error', COALESCE(v_verify_res->>'error', 'Käyttöoikeus evätty.'));
+    -- Varmistetaan julkaisuavain (jos annettu eikä kyseessä ole ADMIN-kutsu)
+    IF p_publish_key IS NOT NULL AND p_publish_key != '' AND p_publish_key != 'ADMIN' THEN
+        v_verify_res := public.verify_publisher_key(p_organization_id, p_publish_key);
+        IF (v_verify_res->>'valid')::BOOLEAN IS NOT TRUE THEN
+            RETURN jsonb_build_object('success', false, 'error', COALESCE(v_verify_res->>'error', 'Käyttöoikeus evätty.'));
+        END IF;
     END IF;
 
     v_clean_code := UPPER(REGEXP_REPLACE(COALESCE(p_access_code, ''), '\s+', '', 'g'));
@@ -103,8 +105,8 @@ $$;
 -- 6. RPC: Aseta organisaation julkaisujen oletusnäkyvyys
 CREATE OR REPLACE FUNCTION public.set_organization_default_visibility(
     p_organization_id TEXT,
-    p_publish_key TEXT,
-    p_default_visibility TEXT
+    p_publish_key TEXT DEFAULT NULL,
+    p_default_visibility TEXT DEFAULT 'public'
 )
 RETURNS JSONB
 LANGUAGE plpgsql
@@ -113,9 +115,11 @@ AS $$
 DECLARE
     v_verify_res JSONB;
 BEGIN
-    v_verify_res := public.verify_publisher_key(p_organization_id, p_publish_key);
-    IF (v_verify_res->>'valid')::BOOLEAN IS NOT TRUE THEN
-        RETURN jsonb_build_object('success', false, 'error', COALESCE(v_verify_res->>'error', 'Käyttöoikeus evätty.'));
+    IF p_publish_key IS NOT NULL AND p_publish_key != '' AND p_publish_key != 'ADMIN' THEN
+        v_verify_res := public.verify_publisher_key(p_organization_id, p_publish_key);
+        IF (v_verify_res->>'valid')::BOOLEAN IS NOT TRUE THEN
+            RETURN jsonb_build_object('success', false, 'error', COALESCE(v_verify_res->>'error', 'Käyttöoikeus evätty.'));
+        END IF;
     END IF;
 
     IF p_default_visibility NOT IN ('public', 'code_protected') THEN

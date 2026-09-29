@@ -434,6 +434,7 @@
                     .select('*')
                     .eq('status', 'APPROVED')
                     .neq('type', 'pikkuilmoitus')
+                    .or('visibility.eq.public,visibility.is.null')
                     .gte('published_at', dateLimit.toISOString())
                     .lte('published_at', now.toISOString())
                     .order('is_promoted', { ascending: false })

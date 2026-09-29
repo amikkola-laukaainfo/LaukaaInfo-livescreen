@@ -352,6 +352,7 @@
                     .select('*')
                     .eq('type', 'pikkuilmoitus')
                     .eq('status', 'APPROVED')
+                    .or('visibility.eq.public,visibility.is.null')
                     .gte('published_at', sevenDaysAgo)
                     .order('published_at', { ascending: false });
 
