@@ -410,7 +410,7 @@
         /* NEW pricing-services-section styles */
         .pricing-services-section {
             margin: 4rem 0 2rem;
-            padding: 3rem 1rem;
+            padding: 3rem 1.5rem;
             background: #fff;
             border-top: 1px solid #eee;
             border-radius: 24px;
@@ -426,6 +426,18 @@
             margin-bottom: 2.5rem;
         }
 
+        .section-header .sub-badge {
+            display: inline-block;
+            background: #0284c7;
+            color: white;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+
         .section-header h2 {
             font-family: 'Outfit', sans-serif;
             font-size: 2.2rem;
@@ -437,44 +449,49 @@
         .section-header p {
             font-size: 1.05rem;
             color: #666;
-            max-width: 600px;
+            max-width: 680px;
             margin: 0 auto;
+            line-height: 1.55;
         }
 
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
             gap: 1.5rem;
             margin-top: 2rem;
         }
 
         .service-card {
             background: #f8fafc;
-            padding: 1.5rem;
-            border-radius: 16px;
+            padding: 1.6rem;
+            border-radius: 18px;
             border: 1px solid #e2e8f0;
             transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
         }
 
         .service-card:hover {
             border-color: var(--primary-blue);
             background: #fff;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
         }
 
         .service-card h3 {
-            font-size: 1.15rem;
+            font-size: 1.2rem;
             color: var(--primary-blue);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
+            font-family: 'Outfit', sans-serif;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
         .service-card .price-range {
-            font-weight: 700;
-            color: #2d3748;
-            margin-bottom: 1rem;
+            font-weight: 800;
+            color: #0f172a;
+            font-size: 1.25rem;
+            margin-bottom: 0.8rem;
             display: block;
         }
 
@@ -483,13 +500,21 @@
             padding: 0;
             font-size: 0.88rem;
             color: #4a5568;
+            margin: 0;
+            line-height: 1.5;
+            flex-grow: 1;
         }
 
         .service-card ul li {
             margin-bottom: 0.5rem;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 8px;
+        }
+
+        .service-card ul li .check {
+            color: #10b981;
+            font-weight: bold;
         }
 
         /* Shop Link Banner */
@@ -540,7 +565,7 @@
             border: 1px solid #feb2b2;
             padding: 1.25rem;
             border-radius: 16px;
-            margin-top: 2.5rem;
+            margin-top: 2rem;
             display: flex;
             align-items: center;
             gap: 1rem;
@@ -933,7 +958,7 @@
                     <div class="step-item">
                         <div class="step-num">2</div>
                         <h4>Tiedot</h4>
-                        <p>Täytä yrityksen, yhdistyksen tai seuran perustiedot alla olevalla lomakkeella.</p>
+                        <p>Täytä yrityksen, yhdistyksen tai seuralle perustiedot alla olevalla lomakkeella.</p>
                     </div>
                     <div class="step-item">
                         <div class="step-num">3</div>
@@ -1022,23 +1047,23 @@
                     </div>
 
                     <div class="form-group" style="background: #f8fafc; padding: 1.5rem; border-radius: 12px; border: 1px solid #e2e8f0; margin-top: 2rem;">
-                        <label style="margin-bottom: 0.5rem; color: #1e293b; font-size: 1.05rem; font-weight:700;">Lisäpalvelut & Mediazoo-sisällöntuotanto</label>
-                        <p style="font-size: 0.88rem; color: #64748b; margin-bottom: 1rem;">Voit pyytää lisätietoa tai tarjouksen Mediazoon tuotantopalveluista samalla lomakkeella:</p>
+                        <label style="margin-bottom: 0.5rem; color: #1e293b; font-size: 1.05rem; font-weight:700;">Mediazoo-sisällöntuotantopalvelut</label>
+                        <p style="font-size: 0.88rem; color: #64748b; margin-bottom: 1rem;">Mediazoo auttaa tekemään näkyvyydestäsi laadukasta. Voit pyytää lisätietoa tai tarjouksen mediatuotannoista:</p>
                         <div style="display: flex; flex-direction: column; gap: 0.8rem;">
                             <label style="display: flex; align-items: center; gap: 10px; font-weight: normal; cursor: pointer; font-size: 0.95rem;">
                                 <input type="checkbox" name="service_whatsapp" value="true" style="width: auto;"> WhatsApp-suoralinkki profiiliin
                             </label>
                             <label style="display: flex; align-items: center; gap: 10px; font-weight: normal; cursor: pointer; font-size: 0.95rem;">
-                                <input type="checkbox" name="service_drone" value="true" style="width: auto;"> Ilmakuva / Drone-kuvaus kohteesta (Mediazoo)
+                                <input type="checkbox" name="service_drone" value="true" style="width: auto;"> Ilmakuva / Drone-kuvaus kohteesta (alk. 149 €)
                             </label>
                             <label style="display: flex; align-items: center; gap: 10px; font-weight: normal; cursor: pointer; font-size: 0.95rem;">
-                                <input type="checkbox" name="service_video" value="true" style="width: auto;"> Esittelyvideo toiminnasta (30–60 sek)
+                                <input type="checkbox" name="service_video" value="true" style="width: auto;"> Valmis esittelyvideo 30–60s (alk. 290 €)
                             </label>
                             <label style="display: flex; align-items: center; gap: 10px; font-weight: normal; cursor: pointer; font-size: 0.95rem;">
-                                <input type="checkbox" name="service_web" value="true" style="width: auto;"> Kotisivujen toteutus tai päivitys
+                                <input type="checkbox" name="service_web" value="true" style="width: auto;"> Kotisivujen toteutus / uudistus (alk. 490 €)
                             </label>
                             <label style="display: flex; align-items: center; gap: 10px; font-weight: normal; cursor: pointer; font-size: 0.95rem;">
-                                <input type="checkbox" name="service_print" value="true" style="width: auto;"> Digipainotuotteet (esitteet, julisteet, bannerit)
+                                <input type="checkbox" name="service_print" value="true" style="width: auto;"> Digipainotuotteet & suunnittelu (alk. 90 €)
                             </label>
                             <label style="display: flex; align-items: center; gap: 10px; font-weight: 700; cursor: pointer; color: var(--primary-blue); background: #f0f7ff; padding: 10px; border-radius: 8px; font-size: 0.95rem;">
                                 <input type="checkbox" name="service_offertool" value="true" checked style="width: auto;"> Oma Seinä & Tarjoustyökalu (PLUS/PRO)
@@ -1151,50 +1176,61 @@
                 <a href="kauppa.html" class="btn-shop-link">Tutustu Kauppaan ja näkyvyystuotteisiin ➔</a>
             </div>
 
-            <!-- Additional Mediazoo Services Section -->
+            <!-- Mediazoo Services Section -->
             <section class="pricing-services-section" id="hinnasto">
                 <div class="pricing-services-container">
                     <div class="section-header">
-                        <h2>Viestinnän ja mediatuotannon lisäpalvelut</h2>
-                        <p>Mediazoo.fi tuottaa tarvittaessa laadukkaat kuvat, videot ja painotuotteet toiminnallenne. Kaikki hinnat sisältävät ALV 25,5%.</p>
+                        <span class="sub-badge">MEDIAZOO SISÄLLÖNTUOTANTO</span>
+                        <h2>Mediazoo – Laadukas mediatuotanto</h2>
+                        <p><strong>LaukaaInfo auttaa sinut näkyviin. Mediazoo auttaa tekemään näkyvyydestä laadukasta.</strong><br>Ammattimainen mediatuotanto räätälöitynä yrityksesi tai yhdistyksesi tarpeisiin. Kaikki hinnat sis. ALV 25,5%.</p>
                     </div>
 
                     <div class="services-grid">
                         <div class="service-card">
                             <h3>🚁 Ilmakuva / Drone</h3>
-                            <span class="price-range">50–100 €</span>
+                            <span class="price-range">alk. 149 €</span>
                             <ul>
-                                <li>• 1–3 korkealaatuista ilmakuvaa</li>
-                                <li>• 0–30 km matkakulut sisältyvät</li>
-                                <li>• Vapaa käyttöoikeus kaikkiin kanaviin</li>
+                                <li><span class="check">✓</span> 1–3 korkealaatuista ilmakuvaa</li>
+                                <li><span class="check">✓</span> Kuvaus sovittuna ajankohtana</li>
+                                <li><span class="check">✓</span> Peruskäsittely & värikorjaus</li>
+                                <li><span class="check">✓</span> Vapaa käyttöoikeus omiin kanaviin</li>
+                                <li><span class="check">✓</span> Matkakulut sis. 30 km asti</li>
                             </ul>
+                            <p style="font-size:0.78rem; color:#64748b; margin-top:0.8rem; font-style:italic;">*Laajempi kuvaus / dronevideo alk. 249 €</p>
                         </div>
                         <div class="service-card">
                             <h3>🎥 Videoesittely</h3>
-                            <span class="price-range">120–250 €</span>
+                            <span class="price-range">alk. 290 €</span>
                             <ul>
-                                <li>• 30–60 sekunnin editoitu video</li>
-                                <li>• Tekstitykset & musiikki</li>
-                                <li>• Reels / TikTok / YouTube sopiva</li>
+                                <li><span class="check">✓</span> 30–60 sek editoitu esittelyvideo</li>
+                                <li><span class="check">✓</span> Kuvauspaikalla tapahtuva kuvaus</li>
+                                <li><span class="check">✓</span> Editointi, tekstitykset & musiikki</li>
+                                <li><span class="check">✓</span> Pysty- & vaakaversiot (Reels/TikTok/YT/FB)</li>
+                                <li><span class="check">✓</span> Käyttöoikeus yrityksen kanavissa</li>
                             </ul>
+                            <p style="font-size:0.78rem; color:#64748b; margin-top:0.8rem; font-style:italic;">*Laajempi esittelyvideo / haastattelu alk. 490 €</p>
                         </div>
                         <div class="service-card">
-                            <h3>🖨️ Digipainotuotteet</h3>
-                            <span class="price-range">alk. 50 €</span>
+                            <h3>🖨️ Painotuotteet</h3>
+                            <span class="price-range">alk. 90 €</span>
                             <ul>
-                                <li>• Flyerit, julisteet ja bannerit</li>
-                                <li>• Graafinen suunnittelu</li>
-                                <li>• Toimitus Laukaan alueelle</li>
+                                <li><span class="check">✓</span> Flyerit, julisteet, esitteet, bannerit</li>
+                                <li><span class="check">✓</span> Ammattimainen graafinen suunnittelu</li>
+                                <li><span class="check">✓</span> Laadukas valmis painatus</li>
+                                <li><span class="check">✓</span> Toimitus Laukaan alueelle</li>
                             </ul>
                         </div>
                         <div class="service-card">
                             <h3>🌐 Kotisivut</h3>
-                            <span class="price-range">alk. n. 350 €</span>
+                            <span class="price-range">alk. 490 €</span>
                             <ul>
-                                <li>• Uuden sivun luonti tai muokkaus</li>
-                                <li>• Mobiili-optimointi & SEO</li>
-                                <li>• Helppo ylläpito</li>
+                                <li><span class="check">✓</span> Nykyaikainen uusi verkkosivu</li>
+                                <li><span class="check">✓</span> Täysi mobiili-optimointi</li>
+                                <li><span class="check">✓</span> Perus-SEO & Google-näkyvyys</li>
+                                <li><span class="check">✓</span> Yhteydenottokanavat & lomakkeet</li>
+                                <li><span class="check-icon">✓</span> Helppo ylläpitää ja päivittää</li>
                             </ul>
+                            <p style="font-size:0.78rem; color:#64748b; margin-top:0.8rem; font-style:italic;">*Laajempi monisivuinen sivusto alk. 790 €</p>
                         </div>
                     </div>
 
