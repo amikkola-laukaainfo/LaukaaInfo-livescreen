@@ -185,6 +185,9 @@
           <!-- Pinned Media Slot -->
           <div id="pinnedMediaSlot" class="space-y-2 pt-1"></div>
 
+          <!-- Pinned PDF Slot -->
+          <div id="pinnedPdfSlot" class="pt-1"></div>
+
           <!-- Pinned Links Slot -->
           <div id="pinnedLinksSlot" class="flex flex-wrap gap-2 pt-1"></div>
 
@@ -1155,11 +1158,15 @@
 
           // Pinned Media Slot
           const mediaSlot = document.getElementById('pinnedMediaSlot');
-          mediaSlot.innerHTML = renderMediaHTML(pinnedPost.post_media);
+          if (mediaSlot) mediaSlot.innerHTML = renderMediaHTML(pinnedPost.post_media);
+
+          // Pinned PDF Slot
+          const pdfSlot = document.getElementById('pinnedPdfSlot');
+          if (pdfSlot) pdfSlot.innerHTML = renderPdfPillsHTML(pinnedPost.post_attachments);
 
           // Pinned Links Slot
           const linksSlot = document.getElementById('pinnedLinksSlot');
-          linksSlot.innerHTML = renderLinksHTML(pinnedPost.post_links, pinnedPost.target_id, pinnedPost.target_type);
+          if (linksSlot) linksSlot.innerHTML = renderLinksHTML(pinnedPost.post_links, pinnedPost.target_id, pinnedPost.target_type);
         } else {
           pinnedSection.classList.add('hidden');
         }
