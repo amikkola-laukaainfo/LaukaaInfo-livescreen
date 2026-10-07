@@ -23,24 +23,53 @@ document.addEventListener('DOMContentLoaded', async () => {
         const aiSb = window.aiSb;
 
         // 2. Hae paikan tiedot Supabasesta
-        let placeQuery = aiSb.from('places').select('*');
+        let placesData = null;
+        let placeError = null;
         
         if (placeId) {
             const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(placeId);
             if (isUuid) {
-                placeQuery = placeQuery.or(`id.eq.${placeId},place_id.eq.${placeId}`);
+                const res = await aiSb.from('places').select('*').or(`id.eq.${placeId},place_id.eq.${placeId}`).limit(1);
+                placesData = res.data;
+                placeError = res.error;
             } else {
                 const rawName = placeId.replace(/["']/g, '').trim();
                 const spaceName = rawName.replace(/-/g, ' ');
-                placeQuery = placeQuery.or(`name.ilike.%${rawName}%,canonical_name.ilike.%${rawName}%,name.ilike.%${spaceName}%,canonical_name.ilike.%${spaceName}%`);
+                
+                // 1. Kokeillaan ensin tarkkaa nimen / täsmäytystä (esim. name = "Lievestuore")
+                const exactRes = await aiSb.from('places').select('*')
+                    .or(`name.ilike.${rawName},canonical_name.ilike.${rawName},name.ilike.${spaceName},canonical_name.ilike.${spaceName},place_id.ilike.${rawName}`)
+                    .limit(1);
+                
+                if (!exactRes.error && exactRes.data && exactRes.data.length > 0) {
+                    placesData = exactRes.data;
+                } else {
+                    // 2. Jos tarkkaa ei löydy, kokeillaan osittaishakua
+                    const wildcardRes = await aiSb.from('places').select('*')
+                        .or(`name.ilike.%${rawName}%,canonical_name.ilike.%${rawName}%,name.ilike.%${spaceName}%,canonical_name.ilike.%${spaceName}%`)
+                        .limit(1);
+                    placesData = wildcardRes.data;
+                    placeError = wildcardRes.error;
+                }
             }
         } else if (placeNameParam) {
             const decodedName = decodeURIComponent(placeNameParam).replace(/_/g, ' ');
             const cleanNameValue = decodedName.replace(/["']/g, '').trim();
-            placeQuery = placeQuery.or(`name.ilike.%${cleanNameValue}%,canonical_name.ilike.%${cleanNameValue}%`);
+
+            const exactRes = await aiSb.from('places').select('*')
+                .or(`name.ilike.${cleanNameValue},canonical_name.ilike.${cleanNameValue}`)
+                .limit(1);
+            
+            if (!exactRes.error && exactRes.data && exactRes.data.length > 0) {
+                placesData = exactRes.data;
+            } else {
+                const wildcardRes = await aiSb.from('places').select('*')
+                    .or(`name.ilike.%${cleanNameValue}%,canonical_name.ilike.%${cleanNameValue}%`)
+                    .limit(1);
+                placesData = wildcardRes.data;
+                placeError = wildcardRes.error;
+            }
         }
-        
-        const { data: placesData, error: placeError } = await placeQuery.limit(1);
 
         if (placeError || !placesData || placesData.length === 0) {
             console.error('Virhe haettaessa paikkaa:', placeError);
@@ -2423,7 +2452,9 @@ async function loadEncountersForPlace(place) {
                     place.id,
                     place.name,
                     place.canonical_name,
-                    placeName
+                    placeName,
+                    ...(parentPlace ? [parentPlace.name, parentPlace.place_id, parentPlace.canonical_name] : []),
+                    ...(subPlaces ? subPlaces.flatMap(sp => [sp.name, sp.place_id, sp.canonical_name]) : [])
                 ].filter(Boolean)));
 
                 let matchedPostIds = [];
@@ -2435,7 +2466,12 @@ async function loadEncountersForPlace(place) {
                         if (ppData && ppData.length > 0) {
                             const lowerVariants = placeVariants.map(v => String(v).toLowerCase());
                             matchedPostIds = ppData
-                                .filter(row => row.place_id && lowerVariants.some(v => row.place_id.toLowerCase().includes(v) || v.includes(row.place_id.toLowerCase())))
+                                .filter(row => row.place_id && lowerVariants.some(v => {
+                                    const r = String(row.place_id).toLowerCase();
+                                    return r.includes(v) || v.includes(r) ||
+                                           r.replace(/en$/, '').includes(v.replace(/en$/, '')) ||
+                                           v.replace(/en$/, '').includes(r.replace(/en$/, ''));
+                                }))
                                 .map(row => row.post_id);
                         }
                     } catch (e) {
@@ -2451,7 +2487,6 @@ async function loadEncountersForPlace(place) {
                     const safePv = String(pv).replace(/["%,]/g, ' ').trim();
                     if (safePv) {
                         postsQueryParts.push(`place_id.ilike.%${safePv}%`);
-                        postsQueryParts.push(`place.ilike.%${safePv}%`);
                     }
                 });
 
