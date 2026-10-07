@@ -49,7 +49,8 @@ async function generateSitemap() {
         'tietoa-paikasta.html',
         'laatu.html',
         'tietosuoja.html',
-        'maksuehto.html'
+        'maksuehto.html',
+        'seina-esittely.html'
     ];
 
     // Kohteet-hakemistosivu erikseen korkealla prioriteetilla
