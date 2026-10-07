@@ -3,8 +3,30 @@
 -- Aja tämä Supabasen SQL Editorissa.
 -- =====================================================
 
--- 0. PGCRYPTO EXTENSION (Sallii SHA256-hashauksen)
+-- 0. PGCRYPTO EXTENSION & STORAGE BUCKET
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+-- Luodaan julkinen 'publication-files' Storage Bucket PDF-liitteille
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('publication-files', 'publication-files', true)
+ON CONFLICT (id) DO UPDATE SET public = true;
+
+-- Sallitaan julkinen lukuoikeus PDF-liitteille
+DROP POLICY IF EXISTS "Public Read Publication Files" ON storage.objects;
+CREATE POLICY "Public Read Publication Files"
+ON storage.objects FOR SELECT
+USING (bucket_id = 'publication-files');
+
+-- Sallitaan julkinen latausoikeus (PDF-tiedostojen tallennus)
+DROP POLICY IF EXISTS "Public Upload Publication Files" ON storage.objects;
+CREATE POLICY "Public Upload Publication Files"
+ON storage.objects FOR INSERT
+WITH CHECK (bucket_id = 'publication-files');
+
+DROP POLICY IF EXISTS "Public Update Publication Files" ON storage.objects;
+CREATE POLICY "Public Update Publication Files"
+ON storage.objects FOR UPDATE
+USING (bucket_id = 'publication-files');
 
 -- 1. ORGANISATIONS (Organisaatiot)
 CREATE TABLE IF NOT EXISTS public.organizations (
