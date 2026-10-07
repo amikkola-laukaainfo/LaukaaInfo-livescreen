@@ -9,10 +9,11 @@
         "seo": "node generate_seo_pages.js",
         "kohteet": "node generate_kohteet_index.js",
         "generate": "node generate_seo_pages.js && node generate_kohteet_index.js && node generate_sitemap.js",
+        "build:julkaise": "npx @tailwindcss/cli -i julkaise_input.css -o julkaise.css --content julkaise.html --minify",
         "sitemap": "node generate_sitemap.js"
     },
-    "dependencies": {},
     "devDependencies": {
+        "@tailwindcss/cli": "^4.3.3",
         "serve": "^14.2.1"
     }
 }

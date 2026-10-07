@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>LaukaaInfo — Organisaation Julkaisupiste</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="julkaise.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
       body {
@@ -845,6 +845,27 @@
         if (!confirm(`Haluatko varmasti poistaa julkaisun:\n${titleStr}?`)) {
           return;
         }
+
+        if (supabaseClient) {
+          try {
+            const { error } = await supabaseClient
+              .from('wall_posts')
+              .delete()
+              .eq('id', postId);
+            if (error) {
+              alert('Julkaisun poistaminen epäonnistui: ' + error.message);
+              return;
+            }
+          } catch (e) {
+            console.warn('Delete error:', e);
+            alert('Julkaisun poistaminen epäonnistui.');
+            return;
+          }
+        }
+
+        loadedMyPosts = loadedMyPosts.filter(item => item.id !== postId);
+        await loadMyPosts();
+      }
 
       // Global Attachment & Duration State
       let attachedItems = [];
