@@ -70,7 +70,10 @@ a:hover { color: var(--violet-dark); }
 }
 .nav-brand {
   font-family: var(--font-h); font-size: 1.35rem; font-weight: 800;
-  color: var(--slate-900); text-decoration: none; display: flex; align-items: center; gap: .4rem;
+  color: var(--slate-900); text-decoration: none; display: flex; align-items: center; gap: .55rem;
+}
+.nav-brand img {
+  height: 34px; width: auto; object-fit: contain;
 }
 .nav-brand span { color: var(--violet); }
 .nav-cta {
@@ -407,8 +410,11 @@ a:hover { color: var(--violet-dark); }
 <!-- ── NAVIGATION ─────────────────────────────────────────────────────── -->
 <nav class="site-nav" aria-label="Päänavigaatio">
   <div class="nav-inner">
-    <a href="index.html" class="nav-brand">Laukaa<span>Info</span></a>
-    <a href="#kysy" class="nav-cta">🧱 Kysy omasta Seinästä</a>
+    <a href="index.html" class="nav-brand">
+      <img src="logo.png" alt="LaukaaInfo Logo">
+      <span>Laukaa<span>Info</span></span>
+    </a>
+    <a href="kauppa.html#kysy" class="nav-cta">🧱 Kysy omasta Seinästä</a>
   </div>
 </nav>
 
@@ -628,7 +634,8 @@ a:hover { color: var(--violet-dark); }
     <h2 id="cta-title">Oma ilmoitustaulu.<br>Yksi linkki. Helppo julkaista.</h2>
     <p>Ei uutta somekanavaa. Ei monimutkaista järjestelmää. Tarvitset vain paikan, johon voit laittaa ilmoituksen – ja linkin, jonka voit jakaa.</p>
     <div class="cta-buttons">
-      <a href="seina.html" class="btn-white">🧱 Avaa Seinä</a>
+      <a href="kauppa.html#kysy" class="btn-white">🧱 Kysy omasta Seinästä / Ota yhteyttä →</a>
+      <a href="seina.html" class="btn-outline-white">🧱 Avaa Seinä</a>
       <a href="julkaise.html" class="btn-outline-white">✍️ Kokeile julkaisemista</a>
     </div>
   </div>

@@ -1254,6 +1254,12 @@
             const modal = document.getElementById('inquiry-modal');
             const form = document.getElementById('inquiry-form');
             
+            if (window.location.hash === '#kysy' || window.location.hash === '#inquiry' || window.location.search.includes('kysy') || window.location.search.includes('seina')) {
+                setTimeout(function() {
+                    openInquiryModal('LaukaaInfo Seinä - Yhteydenotto / Tilauskysely');
+                }, 200);
+            }
+            
             if (closeBtn) closeBtn.addEventListener('click', closeInquiryModal);
             if (modal) {
                 modal.addEventListener('click', function(e) {
