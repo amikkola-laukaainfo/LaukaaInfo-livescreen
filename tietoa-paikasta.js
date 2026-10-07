@@ -2528,31 +2528,67 @@ async function loadEncountersForPlace(place) {
                 }
                 
                 if (postsData) {
+                    const pIds = postsData.map(p => p.id).filter(Boolean);
+                    let mediaByPost = {};
+                    let attachmentsByPost = {};
+                    if (liveSb && pIds.length > 0) {
+                        try {
+                            const { data: pm } = await liveSb.from('post_media').select('*').in('post_id', pIds);
+                            if (pm) pm.forEach(m => { (mediaByPost[m.post_id] = mediaByPost[m.post_id] || []).push(m); });
+                            const { data: pa } = await liveSb.from('post_attachments').select('*').in('post_id', pIds);
+                            if (pa) pa.forEach(a => { (attachmentsByPost[a.post_id] = attachmentsByPost[a.post_id] || []).push(a); });
+                        } catch (subErr) {
+                            console.warn('Posts sub-tables fetch notice:', subErr);
+                        }
+                    }
+
                     postsData.forEach(item => {
-                        // Tarkistetaan onko kyseessä yhteisöjulkaisu vai yrityksen julkaisu
                         const postTypeUpper = (item.type || '').toUpperCase();
                         const isCommunityPost = COMMUNITY_TYPES.includes(postTypeUpper);
+                        
+                        const pMedia = mediaByPost[item.id] || [];
+                        const pAtt = attachmentsByPost[item.id] || [];
+                        
+                        let firstImg = item.image_url;
+                        if (!firstImg && pMedia.length > 0) {
+                            const imgItem = pMedia.find(m => m.media_type === 'image');
+                            if (imgItem) firstImg = imgItem.url;
+                        }
+                        if (!firstImg && pAtt.length > 0) {
+                            const imgAtt = pAtt.find(a => a.type === 'image');
+                            if (imgAtt) firstImg = imgAtt.url;
+                        }
+
+                        let ytVidId = item.video_id;
+                        if (!ytVidId && pMedia.length > 0) {
+                            const vidItem = pMedia.find(m => m.media_type === 'video');
+                            if (vidItem) ytVidId = extractYouTubeId(vidItem.url);
+                        }
+                        if (!ytVidId && pAtt.length > 0) {
+                            const ytAtt = pAtt.find(a => a.type === 'youtube');
+                            if (ytAtt) ytVidId = ytAtt.youtube_video_id || extractYouTubeId(ytAtt.url);
+                        }
                         
                         allItems.push({
                             id: item.id,
                             type: isCommunityPost ? postTypeUpper : (item.type === 'event' ? 'event' : 'feed_post'),
                             title: item.title,
-                            description: item.description,
-                            image_url: item.image_url,
+                            description: item.content || item.description || '',
+                            image_url: firstImg || null,
                             website_url: item.website_url,
                             facebook_url: item.facebook_url,
                             instagram_url: item.instagram_url,
                             youtube_url: item.youtube_url,
-                            video_id: item.video_id,
+                            video_id: ytVidId || null,
                             is_shorts: item.is_shorts,
                             is_promoted: item.is_promoted,
-                            publisher_name: item.publisher_name,
+                            publisher_name: item.publisher_name || item.org_name || 'Organisaatio',
                             contact_email: item.contact_email,
                             contact_phone: item.contact_phone,
                             show_contact: item.show_contact,
                             tags: item.tags || [],
                             price_info: '',
-                            url: '/?item=' + item.id + '&feed=open',
+                            url: 'seina.html?post=' + item.id,
                             created_at: item.publish_at || item.created_at
                         });
                     });
@@ -2830,31 +2866,31 @@ function renderEncounters(encounters) {
                 html += `
                 <div style="${borderBottom}">
                     <!-- accordion otsikko -->
-                    <div onclick="(function(el){var c=document.getElementById('${accId}');var open=c.style.maxHeight&&c.style.maxHeight!=='0px';c.style.maxHeight=open?'0px':c.scrollHeight+'px';c.style.opacity=open?'0':'1';el.querySelector('.acc-arrow').style.transform=open?'rotate(0deg)':'rotate(180deg)';})(this)"
+                    <div onclick="(function(el){var c=document.getElementById('${accId}');if(!c)return;var open=c.style.maxHeight&&c.style.maxHeight!=='0px';c.style.maxHeight=open?'0px':c.scrollHeight+'px';c.style.opacity=open?'0':'1';var arr=el.querySelector('.acc-arrow');if(arr)arr.style.transform=open?'rotate(0deg)':'rotate(180deg)';})(this)"
                         style="display:flex;align-items:flex-start;gap:0.85rem;padding:1.1rem 1.25rem;cursor:pointer;transition:background 0.2s;"
                         onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='transparent'">
                         ${thumbHtml}
                         <div style="flex:1;min-width:0;">
-                            <div style="font-weight:700;color:var(--dark-text);font-size:1rem;margin-bottom:0.2rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${item.title}</div>
-                            <div style="font-size:0.88rem;color:#64748b;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${item.description || ''}</div>
+                            <div style="font-weight:700;color:var(--dark-text);font-size:1rem;margin-bottom:0.2rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(item.title)}</div>
+                            <div style="font-size:0.88rem;color:#64748b;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${escapeHtml(item.description || '')}</div>
                             <div style="margin-top:0.4rem;display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
                                 ${authorHtml}
                                 ${dateStr ? `<span style="font-size:0.75rem;color:#94a3b8;">${dateStr}</span>` : ''}
                                 ${item.is_promoted ? `<span style="font-size:0.72rem;background:#fef9c3;color:#92400e;padding:2px 7px;border-radius:50px;font-weight:700;">⭐ Nostettu</span>` : ''}
                             </div>
                         </div>
-                        ${hasMedia ? `<span class="acc-arrow" style="flex-shrink:0;font-size:1rem;color:#94a3b8;transition:transform 0.25s;transform:rotate(0deg);">▼</span>` : `<a href="${linkUrl}" onclick="event.stopPropagation()" style="flex-shrink:0;font-size:0.82rem;color:var(--primary);text-decoration:none;font-weight:600;white-space:nowrap;">Avaa →</a>`}
+                        <span class="acc-arrow" style="flex-shrink:0;font-size:1rem;color:#94a3b8;transition:transform 0.25s;transform:rotate(0deg);">▼</span>
                     </div>
                     <!-- accordion sisältö -->
-                    ${hasMedia ? `
                     <div id="${accId}" style="max-height:0;opacity:0;overflow:hidden;transition:max-height 0.35s ease,opacity 0.25s ease;">
                         <div style="padding:0 1.25rem 1.25rem;">
+                            ${item.description ? `<div style="font-size:0.9rem;color:#334155;line-height:1.6;margin-bottom:0.75rem;whitespace-pre-line;">${escapeHtml(item.description)}</div>` : ''}
                             ${mediaContent}
                             <a href="${linkUrl}" style="display:inline-flex;align-items:center;gap:0.4rem;margin-top:0.75rem;font-size:0.85rem;color:var(--primary);text-decoration:none;font-weight:700;">
-                                Avaa koko julkaisu →
+                                Avaa koko julkaisu seinällä →
                             </a>
                         </div>
-                    </div>` : ''}
+                    </div>
                 </div>`;
                 
             } else {
