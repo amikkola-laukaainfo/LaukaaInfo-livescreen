@@ -197,7 +197,8 @@ CREATE INDEX IF NOT EXISTS idx_cred_org_hash ON public.organization_publish_cred
 -- RPC 1: Aseta/Generoi organisaatiolle julkaisuavain
 CREATE OR REPLACE FUNCTION public.set_organization_publish_key(
     p_organization_id TEXT,
-    p_raw_key TEXT
+    p_raw_key TEXT,
+    p_org_name TEXT DEFAULT NULL
 )
 RETURNS JSONB
 LANGUAGE plpgsql
@@ -215,6 +216,12 @@ BEGIN
 
     v_hash := encode(digest(v_clean_key, 'sha256'), 'hex');
 
+    -- Varmistetaan että organisaatio on olemassa taulussa
+    INSERT INTO public.organizations (id, name, publisher_enabled)
+    VALUES (p_organization_id, COALESCE(p_org_name, p_organization_id), TRUE)
+    ON CONFLICT (id) DO UPDATE
+    SET publisher_enabled = TRUE, updated_at = NOW();
+
     -- Merkitään vanhat avaimet peruutetuksi
     UPDATE public.organization_publish_credentials
     SET revoked_at = NOW()
@@ -223,11 +230,6 @@ BEGIN
     -- Taltioidaan uusi hash
     INSERT INTO public.organization_publish_credentials (organization_id, code_hash)
     VALUES (p_organization_id, v_hash);
-
-    -- Varmistetaan että organisaatio on aktiivinen
-    UPDATE public.organizations
-    SET publisher_enabled = TRUE, updated_at = NOW()
-    WHERE id = p_organization_id;
 
     RETURN jsonb_build_object('success', true, 'organization_id', p_organization_id);
 END;

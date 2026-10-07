@@ -849,7 +849,7 @@
         if (supabaseClient) {
           try {
             const { error } = await supabaseClient
-              .from('wall_posts')
+              .from('posts')
               .delete()
               .eq('id', postId);
             if (error) {
