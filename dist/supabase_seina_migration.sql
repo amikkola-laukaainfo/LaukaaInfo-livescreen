@@ -64,6 +64,10 @@ CREATE TABLE IF NOT EXISTS public.posts (
     offer_terms TEXT
 );
 
+ALTER TABLE public.posts ADD COLUMN IF NOT EXISTS title TEXT;
+ALTER TABLE public.posts ADD COLUMN IF NOT EXISTS content TEXT;
+ALTER TABLE public.posts ADD COLUMN IF NOT EXISTS type TEXT DEFAULT 'announcement';
+ALTER TABLE public.posts ADD COLUMN IF NOT EXISTS image_url TEXT;
 ALTER TABLE public.posts ADD COLUMN IF NOT EXISTS organization_id TEXT;
 ALTER TABLE public.posts ADD COLUMN IF NOT EXISTS visibility TEXT DEFAULT 'public';
 ALTER TABLE public.posts ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'published';

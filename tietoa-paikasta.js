@@ -2417,21 +2417,54 @@ async function loadEncountersForPlace(place) {
                     .select('*')
                     .or(contentsQuery);
                 
-                // Feed-julkaisut (posts-taulu) – LaukaaLive-projekti
-                // Haetaan vain APPROVED-tilaiset tai ilman statusta (vanhat) – PENDING ja code_protected suodatetaan pois
-                const postsQuery = targetIds.map(idVal => `place_id.eq.${idVal}`).join(',');
-                const postsResult = liveSb
-                    ? await liveSb.from('posts').select('*')
-                        .or(postsQuery)
-                        .or('status.eq.APPROVED,status.is.null')
-                        .or('visibility.eq.public,visibility.is.null')
+                // Feed-julkaisut (posts & post_places -taulut) – LaukaaLive-projekti
+                const placeVariants = Array.from(new Set([
+                    place.place_id,
+                    place.id,
+                    place.name,
+                    place.canonical_name,
+                    placeName
+                ].filter(Boolean)));
+
+                let matchedPostIds = [];
+                if (liveSb) {
+                    try {
+                        const { data: ppData } = await liveSb
+                            .from('post_places')
+                            .select('post_id, place_id');
+                        if (ppData && ppData.length > 0) {
+                            const lowerVariants = placeVariants.map(v => String(v).toLowerCase());
+                            matchedPostIds = ppData
+                                .filter(row => row.place_id && lowerVariants.some(v => row.place_id.toLowerCase().includes(v) || v.includes(row.place_id.toLowerCase())))
+                                .map(row => row.post_id);
+                        }
+                    } catch (e) {
+                        console.warn('post_places fetch notice:', e);
+                    }
+                }
+
+                let postsQueryParts = [];
+                if (matchedPostIds.length > 0) {
+                    postsQueryParts.push(`id.in.(${matchedPostIds.join(',')})`);
+                }
+                placeVariants.forEach(pv => {
+                    const safePv = String(pv).replace(/["%,]/g, ' ').trim();
+                    if (safePv) {
+                        postsQueryParts.push(`place_id.ilike.%${safePv}%`);
+                        postsQueryParts.push(`place.ilike.%${safePv}%`);
+                    }
+                });
+
+                const postsResult = (liveSb && postsQueryParts.length > 0)
+                    ? await liveSb.from('posts').select('*').or(postsQueryParts.join(','))
                     : { data: null };
                 const postsData = (postsResult.data || []).filter(item => {
                     const st = String(item.status || '').toLowerCase();
                     if (st === 'rejected' || st === 'hidden' || st === 'invalid' || st === 'archived' || st === 'deleted') return false;
                     if (item.visibility === 'code_protected' || item.visibility === 'hidden') return false;
-                    if (!item.valid_until) return true;
-                    return new Date(item.valid_until) >= new Date();
+                    if (!item.expires_at && !item.valid_until) return true;
+                    const exp = item.expires_at || item.valid_until;
+                    return new Date(exp) >= new Date();
                 });
                     
                 // Tarjoukset/Tapahtumat – LaukaaLive-projekti

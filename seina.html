@@ -1357,12 +1357,17 @@
       // PDF Attachment Pill Renderer
       function renderPdfPillsHTML(attachmentsList) {
         if (!attachmentsList || attachmentsList.length === 0) return '';
-        const pdfs = attachmentsList.filter(a => a.type === 'pdf' && a.url && a.url !== '#');
+        const pdfs = attachmentsList.filter(a => a.type === 'pdf' || a.mime_type === 'application/pdf' || (a.file_name && a.file_name.toLowerCase().endsWith('.pdf')));
         if (pdfs.length === 0) return '';
         const pillsHtml = pdfs.map(pdf => {
+          let href = pdf.url && pdf.url !== '#' ? pdf.url : '';
+          if (!href && pdf.storage_path) {
+            href = `${SUPABASE_URL}/storage/v1/object/public/${pdf.storage_path}`;
+          }
+          if (!href) href = '#';
           const label = escapeHtml(pdf.file_name || 'Avaa PDF');
           const sizeStr = pdf.file_size ? ` · ${(pdf.file_size / (1024 * 1024)).toFixed(1)} MB` : '';
-          return `<a href="${pdf.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-800 border border-red-200 rounded-xl text-xs font-bold shadow-xs transition-all">
+          return `<a href="${href}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-800 border border-red-200 rounded-xl text-xs font-bold shadow-xs transition-all">
             📄 ${label}${sizeStr}
           </a>`;
         }).join(' ');

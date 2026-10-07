@@ -1065,10 +1065,15 @@
 
             if (!error && data) {
               const { data: pubUrlData } = supabaseClient.storage.from('publication-files').getPublicUrl(storagePath);
-              publicUrl = pubUrlData ? pubUrlData.publicUrl : null;
+              publicUrl = (pubUrlData && pubUrlData.publicUrl) ? pubUrlData.publicUrl : `${SUPABASE_URL}/storage/v1/object/public/${storagePath}`;
+            } else if (storagePath) {
+              publicUrl = `${SUPABASE_URL}/storage/v1/object/public/${storagePath}`;
             }
           } catch (e) {
             console.warn('Storage upload notice:', e);
+            if (storagePath) {
+              publicUrl = `${SUPABASE_URL}/storage/v1/object/public/${storagePath}`;
+            }
           }
         }
 
@@ -1076,7 +1081,7 @@
           type: 'pdf',
           provider: 'supabase',
           storage_path: storagePath || `publication-files/demo/${file.name}`,
-          url: publicUrl || '#',
+          url: publicUrl || (storagePath ? `${SUPABASE_URL}/storage/v1/object/public/${storagePath}` : '#'),
           file_name: file.name,
           file_size: file.size,
           mime_type: 'application/pdf'
