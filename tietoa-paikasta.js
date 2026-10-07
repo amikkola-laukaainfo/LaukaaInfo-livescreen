@@ -2399,7 +2399,9 @@ async function loadEncountersForPlace(place) {
                         .or('visibility.eq.public,visibility.is.null')
                     : { data: null };
                 const postsData = (postsResult.data || []).filter(item => {
-                    if (item.visibility === 'code_protected') return false;
+                    const st = String(item.status || '').toLowerCase();
+                    if (st === 'rejected' || st === 'hidden' || st === 'invalid' || st === 'archived' || st === 'deleted') return false;
+                    if (item.visibility === 'code_protected' || item.visibility === 'hidden') return false;
                     if (!item.valid_until) return true;
                     return new Date(item.valid_until) >= new Date();
                 });
@@ -2437,7 +2439,6 @@ async function loadEncountersForPlace(place) {
                         
                         allItems.push({
                             id: item.id,
-                            // Yhteisöjulkaisut saavat oman tyyppinsä, yritysposts pysyvät 'feed_post':na
                             type: isCommunityPost ? postTypeUpper : (item.type === 'event' ? 'event' : 'feed_post'),
                             title: item.title,
                             description: item.description,
@@ -2455,8 +2456,6 @@ async function loadEncountersForPlace(place) {
                             show_contact: item.show_contact,
                             tags: item.tags || [],
                             price_info: '',
-                            // posts-taulun julkaisut (myös yhteisöjulkaisut kuten OBSERVATION, MEMORY jne.)
-                            // ohjataan feed-näkymään – ilmoituskortti.html on vain encounters-taulun ilmoituksille
                             url: '/?item=' + item.id + '&feed=open',
                             created_at: item.publish_at || item.created_at
                         });
@@ -2482,6 +2481,33 @@ async function loadEncountersForPlace(place) {
             }
         }
         
+        // Moderointisuodatus: Poistetaan allItems-listasta kaikki joiden status on rejected/hidden Supabasen observations-taulussa
+        const candidateItemIds = allItems.map(i => String(i.id)).filter(Boolean);
+        const sbClient = window.aiSb || window.LaukaaSupabase;
+        if (sbClient && candidateItemIds.length > 0) {
+            try {
+                const { data: supaObs } = await sbClient
+                    .from('observations')
+                    .select('id, status')
+                    .in('id', candidateItemIds);
+                if (supaObs && supaObs.length > 0) {
+                    const rejectedSet = new Set(
+                        supaObs
+                            .filter(s => {
+                                const st = String(s.status || '').toLowerCase();
+                                return st === 'rejected' || st === 'hidden' || st === 'invalid' || st === 'archived';
+                            })
+                            .map(s => String(s.id))
+                    );
+                    if (rejectedSet.size > 0) {
+                        allItems = allItems.filter(i => !rejectedSet.has(String(i.id)));
+                    }
+                }
+            } catch (e) {
+                console.warn('Virhe observations-taulun moderoinnin suodatuksessa:', e);
+            }
+        }
+
         renderEncounters(allItems);
     } catch (e) {
         console.error('Yllättävä virhe encounters haussa:', e);
@@ -2813,8 +2839,8 @@ function renderEncounters(encounters) {
 // LOSTNFOUND: FIREBASE FIRESTORE -HAU (kadonneet/löydetyt)
 // ==========================================================
 async function loadLostItemsForPlace(place) {
-    const targetPlaceId = place.place_id || place.id;
-    if (!targetPlaceId) return;
+    const targetPlaceIds = [...new Set([place.place_id, place.id].filter(Boolean))];
+    if (targetPlaceIds.length === 0) return;
     
     try {
         // Firebase SDK ladataan dynaamisesti jos ei vielä ladattu
@@ -2834,28 +2860,44 @@ async function loadLostItemsForPlace(place) {
         
         const db = firebase.firestore(window._lfApp);
         
-        // Hae kyseisen paikan ilmoitukset placeId-kentällä (ilman status-kyselyä indeksien välttämiseksi)
-        console.log('Haetaan lostItems paikalle:', targetPlaceId);
-        const snapshot = await db.collection('lostItems')
-            .where('placeId', '==', targetPlaceId)
-            .limit(50)
-            .get();
+        const rawDocs = [];
+        for (const pid of targetPlaceIds) {
+            try {
+                const snap1 = await db.collection('lostItems').where('placeId', '==', pid).limit(50).get();
+                if (!snap1.empty) rawDocs.push(...snap1.docs);
+            } catch(e) {}
+            try {
+                const snap2 = await db.collection('observations').where('placeId', '==', pid).limit(50).get();
+                if (!snap2.empty) rawDocs.push(...snap2.docs);
+            } catch(e) {}
+        }
         
-        console.log('LostItems snapshot:', snapshot.empty ? 'Tyhjä' : snapshot.docs.length + ' dokumenttia löydetty');
-        if (snapshot.empty) return;
+        if (rawDocs.length === 0) return;
         
-        // Suodata aktiiviset paikallisesti (Android tallentaa tilaksi APPROVED)
-        const activeDocs = snapshot.docs.filter(doc => {
-            const status = doc.data().status;
-            return status === 'ACTIVE' || status === 'active' || status === 'APPROVED' || status === 'approved';
+        // Poista duplikaatit ID:n perusteella
+        const seenDocIds = new Set();
+        const uniqueDocs = [];
+        rawDocs.forEach(doc => {
+            if (!seenDocIds.has(doc.id)) {
+                seenDocIds.add(doc.id);
+                uniqueDocs.push(doc);
+            }
         });
         
-        console.log('Aktiiviset lostItems:', activeDocs.length);
+        // 1. Suodata pois ne, joilla Firebasen oma tila on rejected, hidden jne.
+        const activeDocs = uniqueDocs.filter(doc => {
+            const st = String(doc.data().status || '').toLowerCase();
+            if (st === 'rejected' || st === 'hidden' || st === 'invalid' || st === 'archived' || st === 'deleted') {
+                return false;
+            }
+            return true;
+        });
+        
         if (activeDocs.length === 0) return;
 
-        // Suodatetaan pois Supabasessa hylätyt (rejected) tai piilotetut (hidden) moderointi-overridet
+        // 2. Suodatetaan pois Supabasessa hylätyt (rejected) tai piilotetut (hidden) moderointi-overridet
         let filteredDocs = activeDocs;
-        const candidateIds = activeDocs.map(d => d.id);
+        const candidateIds = activeDocs.map(d => String(d.id));
         const sbClient = window.aiSb || window.LaukaaSupabase;
         if (sbClient && candidateIds.length > 0) {
             try {
@@ -2866,9 +2908,9 @@ async function loadLostItemsForPlace(place) {
                 
                 if (supaObs && supaObs.length > 0) {
                     const supaStatusMap = new Map();
-                    supaObs.forEach(s => supaStatusMap.set(s.id, s.status));
+                    supaObs.forEach(s => supaStatusMap.set(String(s.id), String(s.status).toLowerCase()));
                     filteredDocs = activeDocs.filter(d => {
-                        const supaStatus = supaStatusMap.get(d.id);
+                        const supaStatus = supaStatusMap.get(String(d.id));
                         if (supaStatus) {
                             // Jos Supabasessa on asetettu tila (esim. 'rejected' tai 'hidden'), sallitaan VAIN 'approved'
                             return supaStatus === 'approved';
